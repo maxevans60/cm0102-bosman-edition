@@ -35,7 +35,8 @@ from analysis import Analyzer  # noqa: E402
 from pe import Image  # noqa: E402
 from callsites import CALL_SITES, SITES  # noqa: E402
 import callbacks  # noqa: E402
-from translate import PATCHED, SITES_SEEN, FunctionWriter  # noqa: E402
+from translate import GUARDS_SEEN, PATCHED, SITES_SEEN, FunctionWriter  # noqa: E402
+from crashguards import GUARDS  # noqa: E402
 from widescreen import INSNS, PATCHES, TRUE_WIDTH  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -283,6 +284,9 @@ def main(argv):
         lost = sorted((set(PATCHES) | set(INSNS) | TRUE_WIDTH) - PATCHED)
         if lost:
             raise SystemExit("widescreen.py: no translated instruction at " + ", ".join("%#x" % a for a in lost))
+        lost = sorted(set(GUARDS) - GUARDS_SEEN)
+        if lost:
+            raise SystemExit("crashguards.py: no translated instruction at " + ", ".join("%#x" % a for a in lost))
         lost = sorted(set(SITES) - SITES_SEEN)
         if lost:
             raise SystemExit("callsites.py: no translated instruction at " + ", ".join("%#x" % a for a in lost))
