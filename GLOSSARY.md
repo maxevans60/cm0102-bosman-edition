@@ -138,6 +138,52 @@ _Avoid_: database version, data pack, DB
 The box that shows how far a long step has gone, such as "Loading database".
 _Avoid_: loading screen
 
+### Seasons
+
+**Season**:
+One football year from July to June, such as 2010/11, that a new game can start in.
+_Avoid_: year (for the whole season), edition
+
+**Choose Season screen**:
+The screen from the start screen with one tile per season under era headings. The player picks the season, and so its database, there.
+_Avoid_: season picker, year select
+
+**Season database**:
+The Update Team database that a season uses, the earliest of that season unless players report it as faulty.
+_Avoid_: data update, DB
+
+**Extra database**:
+An Update Team database that is not a season database, such as an April or SIM version.
+_Avoid_: more versions, alternative database
+
+**Custom database**:
+A database folder that the player adds and that is not a known Update Team database. The player names its season.
+_Avoid_: own data, mod database
+
+**Update Team**:
+The CM 01/02 Update Team at champman0102.co.uk, who make the updated databases.
+_Avoid_: modders, community team
+
+**Era**:
+A run of seasons with the same European cup format, shown in one colour on the Choose Season screen.
+_Avoid_: period, generation
+
+**Season rules**:
+The rules and league structures of one season: club counts, promotion and play-off places, cup formats, substitutes, foreign player rules, transfer windows and names.
+_Avoid_: restructure, year patch
+
+**Rules table**:
+The researched season rules of every league and competition, one row per season, each fact with its source.
+_Avoid_: fact sheet
+
+**Changing rules**:
+The option that lets the season rules change each July as a game moves through the years. It is set for each game.
+_Avoid_: evolving rules, dynamic seasons
+
+**Base game**:
+The 2001/02 season with the 3.9.68 data set and changing rules off. It plays as the original.
+_Avoid_: vanilla, classic game
+
 ### Options and features
 
 **Settings file**:
