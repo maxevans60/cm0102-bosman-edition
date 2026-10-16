@@ -2,10 +2,11 @@
  *
  * On the squad screen (0x456900) and the tactics screen (0x899ea0), the name of a player who counts
  * against the foreign player limit of his club's next competitive fixture gets light violet (RGB565
- * 0xCC7F) in place of the normal name colour. On the tactics screen the substitutes' grey changes too:
- * its list holds the match squad, 11 players and the named substitutes, and the rule counts all of them
- * (0x8cf8cf). A name with another colour of the original (on loan, a player of another club and so on)
- * keeps it. Option foreign_colours, on by default.
+ * 0xCC7F) in place of the normal name colour. On the tactics screen the grey names change too: its list
+ * has 20 rows (0x89e3f7), the eleven in light grey and the other rows (the named substitutes and, when
+ * fewer are named, reserves) in grey. The rule counts the eleven and the named substitutes (0x8cf8cf), so
+ * a violet reserve counts only when he is picked. A name with another colour of the original (on loan, a
+ * player of another club and so on) keeps it. Option foreign_colours, on by default.
  *
  * The next competitive fixture: the first unplayed first-team fixture of the club from today on, in the
  * order of the game's fixture search 0x5acbe0 (day, then the three slots of a day, then the club's
@@ -96,7 +97,7 @@ static uint32_t club_at(uint32_t a)
     return rd32(g_mem, a) == (a - base) / CLUB_SIZE ? a : 0;
 }
 
-static int days_in(int year) { return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 ? 366 : 365; }
+#define DAY_SLOTS 366   /* every year block has 366 days, leap year or not (0x5acd2b) */
 
 static uint32_t year_block(int year)
 {
@@ -106,7 +107,8 @@ static uint32_t year_block(int year)
     return 0;
 }
 
-/* The fixture categories of a club, as 0x5acbe0 makes them (0x5acc22..0x5accde), without repeats. */
+/* The fixture categories of a club, as 0x5acbe0 makes them (0x5acc22..0x5accde): of two equal
+ * categories the earlier one goes (0x5accd4), so the order is the search's. */
 static int categories(uint32_t club, uint8_t *out)
 {
     uint32_t a[1] = {club};
@@ -116,19 +118,20 @@ static int categories(uint32_t club, uint8_t *out)
         return 2;
     }
     uint8_t c[8] = {2, 3, 4, 5, 6, 7, (uint8_t)call_cdecl(CATEGORY_A, 1, a), (uint8_t)call_cdecl(CATEGORY_B, 1, a)};
+    for (int i = 0; i < 7; i++)
+        for (int k = i + 1; k < 8; k++)
+            if (c[i] == c[k]) { c[i] = 0xff; break; }
     int n = 0;
-    for (int i = 0; i < 8; i++) {
-        int seen = c[i] == 0xff;
-        for (int k = 0; k < n && !seen; k++) seen = out[k] == c[i];
-        if (!seen) out[n++] = c[i];
-    }
+    for (int i = 0; i < 8; i++)
+        if (c[i] != 0xff) out[n++] = c[i];
     return n;
 }
 
-/* 1 when the fixture is an unplayed first-team fixture of the club (0x5acd9e..0x5acdd3). */
+/* 1 when the fixture is an unplayed first-team fixture of the club (0x5acd9e..0x5acdd3). Unplayed: the
+ * result byte +0x43 is -1 or less (0x454c0d). */
 static int club_fixture(uint32_t f, uint32_t id)
 {
-    if (!f || (int8_t)rd8(g_mem, f + 0x43) != -1) return 0;
+    if (!f || (int8_t)rd8(g_mem, f + 0x43) > -1) return 0;
     if (rd32(g_mem, f + 0xc) == id) return rd8(g_mem, f + 0x40) == 1;
     if (rd32(g_mem, f + 0x10) == id) return rd8(g_mem, f + 0x41) == 1;
     return 0;
@@ -163,7 +166,7 @@ static uint32_t next_competitive(uint32_t club)
                 }
             }
         }
-        if (++day >= days_in(year)) {
+        if (++day >= DAY_SLOTS) {
             day = 0;
             block = year_block(++year);
         }
@@ -173,7 +176,9 @@ static uint32_t next_competitive(uint32_t club)
 
 enum { RULE_NONE, RULE_NON_EU, RULE_FOREIGN };
 
-/* The rule of a club's next competitive fixture, kept per club for the day. */
+/* The rule of a club's next competitive fixture, kept per club for the day until the next screen build:
+ * each build starts with the display reset 0x55f7c0 (names.c), and a load, a new game or a new fixture
+ * (a cup draw) all show a new screen before a name is drawn again. */
 typedef struct { uint32_t club, fixture; int day, year, rule; } RuleCache;
 static RuleCache cache[16];
 static int cache_next;
@@ -183,7 +188,7 @@ static int club_rule(uint32_t club)
     int day = (int16_t)rd16(g_mem, GAME_DAY), year = (int16_t)rd16(g_mem, GAME_DAY + 2);
     for (int i = 0; i < 16; i++)
         if (cache[i].club == club && cache[i].day == day && cache[i].year == year &&
-            (!cache[i].fixture || (int8_t)rd8(g_mem, cache[i].fixture + 0x43) == -1))
+            (!cache[i].fixture || (int8_t)rd8(g_mem, cache[i].fixture + 0x43) <= -1))
             return cache[i].rule;
     uint32_t f = rd32(g_mem, RULES) ? next_competitive(club) : 0;
     int rule = RULE_NONE;
@@ -202,6 +207,12 @@ static int club_rule(uint32_t club)
     cache[cache_next] = (RuleCache){club, f, day, year, rule};
     cache_next = (cache_next + 1) % 16;
     return rule;
+}
+
+/* Called by the display reset wrap (names.c): the next screen looks up each rule again. */
+void foreign_forget(void)
+{
+    memset(cache, 0, sizeof cache);
 }
 
 /* 1 when the player counts against the rule of the club's next competitive fixture. */
