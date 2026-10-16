@@ -161,14 +161,17 @@ static const uint8_t tactics_weights[11] = {14, 1, 5, 1, 52, 10, 14, 26, 13, 8, 
 enum { TACTICS_POSITIONS = 7, TACTICS_CONDITION = 8 };
 
 /* Tactics positions (#48): the Condition view (node slot 10 = 2), in and out of a match, in every mode. The
- * original draws the status ("capt") in the centre of column 5 and the condition in column 7 (view 2 merges
- * column 8 into 7). Column 6 stays empty in this view (screenshots from start.sav), so the positions go
- * there. The area keeps its 9 columns and gets new weights only. Classic has 330 px for the list, so its name
- * column is narrower (the three values fit at 800x600). */
-static const uint8_t condition_move[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-static const uint8_t condition_weights[9] = {14, 1, 5, 1, 56, 14, 24, 14, 9};
-static const uint8_t condition_weights_classic[9] = {12, 1, 4, 0, 48, 15, 24, 14, 8};
-enum { CONDITION_POSITIONS = 6 };
+ * original's cells in this view: "capt" (text 0xa8bdd4, copied at 0x89cc34) is a widget in column 5 (widget
+ * create, return 0x89cd50). The status of 0x8aadb0 (call 0x89e01a: "inj", "off", "sub" or "on" and the
+ * minute in a match) is a label in column 6 (label create 0x89e043, push 6 at 0x89e03b, text_flags 1 at
+ * 0x89e034). The condition is a label in column 7 (push 7 at 0x89e0b4 and 0x89e0cc). Column 8 (goals, view
+ * 6 only) stays empty. New: the positions column after the status (TACTICS_POSITIONS, as in the Match
+ * Rating view), so that no two cells share a column. The condition and column 8 move one place. The weights
+ * are ours: classic has 330 px for the list, so its name column is narrower (about 118 px), and the status
+ * column holds "sub 46". */
+static const uint8_t condition_move[9] = {0, 1, 2, 3, 4, 5, 6, 8, 9};
+static const uint8_t condition_weights[10] = {14, 1, 5, 1, 52, 10, 14, 26, 13, 7};
+static const uint8_t condition_weights_classic[10] = {12, 1, 4, 0, 45, 11, 17, 22, 13, 1};
 
 static int tactics_condition_view(void)
 {
@@ -177,7 +180,7 @@ static int tactics_condition_view(void)
     cols.columns = 9;
     cols.move = condition_move;
     cols.weights = rt_screen_w > 800u ? condition_weights : condition_weights_classic;
-    cols.new_columns = 9;
+    cols.new_columns = 10;
     return 1;
 }
 
@@ -248,7 +251,7 @@ RT_WRAP(008aadb0, tactics_status)
 
 /* The new labels already have their new columns: the column moves end before them. In the Condition view
  * the original draws the condition, so only the positions are new. */
-static void tactics_add_labels(int area, int positions_column, int with_condition)
+static void tactics_add_labels(int area, int with_condition)
 {
     scratch_keep();
     for (int i = 0; i < tactics_count; i++) {
@@ -263,7 +266,7 @@ static void tactics_add_labels(int area, int positions_column, int with_conditio
             call_cdecl(0x53ee50u, 4, p);
             char text[64];
             snprintf(text, sizeof text, "%s", win_str(SCRATCH));
-            label(area, positions_column, r->row, 1, 1, colour, text);
+            label(area, TACTICS_POSITIONS, r->row, 1, 1, colour, text);
         }
         int condition = with_condition ? (int8_t)call_this(0x8aafd0u, r->tactics, 2, a2) : 0;
         if (condition) {
@@ -296,7 +299,7 @@ RT_WRAP(00899ea0, tactics_build)
     tactics_building = 0;
     int area = cols.area;
     columns_off();
-    if (!rt_unwinding && area >= 0) tactics_add_labels(area, condition_view ? CONDITION_POSITIONS : TACTICS_POSITIONS, !condition_view);
+    if (!rt_unwinding && area >= 0) tactics_add_labels(area, !condition_view);
 }
 
 /* --- The Player Ratings view. --- */

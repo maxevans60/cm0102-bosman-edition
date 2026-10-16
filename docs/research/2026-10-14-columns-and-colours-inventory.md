@@ -51,9 +51,10 @@ Because the profile shares one call for all value kinds, the number test is the 
 - The player list area: `0x55fba0(0x6e, 0x91, 0x1b8, 0x221, 9 columns, weights, 0x14 rows, ...)`, that is x 110..440, y 145..545 (pseudocode lines after `LAB_0089c819`). Column weights are bytes set at 0x899ff4..0x89a01c: 14, 1, 5, 1, 60, 15, 16, 7, 7 (sum 126). Before the area is made, the weights of unused columns are merged by view: views 1, 3, 4, 5 merge 7 and 8 into 6, view 2 merges 8 into 7, view 6 keeps all, the instruction views merge 6..8 into 5.
 - Row loop: player `0x8ab480(row, 0)`. Cells by view (pseudocode, block "if (local_929 == '\x01')"):
   - view 1: column 6, text `0x53ee50(player+0x61)` (positions string), colour `[0xaebdec]` or grey when not on the pitch (`0x8aa9d0`).
-  - view 2: column 6 status text `0x8aadb0` ("capt", "Inj"), column 7 condition `0x8aafd0(row, 0)` as `"%d%%"` (0x98e8d4), "Inj" (0x98e98c) when below 1.
+  - view 2: column 6 status text `0x8aadb0` (call 0x89e01a, label create 0x89e043 with push 6 at 0x89e03b: "inj", "off", "sub" or "on" and the minute, in a match), column 7 condition `0x8aafd0(row, 0)` as `"%d%%"` (0x98e8d4), "Inj" (0x98e98c) when below 1.
   - view 6: column 6 status, column 7 match rating `0x8ab150(row, 0)` `"%d"` font 2 colour `[0xaebde8]` light cyan, column 8 goals `0x8ab260(row, 0)` `"%d"` yellow, only when above 0. The run shows the cyan "6" ratings.
-  All these cells use label calls into one shared site (`LAB_0089e14d`) except the rating at column 7.
+  All these cells use label calls into one shared site (`LAB_0089e14d`) except the rating at column 7 and the status at column 6 (0x89e043).
+  - "capt" (text 0xa8bdd4, 0x89cc34) is not a label: it is a widget in column 5 (widget create, return 0x89cd50), in every view that shows it. Correction of 2026-10-16 (0.5.0 slice 3, run log of the widget creates).
 - Data during a match: `0x8aafd0`, `0x8ab150`, `0x8ab260` read a 0x1be-byte record per player at `match + 0x4796 + (row + team*20) * 0x1be` (match = tactics object +4, team = byte +0xdea), or a local copy at `this + 0x2735`. Condition = float +0x4d times 0.01 (double 0x967898), rating = byte +0x1b, goals = byte +0xc, 0xfb at +0x19 means no player. Outside a match condition comes from `0x62c590(player, 1)`. These getters only read (code: 0x8aafd0 assembly). They are safe for display.
 
 ### Three columns side by side
