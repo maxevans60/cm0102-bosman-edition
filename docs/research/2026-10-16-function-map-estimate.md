@@ -1,0 +1,127 @@
+# Function map: coverage and cost
+
+Date: 2026-10-16. Original: `clean-3968/cm0102.exe` 3.9.68. Research only. The build did not change.
+
+Question: can every function of the original get a name and a description, and what would it cost? Pilots: `2026-10-16-function-map-pilot-discipline.md` (agents) and `2026-10-16-function-map-pilot-club-screens.md` (dossiers and the Batch API).
+
+## Answer in short
+
+A full map is possible. Link order, assert strings and the exception tables place every function in a source file or between two files. Names need one model pass per function.
+
+The fast route of pilot 2 costs about $0.012 a function. It sends one prepared dossier per function through the Message Batches API and picks the model by size. For the whole game this is about $120 and 2 to 3 hours of wall time. The first route, with Claude Code agents, was about 30 million tokens and 22 agent hours.
+
+## How many functions there are
+
+`tools/recomp/functions.txt` lists 9,241 entries. The build translates 11,706 functions: `recomp.py` adds 2,506 more that only data points to (vtables, callbacks, screen handlers). 41 entries of the list are runtime replacements and are not translated. The map counts the union, 11,747.
+
+| Kind | Functions | Naming work |
+|---|---|---|
+| Game code (0x401000 to 0x9339ff) | 6,609 | the real work |
+| Exception unwind funclets (0x950000 and later) | 3,873 | none: each belongs to one parent function, found through the FuncInfo tables |
+| Exception handler stubs (`mov eax, FuncInfo` then `jmp`) | 624 | none: one per parent function |
+| Library without asserts (0x933a00 to 0x944c15) | 254 | full work, library not identified |
+| C runtime (0x944c16 and later, not 16-byte aligned) | 387 | small: match against the MSVC runtime |
+
+## Step 1: which file each game function is in
+
+The exe holds 392 source path strings, for example the `tactics_screens.cpp` path at 0xA8B94C. Each assert pushes one of them. The linker placed the object files in alphabetical order of file name, with one exception in 392. So a function between two functions of one file belongs to that file.
+
+| Method | Game functions placed | Share |
+|---|---|---|
+| Assert path string in the function | 2,460 | 37% |
+| Link order: between two functions of the same file | 2,361 | 36% |
+| Vtable: member or constructor of a class whose other methods assert in one file, inside that file's address window | 473 | 7% |
+| Call graph: all callers in one file, inside the gap next to that file | 95 | 1% |
+| Placed in one file | 5,389 | 82% |
+| Gap between two files: the file is one of the two neighbours | 1,220 | 18% |
+| Not placed at all | 0 | 0% |
+
+Checks:
+
+- No placed function sits outside the alphabetical window of the assert functions around it.
+- Two first attempts gave wrong results and were dropped. A vtable shared by a base class put derived league methods into `league.cpp`. A caller vote put the 43 rule book files (`rb_*.cpp`) into `discipline.cpp`. Both now need the address window to agree.
+- 29 functions reference two path strings (inlined code). They stay with the file of their address window.
+- Classes: 301 vtables are referenced by code. 1,892 placed game functions are vtable members or constructors. The per-nation competitions are derived classes of `league.cpp` and `Cup.cpp` with the same vtable slots.
+- Files with the most functions: `transfer_manager.cpp` 192, `club_screens.cpp` 132, `Database.cpp` 129, `match_eng.cpp` 120, `comp_screens.cpp` 106, `Setup.cpp` 103.
+
+The table of all 11,747 functions with category, file or two candidate files, and method: `function-map/function_files.tsv` in the shared notes folder of this session (outside the repo). The scripts are in the same folder.
+
+## Step 2: the pilot
+
+discipline.cpp has 33 placed functions and 4 gap functions. One Opus agent named 35 of them blind: it could not read `docs/`, `src/` or `tests/`. Details and the comparison are in the pilot doc.
+
+- Cost: 169,913 tokens, 443 seconds, 24 tool calls.
+- Per function: 4,850 tokens and 13 seconds.
+- Confidence: 13 high, 18 medium, 4 low.
+- Check: five of six names agree with earlier research. The wrong name (0x55e300, a referee-assault ban read as a drug ban) had low confidence.
+- The pilot found the discipline object (0xae28f0, 42 bytes), the 29-byte player record and the 20-byte ban record.
+- Three of its names depend on the rule book classes in another file. A map of one file is weaker until its neighbours are mapped.
+
+## Scaled estimate, agent route (pilot 1)
+
+One unit is one function at the pilot's depth.
+
+| Part | Functions | Units | Rule |
+|---|---|---|---|
+| Game functions in files that occur once | 4,245 | 3,849 | full cost. 792 of them are already named or cited in research and count half |
+| Per-nation repeat files | 2,364 | 606 | the largest file of each family at full cost (167 functions), the others at 20% to confirm the template |
+| Library without asserts | 254 | 254 | full cost |
+| C runtime | 387 | 39 | 10%: match to the MSVC runtime |
+| Funclets and handler stubs | 4,497 | 0 | named by script from the parent |
+| Total | 11,747 | 4,748 | |
+
+The per-nation families: leagues (87 files, 967 functions), cups (60, 508), awards (34, 145), rule books (43, 155), eurocomp (15, 214), intercomp (8, 159), world cup (7, 158), transfer rules (25, 58).
+
+| | Tokens | Agent time |
+|---|---|---|
+| Naming pass: 4,748 units at 4,850 tokens and 13 seconds | 23 million | 17 hours |
+| Review and reconcile across files, 30% | 7 million | 5 hours |
+| Total | about 30 million | about 22 hours |
+
+With five agents in parallel, one file each, the wall time is about 5 hours plus briefing and merging. If the per-nation files were mapped one by one, the total would rise by about 11 million tokens.
+
+Limits of the estimate:
+
+- One pilot file only. discipline.cpp has many strings and asserts. Screen and match engine files have fewer, so their cost per function can be higher.
+- The game average is 272 instructions a function, the pilot average 360. This can lower the cost per function.
+- At pilot depth about one name in ten can be wrong, mostly at low confidence. The review share covers a second look at those.
+
+## Fast route (pilot 2)
+
+Pilot 2 named all 149 functions of `club_screens.cpp` in one batch of 25 minutes for about $1.81. Seven of eight checked names agree with earlier research. Details are in its doc.
+
+| Step | Functions | Cost | Wall time |
+|---|---|---|---|
+| Ghidra pseudocode of the whole game | 6,862 | none | done (about 40 minutes, once) |
+| Dossiers for all files | 6,863 | none | about 15 minutes, by script |
+| Wave 1: one batch, model by size | 6,863 game and library functions | about $85 at $0.012 a function | about 1 hour if the batch runs like the pilot. A batch can take up to 24 hours. |
+| Wave 2: low-confidence names again, with all wave-1 names as context | about 1,700 (25%) | about $35 | about 20 minutes, direct requests in parallel |
+| C runtime (387): Haiku or a name list | 387 | under $1 | minutes |
+| Funclets and handler stubs | 4,497 | none | by script, from the parent |
+| Docs: one table per file in the pilot 2 format | 392 files | none | by script |
+| Total | | about $120 | 2 to 3 hours |
+
+Notes:
+
+- The cost per function comes from `club_screens.cpp`, whose functions average 494 instructions. The game average is 272, so $0.012 is likely high.
+- In tokens the fast route is larger than the agent route: about 80 million, half of them cheap cache reads. Each request carries the full pseudocode. Money and time are lower because batch prices are half and Haiku and Sonnet take 60% of the functions.
+- The per-nation families are run in full. At $0.012 a function this costs about $28. Copying slot names from the template class is then a check, not a saving.
+- Quality to expect: about one name in eight wrong after wave 1, mostly marked low. Wave 2 in the pilot lifted 15 of 37 low names. It had only the names of the same file. With the names of the whole game, wave 2 should do better. That is not measured.
+
+## Cheaper models (pilot 2, second test)
+
+| Model for every function | club_screens.cpp | Whole game, wave 1 (scaled) | Checks right |
+|---|---|---|---|
+| Haiku | $0.05 | about $2.50 | 5 of 8, wrong names at medium confidence |
+| Sonnet | $0.93 | about $43 | 6 of 8 |
+| By size | $1.81 | about $85 | 7 of 8 |
+
+The subscription route is in `docs/specs/2026-10-16-function-map-spec.md`. It costs no money and takes several usage windows.
+
+## Recommendation
+
+Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
+
+1. Commit the step 1 file table and the dossier and batch scripts under `tools/research/` (addresses, file names and model output only, no code of the original).
+2. Run wave 1 as one batch, then wave 2 on the low names with the names of the whole game.
+3. Write one doc per source file under `docs/research/function-map/`, and check a sample of 20 names against earlier research before use.
