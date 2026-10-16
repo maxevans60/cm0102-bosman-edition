@@ -5,6 +5,7 @@ Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen|hd]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd] [--days n]
+        [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest]
 
 --tolerance n: a colour channel that differs by n or less counts as equal. The Linux build differs from the
@@ -22,6 +23,9 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
 Each save must be byte for byte the same as the save of "normal". A failed check names the parts of
 the save file that differ. The runs play at the same time, about two minutes in all. A later option
 that must not change the game adds a run to SAME_SAVE_RUNS.
+
+With --save, each run loads that saved test game (tests/fixtures/fixtures.py) instead of a new game, then
+takes the same Go on Holiday steps. The game is saved n game days after the load.
 
 Match check (--match): the same as the same-save check, but each run loads the saved test game
 prematch.sav (tests/fixtures/fixtures.py) and plays the friendly at Basel on Friday 20.7.01 to the end.
@@ -340,11 +344,22 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     return 1 if failed else 0
 
 
-def same_save(program, game, mode, days):
+def same_save(program, game, mode, days, save_name=None):
     # No click ends the intro (without_intro_click).
-    steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
-    steps = without_intro_click(steps) + ["400000 quit"]
-    return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days)
+    if save_name is None:
+        steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
+        return compare_runs(program, game, mode, SAME_SAVE_RUNS, without_intro_click(steps) + ["400000 quit"], days)
+    # --save: load the saved test game, then the same Go on Holiday steps as the new game.
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))
+    import fixtures  # noqa: E402  (fixtures.py imports this file)
+    save = os.path.join(fixtures.DEFAULT_DIR, save_name)
+    if not os.path.exists(save):
+        print(f"FAIL: no saved test game {save} (tests/fixtures/fixtures.py says where it comes from)")
+        return 1
+    holiday = STEPS[STEPS.index("wait first-news") + 1:]
+    holiday = [s for s in holiday if "dump" not in s and "quit" not in s]
+    steps = without_intro_click(fixtures.LOAD_STEPS) + holiday + ["400000 quit"]
+    return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save)
 
 
 # --speed fastest: the Fastest item (#31, commentary.c), one row above Very Fast.
@@ -385,7 +400,8 @@ def main(argv):
         return match(os.path.abspath(argv[1]), os.path.abspath(argv[2]), days, speed)
     if "--same-save" in argv[3:]:
         days = int(argv[argv.index("--days") + 1]) if "--days" in argv[3:] else 14
-        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days)
+        save_name = argv[argv.index("--save") + 1] if "--save" in argv[3:] else None
+        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days, save_name)
     program, game, ref = os.path.abspath(argv[1]), os.path.abspath(argv[2]), os.path.abspath(argv[3])
     record = "--record" in argv[4:]
     tol = int(argv[argv.index("--tolerance") + 1]) if "--tolerance" in argv[4:] else 0
