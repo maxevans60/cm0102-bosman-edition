@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e3a10 | 22 | `RbTurkeyCup::RbTurkeyCup` | thiscall(RbTurkeyCup* this, int ruling_body_arg), ret 4 | Constructs the Turkish cup rules object by building its ruling base and installing the cup's vtable and rule constants. | medium | haiku |  |
-| 0x7e3a60 | 163 (+5 unwind) | `rb_turkey_cup_on_day_tick` | thiscall(ECX=this rb_turkey_cup object, stack: param_2 pointer to a ban/news record of 0x13 dwords) ret 4 | Runs the daily Turkish cup check, applying points bans and posting discipline news for the cup's ruling body entries. | medium | haiku |  |
-| 0x7e3cc0 | 38 | `rb_turkey_cup_assert_or_name_check` | cdecl(void* param_1, int param_2) with ret 0xc; param_2 is a count compared against 0x14 (20), param_1 is a name buffer context | Checks the Turkish cup count, raising an error box with build version text when the count is below twenty, otherwise logging the cup name. | medium | haiku |  |
+| 0x7e3a10 | 22 | `RbTurkeyCup::RbTurkeyCup` | thiscall(RbTurkeyCup* this, FILE* file) returning this, ret 4 | Constructs the Turkish cup ruling body on the RulingBody base, sets vtable 0x96eed4, rule set id 0x26 and the Turkey nation fields. | high | opus |  |
+| 0x7e3a60 | 163 (+5 unwind) | `RbTurkeyCup::process_match_cards` | thiscall(RbTurkeyCup* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Turkish cup rules, queueing a points ban for a red card and banning him at each fourth booking. | high | opus |  |
+| 0x7e3cc0 | 38 | `RbTurkeyCup::get_name` | thiscall(RbTurkeyCup* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Turkish cup into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

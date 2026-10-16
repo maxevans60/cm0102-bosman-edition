@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e32d0 | 22 | `rb_sweden_cup_ctor` | thiscall (this in ECX, param_2 base ruling body pointer passed on stack), ret 4 | Constructs the Swedish cup ruling object by initialising the base ruling body and setting its vtable and cup rule fields. | high | haiku |  |
-| 0x7e3320 | 175 (+5 unwind) | `rb_sweden_cup_handle_round_event` | thiscall-like vtable method, ECX is this, arguments (int *param_1, undefined4 *param_2) with param_2 the event record, ret 8 | Handles a Swedish cup round event, applying a points ban and posting discipline news to the ruling body. | medium | haiku |  |
-| 0x7e35b0 | 38 | `rb_sweden_cup_assert_or_name` | cdecl(param_1 unknown output buffer or context, param_2 int check value compared against 0x14), ret 0xc | Shows a version error box when the check value is below 20, otherwise writes the Swedish cup name into a buffer. | medium | haiku |  |
+| 0x7e32d0 | 22 | `RbSwedenCup::RbSwedenCup` | thiscall(RbSwedenCup* this, FILE* file) returning this, ret 4 | Constructs the Swedish cup ruling body on the RulingBody base, sets vtable 0x96ee94, rule set id 0x1d and the Sweden nation fields. | high | opus |  |
+| 0x7e3320 | 175 (+5 unwind) | `RbSwedenCup::process_match_cards` | thiscall(RbSwedenCup* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Swedish cup rules, queueing a points ban for a red card and banning him at the third booking and each second one after. | high | opus |  |
+| 0x7e35b0 | 38 | `RbSwedenCup::get_name` | thiscall(RbSwedenCup* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Swedish cup into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

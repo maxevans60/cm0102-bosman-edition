@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x4c46c0 | 105 (+2 unwind) | `PHL_league_object::PHL_league_object` | thiscall(this, u16 league_id, u32 owner_arg), ret 8 | Constructs the PHL league object, loads its temporary file, and builds the league's rules and components, reporting an assert error on failure. | high | haiku |  |
+| 0x4c46c0 | 105 (+2 unwind) | `PHL_league_object::PHL_league_object` | thiscall(this, u16 league_id, u32 owner_arg), ret 8 | Constructs the PHL league object, loads its temporary file, and builds the league's rules and components, reporting an assert error on failure. | high | haiku | club-world.md |
 | 0x4c4850 | 11 | `conmebol_merc::`scalar deleting destructor'` | thiscall (League* this, unsigned flags), returns this, ret 4 | Override of League::`scalar deleting destructor' for the competition of conmebol_merc.cpp. | medium | slot copy |  |
 | 0x4c4870 | 60 (+1 unwind) | `conmebol_merc_destructor_body` | fastcall (ECX = this, implicit; no stack args), ret 0 | Resets the vtable to the base class, frees owned buffers and child objects, then runs the League base destructor. | medium | haiku |  |
 | 0x4c4930 | 337 | `conmebol_merc::create_schedule` | thiscall (League* this, char stage, short* entry_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Override of League::create_schedule for the competition of conmebol_merc.cpp. | medium | slot copy |  |

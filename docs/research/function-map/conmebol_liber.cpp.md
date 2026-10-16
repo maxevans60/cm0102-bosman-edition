@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x4c2f50 | 108 (+2 unwind) | `conmebol_liber_ctor` | thiscall(this, short param_2, int param_3) ret 8 | Constructs the Conmebol Liber league object, loads its temp file, and reports version assertion failures on error. | high | haiku |  |
+| 0x4c2f50 | 108 (+2 unwind) | `conmebol_liber_ctor` | thiscall(this, short param_2, int param_3) ret 8 | Constructs the Conmebol Liber league object, loads its temp file, and reports version assertion failures on error. | high | haiku | club-world.md |
 | 0x4c30e0 | 11 | `conmebol_liber::`scalar deleting destructor'` | thiscall (League* this, unsigned flags), returns this, ret 4 | Override of League::`scalar deleting destructor' for the competition of conmebol_liber.cpp. | medium | slot copy |  |
 | 0x4c3100 | 60 (+1 unwind) | `conmebol_liber_dtor_body` | thiscall(Conmebol_liber *this) ret 0 | Destroys the Conmebol_liber object by resetting its vtable, freeing owned tables and then delegating base League teardown. | high | haiku |  |
 | 0x4c31c0 | 376 | `conmebol_liber::create_schedule` | thiscall (League* this, char stage, short* entry_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Override of League::create_schedule for the competition of conmebol_liber.cpp. | medium | slot copy |  |

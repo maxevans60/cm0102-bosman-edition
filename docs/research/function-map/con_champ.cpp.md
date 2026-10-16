@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x4c0c40 | 131 (+2 unwind) | `cup_champ_ctor_thiscall` | thiscall(this, int param_2 as short tier/id, int param_3 as owner or parent pointer) ret 8 | Constructs a cup championship object, loads its cup data from disk, builds the fixture tree and reports assertion failures. | high | haiku |  |
+| 0x4c0c40 | 131 (+2 unwind) | `cup_champ_ctor_thiscall` | thiscall(this, int param_2 as short tier/id, int param_3 as owner or parent pointer) ret 8 | Constructs a cup championship object, loads its cup data from disk, builds the fixture tree and reports assertion failures. | high | haiku | club-world.md |
 | 0x4c0e10 | 11 | `con_champ::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of con_champ.cpp. | medium | slot copy |  |
 | 0x4c0e30 | 62 (+1 unwind) | `con_champ::~con_champ` | thiscall(this in ECX, no stack arguments) ret 0 | Destructor of the con_champ object that frees its owned pointer arrays and members, then tears down the base Cup. | high | haiku |  |
 | 0x4c0f00 | 189 | `con_champ::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of con_champ.cpp. | medium | slot copy |  |

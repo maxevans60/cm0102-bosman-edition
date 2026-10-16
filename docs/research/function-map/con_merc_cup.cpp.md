@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x4c16f0 | 105 (+2 unwind) | `Merc_cup::Merc_cup` | thiscall(Merc_cup *this, undefined2 param_2, undefined4 param_3), ret 8 | Constructs a Merc Cup competition object, loading league data and allocating comp stats, reporting assert failures on error. | high | haiku |  |
+| 0x4c16f0 | 105 (+2 unwind) | `Merc_cup::Merc_cup` | thiscall(Merc_cup *this, undefined2 param_2, undefined4 param_3), ret 8 | Constructs a Merc Cup competition object, loading league data and allocating comp stats, reporting assert failures on error. | high | haiku | club-world.md |
 | 0x4c1880 | 11 | `con_merc_cup::`scalar deleting destructor'` | thiscall (League* this, unsigned flags), returns this, ret 4 | Override of League::`scalar deleting destructor' for the competition of con_merc_cup.cpp. | medium | slot copy |  |
 | 0x4c18a0 | 60 (+1 unwind) | `merc_cup_screen_dtor` | thiscall(this in ECX) with unwind funclet, ret 0 | Destroys the merc cup screen object, resetting its vtable and freeing child screen slots, buffers and the league base. | high | haiku |  |
 | 0x4c1960 | 294 | `con_merc_cup::create_schedule` | thiscall (League* this, char stage, short* entry_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Override of League::create_schedule for the competition of con_merc_cup.cpp. | medium | slot copy |  |

@@ -9,14 +9,14 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 1894 high, 4599 medium, 370 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a.
+- Confidence: 2005 high, 4507 medium, 351 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
 |---|---|
-| [african_nations.cpp](african_nations.cpp.md) | 23 |
-| [Area.cpp](Area.cpp.md) | 12 |
+| [african_nations.cpp](african_nations.cpp.md) | 20 |
+| [Area.cpp](Area.cpp.md) | 15 |
 | [arg_prm.cpp](arg_prm.cpp.md) | 17 |
 | [arg_second.cpp](arg_second.cpp.md) | 19 |
 | [argentina_awards.cpp](argentina_awards.cpp.md) | 4 |
@@ -322,8 +322,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [rus_cup.cpp](rus_cup.cpp.md) | 7 |
 | [rus_first.cpp](rus_first.cpp.md) | 7 |
 | [rus_prm.cpp](rus_prm.cpp.md) | 13 |
-| [russia_awards.cpp](russia_awards.cpp.md) | 6 |
-| [russia_rules.cpp](russia_rules.cpp.md) | 3 |
+| [russia_awards.cpp](russia_awards.cpp.md) | 5 |
+| [russia_rules.cpp](russia_rules.cpp.md) | 4 |
 | [sco_chal_cup.cpp](sco_chal_cup.cpp.md) | 7 |
 | [sco_fa_cup.cpp](sco_fa_cup.cpp.md) | 6 |
 | [sco_first.cpp](sco_first.cpp.md) | 12 |
@@ -332,8 +332,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [sco_second.cpp](sco_second.cpp.md) | 7 |
 | [sco_third.cpp](sco_third.cpp.md) | 7 |
 | [scotland_awards.cpp](scotland_awards.cpp.md) | 5 |
-| [scotland_rules.cpp](scotland_rules.cpp.md) | 7 |
-| [scout_manager.cpp](scout_manager.cpp.md) | 43 |
+| [scotland_rules.cpp](scotland_rules.cpp.md) | 5 |
+| [scout_manager.cpp](scout_manager.cpp.md) | 45 |
 | [scrman.cpp](scrman.cpp.md) | 63 |
 | [search_edit_session.cpp](search_edit_session.cpp.md) | 12 |
 | [search_eng.cpp](search_eng.cpp.md) | 15 |
@@ -348,9 +348,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [spa_second.cpp](spa_second.cpp.md) | 7 |
 | [spa_second_b.cpp](spa_second_b.cpp.md) | 18 |
 | [spa_super.cpp](spa_super.cpp.md) | 7 |
-| [spain_awards.cpp](spain_awards.cpp.md) | 5 |
+| [spain_awards.cpp](spain_awards.cpp.md) | 4 |
 | [spain_rules.cpp](spain_rules.cpp.md) | 7 |
-| [squad_manager.cpp](squad_manager.cpp.md) | 18 |
+| [squad_manager.cpp](squad_manager.cpp.md) | 19 |
 | [stadium.cpp](stadium.cpp.md) | 17 |
 | [staff_contracts.cpp](staff_contracts.cpp.md) | 42 |
 | [staff_records.cpp](staff_records.cpp.md) | 37 |

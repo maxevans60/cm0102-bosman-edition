@@ -171,6 +171,31 @@ The agents named the same vtable slots in different ways. After the merge, 56 na
 | 0x5ed200 | Lists an object on the confirm screen (start-screen spec) | `gui_text_fit_draw_row` (Haiku) | `gui_add_text_area_from_text` | agrees in area |
 | 0x66e790 | Language choice from the keyboard layout (import inventory) | `set_language_from_keyboard_layout` (Haiku) | `langlib_setup` | agrees |
 
+#### Wave t1b (tier 1 and the start of tier 2, 2026-10-16)
+
+Run `sweep-t1b`: 8 Opus agents named 194 functions: the rest of tier 1 (`rb_italy_cup.cpp` to `rb_wales.cpp`, `russia_rules.cpp` to `wales_rules.cpp`) and the first tier 2 files (`african_nations.cpp`, `asia_club_champ.cpp`, `asia_cup_winner.cpp`, `asia_nations.cpp`, `asia_super_cup.cpp`). Each agent took 2 to 5 minutes and 110,000 to 162,000 tokens. Confidence: 150 high, 44 medium, 0 low.
+
+A new check (`slotcheck.py` in the work folder) gives each vtable slot of League, Cup, the transfer rules and the ruling bodies one method name. It takes the Opus name of the base method, else a fixed name, else the majority of the Opus overrides. It renamed 2 overrides of Comp slot 26 to `set_club_progress`. The Comp slots that the base sweeps did not name now have fixed names: 10 `advance_stage`, 26 `set_club_progress`, 28 `get_qualification_status`, 29 `get_qualification_status_change`. `african_nations.cpp` keeps four base stubs as `Comp::` and `League::`, because the base vtables point to them.
+
+14 functions of the wave are cited. 0x401000 is a false hit: the docs cite 0x401000 as the start of .text. The other 13 agree.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x401000 | Start of .text, not this function | `African_Nations::African_Nations` (Haiku) | `AfricanNations::AfricanNations` | no citation |
+| 0x402ac0 | Area init, clamps to 799 by 599 (widescreen and display inventories) | `area_init_bounds_and_tables` (Haiku) | `Area::init` | agrees |
+| 0x402d10 | Popup open (input inventory) | `area_refresh_view_pos` (Haiku) | `Area::open_popup` | agrees |
+| 0x402d80 | Popup close (input inventory) | `cup_flag_clear_and_release` (Haiku) | `Area::close_popup` | agrees |
+| 0x40aae0 | Asian Club Championship constructor (club-world) | `Asia_club_champ::ctor` (Haiku) | `AsiaClubChamp::AsiaClubChamp` | agrees |
+| 0x40cbe0 | Asian Cup Winners' Cup constructor | `asia_cup_winner_ctor` (Haiku) | `AsiaCupWinner::AsiaCupWinner` | agrees |
+| 0x410650 | Asian Super Cup constructor | `asia_super_cup_init` (Haiku) | `AsiaSuperCup::AsiaSuperCup` | agrees |
+| 0x7e29e0 | Only function of the South American ruling body (int-continental) | `rb_south_america_ctor` (Haiku) | `RbSouthAmerica::RbSouthAmerica` | agrees |
+| 0x7ec950 | Russia filler, 3 foreign (foreign-and-tactics) | `fill_sentinel_and_set_flag` (Haiku) | `RUSSIA_RULES::fill_squad_restrictions` | agrees |
+| 0x7f64c0 | Scotland filler, an age rule | `scotland_rules_fill_slots` (Haiku) | `SCOTLAND_RULES::fill_squad_restrictions` | agrees |
+| 0x859400 | Spain rules object (season-change-points) | `spain_awards_ctor_base` (Haiku) | `SPAIN_RULES::SPAIN_RULES` | agrees |
+| 0x859570 | Spain filler, 2, 3 or 4 non-EU | `spain_rules_loan_eligibility_flags` (Haiku) | `SPAIN_RULES::fill_squad_restrictions` | agrees |
+| 0x859aa0 | Setup step 29, global 0xdd7ef0 (game-creation inventory) | `find_cm_cd_drive` (Haiku) | `find_cm_cd_drive` | agrees |
+| 0x9021d0 | Turkey filler, 6 foreign or an age rule | `turkey_rules_fill_option_list_for_player` (Haiku) | `TURKEY_RULES::fill_squad_restrictions` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

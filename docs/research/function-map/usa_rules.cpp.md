@@ -6,5 +6,5 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x90b940 | 81 (+1 unwind) | `usa_rules_ctor` | thiscall(usa_rules* this, 5 args forwarded to TRANSFER_RULES base ctor), ret 0x14 | Constructs the USA rules object, allocating a 12-byte rule table and reporting an assert error if allocation fails. | high | haiku |  |
-| 0x90ba60 | 17 | `usa_rules_init_slot_table` | stdcall-like two-argument function returning with ret 8: (int *owner, undefined4 *table), table filled with 0xffffffff over ten dwords plus a word, owner checked against global 0x9cf690 | Initialises a ten-entry slot table to empty and flags it when the owner differs from the global reference. | medium | haiku |  |
+| 0x90b940 | 81 (+1 unwind) | `USA_RULES::USA_RULES` | thiscall(USA_RULES* this, 5 args forwarded to TRANSFER_RULES::TRANSFER_RULES) ret 0x14 | Constructs the USA transfer rules, sets vtable 0x970a38, allocates the 12-byte transfer window table and sets byte +0x13 to 4. | high | opus |  |
+| 0x90ba60 | 17 | `USA_RULES::fill_squad_restrictions` | thiscall(USA_RULES* this, competition_t* competition, u8* record) ret 8 | Fills the 42-byte match squad restriction record with 0xff and allows four foreign players except in competition 0x9cf690. | high | opus |  |
