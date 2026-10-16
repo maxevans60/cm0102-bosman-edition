@@ -4,15 +4,15 @@
 Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen|hd]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd] [--days n]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd] [--days n] [--ref-build <program>]
         [--save start.sav|prematch.sav]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>]
 
 --tolerance n: a colour channel that differs by n or less counts as equal. The Linux build differs from the
 Mac reference pictures by 1 in some channels (the compilers round floating point differently), so its
 smoke run uses --tolerance 1.
 
-Same-save check (--same-save): the run plays the same new game six times, with -seed 1, the test
+Same-save check (--same-save): the run plays the same new game once per run in SAME_SAVE_RUNS, with -seed 1, the test
 clock (RECOMP_FIXED_CLOCK=1) and the same steps to "Go on Holiday". The runtime saves the game n game
 days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops. The runs:
     normal   every option at its default, faster_days = off
@@ -27,6 +27,10 @@ that must not change the game adds a run to SAME_SAVE_RUNS.
 
 With --save, each run loads that saved test game (tests/fixtures/fixtures.py) instead of a new game, then
 takes the same Go on Holiday steps. The game is saved n game days after the load.
+
+Search check (--same-save --save <name> --search): the runs open the player search and close it before
+the holiday: search-off, search-on and search-on-again (full_player_search). Each save is compared with
+the save of search-off.
 
 Match check (--match): the same as the same-save check, but each run loads the saved test game
 prematch.sav (tests/fixtures/fixtures.py) and plays the friendly at Basel on Friday 20.7.01 to the end.
@@ -182,7 +186,12 @@ SAME_SAVE_RUNS = [
     ("off", {"space_to_continue": "off", "shortcuts": "off", "sharp_picture": "off", "sound": "off",
              "clickable_names": "off", "attribute_colours": "off", "faster_days": "off",
              "match_columns": "off", "condition_colours": "off", "save_backups": "off", "remember_window": "off",
-             "squad_views": "off", "attribute_groups": "off"}),
+             "squad_views": "off", "attribute_groups": "off", "foreign_colours": "off",
+             "full_player_search": "off"}),
+    ("foreign-on", {"faster_days": "off", "foreign_colours": "on"}),
+    ("foreign-off", {"faster_days": "off", "foreign_colours": "off"}),
+    ("search-on", {"faster_days": "off", "full_player_search": "on"}),
+    ("search-off", {"faster_days": "off", "full_player_search": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
@@ -238,6 +247,10 @@ MATCH_RUNS = [
     ("colours-off", {"attribute_colours": "off"}),
     ("condition-on", {"condition_colours": "on"}),
     ("condition-off", {"condition_colours": "off"}),
+    ("foreign-on", {"foreign_colours": "on"}),
+    ("foreign-off", {"foreign_colours": "off"}),
+    ("search-on", {"full_player_search": "on"}),
+    ("search-off", {"full_player_search": "off"}),
     ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
@@ -279,15 +292,24 @@ def without_intro_click(steps):
         steps[first_wait:]
 
 
+# --ref-build <program>: one more run, with the options of the first run, plays another build (for example the
+# build of main). For a change with no option, such as the crash guards: its save must equal the first run's.
+REF_BUILD = None
+
+
 def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=()):
     """Plays the runs at the same time, each with its option lines, and compares each saved game with
     the save of the first run. save: a saved game to copy into each user folder first. allowed: names of
     parts that may differ (an accepted difference, for example the parts that depend on the memory layout of
     the game, Q152); a difference in any other part fails."""
+    if REF_BUILD:
+        runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
+
     def play(name, options, work):
         steps_of_run = options.get("_steps", steps)        # a run may have its own steps and environment
         extra_env = options.get("_env", {})
-        options = {k: v for k, v in options.items() if k not in ("_steps", "_env")}
+        run_program = options.get("_program", program)     # and its own build (--ref-build)
+        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program")}
         run = os.path.join(work, name)
         user, home, shots = (os.path.join(run, d) for d in ("user", "home", "shots"))
         for d in (user, home, shots):
@@ -303,7 +325,7 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                    RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days),
                    RECOMP_SCRIPT="; ".join(scaled_steps(mode, shots, steps_of_run)), **extra_env)
         start = time.time()
-        r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
+        r = subprocess.run([run_program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
                            timeout=timeout)
         return r, os.path.join(user, SAVE_NAME), time.time() - start
 
@@ -344,7 +366,24 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     return 1 if failed else 0
 
 
-def same_save(program, game, mode, days, save_name=None):
+# --search: after the load, open the player search (Player & Staff Search, Player Search tab: every player
+# of the list, no filter), close it with Cancel, then go on holiday. The runs open the same screen, so a
+# difference between them comes from the option alone (0.5.0 slice 5).
+SEARCH_STEPS = [
+    "2500 click 45 165",                    # the manager's menu
+    "4000 click 190 302",                   # Player & Staff Search
+    "wait screen:0x808690",
+    "3000 click 359 573",                   # Cancel
+    "wait screen:0x7881e0",
+]
+SEARCH_RUNS = [
+    ("search-off", {"faster_days": "off", "full_player_search": "off"}),
+    ("search-on", {"faster_days": "off", "full_player_search": "on"}),
+    ("search-on-again", {"faster_days": "off", "full_player_search": "on"}),
+]
+
+
+def same_save(program, game, mode, days, save_name=None, search=False):
     # No click ends the intro (without_intro_click).
     if save_name is None:
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
@@ -358,6 +397,9 @@ def same_save(program, game, mode, days, save_name=None):
         return 1
     holiday = STEPS[STEPS.index("wait first-news") + 1:]
     holiday = [s for s in holiday if "dump" not in s and "quit" not in s]
+    if search:
+        steps = without_intro_click(fixtures.LOAD_STEPS) + SEARCH_STEPS + holiday + ["400000 quit"]
+        return compare_runs(program, game, mode, SEARCH_RUNS, steps, days, save)
     steps = without_intro_click(fixtures.LOAD_STEPS) + holiday + ["400000 quit"]
     return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save)
 
@@ -385,6 +427,9 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
+    global REF_BUILD
+    if "--ref-build" in argv[3:]:
+        REF_BUILD = os.path.abspath(argv[argv.index("--ref-build") + 1])
     mode = "classic"
     if "--mode" in argv[3:]:
         mode = argv[argv.index("--mode") + 1]
@@ -401,7 +446,7 @@ def main(argv):
     if "--same-save" in argv[3:]:
         days = int(argv[argv.index("--days") + 1]) if "--days" in argv[3:] else 14
         save_name = argv[argv.index("--save") + 1] if "--save" in argv[3:] else None
-        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days, save_name)
+        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days, save_name, "--search" in argv[3:])
     program, game, ref = os.path.abspath(argv[1]), os.path.abspath(argv[2]), os.path.abspath(argv[3])
     record = "--record" in argv[4:]
     tol = int(argv[argv.index("--tolerance") + 1]) if "--tolerance" in argv[4:] else 0

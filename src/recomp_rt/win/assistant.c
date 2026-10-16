@@ -78,6 +78,7 @@ static uint32_t text(int i)
 
 void o_008040a0(void);
 void o_004671f0(void);
+void foreign_cell_button(void);
 
 /* One item of a popup: an id and its data, as the Filter items (0x458b45, 0x458bb6). */
 static void popup_item(uint32_t popup, uint32_t t, uint32_t id, uint32_t data)
@@ -102,6 +103,7 @@ static int clear_made;  /* the squad list made its Clear Squad button in this bu
  * Squad (another club's) gets an Assistant button with Team views only. */
 RT_WRAP(008040a0, cell_button)
 {
+    foreign_cell_button();      /* the squad list's names (foreign.c) */
     uint32_t site = rd32(g_mem, cpu.esp);
     if (site == rt_site_squad_filter) {
         int other = !clear_made;

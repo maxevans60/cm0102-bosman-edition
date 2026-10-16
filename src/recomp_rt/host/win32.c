@@ -134,6 +134,18 @@ int host_rename(const char *from, const char *to)
     return to_wide(from, a, WPATH) && to_wide(to, b, WPATH) ? _wrename(a, b) : -1;
 }
 
+int host_replace(const char *from, const char *to)
+{
+    wchar_t a[WPATH], b[WPATH];
+    if (!to_wide(from, a, WPATH) || !to_wide(to, b, WPATH)) return -1;
+    return MoveFileExW(a, b, MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) ? 0 : -1;
+}
+
+int host_sync(FILE *f)
+{
+    return _commit(_fileno(f));
+}
+
 /* Folders. */
 struct HostDir {
     HANDLE h;

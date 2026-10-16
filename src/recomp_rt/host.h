@@ -40,6 +40,10 @@ int host_stat(const char *path, HostStat *st);   /* 0 on success */
 int host_mkdir(const char *path);                /* 0 on success */
 int host_unlink(const char *path);               /* 0 on success */
 int host_rename(const char *from, const char *to);
+/* Moves from over to, and replaces to when it exists (also on Windows). 0 on success. */
+int host_replace(const char *from, const char *to);
+/* Flushes the file to the disk. 0 on success. Call fflush first. */
+int host_sync(FILE *f);
 
 /* Folder listing: each name, "." and ".." included, then NULL. */
 typedef struct HostDir HostDir;
