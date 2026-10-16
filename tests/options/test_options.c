@@ -71,6 +71,7 @@ static void check_defaults(void)
     CHECK(options_bool(OPT_CONDITION_COLOURS) == 1);
     CHECK(options_bool(OPT_SQUAD_VIEWS) == 1);
     CHECK(options_bool(OPT_ATTRIBUTE_GROUPS) == 1);
+    CHECK(options_bool(OPT_FOREIGN_COLOURS) == 1);
     CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
     CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.68"));
 }
@@ -95,6 +96,7 @@ int main(void)
     CHECK(strstr(get(), "\nsave_backups = on\n") != NULL);
     CHECK(strstr(get(), "\nsquad_views = on\n") != NULL);
     CHECK(strstr(get(), "\nattribute_groups = on\n") != NULL);
+    CHECK(strstr(get(), "\nforeign_colours = on\n") != NULL);
     static char first[16384];
     snprintf(first, sizeof first, "%s", get());
     options_load(path);                         /* a second start changes nothing */
@@ -145,7 +147,7 @@ int main(void)
     /* 5. Words for the switches, and a bad value keeps the default. */
     put("space_to_continue = FALSE\nshortcuts = yes\nsharp_picture = off\nsound = true\n"
         "clickable_names = maybe\ndisplay = tiny\nattribute_colours = off\r\nfaster_days = off\r\n"
-        "condition_colours = off\nsquad_views = no\nattribute_groups = no\n");
+        "condition_colours = off\nsquad_views = no\nattribute_groups = no\nforeign_colours = off\n");
     options_load(path);
     CHECK(options_bool(OPT_SPACE_TO_CONTINUE) == 0);
     CHECK(options_bool(OPT_SHORTCUTS) == 1);
@@ -158,6 +160,7 @@ int main(void)
     CHECK(options_bool(OPT_CONDITION_COLOURS) == 0);
     CHECK(options_bool(OPT_SQUAD_VIEWS) == 0);
     CHECK(options_bool(OPT_ATTRIBUTE_GROUPS) == 0);
+    CHECK(options_bool(OPT_FOREIGN_COLOURS) == 0);
     CHECK(options_bool(OPT_MATCH_COLUMNS) == 1);
 
     /* 6. HD mode (0.4.0 spec, slice 9): display = hd, in any case. */

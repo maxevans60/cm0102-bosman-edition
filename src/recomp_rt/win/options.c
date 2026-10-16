@@ -50,6 +50,8 @@ static const OptionDef defs[OPT_COUNT] = {
         "squad_views = on adds Team views (best XI, squad depth, compare players) to the Assistant drop-down of a squad screen, and the polygon to the comparison of two chosen players."},
     [OPT_ATTRIBUTE_GROUPS] = {"attribute_groups", KIND_SWITCH, "on", NULL,
         "attribute_groups = on shows the player profile's attributes in Technical, Mental and Physical groups."},
+    [OPT_FOREIGN_COLOURS] = {"foreign_colours", KIND_SWITCH, "on", NULL,
+        "foreign_colours = on shows in light violet the names of players who count against the foreign player limit of the club's next league or cup match, on the squad and tactics screens."},
 };
 
 #define TEXT_MAX 1100

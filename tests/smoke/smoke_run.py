@@ -181,7 +181,9 @@ SAME_SAVE_RUNS = [
     ("off", {"space_to_continue": "off", "shortcuts": "off", "sharp_picture": "off", "sound": "off",
              "clickable_names": "off", "attribute_colours": "off", "faster_days": "off",
              "match_columns": "off", "condition_colours": "off", "save_backups": "off", "remember_window": "off",
-             "squad_views": "off", "attribute_groups": "off"}),
+             "squad_views": "off", "attribute_groups": "off", "foreign_colours": "off"}),
+    ("foreign-on", {"faster_days": "off", "foreign_colours": "on"}),
+    ("foreign-off", {"faster_days": "off", "foreign_colours": "off"}),
 ]
 
 # The match check (--match): the steps after the load of prematch.sav (fixtures.LOAD_STEPS), positions
@@ -235,6 +237,8 @@ MATCH_RUNS = [
     ("colours-off", {"attribute_colours": "off"}),
     ("condition-on", {"condition_colours": "on"}),
     ("condition-off", {"condition_colours": "off"}),
+    ("foreign-on", {"foreign_colours": "on"}),
+    ("foreign-off", {"foreign_colours": "off"}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
 
