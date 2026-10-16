@@ -48,8 +48,16 @@ const char *options_string(OptionId id);
 /* The value of an enum option: the index in its list of values. */
 int options_enum(OptionId id);
 
-/* Sets an enum option to value and writes it to the settings file: the option's line gets the new
- * value, and every other line stays as it is. Returns 0 when value does not fit the option. */
+/* Sets option id to value, for a switch (on/off, yes/no, true/false), a choice (one of its values, or
+ * folder:<name> for database) or a text. The running game reads the new value at once through the getters.
+ * The settings file gets it too: the option's line is replaced, or added with its comment when it is
+ * missing. Every other line, comment, line end and unknown line stays. The file is written to
+ * settings.txt.tmp and moved over the old file, so a failed write leaves the old file whole.
+ * Returns 1 when the value is set and the file is written, 0 when the value does not fit the option (nothing
+ * changes), and -1 when the value is set in memory but the file could not be written (a message is printed). */
+int options_set(OptionId id, const char *value);
+
+/* options_set for an enum option only: returns 0 for a switch or a text. */
 int options_set_enum(OptionId id, const char *value);
 
 /* The name of an option in the file, for messages. */

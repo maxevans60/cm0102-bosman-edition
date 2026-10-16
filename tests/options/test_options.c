@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 static int failures;
@@ -243,6 +244,146 @@ int main(void)
     HostStat st;
     CHECK(host_stat(tmp, &st) != 0);
     free(big);
+
+    /* 8. options_set: switches, choices and text, through the temporary file and a rename. */
+    char tmp2[1100], bak2[1100], snap[16384];
+    snprintf(tmp2, sizeof tmp2, "%s.tmp", path);
+    snprintf(bak2, sizeof bak2, "%s.bak", path);
+    /* 8a. A switch: the line changes, the comments, the other lines and the CRLF stay. */
+    put("# my notes\r\nzebra = 1\r\nSound = On\r\n# about shortcuts\r\nshortcuts = yes\r\nfuture_option=yes\r\n");
+    options_load(path);
+    CHECK(options_bool(OPT_SOUND) == 1);
+    CHECK(options_set(OPT_SOUND, "OFF") == 1);
+    CHECK(options_bool(OPT_SOUND) == 0);                         /* the running game has it at once */
+    t = get();
+    CHECK(strstr(t, "# my notes\r\nzebra = 1\r\nsound = off\r\n# about shortcuts\r\nshortcuts = yes\r\nfuture_option=yes\r\n") == t);
+    CHECK(count(t, "\nsound = ") == 1 && count(t, "\nSound") == 0);
+    CHECK(host_stat(tmp2, &st) != 0 && host_stat(bak2, &st) != 0);   /* no leftover file */
+    CHECK(options_set(OPT_SHORTCUTS, "no") == 1 && options_bool(OPT_SHORTCUTS) == 0);
+    CHECK(strstr(get(), "# about shortcuts\r\nshortcuts = off\r\n") != NULL);
+    CHECK(options_set(OPT_SHORTCUTS, "True") == 1 && options_bool(OPT_SHORTCUTS) == 1);
+    CHECK(strstr(get(), "shortcuts = on\r\n") != NULL);
+    options_load(path);                                          /* the reader sees what the writer wrote */
+    CHECK(options_bool(OPT_SOUND) == 0 && options_bool(OPT_SHORTCUTS) == 1);
+    /* 8b. Every option, one by one: only that line changes. */
+    put("# x\nzebra = 1\n");
+    options_load(path);
+    for (int id = 0; id < OPT_COUNT; id++) {
+        const OptionId oid = (OptionId)id;
+        if (!strcmp(options_name(oid), "display")) {
+            CHECK(options_set(oid, "hd") == 1 && options_enum(oid) == DISPLAY_HD);
+        } else if (!strcmp(options_name(oid), "save_folder")) {
+            CHECK(options_set(oid, "  /Users/me/My Saves ") == 1 && !strcmp(options_string(oid), "/Users/me/My Saves"));
+        } else if (!strcmp(options_name(oid), "database")) {
+            CHECK(options_set(oid, "folder:Mixed Case") == 1 && options_enum(oid) == DATABASE_CUSTOM);
+        } else {
+            CHECK(options_set(oid, "off") == 1 && options_bool(oid) == 0);
+        }
+        CHECK(has_one_line(get(), oid) && has_one_comment(get(), oid));
+    }
+    CHECK(strstr(get(), "# x\nzebra = 1\n") == get());
+    CHECK(strstr(get(), "\ndisplay = hd\n") && strstr(get(), "\nsave_folder = /Users/me/My Saves\n") &&
+          strstr(get(), "\ndatabase = folder:Mixed Case\n") && strstr(get(), "\nsquad_views = off\n"));
+    options_load(path);
+    CHECK(options_enum(OPT_DISPLAY) == DISPLAY_HD && !strcmp(options_string(OPT_SAVE_FOLDER), "/Users/me/My Saves") &&
+          options_bool(OPT_ATTRIBUTE_GROUPS) == 0 && options_enum(OPT_DATABASE) == DATABASE_CUSTOM);
+    CHECK(options_set(OPT_SAVE_FOLDER, "") == 1 && !strcmp(options_string(OPT_SAVE_FOLDER), ""));   /* empty text */
+    CHECK(strstr(get(), "\nsave_folder = \n") != NULL);
+    /* 8c. A missing line is added at the end with its comment, in the file's own line end. */
+    put("display = classic");
+    options_load(path);
+    host_unlink(path);
+    put("display = classic");
+    CHECK(options_set(OPT_FASTER_DAYS, "off") == 1);
+    t = get();
+    CHECK(strstr(t, "display = classic\n# faster_days = on makes") == t && strstr(t, "\nfaster_days = off\n") != NULL);
+    CHECK(has_one_line(t, OPT_FASTER_DAYS) && has_one_comment(t, OPT_FASTER_DAYS));
+    put("display = classic\r\nsound = on");
+    options_load(path);
+    host_unlink(path);
+    put("display = classic\r\nsound = on");
+    CHECK(options_set(OPT_CLICKABLE_NAMES, "off") == 1);
+    t = get();
+    CHECK(strstr(t, "sound = on\r\n# clickable_names = on lets") && strstr(t, "\r\nclickable_names = off\r\n"));
+    CHECK(count(t, "\r\n") == count(t, "\n"));                    /* no bare line feed added */
+    /* 8d. A value that does not fit changes nothing, in memory or in the file. */
+    put("# keep\nsound = on\ndatabase = 3.9.60\ndisplay = classic\n");
+    options_load(path);
+    snprintf(snap, sizeof snap, "%s", get());
+    CHECK(options_set(OPT_SOUND, "maybe") == 0 && options_bool(OPT_SOUND) == 1);
+    CHECK(options_set(OPT_DISPLAY, "tiny") == 0 && options_enum(OPT_DISPLAY) == DISPLAY_CLASSIC);
+    CHECK(options_set(OPT_DATABASE, "3.9.99") == 0 && options_set(OPT_DATABASE, "folder:") == 0);
+    CHECK(options_set(OPT_SOUND, NULL) == 0 && options_set(OPT_SOUND, "") == 0 && options_set(OPT_COUNT, "on") == 0);
+    CHECK(options_set(OPT_SAVE_FOLDER, "/a\nsound = off") == 0 && options_set(OPT_SAVE_FOLDER, "/a\r/b") == 0);
+    {
+        char longv[1300];
+        memset(longv, 'a', sizeof longv - 1);
+        longv[sizeof longv - 1] = 0;
+        CHECK(options_set(OPT_SAVE_FOLDER, longv) == 0);
+    }
+    CHECK(options_set_enum(OPT_SOUND, "off") == 0 && options_bool(OPT_SOUND) == 1);
+    CHECK(!strcmp(snap, get()) && options_bool(OPT_SOUND) == 1);
+    /* 8e. The same value leaves the file as it was. */
+    CHECK(options_set(OPT_SOUND, "on") == 1 && !strcmp(snap, get()));
+    CHECK(options_set(OPT_DISPLAY, "classic") == 1 && !strcmp(snap, get()));
+    /* 8f. A file that is gone is written again with the option. */
+    host_unlink(path);
+    CHECK(options_set(OPT_SOUND, "off") == 1);
+    CHECK(strstr(get(), "# sound = off mutes") != NULL && strstr(get(), "\nsound = off\n") != NULL);
+    /* 8g. Failures leave the old file whole. The value stays set in memory, and the call says -1. */
+    put("# keep me\nsound = on\r\ndisplay = classic\n");
+    options_load(path);
+    snprintf(snap, sizeof snap, "%s", get());
+    CHECK(mkdir(tmp2, 0755) == 0);                                /* the temporary file cannot open */
+    CHECK(options_set(OPT_SOUND, "off") == -1 && options_bool(OPT_SOUND) == 0);
+    CHECK(!strcmp(snap, get()));
+    rmdir(tmp2);
+    CHECK(options_set(OPT_SOUND, "off") == 1 && strstr(get(), "# keep me\nsound = off\r\ndisplay = classic\n") != NULL);
+    put("# keep me\nsound = on\n");
+    options_load(path);
+    snprintf(snap, sizeof snap, "%s", get());
+    if (geteuid() != 0) {                                         /* a folder that cannot be written */
+        CHECK(chmod(dir, 0555) == 0);
+        CHECK(options_set(OPT_SOUND, "off") == -1 && options_bool(OPT_SOUND) == 0);
+        CHECK(options_set(OPT_FASTER_DAYS, "off") == -1 && options_bool(OPT_FASTER_DAYS) == 0);
+        CHECK(chmod(dir, 0755) == 0);
+        CHECK(!strcmp(snap, get()));
+        CHECK(host_stat(tmp2, &st) != 0 && host_stat(bak2, &st) != 0);
+        CHECK(options_set(OPT_SOUND, "on") == 1 && options_bool(OPT_SOUND) == 1);
+    } else {
+        printf("skip: read-only folder test (running as root)\n");
+    }
+    /* A file that cannot be read (here a folder) is not replaced. */
+    host_unlink(path);
+    CHECK(mkdir(path, 0755) == 0);
+    CHECK(options_set(OPT_SOUND, "off") == -1 && options_bool(OPT_SOUND) == 0);
+    CHECK(host_stat(path, &st) == 0 && st.is_dir);
+    rmdir(path);
+    /* A stale temporary file from an earlier crash is overwritten and gone after the write. */
+    put("# keep\nsound = on\n");
+    options_load(path);
+    { FILE *stale = host_fopen(tmp2, "w"); fputs("junk junk junk", stale); fclose(stale); }
+    CHECK(options_set(OPT_SOUND, "off") == 1 && host_stat(tmp2, &st) != 0);
+    CHECK(strstr(get(), "# keep\nsound = off\n") == get());
+    /* 8h. A file above 64 KB keeps every byte but the option's line. */
+    {
+        size_t sz = 150000;
+        char *big2 = malloc(sz + 64);
+        memset(big2, 'y', sz);
+        big2[0] = '#';
+        big2[sz - 1] = '\n';
+        strcpy(big2 + sz, "sound = on\n");
+        put(big2);
+        options_load(path);
+        CHECK(options_set(OPT_SOUND, "off") == 1);
+        FILE *bf2 = fopen(path, "rb");
+        char *got2 = calloc(sz + 8192, 1);
+        size_t gn = bf2 ? fread(got2, 1, sz + 8191, bf2) : 0;
+        if (bf2) fclose(bf2);
+        CHECK(gn > sz && !memcmp(got2, big2, sz) && strstr(got2 + sz, "sound = off\n") && !strstr(got2 + sz, "sound = on\n"));
+        free(got2);
+        free(big2);
+    }
 
     host_unlink(path);
     rmdir(dir);
