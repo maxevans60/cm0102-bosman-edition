@@ -385,6 +385,62 @@ int main(void)
         free(big2);
     }
 
+    /* 9. Review fixes. */
+    /* 9a. A file that exists but cannot be opened (chmod a-r) is never replaced, by options_set or options_load. */
+    put("# keep\nsound = on\n");
+    options_load(path);
+    snprintf(snap, sizeof snap, "%s", get());
+    if (geteuid() != 0) {
+        CHECK(chmod(path, 0200) == 0);
+        CHECK(options_set(OPT_SOUND, "off") == -1 && options_bool(OPT_SOUND) == 0);
+        options_load(path);
+        CHECK(chmod(path, 0644) == 0);
+        CHECK(!strcmp(snap, get()));
+        CHECK(host_stat(tmp2, &st) != 0);
+    }
+    /* 9b. A file with a NUL (UTF-16) or a bare CR is refused and stays as it is. */
+    {
+        static const char utf16[] = "\xff\xfes\0o\0u\0n\0d\0 \0=\0 \0o\0n\0\n\0";
+        FILE *w = host_fopen(path, "wb");
+        fwrite(utf16, 1, sizeof utf16 - 1, w);
+        fclose(w);
+        options_load(path);              /* the start may add missing lines at the end: take the file after it */
+        char before[4096] = {0}, got[4096] = {0};
+        FILE *r = host_fopen(path, "rb");
+        size_t bn = fread(before, 1, sizeof before, r);
+        fclose(r);
+        CHECK(bn >= sizeof utf16 - 1 && !memcmp(before, utf16, sizeof utf16 - 1));
+        CHECK(options_set(OPT_SOUND, "off") == -1);
+        r = host_fopen(path, "rb");
+        size_t gn = fread(got, 1, sizeof got, r);
+        fclose(r);
+        CHECK(gn == bn && !memcmp(got, before, bn));
+    }
+    put("# keep\rsound = on\rdisplay = classic\r");
+    options_load(path);
+    snprintf(snap, sizeof snap, "%s", get());
+    CHECK(options_set(OPT_SOUND, "off") == -1 && !strcmp(snap, get()));
+    put("# keep\r\nsound = on\r\nx = 1\ry = 2\r\n");   /* one bare CR among CRLF lines is refused too */
+    options_load(path);
+    snprintf(snap, sizeof snap, "%s", get());
+    CHECK(options_set(OPT_SOUND, "off") == -1 && !strcmp(snap, get()));
+    /* 9c. A blank line before the option's line stays, and the option is not doubled. */
+    put("# keep\n\nsound = on\n\n\ndisplay = classic\n");
+    options_load(path);
+    CHECK(options_set(OPT_SOUND, "off") == 1);
+    CHECK(strstr(get(), "# keep\n\nsound = off\n\n\ndisplay = classic\n") == get());
+    CHECK(count(get(), "\nsound = ") == 1);
+    put("\n\nsound = on\n");
+    options_load(path);
+    CHECK(options_set(OPT_SOUND, "off") == 1 && strstr(get(), "\n\nsound = off\n") == get());
+    /* 9d. A missing settings file with a .bak file: the .bak file comes back, no defaults are written. */
+    put("# mine\nsound = off\ndisplay = classic\n");
+    options_load(path);
+    CHECK(host_rename(path, bak2) == 0);
+    options_load(path);
+    CHECK(options_bool(OPT_SOUND) == 0 && options_enum(OPT_DISPLAY) == DISPLAY_CLASSIC);
+    CHECK(strstr(get(), "# mine\nsound = off\ndisplay = classic\n") == get() && host_stat(bak2, &st) != 0);
+
     host_unlink(path);
     rmdir(dir);
     if (failures) printf("options_test: %d failures\n", failures);

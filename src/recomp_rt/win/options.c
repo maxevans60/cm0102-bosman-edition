@@ -3,6 +3,7 @@
 #include "../host.h"
 
 #include <ctype.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -162,7 +163,15 @@ void options_load(const char *path)
     snprintf(file_path, sizeof file_path, "%s", path);
     int missing_file = 0, ends_with_newline = 1;
     FILE *f = host_fopen(path, "r");
+    int open_err = f ? 0 : errno;
+    if (!f && open_err == ENOENT) {
+        /* A write that stopped half way on Windows can leave the old file as settings.txt.bak. Use it. */
+        char bak[TEXT_MAX + 8];
+        snprintf(bak, sizeof bak, "%s.bak", path);
+        if (host_rename(bak, path) == 0) f = host_fopen(path, "r");
+    }
     if (!f) {
+        if (open_err != ENOENT) return;      /* the file exists and cannot be opened: write nothing */
         missing_file = 1;
     } else {
         char line[TEXT_MAX + 128];
@@ -234,7 +243,7 @@ static void option_key(const char *line, char *key, size_t room)
 {
     const char *p = line;
     size_t n = 0;
-    while (isspace((unsigned char)*p)) p++;
+    while (*p == ' ' || *p == '\t') p++;    /* not a line break: a blank line is not part of the next line */
     while (isalnum((unsigned char)*p) || *p == '_') {
         if (n < room - 1) key[n++] = (char)tolower((unsigned char)*p);
         p++;
@@ -276,7 +285,7 @@ static char *read_whole(const char *path, size_t *size, int *missing)
 {
     *missing = 0;
     FILE *f = host_fopen(path, "rb");
-    if (!f) { *missing = 1; return NULL; }
+    if (!f) { *missing = errno == ENOENT; return NULL; }
     size_t cap = 65536, n = 0;
     char *text = malloc(cap + 1);
     while (text) {
@@ -299,8 +308,8 @@ static char *read_whole(const char *path, size_t *size, int *missing)
 /* Puts the new file in place of the old one. The old file stays whole when this fails. */
 static int replace_file(const char *tmp_path, const char *path)
 {
-    if (host_rename(tmp_path, path) == 0) return 1;
-    /* Windows does not rename over a file. Move the old file aside, then restore it if the second move fails. */
+    if (host_replace(tmp_path, path) == 0) return 1;
+    /* Fallback: move the old file aside, then restore it if the second move fails. */
     char bak_path[TEXT_MAX + 8];
     snprintf(bak_path, sizeof bak_path, "%s.bak", path);
     host_unlink(bak_path);
@@ -327,6 +336,16 @@ static int write_option(int id, const char *value)
         }
         text = calloc(1, 1);      /* the file is gone: write a new one with this option */
         if (!text) return 0;
+    }
+    /* Refuse a file that is not plain text: a NUL (UTF-16) or a bare CR (old Mac line ends). */
+    int plain = strlen(text) == n;
+    for (size_t k = 0; plain && k < n; k++)
+        if (text[k] == '\r' && (k + 1 >= n || text[k + 1] != '\n')) plain = 0;
+    if (!plain) {
+        free(text);
+        fprintf(stderr, "cm0102_recomp: %s is not plain text with LF or CRLF line ends, so %s is not saved\n",
+                file_path, defs[id].name);
+        return 0;
     }
     /* Build the new text in memory: the old text, with the option's lines replaced. */
     size_t matches = 0;
@@ -376,7 +395,7 @@ static int write_option(int id, const char *value)
         fprintf(stderr, "cm0102_recomp: cannot write %s, so %s is not saved\n", tmp_path, defs[id].name);
         return 0;
     }
-    int write_ok = fwrite(out, 1, o, f) == o && fflush(f) == 0 && !ferror(f);
+    int write_ok = fwrite(out, 1, o, f) == o && fflush(f) == 0 && host_sync(f) == 0 && !ferror(f);
     if (fclose(f) != 0) write_ok = 0;
     free(out);
     if (write_ok) write_ok = replace_file(tmp_path, file_path);

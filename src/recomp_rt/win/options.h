@@ -1,10 +1,13 @@
 /* The options of the settings file settings.txt in the user folder.
  *
  * The file has one line "name = value" per option, and comment lines that start with "#". The runtime
- * reads every option once at start (options_load). It keeps all other lines of the file as they are:
- * it never rewrites or reorders a line of the player. It adds a line, with one comment line before it,
- * for each option that the file lacks, at the end of the file. A missing file is written with every
- * option at its default.
+ * reads every option once at start (options_load). At start it keeps every line as it is, and it adds a
+ * line, with one comment line before it, for each option that the file lacks, at the end of the file.
+ * A missing file is written with every option at its default. If the file is missing and
+ * settings.txt.bak exists (a write that stopped half way), the .bak file is used. A file that exists but
+ * cannot be opened is left alone.
+ * Later, options_set rewrites the line of one option only. It keeps every other line, comment and
+ * line end, and it refuses a file that is not plain text with LF or CRLF line ends.
  *
  * A switch accepts on/off, yes/no and true/false in any case. A value that does not fit the option
  * gets a message on stderr, and the option keeps its default. */
