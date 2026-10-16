@@ -33,12 +33,11 @@ the save of search-off.
 
 Options box check (--same-save --save <name> --options): the runs open the Bosman Edition Options box from the
 side bar before the holiday (0.5.0 slice 6). options and options-again switch Faster holidays off and on and
-close the box: their saves must be the same. Then options-tabs clicks the tabs Game, Screen and Game, and
-options-database clicks the Database values 3.9.60 and 3.9.65, so the box is built as often: their saves
-must be the same, so the open game keeps its own data set (use a game folder with Data-3.9.60 and
-Data-3.9.65, as in a download). With clickable_names = on, the clicks on the Faster holidays row give
-another game than the tab clicks; with clickable_names = off they give the same game. The cause is
-unknown (open).
+close the box. options-tabs clicks the tabs Game, Screen and Game, options-database the Database values 3.9.60
+and 3.9.65 (the open game keeps its own data set; use a game folder with Data-3.9.60 and Data-3.9.65, as in
+a download), and options-backups switches Save backups off and on, so the box is built as often. Each save
+must be the same as the save of options. The runs give the box the same save folder path end
+(OPTIONS_USER_SUB).
 
 Match check (--match): the same as the same-save check, but each run loads the saved test game
 prematch.sav (tests/fixtures/fixtures.py) and plays the friendly at Basel on Friday 20.7.01 to the end.
@@ -314,9 +313,10 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
         steps_of_run = options.get("_steps", steps)        # a run may have its own steps and environment
         extra_env = options.get("_env", {})
         run_program = options.get("_program", program)     # and its own build (--ref-build)
-        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program")}
+        user_sub = options.get("_user_sub", "")              # and a folder between the run and its user folder
+        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program", "_user_sub")}
         run = os.path.join(work, name)
-        user, home, shots = (os.path.join(run, d) for d in ("user", "home", "shots"))
+        user, home, shots = (os.path.join(run, d) for d in (os.path.join(user_sub, "user"), "home", "shots"))
         for d in (user, home, shots):
             os.makedirs(d)
         if save:
@@ -391,26 +391,36 @@ SEARCH_RUNS = [
 # --options: after the load, open the Bosman Edition Options box (Game Options, then its item), switch
 # Faster holidays off and on on the Game tab, close the box, then go on holiday. Positions as in
 # tests/smoke/options_box_run.py. The drop-down item keeps its size, so it has widescreen and HD positions.
-OPTIONS_OPEN = ["1000 click 45 344", "3000 click 175 417 | 225 525 | 295 675"]
-OPTIONS_CLOSE = ["9500 click 444 524", "wait screen:0x7881e0"]
+OPTIONS_OPEN = ["1000 click 45 344", "wait popup", "1000 click 175 417 | 225 525 | 295 675", "wait options"]
+OPTIONS_CLOSE = ["5500 click 444 524", "wait screen:0x7881e0"]
 OPTIONS_STEPS = OPTIONS_OPEN + [
-    "5000 click 584 155",                   # the Game tab
-    "6500 click 452 367",                   # Faster holidays: Off
-    "8000 click 371 367",                   # Faster holidays: On
+    "1000 click 584 155",                   # the Game tab
+    "2500 click 452 367",                   # Faster holidays: Off
+    "4000 click 371 367",                   # Faster holidays: On
 ] + OPTIONS_CLOSE
+
+
+# The Game tab of the box shows the end of the save folder path, and the text that the game draws changes
+# later days (a run folder "same-4" gave another save than "same-0" with the same clicks, also with
+# clickable_names = off). So the runs put a long folder of one name before the user folder: the box then
+# shows the same path end in every run and mode.
+OPTIONS_USER_SUB = "options-box-runs-" + "x" * 100
 
 
 def options_runs(load, holiday):
     """The runs of the options box check, each with its own steps."""
     switch = load + OPTIONS_STEPS + holiday
-    tabs = load + OPTIONS_OPEN + ["5000 click 584 155", "6500 click 304 155", "8000 click 584 155"] + OPTIONS_CLOSE + \
+    tabs = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 304 155", "4000 click 584 155"] + OPTIONS_CLOSE + \
         holiday
-    database = load + OPTIONS_OPEN + ["5000 click 584 155", "6500 click 452 437", "8000 click 533 437"] + \
+    database = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 437", "4000 click 533 437"] + \
         OPTIONS_CLOSE + holiday
-    return ([("options", {"faster_days": "on", "_steps": switch}),
-             ("options-again", {"faster_days": "on", "_steps": switch})],
-            [("options-tabs", {"faster_days": "on", "_steps": tabs}),
-             ("options-database", {"faster_days": "on", "_steps": database})])
+    backups = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 402", "4000 click 371 402"] + \
+        OPTIONS_CLOSE + holiday
+
+    def run(name, steps):
+        return (name, {"faster_days": "on", "_steps": steps, "_user_sub": OPTIONS_USER_SUB})
+    return ([run("options", switch), run("options-again", switch), run("options-tabs", tabs),
+             run("options-database", database), run("options-backups", backups)],)
 
 
 def same_save(program, game, mode, days, save_name=None, search=False, options=False):

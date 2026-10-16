@@ -67,7 +67,6 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 #define WIDGET_CREATE 0x55f990u     /* thiscall on a Display, 18 args */
 #define CELL_BUTTON 0x8040a0u       /* thiscall on S, 11 args: a button in a cell of an area */
 #define CELL_LABEL 0x804100u        /* thiscall on S, 9 args: a label in a cell of an area */
-#define TEXT_WIDTH 0x5e5ad0u        /* cdecl (font, text): the width in screen pixels for a runtime call */
 #define HOOK_FN (SCREENS + 0x37eeu) /* the main loop's Game Settings hook and its id (0x7fcd25) */
 #define HOOK_ID (SCREENS + 0x37f2u)
 #define GAME_SETTINGS_HOOK 0x823930u
@@ -221,21 +220,20 @@ static void plain(int a, int column, const char *s, uint32_t font, uint32_t colo
     call_this(CELL_LABEL, SCREENS, 9, l);
 }
 
-/* The width of a text in screen pixels. */
-static int text_width(uint32_t font, const char *s)
-{
-    uint32_t a[2] = {font, text(s)};
-    return (int)call(TEXT_WIDTH, 2, a);
-}
+/* The characters of font 2 that fit width screen pixels: 8 pixels for each character in HD and 7 in the
+ * other modes. Paths measured on the screen take about 7.4 (HD) and 6.4 (classic) pixels for each
+ * character. The box does not call the game's text width 0x5e5ad0 for this: the count of its calls would
+ * then depend on the path. Note: the text that the game draws changes later days (Q152), so the path
+ * itself does too; it is the same in every game of one player. */
+static size_t chars_for(int width) { return (size_t)(width > 0 ? width : 0) / (rt_screen_w >= 1920 ? 8u : 7u); }
 
 /* A label with a text wider than its cell shows nothing. This cuts the text at the front, with "..." before
- * it, until it fits width screen pixels. */
-static void fit_front(const char *s, uint32_t font, int width, char *out, size_t room)
+ * it, to the characters that fit width screen pixels. */
+static void fit_front(const char *s, int width, char *out, size_t room)
 {
-    snprintf(out, room, "%s", s);
-    size_t n = strlen(s);
-    for (size_t skip = 1; text_width(font, out) > width && skip < n; skip++)
-        snprintf(out, room, "...%s", s + skip);
+    size_t n = strlen(s), fit = chars_for(width);
+    if (n <= fit || fit < 4) snprintf(out, room, "%s", n <= fit ? s : "");
+    else snprintf(out, room, "...%s", s + n - (fit - 3));
 }
 
 /* The folder of the saved games, with the home folder as "~", in code page 1252. */
@@ -318,7 +316,7 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
         plain(a, 0, r->label, 3, light);
         char folder[1100], path[1104];
         folder_text(folder, sizeof folder);
-        fit_front(folder, 2, column_px(weights_path, 3, 1), path, sizeof path);
+        fit_front(folder, column_px(weights_path, 3, 1), path, sizeof path);
         plain(a, 1, path, 2, colour16(TEXT_YELLOW));
         note(index == failed_row ? "Not saved: settings.txt\ncannot be written" : r->note, weights_path, 3, y1, y2,
              light);
@@ -335,9 +333,9 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
     if (custom) {
         char label[64], name[72];
         dbfolders_label(options_string(r->id) + 7, label, sizeof label);      /* after "folder:" */
-        snprintf(name, sizeof name, "%s", label);
-        for (size_t n = strlen(name); n > 1 && text_width(2, name) > column_px(weights, columns, 1); n--)
-            snprintf(name, sizeof name, "%.*s...", (int)n - 2, label);
+        size_t fit = chars_for(column_px(weights, columns, 1));
+        if (strlen(label) <= fit || fit < 4) snprintf(name, sizeof name, "%s", label);
+        else snprintf(name, sizeof name, "%.*s...", (int)(fit - 3), label);
         current(a, col++, name);
     }
     for (int i = 0; i < count; i++, col++) {
@@ -426,11 +424,18 @@ static void apply(const Row *r, int index, int value)
 }
 
 /* The input of the box: cdecl (s16 widget). Only the box's own widgets: the box covers the screen. */
+static uint32_t handled_press = 0xffffffffu;   /* the mouse press of the last click that the box handled */
+
 static void options_input(void)
 {
     int16_t w = (int16_t)rt_arg(0);
     uint32_t r = 0;
+    /* A held button gives its widget again after 400 ms of real time (the repeat of the poll, user32.c). After
+     * a build the same widget number can be another button, and the count of builds would depend on the
+     * speed of the machine. So the box takes one click for each press of the mouse button. */
+    if (w >= 0 && win_press_count() == handled_press) w = -1;
     if (w >= 0) {
+        handled_press = win_press_count();
         uint32_t at = display() + WIDGETS + 8 + (uint32_t)w * WIDGET_SIZE;
         uint32_t id = (uint16_t)rd32(g_mem, at), data = rd32(g_mem, at + 0x40);
         if (id == CLOSE_ID) {
@@ -446,9 +451,11 @@ static void options_input(void)
     rt_ret_cdecl(r);
 }
 
+uint32_t options_screen_build_fn(void) { return rt_host_fn("options_build", options_build); }
+
 int options_screen_open(int from)
 {
-    uint32_t p[5] = {rt_host_fn("options_build", options_build), rt_host_fn("options_input", options_input), 1, 0, 0};
+    uint32_t p[5] = {options_screen_build_fn(), rt_host_fn("options_input", options_input), 1, 0, 0};
     if (!call_this(PUSH, SCREENS, 5, p)) {          /* as 0x8238c0: no node, no slots */
         fprintf(stderr, "recomp: options box not opened\n");
         return 0;
@@ -456,6 +463,7 @@ int options_screen_open(int from)
     set_slot(0, 1);
     set_slot(1, (uint32_t)from);
     failed_row = -1;
+    handled_press = win_press_count();              /* the press that opened the box does not click in it */
     fprintf(stderr, "recomp: options box opened from %s\n", from == 1 ? "the start screen" : "the side bar");
     return 1;
 }

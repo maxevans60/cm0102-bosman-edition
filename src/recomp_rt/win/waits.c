@@ -32,6 +32,7 @@
  *   continue    Continue Game can take a click (keys.c)
  *   day:D.M.YY  the game date is D.M.YY or later (s16 day of the year from 0, s16 year at 0xae2c90)
  *   screen:ADDR the screen with this build function on top, for example screen:0x6b2d80
+ *   options     the Bosman Edition Options box on top (options_screen.c)
  *   label:TEXT  a clickable button of the left bar with a text that starts with TEXT (keys.c), for
  *               example label:Re-start for the button of the match screen at half time. The match
  *               screen changes the text of one button: Kick Off, Pause, Re-start. The log names the
@@ -96,6 +97,7 @@ int waits_parse(const char *name, int *kind, uint32_t *value)
     }
     unsigned long a;
     if (sscanf(name, "screen:%lx", &a) == 1 && a) { *kind = W_SCREEN; *value = (uint32_t)a; return 1; }
+    if (!strcmp(name, "options")) { *kind = W_SCREEN; *value = options_screen_build_fn(); return 1; }
     if (!strncmp(name, "label:", 6) && name[6] && strlen(name + 6) < sizeof labels[0] &&
         label_count < (int)(sizeof labels / sizeof *labels)) {
         snprintf(labels[label_count], sizeof labels[0], "%s", name + 6);

@@ -68,6 +68,7 @@ static uint32_t mouse_lparam(void) { return ((uint32_t)mouse_y & 0xffff) << 16 |
 
 /* The press that the left button is in: a new number at each WM_LBUTTONDOWN, and its time. */
 static uint32_t press_count;
+uint32_t win_press_count(void) { return press_count; }
 static uint64_t press_at;
 
 static void post_mouse(uint32_t msg, int x, int y)
@@ -758,7 +759,7 @@ RT_IMPORT(GetMessageA)
  * (a click that ends a text entry and then hits the button under the pointer), go through at once. */
 #define REPEAT_DELAY 400u
 #define REPEAT_INTERVAL 100u
-static uint32_t last_press, last_widget = 0xffffu;
+static uint32_t last_press, last_widget = 0xffffu, last_top;
 static uint64_t next_repeat_at;
 
 void o_0055f620(void);
@@ -777,12 +778,17 @@ RT_WRAP(0055f620, input_poll)
     uint32_t widget = cpu.eax & 0xffffu;
     int held = (buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu);
     if (widget == 0xffffu || !held) return;
+    uint32_t top = rd32(g_mem, 0xb74450u + 0x7d4u + 0x0eu);   /* the screen node on top (waits.c) */
     if (press_count != last_press || widget != last_widget) {
         last_press = press_count;
         last_widget = widget;
+        last_top = top;
         next_repeat_at = press_at + REPEAT_DELAY;
         return;
     }
+    /* A press that opened or closed a screen does not repeat on the next screen: the same widget number
+     * there is another widget (the options box, options_screen.c). */
+    if (top != last_top) { cpu.eax |= 0xffffu; return; }
     while ((buttons & 1) && SDL_GetTicks64() < next_repeat_at) {
         win_poll_events();
         SDL_Delay(1);

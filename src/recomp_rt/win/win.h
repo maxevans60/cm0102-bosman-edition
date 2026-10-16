@@ -99,11 +99,13 @@ int holiday_widget_before(void);               /* at each widget create: 1 for t
 void holiday_widget_after(void);               /* after that create: adds the new item */
 void holiday_next_turn(void);                  /* at each human turn, before the original */
 /* The Bosman Edition Options box (options_screen.c). */
+uint32_t options_screen_build_fn(void);        /* the build function of the box, for the wait state "options" */
 int options_screen_open(int from);             /* pushes the box (from: 1 start screen, 2 game); 0 when it fails */
 void options_screen_after_poll(uint32_t ret, uint32_t display, uint32_t widget);   /* after each input poll */
 void database_changed_in_game(void);           /* database.c: the data set changes at the next start screen */
 int options_screen_widget_before(void);        /* at each widget create: 1 for the Game Settings item */
 void options_screen_widget_after(void);        /* after that create: adds the Bosman Edition Options item */
+uint32_t win_press_count(void);                /* user32.c: the count of mouse presses so far */
 void win_sharp_picture_changed(void);          /* user32.c: applies the option sharp_picture at once */
 /* The Assistant's picks (picker.c). picker_compute picks without writing; picker_pick stores the pick as
  * the club's selection. kind 1: best team, 2: most match-fit, 3: under-21. Both return the players picked. */
