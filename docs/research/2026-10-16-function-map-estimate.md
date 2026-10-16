@@ -670,6 +670,47 @@ Run `sweep-w18`: 8 Opus agents named 195 functions: the Russian, Scottish, Spani
 | 0x84cf00 | Sound slot search (display inventory) | `find_ready_slot_handler` (Haiku) | `SoundPlayer::find_free_slot` | agrees in area |
 | 0x858e70 | Shared set_up_rounds when no prize fund is set (sweep-europe) | `spa_super::set_up_rounds` (slot copy) | `SpaSuper::set_up_rounds` | agrees |
 
+#### Wave w19 (tier 4 done, tier 5 begins, 2026-10-16)
+
+Run `sweep-w19`: 8 Opus agents named 223 functions: the rest of tier 4 (Swedish, Turkish, US and Welsh competitions with their awards, `SWEDEN_RULES`, the weather and ultimatum gap functions) and the first tier 5 files, `Area.cpp` and part of `Database.cpp`. Each agent took 2 to 4 minutes and 131,000 to 181,000 tokens. Confidence: 191 high, 32 medium, 0 low. Tier 4 is done. Several agents report that the Setup function 0x8383b0 (`create_spanish_comps`) also makes the Turkish, US and Welsh competitions.
+
+Fixes from the research name check (`2026-10-16-research-name-check.md`): `goldcup.cpp` runs the Copa America. The constructor gets the competition record of 0x9cf7a8 from `create_other_int_comps` (0x830ac0), and 0x60efd0 sets that global from the name "Copa America". The 16 purposes now say Copa America, and the class keeps the file name `GoldCup`. 0x5fab70 is now `HostCountry::redraw_world_club_and_confed_hosts`. The same check confirmed the sweep formats of the Club World Championship (12 clubs, 3 groups) and the Merconorte Cup (4 groups of 4) and corrected the 0.6.0 research.
+
+30 functions of the wave are cited. 20 agree, 8 agree in area, 1 citation makes no claim and 1 differs. The game-creation inventory says 0x539750 reads the tactics files. The code builds the name index for each nation.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x402e70 | Called by the screen draw (display inventory) | `Area::draw` (Haiku) | `Area::draw` | agrees in area |
+| 0x4031a0 | Called by the display reset (display inventory) | `Area::release_children` (Haiku) | `Area::release` | agrees in area |
+| 0x403200 | Adds a widget to an area (area-widget-draw spec) | `Area::insert_sorted_index` (Haiku) | `Area::add_widget` | agrees |
+| 0x4032e0 | Saves the scroll position of a list area (start-new-game inventory) | `area_get_selected_entry_field` (Haiku) | `Area::get_shown_row` | agrees |
+| 0x403350 | Called by the screen draw (display inventory) | `area_layout_cells` (Haiku) | `Area::layout` | agrees in area |
+| 0x403600 | Scrollbar setup (input inventory) | `area_layout_scrollbar_geometry` (Haiku) | `Area::setup_scrollbar` | agrees |
+| 0x403760 | Computes the popup position (input inventory) | `area_compute_link_position` (Haiku) | `Area::get_popup_position` | agrees |
+| 0x403a70 | Moves the popup (input inventory) | `area_move_clamped` (Haiku) | `Area::move_to` | agrees |
+| 0x403c80 | Scrollbar drag code (display inventory) | `Area::draw_area_buttons` (Haiku) | `Area::draw_scrollbar` | agrees in area |
+| 0x524d70 | Database trim (game-creation inventory) | `Database::rebuild_staff_and_player_tables` (Haiku) | `database_trim_staff_tables` | agrees |
+| 0x524f50 | Mentioned in a key nation note only (sweep-international) | `Database::load_players_and_staff` (Haiku) | `database_trim_staff_tables_fragment` | no claim |
+| 0x5267c0 | Club table step (game-creation inventory) | `compact_club_table` (Haiku) | `database_trim_club_table` | agrees |
+| 0x528080 | free_tables (game-creation inventory) | `database_free_language_tables` (Haiku) | `database_free_all_tables` | agrees |
+| 0x528540 | Database loader with the 0x43-byte entries (database inventory) | `load_database` (Haiku) | `load_database` | agrees in area |
+| 0x52dad0 | Save writer of index.dat (attribute-groups) | `save_database` (Haiku) | `save_database` | agrees |
+| 0x5315a0 | Index resolution after the load (game-creation inventory) | `resolve_database_indexes` (Haiku) | `resolve_database_indexes` | agrees in area |
+| 0x532e00 | Runs when Use Real Players is No (game-creation inventory) | `database_refresh_club_staff_links_and_wage_tiers` (Haiku) | `database_apply_fake_players` | agrees |
+| 0x5339a0 | Language names load (start-new-game inventory) | `Database::load_language_database` (Haiku) | `database_load_language_names` | agrees in area |
+| 0x535930 | Language file check (game-creation inventory) | `load_language_file_path` (Haiku) | `database_language_file_exists` | agrees |
+| 0x535a80 | Player Initialisation progress step (game-creation inventory) | `Database::player_initialisation_pass` (Haiku) | `database_player_initialisation` | agrees |
+| 0x539750 | Reads the tactics files *.pct (game-creation inventory, emulator trace) | `Database::build_player_index_tables` (Haiku) | `database_build_nation_name_index` | differs. The code builds the name index for each nation. The emulator trace probably gave the tactics file read to the wrong function |
+| 0x539ae0 | Comp history: keeps rows of selected nations (game-creation inventory) | `compact_active_records` (Haiku) | `database_prune_comp_history_table` | agrees |
+| 0x893d80 | Sweden rules constructor with transfer windows (sweep-rulebooks) | `award_record_ctor` (Haiku) | `SWEDEN_RULES::SWEDEN_RULES` | agrees |
+| 0x8fcdb0 | Slot 2 is start_new_season (research-name-check) | `tur_cup::release_data` (slot copy) | `TurCup::start_new_season` | agrees |
+| 0x8fddc0 | Turkish Super Lig club count (season-change-points) | `tur_first_setup_cup_entrants` (Haiku) | `TurFirst::create_table` | agrees |
+| 0x90a760 | Slot 2 is start_new_season (research-name-check) | `usa_mls_all_stars::release_data` (slot copy) | `UsaMlsAllStars::start_new_season` | agrees |
+| 0x90b790 | Slot 2 is start_new_season (research-name-check) | `usa_open_cup::release_data` (slot copy) | `UsaOpenCup::start_new_season` | agrees |
+| 0x922ee0 | Called at game creation (game-creation inventory) | `weather_fill_daily_conditions` (Haiku) | `Weather::update_city_weather` | agrees in area |
+| 0x924c50 | Slot 2 is start_new_season (research-name-check) | `wel_cup::release_data` (slot copy) | `WelCup::start_new_season` | agrees |
+| 0x925b30 | Welsh league table (research-name-check) | `wel_first_alloc_and_fill_league_slots` (Haiku) | `WelFirst::create_table` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

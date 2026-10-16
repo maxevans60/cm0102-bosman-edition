@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x906980 | 82 (+2 unwind) | `UsaAwards::UsaAwards` | thiscall(this, int param_2 nation awards source) ret 4 | Constructs the USA awards object, sets its vtable and fields, then loads awards or reports a version error. | high | haiku |  |
-| 0x906ac0 | 257 (+7 unwind) | `usa_awards_init_awards` | thiscall(USA_Awards* this, int param_2) ret 4 | Allocates the USA awards table and constructs its month, year and team award objects, reporting a memory failure through an error box. | high | haiku |  |
-| 0x906e10 | 122 | `USA_Awards::process_award_record` | thiscall (ECX = this, USA_Awards object; stack arg: short *record) ret 4 | Processes one award record, distributing year awards and team awards for the record's date, then advancing month slots and checking month change. | medium | haiku |  |
-| 0x906f60 | 7 | `usa_awards_deleting_destructor` | fastcall (ECX this, passed in param_1, no stack arguments, ret 0) | Deleting destructor for the USA awards object that forwards the object's field at offset 0x28 to the award cleanup routine with a flag of -1. | medium | haiku |  |
+| 0x906980 | 82 (+2 unwind) | `UsaAwards::UsaAwards` | thiscall(UsaAwards* this, FILE* source) ret 4, returns this | Builds the USA awards object on NationAwards with month ratings, then loads the awards from the file or creates them. | high | opus |  |
+| 0x906ac0 | 257 (+7 unwind) | `UsaAwards::init_awards` | thiscall(UsaAwards* this, FILE* source) ret 4 | Creates the seven USA awards, a month award, five year awards and a team award for the MLS. | high | opus |  |
+| 0x906e10 | 122 | `UsaAwards::daily_update` | thiscall(UsaAwards* this, Date* date) ret 4 | On 25 November, gives the MLS manager, player and team of the season awards, advances the month award slots, then runs the base update. | high | opus |  |
+| 0x906f60 | 7 | `UsaAwards::on_month_change` | thiscall(UsaAwards* this) ret 0 | Gives the USA player of the month award from the month ratings. | medium | opus |  |

@@ -6,8 +6,8 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x90ead0 | 82 (+2 unwind) | `wales_awards::WalesAwards::ctor` | thiscall(this, int param_2 as optional award data pointer, ret 4) | Constructs the Wales awards object, loads its data and initialises the award set, or reports a version error. | high | haiku |  |
-| 0x90ec10 | 230 (+6 unwind) | `wales_awards::init_award_set` | thiscall(this in ECX, int param_2 passed on stack) with ret 4 | Allocates the Wales award set and constructs five year awards and one month award into its table. | high | haiku |  |
-| 0x90ef10 | 100 | `wales_awards::process_award_entry` | thiscall(this in ECX, const short* entry) with ret 4 | Processes one award entry by awarding player and manager of the year when the entry matches, then advancing month slots and checks. | medium | haiku |  |
-| 0x90f020 | 23 | `wales_awards_award_for_manager_record` | cdecl, no arguments, ret 0 (vtable slot entry with no stack arguments) | Looks up the best staff record for a global manager and passes its winner data to the month award setter. | low | haiku |  |
+| 0x90ead0 | 82 (+2 unwind) | `WalesAwards::WalesAwards` | thiscall(WalesAwards* this, FILE* load_source or 0) ret 4, returns this | Constructs the Welsh awards on NationAwards, sets the Wales nation record, then loads saved awards or creates the month ratings and award table. | high | opus |  |
+| 0x90ec10 | 230 (+6 unwind) | `WalesAwards::init_awards` | thiscall(WalesAwards* this, FILE* load_source or 0) ret 4 | Allocates the six-award table and creates one team award, four year awards and one month award for Wales. | high | opus |  |
+| 0x90ef10 | 100 | `WalesAwards::daily_update` | thiscall(WalesAwards* this, Date* date) ret 4 | On day 11 of month index 4, gives the Welsh year awards, then advances the month award slots and runs the base update. | high | opus |  |
+| 0x90f020 | 23 | `WalesAwards::on_month_change` | thiscall(WalesAwards* this) ret 0, this not read | Gives the Welsh manager of the month award to the best staff record of the competition at 0x9cf94c. | medium | opus |  |
 | 0x90f060 | 13 | `WalesAwards::update_team_of_the_week` | thiscall(WalesAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week nominations when the given team award is the first award in the Wales award table. | medium | opus |  |

@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x901c70 | 40 (+1 unwind) | `turkey_awards_ctor` | thiscall(TurkeyAwards* this, int source) ret 4 | Constructs the Turkey awards object, sets its vtable and fields, then loads the award data from the given source or reports an error. | high | haiku |  |
-| 0x901d00 | 219 (+6 unwind) | `turkey_awards_init` | thiscall(TurkeyAwards* this, int param_2) with ret 4 | Allocates the turkey award sub-objects and builds the awards list, reporting a version error if memory runs out. | high | haiku |  |
-| 0x901fd0 | 64 | `turkey_awards::award_month_check_and_record` | thiscall(this, short* date_key) ret 4 | Checks the current month against a stored date, then records monthly awards and runs the month change check for the Turkey awards. | medium | haiku |  |
-| 0x902080 | 12 | `turkey_awards_on_award_event` | thiscall(this, int event_or_player_arg) with one stack argument, ret 4 | Handles an award event, forwarding to the team of the week builder when the argument matches one of two stored references. | medium | haiku |  |
+| 0x901c70 | 40 (+1 unwind) | `TurkeyAwards::TurkeyAwards` | thiscall(TurkeyAwards* this, FILE* source) ret 4, returns this | Builds the Turkish awards object on NationAwards, then loads the awards from the file or creates them. | high | opus |  |
+| 0x901d00 | 219 (+6 unwind) | `TurkeyAwards::init_awards` | thiscall(TurkeyAwards* this, FILE* source) ret 4 | Creates the six Turkish awards, two year awards and four divisional team awards for the two leagues. | high | opus |  |
+| 0x901fd0 | 64 | `TurkeyAwards::daily_update` | thiscall(TurkeyAwards* this, Date* date) ret 4 | On 30 May, gives the Turkish player of the year, manager of the year and team of the season awards, then runs the base update. | high | opus |  |
+| 0x902080 | 12 | `TurkeyAwards::update_team_of_the_week` | thiscall(TurkeyAwards* this, void* award) ret 4 | Builds the team of the week for an award when it is one of the two Turkish divisional team awards. | high | opus |  |

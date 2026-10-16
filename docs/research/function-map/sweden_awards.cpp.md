@@ -6,8 +6,8 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x893720 | 40 (+1 unwind) | `sweden_awards_ctor` | thiscall (ECX = this, stack: int param_2 as load source or 0), ret 4 | Constructs the Sweden awards object, sets its vtable and fields, then loads award data or initialises the defaults. | medium | haiku |  |
-| 0x8937b0 | 332 (+10 unwind) | `sweden_awards::SwedenAwards::init` | thiscall(this, int param_2) ret 4 | Allocates the Swedish award object array and constructs nine award objects, reporting an error box if allocation fails. | high | haiku |  |
-| 0x893bf0 | 141 | `sweden_awards_write_summary` | thiscall(Awards* this in ECX, short* param_2 as the season or record key) ret 4 | Writes the season award summary for the Swedish league, awarding manager, players and top three after a date check. | medium | haiku |  |
-| 0x893d60 | 12 | `sweden_awards_on_nation_check` | thiscall(this, nation_ptr param_2) ret 4 | Checks whether a nation matches one of two stored nations and, if so, builds its team of the week. | medium | haiku |  |
-| 0x893d80 | 22 | `award_record_ctor` | thiscall(this in ECX, param_2..param_6 forwarded to base constructor), ret 0x14 | Constructs an award record object by running the base constructor, then setting the vtable and zeroing its fields. | medium | haiku | 2026-10-16-sweep-rulebooks.md |
+| 0x893720 | 40 (+1 unwind) | `SwedenAwards::SwedenAwards` | thiscall(SwedenAwards* this, int load_source), ret 4 | Runs the NationAwards constructor, installs vtable 0x970354, then loads the awards from the save or builds them fresh with init_awards. | high | opus |  |
+| 0x8937b0 | 332 (+10 unwind) | `SwedenAwards::init_awards` | thiscall(SwedenAwards* this, int load_source), ret 4 | Allocates the ten-entry award array and builds the Swedish year and team awards, with an error box when allocation fails. | high | opus |  |
+| 0x893bf0 | 141 | `SwedenAwards::daily_update` | thiscall(SwedenAwards* this, Date* today), ret 4 | Hands out the Swedish manager and player of the year awards on the season award date, then runs the base daily update. | high | opus |  |
+| 0x893d60 | 12 | `SwedenAwards::update_team_of_the_week` | thiscall(SwedenAwards* this, Award* award), ret 4 | Builds the team of the week when the given award is one of the two Swedish team awards. | high | opus |  |
+| 0x893d80 | 22 | `SWEDEN_RULES::SWEDEN_RULES` | thiscall(SWEDEN_RULES* this, int a1, int a2, int a3, int a4, int rules_id), ret 0x14 | Runs the TRANSFER_RULES constructor and installs the Swedish rules vtable 0x970368 with no transfer window records. | high | opus | 2026-10-16-sweep-rulebooks.md |
