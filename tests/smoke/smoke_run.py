@@ -6,13 +6,13 @@ Usage:
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd] [--days n] [--ref-build <program>]
         [--save start.sav|prematch.sav]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
 --tolerance n: a colour channel that differs by n or less counts as equal. The Linux build differs from the
 Mac reference pictures by 1 in some channels (the compilers round floating point differently), so its
 smoke run uses --tolerance 1.
 
-Same-save check (--same-save): the run plays the same new game five times, with -seed 1, the test
+Same-save check (--same-save): the run plays the same new game once per run in SAME_SAVE_RUNS, with -seed 1, the test
 clock (RECOMP_FIXED_CLOCK=1) and the same steps to "Go on Holiday". The runtime saves the game n game
 days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops. The runs:
     normal   every option at its default, faster_days = off
@@ -20,6 +20,9 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
     faster   faster_days = on: faster days changes no game decision
     silent   sound = off: sound changes no game decision
     off      every switch option off: no option changes a game decision
+    sleep-off  RECOMP_IDLE_SLEEP=0: the idle sleep (#58) changes no game decision
+Each run prints its count of idle sleeps (RECOMP_IDLE_COUNT=1). The check fails when the normal run
+has none, here and in the match check.
 Each save must be byte for byte the same as the save of "normal". A failed check names the parts of
 the save file that differ. The runs play at the same time, about two minutes in all. A later option
 that must not change the game adds a run to SAME_SAVE_RUNS.
@@ -71,6 +74,7 @@ game passes about two weeks, with more than five days in every run so far.
 """
 import concurrent.futures
 import os
+import re
 import shutil
 import struct
 import subprocess
@@ -191,6 +195,8 @@ SAME_SAVE_RUNS = [
     ("foreign-off", {"faster_days": "off", "foreign_colours": "off"}),
     ("search-on", {"faster_days": "off", "full_player_search": "on"}),
     ("search-off", {"faster_days": "off", "full_player_search": "off"}),
+    # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
+    ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
 
 # The match check (--match): the steps after the load of prematch.sav (fixtures.LOAD_STEPS), positions
@@ -248,8 +254,13 @@ MATCH_RUNS = [
     ("foreign-off", {"foreign_colours": "off"}),
     ("search-on", {"full_player_search": "on"}),
     ("search-off", {"full_player_search": "off"}),
+    ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
+# --match --sleep-danger adds this run: the idle sleep without its time rules (RECOMP_IDLE_SLEEP=force), so
+# it also sleeps while background matches play. It must FAIL: it shows that the match check catches a sleep
+# that changes the match. Not in MATCH_RUNS, because it fails.
+SLEEP_DANGER_RUN = ("sleep-force", {"_env": {"RECOMP_IDLE_SLEEP": "force"}})
 
 SAVE_NAME = "samesave.sav"
 INTRO_CLICK = "1000 click 400 300"
@@ -318,7 +329,7 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 f.write(f"{key} = {value}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                    RECOMP_USER_DIR=user,
-                   RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days),
+                   RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days), RECOMP_IDLE_COUNT="1",
                    RECOMP_SCRIPT="; ".join(scaled_steps(mode, shots, steps_of_run)), **extra_env)
         start = time.time()
         r = subprocess.run([run_program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
@@ -339,8 +350,14 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                     print(f"FAIL  {name}: no saved game (code {r.returncode}) after {took:.0f} s")
                     failed_runs += 1
                     continue
-                print(f"run   {name}: saved after {days} game days in {took:.0f} s")
+                m = re.search(r"recomp: idle sleeps (\d+)", r.stderr)
+                sleeps = int(m.group(1)) if m else None
+                print(f"run   {name}: saved after {days} game days in {took:.0f} s, idle sleeps {sleeps}")
                 saves[name] = path
+                # The idle sleep (#58) must have run in the normal run, or the check proves nothing.
+                if name == "normal" and not sleeps:
+                    print(f"FAIL  {name}: the idle sleep never ran (idle sleeps {sleeps})")
+                    failed_runs += 1
             if failed_runs:
                 print("FAIL")
                 return 1
@@ -405,7 +422,7 @@ SPEED_CLICKS = {"very-fast": "2500 click 120 255 | 192 344 | 260 451",
                 "fastest": "2500 click 120 242 | 192 323 | 260 430"}
 
 
-def match(program, game, days, speed="very-fast"):
+def match(program, game, days, speed="very-fast", sleep_danger=False):
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))
     import fixtures  # noqa: E402  (fixtures.py imports this file)
     save = os.path.join(fixtures.DEFAULT_DIR, MATCH_SAVE)
@@ -416,7 +433,8 @@ def match(program, game, days, speed="very-fast"):
     # different matches.
     steps = without_intro_click(fixtures.LOAD_STEPS) + [
         SPEED_CLICKS[speed] if s.startswith("2500 click 120 255") else s for s in MATCH_STEPS]
-    return compare_runs(program, game, "widescreen", MATCH_RUNS, steps, days, save, timeout=900)
+    runs = MATCH_RUNS + ([SLEEP_DANGER_RUN] if sleep_danger else [])
+    return compare_runs(program, game, "widescreen", runs, steps, days, save, timeout=900)
 
 
 def main(argv):
@@ -438,7 +456,7 @@ def main(argv):
         if speed not in SPEED_CLICKS:
             print(f"unknown speed {speed}: use very-fast or fastest")
             return 2
-        return match(os.path.abspath(argv[1]), os.path.abspath(argv[2]), days, speed)
+        return match(os.path.abspath(argv[1]), os.path.abspath(argv[2]), days, speed, "--sleep-danger" in argv[3:])
     if "--same-save" in argv[3:]:
         days = int(argv[argv.index("--days") + 1]) if "--days" in argv[3:] else 14
         save_name = argv[argv.index("--save") + 1] if "--save" in argv[3:] else None
