@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5df650 | 82 (+2 unwind) | `germany_awards::ctor_from_source` | thiscall(Germany_awards* this, int source) ret 4 | Constructs the German awards object, loading its data from a source or falling back to an assert error message. | high | haiku |  |
-| 0x5df790 | 459 (+14 unwind) | `germany_awards::init_award_objects` | thiscall (ECX/param_1 = this, param_2 = int flag passed through), ret 4 | Allocates and constructs the fourteen German award objects into the owner's table, reporting an error box if the table allocation fails. | high | haiku |  |
-| 0x5dfd70 | 182 | `germany_awards::award_block_render` | thiscall(this, short* param_2) with ret 4 | Renders the German award block for a date and nation, filling award slots then advancing month and manager state. | medium | haiku |  |
-| 0x5dff40 | 16 | `germany_awards_deleting_destructor` | fastcall, (this in ECX, param_1 is the award object), ret 0 | Deleting destructor that releases the award's player-side data by calling a month_award routine twice with values -1 and 20. | medium | haiku |  |
+| 0x5df650 | 82 (+2 unwind) | `GermanyAwards::GermanyAwards` | thiscall(GermanyAwards* this, FILE* file or 0), returns this, ret 4 | Constructs the German awards on NationAwards and loads them from the file, or creates the month ratings and sets up the awards fresh. | high | opus |  |
+| 0x5df790 | 459 (+14 unwind) | `GermanyAwards::init_awards` | thiscall(GermanyAwards* this, FILE* file or 0), ret 4 | Allocates the fourteen-entry award table and constructs the German year, team and month awards for the two Bundesliga divisions. | high | opus |  |
+| 0x5dfd70 | 182 | `GermanyAwards::daily_update` | thiscall(GermanyAwards* this, Date* date), ret 4 | On 6 June gives the German yearly player and manager awards, moves the month award slots at season end, then runs the base month check. | high | opus |  |
+| 0x5dff40 | 16 | `GermanyAwards::on_month_change` | thiscall(GermanyAwards* this), ret 0 | Gives the German player of the month awards from the month ratings, once for all players and once for the age limit of 20. | high | opus |  |

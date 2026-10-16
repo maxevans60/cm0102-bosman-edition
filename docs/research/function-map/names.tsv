@@ -2122,27 +2122,27 @@ address	file	name	confidence	model	cited_in
 0x5a5180	find_screens.cpp	fine_dat_load	high	haiku	
 0x5a53c0	find_screens.cpp	noop_destructor	low	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md
 0x5a53d0	Fine.cpp	fine_dat_load_fines	high	haiku	
-0x5a5820	Fine.cpp	fine_check_pending_discipline	medium	haiku	
-0x5a5930	Fine.cpp	fine_set_field_from_float	low	haiku	
-0x5a5960	Fine.cpp	fine_clear_flag_at_offset	medium	haiku	
-0x5a5980	Fine.cpp	fine_apply_disciplinary_sanction	medium	haiku	
-0x5a69b0	Fine.cpp	Fine::check_discipline_fine_candidate	medium	haiku	
-0x5a73a0	Fine.cpp	fine_reason_text	high	haiku	
-0x5a74b0	Fine.cpp	news_contract_offer_story	medium	haiku	
-0x5a76e0	Fine.cpp	news_post_fine_or_warning_story	high	haiku	
-0x5a7ed0	Fine.cpp	fine_board_warning_message	medium	haiku	
-0x5a7f20	Fine.cpp	fine_show_discipline_news_story	medium	haiku	
-0x5a8090	Fine.cpp	news_coach_player_pressure_message	high	haiku	
-0x5a8380	Fine.cpp	fine_discipline_screen_open	medium	haiku	
-0x5a83e0	Fine.cpp	show_discipline_dialog	high	haiku	2026-10-16-slow-screens.md
-0x5a8990	Fine.cpp	fine_dialog_handler	medium	haiku	2026-10-16-slow-screens.md
+0x5a5820	Fine.cpp	Fine::daily_update	medium	opus	
+0x5a5930	Fine.cpp	Fine::halve_club_fine_count	high	opus	
+0x5a5960	Fine.cpp	Fine::clear_club_fine_count	high	opus	
+0x5a5980	Fine.cpp	Fine::fine_player	high	opus	
+0x5a69b0	Fine.cpp	Fine::is_fine_justified	medium	opus	
+0x5a73a0	Fine.cpp	fine_reason_text	high	opus	
+0x5a74b0	Fine.cpp	post_fine_reaction_news	high	opus	
+0x5a76e0	Fine.cpp	write_fine_reaction_news_text	high	opus	
+0x5a7ed0	Fine.cpp	write_board_fine_warning_news_text	high	opus	
+0x5a7f20	Fine.cpp	post_coach_fine_feedback_news	high	opus	
+0x5a8090	Fine.cpp	write_coach_fine_feedback_news_text	high	opus	
+0x5a8380	Fine.cpp	open_discipline_player_screen	high	opus	
+0x5a83e0	Fine.cpp	draw_discipline_player_screen	high	opus	2026-10-16-slow-screens.md
+0x5a8990	Fine.cpp	discipline_player_screen_input	high	opus	2026-10-16-slow-screens.md
 0x5a8f60	Fine.cpp	pre_exit_noop	low	opus	2026-10-13-input-inventory.md,2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md
-0x5a8f70	finland_awards.cpp	FinlandAwards::FinlandAwards	high	haiku	
-0x5a90b0	finland_awards.cpp	finland_awards::construct_awards	high	haiku	2026-10-14-widescreen-inventory.md
-0x5a96b0	finland_awards.cpp	finland_awards_check_and_dispatch	medium	haiku	
-0x5a96e0	finland_awards.cpp	finland_awards_run_award_cycle	medium	haiku	
-0x5a9890	finland_awards.cpp	finland_awards_vtable_refresh_winners	medium	haiku	
-0x5a9930	finland_awards.cpp	finland_awards_vtable_slot_team_of_the_week_check	medium	haiku	
+0x5a8f70	finland_awards.cpp	FinlandAwards::FinlandAwards	high	opus	
+0x5a90b0	finland_awards.cpp	FinlandAwards::init_awards	high	opus	2026-10-14-widescreen-inventory.md
+0x5a96b0	finland_awards.cpp	FinlandAwards::record_match_ratings	medium	opus	
+0x5a96e0	finland_awards.cpp	FinlandAwards::daily_update	high	opus	
+0x5a9890	finland_awards.cpp	FinlandAwards::on_month_change	high	opus	
+0x5a9930	finland_awards.cpp	FinlandAwards::update_team_of_the_week	high	opus	
 0x5a9950	finland_rules.cpp	FINLAND_RULES::FINLAND_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x5a9a80	finland_rules.cpp	FINLAND_RULES::get_loan_period	medium	opus	
 0x5a9af0	finland_rules.cpp	FINLAND_RULES::can_loan_player	high	opus	
@@ -2186,39 +2186,39 @@ address	file	name	confidence	model	cited_in
 0x5af5b0	fix_man.cpp	fix_man_get_partner_nation_type	low	opus	2026-10-15-holiday-next-match-inventory.md,2026-10-16-foreign-and-tactics-positions.md
 0x5af630	fog_of_war.cpp	FOG_OF_WAR::FOG_OF_WAR	medium	opus	2026-10-14-game-creation-inventory.md
 0x5af6a0	fog_of_war.cpp	FOG_OF_WAR::~FOG_OF_WAR	medium	opus	
-0x5af6e0	fog_of_war.cpp	fog_of_war_load_fog_dat	high	haiku	
-0x5afad0	fog_of_war.cpp	fog_of_war_save_fog_data	medium	haiku	
-0x5afce0	fog_of_war.cpp	fog_of_war_update_slots	medium	haiku	
-0x5afd00	fog_of_war.cpp	fog_of_war_clear_player_slot	medium	haiku	
-0x5afd70	fog_of_war.cpp	fog_of_war_slot_alloc_thiscall_wrapper	medium	haiku	2026-10-14-game-creation-inventory.md
-0x5afde0	fog_of_war.cpp	fog_of_war_lookup_by_index	medium	haiku	
-0x5afe00	fog_of_war.cpp	fog_of_war_refresh_pair_teams	medium	haiku	
-0x5aff00	fog_of_war.cpp	fog_of_war_map::init_visibility_grid	high	haiku	
-0x5b0010	fog_of_war.cpp	fog_of_war_read_record_table	medium	haiku	
-0x5b0170	fog_of_war.cpp	fog_of_war_check_fog_file_version	high	haiku	
-0x5b0260	fog_of_war.cpp	fog_of_war_decay_and_raise_visibility	medium	haiku	
-0x5b02f0	fog_of_war.cpp	fog_of_war_visibility_level	medium	haiku	
-0x5b03e0	fog_of_war.cpp	fog_of_war_visibility_level	medium	haiku	
-0x5b06e0	fog_of_war.cpp	fog_of_war_visibility_tier	medium	haiku	
-0x5b09d0	fog_of_war.cpp	fog_of_war_update_cell	medium	haiku	
-0x5b0ab0	fog_of_war.cpp	font_path_object_init	medium	haiku	
-0x5b0b40	fog_of_war.cpp	formation_cleanup_release_handle	medium	haiku	
-0x5b0b60	fog_of_war.cpp	font_load_by_size_index	high	haiku	2026-10-16-hd-text.md
-0x5b0d80	fog_of_war.cpp	blit_glyph_string_alpha	medium	haiku	2026-10-16-hd-text.md
-0x5b18a0	fog_of_war.cpp	formation_sum_score	low	haiku	2026-10-16-hd-text.md
-0x5b1940	fog_of_war.cpp	formation_destroy	medium	haiku	
-0x5b1a00	fog_of_war.cpp	fog_of_war_update_overlay	medium	haiku	2026-10-16-hd-text.md
-0x5b1ba0	fog_of_war.cpp	fog_of_war_cache_lookup_or_build	medium	haiku	
-0x5b1f30	fog_of_war.cpp	fonts_path_init_and_select	medium	haiku	
-0x5b1fc0	fog_of_war.cpp	font_path_resolve_init	medium	haiku	
-0x5b2040	fog_of_war.cpp	font_name_lookup	medium	haiku	
-0x5b2170	fog_of_war.cpp	fog_of_war_load_fog_dat_entries	medium	haiku	2026-10-16-hd-text.md
-0x5b25a0	fog_of_war.cpp	byte_swap_four_dwords	medium	haiku	
-0x5b2650	fog_of_war.cpp	swap_word_bytes_three	medium	haiku	
-0x5b2680	fog_of_war.cpp	byteswap_six_words	medium	haiku	
-0x5b26e0	fog_of_war.cpp	fog_of_war_read_fixed_string_field	medium	haiku	
-0x5b2770	fog_of_war.cpp	fog_dat_entry_read_check	low	haiku	
-0x5b27c0	fog_of_war.cpp	fog_of_war_init_fill_strings	medium	haiku	
+0x5af6e0	fog_of_war.cpp	FOG_OF_WAR::load	high	opus	
+0x5afad0	fog_of_war.cpp	FOG_OF_WAR::save	high	opus	
+0x5afce0	fog_of_war.cpp	FOG_OF_WAR::daily_update	high	opus	
+0x5afd00	fog_of_war.cpp	FOG_OF_WAR::forget_person	high	opus	
+0x5afd70	fog_of_war.cpp	FOG_OF_WAR::add_manager_map	high	opus	2026-10-14-game-creation-inventory.md
+0x5afde0	fog_of_war.cpp	FOG_OF_WAR::get_manager_map	high	opus	
+0x5afe00	fog_of_war.cpp	fog_of_war_reveal_match_players	medium	opus	
+0x5aff00	fog_of_war.cpp	FOG_OF_WAR_MAP::FOG_OF_WAR_MAP	high	opus	
+0x5b0010	fog_of_war.cpp	FOG_OF_WAR_MAP::load	high	opus	
+0x5b0170	fog_of_war.cpp	FOG_OF_WAR_MAP::save	high	opus	
+0x5b0260	fog_of_war.cpp	FOG_OF_WAR_MAP::daily_update	high	opus	
+0x5b02f0	fog_of_war.cpp	FOG_OF_WAR_MAP::get_knowledge_level	high	opus	
+0x5b03e0	fog_of_war.cpp	fog_of_war_initial_knowledge_level	medium	opus	
+0x5b06e0	fog_of_war.cpp	fog_of_war_minimum_knowledge_level	medium	opus	
+0x5b09d0	fog_of_war.cpp	FOG_OF_WAR_MAP::raise_knowledge	high	opus	
+0x5b0ab0	fog_of_war.cpp	FONT::FONT	medium	opus	
+0x5b0b40	fog_of_war.cpp	FONT::~FONT	medium	opus	
+0x5b0b60	fog_of_war.cpp	FONT::load_font_file	high	opus	2026-10-16-hd-text.md
+0x5b0d80	fog_of_war.cpp	FONT::draw_text	high	opus	2026-10-16-hd-text.md
+0x5b18a0	fog_of_war.cpp	FONT::get_text_width	high	opus	2026-10-16-hd-text.md
+0x5b1940	fog_of_war.cpp	FONT::unload	high	opus	
+0x5b1a00	fog_of_war.cpp	FONT::set_style_and_size	medium	opus	2026-10-16-hd-text.md
+0x5b1ba0	fog_of_war.cpp	FONT::get_cached_glyph	high	opus	
+0x5b1f30	fog_of_war.cpp	font_set_mode	high	opus	
+0x5b1fc0	fog_of_war.cpp	font_get_file_count	high	opus	
+0x5b2040	fog_of_war.cpp	font_get_mode_name	high	opus	
+0x5b2170	fog_of_war.cpp	font_scan_folder	high	opus	2026-10-16-hd-text.md
+0x5b25a0	fog_of_war.cpp	ttf_swap_table_record	high	opus	
+0x5b2650	fog_of_war.cpp	ttf_swap_name_table_header	high	opus	
+0x5b2680	fog_of_war.cpp	ttf_swap_name_record	high	opus	
+0x5b26e0	fog_of_war.cpp	ttf_read_name_string	high	opus	
+0x5b2770	fog_of_war.cpp	font_file_read_at	high	opus	
+0x5b27c0	formation.cpp	Formation::Formation	high	opus	
 0x5b2930	formation.cpp	formation_construct_from_club	high	haiku	
 0x5b2ae0	formation.cpp	formation_get_position_slot	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
 0x5b2ba0	formation.cpp	formation_set_position_slot	high	haiku	
@@ -2265,73 +2265,73 @@ address	file	name	confidence	model	cited_in
 0x5b8960	formation.cpp	formation_has_player_in_slot_conflict	medium	haiku	
 0x5b8d80	formation.cpp	Formation::check_positions_legal	medium	haiku	
 0x5b8dc0	formation.cpp	formation_has_duplicate_or_conflicting_slots	medium	haiku	
-0x5b91c0	fra_cfa.cpp	fra_cfa::FraCfa_constructor	medium	haiku	
-0x5b9420	fra_cfa.cpp	fra_cfa_stub_return_zero	medium	haiku	
-0x5b9430	fra_cfa.cpp	return_zero_stub	medium	haiku	
-0x5b9440	fra_cfa.cpp	fra_cfa::`scalar deleting destructor'	medium	slot copy	
-0x5b9460	fra_cfa.cpp	league_fra_cfa_destructor	high	haiku	
-0x5b9510	fra_cfa.cpp	fra_cfa::create_schedule	medium	slot copy	
-0x5b9fa0	fra_cfa.cpp	fra_cfa::init_cfa_slots	medium	haiku	
-0x5ba0a0	fra_cfa.cpp	fra_cfa::set_up_rules	medium	slot copy	
-0x5ba130	fra_cup.cpp	Cup::Cup	high	haiku	
-0x5ba300	fra_cup.cpp	fra_cup::`scalar deleting destructor'	medium	slot copy	
-0x5ba320	fra_cup.cpp	fra_cup::~fra_cup	high	haiku	
-0x5ba3f0	fra_cup.cpp	fra_cup::create_round_table	medium	slot copy	
-0x5baa50	fra_cup.cpp	Cup::build_qualifier_list	medium	haiku	
-0x5bae50	fra_cup.cpp	fra_cup::release_data	medium	slot copy	
-0x5bb030	fra_cup.cpp	fra_cup::club_in_higher_division	medium	slot copy	
-0x5bb100	fra_cup.cpp	fra_gap_set_player_flags_0x5bb100	low	haiku	
-0x5bb000	fra_first.cpp	fra_first::set_up_rounds	medium	slot copy	
-0x5bb160	fra_first.cpp	Fra_First::Fra_First	high	haiku	
-0x5bb540	fra_first.cpp	fra_first_return_true	medium	haiku	
-0x5bb550	fra_first.cpp	return_true_stub	medium	haiku	
-0x5bb560	fra_first.cpp	fra_first_scalar_deleting_destructor	high	haiku	
-0x5bb580	fra_first.cpp	fra_first_base_destructor	high	haiku	
-0x5bb590	fra_first.cpp	fra_first_scalar_deleting_destructor	high	haiku	
-0x5bb5b0	fra_first.cpp	fra_first_comp_base_dtor_5bb5b0	medium	haiku	
-0x5bb5c0	fra_first.cpp	fra_first::`scalar deleting destructor'	medium	slot copy	
-0x5bb5e0	fra_first.cpp	fra_first_screen::~fra_first_screen	high	haiku	
-0x5bb690	fra_first.cpp	fra_first::create_schedule	medium	slot copy	
-0x5bc2b0	fra_first.cpp	fra_first_init_cup_teams	medium	haiku	
-0x5bc410	fra_first.cpp	fra_first::set_up_rules	medium	slot copy	
-0x5bc4d0	fra_first.cpp	fra_first::start_new_season	medium	slot copy	
-0x5bc780	fra_first.cpp	fra_first_select_and_assign_players	medium	haiku	
-0x5bc980	fra_lge_cup.cpp	Cup::Cup	high	haiku	
-0x5bcb50	fra_lge_cup.cpp	fra_lge_cup::`scalar deleting destructor'	medium	slot copy	
-0x5bcb70	fra_lge_cup.cpp	Cup_screen::~Cup_screen	high	haiku	
-0x5bcc40	fra_lge_cup.cpp	fra_lge_cup::create_round_table	medium	slot copy	
-0x5bd160	fra_lge_cup.cpp	fra_lge_cup_fill_team_list	medium	haiku	
-0x5bd420	fra_lge_cup.cpp	fra_lge_cup::release_data	medium	slot copy	
-0x5bd5d0	fra_lge_cup.cpp	fra_lge_cup::set_up_rounds	medium	slot copy	
-0x5bd600	fra_lower.cpp	Fra_Lower::ctor_select_candidates	medium	haiku	
-0x5bd850	fra_lower.cpp	fra_lower::`scalar deleting destructor'	medium	slot copy	
-0x5bd870	fra_lower.cpp	fra_lower::~fra_lower	medium	haiku	
-0x5bd920	fra_lower.cpp	fra_lower::create_schedule	medium	slot copy	
-0x5be230	fra_lower.cpp	fra_lower_init_slots	high	haiku	
-0x5be330	fra_second.cpp	fra_second_constructor	high	haiku	
-0x5be540	fra_second.cpp	fra_second::`scalar deleting destructor'	medium	slot copy	
-0x5be560	fra_second.cpp	fra_second_frame_dtor	medium	haiku	
-0x5be620	fra_second.cpp	fra_second::create_schedule	medium	slot copy	
-0x5bef10	fra_second.cpp	fra_second_init_league_table	high	haiku	
-0x5bf0a0	fra_second.cpp	fra_second::set_up_rules	medium	slot copy	
-0x5bf160	fra_second.cpp	fra_second::start_new_season	medium	slot copy	
-0x5bf320	fra_super.cpp	fra_super_screen_ctor	high	haiku	
-0x5bf4e0	fra_super.cpp	fra_super::`scalar deleting destructor'	medium	slot copy	
-0x5bf500	fra_super.cpp	fra_super_order_dtor	medium	haiku	
-0x5bf5d0	fra_super.cpp	fra_super::create_round_table	medium	slot copy	
-0x5bf770	fra_super.cpp	fra_super_init_cup_handles	high	haiku	
-0x5bf9a0	fra_super.cpp	fra_super::release_data	medium	slot copy	
-0x5bfb40	fra_third.cpp	fra_third_cup_ctor	high	haiku	
-0x5bfd50	fra_third.cpp	fra_third::`scalar deleting destructor'	medium	slot copy	
-0x5bfd70	fra_third.cpp	fra_third_destructor_body	high	haiku	
-0x5bfe30	fra_third.cpp	fra_third::create_schedule	medium	slot copy	
-0x5c05d0	fra_third.cpp	fra_third_init_league_teams	medium	haiku	
-0x5c0700	fra_third.cpp	fra_third::set_up_rules	medium	slot copy	
-0x5c07c0	fra_third.cpp	fra_third::start_new_season	medium	slot copy	
-0x5c0980	france_awards.cpp	France_Awards::France_Awards	high	haiku	
-0x5c0a20	france_awards.cpp	France_Awards::init_awards	high	haiku	
-0x5c1260	france_awards.cpp	france_awards_vtable_update	medium	haiku	
-0x5c1540	france_awards.cpp	awards_on_player_event	medium	haiku	
+0x5b91c0	fra_cfa.cpp	FraCfa::FraCfa	high	opus	
+0x5b9420	fra_cfa.cpp	stub_return_zero_ret8	high	opus	
+0x5b9430	fra_cfa.cpp	stub_return_zero_ret4	medium	opus	
+0x5b9440	fra_cfa.cpp	FraCfa::`scalar deleting destructor'	high	opus	
+0x5b9460	fra_cfa.cpp	FraCfa::~FraCfa	high	opus	
+0x5b9510	fra_cfa.cpp	FraCfa::create_schedule	high	opus	
+0x5b9fa0	fra_cfa.cpp	FraCfa::create_group_table	medium	opus	
+0x5ba0a0	fra_cfa.cpp	FraCfa::set_up_rules	high	opus	
+0x5ba130	fra_cup.cpp	FraCup::FraCup	high	opus	
+0x5ba300	fra_cup.cpp	FraCup::`scalar deleting destructor'	high	opus	
+0x5ba320	fra_cup.cpp	FraCup::~FraCup	high	opus	
+0x5ba3f0	fra_cup.cpp	FraCup::create_round_table	high	opus	
+0x5baa50	fra_cup.cpp	FraCup::collect_entrants	high	opus	
+0x5bae50	fra_cup.cpp	FraCup::start_new_season	high	opus	
+0x5bb000	fra_cup.cpp	FraCup::set_up_rounds	high	opus	
+0x5bb030	fra_cup.cpp	FraCup::club_in_higher_division	medium	opus	
+0x5bb100	fra_cup.cpp	FraCup::set_fixture_substitutes	high	opus	
+0x5bb160	fra_first.cpp	FraFirst::FraFirst	high	opus	
+0x5bb540	fra_first.cpp	stub_return_one_ret8	high	opus	
+0x5bb550	fra_first.cpp	stub_return_one_ret4	high	opus	
+0x5bb560	fra_first.cpp	FraCfaStubComp::`scalar deleting destructor'	medium	opus	
+0x5bb580	fra_first.cpp	FraCfaStubComp::~FraCfaStubComp	medium	opus	
+0x5bb590	fra_first.cpp	FraLowerStubComp::`scalar deleting destructor'	medium	opus	
+0x5bb5b0	fra_first.cpp	FraLowerStubComp::~FraLowerStubComp	medium	opus	
+0x5bb5c0	fra_first.cpp	FraFirst::`scalar deleting destructor'	high	opus	
+0x5bb5e0	fra_first.cpp	FraFirst::~FraFirst	high	opus	
+0x5bb690	fra_first.cpp	FraFirst::create_schedule	high	opus	
+0x5bc2b0	fra_first.cpp	FraFirst::create_table	high	opus	
+0x5bc410	fra_first.cpp	FraFirst::set_up_rules	high	opus	
+0x5bc4d0	fra_first.cpp	FraFirst::start_new_season	high	opus	
+0x5bc780	fra_first.cpp	FraFirst::exchange_cfa_national_clubs	high	opus	
+0x5bc980	fra_lge_cup.cpp	FraLgeCup::FraLgeCup	high	opus	
+0x5bcb50	fra_lge_cup.cpp	FraLgeCup::`scalar deleting destructor'	high	opus	
+0x5bcb70	fra_lge_cup.cpp	FraLgeCup::~FraLgeCup	high	opus	
+0x5bcc40	fra_lge_cup.cpp	FraLgeCup::create_round_table	high	opus	
+0x5bd160	fra_lge_cup.cpp	FraLgeCup::collect_entrants	high	opus	
+0x5bd420	fra_lge_cup.cpp	FraLgeCup::start_new_season	high	opus	
+0x5bd5d0	fra_lge_cup.cpp	FraLgeCup::set_up_rounds	high	opus	
+0x5bd600	fra_lower.cpp	FraLower::FraLower	medium	opus	
+0x5bd850	fra_lower.cpp	FraLower::`scalar deleting destructor'	high	opus	
+0x5bd870	fra_lower.cpp	FraLower::~FraLower	high	opus	
+0x5bd920	fra_lower.cpp	FraLower::create_schedule	high	opus	
+0x5be230	fra_lower.cpp	FraLower::create_table	high	opus	
+0x5be330	fra_second.cpp	FraSecond::FraSecond	high	opus	
+0x5be540	fra_second.cpp	FraSecond::`scalar deleting destructor'	high	opus	
+0x5be560	fra_second.cpp	FraSecond::~FraSecond	high	opus	
+0x5be620	fra_second.cpp	FraSecond::create_schedule	high	opus	
+0x5bef10	fra_second.cpp	FraSecond::create_table	high	opus	
+0x5bf0a0	fra_second.cpp	FraSecond::set_up_rules	high	opus	
+0x5bf160	fra_second.cpp	FraSecond::start_new_season	high	opus	
+0x5bf320	fra_super.cpp	FraSuper::FraSuper	high	opus	
+0x5bf4e0	fra_super.cpp	FraSuper::`scalar deleting destructor'	high	opus	
+0x5bf500	fra_super.cpp	FraSuper::~FraSuper	high	opus	
+0x5bf5d0	fra_super.cpp	FraSuper::create_round_table	high	opus	
+0x5bf770	fra_super.cpp	FraSuper::select_teams	high	opus	
+0x5bf9a0	fra_super.cpp	FraSuper::start_new_season	high	opus	
+0x5bfb40	fra_third.cpp	FraThird::FraThird	high	opus	
+0x5bfd50	fra_third.cpp	FraThird::`scalar deleting destructor'	high	opus	
+0x5bfd70	fra_third.cpp	FraThird::~FraThird	high	opus	
+0x5bfe30	fra_third.cpp	FraThird::create_schedule	high	opus	
+0x5c05d0	fra_third.cpp	FraThird::create_table	high	opus	
+0x5c0700	fra_third.cpp	FraThird::set_up_rules	high	opus	
+0x5c07c0	fra_third.cpp	FraThird::start_new_season	high	opus	
+0x5c0980	france_awards.cpp	FranceAwards::FranceAwards	high	opus	
+0x5c0a20	france_awards.cpp	FranceAwards::init_awards	high	opus	
+0x5c1260	france_awards.cpp	FranceAwards::daily_update	high	opus	
+0x5c1540	france_awards.cpp	FranceAwards::update_team_of_the_week	high	opus	
 0x5c1570	france_rules.cpp	FRANCE_RULES::FRANCE_RULES	high	opus	
 0x5c15e0	france_rules.cpp	FRANCE_RULES::init_transfer_windows	high	opus	2026-10-16-sweep-rulebooks.md
 0x5c1710	france_rules.cpp	FRANCE_RULES::daily_update	medium	opus	
@@ -2453,58 +2453,58 @@ address	file	name	confidence	model	cited_in
 0x5d8310	game_config.cpp	game_config_map_index_to_byte	medium	haiku	
 0x5d83e0	game_config.cpp	Config::set_season_length_checked	medium	haiku	2026-10-16-options-screen.md
 0x5d8480	game_config.cpp	Config::load_preferences	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-16-options-screen.md,setup.c
-0x5d8b40	game_config.cpp	get_field_0x217	low	haiku	
-0x5d8b50	game_config.cpp	config_set_name_field	medium	haiku	2026-10-16-options-screen.md
-0x5d8b80	game_config.cpp	game_config_find_cup_entry	medium	haiku	
-0x5d8c20	ger_cup.cpp	Cup::Cup	high	haiku	
-0x5d8df0	ger_cup.cpp	ger_cup::`scalar deleting destructor'	medium	slot copy	
-0x5d8e10	ger_cup.cpp	ger_cup_entry::~ger_cup_entry	high	haiku	
-0x5d8ee0	ger_cup.cpp	ger_cup::create_round_table	medium	slot copy	
-0x5d9370	ger_cup.cpp	ger_cup_build_squad_list	high	haiku	
-0x5d9780	ger_cup.cpp	ger_cup::release_data	medium	slot copy	
-0x5d9930	ger_cup.cpp	ger_cup::club_in_higher_division	medium	slot copy	
-0x5d99b0	ger_first.cpp	Ger_first::ger_first_init_game_object	medium	haiku	
-0x5d9bc0	ger_first.cpp	ger_first::`scalar deleting destructor'	medium	slot copy	
-0x5d9be0	ger_first.cpp	ger_first_dtor_body	high	haiku	
-0x5d9c70	ger_first.cpp	ger_first::create_schedule	medium	slot copy	
-0x5db230	ger_first.cpp	ger_first_build_team_table	medium	haiku	
-0x5db400	ger_first.cpp	ger_first::set_up_rules	medium	slot copy	
-0x5db4a0	ger_first.cpp	ger_first::start_new_season	medium	slot copy	
-0x5db6c0	ger_first.cpp	ger_first::process_promotion_relegation_chain	medium	slot copy	
-0x5db7b0	ger_first.cpp	ger_first_collect_and_assign_players	medium	haiku	
-0x5db980	ger_first.cpp	ger_first_assign_players_or_error	medium	haiku	
-0x5dbbd0	ger_first.cpp	ger_first::assign_squad_numbers_by_position	medium	haiku	
-0x5dbf50	ger_first.cpp	ger_first_assign_cup_team_assert	medium	haiku	
-0x5dc0e0	ger_lge_cup.cpp	Cup::Cup_ger_lge_cup	high	haiku	
-0x5dc2b0	ger_lge_cup.cpp	ger_lge_cup::`scalar deleting destructor'	medium	slot copy	
-0x5dc2d0	ger_lge_cup.cpp	ger_lge_cup_destructor	high	haiku	
-0x5dc3a0	ger_lge_cup.cpp	ger_lge_cup::create_round_table	medium	slot copy	
-0x5dc700	ger_lge_cup.cpp	ger_lge_cup_load_group_teams	medium	haiku	
-0x5dc9e0	ger_lge_cup.cpp	ger_lge_cup::release_data	medium	slot copy	
-0x5dcb90	ger_lge_cup.cpp	ger_lge_cup::set_up_rounds	medium	slot copy	
-0x5dcbd0	ger_regional.cpp	ger_regional_constructor	high	haiku	
-0x5dce00	ger_regional.cpp	ger_regional::has_relegation	medium	slot copy	
-0x5dce10	ger_regional.cpp	ger_regional::`scalar deleting destructor'	medium	slot copy	
-0x5dce30	ger_regional.cpp	ger_regional_dtor	high	haiku	
-0x5dcef0	ger_regional.cpp	ger_regional::create_schedule	medium	slot copy	
-0x5dd7f0	ger_regional.cpp	ger_regional_fill_slots	high	haiku	
-0x5dd9f0	ger_regional.cpp	ger_regional::set_up_rules	medium	slot copy	
-0x5dda90	ger_regional.cpp	ger_regional::start_new_season	medium	slot copy	
-0x5ddc50	ger_regional.cpp	Regional_Cup::build_cup_teams	medium	haiku	
-0x5ddff0	ger_regional.cpp	ger_regional::get_club_array	medium	slot copy	
-0x5de130	ger_regional.cpp	ger_regional::set_predicted_positions	medium	slot copy	
-0x5de2a0	ger_regional.cpp	ger_regional_set_flags_from_bytes	medium	haiku	
-0x5de2e0	ger_second.cpp	Setup_Screen::ctor_with_assert	medium	haiku	
-0x5de4f0	ger_second.cpp	ger_second::`scalar deleting destructor'	medium	slot copy	
-0x5de510	ger_second.cpp	ger_second_object::~ger_second_object	high	haiku	
-0x5de5d0	ger_second.cpp	ger_second::create_schedule	medium	slot copy	
-0x5df2b0	ger_second.cpp	ger_second_cup_init_teams	medium	haiku	
-0x5df3e0	ger_second.cpp	ger_second::set_up_rules	medium	slot copy	
-0x5df490	ger_second.cpp	ger_second::start_new_season	medium	slot copy	
-0x5df650	germany_awards.cpp	germany_awards::ctor_from_source	high	haiku	
-0x5df790	germany_awards.cpp	germany_awards::init_award_objects	high	haiku	
-0x5dfd70	germany_awards.cpp	germany_awards::award_block_render	medium	haiku	
-0x5dff40	germany_awards.cpp	germany_awards_deleting_destructor	medium	haiku	
+0x5d8b40	game_config.cpp	Config::get_font_index	medium	opus	
+0x5d8b50	game_config.cpp	Config::set_font	high	opus	2026-10-16-options-screen.md
+0x5d8b80	game_config.cpp	is_font_allowed_for_language	medium	opus	
+0x5d8c20	ger_cup.cpp	GerCup::GerCup	high	opus	
+0x5d8df0	ger_cup.cpp	GerCup::`scalar deleting destructor'	high	opus	
+0x5d8e10	ger_cup.cpp	GerCup::~GerCup	high	opus	
+0x5d8ee0	ger_cup.cpp	GerCup::create_round_table	high	opus	
+0x5d9370	ger_cup.cpp	GerCup::collect_entrants	high	opus	
+0x5d9780	ger_cup.cpp	GerCup::start_new_season	high	opus	
+0x5d9930	ger_cup.cpp	GerCup::club_in_higher_division	high	opus	
+0x5d99b0	ger_first.cpp	GerFirst::GerFirst	high	opus	
+0x5d9bc0	ger_first.cpp	GerFirst::`scalar deleting destructor'	high	opus	
+0x5d9be0	ger_first.cpp	GerFirst::~GerFirst	high	opus	
+0x5d9c70	ger_first.cpp	GerFirst::create_schedule	high	opus	
+0x5db230	ger_first.cpp	GerFirst::create_table	high	opus	
+0x5db400	ger_first.cpp	GerFirst::set_up_rules	high	opus	
+0x5db4a0	ger_first.cpp	GerFirst::start_new_season	high	opus	
+0x5db6c0	ger_first.cpp	GerFirst::process_promotion_relegation_chain	high	opus	
+0x5db7b0	ger_first.cpp	ger_first_exchange_regional_clubs_unplayed	high	opus	
+0x5db980	ger_first.cpp	ger_first_exchange_regional_lower_division_clubs	high	opus	
+0x5dbbd0	ger_first.cpp	ger_first_split_regional_north_south	medium	opus	
+0x5dbf50	ger_first.cpp	ger_first_relegate_b_teams_of_relegated_clubs	high	opus	
+0x5dc0e0	ger_lge_cup.cpp	GerLgeCup::GerLgeCup	high	opus	
+0x5dc2b0	ger_lge_cup.cpp	GerLgeCup::`scalar deleting destructor'	high	opus	
+0x5dc2d0	ger_lge_cup.cpp	GerLgeCup::~GerLgeCup	high	opus	
+0x5dc3a0	ger_lge_cup.cpp	GerLgeCup::create_round_table	high	opus	
+0x5dc700	ger_lge_cup.cpp	GerLgeCup::collect_entrants	high	opus	
+0x5dc9e0	ger_lge_cup.cpp	GerLgeCup::start_new_season	high	opus	
+0x5dcb90	ger_lge_cup.cpp	GerLgeCup::set_up_rounds	high	opus	
+0x5dcbd0	ger_regional.cpp	GerRegional::GerRegional	high	opus	
+0x5dce00	ger_regional.cpp	shared_return_false	medium	opus	
+0x5dce10	ger_regional.cpp	GerRegional::`scalar deleting destructor'	high	opus	
+0x5dce30	ger_regional.cpp	GerRegional::~GerRegional	high	opus	
+0x5dcef0	ger_regional.cpp	GerRegional::create_schedule	high	opus	
+0x5dd7f0	ger_regional.cpp	GerRegional::create_table	high	opus	
+0x5dd9f0	ger_regional.cpp	GerRegional::set_up_rules	high	opus	
+0x5dda90	ger_regional.cpp	GerRegional::start_new_season	high	opus	
+0x5ddc50	ger_regional.cpp	GerRegional::create_south_stage	high	opus	
+0x5ddff0	ger_regional.cpp	GerRegional::get_club_array	high	opus	
+0x5de130	ger_regional.cpp	GerRegional::set_predicted_positions	high	opus	
+0x5de2a0	ger_regional.cpp	GerRegional::set_club_progress	high	opus	
+0x5de2e0	ger_second.cpp	GerSecond::GerSecond	high	opus	
+0x5de4f0	ger_second.cpp	GerSecond::`scalar deleting destructor'	high	opus	
+0x5de510	ger_second.cpp	GerSecond::~GerSecond	high	opus	
+0x5de5d0	ger_second.cpp	GerSecond::create_schedule	high	opus	
+0x5df2b0	ger_second.cpp	GerSecond::create_table	high	opus	
+0x5df3e0	ger_second.cpp	GerSecond::set_up_rules	high	opus	
+0x5df490	ger_second.cpp	GerSecond::start_new_season	high	opus	
+0x5df650	germany_awards.cpp	GermanyAwards::GermanyAwards	high	opus	
+0x5df790	germany_awards.cpp	GermanyAwards::init_awards	high	opus	
+0x5dfd70	germany_awards.cpp	GermanyAwards::daily_update	high	opus	
+0x5dff40	germany_awards.cpp	GermanyAwards::on_month_change	high	opus	
 0x5dff70	germany_rules.cpp	GERMANY_RULES::GERMANY_RULES	high	opus	
 0x5dffe0	germany_rules.cpp	GERMANY_RULES::init_transfer_windows	high	opus	2026-10-16-sweep-rulebooks.md
 0x5e00e0	germany_rules.cpp	GERMANY_RULES::can_sign_player	medium	opus	
@@ -2569,50 +2569,50 @@ address	file	name	confidence	model	cited_in
 0x5e81e0	goldcup.cpp	reapply_cursor_mode	high	opus	2026-10-13-input-inventory.md,2026-10-14-import-inventory.md,2026-10-14-select-leagues-spec.md
 0x5e8280	goldcup.cpp	set_software_cursor_flag	medium	opus	2026-10-14-import-inventory.md
 0x5e8290	goldcup.cpp	gui_show_message_box	high	opus	2026-10-13-area-widget-draw-spec.md,2026-10-13-database-inventory.md,2026-10-13-display-and-scrman-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-crash-fixes.md,agent-brief.md,waits.c
-0x5e88a0	gre_cup.cpp	gre_cup_init	high	haiku	
-0x5e8af0	gre_cup.cpp	gre_cup::`scalar deleting destructor'	medium	slot copy	
-0x5e8b10	gre_cup.cpp	gre_cup_entry_dtor	high	haiku	
-0x5e8bf0	gre_cup.cpp	gre_cup::create_schedule	medium	slot copy	
-0x5e9140	gre_cup.cpp	cup_qualification_text_dispatch	medium	haiku	
-0x5e9260	gre_cup.cpp	gre_cup_alloc_teams_or_assert	medium	haiku	
-0x5e9350	gre_cup.cpp	gre_cup::set_up_rules	medium	slot copy	
-0x5e93e0	gre_cup.cpp	gre_cup::record_season_honours	medium	slot copy	
-0x5e93f0	gre_cup.cpp	gre_cup::start_new_season	medium	slot copy	
-0x5e95c0	gre_cup.cpp	gre_cup_tick_error_counter	medium	haiku	
-0x5e9650	gre_cup.cpp	gre_cup_create_team_entry	medium	haiku	
-0x5e9850	gre_cup.cpp	gre_cup_build_stage_players	medium	haiku	
-0x5e9a80	gre_cup.cpp	gre_cup_fill_cup_team_slots	medium	haiku	
-0x5e9ca0	gre_cup.cpp	gre_cup::update_staff_records_for_status	medium	slot copy	
-0x5e9df0	gre_cup.cpp	gre_cup_load_team_links	medium	haiku	
-0x5e9fb0	gre_cup.cpp	cup_load_team_refs	medium	haiku	
-0x5ea060	gre_cup.cpp	gre_cup::set_predicted_positions	medium	slot copy	
-0x5ea2d0	gre_cup.cpp	cup_set_fixture_slots	medium	haiku	
-0x5ea3d0	gre_cup.cpp	cup_set_fixture_flags_by_type	medium	haiku	
-0x5ea410	gre_prm.cpp	gre_prm_constructor	high	haiku	
-0x5ea620	gre_prm.cpp	gre_prm::`scalar deleting destructor'	medium	slot copy	
-0x5ea640	gre_prm.cpp	gre_prm_dtor	high	haiku	
-0x5ea6d0	gre_prm.cpp	gre_prm::create_schedule	medium	slot copy	
-0x5ead60	gre_prm.cpp	gre_prm_init_league_slots	medium	haiku	
-0x5eae90	gre_prm.cpp	gre_prm::set_up_rules	medium	slot copy	
-0x5eaf50	gre_prm.cpp	gre_prm::start_new_season	medium	slot copy	
-0x5eb120	gre_prm.cpp	gre_prm_collect_and_sort_league_teams	medium	haiku	
-0x5eb2b0	gre_second.cpp	Setup_Screen_Component::ctor_with_assert_checks	medium	haiku	
-0x5eb4c0	gre_second.cpp	gre_second::`scalar deleting destructor'	medium	slot copy	
-0x5eb4e0	gre_second.cpp	gre_second::~gre_second	high	haiku	
-0x5eb570	gre_second.cpp	gre_second::create_schedule	medium	slot copy	
-0x5ebcb0	gre_second.cpp	gre_second_init_league_slots	medium	haiku	
-0x5ebde0	gre_second.cpp	gre_second::set_up_rules	medium	slot copy	
-0x5ebe90	gre_second.cpp	gre_second::start_new_season	medium	slot copy	
-0x5ec040	gre_super.cpp	super_cup_ctor	medium	haiku	
-0x5ec200	gre_super.cpp	gre_super::`scalar deleting destructor'	medium	slot copy	
-0x5ec220	gre_super.cpp	gre_super::~gre_super	high	haiku	
-0x5ec2f0	gre_super.cpp	gre_super::create_round_table	medium	slot copy	
-0x5ec430	gre_super.cpp	gre_super_init_pair_slots	medium	haiku	
-0x5ec6b0	gre_super.cpp	gre_super::release_data	medium	slot copy	
-0x5ec850	greece_awards.cpp	greece_awards_ctor	high	haiku	
-0x5ec8e0	greece_awards.cpp	greece_awards::init_award_objects	high	haiku	
-0x5ecd30	greece_awards.cpp	greece_awards::save_award_record	medium	haiku	
-0x5ece90	greece_awards.cpp	greece_awards_on_nation_event	medium	haiku	
+0x5e88a0	gre_cup.cpp	GreCup::GreCup	high	opus	
+0x5e8af0	gre_cup.cpp	GreCup::`scalar deleting destructor'	high	opus	
+0x5e8b10	gre_cup.cpp	GreCup::~GreCup	high	opus	
+0x5e8bf0	gre_cup.cpp	GreCup::create_schedule	high	opus	
+0x5e9140	gre_cup.cpp	GreCup::build_fate_news_text	high	opus	
+0x5e9260	gre_cup.cpp	GreCup::create_table	high	opus	
+0x5e9350	gre_cup.cpp	GreCup::set_up_rules	high	opus	
+0x5e93e0	gre_cup.cpp	GreCup::record_season_honours	high	opus	
+0x5e93f0	gre_cup.cpp	GreCup::start_new_season	high	opus	
+0x5e95c0	gre_cup.cpp	GreCup::advance_stage	high	opus	
+0x5e9650	gre_cup.cpp	GreCup::create_group_stage	high	opus	
+0x5e9850	gre_cup.cpp	GreCup::create_knockout_stage	high	opus	
+0x5e9a80	gre_cup.cpp	GreCup::collect_entrants	high	opus	
+0x5e9ca0	gre_cup.cpp	GreCup::update_staff_records_for_status	high	opus	
+0x5e9df0	gre_cup.cpp	GreCup::load_extra_data	high	opus	
+0x5e9fb0	gre_cup.cpp	GreCup::save_extra_data	high	opus	
+0x5ea060	gre_cup.cpp	GreCup::set_predicted_positions	medium	opus	
+0x5ea2d0	gre_cup.cpp	GreCup::set_club_progress	high	opus	
+0x5ea3d0	gre_cup.cpp	GreCup::set_fixture_substitutes	medium	opus	
+0x5ea410	gre_prm.cpp	GrePrm::GrePrm	high	opus	
+0x5ea620	gre_prm.cpp	GrePrm::`scalar deleting destructor'	high	opus	
+0x5ea640	gre_prm.cpp	GrePrm::~GrePrm	high	opus	
+0x5ea6d0	gre_prm.cpp	GrePrm::create_schedule	high	opus	
+0x5ead60	gre_prm.cpp	GrePrm::create_table	high	opus	
+0x5eae90	gre_prm.cpp	GrePrm::set_up_rules	high	opus	
+0x5eaf50	gre_prm.cpp	GrePrm::start_new_season	high	opus	
+0x5eb120	gre_prm.cpp	gre_prm_swap_second_and_third_division_clubs	high	opus	
+0x5eb2b0	gre_second.cpp	GreSecond::GreSecond	high	opus	
+0x5eb4c0	gre_second.cpp	GreSecond::`scalar deleting destructor'	high	opus	
+0x5eb4e0	gre_second.cpp	GreSecond::~GreSecond	high	opus	
+0x5eb570	gre_second.cpp	GreSecond::create_schedule	high	opus	
+0x5ebcb0	gre_second.cpp	GreSecond::create_table	high	opus	
+0x5ebde0	gre_second.cpp	GreSecond::set_up_rules	high	opus	
+0x5ebe90	gre_second.cpp	GreSecond::start_new_season	high	opus	
+0x5ec040	gre_super.cpp	GreSuper::GreSuper	high	opus	
+0x5ec200	gre_super.cpp	GreSuper::`scalar deleting destructor'	high	opus	
+0x5ec220	gre_super.cpp	GreSuper::~GreSuper	high	opus	
+0x5ec2f0	gre_super.cpp	GreSuper::create_round_table	high	opus	
+0x5ec430	gre_super.cpp	GreSuper::select_teams	high	opus	
+0x5ec6b0	gre_super.cpp	GreSuper::start_new_season	high	opus	
+0x5ec850	greece_awards.cpp	GreeceAwards::GreeceAwards	high	opus	
+0x5ec8e0	greece_awards.cpp	GreeceAwards::init_awards	high	opus	
+0x5ecd30	greece_awards.cpp	GreeceAwards::daily_update	high	opus	
+0x5ece90	greece_awards.cpp	GreeceAwards::update_team_of_the_week	high	opus	
 0x5eceb0	greece_rules.cpp	GREECE_RULES::GREECE_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x5ecf20	greece_rules.cpp	GREECE_RULES::init_transfer_windows	high	opus	2026-10-16-sweep-rulebooks.md
 0x5ed020	greece_rules.cpp	GREECE_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md

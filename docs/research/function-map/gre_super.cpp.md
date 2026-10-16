@@ -6,9 +6,9 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5ec040 | 128 (+2 unwind) | `super_cup_ctor` | thiscall(this, int param_2 as short id-like field, int param_3 as owner or index), ret 8 | Constructs a super cup object, loads its data from disk, builds fixture tree and reports asserted failures through the error box. | medium | haiku |  |
-| 0x5ec200 | 11 | `gre_super::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of gre_super.cpp. | medium | slot copy |  |
-| 0x5ec220 | 62 (+1 unwind) | `gre_super::~gre_super` | thiscall(this in ECX) with no arguments, ret 0 | Destructor that resets the vtable, frees owned buffers and an owned Comp_Stats object, then runs base cleanup. | high | haiku |  |
-| 0x5ec2f0 | 99 | `gre_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of gre_super.cpp. | medium | slot copy |  |
-| 0x5ec430 | 188 | `gre_super_init_pair_slots` | fastcall (ECX = super-cup object pointer, param_1); ret 0 | Allocates a 12-byte pair record and fills two club slot ids from the latest placed club, failing with a logged error. | medium | haiku |  |
-| 0x5ec6b0 | 125 | `gre_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of gre_super.cpp. | medium | slot copy |  |
+| 0x5ec040 | 128 (+2 unwind) | `GreSuper::GreSuper` | thiscall(GreSuper* this, short year, void* comp_record) ret 8, returns this | Constructs the Greek Super Cup on Cup and, when no saved data loads, picks its two clubs and builds its rounds, tie tree and stats. | high | opus |  |
+| 0x5ec200 | 11 | `GreSuper::`scalar deleting destructor'` | thiscall(GreSuper* this, unsigned flags) ret 4, returns this | Runs the Greek Super Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x5ec220 | 62 (+1 unwind) | `GreSuper::~GreSuper` | thiscall(GreSuper* this) ret 0 | Destroys the Greek Super Cup by freeing its team list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x5ec2f0 | 99 | `GreSuper::create_round_table` | thiscall(GreSuper* this, char stage, short* round_count, short* extra, int* out_flag) ret 0x10, returns round table pointer | Builds the one-round table of the Greek Super Cup with its draw and match dates for two teams. | high | opus |  |
+| 0x5ec430 | 188 | `GreSuper::select_teams` | thiscall(GreSuper* this) ret 0, returns 1, 0 or -1 | Picks the Greek First Division champion and the Greek Cup winner, or the league runner-up when one club wins both. | high | opus |  |
+| 0x5ec6b0 | 125 | `GreSuper::start_new_season` | thiscall(GreSuper* this) ret 0 | Clears the finished Greek Super Cup, archives its stats, moves the year on and sets up the clubs and rounds again. | high | opus |  |

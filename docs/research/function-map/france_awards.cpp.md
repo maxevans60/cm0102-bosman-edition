@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5c0980 | 46 (+1 unwind) | `France_Awards::France_Awards` | thiscall(this, int param_2 loaded_flag_or_save_source) ret 4 | Constructs the France awards object, sets its vtable and fields, then loads saved awards or initialises fresh ones. | high | haiku |  |
-| 0x5c0a20 | 648 (+21 unwind) | `France_Awards::init_awards` | thiscall(this, void* param_2 owner/parent pointer), ret 4 | Allocates the France awards table of 21 award objects and stores their pointers, reporting a version-string error if allocation fails. | high | haiku |  |
-| 0x5c1260 | 287 | `france_awards_vtable_update` | thiscall(this, Date *param_2 in ECX-less form: short *date_key) ret 4 | Awards French season prizes for a date, dispatching nation award routines and then the monthly change check. | medium | haiku |  |
-| 0x5c1540 | 14 | `awards_on_player_event` | thiscall(this, int player_event_arg) ret 4 | Forwards a player event to the team of the week builder when the arg matches one of three stored team pointers. | medium | haiku |  |
+| 0x5c0980 | 46 (+1 unwind) | `FranceAwards::FranceAwards` | thiscall(FranceAwards* this, FILE* save) ret 4, returns this | Constructs the French awards object on the NationAwards base, then loads saved awards or creates fresh ones. | high | opus |  |
+| 0x5c0a20 | 648 (+21 unwind) | `FranceAwards::init_awards` | thiscall(FranceAwards* this, FILE* save) ret 4 | Allocates the table of 21 French awards and creates its year awards and the team awards of the three French divisions. | high | opus |  |
+| 0x5c1260 | 287 | `FranceAwards::daily_update` | thiscall(FranceAwards* this, Date* today) ret 4 | Gives French player awards on 20 December and the season awards of the three divisions on 6 June, then runs the base update. | high | opus |  |
+| 0x5c1540 | 14 | `FranceAwards::update_team_of_the_week` | thiscall(FranceAwards* this, TeamAward* award) ret 4 | Builds the team of the week when the given award is one of the three French division team awards. | high | opus |  |

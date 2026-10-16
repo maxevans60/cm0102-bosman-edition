@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 3197 high, 3402 medium, 264 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13.
+- Confidence: 3341 high, 3263 medium, 259 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -122,11 +122,11 @@ All 11747 functions with their category, file and placement method are in `funct
 | [finland_awards.cpp](finland_awards.cpp.md) | 6 |
 | [finland_rules.cpp](finland_rules.cpp.md) | 4 |
 | [fix_man.cpp](fix_man.cpp.md) | 37 |
-| [fog_of_war.cpp](fog_of_war.cpp.md) | 35 |
-| [formation.cpp](formation.cpp.md) | 46 |
+| [fog_of_war.cpp](fog_of_war.cpp.md) | 34 |
+| [formation.cpp](formation.cpp.md) | 47 |
 | [fra_cfa.cpp](fra_cfa.cpp.md) | 8 |
-| [fra_cup.cpp](fra_cup.cpp.md) | 8 |
-| [fra_first.cpp](fra_first.cpp.md) | 15 |
+| [fra_cup.cpp](fra_cup.cpp.md) | 9 |
+| [fra_first.cpp](fra_first.cpp.md) | 14 |
 | [fra_lge_cup.cpp](fra_lge_cup.cpp.md) | 7 |
 | [fra_lower.cpp](fra_lower.cpp.md) | 5 |
 | [fra_second.cpp](fra_second.cpp.md) | 7 |

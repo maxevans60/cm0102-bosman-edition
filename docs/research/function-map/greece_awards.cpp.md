@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5ec850 | 40 (+1 unwind) | `greece_awards_ctor` | thiscall(this: GreeceAwards object pointer, int load_source: nonzero means load from stream), ret 4 | Constructs the Greece awards object, sets its vtable and fields, then loads it or initialises award objects. | high | haiku |  |
-| 0x5ec8e0 | 337 (+10 unwind) | `greece_awards::init_award_objects` | thiscall(this greece_awards*, int param_2) ret 4 | Allocates the ten award objects for the Greek awards and stores their pointers, reporting a fatal error if allocation fails. | high | haiku |  |
-| 0x5ecd30 | 135 | `greece_awards::save_award_record` | thiscall(this, short *record) ret 4 | Saves the Greek awards record for a given date by writing season awards and checking the month change. | medium | haiku |  |
-| 0x5ece90 | 12 | `greece_awards_on_nation_event` | thiscall(int nation_event_object, int nation) ret 4 | Forwards a nation event to team-of-the-week building when the nation matches one of two stored fields. | medium | haiku |  |
+| 0x5ec850 | 40 (+1 unwind) | `GreeceAwards::GreeceAwards` | thiscall(GreeceAwards* this, void* file) ret 4, returns this | Constructs the Greek awards object on NationAwards, sets its nation record, then loads saved awards or creates them fresh. | high | opus |  |
+| 0x5ec8e0 | 337 (+10 unwind) | `GreeceAwards::init_awards` | thiscall(GreeceAwards* this, void* file) ret 4 | Allocates the ten-award table and creates two national year awards, then a team award and three year awards for each Greek division. | high | opus |  |
+| 0x5ecd30 | 135 | `GreeceAwards::daily_update` | thiscall(GreeceAwards* this, Date* date) ret 4 | On 30 May, gives the Greek top player awards and each division's player, manager and young player awards, then runs the base update. | high | opus |  |
+| 0x5ece90 | 12 | `GreeceAwards::update_team_of_the_week` | thiscall(GreeceAwards* this, void* award) ret 4 | Builds the team of the week for an award when it is one of the two Greek divisional team awards. | high | opus |  |

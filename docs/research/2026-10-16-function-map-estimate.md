@@ -577,6 +577,27 @@ Merge fixes: the finance gap holds two classes from a lost `finance.cpp`. `Finan
 | 0x59fae0 | Expansion plans shelved news 0x1788 (stadium research) | `news_post_club_event` (Haiku) | `finance_post_works_cancelled_news` | agrees |
 | 0x5a0050 | Text of news 0x177d, stadium works (stadium research) | `fin_prm_news_headline_text` (Haiku) | `FinanceTable::write_stadium_works_news_text` | agrees |
 
+#### Wave w14 (tier 4, 2026-10-16)
+
+Run `sweep-w14`: 8 Opus agents named 216 functions: `finland_awards.cpp` with the `Fine` gap functions, `fog_of_war.cpp` with the T2K font code (`FONT`), the French, German and Greek competitions, and `game_config.cpp` font settings. Each agent took 2 to 6 minutes and 130,000 to 166,000 tokens. Confidence: 193 high, 23 medium, 0 low.
+
+Merge fixes: awards slot 2 is now a fixed name, `record_match_ratings`. The return-false body 0x5dce00 that Comp slots 30 and 34 share is now `shared_return_false`. `fra_first.cpp` holds two small placeholder Comp classes for the CFA and the lower division, each with its own vtable.
+
+10 functions of the wave are cited. 5 agree, 2 agree in area and 3 citations make no claim about the purpose.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x5a83e0 | Build of Discipline Player (slow-screens) | `show_discipline_dialog` (Haiku) | `draw_discipline_player_screen` | agrees |
+| 0x5a8990 | Input of Discipline Player (slow-screens) | `fine_dialog_handler` (Haiku) | `discipline_player_screen_input` | agrees |
+| 0x5a90b0 | Listed by a constant scan only (widescreen inventory) | `finland_awards::construct_awards` (Haiku) | `FinlandAwards::init_awards` | no claim |
+| 0x5afd70 | Mentioned in a screen action table only (game-creation inventory) | `fog_of_war_slot_alloc_thiscall_wrapper` (Haiku) | `FOG_OF_WAR::add_manager_map` | no claim |
+| 0x5b0b60 | Loads the T2K font files (hd-text) | `font_load_by_size_index` (Haiku) | `FONT::load_font_file` | agrees |
+| 0x5b0d80 | T2K draw, called from the line draw (hd-text) | `blit_glyph_string_alpha` (Haiku) | `FONT::draw_text` | agrees |
+| 0x5b18a0 | Receives the sizes from the text width (hd-text) | `formation_sum_score` (Haiku) | `FONT::get_text_width` | agrees |
+| 0x5b1a00 | Mentioned in a memory layout note only (hd-text) | `fog_of_war_update_overlay` (Haiku) | `FONT::set_style_and_size` | no claim |
+| 0x5b2170 | Fonts row of the Game Settings box (hd-text) | `fog_of_war_load_fog_dat_entries` (Haiku) | `font_scan_folder` | agrees in area |
+| 0x5d8b50 | Sets a drop-down value on the options screen (options-screen) | `config_set_name_field` (Haiku) | `Config::set_font` | agrees in area |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

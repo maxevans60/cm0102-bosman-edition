@@ -6,9 +6,9 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5bf320 | 126 (+2 unwind) | `fra_super_screen_ctor` | thiscall(this, u16 flags, int owner_arg) ret 8 | Constructs the French super screen object, loading cup data and building its fixture tree, reporting assert failures on error. | high | haiku |  |
-| 0x5bf4e0 | 11 | `fra_super::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of fra_super.cpp. | medium | slot copy |  |
-| 0x5bf500 | 62 (+1 unwind) | `fra_super_order_dtor` | thiscall(fra_super_order *this) ret 0 | Destroys a fra_super order object, freeing its owned buffers and comp stats before base cleanup. | medium | haiku |  |
-| 0x5bf5d0 | 121 | `fra_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of fra_super.cpp. | medium | slot copy |  |
-| 0x5bf770 | 165 | `fra_super_init_cup_handles` | fastcall, ECX is this (fra_super screen object, pointer to cup handle block at offset 0xa7), returns int, ret 0 | Allocates a cup handle block and looks up two cup records, reporting an assert error on failure. | high | haiku |  |
-| 0x5bf9a0 | 125 | `fra_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of fra_super.cpp. | medium | slot copy |  |
+| 0x5bf320 | 126 (+2 unwind) | `FraSuper::FraSuper` | thiscall(FraSuper* this, short year, void* comp_record), ret 8 | Constructs the French Super Cup on Cup and, when no saved data loads, picks its two clubs and builds its rounds, tie tree and stats. | high | opus |  |
+| 0x5bf4e0 | 11 | `FraSuper::`scalar deleting destructor'` | thiscall(FraSuper* this, unsigned flags), ret 4, returns this | Runs the French Super Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x5bf500 | 62 (+1 unwind) | `FraSuper::~FraSuper` | thiscall(FraSuper* this), ret 0 | Destroys the French Super Cup by freeing its team list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x5bf5d0 | 121 | `FraSuper::create_round_table` | thiscall(FraSuper* this, char stage, short* round_count, short* extra, int* out), ret 0x10, returns Round* or null | Builds the one-round table of the French Super Cup with its draw and match dates for two teams and a random match weekday flag. | high | opus |  |
+| 0x5bf770 | 165 | `FraSuper::select_teams` | thiscall(FraSuper* this), ret 0, returns 1, 0 or -1 | Picks the French First Division champion and the French Cup winner, or the league runner-up when one club won both. | high | opus |  |
+| 0x5bf9a0 | 125 | `FraSuper::start_new_season` | thiscall(FraSuper* this), ret 0 | Clears the finished French Super Cup, archives its stats, moves the year on and sets up the clubs and rounds of the next edition. | high | opus |  |
