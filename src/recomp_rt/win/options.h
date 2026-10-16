@@ -32,6 +32,7 @@ typedef enum {
     OPT_SQUAD_VIEWS,           /* switch, on: the Team views screen (views.c) */
     OPT_ATTRIBUTE_GROUPS,      /* switch, on */
     OPT_FOREIGN_COLOURS,       /* switch, on: foreign player colour (foreign.c) */
+    OPT_FULL_PLAYER_SEARCH,    /* switch, off: the player search lists every player (playersearch.c) */
     OPT_COUNT
 } OptionId;
 
