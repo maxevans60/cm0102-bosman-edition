@@ -973,6 +973,63 @@ Run `sweep-w23`: 8 Opus agents named 240 functions: the `Comp_Stats` load, save 
 | 0x5ca030 | Named in 2026-10-14-game-creation-inventory.md | `friendly_store_squad_ids` (Haiku) | `Friendly::register_comp_objects` | agrees |
 | 0x5ca4f0 | Named in 2026-10-14-widescreen-inventory.md | `friendly_cup_table_init` (Haiku) | `Friendly::build_international_date_table` | agrees in area |
 
+#### Wave w24 (tier 5, 2026-10-17)
+
+Run `sweep-w24`: 7 Opus agents named 202 functions: `game_config.cpp`, `hall_of_fame.cpp`, `human_manager.cpp`, `index.cpp`, `injury.cpp`, `main.cpp` and `manager_manager.cpp`. A batch of 4 functions joined another batch. Each agent took 3 to 5 minutes and 123,000 to 197,000 tokens. Confidence: 136 high, 65 medium, 1 low. The merge needed no fixes. Twelve rows in `index.cpp` are decode fragments inside three large functions.
+
+48 functions of the wave are cited. 33 agree, 10 agree in area and 5 citations make no claim about the purpose.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x5d72c0 | Named in 2026-10-14-import-inventory.md | `game_config_load` (Haiku) | `Config::Config` | agrees |
+| 0x5d7ad0 | Named in 2026-10-16-options-screen.md | `game_config_copy_record` (Haiku) | `Config::Config` | agrees |
+| 0x5d7bc0 | Named in 2026-10-14-import-inventory.md | `game_config_apply_mode_flags` (Haiku) | `Config::set_defaults` | agrees in area |
+| 0x5d7c60 | Named in 2026-10-14-columns-and-colours-inventory.md | `game_config_set_flag` (Haiku) | `Config::set_option` | agrees |
+| 0x5d8020 | Named in 2026-10-14-start-new-game-inventory.md | `game_config_select_team` (Haiku) | `Config::set_language` | agrees in area |
+| 0x5d8270 | Named in 2026-10-16-options-screen.md | `Config::set_index_checked` (Haiku) | `Config::set_currency` | agrees |
+| 0x5d83e0 | Named in 2026-10-16-options-screen.md | `Config::set_season_length_checked` (Haiku) | `Config::set_auto_save_interval` | agrees |
+| 0x5d8480 | Named in 2026-10-14-game-creation-inventory.md | `Config::load_preferences` (Haiku) | `Config::apply_and_save` | agrees in area |
+| 0x5ef5e0 | Named in 2026-10-14-widescreen-inventory.md | `hall_of_fame_try_insert_entry` (Haiku) | `HallOfFame::try_add_entry` | no claim |
+| 0x5fb430 | Named in 2026-10-14-game-creation-inventory.md | `human_manager_load_from_cd` (Haiku) | `HUMAN_MANAGER::HUMAN_MANAGER` | agrees |
+| 0x5fb810 | Named in 2026-10-14-game-creation-inventory.md | `Human_manager::load_human_record` (Haiku) | `HUMAN_MANAGER::reset_human_record` | agrees |
+| 0x5fbd00 | Named in 2026-10-14-assistant-and-days-inventory.md | `human_manager_get_record` (Haiku) | `HUMAN_MANAGER::get_active_tactic` | agrees in area |
+| 0x5fbe20 | Named in 2026-10-14-assistant-and-days-inventory.md | `human_manager_set_player_state` (Haiku) | `HUMAN_MANAGER::select_tactic_slot` | agrees |
+| 0x5fc760 | Named in 2026-10-16-tactics-inventory.md | `human_manager_get_name_string` (Haiku) | `HUMAN_MANAGER::get_recent_file` | agrees |
+| 0x5fcff0 | Named in 2026-10-15-commentary-speed-inventory.md | `human_manager_lookup_record` (Haiku) | `HUMAN_MANAGER::get_commentary_speed` | agrees |
+| 0x5fd100 | Named in 2026-10-15-commentary-speed-inventory.md | `human_manager_set_record_field` (Haiku) | `HUMAN_MANAGER::set_commentary_speed` | agrees |
+| 0x5fd2f0 | Named in 2026-10-15-holiday-next-match-inventory.md | `human_manager_set_flag` (Haiku) | `HUMAN_MANAGER::set_on_holiday` | agrees |
+| 0x5fd480 | Named in 2026-10-14-assistant-and-days-inventory.md | `human_manager_is_player_flag` (Haiku) | `HUMAN_MANAGER::controls_reserve_team` | no claim |
+| 0x5fdc30 | Named in 2026-10-14-assistant-and-days-inventory.md | `human_manager_get_record` (Haiku) | `HUMAN_MANAGER::get_holiday_stamp` | agrees |
+| 0x5fdd30 | Named in 2026-10-14-assistant-and-days-inventory.md | `human_manager_set_field` (Haiku) | `HUMAN_MANAGER::set_holiday_stamp` | agrees |
+| 0x5fde40 | Named in 2026-10-14-game-creation-inventory.md | `human_manager_record_ptr` (Haiku) | `HUMAN_MANAGER::get_password` | agrees in area |
+| 0x5fdf40 | Named in 2026-10-14-game-creation-inventory.md | `human_manager_record_address` (Haiku) | `HUMAN_MANAGER::get_password_entry` | agrees in area |
+| 0x5fe040 | Named in 2026-10-14-assistant-and-days-inventory.md | `human_manager_get_record` (Haiku) | `HUMAN_MANAGER::is_computer_controlled` | agrees in area |
+| 0x5fe290 | Named in 2026-10-15-holiday-next-match-inventory.md | `human_manager_match_entry_is_valid` (Haiku) | `HUMAN_MANAGER::is_watching_fixture` | agrees |
+| 0x5fe8d0 | Named in 2026-10-15-holiday-next-match-inventory.md | `human_manager_clear_unmatched_slots` (Haiku) | `HUMAN_MANAGER::clear_invalid_watched_fixtures` | agrees in area |
+| 0x5feb60 | Named in 2026-10-15-holiday-next-match-inventory.md | `human_manager_set_lineup_slot` (Haiku) | `HUMAN_MANAGER::set_holiday_option` | agrees |
+| 0x5fed50 | Named in 2026-10-15-holiday-next-match-inventory.md | `human_manager_get_record` (Haiku) | `HUMAN_MANAGER::get_saved_lineup` | agrees in area |
+| 0x5fee50 | Named in 2026-10-15-commentary-speed-inventory.md | `human_manager_load` (Haiku) | `HUMAN_MANAGER::load` | agrees |
+| 0x5ff9e0 | Named in 2026-10-15-commentary-speed-inventory.md | `Human_manager::load_human_manager_dat` (Haiku) | `HUMAN_MANAGER::save` | agrees |
+| 0x601560 | Named in 2026-10-15-squad-dropdown-inventory.md | `human_manager_clear_slot_value` (Haiku) | `HUMAN_MANAGER::clear_squad_number` | agrees |
+| 0x601a40 | Named in 2026-10-14-game-creation-inventory.md | `index_build_colour_and_nation_tables` (Haiku) | `set_key_ids` | agrees |
+| 0x60d780 | Named in 2026-10-16-sweep-international.md | `index_report_missing_index_fatal` (Haiku) | `report_missing_key_id` | agrees in area |
+| 0x60d810 | Named in 2026-10-14-game-creation-inventory.md | `nation_name_to_id_store` (Haiku) | `match_nation_key_id` | agrees |
+| 0x60efd0 | Named in 2026-10-14-game-creation-inventory.md | `set_competition_id_by_name` (Haiku) | `match_club_comp_key_id` | agrees |
+| 0x6115e0 | Named in 2026-10-14-game-creation-inventory.md | `award_name_to_slot` (Haiku) | `match_staff_comp_key_id` | agrees |
+| 0x6146b0 | Named in 2026-10-14-game-creation-inventory.md | `index_set_club_id_by_name` (Haiku) | `match_club_key_id` | agrees |
+| 0x62a680 | Named in 2026-10-14-game-creation-inventory.md | `injury_history_open_cd` (Haiku) | `Injury::Injury` | agrees |
+| 0x62a920 | Named in 2026-10-14-game-creation-inventory.md | `injury_update_recovery_rates` (Haiku) | `Injury::init_squad_fitness` | agrees |
+| 0x62b7b0 | Named in 2026-10-14-game-creation-inventory.md | `injury_daily_tick` (Haiku) | `Injury::daily_update` | agrees |
+| 0x62c590 | Named in 2026-10-14-columns-and-colours-inventory.md | `injury_recovery_percent_or_days` (Haiku) | `Injury::get_condition` | agrees |
+| 0x62c680 | Named in 2026-10-15-assistant-pick-inventory.md | `injury_update_player_recovery` (Haiku) | `Injury::update_player_fitness` | no claim |
+| 0x68d370 | Named in 2026-10-13-screen-stack-inventory.md | `winmain` (Haiku) | `win_main` | agrees |
+| 0x68d520 | Named in 2026-10-13-database-inventory.md | `main_pump_messages` (Haiku) | `pump_messages` | no claim |
+| 0x68d630 | Named in 2026-10-13-input-inventory.md | `main_window_proc` (Haiku) | `main_window_proc` | agrees |
+| 0x68dbc0 | Named in 2026-10-14-import-inventory.md | `restart_game_process` (Haiku) | `restart_game` | agrees |
+| 0x68dbf0 | Named in 2026-10-14-game-creation-inventory.md | `manager_manager_load_cd_and_init` (Haiku) | `MANAGER_MANAGER::MANAGER_MANAGER` | agrees |
+| 0x68f9c0 | Named in 2026-10-14-game-creation-inventory.md | `manager_manager_process_transfer_offers` (Haiku) | `MANAGER_MANAGER::daily_update` | agrees |
+| 0x696b10 | Named in 2026-10-14-assistant-and-days-inventory.md | `manager_manager_evaluate_transfer_offer` (Haiku) | `MANAGER_MANAGER::check_board_transfer_veto` | no claim |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
