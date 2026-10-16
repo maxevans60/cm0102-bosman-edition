@@ -105,3 +105,9 @@ PATCHES.update(GROUP_PATCHES)
 INSNS[0x905A4C] = ("jne 0x905c21",
     "if (!cc_e(F)) { esp -= 4; W32(esp, 0xde1f64u); esp -= 4; W32(esp, edi); esp -= 4; W32(esp, 0x905a52u); "
     "SYNC(); f_0090cba0(); LOAD(); RT_AFTER_CALL(); esp += 8; goto L_905c21; }")
+
+# The full player search option (0.5.0 slice 5, #57; docs/research/2026-10-16-crash-fixes.md, 1c). The player
+# search list builder 0x7afa70 calls 0x5407e0 and tests the score: cmp ax, 0xfa0 / jge 0x7afcee at 0x7afc4b.
+# With the option on, the jge always jumps, so every player passes. The call and the compare stay, so the
+# original's path with the option off is the same. The option is read at run time (playersearch.c).
+INSNS[0x7AFC4B] = ("jge 0x7afcee", "if (!cc_l(F) || rt_full_player_search()) goto L_7afcee;")

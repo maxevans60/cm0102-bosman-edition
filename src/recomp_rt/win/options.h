@@ -28,6 +28,7 @@ typedef enum {
     OPT_DATABASE,              /* enum: 3.9.68 (default), 3.9.60, 3.9.65, or folder:<name>: the data set of a new game */
     OPT_SQUAD_VIEWS,           /* switch, on: the Team views screen (views.c) */
     OPT_ATTRIBUTE_GROUPS,      /* switch, on */
+    OPT_FULL_PLAYER_SEARCH,    /* switch, off: the player search lists every player (playersearch.c) */
     OPT_COUNT
 } OptionId;
 

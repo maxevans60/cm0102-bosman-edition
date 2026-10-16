@@ -290,6 +290,10 @@ void rt_fatal(const char *fmt, ...) __attribute__((noreturn, format(printf, 1, 2
  * mode, 1920x1080 in HD mode. The constants of tools/recomp/widescreen.py read these. */
 extern uint32_t rt_screen_w, rt_screen_h;
 
+/* Full player search (#57, src/recomp_rt/win/playersearch.c): 1 when the option is on. The replaced jge
+ * at 0x7afc4b in tools/recomp/widescreen.py reads it. */
+uint32_t rt_full_player_search(void);
+
 /* Attribute groups (#43, src/recomp_rt/win/groups.c): the cells of the player profile's attribute table
  * and their place. The constants of tools/recomp/attribute_groups.py read these. */
 uint32_t rt_groups_cells(uint32_t esp);

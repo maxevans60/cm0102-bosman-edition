@@ -71,6 +71,7 @@ static void check_defaults(void)
     CHECK(options_bool(OPT_CONDITION_COLOURS) == 1);
     CHECK(options_bool(OPT_SQUAD_VIEWS) == 1);
     CHECK(options_bool(OPT_ATTRIBUTE_GROUPS) == 1);
+    CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
     CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
     CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.68"));
 }
@@ -95,6 +96,8 @@ int main(void)
     CHECK(strstr(get(), "\nsave_backups = on\n") != NULL);
     CHECK(strstr(get(), "\nsquad_views = on\n") != NULL);
     CHECK(strstr(get(), "\nattribute_groups = on\n") != NULL);
+    CHECK(strstr(get(), "\nfull_player_search = off\n") != NULL);
+    CHECK(strstr(get(), "full_player_search = on makes the player search list every player") != NULL);
     static char first[16384];
     snprintf(first, sizeof first, "%s", get());
     options_load(path);                         /* a second start changes nothing */
@@ -159,6 +162,14 @@ int main(void)
     CHECK(options_bool(OPT_SQUAD_VIEWS) == 0);
     CHECK(options_bool(OPT_ATTRIBUTE_GROUPS) == 0);
     CHECK(options_bool(OPT_MATCH_COLUMNS) == 1);
+
+    /* 5b. full_player_search (0.5.0 slice 5): off by default, on when the file says so. */
+    put("full_player_search = on\n");
+    options_load(path);
+    CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 1);
+    put("full_player_search = maybe\n");
+    options_load(path);
+    CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
 
     /* 6. HD mode (0.4.0 spec, slice 9): display = hd, in any case. */
     put("display = HD\n");
