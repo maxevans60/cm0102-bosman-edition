@@ -711,6 +711,106 @@ Fixes from the research name check (`2026-10-16-research-name-check.md`): `goldc
 | 0x924c50 | Slot 2 is start_new_season (research-name-check) | `wel_cup::release_data` (slot copy) | `WelCup::start_new_season` | agrees |
 | 0x925b30 | Welsh league table (research-name-check) | `wel_first_alloc_and_fill_league_slots` (Haiku) | `WelFirst::create_table` | agrees |
 
+#### Wave w20 (tier 5, 2026-10-16)
+
+Run `sweep-w20`: 8 Opus agents named 219 functions: the rest of `Database.cpp`, `Db_files.cpp`, `Fine.cpp` with the friendly and search screens from the gap, `Guio.cpp`, `History.cpp`, `Langlib.cpp`, `Menubar.cpp` and `Setup.cpp`. Each agent took 2 to 6 minutes and 106,000 to 181,000 tokens. Confidence: 192 high, 25 medium, 2 low. The merge needed no fixes. 0x53d740 is `database_is_staff_eu_national`, as the research name check found. `Setup.cpp` uses two naming patterns for its screen pairs (`setup_build_*_screen` with `setup_handle_*_input`, and `*_build` with `*_handle_input`). Both are free functions, and the review pass can align them.
+
+91 functions of the wave are cited. 71 agree, 18 agree in area, 1 citation makes no claim and 1 differs. The import inventory calls the object that 0x5ef0b0 builds the screen manager. The code loads and saves `hall_of_fame.bin`.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x53ab90 | Named in 2026-10-14-game-creation-inventory.md | `database_compare_record_key` (Haiku) | `database_get_staff_age` | agrees |
+| 0x53ad00 | Named in 2026-10-16-comparison-screen-inventory.md | `format_staff_job_title` (Haiku) | `database_get_job_name` | agrees |
+| 0x53c190 | Named in 2026-10-14-game-creation-inventory.md | `clear_player_club_slot` (Haiku) | `database_remove_staff_from_club` | agrees |
+| 0x53d740 | Named in 2026-10-16-foreign-and-tactics-positions.md | `transfer_offer_is_blocked` (Haiku) | `database_is_staff_eu_national` | agrees |
+| 0x53d900 | Named in 2026-10-16-sweep-international.md | `is_oceania_confederation_id` (Haiku) | `database_is_melanesian_nation` | agrees |
+| 0x53d940 | Named in 2026-10-16-sweep-international.md | `is_oceania_or_regional_team_id` (Haiku) | `database_is_polynesian_nation` | agrees |
+| 0x53db40 | Named in 2026-10-14-game-creation-inventory.md | `database_sort_players_by_field_copy` (Haiku) | `database_sort_clubs_by_reputation` | agrees |
+| 0x53ee50 | Named in 2026-10-14-columns-and-colours-inventory.md | `build_player_position_label` (Haiku) | `database_format_player_positions` | agrees |
+| 0x540020 | Named in 2026-10-14-game-creation-inventory.md | `compare_player_short_field_0x80` (Haiku) | `database_compare_club_indexes_by_reputation` | agrees |
+| 0x5402f0 | Named in 2026-10-14-game-creation-inventory.md | `compare_players_by_short_field` (Haiku) | `database_compare_staff_by_player_reputation` | agrees in area |
+| 0x540780 | Named in 2026-10-14-game-creation-inventory.md | `compare_list_entries` (Haiku) | `database_compare_comp_history_rows` | agrees |
+| 0x541e60 | Named in 2026-10-14-game-creation-inventory.md | `Database::select_squad_players_per_team` (Haiku) | `database_trim_senior_and_b_team_squads` | agrees |
+| 0x542740 | Named in 2026-10-14-game-creation-inventory.md | `database_entry_is_assignable` (Haiku) | `database_club_has_reserve_squad` | agrees |
+| 0x5428a0 | Named in 2026-10-15-attribute-groups.md | `get_player_attribute_name` (Haiku) | `database_get_player_attribute_name` | agrees |
+| 0x5431e0 | Named in 2026-10-14-columns-and-colours-inventory.md | `get_player_attribute_rating_checked` (Haiku) | `staff_get_player_attribute` | agrees |
+| 0x543280 | Named in 2026-10-14-columns-and-colours-inventory.md | `is_fixture_date_blocked` (Haiku) | `staff_is_player_attribute_visible` | agrees |
+| 0x543440 | Named in 2026-10-15-attribute-groups.md | `database_set_player_field_checked` (Haiku) | `staff_get_player_attribute_for_viewer` | agrees in area |
+| 0x543540 | Named in 2026-10-15-attribute-groups.md | `get_player_attribute_rating` (Haiku) | `staff_compute_player_attribute` | agrees in area |
+| 0x544590 | Named in 2026-10-16-crash-fixes.md | `is_player_flagged_in_contract_or_lookup` (Haiku) | `staff_contract_has_flag_02` | no claim |
+| 0x544970 | Named in 2026-10-14-game-creation-inventory.md | `club_squad_fill_from_reserves` (Haiku) | `database_merge_b_team_staff` | agrees |
+| 0x54d5e0 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_checked` (Haiku) | `db_files_read_continents` | agrees |
+| 0x54d740 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_checked` (Haiku) | `db_files_read_nations` | agrees |
+| 0x54d8a0 | Named in 2026-10-13-database-inventory.md | `db_read_record_checked` (Haiku) | `db_files_read_cities` | agrees |
+| 0x54da00 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_checked` (Haiku) | `db_files_read_stadiums` | agrees |
+| 0x54db50 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_or_assert` (Haiku) | `db_files_read_clubs` | agrees |
+| 0x54dc90 | Named in 2026-10-13-database-inventory.md | `db_record_serialise_array` (Haiku) | `db_files_read_clubs_v1` | agrees |
+| 0x54e630 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_checked` (Haiku) | `db_files_read_staff` | agrees |
+| 0x54e780 | Named in 2026-10-13-database-inventory.md | `db_read_record_checked` (Haiku) | `db_files_read_staff_v1` | agrees |
+| 0x54e880 | Named in 2026-10-13-database-inventory.md | `db_files_dispatch_by_kind` (Haiku) | `db_files_read_players` | agrees |
+| 0x54e9a0 | Named in 2026-10-13-database-inventory.md | `db_read_record_array` (Haiku) | `db_files_read_players_v1` | agrees |
+| 0x54f030 | Named in 2026-10-13-database-inventory.md | `db_files_dispatch_by_type` (Haiku) | `db_files_read_non_players` | agrees |
+| 0x54f150 | Named in 2026-10-13-database-inventory.md | `db_read_records_0x46` (Haiku) | `db_files_read_non_players_v1` | agrees |
+| 0x54fc10 | Named in 2026-10-14-start-new-game-inventory.md | `db_read_record_checked` (Haiku) | `db_files_read_staff_extra` | agrees in area |
+| 0x54fd60 | Named in 2026-10-13-database-inventory.md | `db_read_record_checked` (Haiku) | `db_files_read_staff_history` | agrees |
+| 0x54feb0 | Named in 2026-10-13-database-inventory.md | `db_files_dispatch_by_kind` (Haiku) | `db_files_read_comps` | agrees |
+| 0x54ffd0 | Named in 2026-10-13-database-inventory.md | `db_files_serialise_records` (Haiku) | `db_files_read_comps_v1` | agrees |
+| 0x550230 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_checked` (Haiku) | `db_files_read_comp_history` | agrees |
+| 0x550380 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_checked` (Haiku) | `db_files_read_staff_comps` | agrees |
+| 0x5504d0 | Named in 2026-10-13-database-inventory.md | `db_files_read_field_check` (Haiku) | `db_files_read_staff_comp_history` | agrees |
+| 0x5505c0 | Named in 2026-10-13-database-inventory.md | `db_files_read_record_checked` (Haiku) | `db_files_read_officials` | agrees |
+| 0x550710 | Named in 2026-10-13-database-inventory.md | `db_files_check_record_version` (Haiku) | `db_files_read_colours` | agrees |
+| 0x550860 | Named in 2026-10-13-database-inventory.md | `db_read_checked_record` (Haiku) | `db_files_read_names` | agrees |
+| 0x5a4fc0 | Named in 2026-10-14-game-creation-inventory.md | `find_screens_fine_pair_init` (Haiku) | `Fine::Fine` | agrees |
+| 0x5eed50 | Named in 2026-10-13-display-and-scrman-inventory.md | `Guio::set_text_and_refresh` (Haiku) | `Guio::set_text_and_refresh` | agrees in area |
+| 0x5eef00 | Named in 2026-10-13-display-and-scrman-inventory.md | `hall_of_fame_release_cup_slot` (Haiku) | `Guio::free_images` | agrees in area |
+| 0x5eef80 | Named in 2026-10-13-display-and-scrman-inventory.md | `gui_set_colour_channels` (Haiku) | `Guio::convert_colours_pixel_format` | agrees in area |
+| 0x5ef0b0 | Object built at start, called the screen manager (import inventory) | `hall_of_fame_table_ctor` (Haiku) | `HallOfFame::HallOfFame` | differs. The code loads and saves hall_of_fame.bin, so this is the hall of fame table, not the screen manager |
+| 0x66eb40 | Named in 2026-10-14-start-new-game-inventory.md | `langlib_change_language` (Haiku) | `langlib_change_language` | agrees |
+| 0x66fbb0 | Named in 2026-10-14-start-screen-helpers.md | `league_database_load_rows` (Haiku) | `langlib_lookup_translation` | agrees |
+| 0x81b890 | Named in 2026-10-13-screen-stack-inventory.md | `cm_main_entry_setup` (Haiku) | `setup_run_front_end` | agrees |
+| 0x81bab0 | Named in 2026-10-13-screen-stack-inventory.md | `setup_game_menu_build` (Haiku) | `setup_build_setup_game_screen` | agrees in area |
+| 0x81ce00 | Named in 2026-10-13-database-inventory.md | `setup_load_cm3_data_and_start` (Haiku) | `setup_start_new_game` | agrees in area |
+| 0x81d010 | Named in 2026-10-14-start-new-game-inventory.md | `Setup::select_leagues_screen` (Haiku) | `setup_build_select_leagues_screen` | agrees |
+| 0x81dc30 | Named in 2026-10-14-game-creation-inventory.md | `select_league_or_club_by_key` (Haiku) | `setup_handle_select_leagues_input` | agrees |
+| 0x81e8d0 | Named in 2026-10-14-start-new-game-inventory.md | `select_start_season_screen` (Haiku) | `setup_build_select_start_season_screen` | agrees |
+| 0x81eb00 | Named in 2026-10-14-start-new-game-inventory.md | `setup_handle_league_selection_command` (Haiku) | `setup_handle_select_start_season_input` | agrees |
+| 0x81edd0 | Named in 2026-10-13-screen-stack-inventory.md | `setup_network_game_menu` (Haiku) | `setup_build_network_play_screen` | agrees |
+| 0x81ef70 | Named in 2026-10-13-screen-stack-inventory.md | `start_network_game_by_mode` (Haiku) | `setup_handle_network_play_input` | agrees |
+| 0x81fea0 | Named in 2026-10-14-game-creation-inventory.md | `start_network_manager_and_clear_slots` (Haiku) | `setup_open_manager_status_screen` | agrees |
+| 0x81ff10 | Named in 2026-10-13-screen-stack-inventory.md | `manager_status_screen_refresh` (Haiku) | `setup_build_manager_status_screen` | agrees in area |
+| 0x820950 | Named in 2026-10-13-screen-stack-inventory.md | `validate_saved_game_checksums` (Haiku) | `setup_handle_manager_status_input` | agrees in area |
+| 0x820d40 | Named in 2026-10-14-game-creation-inventory.md | `setup_begin_manager_slot_and_open_menu` (Haiku) | `setup_add_human_manager` | agrees |
+| 0x820f50 | Named in 2026-10-14-game-creation-inventory.md | `Setup::name_entry_dialog_build` (Haiku) | `setup_build_enter_name_screen` | agrees |
+| 0x821520 | Named in 2026-10-14-game-creation-inventory.md | `validate_manager_name_and_password` (Haiku) | `setup_handle_enter_name_input` | agrees |
+| 0x821900 | Named in 2026-10-14-game-creation-inventory.md | `select_nationality_screen` (Haiku) | `setup_build_select_nationality_screen` | agrees in area |
+| 0x822040 | Named in 2026-10-14-game-creation-inventory.md | `select_team_or_club_result` (Haiku) | `setup_handle_select_nationality_input` | agrees in area |
+| 0x822260 | Named in 2026-10-14-game-creation-inventory.md | `select_team_screen` (Haiku) | `setup_build_select_team_screen` | agrees |
+| 0x8228f0 | Named in 2026-10-14-game-creation-inventory.md | `select_team_or_club_slot_check` (Haiku) | `select_team_screen_handle_input` | agrees |
+| 0x822a60 | Named in 2026-10-14-game-creation-inventory.md | `setup_open_take_control_screen_wrapper` (Haiku) | `open_take_control_confirm` | agrees |
+| 0x822aa0 | Named in 2026-10-14-game-creation-inventory.md | `take_control_confirm_dialog` (Haiku) | `take_control_confirm_build` | agrees |
+| 0x822c50 | Named in 2026-10-14-game-creation-inventory.md | `take_control_of_club_check` (Haiku) | `take_control_confirm_handle_input` | agrees |
+| 0x822ec0 | Named in 2026-10-14-game-creation-inventory.md | `show_enter_password_dialog` (Haiku) | `enter_password_box_build` | agrees |
+| 0x8230b0 | Named in 2026-10-14-game-creation-inventory.md | `setup_resume_control_password_check` (Haiku) | `enter_password_box_handle_input` | agrees |
+| 0x823420 | Named in 2026-10-14-game-creation-inventory.md | `confirm_resume_control_dialog` (Haiku) | `resume_control_confirm_build` | agrees |
+| 0x823660 | Named in 2026-10-14-game-creation-inventory.md | `network_resume_control_request` (Haiku) | `resume_control_confirm_handle_input` | agrees |
+| 0x823890 | Named in 2026-10-13-screen-stack-inventory.md | `show_game_config_screen` (Haiku) | `open_game_settings_box` | agrees |
+| 0x823930 | Named in 2026-10-13-screen-stack-inventory.md | `setup_select_control_mode_screen` (Haiku) | `open_game_settings_from_side_bar` | agrees |
+| 0x8259a0 | Named in 2026-10-16-options-screen.md | `game_setup_dispatch_option_handler` (Haiku) | `game_settings_box_handle_input` | agrees |
+| 0x825d10 | Named in 2026-10-13-screen-stack-inventory.md | `hall_of_fame_view_dialog` (Haiku) | `hall_of_fame_screen_build` | agrees |
+| 0x826690 | Named in 2026-10-13-screen-stack-inventory.md | `hall_of_fame_menu_action` (Haiku) | `hall_of_fame_screen_handle_input` | agrees |
+| 0x826aa0 | Named in 2026-10-14-game-creation-inventory.md | `show_disk_full_dialog` (Haiku) | `disk_full_box_build` | agrees |
+| 0x826c20 | Named in 2026-10-14-game-creation-inventory.md | `select_team_status_code` (Haiku) | `disk_full_box_handle_input` | agrees |
+| 0x826d20 | Named in 2026-10-13-screen-stack-inventory.md | `show_out_of_memory_dialog` (Haiku) | `no_memory_box_build` | agrees |
+| 0x826e60 | Named in 2026-10-13-screen-stack-inventory.md | `get_team_nation_status` (Haiku) | `no_memory_box_handle_input` | agrees |
+| 0x826f20 | Named in 2026-10-14-game-creation-inventory.md | `assert_and_setup_manager_club_record` (Haiku) | `appoint_human_manager_to_club` | agrees in area |
+| 0x827110 | Named in 2026-10-13-database-inventory.md | `load_setup_game_config` (Haiku) | `create_game_from_setup_file` | agrees in area |
+| 0x827d50 | Named in 2026-10-14-game-creation-inventory.md | `setup_select_start_league` (Haiku) | `select_default_league_by_language` | agrees in area |
+| 0x828110 | Named in 2026-10-13-database-inventory.md | `setup_game_data_and_cd_check` (Haiku) | `create_game` | agrees in area |
+| 0x82a9c0 | Named in 2026-10-13-database-inventory.md | `load_game_data` (Haiku) | `load_game_data` | agrees in area |
+| 0x82e430 | Named in 2026-10-15-contract-clauses.md | `save_game_to_disk` (Haiku) | `save_game_data` | agrees |
+| 0x82ff40 | Named in 2026-10-16-sweep-season-end.md | `cleanup_world_state_and_delete_tmp` (Haiku) | `free_game_data` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

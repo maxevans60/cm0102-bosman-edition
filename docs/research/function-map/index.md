@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4014 high, 2616 medium, 233 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19.
+- Confidence: 4141 high, 2494 medium, 228 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -117,8 +117,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [fin_cup.cpp](fin_cup.cpp.md) | 6 |
 | [fin_first.cpp](fin_first.cpp.md) | 19 |
 | [fin_prm.cpp](fin_prm.cpp.md) | 67 |
-| [find_screens.cpp](find_screens.cpp.md) | 23 |
-| [Fine.cpp](Fine.cpp.md) | 16 |
+| [find_screens.cpp](find_screens.cpp.md) | 20 |
+| [Fine.cpp](Fine.cpp.md) | 19 |
 | [finland_awards.cpp](finland_awards.cpp.md) | 6 |
 | [finland_rules.cpp](finland_rules.cpp.md) | 4 |
 | [fix_man.cpp](fix_man.cpp.md) | 37 |
@@ -152,9 +152,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [greece_awards.cpp](greece_awards.cpp.md) | 4 |
 | [greece_rules.cpp](greece_rules.cpp.md) | 4 |
 | [gui_utils.cpp](gui_utils.cpp.md) | 6 |
-| [Guio.cpp](Guio.cpp.md) | 9 |
+| [Guio.cpp](Guio.cpp.md) | 8 |
 | [hall_of_fame.cpp](hall_of_fame.cpp.md) | 20 |
-| [History.cpp](History.cpp.md) | 14 |
+| [History.cpp](History.cpp.md) | 15 |
 | [hol_cup.cpp](hol_cup.cpp.md) | 19 |
 | [hol_first.cpp](hol_first.cpp.md) | 18 |
 | [hol_prm.cpp](hol_prm.cpp.md) | 8 |
@@ -219,8 +219,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [match_official.cpp](match_official.cpp.md) | 9 |
 | [match_pl.cpp](match_pl.cpp.md) | 92 |
 | [match_screens.cpp](match_screens.cpp.md) | 61 |
-| [media.cpp](media.cpp.md) | 86 |
-| [Menubar.cpp](Menubar.cpp.md) | 11 |
+| [media.cpp](media.cpp.md) | 83 |
+| [Menubar.cpp](Menubar.cpp.md) | 14 |
 | [mini_cup.cpp](mini_cup.cpp.md) | 8 |
 | [mini_league.cpp](mini_league.cpp.md) | 9 |
 | [month_award.cpp](month_award.cpp.md) | 11 |
@@ -338,8 +338,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [search_edit_session.cpp](search_edit_session.cpp.md) | 12 |
 | [search_eng.cpp](search_eng.cpp.md) | 15 |
 | [search_filters.cpp](search_filters.cpp.md) | 13 |
-| [search_screens.cpp](search_screens.cpp.md) | 58 |
-| [Setup.cpp](Setup.cpp.md) | 103 |
+| [search_screens.cpp](search_screens.cpp.md) | 54 |
+| [Setup.cpp](Setup.cpp.md) | 107 |
 | [shortlist_manager.cpp](shortlist_manager.cpp.md) | 56 |
 | [simulated_stats.cpp](simulated_stats.cpp.md) | 19 |
 | [spa_cup.cpp](spa_cup.cpp.md) | 7 |
