@@ -46,23 +46,23 @@ import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 
 # Positions for 800x600. The box scales as every area does. The side bar drop-down items keep their size,
-# so the item has its own widescreen and HD positions after "|". Box rows: y = 192 + 35 * row; On and the
-# first value at x 371, Off and the second value at 452; tabs Screen 304, Game 584 at y 155; Close 444, 524.
+# so the item has its own widescreen, HD Small and HD Large positions after "|". Box rows: y = 185 + 33 * row (0.5.1: ten rows on the Screen tab); On and the
+# first value at x 371, Off and the second value at 452; tabs Screen 304, Game 584 at y 149; Close 444, 524.
 GAME_OPTIONS = "click 45 344"
-OPTIONS_ITEM = "click 175 417 | 225 525 | 295 675"
+OPTIONS_ITEM = "click 175 417 | 225 525 | 295 675 | 288 697"
 SIDE_STEPS = [
     "1000 click 45 165",                        # the manager's menu
-    "2500 click 150 156 | 199 203 | 271 271",   # Arsenal Squad
-    "6000 click 210 369 | 336 492 | 460 664",   # Vieira
+    "2500 click 150 156 | 199 203 | 271 271 | 288 274",   # Arsenal Squad
+    "6000 click 210 369 | 336 492 | 460 664 | 461 755",   # Vieira
     "9000 dump {d}/profile-before.bmp",
     "10000 " + GAME_OPTIONS,
     "12000 " + OPTIONS_ITEM,                    # Bosman Edition Options
     "14000 dump {d}/screen.bmp",
-    "15000 click 452 332",                      # Attribute colours: Off
+    "15000 click 452 350",                      # Attribute colours: Off
     "16500 dump {d}/screen-off.bmp",
-    "17500 click 584 155",                      # the Game tab
+    "17500 click 584 149",                      # the Game tab
     "19000 dump {d}/game.bmp",
-    "20000 click 452 402",                      # Save backups: Off
+    "20000 click 452 383",                      # Save backups: Off
     "21500 dump {d}/game-off.bmp",
     "22500 click 444 524",                      # Close
     "25000 dump {d}/profile.bmp",
@@ -86,7 +86,7 @@ TACTICS_STEPS = [
 READONLY_STEPS = [
     "1000 " + GAME_OPTIONS,
     "3000 " + OPTIONS_ITEM,
-    "9000 click 452 332",                       # Attribute colours: Off, after the folder is read only
+    "9000 click 452 350",                       # Attribute colours: Off, after the folder is read only
     "11000 dump {d}/readonly.bmp",
     "12000 quit",
 ]
@@ -94,11 +94,11 @@ START_STEPS = fixtures.LOAD_STEPS[:fixtures.LOAD_STEPS.index("wait setup") + 1] 
     "1000 dump {d}/setup.bmp",
     "1500 click 445 503",                       # Bosman Edition Options, the last item of the menu
     "3500 dump {d}/box.bmp",
-    "4000 click 452 192",                       # Display mode: Classic
-    "4500 click 452 227",                       # Sharp picture: Off
+    "4000 click 452 185",                       # Display mode: Classic
+    "4500 click 452 251",                       # Sharp picture: Off
     "5000 dump {d}/box-sharp-off.bmp",
-    "5500 click 371 227",                       # Sharp picture: On
-    "6000 click 584 155",                       # the Game tab: the custom data set
+    "5500 click 371 251",                       # Sharp picture: On
+    "6000 click 584 149",                       # the Game tab: the custom data set
     "7000 dump {d}/game.bmp",
     "7500 click 444 524",                       # Close
     "wait setup",

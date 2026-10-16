@@ -45,17 +45,17 @@ import smoke_run  # noqa: E402
 
 TOUR = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "4000 click 150 156 | 199 203 | 270 270 | 288 274",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 159 | 928 205 | 1460 274",  # Pick best team
+    "3000 click 540 159 | 928 205 | 1460 274 | 1460 277",  # Pick best team
     "5000 dump {d}/1-squad.bmp",
     "5500 click 169 527",                   # Tactics
     "8000 dump {d}/2-tactics.bmp",
     "8500 click 358 573",                   # Cancel
     "wait screen:0x454900",
     "1500 click 45 165",                    # the manager's menu
-    "3500 click 150 427 | 199 474 | 270 541",  # Go on Holiday
+    "3500 click 150 427 | 199 474 | 270 541 | 288 610",  # Go on Holiday
     "6000 click 705 572",                   # Please Confirm: Yes
 ]
 SAVE_DAYS = 6
