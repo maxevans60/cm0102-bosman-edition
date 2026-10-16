@@ -2619,15 +2619,15 @@ address	file	name	confidence	model	cited_in
 0x5ed060	greece_rules.cpp	GREECE_RULES::can_loan_player	medium	opus	
 0x5ed070	gui_utils.cpp	gui_add_text_area	medium	opus	2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-spec.md,2026-10-14-widescreen-inventory.md,2026-10-16-comparison-screen-inventory.md,display.c
 0x5ed200	gui_utils.cpp	gui_add_text_area_from_text	high	opus	2026-10-14-start-screen-spec.md,file_screens.c
-0x5ed300	gui_utils.cpp	gui_utils_build_button_grid_or_assert	medium	haiku	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,2026-10-16-options-screen.md,build-brief-0.5.0.md,database.c,gui_menu.c
-0x5ed780	gui_utils.cpp	gui_utils_paginated_list_layout	medium	haiku	2026-10-14-start-screen-helpers.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-options-screen.md
+0x5ed300	gui_utils.cpp	gui_add_menu_buttons	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,2026-10-16-options-screen.md,build-brief-0.5.0.md,database.c,gui_menu.c
+0x5ed780	gui_utils.cpp	gui_add_tab_bar	high	opus	2026-10-14-start-screen-helpers.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-options-screen.md
 0x5edcc0	gui_utils.cpp	gui_add_back_next_buttons	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
-0x5ede20	gui_utils.cpp	draw_page_navigation_bar	high	haiku	
-0x5ee150	gui_utils.cpp	gui_item_init	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md
-0x5ee4a0	gui_utils.cpp	gui_object_unpack_fields	medium	haiku	2026-10-13-display-and-scrman-inventory.md
-0x5ee590	gui_utils.cpp	button_draw	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-clickable-names-inventory.md,names.c
-0x5eec20	gui_utils.cpp	gui_widget_refresh_state	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
-0x5eecb0	gui_utils.cpp	gui_element_reset_and_redraw	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
+0x5ede20	gui_utils.cpp	gui_add_page_buttons	high	opus	
+0x5ee150	Guio.cpp	Guio::init	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md
+0x5ee4a0	Guio.cpp	Guio::get_fields	high	opus	2026-10-13-display-and-scrman-inventory.md
+0x5ee590	Guio.cpp	Guio::draw	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-clickable-names-inventory.md,names.c
+0x5eec20	Guio.cpp	Guio::highlight_on	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
+0x5eecb0	Guio.cpp	Guio::highlight_off	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
 0x5eed50	Guio.cpp	Guio::set_text_and_refresh	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-game-setup-spec.md
 0x5eef00	Guio.cpp	hall_of_fame_release_cup_slot	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
 0x5eef80	Guio.cpp	gui_set_colour_channels	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
@@ -2662,65 +2662,65 @@ address	file	name	confidence	model	cited_in
 0x5f2840	History.cpp	verify_history_files	high	haiku	
 0x5f2b80	History.cpp	history_open_screen_with_param	medium	haiku	
 0x5f2c00	History.cpp	history_screen_open_written_history_screen	high	haiku	
-0x5f31c0	History.cpp	history_select_or_load_entry	medium	haiku	
-0x5f33d0	History.cpp	scrman_reset_slots_1_2	medium	haiku	
-0x5f3410	History.cpp	compare_name_fields_or_null	medium	haiku	
-0x5f3030	hol_cup.cpp	hol_cup_show_list_entries	low	haiku	
-0x5f3450	hol_cup.cpp	hol_cup_constructor	high	haiku	
-0x5f35e0	hol_cup.cpp	hol_cup::`scalar deleting destructor'	medium	slot copy	
-0x5f3600	hol_cup.cpp	hol_cup::~hol_cup	high	haiku	
-0x5f36e0	hol_cup.cpp	hol_cup::create_schedule	medium	slot copy	
-0x5f3c50	hol_cup.cpp	hol_cup_team_text_dispatch	medium	haiku	
-0x5f3d70	hol_cup.cpp	hol_cup_init_teams	medium	haiku	
-0x5f3e70	hol_cup.cpp	hol_cup::set_up_rules	medium	slot copy	
-0x5f3f00	hol_cup.cpp	hol_cup::record_season_honours	medium	slot copy	
-0x5f3f10	hol_cup.cpp	hol_cup::start_new_season	medium	slot copy	
-0x5f4020	hol_cup.cpp	hol_cup::update_for_date	medium	slot copy	
-0x5f4190	hol_cup.cpp	hol_cup_round_advance	medium	haiku	
-0x5f4220	hol_cup.cpp	hol_cup_create_group_stage	medium	haiku	
-0x5f4480	hol_cup.cpp	hol_cup_build_round_draw	medium	haiku	
-0x5f4820	hol_cup.cpp	hol_cup_select_squad_players	medium	haiku	
-0x5f4d40	hol_cup.cpp	hol_cup::update_staff_records_for_status	medium	slot copy	
-0x5f4e90	hol_cup.cpp	hol_cup_load_team_indices	medium	haiku	
-0x5f5070	hol_cup.cpp	hol_cup_load_team_links	medium	haiku	
-0x5f5120	hol_cup.cpp	hol_cup::set_predicted_positions	medium	slot copy	
-0x5f5390	hol_cup.cpp	hol_cup_set_round_fields	medium	haiku	
-0x5f5490	hol_first.cpp	hol_first_init_object	medium	haiku	
-0x5f56b0	hol_first.cpp	hol_first::`scalar deleting destructor'	medium	slot copy	
-0x5f56d0	hol_first.cpp	hol_first_dtor_body	high	haiku	
-0x5f5790	hol_first.cpp	hol_first::create_schedule	medium	slot copy	
-0x5f6240	hol_first.cpp	hol_first_alloc_and_fill_table	high	haiku	
-0x5f6340	hol_first.cpp	hol_first::set_up_rules	medium	slot copy	
-0x5f63f0	hol_first.cpp	hol_first::start_new_season	medium	slot copy	
-0x5f65b0	hol_first.cpp	hol_first::add_result	medium	slot copy	
-0x5f6650	hol_first.cpp	hol_first_advance_stage	medium	haiku	
-0x5f6720	hol_first.cpp	hol_first_build_cup_stage_fixtures	medium	haiku	hol-bel.md
-0x5f6ad0	hol_first.cpp	hol_first_stage_build_group_cup	medium	haiku	
-0x5f6d20	hol_first.cpp	hol_first::update_positions_and_status	medium	slot copy	
-0x5f6ee0	hol_first.cpp	hol_first::update_staff_records_for_status	medium	slot copy	
-0x5f7330	hol_first.cpp	hol_first_news_promotion_news_item	medium	haiku	
-0x5f73d0	hol_first.cpp	hol_set_team_form_bands	medium	haiku	2026-10-16-crash-fixes.md
-0x5f7550	hol_first.cpp	hol_first_set_four_flags_thiscall	medium	haiku	
-0x5f75b0	hol_first.cpp	hol_first_reset_flags	low	haiku	
-0x5f7110	hol_prm.cpp	Hol::news_promotion_relegation_story	high	haiku	
-0x5f7610	hol_prm.cpp	hol_prm_load_stage_one	medium	haiku	
-0x5f7820	hol_prm.cpp	hol_prm::`scalar deleting destructor'	medium	slot copy	
-0x5f7840	hol_prm.cpp	hol_prm::~hol_prm	high	haiku	
-0x5f78d0	hol_prm.cpp	hol_prm::create_schedule	medium	slot copy	
-0x5f8430	hol_prm.cpp	hol_prm_allocate_league_table	high	haiku	
-0x5f8560	hol_prm.cpp	hol_prm::set_up_rules	medium	slot copy	
-0x5f8610	hol_prm.cpp	hol_prm::start_new_season	medium	slot copy	
-0x5f87e0	hol_prm.cpp	hol_prm_store_club_entry_fields	medium	haiku	
-0x5f8820	hol_super.cpp	hol_super::HolSuper::ctor	medium	haiku	
-0x5f89e0	hol_super.cpp	hol_super::`scalar deleting destructor'	medium	slot copy	
-0x5f8a00	hol_super.cpp	hol_super_destructor	high	haiku	
-0x5f8ad0	hol_super.cpp	hol_super::create_round_table	medium	slot copy	
-0x5f8c10	hol_super.cpp	hol_super_open_cm3_code_file	high	haiku	
-0x5f8e40	hol_super.cpp	hol_super::release_data	medium	slot copy	
-0x5f8fe0	holland_awards.cpp	holland_awards::HollandAwards::ctor	high	haiku	
-0x5f9070	holland_awards.cpp	holland_awards::HollandAwards::init_award_table	high	haiku	
-0x5f94c0	holland_awards.cpp	holland_award_record_build	medium	haiku	
-0x5f9670	holland_awards.cpp	holland_awards_vtable_slot_notify_match	medium	haiku	
+0x5f3030	History.cpp	history_open_written_history_screen_mid_body	high	opus	
+0x5f31c0	History.cpp	history_written_screen_handle_click	high	opus	
+0x5f33d0	History.cpp	history_written_screen_close	high	opus	
+0x5f3410	History.cpp	history_compare_entries_by_title	high	opus	
+0x5f3450	hol_cup.cpp	HolCup::HolCup	high	opus	
+0x5f35e0	hol_cup.cpp	HolCup::`scalar deleting destructor'	high	opus	
+0x5f3600	hol_cup.cpp	HolCup::~HolCup	high	opus	
+0x5f36e0	hol_cup.cpp	HolCup::create_schedule	high	opus	
+0x5f3c50	hol_cup.cpp	HolCup::build_fate_news_text	high	opus	
+0x5f3d70	hol_cup.cpp	HolCup::create_group_table	medium	opus	
+0x5f3e70	hol_cup.cpp	HolCup::set_up_rules	high	opus	
+0x5f3f00	hol_cup.cpp	HolCup::record_season_honours	high	opus	
+0x5f3f10	hol_cup.cpp	HolCup::start_new_season	high	opus	
+0x5f4020	hol_cup.cpp	HolCup::update_for_date	high	opus	
+0x5f4190	hol_cup.cpp	HolCup::advance_stage	high	opus	
+0x5f4220	hol_cup.cpp	HolCup::create_group_stage	high	opus	
+0x5f4480	hol_cup.cpp	HolCup::create_knockout_stage	high	opus	
+0x5f4820	hol_cup.cpp	HolCup::select_entrants	high	opus	
+0x5f4d40	hol_cup.cpp	HolCup::update_staff_records_for_status	high	opus	
+0x5f4e90	hol_cup.cpp	HolCup::load_extra_data	high	opus	
+0x5f5070	hol_cup.cpp	HolCup::save_extra_data	high	opus	
+0x5f5120	hol_cup.cpp	HolCup::set_predicted_positions	medium	opus	
+0x5f5390	hol_cup.cpp	HolCup::set_club_progress	high	opus	
+0x5f5490	hol_first.cpp	HolFirst::HolFirst	high	opus	
+0x5f56b0	hol_first.cpp	HolFirst::`scalar deleting destructor'	high	opus	
+0x5f56d0	hol_first.cpp	HolFirst::~HolFirst	high	opus	
+0x5f5790	hol_first.cpp	HolFirst::create_schedule	high	opus	
+0x5f6240	hol_first.cpp	HolFirst::create_table	high	opus	
+0x5f6340	hol_first.cpp	HolFirst::set_up_rules	high	opus	
+0x5f63f0	hol_first.cpp	HolFirst::start_new_season	high	opus	
+0x5f65b0	hol_first.cpp	HolFirst::add_result	high	opus	
+0x5f6650	hol_first.cpp	HolFirst::advance_stage	high	opus	
+0x5f6720	hol_first.cpp	HolFirst::create_play_off_groups	high	opus	hol-bel.md
+0x5f6ad0	hol_first.cpp	HolFirst::create_period_stage	high	opus	
+0x5f6d20	hol_first.cpp	HolFirst::update_positions_and_status	high	opus	
+0x5f6ee0	hol_first.cpp	HolFirst::update_staff_records_for_status	high	opus	
+0x5f7110	hol_first.cpp	HolFirst::build_fate_news_text	high	opus	
+0x5f7330	hol_first.cpp	HolFirst::add_period_winner_news	medium	opus	
+0x5f73d0	hol_first.cpp	HolFirst::set_club_progress	high	opus	2026-10-16-crash-fixes.md
+0x5f7550	hol_first.cpp	HolFirst::load_extra_data	high	opus	
+0x5f75b0	hol_first.cpp	HolFirst::save_extra_data	high	opus	
+0x5f7610	hol_prm.cpp	HolPrm::HolPrm	high	opus	
+0x5f7820	hol_prm.cpp	HolPrm::`scalar deleting destructor'	high	opus	
+0x5f7840	hol_prm.cpp	HolPrm::~HolPrm	high	opus	
+0x5f78d0	hol_prm.cpp	HolPrm::create_schedule	high	opus	
+0x5f8430	hol_prm.cpp	HolPrm::create_table	high	opus	
+0x5f8560	hol_prm.cpp	HolPrm::set_up_rules	high	opus	
+0x5f8610	hol_prm.cpp	HolPrm::start_new_season	high	opus	
+0x5f87e0	hol_prm.cpp	HolPrm::set_club_progress	high	opus	
+0x5f8820	hol_super.cpp	HolSuper::HolSuper	high	opus	
+0x5f89e0	hol_super.cpp	HolSuper::`scalar deleting destructor'	high	opus	
+0x5f8a00	hol_super.cpp	HolSuper::~HolSuper	high	opus	
+0x5f8ad0	hol_super.cpp	HolSuper::create_round_table	high	opus	
+0x5f8c10	hol_super.cpp	HolSuper::select_teams	high	opus	
+0x5f8e40	hol_super.cpp	HolSuper::start_new_season	high	opus	
+0x5f8fe0	holland_awards.cpp	HollandAwards::HollandAwards	high	opus	
+0x5f9070	holland_awards.cpp	HollandAwards::init_awards	high	opus	
+0x5f94c0	holland_awards.cpp	HollandAwards::daily_update	high	opus	
+0x5f9670	holland_awards.cpp	HollandAwards::update_team_of_the_week	high	opus	
 0x5f9690	holland_rules.cpp	HOLLAND_RULES::HOLLAND_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x5f97c0	host_country.cpp	HostCountry::HostCountry	high	opus	2026-10-14-game-creation-inventory.md
 0x5f9970	host_country.cpp	HostCountry::init_default_table	high	opus	2026-10-16-sweep-international.md
@@ -2869,9 +2869,9 @@ address	file	name	confidence	model	cited_in
 0x632340	inter_amer_cup.cpp	InterAmerCup::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x632480	inter_amer_cup.cpp	InterAmerCup::select_teams	medium	opus	
 0x632910	inter_amer_cup.cpp	InterAmerCup::start_new_season	high	opus	
-0x632ac0	international_awards.cpp	international_awards_constructor	medium	haiku	
-0x632b30	international_awards.cpp	international_awards::init_award_list	high	haiku	
-0x632e20	international_awards.cpp	Awards::populate_award_entry	medium	haiku	
+0x632ac0	international_awards.cpp	InternationalAwards::InternationalAwards	high	opus	
+0x632b30	international_awards.cpp	InternationalAwards::init_awards	high	opus	
+0x632e20	international_awards.cpp	InternationalAwards::daily_update	medium	opus	
 0x632fb0	intertoto_cup.cpp	IntertotoCup::IntertotoCup	high	opus	
 0x6331a0	intertoto_cup.cpp	IntertotoCup::`scalar deleting destructor'	high	opus	
 0x6331c0	intertoto_cup.cpp	IntertotoCup::~IntertotoCup	high	opus	
@@ -2885,138 +2885,138 @@ address	file	name	confidence	model	cited_in
 0x633eb0	intertoto_cup.cpp	IntertotoCup::load_extra_data	high	opus	
 0x633f50	intertoto_cup.cpp	IntertotoCup::save_extra_data	high	opus	
 0x633f70	intertoto_cup.cpp	IntertotoCup::collect_club_list	medium	opus	
-0x6340a0	ire_chal_cup.cpp	Ire_chal_cup::ctor_cup_tournament	high	haiku	
-0x634220	ire_chal_cup.cpp	ire_chal_cup_assert_or_init_cup	medium	haiku	
-0x634270	ire_chal_cup.cpp	ire_chal_cup::`scalar deleting destructor'	medium	slot copy	
-0x634290	ire_chal_cup.cpp	ire_chal_cup_dtor_body	high	haiku	
-0x634360	ire_chal_cup.cpp	ire_chal_cup::create_round_table	medium	slot copy	
-0x6347d0	ire_chal_cup.cpp	Cup_Squad::fill_slots_from_pool	high	haiku	
-0x634a60	ire_chal_cup.cpp	ire_chal_cup::release_data	medium	slot copy	
-0x634c10	ire_chal_cup.cpp	ire_chal_cup::set_up_rounds	medium	slot copy	
-0x634c40	ire_first.cpp	ire_first_cup_ctor	high	haiku	
-0x634d20	ire_first.cpp	assert_fail_format_report	medium	haiku	
-0x634e60	ire_first.cpp	ire_first::`scalar deleting destructor'	medium	slot copy	
-0x634e80	ire_first.cpp	ire_first_list_destructor	high	haiku	
-0x634f40	ire_first.cpp	ire_first::create_schedule	medium	slot copy	
-0x635420	ire_first.cpp	ire_first_check_squad_size_assert	medium	haiku	
-0x635910	ire_first.cpp	ire_first_setup_cup_teams	high	haiku	
-0x635aa0	ire_first.cpp	ire_first::set_up_rules	medium	slot copy	
-0x635b30	ire_first.cpp	ire_first::start_new_season	medium	slot copy	
-0x635cf0	ire_first.cpp	ire_first_step_or_assert_bounds	medium	haiku	
-0x635dc0	ire_first.cpp	ire_cup_stage_setup_assert	medium	haiku	
-0x636020	ire_first.cpp	ire_first::update_staff_records_for_status	medium	slot copy	
-0x636150	ire_first.cpp	ire_noop_stub_ret18	medium	haiku	
-0x636210	ire_first.cpp	ire_leinster_news_team_message	medium	haiku	
-0x636390	ire_first.cpp	set_club_player_form_fitness_morale	low	haiku	
-0x6364a0	ire_leinster_cup.cpp	Leinster_cup::Leinster_cup	high	haiku	
-0x636670	ire_leinster_cup.cpp	ire_leinster_cup::`scalar deleting destructor'	medium	slot copy	
-0x636690	ire_leinster_cup.cpp	ire_leinster_cup::~ire_leinster_cup	high	haiku	
-0x636760	ire_leinster_cup.cpp	ire_leinster_cup::create_round_table	medium	slot copy	
-0x636a80	ire_leinster_cup.cpp	ire_leinster_cup_fill_roster	high	haiku	
-0x636c20	ire_leinster_cup.cpp	ire_leinster_cup::release_data	medium	slot copy	
-0x636d20	ire_leinster_cup.cpp	ire_leinster_cup_assert_failure	high	haiku	
-0x636dd0	ire_lge_cup.cpp	ire_lge_cup::ire_lge_cup	high	haiku	
-0x636f6c	ire_lge_cup.cpp	ire_lge_cup_assert_fail	high	haiku	
-0x637020	ire_lge_cup.cpp	ire_lge_cup::`scalar deleting destructor'	medium	slot copy	
-0x637040	ire_lge_cup.cpp	ire_lge_cup_scout_destructor	medium	haiku	
-0x637120	ire_lge_cup.cpp	ire_lge_cup::create_schedule	medium	slot copy	
-0x6374a0	ire_lge_cup.cpp	ire_lge_cup_qualify_text_dispatch	high	haiku	
-0x6375c0	ire_lge_cup.cpp	ire_lge_cup::reset_cup_slots	medium	haiku	
-0x6376c0	ire_lge_cup.cpp	ire_lge_cup::set_up_rules	medium	slot copy	
-0x637750	ire_lge_cup.cpp	ire_lge_cup_forward_virtual_call	medium	haiku	
-0x637760	ire_lge_cup.cpp	ire_lge_cup::start_new_season	medium	slot copy	
-0x637930	ire_lge_cup.cpp	ire_lge_cup_advance_round	medium	haiku	
-0x6379c0	ire_lge_cup.cpp	ire_lge_cup_create_group_stage	medium	haiku	
-0x637c00	ire_lge_cup.cpp	ire_cup_stage_create_round	medium	haiku	
-0x637dd0	ire_lge_cup.cpp	ire_lge_cup_fill_slots	high	haiku	
-0x638110	ire_lge_cup.cpp	ire_lge_cup::update_staff_records_for_status	medium	slot copy	
-0x638260	ire_lge_cup.cpp	ire_lge_cup_load_team_ids	medium	haiku	
-0x638420	ire_lge_cup.cpp	ire_lge_cup::set_predicted_positions	medium	slot copy	
-0x638690	ire_lge_cup.cpp	set_cup_ranking_codes	medium	haiku	
-0x6387a0	ire_munster_cup.cpp	Munster_cup_stage::ctor	high	haiku	
-0x638970	ire_munster_cup.cpp	ire_munster_cup::`scalar deleting destructor'	medium	slot copy	
-0x638990	ire_munster_cup.cpp	ire_munster_cup::~ire_munster_cup	high	haiku	
-0x638a60	ire_munster_cup.cpp	ire_munster_cup::create_round_table	medium	slot copy	
-0x638e30	ire_munster_cup.cpp	ire_munster_cup::init_team_pool	high	haiku	
-0x6390d0	ire_munster_cup.cpp	ire_munster_cup::release_data	medium	slot copy	
-0x639280	ire_pres_cup.cpp	cup_ctor_with_assert_setup	high	haiku	
-0x639440	ire_pres_cup.cpp	ire_pres_cup::`scalar deleting destructor'	medium	slot copy	
-0x639460	ire_pres_cup.cpp	ire_pres_cup_dtor	high	haiku	
-0x639530	ire_pres_cup.cpp	ire_pres_cup::create_round_table	medium	slot copy	
-0x639670	ire_pres_cup.cpp	ire_pres_cup_select_qualifiers	medium	haiku	
-0x639820	ire_pres_cup.cpp	ire_pres_cup::release_data	medium	slot copy	
-0x6399c0	ire_pres_cup.cpp	ire_pres_cup_team_is_leinster_county_town	high	haiku	
-0x639bb0	ire_prm.cpp	ire_prm_league_init_checked	high	haiku	
-0x639de0	ire_prm.cpp	ire_prm::`scalar deleting destructor'	medium	slot copy	
-0x639e00	ire_prm.cpp	ire_prm_dtor	high	haiku	
-0x639e90	ire_prm.cpp	ire_prm::create_schedule	medium	slot copy	
-0x63a740	ire_prm.cpp	ire_prm_init_league_table	medium	haiku	wal-nir-irl.md
-0x63a900	ire_prm.cpp	ire_prm::set_up_rules	medium	slot copy	
-0x63a9b0	ire_prm.cpp	ire_prm::start_new_season	medium	slot copy	
-0x63aba0	ire_prm.cpp	ire_prm_find_slot_by_id	medium	haiku	
-0x63abe0	ire_prm.cpp	prm_set_slot_value	medium	haiku	
-0x63ac80	ire_prm.cpp	ire_prm_pool_count_eq_10	low	haiku	
-0x63acb0	ire_prm.cpp	ire_prm_set_field_tail	low	haiku	
-0x63ab60	ire_super_cup.cpp	set_screen_colour_fields	low	haiku	
-0x63acd0	ire_super_cup.cpp	ire_super_cup_ctor	high	haiku	
-0x63ae80	ire_super_cup.cpp	ire_super_cup::`scalar deleting destructor'	medium	slot copy	
-0x63aea0	ire_super_cup.cpp	ire_super_cup_dtor	high	haiku	
-0x63af60	ire_super_cup.cpp	ire_super_cup::create_schedule	medium	slot copy	
-0x63b0c0	ire_super_cup.cpp	ire_super_cup_fill_qualifiers	high	haiku	
-0x63b300	ire_super_cup.cpp	ire_super_cup::update_for_date	medium	slot copy	
-0x63b4c0	ire_super_cup.cpp	ire_super_cup::set_up_rules	medium	slot copy	
-0x63b550	ire_super_cup.cpp	ire_super_cup::start_new_season	medium	slot copy	
-0x63b640	ireland_awards.cpp	ireland_awards::IrelandAwards::IrelandAwards	high	haiku	
-0x63b790	ireland_awards.cpp	Ireland_awards::init_award_objects	high	haiku	
-0x63bf10	ireland_awards.cpp	ireland_awards::IrelandAwards::refresh_awards_display	medium	haiku	
-0x63c160	ireland_awards.cpp	ireland_awards_vtable_slot_refresh	medium	haiku	
-0x63c1f0	ireland_awards.cpp	ireland_awards_vtable_notify_award_changed	medium	haiku	
+0x6340a0	ire_chal_cup.cpp	IreChalCup::IreChalCup	high	opus	
+0x634220	ire_chal_cup.cpp	ire_chal_cup_ctor_error_tail	high	opus	
+0x634270	ire_chal_cup.cpp	IreChalCup::`scalar deleting destructor'	high	opus	
+0x634290	ire_chal_cup.cpp	IreChalCup::~IreChalCup	high	opus	
+0x634360	ire_chal_cup.cpp	IreChalCup::create_round_table	high	opus	
+0x6347d0	ire_chal_cup.cpp	IreChalCup::collect_entrants	high	opus	
+0x634a60	ire_chal_cup.cpp	IreChalCup::start_new_season	high	opus	
+0x634c10	ire_chal_cup.cpp	IreChalCup::set_up_rounds	high	opus	
+0x634c40	ire_first.cpp	IreFirst::IreFirst	high	opus	
+0x634d20	ire_first.cpp	IreFirst::IreFirst_fragment	high	opus	
+0x634e60	ire_first.cpp	IreFirst::`scalar deleting destructor'	high	opus	
+0x634e80	ire_first.cpp	IreFirst::~IreFirst	high	opus	
+0x634f40	ire_first.cpp	IreFirst::create_schedule	high	opus	
+0x635420	ire_first.cpp	IreFirst::create_schedule_fragment	high	opus	
+0x635910	ire_first.cpp	IreFirst::create_table	high	opus	
+0x635aa0	ire_first.cpp	IreFirst::set_up_rules	high	opus	
+0x635b30	ire_first.cpp	IreFirst::start_new_season	high	opus	
+0x635cf0	ire_first.cpp	IreFirst::advance_stage	high	opus	
+0x635dc0	ire_first.cpp	IreFirst::create_promotion_playoff_stage	high	opus	
+0x636020	ire_first.cpp	IreFirst::update_staff_records_for_status	high	opus	
+0x636150	ire_first.cpp	IreFirst::update_staff_records_for_status_fragment	high	opus	
+0x636210	ire_first.cpp	IreFirst::build_fate_news_text	high	opus	
+0x636390	ire_first.cpp	IreFirst::set_club_progress	high	opus	
+0x6364a0	ire_leinster_cup.cpp	IreLeinsterCup::IreLeinsterCup	high	opus	
+0x636670	ire_leinster_cup.cpp	IreLeinsterCup::`scalar deleting destructor'	high	opus	
+0x636690	ire_leinster_cup.cpp	IreLeinsterCup::~IreLeinsterCup	high	opus	
+0x636760	ire_leinster_cup.cpp	IreLeinsterCup::create_round_table	high	opus	
+0x636a80	ire_leinster_cup.cpp	IreLeinsterCup::select_clubs	high	opus	
+0x636c20	ire_leinster_cup.cpp	IreLeinsterCup::start_new_season	high	opus	
+0x636d20	ire_leinster_cup.cpp	IreLeinsterCup::start_new_season_fragment	high	opus	
+0x636dd0	ire_lge_cup.cpp	IreLgeCup::IreLgeCup	high	opus	
+0x636f6c	ire_lge_cup.cpp	IreLgeCup::IreLgeCup_error_tail	high	opus	
+0x637020	ire_lge_cup.cpp	IreLgeCup::`scalar deleting destructor'	high	opus	
+0x637040	ire_lge_cup.cpp	IreLgeCup::~IreLgeCup	high	opus	
+0x637120	ire_lge_cup.cpp	IreLgeCup::create_schedule	high	opus	
+0x6374a0	ire_lge_cup.cpp	IreLgeCup::build_fate_news_text	high	opus	
+0x6375c0	ire_lge_cup.cpp	IreLgeCup::create_table	high	opus	
+0x6376c0	ire_lge_cup.cpp	IreLgeCup::set_up_rules	high	opus	
+0x637750	ire_lge_cup.cpp	IreLgeCup::record_season_honours	high	opus	
+0x637760	ire_lge_cup.cpp	IreLgeCup::start_new_season	high	opus	
+0x637930	ire_lge_cup.cpp	IreLgeCup::advance_stage	high	opus	
+0x6379c0	ire_lge_cup.cpp	IreLgeCup::create_group_stage	high	opus	
+0x637c00	ire_lge_cup.cpp	IreLgeCup::create_knockout_stage	high	opus	
+0x637dd0	ire_lge_cup.cpp	IreLgeCup::collect_entrants	medium	opus	
+0x638110	ire_lge_cup.cpp	IreLgeCup::update_staff_records_for_status	high	opus	
+0x638260	ire_lge_cup.cpp	IreLgeCup::load_extra_data	high	opus	
+0x638420	ire_lge_cup.cpp	IreLgeCup::set_predicted_positions	high	opus	
+0x638690	ire_lge_cup.cpp	IreLgeCup::set_club_progress	high	opus	
+0x6387a0	ire_munster_cup.cpp	IreMunsterCup::IreMunsterCup	high	opus	
+0x638970	ire_munster_cup.cpp	IreMunsterCup::`scalar deleting destructor'	high	opus	
+0x638990	ire_munster_cup.cpp	IreMunsterCup::~IreMunsterCup	high	opus	
+0x638a60	ire_munster_cup.cpp	IreMunsterCup::create_round_table	high	opus	
+0x638e30	ire_munster_cup.cpp	IreMunsterCup::collect_entrants	high	opus	
+0x6390d0	ire_munster_cup.cpp	IreMunsterCup::start_new_season	high	opus	
+0x639280	ire_pres_cup.cpp	IrePresCup::IrePresCup	high	opus	
+0x639440	ire_pres_cup.cpp	IrePresCup::`scalar deleting destructor'	high	opus	
+0x639460	ire_pres_cup.cpp	IrePresCup::~IrePresCup	high	opus	
+0x639530	ire_pres_cup.cpp	IrePresCup::create_round_table	high	opus	
+0x639670	ire_pres_cup.cpp	IrePresCup::collect_entrants	medium	opus	
+0x639820	ire_pres_cup.cpp	IrePresCup::start_new_season	high	opus	
+0x6399c0	ire_pres_cup.cpp	ire_club_is_in_leinster	high	opus	
+0x639bb0	ire_prm.cpp	IrePrm::IrePrm	high	opus	
+0x639de0	ire_prm.cpp	IrePrm::`scalar deleting destructor'	high	opus	
+0x639e00	ire_prm.cpp	IrePrm::~IrePrm	high	opus	
+0x639e90	ire_prm.cpp	IrePrm::create_schedule	high	opus	
+0x63a740	ire_prm.cpp	IrePrm::create_table	high	opus	wal-nir-irl.md
+0x63a900	ire_prm.cpp	IrePrm::set_up_rules	high	opus	
+0x63a9b0	ire_prm.cpp	IrePrm::start_new_season	high	opus	
+0x63ab60	ire_prm.cpp	IrePrm::set_club_progress	high	opus	
+0x63aba0	ire_prm.cpp	IrePrm::get_fixed_draw_slot	high	opus	
+0x63abe0	ire_prm.cpp	IrePrm::set_fixed_draw_slot	high	opus	
+0x63ac80	ire_prm.cpp	IrePrm::load_extra_data	high	opus	
+0x63acb0	ire_prm.cpp	IrePrm::save_extra_data	high	opus	
+0x63acd0	ire_super_cup.cpp	IreSuperCup::IreSuperCup	high	opus	
+0x63ae80	ire_super_cup.cpp	IreSuperCup::`scalar deleting destructor'	high	opus	
+0x63aea0	ire_super_cup.cpp	IreSuperCup::~IreSuperCup	high	opus	
+0x63af60	ire_super_cup.cpp	IreSuperCup::create_schedule	high	opus	
+0x63b0c0	ire_super_cup.cpp	IreSuperCup::create_table	high	opus	
+0x63b300	ire_super_cup.cpp	IreSuperCup::update_for_date	high	opus	
+0x63b4c0	ire_super_cup.cpp	IreSuperCup::set_up_rules	high	opus	
+0x63b550	ire_super_cup.cpp	IreSuperCup::start_new_season	high	opus	
+0x63b640	ireland_awards.cpp	IrelandAwards::IrelandAwards	high	opus	
+0x63b790	ireland_awards.cpp	IrelandAwards::init_awards	high	opus	
+0x63bf10	ireland_awards.cpp	IrelandAwards::daily_update	high	opus	
+0x63c160	ireland_awards.cpp	IrelandAwards::on_month_change	high	opus	
+0x63c1f0	ireland_awards.cpp	IrelandAwards::update_team_of_the_week	high	opus	
 0x63c210	ireland_rules.cpp	IRELAND_RULES::IRELAND_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x63c330	ireland_rules.cpp	IRELAND_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
 0x63c350	ireland_rules.cpp	IRELAND_RULES::get_ineligibility_code	medium	opus	2026-10-16-sweep-rulebooks.md
 0x63c3d0	ireland_rules.cpp	IRELAND_RULES::can_loan_player	high	opus	2026-10-16-sweep-rulebooks.md
 0x63c4e0	ireland_rules.cpp	IRELAND_RULES::record_loan	medium	opus	
 0x63c530	ireland_rules.cpp	IRELAND_RULES::can_end_loan	high	opus	
-0x63c5e0	ita_c1_super.cpp	Cup::Cup_italian_super_cup_ctor	medium	haiku	
-0x63c7a0	ita_c1_super.cpp	ita_c1_super::`scalar deleting destructor'	medium	slot copy	
-0x63c7c0	ita_c1_super.cpp	ita_c1_super::dtor_body	medium	haiku	
-0x63c890	ita_c1_super.cpp	ita_c1_super::create_round_table	medium	slot copy	
-0x63c9d0	ita_c1_super.cpp	ita_c1_super_init_alloc_block	high	haiku	
-0x63caa0	ita_c1_super.cpp	ita_c1_super::release_data	medium	slot copy	
-0x63cc40	ita_c_cup.cpp	ita_c_cup_ctor	high	haiku	
-0x63ce90	ita_c_cup.cpp	ita_c_cup::`scalar deleting destructor'	medium	slot copy	
-0x63ceb0	ita_c_cup.cpp	ita_c_cup::~ita_c_cup	high	haiku	
-0x63cf90	ita_c_cup.cpp	ita_c_cup::create_schedule	medium	slot copy	
-0x63d4c0	ita_c_cup.cpp	ita_c_cup_team_name_text_handler	medium	haiku	
-0x63d5e0	ita_c_cup.cpp	ita_c_cup::init_cup_slots	medium	haiku	
-0x63d6e0	ita_c_cup.cpp	ita_c_cup::set_up_rules	medium	slot copy	
-0x63d770	ita_c_cup.cpp	ita_c_cup::record_season_honours	medium	slot copy	
-0x63d780	ita_c_cup.cpp	ita_c_cup::start_new_season	medium	slot copy	
-0x63d950	ita_c_cup.cpp	ita_c_cup::advance_or_assert_round	medium	haiku	
-0x63d9e0	ita_c_cup.cpp	ita_c_cup_build_group_teams	medium	haiku	
-0x63dc10	ita_c_cup.cpp	ita_cup_build_stage_teams	medium	haiku	
-0x63dfe0	ita_c_cup.cpp	ita_c_cup_build_qualifier_pools	medium	haiku	
-0x63e270	ita_c_cup.cpp	ita_c_cup::update_staff_records_for_status	medium	slot copy	
-0x63e3c0	ita_c_cup.cpp	ita_c_cup::load_cup_teams_from_file	medium	haiku	
-0x63e580	ita_c_cup.cpp	ita_c_cup::set_predicted_positions	medium	slot copy	
-0x63e7f0	ita_c_cup.cpp	ita_cup_set_round_fields	medium	haiku	
-0x63e900	ita_cup.cpp	ita_cup::ita_cup	high	haiku	
-0x63eb50	ita_cup.cpp	ita_cup::`scalar deleting destructor'	medium	slot copy	
-0x63eb70	ita_cup.cpp	ita_cup_cup_object::scalar_deleting_destructor	high	haiku	
-0x63ec50	ita_cup.cpp	ita_cup::create_schedule	medium	slot copy	
-0x63f130	ita_cup.cpp	ita_cup_team_name_prompt_dispatch	medium	haiku	
-0x63f250	ita_cup.cpp	ita_cup::reset_and_alloc_groups	medium	haiku	
-0x63f350	ita_cup.cpp	ita_cup::set_up_rules	medium	slot copy	
-0x63f3e0	ita_cup.cpp	ita_cup::start_new_season	medium	slot copy	
-0x63f5b0	ita_cup.cpp	ita_cup_advance_round_or_assert	medium	haiku	
-0x63f640	ita_cup.cpp	ita_cup_build_group_stage	high	haiku	
-0x63f870	ita_cup.cpp	ita_cup_create_stage_from_teams	medium	haiku	
-0x63faf0	ita_cup.cpp	ita_cup_select_squad_players	high	haiku	
-0x63ff00	ita_cup.cpp	ita_cup::update_staff_records_for_status	medium	slot copy	
-0x640050	ita_cup.cpp	ita_cup_load_team_table	medium	haiku	
-0x640210	ita_cup.cpp	ita_cup::set_predicted_positions	medium	slot copy	
-0x640480	ita_cup.cpp	ita_cup_set_player_slots	medium	haiku	
-0x640590	ita_cup.cpp	compare_player_priority_slot	low	haiku	
+0x63c5e0	ita_c1_super.cpp	ItaC1Super::ItaC1Super	high	opus	
+0x63c7a0	ita_c1_super.cpp	ItaC1Super::`scalar deleting destructor'	high	opus	
+0x63c7c0	ita_c1_super.cpp	ItaC1Super::~ItaC1Super	high	opus	
+0x63c890	ita_c1_super.cpp	ItaC1Super::create_round_table	high	opus	
+0x63c9d0	ita_c1_super.cpp	ItaC1Super::init_team_list	medium	opus	
+0x63caa0	ita_c1_super.cpp	ItaC1Super::start_new_season	high	opus	
+0x63cc40	ita_c_cup.cpp	ItaCCup::ItaCCup	high	opus	
+0x63ce90	ita_c_cup.cpp	ItaCCup::`scalar deleting destructor'	high	opus	
+0x63ceb0	ita_c_cup.cpp	ItaCCup::~ItaCCup	high	opus	
+0x63cf90	ita_c_cup.cpp	ItaCCup::create_schedule	high	opus	
+0x63d4c0	ita_c_cup.cpp	ItaCCup::build_fate_news_text	high	opus	
+0x63d5e0	ita_c_cup.cpp	ItaCCup::init_first_group	medium	opus	
+0x63d6e0	ita_c_cup.cpp	ItaCCup::set_up_rules	high	opus	
+0x63d770	ita_c_cup.cpp	ItaCCup::record_season_honours	high	opus	
+0x63d780	ita_c_cup.cpp	ItaCCup::start_new_season	high	opus	
+0x63d950	ita_c_cup.cpp	ItaCCup::advance_stage	high	opus	
+0x63d9e0	ita_c_cup.cpp	ItaCCup::create_group_stage	high	opus	
+0x63dc10	ita_c_cup.cpp	ItaCCup::create_knockout_stage	high	opus	
+0x63dfe0	ita_c_cup.cpp	ItaCCup::select_entrants	high	opus	
+0x63e270	ita_c_cup.cpp	ItaCCup::update_staff_records_for_status	high	opus	
+0x63e3c0	ita_c_cup.cpp	ItaCCup::load_extra_data	high	opus	
+0x63e580	ita_c_cup.cpp	ItaCCup::set_predicted_positions	high	opus	
+0x63e7f0	ita_c_cup.cpp	ItaCCup::set_club_progress	high	opus	
+0x63e900	ita_cup.cpp	ItaCup::ItaCup	high	opus	
+0x63eb50	ita_cup.cpp	ItaCup::`scalar deleting destructor'	high	opus	
+0x63eb70	ita_cup.cpp	ItaCup::~ItaCup	high	opus	
+0x63ec50	ita_cup.cpp	ItaCup::create_schedule	high	opus	
+0x63f130	ita_cup.cpp	ItaCup::build_fate_news_text	high	opus	
+0x63f250	ita_cup.cpp	ItaCup::create_first_group_table	medium	opus	
+0x63f350	ita_cup.cpp	ItaCup::set_up_rules	high	opus	
+0x63f3e0	ita_cup.cpp	ItaCup::start_new_season	high	opus	
+0x63f5b0	ita_cup.cpp	ItaCup::advance_stage	high	opus	
+0x63f640	ita_cup.cpp	ItaCup::create_group_stage	high	opus	
+0x63f870	ita_cup.cpp	ItaCup::create_knockout_stage	high	opus	
+0x63faf0	ita_cup.cpp	ItaCup::select_entrants	high	opus	
+0x63ff00	ita_cup.cpp	ItaCup::update_staff_records_for_status	high	opus	
+0x640050	ita_cup.cpp	ItaCup::load_extra_data	high	opus	
+0x640210	ita_cup.cpp	ItaCup::set_predicted_positions	high	opus	
+0x640480	ita_cup.cpp	ItaCup::set_club_progress	medium	opus	
+0x640590	ita_cup.cpp	compare_clubs_by_seeding_pot	medium	opus	
 0x6406d0	ita_ser_a.cpp	ita_ser_a_league_ctor	high	haiku	
 0x640900	ita_ser_a.cpp	ita_ser_a::`scalar deleting destructor'	medium	slot copy	
 0x640920	ita_ser_a.cpp	ita_ser_a_object_destructor	high	haiku	

@@ -6,9 +6,9 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5f8820 | 126 (+2 unwind) | `hol_super::HolSuper::ctor` | thiscall(HolSuper* this, undefined2 param_2, int param_3), ret 8 | Constructs the HolSuper object, loads the cup data and CM3 code file, reporting failures through an error message box. | medium | haiku |  |
-| 0x5f89e0 | 11 | `hol_super::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of hol_super.cpp. | medium | slot copy |  |
-| 0x5f8a00 | 62 (+1 unwind) | `hol_super_destructor` | fastcall, (hol_super *this) with ECX as this, ret 0 | Releases the hol_super object's owned buffers and Comp_Stats member, then runs the base Cup destructor. | high | haiku |  |
-| 0x5f8ad0 | 98 | `hol_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of hol_super.cpp. | medium | slot copy |  |
-| 0x5f8c10 | 165 | `hol_super_open_cm3_code_file` | fastcall, (ECX = hol_super object pointer param_1), ret 0 | Allocates the CM3 code record and opens the two code files, reporting an assertion error on failure. | high | haiku |  |
-| 0x5f8e40 | 125 | `hol_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of hol_super.cpp. | medium | slot copy |  |
+| 0x5f8820 | 126 (+2 unwind) | `HolSuper::HolSuper` | thiscall(HolSuper* this, short year, void* comp_record), ret 8, returns this | Constructs the Dutch Super Cup on Cup and, when no saved data loads, picks its two clubs and builds its rounds, tie tree and stats. | high | opus |  |
+| 0x5f89e0 | 11 | `HolSuper::`scalar deleting destructor'` | thiscall(HolSuper* this, unsigned flags), ret 4, returns this | Runs the Dutch Super Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x5f8a00 | 62 (+1 unwind) | `HolSuper::~HolSuper` | thiscall(HolSuper* this), ret 0 | Destroys the Dutch Super Cup by freeing its team list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x5f8ad0 | 98 | `HolSuper::create_round_table` | thiscall(HolSuper* this, char stage, short* round_count, short* extra, int* out), ret 0x10, returns Round* or null | Builds the one-round table of the Dutch Super Cup with its draw and match dates for two teams. | high | opus |  |
+| 0x5f8c10 | 165 | `HolSuper::select_teams` | thiscall(HolSuper* this), ret 0, returns 1, 0 or -1 | Picks the Dutch First Division champion and the Dutch Cup winner, or the league runner-up when one club won both. | high | opus |  |
+| 0x5f8e40 | 125 | `HolSuper::start_new_season` | thiscall(HolSuper* this), ret 0 | Clears the finished Dutch Super Cup, archives its stats, moves the year on and sets up the clubs and rounds of the next edition. | high | opus |  |

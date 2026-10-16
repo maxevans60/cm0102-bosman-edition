@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 3341 high, 3263 medium, 259 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14.
+- Confidence: 3479 high, 3132 medium, 252 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -151,13 +151,13 @@ All 11747 functions with their category, file and placement method are in `funct
 | [gre_super.cpp](gre_super.cpp.md) | 6 |
 | [greece_awards.cpp](greece_awards.cpp.md) | 4 |
 | [greece_rules.cpp](greece_rules.cpp.md) | 4 |
-| [gui_utils.cpp](gui_utils.cpp.md) | 11 |
-| [Guio.cpp](Guio.cpp.md) | 4 |
+| [gui_utils.cpp](gui_utils.cpp.md) | 6 |
+| [Guio.cpp](Guio.cpp.md) | 9 |
 | [hall_of_fame.cpp](hall_of_fame.cpp.md) | 20 |
-| [History.cpp](History.cpp.md) | 13 |
-| [hol_cup.cpp](hol_cup.cpp.md) | 20 |
-| [hol_first.cpp](hol_first.cpp.md) | 17 |
-| [hol_prm.cpp](hol_prm.cpp.md) | 9 |
+| [History.cpp](History.cpp.md) | 14 |
+| [hol_cup.cpp](hol_cup.cpp.md) | 19 |
+| [hol_first.cpp](hol_first.cpp.md) | 18 |
+| [hol_prm.cpp](hol_prm.cpp.md) | 8 |
 | [hol_super.cpp](hol_super.cpp.md) | 6 |
 | [holland_awards.cpp](holland_awards.cpp.md) | 4 |
 | [holland_rules.cpp](holland_rules.cpp.md) | 1 |
@@ -174,8 +174,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [ire_lge_cup.cpp](ire_lge_cup.cpp.md) | 18 |
 | [ire_munster_cup.cpp](ire_munster_cup.cpp.md) | 6 |
 | [ire_pres_cup.cpp](ire_pres_cup.cpp.md) | 7 |
-| [ire_prm.cpp](ire_prm.cpp.md) | 11 |
-| [ire_super_cup.cpp](ire_super_cup.cpp.md) | 9 |
+| [ire_prm.cpp](ire_prm.cpp.md) | 12 |
+| [ire_super_cup.cpp](ire_super_cup.cpp.md) | 8 |
 | [ireland_awards.cpp](ireland_awards.cpp.md) | 5 |
 | [ireland_rules.cpp](ireland_rules.cpp.md) | 6 |
 | [ita_c1_super.cpp](ita_c1_super.cpp.md) | 6 |

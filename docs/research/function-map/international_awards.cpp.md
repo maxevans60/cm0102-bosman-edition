@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x632ac0 | 35 (+1 unwind) | `international_awards_constructor` | thiscall(int param_2 loaded from file pointer or save source) ret 4; ECX is this, argument is a source pointer for loading | Constructs the international awards object, sets its vtable, and loads award data or initialises the award list from the source. | medium | haiku |  |
-| 0x632b30 | 233 (+6 unwind) | `international_awards::init_award_list` | thiscall(this, int param_2) with ret 4; ECX is this, param_2 is a stack argument passed to each award constructor | Allocates the six international award objects into a list and reports a memory failure through an error message box. | high | haiku |  |
-| 0x632e20 | 149 | `Awards::populate_award_entry` | thiscall(this, short* entry) ret 4 | Fills an international award entry by looking up a date record and dispatching nation award selection and shortlist routines. | medium | haiku |  |
+| 0x632ac0 | 35 (+1 unwind) | `InternationalAwards::InternationalAwards` | thiscall(InternationalAwards* this, FILE* load_source or 0), ret 4, returns this | Constructs the international awards object on NationAwards with no nation record, then loads saved awards or creates the award table. | high | opus |  |
+| 0x632b30 | 233 (+6 unwind) | `InternationalAwards::init_awards` | thiscall(InternationalAwards* this, FILE* load_source or 0), ret 4 | Allocates the table of six international awards and creates each one as a year award with no competition. | high | opus |  |
+| 0x632e20 | 149 | `InternationalAwards::daily_update` | thiscall(InternationalAwards* this, Date* date), ret 4 | Outside 2001, gives the world player awards on two fixed dates and the four continental player awards on day 16 of month index 5. | medium | opus |  |

@@ -598,6 +598,25 @@ Merge fixes: awards slot 2 is now a fixed name, `record_match_ratings`. The retu
 | 0x5b2170 | Fonts row of the Game Settings box (hd-text) | `fog_of_war_load_fog_dat_entries` (Haiku) | `font_scan_folder` | agrees in area |
 | 0x5d8b50 | Sets a drop-down value on the options screen (options-screen) | `config_set_name_field` (Haiku) | `Config::set_font` | agrees in area |
 
+#### Wave w15 (tier 4, 2026-10-16)
+
+Run `sweep-w15`: 8 Opus agents named 196 functions: the Dutch competitions with the `Guio` widget and written history gap functions, the Irish competitions, `international_awards.cpp`, and the Italian cups `ita_c1_super.cpp`, `ita_c_cup.cpp` and `ita_cup.cpp`. Each agent took 2 to 4 minutes and 122,000 to 165,000 tokens. Confidence: 185 high, 11 medium, 0 low. The merge needed no fixes.
+
+10 functions of the wave are cited. 5 agree, 3 agree in area, 1 citation makes no claim and 1 differs. The 0.6.0 research `hol-bel.md` says the original builds two play-off groups of eight. It took that from the Haiku name of 0x5f6720. The code builds two groups of four. That doc needs a fix.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x5ed300 | Menu builder (screen-stack inventory) | `gui_utils_build_button_grid_or_assert` (Haiku) | `gui_add_menu_buttons` | agrees |
+| 0x5ed780 | Menu with headers, buttons with flags 0x4002 (start-screen helpers) | `gui_utils_paginated_list_layout` (Haiku) | `gui_add_tab_bar` | agrees in area |
+| 0x5ee150 | Widget init, called by widget create (display inventory) | `gui_item_init` (Haiku) | `Guio::init` | agrees |
+| 0x5ee4a0 | Called by the widget serialiser (display inventory) | `gui_object_unpack_fields` (Haiku) | `Guio::get_fields` | agrees in area |
+| 0x5ee590 | Called by the screen draw (display inventory) | `button_draw` (Haiku) | `Guio::draw` | agrees in area |
+| 0x5eec20 | Hover highlight in the hit test (display inventory) | `gui_widget_refresh_state` (Haiku) | `Guio::highlight_on` | agrees |
+| 0x5eecb0 | Hover highlight in the hit test (display inventory) | `gui_element_reset_and_redraw` (Haiku) | `Guio::highlight_off` | agrees |
+| 0x5f6720 | Two play-off groups of eight (hol-bel), from the Haiku name | `hol_first_build_cup_stage_fixtures` (Haiku) | `HolFirst::create_play_off_groups` | differs. The code builds two groups of four, the real format to 2004/05. The research took its group size from the wrong Haiku name |
+| 0x5f73d0 | Crash guard site only (crash-fixes) | `hol_set_team_form_bands` (Haiku) | `HolFirst::set_club_progress` | no claim |
+| 0x63a740 | Sets the table size to ten or twelve (wal-nir-irl) | `ire_prm_init_league_table` (Haiku) | `IrePrm::create_table` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
