@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 2680 high, 3897 medium, 286 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09.
+- Confidence: 2791 high, 3793 medium, 279 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -369,9 +369,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [training_manager.cpp](training_manager.cpp.md) | 38 |
 | [training_schedule.cpp](training_schedule.cpp.md) | 7 |
 | [training_screens.cpp](training_screens.cpp.md) | 19 |
-| [transfer_manager.cpp](transfer_manager.cpp.md) | 201 |
+| [transfer_manager.cpp](transfer_manager.cpp.md) | 199 |
 | [transfer_offer.cpp](transfer_offer.cpp.md) | 27 |
-| [transfer_screens.cpp](transfer_screens.cpp.md) | 67 |
+| [transfer_screens.cpp](transfer_screens.cpp.md) | 69 |
 | [tur_cup.cpp](tur_cup.cpp.md) | 6 |
 | [tur_first.cpp](tur_first.cpp.md) | 10 |
 | [tur_second.cpp](tur_second.cpp.md) | 7 |

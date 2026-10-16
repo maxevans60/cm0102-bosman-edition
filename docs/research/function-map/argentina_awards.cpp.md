@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x40a350 | 40 (+1 unwind) | `argentina_awards_ctor` | thiscall(this, int param_2 load_source) ret 4 | Constructs the Argentina awards object, sets its vtable and state, and loads it from a source when given. | high | haiku |  |
-| 0x40a3e0 | 107 (+2 unwind) | `argentina_awards::ctor_with_assert_fallback` | thiscall(this in ECX, int param_1 = object pointer, undefined4 param_2 = owner or context handle; ret 4) | Constructs the awards pair of TEAM_AWARD objects, or reports a version assert and an error box when allocation fails. | high | haiku |  |
-| 0x40a550 | 4 | `argentina_awards_forward_to_month_ratings` | thiscall(this, int param_1 forwarded unchanged to callee) ret 4 | Forwards a single argument to the month ratings month-change handler, serving as a thin vtable thunk. | medium | haiku |  |
-| 0x40a560 | 12 | `argentina_awards_handle_event` | thiscall(this, int event_or_source) ret 4 | Handles an award event by checking the source against two stored objects and then building the team of the week. | medium | haiku |  |
+| 0x40a350 | 40 (+1 unwind) | `ArgentinaAwards::ArgentinaAwards` | thiscall(ArgentinaAwards* this, void* file) ret 4 | Constructs the Argentine awards on NationAwards and loads them from the file, or sets them up fresh when loading fails. | high | opus |  |
+| 0x40a3e0 | 107 (+2 unwind) | `ArgentinaAwards::init_awards` | thiscall(ArgentinaAwards* this, void* file) ret 4 | Creates the two team awards, one for the first division and one for the second division. | high | opus |  |
+| 0x40a550 | 4 | `ArgentinaAwards::daily_update` | thiscall(ArgentinaAwards* this, int date) ret 4 | Forwards the daily update to the NationAwards base month change check. | high | opus |  |
+| 0x40a560 | 12 | `ArgentinaAwards::update_team_of_the_week` | thiscall(ArgentinaAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week when the given award is one of the two Argentine team awards. | high | opus |  |

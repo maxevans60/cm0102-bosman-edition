@@ -472,6 +472,43 @@ Run `sweep-w09`: 8 Opus agents named 201 functions: `ruling_body.cpp` with the r
 | 0x8d26b0 | Per-nation rules objects (season-change-points) | `TRANSFER_MANAGER::setup_transfer_rules` (Haiku) | `TRANSFER_MANAGER::setup_transfer_rules` | agrees |
 | 0x8d2fa0 | Rules lookup by fixture (foreign-and-tactics) | `transfer_manager_resolve_party_kind` (Haiku) | `TRANSFER_MANAGER::get_fixture_rules_scope` | agrees |
 
+#### Wave w10 (tier 3 done, tier 4 begins, 2026-10-16)
+
+Run `sweep-w10`: 8 Opus agents named 204 functions: the rest of `transfer_manager.cpp`, `transfer_offer.cpp`, `transfer_screens.cpp`, and the first tier 4 files `arg_prm.cpp`, `arg_second.cpp`, `argentina_awards.cpp`, `aus_nsl.cpp` and `australia_awards.cpp`. Each agent took 2 to 5 minutes and 132,000 to 191,000 tokens. Confidence: 175 high, 29 medium, 0 low. Tier 3 is done.
+
+Before this wave the awards base `NationAwards` (vtable 0x96da10) joined the slot check: 0 `init_awards`, 1 `daily_update`, 3 `on_month_change`, 4 `update_team_of_the_week`. The base 0x768310 and `WorldCupAwards` slot 1 changed from `check_month_change` to `daily_update`. Comp slot 13 is `update_relegation_averages`. `transfer_offer.cpp` keeps two classes: the `TRANSFER_RULES` base methods sit in this file next to `TRANSFER_OFFER`.
+
+26 functions of the wave are cited. 9 agree, 4 agree in area and 13 citations only list the address.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x403ee0 | Listed as a callee only (display inventory) | `area_scroll_to_position` (Haiku) | `Area::scroll_rows` | no claim |
+| 0x4041d0 | Listed as a callee only (display inventory) | `Area::set_colour_masks` (Haiku) | `Area::convert_colour_to_pixel_format` | no claim |
+| 0x4093f0 | Average points, Argentine second division (crash-fixes) | `arg_second_build_club_name_table` (Haiku) | `ArgSecond::init_relegation_averages` | agrees |
+| 0x412680 | Listed by a constant scan only (widescreen inventory) | `AustraliaAwards::init_award_objects` (Haiku) | `AustraliaAwards::init_awards` | no claim |
+| 0x8e5590 | Mentioned near the rules objects only (sweep-season-end) | `compare_transfer_sort_keys` (Haiku) | `transfer_manager_compare_window_dates` | no claim |
+| 0x8e55c0 | Work permit code (sweep-season-end) | `compare_optional_int_keys` (Haiku) | `transfer_manager_compare_work_permit_entries` | agrees in area |
+| 0x8e7b50 | Reads player data of a staff in an offer (crash-fixes) | `transfer_manager_offer_evaluate_player` (Haiku) | `TRANSFER_OFFER::get_weighted_value` | agrees in area |
+| 0x8e8560 | Base rules slot +0x10, squad limits (sweep-season-end, rulebooks) | `transfer_offer_validate_squad_limits` (Haiku) | `TRANSFER_RULES::can_sign_player` | agrees in area. The research uses the Haiku name |
+| 0x8e8800 | Base rules slot +0xc, squad limits (sweep-season-end, crash-fixes) | `transfer_offer_check_squad_limits` (Haiku) | `TRANSFER_RULES::can_make_offer` | agrees in area. The research uses the Haiku name |
+| 0x8e8a60 | Base rules slot +0x18, eligibility code (sweep-season-end) | `transfer_offer_eligibility_code` (Haiku) | `TRANSFER_RULES::get_ineligibility_code` | agrees |
+| 0x8e8bd0 | Mentioned in the England loan rules only (sweep-rulebooks) | `contract_rollover_compute_month_year` (Haiku) | `TRANSFER_RULES::get_loan_period` | no claim |
+| 0x8e8c40 | Window record of two 6-byte bounds (sweep-rulebooks) | `date_window_contains_offer_date` (Haiku) | `transfer_window_contains_date` | agrees |
+| 0x8e8ed0 | Mentioned near the window search only (sweep-season-end) | `transfer_offer_deadline_check` (Haiku) | `TRANSFER_RULES::get_days_until_window_closes` | no claim |
+| 0x8e9080 | Base rules slot, deadline news (sweep-season-end) | `transfer_offer_news_message` (Haiku) | `TRANSFER_RULES::post_deadline_news` | agrees |
+| 0x8e91b0 | Base rules slot, deadline news text (sweep-season-end) | `transfer_deadline_news_post` (Haiku) | `TRANSFER_RULES::write_deadline_news_text` | agrees |
+| 0x8e9760 | Listed as a link site only (clickable-names inventory) | `transfer_screens_build_bid_panel` (Haiku) | `transfer_screens_build_bid_screen` | no claim |
+| 0x8f24c0 | Listed as a link site only (clickable-names inventory) | `transfer_screens_show_bid_response` (Haiku) | `transfer_screens_build_offer_changed_screen` | no claim |
+| 0x8f4160 | Listed in a set of tested ids only (comparison-screen inventory) | `transfer_screens_open_comparison_screen` (Haiku) | `transfer_screens_open_shortlist_dialog` | no claim |
+| 0x8f41b0 | The comparison prompt screen (comparison-screen inventory) | `transfer_screens_open_comparison_screen` (Haiku) | `transfer_screens_open_comparison_prompt` | agrees |
+| 0x8f4210 | Build of the prompt screen | `transfer_screens_compare_prompt_dialog` (Haiku) | `transfer_screens_build_comparison_prompt` | agrees |
+| 0x8f44d0 | Input of the prompt screen | `transfer_screens_dispatch_by_status` (Haiku) | `transfer_screens_handle_comparison_prompt_action` | agrees |
+| 0x8f5080 | Listed as a link site only (clickable-names inventory) | `Transfers::build_transfers_screen` (Haiku) | `transfer_screens_build_transfers_screen` | no claim |
+| 0x8f6a10 | Listed as a link site only (clickable-names inventory) | `transfer_screens_set_staff_transfer_status_dialog` (Haiku) | `transfer_screens_build_transfer_status_screen` | no claim |
+| 0x8f7640 | Input of Set Staff Transfer Status (slow-screens) | `transfer_screens_handle_action` (Haiku) | `transfer_screens_handle_transfer_status_screen` | agrees |
+| 0x8f9a20 | Listed as a link site only (clickable-names inventory) | `transfer_screens_loan_bid_screen` (Haiku) | `transfer_screens_build_loan_bid_screen` | no claim |
+| 0x8fbcc0 | Listed as a link site only (clickable-names inventory) | `transfer_screens_loan_recall_guard` (Haiku) | `transfer_screens_open_end_loan_dialog` | no claim |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

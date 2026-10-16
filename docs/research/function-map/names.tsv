@@ -32,48 +32,48 @@ address	file	name	confidence	model	cited_in
 0x403760	Area.cpp	area_compute_link_position	medium	haiku	2026-10-13-input-inventory.md,2026-10-14-widescreen-inventory.md
 0x403a70	Area.cpp	area_move_clamped	high	haiku	2026-10-13-input-inventory.md,2026-10-14-widescreen-inventory.md
 0x403c80	Area.cpp	Area::draw_area_buttons	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
-0x403ee0	Area.cpp	area_scroll_to_position	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md
-0x4041d0	Area.cpp	Area::set_colour_masks	medium	haiku	2026-10-13-display-and-scrman-inventory.md
-0x404250	arg_prm.cpp	arg_prm_construct	high	haiku	
-0x404480	arg_prm.cpp	return_true_stub	medium	haiku	
-0x404490	arg_prm.cpp	arg_prm::`scalar deleting destructor'	medium	slot copy	
-0x4044b0	arg_prm.cpp	arg_prm::~arg_prm	high	haiku	
-0x404570	arg_prm.cpp	arg_prm::create_schedule	medium	slot copy	
-0x405540	arg_prm.cpp	arg_prm_load_league_teams	medium	haiku	
-0x405670	arg_prm.cpp	arg_prm::set_up_rules	medium	slot copy	
-0x405720	arg_prm.cpp	arg_prm::start_new_season	medium	slot copy	
-0x405950	arg_prm.cpp	arg_prm_build_team_list_pair	medium	haiku	
-0x405c50	arg_prm.cpp	arg_prm::add_result	medium	slot copy	
-0x405ca0	arg_prm.cpp	arg_prm::record_season_honours	medium	slot copy	
-0x405ef0	arg_prm.cpp	arg_prm_build_table_for_club_roster	medium	haiku	
-0x406570	arg_prm.cpp	arg_prm_rebuild_ranking_table	medium	haiku	
-0x4067f0	arg_prm.cpp	arg_prm::process_promotion_relegation_chain	medium	slot copy	
-0x4068d0	arg_prm.cpp	arg_prm_select_club_players_for_transfer_list	medium	haiku	
-0x406aa0	arg_prm.cpp	arg_prm_relegation_news_event	high	haiku	
-0x406b80	arg_prm.cpp	arg_prm_set_three_byte_fields	low	haiku	
-0x406bf0	arg_second.cpp	arg_second_screen_ctor	high	haiku	
-0x406e20	arg_second.cpp	arg_second::`scalar deleting destructor'	medium	slot copy	
-0x406e40	arg_second.cpp	arg_second_list_wrapper_dtor	medium	haiku	
-0x406f00	arg_second.cpp	arg_second::create_schedule	medium	slot copy	
-0x407cd0	arg_second.cpp	arg_second_allocate_and_fill_club_table	high	haiku	
-0x407e50	arg_second.cpp	arg_second::set_up_rules	medium	slot copy	
-0x407f00	arg_second.cpp	arg_second::start_new_season	medium	slot copy	
-0x4080c0	arg_second.cpp	arg_second_state_advance	medium	haiku	
-0x4081b0	arg_second.cpp	arg_second_build_tactic_pass_set	medium	haiku	
-0x408630	arg_second.cpp	cup_stage_setup	medium	haiku	
-0x408800	arg_second.cpp	cup_stage_create_or_assert	medium	haiku	
-0x408910	arg_second.cpp	cup_stage_pair_setup	medium	haiku	
-0x408cd0	arg_second.cpp	arg_second::update_staff_records_for_status	medium	slot copy	
-0x408eb0	arg_second.cpp	arg_second::record_season_honours	medium	slot copy	
-0x408ec0	arg_second.cpp	promotion_relegation_news_for_qualification_outcome	high	haiku	
-0x4093f0	arg_second.cpp	arg_second_build_club_name_table	medium	haiku	2026-10-16-crash-fixes.md
-0x409c20	arg_second.cpp	Table::merge_players_and_sort_ranking	medium	haiku	
-0x409fe0	arg_second.cpp	arg_second::set_predicted_positions	medium	slot copy	
-0x40a240	arg_second.cpp	comp_set_tactic_bytes_from_levels	medium	haiku	
-0x40a350	argentina_awards.cpp	argentina_awards_ctor	high	haiku	
-0x40a3e0	argentina_awards.cpp	argentina_awards::ctor_with_assert_fallback	high	haiku	
-0x40a550	argentina_awards.cpp	argentina_awards_forward_to_month_ratings	medium	haiku	
-0x40a560	argentina_awards.cpp	argentina_awards_handle_event	medium	haiku	
+0x403ee0	Area.cpp	Area::scroll_rows	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md
+0x4041d0	Area.cpp	Area::convert_colour_to_pixel_format	medium	opus	2026-10-13-display-and-scrman-inventory.md
+0x404250	arg_prm.cpp	ArgPrm::ArgPrm	high	opus	
+0x404480	arg_prm.cpp	ArgPrm::has_relegation	medium	opus	
+0x404490	arg_prm.cpp	ArgPrm::`scalar deleting destructor'	high	opus	
+0x4044b0	arg_prm.cpp	ArgPrm::~ArgPrm	high	opus	
+0x404570	arg_prm.cpp	ArgPrm::create_schedule	high	opus	
+0x405540	arg_prm.cpp	ArgPrm::create_table	high	opus	
+0x405670	arg_prm.cpp	ArgPrm::set_up_rules	high	opus	
+0x405720	arg_prm.cpp	ArgPrm::start_new_season	high	opus	
+0x405950	arg_prm.cpp	ArgPrm::create_stages	medium	opus	
+0x405c50	arg_prm.cpp	ArgPrm::add_result	high	opus	
+0x405ca0	arg_prm.cpp	ArgPrm::record_season_honours	high	opus	
+0x405ef0	arg_prm.cpp	ArgPrm::init_relegation_averages	high	opus	
+0x406570	arg_prm.cpp	ArgPrm::update_relegation_averages	high	opus	
+0x4067f0	arg_prm.cpp	ArgPrm::process_promotion_relegation_chain	high	opus	
+0x4068d0	arg_prm.cpp	arg_prm_swap_second_and_third_division_clubs	high	opus	
+0x406aa0	arg_prm.cpp	ArgPrm::build_fate_news_text	high	opus	
+0x406b80	arg_prm.cpp	ArgPrm::set_club_progress	high	opus	
+0x406bf0	arg_second.cpp	ArgSecond::ArgSecond	high	opus	
+0x406e20	arg_second.cpp	ArgSecond::`scalar deleting destructor'	high	opus	
+0x406e40	arg_second.cpp	ArgSecond::~ArgSecond	high	opus	
+0x406f00	arg_second.cpp	ArgSecond::create_schedule	high	opus	
+0x407cd0	arg_second.cpp	ArgSecond::fill_league_table	high	opus	
+0x407e50	arg_second.cpp	ArgSecond::set_up_rules	high	opus	
+0x407f00	arg_second.cpp	ArgSecond::start_new_season	high	opus	
+0x4080c0	arg_second.cpp	ArgSecond::advance_stage	high	opus	
+0x4081b0	arg_second.cpp	ArgSecond::create_zone_stages	medium	opus	
+0x408630	arg_second.cpp	ArgSecond::create_promotion_cup_stage	medium	opus	
+0x408800	arg_second.cpp	ArgSecond::create_promotion_cup_stage_fragment	medium	opus	
+0x408910	arg_second.cpp	ArgSecond::create_promotion_playoffs	medium	opus	
+0x408cd0	arg_second.cpp	ArgSecond::update_staff_records_for_status	high	opus	
+0x408eb0	arg_second.cpp	ArgSecond::record_season_honours	high	opus	
+0x408ec0	arg_second.cpp	ArgSecond::build_fate_news_text	high	opus	
+0x4093f0	arg_second.cpp	ArgSecond::init_relegation_averages	medium	opus	2026-10-16-crash-fixes.md
+0x409c20	arg_second.cpp	ArgSecond::update_relegation_averages	medium	opus	
+0x409fe0	arg_second.cpp	ArgSecond::set_predicted_positions	high	opus	
+0x40a240	arg_second.cpp	ArgSecond::set_club_progress	high	opus	
+0x40a350	argentina_awards.cpp	ArgentinaAwards::ArgentinaAwards	high	opus	
+0x40a3e0	argentina_awards.cpp	ArgentinaAwards::init_awards	high	opus	
+0x40a550	argentina_awards.cpp	ArgentinaAwards::daily_update	high	opus	
+0x40a560	argentina_awards.cpp	ArgentinaAwards::update_team_of_the_week	high	opus	
 0x40a580	argentina_rules.cpp	ARGENTINA_RULES::Argentina_rules	high	opus	2026-10-16-sweep-rulebooks.md
 0x40a5f0	argentina_rules.cpp	TRANSFER_RULES::rule_slot_5	low	opus	
 0x40a600	argentina_rules.cpp	TRANSFER_RULES::can_loan_player	high	opus	
@@ -142,27 +142,27 @@ address	file	name	confidence	model	cited_in
 0x410a50	asia_super_cup.cpp	AsiaSuperCup::select_teams	high	opus	2026-10-16-sweep-europe.md
 0x410c50	asia_super_cup.cpp	AsiaSuperCup::start_new_season	high	opus	
 0x410e20	asia_super_cup.cpp	AsiaSuperCup::update_for_date	high	opus	
-0x410e90	aus_nsl.cpp	aus_nsl_constructor	high	haiku	
-0x4110b0	aus_nsl.cpp	aus_nsl_return_three	medium	haiku	
-0x4110c0	aus_nsl.cpp	aus_nsl::`scalar deleting destructor'	medium	slot copy	
-0x4110e0	aus_nsl.cpp	aus_nsl_screen::~aus_nsl_screen	high	haiku	
-0x4111a0	aus_nsl.cpp	aus_nsl::create_schedule	medium	slot copy	
-0x411980	aus_nsl.cpp	aus_nsl::update_staff_records_for_status	medium	slot copy	
-0x411a30	aus_nsl.cpp	aus_nsl_playoff_qualify_message	high	haiku	
-0x411b70	aus_nsl.cpp	aus_nsl_allocate_and_assign_teams	medium	haiku	
-0x411ce0	aus_nsl.cpp	aus_nsl::set_up_rules	medium	slot copy	
-0x411d90	aus_nsl.cpp	aus_nsl::record_season_honours	medium	slot copy	
-0x411de0	aus_nsl.cpp	aus_nsl::start_new_season	medium	slot copy	
-0x411f70	aus_nsl.cpp	aus_nsl_assert_step	medium	haiku	
-0x412010	aus_nsl.cpp	aus_nsl_load_stage_or_assert	medium	haiku	
-0x412070	aus_nsl.cpp	nsl_validate_and_load_team_record	medium	haiku	
-0x4121c0	aus_nsl.cpp	aus_nsl::create_cup_stage_pair	medium	haiku	
-0x412380	aus_nsl.cpp	set_awards_tier_flags	medium	haiku	
-0x4124e0	aus_nsl.cpp	aus_nsl_set_player_flags_nibbles	low	haiku	
-0x412540	australia_awards.cpp	australia_awards_ctor	high	haiku	
-0x412680	australia_awards.cpp	AustraliaAwards::init_award_objects	high	haiku	2026-10-14-widescreen-inventory.md
-0x412ac0	australia_awards.cpp	australia_awards_thiscall_update	medium	haiku	
-0x412c20	australia_awards.cpp	australia_awards::vtable_slot_award_refresh	medium	haiku	
+0x410e90	aus_nsl.cpp	AusNsl::AusNsl	high	opus	
+0x4110b0	aus_nsl.cpp	AusNsl::get_table_layout_type	high	opus	
+0x4110c0	aus_nsl.cpp	AusNsl::`scalar deleting destructor'	high	opus	
+0x4110e0	aus_nsl.cpp	AusNsl::~AusNsl	high	opus	
+0x4111a0	aus_nsl.cpp	AusNsl::create_schedule	high	opus	
+0x411980	aus_nsl.cpp	AusNsl::update_staff_records_for_status	high	opus	
+0x411a30	aus_nsl.cpp	AusNsl::build_fate_news_text	high	opus	
+0x411b70	aus_nsl.cpp	AusNsl::create_table	high	opus	
+0x411ce0	aus_nsl.cpp	AusNsl::set_up_rules	high	opus	
+0x411d90	aus_nsl.cpp	AusNsl::record_season_honours	high	opus	
+0x411de0	aus_nsl.cpp	AusNsl::start_new_season	high	opus	
+0x411f70	aus_nsl.cpp	AusNsl::advance_stage	high	opus	
+0x412010	aus_nsl.cpp	AusNsl::create_finals_series_stage	high	opus	
+0x412070	aus_nsl.cpp	AusNsl::create_finals_series_stage_tail	medium	opus	
+0x4121c0	aus_nsl.cpp	AusNsl::create_grand_final_stage	high	opus	
+0x412380	aus_nsl.cpp	AusNsl::set_club_progress	high	opus	
+0x4124e0	aus_nsl.cpp	AusNsl::set_fixture_substitutes	high	opus	
+0x412540	australia_awards.cpp	AustraliaAwards::AustraliaAwards	high	opus	
+0x412680	australia_awards.cpp	AustraliaAwards::init_awards	high	opus	2026-10-14-widescreen-inventory.md
+0x412ac0	australia_awards.cpp	AustraliaAwards::daily_update	high	opus	
+0x412c20	australia_awards.cpp	AustraliaAwards::on_month_change	medium	opus	
 0x412c80	australia_rules.cpp	AUSTRALIA_RULES::Australia_rules	high	opus	2026-10-16-sweep-rulebooks.md
 0x412db0	australia_rules.cpp	AUSTRALIA_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md
 0x412dd0	australia_rules.cpp	AUSTRALIA_RULES::can_loan_player	high	opus	
@@ -4230,7 +4230,7 @@ address	file	name	confidence	model	cited_in
 0x7683a0	month_ratings.cpp	month_ratings_forward_if_present	medium	haiku	
 0x768290	nation_awards.cpp	NationAwards::NationAwards	high	opus	
 0x7682b0	nation_awards.cpp	NationAwards::~NationAwards	high	opus	
-0x768310	nation_awards.cpp	NationAwards::check_month_change	medium	opus	
+0x768310	nation_awards.cpp	NationAwards::daily_update	medium	opus	
 0x7683c0	nation_awards.cpp	nation_awards_sort_and_award_top_players	medium	haiku	
 0x768720	nation_awards.cpp	nation_awards_pick_top_three_with_lists	medium	haiku	
 0x768940	nation_awards.cpp	nation_awards_award_manager_of_year	medium	opus	
@@ -6263,151 +6263,151 @@ address	file	name	confidence	model	cited_in
 0x8d8e90	transfer_manager.cpp	TRANSFER_MANAGER::post_contract_response_news	medium	opus	
 0x8d9480	transfer_manager.cpp	TRANSFER_MANAGER::write_contract_response_news_text	high	opus	
 0x8da5e0	transfer_manager.cpp	TRANSFER_MANAGER::post_transfer_finalised_news	medium	opus	
-0x8da8f0	transfer_manager.cpp	news_post_transfer_story_text	high	haiku	
-0x8db3a0	transfer_manager.cpp	transfer_manager_post_transfer_news	medium	haiku	
-0x8db580	transfer_manager.cpp	transfer_manager_announce_fee_share_news	high	haiku	
-0x8db8a0	transfer_manager.cpp	transfer_manager_post_news_story	medium	haiku	
-0x8dba80	transfer_manager.cpp	news_item_builder_with_player_and_club_text	medium	haiku	
-0x8dbef0	transfer_manager.cpp	transfer_manager_build_news_story	medium	haiku	
-0x8dc370	transfer_manager.cpp	transfer_manager_write_news_item	high	haiku	
-0x8dd830	transfer_manager.cpp	news_transfer_collapsed_report	high	haiku	
-0x8dda90	transfer_manager.cpp	transfer_manager_send_offer_news	medium	haiku	
-0x8ddc70	transfer_manager.cpp	transfer_manager_delay_news	high	haiku	
-0x8de150	transfer_manager.cpp	transfer_manager_post_offer_news	medium	haiku	
-0x8de320	transfer_manager.cpp	transfer_manager_remove_part_exchange_player	high	haiku	
-0x8de790	transfer_manager.cpp	transfer_manager_send_transfer_news	medium	haiku	
-0x8de980	transfer_manager.cpp	news_post_collapsed_transfer_story	high	haiku	
-0x8df9b0	transfer_manager.cpp	transfer_manager_process_expiring_offers_contracts	medium	haiku	
-0x8dffe0	transfer_manager.cpp	transfer_manager_release_player_news	high	haiku	
-0x8e05a0	transfer_manager.cpp	transfer_manager_forward_to_news_slot	medium	haiku	
-0x8e05d0	transfer_manager.cpp	transfer_manager_build_transfer_news_story	medium	haiku	
-0x8e08e0	transfer_manager.cpp	transfer_manager_format_agreed_transfer_news	high	haiku	
-0x8e1150	transfer_manager.cpp	TRANSFER_MANAGER::send_transfer_news_report	medium	haiku	
-0x8e1370	transfer_manager.cpp	transfer_manager_post_news_message	medium	haiku	
-0x8e1780	transfer_manager.cpp	transfer_manager_post_rule_news	medium	haiku	
-0x8e19c0	transfer_manager.cpp	news_loan_offer_story	high	haiku	
-0x8e1f10	transfer_manager.cpp	transfer_manager_send_offer_news	medium	haiku	
-0x8e20a0	transfer_manager.cpp	news_loan_agreement_story_text	high	haiku	
-0x8e23d0	transfer_manager.cpp	transfer_manager_post_offer_news	medium	haiku	
-0x8e2570	transfer_manager.cpp	news_post_loan_cancelled_text	high	haiku	
-0x8e2a00	transfer_manager.cpp	transfer_manager_build_transfer_news_story	medium	haiku	
-0x8e2cd0	transfer_manager.cpp	TRANSFER_MANAGER::post_transfer_delay_news	high	haiku	
-0x8e3130	transfer_manager.cpp	transfer_manager_send_offer_news_items	medium	haiku	
-0x8e32c0	transfer_manager.cpp	news_work_permit_granted_text	high	haiku	
-0x8e35a0	transfer_manager.cpp	transfer_manager_send_offer_news	medium	haiku	
-0x8e3780	transfer_manager.cpp	transfer_manager_remove_part_exchange_player_news	high	haiku	
-0x8e3b80	transfer_manager.cpp	transfer_manager_news_work_permit_status	high	haiku	
-0x8e3db0	transfer_manager.cpp	transfer_manager_send_contract_expiry_news	medium	haiku	
-0x8e3f90	transfer_manager.cpp	news_release_clause_activated_text	high	haiku	
-0x8e4290	transfer_manager.cpp	transfer_manager_send_contract_expiry_news	medium	haiku	
-0x8e4460	transfer_manager.cpp	news_post_contract_offer_cancelled_text	high	haiku	
-0x8e4610	transfer_manager.cpp	transfer_manager_send_offer_news_story	medium	haiku	
-0x8e47a0	transfer_manager.cpp	transfer_manager_news_loan_offer_negotiation_text	medium	haiku	
-0x8e4ae0	transfer_manager.cpp	transfer_manager_build_reason_text	high	haiku	
-0x8e4f20	transfer_manager.cpp	transfer_manager_pay_sell_on_fees	medium	haiku	
-0x8e51d0	transfer_manager.cpp	transfer_manager_post_cut_news	medium	haiku	
-0x8e54d0	transfer_manager.cpp	compare_offer_keys_by_field_9_then_1	medium	haiku	
-0x8e54f0	transfer_manager.cpp	transfer_offer_compare_priority	medium	haiku	
-0x8e5540	transfer_manager.cpp	transfer_offer_sort_compare	medium	haiku	
-0x8e5590	transfer_manager.cpp	compare_transfer_sort_keys	low	haiku	2026-10-16-sweep-season-end.md
-0x8e55c0	transfer_manager.cpp	compare_optional_int_keys	medium	haiku	2026-10-16-sweep-season-end.md
-0x8e55f0	transfer_manager.cpp	transfer_offer_compare_by_date_then_player	medium	haiku	
-0x8e5680	transfer_manager.cpp	transfer_offer_date_zero_init	medium	haiku	
-0x8e56a0	transfer_manager.cpp	transfer_offer_wrapper_with_date_stamp	medium	haiku	
+0x8da8f0	transfer_manager.cpp	TRANSFER_MANAGER::write_transfer_finalised_news_text	high	opus	
+0x8db3a0	transfer_manager.cpp	TRANSFER_MANAGER::post_sale_percentage_news	high	opus	
+0x8db580	transfer_manager.cpp	TRANSFER_MANAGER::write_sale_percentage_news_text	high	opus	
+0x8db8a0	transfer_manager.cpp	TRANSFER_MANAGER::post_appearance_money_news	high	opus	
+0x8dba80	transfer_manager.cpp	TRANSFER_MANAGER::write_appearance_money_news_text	high	opus	
+0x8dbef0	transfer_manager.cpp	TRANSFER_MANAGER::post_transfer_completed_news	high	opus	
+0x8dc370	transfer_manager.cpp	TRANSFER_MANAGER::write_transfer_completed_news_text	high	opus	
+0x8dd830	transfer_manager.cpp	TRANSFER_MANAGER::write_funds_refused_news_text	high	opus	
+0x8dda90	transfer_manager.cpp	TRANSFER_MANAGER::post_transfer_delay_request_news	medium	opus	
+0x8ddc70	transfer_manager.cpp	TRANSFER_MANAGER::write_transfer_delay_request_news_text	high	opus	
+0x8de150	transfer_manager.cpp	TRANSFER_MANAGER::post_exchange_player_removed_news	high	opus	
+0x8de320	transfer_manager.cpp	TRANSFER_MANAGER::write_exchange_player_removed_news_text	high	opus	
+0x8de790	transfer_manager.cpp	TRANSFER_MANAGER::post_offer_collapsed_news	high	opus	
+0x8de980	transfer_manager.cpp	TRANSFER_MANAGER::write_offer_collapsed_news_text	high	opus	
+0x8df9b0	transfer_manager.cpp	TRANSFER_MANAGER::cancel_offers_for_released_player	high	opus	
+0x8dffe0	transfer_manager.cpp	TRANSFER_MANAGER::write_player_released_news_text	high	opus	
+0x8e05a0	transfer_manager.cpp	TRANSFER_MANAGER::write_deadline_news_text	high	opus	
+0x8e05d0	transfer_manager.cpp	TRANSFER_MANAGER::post_transfer_agreed_news	high	opus	
+0x8e08e0	transfer_manager.cpp	TRANSFER_MANAGER::write_transfer_agreed_news_text	high	opus	
+0x8e1150	transfer_manager.cpp	TRANSFER_MANAGER::post_offer_on_hold_news	high	opus	
+0x8e1370	transfer_manager.cpp	TRANSFER_MANAGER::write_offer_on_hold_news_text	high	opus	
+0x8e1780	transfer_manager.cpp	TRANSFER_MANAGER::post_loan_offer_news	high	opus	
+0x8e19c0	transfer_manager.cpp	TRANSFER_MANAGER::write_loan_offer_news_text	high	opus	
+0x8e1f10	transfer_manager.cpp	TRANSFER_MANAGER::post_loan_accepted_news	high	opus	
+0x8e20a0	transfer_manager.cpp	TRANSFER_MANAGER::write_loan_accepted_news_text	high	opus	
+0x8e23d0	transfer_manager.cpp	TRANSFER_MANAGER::post_loan_cancelled_news	medium	opus	
+0x8e2570	transfer_manager.cpp	TRANSFER_MANAGER::write_loan_cancelled_news_text	high	opus	
+0x8e2a00	transfer_manager.cpp	TRANSFER_MANAGER::post_work_permit_delay_news	high	opus	
+0x8e2cd0	transfer_manager.cpp	TRANSFER_MANAGER::write_work_permit_delay_news_text	high	opus	
+0x8e3130	transfer_manager.cpp	TRANSFER_MANAGER::post_work_permit_granted_news	high	opus	
+0x8e32c0	transfer_manager.cpp	TRANSFER_MANAGER::write_work_permit_granted_news_text	high	opus	
+0x8e35a0	transfer_manager.cpp	TRANSFER_MANAGER::post_exchange_player_permit_refused_news	high	opus	
+0x8e3780	transfer_manager.cpp	TRANSFER_MANAGER::write_exchange_player_permit_refused_news_text	high	opus	
+0x8e3b80	transfer_manager.cpp	TRANSFER_MANAGER::write_work_permit_renewal_news_text	high	opus	
+0x8e3db0	transfer_manager.cpp	TRANSFER_MANAGER::post_release_clause_activated_news	high	opus	
+0x8e3f90	transfer_manager.cpp	TRANSFER_MANAGER::write_release_clause_activated_news_text	high	opus	
+0x8e4290	transfer_manager.cpp	TRANSFER_MANAGER::post_contract_permit_refused_news	high	opus	
+0x8e4460	transfer_manager.cpp	TRANSFER_MANAGER::write_contract_permit_refused_news_text	high	opus	
+0x8e4610	transfer_manager.cpp	TRANSFER_MANAGER::post_loan_negotiation_news	high	opus	
+0x8e47a0	transfer_manager.cpp	TRANSFER_MANAGER::write_loan_negotiation_news_text	high	opus	
+0x8e4ae0	transfer_manager.cpp	transfer_manager_build_refusal_reasons_text	high	opus	
+0x8e4f20	transfer_manager.cpp	TRANSFER_MANAGER::pay_former_club_fee_cuts	medium	opus	
+0x8e51d0	transfer_manager.cpp	TRANSFER_MANAGER::write_former_club_fee_cut_news_text	high	opus	
+0x8e54d0	transfer_manager.cpp	transfer_manager_compare_next_sale_entries	high	opus	
+0x8e54f0	transfer_manager.cpp	transfer_manager_compare_past_transfers_by_fee	medium	opus	
+0x8e5540	transfer_manager.cpp	transfer_manager_compare_past_transfers_by_date	medium	opus	
+0x8e5590	transfer_manager.cpp	transfer_manager_compare_window_dates	medium	opus	2026-10-16-sweep-season-end.md
+0x8e55c0	transfer_manager.cpp	transfer_manager_compare_work_permit_entries	high	opus	2026-10-16-sweep-season-end.md
+0x8e55f0	transfer_manager.cpp	transfer_manager_compare_future_transfer_rows	medium	opus	
+0x8e5680	transfer_offer.cpp	TRANSFER_OFFER::TRANSFER_OFFER	high	opus	
+0x8e56a0	transfer_offer.cpp	TRANSFER_OFFER::TRANSFER_OFFER	medium	opus	
 0x8e5710	transfer_offer.cpp	TRANSFER_OFFER::~TRANSFER_OFFER	high	opus	
-0x8e5790	transfer_offer.cpp	transfer_offer_deserialise_list	high	haiku	
-0x8e5b30	transfer_offer.cpp	transfer_offer_serialise_pair	high	haiku	
-0x8e5d60	transfer_offer.cpp	transfer_offer_build_bid	medium	haiku	
-0x8e7810	transfer_offer.cpp	transfer_offer_init	high	haiku	
-0x8e78f0	transfer_offer.cpp	transfer_offer_init	high	haiku	
-0x8e7a70	transfer_offer.cpp	transfer_offer_fee_total	medium	haiku	
-0x8e7b50	transfer_offer.cpp	transfer_manager_offer_evaluate_player	medium	haiku	2026-10-16-crash-fixes.md
-0x8e7ef0	transfer_offer.cpp	transfer_offer_total_positive_fields	medium	haiku	
-0x8e7f10	transfer_offer.cpp	transfer_offer_status_lookup	medium	haiku	
-0x8e7f70	transfer_offer.cpp	transfer_offer_equivalent	medium	haiku	
-0x8e81a0	transfer_offer.cpp	transfer_offer_remove_entry	high	haiku	
-0x8e82f0	transfer_offer.cpp	transfer_offer_list_find_by_key	medium	haiku	
-0x8e8330	transfer_offer.cpp	transfer_offer_schedule_bid_timer	medium	haiku	
+0x8e5790	transfer_offer.cpp	TRANSFER_OFFER::load	high	opus	
+0x8e5b30	transfer_offer.cpp	TRANSFER_OFFER::save	high	opus	
+0x8e5d60	transfer_offer.cpp	TRANSFER_OFFER::build_bid	medium	opus	
+0x8e7810	transfer_offer.cpp	TRANSFER_OFFER::init_contract_offer	medium	opus	
+0x8e78f0	transfer_offer.cpp	TRANSFER_OFFER::init_transfer_offer	medium	opus	
+0x8e7a70	transfer_offer.cpp	TRANSFER_OFFER::get_total_value	high	opus	
+0x8e7b50	transfer_offer.cpp	TRANSFER_OFFER::get_weighted_value	medium	opus	2026-10-16-crash-fixes.md
+0x8e7ef0	transfer_offer.cpp	TRANSFER_OFFER::get_clause_total	high	opus	
+0x8e7f10	transfer_offer.cpp	TRANSFER_OFFER::get_player_talks_status	medium	opus	
+0x8e7f70	transfer_offer.cpp	TRANSFER_OFFER::has_same_terms	high	opus	
+0x8e81a0	transfer_offer.cpp	TRANSFER_OFFER::remove_exchange_player	high	opus	
+0x8e82f0	transfer_offer.cpp	TRANSFER_OFFER::find_exchange_player	high	opus	
+0x8e8330	transfer_offer.cpp	TRANSFER_OFFER::restructure_fee_into_clauses	medium	opus	
 0x8e84a0	transfer_offer.cpp	TRANSFER_RULES::TRANSFER_RULES	high	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
 0x8e8540	transfer_offer.cpp	TRANSFER_RULES::~TRANSFER_RULES	high	opus	
-0x8e8560	transfer_offer.cpp	transfer_offer_validate_squad_limits	medium	haiku	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
-0x8e8800	transfer_offer.cpp	transfer_offer_check_squad_limits	medium	haiku	2026-10-16-crash-fixes.md,2026-10-16-sweep-season-end.md
-0x8e8a60	transfer_offer.cpp	transfer_offer_eligibility_code	medium	haiku	2026-10-16-sweep-season-end.md
-0x8e8bd0	transfer_offer.cpp	contract_rollover_compute_month_year	medium	haiku	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
-0x8e8c40	transfer_offer.cpp	date_window_contains_offer_date	medium	haiku	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
+0x8e8560	transfer_offer.cpp	TRANSFER_RULES::can_sign_player	high	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
+0x8e8800	transfer_offer.cpp	TRANSFER_RULES::can_make_offer	high	opus	2026-10-16-crash-fixes.md,2026-10-16-sweep-season-end.md
+0x8e8a60	transfer_offer.cpp	TRANSFER_RULES::get_ineligibility_code	high	opus	2026-10-16-sweep-season-end.md
+0x8e8bd0	transfer_offer.cpp	TRANSFER_RULES::get_loan_period	high	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
+0x8e8c40	transfer_offer.cpp	transfer_window_contains_date	high	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
 0x8e8e50	transfer_offer.cpp	TRANSFER_RULES::find_open_window	high	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
-0x8e8ed0	transfer_offer.cpp	transfer_offer_deadline_check	low	haiku	2026-10-16-sweep-season-end.md
-0x8e9080	transfer_offer.cpp	transfer_offer_news_message	medium	haiku	2026-10-16-sweep-season-end.md
-0x8e91b0	transfer_offer.cpp	transfer_deadline_news_post	high	haiku	2026-10-16-sweep-season-end.md
-0x8e9350	transfer_offer.cpp	transfer_offer_screen_open	medium	haiku	
-0x8e9550	transfer_offer.cpp	transfer_offer_fill_screen_fields	medium	haiku	
-0x8e9760	transfer_screens.cpp	transfer_screens_build_bid_panel	high	haiku	2026-10-14-clickable-names-inventory.md,build-brief-0.3.0.md
-0x8ec420	transfer_screens.cpp	transfer_screens_handle_option_selection	medium	haiku	
-0x8eef60	transfer_screens.cpp	transfer_screens_build_transfer_offer_buttons	medium	haiku	
-0x8ef1e0	transfer_screens.cpp	transfer_screens_open_offer_screen	medium	haiku	
-0x8ef240	transfer_screens.cpp	transfer_screens_show_bid_dialog	high	haiku	
-0x8ef9f0	transfer_screens.cpp	transfer_screens_dispatch_action	medium	haiku	
-0x8efda0	transfer_screens.cpp	transfer_screens_reject_bid_dialog	high	haiku	
-0x8f06f0	transfer_screens.cpp	transfer_screens_resolve_bid_result	medium	haiku	
-0x8f0bc0	transfer_screens.cpp	show_transfer_offer_rejection_dialog	high	haiku	
-0x8f0e40	transfer_screens.cpp	staff_screens_open_transfer_list_for_player	medium	haiku	
-0x8f0f90	transfer_screens.cpp	transfer_screens_show_bid_cancelled_dialog	high	haiku	
-0x8f16c0	transfer_screens.cpp	transfer_offer_resolve_player_or_menu	low	haiku	
-0x8f1730	transfer_screens.cpp	transfer_screens_show_bid_screen	medium	haiku	
-0x8f1830	transfer_screens.cpp	transfer_screens_open_offer_or_compare_news	medium	haiku	
-0x8f1950	transfer_screens.cpp	transfer_screens_open_offer_response_screen	low	haiku	
-0x8f1a60	transfer_screens.cpp	transfer_screens_open_negotiation_screen	medium	haiku	
-0x8f1b40	transfer_screens.cpp	transfer_screens_open_offer_from_news	medium	haiku	
-0x8f1c30	transfer_screens.cpp	transfer_screens_show_transfer_offer_dialog	medium	haiku	
-0x8f2010	transfer_screens.cpp	transfer_screens_show_bid_delay_dialog	high	haiku	
-0x8f22c0	transfer_screens.cpp	transfer_screens_bid_action_dispatch	medium	haiku	
-0x8f2470	transfer_screens.cpp	transfer_screens_open_transfer_bid_screen	medium	haiku	
-0x8f24c0	transfer_screens.cpp	transfer_screens_show_bid_response	high	haiku	2026-10-14-clickable-names-inventory.md
-0x8f2800	transfer_screens.cpp	transfer_screens_handle_player_command	low	haiku	
-0x8f2870	transfer_screens.cpp	transfer_screens_open_confirm_dialog	medium	haiku	
-0x8f28c0	transfer_screens.cpp	transfer_screens_remove_bid_confirm_dialog	high	haiku	
-0x8f2b90	transfer_screens.cpp	transfer_screens_accept_delayed_bid_offer	medium	haiku	
-0x8f2d20	transfer_screens.cpp	transfer_screens_open_confirm_or_bid_screen	medium	haiku	
-0x8f2e10	transfer_screens.cpp	open_transfer_confirm_screen	high	haiku	
-0x8f2ec0	transfer_screens.cpp	Transfer_Screens::show_transfer_offer_dialog	high	haiku	
-0x8f3c70	transfer_screens.cpp	transfer_screens_handle_action	medium	haiku	
-0x8f4160	transfer_screens.cpp	transfer_screens_open_comparison_screen	medium	haiku	2026-10-16-comparison-screen-inventory.md
-0x8f41b0	transfer_screens.cpp	transfer_screens_open_comparison_screen	high	haiku	2026-10-16-comparison-screen-inventory.md,build-brief-0.4.0.md
-0x8f4210	transfer_screens.cpp	transfer_screens_compare_prompt_dialog	high	haiku	2026-10-16-comparison-screen-inventory.md
-0x8f44d0	transfer_screens.cpp	transfer_screens_dispatch_by_status	medium	haiku	2026-10-16-comparison-screen-inventory.md
-0x8f4650	transfer_screens.cpp	transfer_screens_shortlist_dialog	high	haiku	
-0x8f48b0	transfer_screens.cpp	transfer_screens_submit_bid	medium	haiku	
-0x8f4c70	transfer_screens.cpp	transfer_screens_open_withdraw_screen	medium	haiku	
-0x8f4cb0	transfer_screens.cpp	transfer_screens_withdraw_bid_dialog	high	haiku	
-0x8f4ed0	transfer_screens.cpp	transfer_screens_dispatch_player_action	medium	haiku	
-0x8f4fa0	transfer_screens.cpp	transfer_screens_open_transfers_screen	high	haiku	
-0x8f5080	transfer_screens.cpp	Transfers::build_transfers_screen	high	haiku	2026-10-14-clickable-names-inventory.md
-0x8f5f40	transfer_screens.cpp	transfer_screens_handle_calendar_key	medium	haiku	
-0x8f6690	transfer_screens.cpp	transfer_screens_close_panel_slot_4	medium	haiku	
-0x8f66d0	transfer_screens.cpp	transfer_screens_show_news_item_contract	medium	haiku	
-0x8f6770	transfer_screens.cpp	transfer_screens_open_contract_negotiation_screen	medium	haiku	
-0x8f6a10	transfer_screens.cpp	transfer_screens_set_staff_transfer_status_dialog	high	haiku	2026-10-14-clickable-names-inventory.md,2026-10-16-slow-screens.md
-0x8f7640	transfer_screens.cpp	transfer_screens_handle_action	medium	haiku	2026-10-16-slow-screens.md
-0x8f8120	transfer_screens.cpp	transfer_screens_open_transfer_list_screen	medium	haiku	
-0x8f8170	transfer_screens.cpp	transfer_screens_show_list_confirm_dialog	high	haiku	
-0x8f8450	transfer_screens.cpp	shortlist_or_transfer_action_dispatch	medium	haiku	
-0x8f8630	transfer_screens.cpp	transfer_screens_open_release_dialog	medium	haiku	
-0x8f8670	transfer_screens.cpp	transfer_screens_release_player_dialog	high	haiku	
-0x8f8b00	transfer_screens.cpp	transfer_screens_handle_player_action	medium	haiku	
-0x8f8be0	transfer_screens.cpp	transfer_screens_open_offer_trial_screen	high	haiku	
-0x8f8c30	transfer_screens.cpp	transfer_screens_offer_trial_dialog	high	haiku	
-0x8f9080	transfer_screens.cpp	transfer_screens_loan_duration_option_setup	medium	haiku	
-0x8f93b0	transfer_screens.cpp	transfer_screens_loan_offer_assert_and_open	medium	haiku	
-0x8f9690	transfer_screens.cpp	transfer_screens_loan_offer_open	high	haiku	
-0x8f9a20	transfer_screens.cpp	transfer_screens_loan_bid_screen	high	haiku	2026-10-14-clickable-names-inventory.md
-0x8fac30	transfer_screens.cpp	transfer_screens_handle_key_action	medium	haiku	
-0x8fb530	transfer_screens.cpp	open_loan_offer_screen	medium	haiku	
-0x8fb5e0	transfer_screens.cpp	transfer_screens_open_screen_with_args	medium	haiku	
-0x8fb6a0	transfer_screens.cpp	show_loan_offer_confirmation_dialog	high	haiku	
-0x8fb9e0	transfer_screens.cpp	transfer_screens_confirm_loan_offer	medium	haiku	
-0x8fbcc0	transfer_screens.cpp	transfer_screens_loan_recall_guard	high	haiku	2026-10-14-clickable-names-inventory.md
-0x8fbdf0	transfer_screens.cpp	loan_terminate_or_recall_dialog	high	haiku	
-0x8fc0e0	transfer_screens.cpp	loan_recall_or_terminate_dispatch	medium	haiku	
+0x8e8ed0	transfer_offer.cpp	TRANSFER_RULES::get_days_until_window_closes	medium	opus	2026-10-16-sweep-season-end.md
+0x8e9080	transfer_offer.cpp	TRANSFER_RULES::post_deadline_news	high	opus	2026-10-16-sweep-season-end.md
+0x8e91b0	transfer_offer.cpp	TRANSFER_RULES::write_deadline_news_text	high	opus	2026-10-16-sweep-season-end.md
+0x8e9350	transfer_screens.cpp	transfer_screens_open_bid_screen_for_player	high	opus	
+0x8e9550	transfer_screens.cpp	transfer_screens_open_bid_screen_for_offer	high	opus	
+0x8e9760	transfer_screens.cpp	transfer_screens_build_bid_screen	high	opus	2026-10-14-clickable-names-inventory.md,build-brief-0.3.0.md
+0x8ec420	transfer_screens.cpp	transfer_screens_handle_bid_screen_action	high	opus	
+0x8eef60	transfer_screens.cpp	transfer_screens_refresh_bid_total_and_buttons	medium	opus	
+0x8ef1e0	transfer_screens.cpp	transfer_screens_open_bid_confirm_dialog	high	opus	
+0x8ef240	transfer_screens.cpp	transfer_screens_build_bid_confirm_dialog	high	opus	
+0x8ef9f0	transfer_screens.cpp	transfer_screens_handle_bid_confirm_action	high	opus	
+0x8efda0	transfer_screens.cpp	transfer_screens_build_reject_bid_dialog	high	opus	
+0x8f06f0	transfer_screens.cpp	transfer_screens_handle_reject_bid_action	high	opus	
+0x8f0bc0	transfer_screens.cpp	transfer_screens_build_offer_must_accept_dialog	high	opus	
+0x8f0e40	transfer_screens.cpp	transfer_screens_open_cannot_sign_dialog	high	opus	
+0x8f0f90	transfer_screens.cpp	transfer_screens_build_cannot_sign_dialog	high	opus	
+0x8f16c0	transfer_screens.cpp	transfer_screens_handle_back_dialog_action	high	opus	
+0x8f1730	transfer_screens.cpp	transfer_screens_news_respond_bid_action	high	opus	
+0x8f1830	transfer_screens.cpp	transfer_screens_news_respond_counter_offer_action	high	opus	
+0x8f1950	transfer_screens.cpp	transfer_screens_news_offer_contract_action	high	opus	
+0x8f1a60	transfer_screens.cpp	transfer_screens_news_respond_delay_request_action	high	opus	
+0x8f1b40	transfer_screens.cpp	transfer_screens_news_renegotiate_bid_action	high	opus	
+0x8f1c30	transfer_screens.cpp	transfer_screens_news_respond_loan_bid_action	high	opus	
+0x8f2010	transfer_screens.cpp	transfer_screens_build_delay_request_dialog	high	opus	
+0x8f22c0	transfer_screens.cpp	transfer_screens_handle_delay_request_action	high	opus	
+0x8f2470	transfer_screens.cpp	transfer_screens_open_offer_changed_screen	high	opus	
+0x8f24c0	transfer_screens.cpp	transfer_screens_build_offer_changed_screen	high	opus	2026-10-14-clickable-names-inventory.md
+0x8f2800	transfer_screens.cpp	transfer_screens_handle_offer_changed_action	high	opus	
+0x8f2870	transfer_screens.cpp	transfer_screens_open_remove_exchange_player_dialog	high	opus	
+0x8f28c0	transfer_screens.cpp	transfer_screens_build_remove_exchange_player_dialog	high	opus	
+0x8f2b90	transfer_screens.cpp	transfer_screens_handle_remove_exchange_player_action	high	opus	
+0x8f2d20	transfer_screens.cpp	transfer_screens_news_confirm_transfer_action	high	opus	
+0x8f2e10	transfer_screens.cpp	transfer_screens_open_confirm_transfer_screen	high	opus	
+0x8f2ec0	transfer_screens.cpp	transfer_screens_build_confirm_transfer_screen	high	opus	
+0x8f3c70	transfer_screens.cpp	transfer_screens_handle_confirm_transfer_action	high	opus	
+0x8f4160	transfer_screens.cpp	transfer_screens_open_shortlist_dialog	high	opus	2026-10-16-comparison-screen-inventory.md
+0x8f41b0	transfer_screens.cpp	transfer_screens_open_comparison_prompt	high	opus	2026-10-16-comparison-screen-inventory.md,build-brief-0.4.0.md
+0x8f4210	transfer_screens.cpp	transfer_screens_build_comparison_prompt	high	opus	2026-10-16-comparison-screen-inventory.md
+0x8f44d0	transfer_screens.cpp	transfer_screens_handle_comparison_prompt_action	high	opus	2026-10-16-comparison-screen-inventory.md
+0x8f4650	transfer_screens.cpp	transfer_screens_build_shortlist_dialog	high	opus	
+0x8f48b0	transfer_screens.cpp	transfer_screens_handle_shortlist_dialog	medium	opus	
+0x8f4c70	transfer_screens.cpp	transfer_screens_open_withdraw_bid_dialog	high	opus	
+0x8f4cb0	transfer_screens.cpp	transfer_screens_build_withdraw_bid_dialog	high	opus	
+0x8f4ed0	transfer_screens.cpp	transfer_screens_handle_withdraw_bid_dialog	high	opus	
+0x8f4fa0	transfer_screens.cpp	transfer_screens_open_transfers_screen	high	opus	
+0x8f5080	transfer_screens.cpp	transfer_screens_build_transfers_screen	high	opus	2026-10-14-clickable-names-inventory.md
+0x8f5f40	transfer_screens.cpp	transfer_screens_handle_transfers_screen	high	opus	
+0x8f6690	transfer_screens.cpp	transfer_screens_close_transfers_screen	high	opus	
+0x8f66d0	transfer_screens.cpp	transfer_screens_open_transfer_status_from_news	high	opus	
+0x8f6770	transfer_screens.cpp	transfer_screens_open_transfer_status_screen	high	opus	
+0x8f6a10	transfer_screens.cpp	transfer_screens_build_transfer_status_screen	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-16-slow-screens.md
+0x8f7640	transfer_screens.cpp	transfer_screens_handle_transfer_status_screen	high	opus	2026-10-16-slow-screens.md
+0x8f8120	transfer_screens.cpp	transfer_screens_open_transfer_list_dialog	high	opus	
+0x8f8170	transfer_screens.cpp	transfer_screens_build_transfer_list_dialog	high	opus	
+0x8f8450	transfer_screens.cpp	transfer_screens_handle_transfer_list_dialog	high	opus	
+0x8f8630	transfer_screens.cpp	transfer_screens_open_release_dialog	high	opus	
+0x8f8670	transfer_screens.cpp	transfer_screens_build_release_dialog	high	opus	
+0x8f8b00	transfer_screens.cpp	transfer_screens_handle_release_dialog	high	opus	
+0x8f8be0	transfer_screens.cpp	transfer_screens_open_offer_trial_dialog	high	opus	
+0x8f8c30	transfer_screens.cpp	transfer_screens_build_offer_trial_dialog	high	opus	
+0x8f9080	transfer_screens.cpp	transfer_screens_handle_offer_trial_dialog	high	opus	
+0x8f93b0	transfer_screens.cpp	transfer_screens_open_loan_bid_from_news	medium	opus	
+0x8f9690	transfer_screens.cpp	transfer_screens_open_loan_bid_screen	high	opus	
+0x8f9a20	transfer_screens.cpp	transfer_screens_build_loan_bid_screen	high	opus	2026-10-14-clickable-names-inventory.md
+0x8fac30	transfer_screens.cpp	transfer_screens_handle_loan_bid_screen	high	opus	
+0x8fb530	transfer_screens.cpp	transfer_screens_open_confirm_trial_offer	high	opus	
+0x8fb5e0	transfer_screens.cpp	transfer_screens_open_confirm_loan_offer	high	opus	
+0x8fb6a0	transfer_screens.cpp	transfer_screens_build_confirm_offer_dialog	high	opus	
+0x8fb9e0	transfer_screens.cpp	transfer_screens_handle_confirm_offer_dialog	high	opus	
+0x8fbcc0	transfer_screens.cpp	transfer_screens_open_end_loan_dialog	high	opus	2026-10-14-clickable-names-inventory.md
+0x8fbdf0	transfer_screens.cpp	transfer_screens_build_end_loan_dialog	high	opus	
+0x8fc0e0	transfer_screens.cpp	transfer_screens_handle_end_loan_dialog	high	opus	
 0x8fc3b0	tur_cup.cpp	Tur_cup::Tur_cup	high	haiku	
 0x8fc580	tur_cup.cpp	tur_cup::`scalar deleting destructor'	medium	slot copy	
 0x8fc5a0	tur_cup.cpp	cup_screen_dtor_body	high	haiku	
@@ -6828,7 +6828,7 @@ address	file	name	confidence	model	cited_in
 0x92fb40	world_cup.cpp	WorldCup::get_qualification_status_change	medium	opus	
 0x92fc10	world_cup_awards.cpp	WorldCupAwards::WorldCupAwards	high	opus	
 0x92fc80	world_cup_awards.cpp	WorldCupAwards::init_awards	high	opus	
-0x92fdf0	world_cup_awards.cpp	WorldCupAwards::check_month_change	high	opus	
+0x92fdf0	world_cup_awards.cpp	WorldCupAwards::daily_update	high	opus	
 0x92fe80	year_award.cpp	YEAR_AWARD::YEAR_AWARD	high	opus	
 0x92ff60	year_award.cpp	year_award::scalar_deleting_destructor	high	haiku	
 0x92ff80	year_award.cpp	year_award::~year_award	high	haiku	
