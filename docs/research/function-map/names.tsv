@@ -176,69 +176,69 @@ address	file	name	confidence	model	cited_in
 0x4134c0	award_manager.cpp	AWARD_MANAGER::process_fixture	high	opus	
 0x413540	award_manager.cpp	AWARD_MANAGER::process_date	high	opus	2026-10-14-game-creation-inventory.md
 0x4135b0	award_manager.cpp	AWARD_MANAGER::create_nation_awards	high	opus	
-0x413fe0	award_manager.cpp	award_manager_load_awards_dat	high	haiku	
-0x4141a0	award_manager.cpp	Award_Manager::save_awards_dat	medium	haiku	
-0x4142c0	award_manager.cpp	award_manager_forward_three_args	medium	haiku	
-0x4142e0	award_manager.cpp	award_manager_forward_to_fifa_rankings_0058f120	low	haiku	
-0x414300	award_manager.cpp	award_manager_forward_three_args	medium	haiku	
-0x414320	award_manager.cpp	award_manager_forward_two_args	low	haiku	
-0x414340	award_manager.cpp	award_manager_find_award_by_id	medium	haiku	
-0x4143f0	award_manager.cpp	award_manager_dispatch_vote_slot	low	haiku	
-0x414420	award_manager.cpp	award_manager_notify_shortlist_or_vote	high	haiku	
-0x4147f0	award_manager.cpp	award_list_push	high	haiku	
-0x4148e0	award_manager.cpp	award_manager_set_slot	high	haiku	
-0x414950	award_manager.cpp	award_manager_assert_fail	high	haiku	
-0x4149a0	award_manager.cpp	award_manager_slot_lookup	medium	haiku	
-0x414a60	award_screens.cpp	award_lookup_by_id	medium	haiku	
-0x414ac0	award_screens.cpp	award_lookup_by_id	medium	haiku	
-0x414b20	award_screens.cpp	award_is_post_2000_record	medium	haiku	
-0x414b40	award_screens.cpp	award_is_competition_or_nationality_match	medium	haiku	
-0x414c20	award_screens.cpp	award_screens_assert_or_show_award	medium	haiku	
-0x414cf0	award_screens.cpp	award_screens_show_awards_page	high	haiku	
-0x415600	award_screens.cpp	award_show_message_box_area	medium	haiku	
-0x415640	award_screens.cpp	award_screens_add_text_item	medium	haiku	
-0x4156a0	award_screens.cpp	award_screens_build_winners_list	high	haiku	
-0x415f60	award_screens.cpp	award_screens_draw_award_page	high	haiku	
-0x416570	award_screens.cpp	award_screens_render_nominee_rows	medium	haiku	
-0x416960	award_screens.cpp	award_screens_handle_input	medium	haiku	
-0x416cb0	award_screens.cpp	award_screens_open_selected_entry	medium	haiku	
-0x416d50	award_screens.cpp	award_screens_assert_or_open_shortlist	high	haiku	
-0x416e40	award_screens.cpp	award_nominations_screen_show	high	haiku	
-0x4172f0	award_shortlist.cpp	award_shortlist_row_action	medium	haiku	
-0x417440	award_shortlist.cpp	award_shortlist_init_from_source	high	haiku	
-0x417590	award_shortlist.cpp	award_shortlist_read_record	high	haiku	
-0x417720	award_shortlist.cpp	award_shortlist_read_record	medium	haiku	
-0x4178a0	award_shortlist.cpp	award_shortlist_add_entry	high	haiku	
-0x417a20	award_shortlist.cpp	award_shortlist_build_news_entries	medium	haiku	
+0x413fe0	award_manager.cpp	AWARD_MANAGER::load	high	opus	
+0x4141a0	award_manager.cpp	AWARD_MANAGER::save	high	opus	
+0x4142c0	award_manager.cpp	AWARD_MANAGER::add_year_award_record	medium	opus	
+0x4142e0	award_manager.cpp	AWARD_MANAGER::get_year_award_records	medium	opus	
+0x414300	award_manager.cpp	AWARD_MANAGER::add_team_award_record	medium	opus	
+0x414320	award_manager.cpp	AWARD_MANAGER::get_team_award_records	medium	opus	
+0x414340	award_manager.cpp	AWARD_MANAGER::find_nation_awards	high	opus	
+0x4143f0	award_manager.cpp	AWARD_MANAGER::write_award_news	high	opus	
+0x414420	award_manager.cpp	AWARD_MANAGER::write_shortlist_news	high	opus	
+0x4147f0	award_manager.cpp	AWARD_MANAGER::add_shortlist	high	opus	
+0x4148e0	award_manager.cpp	AWARD_MANAGER::set_pending_vote	medium	opus	
+0x414950	award_manager.cpp	award_manager_set_pending_vote_error_tail	high	opus	
+0x4149a0	award_manager.cpp	AWARD_MANAGER::get_pending_vote	medium	opus	
+0x414a60	award_screens.cpp	AWARD_MANAGER::find_award_by_staff_comp	high	opus	
+0x414ac0	award_screens.cpp	AWARD_MANAGER::find_award_by_club_comp	high	opus	
+0x414b20	award_screens.cpp	award_rating_filter_reputation_over_2000	high	opus	
+0x414b40	award_screens.cpp	award_rating_filter_selected_nations	medium	opus	
+0x414c20	award_screens.cpp	award_screens_open_award_screen	high	opus	
+0x414cf0	award_screens.cpp	award_screen_draw	high	opus	
+0x415600	award_screens.cpp	award_screens_add_menu_area	medium	opus	
+0x415640	award_screens.cpp	award_screens_add_menu_item	medium	opus	
+0x4156a0	award_screens.cpp	award_screen_draw_year_award	high	opus	
+0x415f60	award_screens.cpp	award_screen_draw_team_award	high	opus	
+0x416570	award_screens.cpp	award_screen_draw_team_award_fragment	high	opus	
+0x416960	award_screens.cpp	award_screen_handle_action	high	opus	
+0x416cb0	award_screens.cpp	award_screens_open_nominations_from_news	medium	opus	
+0x416d50	award_screens.cpp	award_screens_open_nominations_screen	high	opus	
+0x416e40	award_screens.cpp	award_nominations_screen_draw	high	opus	
+0x4172f0	award_screens.cpp	award_nominations_screen_handle_action	high	opus	
+0x417440	award_shortlist.cpp	AWARD_SHORTLIST::AWARD_SHORTLIST	high	opus	
+0x417590	award_shortlist.cpp	AWARD_SHORTLIST::load	high	opus	
+0x417720	award_shortlist.cpp	AWARD_SHORTLIST::save	high	opus	
+0x4178a0	award_shortlist.cpp	AWARD_SHORTLIST::add_entry	high	opus	
+0x417a20	award_shortlist.cpp	AWARD_SHORTLIST::announce	medium	opus	
 0x417c10	award_shortlist.cpp	Date::operator=	high	opus	2026-10-13-database-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md
-0x417c50	award_shortlist.cpp	award_shortlist_build_candidates	medium	haiku	
-0x417fe0	award_shortlist.cpp	award_shortlist_lookup_slot	medium	haiku	
-0x418140	award_shortlist.cpp	award_shortlist_eligibility_check	high	haiku	
-0x418320	award_shortlist.cpp	award_shortlist_reset_slots	medium	haiku	
-0x418340	award_shortlist.cpp	award_shortlist_compare_players	medium	haiku	
-0x4183f0	award_shortlist.cpp	compare_float_field_at_offset_8	medium	haiku	
-0x418420	award_shortlist.cpp	compare_short_field_0c	low	haiku	
-0x418440	award_shortlist.cpp	award_shortlist_load_or_init	medium	haiku	2026-10-14-game-creation-inventory.md
-0x4185f0	award_shortlist.cpp	awol_record_release	medium	haiku	
-0x418670	award_shortlist.cpp	award_shortlist_load_awol_dat	high	haiku	
-0x418980	awol.cpp	awol_dat_load	high	haiku	
+0x417c50	award_shortlist.cpp	AWARD_SHORTLIST::pick_winners	medium	opus	
+0x417fe0	award_shortlist.cpp	AWARD_SHORTLIST::cast_vote	high	opus	
+0x418140	award_shortlist.cpp	AWARD_SHORTLIST::get_vote_status	high	opus	
+0x418320	award_shortlist.cpp	AWARD_SHORTLIST::clear	high	opus	
+0x418340	award_shortlist.cpp	award_shortlist_compare_by_name	high	opus	
+0x4183f0	award_shortlist.cpp	award_shortlist_compare_by_score	high	opus	
+0x418420	award_shortlist.cpp	award_shortlist_compare_by_votes	high	opus	
+0x418440	awol.cpp	AWOL::AWOL	high	opus	2026-10-14-game-creation-inventory.md
+0x4185f0	awol.cpp	AWOL::~AWOL	high	opus	
+0x418670	awol.cpp	AWOL::load	high	opus	
+0x418980	awol.cpp	AWOL::save	high	opus	
 0x418f60	awol.cpp	AWOL::is_player_awol	medium	opus	
-0x418ff0	awol.cpp	awol_check_player_flag_and_resolve	medium	haiku	
-0x419070	awol.cpp	awol_find_record_in_list_by_id	low	haiku	
-0x4190d0	awol.cpp	background_staff_wage_and_morale_tick	medium	haiku	
-0x4196a0	awol.cpp	remove_object_from_list_by_flag	medium	haiku	
-0x419710	awol.cpp	background_toggle_player_flag	medium	haiku	
-0x4197c0	awol.cpp	awol_clear_flag_and_remove_entry	medium	haiku	
-0x419840	awol.cpp	awol_player_absence_start	medium	haiku	
-0x419ad0	awol.cpp	awol_send_transfer_news	medium	haiku	
-0x419c60	awol.cpp	news_player_awol_story	high	haiku	
-0x41a360	awol.cpp	awol_player_check_and_apply	medium	haiku	
-0x41a630	awol.cpp	awol_fill_news_fields	medium	haiku	
-0x41a8e0	awol.cpp	news_staff_training_absence	high	haiku	
-0x41add0	awol.cpp	award_shortlist_news_event	low	haiku	
-0x41b030	awol.cpp	awol_fitness_news_story	medium	haiku	
-0x41b3d0	background.cpp	setup_background_system	high	haiku	2026-10-14-start-screen-helpers.md
-0x41b8c0	background.cpp	setup_background_system_add_picture	high	haiku	2026-10-14-start-screen-helpers.md,background.c
+0x418ff0	awol.cpp	AWOL::has_missed_training	medium	opus	
+0x419070	awol.cpp	AWOL::has_fitness_incident	medium	opus	
+0x4190d0	awol.cpp	AWOL::daily_update	medium	opus	
+0x4196a0	awol.cpp	AWOL::clear_awol	high	opus	
+0x419710	awol.cpp	AWOL::end_absence	high	opus	
+0x4197c0	awol.cpp	AWOL::clear_missed_training	high	opus	
+0x419840	awol.cpp	AWOL::start_absence	high	opus	
+0x419ad0	awol.cpp	awol_post_news	high	opus	
+0x419c60	awol.cpp	write_awol_news_text	high	opus	
+0x41a360	awol.cpp	AWOL::miss_training	medium	opus	
+0x41a630	awol.cpp	awol_post_missed_training_news	high	opus	
+0x41a8e0	awol.cpp	write_missed_training_news_text	high	opus	
+0x41add0	awol.cpp	AWOL::report_poor_fitness	medium	opus	
+0x41b030	awol.cpp	write_fitness_worry_news_text	high	opus	
+0x41b3d0	background.cpp	setup_background_system	high	opus	2026-10-14-start-screen-helpers.md
+0x41b8c0	background.cpp	background_add_picture	high	opus	2026-10-14-start-screen-helpers.md,background.c
 0x41bad0	background.cpp	background_free_config_tables	high	opus	
 0x41bc20	background.cpp	verify_background_config	high	opus	
 0x41bf80	background.cpp	background_set_pictures_disabled	medium	opus	
@@ -557,124 +557,124 @@ address	file	name	confidence	model	cited_in
 0x43f4c0	cash.cpp	Cash::set_from_display	high	opus	
 0x43f4e0	cash.cpp	Cash::step_up	high	opus	2026-10-16-slow-screens.md
 0x43f580	cash.cpp	Cash::step_down	high	opus	2026-10-16-slow-screens.md
-0x43f620	cash.cpp	Cash_set_fn_ret_range_or_assert	medium	haiku	
-0x43f720	cash.cpp	cash_amount_store_or_assert	medium	haiku	
-0x43f7f0	cash.cpp	cash_format_setup_currency_table	high	haiku	
-0x4415e0	cash.cpp	get_cash_flag	medium	haiku	
-0x4415f0	cash.cpp	cash_currency_name_copy	high	haiku	
+0x43f620	cash.cpp	Cash::set_from_preset_index	high	opus	
+0x43f720	cash.cpp	Cash::set_from_amount_table	high	opus	
+0x43f7f0	cash.cpp	cash_set_currency	high	opus	
+0x4415e0	cash.cpp	cash_get_currency	high	opus	
+0x4415f0	cash.cpp	cash_get_currency_name	high	opus	
 0x441c10	cash.cpp	cash_format_money	high	opus	
-0x442070	cash.cpp	format_string_sprintf_then_replace_spaces	medium	haiku	
-0x4426e0	cash.cpp	cash_round_to_bracket	medium	haiku	
-0x442ab0	club_history.cpp	Club_History::open_history_files	high	haiku	2026-10-14-game-creation-inventory.md
-0x442e20	club_history.cpp	club_history_free_buffers	high	haiku	
-0x442e80	club_history.cpp	club_history_apply_season_records	medium	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
-0x443380	club_history.cpp	club_history_load_or_report_error	medium	haiku	
-0x443520	club_history.cpp	club_history_build_list	medium	haiku	
-0x443770	club_history.cpp	club_history_collect_unique_clubs	medium	haiku	
-0x443a20	club_history.cpp	club_history_collect_unique_ids	medium	haiku	
-0x443cd0	club_history.cpp	club_history::load_from_archive	high	haiku	
-0x443f50	club_history.cpp	Club_History::save_dat	medium	haiku	
-0x444190	club_history.cpp	club_history_find_player_record	medium	haiku	2026-10-15-team-views-frame-inventory.md
-0x444500	club_history.cpp	club_history_compare_ints	low	haiku	
-0x444520	club_records.cpp	Club_Records::load_from_cd_or_temp	high	haiku	2026-10-14-game-creation-inventory.md
-0x4448a0	club_records.cpp	club_records_release_buffers	medium	haiku	
-0x444930	club_records.cpp	club_records::update_player_records_for_match	high	haiku	
-0x447430	club_records.cpp	club_records_update_season_records	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
-0x447880	club_records.cpp	Club_records::update_club_records_from_season	medium	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
-0x448110	club_records.cpp	ClubRecord::copy_from	high	haiku	
-0x448170	club_records.cpp	club_record_copy_assign	medium	haiku	
-0x4481b0	club_records.cpp	club_records_cleanup_funclet_0x4481b0	medium	haiku	
-0x448230	club_records.cpp	club_record_copy_assign	medium	haiku	
-0x448260	club_records.cpp	club_records_reset_fields	medium	haiku	
-0x448490	club_records.cpp	club_record_entry_copy_assign	medium	haiku	
-0x4484d0	club_records.cpp	club_record_copy_assign	medium	haiku	
-0x448500	club_records.cpp	club_record_copy_assign	medium	haiku	
-0x448530	club_records.cpp	copy_record_header_and_sub_object	medium	haiku	
-0x448550	club_records.cpp	club_record_assign	medium	haiku	
-0x4485b0	club_records.cpp	club_record_year_field_assign	medium	haiku	
-0x4485d0	club_records.cpp	club_record_copy_date_state	medium	haiku	
-0x448620	club_records.cpp	club_record_date_reset	medium	haiku	
-0x448670	club_records.cpp	club_record_date_reset	low	haiku	
-0x4486c0	club_records.cpp	club_transfer_affordable_check	medium	haiku	
-0x448760	club_records.cpp	club_record_match_result_update	medium	haiku	
-0x448ad0	club_records.cpp	club_records_apply_transfer_fee_and_record	medium	haiku	
-0x448cb0	club_records.cpp	player_stats_record_best_values	medium	haiku	
-0x448e30	club_records.cpp	club_records_flush_pending_entries	medium	haiku	2026-10-14-game-creation-inventory.md
-0x448fa0	club_records.cpp	club_records_season_label	high	haiku	
-0x4490b0	club_records.cpp	club_records_stat_label	high	haiku	
-0x449590	club_records.cpp	club_records_check_entry_valid	medium	haiku	
-0x4496d0	club_records.cpp	club_record_update_dispatch	medium	haiku	
-0x449810	club_records.cpp	club_records_format_record_text	high	haiku	
-0x44aa20	club_records.cpp	club_records_format_fixture_line	high	haiku	
-0x44c650	club_records.cpp	club_records_read_news_record	high	haiku	2026-10-14-clickable-names-inventory.md
-0x450a70	club_records.cpp	club_record_get_word_field	medium	haiku	
-0x450a80	club_records.cpp	club_record_get_word_field_2	medium	haiku	
-0x450a90	club_records.cpp	ClubRecord::set_field_dword	medium	haiku	
-0x450aa0	club_records.cpp	club_records_format_rounded_money	medium	haiku	
-0x450ad0	club_records.cpp	date_scope_guard_pair_construct	medium	haiku	
-0x450b20	club_records.cpp	club_record_copy_date_guard	low	haiku	
-0x450b70	club_records.cpp	club_record_date_reset	low	haiku	
-0x450bc0	club_records.cpp	club_record_date_pair_reset	medium	haiku	
-0x450c10	club_records.cpp	club_records_call_date_twice_unwind	medium	haiku	
-0x450c60	club_records.cpp	date_copy_construct_passthrough	low	haiku	
-0x450c70	club_records.cpp	date_object_cleanup_stub	medium	haiku	
-0x450cd0	club_records.cpp	club_record_date_reset_guard	low	haiku	
-0x450d30	club_records.cpp	date_wrapper_passthrough	low	haiku	
-0x450d40	club_records.cpp	date_copy_passthrough	medium	haiku	
-0x450d50	club_records.cpp	club_records_snapshot_alloc	high	haiku	
-0x451200	club_records.cpp	club_record_copy	high	haiku	
-0x451570	club_records.cpp	club_record_copy_assign_wrapper	medium	haiku	
-0x4515a0	club_records.cpp	club_records::load_club_records	high	haiku	
-0x451ff0	club_records.cpp	club_records_load_from_file	high	haiku	
-0x452070	club_records.cpp	club_records_load_file	high	haiku	
-0x452710	club_records.cpp	club_records_lookup_or_allocate_slot	medium	haiku	
-0x4528d0	club_records.cpp	club_records::get_or_allocate_record	high	haiku	
-0x452a90	club_records.cpp	club_records_find_best_player_for_record	medium	haiku	
-0x452cb0	club_records.cpp	club_records_array_append	medium	haiku	
-0x452da0	club_records.cpp	club_records::find_best_loan_candidate	medium	haiku	
-0x452fe0	club_records.cpp	club_records_reset_entry	high	haiku	
-0x453120	club_records.cpp	club_record_field_serialise	medium	haiku	
-0x453b90	club_records.cpp	register_club_records_atexit_init	medium	haiku	
-0x453bb0	club_records.cpp	jmp_thunk_0x453bb0	medium	haiku	
-0x453be0	club_records.cpp	register_club_records_getter_setter_pair	low	haiku	
-0x453c10	club_records.cpp	club_records_gap_0x453c10_thunk_std_call	low	haiku	
-0x453c30	club_records.cpp	club_records_register_handler_0x453c30	low	haiku	
-0x453c50	club_records.cpp	date_pass_through_wrapper	medium	haiku	
-0x453c60	club_records.cpp	register_atexit_static_init_club_records	medium	haiku	
-0x453c90	club_records.cpp	date_constructed_zeroed_buffer_init	low	haiku	
-0x453cf0	club_records.cpp	fastcall_release_member_and_call_cleanup	low	haiku	
-0x453d40	club_records.cpp	register_club_records_atexit_or_init_table	low	haiku	
-0x453d60	club_records.cpp	show_club_record_screen_fill	medium	haiku	2026-10-14-clickable-names-inventory.md
+0x442070	cash.cpp	cash_format_money_fragment_442070	high	opus	
+0x4426e0	cash.cpp	cash_get_rounding_step	high	opus	
+0x442ab0	club_history.cpp	Club_History::Club_History	high	opus	2026-10-14-game-creation-inventory.md
+0x442e20	club_history.cpp	Club_History::~Club_History	high	opus	
+0x442e80	club_history.cpp	Club_History::record_comp_season	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
+0x443380	club_history.cpp	Club_History::get_league_history	high	opus	
+0x443520	club_history.cpp	Club_History::get_cup_history	high	opus	
+0x443770	club_history.cpp	Club_History::get_league_comp_ids	high	opus	
+0x443a20	club_history.cpp	Club_History::get_cup_comp_ids	high	opus	
+0x443cd0	club_history.cpp	Club_History::load	high	opus	
+0x443f50	club_history.cpp	Club_History::save	high	opus	
+0x444190	club_history.cpp	club_history_get_current_league_record	high	opus	2026-10-15-team-views-frame-inventory.md
+0x444500	club_history.cpp	compare_int_ids	medium	opus	
+0x444520	club_records.cpp	Club_Records::Club_Records	high	opus	2026-10-14-game-creation-inventory.md
+0x4448a0	club_records.cpp	Club_Records::~Club_Records	high	opus	
+0x444930	club_records.cpp	Club_Records::update_records_for_match	high	opus	
+0x447430	club_records.cpp	Club_Records::update_league_position_records	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
+0x447880	club_records.cpp	Club_Records::end_season_for_nation	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
+0x448110	club_records.cpp	match_record_assign	medium	opus	
+0x448170	club_records.cpp	run_record_assign	medium	opus	
+0x4481b0	club_records.cpp	season_history_entry_destruct	medium	opus	
+0x448230	club_records.cpp	rating_record_assign	medium	opus	
+0x448260	club_records.cpp	season_history_entry_construct	medium	opus	
+0x448490	club_records.cpp	record_holder_assign	medium	opus	
+0x4484d0	club_records.cpp	man_of_match_record_assign	medium	opus	
+0x448500	club_records.cpp	discipline_record_assign	medium	opus	
+0x448530	club_records.cpp	count_record_assign	medium	opus	
+0x448550	club_records.cpp	transfer_fee_record_assign	medium	opus	
+0x4485b0	club_records.cpp	fans_player_record_assign	medium	opus	
+0x4485d0	club_records.cpp	transfer_fee_record_construct	medium	opus	
+0x448620	club_records.cpp	transfer_fee_record_construct_2	low	opus	
+0x448670	club_records.cpp	run_record_construct	medium	opus	
+0x4486c0	club_records.cpp	club_records_offer_breaks_fee_record	medium	opus	
+0x448760	club_records.cpp	Club_Records::update_transfer_fee_records	high	opus	
+0x448ad0	club_records.cpp	Club_Records::add_transfer_totals	high	opus	
+0x448cb0	club_records.cpp	club_records_update_career_records	high	opus	
+0x448e30	club_records.cpp	Club_Records::send_record_news	high	opus	2026-10-14-game-creation-inventory.md
+0x448fa0	club_records.cpp	club_records_get_period_label	high	opus	
+0x4490b0	club_records.cpp	club_records_get_record_type_label	high	opus	
+0x449590	club_records.cpp	club_records_record_type_applies	high	opus	
+0x4496d0	club_records.cpp	club_records_get_record_text	high	opus	
+0x449810	club_records.cpp	club_records_format_record_text	high	opus	
+0x44aa20	club_records.cpp	club_records_format_record_text_fragment	high	opus	
+0x44c650	club_records.cpp	club_records_write_record_news_text	high	opus	2026-10-14-clickable-names-inventory.md
+0x450a70	club_records.cpp	Date::get_day	medium	opus	
+0x450a80	club_records.cpp	Date::get_year	medium	opus	
+0x450a90	club_records.cpp	cash_set_value	low	opus	
+0x450aa0	club_records.cpp	cash_format_rounded	medium	opus	
+0x450ad0	club_records.cpp	won_run_record_construct	medium	opus	
+0x450b20	club_records.cpp	lost_run_record_construct	medium	opus	
+0x450b70	club_records.cpp	unbeaten_run_record_construct	medium	opus	
+0x450bc0	club_records.cpp	winless_run_record_construct	medium	opus	
+0x450c10	club_records.cpp	goals_in_match_record_construct	medium	opus	
+0x450c60	club_records.cpp	tally_record_construct	medium	opus	
+0x450c70	club_records.cpp	youngest_player_record_construct	medium	opus	
+0x450cd0	club_records.cpp	oldest_player_record_construct	medium	opus	
+0x450d30	club_records.cpp	count_record_construct	medium	opus	
+0x450d40	club_records.cpp	record_holder_construct	medium	opus	
+0x450d50	club_records.cpp	Club_Records::build_history_list	high	opus	
+0x451200	club_records.cpp	season_history_entry_assign	high	opus	
+0x451570	club_records.cpp	goals_in_match_record_assign	high	opus	
+0x4515a0	club_records.cpp	Club_Records::load	high	opus	
+0x451ff0	club_records.cpp	Club_Records::save	high	opus	
+0x452070	club_records.cpp	Club_Records::save_false_entry_0x452070	high	opus	
+0x452710	club_records.cpp	Club_Records::get_all_time_record	high	opus	
+0x4528d0	club_records.cpp	Club_Records::get_season_record	high	opus	
+0x452a90	club_records.cpp	Club_Records::update_season_rating_record	high	opus	
+0x452cb0	club_records.cpp	Club_Records::queue_record_news	high	opus	
+0x452da0	club_records.cpp	Club_Records::pick_fans_player_of_year	high	opus	
+0x452fe0	club_records.cpp	season_history_entry_clear	high	opus	
+0x453120	club_records.cpp	club_records_write_record_news_fields	high	opus	
+0x453b90	club_screens.cpp	club_screens_init_match_record	medium	opus	
+0x453bb0	club_screens.cpp	club_screens_exit_match_record	high	opus	
 0x453bc0	club_screens.cpp	match_team_pair_destructor	low	opus	
-0x4542f0	club_screens.cpp	club_screens_populate_fixture_dialog	medium	haiku	2026-10-14-assistant-and-days-inventory.md
-0x454900	club_screens.cpp	club_screens_dispatch_main_view	high	haiku	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,assistant.c,build-brief-0.3.0.md,views.c
-0x454950	club_screens.cpp	club_screens_build_club_view	high	haiku	
+0x453be0	club_screens.cpp	match_team_pair_construct	medium	opus	
+0x453c10	club_screens.cpp	match_team_block_destruct	medium	opus	
+0x453c30	club_screens.cpp	match_team_block_construct	medium	opus	
+0x453c50	club_screens.cpp	rating_record_construct	medium	opus	
+0x453c60	club_screens.cpp	club_screens_init_history_states	medium	opus	
+0x453c90	club_screens.cpp	club_history_state_construct	medium	opus	
+0x453cf0	club_screens.cpp	club_history_state_destruct	medium	opus	
+0x453d40	club_screens.cpp	club_screens_exit_history_states	high	opus	
+0x453d60	club_screens.cpp	open_club_squad_screen	medium	opus	2026-10-14-clickable-names-inventory.md
+0x4542f0	club_screens.cpp	open_manager_club_screen	high	opus	2026-10-14-assistant-and-days-inventory.md
+0x454900	club_screens.cpp	club_screen_build	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,assistant.c,build-brief-0.3.0.md,views.c
+0x454950	club_screens.cpp	club_screen_build_body_fragment	medium	opus	
 0x456740	club_screens.cpp	Date::operator>	high	opus	
 0x456770	club_screens.cpp	Date::operator<	high	opus	
-0x4567a0	club_screens.cpp	club_screens_call_if_not_minus_one	medium	haiku	
-0x4567f0	club_screens.cpp	forward_eleven_arg_call	medium	haiku	
-0x456850	club_screens.cpp	club_screens_show_message_stub	medium	haiku	
-0x456890	club_screens.cpp	club_screens_add_display_item_0x2002	medium	haiku	
-0x4568f0	club_screens.cpp	club_screens_reset_pair_ffff_zero	low	haiku	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md
-0x456900	club_screens.cpp	club_view_squad_list	high	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-foreign-and-tactics-positions.md,foreign.c
-0x45cb60	club_screens.cpp	display_forward_18_args	medium	haiku	
-0x45cbe0	club_screens.cpp	can_player_transfer_or_loan_check	medium	haiku	picker.c
-0x45ccf0	club_screens.cpp	club_screens_fixture_detail_view	high	haiku	2026-10-15-holiday-next-match-inventory.md,2026-10-16-foreign-and-tactics-positions.md
-0x45f380	club_screens.cpp	club_screens_draw_fixture_list_panel	high	haiku	
-0x460450	club_screens.cpp	club_screens_find_club_picture_path	medium	haiku	
-0x460590	club_screens.cpp	club_info_view_build_finance_stats_panel	high	haiku	2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-stadium-research.md
-0x462070	club_screens.cpp	club_screens_build_squad_stats_rows	medium	haiku	
-0x464220	club_screens.cpp	club_screens_render_finance_income_rows	medium	haiku	
-0x464620	club_screens.cpp	club_screens_finance_rows_draw	high	haiku	
-0x464b20	club_screens.cpp	club_screens_draw_investments_panel_rows	high	haiku	
-0x464d20	club_screens.cpp	club_screens_income_table_draw	high	haiku	
-0x465420	club_screens.cpp	club_finance_total_row_draw	high	haiku	
-0x4671a0	club_screens.cpp	set_first_field_dword	medium	haiku	
-0x4671b0	club_screens.cpp	get_club_field_20_ptr	medium	haiku	
-0x4671c0	club_screens.cpp	club_screen_field_70_address	medium	haiku	
-0x4671d0	club_screens.cpp	club_screens_get_field_c0_ptr	medium	haiku	
-0x4671e0	club_screens.cpp	club_screens_get_field_0x110	medium	haiku	
-0x468b10	club_screens.cpp	club_screen_lookup_by_index	medium	haiku	
+0x4567a0	club_screens.cpp	ScreenManager::set_area_scroll_row	high	opus	
+0x4567f0	club_screens.cpp	ScreenManager::add_area	high	opus	
+0x456850	club_screens.cpp	ScreenManager::add_popup_area	high	opus	
+0x456890	club_screens.cpp	ScreenManager::add_ticked_popup_item	high	opus	
+0x4568f0	club_screens.cpp	MenuItem::MenuItem	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md
+0x456900	club_screens.cpp	club_screen_draw_squad_tab	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-foreign-and-tactics-positions.md,foreign.c
+0x45cb60	club_screens.cpp	ScreenManager::add_item	high	opus	
+0x45cbe0	club_screens.cpp	is_player_available_for_match	high	opus	picker.c
+0x45ccf0	club_screens.cpp	club_screen_draw_next_match_tab	high	opus	2026-10-15-holiday-next-match-inventory.md,2026-10-16-foreign-and-tactics-positions.md
+0x45f380	club_screens.cpp	club_screen_draw_fixtures_tab	high	opus	
+0x460450	club_screens.cpp	find_club_badge_picture_path	medium	opus	
+0x460590	club_screens.cpp	club_screen_draw_info_tab	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-stadium-research.md
+0x462070	club_screens.cpp	club_screen_draw_info_tab_stats_fragment	medium	opus	
+0x464220	club_screens.cpp	club_screen_draw_info_tab_income_fragment	medium	opus	
+0x464620	club_screens.cpp	club_screen_draw_info_tab_players_sold_fragment	medium	opus	
+0x464b20	club_screens.cpp	club_screen_draw_info_tab_investments_fragment	medium	opus	
+0x464d20	club_screens.cpp	club_screen_draw_info_tab_interest_other_fragment	medium	opus	
+0x465420	club_screens.cpp	club_screen_draw_info_tab_income_total_fragment	medium	opus	
+0x4671a0	club_screens.cpp	Cash::set	medium	opus	
+0x4671b0	club_screens.cpp	Finance::get_last_month	high	opus	
+0x4671c0	club_screens.cpp	Finance::get_this_month	high	opus	
+0x4671d0	club_screens.cpp	Finance::get_last_year	high	opus	
+0x4671e0	club_screens.cpp	Finance::get_this_year	high	opus	
+0x468b10	club_screens.cpp	Display::get_widget_id	high	opus	
 0x468b40	club_screens.cpp	club_screens_get_club_index_or_default	medium	haiku	2026-10-14-start-screen-helpers.md,2026-10-15-squad-dropdown-inventory.md
 0x468b90	club_screens.cpp	get_club_field_by_index	medium	haiku	2026-10-15-squad-dropdown-inventory.md
 0x468bd0	club_screens.cpp	club_lookup_entry_field	low	haiku	
@@ -2800,7 +2800,7 @@ address	file	name	confidence	model	cited_in
 0x60ba80	index.cpp	index_set_global_if_match	medium	haiku	
 0x60d780	index.cpp	index_report_missing_index_fatal	high	haiku	2026-10-16-sweep-international.md
 0x60d810	index.cpp	nation_name_to_id_store	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-16-sweep-europe.md,2026-10-16-sweep-international.md,key_ids_table.c
-0x60efd0	index.cpp	set_competition_id_by_name	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,2026-10-16-sweep-international.md,int-continental.md,key_ids_table.c
+0x60efd0	index.cpp	set_competition_id_by_name	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-16-research-name-check.md,2026-10-16-seasons-0.6.0-spec.md,2026-10-16-seasons-research-for-max.md,2026-10-16-sweep-europe.md,2026-10-16-sweep-international.md,int-continental.md,key_ids_table.c
 0x6115e0	index.cpp	award_name_to_slot	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,key_ids_table.c
 0x6146b0	index.cpp	index_set_club_id_by_name	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-sweep-europe.md,key_ids_table.c
 0x616570	index.cpp	index_club_name_to_id	medium	haiku	
@@ -5503,60 +5503,60 @@ address	file	name	confidence	model	cited_in
 0x82a9c0	Setup.cpp	load_game_data	high	opus	2026-10-13-database-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-tactics-inventory.md,tactics.c
 0x82e430	Setup.cpp	save_game_data	high	opus	2026-10-15-contract-clauses.md,HANDOVER.md,testrun.c
 0x82ff40	Setup.cpp	free_game_data	high	opus	2026-10-16-sweep-season-end.md
-0x830520	Setup.cpp	setup_check_team_control_slots	medium	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-research-name-check.md,2026-10-16-season-change-points.md,2026-10-16-sweep-season-end.md
-0x830620	Setup.cpp	create_world_cup_comps	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-international.md,key_nation.c
-0x830ac0	Setup.cpp	create_other_int_comps	high	haiku	2026-10-14-start-new-game-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-international.md,int-continental.md,key_nation.c
-0x830fe0	Setup.cpp	create_world_club_comps	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
-0x8312e0	Setup.cpp	create_european_club_comps	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
-0x831650	Setup.cpp	create_north_american_club_comps	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
-0x8318f0	Setup.cpp	create_south_american_club_comps	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
-0x831ba0	Setup.cpp	create_asian_comps	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
-0x831eb0	Setup.cpp	create_asian_club_comps	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
-0x832100	Setup.cpp	create_argentine_comps	high	haiku	key_nation.c
-0x832380	Setup.cpp	create_australian_comps	high	haiku	key_nation.c
-0x8325d0	Setup.cpp	create_belgian_comps	high	haiku	key_nation.c
-0x832980	Setup.cpp	create_norwegian_comps	high	haiku	key_nation.c
-0x8330b0	Setup.cpp	create_croatian_comps	high	haiku	key_nation.c
-0x833400	Setup.cpp	create_danish_comps	high	haiku	key_nation.c
-0x833750	Setup.cpp	create_english_comps	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-sweep-season-end.md,key_nation.c
-0x833cf0	Setup.cpp	create_finnish_comps	high	haiku	key_nation.c
-0x833ff0	Setup.cpp	create_french_comps	high	haiku	key_nation.c
-0x8343f0	Setup.cpp	create_german_comps	high	haiku	key_nation.c
-0x8347c0	Setup.cpp	create_german_comps	high	haiku	key_nation.c
-0x834b10	Setup.cpp	create_dutch_comps	high	haiku	key_nation.c
-0x834e60	Setup.cpp	create_irish_comps	high	haiku	key_nation.c
-0x835320	Setup.cpp	create_italian_comps	high	haiku	key_nation.c
-0x835900	Setup.cpp	create_japanese_comps	high	haiku	key_nation.c
-0x835c90	Setup.cpp	create_northern_irish_comps	high	haiku	key_nation.c
-0x836050	Setup.cpp	create_norwegian_comps	high	haiku	key_nation.c
-0x836350	Setup.cpp	create_polish_comps	high	haiku	key_nation.c
-0x8366e0	Setup.cpp	create_portuguese_comps	high	haiku	key_nation.c
-0x836ac0	Setup.cpp	create_russian_comps	high	haiku	key_nation.c
-0x836dc0	Setup.cpp	create_scottish_comps	high	haiku	key_nation.c
-0x837200	Setup.cpp	create_spanish_comps	high	haiku	key_nation.c
-0x837560	Setup.cpp	create_spanish_comps	high	haiku	key_nation.c
-0x8379f0	Setup.cpp	create_swedish_comps	high	haiku	key_nation.c
-0x837d70	Setup.cpp	create_spanish_comps	high	haiku	key_nation.c
-0x8380c0	Setup.cpp	create_united_states_comps	high	haiku	key_nation.c
-0x8383b0	Setup.cpp	create_spanish_comps	high	haiku	2026-10-14-start-new-game-inventory.md,key_nation.c
-0x8386f0	Setup.cpp	setup_player_index_table	medium	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
-0x8387e0	Setup.cpp	setup_network_players_check_and_register	medium	haiku	
-0x8388e0	Setup.cpp	network_game_connect_or_create	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-14-game-creation-inventory.md
-0x838a80	Setup.cpp	setup_network_game_start	medium	haiku	
-0x838c00	Setup.cpp	setup_clear_manager_control_flag_and_refresh	low	haiku	
-0x838c60	Setup.cpp	find_free_slot_or_report_error	medium	haiku	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
-0x838d10	Setup.cpp	count_selected_leagues_checked	medium	haiku	2026-10-16-tactics-inventory.md
-0x838de0	Setup.cpp	is_current_manager_flag_5f_set	medium	haiku	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
-0x838e10	Setup.cpp	valid_saved_game_version	medium	haiku	savename.c
-0x838eb0	Setup.cpp	valid_saved_game_version	high	haiku	
-0x839290	Setup.cpp	validate_saved_game_or_error_out	medium	haiku	
-0x839340	Setup.cpp	league_region_matches_filter	high	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-international.md
-0x839530	Setup.cpp	compare_names_with_offset_0x57	medium	haiku	
-0x839570	Setup.cpp	get_game_title_string_ptr	high	haiku	2026-10-14-start-screen-helpers.md
-0x839590	Setup.cpp	get_selected_value_by_flag	low	haiku	2026-10-14-start-screen-helpers.md
-0x8395b0	Setup.cpp	load_fifa_transfer_rules_zip	high	haiku	
-0x839760	Setup.cpp	load_fifa_transfer_rules	high	haiku	2026-10-16-sweep-season-end.md
-0x839920	Setup.cpp	select_team_for_nation_squad	medium	haiku	2026-10-14-game-creation-inventory.md
+0x830520	Setup.cpp	setup_set_game_start_date	medium	opus	2026-10-14-game-creation-inventory.md,2026-10-16-research-name-check.md,2026-10-16-season-change-points.md,2026-10-16-sweep-season-end.md
+0x830620	Setup.cpp	create_world_cup_qualifying_comps	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-international.md,key_nation.c
+0x830ac0	Setup.cpp	create_other_int_comps	high	opus	2026-10-14-start-new-game-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-international.md,int-continental.md,key_nation.c
+0x830fe0	Setup.cpp	create_world_club_comps	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
+0x8312e0	Setup.cpp	create_european_club_comps	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
+0x831650	Setup.cpp	create_north_american_club_comps	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
+0x8318f0	Setup.cpp	create_south_american_club_comps	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
+0x831ba0	Setup.cpp	create_asian_club_comps	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
+0x831eb0	Setup.cpp	create_oceania_club_comps	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md,key_nation.c
+0x832100	Setup.cpp	create_argentine_comps	high	opus	key_nation.c
+0x832380	Setup.cpp	create_australian_comps	high	opus	key_nation.c
+0x8325d0	Setup.cpp	create_belgian_comps	high	opus	key_nation.c
+0x832980	Setup.cpp	create_brazilian_comps	high	opus	key_nation.c
+0x8330b0	Setup.cpp	create_croatian_comps	high	opus	key_nation.c
+0x833400	Setup.cpp	create_danish_comps	high	opus	key_nation.c
+0x833750	Setup.cpp	create_english_comps	high	opus	2026-10-14-game-creation-inventory.md,2026-10-16-sweep-season-end.md,key_nation.c
+0x833cf0	Setup.cpp	create_finnish_comps	high	opus	key_nation.c
+0x833ff0	Setup.cpp	create_french_comps	high	opus	key_nation.c
+0x8343f0	Setup.cpp	create_german_comps	high	opus	key_nation.c
+0x8347c0	Setup.cpp	create_greek_comps	high	opus	key_nation.c
+0x834b10	Setup.cpp	create_dutch_comps	high	opus	key_nation.c
+0x834e60	Setup.cpp	create_irish_comps	high	opus	key_nation.c
+0x835320	Setup.cpp	create_italian_comps	high	opus	key_nation.c
+0x835900	Setup.cpp	create_japanese_comps	high	opus	key_nation.c
+0x835c90	Setup.cpp	create_northern_irish_comps	high	opus	key_nation.c
+0x836050	Setup.cpp	create_norwegian_comps	high	opus	key_nation.c
+0x836350	Setup.cpp	create_polish_comps	high	opus	key_nation.c
+0x8366e0	Setup.cpp	create_portuguese_comps	high	opus	key_nation.c
+0x836ac0	Setup.cpp	create_russian_comps	high	opus	key_nation.c
+0x836dc0	Setup.cpp	create_scottish_comps	high	opus	key_nation.c
+0x837200	Setup.cpp	create_south_korean_comps	high	opus	key_nation.c
+0x837560	Setup.cpp	create_spanish_comps	high	opus	key_nation.c
+0x8379f0	Setup.cpp	create_swedish_comps	high	opus	key_nation.c
+0x837d70	Setup.cpp	create_turkish_comps	high	opus	key_nation.c
+0x8380c0	Setup.cpp	create_united_states_comps	high	opus	key_nation.c
+0x8383b0	Setup.cpp	create_welsh_comps	high	opus	2026-10-14-start-new-game-inventory.md,key_nation.c
+0x8386f0	Setup.cpp	build_comp_object_table	high	opus	2026-10-14-game-creation-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
+0x8387e0	Setup.cpp	setup_assign_restored_network_managers	medium	opus	
+0x8388e0	Setup.cpp	setup_create_or_join_network_game	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-game-creation-inventory.md
+0x838a80	Setup.cpp	setup_on_network_player_joined	medium	opus	
+0x838c00	Setup.cpp	setup_on_network_player_left	medium	opus	
+0x838c60	Setup.cpp	find_free_human_manager_row	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
+0x838d10	Setup.cpp	count_human_managers	high	opus	2026-10-16-tactics-inventory.md
+0x838de0	Setup.cpp	is_current_manager_being_created	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
+0x838e10	Setup.cpp	check_saved_game_file	medium	opus	savename.c
+0x838eb0	Setup.cpp	valid_saved_game_version	high	opus	
+0x839290	Setup.cpp	check_quick_start_file	medium	opus	
+0x839340	Setup.cpp	nation_matches_region_filter	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-international.md
+0x839530	Setup.cpp	compare_nations_by_nationality	high	opus	
+0x839570	Setup.cpp	get_game_title	high	opus	2026-10-14-start-screen-helpers.md
+0x839590	Setup.cpp	get_heading_colour	medium	opus	2026-10-14-start-screen-helpers.md
+0x8395b0	Setup.cpp	save_fifa_transfer_rules	high	opus	
+0x839760	Setup.cpp	load_fifa_transfer_rules	high	opus	2026-10-16-sweep-season-end.md
+0x839920	Setup.cpp	fix_division_club_count	high	opus	2026-10-14-game-creation-inventory.md
 0x839a80	shortlist_manager.cpp	ShortlistManager::init_shortlists	high	haiku	
 0x839d90	shortlist_manager.cpp	shortlist_manager_release_buffers	high	haiku	
 0x839e60	shortlist_manager.cpp	shortlist_manager_build_club_shortlists	high	haiku	

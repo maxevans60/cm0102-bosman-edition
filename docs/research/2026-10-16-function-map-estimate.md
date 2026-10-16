@@ -811,6 +811,83 @@ Run `sweep-w20`: 8 Opus agents named 219 functions: the rest of `Database.cpp`, 
 | 0x82e430 | Named in 2026-10-15-contract-clauses.md | `save_game_to_disk` (Haiku) | `save_game_data` | agrees |
 | 0x82ff40 | Named in 2026-10-16-sweep-season-end.md | `cleanup_world_state_and_delete_tmp` (Haiku) | `free_game_data` | agrees |
 
+#### Wave w21 (tier 5, 2026-10-16)
+
+Run `sweep-w21`: 8 Opus agents named 229 functions: the rest of `Setup.cpp`, `award_manager.cpp`, `award_screens.cpp`, `award_shortlist.cpp`, `awol.cpp`, `background.cpp`, `cash.cpp`, `club_history.cpp`, `club_records.cpp` and `club_screens.cpp`. Each agent took 2 to 6 minutes and 115,000 to 182,000 tokens. Confidence: 156 high, 71 medium, 2 low.
+
+The Setup copy slips are settled. The competition builders now carry the nation that their constructors build: 0x832980 `create_brazilian_comps`, 0x8347c0 `create_greek_comps`, 0x831eb0 `create_oceania_club_comps`, 0x837200 `create_south_korean_comps`, 0x837d70 `create_turkish_comps` and 0x8383b0 `create_welsh_comps`. The key nation table in the port (`key_nation.c`) agrees with each one. Merge fixes: four club finance accessors were renamed from `ClubFinances::` to `Finance::`, the class of that record since the hub sweep, and one row got its missing model field.
+
+66 functions of the wave are cited. 49 agree, 13 agree in area and 4 citations make no claim about the purpose.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x418440 | Named in 2026-10-14-game-creation-inventory.md | `award_shortlist_load_or_init` (Haiku) | `AWOL::AWOL` | agrees |
+| 0x41b3d0 | Named in 2026-10-14-start-screen-helpers.md | `setup_background_system` (Haiku) | `setup_background_system` | agrees |
+| 0x41b8c0 | Named in 2026-10-14-start-screen-helpers.md | `setup_background_system_add_picture` (Haiku) | `background_add_picture` | agrees |
+| 0x442ab0 | Named in 2026-10-14-game-creation-inventory.md | `Club_History::open_history_files` (Haiku) | `Club_History::Club_History` | agrees |
+| 0x442e80 | Named in 2026-10-16-research-name-check.md | `club_history_apply_season_records` (Haiku) | `Club_History::record_comp_season` | agrees in area |
+| 0x444190 | Named in 2026-10-15-team-views-frame-inventory.md | `club_history_find_player_record` (Haiku) | `club_history_get_current_league_record` | agrees |
+| 0x444520 | Named in 2026-10-14-game-creation-inventory.md | `Club_Records::load_from_cd_or_temp` (Haiku) | `Club_Records::Club_Records` | agrees |
+| 0x447430 | Named in 2026-10-16-research-name-check.md | `club_records_update_season_records` (Haiku) | `Club_Records::update_league_position_records` | agrees in area |
+| 0x447880 | Named in 2026-10-16-research-name-check.md | `Club_records::update_club_records_from_season` (Haiku) | `Club_Records::end_season_for_nation` | agrees in area |
+| 0x448e30 | Named in 2026-10-14-game-creation-inventory.md | `club_records_flush_pending_entries` (Haiku) | `Club_Records::send_record_news` | agrees |
+| 0x44c650 | Named in 2026-10-14-clickable-names-inventory.md | `club_records_read_news_record` (Haiku) | `club_records_write_record_news_text` | agrees |
+| 0x453d60 | Named in 2026-10-14-clickable-names-inventory.md | `show_club_record_screen_fill` (Haiku) | `open_club_squad_screen` | agrees |
+| 0x4542f0 | Named in 2026-10-14-assistant-and-days-inventory.md | `club_screens_populate_fixture_dialog` (Haiku) | `open_manager_club_screen` | agrees |
+| 0x454900 | Named in 2026-10-15-assistant-pick-inventory.md | `club_screens_dispatch_main_view` (Haiku) | `club_screen_build` | agrees |
+| 0x4568f0 | Named in 2026-10-13-screen-stack-inventory.md | `club_screens_reset_pair_ffff_zero` (Haiku) | `MenuItem::MenuItem` | agrees |
+| 0x456900 | Named in 2026-10-14-columns-and-colours-inventory.md | `club_view_squad_list` (Haiku) | `club_screen_draw_squad_tab` | agrees |
+| 0x45cbe0 | Named in picker.c | `can_player_transfer_or_loan_check` (Haiku) | `is_player_available_for_match` | agrees |
+| 0x45ccf0 | Named in 2026-10-15-holiday-next-match-inventory.md | `club_screens_fixture_detail_view` (Haiku) | `club_screen_draw_next_match_tab` | agrees |
+| 0x460590 | Named in 2026-10-14-clickable-names-inventory.md | `club_info_view_build_finance_stats_panel` (Haiku) | `club_screen_draw_info_tab` | no claim |
+| 0x830520 | Named in 2026-10-14-game-creation-inventory.md | `setup_check_team_control_slots` (Haiku) | `setup_set_game_start_date` | agrees |
+| 0x830620 | Named in 2026-10-14-game-creation-inventory.md | `create_world_cup_comps` (Haiku) | `create_world_cup_qualifying_comps` | agrees in area |
+| 0x830ac0 | Named in 2026-10-14-start-new-game-inventory.md | `create_other_int_comps` (Haiku) | `create_other_int_comps` | agrees in area |
+| 0x830fe0 | Named in 2026-10-16-research-name-check.md | `create_world_club_comps` (Haiku) | `create_world_club_comps` | agrees in area |
+| 0x8312e0 | Named in 2026-10-16-research-name-check.md | `create_european_club_comps` (Haiku) | `create_european_club_comps` | agrees in area |
+| 0x831650 | Named in 2026-10-16-research-name-check.md | `create_north_american_club_comps` (Haiku) | `create_north_american_club_comps` | agrees in area |
+| 0x8318f0 | Named in 2026-10-16-research-name-check.md | `create_south_american_club_comps` (Haiku) | `create_south_american_club_comps` | agrees in area |
+| 0x831ba0 | Named in 2026-10-16-research-name-check.md | `create_asian_comps` (Haiku) | `create_asian_club_comps` | agrees in area |
+| 0x831eb0 | Named in 2026-10-16-research-name-check.md | `create_asian_club_comps` (Haiku) | `create_oceania_club_comps` | agrees in area |
+| 0x832100 | Named in key_nation.c | `create_argentine_comps` (Haiku) | `create_argentine_comps` | agrees |
+| 0x832380 | Named in key_nation.c | `create_australian_comps` (Haiku) | `create_australian_comps` | agrees |
+| 0x8325d0 | Named in key_nation.c | `create_belgian_comps` (Haiku) | `create_belgian_comps` | agrees |
+| 0x832980 | Key nation table entry for Brazil (key_nation.c) | `create_norwegian_comps` (Haiku) | `create_brazilian_comps` | agrees |
+| 0x8330b0 | Named in key_nation.c | `create_croatian_comps` (Haiku) | `create_croatian_comps` | agrees |
+| 0x833400 | Named in key_nation.c | `create_danish_comps` (Haiku) | `create_danish_comps` | agrees |
+| 0x833750 | Named in 2026-10-14-game-creation-inventory.md | `create_english_comps` (Haiku) | `create_english_comps` | agrees in area |
+| 0x833cf0 | Named in key_nation.c | `create_finnish_comps` (Haiku) | `create_finnish_comps` | agrees |
+| 0x833ff0 | Named in key_nation.c | `create_french_comps` (Haiku) | `create_french_comps` | agrees |
+| 0x8343f0 | Named in key_nation.c | `create_german_comps` (Haiku) | `create_german_comps` | agrees |
+| 0x8347c0 | Key nation table entry for Greece (key_nation.c) | `create_german_comps` (Haiku) | `create_greek_comps` | agrees |
+| 0x834b10 | Named in key_nation.c | `create_dutch_comps` (Haiku) | `create_dutch_comps` | agrees |
+| 0x834e60 | Named in key_nation.c | `create_irish_comps` (Haiku) | `create_irish_comps` | agrees |
+| 0x835320 | Named in key_nation.c | `create_italian_comps` (Haiku) | `create_italian_comps` | agrees |
+| 0x835900 | Named in key_nation.c | `create_japanese_comps` (Haiku) | `create_japanese_comps` | agrees |
+| 0x835c90 | Named in key_nation.c | `create_northern_irish_comps` (Haiku) | `create_northern_irish_comps` | agrees |
+| 0x836050 | Named in key_nation.c | `create_norwegian_comps` (Haiku) | `create_norwegian_comps` | agrees |
+| 0x836350 | Named in key_nation.c | `create_polish_comps` (Haiku) | `create_polish_comps` | agrees |
+| 0x8366e0 | Named in key_nation.c | `create_portuguese_comps` (Haiku) | `create_portuguese_comps` | agrees |
+| 0x836ac0 | Named in key_nation.c | `create_russian_comps` (Haiku) | `create_russian_comps` | agrees |
+| 0x836dc0 | Named in key_nation.c | `create_scottish_comps` (Haiku) | `create_scottish_comps` | agrees |
+| 0x837200 | Key nation table entry for South Korea (key_nation.c) | `create_spanish_comps` (Haiku) | `create_south_korean_comps` | agrees |
+| 0x837560 | Named in key_nation.c | `create_spanish_comps` (Haiku) | `create_spanish_comps` | agrees |
+| 0x8379f0 | Named in key_nation.c | `create_swedish_comps` (Haiku) | `create_swedish_comps` | agrees |
+| 0x837d70 | Key nation table entry for Turkey (key_nation.c) | `create_spanish_comps` (Haiku) | `create_turkish_comps` | agrees |
+| 0x8380c0 | Named in key_nation.c | `create_united_states_comps` (Haiku) | `create_united_states_comps` | agrees |
+| 0x8383b0 | Named in 2026-10-14-start-new-game-inventory.md | `create_spanish_comps` (Haiku) | `create_welsh_comps` | agrees in area |
+| 0x8386f0 | Named in 2026-10-14-game-creation-inventory.md | `setup_player_index_table` (Haiku) | `build_comp_object_table` | agrees |
+| 0x8388e0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_game_connect_or_create` (Haiku) | `setup_create_or_join_network_game` | no claim |
+| 0x838c60 | Named in 2026-10-13-screen-stack-inventory.md | `find_free_slot_or_report_error` (Haiku) | `find_free_human_manager_row` | agrees |
+| 0x838d10 | Named in 2026-10-16-tactics-inventory.md | `count_selected_leagues_checked` (Haiku) | `count_human_managers` | no claim |
+| 0x838de0 | Named in 2026-10-13-screen-stack-inventory.md | `is_current_manager_flag_5f_set` (Haiku) | `is_current_manager_being_created` | agrees |
+| 0x838e10 | Named in savename.c | `valid_saved_game_version` (Haiku) | `check_saved_game_file` | agrees |
+| 0x839340 | Named in 2026-10-16-research-name-check.md | `league_region_matches_filter` (Haiku) | `nation_matches_region_filter` | no claim |
+| 0x839570 | Named in 2026-10-14-start-screen-helpers.md | `get_game_title_string_ptr` (Haiku) | `get_game_title` | agrees |
+| 0x839590 | Named in 2026-10-14-start-screen-helpers.md | `get_selected_value_by_flag` (Haiku) | `get_heading_colour` | agrees |
+| 0x839760 | Named in 2026-10-16-sweep-season-end.md | `load_fifa_transfer_rules` (Haiku) | `load_fifa_transfer_rules` | agrees |
+| 0x839920 | Named in 2026-10-14-game-creation-inventory.md | `select_team_for_nation_squad` (Haiku) | `fix_division_club_count` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

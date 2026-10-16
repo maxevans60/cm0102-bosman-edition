@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4141 high, 2494 medium, 228 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20.
+- Confidence: 4205 high, 2450 medium, 208 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -29,9 +29,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [australia_awards.cpp](australia_awards.cpp.md) | 4 |
 | [australia_rules.cpp](australia_rules.cpp.md) | 3 |
 | [award_manager.cpp](award_manager.cpp.md) | 23 |
-| [award_screens.cpp](award_screens.cpp.md) | 15 |
-| [award_shortlist.cpp](award_shortlist.cpp.md) | 17 |
-| [awol.cpp](awol.cpp.md) | 16 |
+| [award_screens.cpp](award_screens.cpp.md) | 16 |
+| [award_shortlist.cpp](award_shortlist.cpp.md) | 13 |
+| [awol.cpp](awol.cpp.md) | 19 |
 | [background.cpp](background.cpp.md) | 21 |
 | [bel_fa_cup.cpp](bel_fa_cup.cpp.md) | 6 |
 | [bel_first.cpp](bel_first.cpp.md) | 10 |
@@ -61,8 +61,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [brazil_rules.cpp](brazil_rules.cpp.md) | 3 |
 | [cash.cpp](cash.cpp.md) | 16 |
 | [club_history.cpp](club_history.cpp.md) | 11 |
-| [club_records.cpp](club_records.cpp.md) | 69 |
-| [club_screens.cpp](club_screens.cpp.md) | 138 |
+| [club_records.cpp](club_records.cpp.md) | 58 |
+| [club_screens.cpp](club_screens.cpp.md) | 149 |
 | [coach.cpp](coach.cpp.md) | 5 |
 | [comp.cpp](comp.cpp.md) | 46 |
 | [comp_screens.cpp](comp_screens.cpp.md) | 108 |

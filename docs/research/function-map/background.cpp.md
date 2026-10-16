@@ -6,8 +6,8 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x41b3d0 | 312 | `setup_background_system` | cdecl, no arguments, ret 0 (void) | Parses the pics.cfg picture configuration file and loads background picture sections per nation into memory. | high | haiku | 2026-10-14-start-screen-helpers.md |
-| 0x41b8c0 | 169 | `setup_background_system_add_picture` | cdecl (probably; ECX not used as this) with arguments (int list_struct_ptr, char *picture_name_buffer, int is_secondary_flag), returns char* error string or null, ret 0 (no stack cleanup) | Searches stadium and old picture folders for a background picture name, then appends it to one of two growable pointer lists. | high | haiku | 2026-10-14-start-screen-helpers.md, background.c |
+| 0x41b3d0 | 312 | `setup_background_system` | cdecl(void) ret 0 | Reads pics.cfg from the pictures folder and fills the eleven background picture sections with keys and picture names. | high | opus | 2026-10-14-start-screen-helpers.md |
+| 0x41b8c0 | 169 | `background_add_picture` | cdecl(BgSub* sub, const char* picture_name, int second_list) ret 0, returns char* error text or null | Appends a copy of a picture name to the first or second name list when its file opens in the pictures, stadium or old folder. | high | opus | 2026-10-14-start-screen-helpers.md, background.c |
 | 0x41bad0 | 113 | `background_free_config_tables` | cdecl(void) ret 0 | Frees the names, both name lists and the sub-entry arrays of all eleven pics.cfg sections, then clears each section. | high | opus |  |
 | 0x41bc20 | 242 | `verify_background_config` | cdecl(void) ret 0 | Checks that every pics.cfg key in each section names a database record, shows an error box for each missing one and reports progress. | high | opus |  |
 | 0x41bf80 | 6 | `background_set_pictures_disabled` | cdecl(int disabled) ret 0 | Sets the show-background-pictures flag to the inverse of the argument. | medium | opus |  |
