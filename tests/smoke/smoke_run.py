@@ -27,6 +27,10 @@ that must not change the game adds a run to SAME_SAVE_RUNS.
 With --save, each run loads that saved test game (tests/fixtures/fixtures.py) instead of a new game, then
 takes the same Go on Holiday steps. The game is saved n game days after the load.
 
+Search check (--same-save --save <name> --search): the runs open the player search and close it before
+the holiday: search-off, search-on and search-on-again (full_player_search). Each save is compared with
+the save of search-off.
+
 Match check (--match): the same as the same-save check, but each run loads the saved test game
 prematch.sav (tests/fixtures/fixtures.py) and plays the friendly at Basel on Friday 20.7.01 to the end.
 The steps answer the Henry bid (Reject), go to the match, set the commentary speed to Very Fast and
@@ -344,7 +348,24 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     return 1 if failed else 0
 
 
-def same_save(program, game, mode, days, save_name=None):
+# --search: after the load, open the player search (Player & Staff Search, Player Search tab: every player
+# of the list, no filter), close it with Cancel, then go on holiday. The runs open the same screen, so a
+# difference between them comes from the option alone (0.5.0 slice 5).
+SEARCH_STEPS = [
+    "2500 click 45 165",                    # the manager's menu
+    "4000 click 190 302",                   # Player & Staff Search
+    "wait screen:0x808690",
+    "3000 click 359 573",                   # Cancel
+    "wait screen:0x7881e0",
+]
+SEARCH_RUNS = [
+    ("search-off", {"faster_days": "off", "full_player_search": "off"}),
+    ("search-on", {"faster_days": "off", "full_player_search": "on"}),
+    ("search-on-again", {"faster_days": "off", "full_player_search": "on"}),
+]
+
+
+def same_save(program, game, mode, days, save_name=None, search=False):
     # No click ends the intro (without_intro_click).
     if save_name is None:
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
@@ -358,6 +379,9 @@ def same_save(program, game, mode, days, save_name=None):
         return 1
     holiday = STEPS[STEPS.index("wait first-news") + 1:]
     holiday = [s for s in holiday if "dump" not in s and "quit" not in s]
+    if search:
+        steps = without_intro_click(fixtures.LOAD_STEPS) + SEARCH_STEPS + holiday + ["400000 quit"]
+        return compare_runs(program, game, mode, SEARCH_RUNS, steps, days, save)
     steps = without_intro_click(fixtures.LOAD_STEPS) + holiday + ["400000 quit"]
     return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save)
 
@@ -401,7 +425,7 @@ def main(argv):
     if "--same-save" in argv[3:]:
         days = int(argv[argv.index("--days") + 1]) if "--days" in argv[3:] else 14
         save_name = argv[argv.index("--save") + 1] if "--save" in argv[3:] else None
-        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days, save_name)
+        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days, save_name, "--search" in argv[3:])
     program, game, ref = os.path.abspath(argv[1]), os.path.abspath(argv[2]), os.path.abspath(argv[3])
     record = "--record" in argv[4:]
     tol = int(argv[argv.index("--tolerance") + 1]) if "--tolerance" in argv[4:] else 0

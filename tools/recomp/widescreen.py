@@ -107,7 +107,16 @@ INSNS[0x905A4C] = ("jne 0x905c21",
     "SYNC(); f_0090cba0(); LOAD(); RT_AFTER_CALL(); esp += 8; goto L_905c21; }")
 
 # The full player search option (0.5.0 slice 5, #57; docs/research/2026-10-16-crash-fixes.md, 1c). The player
-# search list builder 0x7afa70 calls 0x5407e0 and tests the score: cmp ax, 0xfa0 / jge 0x7afcee at 0x7afc4b.
-# With the option on, the jge always jumps, so every player passes. The call and the compare stay, so the
-# original's path with the option off is the same. The option is read at run time (playersearch.c).
-INSNS[0x7AFC4B] = ("jge 0x7afcee", "if (!cc_l(F) || rt_full_player_search()) goto L_7afcee;")
+# search list builder 0x7afa70 tests whether the manager knows a player: score of 0x5407e0 of 4000 or more
+# (jge 0x7afcee at 0x7afc4b), a scout report, or the same region and one of 0x544520, 0x544590, 0x76d9b0.
+# Changing the jge to a jmp lists every player. That skips 0x544520 and 0x544590, which write a
+# cached byte of the club (0x540a50), so on and off could leave different club bytes (Q152). Here the jge and
+# every call stay. Only the three places where the original rejects a player accept him when the option is on:
+# no region object (je 0x7afe6b at 0x7afc8d), another region (jne 0x7afe6b at 0x7afc9d), and all four tests
+# false (je 0x7afcf3 at 0x7afcdf, where ebx stays 0). Accept = go to 0x7afcee (ebx = 1). The screen keeps the
+# count of the list in 16 bits, so rt_full_player_search(ebp) is 0 once the list (count at ebp+0x1f6) holds
+# 32767 players. The option is read at run time (playersearch.c).
+_FPS = "if (%s) { if (rt_full_player_search(ebp)) goto L_7afcee; goto L_7afe6b; }"
+INSNS[0x7AFC8D] = ("je 0x7afe6b", _FPS % "cc_e(F)")
+INSNS[0x7AFC9D] = ("jne 0x7afe6b", _FPS % "!cc_e(F)")
+INSNS[0x7AFCDF] = ("je 0x7afcf3", "if (cc_e(F)) { if (rt_full_player_search(ebp)) ebx = 1; goto L_7afcf3; }")
