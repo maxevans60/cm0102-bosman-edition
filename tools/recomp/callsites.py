@@ -53,6 +53,9 @@ CALL_SITES = {
     # Options box (#56): the Game Settings item create of the side bar drop-down "Game Options" in 0x75db00
     # (docs/research/2026-10-16-options-screen.md, 1a). The new item follows it.
     "options_item": (0x760602, 0x55F990),
+    # Options box (#56): the input poll of the main loop 0x7fc7e0. Its result goes to the Game Settings hook
+    # test at 0x7fcd25.
+    "main_poll": (0x7FCC14, 0x55F620),
 }
 
 SITES = {addr: (name, target) for name, (addr, target) in CALL_SITES.items()}

@@ -75,6 +75,11 @@ static int current_set(void)
     return 0;
 }
 
+/* The options box changed the data set in a game (options_screen.c). The open game keeps its data set
+ * folder. The change reaches files.c at the next build of the start screen, before any new game. */
+static int changed_in_game;
+void database_changed_in_game(void) { changed_in_game = 1; }
+
 void o_005ed300(void);
 void o_0081bd70(void);
 
@@ -82,6 +87,10 @@ void o_0081bd70(void);
 RT_WRAP(005ed300, menu_build)
 {
     if (rd32(g_mem, cpu.esp) == rt_site_setup_menu && rt_arg(7) == 9) {
+        if (changed_in_game) {
+            changed_in_game = 0;
+            win_data_set_changed();
+        }
         sets_fill();
         uint32_t item = rt_arg(8) + 9 * ITEM_SIZE;
         wr16(g_mem, item, 0xffff);
@@ -107,7 +116,7 @@ RT_WRAP(0081bd70, setup_input)
     int clicked = (int16_t)rt_arg(0);
     if (clicked >= 0 && clicked < MAX_WIDGETS &&
         (int16_t)rd16(g_mem, WIDGETS + WIDGET_SIZE * (uint32_t)clicked + 8) == OPTIONS_ID) {
-        options_screen_open();
+        options_screen_open(1);
         rt_ret_cdecl((uint32_t)-4);
         return;
     }

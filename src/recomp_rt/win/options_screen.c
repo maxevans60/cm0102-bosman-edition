@@ -13,23 +13,35 @@
  * the current value as a yellow framed label, style 0x221 (0x804100 at 0x82477b), and each other value
  * as a green button (0x8040a0 at 0x8247a4). One Close button closes the box.
  *
- * Two places open it: a new item "Bosman Edition Options" after "Game Settings" in the side bar drop-down
- * "Game Options" (item create 0x760602, options_screen_widget_before/after), and an item of the start
- * screen menu (database.c).
+ * Two places open it. The first is a new item "Bosman Edition Options" after "Game Settings" in the side bar
+ * drop-down "Game Options" (item create 0x760602, options_screen_widget_before/after). The main loop
+ * 0x7fc7e0 handles a click on Game Settings before the input of the screen: it calls the hook at S + 0x37ee
+ * when the id of the clicked widget is S + 0x37f2 (0x7fcd25), and the side bar build sets 0x823930 and 0x423
+ * there (0x75db3b). So the item works on every screen with the side bar: after the poll of the main loop
+ * (0x7fcc14) returns the item, the runtime puts its own hook and id there, and its hook puts the original
+ * values back. The second place is an item of the start screen menu (database.c).
  *
  * A click on a value calls options_set at once: the running game has the new value, and settings.txt
  * gets it through its temporary file. Rows whose value the game reads only at start say so in a note.
- * When each value takes effect (docs/research/2026-10-16-options-screen.md, 3b): display, sound and
- * save_folder at the next start; database at the next new game; match_columns and attribute_groups when
- * their screen is built next; full_player_search on the next game day (the search keeps its list for the
- * day, 0x7af160); sharp_picture at once (win_sharp_picture_changed); every other switch at the next key,
- * draw or save. save_folder is read only: the box has no text entry.
+ * When each value takes effect (docs/research/2026-10-16-options-screen.md, 3b):
+ * - display, sound and save_folder: at the next start.
+ * - database: at the next Start New Game. In a game the box only writes the option. The data set folder
+ *   of the open game stays (files.c keeps it until database.c tells it at the next start screen build).
+ * - match_columns, attribute_groups and the colour switches: when their screen is built next. The screen
+ *   below the box is built again when the box closes.
+ * - full_player_search: on the next game day (the search keeps its list for the day, 0x7af160).
+ * - sharp_picture: at once (win_sharp_picture_changed).
+ * - the other switches: at the next key, draw or save.
+ * save_folder is read only: the box has no text entry. When settings.txt cannot be written, the option
+ * keeps its old value and its row shows a note.
  *
- * Same game (Q152): the box allocates its scratch block at its first open, a click of the player. The text
- * of the side bar item is allocated at the first side bar build of every game. Switching an option in the
- * box leaves the game as clicking its tabs as often does (smoke_run.py --same-save --options).
+ * Same game (Q152): the box makes its scratch block when it opens the first time, after a click of the
+ * player. The side bar item makes its text block at the first side bar build of each game, so each run has
+ * it. A switch in the box does not change the game: smoke_run.py --same-save --options compares two
+ * switches with two tab clicks.
  *
- * Node slot 0: the tab, 1 Screen or 2 Game. Only a number, so the box needs no leave function. */
+ * Node slots: 0 the tab (1 Screen, 2 Game), 1 the place that opened the box (1 start screen, 2 game). Only
+ * numbers, so the box needs no leave function. */
 #include "win.h"
 #include "options.h"
 #include "dbfolders.h"
@@ -42,7 +54,7 @@
 #define CM0102_VERSION "dev"
 #endif
 
-extern const uint32_t rt_site_options_item;
+extern const uint32_t rt_site_options_item, rt_site_main_poll;
 
 #define SCREENS 0xb74450u           /* the screen stack S */
 #define PUSH 0x7fe600u              /* thiscall on S (build, input, flag, leave, exit), ret 0x14 */
@@ -55,6 +67,11 @@ extern const uint32_t rt_site_options_item;
 #define WIDGET_CREATE 0x55f990u     /* thiscall on a Display, 18 args */
 #define CELL_BUTTON 0x8040a0u       /* thiscall on S, 11 args: a button in a cell of an area */
 #define CELL_LABEL 0x804100u        /* thiscall on S, 9 args: a label in a cell of an area */
+#define TEXT_WIDTH 0x5e5ad0u        /* cdecl (font, text): the width in screen pixels for a runtime call */
+#define HOOK_FN (SCREENS + 0x37eeu) /* the main loop's Game Settings hook and its id (0x7fcd25) */
+#define HOOK_ID (SCREENS + 0x37f2u)
+#define GAME_SETTINGS_HOOK 0x823930u
+#define GAME_SETTINGS_ID 0x423u
 
 #define DISPLAYS 0xb74c4cu          /* the Display of a player slot, 0x300 bytes apart */
 #define PLAYER_SLOT 0xb77c7au       /* s16: the player slot that has the turn */
@@ -95,7 +112,7 @@ static const Row rows[] = {
     {1, OPT_ATTRIBUTE_COLOURS, ROW_SWITCH, "Attribute colours", ""},
     {1, OPT_CONDITION_COLOURS, ROW_SWITCH, "Condition colours", ""},
     {1, OPT_FOREIGN_COLOURS, ROW_SWITCH, "Foreign colours", ""},
-    {1, OPT_MATCH_COLUMNS, ROW_SWITCH, "Match columns", "When the screen opens next"},
+    {1, OPT_MATCH_COLUMNS, ROW_SWITCH, "Match columns", "When the tactics or\nmatch screen opens next"},
     {1, OPT_ATTRIBUTE_GROUPS, ROW_SWITCH, "Attribute groups", "When a profile opens next"},
     {2, OPT_SPACE_TO_CONTINUE, ROW_SWITCH, "Space to continue", ""},
     {2, OPT_SHORTCUTS, ROW_SWITCH, "Shortcut keys", ""},
@@ -114,7 +131,9 @@ static const char *const display_text[] = {"Widescreen", "Classic", "HD"};
 static const char *const display_word[] = {"widescreen", "classic", "hd"};
 static const char *const database_word[] = {"3.9.68", "3.9.60", "3.9.65"};
 
-static uint32_t scratch;            /* game memory for texts and column weights; the creates copy texts */
+/* Game memory for the texts and the column weights. The create functions copy each text. */
+static uint32_t scratch;
+static int failed_row = -1;         /* the row whose last value could not be written to settings.txt */
 
 static uint32_t call_this(uint32_t fn, uint32_t self, int n, const uint32_t *args)
 {
@@ -202,7 +221,24 @@ static void plain(int a, int column, const char *s, uint32_t font, uint32_t colo
     call_this(CELL_LABEL, SCREENS, 9, l);
 }
 
-/* The folder of the saved games, with the home folder as "~", cut at the front to room - 1 characters. */
+/* The width of a text in screen pixels. */
+static int text_width(uint32_t font, const char *s)
+{
+    uint32_t a[2] = {font, text(s)};
+    return (int)call(TEXT_WIDTH, 2, a);
+}
+
+/* A label with a text wider than its cell shows nothing. This cuts the text at the front, with "..." before
+ * it, until it fits width screen pixels. */
+static void fit_front(const char *s, uint32_t font, int width, char *out, size_t room)
+{
+    snprintf(out, room, "%s", s);
+    size_t n = strlen(s);
+    for (size_t skip = 1; text_width(font, out) > width && skip < n; skip++)
+        snprintf(out, room, "...%s", s + skip);
+}
+
+/* The folder of the saved games, with the home folder as "~", in code page 1252. */
 static void folder_text(char *out, size_t room)
 {
     char path[1100], home[1024];
@@ -212,14 +248,7 @@ static void folder_text(char *out, size_t room)
         snprintf(path, sizeof path, "~%s", dir + hl);
     else
         snprintf(path, sizeof path, "%s", dir);
-    char label[1100];
-    dbfolders_label(path, label, sizeof label);
-    size_t n = strlen(label);
-    if (n < room) {
-        snprintf(out, room, "%s", label);
-        return;
-    }
-    snprintf(out, room, "...%s", label + n - (room - 4));
+    dbfolders_label(path, out, room);
 }
 
 /* The index of the current value of a row: 0 or 1 for a switch, 0 to 2 for a choice, 3 for a custom
@@ -240,20 +269,28 @@ static int current_index(const Row *r)
 /* Column weights: the label, three values and the note, as wide as the original's columns allow (Game
  * Settings: 3, 1, 1, 1, 1 at 0x8239ad). A switch row has two values, so its note starts in the third value
  * column. */
-static const uint8_t weights_three[] = {36, 17, 17, 17, 33};
-static const uint8_t weights_two[] = {36, 17, 17, 50};
-static const uint8_t weights_custom[] = {36, 17, 17, 17, 17, 16};    /* database with a custom data set */
-static const uint8_t weights_path[] = {36, 51, 33};
+static const uint8_t weights_three[] = {38, 17, 17, 17, 31};
+static const uint8_t weights_two[] = {38, 17, 17, 48};
+static const uint8_t weights_custom[] = {38, 17, 17, 17, 17, 14};    /* database with a custom data set */
+static const uint8_t weights_path[] = {38, 49, 33};
 #define ROW_X1 160
 #define ROW_X2 729
 
-/* The left edge of the last column of a row area. */
-static int last_column_x(const uint8_t *weights, int columns)
+/* The left edge of column c of a row area, in classic numbers. */
+static int column_x(const uint8_t *weights, int columns, int c)
 {
     int total = 0, before = 0;
     for (int i = 0; i < columns; i++) total += weights[i];
-    for (int i = 0; i < columns - 1; i++) before += weights[i];
+    for (int i = 0; i < c; i++) before += weights[i];
     return ROW_X1 + (ROW_X2 - ROW_X1 + 1) * before / total;
+}
+
+static int last_column_x(const uint8_t *weights, int columns) { return column_x(weights, columns, columns - 1); }
+
+/* The room of column c for a text, in screen pixels, with a margin for the frame. */
+static int column_px(const uint8_t *weights, int columns, int c)
+{
+    return (column_x(weights, columns, c + 1) - column_x(weights, columns, c)) * (int)rt_screen_w / 800 - 12;
 }
 
 /* The note of a row in the last column, in the small font. A "\n" splits it into two lines, for the narrow
@@ -279,12 +316,12 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
     if (r->kind == ROW_PATH) {
         int a = area(ROW_X1, y1, ROW_X2, y2, 3, weights_path, 1, 0);
         plain(a, 0, r->label, 3, light);
-        /* A label with a text wider than its cell shows nothing, so the path is cut to what fits. */
-        char path[128];
-        size_t room = rt_screen_w >= 1920 ? 88 : rt_screen_w >= 1280 ? 58 : 36;
-        folder_text(path, room);
+        char folder[1100], path[1104];
+        folder_text(folder, sizeof folder);
+        fit_front(folder, 2, column_px(weights_path, 3, 1), path, sizeof path);
         plain(a, 1, path, 2, colour16(TEXT_YELLOW));
-        note(r->note, weights_path, 3, y1, y2, light);
+        note(index == failed_row ? "Not saved: settings.txt\ncannot be written" : r->note, weights_path, 3, y1, y2,
+             light);
         return;
     }
     int cur = current_index(r);
@@ -296,9 +333,11 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
     plain(a, 0, r->label, 3, light);
     int col = 1;
     if (custom) {
-        char name[64];
-        const char *v = options_string(r->id) + 7;      /* after "folder:" */
-        dbfolders_label(v, name, rt_screen_w >= 1280 ? 20 : 12);
+        char label[64], name[72];
+        dbfolders_label(options_string(r->id) + 7, label, sizeof label);      /* after "folder:" */
+        snprintf(name, sizeof name, "%s", label);
+        for (size_t n = strlen(name); n > 1 && text_width(2, name) > column_px(weights, columns, 1); n--)
+            snprintf(name, sizeof name, "%.*s...", (int)n - 2, label);
         current(a, col++, name);
     }
     for (int i = 0; i < count; i++, col++) {
@@ -307,7 +346,9 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
         if (i == cur) current(a, col, s);
         else choice(a, col, s, VALUE_ID, (uint32_t)index * 16u + (uint32_t)i, green);
     }
-    note(custom ? "For the next\nnew game" : r->note, weights, columns, y1, y2, light);
+    const char *n = index == failed_row ? "Not saved: settings.txt\ncannot be written"
+                    : custom ? "For the next\nnew game" : r->note;
+    note(n, weights, columns, y1, y2, light);
 }
 
 /* The build of the box: cdecl, no arguments. The frame follows 0x823950. */
@@ -355,18 +396,33 @@ static void options_build(void)
     rt_ret_cdecl(0);
 }
 
-/* Sets the value of a row from a click, and applies what can apply at once. */
-static void apply(const Row *r, int value)
+/* Sets the value of a row from a click, and applies what can apply at once. When settings.txt cannot be
+ * written, the old value goes back into memory and the row shows a note. */
+static void apply(const Row *r, int index, int value)
 {
     const char *word = NULL;
     if (r->kind == ROW_SWITCH && value < 2) word = switch_word[value];
     if (r->kind == ROW_DISPLAY && value < 3) word = display_word[value];
     if (r->kind == ROW_DATABASE && value < 3) word = database_word[value];
     if (!word) return;
+    char old[1100];
+    snprintf(old, sizeof old, "%s", options_string(r->id));
     int ok = options_set(r->id, word);
+    if (ok < 0) {
+        options_set(r->id, old);        /* the file cannot be written: only the memory changes back */
+        failed_row = index;
+        fprintf(stderr, "recomp: option %s = %s not saved, kept %s\n", options_name(r->id), word, old);
+        return;
+    }
+    failed_row = -1;
     fprintf(stderr, "recomp: option %s = %s (%d)\n", options_name(r->id), word, ok);
     if (r->id == OPT_SHARP_PICTURE) win_sharp_picture_changed();
-    if (r->id == OPT_DATABASE) win_data_set_changed();
+    if (r->id == OPT_DATABASE) {
+        /* On the start screen the data set changes now, as with the Database button. In a game it changes
+         * at the next start screen build, so the open game reads its own data set to its end. */
+        if (node_slot(1) == 1) win_data_set_changed();
+        else database_changed_in_game();
+    }
 }
 
 /* The input of the box: cdecl (s16 widget). Only the box's own widgets: the box covers the screen. */
@@ -383,19 +439,43 @@ static void options_input(void)
             set_slot(0, data);
             r = REBUILD;
         } else if (id == VALUE_ID && data / 16 < (uint32_t)ROW_COUNT) {
-            apply(&rows[data / 16], (int)(data % 16));
+            apply(&rows[data / 16], (int)(data / 16), (int)(data % 16));
             r = REBUILD;
         }
     }
     rt_ret_cdecl(r);
 }
 
-void options_screen_open(void)
+int options_screen_open(int from)
 {
     uint32_t p[5] = {rt_host_fn("options_build", options_build), rt_host_fn("options_input", options_input), 1, 0, 0};
-    call_this(PUSH, SCREENS, 5, p);
+    if (!call_this(PUSH, SCREENS, 5, p)) {          /* as 0x8238c0: no node, no slots */
+        fprintf(stderr, "recomp: options box not opened\n");
+        return 0;
+    }
     set_slot(0, 1);
-    fprintf(stderr, "recomp: options box opened\n");
+    set_slot(1, (uint32_t)from);
+    failed_row = -1;
+    fprintf(stderr, "recomp: options box opened from %s\n", from == 1 ? "the start screen" : "the side bar");
+    return 1;
+}
+
+/* The hook that the main loop calls for the item, cdecl (0), as 0x823930. The main loop then builds the
+ * screen on top (-4 at 0x7fcd34). */
+static void options_hook(void)
+{
+    wr32(g_mem, HOOK_FN, GAME_SETTINGS_HOOK);
+    wr32(g_mem, HOOK_ID, GAME_SETTINGS_ID);
+    options_screen_open(2);
+    rt_ret_cdecl(0);
+}
+
+void options_screen_after_poll(uint32_t ret, uint32_t display_of_poll, uint32_t widget)
+{
+    if (ret != rt_site_main_poll || widget >= 1200) return;
+    if (rd16(g_mem, display_of_poll + WIDGETS + 8 + widget * WIDGET_SIZE) != ITEM_ID) return;
+    wr32(g_mem, HOOK_FN, rt_host_fn("options_hook", options_hook));
+    wr32(g_mem, HOOK_ID, ITEM_ID);
 }
 
 /* The side bar item. */
@@ -410,8 +490,8 @@ int options_screen_widget_before(void)
     return 1;
 }
 
-/* After Game Settings: the same item below it, with the new text and id. The text block is made at the
- * first side bar build of every game, so every run has it. */
+/* After the Game Settings item: one more item with the same arguments, but with its own text and id. The
+ * text block is made at the first side bar build of each game, so each run has it. */
 void options_screen_widget_after(void)
 {
     static uint32_t label;
@@ -423,11 +503,4 @@ void options_screen_widget_after(void)
     uint32_t eax = cpu.eax;
     call_this(WIDGET_CREATE, item_display, 18, args);
     cpu.eax = eax;
-}
-
-int options_screen_side_bar_click(int id)
-{
-    if (id != (int)ITEM_ID) return 0;
-    options_screen_open();
-    return 1;
 }

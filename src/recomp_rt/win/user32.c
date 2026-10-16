@@ -768,8 +768,10 @@ RT_WRAP(0055f620, input_poll)
 {
     int key_down_in = key_click.on && (int32_t)(q_head - key_click.down_at) >= 0;
     keys_display = cpu.ecx;
+    uint32_t poll_ret = rd32(g_mem, cpu.esp), poll_display = cpu.ecx;
     waits_poll();
     o_0055f620();
+    options_screen_after_poll(poll_ret, poll_display, cpu.eax & 0xffffu);   /* the options box item */
     names_after_poll();
     if (key_down_in) key_click.polls++;
     uint32_t widget = cpu.eax & 0xffffu;
