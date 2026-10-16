@@ -70,6 +70,7 @@ static uint32_t mouse_lparam(void) { return ((uint32_t)mouse_y & 0xffff) << 16 |
 
 /* The press that the left button is in: a new number at each WM_LBUTTONDOWN, and its time. */
 static uint32_t press_count;
+uint32_t win_press_count(void) { return press_count; }
 static uint64_t press_at;
 
 static void post_mouse(uint32_t msg, int x, int y)
@@ -100,6 +101,22 @@ static void update_scaling(void)
         SDL_RenderSetIntegerScale(renderer, on);
         win_screen_dirty = 1;
     }
+}
+
+/* The option sharp_picture changed in the options box (options_screen.c): the texture filter and the
+ * whole-pixel scale as at window create, at once. Off gives back the filter that the texture had. */
+static SDL_ScaleMode default_scale_mode = SDL_ScaleModeNearest;
+void win_sharp_picture_changed(void)
+{
+    if (!renderer || !texture) return;
+    if (options_bool(OPT_SHARP_PICTURE)) {
+        SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
+        update_scaling();
+    } else {
+        SDL_SetTextureScaleMode(texture, default_scale_mode);
+        SDL_RenderSetIntegerScale(renderer, SDL_FALSE);
+    }
+    win_screen_dirty = 1;
 }
 
 /* Full screen on and off: the desktop size, with the picture scaled as in a window. */
@@ -216,6 +233,7 @@ void win_video_init(void)
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING,
                                 (int)rt_screen_w, (int)rt_screen_h);
     if (!texture) rt_fatal("SDL_CreateTexture: %s", SDL_GetError());
+    SDL_GetTextureScaleMode(texture, &default_scale_mode);
     if (options_bool(OPT_SHARP_PICTURE)) SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
     update_scaling();
     SDL_StartTextInput();
@@ -743,7 +761,7 @@ RT_IMPORT(GetMessageA)
  * (a click that ends a text entry and then hits the button under the pointer), go through at once. */
 #define REPEAT_DELAY 400u
 #define REPEAT_INTERVAL 100u
-static uint32_t last_press, last_widget = 0xffffu;
+static uint32_t last_press, last_widget = 0xffffu, last_top;
 static uint64_t next_repeat_at;
 
 /* Idle CPU (#58). The original has no Sleep: a screen that waits for input runs the screen loop
@@ -821,20 +839,27 @@ RT_WRAP(0055f620, input_poll)
 {
     int key_down_in = key_click.on && (int32_t)(q_head - key_click.down_at) >= 0;
     keys_display = cpu.ecx;
+    uint32_t poll_ret = rd32(g_mem, cpu.esp), poll_display = cpu.ecx;
     waits_poll();
     o_0055f620();
+    options_screen_after_poll(poll_ret, poll_display, cpu.eax & 0xffffu);   /* the options box item */
     names_after_poll();
     if (key_down_in) key_click.polls++;
     uint32_t widget = cpu.eax & 0xffffu;
     int held = (buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu);
     idle_rest(widget);
     if (widget == 0xffffu || !held) return;
+    uint32_t top = rd32(g_mem, 0xb74450u + 0x7d4u + 0x0eu);   /* the screen node on top (waits.c) */
     if (press_count != last_press || widget != last_widget) {
         last_press = press_count;
         last_widget = widget;
+        last_top = top;
         next_repeat_at = press_at + REPEAT_DELAY;
         return;
     }
+    /* A press that opened or closed a screen does not repeat on the next screen: the same widget number
+     * there is another widget (the options box, options_screen.c). */
+    if (top != last_top) { cpu.eax |= 0xffffu; return; }
     while ((buttons & 1) && SDL_GetTicks64() < next_repeat_at) {
         win_poll_events();
         SDL_Delay(1);

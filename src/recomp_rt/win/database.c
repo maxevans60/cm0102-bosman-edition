@@ -4,6 +4,8 @@
  * fills 9 of the 25 menu items on its stack and calls the menu builder 0x5ed300 (0x81bcc5) with
  * (110, 145, 780, 535, 2 columns, 6 rows, font 3, count 9, items, 0, 0). The runtime fills item 9 and
  * passes count 10, so the button takes the free cell after "Web Sites" and the menu stays a full grid.
+ * Since 0.5.0 it also fills item 10, "Bosman Edition Options", with count 11: a click opens the options box
+ * (options_screen.c). The last cell stays free for the Choose Season button of 0.6.0.
  * Item layout: +0x00 s16 font (-1 = default), +0x02 s16 text colour (0 = default), +0x04 text,
  * +0xcc id, +0xd0 data (docs/research/2026-10-13-screen-stack-inventory.md section 6a).
  *
@@ -32,6 +34,7 @@ extern const uint32_t rt_site_setup_menu;
 #define ITEM_SIZE 0xd4u
 #define ITEM_TEXT_SIZE 0xc8u
 #define DATABASE_ID 0x7d39       /* the action id of the item; the original uses no such id */
+#define OPTIONS_ID 0x7d3d        /* the item that opens the Bosman Edition Options box (options_screen.c) */
 
 /* The choices: the three data sets of the game folder (3.9.68, 3.9.60, 3.9.65), then each usable folder of Databases (dbfolders.h),
  * listed again each time the screen builds. */
@@ -72,6 +75,11 @@ static int current_set(void)
     return 0;
 }
 
+/* The options box changed the data set in a game (options_screen.c). The open game keeps its data set
+ * folder. The change reaches files.c at the next build of the start screen, before any new game. */
+static int changed_in_game;
+void database_changed_in_game(void) { changed_in_game = 1; }
+
 void o_005ed300(void);
 void o_0081bd70(void);
 
@@ -79,6 +87,10 @@ void o_0081bd70(void);
 RT_WRAP(005ed300, menu_build)
 {
     if (rd32(g_mem, cpu.esp) == rt_site_setup_menu && rt_arg(7) == 9) {
+        if (changed_in_game) {
+            changed_in_game = 0;
+            win_data_set_changed();
+        }
         sets_fill();
         uint32_t item = rt_arg(8) + 9 * ITEM_SIZE;
         wr16(g_mem, item, 0xffff);
@@ -86,7 +98,14 @@ RT_WRAP(005ed300, menu_build)
         win_put_str(item + 4, sets[current_set()].text, ITEM_TEXT_SIZE);
         wr32(g_mem, item + 0xcc, DATABASE_ID);
         wr32(g_mem, item + 0xd0, 0);
-        wr32(g_mem, cpu.esp + 4 + 4 * 7, 10);
+        /* Item 10: Bosman Edition Options (0.5.0 slice 6). One cell of the 2 x 6 grid stays free. */
+        item += ITEM_SIZE;
+        wr16(g_mem, item, 0xffff);
+        wr16(g_mem, item + 2, 0);
+        win_put_str(item + 4, "Bosman Edition Options", ITEM_TEXT_SIZE);
+        wr32(g_mem, item + 0xcc, OPTIONS_ID);
+        wr32(g_mem, item + 0xd0, 0);
+        wr32(g_mem, cpu.esp + 4 + 4 * 7, 11);
     }
     o_005ed300();
 }
@@ -95,6 +114,12 @@ RT_WRAP(005ed300, menu_build)
 RT_WRAP(0081bd70, setup_input)
 {
     int clicked = (int16_t)rt_arg(0);
+    if (clicked >= 0 && clicked < MAX_WIDGETS &&
+        (int16_t)rd16(g_mem, WIDGETS + WIDGET_SIZE * (uint32_t)clicked + 8) == OPTIONS_ID) {
+        options_screen_open(1);
+        rt_ret_cdecl((uint32_t)-4);
+        return;
+    }
     if (clicked >= 0 && clicked < MAX_WIDGETS &&
         (int16_t)rd16(g_mem, WIDGETS + WIDGET_SIZE * (uint32_t)clicked + 8) == DATABASE_ID) {
         sets_fill();
