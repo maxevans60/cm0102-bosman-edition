@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x9149f0 | 200 (+2 unwind) | `wc_concacaf_cup_ctor` | thiscall(this, short year, int cup_id) ret 8 | Constructs the CONCACAF World Cup qualifying cup object, loads its data and builds the qualifier and group stages, asserting on failure. | high | haiku |  |
+| 0x9149f0 | 200 (+2 unwind) | `wc_concacaf_cup_ctor` | thiscall(this, short year, int cup_id) ret 8 | Constructs the CONCACAF World Cup qualifying cup object, loads its data and builds the qualifier and group stages, asserting on failure. | high | haiku | 2026-10-16-sweep-international.md |
 | 0x914ca0 | 11 | `wc_concacaf_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of wc_concacaf_cup.cpp. | medium | slot copy |  |
 | 0x914cc0 | 90 (+1 unwind) | `wc_concacaf_cup::~wc_concacaf_cup` | thiscall (ECX = this, no stack arguments, ret 0) | Destroys a CONCACAF cup object, freeing its team lists, arrays and Comp_Stats member, then chaining to the Cup base destructor. | high | haiku |  |
 | 0x914de0 | 839 | `wc_concacaf_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of wc_concacaf_cup.cpp. | medium | slot copy |  |

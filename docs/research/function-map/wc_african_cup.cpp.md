@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x90f210 | 209 (+2 unwind) | `wc_african_cup::ctor` | thiscall(this, short year, int parent_id) ret 8 | Constructs the African Cup object, loads its cup data and allocates team slots for the given season year. | high | haiku |  |
+| 0x90f210 | 209 (+2 unwind) | `wc_african_cup::ctor` | thiscall(this, short year, int parent_id) ret 8 | Constructs the African Cup object, loads its cup data and allocates team slots for the given season year. | high | haiku | 2026-10-16-sweep-international.md |
 | 0x90f4d0 | 11 | `wc_african_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of wc_african_cup.cpp. | medium | slot copy |  |
 | 0x90f4f0 | 88 (+1 unwind) | `wc_african_cup_dtor` | thiscall(this) ret 0 | Destructor for the African Cup object that releases its owned buffers, element array, child objects and base Cup state. | high | haiku |  |
 | 0x90f600 | 533 | `wc_african_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of wc_african_cup.cpp. | medium | slot copy |  |

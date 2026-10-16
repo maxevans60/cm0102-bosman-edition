@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 2233 high, 4303 medium, 327 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04.
+- Confidence: 2339 high, 4206 medium, 318 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -246,14 +246,14 @@ All 11747 functions with their category, file and placement method are in `funct
 | [norway_rules.cpp](norway_rules.cpp.md) | 6 |
 | [notes.cpp](notes.cpp.md) | 25 |
 | [oceania_club_champ.cpp](oceania_club_champ.cpp.md) | 16 |
-| [oceania_nations.cpp](oceania_nations.cpp.md) | 32 |
-| [officials_manager.cpp](officials_manager.cpp.md) | 18 |
+| [oceania_nations.cpp](oceania_nations.cpp.md) | 16 |
+| [officials_manager.cpp](officials_manager.cpp.md) | 34 |
 | [old_finland_awards.cpp](old_finland_awards.cpp.md) | 5 |
 | [old_france_awards.cpp](old_france_awards.cpp.md) | 4 |
 | [old_international_awards.cpp](old_international_awards.cpp.md) | 3 |
 | [old_ireland_awards.cpp](old_ireland_awards.cpp.md) | 5 |
-| [olympics.cpp](olympics.cpp.md) | 18 |
-| [os.cpp](os.cpp.md) | 8 |
+| [olympics.cpp](olympics.cpp.md) | 16 |
+| [os.cpp](os.cpp.md) | 10 |
 | [physio.cpp](physio.cpp.md) | 10 |
 | [player_regen.cpp](player_regen.cpp.md) | 46 |
 | [player_search.cpp](player_search.cpp.md) | 60 |
@@ -378,8 +378,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [tur_second_b.cpp](tur_second_b.cpp.md) | 19 |
 | [turkey_awards.cpp](turkey_awards.cpp.md) | 4 |
 | [turkey_rules.cpp](turkey_rules.cpp.md) | 3 |
-| [uefa_cup.cpp](uefa_cup.cpp.md) | 13 |
-| [uefa_seeding.cpp](uefa_seeding.cpp.md) | 24 |
+| [uefa_cup.cpp](uefa_cup.cpp.md) | 11 |
+| [uefa_seeding.cpp](uefa_seeding.cpp.md) | 26 |
 | [ultimatum.cpp](ultimatum.cpp.md) | 3 |
 | [usa_awards.cpp](usa_awards.cpp.md) | 4 |
 | [usa_mls.cpp](usa_mls.cpp.md) | 22 |

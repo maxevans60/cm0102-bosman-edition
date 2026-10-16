@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7df180 | 20 | `RbInternational::RbInternational` | thiscall(RbInternational *this, FILE *file), ret 4 | Constructs the international ruling body on the RulingBody base with no nation or continent and sets its kind and rule set index. | high | opus |  |
+| 0x7df180 | 20 | `RbInternational::RbInternational` | thiscall(RbInternational *this, FILE *file), ret 4 | Constructs the international ruling body on the RulingBody base with no nation or continent and sets its kind and rule set index. | high | opus | 2026-10-16-sweep-international.md |
 | 0x7df1c0 | 101 (+1 unwind) | `RbInternational::process_match_cards` | thiscall(RbInternational *this, MatchPlayer *player, Fixture *fixture), ret 8 | Applies international card rules for one player after a match, with a one match ban for a red card and for every second booking. | high | opus |  |
 | 0x7df320 | 38 | `RbInternational::get_name` | thiscall(RbInternational *this unused, char *buf, int buf_len, int flag), ret 0xc | Writes the text International into the buffer as the ruling body name, or reports an assert when the buffer is too short. | high | opus |  |
 | 0x7df3c0 | 70 | `RbInternational::start_new_season` | fastcall(RbInternational *this in ECX), ret 0 | Clears idle international discipline entries and releases bans older than three years at the start of a season, then compacts the list. | medium | opus |  |

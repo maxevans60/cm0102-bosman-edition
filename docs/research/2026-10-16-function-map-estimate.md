@@ -277,6 +277,58 @@ Many gap functions hold other code: news stories between `european_cup.cpp` and 
 | 0x66a0c0 | Sort order of the 35 league entries | `key_nation_table_init` (Haiku) | `key_nation_sorted_order` | agrees |
 | 0x66a100 | qsort comparator of the entries | `key_nation_compare_names` (Haiku) | `key_nation_compare_entries` | agrees |
 
+#### Wave w05 (tier 2, 2026-10-16)
+
+Run `sweep-w05`: 8 Opus agents named 201 functions of `national_teams.cpp`, `national_teams_screens.cpp` (with `Network` gap functions), `oceania_club_champ.cpp`, `oceania_nations.cpp` (with the officials stats screen and `OfficialsManager` gap functions), `olympics.cpp`, `uefa_cup.cpp` and `uefa_seeding.cpp`. Each agent took 2 to 5 minutes and 112,000 to 188,000 tokens. Confidence: 157 high, 43 medium, 1 low. The merge needed no fixes.
+
+43 functions of the wave are cited. 38 agree, 2 agree in area and 3 citations only list the address.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x76a4e0 | Setup step 23, global 0xb74318 (game-creation inventory) | `national_teams_find_cd_and_init` (Haiku) | `NationalTeams::NationalTeams` | agrees |
+| 0x76b100 | Daily update call (game-creation inventory) | `national_teams_process_fixture_round` (Haiku) | `NationalTeams::daily_update` | agrees |
+| 0x76c120 | fill_squad, wider thresholds for Australia (sweep-international) | `national_teams_fill_squad_from_pool` (Haiku) | `NationalTeams::select_squad` | agrees |
+| 0x76d430 | get_squad_limits (sweep-international) | `national_teams_position_pair_or_assert` (Haiku) | `national_teams_get_squad_size_limits` | agrees |
+| 0x76d940 | is_tournament (sweep-international) | `is_national_team_type` (Haiku) | `national_teams_is_finals_comp` | agrees |
+| 0x76d9b0 | One of three tests in the player search (crash-fixes) | `player_matches_search_filter` (Haiku) | `national_teams_player_is_eligible` | agrees in area |
+| 0x77a7d0 | Network session object created by 0x7ff500 (display inventory) | `network_session_init` (Haiku) | `Network::Network` | agrees |
+| 0x77a890 | Network session object (display inventory) | `network_send_list_server_bye` (Haiku) | `Network::~Network` | agrees in area |
+| 0x77a9f0 | Every wsock32 caller is in 0x77a7d0 to 0x77aa77 (import inventory) | `Network::handle_list_server_ack` (Haiku) | `Network::host_or_join_game` | agrees |
+| 0x77ac00 | Listed as a callee only (display inventory) | `network_release_slot_socket` (Haiku) | `Network::release_slot_socket` | no claim |
+| 0x77af20 | Listed as a callee only (display inventory) | `Network::list_server_exchange` (Haiku) | `Network::receive_packet` | no claim |
+| 0x77b630 | Listed as a callee of scrman init only (display inventory) | `buffer_alloc_or_fatal` (Haiku) | `net_buffer_init` | no claim |
+| 0x796fd0 | Oceania Champions Cup constructor (club-world) | `oceania_club_champ_ctor` (Haiku) | `OceaniaClubChamp::OceaniaClubChamp` | agrees |
+| 0x797230 | Oceania Club Championship stages (sweep-europe) | `oceania_club_champ::create_schedule` (slot copy) | `OceaniaClubChamp::create_schedule` | agrees |
+| 0x798220 | Takes 8 clubs (sweep-europe) | `oceania_club_champ_seed_qualifiers` (Haiku) | `OceaniaClubChamp::select_qualified_clubs` | agrees |
+| 0x7988b0 | Oceania Nations Cup constructor (sweep-international) | `oceania_nations_cup_ctor` (Haiku) | `OceaniaNations::OceaniaNations` | agrees |
+| 0x79b580 | Setup step 40, global 0xb74340 (game-creation inventory) | `officials_manager_find_cd_and_load` (Haiku) | `OfficialsManager::OfficialsManager` | agrees |
+| 0x79f530 | Olympics constructor (sweep-international) | `olympics_cup_ctor` (Haiku) | `Olympics::Olympics` | agrees |
+| 0x7a16d0 | Total physical memory in MB (import inventory) | `os_get_total_physical_memory_mb` (Haiku) | `os_get_total_physical_memory_mb` | agrees |
+| 0x7a1710 | Free memory in MB (game-creation inventory) | `get_free_memory_mb` (Haiku) | `os_get_free_memory_mb` | agrees |
+| 0x7a1750 | Loads cpuinf32.dll (import inventory) | `detect_cpu_speed_class` (Haiku) | `os_get_cpu_speed_class` | agrees |
+| 0x9025c0 | UEFA Cup rounds (sweep-europe) | `uefa_cup::create_round_table` (slot copy) | `UefaCup::create_round_table` | agrees |
+| 0x902b90 | build_entrants (sweep-europe) | `uefa_cup_build_qualifier_list` (Haiku) | `UefaCup::build_entrants` | agrees |
+| 0x903360 | Setup step 8, global 0xde1f58 (game-creation inventory) | `cm_cd_wait_and_load_league_data` (Haiku) | `UefaSeeding::UefaSeeding` | agrees |
+| 0x9035a0 | Daily call (game-creation inventory) | `uefa_seeding_on_season_update` (Haiku) | `UefaSeeding::update_season` | agrees |
+| 0x903890 | English Intertoto place (sweep-europe) | `uefa_seeding_pick_team_for_slot` (Haiku) | `UefaSeeding::pick_english_intertoto_club` | agrees |
+| 0x903b50 | Places by coefficient (season-change-points) | `uefa_seeding_rotate_and_sort_entries` (Haiku) | `UefaSeeding::roll_coefficients` | agrees |
+| 0x903cc0 | Places by coefficient (season-change-points) | `uefa_seeding_assign_pots_and_flags` (Haiku) | `UefaSeeding::set_place_counts` | agrees |
+| 0x904040 | collect_european_clubs (sweep-europe) | `uefa_seeding_collect_qualified_teams` (Haiku) | `UefaSeeding::collect_european_clubs` | agrees |
+| 0x904210 | Champions League places (season-change-points) | `uefa_seeding_assign_pots` (Haiku) | `UefaSeeding::assign_champions_league_places` | agrees |
+| 0x904580 | UEFA Cup places (season-change-points) | `uefa_seeding_assign_qualified_teams` (Haiku) | `UefaSeeding::assign_uefa_cup_places` | agrees |
+| 0x904e30 | Intertoto places (season-change-points) | `uefa_seeding_assign_pots` (Haiku) | `UefaSeeding::assign_intertoto_places` | agrees |
+| 0x905230 | Load of uefa_seeding.tmp (sweep-europe) | `uefa_seeding_load_tmp_file` (Haiku) | `UefaSeeding::load_from_temp_file` | agrees |
+| 0x905510 | Save of uefa_seeding.tmp (sweep-europe) | `uefa_seeding_load_file` (Haiku) | `UefaSeeding::save_to_temp_file` | agrees |
+| 0x905790 | Cup semi-final losers table (sweep-europe) | `uefa_seeding_add_qualified_team` (Haiku) | `UefaSeeding::record_cup_semi_final_losers` | agrees |
+| 0x9058b0 | add_nation_points (sweep-europe) | `uefa_seeding_add_points_to_entry` (Haiku) | `UefaSeeding::add_nation_points` | agrees |
+| 0x9058e0 | check_registration_deadlines (sweep-europe) | `uefa_seeding_dispatch_by_team_pair` (Haiku) | `uefa_check_registration_deadlines` | agrees |
+| 0x9059e0 | apply_euro_cfg_order (sweep-europe) | `uefa_seeding_load_euro_config_teams` (Haiku) | `UefaSeeding::apply_euro_cfg_order` | agrees |
+| 0x905c60 | get_nation_places (sweep-europe) | `uefa_seeding_lookup_entry_flags` (Haiku) | `UefaSeeding::get_nation_places` | agrees |
+| 0x905cb0 | Sort of nations by coefficient (sweep-europe) | `uefa_seeding_compare_float_key` (Haiku) | `uefa_compare_nations_by_coefficient` | agrees |
+| 0x905ce0 | Sort of the club records (sweep-europe) | `uefa_seeding_compare_entries` (Haiku) | `uefa_compare_seed_clubs` | agrees |
+| 0x905d40 | validate_euro_cfg (sweep-europe) | `load_euro_config` (Haiku) | `validate_euro_cfg` | agrees |
+| 0x905f00 | post_qualifiers_news (sweep-europe) | `uefa_seeding_build_qualified_report_news` (Haiku) | `uefa_post_qualifiers_news` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
