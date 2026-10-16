@@ -55,12 +55,8 @@ The game drawn at 1280x800. It is the default.
 _Avoid_: wide mode
 
 **HD mode**:
-The game drawn at 1920x1080 for big screens, made the same way as widescreen mode. Its text is 1.35 times bigger by default (HD text). Opt-in with `display = hd`. Since 0.4.0 (#32).
-_Avoid_: 4K mode
-
-**HD text**:
-The text size in HD mode: Large (the default since 0.5.1, every font size and line height 1.35 times bigger, the Traditional fonts too) or Small (the sizes of 0.4.0 to 0.5.0). Option `hd_text`, read at start. Large and Small give different later days, as two display modes do.
-_Avoid_: font scale, text zoom, larger text
+The game drawn at 1920x1080, in 0.4.0 to 0.5.0 only (`display = hd`). Removed after 0.5.0 (Max, 2026-10-16, Q267): widescreen looks better on large screens. An old `display = hd` gives widescreen.
+_Avoid_: larger text, 4K mode
 
 **Classic mode**:
 The game drawn at 800x600, as the original draws it.

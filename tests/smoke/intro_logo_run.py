@@ -8,7 +8,7 @@ Usage:
 Each run uses a new user folder (RECOMP_USER_DIR) and a game folder of links to <game folder>, with
 Data/bosman_logo.rgn made by tools/release/make_intro_logo.py from --logo (default: a test pattern).
 The runs dump the screen once a second through the intro, with no click.
-    classic, widescreen, hd   the intro shows the logo, 520x520 in the centre of the screen
+    classic, widescreen       the intro shows the logo, 520x520 in the centre of the screen
     folder    database = folder:<name>, a copy of the Update Team folder (it has its own logo.RGN and
               eidos.RGN): the intro shows the logo, and each picture of the intro is one of the classic run,
               so the game reads no .rgn file of the folder
@@ -36,7 +36,7 @@ import smoke_run  # noqa: E402
 
 SIZE = make_intro_logo.SIZE
 DUMPS = 24                      # one a second; the intro without sound ends after about 20 s
-MODES = {"classic": (800, 600), "widescreen": (1280, 800), "hd": (1920, 1200)}
+MODES = {"classic": (800, 600), "widescreen": (1280, 800)}
 
 
 def test_png(path):
@@ -178,7 +178,7 @@ def main(argv):
         games = {"logo": os.path.join(work, "game-1"), "no-logo": os.path.join(work, "game-0")}
         linked_game(game, games["logo"], rgn)
         linked_game(game, games["no-logo"], None)
-        runs = [("classic", "classic", False), ("widescreen", "widescreen", False), ("hd", "hd", False),
+        runs = [("classic", "classic", False), ("widescreen", "widescreen", False),
                 ("folder", "classic", True), ("no-logo", "classic", False)]
         with concurrent.futures.ThreadPoolExecutor(len(runs) + 1) as pool:
             jobs = {name: pool.submit(run, program, games, name, mode, folder, update_team, work)

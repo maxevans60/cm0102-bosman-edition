@@ -1,7 +1,7 @@
 /* The size of a new window on a small screen (0.4.0 slice 10).
  *
- * A new window opens at the size of the game's screen: 1920x1080 in HD mode. On a 1080p screen the
- * menu bar or the task bar and the title bar take part of the height, so the window would go past the
+ * A new window opens at the size of the game's screen, 1280x800 in widescreen mode. On a small screen the
+ * menu bar or the task bar and the title bar take part of the height, so the window could go past the
  * edge of the screen. winfit_size makes the window smaller, with the same shape, until it fits in
  * max_w x max_h. The picture is scaled to the window as before (user32.c). */
 #ifndef WINFIT_H

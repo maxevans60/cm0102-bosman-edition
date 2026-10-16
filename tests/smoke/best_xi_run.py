@@ -3,9 +3,9 @@
 
 Usage:
     python3 tests/smoke/best_xi_run.py <cm0102_recomp> <game folder> <out folder> [--dir <fixtures folder>]
-        [--mode classic|widescreen|hd]...
+        [--mode classic|widescreen]...
 
-One run from start.sav (Arsenal, 14.7.01) for each mode (classic, widescreen and hd when no --mode is given),
+One run from start.sav (Arsenal, 14.7.01) for each mode (classic and widescreen when no --mode is given),
 at the same time. The tour: own squad > Assistant > Team views (Best XI) > Formation > 3-5-2 >
 Back > Assistant > Pick best team > Assistant > Team views > Back; Premier Division table > Liverpool >
 Squad > Assistant > Team views. Screen dumps of each step in <out>/<mode>.
@@ -50,34 +50,34 @@ import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 import hidden_check  # noqa: E402
 
-# Positions for 800x600; "| x y | x y | x y" gives the widescreen, HD Small and HD Large positions where the game does not scale
+# Positions for 800x600; "| x y" gives the widescreen position where the game does not scale
 # (popups).
 TOUR = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270 | 288 274",  # Arsenal Squad
+    "4000 click 150 156 | 199 203",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 241 | 928 288 | 1454 357 | 1460 379",  # Team views
+    "3000 click 540 241 | 928 288",  # Team views
     "5000 dump {d}/1-best-xi.bmp",
     "5500 click 712 25",                    # Formation
     "7000 dump {d}/2-formation-list.bmp",
-    "8000 click 720 174 | 1168 189 | 1800 201 | 1800 235",  # 3-5-2, the seventh item
+    "8000 click 720 174 | 1168 189",  # 3-5-2, the seventh item
     "10000 dump {d}/3-other-formation.bmp",
     "11000 click 358 573",                  # Back
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 159 | 928 205 | 1460 274 | 1460 277",  # Pick best team
+    "3000 click 540 159 | 928 205",  # Pick best team
     "5000 click 592 135",                   # Assistant
-    "6500 click 540 241 | 928 288 | 1454 357 | 1460 379",  # Team views
+    "6500 click 540 241 | 928 288",  # Team views
     "8500 dump {d}/4-after-pick.bmp",
     "9500 click 358 573",                   # Back
     "wait screen:0x454900",
     "1500 click 584 527",                   # Premier Division
     "wait screen:0x48fcd0",
-    "1500 click 215 462",                   # Liverpool (HD Large: Chelsea, the table shows 8 rows)
+    "1500 click 215 462",                   # Liverpool
     "3500 click 169 97",                    # Squad
     "5500 click 592 135",                   # Assistant
-    "7000 click 540 159 | 928 205 | 1460 274 | 1460 277",  # Team views, the only item
+    "7000 click 540 159 | 928 205",  # Team views, the only item
     "9000 dump {d}/5-other-club.bmp",
 ]
 
@@ -256,7 +256,7 @@ def main(argv):
     if len(args) != 3:
         print(__doc__)
         return 2
-    modes = modes or ["classic", "widescreen", "hd"]
+    modes = modes or ["classic", "widescreen"]
     program, game, out = (os.path.abspath(a) for a in args)
     with ThreadPoolExecutor(len(modes) + 1) as pool:
         futures = {m: pool.submit(run, program, game, folder, m, os.path.join(out, m)) for m in modes}

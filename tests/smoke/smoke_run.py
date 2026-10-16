@@ -2,9 +2,9 @@
 """Smoke run: the recompiled game plays the start screen, a new game and some days without a person.
 
 Usage:
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen|hd|hd-small]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd|hd-small] [--days n] [--ref-build <program>]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -62,11 +62,7 @@ With --database, settings.txt also chooses the data set of the new game, and the
 Data-3.9.65, as in a download). Without it, the run uses the default 3.9.68 and <reference folder>/<mode>.
 
 Widescreen mode draws at 1280x800 and the runtime scales every area by 1280/800 across and 800/600
-down, so the run scales each click and the date box by the same factors. HD mode (display = hd) draws
-at 1920x1080 with the same rule. HD draws its text 1.35 times bigger by default (hd_text = large, 0.5.1).
---mode hd-small plays HD with hd_text = small, the text of 0.5.0: its reference pictures are those of 0.5.0
-HD, in <reference folder>/hd-small. Popup items and list rows are taller with the bigger text, so a step can
-give them their own HD Small and HD Large positions (OWN_POSITIONS).
+down, so the run scales each click and the date box by the same factors.
 
 Screens and checks:
     1 settings   the first-start settings screen: up to 20% of pixels differ (random background)
@@ -126,7 +122,7 @@ STEPS = [
     "wait first-news",
     "2000 dump {d}/4-news.bmp",
     "2500 click 45 165",                    # manager menu (the manager's name)
-    "4500 click 150 427 | 199 474 | 270 541 | 288 610",  # Go on Holiday (popup items keep their size; HD Large text makes them taller)
+    "4500 click 150 427 | 199 474",  # Go on Holiday (popup items keep their size in widescreen and HD)
     "7000 click 705 572",                   # Please Confirm: Yes
     "37000 dump {d}/5-holiday.bmp",
     "38000 quit",
@@ -135,19 +131,9 @@ DATE_BOX = (0, 15, 90, 55)  # x0, y0, x1, y1 of the day and date in the left bar
 SCREENS = [("1-settings", 0.20), ("2-setup", 0.0), ("3-leagues", 0.0), ("4-news", 0.0), ("5-holiday", None)]
 
 
-SIZES = {"classic": (800, 600), "widescreen": (1280, 800), "hd": (1920, 1080), "hd-small": (1920, 1080)}
-# The modes that can have their own position after "|": "x y | widescreen x y | hd-small x y | hd x y".
-# HD draws its text 1.35 times bigger by default (hd_text = large, 0.5.1), so popup items and list rows sit
-# lower than with hd_text = small. A step with an HD Small position and none for HD Large stops the run in
-# HD Large: the item has moved.
-OWN_POSITIONS = ["widescreen", "hd-small", "hd"]
-
-
-def settings_text(mode):
-    """The first lines of settings.txt for a mode. hd-small is HD with the text of 0.5.0."""
-    if mode == "hd-small":
-        return "display = hd\nhd_text = small\n"
-    return f"display = {mode}\n"
+SIZES = {"classic": (800, 600), "widescreen": (1280, 800)}
+# The modes that can have their own position after "|": "x y | widescreen x y".
+OWN_POSITIONS = ["widescreen"]
 
 
 def scaled_steps(mode, shots, steps=STEPS):
@@ -155,11 +141,9 @@ def scaled_steps(mode, shots, steps=STEPS):
     w, h = SIZES[mode]
     out = []
     for step in steps:
-        # "| x y": the widescreen position, where it does not scale, and "| x y" after it: the HD position.
+        # "| x y": the widescreen position, where it does not scale.
         step, *own = step.split("|")
         parts = step.format(d=shots).split()
-        if mode == "hd" and len(own) == 2:
-            raise SystemExit(f"step {step.strip()!r} has an HD Small position and none for HD Large")
         if mode in OWN_POSITIONS and len(own) > OWN_POSITIONS.index(mode):
             parts[2:4] = own[OWN_POSITIONS.index(mode)].split()
         elif parts[0] != "wait" and parts[1] in ("click", "move", "down", "up", "rclick"):
@@ -204,8 +188,6 @@ def differing_share(a, b, box=None, tol=0):
 
 
 # The runs of the same-save check: a name and the option lines of settings.txt (after the mode).
-# hd_text is not in the off run: it changes later days as a display mode does (Q225). --mode hd checks HD Large
-# (normal and again), and --mode hd-small with --ref-build checks that HD Small plays as 0.5.0.
 SAME_SAVE_RUNS = [
     ("normal", {"faster_days": "off"}),
     ("again", {"faster_days": "off"}),
@@ -255,7 +237,7 @@ MATCH_STEPS = [
     "1000 click 705 573",                   # Proceed to the match? Yes
     "wait match",
     "1000 click 45 254",                    # Commentary Speed
-    "2500 click 120 255 | 192 344 | 260 451 | 260 459",  # Very Fast (widescreen and HD; the classic position is not checked)
+    "2500 click 120 255 | 192 344",  # Very Fast (widescreen and HD; the classic position is not checked)
     "4000 click 45 120",                    # Kick Off Match
     "wait label:Re-start 600000",           # half time
     "1000 click 45 120",                    # Re-start Match
@@ -351,7 +333,7 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
         if save:
             shutil.copyfile(save, os.path.join(user, os.path.basename(save)))
         with open(os.path.join(user, "settings.txt"), "w") as f:
-            f.write(settings_text(mode))
+            f.write(f"display = {mode}\n")
             for key, value in options.items():
                 f.write(f"{key} = {value}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
@@ -426,13 +408,13 @@ SEARCH_RUNS = [
 
 # --options: after the load, open the Bosman Edition Options box (Game Options, then its item), switch
 # Faster holidays off and on on the Game tab, close the box, then go on holiday. Positions as in
-# tests/smoke/options_box_run.py. The drop-down item keeps its size, so it has widescreen, HD Small and HD Large positions.
-OPTIONS_OPEN = ["1000 click 45 344", "wait popup", "1000 click 175 417 | 225 525 | 295 675 | 288 697", "wait options"]
+# tests/smoke/options_box_run.py. The drop-down item keeps its size, so it has a widescreen position.
+OPTIONS_OPEN = ["1000 click 45 344", "wait popup", "1000 click 175 417 | 225 525", "wait options"]
 OPTIONS_CLOSE = ["5500 click 444 524", "wait screen:0x7881e0"]
 OPTIONS_STEPS = OPTIONS_OPEN + [
-    "1000 click 584 149",                   # the Game tab
-    "2500 click 452 350",                   # Faster holidays: Off
-    "4000 click 371 350",                   # Faster holidays: On
+    "1000 click 584 155",                   # the Game tab
+    "2500 click 452 367",                   # Faster holidays: Off
+    "4000 click 371 367",                   # Faster holidays: On
 ] + OPTIONS_CLOSE
 
 
@@ -446,11 +428,11 @@ OPTIONS_USER_SUB = "options-box-runs-" + "x" * 100
 def options_runs(load, holiday):
     """The runs of the options box check, each with its own steps."""
     switch = load + OPTIONS_STEPS + holiday
-    tabs = load + OPTIONS_OPEN + ["1000 click 584 149", "2500 click 304 149", "4000 click 584 149"] + OPTIONS_CLOSE + \
+    tabs = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 304 155", "4000 click 584 155"] + OPTIONS_CLOSE + \
         holiday
-    database = load + OPTIONS_OPEN + ["1000 click 584 149", "2500 click 452 416", "4000 click 533 416"] + \
+    database = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 437", "4000 click 533 437"] + \
         OPTIONS_CLOSE + holiday
-    backups = load + OPTIONS_OPEN + ["1000 click 584 149", "2500 click 452 383", "4000 click 371 383"] + \
+    backups = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 402", "4000 click 371 402"] + \
         OPTIONS_CLOSE + holiday
 
     def run(name, steps):
@@ -485,8 +467,8 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
 
 
 # --speed fastest: the Fastest item (#31, commentary.c), one row above Very Fast.
-SPEED_CLICKS = {"very-fast": "2500 click 120 255 | 192 344 | 260 451 | 260 459",
-                "fastest": "2500 click 120 242 | 192 323 | 260 430 | 260 433"}
+SPEED_CLICKS = {"very-fast": "2500 click 120 255 | 192 344",
+                "fastest": "2500 click 120 242 | 192 323"}
 
 
 def match(program, game, days, speed="very-fast", sleep_danger=False):
@@ -515,7 +497,7 @@ def main(argv):
     if "--mode" in argv[3:]:
         mode = argv[argv.index("--mode") + 1]
     if mode not in SIZES:
-        print(f"unknown mode {mode}: use classic, widescreen, hd or hd-small")
+        print(f"unknown mode {mode}: use classic or widescreen")
         return 2
     if "--match" in argv[3:]:
         days = int(argv[argv.index("--days") + 1]) if "--days" in argv[3:] else MATCH_DAYS
@@ -542,7 +524,7 @@ def main(argv):
         user = os.path.join(work, "user")  # RECOMP_USER_DIR: the same on Mac and Windows
         os.makedirs(user)
         with open(os.path.join(user, "settings.txt"), "w") as f:
-            f.write(settings_text(mode))
+            f.write(f"display = {mode}\n")
             if database:
                 f.write(f"database = {database}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",

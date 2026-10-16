@@ -13,7 +13,7 @@ import re
 
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
-                  "foreign.c", "hd_text.c")
+                  "foreign.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -26,8 +26,6 @@ CALLBACKS = {
     0x55FBA0: ("a10c29ae008b1510", "popup area create"),
     0x5ACBE0: ("81ec240200008b84", "fixture search"),
     0x5E8290: ("83ec6c8b0d307ab6", "message box (title, text, flags)"),
-    0x945501: ("558bec568b75080f", "calloc (count, size)"),
-    0x9452CA: ("558bec51568b7508", "free"),
     0x5FCFF0: ("8b44240481ec0002", "commentary speed of a manager"),
     0x5FD2F0: ("81ec00020000568b", "set the holiday flag"),
     0x5FED50: ("8b44240481ec0002", "selection saved at the start of a holiday"),

@@ -287,7 +287,7 @@ void rt_fatal(const char *fmt, ...) __attribute__((noreturn, format(printf, 1, 2
 #define RT_WRAP(addr, name) void f_##addr(void)
 
 /* The size of the screen that the original draws: 800x600 in classic mode, 1280x800 in widescreen
- * mode, 1920x1080 in HD mode. The constants of tools/recomp/widescreen.py read these. */
+ * mode. The constants of tools/recomp/widescreen.py read these. */
 extern uint32_t rt_screen_w, rt_screen_h;
 
 /* Full player search (#57, src/recomp_rt/win/playersearch.c): 1 when the option is on. The replaced jumps
@@ -299,12 +299,6 @@ uint32_t rt_full_player_search(uint32_t screen);
 uint32_t rt_groups_cells(uint32_t esp);
 uint32_t rt_groups_table(void);
 uint32_t rt_groups_count(void);
-
-/* HD text (0.5.1, src/recomp_rt/win/hd_text.c): a text size, baseline or line height of the font engine.
- * v times rt_hd_text_percent / 100, rounded half up: 135 in HD with hd_text = large, else 100, which gives v.
- * The constants of tools/recomp/hd_text.py read it. */
-extern uint32_t rt_hd_text_percent;
-static inline uint32_t rt_hd_text(uint32_t v) { return (v * rt_hd_text_percent + 50u) / 100u; }
 
 /* Arguments and return for replacements: esp points at the return address. */
 static inline uint32_t rt_arg(int i) { return rd32(g_mem, cpu.esp + 4 + 4 * (uint32_t)i); }
