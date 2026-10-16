@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 2515 high, 4050 medium, 298 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07.
+- Confidence: 2600 high, 3969 medium, 294 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -73,8 +73,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [conmebol_liber.cpp](conmebol_liber.cpp.md) | 16 |
 | [conmebol_merc.cpp](conmebol_merc.cpp.md) | 18 |
 | [conmebol_seeding.cpp](conmebol_seeding.cpp.md) | 9 |
-| [contract_manager.cpp](contract_manager.cpp.md) | 126 |
-| [contract_screens.cpp](contract_screens.cpp.md) | 46 |
+| [contract_manager.cpp](contract_manager.cpp.md) | 124 |
+| [contract_screens.cpp](contract_screens.cpp.md) | 48 |
 | [cro_a1.cpp](cro_a1.cpp.md) | 14 |
 | [cro_a2a.cpp](cro_a2a.cpp.md) | 10 |
 | [cro_a2b.cpp](cro_a2b.cpp.md) | 9 |
@@ -82,8 +82,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [croatia_awards.cpp](croatia_awards.cpp.md) | 4 |
 | [croatia_rules.cpp](croatia_rules.cpp.md) | 2 |
 | [Cup.cpp](Cup.cpp.md) | 47 |
-| [cup_stage.cpp](cup_stage.cpp.md) | 13 |
-| [Database.cpp](Database.cpp.md) | 179 |
+| [cup_stage.cpp](cup_stage.cpp.md) | 8 |
+| [Database.cpp](Database.cpp.md) | 184 |
 | [Date.cpp](Date.cpp.md) | 36 |
 | [Db_files.cpp](Db_files.cpp.md) | 40 |
 | [den_cup.cpp](den_cup.cpp.md) | 7 |
@@ -121,8 +121,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [Fine.cpp](Fine.cpp.md) | 16 |
 | [finland_awards.cpp](finland_awards.cpp.md) | 6 |
 | [finland_rules.cpp](finland_rules.cpp.md) | 4 |
-| [fix_man.cpp](fix_man.cpp.md) | 39 |
-| [fog_of_war.cpp](fog_of_war.cpp.md) | 33 |
+| [fix_man.cpp](fix_man.cpp.md) | 37 |
+| [fog_of_war.cpp](fog_of_war.cpp.md) | 35 |
 | [formation.cpp](formation.cpp.md) | 46 |
 | [fra_cfa.cpp](fra_cfa.cpp.md) | 8 |
 | [fra_cup.cpp](fra_cup.cpp.md) | 8 |
@@ -134,8 +134,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [fra_third.cpp](fra_third.cpp.md) | 7 |
 | [france_awards.cpp](france_awards.cpp.md) | 4 |
 | [france_rules.cpp](france_rules.cpp.md) | 10 |
-| [friendly.cpp](friendly.cpp.md) | 80 |
-| [game.cpp](game.cpp.md) | 21 |
+| [friendly.cpp](friendly.cpp.md) | 67 |
+| [game.cpp](game.cpp.md) | 34 |
 | [game_config.cpp](game_config.cpp.md) | 13 |
 | [ger_cup.cpp](ger_cup.cpp.md) | 7 |
 | [ger_first.cpp](ger_first.cpp.md) | 12 |
@@ -207,9 +207,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [korea_rules.cpp](korea_rules.cpp.md) | 3 |
 | [Langlib.cpp](Langlib.cpp.md) | 13 |
 | [league.cpp](league.cpp.md) | 62 |
-| [league_stage.cpp](league_stage.cpp.md) | 11 |
+| [league_stage.cpp](league_stage.cpp.md) | 6 |
 | [library_without_asserts](library_without_asserts.md) | 254 |
-| [main.cpp](main.cpp.md) | 11 |
+| [main.cpp](main.cpp.md) | 16 |
 | [manager_manager.cpp](manager_manager.cpp.md) | 101 |
 | [manager_screens.cpp](manager_screens.cpp.md) | 27 |
 | [match_day.cpp](match_day.cpp.md) | 23 |
@@ -254,9 +254,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [old_ireland_awards.cpp](old_ireland_awards.cpp.md) | 5 |
 | [olympics.cpp](olympics.cpp.md) | 16 |
 | [os.cpp](os.cpp.md) | 10 |
-| [physio.cpp](physio.cpp.md) | 10 |
-| [player_regen.cpp](player_regen.cpp.md) | 46 |
-| [player_search.cpp](player_search.cpp.md) | 60 |
+| [physio.cpp](physio.cpp.md) | 4 |
+| [player_regen.cpp](player_regen.cpp.md) | 51 |
+| [player_search.cpp](player_search.cpp.md) | 61 |
 | [player_stats.cpp](player_stats.cpp.md) | 34 |
 | [plot.cpp](plot.cpp.md) | 6 |
 | [pol_cup.cpp](pol_cup.cpp.md) | 7 |

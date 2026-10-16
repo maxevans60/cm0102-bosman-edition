@@ -406,6 +406,38 @@ The `comp.cpp` agents named the Comp base vtable 0x9689e8. League and Cup share 
 | 0x54cf70 | Display function that picks the month table (crash-fixes) | `date_days_into_month_offset_lookup` (Haiku) | `Date::get_day_of_month` | agrees |
 | 0x54d580 | Builds the path and fopens (database inventory) | `db_date_table_teardown_or_register` (Haiku) | `db_files_open_for_read` | agrees |
 
+#### Wave w08 (tier 3, 2026-10-16)
+
+Run `sweep-w08`: 8 Opus agents named 204 functions: the rest of `contract_manager.cpp` (its news senders and text writers), `cup_stage.cpp`, `fix_man.cpp`, `game.cpp`, `league_stage.cpp`, `mini_cup.cpp`, `mini_league.cpp`, `new_transfer_rule_screens.cpp` and `player_regen.cpp`, with their gap functions. Each agent took 1 to 7 minutes and 94,000 to 216,000 tokens. Confidence: 139 high, 64 medium, 1 low. The merge needed no fixes. `main.cpp` holds `LLIST` and `LLIST_NODE` gap functions.
+
+23 functions of the wave are cited. 15 agree, 2 agree in area and 3 citations make no claim about the purpose. The old name `game_update_data_pass` (0x5d5ae0) is now `game_season_update_pass`, as the season-end research names it.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x524cd0 | Sets 0xae2330 to 31 Aug 2001 (sweep-season-end) | `register_cup_stage_atexit_init` (Haiku) | `init_transfer_rule_change_date` | agrees |
+| 0x524d10 | Second read path of the loader (database inventory) | `database_load_with_flag_one` (Haiku) | `load_database_from_stream` | agrees |
+| 0x524d50 | fread path of the loader (database inventory) | `database_load_wrapper_zero_flag` (Haiku) | `load_database_from_files` | agrees |
+| 0x5a9cf0 | Setup step 26, global 0xae2a58 (game-creation inventory) | `fix_man_init_drive_scan` (Haiku) | `FIXTURE_MANAGER::FIXTURE_MANAGER` | agrees |
+| 0x5aa2d0 | Called when the year changes (game-creation inventory) | `fix_man_set_current_fixture_week` (Haiku) | `FIXTURE_MANAGER::set_year` | agrees |
+| 0x5aaf00 | Daily call (game-creation inventory) | `fix_man_refresh_fixtures_and_cups` (Haiku) | `FIXTURE_MANAGER::daily_update` | agrees |
+| 0x5abf10 | Fixture list used by the next-fixture search (holiday inventory) | `fix_man_get_cached_entry` (Haiku) | `FIXTURE_MANAGER::get_fixture_list` | agrees |
+| 0x5af5b0 | Listed as a callee only (holiday inventory) | `fix_man_find_side_flag` (Haiku) | `fix_man_get_partner_nation_type` | no claim |
+| 0x5af630 | Setup step 39, global 0xae2a60 (game-creation inventory) | `fix_man_clear_fog_slots_and_load` (Haiku) | `FOG_OF_WAR::FOG_OF_WAR` | agrees |
+| 0x5cc6b0 | Called by WinMain, calls the main loop (screen-stack inventory) | `friendly_run_wrapper` (Haiku) | `game_run` | agrees |
+| 0x5cc6d0 | Called with lpCmdLine (import inventory) | `game_init_from_command_line` (Haiku) | `game_init_from_command_line` | agrees |
+| 0x5cc850 | Runs to the start date (game-creation inventory) | `friendly_season_loop` (Haiku) | `game_run_to_start_date` | agrees |
+| 0x5cccd0 | Main loop under WinMain (screen-stack inventory) | `friendly_match_day_loop` (Haiku) | `game_main_day_loop` | agrees |
+| 0x5cde40 | Listed as a reader of an input global only (input inventory) | `friendly_refresh_pending_matches` (Haiku) | `game_run_human_turn` | no claim |
+| 0x5ce2d0 | Part of the day order (sweep-season-end) | `Database::update_game_data_per_player` (Haiku) | `game_daily_staff_update` | agrees in area |
+| 0x5d5ae0 | Season update pass (game-creation inventory, sweep-season-end) | `game_update_data_pass` (Haiku) | `game_season_update_pass` | agrees |
+| 0x5d5f20 | Called after the season update pass, no purpose given | `player_form_update_sort_by_rating` (Haiku) | `game_update_nation_coefficients` | no claim |
+| 0x5d6280 | League table entry update day (sweep-season-end) | `game_update_staff_wages` (Haiku) | `game_update_league_attendances` | agrees in area |
+| 0x68d010 | List node free in the list destructor (holiday inventory) | `fastcall_free_wrapper` (Haiku) | `LLIST_NODE::~LLIST_NODE` | agrees |
+| 0x77b850 | Transfer regulations information screen (sweep-season-end) | `transfer_rules_info_screen_show` (Haiku) | `transfer_rules_info_screen_display` | agrees |
+| 0x77bb30 | Command dispatch of that screen (sweep-season-end) | `transfer_rule_dispatch` (Haiku) | `transfer_rules_info_screen_handle_click` | agrees |
+| 0x7a30c0 | Four calls with flags at game creation (game-creation inventory) | `player_setup_cfg_process` (Haiku) | `player_setup_cfg_load` | agrees |
+| 0x7a5380 | Setup step 36, global 0xb7434c (game-creation inventory) | `player_regen_load_from_cd` (Haiku) | `PLAYER_REGEN::PLAYER_REGEN` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
