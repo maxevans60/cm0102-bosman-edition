@@ -86,17 +86,30 @@ static void post_mouse(uint32_t msg, int x, int y)
  * as a block of whole pixels (SDL_RenderSetIntegerScale) when that loses at most a fifth of the size
  * that fits the window, for example 2 times in a window that allows 2.4 times. Otherwise the picture
  * fills the window and each pixel takes the nearest whole pixels. Without the option, the scaling
- * stays as in 0.1.0 (SDL's default filter). */
+ * stays as in 0.1.0 (SDL's default filter).
+ * In HD, when the picture is shown smaller than 1920x1080 output pixels (for example a MacBook window
+ * narrower than 1920 Retina pixels), the nearest filter drops whole rows and columns of pixels, and thin
+ * strokes of text vanish. So below 1x the HD picture is mixed
+ * by the linear filter, whatever sharp_picture says (0.5.1, Q227). Widescreen and classic keep their
+ * filter. */
 #define WHOLE_PIXEL_SHARE 0.8
+static SDL_ScaleMode default_scale_mode = SDL_ScaleModeNearest;
 static void update_scaling(void)
 {
-    if (!renderer || !options_bool(OPT_SHARP_PICTURE)) return;
+    if (!renderer || !texture) return;
     int ow = 0, oh = 0;
     if (SDL_GetRendererOutputSize(renderer, &ow, &oh) || ow <= 0 || oh <= 0) return;
     double fit = (double)ow / rt_screen_w;
     if ((double)oh / rt_screen_h < fit) fit = (double)oh / rt_screen_h;
+    int sharp = options_bool(OPT_SHARP_PICTURE), smooth = rt_screen_w >= 1920 && fit < 1.0;
+    SDL_ScaleMode mode = smooth ? SDL_ScaleModeLinear : sharp ? SDL_ScaleModeNearest : default_scale_mode;
+    SDL_ScaleMode now = mode;
+    if (!SDL_GetTextureScaleMode(texture, &now) && now != mode) {
+        SDL_SetTextureScaleMode(texture, mode);
+        win_screen_dirty = 1;
+    }
     int whole = (int)fit;
-    SDL_bool on = whole >= 1 && whole >= fit * WHOLE_PIXEL_SHARE ? SDL_TRUE : SDL_FALSE;
+    SDL_bool on = sharp && whole >= 1 && whole >= fit * WHOLE_PIXEL_SHARE ? SDL_TRUE : SDL_FALSE;
     if (SDL_RenderGetIntegerScale(renderer) != on) {
         SDL_RenderSetIntegerScale(renderer, on);
         win_screen_dirty = 1;
@@ -105,17 +118,10 @@ static void update_scaling(void)
 
 /* The option sharp_picture changed in the options box (options_screen.c): the texture filter and the
  * whole-pixel scale as at window create, at once. Off gives back the filter that the texture had. */
-static SDL_ScaleMode default_scale_mode = SDL_ScaleModeNearest;
 void win_sharp_picture_changed(void)
 {
     if (!renderer || !texture) return;
-    if (options_bool(OPT_SHARP_PICTURE)) {
-        SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
-        update_scaling();
-    } else {
-        SDL_SetTextureScaleMode(texture, default_scale_mode);
-        SDL_RenderSetIntegerScale(renderer, SDL_FALSE);
-    }
+    update_scaling();
     win_screen_dirty = 1;
 }
 
@@ -234,7 +240,6 @@ void win_video_init(void)
                                 (int)rt_screen_w, (int)rt_screen_h);
     if (!texture) rt_fatal("SDL_CreateTexture: %s", SDL_GetError());
     SDL_GetTextureScaleMode(texture, &default_scale_mode);
-    if (options_bool(OPT_SHARP_PICTURE)) SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
     update_scaling();
     SDL_StartTextInput();
     opened_at = SDL_GetTicks64();

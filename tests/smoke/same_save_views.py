@@ -40,24 +40,24 @@ import smoke_run  # noqa: E402
 # and 7 (docs/research/2026-10-15-attribute-groups.md) found these five and no others.
 LAYOUT_PARTS = ("fifa_rankings.dat", "general.dat", "national_teams.dat", "staff history.tmp", "transfer.dat")
 
-# Positions for 800x600; "| x y | x y" gives the widescreen and HD positions where the game does not scale.
+# Positions for 800x600; "| x y | x y | x y" gives the widescreen, HD Small and HD Large positions where the game does not scale.
 HOLIDAY = [
     "2500 click 45 165",                    # the manager's menu
-    "4500 click 150 427 | 199 474 | 270 541",  # Go on Holiday
+    "4500 click 150 427 | 199 474 | 270 541 | 288 610",  # Go on Holiday
     "7000 click 705 572",                   # Please Confirm: Yes
 ]
 
 COMPARE = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "4000 click 150 156 | 199 203 | 270 270 | 288 274",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 210 234",                   # David Seaman
     "wait screen:0x870700",
     "1500 click 722 14",                    # Action
-    "3000 move 700 267 | 1170 275 | 1800 287",
-    "3500 move 695 267 | 1166 275 | 1795 287",  # Compare Players
-    "4500 move 530 269 | 1001 277 | 1630 289",
-    "5000 click 530 269 | 1001 277 | 1630 289",  # Set as 1st player in comparison
+    "3000 move 700 267 | 1170 275 | 1800 287 | 1800 344",
+    "3500 move 695 267 | 1166 275 | 1795 287 | 1795 344",  # Compare Players
+    "4500 move 530 269 | 1001 277 | 1630 289 | 1630 346",
+    "5000 click 530 269 | 1001 277 | 1630 289 | 1630 346",  # Set as 1st player in comparison
     "wait screen:0x8f4210",
     "1500 click 704 572",                   # Yes
     "wait screen:0x870700",
@@ -66,18 +66,18 @@ COMPARE = [
     "1500 click 545 234",                   # Rami Shaaban
     "wait screen:0x870700",
     "1500 click 722 14",                    # Action
-    "3000 move 700 267 | 1170 275 | 1800 287",
-    "3500 move 695 267 | 1166 275 | 1795 287",  # Compare Players
-    "4500 move 530 290 | 1001 298 | 1630 310",
-    "5000 click 530 290 | 1001 298 | 1630 310",  # Set as 2nd player in comparison
+    "3000 move 700 267 | 1170 275 | 1800 287 | 1800 344",
+    "3500 move 695 267 | 1166 275 | 1795 287 | 1795 344",  # Compare Players
+    "4500 move 530 290 | 1001 298 | 1630 310 | 1630 372",
+    "5000 click 530 290 | 1001 298 | 1630 310 | 1630 372",  # Set as 2nd player in comparison
     "wait screen:0x8f4210",
     "1500 click 704 572",                   # Yes
     "wait screen:0x870700",
     "1500 click 722 14",                    # Action
-    "3000 move 700 267 | 1170 275 | 1800 287",
-    "3500 move 695 267 | 1166 275 | 1795 287",  # Compare Players
-    "4500 move 520 310 | 1001 318 | 1630 330",
-    "5000 click 520 310 | 1001 318 | 1630 330",  # Compare two chosen players
+    "3000 move 700 267 | 1170 275 | 1800 287 | 1800 344",
+    "3500 move 695 267 | 1166 275 | 1795 287 | 1795 344",  # Compare Players
+    "4500 move 520 310 | 1001 318 | 1630 330 | 1630 397",
+    "5000 click 520 310 | 1001 318 | 1630 330 | 1630 397",  # Compare two chosen players
     "wait screen:0x876520",
     "3000 click 358 573",                   # Back
     "wait screen:0x870700",
@@ -85,10 +85,10 @@ COMPARE = [
 
 TACTICS = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "4000 click 150 156 | 199 203 | 270 270 | 288 274",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 159 | 928 205 | 1460 274",  # Pick best team
+    "3000 click 540 159 | 928 205 | 1460 274 | 1460 277",  # Pick best team
     "5000 click 169 527",                   # Tactics: it opens in the Condition view
     "wait screen:0x899ea0",
     "2000 click 705 573",                   # Ok
@@ -186,8 +186,8 @@ def run_tactics(program, game, days, folder):
 MATCH_TACTICS = [
     "1500 click 45 210",                    # Arsenal Tactics
     "wait screen:0x899ea0",
-    "1500 click 297 90 | 475 120 | 712 162",   # View
-    "3000 click 289 133 | 467 163 | 785 215",  # Condition
+    "1500 click 297 90 | 475 120 | 712 162 | 712 162",   # View
+    "3000 click 289 133 | 467 163 | 785 215 | 785 222",  # Condition
     "5000 down 127 373",                    # the number box of Pascal Cygan (row 12)
     "5300 move 127 330",
     "5600 move 127 277",

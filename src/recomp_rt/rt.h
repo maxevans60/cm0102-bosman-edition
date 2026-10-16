@@ -300,6 +300,12 @@ uint32_t rt_groups_cells(uint32_t esp);
 uint32_t rt_groups_table(void);
 uint32_t rt_groups_count(void);
 
+/* HD text (0.5.1, src/recomp_rt/win/hd_text.c): a text size, baseline or line height of the font engine.
+ * v times rt_hd_text_percent / 100, rounded half up: 135 in HD with hd_text = large, else 100, which gives v.
+ * The constants of tools/recomp/hd_text.py read it. */
+extern uint32_t rt_hd_text_percent;
+static inline uint32_t rt_hd_text(uint32_t v) { return (v * rt_hd_text_percent + 50u) / 100u; }
+
 /* Arguments and return for replacements: esp points at the return address. */
 static inline uint32_t rt_arg(int i) { return rd32(g_mem, cpu.esp + 4 + 4 * (uint32_t)i); }
 static inline void rt_ret_cdecl(uint32_t v) { cpu.eax = v; cpu.esp += 4; }

@@ -48,26 +48,26 @@ import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 import hidden_check  # noqa: E402
 
-# Positions for 800x600; "| x y | x y" gives the widescreen and HD positions where the game does not scale
+# Positions for 800x600; "| x y | x y | x y" gives the widescreen, HD Small and HD Large positions where the game does not scale
 # (popups).
 TOUR = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "4000 click 150 156 | 199 203 | 270 270 | 288 274",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 241 | 928 288 | 1454 357",  # Team views
+    "3000 click 540 241 | 928 288 | 1454 357 | 1460 379",  # Team views
     "5000 click 675 97",                    # Compare players: Vieira and Henry, the first two of the squad
     "7000 dump {d}/1-compare-tab.bmp",
-    "8000 click 160 137 | 220 180 | 290 238",  # the first name box
+    "8000 click 160 137 | 220 180 | 290 238 | 290 238",  # the first name box
     "9500 dump {d}/2-squad-list.bmp",
-    "10500 click 160 327 | 220 370 | 290 428",  # David Seaman
-    "12500 click 610 137 | 1080 180 | 1820 238",  # the second name box
+    "10500 click 160 327 | 220 370 | 290 428 | 290 471",  # David Seaman
+    "12500 click 610 137 | 1080 180 | 1820 238 | 1820 238",  # the second name box
     # Classic: More players (page 2). Widescreen and HD: Rami Shaaban on page 1.
-    "14000 click 610 559 | 1140 641 | 1820 701",
-    "16000 click 610 137 | 1080 180 | 1820 238",  # the second name box again
+    "14000 click 610 559 | 1140 641 | 1820 701 | 1820 807",
+    "16000 click 610 137 | 1080 180 | 1820 238 | 1820 238",  # the second name box again
     "17500 dump {d}/3-second-list.bmp",
     # Classic: Rami Shaaban on page 2. Widescreen and HD: a click beside the list closes it.
-    "18500 click 720 223 | 712 365 | 1069 521",
+    "18500 click 720 223 | 712 365 | 1069 521 | 1069 521",
     "20500 dump {d}/4-two-keepers.bmp",
     "21500 click 215 97",                   # the Best XI tab: no polygon may stay on it
     "24000 dump {d}/4b-best-xi-after-compare.bmp",
@@ -77,10 +77,10 @@ TOUR = [
     "1500 click 210 234",                   # David Seaman
     "wait screen:0x870700",
     "1500 click 722 14",                    # Action
-    "3000 move 700 267 | 1170 275 | 1800 287",
-    "3500 move 695 267 | 1166 275 | 1795 287",  # Compare Players
-    "4500 move 530 269 | 1001 277 | 1630 289",
-    "5000 click 530 269 | 1001 277 | 1630 289",  # Set as 1st player in comparison
+    "3000 move 700 267 | 1170 275 | 1800 287 | 1800 344",
+    "3500 move 695 267 | 1166 275 | 1795 287 | 1795 344",  # Compare Players
+    "4500 move 530 269 | 1001 277 | 1630 289 | 1630 346",
+    "5000 click 530 269 | 1001 277 | 1630 289 | 1630 346",  # Set as 1st player in comparison
     "wait screen:0x8f4210",
     "1500 click 704 572",                   # Yes
     "wait screen:0x870700",
@@ -89,39 +89,39 @@ TOUR = [
     "1500 click 545 234",                   # Rami Shaaban
     "wait screen:0x870700",
     "1500 click 722 14",                    # Action
-    "3000 move 700 267 | 1170 275 | 1800 287",
-    "3500 move 695 267 | 1166 275 | 1795 287",  # Compare Players
-    "4500 move 530 290 | 1001 298 | 1630 310",
-    "5000 click 530 290 | 1001 298 | 1630 310",  # Set as 2nd player in comparison
+    "3000 move 700 267 | 1170 275 | 1800 287 | 1800 344",
+    "3500 move 695 267 | 1166 275 | 1795 287 | 1795 344",  # Compare Players
+    "4500 move 530 290 | 1001 298 | 1630 310 | 1630 372",
+    "5000 click 530 290 | 1001 298 | 1630 310 | 1630 372",  # Set as 2nd player in comparison
     "wait screen:0x8f4210",
     "1500 click 704 572",                   # Yes
     "wait screen:0x870700",
     "1500 click 722 14",                    # Action
-    "3000 move 700 267 | 1170 275 | 1800 287",
-    "3500 move 695 267 | 1166 275 | 1795 287",  # Compare Players
-    "4500 move 520 310 | 1001 318 | 1630 330",
-    "5000 click 520 310 | 1001 318 | 1630 330",  # Compare two chosen players
+    "3000 move 700 267 | 1170 275 | 1800 287 | 1800 344",
+    "3500 move 695 267 | 1166 275 | 1795 287 | 1795 344",  # Compare Players
+    "4500 move 520 310 | 1001 318 | 1630 330 | 1630 397",
+    "5000 click 520 310 | 1001 318 | 1630 330 | 1630 397",  # Compare two chosen players
     "wait screen:0x876520",
     "2000 dump {d}/5-comparison-screen.bmp",
     "3000 click 358 573",                   # Back
     "wait screen:0x870700",
     "1500 click 45 165",                    # the manager's menu
-    "3000 click 150 323 | 199 370 | 270 437",  # Compare two chosen players (side bar item 0x434)
+    "3000 click 150 323 | 199 370 | 270 437 | 288 481",  # Compare two chosen players (side bar item 0x434)
     "wait screen:0x876520",
     "2000 dump {d}/6-from-side-bar.bmp",
-    "3000 click 200 88 | 220 117 | 300 158",  # the first name box: a link to the profile
+    "3000 click 200 88 | 220 117 | 300 158 | 300 158",  # the first name box: a link to the profile
     "wait screen:0x870700",
     "2000 dump {d}/7-name-link.bmp",
     # Liverpool's Compare tab: another club's players, so the game hides some attributes.
     "1500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "4000 click 150 156 | 199 203 | 270 270 | 288 274",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 584 527",                   # Premier Division
     "wait screen:0x48fcd0",
-    "1500 click 215 462",                   # Liverpool
+    "1500 click 215 462",                   # Liverpool (HD Large: Chelsea, the table shows 8 rows)
     "3500 click 169 97",                    # Squad
     "5500 click 592 135",                   # Assistant
-    "7000 click 540 159 | 928 205 | 1460 274",  # Team views, the only item
+    "7000 click 540 159 | 928 205 | 1460 274 | 1460 277",  # Team views, the only item
     "9000 click 675 97",                    # Compare players
     "11000 dump {d}/8-other-club-compare.bmp",
 ]

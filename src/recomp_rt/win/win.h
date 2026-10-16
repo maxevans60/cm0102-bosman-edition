@@ -108,6 +108,7 @@ int options_screen_widget_before(void);        /* at each widget create: 1 for t
 void options_screen_widget_after(void);        /* after that create: adds the Bosman Edition Options item */
 uint32_t win_press_count(void);                /* user32.c: the count of mouse presses so far */
 void win_sharp_picture_changed(void);          /* user32.c: applies the option sharp_picture at once */
+void hd_text_init(void);                       /* hd_text.c: reads hd_text once, after the display mode */
 /* The Assistant's picks (picker.c). picker_compute picks without writing; picker_pick stores the pick as
  * the club's selection. kind 1: best team, 2: most match-fit, 3: under-21. Both return the players picked. */
 #define PICK_SLOTS 20

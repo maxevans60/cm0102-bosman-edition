@@ -29,6 +29,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FIXTURES = os.path.join(HERE, "..", "fixtures", "fixtures.py")
 sys.path.insert(0, HERE)
 import smoke_run  # noqa: E402
+import same_save_views  # noqa: E402
 
 # Steps after the load, positions for each mode: manager menu, Arsenal Squad, Seaman, Back, Vieira,
 # then manager menu, Go on Holiday, Yes.
@@ -39,9 +40,13 @@ STEPS = {
     "widescreen": ["1000 click 72 220", "2500 click 199 203", "6000 click 336 312", "9000 dump {d}/gk.bmp",
                    "9500 click 573 764", "12000 click 336 492", "15000 dump {d}/outfield.bmp",
                    "17000 click 72 220", "20500 click 199 474", "23500 click 1128 763"],
-    "hd": ["1000 click 108 297", "2500 click 271 271", "6000 click 460 414", "9000 dump {d}/gk.bmp",
-           "9500 click 860 1030", "12000 click 460 664", "15000 dump {d}/outfield.bmp",
-           "17000 click 108 297", "20500 click 270 542", "23500 click 1690 1030"],
+    "hd-small": ["1000 click 108 297", "2500 click 271 271", "6000 click 460 414", "9000 dump {d}/gk.bmp",
+                 "9500 click 860 1030", "12000 click 460 664", "15000 dump {d}/outfield.bmp",
+                 "17000 click 108 297", "20500 click 270 542", "23500 click 1690 1030"],
+    # HD Large text (0.5.1): the popup items and the squad rows sit lower.
+    "hd": ["1000 click 108 297", "2500 click 288 274", "6000 click 460 422", "9000 dump {d}/gk.bmp",
+           "9500 click 860 1030", "12000 click 461 755", "15000 dump {d}/outfield.bmp",
+           "17000 click 108 297", "20500 click 288 610", "23500 click 1690 1030"],
 }
 # The attribute colours as the runtime paints them (columns.c COLOUR_*), written again here.
 COLOUR = [(5, 0xFA8A), (10, 0xFD84), (15, 0xA70C), (20, 0x37E6)]
@@ -49,9 +54,12 @@ VALUE = re.compile(r'recomp: profile value "([^"]*)" colour (0x[0-9a-f]+)')
 DAYS = 2
 # Modes where the saves with the option on and off may differ. In classic the option gives the profile's
 # attribute area 13 rows in place of 12, which changes the memory layout and so later days of the game.
-# The spec accepts that (Q152, Q153). In widescreen and HD the 13 rows leave the game the same: the saves
+# The spec accepts that (Q152, Q153). In widescreen and HD Small the 13 rows leave the game the same: the saves
 # must be identical.
-ACCEPTED_DIFFERENCE = {"classic": "accepted: 13 rows in place of 12, Q152 and Q153"}
+# In HD with hd_text = large (0.5.1) the 13 rows are lower than the bigger text rows, as in classic, and only the
+# five parts of the memory layout differ (same_save_views.LAYOUT_PARTS).
+ACCEPTED_DIFFERENCE = {"classic": "accepted: 13 rows in place of 12, Q152 and Q153",
+                       "hd": "accepted: 13 rows lower than the HD Large text rows, as in classic, Q152 and Q153"}
 
 
 def run(program, game, mode, value, work):
@@ -113,7 +121,7 @@ def main(argv):
             b = smoke_run.save_parts(os.path.join(off, "samesave.sav"))
             differ = sorted(k for k in set(a) | set(b) if a.get(k, (b"",))[0] != b.get(k, (b"",))[0])
             parts = ', '.join(differ) or 'the file header'
-            if mode in ACCEPTED_DIFFERENCE:
+            if mode in ACCEPTED_DIFFERENCE and (mode != "hd" or set(differ) <= set(same_save_views.LAYOUT_PARTS)):
                 print(f"ok    the saves differ in: {parts} ({ACCEPTED_DIFFERENCE[mode]})")
             else:
                 print(f"FAIL  the saves differ in: {parts}")

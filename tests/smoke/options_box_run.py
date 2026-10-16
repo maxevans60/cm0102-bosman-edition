@@ -25,7 +25,7 @@ Checks:
     - tactics: the box opens from the side bar on the tactics screen.
     - readonly: settings.txt keeps attribute_colours = on, the option keeps its old value in memory, and the
       box shows the note "Not saved" (picture readonly.bmp).
-    - start: settings.txt has display = classic and sharp_picture = on after the first start, the first start
+    - start: settings.txt has display = classic, sharp_picture = on and hd_text = small after the first start, the first start
       draws at 1280x800, and the second start draws at 800x600 (the restart note of the display mode).
 Pictures (with .png copies) in <out>/<run>/: screen.bmp and game.bmp (the two tabs), screen-off.bmp and
 game-off.bmp (after the clicks), profile-before.bmp and profile.bmp; tactics/box.bmp; readonly/readonly.bmp;
@@ -46,23 +46,23 @@ import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 
 # Positions for 800x600. The box scales as every area does. The side bar drop-down items keep their size,
-# so the item has its own widescreen and HD positions after "|". Box rows: y = 192 + 35 * row; On and the
-# first value at x 371, Off and the second value at 452; tabs Screen 304, Game 584 at y 155; Close 444, 524.
+# so the item has its own widescreen, HD Small and HD Large positions after "|". Box rows: y = 185 + 33 * row (0.5.1: ten rows on the Screen tab); On and the
+# first value at x 371, Off and the second value at 452; tabs Screen 304, Game 584 at y 149; Close 444, 524.
 GAME_OPTIONS = "click 45 344"
-OPTIONS_ITEM = "click 175 417 | 225 525 | 295 675"
+OPTIONS_ITEM = "click 175 417 | 225 525 | 295 675 | 288 697"
 SIDE_STEPS = [
     "1000 click 45 165",                        # the manager's menu
-    "2500 click 150 156 | 199 203 | 271 271",   # Arsenal Squad
-    "6000 click 210 369 | 336 492 | 460 664",   # Vieira
+    "2500 click 150 156 | 199 203 | 271 271 | 288 274",   # Arsenal Squad
+    "6000 click 210 369 | 336 492 | 460 664 | 461 755",   # Vieira
     "9000 dump {d}/profile-before.bmp",
     "10000 " + GAME_OPTIONS,
     "12000 " + OPTIONS_ITEM,                    # Bosman Edition Options
     "14000 dump {d}/screen.bmp",
-    "15000 click 452 332",                      # Attribute colours: Off
+    "15000 click 452 350",                      # Attribute colours: Off
     "16500 dump {d}/screen-off.bmp",
-    "17500 click 584 155",                      # the Game tab
+    "17500 click 584 149",                      # the Game tab
     "19000 dump {d}/game.bmp",
-    "20000 click 452 402",                      # Save backups: Off
+    "20000 click 452 383",                      # Save backups: Off
     "21500 dump {d}/game-off.bmp",
     "22500 click 444 524",                      # Close
     "25000 dump {d}/profile.bmp",
@@ -86,7 +86,7 @@ TACTICS_STEPS = [
 READONLY_STEPS = [
     "1000 " + GAME_OPTIONS,
     "3000 " + OPTIONS_ITEM,
-    "9000 click 452 332",                       # Attribute colours: Off, after the folder is read only
+    "9000 click 452 350",                       # Attribute colours: Off, after the folder is read only
     "11000 dump {d}/readonly.bmp",
     "12000 quit",
 ]
@@ -94,11 +94,12 @@ START_STEPS = fixtures.LOAD_STEPS[:fixtures.LOAD_STEPS.index("wait setup") + 1] 
     "1000 dump {d}/setup.bmp",
     "1500 click 445 503",                       # Bosman Edition Options, the last item of the menu
     "3500 dump {d}/box.bmp",
-    "4000 click 452 192",                       # Display mode: Classic
-    "4500 click 452 227",                       # Sharp picture: Off
+    "4000 click 452 185",                       # Display mode: Classic
+    "4250 click 452 218",                       # HD text: Small
+    "4500 click 452 251",                       # Sharp picture: Off
     "5000 dump {d}/box-sharp-off.bmp",
-    "5500 click 371 227",                       # Sharp picture: On
-    "6000 click 584 155",                       # the Game tab: the custom data set
+    "5500 click 371 251",                       # Sharp picture: On
+    "6000 click 584 149",                       # the Game tab: the custom data set
     "7000 dump {d}/game.bmp",
     "7500 click 444 524",                       # Close
     "wait setup",
@@ -259,8 +260,8 @@ def main(argv):
         c1, c2, after_first = start.result()
         check(c1 == 0 and c2 == 0, "start: both starts end with code 0")
         lines = after_first.splitlines()
-        check("display = classic" in lines and "sharp_picture = on" in lines,
-              "start: settings.txt has display = classic and sharp_picture = on")
+        check("display = classic" in lines and "sharp_picture = on" in lines and "hd_text = small" in lines,
+              "start: settings.txt has display = classic, sharp_picture = on and hd_text = small")
         s = os.path.join(out, "start")
         check(size(os.path.join(s, "box.bmp")) == (1280, 800) and size(os.path.join(s, "second.bmp")) == (800, 600),
               "start: the first start draws at 1280x800, the second at 800x600")
