@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e3a10 | 22 | `rb_turkey_cup_ctor` | thiscall(this, int base_arg) ret 4 | Constructs a Turkish cup competition object, calling its base constructor and installing the vtable and tournament fields. | high | haiku |  |
-| 0x7e3a60 | 163 (+5 unwind) | `rb_turkey_cup_on_day_tick` | thiscall(this in ECX as param_1 pointer, param_2 event record pointer), ret 8 | Advances the Turkish Cup round state for a competition object on each day, scheduling a fixture event when due. | low | haiku |  |
-| 0x7e3cc0 | 38 | `rb_turkey_cup_assert_or_name_check` | cdecl, arguments (undefined4 this_or_unused, int index); ret 0x0 (caller cleans, returns void) | Reports an assertion error with source location when the cup index is below twenty, otherwise names the Turkish cup. | medium | haiku |  |
+| 0x7e3a10 | 22 | `RbTurkeyCup::RbTurkeyCup` | thiscall(RbTurkeyCup* this, int ruling_body_arg), ret 4 | Constructs the Turkish cup rules object by building its ruling base and installing the cup's vtable and rule constants. | medium | haiku |  |
+| 0x7e3a60 | 163 (+5 unwind) | `rb_turkey_cup_on_day_tick` | thiscall(ECX=this rb_turkey_cup object, stack: param_2 pointer to a ban/news record of 0x13 dwords) ret 4 | Runs the daily Turkish cup check, applying points bans and posting discipline news for the cup's ruling body entries. | medium | haiku |  |
+| 0x7e3cc0 | 38 | `rb_turkey_cup_assert_or_name_check` | cdecl(void* param_1, int param_2) with ret 0xc; param_2 is a count compared against 0x14 (20), param_1 is a name buffer context | Checks the Turkish cup count, raising an error box with build version text when the count is below twenty, otherwise logging the cup name. | medium | haiku |  |

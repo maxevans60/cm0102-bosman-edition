@@ -4,7 +4,7 @@ A dossier holds the function's placement, size, ret, strings, assert line number
 and callees with their files, pointers to it from data, and the Ghidra pseudocode (or capstone
 disassembly when Ghidra gave none). With --names, callers and callees also show earlier names.
 
-Usage: CM0102_EXE=... FUNCMAP_WORK=... dossier.py --all [--names names.jsonl]
+Usage: CM0102_EXE=... FUNCMAP_WORK=... dossier.py --all [--names names.jsonl ...]
        CM0102_EXE=... FUNCMAP_WORK=... dossier.py <file.cpp> [--names names.jsonl]
 Writes $FUNCMAP_WORK/dossiers/<address>.txt, summaries/<group>.txt and functions.tsv.
 """
@@ -158,7 +158,7 @@ def build(members, out):
 
 
 def main(argv):
-    if "--names" in argv:
+    while "--names" in argv:
         i = argv.index("--names")
         for line in open(argv[i + 1]):
             r = json.loads(line)

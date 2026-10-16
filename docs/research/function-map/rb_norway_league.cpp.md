@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e1150 | 22 | `rb_norway_league::RbNorwayLeague_ctor` | thiscall (ECX = this, stack arg: param_2 passed to base constructor, ruling_body base) ret 4 | Constructs the Norwegian league ruling body object, setting its vtable and default league parameters before returning. | medium | haiku |  |
-| 0x7e11a0 | 97 (+1 unwind) | `ruling_body_norway_league_tick_penalty` | thiscall(this in ECX, int param_2 passed on stack), ret 8 | Advances a per-club counter on a league ruling, then issues a discipline or event record for the club. | low | haiku |  |
-| 0x7e12f0 | 38 | `rb_norway_league_assert_or_init` | cdecl(int param_1 league_id_or_param, int param_2 index) with ret 0xc, stdcall-like callee cleanup not evident | Reports an assertion failure for a Norwegian league index below twenty, otherwise registers the league name. | medium | haiku |  |
-| 0x7e1390 | 18 | `rb_norway_league_get_status_flags` | thiscall(this, undefined1 *out_a, undefined1 *out_b) with ret 0x10 | Writes fixed status bytes to two output pointers and reports whether the league state byte is valid. | medium | haiku |  |
+| 0x7e1150 | 22 | `rb_norway_league_ctor` | thiscall(RulingBody *base, int param_2 forwarded to RulingBody base ctor), ret 4 | Constructs the Norwegian league ruling body by initialising its base then setting vtable and league rule fields. | high | haiku |  |
+| 0x7e11a0 | 97 (+1 unwind) | `ruling_body_norway_league_tick_penalty` | thiscall(this in ECX, param_2 int; ret 8 | Advances a club's Norwegian league offence counter and issues a discipline ban and news item at escalating thresholds. | medium | haiku |  |
+| 0x7e12f0 | 38 | `rb_norway_league_assert_or_init` | cdecl(int version_arg_a, int version_or_sentinel_b) with stack args cleaned by callee, ret 0xc | Checks a version value and, when too old, shows an error box naming the Norwegian league build. | medium | haiku |  |
+| 0x7e1390 | 18 | `rb_norway_league_get_status_flags` | thiscall(this, out_flag_a: byte*, out_flag_b: byte*) ret 0x10 | Reports the Norwegian league status flags, writing fixed values and returning whether the league state is active. | medium | haiku |  |

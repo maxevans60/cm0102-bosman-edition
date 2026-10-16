@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7ded90 | 22 | `rb_holland_ctor` | thiscall(this, int param_2) returns the this pointer, ret 4 | Constructs a Holland rule-book object by setting its vtable, base data fields and default flag values. | medium | haiku |  |
-| 0x7dede0 | 186 (+6 unwind) | `rb_holland_process_ruling_stage` | thiscall-like cdecl with (int *this_obj, undefined4 *event_data) arguments, ret 8 | Advances a ruling stage for a competition, counts pending clubs and dispatches the resulting notification to the league. | low | haiku |  |
-| 0x7df090 | 47 | `rb_holland_assert_or_dispatch` | cdecl-like thiscall-free function with arguments (undefined4 param_1, int param_2, undefined4 param_3) and ret 0xc, so stdcall with 12 bytes of arguments | Reports a formatted assertion error when the index is below 20, otherwise forwards the call to the injury handler. | medium | haiku |  |
-| 0x7df150 | 13 | `rb_holland_get_flags_and_check_type` | thiscall(this, undefined1 *out_a, undefined1 *out_b) ret 0x10 | Writes fixed flag values to two optional output bytes and returns whether the object's type byte equals two. | medium | haiku |  |
+| 0x7ded90 | 22 | `rb_holland_ctor` | thiscall(this, RulingBody* base_ctor_arg) ret 4 | Constructs a Holland ruling body by initialising the RulingBody base then setting the vtable and default rule fields. | medium | haiku |  |
+| 0x7dede0 | 186 (+6 unwind) | `rb_holland_process_ruling_stage` | thiscall(RulingBody *this, const Date *date) ret 8 | Advances the ruling stage counters and, when a points ban is due, records a discipline ban and posts its news. | medium | haiku |  |
+| 0x7df090 | 47 | `rb_holland_assert_or_dispatch` | cdecl-like thiscall-free function with arguments (undefined4 param_1, int param_2, undefined4 param_3), ret 0xc | Shows a version assert error box when a rating value is below twenty, otherwise dispatches the request to a nationality routine. | medium | haiku |  |
+| 0x7df150 | 13 | `rb_holland_get_flags_and_check_type` | thiscall(this, out_flag_a: byte*, out_flag_b: byte*) returning bool; ret 0x10 | Writes two output flag bytes and reports whether the object's type byte equals 2. | medium | haiku |  |

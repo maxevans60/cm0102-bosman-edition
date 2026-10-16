@@ -96,6 +96,21 @@ def funclet_owners(img, funcs):
     return owner
 
 
+def find_vtables(img, db, funcs):
+    """Vtables: tables of entries that code references (constructors store them). Start address -> entries."""
+    fset = set(funcs)
+    coderefs = {r for e in funcs for r in db[e]["refs"] if not img.is_code(r) and img.u32(r) in fset}
+    vtables = {}
+    for st in sorted(coderefs):
+        ents, a = [], st
+        while img.u32(a) in fset and (a == st or a not in coderefs) and len(ents) < 400:
+            ents.append(img.u32(a))
+            a += 4
+        if len(ents) >= 2:
+            vtables[st] = ents
+    return vtables
+
+
 def main():
     img = image()
     funcs = all_entries()
@@ -131,16 +146,7 @@ def main():
         hi = file_of[asserts[i]].lower() if i < len(asserts) else "~"
         return lo <= f.lower() <= hi
 
-    # Vtables: tables of entries that code references (constructors store them).
-    coderefs = {r for e in funcs for r in db[e]["refs"] if not img.is_code(r) and img.u32(r) in fset}
-    vtables = {}
-    for st in sorted(coderefs):
-        ents, a = [], st
-        while img.u32(a) in fset and (a == st or a not in coderefs) and len(ents) < 400:
-            ents.append(img.u32(a))
-            a += 4
-        if len(ents) >= 2:
-            vtables[st] = ents
+    vtables = find_vtables(img, db, funcs)
     in_vt = collections.defaultdict(set)
     for s, ents in vtables.items():
         for x in ents:

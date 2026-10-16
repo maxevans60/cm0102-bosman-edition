@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dd400 | 21 | `rb_europe_ctor` | thiscall (undefined4 *this, undefined4 base_arg), ret 4 | Constructs a European ruling body object by initialising its vtable, default fields and calling the base constructor. | medium | haiku |  |
-| 0x7dd450 | 98 (+1 unwind) | `rb_europe_fire_disciplinary_check` | thiscall(this in ECX as int* param_1, int param_2 passed on stack, returns uint in EAX) ret 8 | Counts a ruling body tally and, when a threshold is reached, raises a discipline event for the club. | low | haiku |  |
-| 0x7dd5a0 | 48 | `rb_europe_assert_or_dispatch` | cdecl-like thiscall-free function with arguments (param_1 pointer-sized value, int param_2 index, param_3 value), ret 0xc, so stdcall taking three arguments | Asserts on a small index with a formatted error message, otherwise forwards the call to the indexed object in a table of 0xc6-byte records. | medium | haiku |  |
+| 0x7dd400 | 21 | `rb_europe_ctor` | thiscall (ECX/param_1 is this, param 2 is the base ruling-body argument passed through to RulingBody::RulingBody), ret 4 | Constructs a European ruling body object by initialising its base ruling body and setting its vtable and default rule fields. | high | haiku |  |
+| 0x7dd450 | 98 (+1 unwind) | `rb_europe_fire_disciplinary_check` | thiscall(RbEurope* this, int param_2), ret 8 | Checks a European club's disciplinary counter and, when a ban is due, records it and posts news. | medium | haiku |  |
+| 0x7dd5a0 | 48 | `rb_europe_assert_or_dispatch` | cdecl-like thiscall-free function with three arguments (param_1 undefined4, param_2 int index or code, param_3 undefined4), returns with ret 0xc | Raises a version assertion error when the code is below 20, otherwise dispatches the request to a nationality text routine. | medium | haiku |  |

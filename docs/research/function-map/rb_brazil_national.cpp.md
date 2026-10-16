@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dc080 | 22 | `rb_brazil_national_ctor` | thiscall(this, ruling_body_base_arg) ret 4 | Constructs the Brazil national ruling body object, first calling the base constructor then installing its vtable and default field values. | medium | haiku |  |
-| 0x7dc0d0 | 156 (+5 unwind) | `rb_brazil_national_on_event` | thiscall-like vtable slot (ECX this, param_1 national team object, param_2 event payload) with ret 8 taking two stack arguments: int *self and undefined4 *event | Handles a Brazil national team match or day event, advancing a counter and dispatching a news or fixture record when thresholds are reached. | medium | haiku |  |
-| 0x7dc320 | 38 | `rb_brazil_national_assert_or_init` | stdcall or cdecl, (undefined4 param_1, int param_2) with ret 0xc | Asserts a version check on the Brazilian national team data, or hands the nation string to the league library when the value is 20 or more. | medium | haiku |  |
+| 0x7dc080 | 22 | `rb_brazil_national_ctor` | thiscall (ECX = this, stack: param_2 int) ret 4 | Constructs the Brazil national rules object by initialising its base RulingBody and setting its vtable and rule fields. | medium | haiku |  |
+| 0x7dc0d0 | 156 (+5 unwind) | `rb_brazil_national_on_event` | thiscall-like fastcall-style: param_1 is the ruling body or discipline object (this), param_2 is the event record pointer, ret 8 | Accumulates a national team's points or discipline counter, issuing a ban and news item once a threshold is reached. | medium | haiku |  |
+| 0x7dc320 | 38 | `rb_brazil_national_assert_or_init` | cdecl, arguments (undefined4 buffer, int code); ret 0xc | Shows a version-stamped error box when the code is below 20, otherwise formats the Brazilian national string into the buffer. | medium | haiku |  |

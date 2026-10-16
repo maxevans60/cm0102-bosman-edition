@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x92fc10 | 35 (+1 unwind) | `World_Cup_Awards::World_Cup_Awards` | thiscall(this in ECX, int param_2 on stack as the source/owner pointer, checked by a validation call then assert on failure) ret 4 | Constructs the World Cup awards object, installing its vtable and default fields, and asserts when the argument fails validation. | medium | haiku |  |
-| 0x92fc80 | 108 (+2 unwind) | `WorldCupAwards::WorldCupAwards` | thiscall(this in ECX, int param_1 is this, undefined4 param_2 as the game or season argument) ret 4 | Constructs the World Cup awards object, allocating its year award and team award sub-objects, and reporting a memory error if allocation fails. | medium | haiku |  |
-| 0x92fdf0 | 52 | `world_cup_awards_on_year_event` | thiscall(this, short* event_key) with ret 4; ECX is this, the vtable slot takes one pointer to a two-short record | Handles a World Cup awards event for a year, checking the date and then forwarding the award to the nation awards. | low | haiku |  |
+| 0x92fc10 | 35 (+1 unwind) | `World_Cup_Awards::World_Cup_Awards` | thiscall(World_Cup_Awards* this, int load_source) ret 4 | Constructs the World Cup awards object, sets its vtable and defaults, then loads awards data or asserts on failure. | high | haiku |  |
+| 0x92fc80 | 108 (+2 unwind) | `WorldCupAwards::WorldCupAwards` | thiscall(this, int param_2 team or owner context) ret 4 | Constructs the World Cup awards object, allocating a pair of award sub-objects and reporting a version-stamped error if allocation fails. | high | haiku |  |
+| 0x92fdf0 | 52 | `world_cup_awards_on_year_handler` | thiscall(ECX this, short *event) ret 4 | Handles a yearly event, and when the year matches a leap-style cycle, builds a date and runs the award picks. | medium | haiku |  |

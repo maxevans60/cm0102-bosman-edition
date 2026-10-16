@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x901c70 | 40 (+1 unwind) | `turkey_awards_ctor` | thiscall(this, int param_2 source pointer) ret 4 | Constructs a Turkey awards object, setting its vtable and fields, and asserts when the source is invalid. | medium | haiku |  |
-| 0x901d00 | 219 (+6 unwind) | `turkey_awards::TurkeyAwards::init` | thiscall(this, param_2 as int) with ret 4 | Allocates the turkey awards award table and constructs five award objects, reporting a failed allocation through an error dialog. | medium | haiku |  |
-| 0x901fd0 | 64 | `turkey_awards::award_month_check_and_record` | thiscall(this, short *record) with ret 4 | Checks a month record against a stored date, then fills award fields from the stored object and refreshes the record. | low | haiku |  |
-| 0x902080 | 12 | `turkey_awards_on_award_event` | thiscall(this, int param_2 object pointer) with ret 4 | Forwards an award event to the nation awards handler when the object matches one of two stored slots. | low | haiku |  |
+| 0x901c70 | 40 (+1 unwind) | `turkey_awards_ctor` | thiscall(TurkeyAwards* this, int source) ret 4 | Constructs the Turkey awards object, sets its vtable and fields, then loads the award data from the given source or reports an error. | high | haiku |  |
+| 0x901d00 | 219 (+6 unwind) | `turkey_awards_init` | thiscall(TurkeyAwards* this, int param_2) with ret 4 | Allocates the turkey award sub-objects and builds the awards list, reporting a version error if memory runs out. | high | haiku |  |
+| 0x901fd0 | 64 | `turkey_awards::award_month_check_and_record` | thiscall(this, short* date_key) ret 4 | Checks the current month against a stored date, then records monthly awards and runs the month change check for the Turkey awards. | medium | haiku |  |
+| 0x902080 | 12 | `turkey_awards_on_award_event` | thiscall(this, int event_or_player_arg) with one stack argument, ret 4 | Handles an award event, forwarding to the team of the week builder when the argument matches one of two stored references. | medium | haiku |  |

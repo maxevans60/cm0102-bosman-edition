@@ -6,5 +6,5 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7cd830 | 83 (+1 unwind) | `poland_rules_ctor` | thiscall(this, 5 args forwarded to base constructor 0x8e84a0), ret 0x14 | Constructs a rules object, sets its vtable, allocates a 12-byte table, and reports an error on allocation failure. | medium | haiku |  |
-| 0x7cd960 | 10 | `poland_rules_reset_table` | stdcall or thiscall-like pseudo-argument: param_1 unused, param_2 is pointer to table, ret 8 | Fills a 42-byte table with 0xFF sentinel values and sets a trailing marker byte to 5. | low | haiku | 2026-10-16-foreign-and-tactics-positions.md |
+| 0x7cd830 | 83 (+1 unwind) | `poland_rules_ctor` | thiscall(this in ECX, int param_2, int param_3, int param_4, int param_5, int param_6), ret 0x14 | Constructs the Poland transfer rules object, filling a rule table or reporting a version-stamped assertion error when allocation fails. | medium | haiku |  |
+| 0x7cd960 | 10 | `poland_rules_reset_table` | stdcall-style vtable slot taking (undefined4 unused, undefined4 *table) with ret 8; thiscall-like second argument is the table pointer, ret 8 means two stack arguments | Fills a 42-byte rules table with 0xFFFFFFFF sentinels and sets a trailing byte to 5, resetting Poland rule entries. | medium | haiku | 2026-10-16-foreign-and-tactics-positions.md |

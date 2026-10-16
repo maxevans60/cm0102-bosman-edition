@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e29e0 | 21 | `rb_south_america_ctor` | thiscall(this, int base_arg) ret 4 | Constructs a South American ruling body object, setting its vtable and default field values before calling the base constructor. | medium | haiku |  |
-| 0x7e2a30 | 99 (+1 unwind) | `rb_south_america_vtable_slot_update` | thiscall(this: object pointer in ECX, param_2: int, ret 8) | Updates a South American ruling body's state flags and dispatches a notification to the discipline and date systems when a flag changes. | low | haiku |  |
-| 0x7e2b90 | 40 | `rb_south_america_assert_or_fail` | stdcall-style thiscall-free function: cdecl-like with 2 args (param_1 int-sized, param_2 int id) and ret 0xc (stdcall, 3 dword args popped by callee) | Checks a numeric code, formats a source-location error message when the code is below 20, otherwise defers to a generic handler. | medium | haiku |  |
+| 0x7e29e0 | 21 | `rb_south_america_ctor` | thiscall(this, RulingBody* base_arg) ret 4 | Constructs the South America ruling body by initialising the base ruling body then setting its vtable and default rule fields. | high | haiku |  |
+| 0x7e2a30 | 99 (+1 unwind) | `rb_south_america_vtable_slot_update` | thiscall(param_2 int: update argument passed on stack, ECX this) ret 8 | Applies a pending ban flag to the ruling body discipline entry and posts the resulting ban news. | low | haiku |  |
+| 0x7e2b90 | 40 | `rb_south_america_assert_or_fail` | cdecl-like free function, args (int param_1 in stack, int line number param_2), ret 0xc (stdcall-style callee cleans 12 bytes is not indicated; treat as stack cleanup of three arguments) | Reports a failed assertion with version string and source line, or forwards valid checks to the region name lookup. | medium | haiku |  |

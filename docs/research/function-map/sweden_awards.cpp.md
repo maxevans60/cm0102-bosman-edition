@@ -6,8 +6,8 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x893720 | 40 (+1 unwind) | `Sweden_awards::Sweden_awards` | thiscall(this, int param_2 as the source object or id), ret 4 | Constructs the Swedish awards object, setting its vtable and the record index, and validating the source via assert. | medium | haiku |  |
-| 0x8937b0 | 332 (+10 unwind) | `sweden_awards::SwedenAwards::init` | thiscall(this, int param_2 owner) ret 4 | Allocates the Swedish award table of nine award objects, falling back to an error report when allocation fails. | high | haiku |  |
-| 0x893bf0 | 141 | `sweden_awards::Awards::write_summary` | thiscall(this in ECX, short* record ptr as arg 1) ret 4 | Writes the award summary rows for a record after checking a stored key matches the record, then finalises it. | low | haiku |  |
-| 0x893d60 | 12 | `Sweden_awards::on_nation_check` | thiscall(this, int param_2 object pointer) ret 4 | Forwards a matching nation object to the nation awards handler when it equals one of two stored nation references. | low | haiku |  |
-| 0x893d80 | 22 | `award_record_ctor` | thiscall(this in ECX, base-init arguments param_2..param_6 forwarded to the base constructor at 0x8e84a0) ret 0x14 | Constructs a derived record object, chaining to a base constructor and installing the derived vtable and default flags. | medium | haiku |  |
+| 0x893720 | 40 (+1 unwind) | `sweden_awards_ctor` | thiscall (ECX = this, stack: int param_2 as load source or 0), ret 4 | Constructs the Sweden awards object, sets its vtable and fields, then loads award data or initialises the defaults. | medium | haiku |  |
+| 0x8937b0 | 332 (+10 unwind) | `sweden_awards::SwedenAwards::init` | thiscall(this, int param_2) ret 4 | Allocates the Swedish award object array and constructs nine award objects, reporting an error box if allocation fails. | high | haiku |  |
+| 0x893bf0 | 141 | `sweden_awards_write_summary` | thiscall(Awards* this in ECX, short* param_2 as the season or record key) ret 4 | Writes the season award summary for the Swedish league, awarding manager, players and top three after a date check. | medium | haiku |  |
+| 0x893d60 | 12 | `sweden_awards_on_nation_check` | thiscall(this, nation_ptr param_2) ret 4 | Checks whether a nation matches one of two stored nations and, if so, builds its team of the week. | medium | haiku |  |
+| 0x893d80 | 22 | `award_record_ctor` | thiscall(this in ECX, param_2..param_6 forwarded to base constructor), ret 0x14 | Constructs an award record object by running the base constructor, then setting the vtable and zeroing its fields. | medium | haiku |  |

@@ -14,10 +14,14 @@ Set `CM0102_EXE` to the clean 3.9.68 exe and `FUNCMAP_WORK` to a folder outside 
 4. `name_batch.py submit <run> --model haiku`, then `name_batch.py collect <run>`. This needs `ANTHROPIC_API_KEY` and the `anthropic` package. The whole game on Haiku costs about $2.50 at batch prices. `--model size` uses Haiku, Sonnet and Opus by function size (about $85). `--only addresses.txt` names only the listed functions.
 5. `write_docs.py <run> [<run> ...]` writes the docs. A later run wins for the same address.
 
+`slot_copy.py` names the overrides of the per-nation competition classes after the base method of their vtable slot in league.cpp or Cup.cpp, as `<file stem>::<method>` (run `slot-copy`, model "slot copy", confidence medium). Run it after the league, cup and hub sweeps. It leaves out every function that a sweep names.
+
+The current order of runs: `write_docs.py haiku-2026-10-16 haiku-2 slot-copy sweep-league sweep-cup sweep-hubs`.
+
 ## Sweep of one file
 
 A sweep replaces the first-pass names of one source file with better ones. It runs on the Claude subscription, inside a Claude Code session:
 
-1. `dossier.py <file.cpp> --names <work>/runs/<first run>/names.jsonl`. Callers and callees then show their first-pass names.
+1. `dossier.py <file.cpp> --names <work>/runs/<first run>/names.jsonl [--names <later run>/names.jsonl ...]`. Callers and callees then show earlier names. A later `--names` wins for the same address.
 2. An Opus agent reads the dossiers of that file in `$FUNCMAP_WORK/dossiers` and writes one JSON line a function to `$FUNCMAP_WORK/runs/sweep-<file>/names.jsonl`. It uses the same fields as `name_batch.py`: address, name, file, convention, purpose, evidence, confidence, model.
 3. `write_docs.py <first run> sweep-<file> ...`, then commit the docs.

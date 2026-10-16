@@ -6,5 +6,5 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x518500 | 80 (+1 unwind) | `croatia_rules_ctor` | thiscall(this, 5 args forwarded to base constructor 0x8e84a0 in transfer_offer.cpp/transfer_screens.cpp, ret 0x14) | Constructs the rules object, sets its vtable, allocates a 12-byte rule table, and reports a formatted error on allocation failure. | high | haiku |  |
-| 0x518620 | 10 | `croatia_rules_init_defaults` | stdcall(undefined4 param_1, undefined4 *out) ret 8; the first argument is unused and the second is the object buffer being filled | Fills a 42-byte rules record with 0xFF sentinel values and sets its first byte to 4. | low | haiku | 2026-10-16-foreign-and-tactics-positions.md |
+| 0x518500 | 80 (+1 unwind) | `croatia_rules_ctor` | thiscall(this, transfer rules args p2..p6) ret 0x14 | Constructs the Croatia rules object, setting its vtable and allocating a 12-byte rules table, reporting an error if allocation fails. | medium | haiku |  |
+| 0x518620 | 10 | `croatia_rules_init_defaults` | stdcall(undefined4 param_1, undefined4 *param_2 as the output record pointer), ret 8 | Fills a 42-byte rules record with 0xFF sentinels and sets its first byte to 4. | medium | haiku | 2026-10-16-foreign-and-tactics-positions.md |

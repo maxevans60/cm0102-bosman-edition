@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x43d2b0 | 40 (+1 unwind) | `brazil_awards_ctor` | thiscall (ECX/param_1 is this, one stack argument param_2 of type int, a source pointer or handle, ret 4) | Constructs a Brazil awards object, setting its vtable and default fields, then validating the supplied argument via an assert path. | medium | haiku |  |
-| 0x43d340 | 1717 (+58 unwind) | `Brazil_awards::init_awards` | thiscall(this in ECX, int param_1 as owner object, int param_2 as award context), ret 4 | Allocates the Brazil awards table of 58 award objects and stores their pointers, or reports an error when allocation fails. | medium | haiku |  |
-| 0x43e990 | 688 | `Brazil_awards::populate_award_slots` | thiscall(this ECX, const short *key ptr, a two-field date or season key, stack-passed) ret 4 | Fills per-award display slots for a key after checking a date record, then refreshes the awards view. | low | haiku |  |
-| 0x43f070 | 36 | `brazil_awards_remove_entry` | thiscall(this, int entry_ptr) ret 4 | Checks whether an award entry belongs to this table's slots and forwards matching entries to the nation awards module for removal. | medium | haiku |  |
+| 0x43d2b0 | 40 (+1 unwind) | `brazil_awards_ctor` | thiscall (ECX = this, stack arg: int param_2 as nation/source pointer, ret 4) | Constructs a Brazil_awards object, sets its vtable, default fields, and loads nation awards or calls init_awards on failure. | high | haiku |  |
+| 0x43d340 | 1717 (+58 unwind) | `Brazil_awards::init_awards` | thiscall(this, int param_2) ret 4 | Allocates the awards table of 58 award objects and fills each slot, or reports a fatal allocation error. | high | haiku |  |
+| 0x43e990 | 688 | `Brazil_awards::populate_award_slots` | thiscall(Brazil_awards *this, Date-like key short *date_pair) ret 4 | Fills the monthly and annual award slots for a date pair, distributing player and team awards, then checks the month change. | medium | haiku |  |
+| 0x43f070 | 36 | `brazil_awards_remove_entry` | thiscall(this, int entry) ret 4 | Clears an awards entry from the Brazil awards table by calling the nation awards team-of-the-week routine when the entry matches a stored slot. | low | haiku |  |

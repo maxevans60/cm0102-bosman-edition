@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x632ac0 | 35 (+1 unwind) | `international_awards_constructor` | thiscall(this, int param) ret 4 | Constructs an international award object, setting its vtable and default fields, and validates the optional argument through an assert path. | medium | haiku |  |
-| 0x632b30 | 233 (+6 unwind) | `international_awards::init_award_list` | thiscall(this in ECX, uint32 param_2 unused by caller frame) ret 4 | Allocates the six international award objects into a list owned by this, reporting allocation failure as an error. | high | haiku |  |
-| 0x632e20 | 149 | `Awards::populate_award_entry` | thiscall(this, short *entry) ret 4; ECX is this, the award record pointer is the single stack argument | Fills an international award record by looking up its database entry and writing the winner and nation fields. | low | haiku |  |
+| 0x632ac0 | 35 (+1 unwind) | `international_awards_constructor` | thiscall(int param_2 loaded from file pointer or save source) ret 4; ECX is this, argument is a source pointer for loading | Constructs the international awards object, sets its vtable, and loads award data or initialises the award list from the source. | medium | haiku |  |
+| 0x632b30 | 233 (+6 unwind) | `international_awards::init_award_list` | thiscall(this, int param_2) with ret 4; ECX is this, param_2 is a stack argument passed to each award constructor | Allocates the six international award objects into a list and reports a memory failure through an error message box. | high | haiku |  |
+| 0x632e20 | 149 | `Awards::populate_award_entry` | thiscall(this, short* entry) ret 4 | Fills an international award entry by looking up a date record and dispatching nation award selection and shortlist routines. | medium | haiku |  |

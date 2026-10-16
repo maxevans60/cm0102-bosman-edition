@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7db100 | 22 | `rb_argentina_ctor` | thiscall(this, int base_arg) ret 4 | Constructs an Argentina rule body object, setting its vtable and default field values from globals. | high | haiku |  |
-| 0x7db150 | 98 (+1 unwind) | `rb_argentina_vtable_update_wins_and_notify` | thiscall(this in ECX, int param_2 passed on stack) ret 8 | Accumulates a per-object counter, and when it reaches a multiple of five, builds a message and dispatches it to the discipline subsystem. | low | haiku |  |
-| 0x7db2a0 | 47 | `rb_argentina_assert_or_dispatch` | stdcall-like thiscall-free function with args (undefined4 param_1, int param_2, undefined4 param_3), ret 0xc (3 stack args, callee cleans) | Asserts a version check on a small integer and otherwise forwards the call to an index-table handler. | medium | haiku |  |
+| 0x7db100 | 22 | `rb_argentina_ctor` | thiscall(this, RulingBody* base_arg) ret 4 | Constructs the Argentina ruling body object by running the base constructor then setting its vtable and default rule fields. | high | haiku |  |
+| 0x7db150 | 98 (+1 unwind) | `rb_argentina_vtable_update_wins_and_notify` | thiscall(this, int param_2) ret 8 | Accumulates a ban counter on the player record and, at a multiple of five, adds a ban and posts news. | low | haiku |  |
+| 0x7db2a0 | 47 | `rb_argentina_assert_or_dispatch` | cdecl-like stdcall with three arguments (int param_1, int index, int param_3), ret 0xc | Dispatches to nationality handling for valid indices, otherwise formats a version assert and shows an error box. | medium | haiku |  |

@@ -6,5 +6,5 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x90b940 | 81 (+1 unwind) | `usa_rules::Rules_ctor` | thiscall(this in ECX; param_2..param_6 forwarded to a transfer_offer.cpp init routine), ret 0x14 | Constructs the USA rules object, allocating a 12-byte rule table and reporting a fatal error with the crt message when allocation fails. | medium | haiku |  |
-| 0x90ba60 | 17 | `usa_rules_init_slot_table` | thiscall-like fastcall: (int *param_1 as this-or-owner pointer, undefined4 *param_2 as output table) returning ret 8 | Fills a ten-entry table with sentinel values and marks a field when the owner's tag differs from a global. | low | haiku |  |
+| 0x90b940 | 81 (+1 unwind) | `usa_rules_ctor` | thiscall(usa_rules* this, 5 args forwarded to TRANSFER_RULES base ctor), ret 0x14 | Constructs the USA rules object, allocating a 12-byte rule table and reporting an assert error if allocation fails. | high | haiku |  |
+| 0x90ba60 | 17 | `usa_rules_init_slot_table` | stdcall-like two-argument function returning with ret 8: (int *owner, undefined4 *table), table filled with 0xffffffff over ten dwords plus a word, owner checked against global 0x9cf690 | Initialises a ten-entry slot table to empty and flags it when the owner differs from the global reference. | medium | haiku |  |

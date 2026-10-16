@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e13d0 | 21 | `rb_oceania_ctor` | thiscall(this, ruling_body_base_arg) ret 4 | Constructs an Oceania ruling body object, setting its vtable and default field values before the base constructor runs. | medium | haiku |  |
-| 0x7e1420 | 98 (+1 unwind) | `rb_oceania_ruling_body_tick` | thiscall(this, int param_2) ret 8 | Advances a ruling-body counter each turn and, on a multiple of three, issues a discipline or ruling notice. | low | haiku |  |
-| 0x7e1570 | 40 | `rb_oceania_assert_version_or_fail` | cdecl-like thiscall-free function with (undefined4 param_1, int param_2) arguments, ret 0xc | Checks a version number and, when it is too old, formats a version error and reports it through the error dialog. | medium | haiku |  |
+| 0x7e13d0 | 21 | `rb_oceania_ctor` | thiscall(RulingBody* this, int base_arg) ret 4 | Constructs an Oceania ruling body by initialising the base body and setting its vtable and default field values. | medium | haiku |  |
+| 0x7e1420 | 98 (+1 unwind) | `rb_oceania_ruling_body_tick` | thiscall(RulingBody* this, int param_2) ret 8 | Advances a ruling body discipline counter and, when a threshold is reached, records a ban and posts news about it. | medium | haiku |  |
+| 0x7e1570 | 40 | `rb_oceania_assert_version_or_fail` | cdecl(int line_or_code, int version_threshold) returns void, ret 0xc with 3 stack args in the callee frame | Checks a version threshold and shows a version error box, otherwise delegates to nation region naming. | medium | haiku |  |
