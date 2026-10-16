@@ -12,4 +12,4 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 | 0x858960 | 98 | `spa_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of spa_super.cpp. | medium | slot copy |  |
 | 0x858aa0 | 165 | `spa_super_init_records` | fastcall (ECX = param_1, the super-league state record); returns int, ret 0 | Allocates and fills the Spanish super league record pair from latest placed club lookups, reporting assert errors on failure. | medium | haiku |  |
 | 0x858cd0 | 125 | `spa_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of spa_super.cpp. | medium | slot copy |  |
-| 0x858e70 | 15 | `spa_super::set_up_rounds` | thiscall(Cup* this), ret 0 | Override of Cup::set_up_rounds for the competition of spa_super.cpp. | medium | slot copy |  |
+| 0x858e70 | 15 | `spa_super::set_up_rounds` | thiscall(Cup* this), ret 0 | Override of Cup::set_up_rounds for the competition of spa_super.cpp. | medium | slot copy | 2026-10-16-sweep-europe.md |

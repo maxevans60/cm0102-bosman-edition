@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e32d0 | 22 | `RbSwedenCup::RbSwedenCup` | thiscall(RbSwedenCup* this, FILE* file) returning this, ret 4 | Constructs the Swedish cup ruling body on the RulingBody base, sets vtable 0x96ee94, rule set id 0x1d and the Sweden nation fields. | high | opus |  |
+| 0x7e32d0 | 22 | `RbSwedenCup::RbSwedenCup` | thiscall(RbSwedenCup* this, FILE* file) returning this, ret 4 | Constructs the Swedish cup ruling body on the RulingBody base, sets vtable 0x96ee94, rule set id 0x1d and the Sweden nation fields. | high | opus | 2026-10-16-sweep-rulebooks.md |
 | 0x7e3320 | 175 (+5 unwind) | `RbSwedenCup::process_match_cards` | thiscall(RbSwedenCup* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Swedish cup rules, queueing a points ban for a red card and banning him at the third booking and each second one after. | high | opus |  |
 | 0x7e35b0 | 38 | `RbSwedenCup::get_name` | thiscall(RbSwedenCup* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Swedish cup into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

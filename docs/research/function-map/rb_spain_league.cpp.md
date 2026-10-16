@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e2f80 | 22 | `RbSpainLeague::RbSpainLeague` | thiscall(RbSpainLeague* this, FILE* file) returning this, ret 4 | Constructs the Spanish league ruling body on the RulingBody base, sets vtable 0x96ee74, rule set id 0x1a and the Spain nation fields. | high | opus |  |
+| 0x7e2f80 | 22 | `RbSpainLeague::RbSpainLeague` | thiscall(RbSpainLeague* this, FILE* file) returning this, ret 4 | Constructs the Spanish league ruling body on the RulingBody base, sets vtable 0x96ee74, rule set id 0x1a and the Spain nation fields. | high | opus | 2026-10-16-sweep-rulebooks.md |
 | 0x7e2fd0 | 162 (+5 unwind) | `RbSpainLeague::process_match_cards` | thiscall(RbSpainLeague* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Spanish league rules, queueing a points ban for a red card and banning him at each fifth booking. | high | opus |  |
 | 0x7e3230 | 38 | `RbSpainLeague::get_name` | thiscall(RbSpainLeague* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Spanish league into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

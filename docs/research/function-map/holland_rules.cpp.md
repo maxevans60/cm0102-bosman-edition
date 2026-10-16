@@ -6,4 +6,4 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5f9690 | 83 (+1 unwind) | `HOLLAND_RULES::HOLLAND_RULES` | thiscall (this, u8 flag, int nation_index, int continent_index, int arg4, int arg5) ret 0x14 | Constructs the Dutch transfer rules on the TRANSFER_RULES base with one transfer window and squad limits of 50 foreign and 50 non-EU players. | high | opus |  |
+| 0x5f9690 | 83 (+1 unwind) | `HOLLAND_RULES::HOLLAND_RULES` | thiscall (this, u8 flag, int nation_index, int continent_index, int arg4, int arg5) ret 0x14 | Constructs the Dutch transfer rules on the TRANSFER_RULES base with one transfer window and squad limits of 50 foreign and 50 non-EU players. | high | opus | 2026-10-16-sweep-rulebooks.md |

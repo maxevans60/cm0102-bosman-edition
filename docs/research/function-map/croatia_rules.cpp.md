@@ -6,5 +6,5 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x518500 | 80 (+1 unwind) | `CROATIA_RULES::CROATIA_RULES` | thiscall (CROATIA_RULES *this, u8 rules_id, int nation_index, int continent_index, int arg4, int arg5) ret 0x14 | Constructs the Croatian transfer rules object, installs vtable 0x969394 and allocates one transfer window from 1 June to 30 March. | high | opus |  |
-| 0x518620 | 10 | `CROATIA_RULES::fill_squad_restrictions` | thiscall (CROATIA_RULES *this, competition_t *competition unused, u8 *record) ret 8 | Fills the 42-byte match squad restriction record with 0xff and allows four foreign players. | high | opus | 2026-10-16-foreign-and-tactics-positions.md |
+| 0x518500 | 80 (+1 unwind) | `CROATIA_RULES::CROATIA_RULES` | thiscall (CROATIA_RULES *this, u8 rules_id, int nation_index, int continent_index, int arg4, int arg5) ret 0x14 | Constructs the Croatian transfer rules object, installs vtable 0x969394 and allocates one transfer window from 1 June to 30 March. | high | opus | 2026-10-16-sweep-rulebooks.md |
+| 0x518620 | 10 | `CROATIA_RULES::fill_squad_restrictions` | thiscall (CROATIA_RULES *this, competition_t *competition unused, u8 *record) ret 8 | Fills the 42-byte match squad restriction record with 0xff and allows four foreign players. | high | opus | 2026-10-16-foreign-and-tactics-positions.md, 2026-10-16-sweep-rulebooks.md |

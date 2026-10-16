@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7db100 | 22 | `RbArgentina::RbArgentina` | thiscall(RbArgentina* this, FILE* file) returning this, ret 4 | Constructs the Argentine ruling body on the RulingBody base, sets vtable 0x96e9f4, rule set id 3 and the Argentina nation fields. | high | opus |  |
+| 0x7db100 | 22 | `RbArgentina::RbArgentina` | thiscall(RbArgentina* this, FILE* file) returning this, ret 4 | Constructs the Argentine ruling body on the RulingBody base, sets vtable 0x96e9f4, rule set id 3 and the Argentina nation fields. | high | opus | 2026-10-16-sweep-rulebooks.md |
 | 0x7db150 | 98 (+1 unwind) | `RbArgentina::process_match_cards` | thiscall(RbArgentina* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Argentine rules, banning him after a red card or each fifth booking and posting the ban news. | high | opus |  |
 | 0x7db2a0 | 47 | `RbArgentina::get_name` | thiscall(RbArgentina* this unused, char* buf, int buf_len, int form) ret 0xc | Writes the Argentine nationality adjective into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | medium | opus |  |

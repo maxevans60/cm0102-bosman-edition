@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x4c6d40 | 6 | `contract_manager_static_date_ae1048_init` | cdecl(void) ret 0 | Static initialiser that constructs the global Date at 0xae1048 and registers its empty destructor stub with atexit. | high | opus |  |
+| 0x4c6d40 | 6 | `contract_manager_static_date_ae1048_init` | cdecl(void) ret 0 | Static initialiser that constructs the global Date at 0xae1048 and registers its empty destructor stub with atexit. | high | opus | 2026-10-16-sweep-europe.md |
 | 0x4c6d60 | 1 | `contract_manager_static_date_ae1048_dtor` | cdecl(void) ret 0 | Empty atexit destructor for the global Date at 0xae1048, since Date has no destructor work to do. | high | opus |  |
 | 0x4c6d70 | 6 | `contract_manager_static_date_ae1030_init` | cdecl(void) ret 0 | Static initialiser that constructs the global Date at 0xae1030 and registers its empty destructor stub with atexit. | high | opus |  |
 | 0x4c6d90 | 1 | `contract_manager_static_date_ae1030_dtor` | cdecl(void) ret 0 | Empty atexit destructor for the global Date at 0xae1030, since Date has no destructor work to do. | high | opus |  |
@@ -39,7 +39,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 | 0x4c7010 | 6 | `contract_manager_static_date_ae1088_init` | cdecl(void) ret 0 | Constructs the static Date at 0xae1088 and registers its empty destructor 0x4c7030 with the C runtime atexit list. | high | opus |  |
 | 0x4c7030 | 1 | `contract_manager_static_date_ae1088_dtor` | cdecl(void) ret 0 | Serves as the empty atexit destructor for the static Date at 0xae1088, since Date has a trivial destructor. | high | opus |  |
 | 0x4c7040 | 304 (+16 unwind) | `CONTRACT_MANAGER::CONTRACT_MANAGER` | thiscall(CONTRACT_MANAGER *this, int save_handle) ret 4, returns this | Waits for the CM01/02 CD, zeroes the fifteen manager fields, sets sixteen static contract Dates from day offsets and loads saved contracts when given a handle. | high | opus | 2026-10-14-game-creation-inventory.md |
-| 0x4c74f0 | 40 | `CONTRACT_MANAGER::~CONTRACT_MANAGER` | thiscall(CONTRACT_MANAGER *this) ret 0 | Frees the three malloc buffers at fields 0, 3 and 10 and destroys and deletes the two linked lists at fields 13 and 14. | high | opus |  |
+| 0x4c74f0 | 40 | `CONTRACT_MANAGER::~CONTRACT_MANAGER` | thiscall(CONTRACT_MANAGER *this) ret 0 | Frees the three malloc buffers at fields 0, 3 and 10 and destroys and deletes the two linked lists at fields 13 and 14. | high | opus | 2026-10-16-sweep-europe.md |
 | 0x4c7560 | 305 (+3 unwind) | `CONTRACT_MANAGER::initialise_all_staff_contracts` | cdecl-like __fastcall with ECX as CONTRACT_MANAGER this and one argument pointer param_1 to the staff contracts list, ret 0 | Allocates the staff contract list and fills each staff record with initial contract dates, morale and offer state. | high | haiku | 2026-10-14-game-creation-inventory.md |
 | 0x4c7950 | 28 | `contract_manager_link_new_staff_contract` | thiscall(int *this, int *staff, int offer_arg) ret 8 | Allocates a free staff contract slot, links it to the staff member and builds the offer. | medium | haiku |  |
 | 0x4c79a0 | 87 | `contract_manager_get_free_staff_contract_space` | thiscall(this in ECX, int want_scan flag as arg1) ret 4 | Returns the index of a free staff contract slot, growing the array by 200 entries when full, or reports allocation failure. | high | haiku |  |

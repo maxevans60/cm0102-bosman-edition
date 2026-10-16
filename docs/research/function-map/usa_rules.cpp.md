@@ -6,5 +6,5 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x90b940 | 81 (+1 unwind) | `USA_RULES::USA_RULES` | thiscall(USA_RULES* this, 5 args forwarded to TRANSFER_RULES::TRANSFER_RULES) ret 0x14 | Constructs the USA transfer rules, sets vtable 0x970a38, allocates the 12-byte transfer window table and sets byte +0x13 to 4. | high | opus |  |
-| 0x90ba60 | 17 | `USA_RULES::fill_squad_restrictions` | thiscall(USA_RULES* this, competition_t* competition, u8* record) ret 8 | Fills the 42-byte match squad restriction record with 0xff and allows four foreign players except in competition 0x9cf690. | high | opus |  |
+| 0x90b940 | 81 (+1 unwind) | `USA_RULES::USA_RULES` | thiscall(USA_RULES* this, 5 args forwarded to TRANSFER_RULES::TRANSFER_RULES) ret 0x14 | Constructs the USA transfer rules, sets vtable 0x970a38, allocates the 12-byte transfer window table and sets byte +0x13 to 4. | high | opus | 2026-10-16-sweep-rulebooks.md |
+| 0x90ba60 | 17 | `USA_RULES::fill_squad_restrictions` | thiscall(USA_RULES* this, competition_t* competition, u8* record) ret 8 | Fills the 42-byte match squad restriction record with 0xff and allows four foreign players except in competition 0x9cf690. | high | opus | 2026-10-16-sweep-rulebooks.md |

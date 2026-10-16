@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 2106 high, 4415 medium, 342 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03.
+- Confidence: 2233 high, 4303 medium, 327 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -110,9 +110,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [euro_champ.cpp](euro_champ.cpp.md) | 25 |
 | [euro_champ_qual.cpp](euro_champ_qual.cpp.md) | 32 |
 | [european_awards.cpp](european_awards.cpp.md) | 7 |
-| [european_cup.cpp](european_cup.cpp.md) | 76 |
-| [fifa_confed.cpp](fifa_confed.cpp.md) | 19 |
-| [fifa_rankings.cpp](fifa_rankings.cpp.md) | 18 |
+| [european_cup.cpp](european_cup.cpp.md) | 73 |
+| [fifa_confed.cpp](fifa_confed.cpp.md) | 20 |
+| [fifa_rankings.cpp](fifa_rankings.cpp.md) | 20 |
 | [file_screens.cpp](file_screens.cpp.md) | 10 |
 | [fin_cup.cpp](fin_cup.cpp.md) | 7 |
 | [fin_first.cpp](fin_first.cpp.md) | 19 |

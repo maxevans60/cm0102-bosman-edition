@@ -216,6 +216,67 @@ From this wave on, the brief points the agents to a local copy of the champman01
 | 0x4c7040 | Setup step 32, global 0xae1050, 0x3c bytes | `cm_cd_check_and_load_seeding_data` (Haiku) | `CONTRACT_MANAGER::CONTRACT_MANAGER` | agrees |
 | 0x5832c0 | Filler with no limit in vtable 0x96a188 (foreign-and-tactics) | `qual_reset_slots_to_minus_one` (Haiku) | `TRANSFER_RULES::fill_squad_restrictions` | agrees |
 
+#### Wave w04 (tier 2, 2026-10-16)
+
+Run `sweep-w04`: 8 Opus agents named 200 functions: the rest of `european_cup.cpp`, `fifa_confed.cpp`, `fifa_rankings.cpp`, `goldcup.cpp`, `host_country.cpp`, `inter_amer_cup.cpp`, `intertoto_cup.cpp`, `key_nation.cpp` and their gap functions. Each agent took 2 to 5 minutes and 110,000 to 167,000 tokens. Confidence: 165 high, 35 medium, 0 low.
+
+Many gap functions hold other code: news stories between `european_cup.cpp` and `fifa_confed.cpp`, the display layer and the GUI drawing code between `goldcup.cpp` and `gre_cup.cpp`, and `FILE_LLIST` methods in `fifa_rankings.cpp`. The brief allows only the two files of the gap, so these sit in the nearer file. One merge fix: three news functions moved to `european_cup.cpp`, so the whole news gap is in one file. Comp slot 22 is now `collect_club_list`. Fifteen addresses in `european_cup.cpp` are pieces inside the phase 2 draw and carry its name with a suffix.
+
+50 functions of the wave are cited. 47 agree, 2 agree in area and 1 citation makes no claim about the function.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x585ab0 | Phase 2 group draw, groups of four (sweep-europe) | `european_cup_group_draw_recurse` (Haiku) | `EuropeanCup::draw_phase2_groups` | agrees |
+| 0x586330 | Champions League stage list (sweep-europe) | `european_cup_setup_group_stage` (Haiku) | `EuropeanCup::draw_quarter_finals` | agrees |
+| 0x587220 | News gap 0x587220 to 0x58aa60 (sweep-europe) | `shortlist_manager_news_transfer_offer` (Haiku) | `news_create_scout_watching_story` | agrees |
+| 0x58a890 | Fixed-date event at game start (game-creation inventory) | `news_post_transfer_rule_change` (Haiku) | `news_post_transfer_system_change` | agrees |
+| 0x58aa60 | News gap (sweep-europe) | `news_compensation_for_player_loss` (Haiku) | `news_insurance_payout_text` | agrees |
+| 0x58acd0 | FA meeting screen (sweep-europe) | `fifa_confed_open_screen_dialog` (Haiku) | `fa_meeting_open_screen` | agrees |
+| 0x58b0f0 | FA meeting screen (sweep-europe) | `european_cup_phase_dispatch_handler` (Haiku) | `fa_meeting_screen_handle_event` | agrees |
+| 0x5e2620 | Display init, UpdateWindow (import inventory) | `gre_cup_init_graphics_window` (Haiku) | `graphics_init_display` | agrees |
+| 0x5e2cc0 | Display release, DestroyWindow (import inventory) | `goldcup_shutdown_ui_resources` (Haiku) | `graphics_shutdown_display` | agrees |
+| 0x5e2e50 | Activation handling (input inventory) | `goldcup_release_pending_objects` (Haiku) | `graphics_restore_lost_surfaces` | agrees in area |
+| 0x5e2ea0 | Minimise path on deactivate (input inventory) | `get_global_flag_ae319c` (Haiku) | `graphics_is_full_screen` | agrees |
+| 0x5e2eb0 | Full screen flip (display inventory) | `blit_cursor_region_update` (Haiku) | `graphics_flip_rect` | agrees |
+| 0x5e30e0 | Screen draw helpers (display inventory) | `gold_cup_render_fade_frames` (Haiku) | `graphics_fade_rect` | agrees |
+| 0x5e3680 | Clip helper (widescreen inventory) | `clip_rect_to_surface` (Haiku) | `clip_rect_to_surface` | agrees |
+| 0x5e3730 | Clip helper (widescreen inventory) | `goldcup_draw_line_clipped` (Haiku) | `graphics_draw_line` | agrees |
+| 0x5e3b50 | Rectangle draw (display inventory) | `draw_clipped_quad_outline` (Haiku) | `graphics_draw_rect` | agrees in area |
+| 0x5e3dd0 | Screen image save (display inventory) | `grab_screen_region_bitmap` (Haiku) | `gui_save_screen_image` | agrees |
+| 0x5e3fd0 | Screen image restore (display inventory) | `blit_region_to_surface` (Haiku) | `gui_restore_screen_image` | agrees |
+| 0x5e40d0 | Picture load (display inventory) | `load_bitmap_cached_or_converted` (Haiku) | `gui_load_rgn_picture` | agrees |
+| 0x5e42b0 | Image free (display inventory) | `release_owned_buffer` (Haiku) | `gui_free_image` | agrees |
+| 0x5e42e0 | Clears the 800x600 rectangle (display inventory) | `gre_cup_blit_palette_surface` (Haiku) | `gui_darken_rect` | agrees |
+| 0x5e4560 | Colours set up at start (area-widget-draw spec) | `gre_init_palette_colours` (Haiku) | `gui_init_palette_colours` | agrees |
+| 0x5e4ba0 | Bitmap font set load (hd_text.c) | `load_font_set` (Haiku) | `gui_load_bitmap_font` | agrees |
+| 0x5e5060 | Hash escape decode (gui_font.c) | `decode_hash_escaped_string` (Haiku) | `text_decode_hash_escapes` | agrees |
+| 0x5e5160 | Line draw (clickable-names inventory) | `gre_cup_render_text_line` (Haiku) | `gui_draw_text_line` | agrees |
+| 0x5e5d60 | Gap between two glyph codes (gui_font.c) | `kerning_adjust_pair` (Haiku) | `font_glyph_gap` | agrees |
+| 0x5e5df0 | Panel draw (display inventory) | `draw_styled_rect` (Haiku) | `gui_draw_panel` | agrees |
+| 0x5e6d80 | Text box draw (display inventory) | `gre_cup_draw_wrapped_text` (Haiku) | `gui_draw_text_box` | agrees |
+| 0x5e76f0 | Progress box (display inventory) | `gold_cup_draw_progress_panel` (Haiku) | `gui_draw_progress_box` | agrees |
+| 0x5e7840 | Ellipse panel style (area-widget-draw spec) | `goldcup_draw_dashed_ellipse_pass` (Haiku) | `gui_draw_circle` | agrees |
+| 0x5e7aa0 | Ellipse panel style (area-widget-draw spec) | `draw_filled_ellipse_pixels` (Haiku) | `circle_plot_points` | agrees |
+| 0x5e8170 | Cursor kind cache 0x9cd804 (input inventory) | `set_cursor_mode` (Haiku) | `set_cursor_mode` | agrees |
+| 0x5e81e0 | Cursor kind cache (input inventory) | `set_cursor_for_mode` (Haiku) | `reapply_cursor_mode` | agrees |
+| 0x5e8280 | Called with 1 at start (import inventory) | `set_gold_cup_global` (Haiku) | `set_software_cursor_flag` | agrees |
+| 0x5f97c0 | Setup step 15, global 0xb5e134 (game-creation inventory) | `host_country_find_cd_and_load` (Haiku) | `HostCountry::HostCountry` | agrees |
+| 0x5fa850 | Daily update call (game-creation inventory) | `host_country_update_sibling_records` (Haiku) | `HostCountry::daily_update` | agrees |
+| 0x5fab70 | Listed by a constant scan only (widescreen inventory) | `host_country_assign_players_from_list` (Haiku) | `HostCountry::pick_club_world_champ_hosts` | no claim |
+| 0x632080 | Inter-American Cup constructor (club-world) | `Inter_Amer_Cup::Inter_Amer_Cup` (Haiku) | `InterAmerCup::InterAmerCup` | agrees |
+| 0x632340 | Inter-American Cup, 1 round (sweep-europe) | `inter_amer_cup::create_round_table` (slot copy) | `InterAmerCup::create_round_table` | agrees |
+| 0x633290 | Intertoto process_fixture, nation points (sweep-europe) | `intertoto_cup::process_fixture` (slot copy) | `IntertotoCup::process_fixture` | agrees |
+| 0x633300 | Intertoto Cup rounds (sweep-europe) | `intertoto_cup::create_round_table` (slot copy) | `IntertotoCup::create_round_table` | agrees |
+| 0x6336c0 | Intertoto entrants (sweep-europe) | `intertoto_cup_collect_team_slots` (Haiku) | `IntertotoCup::collect_entrants` | agrees |
+| 0x633d40 | Intertoto Cup rounds (sweep-europe) | `intertoto_cup::update_for_date` (slot copy) | `IntertotoCup::update_for_date` | agrees |
+| 0x667150 | Key nation table build (game-creation inventory) | `key_nation_init_table` (Haiku) | `key_nation_build_table` | agrees |
+| 0x669140 | Numbers the league entries, count at 0xb64738 | `key_nation_reset_slots` (Haiku) | `key_nation_number_active_entries` | agrees |
+| 0x669180 | Makes the competitions (game-creation inventory) | `key_nation_check_table_entries` (Haiku) | `key_nation_create_all_comps` | agrees |
+| 0x6699d0 | Creator runs only when an entry is active (sweep-europe) | `nation_has_active_entry` (Haiku) | `key_nation_continent_has_selected_nation` | agrees |
+| 0x669f50 | key_nation.cpp assert (start-new-game inventory) | `key_nation_division_name_format` (Haiku) | `key_nation_extra_division_name` | agrees |
+| 0x66a0c0 | Sort order of the 35 league entries | `key_nation_table_init` (Haiku) | `key_nation_sorted_order` | agrees |
+| 0x66a100 | qsort comparator of the entries | `key_nation_compare_names` (Haiku) | `key_nation_compare_entries` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

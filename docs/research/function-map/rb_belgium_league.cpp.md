@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dbca0 | 25 | `RbBelgiumLeague::RbBelgiumLeague` | thiscall(RbBelgiumLeague* this, FILE* file) returning this, ret 4 | Constructs the Belgian league ruling body on the RulingBody base, sets vtable 0x96ea74, rule set id 4 and the Belgium nation fields. | high | opus |  |
+| 0x7dbca0 | 25 | `RbBelgiumLeague::RbBelgiumLeague` | thiscall(RbBelgiumLeague* this, FILE* file) returning this, ret 4 | Constructs the Belgian league ruling body on the RulingBody base, sets vtable 0x96ea74, rule set id 4 and the Belgium nation fields. | high | opus | 2026-10-16-sweep-rulebooks.md |
 | 0x7dbcf0 | 204 (+4 unwind) | `RbBelgiumLeague::process_match_cards` | thiscall(RbBelgiumLeague* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Belgian league rules, queueing a points ban for a red card and banning him at each third booking. | high | opus |  |
 | 0x7dbfe0 | 38 | `RbBelgiumLeague::get_name` | thiscall(RbBelgiumLeague* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Belgian league into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

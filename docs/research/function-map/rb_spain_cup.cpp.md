@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e2c30 | 22 | `RbSpainCup::RbSpainCup` | thiscall(RbSpainCup* this, FILE* file) returning this, ret 4 | Constructs the Spanish cup ruling body on the RulingBody base, sets vtable 0x96ee54, rule set id 0x1b and the Spain nation fields. | high | opus |  |
+| 0x7e2c30 | 22 | `RbSpainCup::RbSpainCup` | thiscall(RbSpainCup* this, FILE* file) returning this, ret 4 | Constructs the Spanish cup ruling body on the RulingBody base, sets vtable 0x96ee54, rule set id 0x1b and the Spain nation fields. | high | opus | 2026-10-16-sweep-rulebooks.md |
 | 0x7e2c80 | 163 (+5 unwind) | `RbSpainCup::process_match_cards` | thiscall(RbSpainCup* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Spanish cup rules, queueing a points ban for a red card and banning him at each second booking. | high | opus |  |
 | 0x7e2ee0 | 38 | `RbSpainCup::get_name` | thiscall(RbSpainCup* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Spanish cup into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

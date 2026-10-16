@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x583280 | 19 | `EUROPE_RULES::EUROPE_RULES` | thiscall(EUROPE_RULES* this, u8 flag, int nation_index, int continent_index, int arg4, int arg5) ret 0x14, returns this | Constructs the Europe-wide transfer rules object on the TRANSFER_RULES base, sets its vtable and clears a flag byte. | medium | opus |  |
+| 0x583280 | 19 | `EUROPE_RULES::EUROPE_RULES` | thiscall(EUROPE_RULES* this, u8 flag, int nation_index, int continent_index, int arg4, int arg5) ret 0x14, returns this | Constructs the Europe-wide transfer rules object on the TRANSFER_RULES base, sets its vtable and clears a flag byte. | medium | opus | 2026-10-16-sweep-rulebooks.md, 2026-10-16-sweep-season-end.md |
 | 0x5832c0 | 8 | `TRANSFER_RULES::fill_squad_restrictions` | thiscall(TRANSFER_RULES* this, int unused, int* restrictions) ret 8 | Sets all eleven restriction values to minus one, the base default meaning no squad restrictions apply. | high | opus | 2026-10-16-foreign-and-tactics-positions.md |
 | 0x5832e0 | 112 | `EUROPE_RULES::get_ineligibility_code` | thiscall(EUROPE_RULES* this, Player* player, void* target) ret 8, returns code | Returns code 8 for some players in five listed nations in the current season, otherwise defers to the base eligibility check. | low | opus |  |
 | 0x583400 | 36 (+1 unwind) | `european_awards_ctor` | thiscall(EAwards* this, int source), ret 4 | Constructs the European awards object, sets its vtable and defaults, then loads awards data or initialises them. | high | haiku |  |

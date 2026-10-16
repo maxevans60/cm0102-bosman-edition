@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x68b100 | 254 (+1 unwind) | `League_Stage::League_Stage` | thiscall(League_Stage* this, Comp* parent, short teams, Club** team_list, short p5, int p6, void* fixture_dates, short date_count, ...) ret 0x58 | Builds a league stage of a cup, sets up its table rows and fixtures, and sorts the table. | high | opus |  |
+| 0x68b100 | 254 (+1 unwind) | `League_Stage::League_Stage` | thiscall(League_Stage* this, Comp* parent, short teams, Club** team_list, short p5, int p6, void* fixture_dates, short date_count, ...) ret 0x58 | Builds a league stage of a cup, sets up its table rows and fixtures, and sorts the table. | high | opus | 2026-10-16-sweep-europe.md |
 | 0x68b4d0 | 11 | `league_stage::`scalar deleting destructor'` | thiscall (League* this, unsigned flags), returns this, ret 4 | Override of League::`scalar deleting destructor' for the competition of league_stage.cpp. | medium | slot copy |  |
 | 0x68b4f0 | 114 (+1 unwind) | `League_Stage::League_Stage` | thiscall(League_Stage *this, short count_a, short count_b), ret 8 | Constructs a league stage object, allocating two record tables sized by the arguments and reporting assertion failures on allocation error. | high | haiku |  |
 | 0x68b6a0 | 34 (+1 unwind) | `league_stage::~league_stage` | thiscall(this) ret 0 | Destructor body that resets the vtable, frees league tables and heap buffers, then destroys the base League object. | medium | haiku |  |
