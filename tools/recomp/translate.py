@@ -179,6 +179,8 @@ class FunctionWriter:
                 else:
                     falls = self.insn(insn)
                 self.handled += 1
+                if a in GUARDS:
+                    GUARDS_SEEN.add(a)      # only when the guarded instruction is translated too
                 if a in PATCHES:
                     self.patch(body, mark, a)
                 if a in TRUE_WIDTH:
@@ -241,7 +243,6 @@ class FunctionWriter:
         if (insn.mnemonic + " " + insn.op_str).strip() != text:
             raise SystemExit(f"crashguards.py: the instruction at {insn.address:#x} is not {text}")
         self.e(f"if ({test}) {{ {code} }}")
-        GUARDS_SEEN.add(insn.address)
 
     def patch(self, body, mark, a):
         """Replaces the constant of the instruction at a with its run-time value (widescreen.py)."""
