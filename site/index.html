@@ -80,13 +80,6 @@ a { color: inherit; }
 @keyframes net { to { background-position: 104px 180px; } }
 .hero h1 { margin: 0; width: min(1000px, 92vw); text-align: center; }
 .hero h1 img { width: 100%; height: auto; margin: 0 auto; filter: drop-shadow(0 6px 0 rgba(0,0,0,.45)); }
-.hero .edition {
-  display: block; margin-top: clamp(8px, 1.4vw, 20px);
-  font-family: "Orbitron", sans-serif; font-weight: 900; font-style: normal; text-transform: uppercase;
-  font-size: clamp(1.75rem, 5.2vw, 4.75rem); letter-spacing: .04em; line-height: 1; color: #fff;
-  -webkit-text-stroke: 2px #1a0c10; paint-order: stroke fill; text-shadow: 0 5px 0 rgba(0,0,0,.5);
-}
-.hero .edition em { font-style: italic; color: var(--accent); }
 .hero .flank {
   position: absolute; bottom: 32px; z-index: 2; width: 320px; font-size: var(--step-body); line-height: 1.4;
 }
@@ -177,13 +170,12 @@ a { color: inherit; }
 .js [data-in] { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); }
 .js [data-in].in { opacity: 1; transform: none; }
 .js .hero h1 img { opacity: 0; transform: translateY(30px) scale(.97); transition: opacity .9s var(--ease-out), transform .9s var(--ease-out); }
-.js .hero h1 .edition { opacity: 0; transform: translateY(100%); transition: opacity .7s .25s, transform .9s .25s var(--ease-out); }
-.js .hero.ready h1 img, .js .hero.ready h1 .edition { opacity: 1; transform: none; }
+.js .hero.ready h1 img { opacity: 1; transform: none; }
 .js .hero .flank { opacity: 0; transition: opacity .8s .5s, transform .9s .4s var(--ease-out); }
 .js .hero.ready .flank { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 0s !important; transition-delay: 0s !important; }
-  .js [data-in], .js .hero h1 img, .js .hero h1 .edition, .js .hero .flank { opacity: 1 !important; transform: none !important; }
+  .js [data-in], .js .hero h1 img, .js .hero .flank { opacity: 1 !important; transform: none !important; }
 }
 
 @media (max-width: 1100px) {
@@ -236,8 +228,7 @@ a { color: inherit; }
     <a class="btn" href="#release" data-dl-label>Download</a>
   </nav>
   <h1>
-    <img src="assets/logo.png" width="1294" height="562" alt="Championship Manager Season 01/02">
-    <span class="edition">Bosman <em>Edition</em></span>
+    <img src="assets/logo.png" width="1294" height="671" alt="Championship Manager Season 01/02: Bosman Edition">
   </h1>
   <div class="flank left">
     <p>Championship Manager 01/02, rebuilt to run on Mac, Windows and Linux.</p>
@@ -400,7 +391,7 @@ a { color: inherit; }
 
 <footer class="foot">
   <div class="inner">
-    <img src="assets/logo-sm.png" width="647" height="281" alt="Championship Manager Season 01/02" loading="lazy">
+    <img src="assets/logo-sm.png" width="647" height="335" alt="Championship Manager Season 01/02: Bosman Edition" loading="lazy">
     <p>CM 01/02 Bosman Edition is an unofficial fan project. Not affiliated with or endorsed by Sports Interactive, SEGA, Eidos or Square Enix. The download includes the game files from the 2008 free release. Logo from the 2001 manual.</p>
     <ul>
       <li><a href="https://github.com/maxevans60/cm0102-bosman-edition">Source on GitHub</a></li>
