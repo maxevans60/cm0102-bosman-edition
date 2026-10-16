@@ -99,7 +99,7 @@ cp "$SETUP" "$OUT/"
 echo "== Linux"
 # One x86-64 AppImage, built and checked in a linux/amd64 container (Docker, Colima or OrbStack).
 "$REPO/tools/linux/make_appimage.sh" --game "$GAME" --manifest "$MANIFEST" --out "$REPO/build/linux"
-APPIMAGE="$REPO/build/linux/CM-01-02-Bosman-Edition-$VERSION-linux-x86_64.AppImage"
+APPIMAGE="$REPO/build/linux/CM0102-Bosman-Edition-$VERSION-x86_64.AppImage"
 [ -f "$APPIMAGE" ] || { echo "make_release.sh: the Linux build made no AppImage." >&2; exit 1; }
 cp "$APPIMAGE" "$OUT/"
 

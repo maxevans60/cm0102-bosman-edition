@@ -39,4 +39,4 @@ MOUNTS=(-v "$REPO:/src:ro" -v "$GAME:/game:ro" -v "$OUT:/out" -v "$MANIFEST:/man
 [ -n "$SMOKE" ] && MOUNTS+=(-v "$(cd "$SMOKE" && pwd):/smoke-ref:ro")
 docker run --rm --platform linux/amd64 "${MOUNTS[@]}" -e VERSION="$VERSION" -e SMOKE="${SMOKE:+1}" \
     ubuntu:22.04 bash /src/tools/linux/in_container.sh
-echo "== $OUT/CM-01-02-Bosman-Edition-$VERSION-linux-x86_64.AppImage"
+echo "== $OUT/CM0102-Bosman-Edition-$VERSION-x86_64.AppImage"
