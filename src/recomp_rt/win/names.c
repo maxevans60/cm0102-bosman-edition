@@ -65,6 +65,7 @@ static int widget_index(uint32_t w)
 void o_005ee590(void);
 void o_005e6d80(void);
 void o_0055f7c0(void);
+void foreign_forget(void);
 
 /* The reset of a Display to empty (0x55f7c0, thiscall, 1 stack argument): the game does it when it builds
  * a screen again. The pictures that widget i showed on the old screen are gone with it: a new widget i
@@ -72,6 +73,7 @@ void o_0055f7c0(void);
 RT_WRAP(0055f7c0, display_reset)
 {
     if (cpu.ecx == DISPLAY) {
+        foreign_forget();                   /* the rules of the foreign player colour (foreign.c) */
         memset(hashed, 0, sizeof hashed);
         memset(drawn_hash, 0, sizeof drawn_hash);
         for (int i = 0; i < MAX_WIDGETS; i++) places[i].set = 0;

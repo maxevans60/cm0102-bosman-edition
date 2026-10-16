@@ -71,6 +71,7 @@ void columns_area_before(void);
 void columns_area_after(int area, int unwound);
 void groups_area_before(void);
 void columns_widget_before(void);
+void foreign_widget_before(void);
 void o_0055f990(void);
 void o_005e40d0(void);
 void o_00800890(void);
@@ -117,6 +118,7 @@ static int from_comp_text(void)
 RT_WRAP(0055f990, widget_create)
 {
     columns_widget_before();
+    foreign_widget_before();    /* the tactics screen's names (foreign.c) */
     int holiday = holiday_widget_before();
     commentary_widget_before();
     if (rt_screen_w != CLASSIC_W && from_comp_text()) {

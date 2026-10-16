@@ -12,7 +12,8 @@ import os
 import re
 
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
-                  "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c")
+                  "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
+                  "foreign.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -64,6 +65,13 @@ CALLBACKS = {
     0x8B1750: ("81ec340400005355", "training manager: train a player"),
     0x41C790: ("5657b95044b700e8", "staff picture as the screen's picture"),
     0x53DBA0: ("81ec000200005355", "full name of a staff record"),
+    0x53B900: ("8b44240481ec0002", "is a club a national side (club)"),
+    0x48DEE0: ("53568b74240c8b56", "fixture category of a club (club)"),
+    0x5AF5B0: ("8b442404538b4053", "second fixture category of a club (club)"),
+    0x8D2FA0: ("8b1584f69c00568b", "competition of a fixture: kind, nation, continent (fixture, 3 out pointers)"),
+    0x8CF6B0: ("515355568b742418", "foreign player rule of a fixture (fixture, record, 1)"),
+    0x53D980: ("8b44240883ec1085", "is a person foreign for a nation (person, nation, 1)"),
+    0x53D740: ("8b442404b102568b", "is a person an EU player for a nation (person, nation)"),
 }
 
 

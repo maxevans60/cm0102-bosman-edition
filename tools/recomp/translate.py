@@ -4,12 +4,16 @@ The generated function keeps the eight registers in locals and the flags in a lo
 operands and the result of the last instruction that set them; rt.h computes a flag when code reads it).
 Before a call the locals go back into `cpu` and after it they come back. Memory is the flat block `M`.
 """
+import re
+
 from capstone import x86_const as X
 
 from callsites import SITES
+from crashguards import GUARDS
 from widescreen import INSNS, PATCHES, TRUE_WIDTH
 
 PATCHED = set()     # the addresses of PATCHES that a translation used
+GUARDS_SEEN = set()  # the addresses of crashguards.py GUARDS that a translation used
 SITES_SEEN = set()  # the addresses of callsites.py SITES that a translation checked
 
 REG32 = ["eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"]
@@ -152,6 +156,9 @@ class FunctionWriter:
         body = []
         self.out = body
         need_label = set(f.labels) | {f.entry}
+        for a in GUARDS:
+            if a in f.insns:   # the exits of the crash guards
+                need_label |= {int(x, 16) for x in re.findall(r"L_([0-9a-f]+)", GUARDS[a][2])}
         for i, a in enumerate(addrs):
             nxt = a + f.insns[a].size
             if (addrs[i + 1] if i + 1 < len(addrs) else None) != nxt:
@@ -165,11 +172,15 @@ class FunctionWriter:
             self.e(f"/* {a:x}: {text} */")
             mark = len(body)
             try:
+                if a in GUARDS:
+                    self.guard(insn)
                 if a in INSNS:
                     falls = self.replace_insn(insn)
                 else:
                     falls = self.insn(insn)
                 self.handled += 1
+                if a in GUARDS:
+                    GUARDS_SEEN.add(a)      # only when the guarded instruction is translated too
                 if a in PATCHES:
                     self.patch(body, mark, a)
                 if a in TRUE_WIDTH:
@@ -225,6 +236,13 @@ class FunctionWriter:
         self.e(code)
         PATCHED.add(insn.address)
         return True
+
+    def guard(self, insn):
+        """Writes the NULL test of crashguards.py GUARDS before the instruction."""
+        text, test, code = GUARDS[insn.address]
+        if (insn.mnemonic + " " + insn.op_str).strip() != text:
+            raise SystemExit(f"crashguards.py: the instruction at {insn.address:#x} is not {text}")
+        self.e(f"if ({test}) {{ {code} }}")
 
     def patch(self, body, mark, a):
         """Replaces the constant of the instruction at a with its run-time value (widescreen.py)."""
