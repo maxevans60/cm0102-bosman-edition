@@ -7,7 +7,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
 | 0x4ae590 | 12 | `Text::Text` | thiscall(Text* this, const char* initial) ret 4, returns this | Constructs a text object with no string and no link list, copying the initial string when one is given. | high | opus | 2026-10-16-comparison-screen-inventory.md |
-| 0x4ae5c0 | 37 | `comp_text_iterator_init` | thiscall(this: output iterator object in ECX, const param_2: int* source text object) ret 4 | Initialises a text iterator from a source object, setting its string and walking linked list entries to add links. | low | haiku |  |
+| 0x4ae5c0 | 37 | `Text::Text` | thiscall(Text* this, const Text* src) ret 4, returns this | Constructs a text object as a copy of another, copying its string and adding each of its links. | high | opus |  |
 | 0x4ae630 | 18 | `Text::~Text` | thiscall(Text* this) ret 0 | Frees the string and the link list of a text object. | high | opus | 2026-10-16-comparison-screen-inventory.md |
 | 0x4ae660 | 92 | `Text::set_string` | thiscall(Text* this, const char* source) ret 4, returns int | Replaces the string of a text object with a newly allocated copy of the source string. | high | opus | 2026-10-14-clickable-names-inventory.md, 2026-10-16-comparison-screen-inventory.md |
 | 0x4ae770 | 100 | `Text::append_string` | thiscall(Text* this, const char* source) ret 4, returns int | Appends a string to the string of a text object, or sets it when the object is empty. | high | opus |  |

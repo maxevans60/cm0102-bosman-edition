@@ -913,6 +913,66 @@ Run `sweep-w22`: 7 Opus agents named 188 functions: the rest of `club_screens.cp
 | 0x49d930 | Named in 2026-10-13-display-and-scrman-inventory.md | `comp_screens_league_name_panel_show` (Haiku) | `comp_screens_add_stage_menu_item` | agrees in area |
 | 0x4a19f0 | Named in 2026-10-16-research-name-check.md | `comp_screens_update_round_records` (Haiku) | `Comp_Stats::update_season_end_records` | agrees in area |
 
+#### Wave w23 (tier 5, 2026-10-16)
+
+Run `sweep-w23`: 8 Opus agents named 240 functions: the `Comp_Stats` load, save and record news code in `comp_screens.cpp`, `contract_screens.cpp`, `discipline.cpp` with the `Display` constructor from the gap, `display.cpp`, `dispute.cpp`, `file_screens.cpp`, `find_screens.cpp`, `formation.cpp` and `friendly.cpp`. Each agent took 2 to 5 minutes and 118,000 to 190,000 tokens. Confidence: 163 high, 76 medium, 1 low. One merge fix: `SCREEN_MANAGER::set_area_selection` now uses the map's class name `ScreenManager`.
+
+51 functions of the wave are cited. 26 agree and 25 agree in area. The display, discipline and formation research docs describe most of these functions, and the sweep names fit them.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x4a7f50 | Named in 2026-10-14-clickable-names-inventory.md | `comp_stats_record_check_and_announce` (Haiku) | `comp_stats_write_record_news_text` | agrees in area |
+| 0x4e2280 | Named in user32.c | `contract_screens_apply_clause_switch` (Haiku) | `contract_screens_handle_basic_terms_action` | agrees |
+| 0x5554a0 | Named in 2026-10-14-game-creation-inventory.md | `discipline_cd_check_and_init` (Haiku) | `Discipline::Discipline` | agrees |
+| 0x556210 | Named in 2026-10-16-research-name-check.md | `discipline_dispatch_by_id_slot` (Haiku) | `Discipline::start_new_season_for_comp` | agrees in area |
+| 0x556240 | Named in 2026-10-14-game-creation-inventory.md | `discipline_array_call_vtable_slot_1_for_each` (Haiku) | `Discipline::daily_update` | agrees |
+| 0x556d00 | Named in 2026-10-14-violent-conduct-inventory.md | `discipline_slot_release_entry` (Haiku) | `Discipline::release_ban` | agrees |
+| 0x55d270 | Named in 2026-10-14-assistant-and-days-inventory.md | `discipline_check_player_suspended_for_match` (Haiku) | `Discipline::is_player_banned` | agrees in area |
+| 0x55d420 | Named in 2026-10-16-sweep-rulebooks.md | `discipline_rules_init` (Haiku) | `Discipline::create_rule_sets` | agrees |
+| 0x55e300 | Named in 2026-10-14-violent-conduct-inventory.md | `discipline_check_player_suspension` (Haiku) | `Discipline::handle_referee_assault` | agrees |
+| 0x55ef50 | Named in 2026-10-13-display-and-scrman-inventory.md | `discipline_reset_state` (Haiku) | `Display::Display` | agrees |
+| 0x55efe0 | Named in 2026-10-13-display-and-scrman-inventory.md | `discipline_state_free_all` (Haiku) | `Display::~Display` | agrees |
+| 0x55f1c0 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_assert_fail_on_init` (Haiku) | `display_alloc_guio_snapshot_pool` | agrees |
+| 0x55f270 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_release_pic_region` (Haiku) | `display_free_guio_snapshot_pool` | agrees |
+| 0x55f290 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_clear_slot_flag` (Haiku) | `display_clear_guio_snapshot` | agrees |
+| 0x55f2c0 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_init_once_and_clear_screen` (Haiku) | `Display::clear_screen_once` | agrees |
+| 0x55f300 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_redraw_screen` (Haiku) | `Display::draw_screen` | agrees |
+| 0x55f620 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_dispatch_pic_mode` (Haiku) | `Display::poll_input` | agrees |
+| 0x5603e0 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_push_pending_index` (Haiku) | `Display::push_area_order` | agrees in area |
+| 0x560490 | Named in 2026-10-13-display-and-scrman-inventory.md | `order_select_target` (Haiku) | `Display::hit_test_widgets` | agrees in area |
+| 0x560c30 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_update_player_queue_pass` (Haiku) | `Display::track_popup_hover` | agrees in area |
+| 0x561050 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_scroll_area_step` (Haiku) | `Display::drag_scroll_thumb` | agrees in area |
+| 0x561210 | Named in 2026-10-13-display-and-scrman-inventory.md | `Display::scroll_and_hit_test_pitch_view` (Haiku) | `Display::drag_widget` | agrees in area |
+| 0x5617c0 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_edit_field_handle_key` (Haiku) | `Display::handle_text_entry_key` | agrees in area |
+| 0x561f10 | Named in 2026-10-13-display-and-scrman-inventory.md | `display_drag_cursor_update` (Haiku) | `Display::hit_test_area_scrollbar` | agrees in area |
+| 0x5621f0 | Named in 2026-10-13-input-inventory.md | `display_set_scroll_target` (Haiku) | `display_press_scrollbar_key` | agrees in area |
+| 0x5622a0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_log_screen_sent` (Haiku) | `Display::log_screen_sent` | agrees |
+| 0x562370 | Named in 2026-10-13-display-and-scrman-inventory.md | `serialise_match_state_packet` (Haiku) | `Display::send_screen_section` | agrees in area |
+| 0x567ac0 | Named in 2026-10-13-display-and-scrman-inventory.md | `rect_set_bounds` (Haiku) | `guio_set_fixed_rect` | agrees in area |
+| 0x567ae0 | Named in 2026-10-13-display-and-scrman-inventory.md | `rect_set_bounds` (Haiku) | `guio_set_rect` | agrees in area |
+| 0x567b00 | Named in 2026-10-13-display-and-scrman-inventory.md | `copy_string_to_buffer_if_flagged` (Haiku) | `guio_copy_text_to_caller` | agrees in area |
+| 0x5680b0 | Named in 2026-10-13-display-and-scrman-inventory.md | `Network::set_slot_value` (Haiku) | `ScreenManager::set_area_selection` | agrees in area |
+| 0x5680f0 | Named in 2026-10-13-display-and-scrman-inventory.md | `resolve_media_path_for_type` (Haiku) | `display_localise_media_path` | agrees in area |
+| 0x568290 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_send_buffered_byte` (Haiku) | `display_send_status_packet` | agrees in area |
+| 0x568470 | Named in 2026-10-13-display-and-scrman-inventory.md | `Network::send_data_or_report_error` (Haiku) | `Display::send_keepalive` | agrees in area |
+| 0x568560 | Named in 2026-10-13-display-and-scrman-inventory.md | `Network_session::pack_and_send_player_record` (Haiku) | `Display::send_widget_click` | agrees in area |
+| 0x569610 | Named in 2026-10-13-display-and-scrman-inventory.md | `dispute_tick_players` (Haiku) | `Display::animate_widgets` | agrees in area |
+| 0x5697e0 | Named in 2026-10-14-game-creation-inventory.md | `dispute_file_load_or_reset` (Haiku) | `DISPUTE::DISPUTE` | agrees |
+| 0x58f500 | Named in 2026-10-13-screen-stack-inventory.md | `file_browser_open_dialog` (Haiku) | `open_file_dialog` | agrees |
+| 0x591840 | Named in 2026-10-14-game-creation-inventory.md | `assert_screen_args_and_open_screen` (Haiku) | `confirm_push` | agrees |
+| 0x5919b0 | Named in 2026-10-14-start-screen-spec.md | `create_screen_assert_or_open` (Haiku) | `confirm_push_text_object` | agrees |
+| 0x5b2ae0 | Named in 2026-10-14-assistant-and-days-inventory.md | `formation_get_position_slot` (Haiku) | `Formation::get_slot_position` | agrees in area |
+| 0x5b3560 | Named in 2026-10-16-tactics-inventory.md | `Formation::choose_formation_players` (Haiku) | `Formation::set_slot_coordinate` | agrees |
+| 0x5b3c70 | Named in 2026-10-16-tactics-inventory.md | `Formation::get_player_slot` (Haiku) | `Formation::get_slot_coordinate` | agrees |
+| 0x5b50d0 | Named in 2026-10-14-assistant-and-days-inventory.md | `formation_set_role_flags` (Haiku) | `Formation::set_team_instruction` | agrees in area |
+| 0x5b5270 | Named in 2026-10-15-assistant-pick-inventory.md | `Formation::get_position_pair` (Haiku) | `Formation::get_player_instructions` | agrees |
+| 0x5b57c0 | Named in 2026-10-15-assistant-pick-inventory.md | `formation::get_position_slot_flag` (Haiku) | `Formation::get_marking_type` | agrees |
+| 0x5b59a0 | Named in 2026-10-16-tactics-inventory.md | `formation_recompute_slot_mask` (Haiku) | `Formation::update_shape_code` | agrees in area |
+| 0x5b5d10 | Named in 2026-10-16-tactics-inventory.md | `Formation::load_from_disk` (Haiku) | `Formation::load_from_disk` | agrees |
+| 0x5c1f80 | Named in 2026-10-14-game-creation-inventory.md | `friendly_cup_load_cd_and_init` (Haiku) | `Friendly::Friendly` | agrees |
+| 0x5ca030 | Named in 2026-10-14-game-creation-inventory.md | `friendly_store_squad_ids` (Haiku) | `Friendly::register_comp_objects` | agrees |
+| 0x5ca4f0 | Named in 2026-10-14-widescreen-inventory.md | `friendly_cup_table_init` (Haiku) | `Friendly::build_international_date_table` | agrees in area |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

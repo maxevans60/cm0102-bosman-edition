@@ -919,31 +919,31 @@ address	file	name	confidence	model	cited_in
 0x4a4a30	comp_screens.cpp	Comp_Stats::find_player_entry	high	opus	
 0x4a4b20	comp_screens.cpp	Comp_Stats::get_sorted_team_table	medium	opus	
 0x4a4dc0	comp_screens.cpp	Comp_Stats::get_sorted_player_table	medium	opus	
-0x4a5010	comp_screens.cpp	comp_stats_period_label_write	high	haiku	
-0x4a5120	comp_screens.cpp	comp_stats_record_title_string	high	haiku	
-0x4a54c0	comp_screens.cpp	comp_screens_can_show_view	medium	haiku	
-0x4a5530	comp_screens.cpp	comp_stats_dispatch_event	medium	haiku	
-0x4a5690	comp_screens.cpp	comp_record_line_text	high	haiku	
-0x4a7f20	comp_screens.cpp	pair_matches_key	medium	haiku	
-0x4a7f50	comp_screens.cpp	comp_stats_record_check_and_announce	high	haiku	2026-10-14-clickable-names-inventory.md
-0x4ab0c0	comp_screens.cpp	comp_stats_snapshot_build	medium	haiku	
-0x4ab5b0	comp_screens.cpp	copy_record_into_this	medium	haiku	
-0x4ab5d0	comp_screens.cpp	comp_record_copy_from	medium	haiku	
-0x4ab5f0	comp_screens.cpp	club_record_assign_thiscall_copy	medium	haiku	
-0x4ab890	comp_screens.cpp	Competition_stats::load_from_file	high	haiku	
-0x4ac4e0	comp_screens.cpp	comp_stats_load	medium	haiku	
-0x4aceb0	comp_screens.cpp	comp_stats_list_append	medium	haiku	
-0x4ad030	comp_screens.cpp	comp_stats_list::append_record	medium	haiku	
-0x4ad1a0	comp_screens.cpp	comp_screens_compare_by_sort_key	medium	haiku	
-0x4ad250	comp_screens.cpp	comp_stats_compare_teams	medium	haiku	
-0x4ad680	comp_screens.cpp	comp_stats_tally_best_competition	medium	haiku	
-0x4ad7f0	comp_screens.cpp	comp_screens_refresh_stats_cache	medium	haiku	
-0x4ad8c0	comp_screens.cpp	comp_stats_record_init	high	haiku	
-0x4ad9c0	comp_screens.cpp	comp_stats_record_serialise_field	medium	haiku	
-0x4ae300	comp_screens.cpp	comp_screens_find_stage_for_team	medium	haiku	
-0x4ae4f0	comp_screens.cpp	comp_get_qualification_status	medium	haiku	
+0x4a5010	comp_screens.cpp	comp_stats_get_record_period_label	high	opus	
+0x4a5120	comp_screens.cpp	comp_stats_get_record_title	high	opus	
+0x4a54c0	comp_screens.cpp	Comp_Stats::is_record_type_shown	medium	opus	
+0x4a5530	comp_screens.cpp	Comp_Stats::get_record_text	high	opus	
+0x4a5690	comp_screens.cpp	comp_stats_format_record_text	high	opus	
+0x4a7f20	comp_screens.cpp	id_pair_equals	medium	opus	
+0x4a7f50	comp_screens.cpp	comp_stats_write_record_news_text	high	opus	2026-10-14-clickable-names-inventory.md
+0x4ab0c0	comp_screens.cpp	Comp_Stats::build_season_records_list	high	opus	
+0x4ab5b0	comp_screens.cpp	attendance_record_assign	medium	opus	
+0x4ab5d0	comp_screens.cpp	comp_run_record_assign	medium	opus	
+0x4ab5f0	comp_screens.cpp	comp_season_records_assign	high	opus	
+0x4ab890	comp_screens.cpp	Comp_Stats::load	high	opus	
+0x4ac4e0	comp_screens.cpp	Comp_Stats::save	high	opus	
+0x4aceb0	comp_screens.cpp	Comp_Stats::add_club_entry	high	opus	
+0x4ad030	comp_screens.cpp	Comp_Stats::add_player_entry	high	opus	
+0x4ad1a0	comp_screens.cpp	comp_stats_compare_team_entries	high	opus	
+0x4ad250	comp_screens.cpp	comp_stats_compare_player_entries	high	opus	
+0x4ad680	comp_screens.cpp	Comp_Stats::update_most_titles_record	high	opus	
+0x4ad7f0	comp_screens.cpp	Comp_Stats::update_season_rating_record	high	opus	
+0x4ad8c0	comp_screens.cpp	comp_season_records_clear	high	opus	
+0x4ad9c0	comp_screens.cpp	comp_stats_write_record_to_news	high	opus	
+0x4ae300	comp_screens.cpp	Comp_Stats::get_club_projected_positions	medium	opus	
+0x4ae4f0	comp_screens.cpp	comp_stats_get_player_position_group	high	opus	
 0x4ae590	comp_text.cpp	Text::Text	high	opus	2026-10-16-comparison-screen-inventory.md
-0x4ae5c0	comp_text.cpp	comp_text_iterator_init	low	haiku	
+0x4ae5c0	comp_text.cpp	Text::Text	high	opus	
 0x4ae630	comp_text.cpp	Text::~Text	high	opus	2026-10-16-comparison-screen-inventory.md
 0x4ae660	comp_text.cpp	Text::set_string	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
 0x4ae770	comp_text.cpp	Text::append_string	high	opus	
@@ -1186,23 +1186,23 @@ address	file	name	confidence	model	cited_in
 0x4dca40	contract_screens.cpp	contract_screens_news_transfer_request_respond_action	high	opus	
 0x4dcb30	contract_screens.cpp	contract_screens_build_transfer_request_screen	high	opus	
 0x4dcd70	contract_screens.cpp	contract_screens_handle_transfer_request_screen	high	opus	
-0x4dd0f0	contract_screens.cpp	contract_screens_open_renewal_negotiation_screen	medium	haiku	
-0x4dd6c0	contract_screens.cpp	show_set_role_squad_status_screen	high	haiku	
-0x4ddf20	contract_screens.cpp	contract_screens_dispatch_action	medium	haiku	
-0x4de1f0	contract_screens.cpp	contract_screens_open_contract_screen_params	medium	haiku	
-0x4de5d0	contract_screens.cpp	contract_screens_fill_negotiation_fields	medium	haiku	
-0x4deac0	contract_screens.cpp	contract_screens_offer_contract_dialog	high	haiku	
-0x4e0180	contract_screens.cpp	contract_screens_add_offer_item	medium	haiku	
-0x4e01e0	contract_screens.cpp	contract_screens_dispatch_action	medium	haiku	
-0x4e06a0	contract_screens.cpp	contract_screens_release_screen_2	medium	haiku	
-0x4e06e0	contract_screens.cpp	contract_offer_dialog_build	high	haiku	
-0x4e2070	contract_screens.cpp	contract_screens_draw_bonus_text	medium	haiku	
-0x4e2280	contract_screens.cpp	contract_screens_apply_clause_switch	medium	haiku	user32.c
-0x4e30f0	contract_screens.cpp	show_player_bonus_offer	high	haiku	
-0x4e39c0	contract_screens.cpp	contract_screens_offer_row_dispatch	medium	haiku	
-0x4e4160	contract_screens.cpp	contract_screens_handle_offer_response	high	haiku	
-0x4e4730	contract_screens.cpp	contract_screens_open_screen_with_params	medium	haiku	
-0x4e4820	contract_screens.cpp	contract_screens_offer_contract_dialog	high	haiku	
+0x4dd0f0	contract_screens.cpp	contract_screens_offer_contract_to_staff	high	opus	
+0x4dd6c0	contract_screens.cpp	contract_screens_build_set_role_screen	high	opus	
+0x4ddf20	contract_screens.cpp	contract_screens_handle_set_role_screen	high	opus	
+0x4de1f0	contract_screens.cpp	contract_screens_open_offer_contract_screen	high	opus	
+0x4de5d0	contract_screens.cpp	contract_screens_open_offer_contract_screen_for_transfer	high	opus	
+0x4deac0	contract_screens.cpp	contract_screens_build_offer_contract_screen	high	opus	
+0x4e0180	contract_screens.cpp	contract_screens_add_disabled_menu_item	medium	opus	
+0x4e01e0	contract_screens.cpp	contract_screens_handle_offer_contract_screen	high	opus	
+0x4e06a0	contract_screens.cpp	contract_screens_close_offer_contract_screen	high	opus	
+0x4e06e0	contract_screens.cpp	contract_screens_build_basic_terms_tab	high	opus	
+0x4e2070	contract_screens.cpp	contract_screens_build_basic_terms_tab_fragment_4e2070	high	opus	
+0x4e2280	contract_screens.cpp	contract_screens_handle_basic_terms_action	high	opus	user32.c
+0x4e30f0	contract_screens.cpp	contract_screens_build_bonuses_tab	high	opus	
+0x4e39c0	contract_screens.cpp	contract_screens_handle_bonuses_action	high	opus	
+0x4e4160	contract_screens.cpp	contract_screens_handle_clauses_action	high	opus	
+0x4e4730	contract_screens.cpp	contract_screens_open_staff_offer_contract_screen	high	opus	
+0x4e4820	contract_screens.cpp	contract_screens_build_staff_offer_contract_screen	high	opus	
 0x4e4ea0	contract_screens.cpp	contract_screens_handle_staff_offer_contract_screen	high	opus	
 0x4e53e0	contract_screens.cpp	contract_screens_open_terminate_contract_screen	high	opus	
 0x4e5420	contract_screens.cpp	contract_screens_build_terminate_contract_screen	high	opus	
@@ -1624,78 +1624,84 @@ address	file	name	confidence	model	cited_in
 0x5552a0	denmark_awards.cpp	DenmarkAwards::daily_update	high	opus	
 0x555430	denmark_awards.cpp	DenmarkAwards::update_team_of_the_week	high	opus	
 0x555460	denmark_awards.cpp	DENMARK_RULES::DENMARK_RULES	high	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
-0x5554a0	discipline.cpp	discipline_cd_check_and_init	high	haiku	2026-10-14-game-creation-inventory.md
-0x555790	discipline.cpp	discipline_table_destroy	medium	haiku	
-0x555860	discipline.cpp	Discipline::load_discipline_dat	high	haiku	
-0x555dd0	discipline.cpp	discipline_load_dat	high	haiku	
-0x556210	discipline.cpp	discipline_dispatch_by_id_slot	medium	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
-0x556240	discipline.cpp	discipline_array_call_vtable_slot_1_for_each	medium	haiku	2026-10-14-game-creation-inventory.md
-0x556270	discipline.cpp	discipline_clear_suspension_slots	medium	haiku	
-0x5563f0	discipline.cpp	discipline_clear_invalid_squad_slots	medium	haiku	
-0x556570	discipline.cpp	discipline_transfer_staff_suspensions	medium	haiku	
-0x5567d0	discipline.cpp	discipline_clear_player_bans_from_list	medium	haiku	
-0x556830	discipline.cpp	discipline_clear_player_bans	medium	haiku	
+0x5554a0	discipline.cpp	Discipline::Discipline	high	opus	2026-10-14-game-creation-inventory.md
+0x555790	discipline.cpp	Discipline::~Discipline	high	opus	
+0x555860	discipline.cpp	Discipline::load	high	opus	
+0x555dd0	discipline.cpp	Discipline::save	high	opus	
+0x556210	discipline.cpp	Discipline::start_new_season_for_comp	medium	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
+0x556240	discipline.cpp	Discipline::daily_update	high	opus	2026-10-14-game-creation-inventory.md
+0x556270	discipline.cpp	Discipline::clear_bans_invalid_for_club	medium	opus	
+0x5563f0	discipline.cpp	Discipline::hold_bans_on_transfer	medium	opus	
+0x556570	discipline.cpp	Discipline::restore_held_bans	medium	opus	
+0x5567d0	discipline.cpp	Discipline::drop_held_bans	medium	opus	
+0x556830	discipline.cpp	Discipline::remove_player	medium	opus	
 0x556940	discipline.cpp	Discipline::add_ban	high	opus	2026-10-14-violent-conduct-inventory.md
-0x556c70	discipline.cpp	discipline_record_copy_assign	medium	haiku	
-0x556d00	discipline.cpp	discipline_slot_release_entry	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x556e90	discipline.cpp	discipline_check_and_release_suspension	medium	haiku	
-0x557000	discipline.cpp	discipline_apply_suspension_decrement	medium	haiku	
-0x557120	discipline.cpp	discipline_clear_matching_bans	medium	haiku	
+0x556c70	discipline.cpp	BanRecord::operator=	high	opus	
+0x556d00	discipline.cpp	Discipline::release_ban	high	opus	2026-10-14-violent-conduct-inventory.md
+0x556e90	discipline.cpp	Discipline::update_ban_progress	medium	opus	
+0x557000	discipline.cpp	Discipline::apply_appeal_result	low	opus	
+0x557120	discipline.cpp	Discipline::serve_international_bans	medium	opus	
 0x557280	discipline.cpp	Discipline::post_ban_news	medium	opus	2026-10-14-violent-conduct-inventory.md
-0x5576e0	discipline.cpp	discipline_build_ban_news_text	high	haiku	
-0x55b8b0	discipline.cpp	discipline_build_ban_news_text_2	high	haiku	
-0x55ca00	discipline.cpp	discipline_notify_suspension_to_teams	medium	haiku	
-0x55cae0	discipline.cpp	discipline_record_lookup	medium	haiku	
-0x55cb20	discipline.cpp	discipline_table_set_entry	medium	haiku	
-0x55cb60	discipline.cpp	discipline_find_next_match_entry	medium	haiku	
-0x55cbc0	discipline.cpp	staff_discipline_player_is_banned_or_unavailable	medium	haiku	
-0x55cc20	discipline.cpp	describe_ban_text	medium	haiku	
-0x55ce40	discipline.cpp	discipline_scope_resolve_and_dispatch	medium	haiku	
-0x55d0a0	discipline.cpp	discipline_describe_ban_reason	high	haiku	
-0x55d270	discipline.cpp	discipline_check_player_suspended_for_match	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
-0x55d360	discipline.cpp	discipline_can_ban_player_check	medium	haiku	
-0x55d3c0	discipline.cpp	discipline_suspension_text_if_valid	medium	haiku	
-0x55d420	discipline.cpp	discipline_rules_init	medium	haiku	2026-10-16-sweep-rulebooks.md
-0x55e1d0	discipline.cpp	discipline_assert_player_record	medium	haiku	
-0x55e300	discipline.cpp	discipline_check_player_suspension	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x55e5f0	discipline.cpp	compare_discipline_keys	medium	haiku	
-0x55e620	discipline.cpp	discipline_show_ban_detail_screen	medium	haiku	
-0x55ea10	discipline.cpp	discipline_show_appeal_dialog	high	haiku	
-0x55ed00	discipline.cpp	discipline_offence_dispatch	low	haiku	
-0x55eef0	discipline.cpp	discipline_register_atexit_thunk	medium	haiku	
-0x55ef10	discipline.cpp	discipline_gap_forward_0x55ef10	low	haiku	
-0x55ef20	discipline.cpp	discipline_alloc_and_register_exit	medium	haiku	
-0x55ef40	discipline.cpp	discipline_release_handle_forward_0x55ef40	low	haiku	
-0x55ef50	discipline.cpp	discipline_reset_state	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
-0x55efe0	discipline.cpp	discipline_state_free_all	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
-0x55f1a0	discipline.cpp	thunk_area_release_children	high	haiku	
-0x55f1b0	discipline.cpp	thunk_hall_of_fame_release_cup_slot	medium	haiku	
-0x55f1c0	display.cpp	display_assert_fail_on_init	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
-0x55f270	display.cpp	display_release_pic_region	medium	haiku	2026-10-13-display-and-scrman-inventory.md
-0x55f290	display.cpp	display_clear_slot_flag	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-widescreen-inventory.md
-0x55f2c0	display.cpp	display_init_once_and_clear_screen	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-widescreen-inventory.md,display.c
-0x55f300	display.cpp	display_redraw_screen	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-import-inventory.md,2026-10-14-widescreen-inventory.md
-0x55f620	display.cpp	display_dispatch_pic_mode	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-15-commentary-speed-inventory.md,2026-10-16-slow-screens.md,keys.c,user32.c,waits.c
+0x5576e0	discipline.cpp	Discipline::write_ban_news_text	high	opus	
+0x55b8b0	discipline.cpp	Discipline::write_further_ban_news_text	high	opus	
+0x55ca00	discipline.cpp	Discipline::process_match	medium	opus	
+0x55cae0	discipline.cpp	Discipline::get_slot_value	medium	opus	
+0x55cb20	discipline.cpp	Discipline::set_slot	medium	opus	
+0x55cb60	discipline.cpp	Discipline::find_held_ban	medium	opus	
+0x55cbc0	discipline.cpp	Discipline::get_ban_history	medium	opus	
+0x55cc20	discipline.cpp	Discipline::describe_ban	high	opus	
+0x55ce40	discipline.cpp	Discipline::get_scope_text	high	opus	
+0x55d0a0	discipline.cpp	Discipline::get_reason_text	high	opus	
+0x55d270	discipline.cpp	Discipline::is_player_banned	medium	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
+0x55d360	discipline.cpp	Discipline::is_one_booking_from_ban	medium	opus	
+0x55d3c0	discipline.cpp	Discipline::get_slot_text	medium	opus	
+0x55d420	discipline.cpp	Discipline::create_rule_sets	high	opus	2026-10-16-sweep-rulebooks.md
+0x55e1d0	discipline.cpp	Discipline::clear_ban_history	medium	opus	
+0x55e300	discipline.cpp	Discipline::handle_referee_assault	high	opus	2026-10-14-violent-conduct-inventory.md
+0x55e5f0	discipline.cpp	compare_nation_index_entries	high	opus	
+0x55e620	discipline.cpp	discipline_appeal_news_action	medium	opus	
+0x55ea10	discipline.cpp	discipline_appeal_dialog_build	high	opus	
+0x55ed00	discipline.cpp	discipline_appeal_dialog_handle_click	medium	opus	
+0x55eef0	display.cpp	init_net_send_buffer	high	opus	
+0x55ef10	display.cpp	free_net_send_buffer	high	opus	
+0x55ef20	display.cpp	init_display_packet_buffer	high	opus	
+0x55ef40	display.cpp	free_display_packet_buffer	high	opus	
+0x55ef50	display.cpp	Display::Display	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
+0x55efe0	display.cpp	Display::~Display	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
+0x55f1a0	display.cpp	thunk_area_release	high	opus	
+0x55f1b0	display.cpp	thunk_guio_free_images	high	opus	
+0x55f1c0	display.cpp	display_alloc_guio_snapshot_pool	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
+0x55f270	display.cpp	display_free_guio_snapshot_pool	high	opus	2026-10-13-display-and-scrman-inventory.md
+0x55f290	display.cpp	display_clear_guio_snapshot	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-widescreen-inventory.md
+0x55f2c0	display.cpp	Display::clear_screen_once	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-widescreen-inventory.md,display.c
+0x55f300	display.cpp	Display::draw_screen	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-import-inventory.md,2026-10-14-widescreen-inventory.md
+0x55f620	display.cpp	Display::poll_input	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-15-commentary-speed-inventory.md,2026-10-16-slow-screens.md,keys.c,user32.c,waits.c
 0x55f990	display.cpp	Display::add_item	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-options-screen.md,2026-10-16-tactics-inventory.md,display.c
-0x5603e0	display.cpp	display_push_pending_index	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md,scrman.c
-0x560490	display.cpp	order_select_target	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-squad-dropdown-inventory.md,assistant.c,names.c,user32.c
-0x560c30	display.cpp	display_update_player_queue_pass	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-squad-dropdown-inventory.md,keys.c
-0x561050	display.cpp	display_scroll_area_step	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md
-0x561210	display.cpp	Display::scroll_and_hit_test_pitch_view	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md
-0x5617c0	display.cpp	display_edit_field_handle_key	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-widescreen-inventory.md
-0x561f10	display.cpp	display_drag_cursor_update	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-slow-screens.md,scrman_input.c,user32.c
-0x5621f0	display.cpp	display_set_scroll_target	medium	haiku	2026-10-13-input-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md
-0x5622a0	display.cpp	network_log_screen_sent	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
-0x562370	display.cpp	serialise_match_state_packet	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-14-widescreen-inventory.md
+0x5603e0	display.cpp	Display::push_area_order	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md,scrman.c
+0x560490	display.cpp	Display::hit_test_widgets	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-squad-dropdown-inventory.md,assistant.c,names.c,user32.c
+0x560c30	display.cpp	Display::track_popup_hover	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-squad-dropdown-inventory.md,keys.c
+0x561050	display.cpp	Display::drag_scroll_thumb	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md
+0x561210	display.cpp	Display::drag_widget	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md
+0x5617c0	display.cpp	Display::handle_text_entry_key	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-widescreen-inventory.md
+0x561f10	display.cpp	Display::hit_test_area_scrollbar	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-slow-screens.md,scrman_input.c,user32.c
+0x5621f0	display.cpp	display_press_scrollbar_key	high	opus	2026-10-13-input-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md
+0x5622a0	display.cpp	Display::log_screen_sent	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
+0x562370	display.cpp	Display::send_screen_section	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-widescreen-inventory.md
 0x564080	display.cpp	Display::process_command_packet	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-select-leagues-spec.md,progress_box.c
-0x567000	display.cpp	display_gap_0x567000_stub	low	haiku	
-0x567260	display.cpp	return_minus_one_stub	medium	haiku	
-0x567ac0	display.cpp	rect_set_bounds	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-stack-inventory.md
-0x567ae0	display.cpp	rect_set_bounds	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
-0x567b00	display.cpp	copy_string_to_buffer_if_flagged	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
-0x568470	display.cpp	Network::send_data_or_report_error	high	haiku	2026-10-13-display-and-scrman-inventory.md
-0x568560	display.cpp	Network_session::pack_and_send_player_record	medium	haiku	2026-10-13-display-and-scrman-inventory.md
-0x569ae0	dispute.cpp	dispute_load_dat	high	haiku	
+0x567000	display.cpp	process_command_packet_epilogue_567000	high	opus	
+0x567260	display.cpp	process_command_packet_epilogue_567260	high	opus	
+0x567ac0	display.cpp	guio_set_fixed_rect	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-stack-inventory.md
+0x567ae0	display.cpp	guio_set_rect	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
+0x567b00	display.cpp	guio_copy_text_to_caller	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
+0x5680b0	display.cpp	ScreenManager::set_area_selection	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
+0x5680f0	display.cpp	display_localise_media_path	high	opus	2026-10-13-display-and-scrman-inventory.md
+0x568290	display.cpp	display_send_status_packet	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
+0x568470	display.cpp	Display::send_keepalive	medium	opus	2026-10-13-display-and-scrman-inventory.md
+0x568560	display.cpp	Display::send_widget_click	high	opus	2026-10-13-display-and-scrman-inventory.md
+0x5697e0	dispute.cpp	DISPUTE::DISPUTE	high	opus	2026-10-14-game-creation-inventory.md
+0x5698d0	dispute.cpp	DISPUTE::~DISPUTE	high	opus	
+0x569910	dispute.cpp	DISPUTE::load	high	opus	
+0x569ae0	dispute.cpp	DISPUTE::save	high	opus	
 0x569e30	dispute.cpp	DISPUTE::is_in_dispute	medium	opus	
 0x569ed0	dispute.cpp	DISPUTE::process_hearings	medium	opus	
 0x56a030	dispute.cpp	DISPUTE::get_dispute_club_id	medium	opus	
@@ -1995,14 +2001,14 @@ address	file	name	confidence	model	cited_in
 0x58e9b0	fifa_rankings.cpp	FILE_LLIST::add_node_list	high	opus	
 0x58f110	fifa_rankings.cpp	FILE_LLIST::reset_last_offset	medium	opus	
 0x58f120	fifa_rankings.cpp	FILE_LLIST::get_nodes	high	opus	
-0x58f500	file_screens.cpp	file_browser_open_dialog	medium	haiku	2026-10-13-screen-stack-inventory.md,savename.c
-0x58f7c0	file_screens.cpp	file_dialog_screen_build	high	haiku	
-0x58ff80	file_screens.cpp	save_file_dialog_handler	high	haiku	
-0x590000	file_screens.cpp	file_screens_save_file_action_dialog	high	haiku	
-0x590c00	file_screens.cpp	create_save_file_summary_screen	high	haiku	
-0x5917f0	file_screens.cpp	get_screen_result_code	medium	haiku	
-0x591840	file_screens.cpp	assert_screen_args_and_open_screen	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-holiday-next-match-inventory.md
-0x5919b0	file_screens.cpp	create_screen_assert_or_open	high	haiku	2026-10-14-start-screen-spec.md,file_screens.c
+0x58f500	file_screens.cpp	open_file_dialog	high	opus	2026-10-13-screen-stack-inventory.md,savename.c
+0x58f7c0	file_screens.cpp	file_dialog_build	high	opus	
+0x58ff80	file_screens.cpp	file_dialog_input	high	opus	
+0x590000	file_screens.cpp	file_dialog_input_fragment	medium	opus	
+0x590c00	file_screens.cpp	create_save_file_summary_screen	high	opus	
+0x5917f0	file_screens.cpp	save_game_info_input	high	opus	
+0x591840	file_screens.cpp	confirm_push	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-holiday-next-match-inventory.md
+0x5919b0	file_screens.cpp	confirm_push_text_object	high	opus	2026-10-14-start-screen-spec.md,file_screens.c
 0x591b70	file_screens.cpp	confirm_build	high	opus	2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,display.c
 0x591dc0	file_screens.cpp	confirm_input	high	opus	2026-10-14-start-screen-helpers.md,2026-10-15-holiday-next-match-inventory.md
 0x591f80	file_screens.cpp	build_save_game_summary	high	opus	
@@ -2098,13 +2104,13 @@ address	file	name	confidence	model	cited_in
 0x5a0410	fin_prm.cpp	finance_post_ground_upgrade_plans_news	high	opus	
 0x5a04c0	fin_prm.cpp	FinanceTable::write_ground_upgrade_plans_news_text	high	opus	
 0x5a0590	fin_prm.cpp	FinanceTable::get_club_finance	high	opus	
-0x5a0650	find_screens.cpp	find_screens_open_search_screen	medium	haiku	
-0x5a0840	find_screens.cpp	find_screens_dispatch_choose_teams	high	haiku	
-0x5a1030	find_screens.cpp	find_screens_continent_under21_list	high	haiku	
-0x5a1480	find_screens.cpp	find_screens_show_continent_clubs	high	haiku	
-0x5a1990	find_screens.cpp	find_screens::league_clubs_search_screen	high	haiku	
-0x5a1e10	find_screens.cpp	show_nation_non_league_clubs_screen	high	haiku	
-0x5a2250	find_screens.cpp	find_screens_continent_clubs_screen	high	haiku	
+0x5a0650	find_screens.cpp	open_choose_friendly_teams_screen	high	opus	
+0x5a0840	find_screens.cpp	draw_choose_friendly_teams_screen	high	opus	
+0x5a1030	find_screens.cpp	draw_choose_friendly_under21s_tab	high	opus	
+0x5a1480	find_screens.cpp	draw_choose_friendly_major_clubs_tab	high	opus	
+0x5a1990	find_screens.cpp	draw_choose_friendly_league_clubs_tab	high	opus	
+0x5a1e10	find_screens.cpp	draw_choose_friendly_non_league_tab	high	opus	
+0x5a2250	find_screens.cpp	draw_choose_friendly_other_clubs_tab	high	opus	
 0x5a2780	find_screens.cpp	choose_friendly_teams_screen_input	high	opus	
 0x5a2b30	find_screens.cpp	choose_friendly_teams_other_clubs_input	medium	opus	
 0x5a2c30	find_screens.cpp	open_find_screen	high	opus	
@@ -2219,52 +2225,52 @@ address	file	name	confidence	model	cited_in
 0x5b26e0	fog_of_war.cpp	ttf_read_name_string	high	opus	
 0x5b2770	fog_of_war.cpp	font_file_read_at	high	opus	
 0x5b27c0	formation.cpp	Formation::Formation	high	opus	
-0x5b2930	formation.cpp	formation_construct_from_club	high	haiku	
-0x5b2ae0	formation.cpp	formation_get_position_slot	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
-0x5b2ba0	formation.cpp	formation_set_position_slot	high	haiku	
-0x5b2e80	formation.cpp	formation_player_slot_matches_position	medium	haiku	
-0x5b2f10	formation.cpp	formation_find_slot_index	medium	haiku	
-0x5b2f30	formation.cpp	formation_swap_players	high	haiku	
-0x5b31b0	formation.cpp	formation_assign_slots_from_flags	medium	haiku	
-0x5b3270	formation.cpp	formation_assign_players_to_slots_greedy	medium	haiku	
-0x5b3460	formation.cpp	formation_check_player_slot_order	medium	haiku	
-0x5b3560	formation.cpp	Formation::choose_formation_players	medium	haiku	2026-10-16-tactics-inventory.md
-0x5b3c70	formation.cpp	Formation::get_player_slot	high	haiku	2026-10-16-tactics-inventory.md
-0x5b3de0	formation.cpp	formation_load_player_slots	medium	haiku	
-0x5b3f90	formation.cpp	formation_set_player_positions	medium	haiku	
-0x5b4120	formation.cpp	formation_load_positions_from_array	medium	haiku	
-0x5b42a0	formation.cpp	formation_load_slots_or_clear	medium	haiku	
-0x5b4410	formation.cpp	formation_find_slot_index	high	haiku	
-0x5b45b0	formation.cpp	formation_swap_players	medium	haiku	
-0x5b47a0	formation.cpp	Formation::assign_players_to_slots	medium	haiku	
-0x5b4a60	formation.cpp	formation_any_player_flagged	medium	haiku	
-0x5b4b70	formation.cpp	formation_slot_swap_is_invalid	medium	haiku	
-0x5b4ee0	formation.cpp	formation_slot_pair_compare	medium	haiku	
-0x5b50d0	formation.cpp	formation_set_role_flags	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
-0x5b5270	formation.cpp	Formation::get_position_pair	medium	haiku	2026-10-15-assistant-pick-inventory.md
-0x5b5290	formation.cpp	formation_set_position_flag	medium	haiku	
-0x5b57c0	formation.cpp	formation::get_position_slot_flag	medium	haiku	2026-10-15-assistant-pick-inventory.md
-0x5b57d0	formation.cpp	formation_set_player_flag	medium	haiku	
-0x5b58e0	formation.cpp	formation_get_player_slot_ptr	medium	haiku	
-0x5b5910	formation.cpp	Formation::set_slot_player	medium	haiku	
-0x5b5960	formation.cpp	formation_clear_slot_flags	medium	haiku	
-0x5b59a0	formation.cpp	formation_recompute_slot_mask	medium	haiku	2026-10-16-tactics-inventory.md
-0x5b5a60	formation.cpp	formation_key_to_flag	medium	haiku	
-0x5b5d10	formation.cpp	Formation::load_from_disk	high	haiku	2026-10-16-tactics-inventory.md
-0x5b6900	formation.cpp	Formation::save_to_disk	high	haiku	
-0x5b7160	formation.cpp	formation_build_position_grid	medium	haiku	
-0x5b73a0	formation.cpp	formation_decode_position_flags	medium	haiku	
-0x5b7580	formation.cpp	formation_position_label	high	haiku	
-0x5b7810	formation.cpp	formation_position_comment_text	high	haiku	
-0x5b7ab0	formation.cpp	formation_position_role_to_string	high	haiku	
+0x5b2930	formation.cpp	Formation::Formation	medium	opus	
+0x5b2ae0	formation.cpp	Formation::get_slot_position	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
+0x5b2ba0	formation.cpp	Formation::set_slot_position	high	opus	
+0x5b2e80	formation.cpp	Formation::has_central_slot_in_line	medium	opus	
+0x5b2f10	formation.cpp	Formation::find_slot_by_position	high	opus	
+0x5b2f30	formation.cpp	Formation::swap_slots	high	opus	
+0x5b31b0	formation.cpp	Formation::get_slots_in_position_order	medium	opus	
+0x5b3270	formation.cpp	Formation::get_slots_in_position_order_loop	medium	opus	
+0x5b3460	formation.cpp	Formation::check_duplicate_position	medium	opus	
+0x5b3560	formation.cpp	Formation::set_slot_coordinate	high	opus	2026-10-16-tactics-inventory.md
+0x5b3c70	formation.cpp	Formation::get_slot_coordinate	high	opus	2026-10-16-tactics-inventory.md
+0x5b3de0	formation.cpp	Formation::set_zone_coordinates	high	opus	
+0x5b3f90	formation.cpp	Formation::get_zone_coordinates	high	opus	
+0x5b4120	formation.cpp	Formation::set_phase_coordinates	high	opus	
+0x5b42a0	formation.cpp	Formation::get_phase_coordinates	high	opus	
+0x5b4410	formation.cpp	Formation::find_slot_at_coordinate	high	opus	
+0x5b45b0	formation.cpp	Formation::swap_slot_coordinates	high	opus	
+0x5b47a0	formation.cpp	Formation::mirror_zone_coordinates	medium	opus	
+0x5b4a60	formation.cpp	Formation::is_slot_customised	medium	opus	
+0x5b4b70	formation.cpp	Formation::is_slot_coordinate_customised	medium	opus	
+0x5b4ee0	formation.cpp	Formation::check_duplicate_coordinate	medium	opus	
+0x5b50d0	formation.cpp	Formation::set_team_instruction	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
+0x5b5270	formation.cpp	Formation::get_player_instructions	high	opus	2026-10-15-assistant-pick-inventory.md
+0x5b5290	formation.cpp	Formation::set_player_instruction	high	opus	
+0x5b57c0	formation.cpp	Formation::get_marking_type	high	opus	2026-10-15-assistant-pick-inventory.md
+0x5b57d0	formation.cpp	Formation::set_marking_type	high	opus	
+0x5b58e0	formation.cpp	Formation::get_marking_target	high	opus	
+0x5b5910	formation.cpp	Formation::set_marking_target	high	opus	
+0x5b5960	formation.cpp	Formation::clear_marking_targets	medium	opus	
+0x5b59a0	formation.cpp	Formation::update_shape_code	high	opus	2026-10-16-tactics-inventory.md
+0x5b5a60	formation.cpp	formation_position_to_shape_bit	high	opus	
+0x5b5d10	formation.cpp	Formation::load_from_disk	high	opus	2026-10-16-tactics-inventory.md
+0x5b6900	formation.cpp	Formation::save_to_disk	high	opus	
+0x5b7160	formation.cpp	Formation::build_position_lookup	medium	opus	
+0x5b73a0	formation.cpp	formation_split_position_code	high	opus	
+0x5b7580	formation.cpp	formation_get_position_name	high	opus	
+0x5b7810	formation.cpp	formation_get_position_abbreviation	high	opus	
+0x5b7ab0	formation.cpp	formation_get_position_flag_name	high	opus	
 0x5b7d20	formation.cpp	formation_get_position_mask	medium	opus	2026-10-15-assistant-pick-inventory.md,picker.c
-0x5b7e60	formation.cpp	formation_player_position_coordinates	medium	haiku	
-0x5b8600	formation.cpp	formation_load_name_string_from_file	medium	haiku	
-0x5b87e0	formation.cpp	formation_validate_name_against_club	medium	haiku	
-0x5b88a0	formation.cpp	formation_validate_name_against_club	low	haiku	
-0x5b8960	formation.cpp	formation_has_player_in_slot_conflict	medium	haiku	
-0x5b8d80	formation.cpp	Formation::check_positions_legal	medium	haiku	
-0x5b8dc0	formation.cpp	formation_has_duplicate_or_conflicting_slots	medium	haiku	
+0x5b7e60	formation.cpp	formation_get_default_coordinate	high	opus	
+0x5b8600	formation.cpp	formation_read_file_password	high	opus	
+0x5b87e0	formation.cpp	formation_check_file_password	medium	opus	
+0x5b88a0	formation.cpp	formation_check_file_password_obfuscated	medium	opus	
+0x5b8960	formation.cpp	Formation::has_no_wide_midfield_or_attack	medium	opus	
+0x5b8d80	formation.cpp	Formation::has_no_wide_midfield_or_attack_fragment	high	opus	
+0x5b8dc0	formation.cpp	Formation::has_no_wide_defenders	medium	opus	
 0x5b91c0	fra_cfa.cpp	FraCfa::FraCfa	high	opus	
 0x5b9420	fra_cfa.cpp	stub_return_zero_ret8	high	opus	
 0x5b9430	fra_cfa.cpp	stub_return_zero_ret4	medium	opus	
@@ -2342,71 +2348,71 @@ address	file	name	confidence	model	cited_in
 0x5c1a70	france_rules.cpp	FRANCE_RULES::post_deadline_news	medium	opus	
 0x5c1b90	france_rules.cpp	FRANCE_RULES::write_deadline_news_text	high	opus	
 0x5c1ed0	france_rules.cpp	FRANCE_RULES::can_end_loan	high	opus	
-0x5c1f80	friendly.cpp	friendly_cup_load_cd_and_init	high	haiku	2026-10-14-game-creation-inventory.md
-0x5c22a0	friendly.cpp	friendly_match_dtor	medium	haiku	
-0x5c22c0	friendly.cpp	friendly_pass_through_date_call	medium	haiku	
-0x5c22d0	friendly.cpp	friendly_cup_state::~friendly_cup_state	high	haiku	
-0x5c2460	friendly.cpp	friendly_cup_date_expire_fixtures	medium	haiku	
-0x5c27a0	friendly.cpp	friendly_build_sorted_roster_list	medium	haiku	
-0x5c2990	friendly.cpp	friendly_match_has_id	high	haiku	
-0x5c29b0	friendly.cpp	friendly_date_in_window	medium	haiku	
-0x5c2ae0	friendly.cpp	friendly_process_pending_fixtures	medium	haiku	
-0x5c2d40	friendly.cpp	friendly_schedule_week_slots_for_teams	low	haiku	
-0x5c3040	friendly.cpp	friendly_schedule_pick_rounds	medium	haiku	
-0x5c3be0	friendly.cpp	friendly_schedule_cup_or_league	medium	haiku	
-0x5c4040	friendly.cpp	friendly_schedule_pair_matches	medium	haiku	
-0x5c4380	friendly.cpp	friendly_match_pair_arrange	medium	haiku	
-0x5c45a0	friendly.cpp	friendly_pair_already_scheduled	medium	haiku	
-0x5c4680	friendly.cpp	friendly_pick_opponent	medium	haiku	
-0x5c4770	friendly.cpp	friendly_cup_fixture_scheduler	medium	haiku	
-0x5c4b60	friendly.cpp	friendly_cup_list_append	high	haiku	
-0x5c4cb0	friendly.cpp	friendly_find_opponent	medium	haiku	
-0x5c5040	friendly.cpp	friendly_find_candidate_match	medium	haiku	
-0x5c5270	friendly.cpp	friendly_compare_field5_diff	medium	haiku	
-0x5c5290	friendly.cpp	friendly_compare_by_field_offset_6_then_byte_5	medium	haiku	
-0x5c52d0	friendly.cpp	friendly_crowd_tier	medium	haiku	
-0x5c5310	friendly.cpp	friendly_cup_check_and_notify_human	medium	haiku	
-0x5c5570	friendly.cpp	friendly_match_news_publish	medium	haiku	
-0x5c57d0	friendly.cpp	friendly_slot_set_first_free	medium	haiku	
-0x5c5820	friendly.cpp	friendly_cup_round_schedule	medium	haiku	
-0x5c5f40	friendly.cpp	friendly_match_resolve_fixture	medium	haiku	
-0x5c6350	friendly.cpp	friendly_pick_opponent	medium	haiku	
-0x5c64e0	friendly.cpp	friendly_cup_remove_team	medium	haiku	
-0x5c6570	friendly.cpp	friendly_fixture_update_news	medium	haiku	
+0x5c1f80	friendly.cpp	Friendly::Friendly	high	opus	2026-10-14-game-creation-inventory.md
+0x5c22a0	friendly.cpp	Friendly::`scalar deleting destructor'	high	opus	
+0x5c22c0	friendly.cpp	friendly_tournament_slot_construct	high	opus	
+0x5c22d0	friendly.cpp	Friendly::~Friendly	high	opus	
+0x5c2460	friendly.cpp	Friendly::update_for_date	high	opus	
+0x5c27a0	friendly.cpp	Friendly::plan_ai_preseason_friendlies	medium	opus	
+0x5c2990	friendly.cpp	Friendly::is_own_comp_record	high	opus	
+0x5c29b0	friendly.cpp	Friendly::is_comp_current_on_date	medium	opus	
+0x5c2ae0	friendly.cpp	Friendly::create_due_planned_friendlies	medium	opus	
+0x5c2d40	friendly.cpp	friendly_set_preseason_windows	medium	opus	
+0x5c3040	friendly.cpp	Friendly::plan_preseason_tournaments_and_tours	medium	opus	
+0x5c3be0	friendly.cpp	Friendly::create_ai_tournament	high	opus	
+0x5c4040	friendly.cpp	Friendly::schedule_tour_matches	medium	opus	
+0x5c4380	friendly.cpp	Friendly::plan_friendly_on_free_date	medium	opus	
+0x5c45a0	friendly.cpp	friendly_candidate_has_nearby_date	medium	opus	
+0x5c4680	friendly.cpp	friendly_pick_tour_nation	medium	opus	
+0x5c4770	friendly.cpp	Friendly::plan_club_friendlies	medium	opus	
+0x5c4b60	friendly.cpp	Friendly::add_planned_friendly	high	opus	
+0x5c4cb0	friendly.cpp	Friendly::find_friendly_opponent	medium	opus	
+0x5c5040	friendly.cpp	Friendly::find_tour_opponent	medium	opus	
+0x5c5270	friendly.cpp	compare_friendly_candidates_by_band	high	opus	
+0x5c5290	friendly.cpp	compare_friendly_candidate_ptrs_by_nation	high	opus	
+0x5c52d0	friendly.cpp	friendly_club_reputation_tier	high	opus	
+0x5c5310	friendly.cpp	Friendly::send_tournament_invitations	medium	opus	
+0x5c5570	friendly.cpp	Friendly::send_friendly_request	medium	opus	
+0x5c57d0	friendly.cpp	friendly_schedule_assign_opponent	medium	opus	
+0x5c5820	friendly.cpp	Friendly::process_tournament_replies	high	opus	
+0x5c5f40	friendly.cpp	Friendly::process_friendly_reply	high	opus	
+0x5c6350	friendly.cpp	friendly_pick_replacement_invitee	medium	opus	
+0x5c64e0	friendly.cpp	Friendly::remove_club_from_ai_plans	medium	opus	
+0x5c6570	friendly.cpp	Friendly::on_friendly_fixture_cancelled	medium	opus	
 0x5c6710	friendly.cpp	Friendly::is_friendly_competition	medium	opus	2026-10-16-foreign-and-tactics-positions.md,foreign.c
-0x5c6740	friendly.cpp	friendly_find_fixture_entry	medium	haiku	
-0x5c6830	friendly.cpp	friendly_find_match_by_club	medium	haiku	
-0x5c68b0	friendly.cpp	friendly_find_club_fixture	medium	haiku	
-0x5c6920	friendly.cpp	friendly_find_selected_match	medium	haiku	
-0x5c6990	friendly.cpp	friendly_cup_slot_remove_or_add_team	high	haiku	
-0x5c6b60	friendly.cpp	friendly_stub_return_zero	medium	haiku	
-0x5c6b70	friendly.cpp	friendly_check_fixture_date_window	medium	haiku	
-0x5c6e00	friendly.cpp	friendly_slot_add	medium	haiku	
-0x5c6f00	friendly.cpp	friendly_match_create	high	haiku	
-0x5c71f0	friendly.cpp	friendly_cup_create_entries	medium	haiku	
-0x5c74d0	friendly.cpp	friendly_cup_round_status_or_assert	medium	haiku	
-0x5c75a0	friendly.cpp	friendly_date_check_fixture	medium	haiku	
-0x5c8260	friendly.cpp	friendly_cup_match_remove_or_fail	high	haiku	
-0x5c85d0	friendly.cpp	friendly_clear_fixtures_for_cup_rounds	medium	haiku	
-0x5c87b0	friendly.cpp	friendly_remove_from_queue	medium	haiku	
-0x5c88f0	friendly.cpp	friendly_find_fixture_for_team_in_comp	medium	haiku	
-0x5c89a0	friendly.cpp	friendly_get_slot_checked	medium	haiku	
-0x5c8a00	friendly.cpp	friendly_cup_load_state	high	haiku	
-0x5c9630	friendly.cpp	friendly_register_tail_call_wrapper	low	haiku	
-0x5c9650	friendly.cpp	friendly_cup_load_state	high	haiku	
-0x5ca030	friendly.cpp	friendly_store_squad_ids	medium	haiku	2026-10-14-game-creation-inventory.md
-0x5ca090	friendly.cpp	friendly_arrange_match_check	high	haiku	
-0x5ca290	friendly.cpp	friendly_cup_availability_check	medium	haiku	
-0x5ca3e0	friendly.cpp	friendly_build_active_team_list	medium	haiku	
-0x5ca4f0	friendly.cpp	friendly_cup_table_init	high	haiku	2026-10-14-widescreen-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-international.md
-0x5cb9b0	friendly.cpp	friendly_fixture_set_fields	medium	haiku	
-0x5cb9e0	friendly.cpp	friendly_match_process_fixture	medium	haiku	
-0x5cbb00	friendly.cpp	friendly_cup_schedule_matches	medium	haiku	
-0x5cbdd0	friendly.cpp	friendly_fixture_date_set	medium	haiku	
-0x5cbdf0	friendly.cpp	friendly_pair_teams	medium	haiku	
-0x5cc2d0	friendly.cpp	friendly_alloc_state_block	medium	haiku	
-0x5cc3e0	friendly.cpp	friendly_find_match_slot	medium	haiku	
-0x5cc510	friendly.cpp	friendly_schedule_fixtures_by_date	medium	haiku	
+0x5c6740	friendly.cpp	Friendly::find_scheduled_friendly_slot	medium	opus	
+0x5c6830	friendly.cpp	Friendly::find_human_club_tournament	high	opus	
+0x5c68b0	friendly.cpp	Friendly::find_human_club_open_invitation	high	opus	
+0x5c6920	friendly.cpp	Friendly::find_human_club_open_dates_request	high	opus	
+0x5c6990	friendly.cpp	Friendly::set_tournament_invite	high	opus	
+0x5c6b60	friendly.cpp	Friendly::add_result	high	opus	
+0x5c6b70	friendly.cpp	friendly_is_club_free_on_date	high	opus	
+0x5c6e00	friendly.cpp	Friendly::add_tournament	high	opus	
+0x5c6f00	friendly.cpp	Friendly::add_friendly_match	high	opus	
+0x5c71f0	friendly.cpp	Friendly::add_friendly_dates_request	high	opus	
+0x5c74d0	friendly.cpp	friendly_get_rest_days_for_kind	high	opus	
+0x5c75a0	friendly.cpp	Friendly::get_club_date_status	medium	opus	
+0x5c8260	friendly.cpp	Friendly::cancel_tournament	high	opus	
+0x5c85d0	friendly.cpp	Friendly::cancel_friendly_dates_request	high	opus	
+0x5c87b0	friendly.cpp	Friendly::remove_friendly_match	medium	opus	
+0x5c88f0	friendly.cpp	Friendly::find_friendly_match	medium	opus	
+0x5c89a0	friendly.cpp	Friendly::get_tournament	high	opus	
+0x5c8a00	friendly.cpp	Friendly::load_from_temp_file	high	opus	
+0x5c9630	friendly.cpp	friendly_dates_request_destroy_slots	medium	opus	
+0x5c9650	friendly.cpp	Friendly::save_to_temp_file	high	opus	
+0x5ca030	friendly.cpp	Friendly::register_comp_objects	high	opus	2026-10-14-game-creation-inventory.md
+0x5ca090	friendly.cpp	friendly_check_match_invitation	high	opus	
+0x5ca290	friendly.cpp	friendly_check_tournament_invitation	high	opus	
+0x5ca3e0	friendly.cpp	Friendly::build_nation_list	high	opus	
+0x5ca4f0	friendly.cpp	Friendly::build_international_date_table	high	opus	2026-10-14-widescreen-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-international.md
+0x5cb9b0	friendly.cpp	friendly_international_date_set	medium	opus	
+0x5cb9e0	friendly.cpp	friendly_remove_national_fixture	medium	opus	
+0x5cbb00	friendly.cpp	Friendly::update_international_friendlies	medium	opus	
+0x5cbdd0	friendly.cpp	friendly_international_date_resolve	medium	opus	
+0x5cbdf0	friendly.cpp	Friendly::arrange_international_friendlies	high	opus	
+0x5cc2d0	friendly.cpp	Friendly::init_banned_nation_pairs	high	opus	
+0x5cc3e0	friendly.cpp	Friendly::is_banned_nation_pair	medium	opus	
+0x5cc510	friendly.cpp	Friendly::resolve_international_dates	high	opus	
 0x5cc5f0	friendly.cpp	compare_nations_by_reputation_desc	high	opus	
 0x5cc610	friendly.cpp	compare_fixture_records_by_date	high	opus	
 0x5cc650	game.cpp	game_date_static_init	high	opus	
@@ -4349,15 +4355,9 @@ address	file	name	confidence	model	cited_in
 0x567e90	network.h	buffer_read_u16	high	haiku	2026-10-13-display-and-scrman-inventory.md
 0x567f40	network.h	buffer_read_u32	high	haiku	2026-10-13-display-and-scrman-inventory.md
 0x567ff0	network.h	net_buffer_read_string	medium	haiku	2026-10-13-display-and-scrman-inventory.md
-0x5680b0	network.h	Network::set_slot_value	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
-0x5680f0	network.h	resolve_media_path_for_type	medium	haiku	2026-10-13-display-and-scrman-inventory.md
-0x568290	network.h	network_send_buffered_byte	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
 0x5694a0	network.h	buffer_write_u32	high	haiku	2026-10-13-display-and-scrman-inventory.md
 0x569540	network.h	Packet::write_sized_payload	high	haiku	2026-10-13-display-and-scrman-inventory.md
-0x569610	network.h	dispute_tick_players	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-game-setup-spec.md,2026-10-14-select-leagues-spec.md
-0x5697e0	network.h	dispute_file_load_or_reset	medium	haiku	2026-10-14-game-creation-inventory.md
-0x5698d0	network.h	dispute_list_release	medium	haiku	
-0x569910	network.h	dispute_load_file	high	haiku	
+0x569610	network.h	Display::animate_widgets	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-game-setup-spec.md,2026-10-14-select-leagues-spec.md
 0x7fc690	network.h	network_session_poll_and_flush	medium	haiku	2026-10-13-display-and-scrman-inventory.md
 0x7fc7c0	network.h	scrman_forward_one_arg	low	haiku	
 0x7fc7e0	network.h	SCREEN_MANAGER::monitor	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-16-options-screen.md,2026-10-16-slow-screens.md,options_screen.c,user32.c,views.c,waits.c

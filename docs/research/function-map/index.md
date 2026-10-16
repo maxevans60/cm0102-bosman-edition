@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4302 high, 2360 medium, 201 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22.
+- Confidence: 4403 high, 2266 medium, 194 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -91,9 +91,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [den_prm.cpp](den_prm.cpp.md) | 8 |
 | [den_second.cpp](den_second.cpp.md) | 7 |
 | [denmark_awards.cpp](denmark_awards.cpp.md) | 5 |
-| [discipline.cpp](discipline.cpp.md) | 46 |
-| [display.cpp](display.cpp.md) | 25 |
-| [dispute.cpp](dispute.cpp.md) | 8 |
+| [discipline.cpp](discipline.cpp.md) | 38 |
+| [display.cpp](display.cpp.md) | 36 |
+| [dispute.cpp](dispute.cpp.md) | 11 |
 | [eng_auto_cup.cpp](eng_auto_cup.cpp.md) | 15 |
 | [eng_cc_cup.cpp](eng_cc_cup.cpp.md) | 8 |
 | [eng_charity.cpp](eng_charity.cpp.md) | 6 |
@@ -228,7 +228,7 @@ All 11747 functions with their category, file and placement method are in `funct
 | [nation_awards.cpp](nation_awards.cpp.md) | 19 |
 | [national_teams.cpp](national_teams.cpp.md) | 70 |
 | [national_teams_screens.cpp](national_teams_screens.cpp.md) | 19 |
-| [network.h](network.h.md) | 38 |
+| [network.h](network.h.md) | 32 |
 | [new_transfer_rule_screens.cpp](new_transfer_rule_screens.cpp.md) | 3 |
 | [news.cpp](news.cpp.md) | 35 |
 | [news_screens.cpp](news_screens.cpp.md) | 9 |
