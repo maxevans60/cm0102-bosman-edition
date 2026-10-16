@@ -2,7 +2,7 @@
 """Same-save checks of the 0.4.0 screens: a feature must not change the game (spec 2026-10-15-features-0.4.0).
 
 Usage:
-    python3 tests/smoke/same_save_views.py <cm0102_recomp> <game folder> [--check compare|print]
+    python3 tests/smoke/same_save_views.py <cm0102_recomp> <game folder> [--check compare|print|tactics|match-tactics]
         [--days n] [--dir <fixtures folder>]
 
 Each check plays the same game from start.sav (tests/fixtures) in runs at the same time, goes on holiday
@@ -16,6 +16,15 @@ for n game days (default 2) and compares the saved games byte for byte (smoke_ru
     print     The squad printed from the squad screen's Print drop-down as a PDF (the default) and as a File
               (Print To in Game Settings), with the same clicks otherwise. The PDF message box must not
               change the game (Q152): the texts of the box are in runtime memory, not on the game's heap.
+    tactics   The tactics screen in its Condition view (Squad, Assistant > Pick best team, Tactics, Ok) with
+              match_columns on and off, in classic and in widescreen mode (#48, 0.5.0). The option adds a
+              positions label to each row and gives the list new column weights. Both move the game's
+              memory blocks (research of slice 3: each alone changes the five parts), so the five parts of
+              LAYOUT_PARTS may differ (Q152) between on and off; "on again" must equal "on".
+    match-tactics The same in a match (prematch.sav, the Basel friendly of the match check), with a
+              substitution at half time, in classic and widescreen (--mode m1,m2 to choose). Not HD: there
+              an injury before half time opens the tactics screen, and these steps do not handle it. The game
+              is saved after the match (5 days). --shots <folder> keeps the screen of each run.
 """
 import os
 import sys
@@ -72,6 +81,18 @@ COMPARE = [
     "wait screen:0x876520",
     "3000 click 358 573",                   # Back
     "wait screen:0x870700",
+]
+
+TACTICS = [
+    "2500 click 45 165",                    # the manager's menu
+    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "wait screen:0x454900",
+    "1500 click 592 135",                   # Assistant
+    "3000 click 540 159 | 928 205 | 1460 274",  # Pick best team
+    "5000 click 169 527",                   # Tactics: it opens in the Condition view
+    "wait screen:0x899ea0",
+    "2000 click 705 573",                   # Ok
+    "wait screen:0x454900",
 ]
 
 # Print To is three buttons of Game Settings: PDF at 444 474, File at 522 474, Both at 601 474.
@@ -146,6 +167,60 @@ def run_print(program, game, days, folder):
     return failed
 
 
+def run_tactics(program, game, days, folder):
+    steps = smoke_run.without_intro_click(fixtures.LOAD_STEPS) + TACTICS + HOLIDAY + ["400000 quit"]
+    failed = 0
+    for mode in ("classic", "widescreen"):
+        print(f"--- tactics screen, Condition view, {mode}")
+        runs = [("on", {"match_columns": "on"}), ("off", {"match_columns": "off"}),
+                ("on again", {"match_columns": "on"})]
+        failed += smoke_run.compare_runs(program, game, mode, runs, steps, days,
+                                         os.path.join(folder, "start.sav"), allowed={"off": LAYOUT_PARTS})
+    return failed
+
+
+# The in-match Condition view (--check match-tactics): the match check of smoke_run.py (prematch.sav, the
+# Basel friendly). At half time the steps open Arsenal Tactics, choose the Condition view, drag Pascal Cygan
+# (a substitute) onto Edu (a substitution, so the status column shows "sub"/"on" with the minute), dump the
+# screen and close it with Ok. Then the match goes on as in the match check.
+MATCH_TACTICS = [
+    "1500 click 45 210",                    # Arsenal Tactics
+    "wait screen:0x899ea0",
+    "1500 click 297 90 | 475 120 | 712 162",   # View
+    "3000 click 289 133 | 467 163 | 785 215",  # Condition
+    "5000 down 127 373",                    # the number box of Pascal Cygan (row 12)
+    "5300 move 127 330",
+    "5600 move 127 277",
+    "5900 up 127 277",                      # onto Edu (row 7)
+    "8000 dump {d}/condition.bmp",
+    "9000 click 705 573",                   # Ok
+    "wait screen:0x591b70",                 # Please Confirm: Cygan replaces Edu. Return to the match?
+    "1000 click 705 573",                   # Yes
+    "wait label:Re-start 600000",
+]
+
+
+def run_match_tactics(program, game, days, folder, modes=("classic", "widescreen"), shots=None):
+    half = smoke_run.MATCH_STEPS.index("wait label:Re-start 600000") + 1
+    failed = 0
+    for mode in modes:
+        print(f"--- tactics screen in the match, Condition view, {mode}")
+        runs = []
+        for name, value in (("on", "on"), ("off", "off"), ("on again", "on")):
+            tactics = MATCH_TACTICS
+            if shots:                       # keep the dump of each run
+                out = os.path.join(os.path.abspath(shots), f"{mode}-{name.replace(' ', '-')}")
+                os.makedirs(out, exist_ok=True)
+                tactics = [t.replace("{d}", out) for t in tactics]
+            steps = smoke_run.without_intro_click(fixtures.LOAD_STEPS) + smoke_run.MATCH_STEPS[:half] + tactics + \
+                smoke_run.MATCH_STEPS[half:]
+            runs.append((name, {"match_columns": value, "_steps": steps}))
+        failed += smoke_run.compare_runs(program, game, mode, runs, [], days,
+                                         os.path.join(folder, smoke_run.MATCH_SAVE), timeout=900,
+                                         allowed={"off": LAYOUT_PARTS})
+    return failed
+
+
 def main(argv):
     if len(argv) < 3:
         print(__doc__)
@@ -159,6 +234,12 @@ def main(argv):
         failed += run_compare(program, game, days, folder)
     if which in ("all", "print"):
         failed += run_print(program, game, days, folder)
+    if which in ("all", "tactics"):
+        failed += run_tactics(program, game, days, folder)
+    if which in ("all", "match-tactics"):
+        shots = argv[argv.index("--shots") + 1] if "--shots" in argv else None
+        modes = argv[argv.index("--mode") + 1].split(",") if "--mode" in argv else ("classic", "widescreen")
+        failed += run_match_tactics(program, game, smoke_run.MATCH_DAYS, folder, modes, shots)
     print("same_save_views: " + ("FAIL" if failed else "all checks passed"))
     return 1 if failed else 0
 

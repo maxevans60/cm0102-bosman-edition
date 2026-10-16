@@ -15,6 +15,10 @@
  * green. So every screen that draws these values with the game's own code gets the colours, with no list
  * of call sites. Option condition_colours, separate from attribute_colours.
  *
+ * Tactics positions (#48), in every mode: the Condition view of the tactics screen 0x899ea0 (node slot 10 =
+ * 2), in and out of a match, shows the player's positions between the status and the condition, with the
+ * same labels as the Match Rating view below. Classic gets narrower column weights.
+ *
  * Match columns, in widescreen mode only (the classic screen has no room; RECOMP_COLUMNS_CLASSIC=1 makes
  * a test run show them in classic mode too):
  * - The tactics screen 0x899ea0 in a match, view Match Rating (node slot 10 = 6), shows the player's
@@ -156,6 +160,30 @@ static const uint8_t tactics_move[9] = {0, 1, 2, 3, 4, 5, 6, 9, 10};
 static const uint8_t tactics_weights[11] = {14, 1, 5, 1, 52, 10, 14, 26, 13, 8, 7};
 enum { TACTICS_POSITIONS = 7, TACTICS_CONDITION = 8 };
 
+/* Tactics positions (#48): the Condition view (node slot 10 = 2), in and out of a match, in every mode. The
+ * original's cells in this view: "capt" (text 0xa8bdd4, copied at 0x89cc34) is a widget in column 5 (widget
+ * create, return 0x89cd50). The status of 0x8aadb0 (call 0x89e01a: "inj", "off", "sub" or "on" and the
+ * minute in a match) is a label in column 6 (label create 0x89e043, push 6 at 0x89e03b, text_flags 1 at
+ * 0x89e034). The condition is a label in column 7 (push 7 at 0x89e0b4 and 0x89e0cc). Column 8 (goals, view
+ * 6 only) stays empty. New: the positions column after the status (TACTICS_POSITIONS, as in the Match
+ * Rating view), so that no two cells share a column. The condition and column 8 move one place. The weights
+ * are ours: classic has 330 px for the list, so its name column is narrower (about 118 px), and the status
+ * column holds "sub 46". */
+static const uint8_t condition_move[9] = {0, 1, 2, 3, 4, 5, 6, 8, 9};
+static const uint8_t condition_weights[10] = {14, 1, 5, 1, 52, 10, 14, 26, 13, 7};
+static const uint8_t condition_weights_classic[10] = {12, 1, 4, 0, 45, 11, 17, 22, 13, 1};
+
+static int tactics_condition_view(void)
+{
+    if (!options_bool(OPT_MATCH_COLUMNS) || (int8_t)node_slot(10) != 2) return 0;
+    cols.pending = 1;
+    cols.columns = 9;
+    cols.move = condition_move;
+    cols.weights = rt_screen_w > 800u ? condition_weights : condition_weights_classic;
+    cols.new_columns = 10;
+    return 1;
+}
+
 /* Player Ratings, 8 columns per team: number, box, card box, gap, name, event, rating, goals. New: the
  * condition before the rating. */
 static const uint8_t ratings_move[16] = {0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17};
@@ -221,8 +249,9 @@ RT_WRAP(008aadb0, tactics_status)
     o_008aadb0();
 }
 
-/* The new labels already have their new columns: the column moves end before them. */
-static void tactics_add_labels(int area)
+/* The new labels already have their new columns: the column moves end before them. In the Condition view
+ * the original draws the condition, so only the positions are new. */
+static void tactics_add_labels(int area, int with_condition)
 {
     scratch_keep();
     for (int i = 0; i < tactics_count; i++) {
@@ -239,7 +268,7 @@ static void tactics_add_labels(int area)
             snprintf(text, sizeof text, "%s", win_str(SCRATCH));
             label(area, TACTICS_POSITIONS, r->row, 1, 1, colour, text);
         }
-        int condition = (int8_t)call_this(0x8aafd0u, r->tactics, 2, a2);
+        int condition = with_condition ? (int8_t)call_this(0x8aafd0u, r->tactics, 2, a2) : 0;
         if (condition) {
             char text[16];
             if (condition < 1) snprintf(text, sizeof text, "Inj");
@@ -257,7 +286,8 @@ RT_WRAP(00899ea0, tactics_build)
 {
     columns_off();
     tactics_count = 0;
-    if (columns_wanted() && (int8_t)node_slot(10) == 6) {
+    int condition_view = tactics_condition_view();
+    if (!condition_view && columns_wanted() && (int8_t)node_slot(10) == 6) {
         cols.pending = 1;
         cols.columns = 9;
         cols.move = tactics_move;
@@ -269,7 +299,7 @@ RT_WRAP(00899ea0, tactics_build)
     tactics_building = 0;
     int area = cols.area;
     columns_off();
-    if (!rt_unwinding && area >= 0) tactics_add_labels(area);
+    if (!rt_unwinding && area >= 0) tactics_add_labels(area, !condition_view);
 }
 
 /* --- The Player Ratings view. --- */

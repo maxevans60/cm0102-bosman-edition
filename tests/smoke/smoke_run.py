@@ -41,7 +41,7 @@ kick off (--speed fastest: the Fastest step of #31 instead). At half time they r
 Space go on to Saturday 21.7.01 AM, where the runtime saves the game, 5 game days (default) after
 the load. Later days are not reached: the Bergkamp rumour of 21.7.01 needs an answer. The runs are
 in MATCH_RUNS and play at the same time, each in about two minutes. The mode is widescreen only,
-because the option match_columns draws only in widescreen.
+because the match screens of the option match_columns draw only in widescreen.
 
 The run uses a new empty save folder (RECOMP_USER_DIR is a temporary folder), so the game first shows its
 settings. Before the start it writes settings.txt with the mode (default: classic). It saves five
@@ -308,7 +308,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     """Plays the runs at the same time, each with its option lines, and compares each saved game with
     the save of the first run. save: a saved game to copy into each user folder first. allowed: names of
     parts that may differ (an accepted difference, for example the parts that depend on the memory layout of
-    the game, Q152); a difference in any other part fails."""
+    the game, Q152); a difference in any other part fails. allowed may also be a dict {run name: parts}: then
+    only those runs may differ, each in its own parts."""
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
 
@@ -370,7 +371,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 continue
             a, b = save_parts(saves[first]), save_parts(saves[name])
             differ = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
-            if differ and set(differ) <= set(allowed):
+            ok_parts = allowed.get(name, ()) if isinstance(allowed, dict) else allowed
+            if differ and set(differ) <= set(ok_parts):
                 print(f"ok    {name}: the save differs from {first} only in accepted parts: {', '.join(differ)}")
                 continue
             failed += 1
