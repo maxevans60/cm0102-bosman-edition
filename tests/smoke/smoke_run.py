@@ -4,9 +4,9 @@
 Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen|hd]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd] [--days n]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd] [--days n] [--ref-build <program>]
         [--save start.sav|prematch.sav]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>]
 
 --tolerance n: a colour channel that differs by n or less counts as equal. The Linux build differs from the
 Mac reference pictures by 1 in some channels (the compilers round floating point differently), so its
@@ -275,15 +275,24 @@ def without_intro_click(steps):
         steps[first_wait:]
 
 
+# --ref-build <program>: one more run, with the options of the first run, plays another build (for example the
+# build of main). For a change with no option, such as the crash guards: its save must equal the first run's.
+REF_BUILD = None
+
+
 def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=()):
     """Plays the runs at the same time, each with its option lines, and compares each saved game with
     the save of the first run. save: a saved game to copy into each user folder first. allowed: names of
     parts that may differ (an accepted difference, for example the parts that depend on the memory layout of
     the game, Q152); a difference in any other part fails."""
+    if REF_BUILD:
+        runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
+
     def play(name, options, work):
         steps_of_run = options.get("_steps", steps)        # a run may have its own steps and environment
         extra_env = options.get("_env", {})
-        options = {k: v for k, v in options.items() if k not in ("_steps", "_env")}
+        run_program = options.get("_program", program)     # and its own build (--ref-build)
+        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program")}
         run = os.path.join(work, name)
         user, home, shots = (os.path.join(run, d) for d in ("user", "home", "shots"))
         for d in (user, home, shots):
@@ -299,7 +308,7 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                    RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days),
                    RECOMP_SCRIPT="; ".join(scaled_steps(mode, shots, steps_of_run)), **extra_env)
         start = time.time()
-        r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
+        r = subprocess.run([run_program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
                            timeout=timeout)
         return r, os.path.join(user, SAVE_NAME), time.time() - start
 
@@ -381,6 +390,9 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
+    global REF_BUILD
+    if "--ref-build" in argv[3:]:
+        REF_BUILD = os.path.abspath(argv[argv.index("--ref-build") + 1])
     mode = "classic"
     if "--mode" in argv[3:]:
         mode = argv[argv.index("--mode") + 1]
