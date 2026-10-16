@@ -747,29 +747,40 @@ static uint32_t last_press, last_widget = 0xffffu;
 static uint64_t next_repeat_at;
 
 /* Idle CPU (#58). The original has no Sleep: a screen that waits for input runs the screen loop
- * 0x7fc7e0 without a stop, and one pass takes about 1 ms here, so the game used one full core. So
- * when a pass of the screen loop gives no input (the poll gives -1, no button is down, the queue is
- * empty), no message came for IDLE_AFTER ms and no game work ran for WORK_HOLD ms, the runtime sleeps
- * 1 ms after the poll. The sleep touches no game memory. It changes only the real time of a pass.
+ * 0x7fc7e0 without a stop, so the game used one full core (99.6% on the transfer status screen in
+ * 25 s, ps, 2026-10-16). So when a pass of the screen loop gives no input (the poll gives -1, no
+ * button is down, the queue is empty), no message came for IDLE_AFTER ms and no game work ran for
+ * WORK_HOLD ms, the runtime sleeps 1 ms after the poll. The sleep touches no game memory. It changes
+ * only the real time of a pass and so the count of passes in a stretch of real time.
  *
  * The game work rule keeps match results. While a commentary line waits, each pass runs one step of
  * a background match (0x6b5ce0 from the commentary step 0x6b55c0), and that step draws from the
  * game's random function 0x90cfc0 (docs/research/2026-10-15-commentary-speed-inventory.md, section
- * 3). The human match takes its numbers from the same table. A sleep in those passes gives fewer
- * background steps per line, so the match takes other numbers: in the match check, two runs of the
- * same steps gave two results. So a call of the commentary step or of the random function counts as
- * game work, and the sleep waits until WORK_HOLD ms after the last one. An idle screen draws no
- * number (docs/research/2026-10-14-assistant-and-days-inventory.md: no draw under the screen loop in
- * a 10 s sample).
+ * 3). The human match takes its numbers from the same table. So a call of the commentary step or of
+ * the random function counts as game work, and no pass sleeps until WORK_HOLD ms after the last poll
+ * that saw one. Evidence: with RECOMP_IDLE_SLEEP=force (no IDLE_AFTER and no WORK_HOLD rule) the
+ * match check fails (tests/smoke/smoke_run.py --match --sleep-danger). An idle screen draws no number
+ * (docs/research/2026-10-14-assistant-and-days-inventory.md: no draw under the screen loop in a 10 s
+ * sample).
  *
- * A holiday day and Continue Game run their work inside one pass or between pump calls 0x68d520,
- * not between polls, so the sleep does not slow them. Test runs only: RECOMP_IDLE_SLEEP=0 turns the
- * sleep off (the same-save checks compare the two). */
+ * Paths that measure real time and can see the sleep, each at most 1 ms later than without it:
+ *   - The holiday hold: the side bar input 0x7615d0 reads the clock 0x90c510 at 0x762252 in each pass
+ *     until 2000 ms passed. The day's work draws numbers, so the sleep runs only in the last part of
+ *     each hold, after WORK_HOLD.
+ *   - The screen timeout at 0x7fcc54..0x7fccbf in the screen loop: it reads time() in each pass.
+ *   - The commentary line delay (0x6d8c70): it reads 0x90c510, but WORK_HOLD keeps the sleep off
+ *     while the commentary step runs.
+ *
+ * Test runs only: RECOMP_IDLE_SLEEP=0 turns the sleep off, and the same-save checks compare the two.
+ * RECOMP_IDLE_SLEEP=force drops the IDLE_AFTER and WORK_HOLD rules, to show that the match check
+ * catches a sleep in the wrong place. RECOMP_IDLE_COUNT=1 prints the count of sleeps at the exit, so
+ * the checks can see that the sleep ran. */
 #define IDLE_AFTER 100u
 #define WORK_HOLD 1000u
+enum { SLEEP_OFF, SLEEP_ON, SLEEP_FORCE };
 static int idle_sleep = -1;
 static uint32_t work_count, work_seen;            /* calls that count as game work; the count at the last poll */
-static uint64_t last_work_at;
+static uint64_t last_work_at, sleep_count;
 
 void win_game_work(void) { work_count++; }
 
@@ -782,19 +793,24 @@ RT_WRAP(0090cfc0, game_random)
     o_0090cfc0();
 }
 
+static void print_sleep_count(void) { fprintf(stderr, "recomp: idle sleeps %llu\n", (unsigned long long)sleep_count); }
+
 static void idle_rest(uint32_t widget)
 {
     if (idle_sleep < 0) {
         const char *v = getenv("RECOMP_IDLE_SLEEP");
-        idle_sleep = !(v && !strcmp(v, "0"));
+        idle_sleep = !v ? SLEEP_ON : !strcmp(v, "0") ? SLEEP_OFF : !strcmp(v, "force") ? SLEEP_FORCE : SLEEP_ON;
+        const char *c = getenv("RECOMP_IDLE_COUNT");
+        if (c && !strcmp(c, "1")) atexit(print_sleep_count);
     }
     uint64_t now = SDL_GetTicks64();
     if (work_count != work_seen) {
         work_seen = work_count;
         last_work_at = now;
     }
-    if (!idle_sleep || widget != 0xffffu || buttons || q_head != q_tail) return;
-    if (now - last_input_at < IDLE_AFTER || now - last_work_at < WORK_HOLD) return;
+    if (idle_sleep == SLEEP_OFF || widget != 0xffffu || buttons || q_head != q_tail) return;
+    if (idle_sleep == SLEEP_ON && (now - last_input_at < IDLE_AFTER || now - last_work_at < WORK_HOLD)) return;
+    sleep_count++;
     SDL_Delay(1);
 }
 
