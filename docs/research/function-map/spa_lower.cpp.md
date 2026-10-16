@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x851020 | 107 (+1 unwind) | `SpaLower::SpaLower` | thiscall(SpaLower* this, short year), returns this, ret 4 | Constructs the Spanish Lower Division on League for comp 0x9cf6b0, then loads saved data or sets up rules, table and fixtures. | high | opus |  |
+| 0x851020 | 107 (+1 unwind) | `SpaLower::SpaLower` | thiscall(SpaLower* this, short year), returns this, ret 4 | Constructs the Spanish Lower Division on League for comp 0x9cf6b0, then loads saved data or sets up rules, table and fixtures. | high | opus | spa.md |
 | 0x851190 | 11 | `SpaLower::`scalar deleting destructor'` | thiscall(SpaLower* this, unsigned flags), returns this, ret 4 | Runs the SpaLower destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
 | 0x8511b0 | 52 (+1 unwind) | `SpaLower::~SpaLower` | thiscall(SpaLower* this), ret 0 | Destroys the Spanish Lower Division, freeing its table, schedule and stage objects before the League destructor runs. | high | opus |  |
 | 0x851260 | 3606 | `SpaLower::create_schedule` | thiscall(SpaLower* this, char stage, short* round_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Builds the 42-round schedule template of the Spanish Lower Division for stage -1, with layouts for even and odd years, and returns null otherwise. | high | opus |  |

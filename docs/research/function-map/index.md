@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4471 high, 2202 medium, 190 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24.
+- Confidence: 4544 high, 2137 medium, 182 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -210,11 +210,11 @@ All 11747 functions with their category, file and placement method are in `funct
 | [league_stage.cpp](league_stage.cpp.md) | 6 |
 | [library_without_asserts](library_without_asserts.md) | 254 |
 | [main.cpp](main.cpp.md) | 16 |
-| [manager_manager.cpp](manager_manager.cpp.md) | 101 |
-| [manager_screens.cpp](manager_screens.cpp.md) | 27 |
-| [match_day.cpp](match_day.cpp.md) | 23 |
-| [match_eng.cpp](match_eng.cpp.md) | 136 |
-| [match_events.cpp](match_events.cpp.md) | 8 |
+| [manager_manager.cpp](manager_manager.cpp.md) | 100 |
+| [manager_screens.cpp](manager_screens.cpp.md) | 28 |
+| [match_day.cpp](match_day.cpp.md) | 22 |
+| [match_eng.cpp](match_eng.cpp.md) | 130 |
+| [match_events.cpp](match_events.cpp.md) | 15 |
 | [match_man.cpp](match_man.cpp.md) | 32 |
 | [match_official.cpp](match_official.cpp.md) | 9 |
 | [match_pl.cpp](match_pl.cpp.md) | 92 |

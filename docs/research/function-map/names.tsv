@@ -271,7 +271,7 @@ address	file	name	confidence	model	cited_in
 0x41e8b0	bel_first.cpp	BelFirst::create_table	high	opus	
 0x41e9e0	bel_first.cpp	BelFirst::set_up_rules	high	opus	
 0x41ea90	bel_first.cpp	BelFirst::start_new_season	high	opus	
-0x41ec90	bel_first.cpp	bel_first_move_third_division_clubs	medium	opus	
+0x41ec90	bel_first.cpp	bel_first_move_third_division_clubs	medium	opus	hol-bel.md
 0x41ee80	bel_first.cpp	BelFirst::process_promotion_relegation_chain	high	opus	
 0x41ef70	bel_first.cpp	bel_first_split_third_division_groups	medium	opus	
 0x41f030	bel_second.cpp	BelSecond::BelSecond	high	opus	
@@ -315,7 +315,7 @@ address	file	name	confidence	model	cited_in
 0x423640	bel_third.cpp	BelThird::advance_stage	high	opus	
 0x423710	bel_third.cpp	BelThird::create_title_decider_stage	medium	opus	
 0x423880	bel_third.cpp	BelThird::create_promotion_playoff_stage	medium	opus	
-0x423ba0	bel_third.cpp	BelThird::create_relegation_playoff_stage	medium	opus	
+0x423ba0	bel_third.cpp	BelThird::create_relegation_playoff_stage	medium	opus	hol-bel.md
 0x423f00	bel_third.cpp	BelThird::get_club_array	high	opus	
 0x424030	bel_third.cpp	BelThird::set_predicted_positions	high	opus	
 0x4241b0	bel_third.cpp	BelThird::set_club_progress	high	opus	
@@ -1322,7 +1322,7 @@ address	file	name	confidence	model	cited_in
 0x522950	Cup.cpp	Cup::post_draw_news	medium	opus	
 0x522c50	Cup.cpp	Cup::team_position	medium	opus	
 0x522c70	Cup.cpp	Cup::label_round_extra_fixtures	low	opus	
-0x522e00	cup_stage.cpp	Cup_Stage::Cup_Stage	high	opus	2026-10-16-sweep-europe.md
+0x522e00	cup_stage.cpp	Cup_Stage::Cup_Stage	high	opus	2026-10-16-sweep-europe.md,int-world.md
 0x5230c0	cup_stage.cpp	Cup_Stage::`scalar deleting destructor'	high	opus	
 0x5230e0	cup_stage.cpp	Cup_Stage::Cup_Stage	high	opus	
 0x523300	cup_stage.cpp	Cup_Stage::~Cup_Stage	high	opus	
@@ -3663,242 +3663,242 @@ address	file	name	confidence	model	cited_in
 0x6a0e70	manager_manager.cpp	MANAGER_MANAGER::post_manager_under_pressure_news	high	opus	
 0x6a1190	manager_manager.cpp	news_manager_under_pressure_text	high	opus	
 0x6a1b00	manager_manager.cpp	post_manager_departure_news	high	opus	
-0x6a1d60	manager_manager.cpp	news_manager_departure_story	high	haiku	
-0x6a2e00	manager_manager.cpp	manager_manager_send_news_event	medium	haiku	
-0x6a3060	manager_manager.cpp	news_manager_appointment_story	high	haiku	
-0x6a3770	manager_manager.cpp	manager_manager_update_job_satisfaction_and_rating	medium	haiku	
-0x6a44a0	manager_manager.cpp	manager_manager_emit_news_story	medium	haiku	
-0x6a4550	manager_manager.cpp	news_expectations_announce_story	high	haiku	
-0x6a4a20	manager_manager.cpp	manager_manager_post_news_if_due	medium	haiku	
-0x6a4ae0	manager_manager.cpp	news_board_expectations_announcement	high	haiku	
-0x6a4c40	manager_manager.cpp	manager_manager_announce_expectations_news_item	medium	haiku	
-0x6a4d40	manager_manager.cpp	manager_manager_news_confidence_update_message	high	haiku	
-0x6a4f80	manager_manager.cpp	manager_manager_show_board_news_item	medium	haiku	
-0x6a5120	manager_manager.cpp	manager_manager::send_job_offer_news	high	haiku	
-0x6a5610	manager_manager.cpp	MANAGER_MANAGER::update_job_offer_state	medium	haiku	
-0x6a5a60	manager_manager.cpp	manager_manager_send_news_item	medium	haiku	
-0x6a5b40	manager_manager.cpp	manager_performance_news_item	high	haiku	
-0x6a5d10	manager_manager.cpp	manager_manager_build_news_story	medium	haiku	
-0x6a5e30	manager_manager.cpp	news_supporter_protest_story	high	haiku	
-0x6a5fa0	manager_manager.cpp	manager_generate_job_news_story	medium	haiku	
-0x6a6310	manager_manager.cpp	manager_manager_derby_board_reaction_news	high	haiku	
-0x6a69c0	manager_manager.cpp	manager_manager_board_reaction_text	high	haiku	
-0x6a8770	manager_manager.cpp	add_board_request_option	high	haiku	2026-10-16-stadium-research.md
-0x6a8810	manager_manager.cpp	manager_manager_job_offer_decision	medium	haiku	2026-10-16-stadium-research.md
-0x6a9350	manager_manager.cpp	Manager::fire_news_transfer_offer	medium	haiku	
-0x6a9470	manager_manager.cpp	MANAGER_MANAGER::compose_board_reaction_news	high	haiku	2026-10-16-stadium-research.md
-0x6a9e20	manager_manager.cpp	manager_manager_request_match_action	high	haiku	
-0x6a9e60	manager_manager.cpp	MANAGER_MANAGER::process_job_offer_response	medium	haiku	
-0x6aa7d0	manager_manager.cpp	manager_manager_post_news_item	medium	haiku	
-0x6aa910	manager_manager.cpp	news_match_rescheduled_appeal_text	high	haiku	
-0x6aaa90	manager_manager.cpp	manager_manager_send_news_item	medium	haiku	
-0x6aab70	manager_manager.cpp	news_fa_reaction_message	high	haiku	
-0x6aadb0	manager_manager.cpp	news_fa_ref_complaint_reaction	high	haiku	
-0x6aaee0	manager_manager.cpp	manager_manager_collect_job_candidates	medium	haiku	
-0x6ab2d0	manager_manager.cpp	match_performance_commentary_text	high	haiku	
-0x6ab670	manager_manager.cpp	manager_manager_find_club_status_code	medium	haiku	
-0x6ab800	manager_manager.cpp	manager_manager_offer_job_or_interest	medium	haiku	
-0x6abef0	manager_manager.cpp	manager_manager_process_job_list	medium	haiku	
-0x6ac060	manager_manager.cpp	manager_manager_send_news_story	medium	haiku	
-0x6ac190	manager_manager.cpp	news_fa_ban_appeal_result	high	haiku	
-0x6ac470	manager_manager.cpp	manager_manager_try_offer_job_to_candidate	medium	haiku	
-0x6ac560	manager_manager.cpp	manager_manager_try_offer_job_switch	low	haiku	
-0x6ac700	manager_manager.cpp	manager_manager_send_news_item	medium	haiku	
-0x6ac880	manager_manager.cpp	news_manager_ultimatum_story	high	haiku	
-0x6aca50	manager_manager.cpp	manager_manager_assert_or_grade_job_offer	medium	haiku	
-0x6acfc0	manager_manager.cpp	manager_manager_check_job_offer_fit	medium	haiku	
-0x6ad610	manager_manager.cpp	manager_manager_process_job_offer	medium	haiku	
-0x6ad930	manager_manager.cpp	manager_manager_send_job_offer_news	high	haiku	
-0x6adb70	manager_manager.cpp	manager_news_board_demand_response	high	haiku	2026-10-16-stadium-research.md
-0x6ae180	manager_manager.cpp	check_special_case_flag	low	haiku	
-0x6ae1a0	manager_manager.cpp	manager_open_scrman_session	medium	haiku	
-0x6ae2a0	manager_screens.cpp	manager_stats_screen_show	high	haiku	
-0x6b05e0	manager_screens.cpp	manager_screens_key_navigation_handler	medium	haiku	
-0x6b09d0	manager_screens.cpp	manager_screens_close_screen_pair	medium	haiku	
-0x6b0a10	manager_screens.cpp	open_manager_screen_for_current_club	medium	haiku	
-0x6b0b10	manager_screens.cpp	manager_screens_job_information_screen	high	haiku	
-0x6b1790	manager_screens.cpp	manager_screens_scroll_list_item_action	medium	haiku	
-0x6b1980	manager_screens.cpp	manager_screens_close_panel_one	medium	haiku	
-0x6b19d0	manager_screens.cpp	manager_screens_apply_job_result	medium	haiku	
-0x6b1a80	manager_screens.cpp	manager_screens_apply_for_job_confirm	high	haiku	
-0x6b1c30	manager_screens.cpp	manager_screens_can_apply_or_dispatch	low	haiku	
-0x6b1d10	manager_screens.cpp	manager_screens_assert_version_check	medium	haiku	
-0x6b1dc0	manager_screens.cpp	manager_screens_resign_confirm_dialog	high	haiku	
-0x6b1f70	manager_screens.cpp	manager_screens_handle_club_command	medium	haiku	
-0x6b2080	manager_screens.cpp	manager_screens_show_error_or_open_board	medium	haiku	2026-10-16-stadium-research.md
-0x6b2130	manager_screens.cpp	manager_screens_board_request_panel_show	high	haiku	2026-10-16-stadium-research.md
-0x6b2370	manager_screens.cpp	competition_selector_dispatch	low	haiku	2026-10-16-stadium-research.md
-0x6b2450	manager_screens.cpp	manager_screens_assert_job_offer_accept	medium	haiku	
-0x6b25e0	manager_screens.cpp	manager_screens_show_accept_job_confirm	high	haiku	
-0x6b2790	manager_screens.cpp	manager_screens_club_offer_dispatch	medium	haiku	
-0x6b28b0	manager_screens.cpp	manager_screens_open_resign_dialog	medium	haiku	
-0x6b28d0	manager_screens.cpp	manager_screens_confirm_resign_dialog	high	haiku	
-0x6b2b40	manager_screens.cpp	manager_sack_or_resign_player_slot	medium	haiku	
-0x6b2d60	manager_screens.cpp	manager_screens_open_holiday_screen	medium	haiku	2026-10-15-holiday-next-match-inventory.md
-0x6b2d80	manager_screens.cpp	show_holiday_confirm_dialog	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-holiday-next-match-inventory.md,waits.c
-0x6b3440	manager_screens.cpp	manager_screens_dispatch_holiday_action	low	haiku	2026-10-15-holiday-next-match-inventory.md
-0x6b36f0	manager_screens.cpp	compare_staff_for_sort	medium	haiku	
-0x6b3be0	manager_screens.cpp	compare_records_by_short_field_8	medium	haiku	
-0x6b3c10	match_day.cpp	match_day_schedule_build	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md
-0x6b4190	match_day.cpp	match_day_release_resources	high	haiku	2026-10-14-game-creation-inventory.md
-0x6b42a0	match_day.cpp	match_day_clear_and_select_fixture	medium	haiku	2026-10-14-assistant-and-days-inventory.md
-0x6b4360	match_day.cpp	match_day_run_round	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md
-0x6b5040	match_day.cpp	match_day_refresh_flags	medium	haiku	2026-10-15-holiday-next-match-inventory.md
-0x6b5260	match_day.cpp	match_day_begin_or_resume_match	medium	haiku	
-0x6b55c0	match_day.cpp	match_day_select_next_event	medium	haiku	2026-10-15-commentary-speed-inventory.md,commentary.c,user32.c
-0x6b59a0	match_day.cpp	match_day_has_fixture_for_team	medium	haiku	2026-10-14-game-creation-inventory.md
-0x6b5a70	match_day.cpp	match_day_schedule_next_fixture	high	haiku	2026-10-15-commentary-speed-inventory.md
-0x6b5ce0	match_day.cpp	match_day_process_pending_match	high	haiku	2026-10-15-commentary-speed-inventory.md,user32.c
-0x6b5f00	match_day.cpp	match_day_process_fixture	high	haiku	
-0x6b61e0	match_day.cpp	match_day_fixture_conflict_check	medium	haiku	
-0x6b6510	match_day.cpp	match_day_compare_fixtures	medium	haiku	
-0x6b6570	match_day.cpp	match_day_competition_flag_lookup	high	haiku	
-0x6b66a0	match_day.cpp	match_day_can_fixture_proceed	medium	haiku	
-0x6b696a	match_day.cpp	match_day_clear_lineup_state_and_init	medium	haiku	
-0x6b6970	match_day.cpp	match_day_prepare_day_state	medium	haiku	
-0x6b6cc0	match_day.cpp	match_day_tactical_player_swap_pass	medium	haiku	
-0x6b6d20	match_day.cpp	match_day_update_player_ratings	medium	haiku	
-0x6b74a0	match_day.cpp	match_day_process_fixture_events	medium	haiku	
-0x6b79a0	match_day.cpp	match_day_select_substitute_for_team	medium	haiku	
-0x6b7cf0	match_day.cpp	match_day_is_sorted_before_slot	medium	haiku	
-0x6b7e50	match_day.cpp	match_day_init_containers	medium	haiku	
-0x6b7f20	match_eng.cpp	CM3_MATCH_ENGINE::init_match	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
-0x6b97a0	match_eng.cpp	match_engine_reset_buffers	medium	haiku	
-0x6b98c0	match_eng.cpp	CM3_MATCH_ENGINE::simulate_minute_loop	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-commentary-speed-inventory.md
-0x6bab90	match_eng.cpp	match_engine_check_substitution_pending	medium	haiku	
-0x6bac40	match_eng.cpp	CM3_MATCH_ENGINE::process_pending_event	medium	haiku	
-0x6bb8d0	match_eng.cpp	match_pl_broadcast_fatigue_or_morale	medium	haiku	
-0x6bb950	match_eng.cpp	match_engine_notify_active_slots	medium	haiku	
-0x6bb9a0	match_eng.cpp	CM3_MATCH_ENGINE::set_pending_event_once	medium	haiku	
-0x6bba10	match_eng.cpp	match_state::reset_substitution_slots	low	haiku	
-0x6bba50	match_eng.cpp	match_engine_is_second_leg_or_flag_clear	low	haiku	
-0x6bba80	match_eng.cpp	match_engine_clear_substitution_slot	low	haiku	
-0x6bbb60	match_eng.cpp	match_engine_side_strength_score	medium	haiku	
-0x6bbe40	match_eng.cpp	match_update_ball_control_pressure	medium	haiku	
-0x6bbf60	match_eng.cpp	match_setup_player_positions	medium	haiku	
-0x6bc030	match_eng.cpp	CM3_MATCH_ENGINE::find_best_pass_target	medium	haiku	
-0x6bcbd0	match_eng.cpp	match_eng_compute_team_strength_and_pick_players	medium	haiku	
-0x6bce20	match_eng.cpp	match_engine_player_can_be_substituted	high	haiku	
-0x6bce80	match_eng.cpp	CM3_MATCH_ENGINE::best_move_target_score	medium	haiku	
-0x6bd5b0	match_eng.cpp	match_eng_check_pitch_slot_free	medium	haiku	
-0x6bd6b0	match_eng.cpp	match_compute_side_strength_flag	medium	haiku	
-0x6bd760	match_eng.cpp	CM3_MATCH_ENGINE::build_substitute_pool	medium	haiku	
-0x6bd840	match_eng.cpp	match_compare_players_by_priority	medium	haiku	
-0x6bd930	match_eng.cpp	CM3_MATCH_ENGINE::advance_period_state	high	haiku	
-0x6be120	match_eng.cpp	check_tactical_substitution_triggers	medium	haiku	
-0x6be520	match_eng.cpp	match_eng_fill_lineup_slots	medium	haiku	
-0x6be710	match_eng.cpp	CM3_MATCH_ENGINE::run_possession_step	medium	haiku	
-0x6beeb0	match_eng.cpp	CM3_MATCH_ENGINE::simulate_match_minutes	medium	haiku	
-0x6c06b0	match_eng.cpp	match_eng_apply_player_fatigue_recovery	medium	haiku	
-0x6c07a0	match_eng.cpp	adjust_player_condition_stats	medium	haiku	
-0x6c0890	match_eng.cpp	match_eng_apply_player_fatigue_loop	medium	haiku	
-0x6c0980	match_eng.cpp	match_eng_apply_player_fitness_recovery	medium	haiku	
-0x6c0a70	match_eng.cpp	CM3_MATCH_ENGINE::accumulate_player_stat_by_flags	medium	haiku	
-0x6c0b70	match_eng.cpp	apply_player_fatigue_recovery	medium	haiku	
-0x6c0c60	match_eng.cpp	update_team_tactics_and_pressure	medium	haiku	
-0x6c2050	match_eng.cpp	match_eng_best_player_index	medium	haiku	
-0x6c2310	match_eng.cpp	match_eng_best_player_slot	medium	haiku	
-0x6c23f0	match_eng.cpp	CM3_MATCH_ENGINE::pick_best_player_slot	medium	haiku	
-0x6c2750	match_eng.cpp	match_eng_best_slot_by_flags	medium	haiku	
-0x6c2880	match_eng.cpp	select_best_player_slot	medium	haiku	
-0x6c2a40	match_eng.cpp	match_engine_player_skill_nibbles	medium	haiku	
-0x6c2be0	match_eng.cpp	match_eng_select_tactic_slot_values	medium	haiku	
-0x6c2fe0	match_eng.cpp	match_engine_player_slot_address	medium	haiku	
-0x6c3010	match_eng.cpp	match_eng_is_best_candidate	medium	haiku	
-0x6c30e0	match_eng.cpp	CM3_MATCH_ENGINE::find_nearest_eligible_player	medium	haiku	
+0x6a1d60	manager_manager.cpp	news_manager_departure_text	high	opus	
+0x6a2e00	manager_manager.cpp	post_manager_appointment_news	high	opus	
+0x6a3060	manager_manager.cpp	news_manager_appointment_text	high	opus	
+0x6a3770	manager_manager.cpp	MANAGER_MANAGER::set_season_expectations	medium	opus	
+0x6a44a0	manager_manager.cpp	post_fa_expectations_news	high	opus	
+0x6a4550	manager_manager.cpp	news_fa_expectations_text	high	opus	
+0x6a4a20	manager_manager.cpp	post_board_expectations_news	high	opus	
+0x6a4ae0	manager_manager.cpp	MANAGER_MANAGER::news_board_expectations_text	high	opus	
+0x6a4c40	manager_manager.cpp	post_board_confidence_update_news	high	opus	
+0x6a4d40	manager_manager.cpp	MANAGER_MANAGER::news_board_confidence_update_text	high	opus	
+0x6a4f80	manager_manager.cpp	MANAGER_MANAGER::post_job_offer_to_human_news	medium	opus	
+0x6a5120	manager_manager.cpp	MANAGER_MANAGER::news_job_offer_to_human_text	high	opus	
+0x6a5610	manager_manager.cpp	MANAGER_MANAGER::review_national_team_performance	medium	opus	
+0x6a5a60	manager_manager.cpp	post_fa_performance_news	high	opus	
+0x6a5b40	manager_manager.cpp	news_fa_performance_assessment_text	high	opus	
+0x6a5d10	manager_manager.cpp	post_supporter_protest_news	high	opus	
+0x6a5e30	manager_manager.cpp	news_supporter_protest_text	high	opus	
+0x6a5fa0	manager_manager.cpp	MANAGER_MANAGER::post_board_match_reaction_news	medium	opus	
+0x6a6310	manager_manager.cpp	MANAGER_MANAGER::news_board_match_reaction_text	high	opus	
+0x6a69c0	manager_manager.cpp	MANAGER_MANAGER::build_board_match_reaction_text	high	opus	
+0x6a8770	manager_manager.cpp	get_board_request_option_text	high	opus	2026-10-16-stadium-research.md
+0x6a8810	manager_manager.cpp	MANAGER_MANAGER::handle_board_request	high	opus	2026-10-16-stadium-research.md
+0x6a9350	manager_manager.cpp	MANAGER_MANAGER::post_board_request_reply_news	high	opus	
+0x6a9470	manager_manager.cpp	MANAGER_MANAGER::news_board_request_reply_text	high	opus	2026-10-16-stadium-research.md
+0x6a9e20	manager_manager.cpp	get_fa_request_option_text	high	opus	
+0x6a9e60	manager_manager.cpp	MANAGER_MANAGER::handle_fa_request	high	opus	
+0x6aa7d0	manager_manager.cpp	post_match_rescheduled_news	high	opus	
+0x6aa910	manager_manager.cpp	news_match_rescheduled_text	high	opus	
+0x6aaa90	manager_manager.cpp	post_fa_request_reply_news	high	opus	
+0x6aab70	manager_manager.cpp	news_fa_request_reply_text	high	opus	
+0x6aadb0	manager_manager.cpp	news_fa_referee_complaint_text	high	opus	
+0x6aaee0	manager_manager.cpp	MANAGER_MANAGER::collect_board_match_reaction_players	medium	opus	
+0x6ab2d0	manager_manager.cpp	build_board_player_performance_text	high	opus	
+0x6ab670	manager_manager.cpp	get_player_match_rating_verdict	medium	opus	
+0x6ab800	manager_manager.cpp	MANAGER_MANAGER::submit_ban_appeal	medium	opus	
+0x6abef0	manager_manager.cpp	MANAGER_MANAGER::process_ban_appeals	high	opus	
+0x6ac060	manager_manager.cpp	post_ban_appeal_result_news	high	opus	
+0x6ac190	manager_manager.cpp	news_ban_appeal_result_text	high	opus	
+0x6ac470	manager_manager.cpp	MANAGER_MANAGER::resolve_board_ultimatum	medium	opus	
+0x6ac560	manager_manager.cpp	MANAGER_MANAGER::issue_board_ultimatum	medium	opus	
+0x6ac700	manager_manager.cpp	post_board_ultimatum_news	high	opus	
+0x6ac880	manager_manager.cpp	news_board_ultimatum_text	high	opus	
+0x6aca50	manager_manager.cpp	MANAGER_MANAGER::decide_ultimatum_response	medium	opus	
+0x6acfc0	manager_manager.cpp	not_a_function_0x6acfc0	high	opus	
+0x6ad610	manager_manager.cpp	MANAGER_MANAGER::handle_manager_ultimatum	high	opus	
+0x6ad930	manager_manager.cpp	post_ultimatum_response_news	high	opus	
+0x6adb70	manager_manager.cpp	news_ultimatum_response_text	high	opus	2026-10-16-stadium-research.md
+0x6ae180	manager_manager.cpp	is_board_request_available	high	opus	
+0x6ae1a0	manager_screens.cpp	open_manager_stats_screen	high	opus	
+0x6ae2a0	manager_screens.cpp	manager_stats_screen_build	high	opus	
+0x6b05e0	manager_screens.cpp	manager_stats_screen_handle_action	high	opus	
+0x6b09d0	manager_screens.cpp	manager_stats_screen_close	high	opus	
+0x6b0a10	manager_screens.cpp	open_job_information_screen	high	opus	
+0x6b0b10	manager_screens.cpp	job_information_screen_build	high	opus	
+0x6b1790	manager_screens.cpp	job_information_screen_handle_action	high	opus	
+0x6b1980	manager_screens.cpp	job_information_screen_close	high	opus	
+0x6b19d0	manager_screens.cpp	open_apply_for_job_screen	high	opus	
+0x6b1a80	manager_screens.cpp	apply_for_job_screen_build	high	opus	
+0x6b1c30	manager_screens.cpp	apply_for_job_screen_handle_action	high	opus	
+0x6b1d10	manager_screens.cpp	open_resign_job_screen	high	opus	
+0x6b1dc0	manager_screens.cpp	resign_job_screen_build	high	opus	
+0x6b1f70	manager_screens.cpp	resign_job_screen_handle_action	high	opus	
+0x6b2080	manager_screens.cpp	open_board_confidence_screen	high	opus	2026-10-16-stadium-research.md
+0x6b2130	manager_screens.cpp	board_confidence_screen_build	high	opus	2026-10-16-stadium-research.md
+0x6b2370	manager_screens.cpp	board_confidence_screen_handle_action	high	opus	2026-10-16-stadium-research.md
+0x6b2450	manager_screens.cpp	open_job_offer_screen	high	opus	
+0x6b25e0	manager_screens.cpp	job_offer_screen_build	high	opus	
+0x6b2790	manager_screens.cpp	job_offer_screen_handle_action	high	opus	
+0x6b28b0	manager_screens.cpp	open_retire_screen	high	opus	
+0x6b28d0	manager_screens.cpp	retire_screen_build	high	opus	
+0x6b2b40	manager_screens.cpp	retire_screen_handle_action	high	opus	
+0x6b2d60	manager_screens.cpp	open_holiday_screen	high	opus	2026-10-15-holiday-next-match-inventory.md
+0x6b2d80	manager_screens.cpp	holiday_screen_build	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-holiday-next-match-inventory.md,waits.c
+0x6b3440	manager_screens.cpp	holiday_screen_handle_action	high	opus	2026-10-15-holiday-next-match-inventory.md
+0x6b36f0	manager_screens.cpp	compare_manager_stats_rows	high	opus	
+0x6b3be0	manager_screens.cpp	compare_job_information_rows	high	opus	
+0x6b3c10	match_day.cpp	MATCH_DAY::MATCH_DAY	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md
+0x6b4190	match_day.cpp	MATCH_DAY::~MATCH_DAY	high	opus	2026-10-14-game-creation-inventory.md
+0x6b42a0	match_day.cpp	MATCH_DAY::show_match_day_screen	high	opus	2026-10-14-assistant-and-days-inventory.md
+0x6b4360	match_day.cpp	MATCH_DAY::play_matches	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md
+0x6b5040	match_day.cpp	MATCH_DAY::refresh_human_interest_flags	high	opus	2026-10-15-holiday-next-match-inventory.md
+0x6b5260	match_day.cpp	match_day_start_watched_match	medium	opus	
+0x6b55c0	match_day.cpp	MATCH_DAY::step_live_match	high	opus	2026-10-15-commentary-speed-inventory.md,commentary.c,user32.c
+0x6b59a0	match_day.cpp	MATCH_DAY::is_club_playing	high	opus	2026-10-14-game-creation-inventory.md
+0x6b5a70	match_day.cpp	MATCH_DAY::start_next_background_match	high	opus	2026-10-15-commentary-speed-inventory.md
+0x6b5ce0	match_day.cpp	MATCH_DAY::step_background_match	high	opus	2026-10-15-commentary-speed-inventory.md,user32.c
+0x6b5f00	match_day.cpp	match_day_apply_match_result	high	opus	
+0x6b61e0	match_day.cpp	match_day_is_fixture_of_human_interest	medium	opus	
+0x6b6510	match_day.cpp	match_day_compare_entries	medium	opus	
+0x6b6570	match_day.cpp	match_day_get_period_rank	medium	opus	
+0x6b66a0	match_day.cpp	match_day_can_quick_simulate	medium	opus	
+0x6b696a	match_day.cpp	nop_padding_6b696a	high	opus	
+0x6b6970	match_day.cpp	match_day_drop_viewer_and_finish_match	medium	opus	
+0x6b6cc0	match_day.cpp	match_day_generate_player_match_stories	medium	opus	
+0x6b6d20	match_day.cpp	mid_instruction_6b6d20	high	opus	
+0x6b74a0	match_day.cpp	match_day_process_player_incidents	medium	opus	
+0x6b79a0	match_day.cpp	match_day_post_player_reaction_news	medium	opus	
+0x6b7cf0	match_day.cpp	match_day_did_club_win	high	opus	
+0x6b7e50	match_eng.cpp	CM3_MATCH_ENGINE::CM3_MATCH_ENGINE	high	opus	
+0x6b7f20	match_eng.cpp	CM3_MATCH_ENGINE::init_match	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
+0x6b97a0	match_eng.cpp	CM3_MATCH_ENGINE::~CM3_MATCH_ENGINE	high	opus	
+0x6b98c0	match_eng.cpp	CM3_MATCH_ENGINE::run_match_steps	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-commentary-speed-inventory.md
+0x6bab90	match_eng.cpp	CM3_MATCH_ENGINE::is_foul_pending	medium	opus	
+0x6bac40	match_eng.cpp	CM3_MATCH_ENGINE::award_pending_foul	medium	opus	
+0x6bb8d0	match_eng.cpp	CM3_MATCH_ENGINE::scale_side_anger_from_player	medium	opus	
+0x6bb950	match_eng.cpp	CM3_MATCH_ENGINE::scale_side_anger	medium	opus	
+0x6bb9a0	match_eng.cpp	CM3_MATCH_ENGINE::set_pending_foul	high	opus	
+0x6bba10	match_eng.cpp	CM3_MATCH_ENGINE::clear_pending_foul	high	opus	
+0x6bba50	match_eng.cpp	CM3_MATCH_ENGINE::get_pending_foul_awarded_side	medium	opus	
+0x6bba80	match_eng.cpp	CM3_MATCH_ENGINE::try_play_advantage	medium	opus	
+0x6bbb60	match_eng.cpp	CM3_MATCH_ENGINE::recalc_side_score	low	opus	
+0x6bbe40	match_eng.cpp	CM3_MATCH_ENGINE::move_loose_ball	medium	opus	
+0x6bbf60	match_eng.cpp	CM3_MATCH_ENGINE::assign_marking_targets	medium	opus	
+0x6bc030	match_eng.cpp	CM3_MATCH_ENGINE::choose_marking_target	medium	opus	
+0x6bcbd0	match_eng.cpp	CM3_MATCH_ENGINE::sum_cell_opponents	medium	opus	
+0x6bce20	match_eng.cpp	CM3_MATCH_ENGINE::can_marker_challenge	medium	opus	
+0x6bce80	match_eng.cpp	CM3_MATCH_ENGINE::choose_move_cell	medium	opus	
+0x6bd5b0	match_eng.cpp	CM3_MATCH_ENGINE::is_path_ahead_clear	medium	opus	
+0x6bd6b0	match_eng.cpp	CM3_MATCH_ENGINE::update_side_pressure_flag	low	opus	
+0x6bd760	match_eng.cpp	CM3_MATCH_ENGINE::build_action_order	medium	opus	
+0x6bd840	match_eng.cpp	compare_action_order	medium	opus	
+0x6bd930	match_eng.cpp	CM3_MATCH_ENGINE::period_completed	high	opus	
+0x6be120	match_eng.cpp	CM3_MATCH_ENGINE::post_period_end_events	medium	opus	
+0x6be520	match_eng.cpp	CM3_MATCH_ENGINE::choose_shootout_takers	medium	opus	
+0x6be710	match_eng.cpp	CM3_MATCH_ENGINE::run_penalty_shootout_step	medium	opus	
+0x6beeb0	match_eng.cpp	CM3_MATCH_ENGINE::quick_simulate_match	medium	opus	
+0x6c06b0	match_eng.cpp	CM3_MATCH_ENGINE::adjust_attacking_side_ratings	medium	opus	
+0x6c07a0	match_eng.cpp	CM3_MATCH_ENGINE::adjust_defending_side_ratings	medium	opus	
+0x6c0890	match_eng.cpp	CM3_MATCH_ENGINE::adjust_shooting_side_ratings_set_piece	medium	opus	
+0x6c0980	match_eng.cpp	CM3_MATCH_ENGINE::adjust_shooting_side_ratings	medium	opus	
+0x6c0a70	match_eng.cpp	CM3_MATCH_ENGINE::adjust_defending_side_ratings_set_piece	medium	opus	
+0x6c0b70	match_eng.cpp	CM3_MATCH_ENGINE::reward_defenders_for_stopped_shot	medium	opus	
+0x6c0c60	match_eng.cpp	CM3_MATCH_ENGINE::compute_side_phase_strengths	medium	opus	
+0x6c2050	match_eng.cpp	CM3_MATCH_ENGINE::pick_shot_taker	medium	opus	
+0x6c2310	match_eng.cpp	CM3_MATCH_ENGINE::pick_booked_player	medium	opus	
+0x6c23f0	match_eng.cpp	CM3_MATCH_ENGINE::pick_assist_provider	medium	opus	
+0x6c2750	match_eng.cpp	CM3_MATCH_ENGINE::pick_random_forward	low	opus	
+0x6c2880	match_eng.cpp	CM3_MATCH_ENGINE::pick_tackling_defender	medium	opus	
+0x6c2a40	match_eng.cpp	CM3_MATCH_ENGINE::get_reference_tactic_cell	medium	opus	
+0x6c2be0	match_eng.cpp	CM3_MATCH_ENGINE::get_player_target_cell	medium	opus	
+0x6c2fe0	match_eng.cpp	CM3_MATCH_ENGINE::get_match_player	high	opus	
+0x6c3010	match_eng.cpp	CM3_MATCH_ENGINE::is_closest_teammate_to_cell	medium	opus	
+0x6c30e0	match_eng.cpp	CM3_MATCH_ENGINE::find_nearest_outfield_player	high	opus	
 0x6c38c0	match_eng.cpp	CM3_MATCH_ENGINE::get_player_position	medium	opus	
-0x6c38f0	match_eng.cpp	match_engine_lookup_player_slot_value	medium	haiku	
-0x6c3920	match_eng.cpp	CM3_MATCH_ENGINE::get_player_slot_rating	medium	haiku	
-0x6c3950	match_eng.cpp	match_pl_min_distance_to_target	high	haiku	
-0x6c3a00	match_eng.cpp	match_eng_count_eligible_points	medium	haiku	
-0x6c3aa0	match_eng.cpp	match_engine_compute_pitch_bounds	medium	haiku	
-0x6c4130	match_eng.cpp	get_player_match_rating_delta	medium	haiku	
-0x6c4180	match_eng.cpp	match_eng_side_value_delta	low	haiku	
-0x6c41b0	match_eng.cpp	match_pl::is_position_available_for_sub	medium	haiku	
-0x6c4290	match_eng.cpp	period_setup_players_and_assert_error	medium	haiku	
-0x6c4470	match_eng.cpp	CM3_MATCH_ENGINE::set_team_formation_tactics	medium	haiku	
-0x6c4820	match_eng.cpp	CM3_MATCH_ENGINE::set_tactical_position_and_rebuild	medium	haiku	
-0x6c4ec0	match_eng.cpp	match_engine_setup_teams_and_reset_period	medium	haiku	
-0x6c50d0	match_eng.cpp	match_eng_reset_player_slots	medium	haiku	
-0x6c51e0	match_eng.cpp	match_engine_set_repositioning_or_pick_player	low	haiku	
-0x6c54a0	match_eng.cpp	CM3_MATCH_ENGINE::period_tactics_update	medium	haiku	
-0x6c6a30	match_eng.cpp	CM3_MATCH_ENGINE::evaluate_candidate_moves	medium	haiku	
-0x6c7a20	match_eng.cpp	match_eng_score_candidate_players	medium	haiku	
-0x6c87e0	match_eng.cpp	CM3_MATCH_ENGINE::select_opposition_challenger	high	haiku	
-0x6c9cd0	match_eng.cpp	CM3_MATCH_ENGINE::process_possession_event	medium	haiku	
-0x6cb650	match_eng.cpp	is_match_event_code_flag	medium	haiku	
-0x6cb6c0	match_eng.cpp	match_engine_pitch_lookup_delta	medium	haiku	
-0x6cb700	match_eng.cpp	count_players_below_threshold	medium	haiku	
-0x6cb780	match_eng.cpp	match_eng_substitution_check	low	haiku	
-0x6cb910	match_eng.cpp	is_valid_match_period	medium	haiku	
-0x6cb930	match_eng.cpp	match_pair_flag_check	low	haiku	
-0x6cb960	match_eng.cpp	is_valid_match_slot	medium	haiku	
-0x6cb9b0	match_eng.cpp	match_eng_tactical_pair_valid	medium	haiku	
-0x6cbad0	match_eng.cpp	can_move_player_to_slot	medium	haiku	
-0x6cbbb0	match_eng.cpp	CM3_MATCH_ENGINE::count_available_players_for_side	medium	haiku	
-0x6cbc00	match_eng.cpp	CM3_MATCH_ENGINE::line_visibility_sum	medium	haiku	
-0x6cc070	match_eng.cpp	CM3_MATCH_ENGINE::sum_line_probability_along_path	medium	haiku	
-0x6cc4e0	match_eng.cpp	match_distance_weight_lookup	medium	haiku	
-0x6cc540	match_eng.cpp	match_pl_path_walk_pass_order	medium	haiku	
-0x6ccb60	match_eng.cpp	match_pl::line_walk_pass_search	medium	haiku	
-0x6cd330	match_eng.cpp	match_eng_scan_players_for_action	medium	haiku	
-0x6cd3d0	match_eng.cpp	match_select_player_slot	medium	haiku	
-0x6cd490	match_eng.cpp	match_engine_start_penalty_or_kick_phase	high	haiku	
-0x6cd5f0	match_eng.cpp	CM3_MATCH_ENGINE::player_within_limit	low	haiku	
-0x6cd660	match_eng.cpp	CM3_MATCH_ENGINE::select_substitute_candidates	medium	haiku	
-0x6cd770	match_eng.cpp	match_eng_set_player_position_and_slot	medium	haiku	
-0x6cda20	match_eng.cpp	match_period_tick_side_update	medium	haiku	
-0x6cdd00	match_eng.cpp	CM3_MATCH_ENGINE::register_player_slot	medium	haiku	
-0x6cdd50	match_eng.cpp	CM3_MATCH_ENGINE::replace_player_in_slot	medium	haiku	
-0x6ce0f0	match_eng.cpp	CM3_MATCH_ENGINE::clear_flag_field	medium	haiku	
-0x6ce110	match_eng.cpp	CM3_MATCH_ENGINE::get_substitute_slot	medium	haiku	
-0x6ce310	match_eng.cpp	match_eng_compute_score_margin	medium	haiku	
-0x6ce460	match_eng.cpp	CM3_MATCH_ENGINE::prepare_team_strengths	medium	haiku	
-0x6ce9c0	match_eng.cpp	match_engine_set_zone_ratings	medium	haiku	
-0x6ceb90	match_eng.cpp	match_eng_best_candidate_pick	medium	haiku	
-0x6cf710	match_eng.cpp	match_eng_adjust_side_player_shorts	medium	haiku	
-0x6cf750	match_eng.cpp	CM3_MATCH_ENGINE::record_shot_event	medium	haiku	
-0x6cfc60	match_eng.cpp	match_eng_forward_seven_args	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x6cfca0	match_eng.cpp	match_eng_forward_four_args	medium	haiku	
-0x6cfcd0	match_eng.cpp	match_eng_forward_eight_args	medium	haiku	
-0x6cfd10	match_eng.cpp	match_eng_forward_six_args_to_match_decide_action	medium	haiku	
-0x6cfd40	match_eng.cpp	match_engine_forward_four_args	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x6cfd70	match_eng.cpp	match_eng_forward_four_args	medium	haiku	
-0x6cfda0	match_eng.cpp	is_side_home_or_flagged	low	haiku	
-0x6cfe10	match_eng.cpp	match_engine_roll_event_outcome	medium	haiku	
-0x6d0980	match_eng.cpp	CM3_MATCH_ENGINE::apply_shot_outcome	medium	haiku	
-0x6d0b60	match_eng.cpp	match_eng_process_pending_events	medium	haiku	
-0x6d0f80	match_eng.cpp	match_select_best_substitute_player	medium	haiku	
-0x6d10a0	match_eng.cpp	apply_player_form_fitness_events	medium	haiku	
-0x6d1210	match_eng.cpp	CM3_MATCH_ENGINE::process_match_state	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x6d1770	match_eng.cpp	match_pick_starting_xi_positions	medium	haiku	
-0x6d1cc0	match_eng.cpp	CM3_MATCH_ENGINE::update_tactical_substitutions	medium	haiku	
-0x6d26b0	match_eng.cpp	match_eng_compute_player_match_rating	medium	haiku	
-0x6d3610	match_eng.cpp	match_eng_compute_player_speed_limits	medium	haiku	
-0x6d3de0	match_eng.cpp	match_set_side_rating_slot	medium	haiku	
-0x6d4250	match_eng.cpp	match_engine_is_player_available	medium	haiku	2026-10-16-sweep-international.md
-0x6d4280	match_eng.cpp	match_engine_slot_is_neg2	medium	haiku	
-0x6d42a0	match_eng.cpp	match_engine_side_substitution_check	medium	haiku	
-0x6d4330	match_eng.cpp	match_eng_best_marking_target	medium	haiku	
-0x6d47e0	match_eng.cpp	match_engine_find_team_slot_result	medium	haiku	
-0x6d4a20	match_eng.cpp	match_engine_update_crowd_or_morale_rating	medium	haiku	
-0x6d4b70	match_eng.cpp	match_eng_check_special_event_condition	low	haiku	
-0x6d58f0	match_eng.cpp	match_state_sign_of_side	low	haiku	
-0x6d5930	match_eng.cpp	match_state_index_below_limit	medium	haiku	
-0x6d5950	match_eng.cpp	match_events_compare_flag_check	low	haiku	
-0x6d59b0	match_eng.cpp	match_events_count_team_players_with_marker	medium	haiku	
-0x6d5a10	match_eng.cpp	match_find_active_player_slot	medium	haiku	
-0x6d5a70	match_eng.cpp	find_eligible_player_slot	medium	haiku	
-0x6d5af0	match_eng.cpp	formation_apply_flag_wrapper	low	haiku	
-0x6d5b20	match_eng.cpp	match_gap_0x6d5b20_formation_reset	low	haiku	
-0x6d5b50	match_eng.cpp	match_events_release_all_slots	medium	haiku	
-0x6d5bf0	match_eng.cpp	crowd_sound_init	medium	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md
-0x6d5cd0	match_eng.cpp	match_event_type_lookup	medium	haiku	
-0x6d5d00	match_eng.cpp	match_events_rotate_queue_and_dispatch	medium	haiku	
-0x6d5d80	match_eng.cpp	match_event_remap_player_ref	medium	haiku	
-0x6d60b0	match_eng.cpp	resolve_event_pair	medium	haiku	
-0x6d78b0	match_eng.cpp	match_events_next_event	medium	haiku	2026-10-15-commentary-speed-inventory.md
+0x6c38f0	match_eng.cpp	CM3_MATCH_ENGINE::get_player_secondary_position	medium	opus	
+0x6c3920	match_eng.cpp	CM3_MATCH_ENGINE::get_player_alt_slot_position	medium	opus	
+0x6c3950	match_eng.cpp	CM3_MATCH_ENGINE::min_outfield_distance_to_cell	high	opus	
+0x6c3a00	match_eng.cpp	CM3_MATCH_ENGINE::count_players_near_cell	high	opus	
+0x6c3aa0	match_eng.cpp	CM3_MATCH_ENGINE::update_offside_lines	high	opus	
+0x6c4130	match_eng.cpp	CM3_MATCH_ENGINE::get_offside_margin	high	opus	
+0x6c4180	match_eng.cpp	CM3_MATCH_ENGINE::get_offside_margin_for_row	high	opus	
+0x6c41b0	match_eng.cpp	CM3_MATCH_ENGINE::is_clear_ahead_of_cell	medium	opus	
+0x6c4290	match_eng.cpp	CM3_MATCH_ENGINE::set_up_throw_in	medium	opus	
+0x6c4470	match_eng.cpp	CM3_MATCH_ENGINE::set_up_corner_kick	high	opus	
+0x6c4820	match_eng.cpp	CM3_MATCH_ENGINE::set_up_free_kick	high	opus	
+0x6c4ec0	match_eng.cpp	CM3_MATCH_ENGINE::set_up_goal_kick	high	opus	
+0x6c50d0	match_eng.cpp	CM3_MATCH_ENGINE::set_up_penalty	high	opus	
+0x6c51e0	match_eng.cpp	CM3_MATCH_ENGINE::set_up_kick_off	high	opus	
+0x6c54a0	match_eng.cpp	CM3_MATCH_ENGINE::handle_stoppage	high	opus	
+0x6c6a30	match_eng.cpp	CM3_MATCH_ENGINE::find_best_pass_receiver	medium	opus	
+0x6c7a20	match_eng.cpp	not_a_function_6c7a20	high	opus	
+0x6c87e0	match_eng.cpp	CM3_MATCH_ENGINE::get_opposition_challenge	high	opus	
+0x6c9cd0	match_eng.cpp	CM3_MATCH_ENGINE::resolve_ball_challenge	medium	opus	
+0x6cb650	match_eng.cpp	is_undisputed_action_code	low	opus	
+0x6cb6c0	match_eng.cpp	CM3_MATCH_ENGINE::get_direction_between_cells	medium	opus	
+0x6cb700	match_eng.cpp	CM3_MATCH_ENGINE::count_players_ahead_of_row	medium	opus	
+0x6cb780	match_eng.cpp	CM3_MATCH_ENGINE::check_clear_run_on_goal	medium	opus	
+0x6cb910	match_eng.cpp	is_outside_box_width	medium	opus	
+0x6cb930	match_eng.cpp	is_in_attacking_third	medium	opus	
+0x6cb960	match_eng.cpp	is_in_own_penalty_area	high	opus	
+0x6cb9b0	match_eng.cpp	can_run_into_central_box	medium	opus	
+0x6cbad0	match_eng.cpp	CM3_MATCH_ENGINE::has_free_cell_ahead	medium	opus	
+0x6cbbb0	match_eng.cpp	CM3_MATCH_ENGINE::count_players_on_pitch	medium	opus	
+0x6cbc00	match_eng.cpp	CM3_MATCH_ENGINE::count_interceptors_on_line	medium	opus	
+0x6cc070	match_eng.cpp	CM3_MATCH_ENGINE::count_shot_blockers_on_line	medium	opus	
+0x6cc4e0	match_eng.cpp	get_cell_distance	high	opus	
+0x6cc540	match_eng.cpp	CM3_MATCH_ENGINE::check_shot_blocked_on_path	medium	opus	
+0x6ccb60	match_eng.cpp	CM3_MATCH_ENGINE::check_pass_intercepted_on_path	medium	opus	
+0x6cd330	match_eng.cpp	CM3_MATCH_ENGINE::try_cell_interception	medium	opus	
+0x6cd3d0	match_eng.cpp	CM3_MATCH_ENGINE::try_cell_shot_block	medium	opus	
+0x6cd490	match_eng.cpp	CM3_MATCH_ENGINE::ball_out_of_play	high	opus	
+0x6cd5f0	match_eng.cpp	CM3_MATCH_ENGINE::is_behind_own_back_line	medium	opus	
+0x6cd660	match_eng.cpp	CM3_MATCH_ENGINE::update_defensive_lines	medium	opus	
+0x6cd770	match_eng.cpp	CM3_MATCH_ENGINE::move_ball_to_cell	medium	opus	
+0x6cda20	match_eng.cpp	CM3_MATCH_ENGINE::send_off_player	medium	opus	
+0x6cdd00	match_eng.cpp	CM3_MATCH_ENGINE::place_player_at_entry_cell	medium	opus	
+0x6cdd50	match_eng.cpp	CM3_MATCH_ENGINE::remove_player_from_pitch	medium	opus	
+0x6ce0f0	match_eng.cpp	CM3_MATCH_ENGINE::clear_goalkeeper	high	opus	
+0x6ce110	match_eng.cpp	CM3_MATCH_ENGINE::get_goalkeeper	high	opus	
+0x6ce310	match_eng.cpp	CM3_MATCH_ENGINE::get_goal_margin	medium	opus	
+0x6ce460	match_eng.cpp	CM3_MATCH_ENGINE::rebuild_team_match_stats	medium	opus	
+0x6ce9c0	match_eng.cpp	CM3_MATCH_ENGINE::compute_possession_percentages	medium	opus	
+0x6ceb90	match_eng.cpp	CM3_MATCH_ENGINE::pick_player_for_role	medium	opus	
+0x6cf710	match_eng.cpp	CM3_MATCH_ENGINE::adjust_side_rating_points	medium	opus	
+0x6cf750	match_eng.cpp	CM3_MATCH_ENGINE::record_possession_tick	medium	opus	
+0x6cfc60	match_eng.cpp	match_eng_referee_judge_tackle	low	opus	2026-10-14-violent-conduct-inventory.md
+0x6cfca0	match_eng.cpp	match_eng_referee_check_foul	low	opus	
+0x6cfcd0	match_eng.cpp	match_eng_referee_decide_foul_punishment	medium	opus	
+0x6cfd10	match_eng.cpp	match_eng_referee_decide_booking	medium	opus	
+0x6cfd40	match_eng.cpp	match_eng_referee_decide_misconduct_card	medium	opus	2026-10-14-violent-conduct-inventory.md
+0x6cfd70	match_eng.cpp	match_eng_referee_check_offside	medium	opus	
+0x6cfda0	match_eng.cpp	CM3_MATCH_ENGINE::is_player_nearest_to_ball	medium	opus	
+0x6cfe10	match_eng.cpp	CM3_MATCH_ENGINE::roll_challenge_injuries	medium	opus	
+0x6d0980	match_eng.cpp	CM3_MATCH_ENGINE::injure_player	high	opus	
+0x6d0b60	match_eng.cpp	CM3_MATCH_ENGINE::process_injured_players	high	opus	
+0x6d0f80	match_eng.cpp	CM3_MATCH_ENGINE::pick_man_of_the_match	medium	opus	
+0x6d10a0	match_eng.cpp	CM3_MATCH_ENGINE::set_instruction_for_top_rated_players	low	opus	
+0x6d1210	match_eng.cpp	CM3_MATCH_ENGINE::process_queued_fouls	medium	opus	2026-10-14-violent-conduct-inventory.md
+0x6d1770	match_eng.cpp	CM3_MATCH_ENGINE::build_pitch_position_snapshot	medium	opus	
+0x6d1cc0	match_eng.cpp	match_eng_update_post_match_reputations	medium	opus	
+0x6d26b0	match_eng.cpp	update_player_reputation_after_match	high	opus	
+0x6d3610	match_eng.cpp	update_manager_reputation_after_match	medium	opus	
+0x6d3de0	match_eng.cpp	match_eng_compute_club_reputation	low	opus	
+0x6d4250	match_eng.cpp	CM3_MATCH_ENGINE::is_golden_goal_active	high	opus	2026-10-16-sweep-international.md
+0x6d4280	match_eng.cpp	CM3_MATCH_ENGINE::is_fake_fixture	medium	opus	
+0x6d42a0	match_eng.cpp	CM3_MATCH_ENGINE::is_side_pushing_forward	low	opus	
+0x6d4330	match_eng.cpp	CM3_MATCH_ENGINE::find_marking_target	medium	opus	
+0x6d47e0	match_eng.cpp	match_eng_choose_kit	high	opus	
+0x6d4a20	match_eng.cpp	CM3_MATCH_ENGINE::record_referee_rating	medium	opus	
+0x6d4b70	match_eng.cpp	CM3_MATCH_ENGINE::is_context_commentary_allowed	medium	opus	
+0x6d58f0	match_eng.cpp	CM3_MATCH_ENGINE::get_ball_goal_end	medium	opus	
+0x6d5930	match_eng.cpp	CM3_MATCH_ENGINE::is_match_abandoned	medium	opus	
+0x6d5950	match_eng.cpp	CM3_MATCH_ENGINE::is_side_trailing	medium	opus	
+0x6d59b0	match_eng.cpp	CM3_MATCH_ENGINE::count_markers_of_player	medium	opus	
+0x6d5a10	match_eng.cpp	CM3_MATCH_ENGINE::find_marker_of_player	medium	opus	
+0x6d5a70	match_eng.cpp	CM3_MATCH_ENGINE::find_free_teammate_in_final_third	medium	opus	
+0x6d5af0	match_eng.cpp	CM3_MATCH_ENGINE::side_has_no_wide_midfield_or_attack	low	opus	
+0x6d5b20	match_eng.cpp	CM3_MATCH_ENGINE::side_has_no_wide_defenders	low	opus	
+0x6d5b50	match_events.cpp	match_events_free_event_tables	high	opus	
+0x6d5bf0	match_events.cpp	Match_Events::Match_Events	medium	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md
+0x6d5cd0	match_events.cpp	match_events_get_event_category	medium	opus	
+0x6d5d00	match_events.cpp	Match_Events::add_event_at_front	medium	opus	
+0x6d5d80	match_events.cpp	match_events_pick_weather_variant	high	opus	
+0x6d60b0	match_events.cpp	Match_Events::combine_with_previous_event	medium	opus	
 0x6d6f70	match_events.cpp	Match_Events::add_event	medium	opus	2026-10-14-violent-conduct-inventory.md
+0x6d78b0	match_events.cpp	Match_Events::get_next_event	high	opus	2026-10-15-commentary-speed-inventory.md
 0x6d7b00	match_events.cpp	match_events_format_text_token	medium	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md,commentary.c
 0x6d8c70	match_events.cpp	match_events_check_order_ready	medium	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md,dsound.c,user32.c
 0x6d8d10	match_events.cpp	match_events_expand_message_template	high	haiku	
@@ -5639,7 +5639,7 @@ address	file	name	confidence	model	cited_in
 0x84d740	spa_cup.cpp	SpaCup::update_for_date	high	opus	
 0x84d910	spa_cup.cpp	SpaCup::collect_entrants	high	opus	
 0x84df70	spa_cup.cpp	SpaCup::start_new_season	high	opus	
-0x84e130	spa_first.cpp	SpaFirst::SpaFirst	high	opus	
+0x84e130	spa_first.cpp	SpaFirst::SpaFirst	high	opus	spa.md
 0x84e390	spa_first.cpp	SpaFirst::`scalar deleting destructor'	high	opus	
 0x84e3b0	spa_first.cpp	SpaFirst::~SpaFirst	high	opus	
 0x84e450	spa_first.cpp	SpaFirst::create_schedule	high	opus	
@@ -5651,10 +5651,10 @@ address	file	name	confidence	model	cited_in
 0x850530	spa_first.cpp	spa_first_assign_second_division_b_groups	high	opus	
 0x850700	spa_first.cpp	SpaFirst::process_promotion_relegation_chain	high	opus	
 0x850880	spa_first.cpp	SpaFirst::set_club_progress	high	opus	
-0x8508c0	spa_first.cpp	SpaFirst::load_extra_data	high	opus	
+0x8508c0	spa_first.cpp	SpaFirst::load_extra_data	high	opus	spa.md
 0x850950	spa_first.cpp	SpaFirst::save_extra_data	high	opus	
 0x850970	spa_first.cpp	SpaFirst::resolve_b_team_clashes	medium	opus	
-0x851020	spa_lower.cpp	SpaLower::SpaLower	high	opus	
+0x851020	spa_lower.cpp	SpaLower::SpaLower	high	opus	spa.md
 0x851190	spa_lower.cpp	SpaLower::`scalar deleting destructor'	high	opus	
 0x8511b0	spa_lower.cpp	SpaLower::~SpaLower	high	opus	
 0x851260	spa_lower.cpp	SpaLower::create_schedule	high	opus	
@@ -5666,7 +5666,7 @@ address	file	name	confidence	model	cited_in
 0x853bd0	spa_second.cpp	SpaSecond::~SpaSecond	high	opus	
 0x853c90	spa_second.cpp	SpaSecond::create_schedule	high	opus	
 0x855b40	spa_second.cpp	SpaSecond::create_table	high	opus	
-0x855cc0	spa_second.cpp	SpaSecond::set_up_rules	high	opus	
+0x855cc0	spa_second.cpp	SpaSecond::set_up_rules	high	opus	spa.md
 0x855d80	spa_second.cpp	SpaSecond::start_new_season	high	opus	
 0x855f40	spa_second_b.cpp	SpaSecondB::SpaSecondB	high	opus	
 0x856180	spa_second_b.cpp	SpaSecondB::`scalar deleting destructor'	high	opus	
@@ -6535,7 +6535,7 @@ address	file	name	confidence	model	cited_in
 0x90b080	usa_open_cup.cpp	UsaOpenCup::`scalar deleting destructor'	high	opus	
 0x90b0a0	usa_open_cup.cpp	UsaOpenCup::~UsaOpenCup	high	opus	
 0x90b170	usa_open_cup.cpp	UsaOpenCup::create_round_table	high	opus	
-0x90b530	usa_open_cup.cpp	UsaOpenCup::collect_entrants	medium	opus	
+0x90b530	usa_open_cup.cpp	UsaOpenCup::collect_entrants	medium	opus	arg-usa.md
 0x90b790	usa_open_cup.cpp	UsaOpenCup::start_new_season	high	opus	2026-10-16-research-name-check.md
 0x90b940	usa_rules.cpp	USA_RULES::USA_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x90ba60	usa_rules.cpp	USA_RULES::fill_squad_restrictions	high	opus	2026-10-16-sweep-rulebooks.md
@@ -6659,7 +6659,7 @@ address	file	name	confidence	model	cited_in
 0x919430	wc_europe_league.cpp	WcEuropeLeague::start_new_season	high	opus	
 0x919620	wc_europe_league.cpp	WcEuropeLeague::advance_stage	high	opus	
 0x9196d0	wc_europe_league.cpp	WcEuropeLeague::create_group_stage	high	opus	
-0x919910	wc_europe_league.cpp	WcEuropeLeague::create_play_off_stage	high	opus	
+0x919910	wc_europe_league.cpp	WcEuropeLeague::create_play_off_stage	high	opus	int-world.md
 0x919e30	wc_europe_league.cpp	WcEuropeLeague::build_entry_pool	high	opus	2026-10-16-sweep-international.md
 0x91a140	wc_europe_league.cpp	WcEuropeLeague::create_runners_up_stage	medium	opus	
 0x91a240	wc_europe_league.cpp	WcEuropeLeague::fill_runners_up_table	medium	opus	
@@ -6690,7 +6690,7 @@ address	file	name	confidence	model	cited_in
 0x91f1a0	wc_oceania_league.cpp	WcOceaniaLeague::create_second_group_stage	medium	opus	
 0x91f3d0	wc_oceania_league.cpp	WcOceaniaLeague::update_for_date	high	opus	
 0x91f640	wc_oceania_league.cpp	WcOceaniaLeague::create_final_stage	high	opus	
-0x91f800	wc_oceania_league.cpp	WcOceaniaLeague::create_playoff_stage	high	opus	2026-10-16-sweep-international.md
+0x91f800	wc_oceania_league.cpp	WcOceaniaLeague::create_playoff_stage	high	opus	2026-10-16-sweep-international.md,int-world.md
 0x91fa80	wc_oceania_league.cpp	WcOceaniaLeague::build_entrant_pool	high	opus	
 0x91fd20	wc_oceania_league.cpp	WcOceaniaLeague::load_extra_data	high	opus	
 0x91ff30	wc_oceania_league.cpp	WcOceaniaLeague::set_predicted_positions	high	opus	

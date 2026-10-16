@@ -1030,6 +1030,42 @@ Run `sweep-w24`: 7 Opus agents named 202 functions: `game_config.cpp`, `hall_of_
 | 0x68f9c0 | Named in 2026-10-14-game-creation-inventory.md | `manager_manager_process_transfer_offers` (Haiku) | `MANAGER_MANAGER::daily_update` | agrees |
 | 0x696b10 | Named in 2026-10-14-assistant-and-days-inventory.md | `manager_manager_evaluate_transfer_offer` (Haiku) | `MANAGER_MANAGER::check_board_transfer_veto` | no claim |
 
+#### Wave w25 (tier 5, 2026-10-17)
+
+Run `sweep-w25`: 8 Opus agents named 234 functions: the rest of `manager_manager.cpp` (board and FA news), `manager_screens.cpp`, `match_day.cpp` and the first five batches of `match_eng.cpp` (`CM3_MATCH_ENGINE`). Each agent took 2 to 7 minutes and 125,000 to 228,000 tokens. Confidence: 114 high, 109 medium, 11 low. The merge needed no fixes. The match engine names have lower confidence: its code works with event codes and grid cells and has few strings. From this wave on, the brief allows agents to disassemble a function when the pseudocode hides the convention or the ECX flow.
+
+27 functions of the wave are cited. 19 agree, 7 agree in area and 1 differs. The stadium research lists 0x6adb70 as a second text of board reply news 0x1786. The sweep names it the text of the manager's ultimatum response.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x6a8770 | Named in 2026-10-16-stadium-research.md | `add_board_request_option` (Haiku) | `get_board_request_option_text` | agrees |
+| 0x6a8810 | Named in 2026-10-16-stadium-research.md | `manager_manager_job_offer_decision` (Haiku) | `MANAGER_MANAGER::handle_board_request` | agrees |
+| 0x6a9470 | Named in 2026-10-16-stadium-research.md | `MANAGER_MANAGER::compose_board_reaction_news` (Haiku) | `MANAGER_MANAGER::news_board_request_reply_text` | agrees |
+| 0x6adb70 | Named in 2026-10-16-stadium-research.md | `manager_news_board_demand_response` (Haiku) | `news_ultimatum_response_text` | differs. The research lists it as a second text of board reply news 0x1786. The sweep names it the text of the manager's ultimatum response. Not checked |
+| 0x6b2080 | Named in 2026-10-16-stadium-research.md | `manager_screens_show_error_or_open_board` (Haiku) | `open_board_confidence_screen` | agrees |
+| 0x6b2130 | Named in 2026-10-16-stadium-research.md | `manager_screens_board_request_panel_show` (Haiku) | `board_confidence_screen_build` | agrees |
+| 0x6b2370 | Named in 2026-10-16-stadium-research.md | `competition_selector_dispatch` (Haiku) | `board_confidence_screen_handle_action` | agrees |
+| 0x6b2d60 | Named in 2026-10-15-holiday-next-match-inventory.md | `manager_screens_open_holiday_screen` (Haiku) | `open_holiday_screen` | agrees |
+| 0x6b2d80 | Named in 2026-10-14-assistant-and-days-inventory.md | `show_holiday_confirm_dialog` (Haiku) | `holiday_screen_build` | agrees |
+| 0x6b3440 | Named in 2026-10-15-holiday-next-match-inventory.md | `manager_screens_dispatch_holiday_action` (Haiku) | `holiday_screen_handle_action` | agrees |
+| 0x6b3c10 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_day_schedule_build` (Haiku) | `MATCH_DAY::MATCH_DAY` | agrees |
+| 0x6b4190 | Named in 2026-10-14-game-creation-inventory.md | `match_day_release_resources` (Haiku) | `MATCH_DAY::~MATCH_DAY` | agrees |
+| 0x6b42a0 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_day_clear_and_select_fixture` (Haiku) | `MATCH_DAY::show_match_day_screen` | agrees |
+| 0x6b4360 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_day_run_round` (Haiku) | `MATCH_DAY::play_matches` | agrees in area |
+| 0x6b5040 | Named in 2026-10-15-holiday-next-match-inventory.md | `match_day_refresh_flags` (Haiku) | `MATCH_DAY::refresh_human_interest_flags` | agrees |
+| 0x6b55c0 | Named in 2026-10-15-commentary-speed-inventory.md | `match_day_select_next_event` (Haiku) | `MATCH_DAY::step_live_match` | agrees |
+| 0x6b59a0 | Named in 2026-10-14-game-creation-inventory.md | `match_day_has_fixture_for_team` (Haiku) | `MATCH_DAY::is_club_playing` | agrees in area |
+| 0x6b5a70 | Named in 2026-10-15-commentary-speed-inventory.md | `match_day_schedule_next_fixture` (Haiku) | `MATCH_DAY::start_next_background_match` | agrees in area |
+| 0x6b5ce0 | Named in 2026-10-15-commentary-speed-inventory.md | `match_day_process_pending_match` (Haiku) | `MATCH_DAY::step_background_match` | agrees |
+| 0x6b7f20 | Named in 2026-10-14-assistant-and-days-inventory.md | `CM3_MATCH_ENGINE::init_match` (Haiku) | `CM3_MATCH_ENGINE::init_match` | agrees in area |
+| 0x6b98c0 | Named in 2026-10-14-assistant-and-days-inventory.md | `CM3_MATCH_ENGINE::simulate_minute_loop` (Haiku) | `CM3_MATCH_ENGINE::run_match_steps` | agrees |
+| 0x6cfc60 | Named in 2026-10-14-violent-conduct-inventory.md | `match_eng_forward_seven_args` (Haiku) | `match_eng_referee_judge_tackle` | agrees in area |
+| 0x6cfd40 | Named in 2026-10-14-violent-conduct-inventory.md | `match_engine_forward_four_args` (Haiku) | `match_eng_referee_decide_misconduct_card` | agrees |
+| 0x6d1210 | Named in 2026-10-14-violent-conduct-inventory.md | `CM3_MATCH_ENGINE::process_match_state` (Haiku) | `CM3_MATCH_ENGINE::process_queued_fouls` | agrees in area |
+| 0x6d4250 | Named in 2026-10-16-sweep-international.md | `match_engine_is_player_available` (Haiku) | `CM3_MATCH_ENGINE::is_golden_goal_active` | agrees |
+| 0x6d5bf0 | Named in 2026-10-14-columns-and-colours-inventory.md | `crowd_sound_init` (Haiku) | `Match_Events::Match_Events` | agrees |
+| 0x6d78b0 | Named in 2026-10-15-commentary-speed-inventory.md | `match_events_next_event` (Haiku) | `Match_Events::get_next_event` | agrees in area |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
