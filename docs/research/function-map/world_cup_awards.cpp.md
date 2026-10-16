@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x92fc10 | 35 (+1 unwind) | `World_Cup_Awards::World_Cup_Awards` | thiscall(World_Cup_Awards* this, int load_source) ret 4 | Constructs the World Cup awards object, sets its vtable and defaults, then loads awards data or asserts on failure. | high | haiku |  |
-| 0x92fc80 | 108 (+2 unwind) | `WorldCupAwards::WorldCupAwards` | thiscall(this, int param_2 team or owner context) ret 4 | Constructs the World Cup awards object, allocating a pair of award sub-objects and reporting a version-stamped error if allocation fails. | high | haiku |  |
-| 0x92fdf0 | 52 | `world_cup_awards_on_year_handler` | thiscall(ECX this, short *event) ret 4 | Handles a yearly event, and when the year matches a leap-style cycle, builds a date and runs the award picks. | medium | haiku |  |
+| 0x92fc10 | 35 (+1 unwind) | `WorldCupAwards::WorldCupAwards` | thiscall(WorldCupAwards* this, FILE* load_source or 0) ret 4, returns this | Constructs the World Cup awards object on the NationAwards base, sets its vtable and fields, then loads saved data or creates fresh award objects. | high | opus |  |
+| 0x92fc80 | 108 (+2 unwind) | `WorldCupAwards::init_awards` | thiscall(WorldCupAwards* this, FILE* load_source or 0) ret 4 | Allocates the two-entry award table and constructs one yearly player award and one team award, reporting an assert error if the table allocation fails. | high | opus |  |
+| 0x92fdf0 | 52 | `WorldCupAwards::check_month_change` | thiscall(WorldCupAwards* this, Date* date) ret 4 | In a World Cup year, on the date built as day 13 of month index 6, picks the top three players and the team award winners. | high | opus |  |

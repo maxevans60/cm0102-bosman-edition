@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 2437 high, 4115 medium, 311 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06.
+- Confidence: 2515 high, 4050 medium, 298 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -64,10 +64,10 @@ All 11747 functions with their category, file and placement method are in `funct
 | [club_records.cpp](club_records.cpp.md) | 69 |
 | [club_screens.cpp](club_screens.cpp.md) | 138 |
 | [coach.cpp](coach.cpp.md) | 5 |
-| [comp.cpp](comp.cpp.md) | 48 |
-| [comp_screens.cpp](comp_screens.cpp.md) | 106 |
-| [comp_text.cpp](comp_text.cpp.md) | 11 |
-| [comp_util.cpp](comp_util.cpp.md) | 37 |
+| [comp.cpp](comp.cpp.md) | 46 |
+| [comp_screens.cpp](comp_screens.cpp.md) | 108 |
+| [comp_text.cpp](comp_text.cpp.md) | 8 |
+| [comp_util.cpp](comp_util.cpp.md) | 40 |
 | [con_champ.cpp](con_champ.cpp.md) | 8 |
 | [con_merc_cup.cpp](con_merc_cup.cpp.md) | 17 |
 | [conmebol_liber.cpp](conmebol_liber.cpp.md) | 16 |
@@ -83,9 +83,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [croatia_rules.cpp](croatia_rules.cpp.md) | 2 |
 | [Cup.cpp](Cup.cpp.md) | 47 |
 | [cup_stage.cpp](cup_stage.cpp.md) | 13 |
-| [Database.cpp](Database.cpp.md) | 178 |
-| [Date.cpp](Date.cpp.md) | 39 |
-| [Db_files.cpp](Db_files.cpp.md) | 38 |
+| [Database.cpp](Database.cpp.md) | 179 |
+| [Date.cpp](Date.cpp.md) | 36 |
+| [Db_files.cpp](Db_files.cpp.md) | 40 |
 | [den_cup.cpp](den_cup.cpp.md) | 7 |
 | [den_first.cpp](den_first.cpp.md) | 7 |
 | [den_prm.cpp](den_prm.cpp.md) | 8 |

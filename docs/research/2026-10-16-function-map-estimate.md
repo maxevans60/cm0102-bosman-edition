@@ -374,6 +374,38 @@ An agent showed that Cup slot 2 is `start_new_season`: League and Cup share this
 | 0x92f230 | Seeded pots of 8 (sweep-international) | `world_cup_build_squad_and_groups` (Haiku) | `WorldCup::seed_teams` | agrees |
 | 0x92f680 | Fixed sizes of the World Cup (sweep-international) | `world_cup::set_predicted_positions` (slot copy) | `WorldCup::set_predicted_positions` | agrees |
 
+#### Wave w07 (tier 3, 2026-10-16)
+
+Run `sweep-w07`: 8 Opus agents named 213 functions: the last 3 of tier 2 (`world_cup_awards.cpp`), `Date.cpp` with the Database.cpp gap helpers, `comp.cpp`, `comp_util.cpp` and `contract_manager.cpp`. Each agent took 1 to 5 minutes and 83,000 to 211,000 tokens. Confidence: 121 high, 86 medium, 6 low.
+
+The `comp.cpp` agents named the Comp base vtable 0x9689e8. League and Cup share these slots, so three Cup base names now take the League name of the same slot: 4 `check_complete`, 12 `record_season_honours` and 21 `get_match_importance`. Two cup overrides changed with them. `contract_manager.cpp` keeps one `STAFF_CONTRACT::operator=`, an inline member that the compiler put in this file.
+
+21 functions of the wave are cited. 14 agree, 1 agrees in area and 6 citations only list the address.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x48c580 | Comp base constructor (sweep-rulebooks) | `comp_record_init` (Haiku) | `Comp::Comp` | agrees |
+| 0x48ce10 | Loop over the comp table calling virtual +0x10 (crash-fixes) | `comp_chain_all_done` (Haiku) | `Comp::all_stages_complete` | agrees |
+| 0x48d500 | Listed by a constant scan only (widescreen inventory) | `comp_build_fixture_list` (Haiku) | `Comp::build_match_date_list` | no claim |
+| 0x48dd70 | Listed as a callee only (holiday inventory) | `match_day_result_code` (Haiku) | `comp_active_key_nation_of_fixture` | no claim |
+| 0x48dee0 | Listed as a callee only (holiday inventory) | `comp_find_active_team_slot` (Haiku) | `comp_active_key_nation_of_club` | no claim |
+| 0x48e1c0 | Listed by a constant scan only (widescreen inventory) | `collect_unique_team_pointers` (Haiku) | `Comp::collect_club_list` | no claim |
+| 0x48ee40 | Promotion refused for a small ground (stadium research) | `news_relegation_promotion_text` (Haiku) | `Comp::write_promotion_relegation_override_news_text` | agrees |
+| 0x48f2d0 | Writes the substitutes word (sweep-season-end) | `comp_apply_season_flags_thiscall` (Haiku) | `Comp::set_fixture_substitutes` | agrees |
+| 0x48f4a0 | Opens the competition from a clickable name (clickable-names inventory) | `comp_open_scrman_setup_window` (Haiku) | `comp_screens_open_comp_screen` | agrees |
+| 0x4b07b0 | Sort compare of two teams by +0x80 (crash-fixes) | `compare_short_field_0x80_descending` (Haiku) | `compare_clubs_by_reputation_desc` | agrees |
+| 0x4bffc0 | Text formatter, detail unknown (display inventory) | `comp_util_round_name_text` (Haiku) | `comp_util_format_stage_round_name` | agrees in area |
+| 0x4c7560 | Setup step 32, after the constructor (game-creation inventory) | `CONTRACT_MANAGER::initialise_all_staff_contracts` (Haiku) | `CONTRACT_MANAGER::initialise_all_staff_contracts` | agrees |
+| 0x4c7ac0 | Daily call with the game date (game-creation inventory) | `CONTRACT_MANAGER::update_daily_contracts` (Haiku) | `CONTRACT_MANAGER::daily_update` | agrees |
+| 0x4cc2e0 | Morale word in a column (columns inventory) | `staff_morale_comment_text_write` (Haiku) | `contract_manager_write_morale_text` | agrees |
+| 0x4cc3a0 | Morale text and byte for the comparison screen | `compare_staff_morale_comment` (Haiku) | `contract_manager_write_morale_comparison_text` | agrees |
+| 0x4d1600 | Listed as a caller only (columns inventory) | `contract_manager_calc_player_offer_value` (Haiku) | `contract_manager_calc_asking_price` | no claim |
+| 0x4d4fb0 | Listed by a constant scan only (widescreen inventory) | `contract_manager_generate_news_story` (Haiku) | `contract_manager_write_offer_response_news_text` | no claim |
+| 0x54a130 | date_set for the birth date (game-creation inventory) | `date_set_ymd` (Haiku) | `Date::set` | agrees |
+| 0x54a2d0 | Date constructor with a weekday (game-creation inventory) | `date_next_weekday_on_or_after` (Haiku) | `Date::get_nearest_weekday` | agrees |
+| 0x54cf70 | Display function that picks the month table (crash-fixes) | `date_days_into_month_offset_lookup` (Haiku) | `Date::get_day_of_month` | agrees |
+| 0x54d580 | Builds the path and fopens (database inventory) | `db_date_table_teardown_or_register` (Haiku) | `db_files_open_for_read` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
