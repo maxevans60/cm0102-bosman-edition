@@ -3,6 +3,7 @@
 #include "../host.h"
 
 #include <ctype.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -164,7 +165,15 @@ void options_load(const char *path)
     snprintf(file_path, sizeof file_path, "%s", path);
     int missing_file = 0, ends_with_newline = 1;
     FILE *f = host_fopen(path, "r");
+    int open_err = f ? 0 : errno;
+    if (!f && open_err == ENOENT) {
+        /* A write that stopped half way on Windows can leave the old file as settings.txt.bak. Use it. */
+        char bak[TEXT_MAX + 8];
+        snprintf(bak, sizeof bak, "%s.bak", path);
+        if (host_rename(bak, path) == 0) f = host_fopen(path, "r");
+    }
     if (!f) {
+        if (open_err != ENOENT) return;      /* the file exists and cannot be opened: write nothing */
         missing_file = 1;
     } else {
         char line[TEXT_MAX + 128];
@@ -236,7 +245,7 @@ static void option_key(const char *line, char *key, size_t room)
 {
     const char *p = line;
     size_t n = 0;
-    while (isspace((unsigned char)*p)) p++;
+    while (*p == ' ' || *p == '\t') p++;    /* not a line break: a blank line is not part of the next line */
     while (isalnum((unsigned char)*p) || *p == '_') {
         if (n < room - 1) key[n++] = (char)tolower((unsigned char)*p);
         p++;
@@ -245,17 +254,40 @@ static void option_key(const char *line, char *key, size_t room)
     key[*p == '=' ? n : 0] = 0;
 }
 
-int options_set_enum(OptionId id, const char *value)
+/* The value to write for option id, from the word that the caller gives: switches become on or off,
+ * enums become lower case, text loses the spaces at its ends. Returns 0 when the word does not fit. */
+static int normalise(int id, const char *value, char *out)
 {
-    if (!loaded) reset();
-    if (id >= OPT_COUNT || defs[id].kind != KIND_ENUM) return 0;
-    if (!is_custom_database((int)id, value) && parse_enum(defs[id].values, value) < 0) return 0;
-    snprintf(text_value[id], TEXT_MAX, "%s", value);
-    if (!file_path[0]) return 1;
-    /* Read the whole file, write it again with the new value on the option's lines to a temporary file
-     * next to it, then move that over the file. A failed write leaves the player's file as it was. */
-    FILE *f = host_fopen(file_path, "r");
-    if (!f) return 1;
+    const OptionDef *d = &defs[id];
+    if (!value || strlen(value) >= TEXT_MAX) return 0;
+    snprintf(out, TEXT_MAX, "%s", value);
+    /* A line break in a value would write a second line into the file. */
+    for (const char *c = out; *c; c++)
+        if ((unsigned char)*c < 0x20 && *c != '\t') return 0;
+    char *end = out + strlen(out);
+    while (end > out && isspace((unsigned char)end[-1])) *--end = 0;
+    char *start = out;
+    while (isspace((unsigned char)*start)) start++;
+    memmove(out, start, strlen(start) + 1);
+    if (d->kind == KIND_TEXT) return 1;
+    if (is_custom_database(id, out)) return 1;
+    lower(out);
+    if (d->kind == KIND_SWITCH) {
+        int on = parse_switch(out);
+        if (on < 0) return 0;
+        snprintf(out, TEXT_MAX, "%s", on ? "on" : "off");
+        return 1;
+    }
+    return parse_enum(d->values, out) >= 0;
+}
+
+/* The whole file at path in one block (NUL at the end), or NULL with *missing set to 1 when the file
+ * does not exist, or NULL with *missing 0 when it cannot be read. */
+static char *read_whole(const char *path, size_t *size, int *missing)
+{
+    *missing = 0;
+    FILE *f = host_fopen(path, "rb");
+    if (!f) { *missing = errno == ENOENT; return NULL; }
     size_t cap = 65536, n = 0;
     char *text = malloc(cap + 1);
     while (text) {
@@ -267,22 +299,72 @@ int options_set_enum(OptionId id, const char *value)
         text = bigger;
         cap *= 2;
     }
-    int read_ok = text && !ferror(f);
+    int ok = text && !ferror(f);
     fclose(f);
-    if (!read_ok) {
-        free(text);
-        fprintf(stderr, "cm0102_recomp: cannot read %s, so %s is not saved\n", file_path, defs[id].name);
-        return 1;
-    }
+    if (!ok) { free(text); return NULL; }
     text[n] = 0;
-    char tmp_path[sizeof file_path + 8];
-    snprintf(tmp_path, sizeof tmp_path, "%s.tmp", file_path);
-    f = host_fopen(tmp_path, "w");
-    if (!f) {
-        free(text);
-        fprintf(stderr, "cm0102_recomp: cannot write %s, so %s is not saved\n", tmp_path, defs[id].name);
-        return 1;
+    *size = n;
+    return text;
+}
+
+/* Puts the new file in place of the old one. The old file stays whole when this fails. */
+static int replace_file(const char *tmp_path, const char *path)
+{
+    if (host_replace(tmp_path, path) == 0) return 1;
+    /* Fallback: move the old file aside, then restore it if the second move fails. */
+    char bak_path[TEXT_MAX + 8];
+    snprintf(bak_path, sizeof bak_path, "%s.bak", path);
+    host_unlink(bak_path);
+    if (host_rename(path, bak_path) != 0) return 0;
+    if (host_rename(tmp_path, path) != 0) {
+        host_rename(bak_path, path);
+        return 0;
     }
+    host_unlink(bak_path);
+    return 1;
+}
+
+/* Writes the option to the settings file. 1 when the file is written or already has the value. */
+static int write_option(int id, const char *value)
+{
+    if (!file_path[0]) return 1;
+    size_t n = 0;
+    int missing = 0;
+    char *text = read_whole(file_path, &n, &missing);
+    if (!text) {
+        if (!missing) {
+            fprintf(stderr, "cm0102_recomp: cannot read %s, so %s is not saved\n", file_path, defs[id].name);
+            return 0;
+        }
+        text = calloc(1, 1);      /* the file is gone: write a new one with this option */
+        if (!text) return 0;
+    }
+    /* Refuse a file that is not plain text: a NUL (UTF-16) or a bare CR (old Mac line ends). */
+    int plain = strlen(text) == n;
+    for (size_t k = 0; plain && k < n; k++)
+        if (text[k] == '\r' && (k + 1 >= n || text[k + 1] != '\n')) plain = 0;
+    if (!plain) {
+        free(text);
+        fprintf(stderr, "cm0102_recomp: %s is not plain text with LF or CRLF line ends, so %s is not saved\n",
+                file_path, defs[id].name);
+        return 0;
+    }
+    /* Build the new text in memory: the old text, with the option's lines replaced. */
+    size_t matches = 0;
+    for (char *line = text; *line;) {
+        char *end = strchr(line, '\n');
+        char key[64];
+        option_key(line, key, sizeof key);
+        matches += !strcmp(key, defs[id].name);
+        line += end ? (size_t)(end - line) + 1 : strlen(line);
+    }
+    size_t room = n + matches * (strlen(defs[id].name) + strlen(value) + 8) + strlen(defs[id].comment) +
+                  strlen(defs[id].name) + strlen(value) + 64;
+    char *out = malloc(room);
+    if (!out) { free(text); return 0; }
+    const char *nl = strchr(text, '\n');
+    const char *eol = nl && nl > text && nl[-1] == '\r' ? "\r\n" : "\n";   /* the file's own line end for added lines */
+    size_t o = 0;
     int found = 0;
     for (char *line = text; *line;) {
         char *end = strchr(line, '\n');
@@ -290,26 +372,57 @@ int options_set_enum(OptionId id, const char *value)
         char key[64];
         option_key(line, key, sizeof key);
         if (!strcmp(key, defs[id].name)) {
-            fprintf(f, "%s = %s%s", defs[id].name, value, end ? (len > 1 && end[-1] == '\r' ? "\r\n" : "\n") : "");
+            const char *own = end ? (len > 1 && end[-1] == '\r' ? "\r\n" : "\n") : "";
+            o += (size_t)snprintf(out + o, room - o, "%s = %s%s", defs[id].name, value, own);
             found = 1;
         } else {
-            fwrite(line, 1, len, f);
+            memcpy(out + o, line, len);
+            o += len;
         }
         line += len;
     }
-    if (!found) fprintf(f, "%s# %s\n%s = %s\n", n && text[n - 1] != '\n' ? "\n" : "", defs[id].comment,
-                        defs[id].name, value);
+    if (!found) {
+        if (n && text[n - 1] != '\n') { memcpy(out + o, eol, strlen(eol)); o += strlen(eol); }
+        o += (size_t)snprintf(out + o, room - o, "# %s%s%s = %s%s", defs[id].comment, eol, defs[id].name, value, eol);
+    }
+    int same = o == n && !memcmp(out, text, n);
     free(text);
-    int write_ok = !ferror(f);
+    if (same) { free(out); return 1; }
+
+    char tmp_path[TEXT_MAX + 8];
+    snprintf(tmp_path, sizeof tmp_path, "%s.tmp", file_path);
+    FILE *f = host_fopen(tmp_path, "wb");
+    if (!f) {
+        free(out);
+        fprintf(stderr, "cm0102_recomp: cannot write %s, so %s is not saved\n", tmp_path, defs[id].name);
+        return 0;
+    }
+    int write_ok = fwrite(out, 1, o, f) == o && fflush(f) == 0 && host_sync(f) == 0 && !ferror(f);
     if (fclose(f) != 0) write_ok = 0;
-    /* Windows does not rename over a file: remove the old one when the first try fails. */
-    if (write_ok && host_rename(tmp_path, file_path) != 0 && (host_unlink(file_path) != 0 || host_rename(tmp_path, file_path) != 0))
-        write_ok = 0;
+    free(out);
+    if (write_ok) write_ok = replace_file(tmp_path, file_path);
     if (!write_ok) {
         host_unlink(tmp_path);
         fprintf(stderr, "cm0102_recomp: cannot write %s, so %s is not saved\n", file_path, defs[id].name);
     }
-    return 1;
+    return write_ok;
+}
+
+int options_set(OptionId id, const char *value)
+{
+    if (!loaded) reset();
+    char word[TEXT_MAX];
+    if (id >= OPT_COUNT || !normalise((int)id, value, word)) return 0;
+    snprintf(text_value[id], TEXT_MAX, "%s", word);       /* the running game has the value now */
+    int saved = write_option((int)id, word);
+    if (saved) present[id] = 1;
+    return saved ? 1 : -1;
+}
+
+int options_set_enum(OptionId id, const char *value)
+{
+    if (id >= OPT_COUNT || defs[id].kind != KIND_ENUM) return 0;
+    return options_set(id, value);
 }
 
 const char *options_name(OptionId id)

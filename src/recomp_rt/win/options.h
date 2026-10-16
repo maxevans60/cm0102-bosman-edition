@@ -1,10 +1,13 @@
 /* The options of the settings file settings.txt in the user folder.
  *
  * The file has one line "name = value" per option, and comment lines that start with "#". The runtime
- * reads every option once at start (options_load). It keeps all other lines of the file as they are:
- * it never rewrites or reorders a line of the player. It adds a line, with one comment line before it,
- * for each option that the file lacks, at the end of the file. A missing file is written with every
- * option at its default.
+ * reads every option once at start (options_load). At start it keeps every line as it is, and it adds a
+ * line, with one comment line before it, for each option that the file lacks, at the end of the file.
+ * A missing file is written with every option at its default. If the file is missing and
+ * settings.txt.bak exists (a write that stopped half way), the .bak file is used. A file that exists but
+ * cannot be opened is left alone.
+ * Later, options_set rewrites the line of one option only. It keeps every other line, comment and
+ * line end, and it refuses a file that is not plain text with LF or CRLF line ends.
  *
  * A switch accepts on/off, yes/no and true/false in any case. A value that does not fit the option
  * gets a message on stderr, and the option keeps its default. */
@@ -49,8 +52,16 @@ const char *options_string(OptionId id);
 /* The value of an enum option: the index in its list of values. */
 int options_enum(OptionId id);
 
-/* Sets an enum option to value and writes it to the settings file: the option's line gets the new
- * value, and every other line stays as it is. Returns 0 when value does not fit the option. */
+/* Sets option id to value, for a switch (on/off, yes/no, true/false), a choice (one of its values, or
+ * folder:<name> for database) or a text. The running game reads the new value at once through the getters.
+ * The settings file gets it too: the option's line is replaced, or added with its comment when it is
+ * missing. Every other line, comment, line end and unknown line stays. The file is written to
+ * settings.txt.tmp and moved over the old file, so a failed write leaves the old file whole.
+ * Returns 1 when the value is set and the file is written, 0 when the value does not fit the option (nothing
+ * changes), and -1 when the value is set in memory but the file could not be written (a message is printed). */
+int options_set(OptionId id, const char *value);
+
+/* options_set for an enum option only: returns 0 for a switch or a text. */
 int options_set_enum(OptionId id, const char *value);
 
 /* The name of an option in the file, for messages. */
