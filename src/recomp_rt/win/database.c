@@ -7,9 +7,10 @@
  * Item layout: +0x00 s16 font (-1 = default), +0x02 s16 text colour (0 = default), +0x04 text,
  * +0xcc id, +0xd0 data (docs/research/2026-10-13-screen-stack-inventory.md section 6a).
  *
- * A click on it moves the option database to the next data set and writes it to the settings file. After
- * the three data sets of the game folder come the folders of Databases in the save folder (Q143,
- * dbfolders.h), by folder name; the option then reads folder:<name>. The
+ * A click on it moves the option database to the next data set and writes it to the settings file. The
+ * three data sets of the game folder come first, the default 3.9.68 at the start (Q174). After them come
+ * the folders of Databases in the save folder (Q143, dbfolders.h), oldest season first, each shown by its
+ * season and its folder name (Q174); the option then reads folder:<name>. The
  * input function then returns -4, so the screen builds again with the new text. The next Start New Game
  * loads the database from the chosen folder (files.c).
  *
@@ -32,7 +33,7 @@ extern const uint32_t rt_site_setup_menu;
 #define ITEM_TEXT_SIZE 0xc8u
 #define DATABASE_ID 0x7d39       /* the action id of the item; the original uses no such id */
 
-/* The choices: the three data sets of the game folder, then each usable folder of Databases (dbfolders.h),
+/* The choices: the three data sets of the game folder (3.9.68, 3.9.60, 3.9.65), then each usable folder of Databases (dbfolders.h),
  * listed again each time the screen builds. */
 typedef struct { char value[DBFOLDER_NAME + 8]; char text[ITEM_TEXT_SIZE]; } Choice;
 static Choice sets[3 + DBFOLDER_MAX];
@@ -46,16 +47,16 @@ static void choice_set(Choice *c, const char *value, const char *text)
 
 static void sets_fill(void)
 {
-    choice_set(&sets[0], "3.9.60", "Database: 2001/02 (3.9.60)");
-    choice_set(&sets[1], "3.9.65", "Database: 2001/02 Dec (3.9.65)");
-    choice_set(&sets[2], "3.9.68", "Database: 2002/03 (3.9.68)");
+    choice_set(&sets[0], "3.9.68", "Database: 2002/03 (3.9.68)");
+    choice_set(&sets[1], "3.9.60", "Database: 2001/02 (3.9.60)");
+    choice_set(&sets[2], "3.9.65", "Database: 2001/02 Dec (3.9.65)");
     set_count = 3;
     char names[DBFOLDER_MAX][DBFOLDER_NAME];
     int n = dbfolders_list(win_databases_root(), names, DBFOLDER_MAX);
     for (int i = 0; i < n; i++) {
         char value[DBFOLDER_NAME + 8], label[DBFOLDER_NAME];
         snprintf(value, sizeof value, "folder:%s", names[i]);
-        dbfolders_label(names[i], label, dbfolders_label_room(rt_screen_w));
+        dbfolders_button_text(names[i], label, dbfolders_label_room(rt_screen_w));
         char text[ITEM_TEXT_SIZE];
         snprintf(text, sizeof text, "Database: %s", label);
         choice_set(&sets[set_count++], value, text);
@@ -68,7 +69,7 @@ static int current_set(void)
 {
     for (int i = 0; i < set_count; i++)
         if (!strcmp(options_string(OPT_DATABASE), sets[i].value)) return i;
-    return 2;
+    return 0;
 }
 
 void o_005ed300(void);

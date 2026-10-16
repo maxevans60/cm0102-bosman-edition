@@ -81,7 +81,7 @@ int main(void)
     CHECK(!has(names, n, "Empty"));
     CHECK(!has(names, n, "Notes"));
     CHECK(!has(names, n, "stray.dat"));
-    /* The list is sorted, ignoring case. */
+    /* The dated folder comes first, then the others by name, ignoring case. */
     CHECK(n == 3 && !strcmp(names[0], "May 2026") && !strcmp(names[1], "Upper"));
 
     CHECK(dbfolders_valid(dbs) == 0);
@@ -92,6 +92,41 @@ int main(void)
     CHECK(dbfolders_path(tmpl, "No staff", d, sizeof d) == 0);
     CHECK(dbfolders_path(tmpl, "../Databases/May 2026", d, sizeof d) == 0);   /* no path parts in a name */
     CHECK(dbfolders_path(tmpl, "gone", d, sizeof d) == 0);
+
+    /* Dated folders in the list come in date order, before the names with no date (Q174). */
+    {
+        char od[] = "/tmp/dbfolders_order_XXXXXX";
+        if (!mkdtemp(od)) return 2;
+        char odb[1100];
+        snprintf(odb, sizeof odb, "%s/Databases", od);
+        mkdir(odb, 0755);
+        char saved[1024];
+        snprintf(saved, sizeof saved, "%s", root);
+        snprintf(root, sizeof root, "%s", odb);
+        static const char *const made[] = {"May 2026", "Original 3.9.68", "October 2014", "Autumn 2013"};
+        for (int i = 0; i < 4; i++) make_set(made[i], NULL, 0);
+        static char got[DBFOLDER_MAX][DBFOLDER_NAME];
+        int c = dbfolders_list(od, got, DBFOLDER_MAX);
+        CHECK(c == 4);
+        CHECK(c == 4 && !strcmp(got[0], "Autumn 2013") && !strcmp(got[1], "October 2014") &&
+              !strcmp(got[2], "May 2026") && !strcmp(got[3], "Original 3.9.68"));
+        static char two[2][DBFOLDER_NAME];
+        CHECK(dbfolders_list(od, two, 2) == 2);
+        CHECK(!strcmp(two[0], "Autumn 2013") && !strcmp(two[1], "October 2014"));
+        for (int i = 0; i < 4; i++) {
+            char dir[1300];
+            snprintf(dir, sizeof dir, "%s/%s", odb, made[i]);
+            for (size_t f = 0; f < sizeof files / sizeof *files; f++) {
+                char fp[1500];
+                snprintf(fp, sizeof fp, "%s/%s", dir, files[f]);
+                unlink(fp);
+            }
+            rmdir(dir);
+        }
+        rmdir(odb);
+        rmdir(od);
+        snprintf(root, sizeof root, "%s", saved);
+    }
 
     /* No Databases folder: an empty list. */
     char none[] = "/tmp/dbfolders_none_XXXXXX";
@@ -157,6 +192,60 @@ int main(void)
     CHECK(dbfolders_label_room(1920) == 57);
     dbfolders_label("Update Team May 2026 Championship Edition", text, dbfolders_label_room(1920));
     CHECK(!strcmp(text, "Update Team May 2026 Championship Edition"));
+
+    /* The date in a folder name (Q174): a month (or Spring or Autumn) and a four-digit year. */
+    {
+        int y = 0, m = 0;
+        CHECK(dbfolders_date("May 2026", &y, &m) == 1 && y == 2026 && m == 5);
+        CHECK(dbfolders_date("October 2003 Sawczuk", &y, &m) == 1 && y == 2003 && m == 10);
+        CHECK(dbfolders_date("march 2012 odb", &y, &m) == 1 && y == 2012 && m == 3);
+        CHECK(dbfolders_date("Autumn 2013", &y, &m) == 1 && y == 2013 && m == 10);
+        CHECK(dbfolders_date("Sep 2008", &y, &m) == 1 && y == 2008 && m == 9);
+        CHECK(dbfolders_date("Original 3.9.68", &y, &m) == 0);
+        CHECK(dbfolders_date("EmptyDatabase", &y, &m) == 0);
+        CHECK(dbfolders_date("May", &y, &m) == 0);
+        CHECK(dbfolders_date("2026", &y, &m) == 0);
+        CHECK(dbfolders_date("Mayday 2026", &y, &m) == 0);
+        CHECK(dbfolders_date("May 20260", &y, &m) == 0);
+    }
+
+    /* The season: July to December starts it, January to June ends it. */
+    {
+        char s[16];
+        CHECK(dbfolders_season("May 2026", s, sizeof s) == 1 && !strcmp(s, "2025/26"));
+        CHECK(dbfolders_season("October 2014", s, sizeof s) == 1 && !strcmp(s, "2014/15"));
+        CHECK(dbfolders_season("Autumn 2013", s, sizeof s) == 1 && !strcmp(s, "2013/14"));
+        CHECK(dbfolders_season("June 2010", s, sizeof s) == 1 && !strcmp(s, "2009/10"));
+        CHECK(dbfolders_season("July 2010", s, sizeof s) == 1 && !strcmp(s, "2010/11"));
+        CHECK(dbfolders_season("December 1999", s, sizeof s) == 1 && !strcmp(s, "1999/00"));
+        CHECK(dbfolders_season("Original 3.9.68", s, sizeof s) == 0);
+    }
+
+    /* The order: by date, oldest first (February before April in one season), a tie by name, and names
+     * with no date last, by name. */
+    {
+        static char v[8][DBFOLDER_NAME] = {"May 2026", "Original 3.9.68", "April 2010 SIM", "December 2025",
+                                           "EmptyDatabase", "February 2010 ODB", "March 2012 SIM", "March 2012 ODB"};
+        dbfolders_sort(v, 8);
+        static const char *const want[] = {"February 2010 ODB", "April 2010 SIM", "March 2012 ODB", "March 2012 SIM",
+                                           "December 2025", "May 2026", "EmptyDatabase", "Original 3.9.68"};
+        for (int i = 0; i < 8; i++) CHECK(!strcmp(v[i], want[i]));
+    }
+
+    /* The button text: the season and the folder name, or the season alone when both do not fit. */
+    {
+        char t[DBFOLDER_NAME];
+        dbfolders_button_text("May 2026", t, dbfolders_label_room(800));
+        CHECK(!strcmp(t, "2025/26 (May 2026)"));
+        dbfolders_button_text("February 2010 ODB", t, dbfolders_label_room(800));
+        CHECK(!strcmp(t, "2009/10"));
+        dbfolders_button_text("February 2010 ODB", t, dbfolders_label_room(1280));
+        CHECK(!strcmp(t, "2009/10 (February 2010 ODB)"));
+        dbfolders_button_text("Original 3.9.68", t, dbfolders_label_room(800));
+        CHECK(!strcmp(t, "Original 3.9.68"));
+        dbfolders_button_text("Original 3.9.60 Swedish_fixed", t, dbfolders_label_room(800));
+        CHECK(strlen(t) == 23);
+    }
 
     /* Remove the test folders: only the names made above. */
     static const char *const sets[] = {"May 2026", "Zo\xc3\xab Update", "Upper", "No staff"};
