@@ -14,7 +14,8 @@ cmake -S /src -B /build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCM0102_EXE=/game/c
     -DRECOMP_PYTHON=/venv/bin/python >/dev/null
 cmake --build /build --target cm0102_recomp
 
-# 2. The AppDir: program, SDL2, clean files, launcher, desktop file, icon.
+# 2. The AppDir: program, SDL2, clean files, launcher, desktop file, icon and .DirIcon (the AppImage
+# catalogue requires it: https://docs.appimage.org/reference/appdir.html).
 A=/work/CM-01-02.AppDir
 mkdir -p "$A/usr/bin" "$A/usr/lib" "$A/usr/share/game"
 cp /build/cm0102_recomp "$A/usr/bin/"
@@ -45,20 +46,26 @@ def ch(t, d): return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.
 open(sys.argv[1], "wb").write(b"\x89PNG\r\n\x1a\n" + ch(b"IHDR", struct.pack(">IIBBBBB", w, w, 8, 2, 0, 0, 0))
                               + ch(b"IDAT", zlib.compress(raw)) + ch(b"IEND", b""))
 PY
+ln -s cm0102.png "$A/.DirIcon"
 
 # 3. The AppImage: the type 2 runtime (pinned by hash), then the squashfs of the AppDir. appimagetool is
 # not used, because it does not run under the Rosetta of the container.
 cd /work
 wget -q -O runtime https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-x86_64
 echo "2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d  runtime" | sha256sum -c -
-NAME="CM-01-02-Bosman-Edition-$VERSION-linux-x86_64.AppImage"
+# The AppImage catalogue reads the name of the program up to "-<version>" and wants no "linux" in it (every
+# AppImage is for Linux). So the name has no dash between CM and 0102, as the Windows installer.
+NAME="CM0102-Bosman-Edition-$VERSION-x86_64.AppImage"
 mksquashfs "$A" /work/app.sqfs -root-owned -noappend -comp zstd -quiet
 cat runtime app.sqfs > "/out/$NAME"
 chmod +x "/out/$NAME"
 
-# 4. Check: x86-64 ELF, and every game file matches the manifest, none missing or extra.
+# 4. Check: x86-64 ELF, the files the catalogue needs at the top, and every game file matches the manifest, none missing or extra.
 file "/out/$NAME" | grep -q "x86-64" || { echo "check: not an x86-64 AppImage" >&2; exit 1; }
 rm -rf /work/x && mkdir -p /work/x && unsquashfs -q -d /work/x/squashfs-root -o "$(stat -c %s /work/runtime)" "/out/$NAME" >/dev/null
+for f in AppRun cm0102.desktop cm0102.png .DirIcon; do
+    [ -e "/work/x/squashfs-root/$f" ] || { echo "check: the AppImage has no $f" >&2; exit 1; }
+done
 python3 -I - /manifest.tsv /work/x/squashfs-root/usr/share/game <<'PY'
 import hashlib, os, sys
 want = {}
