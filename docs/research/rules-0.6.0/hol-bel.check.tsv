@@ -1,0 +1,1947 @@
+id	field	verdict	second_url	note
+hol-bel-1	name	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-1	foreign	no second source		still unknown
+hol-bel-1	work_permit	no second source		still unknown
+hol-bel-1	registration	no second source		still unknown
+hol-bel-1	windows	no second source		still unknown
+hol-bel-2	name	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-2	clubs	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-2	down	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-2	playoffs	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-2	subs_used	no second source		
+hol-bel-2	bench	no second source		still unknown
+hol-bel-3	name	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-3	clubs	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-3	up	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-3	down	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-3	playoffs	agree	https://www.rsssf.org/tablesn/ned02.html	
+hol-bel-3	subs_used	no second source		
+hol-bel-3	bench	no second source		still unknown
+hol-bel-4	name	agree	https://www.rsssf.org/tablesn/ned-amat02.html	
+hol-bel-4	clubs	found	https://www.rsssf.org/tablesn/ned-amat02.html	84: six groups (Saturday A to C, Sunday A to C) of 14 clubs, 26 matches each
+hol-bel-4	up	agree	https://www.rsssf.org/tablesn/ned-amat02.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-4	format	no second source		
+hol-bel-5	name	agree	https://www.rsssf.org/tablesn/nedcuphist.html	
+hol-bel-5	format	no second source		RSSSF season pages for these seasons hold no cup rounds; the RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesn/nedcuphist.html)
+hol-bel-5	subs_used	no second source		
+hol-bel-5	bench	no second source		still unknown
+hol-bel-6	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-6	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-6	subs_used	no second source		still unknown
+hol-bel-6	bench	no second source		still unknown
+hol-bel-7	name	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-7	foreign	no second source		
+hol-bel-7	work_permit	no second source		still unknown
+hol-bel-7	registration	no second source		still unknown
+hol-bel-7	windows	no second source		still unknown
+hol-bel-8	name	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-8	clubs	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-8	down	agree	https://www.rsssf.org/tablesb/belg02.html	RSSSF: RWD Molenbeek (10th) and Aalst (17th) relegated by licence decisions
+hol-bel-8	split	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-8	subs_used	no second source		
+hol-bel-8	bench	no second source		still unknown
+hol-bel-9	name	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-9	clubs	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-9	up	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-9	down	agree	https://www.rsssf.org/tablesb/belg02.html	RSSSF marks licence relegations only; 18th Patro to a relegation play-off
+hol-bel-9	playoffs	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-9	format	no second source		
+hol-bel-9	subs_used	no second source		
+hol-bel-9	bench	no second source		still unknown
+hol-bel-10	name	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-10	clubs	agree	https://www.rsssf.org/tablesb/belg02.html	RSSSF: two groups
+hol-bel-10	up	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-10	down	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-10	playoffs	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-10	subs_used	no second source		
+hol-bel-10	bench	no second source		still unknown
+hol-bel-11	name	agree	https://www.rsssf.org/tablesb/belg02.html	
+hol-bel-11	clubs	agree	https://www.rsssf.org/tablesb/belg02.html	RSSSF: four groups of 16
+hol-bel-11	up	no second source		
+hol-bel-11	down	no second source		
+hol-bel-11	playoffs	no second source		
+hol-bel-11	subs_used	no second source		still unknown
+hol-bel-11	bench	no second source		still unknown
+hol-bel-12	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-12	format	no second source		RSSSF season pages hold no cup rounds for this season; RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesb/belgcuphist.html)
+hol-bel-12	subs_used	no second source		
+hol-bel-12	bench	no second source		still unknown
+hol-bel-13	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-13	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-13	subs_used	no second source		still unknown
+hol-bel-13	bench	no second source		still unknown
+hol-bel-14	name	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-14	foreign	no second source		still unknown
+hol-bel-14	work_permit	no second source		still unknown
+hol-bel-14	registration	no second source		still unknown
+hol-bel-14	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-15	name	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-15	clubs	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-15	down	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-15	playoffs	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-15	subs_used	no second source		
+hol-bel-15	bench	no second source		still unknown
+hol-bel-16	name	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-16	clubs	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-16	up	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-16	down	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-16	playoffs	agree	https://www.rsssf.org/tablesn/ned03.html	
+hol-bel-16	subs_used	no second source		
+hol-bel-16	bench	no second source		still unknown
+hol-bel-17	name	agree	https://www.rsssf.org/tablesn/ned-amat03.html	
+hol-bel-17	clubs	found	https://www.rsssf.org/tablesn/ned-amat03.html	84: six groups (Saturday A to C, Sunday A to C) of 14 clubs, 26 matches each
+hol-bel-17	up	agree	https://www.rsssf.org/tablesn/ned-amat03.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-17	format	no second source		
+hol-bel-18	name	agree	https://www.rsssf.org/tablesn/nedcuphist.html	
+hol-bel-18	format	no second source		RSSSF season pages for these seasons hold no cup rounds; the RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesn/nedcuphist.html)
+hol-bel-18	subs_used	no second source		
+hol-bel-18	bench	no second source		still unknown
+hol-bel-19	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-19	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-19	subs_used	no second source		still unknown
+hol-bel-19	bench	no second source		still unknown
+hol-bel-20	name	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-20	foreign	no second source		
+hol-bel-20	work_permit	no second source		still unknown
+hol-bel-20	registration	no second source		still unknown
+hol-bel-20	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-21	name	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-21	clubs	agree	https://www.rsssf.org/tablesb/belg03.html	RSSSF: Lommel withdrew with 8 matches left, results annulled; 18 at the start
+hol-bel-21	down	agree	https://www.rsssf.org/tablesb/belg03.html	RSSSF: Lommel (withdrew) and 17th Mechelen out
+hol-bel-21	split	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-21	subs_used	no second source		
+hol-bel-21	bench	no second source		still unknown
+hol-bel-22	name	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-22	clubs	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-22	up	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-22	down	agree	https://www.rsssf.org/tablesb/belg03.html	RSSSF marks no sporting relegation
+hol-bel-22	playoffs	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-22	format	no second source		
+hol-bel-22	subs_used	no second source		
+hol-bel-22	bench	no second source		still unknown
+hol-bel-23	name	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-23	clubs	agree	https://www.rsssf.org/tablesb/belg03.html	RSSSF: A and B with one withdrawal each
+hol-bel-23	up	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-23	down	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-23	playoffs	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-23	subs_used	no second source		
+hol-bel-23	bench	no second source		still unknown
+hol-bel-24	name	agree	https://www.rsssf.org/tablesb/belg03.html	
+hol-bel-24	clubs	agree	https://www.rsssf.org/tablesb/belg03.html	RSSSF: four groups of 16
+hol-bel-24	up	no second source		
+hol-bel-24	down	no second source		
+hol-bel-24	playoffs	no second source		
+hol-bel-24	subs_used	no second source		still unknown
+hol-bel-24	bench	no second source		still unknown
+hol-bel-25	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-25	format	no second source		RSSSF season pages hold no cup rounds for this season; RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesb/belgcuphist.html)
+hol-bel-25	subs_used	no second source		
+hol-bel-25	bench	no second source		still unknown
+hol-bel-26	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-26	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-26	subs_used	no second source		still unknown
+hol-bel-26	bench	no second source		still unknown
+hol-bel-27	name	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-27	foreign	no second source		still unknown
+hol-bel-27	work_permit	no second source		still unknown
+hol-bel-27	registration	no second source		still unknown
+hol-bel-27	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-28	name	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-28	clubs	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-28	down	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-28	playoffs	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-28	subs_used	no second source		
+hol-bel-28	bench	no second source		still unknown
+hol-bel-29	name	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-29	clubs	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-29	up	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-29	down	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-29	playoffs	agree	https://www.rsssf.org/tablesn/ned04.html	
+hol-bel-29	subs_used	no second source		
+hol-bel-29	bench	no second source		still unknown
+hol-bel-30	name	agree	https://www.rsssf.org/tablesn/ned-amat04.html	
+hol-bel-30	clubs	found	https://www.rsssf.org/tablesn/ned-amat04.html	84: six groups (Saturday A to C, Sunday A to C) of 14 clubs, 26 matches each
+hol-bel-30	up	agree	https://www.rsssf.org/tablesn/ned-amat04.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-30	format	no second source		
+hol-bel-31	name	agree	https://www.rsssf.org/tablesn/nedcuphist.html	
+hol-bel-31	format	no second source		RSSSF season pages for these seasons hold no cup rounds; the RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesn/nedcuphist.html)
+hol-bel-31	subs_used	no second source		
+hol-bel-31	bench	no second source		still unknown
+hol-bel-32	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-32	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-32	subs_used	no second source		still unknown
+hol-bel-32	bench	no second source		still unknown
+hol-bel-33	name	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-33	foreign	no second source		
+hol-bel-33	work_permit	no second source		still unknown
+hol-bel-33	registration	no second source		still unknown
+hol-bel-33	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-34	name	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-34	clubs	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-34	down	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-34	split	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-34	subs_used	no second source		
+hol-bel-34	bench	no second source		still unknown
+hol-bel-35	name	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-35	clubs	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-35	up	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-35	down	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-35	playoffs	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-35	format	no second source		
+hol-bel-35	subs_used	no second source		
+hol-bel-35	bench	no second source		still unknown
+hol-bel-36	name	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-36	clubs	agree	https://www.rsssf.org/tablesb/belg04.html	RSSSF: two groups
+hol-bel-36	up	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-36	down	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-36	playoffs	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-36	subs_used	no second source		
+hol-bel-36	bench	no second source		still unknown
+hol-bel-37	name	agree	https://www.rsssf.org/tablesb/belg04.html	
+hol-bel-37	clubs	agree	https://www.rsssf.org/tablesb/belg04.html	RSSSF: four groups of 16
+hol-bel-37	up	no second source		
+hol-bel-37	down	no second source		
+hol-bel-37	playoffs	no second source		
+hol-bel-37	subs_used	no second source		still unknown
+hol-bel-37	bench	no second source		still unknown
+hol-bel-38	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-38	format	no second source		RSSSF season pages hold no cup rounds for this season; RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesb/belgcuphist.html)
+hol-bel-38	subs_used	no second source		
+hol-bel-38	bench	no second source		still unknown
+hol-bel-39	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-39	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-39	subs_used	no second source		still unknown
+hol-bel-39	bench	no second source		still unknown
+hol-bel-40	name	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-40	foreign	no second source		still unknown
+hol-bel-40	work_permit	no second source		still unknown
+hol-bel-40	registration	no second source		still unknown
+hol-bel-40	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-41	name	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-41	clubs	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-41	down	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-41	playoffs	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-41	subs_used	no second source		
+hol-bel-41	bench	no second source		still unknown
+hol-bel-42	name	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-42	clubs	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-42	up	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-42	down	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-42	playoffs	agree	https://www.rsssf.org/tablesn/ned05.html	
+hol-bel-42	subs_used	no second source		
+hol-bel-42	bench	no second source		still unknown
+hol-bel-43	name	agree	https://www.rsssf.org/tablesn/ned-amat05.html	
+hol-bel-43	clubs	found	https://www.rsssf.org/tablesn/ned-amat05.html	84: six groups (Saturday A to C, Sunday A to C) of 14 clubs, 26 matches each
+hol-bel-43	up	agree	https://www.rsssf.org/tablesn/ned-amat05.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-43	format	no second source		
+hol-bel-44	name	agree	https://www.rsssf.org/tablesn/nedcuphist.html	
+hol-bel-44	format	no second source		RSSSF season pages for these seasons hold no cup rounds; the RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesn/nedcuphist.html)
+hol-bel-44	subs_used	no second source		
+hol-bel-44	bench	no second source		still unknown
+hol-bel-45	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-45	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-45	subs_used	no second source		still unknown
+hol-bel-45	bench	no second source		still unknown
+hol-bel-46	name	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-46	foreign	no second source		
+hol-bel-46	work_permit	no second source		still unknown
+hol-bel-46	registration	no second source		still unknown
+hol-bel-46	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-47	name	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-47	clubs	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-47	down	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-47	split	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-47	subs_used	no second source		
+hol-bel-47	bench	no second source		still unknown
+hol-bel-48	name	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-48	clubs	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-48	up	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-48	down	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-48	playoffs	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-48	format	no second source		
+hol-bel-48	subs_used	no second source		
+hol-bel-48	bench	no second source		still unknown
+hol-bel-49	name	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-49	clubs	agree	https://www.rsssf.org/tablesb/belg05.html	RSSSF: two groups
+hol-bel-49	up	agree	https://www.rsssf.org/tablesb/belg05.html	RSSSF: KV Mechelen and KVSK United promoted
+hol-bel-49	down	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-49	playoffs	agree	https://www.rsssf.org/tablesb/belg05.html	
+hol-bel-49	subs_used	no second source		
+hol-bel-49	bench	no second source		still unknown
+hol-bel-50	name	no second source		
+hol-bel-50	clubs	no second source		
+hol-bel-50	up	no second source		
+hol-bel-50	down	no second source		
+hol-bel-50	playoffs	no second source		
+hol-bel-50	subs_used	no second source		still unknown
+hol-bel-50	bench	no second source		still unknown
+hol-bel-51	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-51	format	no second source		RSSSF season pages hold no cup rounds for this season; RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesb/belgcuphist.html)
+hol-bel-51	subs_used	no second source		
+hol-bel-51	bench	no second source		still unknown
+hol-bel-52	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-52	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-52	subs_used	no second source		still unknown
+hol-bel-52	bench	no second source		still unknown
+hol-bel-53	name	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-53	foreign	no second source		still unknown
+hol-bel-53	work_permit	no second source		still unknown
+hol-bel-53	registration	no second source		still unknown
+hol-bel-53	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-54	name	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-54	clubs	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-54	down	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-54	playoffs	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-54	subs_used	no second source		
+hol-bel-54	bench	no second source		still unknown
+hol-bel-55	name	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-55	clubs	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-55	up	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-55	down	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-55	playoffs	agree	https://www.rsssf.org/tablesn/ned06.html	
+hol-bel-55	subs_used	no second source		
+hol-bel-55	bench	no second source		still unknown
+hol-bel-56	name	agree	https://www.rsssf.org/tablesn/ned-amat06.html	
+hol-bel-56	clubs	found	https://www.rsssf.org/tablesn/ned-amat06.html	84: six groups (Saturday A to C, Sunday A to C) of 14 clubs, 26 matches each
+hol-bel-56	up	agree	https://www.rsssf.org/tablesn/ned-amat06.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-56	format	no second source		
+hol-bel-57	name	agree	https://www.rsssf.org/tablesn/nedcuphist.html	
+hol-bel-57	format	no second source		RSSSF season pages for these seasons hold no cup rounds; the RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesn/nedcuphist.html)
+hol-bel-57	subs_used	no second source		
+hol-bel-57	bench	no second source		still unknown
+hol-bel-58	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-58	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-58	subs_used	no second source		still unknown
+hol-bel-58	bench	no second source		still unknown
+hol-bel-59	name	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-59	foreign	no second source		
+hol-bel-59	work_permit	no second source		still unknown
+hol-bel-59	registration	no second source		still unknown
+hol-bel-59	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-60	name	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-60	clubs	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-60	down	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-60	playoffs	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-60	split	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-60	subs_used	no second source		
+hol-bel-60	bench	no second source		still unknown
+hol-bel-61	name	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-61	clubs	agree	https://www.rsssf.org/tablesb/belg06.html	RSSSF: 17 in the final table; Beringen-Heusden-Zolder withdrew, results annulled
+hol-bel-61	up	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-61	down	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-61	playoffs	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-61	format	no second source		
+hol-bel-61	subs_used	no second source		
+hol-bel-61	bench	no second source		still unknown
+hol-bel-62	name	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-62	clubs	agree	https://www.rsssf.org/tablesb/belg06.html	RSSSF: two groups
+hol-bel-62	up	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-62	down	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-62	playoffs	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-62	subs_used	no second source		
+hol-bel-62	bench	no second source		still unknown
+hol-bel-63	name	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-63	clubs	agree	https://www.rsssf.org/tablesb/belg06.html	RSSSF: A 17, B to D 16
+hol-bel-63	up	agree	https://www.rsssf.org/tablesb/belg06.html	
+hol-bel-63	down	agree	https://www.rsssf.org/tablesb/belg06.html	RSSSF: 14th to 16th relegated, 13th (or 12th and 13th) to the relegation play-off
+hol-bel-63	playoffs	agree	https://www.rsssf.org/tablesb/belg06.html	RSSSF marks promotion play-off places from period results
+hol-bel-63	subs_used	no second source		still unknown
+hol-bel-63	bench	no second source		still unknown
+hol-bel-64	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-64	format	agree	https://www.rsssf.org/tablesb/belg06.html	RSSSF: two-legged quarter-finals and semi-finals; five rounds before the last 32, top flight enters in the last 32; penalty and extra-time rules of the early rounds not shown
+hol-bel-64	subs_used	no second source		
+hol-bel-64	bench	no second source		still unknown
+hol-bel-65	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-65	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-65	subs_used	no second source		still unknown
+hol-bel-65	bench	no second source		still unknown
+hol-bel-66	name	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-66	foreign	no second source		still unknown
+hol-bel-66	work_permit	no second source		still unknown
+hol-bel-66	registration	no second source		still unknown
+hol-bel-66	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-67	name	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-67	clubs	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-67	down	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-67	playoffs	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-67	subs_used	no second source		
+hol-bel-67	bench	no second source		still unknown
+hol-bel-68	name	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-68	clubs	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-68	up	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-68	down	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-68	playoffs	agree	https://www.rsssf.org/tablesn/ned07.html	
+hol-bel-68	subs_used	no second source		
+hol-bel-68	bench	no second source		still unknown
+hol-bel-69	name	agree	https://www.rsssf.org/tablesn/ned-amat07.html	
+hol-bel-69	clubs	agree	https://www.rsssf.org/tablesn/ned-amat07.html	six groups of 14 (26 matches)
+hol-bel-69	up	agree	https://www.rsssf.org/tablesn/ned-amat07.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-69	format	no second source		
+hol-bel-70	name	agree	https://www.rsssf.org/tablesn/nedcuphist.html	
+hol-bel-70	format	no second source		RSSSF season pages for these seasons hold no cup rounds; the RSSSF list of finals confirms only a single-match final (https://www.rsssf.org/tablesn/nedcuphist.html)
+hol-bel-70	subs_used	no second source		
+hol-bel-70	bench	no second source		still unknown
+hol-bel-71	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-71	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-71	subs_used	no second source		still unknown
+hol-bel-71	bench	no second source		still unknown
+hol-bel-72	name	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-72	foreign	no second source		
+hol-bel-72	work_permit	no second source		still unknown
+hol-bel-72	registration	no second source		still unknown
+hol-bel-72	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-73	name	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-73	clubs	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-73	down	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-73	playoffs	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-73	split	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-73	subs_used	no second source		
+hol-bel-73	bench	no second source		still unknown
+hol-bel-74	name	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-74	clubs	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-74	up	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-74	down	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-74	playoffs	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-74	format	no second source		
+hol-bel-74	subs_used	no second source		
+hol-bel-74	bench	no second source		still unknown
+hol-bel-75	name	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-75	clubs	agree	https://www.rsssf.org/tablesb/belg07.html	RSSSF: two groups
+hol-bel-75	up	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-75	down	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-75	playoffs	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-75	subs_used	no second source		
+hol-bel-75	bench	no second source		still unknown
+hol-bel-76	name	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-76	clubs	agree	https://www.rsssf.org/tablesb/belg07.html	RSSSF: four groups of 16
+hol-bel-76	up	agree	https://www.rsssf.org/tablesb/belg07.html	
+hol-bel-76	down	agree	https://www.rsssf.org/tablesb/belg07.html	RSSSF: 14th to 16th relegated, 13th (or 12th and 13th) to the relegation play-off
+hol-bel-76	playoffs	agree	https://www.rsssf.org/tablesb/belg07.html	RSSSF marks promotion play-off places from period results
+hol-bel-76	subs_used	no second source		still unknown
+hol-bel-76	bench	no second source		still unknown
+hol-bel-77	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-77	format	agree	https://www.rsssf.org/tablesb/belg07.html	RSSSF: two-legged quarter-finals and semi-finals; five rounds before the last 32, top flight enters in the last 32; penalty and extra-time rules of the early rounds not shown
+hol-bel-77	subs_used	no second source		
+hol-bel-77	bench	no second source		still unknown
+hol-bel-78	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-78	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown; 2006 first match abandoned and replayed
+hol-bel-78	subs_used	no second source		still unknown
+hol-bel-78	bench	no second source		still unknown
+hol-bel-79	name	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-79	foreign	found	https://bleacherreport.com/articles/68191-foreigners-in-football	Bleacher Report (13 Oct 2008): the Netherlands had no limitations on foreign players as of 2008
+hol-bel-79	work_permit	no second source		still unknown
+hol-bel-79	registration	no second source		still unknown
+hol-bel-79	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-80	name	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-80	clubs	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-80	down	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-80	playoffs	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-80	subs_used	no second source		
+hol-bel-80	bench	no second source		still unknown
+hol-bel-81	name	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-81	clubs	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-81	up	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-81	down	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-81	playoffs	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-81	subs_used	no second source		
+hol-bel-81	bench	no second source		still unknown
+hol-bel-82	name	agree	https://www.rsssf.org/tablesn/ned-amat08.html	
+hol-bel-82	clubs	agree	https://www.rsssf.org/tablesn/ned-amat08.html	six groups of 14 (26 matches)
+hol-bel-82	up	agree	https://www.rsssf.org/tablesn/ned-amat08.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-82	format	no second source		
+hol-bel-83	name	agree	https://www.rsssf.org/tablesn/ned08.html	
+hol-bel-83	format	agree	https://www.rsssf.org/tablesn/ned08.html	RSSSF names about 85 to 89 clubs (several spelt twice); close to 87; single-match knockout with extra time and penalties confirmed
+hol-bel-83	subs_used	no second source		
+hol-bel-83	bench	no second source		still unknown
+hol-bel-84	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-84	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-84	subs_used	no second source		still unknown
+hol-bel-84	bench	no second source		still unknown
+hol-bel-85	name	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-85	foreign	no second source		
+hol-bel-85	work_permit	no second source		still unknown
+hol-bel-85	registration	no second source		still unknown
+hol-bel-85	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-86	name	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-86	clubs	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-86	down	disagree	https://www.rsssf.org/tablesb/belg08.html	RSSSF: 17th Sint-Truiden and 18th FC Brussels both relegated directly; first value 1 plus 17th to final round
+hol-bel-86	playoffs	disagree	https://www.rsssf.org/tablesb/belg08.html	RSSSF: the 2008 final round was the second-tier runner-up and three period winners; the top-flight 17th played only in 2005/06 and 2006/07 (RSSSF note on the 2004/05 page)
+hol-bel-86	split	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-86	subs_used	no second source		
+hol-bel-86	bench	no second source		still unknown
+hol-bel-87	name	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-87	clubs	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-87	up	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-87	down	disagree	https://www.rsssf.org/tablesb/belg08.html	RSSSF (19 clubs): 18th and 19th relegated, 17th to the relegation play-off; first says 16th to the play-off
+hol-bel-87	playoffs	disagree	https://www.rsssf.org/tablesb/belg08.html	RSSSF: final round of the runner-up and three period winners, no top-flight club
+hol-bel-87	format	no second source		
+hol-bel-87	subs_used	no second source		
+hol-bel-87	bench	no second source		still unknown
+hol-bel-88	name	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-88	clubs	agree	https://www.rsssf.org/tablesb/belg08.html	RSSSF: A and B with B has 15
+hol-bel-88	up	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-88	down	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-88	playoffs	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-88	subs_used	no second source		
+hol-bel-88	bench	no second source		still unknown
+hol-bel-89	name	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-89	clubs	agree	https://www.rsssf.org/tablesb/belg08.html	RSSSF: four groups of 16
+hol-bel-89	up	agree	https://www.rsssf.org/tablesb/belg08.html	
+hol-bel-89	down	agree	https://www.rsssf.org/tablesb/belg08.html	RSSSF: 14th to 16th relegated, 13th (or 12th and 13th) to the relegation play-off
+hol-bel-89	playoffs	agree	https://www.rsssf.org/tablesb/belg08.html	RSSSF marks promotion play-off places from period results
+hol-bel-89	subs_used	no second source		still unknown
+hol-bel-89	bench	no second source		still unknown
+hol-bel-90	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-90	format	agree	https://www.rsssf.org/tablesb/belg08.html	RSSSF: two-legged quarter-finals and semi-finals; five rounds before the last 32, top flight enters in the last 32; penalty and extra-time rules of the early rounds not shown
+hol-bel-90	subs_used	no second source		
+hol-bel-90	bench	no second source		still unknown
+hol-bel-91	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-91	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-91	subs_used	no second source		still unknown
+hol-bel-91	bench	no second source		still unknown
+hol-bel-92	name	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-92	foreign	found	https://bleacherreport.com/articles/68191-foreigners-in-football	Bleacher Report (13 Oct 2008): the Netherlands had no limitations on foreign players as of 2008
+hol-bel-92	work_permit	no second source		still unknown
+hol-bel-92	registration	no second source		still unknown
+hol-bel-92	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-93	name	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-93	clubs	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-93	down	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-93	playoffs	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-93	subs_used	no second source		
+hol-bel-93	bench	no second source		still unknown
+hol-bel-94	name	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-94	clubs	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-94	up	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-94	down	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-94	playoffs	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-94	subs_used	no second source		
+hol-bel-94	bench	no second source		still unknown
+hol-bel-95	name	agree	https://www.rsssf.org/tablesn/ned-amat09.html	
+hol-bel-95	clubs	agree	https://www.rsssf.org/tablesn/ned-amat09.html	six groups of 14 (26 matches)
+hol-bel-95	up	agree	https://www.rsssf.org/tablesn/ned-amat09.html	RSSSF amateur pages show no promotion from the Hoofdklasse to the Eerste Divisie
+hol-bel-95	format	no second source		
+hol-bel-96	name	agree	https://www.rsssf.org/tablesn/ned09.html	
+hol-bel-96	format	agree	https://www.rsssf.org/tablesn/ned09.html	RSSSF names 90 clubs, 88 after two duplicate spellings; single-match knockout with extra time and penalties confirmed
+hol-bel-96	subs_used	no second source		
+hol-bel-96	bench	no second source		still unknown
+hol-bel-97	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-97	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-97	subs_used	no second source		still unknown
+hol-bel-97	bench	no second source		still unknown
+hol-bel-98	name	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-98	foreign	no second source		
+hol-bel-98	work_permit	no second source		still unknown
+hol-bel-98	registration	no second source		still unknown
+hol-bel-98	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-99	name	agree	https://www.rsssf.org/tablesb/belg09.html	RSSSF heads the table Jupiler Pro League (sponsor name)
+hol-bel-99	clubs	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-99	down	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-99	playoffs	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-99	split	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-99	subs_used	no second source		
+hol-bel-99	bench	no second source		still unknown
+hol-bel-100	name	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-100	clubs	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-100	up	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-100	down	disagree	https://www.rsssf.org/tablesb/belg09.html	RSSSF (19 clubs): 18th and 19th relegated, 15th to 17th to the relegation play-off; first says 16th
+hol-bel-100	playoffs	disagree	https://www.rsssf.org/tablesb/belg09.html	RSSSF: top-flight 15th and 16th plus two second-tier qualifiers in a group of four; first names the top-flight 17th
+hol-bel-100	format	no second source		
+hol-bel-100	subs_used	no second source		
+hol-bel-100	bench	no second source		still unknown
+hol-bel-101	name	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-101	clubs	agree	https://www.rsssf.org/tablesb/belg09.html	RSSSF: two groups
+hol-bel-101	up	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-101	down	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-101	playoffs	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-101	subs_used	no second source		
+hol-bel-101	bench	no second source		still unknown
+hol-bel-102	name	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-102	clubs	agree	https://www.rsssf.org/tablesb/belg09.html	RSSSF: four groups of 16
+hol-bel-102	up	agree	https://www.rsssf.org/tablesb/belg09.html	
+hol-bel-102	down	agree	https://www.rsssf.org/tablesb/belg09.html	RSSSF: 14th to 16th relegated, 13th (or 12th and 13th) to the relegation play-off
+hol-bel-102	playoffs	agree	https://www.rsssf.org/tablesb/belg09.html	RSSSF marks promotion play-off places from period results
+hol-bel-102	subs_used	no second source		still unknown
+hol-bel-102	bench	no second source		still unknown
+hol-bel-103	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-103	format	agree	https://www.rsssf.org/tablesb/belg09.html	RSSSF: two-legged quarter-finals and semi-finals; five rounds before the last 32, top flight enters in the last 32; penalty and extra-time rules of the early rounds not shown
+hol-bel-103	subs_used	no second source		
+hol-bel-103	bench	no second source		still unknown
+hol-bel-104	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-104	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-104	subs_used	no second source		still unknown
+hol-bel-104	bench	no second source		still unknown
+hol-bel-105	name	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-105	foreign	no second source		still unknown
+hol-bel-105	work_permit	no second source		still unknown
+hol-bel-105	registration	no second source		still unknown
+hol-bel-105	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-106	name	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-106	clubs	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-106	down	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-106	playoffs	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-106	subs_used	no second source		
+hol-bel-106	bench	no second source		still unknown
+hol-bel-107	name	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-107	clubs	agree	https://www.rsssf.org/tablesn/ned2010.html	RSSSF final table has 19: Haarlem withdrew in January 2010 and its results were annulled; 20 at the start
+hol-bel-107	up	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-107	down	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-107	playoffs	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-107	subs_used	no second source		
+hol-bel-107	bench	no second source		still unknown
+hol-bel-108	name	agree	https://www.rsssf.org/tablesn/ned-amat2010.html	
+hol-bel-108	clubs	agree	https://www.rsssf.org/tablesn/ned-amat2010.html	six groups of 14 (26 matches)
+hol-bel-108	up	disagree	https://www.rsssf.org/tablesn/ned-amat2010.html	RSSSF marks 31 Hoofdklasse clubs promoted to the new Topklasse (24 top-four places plus 7 via play-offs: DTS 35 and Excelsior Maassluis both went up after the final because ARC was promoted); first value 30 (24 plus six)
+hol-bel-108	format	no second source		
+hol-bel-109	name	agree	https://www.rsssf.org/tablesn/ned2010.html	
+hol-bel-109	format	agree	https://www.rsssf.org/tablesn/ned2010.html	RSSSF names 88 clubs; final over two legs (RSSSF list of finals: Ajax won 2-0 and 4-1); single-match knockout with extra time and penalties confirmed
+hol-bel-109	subs_used	no second source		
+hol-bel-109	bench	no second source		still unknown
+hol-bel-110	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-110	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-110	subs_used	no second source		still unknown
+hol-bel-110	bench	no second source		still unknown
+hol-bel-111	name	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-111	foreign	no second source		
+hol-bel-111	work_permit	no second source		still unknown
+hol-bel-111	registration	no second source		still unknown
+hol-bel-111	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-112	name	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-112	clubs	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF regular stage has 15: Mouscron excluded in the season; 16 at the start
+hol-bel-112	down	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF: 15th Roeselare lost the final round; no 16th after the exclusion
+hol-bel-112	playoffs	agree	https://www.rsssf.org/tablesb/belg2010.html	see split
+hol-bel-112	split	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-112	subs_used	no second source		
+hol-bel-112	bench	no second source		still unknown
+hol-bel-113	name	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-113	clubs	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-113	up	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-113	down	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-113	playoffs	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-113	format	no second source		
+hol-bel-113	subs_used	no second source		
+hol-bel-113	bench	no second source		still unknown
+hol-bel-114	name	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-114	clubs	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF: A and B with A 19, B 18
+hol-bel-114	up	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-114	down	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF 2009/10: A 17th to 19th relegated, B 17th and 18th, 16th of each to play-off
+hol-bel-114	playoffs	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-114	subs_used	no second source		
+hol-bel-114	bench	no second source		still unknown
+hol-bel-115	name	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-115	clubs	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF: A 15, B to D 16
+hol-bel-115	up	agree	https://www.rsssf.org/tablesb/belg2010.html	
+hol-bel-115	down	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF: 14th to 16th relegated, 13th (or 12th and 13th) to the relegation play-off
+hol-bel-115	playoffs	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF marks promotion play-off places from period results
+hol-bel-115	subs_used	no second source		still unknown
+hol-bel-115	bench	no second source		still unknown
+hol-bel-116	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-116	format	agree	https://www.rsssf.org/tablesb/belg2010.html	RSSSF: two-legged quarter-finals and semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-116	subs_used	no second source		
+hol-bel-116	bench	no second source		still unknown
+hol-bel-117	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-117	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-117	subs_used	no second source		still unknown
+hol-bel-117	bench	no second source		
+hol-bel-118	name	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-118	foreign	no second source		still unknown
+hol-bel-118	work_permit	no second source		still unknown
+hol-bel-118	registration	no second source		still unknown
+hol-bel-118	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-119	name	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-119	clubs	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-119	down	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-119	playoffs	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-119	subs_used	no second source		
+hol-bel-119	bench	no second source		still unknown
+hol-bel-120	name	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-120	clubs	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-120	up	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-120	down	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-120	playoffs	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-120	subs_used	no second source		
+hol-bel-120	bench	no second source		still unknown
+hol-bel-121	name	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-121	clubs	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2010	StatsCrew: 16 Saturday and 16 Sunday clubs; RSSSF shows the same; Sunday: Dijkse Boys withdrew, results annulled, 15 in the final table
+hol-bel-121	up	agree	https://www.rsssf.org/tablesn/ned2011.html	RSSSF: champions play the amateur title final; FC Oss (Sunday champion) promoted
+hol-bel-121	down	agree	https://www.rsssf.org/tablesn/ned2011.html	RSSSF: 14th to 16th relegated, 13th to relegation play-off (Sunday: 14th and 15th after the Dijkse Boys withdrawal)
+hol-bel-121	playoffs	agree	https://www.rsssf.org/tablesn/ned2011.html	RSSSF marks both champions for the Amateurkampioenschap
+hol-bel-121	subs_used	no second source		still unknown
+hol-bel-121	bench	no second source		still unknown
+hol-bel-122	name	agree	https://www.rsssf.org/tablesn/ned2011.html	
+hol-bel-122	format	disagree	https://www.rsssf.org/tablesn/ned2011.html	RSSSF names 93 clubs in all rounds; first value 88; single-match knockout with extra time and penalties confirmed
+hol-bel-122	subs_used	no second source		
+hol-bel-122	bench	no second source		still unknown
+hol-bel-123	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-123	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-123	subs_used	no second source		still unknown
+hol-bel-123	bench	no second source		still unknown
+hol-bel-124	name	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-124	foreign	no second source		
+hol-bel-124	work_permit	no second source		still unknown
+hol-bel-124	registration	no second source		still unknown
+hol-bel-124	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-125	name	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-125	clubs	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-125	down	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-125	playoffs	agree	https://www.rsssf.org/tablesb/belg2011.html	see split
+hol-bel-125	split	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-125	subs_used	no second source		
+hol-bel-125	bench	no second source		still unknown
+hol-bel-126	name	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-126	clubs	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-126	up	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-126	down	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-126	playoffs	agree	https://www.rsssf.org/tablesb/belg2011.html	
+hol-bel-126	format	no second source		
+hol-bel-126	subs_used	no second source		
+hol-bel-126	bench	no second source		still unknown
+hol-bel-127	name	no second source		
+hol-bel-127	clubs	no second source		
+hol-bel-127	up	no second source		
+hol-bel-127	down	no second source		
+hol-bel-127	playoffs	no second source		
+hol-bel-127	subs_used	no second source		
+hol-bel-127	bench	no second source		still unknown
+hol-bel-128	name	no second source		
+hol-bel-128	clubs	no second source		
+hol-bel-128	up	no second source		
+hol-bel-128	down	no second source		
+hol-bel-128	playoffs	no second source		
+hol-bel-128	subs_used	no second source		still unknown
+hol-bel-128	bench	no second source		still unknown
+hol-bel-129	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-129	format	agree	https://www.rsssf.org/tablesb/belg2011.html	RSSSF: two-legged quarter-finals and semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-129	subs_used	no second source		
+hol-bel-129	bench	no second source		still unknown
+hol-bel-130	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-130	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-130	subs_used	no second source		still unknown
+hol-bel-130	bench	no second source		still unknown
+hol-bel-131	name	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-131	foreign	no second source		still unknown
+hol-bel-131	work_permit	no second source		still unknown
+hol-bel-131	registration	no second source		still unknown
+hol-bel-131	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-132	name	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-132	clubs	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-132	down	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-132	playoffs	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-132	subs_used	no second source		
+hol-bel-132	bench	no second source		still unknown
+hol-bel-133	name	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-133	clubs	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-133	up	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-133	down	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-133	playoffs	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-133	subs_used	no second source		
+hol-bel-133	bench	no second source		still unknown
+hol-bel-134	name	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-134	clubs	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2011	StatsCrew: 16 Saturday and 16 Sunday clubs; RSSSF shows the same
+hol-bel-134	up	agree	https://www.rsssf.org/tablesn/ned2012.html	RSSSF: champions play the amateur title final; no club promoted to the Eerste Divisie in 2012
+hol-bel-134	down	agree	https://www.rsssf.org/tablesn/ned2012.html	RSSSF: 14th to 16th relegated, 13th to relegation play-off
+hol-bel-134	playoffs	agree	https://www.rsssf.org/tablesn/ned2012.html	RSSSF marks both champions for the Amateurkampioenschap
+hol-bel-134	subs_used	no second source		still unknown
+hol-bel-134	bench	no second source		still unknown
+hol-bel-135	name	agree	https://www.rsssf.org/tablesn/ned2012.html	
+hol-bel-135	format	found	https://www.rsssf.org/tablesn/ned2012.html	92 entrants (RSSSF names 93 clubs, one listed twice); single-match knockout with extra time and penalties confirmed
+hol-bel-135	subs_used	no second source		
+hol-bel-135	bench	no second source		still unknown
+hol-bel-136	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-136	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-136	subs_used	no second source		still unknown
+hol-bel-136	bench	no second source		still unknown
+hol-bel-137	name	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-137	foreign	no second source		
+hol-bel-137	work_permit	no second source		still unknown
+hol-bel-137	registration	no second source		
+hol-bel-137	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-138	name	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-138	clubs	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-138	down	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-138	playoffs	agree	https://www.rsssf.org/tablesb/belg2012.html	see split
+hol-bel-138	split	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-138	subs_used	no second source		
+hol-bel-138	bench	no second source		still unknown
+hol-bel-139	name	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-139	clubs	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-139	up	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-139	down	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-139	playoffs	agree	https://www.rsssf.org/tablesb/belg2012.html	
+hol-bel-139	format	no second source		
+hol-bel-139	subs_used	no second source		
+hol-bel-139	bench	no second source		still unknown
+hol-bel-140	name	no second source		
+hol-bel-140	clubs	no second source		
+hol-bel-140	up	no second source		
+hol-bel-140	down	no second source		
+hol-bel-140	playoffs	no second source		
+hol-bel-140	subs_used	no second source		
+hol-bel-140	bench	no second source		still unknown
+hol-bel-141	name	no second source		
+hol-bel-141	clubs	no second source		
+hol-bel-141	up	no second source		
+hol-bel-141	down	no second source		
+hol-bel-141	playoffs	no second source		
+hol-bel-141	subs_used	no second source		still unknown
+hol-bel-141	bench	no second source		still unknown
+hol-bel-142	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-142	format	agree	https://www.rsssf.org/tablesb/belg2012.html	RSSSF: two-legged quarter-finals and semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-142	subs_used	no second source		
+hol-bel-142	bench	no second source		still unknown
+hol-bel-143	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-143	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-143	subs_used	no second source		still unknown
+hol-bel-143	bench	no second source		
+hol-bel-144	name	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-144	foreign	no second source		still unknown
+hol-bel-144	work_permit	no second source		still unknown
+hol-bel-144	registration	no second source		still unknown
+hol-bel-144	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-145	name	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-145	clubs	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-145	down	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-145	playoffs	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-145	subs_used	no second source		
+hol-bel-145	bench	no second source		still unknown
+hol-bel-146	name	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-146	clubs	agree	https://www.rsssf.org/tablesn/ned2013.html	RSSSF final table has 16 clubs (AGOVV and Veendam went bankrupt in the season, results annulled); 18 at the start
+hol-bel-146	up	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-146	down	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-146	playoffs	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-146	subs_used	no second source		
+hol-bel-146	bench	no second source		still unknown
+hol-bel-147	name	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2012	StatsCrew titles the league Derde Divisie Zaterdag/Zondag (Topklasse)
+hol-bel-147	clubs	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2012	StatsCrew: 16 Saturday clubs; Sunday 16 at https://www.statscrew.com/worldfootball/l-NETDZO/y-2012
+hol-bel-147	up	no second source		
+hol-bel-147	down	no second source		
+hol-bel-147	playoffs	no second source		
+hol-bel-147	subs_used	no second source		still unknown
+hol-bel-147	bench	no second source		still unknown
+hol-bel-148	name	agree	https://www.rsssf.org/tablesn/ned2013.html	
+hol-bel-148	format	agree	https://www.rsssf.org/tablesn/ned2013.html	RSSSF names 92 clubs; single-match knockout with extra time and penalties confirmed
+hol-bel-148	subs_used	no second source		
+hol-bel-148	bench	no second source		still unknown
+hol-bel-149	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-149	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-149	subs_used	no second source		still unknown
+hol-bel-149	bench	no second source		still unknown
+hol-bel-150	name	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-150	foreign	no second source		
+hol-bel-150	work_permit	no second source		still unknown
+hol-bel-150	registration	no second source		
+hol-bel-150	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-151	name	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-151	clubs	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-151	down	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-151	playoffs	agree	https://www.rsssf.org/tablesb/belg2013.html	see split
+hol-bel-151	split	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-151	subs_used	no second source		
+hol-bel-151	bench	no second source		still unknown
+hol-bel-152	name	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-152	clubs	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-152	up	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-152	down	agree	https://www.rsssf.org/tablesb/belg2013.html	RSSSF: 18th relegated, 17th to play-off; FC Brussels left the league
+hol-bel-152	playoffs	agree	https://www.rsssf.org/tablesb/belg2013.html	
+hol-bel-152	format	no second source		
+hol-bel-152	subs_used	no second source		
+hol-bel-152	bench	no second source		still unknown
+hol-bel-153	name	no second source		
+hol-bel-153	clubs	no second source		
+hol-bel-153	up	no second source		
+hol-bel-153	down	no second source		
+hol-bel-153	playoffs	no second source		
+hol-bel-153	subs_used	no second source		
+hol-bel-153	bench	no second source		still unknown
+hol-bel-154	name	no second source		
+hol-bel-154	clubs	no second source		
+hol-bel-154	up	no second source		
+hol-bel-154	down	no second source		
+hol-bel-154	playoffs	no second source		
+hol-bel-154	subs_used	no second source		still unknown
+hol-bel-154	bench	no second source		still unknown
+hol-bel-155	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-155	format	agree	https://www.rsssf.org/tablesb/belg2013.html	RSSSF: two-legged quarter-finals and semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-155	subs_used	no second source		
+hol-bel-155	bench	no second source		still unknown
+hol-bel-156	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-156	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-156	subs_used	no second source		still unknown
+hol-bel-156	bench	no second source		still unknown
+hol-bel-157	name	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-157	foreign	no second source		still unknown
+hol-bel-157	work_permit	no second source		still unknown
+hol-bel-157	registration	no second source		still unknown
+hol-bel-157	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-158	name	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-158	clubs	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-158	down	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-158	playoffs	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-158	subs_used	no second source		
+hol-bel-158	bench	no second source		still unknown
+hol-bel-159	name	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-159	clubs	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-159	up	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-159	down	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-159	playoffs	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-159	subs_used	no second source		
+hol-bel-159	bench	no second source		still unknown
+hol-bel-160	name	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2013	StatsCrew titles the league Derde Divisie Zaterdag/Zondag (Topklasse)
+hol-bel-160	clubs	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2013	StatsCrew: 16 Saturday clubs; Sunday 16 at https://www.statscrew.com/worldfootball/l-NETDZO/y-2013
+hol-bel-160	up	no second source		
+hol-bel-160	down	no second source		
+hol-bel-160	playoffs	no second source		
+hol-bel-160	subs_used	no second source		still unknown
+hol-bel-160	bench	no second source		still unknown
+hol-bel-161	name	agree	https://www.rsssf.org/tablesn/ned2014.html	
+hol-bel-161	format	agree	https://www.rsssf.org/tablesn/ned2014.html	RSSSF names 82 clubs; single-match knockout with extra time and penalties confirmed
+hol-bel-161	subs_used	no second source		
+hol-bel-161	bench	no second source		still unknown
+hol-bel-162	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-162	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021); 2013 match 3-2 after extra time
+hol-bel-162	subs_used	no second source		still unknown
+hol-bel-162	bench	no second source		still unknown
+hol-bel-163	name	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-163	foreign	no second source		
+hol-bel-163	work_permit	no second source		still unknown
+hol-bel-163	registration	no second source		
+hol-bel-163	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-164	name	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-164	clubs	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-164	down	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-164	playoffs	agree	https://www.rsssf.org/tablesb/belg2014.html	see split
+hol-bel-164	split	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-164	subs_used	no second source		
+hol-bel-164	bench	no second source		still unknown
+hol-bel-165	name	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-165	clubs	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-165	up	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-165	down	agree	https://www.rsssf.org/tablesb/belg2014.html	RSSSF: 18th relegated, 17th to play-off; RWDM demoted
+hol-bel-165	playoffs	agree	https://www.rsssf.org/tablesb/belg2014.html	
+hol-bel-165	format	no second source		
+hol-bel-165	subs_used	no second source		
+hol-bel-165	bench	no second source		still unknown
+hol-bel-166	name	no second source		
+hol-bel-166	clubs	no second source		
+hol-bel-166	up	no second source		
+hol-bel-166	down	no second source		
+hol-bel-166	playoffs	no second source		
+hol-bel-166	subs_used	no second source		
+hol-bel-166	bench	no second source		still unknown
+hol-bel-167	name	no second source		
+hol-bel-167	clubs	no second source		
+hol-bel-167	up	no second source		
+hol-bel-167	down	no second source		
+hol-bel-167	playoffs	no second source		
+hol-bel-167	subs_used	no second source		still unknown
+hol-bel-167	bench	no second source		still unknown
+hol-bel-168	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-168	format	agree	https://www.rsssf.org/tablesb/belg2014.html	RSSSF: two-legged quarter-finals and semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-168	subs_used	no second source		
+hol-bel-168	bench	no second source		still unknown
+hol-bel-169	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-169	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-169	subs_used	no second source		still unknown
+hol-bel-169	bench	no second source		still unknown
+hol-bel-170	name	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-170	foreign	no second source		still unknown
+hol-bel-170	work_permit	no second source		still unknown
+hol-bel-170	registration	no second source		still unknown
+hol-bel-170	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-171	name	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-171	clubs	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-171	down	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-171	playoffs	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-171	subs_used	no second source		
+hol-bel-171	bench	no second source		still unknown
+hol-bel-172	name	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-172	clubs	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-172	up	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-172	down	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-172	playoffs	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-172	subs_used	no second source		
+hol-bel-172	bench	no second source		still unknown
+hol-bel-173	name	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2014	StatsCrew titles the league Derde Divisie Zaterdag/Zondag (Topklasse)
+hol-bel-173	clubs	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2014	StatsCrew: 16 Saturday clubs; Sunday 16 at https://www.statscrew.com/worldfootball/l-NETDZO/y-2014
+hol-bel-173	up	no second source		
+hol-bel-173	down	no second source		
+hol-bel-173	playoffs	no second source		
+hol-bel-173	subs_used	no second source		still unknown
+hol-bel-173	bench	no second source		still unknown
+hol-bel-174	name	agree	https://www.rsssf.org/tablesn/ned2015.html	
+hol-bel-174	format	found	https://www.rsssf.org/tablesn/ned2015.html	85 entrants (RSSSF, all rounds); single-match knockout with extra time and penalties confirmed
+hol-bel-174	subs_used	no second source		
+hol-bel-174	bench	no second source		still unknown
+hol-bel-175	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-175	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-175	subs_used	no second source		still unknown
+hol-bel-175	bench	no second source		still unknown
+hol-bel-176	name	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-176	foreign	no second source		
+hol-bel-176	work_permit	no second source		still unknown
+hol-bel-176	registration	no second source		
+hol-bel-176	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-177	name	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-177	clubs	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-177	down	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-177	playoffs	agree	https://www.rsssf.org/tablesb/belg2015.html	see split
+hol-bel-177	split	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-177	subs_used	no second source		
+hol-bel-177	bench	no second source		still unknown
+hol-bel-178	name	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-178	clubs	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-178	up	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-178	down	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-178	playoffs	agree	https://www.rsssf.org/tablesb/belg2015.html	
+hol-bel-178	format	no second source		
+hol-bel-178	subs_used	no second source		
+hol-bel-178	bench	no second source		still unknown
+hol-bel-179	name	no second source		
+hol-bel-179	clubs	no second source		
+hol-bel-179	up	no second source		
+hol-bel-179	down	no second source		
+hol-bel-179	playoffs	no second source		
+hol-bel-179	subs_used	no second source		
+hol-bel-179	bench	no second source		still unknown
+hol-bel-180	name	no second source		
+hol-bel-180	clubs	no second source		
+hol-bel-180	up	no second source		
+hol-bel-180	down	no second source		
+hol-bel-180	playoffs	no second source		
+hol-bel-180	subs_used	no second source		still unknown
+hol-bel-180	bench	no second source		still unknown
+hol-bel-181	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-181	format	agree	https://www.rsssf.org/tablesb/belg2015.html	RSSSF: two-legged quarter-finals and semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-181	subs_used	no second source		
+hol-bel-181	bench	no second source		still unknown
+hol-bel-182	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-182	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-182	subs_used	no second source		still unknown
+hol-bel-182	bench	no second source		still unknown
+hol-bel-183	name	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-183	foreign	no second source		still unknown
+hol-bel-183	work_permit	no second source		still unknown
+hol-bel-183	registration	no second source		still unknown
+hol-bel-183	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-184	name	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-184	clubs	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-184	down	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-184	playoffs	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-184	subs_used	no second source		
+hol-bel-184	bench	no second source		still unknown
+hol-bel-185	name	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-185	clubs	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-185	up	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-185	down	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-185	playoffs	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-185	subs_used	no second source		
+hol-bel-185	bench	no second source		still unknown
+hol-bel-186	name	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2015	StatsCrew titles the league Derde Divisie Zaterdag/Zondag (Topklasse)
+hol-bel-186	clubs	agree	https://www.statscrew.com/worldfootball/l-NETDZA/y-2015	StatsCrew: 16 Saturday clubs; Sunday 16 at https://www.statscrew.com/worldfootball/l-NETDZO/y-2015
+hol-bel-186	up	no second source		
+hol-bel-186	down	no second source		
+hol-bel-186	playoffs	no second source		
+hol-bel-186	subs_used	no second source		still unknown
+hol-bel-186	bench	no second source		still unknown
+hol-bel-187	name	agree	https://www.rsssf.org/tablesn/ned2016.html	
+hol-bel-187	format	found	https://www.rsssf.org/tablesn/ned2016.html	85 entrants (RSSSF, all rounds); single-match knockout with extra time and penalties confirmed
+hol-bel-187	subs_used	no second source		
+hol-bel-187	bench	no second source		still unknown
+hol-bel-188	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-188	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-188	subs_used	no second source		still unknown
+hol-bel-188	bench	no second source		still unknown
+hol-bel-189	name	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-189	foreign	no second source		
+hol-bel-189	work_permit	no second source		still unknown
+hol-bel-189	registration	no second source		
+hol-bel-189	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-190	name	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-190	clubs	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-190	down	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-190	playoffs	agree	https://www.rsssf.org/tablesb/belg2016.html	see split
+hol-bel-190	split	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-190	subs_used	no second source		
+hol-bel-190	bench	no second source		still unknown
+hol-bel-191	name	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-191	clubs	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-191	up	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-191	down	agree	https://www.rsssf.org/tablesb/belg2016.html	RSSSF: places 10 to 17 relegated to the amateur level
+hol-bel-191	playoffs	agree	https://www.rsssf.org/tablesb/belg2016.html	
+hol-bel-191	subs_used	no second source		
+hol-bel-191	bench	no second source		still unknown
+hol-bel-192	name	no second source		
+hol-bel-192	clubs	no second source		
+hol-bel-192	up	no second source		
+hol-bel-192	down	no second source		
+hol-bel-192	playoffs	no second source		
+hol-bel-192	subs_used	no second source		
+hol-bel-192	bench	no second source		still unknown
+hol-bel-193	name	no second source		
+hol-bel-193	clubs	no second source		
+hol-bel-193	up	no second source		
+hol-bel-193	down	no second source		
+hol-bel-193	subs_used	no second source		still unknown
+hol-bel-193	bench	no second source		still unknown
+hol-bel-194	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-194	format	agree	https://www.rsssf.org/tablesb/belg2016.html	RSSSF: single-match quarter-finals, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-194	subs_used	no second source		
+hol-bel-194	bench	no second source		still unknown
+hol-bel-195	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-195	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-195	subs_used	no second source		still unknown
+hol-bel-195	bench	no second source		still unknown
+hol-bel-196	name	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-196	foreign	no second source		still unknown
+hol-bel-196	work_permit	no second source		still unknown
+hol-bel-196	registration	no second source		still unknown
+hol-bel-196	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-197	name	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-197	clubs	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-197	down	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-197	playoffs	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-197	subs_used	no second source		
+hol-bel-197	bench	no second source		
+hol-bel-198	name	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-198	clubs	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-198	up	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-198	down	agree	https://www.rsssf.org/tablesn/ned2017.html	RSSSF: 20th Achilles '29 relegated; Jong AZ promoted from the Tweede Divisie
+hol-bel-198	playoffs	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-198	subs_used	no second source		
+hol-bel-198	bench	no second source		
+hol-bel-199	name	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-199	clubs	agree	https://www.rsssf.org/tablesn/ned2017.html	also StatsCrew: 18 teams
+hol-bel-199	up	agree	https://www.rsssf.org/tablesn/ned2017.html	RSSSF: Jong AZ promoted
+hol-bel-199	down	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-199	subs_used	no second source		still unknown
+hol-bel-199	bench	no second source		still unknown
+hol-bel-200	name	agree	https://www.rsssf.org/tablesn/ned2017.html	
+hol-bel-200	format	disagree	https://www.rsssf.org/tablesn/ned2017.html	RSSSF names 64 clubs from round 1 (about 103 with the amateur qualifying rounds); first value 63; single-match knockout with extra time and penalties confirmed
+hol-bel-200	subs_used	no second source		
+hol-bel-200	bench	no second source		
+hol-bel-201	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-201	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021); 2016 match 1-0, the extra-time rule is not tested
+hol-bel-201	subs_used	no second source		
+hol-bel-201	bench	no second source		
+hol-bel-202	name	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-202	foreign	no second source		
+hol-bel-202	work_permit	no second source		still unknown
+hol-bel-202	registration	no second source		
+hol-bel-202	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-203	name	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-203	clubs	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-203	down	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-203	playoffs	agree	https://www.rsssf.org/tablesb/belg2017.html	see split
+hol-bel-203	split	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-203	subs_used	no second source		
+hol-bel-203	bench	no second source		still unknown
+hol-bel-204	name	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-204	clubs	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-204	up	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-204	down	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-204	playoffs	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-204	subs_used	no second source		
+hol-bel-204	bench	no second source		still unknown
+hol-bel-205	name	agree	https://www.rsssf.org/tablesb/belg2017.html	RSSSF: Amateur First Class (National)
+hol-bel-205	clubs	agree	https://www.rsssf.org/tablesb/belg2017.html	
+hol-bel-205	up	no second source		
+hol-bel-205	down	no second source		
+hol-bel-205	playoffs	no second source		
+hol-bel-205	subs_used	no second source		
+hol-bel-205	bench	no second source		still unknown
+hol-bel-206	name	agree	https://www.rsssf.org/tablesb/belg2017.html	RSSSF: Amateur Second Class (National), VV A, VV B, ACFF
+hol-bel-206	clubs	agree	https://www.rsssf.org/tablesb/belg2017.html	RSSSF: three groups of 16
+hol-bel-206	up	no second source		
+hol-bel-206	down	no second source		
+hol-bel-206	subs_used	no second source		still unknown
+hol-bel-206	bench	no second source		still unknown
+hol-bel-207	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-207	format	agree	https://www.rsssf.org/tablesb/belg2017.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-207	subs_used	no second source		
+hol-bel-207	bench	no second source		still unknown
+hol-bel-208	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-208	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-208	subs_used	no second source		
+hol-bel-208	bench	no second source		
+hol-bel-209	name	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-209	foreign	no second source		still unknown
+hol-bel-209	work_permit	no second source		still unknown
+hol-bel-209	registration	no second source		still unknown
+hol-bel-209	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-210	name	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-210	clubs	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-210	down	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-210	playoffs	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-210	subs_used	no second source		
+hol-bel-210	bench	no second source		
+hol-bel-211	name	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-211	clubs	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-211	up	agree	https://www.rsssf.org/tablesn/ned2018.html	RSSSF: Jong Ajax champion, 2nd Fortuna Sittard promoted
+hol-bel-211	down	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-211	playoffs	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-211	subs_used	no second source		
+hol-bel-211	bench	no second source		
+hol-bel-212	name	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-212	clubs	agree	https://www.rsssf.org/tablesn/ned2018.html	also StatsCrew: 18 teams
+hol-bel-212	up	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-212	down	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-212	subs_used	no second source		still unknown
+hol-bel-212	bench	no second source		still unknown
+hol-bel-213	name	agree	https://www.rsssf.org/tablesn/ned2018.html	
+hol-bel-213	format	agree	https://www.rsssf.org/tablesn/ned2018.html	RSSSF names 64 clubs from round 1; about 105 with the qualifying rounds; single-match knockout with extra time and penalties confirmed
+hol-bel-213	subs_used	no second source		
+hol-bel-213	bench	no second source		
+hol-bel-214	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-214	format	disagree	https://www.rsssf.org/tablesn/nedsupcuphist.html	RSSSF: 2017 match Feyenoord v Vitesse 1-1 after extra time, 4-2 on penalties; first says 90 minutes then penalties
+hol-bel-214	subs_used	no second source		
+hol-bel-214	bench	no second source		
+hol-bel-215	name	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-215	foreign	no second source		
+hol-bel-215	work_permit	no second source		still unknown
+hol-bel-215	registration	no second source		
+hol-bel-215	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-216	name	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-216	clubs	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-216	down	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-216	playoffs	agree	https://www.rsssf.org/tablesb/belg2018.html	see split
+hol-bel-216	split	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-216	subs_used	no second source		
+hol-bel-216	bench	no second source		still unknown
+hol-bel-217	name	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-217	clubs	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-217	up	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-217	down	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-217	playoffs	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-217	subs_used	no second source		
+hol-bel-217	bench	no second source		still unknown
+hol-bel-218	name	agree	https://www.rsssf.org/tablesb/belg2018.html	RSSSF: Amateur First Class (National)
+hol-bel-218	clubs	agree	https://www.rsssf.org/tablesb/belg2018.html	
+hol-bel-218	up	no second source		
+hol-bel-218	down	no second source		
+hol-bel-218	playoffs	no second source		
+hol-bel-218	subs_used	no second source		
+hol-bel-218	bench	no second source		still unknown
+hol-bel-219	name	agree	https://www.rsssf.org/tablesb/belg2018.html	RSSSF: Amateur Second Class (National), VV A, VV B, ACFF
+hol-bel-219	clubs	agree	https://www.rsssf.org/tablesb/belg2018.html	RSSSF: three groups of 16
+hol-bel-219	up	no second source		
+hol-bel-219	down	no second source		
+hol-bel-219	subs_used	no second source		still unknown
+hol-bel-219	bench	no second source		still unknown
+hol-bel-220	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-220	format	agree	https://www.rsssf.org/tablesb/belg2018.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-220	subs_used	no second source		
+hol-bel-220	bench	no second source		still unknown
+hol-bel-221	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-221	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-221	subs_used	no second source		
+hol-bel-221	bench	no second source		
+hol-bel-222	name	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-222	foreign	no second source		still unknown
+hol-bel-222	work_permit	no second source		
+hol-bel-222	registration	no second source		still unknown
+hol-bel-222	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-223	name	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-223	clubs	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-223	down	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-223	playoffs	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-223	subs_used	no second source		
+hol-bel-223	bench	no second source		inference in the first file; no second source found
+hol-bel-224	name	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-224	clubs	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-224	up	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-224	down	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-224	playoffs	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-224	subs_used	no second source		
+hol-bel-224	bench	no second source		inference in the first file; no second source found
+hol-bel-225	name	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-225	clubs	agree	https://www.rsssf.org/tablesn/ned2019.html	also StatsCrew: 18 teams
+hol-bel-225	up	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-225	down	agree	https://www.rsssf.org/tablesn/ned2019.html	RSSSF: 18th relegated, Jong Almere City (16th) relegated as reserve team, 15th and 17th to relegation play-offs
+hol-bel-225	subs_used	no second source		still unknown
+hol-bel-225	bench	no second source		still unknown
+hol-bel-226	name	agree	https://www.rsssf.org/tablesn/ned2019.html	
+hol-bel-226	format	agree	https://www.rsssf.org/tablesn/ned2019.html	RSSSF names 64 clubs from round 1; about 107 with qualifying rounds; single-match knockout with extra time and penalties confirmed
+hol-bel-226	subs_used	no second source		
+hol-bel-226	bench	no second source		inference in the first file; no second source found
+hol-bel-227	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-227	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021); RSSSF: no extra time played, straight to penalties
+hol-bel-227	subs_used	no second source		still unknown
+hol-bel-227	bench	no second source		still unknown
+hol-bel-228	name	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-228	foreign	no second source		
+hol-bel-228	work_permit	no second source		still unknown
+hol-bel-228	registration	no second source		
+hol-bel-228	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-229	name	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-229	clubs	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-229	down	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-229	playoffs	agree	https://www.rsssf.org/tablesb/belg2019.html	see split
+hol-bel-229	split	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-229	subs_used	no second source		
+hol-bel-229	bench	no second source		still unknown
+hol-bel-230	name	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-230	clubs	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-230	up	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-230	down	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-230	playoffs	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-230	subs_used	no second source		
+hol-bel-230	bench	no second source		still unknown
+hol-bel-231	name	agree	https://www.rsssf.org/tablesb/belg2019.html	RSSSF: Amateur First Class (National)
+hol-bel-231	clubs	agree	https://www.rsssf.org/tablesb/belg2019.html	
+hol-bel-231	up	no second source		
+hol-bel-231	down	no second source		
+hol-bel-231	playoffs	no second source		
+hol-bel-231	subs_used	no second source		
+hol-bel-231	bench	no second source		still unknown
+hol-bel-232	name	agree	https://www.rsssf.org/tablesb/belg2019.html	RSSSF: Amateur Second Class (National), VV A, VV B, ACFF
+hol-bel-232	clubs	agree	https://www.rsssf.org/tablesb/belg2019.html	RSSSF: three groups of 16
+hol-bel-232	up	no second source		
+hol-bel-232	down	no second source		
+hol-bel-232	subs_used	no second source		still unknown
+hol-bel-232	bench	no second source		still unknown
+hol-bel-233	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-233	format	agree	https://www.rsssf.org/tablesb/belg2019.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-233	subs_used	no second source		
+hol-bel-233	bench	no second source		still unknown
+hol-bel-234	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-234	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-234	subs_used	no second source		
+hol-bel-234	bench	no second source		
+hol-bel-235	name	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-235	foreign	no second source		still unknown
+hol-bel-235	work_permit	no second source		still unknown
+hol-bel-235	registration	no second source		still unknown
+hol-bel-235	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-236	name	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-236	clubs	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-236	down	agree	https://www.rsssf.org/tablesn/ned2020.html	RSSSF gives the table at abandonment with no relegation
+hol-bel-236	playoffs	agree	https://www.rsssf.org/tablesn/ned2020.html	RSSSF shows no play-offs after abandonment
+hol-bel-236	subs_used	agree	https://www.knvb.nl/downloads/sites/bestand/knvb/23477/uitvoeringsbesluit-bestuur-betaald-voetbal---reglement-wedstrijden-betaald-voetbal---wisselspelers	KNVB decision of 29 July 2020 quotes the rule it replaced: 3 substitutes (4th in extra time)
+hol-bel-236	bench	no second source		only source found is the same publisher as the first source (knvb.nl)
+hol-bel-237	name	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-237	clubs	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-237	up	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-237	down	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-237	playoffs	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-237	subs_used	agree	https://www.knvb.nl/downloads/sites/bestand/knvb/23477/uitvoeringsbesluit-bestuur-betaald-voetbal---reglement-wedstrijden-betaald-voetbal---wisselspelers	KNVB 2020 decision quotes the earlier rule of 3 substitutes
+hol-bel-237	bench	no second source		only source found is the same publisher as the first source (knvb.nl)
+hol-bel-238	name	agree	https://www.statscrew.com/worldfootball/l-NETTWE/y-2019	
+hol-bel-238	clubs	agree	https://www.statscrew.com/worldfootball/l-NETTWE/y-2019	StatsCrew: 18 teams
+hol-bel-238	up	no second source		
+hol-bel-238	down	no second source		
+hol-bel-238	subs_used	no second source		still unknown
+hol-bel-238	bench	no second source		still unknown
+hol-bel-239	name	agree	https://www.rsssf.org/tablesn/ned2020.html	
+hol-bel-239	format	agree	https://www.rsssf.org/tablesn/ned2020.html	RSSSF names 60 clubs from round 1 plus byes; competition abandoned before the final (RSSSF list of finals); single-match knockout with extra time and penalties confirmed
+hol-bel-239	subs_used	no second source		only source found is the same publisher as the first source (knvb.nl)
+hol-bel-239	bench	no second source		only source found is the same publisher as the first source (knvb.nl)
+hol-bel-240	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-240	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-240	subs_used	no second source		still unknown
+hol-bel-240	bench	no second source		still unknown
+hol-bel-241	name	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-241	foreign	no second source		
+hol-bel-241	work_permit	no second source		
+hol-bel-241	registration	no second source		
+hol-bel-241	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-242	name	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-242	clubs	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-242	down	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-242	split	agree	https://www.rsssf.org/tablesb/belg2020.html	RSSSF: abandoned in March 2020, no play-offs
+hol-bel-242	subs_used	no second source		
+hol-bel-242	bench	no second source		still unknown
+hol-bel-243	name	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-243	clubs	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-243	up	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-243	down	agree	https://www.rsssf.org/tablesb/belg2020.html	RSSSF: no play-off III played; Lokeren bankrupt
+hol-bel-243	playoffs	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-243	subs_used	no second source		
+hol-bel-243	bench	no second source		still unknown
+hol-bel-244	name	agree	https://www.rsssf.org/tablesb/belg2020.html	RSSSF: Amateur First Class (National)
+hol-bel-244	clubs	agree	https://www.rsssf.org/tablesb/belg2020.html	
+hol-bel-244	up	no second source		
+hol-bel-244	down	no second source		
+hol-bel-244	playoffs	no second source		
+hol-bel-244	subs_used	no second source		
+hol-bel-244	bench	no second source		still unknown
+hol-bel-245	name	agree	https://www.rsssf.org/tablesb/belg2020.html	RSSSF: Amateur Second Class (National), VV A, VV B, ACFF
+hol-bel-245	clubs	agree	https://www.rsssf.org/tablesb/belg2020.html	RSSSF: three groups of 16
+hol-bel-245	up	no second source		
+hol-bel-245	down	no second source		still unknown
+hol-bel-245	subs_used	no second source		still unknown
+hol-bel-245	bench	no second source		still unknown
+hol-bel-246	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-246	format	agree	https://www.rsssf.org/tablesb/belg2020.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-246	subs_used	no second source		
+hol-bel-246	bench	no second source		still unknown
+hol-bel-247	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-247	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-247	subs_used	no second source		
+hol-bel-247	bench	no second source		
+hol-bel-248	name	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-248	foreign	no second source		still unknown
+hol-bel-248	work_permit	no second source		still unknown
+hol-bel-248	registration	no second source		still unknown
+hol-bel-248	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-249	name	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-249	clubs	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-249	down	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-249	playoffs	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-249	subs_used	agree	https://nos.nl/artikel/2367070-knvb-start-proef-met-extra-wissel-bij-vermoedelijke-hersenschudding	NOS 2 Feb 2021: five substitutes allowed, extra concussion substitute from that weekend; eredivisie.nl confirms 5 in 3 moments: https://eredivisie.nl/nieuws/dit-seizoen-vijf-wissels-toegestaan-in-de-eredivisie/
+hol-bel-249	bench	no second source		
+hol-bel-250	name	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-250	clubs	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-250	up	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-250	down	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-250	playoffs	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-250	subs_used	agree	https://nos.nl/artikel/2367070-knvb-start-proef-met-extra-wissel-bij-vermoedelijke-hersenschudding	NOS 2 Feb 2021 confirms 5 substitutes and the concussion trial in the Keuken Kampioen Divisie
+hol-bel-250	bench	no second source		
+hol-bel-251	name	agree	https://www.statscrew.com/worldfootball/l-NETTWE/y-2020	
+hol-bel-251	clubs	agree	https://www.statscrew.com/worldfootball/l-NETTWE/y-2020	StatsCrew: 18 teams
+hol-bel-251	up	no second source		
+hol-bel-251	down	no second source		
+hol-bel-251	subs_used	no second source		still unknown
+hol-bel-251	bench	no second source		still unknown
+hol-bel-252	name	agree	https://www.rsssf.org/tablesn/ned2021.html	
+hol-bel-252	format	agree	https://www.rsssf.org/tablesn/ned2021.html	RSSSF: 52 clubs played from round 1 after amateurs were withdrawn; 64 in the draw; single-match knockout with extra time and penalties confirmed
+hol-bel-252	subs_used	agree	https://nos.nl/artikel/2367070-knvb-start-proef-met-extra-wissel-bij-vermoedelijke-hersenschudding	NOS 2 Feb 2021: five substitutes and concussion trial also in the cup
+hol-bel-252	bench	no second source		
+hol-bel-253	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-253	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	RSSSF: 2020 not contested
+hol-bel-254	name	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-254	foreign	no second source		
+hol-bel-254	work_permit	no second source		
+hol-bel-254	registration	no second source		
+hol-bel-254	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-255	name	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-255	clubs	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-255	down	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-255	playoffs	agree	https://www.rsssf.org/tablesb/belg2021.html	see split
+hol-bel-255	split	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-255	subs_used	agree	https://www.dhnet.be/sports/football/division-1a/2020/12/15/la-regle-des-cinq-changements-approuvee-en-pro-league-B2SCP22VTVEH3OQNIS45BAZE4M/	DH 15 Dec 2020: Pro League approved five substitutes in three moments from 1 January 2021
+hol-bel-255	bench	no second source		still unknown
+hol-bel-256	name	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-256	clubs	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-256	up	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-256	down	disagree	https://www.rsssf.org/tablesb/belg2021.html	RSSSF: no relegation, as the amateur leagues were abandoned; first says 1 (8th)
+hol-bel-256	playoffs	agree	https://www.rsssf.org/tablesb/belg2021.html	
+hol-bel-256	format	no second source		
+hol-bel-256	subs_used	agree	https://www.dhnet.be/sports/football/division-1a/2020/12/15/la-regle-des-cinq-changements-approuvee-en-pro-league-B2SCP22VTVEH3OQNIS45BAZE4M/	DH: five substitutes also in 1B Pro League from 1 January 2021
+hol-bel-256	bench	no second source		still unknown
+hol-bel-257	name	no second source		
+hol-bel-257	clubs	no second source		
+hol-bel-257	up	agree	https://www.rsssf.org/tablesb/belg2021.html	RSSSF: no promotion from the abandoned amateur leagues to First Division B
+hol-bel-257	down	agree	https://www.rsssf.org/tablesb/belg2021.html	RSSSF: no relegation as the amateur leagues were abandoned
+hol-bel-257	format	no second source		
+hol-bel-257	subs_used	no second source		still unknown
+hol-bel-257	bench	no second source		still unknown
+hol-bel-258	name	no second source		
+hol-bel-258	clubs	no second source		
+hol-bel-258	up	agree	https://www.rsssf.org/tablesb/belg2021.html	RSSSF: amateur leagues abandoned
+hol-bel-258	down	agree	https://www.rsssf.org/tablesb/belg2021.html	RSSSF: amateur leagues abandoned, no relegation
+hol-bel-258	subs_used	no second source		still unknown
+hol-bel-258	bench	no second source		still unknown
+hol-bel-259	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-259	format	agree	https://www.rsssf.org/tablesb/belg2021.html	RSSSF: single-match semi-finals this season; penalty and extra-time rules of the early rounds not shown
+hol-bel-259	subs_used	agree	https://www.dhnet.be/sports/football/division-1a/2020/12/15/la-regle-des-cinq-changements-approuvee-en-pro-league-B2SCP22VTVEH3OQNIS45BAZE4M/	DH: five substitutes also in the Croky Cup from 1 January 2021
+hol-bel-259	bench	no second source		still unknown
+hol-bel-260	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-260	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: 2020 not played
+hol-bel-261	name	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-261	foreign	no second source		still unknown
+hol-bel-261	work_permit	no second source		still unknown
+hol-bel-261	registration	no second source		still unknown
+hol-bel-261	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-262	name	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-262	clubs	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-262	down	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-262	playoffs	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-262	subs_used	no second source		inference in the first file; no second source found
+hol-bel-262	bench	no second source		inference in the first file; no second source found
+hol-bel-263	name	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-263	clubs	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-263	up	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-263	down	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-263	playoffs	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-263	subs_used	no second source		inference in the first file; no second source found
+hol-bel-263	bench	no second source		inference in the first file; no second source found
+hol-bel-264	name	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-264	clubs	agree	https://www.rsssf.org/tablesn/ned2022.html	also StatsCrew: 18 teams
+hol-bel-264	up	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-264	down	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-264	subs_used	no second source		still unknown
+hol-bel-264	bench	no second source		still unknown
+hol-bel-265	name	agree	https://www.rsssf.org/tablesn/ned2022.html	
+hol-bel-265	format	agree	https://www.rsssf.org/tablesn/ned2022.html	RSSSF names 59 clubs from round 1; single-match knockout with extra time and penalties confirmed
+hol-bel-265	subs_used	no second source		inference in the first file; no second source found
+hol-bel-265	bench	no second source		inference in the first file; no second source found
+hol-bel-266	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-266	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-266	subs_used	no second source		still unknown
+hol-bel-266	bench	no second source		still unknown
+hol-bel-267	name	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-267	foreign	no second source		
+hol-bel-267	work_permit	no second source		still unknown
+hol-bel-267	registration	no second source		
+hol-bel-267	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-268	name	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-268	clubs	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-268	down	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-268	playoffs	agree	https://www.rsssf.org/tablesb/belg2022.html	see split
+hol-bel-268	split	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-268	subs_used	no second source		
+hol-bel-268	bench	no second source		still unknown
+hol-bel-269	name	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-269	clubs	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-269	up	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-269	down	disagree	https://www.rsssf.org/tablesb/belg2022.html	RSSSF marks no relegated club (8th Virton stayed; Mouscron folded after the season); first says 1 (8th)
+hol-bel-269	playoffs	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-269	format	no second source		
+hol-bel-269	subs_used	no second source		
+hol-bel-269	bench	no second source		still unknown
+hol-bel-270	name	agree	https://www.rsssf.org/tablesb/belg2022.html	RSSSF: 1e Nationale
+hol-bel-270	clubs	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-270	up	agree	https://www.rsssf.org/tablesb/belg2022.html	RSSSF: Dender promoted via the promotion play-off
+hol-bel-270	down	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-270	playoffs	agree	https://www.rsssf.org/tablesb/belg2022.html	
+hol-bel-270	subs_used	no second source		still unknown
+hol-bel-270	bench	no second source		still unknown
+hol-bel-271	name	no second source		
+hol-bel-271	clubs	no second source		
+hol-bel-271	up	no second source		
+hol-bel-271	down	no second source		
+hol-bel-271	subs_used	no second source		still unknown
+hol-bel-271	bench	no second source		still unknown
+hol-bel-272	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-272	format	agree	https://www.rsssf.org/tablesb/belg2022.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-272	subs_used	no second source		
+hol-bel-272	bench	no second source		still unknown
+hol-bel-273	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-273	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-273	subs_used	no second source		
+hol-bel-273	bench	no second source		
+hol-bel-274	name	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-274	foreign	no second source		still unknown
+hol-bel-274	work_permit	no second source		still unknown
+hol-bel-274	registration	no second source		still unknown
+hol-bel-274	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-275	name	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-275	clubs	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-275	down	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-275	playoffs	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-275	subs_used	no second source		inference in the first file; no second source found
+hol-bel-275	bench	no second source		inference in the first file; no second source found
+hol-bel-276	name	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-276	clubs	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-276	up	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-276	down	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-276	playoffs	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-276	subs_used	no second source		inference in the first file; no second source found
+hol-bel-276	bench	no second source		inference in the first file; no second source found
+hol-bel-277	name	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-277	clubs	agree	https://www.rsssf.org/tablesn/ned2023.html	also StatsCrew: 18 teams
+hol-bel-277	up	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-277	down	agree	https://www.rsssf.org/tablesn/ned2023.html	RSSSF: 17th Jong FC Volendam and 18th OFC relegated, 15th and 16th to play-offs (reserve-team rule moves the play-off places up)
+hol-bel-277	subs_used	no second source		still unknown
+hol-bel-277	bench	no second source		still unknown
+hol-bel-278	name	agree	https://www.rsssf.org/tablesn/ned2023.html	
+hol-bel-278	format	disagree	https://www.rsssf.org/tablesn/ned2023.html	RSSSF names 59 clubs from round 1 and about 86 with qualifying rounds; first value 46; single-match knockout with extra time and penalties confirmed
+hol-bel-278	subs_used	no second source		inference in the first file; no second source found
+hol-bel-278	bench	no second source		inference in the first file; no second source found
+hol-bel-279	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-279	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-279	subs_used	no second source		still unknown
+hol-bel-279	bench	no second source		still unknown
+hol-bel-280	name	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-280	foreign	no second source		
+hol-bel-280	work_permit	no second source		still unknown
+hol-bel-280	registration	agree	https://www.dhnet.be/sports/football/division-1a/standard/2023/01/20/standard-la-regle-qui-oblige-a-compter-ses-belges-DS4IERMB6JDJDOVZJEFGVIJ4GI/	DH: at least six players trained in Belgium on the match sheet (article B6.109); start year 2011 not confirmed
+hol-bel-280	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-281	name	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-281	clubs	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-281	down	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-281	playoffs	agree	https://www.rsssf.org/tablesb/belg2023.html	see split
+hol-bel-281	split	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-281	subs_used	no second source		
+hol-bel-281	bench	no second source		still unknown
+hol-bel-282	name	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-282	clubs	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-282	up	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-282	down	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-282	playoffs	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-282	split	agree	https://www.rsssf.org/tablesb/belg2023.html	RSSSF: 22 matches, then promotion and relegation play-offs
+hol-bel-282	subs_used	no second source		
+hol-bel-282	bench	no second source		still unknown
+hol-bel-283	name	agree	https://www.rsssf.org/tablesb/belg2023.html	RSSSF: 1e Nationale
+hol-bel-283	clubs	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-283	up	agree	https://www.rsssf.org/tablesb/belg2023.html	RSSSF: Patro Eisden, RFC Liege, Francs Borains promoted
+hol-bel-283	down	agree	https://www.rsssf.org/tablesb/belg2023.html	
+hol-bel-283	playoffs	agree	https://www.rsssf.org/tablesb/belg2023.html	RSSSF shows no play-off for promotion
+hol-bel-283	subs_used	no second source		still unknown
+hol-bel-283	bench	no second source		still unknown
+hol-bel-284	name	no second source		
+hol-bel-284	clubs	no second source		
+hol-bel-284	up	no second source		
+hol-bel-284	down	no second source		
+hol-bel-284	subs_used	no second source		still unknown
+hol-bel-284	bench	no second source		still unknown
+hol-bel-285	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-285	format	agree	https://www.rsssf.org/tablesb/belg2023.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-285	subs_used	no second source		
+hol-bel-285	bench	no second source		still unknown
+hol-bel-286	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-286	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-286	subs_used	no second source		
+hol-bel-286	bench	no second source		
+hol-bel-287	name	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-287	foreign	no second source		still unknown
+hol-bel-287	work_permit	no second source		
+hol-bel-287	registration	no second source		still unknown
+hol-bel-287	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-288	name	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-288	clubs	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-288	down	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-288	playoffs	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-288	subs_used	no second source		inference in the first file; no second source found
+hol-bel-288	bench	no second source		inference in the first file; no second source found
+hol-bel-289	name	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-289	clubs	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-289	up	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-289	down	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-289	playoffs	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-289	subs_used	no second source		inference in the first file; no second source found
+hol-bel-289	bench	no second source		inference in the first file; no second source found
+hol-bel-290	name	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-290	clubs	agree	https://www.rsssf.org/tablesn/ned2024.html	also StatsCrew: 18 teams
+hol-bel-290	up	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-290	down	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-290	subs_used	no second source		still unknown
+hol-bel-290	bench	no second source		still unknown
+hol-bel-291	name	agree	https://www.rsssf.org/tablesn/ned2024.html	
+hol-bel-291	format	agree	https://www.rsssf.org/tablesn/ned2024.html	RSSSF names 109 to 110 clubs in all rounds; single-match knockout with extra time and penalties confirmed
+hol-bel-291	subs_used	no second source		inference in the first file; no second source found
+hol-bel-291	bench	no second source		inference in the first file; no second source found
+hol-bel-292	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-292	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-292	subs_used	no second source		still unknown
+hol-bel-292	bench	no second source		still unknown
+hol-bel-293	name	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-293	foreign	no second source		
+hol-bel-293	work_permit	no second source		still unknown
+hol-bel-293	registration	agree	https://www.dhnet.be/sports/football/division-1a/rwdm/2023/08/17/le-rwdm-va-devoir-recruter-du-belge-dici-a-la-fin-du-mercato-3F3NO2IYYRGCVLUBD6U2EL4WNE/	DH: at least six players trained in Belgium on the match sheet (article B6.109); Sporza 21 Dec 2023: at least eight in the squad https://sporza.be/nl/2023/12/21/ook-antwerp-haalt-zijn-gelijk-regel-van-voetbalbelgen-mogelijk-in-strijd-met-eu-wetgeving~1703148144943/; start year 2011 not confirmed
+hol-bel-293	windows	agree	https://sporza.be/nl/2023/09/06/dit-was-transfer-deadline-day-in-belgie-hazard-is-paars-alzate-keert-terug-en-raman-is-pissig~1694002332733/	Sporza: Belgian market closed on 6 September 2023; opening date not confirmed
+hol-bel-294	name	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-294	clubs	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-294	down	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-294	playoffs	agree	https://www.rsssf.org/tablesb/belg2024.html	see split
+hol-bel-294	split	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-294	subs_used	no second source		
+hol-bel-294	bench	no second source		still unknown
+hol-bel-295	name	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-295	clubs	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-295	up	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-295	down	agree	https://www.rsssf.org/tablesb/belg2024.html	RSSSF: 15th and 16th in the relegation zone; Oostende refused a licence so Seraing stayed
+hol-bel-295	playoffs	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-295	subs_used	no second source		
+hol-bel-295	bench	no second source		still unknown
+hol-bel-296	name	agree	https://www.rsssf.org/tablesb/belg2024.html	RSSSF: 1e Nationale
+hol-bel-296	clubs	agree	https://www.rsssf.org/tablesb/belg2024.html	
+hol-bel-296	up	agree	https://www.rsssf.org/tablesb/belg2024.html	RSSSF: La Louviere and Lokeren-Temse promoted
+hol-bel-296	down	no second source		still unknown
+hol-bel-296	playoffs	no second source		still unknown
+hol-bel-296	subs_used	no second source		still unknown
+hol-bel-296	bench	no second source		still unknown
+hol-bel-297	name	no second source		
+hol-bel-297	clubs	no second source		
+hol-bel-297	up	no second source		
+hol-bel-297	down	no second source		
+hol-bel-297	subs_used	no second source		still unknown
+hol-bel-297	bench	no second source		still unknown
+hol-bel-298	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-298	format	agree	https://www.rsssf.org/tablesb/belg2024.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-298	subs_used	no second source		
+hol-bel-298	bench	no second source		still unknown
+hol-bel-299	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-299	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-299	subs_used	no second source		still unknown
+hol-bel-299	bench	no second source		still unknown
+hol-bel-300	name	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-300	foreign	no second source		still unknown
+hol-bel-300	work_permit	no second source		
+hol-bel-300	registration	no second source		still unknown
+hol-bel-300	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-301	name	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-301	clubs	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-301	down	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-301	playoffs	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-301	subs_used	no second source		inference in the first file; no second source found
+hol-bel-301	bench	no second source		inference in the first file; no second source found
+hol-bel-302	name	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-302	clubs	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-302	up	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-302	down	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-302	playoffs	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-302	subs_used	no second source		inference in the first file; no second source found
+hol-bel-302	bench	no second source		inference in the first file; no second source found
+hol-bel-303	name	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-303	clubs	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-303	up	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-303	down	agree	https://www.rsssf.org/tablesn/ned2025.html	RSSSF: 18th relegated; 15th, 16th (Jong Sparta) and 17th in the relegation play-offs
+hol-bel-303	subs_used	no second source		still unknown
+hol-bel-303	bench	no second source		still unknown
+hol-bel-304	name	agree	https://www.rsssf.org/tablesn/ned2025.html	
+hol-bel-304	format	agree	https://www.rsssf.org/tablesn/ned2025.html	RSSSF names 108 clubs in all rounds (spelling variants possible); single-match knockout with extra time and penalties confirmed
+hol-bel-304	subs_used	no second source		inference in the first file; no second source found
+hol-bel-304	bench	no second source		inference in the first file; no second source found
+hol-bel-305	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-305	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021); RSSSF: no extra time played, straight to penalties
+hol-bel-305	subs_used	no second source		still unknown
+hol-bel-305	bench	no second source		still unknown
+hol-bel-306	name	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-306	foreign	no second source		
+hol-bel-306	work_permit	no second source		still unknown
+hol-bel-306	registration	agree	https://www.dhnet.be/sports/football/division-1a/standard/2024/07/17/au-standard-la-regle-des-joueurs-belges-est-une-donne-a-prendre-en-compte-pour-le-mercato-ALOFSJCBCZFUZLKTHTA2QFXISY/	DH: at least six players trained in Belgium on the match sheet (article B6.109); start year 2011 not confirmed
+hol-bel-306	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-307	name	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-307	clubs	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-307	down	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-307	playoffs	agree	https://www.rsssf.org/tablesb/belg2025.html	see split
+hol-bel-307	split	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-307	subs_used	no second source		
+hol-bel-307	bench	no second source		still unknown
+hol-bel-308	name	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-308	clubs	agree	https://www.rsssf.org/tablesb/belg2025.html	RSSSF: 15 in the final table; Deinze declared bankrupt in December, results annulled
+hol-bel-308	up	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-308	down	agree	https://www.rsssf.org/tablesb/belg2025.html	RSSSF: one place below the line plus Deinze bankrupt; U23 teams exempt, so no club went down on the table
+hol-bel-308	playoffs	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-308	subs_used	no second source		
+hol-bel-308	bench	no second source		still unknown
+hol-bel-309	name	agree	https://www.rsssf.org/tablesb/belg2025.html	RSSSF: 1e Nationale Vlaanderen (VV) and Wallonie (ACFF)
+hol-bel-309	clubs	agree	https://www.rsssf.org/tablesb/belg2025.html	
+hol-bel-309	up	agree	https://www.rsssf.org/tablesb/belg2025.html	RSSSF: VV champion Jong Gent promoted; ACFF top six in the promotion play-off
+hol-bel-309	down	agree	https://www.rsssf.org/tablesb/belg2025.html	RSSSF: VV 14th to 16th relegated; ACFF 7th to 12th in the relegation play-off
+hol-bel-309	subs_used	no second source		still unknown
+hol-bel-309	bench	no second source		still unknown
+hol-bel-310	name	no second source		
+hol-bel-310	clubs	no second source		
+hol-bel-310	up	no second source		
+hol-bel-310	down	no second source		
+hol-bel-310	subs_used	no second source		still unknown
+hol-bel-310	bench	no second source		still unknown
+hol-bel-311	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-311	format	agree	https://www.rsssf.org/tablesb/belg2025.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-311	subs_used	no second source		
+hol-bel-311	bench	no second source		still unknown
+hol-bel-312	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-312	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-312	subs_used	no second source		still unknown
+hol-bel-312	bench	no second source		still unknown
+hol-bel-313	name	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-313	foreign	no second source		still unknown
+hol-bel-313	work_permit	agree	https://www.flashscore.com/news/soccer-eredivisie-the-dutch-sports-passport-crisis-explained-causes-issues-solutions/QPWiRnnQ	Flashscore (2026): non-EU players must earn at least EUR 600,000 a year (rounded); under-21 figure not given
+hol-bel-313	registration	no second source		still unknown
+hol-bel-313	windows	disagree	https://www.voetbalprimeur.nl/nieuws/1291478/wanneer-begint-en-eindigt-de-zomerse-transferperiode.html	Voetbalprimeur (3 Jun 2025): Eredivisie summer window 16 June to 1 September 2025 (deadline later moved to 2 September); first gives 11 June to 2 September
+hol-bel-314	name	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-314	clubs	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-314	down	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-314	playoffs	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-314	subs_used	no second source		
+hol-bel-314	bench	no second source		
+hol-bel-315	name	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-315	clubs	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-315	up	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-315	down	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-315	playoffs	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-315	subs_used	no second source		
+hol-bel-315	bench	no second source		
+hol-bel-316	name	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-316	clubs	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-316	up	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-316	down	agree	https://www.rsssf.org/tablesn/ned2026.html	RSSSF: 18th relegated; 16th and 17th plus Jong Sparta (10th, reserve rule) in the relegation play-offs
+hol-bel-316	subs_used	no second source		
+hol-bel-316	bench	no second source		still unknown
+hol-bel-317	name	agree	https://www.rsssf.org/tablesn/ned2026.html	
+hol-bel-317	format	found	https://www.rsssf.org/tablesn/ned2026.html	about 110 entrants (RSSSF names 111 clubs, one listed twice); single-match knockout, extra time and penalties
+hol-bel-317	subs_used	no second source		
+hol-bel-317	bench	no second source		
+hol-bel-318	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-318	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-318	subs_used	no second source		still unknown
+hol-bel-318	bench	no second source		still unknown
+hol-bel-319	name	agree	https://www.rsssf.org/tablesb/belg2026.html	
+hol-bel-319	foreign	no second source		
+hol-bel-319	work_permit	no second source		still unknown
+hol-bel-319	registration	no second source		
+hol-bel-319	windows	agree	https://www.goal.com/en-my/news/transfer-window-when-it-was-introduced-dates--everything-you-need-to-know/u7wotr85nydw1joydoccjmdhz	goal.com: FIFA made two registration periods compulsory from 2002/03; not specific to this nation
+hol-bel-320	name	agree	https://www.rsssf.org/tablesb/belg2026.html	
+hol-bel-320	clubs	agree	https://www.rsssf.org/tablesb/belg2026.html	
+hol-bel-320	down	agree	https://www.rsssf.org/tablesb/belg2026.html	
+hol-bel-320	split	agree	https://www.rsssf.org/tablesb/belg2026.html	
+hol-bel-320	subs_used	no second source		
+hol-bel-320	bench	no second source		still unknown
+hol-bel-321	name	agree	https://www.rsssf.org/tablesb/belg2026.html	
+hol-bel-321	clubs	agree	https://www.rsssf.org/tablesb/belg2026.html	also Sporza 5 Aug 2025: 17 teams https://sporza.be/nl/2025/08/05/challenger-pro-league-uitgelegd-hoe-kun-je-promoveren-wie-zakt-naar-het-amateurniveau~1754377538536/
+hol-bel-321	up	agree	https://www.rsssf.org/tablesb/belg2026.html	
+hol-bel-321	down	agree	https://sporza.be/nl/2025/08/05/challenger-pro-league-uitgelegd-hoe-kun-je-promoveren-wie-zakt-naar-het-amateurniveau~1754377538536/	Sporza 5 Aug 2025: 16th and 17th go down normally, U23 teams exempt; RSSSF shows 17th relegated and RWDM demoted by licence
+hol-bel-321	playoffs	agree	https://sporza.be/nl/2025/08/05/challenger-pro-league-uitgelegd-hoe-kun-je-promoveren-wie-zakt-naar-het-amateurniveau~1754377538536/	
+hol-bel-321	subs_used	no second source		
+hol-bel-321	bench	no second source		still unknown
+hol-bel-322	name	no second source		
+hol-bel-322	clubs	no second source		
+hol-bel-322	up	no second source		
+hol-bel-322	down	no second source		
+hol-bel-322	subs_used	no second source		still unknown
+hol-bel-322	bench	no second source		still unknown
+hol-bel-323	name	no second source		
+hol-bel-323	clubs	no second source		
+hol-bel-323	up	no second source		
+hol-bel-323	down	no second source		
+hol-bel-323	subs_used	no second source		still unknown
+hol-bel-323	bench	no second source		still unknown
+hol-bel-324	name	agree	https://www.rsssf.org/tablesb/belgcuphist.html	
+hol-bel-324	format	agree	https://www.rsssf.org/tablesb/belg2026.html	RSSSF: single-match rounds, two-legged semi-finals; penalty and extra-time rules of the early rounds not shown
+hol-bel-324	subs_used	no second source		
+hol-bel-324	bench	no second source		still unknown
+hol-bel-325	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-325	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-325	subs_used	no second source		still unknown
+hol-bel-325	bench	no second source		still unknown
+hol-bel-326	name	no second source		
+hol-bel-326	foreign	no second source		still unknown
+hol-bel-326	work_permit	no second source		still unknown
+hol-bel-326	registration	no second source		still unknown
+hol-bel-326	windows	no second source		still unknown
+hol-bel-327	name	no second source		
+hol-bel-327	clubs	no second source		
+hol-bel-327	down	no second source		
+hol-bel-327	playoffs	no second source		
+hol-bel-327	subs_used	no second source		still unknown
+hol-bel-327	bench	no second source		still unknown
+hol-bel-328	name	no second source		
+hol-bel-328	clubs	no second source		
+hol-bel-328	up	no second source		
+hol-bel-328	down	no second source		
+hol-bel-328	playoffs	no second source		
+hol-bel-328	subs_used	no second source		still unknown
+hol-bel-328	bench	no second source		still unknown
+hol-bel-329	name	no second source		
+hol-bel-329	clubs	no second source		still unknown
+hol-bel-329	up	no second source		still unknown
+hol-bel-329	down	no second source		still unknown
+hol-bel-329	subs_used	found	https://www.knvb.nl/node/48989	5 substitutes in 4 moments (3 in play, 1 at half-time) for adult category A in 2026/27; inference that category A covers the Tweede Divisie
+hol-bel-329	bench	no second source		still unknown
+hol-bel-330	name	no second source		
+hol-bel-330	format	no second source		still unknown
+hol-bel-330	subs_used	no second source		still unknown
+hol-bel-330	bench	no second source		still unknown
+hol-bel-331	name	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	
+hol-bel-331	format	agree	https://www.rsssf.org/tablesn/nedsupcuphist.html	single match, champions v cup winners, league runners-up when one club won the double (RSSSF notes 2002, 2019, 2021)
+hol-bel-331	subs_used	no second source		still unknown
+hol-bel-331	bench	no second source		still unknown
+hol-bel-332	name	no second source		
+hol-bel-332	foreign	no second source		
+hol-bel-332	work_permit	no second source		still unknown
+hol-bel-332	registration	no second source		
+hol-bel-332	windows	no second source		still unknown
+hol-bel-333	name	agree	https://sporza.be/nl/2026/08/04/wanneer-zijn-de-eerste-toppers-en-hoe-werken-alle-nieuwigheden-jouw-gids-voor-de-aftrap-van-de-jupiler-pro-league~1785833592677/	Sporza: Jupiler Pro League
+hol-bel-333	clubs	agree	https://sporza.be/nl/2026/08/04/wanneer-zijn-de-eerste-toppers-en-hoe-werken-alle-nieuwigheden-jouw-gids-voor-de-aftrap-van-de-jupiler-pro-league~1785833592677/	Sporza 4 Aug 2026: 18 clubs, one regular competition, no play-offs, 17th and 18th relegated
+hol-bel-333	down	agree	https://sporza.be/nl/2026/08/04/wanneer-zijn-de-eerste-toppers-en-hoe-werken-alle-nieuwigheden-jouw-gids-voor-de-aftrap-van-de-jupiler-pro-league~1785833592677/	Sporza 4 Aug 2026: 18 clubs, one regular competition, no play-offs, 17th and 18th relegated
+hol-bel-333	split	agree	https://sporza.be/nl/2026/08/04/wanneer-zijn-de-eerste-toppers-en-hoe-werken-alle-nieuwigheden-jouw-gids-voor-de-aftrap-van-de-jupiler-pro-league~1785833592677/	Sporza 4 Aug 2026: 18 clubs, one regular competition, no play-offs, 17th and 18th relegated
+hol-bel-333	subs_used	no second source		still unknown
+hol-bel-333	bench	no second source		still unknown
+hol-bel-334	name	no second source		
+hol-bel-334	clubs	no second source		
+hol-bel-334	up	no second source		
+hol-bel-334	down	no second source		
+hol-bel-334	playoffs	no second source		
+hol-bel-334	subs_used	no second source		still unknown
+hol-bel-334	bench	no second source		still unknown
+hol-bel-335	name	no second source		
+hol-bel-335	clubs	no second source		
+hol-bel-335	up	no second source		
+hol-bel-335	down	no second source		
+hol-bel-335	subs_used	no second source		still unknown
+hol-bel-335	bench	no second source		still unknown
+hol-bel-336	name	no second source		
+hol-bel-336	clubs	no second source		
+hol-bel-336	up	no second source		
+hol-bel-336	down	no second source		
+hol-bel-336	subs_used	no second source		still unknown
+hol-bel-336	bench	no second source		still unknown
+hol-bel-337	name	no second source		
+hol-bel-337	format	no second source		
+hol-bel-337	subs_used	no second source		still unknown
+hol-bel-337	bench	no second source		still unknown
+hol-bel-338	name	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	
+hol-bel-338	format	agree	https://www.rsssf.org/tablesb/belgsupcuphist.html	RSSSF: single match champions v cup winners; cup runners-up when the champion won the double (2023); host not shown
+hol-bel-338	subs_used	no second source		still unknown
+hol-bel-338	bench	no second source		still unknown
+hol-bel-339	name	no second source		
+hol-bel-339	foreign	no second source		still unknown
+hol-bel-339	work_permit	no second source		still unknown
+hol-bel-339	registration	no second source		still unknown
+hol-bel-339	windows	no second source		still unknown
+hol-bel-340	name	no second source		
+hol-bel-340	clubs	no second source		still unknown
+hol-bel-340	down	no second source		still unknown
+hol-bel-340	playoffs	no second source		still unknown
+hol-bel-340	subs_used	no second source		still unknown
+hol-bel-340	bench	no second source		still unknown
+hol-bel-341	name	no second source		
+hol-bel-341	clubs	no second source		still unknown
+hol-bel-341	up	no second source		still unknown
+hol-bel-341	down	no second source		still unknown
+hol-bel-341	playoffs	no second source		still unknown
+hol-bel-341	subs_used	no second source		still unknown
+hol-bel-341	bench	no second source		still unknown
+hol-bel-342	name	no second source		
+hol-bel-342	clubs	no second source		still unknown
+hol-bel-342	up	no second source		still unknown
+hol-bel-342	down	no second source		still unknown
+hol-bel-342	subs_used	no second source		still unknown
+hol-bel-342	bench	no second source		still unknown
+hol-bel-343	name	no second source		
+hol-bel-343	format	no second source		still unknown
+hol-bel-343	subs_used	no second source		still unknown
+hol-bel-343	bench	no second source		still unknown
+hol-bel-344	name	no second source		
+hol-bel-344	format	no second source		still unknown
+hol-bel-344	subs_used	no second source		still unknown
+hol-bel-344	bench	no second source		still unknown
+hol-bel-345	name	no second source		
+hol-bel-345	foreign	no second source		
+hol-bel-345	work_permit	no second source		still unknown
+hol-bel-345	registration	no second source		
+hol-bel-345	windows	no second source		still unknown
+hol-bel-346	name	no second source		
+hol-bel-346	clubs	no second source		still unknown
+hol-bel-346	down	no second source		still unknown
+hol-bel-346	split	no second source		still unknown
+hol-bel-346	subs_used	no second source		still unknown
+hol-bel-346	bench	no second source		still unknown
+hol-bel-347	name	no second source		
+hol-bel-347	clubs	no second source		still unknown
+hol-bel-347	up	no second source		still unknown
+hol-bel-347	down	no second source		still unknown
+hol-bel-347	subs_used	no second source		still unknown
+hol-bel-347	bench	no second source		still unknown
+hol-bel-348	name	no second source		
+hol-bel-348	clubs	no second source		still unknown
+hol-bel-348	up	no second source		still unknown
+hol-bel-348	down	no second source		still unknown
+hol-bel-348	subs_used	no second source		still unknown
+hol-bel-348	bench	no second source		still unknown
+hol-bel-349	name	no second source		
+hol-bel-349	clubs	no second source		still unknown
+hol-bel-349	up	no second source		still unknown
+hol-bel-349	down	no second source		still unknown
+hol-bel-349	subs_used	no second source		still unknown
+hol-bel-349	bench	no second source		still unknown
+hol-bel-350	name	no second source		
+hol-bel-350	format	no second source		still unknown
+hol-bel-350	subs_used	no second source		still unknown
+hol-bel-350	bench	no second source		still unknown
+hol-bel-351	name	no second source		
+hol-bel-351	format	no second source		still unknown
+hol-bel-351	subs_used	no second source		still unknown
+hol-bel-351	bench	no second source		still unknown

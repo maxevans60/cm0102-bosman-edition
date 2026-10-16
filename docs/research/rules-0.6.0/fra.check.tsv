@@ -1,0 +1,1470 @@
+id	field	verdict	second_url	note
+fra-1	foreign	found	https://questions.assemblee-nationale.fr/dyn/11/questions/QANR5L11QE61641.pdf	5 non-EU players per team in Division 1 (Assemblée nationale answer, 1 October 2001). Maxifoot (spring 2001, https://www.maxifoot.fr/newsplus225.php) reports the planned change from 3 to 5 in D1 and 1 to 3 in D2.
+fra-1	registration	no second source		Not found in a second source.
+fra-1	windows	no second source		Marked unknown; not found in a second source.
+fra-2	name	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF season page heading.
+fra-2	clubs	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF final table.
+fra-2	down	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF relegation marks.
+fra-2	playoffs	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF play-off section.
+fra-2	split	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF: one table, no split.
+fra-2	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-2	bench	no second source		
+fra-3	name	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF season page heading.
+fra-3	clubs	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF final table.
+fra-3	up	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF promotion marks.
+fra-3	down	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF relegation marks.
+fra-3	playoffs	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF play-off section.
+fra-3	split	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF: one table, no split.
+fra-3	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-3	bench	no second source		
+fra-4	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2001	Transfermarkt table: 20 clubs, "Championnat National".
+fra-4	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2001	Transfermarkt table: 20 clubs, "Championnat National".
+fra-4	up	no second source		First source is RSSSF.
+fra-4	down	no second source		First source is RSSSF. RSSSF also marks 14th RC Paris relegated for financial reasons.
+fra-4	playoffs	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-4	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2001	Transfermarkt: one table.
+fra-4	subs_used	no second source		Marked unknown; not found in a second source.
+fra-4	bench	no second source		Marked unknown; not found in a second source.
+fra-5	name	no second source		First source is RSSSF.
+fra-5	clubs	no second source		First source is RSSSF; Transfermarkt has no tables before 2008/09.
+fra-5	up	no second source		
+fra-5	down	found	https://www.rsssf.org/tablesf/fran02.html	3 per group (16th to 18th) in groups A to C; group D has no marks on the page. Same publisher as the first source.
+fra-5	playoffs	no second source		
+fra-5	split	no second source		First source is RSSSF.
+fra-5	subs_used	no second source		Marked unknown; not found in a second source.
+fra-5	bench	no second source		Marked unknown; not found in a second source.
+fra-6	name	agree	https://www.rsssf.org/tablesf/fran02.html	RSSSF: "CFA2" / "Championnat de France Amateur 2".
+fra-6	clubs	no second source		First source is RSSSF.
+fra-6	up	disagree	https://www.rsssf.org/tablesf/fran02.html	RSSSF: 2 promoted in each of the 8 groups, 16 in all (reserve teams included).
+fra-6	down	no second source		Marked unknown; not found in a second source.
+fra-6	playoffs	no second source		
+fra-6	split	no second source		
+fra-6	subs_used	no second source		Marked unknown; not found in a second source.
+fra-6	bench	no second source		Marked unknown; not found in a second source.
+fra-7	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-7	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-7	subs_used	no second source		
+fra-7	bench	no second source		
+fra-8	name	agree	https://www.rsssf.org/tablesf/fran02.html	
+fra-8	format	no second source		RSSSF gives no final venue for this season.
+fra-8	subs_used	no second source		
+fra-8	bench	no second source		
+fra-9	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-9	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-9	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-9	subs_used	no second source		Marked unknown; not found in a second source.
+fra-9	bench	no second source		Marked unknown; not found in a second source.
+fra-10	foreign	agree	https://questions.assemblee-nationale.fr/dyn/11/questions/QANR5L11QE61641.pdf	Assemblée nationale answer of 1 October 2001: French football accepted 5 non-EU players per team. Dated one season earlier.
+fra-10	registration	no second source		Not found in a second source.
+fra-10	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-11	name	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF season page heading.
+fra-11	clubs	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF final table.
+fra-11	down	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF: 18th to 20th relegated (Monaco later forcibly relegated, then reprieved, per RSSSF note).
+fra-11	playoffs	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF play-off section.
+fra-11	split	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF: one table, no split.
+fra-11	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-11	bench	no second source		
+fra-12	name	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF season page heading.
+fra-12	clubs	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF final table.
+fra-12	up	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF promotion marks.
+fra-12	down	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF relegation marks.
+fra-12	playoffs	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF play-off section.
+fra-12	split	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF: one table, no split.
+fra-12	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-12	bench	no second source		
+fra-13	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2002	Transfermarkt table: 20 clubs, "Championnat National".
+fra-13	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2002	Transfermarkt table: 20 clubs, "Championnat National".
+fra-13	up	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-13	down	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-13	playoffs	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-13	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2002	Transfermarkt: one table.
+fra-13	subs_used	no second source		Marked unknown; not found in a second source.
+fra-13	bench	no second source		Marked unknown; not found in a second source.
+fra-14	name	no second source		First source is RSSSF.
+fra-14	clubs	no second source		First source is RSSSF; Transfermarkt has no tables before 2008/09.
+fra-14	up	agree	https://www.rsssf.org/tablesf/fran03.html	RSSSF: best amateur club of each group promoted; 2 extra best runners-up (Raon, Tours) went up after 2 administrative relegations from the National.
+fra-14	down	found	https://www.rsssf.org/tablesf/fran03.html	3 per group (16th to 18th), 12, plus Limoges (14th, D) for financial reasons.
+fra-14	playoffs	no second source		
+fra-14	split	no second source		First source is RSSSF.
+fra-14	subs_used	no second source		Marked unknown; not found in a second source.
+fra-14	bench	no second source		Marked unknown; not found in a second source.
+fra-15	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-15	clubs	no second source		
+fra-15	up	no second source		
+fra-15	down	no second source		Marked unknown; not found in a second source.
+fra-15	playoffs	no second source		
+fra-15	split	no second source		
+fra-15	subs_used	no second source		Marked unknown; not found in a second source.
+fra-15	bench	no second source		Marked unknown; not found in a second source.
+fra-16	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-16	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-16	subs_used	no second source		
+fra-16	bench	no second source		Marked unknown; not found in a second source.
+fra-17	name	agree	https://www.rsssf.org/tablesf/fran03.html	
+fra-17	format	no second source		RSSSF gives no final venue for this season.
+fra-17	subs_used	no second source		
+fra-17	bench	no second source		
+fra-18	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-18	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-18	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-18	subs_used	no second source		Marked unknown; not found in a second source.
+fra-18	bench	no second source		Marked unknown; not found in a second source.
+fra-19	foreign	no second source		Marked unknown; not found in a second source.
+fra-19	registration	no second source		Not found in a second source.
+fra-19	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-20	name	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF season page heading.
+fra-20	clubs	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF final table.
+fra-20	down	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF relegation marks.
+fra-20	playoffs	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF play-off section.
+fra-20	split	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF: one table, no split.
+fra-20	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-20	bench	no second source		
+fra-21	name	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF season page heading.
+fra-21	clubs	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF final table.
+fra-21	up	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF promotion marks.
+fra-21	down	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF relegation marks.
+fra-21	playoffs	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF play-off section.
+fra-21	split	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF: one table, no split.
+fra-21	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-21	bench	no second source		
+fra-22	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2003	Transfermarkt table: 20 clubs, "Championnat National".
+fra-22	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2003	Transfermarkt table: 20 clubs, "Championnat National".
+fra-22	up	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-22	down	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-22	playoffs	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-22	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2003	Transfermarkt: one table.
+fra-22	subs_used	no second source		Marked unknown; not found in a second source.
+fra-22	bench	no second source		Marked unknown; not found in a second source.
+fra-23	name	no second source		First source is RSSSF.
+fra-23	clubs	no second source		First source is RSSSF; Transfermarkt has no tables before 2008/09.
+fra-23	up	agree	https://www.rsssf.org/tablesf/fran04.html	RSSSF: one promoted club per group.
+fra-23	down	found	https://www.rsssf.org/tablesf/fran04.html	3 per group (16th to 18th), 12.
+fra-23	playoffs	no second source		
+fra-23	split	no second source		First source is RSSSF.
+fra-23	subs_used	no second source		Marked unknown; not found in a second source.
+fra-23	bench	no second source		Marked unknown; not found in a second source.
+fra-24	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-24	clubs	no second source		
+fra-24	up	no second source		
+fra-24	down	no second source		Marked unknown; not found in a second source.
+fra-24	playoffs	no second source		
+fra-24	split	no second source		
+fra-24	subs_used	no second source		Marked unknown; not found in a second source.
+fra-24	bench	no second source		Marked unknown; not found in a second source.
+fra-25	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-25	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-25	subs_used	no second source		
+fra-25	bench	no second source		Marked unknown; not found in a second source.
+fra-26	name	agree	https://www.rsssf.org/tablesf/fran04.html	
+fra-26	format	no second source		RSSSF gives no final venue for this season.
+fra-26	subs_used	no second source		
+fra-26	bench	no second source		
+fra-27	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-27	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-27	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-27	subs_used	no second source		Marked unknown; not found in a second source.
+fra-27	bench	no second source		Marked unknown; not found in a second source.
+fra-28	foreign	no second source		Marked unknown; not found in a second source.
+fra-28	registration	no second source		Not found in a second source.
+fra-28	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-29	name	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF season page heading.
+fra-29	clubs	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF final table.
+fra-29	down	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF relegation marks.
+fra-29	playoffs	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF play-off section.
+fra-29	split	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF: one table, no split.
+fra-29	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-29	bench	no second source		
+fra-30	name	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF season page heading.
+fra-30	clubs	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF final table.
+fra-30	up	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF promotion marks.
+fra-30	down	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF zone of 3; 18th Clermont saved because Valence were denied promotion from the National.
+fra-30	playoffs	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF play-off section.
+fra-30	split	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF: one table, no split.
+fra-30	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-30	bench	no second source		
+fra-31	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2004	Transfermarkt table: 20 clubs, "Championnat National".
+fra-31	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2004	Transfermarkt table: 20 clubs, "Championnat National".
+fra-31	up	no second source		First source is RSSSF. RSSSF itself notes Valence (2nd) were denied promotion, so only 2 went up.
+fra-31	down	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-31	playoffs	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-31	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2004	Transfermarkt: one table.
+fra-31	subs_used	no second source		Marked unknown; not found in a second source.
+fra-31	bench	no second source		Marked unknown; not found in a second source.
+fra-32	name	no second source		First source is RSSSF.
+fra-32	clubs	no second source		First source is RSSSF; Transfermarkt has no tables before 2008/09.
+fra-32	up	found	https://www.rsssf.org/tablesf/fran05.html	RSSSF: group winners Boulogne, Toulon, Vannes and group B (line unclear on the page), plus Châtellerault after the forced relegation of Racing. Same publisher as the first source.
+fra-32	down	found	https://www.rsssf.org/tablesf/fran05.html	3 per group (16th to 18th), plus administrative relegations (Angoulême, Trélissac, Fontenay). Same publisher as the first source.
+fra-32	playoffs	no second source		
+fra-32	split	no second source		First source is RSSSF.
+fra-32	subs_used	no second source		Marked unknown; not found in a second source.
+fra-32	bench	no second source		Marked unknown; not found in a second source.
+fra-33	name	agree	https://www.rsssf.org/tablesf/fran05.html	RSSSF: "CFA2" / "Championnat de France Amateur 2".
+fra-33	clubs	no second source		First source is RSSSF.
+fra-33	up	disagree	https://www.rsssf.org/tablesf/fran05.html	RSSSF: 8 group winners (best eligible) plus 4 best runners-up, plus Sainte-Geneviève, Andrézieux and Blois promoted additionally (15).
+fra-33	down	no second source		Marked unknown; not found in a second source.
+fra-33	playoffs	no second source		First source is RSSSF, which shows a relegation play-off for 13th places (Barrages CFA 2 - DH).
+fra-33	split	no second source		
+fra-33	subs_used	no second source		Marked unknown; not found in a second source.
+fra-33	bench	no second source		Marked unknown; not found in a second source.
+fra-34	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-34	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-34	subs_used	no second source		
+fra-34	bench	no second source		
+fra-35	name	agree	https://www.rsssf.org/tablesf/fran05.html	
+fra-35	format	no second source		RSSSF gives no final venue for this season.
+fra-35	subs_used	no second source		
+fra-35	bench	no second source		
+fra-36	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-36	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-36	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-36	subs_used	no second source		Marked unknown; not found in a second source.
+fra-36	bench	no second source		Marked unknown; not found in a second source.
+fra-37	foreign	no second source		Marked unknown; not found in a second source.
+fra-37	registration	no second source		Not found in a second source.
+fra-37	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-38	name	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF season page heading.
+fra-38	clubs	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF final table.
+fra-38	down	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF relegation marks.
+fra-38	playoffs	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF play-off section.
+fra-38	split	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: one table, no split.
+fra-38	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-38	bench	no second source		
+fra-39	name	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF season page heading.
+fra-39	clubs	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF final table.
+fra-39	up	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF promotion marks.
+fra-39	down	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF relegation marks.
+fra-39	playoffs	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF play-off section.
+fra-39	split	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: one table, no split.
+fra-39	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-39	bench	no second source		
+fra-40	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2005	Transfermarkt table: 20 clubs, "Championnat National".
+fra-40	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2005	Transfermarkt table: 20 clubs, "Championnat National".
+fra-40	up	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-40	down	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-40	playoffs	no second source		First source is RSSSF; Transfermarkt shows no promotion or play-off marks.
+fra-40	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2005	Transfermarkt: one table.
+fra-40	subs_used	no second source		Marked unknown; not found in a second source.
+fra-40	bench	no second source		Marked unknown; not found in a second source.
+fra-41	name	no second source		First source is RSSSF.
+fra-41	clubs	no second source		First source is RSSSF; Transfermarkt has no tables before 2008/09.
+fra-41	up	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: "Top team of each group is promoted to National."
+fra-41	down	found	https://www.rsssf.org/tablesf/fran06.html	RSSSF: "Last 3 of each group are relegated to CFA 2." 12.
+fra-41	playoffs	no second source		
+fra-41	split	no second source		First source is RSSSF.
+fra-41	subs_used	no second source		Marked unknown; not found in a second source.
+fra-41	bench	no second source		Marked unknown; not found in a second source.
+fra-42	name	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: "CFA2" / "Championnat de France Amateur 2".
+fra-42	clubs	found	https://www.rsssf.org/tablesf/fran06.html	128 (8 groups of 16).
+fra-42	up	disagree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: 8 group winners plus the 4 best runners-up after a play-off (12).
+fra-42	down	no second source		Marked unknown; not found in a second source.
+fra-42	playoffs	disagree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: 13th places (and the best 14th places) play a relegation play-off, and runners-up play a promotion play-off.
+fra-42	split	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: 8 groups.
+fra-42	subs_used	no second source		Marked unknown; not found in a second source.
+fra-42	bench	no second source		Marked unknown; not found in a second source.
+fra-43	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-43	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-43	subs_used	no second source		
+fra-43	bench	no second source		
+fra-44	name	agree	https://www.rsssf.org/tablesf/fran06.html	
+fra-44	format	agree	https://www.rsssf.org/tablesf/fran06.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-44	subs_used	no second source		
+fra-44	bench	no second source		
+fra-45	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-45	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-45	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-45	subs_used	no second source		Marked unknown; not found in a second source.
+fra-45	bench	no second source		Marked unknown; not found in a second source.
+fra-46	foreign	no second source		Marked unknown; not found in a second source.
+fra-46	registration	no second source		Not found in a second source.
+fra-46	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-47	name	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF season page heading.
+fra-47	clubs	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF final table.
+fra-47	down	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF relegation marks.
+fra-47	playoffs	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF play-off section.
+fra-47	split	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: one table, no split.
+fra-47	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-47	bench	no second source		
+fra-48	name	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF season page heading.
+fra-48	clubs	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF final table.
+fra-48	up	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF promotion marks.
+fra-48	down	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF relegation marks.
+fra-48	playoffs	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF play-off section.
+fra-48	split	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: one table, no split.
+fra-48	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-48	bench	no second source		
+fra-49	name	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF season page heading.
+fra-49	clubs	found	https://www.rsssf.org/tablesf/fran07.html	20 clubs (RSSSF National 2006/07 final table).
+fra-49	up	found	https://www.rsssf.org/tablesf/fran07.html	3 (1st to 3rd promoted).
+fra-49	down	found	https://www.rsssf.org/tablesf/fran07.html	4 (17th to 20th relegated).
+fra-49	playoffs	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF play-off section.
+fra-49	split	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: one table, no split.
+fra-49	subs_used	no second source		Marked unknown; not found in a second source.
+fra-49	bench	no second source		Marked unknown; not found in a second source.
+fra-50	name	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: "CFA".
+fra-50	clubs	found	https://www.rsssf.org/tablesf/fran07.html	72 (4 groups of 18, 34 rounds).
+fra-50	up	found	https://www.rsssf.org/tablesf/fran07.html	4 (group winners Calais, Arles, Rodez, Villemomble).
+fra-50	down	found	https://www.rsssf.org/tablesf/fran07.html	12 (16th to 18th of each group).
+fra-50	playoffs	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF shows no play-off.
+fra-50	split	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: groups.
+fra-50	subs_used	no second source		Marked unknown; not found in a second source.
+fra-50	bench	no second source		Marked unknown; not found in a second source.
+fra-51	name	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: "CFA2" / "Championnat de France Amateur 2".
+fra-51	clubs	found	https://www.rsssf.org/tablesf/fran07.html	128 (8 groups of 16).
+fra-51	up	disagree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: 8 group winners plus the 4 best runners-up after a play-off (12).
+fra-51	down	no second source		Marked unknown; not found in a second source.
+fra-51	playoffs	disagree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: 13th places (and the best 14th places) play a relegation play-off, and runners-up play a promotion play-off.
+fra-51	split	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: 8 groups.
+fra-51	subs_used	no second source		Marked unknown; not found in a second source.
+fra-51	bench	no second source		Marked unknown; not found in a second source.
+fra-52	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-52	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-52	subs_used	no second source		
+fra-52	bench	no second source		
+fra-53	name	agree	https://www.rsssf.org/tablesf/fran07.html	
+fra-53	format	agree	https://www.rsssf.org/tablesf/fran07.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-53	subs_used	no second source		
+fra-53	bench	no second source		
+fra-54	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-54	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-54	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-54	subs_used	no second source		Marked unknown; not found in a second source.
+fra-54	bench	no second source		Marked unknown; not found in a second source.
+fra-55	foreign	no second source		Marked unknown; not found in a second source.
+fra-55	registration	no second source		Not found in a second source.
+fra-55	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-56	name	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF season page heading.
+fra-56	clubs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF final table.
+fra-56	down	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF relegation marks.
+fra-56	playoffs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF play-off section.
+fra-56	split	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: one table, no split.
+fra-56	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-56	bench	no second source		
+fra-57	name	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF season page heading.
+fra-57	clubs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF final table.
+fra-57	up	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF promotion marks.
+fra-57	down	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF relegation marks.
+fra-57	playoffs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF play-off section.
+fra-57	split	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: one table, no split.
+fra-57	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-57	bench	no second source		
+fra-58	name	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF season page heading.
+fra-58	clubs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF final table.
+fra-58	up	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF promotion marks.
+fra-58	down	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF relegation marks.
+fra-58	playoffs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF play-off section.
+fra-58	split	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: one table, no split.
+fra-58	subs_used	no second source		Marked unknown; not found in a second source.
+fra-58	bench	no second source		Marked unknown; not found in a second source.
+fra-59	name	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: "CFA".
+fra-59	clubs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: 4 groups of 18.
+fra-59	up	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: Pacy, Croix-de-Savoie, Cassis-Carnoux, Bayonne promoted; Bordeaux reserves (1st) not eligible.
+fra-59	down	found	https://www.rsssf.org/tablesf/fran08.html	12 (16th to 18th of each group).
+fra-59	playoffs	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF shows no play-off.
+fra-59	split	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: groups.
+fra-59	subs_used	no second source		Marked unknown; not found in a second source.
+fra-59	bench	no second source		Marked unknown; not found in a second source.
+fra-60	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-60	clubs	no second source		
+fra-60	up	no second source		
+fra-60	down	no second source		Marked unknown; not found in a second source.
+fra-60	playoffs	no second source		
+fra-60	split	no second source		
+fra-60	subs_used	no second source		Marked unknown; not found in a second source.
+fra-60	bench	no second source		Marked unknown; not found in a second source.
+fra-61	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-61	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-61	subs_used	no second source		
+fra-61	bench	no second source		
+fra-62	name	agree	https://www.rsssf.org/tablesf/fran08.html	
+fra-62	format	agree	https://www.rsssf.org/tablesf/fran08.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-62	subs_used	no second source		
+fra-62	bench	no second source		
+fra-63	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-63	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-63	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-63	subs_used	no second source		Marked unknown; not found in a second source.
+fra-63	bench	no second source		Marked unknown; not found in a second source.
+fra-64	foreign	no second source		Marked unknown; not found in a second source.
+fra-64	registration	no second source		Not found in a second source.
+fra-64	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-65	name	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF season page heading.
+fra-65	clubs	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF final table.
+fra-65	down	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF relegation marks.
+fra-65	playoffs	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF play-off section.
+fra-65	split	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF: one table, no split.
+fra-65	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-65	bench	no second source		
+fra-66	name	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF season page heading.
+fra-66	clubs	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF final table.
+fra-66	up	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF promotion marks.
+fra-66	down	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF relegation marks.
+fra-66	playoffs	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF play-off section.
+fra-66	split	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF: one table, no split.
+fra-66	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-66	bench	no second source		
+fra-67	name	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF season page heading.
+fra-67	clubs	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF final table.
+fra-67	up	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF promotion marks.
+fra-67	down	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF relegation marks.
+fra-67	playoffs	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF play-off section.
+fra-67	split	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF: one table, no split.
+fra-67	subs_used	no second source		Marked unknown; not found in a second source.
+fra-67	bench	no second source		Marked unknown; not found in a second source.
+fra-68	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2008 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-68	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2008 (and B to D)	Transfermarkt: 4 groups of 18 (72).
+fra-68	up	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF: one promoted club per group (Besançon later refused a licence).
+fra-68	down	found	https://www.rsssf.org/tablesf/fran09.html	3 per group (16th to 18th) in the groups shown.
+fra-68	playoffs	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF shows no play-off.
+fra-68	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2008 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-68	subs_used	no second source		Marked unknown; not found in a second source.
+fra-68	bench	no second source		Marked unknown; not found in a second source.
+fra-69	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-69	clubs	no second source		
+fra-69	up	no second source		
+fra-69	down	no second source		Marked unknown; not found in a second source.
+fra-69	playoffs	no second source		
+fra-69	split	no second source		
+fra-69	subs_used	no second source		Marked unknown; not found in a second source.
+fra-69	bench	no second source		Marked unknown; not found in a second source.
+fra-70	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-70	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-70	subs_used	no second source		
+fra-70	bench	no second source		
+fra-71	name	agree	https://www.rsssf.org/tablesf/fran09.html	
+fra-71	format	agree	https://www.rsssf.org/tablesf/fran09.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-71	subs_used	no second source		
+fra-71	bench	no second source		
+fra-72	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-72	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-72	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-72	subs_used	no second source		Marked unknown; not found in a second source.
+fra-72	bench	no second source		Marked unknown; not found in a second source.
+fra-73	foreign	no second source		Marked unknown; not found in a second source.
+fra-73	registration	no second source		Not found in a second source.
+fra-73	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-74	name	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF season page heading.
+fra-74	clubs	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF final table.
+fra-74	down	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF relegation marks.
+fra-74	playoffs	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF play-off section.
+fra-74	split	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF: one table, no split.
+fra-74	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-74	bench	no second source		
+fra-75	name	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF season page heading.
+fra-75	clubs	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF final table.
+fra-75	up	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF promotion marks.
+fra-75	down	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF relegation marks.
+fra-75	playoffs	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF play-off section.
+fra-75	split	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF: one table, no split.
+fra-75	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-75	bench	no second source		
+fra-76	name	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF season page heading.
+fra-76	clubs	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF final table.
+fra-76	up	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF promotion marks.
+fra-76	down	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF relegation marks.
+fra-76	playoffs	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF play-off section.
+fra-76	split	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF: one table, no split.
+fra-76	subs_used	no second source		Marked unknown; not found in a second source.
+fra-76	bench	no second source		Marked unknown; not found in a second source.
+fra-77	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2009 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-77	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2009 (and FR4B, FR4C, FR4D)	Transfermarkt: 73 (group A of 19). fra-clubs.tsv lists 72.
+fra-77	up	no second source		
+fra-77	down	no second source		Marked unknown; not found in a second source.
+fra-77	playoffs	no second source		
+fra-77	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2009 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-77	subs_used	no second source		Marked unknown; not found in a second source.
+fra-77	bench	no second source		Marked unknown; not found in a second source.
+fra-78	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-78	clubs	no second source		
+fra-78	up	no second source		
+fra-78	down	no second source		Marked unknown; not found in a second source.
+fra-78	playoffs	no second source		
+fra-78	split	no second source		
+fra-78	subs_used	no second source		Marked unknown; not found in a second source.
+fra-78	bench	no second source		Marked unknown; not found in a second source.
+fra-79	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-79	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-79	subs_used	no second source		
+fra-79	bench	no second source		
+fra-80	name	agree	https://www.rsssf.org/tablesf/fran2010.html	
+fra-80	format	agree	https://www.rsssf.org/tablesf/fran2010.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-80	subs_used	no second source		
+fra-80	bench	no second source		
+fra-81	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-81	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-81	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-81	subs_used	no second source		Marked unknown; not found in a second source.
+fra-81	bench	no second source		Marked unknown; not found in a second source.
+fra-82	foreign	no second source		Marked unknown; not found in a second source.
+fra-82	registration	no second source		Not found in a second source.
+fra-82	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-83	name	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF season page heading.
+fra-83	clubs	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF final table.
+fra-83	down	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF relegation marks.
+fra-83	playoffs	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF play-off section.
+fra-83	split	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF: one table, no split.
+fra-83	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-83	bench	no second source		
+fra-84	name	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF season page heading.
+fra-84	clubs	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF final table.
+fra-84	up	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF promotion marks.
+fra-84	down	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF relegation marks.
+fra-84	playoffs	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF play-off section.
+fra-84	split	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF: one table, no split.
+fra-84	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-84	bench	no second source		
+fra-85	name	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF season page heading.
+fra-85	clubs	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF final table.
+fra-85	up	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF promotion marks.
+fra-85	down	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF relegation marks.
+fra-85	playoffs	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF play-off section.
+fra-85	split	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF: one table, no split.
+fra-85	subs_used	no second source		Marked unknown; not found in a second source.
+fra-85	bench	no second source		Marked unknown; not found in a second source.
+fra-86	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2010 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-86	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2010 (and FR4B, FR4C, FR4D)	Transfermarkt: 69.
+fra-86	up	no second source		
+fra-86	down	no second source		
+fra-86	playoffs	no second source		
+fra-86	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2010 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-86	subs_used	no second source		Marked unknown; not found in a second source.
+fra-86	bench	no second source		Marked unknown; not found in a second source.
+fra-87	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-87	clubs	no second source		
+fra-87	up	no second source		
+fra-87	down	no second source		Marked unknown; not found in a second source.
+fra-87	playoffs	no second source		
+fra-87	split	no second source		
+fra-87	subs_used	no second source		Marked unknown; not found in a second source.
+fra-87	bench	no second source		Marked unknown; not found in a second source.
+fra-88	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-88	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-88	subs_used	no second source		
+fra-88	bench	no second source		
+fra-89	name	agree	https://www.rsssf.org/tablesf/fran2011.html	
+fra-89	format	agree	https://www.rsssf.org/tablesf/fran2011.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-89	subs_used	no second source		
+fra-89	bench	no second source		
+fra-90	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-90	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-90	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-90	subs_used	no second source		Marked unknown; not found in a second source.
+fra-90	bench	no second source		Marked unknown; not found in a second source.
+fra-91	foreign	no second source		Marked unknown; not found in a second source.
+fra-91	registration	no second source		Not found in a second source.
+fra-91	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-92	name	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF season page heading.
+fra-92	clubs	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF final table.
+fra-92	down	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF relegation marks.
+fra-92	playoffs	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF play-off section.
+fra-92	split	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF: one table, no split.
+fra-92	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-92	bench	no second source		
+fra-93	name	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF season page heading.
+fra-93	clubs	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF final table.
+fra-93	up	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF promotion marks.
+fra-93	down	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF relegation marks.
+fra-93	playoffs	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF play-off section.
+fra-93	split	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF: one table, no split.
+fra-93	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-93	bench	no second source		
+fra-94	name	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF season page heading.
+fra-94	clubs	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF final table.
+fra-94	up	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF promotion marks.
+fra-94	down	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF relegation marks.
+fra-94	playoffs	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF play-off section.
+fra-94	split	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF: one table, no split.
+fra-94	subs_used	no second source		Marked unknown; not found in a second source.
+fra-94	bench	no second source		Marked unknown; not found in a second source.
+fra-95	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2011 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-95	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2011 (and FR4B, FR4C, FR4D)	Transfermarkt: 71.
+fra-95	up	no second source		
+fra-95	down	no second source		Marked unknown; not found in a second source.
+fra-95	playoffs	no second source		
+fra-95	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2011 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-95	subs_used	no second source		Marked unknown; not found in a second source.
+fra-95	bench	no second source		Marked unknown; not found in a second source.
+fra-96	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-96	clubs	no second source		
+fra-96	up	no second source		
+fra-96	down	no second source		Marked unknown; not found in a second source.
+fra-96	playoffs	no second source		
+fra-96	split	no second source		
+fra-96	subs_used	no second source		Marked unknown; not found in a second source.
+fra-96	bench	no second source		Marked unknown; not found in a second source.
+fra-97	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-97	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-97	subs_used	no second source		
+fra-97	bench	no second source		
+fra-98	name	agree	https://www.rsssf.org/tablesf/fran2012.html	
+fra-98	format	agree	https://www.rsssf.org/tablesf/fran2012.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-98	subs_used	no second source		
+fra-98	bench	no second source		
+fra-99	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-99	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-99	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-99	subs_used	no second source		Marked unknown; not found in a second source.
+fra-99	bench	no second source		Marked unknown; not found in a second source.
+fra-100	foreign	no second source		Marked unknown; not found in a second source.
+fra-100	registration	no second source		Not found in a second source.
+fra-100	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-101	name	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF season page heading.
+fra-101	clubs	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF final table.
+fra-101	down	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF relegation marks.
+fra-101	playoffs	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF play-off section.
+fra-101	split	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF: one table, no split.
+fra-101	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-101	bench	no second source		
+fra-102	name	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF season page heading.
+fra-102	clubs	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF final table.
+fra-102	up	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF promotion marks.
+fra-102	down	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF relegation marks.
+fra-102	playoffs	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF play-off section.
+fra-102	split	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF: one table, no split.
+fra-102	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-102	bench	no second source		
+fra-103	name	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF season page heading.
+fra-103	clubs	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF final table.
+fra-103	up	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF promotion marks.
+fra-103	down	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF zone 15th to 20th (6); Rouen demoted, so 15th to 17th stayed up.
+fra-103	playoffs	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF play-off section.
+fra-103	split	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF: one table, no split.
+fra-103	subs_used	no second source		Marked unknown; not found in a second source.
+fra-103	bench	no second source		Marked unknown; not found in a second source.
+fra-104	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2012 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-104	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2012 (and FR4B, FR4C, FR4D)	Transfermarkt: 72.
+fra-104	up	no second source		
+fra-104	down	no second source		
+fra-104	playoffs	no second source		
+fra-104	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2012 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-104	subs_used	no second source		Marked unknown; not found in a second source.
+fra-104	bench	no second source		Marked unknown; not found in a second source.
+fra-105	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-105	clubs	found	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2012 (and FR5B to FR5L)	112 (8 groups of 14).
+fra-105	up	no second source		
+fra-105	down	no second source		Marked unknown; not found in a second source.
+fra-105	playoffs	no second source		
+fra-105	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2012 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-105	subs_used	no second source		Marked unknown; not found in a second source.
+fra-105	bench	no second source		Marked unknown; not found in a second source.
+fra-106	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-106	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-106	subs_used	no second source		
+fra-106	bench	no second source		
+fra-107	name	agree	https://www.rsssf.org/tablesf/fran2013.html	
+fra-107	format	agree	https://www.rsssf.org/tablesf/fran2013.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-107	subs_used	no second source		
+fra-107	bench	no second source		
+fra-108	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-108	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-108	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-108	subs_used	no second source		Marked unknown; not found in a second source.
+fra-108	bench	no second source		Marked unknown; not found in a second source.
+fra-109	foreign	no second source		Marked unknown; not found in a second source.
+fra-109	registration	no second source		Not found in a second source.
+fra-109	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-110	name	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF season page heading.
+fra-110	clubs	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF final table.
+fra-110	down	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF relegation marks.
+fra-110	playoffs	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF play-off section.
+fra-110	split	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF: one table, no split.
+fra-110	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-110	bench	no second source		
+fra-111	name	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF season page heading.
+fra-111	clubs	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF final table.
+fra-111	up	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF promotion marks.
+fra-111	down	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF: zone of 3 (18th to 20th); 18th Châteauroux stayed up because Luzenac were denied promotion.
+fra-111	playoffs	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF play-off section.
+fra-111	split	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF: one table, no split.
+fra-111	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-111	bench	no second source		
+fra-112	name	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF season page heading.
+fra-112	clubs	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF final table.
+fra-112	up	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF promotion marks.
+fra-112	down	found	https://www.rsssf.org/tablesf/fran2014.html	Zone of 4 (15th to 18th). Only Vannes and Uzès went down: Colomiers and Strasbourg were reprieved after Luzenac and Carquefou left.
+fra-112	playoffs	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF play-off section.
+fra-112	split	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF: one table, no split.
+fra-112	subs_used	no second source		Marked unknown; not found in a second source.
+fra-112	bench	no second source		Marked unknown; not found in a second source.
+fra-113	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2013 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-113	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2013 (and FR4B, FR4C, FR4D)	Transfermarkt: 62.
+fra-113	up	no second source		
+fra-113	down	no second source		Marked unknown; not found in a second source.
+fra-113	playoffs	no second source		
+fra-113	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2013 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-113	subs_used	no second source		Marked unknown; not found in a second source.
+fra-113	bench	no second source		Marked unknown; not found in a second source.
+fra-114	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-114	clubs	found	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2013 (and FR5B to FR5L)	112 (8 groups of 14).
+fra-114	up	no second source		
+fra-114	down	no second source		Marked unknown; not found in a second source.
+fra-114	playoffs	no second source		
+fra-114	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2013 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-114	subs_used	no second source		Marked unknown; not found in a second source.
+fra-114	bench	no second source		Marked unknown; not found in a second source.
+fra-115	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-115	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-115	subs_used	no second source		
+fra-115	bench	no second source		
+fra-116	name	agree	https://www.rsssf.org/tablesf/fran2014.html	
+fra-116	format	agree	https://www.rsssf.org/tablesf/fran2014.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-116	subs_used	no second source		
+fra-116	bench	no second source		
+fra-117	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-117	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-117	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-117	subs_used	no second source		Marked unknown; not found in a second source.
+fra-117	bench	no second source		Marked unknown; not found in a second source.
+fra-118	foreign	no second source		Second sources found cover 2017/18 (goal.com, 4) and 2019/20 (Charte, 4) only.
+fra-118	registration	no second source		Not found in a second source.
+fra-118	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-119	name	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF season page heading.
+fra-119	clubs	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF final table.
+fra-119	down	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF relegation marks.
+fra-119	playoffs	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF play-off section.
+fra-119	split	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF: one table, no split.
+fra-119	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-119	bench	no second source		
+fra-120	name	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF season page heading.
+fra-120	clubs	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF final table.
+fra-120	up	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF promotion marks.
+fra-120	down	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF relegation marks.
+fra-120	playoffs	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF play-off section.
+fra-120	split	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF: one table, no split.
+fra-120	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-120	bench	no second source		
+fra-121	name	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF season page heading.
+fra-121	clubs	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF final table.
+fra-121	up	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF promotion marks.
+fra-121	down	found	https://www.rsssf.org/tablesf/fran2015.html	Zone of 4 (15th to 18th). Colomiers relegated, Istres demoted; CA Bastia and Epinal reprieved.
+fra-121	playoffs	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF play-off section.
+fra-121	split	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF: one table, no split.
+fra-121	subs_used	no second source		Marked unknown; not found in a second source.
+fra-121	bench	no second source		Marked unknown; not found in a second source.
+fra-122	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2014 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-122	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2014 (and FR4B, FR4C, FR4D)	Transfermarkt: 64.
+fra-122	up	no second source		
+fra-122	down	no second source		Marked unknown; not found in a second source.
+fra-122	playoffs	no second source		
+fra-122	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2014 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-122	subs_used	no second source		Marked unknown; not found in a second source.
+fra-122	bench	no second source		Marked unknown; not found in a second source.
+fra-123	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-123	clubs	found	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2014 (and FR5B to FR5L)	112 (8 groups of 14).
+fra-123	up	no second source		
+fra-123	down	no second source		Marked unknown; not found in a second source.
+fra-123	playoffs	no second source		
+fra-123	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2014 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-123	subs_used	no second source		Marked unknown; not found in a second source.
+fra-123	bench	no second source		Marked unknown; not found in a second source.
+fra-124	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-124	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-124	subs_used	no second source		
+fra-124	bench	no second source		
+fra-125	name	agree	https://www.rsssf.org/tablesf/fran2015.html	
+fra-125	format	agree	https://www.rsssf.org/tablesf/fran2015.html	RSSSF: single-match ties, extra time and penalties; final at Stade de France (Saint-Denis or "Paris" on the page). Entrant count not checked.
+fra-125	subs_used	no second source		
+fra-125	bench	no second source		
+fra-126	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-126	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-126	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-126	subs_used	no second source		Marked unknown; not found in a second source.
+fra-126	bench	no second source		Marked unknown; not found in a second source.
+fra-127	foreign	no second source		Second sources found cover 2017/18 (goal.com, 4) and 2019/20 (Charte, 4) only.
+fra-127	registration	no second source		Not found in a second source.
+fra-127	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-128	name	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF season page heading.
+fra-128	clubs	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF final table.
+fra-128	down	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF relegation marks.
+fra-128	playoffs	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF play-off section.
+fra-128	split	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF: one table, no split.
+fra-128	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-128	bench	no second source		
+fra-129	name	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF season page heading.
+fra-129	clubs	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF final table.
+fra-129	up	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF promotion marks.
+fra-129	down	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF: 18th Evian demoted, 19th and 20th relegated.
+fra-129	playoffs	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF play-off section.
+fra-129	split	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF: one table, no split.
+fra-129	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-129	bench	no second source		
+fra-130	name	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF season page heading.
+fra-130	clubs	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF final table.
+fra-130	up	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF promotion marks.
+fra-130	down	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF zone 15th to 18th; Les Herbiers and Epinal reprieved.
+fra-130	playoffs	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF play-off section.
+fra-130	split	agree	https://www.rsssf.org/tablesf/fran2016.html	RSSSF: one table, no split.
+fra-130	subs_used	no second source		Marked unknown; not found in a second source.
+fra-130	bench	no second source		Marked unknown; not found in a second source.
+fra-131	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2015 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-131	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2015 (and FR4B, FR4C, FR4D)	Transfermarkt lists 63 (group C of 15); the missing club is AC Arles-Avignon, which left during the season. 64 at the start.
+fra-131	up	no second source		
+fra-131	down	no second source		Marked unknown; not found in a second source.
+fra-131	playoffs	no second source		
+fra-131	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2015 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-131	subs_used	no second source		Marked unknown; not found in a second source.
+fra-131	bench	no second source		Marked unknown; not found in a second source.
+fra-132	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-132	clubs	found	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2015 (and FR5B to FR5L)	111 (8 groups of 14, one of 13).
+fra-132	up	no second source		
+fra-132	down	no second source		Marked unknown; not found in a second source.
+fra-132	playoffs	no second source		
+fra-132	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2015 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-132	subs_used	no second source		Marked unknown; not found in a second source.
+fra-132	bench	no second source		Marked unknown; not found in a second source.
+fra-133	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-133	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-133	subs_used	no second source		
+fra-133	bench	no second source		
+fra-134	name	agree	https://www.rsssf.org/tablesf/fran2016.html	
+fra-134	format	no second source		RSSSF gives no final venue for this season.
+fra-134	subs_used	no second source		
+fra-134	bench	no second source		
+fra-135	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-135	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-135	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-135	subs_used	no second source		Marked unknown; not found in a second source.
+fra-135	bench	no second source		Marked unknown; not found in a second source.
+fra-136	foreign	no second source		Second sources found cover 2017/18 (goal.com, 4) and 2019/20 (Charte, 4) only.
+fra-136	registration	no second source		Not found in a second source.
+fra-136	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-137	name	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF season page heading.
+fra-137	clubs	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF final table.
+fra-137	down	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF relegation marks.
+fra-137	playoffs	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF play-off section.
+fra-137	split	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF: one table, no split.
+fra-137	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-137	bench	no second source		
+fra-138	name	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF season page heading.
+fra-138	clubs	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF final table.
+fra-138	up	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF promotion marks.
+fra-138	down	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF relegation marks.
+fra-138	playoffs	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF play-off section.
+fra-138	split	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF: one table, no split.
+fra-138	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-138	bench	no second source		
+fra-139	name	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF season page heading.
+fra-139	clubs	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF final table.
+fra-139	up	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF promotion marks.
+fra-139	down	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF relegation marks.
+fra-139	playoffs	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF play-off section.
+fra-139	split	agree	https://www.rsssf.org/tablesf/fran2017.html	RSSSF: one table, no split.
+fra-139	subs_used	no second source		Marked unknown; not found in a second source.
+fra-139	bench	no second source		Marked unknown; not found in a second source.
+fra-140	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2016 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-140	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2016 (and FR4B, FR4C, FR4D)	Transfermarkt lists 63 (group C of 15); the missing club is Evian Thonon Gaillard, which left during the season. 64 at the start.
+fra-140	up	no second source		
+fra-140	down	no second source		Marked unknown; not found in a second source.
+fra-140	playoffs	no second source		
+fra-140	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2016 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-140	subs_used	no second source		Marked unknown; not found in a second source.
+fra-140	bench	no second source		Marked unknown; not found in a second source.
+fra-141	name	no second source		Transfermarkt uses the current name for old seasons.
+fra-141	clubs	found	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2016 (and FR5B to FR5L)	112 (8 groups of 14).
+fra-141	up	no second source		
+fra-141	down	no second source		Marked unknown; not found in a second source.
+fra-141	playoffs	no second source		
+fra-141	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2016 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-141	subs_used	no second source		Marked unknown; not found in a second source.
+fra-141	bench	no second source		Marked unknown; not found in a second source.
+fra-142	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-142	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-142	subs_used	no second source		
+fra-142	bench	no second source		
+fra-143	name	agree	https://www.rsssf.org/tablesf/fran2017.html	
+fra-143	format	agree	https://www.macommune.info/coupe-de-la-ligue-sochaux-bat-marseille-et-se-qualifie-pour-les-quarts-de-finale-154513	Sochaux v Marseille, 13 December 2016: penalties straight after 90 minutes. Final venue and entrant count not checked. RSSSF marks these ties "aet", which this report contradicts.
+fra-143	subs_used	no second source		
+fra-143	bench	no second source		
+fra-144	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-144	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-144	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-144	subs_used	no second source		Marked unknown; not found in a second source.
+fra-144	bench	no second source		Marked unknown; not found in a second source.
+fra-145	foreign	found	https://www.goal.com/fr/news/la-lfp-ouverte-a-un-cinquieme-extracommunautaire-en-ligue-1/1rt0svpwbl2ur12mmw8ho97h5o	4 non-EU players per Ligue 1 club: "jusqu'à présent limité à quatre" (goal.com, 17 March 2018).
+fra-145	registration	no second source		Not found in a second source.
+fra-145	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-146	name	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF season page heading.
+fra-146	clubs	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF final table.
+fra-146	down	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF relegation marks.
+fra-146	playoffs	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF play-off section.
+fra-146	split	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF: one table, no split.
+fra-146	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-146	bench	no second source		
+fra-147	name	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF season page heading.
+fra-147	clubs	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF final table.
+fra-147	up	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF promotion marks.
+fra-147	down	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF relegation marks.
+fra-147	playoffs	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF play-off section.
+fra-147	split	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF: one table, no split.
+fra-147	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-147	bench	no second source		
+fra-148	name	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF season page heading.
+fra-148	clubs	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF final table.
+fra-148	up	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF promotion marks.
+fra-148	down	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF relegation marks.
+fra-148	playoffs	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF play-off section.
+fra-148	split	agree	https://www.rsssf.org/tablesf/fran2018.html	RSSSF: one table, no split.
+fra-148	subs_used	no second source		Marked unknown; not found in a second source.
+fra-148	bench	no second source		Marked unknown; not found in a second source.
+fra-149	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2017 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-149	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2017 (and FR4B, FR4C, FR4D)	Transfermarkt: 64.
+fra-149	up	no second source		
+fra-149	down	no second source		Marked unknown; not found in a second source.
+fra-149	playoffs	no second source		
+fra-149	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2017 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-149	subs_used	no second source		Marked unknown; not found in a second source.
+fra-149	bench	no second source		Marked unknown; not found in a second source.
+fra-150	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2017 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-150	clubs	disagree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2017 (and FR5B to FR5L)	Transfermarkt group tables total 171 (12 groups: 10 of 14, one of 15, one of 16).
+fra-150	up	no second source		
+fra-150	down	no second source		Marked unknown; not found in a second source.
+fra-150	playoffs	no second source		
+fra-150	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2017 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-150	subs_used	no second source		Marked unknown; not found in a second source.
+fra-150	bench	no second source		Marked unknown; not found in a second source.
+fra-151	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-151	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-151	subs_used	no second source		
+fra-151	bench	no second source		
+fra-152	name	agree	https://www.rsssf.org/tablesf/fran2018.html	
+fra-152	format	no second source		RSSSF marks drawn ties "aet, pen", but it does the same for 2016/17, where macommune.info confirms penalties straight after 90 minutes; no reliable second source.
+fra-152	subs_used	no second source		
+fra-152	bench	no second source		
+fra-153	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-153	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-153	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-153	subs_used	no second source		Marked unknown; not found in a second source.
+fra-153	bench	no second source		Marked unknown; not found in a second source.
+fra-154	foreign	no second source		Marked unknown; not found in a second source.
+fra-154	registration	no second source		Not found in a second source.
+fra-154	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-155	name	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF season page heading.
+fra-155	clubs	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF final table.
+fra-155	down	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF relegation marks.
+fra-155	playoffs	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF play-off section.
+fra-155	split	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF: one table, no split.
+fra-155	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-155	bench	no second source		
+fra-156	name	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF season page heading.
+fra-156	clubs	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF final table.
+fra-156	up	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF promotion marks.
+fra-156	down	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF relegation marks.
+fra-156	playoffs	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF play-off section.
+fra-156	split	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF: one table, no split.
+fra-156	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-156	bench	no second source		
+fra-157	name	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF season page heading.
+fra-157	clubs	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF final table.
+fra-157	up	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF promotion marks.
+fra-157	down	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF relegation marks.
+fra-157	playoffs	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF play-off section.
+fra-157	split	agree	https://www.rsssf.org/tablesf/fran2019.html	RSSSF: one table, no split.
+fra-157	subs_used	no second source		Marked unknown; not found in a second source.
+fra-157	bench	no second source		Marked unknown; not found in a second source.
+fra-158	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2018 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-158	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2018 (and FR4B, FR4C, FR4D)	Transfermarkt: 64.
+fra-158	up	no second source		
+fra-158	down	no second source		Marked unknown; not found in a second source.
+fra-158	playoffs	no second source		
+fra-158	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2018 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-158	subs_used	no second source		Marked unknown; not found in a second source.
+fra-158	bench	no second source		Marked unknown; not found in a second source.
+fra-159	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2018 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-159	clubs	disagree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2018 (and FR5B to FR5L)	Transfermarkt group tables total 167 (12 groups: 11 of 14, one of 13).
+fra-159	up	no second source		
+fra-159	down	no second source		Marked unknown; not found in a second source.
+fra-159	playoffs	no second source		
+fra-159	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2018 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-159	subs_used	no second source		Marked unknown; not found in a second source.
+fra-159	bench	no second source		Marked unknown; not found in a second source.
+fra-160	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-160	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-160	subs_used	no second source		
+fra-160	bench	no second source		
+fra-161	name	agree	https://www.rsssf.org/tablesf/fran2019.html	
+fra-161	format	no second source		RSSSF marks drawn ties "aet, pen", but it does the same for 2016/17, where macommune.info confirms penalties straight after 90 minutes; no reliable second source.
+fra-161	subs_used	no second source		
+fra-161	bench	no second source		
+fra-162	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-162	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-162	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-162	subs_used	no second source		Marked unknown; not found in a second source.
+fra-162	bench	no second source		Marked unknown; not found in a second source.
+fra-163	foreign	found	https://sport.newstank.fr/file/public/57c0dfa770f28ef415c584c8e4bc281f/charte-football-professionnel-edition-2019-20.pdf	Charte du football professionnel 2019/20, art. 553 and 556: Ligue 1 at most 4 non-EU/EEA players under contract and on the match sheet, Ligue 2 at most 2; Cotonou (ACP) nationals do not count (art. 552).
+fra-163	registration	no second source		Not found in a second source.
+fra-163	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-164	name	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF season page heading.
+fra-164	clubs	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF final table.
+fra-164	down	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF relegation marks.
+fra-164	playoffs	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF play-off section.
+fra-164	split	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF: one table, no split.
+fra-164	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-164	bench	agree	https://www.lyonmag.com/article/109488/ol-5-changements-possibles-en-ligue-1-la-saison-prochaine	LyonMag, 1 August 2020: Ligue 1 squads go from 18 to 20, so 18 (7 on the bench) before 2020/21.
+fra-165	name	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF season page heading.
+fra-165	clubs	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF final table.
+fra-165	up	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF promotion marks.
+fra-165	down	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF relegation marks.
+fra-165	playoffs	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF play-off section.
+fra-165	split	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF: one table, no split.
+fra-165	subs_used	agree	https://en.wikipedia.org/wiki/Substitute_(association_football)	Three substitutes in competitive matches from 1995 until the temporary five-substitute option of May 2020.
+fra-165	bench	no second source		
+fra-166	name	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF season page heading.
+fra-166	clubs	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF final table.
+fra-166	up	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF promotion marks.
+fra-166	down	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF relegation marks.
+fra-166	playoffs	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF play-off section.
+fra-166	split	agree	https://www.rsssf.org/tablesf/fran2020.html	RSSSF: one table, no split.
+fra-166	subs_used	no second source		Marked unknown; not found in a second source.
+fra-166	bench	no second source		Marked unknown; not found in a second source.
+fra-167	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2019 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-167	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2019 (and FR4B, FR4C, FR4D)	Transfermarkt: 64.
+fra-167	up	no second source		
+fra-167	down	no second source		Marked unknown; not found in a second source.
+fra-167	playoffs	no second source		
+fra-167	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2019 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-167	subs_used	no second source		Marked unknown; not found in a second source.
+fra-167	bench	no second source		Marked unknown; not found in a second source.
+fra-168	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2019 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-168	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2019 (and FR5B to FR5L)	Transfermarkt: 168.
+fra-168	up	no second source		
+fra-168	down	no second source		Marked unknown; not found in a second source.
+fra-168	playoffs	no second source		
+fra-168	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2019 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-168	subs_used	no second source		Marked unknown; not found in a second source.
+fra-168	bench	no second source		Marked unknown; not found in a second source.
+fra-169	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-169	format	agree	https://www.rsssf.org/tablesf/francuphist.html	RSSSF: single matches with extra time and penalties; final venue matches. Entrant count not in a second source.
+fra-169	subs_used	no second source		
+fra-169	bench	no second source		
+fra-170	name	agree	https://www.rsssf.org/tablesf/fran2020.html	
+fra-170	format	agree	https://www.rsssf.org/tablesf/fran2020.html	Final 31 July 2020 at Saint-Denis, 0-0 aet, PSG on penalties. Earlier rounds marked "aet" on RSSSF (see 2016/17 note). Entrant count not checked.
+fra-170	subs_used	no second source		
+fra-170	bench	no second source		
+fra-171	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-171	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-171	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-171	subs_used	no second source		Marked unknown; not found in a second source.
+fra-171	bench	no second source		Marked unknown; not found in a second source.
+fra-172	foreign	no second source		Marked unknown; not found in a second source.
+fra-172	registration	no second source		Not found in a second source.
+fra-172	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-173	name	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF season page heading.
+fra-173	clubs	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF final table.
+fra-173	down	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF relegation marks.
+fra-173	playoffs	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF play-off section.
+fra-173	split	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF: one table, no split.
+fra-173	subs_used	agree	https://www.lyonmag.com/article/109488/ol-5-changements-possibles-en-ligue-1-la-saison-prochaine	LyonMag, 1 August 2020: five changes allowed in Ligue 1 and Ligue 2 in 2020/21.
+fra-173	bench	agree	https://www.lyonmag.com/article/109488/ol-5-changements-possibles-en-ligue-1-la-saison-prochaine	LyonMag: 20 on the match sheet in 2020/21. Note: the LFP 2020/21 rule book (newstank PDF, art. 529) still says 18 for Ligue 1 and Ligue 2.
+fra-174	name	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF season page heading.
+fra-174	clubs	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF final table.
+fra-174	up	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF promotion marks.
+fra-174	down	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF relegation marks.
+fra-174	playoffs	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF play-off section.
+fra-174	split	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF: one table, no split.
+fra-174	subs_used	agree	https://www.lyonmag.com/article/109488/ol-5-changements-possibles-en-ligue-1-la-saison-prochaine	LyonMag, 1 August 2020: five changes allowed in Ligue 1 and Ligue 2 in 2020/21.
+fra-174	bench	agree	https://sport.newstank.fr/file/public/18717f19dacf91f3fdd65f2917845382/lfp-statuts-reglements-2020-21.pdf	LFP Statuts et Règlements 2020/21, art. 529: at most 18 on the match sheet in Ligue 2.
+fra-175	name	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF season page heading.
+fra-175	clubs	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF final table.
+fra-175	up	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF promotion marks.
+fra-175	down	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF relegation marks.
+fra-175	playoffs	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF play-off section.
+fra-175	split	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF: one table, no split.
+fra-175	subs_used	no second source		Marked unknown; not found in a second source.
+fra-175	bench	no second source		Marked unknown; not found in a second source.
+fra-176	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2020 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-176	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2020 (and FR4B, FR4C, FR4D)	Transfermarkt: 64.
+fra-176	up	no second source		
+fra-176	down	no second source		
+fra-176	playoffs	no second source		
+fra-176	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2020 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-176	subs_used	no second source		Marked unknown; not found in a second source.
+fra-176	bench	no second source		Marked unknown; not found in a second source.
+fra-177	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2020 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-177	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2020 (and FR5B to FR5L)	Transfermarkt: 168.
+fra-177	up	no second source		
+fra-177	down	no second source		Marked unknown; not found in a second source.
+fra-177	playoffs	no second source		
+fra-177	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2020 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-177	subs_used	no second source		Marked unknown; not found in a second source.
+fra-177	bench	no second source		Marked unknown; not found in a second source.
+fra-178	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-178	format	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF 2020/21 shows drawn ties decided on penalties with no "aet". Final at Stade de France per the RSSSF list of finals. Entrant count not in a second source.
+fra-178	subs_used	no second source		
+fra-178	bench	no second source		
+fra-179	name	agree	https://www.rsssf.org/tablesf/fran2021.html	
+fra-179	format	agree	https://www.rsssf.org/tablesf/fran2021.html	RSSSF season page lists no Coupe de la Ligue (only the Coupe de France).
+fra-180	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-180	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-180	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-180	subs_used	no second source		Marked unknown; not found in a second source.
+fra-180	bench	no second source		Marked unknown; not found in a second source.
+fra-181	foreign	no second source		Marked unknown; not found in a second source.
+fra-181	registration	no second source		Not found in a second source.
+fra-181	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-182	name	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF season page heading.
+fra-182	clubs	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF final table.
+fra-182	down	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF relegation marks.
+fra-182	playoffs	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF play-off section.
+fra-182	split	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF: one table, no split.
+fra-182	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-182	bench	no second source		
+fra-183	name	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF season page heading.
+fra-183	clubs	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF final table.
+fra-183	up	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF promotion marks.
+fra-183	down	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF relegation marks.
+fra-183	playoffs	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF play-off section.
+fra-183	split	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF: one table, no split.
+fra-183	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-183	bench	no second source		Marked unknown; not found in a second source.
+fra-184	name	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF season page heading.
+fra-184	clubs	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF final table.
+fra-184	up	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF promotion marks.
+fra-184	down	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF zone 15th to 18th; Sète excluded, so Bastia-Borgo (15th) stayed up.
+fra-184	playoffs	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF play-off section.
+fra-184	split	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF: one table, no split.
+fra-184	subs_used	no second source		Marked unknown; not found in a second source.
+fra-184	bench	no second source		Marked unknown; not found in a second source.
+fra-185	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2021 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-185	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2021 (and FR4B, FR4C, FR4D)	Transfermarkt: 64.
+fra-185	up	no second source		
+fra-185	down	no second source		Marked unknown; not found in a second source.
+fra-185	playoffs	no second source		
+fra-185	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2021 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-185	subs_used	no second source		Marked unknown; not found in a second source.
+fra-185	bench	no second source		Marked unknown; not found in a second source.
+fra-186	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2021 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-186	clubs	disagree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2021 (and FR5B to FR5L)	Transfermarkt group tables total 169 (12 groups: 11 of 14, one of 15).
+fra-186	up	no second source		
+fra-186	down	no second source		Marked unknown; not found in a second source.
+fra-186	playoffs	no second source		
+fra-186	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2021 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-186	subs_used	no second source		Marked unknown; not found in a second source.
+fra-186	bench	no second source		Marked unknown; not found in a second source.
+fra-187	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-187	format	agree	https://www.ogcnice.com/en/article/126672/psg-nice-part-iii.html	OGC Nice report of PSG v Nice, 31 January 2022: "the game ended 0-0, so it went straight to penalties". RSSSF marks this tie "aet", so its aet marks are not reliable here. Final venue agrees with https://www.rsssf.org/tablesf/francuphist.html.
+fra-187	subs_used	no second source		
+fra-187	bench	no second source		
+fra-188	name	agree	https://www.rsssf.org/tablesf/fran2022.html	
+fra-188	format	agree	https://www.rsssf.org/tablesf/fran2022.html	RSSSF season page lists no Coupe de la Ligue (only the Coupe de France).
+fra-189	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-189	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-189	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-189	subs_used	no second source		Marked unknown; not found in a second source.
+fra-189	bench	no second source		Marked unknown; not found in a second source.
+fra-190	foreign	no second source		Marked unknown; not found in a second source.
+fra-190	registration	no second source		Not found in a second source.
+fra-190	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-191	name	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF season page heading.
+fra-191	clubs	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF final table.
+fra-191	down	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF relegation marks.
+fra-191	playoffs	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF play-off section.
+fra-191	split	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF: one table, no split.
+fra-191	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-191	bench	no second source		
+fra-192	name	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF season page heading.
+fra-192	clubs	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF final table.
+fra-192	up	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF promotion marks.
+fra-192	down	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF relegation marks.
+fra-192	playoffs	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF play-off section.
+fra-192	split	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF: one table, no split.
+fra-192	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-192	bench	no second source		Marked unknown; not found in a second source.
+fra-193	name	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF season page heading.
+fra-193	clubs	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF final table.
+fra-193	up	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF promotion marks.
+fra-193	down	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF relegation marks.
+fra-193	playoffs	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF play-off section.
+fra-193	split	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF: one table, no split.
+fra-193	subs_used	no second source		Marked unknown; not found in a second source.
+fra-193	bench	no second source		Marked unknown; not found in a second source.
+fra-194	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2022 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-194	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2022 (and FR4B, FR4C, FR4D)	Transfermarkt: 64.
+fra-194	up	no second source		
+fra-194	down	no second source		Marked unknown; not found in a second source.
+fra-194	playoffs	no second source		
+fra-194	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2022 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-194	subs_used	no second source		Marked unknown; not found in a second source.
+fra-194	bench	no second source		Marked unknown; not found in a second source.
+fra-195	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2022 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-195	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2022 (and FR5B to FR5L)	Transfermarkt: 168.
+fra-195	up	no second source		
+fra-195	down	no second source		Marked unknown; not found in a second source.
+fra-195	playoffs	no second source		
+fra-195	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2022 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-195	subs_used	no second source		Marked unknown; not found in a second source.
+fra-195	bench	no second source		Marked unknown; not found in a second source.
+fra-196	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-196	format	no second source		Extra-time rule still not settled: RSSSF marks drawn ties "aet, pen", but RSSSF also marks 2021/22 ties "aet" where OGC Nice confirms penalties straight after 90 minutes. Final venue agrees with https://www.rsssf.org/tablesf/francuphist.html.
+fra-196	subs_used	no second source		
+fra-196	bench	no second source		
+fra-197	name	agree	https://www.rsssf.org/tablesf/fran2023.html	
+fra-197	format	agree	https://www.rsssf.org/tablesf/fran2023.html	RSSSF season page lists no Coupe de la Ligue (only the Coupe de France).
+fra-198	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-198	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-198	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-198	subs_used	no second source		Marked unknown; not found in a second source.
+fra-198	bench	no second source		Marked unknown; not found in a second source.
+fra-199	foreign	no second source		Marked unknown; not found in a second source.
+fra-199	registration	no second source		Not found in a second source.
+fra-199	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-200	name	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF season page heading.
+fra-200	clubs	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF final table.
+fra-200	down	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF relegation marks.
+fra-200	playoffs	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF play-off section.
+fra-200	split	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF: one table, no split.
+fra-200	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-200	bench	no second source		
+fra-201	name	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF season page heading.
+fra-201	clubs	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF final table.
+fra-201	up	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF promotion marks.
+fra-201	down	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF relegation marks.
+fra-201	playoffs	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF play-off section.
+fra-201	split	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF: one table, no split.
+fra-201	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-201	bench	no second source		Marked unknown; not found in a second source.
+fra-202	name	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF season page heading.
+fra-202	clubs	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF final table.
+fra-202	up	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF promotion marks.
+fra-202	down	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF relegation marks.
+fra-202	playoffs	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF play-off section.
+fra-202	split	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF: one table, no split.
+fra-202	subs_used	no second source		Marked unknown; not found in a second source.
+fra-202	bench	no second source		Marked unknown; not found in a second source.
+fra-203	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2023 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-203	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2023 (and FR4B, FR4C, FR4D)	Transfermarkt: 56.
+fra-203	up	no second source		
+fra-203	down	no second source		Marked unknown; not found in a second source.
+fra-203	playoffs	no second source		
+fra-203	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2023 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-203	subs_used	no second source		Marked unknown; not found in a second source.
+fra-203	bench	no second source		Marked unknown; not found in a second source.
+fra-204	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2023 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-204	clubs	disagree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2023 (and FR5B to FR5L)	Transfermarkt group tables total 153 (11 groups: 10 of 14, one of 13).
+fra-204	up	no second source		Marked unknown; not found in a second source.
+fra-204	down	no second source		Marked unknown; not found in a second source.
+fra-204	playoffs	no second source		
+fra-204	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2023 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-204	subs_used	no second source		Marked unknown; not found in a second source.
+fra-204	bench	no second source		Marked unknown; not found in a second source.
+fra-205	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-205	format	no second source		Extra-time rule still not settled: RSSSF marks drawn ties "aet, pen", but RSSSF also marks 2021/22 ties "aet" where OGC Nice confirms penalties straight after 90 minutes. Final venue agrees with https://www.rsssf.org/tablesf/francuphist.html.
+fra-205	subs_used	no second source		
+fra-205	bench	no second source		
+fra-206	name	agree	https://www.rsssf.org/tablesf/fran2024.html	
+fra-206	format	agree	https://www.rsssf.org/tablesf/fran2024.html	RSSSF season page lists no Coupe de la Ligue (only the Coupe de France).
+fra-207	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-207	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-207	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-207	subs_used	no second source		Marked unknown; not found in a second source.
+fra-207	bench	no second source		Marked unknown; not found in a second source.
+fra-208	foreign	no second source		
+fra-208	registration	no second source		Not found in a second source.
+fra-208	windows	disagree	https://www.dailymercato.com/news/ligue-1-quand-souvre-officiellement-le-mercato-estival-2024	LFP dates: summer 10 June to 30 August 2024, 23:00 (dailymercato.com); winter 1 January to 3 February 2025, 23:00 (https://www.goal.com/fr/news/quelles-sont-les-dates-du-mercato-d-hiver-en-france-cette-annee/blt780d56851e0dfd14).
+fra-209	name	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF season page heading.
+fra-209	clubs	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF final table.
+fra-209	down	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF relegation marks.
+fra-209	playoffs	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF play-off section.
+fra-209	split	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF: one table, no split.
+fra-209	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-209	bench	no second source		
+fra-210	name	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF season page heading.
+fra-210	clubs	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF final table.
+fra-210	up	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF promotion marks.
+fra-210	down	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF: 17th and 18th relegated; AC Ajaccio and Martigues later excluded from national levels.
+fra-210	playoffs	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF play-off section.
+fra-210	split	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF: one table, no split.
+fra-210	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-210	bench	no second source		Marked unknown; not found in a second source.
+fra-211	name	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF season page heading.
+fra-211	clubs	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF: 17 in the table, Bordeaux listed as excluded.
+fra-211	up	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF promotion marks.
+fra-211	down	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF: 17 clubs (Bordeaux excluded); only 17th Nîmes relegated, 16th Châteauroux reprieved.
+fra-211	playoffs	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF play-off section.
+fra-211	split	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF: one table, no split.
+fra-211	subs_used	no second source		Marked unknown; not found in a second source.
+fra-211	bench	no second source		Marked unknown; not found in a second source.
+fra-212	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2024 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-212	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2024 (and FR4B, FR4C, FR4D)	Transfermarkt: 48.
+fra-212	up	no second source		
+fra-212	down	no second source		
+fra-212	playoffs	no second source		
+fra-212	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2024 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-212	subs_used	no second source		Marked unknown; not found in a second source.
+fra-212	bench	no second source		Marked unknown; not found in a second source.
+fra-213	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2024 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-213	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2024 (and FR5B to FR5L)	Transfermarkt: 140.
+fra-213	up	no second source		Marked unknown; not found in a second source.
+fra-213	down	no second source		Marked unknown; not found in a second source.
+fra-213	playoffs	no second source		
+fra-213	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2024 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-213	subs_used	no second source		Marked unknown; not found in a second source.
+fra-213	bench	no second source		Marked unknown; not found in a second source.
+fra-214	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-214	format	no second source		Extra-time rule still not settled: RSSSF marks drawn ties "aet, pen", but RSSSF also marks 2021/22 ties "aet" where OGC Nice confirms penalties straight after 90 minutes. Final venue agrees with https://www.rsssf.org/tablesf/francuphist.html.
+fra-214	subs_used	no second source		
+fra-214	bench	no second source		
+fra-215	name	agree	https://www.rsssf.org/tablesf/fran2025.html	
+fra-215	format	agree	https://www.rsssf.org/tablesf/fran2025.html	RSSSF season page lists no Coupe de la Ligue (only the Coupe de France).
+fra-216	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-216	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-216	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-216	subs_used	no second source		Marked unknown; not found in a second source.
+fra-216	bench	no second source		Marked unknown; not found in a second source.
+fra-217	foreign	no second source		Marked unknown; not found in a second source.
+fra-217	registration	no second source		Not found in a second source.
+fra-217	windows	found	https://ligue1.com/fr/articles/l1_article_2392-	Summer 16 June to 1 September 2025, 20:00; winter 1 January to 2 February 2026, 20:00.
+fra-218	name	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF season page heading.
+fra-218	clubs	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF final table.
+fra-218	down	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF relegation marks.
+fra-218	playoffs	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF play-off section.
+fra-218	split	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF: one table, no split.
+fra-218	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-218	bench	no second source		
+fra-219	name	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF season page heading.
+fra-219	clubs	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF final table.
+fra-219	up	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF promotion marks.
+fra-219	down	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF relegation marks.
+fra-219	playoffs	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF play-off section.
+fra-219	split	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF: one table, no split.
+fra-219	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-219	bench	no second source		Marked unknown; not found in a second source.
+fra-220	name	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF season page heading.
+fra-220	clubs	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF: 17 in the final table plus AC Ajaccio excluded (18 at the start). Transfermarkt also lists 17.
+fra-220	up	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF promotion marks.
+fra-220	down	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF: 16th and 17th relegated.
+fra-220	playoffs	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF play-off section.
+fra-220	split	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF: one table, no split.
+fra-220	subs_used	no second source		Marked unknown; not found in a second source.
+fra-220	bench	no second source		Marked unknown; not found in a second source.
+fra-221	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2025 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-221	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2025 (and FR4B, FR4C, FR4D)	Transfermarkt: 48.
+fra-221	up	no second source		
+fra-221	down	no second source		Marked unknown; not found in a second source.
+fra-221	playoffs	no second source		
+fra-221	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2025 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-221	subs_used	no second source		Marked unknown; not found in a second source.
+fra-221	bench	no second source		Marked unknown; not found in a second source.
+fra-222	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2025 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-222	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2025 (and FR5B to FR5L)	Transfermarkt: 112.
+fra-222	up	no second source		Marked unknown; not found in a second source.
+fra-222	down	no second source		Marked unknown; not found in a second source.
+fra-222	playoffs	no second source		
+fra-222	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2025 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-222	subs_used	no second source		Marked unknown; not found in a second source.
+fra-222	bench	no second source		Marked unknown; not found in a second source.
+fra-223	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-223	format	no second source		Extra-time rule still not settled: RSSSF marks drawn ties "aet, pen", but RSSSF also marks 2021/22 ties "aet" where OGC Nice confirms penalties straight after 90 minutes. Final venue agrees with https://www.rsssf.org/tablesf/francuphist.html.
+fra-223	subs_used	no second source		
+fra-223	bench	no second source		
+fra-224	name	agree	https://www.rsssf.org/tablesf/fran2026.html	
+fra-224	format	agree	https://www.rsssf.org/tablesf/fran2026.html	RSSSF season page lists no Coupe de la Ligue (only the Coupe de France).
+fra-225	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-225	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-225	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-225	subs_used	no second source		Marked unknown; not found in a second source.
+fra-225	bench	no second source		Marked unknown; not found in a second source.
+fra-226	foreign	no second source		
+fra-226	registration	no second source		Not found in a second source.
+fra-226	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-227	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR1/saison_id/2026	Transfermarkt 26/27 table title: "Ligue 1".
+fra-227	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR1/saison_id/2026	Transfermarkt 26/27 table: 18 clubs.
+fra-227	down	no second source		Season in progress; no second source for the places.
+fra-227	playoffs	no second source		Season in progress; no second source for the places.
+fra-227	split	no second source		Season in progress; no second source for the places.
+fra-227	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-227	bench	no second source		
+fra-228	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR2/saison_id/2026	Transfermarkt 26/27 table title: "Ligue 2".
+fra-228	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR2/saison_id/2026	Transfermarkt 26/27 table: 18 clubs.
+fra-228	up	no second source		Season in progress; no second source for the places.
+fra-228	down	no second source		Season in progress; no second source for the places.
+fra-228	playoffs	no second source		Season in progress; no second source for the places.
+fra-228	split	no second source		Season in progress; no second source for the places.
+fra-228	subs_used	no second source		Second sources found cover 2020/21 only.
+fra-228	bench	no second source		Marked unknown; not found in a second source.
+fra-229	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2026	Transfermarkt 26/27 table title: "Ligue 3".
+fra-229	clubs	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR3/saison_id/2026	Transfermarkt 26/27 table: 18 clubs.
+fra-229	up	no second source		Season in progress; no second source for the places.
+fra-229	down	no second source		Season in progress; no second source for the places.
+fra-229	playoffs	no second source		Season in progress; no second source for the places.
+fra-229	split	no second source		Season in progress; no second source for the places.
+fra-229	subs_used	no second source		Marked unknown; not found in a second source.
+fra-229	bench	no second source		Marked unknown; not found in a second source.
+fra-230	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2026 (and FR4B, FR4C, FR4D)	Transfermarkt group table title.
+fra-230	clubs	disagree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2026 (and FR4B, FR4C, FR4D)	Transfermarkt group tables total 49.
+fra-230	up	no second source		Season in progress.
+fra-230	down	no second source		Marked unknown; not found in a second source.
+fra-230	playoffs	no second source		
+fra-230	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR4A/saison_id/2026 (and FR4B, FR4C, FR4D)	Transfermarkt: separate group tables.
+fra-230	subs_used	no second source		Marked unknown; not found in a second source.
+fra-230	bench	no second source		Marked unknown; not found in a second source.
+fra-231	name	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2026 (and FR5B to FR5L)	Transfermarkt group table title.
+fra-231	clubs	disagree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2026 (and FR5B to FR5L)	Transfermarkt group tables total 111 (8 groups: 7 of 14, one of 13).
+fra-231	up	no second source		Marked unknown; not found in a second source.
+fra-231	down	no second source		Marked unknown; not found in a second source.
+fra-231	playoffs	no second source		
+fra-231	split	agree	https://www.transfermarkt.fr/x/tabelle/wettbewerb/FR5A/saison_id/2026 (and FR5B to FR5L)	Transfermarkt: separate group tables.
+fra-231	subs_used	no second source		Marked unknown; not found in a second source.
+fra-231	bench	no second source		Marked unknown; not found in a second source.
+fra-232	name	agree	https://www.rsssf.org/tablesf/francuphist.html	
+fra-232	format	no second source		
+fra-232	subs_used	no second source		Marked unknown; not found in a second source.
+fra-232	bench	no second source		Marked unknown; not found in a second source.
+fra-233	name	agree	https://www.rsssf.org/tablesf/fran2027.html	
+fra-233	format	agree	https://www.rsssf.org/tablesf/fran2027.html	RSSSF season page lists no Coupe de la Ligue (only the Coupe de France).
+fra-234	name	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-234	clubs	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	
+fra-234	format	agree	https://www.rsssf.org/tablesf/fransupcuphist.html	RSSSF list of finals: venue and teams agree.
+fra-234	subs_used	no second source		Marked unknown; not found in a second source.
+fra-234	bench	no second source		Marked unknown; not found in a second source.
+fra-235	foreign	no second source		
+fra-235	registration	no second source		Not found in a second source.
+fra-235	windows	agree	https://digitalhub.fifa.com/m/27e3bf684f75034f/original/x9q8h6zvyq8xjtfzmpy9-pdf.pdf	FIFA (April 2020): players register in one of the two annual registration periods (RSTP art. 6). Dates not given.
+fra-236	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-236	clubs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-236	down	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-236	playoffs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-236	split	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-236	subs_used	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-236	bench	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	clubs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	up	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	down	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	playoffs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	split	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	subs_used	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-237	bench	no second source		Marked unknown; not found in a second source.
+fra-238	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-238	clubs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-238	up	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-238	down	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-238	playoffs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-238	split	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-238	subs_used	no second source		Marked unknown; not found in a second source.
+fra-238	bench	no second source		Marked unknown; not found in a second source.
+fra-239	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-239	clubs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-239	up	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-239	down	no second source		Marked unknown; not found in a second source.
+fra-239	playoffs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-239	split	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-239	subs_used	no second source		Marked unknown; not found in a second source.
+fra-239	bench	no second source		Marked unknown; not found in a second source.
+fra-240	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-240	clubs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-240	up	no second source		Marked unknown; not found in a second source.
+fra-240	down	no second source		Marked unknown; not found in a second source.
+fra-240	playoffs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-240	split	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-240	subs_used	no second source		Marked unknown; not found in a second source.
+fra-240	bench	no second source		Marked unknown; not found in a second source.
+fra-241	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-241	format	no second source		Marked unknown; not found in a second source.
+fra-241	subs_used	no second source		Marked unknown; not found in a second source.
+fra-241	bench	no second source		Marked unknown; not found in a second source.
+fra-242	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-242	format	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-243	name	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-243	clubs	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-243	format	no second source		No page for 2027/28 yet; value carried from 2026/27.
+fra-243	subs_used	no second source		Marked unknown; not found in a second source.
+fra-243	bench	no second source		Marked unknown; not found in a second source.

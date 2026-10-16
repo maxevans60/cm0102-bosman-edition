@@ -1,0 +1,1469 @@
+id	field	verdict	second_url	note
+sco-1	foreign	no second source		first value unknown; none found
+sco-1	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-1	registration	no second source		first value unknown; none found
+sco-1	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: the present window system was introduced for 2002/03
+sco-2	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-2	clubs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF final table has the same club count
+sco-2	down	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF table marks the same direct relegation places
+sco-2	playoffs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same play-off ties and stages
+sco-2	split	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same split stages
+sco-2	format	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF tables show the same number of matches
+sco-2	subs_used	no second source		no page from another publisher found
+sco-2	bench	no second source		first value unknown; none found
+sco-2	registration	no second source		first value unknown; none found
+sco-3	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-3	clubs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF final table has the same club count
+sco-3	up	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF table marks the same direct promotion places
+sco-3	down	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF: only Raith relegated because Airdrieonians folded; Falkirk escaped, so 2 places by rule
+sco-3	playoffs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same play-off ties and stages
+sco-3	split	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same split stages
+sco-3	format	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF tables show the same number of matches
+sco-3	subs_used	no second source		no page from another publisher found
+sco-3	bench	no second source		first value is an inference; no second source found
+sco-4	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-4	clubs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF final table has the same club count
+sco-4	up	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF table marks the same direct promotion places
+sco-4	down	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF table marks the same direct relegation places
+sco-4	playoffs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same play-off ties and stages
+sco-4	split	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same split stages
+sco-4	format	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF tables show the same number of matches
+sco-4	subs_used	no second source		no page from another publisher found
+sco-4	bench	no second source		first value is an inference; no second source found
+sco-5	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-5	clubs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF final table has the same club count
+sco-5	up	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF table marks the same direct promotion places
+sco-5	down	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-5	playoffs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same play-off ties and stages
+sco-5	split	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF shows the same split stages
+sco-5	format	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF tables show the same number of matches
+sco-5	subs_used	no second source		no page from another publisher found
+sco-5	bench	no second source		first value is an inference; no second source found
+sco-6	name	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-6	clubs	no second source		first value unknown; no count found
+sco-6	format	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF rounds and replays match; Premier clubs enter at the last 32
+sco-6	subs_used	no second source		no page from another publisher found
+sco-6	bench	no second source		first value unknown; none found
+sco-7	name	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF lists the League Cup (sponsor names aside)
+sco-7	clubs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-7	format	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-7	subs_used	no second source		no page from another publisher found
+sco-7	bench	no second source		first value is an inference; no second source found
+sco-8	name	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF lists the (League) Challenge Cup
+sco-8	clubs	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-8	format	agree	https://www.rsssf.org/tabless/scot02.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-8	subs_used	no second source		no page from another publisher found
+sco-8	bench	no second source		first value is an inference; no second source found
+sco-9	foreign	no second source		first value unknown; none found
+sco-9	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-9	registration	no second source		first value unknown; none found
+sco-9	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-10	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-10	clubs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF final table has the same club count
+sco-10	down	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF table marks the same direct relegation places
+sco-10	playoffs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same play-off ties and stages
+sco-10	split	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same split stages
+sco-10	format	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF tables show the same number of matches
+sco-10	subs_used	no second source		no page from another publisher found
+sco-10	bench	no second source		first value unknown; none found
+sco-10	registration	no second source		first value unknown; none found
+sco-11	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-11	clubs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF final table has the same club count
+sco-11	up	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF table marks the same direct promotion places
+sco-11	down	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF table marks the same direct relegation places
+sco-11	playoffs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same play-off ties and stages
+sco-11	split	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same split stages
+sco-11	format	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF tables show the same number of matches
+sco-11	subs_used	no second source		no page from another publisher found
+sco-11	bench	no second source		first value is an inference; no second source found
+sco-12	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-12	clubs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF final table has the same club count
+sco-12	up	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF table marks the same direct promotion places
+sco-12	down	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF table marks the same direct relegation places
+sco-12	playoffs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same play-off ties and stages
+sco-12	split	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same split stages
+sco-12	format	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF tables show the same number of matches
+sco-12	subs_used	no second source		no page from another publisher found
+sco-12	bench	no second source		first value is an inference; no second source found
+sco-13	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-13	clubs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF final table has the same club count
+sco-13	up	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF table marks the same direct promotion places
+sco-13	down	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-13	playoffs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same play-off ties and stages
+sco-13	split	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF shows the same split stages
+sco-13	format	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF tables show the same number of matches
+sco-13	subs_used	no second source		no page from another publisher found
+sco-13	bench	no second source		first value is an inference; no second source found
+sco-14	name	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-14	clubs	no second source		first value unknown; no count found
+sco-14	format	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF rounds and replays match; Premier clubs enter at the last 32
+sco-14	subs_used	no second source		no page from another publisher found
+sco-14	bench	no second source		first value unknown; none found
+sco-15	name	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF lists the League Cup (sponsor names aside)
+sco-15	clubs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-15	format	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-15	subs_used	no second source		no page from another publisher found
+sco-15	bench	no second source		first value is an inference; no second source found
+sco-16	name	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF lists the (League) Challenge Cup
+sco-16	clubs	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-16	format	agree	https://www.rsssf.org/tabless/scot03.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-16	subs_used	no second source		no page from another publisher found
+sco-16	bench	no second source		first value is an inference; no second source found
+sco-17	foreign	no second source		first value unknown; none found
+sco-17	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-17	registration	no second source		first value unknown; none found
+sco-17	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-18	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-18	clubs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF final table has the same club count
+sco-18	down	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF table marks the same direct relegation places
+sco-18	playoffs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same play-off ties and stages
+sco-18	split	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same split stages
+sco-18	format	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF tables show the same number of matches
+sco-18	subs_used	no second source		no page from another publisher found
+sco-18	bench	no second source		first value unknown; none found
+sco-18	registration	no second source		first value unknown; none found
+sco-19	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-19	clubs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF final table has the same club count
+sco-19	up	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF table marks the same direct promotion places
+sco-19	down	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF table marks the same direct relegation places
+sco-19	playoffs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same play-off ties and stages
+sco-19	split	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same split stages
+sco-19	format	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF tables show the same number of matches
+sco-19	subs_used	no second source		no page from another publisher found
+sco-19	bench	no second source		first value is an inference; no second source found
+sco-20	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-20	clubs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF final table has the same club count
+sco-20	up	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF table marks the same direct promotion places
+sco-20	down	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF table marks the same direct relegation places
+sco-20	playoffs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same play-off ties and stages
+sco-20	split	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same split stages
+sco-20	format	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF tables show the same number of matches
+sco-20	subs_used	no second source		no page from another publisher found
+sco-20	bench	no second source		first value is an inference; no second source found
+sco-21	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-21	clubs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF final table has the same club count
+sco-21	up	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF table marks the same direct promotion places
+sco-21	down	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-21	playoffs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same play-off ties and stages
+sco-21	split	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF shows the same split stages
+sco-21	format	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF tables show the same number of matches
+sco-21	subs_used	no second source		no page from another publisher found
+sco-21	bench	no second source		first value is an inference; no second source found
+sco-22	name	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-22	clubs	no second source		first value unknown; no count found
+sco-22	format	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF rounds and replays match; Premier clubs enter at the last 32
+sco-22	subs_used	no second source		no page from another publisher found
+sco-22	bench	no second source		first value unknown; none found
+sco-23	name	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF lists the League Cup (sponsor names aside)
+sco-23	clubs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-23	format	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-23	subs_used	no second source		no page from another publisher found
+sco-23	bench	no second source		first value is an inference; no second source found
+sco-24	name	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF lists the (League) Challenge Cup
+sco-24	clubs	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-24	format	agree	https://www.rsssf.org/tabless/scot04.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-24	subs_used	no second source		no page from another publisher found
+sco-24	bench	no second source		first value is an inference; no second source found
+sco-25	foreign	no second source		first value unknown; none found
+sco-25	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-25	registration	no second source		first value unknown; none found
+sco-25	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-26	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-26	clubs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF final table has the same club count
+sco-26	down	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF table marks the same direct relegation places
+sco-26	playoffs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same play-off ties and stages
+sco-26	split	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same split stages
+sco-26	format	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF tables show the same number of matches
+sco-26	subs_used	no second source		no page from another publisher found
+sco-26	bench	no second source		first value unknown; none found
+sco-26	registration	no second source		first value unknown; none found
+sco-27	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-27	clubs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF final table has the same club count
+sco-27	up	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF table marks the same direct promotion places
+sco-27	down	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF table marks the same direct relegation places
+sco-27	playoffs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same play-off ties and stages
+sco-27	split	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same split stages
+sco-27	format	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF tables show the same number of matches
+sco-27	subs_used	no second source		no page from another publisher found
+sco-27	bench	no second source		first value is an inference; no second source found
+sco-28	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-28	clubs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF final table has the same club count
+sco-28	up	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF table marks the same direct promotion places
+sco-28	down	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF table marks the same direct relegation places
+sco-28	playoffs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same play-off ties and stages
+sco-28	split	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same split stages
+sco-28	format	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF tables show the same number of matches
+sco-28	subs_used	no second source		no page from another publisher found
+sco-28	bench	no second source		first value is an inference; no second source found
+sco-29	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-29	clubs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF final table has the same club count
+sco-29	up	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF table marks the same direct promotion places
+sco-29	down	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-29	playoffs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same play-off ties and stages
+sco-29	split	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF shows the same split stages
+sco-29	format	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF tables show the same number of matches
+sco-29	subs_used	no second source		no page from another publisher found
+sco-29	bench	no second source		first value is an inference; no second source found
+sco-30	name	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-30	clubs	no second source		first value unknown; no count found
+sco-30	format	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF rounds and replays match; Premier clubs enter at the last 32
+sco-30	subs_used	no second source		no page from another publisher found
+sco-30	bench	no second source		first value unknown; none found
+sco-31	name	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF lists the League Cup (sponsor names aside)
+sco-31	clubs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-31	format	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-31	subs_used	no second source		no page from another publisher found
+sco-31	bench	no second source		first value is an inference; no second source found
+sco-32	name	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF lists the (League) Challenge Cup
+sco-32	clubs	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-32	format	agree	https://www.rsssf.org/tabless/scot05.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-32	subs_used	no second source		no page from another publisher found
+sco-32	bench	no second source		first value is an inference; no second source found
+sco-33	foreign	no second source		first value unknown; none found
+sco-33	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-33	registration	no second source		first value unknown; none found
+sco-33	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-34	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-34	clubs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF final table has the same club count
+sco-34	down	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF table marks the same direct relegation places
+sco-34	playoffs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same play-off ties and stages
+sco-34	split	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same split stages
+sco-34	format	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF tables show the same number of matches
+sco-34	subs_used	no second source		no page from another publisher found
+sco-34	bench	no second source		first value unknown; none found
+sco-34	registration	no second source		first value unknown; none found
+sco-35	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-35	clubs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF final table has the same club count
+sco-35	up	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF table marks the same direct promotion places
+sco-35	down	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF table marks the same direct relegation places
+sco-35	playoffs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same play-off ties and stages
+sco-35	split	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same split stages
+sco-35	format	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF tables show the same number of matches
+sco-35	subs_used	no second source		no page from another publisher found
+sco-35	bench	no second source		first value is an inference; no second source found
+sco-36	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-36	clubs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF final table has the same club count
+sco-36	up	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF table marks the same direct promotion places
+sco-36	down	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF table marks the same direct relegation places
+sco-36	playoffs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same play-off ties and stages
+sco-36	split	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same split stages
+sco-36	format	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF tables show the same number of matches
+sco-36	subs_used	no second source		no page from another publisher found
+sco-36	bench	no second source		first value is an inference; no second source found
+sco-37	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-37	clubs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF final table has the same club count
+sco-37	up	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF table marks the same direct promotion places
+sco-37	down	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-37	playoffs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same play-off ties and stages
+sco-37	split	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF shows the same split stages
+sco-37	format	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF tables show the same number of matches
+sco-37	subs_used	no second source		no page from another publisher found
+sco-37	bench	no second source		first value is an inference; no second source found
+sco-38	name	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-38	clubs	no second source		first value unknown; no count found
+sco-38	format	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF rounds and replays match; Premier clubs enter at the last 32
+sco-38	subs_used	no second source		no page from another publisher found
+sco-38	bench	no second source		first value unknown; none found
+sco-39	name	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF lists the League Cup (sponsor names aside)
+sco-39	clubs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-39	format	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-39	subs_used	no second source		no page from another publisher found
+sco-39	bench	no second source		no page from another publisher found
+sco-40	name	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF lists the (League) Challenge Cup
+sco-40	clubs	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-40	format	agree	https://www.rsssf.org/tabless/scot06.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-40	subs_used	no second source		no page from another publisher found
+sco-40	bench	no second source		first value is an inference; no second source found
+sco-41	foreign	no second source		first value unknown; none found
+sco-41	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-41	registration	no second source		first value unknown; none found
+sco-41	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-42	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-42	clubs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF final table has the same club count
+sco-42	down	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF table marks the same direct relegation places
+sco-42	playoffs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same play-off ties and stages
+sco-42	split	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same split stages
+sco-42	format	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF tables show the same number of matches
+sco-42	subs_used	no second source		no page from another publisher found
+sco-42	bench	no second source		first value unknown; none found
+sco-42	registration	no second source		first value unknown; none found
+sco-43	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-43	clubs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF final table has the same club count
+sco-43	up	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF table marks the same direct promotion places
+sco-43	down	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF table marks the same direct relegation places
+sco-43	playoffs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same play-off ties and stages
+sco-43	split	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same split stages
+sco-43	format	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF tables show the same number of matches
+sco-43	subs_used	no second source		no page from another publisher found
+sco-43	bench	no second source		first value is an inference; no second source found
+sco-44	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-44	clubs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF final table has the same club count
+sco-44	up	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF table marks the same direct promotion places
+sco-44	down	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF table marks the same direct relegation places
+sco-44	playoffs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same play-off ties and stages
+sco-44	split	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same split stages
+sco-44	format	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF tables show the same number of matches
+sco-44	subs_used	no second source		no page from another publisher found
+sco-44	bench	no second source		first value is an inference; no second source found
+sco-45	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-45	clubs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF final table has the same club count
+sco-45	up	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF table marks the same direct promotion places
+sco-45	down	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-45	playoffs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same play-off ties and stages
+sco-45	split	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF shows the same split stages
+sco-45	format	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF tables show the same number of matches
+sco-45	subs_used	no second source		no page from another publisher found
+sco-45	bench	no second source		first value is an inference; no second source found
+sco-46	name	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-46	clubs	no second source		first value unknown; no count found
+sco-46	format	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF rounds and replays match; Premier clubs enter at the last 32; RSSSF shows a semi-final replay
+sco-46	subs_used	no second source		no page from another publisher found
+sco-46	bench	no second source		first value unknown; none found
+sco-47	name	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF lists the League Cup (sponsor names aside)
+sco-47	clubs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-47	format	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-47	subs_used	no second source		no page from another publisher found
+sco-47	bench	no second source		first value is an inference; no second source found
+sco-48	name	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF lists the (League) Challenge Cup
+sco-48	clubs	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs; RSSSF splits the first round into North/East and South/West sections
+sco-48	format	agree	https://www.rsssf.org/tabless/scot07.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs; RSSSF splits the first round into North/East and South/West sections
+sco-48	subs_used	no second source		no page from another publisher found
+sco-48	bench	no second source		first value is an inference; no second source found
+sco-49	foreign	no second source		first value unknown; none found
+sco-49	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-49	registration	no second source		first value unknown; none found
+sco-49	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-50	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-50	clubs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF final table has the same club count
+sco-50	down	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF table marks the same direct relegation places
+sco-50	playoffs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same play-off ties and stages
+sco-50	split	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same split stages
+sco-50	format	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF tables show the same number of matches
+sco-50	subs_used	no second source		no page from another publisher found
+sco-50	bench	no second source		first value unknown; none found
+sco-50	registration	no second source		first value unknown; none found
+sco-51	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-51	clubs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF final table has the same club count
+sco-51	up	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF table marks the same direct promotion places
+sco-51	down	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF table marks the same direct relegation places
+sco-51	playoffs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same play-off ties and stages
+sco-51	split	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same split stages
+sco-51	format	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF tables show the same number of matches
+sco-51	subs_used	no second source		no page from another publisher found
+sco-51	bench	no second source		first value is an inference; no second source found
+sco-52	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-52	clubs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF final table has the same club count
+sco-52	up	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF table marks the same direct promotion places
+sco-52	down	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF table marks the same direct relegation places
+sco-52	playoffs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same play-off ties and stages
+sco-52	split	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same split stages
+sco-52	format	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF tables show the same number of matches
+sco-52	subs_used	no second source		no page from another publisher found
+sco-52	bench	no second source		first value is an inference; no second source found
+sco-53	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-53	clubs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF final table has the same club count
+sco-53	up	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF table marks the same direct promotion places
+sco-53	down	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-53	playoffs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same play-off ties and stages
+sco-53	split	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows the same split stages
+sco-53	format	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF tables show the same number of matches
+sco-53	subs_used	no second source		no page from another publisher found
+sco-53	bench	no second source		first value is an inference; no second source found
+sco-54	name	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-54	clubs	no second source		first value unknown; no count found
+sco-54	format	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-54	subs_used	no second source		no page from another publisher found
+sco-54	bench	no second source		first value unknown; none found
+sco-55	name	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF lists the League Cup (sponsor names aside)
+sco-55	clubs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-55	format	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-55	subs_used	no second source		no page from another publisher found
+sco-55	bench	no second source		first value is an inference; no second source found
+sco-56	name	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF lists the (League) Challenge Cup
+sco-56	clubs	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs; RSSSF splits the first round into North/East and South/West sections
+sco-56	format	agree	https://www.rsssf.org/tabless/scot08.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs; RSSSF splits the first round into North/East and South/West sections
+sco-56	subs_used	no second source		no page from another publisher found
+sco-56	bench	no second source		first value is an inference; no second source found
+sco-57	foreign	no second source		first value unknown; none found
+sco-57	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-57	registration	no second source		first value unknown; none found
+sco-57	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-58	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-58	clubs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF final table has the same club count
+sco-58	down	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF table marks the same direct relegation places
+sco-58	playoffs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same play-off ties and stages
+sco-58	split	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same split stages
+sco-58	format	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF tables show the same number of matches
+sco-58	subs_used	no second source		no page from another publisher found
+sco-58	bench	no second source		first value unknown; none found
+sco-58	registration	found	https://www.skysports.com/football/celtic-vs-dundee-u/11153	value found: SPL rule of three outfield players aged 21 or under in each matchday squad was in force on 3 Jan 2009 (season 2008/09); start year unknown
+sco-59	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-59	clubs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF final table has the same club count
+sco-59	up	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF table marks the same direct promotion places
+sco-59	down	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF table marks the same direct relegation places
+sco-59	playoffs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same play-off ties and stages
+sco-59	split	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same split stages
+sco-59	format	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF tables show the same number of matches
+sco-59	subs_used	no second source		no page from another publisher found
+sco-59	bench	no second source		first value is an inference; no second source found
+sco-60	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-60	clubs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF final table has the same club count
+sco-60	up	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF table marks the same direct promotion places
+sco-60	down	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF table marks the same direct relegation places
+sco-60	playoffs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same play-off ties and stages
+sco-60	split	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same split stages
+sco-60	format	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF tables show the same number of matches
+sco-60	subs_used	no second source		no page from another publisher found
+sco-60	bench	no second source		first value is an inference; no second source found
+sco-61	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-61	clubs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF final table has the same club count
+sco-61	up	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF table marks the same direct promotion places
+sco-61	down	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-61	playoffs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same play-off ties and stages
+sco-61	split	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows the same split stages
+sco-61	format	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF tables show the same number of matches
+sco-61	subs_used	no second source		no page from another publisher found
+sco-61	bench	no second source		first value is an inference; no second source found
+sco-62	name	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-62	clubs	no second source		first value unknown; no count found
+sco-62	format	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-62	subs_used	no second source		no page from another publisher found
+sco-62	bench	no second source		first value unknown; none found
+sco-63	name	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF lists the League Cup (sponsor names aside)
+sco-63	clubs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-63	format	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-63	subs_used	no second source		no page from another publisher found
+sco-63	bench	no second source		first value is an inference; no second source found
+sco-64	name	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF lists the (League) Challenge Cup
+sco-64	clubs	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-64	format	agree	https://www.rsssf.org/tabless/scot2009.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-64	subs_used	no second source		no page from another publisher found
+sco-64	bench	no second source		first value is an inference; no second source found
+sco-65	foreign	no second source		first value unknown; none found
+sco-65	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-65	registration	no second source		first value unknown; none found
+sco-65	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-66	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-66	clubs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF final table has the same club count
+sco-66	down	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF table marks the same direct relegation places
+sco-66	playoffs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same play-off ties and stages
+sco-66	split	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same split stages
+sco-66	format	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF tables show the same number of matches
+sco-66	subs_used	no second source		no page from another publisher found
+sco-66	bench	no second source		first value unknown; none found
+sco-66	registration	no second source		first value unknown; none found
+sco-67	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-67	clubs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF final table has the same club count
+sco-67	up	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF table marks the same direct promotion places
+sco-67	down	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF table marks the same direct relegation places
+sco-67	playoffs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same play-off ties and stages
+sco-67	split	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same split stages
+sco-67	format	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF tables show the same number of matches
+sco-67	subs_used	no second source		no page from another publisher found
+sco-67	bench	no second source		first value is an inference; no second source found
+sco-68	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-68	clubs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF final table has the same club count
+sco-68	up	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF table marks the same direct promotion places
+sco-68	down	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF table marks the same direct relegation places
+sco-68	playoffs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same play-off ties and stages
+sco-68	split	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same split stages
+sco-68	format	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF tables show the same number of matches
+sco-68	subs_used	no second source		no page from another publisher found
+sco-68	bench	no second source		first value is an inference; no second source found
+sco-69	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-69	clubs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF final table has the same club count
+sco-69	up	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF table marks the same direct promotion places
+sco-69	down	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-69	playoffs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same play-off ties and stages
+sco-69	split	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows the same split stages
+sco-69	format	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF tables show the same number of matches
+sco-69	subs_used	no second source		no page from another publisher found
+sco-69	bench	no second source		first value is an inference; no second source found
+sco-70	name	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-70	clubs	no second source		first value unknown; no count found
+sco-70	format	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-70	subs_used	no second source		no page from another publisher found
+sco-70	bench	no second source		first value unknown; none found
+sco-71	name	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF lists the League Cup (sponsor names aside)
+sco-71	clubs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-71	format	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-71	subs_used	no second source		no page from another publisher found
+sco-71	bench	no second source		first value is an inference; no second source found
+sco-72	name	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF lists the (League) Challenge Cup
+sco-72	clubs	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-72	format	agree	https://www.rsssf.org/tabless/scot2010.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-72	subs_used	no second source		no page from another publisher found
+sco-72	bench	no second source		first value is an inference; no second source found
+sco-73	foreign	no second source		first value unknown; none found
+sco-73	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-73	registration	no second source		first value unknown; none found
+sco-73	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-74	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-74	clubs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF final table has the same club count
+sco-74	down	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF table marks the same direct relegation places
+sco-74	playoffs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same play-off ties and stages
+sco-74	split	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same split stages
+sco-74	format	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF tables show the same number of matches
+sco-74	subs_used	no second source		no page from another publisher found
+sco-74	bench	no second source		no page from another publisher found
+sco-74	registration	agree	https://thecourier.co.uk/sport/football/95021/spl-urged-to-dump-no-use-under-21-rule	rule in force in January 2009 (Sky Sports) and June 2012 (The Courier); continuity across this season is an inference
+sco-75	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-75	clubs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF final table has the same club count
+sco-75	up	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF table marks the same direct promotion places
+sco-75	down	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF table marks the same direct relegation places
+sco-75	playoffs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same play-off ties and stages
+sco-75	split	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same split stages
+sco-75	format	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF tables show the same number of matches
+sco-75	subs_used	no second source		no page from another publisher found
+sco-75	bench	no second source		no page from another publisher found
+sco-76	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-76	clubs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF final table has the same club count
+sco-76	up	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF table marks the same direct promotion places
+sco-76	down	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF table marks the same direct relegation places
+sco-76	playoffs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same play-off ties and stages
+sco-76	split	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same split stages
+sco-76	format	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF tables show the same number of matches
+sco-76	subs_used	no second source		no page from another publisher found
+sco-76	bench	no second source		no page from another publisher found
+sco-77	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-77	clubs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF final table has the same club count
+sco-77	up	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF table marks the same direct promotion places
+sco-77	down	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-77	playoffs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same play-off ties and stages
+sco-77	split	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows the same split stages
+sco-77	format	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF tables show the same number of matches
+sco-77	subs_used	no second source		no page from another publisher found
+sco-77	bench	no second source		no page from another publisher found
+sco-78	name	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-78	clubs	no second source		first value unknown; no count found
+sco-78	format	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-78	subs_used	no second source		no page from another publisher found
+sco-78	bench	no second source		first value unknown; none found
+sco-79	name	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF lists the League Cup (sponsor names aside)
+sco-79	clubs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-79	format	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-79	subs_used	no second source		no page from another publisher found
+sco-79	bench	no second source		first value is an inference; no second source found
+sco-80	name	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF lists the (League) Challenge Cup
+sco-80	clubs	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-80	format	agree	https://www.rsssf.org/tabless/scot2011.html	RSSSF: first round of 14 ties plus byes, 30 SFL clubs
+sco-80	subs_used	no second source		no page from another publisher found
+sco-80	bench	no second source		first value is an inference; no second source found
+sco-81	foreign	no second source		first value unknown; none found
+sco-81	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-81	registration	no second source		first value unknown; none found
+sco-81	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-82	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-82	clubs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF final table has the same club count
+sco-82	down	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF table marks the same direct relegation places
+sco-82	playoffs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same play-off ties and stages
+sco-82	split	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same split stages
+sco-82	format	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF tables show the same number of matches
+sco-82	subs_used	no second source		no page from another publisher found
+sco-82	bench	no second source		no page from another publisher found
+sco-82	registration	agree	https://thecourier.co.uk/sport/football/95021/spl-urged-to-dump-no-use-under-21-rule	The Courier (7 June 2012): every top-tier club needs three players under 21 in the matchday squad; Sky Sports shows the rule in force in January 2009
+sco-83	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-83	clubs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF final table has the same club count
+sco-83	up	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF table marks the same direct promotion places
+sco-83	down	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF table marks the same direct relegation places
+sco-83	playoffs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same play-off ties and stages
+sco-83	split	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same split stages
+sco-83	format	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF tables show the same number of matches
+sco-83	subs_used	no second source		no page from another publisher found
+sco-83	bench	no second source		first value is an inference; no second source found
+sco-84	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-84	clubs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF final table has the same club count
+sco-84	up	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF table marks the same direct promotion places
+sco-84	down	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF table marks the same direct relegation places
+sco-84	playoffs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same play-off ties and stages
+sco-84	split	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same split stages
+sco-84	format	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF tables show the same number of matches
+sco-84	subs_used	no second source		no page from another publisher found
+sco-84	bench	no second source		first value is an inference; no second source found
+sco-85	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-85	clubs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF final table has the same club count
+sco-85	up	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF table marks the same direct promotion places
+sco-85	down	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-85	playoffs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same play-off ties and stages
+sco-85	split	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows the same split stages
+sco-85	format	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF tables show the same number of matches
+sco-85	subs_used	no second source		no page from another publisher found
+sco-85	bench	no second source		first value is an inference; no second source found
+sco-86	name	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-86	clubs	no second source		first value unknown; no count found
+sco-86	format	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-86	subs_used	no second source		no page from another publisher found
+sco-86	bench	no second source		first value unknown; none found
+sco-87	name	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF lists the League Cup (sponsor names aside)
+sco-87	clubs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-87	format	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-87	subs_used	no second source		no page from another publisher found
+sco-87	bench	no second source		no page from another publisher found
+sco-88	name	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF lists the (League) Challenge Cup
+sco-88	clubs	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF: first round of 16 ties, 32 clubs
+sco-88	format	agree	https://www.rsssf.org/tabless/scot2012.html	RSSSF: first round of 16 ties, 32 clubs
+sco-88	subs_used	no second source		no page from another publisher found
+sco-88	bench	no second source		no page from another publisher found
+sco-89	foreign	no second source		first value unknown; none found
+sco-89	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-89	registration	no second source		first value unknown; none found
+sco-89	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-90	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-90	clubs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF final table has the same club count
+sco-90	down	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF table marks the same direct relegation places
+sco-90	playoffs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same play-off ties and stages
+sco-90	split	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same split stages
+sco-90	format	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF tables show the same number of matches
+sco-90	subs_used	no second source		no page from another publisher found
+sco-90	bench	no second source		no page from another publisher found
+sco-90	registration	agree	https://thecourier.co.uk/sport/football/95021/spl-urged-to-dump-no-use-under-21-rule	The Courier (7 June 2012) shows the rule still in force before 2012/13
+sco-91	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-91	clubs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF final table has the same club count
+sco-91	up	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF table marks the same direct promotion places
+sco-91	down	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF table marks the same direct relegation places
+sco-91	playoffs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same play-off ties and stages
+sco-91	split	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same split stages
+sco-91	format	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF tables show the same number of matches
+sco-91	subs_used	no second source		no page from another publisher found
+sco-91	bench	no second source		no page from another publisher found
+sco-92	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-92	clubs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF final table has the same club count
+sco-92	up	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF table marks the same direct promotion places
+sco-92	down	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF table marks the same direct relegation places
+sco-92	playoffs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same play-off ties and stages
+sco-92	split	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same split stages
+sco-92	format	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF tables show the same number of matches
+sco-92	subs_used	no second source		no page from another publisher found
+sco-92	bench	no second source		no page from another publisher found
+sco-93	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	club site (July 2013) names the SPL and the old First Division and Divisions Two and Three; RSSSF uses the same division names
+sco-93	clubs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF final table has the same club count
+sco-93	up	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF table marks the same direct promotion places
+sco-93	down	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-93	playoffs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same play-off ties and stages
+sco-93	split	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows the same split stages
+sco-93	format	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF tables show the same number of matches
+sco-93	subs_used	no second source		no page from another publisher found
+sco-93	bench	no second source		no page from another publisher found
+sco-94	name	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-94	clubs	no second source		first value unknown; no count found
+sco-94	format	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties; preliminary round present
+sco-94	subs_used	no second source		no page from another publisher found
+sco-94	bench	no second source		first value unknown; none found
+sco-95	name	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF lists the League Cup (sponsor names aside)
+sco-95	clubs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-95	format	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-95	subs_used	no second source		no page from another publisher found
+sco-95	bench	no second source		no page from another publisher found
+sco-96	name	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF lists the (League) Challenge Cup
+sco-96	clubs	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF: first round of 16 ties, 32 clubs
+sco-96	format	agree	https://www.rsssf.org/tabless/scot2013.html	RSSSF: first round of 16 ties, 32 clubs
+sco-96	subs_used	no second source		no page from another publisher found
+sco-96	bench	no second source		no page from another publisher found
+sco-97	foreign	no second source		no page from another publisher found
+sco-97	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-97	registration	no second source		no page from another publisher found
+sco-97	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-98	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-98	clubs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF final table has the same club count
+sco-98	down	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF table marks the same direct relegation places
+sco-98	playoffs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same play-off ties and stages
+sco-98	split	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same split stages
+sco-98	format	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF tables show the same number of matches
+sco-98	subs_used	no second source		no page from another publisher found
+sco-98	bench	no second source		no page from another publisher found
+sco-99	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-99	clubs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF final table has the same club count
+sco-99	up	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF table marks the same direct promotion places
+sco-99	down	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF table marks the same direct relegation places
+sco-99	playoffs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same play-off ties and stages
+sco-99	split	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same split stages
+sco-99	format	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF tables show the same number of matches
+sco-99	subs_used	no second source		no page from another publisher found
+sco-99	bench	no second source		no page from another publisher found
+sco-100	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-100	clubs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF final table has the same club count
+sco-100	up	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF table marks the same direct promotion places
+sco-100	down	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF table marks the same direct relegation places
+sco-100	playoffs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same play-off ties and stages
+sco-100	split	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same split stages
+sco-100	format	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF tables show the same number of matches
+sco-100	subs_used	no second source		no page from another publisher found
+sco-100	bench	no second source		no page from another publisher found
+sco-101	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-101	clubs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF final table has the same club count
+sco-101	up	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF table marks the same direct promotion places
+sco-101	down	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF NB: no institutionalised promotion/relegation below the fourth level
+sco-101	playoffs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same play-off ties and stages
+sco-101	split	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows the same split stages
+sco-101	format	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF tables show the same number of matches
+sco-101	subs_used	no second source		no page from another publisher found
+sco-101	bench	no second source		no page from another publisher found
+sco-102	name	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-102	clubs	no second source		first value unknown; no count found
+sco-102	format	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-102	subs_used	no second source		no page from another publisher found
+sco-102	bench	no second source		first value unknown; none found
+sco-103	name	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF lists the League Cup (sponsor names aside)
+sco-103	clubs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-103	format	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-103	subs_used	no second source		no page from another publisher found
+sco-103	bench	no second source		no page from another publisher found
+sco-104	name	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF lists the (League) Challenge Cup
+sco-104	clubs	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF: first round of 16 ties, 32 clubs; RSSSF shows the East v South preliminary tie over two legs
+sco-104	format	agree	https://www.rsssf.org/tabless/scot2014.html	RSSSF: first round of 16 ties, 32 clubs; RSSSF shows the East v South preliminary tie over two legs
+sco-104	subs_used	no second source		no page from another publisher found
+sco-104	bench	no second source		no page from another publisher found
+sco-105	foreign	no second source		no page from another publisher found
+sco-105	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-105	registration	no second source		no page from another publisher found
+sco-105	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-106	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-106	clubs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF final table has the same club count
+sco-106	down	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF table marks the same direct relegation places
+sco-106	playoffs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows the same play-off ties and stages
+sco-106	split	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows the same split stages
+sco-106	format	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF tables show the same number of matches
+sco-106	subs_used	no second source		no page from another publisher found
+sco-106	bench	no second source		no page from another publisher found
+sco-107	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-107	clubs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF final table has the same club count
+sco-107	up	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF table marks the same direct promotion places
+sco-107	down	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF table marks the same direct relegation places
+sco-107	playoffs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows the same play-off ties and stages
+sco-107	split	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows the same split stages
+sco-107	format	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF tables show the same number of matches
+sco-107	subs_used	no second source		no page from another publisher found
+sco-107	bench	no second source		no page from another publisher found
+sco-108	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-108	clubs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF final table has the same club count
+sco-108	up	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF table marks the same direct promotion places
+sco-108	down	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF table marks the same direct relegation places
+sco-108	playoffs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows the same play-off ties and stages
+sco-108	split	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows the same split stages
+sco-108	format	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF tables show the same number of matches
+sco-108	subs_used	no second source		no page from another publisher found
+sco-108	bench	no second source		no page from another publisher found
+sco-109	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-109	clubs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF final table has the same club count
+sco-109	up	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF table marks the same direct promotion places
+sco-109	down	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF table marks the same direct relegation places
+sco-109	playoffs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows Highland v Lowland champions then winner v League Two 10th, both two-legged
+sco-109	split	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows the same split stages
+sco-109	format	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF tables show the same number of matches
+sco-109	subs_used	no second source		no page from another publisher found
+sco-109	bench	no second source		no page from another publisher found
+sco-110	name	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-110	clubs	no second source		first value unknown; no count found
+sco-110	format	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-110	subs_used	no second source		no page from another publisher found
+sco-110	bench	no second source		first value unknown; none found
+sco-111	name	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF lists the League Cup (sponsor names aside)
+sco-111	clubs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-111	format	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-111	subs_used	no second source		no page from another publisher found
+sco-111	bench	no second source		no page from another publisher found
+sco-112	name	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF lists the (League) Challenge Cup
+sco-112	clubs	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF: first round of 16 ties, 32 clubs
+sco-112	format	agree	https://www.rsssf.org/tabless/scot2015.html	RSSSF: first round of 16 ties, 32 clubs
+sco-112	subs_used	no second source		no page from another publisher found
+sco-112	bench	no second source		no page from another publisher found
+sco-113	foreign	no second source		no page from another publisher found
+sco-113	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-113	registration	no second source		no page from another publisher found
+sco-113	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-114	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-114	clubs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF final table has the same club count
+sco-114	down	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF table marks the same direct relegation places
+sco-114	playoffs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same play-off ties and stages
+sco-114	split	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same split stages
+sco-114	format	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF tables show the same number of matches
+sco-114	subs_used	no second source		no page from another publisher found
+sco-114	bench	no second source		no page from another publisher found
+sco-115	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-115	clubs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF final table has the same club count
+sco-115	up	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF table marks the same direct promotion places
+sco-115	down	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF table marks the same direct relegation places
+sco-115	playoffs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same play-off ties and stages
+sco-115	split	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same split stages
+sco-115	format	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF tables show the same number of matches
+sco-115	subs_used	no second source		no page from another publisher found
+sco-115	bench	no second source		no page from another publisher found
+sco-116	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-116	clubs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF final table has the same club count
+sco-116	up	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF table marks the same direct promotion places
+sco-116	down	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF table marks the same direct relegation places
+sco-116	playoffs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same play-off ties and stages
+sco-116	split	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same split stages
+sco-116	format	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF tables show the same number of matches
+sco-116	subs_used	no second source		no page from another publisher found
+sco-116	bench	no second source		no page from another publisher found
+sco-117	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-117	clubs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF final table has the same club count
+sco-117	up	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF table marks the same direct promotion places
+sco-117	down	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF table marks the same direct relegation places
+sco-117	playoffs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same play-off ties and stages
+sco-117	split	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows the same split stages
+sco-117	format	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF tables show the same number of matches
+sco-117	subs_used	no second source		no page from another publisher found
+sco-117	bench	no second source		no page from another publisher found
+sco-118	name	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-118	clubs	no second source		first value unknown; no count found
+sco-118	format	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-118	subs_used	no second source		no page from another publisher found
+sco-118	bench	no second source		first value unknown; none found
+sco-119	name	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF lists the League Cup (sponsor names aside)
+sco-119	clubs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-119	format	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF tie counts per round give 42 clubs and the same rounds
+sco-119	subs_used	no second source		no page from another publisher found
+sco-119	bench	no second source		no page from another publisher found
+sco-120	name	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF lists the (League) Challenge Cup
+sco-120	clubs	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF: first round of 16 ties, 32 clubs
+sco-120	format	agree	https://www.rsssf.org/tabless/scot2016.html	RSSSF: first round of 16 ties, 32 clubs
+sco-120	subs_used	no second source		no page from another publisher found
+sco-120	bench	no second source		no page from another publisher found
+sco-121	foreign	no second source		no page from another publisher found
+sco-121	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-121	registration	no second source		no page from another publisher found
+sco-121	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-122	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-122	clubs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF final table has the same club count
+sco-122	down	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF table marks the same direct relegation places
+sco-122	playoffs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same play-off ties and stages
+sco-122	split	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same split stages
+sco-122	format	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF tables show the same number of matches
+sco-122	subs_used	no second source		no page from another publisher found
+sco-122	bench	no second source		no page from another publisher found
+sco-123	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-123	clubs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF final table has the same club count
+sco-123	up	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF table marks the same direct promotion places
+sco-123	down	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF table marks the same direct relegation places
+sco-123	playoffs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same play-off ties and stages
+sco-123	split	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same split stages
+sco-123	format	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF tables show the same number of matches
+sco-123	subs_used	no second source		no page from another publisher found
+sco-123	bench	no second source		no page from another publisher found
+sco-124	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-124	clubs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF final table has the same club count
+sco-124	up	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF table marks the same direct promotion places
+sco-124	down	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF table marks the same direct relegation places
+sco-124	playoffs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same play-off ties and stages
+sco-124	split	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same split stages
+sco-124	format	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF tables show the same number of matches
+sco-124	subs_used	no second source		no page from another publisher found
+sco-124	bench	no second source		no page from another publisher found
+sco-125	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-125	clubs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF final table has the same club count
+sco-125	up	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF table marks the same direct promotion places
+sco-125	down	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF table marks the same direct relegation places
+sco-125	playoffs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same play-off ties and stages
+sco-125	split	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows the same split stages
+sco-125	format	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF tables show the same number of matches
+sco-125	subs_used	no second source		no page from another publisher found
+sco-125	bench	no second source		no page from another publisher found
+sco-126	name	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-126	clubs	no second source		first value unknown; no count found
+sco-126	format	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-126	subs_used	agree	https://archive.news.stv.tv/sport/1366083-scottish-cup-to-allow-tactical-fourth-substitute-in-extra-time.html	STV, 5 Sep 2016: tactical fourth substitute in extra time from round one
+sco-126	bench	no second source		first value unknown; none found
+sco-127	name	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF lists the League Cup (sponsor names aside)
+sco-127	clubs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-127	format	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-127	subs_used	no second source		no page from another publisher found
+sco-127	bench	no second source		no page from another publisher found
+sco-128	name	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF lists the (League) Challenge Cup
+sco-128	clubs	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF tie counts: 28+10+12+4 = 54 clubs
+sco-128	format	agree	https://www.rsssf.org/tabless/scot2017.html	RSSSF tie counts: 28+10+12+4 = 54 clubs
+sco-128	subs_used	no second source		no page from another publisher found
+sco-128	bench	no second source		no page from another publisher found
+sco-129	foreign	no second source		no page from another publisher found
+sco-129	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-129	registration	no second source		no page from another publisher found
+sco-129	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-130	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-130	clubs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF final table has the same club count
+sco-130	down	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF table marks the same direct relegation places
+sco-130	playoffs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same play-off ties and stages
+sco-130	split	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same split stages
+sco-130	format	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF tables show the same number of matches
+sco-130	subs_used	no second source		no page from another publisher found
+sco-130	bench	no second source		no page from another publisher found
+sco-131	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-131	clubs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF final table has the same club count
+sco-131	up	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF table marks the same direct promotion places
+sco-131	down	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF table marks the same direct relegation places
+sco-131	playoffs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same play-off ties and stages
+sco-131	split	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same split stages
+sco-131	format	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF tables show the same number of matches
+sco-131	subs_used	no second source		no page from another publisher found
+sco-131	bench	no second source		no page from another publisher found
+sco-132	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-132	clubs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF final table has the same club count
+sco-132	up	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF table marks the same direct promotion places
+sco-132	down	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF table marks the same direct relegation places
+sco-132	playoffs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same play-off ties and stages
+sco-132	split	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same split stages
+sco-132	format	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF tables show the same number of matches
+sco-132	subs_used	no second source		no page from another publisher found
+sco-132	bench	no second source		no page from another publisher found
+sco-133	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-133	clubs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF final table has the same club count
+sco-133	up	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF table marks the same direct promotion places
+sco-133	down	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF table marks the same direct relegation places
+sco-133	playoffs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same play-off ties and stages
+sco-133	split	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows the same split stages
+sco-133	format	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF tables show the same number of matches
+sco-133	subs_used	no second source		no page from another publisher found
+sco-133	bench	no second source		no page from another publisher found
+sco-134	name	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-134	clubs	no second source		first value unknown; no count found
+sco-134	format	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-134	subs_used	no second source		no page from another publisher found
+sco-134	bench	no second source		first value unknown; none found
+sco-135	name	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF lists the League Cup (sponsor names aside)
+sco-135	clubs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-135	format	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-135	subs_used	no second source		no page from another publisher found
+sco-135	bench	no second source		no page from another publisher found
+sco-136	name	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF lists the (League) Challenge Cup
+sco-136	clubs	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF tie counts: 48+8 = 56 clubs; League of Ireland clubs named
+sco-136	format	agree	https://www.rsssf.org/tabless/scot2018.html	RSSSF tie counts: 48+8 = 56 clubs; League of Ireland clubs named
+sco-136	subs_used	no second source		no page from another publisher found
+sco-136	bench	no second source		no page from another publisher found
+sco-137	foreign	no second source		no page from another publisher found
+sco-137	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-137	registration	no second source		no page from another publisher found
+sco-137	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-138	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-138	clubs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF final table has the same club count
+sco-138	down	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF table marks the same direct relegation places
+sco-138	playoffs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same play-off ties and stages
+sco-138	split	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same split stages
+sco-138	format	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF tables show the same number of matches
+sco-138	subs_used	no second source		no page from another publisher found
+sco-138	bench	no second source		no page from another publisher found
+sco-139	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-139	clubs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF final table has the same club count
+sco-139	up	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF table marks the same direct promotion places
+sco-139	down	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF table marks the same direct relegation places
+sco-139	playoffs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same play-off ties and stages
+sco-139	split	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same split stages
+sco-139	format	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF tables show the same number of matches
+sco-139	subs_used	no second source		no page from another publisher found
+sco-139	bench	no second source		no page from another publisher found
+sco-140	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-140	clubs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF final table has the same club count
+sco-140	up	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF table marks the same direct promotion places
+sco-140	down	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF table marks the same direct relegation places
+sco-140	playoffs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same play-off ties and stages
+sco-140	split	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same split stages
+sco-140	format	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF tables show the same number of matches
+sco-140	subs_used	no second source		no page from another publisher found
+sco-140	bench	no second source		no page from another publisher found
+sco-141	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-141	clubs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF final table has the same club count
+sco-141	up	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF table marks the same direct promotion places
+sco-141	down	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF table marks the same direct relegation places
+sco-141	playoffs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same play-off ties and stages
+sco-141	split	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows the same split stages
+sco-141	format	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF tables show the same number of matches
+sco-141	subs_used	no second source		no page from another publisher found
+sco-141	bench	no second source		no page from another publisher found
+sco-142	name	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-142	clubs	no second source		first value unknown; no count found
+sco-142	format	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-142	subs_used	agree	http://web.archive.org/web/20220808112136/https://www.scottishfa.co.uk/media/4819/scottish-cup-rules-for-18-19-fv-docx.pdf	rule 13.1: three from seven, a fourth in extra time
+sco-142	bench	found	http://web.archive.org/web/20220808112136/https://www.scottishfa.co.uk/media/4819/scottish-cup-rules-for-18-19-fv-docx.pdf	value found: up to seven nominated substitutes (rule 13.1)
+sco-143	name	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF lists the League Cup (sponsor names aside)
+sco-143	clubs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-143	format	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-143	subs_used	no second source		no page from another publisher found
+sco-143	bench	no second source		no page from another publisher found
+sco-144	name	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF lists the (League) Challenge Cup
+sco-144	clubs	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF tie counts: 4+46+8 = 58 clubs; English, Irish, Welsh and Northern Irish guests named
+sco-144	format	agree	https://www.rsssf.org/tabless/scot2019.html	RSSSF tie counts: 4+46+8 = 58 clubs; English, Irish, Welsh and Northern Irish guests named
+sco-144	subs_used	no second source		no page from another publisher found
+sco-144	bench	no second source		no page from another publisher found
+sco-145	foreign	no second source		no page from another publisher found
+sco-145	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	Scottish Legal News (June 2021): under the old rules clubs needed work permits and endorsement for players from outside the EU; the EU exemption itself is not stated
+sco-145	registration	no second source		no page from another publisher found
+sco-145	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-146	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-146	clubs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF final table has the same club count
+sco-146	down	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF table marks the same direct relegation places
+sco-146	playoffs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-146	split	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-146	format	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-146	subs_used	no second source		no page from another publisher found
+sco-146	bench	no second source		no page from another publisher found
+sco-147	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-147	clubs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF final table has the same club count
+sco-147	up	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF table marks the same direct promotion places
+sco-147	down	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF table marks the same direct relegation places
+sco-147	playoffs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-147	split	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-147	format	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-147	subs_used	no second source		no page from another publisher found
+sco-147	bench	no second source		no page from another publisher found
+sco-148	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-148	clubs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF final table has the same club count
+sco-148	up	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF table marks the same direct promotion places
+sco-148	down	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF table marks the same direct relegation places
+sco-148	playoffs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-148	split	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-148	format	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-148	subs_used	no second source		no page from another publisher found
+sco-148	bench	no second source		no page from another publisher found
+sco-149	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-149	clubs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF final table has the same club count
+sco-149	up	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF table marks the same direct promotion places
+sco-149	down	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF table marks the same direct relegation places
+sco-149	playoffs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-149	split	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-149	format	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: league abandoned, ranking on points per match, play-offs cancelled
+sco-149	subs_used	no second source		no page from another publisher found
+sco-149	bench	no second source		no page from another publisher found
+sco-150	name	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-150	clubs	no second source		first value unknown; no count found
+sco-150	format	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF shows replays up to the quarter-finals and semi-finals settled by extra time and penalties
+sco-150	subs_used	agree	http://web.archive.org/web/20191014103133/https://www.scottishfa.co.uk/media/5364/scottish-cup-rules-for-2019-20.pdf	rule 13.1: three from seven, a fourth in extra time
+sco-150	bench	found	http://web.archive.org/web/20191014103133/https://www.scottishfa.co.uk/media/5364/scottish-cup-rules-for-2019-20.pdf	value found: up to seven nominated substitutes (rule 13.1)
+sco-151	name	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF lists the League Cup (sponsor names aside)
+sco-151	clubs	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-151	format	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF: 8 groups of 5, penalty bonus point, 4 byes for European clubs, 4 best runners-up
+sco-151	subs_used	no second source		no page from another publisher found
+sco-151	bench	no second source		no page from another publisher found
+sco-152	name	agree	https://www.rsssf.org/tabless/scot2020.html	RSSSF lists the (League) Challenge Cup
+sco-152	clubs	no second source		no page from another publisher found
+sco-152	format	no second source		no page from another publisher found
+sco-152	subs_used	no second source		no page from another publisher found
+sco-152	bench	no second source		no page from another publisher found
+sco-153	foreign	no second source		no page from another publisher found
+sco-153	work_permit	agree	https://www.scottishlegal.com/article/john-kiely-player-endorsement-a-world-of-opportunity-for-scottish-football	new rules from 1 January 2021: a governing body endorsement from the Scottish FA, points system
+sco-153	registration	no second source		no page from another publisher found
+sco-153	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-154	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-154	clubs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF final table has the same club count
+sco-154	down	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table marks the same direct relegation places
+sco-154	playoffs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows the same play-off ties and stages
+sco-154	split	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows the same split stages
+sco-154	format	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF tables show the same number of matches
+sco-154	subs_used	agree	https://www.clydefc.co.uk/news/2020/09/spfl-statement-use-of-five-subs/	SPFL statement as published by Clyde FC: up to five substitutes in this division
+sco-154	bench	agree	https://www.inverness-courier.co.uk/sport/five-substitutes-rule-could-also-be-brought-into-championship-after-premiership-give-green-light-207575/	Inverness Courier: Premiership clubs can name a bench of up to nine
+sco-155	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-155	clubs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF final table has the same club count
+sco-155	up	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table marks the same direct promotion places
+sco-155	down	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table marks the same direct relegation places
+sco-155	playoffs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows the same play-off ties and stages
+sco-155	split	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows the same split stages
+sco-155	format	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table shows 27 matches
+sco-155	subs_used	agree	https://www.clydefc.co.uk/news/2020/09/spfl-statement-use-of-five-subs/	SPFL statement as published by Clyde FC: Championship up to three substitutes
+sco-155	bench	no second source		no page from another publisher found
+sco-156	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-156	clubs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF final table has the same club count
+sco-156	up	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table marks the same direct promotion places
+sco-156	down	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table marks the same direct relegation places
+sco-156	playoffs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows the same play-off ties and stages
+sco-156	split	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows 18 matches then a top-5/bottom-5 playoff stage (22)
+sco-156	format	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows 18 matches then a top-5/bottom-5 playoff stage (22)
+sco-156	subs_used	agree	https://www.clydefc.co.uk/news/2020/09/spfl-statement-use-of-five-subs/	SPFL statement as published by Clyde FC: up to five substitutes in this division
+sco-156	bench	no second source		no page from another publisher found
+sco-157	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-157	clubs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF final table has the same club count
+sco-157	up	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table marks the same direct promotion places
+sco-157	down	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF table marks the same direct relegation places
+sco-157	playoffs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows the same play-off ties and stages
+sco-157	split	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows 18 matches then a top-5/bottom-5 playoff stage (22)
+sco-157	format	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF shows 18 matches then a top-5/bottom-5 playoff stage (22)
+sco-157	subs_used	agree	https://www.clydefc.co.uk/news/2020/09/spfl-statement-use-of-five-subs/	SPFL statement as published by Clyde FC: up to five substitutes in this division
+sco-157	bench	no second source		no page from another publisher found
+sco-158	name	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-158	clubs	found	https://www.scottishfa.co.uk/news/scottish-cup-202021-format-confirmed/	value found: 106 planned entrants (30 in preliminary round one, 15 Highland and 15 Lowland in preliminary round two, 2+2 in round one, 10 League Two, 20 League One and Championship, 12 Premiership); clubs could decline
+sco-158	format	disagree	https://www.scottishfa.co.uk/news/scottish-cup-202021-format-confirmed/	Scottish FA: no replays agrees, but 15 Highland and 15 Lowland clubs entered in preliminary round two and only 2 Highland and 2 Lowland clubs in round one; the first agent puts Highland and Lowland clubs in round one
+sco-158	subs_used	agree	https://www.scottishfa.co.uk/news/scottish-cup-202021-format-confirmed/	Scottish FA: substitutes revert to three, one more in extra time
+sco-158	bench	no second source		first value unknown; none found
+sco-159	name	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF lists the League Cup (sponsor names aside)
+sco-159	clubs	agree	https://spfl.co.uk/news/betfred-cup-group-stage-draw-46847	SPFL draw: 8 groups of 5; 8 winners and 4 best runners-up reach the last 16
+sco-159	format	agree	https://spfl.co.uk/news/betfred-cup-group-stage-draw-46847	SPFL draw: 8 groups of 5; 8 winners and 4 best runners-up reach the last 16
+sco-159	subs_used	disagree	https://www.clydefc.co.uk/news/2020/09/spfl-statement-use-of-five-subs/	SPFL statement (Sept 2020, as published by Clyde FC): Betfred Cup matches up to five substitutes, one more in extra time; first value is 3 plus a fourth in extra time
+sco-159	bench	no second source		no page from another publisher found
+sco-160	name	no second source		no page from another publisher found
+sco-160	clubs	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF 2020/21 page has no Challenge Cup
+sco-160	format	agree	https://www.rsssf.org/tabless/scot2021.html	RSSSF 2020/21 page has no Challenge Cup
+sco-161	foreign	no second source		no page from another publisher found
+sco-161	work_permit	agree	https://www.scottishdailyexpress.co.uk/sport/football/scottish-football-chiefs-secure-important-25631577	Scottish Daily Express, 6 Dec 2021: UK Government keeps the Scottish panel on a permanent basis
+sco-161	registration	no second source		no page from another publisher found
+sco-161	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-162	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-162	clubs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF final table has the same club count
+sco-162	down	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF table marks the same direct relegation places
+sco-162	playoffs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same play-off ties and stages
+sco-162	split	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same split stages
+sco-162	format	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF tables show the same number of matches
+sco-162	subs_used	agree	https://pressandjournal.co.uk/fp/sport/football/peterhead-fc/3841845/peterhead-jim-mcinally-league-one	Press and Journal 14 Jan 2022: Premiership clubs voted this week to go from three to five
+sco-162	bench	no second source		no page from another publisher found
+sco-163	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-163	clubs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF final table has the same club count
+sco-163	up	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF table marks the same direct promotion places
+sco-163	down	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF table marks the same direct relegation places
+sco-163	playoffs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same play-off ties and stages
+sco-163	split	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same split stages
+sco-163	format	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF tables show the same number of matches
+sco-163	subs_used	agree	https://www.nottheoldfirm.com/news/spfl-clubs-vote-through-substitute-rule-change/	26 Jan 2022: Championship and League One move from three subs from seven to five from nine
+sco-163	bench	agree	https://www.nottheoldfirm.com/news/spfl-clubs-vote-through-substitute-rule-change/	three subs from seven, then five from nine from late January 2022
+sco-164	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-164	clubs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF final table has the same club count
+sco-164	up	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF table marks the same direct promotion places
+sco-164	down	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF table marks the same direct relegation places
+sco-164	playoffs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same play-off ties and stages
+sco-164	split	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same split stages
+sco-164	format	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF tables show the same number of matches
+sco-164	subs_used	agree	https://www.nottheoldfirm.com/news/spfl-clubs-vote-through-substitute-rule-change/	26 Jan 2022: Championship and League One move from three subs from seven to five from nine
+sco-164	bench	agree	https://www.nottheoldfirm.com/news/spfl-clubs-vote-through-substitute-rule-change/	three subs from seven, then five from nine from late January 2022
+sco-165	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-165	clubs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF final table has the same club count
+sco-165	up	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF table marks the same direct promotion places
+sco-165	down	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF table marks the same direct relegation places
+sco-165	playoffs	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same play-off ties and stages
+sco-165	split	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF shows the same split stages
+sco-165	format	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF tables show the same number of matches
+sco-165	subs_used	agree	https://pressandjournal.co.uk/fp/sport/football/scottish/3887055/championship-league-one-five-substitutes	Press and Journal 26 Jan 2022: League Two sides able to use five subs all season
+sco-165	bench	no second source		first value is an inference; no second source found
+sco-166	name	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-166	clubs	found	https://scottishfa.co.uk/news/202122-scottish-cup-fixture-dates-confirmed	value found: 113 entrants (37 preliminary round, 18 Highland, 16 Lowland, 10 League Two, 20 League One and Championship, 12 Premiership)
+sco-166	format	agree	https://scottishfa.co.uk/news/202122-scottish-cup-fixture-dates-confirmed	replays up to round three, a level replay goes to penalties, entry rounds match
+sco-166	subs_used	agree	https://www.nottheoldfirm.com/news/spfl-clubs-vote-through-substitute-rule-change/	26 Jan 2022: the Scottish Cup still allows only three substitutions (before round five)
+sco-166	bench	no second source		no page from another publisher found
+sco-167	name	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF lists the League Cup (sponsor names aside)
+sco-167	clubs	agree	https://spfl.co.uk/news/premier-sports-cup-draw	SPFL draw 28 May 2021: 40 clubs in groups, 8 winners and 3 best runners-up join 5 European clubs
+sco-167	format	agree	https://spfl.co.uk/news/premier-sports-cup-draw	SPFL draw 28 May 2021: 40 clubs in groups, 8 winners and 3 best runners-up join 5 European clubs
+sco-167	subs_used	no second source		no page from another publisher found
+sco-167	bench	no second source		no page from another publisher found
+sco-168	name	agree	https://www.rsssf.org/tabless/scot2022.html	RSSSF lists the (League) Challenge Cup
+sco-168	clubs	agree	https://livingstonfc.co.uk/?p=16344	participants up to 12 B teams, 30 SPFL, 4 Highland, 4 Lowland; Scottish teams only
+sco-168	format	agree	https://livingstonfc.co.uk/?p=16344	participants up to 12 B teams, 30 SPFL, 4 Highland, 4 Lowland; Scottish teams only
+sco-168	subs_used	no second source		no page from another publisher found
+sco-168	bench	no second source		no page from another publisher found
+sco-169	foreign	no second source		no page from another publisher found
+sco-169	work_permit	agree	https://www.scottishdailyexpress.co.uk/sport/football/scottish-football-chiefs-secure-important-25631577	Scottish Daily Express, 6 Dec 2021: UK Government keeps the Scottish panel on a permanent basis
+sco-169	registration	no second source		no page from another publisher found
+sco-169	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-170	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-170	clubs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF final table has the same club count
+sco-170	down	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF table marks the same direct relegation places
+sco-170	playoffs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same play-off ties and stages
+sco-170	split	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same split stages
+sco-170	format	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF tables show the same number of matches
+sco-170	subs_used	no second source		no page from another publisher found
+sco-170	bench	no second source		no page from another publisher found
+sco-171	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-171	clubs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF final table has the same club count
+sco-171	up	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF table marks the same direct promotion places
+sco-171	down	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF table marks the same direct relegation places
+sco-171	playoffs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same play-off ties and stages
+sco-171	split	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same split stages
+sco-171	format	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF tables show the same number of matches
+sco-171	subs_used	no second source		no page from another publisher found
+sco-171	bench	no second source		no page from another publisher found
+sco-172	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-172	clubs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF final table has the same club count
+sco-172	up	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF table marks the same direct promotion places
+sco-172	down	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF table marks the same direct relegation places
+sco-172	playoffs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same play-off ties and stages
+sco-172	split	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same split stages
+sco-172	format	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF tables show the same number of matches
+sco-172	subs_used	no second source		no page from another publisher found
+sco-172	bench	no second source		no page from another publisher found
+sco-173	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-173	clubs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF final table has the same club count
+sco-173	up	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF table marks the same direct promotion places
+sco-173	down	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF table marks the same direct relegation places
+sco-173	playoffs	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same play-off ties and stages
+sco-173	split	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF shows the same split stages
+sco-173	format	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF tables show the same number of matches
+sco-173	subs_used	no second source		no page from another publisher found
+sco-173	bench	no second source		no page from another publisher found
+sco-174	name	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-174	clubs	no second source		first value unknown; no count found
+sco-174	format	agree	https://www.scottishfa.co.uk/news/scottish-cup-replays-removed-for-202223-season/	replays removed from rounds one to three; preliminary round keeps replays (rule 21.1 of the 2022/23 rules)
+sco-174	subs_used	found	http://web.archive.org/web/20230213155210/https://www.scottishfa.co.uk/media/9973/scottish-cup-rules-2022-23.pdf	value found: rule 13.1, up to five substitutes from nine plus a sixth in extra time
+sco-174	bench	disagree	http://web.archive.org/web/20230213155210/https://www.scottishfa.co.uk/media/9973/scottish-cup-rules-2022-23.pdf	rule 13.1: up to nine nominated substitutes; first value is up to 7
+sco-175	name	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF lists the League Cup (sponsor names aside)
+sco-175	clubs	agree	https://spfl.co.uk/news/premier-sports-cup-seedings	SPFL: regionalisation removed for 2022/23; 37 SPFL clubs plus Fraserburgh, Bonnyrigg Rose and Buckie Thistle; 3 runners-up and 5 European clubs
+sco-175	format	agree	https://spfl.co.uk/news/premier-sports-cup-seedings	SPFL: regionalisation removed for 2022/23; 37 SPFL clubs plus Fraserburgh, Bonnyrigg Rose and Buckie Thistle; 3 runners-up and 5 European clubs
+sco-175	subs_used	no second source		no page from another publisher found
+sco-175	bench	no second source		no page from another publisher found
+sco-176	name	agree	https://www.rsssf.org/tabless/scot2023.html	RSSSF lists the (League) Challenge Cup
+sco-176	clubs	agree	https://spfl.co.uk/news/spfl-trust-trophy-202223	11 B teams, 4+4 Highland and Lowland, 30 SPFL, 4 cross-border clubs in round three = 53
+sco-176	format	agree	https://spfl.co.uk/news/spfl-trust-trophy-202223	11 B teams, 4+4 Highland and Lowland, 30 SPFL, 4 cross-border clubs in round three = 53
+sco-176	subs_used	no second source		no page from another publisher found
+sco-176	bench	no second source		no page from another publisher found
+sco-177	foreign	no second source		no page from another publisher found
+sco-177	work_permit	agree	https://www.scottishdailyexpress.co.uk/sport/football/scottish-football-chiefs-secure-important-25631577	Scottish Daily Express, 6 Dec 2021: UK Government keeps the Scottish panel on a permanent basis
+sco-177	registration	no second source		no page from another publisher found
+sco-177	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-178	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-178	clubs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF final table has the same club count
+sco-178	down	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF table marks the same direct relegation places
+sco-178	playoffs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same play-off ties and stages
+sco-178	split	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same split stages
+sco-178	format	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF tables show the same number of matches
+sco-178	subs_used	no second source		no page from another publisher found
+sco-178	bench	no second source		no page from another publisher found
+sco-179	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-179	clubs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF final table has the same club count
+sco-179	up	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF table marks the same direct promotion places
+sco-179	down	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF table marks the same direct relegation places
+sco-179	playoffs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same play-off ties and stages
+sco-179	split	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same split stages
+sco-179	format	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF tables show the same number of matches
+sco-179	subs_used	no second source		no page from another publisher found
+sco-179	bench	no second source		no page from another publisher found
+sco-180	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-180	clubs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF final table has the same club count
+sco-180	up	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF table marks the same direct promotion places
+sco-180	down	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF table marks the same direct relegation places
+sco-180	playoffs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same play-off ties and stages
+sco-180	split	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same split stages
+sco-180	format	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF tables show the same number of matches
+sco-180	subs_used	no second source		no page from another publisher found
+sco-180	bench	no second source		no page from another publisher found
+sco-181	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-181	clubs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF final table has the same club count
+sco-181	up	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF table marks the same direct promotion places
+sco-181	down	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF table marks the same direct relegation places
+sco-181	playoffs	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same play-off ties and stages
+sco-181	split	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF shows the same split stages
+sco-181	format	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF tables show the same number of matches
+sco-181	subs_used	no second source		no page from another publisher found
+sco-181	bench	no second source		no page from another publisher found
+sco-182	name	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-182	clubs	agree	https://www.scottishfa.co.uk/media/10829/2023-24-scottish-gas-scottish-cup-format-composition.pdf	7+48+18+16+10+20+12 = 131
+sco-182	format	agree	https://www.scottishfa.co.uk/media/10830/2023-24-scottish-gas-scottish-cup-rules.pdf	rule 21.1: drawn matches go to extra time and penalties; entry rounds match the composition document https://www.scottishfa.co.uk/media/10829/2023-24-scottish-gas-scottish-cup-format-composition.pdf
+sco-182	subs_used	found	https://www.scottishfa.co.uk/media/10830/2023-24-scottish-gas-scottish-cup-rules.pdf	value found: rule 13.1, up to five substitutes with three substitution opportunities, plus a sixth in extra time
+sco-182	bench	disagree	https://www.scottishfa.co.uk/media/10830/2023-24-scottish-gas-scottish-cup-rules.pdf	rule 13.1: up to nine nominated substitutes; first value is up to 7
+sco-183	name	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF lists the League Cup (sponsor names aside)
+sco-183	clubs	no second source		no page from another publisher found
+sco-183	format	no second source		no page from another publisher found
+sco-183	subs_used	no second source		no page from another publisher found
+sco-183	bench	no second source		no page from another publisher found
+sco-184	name	agree	https://www.rsssf.org/tabless/scot2024.html	RSSSF lists the (League) Challenge Cup
+sco-184	clubs	agree	https://spfltrust.org.uk/?p=19751	same make-up as 2022/23 = 53
+sco-184	format	agree	https://spfltrust.org.uk/?p=19751	same make-up as 2022/23 = 53
+sco-184	subs_used	no second source		no page from another publisher found
+sco-184	bench	no second source		no page from another publisher found
+sco-185	foreign	no second source		no page from another publisher found
+sco-185	work_permit	agree	https://www.scottishdailyexpress.co.uk/sport/football/scottish-football-chiefs-secure-important-25631577	Scottish Daily Express, 6 Dec 2021: UK Government keeps the Scottish panel on a permanent basis
+sco-185	registration	no second source		no page from another publisher found
+sco-185	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-186	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-186	clubs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF final table has the same club count
+sco-186	down	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF table marks the same direct relegation places
+sco-186	playoffs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same play-off ties and stages
+sco-186	split	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same split stages
+sco-186	format	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF tables show the same number of matches
+sco-186	subs_used	no second source		no page from another publisher found
+sco-186	bench	no second source		no page from another publisher found
+sco-187	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-187	clubs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF final table has the same club count
+sco-187	up	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF table marks the same direct promotion places
+sco-187	down	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF table marks the same direct relegation places
+sco-187	playoffs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same play-off ties and stages
+sco-187	split	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same split stages
+sco-187	format	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF tables show the same number of matches
+sco-187	subs_used	no second source		no page from another publisher found
+sco-187	bench	no second source		no page from another publisher found
+sco-188	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-188	clubs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF final table has the same club count
+sco-188	up	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF table marks the same direct promotion places
+sco-188	down	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF table marks the same direct relegation places
+sco-188	playoffs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same play-off ties and stages
+sco-188	split	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same split stages
+sco-188	format	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF tables show the same number of matches
+sco-188	subs_used	no second source		no page from another publisher found
+sco-188	bench	no second source		no page from another publisher found
+sco-189	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-189	clubs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF final table has the same club count
+sco-189	up	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF table marks the same direct promotion places
+sco-189	down	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF table marks the same direct relegation places
+sco-189	playoffs	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same play-off ties and stages
+sco-189	split	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF shows the same split stages
+sco-189	format	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF tables show the same number of matches
+sco-189	subs_used	no second source		no page from another publisher found
+sco-189	bench	no second source		no page from another publisher found
+sco-190	name	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-190	clubs	found	https://www.scottishfa.co.uk/media/12024/2024-25-scottish-cup-format-composition.pdf	value found: 130 entrants (6+48+18+16+10+20+12)
+sco-190	format	agree	https://www.scottishfa.co.uk/media/12006/scottish-cup-rules-2024-25-fv.pdf	rule 21.1: drawn matches go to extra time and penalties; entry rounds match the composition document https://www.scottishfa.co.uk/media/12024/2024-25-scottish-cup-format-composition.pdf
+sco-190	subs_used	found	https://www.scottishfa.co.uk/media/12006/scottish-cup-rules-2024-25-fv.pdf	value found: rule 13.1, up to five substitutes with three substitution opportunities, plus a sixth in extra time
+sco-190	bench	disagree	https://www.scottishfa.co.uk/media/12006/scottish-cup-rules-2024-25-fv.pdf	rule 13.1: up to eight nominated substitutes; first value is up to 7
+sco-191	name	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF lists the League Cup (sponsor names aside)
+sco-191	clubs	no second source		no page from another publisher found
+sco-191	format	no second source		no page from another publisher found
+sco-191	subs_used	no second source		no page from another publisher found
+sco-191	bench	no second source		no page from another publisher found
+sco-192	name	agree	https://www.rsssf.org/tabless/scot2025.html	RSSSF lists the (League) Challenge Cup
+sco-192	clubs	agree	https://spfl.co.uk/news/spfl-trust-trophy-202425	22+7+23 = 52; Scottish-only; 5 Highland and 6 Lowland
+sco-192	format	agree	https://spfl.co.uk/news/spfl-trust-trophy-202425	22+7+23 = 52; Scottish-only; 5 Highland and 6 Lowland
+sco-192	subs_used	no second source		no page from another publisher found
+sco-192	bench	no second source		no page from another publisher found
+sco-193	foreign	no second source		no page from another publisher found
+sco-193	work_permit	agree	https://www.scottishdailyexpress.co.uk/sport/football/scottish-football-chiefs-secure-important-25631577	Scottish Daily Express, 6 Dec 2021: UK Government keeps the Scottish panel on a permanent basis
+sco-193	registration	no second source		no page from another publisher found
+sco-193	windows	agree	https://www.premierleague.com/news/60258	premierleague.com: window system since 2002/03; Scottish dates not given
+sco-194	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-194	clubs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF final table has the same club count
+sco-194	down	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF table marks the same direct relegation places
+sco-194	playoffs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same play-off ties and stages
+sco-194	split	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same split stages
+sco-194	format	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF tables show the same number of matches
+sco-194	subs_used	no second source		no page from another publisher found
+sco-194	bench	no second source		no page from another publisher found
+sco-195	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-195	clubs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF final table has the same club count
+sco-195	up	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF table marks the same direct promotion places
+sco-195	down	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF table marks the same direct relegation places
+sco-195	playoffs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same play-off ties and stages
+sco-195	split	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same split stages
+sco-195	format	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF tables show the same number of matches
+sco-195	subs_used	no second source		no page from another publisher found
+sco-195	bench	no second source		no page from another publisher found
+sco-196	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-196	clubs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF final table has the same club count
+sco-196	up	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF table marks the same direct promotion places
+sco-196	down	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF table marks the same direct relegation places
+sco-196	playoffs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same play-off ties and stages
+sco-196	split	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same split stages
+sco-196	format	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF tables show the same number of matches
+sco-196	subs_used	no second source		no page from another publisher found
+sco-196	bench	no second source		no page from another publisher found
+sco-197	name	agree	https://www.stenhousemuirfc.com/2013/07/24/stenhousemuir-fc-enters-spfl-scottish-league-one/	Scottish Premiership, Championship, League One, League Two named from 2013/14
+sco-197	clubs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF final table has the same club count
+sco-197	up	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF table marks the same direct promotion places
+sco-197	down	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF table marks the same direct relegation places
+sco-197	playoffs	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same play-off ties and stages
+sco-197	split	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF shows the same split stages
+sco-197	format	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF tables show the same number of matches
+sco-197	subs_used	no second source		no page from another publisher found
+sco-197	bench	no second source		no page from another publisher found
+sco-198	name	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF lists the competition as the SFA Cup / Scottish Cup
+sco-198	clubs	agree	https://www.scottishfa.co.uk/media/13229/mens-scottish-cup-format-composition-2025-26.pdf	56+18+16+10+20+12 = 132
+sco-198	format	agree	https://www.scottishfa.co.uk/media/13230/mens-scottish-cup-rules-2025-26.pdf	rule 21.1: drawn matches go to extra time and penalties; entry rounds match the composition document https://www.scottishfa.co.uk/media/13229/mens-scottish-cup-format-composition-2025-26.pdf
+sco-198	subs_used	found	https://www.scottishfa.co.uk/media/13230/mens-scottish-cup-rules-2025-26.pdf	value found: rule 13.1, up to five substitutes with three substitution opportunities, plus a sixth in extra time
+sco-198	bench	disagree	https://www.scottishfa.co.uk/media/13230/mens-scottish-cup-rules-2025-26.pdf	rule 13.1: up to nine nominated substitutes; first value is up to 7
+sco-199	name	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF lists the League Cup (sponsor names aside)
+sco-199	clubs	no second source		no page from another publisher found
+sco-199	format	no second source		no page from another publisher found
+sco-199	subs_used	no second source		no page from another publisher found
+sco-199	bench	no second source		no page from another publisher found
+sco-200	name	agree	https://www.rsssf.org/tabless/scot2026.html	RSSSF lists the (League) Challenge Cup
+sco-200	clubs	agree	https://spfl.co.uk/news/kdm-evolution-trophy-fixture-launch	league phase of 30, six matches each, top 22 join the 10 Championship clubs
+sco-200	format	agree	https://spfl.co.uk/news/kdm-evolution-trophy-fixture-launch	league phase of 30, six matches each, top 22 join the 10 Championship clubs
+sco-200	subs_used	no second source		no page from another publisher found
+sco-200	bench	no second source		no page from another publisher found
+sco-201	foreign	no second source		no page from another publisher found
+sco-201	work_permit	no second source		inference by the first agent; no later source
+sco-201	registration	no second source		no page from another publisher found
+sco-201	windows	no second source		no page from another publisher found
+sco-202	name	no second source		no season has been played yet; the value is a carry-over
+sco-202	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-202	down	no second source		no season has been played yet; the value is a carry-over
+sco-202	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-202	split	no second source		no season has been played yet; the value is a carry-over
+sco-202	format	no second source		no season has been played yet; the value is a carry-over
+sco-202	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-202	bench	no second source		no season has been played yet; the value is a carry-over
+sco-203	name	no second source		no season has been played yet; the value is a carry-over
+sco-203	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-203	up	no second source		no season has been played yet; the value is a carry-over
+sco-203	down	no second source		no season has been played yet; the value is a carry-over
+sco-203	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-203	split	no second source		no season has been played yet; the value is a carry-over
+sco-203	format	no second source		no season has been played yet; the value is a carry-over
+sco-203	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-203	bench	no second source		no season has been played yet; the value is a carry-over
+sco-204	name	no second source		no season has been played yet; the value is a carry-over
+sco-204	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-204	up	no second source		no season has been played yet; the value is a carry-over
+sco-204	down	no second source		no season has been played yet; the value is a carry-over
+sco-204	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-204	split	no second source		no season has been played yet; the value is a carry-over
+sco-204	format	no second source		no season has been played yet; the value is a carry-over
+sco-204	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-204	bench	no second source		no season has been played yet; the value is a carry-over
+sco-205	name	no second source		no season has been played yet; the value is a carry-over
+sco-205	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-205	up	no second source		no season has been played yet; the value is a carry-over
+sco-205	down	no second source		no season has been played yet; the value is a carry-over
+sco-205	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-205	split	no second source		no season has been played yet; the value is a carry-over
+sco-205	format	no second source		no season has been played yet; the value is a carry-over
+sco-205	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-205	bench	no second source		no season has been played yet; the value is a carry-over
+sco-206	name	agree	https://assets.ctfassets.net/qu0slcxvbwp6/1BfTz9IMRE7ckhocCF5TOj/6e33387a50a820f4f86c4c1eecb10659/2026-27_Scottish_Cup_Format___Composition.pdf	Scottish FA composition document
+sco-206	clubs	agree	https://assets.ctfassets.net/qu0slcxvbwp6/1BfTz9IMRE7ckhocCF5TOj/6e33387a50a820f4f86c4c1eecb10659/2026-27_Scottish_Cup_Format___Composition.pdf	45+18+16+16+10+20+12 = 137
+sco-206	format	agree	https://assets.ctfassets.net/qu0slcxvbwp6/4TZlz8yWaTibtBRSUk8Ai0/48f87db2a4679b5ad04a0039fe8683a5/Men-s_Scottish_Cup_Rules_2026-27.pdf	rule 21.1: drawn matches go to extra time and penalties; entry rounds match the composition document https://assets.ctfassets.net/qu0slcxvbwp6/1BfTz9IMRE7ckhocCF5TOj/6e33387a50a820f4f86c4c1eecb10659/2026-27_Scottish_Cup_Format___Composition.pdf
+sco-206	subs_used	found	https://assets.ctfassets.net/qu0slcxvbwp6/4TZlz8yWaTibtBRSUk8Ai0/48f87db2a4679b5ad04a0039fe8683a5/Men-s_Scottish_Cup_Rules_2026-27.pdf	value found: rule 13.1, up to five substitutes with three substitution opportunities, plus a sixth in extra time
+sco-206	bench	disagree	https://assets.ctfassets.net/qu0slcxvbwp6/4TZlz8yWaTibtBRSUk8Ai0/48f87db2a4679b5ad04a0039fe8683a5/Men-s_Scottish_Cup_Rules_2026-27.pdf	rule 13.1: up to nine nominated substitutes; first value is up to 7
+sco-207	name	no second source		no page from another publisher found
+sco-207	clubs	no second source		no page from another publisher found
+sco-207	format	no second source		no page from another publisher found
+sco-207	subs_used	no second source		no page from another publisher found
+sco-207	bench	no second source		no page from another publisher found
+sco-208	name	agree	https://spfl.co.uk/news/kdm-evolution-trophy-202627	SPFL calls it the KDM Evolution Trophy (sponsor name)
+sco-208	clubs	agree	https://spfl.co.uk/news/kdm-evolution-trophy-202627	league phase of 40 with 10 Highland and Lowland guests, top 22 join the 10 Championship clubs in the round of 32
+sco-208	format	agree	https://spfl.co.uk/news/kdm-evolution-trophy-202627	league phase of 40 with 10 Highland and Lowland guests, top 22 join the 10 Championship clubs in the round of 32
+sco-208	subs_used	no second source		no page from another publisher found
+sco-208	bench	no second source		no page from another publisher found
+sco-209	foreign	no second source		no page from another publisher found
+sco-209	work_permit	no second source		inference by the first agent; no later source
+sco-209	registration	no second source		no page from another publisher found
+sco-209	windows	no second source		no page from another publisher found
+sco-210	name	no second source		no season has been played yet; the value is a carry-over
+sco-210	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-210	down	no second source		no season has been played yet; the value is a carry-over
+sco-210	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-210	split	no second source		no season has been played yet; the value is a carry-over
+sco-210	format	no second source		no season has been played yet; the value is a carry-over
+sco-210	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-210	bench	no second source		no season has been played yet; the value is a carry-over
+sco-211	name	no second source		no season has been played yet; the value is a carry-over
+sco-211	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-211	up	no second source		no season has been played yet; the value is a carry-over
+sco-211	down	no second source		no season has been played yet; the value is a carry-over
+sco-211	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-211	split	no second source		no season has been played yet; the value is a carry-over
+sco-211	format	no second source		no season has been played yet; the value is a carry-over
+sco-211	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-211	bench	no second source		no season has been played yet; the value is a carry-over
+sco-212	name	no second source		no season has been played yet; the value is a carry-over
+sco-212	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-212	up	no second source		no season has been played yet; the value is a carry-over
+sco-212	down	no second source		no season has been played yet; the value is a carry-over
+sco-212	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-212	split	no second source		no season has been played yet; the value is a carry-over
+sco-212	format	no second source		no season has been played yet; the value is a carry-over
+sco-212	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-212	bench	no second source		no season has been played yet; the value is a carry-over
+sco-213	name	no second source		no season has been played yet; the value is a carry-over
+sco-213	clubs	no second source		no season has been played yet; the value is a carry-over
+sco-213	up	no second source		no season has been played yet; the value is a carry-over
+sco-213	down	no second source		no season has been played yet; the value is a carry-over
+sco-213	playoffs	no second source		no season has been played yet; the value is a carry-over
+sco-213	split	no second source		no season has been played yet; the value is a carry-over
+sco-213	format	no second source		no season has been played yet; the value is a carry-over
+sco-213	subs_used	no second source		no season has been played yet; the value is a carry-over
+sco-213	bench	no second source		no season has been played yet; the value is a carry-over
+sco-214	name	no second source		no page from another publisher found
+sco-214	clubs	no second source		first value unknown; no count found
+sco-214	format	no second source		first value is an inference; no second source found
+sco-214	subs_used	no second source		first value unknown; none found
+sco-214	bench	no second source		no page from another publisher found
+sco-215	name	no second source		no page from another publisher found
+sco-215	clubs	no second source		first value is an inference; no second source found
+sco-215	format	no second source		first value is an inference; no second source found
+sco-215	subs_used	no second source		no page from another publisher found
+sco-215	bench	no second source		first value is an inference; no second source found
+sco-216	name	no second source		no page from another publisher found
+sco-216	clubs	no second source		first value is an inference; no second source found
+sco-216	format	no second source		first value is an inference; no second source found
+sco-216	subs_used	no second source		no page from another publisher found
+sco-216	bench	no second source		first value is an inference; no second source found

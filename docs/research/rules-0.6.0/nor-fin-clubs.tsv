@@ -1,0 +1,645 @@
+season	division	club	db_club_id	db_club	db_division	source
+2001/02	Ykkönen South zone	KooTeePee Kotka	6105	FC KooTeePee	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	Jokerit Helsinki	3801	FC Jokerit	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	FC Honka Espoo	5137	FC Honka	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	PP-70 Tampere	8463	Tampereen Peli-Pojat-70	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	FC Kuusankoski	3812	FC Kuusankoski	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	Rakuunat Lappeenranta	9335	Jalkapalloseura Rakuunat	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	HIFK Helsinki	4728	FC HIFK	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	Viikingit Helsinki	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen South zone	Gnistan Helsinki	4454	IF Gnistan	Finnish First Division South	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	TPS Turku	11306	Jalkapallo TPS	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	TP-47 Tornio	11301	Tornion Pallo-47	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	GBK Kokkola	4248	Gamlakarleby Bollklubb	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	RoPS Rovaniemi	9603	Rovaniemen Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	Tervarit Oulu	11488	Oulun Tervarit	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	Kraft Närpiö	7766	IF Kraft	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	VG-62 Naantali	12155	VG-62	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	TP Seinäjoki	11303	TP-Seinäjoki	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2001/02	Ykkönen North zone	FC Korsholm Mustasaari	3808	FC Korsholm	Finnish First Division North	https://en.wikipedia.org/wiki/2002_Ykkönen
+2002/03	Veikkausliiga	HJK Helsinki	4730	HJK Helsinki	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	Haka Valkeakoski	3791	FC Haka Valkeakoski	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	Tampere United	11356	Tampere United	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	MyPa Anjalankoski	7663	Myllykosken Pallo-47	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	FC Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	Allianssi Vantaa	57	AC Vantaan Allianssi	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	FC Inter Turku	5386	FC Inter	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	Jaro Jakobstad	5563	FF Jaro	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	TPS Turku	11306	Jalkapallo TPS	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	FC Jokerit	3801	FC Jokerit	Finnish First Division South	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	FC Jazz Pori	3798	FC Jazz	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	FC KooTeePee	6105	FC KooTeePee	Finnish First Division South	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Veikkausliiga	KuPS	6188	Kuopion Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Veikkausliiga
+2002/03	Ykkönen	TP-47 Tornio	11301	Tornion Pallo-47	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	RoPS Rovaniemi	9603	Rovaniemen Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	FC Viikingit Helsinki	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	FC Honka Espoo	5137	FC Honka	Finnish First Division South	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	VPS Vaasa	12164	Vaasan Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	Kraft Närpiö	7766	IF Kraft	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	VG-62 Naantali	12155	VG-62	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	AC Oulu	11488	Oulun Tervarit	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	Rakuunat Lappeenranta	9335	Jalkapalloseura Rakuunat	Finnish First Division South	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	PP-70 Tampere	8463	Tampereen Peli-Pojat-70	Finnish First Division South	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	GBK Kokkola	4248	Gamlakarleby Bollklubb	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	FC Kuusankoski	3812	FC Kuusankoski	Finnish First Division South	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	OLS Oulu	8116	Oulun Luistinseura	Finnish Second Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2002/03	Ykkönen	FC Korsholm Mustasaari	3808	FC Korsholm	Finnish First Division North	https://en.wikipedia.org/wiki/2003_Ykkönen
+2003/04	Veikkausliiga	Haka	3791	FC Haka Valkeakoski	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	AC Allianssi	57	AC Vantaan Allianssi	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	Tampere United	11356	Tampere United	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	FC Inter	5386	FC Inter	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	TPS	11306	Jalkapallo TPS	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	HJK	4730	HJK Helsinki	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	FC Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	MYPA	7663	Myllykosken Pallo-47	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	FC KooTeePee	6105	FC KooTeePee	Finnish First Division South	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	TP-47	11301	Tornion Pallo-47	Finnish First Division North	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	FF Jaro	5563	FF Jaro	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	RoPS	9603	Rovaniemen Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	FC Jazz	3798	FC Jazz	Finnish First Division South	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Veikkausliiga	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Veikkausliiga
+2003/04	Ykkönen	KuPS	6188	Kuopion Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	IFK Mariehamn	6906	IFK Mariehamn	Finnish Second Division South	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	FC Honka	5137	FC Honka	Finnish First Division South	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	AC Oulu	11488	Oulun Tervarit	Finnish First Division North	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	VPS	12164	Vaasan Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish Second Division East	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	Rakuunat	9335	Jalkapalloseura Rakuunat	Finnish First Division South	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	PP-70	8463	Tampereen Peli-Pojat-70	Finnish First Division South	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	P-Iirot	8440	Pallo-Iirot Rauma	Finnish Second Division West	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	VG-62	12155	VG-62	Finnish First Division North	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	Närpes Kraft	7766	IF Kraft	Finnish First Division North	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	FC Kuusankoski	3812	FC Kuusankoski	Finnish First Division South	https://en.wikipedia.org/wiki/2004_Ykkönen
+2003/04	Ykkönen	GBK	4248	Gamlakarleby Bollklubb	Finnish First Division North	https://en.wikipedia.org/wiki/2004_Ykkönen
+2005/06	Veikkausliiga	Tampere United	11356	Tampere United	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	HJK	4730	HJK Helsinki	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	FC Haka	3791	FC Haka Valkeakoski	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	FC Honka	5137	FC Honka	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	IFK Mariehamn	6906	IFK Mariehamn	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	MyPa	7663	Myllykosken Pallo-47	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	TPS	11306	Jalkapallo TPS	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	FC Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	VPS	12164	Vaasan Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	FC Inter	5386	FC Inter	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	FC KooTeePee	6105	FC KooTeePee	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	FF Jaro	5563	FF Jaro	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Veikkausliiga	KuPS	6188	Kuopion Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Veikkausliiga
+2005/06	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	AC Oulu	11488	FC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	Atlantis FC	984	Atlantis Akatemia	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	TP-47	11301	Tornion Pallo-47	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	Jippo	5621	Joensuun Pallo	Finnish Second Division East	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	Klubi-04	3801	HJK Reserves	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	RoPS	9603	Rovaniemen Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	VIFK	12158	IFK Vasa	Finnish Second Division North	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	KPV	5738	KPV juniorit	Finnish Second Division North	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	PK-35	8458	Pallokerho-35	Finnish Second Division South	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish Premier Division	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	PP-70	8463	Tampereen Peli-Pojat-70	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish First Division North	https://en.wikipedia.org/wiki/2006_Ykkönen
+2005/06	Ykkönen	Rakuunat	9335	Jalkapalloseura Rakuunat	Finnish First Division South	https://en.wikipedia.org/wiki/2006_Ykkönen
+2007/08	Veikkausliiga	FC Inter	5386	FC Inter Turku	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	FC Honka	5137	FC Honka	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	FC Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	HJK	4730	HJK Helsinki	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	MYPA	7663	MyPa Anjalankoski	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	TPS	11306	FC TPS	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	Tampere United	11356	Tampere United	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	Haka	3791	FC Haka	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	FF Jaro	5563	FF Jaro	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	RoPS	9603	Rovaniemen Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	VPS	12164	Vaasan Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	IFK Mariehamn	6906	IFK Mariehamn	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	KuPS	6188	Kuopion Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Veikkausliiga	FC KooTeePee	6105	FC KooTeePee	Finnish Premier Division	https://en.wikipedia.org/wiki/2008_Veikkausliiga
+2007/08	Ykkönen	JJK	5512	Jyväskylän Jalkapalloklubi	Finnish Second Division East	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish First Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	AC Oulu	11488	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	Jippo	5621	JIPPO Joensuu	Finnish Second Division East	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	KPV	5738	Kokkolan Palloveikot	Finnish Second Division North	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	PK-35	8458	Pallokerho-35	Finnish Second Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	PS Kemi	8466	PS Kemi Kings	Finnish First Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	TPV	11307	TPV Tampere	Finnish First Division North	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	TP-47	11301	Tornion Pallo-47	Finnish First Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	Atlantis FC	984	Atlantis FC	Finnish First Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	VIFK	12158	Vasa IFK	Finnish Second Division North	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	GrIFK	4525	IFK Grankulla	Finnish First Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2007/08	Ykkönen	KäPa	5753	Käpylän Pallo	Finnish Second Division South	https://en.wikipedia.org/wiki/2008_Ykkönen
+2008/09	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Stabæk	11013	Stabæk IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Odd Grenland	8153	Odd Grenland	Norwegian First Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Tromsø	11818	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Vålerenga	12216	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Sandefjord	10089	Sandefjord Fotball	Norwegian First Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Start	11061	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Viking	12458	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Strømsgodset	11158	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Fredrikstad	4176	Fredrikstad FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Tippeligaen	Lyn	6864	FC Lyn Oslo	Norwegian Premier Division	https://en.wikipedia.org/wiki/2009_Tippeligaen
+2008/09	Veikkausliiga	HJK	4730	HJK Helsinki	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	FC Honka	5137	FC Honka	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	TPS	11306	Turun Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	IFK Mariehamn	6906	IFK Mariehamn	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	FC Inter	5386	FC Inter Turku	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	Haka	3791	FC Haka	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	Tampere United	11356	Tampere United	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	VPS	12164	Vaasan Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	MYPA	7663	MyPa Anjalankoski	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	FF Jaro	5563	FF Jaro	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	FC Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	KuPS	6188	Kuopion Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	JJK	5512	Jyväskylän Jalkapalloklubi	Finnish First Division North	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Veikkausliiga	RoPS	9603	Rovaniemen Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2009_Veikkausliiga
+2008/09	Ykkönen	AC Oulu	11488	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	KPV	5738	Kokkolan Palloveikot	Finnish First Division North	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	FC PoPa	8853	Porin Palloilijat	Finnish Second Division West	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	FC KooTeePee	6105	FC KooTeePee	Finnish Premier Division	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish First Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	PS Kemi	8466	PS Kemi Kings	Finnish Second Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	Klubi-04	3801	Klubi-04 Helsinki	Finnish Second Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	PK-35	8458	Pallokerho-35	Finnish First Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	Jippo	5621	JIPPO Joensuu	Finnish First Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	TPV	11307	Tampereen Pallo-Veikot	Finnish First Division North	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	TP-47	11301	Tornion Pallo-47	Finnish First Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	Atlantis FC	984	Atlantis FC	Finnish First Division South	https://en.wikipedia.org/wiki/2009_Ykkönen
+2008/09	Ykkönen	FC Kiisto	5971	Vaasan Kiisto	Finnish Second Division North	https://en.wikipedia.org/wiki/2009_Ykkönen
+2009/10	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Vålerenga	12216	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Tromsø	11818	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Odd Grenland	8153	Odd Grenland	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Haugesund	4916	FK Haugesund	Norwegian First Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Strømsgodset	11158	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Start	11061	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Viking	12458	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Stabæk	11013	Stabæk IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Hønefoss	6263	Hønefoss BK	Norwegian First Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Kongsvinger	6095	Kongsvinger IL	Norwegian First Division	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Tippeligaen	Sandefjord	10089	Sandefjord Fotball	Norwegian Second Division Group 1	https://en.wikipedia.org/wiki/2010_Tippeligaen
+2009/10	Veikkausliiga	HJK	4730	HJK Helsinki	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	KuPS	6188	Kuopion Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	TPS	11306	Turun Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	FC Honka	5137	FC Honka	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	FF Jaro	5563	FF Jaro	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	FC Inter	5386	FC Inter Turku	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	Tampere United	11356	Tampere United	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	Haka	3791	FC Haka	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	MYPA	7663	Myllykosken Pallo -47	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	VPS	12164	Vaasan Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	AC Oulu	11488	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	IFK Mariehamn	6906	IFK Mariehamn	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	JJK	5512	Jyväskylän Jalkapalloklubi	Finnish First Division North	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Veikkausliiga	FC Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Veikkausliiga
+2009/10	Ykkönen	RoPS	9603	Rovaniemen Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	FC PoPa	8853	Porin Palloilijat	Finnish Second Division West	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	KPV	5738	Kokkolan Palloveikot	Finnish First Division North	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	OPS	8118	Oulun Palloseura	A Lower Division	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	FC Espoo	3781	FC Espoo	Finnish Second Division South	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	FC KooTeePee	6105	FC KooTeePee	Finnish First Division North	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	PK-35 Vantaa	8458	PK-35 Vantaa	Finnish First Division South	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	PS Kemi	8466	PS Kemi Kings	Finnish Second Division South	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish First Division South	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	JIPPO	5621	JIPPO Joensuu	Finnish First Division South	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	TPV	11307	Tampereen Pallo-Veikot	Finnish First Division North	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	Klubi 04	3801	Klubi-04 Helsinki	Finnish Second Division South	https://en.wikipedia.org/wiki/2010_Ykkönen
+2009/10	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish Second Division North	https://en.wikipedia.org/wiki/2010_Ykkönen
+2010/11	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Tromsø	11818	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Odd Grenland	8153	Odd Grenland	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Vålerenga	12216	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Strømsgodset	11158	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Stabæk	11013	Stabæk IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Viking	12458	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Fredrikstad	4176	Fredrikstad FK	Norwegian First Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Sogndal	10724	Sogndal IL	Norwegian First Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Start	11061	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Tippeligaen	Sarpsborg 08	6496	Sparta Sarpsborg	Norwegian First Division	https://en.wikipedia.org/wiki/2011_Tippeligaen
+2010/11	Ykkönen	FC Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	OPS	8118	Oulun Palloseura	A Lower Division	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	AC Oulu	11488	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	PK-35 Vantaa	8458	PK-35 Vantaa	Finnish First Division South	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	FC KooTeePee	6105	FC KooTeePee	Finnish First Division North	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish First Division South	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	JIPPO	5621	JIPPO Joensuu	Finnish First Division South	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	HIFK	4728	FC HIFK	Finnish Second Division East	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	PS Kemi	8466	PS Kemi Kings	Finnish Second Division South	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	FC PoPa	8853	Porin Palloilijat	Finnish Second Division West	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	KPV	5738	Kokkolan Palloveikot	Finnish First Division North	https://en.wikipedia.org/wiki/2011_Ykkönen
+2010/11	Ykkönen	FC Espoo	3781	FC Espoo	Finnish Second Division South	https://en.wikipedia.org/wiki/2011_Ykkönen
+2011/12	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Strømsgodset	11158	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Tromsø	11818	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Viking	12458	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Vålerenga	12216	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Odd Grenland	8153	Odd Grenland	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Sogndal	10724	Sogndal IL	Norwegian First Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Hønefoss	6263	Hønefoss BK	Norwegian First Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Sandnes Ulf	10093	Sandnes Ulf	Norwegian First Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Fredrikstad	4176	Fredrikstad FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Tippeligaen	Stabæk	11013	Stabæk IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2012_Tippeligaen
+2011/12	Ykkönen	RoPS	9603	Rovaniemen Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	SJK	11303	Seinäjoen Jalkapallokerho	Finnish Second Division North	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division South	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	PK-35 Vantaa	8458	PK-35 Vantaa	Finnish First Division South	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	OPS	8118	Oulun Palloseura	A Lower Division	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	AC Oulu	11488	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	FC KooTeePee	6105	FC KooTeePee	Finnish First Division North	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	JIPPO	5621	JIPPO Joensuu	Finnish First Division South	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	FC Hämeenlinna	3793	FC Hämeenlinna	Finnish First Division South	https://en.wikipedia.org/wiki/2012_Ykkönen
+2011/12	Ykkönen	HIFK	4728	FC HIFK	Finnish Second Division East	https://en.wikipedia.org/wiki/2012_Ykkönen
+2012/13	Tippeligaen	Strømsgodset	11158	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Viking	12458	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Odd	8153	Odd Grenland	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Start	11061	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Vålerenga	12216	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Sogndal	10724	Sogndal IL	Norwegian First Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Sandnes Ulf	10093	Sandnes Ulf SK	Norwegian First Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Sarpsborg 08	6496	Sarpsborg 08	Norwegian First Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Tromsø	11818	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Tippeligaen	Hønefoss	6263	Hønefoss BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2013_Tippeligaen
+2012/13	Ykkönen	SJK	11303	Seinäjoen Jalkapallokerho	Finnish First Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	Haka	3791	FC Haka	Finnish Premier Division	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	FC KooTeePee	6105	FC KooTeePee	Finnish First Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	Ilves	13052	Ilves	Finnish First Division South	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	AC Oulu	11488	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	PK-35 Vantaa	8458	Pallokerho-35	Finnish First Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	JIPPO	5621	JIPPO Joensuu	Finnish First Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	OPS	8118	Oulun Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2012/13	Ykkönen	Kajaani	3272	AC Kajaani	Finnish Second Division North	https://en.wikipedia.org/wiki/2013_Ykkönen
+2013/14	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Strømsgodset	11158	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Vålerenga	12216	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Sarpsborg 08	6496	Sarpsborg 08	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Stabæk	11013	Stabæk IF	Norwegian First Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Viking	12458	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Start	11061	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian First Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Sogndal	10724	Sogndal IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Tippeligaen	Sandnes Ulf	10093	Sandnes Ulf SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2014_Tippeligaen
+2013/14	Ykkönen	HIFK	4728	FC HIFK	Finnish First Division South	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	KTP	6131	Kotkan TP	Finnish Second Division South	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	Ilves	6502	Ilves	Finnish First Division North	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	AC Oulu	3836	FC Oulu	none	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	Haka	3791	FC Haka	Finnish First Division North	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	PK-35 Vantaa	8458	Pallokerho-35	Finnish First Division North	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	JJK	5512	Jyväskylän Jalkapalloklubi	Finnish Premier Division	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	FC Jazz	3798	FC Jazz	Finnish First Division South	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	JIPPO	5621	JIPPO Joensuu	Finnish First Division North	https://en.wikipedia.org/wiki/2014_Ykkönen
+2013/14	Ykkönen	FC Viikingit	12454	FC Viikingit	Finnish First Division North	https://en.wikipedia.org/wiki/2014_Ykkönen
+2014/15	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Stabæk	11013	Stabæk IF	Norwegian First Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Viking	6960	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Vålerenga	3828	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian First Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Sarpsborg 08	6496	Sarpsborg 08	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Tromsø	9458	Tromsø IL	Norwegian First Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Start	11061	IK Start	Norwegian Premier Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Mjøndalen	7424	Mjøndalen IF	Norwegian First Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Tippeligaen	Sandefjord	10089	Sandefjord Fotball	Norwegian First Division	https://en.wikipedia.org/wiki/2015_Tippeligaen
+2014/15	Ykkönen	AC Oulu	3836	FC Oulu	Finnish Lower Division	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division South	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	FC Jazz	3798	FC Jazz	Finnish First Division South	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	JJK	5512	JJK Jyväskylä	Finnish First Division North	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	Haka	3791	FC Haka	Finnish First Division South	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish First Division North	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	PK-35 Vantaa	8458	PK-35 Vantaa	Finnish First Division South	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	PS Kemi	8466	PS Kemi Kings	Finnish First Division North	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	TPS	9752	Turun Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2015_Ykkönen
+2014/15	Ykkönen	VIFK	7685	Vasa IFK	Finnish Second Division North	https://en.wikipedia.org/wiki/2015_Ykkönen
+2015/16	Tippeligaen	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Brann	1835	SK Brann	Norwegian First Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Sarpsborg 08	6496	Sarpsborg 08	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Viking	6960	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Vålerenga	3828	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Sogndal	10724	Sogndal IL	Norwegian First Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Tromsø	9458	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Stabæk	11013	Stabæk IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Tippeligaen	Start	11061	IK Start	Norwegian Premier Division	https://en.wikipedia.org/wiki/2016_Tippeligaen
+2015/16	Ykkönen	JJK	5512	JJK Jyväskylä	Finnish First Division North	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	TPS	9752	Turun Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	FF Jaro	5563	FF Jaro	Finnish Premier Division	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	AC Oulu	4784	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	KPV	5738	Kokkolan Pallo-Veikot	Finnish First Division South	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	GrIFK	4525	Grankulla IFK	Finnish First Division South	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	Haka	3791	Valkeakosken Haka	Finnish First Division North	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division North	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	KTP	3033	Kotkan Työväen Palloilijat	Finnish Premier Division	https://en.wikipedia.org/wiki/2016_Ykkönen
+2015/16	Ykkönen	FC Jazz	3798	FC Jazz Pori	Finnish First Division North	https://en.wikipedia.org/wiki/2016_Ykkönen
+2016/17	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Sarpsborg 08	6496	Sarpsborg 08	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Brann	1835	SK Brann	Norwegian First Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian First Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Vålerenga	3828	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Stabæk	11013	Stabæk IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Sandefjord	10089	Sandefjord Fotball	Norwegian First Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Sogndal	10724	Sogndal IL	Norwegian First Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Eliteserien	Viking	6960	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2017_Eliteserien
+2016/17	Ykkönen	TPS	9752	Turun Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	FC Honka	5137	FC Honka Espoo	Finnish First Division South	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	KPV	5738	Kokkolan Pallo-Veikot	Finnish First Division South	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	AC Oulu	4784	AC Oulu	Finnish First Division South	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	FF Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	FC Haka	3791	Valkeakosken Haka	Finnish First Division North	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division North	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	OPS	8118	Oulun Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	GrIFK	4525	Grankulla IFK	Finnish First Division South	https://en.wikipedia.org/wiki/2017_Ykkönen
+2016/17	Ykkönen	Gnistan	4454	IF Gnistan	Finnish First Division South	https://en.wikipedia.org/wiki/2017_Ykkönen
+2017/18	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Haugesund	4916	Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian First Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Vålerenga	3828	Vålerenga IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Ranheim	9361	Ranheim IL	Norwegian First Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Sarpsborg 08	6496	Sarpsborg 08	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian First Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Stabæk	11013	Stabæk IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Start	11061	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Eliteserien	Sandefjord	10089	Sandefjord Fotball	Norwegian First Division	https://en.wikipedia.org/wiki/2018_Eliteserien
+2017/18	Ykkönen	HIFK	4728	HIFK Fotboll	Finnish Premier Division	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	KPV	5738	KPV Kokkola	Finnish First Division North	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division North	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	AC Oulu	4784	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	FC Haka	3791	FC Haka	Finnish First Division North	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	FF Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	FC KTP	3033	KTP Kotka	Finnish First Division South	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	AC Kajaani	3272	AC Kajaani	Finnish First Division North	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	JJK	5512	JJK Jyväskylä	Finnish Premier Division	https://en.wikipedia.org/wiki/2018_Ykkönen
+2017/18	Ykkönen	Klubi 04	3801	Klubi-04	Finnish First Division North	https://en.wikipedia.org/wiki/2018_Ykkönen
+2018/19	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Viking	6960	Viking Stavanger	Norwegian First Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Stabæk	11013	Stabaek IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Vålerenga	3828	Valerenga Oslo	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Sarpsborg 08	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Mjøndalen	7424	Mjøndalen IF	Norwegian First Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Lillestrøm	6578	Lilleström SK	Norwegian First Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Tromsø	9458	Tromsö IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Eliteserien	Ranheim	9361	Ranheim IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2019_Eliteserien
+2018/19	Ykkönen	FC Haka	3791	FC Haka	Finnish First Division North	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	TPS	9752	Turun Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	FF Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	KTP	3033	FC KTP	Finnish First Division North	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	MuSa	7620	Musan Salama	Finnish First Division South	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division North	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	AC Oulu	4784	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	AC Kajaani	3272	AC Kajaani	Finnish First Division North	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	MYPA	7663	Myllykosken Pallo -47	Finnish Second Division West	https://en.wikipedia.org/wiki/2019_Ykkönen
+2018/19	Ykkönen	TPV	9734	Tampereen Pallo-Veikot	Finnish First Division South	https://en.wikipedia.org/wiki/2019_Ykkönen
+2019/20	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Vålerenga	3828	Vålerenga Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Viking	6960	Viking Stavanger	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Stabæk	6419	Stabæk Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Sandefjord	10089	Sandefjord Fotball	Norwegian First Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Sarpsborg 08	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Mjøndalen	7424	Mjøndalen IF	Norwegian First Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Start	8336	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Eliteserien	Aalesund	181	Aalesunds FK	Norwegian First Division	https://en.wikipedia.org/wiki/2020_Eliteserien
+2019/20	Ykkönen	Oulu	4784	AC Oulu	Finnish First Division North	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	MuSa	7620	Musan Salama	Finnish First Division North	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division North	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	KTP	3033	FC KTP	Finnish First Division North	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	VPS	7370	Vaasan Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish First Division South	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	KPV	5738	Kokkolan Pallo-Veikot	Finnish Premier Division	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	Kajaani	3272	AC Kajaani	Finnish First Division North	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	Gnistan	4454	IF Gnistan	Finnish First Division South	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	MYPA	7663	Myllykosken Pallo -47	Finnish First Division North	https://en.wikipedia.org/wiki/2020_Ykkönen
+2019/20	Ykkönen	SJK Akatemia	5363	SJK Seinäjoki II	Finnish Second Division West	https://en.wikipedia.org/wiki/2020_Ykkönen
+2020/21	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Viking	6960	Viking Stavanger	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Lillestrøm	6578	Lillestrøm SK	Norwegian First Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Vålerenga	3828	Vålerenga Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Sarpsborg 08	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Sandefjord	10089	Sandefjord Fotball	Norwegian First Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian First Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Stabæk	6419	Stabæk Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Eliteserien	Mjøndalen	7424	Mjøndalen IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2021_Eliteserien
+2020/21	Ykkönen	RoPS	9603	Rovaniemen Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	TPS	9752	Turun Palloseura	Finnish Premier Division	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	VPS	7370	Vaasan Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	FF Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division North	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	Gnistan	4454	IF Gnistan	Finnish First Division South	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	PK-35	8458	Pallokerho-35	Finnish Second Division South	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	KPV	5738	Kokkolan Pallo-Veikot	Finnish First Division North	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish First Division South	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	JIPPO	5621	JIPPO Joensuu	Finnish Second Division North	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	MuSa	7620	Musan Salama	Finnish First Division North	https://en.wikipedia.org/wiki/2021_Ykkönen
+2020/21	Ykkönen	Klubi 04	3801	HJK Klubi 04 Helsinki	Finnish First Division South	https://en.wikipedia.org/wiki/2021_Ykkönen
+2021/22	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Lillestrøm	6578	Lillestrøm SK	Norwegian First Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Vålerenga	3828	Vålerenga Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian First Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Sarpsborg 08	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Aalesund	181	Aalesunds FK	Norwegian First Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Viking	6960	Viking Stavanger	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	HamKam	4823	Hamarkameratene	Norwegian First Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Sandefjord	1956	Sandefjord Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Eliteserien	Jerv	5599	FK Jerv	Norwegian First Division	https://en.wikipedia.org/wiki/2022_Eliteserien
+2021/22	Ykkönen	KTP	3033	FC KTP	Finnish Premier Division	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	TPS	9752	Turun Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	FF Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division South	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	KPV	5738	Kokkolan Pallo-Veikot	Finnish First Division South	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	JaPS	5530	Järvenpään Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	Gnistan	4454	IF Gnistan	Finnish First Division North	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish First Division North	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	SJK Akatemia	5363	SJK Seinäjoki II	Finnish Lower Division	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	PEPO	8456	PEPO Lappeenranta	Finnish First Division South	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	PK-35	8458	Pallokerho-35	Finnish First Division South	https://en.wikipedia.org/wiki/2022_Ykkönen
+2021/22	Ykkönen	Pargas IF	4415	Pargas IF	Finnish Second Division West	https://en.wikipedia.org/wiki/2022_Ykkönen
+2022/23	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Brann	1835	SK Brann	Norwegian First Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Viking	6960	Viking Stavanger	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Sarpsborg	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	HamKam	4823	Hamarkameratene	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Sandefjord	1956	Sandefjord Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Vålerenga	3828	Vålerenga Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Stabæk	6419	Stabæk Fotball	Norwegian First Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Eliteserien	Aalesund	181	Aalesunds FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2023_Eliteserien
+2022/23	Ykkönen	EIF	3388	Ekenäs IF	Finnish First Division South	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	Gnistan	4454	IF Gnistan	Finnish First Division South	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	MP	6914	Mikkelin Palloilijat	Finnish First Division South	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	TPS	9752	Turun Palloseura	Finnish First Division North	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	SJK Akatemia	5363	SJK Seinäjoki II	Finnish Lower Division	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	HIFK	4728	Helsinki IFK	Finnish Premier Division	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	SalPa	9979	Salon Palloilijat	Finnish Second Division West	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	JäPS	5530	Järvenpään Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	KäPa	5753	Käpylän Pallo	Finnish Second Division North	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	KPV	5738	Kokkolan Pallo-Veikot	Finnish First Division North	https://en.wikipedia.org/wiki/2023_Ykkönen
+2022/23	Ykkönen	JJK	5512	JJK Jyväskylä	Finnish First Division North	https://en.wikipedia.org/wiki/2023_Ykkönen
+2023/24	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Brann	1835	SK Brann	Norwegian First Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Viking	6960	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Fredrikstad	4176	Fredrikstad FK	Norwegian First Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	KFUM	5722	KFUM-Kameratene Oslo	Norwegian First Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Sarpsborg	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Sandefjord	1956	Sandefjord Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian First Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	HamKam	4823	Hamarkameratene	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Lillestrøm	6578	Lillestrøm SK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Eliteserien	Odd	8153	Odds BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2024_Eliteserien
+2023/24	Ykkösliiga	KTP	3033	FC KTP	Finnish Premier Division	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	Jaro	5563	FF Jaro	Finnish First Division North	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	JIPPO	5621	JIPPO Joensuu	Finnish First Division North	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	TPS	9752	Turun Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	JäPS	5530	Järvenpään Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	PK-35	8458	Pallokerho-35	Finnish First Division North	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	SJK Akatemia	5363	SJK Seinäjoki II	Finnish First Division North	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	SalPa	9979	Salon Palloilijat	Finnish First Division South	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	KäPa	5753	Käpylän Pallo	Finnish First Division South	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2023/24	Ykkösliiga	MP	6914	Mikkelin Palloilijat	Finnish First Division North	https://en.wikipedia.org/wiki/2024_Ykkösliiga
+2024/25	Eliteserien	Viking	6960	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Sandefjord	1956	Sandefjord Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Vålerenga	3828	Vålerenga Fotball Elite	Norwegian First Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Fredrikstad	4176	Fredrikstad FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Sarpsborg 08	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	HamKam	4823	Hamarkameratene	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	KFUM Oslo	5722	KFUM-Kameratene Oslo	Norwegian First Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian First Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Bryne	1955	Bryne FK	Norwegian First Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Strømsgodset	8186	Strømsgodset IF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Eliteserien	Haugesund	4916	FK Haugesund	Norwegian Premier Division	https://en.wikipedia.org/wiki/2025_Eliteserien
+2024/25	Ykkösliiga	Lahti	3814	FC Lahti	Finnish Premier Division	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	TPS	9752	Turun Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	JIPPO	5621	JIPPO Joensuu	Finnish First Division North	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	EIF	3388	Ekenäs IF	Finnish Premier Division	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	PK-35	8458	Pallokerho-35	Finnish First Division North	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	Klubi 04	3801	HJK Klubi 04 Helsinki	Finnish First Division South	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	JäPS	5530	Järvenpään Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	SJK Akatemia	5363	SJK Seinäjoki II	Finnish First Division North	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	KäPa	5753	Käpylän Pallo	Finnish First Division South	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2024/25	Ykkösliiga	SalPa	9979	Salon Palloilijat	Finnish First Division South	https://en.wikipedia.org/wiki/2025_Ykkösliiga
+2025/26	Eliteserien	Viking	6960	Viking FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Bodø/Glimt	1703	FK Bodø/Glimt	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Tromsø	9458	Tromsø IL	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Molde	7479	Molde FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Rosenborg	9665	Rosenborg BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Lillestrøm	6578	Lillestrøm SK	Norwegian First Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Brann	1835	SK Brann	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Fredrikstad	4176	Fredrikstad FK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Sarpsborg	6496	Sarpsborg 08 FF	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	KFUM	5722	KFUM-Kameratene Oslo	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Sandefjord	1956	Sandefjord Fotball	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Vålerenga	3828	Vålerenga Fotball Elite	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	HamKam	4823	Hamarkameratene	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Aalesund	181	Aalesunds FK	Norwegian First Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Kristiansund	6168	Kristiansund BK	Norwegian Premier Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Eliteserien	Start	8336	IK Start	Norwegian First Division	https://en.wikipedia.org/wiki/2026_Eliteserien
+2025/26	Ykkösliiga	KTP	3033	FC KTP	Finnish Premier Division	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	PK-35	8458	Pallokerho-35	Finnish First Division North	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	Haka	3791	FC Haka	Finnish Premier Division	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	JIPPO	5621	JIPPO Joensuu	Finnish First Division North	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	JäPS	5530	Järvenpään Palloseura	Finnish First Division South	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	MP	6914	Mikkelin Palloilijat	Finnish First Division North	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	EIF	3388	Ekenäs IF	Finnish First Division South	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	Klubi 04	3801	HJK Klubi 04 Helsinki	Finnish First Division South	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	KäPa	5753	Käpylän Pallo	Finnish First Division South	https://en.wikipedia.org/wiki/2026_Ykkösliiga
+2025/26	Ykkösliiga	SJK Akatemia	5363	SJK Seinäjoki II	Finnish First Division North	https://en.wikipedia.org/wiki/2026_Ykkösliiga

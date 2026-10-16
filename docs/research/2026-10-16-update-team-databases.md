@@ -68,7 +68,7 @@ recomp: free of 0x70592c30, which is not a heap block (from  |
 | May 2026 | pass | 75 |  |
 | November 2007 | pass | 71 |  |
 | November 2020 | pass | 100 |  |
-| October 2003 Sawczuk | pass | 73 |  |
+| October 2003 | pass | 73 |  |
 | October 2014 | pass | 72 |  |
 | October 2015 | pass | 72 |  |
 | October 2016 | pass | 72 |  |
@@ -82,7 +82,7 @@ recomp: free of 0x70592c30, which is not a heap block (from  |
 | Original 3.9.60 Swedish_fixed | pass | 75 |  |
 | Original 3.9.65 Swedish_fixed | pass | 82 |  |
 | Original 3.9.68 | pass | 74 |  |
-| September 2005 Helvete | pass | 73 |  |
+| September 2005 | pass | 73 |  |
 | September 2008 | pass | 76 |  |
 | September 2009 | pass | 75 |  |
 | September 2010 ODB | pass | 72 |  |

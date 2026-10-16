@@ -1,0 +1,1407 @@
+id	field	verdict	second_url	note
+spa-1	foreign	agree	https://www.rsssf.org/tabless/span02.html	Partial: RSSSF 2001/02 Copa notes Valencia lost a tie (Oct 2001) for playing 4 non-EU players at once, which supports at most 3 on the pitch. The 4 registered places and the Segunda limit have no second source.
+spa-1	work_permit	no second source		unknown in first file; no source found.
+spa-1	registration	no second source		No second source found from another publisher.
+spa-1	windows	no second source		No second source found from another publisher.
+spa-2	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Primera takes the name Liga BBVA from 2008/09, so no title sponsor before.
+spa-2	clubs	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-2	down	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-2	playoffs	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-2	split	agree	https://www.rsssf.org/tabless/span02.html	RSSSF: single table, no split.
+spa-2	format	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-2	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-2	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-3	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (2008): BBVA gave its name to Segunda two years before 2008, so no sponsor name before 2006/07.
+spa-3	clubs	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-3	up	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-3	down	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-3	playoffs	agree	https://www.rsssf.org/tabless/span02.html	RSSSF: no promotion play-off before 2010/11.
+spa-3	split	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-3	format	agree	https://www.rsssf.org/tabless/span02.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-3	subs_used	no second source		No dated second source for this season.
+spa-3	bench	no second source		No dated second source for this season.
+spa-4	name	agree	https://www.bdfutbol.com/en/t/t2001-022aB1.html	BDFutbol titles the division Second Division B.
+spa-4	clubs	agree	https://www.bdfutbol.com/en/t/t2001-022aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-4	up	agree	https://www.bdfutbol.com/en/t/t2001-02aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-4	down	disagree	https://www.bdfutbol.com/en/t/t2001-02aPR3.html	BDFutbol play-out page: semi-finals and final among the four 16th-placed clubs, so 1 club relegated by play-out (17 in all, plus any administrative relegations). First file: 2 via play-out (18).
+spa-4	playoffs	disagree	https://www.bdfutbol.com/en/t/t2001-02aPR2.html	BDFutbol and RSSSF (https://www.rsssf.org/tabless/span02.html): the 16 clubs played four round-robin groups of four (6 rounds), each group winner promoted. First file: two-legged ties.
+spa-4	split	agree	https://www.bdfutbol.com/en/t/t2001-022aB1.html	BDFutbol: single phase per group.
+spa-4	format	agree	https://www.bdfutbol.com/en/t/t2001-022aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-4	subs_used	no second source		No second source found from another publisher.
+spa-4	bench	no second source		unknown in first file; not found.
+spa-5	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-6	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-6	clubs	no second source		No second source found from another publisher.
+spa-6	up	no second source		No second source found from another publisher.
+spa-6	down	no second source		unknown in first file; not found.
+spa-6	playoffs	no second source		No second source found from another publisher.
+spa-6	split	no second source		No second source found from another publisher.
+spa-6	format	no second source		No second source found from another publisher.
+spa-6	subs_used	no second source		unknown in first file; not found.
+spa-6	bench	no second source		unknown in first file; not found.
+spa-7	name	agree	https://www.rsssf.org/tabless/span02.html	RSSSF heads the cup Copa del Rey.
+spa-7	clubs	found	https://www.bdfutbol.com/en/t/t2001-02aCOP.html	80 clubs. BDFutbol cup page lists 80 distinct clubs.
+spa-7	format	agree	https://www.bdfutbol.com/en/t/t2001-02aCOP.html	Rounds and legs match RSSSF and BDFutbol. Note: the 2002 final was played at the Bernabéu, home of finalist Real Madrid.
+spa-7	subs_used	no second source		No second source found from another publisher.
+spa-7	bench	no second source		unknown in first file; not found.
+spa-8	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-8	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-8	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-8	subs_used	no second source		No second source found from another publisher.
+spa-8	bench	no second source		unknown in first file; not found.
+spa-9	foreign	agree	https://www.rsssf.org/tabless/span02.html	Partial: RSSSF 2001/02 Copa notes Valencia lost a tie (Oct 2001) for playing 4 non-EU players at once, which supports at most 3 on the pitch. The 4 registered places and the Segunda limit have no second source.
+spa-9	work_permit	no second source		unknown in first file; no source found.
+spa-9	registration	no second source		No second source found from another publisher.
+spa-9	windows	no second source		No second source found from another publisher.
+spa-10	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Primera takes the name Liga BBVA from 2008/09, so no title sponsor before.
+spa-10	clubs	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-10	down	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-10	playoffs	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-10	split	agree	https://www.rsssf.org/tabless/span03.html	RSSSF: single table, no split.
+spa-10	format	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-10	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-10	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-11	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (2008): BBVA gave its name to Segunda two years before 2008, so no sponsor name before 2006/07.
+spa-11	clubs	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-11	up	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-11	down	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-11	playoffs	agree	https://www.rsssf.org/tabless/span03.html	RSSSF: no promotion play-off before 2010/11.
+spa-11	split	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-11	format	agree	https://www.rsssf.org/tabless/span03.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-11	subs_used	no second source		No dated second source for this season.
+spa-11	bench	no second source		No dated second source for this season.
+spa-12	name	agree	https://www.bdfutbol.com/en/t/t2002-032aB1.html	BDFutbol titles the division Second Division B.
+spa-12	clubs	agree	https://www.bdfutbol.com/en/t/t2002-032aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-12	up	agree	https://www.bdfutbol.com/en/t/t2002-03aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-12	down	disagree	https://www.bdfutbol.com/en/t/t2002-03aPR3.html	BDFutbol play-out page: semi-finals and final among the four 16th-placed clubs, so 1 club relegated by play-out (17 in all, plus any administrative relegations). First file: 2 via play-out (18).
+spa-12	playoffs	disagree	https://www.bdfutbol.com/en/t/t2002-03aPR2.html	BDFutbol and RSSSF (https://www.rsssf.org/tabless/span03.html): the 16 clubs played four round-robin groups of four (6 rounds), each group winner promoted. First file: two-legged ties.
+spa-12	split	agree	https://www.bdfutbol.com/en/t/t2002-032aB1.html	BDFutbol: single phase per group.
+spa-12	format	agree	https://www.bdfutbol.com/en/t/t2002-032aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-12	subs_used	no second source		No second source found from another publisher.
+spa-12	bench	no second source		unknown in first file; not found.
+spa-13	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-14	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-14	clubs	agree	https://www.rsssf.org/tabless/span04.html	RSSSF Copa del Rey 2003/04 note: 342 Tercera clubs in 17 groups (season of the qualifying champions, 2002/03).
+spa-14	up	no second source		No second source found from another publisher.
+spa-14	down	no second source		unknown in first file; not found.
+spa-14	playoffs	no second source		No second source found from another publisher.
+spa-14	split	no second source		No second source found from another publisher.
+spa-14	format	no second source		No second source found from another publisher.
+spa-14	subs_used	no second source		unknown in first file; not found.
+spa-14	bench	no second source		unknown in first file; not found.
+spa-15	name	agree	https://www.rsssf.org/tabless/span03.html	RSSSF heads the cup Copa del Rey.
+spa-15	clubs	found	https://www.bdfutbol.com/en/t/t2002-03aCOP.html	81 clubs. BDFutbol cup page lists 81 distinct clubs.
+spa-15	format	agree	https://www.bdfutbol.com/en/t/t2002-03aCOP.html	Rounds and legs match RSSSF/BDFutbol.
+spa-15	subs_used	no second source		No second source found from another publisher.
+spa-15	bench	no second source		unknown in first file; not found.
+spa-16	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-16	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-16	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-16	subs_used	no second source		No second source found from another publisher.
+spa-16	bench	no second source		unknown in first file; not found.
+spa-17	foreign	agree	https://www.rsssf.org/tabless/span02.html	Partial: RSSSF 2001/02 Copa notes Valencia lost a tie (Oct 2001) for playing 4 non-EU players at once, which supports at most 3 on the pitch. The 4 registered places and the Segunda limit have no second source.
+spa-17	work_permit	no second source		unknown in first file; no source found.
+spa-17	registration	no second source		No second source found from another publisher.
+spa-17	windows	no second source		No second source found from another publisher.
+spa-18	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Primera takes the name Liga BBVA from 2008/09, so no title sponsor before.
+spa-18	clubs	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-18	down	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-18	playoffs	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-18	split	agree	https://www.rsssf.org/tabless/span04.html	RSSSF: single table, no split.
+spa-18	format	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-18	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-18	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-19	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (2008): BBVA gave its name to Segunda two years before 2008, so no sponsor name before 2006/07.
+spa-19	clubs	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-19	up	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-19	down	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-19	playoffs	agree	https://www.rsssf.org/tabless/span04.html	RSSSF: no promotion play-off before 2010/11.
+spa-19	split	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-19	format	agree	https://www.rsssf.org/tabless/span04.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-19	subs_used	no second source		No dated second source for this season.
+spa-19	bench	no second source		No dated second source for this season.
+spa-20	name	agree	https://www.bdfutbol.com/en/t/t2003-042aB1.html	BDFutbol titles the division Second Division B.
+spa-20	clubs	agree	https://www.bdfutbol.com/en/t/t2003-042aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-20	up	agree	https://www.bdfutbol.com/en/t/t2003-04aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-20	down	disagree	https://www.bdfutbol.com/en/t/t2003-04aPR3.html	BDFutbol play-out page: semi-finals and final among the four 16th-placed clubs, so 1 club relegated by play-out (17 in all, plus any administrative relegations). First file: 2 via play-out (18).
+spa-20	playoffs	disagree	https://www.bdfutbol.com/en/t/t2003-04aPR2.html	BDFutbol: the 16 clubs played four round-robin groups of four (6 rounds), each group winner promoted. First file: two-legged ties.
+spa-20	split	agree	https://www.bdfutbol.com/en/t/t2003-042aB1.html	BDFutbol: single phase per group.
+spa-20	format	agree	https://www.bdfutbol.com/en/t/t2003-042aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-20	subs_used	no second source		No second source found from another publisher.
+spa-20	bench	no second source		unknown in first file; not found.
+spa-21	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-22	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-22	clubs	no second source	https://www.rsssf.org/tabless/span05.html	RSSSF Copa 2004/05 note says "354, in 18 groups" for the Tercera of the qualifying champions, which may mean 2003/04 had 18 groups; the wording is unclear.
+spa-22	up	found	https://www.rsssf.org/tabless/span04.html	RSSSF: 18 clubs promoted from Tercera after 2003/04 (17 on merit plus Haro to fill a vacancy).
+spa-22	down	no second source		unknown in first file; not found.
+spa-22	playoffs	no second source		No second source found from another publisher.
+spa-22	split	no second source		No second source found from another publisher.
+spa-22	format	no second source		No second source found from another publisher.
+spa-22	subs_used	no second source		unknown in first file; not found.
+spa-22	bench	no second source		unknown in first file; not found.
+spa-23	name	agree	https://www.rsssf.org/tabless/span04.html	RSSSF heads the cup Copa del Rey.
+spa-23	clubs	found	https://www.rsssf.org/tabless/span04.html	81 clubs. RSSSF states "Played by 81".
+spa-23	format	agree	https://www.rsssf.org/tabless/span04.html	Rounds and legs match RSSSF/BDFutbol.
+spa-23	subs_used	no second source		No second source found from another publisher.
+spa-23	bench	no second source		unknown in first file; not found.
+spa-24	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-24	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-24	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-24	subs_used	no second source		No second source found from another publisher.
+spa-24	bench	no second source		unknown in first file; not found.
+spa-25	foreign	agree	https://www.rsssf.org/tabless/span02.html	Partial: RSSSF 2001/02 Copa notes Valencia lost a tie (Oct 2001) for playing 4 non-EU players at once, which supports at most 3 on the pitch. The 4 registered places and the Segunda limit have no second source.
+spa-25	work_permit	no second source		unknown in first file; no source found.
+spa-25	registration	no second source		No second source found from another publisher.
+spa-25	windows	no second source		No second source found from another publisher.
+spa-26	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Primera takes the name Liga BBVA from 2008/09, so no title sponsor before.
+spa-26	clubs	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-26	down	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-26	playoffs	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-26	split	agree	https://www.rsssf.org/tabless/span05.html	RSSSF: single table, no split.
+spa-26	format	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-26	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-26	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-27	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (2008): BBVA gave its name to Segunda two years before 2008, so no sponsor name before 2006/07.
+spa-27	clubs	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-27	up	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-27	down	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-27	playoffs	agree	https://www.rsssf.org/tabless/span05.html	RSSSF: no promotion play-off before 2010/11.
+spa-27	split	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-27	format	agree	https://www.rsssf.org/tabless/span05.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-27	subs_used	no second source		No dated second source for this season.
+spa-27	bench	no second source		No dated second source for this season.
+spa-28	name	agree	https://www.bdfutbol.com/en/t/t2004-052aB1.html	BDFutbol titles the division Second Division B.
+spa-28	clubs	agree	https://www.bdfutbol.com/en/t/t2004-052aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-28	up	agree	https://www.bdfutbol.com/en/t/t2004-05aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-28	down	disagree	https://www.bdfutbol.com/en/t/t2004-05aPR3.html	BDFutbol play-out page: semi-finals and final among the four 16th-placed clubs, so 1 club relegated by play-out (17 in all, plus any administrative relegations). First file: 2 via play-out (18).
+spa-28	playoffs	agree	https://www.bdfutbol.com/en/t/t2004-05aPR2.html	BDFutbol: two-legged semi-finals and finals in four brackets of four.
+spa-28	split	agree	https://www.bdfutbol.com/en/t/t2004-052aB1.html	BDFutbol: single phase per group.
+spa-28	format	agree	https://www.bdfutbol.com/en/t/t2004-052aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-28	subs_used	no second source		No second source found from another publisher.
+spa-28	bench	no second source		unknown in first file; not found.
+spa-29	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-30	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-30	clubs	agree	https://www.rsssf.org/tabless/span05.html	RSSSF lists 18 groups (Group 15 split into A and B, Navarra and La Rioja).
+spa-30	up	found	https://www.rsssf.org/tabless/span05.html	RSSSF: 17 clubs promoted from Tercera after 2004/05.
+spa-30	down	no second source		unknown in first file; not found.
+spa-30	playoffs	agree	https://www.rsssf.org/tabless/span05.html	RSSSF: top 4 of each group in groups of four, semi-finals and final over two legs.
+spa-30	split	no second source		No second source found from another publisher.
+spa-30	format	agree	https://www.rsssf.org/tabless/span05.html	RSSSF: regional groups, double round robin.
+spa-30	subs_used	no second source		unknown in first file; not found.
+spa-30	bench	no second source		unknown in first file; not found.
+spa-31	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF heads the cup Copa del Rey.
+spa-31	clubs	found	https://www.rsssf.org/tabless/span05.html	81 clubs. RSSSF states "Played by 81".
+spa-31	format	agree	https://www.rsssf.org/tabless/span05.html	Rounds and legs match RSSSF/BDFutbol.
+spa-31	subs_used	no second source		No second source found from another publisher.
+spa-31	bench	no second source		unknown in first file; not found.
+spa-32	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-32	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-32	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-32	subs_used	no second source		No second source found from another publisher.
+spa-32	bench	no second source		unknown in first file; not found.
+spa-33	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-33	work_permit	no second source		unknown in first file; no source found.
+spa-33	registration	no second source		No second source found from another publisher.
+spa-33	windows	no second source		No second source found from another publisher.
+spa-34	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Primera takes the name Liga BBVA from 2008/09, so no title sponsor before.
+spa-34	clubs	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-34	down	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-34	playoffs	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-34	split	agree	https://www.rsssf.org/tabless/span06.html	RSSSF: single table, no split.
+spa-34	format	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-34	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-34	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-35	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (2008): BBVA gave its name to Segunda two years before 2008, so no sponsor name before 2006/07.
+spa-35	clubs	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-35	up	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-35	down	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-35	playoffs	agree	https://www.rsssf.org/tabless/span06.html	RSSSF: no promotion play-off before 2010/11.
+spa-35	split	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-35	format	agree	https://www.rsssf.org/tabless/span06.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-35	subs_used	no second source		No dated second source for this season.
+spa-35	bench	no second source		No dated second source for this season.
+spa-36	name	agree	https://www.bdfutbol.com/en/t/t2005-062aB1.html	BDFutbol titles the division Second Division B.
+spa-36	clubs	agree	https://www.bdfutbol.com/en/t/t2005-062aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-36	up	agree	https://www.bdfutbol.com/en/t/t2005-06aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-36	down	disagree	https://www.bdfutbol.com/en/t/t2005-06aPR3.html	BDFutbol play-out page: semi-finals and final among the four 16th-placed clubs, so 1 club relegated by play-out (17 in all, plus any administrative relegations). First file: 2 via play-out (18).
+spa-36	playoffs	agree	https://www.bdfutbol.com/en/t/t2005-06aPR2.html	BDFutbol: two-legged semi-finals and finals in four brackets of four.
+spa-36	split	agree	https://www.bdfutbol.com/en/t/t2005-062aB1.html	BDFutbol: single phase per group.
+spa-36	format	agree	https://www.bdfutbol.com/en/t/t2005-062aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-36	subs_used	no second source		No second source found from another publisher.
+spa-36	bench	no second source		unknown in first file; not found.
+spa-37	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-38	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-38	clubs	agree	https://www.rsssf.org/tabless/span06.html	RSSSF lists 18 groups (Group 15 split into A and B, Navarra and La Rioja).
+spa-38	up	no second source		No second source found from another publisher.
+spa-38	down	no second source		unknown in first file; not found.
+spa-38	playoffs	agree	https://www.rsssf.org/tabless/span06.html	RSSSF: top 4 of each group in groups of four, semi-finals and final over two legs.
+spa-38	split	no second source		No second source found from another publisher.
+spa-38	format	agree	https://www.rsssf.org/tabless/span06.html	RSSSF: regional groups, double round robin.
+spa-38	subs_used	no second source		unknown in first file; not found.
+spa-38	bench	no second source		unknown in first file; not found.
+spa-39	name	agree	https://www.rsssf.org/tabless/span06.html	RSSSF heads the cup Copa del Rey.
+spa-39	clubs	found	https://www.bdfutbol.com/en/t/t2005-06aCOP.html	81 clubs. BDFutbol cup page lists 81 distinct clubs.
+spa-39	format	agree	https://www.bdfutbol.com/en/t/t2005-06aCOP.html	Rounds and legs match RSSSF/BDFutbol.
+spa-39	subs_used	no second source		No second source found from another publisher.
+spa-39	bench	no second source		unknown in first file; not found.
+spa-40	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-40	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-40	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-40	subs_used	no second source		No second source found from another publisher.
+spa-40	bench	no second source		unknown in first file; not found.
+spa-41	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-41	work_permit	no second source		unknown in first file; no source found.
+spa-41	registration	no second source		No second source found from another publisher.
+spa-41	windows	no second source		No second source found from another publisher.
+spa-42	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Primera takes the name Liga BBVA from 2008/09, so no title sponsor before.
+spa-42	clubs	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-42	down	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-42	playoffs	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-42	split	agree	https://www.rsssf.org/tabless/span07.html	RSSSF: single table, no split.
+spa-42	format	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-42	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-42	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-43	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (2008): BBVA already gave its name to Segunda before 2008 (from two years earlier).
+spa-43	clubs	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-43	up	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-43	down	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-43	playoffs	agree	https://www.rsssf.org/tabless/span07.html	RSSSF: no promotion play-off before 2010/11.
+spa-43	split	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-43	format	agree	https://www.rsssf.org/tabless/span07.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-43	subs_used	no second source		No dated second source for this season.
+spa-43	bench	no second source		No dated second source for this season.
+spa-44	name	agree	https://www.bdfutbol.com/en/t/t2006-072aB1.html	BDFutbol titles the division Second Division B.
+spa-44	clubs	agree	https://www.bdfutbol.com/en/t/t2006-072aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-44	up	agree	https://www.bdfutbol.com/en/t/t2006-07aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-44	down	agree	https://www.bdfutbol.com/en/t/t2006-07aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-44	playoffs	agree	https://www.bdfutbol.com/en/t/t2006-07aPR2.html	BDFutbol: two-legged semi-finals and finals in four brackets of four.
+spa-44	split	agree	https://www.bdfutbol.com/en/t/t2006-072aB1.html	BDFutbol: single phase per group.
+spa-44	format	agree	https://www.bdfutbol.com/en/t/t2006-072aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-44	subs_used	no second source		No second source found from another publisher.
+spa-44	bench	no second source		unknown in first file; not found.
+spa-45	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-46	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-46	clubs	agree	https://www.rsssf.org/tabless/span07.html	RSSSF lists 18 groups (Group 15 split into A and B, Navarra and La Rioja).
+spa-46	up	no second source		No second source found from another publisher.
+spa-46	down	no second source		unknown in first file; not found.
+spa-46	playoffs	agree	https://www.rsssf.org/tabless/span07.html	RSSSF: top 4 of each group in groups of four, semi-finals and final over two legs.
+spa-46	split	no second source		No second source found from another publisher.
+spa-46	format	agree	https://www.rsssf.org/tabless/span07.html	RSSSF: regional groups, double round robin.
+spa-46	subs_used	no second source		unknown in first file; not found.
+spa-46	bench	no second source		unknown in first file; not found.
+spa-47	name	agree	https://www.rsssf.org/tabless/span07.html	RSSSF heads the cup Copa del Rey.
+spa-47	clubs	found	https://www.bdfutbol.com/en/t/t2006-07aCOP.html	83 clubs. BDFutbol cup page lists 83 distinct clubs.
+spa-47	format	agree	https://www.bdfutbol.com/en/t/t2006-07aCOP.html	Rounds and legs match RSSSF/BDFutbol.
+spa-47	subs_used	no second source		No second source found from another publisher.
+spa-47	bench	no second source		unknown in first file; not found.
+spa-48	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-48	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-48	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-48	subs_used	no second source		No second source found from another publisher.
+spa-48	bench	no second source		unknown in first file; not found.
+spa-49	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-49	work_permit	no second source		unknown in first file; no source found.
+spa-49	registration	no second source		No second source found from another publisher.
+spa-49	windows	no second source		No second source found from another publisher.
+spa-50	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Primera takes the name Liga BBVA from 2008/09, so no title sponsor before.
+spa-50	clubs	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-50	down	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-50	playoffs	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-50	split	agree	https://www.rsssf.org/tabless/span08.html	RSSSF: single table, no split.
+spa-50	format	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-50	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-50	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-51	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (2008): BBVA already gave its name to Segunda before 2008 (from two years earlier).
+spa-51	clubs	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-51	up	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-51	down	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-51	playoffs	agree	https://www.rsssf.org/tabless/span08.html	RSSSF: no promotion play-off before 2010/11.
+spa-51	split	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-51	format	agree	https://www.rsssf.org/tabless/span08.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-51	subs_used	no second source		No dated second source for this season.
+spa-51	bench	no second source		No dated second source for this season.
+spa-52	name	agree	https://www.bdfutbol.com/en/t/t2007-082aB1.html	BDFutbol titles the division Second Division B.
+spa-52	clubs	agree	https://www.bdfutbol.com/en/t/t2007-082aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-52	up	agree	https://www.bdfutbol.com/en/t/t2007-08aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-52	down	agree	https://www.bdfutbol.com/en/t/t2007-08aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-52	playoffs	agree	https://www.bdfutbol.com/en/t/t2007-08aPR2.html	BDFutbol: two-legged semi-finals and finals in four brackets of four.
+spa-52	split	agree	https://www.bdfutbol.com/en/t/t2007-082aB1.html	BDFutbol: single phase per group.
+spa-52	format	agree	https://www.bdfutbol.com/en/t/t2007-082aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-52	subs_used	no second source		No second source found from another publisher.
+spa-52	bench	no second source		unknown in first file; not found.
+spa-53	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-54	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-54	clubs	agree	https://www.rsssf.org/tabless/span08.html	RSSSF lists 18 groups (Group 15 split into A and B, Navarra and La Rioja).
+spa-54	up	no second source		No second source found from another publisher.
+spa-54	down	no second source		unknown in first file; not found.
+spa-54	playoffs	agree	https://www.rsssf.org/tabless/span08.html	RSSSF: top 4 of each group in groups of four, semi-finals and final over two legs.
+spa-54	split	no second source		No second source found from another publisher.
+spa-54	format	agree	https://www.rsssf.org/tabless/span08.html	RSSSF: regional groups, double round robin.
+spa-54	subs_used	no second source		unknown in first file; not found.
+spa-54	bench	no second source		unknown in first file; not found.
+spa-55	name	agree	https://www.rsssf.org/tabless/span08.html	RSSSF heads the cup Copa del Rey.
+spa-55	clubs	found	https://www.bdfutbol.com/en/t/t2007-08aCOP.html	83 clubs. BDFutbol cup page lists 83 distinct clubs.
+spa-55	format	agree	https://www.bdfutbol.com/en/t/t2007-08aCOP.html	Rounds and legs match RSSSF/BDFutbol.
+spa-55	subs_used	no second source		No second source found from another publisher.
+spa-55	bench	no second source		unknown in first file; not found.
+spa-56	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-56	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-56	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-56	subs_used	no second source		No second source found from another publisher.
+spa-56	bench	no second source		unknown in first file; not found.
+spa-57	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-57	work_permit	no second source		unknown in first file; no source found.
+spa-57	registration	no second source		No second source found from another publisher.
+spa-57	windows	no second source		No second source found from another publisher.
+spa-58	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-58	clubs	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-58	down	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-58	playoffs	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-58	split	agree	https://www.rsssf.org/tabless/span09.html	RSSSF: single table, no split.
+spa-58	format	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-58	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-58	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-59	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-59	clubs	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-59	up	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-59	down	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-59	playoffs	agree	https://www.rsssf.org/tabless/span09.html	RSSSF: no promotion play-off before 2010/11.
+spa-59	split	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-59	format	agree	https://www.rsssf.org/tabless/span09.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-59	subs_used	no second source		No dated second source for this season.
+spa-59	bench	no second source		No dated second source for this season.
+spa-60	name	agree	https://www.bdfutbol.com/en/t/t2008-092aB1.html	BDFutbol titles the division Second Division B.
+spa-60	clubs	agree	https://www.bdfutbol.com/en/t/t2008-092aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-60	up	agree	https://www.bdfutbol.com/en/t/t2008-09aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-60	down	agree	https://www.bdfutbol.com/en/t/t2008-09aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-60	playoffs	agree	https://www.bdfutbol.com/en/t/t2008-09aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-60	split	agree	https://www.bdfutbol.com/en/t/t2008-092aB1.html	BDFutbol: single phase per group.
+spa-60	format	agree	https://www.bdfutbol.com/en/t/t2008-092aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-60	subs_used	no second source		No second source found from another publisher.
+spa-60	bench	no second source		unknown in first file; not found.
+spa-61	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-62	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-62	clubs	no second source		No second source found from another publisher.
+spa-62	up	no second source		No second source found from another publisher.
+spa-62	down	no second source		unknown in first file; not found.
+spa-62	playoffs	no second source		No second source found from another publisher.
+spa-62	split	no second source		No second source found from another publisher.
+spa-62	format	no second source		No second source found from another publisher.
+spa-62	subs_used	no second source		unknown in first file; not found.
+spa-62	bench	no second source		unknown in first file; not found.
+spa-63	name	agree	https://www.rsssf.org/tabless/span09.html	RSSSF heads the cup Copa del Rey.
+spa-63	clubs	agree	https://www.rsssf.org/tabless/span09.html	RSSSF round counts (byes included) give the same total.
+spa-63	format	agree	https://www.rsssf.org/tabless/span09.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-63	subs_used	no second source		No second source found from another publisher.
+spa-63	bench	no second source		unknown in first file; not found.
+spa-64	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-64	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-64	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-64	subs_used	no second source		No second source found from another publisher.
+spa-64	bench	no second source		unknown in first file; not found.
+spa-65	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-65	work_permit	no second source		unknown in first file; no source found.
+spa-65	registration	no second source		No second source found from another publisher.
+spa-65	windows	no second source		No second source found from another publisher.
+spa-66	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-66	clubs	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-66	down	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-66	playoffs	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-66	split	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF: single table, no split.
+spa-66	format	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-66	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-66	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-67	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-67	clubs	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-67	up	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-67	down	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-67	playoffs	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF: no promotion play-off before 2010/11.
+spa-67	split	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-67	format	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated, 3 promoted.
+spa-67	subs_used	no second source		No dated second source for this season.
+spa-67	bench	no second source		No dated second source for this season.
+spa-68	name	agree	https://www.bdfutbol.com/en/t/t2009-102aB1.html	BDFutbol titles the division Second Division B.
+spa-68	clubs	agree	https://www.bdfutbol.com/en/t/t2009-102aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-68	up	agree	https://www.bdfutbol.com/en/t/t2009-10aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-68	down	agree	https://www.bdfutbol.com/en/t/t2009-10aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-68	playoffs	agree	https://www.bdfutbol.com/en/t/t2009-10aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-68	split	agree	https://www.bdfutbol.com/en/t/t2009-102aB1.html	BDFutbol: single phase per group.
+spa-68	format	agree	https://www.bdfutbol.com/en/t/t2009-102aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-68	subs_used	no second source		No second source found from another publisher.
+spa-68	bench	no second source		unknown in first file; not found.
+spa-69	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-70	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-70	clubs	no second source		No second source found from another publisher.
+spa-70	up	no second source		No second source found from another publisher.
+spa-70	down	no second source		unknown in first file; not found.
+spa-70	playoffs	no second source		No second source found from another publisher.
+spa-70	split	no second source		No second source found from another publisher.
+spa-70	format	no second source		No second source found from another publisher.
+spa-70	subs_used	no second source		unknown in first file; not found.
+spa-70	bench	no second source		unknown in first file; not found.
+spa-71	name	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF heads the cup Copa del Rey.
+spa-71	clubs	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF round counts (byes included) give the same total.
+spa-71	format	agree	https://www.rsssf.org/tabless/span2010.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-71	subs_used	no second source		No second source found from another publisher.
+spa-71	bench	no second source		unknown in first file; not found.
+spa-72	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-72	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-72	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-72	subs_used	no second source		No second source found from another publisher.
+spa-72	bench	no second source		unknown in first file; not found.
+spa-73	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-73	work_permit	no second source		unknown in first file; no source found.
+spa-73	registration	no second source		No second source found from another publisher.
+spa-73	windows	no second source		No second source found from another publisher.
+spa-74	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-74	clubs	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-74	down	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-74	playoffs	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-74	split	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF: single table, no split.
+spa-74	format	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-74	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-74	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-75	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-75	clubs	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-75	up	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-75	down	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-75	playoffs	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-75	split	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-75	format	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-75	subs_used	no second source		No dated second source for this season.
+spa-75	bench	no second source		No dated second source for this season.
+spa-76	name	agree	https://www.bdfutbol.com/en/t/t2010-112aB1.html	BDFutbol titles the division Second Division B.
+spa-76	clubs	agree	https://www.bdfutbol.com/en/t/t2010-112aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-76	up	agree	https://www.bdfutbol.com/en/t/t2010-11aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-76	down	agree	https://www.bdfutbol.com/en/t/t2010-11aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-76	playoffs	agree	https://www.bdfutbol.com/en/t/t2010-11aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-76	split	agree	https://www.bdfutbol.com/en/t/t2010-112aB1.html	BDFutbol: single phase per group.
+spa-76	format	agree	https://www.bdfutbol.com/en/t/t2010-112aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-76	subs_used	no second source		No second source found from another publisher.
+spa-76	bench	no second source		unknown in first file; not found.
+spa-77	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-78	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-78	clubs	no second source		No second source found from another publisher.
+spa-78	up	no second source		No second source found from another publisher.
+spa-78	down	no second source		unknown in first file; not found.
+spa-78	playoffs	no second source		No second source found from another publisher.
+spa-78	split	no second source		No second source found from another publisher.
+spa-78	format	no second source		No second source found from another publisher.
+spa-78	subs_used	no second source		unknown in first file; not found.
+spa-78	bench	no second source		unknown in first file; not found.
+spa-79	name	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF heads the cup Copa del Rey.
+spa-79	clubs	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF round counts (byes included) give the same total.
+spa-79	format	agree	https://www.rsssf.org/tabless/span2011.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-79	subs_used	no second source		No second source found from another publisher.
+spa-79	bench	no second source		unknown in first file; not found.
+spa-80	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-80	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-80	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-80	subs_used	no second source		No second source found from another publisher.
+spa-80	bench	no second source		unknown in first file; not found.
+spa-81	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-81	work_permit	no second source		unknown in first file; no source found.
+spa-81	registration	no second source		No second source found from another publisher.
+spa-81	windows	no second source		No second source found from another publisher.
+spa-82	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-82	clubs	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-82	down	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-82	playoffs	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-82	split	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF: single table, no split.
+spa-82	format	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-82	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-82	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-83	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-83	clubs	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-83	up	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-83	down	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-83	playoffs	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-83	split	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-83	format	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-83	subs_used	no second source		No dated second source for this season.
+spa-83	bench	no second source		No dated second source for this season.
+spa-84	name	agree	https://www.bdfutbol.com/en/t/t2011-122aB1.html	BDFutbol titles the division Second Division B.
+spa-84	clubs	agree	https://www.bdfutbol.com/en/t/t2011-122aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-84	up	agree	https://www.bdfutbol.com/en/t/t2011-12aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-84	down	agree	https://www.bdfutbol.com/en/t/t2011-12aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-84	playoffs	agree	https://www.bdfutbol.com/en/t/t2011-12aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-84	split	agree	https://www.bdfutbol.com/en/t/t2011-122aB1.html	BDFutbol: single phase per group.
+spa-84	format	agree	https://www.bdfutbol.com/en/t/t2011-122aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-84	subs_used	no second source		No second source found from another publisher.
+spa-84	bench	no second source		unknown in first file; not found.
+spa-85	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-86	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-86	clubs	no second source		No second source found from another publisher.
+spa-86	up	no second source		No second source found from another publisher.
+spa-86	down	no second source		unknown in first file; not found.
+spa-86	playoffs	no second source		No second source found from another publisher.
+spa-86	split	no second source		No second source found from another publisher.
+spa-86	format	no second source		No second source found from another publisher.
+spa-86	subs_used	no second source		unknown in first file; not found.
+spa-86	bench	no second source		unknown in first file; not found.
+spa-87	name	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF heads the cup Copa del Rey.
+spa-87	clubs	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF round counts (byes included) give the same total.
+spa-87	format	agree	https://www.rsssf.org/tabless/span2012.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-87	subs_used	no second source		No second source found from another publisher.
+spa-87	bench	no second source		unknown in first file; not found.
+spa-88	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-88	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-88	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-88	subs_used	no second source		No second source found from another publisher.
+spa-88	bench	no second source		unknown in first file; not found.
+spa-89	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-89	work_permit	no second source		unknown in first file; no source found.
+spa-89	registration	no second source		No second source found from another publisher.
+spa-89	windows	no second source		No second source found from another publisher.
+spa-90	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-90	clubs	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-90	down	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-90	playoffs	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-90	split	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF: single table, no split.
+spa-90	format	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-90	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-90	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-91	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-91	clubs	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-91	up	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-91	down	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-91	playoffs	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-91	split	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-91	format	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-91	subs_used	no second source		No dated second source for this season.
+spa-91	bench	no second source		No dated second source for this season.
+spa-92	name	agree	https://www.bdfutbol.com/en/t/t2012-132aB1.html	BDFutbol titles the division Second Division B.
+spa-92	clubs	disagree	https://www.bdfutbol.com/en/t/t2012-132aB3.html	BDFutbol: group III had 21 clubs in 2012/13 (81 in all). First file: 80 (4 groups of 20).
+spa-92	up	agree	https://www.bdfutbol.com/en/t/t2012-13aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-92	down	disagree	https://www.bdfutbol.com/en/t/t2012-13aPR3.html	BDFutbol play-out page: semi-finals and final among the four 16th-placed clubs, so 1 club relegated by play-out (17 in all, plus any administrative relegations). First file: 2 via play-out (18).
+spa-92	playoffs	agree	https://www.bdfutbol.com/en/t/t2012-13aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-92	split	agree	https://www.bdfutbol.com/en/t/t2012-132aB1.html	BDFutbol: single phase per group.
+spa-92	format	disagree	https://www.bdfutbol.com/en/t/t2012-132aB3.html	Group III had 21 clubs (40 matches), so not all groups played 38 matches.
+spa-92	subs_used	no second source		No second source found from another publisher.
+spa-92	bench	no second source		unknown in first file; not found.
+spa-93	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-94	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-94	clubs	no second source		No second source found from another publisher.
+spa-94	up	no second source		No second source found from another publisher.
+spa-94	down	no second source		unknown in first file; not found.
+spa-94	playoffs	no second source		No second source found from another publisher.
+spa-94	split	no second source		No second source found from another publisher.
+spa-94	format	no second source		No second source found from another publisher.
+spa-94	subs_used	no second source		unknown in first file; not found.
+spa-94	bench	no second source		unknown in first file; not found.
+spa-95	name	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF heads the cup Copa del Rey.
+spa-95	clubs	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF round counts (byes included) give the same total.
+spa-95	format	agree	https://www.rsssf.org/tabless/span2013.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-95	subs_used	no second source		No second source found from another publisher.
+spa-95	bench	no second source		unknown in first file; not found.
+spa-96	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-96	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-96	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-96	subs_used	no second source		No second source found from another publisher.
+spa-96	bench	no second source		unknown in first file; not found.
+spa-97	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-97	work_permit	no second source		unknown in first file; no source found.
+spa-97	registration	no second source		No second source found from another publisher.
+spa-97	windows	no second source		No second source found from another publisher.
+spa-98	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-98	clubs	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-98	down	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-98	playoffs	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-98	split	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF: single table, no split.
+spa-98	format	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-98	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-98	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-99	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-99	clubs	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-99	up	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-99	down	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-99	playoffs	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-99	split	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-99	format	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-99	subs_used	no second source		No dated second source for this season.
+spa-99	bench	no second source		No dated second source for this season.
+spa-100	name	agree	https://www.bdfutbol.com/en/t/t2013-142aB1.html	BDFutbol titles the division Second Division B.
+spa-100	clubs	disagree	https://www.bdfutbol.com/en/t/t2013-142aB1.html	BDFutbol: group I had 19 clubs in 2013/14 (79 in all). First file: 80 (4 groups of 20).
+spa-100	up	agree	https://www.bdfutbol.com/en/t/t2013-14aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-100	down	agree	https://www.bdfutbol.com/en/t/t2013-14aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-100	playoffs	agree	https://www.bdfutbol.com/en/t/t2013-14aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-100	split	agree	https://www.bdfutbol.com/en/t/t2013-142aB1.html	BDFutbol: single phase per group.
+spa-100	format	disagree	https://www.bdfutbol.com/en/t/t2013-142aB1.html	Group I had 19 clubs (36 matches), so not all groups played 38 matches.
+spa-100	subs_used	no second source		No second source found from another publisher.
+spa-100	bench	no second source		unknown in first file; not found.
+spa-101	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-102	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-102	clubs	no second source		No second source found from another publisher.
+spa-102	up	no second source		No second source found from another publisher.
+spa-102	down	no second source		unknown in first file; not found.
+spa-102	playoffs	no second source		No second source found from another publisher.
+spa-102	split	no second source		No second source found from another publisher.
+spa-102	format	no second source		No second source found from another publisher.
+spa-102	subs_used	no second source		unknown in first file; not found.
+spa-102	bench	no second source		unknown in first file; not found.
+spa-103	name	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF heads the cup Copa del Rey.
+spa-103	clubs	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF round counts (byes included) give the same total.
+spa-103	format	agree	https://www.rsssf.org/tabless/span2014.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-103	subs_used	no second source		No second source found from another publisher.
+spa-103	bench	no second source		unknown in first file; not found.
+spa-104	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-104	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-104	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-104	subs_used	no second source		No second source found from another publisher.
+spa-104	bench	no second source		unknown in first file; not found.
+spa-105	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-105	work_permit	no second source		unknown in first file; no source found.
+spa-105	registration	no second source		No second source found from another publisher.
+spa-105	windows	no second source		No second source found from another publisher.
+spa-106	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-106	clubs	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-106	down	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-106	playoffs	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-106	split	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF: single table, no split.
+spa-106	format	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-106	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-106	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-107	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-107	clubs	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-107	up	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-107	down	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-107	playoffs	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-107	split	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-107	format	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-107	subs_used	no second source		No dated second source for this season.
+spa-107	bench	no second source		No dated second source for this season.
+spa-108	name	agree	https://www.bdfutbol.com/en/t/t2014-152aB1.html	BDFutbol titles the division Second Division B.
+spa-108	clubs	agree	https://www.bdfutbol.com/en/t/t2014-152aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-108	up	agree	https://www.bdfutbol.com/en/t/t2014-15aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-108	down	agree	https://www.bdfutbol.com/en/t/t2014-15aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-108	playoffs	agree	https://www.bdfutbol.com/en/t/t2014-15aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-108	split	agree	https://www.bdfutbol.com/en/t/t2014-152aB1.html	BDFutbol: single phase per group.
+spa-108	format	agree	https://www.bdfutbol.com/en/t/t2014-152aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-108	subs_used	no second source		No second source found from another publisher.
+spa-108	bench	no second source		unknown in first file; not found.
+spa-109	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-110	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-110	clubs	no second source		No second source found from another publisher.
+spa-110	up	no second source		No second source found from another publisher.
+spa-110	down	no second source		unknown in first file; not found.
+spa-110	playoffs	no second source		No second source found from another publisher.
+spa-110	split	no second source		No second source found from another publisher.
+spa-110	format	no second source		No second source found from another publisher.
+spa-110	subs_used	no second source		unknown in first file; not found.
+spa-110	bench	no second source		unknown in first file; not found.
+spa-111	name	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF heads the cup Copa del Rey.
+spa-111	clubs	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF round counts (byes included) give the same total.
+spa-111	format	agree	https://www.rsssf.org/tabless/span2015.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-111	subs_used	no second source		No second source found from another publisher.
+spa-111	bench	no second source		unknown in first file; not found.
+spa-112	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-112	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-112	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-112	subs_used	no second source		No second source found from another publisher.
+spa-112	bench	no second source		unknown in first file; not found.
+spa-113	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-113	work_permit	no second source		unknown in first file; no source found.
+spa-113	registration	no second source		No second source found from another publisher.
+spa-113	windows	no second source		No second source found from another publisher.
+spa-114	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Liga BBVA 2008-2016.
+spa-114	clubs	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-114	down	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-114	playoffs	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-114	split	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF: single table, no split.
+spa-114	format	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-114	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-114	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-115	name	agree	https://www.puromarketing.com/39/4579/deportivo-pasara-denominarse-liga-bbva	Puro Marketing (4 Jun 2008): Segunda to be called Liga Adelante from 2008/09; RSSSF headers 2009/10 to 2015/16 also read Liga Adelante.
+spa-115	clubs	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-115	up	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-115	down	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-115	playoffs	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-115	split	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-115	format	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-115	subs_used	no second source		No dated second source for this season.
+spa-115	bench	no second source		No dated second source for this season.
+spa-116	name	agree	https://www.bdfutbol.com/en/t/t2015-162aB1.html	BDFutbol titles the division Second Division B.
+spa-116	clubs	agree	https://www.bdfutbol.com/en/t/t2015-162aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-116	up	agree	https://www.bdfutbol.com/en/t/t2015-16aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-116	down	agree	https://www.bdfutbol.com/en/t/t2015-16aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-116	playoffs	agree	https://www.bdfutbol.com/en/t/t2015-16aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-116	split	agree	https://www.bdfutbol.com/en/t/t2015-162aB1.html	BDFutbol: single phase per group.
+spa-116	format	agree	https://www.bdfutbol.com/en/t/t2015-162aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-116	subs_used	no second source		No second source found from another publisher.
+spa-116	bench	no second source		unknown in first file; not found.
+spa-117	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-118	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-118	clubs	no second source		No second source found from another publisher.
+spa-118	up	no second source		No second source found from another publisher.
+spa-118	down	no second source		unknown in first file; not found.
+spa-118	playoffs	no second source		No second source found from another publisher.
+spa-118	split	no second source		No second source found from another publisher.
+spa-118	format	no second source		No second source found from another publisher.
+spa-118	subs_used	no second source		unknown in first file; not found.
+spa-118	bench	no second source		unknown in first file; not found.
+spa-119	name	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF heads the cup Copa del Rey.
+spa-119	clubs	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF round counts (byes included) give the same total.
+spa-119	format	agree	https://www.rsssf.org/tabless/span2016.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-119	subs_used	no second source		No second source found from another publisher.
+spa-119	bench	no second source		unknown in first file; not found.
+spa-120	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-120	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-120	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-120	subs_used	no second source		No second source found from another publisher.
+spa-120	bench	no second source		unknown in first file; not found.
+spa-121	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-121	work_permit	no second source		unknown in first file; no source found.
+spa-121	registration	no second source		No second source found from another publisher.
+spa-121	windows	no second source		No second source found from another publisher.
+spa-122	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga Santander 2016-2023.
+spa-122	clubs	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-122	down	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-122	playoffs	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-122	split	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF: single table, no split.
+spa-122	format	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-122	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-122	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-123	name	no second source		Start of the LaLiga 1|2|3 name not found outside Wikipedia; RSSSF still heads Segunda "Liga Adelante" in these seasons (not updated).
+spa-123	clubs	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-123	up	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-123	down	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-123	playoffs	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-123	split	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-123	format	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-123	subs_used	no second source		No dated second source for this season.
+spa-123	bench	no second source		No dated second source for this season.
+spa-124	name	agree	https://www.bdfutbol.com/en/t/t2016-172aB1.html	BDFutbol titles the division Second Division B.
+spa-124	clubs	agree	https://www.bdfutbol.com/en/t/t2016-172aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-124	up	agree	https://www.bdfutbol.com/en/t/t2016-17aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-124	down	agree	https://www.bdfutbol.com/en/t/t2016-17aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-124	playoffs	agree	https://www.bdfutbol.com/en/t/t2016-17aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-124	split	agree	https://www.bdfutbol.com/en/t/t2016-172aB1.html	BDFutbol: single phase per group.
+spa-124	format	agree	https://www.bdfutbol.com/en/t/t2016-172aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-124	subs_used	no second source		No second source found from another publisher.
+spa-124	bench	no second source		unknown in first file; not found.
+spa-125	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-126	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-126	clubs	no second source		No second source found from another publisher.
+spa-126	up	no second source		No second source found from another publisher.
+spa-126	down	no second source		unknown in first file; not found.
+spa-126	playoffs	no second source		No second source found from another publisher.
+spa-126	split	no second source		No second source found from another publisher.
+spa-126	format	no second source		No second source found from another publisher.
+spa-126	subs_used	no second source		unknown in first file; not found.
+spa-126	bench	no second source		unknown in first file; not found.
+spa-127	name	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF heads the cup Copa del Rey.
+spa-127	clubs	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF round counts (byes included) give the same total.
+spa-127	format	agree	https://www.rsssf.org/tabless/span2017.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-127	subs_used	no second source		No second source found from another publisher.
+spa-127	bench	no second source		unknown in first file; not found.
+spa-128	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-128	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-128	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs each year.
+spa-128	subs_used	no second source		No second source found from another publisher.
+spa-128	bench	no second source		unknown in first file; not found.
+spa-129	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-129	work_permit	no second source		unknown in first file; no source found.
+spa-129	registration	no second source		No second source found from another publisher.
+spa-129	windows	no second source		No second source found from another publisher.
+spa-130	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga Santander 2016-2023.
+spa-130	clubs	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-130	down	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-130	playoffs	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-130	split	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF: single table, no split.
+spa-130	format	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-130	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-130	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-131	name	no second source		Start of the LaLiga 1|2|3 name not found outside Wikipedia; RSSSF still heads Segunda "Liga Adelante" in these seasons (not updated).
+spa-131	clubs	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-131	up	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-131	down	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-131	playoffs	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-131	split	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-131	format	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-131	subs_used	no second source		No dated second source for this season.
+spa-131	bench	no second source		No dated second source for this season.
+spa-132	name	agree	https://www.bdfutbol.com/en/t/t2017-182aB1.html	BDFutbol titles the division Second Division B.
+spa-132	clubs	agree	https://www.bdfutbol.com/en/t/t2017-182aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-132	up	agree	https://www.bdfutbol.com/en/t/t2017-18aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-132	down	agree	https://www.bdfutbol.com/en/t/t2017-18aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-132	playoffs	agree	https://www.bdfutbol.com/en/t/t2017-18aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-132	split	agree	https://www.bdfutbol.com/en/t/t2017-182aB1.html	BDFutbol: single phase per group.
+spa-132	format	agree	https://www.bdfutbol.com/en/t/t2017-182aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-132	subs_used	no second source		No second source found from another publisher.
+spa-132	bench	no second source		unknown in first file; not found.
+spa-133	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-134	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-134	clubs	no second source		No second source found from another publisher.
+spa-134	up	no second source		No second source found from another publisher.
+spa-134	down	no second source		unknown in first file; not found.
+spa-134	playoffs	no second source		No second source found from another publisher.
+spa-134	split	no second source		No second source found from another publisher.
+spa-134	format	no second source		No second source found from another publisher.
+spa-134	subs_used	no second source		unknown in first file; not found.
+spa-134	bench	no second source		unknown in first file; not found.
+spa-135	name	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF heads the cup Copa del Rey.
+spa-135	clubs	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF round counts (byes included) give the same total.
+spa-135	format	agree	https://www.rsssf.org/tabless/span2018.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-135	subs_used	no second source		No second source found from another publisher.
+spa-135	bench	no second source		unknown in first file; not found.
+spa-136	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-136	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-136	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: two legs (August 2017).
+spa-136	subs_used	no second source		No second source found from another publisher.
+spa-136	bench	no second source		unknown in first file; not found.
+spa-137	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-137	work_permit	no second source		unknown in first file; no source found.
+spa-137	registration	no second source		No second source found from another publisher.
+spa-137	windows	no second source		No second source found from another publisher.
+spa-138	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga Santander 2016-2023.
+spa-138	clubs	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-138	down	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-138	playoffs	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-138	split	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF: single table, no split.
+spa-138	format	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-138	subs_used	no second source		football-espana (2020) calls 3 the normal number in 2020 only; no dated source for this season.
+spa-138	bench	no second source		Bench 7 is an inference in the first file; football-espana gives 18 as the limit before June 2020 only.
+spa-139	name	agree	https://www.reasonwhy.es/actualidad/laliga-cambia-nombre-laliga-smart-bank-santander	reasonwhy (30 Jul 2019): Segunda is "actualmente LaLiga 1|2|3" before the change.
+spa-139	clubs	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-139	up	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-139	down	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-139	playoffs	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-139	split	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-139	format	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-139	subs_used	no second source		No dated second source for this season.
+spa-139	bench	no second source		No dated second source for this season.
+spa-140	name	agree	https://www.bdfutbol.com/en/t/t2018-192aB1.html	BDFutbol titles the division Second Division B.
+spa-140	clubs	agree	https://www.bdfutbol.com/en/t/t2018-192aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-140	up	agree	https://www.bdfutbol.com/en/t/t2018-19aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-140	down	agree	https://www.bdfutbol.com/en/t/t2018-19aPR3.html	BDFutbol play-out: two two-legged ties, 2 relegated; bottom 4 of each group relegated.
+spa-140	playoffs	agree	https://www.bdfutbol.com/en/t/t2018-19aPR2.html	BDFutbol: champions semi-finals and final over two legs; round of 8, semi-finals and finals over two legs for the rest.
+spa-140	split	agree	https://www.bdfutbol.com/en/t/t2018-192aB1.html	BDFutbol: single phase per group.
+spa-140	format	agree	https://www.bdfutbol.com/en/t/t2018-192aB1.html	BDFutbol: 4 groups of 20, double round robin.
+spa-140	subs_used	no second source		No second source found from another publisher.
+spa-140	bench	no second source		unknown in first file; not found.
+spa-141	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-142	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-142	clubs	no second source		No second source found from another publisher.
+spa-142	up	no second source		No second source found from another publisher.
+spa-142	down	no second source		unknown in first file; not found.
+spa-142	playoffs	no second source		No second source found from another publisher.
+spa-142	split	no second source		No second source found from another publisher.
+spa-142	format	no second source		No second source found from another publisher.
+spa-142	subs_used	no second source		unknown in first file; not found.
+spa-142	bench	no second source		unknown in first file; not found.
+spa-143	name	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF heads the cup Copa del Rey.
+spa-143	clubs	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF round counts (byes included) give the same total.
+spa-143	format	agree	https://www.rsssf.org/tabless/span2019.html	RSSSF: three single-match rounds, Primera clubs enter in the round of 32, two legs from the round of 32. Away goals not checked.
+spa-143	subs_used	no second source		No second source found from another publisher.
+spa-143	bench	no second source		unknown in first file; not found.
+spa-144	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-144	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-144	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: single match in Tangier, August 2018.
+spa-144	subs_used	no second source		No second source found from another publisher.
+spa-144	bench	no second source		unknown in first file; not found.
+spa-145	foreign	no second source		Goal (2020) and sportslaw.es (2024) state the 3/2 rule for 2020 and 2024 only; no dated second source for this season. The 2005 cut from 4 to 3 has no non-Wikipedia source found.
+spa-145	work_permit	no second source		unknown in first file; no source found.
+spa-145	registration	no second source		No second source found from another publisher.
+spa-145	windows	no second source		No second source found from another publisher.
+spa-146	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga Santander 2016-2023.
+spa-146	clubs	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-146	down	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-146	playoffs	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-146	split	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF: single table, no split.
+spa-146	format	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-146	subs_used	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana (8 Sep 2020): five subs introduced when 2019/20 resumed in June, two more than normal.
+spa-146	bench	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana: matchday squads 23 rather than the previous limit of 18.
+spa-147	name	agree	https://www.reasonwhy.es/actualidad/laliga-cambia-nombre-laliga-smart-bank-santander	reasonwhy: LaLiga SmartBank from 17 August 2019 for 2019/20.
+spa-147	clubs	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-147	up	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-147	down	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-147	playoffs	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-147	split	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-147	format	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-147	subs_used	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana: changes cover the top two divisions; five subs and 23-man squads (18 before).
+spa-147	bench	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana: changes cover the top two divisions; five subs and 23-man squads (18 before).
+spa-148	name	agree	https://www.bdfutbol.com/en/t/t2019-202aB1.html	BDFutbol titles the division Second Division B.
+spa-148	clubs	agree	https://www.bdfutbol.com/en/t/t2019-202aB1.html	BDFutbol group pages B1 to B4: 20 clubs each.
+spa-148	up	agree	https://www.bdfutbol.com/en/t/t2019-20aPR2.html	BDFutbol promotion page: 4 promoted via play-offs.
+spa-148	down	agree	https://www.bdfutbol.com/en/t/t2019-202aB1.html	BDFutbol group tables mark no relegated clubs; no play-out page.
+spa-148	playoffs	agree	https://www.bdfutbol.com/en/t/t2019-20aPR2.html	BDFutbol: 16 clubs, single matches (round of 8, semi-finals, finals) at neutral grounds.
+spa-148	split	agree	https://www.bdfutbol.com/en/t/t2019-202aB1.html	BDFutbol: single phase per group.
+spa-148	format	agree	https://www.bdfutbol.com/en/t/t2019-202aB1.html	BDFutbol: 4 groups of 20; stop date and round count not checked.
+spa-148	subs_used	no second source		No second source found from another publisher.
+spa-148	bench	no second source		unknown in first file; not found.
+spa-149	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-150	name	agree	https://www.rsssf.org/tabless/span05.html	RSSSF uses Tercera División for the 4th level.
+spa-150	clubs	no second source		No second source found from another publisher.
+spa-150	up	no second source		No second source found from another publisher.
+spa-150	down	no second source		unknown in first file; not found.
+spa-150	playoffs	no second source		No second source found from another publisher.
+spa-150	split	no second source		No second source found from another publisher.
+spa-150	format	no second source		No second source found from another publisher.
+spa-150	subs_used	no second source		unknown in first file; not found.
+spa-150	bench	no second source		unknown in first file; not found.
+spa-151	name	agree	https://www.rsssf.org/tabless/span2020.html	RSSSF heads the cup Copa del Rey.
+spa-151	clubs	agree	https://www.bdfutbol.com/en/t/t2019-20aCOP.html	BDFutbol cup page lists the same number of distinct clubs.
+spa-151	format	agree	https://www.bdfutbol.com/en/t/t2019-20aCOP.html	BDFutbol: preliminary round, single matches to the quarter-finals, two-legged semi-finals; RSSSF the same from the round of 16. Away-goal detail not checked.
+spa-151	subs_used	no second source		No second source found from another publisher.
+spa-151	bench	no second source		unknown in first file; not found.
+spa-152	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-152	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-152	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: semi-finals and final in Jeddah, January 2020; final aet and penalties. Note: Copa runner-up Barcelona was also league champion, so the league third (Real Madrid) took the place.
+spa-152	subs_used	no second source		No second source found from another publisher.
+spa-152	bench	no second source		unknown in first file; not found.
+spa-153	foreign	agree	https://www.goal.com/es/noticias/cuantos-extracomunitarios-tienen-real-madrid-barcelona-y-los-equipos-espanoles-y-cuantos-permite-la-liga/gmr6eic8usdt17dj1l7f6bpy9	Goal (28 Sep 2020): Primera 3 and Segunda 2 non-EU, all may play together; tier 3 clause not checked.
+spa-153	work_permit	no second source		unknown in first file; no source found.
+spa-153	registration	agree	https://www.goal.com/es/noticias/cuantos-extracomunitarios-tienen-real-madrid-barcelona-y-los-equipos-espanoles-y-cuantos-permite-la-liga/gmr6eic8usdt17dj1l7f6bpy9	Goal (Sep 2020): up to 25 first-team licences.
+spa-153	windows	no second source		No second source found from another publisher.
+spa-154	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga Santander 2016-2023.
+spa-154	clubs	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-154	down	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-154	playoffs	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-154	split	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF: single table, no split.
+spa-154	format	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-154	subs_used	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana: five subs kept for 2020/21, in three slots.
+spa-154	bench	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana: matchday squads stay at 23 in 2020/21.
+spa-155	name	no second source		No second source found from another publisher.
+spa-155	clubs	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-155	up	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-155	down	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-155	playoffs	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-155	split	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-155	format	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-155	subs_used	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana: changes cover the top two divisions; five subs and 23-man squads (18 before).
+spa-155	bench	agree	https://www.football-espana.net/2020/09/08/la-liga-to-continue-with-five-substitutions-for-teams-this-season	football-espana: changes cover the top two divisions; five subs and 23-man squads (18 before).
+spa-156	name	agree	https://www.bdfutbol.com/en/t/t2020-212aB1.html	BDFutbol: Second Division B 2020-21, groups I to V.
+spa-156	clubs	agree	https://www.bdfutbol.com/en/t/t2020-212aB1.html	BDFutbol group pages: first-phase subgroups 10+10, 11+10, 11+10, 10+10, 10+10 = 102; second-phase tables of 6, 6 or 7, and 8.
+spa-156	up	agree	https://www.bdfutbol.com/en/t/t2020-21aPR2.html	BDFutbol: 4 promoted via single-match semi-finals and finals; 36 to Primera RFEF agrees with RSSSF 2021/22 (40 clubs less 4 relegated from Segunda).
+spa-156	down	no second source		Count of 27 relegated to tier 5 not checked on a second source.
+spa-156	playoffs	agree	https://www.bdfutbol.com/en/t/t2020-21aPR2.html	BDFutbol: 8 semi-finals and 4 finals, single matches.
+spa-156	split	agree	https://www.bdfutbol.com/en/t/t2020-212aB1.html	BDFutbol group pages: first-phase subgroups 10+10, 11+10, 11+10, 10+10, 10+10 = 102; second-phase tables of 6, 6 or 7, and 8.
+spa-156	format	agree	https://www.bdfutbol.com/en/t/t2020-212aB1.html	BDFutbol group pages: first-phase subgroups 10+10, 11+10, 11+10, 10+10, 10+10 = 102; second-phase tables of 6, 6 or 7, and 8.
+spa-156	subs_used	no second source		No second source found from another publisher.
+spa-156	bench	no second source		unknown in first file; not found.
+spa-157	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: the 5-group tier-4 league starts in 2021-22; Segunda B (4 or 5 groups, tier 3) before.
+spa-158	name	no second source		No second source found from another publisher.
+spa-158	clubs	no second source		No second source found from another publisher.
+spa-158	up	no second source		No second source found from another publisher.
+spa-158	down	no second source		unknown in first file; not found.
+spa-158	playoffs	no second source		No second source found from another publisher.
+spa-158	split	no second source		No second source found from another publisher.
+spa-158	format	no second source		No second source found from another publisher.
+spa-158	subs_used	no second source		unknown in first file; not found.
+spa-158	bench	no second source		unknown in first file; not found.
+spa-159	name	agree	https://www.rsssf.org/tabless/span2021.html	RSSSF heads the cup Copa del Rey.
+spa-159	clubs	agree	https://www.bdfutbol.com/en/t/t2020-21aCOP.html	BDFutbol cup page lists the same number of distinct clubs.
+spa-159	format	agree	https://www.bdfutbol.com/en/t/t2020-21aCOP.html	BDFutbol: preliminary round, single matches to the quarter-finals, two-legged semi-finals; RSSSF the same from the round of 16. Away-goal detail not checked.
+spa-159	subs_used	no second source		No second source found from another publisher.
+spa-159	bench	no second source		unknown in first file; not found.
+spa-160	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-160	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-160	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: semi-finals in Córdoba and Málaga, final in Sevilla (aet), January 2021.
+spa-160	subs_used	no second source		No second source found from another publisher.
+spa-160	bench	no second source		unknown in first file; not found.
+spa-161	foreign	no second source	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	sportslaw.es (Jan 2024) gives the same Primera 3 / Segunda 2 rule and no limit below Segunda for 2023/24 only; no dated source for this season.
+spa-161	work_permit	no second source		unknown in first file; no source found.
+spa-161	registration	no second source		No second source found from another publisher.
+spa-161	windows	no second source		No second source found from another publisher.
+spa-162	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga Santander 2016-2023.
+spa-162	clubs	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-162	down	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-162	playoffs	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-162	split	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF: single table, no split.
+spa-162	format	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-162	subs_used	no second source		No second source found from another publisher.
+spa-162	bench	no second source		No second source found from another publisher.
+spa-163	name	no second source		No second source found from another publisher.
+spa-163	clubs	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-163	up	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-163	down	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-163	playoffs	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-163	split	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-163	format	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-163	subs_used	no second source		No second source found from another publisher.
+spa-163	bench	no second source		No second source found from another publisher.
+spa-164	name	no second source		No second source found from another publisher.
+spa-164	clubs	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-164	up	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF: group winners promoted plus 2 play-off winners.
+spa-164	down	agree	https://www.bdfutbol.com/en/t/t2021-221rf1.html	BDFutbol and RSSSF: 16th to 20th relegated (2021/22 group 1: Talavera kept its place after a withdrawal, Extremadura disqualified).
+spa-164	playoffs	found	https://www.bdfutbol.com/en/t/t2021-22aPR2.html	2nd to 5th play off: agree. Tie format (unknown in first file): single matches at Balaídos, A Malata and Riazor; title final a single match at A Malata (Ferrol) per RSSSF and BDFutbol.
+spa-164	split	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF: no split.
+spa-164	format	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-164	subs_used	no second source		No second source found from another publisher.
+spa-164	bench	no second source		No second source found from another publisher.
+spa-165	name	no second source		No second source found from another publisher.
+spa-165	clubs	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-165	up	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF lists 10 clubs promoted from the 4th level; BDFutbol play-off page: 5 final-round winners.
+spa-165	down	agree	https://www.bdfutbol.com/en/t/t2021-22aPR3.html	BDFutbol: 14th to 18th relegated in each group; four 13th-placed clubs play off, 2 relegated (single matches 2021/22, two legs later).
+spa-165	playoffs	agree	https://www.bdfutbol.com/en/t/t2021-22aPRF.html	BDFutbol: 20 clubs (2nd to 5th), two rounds, 5 promoted; single matches 2021/22, two legs from 2022/23.
+spa-165	split	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol: no split.
+spa-165	format	agree	https://www.bdfutbol.com/en/t/t2021-222aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-165	subs_used	no second source		No second source found from another publisher.
+spa-165	bench	no second source		No second source found from another publisher.
+spa-166	name	no second source		No second source found from another publisher.
+spa-166	clubs	no second source		No second source found from another publisher.
+spa-166	up	no second source		Second source only for 2024/25 (RFEF circular 46: group winners up directly plus 9 via play-off).
+spa-166	down	no second source		No second source found from another publisher.
+spa-166	playoffs	no second source		Second source only for 2024/25 (RFEF circular 46: 2nd to 5th, not top 4).
+spa-166	split	no second source		No second source found from another publisher.
+spa-166	format	no second source		No second source found from another publisher.
+spa-166	subs_used	no second source		unknown in first file; not found.
+spa-166	bench	no second source		unknown in first file; not found.
+spa-167	name	agree	https://www.rsssf.org/tabless/span2022.html	RSSSF heads the cup Copa del Rey.
+spa-167	clubs	agree	https://www.bdfutbol.com/en/t/t2021-22aCOP.html	BDFutbol cup page lists the same number of distinct clubs.
+spa-167	format	agree	https://www.bdfutbol.com/en/t/t2021-22aCOP.html	BDFutbol: preliminary round, single matches to the quarter-finals, two-legged semi-finals; RSSSF the same from the round of 16. Away-goal detail not checked.
+spa-167	subs_used	no second source		No second source found from another publisher.
+spa-167	bench	no second source		unknown in first file; not found.
+spa-168	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-168	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-168	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: Riyadh; extra time seen in the semi-finals.
+spa-168	subs_used	no second source		No second source found from another publisher.
+spa-168	bench	no second source		unknown in first file; not found.
+spa-169	foreign	no second source	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	sportslaw.es (Jan 2024) gives the same Primera 3 / Segunda 2 rule and no limit below Segunda for 2023/24 only; no dated source for this season.
+spa-169	work_permit	no second source		unknown in first file; no source found.
+spa-169	registration	no second source		No second source found from another publisher.
+spa-169	windows	no second source		No second source found from another publisher.
+spa-170	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga Santander 2016-2023.
+spa-170	clubs	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-170	down	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-170	playoffs	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-170	split	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF: single table, no split.
+spa-170	format	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-170	subs_used	no second source		No second source found from another publisher.
+spa-170	bench	no second source		No second source found from another publisher.
+spa-171	name	no second source		No second source found from another publisher.
+spa-171	clubs	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-171	up	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-171	down	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-171	playoffs	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-171	split	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-171	format	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-171	subs_used	no second source		No second source found from another publisher.
+spa-171	bench	no second source		No second source found from another publisher.
+spa-172	name	no second source		No second source found from another publisher.
+spa-172	clubs	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-172	up	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF: group winners promoted plus 2 play-off winners.
+spa-172	down	agree	https://www.bdfutbol.com/en/t/t2022-231rf1.html	BDFutbol and RSSSF: 16th to 20th relegated (2021/22 group 1: Talavera kept its place after a withdrawal, Extremadura disqualified).
+spa-172	playoffs	found	https://www.bdfutbol.com/en/t/t2022-23aPR2.html	2nd to 5th play off: agree. Tie format (unknown in first file): two-legged semi-finals and finals, cross-group; title final over two legs (also RFEF circular 45 for 2024/25).
+spa-172	split	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF: no split.
+spa-172	format	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-172	subs_used	no second source		No second source found from another publisher.
+spa-172	bench	no second source		No second source found from another publisher.
+spa-173	name	no second source		No second source found from another publisher.
+spa-173	clubs	agree	https://www.bdfutbol.com/en/t/t2022-232aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-173	up	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF lists 10 clubs promoted from the 4th level; BDFutbol play-off page: 5 final-round winners.
+spa-173	down	agree	https://www.bdfutbol.com/en/t/t2022-23aPR3.html	BDFutbol: 14th to 18th relegated in each group; four 13th-placed clubs play off, 2 relegated (single matches 2021/22, two legs later).
+spa-173	playoffs	agree	https://www.bdfutbol.com/en/t/t2022-23aPRF.html	BDFutbol: 20 clubs (2nd to 5th), two rounds, 5 promoted; single matches 2021/22, two legs from 2022/23.
+spa-173	split	agree	https://www.bdfutbol.com/en/t/t2022-232aB1.html	BDFutbol: no split.
+spa-173	format	agree	https://www.bdfutbol.com/en/t/t2022-232aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-173	subs_used	no second source		No second source found from another publisher.
+spa-173	bench	no second source		No second source found from another publisher.
+spa-174	name	agree	https://rfef.es/sites/default/files/sanciones/Resolucion%20vacantes%203RFEF%20Gr11.pdf	RFEF resolution (2023) names Tercera Federación for 2022/23 and 2023/24.
+spa-174	clubs	agree	https://rfef.es/sites/default/files/sanciones/Resolucion%20vacantes%203RFEF%20Gr11.pdf	RFEF: 288 clubs in 18 groups of 16 in 2022/23.
+spa-174	up	no second source		Second source only for 2024/25 (RFEF circular 46: group winners up directly plus 9 via play-off).
+spa-174	down	no second source		No second source found from another publisher.
+spa-174	playoffs	no second source		Second source only for 2024/25 (RFEF circular 46: 2nd to 5th, not top 4).
+spa-174	split	no second source		No second source found from another publisher.
+spa-174	format	agree	https://rfef.es/sites/default/files/sanciones/Resolucion%20vacantes%203RFEF%20Gr11.pdf	RFEF: 18 groups.
+spa-174	subs_used	no second source		unknown in first file; not found.
+spa-174	bench	no second source		unknown in first file; not found.
+spa-175	name	agree	https://www.rsssf.org/tabless/span2023.html	RSSSF heads the cup Copa del Rey.
+spa-175	clubs	agree	https://www.bdfutbol.com/en/t/t2022-23aCOP.html	BDFutbol cup page lists the same number of distinct clubs.
+spa-175	format	agree	https://www.bdfutbol.com/en/t/t2022-23aCOP.html	BDFutbol: preliminary round, single matches to the quarter-finals, two-legged semi-finals; RSSSF the same from the round of 16. Away-goal detail not checked.
+spa-175	subs_used	no second source		No second source found from another publisher.
+spa-175	bench	no second source		unknown in first file; not found.
+spa-176	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-176	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-176	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: Riyadh; extra time seen in the semi-finals.
+spa-176	subs_used	no second source		No second source found from another publisher.
+spa-176	bench	no second source		unknown in first file; not found.
+spa-177	foreign	found	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	Primera 3 and Segunda 2 non-EU, all may play together: agree. Tier 3 to 5 (unknown in first file): sportslaw.es (18 Jan 2024) says non-professional categories register foreign players without limit if they have legal residence.
+spa-177	work_permit	no second source		unknown in first file; no source found.
+spa-177	registration	agree	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	sportslaw.es (Jan 2024) cites the 25-licence limit. Start year still unknown.
+spa-177	windows	no second source		No second source found from another publisher.
+spa-178	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga EA Sports 2023-present.
+spa-178	clubs	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-178	down	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-178	playoffs	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-178	split	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF: single table, no split.
+spa-178	format	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-178	subs_used	no second source		No second source found from another publisher.
+spa-178	bench	no second source		No second source found from another publisher.
+spa-179	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Segunda became LaLiga Hypermotion from 2023-24.
+spa-179	clubs	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-179	up	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-179	down	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-179	playoffs	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-179	split	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-179	format	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-179	subs_used	no second source		No second source found from another publisher.
+spa-179	bench	no second source		No second source found from another publisher.
+spa-180	name	no second source		No second source found from another publisher.
+spa-180	clubs	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-180	up	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF: group winners promoted plus 2 play-off winners.
+spa-180	down	agree	https://www.bdfutbol.com/en/t/t2023-241rf1.html	BDFutbol and RSSSF: 16th to 20th relegated (2021/22 group 1: Talavera kept its place after a withdrawal, Extremadura disqualified).
+spa-180	playoffs	found	https://www.bdfutbol.com/en/t/t2023-24aPR2.html	2nd to 5th play off: agree. Tie format (unknown in first file): two-legged semi-finals and finals, cross-group; title final over two legs (also RFEF circular 45 for 2024/25).
+spa-180	split	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF: no split.
+spa-180	format	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-180	subs_used	no second source		No second source found from another publisher.
+spa-180	bench	no second source		No second source found from another publisher.
+spa-181	name	no second source		No second source found from another publisher.
+spa-181	clubs	agree	https://www.bdfutbol.com/en/t/t2023-242aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-181	up	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF lists 10 clubs promoted from the 4th level; BDFutbol play-off page: 5 final-round winners.
+spa-181	down	agree	https://www.bdfutbol.com/en/t/t2023-24aPR3.html	BDFutbol: 14th to 18th relegated in each group; four 13th-placed clubs play off, 2 relegated (single matches 2021/22, two legs later).
+spa-181	playoffs	agree	https://www.bdfutbol.com/en/t/t2023-24aPRF.html	BDFutbol: 20 clubs (2nd to 5th), two rounds, 5 promoted; single matches 2021/22, two legs from 2022/23.
+spa-181	split	agree	https://www.bdfutbol.com/en/t/t2023-242aB1.html	BDFutbol: no split.
+spa-181	format	agree	https://www.bdfutbol.com/en/t/t2023-242aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-181	subs_used	no second source		No second source found from another publisher.
+spa-181	bench	no second source		No second source found from another publisher.
+spa-182	name	agree	https://rfef.es/sites/default/files/sanciones/Resolucion%20vacantes%203RFEF%20Gr11.pdf	RFEF resolution (2023) names Tercera Federación for 2022/23 and 2023/24.
+spa-182	clubs	agree	https://rfef.es/sites/default/files/sanciones/Resolucion%20vacantes%203RFEF%20Gr11.pdf	RFEF: the 2023/24 bases set 18 groups of 18 (324).
+spa-182	up	no second source		Second source only for 2024/25 (RFEF circular 46: group winners up directly plus 9 via play-off).
+spa-182	down	no second source		No second source found from another publisher.
+spa-182	playoffs	no second source		Second source only for 2024/25 (RFEF circular 46: 2nd to 5th, not top 4).
+spa-182	split	no second source		No second source found from another publisher.
+spa-182	format	agree	https://rfef.es/sites/default/files/sanciones/Resolucion%20vacantes%203RFEF%20Gr11.pdf	RFEF: 18 groups.
+spa-182	subs_used	no second source		unknown in first file; not found.
+spa-182	bench	no second source		unknown in first file; not found.
+spa-183	name	agree	https://www.rsssf.org/tabless/span2024.html	RSSSF heads the cup Copa del Rey.
+spa-183	clubs	agree	https://www.bdfutbol.com/en/t/t2023-24aCOP.html	BDFutbol cup page lists the same number of distinct clubs.
+spa-183	format	agree	https://www.bdfutbol.com/en/t/t2023-24aCOP.html	BDFutbol: preliminary round, single matches to the quarter-finals, two-legged semi-finals; RSSSF the same from the round of 16. Away-goal detail not checked.
+spa-183	subs_used	no second source		No second source found from another publisher.
+spa-183	bench	no second source		unknown in first file; not found.
+spa-184	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-184	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-184	format	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: Riyadh, January 2024; semi-final 5-3 aet.
+spa-184	subs_used	no second source		No second source found from another publisher.
+spa-184	bench	no second source		unknown in first file; not found.
+spa-185	foreign	no second source	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	sportslaw.es (Jan 2024) gives the same Primera 3 / Segunda 2 rule and no limit below Segunda for 2023/24 only; no dated source for this season.
+spa-185	work_permit	no second source		unknown in first file; no source found.
+spa-185	registration	no second source		No second source found from another publisher.
+spa-185	windows	no second source		No second source found from another publisher.
+spa-186	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga EA Sports 2023-present.
+spa-186	clubs	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-186	down	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-186	playoffs	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-186	split	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF: single table, no split.
+spa-186	format	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-186	subs_used	no second source		No second source found from another publisher.
+spa-186	bench	no second source		No second source found from another publisher.
+spa-187	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Segunda became LaLiga Hypermotion from 2023-24.
+spa-187	clubs	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-187	up	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-187	down	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-187	playoffs	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-187	split	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-187	format	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-187	subs_used	no second source		No second source found from another publisher.
+spa-187	bench	no second source		No second source found from another publisher.
+spa-188	name	agree	https://rfef.es/sites/default/files/pdf/circulares/circular45%2Bdocumento.pdf	RFEF circular 45 (2024/25): Primera Federación.
+spa-188	clubs	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-188	up	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF: group winners promoted plus 2 play-off winners.
+spa-188	down	agree	https://www.bdfutbol.com/en/t/t2024-251rf1.html	BDFutbol and RSSSF: 16th to 20th relegated (2021/22 group 1: Talavera kept its place after a withdrawal, Extremadura disqualified).
+spa-188	playoffs	found	https://www.bdfutbol.com/en/t/t2024-25aPR2.html	2nd to 5th play off: agree. Tie format (unknown in first file): two-legged semi-finals and finals, cross-group; title final over two legs (also RFEF circular 45 for 2024/25).
+spa-188	split	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF: no split.
+spa-188	format	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-188	subs_used	agree	https://rfef.es/sites/default/files/pdf/circulares/circular45%2Bdocumento.pdf	RFEF circular 45 (2024/25): up to 12 substitutes named, 5 used in 3 stops.
+spa-188	bench	agree	https://rfef.es/sites/default/files/pdf/circulares/circular45%2Bdocumento.pdf	RFEF circular 45 (2024/25): up to 12 substitutes named, 5 used in 3 stops.
+spa-189	name	agree	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46 (2024/25) names Segunda Federación.
+spa-189	clubs	agree	https://www.bdfutbol.com/en/t/t2024-252aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-189	up	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF lists 10 clubs promoted from the 4th level; BDFutbol play-off page: 5 final-round winners.
+spa-189	down	agree	https://www.bdfutbol.com/en/t/t2024-25aPR3.html	BDFutbol: 14th to 18th relegated in each group; four 13th-placed clubs play off, 2 relegated (single matches 2021/22, two legs later).
+spa-189	playoffs	agree	https://www.bdfutbol.com/en/t/t2024-25aPRF.html	BDFutbol: 20 clubs (2nd to 5th), two rounds, 5 promoted; single matches 2021/22, two legs from 2022/23.
+spa-189	split	agree	https://www.bdfutbol.com/en/t/t2024-252aB1.html	BDFutbol: no split.
+spa-189	format	agree	https://www.bdfutbol.com/en/t/t2024-252aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-189	subs_used	no second source		No second source found from another publisher.
+spa-189	bench	no second source		No second source found from another publisher.
+spa-190	name	agree	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46 (2024/25).
+spa-190	clubs	disagree	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46 (bases 2024/25): 324 clubs in 18 groups of 18. First file: 325 (17 x 18 + 1 x 19); the season page may count a late addition.
+spa-190	up	disagree	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46: the 18 group winners go up directly and 9 more via the play-off of 2nd to 5th (27 in all). First file: only via play-offs, count unknown.
+spa-190	down	agree	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46: at least 3 per group, number set by each regional federation.
+spa-190	playoffs	disagree	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46: 2nd to 5th of each group (not top 4) play three two-legged rounds, the last two within the group and a drawn final round; 9 promoted.
+spa-190	split	no second source		No second source found from another publisher.
+spa-190	format	agree	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46: 18 groups, double round robin.
+spa-190	subs_used	found	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46 (2024/25): up to 5 substitutes used in 3 stops; one more in play-off extra time.
+spa-190	bench	found	https://rfef.es/sites/default/files/pdf/circulares/circular46%2Bdocumento.pdf	RFEF circular 46 (2024/25): at most 7 substitutes named.
+spa-191	name	agree	https://www.rsssf.org/tabless/span2025.html	RSSSF heads the cup Copa del Rey.
+spa-191	clubs	agree	https://www.bdfutbol.com/en/t/t2024-25aCOP.html	BDFutbol cup page lists the same number of distinct clubs. Also RFEF circular 43 (115 in round 1 plus 20 in the preliminary round, less 10 winners).
+spa-191	format	agree	https://rfef.es/sites/default/files/pdf/circulares/circular43%2Bdocumento.pdf	RFEF circular 43 (2024/25): seven rounds and final single match, semi-finals two legs, Supercopa clubs from the round of 32, final at La Cartuja.
+spa-191	subs_used	agree	https://rfef.es/sites/default/files/pdf/circulares/circular43%2Bdocumento.pdf	RFEF circular 43: up to 5 used in 3 stops, one more in extra time.
+spa-191	bench	found	https://rfef.es/sites/default/files/pdf/circulares/circular43%2Bdocumento.pdf	RFEF circular 43 (2024/25): at most 11 substitutes named.
+spa-192	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-192	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-192	format	disagree	https://rfef.es/sites/default/files/pdf/circulares/circular43%2Bdocumento.pdf	RFEF circular 43 (approved 10 Oct 2024): a draw after 90 minutes goes straight to penalties, no extra time. Venue Jeddah agrees (RSSSF). First file: extra time then penalties.
+spa-192	subs_used	agree	https://rfef.es/sites/default/files/pdf/circulares/circular43%2Bdocumento.pdf	RFEF circular 43: 5 used in 3 stops.
+spa-192	bench	found	https://rfef.es/sites/default/files/pdf/circulares/circular43%2Bdocumento.pdf	RFEF circular 43 (2024/25): at most 11 substitutes named.
+spa-193	foreign	no second source	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	sportslaw.es (Jan 2024) gives the same Primera 3 / Segunda 2 rule and no limit below Segunda for 2023/24 only; no dated source for this season.
+spa-193	work_permit	no second source		unknown in first file; no source found.
+spa-193	registration	no second source		No second source found from another publisher.
+spa-193	windows	agree	https://www.bloomberglinea.com/actualidad/de-la-premier-league-a-laliga-espanola-cuando-cierra-el-mercado-de-fichajes-2025-2026/	Bloomberg Linea: summer window opened 1 July and closes 1 September 2025; winter close moved to Monday 2 February 2026. Opening of 2 January not stated there.
+spa-194	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga EA Sports 2023-present.
+spa-194	clubs	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-194	down	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-194	playoffs	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-194	split	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF: single table, no split.
+spa-194	format	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 20 clubs, 38 matches, 3 relegated, no play-off.
+spa-194	subs_used	no second source		No second source found from another publisher.
+spa-194	bench	no second source		No second source found from another publisher.
+spa-195	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Segunda became LaLiga Hypermotion from 2023-24.
+spa-195	clubs	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-195	up	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF: 1st and 2nd promoted, 3rd to 6th play-off.
+spa-195	down	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-195	playoffs	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF: semi-finals and final over two legs; reserve team in 3rd (2010/11) skipped.
+spa-195	split	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-195	format	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF final table: 22 clubs, 42 matches, 4 relegated.
+spa-195	subs_used	no second source		No second source found from another publisher.
+spa-195	bench	no second source		No second source found from another publisher.
+spa-196	name	no second source		No second source found from another publisher.
+spa-196	clubs	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-196	up	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF: group winners promoted plus 2 play-off winners.
+spa-196	down	agree	https://www.bdfutbol.com/en/t/t2025-261rf1.html	BDFutbol and RSSSF: 16th to 20th relegated (2021/22 group 1: Talavera kept its place after a withdrawal, Extremadura disqualified).
+spa-196	playoffs	disagree	https://www.bdfutbol.com/en/t/t2025-26aPR2.html	BDFutbol and RSSSF 2025/26 list no title final between the group winners. Play-off itself: two-legged semi-finals and finals (found).
+spa-196	split	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF: no split.
+spa-196	format	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF and BDFutbol: 2 groups of 20, 38 matches.
+spa-196	subs_used	no second source		No second source found from another publisher.
+spa-196	bench	no second source		No second source found from another publisher.
+spa-197	name	no second source		No second source found from another publisher.
+spa-197	clubs	agree	https://www.bdfutbol.com/en/t/t2025-262aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-197	up	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF lists 10 clubs promoted from the 4th level; BDFutbol play-off page: 5 final-round winners.
+spa-197	down	agree	https://www.bdfutbol.com/en/t/t2025-26aPR3.html	BDFutbol: 14th to 18th relegated in each group; four 13th-placed clubs play off, 2 relegated (single matches 2021/22, two legs later).
+spa-197	playoffs	agree	https://www.bdfutbol.com/en/t/t2025-26aPRF.html	BDFutbol: 20 clubs (2nd to 5th), two rounds, 5 promoted; single matches 2021/22, two legs from 2022/23.
+spa-197	split	agree	https://www.bdfutbol.com/en/t/t2025-262aB1.html	BDFutbol: no split.
+spa-197	format	agree	https://www.bdfutbol.com/en/t/t2025-262aB1.html	BDFutbol group pages: 5 groups of 18, 34 rounds.
+spa-197	subs_used	no second source		No second source found from another publisher.
+spa-197	bench	no second source		No second source found from another publisher.
+spa-198	name	no second source		No second source found from another publisher.
+spa-198	clubs	no second source		No second source found from another publisher.
+spa-198	up	no second source		Second source only for 2024/25 (RFEF circular 46: group winners up directly plus 9 via play-off).
+spa-198	down	no second source		No second source found from another publisher.
+spa-198	playoffs	no second source		Second source only for 2024/25 (RFEF circular 46: 2nd to 5th, not top 4).
+spa-198	split	no second source		No second source found from another publisher.
+spa-198	format	no second source		No second source found from another publisher.
+spa-198	subs_used	no second source		unknown in first file; not found.
+spa-198	bench	no second source		unknown in first file; not found.
+spa-199	name	agree	https://www.rsssf.org/tabless/span2026.html	RSSSF heads the cup Copa del Rey.
+spa-199	clubs	agree	https://www.bdfutbol.com/en/t/t2025-26aCOP.html	BDFutbol cup page lists the same number of distinct clubs.
+spa-199	format	agree	https://www.bdfutbol.com/en/t/t2025-26aCOP.html	BDFutbol: preliminary round over two legs, single matches to the quarter-finals, two-legged semi-finals. Proximity draw not checked.
+spa-199	subs_used	no second source		No second source found from another publisher.
+spa-199	bench	no second source		unknown in first file; not found.
+spa-200	name	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF list of Super Cup finals.
+spa-200	clubs	agree	https://www.rsssf.org/tabless/spansupcuphist.html	RSSSF: 2 clubs to 2018, 4 from the January 2020 edition.
+spa-200	format	no second source	https://www.rsssf.org/tabless/spansupcuphist.html	Venue Jeddah agrees (RSSSF). Tie-break not checked for 2025/26: the 2024/25 and 2026/27 RFEF bases both have no extra time, so "extra time then penalties" is doubtful.
+spa-200	subs_used	no second source		No second source found from another publisher.
+spa-200	bench	no second source		unknown in first file; not found.
+spa-201	foreign	no second source	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	sportslaw.es (Jan 2024) gives the same Primera 3 / Segunda 2 rule and no limit below Segunda for 2023/24 only; no dated source for this season.
+spa-201	work_permit	no second source		unknown in first file; no source found.
+spa-201	registration	no second source		No second source found from another publisher.
+spa-201	windows	found	https://www.laliga.com/es-GB/fichajes	laliga.com (read 16 Oct 2026): summer 1 July to 1 September 2026, winter 2 January to 2 February 2027, both inclusive.
+spa-202	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: LaLiga EA Sports 2023-present.
+spa-202	clubs	agree	https://www.bdfutbol.com/en/t/t2026-27.html	BDFutbol 2026-27 table lists 20 clubs.
+spa-202	down	no second source		No second source found from another publisher.
+spa-202	playoffs	no second source		No second source found from another publisher.
+spa-202	split	no second source		No second source found from another publisher.
+spa-202	format	no second source		No second source found from another publisher.
+spa-202	subs_used	no second source		No second source found from another publisher.
+spa-202	bench	no second source		No second source found from another publisher.
+spa-203	name	agree	https://factoryfutbol.com/laliga-ea-sports/laliga-santander-o-laliga-ea-sports-el-mismo-torneo-distintos-nombres/	factoryfutbol: Segunda became LaLiga Hypermotion from 2023-24.
+spa-203	clubs	agree	https://www.bdfutbol.com/en/t/t2026-272a.html	BDFutbol 2026-27 Segunda table lists 22 clubs.
+spa-203	up	no second source		No second source found from another publisher.
+spa-203	down	no second source		No second source found from another publisher.
+spa-203	playoffs	no second source		No second source found from another publisher.
+spa-203	split	no second source		No second source found from another publisher.
+spa-203	format	no second source		No second source found from another publisher.
+spa-203	subs_used	no second source		No second source found from another publisher.
+spa-203	bench	no second source		No second source found from another publisher.
+spa-204	name	no second source		No second source found from another publisher.
+spa-204	clubs	agree	https://www.bdfutbol.com/en/t/t2026-271rf1.html	BDFutbol 2026-27: 2 groups of 20.
+spa-204	up	no second source		No second source found from another publisher.
+spa-204	down	no second source		No second source found from another publisher.
+spa-204	playoffs	no second source		No second source found from another publisher.
+spa-204	split	no second source		No second source found from another publisher.
+spa-204	format	agree	https://www.bdfutbol.com/en/t/t2026-271rf1.html	BDFutbol 2026-27: 2 groups of 20.
+spa-204	subs_used	no second source		No second source found from another publisher.
+spa-204	bench	no second source		No second source found from another publisher.
+spa-205	name	no second source		No second source found from another publisher.
+spa-205	clubs	agree	https://www.bdfutbol.com/en/t/t2026-272aB1.html	BDFutbol 2026-27: 5 groups of 18.
+spa-205	up	no second source		No second source found from another publisher.
+spa-205	down	no second source		No second source found from another publisher.
+spa-205	playoffs	no second source		No second source found from another publisher.
+spa-205	split	no second source		No second source found from another publisher.
+spa-205	format	agree	https://www.bdfutbol.com/en/t/t2026-272aB1.html	BDFutbol 2026-27: 5 groups of 18.
+spa-205	subs_used	no second source		No second source found from another publisher.
+spa-205	bench	no second source		No second source found from another publisher.
+spa-206	name	no second source		No second source found from another publisher.
+spa-206	clubs	no second source		No second source found from another publisher.
+spa-206	up	no second source		Second source only for 2024/25 (RFEF circular 46: group winners up directly plus 9 via play-off).
+spa-206	down	no second source		No second source found from another publisher.
+spa-206	playoffs	no second source		Second source only for 2024/25 (RFEF circular 46: 2nd to 5th, not top 4).
+spa-206	split	no second source		No second source found from another publisher.
+spa-206	format	no second source		No second source found from another publisher.
+spa-206	subs_used	no second source		unknown in first file; not found.
+spa-206	bench	no second source		unknown in first file; not found.
+spa-207	name	agree	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RSSSF heads the cup Copa del Rey.
+spa-207	clubs	agree	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RFEF bases 2026/27: 116 in round 1 including 10 preliminary winners, plus 20 territorial clubs = 126.
+spa-207	format	agree	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RFEF bases 2026/27: preliminary and semi-finals two legs, rest single match, rounds 1 and 2 by geographical proximity, Supercopa clubs in their own pot in the round of 32.
+spa-207	subs_used	agree	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RFEF bases 2026/27: up to 5 used in 3 stops.
+spa-207	bench	found	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RFEF bases 2026/27: at most 12 substitutes named.
+spa-208	name	no second source		No second source found from another publisher.
+spa-208	clubs	agree	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RFEF bases 2026/27: four clubs.
+spa-208	format	disagree	https://www.fcbarcelona.es/es/noticias/4558958/la-supercopa-de-espana-2027-se-jugara-en-estambul	FC Barcelona site: Istanbul (Atatürk Olympic Stadium), 2 to 7 February 2027, so not January. RFEF bases 2026/27 (https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf): penalties straight after 90 minutes, no extra time.
+spa-208	subs_used	agree	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RFEF bases 2026/27: 5 used in 3 stops.
+spa-208	bench	found	https://rfef.es/sites/default/files/2026-06/5._Torneos_Federacion_0.pdf	RFEF bases 2026/27: at most 12 substitutes named.
+spa-209	foreign	no second source	https://sportslaw.es/las-fichas-de-extracomunitarios-y-jude-bellingham/	sportslaw.es (Jan 2024) gives the same Primera 3 / Segunda 2 rule and no limit below Segunda for 2023/24 only; no dated source for this season.
+spa-209	work_permit	no second source		unknown in first file; no source found.
+spa-209	registration	no second source		No second source found from another publisher.
+spa-209	windows	no second source		No second source found from another publisher.
+spa-210	name	no second source		No second source found from another publisher.
+spa-210	clubs	no second source		No second source found from another publisher.
+spa-210	down	no second source		No second source found from another publisher.
+spa-210	playoffs	no second source		No second source found from another publisher.
+spa-210	split	no second source		No second source found from another publisher.
+spa-210	format	no second source		No second source found from another publisher.
+spa-210	subs_used	no second source		No second source found from another publisher.
+spa-210	bench	no second source		No second source found from another publisher.
+spa-211	name	no second source		No second source found from another publisher.
+spa-211	clubs	no second source		No second source found from another publisher.
+spa-211	up	no second source		No second source found from another publisher.
+spa-211	down	no second source		No second source found from another publisher.
+spa-211	playoffs	no second source		No second source found from another publisher.
+spa-211	split	no second source		No second source found from another publisher.
+spa-211	format	no second source		No second source found from another publisher.
+spa-211	subs_used	no second source		No second source found from another publisher.
+spa-211	bench	no second source		No second source found from another publisher.
+spa-212	name	no second source		No second source found from another publisher.
+spa-212	clubs	no second source		No second source found from another publisher.
+spa-212	up	no second source		No second source found from another publisher.
+spa-212	down	no second source		No second source found from another publisher.
+spa-212	playoffs	no second source		No second source found from another publisher.
+spa-212	split	no second source		No second source found from another publisher.
+spa-212	format	no second source		No second source found from another publisher.
+spa-212	subs_used	no second source		No second source found from another publisher.
+spa-212	bench	no second source		No second source found from another publisher.
+spa-213	name	no second source		No second source found from another publisher.
+spa-213	clubs	no second source		No second source found from another publisher.
+spa-213	up	no second source		No second source found from another publisher.
+spa-213	down	no second source		No second source found from another publisher.
+spa-213	playoffs	no second source		No second source found from another publisher.
+spa-213	split	no second source		No second source found from another publisher.
+spa-213	format	no second source		No second source found from another publisher.
+spa-213	subs_used	no second source		No second source found from another publisher.
+spa-213	bench	no second source		No second source found from another publisher.
+spa-214	name	no second source		No second source found from another publisher.
+spa-214	clubs	no second source		No second source found from another publisher.
+spa-214	up	no second source		Second source only for 2024/25 (RFEF circular 46: group winners up directly plus 9 via play-off).
+spa-214	down	no second source		No second source found from another publisher.
+spa-214	playoffs	no second source		Second source only for 2024/25 (RFEF circular 46: 2nd to 5th, not top 4).
+spa-214	split	no second source		No second source found from another publisher.
+spa-214	format	no second source		No second source found from another publisher.
+spa-214	subs_used	no second source		unknown in first file; not found.
+spa-214	bench	no second source		unknown in first file; not found.
+spa-215	name	no second source		No second source found from another publisher.
+spa-215	clubs	no second source		No second source found from another publisher.
+spa-215	format	no second source		No second source found from another publisher.
+spa-215	subs_used	no second source		No second source found from another publisher.
+spa-215	bench	no second source		unknown in first file; not found.
+spa-216	name	no second source		No second source found from another publisher.
+spa-216	clubs	no second source		No second source found from another publisher.
+spa-216	format	no second source		No 2028 edition source; the 2026/27 RFEF bases have no extra time.
+spa-216	subs_used	no second source		No second source found from another publisher.
+spa-216	bench	no second source		unknown in first file; not found.

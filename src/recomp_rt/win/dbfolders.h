@@ -34,7 +34,7 @@ void dbfolders_label(const char *utf8, char *out, size_t room);
 size_t dbfolders_label_room(unsigned screen_w);
 
 /* The date in a folder name (Q174): 1 when the name holds a month and a four-digit year as words, for
- * example "May 2026" or "October 2003 Sawczuk". A month is its English name or its first three letters
+ * example "May 2026" or "October 2003 Extra". A month is its English name or its first three letters
  * ("Sept" too), without regard to case. "Spring" counts as April and "Autumn" as October. The first month
  * and the first year in the name count. */
 int dbfolders_date(const char *name, int *year, int *month);

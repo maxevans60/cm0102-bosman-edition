@@ -1,0 +1,1420 @@
+id	field	verdict	second_url	note
+por-1	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2001	Transfermarkt table has 18 clubs
+por-1	down	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF final table and notes
+por-1	split	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: single table
+por-1	format	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: each club plays 2(n-1) matches
+por-1	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-1	bench	no second source		unknown in first file; not found in a second source either
+por-1	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2001	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-2	clubs	agree	https://www.rsssf.org/tablesp/port02.html	18 clubs in the table
+por-2	up	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF promoted places
+por-2	down	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: 16th Felgueiras won an appeal, 17th and 18th relegated (2)
+por-2	split	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: single double round robin table
+por-2	format	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: single double round robin table
+por-2	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-2	bench	no second source		unknown in first file; not found in a second source either
+por-2	name	agree	https://www.rsssf.org/tablesp/port02.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-3	clubs	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: Zona Norte, Centro, Sul of 20
+por-3	up	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF NB: 1 team per zone directly promoted
+por-3	down	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF NB: 4 per zone directly relegated
+por-3	playoffs	disagree	https://www.rsssf.org/tablesp/port02.html	RSSSF NB: the 16th of each zone goes to a relegation play-off; first file says none
+por-3	split	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: single zone tables
+por-3	format	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: 3 zones of 20, 38 rounds; title play-off not checked
+por-3	subs_used	no second source		no page from another publisher found for this fact
+por-3	bench	no second source		unknown in first file; not found in a second source either
+por-3	name	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF Portugal Cup level codes use II Divisao B
+por-4	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-4	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-5	clubs	no second source	https://www.rsssf.org/tablesp/port02.html	RSSSF gives only Serie A (18) and Acores (10), both as in the first file; series B-F unavailable
+por-5	up	no second source	https://www.rsssf.org/tablesp/port02.html	RSSSF Serie A: top 2 promoted; Acores champion; other series unavailable
+por-5	down	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF Serie A: 15th-18th relegated (4); other series unavailable
+por-5	split	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: Acores first stage, then promotion group of 5 and relegation tournament
+por-5	format	agree	https://www.rsssf.org/tablesp/port02.html	regional series double round robin
+por-5	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-5	bench	no second source		unknown in first file; not found in a second source either
+por-5	name	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: Campeonato Nacional da 3a Divisao
+por-6	clubs	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF lists 229 ties without replays, so 230 entrants
+por-6	format	disagree	https://www.rsssf.org/tablesp/port02.html	RSSSF shows replays in rounds 1 to 5 and also a 1/8-final replay (Jan 9) and a quarter-final replay (Jan 30); first file says replays in rounds 1 to 5 only. Rounds and single semi-finals agree
+por-6	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-6	bench	no second source		unknown in first file; not found in a second source either
+por-6	name	agree	https://www.rsssf.org/tablesp/port02.html	RSSSF: Taca de Portugal
+por-7	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-7	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Vila do Conde, Aug 4, 2001; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-7	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-7	bench	no second source		unknown in first file; not found in a second source either
+por-7	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-8	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-8	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-9	foreign	no second source		unknown in first file; not found in a second source either
+por-9	work_permit	no second source		unknown in first file; not found in a second source either
+por-9	registration	no second source		unknown in first file; not found in a second source either
+por-9	windows	no second source		unknown in first file; not found in a second source either
+por-9	name	agree	https://www.rsssf.org/tablesp/port02.html	nation name
+por-10	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2002	Transfermarkt table has 18 clubs
+por-10	down	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF final table and notes
+por-10	split	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: single table
+por-10	format	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: each club plays 2(n-1) matches
+por-10	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-10	bench	no second source		unknown in first file; not found in a second source either
+por-10	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2002	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-11	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2002	18 clubs in the table
+por-11	up	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF promoted places
+por-11	down	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF NB: Farense relegated for debts, 16th Felgueiras kept place (3 out)
+por-11	split	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: single double round robin table
+por-11	format	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: single double round robin table
+por-11	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-11	bench	no second source		unknown in first file; not found in a second source either
+por-11	name	agree	https://www.rsssf.org/tablesp/port03.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-12	clubs	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: Group North 20, Central 19, South 20
+por-12	up	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: group winners promoted
+por-12	down	disagree	https://www.rsssf.org/tablesp/port03.html	RSSSF: North 4, Central 3, South 4 relegated (11); first file says South 5 (12)
+por-12	playoffs	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF shows no play-off
+por-12	split	agree	https://www.rsssf.org/tablesp/port03.html	single tables
+por-12	format	agree	https://www.rsssf.org/tablesp/port03.html	3 groups double round robin
+por-12	subs_used	no second source		no page from another publisher found for this fact
+por-12	bench	no second source		unknown in first file; not found in a second source either
+por-12	name	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: Segunda Divisao B (Third Level)
+por-13	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-13	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-14	clubs	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: series 18, 18, 18, 17, 18, 18 and Acores 10 = 117
+por-14	up	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: top 2 of each series, Acores play-off winner
+por-14	down	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: 4 per series (Serie D 3)
+por-14	split	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: Acores first phase, then play-off and play-out
+por-14	format	agree	https://www.rsssf.org/tablesp/port03.html	double round robin series
+por-14	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-14	bench	no second source		unknown in first file; not found in a second source either
+por-14	name	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: Terceira Divisao (Fourth Level)
+por-15	clubs	no second source	https://www.rsssf.org/tablesp/port03.html	RSSSF match lists are incomplete for an entrant count
+por-15	format	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: no replays, aet and penalties, single-match semi-finals; 9 rounds
+por-15	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-15	bench	no second source		unknown in first file; not found in a second source either
+por-15	name	agree	https://www.rsssf.org/tablesp/port03.html	RSSSF: Taca de Portugal
+por-16	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-16	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Setubal, Aug 18, 2002; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-16	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-16	bench	no second source		unknown in first file; not found in a second source either
+por-16	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-17	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-17	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-18	foreign	no second source		unknown in first file; not found in a second source either
+por-18	work_permit	no second source		unknown in first file; not found in a second source either
+por-18	registration	no second source		unknown in first file; not found in a second source either
+por-18	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-18	name	agree	https://www.rsssf.org/tablesp/port03.html	nation name
+por-19	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2003	Transfermarkt table has 18 clubs
+por-19	down	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF final table and notes
+por-19	split	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: single table
+por-19	format	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: each club plays 2(n-1) matches
+por-19	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-19	bench	no second source		unknown in first file; not found in a second source either
+por-19	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2003	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-20	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2003	18 clubs in the table
+por-20	up	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF promoted places
+por-20	down	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF table marks 16-18, but 16th Portimonense plays the 2004/05 second tier and Salgueiros does not, as the first file says
+por-20	split	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: single double round robin table
+por-20	format	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: single double round robin table
+por-20	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-20	bench	no second source		unknown in first file; not found in a second source either
+por-20	name	agree	https://www.rsssf.org/tablesp/port04.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-21	clubs	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: North 19, Center 20, South 20
+por-21	up	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: group winners promoted
+por-21	down	disagree	https://www.rsssf.org/tablesp/port04.html	RSSSF: North 16th-19th relegated (4: Cacador Taipas, Braganca, Ermesinde, Leca; none in the 2004/05 North table), Center 4, South 4 = 12; first file says 11 with North 3
+por-21	playoffs	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF shows no play-off
+por-21	split	agree	https://www.rsssf.org/tablesp/port04.html	single tables
+por-21	format	agree	https://www.rsssf.org/tablesp/port04.html	3 groups double round robin
+por-21	subs_used	no second source		no page from another publisher found for this fact
+por-21	bench	no second source		unknown in first file; not found in a second source either
+por-21	name	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: II Divisao B
+por-22	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-22	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-23	clubs	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: 6 series of 18 and Acores 10
+por-23	up	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: top 2 of each series, Acores promoted-group winner
+por-23	down	disagree	https://www.rsssf.org/tablesp/port04.html	RSSSF: 16th-18th relegated in every mainland series (3 each); first file says about 4
+por-23	split	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: Acores promoted and relegation groups
+por-23	format	agree	https://www.rsssf.org/tablesp/port04.html	double round robin series
+por-23	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-23	bench	no second source		unknown in first file; not found in a second source either
+por-23	name	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: Terceira Divisao
+por-24	clubs	no second source	https://www.rsssf.org/tablesp/port04.html	RSSSF match lists are incomplete for an entrant count
+por-24	format	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: no replays, aet and penalties, single-match semi-finals; lists from 1/8 finals only
+por-24	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-24	bench	no second source		unknown in first file; not found in a second source either
+por-24	name	agree	https://www.rsssf.org/tablesp/port04.html	RSSSF: Taca de Portugal
+por-25	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-25	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Guimaraes, Aug 10, 2003; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-25	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-25	bench	no second source		unknown in first file; not found in a second source either
+por-25	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-26	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-26	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-27	foreign	no second source		unknown in first file; not found in a second source either
+por-27	work_permit	no second source		unknown in first file; not found in a second source either
+por-27	registration	no second source		unknown in first file; not found in a second source either
+por-27	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-27	name	agree	https://www.rsssf.org/tablesp/port04.html	nation name
+por-28	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2004	Transfermarkt table has 18 clubs
+por-28	down	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF final table and notes
+por-28	split	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: single table
+por-28	format	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: each club plays 2(n-1) matches
+por-28	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-28	bench	no second source		unknown in first file; not found in a second source either
+por-28	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2004	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-29	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2004	18 clubs in the table
+por-29	up	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF promoted places
+por-29	down	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF marks 16-18, but 16th Gondomar and 17th Chaves play 2005/06 second tier; Felgueiras and Alverca do not, as the first file says
+por-29	split	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: single double round robin table
+por-29	format	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: single double round robin table
+por-29	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-29	bench	no second source		unknown in first file; not found in a second source either
+por-29	name	agree	https://www.rsssf.org/tablesp/port05.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-30	clubs	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: 20, 20 (Alcains withdrew before playing), 20
+por-30	up	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: group winners promoted
+por-30	down	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: direct relegation North 4, Center 3 plus withdrawn Alcains, South 4
+por-30	playoffs	disagree	https://www.rsssf.org/tablesp/port05.html	RSSSF: South 12th Lusitania to a play-off v the Acores champion of the fourth level and relegated; first file says none
+por-30	split	agree	https://www.rsssf.org/tablesp/port05.html	single tables
+por-30	format	agree	https://www.rsssf.org/tablesp/port05.html	3 groups double round robin
+por-30	subs_used	no second source		no page from another publisher found for this fact
+por-30	bench	no second source		unknown in first file; not found in a second source either
+por-30	name	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: Campeonato Nacional da Segunda Divisao B
+por-31	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-31	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-32	clubs	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: 6 groups of 18 and Acores 10
+por-32	up	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: top 2 of each group; Acores winner via play-off (Madalena promoted)
+por-32	down	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: 15th-18th relegated in each group
+por-32	split	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: Acores top 5 to promotion play-off, bottom 5 to relegation play-off
+por-32	format	agree	https://www.rsssf.org/tablesp/port05.html	double round robin groups
+por-32	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-32	bench	no second source		unknown in first file; not found in a second source either
+por-32	name	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: Campeonato Nacional da Terceira Divisao
+por-33	clubs	no second source	https://www.rsssf.org/tablesp/port05.html	RSSSF match lists are incomplete for an entrant count
+por-33	format	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: no replays, aet and penalties, single-match semi-finals; 9 rounds
+por-33	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-33	bench	no second source		unknown in first file; not found in a second source either
+por-33	name	agree	https://www.rsssf.org/tablesp/port05.html	RSSSF: Taca de Portugal
+por-34	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-34	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Coimbra, Aug 20, 2004; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-34	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-34	bench	no second source		unknown in first file; not found in a second source either
+por-34	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-35	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-35	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-36	foreign	no second source		unknown in first file; not found in a second source either
+por-36	work_permit	no second source		unknown in first file; not found in a second source either
+por-36	registration	no second source		unknown in first file; not found in a second source either
+por-36	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-36	name	agree	https://www.rsssf.org/tablesp/port05.html	nation name
+por-37	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2005	Transfermarkt table has 18 clubs
+por-37	down	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF NB: 4 relegated as league cut to 16
+por-37	split	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: single table
+por-37	format	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: each club plays 2(n-1) matches
+por-37	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-37	bench	no second source		unknown in first file; not found in a second source either
+por-37	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2005	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-38	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2005	18 clubs in the table
+por-38	up	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF promoted places
+por-38	down	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: 13th to 18th relegated
+por-38	split	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: single double round robin table
+por-38	format	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: single double round robin table
+por-38	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-38	bench	no second source		unknown in first file; not found in a second source either
+por-38	name	agree	https://www.rsssf.org/tablesp/port06.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-39	clubs	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: Series A 14, B 14, C 14, D 16
+por-39	up	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: Trofense and Olivais e Moscavide promoted after the play-off
+por-39	down	disagree	https://www.rsssf.org/tablesp/port06.html	RSSSF: A 3, B 3, C 3, D 6 (11th-16th) = 15; first file says D 4, total 13
+por-39	playoffs	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: series winners to promotion play-off
+por-39	split	agree	https://www.rsssf.org/tablesp/port06.html	single tables
+por-39	format	agree	https://www.rsssf.org/tablesp/port06.html	4 series double round robin
+por-39	subs_used	no second source		no page from another publisher found for this fact
+por-39	bench	no second source		unknown in first file; not found in a second source either
+por-39	name	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: Campeonato Nacional da 2a Divisao
+por-40	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-40	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-41	clubs	no second source	https://www.rsssf.org/tablesp/port06.html	RSSSF lists series A-E (18, 17, 18, 17, 18) and Acores 10 only; no series F
+por-41	up	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: top 2 of each listed series promoted
+por-41	down	disagree	https://www.rsssf.org/tablesp/port06.html	RSSSF relegated marks: A 6, B 5, C 5, D 4, E 6; first file says about 4 per series
+por-41	split	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: Acores promotion and relegation groups
+por-41	format	agree	https://www.rsssf.org/tablesp/port06.html	double round robin series
+por-41	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-41	bench	no second source		unknown in first file; not found in a second source either
+por-41	name	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: Campeonato Nacional da 3a Divisao
+por-42	clubs	no second source	https://www.rsssf.org/tablesp/port06.html	RSSSF match lists are incomplete for an entrant count
+por-42	format	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: no replays, aet and penalties, single-match semi-finals; 9 rounds
+por-42	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-42	bench	no second source		unknown in first file; not found in a second source either
+por-42	name	agree	https://www.rsssf.org/tablesp/port06.html	RSSSF: Taca de Portugal
+por-43	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-43	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Sao Joao da Venda, Aug 13, 2005; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-43	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-43	bench	no second source		unknown in first file; not found in a second source either
+por-43	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-44	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-44	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-45	foreign	no second source		unknown in first file; not found in a second source either
+por-45	work_permit	no second source		unknown in first file; not found in a second source either
+por-45	registration	no second source		unknown in first file; not found in a second source either
+por-45	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-45	name	agree	https://www.rsssf.org/tablesp/port06.html	nation name
+por-46	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2006	Transfermarkt table has 16 clubs
+por-46	down	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF final table and notes
+por-46	split	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: single table
+por-46	format	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: each club plays 2(n-1) matches
+por-46	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-46	bench	no second source		unknown in first file; not found in a second source either
+por-46	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2006	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-47	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2006	16 clubs in the table
+por-47	up	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF promoted places
+por-47	down	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF relegation places
+por-47	split	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: single double round robin table
+por-47	format	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: single double round robin table
+por-47	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-47	bench	no second source		unknown in first file; not found in a second source either
+por-47	name	agree	https://www.rsssf.org/tablesp/port07.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-48	clubs	no second source		no page from another publisher found for this fact
+por-48	up	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: champion Freamunde; both play-off finalists promoted
+por-48	down	no second source		no page from another publisher found for this fact
+por-48	playoffs	no second source		no page from another publisher found for this fact
+por-48	split	no second source		no page from another publisher found for this fact
+por-48	format	no second source		no page from another publisher found for this fact
+por-48	subs_used	no second source		no page from another publisher found for this fact
+por-48	bench	no second source		unknown in first file; not found in a second source either
+por-48	name	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: Division II 2006/07
+por-49	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-49	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-50	clubs	no second source		no page from another publisher found for this fact
+por-50	up	no second source		no page from another publisher found for this fact
+por-50	down	no second source		no page from another publisher found for this fact
+por-50	split	no second source		no page from another publisher found for this fact
+por-50	format	no second source		no page from another publisher found for this fact
+por-50	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-50	bench	no second source		unknown in first file; not found in a second source either
+por-50	name	no second source		no page from another publisher found for this fact
+por-51	clubs	no second source	https://www.rsssf.org/tablesp/port07.html	RSSSF match lists are incomplete for an entrant count
+por-51	format	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: no replays, aet and penalties, single-match semi-finals; 9 rounds
+por-51	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-51	bench	no second source		unknown in first file; not found in a second source either
+por-51	name	agree	https://www.rsssf.org/tablesp/port07.html	RSSSF: Taca de Portugal
+por-52	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-52	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Leiria, Aug 19, 2006; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-52	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-52	bench	no second source		unknown in first file; not found in a second source either
+por-52	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-53	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-53	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF 2007/08: League Cup '1st edition'
+por-54	foreign	no second source		unknown in first file; not found in a second source either
+por-54	work_permit	no second source		unknown in first file; not found in a second source either
+por-54	registration	no second source		unknown in first file; not found in a second source either
+por-54	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-54	name	agree	https://www.rsssf.org/tablesp/port07.html	nation name
+por-55	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2007	Transfermarkt table has 16 clubs
+por-55	down	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: 16th relegated and 9th Boavista demoted (2 out)
+por-55	split	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: single table
+por-55	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: each club plays 2(n-1) matches
+por-55	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-55	bench	no second source		unknown in first file; not found in a second source either
+por-55	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2007	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-56	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2007	16 clubs in the table
+por-56	up	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF promoted places
+por-56	down	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF relegation places
+por-56	split	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: single double round robin table
+por-56	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: single double round robin table
+por-56	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-56	bench	no second source		unknown in first file; not found in a second source either
+por-56	name	agree	https://www.rsssf.org/tablesp/port08.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-57	clubs	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: A 14, B 13, C 14, D 14
+por-57	up	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: Oliveirense and Sporting Covilha promoted after play-off
+por-57	down	disagree	https://www.rsssf.org/tablesp/port08.html	RSSSF relegated marks: A 5, B 4, C 5, D 5 = 19 (bottom 2 of each relegation group plus worst runners-up); first file says 15
+por-57	playoffs	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF NB: top 6 to promotion section, the rest to two relegation sections
+por-57	split	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: promotion and relegation sections
+por-57	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: 4 series, then second stage, points halved
+por-57	subs_used	no second source		no page from another publisher found for this fact
+por-57	bench	no second source		unknown in first file; not found in a second source either
+por-57	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: II Divisao
+por-58	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-58	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-59	clubs	no second source		no page from another publisher found for this fact
+por-59	up	no second source		no page from another publisher found for this fact
+por-59	down	no second source		no page from another publisher found for this fact
+por-59	split	no second source		no page from another publisher found for this fact
+por-59	format	no second source		no page from another publisher found for this fact
+por-59	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-59	bench	no second source		unknown in first file; not found in a second source either
+por-59	name	no second source		no page from another publisher found for this fact
+por-60	clubs	no second source	https://www.rsssf.org/tablesp/port08.html	RSSSF match lists are incomplete for an entrant count
+por-60	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: no replays, aet and penalties, single-match semi-finals; 9 rounds
+por-60	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-60	bench	no second source		unknown in first file; not found in a second source either
+por-60	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: Taca de Portugal
+por-61	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-61	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 11, 2007 (no venue); venues not given by RSSSF from 2007 to 2019 are unchecked
+por-61	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-61	bench	no second source		unknown in first file; not found in a second source either
+por-61	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-62	clubs	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: 16 second-tier clubs in round 1, 8 in round 2, 8 in round 3 = 32
+por-62	format	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: rounds 1-3 single legs with penalties, round 4 two legs, group of 4, top 2 to final; final venue not given
+por-62	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-62	bench	no second source		unknown in first file; not found in a second source either
+por-62	name	agree	https://www.rsssf.org/tablesp/port08.html	RSSSF: League Cup (Carlsberg Cup 2007/2008); sponsor names not all shown
+por-63	foreign	no second source		no page from another publisher found for this fact
+por-63	work_permit	no second source		unknown in first file; not found in a second source either
+por-63	registration	no second source		unknown in first file; not found in a second source either
+por-63	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-63	name	agree	https://www.rsssf.org/tablesp/port08.html	nation name
+por-64	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2008	Transfermarkt table has 16 clubs
+por-64	down	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: 16th Trofense relegated, Estrela Amadora demoted, 15th saved (2 out)
+por-64	split	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: single table
+por-64	format	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: each club plays 2(n-1) matches
+por-64	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-64	bench	no second source		unknown in first file; not found in a second source either
+por-64	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2008	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-65	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2008	16 clubs in the table
+por-65	up	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF promoted places
+por-65	down	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF relegation places
+por-65	split	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: single double round robin table
+por-65	format	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: single double round robin table
+por-65	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-65	bench	no second source		unknown in first file; not found in a second source either
+por-65	name	agree	https://www.rsssf.org/tablesp/port09.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-66	clubs	no second source		no page from another publisher found for this fact
+por-66	up	no second source		no page from another publisher found for this fact
+por-66	down	no second source		no page from another publisher found for this fact
+por-66	playoffs	no second source		no page from another publisher found for this fact
+por-66	split	no second source		no page from another publisher found for this fact
+por-66	format	no second source		no page from another publisher found for this fact
+por-66	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-66	bench	no second source		unknown in first file; not found in a second source either
+por-66	name	no second source		no page from another publisher found for this fact
+por-67	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-67	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-68	clubs	no second source		no page from another publisher found for this fact
+por-68	up	no second source		no page from another publisher found for this fact
+por-68	down	no second source		no page from another publisher found for this fact
+por-68	split	no second source		no page from another publisher found for this fact
+por-68	format	no second source		no page from another publisher found for this fact
+por-68	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-68	bench	no second source		unknown in first file; not found in a second source either
+por-68	name	no second source		no page from another publisher found for this fact
+por-69	clubs	no second source	https://www.rsssf.org/tablesp/port09.html	RSSSF match lists are incomplete for an entrant count
+por-69	format	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; 8 rounds listed
+por-69	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-69	bench	no second source		unknown in first file; not found in a second source either
+por-69	name	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: Taca de Portugal
+por-70	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-70	format	disagree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF dates the match Aug 15, 2008; first file says 16 August 2008 (venue not given by RSSSF)
+por-70	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-70	bench	no second source		unknown in first file; not found in a second source either
+por-70	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-71	clubs	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: 16 + 16 clubs of the two professional leagues
+por-71	format	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: two-legged preliminary round, 6 groups of 3, 3 groups of 4 with 6 byes, best runner-up, single semi-finals; final venue not given
+por-71	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-71	bench	no second source		unknown in first file; not found in a second source either
+por-71	name	agree	https://www.rsssf.org/tablesp/port09.html	RSSSF: League Cup; sponsor names not all shown
+por-72	foreign	no second source		no page from another publisher found for this fact
+por-72	work_permit	no second source		unknown in first file; not found in a second source either
+por-72	registration	no second source		unknown in first file; not found in a second source either
+por-72	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-72	name	agree	https://www.rsssf.org/tablesp/port09.html	nation name
+por-73	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2009	Transfermarkt table has 16 clubs
+por-73	down	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF final table and notes
+por-73	split	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: single table
+por-73	format	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: each club plays 2(n-1) matches
+por-73	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-73	bench	no second source		unknown in first file; not found in a second source either
+por-73	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2009	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-74	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2009	16 clubs in the table
+por-74	up	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF promoted places
+por-74	down	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF relegation places
+por-74	split	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: single double round robin table
+por-74	format	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: single double round robin table
+por-74	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-74	bench	no second source		unknown in first file; not found in a second source either
+por-74	name	agree	https://www.rsssf.org/tablesp/port2010.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-75	clubs	no second source		no page from another publisher found for this fact
+por-75	up	no second source		no page from another publisher found for this fact
+por-75	down	no second source		no page from another publisher found for this fact
+por-75	playoffs	no second source		no page from another publisher found for this fact
+por-75	split	no second source		no page from another publisher found for this fact
+por-75	format	no second source		no page from another publisher found for this fact
+por-75	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-75	bench	no second source		unknown in first file; not found in a second source either
+por-75	name	no second source		no page from another publisher found for this fact
+por-76	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-76	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-77	clubs	no second source		no page from another publisher found for this fact
+por-77	up	no second source		no page from another publisher found for this fact
+por-77	down	no second source		no page from another publisher found for this fact
+por-77	split	no second source		no page from another publisher found for this fact
+por-77	format	no second source		no page from another publisher found for this fact
+por-77	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-77	bench	no second source		unknown in first file; not found in a second source either
+por-77	name	no second source		no page from another publisher found for this fact
+por-78	clubs	no second source	https://www.rsssf.org/tablesp/port2010.html	RSSSF match lists are incomplete for an entrant count
+por-78	format	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-78	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-78	bench	no second source		unknown in first file; not found in a second source either
+por-78	name	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: Taca de Portugal
+por-79	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-79	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 9, 2009; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-79	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-79	bench	no second source		unknown in first file; not found in a second source either
+por-79	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-80	clubs	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: two professional leagues of 16 each
+por-80	format	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: two-legged round 1, 6 groups of 3, 3 groups of 4, semi-finals, final
+por-80	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-80	bench	no second source		unknown in first file; not found in a second source either
+por-80	name	agree	https://www.rsssf.org/tablesp/port2010.html	RSSSF: League Cup; sponsor names not all shown
+por-81	foreign	no second source		no page from another publisher found for this fact
+por-81	work_permit	no second source		unknown in first file; not found in a second source either
+por-81	registration	no second source		unknown in first file; not found in a second source either
+por-81	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-81	name	agree	https://www.rsssf.org/tablesp/port2010.html	nation name
+por-82	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2010	Transfermarkt table has 16 clubs
+por-82	down	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF final table and notes
+por-82	split	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF: single table
+por-82	format	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF: each club plays 2(n-1) matches
+por-82	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-82	bench	no second source		unknown in first file; not found in a second source either
+por-82	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2010	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-83	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2010	16 clubs in the table
+por-83	up	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF promoted places
+por-83	down	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF relegation places
+por-83	split	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF: single double round robin table
+por-83	format	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF: single double round robin table
+por-83	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-83	bench	no second source		unknown in first file; not found in a second source either
+por-83	name	agree	https://www.rsssf.org/tablesp/port2011.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-84	clubs	no second source		no page from another publisher found for this fact
+por-84	up	no second source		no page from another publisher found for this fact
+por-84	down	no second source		no page from another publisher found for this fact
+por-84	playoffs	no second source		no page from another publisher found for this fact
+por-84	split	no second source		no page from another publisher found for this fact
+por-84	format	no second source		no page from another publisher found for this fact
+por-84	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-84	bench	no second source		unknown in first file; not found in a second source either
+por-84	name	no second source		no page from another publisher found for this fact
+por-85	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-85	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-86	clubs	no second source		no page from another publisher found for this fact
+por-86	up	no second source		no page from another publisher found for this fact
+por-86	down	no second source		no page from another publisher found for this fact
+por-86	split	no second source		no page from another publisher found for this fact
+por-86	format	no second source		no page from another publisher found for this fact
+por-86	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-86	bench	no second source		unknown in first file; not found in a second source either
+por-86	name	no second source		no page from another publisher found for this fact
+por-87	clubs	no second source	https://www.rsssf.org/tablesp/port2011.html	RSSSF match lists are incomplete for an entrant count
+por-87	format	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-87	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-87	bench	no second source		unknown in first file; not found in a second source either
+por-87	name	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF: Taca de Portugal
+por-88	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-88	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 7, 2010; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-88	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-88	bench	no second source		unknown in first file; not found in a second source either
+por-88	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-89	clubs	no second source		no page from another publisher found for this fact
+por-89	format	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF lists only round 3 (4 groups of 4), semi-finals and final (Coimbra)
+por-89	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-89	bench	no second source		unknown in first file; not found in a second source either
+por-89	name	agree	https://www.rsssf.org/tablesp/port2011.html	RSSSF: League Cup; sponsor names not all shown
+por-90	foreign	no second source		no page from another publisher found for this fact
+por-90	work_permit	no second source		unknown in first file; not found in a second source either
+por-90	registration	no second source		unknown in first file; not found in a second source either
+por-90	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-90	name	agree	https://www.rsssf.org/tablesp/port2011.html	nation name
+por-91	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2011	Transfermarkt table has 16 clubs
+por-91	down	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF final table and notes
+por-91	split	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: single table
+por-91	format	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: each club plays 2(n-1) matches
+por-91	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-91	bench	no second source		unknown in first file; not found in a second source either
+por-91	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2011	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-92	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2011	16 clubs in the table
+por-92	up	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF promoted places
+por-92	down	disagree	https://www.rsssf.org/tablesp/port2012.html	RSSSF NB: Uniao de Leiria demoted and Varzim refused promotion, so no teams were relegated (0, not 2)
+por-92	split	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: single double round robin table
+por-92	format	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: single double round robin table
+por-92	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-92	bench	no second source		unknown in first file; not found in a second source either
+por-92	name	agree	https://www.rsssf.org/tablesp/port2012.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-93	clubs	no second source		no page from another publisher found for this fact
+por-93	up	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: only Tondela promoted because Varzim were refused; rule of 2 agrees
+por-93	down	no second source		no page from another publisher found for this fact
+por-93	playoffs	no second source		no page from another publisher found for this fact
+por-93	split	no second source		no page from another publisher found for this fact
+por-93	format	no second source		no page from another publisher found for this fact
+por-93	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-93	bench	no second source		unknown in first file; not found in a second source either
+por-93	name	no second source		no page from another publisher found for this fact
+por-94	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-94	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-95	clubs	no second source		no page from another publisher found for this fact
+por-95	up	no second source		no page from another publisher found for this fact
+por-95	down	no second source		no page from another publisher found for this fact
+por-95	split	no second source		no page from another publisher found for this fact
+por-95	format	no second source		no page from another publisher found for this fact
+por-95	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-95	bench	no second source		unknown in first file; not found in a second source either
+por-95	name	no second source		no page from another publisher found for this fact
+por-96	clubs	no second source	https://www.rsssf.org/tablesp/port2012.html	RSSSF match lists are incomplete for an entrant count
+por-96	format	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; 8 rounds listed
+por-96	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-96	bench	no second source		unknown in first file; not found in a second source either
+por-96	name	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: Taca de Portugal
+por-97	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-97	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 7, 2011; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-97	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-97	bench	no second source		unknown in first file; not found in a second source either
+por-97	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-98	clubs	no second source		no page from another publisher found for this fact
+por-98	format	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: 4 groups of 4, two-legged round 2, 4 groups of 4, semi-finals, final
+por-98	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-98	bench	no second source		unknown in first file; not found in a second source either
+por-98	name	agree	https://www.rsssf.org/tablesp/port2012.html	RSSSF: League Cup; sponsor names not all shown
+por-99	foreign	no second source		no page from another publisher found for this fact
+por-99	work_permit	no second source		unknown in first file; not found in a second source either
+por-99	registration	no second source		unknown in first file; not found in a second source either
+por-99	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-99	name	agree	https://www.rsssf.org/tablesp/port2012.html	nation name
+por-100	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2012	Transfermarkt table has 16 clubs
+por-100	down	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF final table and notes
+por-100	split	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: single table
+por-100	format	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: each club plays 2(n-1) matches
+por-100	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-100	bench	no second source		unknown in first file; not found in a second source either
+por-100	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2012	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-101	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2012	22 clubs in the table
+por-101	up	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF promoted places
+por-101	down	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: 21st and 22nd relegated, Naval withdrew (3 out)
+por-101	split	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: single double round robin table
+por-101	format	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: single double round robin table
+por-101	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-101	bench	no second source		unknown in first file; not found in a second source either
+por-101	name	agree	https://www.rsssf.org/tablesp/port2013.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-102	clubs	no second source		no page from another publisher found for this fact
+por-102	up	disagree	https://www.rsssf.org/tablesp/port2013.html	RSSSF 2012/13: Chaves, Farense and Academico de Viseu promoted (3); first file says 2
+por-102	down	no second source		no page from another publisher found for this fact
+por-102	playoffs	no second source		no page from another publisher found for this fact
+por-102	split	no second source		no page from another publisher found for this fact
+por-102	format	no second source		no page from another publisher found for this fact
+por-102	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-102	bench	no second source		unknown in first file; not found in a second source either
+por-102	name	no second source		no page from another publisher found for this fact
+por-103	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-103	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-104	clubs	no second source		no page from another publisher found for this fact
+por-104	up	no second source		no page from another publisher found for this fact
+por-104	down	no second source		no page from another publisher found for this fact
+por-104	split	no second source		no page from another publisher found for this fact
+por-104	format	no second source		no page from another publisher found for this fact
+por-104	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-104	bench	no second source		unknown in first file; not found in a second source either
+por-104	name	no second source		no page from another publisher found for this fact
+por-105	clubs	no second source	https://www.rsssf.org/tablesp/port2013.html	RSSSF match lists are incomplete for an entrant count
+por-105	format	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-105	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-105	bench	no second source		unknown in first file; not found in a second source either
+por-105	name	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: Taca de Portugal
+por-106	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-106	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 11, 2012; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-106	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-106	bench	no second source		unknown in first file; not found in a second source either
+por-106	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-107	clubs	no second source		no page from another publisher found for this fact
+por-107	format	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF lists only round 3 (4 groups of 4), semi-finals, final (Coimbra)
+por-107	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-107	bench	no second source		unknown in first file; not found in a second source either
+por-107	name	agree	https://www.rsssf.org/tablesp/port2013.html	RSSSF: League Cup; sponsor names not all shown
+por-108	foreign	no second source		no page from another publisher found for this fact
+por-108	work_permit	no second source		unknown in first file; not found in a second source either
+por-108	registration	no second source		unknown in first file; not found in a second source either
+por-108	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-108	name	agree	https://www.rsssf.org/tablesp/port2013.html	nation name
+por-109	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2013	Transfermarkt table has 16 clubs
+por-109	down	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF final table and notes
+por-109	playoffs	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: 15th Pacos v 4th Aves, two legs
+por-109	split	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: single table
+por-109	format	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: each club plays 2(n-1) matches
+por-109	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-109	bench	no second source		unknown in first file; not found in a second source either
+por-109	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2013	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-110	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2013	22 clubs in the table
+por-110	up	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF promoted places
+por-110	down	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF NB: no relegation, league grew to 24
+por-110	playoffs	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF lists the play-off places and ties
+por-110	split	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: single double round robin table
+por-110	format	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: single double round robin table
+por-110	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-110	bench	no second source		unknown in first file; not found in a second source either
+por-110	name	agree	https://www.rsssf.org/tablesp/port2014.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-111	clubs	no second source	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSB/saison_id/2013	Transfermarkt lists only series A to D, each of 10 clubs; consistent but not the full 80
+por-111	up	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: 3 promoted (Freamunde, Vitoria SC B, Oriental)
+por-111	down	no second source		no page from another publisher found for this fact
+por-111	playoffs	no second source		no page from another publisher found for this fact
+por-111	split	no second source		no page from another publisher found for this fact
+por-111	format	no second source		no page from another publisher found for this fact
+por-111	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-111	bench	no second source		unknown in first file; not found in a second source either
+por-111	name	no second source		no page from another publisher found for this fact
+por-112	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-112	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-113	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-113	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-114	clubs	no second source	https://www.rsssf.org/tablesp/port2014.html	RSSSF match lists are incomplete for an entrant count
+por-114	format	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-114	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-114	bench	no second source		unknown in first file; not found in a second source either
+por-114	name	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: Taca de Portugal
+por-115	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-115	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 10, 2013; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-115	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-115	bench	no second source		unknown in first file; not found in a second source either
+por-115	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-116	clubs	no second source		no page from another publisher found for this fact
+por-116	format	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF lists only round 3 (4 groups of 4), semi-finals, final (Leiria)
+por-116	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-116	bench	no second source		unknown in first file; not found in a second source either
+por-116	name	agree	https://www.rsssf.org/tablesp/port2014.html	RSSSF: League Cup; sponsor names not all shown
+por-117	foreign	no second source		no page from another publisher found for this fact
+por-117	work_permit	no second source		unknown in first file; not found in a second source either
+por-117	registration	no second source		unknown in first file; not found in a second source either
+por-117	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-117	name	agree	https://www.rsssf.org/tablesp/port2014.html	nation name
+por-118	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2014	Transfermarkt table has 18 clubs
+por-118	down	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF final table and notes
+por-118	split	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: single table
+por-118	format	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: each club plays 2(n-1) matches
+por-118	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-118	bench	no second source		unknown in first file; not found in a second source either
+por-118	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2014	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-119	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2014	24 clubs in the table
+por-119	up	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF promoted places
+por-119	down	disagree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: 23rd Maritimo B and 24th Trofense relegated and 10th Beira-Mar demoted for finances; 22nd Atletico stayed. Count 3 agrees; first file names Maritimo B twice and omits Beira-Mar
+por-119	split	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: single double round robin table
+por-119	format	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: single double round robin table
+por-119	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-119	bench	no second source		unknown in first file; not found in a second source either
+por-119	name	agree	https://www.rsssf.org/tablesp/port2015.html	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-120	clubs	no second source	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSB/saison_id/2014	Transfermarkt lists only series A to D, each of 10 clubs; consistent but not the full 80
+por-120	up	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: 3 promoted (Famalicao, Mafra, Varzim)
+por-120	down	no second source		no page from another publisher found for this fact
+por-120	playoffs	no second source		no page from another publisher found for this fact
+por-120	split	no second source		no page from another publisher found for this fact
+por-120	format	no second source		no page from another publisher found for this fact
+por-120	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-120	bench	no second source		unknown in first file; not found in a second source either
+por-120	name	no second source		no page from another publisher found for this fact
+por-121	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-121	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-122	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-122	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-123	clubs	no second source	https://www.rsssf.org/tablesp/port2015.html	RSSSF match lists are incomplete for an entrant count
+por-123	format	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-123	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-123	bench	no second source		unknown in first file; not found in a second source either
+por-123	name	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: Taca de Portugal
+por-124	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-124	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 10, 2014, 3-2 pen; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-124	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-124	bench	no second source		unknown in first file; not found in a second source either
+por-124	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-125	clubs	no second source		no page from another publisher found for this fact
+por-125	format	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF lists round 3 as groups of 4, 4, 5 and 5, semi-finals and final (Coimbra); round 1 not listed
+por-125	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-125	bench	no second source		unknown in first file; not found in a second source either
+por-125	name	agree	https://www.rsssf.org/tablesp/port2015.html	RSSSF: League Cup; sponsor names not all shown
+por-126	foreign	no second source		no page from another publisher found for this fact
+por-126	work_permit	no second source		unknown in first file; not found in a second source either
+por-126	registration	no second source		no page from another publisher found for this fact
+por-126	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-126	name	agree	https://www.rsssf.org/tablesp/port2015.html	nation name
+por-127	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2015	Transfermarkt table has 18 clubs
+por-127	down	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF final table and notes
+por-127	split	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: single table
+por-127	format	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: each club plays 2(n-1) matches
+por-127	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-127	bench	no second source		unknown in first file; not found in a second source either
+por-127	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2015	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-128	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2015	24 clubs in the table
+por-128	up	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF promoted places
+por-128	down	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: 20th to 24th relegated
+por-128	split	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: single double round robin table
+por-128	format	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: single double round robin table
+por-128	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-128	bench	no second source		unknown in first file; not found in a second source either
+por-128	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2015	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-129	clubs	no second source	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSB/saison_id/2015	Transfermarkt lists only series A to D, each of 10 clubs; consistent but not the full 80
+por-129	up	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: 3 promoted (Cova da Piedade, Vizela, Fafe)
+por-129	down	no second source		no page from another publisher found for this fact
+por-129	playoffs	no second source		no page from another publisher found for this fact
+por-129	split	no second source		no page from another publisher found for this fact
+por-129	format	no second source		no page from another publisher found for this fact
+por-129	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-129	bench	no second source		unknown in first file; not found in a second source either
+por-129	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2015	Transfermarkt: Campeonato de Portugal
+por-130	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-130	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-131	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-131	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-132	clubs	no second source	https://www.rsssf.org/tablesp/port2016.html	RSSSF match lists are incomplete for an entrant count
+por-132	format	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-132	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-132	bench	no second source		unknown in first file; not found in a second source either
+por-132	name	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: Taca de Portugal
+por-133	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-133	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 9, 2015; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-133	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-133	bench	no second source		unknown in first file; not found in a second source either
+por-133	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-134	clubs	no second source		no page from another publisher found for this fact
+por-134	format	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: rounds 1 and 2 single ties, 4 groups of 4, semi-finals, final (Coimbra)
+por-134	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-134	bench	no second source		unknown in first file; not found in a second source either
+por-134	name	agree	https://www.rsssf.org/tablesp/port2016.html	RSSSF: League Cup; sponsor names not all shown
+por-135	foreign	no second source		no page from another publisher found for this fact
+por-135	work_permit	no second source		unknown in first file; not found in a second source either
+por-135	registration	no second source		unknown in first file; not found in a second source either
+por-135	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-135	name	agree	https://www.rsssf.org/tablesp/port2016.html	nation name
+por-136	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2016	Transfermarkt table has 18 clubs
+por-136	down	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF final table and notes
+por-136	split	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: single table
+por-136	format	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: each club plays 2(n-1) matches
+por-136	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-136	bench	no second source		unknown in first file; not found in a second source either
+por-136	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2016	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-137	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2016	22 clubs in the table
+por-137	up	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF promoted places
+por-137	down	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: 19th-22nd relegated; 17th and 18th to play-off
+por-137	playoffs	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF lists the play-off places and ties
+por-137	split	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: single double round robin table
+por-137	format	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: single double round robin table
+por-137	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-137	bench	no second source		unknown in first file; not found in a second source either
+por-137	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2016	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-138	clubs	no second source	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSB/saison_id/2016	Transfermarkt lists only series A to D, each of 10 clubs; consistent but not the full 80
+por-138	up	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: Oliveirense and Real promoted; runners-up Merelinense and Praiense lost the play-off v LigaPro 17th and 18th
+por-138	down	no second source		no page from another publisher found for this fact
+por-138	playoffs	no second source		no page from another publisher found for this fact
+por-138	split	no second source		no page from another publisher found for this fact
+por-138	format	no second source		no page from another publisher found for this fact
+por-138	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-138	bench	no second source		unknown in first file; not found in a second source either
+por-138	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2016	Transfermarkt: Campeonato de Portugal
+por-139	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-139	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-140	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-140	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-141	clubs	no second source	https://www.rsssf.org/tablesp/port2017.html	RSSSF match lists are incomplete for an entrant count
+por-141	format	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-141	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-141	bench	no second source		unknown in first file; not found in a second source either
+por-141	name	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: Taca de Portugal
+por-142	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-142	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 7, 2016; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-142	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-142	bench	no second source		unknown in first file; not found in a second source either
+por-142	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-143	clubs	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: round 1 8 ties, round 2 11 ties, 16 in groups = 35
+por-143	format	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: semi-finals Jan 25-26, final Jan 29 at Faro; semi-final venue not given
+por-143	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-143	bench	no second source		unknown in first file; not found in a second source either
+por-143	name	agree	https://www.rsssf.org/tablesp/port2017.html	RSSSF: League Cup; sponsor names not all shown
+por-144	foreign	no second source		no page from another publisher found for this fact
+por-144	work_permit	no second source		unknown in first file; not found in a second source either
+por-144	registration	no second source		unknown in first file; not found in a second source either
+por-144	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-144	name	agree	https://www.rsssf.org/tablesp/port2017.html	nation name
+por-145	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2017	Transfermarkt table has 18 clubs
+por-145	down	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF final table and notes
+por-145	split	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: single table
+por-145	format	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: each club plays 2(n-1) matches
+por-145	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-145	bench	no second source		unknown in first file; not found in a second source either
+por-145	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2017	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-146	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2017	20 clubs in the table
+por-146	up	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF promoted places
+por-146	down	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: 17th-20th relegated
+por-146	split	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: single double round robin table
+por-146	format	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: single double round robin table
+por-146	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-146	bench	no second source		unknown in first file; not found in a second source either
+por-146	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2017	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-147	clubs	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: 80 clubs in 5 series of 16
+por-147	up	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	the two play-off finalists are promoted
+por-147	down	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	last 6 of each series relegated
+por-147	playoffs	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	8 clubs: the 5 series winners and 3 best runners-up; first file wording 'top 5 of each series' should read '5 series winners'
+por-147	split	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	no second-stage league split, knockout play-off only
+por-147	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	series double round robin, then quarter-finals, two-legged semi-finals, final at a neutral ground
+por-147	subs_used	no second source		no page from another publisher found for this fact
+por-147	bench	no second source		unknown in first file; not found in a second source either
+por-147	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2017	Transfermarkt: Campeonato de Portugal
+por-148	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-148	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-149	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-149	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-150	clubs	no second source	https://www.rsssf.org/tablesp/port2018.html	RSSSF match lists are incomplete for an entrant count
+por-150	format	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-150	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-150	bench	no second source		unknown in first file; not found in a second source either
+por-150	name	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: Taca de Portugal
+por-151	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-151	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 5, 2017 (first file gives month only); venues not given by RSSSF from 2007 to 2019 are unchecked
+por-151	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-151	bench	no second source		unknown in first file; not found in a second source either
+por-151	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-152	clubs	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: round 1 7 ties, round 2 10 ties, 16 in groups = 33
+por-152	format	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: final Jan 27 at Braga
+por-152	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-152	bench	no second source		unknown in first file; not found in a second source either
+por-152	name	agree	https://www.rsssf.org/tablesp/port2018.html	RSSSF: League Cup; sponsor names not all shown
+por-153	foreign	no second source		no page from another publisher found for this fact
+por-153	work_permit	no second source		unknown in first file; not found in a second source either
+por-153	registration	no second source		unknown in first file; not found in a second source either
+por-153	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-153	name	agree	https://www.rsssf.org/tablesp/port2018.html	nation name
+por-154	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2018	Transfermarkt table has 18 clubs
+por-154	down	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF final table and notes
+por-154	split	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: single table
+por-154	format	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: each club plays 2(n-1) matches
+por-154	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-154	bench	no second source		unknown in first file; not found in a second source either
+por-154	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2018	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-155	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2018	18 clubs in the table
+por-155	up	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF promoted places
+por-155	down	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: 16th-18th relegated
+por-155	split	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: single double round robin table
+por-155	format	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: single double round robin table
+por-155	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-155	bench	no second source		unknown in first file; not found in a second source either
+por-155	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2018	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-156	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2018	Transfermarkt: series A to D of 18
+por-156	up	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: Casa Pia and Vilafranquense promoted
+por-156	down	no second source		no page from another publisher found for this fact
+por-156	playoffs	no second source		no page from another publisher found for this fact
+por-156	split	no second source		no page from another publisher found for this fact
+por-156	format	no second source		no page from another publisher found for this fact
+por-156	subs_used	no second source		no page from another publisher found for this fact
+por-156	bench	no second source		unknown in first file; not found in a second source either
+por-156	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2018	Transfermarkt: Campeonato de Portugal
+por-157	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-157	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-158	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-158	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-159	clubs	no second source	https://www.rsssf.org/tablesp/port2019.html	RSSSF match lists are incomplete for an entrant count
+por-159	format	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-159	subs_used	no second source		no page from another publisher found for this fact
+por-159	bench	no second source		unknown in first file; not found in a second source either
+por-159	name	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: Taca de Portugal
+por-160	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-160	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 4, 2018 (first file gives month only); venues not given by RSSSF from 2007 to 2019 are unchecked
+por-160	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-160	bench	no second source		unknown in first file; not found in a second source either
+por-160	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-161	clubs	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: round 1 5 ties, round 2 11 ties, 16 in groups = 32
+por-161	format	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: 2 single-leg rounds, 4 groups of 4, semi-finals, final Jan 26 (venue not given)
+por-161	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-161	bench	no second source		unknown in first file; not found in a second source either
+por-161	registration	agree	https://www.noticiasaominuto.com/desporto/1382362/sporting-reage-a-intencao-do-portimonense-em-protestar-o-jogo	Noticias ao Minuto, December 2019: the cup rules require 2 locally trained players on the team sheet; 45-minute part not stated
+por-161	name	agree	https://www.rsssf.org/tablesp/port2019.html	RSSSF: League Cup; sponsor names not all shown
+por-162	foreign	no second source		no page from another publisher found for this fact
+por-162	work_permit	no second source		unknown in first file; not found in a second source either
+por-162	registration	no second source		unknown in first file; not found in a second source either
+por-162	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-162	name	agree	https://www.rsssf.org/tablesp/port2019.html	nation name
+por-163	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2019	Transfermarkt table has 18 clubs
+por-163	down	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: Aves (18th) and Setubal forcibly relegated, 17th Portimonense saved (2 out)
+por-163	split	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: single table
+por-163	format	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: each club plays 2(n-1) matches
+por-163	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-nacional/2020/06/08/clubes-aprovam-cinco-substituicoes-e-nove-suplentes-ate-final-da-epoca/195917/	5 in three stoppages or half-time approved 8 June 2020, from round 26
+por-163	bench	agree	https://rr.pt/bola-branca/noticia/futebol-nacional/2020/06/08/clubes-aprovam-cinco-substituicoes-e-nove-suplentes-ate-final-da-epoca/195917/	bench raised from 7 to 9 at the 8 June 2020 assembly
+por-163	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2019	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-164	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2019	18 clubs in the table
+por-164	up	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF promoted places
+por-164	down	agree	https://www.cmjornal.pt/desporto/detalhe/ja-se-sabe-quem-sobe-e-quem-desce-na-segunda-liga-de-futebol-conheca-todas-as-decisoes-aprovadas-na-assembleia-geral	CM Jornal June 2020: Cova da Piedade and Casa Pia relegated; RSSSF adds both later stayed when Setubal and Aves were demoted
+por-164	split	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: single double round robin table
+por-164	format	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: single double round robin table
+por-164	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-nacional/2020/06/08/clubes-aprovam-cinco-substituicoes-e-nove-suplentes-ate-final-da-epoca/195917/	5 substitutions only for the rest of the I Liga after June 2020; this competition had ended or was abandoned before
+por-164	bench	found	https://rr.pt/bola-branca/noticia/futebol-nacional/2020/06/08/clubes-aprovam-cinco-substituicoes-e-nove-suplentes-ate-final-da-epoca/195917/	value 7: the June 2020 assembly raised the bench from 7 to 9; this competition ended before the change
+por-164	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2019	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-165	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2019	Transfermarkt: series A to D of 18
+por-165	up	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: Arouca and Vizela promoted
+por-165	down	agree	https://maisfutebol.iol.pt/ii-liga/subidas/play-off-a-oito-clubes-no-campeonato-de-portugal-pode-manter-se	Maisfutebol April 2020: FPF relegates no club
+por-165	playoffs	agree	https://maisfutebol.iol.pt/ii-liga/subidas/play-off-a-oito-clubes-no-campeonato-de-portugal-pode-manter-se	Maisfutebol: an 8-club play-off of the top 2 of each series was the planned route
+por-165	split	agree	https://maisfutebol.iol.pt/ii-liga/subidas/play-off-a-oito-clubes-no-campeonato-de-portugal-pode-manter-se	no split
+por-165	format	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2019	4 series of 18; cancelled per Maisfutebol
+por-165	subs_used	no second source		no page from another publisher found for this fact
+por-165	bench	no second source		unknown in first file; not found in a second source either
+por-165	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2019	Transfermarkt: Campeonato de Portugal
+por-166	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-166	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-167	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-167	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-168	clubs	no second source	https://www.rsssf.org/tablesp/port2020.html	RSSSF match lists are incomplete for an entrant count
+por-168	format	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra
+por-168	subs_used	no second source		no page from another publisher found for this fact
+por-168	bench	no second source		unknown in first file; not found in a second source either
+por-168	name	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: Taca de Portugal
+por-169	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-169	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aug 4, 2019 (first file gives month only); venues not given by RSSSF from 2007 to 2019 are unchecked
+por-169	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-internacional/2020/05/09/fifa-autoriza-cinco-substituicoes-por-jogo/192288/	May 2020 report: five substitutions are new for professional football; three applied before
+por-169	bench	no second source		unknown in first file; not found in a second source either
+por-169	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-170	clubs	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: round 1 6 ties, round 2 12 ties, 16 in groups = 34
+por-170	format	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: semi-finals and final at Braga; no-extra-time rule not checked
+por-170	subs_used	agree	https://rr.pt/bola-branca/noticia/futebol-nacional/2020/06/08/clubes-aprovam-cinco-substituicoes-e-nove-suplentes-ate-final-da-epoca/195917/	5 substitutions only for the rest of the I Liga after June 2020; this competition had ended or was abandoned before
+por-170	bench	found	https://rr.pt/bola-branca/noticia/futebol-nacional/2020/06/08/clubes-aprovam-cinco-substituicoes-e-nove-suplentes-ate-final-da-epoca/195917/	value 7: the June 2020 assembly raised the bench from 7 to 9; this competition ended before the change
+por-170	name	agree	https://www.rsssf.org/tablesp/port2020.html	RSSSF: League Cup; sponsor names not all shown
+por-171	foreign	no second source		no page from another publisher found for this fact
+por-171	work_permit	no second source		unknown in first file; not found in a second source either
+por-171	registration	no second source		unknown in first file; not found in a second source either
+por-171	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-171	name	agree	https://www.rsssf.org/tablesp/port2020.html	nation name
+por-172	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2020	Transfermarkt table has 18 clubs
+por-172	down	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF final table and notes
+por-172	playoffs	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: 16th to relegation play-off v second-tier 3rd
+por-172	split	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: single table
+por-172	format	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: each club plays 2(n-1) matches
+por-172	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-172	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023
+por-172	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2020	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-173	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2020	18 clubs in the table
+por-173	up	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF promoted places
+por-173	down	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: 18th relegated, Cova da Piedade denied licence, 17th Vilafranquense saved (2 out)
+por-173	playoffs	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF lists the play-off places and ties
+por-173	split	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: single double round robin table
+por-173	format	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: single double round robin table
+por-173	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-173	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-173	name	disagree	https://www.rsssf.org/tablesp/port2021.html	RSSSF 2020/21 heads the second tier 'LigaPro', not 'Liga Portugal 2 (Liga Portugal SABSEG)'; first Liga Portugal 2 heading is 2021/22
+por-174	clubs	agree	https://www.record.pt/futebol/futebol-nacional/campeonato-de-portugal/detalhe/saiba-tudo-o-que-muda-no-campeonato-de-portugal	Record: 96 clubs in 8 series of 12
+por-174	up	agree	https://www.record.pt/futebol/futebol-nacional/campeonato-de-portugal/detalhe/saiba-tudo-o-que-muda-no-campeonato-de-portugal	Record: winner of each of 2 promotion series promoted; RSSSF: Trofense and Estrela Amadora
+por-174	down	agree	https://www.record.pt/futebol/futebol-nacional/campeonato-de-portugal/detalhe/saiba-tudo-o-que-muda-no-campeonato-de-portugal	Record: the last 4 of each series go down
+por-174	playoffs	agree	https://www.record.pt/futebol/futebol-nacional/campeonato-de-portugal/detalhe/saiba-tudo-o-que-muda-no-campeonato-de-portugal	Record: series winners to 2 promotion series of 4; 2nd to 5th to Liga 3 access series
+por-174	split	agree	https://www.record.pt/futebol/futebol-nacional/campeonato-de-portugal/detalhe/saiba-tudo-o-que-muda-no-campeonato-de-portugal	no split; second-stage series only
+por-174	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol: transition season, places in the new III Liga decided in the second stage
+por-174	subs_used	no second source		no page from another publisher found for this fact
+por-174	bench	no second source		unknown in first file; not found in a second source either
+por-174	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2020	Transfermarkt: Campeonato de Portugal
+por-175	format	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-175	name	agree	https://maisfutebol.iol.pt/fpf/iii-liga/campeonato-de-portugal-todas-as-mudancas-para-a-epoca-2020-21	Maisfutebol 2020: the new III Liga starts in 2021/22
+por-176	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-176	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-177	clubs	no second source	https://www.rsssf.org/tablesp/port2021.html	RSSSF match lists are incomplete for an entrant count
+por-177	format	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; reserve-team rule not checked
+por-177	subs_used	no second source		no page from another publisher found for this fact
+por-177	bench	no second source		unknown in first file; not found in a second source either
+por-177	name	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: Taca de Portugal
+por-178	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-178	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aveiro, Dec 23, 2020; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-178	subs_used	no second source		no page from another publisher found for this fact
+por-178	bench	no second source		unknown in first file; not found in a second source either
+por-178	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-179	clubs	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: 4 quarter-finals
+por-179	format	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: quarter-finals, semi-finals and final at Leiria
+por-179	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-179	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-179	name	agree	https://www.rsssf.org/tablesp/port2021.html	RSSSF: League Cup; sponsor names not all shown
+por-180	foreign	no second source		no page from another publisher found for this fact
+por-180	work_permit	no second source		unknown in first file; not found in a second source either
+por-180	registration	no second source		unknown in first file; not found in a second source either
+por-180	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-180	name	agree	https://www.rsssf.org/tablesp/port2021.html	nation name
+por-181	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2021	Transfermarkt table has 18 clubs
+por-181	down	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF final table and notes
+por-181	playoffs	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: 16th to relegation play-off v second-tier 3rd
+por-181	split	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: single table
+por-181	format	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: each club plays 2(n-1) matches
+por-181	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-181	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023
+por-181	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2021	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-182	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2021	18 clubs in the table
+por-182	up	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF promoted places
+por-182	down	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF relegation places
+por-182	playoffs	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF lists the play-off places and ties
+por-182	split	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: single double round robin table
+por-182	format	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: single double round robin table
+por-182	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-182	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-182	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2021	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-183	clubs	no second source	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2021	Transfermarkt lists only series A (11) to D (10 each); consistent but not the full 61
+por-183	up	no second source		no page from another publisher found for this fact
+por-183	down	no second source		no page from another publisher found for this fact
+por-183	playoffs	no second source		no page from another publisher found for this fact
+por-183	split	no second source		no page from another publisher found for this fact
+por-183	format	no second source		no page from another publisher found for this fact
+por-183	subs_used	no second source		no page from another publisher found for this fact
+por-183	bench	no second source		unknown in first file; not found in a second source either
+por-183	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2021	Transfermarkt: Campeonato de Portugal
+por-184	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2021	Transfermarkt: 2 series of 12
+por-184	up	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: winners of the 2 promotion series promoted
+por-184	down	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: 4 relegation series of 4, last of each relegated (4)
+por-184	playoffs	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: promotion play-off, winner v Liga Portugal 2 16th
+por-184	split	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: first-stage top 4 to promotion series, rest to relegation series
+por-184	format	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: group stage double round robin, then promotion and relegation series
+por-184	subs_used	no second source		no page from another publisher found for this fact
+por-184	bench	no second source		unknown in first file; not found in a second source either
+por-184	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2021	Transfermarkt: Liga 3; RSSSF heading Liga Portugal 3
+por-185	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-185	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-186	clubs	no second source	https://www.rsssf.org/tablesp/port2022.html	RSSSF match lists are incomplete for an entrant count
+por-186	format	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; reserve-team rule not checked
+por-186	subs_used	no second source		no page from another publisher found for this fact
+por-186	bench	no second source		unknown in first file; not found in a second source either
+por-186	name	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: Taca de Portugal
+por-187	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-187	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aveiro, Jul 31, 2021; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-187	subs_used	no second source		no page from another publisher found for this fact
+por-187	bench	no second source		unknown in first file; not found in a second source either
+por-187	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-188	clubs	no second source		no page from another publisher found for this fact
+por-188	format	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF lists 4 groups of 3, semi-finals and final at Leiria; earlier rounds not listed
+por-188	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-188	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-188	name	agree	https://www.rsssf.org/tablesp/port2022.html	RSSSF: League Cup; sponsor names not all shown
+por-189	foreign	no second source		no page from another publisher found for this fact
+por-189	work_permit	no second source		unknown in first file; not found in a second source either
+por-189	registration	no second source		unknown in first file; not found in a second source either
+por-189	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-189	name	agree	https://www.rsssf.org/tablesp/port2022.html	nation name
+por-190	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2022	Transfermarkt table has 18 clubs
+por-190	down	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF final table and notes
+por-190	playoffs	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: 16th to relegation play-off v second-tier 3rd
+por-190	split	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: single table
+por-190	format	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: each club plays 2(n-1) matches
+por-190	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-190	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023
+por-190	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2022	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-191	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2022	18 clubs in the table
+por-191	up	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF promoted places
+por-191	down	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF relegation places
+por-191	playoffs	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF lists the play-off places and ties
+por-191	split	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: single double round robin table
+por-191	format	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: single double round robin table
+por-191	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-191	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-191	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2022	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-192	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2022	Transfermarkt: series A to D of 14 each; Transfermarkt does not show the withdrawal
+por-192	up	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF 'Promoted from 4th level' lists 4 clubs (plus extra places from demotions)
+por-192	down	no second source		no page from another publisher found for this fact
+por-192	playoffs	no second source		no page from another publisher found for this fact
+por-192	split	no second source		no page from another publisher found for this fact
+por-192	format	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2022	Transfermarkt: 4 series of 14; promotion stage not checked
+por-192	subs_used	no second source		no page from another publisher found for this fact
+por-192	bench	no second source		unknown in first file; not found in a second source either
+por-192	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2022	Transfermarkt: Campeonato de Portugal
+por-193	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2022	Transfermarkt: 2 series of 12
+por-193	up	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: winners of the 2 promotion series promoted
+por-193	down	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: 4 relegation series of 4, last 2 of each relegated (8)
+por-193	playoffs	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: promotion play-off, winner v Liga Portugal 2 16th
+por-193	split	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: first-stage top 4 to promotion series, rest to relegation series
+por-193	format	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: group stage double round robin, then promotion and relegation series
+por-193	subs_used	no second source		no page from another publisher found for this fact
+por-193	bench	no second source		unknown in first file; not found in a second source either
+por-193	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2022	Transfermarkt: Liga 3; RSSSF heading Liga Portugal 3
+por-194	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-194	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-195	clubs	no second source	https://www.rsssf.org/tablesp/port2023.html	RSSSF match lists are incomplete for an entrant count
+por-195	format	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; reserve-team rule not checked
+por-195	subs_used	no second source		no page from another publisher found for this fact
+por-195	bench	no second source		unknown in first file; not found in a second source either
+por-195	name	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: Taca de Portugal
+por-196	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-196	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aveiro, Jul 30, 2022; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-196	subs_used	no second source		no page from another publisher found for this fact
+por-196	bench	no second source		unknown in first file; not found in a second source either
+por-196	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-197	clubs	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: 6 groups of 4 and 2 of 5 = 34
+por-197	format	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: 8 groups, quarter-finals, semi-finals, final Jan 28 (venue not given)
+por-197	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	May 2023 assembly made the temporary norm of 9 substitutes and 5 substitutions definitive, so it was in force before
+por-197	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-197	name	agree	https://www.rsssf.org/tablesp/port2023.html	RSSSF: League Cup; sponsor names not all shown
+por-198	foreign	no second source		no page from another publisher found for this fact
+por-198	work_permit	no second source		unknown in first file; not found in a second source either
+por-198	registration	no second source		unknown in first file; not found in a second source either
+por-198	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-198	name	agree	https://www.rsssf.org/tablesp/port2023.html	nation name
+por-199	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2023	Transfermarkt table has 18 clubs
+por-199	down	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF final table and notes
+por-199	playoffs	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: 16th to relegation play-off v second-tier 3rd
+por-199	split	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: single table
+por-199	format	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: each club plays 2(n-1) matches
+por-199	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-199	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023
+por-199	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2023	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-200	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2023	18 clubs in the table
+por-200	up	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF promoted places
+por-200	down	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF relegation places
+por-200	playoffs	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF lists the play-off places and ties
+por-200	split	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: single double round robin table
+por-200	format	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: single double round robin table
+por-200	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-200	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-200	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2023	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-201	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2023	Transfermarkt: series A to D of 14 each
+por-201	up	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF 'Promoted from 4th level' lists 4 clubs (plus extra places from demotions)
+por-201	down	no second source		no page from another publisher found for this fact
+por-201	playoffs	no second source		no page from another publisher found for this fact
+por-201	split	no second source		no page from another publisher found for this fact
+por-201	format	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2023	Transfermarkt: 4 series of 14; promotion stage not checked
+por-201	subs_used	no second source		no page from another publisher found for this fact
+por-201	bench	no second source		unknown in first file; not found in a second source either
+por-201	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2023	Transfermarkt: Campeonato de Portugal
+por-202	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2023	Transfermarkt: 2 series of 10
+por-202	up	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: promotion series 1st and 2nd promoted
+por-202	down	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: 2 relegation series of 6, last 2 of each relegated (4)
+por-202	playoffs	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: promotion series 3rd to play-off v Liga Portugal 2 16th
+por-202	split	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: first-stage top 4 to promotion series, rest to relegation series
+por-202	format	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: group stage double round robin, then promotion and relegation series
+por-202	subs_used	no second source		no page from another publisher found for this fact
+por-202	bench	no second source		unknown in first file; not found in a second source either
+por-202	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2023	Transfermarkt: Liga 3; RSSSF heading Liga Portugal 3
+por-203	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-203	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-204	clubs	no second source	https://www.rsssf.org/tablesp/port2024.html	RSSSF match lists are incomplete for an entrant count
+por-204	format	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; reserve-team rule not checked
+por-204	subs_used	no second source		no page from another publisher found for this fact
+por-204	bench	no second source		unknown in first file; not found in a second source either
+por-204	name	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: Taca de Portugal
+por-205	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-205	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aveiro, Aug 9, 2023; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-205	subs_used	no second source		no page from another publisher found for this fact
+por-205	bench	no second source		unknown in first file; not found in a second source either
+por-205	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-206	clubs	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: 14 first-round ties and a bye, 8 second-round ties, 4 seeded clubs = 34
+por-206	format	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: 2 single-leg rounds, 4 groups of 3, semi-finals, final (venue not given)
+por-206	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-206	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-206	name	agree	https://www.rsssf.org/tablesp/port2024.html	RSSSF: League Cup; sponsor names not all shown
+por-207	foreign	no second source		no page from another publisher found for this fact
+por-207	work_permit	no second source		unknown in first file; not found in a second source either
+por-207	registration	no second source		unknown in first file; not found in a second source either
+por-207	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-207	name	agree	https://www.rsssf.org/tablesp/port2024.html	nation name
+por-208	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2024	Transfermarkt table has 18 clubs
+por-208	down	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF final table and notes
+por-208	playoffs	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: 16th to relegation play-off v second-tier 3rd
+por-208	split	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: single table
+por-208	format	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: each club plays 2(n-1) matches
+por-208	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-208	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023
+por-208	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2024	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-209	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2024	18 clubs in the table
+por-209	up	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF promoted places
+por-209	down	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF relegation places
+por-209	playoffs	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF lists the play-off places and ties
+por-209	split	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: single double round robin table
+por-209	format	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: single double round robin table
+por-209	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-209	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-209	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2024	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-210	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2024	Transfermarkt: series A to D of 14 each
+por-210	up	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF 'Promoted from 4th level' lists 4 clubs (plus extra places from demotions)
+por-210	down	no second source		no page from another publisher found for this fact
+por-210	playoffs	no second source		no page from another publisher found for this fact
+por-210	split	no second source		no page from another publisher found for this fact
+por-210	format	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2024	Transfermarkt: 4 series of 14; promotion stage not checked
+por-210	subs_used	no second source		no page from another publisher found for this fact
+por-210	bench	no second source		unknown in first file; not found in a second source either
+por-210	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2024	Transfermarkt: Campeonato de Portugal
+por-211	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2024	Transfermarkt: 2 series of 10
+por-211	up	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: promotion series 1st and 2nd promoted
+por-211	down	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: 2 relegation series of 6, last 2 of each relegated (4)
+por-211	playoffs	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: promotion series 3rd to play-off v Liga Portugal 2 16th
+por-211	split	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: first-stage top 4 to promotion series, rest to relegation series
+por-211	format	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: group stage double round robin, then promotion and relegation series
+por-211	subs_used	no second source		no page from another publisher found for this fact
+por-211	bench	no second source		unknown in first file; not found in a second source either
+por-211	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2024	Transfermarkt: Liga 3; RSSSF heading Liga Portugal 3
+por-212	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-212	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-213	clubs	no second source	https://www.rsssf.org/tablesp/port2025.html	RSSSF match lists are incomplete for an entrant count
+por-213	format	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; reserve-team rule not checked
+por-213	subs_used	no second source		no page from another publisher found for this fact
+por-213	bench	no second source		unknown in first file; not found in a second source either
+por-213	name	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: Taca de Portugal
+por-214	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-214	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Aveiro, Aug 3, 2024, aet (first file gives month only); venues not given by RSSSF from 2007 to 2019 are unchecked
+por-214	subs_used	no second source		no page from another publisher found for this fact
+por-214	bench	no second source		unknown in first file; not found in a second source either
+por-214	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-215	clubs	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: 4 quarter-finals
+por-215	format	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: quarter-finals, semi-finals, final Jan 11 (venue not given)
+por-215	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-215	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-215	name	agree	https://www.rsssf.org/tablesp/port2025.html	RSSSF: League Cup; sponsor names not all shown
+por-216	foreign	no second source		no page from another publisher found for this fact
+por-216	work_permit	agree	https://www.abola.pt/noticias/imigracao-armando-marques-a-ud-leiria-nao-quer-estar-contra-a-lei-quer-e-um-mecanismo-de-celeridade-2024071015544746220	A Bola July 2024 and Record June 2024: Decree-Law 37-A/2024 of 3 June ended the manifestacao de interesse
+por-216	registration	no second source		unknown in first file; not found in a second source either
+por-216	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-216	name	agree	https://www.rsssf.org/tablesp/port2025.html	nation name
+por-217	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2025	Transfermarkt table has 18 clubs
+por-217	down	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF final table and notes
+por-217	playoffs	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: 16th to relegation play-off v second-tier 3rd
+por-217	split	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: single table
+por-217	format	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: each club plays 2(n-1) matches
+por-217	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-217	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023
+por-217	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2025	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-218	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2025	18 clubs in the table
+por-218	up	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF promoted places
+por-218	down	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF relegation places
+por-218	playoffs	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF lists the play-off places and ties
+por-218	split	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: single double round robin table
+por-218	format	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: single double round robin table
+por-218	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-218	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-218	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2025	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-219	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2025	Transfermarkt: series A to D of 14 each
+por-219	up	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF 'Promoted from 4th level' lists 4 clubs (plus extra places from demotions)
+por-219	down	no second source		no page from another publisher found for this fact
+por-219	playoffs	no second source		no page from another publisher found for this fact
+por-219	split	no second source		no page from another publisher found for this fact
+por-219	format	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2025	Transfermarkt: 4 series of 14; promotion stage not checked
+por-219	subs_used	no second source		no page from another publisher found for this fact
+por-219	bench	no second source		unknown in first file; not found in a second source either
+por-219	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2025	Transfermarkt: Campeonato de Portugal
+por-220	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2025	Transfermarkt: 2 series of 10
+por-220	up	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: promotion series 1st and 2nd promoted
+por-220	down	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: 2 relegation series of 6, last 2 of each relegated (4)
+por-220	playoffs	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: promotion series 3rd to play-off v Liga Portugal 2 16th
+por-220	split	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: first-stage top 4 to promotion series, rest to relegation series
+por-220	format	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: group stage double round robin, then promotion and relegation series
+por-220	subs_used	no second source		no page from another publisher found for this fact
+por-220	bench	no second source		unknown in first file; not found in a second source either
+por-220	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2025	Transfermarkt: Liga 3; RSSSF heading Liga Portugal 3
+por-221	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-221	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-222	clubs	no second source	https://www.rsssf.org/tablesp/port2026.html	RSSSF match lists are incomplete for an entrant count
+por-222	format	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: two-legged semi-finals, no replays, final at Oeiras/Lisboa or Coimbra; reserve-team rule not checked
+por-222	subs_used	agree	https://www.record.pt/futebol/futebol-nacional/taca-de-portugal/detalhe/houve-irregularidade-na-sexta-e-ultima-substituicao-do-avs-o-que-dizem-as-regras	Record, February 2026: a sixth substitution in extra time is allowed by the cup rules, so 5 in normal time
+por-222	bench	no second source		unknown in first file; not found in a second source either
+por-222	name	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: Taca de Portugal
+por-223	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-223	format	disagree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Faro/Loule, Jul 31, 2025; first file says August 2025
+por-223	subs_used	no second source		no page from another publisher found for this fact
+por-223	bench	no second source		unknown in first file; not found in a second source either
+por-223	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-224	clubs	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: 4 quarter-finals
+por-224	format	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: quarter-finals, semi-finals and final at Leiria
+por-224	subs_used	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm made definitive in May 2023: up to 5 substitutions in 3 stoppages plus half-time
+por-224	bench	agree	https://pt.soccerway.com/noticias/futebol-liga-portugal-liga-de-clubes-antecipa-horarios-dos-jogos-de-futebol-nos-dias-uteis/6N9cPfuo	norm of up to 9 substitutes, temporary from 2020, made definitive May 2023; the source names the Liga regulation, not each Liga competition
+por-224	name	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: League Cup; sponsor names not all shown
+por-225	foreign	no second source		no page from another publisher found for this fact
+por-225	work_permit	agree	https://www.abola.pt/noticias/imigracao-armando-marques-a-ud-leiria-nao-quer-estar-contra-a-lei-quer-e-um-mecanismo-de-celeridade-2024071015544746220	A Bola July 2024 and Record June 2024: Decree-Law 37-A/2024 of 3 June ended the manifestacao de interesse
+por-225	registration	no second source		unknown in first file; not found in a second source either
+por-225	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-225	name	agree	https://www.rsssf.org/tablesp/port2026.html	nation name
+por-226	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2026	Transfermarkt table has 18 clubs
+por-226	down	no second source		no page from another publisher found for this fact
+por-226	playoffs	no second source		no page from another publisher found for this fact
+por-226	split	no second source		no page from another publisher found for this fact
+por-226	format	no second source		no page from another publisher found for this fact
+por-226	subs_used	no second source		no page from another publisher found for this fact
+por-226	bench	agree	https://maisfutebol.iol.pt/fc-porto/benfica/ag-da-liga-aprova-aumento-do-numero-de-suplentes-no-banco-para-doze	Liga assembly approved 12 substitutes on the bench (May 2026)
+por-226	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO1/saison_id/2026	Transfermarkt/RSSSF season name matches (sponsor part checked where shown)
+por-227	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2026	18 clubs in the table
+por-227	up	no second source		no page from another publisher found for this fact
+por-227	down	no second source		no page from another publisher found for this fact
+por-227	playoffs	no second source		no page from another publisher found for this fact
+por-227	split	no second source		no page from another publisher found for this fact
+por-227	format	no second source		no page from another publisher found for this fact
+por-227	subs_used	no second source		no page from another publisher found for this fact
+por-227	bench	agree	https://maisfutebol.iol.pt/fc-porto/benfica/ag-da-liga-aprova-aumento-do-numero-de-suplentes-no-banco-para-doze	Liga assembly approved 12 substitutes on the bench (May 2026); the source names the Liga, not each Liga competition
+por-227	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PO2/saison_id/2026	base name matches the RSSSF/Transfermarkt heading; sponsor part not shown for every season
+por-228	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2026	Transfermarkt: series A to D of 14 each
+por-228	up	no second source		unknown in first file; not found in a second source either
+por-228	down	no second source		no page from another publisher found for this fact
+por-228	playoffs	no second source		no page from another publisher found for this fact
+por-228	split	no second source		no page from another publisher found for this fact
+por-228	format	no second source		no page from another publisher found for this fact
+por-228	subs_used	no second source		no page from another publisher found for this fact
+por-228	bench	no second source		unknown in first file; not found in a second source either
+por-228	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/CPSA/saison_id/2026	Transfermarkt: Campeonato de Portugal
+por-229	clubs	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2026	Transfermarkt: 2 series of 10
+por-229	up	no second source		no page from another publisher found for this fact
+por-229	down	no second source		no page from another publisher found for this fact
+por-229	playoffs	no second source		no page from another publisher found for this fact
+por-229	split	no second source		no page from another publisher found for this fact
+por-229	format	no second source		no page from another publisher found for this fact
+por-229	subs_used	no second source		no page from another publisher found for this fact
+por-229	bench	no second source		unknown in first file; not found in a second source either
+por-229	name	agree	https://www.transfermarkt.com/x/tabelle/wettbewerb/PT3A/saison_id/2026	Transfermarkt: Liga 3; RSSSF heading Liga Portugal 3
+por-230	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-230	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-231	clubs	no second source	https://www.rsssf.org/tablesp/port2026.html	RSSSF match lists are incomplete for an entrant count
+por-231	format	no second source		no page from another publisher found for this fact
+por-231	subs_used	no second source		no page from another publisher found for this fact
+por-231	bench	no second source		unknown in first file; not found in a second source either
+por-231	name	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: Taca de Portugal
+por-232	clubs	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	single match between two clubs
+por-232	format	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Coimbra, Aug 1, 2026; venues not given by RSSSF from 2007 to 2019 are unchecked
+por-232	subs_used	no second source		no page from another publisher found for this fact
+por-232	bench	no second source		unknown in first file; not found in a second source either
+por-232	name	agree	https://www.rsssf.org/tablesp/portsupcuphist.html	RSSSF: Supertaca Candido de Oliveira
+por-233	clubs	no second source		no page from another publisher found for this fact
+por-233	format	no second source		no page from another publisher found for this fact
+por-233	subs_used	no second source		no page from another publisher found for this fact
+por-233	bench	agree	https://maisfutebol.iol.pt/fc-porto/benfica/ag-da-liga-aprova-aumento-do-numero-de-suplentes-no-banco-para-doze	Liga assembly approved 12 substitutes on the bench (May 2026); the source names the Liga, not each Liga competition
+por-233	name	agree	https://www.rsssf.org/tablesp/port2026.html	RSSSF: League Cup; sponsor names not all shown
+por-234	foreign	no second source		no page from another publisher found for this fact
+por-234	work_permit	no second source		no page from another publisher found for this fact
+por-234	registration	no second source		no page from another publisher found for this fact
+por-234	windows	agree	https://www.cuatrecasas.com/en/portugal/art/covid-19-soccer-and-professional-soccer-players	Cuatrecasas on FIFA RSTP art. 6: two periods, max 12 weeks and max 4 weeks; start season of the rule not checked
+por-234	name	agree	https://www.rsssf.org/tablesp/port2026.html	nation name
+por-235	clubs	no second source		inference for 2027/28; no second source exists yet
+por-235	down	no second source		inference for 2027/28; no second source exists yet
+por-235	playoffs	no second source		inference for 2027/28; no second source exists yet
+por-235	split	no second source		inference for 2027/28; no second source exists yet
+por-235	format	no second source		inference for 2027/28; no second source exists yet
+por-235	subs_used	no second source		inference for 2027/28; no second source exists yet
+por-235	bench	no second source		inference for 2027/28; no second source exists yet
+por-235	name	no second source		inference for 2027/28; no second source exists yet
+por-236	clubs	no second source		inference for 2027/28; no second source exists yet
+por-236	up	no second source		inference for 2027/28; no second source exists yet
+por-236	down	no second source		inference for 2027/28; no second source exists yet
+por-236	playoffs	no second source		inference for 2027/28; no second source exists yet
+por-236	split	no second source		inference for 2027/28; no second source exists yet
+por-236	format	no second source		inference for 2027/28; no second source exists yet
+por-236	subs_used	no second source		inference for 2027/28; no second source exists yet
+por-236	bench	no second source		inference for 2027/28; no second source exists yet
+por-236	name	no second source		inference for 2027/28; no second source exists yet
+por-237	clubs	no second source		inference for 2027/28; no second source exists yet
+por-237	up	no second source		unknown in first file; not found in a second source either
+por-237	down	no second source		unknown in first file; not found in a second source either
+por-237	playoffs	no second source		unknown in first file; not found in a second source either
+por-237	split	no second source		inference for 2027/28; no second source exists yet
+por-237	format	no second source		unknown in first file; not found in a second source either
+por-237	subs_used	no second source		inference for 2027/28; no second source exists yet
+por-237	bench	no second source		unknown in first file; not found in a second source either
+por-237	name	no second source		inference for 2027/28; no second source exists yet
+por-238	clubs	no second source		inference for 2027/28; no second source exists yet
+por-238	up	no second source		inference for 2027/28; no second source exists yet
+por-238	down	no second source		unknown in first file; not found in a second source either
+por-238	playoffs	no second source		inference for 2027/28; no second source exists yet
+por-238	split	no second source		inference for 2027/28; no second source exists yet
+por-238	format	no second source		inference for 2027/28; no second source exists yet
+por-238	subs_used	no second source		inference for 2027/28; no second source exists yet
+por-238	bench	no second source		unknown in first file; not found in a second source either
+por-238	name	no second source		inference for 2027/28; no second source exists yet
+por-239	format	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-239	name	agree	https://bolanarede.pt/rubricas/jogos-simples/jogo-simples-2-seis-perguntas-sobre-o-campeonato-de-portugal/2/	Bola na Rede: the national third tier from 2013/14 replaced the old II Divisão B and III Divisão
+por-240	clubs	no second source		unknown in first file; not found in a second source either
+por-240	format	no second source		unknown in first file; not found in a second source either
+por-240	subs_used	no second source		inference for 2027/28; no second source exists yet
+por-240	bench	no second source		unknown in first file; not found in a second source either
+por-240	name	no second source		inference for 2027/28; no second source exists yet
+por-241	clubs	no second source		inference for 2027/28; no second source exists yet
+por-241	format	no second source		inference for 2027/28; no second source exists yet
+por-241	subs_used	no second source		inference for 2027/28; no second source exists yet
+por-241	bench	no second source		unknown in first file; not found in a second source either
+por-241	name	no second source		inference for 2027/28; no second source exists yet
+por-242	clubs	no second source		unknown in first file; not found in a second source either
+por-242	format	no second source		unknown in first file; not found in a second source either
+por-242	subs_used	no second source		inference for 2027/28; no second source exists yet
+por-242	bench	no second source		inference for 2027/28; no second source exists yet
+por-242	name	no second source		inference for 2027/28; no second source exists yet
+por-243	foreign	no second source		inference for 2027/28; no second source exists yet
+por-243	work_permit	no second source		inference for 2027/28; no second source exists yet
+por-243	registration	no second source		unknown in first file; not found in a second source either
+por-243	windows	no second source		inference for 2027/28; no second source exists yet
+por-243	name	no second source		inference for 2027/28; no second source exists yet

@@ -1,0 +1,133 @@
+id	field	first_value	second_value	third_url	decision	note
+wal-nir-irl-16	down	2 (pos 11,12)	3 (pos 10,11,12)	https://www.claudionicoletti.eu/tabelle/Euroleagues/IRL/ireland%20rep%202001-10.htm	second	2001-02 table: 9th Longford in the play-off, Drogheda promoted; the 2002-03 Premier table has 10 clubs and no Dundalk, Galway or Monaghan. Cut from 12 to 10 clubs by the rules.
+wal-nir-irl-17	clubs	10	9	https://www.stpatsfc.com/media.php?id=937	second	St Patrick's Athletic club news of 4 Jul 2001: St Francis resigned from the League before the season.
+wal-nir-irl-88	format	single-match knockout with replays in early rounds; extra time and penalties in replays (inference from round lists)	single-match knockout; drawn ties replayed up to and including the semi-finals; extra time and penalties in replays	https://www.claudionicoletti.eu/tabelle/Euroleagues/NIR/northern%20ireland%202001-10.htm	second	2004-05 Irish Cup: quarter-final replays (Ballymena v H&W Welders, Loughgall v Larne) and a semi-final replay (Glentoran v Portadown).
+wal-nir-irl-95	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	none	second	No third publisher found today for 2005. Read the primary record: the RSSSF tie lines show [aet] and [aet, n-n pen] (for example Limerick 2-2 Waterford aet, 1-4 pen). Same rule confirmed by third sources for 2006 and 2012 to 2019.
+wal-nir-irl-111	down	2 (pos 11,12)	RSSSF: Omagh Town closed, so 12th Ballymoney United stayed; only pos 11 Ballyclare Comrades relegated. First value 2 (pos 11,12)	none	first	No third publisher found. Primary record: the RSSSF 2006/07 Division One table lists neither Ballyclare Comrades nor Ballymoney United, so both went down. The RSSSF note on Omagh Town belongs to 2004/05 (Omagh folded June 2005).
+wal-nir-irl-116	playoffs	pos 11: relegation play-off	RSSSF: 11th Waterford v Dundalk play-off only set the placings; the FAI decided the 2007 places by licence. First value: relegation play-off	https://www.claudionicoletti.eu/tabelle/Euroleagues/IRL/ireland%20rep%202001-10.htm	first	The 11th v First Division play-off (Dundalk v Waterford United) was held as a promotion/relegation play-off. The FAI then set the 2007 places by licence assessment, which goes in notes under the new default.
+wal-nir-irl-120	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.rte.ie/sport/2006/0918/derrycity.html	second	RTE report of the 2006 final: normal and extra time failed to produce a goal, then a shoot-out.
+wal-nir-irl-142	up	0	1 (pos 1)	https://www.claudionicoletti.eu/tabelle/Euroleagues/IRL/ireland%20rep%202001-10.htm	second	2007: promoted Cobh Ramblers (champion) and Finn Harps (play-off winner v Waterford United).
+wal-nir-irl-142	playoffs	pos 1: European play-off; pos 2,3: promotion/relegation play-off	pos 2,3: promotion/relegation play-off	https://www.claudionicoletti.eu/tabelle/Euroleagues/IRL/ireland%20rep%202001-10.htm	second	Finn Harps won the play-off final against Waterford United. No European play-off listed.
+wal-nir-irl-145	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	none	second	No third publisher found today for 2007. Primary record: RSSSF tie lines show [aet] and [aet, n-n pen] (for example Bohemians 3-2 Cork City aet). Same rule confirmed for 2006 and 2012 to 2019.
+wal-nir-irl-160	down	2 (pos 15,16)	RSSSF: 5 relegated for the cut to 12 clubs (pos 5 Portadown, 11 Donegal Celtic, 13 Larne, 15 Limavady United, 16 Armagh City). First value 2 (pos 15,16)	https://en.wikipedia.org/wiki/2007%E2%80%9308_Irish_Premier_League	first	"No third publisher states the rule. Primary record (the season table notes): 11th and 13th are ""outside relegation zone"", 15th has ""relegation"". The other three exits came from the licence ranking (claudionicoletti.eu agrees on the five exits) and belong in notes."
+wal-nir-irl-161	up	1 (pos 4)	RSSSF: pos 3 Bangor promoted (only applicant). First value pos 4	https://www.claudionicoletti.eu/tabelle/Euroleagues/NIR/northern%20ireland%202001-10.htm	conflict	Third source confirms Bangor were promoted as the only second-level applicant, but gives no table position. RSSSF has Bangor 3rd (37 pts, Ballyclare 36), Wikipedia 4th. Promotion was by application, so the direct place by the rules is also unclear.
+wal-nir-irl-161	down	3 (pos 10,11,12)	RSSSF: pos 2 Dundela (failed criteria) and pos 10,11,12 relegated, 4 in all. First value 3 (pos 10,11,12)	none	first	Under the new default Dundela (2nd, failed the Championship criteria) goes in notes. Positions 10,11,12 are the places both sources mark. No third publisher found.
+wal-nir-irl-185	down	1 (pos 12)	RSSSF: pos 11 Bangor demoted (left the licensing scheme); pos 12 Dungannon Swifts went into the play-off and stayed. First value pos 12	https://www.claudionicoletti.eu/tabelle/Euroleagues/NIR/northern%20ireland%202001-10.htm	first	Third source: Bangor (11th) could not renew its licence; 12th Dungannon Swifts played the play-off v Donegal Celtic and stayed. By the rules 12th was the direct place. Bangor goes in notes.
+wal-nir-irl-185	playoffs	pos 11: promotion/relegation play-off	RSSSF: pos 12 Dungannon Swifts played the play-off in place of 11th Bangor. First value pos 11	https://www.claudionicoletti.eu/tabelle/Euroleagues/NIR/northern%20ireland%202001-10.htm	first	By the rules 11th played off. Dungannon (12th) took the play-off place because of Bangor's licence exit, which goes in notes.
+wal-nir-irl-192	playoffs	pos 2: promotion/relegation play-off	pos 2,3: promotion/relegation play-off; pos 12: relegation play-off v A Championship	https://www.claudionicoletti.eu/tabelle/Euroleagues/IRL/ireland%20rep%202001-10.htm	second	Third source: Shelbourne v Sporting Fingal play-off, winner v Bray Wanderers. The pos 12 Kildare County play-off rests on RSSSF only (no third publisher found).
+wal-nir-irl-195	clubs	24	29	https://www.betexplorer.com/football/ireland/league-cup-2009/results/	second	BetExplorer 2009: 2 preliminary ties (Kildrum Tigers, Mervue United new), 11 first-round ties (22 clubs), 5 clubs enter in round 2 (Bohemians, Waterford, Derry, Sligo, St Patrick's).
+wal-nir-irl-270	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.betexplorer.com/football/ireland/league-cup-2012/results/	second	"BetExplorer marks ties ""After Extra Time"" and ""After Penalties""."
+wal-nir-irl-295	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.betexplorer.com/football/ireland/league-cup-2013/results/	second	"BetExplorer marks ties ""After Extra Time"" and ""After Penalties""."
+wal-nir-irl-306	down	3 (pos 14,15,16)	RSSSF: 4 relegated (pos 13 Cwmbran Celtic, 14 Tata Steel, 15 Aberbargoed Buds, 16 West End); first value 3 (pos 14,15,16)	https://ie.soccerway.com/wales/division-1-2013-2014/standings/	first	Soccerway marks pos 14,15,16 as relegation places. Cwmbran Celtic (13th) is also missing from the 2014/15 table, so its exit was outside the rules (goes in notes).
+wal-nir-irl-316	playoffs	pos 11: European play-off	pos 11: relegation play-off	https://www.claudionicoletti.eu/tabelle/Euroleagues/IRL/ireland%20rep%202011-20.htm	second	2014: UCD (11th) lost the promotion/relegation final to Galway United 1-2, 0-3.
+wal-nir-irl-320	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.betexplorer.com/football/ireland/league-cup-2014/results/	second	"BetExplorer: Crumlin Utd 1-3 Drogheda and Shelbourne 2-5 Bray ""After Extra Time""."
+wal-nir-irl-345	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.betexplorer.com/football/ireland/league-cup-2015/results/	second	"BetExplorer marks ties ""After Extra Time"" and ""After Penalties""."
+wal-nir-irl-358	clubs	20	28	https://ie.soccerway.com/wales/league-cup-2015-2016/results/	second	Soccerway: 12 first-round ties (24 clubs), 8 second-round ties with 4 byes (TNS, Prestatyn, Port Talbot, Bala).
+wal-nir-irl-370	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.betexplorer.com/football/ireland/league-cup-2016/results/	second	"BetExplorer marks ties ""After Extra Time"" and ""After Penalties""."
+wal-nir-irl-386	split	none	after 22 matches, top six and bottom six play each other twice more (32 matches)	https://www.betexplorer.com/football/northern-ireland/nifl-championship-2016-2017/	second	BetExplorer lists a Promotion Group and a Relegation Group, last round 32.
+wal-nir-irl-395	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.betexplorer.com/football/ireland/league-cup-2017/results/	second	"BetExplorer: one tie ""After Extra Time"", others ""After Penalties""."
+wal-nir-irl-406	down	2 (pos 15,16)	RSSSF: pos 14 Monmouth Town and 15 Caerau (Ely) relegated (no Tier 2 certificate); 16th Ton Pentre stayed. First value pos 15,16	https://ie.soccerway.com/wales/division-1-2017-2018/standings/	conflict	Soccerway marks three relegation places (pos 14,15,16). RSSSF: 14th Monmouth and 15th Caerau (Ely) went down for no Tier 2 certificate and 16th Ton Pentre stayed (Soccerway 2018/19 still lists Ton Pentre). First value 2 (pos 15,16). By the rules the count is 2 or 3. No source states the rule.
+wal-nir-irl-411	playoffs	pos 2: promotion play-off; pos 11: relegation play-off	pos 2,3: promotion play-off; pos 11: relegation play-off	none	second	No third publisher found. Under the new default the places by the rules are pos 2,3, as in the 2016/17 and 2018/19 rows. The first source says 3rd H&W Welders did not apply for a licence, so 2nd Newry City went straight to the final. That goes in notes.
+wal-nir-irl-411	split	none	after 22 matches, top six and bottom six play each other twice more (32 matches)	https://www.betexplorer.com/football/northern-ireland/nifl-championship-2017-2018/	second	BetExplorer lists a Promotion Group and a Relegation Group, last round 32.
+wal-nir-irl-420	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.the42.ie/ea-sports-cup-wrap-3949320-Apr2018/	second	The42: St Patrick's Athletic 4-4 Dundalk went to extra time, then Dundalk won 8-7 on penalties.
+wal-nir-irl-436	split	none	after 22 matches, top six and bottom six play each other twice more (32 matches)	https://larnefc.com/post-split-fixture-news/	second	Larne FC, 9 Jan 2019: top six after 22 matches, then ten more league games. BetExplorer also lists the two groups.
+wal-nir-irl-445	format	single-match knockout; penalties if level	single-match knockout; extra time, then penalties if level	https://www.betexplorer.com/football/ireland/league-cup-2019/results/	second	"BetExplorer marks ties ""After Extra Time"" and ""After Penalties""."
+wal-nir-irl-456	down	3 (pos 6,15,16)	RSSSF: pos 14 Taffs Well, 15 Cwmamman United, 16 Caerau (Ely) relegated; first value pos 6,15,16 (6th is Llanelli Town). Note: Taffs Well is in the RSSSF 2021/22 Cymru South table	https://ie.soccerway.com/wales/cymru-south-2019-2020/standings/	conflict	Three sources, three answers. Season cut short (COVID-19), final order by points per game. Soccerway marks STM Sports and Cwmamman United as relegated. RSSSF marks 14th Taffs Well, 15th and 16th. Taffs Well and Llanelli Town are both in the 2021/22 Cymru South (Soccerway), and STM Sports, Cwmamman and Caerau (Ely) are not. No source states the relegation places by the rules.
+wal-nir-irl-470	format	abandoned after the first round (COVID-19)	abandoned during the opening round (COVID-19); 4 of 6 ties played	https://www.betexplorer.com/football/ireland/league-cup-2020/results/	second	BetExplorer: 4 ties played 8-10 Mar 2020; Drogheda v UCD and Longford v Cockhill Celtic cancelled.
+wal-nir-irl-488	clubs	26	RSSSF: 16 first-round ties (32 clubs), 6 of them awarded as walkovers. First value 26	https://ie.soccerway.com/northern-ireland/irish-cup-2020-2021/results/	conflict	Question of reading. Soccerway: 16 first-round ties (32 clubs in the draw), 6 of them walkovers, so 26 clubs played. Entrants 32 or clubs that played 26.
+wal-nir-irl-494	format	single-match knockout; extra time and penalties; no replays (inference from round lists)	single-match knockout; drawn ties replayed; extra time and penalties in a replay	https://www.betexplorer.com/football/ireland/fai-cup-2021/results/	second	BetExplorer: Finn Harps 3-3 Dundalk (17 Sep 2021), then Dundalk 3-1 Finn Harps AET (21 Sep 2021).
+wal-nir-irl-511	split	none	top six and bottom six groups after the first stage	https://www.betexplorer.com/football/northern-ireland/nifl-championship-2021-2022/	second	BetExplorer lists a Promotion Group and a Relegation Group. Match count not confirmed.
+wal-nir-irl-536	split	none	after 33 matches, top six and bottom six play each other once more (38 matches)	https://www.newsletter.co.uk/sport/football/nifl-confirm-post-split-fixture-schedule-for-lough41-championship-4089305	second	News Letter, 2 Apr 2023: split into two sections after 33 rounds, each group plays each other once more, rounds 34 to 38.
+wal-nir-irl-561	split	none	after 33 matches, top six and bottom six play each other once more (38 matches)	https://www.betexplorer.com/football/northern-ireland/nifl-championship-2023-2024/	second	BetExplorer lists a Promotion Group and a Relegation Group, last round 38.
+wal-nir-irl-6	clubs	unknown	19	https://www.rsssf.org/tablesw/wal02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-6	up	unknown	1 (pos 1; needs a Welsh Premier licence; inference)	https://www.rsssf.org/tablesw/wal02.html	accept	Accepted. Up set to the direct place by the rules (new default); actual outcome moved to notes.
+wal-nir-irl-6	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-6	split	unknown	none	https://www.rsssf.org/tablesw/wal02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-7	format	single-match knockout; replay rule unknown	single-match knockout; extra time and penalties if level after 90 minutes; no replays	https://www.rsssf.org/tablesw/wal02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-8	format	held (final listed); format unknown	six regional groups of three; group winners and two best runners-up to single-leg quarter-finals (replay if level after 90 min); two-legged semi-finals; final at a neutral venue	https://www.rsssf.org/tablesw/wal02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-12	clubs	unknown	13	https://www.rsssf.org/tablesn/nil02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-12	split	unknown	none	https://www.rsssf.org/tablesn/nil02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-20	format	held; format unknown	first round, intermediate round, quarter-finals, semi-finals, two-legged final	https://www.rsssf.org/tablesi/ier02.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-31	clubs	unknown	18	https://www.rsssf.org/tablesw/wal03.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-31	up	unknown	1 (pos 1; needs a Welsh Premier licence; inference)	https://www.rsssf.org/tablesw/wal03.html	accept	Accepted. Up set to the direct place by the rules (new default); actual outcome moved to notes.
+wal-nir-irl-31	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal03.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-31	split	unknown	none	https://www.rsssf.org/tablesw/wal03.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-32	format	single-match knockout; final decided on penalties after extra time; replay rule unknown	single-match knockout; extra time and penalties if level; no replays (inference from RSSSF round lists)	https://www.rsssf.org/tablesw/wal03.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-33	format	held (final listed); format unknown	two-legged preliminary and first rounds, second round, two-legged semi-finals, final	https://www.rsssf.org/tablesw/wal03.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-37	clubs	unknown	16	https://www.rsssf.org/tablesn/nil03.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-37	up	unknown	8 (pos 1-8; league restructure)	https://www.rsssf.org/tablesn/nil03.html	accept	Accepted (RSSSF season table).
+wal-nir-irl-37	split	unknown	none	https://www.rsssf.org/tablesn/nil03.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-44	clubs	unknown	about 41 entrants for the 2003 cup (inference from RSSSF round lists; the 2002-03 cup about 42)	https://www.rsssf.org/tablesi/ier03a.html	reject	"Value is an estimate (""about 41"") from incomplete round lists, not a count the page gives. Field stays unknown."
+wal-nir-irl-56	clubs	unknown	18	https://www.rsssf.org/tablesw/wal04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-56	up	unknown	1 (pos 1)	https://www.rsssf.org/tablesw/wal04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-56	down	unknown	3 (pos 16,17,18)	https://www.rsssf.org/tablesw/wal04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-56	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-56	split	unknown	none	https://www.rsssf.org/tablesw/wal04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-57	format	single-match knockout; replay rule unknown	single-match knockout; extra time and penalties if level; no replays (inference from RSSSF round lists)	https://www.rsssf.org/tablesw/wal04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-58	format	held (final listed); format unknown	two-legged preliminary and first rounds, second round, semi-finals, final	https://www.rsssf.org/tablesw/wal04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-62	clubs	unknown	12	https://www.rsssf.org/tablesn/nil04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-62	up	unknown	2 (pos 1,2)	https://www.rsssf.org/tablesn/nil04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-62	playoffs	unknown	pos 12: relegation play-off	https://www.rsssf.org/tablesn/nil04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-62	split	unknown	none	https://www.rsssf.org/tablesn/nil04.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-81	clubs	unknown	18	https://www.rsssf.org/tablesw/wal05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-81	up	unknown	1 (pos 1)	https://www.rsssf.org/tablesw/wal05.html	accept	Accepted. Up set to the direct place by the rules (new default); actual outcome moved to notes.
+wal-nir-irl-81	down	unknown	2 (pos 17,18)	https://www.rsssf.org/tablesw/wal05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-81	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-81	split	unknown	none	https://www.rsssf.org/tablesw/wal05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-87	clubs	unknown	12	https://www.rsssf.org/tablesn/nil05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-87	up	unknown	2 (pos 1,2)	https://www.rsssf.org/tablesn/nil05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-87	split	unknown	none	https://www.rsssf.org/tablesn/nil05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-95	clubs	unknown	23 (inference from RSSSF round list)	https://www.rsssf.org/tablesi/ier05.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-106	clubs	unknown	18	https://www.rsssf.org/tablesw/wal06.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-106	up	unknown	1 (pos 1; needs a Welsh Premier licence; inference)	https://www.rsssf.org/tablesw/wal06.html	accept	Accepted. Up set to the direct place by the rules (new default); actual outcome moved to notes.
+wal-nir-irl-106	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal06.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-106	split	unknown	none	https://www.rsssf.org/tablesw/wal06.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-112	clubs	unknown	11	https://www.rsssf.org/tablesn/nil06.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-112	up	unknown	2 (pos 1,2)	https://www.rsssf.org/tablesn/nil06.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-112	split	unknown	none	https://www.rsssf.org/tablesn/nil06.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-120	clubs	unknown	24 (inference from RSSSF round list)	https://www.rsssf.org/tablesi/ier06.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-131	clubs	unknown	19	https://www.rsssf.org/tablesw/wal07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-131	up	unknown	1 (pos 1)	https://www.rsssf.org/tablesw/wal07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-131	down	unknown	3 (pos 17,18,19)	https://www.rsssf.org/tablesw/wal07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-131	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-131	split	unknown	none	https://www.rsssf.org/tablesw/wal07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-137	clubs	unknown	12	https://www.rsssf.org/tablesn/nil07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-137	up	unknown	2 (pos 1,2)	https://www.rsssf.org/tablesn/nil07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-137	split	unknown	none	https://www.rsssf.org/tablesn/nil07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-144	clubs	unknown	42 (inference from RSSSF round list)	https://www.rsssf.org/tablesi/ier07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-145	clubs	unknown	25 (inference from RSSSF round list)	https://www.rsssf.org/tablesi/ier07.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-156	clubs	unknown	18	https://www.rsssf.org/tablesw/wal08.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-156	up	unknown	1 (pos 1; needs a Welsh Premier licence; inference)	https://www.rsssf.org/tablesw/wal08.html	accept	Accepted. Up set to the direct place by the rules (new default); actual outcome moved to notes.
+wal-nir-irl-156	down	unknown	3 (pos 16,17,18)	https://www.rsssf.org/tablesw/wal08.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-156	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal08.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-156	split	unknown	none	https://www.rsssf.org/tablesw/wal08.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-162	clubs	unknown	12	https://www.rsssf.org/tablesn/nil08.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-162	up	unknown	4 (pos 1-4)	https://www.rsssf.org/tablesn/nil08.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-162	split	unknown	none	https://www.rsssf.org/tablesn/nil08.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-181	clubs	unknown	18	https://www.rsssf.org/tablesw/wal09.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-181	up	unknown	1 (pos 1; needs a Welsh Premier licence; inference)	https://www.rsssf.org/tablesw/wal09.html	accept	Accepted. Up set to the direct place by the rules (new default); actual outcome moved to notes.
+wal-nir-irl-181	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal09.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-181	split	unknown	none	https://www.rsssf.org/tablesw/wal09.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-187	clubs	unknown	12	https://www.rsssf.org/tablesn/nil09.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-187	split	unknown	none	https://www.rsssf.org/tablesn/nil09.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-193	playoffs	unknown	promotion/relegation play-off v the First Division 12th (Kildare County); A Championship place unknown	https://www.rsssf.org/tablesi/ier09.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-314	clubs	unknown	42	https://www.rsssf.org/tablesn/nil2014.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-339	clubs	unknown	41	https://www.rsssf.org/tablesn/nil2015.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-355	clubs	unknown	16	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-355	up	unknown	1 (pos 1)	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted. Up set to the direct place by the rules (new default); actual outcome moved to notes.
+wal-nir-irl-355	down	unknown	1 (pos 16)	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-355	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-355	split	unknown	none	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-356	clubs	unknown	16	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-356	up	unknown	1 (pos 1)	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-356	down	unknown	4 (pos 13,14,15,16)	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-356	playoffs	unknown	none	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-356	split	unknown	none	https://www.rsssf.org/tablesw/wal2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-364	clubs	unknown	40	https://www.rsssf.org/tablesn/nil2016.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-389	clubs	unknown	36	https://www.rsssf.org/tablesn/nil2017.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-394	clubs	unknown	40 (inference from RSSSF round list)	https://www.rsssf.org/tablesi/ier2017.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-414	clubs	unknown	36	https://www.rsssf.org/tablesn/nil2018.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-419	clubs	unknown	40 (inference from RSSSF round list)	https://www.rsssf.org/tablesi/ier2018.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-439	clubs	unknown	36	https://www.rsssf.org/tablesn/nil2019.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-464	clubs	unknown	36	https://www.rsssf.org/tablesn/nil2020.html	accept	Accepted (RSSSF season page).
+wal-nir-irl-589	clubs	unknown	38	https://www.rsssf.org/tablesn/nil2025.html	accept	Accepted (RSSSF season page).

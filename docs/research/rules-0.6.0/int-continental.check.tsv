@@ -1,0 +1,626 @@
+id	field	verdict	second_url	note
+int-continental-1	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-2	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-3	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-4	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-5	name	agree	https://www.rsssf.org/tables/02gc.html	RSSSF title "Gold Cup 2002".
+int-continental-5	clubs	agree	https://www.rsssf.org/tables/02gc.html	10 participants plus 2 invited teams = 12.
+int-continental-5	format	disagree	https://www.rsssf.org/tables/02gc.html	Host USA, 18 Jan to 2 Feb 2002, 4 groups of 3, golden goal ([asdet], Costa Rica 2-1 Haiti, winner 97 min) agree. RSSSF also lists a third place match (2 Feb, Canada 2-1 South Korea), which the first row omits.
+int-continental-5	notes	agree	https://www.rsssf.org/tables/02gc.html	UNCAF Cup and Copa Caribe qualifiers, Cuba by play-off, guests Ecuador and South Korea agree. The July-August 2001 dates are not on the second page.
+int-continental-6	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-7	name	agree	https://www.rsssf.org/tables/02a.html	RSSSF: "African Nations Cup 2002".
+int-continental-7	clubs	agree	https://www.rsssf.org/tables/02a.html	
+int-continental-7	format	found	http://www.the-shot.com/africa/african-nations-cup-2002/matches/semi-finals/nigeria-senegal.html	Host Mali, 19 Jan to 10 Feb 2002, 4 groups, QF, SF, third place, final agree (https://www.rsssf.org/tables/02a.html). Golden goal found: no golden goal. In the Nigeria v Senegal semi-final, Senegal scored at 97 min (1:2) and play went on: "halftime extratime 1:2", a Nigerian penalty at 110, two red cards, "120+2 ... final score 1:2".
+int-continental-7	notes	agree	https://www.rsssf.org/tables/02a.html	"Cameroon qualified as holders. Mali as hosts." Qualifying detail not checked.
+int-continental-8	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-9	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-10	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-11	name	agree	https://www.rsssf.org/tables/2001safull.html	
+int-continental-11	clubs	agree	https://www.rsssf.org/tables/2001safull.html	Groups A to C of 4.
+int-continental-11	format	agree	https://www.rsssf.org/tables/2001safull.html	"Colombia July 11-29"; QF, SF, third place, final. Third place Honduras 2:2 Uruguay "p 5-4" with no extra time, which supports the inference.
+int-continental-11	notes	agree	https://www.rsssf.org/tables/2001safull.html	"Canada withdrew on Jul 6 and Argentina on Jul 10, Costa Rica and Honduras were invited instead"; Mexico invited.
+int-continental-12	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-13	name	agree	https://www.rsssf.org/tables/04e.html	
+int-continental-13	clubs	agree	https://www.rsssf.org/tables/04e.html	10 group tables of 5 = 50.
+int-continental-13	playoffs	agree	https://www.rsssf.org/tables/04e.html	5 two-legged play-offs, 15 and 19 November 2003.
+int-continental-13	format	agree	https://www.rsssf.org/tables/04e.html	10 groups of 5, first match 7 Sep 2002, last group match 11 Oct 2003.
+int-continental-13	notes	agree	https://www.rsssf.org/tables/04e.html	"Portugal qualified as hosts."
+int-continental-14	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-15	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-16	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-17	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-18	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-19	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-20	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-21	name	agree	https://www.rsssf.org/tables/02oc.html	
+int-continental-21	clubs	agree	https://www.rsssf.org/tables/02oc.html	"Eight teams participated".
+int-continental-21	format	disagree	https://www.rsssf.org/tables/02oc.html	Auckland, New Zealand; matches 5 to 14 July 2002 (header says "July 5 to 15"); 2 groups of 4; golden goal agrees (Australia 2-1 Tahiti "(asdet)"). RSSSF also lists a third place match (14 Jul, Tahiti 1-0 Vanuatu), which the first row omits.
+int-continental-21	notes	agree	https://www.rsssf.org/tables/02oc.html	Teams ranked 7 to 12 in a round-robin qualifying tournament in Apia (Cook Islands withdrew); winner and runner-up advance.
+int-continental-22	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-23	name	agree	https://www.rsssf.org/tables/04e.html	
+int-continental-23	clubs	agree	https://www.rsssf.org/tables/04e.html	16 participants listed.
+int-continental-23	format	agree	https://www.rsssf.org/tables/04e.html	Portugal, 12 June to 4 July 2004, groups A to D of 4, QF, SF, final. Silver goal: RSSSF marks [a2het]/[a1het]; Greece won the semi-final with a goal at 105+1 and the match ended there.
+int-continental-23	notes	agree	https://www.rsssf.org/tables/04e.html	
+int-continental-24	name	agree	https://www.rsssf.org/tables/04e.html	
+int-continental-24	clubs	agree	https://www.rsssf.org/tables/04e.html	
+int-continental-24	playoffs	agree	https://www.rsssf.org/tables/04e.html	
+int-continental-24	format	agree	https://www.rsssf.org/tables/04e.html	
+int-continental-24	notes	agree	https://www.rsssf.org/tables/04e.html	Play-offs 15 and 19 November 2003.
+int-continental-25	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-26	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-27	name	agree	https://www.rsssf.org/tables/03gc.html	
+int-continental-27	clubs	agree	https://www.rsssf.org/tables/03gc.html	9 qualifiers plus guests Brazil and Colombia = 12.
+int-continental-27	format	disagree	https://www.rsssf.org/tables/03gc.html	Hosts Mexico (Ciudad de Mexico) and USA, 12 to 27 July, 4 groups of 3, golden goal ([asdet], final won 97 min) agree. RSSSF also lists a third place match (26 Jul, USA 3-2 Costa Rica), which the first row omits.
+int-continental-27	notes	agree	https://www.rsssf.org/tables/03gc.html	Guests Brazil (U-23) and Colombia agree.
+int-continental-28	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-29	name	agree	https://www.rsssf.org/tables/04a.html	
+int-continental-29	clubs	agree	https://www.rsssf.org/tables/04a.html	
+int-continental-29	format	agree	https://www.rsssf.org/tables/04a.html	Tunisia, 24 Jan (Tunisia 2-1 Rwanda) to 14 Feb 2004, QF, SF, third place, final. The golden goal point rests on the same publisher as the first row (RSSSF), so it has no independent second source here.
+int-continental-29	notes	agree	https://www.rsssf.org/tables/04a.html	"Cameroon qualified as holders. Tunisia as hosts." Qualifying dates not checked.
+int-continental-30	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-31	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-32	name	agree	https://www.rsssf.org/tables/04oc.html	
+int-continental-32	clubs	agree	https://www.rsssf.org/tables/04oc.html	Second round of 6.
+int-continental-32	format	agree	https://www.rsssf.org/tables/04oc.html	Second round in Adelaide, Australia, 29 May to 6 June 2004; top two to a two-legged "Championship Playoff" (9 and 12 Oct 2004).
+int-continental-32	notes	agree	https://www.rsssf.org/tables/04oc.html	"Australia and New Zealand bye to Second Round"; "First and Second Round are also part of 2006 World Cup qualifying."
+int-continental-33	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-34	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-35	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-36	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-37	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-38	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-39	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-40	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-41	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-42	name	agree	https://www.rsssf.org/tables/04asch.html	RSSSF: "Asian Nations Cup 2004".
+int-continental-42	clubs	agree	https://www.rsssf.org/tables/04asch.html	4 groups of 4.
+int-continental-42	format	disagree	https://www.rsssf.org/tables/04asch.html	China, 17 July to 7 Aug 2004, QF, SF, final agree. RSSSF also lists a third place match (6 Aug, Beijing, Iran 4-2 Bahrain), which the first row omits. Golden goal not found: the only extra-time goal (Japan 4-3 Bahrain, Tamada 93) fits both rules; reports (https://www.taipeitimes.com/News/sport/archives/2004/08/05/2003181854) do not say.
+int-continental-42	notes	agree	https://www.rsssf.org/tables/04asch.html	"China (hosts) and Japan (holders) qualified automatically"; preliminary round from 21 Mar 2003.
+int-continental-43	name	agree	https://www.rsssf.org/tables/04oc.html	
+int-continental-43	clubs	agree	https://www.rsssf.org/tables/04oc.html	
+int-continental-43	format	agree	https://www.rsssf.org/tables/04oc.html	Solomon Islands 1-5 Australia (9 Oct, Honiara), Australia 6-0 Solomon Islands (12 Oct, Sydney).
+int-continental-44	name	agree	https://www.rsssf.org/tables/2004safull.html	
+int-continental-44	clubs	agree	https://www.rsssf.org/tables/2004safull.html	
+int-continental-44	format	agree	https://www.rsssf.org/tables/2004safull.html	"Peru July 6-25"; final ARG - BRA 2:2 "p 2-4" and semi URU - BRA 1:1 "p 3-5" with no extra time.
+int-continental-44	notes	agree	https://www.rsssf.org/tables/2004safull.html	"Costa Rica and Mexico invited."
+int-continental-45	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-46	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-47	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-48	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-49	name	agree	https://www.rsssf.org/tables/05gc.html	
+int-continental-49	clubs	agree	https://www.rsssf.org/tables/05gc.html	
+int-continental-49	format	agree	https://www.rsssf.org/tables/05gc.html	6 to 24 July, US venues, 3 groups of 4, QF, SF, final (no third place), knockout ties marked [aet] not golden goal.
+int-continental-49	notes	agree	https://www.rsssf.org/tables/05gc.html	Guests South Africa and Colombia agree. "Last edition with guests until 2021" is not on the second page.
+int-continental-50	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-51	name	agree	https://www.rsssf.org/tables/06a.html	
+int-continental-51	clubs	agree	https://www.rsssf.org/tables/06a.html	
+int-continental-51	format	agree	https://www.rsssf.org/tables/06a.html	Egypt, 20 Jan to 10 Feb 2006, QF, SF, third place, final; ties [aet] then pen. Golden goal not marked.
+int-continental-51	notes	agree	https://www.rsssf.org/tables/06a.html	"Top-3 of each group qualify ... (top-4 of group 3 which contains hosts Egypt)"; doubles as World Cup qualifying.
+int-continental-52	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-53	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-54	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-55	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-56	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-57	name	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-57	clubs	agree	https://www.rsssf.org/tables/08e.html	Group 1 has 8 teams, groups 2 to 7 have 7 teams = 50.
+int-continental-57	playoffs	agree	https://www.rsssf.org/tables/08e.html	No play-off section on the page.
+int-continental-57	format	agree	https://www.rsssf.org/tables/08e.html	7 groups; first match 16 Aug 2006, last 24 Nov 2007 (RSSSF prints 24-11-07; the first row says November 2007).
+int-continental-57	notes	found	https://www.rsssf.org/tables/08e.html	Group sizes: group 1 (later called A) 8 teams, groups 2 to 7 7 teams each. Hosts: "Austria and Switzerland qualified as hosts" agrees.
+int-continental-58	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-59	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-60	name	agree	https://www.rsssf.org/tables/07gc.html	
+int-continental-60	clubs	agree	https://www.rsssf.org/tables/07gc.html	
+int-continental-60	format	agree	https://www.rsssf.org/tables/07gc.html	6 to 24 June, US venues, 3 groups of 4, QF, SF, final. Costa Rica 0-1 Mexico marked [aet], no golden goal mark.
+int-continental-60	notes	agree	https://www.rsssf.org/tables/07gc.html	No guests (Canada, Mexico, USA plus zone qualifiers).
+int-continental-61	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-62	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-63	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-64	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-65	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-66	name	agree	https://www.rsssf.org/tables/2007safull.html	
+int-continental-66	clubs	agree	https://www.rsssf.org/tables/2007safull.html	
+int-continental-66	format	agree	https://www.rsssf.org/tables/2007safull.html	"Venezuela June 26-July 15"; Brazil 2-2 Uruguay semi-final, "Brazil won 5-4 on penalties", no extra time noted.
+int-continental-66	notes	agree	https://www.rsssf.org/tables/2007safull.html	"Mexico and USA invited."
+int-continental-67	name	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-67	clubs	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-67	format	agree	https://www.rsssf.org/tables/08e.html	"June 7 - June 29, 2008", Austria and Switzerland, groups A to D, QF, SF, final. Netherlands 1-3 Russia [aet] (two extra-time goals, no golden or silver goal).
+int-continental-67	notes	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-68	name	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-68	clubs	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-68	playoffs	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-68	format	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-68	notes	agree	https://www.rsssf.org/tables/08e.html	
+int-continental-69	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-70	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-71	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-72	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-73	name	agree	https://www.rsssf.org/tables/08a.html	
+int-continental-73	clubs	agree	https://www.rsssf.org/tables/08a.html	
+int-continental-73	format	agree	https://www.rsssf.org/tables/08a.html	Ghana, 20 Jan to 10 Feb 2008, QF, SF, third place, final.
+int-continental-73	notes	agree	https://www.rsssf.org/tables/08a.html	"all group winners qualify; also the 3 best runners-up"; "Ghana qualified as hosts"; first qualifier 2 Sep 2006.
+int-continental-74	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-75	name	agree	https://www.rsssf.org/tables/07asch.html	
+int-continental-75	clubs	agree	https://www.rsssf.org/tables/07asch.html	
+int-continental-75	format	disagree	https://www.rsssf.org/tables/07asch.html	Four hosts, 7 to 29 July 2007, 4 groups of 4, QF, SF, final agree. RSSSF also lists a third place match (28 Jul, South Korea 0-0 Japan aet, 6-5 pen), which the first row omits.
+int-continental-75	notes	agree	https://www.rsssf.org/tables/07asch.html	"Indonesia, Malaysia, Thailand and Vietnam (the four hosts) qualified automatically"; holders Japan played qualifying.
+int-continental-76	name	agree	https://www.rsssf.org/tables/08oc.html	
+int-continental-76	clubs	agree	https://www.rsssf.org/tables/08oc.html	New Zealand plus the top three of the 2007 South Pacific Games.
+int-continental-76	format	agree	https://www.rsssf.org/tables/08oc.html	Home-and-away round-robin of 4, 17 Oct 2007 to 19 Nov 2008.
+int-continental-76	notes	agree	https://www.rsssf.org/tables/08oc.html	"doubles as Oceania's 2010 World Cup qualifying section". Australia leaving OFC is not on the second page.
+int-continental-77	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-78	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-79	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-80	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-81	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-82	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-83	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-84	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-85	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-86	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-87	name	agree	https://www.rsssf.org/tables/08oc.html	
+int-continental-87	clubs	agree	https://www.rsssf.org/tables/08oc.html	
+int-continental-87	format	agree	https://www.rsssf.org/tables/08oc.html	Last match 19 Nov 2008 (New Zealand 0-2 Fiji).
+int-continental-87	notes	agree	https://www.rsssf.org/tables/08oc.html	
+int-continental-88	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-89	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-90	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-91	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-92	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-93	name	agree	https://www.rsssf.org/tables/09gc.html	
+int-continental-93	clubs	agree	https://www.rsssf.org/tables/09gc.html	
+int-continental-93	format	agree	https://www.rsssf.org/tables/09gc.html	3 to 26 July, US venues, 3 groups of 4, QF, SF, final. USA 2-1 Panama marked [aet] (RSSSF marks golden goals as [asdet] in 2002 and 2003).
+int-continental-93	notes	agree	https://www.rsssf.org/tables/09gc.html	Caribbean zone 2008 and Central American zone 2009, no guests.
+int-continental-94	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-95	name	agree	https://www.rsssf.org/tables/2010a.html	
+int-continental-95	clubs	agree	https://www.rsssf.org/tables/2010a.html	"Togo withdrew" after the bus attack.
+int-continental-95	format	agree	https://www.rsssf.org/tables/2010a.html	Angola, 10 to 31 Jan 2010, QF, SF, third place, final. Egypt 3-1 Cameroon [aet].
+int-continental-95	notes	agree	https://www.rsssf.org/tables/2010a.html	"the qualifying tournament doubled as qualifying tournament for the" World Cup.
+int-continental-96	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-97	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-98	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-99	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-100	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-101	name	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-101	clubs	agree	https://www.rsssf.org/tables/2012e.html	6 groups of 6 and 3 groups of 5 = 51.
+int-continental-101	playoffs	agree	https://www.rsssf.org/tables/2012e.html	4 two-legged ties, 11 and 15 November 2011. The tie-break rule (away goals then penalties) is not on the second page.
+int-continental-101	format	disagree	https://www.rsssf.org/tables/2012e.html	First row: "August 2010 to November 2011". RSSSF: first qualifying match 3 Sep 2010 (Kazakhstan v Turkey, Belgium v Germany). 9 groups agree.
+int-continental-101	notes	agree	https://www.rsssf.org/tables/2012e.html	"Poland and Ukraine qualified as hosts."
+int-continental-102	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-103	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-104	name	agree	https://www.rsssf.org/tables/2011gc.html	
+int-continental-104	clubs	agree	https://www.rsssf.org/tables/2011gc.html	
+int-continental-104	format	agree	https://www.rsssf.org/tables/2011gc.html	5 to 25 June, US venues, 3 groups of 4, QF, SF, final. Semi-final Honduras 0-2 Mexico aet with goals at 93 and 99: no golden goal.
+int-continental-104	notes	agree	https://www.rsssf.org/tables/2011gc.html	No guests agree. "Winner to 2013 Confederations Cup" is not on the second page.
+int-continental-105	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-106	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-107	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-108	name	agree	https://www.rsssf.org/tables/11asch.html	
+int-continental-108	clubs	agree	https://www.rsssf.org/tables/11asch.html	
+int-continental-108	format	disagree	https://www.rsssf.org/tables/11asch.html	"Qatar, Jan 7-29 2011", QF, SF, final agree. RSSSF also lists a third place match (28 Jan, Uzbekistan 2-3 South Korea), which the first row omits.
+int-continental-108	notes	agree	https://www.rsssf.org/tables/11asch.html	"6 teams qualified directly": Qatar (hosts), Iraq, Saudi Arabia, South Korea (top 3 of 2007), India (2008 Challenge Cup), North Korea (2010 Challenge Cup).
+int-continental-109	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-110	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-111	name	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-111	clubs	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-111	format	agree	https://www.rsssf.org/tables/2012e.html	"June 8 - July 1, 2012", Poland and Ukraine, QF, SF, final; England 0-0 Italy [aet, 2-4 pen].
+int-continental-111	notes	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-112	name	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-112	clubs	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-112	playoffs	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-112	format	disagree	https://www.rsssf.org/tables/2012e.html	Same as int-continental-101: qualifying started 3 Sep 2010, not August 2010.
+int-continental-112	notes	agree	https://www.rsssf.org/tables/2012e.html	
+int-continental-113	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-114	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-115	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-116	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-117	name	agree	https://www.rsssf.org/tables/2012a.html	
+int-continental-117	clubs	agree	https://www.rsssf.org/tables/2012a.html	
+int-continental-117	format	agree	https://www.rsssf.org/tables/2012a.html	Equatorial Guinea and Gabon, 21 Jan to 12 Feb 2012, final Zambia 0-0 Ivory Coast [aet, 8-7 pen].
+int-continental-117	notes	agree	https://www.rsssf.org/tables/2012a.html	"Gabon and Equatorial Guinea qualified as hosts".
+int-continental-118	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-119	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-120	name	agree	https://www.rsssf.org/tables/2012oc.html	
+int-continental-120	clubs	agree	https://www.rsssf.org/tables/2012oc.html	
+int-continental-120	format	disagree	https://www.rsssf.org/tables/2012oc.html	"[Solomon Islands, 1-10 June 2012]", 2 groups of 4, semi-finals, final agree. RSSSF also lists a third place match (10 Jun, Solomon Islands 3-4 New Zealand), which the first row omits.
+int-continental-120	notes	agree	https://www.rsssf.org/tables/2012oc.html	Qualifying in Apia, Samoa, 22 to 26 Nov 2011, 4 teams, winner Samoa.
+int-continental-121	name	agree	https://www.rsssf.org/tables/2011safull.html	
+int-continental-121	clubs	agree	https://www.rsssf.org/tables/2011safull.html	
+int-continental-121	format	agree	https://www.rsssf.org/tables/2011safull.html	"Argentina July 1-24"; QF Colombia 0-2 Peru [aet], Argentina 1-1 Uruguay [aet] then penalties.
+int-continental-121	notes	agree	https://www.rsssf.org/tables/2011safull.html	"Japan and Mexico invited. Japan later withdrew ... Costa Rica named as their replacement."
+int-continental-122	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-123	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-124	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-125	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-126	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-127	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-128	name	agree	https://www.rsssf.org/tables/2013a.html	
+int-continental-128	clubs	agree	https://www.rsssf.org/tables/2013a.html	
+int-continental-128	format	agree	https://www.rsssf.org/tables/2013a.html	"Final Tournament, held in South Africa"; matches 19/01/2013 to 10/02/2013; QF, SF, third place, final; "won ... on penalties, after extra time".
+int-continental-128	notes	agree	https://www.rsssf.org/tables/2013a.html	"South Africa qualified as host." The count of 47 entrants is not checked.
+int-continental-129	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-130	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-131	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-132	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-133	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-134	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-135	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-136	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-137	name	agree	https://www.rsssf.org/tables/2013gc.html	
+int-continental-137	clubs	agree	https://www.rsssf.org/tables/2013gc.html	
+int-continental-137	format	agree	https://www.rsssf.org/tables/2013gc.html	7 to 28 July (RSSSF prints one group B date as "Jun 8", a typo), US venues, 3 groups of 4, QF, SF, final.
+int-continental-137	notes	agree	https://www.rsssf.org/tables/2013gc.html	RSSSF NB: USA qualified for the 2015 CONCACAF Cup play-off.
+int-continental-138	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-139	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-140	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-141	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-142	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-143	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-144	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-145	name	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-145	clubs	agree	https://www.rsssf.org/tables/2016e.html	8 groups of 6 and 1 of 5 = 53.
+int-continental-145	playoffs	agree	https://www.rsssf.org/tables/2016e.html	"Turkey qualified directly; the other countries play off for the final four spots." 4 ties, 12 to 17 Nov 2015.
+int-continental-145	format	agree	https://www.rsssf.org/tables/2016e.html	First match 7 Sep 2014.
+int-continental-145	notes	agree	https://www.rsssf.org/tables/2016e.html	"France qualify as hosts."
+int-continental-146	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-147	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-148	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-149	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-150	name	agree	https://www.rsssf.org/tables/2015a.html	
+int-continental-150	clubs	agree	https://www.rsssf.org/tables/2015a.html	
+int-continental-150	format	agree	https://www.rsssf.org/tables/2015a.html	Equatorial Guinea, 17 Jan to 8 Feb 2015, QF, SF, third place, final.
+int-continental-150	notes	agree	https://www.rsssf.org/tables/2015a.html	"Morocco were the original hosts but were disqualified"; qualifying round then 7 groups.
+int-continental-151	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-152	name	agree	https://www.rsssf.org/tables/2015asch.html	
+int-continental-152	clubs	agree	https://www.rsssf.org/tables/2015asch.html	
+int-continental-152	format	disagree	https://www.rsssf.org/tables/2015asch.html	"Australia, 9-31 January, 2015" agrees. First row: "final extra time; three substitutes". RSSSF shows extra time in the quarter-finals too (South Korea 2-0 Uzbekistan [aet], Iran 3-3 Iraq [aet, 6-7 pen]) and a third place match (30 Jan, Newcastle, Iraq 2-3 UAE), which the first row omits.
+int-continental-152	notes	agree	https://www.rsssf.org/tables/2015asch.html	Five direct places (Japan, Australia, South Korea, North Korea as 2012 Challenge Cup winners, Palestine) and "The best third placed team qualified".
+int-continental-153	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-154	name	agree	https://www.rsssf.org/tables/2015sa.html	
+int-continental-154	clubs	agree	https://www.rsssf.org/tables/2015sa.html	
+int-continental-154	format	agree	https://www.rsssf.org/tables/2015sa.html	"Held in Chile, June 11-July 4, 2015"; QF Argentina 0-0 Colombia [5-4 pen] without [aet]; final [aet, 4-1 pen].
+int-continental-154	notes	no second source	https://www.rsssf.org/tables/2015sa.html	Guests not checked on the second page.
+int-continental-155	name	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-155	clubs	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-155	format	agree	https://www.rsssf.org/tables/2016e.html	"June 10 - July 10, 2016", France, 6 groups, 1/8 finals, QF, SF, final; ties [aet] then pen.
+int-continental-155	notes	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-156	name	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-156	clubs	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-156	playoffs	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-156	format	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-156	notes	agree	https://www.rsssf.org/tables/2016e.html	
+int-continental-157	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-158	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-159	name	agree	https://www.rsssf.org/tables/2015gc.html	
+int-continental-159	clubs	agree	https://www.rsssf.org/tables/2015gc.html	
+int-continental-159	format	disagree	https://www.rsssf.org/tables/2015gc.html	Hosts Canada and USA, 7 to 26 July, 3 groups of 4 agree. RSSSF also lists a third place match (25 Jul, Philadelphia, USA 1-1 Panama aet, 2-3 pen), which the first row omits.
+int-continental-159	notes	agree	https://www.rsssf.org/tables/2015gc.html	No guests.
+int-continental-160	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-161	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-162	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-163	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-164	name	agree	https://www.rsssf.org/tables/2016oc.html	
+int-continental-164	clubs	agree	https://www.rsssf.org/tables/2016oc.html	
+int-continental-164	format	agree	https://www.rsssf.org/tables/2016oc.html	Port Moresby, 28 May to 11 June 2016, 2 groups of 4, semi-finals, final; "NB: no match for third place".
+int-continental-164	notes	agree	https://www.rsssf.org/tables/2016oc.html	Qualifying tournament in Tonga (Aug-Sep 2015), winner Samoa joins the finals.
+int-continental-165	name	agree	https://www.rsssf.org/tables/2016sa.html	
+int-continental-165	clubs	agree	https://www.rsssf.org/tables/2016sa.html	"10 traditional participants from South America, 6 CONCACAF countries".
+int-continental-165	format	agree	https://www.rsssf.org/tables/2016sa.html	"Held in the United States of America, June 3-26, 2016"; QF and SF "(no extra time in case of draws)"; final [aet, 2-4 p]. The second page also has a third place match, which the first row does not list. The fourth substitute is not on the second page.
+int-continental-165	notes	agree	https://www.rsssf.org/tables/2016sa.html	Costa Rica, Jamaica, Mexico, USA automatic; Haiti and Panama by play-off.
+int-continental-166	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-167	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-168	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-169	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-170	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-171	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-172	name	agree	https://www.rsssf.org/tables/2017a.html	
+int-continental-172	clubs	agree	https://www.rsssf.org/tables/2017a.html	
+int-continental-172	format	agree	https://www.rsssf.org/tables/2017a.html	"Gabon, 14 January - 5 February, 2017"; QF, SF, third place, final.
+int-continental-172	notes	found	https://www.rsssf.org/tables/2017a.html	Qualifying: qualifying round, then 13 groups; "group winners and 2 best runners-up among all groups apart from I qualify"; Gabon hosts (Libya lost hosting).
+int-continental-173	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-174	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-175	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-176	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-177	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-178	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-179	format	agree	https://www.rsssf.org/tablesu/uefanl.html	RSSSF: first edition 2018/19; editions 2018/19, 2020/21, 2022/23, 2024/25.
+int-continental-180	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-181	name	agree	https://www.rsssf.org/tables/2017gc.html	
+int-continental-181	clubs	agree	https://www.rsssf.org/tables/2017gc.html	
+int-continental-181	format	agree	https://www.rsssf.org/tables/2017gc.html	7 to 26 July, US venues, 3 groups of 4, QF, SF, final. Only the final had extra time: also stated by https://www.beinsports.com/en-us/soccer/articles/gold-cup-rule-changes-reintroduce-extra-time ("For the 2017 tournament, only the final would have gone to extra time").
+int-continental-181	notes	agree	https://www.rsssf.org/tables/2017gc.html	3 North American, 4 Central American, 4 Caribbean (zone lists). The CFU-UNCAF play-off is not on the second page.
+int-continental-182	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-183	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-184	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-185	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-186	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-187	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-188	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-189	name	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-189	clubs	agree	https://www.rsssf.org/tables/2020e.html	5 groups of 5 and 5 groups of 6 = 55.
+int-continental-189	playoffs	agree	https://www.rsssf.org/tables/2020e.html	Play-offs by Nations League leagues A to D, single-match semi-finals and final.
+int-continental-189	format	agree	https://www.rsssf.org/tables/2020e.html	First match 21 Mar 2019.
+int-continental-189	notes	agree	https://www.rsssf.org/tables/2020e.html	The groups-of-5 rule for the four Finals teams is not on the second page.
+int-continental-190	name	agree	https://www.rsssf.org/tables/2019uefanl.html	
+int-continental-190	clubs	agree	https://www.rsssf.org/tables/2019uefanl.html	"The 55 UEFA member federations".
+int-continental-190	up	agree	https://www.rsssf.org/tables/2019uefanl.html	Group winners promoted; after the 2019 revamp also top 2 of each C and D group and the best third of D.
+int-continental-190	down	agree	https://www.rsssf.org/tables/2019uefanl.html	"no teams were relegated from any category".
+int-continental-190	format	agree	https://www.rsssf.org/tables/2019uefanl.html	A 12, B 12, C 15, D 16; groups of 3 or 4; matches 6 Sep to 20 Nov 2018; Finals in Portugal (Guimaraes and Oporto) 5 to 9 June 2019 with third place match.
+int-continental-190	notes	agree	https://www.rsssf.org/tables/2019uefanl.html	"In all four categories, a playoff will be held for one place at the European Championship 2020."
+int-continental-191	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-192	name	agree	https://www.rsssf.org/tables/2019gc.html	
+int-continental-192	clubs	agree	https://www.rsssf.org/tables/2019gc.html	
+int-continental-192	format	agree	https://www.rsssf.org/tables/2019gc.html	Venues in USA, Costa Rica (San Jose) and Jamaica (Kingston); 15 June to 7 July; 4 groups of 4, QF, SF, final; Mexico 1-1 Costa Rica aet 5-4 pen. The fourth substitute in extra time is not on the second page.
+int-continental-192	notes	agree	https://www.rsssf.org/tables/2019gc.html	RSSSF NB: the qualifying stage of the 2018-2020 Nations League served as qualifying tournament.
+int-continental-193	name	agree	https://www.rsssf.org/tables/2020concanl.html	
+int-continental-193	clubs	agree	https://www.rsssf.org/tables/2020concanl.html	"The remaining 34 teams entered the qualifying stage".
+int-continental-193	format	agree	https://www.rsssf.org/tables/2020concanl.html	"teams 1-6 qualify to League A; teams 1-10 qualify to 2019 Gold Cup". Dates 6 Sep 2018 to 24 Mar 2019 not checked.
+int-continental-193	notes	agree	https://www.rsssf.org/tables/2020concanl.html	The six Hexagonal teams "obtained automatic entry to League A".
+int-continental-194	name	agree	https://www.rsssf.org/tables/2019a.html	
+int-continental-194	clubs	agree	https://www.rsssf.org/tables/2019a.html	
+int-continental-194	format	agree	https://www.rsssf.org/tables/2019a.html	"Egypt, 21 June - 19 July, 2019"; 6 groups, round of 16, QF, SF, third place, final.
+int-continental-194	notes	found	https://www.rsssf.org/tables/2019a.html	Qualifying: preliminary round, then 12 groups; "Group winners and runners-up qualify". Cameroon lost hosting.
+int-continental-195	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-196	name	agree	https://www.rsssf.org/tables/2019asch.html	
+int-continental-196	clubs	agree	https://www.rsssf.org/tables/2019asch.html	
+int-continental-196	format	agree	https://www.rsssf.org/tables/2019asch.html	"in the United Arab Emirates", 5 Jan to 1 Feb 2019, 6 groups, round of 16 with [aet, pen], QF, SF, final, no third place.
+int-continental-196	notes	agree	https://www.rsssf.org/tables/2019asch.html	Qualifying by the Asian World Cup qualifying stages and a third round.
+int-continental-197	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-198	name	agree	https://www.rsssf.org/tables/2019sa.html	
+int-continental-198	clubs	agree	https://www.rsssf.org/tables/2019sa.html	
+int-continental-198	format	agree	https://www.rsssf.org/tables/2019sa.html	"Held in Brazil, June 14-July 7, 2019"; "Quarterfinals (no extra time in case of draws)"; semi-finals, third place and final had no draws, so the extra-time rule there is untested on this page.
+int-continental-198	notes	no second source	https://www.rsssf.org/tables/2019sa.html	Guests Japan and Qatar not checked on the second page.
+int-continental-199	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-200	name	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-200	clubs	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-200	playoffs	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-200	format	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-200	notes	agree	https://www.rsssf.org/tables/2020e.html	Play-off semi-finals 8 Oct 2020, finals 12 Nov 2020.
+int-continental-201	format	agree	https://www.rsssf.org/tables/2021uefanl.html	2018-19 ends 9 June 2019 (https://www.rsssf.org/tables/2019uefanl.html); 2020-21 starts 3 Sep 2020.
+int-continental-202	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-203	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-204	name	agree	https://www.rsssf.org/tables/2020concanl.html	
+int-continental-204	clubs	agree	https://www.rsssf.org/tables/2020concanl.html	A 4 groups of 3, B 4 groups of 4, C 13 (groups of 4, 3, 3, 3) = 41.
+int-continental-204	up	no second source	https://www.rsssf.org/tables/2020concanl.html	
+int-continental-204	down	no second source	https://www.rsssf.org/tables/2020concanl.html	
+int-continental-204	format	agree	https://www.rsssf.org/tables/2020concanl.html	League sizes agree; Finals at Empower Field at Mile High, Denver.
+int-continental-204	notes	agree	https://www.rsssf.org/tables/2021gc.html	"Qualified to Group Stage (from CONCACAF Nations League 2020)" and "Qualified to Preliminary Stage".
+int-continental-205	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-206	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-207	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-208	name	agree	https://www.oceaniafootball.com/ofc-nations-cup-cancelled/	
+int-continental-208	format	agree	https://www.oceaniafootball.com/ofc-nations-cup-cancelled/	"OFC's Executive Committee has agreed to cancel the OFC Nations Cup 2020" (21 April 2020), because of the coronavirus pandemic.
+int-continental-209	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-210	name	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-210	clubs	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-210	format	agree	https://www.rsssf.org/tables/2020e.html	"postponed to 2021"; 11 June (Roma) to 11 July 2021 (London); venues include Baku, Kobenhavn, Bucuresti, Glasgow, St Peterburg; round of 16 with [aet] and pen.
+int-continental-210	subs_used	agree	https://www.irishtimes.com/sport/soccer/international/teams-to-be-allowed-make-five-substitutions-at-euro-2020-1.4525381	"Teams will be able to make five substitutions at Euro 2020". The sixth in extra time and the three stoppages are not on the second page.
+int-continental-210	notes	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-211	name	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-211	clubs	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-211	playoffs	agree	https://www.rsssf.org/tables/2020e.html	
+int-continental-211	format	agree	https://www.rsssf.org/tables/2020e.html	Play-off matches 8 Oct and 12 Nov 2020.
+int-continental-211	notes	agree	https://www.rsssf.org/tables/2020e.html	Only the play-off matches (8 Oct and 12 Nov 2020) fall in this season.
+int-continental-212	name	agree	https://www.rsssf.org/tables/2021uefanl.html	
+int-continental-212	clubs	agree	https://www.rsssf.org/tables/2021uefanl.html	13 tables of 4 and 1 of 3 = 55.
+int-continental-212	up	no second source	https://www.rsssf.org/tables/2021uefanl.html	The page does not list promotions.
+int-continental-212	down	agree	https://www.rsssf.org/tables/2021uefanl.html	"Moldova and Estonia relegated to League D" via League C relegation play-off. Relegation from A and B is not on the second page.
+int-continental-212	playoffs	agree	https://www.rsssf.org/tables/2021uefanl.html	League C relegation play-off 24 and 29 March 2022.
+int-continental-212	format	agree	https://www.rsssf.org/tables/2021uefanl.html	A, B, C 16 each, D 7; matches 3 Sep to 18 Nov 2020.
+int-continental-212	subs_used	no second source	https://www.irishtimes.com/sport/soccer/international/teams-to-be-allowed-make-five-substitutions-at-euro-2020-1.4525381	Irish Times (March 2021) says five substitutions also apply for the Nations League finals and relegation play-offs. Nothing found for the autumn 2020 league phase.
+int-continental-213	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-214	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-215	name	agree	https://www.rsssf.org/tables/2020concanl.html	
+int-continental-215	clubs	agree	https://www.rsssf.org/tables/2020concanl.html	Four-team final stage.
+int-continental-215	format	agree	https://www.rsssf.org/tables/2020concanl.html	Finals in Denver (Empower Field at Mile High). Exact dates 3 and 6 June 2021 not checked.
+int-continental-216	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-217	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-218	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-219	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-220	name	agree	https://www.rsssf.org/tables/2021sa.html	
+int-continental-220	clubs	agree	https://www.rsssf.org/tables/2021sa.html	2 groups of 5.
+int-continental-220	format	agree	https://www.rsssf.org/tables/2021sa.html	"Held in Brazil, June 13-July 10, 2021"; QF and SF "[NB: no extra time played after draw]"; third place match also played.
+int-continental-220	notes	no second source	https://www.rsssf.org/tables/2021sa.html	The move from Argentina and Colombia is not on the second page.
+int-continental-221	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-222	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-223	name	agree	https://www.rsssf.org/tables/2021uefanl.html	
+int-continental-223	clubs	agree	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-223	playoffs	agree	https://www.rsssf.org/tables/2021uefanl.html	
+int-continental-223	format	agree	https://www.rsssf.org/tables/2021uefanl.html	"Final tournament in Italy (Milano and Torino), Oct 6-10, 2021"; play-outs March 2022; 2022-23 starts 1 June 2022 (https://www.rsssf.org/tables/2023uefanl.html).
+int-continental-223	subs_used	agree	https://www.irishtimes.com/sport/soccer/international/teams-to-be-allowed-make-five-substitutions-at-euro-2020-1.4525381	Five substitutions for the Nations League finals. The sixth in extra time is not on the second page.
+int-continental-223	notes	agree	https://www.rsssf.org/tables/2021uefanl.html	2020-21 Finals and play-outs plus the 2022-23 start (https://www.rsssf.org/tables/2023uefanl.html).
+int-continental-224	name	agree	https://www.rsssf.org/tablesf/finalissima.html	
+int-continental-224	clubs	agree	https://www.rsssf.org/tablesf/finalissima.html	
+int-continental-224	format	agree	https://www.goal.com/es/noticias/como-se-define-la-finalissima-entre-argentina-e-italia-en-caso-de-empate-tiempo-extra-o-penales-directo/blt1f4b89a3bc14cc99	"No hay prórroga ... se irá directamente a los penales." Wembley, 01/06/2022, Italy v Argentina: https://www.rsssf.org/tablesf/finalissima.html
+int-continental-224	subs_used	no second source	https://www.rsssf.org/tablesf/finalissima.html	No rule found. Both teams made five substitutions in the line-ups, which fits a limit of 5.
+int-continental-224	bench	no second source	https://www.rsssf.org/tablesf/finalissima.html	
+int-continental-224	notes	no second source	https://www.rsssf.org/tablesf/finalissima.html	The agreement date 28 September 2021 is not on the second page.
+int-continental-225	name	agree	https://www.rsssf.org/tables/2021gc.html	
+int-continental-225	clubs	agree	https://www.rsssf.org/tables/2021gc.html	12 from Nations League, 3 from qualifying stage, guest Qatar = 16.
+int-continental-225	format	agree	https://www.rsssf.org/tables/2021gc.html	Group stage 10 July, final 1 August 2021 (Las Vegas, USA 1-0 Mexico aet, goal 117). All venues in USA. Sixth substitute in extra time not on second page.
+int-continental-225	notes	agree	https://www.rsssf.org/tables/2021gc.html	
+int-continental-226	name	agree	https://www.rsssf.org/tables/2023concanl.html	
+int-continental-226	clubs	agree	https://www.rsssf.org/tables/2023concanl.html	12 + 16 + 13 in the tables = 41.
+int-continental-226	format	no second source	https://www.rsssf.org/tables/2023concanl.html	Start date 2 June 2022 not checked.
+int-continental-226	notes	no second source	https://www.rsssf.org/tables/2023concanl.html	League phase dates not on the second page.
+int-continental-227	name	agree	https://www.rsssf.org/tables/2021a.html	
+int-continental-227	clubs	agree	https://www.rsssf.org/tables/2021a.html	
+int-continental-227	format	agree	https://www.rsssf.org/tables/2021a.html	"Cameroon, 9 January - 6 February, 2022"; round of 16, QF, SF, third place, final.
+int-continental-227	notes	agree	https://www.rsssf.org/tables/2021a.html	Preliminary round, group stage from 13 Nov 2019; "moved to January 2022 due to COVID-19 pandemic".
+int-continental-228	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-229	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-230	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-231	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-232	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-233	name	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-233	clubs	agree	https://www.rsssf.org/tables/2024e.html	7 groups of 5 and 3 of 6 = 53.
+int-continental-233	playoffs	agree	https://www.rsssf.org/tables/2024e.html	Play-offs for Leagues A, B and C; finals 26 March 2024.
+int-continental-233	format	agree	https://www.rsssf.org/tables/2024e.html	First match 23 Mar 2023.
+int-continental-233	notes	no second source	https://www.rsssf.org/tables/2024e.html	Germany as host is implied by the final tournament heading only.
+int-continental-234	name	agree	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-234	clubs	agree	https://www.rsssf.org/tables/2023uefanl.html	Russia "excluded"; 54 in tables.
+int-continental-234	up	no second source	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-234	down	no second source	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-234	playoffs	agree	https://www.rsssf.org/tables/2023uefanl.html	League C relegation play-off 21 and 26 March 2024.
+int-continental-234	format	agree	https://www.rsssf.org/tables/2023uefanl.html	League phase 1 June to 27 Sep 2022; "Final tournament in the Netherlands, Jun 14-18, 2023"; final Croatia 0-0 Spain [aet, 4-5 pen].
+int-continental-234	notes	agree	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-235	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-236	name	agree	https://www.rsssf.org/tables/2023gc.html	
+int-continental-236	clubs	agree	https://www.rsssf.org/tables/2023gc.html	12 plus 3 from qualifying stage plus guest Qatar.
+int-continental-236	format	agree	https://www.rsssf.org/tables/2023gc.html	24 June to 16 July 2023, venues in USA and Toronto, QF USA 2-2 Canada aet 3-2 pen.
+int-continental-236	notes	agree	https://www.rsssf.org/tables/2023gc.html	
+int-continental-237	name	agree	https://www.rsssf.org/tables/2023concanl.html	
+int-continental-237	clubs	agree	https://www.rsssf.org/tables/2023concanl.html	
+int-continental-237	up	agree	https://www.rsssf.org/tables/2023concanl.html	B group winners "Promoted" (Trinidad and Tobago in place of disqualified Nicaragua); C group winners "Promoted".
+int-continental-237	down	disagree	https://www.rsssf.org/tables/2023concanl.html	First row: "none (no relegation from 2022-23)". RSSSF marks the third-placed League A teams (Suriname, Martinique, Curacao, Grenada) and the fourth-placed League B teams (Barbados, Montserrat, St. Vincent, Belize) "Relegated".
+int-continental-237	format	agree	https://www.rsssf.org/tables/2023concanl.html	League A 4 groups of 3; Final Stage at "Allegiant Stadium, Las Vegas, USA (Jun. 15-18, 2023)".
+int-continental-237	notes	agree	https://www.rsssf.org/tables/2023concanl.html	Table notes give "Gold Cup 2023" and "Gold Cup 2023 Qualifying".
+int-continental-238	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-239	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-240	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-241	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-242	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-243	name	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-243	clubs	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-243	format	agree	https://www.rsssf.org/tables/2024e.html	"June 14 - July 14, 2024", Germany, 1/8 finals with [aet] and pen.
+int-continental-243	notes	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-244	name	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-244	clubs	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-244	playoffs	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-244	format	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-244	notes	agree	https://www.rsssf.org/tables/2024e.html	
+int-continental-245	name	agree	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-245	clubs	agree	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-245	playoffs	agree	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-245	format	agree	https://www.rsssf.org/tables/2023uefanl.html	21 and 26 March 2024.
+int-continental-245	notes	agree	https://www.rsssf.org/tables/2023uefanl.html	
+int-continental-246	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-247	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-248	name	agree	https://www.rsssf.org/tables/2024concanl.html	
+int-continental-248	clubs	agree	https://www.rsssf.org/tables/2024concanl.html	A 12 in two Swiss groups of 6 plus 4 in the final stage, B 4 groups of 4, C 3 groups of 3.
+int-continental-248	up	agree	https://www.rsssf.org/tables/2024concanl.html	B group winners "promoted"; C winners and Bonaire (runner-up) "promoted".
+int-continental-248	down	agree	https://www.rsssf.org/tables/2024concanl.html	A 5th and 6th "relegated"; B 4th "relegated".
+int-continental-248	format	agree	https://www.rsssf.org/tables/2024concanl.html	"Played under Swiss style league system"; Sep to Nov 2023; final stage 2023-24. Finals dates and venue not checked.
+int-continental-248	notes	agree	https://www.rsssf.org/tables/2024sa.html	"6 CONCACAF countries ... entered through the CONCACAF Nations League 2023-24."
+int-continental-249	name	agree	https://www.rsssf.org/tables/2023a.html	
+int-continental-249	clubs	agree	https://www.rsssf.org/tables/2023a.html	
+int-continental-249	format	agree	https://www.rsssf.org/tables/2023a.html	"Ivory Coast, 13 January - 11 February, 2024"; round of 16 ("Playoff Stage"), QF, SF, third place (straight to penalties), final.
+int-continental-249	notes	found	https://www.rsssf.org/tables/2023a.html	Qualifying: preliminary round, then 12 groups from 9 June 2022; Ivory Coast played the groups although hosts. The final tournament "was originally scheduled to be played in Summer 2023, then moved to January 2024".
+int-continental-250	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-251	name	agree	https://www.rsssf.org/tables/2023asch.html	
+int-continental-251	clubs	agree	https://www.rsssf.org/tables/2023asch.html	
+int-continental-251	format	agree	https://www.rsssf.org/tables/2023asch.html	"in Qatar", 12 Jan to 10 Feb 2024, 6 groups, round of 16 with [aet, pen], QF, SF, final.
+int-continental-251	notes	agree	https://www.rsssf.org/tables/2023asch.html	Qatar qualified as hosts; others by the third stage of World Cup qualifying and a third round. The move from China is not on the second page.
+int-continental-252	name	agree	https://www.rsssf.org/tables/2024oc.html	
+int-continental-252	clubs	agree	https://www.rsssf.org/tables/2024oc.html	"New Caledonia Withdrew".
+int-continental-252	format	agree	https://www.rsssf.org/tables/2024oc.html	"Suva (Fiji) and Port Vila (Vanuatu); 15-30 June 2024"; groups, semi-finals, third place, final.
+int-continental-252	notes	agree	https://www.rsssf.org/tables/2024oc.html	
+int-continental-253	name	agree	https://www.rsssf.org/tables/2024sa.html	
+int-continental-253	clubs	agree	https://www.rsssf.org/tables/2024sa.html	
+int-continental-253	format	agree	https://www.rsssf.org/tables/2024sa.html	"Held in United States of America, June 20-July 14, 2024"; QF, SF and third place "(no extra time in case of draw)"; final [aet].
+int-continental-253	notes	agree	https://www.rsssf.org/tables/2024sa.html	"6 CONCACAF countries ... entered through the CONCACAF Nations League 2023-24."
+int-continental-254	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-255	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-256	name	agree	https://www.rsssf.org/tables/2025uefanl.html	
+int-continental-256	clubs	agree	https://www.rsssf.org/tables/2025uefanl.html	12 groups of 4 and 2 of 3 = 54.
+int-continental-256	up	agree	https://www.rsssf.org/tables/2025uefanl.html	Promotion/relegation play-offs A-B and B-C promoted Turkey, Greece, Kosovo.
+int-continental-256	down	agree	https://www.rsssf.org/tables/2025uefanl.html	
+int-continental-256	playoffs	agree	https://www.rsssf.org/tables/2025uefanl.html	A-B and B-C play-offs 20 and 23 March 2025; C-D play-off 26 and 31 March 2026.
+int-continental-256	format	agree	https://www.rsssf.org/tables/2025uefanl.html	League phase 5 Sep to 19 Nov 2024; QF 20 and 23 March 2025 with [aet]; "Final tournament in Germany, Jun 4-8, 2025".
+int-continental-257	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-258	name	agree	https://www.rsssf.org/tables/2025gc.html	
+int-continental-258	clubs	agree	https://www.rsssf.org/tables/2025gc.html	8 direct, 7 from preliminary stage, guest Saudi Arabia.
+int-continental-258	format	disagree	https://bolavip.com/en/amp/soccer/gold-cup-2025-overtime-rules-when-do-matches-go-to-extra-time	Hosts USA and Canada (Vancouver), 14 June to 6 July agree. First row says "extra time and penalties". Bolavip quotes regulation Art. 12.12: quarter-finals and semi-finals have no extra time, straight to penalties; only the final has extra time. RSSSF (https://www.rsssf.org/tables/2025gc.html) shows the three drawn quarter-finals with penalties and no [aet] mark.
+int-continental-258	notes	agree	https://www.rsssf.org/tables/2025gc.html	Preliminary stage March 2025 (21 and 25 Mar) agrees.
+int-continental-259	name	agree	https://www.rsssf.org/tables/2025concanl.html	
+int-continental-259	clubs	agree	https://www.rsssf.org/tables/2025concanl.html	
+int-continental-259	up	found	https://www.rsssf.org/tables/2025concanl.html	League B group winners promoted (El Salvador, Curacao, Haiti, Dominican Republic); League C group winners and Cayman Islands (runner-up) promoted.
+int-continental-259	down	found	https://www.rsssf.org/tables/2025concanl.html	League A 5th and 6th of each group "relegated; play in for GC Prel." (Guadeloupe, Guyana, Cuba, French Guiana); League B 4th relegated.
+int-continental-259	format	agree	https://www.rsssf.org/tables/2025concanl.html	League A Swiss groups of 6 from 5 Sep 2024; quarter-finals; final stage 2024-25. Finals dates not checked.
+int-continental-259	notes	agree	https://www.rsssf.org/tables/2025concanl.html	"Winners qualified to CONCACAF Gold Cup 2025 Group Phase".
+int-continental-260	format	agree	https://www.rsssf.org/tablesa/afrchamp.html	RSSSF overview lists 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2013, 2015, 2017, 2019, 2021 (played 2022), 2023 (played 2024), 2025 (Dec 2025-Jan 2026); none in this season.
+int-continental-261	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-262	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-263	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-264	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-265	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-266	format	agree	https://www.rsssf.org/tablese/eurochamp.html	Qualifying windows on the RSSSF edition pages: Sep 2002-Nov 2003, Aug 2006-Nov 2007, Sep 2010-Nov 2011, Sep 2014-Nov 2015, Mar 2019-Nov 2020, Mar 2023-Mar 2024; Euro 2028 qualifying starts March 2027 (https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/). None in this season.
+int-continental-267	name	agree	https://www.rsssf.org/tables/2025uefanl.html	
+int-continental-267	clubs	agree	https://www.rsssf.org/tables/2025uefanl.html	
+int-continental-267	playoffs	agree	https://www.rsssf.org/tables/2025uefanl.html	"All teams remained in their respective leagues."
+int-continental-267	format	agree	https://www.rsssf.org/tables/2025uefanl.html	26 and 31 March 2026.
+int-continental-267	notes	agree	https://www.rsssf.org/tables/2025uefanl.html	
+int-continental-268	name	agree	https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled	
+int-continental-268	clubs	agree	https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled	Spain v Argentina.
+int-continental-268	format	agree	https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled	Planned "March 27 at Lusail Stadium in Qatar"; "this edition of the Finalissima has been canceled" (UEFA statement).
+int-continental-268	notes	agree	https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled	Article of 16 March 2026. It gives the failure to agree a date and venue after the Middle East conflict escalated as the reason; the first row says "security situation in Qatar".
+int-continental-269	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-270	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september).
+int-continental-271	name	agree	https://www.rsssf.org/tables/2025a.html	
+int-continental-271	clubs	agree	https://www.rsssf.org/tables/2025a.html	
+int-continental-271	format	agree	https://www.rsssf.org/tables/2025a.html	"Morocco, 21 December 2025 - 18 January 2026"; second round, QF, SF, third place, final.
+int-continental-271	notes	agree	https://www.rsssf.org/tables/2025a.html	Preliminary round, groups from 4 Sep 2024. Guinea losing the hosting is not on the second page.
+int-continental-272	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-273	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-274	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled.
+int-continental-275	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-276	format	agree	https://www.rsssf.org/tablese/eurochamp.html	RSSSF overview lists editions 2000, 2004, 2008, 2012, 2016, 2020 (played 2021), 2024; none in this season.
+int-continental-277	name	agree	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	
+int-continental-277	clubs	no second source	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	
+int-continental-277	playoffs	disagree	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	First row: play-offs are single-leg semi-finals and final. Malta FA (UEFA release): that holds when one or both host slots are used; if no host slot is used, "Eight teams contest four home-and-away play-off ties". 2 to 4 places and the play-off entrants agree. March 2028: https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/.
+int-continental-277	format	agree	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	12 groups of 4 or 5; 12 winners and 8 best runners-up; 2 places reserved for best-ranked hosts. Start March 2027: https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/.
+int-continental-277	notes	no second source	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	The groups-of-4 rule for Nations League quarter-finalists is not on the second page.
+int-continental-278	name	agree	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	
+int-continental-278	clubs	agree	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	"A total of 54 teams".
+int-continental-278	up	agree	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	B and C group winners promoted; "League D: All teams are promoted to League C."
+int-continental-278	down	agree	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	"The two weakest fourth-placed teams drop to League B." (https://faw.cymru/news/uefa-nations-league-2026-27-draw-all-you-need-to-know/ says bottom place is relegated directly, a simpler summary.)
+int-continental-278	playoffs	agree	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	A/B: two weakest third and two best fourth v B runners-up; B/C: B fourth v C runners-up; 25 to 30 March 2027.
+int-continental-278	format	agree	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	A, B, C 4 groups of 4, D 2 groups of 3; 24 Sep to 17 Nov 2026; QF March 2027; Finals 9 to 13 June 2027, host not confirmed.
+int-continental-278	notes	no second source	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	The 2028-29 three-league proposal is not on the second page.
+int-continental-279	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-280	name	agree	https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed	
+int-continental-280	clubs	agree	https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed	"16 teams".
+int-continental-280	format	agree	https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed	"played between June and July of 2027"; host venues "announced at a later date". Exact dates 19 June to 11 July not on the second page.
+int-continental-280	notes	agree	https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed	8 direct places via Nations League, Prelims March 2027, guest Saudi Arabia.
+int-continental-281	name	agree	https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september	
+int-continental-281	clubs	agree	https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september	A 16, B 16, C 9.
+int-continental-281	up	found	https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september	League B group winners promoted to League A; League C group winners and the best second-placed team promoted to League B.
+int-continental-281	down	agree	https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september	"Fifth- and sixth-place finishers are relegated to League B." The play-in is described on https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed (League A and C Play-In, November 2026).
+int-continental-281	playoffs	no second source	https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed	
+int-continental-281	format	disagree	https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september	Swiss groups of 6 with 4 matches, 4 pre-seeded teams and QF 9 to 17 November 2026 agree. First row: "Finals 22 to 30 March 2027". Concacaf: League A Finals 25 to 28 March 2027 at SoFi Stadium, Los Angeles; 22 to 30 March is the window of the League B and C Championships.
+int-continental-281	notes	agree	https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september	The Nations League "will serve as the qualifiers for the 2027 Concacaf Gold Cup."
+int-continental-282	name	agree	https://www.dailysabah.com/sports/football/caf-confirms-east-africa-to-host-historic-tri-nation-afcon	
+int-continental-282	clubs	agree	https://www.dailysabah.com/sports/football/caf-confirms-east-africa-to-host-historic-tri-nation-afcon	"24-team finals lineup".
+int-continental-282	format	agree	https://www.dailysabah.com/sports/football/caf-confirms-east-africa-to-host-historic-tri-nation-afcon	Hosts "Kenya, Tanzania, and Uganda" in "June and July 2027". Exact dates 19 June to 17 July are not on the second page.
+int-continental-282	notes	no second source	https://www.dailysabah.com/sports/football/caf-confirms-east-africa-to-host-historic-tri-nation-afcon	Qualifying dates not on the second page.
+int-continental-283	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-284	name	agree	https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840	
+int-continental-284	clubs	agree	https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840	"facilities for 24 of Asia's top national teams".
+int-continental-284	format	agree	https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840	"held in Saudi Arabia from January 7 to February 5, 2027". Group and knockout format not on the second page.
+int-continental-284	notes	no second source	https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840	VOV reports 18 qualified teams and a qualifiers final round; the October 2023 to June 2026 window is not on the second page.
+int-continental-285	format	agree	https://www.rsssf.org/tableso/oceania-cup.html	RSSSF overview lists 2000, 2002, 2004, 2008, 2012, 2016, 2024; 2020 cancelled. Caveat: the 2028 qualifying tournament is in the Cook Islands "in 2027" with dates TBC (first source); if it falls before July 2027 this season has OFC matches.
+int-continental-286	format	agree	https://www.rsssf.org/tabless/sachamp.html	RSSSF overview lists 2001, 2004, 2007, 2011, 2015, 2016, 2019, 2021, 2024; none in this season.
+int-continental-287	name	agree	https://www.englandfootball.com/articles/2025/Nov/12/EURO-2028-match-schedule-released-20251211	
+int-continental-287	clubs	agree	https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/	"24 teams will enter the group stage."
+int-continental-287	format	agree	https://www.englandfootball.com/articles/2025/Nov/12/EURO-2028-match-schedule-released-20251211	9 June to 9 July 2028; final at Wembley; hosts across the UK and Ireland. Six groups, top two and four best thirds to round of 16: https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/.
+int-continental-287	notes	agree	https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/	Northern Ireland is part of the bid, but no Belfast games appear in the host city list on https://www.englandfootball.com/articles/2025/Nov/12/EURO-2028-match-schedule-released-20251211.
+int-continental-288	name	agree	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	
+int-continental-288	clubs	no second source	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	
+int-continental-288	playoffs	disagree	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	Same as int-continental-277: with no host slot used, four home-and-away ties.
+int-continental-288	format	agree	https://www.maltafootball.com/2025/05/22/uefa-euro-2028-qualification-system-approved/	
+int-continental-288	notes	found	https://dublin.ie/live/stories/euro-2028-all-you-need-to-know/	"The qualifying group stage will begin in March 2027 and will end in November 2027." "The play-off round will be played in March 2028."
+int-continental-289	format	disagree	https://www.aljazeera.com/sports/2026/9/23/uefa-nations-league-2026-27-format-teams-players-schedule	First row: not held. Al Jazeera and https://faw.cymru/news/uefa-nations-league-2026-27-draw-all-you-need-to-know/ list "League C/D playoffs" for 23 to 28 March 2028, in season 2027/28. Neither describes the format, and all League D teams are promoted, so the window may not be used.
+int-continental-290	format	agree	https://www.rsssf.org/tablesf/finalissima.html	RSSSF lists only 2022 for men (successor of the Artemio Franchi Trophy); 2026 cancelled (https://buenosairesherald.com/sports/football/its-official-2026-finalissima-is-canceled); no other edition found.
+int-continental-291	format	agree	https://www.rsssf.org/tablesg/goldcupall.html	RSSSF overview lists 2000, 2002, 2003, 2005 ... 2025 (odd years from 2003); 2027 edition is June-July 2027 (https://www.concacaf.com/competitions/gold-cup/news/2027-concacaf-gold-cup-qualification-pathway-confirmed).
+int-continental-292	format	agree	https://www.rsssf.org/tables/2020concanl.html	RSSSF: "Inaugural Season" 2018-21 with qualifying 2018/19. 2024-25 ended March 2025; the fifth edition starts September 2026 (https://www.concacaf.com/competitions/nations-league/news/fifth-edition-of-nations-league-to-begin-in-september). The 2026-27 Finals are 25-28 March 2027 (in 2026/27). "Next after 2026-27 is 2028-29" is not on a second page.
+int-continental-293	name	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	
+int-continental-293	clubs	no second source	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Team count not stated.
+int-continental-293	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng, 9 Oct 2026: "no host nation has been confirmed for the 2028 edition." Host and dates remain unknown. The article also says CAF will discuss whether to cancel the four-year cycle.
+int-continental-293	notes	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Four-year cycle "beginning with the 2028 edition"; African Nations League "scheduled to begin in 2029".
+int-continental-294	format	agree	https://www.legit.ng/sports/football/1735221-caf-reverse-afcon-4-year-cycle-decision-2028-edition-report/	Legit.ng (9 Oct 2026): the African Nations League "is scheduled to begin in 2029".
+int-continental-295	format	agree	https://www.rsssf.org/tablesa/asiachamp.html	RSSSF overview lists 2000, 2004, 2007, 2011, 2015, 2019, 2023 (played 2024); 2027 edition Jan-Feb 2027 (https://vov.gov.vn/dates-for-2027-afc-asian-cup-in-saudi-arabia-confirmed-dtnew-1061840).
+int-continental-296	name	no second source	https://pina.com.fj/?p=60374	Only the first source (oceaniafootball.com) names the 2028 qualifier in the Cook Islands. The PINA page found covers other OFC events only.
+int-continental-296	format	no second source	https://pina.com.fj/?p=60374	
+int-continental-296	notes	no second source	https://pina.com.fj/?p=60374	
+int-continental-297	name	agree	https://www.beinsports.com/en-us/soccer/articles/copa-am%C3%A9rica-could-once-again-be-played-outside-south-america-2025-12-02	
+int-continental-297	format	agree	https://www.beinsports.com/en-us/soccer/articles/copa-am%C3%A9rica-could-once-again-be-played-outside-south-america-2025-12-02	Host not set: talks for the United States, Argentina and Ecuador possible; "during the summer of the Los Angeles Olympic Games".
+int-continental-297	notes	no second source	https://www.beinsports.com/en-us/soccer/articles/copa-am%C3%A9rica-could-once-again-be-played-outside-south-america-2025-12-02	Team count not stated.

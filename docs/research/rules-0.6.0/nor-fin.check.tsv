@@ -1,0 +1,1500 @@
+id	field	verdict	second_url	note
+nor-fin-1	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-1	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-1	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-1	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-2	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-2	clubs	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-2	down	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-2	playoffs	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-2	split	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-2	format	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-2	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2212297	most substitutions made per team in sampled Eliteserien matches of 2002 = 3 (2002-04-28 3; 2002-05-05 3; 2002-06-16 3; 2002-07-20 3; 2002-09-15 3)
+nor-fin-2	bench	disagree	https://www.rsssf.org/tablesn/noo02.html	first value 7 is inferred from the 2002 cup final; RSSSF lists 8 named substitutes for Valerenga in that final (3 used, 5 unused)
+nor-fin-3	name	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF heading: Forste divisjon
+nor-fin-3	clubs	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-3	up	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-3	down	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-3	playoffs	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-3	split	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-3	format	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-3	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4878028	most substitutions made per team in sampled OBOS-ligaen matches of 2002 = 3 (2002-06-19 3)
+nor-fin-3	bench	no second source		Transfermarkt match sheets of 2002 (OBOS-ligaen) give no bench data
+nor-fin-4	name	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF section: Norway Cup / Cup
+nor-fin-4	format	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-4	subs_used	agree	https://www.rsssf.org/tablesn/noo02.html	RSSSF cup final line-ups show 3 substitutions per team
+nor-fin-4	bench	disagree	https://www.rsssf.org/tablesn/noo02.html	first value 7; RSSSF 2002 final lists 8 named substitutes for Valerenga (Dohli, Holm, Viikmae used; Bakke, Ohr, Heiaas, Belsvik, Krogstad unused)
+nor-fin-5	format	disagree	https://www.rsssf.org/tablesn/noosupcuphist.html	first value: not held; RSSSF: a 2002 edition was played (Rosenborg 2-0 Viking, 7 Apr 2002, Stavanger) without official status
+nor-fin-6	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-6	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-6	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-6	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-7	name	agree	https://www.rsssf.org/tablesf/fin02.html	Veikkausliiga
+nor-fin-7	clubs	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF final table and play-off sections
+nor-fin-7	down	disagree	https://www.rsssf.org/tablesf/fin02.html	first value: 12th of the relegation stage; RSSSF: the bottom 2 of the 8-club promotion/relegation group go to Division One; VPS (Premier 11th) was 7th and the only Premier club relegated
+nor-fin-7	playoffs	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF final table and play-off sections
+nor-fin-7	split	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF final table and play-off sections
+nor-fin-7	format	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF final table and play-off sections
+nor-fin-7	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3339671	most substitutions made per team in sampled Veikkausliiga matches of 2002 = 3 (2002-05-20 2; 2002-08-01 3)
+nor-fin-7	bench	no second source		Transfermarkt match sheets of 2002 (Veikkausliiga) give no bench data
+nor-fin-8	name	agree	https://www.rsssf.org/tablesf/fin02.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-8	clubs	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF format text: 2 zones of 9, top 2 to the promotion/relegation group, bottom 7 to zone relegation groups; last of each group down, 2nd and 3rd last v Division Two winners
+nor-fin-8	up	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF format text: 2 zones of 9, top 2 to the promotion/relegation group, bottom 7 to zone relegation groups; last of each group down, 2nd and 3rd last v Division Two winners
+nor-fin-8	down	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF format text: 2 zones of 9, top 2 to the promotion/relegation group, bottom 7 to zone relegation groups; last of each group down, 2nd and 3rd last v Division Two winners
+nor-fin-8	playoffs	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF format text: 2 zones of 9, top 2 to the promotion/relegation group, bottom 7 to zone relegation groups; last of each group down, 2nd and 3rd last v Division Two winners
+nor-fin-8	split	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF format text: 2 zones of 9, top 2 to the promotion/relegation group, bottom 7 to zone relegation groups; last of each group down, 2nd and 3rd last v Division Two winners
+nor-fin-8	format	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF format text: 2 zones of 9, top 2 to the promotion/relegation group, bottom 7 to zone relegation groups; last of each group down, 2nd and 3rd last v Division Two winners
+nor-fin-8	subs_used	no second source		Transfermarkt match sheets of 2002 (Ykkösliiga) give no substitution data
+nor-fin-8	bench	no second source		Transfermarkt match sheets of 2002 (Ykkösliiga) give no bench data
+nor-fin-9	name	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF: Suomen Cup
+nor-fin-9	format	agree	https://www.rsssf.org/tablesf/fin02.html	RSSSF: knockout; open entry (first, reserve and U20 teams); levels 1-3 enter in round 4
+nor-fin-9	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-9	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-10	format	no second source		RSSSF pages for 2002 and 2003 have no League Cup section; absence is not proof
+nor-fin-11	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-11	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-11	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-11	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-12	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-12	clubs	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-12	down	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-12	playoffs	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-12	split	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-12	format	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-12	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2212194	most substitutions made per team in sampled Eliteserien matches of 2003 = 3 (2003-05-11 2; 2003-08-03 3)
+nor-fin-12	bench	no second source		Transfermarkt match sheets of 2003 (Eliteserien) give no bench data
+nor-fin-13	name	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF heading: Forste divisjon
+nor-fin-13	clubs	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-13	up	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-13	down	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-13	playoffs	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-13	split	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-13	format	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-13	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4757362	most substitutions made per team in sampled OBOS-ligaen matches of 2003 = 3 (2003-05-04 2; 2003-06-22 3)
+nor-fin-13	bench	no second source		Transfermarkt match sheets of 2003 (OBOS-ligaen) give no bench data
+nor-fin-14	name	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF section: Norway Cup / Cup
+nor-fin-14	format	agree	https://www.rsssf.org/tablesn/noo03.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-14	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-14	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-15	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2003-08
+nor-fin-16	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-16	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-16	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-16	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-17	name	agree	https://www.rsssf.org/tablesf/fin03.html	Veikkausliiga
+nor-fin-17	clubs	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-17	down	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-17	playoffs	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-17	split	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-17	format	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-17	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2299176	most substitutions made per team in sampled Veikkausliiga matches of 2003 = 3 (2003-05-29 3; 2003-08-02 3)
+nor-fin-17	bench	no second source		Transfermarkt match sheets of 2003 (Veikkausliiga) give no bench data
+nor-fin-18	name	agree	https://www.rsssf.org/tablesf/fin03.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-18	clubs	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-18	up	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-18	down	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-18	playoffs	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-18	split	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-18	format	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF final table and play-off sections
+nor-fin-18	subs_used	no second source		Transfermarkt match sheets of 2003 (Ykkösliiga) give no substitution data
+nor-fin-18	bench	no second source		Transfermarkt match sheets of 2003 (Ykkösliiga) give no bench data
+nor-fin-19	name	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF: Suomen Cup
+nor-fin-19	format	agree	https://www.rsssf.org/tablesf/fin03.html	RSSSF: knockout; open entry (first, reserve and U20 teams); levels 1-3 enter in round 4
+nor-fin-19	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-19	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-20	format	no second source		RSSSF pages for 2002 and 2003 have no League Cup section; absence is not proof
+nor-fin-21	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-21	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-21	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-21	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-22	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-22	clubs	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-22	down	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-22	playoffs	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-22	split	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-22	format	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-22	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1192536	most substitutions made per team in sampled Eliteserien matches of 2004 = 3 (2004-05-09 3; 2004-07-25 3)
+nor-fin-22	bench	no second source		Transfermarkt match sheets of 2004 (Eliteserien) give no bench data
+nor-fin-23	name	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF heading: Forste divisjon
+nor-fin-23	clubs	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-23	up	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-23	down	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-23	playoffs	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-23	split	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-23	format	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-23	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2987824	most substitutions made per team in sampled OBOS-ligaen matches of 2004 = 3 (2004-05-02 3; 2004-06-20 3)
+nor-fin-23	bench	no second source		Transfermarkt match sheets of 2004 (OBOS-ligaen) give no bench data
+nor-fin-24	name	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF section: Norway Cup / Cup
+nor-fin-24	format	agree	https://www.rsssf.org/tablesn/noo04.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-24	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-24	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-25	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2003-08
+nor-fin-26	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-26	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-26	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-26	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-27	name	agree	https://www.rsssf.org/tablesf/fin04.html	Veikkausliiga
+nor-fin-27	clubs	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-27	down	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-27	playoffs	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-27	split	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-27	format	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-27	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2213322	most substitutions made per team in sampled Veikkausliiga matches of 2004 = 3 (2004-05-23 3; 2004-07-18 3)
+nor-fin-27	bench	no second source		Transfermarkt match sheets of 2004 (Veikkausliiga) give no bench data
+nor-fin-28	name	agree	https://www.rsssf.org/tablesf/fin04.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-28	clubs	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-28	up	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-28	down	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-28	playoffs	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-28	split	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-28	format	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF final table and play-off sections
+nor-fin-28	subs_used	no second source		Transfermarkt match sheets of 2004 (Ykkösliiga) give no substitution data
+nor-fin-28	bench	no second source		Transfermarkt match sheets of 2004 (Ykkösliiga) give no bench data
+nor-fin-29	name	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF: Suomen Cup
+nor-fin-29	format	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF: knockout; open entry (first, reserve and U20 teams); levels 1-3 enter in round 4
+nor-fin-29	subs_used	no second source	https://www.rsssf.org/tablesf/fin04.html	RSSSF final shows at most 2 substitutions per team, which does not confirm the limit
+nor-fin-29	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-30	name	agree	https://www.rsssf.org/tablesf/fin04.html	Liigacup
+nor-fin-30	clubs	disagree	https://www.rsssf.org/tablesf/fin04.html	first value: Veikkausliiga clubs; RSSSF: all first-level clubs and the top 2 second-level clubs of the previous season, 16 clubs in 4 groups of 4
+nor-fin-30	format	agree	https://www.rsssf.org/tablesf/fin04.html	RSSSF: 4 groups of 4 (3 matches each), indoor; group winners to semi-finals, final 2 May 2004
+nor-fin-30	subs_used	no second source		no line-up found
+nor-fin-30	bench	no second source		no line-up found
+nor-fin-31	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-31	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-31	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-31	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-32	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-32	clubs	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-32	down	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-32	playoffs	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-32	split	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-32	format	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-32	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1184878	most substitutions made per team in sampled Eliteserien matches of 2005 = 3 (2005-04-24 3; 2005-05-05 3; 2005-06-26 2; 2005-07-30 3; 2005-09-25 3)
+nor-fin-32	bench	no second source		Transfermarkt match sheets of 2005 (Eliteserien) give no bench data
+nor-fin-33	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-33	clubs	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-33	up	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-33	down	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-33	playoffs	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-33	split	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-33	format	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-33	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2922307	most substitutions made per team in sampled OBOS-ligaen matches of 2005 = 3 (2005-05-01 3; 2005-06-26 3)
+nor-fin-33	bench	no second source		Transfermarkt match sheets of 2005 (OBOS-ligaen) give no bench data
+nor-fin-34	name	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF section: Norway Cup / Cup
+nor-fin-34	format	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-34	subs_used	agree	https://www.rsssf.org/tablesn/noo05.html	RSSSF cup final line-ups show 3 substitutions per team
+nor-fin-34	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-35	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2003-08
+nor-fin-36	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-36	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-36	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-36	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-37	name	agree	https://www.rsssf.org/tablesf/fin05.html	Veikkausliiga
+nor-fin-37	clubs	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-37	down	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-37	playoffs	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-37	split	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-37	format	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-37	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2209709	most substitutions made per team in sampled Veikkausliiga matches of 2005 = 3 (2005-05-21 3; 2005-07-21 3)
+nor-fin-37	bench	no second source		Transfermarkt match sheets of 2005 (Veikkausliiga) give no bench data
+nor-fin-38	name	agree	https://www.rsssf.org/tablesf/fin05.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-38	clubs	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-38	up	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-38	down	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-38	playoffs	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-38	split	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-38	format	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF final table and play-off sections
+nor-fin-38	subs_used	no second source		Transfermarkt match sheets of 2005 (Ykkösliiga) give no substitution data
+nor-fin-38	bench	no second source		Transfermarkt match sheets of 2005 (Ykkösliiga) give no bench data
+nor-fin-39	name	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF: Suomen Cup
+nor-fin-39	format	found	https://www.rsssf.org/tablesf/fin05.html	found: RSSSF Suomen Cup 2005: knockout; first, second and third level clubs enter in round 4; quarter-finals 22 Oct, final 29 Oct
+nor-fin-39	subs_used	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF 2005 final: TPS and Haka each made 3 substitutions
+nor-fin-39	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-40	name	agree	https://www.rsssf.org/tablesf/fin05.html	Liigacup
+nor-fin-40	clubs	disagree	https://www.rsssf.org/tablesf/fin05.html	first value: Veikkausliiga clubs; RSSSF: all first-level clubs and the top 2 second-level clubs of the previous season, 16 clubs in 4 groups of 4
+nor-fin-40	format	agree	https://www.rsssf.org/tablesf/fin05.html	RSSSF: 4 groups of 4 (3 matches each), indoor; top 2 to quarter-finals, final 23 Apr 2005
+nor-fin-40	subs_used	no second source		no line-up found
+nor-fin-40	bench	no second source		no line-up found
+nor-fin-41	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-41	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-41	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-41	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-42	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-42	clubs	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-42	down	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-42	playoffs	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-42	split	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-42	format	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-42	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1165576	most substitutions made per team in sampled Eliteserien matches of 2006 = 3 (2006-05-03 2; 2006-07-22 3)
+nor-fin-42	bench	no second source		Transfermarkt match sheets of 2006 (Eliteserien) give no bench data
+nor-fin-43	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-43	clubs	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-43	up	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-43	down	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-43	playoffs	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-43	split	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-43	format	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-43	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2286715	most substitutions made per team in sampled OBOS-ligaen matches of 2006 = 3 (2006-04-30 3; 2006-07-09 3)
+nor-fin-43	bench	no second source		Transfermarkt match sheets of 2006 (OBOS-ligaen) give no bench data
+nor-fin-44	name	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF section: Norway Cup / Cup
+nor-fin-44	format	agree	https://www.rsssf.org/tablesn/noo06.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-44	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-44	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-45	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2003-08
+nor-fin-46	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-46	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-46	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-46	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-47	name	agree	https://www.rsssf.org/tablesf/fin06.html	Veikkausliiga
+nor-fin-47	clubs	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: 13 clubs (Allianssi refused a licence), 24 matches, 13th KuPS relegated, no play-off
+nor-fin-47	down	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: 13 clubs (Allianssi refused a licence), 24 matches, 13th KuPS relegated, no play-off
+nor-fin-47	playoffs	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: 13 clubs (Allianssi refused a licence), 24 matches, 13th KuPS relegated, no play-off
+nor-fin-47	split	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: 13 clubs (Allianssi refused a licence), 24 matches, 13th KuPS relegated, no play-off
+nor-fin-47	format	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: 13 clubs (Allianssi refused a licence), 24 matches, 13th KuPS relegated, no play-off
+nor-fin-47	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2209493	most substitutions made per team in sampled Veikkausliiga matches of 2006 = 3 (2006-05-04 3; 2006-05-18 3; 2006-07-06 3; 2006-08-13 3; 2006-09-10 3)
+nor-fin-47	bench	no second source		Transfermarkt match sheets of 2006 (Veikkausliiga) give no bench data
+nor-fin-48	name	agree	https://www.rsssf.org/tablesf/fin06.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-48	clubs	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF final table and play-off sections
+nor-fin-48	up	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF final table and play-off sections
+nor-fin-48	down	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF final table and play-off sections
+nor-fin-48	playoffs	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF final table and play-off sections
+nor-fin-48	split	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF final table and play-off sections
+nor-fin-48	format	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF final table and play-off sections
+nor-fin-48	subs_used	no second source		Transfermarkt match sheets of 2006 (Ykkösliiga) give no substitution data
+nor-fin-48	bench	no second source		Transfermarkt match sheets of 2006 (Ykkösliiga) give no bench data
+nor-fin-49	name	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: Suomen Cup
+nor-fin-49	format	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: knockout; open entry (first, reserve and U20 teams); levels 1-3 enter in round 4
+nor-fin-49	subs_used	no second source	https://www.rsssf.org/tablesf/fin06.html	RSSSF final shows at most 2 substitutions per team, which does not confirm the limit
+nor-fin-49	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-50	name	agree	https://www.rsssf.org/tablesf/fin06.html	Liigacup
+nor-fin-50	clubs	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: the Veikkausliiga clubs (2006: 13, Allianssi refused a licence; 2007 and 2010: 14)
+nor-fin-50	format	agree	https://www.rsssf.org/tablesf/fin06.html	RSSSF: 2 groups, top 4 of each to quarter-finals, then semi-finals and final
+nor-fin-50	subs_used	no second source		no line-up found
+nor-fin-50	bench	no second source		no line-up found
+nor-fin-51	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-51	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-51	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-51	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-52	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-52	clubs	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-52	down	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-52	playoffs	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-52	split	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-52	format	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-52	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1161168	most substitutions made per team in sampled Eliteserien matches of 2007 = 3 (2007-05-06 2; 2007-07-28 3)
+nor-fin-52	bench	no second source		Transfermarkt match sheets of 2007 (Eliteserien) give no bench data
+nor-fin-53	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-53	clubs	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-53	up	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-53	down	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF: 14th-16th relegated; 13th Sparta Sarpsborg stayed because Raufoss were denied a licence
+nor-fin-53	playoffs	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-53	split	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-53	format	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-53	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/68216	most substitutions made per team in sampled OBOS-ligaen matches of 2007 = 3 (2007-04-29 3; 2007-06-24 3)
+nor-fin-53	bench	no second source		Transfermarkt match sheets of 2007 (OBOS-ligaen) give no bench data
+nor-fin-54	name	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF section: Norway Cup / Cup
+nor-fin-54	format	agree	https://www.rsssf.org/tablesn/noo07.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-54	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-54	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-55	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2003-08
+nor-fin-56	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-56	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-56	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-56	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-57	name	agree	https://www.rsssf.org/tablesf/fin07.html	Veikkausliiga
+nor-fin-57	clubs	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-57	down	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-57	playoffs	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-57	split	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-57	format	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-57	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/68530	most substitutions made per team in sampled Veikkausliiga matches of 2007 = 3 (2007-05-16 3; 2007-08-05 3)
+nor-fin-57	bench	no second source		Transfermarkt match sheets of 2007 (Veikkausliiga) give no bench data
+nor-fin-58	name	agree	https://www.rsssf.org/tablesf/fin07.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-58	clubs	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-58	up	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-58	down	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-58	playoffs	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-58	split	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-58	format	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF final table and play-off sections
+nor-fin-58	subs_used	no second source		Transfermarkt match sheets of 2007 (Ykkösliiga) give no substitution data
+nor-fin-58	bench	no second source		Transfermarkt match sheets of 2007 (Ykkösliiga) give no bench data
+nor-fin-59	name	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF: Suomen Cup
+nor-fin-59	format	found	https://www.rsssf.org/tablesf/fin07.html	found: RSSSF Suomen Cup 2007: single-match knockout, round 5, round 6, last 16, quarter-finals, semi-finals 3 Nov, final 11 Nov
+nor-fin-59	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-59	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-60	name	agree	https://www.rsssf.org/tablesf/fin07.html	Liigacup
+nor-fin-60	clubs	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF: the Veikkausliiga clubs (2006: 13, Allianssi refused a licence; 2007 and 2010: 14)
+nor-fin-60	format	agree	https://www.rsssf.org/tablesf/fin07.html	RSSSF: 2 groups, top 4 of each to quarter-finals, then semi-finals and final
+nor-fin-60	subs_used	no second source		no line-up found
+nor-fin-60	bench	no second source		no line-up found
+nor-fin-61	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-61	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-61	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-61	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-62	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-62	clubs	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-62	down	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-62	playoffs	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF: 13th Aalesund v 1. divisjon 4th Sogndal, two legs
+nor-fin-62	split	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-62	format	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (14 clubs, 26 matches) and play-off section
+nor-fin-62	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/915695	most substitutions made per team in sampled Eliteserien matches of 2008 = 3 (2008-04-13 3; 2008-04-27 3; 2008-07-06 3; 2008-07-27 3; 2008-09-28 3)
+nor-fin-62	bench	no second source		Transfermarkt match sheets of 2008 (Eliteserien) give no bench data
+nor-fin-63	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-63	clubs	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-63	up	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-63	down	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-63	playoffs	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-63	split	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-63	format	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-63	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/915809	most substitutions made per team in sampled OBOS-ligaen matches of 2008 = 3 (2008-04-27 3; 2008-07-13 3)
+nor-fin-63	bench	no second source		Transfermarkt match sheets of 2008 (OBOS-ligaen) give no bench data
+nor-fin-64	name	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF section: Norway Cup / Cup
+nor-fin-64	format	agree	https://www.rsssf.org/tablesn/noo08.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-64	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-64	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-65	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2003-08
+nor-fin-66	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-66	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-66	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-66	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-67	name	agree	https://www.rsssf.org/tablesf/fin08.html	Veikkausliiga
+nor-fin-67	clubs	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-67	down	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-67	playoffs	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-67	split	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-67	format	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-67	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/915495	most substitutions made per team in sampled Veikkausliiga matches of 2008 = 3 (2008-05-15 3; 2008-08-03 3)
+nor-fin-67	bench	no second source		Transfermarkt match sheets of 2008 (Veikkausliiga) give no bench data
+nor-fin-68	name	agree	https://www.rsssf.org/tablesf/fin08.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-68	clubs	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-68	up	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-68	down	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-68	playoffs	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-68	split	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-68	format	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF final table and play-off sections
+nor-fin-68	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/915600	most substitutions made per team in sampled Ykkösliiga matches of 2008 = 3 (2008-05-28 3; 2008-08-08 3)
+nor-fin-68	bench	no second source		Transfermarkt match sheets of 2008 (Ykkösliiga) give no bench data
+nor-fin-69	name	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF: Suomen Cup
+nor-fin-69	format	agree	https://www.rsssf.org/tablesf/fin08.html	RSSSF: single-match knockout
+nor-fin-69	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-69	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-70	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-70	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-70	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-70	subs_used	no second source		no line-up found
+nor-fin-70	bench	no second source		no line-up found
+nor-fin-71	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-71	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-71	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-71	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-72	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-72	clubs	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-72	down	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-72	playoffs	disagree	https://www.rsssf.org/tablesn/noo09.html	first value says two-legged ties; RSSSF: single-match semi-finals (14th Fredrikstad v 5th Sarpsborg 08, 3rd Kongsvinger v 4th Sogndal), then a two-legged final
+nor-fin-72	split	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-72	format	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-72	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/940118	most substitutions made per team in sampled Eliteserien matches of 2009 = 3 (2009-04-13 3; 2009-06-14 2)
+nor-fin-72	bench	no second source		Transfermarkt match sheets of 2009 (Eliteserien) give no bench data
+nor-fin-73	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-73	clubs	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-73	up	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-73	down	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-73	playoffs	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF: one place among 3rd-5th and the top-flight 14th; detail: single-match semi-finals, then a two-legged final
+nor-fin-73	split	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-73	format	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-73	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/944694	most substitutions made per team in sampled OBOS-ligaen matches of 2009 = 3 (2009-04-26 3; 2009-06-28 3)
+nor-fin-73	bench	no second source		Transfermarkt match sheets of 2009 (OBOS-ligaen) give no bench data
+nor-fin-74	name	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF section: Norway Cup / Cup
+nor-fin-74	format	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-74	subs_used	agree	https://www.rsssf.org/tablesn/noo09.html	RSSSF cup final line-ups show 3 substitutions per team
+nor-fin-74	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-75	name	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Superfinalen, Stabaek 3-1 Valerenga, 8 Mar 2009
+nor-fin-75	clubs	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Superfinalen, Stabaek 3-1 Valerenga, 8 Mar 2009
+nor-fin-75	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Superfinalen, Stabaek 3-1 Valerenga, 8 Mar 2009
+nor-fin-75	subs_used	no second source		no line-up found
+nor-fin-75	bench	no second source		no line-up found
+nor-fin-76	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-76	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-76	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-76	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-77	name	agree	https://www.rsssf.org/tablesf/fin09.html	Veikkausliiga
+nor-fin-77	clubs	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-77	down	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-77	playoffs	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-77	split	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-77	format	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-77	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/945850	most substitutions made per team in sampled Veikkausliiga matches of 2009 = 3 (2009-05-04 3; 2009-07-18 3)
+nor-fin-77	bench	no second source		Transfermarkt match sheets of 2009 (Veikkausliiga) give no bench data
+nor-fin-78	name	agree	https://www.rsssf.org/tablesf/fin09.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-78	clubs	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-78	up	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-78	down	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-78	playoffs	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-78	split	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-78	format	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF final table and play-off sections
+nor-fin-78	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/949150	most substitutions made per team in sampled Ykkösliiga matches of 2009 = 3 (2009-05-21 3; 2009-08-01 3)
+nor-fin-78	bench	no second source		Transfermarkt match sheets of 2009 (Ykkösliiga) give no bench data
+nor-fin-79	name	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF: Suomen Cup
+nor-fin-79	format	agree	https://www.rsssf.org/tablesf/fin09.html	RSSSF: single-match knockout
+nor-fin-79	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-79	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-80	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-80	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-80	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-80	subs_used	no second source		no line-up found
+nor-fin-80	bench	no second source		no line-up found
+nor-fin-81	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-81	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-81	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-81	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-82	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-82	clubs	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-82	down	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-82	playoffs	disagree	https://www.rsssf.org/tablesn/noo2010.html	first value says two-legged ties; RSSSF: single-match semi-finals (3rd Fredrikstad v 4th Lov-Ham, 14th Honefoss v 5th Ranheim), then a two-legged final
+nor-fin-82	split	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-82	format	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-82	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1004136	most substitutions made per team in sampled Eliteserien matches of 2010 = 3 (2010-04-05 3; 2010-05-24 3)
+nor-fin-82	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1004136	most named substitutes per team in sampled Eliteserien matches of 2010 = 7 (2010-04-05 7; 2010-05-24 5)
+nor-fin-83	name	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF heading: Adeccoligaen
+nor-fin-83	clubs	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF: 16 started; Lyn withdrew after 11 matches and their results were annulled, so the final table has 15 clubs and 28 matches
+nor-fin-83	up	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-83	down	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF: 14th and 15th relegated, Lyn withdrew, Follo (12th) relegated after licence refusal, 13th Sandnes Ulf stayed
+nor-fin-83	playoffs	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF: one place among 3rd-5th and the top-flight 14th; detail: single-match semi-finals, then a two-legged final
+nor-fin-83	split	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-83	format	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-83	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1031539	most substitutions made per team in sampled OBOS-ligaen matches of 2010 = 3 (2010-04-25 1; 2010-07-11 3)
+nor-fin-83	bench	no second source		Transfermarkt match sheets of 2010 (OBOS-ligaen) give no bench data
+nor-fin-84	name	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF section: Norway Cup / Cup
+nor-fin-84	format	agree	https://www.rsssf.org/tablesn/noo2010.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-84	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-84	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-85	name	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Superfinalen, Rosenborg 3-1 Aalesund, 7 Mar 2010
+nor-fin-85	clubs	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Superfinalen, Rosenborg 3-1 Aalesund, 7 Mar 2010
+nor-fin-85	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Superfinalen, Rosenborg 3-1 Aalesund, 7 Mar 2010
+nor-fin-85	subs_used	no second source		no line-up found
+nor-fin-85	bench	no second source		no line-up found
+nor-fin-86	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-86	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-86	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-86	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-87	name	agree	https://www.rsssf.org/tablesf/fin2010.html	Veikkausliiga
+nor-fin-87	clubs	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-87	down	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-87	playoffs	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-87	split	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-87	format	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-87	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1018761	most substitutions made per team in sampled Veikkausliiga matches of 2010 = 3 (2010-04-30 3; 2010-05-15 2; 2010-06-21 3; 2010-07-24 3; 2010-08-13 2)
+nor-fin-87	bench	no second source		Transfermarkt match sheets of 2010 (Veikkausliiga) give no bench data
+nor-fin-88	name	agree	https://www.rsssf.org/tablesf/fin2010.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-88	clubs	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-88	up	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-88	down	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-88	playoffs	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-88	split	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-88	format	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF final table and play-off sections
+nor-fin-88	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1023850	most substitutions made per team in sampled Ykkösliiga matches of 2010 = 3 (2010-05-22 3; 2010-07-31 3)
+nor-fin-88	bench	no second source		Transfermarkt match sheets of 2010 (Ykkösliiga) give no bench data
+nor-fin-89	name	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF: Suomen Cup
+nor-fin-89	format	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF: single-match knockout
+nor-fin-89	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-89	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-90	name	agree	https://www.rsssf.org/tablesf/fin2010.html	Liigacup
+nor-fin-90	clubs	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF: the Veikkausliiga clubs (2006: 13, Allianssi refused a licence; 2007 and 2010: 14)
+nor-fin-90	format	agree	https://www.rsssf.org/tablesf/fin2010.html	RSSSF: 2 groups, top 4 of each to quarter-finals, then semi-finals and final
+nor-fin-90	subs_used	no second source		no line-up found
+nor-fin-90	bench	no second source		no line-up found
+nor-fin-91	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-91	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-91	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-91	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-92	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-92	clubs	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-92	down	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-92	playoffs	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF: no play-off section; 15th and 16th relegated
+nor-fin-92	split	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-92	format	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-92	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1072493	most substitutions made per team in sampled Eliteserien matches of 2011 = 3 (2011-04-10 3; 2011-04-17 3; 2011-05-30 3; 2011-06-19 2; 2011-08-07 3)
+nor-fin-92	bench	no second source		Transfermarkt match sheets of 2011 (Eliteserien) give no bench data
+nor-fin-93	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-93	clubs	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-93	up	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-93	down	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-93	playoffs	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-93	split	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-93	format	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-93	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1073131	most substitutions made per team in sampled OBOS-ligaen matches of 2011 = 3 (2011-04-25 3; 2011-06-26 3)
+nor-fin-93	bench	no second source		Transfermarkt match sheets of 2011 (OBOS-ligaen) give no bench data
+nor-fin-94	name	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF section: Norway Cup / Cup
+nor-fin-94	format	agree	https://www.rsssf.org/tablesn/noo2011.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-94	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-94	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-95	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2011-16
+nor-fin-96	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-96	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-96	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-96	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-97	name	agree	https://www.rsssf.org/tablesf/fin2011.html	Veikkausliiga
+nor-fin-97	clubs	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-97	down	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-97	playoffs	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-97	split	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-97	format	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-97	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1107569	most substitutions made per team in sampled Veikkausliiga matches of 2011 = 3 (2011-05-20 3; 2011-07-31 3)
+nor-fin-97	bench	no second source		Transfermarkt match sheets of 2011 (Veikkausliiga) give no bench data
+nor-fin-98	name	agree	https://www.rsssf.org/tablesf/fin2011.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-98	clubs	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-98	up	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-98	down	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-98	playoffs	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-98	split	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-98	format	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF final table and play-off sections
+nor-fin-98	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1139909	most substitutions made per team in sampled Ykkösliiga matches of 2011 = 3 (2011-05-30 3; 2011-08-07 3)
+nor-fin-98	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1139909	most named substitutes per team in sampled Ykkösliiga matches of 2011 = 7 (2011-05-30 7; 2011-08-07 7)
+nor-fin-99	name	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF: Suomen Cup
+nor-fin-99	format	agree	https://www.rsssf.org/tablesf/fin2011.html	RSSSF: knockout; 2014 lists HJK, Mariehamn, SJK and VPS with byes to the last 16. The League Cup link is not stated there
+nor-fin-99	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-99	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-100	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-100	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-100	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-100	subs_used	no second source		no line-up found
+nor-fin-100	bench	no second source		no line-up found
+nor-fin-101	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-101	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-101	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-101	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-102	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-102	clubs	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-102	down	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-102	playoffs	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-102	split	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-102	format	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-102	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1180232	most substitutions made per team in sampled Eliteserien matches of 2012 = 3 (2012-04-15 3; 2012-06-30 3)
+nor-fin-102	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1180232	most named substitutes per team in sampled Eliteserien matches of 2012 = 7 (2012-04-15 7; 2012-06-30 6)
+nor-fin-103	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-103	clubs	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-103	up	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-103	down	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-103	playoffs	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-103	split	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-103	format	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-103	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1180546	most substitutions made per team in sampled OBOS-ligaen matches of 2012 = 3 (2012-04-28 2; 2012-07-15 3)
+nor-fin-103	bench	no second source		Transfermarkt match sheets of 2012 (OBOS-ligaen) give no bench data
+nor-fin-104	name	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF section: Norway Cup / Cup
+nor-fin-104	format	agree	https://www.rsssf.org/tablesn/noo2012.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-104	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-104	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-105	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2011-16
+nor-fin-106	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-106	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-106	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-106	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-107	name	agree	https://www.rsssf.org/tablesf/fin2012.html	Veikkausliiga
+nor-fin-107	clubs	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-107	down	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-107	playoffs	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-107	split	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-107	format	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-107	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2210435	most substitutions made per team in sampled Veikkausliiga matches of 2012 = 3 (2012-05-06 3; 2012-07-15 3)
+nor-fin-107	bench	no second source		Transfermarkt match sheets of 2012 (Veikkausliiga) give no bench data
+nor-fin-108	name	agree	https://www.rsssf.org/tablesf/fin2012.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-108	clubs	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-108	up	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-108	down	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-108	playoffs	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-108	split	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF final table and play-off sections
+nor-fin-108	format	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF: 10 clubs, 27 matches each (triple round robin)
+nor-fin-108	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/1186320	most substitutions made per team in sampled Ykkösliiga matches of 2012 = 3 (2012-05-27 3; 2012-08-19 3)
+nor-fin-108	bench	no second source		Transfermarkt match sheets of 2012 (Ykkösliiga) give no bench data
+nor-fin-109	name	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF: Suomen Cup
+nor-fin-109	format	agree	https://www.rsssf.org/tablesf/fin2012.html	RSSSF: single-match knockout
+nor-fin-109	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-109	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-110	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-110	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-110	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-110	subs_used	no second source		no line-up found
+nor-fin-110	bench	no second source		no line-up found
+nor-fin-111	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-111	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-111	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-111	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-112	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-112	clubs	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-112	down	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-112	playoffs	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-112	split	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-112	format	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-112	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2297915	most substitutions made per team in sampled Eliteserien matches of 2013 = 3 (2013-04-07 3; 2013-04-14 3; 2013-05-16 3; 2013-06-23 3; 2013-08-11 3)
+nor-fin-112	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2297915	most named substitutes per team in sampled Eliteserien matches of 2013 = 7 (2013-04-07 7; 2013-04-14 7; 2013-05-16 7; 2013-06-23 7; 2013-08-11 7)
+nor-fin-113	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-113	clubs	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-113	up	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-113	down	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-113	playoffs	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-113	split	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-113	format	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-113	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2294746	most substitutions made per team in sampled OBOS-ligaen matches of 2013 = 3 (2013-04-28 3; 2013-06-23 3)
+nor-fin-113	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2294746	most named substitutes per team in sampled OBOS-ligaen matches of 2013 = 7 (2013-04-28 7; 2013-06-23 7)
+nor-fin-114	name	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF section: Norway Cup / Cup
+nor-fin-114	format	agree	https://www.rsssf.org/tablesn/noo2013.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-114	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-114	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-115	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2011-16
+nor-fin-116	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-116	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-116	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-116	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-117	name	agree	https://www.rsssf.org/tablesf/fin2013.html	Veikkausliiga
+nor-fin-117	clubs	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-117	down	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-117	playoffs	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-117	split	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-117	format	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-117	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2315954	most substitutions made per team in sampled Veikkausliiga matches of 2013 = 3 (2013-04-28 2; 2013-05-09 3; 2013-06-13 3; 2013-06-30 3; 2013-07-21 1)
+nor-fin-117	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2314391	most named substitutes per team in sampled Veikkausliiga matches of 2013 = 7 (2013-04-28 7; 2013-05-09 6; 2013-06-13 7; 2013-06-30 5; 2013-07-21 5)
+nor-fin-118	name	agree	https://www.rsssf.org/tablesf/fin2013.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-118	clubs	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-118	up	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-118	down	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-118	playoffs	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-118	split	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF final table and play-off sections
+nor-fin-118	format	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF: 10 clubs, 27 matches each (triple round robin)
+nor-fin-118	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2317856	most substitutions made per team in sampled Ykkösliiga matches of 2013 = 3 (2013-05-27 3; 2013-08-12 3)
+nor-fin-118	bench	no second source		Transfermarkt match sheets of 2013 (Ykkösliiga) give no bench data
+nor-fin-119	name	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF: Suomen Cup
+nor-fin-119	format	agree	https://www.rsssf.org/tablesf/fin2013.html	RSSSF: single-match knockout
+nor-fin-119	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-119	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-120	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-120	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-120	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-120	subs_used	no second source		no line-up found
+nor-fin-120	bench	no second source		no line-up found
+nor-fin-121	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-121	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-121	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-121	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-122	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-122	clubs	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-122	down	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-122	playoffs	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-122	split	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-122	format	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-122	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2411743	most substitutions made per team in sampled Eliteserien matches of 2014 = 3 (2014-04-21 3; 2014-06-12 3)
+nor-fin-122	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2411743	most named substitutes per team in sampled Eliteserien matches of 2014 = 7 (2014-04-21 7; 2014-06-12 7)
+nor-fin-123	name	no second source		sponsor name for this year found only on Wikipedia pages and a fan site; RSSSF uses its own label
+nor-fin-123	clubs	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-123	up	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-123	down	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-123	playoffs	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-123	split	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-123	format	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-123	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2412035	most substitutions made per team in sampled OBOS-ligaen matches of 2014 = 3 (2014-04-27 3; 2014-06-09 3)
+nor-fin-123	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2412035	most named substitutes per team in sampled OBOS-ligaen matches of 2014 = 7 (2014-04-27 7; 2014-06-09 7)
+nor-fin-124	name	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF section: Norway Cup / Cup
+nor-fin-124	format	agree	https://www.rsssf.org/tablesn/noo2014.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-124	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-124	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-125	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2011-16
+nor-fin-126	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-126	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-126	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-126	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-127	name	agree	https://www.rsssf.org/tablesf/fin2014.html	Veikkausliiga
+nor-fin-127	clubs	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-127	down	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-127	playoffs	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-127	split	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-127	format	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-127	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2451425	most substitutions made per team in sampled Veikkausliiga matches of 2014 = 3 (2014-05-04 2; 2014-05-12 3; 2014-07-02 3; 2014-08-25 2)
+nor-fin-127	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2451425	most named substitutes per team in sampled Veikkausliiga matches of 2014 = 7 (2014-05-04 6; 2014-05-12 7)
+nor-fin-128	name	agree	https://www.rsssf.org/tablesf/fin2014.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-128	clubs	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-128	up	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF: 1 promotion place; KTP and Ilves also went up after MyPa and Honka were refused licences
+nor-fin-128	down	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-128	playoffs	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-128	split	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF final table and play-off sections
+nor-fin-128	format	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF: 10 clubs, 27 matches each (triple round robin)
+nor-fin-128	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2465503	most substitutions made per team in sampled Ykkösliiga matches of 2014 = 3 (2014-05-28 3; 2014-08-17 3)
+nor-fin-128	bench	no second source		Transfermarkt match sheets of 2014 (Ykkösliiga) give no bench data
+nor-fin-129	name	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF: Suomen Cup
+nor-fin-129	format	agree	https://www.rsssf.org/tablesf/fin2014.html	RSSSF: knockout; 2014 lists HJK, Mariehamn, SJK and VPS with byes to the last 16. The League Cup link is not stated there
+nor-fin-129	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-129	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-130	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-130	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-130	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-130	subs_used	no second source		no line-up found
+nor-fin-130	bench	no second source		no line-up found
+nor-fin-131	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-131	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-131	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-131	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-132	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-132	clubs	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-132	down	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-132	playoffs	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-132	split	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-132	format	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-132	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2556025	most substitutions made per team in sampled Eliteserien matches of 2015 = 3 (2015-04-26 3; 2015-06-21 3)
+nor-fin-132	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2556025	most named substitutes per team in sampled Eliteserien matches of 2015 = 7 (2015-04-26 7; 2015-06-21 7)
+nor-fin-133	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-133	clubs	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-133	up	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-133	down	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-133	playoffs	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-133	split	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-133	format	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-133	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2556254	most substitutions made per team in sampled OBOS-ligaen matches of 2015 = 3 (2015-04-26 3; 2015-06-21 3)
+nor-fin-133	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2556254	most named substitutes per team in sampled OBOS-ligaen matches of 2015 = 7 (2015-04-26 7; 2015-06-21 7)
+nor-fin-134	name	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF section: Norway Cup / Cup
+nor-fin-134	format	agree	https://www.rsssf.org/tablesn/noo2015.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-134	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-134	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-135	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2011-16
+nor-fin-136	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-136	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-136	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-136	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-137	name	agree	https://www.rsssf.org/tablesf/fin2015.html	Veikkausliiga
+nor-fin-137	clubs	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-137	down	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-137	playoffs	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-137	split	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-137	format	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-137	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2561004	most substitutions made per team in sampled Veikkausliiga matches of 2015 = 3 (2015-05-03 3; 2015-07-06 3)
+nor-fin-137	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2561004	most named substitutes per team in sampled Veikkausliiga matches of 2015 = 7 (2015-05-03 7)
+nor-fin-138	name	agree	https://www.rsssf.org/tablesf/fin2015.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-138	clubs	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-138	up	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-138	down	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-138	playoffs	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-138	split	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF final table and play-off sections
+nor-fin-138	format	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF: 10 clubs, 27 matches each (triple round robin)
+nor-fin-138	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2536035	most substitutions made per team in sampled Ykkösliiga matches of 2015 = 3 (2015-05-31 2; 2015-08-30 3)
+nor-fin-138	bench	no second source		Transfermarkt match sheets of 2015 (Ykkösliiga) give no bench data
+nor-fin-139	name	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF: Suomen Cup
+nor-fin-139	format	agree	https://www.rsssf.org/tablesf/fin2015.html	RSSSF: single-match knockout
+nor-fin-139	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-139	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-140	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-140	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-140	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-140	subs_used	no second source		no line-up found
+nor-fin-140	bench	no second source		no line-up found
+nor-fin-141	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-141	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-141	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-141	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-142	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-142	clubs	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-142	down	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-142	playoffs	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-142	split	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-142	format	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-142	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2672787	most substitutions made per team in sampled Eliteserien matches of 2016 = 3 (2016-04-03 3; 2016-04-10 3; 2016-05-12 3; 2016-05-29 3; 2016-08-07 3)
+nor-fin-142	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2672787	most named substitutes per team in sampled Eliteserien matches of 2016 = 7 (2016-04-03 7; 2016-04-10 7; 2016-05-12 7; 2016-05-29 7; 2016-08-07 7)
+nor-fin-143	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-143	clubs	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-143	up	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-143	down	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-143	playoffs	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-143	split	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-143	format	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-143	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2680915	most substitutions made per team in sampled OBOS-ligaen matches of 2016 = 3 (2016-04-24 3; 2016-06-19 2)
+nor-fin-143	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2680915	most named substitutes per team in sampled OBOS-ligaen matches of 2016 = 7 (2016-04-24 7; 2016-06-19 6)
+nor-fin-144	name	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF section: Norway Cup / Cup
+nor-fin-144	format	agree	https://www.rsssf.org/tablesn/noo2016.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-144	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-144	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-145	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: not held 2011-16
+nor-fin-146	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-146	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-146	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-146	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-147	name	agree	https://www.rsssf.org/tablesf/fin2016.html	Veikkausliiga
+nor-fin-147	clubs	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-147	down	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-147	playoffs	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-147	split	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-147	format	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-147	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2656048	most substitutions made per team in sampled Veikkausliiga matches of 2016 = 3 (2016-04-28 3; 2016-06-09 3; 2016-06-29 3; 2016-07-17 3; 2016-08-07 3)
+nor-fin-147	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2656048	most named substitutes per team in sampled Veikkausliiga matches of 2016 = 7 (2016-04-28 7; 2016-06-09 7; 2016-06-29 7; 2016-07-17 7; 2016-08-07 7)
+nor-fin-148	name	agree	https://www.rsssf.org/tablesf/fin2016.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-148	clubs	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-148	up	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-148	down	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-148	playoffs	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-148	split	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF final table and play-off sections
+nor-fin-148	format	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF: 10 clubs, 27 matches each (triple round robin)
+nor-fin-148	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2662776	most substitutions made per team in sampled Ykkösliiga matches of 2016 = 3 (2016-05-23 3; 2016-08-28 2)
+nor-fin-148	bench	no second source		Transfermarkt match sheets of 2016 (Ykkösliiga) give no bench data
+nor-fin-149	name	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF: Suomen Cup
+nor-fin-149	format	agree	https://www.rsssf.org/tablesf/fin2016.html	RSSSF: single-match knockout
+nor-fin-149	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-149	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-150	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-150	clubs	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-150	format	no second source		RSSSF has no League Cup section for this year; no other page read
+nor-fin-150	subs_used	no second source		no line-up found
+nor-fin-150	bench	no second source		no line-up found
+nor-fin-151	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-151	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-151	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-151	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-152	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-152	clubs	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-152	down	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-152	playoffs	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-152	split	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-152	format	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-152	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2830898	most substitutions made per team in sampled Eliteserien matches of 2017 = 3 (2017-04-17 3; 2017-06-18 3)
+nor-fin-152	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2830898	most named substitutes per team in sampled Eliteserien matches of 2017 = 7 (2017-04-17 7; 2017-06-18 7)
+nor-fin-153	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-153	clubs	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-153	up	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-153	down	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-153	playoffs	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-153	split	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-153	format	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-153	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2849338	most substitutions made per team in sampled OBOS-ligaen matches of 2017 = 3 (2017-04-23 3; 2017-06-18 3)
+nor-fin-153	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2849338	most named substitutes per team in sampled OBOS-ligaen matches of 2017 = 7 (2017-04-23 7; 2017-06-18 7)
+nor-fin-154	name	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF section: Norway Cup / Cup
+nor-fin-154	format	agree	https://www.rsssf.org/tablesn/noo2017.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-154	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-154	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-155	name	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Mesterfinalen, Rosenborg 2-0 Brann (league runners-up, Rosenborg held the double), 29 Mar 2017
+nor-fin-155	clubs	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Mesterfinalen, Rosenborg 2-0 Brann (league runners-up, Rosenborg held the double), 29 Mar 2017
+nor-fin-155	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Mesterfinalen, Rosenborg 2-0 Brann (league runners-up, Rosenborg held the double), 29 Mar 2017
+nor-fin-155	subs_used	no second source		no line-up found
+nor-fin-155	bench	no second source		no line-up found
+nor-fin-156	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-156	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-156	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-156	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-157	name	agree	https://www.rsssf.org/tablesf/fin2017.html	Veikkausliiga
+nor-fin-157	clubs	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-157	down	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-157	playoffs	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-157	split	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-157	format	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-157	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2824978	most substitutions made per team in sampled Veikkausliiga matches of 2017 = 3 (2017-05-06 3; 2017-07-16 3)
+nor-fin-157	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2824978	most named substitutes per team in sampled Veikkausliiga matches of 2017 = 7 (2017-05-06 7; 2017-07-16 7)
+nor-fin-158	name	agree	https://www.rsssf.org/tablesf/fin2017.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-158	clubs	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-158	up	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-158	down	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-158	playoffs	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-158	split	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF final table and play-off sections
+nor-fin-158	format	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF: 10 clubs, 27 matches each (triple round robin)
+nor-fin-158	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/2824846	most substitutions made per team in sampled Ykkösliiga matches of 2017 = 3 (2017-06-03 3; 2017-08-28 3)
+nor-fin-158	bench	no second source		Transfermarkt match sheets of 2017 (Ykkösliiga) give no bench data
+nor-fin-159	name	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF: Suomen Cup
+nor-fin-159	format	agree	https://www.rsssf.org/tablesf/fin2017.html	RSSSF Suomen Cup 2017: 5 groups (A-E) of 6 in Jan-Mar, then an intermediate round of 3 ties before the quarter-finals, final 23 Sep 2017
+nor-fin-159	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-159	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-160	format	agree	https://www.veikkausliiga.com/uutiset/2021/11/27/liigacup-palaa-kilpailukalenteriin-edellisen-kerran-pelattiin-vuonna-2016	veikkausliiga.com: Liigacup returns in 2022, last played in 2016
+nor-fin-161	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-161	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-161	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-161	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-162	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-162	clubs	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-162	down	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-162	playoffs	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-162	split	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-162	format	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-162	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3021525	most substitutions made per team in sampled Eliteserien matches of 2018 = 3 (2018-04-02 3; 2018-04-08 3; 2018-05-16 3; 2018-06-10 3; 2018-08-19 3)
+nor-fin-162	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3021525	most named substitutes per team in sampled Eliteserien matches of 2018 = 7 (2018-04-02 7; 2018-04-08 7; 2018-05-16 7; 2018-06-10 7; 2018-08-19 7)
+nor-fin-163	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-163	clubs	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-163	up	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-163	down	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-163	playoffs	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-163	split	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-163	format	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-163	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3021769	most substitutions made per team in sampled OBOS-ligaen matches of 2018 = 3 (2018-04-22 3; 2018-06-17 3)
+nor-fin-163	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3021769	most named substitutes per team in sampled OBOS-ligaen matches of 2018 = 7 (2018-04-22 7; 2018-06-17 7)
+nor-fin-164	name	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF section: Norway Cup / Cup
+nor-fin-164	format	agree	https://www.rsssf.org/tablesn/noo2018.html	RSSSF: single-match rounds, aet and penalties shown, final in Oslo in Nov/Dec; first-round count not checked on this page
+nor-fin-164	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-164	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-165	name	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Mesterfinalen, Rosenborg 1-0 Lillestrom, 26 Apr 2018
+nor-fin-165	clubs	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Mesterfinalen, Rosenborg 1-0 Lillestrom, 26 Apr 2018
+nor-fin-165	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Mesterfinalen, Rosenborg 1-0 Lillestrom, 26 Apr 2018
+nor-fin-165	subs_used	no second source		no line-up found
+nor-fin-165	bench	no second source		no line-up found
+nor-fin-166	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-166	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-166	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-166	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-167	name	agree	https://www.rsssf.org/tablesf/fin2018.html	Veikkausliiga
+nor-fin-167	clubs	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-167	down	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-167	playoffs	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-167	split	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-167	format	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-167	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3028680	most substitutions made per team in sampled Veikkausliiga matches of 2018 = 3 (2018-04-29 3; 2018-06-30 3)
+nor-fin-167	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3028680	most named substitutes per team in sampled Veikkausliiga matches of 2018 = 7 (2018-04-29 7; 2018-06-30 7)
+nor-fin-168	name	agree	https://www.rsssf.org/tablesf/fin2018.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-168	clubs	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-168	up	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-168	down	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-168	playoffs	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-168	split	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF final table and play-off sections
+nor-fin-168	format	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF: 10 clubs, 27 matches each (triple round robin)
+nor-fin-168	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3030276	most substitutions made per team in sampled Ykkösliiga matches of 2018 = 3 (2018-06-02 3; 2018-09-02 3)
+nor-fin-168	bench	no second source		Transfermarkt match sheets of 2018 (Ykkösliiga) give no bench data
+nor-fin-169	name	agree	https://www.rsssf.org/tablesf/fin2018.html	RSSSF: Suomen Cup
+nor-fin-169	format	disagree	https://www.rsssf.org/tablesf/fin2018.html	first value: ran to September of the next year; RSSSF Suomen Cup 2018: groups A-E, intermediate round 17 Mar, semi-finals 1-2 Apr, final 12 May 2018
+nor-fin-169	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-169	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-170	format	agree	https://www.veikkausliiga.com/uutiset/2021/11/27/liigacup-palaa-kilpailukalenteriin-edellisen-kerran-pelattiin-vuonna-2016	veikkausliiga.com: Liigacup returns in 2022, last played in 2016
+nor-fin-171	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-171	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-171	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-171	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-172	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-172	clubs	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-172	down	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-172	playoffs	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-172	split	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-172	format	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-172	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3172416	most substitutions made per team in sampled Eliteserien matches of 2019 = 3 (2019-04-07 3; 2019-04-14 3; 2019-04-22 3; 2019-06-30 3; 2019-08-14 3; 2019-08-25 3; 2019-10-21 3)
+nor-fin-172	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3172416	most named substitutes per team in sampled Eliteserien matches of 2019 = 7 (2019-04-07 7; 2019-04-14 7; 2019-04-22 7; 2019-06-30 7; 2019-08-14 7; 2019-08-25 7; 2019-10-21 7)
+nor-fin-173	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-173	clubs	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-173	up	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-173	down	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-173	playoffs	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-173	split	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-173	format	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-173	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3173099	most substitutions made per team in sampled OBOS-ligaen matches of 2019 = 3 (2019-04-14 3; 2019-04-22 3; 2019-06-30 3)
+nor-fin-173	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3173099	most named substitutes per team in sampled OBOS-ligaen matches of 2019 = 7 (2019-04-14 7; 2019-04-22 7; 2019-06-30 7)
+nor-fin-174	name	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF section: Norway Cup / Cup
+nor-fin-174	format	agree	https://www.rsssf.org/tablesn/noo2019.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-174	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-174	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-175	name	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Rosenborg v Molde set for 17 Mar 2019, cancelled 15 Mar over the state of the pitch before Norway v Sweden; the first agent gives extreme weather as the reason
+nor-fin-175	format	agree	https://www.rsssf.org/tablesn/noosupcuphist.html	RSSSF: Rosenborg v Molde set for 17 Mar 2019, cancelled 15 Mar over the state of the pitch before Norway v Sweden; the first agent gives extreme weather as the reason
+nor-fin-176	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-176	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-176	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-176	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-177	name	agree	https://www.rsssf.org/tablesf/fin2019.html	Veikkausliiga
+nor-fin-177	clubs	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-177	down	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-177	playoffs	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-177	split	disagree	https://www.rsssf.org/tablesf/fin2019.html	first value: Challenger winner joins 4th-6th; RSSSF: 7th HIFK and 8th Lahti (top 2 of the lower group) joined 3rd, 5th and 6th in the Europa League play-off (4th Ilves were cup winners); each group played 5 more matches, 27 in all
+nor-fin-177	format	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-177	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3154392	most substitutions made per team in sampled Veikkausliiga matches of 2019 = 3 (2019-04-20 3; 2019-05-03 3; 2019-06-25 3; 2019-07-28 3; 2019-08-19 3)
+nor-fin-177	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3154392	most named substitutes per team in sampled Veikkausliiga matches of 2019 = 7 (2019-04-20 7; 2019-05-03 7; 2019-06-25 7; 2019-07-28 7; 2019-08-19 7)
+nor-fin-178	name	agree	https://www.rsssf.org/tablesf/fin2019.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-178	clubs	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-178	up	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-178	down	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-178	playoffs	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-178	split	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF final table and play-off sections
+nor-fin-178	format	found	https://www.rsssf.org/tablesf/fin2019.html	found: 10 clubs, 27 matches each, so a triple round robin; only 10th relegated as tier 2 grew to 12
+nor-fin-178	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3161422	most substitutions made per team in sampled Ykkösliiga matches of 2019 = 3 (2019-05-30 3; 2019-08-24 3)
+nor-fin-178	bench	no second source	https://www.transfermarkt.com/spielbericht/index/spielbericht/3161422	sample shows at most 5 (2019-05-30 5), which does not confirm a limit of 7
+nor-fin-179	name	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF: Suomen Cup
+nor-fin-179	format	agree	https://www.rsssf.org/tablesf/fin2019.html	RSSSF: 2 Veikkausliiga groups of 6 (top 4 on), 2 Ykkonen groups of 5 (top 2 on), Kakkonen groups, then last 16 to final
+nor-fin-179	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-179	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-180	format	agree	https://www.veikkausliiga.com/uutiset/2021/11/27/liigacup-palaa-kilpailukalenteriin-edellisen-kerran-pelattiin-vuonna-2016	veikkausliiga.com: Liigacup returns in 2022, last played in 2016
+nor-fin-181	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-181	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-181	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-181	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-182	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-182	clubs	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-182	down	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-182	playoffs	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF: play-off final a single match in Oslo
+nor-fin-182	split	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-182	format	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-182	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3329954	found 5: most substitutions made per team in sampled Eliteserien matches of 2020 (2020-06-16 5; 2020-06-24 5; 2020-06-28 4; 2020-07-02 5; 2020-07-26 4; 2020-08-09 4; 2020-09-12 4; 2020-09-27 5; 2020-11-24 2; 2020-12-10 4)
+nor-fin-182	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3329833	found 9: most named substitutes per team in sampled Eliteserien matches of 2020 (2020-06-16 7; 2020-06-24 7; 2020-06-28 7; 2020-07-02 7; 2020-07-26 7; 2020-08-09 9; 2020-09-12 9; 2020-09-27 9; 2020-11-24 8; 2020-12-10 8)
+nor-fin-183	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-183	clubs	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-183	up	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-183	down	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-183	playoffs	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-183	split	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-183	format	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-183	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3330095	found 5: most substitutions made per team in sampled OBOS-ligaen matches of 2020 (2020-07-20 5; 2020-08-30 5)
+nor-fin-183	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3330095	found 9: most named substitutes per team in sampled OBOS-ligaen matches of 2020 (2020-07-20 9; 2020-08-30 9)
+nor-fin-184	name	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF section: Norway Cup / Cup
+nor-fin-184	format	agree	https://www.rsssf.org/tablesn/noo2020.html	RSSSF 2020 page has league sections only and no cup
+nor-fin-185	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-186	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-186	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-186	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-186	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-187	name	agree	https://www.rsssf.org/tablesf/fin2020.html	Veikkausliiga
+nor-fin-187	clubs	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF final table and play-off sections
+nor-fin-187	down	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF final table and play-off sections
+nor-fin-187	playoffs	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF final table and play-off sections
+nor-fin-187	split	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF: split cancelled on 29 Oct 2020; table after 22 matches final (first agent says so in notes)
+nor-fin-187	format	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF final table and play-off sections
+nor-fin-187	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3323241	found 5: most substitutions made per team in sampled Veikkausliiga matches of 2020 (2020-07-17 4; 2020-07-26 3; 2020-08-31 5; 2020-09-28 5; 2020-10-19 5)
+nor-fin-187	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3323185	found 7: most named substitutes per team in sampled Veikkausliiga matches of 2020 (2020-07-17 7; 2020-07-26 7; 2020-08-31 7; 2020-09-28 7; 2020-10-19 7)
+nor-fin-188	name	agree	https://www.rsssf.org/tablesf/fin2020.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-188	clubs	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF final table and play-off sections
+nor-fin-188	up	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF final table and play-off sections
+nor-fin-188	down	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF: 10th Kajaani dissolved, 11th and 12th relegated
+nor-fin-188	playoffs	disagree	https://www.rsssf.org/tablesf/fin2020.html	first value: 3rd v 4th, winner v 2nd, then v Veikkausliiga 11th; RSSSF: 2nd KTP went straight to the play-off v Veikkausliiga 11th TPS (two legs); no internal play-off shown
+nor-fin-188	split	disagree	https://www.rsssf.org/tablesf/fin2020.html	first value: promotion and relegation series; RSSSF: final table after 22 matches only, no series played (answers the open question in nor-fin.md)
+nor-fin-188	format	disagree	https://www.rsssf.org/tablesf/fin2020.html	first value: round robin plus split; RSSSF: 12 clubs, 22-match double round robin as the final table
+nor-fin-188	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3321730	found 5: most substitutions made per team in sampled Ykkösliiga matches of 2020 (2020-07-18 5; 2020-07-26 5; 2020-09-30 3)
+nor-fin-188	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3321730	found 7: most named substitutes per team in sampled Ykkösliiga matches of 2020 (2020-07-18 7; 2020-09-30 6)
+nor-fin-189	name	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF: Suomen Cup
+nor-fin-189	format	agree	https://www.rsssf.org/tablesf/fin2020.html	RSSSF: 2 Veikkausliiga groups of 6 and 2 Ykkonen groups of 6, then last 16 to final (3 Oct 2020)
+nor-fin-189	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-189	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-190	format	agree	https://www.veikkausliiga.com/uutiset/2021/11/27/liigacup-palaa-kilpailukalenteriin-edellisen-kerran-pelattiin-vuonna-2016	veikkausliiga.com: Liigacup returns in 2022, last played in 2016
+nor-fin-191	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-191	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-191	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-191	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-192	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-192	clubs	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-192	down	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-192	playoffs	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF: play-off final a single match in Oslo
+nor-fin-192	split	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-192	format	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-192	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3548527	most substitutions made per team in sampled Eliteserien matches of 2021 = 5 (2021-05-16 3; 2021-05-24 5; 2021-07-01 4; 2021-07-18 4; 2021-09-19 4)
+nor-fin-192	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3548527	most named substitutes per team in sampled Eliteserien matches of 2021 = 9 (2021-05-16 8; 2021-05-24 9; 2021-07-01 8; 2021-07-18 8; 2021-09-19 9)
+nor-fin-193	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-193	clubs	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-193	up	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-193	down	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-193	playoffs	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-193	split	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-193	format	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-193	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3524966	most substitutions made per team in sampled OBOS-ligaen matches of 2021 = 5 (2021-05-25 5; 2021-05-30 4; 2021-07-21 4)
+nor-fin-193	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3524966	most named substitutes per team in sampled OBOS-ligaen matches of 2021 = 9 (2021-05-25 9; 2021-05-30 9; 2021-07-21 9)
+nor-fin-194	name	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF section: Norway Cup / Cup
+nor-fin-194	format	agree	https://www.rsssf.org/tablesn/noo2021.html	RSSSF Cup 2021/22: first round 24 Jul 2021, 64 ties, final 1 May 2022
+nor-fin-194	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-194	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-195	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-196	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-196	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-196	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-196	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-197	name	agree	https://www.rsssf.org/tablesf/fin2021.html	Veikkausliiga
+nor-fin-197	clubs	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-197	down	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-197	playoffs	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-197	split	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-197	format	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-197	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3511635	found 5: most substitutions made per team in sampled Veikkausliiga matches of 2021 (2021-05-14 5; 2021-05-30 5; 2021-07-17 5; 2021-08-22 5; 2021-09-19 5)
+nor-fin-197	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3511635	found 7: most named substitutes per team in sampled Veikkausliiga matches of 2021 (2021-05-14 7; 2021-05-30 7; 2021-07-17 7; 2021-08-22 7; 2021-09-19 7)
+nor-fin-198	name	agree	https://www.rsssf.org/tablesf/fin2021.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-198	clubs	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-198	up	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-198	down	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-198	playoffs	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-198	split	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-198	format	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF final table and play-off sections
+nor-fin-198	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3512669	found 5: most substitutions made per team in sampled Ykkösliiga matches of 2021 (2021-05-13 5; 2021-05-30 4; 2021-06-30 5; 2021-07-17 5; 2021-08-14 4; 2021-09-11 5)
+nor-fin-198	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3512669	found 7: most named substitutes per team in sampled Ykkösliiga matches of 2021 (2021-05-13 7; 2021-05-30 7; 2021-06-30 7; 2021-07-17 7; 2021-08-14 7; 2021-09-11 7)
+nor-fin-199	name	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF: Suomen Cup
+nor-fin-199	format	agree	https://www.rsssf.org/tablesf/fin2021.html	RSSSF: 3 Veikkausliiga groups and 3 Ykkonen groups of 4, play-off round, quarter-finals, final 8 May 2021
+nor-fin-199	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-199	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-200	format	agree	https://www.veikkausliiga.com/uutiset/2021/11/27/liigacup-palaa-kilpailukalenteriin-edellisen-kerran-pelattiin-vuonna-2016	veikkausliiga.com: Liigacup returns in 2022, last played in 2016
+nor-fin-201	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-201	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-201	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-201	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-202	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-202	clubs	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-202	down	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-202	playoffs	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-202	split	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-202	format	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-202	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3750490	most substitutions made per team in sampled Eliteserien matches of 2022 = 5 (2022-04-24 5; 2022-07-10 5)
+nor-fin-202	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3750490	most named substitutes per team in sampled Eliteserien matches of 2022 = 9 (2022-04-24 9; 2022-07-10 7)
+nor-fin-203	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-203	clubs	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-203	up	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-203	down	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-203	playoffs	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-203	split	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-203	format	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-203	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3778499	most substitutions made per team in sampled OBOS-ligaen matches of 2022 = 5 (2022-04-25 5; 2022-07-07 5)
+nor-fin-203	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3778499	most named substitutes per team in sampled OBOS-ligaen matches of 2022 = 9 (2022-04-25 9; 2022-07-07 9)
+nor-fin-204	name	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF section: Norway Cup / Cup
+nor-fin-204	format	agree	https://www.rsssf.org/tablesn/noo2022.html	RSSSF Cup 2022/23: first round 4 May 2022, final 20 May 2023
+nor-fin-204	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-204	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-205	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-206	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-206	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-206	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-206	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-207	name	agree	https://www.rsssf.org/tablesf/fin2022.html	Veikkausliiga
+nor-fin-207	clubs	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-207	down	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-207	playoffs	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-207	split	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-207	format	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-207	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3747710	found 5: most substitutions made per team in sampled Veikkausliiga matches of 2022 (2022-04-17 4; 2022-04-29 4; 2022-07-02 5; 2022-08-07 3; 2022-08-28 5)
+nor-fin-207	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3747651	found 7: most named substitutes per team in sampled Veikkausliiga matches of 2022 (2022-04-17 7; 2022-04-29 7; 2022-07-02 7; 2022-08-07 7; 2022-08-28 7)
+nor-fin-208	name	agree	https://www.rsssf.org/tablesf/fin2022.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-208	clubs	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-208	up	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-208	down	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-208	playoffs	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-208	split	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-208	format	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF final table and play-off sections
+nor-fin-208	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3788525	found 5: most substitutions made per team in sampled Ykkösliiga matches of 2022 (2022-07-27 5; 2022-07-30 5)
+nor-fin-208	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/3788525	found 7: most named substitutes per team in sampled Ykkösliiga matches of 2022 (2022-07-27 7; 2022-07-30 7)
+nor-fin-209	name	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF: Suomen Cup
+nor-fin-209	format	agree	https://www.rsssf.org/tablesf/fin2022.html	RSSSF: knockout only (round 6, quarter-finals, semi-finals, final in September); entry round of the top three tiers not shown
+nor-fin-209	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-209	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-210	name	agree	https://www.veikkausliiga.com/uutiset/2021/11/27/liigacup-palaa-kilpailukalenteriin-edellisen-kerran-pelattiin-vuonna-2016	Liigacup
+nor-fin-210	clubs	agree	https://www.veikkausliiga.com/uutiset/2021/11/27/liigacup-palaa-kilpailukalenteriin-edellisen-kerran-pelattiin-vuonna-2016	veikkausliiga.com: the 12 Veikkausliiga clubs
+nor-fin-210	format	disagree	https://www.veikkausliiga.com/uutiset/2021/12/03/liigacupin-2022-lohkot-ja-runkoaikataulu-selvilla	first value: knockout (detail unknown); veikkausliiga.com: 3 groups of 4 (single round robin, 15 Jan-23 Feb), top 2 and 2 best 3rd to quarter-finals, semi-finals, final 19 Mar 2022
+nor-fin-210	subs_used	no second source		no line-up found
+nor-fin-210	bench	no second source		no line-up found
+nor-fin-211	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-211	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-211	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-211	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-212	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-212	clubs	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-212	down	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-212	playoffs	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-212	split	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-212	format	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-212	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3992979	most substitutions made per team in sampled Eliteserien matches of 2023 = 5 (2023-04-23 5; 2023-04-30 5; 2023-06-11 4; 2023-07-09 4; 2023-08-20 5)
+nor-fin-212	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3992979	most named substitutes per team in sampled Eliteserien matches of 2023 = 9 (2023-04-23 9; 2023-04-30 9; 2023-06-11 8; 2023-07-09 8; 2023-08-20 9)
+nor-fin-213	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-213	clubs	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-213	up	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-213	down	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-213	playoffs	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-213	split	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-213	format	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-213	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3993221	most substitutions made per team in sampled OBOS-ligaen matches of 2023 = 5 (2023-04-30 5; 2023-06-24 5)
+nor-fin-213	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/3993221	most named substitutes per team in sampled OBOS-ligaen matches of 2023 = 9 (2023-04-30 9; 2023-06-24 9)
+nor-fin-214	name	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF section: Norway Cup / Cup
+nor-fin-214	format	agree	https://www.rsssf.org/tablesn/noo2023.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-214	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-214	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-215	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-216	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-216	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-216	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-216	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-217	name	agree	https://www.rsssf.org/tablesf/fin2023.html	Veikkausliiga
+nor-fin-217	clubs	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-217	down	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-217	playoffs	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-217	split	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-217	format	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-217	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4014197	found 5: most substitutions made per team in sampled Veikkausliiga matches of 2023 (2023-04-23 4; 2023-05-05 4; 2023-06-27 5; 2023-07-30 5; 2023-08-21 4)
+nor-fin-217	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4014140	found 7: most named substitutes per team in sampled Veikkausliiga matches of 2023 (2023-04-23 7; 2023-05-05 7; 2023-06-27 7; 2023-07-30 7; 2023-08-21 7)
+nor-fin-218	name	agree	https://www.rsssf.org/tablesf/fin2023.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-218	clubs	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-218	up	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-218	down	disagree	https://www.rsssf.org/tablesf/fin2023.html	first value: bottom 2; RSSSF: relegation line above 10th (3 places); 11th KPV and 12th JJK relegated, 10th KaPa stayed only because HIFK were dissolved
+nor-fin-218	playoffs	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-218	split	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-218	format	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF final table and play-off sections
+nor-fin-218	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4045607	found 5: most substitutions made per team in sampled Ykkösliiga matches of 2023 (2023-05-06 4; 2023-05-13 5; 2023-07-30 3)
+nor-fin-218	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4045597	found 7: most named substitutes per team in sampled Ykkösliiga matches of 2023 (2023-05-06 7; 2023-05-13 7; 2023-07-30 7)
+nor-fin-219	name	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF: Suomen Cup
+nor-fin-219	format	agree	https://www.rsssf.org/tablesf/fin2023.html	RSSSF: knockout only (round 6, quarter-finals, semi-finals, final in September); entry round of the top three tiers not shown
+nor-fin-219	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-219	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-220	name	no second source		no non-Wikipedia page for this edition read
+nor-fin-220	clubs	no second source		club list of the 2023 edition not read
+nor-fin-220	format	disagree	https://www.veikkausliiga.com/uutiset/2023/12/01/liigacupin-2024-lohkojako-selvilla	first value: knockout (detail unknown); veikkausliiga.com: 2 geographic groups of 6 (single round robin, Jan-Feb), top 2 of each to semi-finals, then final in March (the 2024 article says the 2023 format was the same)
+nor-fin-220	subs_used	no second source		no line-up found
+nor-fin-220	bench	no second source		no line-up found
+nor-fin-221	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-221	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-221	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-221	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-222	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-222	clubs	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-222	down	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-222	playoffs	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-222	split	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-222	format	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-222	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4254785	most substitutions made per team in sampled Eliteserien matches of 2024 = 5 (2024-04-21 3; 2024-07-07 5)
+nor-fin-222	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4254722	most named substitutes per team in sampled Eliteserien matches of 2024 = 9 (2024-04-21 9; 2024-07-07 8)
+nor-fin-223	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-223	clubs	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-223	up	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-223	down	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-223	playoffs	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-223	split	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-223	format	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-223	subs_used	no second source	https://www.transfermarkt.com/spielbericht/index/spielbericht/4254944	sample shows at most 4 (2024-04-15 4; 2024-04-20 4; 2024-04-28 3; 2024-06-16 4; 2024-08-19 3), which does not confirm a limit of 5
+nor-fin-223	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4254944	most named substitutes per team in sampled OBOS-ligaen matches of 2024 = 9 (2024-04-15 9; 2024-04-20 9; 2024-04-28 9; 2024-06-16 8; 2024-08-19 9)
+nor-fin-224	name	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF section: Norway Cup / Cup
+nor-fin-224	format	agree	https://www.rsssf.org/tablesn/noo2024.html	RSSSF: 64 first-round ties (128 clubs), single matches, final at Ullevaal
+nor-fin-224	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-224	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-225	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-226	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-226	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-226	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-226	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-227	name	agree	https://www.rsssf.org/tablesf/fin2024.html	Veikkausliiga
+nor-fin-227	clubs	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-227	down	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-227	playoffs	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-227	split	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-227	format	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-227	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4273383	found 5: most substitutions made per team in sampled Veikkausliiga matches of 2024 (2024-04-20 5; 2024-05-05 4; 2024-06-19 5; 2024-07-28 4; 2024-08-18 5)
+nor-fin-227	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4273383	found 7: most named substitutes per team in sampled Veikkausliiga matches of 2024 (2024-04-20 7; 2024-05-05 7; 2024-06-19 7; 2024-07-28 7; 2024-08-18 7)
+nor-fin-228	name	agree	https://www.rsssf.org/tablesf/fin2024.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-228	clubs	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-228	up	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-228	down	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-228	playoffs	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-228	split	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-228	format	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF final table and play-off sections
+nor-fin-228	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4321457	found 5: most substitutions made per team in sampled Ykkösliiga matches of 2024 (2024-04-29 5; 2024-05-13 4; 2024-08-19 5)
+nor-fin-228	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4321457	found 7: most named substitutes per team in sampled Ykkösliiga matches of 2024 (2024-04-29 7; 2024-05-13 7; 2024-08-19 7)
+nor-fin-229	name	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF: Suomen Cup
+nor-fin-229	format	agree	https://www.rsssf.org/tablesf/fin2024.html	RSSSF: knockout only (round 6, quarter-finals, semi-finals, final in September); entry round of the top three tiers not shown
+nor-fin-229	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-229	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-230	name	agree	https://www.veikkausliiga.com/uutiset/2023/12/01/liigacupin-2024-lohkojako-selvilla	Liigacup
+nor-fin-230	clubs	agree	https://www.veikkausliiga.com/uutiset/2023/12/01/liigacupin-2024-lohkojako-selvilla	veikkausliiga.com group lists hold the 12 Veikkausliiga clubs of the season
+nor-fin-230	format	disagree	https://www.veikkausliiga.com/uutiset/2023/12/01/liigacupin-2024-lohkojako-selvilla	first value: knockout (detail unknown); veikkausliiga.com: 2 geographic groups of 6 (single round robin, Jan-Feb), top 2 of each to semi-finals, then final in March
+nor-fin-230	subs_used	no second source		no line-up found
+nor-fin-230	bench	no second source		no line-up found
+nor-fin-231	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-231	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-231	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-231	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-232	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-232	clubs	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-232	down	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-232	playoffs	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-232	split	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-232	format	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off section
+nor-fin-232	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4522590	most substitutions made per team in sampled Eliteserien matches of 2025 = 5 (2025-04-21 4; 2025-04-27 5; 2025-06-22 5; 2025-07-13 5; 2025-08-25 4)
+nor-fin-232	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4522604	most named substitutes per team in sampled Eliteserien matches of 2025 = 9 (2025-04-21 9; 2025-04-27 9; 2025-06-22 9; 2025-07-13 9; 2025-08-25 9)
+nor-fin-233	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-233	clubs	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-233	up	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-233	down	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-233	playoffs	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-233	split	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-233	format	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF final table (16 clubs, 30 matches) and play-off sections
+nor-fin-233	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4522861	most substitutions made per team in sampled OBOS-ligaen matches of 2025 = 5 (2025-04-28 4; 2025-06-28 5)
+nor-fin-233	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4522861	most named substitutes per team in sampled OBOS-ligaen matches of 2025 = 9 (2025-04-28 7; 2025-06-28 9)
+nor-fin-234	name	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF section: Norway Cup / Cup
+nor-fin-234	format	agree	https://www.rsssf.org/tablesn/noo2025.html	RSSSF: 64 first-round ties from 26 Mar 2025 (Bodo/Glimt in round 1), 7 rounds, final 6 Dec 2025
+nor-fin-234	subs_used	no second source		RSSSF gives no cup final line-up for this year
+nor-fin-234	bench	no second source		RSSSF gives no bench list for this cup final
+nor-fin-235	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-236	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-236	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-236	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-236	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-237	name	agree	https://www.rsssf.org/tablesf/fin2025.html	Veikkausliiga
+nor-fin-237	clubs	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-237	down	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-237	playoffs	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-237	split	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-237	format	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-237	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4577364	found 5: most substitutions made per team in sampled Veikkausliiga matches of 2025 (2025-04-19 5; 2025-05-03 5; 2025-06-28 5; 2025-07-26 4; 2025-08-18 5)
+nor-fin-237	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4577445	found 9: most named substitutes per team in sampled Veikkausliiga matches of 2025 (2025-04-19 7; 2025-05-03 9; 2025-06-28 8; 2025-07-26 9; 2025-08-18 9)
+nor-fin-238	name	agree	https://www.rsssf.org/tablesf/fin2025.html	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-238	clubs	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-238	up	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-238	down	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-238	playoffs	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-238	split	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-238	format	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF final table and play-off sections
+nor-fin-238	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4577466	found 5: most substitutions made per team in sampled Ykkösliiga matches of 2025 (2025-05-14 4; 2025-05-21 5; 2025-08-23 5)
+nor-fin-238	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4577506	found 9: most named substitutes per team in sampled Ykkösliiga matches of 2025 (2025-05-14 9; 2025-05-21 9; 2025-08-23 9)
+nor-fin-239	name	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF: Suomen Cup
+nor-fin-239	format	agree	https://www.rsssf.org/tablesf/fin2025.html	RSSSF: knockout only (round 6, quarter-finals, semi-finals, final in September); entry round of the top three tiers not shown
+nor-fin-239	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-239	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-240	name	agree	https://www.veikkausliiga.com/uutiset/2024/11/26/liigacupin-2025-lohkojako-selvilla-kilpailun-muoto-aiemmilta-kausilta-tuttu	Liigacup
+nor-fin-240	clubs	agree	https://www.veikkausliiga.com/uutiset/2024/11/26/liigacupin-2025-lohkojako-selvilla-kilpailun-muoto-aiemmilta-kausilta-tuttu	veikkausliiga.com group lists hold the 12 Veikkausliiga clubs of the season
+nor-fin-240	format	disagree	https://www.veikkausliiga.com/uutiset/2024/11/26/liigacupin-2025-lohkojako-selvilla-kilpailun-muoto-aiemmilta-kausilta-tuttu	first value: knockout (detail unknown); veikkausliiga.com: 2 geographic groups of 6 (single round robin, Jan-Feb), top 2 of each to semi-finals, then final in March
+nor-fin-240	subs_used	no second source		no line-up found
+nor-fin-240	bench	no second source		no line-up found
+nor-fin-241	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-241	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-241	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-241	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-242	name	agree	https://snl.no/Eliteserien	SNL: Tippeligaen 1990-2016, Eliteserien from 2017
+nor-fin-242	clubs	agree	https://snl.no/Eliteserien	SNL: 16 clubs since 2009, double round robin, 2 relegated, 3rd last to qualification (reintroduced 2012)
+nor-fin-242	down	agree	https://snl.no/Eliteserien	SNL: 16 clubs since 2009, double round robin, 2 relegated, 3rd last to qualification (reintroduced 2012)
+nor-fin-242	playoffs	agree	https://snl.no/Eliteserien	SNL: 16 clubs since 2009, double round robin, 2 relegated, 3rd last to qualification (reintroduced 2012)
+nor-fin-242	split	agree	https://snl.no/Eliteserien	SNL: 16 clubs since 2009, double round robin, 2 relegated, 3rd last to qualification (reintroduced 2012)
+nor-fin-242	format	agree	https://snl.no/Eliteserien	SNL: 16 clubs since 2009, double round robin, 2 relegated, 3rd last to qualification (reintroduced 2012)
+nor-fin-242	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4794664	most substitutions made per team in sampled Eliteserien matches of 2026 = 5 (2026-04-12 5; 2026-07-12 5)
+nor-fin-242	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4794664	most named substitutes per team in sampled Eliteserien matches of 2026 = 9 (2026-04-12 9; 2026-07-12 9)
+nor-fin-243	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	lokalhistoriewiki: OBOS sponsor of the second tier since 2015, hence OBOS-ligaen
+nor-fin-243	clubs	no second source		no non-Wikipedia page for the 2026 1. divisjon rules read
+nor-fin-243	up	no second source		no non-Wikipedia page for the 2026 1. divisjon rules read
+nor-fin-243	down	no second source		no non-Wikipedia page for the 2026 1. divisjon rules read
+nor-fin-243	playoffs	no second source		no non-Wikipedia page for the 2026 1. divisjon rules read
+nor-fin-243	split	no second source		no non-Wikipedia page for the 2026 1. divisjon rules read
+nor-fin-243	format	no second source		no non-Wikipedia page for the 2026 1. divisjon rules read
+nor-fin-243	subs_used	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4795005	most substitutions made per team in sampled OBOS-ligaen matches of 2026 = 5 (2026-04-26 4; 2026-06-27 5)
+nor-fin-243	bench	agree	https://www.transfermarkt.com/spielbericht/index/spielbericht/4795005	most named substitutes per team in sampled OBOS-ligaen matches of 2026 = 9 (2026-04-26 7; 2026-06-27 9)
+nor-fin-244	name	agree	https://www.dagbladet.no/sport/kjempedumt/83948867	Dagbladet: fotball-NM for menn
+nor-fin-244	format	agree	https://www.dagbladet.no/sport/kjempedumt/83948867	Dagbladet/NTB: from autumn 2025 the cup starts in autumn (rounds 1-3) and ends in spring (last 16 to final), with two added qualifying rounds. 80 clubs, round-3 entry of Eliteserien clubs and the dates not confirmed
+nor-fin-244	subs_used	no second source		no line-up of the 2026 final outside Wikipedia read
+nor-fin-244	bench	no second source		no line-up of the 2026 final outside Wikipedia read
+nor-fin-245	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-246	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-246	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-246	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-246	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-247	name	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Veikkausliiga
+nor-fin-247	clubs	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Veikkausliiga sarjajarjestelma 2026: 12 clubs, double round robin, top 6 double round, bottom 6 single round, points carried, 12th down, 11th v Ykkosliiga 2nd over two legs
+nor-fin-247	down	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Veikkausliiga sarjajarjestelma 2026: 12 clubs, double round robin, top 6 double round, bottom 6 single round, points carried, 12th down, 11th v Ykkosliiga 2nd over two legs
+nor-fin-247	playoffs	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Veikkausliiga sarjajarjestelma 2026: 12 clubs, double round robin, top 6 double round, bottom 6 single round, points carried, 12th down, 11th v Ykkosliiga 2nd over two legs
+nor-fin-247	split	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Veikkausliiga sarjajarjestelma 2026: 12 clubs, double round robin, top 6 double round, bottom 6 single round, points carried, 12th down, 11th v Ykkosliiga 2nd over two legs
+nor-fin-247	format	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Veikkausliiga sarjajarjestelma 2026: 12 clubs, double round robin, top 6 double round, bottom 6 single round, points carried, 12th down, 11th v Ykkosliiga 2nd over two legs
+nor-fin-247	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4797004	found 5: most substitutions made per team in sampled Veikkausliiga matches of 2026 (2026-04-18 4; 2026-05-05 5; 2026-06-23 3; 2026-07-26 5; 2026-08-17 5)
+nor-fin-247	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4797025	found 9: most named substitutes per team in sampled Veikkausliiga matches of 2026 (2026-04-18 9; 2026-05-05 9; 2026-06-23 9; 2026-07-26 9; 2026-08-17 9)
+nor-fin-248	name	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Ykkonen to 2023, Ykkosliiga from 2024
+nor-fin-248	clubs	no second source		no non-Wikipedia page for the 2026 Ykkosliiga rules read
+nor-fin-248	up	no second source		no non-Wikipedia page for the 2026 Ykkosliiga rules read
+nor-fin-248	down	no second source		no non-Wikipedia page for the 2026 Ykkosliiga rules read
+nor-fin-248	playoffs	agree	https://www.veikkausliiga.com/veikkausliiga/sarjajarjestelma	Veikkausliiga page: Ykkosliiga 2nd v Veikkausliiga 11th, two legs; the 9th v Ykkonen 2nd part not confirmed
+nor-fin-248	split	no second source		no non-Wikipedia page for the 2026 Ykkosliiga rules read
+nor-fin-248	format	no second source		no non-Wikipedia page for the 2026 Ykkosliiga rules read
+nor-fin-248	subs_used	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4855988	found 5: most substitutions made per team in sampled Ykkösliiga matches of 2026 (2026-05-09 5; 2026-08-22 4)
+nor-fin-248	bench	found	https://www.transfermarkt.com/spielbericht/index/spielbericht/4855988	found 9: most named substitutes per team in sampled Ykkösliiga matches of 2026 (2026-05-09 9; 2026-08-22 9)
+nor-fin-249	name	agree	https://www.rsssf.org/tablesf/fin2026.html	RSSSF: Suomen Cup
+nor-fin-249	format	no second source		no RSSSF page for 2026
+nor-fin-249	subs_used	no second source		no non-Wikipedia line-up read
+nor-fin-249	bench	no second source		RSSSF finals list substitutes used only
+nor-fin-250	name	agree	https://www.veikkausliiga.com/uutiset/2025/12/16/liigacupin-2026-lohkovaiheen-alustava-ohjelma-valmis-tasan-kuukausi-alkuun	Liigacup
+nor-fin-250	clubs	agree	https://www.veikkausliiga.com/uutiset/2025/12/16/liigacupin-2026-lohkovaiheen-alustava-ohjelma-valmis-tasan-kuukausi-alkuun	veikkausliiga.com group lists hold the 12 Veikkausliiga clubs of the season
+nor-fin-250	format	disagree	https://www.veikkausliiga.com/uutiset/2025/12/16/liigacupin-2026-lohkovaiheen-alustava-ohjelma-valmis-tasan-kuukausi-alkuun	first value: knockout (detail unknown); veikkausliiga.com: 2 geographic groups of 6 (single round robin, Jan-Feb), top 2 of each to semi-finals, then final in March
+nor-fin-250	subs_used	no second source		no line-up found
+nor-fin-250	bench	no second source		no line-up found
+nor-fin-251	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-251	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-251	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-251	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-252	name	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-252	clubs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-252	down	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-252	playoffs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-252	split	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-252	format	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-252	subs_used	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-252	bench	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	name	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	clubs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	up	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	down	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	playoffs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	split	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	format	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	subs_used	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-253	bench	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-254	name	agree	https://www.dagbladet.no/sport/kjempedumt/83948867	Dagbladet: fotball-NM for menn
+nor-fin-254	format	no second source	https://www.dagbladet.no/sport/kjempedumt/83948867	Dagbladet confirms the autumn-spring model from 2025; the dates and the 84 + 44 entry split not confirmed
+nor-fin-254	subs_used	no second source		inference from the 2026 final; no second source
+nor-fin-254	bench	no second source		inference from the 2026 final; no second source
+nor-fin-255	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-256	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-256	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-256	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-256	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-257	name	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-257	clubs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-257	down	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-257	playoffs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-257	split	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-257	format	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-257	subs_used	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-257	bench	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	name	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	clubs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	up	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	down	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	playoffs	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	split	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	format	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	subs_used	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-258	bench	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-259	name	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-259	format	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-259	subs_used	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-259	bench	no second source		season 2027 not yet played; row carries the 2026 format forward
+nor-fin-260	name	no second source		season 2027 not yet played
+nor-fin-260	clubs	no second source		season 2027 not yet played
+nor-fin-260	format	no second source		season 2027 not yet played
+nor-fin-260	subs_used	no second source		season 2027 not yet played
+nor-fin-260	bench	no second source		season 2027 not yet played
+nor-fin-261	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-261	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-261	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-261	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-262	name	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-262	clubs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-262	down	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-262	playoffs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-262	split	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-262	format	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-262	subs_used	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-262	bench	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	name	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	clubs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	up	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	down	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	playoffs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	split	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	format	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	subs_used	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-263	bench	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-264	name	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-264	format	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-264	subs_used	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-264	bench	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-265	format	no second source		RSSSF list ends in 2019; a Soccerway menu shows a Norwegian Super Cup entry for 2025-26 that I could not open
+nor-fin-266	foreign	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-266	work_permit	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-266	registration	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-266	windows	no second source		web searches (transfer windows, squad and foreign-player rules) found no non-Wikipedia page with this fact
+nor-fin-267	name	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-267	clubs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-267	down	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-267	playoffs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-267	split	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-267	format	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-267	subs_used	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-267	bench	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	name	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	clubs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	up	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	down	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	playoffs	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	split	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	format	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	subs_used	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-268	bench	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-269	name	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-269	format	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-269	subs_used	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-269	bench	no second source		season 2028 not yet played; row carries the 2026 format forward
+nor-fin-270	name	no second source		season 2028 not yet played
+nor-fin-270	clubs	no second source		season 2028 not yet played
+nor-fin-270	format	no second source		season 2028 not yet played
+nor-fin-270	subs_used	no second source		season 2028 not yet played
+nor-fin-270	bench	no second source		season 2028 not yet played

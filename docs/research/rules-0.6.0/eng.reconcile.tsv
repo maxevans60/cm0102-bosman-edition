@@ -1,0 +1,56 @@
+id	field	first_value	second_value	third_url	decision	note
+eng-62	down	2	3	https://www.fchd.info/lghist/conf2005.htm	second	places by the rules: 3 (20th reprieved, 19th demoted). Season page legend marks the 20th as reprieved
+eng-64	down	2	3	https://www.rsssf.org/tablese/eng05.html	second	3 places: 20th reprieved, 21st and 22nd relegated, Hornchurch folded. The second value counted departures and is the same number
+eng-72	down	1	2	https://www.fchd.info/lghist/conf2006.htm	second	2 places in a year the division grew to 24. Scarborough demoted, Altrincham reprieved
+eng-83	down	2	3	https://www.fchd.info/lghist/conf2007.htm	second	3 places. Scarborough (20th) folded
+eng-84	down	1	3	https://www.fchd.info/lghist/conf2007.htm	second	3 places. Hayes and Yeading merged, 21st reprieved
+eng-92	down	3	4	https://www.fchd.info/lghist/conf2008.htm	second	4 places. Halifax folded, Altrincham reprieved
+eng-94	down	2	3	https://www.fchd.info/lghist/conf2008.htm	second	3 places. 20th and 21st reprieved
+eng-104	down	1	3	https://www.fchd.info/lghist/conf2009.htm	second	3 places
+eng-112	down	2	4	https://en.wikipedia.org/wiki/2009%E2%80%9310_Football_Conference	second	4 places. The season page states that the bottom four were scheduled to go down. Chester City expelled, Salisbury City demoted
+eng-113	down	1	2	https://en.wikipedia.org/wiki/2009%E2%80%9310_Football_Conference	third	3 places: the season page states three per North and South division. The second value (2) counted departures
+eng-122	down	3	4	https://www.fchd.info/lghist/conf2011.htm	second	4 places. Rushden & Diamonds expelled, 21st reprieved
+eng-123	down	2	3	https://www.fchd.info/lghist/conf2011.htm	second	3 places. Ilkeston Town expelled
+eng-132	down	3	4	https://www.fchd.info/lghist/conf2012.htm	second	4 places. Darlington folded
+eng-152	down	2	4	https://www.fchd.info/lghist/conf2014.htm	second	4 places. Chester and Dartford reprieved after the expulsion of Hereford United and the demotion of Salisbury City
+eng-153	down	2	3	https://en.wikipedia.org/wiki/2013%E2%80%9314_Football_Conference	conflict	value written: 3, the rule at the season start. The Conference cut relegation to the bottom two on 4 April 2014 after Vauxhall Motors resigned. Same reading question as eng-211 and eng-212
+eng-211	down	2	1	https://www.rsssf.org/tablese/eng2020.html	conflict	value kept: 2, the rule at the season start. The EFL relegated only 1 after the expulsion of Bury. Reading question for Max
+eng-212	down	4	3	https://en.wikipedia.org/wiki/2019%E2%80%9320_National_League	conflict	value kept: 4, the rule at the season start. After the expulsion of Bury the league expected to relegate no more than 3, and the fourth-bottom club was reprieved. Reading question for Max
+eng-222	clubs	24	23	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	second	Macclesfield Town wound up in September 2020, before the season. 23 clubs started. Macclesfield removed from eng-clubs.tsv
+eng-223	up	1	none	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	first	brief rule: places by the rules of the season. The void of 18 February 2021 is an outcome and is in notes
+eng-223	playoffs	2nd-7th ...	none	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	first	as for up
+eng-224	up	1	none	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	first	as for eng-223
+eng-224	playoffs	2nd-7th ...	none	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	first	as for eng-223
+eng-286	clubs	0 + 0	22 + 22	https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/nls/nls-1-to-4-club-allocations-2026-27---v1-140526.ashx	second	FA allocation lists read as text: 22 clubs in Premier Central and 22 in Premier South. eng-296 copies it and is set to 22 + 22 (inference)
+eng-209	subs_used	3	3, 5 after the June 2020 restart	https://www.pressreader.com/uk/bristol-post/20201119/282428466728585	second	five substitutes were used in the final two months of 2019/20. Bench after the restart unknown
+eng-9	registration	4 home-grown in a 16-man squad	squad of 18	https://leisureopportunities.co.uk/news/New-home-grown-rule-for-Football-League/99423	conflict	the rule of December 2008 says 4 of a 16-man squad. The bench grew to 7 in summer 2009, so squads were 18. Sources stay split on the squad size. Value kept
+eng-10	registration	4 home-grown in a 16-man squad	squad of 18	https://leisureopportunities.co.uk/news/New-home-grown-rule-for-Football-League/99423	conflict	as eng-9
+eng-11	registration	6 home-grown in an 18-man squad	squad of 16 (bench 5)	https://www.twtd.co.uk/amp/news/18796/substitute-numbers-cut	conflict	the home-grown source dates the rise to 18 and 6 at 2011/12. TWTD gives a bench of 5 in 2011/12. The rise fits 2012/13 better (inference). Value kept
+eng-18	windows	League One and Two to 31 Aug	all EFL clubs closed 9 Aug 2018	https://www.carlisleunited.co.uk/news/2018/february/eflpressrelease22feb18	second	EFL press release of 22 Feb 2018: the EFL window closed at 5pm on 9 Aug 2018, loans to 31 Aug
+eng-19	windows	9 Aug 2018 (repeated)	Championship 8 Aug 2019	https://www.carlisleunited.co.uk/news/2019/may/efl-transfer-window-dates-confirmed	second	Championship (and Premier League) 8 Aug 2019. League One and League Two 2 Sep 2019
+eng-20	work_permit	exceptions panel 12-14 points	10-14 points	https://www.sports.legal/2020/12/a-new-post-brexit-system-for-the-transfer-of-eu-players/	second	10 to 14 points, January 2021 window only
+eng-26	windows	winter 1-31 Jan	winter 1 Jan-1 Feb 2027	https://www.premierleague.com/en/news/4664145/when-does-summer-2026-premier-league-transfer-window-open-and-close	second	primary record (league announcement). Summer 15 Jun to 1 Sep 2026
+eng-66	clubs	unknown	22	https://www.fchd.info/lghist/south2005.htm	second	found value accepted: the FCHD table lists 22 clubs
+eng-215	clubs	unknown	22	https://www.fchd.info/lghist/isth2020.htm	second	found value accepted: the FCHD table lists 22 clubs
+eng-216	clubs	unknown	22 + 22	https://www.fchd.info/lghist/south2020.htm	second	found value accepted: the FCHD table lists 22 + 22 clubs
+eng-217	clubs	unknown	22	https://www.fchd.info/lghist/npl2020.htm	second	found value accepted: the FCHD table lists 22 clubs
+eng-225	clubs	unknown	22	https://www.fchd.info/lghist/isth2021.htm	second	found value accepted: the FCHD table lists 22 clubs
+eng-227	clubs	unknown	22	https://www.fchd.info/lghist/npl2021.htm	second	found value accepted: the FCHD table lists 22 clubs
+eng-226	clubs	unknown	22 + 20	https://en.wikipedia.org/wiki/2020%E2%80%9321_Southern_Football_League	second	settled: Premier South had 20 clubs (Blackfield & Langley resigned, Merthyr Town withdrew for one season). FCHD table at suspension also lists 20
+eng-222	subs_used	unknown	3	https://fanbanter.co.uk/chesterfield-manager-writes-to-national-league-urging-for-new-rule-ahead-of-2021-22-season/	second	found value accepted: league rule quoted, three used
+eng-222	bench	unknown	5	https://fanbanter.co.uk/chesterfield-manager-writes-to-national-league-urging-for-new-rule-ahead-of-2021-22-season/	second	found value accepted: maximum five nominated
+eng-232	subs_used	unknown	3 (inference)	https://www.basildonstandard.co.uk/sport/24292712.two-changes-announced-national-league-season/	second	found value accepted as inference: five named in previous years until 2024
+eng-232	bench	unknown	5 (inference)	https://www.basildonstandard.co.uk/sport/24292712.two-changes-announced-national-league-season/	second	as subs_used
+eng-285	clubs	unknown	22	https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/nls/nls-1-to-4-club-allocations-2026-27---v1-140526.ashx	second	found value accepted; eng-295 copies it (inference)
+eng-287	clubs	unknown	22	https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/nls/nls-1-to-4-club-allocations-2026-27---v1-140526.ashx	second	found value accepted; eng-297 copies it (inference)
+eng-73	down	1	agree (1)	https://en.wikipedia.org/wiki/2005%E2%80%9306_Football_Conference	rule	correction under the brief rule (places, not outcomes) at Max's request: 2. table legend: 21st reprieved, 22nd relegated
+eng-114	down	1	agree (1)	https://en.wikipedia.org/wiki/2009%E2%80%9310_Football_Conference	rule	correction under the brief rule (places, not outcomes) at Max's request: 3. season page states three per division; 20th and 21st reprieved
+eng-124	down	2	agree (2)	https://en.wikipedia.org/wiki/2010%E2%80%9311_Football_Conference	rule	correction under the brief rule (places, not outcomes) at Max's request: 3. season page states three per division; 20th reprieved
+eng-133	down	2	agree (2)	https://en.wikipedia.org/wiki/2011%E2%80%9312_Football_Conference	rule	correction under the brief rule (places, not outcomes) at Max's request: 3. season page states three per division; its table marks two (inference)
+eng-134	down	2	agree (2)	https://en.wikipedia.org/wiki/2011%E2%80%9312_Football_Conference	rule	correction under the brief rule (places, not outcomes) at Max's request: 3. as eng-133
+eng-154	down	2	agree (2)	https://en.wikipedia.org/wiki/2013%E2%80%9314_Football_Conference	rule	correction under the brief rule (places, not outcomes) at Max's request: 3. Hayes & Yeading United (20th) reprieved
+eng-213	down	0	agree (0)	https://en.wikipedia.org/wiki/2019%E2%80%9320_National_League	rule	correction under the brief rule (places, not outcomes) at Max's request: 2. table legend marks 21st and 22nd as reprieved; no rule text found (inference)
+eng-214	down	0	agree (0)	https://en.wikipedia.org/wiki/2019%E2%80%9320_National_League	rule	correction under the brief rule (places, not outcomes) at Max's request: 2. as eng-213
+eng-222	down	2	agree (2)	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	rule	correction under the brief rule (places, not outcomes) at Max's request: 3. maximum of 3 after Macclesfield closed; RSSSF counts the Dover withdrawal and shows 2
+eng-223	down	none	agree (none)	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	rule	correction under the brief rule (places, not outcomes) at Max's request: 2. two from North, one from South planned; season voided
+eng-224	down	none	agree (none)	https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League	rule	correction under the brief rule (places, not outcomes) at Max's request: 1. as eng-223

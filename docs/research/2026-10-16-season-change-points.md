@@ -40,12 +40,12 @@ Sources of evidence:
 | 0x903b6f | (UEFA, no assert) | `cmp [0xae2c92], 2001` | UEFA coefficients |
 | 0x9291b2 | world_club_champ.cpp | `cmp ax, 2003`, odd years | Club World Championship from 2003, every two years |
 | 0x5836c4, 0x632e30 | european_awards.cpp, international_awards.cpp | `cmp ax, 2001` | Awards first season |
-| 0x667150 (4 sites) | key_nation.cpp | `push 2001` | League table season labels |
-| 0x830520 (9 sites) | Setup.cpp | `push 2001` | New game set-up of the 35 leagues |
+| 0x667150 (33 sites) | key_nation.cpp | `push 2001` | Season update day of each league table entry (+0x15). Corrected by `2026-10-16-sweep-season-end.md` |
+| 0x830520 (9 sites) | Setup.cpp | `push 2001` | Update days (+0x15) and a year word (+0x1b) per league table entry. 0x830520 is the start date picker. Corrected by `2026-10-16-sweep-season-end.md` |
 
 - Other year tests in the original [code]: Spain rules `0x8595AD`: non-EU limit 4 in 2000, 3 in 2001 and
   2002, 2 after. World Cup `0x92dfc4` and two more: special case for 2002. Korea `0x66b1f1`: 2002.
-  CONMEBOL seeding `0x4c64fe`: after 2002. News `0x781671`: 2002 and 2003.
+  CONMEBOL seeding `0x4c64fe`: after 2002. News `0x781671`: 2002 and 2003 (inference from the sweep: news type ids, not years).
 - Finding: the original already knows a few transitions (France 18 to 20, Spain non-EU 3 to 2, Club World
   Championship 2003), always relative to its own 2001 start.
 

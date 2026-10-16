@@ -197,7 +197,7 @@ int main(void)
     {
         int y = 0, m = 0;
         CHECK(dbfolders_date("May 2026", &y, &m) == 1 && y == 2026 && m == 5);
-        CHECK(dbfolders_date("October 2003 Sawczuk", &y, &m) == 1 && y == 2003 && m == 10);
+        CHECK(dbfolders_date("October 2003 Extra", &y, &m) == 1 && y == 2003 && m == 10);
         CHECK(dbfolders_date("march 2012 odb", &y, &m) == 1 && y == 2012 && m == 3);
         CHECK(dbfolders_date("Autumn 2013", &y, &m) == 1 && y == 2013 && m == 10);
         CHECK(dbfolders_date("Sep 2008", &y, &m) == 1 && y == 2008 && m == 9);

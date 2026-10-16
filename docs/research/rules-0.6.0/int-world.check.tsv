@@ -1,0 +1,1280 @@
+id	field	verdict	second_url	note
+int-world-1	notes	agree	https://www.uefa.com/european-qualifiers/news/newsid=53489.html	The team played as Yugoslavia until February 2003 (UEFA). Australia in OFC until 1 January 2006 (OFC site). FIFA code FRY not checked.
+int-world-2	name	agree	https://www.rsssf.org/tables/2002f.html	
+int-world-2	clubs	agree	https://www.rsssf.org/tables/2002f.html	Count of teams in the groups.
+int-world-2	playoffs	agree	https://www.rsssf.org/tables/2002f.html	No play-off at the finals.
+int-world-2	format	agree	https://www.rsssf.org/tables/2002f.html	"31 May to 30 June 2002, groups A to H; golden goals marked [asdet] (Sweden v Senegal, Senegal v Turkey). ""Last with golden goal"" agrees with the 2006 page (extra time, no golden goal)."
+int-world-2	subs_used	agree	https://www.tntsports.co.uk/football/russia-s-aleksandr-yerokhin-makes-history-becomes-first-fourth-sub-at-world-cup_sto6828911/story.shtml	The fourth substitute in extra time was new in 2018; three before (inference from the report).
+int-world-2	bench	found	https://lastwordonsports.com/football/2022/06/24/26-player-squad-fifa-world-cup/	"""12 available in previous tournaments"" (bench before 2022): 12."
+int-world-2	registration	agree	https://nubiapage.com/world-cup-squad-composition-rules-through-the-decades-how-team-selection-criteria-have-changed/	23-man squads from 2002 to 2018 (section heading). Three goalkeepers: the 2014 regulations quoted by search results; not read for 2002.
+int-world-2	notes	agree	https://www.rsssf.org/tables/2002q.html	"""Qualified as hosts: Japan and South Korea; Qualified as holders: France"". 2006 page lists only Germany as automatic."
+int-world-3	name	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-3	clubs	agree	https://www.rsssf.org/tables/2002q.html	Team count agrees with the groups and ties listed.
+int-world-3	playoffs	agree	https://www.rsssf.org/tables/2002q.html	Play-off pairings and months agree.
+int-world-3	format	disagree	https://www.rsssf.org/tables/2002q.html	Second source: first UEFA group match 16 August 2000 (Estonia v Andorra, group 2), not 2 September 2000; last group match 27 October 2001 (Israel v Austria). Other facts agree; Ireland v Iran second leg 15 November 2001.
+int-world-3	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-3	bench	no second source		Not found.
+int-world-4	name	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-4	clubs	agree	https://www.rsssf.org/tables/2002q.html	Team count agrees with the groups and ties listed.
+int-world-4	playoffs	agree	https://www.rsssf.org/tables/2002q.html	Play-off pairings and months agree.
+int-world-4	format	agree	https://www.rsssf.org/tables/2002q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-4	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-4	bench	no second source		Not found.
+int-world-5	name	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-5	clubs	agree	https://www.rsssf.org/tables/2002q.html	Team count agrees with the groups and ties listed.
+int-world-5	playoffs	agree	https://www.rsssf.org/tables/2002q.html	Play-off pairings and months agree.
+int-world-5	format	agree	https://www.rsssf.org/tables/2002q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-5	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-5	bench	no second source		Not found.
+int-world-6	name	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-6	clubs	agree	https://www.rsssf.org/tables/2002q.html	Team count agrees with the groups and ties listed.
+int-world-6	playoffs	agree	https://www.rsssf.org/tables/2002q.html	Play-off pairings and months agree.
+int-world-6	format	agree	https://www.rsssf.org/tables/2002q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-6	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-6	bench	no second source		Not found.
+int-world-7	name	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-7	clubs	agree	https://www.rsssf.org/tables/2002q.html	Team count agrees with the groups and ties listed.
+int-world-7	playoffs	agree	https://www.rsssf.org/tables/2002q.html	Play-off pairings and months agree.
+int-world-7	format	agree	https://www.rsssf.org/tables/2002q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-7	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-7	bench	no second source		Not found.
+int-world-8	name	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-8	clubs	agree	https://www.rsssf.org/tables/2002q.html	Team count agrees with the groups and ties listed.
+int-world-8	playoffs	agree	https://www.rsssf.org/tables/2002q.html	Play-off pairings and months agree.
+int-world-8	format	agree	https://www.rsssf.org/tables/2002q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-8	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-8	bench	no second source		Not found.
+int-world-8	notes	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-9	name	agree	https://www.rsssf.org/tables/2002q.html	
+int-world-9	clubs	agree	https://www.rsssf.org/tables/2002q.html	Team count agrees with the groups and ties listed.
+int-world-9	playoffs	agree	https://www.rsssf.org/tables/2002q.html	Play-off pairings and months agree.
+int-world-9	format	agree	https://www.rsssf.org/tables/2002q.html	Ties and dates 10 to 25 November 2001 agree. Draw date 31 August 2001 not on the second source.
+int-world-9	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-9	bench	no second source		Not found.
+int-world-10	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-10	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-10	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	2001 edition in Japan and South Korea; dates in May-June 2001 not printed in the participants block.
+int-world-11	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-11	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-12	notes	agree	https://www.swissinfo.ch/eng/germany-clinches-bid-to-host-2006-world-cup/1556330	Germany chosen 6 July 2000 (final round reported 6 July; one source puts it on 7 July). Hosts 2002 and Confed 2003 agree with RSSSF.
+int-world-13	notes	agree	https://www.uefa.com/european-qualifiers/news/newsid=53489.html	First match as Serbia and Montenegro: 12 February 2003 v Azerbaijan (UEFA). Kazakhstan in AFC for 2002 and in UEFA group 2 for 2006 (RSSSF).
+int-world-14	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-14	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-14	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-15	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-15	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-15	notes	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-16	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-16	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-17	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-17	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-18	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-18	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-19	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-19	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-20	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-20	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-21	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-21	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-22	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-22	clubs	agree	https://www.rsssf.org/tablesi/intconcup.html	8 participants.
+int-world-22	format	agree	https://www.rsssf.org/tablesi/intconcup.html	Host, dates, groups A and B, semi-finals, third-place match and final agree. The 2003 final was won [asdet] (golden goal).
+int-world-22	subs_used	no second source		Not on a second source read.
+int-world-22	bench	no second source		Not found.
+int-world-22	registration	no second source		Not found.
+int-world-22	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Entrants agree; Turkey replaced Germany (Germany, Italy and Spain declined).
+int-world-23	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-23	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-24	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	2003 France; Olympics 2004 Greece (RSSSF olympics page).
+int-world-25	notes	agree	https://www.uefa.com/european-qualifiers/news/newsid=53489.html	
+int-world-26	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-26	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-26	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-27	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-27	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-27	notes	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-28	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-28	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-28	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-28	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-28	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-28	bench	no second source		Not found.
+int-world-28	notes	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-29	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-29	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-29	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-29	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-29	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-29	bench	no second source		Not found.
+int-world-30	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-30	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-30	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-30	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-30	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-30	bench	no second source		Not found.
+int-world-30	notes	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-31	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-31	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-31	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-31	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-31	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-31	bench	no second source		Not found.
+int-world-31	notes	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-32	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-32	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-32	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-32	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-32	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-32	bench	no second source		Not found.
+int-world-33	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-33	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-34	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-34	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-34	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-35	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-35	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-35	notes	found	https://www.rsssf.org/tableso/ol2004q.html	Months found: qualifying started in 2002/03 (CAF preliminary round from 8 to 24 November 2002, AFC first round from 5 April 2003); OFC 14 to 30 January 2004, CONMEBOL January 2004 and CONCACAF final round February 2004 fall in 2003/04.
+int-world-36	notes	agree	https://www.sportcal.com/pressreleases/south-africa-wins-vote-to-host-2010-world-cup/	South Africa won the vote on 15 May 2004 (14 votes in the first round). Africa-only bidding not checked.
+int-world-37	notes	no second source	https://www.oceaniafootball.com/archives-12781/	The OFC page gives only the effective date 1 January 2006; the AFC (23 March 2005) and OFC (17 April 2005) dates are not on it.
+int-world-38	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-38	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-38	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-39	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-39	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-39	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-39	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-39	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-39	bench	no second source		Not found.
+int-world-39	notes	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-40	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-40	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-40	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-40	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-40	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-40	bench	no second source		Not found.
+int-world-41	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-41	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-41	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-41	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-41	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-41	bench	no second source		Not found.
+int-world-42	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-42	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-42	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-42	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-42	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-42	bench	no second source		Not found.
+int-world-43	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-43	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-43	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-43	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-43	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-43	bench	no second source		Not found.
+int-world-44	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-44	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-44	notes	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-45	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-45	format	agree	https://www.rsssf.org/tables/2006q.html	No match of this zone in this season on the second source.
+int-world-46	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-46	clubs	agree	https://www.rsssf.org/tablesi/intconcup.html	8 participants.
+int-world-46	format	agree	https://www.rsssf.org/tablesi/intconcup.html	Host, dates, groups A and B, semi-finals, third-place match and final agree. Golden goal end not stated on the source; no [asdet] result.
+int-world-46	subs_used	no second source		Not on a second source read.
+int-world-46	bench	no second source		Not found.
+int-world-46	registration	no second source		Not found.
+int-world-46	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Entrants agree; Argentina as Copa America 2004 runners-up behind Brazil.
+int-world-47	name	agree	https://www.rsssf.org/tableso/ol2004f.html	
+int-world-47	clubs	agree	https://www.rsssf.org/tableso/ol2004f.html	4 groups of 4.
+int-world-47	format	agree	https://www.rsssf.org/tableso/ol2004f.html	Athens, 11 to 28 August 2004. Mali v Italy quarter-final marked [aet], not as a golden goal, which fits the row.
+int-world-47	subs_used	no second source		Not found.
+int-world-47	bench	no second source		Not found.
+int-world-47	registration	agree	https://www.aljazeera.com/sports/2024/7/21/paris-2024-olympics-mens-football-teams-players-format-schedule	Under-23 with up to 3 overage players since 1996 (general rule). The 2004 regulation itself not read.
+int-world-47	notes	agree	https://www.rsssf.org/tableso/ol2004q.html	Qualifiers match the RSSSF qualifying page (CONCACAF 2, CONMEBOL 2, CAF 4 group winners, AFC final round, OFC play-off).
+int-world-48	notes	agree	https://www.rsssf.org/tableso/olympics.html	Greece 2004; Germany 2005 (RSSSF).
+int-world-49	notes	agree	https://www.oceaniafootball.com/archives-12781/	"""Australia will therefore belong to the Asian Football Confederation as from 1 January 2006."" Serbia and Montenegro at the 2006 finals agrees (RSSSF 2006f). Montenegro independence date not checked."
+int-world-50	name	agree	https://www.rsssf.org/tables/2006f.html	
+int-world-50	clubs	agree	https://www.rsssf.org/tables/2006f.html	Count of teams in the groups.
+int-world-50	playoffs	agree	https://www.rsssf.org/tables/2006f.html	No play-off at the finals.
+int-world-50	format	agree	https://www.rsssf.org/tables/2006f.html	Host, dates, groups A to H, extra time and penalties agree.
+int-world-50	subs_used	agree	https://www.tntsports.co.uk/football/russia-s-aleksandr-yerokhin-makes-history-becomes-first-fourth-sub-at-world-cup_sto6828911/story.shtml	Three; the fourth in extra time was new in 2018.
+int-world-50	bench	found	https://lastwordonsports.com/football/2022/06/24/26-player-squad-fifa-world-cup/	"""12 available in previous tournaments"" (bench before 2022): 12."
+int-world-50	registration	agree	https://nubiapage.com/world-cup-squad-composition-rules-through-the-decades-how-team-selection-criteria-have-changed/	23-man squads 2002 to 2018.
+int-world-50	notes	agree	https://www.rsssf.org/tables/2006f.html	Only the host is listed as automatically qualified.
+int-world-51	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-51	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-51	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-51	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-51	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-51	bench	no second source		Not found.
+int-world-52	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-52	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-52	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-52	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-52	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-52	bench	no second source		Not found.
+int-world-53	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-53	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-53	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-53	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-53	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-53	bench	no second source		Not found.
+int-world-54	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-54	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-54	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-54	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-54	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-54	bench	no second source		Not found.
+int-world-55	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-55	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-55	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-55	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-55	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-55	bench	no second source		Not found.
+int-world-56	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-56	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-56	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-56	format	agree	https://www.rsssf.org/tables/2006q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-56	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-56	bench	no second source		Not found.
+int-world-56	notes	agree	https://www.oceaniafootball.com/archives-12781/	Australia belongs to AFC from 1 January 2006.
+int-world-57	name	agree	https://www.rsssf.org/tables/2006q.html	
+int-world-57	clubs	agree	https://www.rsssf.org/tables/2006q.html	Team count agrees with the groups and ties listed.
+int-world-57	playoffs	agree	https://www.rsssf.org/tables/2006q.html	Play-off pairings and months agree.
+int-world-57	format	agree	https://www.rsssf.org/tables/2006q.html	Ties and dates 12 to 16 November 2005 agree. Draw date 10 September 2005 not on the second source.
+int-world-57	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-57	bench	no second source		Not found.
+int-world-58	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-58	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-58	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-59	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-59	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-60	notes	agree	https://www.rsssf.org/tables/2006f.html	Germany 2006; South Africa 2010 (RSSSF World Cup index).
+int-world-61	notes	agree	https://www.uefa.com/about-uefa/organisation/congress/news/newsid=501110.html	"UEFA member 26 January 2007 (Düsseldorf), provisional membership ""last year"". FIFA 31 May 2007 per FSCG site (search extract; UEFA.com elsewhere says 29 May)."
+int-world-62	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-62	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-62	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-63	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-63	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-63	notes	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-64	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-64	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-65	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-65	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-66	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-66	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-67	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-67	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-68	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-68	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-69	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-69	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-70	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-70	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-70	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-71	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-71	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-71	notes	agree	https://www.rsssf.org/tableso/ol2008q.html	CAF from 1 September 2006; AFC 7 February to 21 November 2007. U-21 Euro and South American dates not on the source.
+int-world-72	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-73	notes	agree	https://www.rsssf.org/tables/2010q.html	Australia in AFC third round, February 2008.
+int-world-74	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-74	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-74	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-75	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-75	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-75	notes	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-76	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-76	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-76	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-76	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-76	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-76	bench	no second source		Not found.
+int-world-77	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-77	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-77	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-77	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-77	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-77	bench	no second source		Not found.
+int-world-78	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-78	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-78	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-78	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-78	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-78	bench	no second source		Not found.
+int-world-79	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-79	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-79	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-79	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-79	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-79	bench	no second source		Not found.
+int-world-79	notes	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-80	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-80	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-80	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-80	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-80	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-80	bench	no second source		Not found.
+int-world-80	notes	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-81	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-81	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-82	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-82	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-82	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-83	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-83	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-83	notes	agree	https://www.rsssf.org/tableso/ol2008q.html	CONCACAF 31 August 2007 to 23 March 2008; CAF to 26 March 2008; AFC to 21 November 2007; OFC 1 to 9 March 2008.
+int-world-84	notes	agree	https://www.sowetanlive.co.za/amp/news/2007-11-05-brazil-to-host-2014-finals/	Brazil 30 October 2007; rotation dropped the day before (search extracts of reports).
+int-world-85	notes	agree	https://www.rsssf.org/tables/2010q.html	Montenegro v Bulgaria, 6 September 2008.
+int-world-86	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-86	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-86	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-87	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-87	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-87	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-87	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-87	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-87	bench	no second source		Not found.
+int-world-87	notes	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-88	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-88	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-88	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-88	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-88	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-88	bench	no second source		Not found.
+int-world-89	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-89	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-89	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-89	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-89	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-89	bench	no second source		Not found.
+int-world-90	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-90	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-90	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-90	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-90	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-90	bench	no second source		Not found.
+int-world-91	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-91	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-91	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-91	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-91	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-91	bench	no second source		Not found.
+int-world-92	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-92	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-92	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-92	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-92	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-92	bench	no second source		Not found.
+int-world-93	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-93	format	agree	https://www.rsssf.org/tables/2010q.html	No match of this zone in this season on the second source.
+int-world-94	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-94	clubs	agree	https://www.rsssf.org/tablesi/intconcup.html	8 participants.
+int-world-94	format	agree	https://www.rsssf.org/tablesi/intconcup.html	Host, dates, groups A and B, semi-finals, third-place match and final agree. Golden goal end not stated on the source; no [asdet] result.
+int-world-94	subs_used	no second source		Not on a second source read.
+int-world-94	bench	no second source		Not found.
+int-world-94	registration	no second source		Not found.
+int-world-94	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Entrants agree.
+int-world-95	name	agree	https://www.rsssf.org/tableso/ol2008f.html	
+int-world-95	clubs	agree	https://www.rsssf.org/tableso/ol2008f.html	4 groups of 4.
+int-world-95	format	agree	https://www.rsssf.org/tableso/ol2008f.html	China, 7 to 23 August 2008.
+int-world-95	subs_used	no second source		Not found.
+int-world-95	bench	no second source		Not found.
+int-world-95	registration	agree	https://www.aljazeera.com/sports/2024/7/21/paris-2024-olympics-mens-football-teams-players-format-schedule	18 players, under-23 plus up to 3 overage (general rule); 1985 cut-off follows from it.
+int-world-96	notes	agree	https://www.rsssf.org/tableso/olympics.html	Beijing 2008; South Africa 2009 (RSSSF).
+int-world-97	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-98	name	agree	https://www.rsssf.org/tables/2010f.html	
+int-world-98	clubs	agree	https://www.rsssf.org/tables/2010f.html	Count of teams in the groups.
+int-world-98	playoffs	agree	https://www.rsssf.org/tables/2010f.html	No play-off at the finals.
+int-world-98	format	agree	https://www.rsssf.org/tables/2010f.html	Host, dates, groups A to H, extra time and penalties agree.
+int-world-98	subs_used	agree	https://www.tntsports.co.uk/football/russia-s-aleksandr-yerokhin-makes-history-becomes-first-fourth-sub-at-world-cup_sto6828911/story.shtml	Three; the fourth in extra time was new in 2018.
+int-world-98	bench	found	https://lastwordonsports.com/football/2022/06/24/26-player-squad-fifa-world-cup/	"""12 available in previous tournaments"" (bench before 2022): 12."
+int-world-98	registration	agree	https://nubiapage.com/world-cup-squad-composition-rules-through-the-decades-how-team-selection-criteria-have-changed/	23-man squads 2002 to 2018.
+int-world-98	notes	agree	https://www.rsssf.org/tables/2010f.html	Only the host is listed as automatically qualified.
+int-world-99	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-99	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-99	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-99	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-99	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-99	bench	no second source		Not found.
+int-world-100	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-100	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-100	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-100	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-100	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-100	bench	no second source		Not found.
+int-world-101	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-101	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-101	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-101	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-101	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-101	bench	no second source		Not found.
+int-world-102	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-102	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-102	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-102	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-102	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-102	bench	no second source		Not found.
+int-world-103	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-103	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-103	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-103	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-103	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-103	bench	no second source		Not found.
+int-world-104	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-104	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-104	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-104	format	agree	https://www.rsssf.org/tables/2010q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-104	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-104	bench	no second source		Not found.
+int-world-105	name	agree	https://www.rsssf.org/tables/2010q.html	
+int-world-105	clubs	agree	https://www.rsssf.org/tables/2010q.html	Team count agrees with the groups and ties listed.
+int-world-105	playoffs	agree	https://www.rsssf.org/tables/2010q.html	Play-off pairings and months agree.
+int-world-105	format	agree	https://www.rsssf.org/tables/2010q.html	Ties and dates 10 October to 18 November 2009 agree. Draw date 2 June 2009 not on the second source.
+int-world-105	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-105	bench	no second source		Not found.
+int-world-106	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-106	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-106	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-107	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-107	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-108	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	South Africa 2010; Brazil 2014.
+int-world-109	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-110	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-110	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-110	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-111	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-111	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-111	notes	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-112	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-112	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-113	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-113	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-113	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-113	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-113	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-113	bench	no second source		Not found.
+int-world-114	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-114	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-115	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-115	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-115	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-115	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-115	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-115	bench	no second source		Not found.
+int-world-116	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-116	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-117	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-117	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-118	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-118	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-118	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-119	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-119	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-119	notes	disagree	https://www.rsssf.org/tableso/ol2012q.html	Incomplete: the AFC qualifying also started in this season (first round from 23 February 2011). South American and U-21 Euro events agree by name.
+int-world-120	notes	agree	https://inside.fifa.com/news/russia-and-qatar-awarded-2018-and-2022-fifa-world-cups-1344698	FIFA release of Thursday 2 December 2010.
+int-world-121	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-122	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-122	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-122	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-123	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-123	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-123	notes	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-124	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-124	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-124	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-124	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-124	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-124	bench	no second source		Not found.
+int-world-125	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-125	clubs	agree	https://www.rsssf.org/tables/2014q.html	Read as teams left at the start of the season: 24 drawn in the second round (Bahamas withdrew 19 August 2011, so 23 played) plus the 6 top seeds = 30; 12 in the third round agrees.
+int-world-125	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-125	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-125	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-125	bench	no second source		Not found.
+int-world-126	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-126	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-126	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-126	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-126	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-126	bench	no second source		Not found.
+int-world-127	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-127	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-127	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-127	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-127	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-127	bench	no second source		Not found.
+int-world-128	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-128	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-128	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-128	format	agree	https://api.fifa.com/api/v3/calendar/matches?from=2011-11-21T00:00:00Z&to=2011-11-29T00:00:00Z&language=en&count=500	FIFA match list: kick-offs 23 to 27 November 2011 UTC = 22 to 26 November local time in Samoa (UTC-11). RSSSF prints 23 to 27 November. Nations Cup 1 to 10 June 2012 agrees with RSSSF.
+int-world-128	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-128	bench	no second source		Not found.
+int-world-129	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-129	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-130	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-130	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-130	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-131	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-131	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-131	notes	agree	https://www.rsssf.org/tableso/ol2012q.html	CONCACAF to 2 April 2012; AFC to the play-off round in March 2012; OFC 16 to 25 March 2012; AFC-CAF play-off 23 April 2012. CAF date not on the source.
+int-world-132	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-133	notes	agree	https://www.uefa.com/uefa/aboutuefa/organisation/congress/news/newsid=1956133.html	Admitted at the London Congress, 24 May 2013 (search extract of the UEFA page).
+int-world-134	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-134	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-134	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-135	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-135	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-135	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-135	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-135	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-135	bench	no second source		Not found.
+int-world-136	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-136	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-136	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-136	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-136	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-136	bench	no second source		Not found.
+int-world-137	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-137	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-137	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-137	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-137	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-137	bench	no second source		Not found.
+int-world-138	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-138	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-138	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-138	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-138	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-138	bench	no second source		Not found.
+int-world-139	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-139	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-139	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-139	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-139	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-139	bench	no second source		Not found.
+int-world-140	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-140	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-140	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-140	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-140	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-140	bench	no second source		Not found.
+int-world-141	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-141	format	agree	https://www.rsssf.org/tables/2014q.html	No match of this zone in this season on the second source.
+int-world-142	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-142	clubs	agree	https://www.rsssf.org/tablesi/intconcup.html	8 participants.
+int-world-142	format	agree	https://www.rsssf.org/tablesi/intconcup.html	Host, dates, groups A and B, semi-finals, third-place match and final agree. Golden goal end not stated on the source; no [asdet] result.
+int-world-142	subs_used	no second source		Not on a second source read.
+int-world-142	bench	no second source		Not found.
+int-world-142	registration	no second source		Not found.
+int-world-142	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Entrants agree; Italy as Euro 2012 runners-up behind Spain.
+int-world-143	name	agree	https://www.rsssf.org/tableso/ol2012f.html	
+int-world-143	clubs	agree	https://www.rsssf.org/tableso/ol2012f.html	4 groups of 4.
+int-world-143	format	agree	https://www.rsssf.org/tableso/ol2012f.html	Men 26 July to 11 August 2012 (RSSSF header 25 July covers the women).
+int-world-143	subs_used	no second source		Not found.
+int-world-143	bench	no second source		Not found.
+int-world-143	registration	agree	https://www.aljazeera.com/sports/2024/7/21/paris-2024-olympics-mens-football-teams-players-format-schedule	18 players, under-23 plus up to 3 overage (general rule); 1989 cut-off follows from it.
+int-world-144	notes	agree	https://www.rsssf.org/tableso/olympics.html	London 2012; Brazil 2013 (RSSSF).
+int-world-145	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-146	name	agree	https://www.rsssf.org/tables/2014f.html	
+int-world-146	clubs	agree	https://www.rsssf.org/tables/2014f.html	Count of teams in the groups.
+int-world-146	playoffs	agree	https://www.rsssf.org/tables/2014f.html	No play-off at the finals.
+int-world-146	format	agree	https://www.rsssf.org/tables/2014f.html	Host, dates, groups A to H, extra time and penalties agree.
+int-world-146	subs_used	agree	https://www.tntsports.co.uk/football/russia-s-aleksandr-yerokhin-makes-history-becomes-first-fourth-sub-at-world-cup_sto6828911/story.shtml	Three; the fourth in extra time was new in 2018.
+int-world-146	bench	agree	https://lastwordonsports.com/football/2022/06/24/26-player-squad-fifa-world-cup/	"""12 available in previous tournaments"" (bench before 2022): 12."
+int-world-146	registration	agree	https://nubiapage.com/world-cup-squad-composition-rules-through-the-decades-how-team-selection-criteria-have-changed/	23-man squads 2002 to 2018.
+int-world-146	notes	agree	https://www.rsssf.org/tables/2014f.html	Only the host is listed as automatically qualified.
+int-world-147	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-147	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-147	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-147	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-147	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-147	bench	no second source		Not found.
+int-world-148	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-148	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-148	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-148	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-148	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-148	bench	no second source		Not found.
+int-world-149	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-149	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-149	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-149	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-149	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-149	bench	no second source		Not found.
+int-world-150	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-150	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-150	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-150	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-150	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-150	bench	no second source		Not found.
+int-world-151	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-151	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-151	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-151	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-151	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-151	bench	no second source		Not found.
+int-world-152	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-152	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-152	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-152	format	agree	https://www.rsssf.org/tables/2014q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-152	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-152	bench	no second source		Not found.
+int-world-153	name	agree	https://www.rsssf.org/tables/2014q.html	
+int-world-153	clubs	agree	https://www.rsssf.org/tables/2014q.html	Team count agrees with the groups and ties listed.
+int-world-153	playoffs	agree	https://www.rsssf.org/tables/2014q.html	Play-off pairings and months agree.
+int-world-153	format	agree	https://www.rsssf.org/tables/2014q.html	Ties and dates 13 to 20 November 2013 agree. Draw date 30 July 2011 not on the second source.
+int-world-153	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-153	bench	no second source		Not found.
+int-world-154	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-154	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-154	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-155	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-155	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-156	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	Brazil 2014; Russia 2018; Qatar 2022.
+int-world-157	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-158	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-158	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-158	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-159	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-159	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-159	notes	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-160	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-160	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-161	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-161	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-161	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-161	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-161	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-161	bench	no second source		Not found.
+int-world-162	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-162	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-163	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-163	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-163	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-163	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-163	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-163	bench	no second source		Not found.
+int-world-164	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-164	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-165	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-165	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-166	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-166	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-166	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-167	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-167	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-167	notes	agree	https://www.rsssf.org/tableso/ol2016q.html	Events agree by name; dates not on the source.
+int-world-168	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-169	notes	agree	https://worldsoccertalk.com/2016/05/13/fifa-admits-kosovo-gibraltar-ahead-of-world-cup-2/	"FIFA admitted both on Friday 13 May 2016; UEFA admitted Kosovo ""earlier this month"" (3 May 2016, Budapest, per thepeninsulaqatar.com)."
+int-world-170	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-170	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-170	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-171	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-171	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-171	notes	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-172	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-172	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-172	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-172	format	disagree	https://www.rsssf.org/tables/2018q.html	Second source lists 30 matches in 2015/16 (8 October 2015 to 29 March 2016, 6 matchdays of 5), not 32. Start 8 October 2015 agrees.
+int-world-172	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-172	bench	no second source		Not found.
+int-world-173	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-173	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-173	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-173	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-173	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-173	bench	no second source		Not found.
+int-world-174	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-174	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-174	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-174	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-174	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-174	bench	no second source		Not found.
+int-world-175	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-175	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-175	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-175	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-175	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-175	bench	no second source		Not found.
+int-world-176	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-176	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-176	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-176	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-176	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-176	bench	no second source		Not found.
+int-world-177	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-177	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-178	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-178	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-178	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-179	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-179	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-179	notes	agree	https://www.rsssf.org/tableso/ol2016q.html	CONCACAF 1 to 13 October 2015; play-off 25 and 29 March 2016; Pacific Games, U-23 AFCON and AFC U-23 dates not on the source.
+int-world-180	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-181	notes	found	https://web.archive.org/web/20210601000417/https://www.fifa.com/fifa-world-ranking/ranking-table/men/	"Kosovo and Gibraltar in 2018 qualifying agree (RSSSF). FIFA change date not found, but narrowed: the FIFA ranking table still names ""Czech Republic"" in the archived copy of 1 June 2021, so FIFA changed to Czechia after June 2021."
+int-world-182	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-182	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-182	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-183	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-183	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-183	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-183	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-183	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-183	bench	no second source		Not found.
+int-world-183	notes	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-184	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-184	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-184	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-184	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-184	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-184	bench	no second source		Not found.
+int-world-185	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-185	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-185	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-185	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-185	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-185	bench	no second source		Not found.
+int-world-186	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-186	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-186	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-186	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-186	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-186	bench	no second source		Not found.
+int-world-187	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-187	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-187	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-187	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-187	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-187	bench	no second source		Not found.
+int-world-188	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-188	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-188	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-188	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-188	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-188	bench	no second source		Not found.
+int-world-189	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-189	format	agree	https://www.rsssf.org/tables/2018q.html	No match of this zone in this season on the second source.
+int-world-190	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-190	clubs	agree	https://www.rsssf.org/tablesi/intconcup.html	8 participants.
+int-world-190	format	agree	https://www.rsssf.org/tablesi/intconcup.html	Host, dates, groups A and B, semi-finals, third-place match and final agree. Golden goal end not stated on the source; no [asdet] result.
+int-world-190	subs_used	no second source		Not on a second source read.
+int-world-190	bench	no second source		Not found.
+int-world-190	registration	no second source		Not found.
+int-world-190	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Entrants agree.
+int-world-191	name	agree	https://www.rsssf.org/tableso/ol2016f.html	
+int-world-191	clubs	agree	https://www.rsssf.org/tableso/ol2016f.html	4 groups of 4.
+int-world-191	format	agree	https://www.rsssf.org/tableso/ol2016f.html	Rio de Janeiro, 4 to 20 August 2016.
+int-world-191	subs_used	agree	https://www.inside.fifa.com/news/history-set-to-be-made-at-rio-2016-2821467	IFAB/FIFA trial of a fourth substitute in extra time at the Rio tournaments.
+int-world-191	bench	no second source		Not found.
+int-world-191	registration	agree	https://www.aljazeera.com/sports/2024/7/21/paris-2024-olympics-mens-football-teams-players-format-schedule	18 players, under-23 plus up to 3 overage (general rule). Two goalkeepers not checked.
+int-world-192	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Rio 2016; Russia 2017, last edition.
+int-world-193	notes	found	https://web.archive.org/web/20181006204509/https://www.fifa.com/fifa-world-ranking/ranking-table/men/index.html	"FIFA ranking table: ""Swaziland"" in the ranking of 16 August 2018 (archived 2 September 2018), ""Eswatini"" in the ranking of 20 September 2018 (archived 6 October 2018). The newer fifa.com ranking page still showed Swaziland up to the 7 February 2019 ranking and Eswatini from the 4 April 2019 ranking. The football association took the new name on 1 July 2018 (nfas.org.sz/kahawatungu.com)."
+int-world-194	name	agree	https://www.rsssf.org/tables/2018f.html	
+int-world-194	clubs	agree	https://www.rsssf.org/tables/2018f.html	Count of teams in the groups.
+int-world-194	playoffs	agree	https://www.rsssf.org/tables/2018f.html	No play-off at the finals.
+int-world-194	format	agree	https://www.rsssf.org/tables/2018f.html	Host, dates, groups A to H, extra time and penalties agree.
+int-world-194	subs_used	agree	https://www.tntsports.co.uk/football/russia-s-aleksandr-yerokhin-makes-history-becomes-first-fourth-sub-at-world-cup_sto6828911/story.shtml	FIFA introduced a fourth substitute in extra time for 2018 (Yerokhin, Russia v Spain, first use).
+int-world-194	bench	found	https://lastwordonsports.com/football/2022/06/24/26-player-squad-fifa-world-cup/	"""12 available in previous tournaments"" (bench before 2022): 12."
+int-world-194	registration	agree	https://nubiapage.com/world-cup-squad-composition-rules-through-the-decades-how-team-selection-criteria-have-changed/	23-man squads 2002 to 2018.
+int-world-194	notes	agree	https://www.rsssf.org/tables/2018f.html	Only the host is listed as automatically qualified.
+int-world-195	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-195	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-195	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-195	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-195	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-195	bench	no second source		Not found.
+int-world-196	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-196	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-196	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-196	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-196	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-196	bench	no second source		Not found.
+int-world-197	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-197	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-197	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-197	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-197	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-197	bench	no second source		Not found.
+int-world-198	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-198	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-198	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-198	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-198	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-198	bench	no second source		Not found.
+int-world-199	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-199	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-199	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-199	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-199	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-199	bench	no second source		Not found.
+int-world-200	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-200	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-200	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-200	format	agree	https://www.rsssf.org/tables/2018q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-200	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-200	bench	no second source		Not found.
+int-world-201	name	agree	https://www.rsssf.org/tables/2018q.html	
+int-world-201	clubs	agree	https://www.rsssf.org/tables/2018q.html	Team count agrees with the groups and ties listed.
+int-world-201	playoffs	agree	https://www.rsssf.org/tables/2018q.html	Play-off pairings and months agree.
+int-world-201	format	agree	https://www.rsssf.org/tables/2018q.html	Ties and dates 10 to 15 November 2017 agree. Draw date 25 July 2015 and the away-goals rule not on the second source.
+int-world-201	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-201	bench	no second source		Not found.
+int-world-202	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-202	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-202	notes	agree	https://www.rsssf.org/tablesi/intconcup.html	Editions 2005 Germany, 2009 South Africa, 2013 Brazil, 2017 Russia: each the next World Cup host, the year before.
+int-world-203	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-203	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-204	notes	agree	https://www.mprnews.org/story/2018/06/13/npr-us-mexico-canada-win-bid-host-2026-world-cup	United bid won 134 to 65 at the FIFA Congress in Moscow on 13 June 2018.
+int-world-205	notes	found	https://web.archive.org/web/20190702120030/https://www.fifa.com/fifa-world-ranking/ranking-table/men/	"FIFA ranking table: ""FYR Macedonia"" in the ranking of 4 April 2019 (archived 1 June 2019), ""North Macedonia"" in the ranking of 14 June 2019 (archived 2 July 2019). 11v11.com gives 15 February 2019 for the country name; 12 February 2019 not confirmed by a second source."
+int-world-206	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-206	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-206	notes	disagree	https://www.rsssf.org/tables/2022f.html	"Next finals are the 2022 World Cup (20 November to 18 December 2022, season 2022/23). ""2023"" is the season end year, not the tournament year."
+int-world-207	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-207	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-207	notes	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-208	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-208	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-209	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-209	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-210	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-210	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-211	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-211	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-211	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-211	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-211	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-211	bench	no second source		Not found.
+int-world-212	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-212	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-213	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-213	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-214	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-214	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-214	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-215	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-215	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-215	notes	agree	https://www.rsssf.org/tableso/ol2020q.html	U-21 Euro 2019 (Italy), 4 places agree; dates not on the source.
+int-world-216	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-217	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-218	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-218	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-218	notes	disagree	https://www.rsssf.org/tables/2022f.html	"Next finals are the 2022 World Cup (20 November to 18 December 2022, season 2022/23). ""2023"" is the season end year, not the tournament year."
+int-world-219	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-219	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-219	notes	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-220	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-220	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-221	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-221	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-222	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-222	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-222	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-222	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-222	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-222	bench	no second source		Not found.
+int-world-222	notes	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=282627&language=en&count=1000	Second round played from 1 September 2021. The announcement date 19 August 2020 is not on the second source.
+int-world-223	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-223	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-223	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-223	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-223	subs_used	agree	https://www.theifab.com/news/five-substitutes-option-temporarily-allowed-for-competition-organisers	IFAB allowed more than three substitutes only from 2020 (temporary five-substitute option); three before.
+int-world-223	bench	no second source		Not found.
+int-world-223	notes	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=282609&language=en&count=1000	FIFA match list: no AFC second-round match between 19 November 2019 and 4 December 2020 (Qatar v Bangladesh); the round resumed in full in March to June 2021. RSSSF prints the 2021 dates as 2020 (typo).
+int-world-224	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-224	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-225	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-225	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-226	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-226	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-226	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-227	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-227	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-227	notes	agree	https://www.rsssf.org/tableso/ol2020q.html	OFC 21 September to 5 October 2019; CONMEBOL 18 January to 9 February 2020; AFC and CAF events agree by name.
+int-world-228	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-229	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-230	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-230	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-230	notes	disagree	https://www.rsssf.org/tables/2022f.html	"Next finals are the 2022 World Cup (20 November to 18 December 2022, season 2022/23). ""2023"" is the season end year, not the tournament year."
+int-world-231	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-231	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-231	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-231	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-231	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-231	bench	no second source		Not found.
+int-world-231	notes	no second source		The link to the Nations League and Euro 2020 is not on a second source read.
+int-world-232	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-232	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-232	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-232	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=282735&language=en&count=1000	From 8 October 2020; 30 matches to June 2021. Fixture draw date 17 December 2019 not on the second source.
+int-world-232	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-232	bench	no second source		Not found.
+int-world-232	notes	no second source		Start date 8 October 2020 agrees (FIFA match list); the COVID-19 reason is an inference on both sides.
+int-world-233	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-233	clubs	agree	https://www.rsssf.org/tables/2022q.html	30 drawn into 6 groups of 5; Saint Lucia withdrew, so group E had 4. 6 in the second round agrees.
+int-world-233	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-233	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-233	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-233	bench	no second source		Not found.
+int-world-233	notes	no second source		Plan of July 2019 not checked.
+int-world-234	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-234	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-234	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-234	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=282627&language=en&count=1000	FIFA match list: no CAF match between 10 September 2019 and 1 September 2021.
+int-world-234	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-234	bench	no second source		Not found.
+int-world-235	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-235	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-235	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-235	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=282609&language=en&count=1000	Second round ends 15 June 2021 (FIFA match list). One match was played on 4 December 2020 (Qatar v Bangladesh), the rest from 25 March 2021.
+int-world-235	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-235	bench	no second source		Not found.
+int-world-236	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-236	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-237	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-237	format	agree	https://www.rsssf.org/tables/2022q.html	No match of this zone in this season on the second source.
+int-world-238	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-238	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-238	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-239	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-239	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-239	notes	agree	https://www.rsssf.org/tableso/ol2020q.html	Mexico, 18 to 30 March 2021, 2 places.
+int-world-240	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-241	notes	agree	https://inside.fifa.com/es/tournaments/mens/worldcup/qatar2022/media-releases/la-fifa-y-la-uefa-suspenden-a-las-selecciones-y-los-clubes-rusos-en-todas-las-competiciones	FIFA/UEFA release of 28 February 2022.
+int-world-242	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-242	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-242	notes	disagree	https://www.rsssf.org/tables/2022f.html	"Next finals are the 2022 World Cup (20 November to 18 December 2022, season 2022/23). ""2023"" is the season end year, not the tournament year."
+int-world-243	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-243	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-243	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Paths A, B, C; Russia awarded 0-3 to Poland; finals 29 March and (path A) 5 June 2022. Nations League rule not on the second source.
+int-world-243	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-243	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-243	bench	no second source		Not found.
+int-world-243	notes	agree	https://inside.fifa.com/es/tournaments/mens/worldcup/qatar2022/media-releases/la-fifa-y-la-uefa-suspenden-a-las-selecciones-y-los-clubes-rusos-en-todas-las-competiciones	FIFA and UEFA release of 28 February 2022; RSSSF shows the walkover for Poland.
+int-world-244	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-244	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-244	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-244	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-244	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-244	bench	no second source		Not found.
+int-world-244	notes	found	https://www.rsssf.org/tables/2022q.html	The Brazil v Argentina match (suspended 5 September 2021, re-set for 21 September 2022) was declared void and never played. The 60 matches of this season include it.
+int-world-245	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-245	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-245	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-245	format	agree	https://www.rsssf.org/tables/2022q.html	Octagonal 2 September 2021 to 30 March 2022 (56 matches).
+int-world-245	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-245	bench	no second source		Not found.
+int-world-246	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-246	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-246	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-246	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=282627&language=en&count=1000	Second round 1 September to 16 November 2021, third round 25 to 29 March 2022.
+int-world-246	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-246	bench	no second source		Not found.
+int-world-247	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-247	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-247	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-247	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-247	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-247	bench	no second source		Not found.
+int-world-247	notes	agree	https://www.rsssf.org/tables/2022q.html	Qatar did not take part in the third round.
+int-world-248	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-248	clubs	disagree	https://www.rsssf.org/tables/2022q.html	Second source: after Tonga, Cook Islands (after one annulled match) and Vanuatu (before playing) also withdrew because of COVID-19, so 6 teams completed the competition, not 8.
+int-world-248	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-248	format	agree	https://www.rsssf.org/tables/2022q.html	Rounds, group sizes and match months agree with the dated match list.
+int-world-248	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-248	bench	no second source		Not found.
+int-world-248	notes	no second source		RSSSF confirms play in Qatar in March 2022 and the COVID-19 withdrawals; the November 2021 decision date is not on it.
+int-world-249	name	agree	https://www.rsssf.org/tables/2022q.html	
+int-world-249	clubs	agree	https://www.rsssf.org/tables/2022q.html	Team count agrees with the groups and ties listed.
+int-world-249	playoffs	agree	https://www.rsssf.org/tables/2022q.html	Play-off pairings and months agree.
+int-world-249	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=286158&language=en&count=1000	Single matches 13 and 14 June 2022 agree (FIFA match list; RSSSF agrees). Draw date 26 November 2021 not on the second source.
+int-world-249	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-249	bench	no second source		Not found.
+int-world-250	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-250	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-250	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-251	name	agree	https://www.rsssf.org/tableso/ol2020f.html	
+int-world-251	clubs	agree	https://www.rsssf.org/tableso/ol2020f.html	4 groups of 4.
+int-world-251	format	agree	https://www.rsssf.org/tableso/ol2020f.html	Tokyo, 22 July to 7 August 2021.
+int-world-251	subs_used	no second source	https://www.theifab.com/news/five-substitute-option-extended-into-2021-in-response-to-covid-19-pandemic	IFAB allowed the five-substitute option for international competitions in July and August 2021; use at Tokyo not confirmed.
+int-world-251	bench	no second source		Not found.
+int-world-251	registration	agree	https://www.skysports.com/football/news/11095/12356355/football-at-olympics-tokyo-2020-which-premier-league-stars-are-heading-to-the-games	Squads raised from 18 to 22 because of COVID-19; born on or after 1 January 1997 plus 3 overage. JFA: 18 players and 4 alternates.
+int-world-251	notes	no second source		Closed doors not checked.
+int-world-252	notes	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=286158&language=en&count=1000	Tokyo 2021; play-offs in Qatar (FIFA match list, 13 and 14 June 2022).
+int-world-253	notes	agree	https://www.aljazeera.com/news/2022/6/2/un-registers-turkiye-as-new-country-name-for-turkey	"The UN received the letter on Wednesday 1 June 2022 (article of 2 June); the letter date 31 May not stated. FIFA change date not found: the archived FIFA ranking page of 1 June 2021 still says ""Turkey""; later archived copies hold no team names. Russia still suspended agrees (ESPN)."
+int-world-254	name	agree	https://www.rsssf.org/tables/2022f.html	
+int-world-254	clubs	agree	https://www.rsssf.org/tables/2022f.html	Count of teams in the groups.
+int-world-254	playoffs	agree	https://www.rsssf.org/tables/2022f.html	No play-off at the finals.
+int-world-254	format	agree	https://www.rsssf.org/tables/2022f.html	Qatar, 20 November to 18 December 2022, groups A to H, extra time and penalties.
+int-world-254	subs_used	agree	https://www.aljazeera.com/news/2022/11/2/new-concussion-protocol-in-place-for-world-cup-2022	Five substitutes plus one additional permanent concussion substitute (Yorkshire Post/Al Jazeera). Sixth in extra time not stated on the pages read.
+int-world-254	bench	found	https://www.cbssports.com/soccer/news/fifa-approves-26-man-squads-for-2022-world-cup-as-teams-will-have-three-extra-players-in-qatar	"""15 substitutes and 11 team officials"" on the bench: 15."
+int-world-254	registration	agree	https://www.cbssports.com/soccer/news/fifa-approves-26-man-squads-for-2022-world-cup-as-teams-will-have-three-extra-players-in-qatar	26 players (FIFA, 23 June 2022); minimum 23 per search extracts of the Bureau decision; 3 goalkeepers not stated.
+int-world-254	notes	agree	https://www.rsssf.org/tables/2022f.html	Only Qatar listed as automatically qualified; November to December 2022.
+int-world-255	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	
+int-world-255	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-255	notes	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	
+int-world-256	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	
+int-world-256	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-257	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	
+int-world-257	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-258	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	
+int-world-258	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-259	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	
+int-world-259	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-260	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	
+int-world-260	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-261	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	
+int-world-261	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-262	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-262	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-262	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-263	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-263	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-263	notes	agree	https://www.rsssf.org/tableso/ol2024q.html	Events and places agree by name; dates not on the source.
+int-world-264	notes	agree	https://www.rsssf.org/tables/2022f.html	Qatar November-December 2022; 2026 hosts per RSSSF 2026 page.
+int-world-265	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-266	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-266	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-266	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-267	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	
+int-world-267	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-267	notes	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	
+int-world-268	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	
+int-world-268	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-268	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	Play-off pairings and months agree.
+int-world-268	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	From 7 September 2023; 30 matches to November 2023 (FIFA match list). 6 direct and 1 play-off place agree (ESPN).
+int-world-268	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-268	bench	no second source		Not found.
+int-world-268	notes	agree	https://www.espn.com/soccer/story/_/id/37633680/ecuador-keep-2022-world-cup-spot-get-2026-qualifying-point-deduction	CAS: Ecuador loses 3 points in the 2026 qualifying (Byron Castillo case).
+int-world-269	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	
+int-world-269	clubs	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	32 nations entered (hosts exempt).
+int-world-269	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	Play-off pairings and months agree.
+int-world-269	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	First round 22 and 26 March 2024 (4 matches); second round 6 groups of 5, one match per pairing, from 5 June 2024 (FIFA list and ESPN).
+int-world-269	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-269	bench	no second source		Not found.
+int-world-269	notes	agree	https://www.cbssports.com/soccer/news/fifa-confirms-usmnt-mexico-canada-are-automatically-qualified-for-2026-world-cup-as-co-hosts	FIFA Council decision of 14 February 2023 (reports of 15 February 2023).
+int-world-270	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	
+int-world-270	clubs	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	54 in the draw, Eritrea withdrew: 53.
+int-world-270	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	Play-off pairings and months agree.
+int-world-270	format	disagree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	Second source: 8 groups of 6 and 1 group of 5 (Eritrea withdrew), not 9 groups of 6. Matchdays 1 to 4: 15 November 2023 to 11 June 2024 (104 matches) agree; 9 + 1 places agree.
+int-world-270	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-270	bench	no second source		Not found.
+int-world-271	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	
+int-world-271	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-271	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Play-off pairings and months agree.
+int-world-271	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	First round 12 to 17 October 2023 (20 matches); second round 16 November 2023 to 11 June 2024, 108 matches (9 groups of 4). 8 + 1 places agree (ESPN).
+int-world-271	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-271	bench	no second source		Not found.
+int-world-271	notes	agree	https://www.rsssf.org/tables/2022q.html	Same double role as 2022 (RSSSF 2022 page states it for the 2023 Asian Cup); 2027 Asian Cup link stated by ESPN for the first two rounds.
+int-world-272	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	
+int-world-272	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-273	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	
+int-world-273	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-274	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-274	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-274	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-275	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-275	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-275	notes	agree	https://www.rsssf.org/tableso/ol2024q.html	OFC 27 August to 9 September 2023; CONMEBOL 20 January to 11 February 2024; AFC-CAF play-off 9 May 2024.
+int-world-276	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-277	notes	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	Russia excluded from UEFA qualifying.
+int-world-278	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-278	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-278	notes	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-279	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	
+int-world-279	clubs	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	55 members, Russia excluded: 54.
+int-world-279	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	Play-off pairings and months agree.
+int-world-279	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	From 21 March 2025; 48 matches in March and June 2025 (groups of 5 only). 12 direct + 4 play-off = 16 (ESPN). 6 groups of 4 and 6 of 5 (search extract of the draw reports).
+int-world-279	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-279	bench	no second source		Not found.
+int-world-279	notes	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	Russia remains suspended.
+int-world-280	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	
+int-world-280	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-280	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	Play-off pairings and months agree.
+int-world-280	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	50 matches, 5 September 2024 to 10 June 2025 (11 June UTC).
+int-world-280	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-280	bench	no second source		Not found.
+int-world-281	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	
+int-world-281	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-281	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	Play-off pairings and months agree.
+int-world-281	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	Second round June 2024 and June 2025; last match 10 June 2025 local (11 June UTC).
+int-world-281	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-281	bench	no second source		Not found.
+int-world-282	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	
+int-world-282	clubs	disagree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	Second source: 53 teams in groups (8 of 6, 1 of 5); Eritrea withdrew. Not 54.
+int-world-282	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	Play-off pairings and months agree.
+int-world-282	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	Matchdays 5 and 6: 19 to 25 March 2025 (52 matches).
+int-world-282	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-282	bench	no second source		Not found.
+int-world-283	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	
+int-world-283	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-283	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Play-off pairings and months agree.
+int-world-283	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Third round 5 September 2024 to 10 June 2025, 90 matches (3 groups of 6).
+int-world-283	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-283	bench	no second source		Not found.
+int-world-284	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	
+int-world-284	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-284	playoffs	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	New Caledonia (runner-up) went to the play-off tournament.
+int-world-284	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	First round 5 to 9 September 2024 (3 matches, knockout); second round 10 October to 18 November 2024 (12 matches, 2 groups of 4); third round 21 and 24 March 2025.
+int-world-284	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-284	bench	no second source		Not found.
+int-world-285	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	
+int-world-285	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	No match of this zone in this season on the second source.
+int-world-286	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-286	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-286	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-287	name	agree	https://www.rsssf.org/tableso/ol2024f.html	
+int-world-287	clubs	agree	https://www.rsssf.org/tableso/ol2024f.html	4 groups of 4.
+int-world-287	format	agree	https://www.rsssf.org/tableso/ol2024f.html	Paris, 24 July to 9 August 2024.
+int-world-287	subs_used	no second source		Not found.
+int-world-287	bench	no second source		Not found.
+int-world-287	registration	agree	https://www.fifatrainingcentre.com/en/game/tournaments/olympic-football-tournament/2024/men/utilising-experience-the-influence-of-overage-players-at-the-men-s-olympic-football-tournament.php	18-man squads, born on or after 1 January 2001, up to 3 overage. Two goalkeepers not checked.
+int-world-287	notes	agree	https://www.rsssf.org/tableso/ol2024q.html	Qualifiers and AFC-CAF play-off (Guinea, 9 May 2024) agree.
+int-world-288	notes	agree	https://legal.fifa.com/media-releases/extraordinary-congress-appoints-hosts-of-2030-and-2034-editions-of-fifa-world-cup	FIFA Congress 11 December 2024: 2030 Morocco, Portugal, Spain with centenary matches in Argentina, Paraguay, Uruguay; 2034 Saudi Arabia. Paris 2024 per RSSSF.
+int-world-289	notes	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	Russia remains suspended.
+int-world-290	name	agree	https://www.rsssf.org/tables/2026f.html	
+int-world-290	clubs	agree	https://www.rsssf.org/tables/2026f.html	Count of teams in the groups.
+int-world-290	playoffs	agree	https://www.rsssf.org/tables/2026f.html	No play-off at the finals.
+int-world-290	format	agree	https://www.rsssf.org/tables/2026f.html	11 June to 19 July 2026, groups A to L, second round of 32, 104 dated matches; extra time and penalties.
+int-world-290	subs_used	found	https://www.beinsports.com/en-us/soccer/fifa-world-cup-2026/articles/how-many-substitutions-are-allowed-in-fifa-world-cup-2026-matches-2026-04-22	"""five substitutions during regular time"" and ""one additional substitution in case of extra time"": 5 plus a sixth in extra time."
+int-world-290	bench	no second source		Not found.
+int-world-290	registration	agree	https://www.beinsports.com/en-us/soccer/fifa-world-cup-2026/articles/how-many-players-can-each-national-team-call-up-for-the-2026-fifa-world-cup-2026-04-22	Minimum 23, maximum 26, at least 3 goalkeepers.
+int-world-290	notes	agree	https://www.flashscore.com/news/fifa-confirms-that-the-2026-world-cup-will-contain-12-groups-of-four-teams/tvTF7qx8	FIFA Council in Kigali (Tuesday, 14 March 2023) chose 12 groups of 4; hosts automatic (RSSSF 2026 page); host places from the CONCACAF allocation (FIFA statement in reports of 15 February 2023).
+int-world-291	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	
+int-world-291	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-291	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	Play-offs 26 and 31 March 2026, 4 one-leg paths (ESPN). Nations League group-winner rule not on the second source.
+int-world-291	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288329&language=en&count=1000	Group matches 4 September to 18 November 2025 (144 matches), play-offs March 2026.
+int-world-291	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-291	bench	no second source		Not found.
+int-world-292	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	
+int-world-292	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-292	playoffs	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	Bolivia (7th) went to the play-off tournament.
+int-world-292	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288315&language=en&count=1000	Last 10 matches 4 to 9 September 2025.
+int-world-292	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-292	bench	no second source		Not found.
+int-world-293	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	
+int-world-293	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-293	playoffs	agree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	Jamaica and Suriname, the two best runners-up.
+int-world-293	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288301&language=en&count=1000	Final round 4 September to 18 November 2025 local (36 matches, 3 groups of 4).
+int-world-293	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-293	bench	no second source		Not found.
+int-world-294	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	
+int-world-294	clubs	disagree	https://global.espn.com/football/story/_/id/40297462/2026-world-cup-how-nations-world-qualify	Second source: 53 teams in groups (Eritrea withdrew), not 54.
+int-world-294	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	Semi-finals 13 November, final 16 November 2025; DR Congo won (ESPN).
+int-world-294	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288282&language=en&count=1000	Matchdays 7 to 10: 3 September to 14 October 2025 (104 matches).
+int-world-294	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-294	bench	no second source		Not found.
+int-world-295	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	
+int-world-295	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-295	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Fifth round 13 and 18 November 2025, two legs; Iraq beat UAE (ESPN).
+int-world-295	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288263&language=en&count=1000	Fourth round 8 to 14 October 2025, 6 matches (2 groups of 3).
+int-world-295	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-295	bench	no second source		Not found.
+int-world-296	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	
+int-world-296	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-296	playoffs	agree	https://www.flashscore.com/news/soccer-world-cup-everything-you-need-to-know-about-the-fifa-play-off-tournament-for-the-2026-world-cup/OGrPLXWq	New Caledonia played the semi-final on 26 March 2026.
+int-world-296	format	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=288319&language=en&count=1000	Rounds, group sizes and match months agree with the dated match list.
+int-world-296	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-296	bench	no second source		Not found.
+int-world-297	name	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	
+int-world-297	clubs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	Team count agrees with the groups and ties listed.
+int-world-297	playoffs	agree	https://api.fifa.com/api/v3/calendar/matches?idCompetition=520&idSeason=292616&language=en&count=1000	Play-off pairings and months agree.
+int-world-297	format	agree	https://www.flashscore.com/news/soccer-world-cup-everything-you-need-to-know-about-the-fifa-play-off-tournament-for-the-2026-world-cup/OGrPLXWq	6 teams (CONCACAF 2, AFC, CAF, CONMEBOL, OFC 1 each), 2 seeded by ranking, semi-finals 26 March and finals 31 March 2026, single matches, extra time and penalties; venues Guadalajara and Monterrey (ESPN). Sixth substitution not on this source.
+int-world-297	subs_used	no second source		Sixth substitution in extra time not found on a second source for the play-off tournament.
+int-world-297	bench	no second source		Not found.
+int-world-298	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-298	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-298	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-299	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-299	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-300	notes	agree	https://africa.espn.com/football/story/_/id/47025267/2026-world-cup-playoff-tournament-guadalajara-monterrey	Play-off tournament in Guadalajara and Monterrey, Mexico. 16 venues not checked.
+int-world-301	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-302	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-302	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-302	notes	agree	https://widgets.datasportsgroup.com/sports-news/news/en/176003/2030-world-cup:-conmebol-confirms-historic-expansion-to-64-teams/	Planned 8 June to 21 July 2030 (media report); hosts per FIFA 11 December 2024.
+int-world-303	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-303	format	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	No 2030 qualifier in the FIFA match list for September to mid-October 2026; UEFA plans to seed from the 2028/29 Nations League (ESPN, 20 May 2026).
+int-world-304	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-304	clubs	no second source	https://www.elpais.com.co/deportes/asi-se-jugarian-las-eliminatorias-sudamericanas-para-el-mundial-2030-hay-novedades-2119.html	Not found. Media (El País Colombia) report a start in March 2027, but CONMEBOL has not published the format.
+int-world-304	playoffs	no second source	https://www.elpais.com.co/deportes/asi-se-jugarian-las-eliminatorias-sudamericanas-para-el-mundial-2030-hay-novedades-2119.html	Not found. Media (El País Colombia) report a start in March 2027, but CONMEBOL has not published the format.
+int-world-304	format	no second source	https://www.elpais.com.co/deportes/asi-se-jugarian-las-eliminatorias-sudamericanas-para-el-mundial-2030-hay-novedades-2119.html	Not found. Media (El País Colombia) report a start in March 2027, but CONMEBOL has not published the format.
+int-world-304	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-304	bench	no second source		Not found.
+int-world-304	notes	agree	https://legal.fifa.com/media-releases/extraordinary-congress-appoints-hosts-of-2030-and-2034-editions-of-fifa-world-cup	Centenary matches in Argentina, Paraguay, Uruguay (FIFA, 11 December 2024). Automatic places reported by media (El País Colombia).
+int-world-305	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-305	format	agree	https://www.bakersfieldnow.com/sports/content/concacaf-says-it-will-have-6-automatic-berths-for-2030-world-cup	CONCACAF qualifying starts September 2027.
+int-world-306	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-306	clubs	no second source	https://blueprint.ng/caf-announces-date-for-2030-world-cup-qualifier/	Not found. One report (Blueprint) put a CAF preliminary round in March 2026, but the FIFA match list shows no 2030 qualifier in March 2026.
+int-world-306	playoffs	no second source	https://blueprint.ng/caf-announces-date-for-2030-world-cup-qualifier/	Not found. One report (Blueprint) put a CAF preliminary round in March 2026, but the FIFA match list shows no 2030 qualifier in March 2026.
+int-world-306	format	no second source	https://blueprint.ng/caf-announces-date-for-2030-world-cup-qualifier/	Not found. One report (Blueprint) put a CAF preliminary round in March 2026, but the FIFA match list shows no 2030 qualifier in March 2026.
+int-world-306	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-306	bench	no second source		Not found.
+int-world-306	notes	agree	https://legal.fifa.com/media-releases/extraordinary-congress-appoints-hosts-of-2030-and-2034-editions-of-fifa-world-cup	Morocco co-host (FIFA, 11 December 2024).
+int-world-307	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-307	clubs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-307	playoffs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-307	format	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-307	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-307	bench	no second source		Not found.
+int-world-308	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-308	clubs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-308	playoffs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-308	format	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-308	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-308	bench	no second source		Not found.
+int-world-309	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-309	format	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	No match of this zone in this season on the second source.
+int-world-310	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-310	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-310	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-311	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-311	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-311	notes	agree	https://sportsvillagesquare.com/2025/04/10/ioc-boosts-womens-soccer-teams-to-16-for-la-2028-games-mens-teams-down-to-12/	12 men's teams (IOC, April 2025); places: Europe 3, Africa 2, CONCACAF 1 (media report of July 2026). Tournament dates and the December 2025 FIFA Council date not on a second source.
+int-world-312	notes	no second source		A claim that nothing happened; no second source can confirm it.
+int-world-313	notes	no second source		A claim that nothing changed; no second source can confirm it.
+int-world-314	name	agree	https://www.rsssf.org/tablesw/worldcup.html	
+int-world-314	format	agree	https://www.rsssf.org/tablesw/worldcup.html	No finals this season (editions 2002, 2006 to 2026).
+int-world-314	notes	agree	https://widgets.datasportsgroup.com/sports-news/news/en/176003/2030-world-cup:-conmebol-confirms-historic-expansion-to-64-teams/	Domínguez announced 64 teams; FIFA has not confirmed (report of 23 July 2026). The day 20 July 2026 not checked.
+int-world-315	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-315	format	agree	https://global.espn.com/football/story/_/id/48826270/uefa-announces-plans-champions-league-style-qualification-world-cup	Plan announced 20 May 2026; Nations League changes start 2028/29. Start after 2027/28 is an inference on both sides.
+int-world-315	notes	agree	https://global.espn.com/football/story/_/id/48826270/uefa-announces-plans-champions-league-style-qualification-world-cup	League A: 36 teams in 3 groups of 12, 6 opponents each; League B: 18 teams (3 groups of 6); play-offs. Announced 20 May 2026.
+int-world-316	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-316	clubs	no second source	https://www.elpais.com.co/deportes/asi-se-jugarian-las-eliminatorias-sudamericanas-para-el-mundial-2030-hay-novedades-2119.html	Not found. Media (El País Colombia) report a start in March 2027, but CONMEBOL has not published the format.
+int-world-316	playoffs	no second source	https://www.elpais.com.co/deportes/asi-se-jugarian-las-eliminatorias-sudamericanas-para-el-mundial-2030-hay-novedades-2119.html	Not found. Media (El País Colombia) report a start in March 2027, but CONMEBOL has not published the format.
+int-world-316	format	no second source	https://www.elpais.com.co/deportes/asi-se-jugarian-las-eliminatorias-sudamericanas-para-el-mundial-2030-hay-novedades-2119.html	Not found. Media (El País Colombia) report a start in March 2027, but CONMEBOL has not published the format.
+int-world-316	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-316	bench	no second source		Not found.
+int-world-316	notes	agree	https://legal.fifa.com/media-releases/extraordinary-congress-appoints-hosts-of-2030-and-2034-editions-of-fifa-world-cup	Centenary matches in Argentina, Paraguay, Uruguay (FIFA, 11 December 2024). Automatic places reported by media (El País Colombia).
+int-world-317	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-317	clubs	agree	https://www.bakersfieldnow.com/sports/content/concacaf-says-it-will-have-6-automatic-berths-for-2030-world-cup	Teams ranked 14 to 35 in round 1 (22) plus top 13.
+int-world-317	playoffs	agree	https://www.bakersfieldnow.com/sports/content/concacaf-says-it-will-have-6-automatic-berths-for-2030-world-cup	Two best third-placed teams, November 2029; winner to the intercontinental play-offs.
+int-world-317	format	agree	https://www.bakersfieldnow.com/sports/content/concacaf-says-it-will-have-6-automatic-berths-for-2030-world-cup	Round 1 from September 2027 (two legs); round 2 six groups of 4, October and November 2027 and March 2028; final round 3 groups of 4, June 2028 and September and October 2029.
+int-world-317	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-317	bench	no second source		Not found.
+int-world-317	notes	agree	https://www.bakersfieldnow.com/sports/content/concacaf-says-it-will-have-6-automatic-berths-for-2030-world-cup	AP report of 6 February 2026. FIFA had not set the berths (same report).
+int-world-318	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-318	clubs	no second source	https://blueprint.ng/caf-announces-date-for-2030-world-cup-qualifier/	Not found. One report (Blueprint) put a CAF preliminary round in March 2026, but the FIFA match list shows no 2030 qualifier in March 2026.
+int-world-318	playoffs	no second source	https://blueprint.ng/caf-announces-date-for-2030-world-cup-qualifier/	Not found. One report (Blueprint) put a CAF preliminary round in March 2026, but the FIFA match list shows no 2030 qualifier in March 2026.
+int-world-318	format	no second source	https://blueprint.ng/caf-announces-date-for-2030-world-cup-qualifier/	Not found. One report (Blueprint) put a CAF preliminary round in March 2026, but the FIFA match list shows no 2030 qualifier in March 2026.
+int-world-318	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-318	bench	no second source		Not found.
+int-world-318	notes	agree	https://legal.fifa.com/media-releases/extraordinary-congress-appoints-hosts-of-2030-and-2034-editions-of-fifa-world-cup	Morocco co-host (FIFA, 11 December 2024).
+int-world-319	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-319	clubs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-319	playoffs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-319	format	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-319	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-319	bench	no second source		Not found.
+int-world-320	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-320	clubs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-320	playoffs	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-320	format	no second source	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	Not found. No 2030 qualifier in the FIFA match list for September to mid-October 2026.
+int-world-320	subs_used	no second source		Use of five substitutes in this competition not found on a second source.
+int-world-320	bench	no second source		Not found.
+int-world-321	name	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	
+int-world-321	format	agree	https://api.fifa.com/api/v3/calendar/matches?from=2026-09-01T00:00:00Z&to=2026-10-16T23:59:59Z&language=en&count=500	No match of this zone in this season on the second source.
+int-world-321	notes	agree	https://www.bakersfieldnow.com/sports/content/concacaf-says-it-will-have-6-automatic-berths-for-2030-world-cup	CONCACAF play-in in November 2029 feeds the intercontinental play-offs; FIFA had not announced the format.
+int-world-322	name	agree	https://www.rsssf.org/tablesi/intconcup.html	
+int-world-322	format	agree	https://www.rsssf.org/tablesi/intconcup.html	No edition this season (editions 2001, 2003, 2005, 2009, 2013, 2017).
+int-world-322	notes	agree	https://www.goal.com/en-gh/news/what-happened-confederations-cup-world-cup-warm-up-cancelled/bltc39f7dc2393dfcc8	Last edition 2017; FIFA confirmed in 2019 it would not be held again. The day (15 March 2019, FIFA Council in Miami) is not on this page.
+int-world-323	name	agree	https://www.rsssf.org/tableso/olympics.html	
+int-world-323	format	agree	https://www.rsssf.org/tableso/olympics.html	No Olympic tournament this season.
+int-world-323	notes	agree	https://sportsvillagesquare.com/2025/04/10/ioc-boosts-womens-soccer-teams-to-16-for-la-2028-games-mens-teams-down-to-12/	Asia 2, South America 2, Oceania 1, host USA (media report). 10 to 29 July 2028 not checked.
+int-world-324	notes	agree	https://legal.fifa.com/media-releases/extraordinary-congress-appoints-hosts-of-2030-and-2034-editions-of-fifa-world-cup	2030 hosts agree; Los Angeles 2028 host agrees (media report); July 2028 dates not checked.
