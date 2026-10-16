@@ -2,6 +2,16 @@
 
 CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes bugs. A minor release (0.2.0) adds features. A major release (1.0.0 and later) can break saved games or settings. Releases below 1.0.0 are test releases.
 
+## 0.4.1 (pre-release)
+
+Fixes for the Database button on Setup Game and for the intro.
+
+- The intro shows the CM 01/02 logo in place of the Sports Interactive logo, with every database.
+- A database in `Databases` no longer replaces the pictures of the intro. The Update Team databases showed their "Data Update" picture there.
+- The button shows 3.9.68, 3.9.60 and 3.9.65 first, then your databases from the oldest season to the newest. In 0.4.0 they came in alphabetical order of the folder names.
+- Each database shows its season and its folder name, for example "2025/26 (May 2026)". In classic mode a long folder name shows the season alone.
+- A folder whose name has no month and year comes last.
+
 ## 0.4.0 (pre-release)
 
 New screens and an HD layout. Each new option has a line in `settings.txt` in the save folder. No feature changes the game's decisions while you make the same clicks.

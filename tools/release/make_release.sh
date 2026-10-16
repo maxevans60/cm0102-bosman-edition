@@ -14,7 +14,8 @@
 #   --sdl2-mac     the folder with mac-arm64 and mac-x86_64 SDL2 builds (tools/mac/build_sdl2.sh)
 #   --sdl2-mingw   the SDL2 mingw development release (SDL2-2.x.y)
 #   --site-assets  the site's pictures (logo, screenshots). They go into site-assets.zip on the release,
-#                  where the Pages workflow fetches them, so git never holds them.
+#                  where the Pages workflow fetches them, so git never holds them. logo.png also gives
+#                  the intro logo, Data/bosman_logo.rgn of each download (tools/release/make_intro_logo.py).
 #   --publish      tag v<version>, push the tag and upload the release. Without it the script only builds
 #                  and checks, and prints what it would upload.
 #
@@ -65,12 +66,17 @@ mkdir -p "$STAGE"
 rsync -a --delete --exclude .DS_Store --exclude /Data-3.9.60 --exclude /Data-3.9.65 "$GAME/" "$STAGE/"
 rsync -a --delete --exclude .DS_Store "$DATA_3960/" "$STAGE/Data-3.9.60/"
 rsync -a --delete --exclude .DS_Store "$DATA_3965/" "$STAGE/Data-3.9.65/"
+# The intro logo (Q208): made from the site logo, in the downloads only. The game shows it in place of
+# Data/logo.rgn (src/recomp_rt/win/files.c).
+python3 -I "$REPO/tools/release/make_intro_logo.py" "$SITE/logo.png" "$STAGE/Data/bosman_logo.rgn"
 GAME="$STAGE"
 MANIFEST="$OUT/manifest-download.tsv"
 {
     cat "$CLEAN/manifest.tsv"
     grep -v '^#' "$CLEAN/manifest-3960.tsv" | awk -F '\t' -v OFS='\t' '{ $3 = "Data-3.9.60/" $3; print }'
     grep -v '^#' "$CLEAN/manifest-3965.tsv" | awk -F '\t' -v OFS='\t' '{ $3 = "Data-3.9.65/" $3; print }'
+    printf '%s\t%s\tData/bosman_logo.rgn\n' "$(shasum -a 256 "$STAGE/Data/bosman_logo.rgn" | cut -d ' ' -f 1)" \
+        "$(wc -c < "$STAGE/Data/bosman_logo.rgn" | tr -d ' ')"
 } > "$MANIFEST"
 CHECK_ARGS=(--manifest "$MANIFEST")
 

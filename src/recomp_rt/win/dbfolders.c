@@ -2,6 +2,7 @@
 #include "dbfolders.h"
 #include "../host.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,10 +34,70 @@ int dbfolders_valid(const char *dir)
     return count == FILE_COUNT;
 }
 
+static const char *const months[] = {"january", "february", "march", "april", "may", "june", "july",
+                                     "august", "september", "october", "november", "december"};
+
+/* The month of the word p (len bytes), or 0. */
+static int month_word(const char *p, size_t len)
+{
+    if (len == 6 && !strncasecmp(p, "spring", 6)) return 4;
+    if (len == 6 && !strncasecmp(p, "autumn", 6)) return 10;
+    if (len == 4 && !strncasecmp(p, "sept", 4)) return 9;
+    for (int i = 0; i < 12; i++)
+        if ((len == 3 || len == strlen(months[i])) && !strncasecmp(p, months[i], len)) return i + 1;
+    return 0;
+}
+
+int dbfolders_date(const char *name, int *year, int *month)
+{
+    int y = 0, m = 0;
+    const char *p = name;
+    while (*p) {
+        if (!isalnum((unsigned char)*p)) { p++; continue; }
+        const char *w = p;
+        while (isalnum((unsigned char)*p)) p++;
+        size_t len = (size_t)(p - w);
+        if (len == 4 && isdigit((unsigned char)w[0]) && isdigit((unsigned char)w[1]) &&
+            isdigit((unsigned char)w[2]) && isdigit((unsigned char)w[3])) {
+            if (!y) y = atoi(w);
+        } else if (!m) {
+            m = month_word(w, len);
+        }
+    }
+    if (!y || !m) return 0;
+    *year = y;
+    *month = m;
+    return 1;
+}
+
+int dbfolders_season(const char *name, char *out, size_t room)
+{
+    int y, m;
+    if (!dbfolders_date(name, &y, &m)) return 0;
+    int start = m >= 7 ? y : y - 1;
+    snprintf(out, room, "%04d/%02d", start, (start + 1) % 100);
+    return 1;
+}
+
 static int by_name(const void *a, const void *b)
 {
     int c = strcasecmp((const char *)a, (const char *)b);
     return c ? c : strcmp((const char *)a, (const char *)b);
+}
+
+/* The order of dbfolders_sort. */
+static int by_date(const void *a, const void *b)
+{
+    int ya, ma, yb, mb;
+    int da = dbfolders_date((const char *)a, &ya, &ma), db = dbfolders_date((const char *)b, &yb, &mb);
+    if (da != db) return db - da;
+    if (da && ya * 12 + ma != yb * 12 + mb) return ya * 12 + ma < yb * 12 + mb ? -1 : 1;
+    return by_name(a, b);
+}
+
+void dbfolders_sort(char names[][DBFOLDER_NAME], int n)
+{
+    qsort(names, (size_t)n, DBFOLDER_NAME, by_date);
 }
 
 int dbfolders_list(const char *save_dir, char names[][DBFOLDER_NAME], int max)
@@ -59,11 +120,11 @@ int dbfolders_list(const char *save_dir, char names[][DBFOLDER_NAME], int max)
         /* The list is full: the folders that sort first stay, whatever order the disk gives. */
         int last = 0;
         for (int i = 1; i < n; i++)
-            if (by_name(names[i], names[last]) > 0) last = i;
-        if (n > 0 && by_name(e, names[last]) < 0) snprintf(names[last], DBFOLDER_NAME, "%s", e);
+            if (by_date(names[i], names[last]) > 0) last = i;
+        if (n > 0 && by_date(e, names[last]) < 0) snprintf(names[last], DBFOLDER_NAME, "%s", e);
     }
     host_closedir(d);
-    qsort(names, (size_t)n, DBFOLDER_NAME, by_name);
+    dbfolders_sort(names, n);
     return n;
 }
 
@@ -109,6 +170,19 @@ void dbfolders_label(const char *utf8, char *out, size_t room)
         out[n++] = (char)byte;
     }
     out[n] = 0;
+}
+
+void dbfolders_button_text(const char *name, char *out, size_t room)
+{
+    char season[16];
+    if (!dbfolders_season(name, season, sizeof season)) {
+        dbfolders_label(name, out, room);
+        return;
+    }
+    char both[DBFOLDER_NAME + 32], text[DBFOLDER_NAME + 32];
+    snprintf(both, sizeof both, "%s (%s)", season, name);
+    dbfolders_label(both, text, sizeof text);
+    snprintf(out, room, "%s", strlen(text) < room ? text : season);
 }
 
 size_t dbfolders_label_room(unsigned screen_w)
