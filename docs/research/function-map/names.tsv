@@ -92,7 +92,7 @@ address	file	name	confidence	model	cited_in
 0x40ae90	asia_club_champ.cpp	AsiaClubChamp::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x40b460	asia_club_champ.cpp	AsiaClubChamp::build_fate_news_text	high	opus	
 0x40b620	asia_club_champ.cpp	AsiaClubChamp::build_team_table	medium	opus	2026-10-16-sweep-europe.md
-0x40b700	asia_club_champ.cpp	AsiaClubChamp::release_data	high	opus	
+0x40b700	asia_club_champ.cpp	AsiaClubChamp::start_new_season	high	opus	
 0x40b950	asia_club_champ.cpp	AsiaClubChamp::select_qualified_clubs	medium	opus	2026-10-16-sweep-europe.md
 0x40bec0	asia_club_champ.cpp	AsiaClubChamp::create_second_zone_cup_stage	medium	opus	
 0x40c070	asia_club_champ.cpp	AsiaClubChamp::advance_stage	medium	opus	
@@ -108,7 +108,7 @@ address	file	name	confidence	model	cited_in
 0x40cf90	asia_cup_winner.cpp	AsiaCupWinner::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x40d460	asia_cup_winner.cpp	AsiaCupWinner::build_fate_news_text	high	opus	
 0x40d4d0	asia_cup_winner.cpp	AsiaCupWinner::create_team_entries	high	opus	2026-10-16-sweep-europe.md
-0x40d5b0	asia_cup_winner.cpp	AsiaCupWinner::release_data	high	opus	
+0x40d5b0	asia_cup_winner.cpp	AsiaCupWinner::start_new_season	high	opus	
 0x40d800	asia_cup_winner.cpp	AsiaCupWinner::set_up_rounds	high	opus	
 0x40d830	asia_cup_winner.cpp	AsiaCupWinner::select_qualified_clubs	medium	opus	2026-10-16-sweep-europe.md
 0x40ddf0	asia_cup_winner.cpp	AsiaCupWinner::create_zone_stage	medium	opus	
@@ -140,7 +140,7 @@ address	file	name	confidence	model	cited_in
 0x410840	asia_super_cup.cpp	AsiaSuperCup::~AsiaSuperCup	high	opus	
 0x410910	asia_super_cup.cpp	AsiaSuperCup::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x410a50	asia_super_cup.cpp	AsiaSuperCup::select_teams	high	opus	2026-10-16-sweep-europe.md
-0x410c50	asia_super_cup.cpp	AsiaSuperCup::release_data	high	opus	
+0x410c50	asia_super_cup.cpp	AsiaSuperCup::start_new_season	high	opus	
 0x410e20	asia_super_cup.cpp	AsiaSuperCup::update_for_date	high	opus	
 0x410e90	aus_nsl.cpp	aus_nsl_constructor	high	haiku	
 0x4110b0	aus_nsl.cpp	aus_nsl_return_three	medium	haiku	
@@ -995,7 +995,7 @@ address	file	name	confidence	model	cited_in
 0x4c0e30	con_champ.cpp	ConChamp::~ConChamp	high	opus	
 0x4c0f00	con_champ.cpp	ConChamp::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x4c11a0	con_champ.cpp	ConChamp::select_qualified_clubs	medium	opus	2026-10-16-sweep-europe.md
-0x4c1440	con_champ.cpp	ConChamp::release_data	high	opus	
+0x4c1440	con_champ.cpp	ConChamp::start_new_season	high	opus	
 0x4c15f0	con_champ.cpp	ConChamp::set_up_rounds	high	opus	
 0x4c1620	con_champ.cpp	ConChamp::update_for_date	high	opus	
 0x4c16f0	con_merc_cup.cpp	Merc_cup::Merc_cup	high	haiku	club-world.md
@@ -1280,7 +1280,7 @@ address	file	name	confidence	model	cited_in
 0x518690	Cup.cpp	Cup::~Cup	high	opus	
 0x5186a0	Cup.cpp	Cup::create_round_table	high	opus	
 0x518710	Cup.cpp	Cup::set_up_rounds	high	opus	
-0x518780	Cup.cpp	Cup::release_data	medium	opus	
+0x518780	Cup.cpp	Cup::start_new_season	medium	opus	
 0x518790	Cup.cpp	Cup::map_fixture_tree	high	opus	
 0x519690	Cup.cpp	Cup::add_team_result_news	medium	opus	
 0x519890	Cup.cpp	Cup::apply_team_result_finance	medium	opus	
@@ -1817,7 +1817,7 @@ address	file	name	confidence	model	cited_in
 0x57a2f0	eur_super_cup.cpp	EurSuperCup::~EurSuperCup	high	opus	
 0x57a3c0	eur_super_cup.cpp	EurSuperCup::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x57a500	eur_super_cup.cpp	EurSuperCup::select_teams	high	opus	2026-10-16-sweep-europe.md
-0x57a6d0	eur_super_cup.cpp	EurSuperCup::release_data	high	opus	
+0x57a6d0	eur_super_cup.cpp	EurSuperCup::start_new_season	high	opus	
 0x57a890	euro_champ.cpp	EuroChamp::EuroChamp	high	opus	2026-10-16-sweep-international.md
 0x57aab0	euro_champ.cpp	EuroChamp::`scalar deleting destructor'	high	opus	
 0x57aad0	euro_champ.cpp	EuroChamp::~EuroChamp	high	opus	
@@ -1892,7 +1892,7 @@ address	file	name	confidence	model	cited_in
 0x584990	european_cup.cpp	EuropeanCup::build_qualifying_entry_table	medium	opus	
 0x584ad0	european_cup.cpp	EuropeanCup::record_season_history	high	opus	
 0x584ae0	european_cup.cpp	EuropeanCup::apply_team_result_finance	medium	opus	
-0x584d60	european_cup.cpp	EuropeanCup::release_data	high	opus	
+0x584d60	european_cup.cpp	EuropeanCup::start_new_season	high	opus	
 0x584fa0	european_cup.cpp	EuropeanCup::collect_entrants	medium	opus	2026-10-16-sweep-europe.md
 0x5851d0	european_cup.cpp	EuropeanCup::advance_stage	high	opus	
 0x585290	european_cup.cpp	EuropeanCup::draw_phase1_groups	high	opus	2026-10-16-sweep-europe.md
@@ -2868,7 +2868,7 @@ address	file	name	confidence	model	cited_in
 0x632270	inter_amer_cup.cpp	InterAmerCup::~InterAmerCup	high	opus	
 0x632340	inter_amer_cup.cpp	InterAmerCup::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x632480	inter_amer_cup.cpp	InterAmerCup::select_teams	medium	opus	
-0x632910	inter_amer_cup.cpp	InterAmerCup::release_data	high	opus	
+0x632910	inter_amer_cup.cpp	InterAmerCup::start_new_season	high	opus	
 0x632ac0	international_awards.cpp	international_awards_constructor	medium	haiku	
 0x632b30	international_awards.cpp	international_awards::init_award_list	high	haiku	
 0x632e20	international_awards.cpp	Awards::populate_award_entry	medium	haiku	
@@ -2878,7 +2878,7 @@ address	file	name	confidence	model	cited_in
 0x633290	intertoto_cup.cpp	IntertotoCup::process_fixture	high	opus	2026-10-16-sweep-europe.md
 0x633300	intertoto_cup.cpp	IntertotoCup::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x6336c0	intertoto_cup.cpp	IntertotoCup::collect_entrants	high	opus	2026-10-16-sweep-europe.md
-0x633920	intertoto_cup.cpp	IntertotoCup::release_data	high	opus	
+0x633920	intertoto_cup.cpp	IntertotoCup::start_new_season	high	opus	
 0x633af0	intertoto_cup.cpp	IntertotoCup::build_fate_news_text	high	opus	
 0x633c10	intertoto_cup.cpp	IntertotoCup::apply_team_result_finance	high	opus	
 0x633d40	intertoto_cup.cpp	IntertotoCup::update_for_date	high	opus	2026-10-16-sweep-europe.md
@@ -6462,7 +6462,7 @@ address	file	name	confidence	model	cited_in
 0x9024f0	uefa_cup.cpp	UefaCup::~UefaCup	high	opus	
 0x9025c0	uefa_cup.cpp	UefaCup::create_round_table	high	opus	2026-10-16-sweep-europe.md
 0x902b90	uefa_cup.cpp	UefaCup::build_entrants	high	opus	2026-10-16-sweep-europe.md
-0x902ee0	uefa_cup.cpp	UefaCup::release_data	high	opus	
+0x902ee0	uefa_cup.cpp	UefaCup::start_new_season	high	opus	
 0x9030b0	uefa_cup.cpp	UefaCup::set_up_rounds	high	opus	
 0x9030e0	uefa_cup.cpp	UefaCup::apply_team_result_finance	medium	opus	
 0x903120	uefa_cup.cpp	UefaCup::collect_club_list	high	opus	
@@ -6581,140 +6581,140 @@ address	file	name	confidence	model	cited_in
 0x90f060	wales_awards.cpp	WalesAwards::update_team_of_the_week	medium	opus	
 0x90f080	wales_rules.cpp	WALES_RULES::WALES_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x90f1a0	wales_rules.cpp	WALES_RULES::get_loan_period	medium	opus	
-0x90f210	wc_african_cup.cpp	wc_african_cup::ctor	high	haiku	2026-10-16-sweep-international.md
-0x90f4d0	wc_african_cup.cpp	wc_african_cup::`scalar deleting destructor'	medium	slot copy	
-0x90f4f0	wc_african_cup.cpp	wc_african_cup_dtor	high	haiku	
-0x90f600	wc_african_cup.cpp	wc_african_cup::create_round_table	medium	slot copy	
-0x90fbe0	wc_african_cup.cpp	wc_african_cup_slot_clear_team_selection	medium	haiku	
-0x90fbf0	wc_african_cup.cpp	wc_african_cup::apply_team_result_finance	medium	slot copy	
-0x90fe00	wc_african_cup.cpp	wc_african_cup_qualifier_news_message	high	haiku	
-0x910120	wc_african_cup.cpp	wc_african_cup::init_qualifier_slots	medium	haiku	
-0x910260	wc_african_cup.cpp	wc_african_cup_qualifier_text_or_assert	high	haiku	
-0x910410	wc_african_cup.cpp	wc_african_cup::release_data	medium	slot copy	
-0x9106a0	wc_african_cup.cpp	african_cup_qualifier_pool_fill	medium	haiku	
-0x910920	wc_african_cup.cpp	wc_african_cup_advance_stage	medium	haiku	
-0x9109e0	wc_african_cup.cpp	wc_african_cup_build_group_stage_leagues	high	haiku	
-0x910d20	wc_african_cup.cpp	wc_african_cup_create_stage	medium	haiku	
-0x910f00	wc_african_cup.cpp	wc_african_cup_load_team_ids	high	haiku	
-0x911110	wc_african_cup.cpp	African_Cup::serialise_qualifiers	medium	haiku	
-0x9111d0	wc_african_cup.cpp	wc_african_cup::rank_teams	medium	slot copy	
-0x9115a0	wc_african_cup.cpp	WCAfricanCup::set_fixture_slot	medium	haiku	
-0x911b80	wc_african_cup.cpp	wc_african_cup_result_code	low	haiku	
-0x911ba0	wc_african_cup.cpp	wc_african_cup_is_qualified_or_flagged	medium	haiku	
-0x911bf0	wc_asia_league.cpp	wc_asia_league::wc_asia_league	high	haiku	2026-10-16-sweep-international.md
-0x911df0	wc_asia_league.cpp	wc_asia_league::`scalar deleting destructor'	medium	slot copy	
-0x911e10	wc_asia_league.cpp	wc_asia_league::~wc_asia_league	high	haiku	
-0x911f00	wc_asia_league.cpp	wc_asia_league::create_schedule	medium	slot copy	
-0x912500	wc_asia_league.cpp	wc_asia_league::update_staff_records_for_status	medium	slot copy	
-0x912780	wc_asia_league.cpp	emit_qualification_news	high	haiku	
-0x912ad0	wc_asia_league.cpp	wc_asia_league_allocate_teams_and_load	high	haiku	
-0x912bd0	wc_asia_league.cpp	wc_asia_league_assign_teams_to_groups	medium	haiku	
-0x912db0	wc_asia_league.cpp	wc_asia_league_stage_result_code	medium	haiku	
-0x912eb0	wc_asia_league.cpp	wc_asia_league::set_up_rules	medium	slot copy	
-0x912f80	wc_asia_league.cpp	wc_asia_league_qualification_text	high	haiku	
-0x913140	wc_asia_league.cpp	wc_asia_league::update_for_date	medium	slot copy	
-0x913360	wc_asia_league.cpp	wc_asia_league::start_new_season	medium	slot copy	
-0x913490	wc_asia_league.cpp	asia_league_advance_stage	medium	haiku	
-0x913540	wc_asia_league.cpp	wc_asia_league_create_group_stage_for_round	medium	haiku	
-0x913740	wc_asia_league.cpp	wc_asia_league_build_qualifier_stages	high	haiku	2026-10-16-sweep-international.md
-0x913b60	wc_asia_league.cpp	wc_asia_league_create_cup_stage_object	medium	haiku	
-0x913d50	wc_asia_league.cpp	wc_asia_league_create_qualifier_cup	medium	haiku	2026-10-16-sweep-international.md
-0x913f60	wc_asia_league.cpp	wc_asia_league::build_qualified_team_list	medium	haiku	2026-10-16-sweep-international.md
-0x914200	wc_asia_league.cpp	wc_asia_league_load_team_indices	high	haiku	
-0x914410	wc_asia_league.cpp	wc_asia_league_serialise_load	medium	haiku	
-0x9144d0	wc_asia_league.cpp	wc_asia_league::set_predicted_positions	medium	slot copy	
-0x914730	wc_asia_league.cpp	wc_asia_league::set_qualification_slots	medium	haiku	
-0x9149f0	wc_concacaf_cup.cpp	wc_concacaf_cup_ctor	high	haiku	2026-10-16-sweep-international.md
-0x914ca0	wc_concacaf_cup.cpp	wc_concacaf_cup::`scalar deleting destructor'	medium	slot copy	
-0x914cc0	wc_concacaf_cup.cpp	wc_concacaf_cup::~wc_concacaf_cup	high	haiku	
-0x914de0	wc_concacaf_cup.cpp	wc_concacaf_cup::create_round_table	medium	slot copy	
-0x915710	wc_concacaf_cup.cpp	wc_concacaf_cup::apply_team_result_finance	medium	slot copy	
-0x9159b0	wc_concacaf_cup.cpp	wc_concacaf_cup::on_team_stage_news	high	haiku	
-0x915d40	wc_concacaf_cup.cpp	wc_concacaf_cup_alloc_team_table	high	haiku	
-0x915e40	wc_concacaf_cup.cpp	wc_concacaf_cup::update_for_date	medium	slot copy	
-0x915fe0	wc_concacaf_cup.cpp	wc_concacaf_cup_clear_flag_0xb1	medium	haiku	
-0x915ff0	wc_concacaf_cup.cpp	wc_concacaf_cup::release_data	medium	slot copy	
-0x916250	wc_concacaf_cup.cpp	wc_concacaf_cup_select_qualifiers	medium	haiku	
-0x916af0	wc_concacaf_cup.cpp	wc_concacaf_cup_round_label	high	haiku	
-0x916cd0	wc_concacaf_cup.cpp	wc_concacaf_cup_build_group_stages	medium	haiku	
-0x917060	wc_concacaf_cup.cpp	wc_concacaf_cup_advance_stage	high	haiku	
-0x917110	wc_concacaf_cup.cpp	wc_concacaf_cup_build_qualifier_stage	medium	haiku	
-0x917320	wc_concacaf_cup.cpp	wc_concacaf_cup_create_group_fixtures	medium	haiku	
-0x917830	wc_concacaf_cup.cpp	wc_concacaf_cup_create_group_stage	medium	haiku	
-0x917aa0	wc_concacaf_cup.cpp	cup_team_table_load	high	haiku	
-0x917cd0	wc_concacaf_cup.cpp	wc_concacaf_cup::serialise_qualifier_slots	medium	haiku	
-0x917db0	wc_concacaf_cup.cpp	wc_concacaf_cup::rank_teams	medium	slot copy	
-0x918040	wc_concacaf_cup.cpp	CONCACAF_qualification_slots_set	medium	haiku	
-0x918200	wc_europe_league.cpp	WC_Europe_League::ctor_setup_league	high	haiku	2026-10-16-sweep-international.md
-0x9184a0	wc_europe_league.cpp	wc_europe_league::`scalar deleting destructor'	medium	slot copy	
-0x9184c0	wc_europe_league.cpp	WCEuropeLeague::~WCEuropeLeague	high	haiku	
-0x9185c0	wc_europe_league.cpp	wc_europe_league::create_schedule	medium	slot copy	
-0x918980	wc_europe_league.cpp	wc_europe_league::update_staff_records_for_status	medium	slot copy	
-0x918b00	wc_europe_league.cpp	qualification_news_message	high	haiku	
-0x918dd0	wc_europe_league.cpp	wc_europe_league_qualified_stage_result	medium	haiku	2026-10-16-sweep-international.md
-0x918ec0	wc_europe_league.cpp	wc_europe_league_fill_group_slots	medium	haiku	2026-10-16-sweep-international.md
-0x9190d0	wc_europe_league.cpp	wc_europe_league::init_team_table	high	haiku	
-0x9191e0	wc_europe_league.cpp	wc_europe_league::set_up_rules	medium	slot copy	
-0x9192c0	wc_europe_league.cpp	wc_europe_league_qualification_text	medium	haiku	
-0x919430	wc_europe_league.cpp	wc_europe_league::start_new_season	medium	slot copy	
-0x919620	wc_europe_league.cpp	wc_europe_league_advance_round_guard	medium	haiku	
-0x9196d0	wc_europe_league.cpp	wc_europe_league_create_group_stage	high	haiku	
-0x919910	wc_europe_league.cpp	wc_europe_league_build_qualifier_cup	medium	haiku	
-0x919e30	wc_europe_league.cpp	wc_qualifier_pool_setup	medium	haiku	2026-10-16-sweep-international.md
-0x91a140	wc_europe_league.cpp	wc_europe_league_stage_setup_and_create	medium	haiku	
-0x91a240	wc_europe_league.cpp	wc_europe_league_copy_qualifiers_to_group_table	medium	haiku	
-0x91a500	wc_europe_league.cpp	wc_europe_league::update_for_date	medium	slot copy	
-0x91a7b0	wc_europe_league.cpp	wc_europe_league::update_positions_and_status	medium	slot copy	
-0x91a7e0	wc_europe_league.cpp	wc_europe_league_mark_qualified_teams	medium	haiku	
-0x91a9f0	wc_europe_league.cpp	wc_europe_league_load_stage_data	high	haiku	
-0x91ae80	wc_europe_league.cpp	Save::load_qualification_list	medium	haiku	
-0x91b1b0	wc_europe_league.cpp	wc_europe_league::set_predicted_positions	medium	slot copy	
-0x91b510	wc_europe_league.cpp	wc_fixture_slot_set_result	medium	haiku	
-0x91b6e0	wc_europe_league.cpp	wc_europe_league_qualifier_rank_index	low	haiku	
-0x91b710	wc_europe_league.cpp	wc_europe_league_compare_qualifiers	medium	haiku	
-0x91b760	wc_europe_league.cpp	WC_Europe_League::load_fixtures	medium	haiku	2026-10-16-sweep-international.md
-0x91db60	wc_europe_league.cpp	wc_europe_league_add_fixture_for_group_team	medium	haiku	2026-10-16-sweep-season-end.md
-0x91def0	wc_europe_league.cpp	wc_find_unmatched_team_pair	medium	haiku	
-0x91df90	wc_oceania_league.cpp	wc_oceania_league_ctor	high	haiku	2026-10-16-sweep-international.md
-0x91e1c0	wc_oceania_league.cpp	wc_oceania_league_order_key	low	haiku	
-0x91e1e0	wc_oceania_league.cpp	wc_oceania_league::`scalar deleting destructor'	medium	slot copy	
-0x91e200	wc_oceania_league.cpp	wc_oceania_league_dtor	high	haiku	
-0x91e2e0	wc_oceania_league.cpp	wc_oceania_league::create_schedule	medium	slot copy	
-0x91e840	wc_oceania_league.cpp	wc_oceania_league::update_staff_records_for_status	medium	slot copy	
-0x91e990	wc_oceania_league.cpp	Oceania_league_news_on_round_result	high	haiku	
-0x91ec00	wc_oceania_league.cpp	wc_oceania_league_init_teams	high	haiku	
-0x91ecf0	wc_oceania_league.cpp	wc_oceania_league::set_up_rules	medium	slot copy	
-0x91edc0	wc_oceania_league.cpp	wc_oceania_league_round_label	high	haiku	
-0x91ef40	wc_oceania_league.cpp	wc_oceania_league::start_new_season	medium	slot copy	
-0x91f0d0	wc_oceania_league.cpp	wc_oceania_league_advance_stage	medium	haiku	
-0x91f1a0	wc_oceania_league.cpp	wc_oceania_league_create_stage	medium	haiku	
-0x91f3d0	wc_oceania_league.cpp	wc_oceania_league::update_for_date	medium	slot copy	
-0x91f640	wc_oceania_league.cpp	wc_oceania_league_stage_setup	medium	haiku	
-0x91f800	wc_oceania_league.cpp	wc_oceania_league_create_cup_stage	medium	haiku	2026-10-16-sweep-international.md
-0x91fa80	wc_oceania_league.cpp	wc_oceania_league_fill_qualifier_list	medium	haiku	
-0x91fd20	wc_oceania_league.cpp	Oceania_league::load_teams	medium	haiku	
-0x91ff30	wc_oceania_league.cpp	wc_oceania_league::set_predicted_positions	medium	slot copy	
-0x9200e0	wc_oceania_league.cpp	wc_oceania_league_set_qualifier_slots	medium	haiku	
-0x920260	wc_oceania_league.cpp	wc_oceania_league_flag_check	low	haiku	
-0x9202b0	wc_south_american_league.cpp	wc_south_american_league_ctor	high	haiku	2026-10-16-sweep-international.md
-0x9204e0	wc_south_american_league.cpp	wc_south_american_league::`scalar deleting destructor'	medium	slot copy	
-0x920500	wc_south_american_league.cpp	wc_south_american_league_dtor	high	haiku	
-0x920590	wc_south_american_league.cpp	wc_south_american_league::create_schedule	medium	slot copy	
-0x920a50	wc_south_american_league.cpp	wc_south_american_league::update_staff_records_for_status	medium	slot copy	
-0x920b40	wc_south_american_league.cpp	wc_south_american_league_qualify_message	high	haiku	
-0x920d10	wc_south_american_league.cpp	wc_south_american_league_count_qualifier_slots	medium	haiku	
-0x920eb0	wc_south_american_league.cpp	wc_south_american_league_fill_slots	medium	haiku	
-0x921040	wc_south_american_league.cpp	wc_south_american_league::set_up_rules	medium	slot copy	
-0x921160	wc_south_american_league.cpp	wc_south_american_league::update_for_date	medium	slot copy	
-0x921390	wc_south_american_league.cpp	wc_south_american_league_qualify_or_stage_label	high	haiku	
-0x921470	wc_south_american_league.cpp	wc_south_american_league::start_new_season	medium	slot copy	
-0x921590	wc_south_american_league.cpp	team_read_from_stream	medium	haiku	
-0x921630	wc_south_american_league.cpp	wc_south_american_league::qualification_slots_for_team	low	haiku	
-0x921670	wc_south_american_league.cpp	qualification_slot_check	medium	haiku	
-0x9216d0	wc_south_american_league.cpp	wc_south_american_league::add_fixtures	medium	haiku	2026-10-16-sweep-international.md
-0x922350	wc_south_american_league.cpp	wc_south_american_league_qualify_team_fixture	high	haiku	2026-10-16-sweep-season-end.md
-0x9226c0	wc_south_american_league.cpp	find_cm_cd_drive	high	haiku	2026-10-14-game-creation-inventory.md
-0x9227d0	wc_south_american_league.cpp	wc_south_american_league_release_pair	medium	haiku	
+0x90f210	wc_african_cup.cpp	WcAfricanCup::WcAfricanCup	high	opus	2026-10-16-sweep-international.md
+0x90f4d0	wc_african_cup.cpp	WcAfricanCup::`scalar deleting destructor'	high	opus	
+0x90f4f0	wc_african_cup.cpp	WcAfricanCup::~WcAfricanCup	high	opus	
+0x90f600	wc_african_cup.cpp	WcAfricanCup::create_round_table	high	opus	
+0x90fbe0	wc_african_cup.cpp	WcAfricanCup::record_season_history	medium	opus	
+0x90fbf0	wc_african_cup.cpp	WcAfricanCup::apply_team_result_finance	high	opus	
+0x90fe00	wc_african_cup.cpp	WcAfricanCup::build_fate_news_text	high	opus	
+0x910120	wc_african_cup.cpp	WcAfricanCup::build_first_round_entries	medium	opus	
+0x910260	wc_african_cup.cpp	WcAfricanCup::write_progress_text	high	opus	
+0x910410	wc_african_cup.cpp	WcAfricanCup::start_new_season	medium	opus	
+0x9106a0	wc_african_cup.cpp	WcAfricanCup::collect_entrants	high	opus	
+0x910920	wc_african_cup.cpp	WcAfricanCup::advance_stage	high	opus	
+0x9109e0	wc_african_cup.cpp	WcAfricanCup::create_group_stages	high	opus	
+0x910d20	wc_african_cup.cpp	WcAfricanCup::create_playoff_stage	high	opus	
+0x910f00	wc_african_cup.cpp	WcAfricanCup::load_extra_data	high	opus	
+0x911110	wc_african_cup.cpp	WcAfricanCup::save_extra_data	high	opus	
+0x9111d0	wc_african_cup.cpp	WcAfricanCup::rank_teams	medium	opus	
+0x9115a0	wc_african_cup.cpp	WcAfricanCup::set_club_progress	high	opus	
+0x911b80	wc_african_cup.cpp	WcAfricanCup::get_qualification_status	high	opus	
+0x911ba0	wc_african_cup.cpp	WcAfricanCup::get_qualification_status_change	high	opus	
+0x911bf0	wc_asia_league.cpp	WcAsiaLeague::WcAsiaLeague	high	opus	2026-10-16-sweep-international.md
+0x911df0	wc_asia_league.cpp	WcAsiaLeague::`scalar deleting destructor'	high	opus	
+0x911e10	wc_asia_league.cpp	WcAsiaLeague::~WcAsiaLeague	high	opus	
+0x911f00	wc_asia_league.cpp	WcAsiaLeague::create_schedule	high	opus	
+0x912500	wc_asia_league.cpp	WcAsiaLeague::update_staff_records_for_status	high	opus	
+0x912780	wc_asia_league.cpp	WcAsiaLeague::build_fate_news_text	high	opus	
+0x912ad0	wc_asia_league.cpp	WcAsiaLeague::init_first_group_table	medium	opus	
+0x912bd0	wc_asia_league.cpp	WcAsiaLeague::draw_first_round_groups	medium	opus	
+0x912db0	wc_asia_league.cpp	WcAsiaLeague::get_first_round_group_size	medium	opus	
+0x912eb0	wc_asia_league.cpp	WcAsiaLeague::set_up_rules	high	opus	
+0x912f80	wc_asia_league.cpp	WcAsiaLeague::write_progress_text	high	opus	
+0x913140	wc_asia_league.cpp	WcAsiaLeague::update_for_date	high	opus	
+0x913360	wc_asia_league.cpp	WcAsiaLeague::start_new_season	high	opus	
+0x913490	wc_asia_league.cpp	WcAsiaLeague::advance_stage	high	opus	
+0x913540	wc_asia_league.cpp	WcAsiaLeague::create_first_round_group	high	opus	
+0x913740	wc_asia_league.cpp	WcAsiaLeague::create_second_round_groups	high	opus	2026-10-16-sweep-international.md
+0x913b60	wc_asia_league.cpp	WcAsiaLeague::create_third_round_tie	medium	opus	
+0x913d50	wc_asia_league.cpp	WcAsiaLeague::create_playoff_tie	medium	opus	2026-10-16-sweep-international.md
+0x913f60	wc_asia_league.cpp	WcAsiaLeague::build_entrant_list	high	opus	2026-10-16-sweep-international.md
+0x914200	wc_asia_league.cpp	WcAsiaLeague::load_extra_data	high	opus	
+0x914410	wc_asia_league.cpp	WcAsiaLeague::save_extra_data	high	opus	
+0x9144d0	wc_asia_league.cpp	WcAsiaLeague::set_predicted_positions	high	opus	
+0x914730	wc_asia_league.cpp	WcAsiaLeague::set_club_progress	high	opus	
+0x9149f0	wc_concacaf_cup.cpp	WcConcacafCup::WcConcacafCup	high	opus	2026-10-16-sweep-international.md
+0x914ca0	wc_concacaf_cup.cpp	WcConcacafCup::`scalar deleting destructor'	high	opus	
+0x914cc0	wc_concacaf_cup.cpp	WcConcacafCup::~WcConcacafCup	high	opus	
+0x914de0	wc_concacaf_cup.cpp	WcConcacafCup::create_round_table	high	opus	
+0x915710	wc_concacaf_cup.cpp	WcConcacafCup::apply_team_result_finance	high	opus	
+0x9159b0	wc_concacaf_cup.cpp	WcConcacafCup::build_fate_news_text	high	opus	
+0x915d40	wc_concacaf_cup.cpp	WcConcacafCup::build_team_table	medium	opus	
+0x915e40	wc_concacaf_cup.cpp	WcConcacafCup::update_for_date	high	opus	
+0x915fe0	wc_concacaf_cup.cpp	WcConcacafCup::skip_season_reset	medium	opus	
+0x915ff0	wc_concacaf_cup.cpp	WcConcacafCup::start_new_season	high	opus	
+0x916250	wc_concacaf_cup.cpp	WcConcacafCup::select_entrants	medium	opus	
+0x916af0	wc_concacaf_cup.cpp	WcConcacafCup::write_progress_text	high	opus	
+0x916cd0	wc_concacaf_cup.cpp	WcConcacafCup::create_central_american_groups	medium	opus	
+0x917060	wc_concacaf_cup.cpp	WcConcacafCup::advance_stage	high	opus	
+0x917110	wc_concacaf_cup.cpp	WcConcacafCup::create_play_off_stage	medium	opus	
+0x917320	wc_concacaf_cup.cpp	WcConcacafCup::create_semi_final_groups	medium	opus	
+0x917830	wc_concacaf_cup.cpp	WcConcacafCup::create_final_group	medium	opus	
+0x917aa0	wc_concacaf_cup.cpp	WcConcacafCup::load_extra_data	high	opus	
+0x917cd0	wc_concacaf_cup.cpp	WcConcacafCup::save_extra_data	high	opus	
+0x917db0	wc_concacaf_cup.cpp	WcConcacafCup::rank_teams	high	opus	
+0x918040	wc_concacaf_cup.cpp	WcConcacafCup::set_club_progress	medium	opus	
+0x918200	wc_europe_league.cpp	WcEuropeLeague::WcEuropeLeague	high	opus	2026-10-16-sweep-international.md
+0x9184a0	wc_europe_league.cpp	WcEuropeLeague::`scalar deleting destructor'	high	opus	
+0x9184c0	wc_europe_league.cpp	WcEuropeLeague::~WcEuropeLeague	high	opus	
+0x9185c0	wc_europe_league.cpp	WcEuropeLeague::create_schedule	high	opus	
+0x918980	wc_europe_league.cpp	WcEuropeLeague::update_staff_records_for_status	high	opus	
+0x918b00	wc_europe_league.cpp	WcEuropeLeague::build_fate_news_text	high	opus	
+0x918dd0	wc_europe_league.cpp	WcEuropeLeague::get_group_size	high	opus	2026-10-16-sweep-international.md
+0x918ec0	wc_europe_league.cpp	WcEuropeLeague::draw_groups	high	opus	2026-10-16-sweep-international.md
+0x9190d0	wc_europe_league.cpp	WcEuropeLeague::init_own_group_table	medium	opus	
+0x9191e0	wc_europe_league.cpp	WcEuropeLeague::set_up_rules	high	opus	
+0x9192c0	wc_europe_league.cpp	WcEuropeLeague::write_progress_text	high	opus	
+0x919430	wc_europe_league.cpp	WcEuropeLeague::start_new_season	high	opus	
+0x919620	wc_europe_league.cpp	WcEuropeLeague::advance_stage	high	opus	
+0x9196d0	wc_europe_league.cpp	WcEuropeLeague::create_group_stage	high	opus	
+0x919910	wc_europe_league.cpp	WcEuropeLeague::create_play_off_stage	high	opus	
+0x919e30	wc_europe_league.cpp	WcEuropeLeague::build_entry_pool	high	opus	2026-10-16-sweep-international.md
+0x91a140	wc_europe_league.cpp	WcEuropeLeague::create_runners_up_stage	medium	opus	
+0x91a240	wc_europe_league.cpp	WcEuropeLeague::fill_runners_up_table	medium	opus	
+0x91a500	wc_europe_league.cpp	WcEuropeLeague::update_for_date	high	opus	
+0x91a7b0	wc_europe_league.cpp	WcEuropeLeague::update_positions_and_status	high	opus	
+0x91a7e0	wc_europe_league.cpp	WcEuropeLeague::mark_play_off_qualifiers	medium	opus	
+0x91a9f0	wc_europe_league.cpp	WcEuropeLeague::load_extra_data	high	opus	
+0x91ae80	wc_europe_league.cpp	WcEuropeLeague::save_extra_data	high	opus	
+0x91b1b0	wc_europe_league.cpp	WcEuropeLeague::set_predicted_positions	high	opus	
+0x91b510	wc_europe_league.cpp	WcEuropeLeague::set_club_progress	high	opus	
+0x91b6e0	wc_europe_league.cpp	WcEuropeLeague::get_qualification_status	medium	opus	
+0x91b710	wc_europe_league.cpp	WcEuropeLeague::get_qualification_status_change	medium	opus	
+0x91b760	wc_europe_league.cpp	WcEuropeLeague::load_2002_campaign	high	opus	2026-10-16-sweep-international.md
+0x91db60	wc_europe_league.cpp	WcEuropeLeague::add_fixed_result	high	opus	2026-10-16-sweep-season-end.md
+0x91def0	wc_europe_league.cpp	WcEuropeLeague::get_asia_play_off_team	medium	opus	
+0x91df90	wc_oceania_league.cpp	WcOceaniaLeague::WcOceaniaLeague	high	opus	2026-10-16-sweep-international.md
+0x91e1c0	wc_oceania_league.cpp	WcOceaniaLeague::get_finals_comp	high	opus	
+0x91e1e0	wc_oceania_league.cpp	WcOceaniaLeague::`scalar deleting destructor'	high	opus	
+0x91e200	wc_oceania_league.cpp	WcOceaniaLeague::~WcOceaniaLeague	high	opus	
+0x91e2e0	wc_oceania_league.cpp	WcOceaniaLeague::create_schedule	high	opus	
+0x91e840	wc_oceania_league.cpp	WcOceaniaLeague::update_staff_records_for_status	high	opus	
+0x91e990	wc_oceania_league.cpp	WcOceaniaLeague::build_fate_news_text	high	opus	
+0x91ec00	wc_oceania_league.cpp	WcOceaniaLeague::init_group_table	high	opus	
+0x91ecf0	wc_oceania_league.cpp	WcOceaniaLeague::set_up_rules	high	opus	
+0x91edc0	wc_oceania_league.cpp	WcOceaniaLeague::write_progress_text	high	opus	
+0x91ef40	wc_oceania_league.cpp	WcOceaniaLeague::start_new_season	high	opus	
+0x91f0d0	wc_oceania_league.cpp	WcOceaniaLeague::advance_stage	high	opus	
+0x91f1a0	wc_oceania_league.cpp	WcOceaniaLeague::create_second_group_stage	medium	opus	
+0x91f3d0	wc_oceania_league.cpp	WcOceaniaLeague::update_for_date	high	opus	
+0x91f640	wc_oceania_league.cpp	WcOceaniaLeague::create_final_stage	high	opus	
+0x91f800	wc_oceania_league.cpp	WcOceaniaLeague::create_playoff_stage	high	opus	2026-10-16-sweep-international.md
+0x91fa80	wc_oceania_league.cpp	WcOceaniaLeague::build_entrant_pool	high	opus	
+0x91fd20	wc_oceania_league.cpp	WcOceaniaLeague::load_extra_data	high	opus	
+0x91ff30	wc_oceania_league.cpp	WcOceaniaLeague::set_predicted_positions	high	opus	
+0x9200e0	wc_oceania_league.cpp	WcOceaniaLeague::set_club_progress	medium	opus	
+0x920260	wc_oceania_league.cpp	WcOceaniaLeague::get_qualification_status_change	medium	opus	
+0x9202b0	wc_south_american_league.cpp	WcSouthAmericanLeague::WcSouthAmericanLeague	high	opus	2026-10-16-sweep-international.md
+0x9204e0	wc_south_american_league.cpp	WcSouthAmericanLeague::`scalar deleting destructor'	high	opus	
+0x920500	wc_south_american_league.cpp	WcSouthAmericanLeague::~WcSouthAmericanLeague	high	opus	
+0x920590	wc_south_american_league.cpp	WcSouthAmericanLeague::create_schedule	high	opus	
+0x920a50	wc_south_american_league.cpp	WcSouthAmericanLeague::update_staff_records_for_status	high	opus	
+0x920b40	wc_south_american_league.cpp	WcSouthAmericanLeague::build_fate_news_text	high	opus	
+0x920d10	wc_south_american_league.cpp	WcSouthAmericanLeague::count_exempt_nations	high	opus	
+0x920eb0	wc_south_american_league.cpp	WcSouthAmericanLeague::build_team_slots	high	opus	
+0x921040	wc_south_american_league.cpp	WcSouthAmericanLeague::set_up_rules	high	opus	
+0x921160	wc_south_american_league.cpp	WcSouthAmericanLeague::update_for_date	high	opus	
+0x921390	wc_south_american_league.cpp	WcSouthAmericanLeague::write_progress_text	high	opus	
+0x921470	wc_south_american_league.cpp	WcSouthAmericanLeague::start_new_season	high	opus	
+0x921590	wc_south_american_league.cpp	WcSouthAmericanLeague::load_extra_data	high	opus	
+0x921630	wc_south_american_league.cpp	WcSouthAmericanLeague::get_qualification_status	medium	opus	
+0x921670	wc_south_american_league.cpp	WcSouthAmericanLeague::get_qualification_status_change	medium	opus	
+0x9216d0	wc_south_american_league.cpp	WcSouthAmericanLeague::load_2002_campaign	high	opus	2026-10-16-sweep-international.md
+0x922350	wc_south_american_league.cpp	WcSouthAmericanLeague::add_fixed_fixture	high	opus	2026-10-16-sweep-season-end.md
+0x9226c0	weather.cpp	Weather::Weather	high	opus	2026-10-14-game-creation-inventory.md
+0x9227d0	weather.cpp	Weather::~Weather	high	opus	
 0x922810	weather.cpp	weather_load_config	high	haiku	
 0x922c40	weather.cpp	weather_load_record	high	haiku	
 0x922d20	weather.cpp	weather_read_cfg_record	medium	haiku	
@@ -6776,56 +6776,56 @@ address	file	name	confidence	model	cited_in
 0x928c40	wel_prm_cup.cpp	wel_prm_cup_load_team_index_table	medium	haiku	
 0x928e00	wel_prm_cup.cpp	wel_prm_cup::set_predicted_positions	medium	slot copy	
 0x9290b0	wel_prm_cup.cpp	wel_prm_cup_set_fields_from_args	medium	haiku	
-0x929140	world_club_champ.cpp	world_club_champ_init	high	haiku	2026-10-16-sweep-season-end.md,club-world.md
-0x9292b0	world_club_champ.cpp	world_club_champ::`scalar deleting destructor'	medium	slot copy	
-0x9292d0	world_club_champ.cpp	world_club_champ::~world_club_champ	high	haiku	
-0x929390	world_club_champ.cpp	world_club_champ::create_schedule	medium	slot copy	2026-10-16-sweep-europe.md
-0x9298a0	world_club_champ.cpp	world_club_champ_news_message	high	haiku	
-0x929aa0	world_club_champ.cpp	world_club_champ_init_slots	high	haiku	
-0x929bb0	world_club_champ.cpp	world_club_champ::set_up_rules	medium	slot copy	
-0x929c70	world_club_champ.cpp	world_club_champ::update_staff_records_for_status	medium	slot copy	
-0x929d40	world_club_champ.cpp	world_club_champ::start_new_season	medium	slot copy	
-0x929dd0	world_club_champ.cpp	world_club_champ_stage_advance	medium	haiku	
-0x929e60	world_club_champ.cpp	world_club_champ_init_stage_pair	high	haiku	2026-10-16-sweep-europe.md
-0x92a140	world_club_champ.cpp	world_club_champ_build_final_stage	high	haiku	2026-10-16-sweep-europe.md
-0x92a6b0	world_club_champ.cpp	world_club_champ::update_for_date	medium	slot copy	
-0x92a8b0	world_club_champ.cpp	world_club_champ_init_slots	high	haiku	2026-10-16-sweep-europe.md,2026-10-16-sweep-international.md
-0x92aba0	world_club_champ.cpp	world_club_champ::set_predicted_positions	medium	slot copy	
-0x92ad50	world_club_champ.cpp	set_champ_round_rules	medium	haiku	
-0x92ae60	world_club_champ.cpp	world_club_champ_find_club_for_team_pick	medium	haiku	2026-10-16-sweep-europe.md
-0x92b400	world_club_champ.cpp	compare_club_entries_by_rank	medium	haiku	
-0x92b4b0	world_club_cup.cpp	WorldClubCup::WorldClubCup	high	haiku	club-world.md
-0x92b680	world_club_cup.cpp	world_club_cup::`scalar deleting destructor'	medium	slot copy	
-0x92b6a0	world_club_cup.cpp	WorldClubCup::~WorldClubCup	high	haiku	
-0x92b770	world_club_cup.cpp	world_club_cup::create_round_table	medium	slot copy	2026-10-16-sweep-europe.md
-0x92b8b0	world_club_cup.cpp	WorldClubCup::pick_qualifiers	medium	haiku	2026-10-16-sweep-europe.md
-0x92bda0	world_club_cup.cpp	world_club_cup::release_data	medium	slot copy	
-0x92bf50	world_cup.cpp	world_cup::world_cup	high	haiku	2026-10-16-sweep-international.md
-0x92c1b0	world_cup.cpp	world_cup::`scalar deleting destructor'	medium	slot copy	
-0x92c1d0	world_cup.cpp	world_cup_object_destructor	high	haiku	
-0x92c290	world_cup.cpp	world_cup::create_schedule	medium	slot copy	
-0x92ccf0	world_cup.cpp	world_cup::update_staff_records_for_status	medium	slot copy	
-0x92cea0	world_cup.cpp	world_cup_news_story_emit	high	haiku	
-0x92d0f0	world_cup.cpp	world_cup_init_teams	medium	haiku	
-0x92d200	world_cup.cpp	world_cup::set_up_rules	medium	slot copy	
-0x92d310	world_cup.cpp	world_cup::record_season_honours	medium	slot copy	
-0x92d330	world_cup.cpp	world_cup::start_new_season	medium	slot copy	
-0x92d4b0	world_cup.cpp	world_cup_advance_round	medium	haiku	
-0x92d540	world_cup.cpp	world_cup_create_group_stage	medium	haiku	
-0x92d770	world_cup.cpp	world_cup_stage_setup	medium	haiku	2026-10-16-sweep-international.md
-0x92da40	world_cup.cpp	world_cup_build_team_slots	high	haiku	2026-10-16-sweep-international.md
-0x92e740	world_cup.cpp	world_cup_push_entry	medium	haiku	2026-10-16-sweep-international.md
-0x92e7f0	world_cup.cpp	world_cup_prepare_teams_or_assert	high	haiku	
-0x92e940	world_cup.cpp	world_cup_generate_groups	medium	haiku	2026-10-16-sweep-international.md
-0x92f000	world_cup.cpp	world_cup_load_fields	medium	haiku	
-0x92f150	world_cup.cpp	world_cup_object_serialise_fields	medium	haiku	
-0x92f1a0	world_cup.cpp	world_cup::update_for_date	medium	slot copy	
-0x92f230	world_cup.cpp	world_cup_build_squad_and_groups	medium	haiku	2026-10-16-sweep-international.md
-0x92f660	world_cup.cpp	world_cup_compare_by_byte_at_offset_4	medium	haiku	
-0x92f680	world_cup.cpp	world_cup::set_predicted_positions	medium	slot copy	2026-10-16-sweep-international.md
-0x92f9e0	world_cup.cpp	world_cup_set_round_fields	medium	haiku	
-0x92fae0	world_cup.cpp	world_cup_rating_to_value	low	haiku	
-0x92fb40	world_cup.cpp	world_cup_group_rank_bucket	low	haiku	
+0x929140	world_club_champ.cpp	WorldClubChamp::WorldClubChamp	high	opus	2026-10-16-sweep-season-end.md,club-world.md
+0x9292b0	world_club_champ.cpp	WorldClubChamp::`scalar deleting destructor'	high	opus	
+0x9292d0	world_club_champ.cpp	WorldClubChamp::~WorldClubChamp	high	opus	
+0x929390	world_club_champ.cpp	WorldClubChamp::create_schedule	high	opus	2026-10-16-sweep-europe.md
+0x9298a0	world_club_champ.cpp	WorldClubChamp::build_fate_news_text	high	opus	
+0x929aa0	world_club_champ.cpp	WorldClubChamp::draw_first_group	medium	opus	
+0x929bb0	world_club_champ.cpp	WorldClubChamp::set_up_rules	high	opus	
+0x929c70	world_club_champ.cpp	WorldClubChamp::update_staff_records_for_status	high	opus	
+0x929d40	world_club_champ.cpp	WorldClubChamp::start_new_season	high	opus	
+0x929dd0	world_club_champ.cpp	WorldClubChamp::advance_stage	high	opus	
+0x929e60	world_club_champ.cpp	WorldClubChamp::create_second_and_third_groups	medium	opus	2026-10-16-sweep-europe.md
+0x92a140	world_club_champ.cpp	WorldClubChamp::create_knockout_stage	high	opus	2026-10-16-sweep-europe.md
+0x92a6b0	world_club_champ.cpp	WorldClubChamp::update_for_date	high	opus	
+0x92a8b0	world_club_champ.cpp	WorldClubChamp::pick_entrants	high	opus	2026-10-16-sweep-europe.md,2026-10-16-sweep-international.md
+0x92aba0	world_club_champ.cpp	WorldClubChamp::set_predicted_positions	high	opus	
+0x92ad50	world_club_champ.cpp	WorldClubChamp::set_club_progress	high	opus	
+0x92ae60	world_club_champ.cpp	WorldClubChamp::pick_entrant	medium	opus	2026-10-16-sweep-europe.md
+0x92b400	world_club_champ.cpp	compare_entrants_by_continent_strength	medium	opus	
+0x92b4b0	world_club_cup.cpp	WorldClubCup::WorldClubCup	high	opus	club-world.md
+0x92b680	world_club_cup.cpp	WorldClubCup::`scalar deleting destructor'	high	opus	
+0x92b6a0	world_club_cup.cpp	WorldClubCup::~WorldClubCup	high	opus	
+0x92b770	world_club_cup.cpp	WorldClubCup::create_round_table	high	opus	2026-10-16-sweep-europe.md
+0x92b8b0	world_club_cup.cpp	WorldClubCup::pick_qualifiers	high	opus	2026-10-16-sweep-europe.md
+0x92bda0	world_club_cup.cpp	WorldClubCup::start_new_season	high	opus	
+0x92bf50	world_cup.cpp	WorldCup::WorldCup	high	opus	2026-10-16-sweep-international.md
+0x92c1b0	world_cup.cpp	WorldCup::`scalar deleting destructor'	high	opus	
+0x92c1d0	world_cup.cpp	WorldCup::~WorldCup	high	opus	
+0x92c290	world_cup.cpp	WorldCup::create_schedule	high	opus	
+0x92ccf0	world_cup.cpp	WorldCup::update_staff_records_for_status	high	opus	
+0x92cea0	world_cup.cpp	WorldCup::build_fate_news_text	high	opus	
+0x92d0f0	world_cup.cpp	WorldCup::create_group_table	high	opus	
+0x92d200	world_cup.cpp	WorldCup::set_up_rules	high	opus	
+0x92d310	world_cup.cpp	WorldCup::record_season_honours	high	opus	
+0x92d330	world_cup.cpp	WorldCup::start_new_season	high	opus	
+0x92d4b0	world_cup.cpp	WorldCup::advance_stage	high	opus	
+0x92d540	world_cup.cpp	WorldCup::create_group_stage	high	opus	
+0x92d770	world_cup.cpp	WorldCup::create_knockout_stage	high	opus	2026-10-16-sweep-international.md
+0x92da40	world_cup.cpp	WorldCup::set_up_team_list	high	opus	2026-10-16-sweep-international.md
+0x92e740	world_cup.cpp	WorldCup::add_qualified_team	high	opus	2026-10-16-sweep-international.md
+0x92e7f0	world_cup.cpp	WorldCup::run_group_draw	high	opus	
+0x92e940	world_cup.cpp	WorldCup::draw_groups	high	opus	2026-10-16-sweep-international.md
+0x92f000	world_cup.cpp	WorldCup::load_extra_data	high	opus	
+0x92f150	world_cup.cpp	WorldCup::save_extra_data	high	opus	
+0x92f1a0	world_cup.cpp	WorldCup::update_for_date	high	opus	
+0x92f230	world_cup.cpp	WorldCup::seed_teams	high	opus	2026-10-16-sweep-international.md
+0x92f660	world_cup.cpp	compare_entries_by_pot	medium	opus	
+0x92f680	world_cup.cpp	WorldCup::set_predicted_positions	high	opus	2026-10-16-sweep-international.md
+0x92f9e0	world_cup.cpp	WorldCup::set_club_progress	high	opus	
+0x92fae0	world_cup.cpp	WorldCup::get_qualification_status	high	opus	
+0x92fb40	world_cup.cpp	WorldCup::get_qualification_status_change	medium	opus	
 0x92fc10	world_cup_awards.cpp	World_Cup_Awards::World_Cup_Awards	high	haiku	
 0x92fc80	world_cup_awards.cpp	WorldCupAwards::WorldCupAwards	high	haiku	
 0x92fdf0	world_cup_awards.cpp	world_cup_awards_on_year_handler	medium	haiku	

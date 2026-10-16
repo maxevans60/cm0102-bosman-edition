@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 2339 high, 4206 medium, 318 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05.
+- Confidence: 2437 high, 4115 medium, 311 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -395,8 +395,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [wc_concacaf_cup.cpp](wc_concacaf_cup.cpp.md) | 21 |
 | [wc_europe_league.cpp](wc_europe_league.cpp.md) | 30 |
 | [wc_oceania_league.cpp](wc_oceania_league.cpp.md) | 21 |
-| [wc_south_american_league.cpp](wc_south_american_league.cpp.md) | 19 |
-| [weather.cpp](weather.cpp.md) | 14 |
+| [wc_south_american_league.cpp](wc_south_american_league.cpp.md) | 17 |
+| [weather.cpp](weather.cpp.md) | 16 |
 | [wel_cup.cpp](wel_cup.cpp.md) | 7 |
 | [wel_first.cpp](wel_first.cpp.md) | 7 |
 | [wel_lge_cup.cpp](wel_lge_cup.cpp.md) | 17 |

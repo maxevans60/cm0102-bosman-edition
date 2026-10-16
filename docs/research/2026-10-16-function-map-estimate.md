@@ -329,6 +329,51 @@ Run `sweep-w05`: 8 Opus agents named 201 functions of `national_teams.cpp`, `nat
 | 0x905d40 | validate_euro_cfg (sweep-europe) | `load_euro_config` (Haiku) | `validate_euro_cfg` | agrees |
 | 0x905f00 | post_qualifiers_news (sweep-europe) | `uefa_seeding_build_qualified_report_news` (Haiku) | `uefa_post_qualifiers_news` | agrees |
 
+#### Wave w06 (tier 2 done, 2026-10-16)
+
+Run `sweep-w06`: 8 Opus agents named 184 functions of the six World Cup qualifying sections (`wc_*.cpp`), `world_club_champ.cpp`, `world_club_cup.cpp` and `world_cup.cpp`. Each agent took 2 to 3 minutes and 116,000 to 157,000 tokens. Confidence: 149 high, 35 medium, 0 low. Tier 2 is done.
+
+An agent showed that Cup slot 2 is `start_new_season`: League and Cup share this Comp slot, and the season change calls it for every competition. The Cup sweep had named it `release_data`. The base row 0x518780 and 13 cup overrides of earlier waves are now `start_new_season`, and the brief gives the slot name.
+
+34 functions of the wave are cited. 32 agree and 2 agree in area.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x90f210 | African section constructor (sweep-international) | `wc_african_cup::ctor` (Haiku) | `WcAfricanCup::WcAfricanCup` | agrees |
+| 0x911bf0 | Asian section constructor | `wc_asia_league::wc_asia_league` (Haiku) | `WcAsiaLeague::WcAsiaLeague` | agrees |
+| 0x913740 | Two final groups of five (sweep-international) | `wc_asia_league_build_qualifier_stages` (Haiku) | `WcAsiaLeague::create_second_round_groups` | agrees |
+| 0x913d50 | Asian section stage list | `wc_asia_league_create_qualifier_cup` (Haiku) | `WcAsiaLeague::create_playoff_tie` | agrees in area |
+| 0x913f60 | Asian entrant list by continent | `wc_asia_league::build_qualified_team_list` (Haiku) | `WcAsiaLeague::build_entrant_list` | agrees |
+| 0x9149f0 | CONCACAF section constructor | `wc_concacaf_cup_ctor` (Haiku) | `WcConcacafCup::WcConcacafCup` | agrees |
+| 0x918200 | European section constructor | `WC_Europe_League::ctor_setup_league` (Haiku) | `WcEuropeLeague::WcEuropeLeague` | agrees |
+| 0x918dd0 | European section, stages by exempt count | `wc_europe_league_qualified_stage_result` (Haiku) | `WcEuropeLeague::get_group_size` | agrees |
+| 0x918ec0 | European section, group draw | `wc_europe_league_fill_group_slots` (Haiku) | `WcEuropeLeague::draw_groups` | agrees |
+| 0x919e30 | European entry pool without hosts and holder | `wc_qualifier_pool_setup` (Haiku) | `WcEuropeLeague::build_entry_pool` | agrees |
+| 0x91b760 | 2002 loader with the real groups (sweep-international) | `WC_Europe_League::load_fixtures` (Haiku) | `WcEuropeLeague::load_2002_campaign` | agrees |
+| 0x91db60 | Fixed 2001 fixtures (sweep-season-end) | `wc_europe_league_add_fixture_for_group_team` (Haiku) | `WcEuropeLeague::add_fixed_result` | agrees |
+| 0x91df90 | Oceania section constructor | `wc_oceania_league_ctor` (Haiku) | `WcOceaniaLeague::WcOceaniaLeague` | agrees |
+| 0x91f800 | Oceania section, 3 stages | `wc_oceania_league_create_cup_stage` (Haiku) | `WcOceaniaLeague::create_playoff_stage` | agrees |
+| 0x9202b0 | South American section constructor | `wc_south_american_league_ctor` (Haiku) | `WcSouthAmericanLeague::WcSouthAmericanLeague` | agrees |
+| 0x9216d0 | 2002 loader with the real groups | `wc_south_american_league::add_fixtures` (Haiku) | `WcSouthAmericanLeague::load_2002_campaign` | agrees |
+| 0x922350 | Fixed 2001 fixtures (sweep-season-end) | `wc_south_american_league_qualify_team_fixture` (Haiku) | `WcSouthAmericanLeague::add_fixed_fixture` | agrees |
+| 0x9226c0 | Setup step 43, weather.cpp, reads weather.cfg (game-creation inventory) | `find_cm_cd_drive` (Haiku) | `Weather::Weather` | agrees |
+| 0x929140 | Made once at a new game (sweep-season-end) | `world_club_champ_init` (Haiku) | `WorldClubChamp::WorldClubChamp` | agrees |
+| 0x929390 | Club World Championship, 2 groups of 4 (sweep-europe) | `world_club_champ::create_schedule` (slot copy) | `WorldClubChamp::create_schedule` | agrees |
+| 0x929e60 | Club World Championship, 2 groups of 4, 8 clubs (sweep-europe) | `world_club_champ_init_stage_pair` (Haiku) | `WorldClubChamp::create_second_and_third_groups` | agrees in area. Opus finds 12 entrants in three groups, the research gives 2 groups of 4. Not checked |
+| 0x92a140 | Final and third place match (sweep-europe) | `world_club_champ_build_final_stage` (Haiku) | `WorldClubChamp::create_knockout_stage` | agrees |
+| 0x92a8b0 | Host clubs and continental winners (sweep-europe) | `world_club_champ_init_slots` (Haiku) | `WorldClubChamp::pick_entrants` | agrees |
+| 0x92ae60 | Host clubs and continental winners (sweep-europe) | `world_club_champ_find_club_for_team_pick` (Haiku) | `WorldClubChamp::pick_entrant` | agrees |
+| 0x92b4b0 | Intercontinental Cup constructor (club-world) | `WorldClubCup::WorldClubCup` (Haiku) | `WorldClubCup::WorldClubCup` | agrees |
+| 0x92b770 | World Club Cup, 1 match (sweep-europe) | `world_club_cup::create_round_table` (slot copy) | `WorldClubCup::create_round_table` | agrees |
+| 0x92b8b0 | CL and Libertadores winners, fallback above 5000 (sweep-europe) | `WorldClubCup::pick_qualifiers` (Haiku) | `WorldClubCup::pick_qualifiers` | agrees |
+| 0x92bf50 | World Cup constructor (sweep-international) | `world_cup::world_cup` (Haiku) | `WorldCup::WorldCup` | agrees |
+| 0x92d770 | 16-team Cup_Stage (sweep-international) | `world_cup_stage_setup` (Haiku) | `WorldCup::create_knockout_stage` | agrees |
+| 0x92da40 | build_team_slots, holder then hosts (sweep-international) | `world_cup_build_team_slots` (Haiku) | `WorldCup::set_up_team_list` | agrees |
+| 0x92e740 | Fills the team slots (sweep-international) | `world_cup_push_entry` (Haiku) | `WorldCup::add_qualified_team` | agrees |
+| 0x92e940 | draw_groups, real 2002 draw (sweep-international) | `world_cup_generate_groups` (Haiku) | `WorldCup::draw_groups` | agrees |
+| 0x92f230 | Seeded pots of 8 (sweep-international) | `world_cup_build_squad_and_groups` (Haiku) | `WorldCup::seed_teams` | agrees |
+| 0x92f680 | Fixed sizes of the World Cup (sweep-international) | `world_cup::set_predicted_positions` (slot copy) | `WorldCup::set_predicted_positions` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
