@@ -273,21 +273,21 @@ a { color: inherit; }
 
 <section class="screen" id="new" aria-labelledby="new-title">
   <div class="inner">
-    <h2 class="bar" id="new-title">New in <em>0.4.0</em></h2>
+    <h2 class="bar" id="new-title">New in <em>0.5.0</em></h2>
     <div class="release">
       <div class="panel" data-in>
         <h3 class="sub">Added</h3>
         <ul>
-          <li>Team views on every squad screen: your best XI on a pitch with the subs beside it, and a squad depth table for any formation.</li>
-          <li>A player comparison with a polygon of each player's strengths, from the comparison screen or the Compare tab.</li>
-          <li>Attributes in Technical, Mental and Physical groups on the player profile, with a Goalkeeping group for keepers.</li>
-          <li>Print to PDF: the print buttons save squad lists, tables and fixtures as PDF files.</li>
-          <li>An HD layout at 1920 × 1080 for big screens.</li>
-          <li>Play the CM 01/02 Update Team's databases, from 2003 to 2026.</li>
-          <li>No more "CD Not Required" box after a load.</li>
+          <li>Bosman Edition Options: change every option in the game, from Setup Game or from Game Options in the side bar.</li>
+          <li>Each player's position on the tactics screen, before and during a match.</li>
+          <li>Players who count against the foreign player limit of your next league or cup match show in light violet.</li>
+          <li>A full player search option that lists every player, also the ones your manager does not know.</li>
+          <li>Fixes for rare faults of the original game in news, transfers and squad updates.</li>
+          <li>The game no longer uses a full processor core while it waits for you.</li>
+          <li>The Database button lists the Update Team databases by season.</li>
         </ul>
         <ul class="later">
-          <li>Each option can be switched off in settings.txt. The changelog on GitHub lists every change.</li>
+          <li>Each option can be switched off in the options box or in settings.txt. The changelog on GitHub lists every change.</li>
         </ul>
       </div>
       <figure class="shot wide" data-in style="margin:0">
@@ -358,9 +358,9 @@ a { color: inherit; }
       <details><summary>Where are my saved games?</summary>
         <p>On a Mac: <code>~/Library/Application Support/cm0102</code>. On Windows: <code>%APPDATA%\cm0102</code>. On Linux: <code>~/.local/share/cm0102</code>. A new release does not change this folder. Older copies of each save are in the <code>backups</code> folder inside it.</p></details>
       <details><summary>How do I get the 800 × 600 layout back?</summary>
-        <p>Open <code>settings.txt</code> in the save folder and change the line to <code>display = classic</code>. Then start the game again.</p></details>
-      <details><summary>Which settings can I change in version 0.4.0?</summary>
-        <p>Open <code>settings.txt</code> in the save folder. Each option has one line, and a switch takes <code>on</code> or <code>off</code>. The defaults are:</p>
+        <p>Open Bosman Edition Options from Setup Game or from Game Options, and set Display mode to Classic. Then start the game again. You can also change the line in <code>settings.txt</code> in the save folder to <code>display = classic</code>.</p></details>
+      <details><summary>Which settings can I change in version 0.5.0?</summary>
+        <p>Open Bosman Edition Options from Setup Game or from Game Options in the side bar, or open <code>settings.txt</code> in the save folder. Each option has one line in the file, and a switch takes <code>on</code> or <code>off</code>. The defaults are:</p>
         <ul>
           <li><code>display = widescreen</code> draws the game at 1280 × 800. <code>hd</code> draws it at 1920 × 1080, and <code>classic</code> at 800 × 600.</li>
           <li><code>space_to_continue = on</code> lets the space bar press Continue Game.</li>
@@ -371,13 +371,15 @@ a { color: inherit; }
           <li><code>clickable_names = on</code> lets you click a player or club name to open its profile.</li>
           <li><code>attribute_colours = on</code> colours attribute numbers by value.</li>
           <li><code>faster_days = on</code> makes days pass faster while you are on holiday.</li>
-          <li><code>match_columns = on</code> shows position, condition and match rating together on the match screens. It works in widescreen only.</li>
+          <li><code>match_columns = on</code> shows each player's position in the Condition view of the tactics screen, in every layout. In widescreen it also shows position, condition and match rating together on the match screens.</li>
           <li><code>save_backups = on</code> keeps the last three copies of each save in the <code>backups</code> folder.</li>
           <li><code>remember_window = on</code> opens the window at the size and place it had when you quit.</li>
           <li><code>condition_colours = on</code> colours condition and morale: red, amber or green.</li>
           <li><code>database = 3.9.68</code> is the database for the next new game. <code>3.9.60</code> is the original 2001/02 data and <code>3.9.65</code> its December 2001 update. <code>folder:May 2026</code> is a folder of your own in <code>Databases</code> (see the FAQ). The Database button on the Setup Game screen changes this line.</li>
           <li><code>squad_views = on</code> adds Team views (best XI, squad depth, compare players) to the Assistant menu of every squad screen, and the polygon to the comparison screen.</li>
           <li><code>attribute_groups = on</code> shows the player profile's attributes in Technical, Mental and Physical groups.</li>
+          <li><code>foreign_colours = on</code> shows in light violet the players who count against the foreign player limit of the club's next league or cup match.</li>
+          <li><code>full_player_search = off</code> keeps the original player search. <code>on</code> lists every player, also the ones your manager does not know.</li>
         </ul>
         <p>Prints go to the <code>Prints</code> folder as PDF files. To get the old text files, set Print To to File in the game's own options.</p></details>
       <details><summary>Is the database updated?</summary>

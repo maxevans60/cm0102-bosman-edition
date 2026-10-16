@@ -2,15 +2,19 @@
 
 CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes bugs. A minor release (0.2.0) adds features. A major release (1.0.0 and later) can break saved games or settings. Releases below 1.0.0 are test releases.
 
-## 0.4.1 (pre-release)
+## 0.5.0 (pre-release)
 
-Fixes for the Database button on Setup Game and for the intro.
+An options box in the game, positions on the tactics screen, foreign players in colour, and fixes for rare faults of the original. Each new option has a line in `settings.txt` in the save folder.
 
-- The intro shows the CM 01/02 logo in place of the Sports Interactive logo, with every database.
-- A database in `Databases` no longer replaces the pictures of the intro. The Update Team databases showed their "Data Update" picture there.
-- The button shows 3.9.68, 3.9.60 and 3.9.65 first, then your databases from the oldest season to the newest. In 0.4.0 they came in alphabetical order of the folder names.
-- Each database shows its season and its folder name, for example "2025/26 (May 2026)". In classic mode a long folder name shows the season alone.
-- A folder whose name has no month and year comes last.
+- Bosman Edition Options: a box with two tabs, Screen and Game, that shows every option of the Bosman Edition. It opens from Setup Game and from Game Options in the side bar, after Game Settings. A change saves to `settings.txt` at once and keeps your own lines and comments. Display mode, All sound and Save folder take effect at the next start. Save folder is shown, and you change it in `settings.txt`.
+- The tactics screen shows each player's position in the Condition view, before and during a match, in classic, widescreen and HD (`match_columns`).
+- Foreign players in colour (`foreign_colours`): on the squad and tactics screens, the names of players who count against the foreign player limit of the club's next league or cup match are light violet. It works for every club. The game's "Fgn" status stays.
+- Full player search (`full_player_search`, off by default): the player search lists every player, also players your manager does not know. With it on, a search changes later days, as opening a screen does.
+- Fixes for rare faults of the original game: a news item with no text, some transfer offers, squad updates, staff records after a part-exchange deal, the competition table and the World Cup draw. The original crashed on these. The port went on with wrong data. Now it skips the bad item.
+- The game no longer uses a full processor core while it waits for input (about 1% in place of 100%). Matches and holidays play the same.
+- The Database button shows 3.9.68, 3.9.60 and 3.9.65 first, then your databases from the oldest season to the newest, each with its season and folder name, for example "2025/26 (May 2026)". In classic mode a long folder name shows the season alone. A folder whose name has no month and year comes last.
+- The intro shows the CM 01/02 logo with every database, and a database in `Databases` no longer replaces the pictures of the intro.
+- A new Bosman Edition logo, on the site and in the intro.
 
 ## 0.4.0 (pre-release)
 
