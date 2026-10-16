@@ -2,7 +2,7 @@
 """Same-save checks of the 0.4.0 screens: a feature must not change the game (spec 2026-10-15-features-0.4.0).
 
 Usage:
-    python3 tests/smoke/same_save_views.py <cm0102_recomp> <game folder> [--check compare|print]
+    python3 tests/smoke/same_save_views.py <cm0102_recomp> <game folder> [--check compare|print|tactics]
         [--days n] [--dir <fixtures folder>]
 
 Each check plays the same game from start.sav (tests/fixtures) in runs at the same time, goes on holiday
@@ -16,6 +16,11 @@ for n game days (default 2) and compares the saved games byte for byte (smoke_ru
     print     The squad printed from the squad screen's Print drop-down as a PDF (the default) and as a File
               (Print To in Game Settings), with the same clicks otherwise. The PDF message box must not
               change the game (Q152): the texts of the box are in runtime memory, not on the game's heap.
+    tactics   The tactics screen in its Condition view (Squad, Assistant > Pick best team, Tactics, Ok) with
+              match_columns on and off, in classic and in widescreen mode (#48, 0.5.0). The option adds a
+              positions label to each row and gives the list new column weights. Both move the game's
+              memory blocks (research of slice 3: each alone changes the five parts), so the five parts of
+              LAYOUT_PARTS may differ (Q152); no other part may.
 """
 import os
 import sys
@@ -72,6 +77,18 @@ COMPARE = [
     "wait screen:0x876520",
     "3000 click 358 573",                   # Back
     "wait screen:0x870700",
+]
+
+TACTICS = [
+    "2500 click 45 165",                    # the manager's menu
+    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "wait screen:0x454900",
+    "1500 click 592 135",                   # Assistant
+    "3000 click 540 159 | 928 205 | 1460 274",  # Pick best team
+    "5000 click 169 527",                   # Tactics: it opens in the Condition view
+    "wait screen:0x899ea0",
+    "2000 click 705 573",                   # Ok
+    "wait screen:0x454900",
 ]
 
 # Print To is three buttons of Game Settings: PDF at 444 474, File at 522 474, Both at 601 474.
@@ -146,6 +163,18 @@ def run_print(program, game, days, folder):
     return failed
 
 
+def run_tactics(program, game, days, folder):
+    steps = smoke_run.without_intro_click(fixtures.LOAD_STEPS) + TACTICS + HOLIDAY + ["400000 quit"]
+    failed = 0
+    for mode in ("classic", "widescreen"):
+        print(f"--- tactics screen, Condition view, {mode}")
+        runs = [("on", {"match_columns": "on"}), ("off", {"match_columns": "off"}),
+                ("on again", {"match_columns": "on"})]
+        failed += smoke_run.compare_runs(program, game, mode, runs, steps, days,
+                                         os.path.join(folder, "start.sav"), allowed=LAYOUT_PARTS)
+    return failed
+
+
 def main(argv):
     if len(argv) < 3:
         print(__doc__)
@@ -159,6 +188,8 @@ def main(argv):
         failed += run_compare(program, game, days, folder)
     if which in ("all", "print"):
         failed += run_print(program, game, days, folder)
+    if which in ("all", "tactics"):
+        failed += run_tactics(program, game, days, folder)
     print("same_save_views: " + ("FAIL" if failed else "all checks passed"))
     return 1 if failed else 0
 

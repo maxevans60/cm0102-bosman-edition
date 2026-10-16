@@ -34,7 +34,7 @@ kick off (--speed fastest: the Fastest step of #31 instead). At half time they r
 Space go on to Saturday 21.7.01 AM, where the runtime saves the game, 5 game days (default) after
 the load. Later days are not reached: the Bergkamp rumour of 21.7.01 needs an answer. The runs are
 in MATCH_RUNS and play at the same time, each in about two minutes. The mode is widescreen only,
-because the option match_columns draws only in widescreen.
+because the match screens of the option match_columns draw only in widescreen.
 
 The run uses a new empty save folder (RECOMP_USER_DIR is a temporary folder), so the game first shows its
 settings. Before the start it writes settings.txt with the mode (default: classic). It saves five
