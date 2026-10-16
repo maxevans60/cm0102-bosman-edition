@@ -5,7 +5,10 @@
 
 #include <stdint.h>
 
-/* v times 1.35, rounded half up: 9, 10, 14, 16, 18, 20, 22 give 12, 14, 19, 22, 24, 27, 30 (Q224). */
+#define HD_TEXT_PERCENT 135u       /* the factor of HD Large text, 1.35 (Q224) */
+
+/* v times 1.35, rounded half up: 9, 10, 14, 16, 18, 20, 22 give 12, 14, 19, 22, 24, 27, 30 (Q224). The same
+ * rule as rt_hd_text (rt.h). */
 uint32_t hd_glyph_size(uint32_t v);
 
 /* Scales a glyph of the bitmap fonts from w x h to w2 x h2 pixels, by linear mixing of the four nearest

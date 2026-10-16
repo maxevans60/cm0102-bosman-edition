@@ -87,8 +87,9 @@ static void post_mouse(uint32_t msg, int x, int y)
  * that fits the window, for example 2 times in a window that allows 2.4 times. Otherwise the picture
  * fills the window and each pixel takes the nearest whole pixels. Without the option, the scaling
  * stays as in 0.1.0 (SDL's default filter).
- * In HD, when the picture is shown smaller than 1920x1080 (a MacBook window), the nearest filter drops
- * whole rows and columns of pixels, and thin strokes of text vanish. So below 1x the HD picture is mixed
+ * In HD, when the picture is shown smaller than 1920x1080 output pixels (for example a MacBook window
+ * narrower than 1920 Retina pixels), the nearest filter drops whole rows and columns of pixels, and thin
+ * strokes of text vanish. So below 1x the HD picture is mixed
  * by the linear filter, whatever sharp_picture says (0.5.1, Q227). Widescreen and classic keep their
  * filter. */
 #define WHOLE_PIXEL_SHARE 0.8

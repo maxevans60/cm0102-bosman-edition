@@ -25,7 +25,7 @@ Checks:
     - tactics: the box opens from the side bar on the tactics screen.
     - readonly: settings.txt keeps attribute_colours = on, the option keeps its old value in memory, and the
       box shows the note "Not saved" (picture readonly.bmp).
-    - start: settings.txt has display = classic and sharp_picture = on after the first start, the first start
+    - start: settings.txt has display = classic, sharp_picture = on and hd_text = small after the first start, the first start
       draws at 1280x800, and the second start draws at 800x600 (the restart note of the display mode).
 Pictures (with .png copies) in <out>/<run>/: screen.bmp and game.bmp (the two tabs), screen-off.bmp and
 game-off.bmp (after the clicks), profile-before.bmp and profile.bmp; tactics/box.bmp; readonly/readonly.bmp;
@@ -95,6 +95,7 @@ START_STEPS = fixtures.LOAD_STEPS[:fixtures.LOAD_STEPS.index("wait setup") + 1] 
     "1500 click 445 503",                       # Bosman Edition Options, the last item of the menu
     "3500 dump {d}/box.bmp",
     "4000 click 452 185",                       # Display mode: Classic
+    "4250 click 452 218",                       # HD text: Small
     "4500 click 452 251",                       # Sharp picture: Off
     "5000 dump {d}/box-sharp-off.bmp",
     "5500 click 371 251",                       # Sharp picture: On
@@ -259,8 +260,8 @@ def main(argv):
         c1, c2, after_first = start.result()
         check(c1 == 0 and c2 == 0, "start: both starts end with code 0")
         lines = after_first.splitlines()
-        check("display = classic" in lines and "sharp_picture = on" in lines,
-              "start: settings.txt has display = classic and sharp_picture = on")
+        check("display = classic" in lines and "sharp_picture = on" in lines and "hd_text = small" in lines,
+              "start: settings.txt has display = classic, sharp_picture = on and hd_text = small")
         s = os.path.join(out, "start")
         check(size(os.path.join(s, "box.bmp")) == (1280, 800) and size(os.path.join(s, "second.bmp")) == (800, 600),
               "start: the first start draws at 1280x800, the second at 800x600")

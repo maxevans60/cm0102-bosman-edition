@@ -7,14 +7,19 @@
  *
  * - The font engine fonts ("Futuristic", font mode -2, the default): tools/recomp/hd_text.py turns the 59
  *   size, baseline, cursor and line height constants of the line draw 0x5e5160, the text width 0x5e5ad0,
- *   the text height 0x5e5cd0 and the text box 0x5e6d80 into rt_hd_text(v).
- * - The bitmap fonts ("Traditional", font mode -1): the font set load 0x5e4ba0 reads a font into the table
- *   at 0xae1dac + font * 0x1404: the height +0, then for each character c (0x20 to 0xff) at +4 + c * 20 the
- *   width, the bytes of a glyph row, the space before and after it, and the glyph (docs/research/
- *   2026-10-16-hd-text.md). After the load each glyph is scaled by 1.35 with linear mixing (hd_glyph.c), and
- *   the height, widths and spaces with it. The draw, the width, the height and the line height of the text
- *   box read these values, so the text and its lines grow together. The fonts are loaded once at start in
- *   every font mode, so a switch to Traditional in Game Settings shows them big as well. */
+ *   the text height 0x5e5cd0 and the text box 0x5e6d80 into rt_hd_text(v) (docs/research/2026-10-16-hd-text.md).
+ * - The bitmap fonts ("Traditional", font mode -1): the font set load 0x5e4ba0 (font, path) clears the table of
+ *   the font at 0xae1dac + font * 0x1404 (0x501 dwords, rep stosd at 0x5e4c03..0x5e4c22) and reads the file
+ *   into it: the height +0 (0x5e4c24), then for each character c of 0x20 to 0xff at +4 + c * 20 the width,
+ *   the bytes of a glyph row, the space before and after it and the glyph, which it allocates (0x5e4c47 to
+ *   0x5e4d15). For fonts 6 and 7 it copies some characters into new glyphs (0x5e4e13 to 0x5e4ead). The line
+ *   draw reads a glyph as one value of 0 to 15 per pixel, two to a byte, (width + 1) / 2 bytes a row
+ *   (0x5e56d7 to 0x5e58d8). After each load the wrap scales every glyph by 1.35 with linear mixing
+ *   (hd_glyph.c), and the height, widths and spaces with it. The draw, the width 0x5e5ad0, the spacing
+ *   0x5e5d60, the height 0x5e5cd0 and the line height of the text box read these values, so the text and its lines grow together.
+ *   The display init 0x5e2620 loads the fonts at start in every font mode, and again when the player changes
+ *   the font in Game Settings (it clears the flag 0xaebe0c at 0x5e2c3f). Each load reads the file again, so
+ *   a font is never scaled twice. */
 #include "win.h"
 #include "options.h"
 #include "hd_glyph.h"
@@ -24,20 +29,16 @@ static int large;       /* HD with hd_text = large */
 void hd_text_init(void)
 {
     large = rt_screen_w == 1920u && options_enum(OPT_HD_TEXT) == HD_TEXT_LARGE;
+    rt_hd_text_percent = large ? HD_TEXT_PERCENT : 100u;
     if (large) fprintf(stderr, "recomp: HD text large\n");
-}
-
-uint32_t rt_hd_text(uint32_t v)
-{
-    return large ? hd_glyph_size(v) : v;
 }
 
 #define FONTS 0xae1dacu
 #define FONT_SIZE 0x1404u      /* 0x501 dwords: the height and 256 characters of 20 bytes (0x5e4c03) */
 #define FIRST_CHAR 0x20u
 #define LAST_CHAR 0xffu
-#define CALLOC 0x945501u        /* the original's calloc (count, size) */
-#define FREE 0x9452cau          /* the original's free */
+#define CALLOC 0x945501u        /* the original's calloc (count, size), as display.c resize_picture */
+#define FREE 0x9452cau          /* the original's free, which the loader also uses for glyphs (0x5e4e2a) */
 
 /* A space before or after a glyph, which may be below 0, at the HD Large size. */
 static uint32_t scale_space(uint32_t v)

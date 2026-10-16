@@ -5,7 +5,7 @@
 
 uint32_t hd_glyph_size(uint32_t v)
 {
-    return (v * 135u + 50u) / 100u;
+    return (v * HD_TEXT_PERCENT + 50u) / 100u;
 }
 
 static uint32_t nibble(const uint8_t *g, uint32_t row_bytes, uint32_t x, uint32_t y)

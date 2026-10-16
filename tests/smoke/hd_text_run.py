@@ -4,11 +4,12 @@
 Usage:
     python3 tests/smoke/hd_text_run.py <cm0102_recomp> <game folder> <out folder>
 
-Three runs in parallel, each from a saved test game (tests/fixtures):
+Four runs in parallel, each from a saved test game (tests/fixtures):
     screens      start.sav: the manager menu (a side bar popup), the squad screen, the profile of Vieira,
                  the Bosman Edition Options box (both tabs) and Game Settings.
     traditional  start.sav: Game Settings > Fonts > Traditional > Ok, then the news, the manager menu and the
                  squad screen in the bitmap fonts.
+    views        start.sav: Team views of Arsenal: Best XI, Squad depth and Compare players.
     match        prematch.sav: the match screen before the kick off, with the Commentary Speed popup open.
 The pictures go to the out folder as <run>-<name>.png. Look for text that is cut or that overlaps, and count
 the rows of the squad list: at least 9 a column (spec 2026-10-16-hd-text-0.5.1, screen seam). The run fails
@@ -72,7 +73,21 @@ TRADITIONAL = [
     "2000 dump {d}/squad.bmp",
     "2500 quit",
 ]
-RUNS = {"screens": ("start.sav", SCREENS), "traditional": ("start.sav", TRADITIONAL)}
+# Team views (the runtime's own screens, with their own rows of text): Best XI, Squad depth and Compare players.
+VIEWS = [
+    "1000 " + MENU,
+    "2500 " + SQUAD,
+    "wait screen:0x454900",
+    "1500 click 1420 243",                                      # Assistant
+    "3000 click 1460 379",                                      # Team views, the fifth item
+    "5000 dump {d}/best-xi.bmp",
+    "5500 click 1068 176",                                      # the Squad depth tab
+    "7000 dump {d}/squad-depth.bmp",
+    "7500 click 1620 176",                                      # the Compare players tab
+    "9500 dump {d}/compare.bmp",
+    "10000 quit",
+]
+RUNS = {"screens": ("start.sav", SCREENS), "traditional": ("start.sav", TRADITIONAL), "views": ("start.sav", VIEWS)}
 
 
 def match_steps():
