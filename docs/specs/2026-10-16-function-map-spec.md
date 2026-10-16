@@ -54,9 +54,9 @@ Merge danger: two-way door. Blast radius: research files only, the build does no
 Blocked by: 1
 Delivers: first-pass names for all 6,863 game and library functions, one doc per source file, `names.tsv` and an index.
 Merge danger: two-way door. Blast radius: agents may trust a wrong name. The model and confidence columns and the "Cited in" column limit that.
-- [ ] Every game and library function has a row.
-- [ ] The 14 proven functions of the pilots are checked and the result is in the index.
-- [ ] Cost and time recorded in the estimate doc.
+- [x] Every game and library function has a row (6,863).
+- [x] The 14 proven functions of the pilots are checked: 8 agree, 1 in part, 5 wrong. The index points to the result.
+- [x] Cost and time recorded in the estimate doc: $1.56, 12 minutes.
 
 ### 3. Sweep of one source file (repeat per file, on demand)
 Blocked by: 2

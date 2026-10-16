@@ -118,6 +118,34 @@ Notes:
 
 The subscription route is in `docs/specs/2026-10-16-function-map-spec.md`. It costs no money and takes several usage windows.
 
+## First pass
+
+Max chose the Haiku route on 2026-10-16: Haiku names every function once, and sweeps with Opus on the subscription improve one file at a time later. The docs are in `function-map/`.
+
+- 6,863 game and library functions, one batch of 6,863 requests. All succeeded, none refused.
+- Cost $1.56 at batch prices. Wall time 12 minutes. Tokens: 34.6 million input (13.5 million cache reads), 1.6 million output.
+- Confidence: 743 high, 4,254 medium, 1,866 low.
+- Check against the 14 functions that earlier research proves: 8 agree, 1 agrees in part, 5 are wrong.
+
+| Address | Earlier research | Haiku name (confidence) | Result |
+|---|---|---|---|
+| 0x5554a0 | Discipline object constructor | `copy_protection_check_and_init` (high) | wrong |
+| 0x556240 | Daily update of the rule sets | `discipline_array_call_vtable_slot_1` (medium) | in part: the mechanism, not the purpose |
+| 0x556940 | Stores a ban | `discipline_record_ban_entry` (medium) | agrees |
+| 0x556d00 | Releases pending bans | `discipline_slot_release_entry` (medium) | agrees |
+| 0x55d270 | Player banned for a competition | `discipline_check_player_suspended_for_match` (low) | agrees |
+| 0x55e300 | Long ban after a referee assault | `discipline_check_player_suspension` (low) | wrong |
+| 0x4542f0 | Opens the team screen | `club_screens_populate_fixture_dialog` (medium) | wrong |
+| 0x454900 | Club screen build | `club_screens_dispatch_main_view` (medium) | agrees |
+| 0x456900 | Squad list builder | `club_view_squad_list` (medium) | agrees |
+| 0x45cbe0 | Player available for the next match | `can_player_transfer_or_loan_check` (medium) | wrong |
+| 0x45ccf0 | Next Match tab | `club_screens_fixture_detail_view` (medium) | agrees |
+| 0x469da0 | Leave function, frees slot buffers | `club_screens_release_screen_handles` (medium) | agrees |
+| 0x481ef0 | Team selector (Main, B, Reserve) | `club_squad_list_menu_build` (medium) | agrees |
+| 0x4849f0 | Player status code | `validate_transfer_or_loan_offer` (medium) | wrong |
+
+Read a first-pass name as a hint of the area, not as a fact. Three of the five wrong names have medium confidence and one has high. A sweep with Opus fixes a file when a feature needs it.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.

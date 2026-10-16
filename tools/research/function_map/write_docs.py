@@ -94,7 +94,8 @@ def main(runs):
              f"- Not named, by category: {cats['funclet']} unwind funclets (each belongs to its parent, shown as \"+n unwind\"), "
              f"{cats['ehstub']} exception handler stubs, {cats['crt']} C runtime functions.",
              f"- Confidence: {conf['high']} high, {conf['medium']} medium, {conf['low']} low, {conf['none']} without a name.",
-             f"- Runs: {', '.join(runs)}.", "", "| File | Functions |", "|---|---|"]
+             f"- Runs: {', '.join(runs)}.",
+             "- Quality of the Haiku first pass: see \"First pass\" in `../2026-10-16-function-map-estimate.md`.", "", "| File | Functions |", "|---|---|"]
     for f in sorted(by_file, key=str.lower):
         index.append(f"| [{f}]({f}.md) | {len(by_file[f])} |")
     open(f"{MAP_DIR}/index.md", "w").write("\n".join(index) + "\n")
