@@ -888,6 +888,31 @@ The Setup copy slips are settled. The competition builders now carry the nation 
 | 0x839760 | Named in 2026-10-16-sweep-season-end.md | `load_fifa_transfer_rules` (Haiku) | `load_fifa_transfer_rules` | agrees |
 | 0x839920 | Named in 2026-10-14-game-creation-inventory.md | `select_team_for_nation_squad` (Haiku) | `fix_division_club_count` | agrees |
 
+#### Wave w22 (tier 5, 2026-10-16)
+
+Run `sweep-w22`: 7 Opus agents named 188 functions: the rest of `club_screens.cpp` (club history, past meetings, friendlies, tournaments, squad numbers, part exchange and the squad list comparators), `coach.cpp` and `comp_screens.cpp` with the `Comp_Stats` record code. A batch of 2 functions joined another batch, so the wave ran 7 agents. Each agent took 3 to 6 minutes and 145,000 to 202,000 tokens. Confidence: 149 high, 35 medium, 4 low. The merge needed no fixes. Several rows are false entries inside a larger function, named with a `_fragment`, `_tail` or `_false_entry` suffix.
+
+16 functions of the wave are cited. 11 agree, 3 agree in area and 2 citations only list the address.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x468b40 | Named in 2026-10-14-start-screen-helpers.md | `club_screens_get_club_index_or_default` (Haiku) | `ScreenManager::get_widget_action_id` | agrees |
+| 0x468b90 | Named in 2026-10-15-squad-dropdown-inventory.md | `get_club_field_by_index` (Haiku) | `ScreenManager::get_widget_action_data` | agrees |
+| 0x468c10 | Named in 2026-10-15-squad-dropdown-inventory.md | `club_screens_handle_match_action` (Haiku) | `club_screen_next_match_tab_input` | agrees |
+| 0x469da0 | Named in 2026-10-15-squad-dropdown-inventory.md | `club_screens_release_screen_handles` (Haiku) | `club_screen_leave` | agrees |
+| 0x4739a0 | Named in 2026-10-14-clickable-names-inventory.md | `screen_array_lookup_by_index` (Haiku) | `Display::get_widget_data` | agrees in area |
+| 0x475520 | Named in 2026-10-14-columns-and-colours-inventory.md | `club_squad_list_view_build` (Haiku) | `squad_numbers_screen_build` | no claim |
+| 0x47c180 | Named in 2026-10-14-columns-and-colours-inventory.md | `Club::squad_view_menu_build` (Haiku) | `part_exchange_screen_build` | no claim |
+| 0x481ef0 | Named in 2026-10-15-team-views-frame-inventory.md | `club_squad_list_menu_build` (Haiku) | `build_club_squad_navigation_menu` | agrees |
+| 0x482a40 | Named in 2026-10-15-team-views-frame-inventory.md | `club_screens_add_club_action_button` (Haiku) | `add_club_screen_action_button` | agrees |
+| 0x482d10 | Named in 2026-10-15-team-views-frame-inventory.md | `Club::friendly_and_tournament_action_dispatch` (Haiku) | `handle_club_screen_action` | agrees |
+| 0x4849f0 | Named in 2026-10-16-foreign-and-tactics-positions.md | `validate_transfer_or_loan_offer` (Haiku) | `get_player_status_code` | agrees |
+| 0x48fcd0 | Named in 2026-10-14-clickable-names-inventory.md | `comp_screens_dispatch` (Haiku) | `comp_screens_draw_comp_screen` | agrees |
+| 0x4965d0 | Named in 2026-10-14-clickable-names-inventory.md | `comp_screens_handle_save_printout_action` (Haiku) | `comp_screens_handle_comp_screen_click` | agrees |
+| 0x4985e0 | Named in 2026-10-14-clickable-names-inventory.md | `comp_screens_release_slots` (Haiku) | `comp_screens_close_comp_screen` | agrees |
+| 0x49d930 | Named in 2026-10-13-display-and-scrman-inventory.md | `comp_screens_league_name_panel_show` (Haiku) | `comp_screens_add_stage_menu_item` | agrees in area |
+| 0x4a19f0 | Named in 2026-10-16-research-name-check.md | `comp_screens_update_round_records` (Haiku) | `Comp_Stats::update_season_end_records` | agrees in area |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
