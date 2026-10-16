@@ -120,6 +120,43 @@ The subscription route is in `docs/specs/2026-10-16-function-map-spec.md`. It co
 
 ## First pass
 
+### Sweeps
+
+league.cpp and Cup.cpp were swept on 2026-10-16 for 0.6.0 (seasons). Five Opus agents on the subscription named 113 functions: the 62 of league.cpp, 4 gap functions that went to Langlib.cpp, and the 47 of Cup.cpp. Each agent took about 4 minutes and 150,000 to 170,000 tokens. The agents read the League vtable (0x96d020, 45 slots) and the Cup vtable (0x9693c8, 40 slots) against the derived competitions. Confidence: league.cpp 36 high, 23 medium, 3 low; Cup.cpp 20 high, 23 medium, 4 low.
+
+No pilot proves a function of these files. Earlier research cites four of them, and the four sweep names agree with it. Haiku had three of the four wrong.
+
+| Address | Earlier research | Haiku name (confidence) | Opus name (confidence) | Result |
+|---|---|---|---|---|
+| 0x683ee0 | Called for each new manager's division at game creation. Inference: first news items (game-creation inventory) | `League::process_transfer_offers` (low) | `League::send_fixture_list_news` (medium) | agrees |
+| 0x686a70 | Seeds `srand` with year plus seed at 0x686b34 (game-creation inventory) | `League::pair_fixtures_by_rivalry` (medium) | `League::draw_team_order` (medium): shuffles the team order, pairs clubs that share a ground | agrees |
+| 0x689c20 | Holds 0x689c6e, a jump in the promotion chain | `league_cascade_remove_child_nodes` (low) | `League::process_promotion_relegation_chain` (medium) | agrees in area. The research gives no purpose, and a Northern League patch fits a promotion chain (inference) |
+| 0x6701f0 | Tag pass of the message formatter (start-screen helpers) | `league_name_translate_text` (medium), placed in league.cpp | `langlib_apply_grammar_modifier` (high), placed in Langlib.cpp | agrees |
+
+### Hub sweep
+
+The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
+
+The agents changed almost every name. Examples: 0x417c10 is `Date::operator=` (Haiku: a shortlist copy), 0x77bbe0 is `NewsItem::NewsItem` with 211 callers (Haiku: a transfer rule constructor), 0x66f4e0 is `langlib_sprintf` with about 770 callers, and 0x68d020 to 0x68d1f0 are one linked list class. One hub is a proven function: 0x556940 (stores a ban) is `Discipline::add_ban` (high), and it agrees.
+
+### Second Haiku run
+
+The second Haiku run (`haiku-2`) named all 6,863 functions again on 2026-10-16. Its dossiers showed the hub, league and cup sweep names and the slot copies over the first Haiku names.
+
+- All 6,863 requests succeeded, none refused.
+- Cost $1.55 at batch prices. Wall time 13 minutes. Tokens: 35.3 million input (14.3 million cache reads), 1.6 million output.
+- Confidence: 2,021 high, 4,410 medium, 432 low. The first run had 743 high, 4,254 medium, 1,866 low.
+- 4,745 names (69%) are the same as in the first run.
+- Check against the 14 proven functions: 8 agree, 1 in part, 5 wrong, the same result as the first run. 0x5554a0 moves into the right area (`discipline_cd_check_and_init`, high) but is still not a constructor. The other 13 names keep their result, and 11 of them keep the same name.
+
+Better callee names did not fix the wrong names of the 14 checks. The confidence rose much more than the check result, so a high Haiku name is still only a hint. In the docs, the hub sweep name wins for 0x556940, so the docs have 9 of the 14 right.
+
+### Slot copy
+
+`tools/research/function_map/slot_copy.py` names the overrides of the per-nation competition classes (run `slot-copy`). A vtable derives from League (0x96d020) or Cup (0x9693c8) when it shares at least 5 of the base's own league.cpp or Cup.cpp slots. Each slot that holds another function gets `<file stem>::<base method>`, for example `eng_prm::create_schedule`, with model "slot copy" and confidence medium. It gave 875 names in under a second. It left out 6 functions that sit in slots of two different methods and 1 function that a sweep names. The most common methods are the scalar deleting destructor (179), `create_schedule` (115), `start_new_season` (112) and `set_up_rules` (109).
+
+The docs use the runs in this order, a later run wins: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs. Models in `names.tsv`: 314 Opus, 875 slot copy, 5,674 Haiku. Confidence: 1,777 high, 4,698 medium, 388 low.
+
 Max chose the Haiku route on 2026-10-16: Haiku names every function once, and sweeps with Opus on the subscription improve one file at a time later. The docs are in `function-map/`.
 
 - 6,863 game and library functions, one batch of 6,863 requests. All succeeded, none refused.

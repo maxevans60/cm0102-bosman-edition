@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 743 high, 4254 medium, 1866 low, 0 without a name.
-- Runs: haiku-2026-10-16.
+- Confidence: 787 high, 4244 medium, 1832 low, 0 without a name.
+- Runs: haiku-2026-10-16, sweep-league, sweep-cup.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -206,8 +206,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [korea_awards.cpp](korea_awards.cpp.md) | 4 |
 | [korea_rules.cpp](korea_rules.cpp.md) | 6 |
 | [Langlib.cpp](Langlib.cpp.md) | 10 |
-| [league.cpp](league.cpp.md) | 61 |
-| [league_stage.cpp](league_stage.cpp.md) | 19 |
+| [league.cpp](league.cpp.md) | 62 |
+| [league_stage.cpp](league_stage.cpp.md) | 18 |
 | [library_without_asserts](library_without_asserts.md) | 254 |
 | [main.cpp](main.cpp.md) | 4 |
 | [manager_manager.cpp](manager_manager.cpp.md) | 101 |
