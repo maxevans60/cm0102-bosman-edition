@@ -438,6 +438,40 @@ Run `sweep-w08`: 8 Opus agents named 204 functions: the rest of `contract_manage
 | 0x7a30c0 | Four calls with flags at game creation (game-creation inventory) | `player_setup_cfg_process` (Haiku) | `player_setup_cfg_load` | agrees |
 | 0x7a5380 | Setup step 36, global 0xb7434c (game-creation inventory) | `player_regen_load_from_cd` (Haiku) | `PLAYER_REGEN::PLAYER_REGEN` | agrees |
 
+#### Wave w09 (tier 3, 2026-10-16)
+
+Run `sweep-w09`: 8 Opus agents named 201 functions: `ruling_body.cpp` with the reserve competition gap functions, `sub_league.cpp` with staff screen dialogs, and six batches of `transfer_manager.cpp` with training screen comparators. Each agent took 2 to 6 minutes and 101,000 to 213,000 tokens. Confidence: 118 high, 82 medium, 1 low. The merge needed no fixes. `record_utils.cpp` holds three competition classes from the gap, each with its own vtable: `ReserveComp`, `BIntComp` and `Under21IntComp`.
+
+25 functions of the wave are cited. 16 agree, 4 agree in area and 5 citations make no claim about the purpose. The rulebooks research calls ruling body slots 0 and 1 "process pending entries" and "process pending rulings". The sweep names them `start_new_season` and `daily_update` from their callers.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x7e5fc0 | Setup step 27, global 0xb74434 (game-creation inventory) | `cd_check_find_cm_drive` (Haiku) | `ReserveComp::ReserveComp` | agrees |
+| 0x7e61c0 | Setup step 30 (game-creation inventory) | `record_utils_init_comp_records` (Haiku) | `ReserveComp::create_sub_comps` | agrees in area |
+| 0x7e7d50 | Base slot +0x4, process pending rulings (sweep-rulebooks) | `ruling_body_process_pending_rulings` (Haiku) | `RulingBody::daily_update` | agrees in area |
+| 0x7e7ed0 | Base slot +0x0, process pending entries (sweep-rulebooks) | `ruling_body_process_pending_entries` (Haiku) | `RulingBody::start_new_season` | agrees in area |
+| 0x7e85b0 | Reader of the ruling body fields (sweep-rulebooks) | `ruling_body_rule_check` (Haiku) | `RulingBody::is_player_banned` | agrees |
+| 0x88bc50 | Table of 0x65-byte cells at 0xddf570 (attribute-groups) | `forward_to_utils_string_compare_flagged` (Haiku) | `staff_screens_compare_text_rows` | agrees |
+| 0x88c440 | None or one player set (comparison-screen inventory) | `staff_screens_open_compare_players_screen` (Haiku) | `staff_screens_open_compare_players_dialog` | agrees |
+| 0x88c460 | Compare screen open path | `sub_league_compare_players_dialog` (Haiku) | `staff_screens_build_compare_players_dialog` | agrees |
+| 0x88c660 | Compare screen open path | `get_player_team_or_reject_id` (Haiku) | `staff_screens_handle_compare_players_action` | agrees |
+| 0x8bba30 | Setup step 34, global 0xde1f54 (game-creation inventory) | `TRANSFER_MANAGER::TRANSFER_MANAGER` (Haiku) | `TRANSFER_MANAGER::TRANSFER_MANAGER` | agrees |
+| 0x8c1870 | Listed near the On Loan widget only (comparison-screen inventory) | `transfer_manager_find_staff_match` (Haiku) | `TRANSFER_MANAGER::is_queued_for_free_transfer` | no claim |
+| 0x8c39f0 | Adds 1 to the counter of a bsearch row (crash-fixes) | `transfer_manager_process_offers_for_club` (Haiku) | `TRANSFER_MANAGER::update_appearance_clauses_after_match` | agrees |
+| 0x8c6bc0 | Transfer window code (sweep-season-end) | `transfer_manager_check_offer_deadlines` (Haiku) | `TRANSFER_MANAGER::update_transfer_window_news` | agrees |
+| 0x8c7070 | Adds a work permit (sweep-season-end) | `transfer_manager_add_work_permit` (Haiku) | `TRANSFER_MANAGER::add_work_permit` | agrees |
+| 0x8c9390 | Moves part-exchange players (crash-fixes) | `transfer_manager_process_completed_transfer` (Haiku) | `TRANSFER_MANAGER::finalise_transfer` | agrees |
+| 0x8cd450 | Squad limit check (sweep-season-end) | `transfer_manager_check_squad_limits` (Haiku) | `transfer_manager_check_squad_limits` | agrees |
+| 0x8cdb80 | In a call chain to srand only (assistant-and-days inventory) | `transfer_manager_check_offer_flags` (Haiku) | `transfer_manager_check_manager_veto` | no claim |
+| 0x8cf470 | Steps forward to the next open window date (sweep-season-end) | `transfer_manager_find_open_window_date` (Haiku) | `TRANSFER_MANAGER::find_next_window_open_date` | agrees |
+| 0x8cf5e0 | Mentioned in a call graph note only (assistant-pick inventory) | `transfer_manager_dispatch_offer` (Haiku) | `TRANSFER_MANAGER::get_ineligibility_code` | no claim |
+| 0x8cf6b0 | Lookup of the rules object, slot +0x1c (foreign-and-tactics) | `transfer_manager_fill_party_slots` (Haiku) | `TRANSFER_MANAGER::fill_squad_restrictions` | agrees |
+| 0x8cf7e0 | Reader of the squad restriction bytes (foreign-and-tactics) | `transfer_manager_build_selection_result` (Haiku) | `transfer_manager_get_selection_limit` | agrees |
+| 0x8cf880 | Applies competition rules to a fixture (assistant-pick inventory) | `squad_registration_rule_check` (Haiku) | `transfer_manager_check_matchday_squad_limit` | agrees in area |
+| 0x8cfc90 | In a call chain to srand only (assistant-and-days inventory) | `transfer_manager_check_offer_acceptance` (Haiku) | `TRANSFER_MANAGER::check_offer_restrictions` | no claim |
+| 0x8d26b0 | Per-nation rules objects (season-change-points) | `TRANSFER_MANAGER::setup_transfer_rules` (Haiku) | `TRANSFER_MANAGER::setup_transfer_rules` | agrees |
+| 0x8d2fa0 | Rules lookup by fixture (foreign-and-tactics) | `transfer_manager_resolve_party_kind` (Haiku) | `TRANSFER_MANAGER::get_fixture_rules_scope` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

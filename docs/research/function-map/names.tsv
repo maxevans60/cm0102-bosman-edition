@@ -5105,43 +5105,43 @@ address	file	name	confidence	model	cited_in
 0x7e5570	record_utils.cpp	record_read_date_pair	medium	haiku	
 0x7e56d0	record_utils.cpp	record_utils_assert_compare_bytes	medium	haiku	
 0x7e5780	record_utils.cpp	format_duration_text	high	haiku	
-0x7e5b10	record_utils.cpp	staff_injury_screen_prompt_open	medium	haiku	
-0x7e5c00	record_utils.cpp	confirm_player_treatment_dialog	high	haiku	
-0x7e5e30	record_utils.cpp	ruling_body_match_event_dispatch	medium	haiku	
-0x7e5fc0	record_utils.cpp	cd_check_find_cm_drive	high	haiku	2026-10-14-game-creation-inventory.md
-0x7e6130	record_utils.cpp	scalar_deleting_destructor_stub	high	haiku	
-0x7e6150	record_utils.cpp	comment_ruling_body_dtor	medium	haiku	
-0x7e61c0	record_utils.cpp	record_utils_init_comp_records	low	haiku	2026-10-14-game-creation-inventory.md
-0x7e6320	record_utils.cpp	scalar_deleting_destructor	high	haiku	
-0x7e6340	record_utils.cpp	comp_destructor_thunk	high	haiku	
-0x7e6350	record_utils.cpp	scalar_deleting_destructor_wrapper	high	haiku	
-0x7e6370	record_utils.cpp	record_dtor_stub_0x7e6370	high	haiku	
-0x7e6380	record_utils.cpp	fix_man_sort_and_apply_shortlist	medium	haiku	
-0x7e6720	record_utils.cpp	fix_man_prepare_fixture_stadium_and_add	medium	haiku	
-0x7e6a70	record_utils.cpp	match_day_reset_player_flags	medium	haiku	
-0x7e6ba0	record_utils.cpp	fixture_is_legal_for_both_squads	medium	haiku	
+0x7e5b10	record_utils.cpp	open_treatment_confirm_screen	high	opus	
+0x7e5c00	record_utils.cpp	draw_treatment_confirm_screen	high	opus	
+0x7e5e30	record_utils.cpp	handle_treatment_confirm_screen	medium	opus	
+0x7e5fc0	record_utils.cpp	ReserveComp::ReserveComp	high	opus	2026-10-14-game-creation-inventory.md
+0x7e6130	record_utils.cpp	ReserveComp::scalar_deleting_destructor	high	opus	
+0x7e6150	record_utils.cpp	ReserveComp::~ReserveComp	high	opus	
+0x7e61c0	record_utils.cpp	ReserveComp::create_sub_comps	medium	opus	2026-10-14-game-creation-inventory.md
+0x7e6320	record_utils.cpp	Under21IntComp::scalar_deleting_destructor	high	opus	
+0x7e6340	record_utils.cpp	Under21IntComp::~Under21IntComp	high	opus	
+0x7e6350	record_utils.cpp	BIntComp::scalar_deleting_destructor	high	opus	
+0x7e6370	record_utils.cpp	BIntComp::~BIntComp	high	opus	
+0x7e6380	record_utils.cpp	schedule_reserve_fixtures	medium	opus	
+0x7e6720	record_utils.cpp	add_b_or_under21_fixture	medium	opus	
+0x7e6a70	record_utils.cpp	cancel_unplayable_reserve_fixtures	medium	opus	
+0x7e6ba0	record_utils.cpp	can_clubs_field_reserve_sides	medium	opus	
 0x7e6f20	record_utils.cpp	comp_is_non_competitive	low	opus	
-0x7e6f70	record_utils.cpp	record_utils_send_comment_pair_to_clubs	medium	haiku	
-0x7e7280	record_utils.cpp	news_match_result_text	high	haiku	
+0x7e6f70	record_utils.cpp	ReserveComp::add_result	high	opus	
+0x7e7280	record_utils.cpp	reserve_result_news_text	high	opus	
 0x7e7760	ruling_body.cpp	RulingBody::RulingBody	high	opus	2026-10-16-sweep-europe.md,2026-10-16-sweep-rulebooks.md
-0x7e7850	ruling_body.cpp	ruling_body_stub_return_zero	medium	haiku	
-0x7e7860	ruling_body.cpp	ruling_body_vtable_destructor	medium	haiku	
-0x7e78a0	ruling_body.cpp	ruling_body_load_from_stream	high	haiku	
-0x7e7b80	ruling_body.cpp	Ruling_body::load_state	medium	haiku	
-0x7e7d50	ruling_body.cpp	ruling_body_process_pending_rulings	medium	haiku	2026-10-16-sweep-rulebooks.md
-0x7e7ed0	ruling_body.cpp	ruling_body_process_pending_entries	medium	haiku	2026-10-16-sweep-rulebooks.md
-0x7e7ff0	ruling_body.cpp	ruling_body_select_candidates	medium	haiku	
+0x7e7850	ruling_body.cpp	RulingBody::is_one_booking_from_ban	high	opus	
+0x7e7860	ruling_body.cpp	RulingBody::~RulingBody	high	opus	
+0x7e78a0	ruling_body.cpp	RulingBody::load	high	opus	
+0x7e7b80	ruling_body.cpp	RulingBody::save	high	opus	
+0x7e7d50	ruling_body.cpp	RulingBody::daily_update	high	opus	2026-10-16-sweep-rulebooks.md
+0x7e7ed0	ruling_body.cpp	RulingBody::start_new_season	high	opus	2026-10-16-sweep-rulebooks.md
+0x7e7ff0	ruling_body.cpp	RulingBody::process_match	high	opus	
 0x7e82e0	ruling_body.cpp	RulingBody::find_or_add_discipline_entry	high	opus	2026-10-16-sweep-rulebooks.md
-0x7e8510	ruling_body.cpp	ruling_body_transfer_slot_holder	medium	haiku	
-0x7e8590	ruling_body.cpp	ruling_body_clear_suspension	medium	haiku	
-0x7e85b0	ruling_body.cpp	ruling_body_rule_check	medium	haiku	2026-10-16-sweep-rulebooks.md
-0x7e88d0	ruling_body.cpp	ruling_body_format_suspension_text	medium	haiku	
-0x7e8d60	ruling_body.cpp	ruling_body_dispatch_action	medium	haiku	
-0x7e8da0	ruling_body.cpp	ruling_body_report_assert_failure	high	haiku	
+0x7e8510	ruling_body.cpp	RulingBody::attach_ban	high	opus	
+0x7e8590	ruling_body.cpp	RulingBody::detach_ban	high	opus	
+0x7e85b0	ruling_body.cpp	RulingBody::is_player_banned	high	opus	2026-10-16-sweep-rulebooks.md
+0x7e88d0	ruling_body.cpp	RulingBody::get_ban_text	high	opus	
+0x7e8d60	ruling_body.cpp	RulingBody::check_one_booking_from_ban	medium	opus	
+0x7e8da0	ruling_body.cpp	RulingBody::get_name	high	opus	
 0x7e8e10	ruling_body.cpp	RulingBody::make_points_ban	medium	opus	2026-10-16-sweep-rulebooks.md
-0x7e9050	ruling_body.cpp	ruling_body_compact_list	high	haiku	
-0x7e9180	ruling_body.cpp	ruling_body_clear_flags_for_nation	medium	haiku	
-0x7e91d0	ruling_body.cpp	ruling_body_remove_fixture_entries	medium	haiku	
+0x7e9050	ruling_body.cpp	RulingBody::compact_entries	high	opus	
+0x7e9180	ruling_body.cpp	RulingBody::reset_bookings_for_club	high	opus	
+0x7e91d0	ruling_body.cpp	RulingBody::remove_pending_bans	high	opus	
 0x7e9210	rus_cup.cpp	Cup::Cup_rus_cup_init	high	haiku	
 0x7e9400	rus_cup.cpp	rus_cup::`scalar deleting destructor'	medium	slot copy	
 0x7e9420	rus_cup.cpp	Cup::~Cup	high	haiku	
@@ -5839,18 +5839,18 @@ address	file	name	confidence	model	cited_in
 0x88b4b0	staff_screens.cpp	list_row_key_handler	medium	haiku	
 0x88b8a0	staff_screens.cpp	staff_screens_release_screen_slots	medium	haiku	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
 0x88b910	staff_screens.cpp	staff_screens_history_panel_build	medium	haiku	
-0x88bc50	staff_screens.cpp	forward_to_utils_string_compare_flagged	low	haiku	2026-10-15-attribute-groups.md,2026-10-16-comparison-screen-inventory.md
-0x88bc70	staff_screens.cpp	staff_screens_nickname_dialog_build	high	haiku	
-0x88bee0	staff_screens.cpp	staff_screens_dispatch_button_action	medium	haiku	
-0x88c100	staff_screens.cpp	staff_screens_scout_watch_prompt_screen	medium	haiku	
-0x88c360	staff_screens.cpp	staff_screens_resolve_squad_row_action	medium	haiku	
-0x88c440	staff_screens.cpp	staff_screens_open_compare_players_screen	high	haiku	2026-10-16-comparison-screen-inventory.md
-0x88c460	staff_screens.cpp	sub_league_compare_players_dialog	medium	haiku	2026-10-16-comparison-screen-inventory.md
-0x88c660	staff_screens.cpp	get_player_team_or_reject_id	low	haiku	2026-10-16-comparison-screen-inventory.md
-0x88c6d0	sub_league.cpp	League::League	high	haiku	
-0x88c970	sub_league.cpp	sub_league::`scalar deleting destructor'	medium	slot copy	
-0x88c990	sub_league.cpp	sub_league::~sub_league	medium	haiku	
-0x88c9f0	sub_league.cpp	league_fixture_scan_matching_teams	medium	haiku	
+0x88bc50	staff_screens.cpp	staff_screens_compare_text_rows	high	opus	2026-10-15-attribute-groups.md,2026-10-16-comparison-screen-inventory.md
+0x88bc70	staff_screens.cpp	staff_screens_build_nickname_dialog	high	opus	
+0x88bee0	staff_screens.cpp	staff_screens_handle_nickname_dialog_action	high	opus	
+0x88c100	staff_screens.cpp	staff_screens_build_scout_request_dialog	high	opus	
+0x88c360	staff_screens.cpp	staff_screens_handle_scout_request_action	high	opus	
+0x88c440	staff_screens.cpp	staff_screens_open_compare_players_dialog	high	opus	2026-10-16-comparison-screen-inventory.md
+0x88c460	staff_screens.cpp	staff_screens_build_compare_players_dialog	high	opus	2026-10-16-comparison-screen-inventory.md
+0x88c660	staff_screens.cpp	staff_screens_handle_compare_players_action	high	opus	2026-10-16-comparison-screen-inventory.md
+0x88c6d0	sub_league.cpp	SubLeague::SubLeague	high	opus	
+0x88c970	sub_league.cpp	SubLeague::`scalar deleting destructor'	high	opus	
+0x88c990	sub_league.cpp	SubLeague::~SubLeague	high	opus	
+0x88c9f0	sub_league.cpp	SubLeague::add_results_between_members	high	opus	
 0x88cbb0	swe_cup.cpp	swe_cup_init	high	haiku	
 0x88ce00	swe_cup.cpp	swe_cup::`scalar deleting destructor'	medium	slot copy	
 0x88ce20	swe_cup.cpp	swe_cup_destructor	high	haiku	
@@ -6102,167 +6102,167 @@ address	file	name	confidence	model	cited_in
 0x8ba530	training_screens.cpp	training_screens_handle_click	medium	haiku	
 0x8ba920	training_screens.cpp	training_screens_scalar_deleting_destructor	high	haiku	
 0x8ba940	training_screens.cpp	training_screen_build_coaches_panel	high	haiku	
-0x8baea0	training_screens.cpp	training_screen_refresh_row_state	medium	haiku	
-0x8bb190	training_screens.cpp	compare_player_names_for_sort	medium	haiku	
-0x8bb2a0	training_screens.cpp	compare_player_names_cb	medium	haiku	
-0x8bb340	training_screens.cpp	compare_player_names_for_sort	medium	haiku	
-0x8bb460	training_screens.cpp	compare_players_by_position_then_name	medium	haiku	
-0x8bb510	training_screens.cpp	training_compare_players	medium	haiku	
-0x8bb620	training_screens.cpp	compare_player_names_by_position	medium	haiku	
-0x8bb6d0	training_screens.cpp	compare_training_candidates_by_position_then_name	medium	haiku	
-0x8bb7d0	training_screens.cpp	compare_coaches_by_name_or_rank	medium	haiku	
-0x8bb8d0	training_screens.cpp	compare_player_injury_then_name	medium	haiku	
-0x8bba10	training_screens.cpp	training_record_init_defaults	medium	haiku	
-0x8bba30	transfer_manager.cpp	TRANSFER_MANAGER::TRANSFER_MANAGER	high	haiku	2026-10-14-game-creation-inventory.md
-0x8bbe20	transfer_manager.cpp	TRANSFER_MANAGER::~TRANSFER_MANAGER	high	haiku	
-0x8bc020	transfer_manager.cpp	TRANSFER_MANAGER::load_from_disk	high	haiku	
-0x8bd4b0	transfer_manager.cpp	TRANSFER_MANAGER::save_to_disk	high	haiku	
-0x8be300	transfer_manager.cpp	transfer_manager_add_transfer_offer	high	haiku	
-0x8be9d0	transfer_manager.cpp	TRANSFER_MANAGER::add_transfer_slot_record	medium	haiku	
-0x8bed60	transfer_manager.cpp	transfer_manager_make_offer_wrapper	medium	haiku	
-0x8bee50	transfer_manager.cpp	transfer_manager_add_transfer_offer_record	medium	haiku	
-0x8bf060	transfer_manager.cpp	transfer_manager_build_staff_contract_offer	medium	haiku	
-0x8bf400	transfer_manager.cpp	transfer_manager_execute_transfer_contract	medium	haiku	
-0x8bf680	transfer_manager.cpp	transfer_manager_complete_transfer	medium	haiku	
-0x8bfa30	transfer_manager.cpp	transfer_manager_complete_transfer_offer	medium	haiku	
-0x8bfcb0	transfer_manager.cpp	transfer_manager_cancel_transfer_offer	medium	haiku	
-0x8c0080	transfer_manager.cpp	TRANSFER_MANAGER::process_transfer_offer_state	medium	haiku	
-0x8c0660	transfer_manager.cpp	transfer_manager_process_offer_state	medium	haiku	
-0x8c0810	transfer_manager.cpp	transfer_manager_process_bid_offer	medium	haiku	
-0x8c0f40	transfer_manager.cpp	transfer_manager_accept_offer_and_schedule_contract	medium	haiku	
-0x8c1290	transfer_manager.cpp	transfer_manager_process_player_bid	medium	haiku	
-0x8c16b0	transfer_manager.cpp	transfer_manager_check_and_queue_contract_entry	low	haiku	
-0x8c1780	transfer_manager.cpp	transfer_manager_count_club_players	medium	haiku	
-0x8c1870	transfer_manager.cpp	transfer_manager_find_staff_match	medium	haiku	2026-10-16-comparison-screen-inventory.md
-0x8c18c0	transfer_manager.cpp	transfer_manager_process_pending_transfers	medium	haiku	
-0x8c1af0	transfer_manager.cpp	TRANSFER_MANAGER::add_transfer_staff	medium	haiku	
-0x8c1e40	transfer_manager.cpp	transfer_manager_process_offer_response	medium	haiku	
-0x8c1f80	transfer_manager.cpp	TRANSFER_MANAGER::set_pending_flag_at_index	medium	haiku	
-0x8c2060	transfer_manager.cpp	transfer_manager_set_offer_state	medium	haiku	
-0x8c2180	transfer_manager.cpp	transfer_manager_process_staff_offer_resolution	medium	haiku	
-0x8c28c0	transfer_manager.cpp	transfer_manager_cancel_or_complete_transfer	medium	haiku	
-0x8c2f50	transfer_manager.cpp	transfer_manager_process_offer_state_machine	medium	haiku	
-0x8c3310	transfer_manager.cpp	transfer_manager_advance_offer_state	medium	haiku	
-0x8c34e0	transfer_manager.cpp	transfer_manager_process_pending_offer	medium	haiku	
-0x8c36b0	transfer_manager.cpp	transfer_manager_offer_step	medium	haiku	
-0x8c38b0	transfer_manager.cpp	transfer_manager_check_contract_expiry_offer	medium	haiku	
-0x8c39f0	transfer_manager.cpp	transfer_manager_process_offers_for_club	medium	haiku	2026-10-16-crash-fixes.md
-0x8c3e50	transfer_manager.cpp	transfer_manager_get_rating_delta	low	haiku	
-0x8c3eb0	transfer_manager.cpp	transfer_manager_clear_old_past_transfers	high	haiku	
-0x8c41c0	transfer_manager.cpp	transfer_manager_remove_player_from_club_list	medium	haiku	
-0x8c44e0	transfer_manager.cpp	TRANSFER_MANAGER::set_transfer_state_to_offer_stage	medium	haiku	
-0x8c47d0	transfer_manager.cpp	transfer_manager_process_offers_for_player	medium	haiku	
-0x8c4950	transfer_manager.cpp	transfer_manager_release_club_players_for_sale	medium	haiku	
-0x8c4e10	transfer_manager.cpp	transfer_manager_process_expired_offers	medium	haiku	
-0x8c5410	transfer_manager.cpp	TRANSFER_MANAGER::set_flag_0x40_on_entry	medium	haiku	
-0x8c5430	transfer_manager.cpp	transfer_manager_clear_flag_bit_6	medium	haiku	
-0x8c5450	transfer_manager.cpp	transfer_manager_check_player_flag_and_get_club	medium	haiku	
-0x8c54c0	transfer_manager.cpp	transfer_manager_contract_flag_for_player	medium	haiku	
-0x8c5560	transfer_manager.cpp	transfer_manager_check_offer_validity	medium	haiku	
-0x8c5690	transfer_manager.cpp	transfer_manager_rejection_reason_text	high	haiku	
-0x8c5800	transfer_manager.cpp	transfer_manager_get_contract_status_for_player	medium	haiku	
-0x8c5880	transfer_manager.cpp	transfer_manager_weekly_tick	medium	haiku	
+0x8baea0	training_screens.cpp	training_screens_coaches_panel_handle_event	high	opus	
+0x8bb190	training_screens.cpp	training_screens_compare_by_status_then_name	medium	opus	
+0x8bb2a0	training_screens.cpp	training_screens_compare_by_name	medium	opus	
+0x8bb340	training_screens.cpp	training_screens_compare_by_position_then_name	medium	opus	
+0x8bb460	training_screens.cpp	training_screens_compare_by_value_then_name	medium	opus	
+0x8bb510	training_screens.cpp	training_screens_compare_by_attribute_then_name	medium	opus	
+0x8bb620	training_screens.cpp	training_screens_compare_by_age_then_name	medium	opus	
+0x8bb6d0	training_screens.cpp	training_screens_compare_by_ability_then_name	medium	opus	
+0x8bb7d0	training_screens.cpp	training_screens_compare_by_morale_then_name	medium	opus	
+0x8bb8d0	training_screens.cpp	training_screens_compare_by_injury_then_name	medium	opus	
+0x8bba10	training_screens.cpp	training_record_init_header	low	opus	
+0x8bba30	transfer_manager.cpp	TRANSFER_MANAGER::TRANSFER_MANAGER	high	opus	2026-10-14-game-creation-inventory.md
+0x8bbe20	transfer_manager.cpp	TRANSFER_MANAGER::~TRANSFER_MANAGER	high	opus	
+0x8bc020	transfer_manager.cpp	TRANSFER_MANAGER::load_from_disk	high	opus	
+0x8bd4b0	transfer_manager.cpp	TRANSFER_MANAGER::save_to_disk	high	opus	
+0x8be300	transfer_manager.cpp	TRANSFER_MANAGER::add_transfer_offer	high	opus	
+0x8be9d0	transfer_manager.cpp	TRANSFER_MANAGER::add_transfer_negotiation	high	opus	
+0x8bed60	transfer_manager.cpp	TRANSFER_MANAGER::make_contract_offer	medium	opus	
+0x8bee50	transfer_manager.cpp	TRANSFER_MANAGER::add_contract_negotiation	medium	opus	
+0x8bf060	transfer_manager.cpp	TRANSFER_MANAGER::add_config_future_transfer	high	opus	
+0x8bf400	transfer_manager.cpp	TRANSFER_MANAGER::add_config_loan	high	opus	
+0x8bf680	transfer_manager.cpp	TRANSFER_MANAGER::reject_transfer_offer	medium	opus	
+0x8bfa30	transfer_manager.cpp	TRANSFER_MANAGER::reject_contract_offer	medium	opus	
+0x8bfcb0	transfer_manager.cpp	TRANSFER_MANAGER::withdraw_transfer_offer	high	opus	
+0x8c0080	transfer_manager.cpp	TRANSFER_MANAGER::accept_transfer_bid	medium	opus	
+0x8c0660	transfer_manager.cpp	TRANSFER_MANAGER::accept_contract_offer	medium	opus	
+0x8c0810	transfer_manager.cpp	TRANSFER_MANAGER::review_ai_club_bid	medium	opus	
+0x8c0f40	transfer_manager.cpp	TRANSFER_MANAGER::submit_loan_contract_offer	medium	opus	
+0x8c1290	transfer_manager.cpp	TRANSFER_MANAGER::unsettle_player_after_bid	medium	opus	
+0x8c16b0	transfer_manager.cpp	TRANSFER_MANAGER::queue_free_transfer	high	opus	
+0x8c1780	transfer_manager.cpp	TRANSFER_MANAGER::count_club_free_transfer_queue	medium	opus	
+0x8c1870	transfer_manager.cpp	TRANSFER_MANAGER::is_queued_for_free_transfer	high	opus	2026-10-16-comparison-screen-inventory.md
+0x8c18c0	transfer_manager.cpp	TRANSFER_MANAGER::process_free_transfer_queue	high	opus	
+0x8c1af0	transfer_manager.cpp	TRANSFER_MANAGER::free_transfer_staff	high	opus	
+0x8c1e40	transfer_manager.cpp	TRANSFER_MANAGER::offer_contract_to_offer_player	medium	opus	
+0x8c1f80	transfer_manager.cpp	TRANSFER_MANAGER::note_terms_offered_to_main_player	medium	opus	
+0x8c2060	transfer_manager.cpp	TRANSFER_MANAGER::note_terms_offered_to_exchange_player	medium	opus	
+0x8c2180	transfer_manager.cpp	TRANSFER_MANAGER::handle_player_accepted_terms	high	opus	
+0x8c28c0	transfer_manager.cpp	TRANSFER_MANAGER::handle_player_rejected_terms	medium	opus	
+0x8c2f50	transfer_manager.cpp	TRANSFER_MANAGER::advance_offer_to_club_approval	medium	opus	
+0x8c3310	transfer_manager.cpp	TRANSFER_MANAGER::confirm_offer_by_club	high	opus	
+0x8c34e0	transfer_manager.cpp	TRANSFER_MANAGER::try_complete_offer	medium	opus	
+0x8c36b0	transfer_manager.cpp	TRANSFER_MANAGER::club_rejects_offer	medium	opus	
+0x8c38b0	transfer_manager.cpp	TRANSFER_MANAGER::complete_accepted_contract_offer	medium	opus	
+0x8c39f0	transfer_manager.cpp	TRANSFER_MANAGER::update_appearance_clauses_after_match	medium	opus	2026-10-16-crash-fixes.md
+0x8c3e50	transfer_manager.cpp	TRANSFER_MANAGER::get_clause_count	medium	opus	
+0x8c3eb0	transfer_manager.cpp	TRANSFER_MANAGER::clear_old_past_transfers	high	opus	
+0x8c41c0	transfer_manager.cpp	TRANSFER_MANAGER::remove_exchange_player	medium	opus	
+0x8c44e0	transfer_manager.cpp	TRANSFER_MANAGER::collapse_offer	medium	opus	
+0x8c47d0	transfer_manager.cpp	TRANSFER_MANAGER::collapse_offers_for_player	medium	opus	
+0x8c4950	transfer_manager.cpp	TRANSFER_MANAGER::cancel_club_offers	medium	opus	
+0x8c4e10	transfer_manager.cpp	TRANSFER_MANAGER::hold_offers_at_window_close	medium	opus	
+0x8c5410	transfer_manager.cpp	TRANSFER_MANAGER::set_agreed_contract_flag	medium	opus	
+0x8c5430	transfer_manager.cpp	TRANSFER_MANAGER::clear_agreed_contract_flag	medium	opus	
+0x8c5450	transfer_manager.cpp	TRANSFER_MANAGER::get_agreed_contract_club	high	opus	
+0x8c54c0	transfer_manager.cpp	transfer_manager_get_squad_status_reason	high	opus	
+0x8c5560	transfer_manager.cpp	transfer_manager_is_rejection_reason_valid	high	opus	
+0x8c5690	transfer_manager.cpp	transfer_manager_get_rejection_reason_text	high	opus	
+0x8c5800	transfer_manager.cpp	transfer_manager_get_squad_status_for_reason	medium	opus	
+0x8c5880	transfer_manager.cpp	TRANSFER_MANAGER::daily_update	high	opus	
 0x8c5cf0	transfer_manager.cpp	TRANSFER_MANAGER::get_offers_for_player	medium	opus	
-0x8c5e40	transfer_manager.cpp	transfer_manager_count_club_offers_for_player	medium	haiku	
-0x8c5fc0	transfer_manager.cpp	transfer_manager_count_club_offers_for_player	medium	haiku	
-0x8c6100	transfer_manager.cpp	transfer_manager_count_players_at_club	medium	haiku	
+0x8c5e40	transfer_manager.cpp	TRANSFER_MANAGER::get_exchange_offers_for_player	medium	opus	
+0x8c5fc0	transfer_manager.cpp	TRANSFER_MANAGER::get_exchange_negotiations_for_player	medium	opus	
+0x8c6100	transfer_manager.cpp	TRANSFER_MANAGER::get_open_offers_for_club_players	medium	opus	
 0x8c61e0	transfer_manager.cpp	TRANSFER_MANAGER::get_offer_slot	high	opus	
-0x8c6200	transfer_manager.cpp	TRANSFER_MANAGER::get_entry_ptr	medium	haiku	
+0x8c6200	transfer_manager.cpp	TRANSFER_MANAGER::get_negotiation_slot	medium	opus	
 0x8c6220	transfer_manager.cpp	TRANSFER_MANAGER::schedule_offer	high	opus	
-0x8c63a0	transfer_manager.cpp	transfer_manager_process_transfer_offer_state	medium	haiku	
-0x8c6ae0	transfer_manager.cpp	transfer_manager_clear_club_offer_list	medium	haiku	
-0x8c6bc0	transfer_manager.cpp	transfer_manager_check_offer_deadlines	medium	haiku	2026-10-16-sweep-season-end.md
-0x8c6db0	transfer_manager.cpp	transfer_manager_mark_contract_terminated_players	medium	haiku	
-0x8c6e60	transfer_manager.cpp	transfer_manager_update_player_transfer_offers	medium	haiku	
-0x8c7070	transfer_manager.cpp	transfer_manager_add_work_permit	high	haiku	2026-10-16-sweep-season-end.md
-0x8c7260	transfer_manager.cpp	TRANSFER_MANAGER::is_player_on_transfer_list	medium	haiku	
-0x8c72d0	transfer_manager.cpp	TRANSFER_MANAGER::find_transfer_by_pair	medium	haiku	
-0x8c7330	transfer_manager.cpp	transfer_manager_prune_expired_offers	medium	haiku	
-0x8c7470	transfer_manager.cpp	transfer_manager_check_pending_offer_clash	medium	haiku	
+0x8c63a0	transfer_manager.cpp	TRANSFER_MANAGER::process_due_offer	high	opus	
+0x8c6ae0	transfer_manager.cpp	transfer_manager_detach_offer_players	medium	opus	
+0x8c6bc0	transfer_manager.cpp	TRANSFER_MANAGER::update_transfer_window_news	high	opus	2026-10-16-sweep-season-end.md
+0x8c6db0	transfer_manager.cpp	transfer_manager_close_offer_contract_offers	medium	opus	
+0x8c6e60	transfer_manager.cpp	TRANSFER_MANAGER::init_work_permits	medium	opus	
+0x8c7070	transfer_manager.cpp	TRANSFER_MANAGER::add_work_permit	high	opus	2026-10-16-sweep-season-end.md
+0x8c7260	transfer_manager.cpp	TRANSFER_MANAGER::find_work_permit	high	opus	
+0x8c72d0	transfer_manager.cpp	TRANSFER_MANAGER::find_negotiated_loan_contract	high	opus	
+0x8c7330	transfer_manager.cpp	TRANSFER_MANAGER::update_work_permits	medium	opus	
+0x8c7470	transfer_manager.cpp	transfer_manager_offer_needs_work_permit	high	opus	
 0x8c7560	transfer_manager.cpp	TRANSFER_MANAGER::player_needs_work_permit	medium	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-season-end.md
-0x8c7690	transfer_manager.cpp	transfer_manager_process_offer_bid	medium	haiku	
-0x8c7950	transfer_manager.cpp	transfer_manager_player_rejects_offer	medium	haiku	
-0x8c7e20	transfer_manager.cpp	transfer_manager_add_transfer_staff_slot	medium	haiku	
-0x8c8090	transfer_manager.cpp	transfer_manager_process_transfer_offer_candidates	medium	haiku	
-0x8c8740	transfer_manager.cpp	transfer_manager_add_offer_checked	medium	haiku	
-0x8c8860	transfer_manager.cpp	TRANSFER_MANAGER::find_bid_candidates	medium	haiku	
-0x8c8fd0	transfer_manager.cpp	transfer_manager_try_make_offer	medium	haiku	
-0x8c91e0	transfer_manager.cpp	transfer_manager_apply_completed_flags	medium	haiku	
-0x8c9390	transfer_manager.cpp	transfer_manager_process_completed_transfer	medium	haiku	2026-10-16-crash-fixes.md
-0x8c9720	transfer_manager.cpp	transfer_manager_complete_transfer_core	medium	haiku	
-0x8ca8a0	transfer_manager.cpp	transfer_manager_apply_transfer_finances	medium	haiku	
-0x8caaf0	transfer_manager.cpp	transfer_manager_add_next_sale_percentage	high	haiku	
-0x8cac40	transfer_manager.cpp	transfer_manager_add_first_team_appearance_money	high	haiku	
-0x8cad90	transfer_manager.cpp	transfer_manager_add_international_team_appearance_money	high	haiku	
-0x8caee0	transfer_manager.cpp	transfer_manager_process_pending_transfers	medium	haiku	
-0x8cb0f0	transfer_manager.cpp	transfer_manager_compute_offer_fee	medium	haiku	
-0x8cb340	transfer_manager.cpp	transfer_manager_apply_offer_to_player	medium	haiku	
-0x8cb4f0	transfer_manager.cpp	transfer_manager_remove_staff_entry	medium	haiku	
-0x8cb590	transfer_manager.cpp	transfer_manager_remove_entry_by_id	medium	haiku	
-0x8cb630	transfer_manager.cpp	transfer_manager_remove_entry_by_id	medium	haiku	
-0x8cb6d0	transfer_manager.cpp	transfer_manager_add_transfer_record_checked	medium	haiku	
-0x8cb810	transfer_manager.cpp	transfer_manager_add_past_transfer	high	haiku	
-0x8cb940	transfer_manager.cpp	transfer_past_record_copy_construct	medium	haiku	
-0x8cb9a0	transfer_manager.cpp	transfer_manager_add_future_transfer	high	haiku	
-0x8cbbe0	transfer_manager.cpp	transfer_manager_process_pending_transfers	medium	haiku	
-0x8cbf40	transfer_manager.cpp	transfer_record_copy_assign	medium	haiku	
-0x8cbf70	transfer_manager.cpp	TRANSFER_MANAGER::remove_transfer_offer_entry	medium	haiku	
-0x8cc030	transfer_manager.cpp	transfer_manager_get_past_transfers	high	haiku	
-0x8cc5b0	transfer_manager.cpp	transfer_manager_compute_offer_rating	medium	haiku	
-0x8cc930	transfer_manager.cpp	transfer_manager_find_best_offer_for_player	medium	haiku	
+0x8c7690	transfer_manager.cpp	TRANSFER_MANAGER::check_offer_work_permits	medium	opus	
+0x8c7950	transfer_manager.cpp	TRANSFER_MANAGER::is_work_permit_granted	medium	opus	
+0x8c7e20	transfer_manager.cpp	TRANSFER_MANAGER::update_work_permit_on_move	medium	opus	
+0x8c8090	transfer_manager.cpp	TRANSFER_MANAGER::ai_respond_to_bid	medium	opus	
+0x8c8740	transfer_manager.cpp	TRANSFER_MANAGER::build_cash_offer_option	high	opus	
+0x8c8860	transfer_manager.cpp	TRANSFER_MANAGER::build_exchange_offer_option	medium	opus	
+0x8c8fd0	transfer_manager.cpp	TRANSFER_MANAGER::build_clause_offer_option	medium	opus	
+0x8c91e0	transfer_manager.cpp	TRANSFER_MANAGER::settle_previous_transfer_clauses	high	opus	
+0x8c9390	transfer_manager.cpp	TRANSFER_MANAGER::finalise_transfer	high	opus	2026-10-16-crash-fixes.md
+0x8c9720	transfer_manager.cpp	TRANSFER_MANAGER::move_player_to_club	high	opus	
+0x8ca8a0	transfer_manager.cpp	TRANSFER_MANAGER::pay_fee_and_record_clauses	high	opus	
+0x8caaf0	transfer_manager.cpp	TRANSFER_MANAGER::add_next_sale_percentage	high	opus	
+0x8cac40	transfer_manager.cpp	TRANSFER_MANAGER::add_first_team_appearance_money	high	opus	
+0x8cad90	transfer_manager.cpp	TRANSFER_MANAGER::add_international_team_appearance_money	high	opus	
+0x8caee0	transfer_manager.cpp	TRANSFER_MANAGER::pay_transfer_instalments	medium	opus	
+0x8cb0f0	transfer_manager.cpp	TRANSFER_MANAGER::pay_next_sale_percentage	high	opus	
+0x8cb340	transfer_manager.cpp	TRANSFER_MANAGER::pay_appearance_money	medium	opus	
+0x8cb4f0	transfer_manager.cpp	TRANSFER_MANAGER::remove_next_sale_percentage	high	opus	
+0x8cb590	transfer_manager.cpp	TRANSFER_MANAGER::remove_first_team_appearance_money	high	opus	
+0x8cb630	transfer_manager.cpp	TRANSFER_MANAGER::remove_international_team_appearance_money	high	opus	
+0x8cb6d0	transfer_manager.cpp	transfer_manager_fill_vacated_staff_job	medium	opus	
+0x8cb810	transfer_manager.cpp	TRANSFER_MANAGER::add_past_transfer	high	opus	
+0x8cb940	transfer_manager.cpp	past_transfer_copy_construct	high	opus	
+0x8cb9a0	transfer_manager.cpp	TRANSFER_MANAGER::add_future_transfer	high	opus	
+0x8cbbe0	transfer_manager.cpp	TRANSFER_MANAGER::process_due_future_transfers	high	opus	
+0x8cbf40	transfer_manager.cpp	future_transfer_assign	high	opus	
+0x8cbf70	transfer_manager.cpp	TRANSFER_MANAGER::remove_future_transfer	high	opus	
+0x8cc030	transfer_manager.cpp	TRANSFER_MANAGER::get_past_transfers	high	opus	
+0x8cc5b0	transfer_manager.cpp	TRANSFER_MANAGER::get_offer_response_delay	medium	opus	
+0x8cc930	transfer_manager.cpp	TRANSFER_MANAGER::find_highest_offer_for_player	medium	opus	
 0x8cca10	transfer_manager.cpp	TRANSFER_MANAGER::get_future_transfer	medium	opus	
-0x8ccb80	transfer_manager.cpp	TRANSFER_MANAGER::get_club_future_transfer_list	high	haiku	
-0x8cd150	transfer_manager.cpp	transfer_manager_has_active_offer_for_player	low	haiku	
-0x8cd240	transfer_manager.cpp	transfer_manager_check_offer_viable	medium	haiku	
-0x8cd450	transfer_manager.cpp	transfer_manager_check_squad_limits	medium	haiku	2026-10-16-sweep-season-end.md
-0x8cdb80	transfer_manager.cpp	transfer_manager_check_offer_flags	medium	haiku	2026-10-14-assistant-and-days-inventory.md
-0x8cdc90	transfer_manager.cpp	transfer_manager_is_player_in_club_list	medium	haiku	
-0x8cdd80	transfer_manager.cpp	transfer_manager_find_club_future_transfer	medium	haiku	
-0x8cde70	transfer_manager.cpp	transfer_manager_player_is_blocked	medium	haiku	
-0x8ce0e0	transfer_manager.cpp	transfer_manager_apply_player_mood_change	medium	haiku	
-0x8ce920	transfer_manager.cpp	transfer_manager_set_rating_bits	low	haiku	
-0x8ce990	transfer_manager.cpp	transfer_manager_validate_offer_player	medium	haiku	
-0x8ced40	transfer_manager.cpp	transfer_manager_check_offer_rule	medium	haiku	
-0x8cee70	transfer_manager.cpp	transfer_manager_dispatch_offer_status	medium	haiku	
-0x8cf0e0	transfer_manager.cpp	transfer_manager_resolve_offer_outcome	medium	haiku	
-0x8cf470	transfer_manager.cpp	transfer_manager_find_open_window_date	medium	haiku	2026-10-16-sweep-season-end.md
-0x8cf5e0	transfer_manager.cpp	transfer_manager_dispatch_offer	medium	haiku	2026-10-15-assistant-pick-inventory.md
-0x8cf6b0	transfer_manager.cpp	transfer_manager_fill_party_slots	medium	haiku	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md,foreign.c
-0x8cf7e0	transfer_manager.cpp	transfer_manager_build_selection_result	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x8cf880	transfer_manager.cpp	squad_registration_rule_check	high	haiku	2026-10-15-assistant-pick-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
-0x8cfc90	transfer_manager.cpp	transfer_manager_check_offer_acceptance	medium	haiku	2026-10-14-assistant-and-days-inventory.md
-0x8d0040	transfer_manager.cpp	transfer_manager_check_loan_eligibility	high	haiku	
-0x8d0530	transfer_manager.cpp	transfer_manager_dispatch_by_club_id	medium	haiku	
-0x8d0590	transfer_manager.cpp	transfer_manager_clamp_contract_expiry_date	medium	haiku	
-0x8d0780	transfer_manager.cpp	transfer_manager_calc_transfer_fee	medium	haiku	
-0x8d0a70	transfer_manager.cpp	transfer_manager_club_name_from_contract_id	low	haiku	
-0x8d0bb0	transfer_manager.cpp	transfer_manager_compare_player_age_bracket	low	haiku	
-0x8d0d90	transfer_manager.cpp	transfer_offer_is_active_status	medium	haiku	
-0x8d0dd0	transfer_manager.cpp	transfer_manager_clear_flag_and_notify	medium	haiku	
-0x8d0ea0	transfer_manager.cpp	transfer_manager_clear_flag_and_search	medium	haiku	
-0x8d0f00	transfer_manager.cpp	transfer_manager_clear_flag_4_after_search	medium	haiku	
-0x8d0f60	transfer_manager.cpp	transfer_manager_remove_offer	medium	haiku	
-0x8d1130	transfer_manager.cpp	TRANSFER_MANAGER::collect_transfer_candidates	medium	haiku	
-0x8d1da0	transfer_manager.cpp	transfer_manager_collect_candidate_players	medium	haiku	
-0x8d26b0	transfer_manager.cpp	TRANSFER_MANAGER::setup_transfer_rules	high	haiku	2026-10-16-season-change-points.md,2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
-0x8d2fa0	transfer_manager.cpp	transfer_manager_resolve_party_kind	medium	haiku	2026-10-16-foreign-and-tactics-positions.md,foreign.c
-0x8d3090	transfer_manager.cpp	transfer_manager_build_offer_news_strings	medium	haiku	
-0x8d3520	transfer_manager.cpp	news_generate_transfer_story	medium	haiku	
-0x8d5170	transfer_manager.cpp	transfer_manager_send_rule_news	medium	haiku	
-0x8d5420	transfer_manager.cpp	transfer_manager_news_rejection_story	high	haiku	
-0x8d6bf0	transfer_manager.cpp	transfer_manager_build_offer_news_story	medium	haiku	
-0x8d6e80	transfer_manager.cpp	transfer_manager_news_bid_message	medium	haiku	
-0x8d76d0	transfer_manager.cpp	transfer_manager_send_offer_news	medium	haiku	
-0x8d7870	transfer_manager.cpp	news_post_transfer_acceptance_text	high	haiku	
-0x8d7cd0	transfer_manager.cpp	transfer_manager_send_offer_news	medium	haiku	
-0x8d7fb0	transfer_manager.cpp	transfer_manager_post_contract_news	high	haiku	
-0x8d8310	transfer_manager.cpp	transfer_manager_build_rule_news_message	medium	haiku	
-0x8d84e0	transfer_manager.cpp	news_transfer_rejection_message	high	haiku	
-0x8d8910	transfer_manager.cpp	transfer_manager_show_offer_news_story	medium	haiku	
-0x8d8af0	transfer_manager.cpp	news_swap_move_rejected_text	high	haiku	
-0x8d8e90	transfer_manager.cpp	transfer_manager_post_offer_news	medium	haiku	
-0x8d9480	transfer_manager.cpp	transfer_manager_build_transfer_news_text	high	haiku	
-0x8da5e0	transfer_manager.cpp	transfer_manager_post_offer_news	medium	haiku	
+0x8ccb80	transfer_manager.cpp	TRANSFER_MANAGER::get_club_future_transfer_list	high	opus	
+0x8cd150	transfer_manager.cpp	TRANSFER_MANAGER::player_has_pending_offer	medium	opus	
+0x8cd240	transfer_manager.cpp	transfer_manager_selling_club_must_accept	medium	opus	
+0x8cd450	transfer_manager.cpp	transfer_manager_check_squad_limits	medium	opus	2026-10-16-sweep-season-end.md
+0x8cdb80	transfer_manager.cpp	transfer_manager_check_manager_veto	medium	opus	2026-10-14-assistant-and-days-inventory.md
+0x8cdc90	transfer_manager.cpp	TRANSFER_MANAGER::club_has_offer_for_player	high	opus	
+0x8cdd80	transfer_manager.cpp	TRANSFER_MANAGER::find_club_offer_for_player	high	opus	
+0x8cde70	transfer_manager.cpp	TRANSFER_MANAGER::is_player_under_offer	medium	opus	
+0x8ce0e0	transfer_manager.cpp	transfer_manager_set_player_squad_status	medium	opus	
+0x8ce920	transfer_manager.cpp	TRANSFER_MANAGER::record_international_appearance	high	opus	
+0x8ce990	transfer_manager.cpp	TRANSFER_MANAGER::can_club_bid_for_player	medium	opus	
+0x8ced40	transfer_manager.cpp	TRANSFER_MANAGER::can_sign_player	high	opus	
+0x8cee70	transfer_manager.cpp	transfer_manager_get_offer_completion_date	medium	opus	
+0x8cf0e0	transfer_manager.cpp	TRANSFER_MANAGER::find_next_allowed_transfer_date	medium	opus	
+0x8cf470	transfer_manager.cpp	TRANSFER_MANAGER::find_next_window_open_date	medium	opus	2026-10-16-sweep-season-end.md
+0x8cf5e0	transfer_manager.cpp	TRANSFER_MANAGER::get_ineligibility_code	high	opus	2026-10-15-assistant-pick-inventory.md
+0x8cf6b0	transfer_manager.cpp	TRANSFER_MANAGER::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md,foreign.c
+0x8cf7e0	transfer_manager.cpp	transfer_manager_get_selection_limit	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x8cf880	transfer_manager.cpp	transfer_manager_check_matchday_squad_limit	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
+0x8cfc90	transfer_manager.cpp	TRANSFER_MANAGER::check_offer_restrictions	medium	opus	2026-10-14-assistant-and-days-inventory.md
+0x8d0040	transfer_manager.cpp	TRANSFER_MANAGER::can_loan_player	high	opus	
+0x8d0530	transfer_manager.cpp	TRANSFER_MANAGER::can_end_loan	high	opus	
+0x8d0590	transfer_manager.cpp	TRANSFER_MANAGER::get_loan_period	high	opus	
+0x8d0780	transfer_manager.cpp	transfer_manager_calc_compensation_fee	medium	opus	
+0x8d0a70	transfer_manager.cpp	transfer_manager_player_club_uses_bosman	medium	opus	
+0x8d0bb0	transfer_manager.cpp	transfer_manager_get_next_window_dates	medium	opus	
+0x8d0d90	transfer_manager.cpp	transfer_offer_is_closed	medium	opus	
+0x8d0dd0	transfer_manager.cpp	TRANSFER_MANAGER::find_next_sale_percentage	high	opus	
+0x8d0ea0	transfer_manager.cpp	TRANSFER_MANAGER::find_first_team_appearance_money	high	opus	
+0x8d0f00	transfer_manager.cpp	TRANSFER_MANAGER::find_international_appearance_money	high	opus	
+0x8d0f60	transfer_manager.cpp	TRANSFER_MANAGER::remove_offer	high	opus	
+0x8d1130	transfer_manager.cpp	TRANSFER_MANAGER::collect_offer_news_recipients	high	opus	
+0x8d1da0	transfer_manager.cpp	transfer_manager_collect_player_news_recipients	high	opus	
+0x8d26b0	transfer_manager.cpp	TRANSFER_MANAGER::setup_transfer_rules	high	opus	2026-10-16-season-change-points.md,2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
+0x8d2fa0	transfer_manager.cpp	TRANSFER_MANAGER::get_fixture_rules_scope	high	opus	2026-10-16-foreign-and-tactics-positions.md,foreign.c
+0x8d3090	transfer_manager.cpp	TRANSFER_MANAGER::post_offer_made_news	high	opus	
+0x8d3520	transfer_manager.cpp	TRANSFER_MANAGER::write_offer_made_news_text	high	opus	
+0x8d5170	transfer_manager.cpp	TRANSFER_MANAGER::post_offer_rejected_news	high	opus	
+0x8d5420	transfer_manager.cpp	TRANSFER_MANAGER::write_offer_rejected_news_text	high	opus	
+0x8d6bf0	transfer_manager.cpp	TRANSFER_MANAGER::post_offer_negotiation_news	medium	opus	
+0x8d6e80	transfer_manager.cpp	TRANSFER_MANAGER::write_offer_negotiation_news_text	high	opus	
+0x8d76d0	transfer_manager.cpp	TRANSFER_MANAGER::post_offer_accepted_news	high	opus	
+0x8d7870	transfer_manager.cpp	TRANSFER_MANAGER::write_offer_accepted_news_text	high	opus	
+0x8d7cd0	transfer_manager.cpp	TRANSFER_MANAGER::post_contract_talks_news	medium	opus	
+0x8d7fb0	transfer_manager.cpp	TRANSFER_MANAGER::write_contract_talks_news_text	high	opus	
+0x8d8310	transfer_manager.cpp	TRANSFER_MANAGER::post_player_rejects_move_news	high	opus	
+0x8d84e0	transfer_manager.cpp	TRANSFER_MANAGER::write_player_rejects_move_news_text	high	opus	
+0x8d8910	transfer_manager.cpp	TRANSFER_MANAGER::post_swap_player_rejects_news	high	opus	
+0x8d8af0	transfer_manager.cpp	TRANSFER_MANAGER::write_swap_player_rejects_news_text	high	opus	
+0x8d8e90	transfer_manager.cpp	TRANSFER_MANAGER::post_contract_response_news	medium	opus	
+0x8d9480	transfer_manager.cpp	TRANSFER_MANAGER::write_contract_response_news_text	high	opus	
+0x8da5e0	transfer_manager.cpp	TRANSFER_MANAGER::post_transfer_finalised_news	medium	opus	
 0x8da8f0	transfer_manager.cpp	news_post_transfer_story_text	high	haiku	
 0x8db3a0	transfer_manager.cpp	transfer_manager_post_transfer_news	medium	haiku	
 0x8db580	transfer_manager.cpp	transfer_manager_announce_fee_share_news	high	haiku	
