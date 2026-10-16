@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 3613 high, 3003 medium, 247 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16.
+- Confidence: 3753 high, 2868 medium, 242 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -238,8 +238,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [nir_lge_cup.cpp](nir_lge_cup.cpp.md) | 16 |
 | [nir_prm.cpp](nir_prm.cpp.md) | 8 |
 | [nor_cup.cpp](nor_cup.cpp.md) | 6 |
-| [nor_first.cpp](nor_first.cpp.md) | 11 |
-| [nor_prm.cpp](nor_prm.cpp.md) | 11 |
+| [nor_first.cpp](nor_first.cpp.md) | 12 |
+| [nor_prm.cpp](nor_prm.cpp.md) | 10 |
 | [northern_ireland_awards.cpp](northern_ireland_awards.cpp.md) | 5 |
 | [northern_ireland_rules.cpp](northern_ireland_rules.cpp.md) | 4 |
 | [norway_awards.cpp](norway_awards.cpp.md) | 6 |
@@ -262,8 +262,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [pol_cup.cpp](pol_cup.cpp.md) | 7 |
 | [pol_first.cpp](pol_first.cpp.md) | 17 |
 | [pol_lge_cup.cpp](pol_lge_cup.cpp.md) | 7 |
-| [pol_second.cpp](pol_second.cpp.md) | 11 |
-| [pol_super.cpp](pol_super.cpp.md) | 7 |
+| [pol_second.cpp](pol_second.cpp.md) | 12 |
+| [pol_super.cpp](pol_super.cpp.md) | 6 |
 | [poland_awards.cpp](poland_awards.cpp.md) | 5 |
 | [poland_rules.cpp](poland_rules.cpp.md) | 2 |
 | [por_cup.cpp](por_cup.cpp.md) | 7 |

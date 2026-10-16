@@ -6,10 +6,10 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7c7d80 | 132 (+2 unwind) | `Cup::Cup` | thiscall(Cup *this, undefined2 cup_id, int owner) ret 8 | Constructs a Polish cup object, loads its data from disk, and builds its fixture tree or reports an assert failure. | high | haiku |  |
-| 0x7c7f50 | 11 | `pol_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of pol_cup.cpp. | medium | slot copy |  |
-| 0x7c7f70 | 62 (+1 unwind) | `pol_cup_destructor` | thiscall(pol_cup* this) ret 0 | Destroys a pol_cup object by releasing its owned buffers, Comp_Stats member and base Cup part, then restoring the vtable. | high | haiku |  |
-| 0x7c8040 | 325 | `pol_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of pol_cup.cpp. | medium | slot copy |  |
-| 0x7c8550 | 253 | `pol_cup_build_candidate_list` | fastcall (ECX = param_1, the Cup object; no stack arguments), ret 0 | Allocates a 312-byte candidate table and fills it with clubs ranked into cup entry slots, returning 1 on success. | medium | haiku |  |
-| 0x7c88a0 | 132 | `pol_cup::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of pol_cup.cpp. | medium | slot copy |  |
-| 0x7c8a50 | 16 | `pol_cup::set_up_rounds` | thiscall(Cup* this), ret 0 | Override of Cup::set_up_rounds for the competition of pol_cup.cpp. | medium | slot copy |  |
+| 0x7c7d80 | 132 (+2 unwind) | `PolCup::PolCup` | thiscall(PolCup* this, short year, CompRecord* comp) ret 8, returns this | Constructs the Polish FA Cup on Cup, then loads saved data or collects entrants and builds the round table, fixture tree, stats and ranking. | high | opus |  |
+| 0x7c7f50 | 11 | `PolCup::`scalar deleting destructor'` | thiscall(PolCup* this, unsigned flags) ret 4, returns this | Runs the Polish FA Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x7c7f70 | 62 (+1 unwind) | `PolCup::~PolCup` | thiscall(PolCup* this) ret 0 | Destroys the Polish FA Cup by freeing its entrant list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x7c8040 | 325 | `PolCup::create_round_table` | thiscall(PolCup* this, char stage, short* round_count, short* extra, int* out) ret 0x10, returns Round* | Allocates and fills the seven-round table of the Polish FA Cup with draw dates, match dates and round rules for the current year. | high | opus |  |
+| 0x7c8550 | 253 | `PolCup::collect_entrants` | thiscall(PolCup* this) ret 0, returns 1 on success and -1 on allocation failure | Fills the 52-entry entrant list with Polish Second Division, Lower Division and First Division clubs, each tagged with its entry round. | high | opus |  |
+| 0x7c88a0 | 132 | `PolCup::start_new_season` | thiscall(PolCup* this) ret 0 | Frees last season's cup data, archives the stats, advances the year and rebuilds the entrants, rounds, fixture tree and ranking. | high | opus |  |
+| 0x7c8a50 | 16 | `PolCup::set_up_rounds` | thiscall(PolCup* this) ret 0, returns 1 | Sets the Polish FA Cup prize fund to 600000 and builds the round table for stage -1. | high | opus |  |

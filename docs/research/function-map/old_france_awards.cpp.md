@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x79dcf0 | 40 (+1 unwind) | `old_france_awards::ctor` | thiscall(this, int param_2 loader or data pointer) ret 4 | Constructs the France awards object, sets its vtable and fields, then loads its award data or initialises defaults. | high | haiku |  |
-| 0x79dd80 | 449 (+14 unwind) | `France_awards::init_awards` | thiscall(France_awards *this, int owner_arg) ret 4 | Allocates the France awards table of fourteen award objects, showing a fatal assert dialog if memory runs out. | high | haiku |  |
-| 0x79e330 | 221 | `france_awards_update_thiscall` | thiscall(France_awards *this, short *date_or_season) with ECX as this and one stack argument, ret 4 | Checks the month date, then awards France national team season prizes and player and manager of the year when the date matches. | medium | haiku |  |
-| 0x79e560 | 12 | `old_france_awards_check_nation` | thiscall, with ECX as this (award object) and one stack argument (nation or team pointer), ret 4 | Checks whether the given nation matches a stored team pointer and, if so, builds the team of the week. | medium | haiku |  |
+| 0x79dcf0 | 40 (+1 unwind) | `OldFranceAwards::OldFranceAwards` | thiscall(OldFranceAwards* this, FILE* save) ret 4, returns this | Constructs the old-format France awards object on the NationAwards base, then loads saved awards or creates fresh ones. | high | opus |  |
+| 0x79dd80 | 449 (+14 unwind) | `OldFranceAwards::init_awards` | thiscall(OldFranceAwards* this, FILE* save) ret 4 | Allocates the table of fourteen old France awards with year awards and the awards of the two French divisions. | high | opus |  |
+| 0x79e330 | 221 | `OldFranceAwards::daily_update` | thiscall(OldFranceAwards* this, Date* today) ret 4 | Gives French player awards on 20 November and the season awards of the two divisions on 6 May, then runs the base update. | high | opus |  |
+| 0x79e560 | 12 | `OldFranceAwards::update_team_of_the_week` | thiscall(OldFranceAwards* this, TeamAward* award) ret 4 | Builds the team of the week when the given award is one of the two old France division team awards. | high | opus |  |

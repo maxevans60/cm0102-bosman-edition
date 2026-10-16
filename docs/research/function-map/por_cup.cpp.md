@@ -6,10 +6,10 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7cd980 | 130 (+2 unwind) | `Cup::Cup` | thiscall (ECX = this, Cup* param_1; stack args: int param_2 as word, int param_3 as parent/owner) ret 8 | Constructs a Cup object, loads its data from disk, builds the fixture tree and ranks teams, or reports an assert failure. | high | haiku |  |
-| 0x7cdb50 | 11 | `por_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of por_cup.cpp. | medium | slot copy |  |
-| 0x7cdb70 | 62 (+1 unwind) | `por_cup_order_destructor` | thiscall(this in ECX) with no stack arguments, ret 0 | Destroys a cup order object by freeing its owned buffers and sub-objects, then chaining to the Cup base destructor. | high | haiku |  |
-| 0x7cdc40 | 362 | `por_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of por_cup.cpp. | medium | slot copy |  |
-| 0x7ce220 | 241 | `Cup::build_qualifier_list` | fastcall (ECX = Cup *this; no stack arguments); ret 0 | Allocates a 0x3d8-byte entry buffer and fills it with eligible club records for the cup qualifier, shuffling the last entry with a random one. | high | haiku |  |
-| 0x7ce540 | 132 | `por_cup::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of por_cup.cpp. | medium | slot copy |  |
-| 0x7ce6f0 | 16 | `por_cup::set_up_rounds` | thiscall(Cup* this), ret 0 | Override of Cup::set_up_rounds for the competition of por_cup.cpp. | medium | slot copy |  |
+| 0x7cd980 | 130 (+2 unwind) | `PorCup::PorCup` | thiscall(PorCup* this, short year, CompRecord* comp) ret 8, returns this | Builds the Portuguese Cup on Cup, loads it from disk or collects its entrants, builds the round table, fixture tree and statistics. | high | opus |  |
+| 0x7cdb50 | 11 | `PorCup::`scalar deleting destructor'` | thiscall(PorCup* this, unsigned flags) ret 4, returns this | Destroys the Portuguese Cup and frees its memory when bit 0 of the flags is set. | high | opus |  |
+| 0x7cdb70 | 62 (+1 unwind) | `PorCup::~PorCup` | thiscall(PorCup* this) ret 0 | Frees the entrant list, round table and tie arrays and the statistics object, then runs the Cup destructor. | high | opus |  |
+| 0x7cdc40 | 362 | `PorCup::create_round_table` | thiscall(PorCup* this, char stage, short* round_count, short* extra, int* is_league) ret 0x10, returns round table | Allocates the eight-round Portuguese Cup table and sets the draw date, match dates, ties and rules of each round. | high | opus |  |
+| 0x7ce220 | 241 | `PorCup::collect_entrants` | thiscall(PorCup* this) ret 0, returns 1 when full, 0 when short, -1 on allocation failure | Fills the 164-place entrant list with Portuguese clubs from the lowest divisions upwards, skipping B teams, then swaps the last entrant at random. | high | opus |  |
+| 0x7ce540 | 132 | `PorCup::start_new_season` | thiscall(PorCup* this) ret 0 | Frees last season's tables, archives the statistics, adds one to the year and rebuilds the entrants, round table and stages. | high | opus |  |
+| 0x7ce6f0 | 16 | `PorCup::set_up_rounds` | thiscall(PorCup* this) ret 0, returns 1 | Sets a prize fund of 800000 and builds the round table, a body that four other cups share by the same pointer. | high | opus |  |

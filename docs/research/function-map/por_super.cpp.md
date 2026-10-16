@@ -6,9 +6,9 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7d2e40 | 126 (+2 unwind) | `cup_super_ctor` | thiscall(cup_super *this, short param_2, int param_3) returns this, ret 8 | Constructs a Portuguese super cup object, loads its data and builds fixtures, reporting failures through an assert message box. | high | haiku |  |
-| 0x7d3000 | 11 | `por_super::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of por_super.cpp. | medium | slot copy |  |
-| 0x7d3020 | 62 (+1 unwind) | `por_super::~por_super` | thiscall(por_super *this) ret 0 | Destructor of the por_super object that frees its owned buffers, Comp_Stats member and base Cup state. | high | haiku |  |
-| 0x7d30f0 | 111 | `por_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of por_super.cpp. | medium | slot copy |  |
-| 0x7d3260 | 165 | `por_super_init_pointer_pair` | fastcall (ECX = this, por_super object); returns 1 on success, 0 or 0xffffffff on failure, ret 0 | Allocates a twelve byte pointer pair for the super object, fills it from the placed club lookup, and reports assert errors on failure. | high | haiku |  |
-| 0x7d3490 | 125 | `por_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of por_super.cpp. | medium | slot copy |  |
+| 0x7d2e40 | 126 (+2 unwind) | `PorSuper::PorSuper` | thiscall(PorSuper* this, short year, void* comp_record) ret 8, returns this | Constructs the Portuguese Super Cup, loads it or selects the two teams, builds the round table and fixture tree, and creates Comp_Stats. | high | opus |  |
+| 0x7d3000 | 11 | `PorSuper::`scalar deleting destructor'` | thiscall(PorSuper* this, unsigned flags) ret 4, returns this | Runs the PorSuper destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x7d3020 | 62 (+1 unwind) | `PorSuper::~PorSuper` | thiscall(PorSuper* this) ret 0 | Destroys the Super Cup, freeing its team list, round table, round arrays and Comp_Stats, then runs the Cup destructor. | high | opus |  |
+| 0x7d30f0 | 111 | `PorSuper::create_round_table` | thiscall(PorSuper* this, char stage, short* round_count, short* extra, int* out) ret 0x10, returns round table | Builds the one-round table of the Super Cup, a two-legged final, with a different second-leg setting in the 2000 season. | high | opus |  |
+| 0x7d3260 | 165 | `PorSuper::select_teams` | thiscall(PorSuper* this) ret 0, returns 1, 0 or -1 | Picks the league champion and the cup winner as the two Super Cup teams, taking the cup runner-up when one club won both. | high | opus |  |
+| 0x7d3490 | 125 | `PorSuper::start_new_season` | thiscall(PorSuper* this) ret 0 | Frees last season's team list and round data, increments the year, selects the new teams and sets up the rounds. | high | opus |  |

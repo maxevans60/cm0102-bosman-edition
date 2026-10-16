@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x79e580 | 35 (+1 unwind) | `old_international_awards_ctor` | thiscall(this, int param_2 loader_or_archive) ret 4 | Constructs the old international awards object, setting its vtable and fields, then loads its data or initialises awards when loading fails. | high | haiku |  |
-| 0x79e5f0 | 205 (+5 unwind) | `old_international_awards::init_awards` | thiscall(this, int param_2) with ret 4; ECX is this, param_2 is the caller-supplied owner or context pointer passed on to each award constructor | Allocates five international award objects into a 20-byte table, or reports a failed allocation through an error box with the game version string. | high | haiku |  |
-| 0x79e890 | 137 | `international_awards_load_player_awards` | thiscall(this, short* player) ret 4 | Loads a player's international award records and assigns the top-three and shortlist awards for one player when the lookup matches. | medium | haiku |  |
+| 0x79e580 | 35 (+1 unwind) | `OldInternationalAwards::OldInternationalAwards` | thiscall(OldInternationalAwards* this, FILE* save) ret 4, returns this | Constructs the old-format international awards object with no nation, then loads saved awards or creates fresh ones. | high | opus |  |
+| 0x79e5f0 | 205 (+5 unwind) | `OldInternationalAwards::init_awards` | thiscall(OldInternationalAwards* this, FILE* save) ret 4 | Allocates the table of five old international year awards, or reports a failed allocation in an error box. | high | opus |  |
+| 0x79e890 | 137 | `OldInternationalAwards::daily_update` | thiscall(OldInternationalAwards* this, Date* today) ret 4 | Outside 2001, fills the first award shortlist on 6 April, gives two player awards on 6 May and three filtered awards on 16 May. | high | opus |  |

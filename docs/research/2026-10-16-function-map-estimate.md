@@ -638,6 +638,17 @@ Run `sweep-w16`: 8 Opus agents named 218 functions: the Italian leagues (`ita_se
 | 0x7892b0 | Input of the news screen (clickable-names inventory) | `news_screens_dispatch_selected_message` (Haiku) | `news_screens_news_input` | agrees |
 | 0x7897a0 | Leave function of the news screen (clickable-names inventory) | `scrman_close_screen_slot_2_if_open` (Haiku) | `news_screens_news_exit` | agrees |
 
+#### Wave w17 (tier 4, 2026-10-16)
+
+Run `sweep-w17`: 8 Opus agents named 216 functions: the Northern Irish, Norwegian, Polish and Portuguese competitions with their awards, the four `old_*_awards.cpp` classes, the `OfficialsManager` stats gap functions, `Plot`, and `rus_cup.cpp`. Each agent took 2 to 4 minutes and 127,000 to 165,000 tokens. Confidence: 201 high, 15 medium, 0 low. The merge needed no fixes.
+
+2 functions of the wave are cited. 1 agrees in area and 1 citation only lists the address.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x78ac90 | Fills up to 30 top clubs (wal-nir-irl) | `nir_cup_build_order_table` (Haiku) | `NirCup::collect_entrants` | agrees in area. Opus finds 20 top clubs and 12 lower clubs, 32 entries. Not checked |
+| 0x79d680 | Listed by a constant scan only (widescreen inventory) | `old_finland_awards_init_award_objects` (Haiku) | `OldFinlandAwards::init_awards` | no claim |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

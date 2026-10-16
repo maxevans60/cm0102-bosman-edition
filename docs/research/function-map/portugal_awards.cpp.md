@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7d3630 | 40 (+1 unwind) | `portugal_awards::PortugalAwards::ctor` | thiscall(this, int param_2 /* optional save or load source, ret 4 */), ret 4 | Constructs the PortugalAwards object, sets its vtable and fields, then loads awards or initialises them when loading fails. | high | haiku |  |
-| 0x7d36c0 | 395 (+12 unwind) | `portugal_awards::PortugalAwards::init_awards` | thiscall(this in ECX, int param_2 as reserved argument) ret 4 | Allocates and builds the twelve Portuguese award objects, reporting an allocation failure through a version error dialog. | high | haiku |  |
-| 0x7d3be0 | 148 | `portugal_awards_distribute_season_awards` | thiscall(this, short *player_or_nation_key) ret 4 | Distributes season awards to two award groups after validating a key, then runs the month-change check. | medium | haiku |  |
-| 0x7d3d60 | 12 | `portugal_awards_on_event` | thiscall(event_object this, int event_arg) ret 4 | Forwards a matching award event to the team of the week builder for the owning nation. | medium | haiku |  |
+| 0x7d3630 | 40 (+1 unwind) | `PortugalAwards::PortugalAwards` | thiscall(PortugalAwards* this, FILE* load_source or 0) ret 4, returns this | Constructs the Portuguese awards object for its nation, loads saved awards or creates them fresh. | high | opus |  |
+| 0x7d36c0 | 395 (+12 unwind) | `PortugalAwards::init_awards` | thiscall(PortugalAwards* this, FILE* load_source or 0) ret 4 | Creates the Portuguese year and team awards for the first and second divisions and stores them in the award list. | high | opus |  |
+| 0x7d3be0 | 148 | `PortugalAwards::daily_update` | thiscall(PortugalAwards* this, Date* date) ret 4 | On the end-of-season date, gives player, team and manager of the year awards for both divisions, then runs the base daily update. | high | opus |  |
+| 0x7d3d60 | 12 | `PortugalAwards::update_team_of_the_week` | thiscall(PortugalAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week when the award is one of the two Portuguese team of the week awards. | high | opus |  |
