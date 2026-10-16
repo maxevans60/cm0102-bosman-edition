@@ -196,6 +196,26 @@ A new check (`slotcheck.py` in the work folder) gives each vtable slot of League
 | 0x859aa0 | Setup step 29, global 0xdd7ef0 (game-creation inventory) | `find_cm_cd_drive` (Haiku) | `find_cm_cd_drive` | agrees |
 | 0x9021d0 | Turkey filler, 6 foreign or an age rule | `turkey_rules_fill_option_list_for_player` (Haiku) | `TURKEY_RULES::fill_squad_restrictions` | agrees |
 
+#### Wave w03 (tier 2, 2026-10-16)
+
+Run `sweep-w03`: 8 Opus agents named 172 functions of `con_champ.cpp`, `conmebol_liber.cpp`, `conmebol_merc.cpp`, `conmebol_seeding.cpp` with the `CONTRACT_MANAGER` gap functions, `eur_super_cup.cpp`, `euro_champ.cpp`, `euro_champ_qual.cpp` and `european_cup.cpp`. Each agent took 1 to 4 minutes and 99,000 to 143,000 tokens. Confidence: 138 high, 33 medium, 1 low.
+
+After the merge, 23 names changed: one class name a file in `conmebol_seeding.cpp` (`ConmebolSeeding`), one pattern for the static Date initialisers of `contract_manager.cpp`, and Comp slots 8 and 9 as `load_extra_data` and `save_extra_data`. New fixed slot names: 11 `skip_season_reset`, 14 `write_progress_text`, 30 `get_finals_comp`. Three gap functions of a transfer rules class for Europe (vtable 0x96a188) went to `european_awards.cpp`, the nearer file of the pair. Their source file is probably lost (inference from the file order). Seven addresses are pieces inside a larger function (two in `conmebol_merc.cpp`, five in the phase 1 draw of `european_cup.cpp`). They keep a name with the suffix of their parent.
+
+From this wave on, the brief points the agents to a local copy of the champman0102 forum "Offset Index" thread for field hints.
+
+7 functions of the wave are cited. All 7 agree.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x4c0b50 | findnext in the copy of .lng files (start-new-game inventory) | `find_next_matching_file` (Haiku) | `file_find_next` | agrees |
+| 0x4c0c40 | CONCACAF Champions Cup constructor (club-world) | `cup_champ_ctor_thiscall` (Haiku) | `ConChamp::ConChamp` | agrees |
+| 0x4c2f50 | Copa Libertadores constructor | `conmebol_liber_ctor` (Haiku) | `ConmebolLiber::ConmebolLiber` | agrees |
+| 0x4c46c0 | Copa Mercosur constructor | `PHL_league_object::PHL_league_object` (Haiku) | `ConmebolMerc::ConmebolMerc` | agrees |
+| 0x4c5fe0 | Setup step 9, global 0xae1000, 0x75 bytes (game-creation inventory) | `find_cd_and_load_teams` (Haiku) | `ConmebolSeeding::ConmebolSeeding` | agrees |
+| 0x4c7040 | Setup step 32, global 0xae1050, 0x3c bytes | `cm_cd_check_and_load_seeding_data` (Haiku) | `CONTRACT_MANAGER::CONTRACT_MANAGER` | agrees |
+| 0x5832c0 | Filler with no limit in vtable 0x96a188 (foreign-and-tactics) | `qual_reset_slots_to_minus_one` (Haiku) | `TRANSFER_RULES::fill_squad_restrictions` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

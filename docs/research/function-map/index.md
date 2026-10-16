@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 2005 high, 4507 medium, 351 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b.
+- Confidence: 2106 high, 4415 medium, 342 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -72,8 +72,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [con_merc_cup.cpp](con_merc_cup.cpp.md) | 17 |
 | [conmebol_liber.cpp](conmebol_liber.cpp.md) | 16 |
 | [conmebol_merc.cpp](conmebol_merc.cpp.md) | 18 |
-| [conmebol_seeding.cpp](conmebol_seeding.cpp.md) | 40 |
-| [contract_manager.cpp](contract_manager.cpp.md) | 95 |
+| [conmebol_seeding.cpp](conmebol_seeding.cpp.md) | 9 |
+| [contract_manager.cpp](contract_manager.cpp.md) | 126 |
 | [contract_screens.cpp](contract_screens.cpp.md) | 46 |
 | [cro_a1.cpp](cro_a1.cpp.md) | 14 |
 | [cro_a2a.cpp](cro_a2a.cpp.md) | 10 |
@@ -108,8 +108,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [england_rules.cpp](england_rules.cpp.md) | 7 |
 | [eur_super_cup.cpp](eur_super_cup.cpp.md) | 6 |
 | [euro_champ.cpp](euro_champ.cpp.md) | 25 |
-| [euro_champ_qual.cpp](euro_champ_qual.cpp.md) | 35 |
-| [european_awards.cpp](european_awards.cpp.md) | 4 |
+| [euro_champ_qual.cpp](euro_champ_qual.cpp.md) | 32 |
+| [european_awards.cpp](european_awards.cpp.md) | 7 |
 | [european_cup.cpp](european_cup.cpp.md) | 76 |
 | [fifa_confed.cpp](fifa_confed.cpp.md) | 19 |
 | [fifa_rankings.cpp](fifa_rankings.cpp.md) | 18 |

@@ -986,18 +986,18 @@ address	file	name	confidence	model	cited_in
 0x4c06c0	comp_util.cpp	comp_util_compare_fields_and_string	medium	haiku	
 0x4c0720	comp_util.cpp	comp_util_team_strength_score	medium	haiku	
 0x4c08f0	comp_util.cpp	sort_indexed_pairs_by_key	medium	haiku	
-0x4c0a40	comp_util.cpp	comp_util_compare_round_order	medium	haiku	
+0x4c0a40	comp_util.cpp	compare_clubs_by_last_division	medium	opus	
 0x4c0aa0	comp_util.cpp	file_find_first	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md
-0x4c0b50	comp_util.cpp	find_next_matching_file	medium	haiku	2026-10-14-start-new-game-inventory.md
+0x4c0b50	comp_util.cpp	file_find_next	high	opus	2026-10-14-start-new-game-inventory.md
 0x4c0c10	comp_util.cpp	file_find_close	high	opus	2026-10-14-start-new-game-inventory.md
-0x4c0c40	con_champ.cpp	cup_champ_ctor_thiscall	high	haiku	club-world.md
-0x4c0e10	con_champ.cpp	con_champ::`scalar deleting destructor'	medium	slot copy	
-0x4c0e30	con_champ.cpp	con_champ::~con_champ	high	haiku	
-0x4c0f00	con_champ.cpp	con_champ::create_round_table	medium	slot copy	
-0x4c11a0	con_champ.cpp	con_champ_fill_team_slots	medium	haiku	
-0x4c1440	con_champ.cpp	con_champ::release_data	medium	slot copy	
-0x4c15f0	con_champ.cpp	con_champ::set_up_rounds	medium	slot copy	
-0x4c1620	con_champ.cpp	con_champ::update_for_date	medium	slot copy	
+0x4c0c40	con_champ.cpp	ConChamp::ConChamp	high	opus	club-world.md
+0x4c0e10	con_champ.cpp	ConChamp::`scalar deleting destructor'	high	opus	
+0x4c0e30	con_champ.cpp	ConChamp::~ConChamp	high	opus	
+0x4c0f00	con_champ.cpp	ConChamp::create_round_table	high	opus	
+0x4c11a0	con_champ.cpp	ConChamp::select_qualified_clubs	medium	opus	
+0x4c1440	con_champ.cpp	ConChamp::release_data	high	opus	
+0x4c15f0	con_champ.cpp	ConChamp::set_up_rounds	high	opus	
+0x4c1620	con_champ.cpp	ConChamp::update_for_date	high	opus	
 0x4c16f0	con_merc_cup.cpp	Merc_cup::Merc_cup	high	haiku	club-world.md
 0x4c1880	con_merc_cup.cpp	con_merc_cup::`scalar deleting destructor'	medium	slot copy	
 0x4c18a0	con_merc_cup.cpp	merc_cup_screen_dtor	high	haiku	
@@ -1015,83 +1015,83 @@ address	file	name	confidence	model	cited_in
 0x4c2a90	con_merc_cup.cpp	con_merc_cup::set_predicted_positions	medium	slot copy	
 0x4c2c90	con_merc_cup.cpp	con_merc_cup::update_for_date	medium	slot copy	
 0x4c2e40	con_merc_cup.cpp	merc_cup_set_three_levels	medium	haiku	
-0x4c2f50	conmebol_liber.cpp	conmebol_liber_ctor	high	haiku	club-world.md
-0x4c30e0	conmebol_liber.cpp	conmebol_liber::`scalar deleting destructor'	medium	slot copy	
-0x4c3100	conmebol_liber.cpp	conmebol_liber_dtor_body	high	haiku	
-0x4c31c0	conmebol_liber.cpp	conmebol_liber::create_schedule	medium	slot copy	
-0x4c3680	conmebol_liber.cpp	conmebol_liber_qualify_team_message	high	haiku	
-0x4c37a0	conmebol_liber.cpp	conmebol_liber_alloc_and_init_teams	high	haiku	
-0x4c3890	conmebol_liber.cpp	conmebol_liber::set_up_rules	medium	slot copy	
-0x4c3980	conmebol_liber.cpp	conmebol_liber::start_new_season	medium	slot copy	
-0x4c3a80	conmebol_liber.cpp	conmebol_liber_advance_counter_or_assert	medium	haiku	
-0x4c3b10	conmebol_liber.cpp	conmebol_liber_create_league_stage	high	haiku	
-0x4c3d10	conmebol_liber.cpp	conmebol_liber_create_cup_stage	high	haiku	
-0x4c3f40	conmebol_liber.cpp	conmebol_liber_fill_team_list	medium	haiku	
-0x4c4080	conmebol_liber.cpp	conmebol_liber::update_staff_records_for_status	medium	slot copy	
-0x4c4210	conmebol_liber.cpp	conmebol_liber::set_predicted_positions	medium	slot copy	
-0x4c4410	conmebol_liber.cpp	conmebol_liber::update_for_date	medium	slot copy	
-0x4c4610	conmebol_liber.cpp	conmebol_liber_set_league_levels	medium	haiku	
-0x4c46c0	conmebol_merc.cpp	PHL_league_object::PHL_league_object	high	haiku	club-world.md
-0x4c4850	conmebol_merc.cpp	conmebol_merc::`scalar deleting destructor'	medium	slot copy	
-0x4c4870	conmebol_merc.cpp	conmebol_merc_destructor_body	medium	haiku	
-0x4c4930	conmebol_merc.cpp	conmebol_merc::create_schedule	medium	slot copy	
-0x4c4b40	conmebol_merc.cpp	conmebol_merc_error_report	medium	haiku	
-0x4c4d40	conmebol_merc.cpp	conmebol_merc_write_quarter_finals_news	medium	haiku	
-0x4c4e60	conmebol_merc.cpp	conmebol_merc_init_slots	medium	haiku	
-0x4c4f50	conmebol_merc.cpp	conmebol_merc::set_up_rules	medium	slot copy	
-0x4c5040	conmebol_merc.cpp	conmebol_merc::start_new_season	medium	slot copy	
-0x4c5140	conmebol_merc.cpp	conmebol_merc_retry_or_assert	medium	haiku	
-0x4c51d0	conmebol_merc.cpp	conmebol_merc_create_league_stage_slot	medium	haiku	
-0x4c53d0	conmebol_merc.cpp	cup_build_group_stage	medium	haiku	
-0x4c5420	conmebol_merc.cpp	conmebol_merc_build_cup_round_table	low	haiku	
-0x4c5850	conmebol_merc.cpp	conmebol_merc_build_eligible_list	medium	haiku	
-0x4c5960	conmebol_merc.cpp	conmebol_merc::update_staff_records_for_status	medium	slot copy	
-0x4c5a90	conmebol_merc.cpp	conmebol_merc::set_predicted_positions	medium	slot copy	
-0x4c5c90	conmebol_merc.cpp	conmebol_merc::update_for_date	medium	slot copy	
-0x4c5ee0	conmebol_merc.cpp	set_squad_slot_counts	medium	haiku	
-0x4c5fe0	conmebol_seeding.cpp	find_cd_and_load_teams	high	haiku	2026-10-14-game-creation-inventory.md
-0x4c61b0	conmebol_seeding.cpp	conmebol_seeding_check_version	medium	haiku	
-0x4c6280	conmebol_seeding.cpp	conmebol_seeding_collect_clubs	medium	haiku	
-0x4c6430	conmebol_seeding.cpp	conmebol_seeding_fill_slots	medium	haiku	
-0x4c6730	conmebol_seeding.cpp	conmebol_seeding_find_candidate	medium	haiku	
-0x4c6890	conmebol_seeding.cpp	is_seeding_league_id	medium	haiku	
-0x4c6960	conmebol_seeding.cpp	conmebol_seeding_set_field_0x71	medium	haiku	
-0x4c6970	conmebol_seeding.cpp	conmebol_seeding_load_temp_file	high	haiku	
-0x4c6b70	conmebol_seeding.cpp	conmebol_seeding_load_file	high	haiku	
-0x4c6d40	conmebol_seeding.cpp	register_date_atexit_init	high	haiku	
-0x4c6d60	conmebol_seeding.cpp	noop_stub_4c6d60	medium	haiku	
-0x4c6d70	conmebol_seeding.cpp	register_atexit_contract_manager_stub	medium	haiku	
-0x4c6da0	conmebol_seeding.cpp	register_date_init_atexit_stub	medium	haiku	
-0x4c6dc0	conmebol_seeding.cpp	no_op_stub_0x4c6dc0	low	haiku	
-0x4c6dd0	conmebol_seeding.cpp	register_atexit_date_cleanup	medium	haiku	
-0x4c6df0	conmebol_seeding.cpp	empty_stub_0x4c6df0	high	haiku	
-0x4c6e00	conmebol_seeding.cpp	register_date_atexit_stub_0x4c6e00	medium	haiku	
-0x4c6e20	conmebol_seeding.cpp	empty_stub_0x4c6e20	medium	haiku	
-0x4c6e30	conmebol_seeding.cpp	register_date_atexit_stub_4c6e30	medium	haiku	
-0x4c6e50	conmebol_seeding.cpp	empty_stub_0x4c6e50	medium	haiku	
-0x4c6e60	conmebol_seeding.cpp	register_date_static_init_0x4c6e60	medium	haiku	
-0x4c6e80	conmebol_seeding.cpp	empty_stub_0x4c6e80	high	haiku	
-0x4c6e90	conmebol_seeding.cpp	register_atexit_date_init	medium	haiku	
-0x4c6eb0	conmebol_seeding.cpp	noop_stub_0x4c6eb0	medium	haiku	
-0x4c6ec0	conmebol_seeding.cpp	register_date_static_init_0x4c6ec0	medium	haiku	
-0x4c6ee0	conmebol_seeding.cpp	stub_noop_void_4c6ee0	high	haiku	
-0x4c6ef0	conmebol_seeding.cpp	register_date_init_atexit_stub_6ef0	medium	haiku	
-0x4c6f10	conmebol_seeding.cpp	stub_noop_0x4c6f10	low	haiku	
-0x4c6f20	conmebol_seeding.cpp	register_atexit_stub_0x4c6f20	medium	haiku	
-0x4c6f50	conmebol_seeding.cpp	register_date_static_initialiser	medium	haiku	
-0x4c6f70	conmebol_seeding.cpp	empty_stub_0x4c6f70	high	haiku	
-0x4c6f80	conmebol_seeding.cpp	register_date_atexit_init	medium	haiku	
-0x4c6fa0	conmebol_seeding.cpp	noop_stub_0x4c6fa0	medium	haiku	
-0x4c6fb0	conmebol_seeding.cpp	register_date_static_init_0x4c6fb0	medium	haiku	
-0x4c6fe0	conmebol_seeding.cpp	register_date_atexit_cleanup	medium	haiku	
-0x4c7000	conmebol_seeding.cpp	noop_stub_4c7000	low	haiku	
-0x4c7010	conmebol_seeding.cpp	register_date_init_at_exit	high	haiku	
-0x4c7030	conmebol_seeding.cpp	noop_stub_0x4c7030	high	haiku	
-0x4c7040	conmebol_seeding.cpp	cm_cd_check_and_load_seeding_data	high	haiku	2026-10-14-game-creation-inventory.md
-0x4c74f0	conmebol_seeding.cpp	seeding_state_release	medium	haiku	
-0x4c6d90	contract_manager.cpp	empty_stub_4c6d90	medium	haiku	
-0x4c6f40	contract_manager.cpp	empty_stub_0x4c6f40	low	haiku	
-0x4c6fd0	contract_manager.cpp	empty_stub_0x4c6fd0	low	haiku	
+0x4c2f50	conmebol_liber.cpp	ConmebolLiber::ConmebolLiber	high	opus	club-world.md
+0x4c30e0	conmebol_liber.cpp	ConmebolLiber::`scalar deleting destructor'	high	opus	
+0x4c3100	conmebol_liber.cpp	ConmebolLiber::~ConmebolLiber	high	opus	
+0x4c31c0	conmebol_liber.cpp	ConmebolLiber::create_schedule	high	opus	
+0x4c3680	conmebol_liber.cpp	ConmebolLiber::build_fate_news_text	high	opus	
+0x4c37a0	conmebol_liber.cpp	ConmebolLiber::build_first_group_table	medium	opus	
+0x4c3890	conmebol_liber.cpp	ConmebolLiber::set_up_rules	high	opus	
+0x4c3980	conmebol_liber.cpp	ConmebolLiber::start_new_season	high	opus	
+0x4c3a80	conmebol_liber.cpp	ConmebolLiber::advance_stage	high	opus	
+0x4c3b10	conmebol_liber.cpp	ConmebolLiber::create_group_stage	high	opus	
+0x4c3d10	conmebol_liber.cpp	ConmebolLiber::create_knockout_stage	high	opus	
+0x4c3f40	conmebol_liber.cpp	ConmebolLiber::select_qualified_clubs	high	opus	
+0x4c4080	conmebol_liber.cpp	ConmebolLiber::update_staff_records_for_status	high	opus	
+0x4c4210	conmebol_liber.cpp	ConmebolLiber::set_predicted_positions	high	opus	
+0x4c4410	conmebol_liber.cpp	ConmebolLiber::update_for_date	high	opus	
+0x4c4610	conmebol_liber.cpp	ConmebolLiber::set_club_progress	high	opus	
+0x4c46c0	conmebol_merc.cpp	ConmebolMerc::ConmebolMerc	high	opus	club-world.md
+0x4c4850	conmebol_merc.cpp	ConmebolMerc::`scalar deleting destructor'	high	opus	
+0x4c4870	conmebol_merc.cpp	ConmebolMerc::~ConmebolMerc	high	opus	
+0x4c4930	conmebol_merc.cpp	ConmebolMerc::create_schedule	high	opus	
+0x4c4b40	conmebol_merc.cpp	conmebol_merc_create_schedule_error_tail	medium	opus	
+0x4c4d40	conmebol_merc.cpp	ConmebolMerc::build_fate_news_text	high	opus	
+0x4c4e60	conmebol_merc.cpp	ConmebolMerc::create_first_group_table	medium	opus	
+0x4c4f50	conmebol_merc.cpp	ConmebolMerc::set_up_rules	high	opus	
+0x4c5040	conmebol_merc.cpp	ConmebolMerc::start_new_season	high	opus	
+0x4c5140	conmebol_merc.cpp	ConmebolMerc::advance_stage	high	opus	
+0x4c51d0	conmebol_merc.cpp	ConmebolMerc::create_group_stage	high	opus	
+0x4c53d0	conmebol_merc.cpp	ConmebolMerc::create_quarter_final_stage	high	opus	
+0x4c5420	conmebol_merc.cpp	conmebol_merc_create_quarter_final_stage_mid	medium	opus	
+0x4c5850	conmebol_merc.cpp	ConmebolMerc::select_invited_clubs	high	opus	
+0x4c5960	conmebol_merc.cpp	ConmebolMerc::update_staff_records_for_status	high	opus	
+0x4c5a90	conmebol_merc.cpp	ConmebolMerc::set_predicted_positions	medium	opus	
+0x4c5c90	conmebol_merc.cpp	ConmebolMerc::update_for_date	high	opus	
+0x4c5ee0	conmebol_merc.cpp	ConmebolMerc::set_club_progress	high	opus	
+0x4c5fe0	conmebol_seeding.cpp	ConmebolSeeding::ConmebolSeeding	medium	opus	2026-10-14-game-creation-inventory.md
+0x4c61b0	conmebol_seeding.cpp	ConmebolSeeding::update_for_new_season	medium	opus	
+0x4c6280	conmebol_seeding.cpp	collect_conmebol_clubs	medium	opus	
+0x4c6430	conmebol_seeding.cpp	ConmebolSeeding::assign_libertadores_places	medium	opus	
+0x4c6730	conmebol_seeding.cpp	find_nth_unqualified_club_of_nation	medium	opus	
+0x4c6890	conmebol_seeding.cpp	is_mercosur_invited_club	medium	opus	
+0x4c6960	conmebol_seeding.cpp	ConmebolSeeding::set_bra_champ_cup_winner	medium	opus	
+0x4c6970	conmebol_seeding.cpp	ConmebolSeeding::load_from_temp_file	high	opus	
+0x4c6b70	conmebol_seeding.cpp	ConmebolSeeding::save_to_temp_file	high	opus	
+0x4c6d40	contract_manager.cpp	contract_manager_static_date_ae1048_init	high	opus	
+0x4c6d60	contract_manager.cpp	contract_manager_static_date_ae1048_dtor	high	opus	
+0x4c6d70	contract_manager.cpp	contract_manager_static_date_ae1030_init	high	opus	
+0x4c6d90	contract_manager.cpp	contract_manager_static_date_ae1030_dtor	high	opus	
+0x4c6da0	contract_manager.cpp	contract_manager_static_date_ae1058_init	high	opus	
+0x4c6dc0	contract_manager.cpp	contract_manager_static_date_ae1058_dtor	high	opus	
+0x4c6dd0	contract_manager.cpp	contract_manager_static_date_ae1010_init	high	opus	
+0x4c6df0	contract_manager.cpp	contract_manager_static_date_ae1010_dtor	high	opus	
+0x4c6e00	contract_manager.cpp	contract_manager_static_date_ae1060_init	high	opus	
+0x4c6e20	contract_manager.cpp	contract_manager_static_date_ae1060_dtor	high	opus	
+0x4c6e30	contract_manager.cpp	contract_manager_static_date_ae1040_init	high	opus	
+0x4c6e50	contract_manager.cpp	contract_manager_static_date_ae1040_dtor	high	opus	
+0x4c6e60	contract_manager.cpp	contract_manager_static_date_ae1090_init	high	opus	
+0x4c6e80	contract_manager.cpp	contract_manager_static_date_ae1090_dtor	high	opus	
+0x4c6e90	contract_manager.cpp	contract_manager_static_date_ae1068_init	high	opus	
+0x4c6eb0	contract_manager.cpp	contract_manager_static_date_ae1068_dtor	high	opus	
+0x4c6ec0	contract_manager.cpp	contract_manager_static_date_ae1008_init	high	opus	
+0x4c6ee0	contract_manager.cpp	contract_manager_static_date_ae1008_dtor	high	opus	
+0x4c6ef0	contract_manager.cpp	contract_manager_static_date_ae1020_init	high	opus	
+0x4c6f10	contract_manager.cpp	contract_manager_static_date_ae1020_dtor	high	opus	
+0x4c6f20	contract_manager.cpp	contract_manager_static_date_ae1070_init	high	opus	
+0x4c6f40	contract_manager.cpp	contract_manager_static_date_ae1070_dtor	high	opus	
+0x4c6f50	contract_manager.cpp	contract_manager_static_date_ae1018_init	high	opus	
+0x4c6f70	contract_manager.cpp	contract_manager_static_date_ae1018_dtor	high	opus	
+0x4c6f80	contract_manager.cpp	contract_manager_static_date_ae1038_init	high	opus	
+0x4c6fa0	contract_manager.cpp	contract_manager_static_date_ae1038_dtor	high	opus	
+0x4c6fb0	contract_manager.cpp	contract_manager_static_date_ae1028_init	high	opus	
+0x4c6fd0	contract_manager.cpp	contract_manager_static_date_ae1028_dtor	high	opus	
+0x4c6fe0	contract_manager.cpp	contract_manager_static_date_ae1078_init	high	opus	
+0x4c7000	contract_manager.cpp	contract_manager_static_date_ae1078_dtor	high	opus	
+0x4c7010	contract_manager.cpp	contract_manager_static_date_ae1088_init	high	opus	
+0x4c7030	contract_manager.cpp	contract_manager_static_date_ae1088_dtor	high	opus	
+0x4c7040	contract_manager.cpp	CONTRACT_MANAGER::CONTRACT_MANAGER	high	opus	2026-10-14-game-creation-inventory.md
+0x4c74f0	contract_manager.cpp	CONTRACT_MANAGER::~CONTRACT_MANAGER	high	opus	
 0x4c7560	contract_manager.cpp	CONTRACT_MANAGER::initialise_all_staff_contracts	high	haiku	2026-10-14-game-creation-inventory.md
 0x4c7950	contract_manager.cpp	contract_manager_link_new_staff_contract	medium	haiku	
 0x4c79a0	contract_manager.cpp	contract_manager_get_free_staff_contract_space	high	haiku	
@@ -1812,95 +1812,95 @@ address	file	name	confidence	model	cited_in
 0x579fd0	england_rules.cpp	ENGLAND_RULES::record_loan	medium	opus	
 0x57a020	england_rules.cpp	ENGLAND_RULES::daily_update	medium	opus	
 0x57a090	england_rules.cpp	ENGLAND_RULES::get_ineligibility_code	medium	opus	
-0x57a100	eur_super_cup.cpp	Super_cup_constructor_ex	high	haiku	
-0x57a2d0	eur_super_cup.cpp	eur_super_cup::`scalar deleting destructor'	medium	slot copy	
-0x57a2f0	eur_super_cup.cpp	eur_super_cup::~eur_super_cup	high	haiku	
-0x57a3c0	eur_super_cup.cpp	eur_super_cup::create_round_table	medium	slot copy	
-0x57a500	eur_super_cup.cpp	eur_super_cup_allocate_and_load_record	medium	haiku	
-0x57a6d0	eur_super_cup.cpp	eur_super_cup::release_data	medium	slot copy	
-0x57a890	euro_champ.cpp	euro_champ_ctor	high	haiku	
-0x57aab0	euro_champ.cpp	euro_champ::`scalar deleting destructor'	medium	slot copy	
-0x57aad0	euro_champ.cpp	euro_champ::~euro_champ	high	haiku	
-0x57ab90	euro_champ.cpp	euro_champ::create_schedule	medium	slot copy	
-0x57b1d0	euro_champ.cpp	euro_champ::update_staff_records_for_status	medium	slot copy	
-0x57b330	euro_champ.cpp	euro_champ_report_result_news	high	haiku	
-0x57b530	euro_champ.cpp	euro_champ_init_qualifiers_slot	medium	haiku	
-0x57b630	euro_champ.cpp	euro_champ::set_up_rules	medium	slot copy	
-0x57b730	euro_champ.cpp	euro_champ::record_season_honours	medium	slot copy	
-0x57b750	euro_champ.cpp	euro_champ::start_new_season	medium	slot copy	
-0x57b880	euro_champ.cpp	euro_champ_stage_advance_or_assert	medium	haiku	
-0x57b910	euro_champ.cpp	euro_champ_build_team_round_entry	medium	haiku	
-0x57bb40	euro_champ.cpp	euro_champ_create_cup_stage	medium	haiku	
-0x57bd80	euro_champ.cpp	Euro_champ::populate_qualifier_teams	medium	haiku	
-0x57c120	euro_champ.cpp	euro_champ_qual_slot_push	high	haiku	
-0x57c1d0	euro_champ.cpp	euro_champ_setup_teams_or_assert	high	haiku	
-0x57c320	euro_champ.cpp	euro_champ_build_draw_pairing_list	medium	haiku	
-0x57c480	euro_champ.cpp	euro_champ_validate_load_fields	medium	haiku	
-0x57c5d0	euro_champ.cpp	euro_champ_serialise_fields	medium	haiku	
-0x57c620	euro_champ.cpp	euro_champ::update_for_date	medium	slot copy	
-0x57c710	euro_champ.cpp	euro_champ_seed_teams_by_rank	medium	haiku	
-0x57c9f0	euro_champ.cpp	euro_champ::set_predicted_positions	medium	slot copy	
-0x57cc30	euro_champ.cpp	euro_champ_set_qualification_levels	medium	haiku	
-0x57cd30	euro_champ.cpp	euro_champ_get_qualify_rank_bonus	medium	haiku	
-0x57cd80	euro_champ.cpp	euro_champ_grade_pair_bucket	low	haiku	
-0x57ce10	euro_champ_qual.cpp	euro_champ_qual_ctor	high	haiku	
-0x57d060	euro_champ_qual.cpp	euro_champ_qual_vtable_slot_hash	low	haiku	
-0x57d080	euro_champ_qual.cpp	euro_champ_qual::`scalar deleting destructor'	medium	slot copy	
-0x57d0a0	euro_champ_qual.cpp	euro_champ_qual_qualifier_dtor_body	medium	haiku	
-0x57d190	euro_champ_qual.cpp	euro_champ_qual::create_schedule	medium	slot copy	
-0x57d5b0	euro_champ_qual.cpp	euro_champ_qual::update_staff_records_for_status	medium	slot copy	
-0x57d700	euro_champ_qual.cpp	euro_champ_qual_post_news_item	high	haiku	
-0x57d9d0	euro_champ_qual.cpp	euro_champ_qual_check_stage_state	medium	haiku	
-0x57dab0	euro_champ_qual.cpp	euro_champ_qual_build_team_draw_table	high	haiku	
-0x57e7e0	euro_champ_qual.cpp	euro_champ_qual_allocate_teams	medium	haiku	
-0x57e8f0	euro_champ_qual.cpp	euro_champ_qual::set_up_rules	medium	slot copy	
-0x57e9d0	euro_champ_qual.cpp	euro_champ_qual_describe_stage	medium	haiku	
-0x57eb10	euro_champ_qual.cpp	euro_champ_qual_set_flag_b5	medium	haiku	
-0x57eb20	euro_champ_qual.cpp	euro_champ_qual::start_new_season	medium	slot copy	
-0x57ec60	euro_champ_qual.cpp	euro_champ_qual_advance_round_step	medium	haiku	
-0x57ed10	euro_champ_qual.cpp	euro_champ_qual_create_group_stage	medium	haiku	
-0x57ef50	euro_champ_qual.cpp	euro_champ_qual_build_qualifier_round	medium	haiku	
-0x57f600	euro_champ_qual.cpp	euro_champ_qual_load_qualified_teams	high	haiku	
-0x57f920	euro_champ_qual.cpp	euro_champ_qual_start_round_of_matches	medium	haiku	
-0x57fa10	euro_champ_qual.cpp	euro_champ_qual_build_qualifier_squads	medium	haiku	
-0x57fd60	euro_champ_qual.cpp	euro_champ_qual::update_for_date	medium	slot copy	
-0x57ffd0	euro_champ_qual.cpp	euro_champ_qual::add_result	medium	slot copy	
-0x580010	euro_champ_qual.cpp	euro_champ_qual::update_positions_and_status	medium	slot copy	
-0x580040	euro_champ_qual.cpp	euro_champ_qual::mark_qualified_teams	medium	haiku	
-0x580130	euro_champ_qual.cpp	euro_champ_qual_read_qualifiers	high	haiku	
-0x580410	euro_champ_qual.cpp	euro_champ_qual_serialise_load	medium	haiku	
-0x5806d0	euro_champ_qual.cpp	euro_champ_qual::set_predicted_positions	medium	slot copy	
-0x580980	euro_champ_qual.cpp	Qualification_Slot::set_fixture_round_code	medium	haiku	
-0x580b50	euro_champ_qual.cpp	euro_champ_qual_band_index	low	haiku	
-0x580b80	euro_champ_qual.cpp	euro_champ_qual_compare_slots	medium	haiku	
-0x580bd0	euro_champ_qual.cpp	euro_champ_qual_init_qualifying_groups	high	haiku	
-0x582ef0	euro_champ_qual.cpp	euro_champ_qual_add_qualifier_entry	medium	haiku	
-0x583280	euro_champ_qual.cpp	transfer_offer_ctor	medium	haiku	
-0x5832c0	euro_champ_qual.cpp	qual_reset_slots_to_minus_one	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x5832e0	euro_champ_qual.cpp	qualifier_team_eligible_check	low	haiku	
+0x57a100	eur_super_cup.cpp	EurSuperCup::EurSuperCup	high	opus	
+0x57a2d0	eur_super_cup.cpp	EurSuperCup::`scalar deleting destructor'	high	opus	
+0x57a2f0	eur_super_cup.cpp	EurSuperCup::~EurSuperCup	high	opus	
+0x57a3c0	eur_super_cup.cpp	EurSuperCup::create_round_table	high	opus	
+0x57a500	eur_super_cup.cpp	EurSuperCup::select_teams	high	opus	
+0x57a6d0	eur_super_cup.cpp	EurSuperCup::release_data	high	opus	
+0x57a890	euro_champ.cpp	EuroChamp::EuroChamp	high	opus	
+0x57aab0	euro_champ.cpp	EuroChamp::`scalar deleting destructor'	high	opus	
+0x57aad0	euro_champ.cpp	EuroChamp::~EuroChamp	high	opus	
+0x57ab90	euro_champ.cpp	EuroChamp::create_schedule	high	opus	
+0x57b1d0	euro_champ.cpp	EuroChamp::update_staff_records_for_status	high	opus	
+0x57b330	euro_champ.cpp	EuroChamp::build_fate_news_text	high	opus	
+0x57b530	euro_champ.cpp	EuroChamp::create_group_table	high	opus	
+0x57b630	euro_champ.cpp	EuroChamp::set_up_rules	high	opus	
+0x57b730	euro_champ.cpp	EuroChamp::record_season_honours	high	opus	
+0x57b750	euro_champ.cpp	EuroChamp::start_new_season	high	opus	
+0x57b880	euro_champ.cpp	EuroChamp::advance_stage	high	opus	
+0x57b910	euro_champ.cpp	EuroChamp::create_group_stage	high	opus	
+0x57bb40	euro_champ.cpp	EuroChamp::create_knockout_stage	high	opus	
+0x57bd80	euro_champ.cpp	EuroChamp::set_up_team_list	high	opus	
+0x57c120	euro_champ.cpp	EuroChamp::add_qualified_team	high	opus	
+0x57c1d0	euro_champ.cpp	EuroChamp::run_group_draw	high	opus	
+0x57c320	euro_champ.cpp	EuroChamp::draw_groups	high	opus	
+0x57c480	euro_champ.cpp	EuroChamp::load_extra_data	medium	opus	
+0x57c5d0	euro_champ.cpp	EuroChamp::save_extra_data	medium	opus	
+0x57c620	euro_champ.cpp	EuroChamp::update_for_date	high	opus	
+0x57c710	euro_champ.cpp	EuroChamp::seed_teams	high	opus	
+0x57c9f0	euro_champ.cpp	EuroChamp::set_predicted_positions	high	opus	
+0x57cc30	euro_champ.cpp	EuroChamp::set_club_progress	high	opus	
+0x57cd30	euro_champ.cpp	EuroChamp::get_qualification_status	high	opus	
+0x57cd80	euro_champ.cpp	EuroChamp::get_qualification_status_change	medium	opus	
+0x57ce10	euro_champ_qual.cpp	EuroChampQual::EuroChampQual	high	opus	
+0x57d060	euro_champ_qual.cpp	EuroChampQual::get_finals_comp	medium	opus	
+0x57d080	euro_champ_qual.cpp	EuroChampQual::`scalar deleting destructor'	high	opus	
+0x57d0a0	euro_champ_qual.cpp	EuroChampQual::~EuroChampQual	high	opus	
+0x57d190	euro_champ_qual.cpp	EuroChampQual::create_schedule	high	opus	
+0x57d5b0	euro_champ_qual.cpp	EuroChampQual::update_staff_records_for_status	high	opus	
+0x57d700	euro_champ_qual.cpp	EuroChampQual::build_fate_news_text	high	opus	
+0x57d9d0	euro_champ_qual.cpp	EuroChampQual::get_group_team_count	high	opus	
+0x57dab0	euro_champ_qual.cpp	EuroChampQual::draw_groups	high	opus	
+0x57e7e0	euro_champ_qual.cpp	EuroChampQual::init_group_one_table	medium	opus	
+0x57e8f0	euro_champ_qual.cpp	EuroChampQual::set_up_rules	high	opus	
+0x57e9d0	euro_champ_qual.cpp	EuroChampQual::write_progress_text	high	opus	
+0x57eb10	euro_champ_qual.cpp	EuroChampQual::skip_season_reset	medium	opus	
+0x57eb20	euro_champ_qual.cpp	EuroChampQual::start_new_season	high	opus	
+0x57ec60	euro_champ_qual.cpp	EuroChampQual::advance_stage	high	opus	
+0x57ed10	euro_champ_qual.cpp	EuroChampQual::create_group_stage	high	opus	
+0x57ef50	euro_champ_qual.cpp	EuroChampQual::create_playoff_stage	high	opus	
+0x57f600	euro_champ_qual.cpp	EuroChampQual::collect_entrants	high	opus	
+0x57f920	euro_champ_qual.cpp	EuroChampQual::create_runners_up_stage	medium	opus	
+0x57fa10	euro_champ_qual.cpp	EuroChampQual::update_runners_up_table	medium	opus	
+0x57fd60	euro_champ_qual.cpp	EuroChampQual::update_for_date	high	opus	
+0x57ffd0	euro_champ_qual.cpp	EuroChampQual::add_result	high	opus	
+0x580010	euro_champ_qual.cpp	EuroChampQual::update_positions_and_status	high	opus	
+0x580040	euro_champ_qual.cpp	EuroChampQual::mark_qualified_teams	medium	opus	
+0x580130	euro_champ_qual.cpp	EuroChampQual::load_extra_data	high	opus	
+0x580410	euro_champ_qual.cpp	EuroChampQual::save_extra_data	high	opus	
+0x5806d0	euro_champ_qual.cpp	EuroChampQual::set_predicted_positions	high	opus	
+0x580980	euro_champ_qual.cpp	EuroChampQual::set_club_progress	high	opus	
+0x580b50	euro_champ_qual.cpp	EuroChampQual::get_qualification_status	high	opus	
+0x580b80	euro_champ_qual.cpp	EuroChampQual::get_qualification_status_change	high	opus	
+0x580bd0	euro_champ_qual.cpp	EuroChampQual::create_groups_and_results	high	opus	
+0x582ef0	euro_champ_qual.cpp	EuroChampQual::add_historic_fixture	high	opus	
+0x583280	european_awards.cpp	EUROPE_RULES::EUROPE_RULES	medium	opus	
+0x5832c0	european_awards.cpp	TRANSFER_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x5832e0	european_awards.cpp	EUROPE_RULES::get_ineligibility_code	low	opus	
 0x583400	european_awards.cpp	european_awards_ctor	high	haiku	
 0x583470	european_awards.cpp	european_awards_noop	medium	haiku	
 0x583480	european_awards.cpp	European_Awards::init_awards	high	haiku	
 0x5836a0	european_awards.cpp	european_awards_vtable_refresh_entries	medium	haiku	
-0x5837c0	european_cup.cpp	European_Cup::European_Cup	high	haiku	
-0x5839d0	european_cup.cpp	return_zero_stub_5839d0	medium	haiku	
-0x5839e0	european_cup.cpp	european_cup::`scalar deleting destructor'	medium	slot copy	
-0x583a00	european_cup.cpp	european_cup_screen_dtor	high	haiku	
-0x583b10	european_cup.cpp	european_cup::process_fixture	medium	slot copy	
-0x583c50	european_cup.cpp	european_cup::create_round_table	medium	slot copy	
-0x584550	european_cup.cpp	european_cup_qualification_news_dispatch	high	haiku	
-0x584990	european_cup.cpp	european_cup_init_team_table	high	haiku	
-0x584ad0	european_cup.cpp	european_cup::record_season_history	medium	slot copy	
-0x584ae0	european_cup.cpp	european_cup::apply_team_result_finance	medium	slot copy	
-0x584d60	european_cup.cpp	european_cup::release_data	medium	slot copy	
-0x584fa0	european_cup.cpp	european_cup_fill_player_slots	medium	haiku	
-0x5851d0	european_cup.cpp	european_cup_advance_phase	medium	haiku	
-0x585290	european_cup.cpp	european_cup_build_round_groups	medium	haiku	
-0x585680	european_cup.cpp	european_cup_draw_seed_pots_and_assign_groups	medium	haiku	
-0x5858e0	european_cup.cpp	european_cup_fixture_round_robin_setup	medium	haiku	
-0x585920	european_cup.cpp	european_cup_transfer_players_into_club_or_abort	medium	haiku	
-0x585a00	european_cup.cpp	european_cup_fill_entries_from_table	medium	haiku	
-0x585a20	european_cup.cpp	european_cup_entry_array_push	medium	haiku	
+0x5837c0	european_cup.cpp	EuropeanCup::EuropeanCup	high	opus	
+0x5839d0	european_cup.cpp	comp_stub_return_zero	medium	opus	
+0x5839e0	european_cup.cpp	EuropeanCup::`scalar deleting destructor'	high	opus	
+0x583a00	european_cup.cpp	EuropeanCup::~EuropeanCup	high	opus	
+0x583b10	european_cup.cpp	EuropeanCup::process_fixture	high	opus	
+0x583c50	european_cup.cpp	EuropeanCup::create_round_table	high	opus	
+0x584550	european_cup.cpp	EuropeanCup::build_fate_news_text	high	opus	
+0x584990	european_cup.cpp	EuropeanCup::build_qualifying_entry_table	medium	opus	
+0x584ad0	european_cup.cpp	EuropeanCup::record_season_history	high	opus	
+0x584ae0	european_cup.cpp	EuropeanCup::apply_team_result_finance	medium	opus	
+0x584d60	european_cup.cpp	EuropeanCup::release_data	high	opus	
+0x584fa0	european_cup.cpp	EuropeanCup::collect_entrants	medium	opus	
+0x5851d0	european_cup.cpp	EuropeanCup::advance_stage	high	opus	
+0x585290	european_cup.cpp	EuropeanCup::draw_phase1_groups	high	opus	
+0x585680	european_cup.cpp	EuropeanCup::draw_phase1_groups_pot_loop	medium	opus	
+0x5858e0	european_cup.cpp	EuropeanCup::draw_phase1_groups_create_stages	medium	opus	
+0x585920	european_cup.cpp	EuropeanCup::draw_phase1_groups_send_losers_to_uefa_cup	medium	opus	
+0x585a00	european_cup.cpp	EuropeanCup::draw_phase1_groups_uefa_cup_copy_loop	medium	opus	
+0x585a20	european_cup.cpp	EuropeanCup::draw_phase1_groups_uefa_cup_copy_entry	medium	opus	
 0x585a50	european_cup.cpp	european_cup_set_state_five_and_bump_counter	low	haiku	
 0x585a60	european_cup.cpp	european_cup_copy_selected_entries	medium	haiku	
 0x585aa6	european_cup.cpp	european_cup_group_stage_seed_and_draw_entry	low	haiku	
