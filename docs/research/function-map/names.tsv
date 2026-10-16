@@ -467,85 +467,85 @@ address	file	name	confidence	model	cited_in
 0x4350d0	bra_reg_minas_gerais.cpp	BraRegMinasGerais::set_club_progress	high	opus	
 0x435130	bra_reg_minas_gerais.cpp	BraRegMinasGerais::add_result	high	opus	
 0x4351b0	bra_reg_minas_gerais.cpp	BraRegMinasGerais::create_half_season_stage	high	opus	
-0x435340	bra_reg_north.cpp	Bra_Reg_North::construct	medium	haiku	
-0x435560	bra_reg_north.cpp	bra_reg_north::`scalar deleting destructor'	medium	slot copy	
-0x435580	bra_reg_north.cpp	regional_news_north_destructor	high	haiku	
-0x435640	bra_reg_north.cpp	bra_reg_north::create_schedule	medium	slot copy	
-0x435d80	bra_reg_north.cpp	bra_reg_north_allocate_and_load_teams	medium	haiku	
-0x435e80	bra_reg_north.cpp	bra_reg_north::start_new_season	medium	slot copy	
-0x436030	bra_reg_north.cpp	bra_reg_north_retry_or_fail	medium	haiku	
-0x4360c0	bra_reg_north.cpp	bra_reg_north_create_cup_stage	medium	haiku	
-0x436280	bra_reg_north.cpp	bra_reg_north::set_predicted_positions	medium	slot copy	
-0x4363f0	bra_reg_northeast.cpp	bra_reg_northeast_region_ctor	high	haiku	
-0x436610	bra_reg_northeast.cpp	bra_reg_northeast::`scalar deleting destructor'	medium	slot copy	
-0x436630	bra_reg_northeast.cpp	bra_reg_northeast::~bra_reg_northeast	high	haiku	
-0x4366f0	bra_reg_northeast.cpp	bra_reg_northeast::create_schedule	medium	slot copy	
-0x436d90	bra_reg_northeast.cpp	bra_reg_northeast_fill_league_slots	medium	haiku	
-0x436e90	bra_reg_northeast.cpp	bra_reg_northeast::start_new_season	medium	slot copy	
-0x437040	bra_reg_northeast.cpp	bra_reg_northeast_counter_check	medium	haiku	
-0x4370d0	bra_reg_northeast.cpp	bra_reg_northeast_cup_stage_create	medium	haiku	
-0x437290	bra_reg_northeast.cpp	bra_reg_northeast::set_predicted_positions	medium	slot copy	
-0x437400	bra_reg_parana.cpp	Bra_reg_parana::Bra_reg_parana	high	haiku	
-0x437620	bra_reg_parana.cpp	bra_reg_parana::`scalar deleting destructor'	medium	slot copy	
-0x437640	bra_reg_parana.cpp	bra_reg_parana_vc_destructor	high	haiku	
-0x437700	bra_reg_parana.cpp	bra_reg_parana::create_schedule	medium	slot copy	
-0x437ec0	bra_reg_parana.cpp	bra_reg_parana_init_league_teams	medium	haiku	
-0x437fc0	bra_reg_parana.cpp	bra_reg_parana::set_up_rules	medium	slot copy	
-0x438060	bra_reg_parana.cpp	bra_reg_parana::start_new_season	medium	slot copy	
-0x438230	bra_reg_parana.cpp	bra_reg_parana_retry_or_assert	medium	haiku	
-0x4382c0	bra_reg_parana.cpp	Bra_reg_parana::start_cup_round_robin_stage	medium	haiku	
-0x4384e0	bra_reg_parana.cpp	bra_reg_parana::record_season_honours	medium	slot copy	
-0x438590	bra_reg_parana.cpp	bra_reg_parana::set_predicted_positions	medium	slot copy	
-0x4386e0	bra_reg_parana.cpp	bra_reg_parana::add_result	medium	slot copy	
-0x438760	bra_reg_parana.cpp	bra_reg_parana_build_league_stage	medium	haiku	
-0x4388f0	bra_reg_pern.cpp	bra_reg_pern::Bra_Reg_Pern	high	haiku	
-0x438b10	bra_reg_pern.cpp	bra_reg_pern::`scalar deleting destructor'	medium	slot copy	
-0x438b30	bra_reg_pern.cpp	bra_reg_pern::~bra_reg_pern	high	haiku	
-0x438bf0	bra_reg_pern.cpp	bra_reg_pern::create_schedule	medium	slot copy	
-0x439330	bra_reg_pern.cpp	bra_reg_pern_populate_players	high	haiku	
-0x439430	bra_reg_pern.cpp	bra_reg_pern::set_up_rules	medium	slot copy	
-0x4394d0	bra_reg_pern.cpp	bra_reg_pern::start_new_season	medium	slot copy	
-0x439680	bra_reg_pern.cpp	reg_pern_assert_check_count	medium	haiku	
-0x439710	bra_reg_pern.cpp	bra_reg_pern_build_cup_stage	medium	haiku	
-0x4398d0	bra_reg_pern.cpp	bra_reg_pern::set_predicted_positions	medium	slot copy	
-0x439a40	bra_reg_rio.cpp	bra_reg_rio_init	medium	haiku	
-0x439c60	bra_reg_rio.cpp	bra_reg_rio::`scalar deleting destructor'	medium	slot copy	
-0x439c80	bra_reg_rio.cpp	bra_reg_rio::~bra_reg_rio	high	haiku	
-0x439d40	bra_reg_rio.cpp	bra_reg_rio::create_schedule	medium	slot copy	
-0x43a500	bra_reg_rio.cpp	bra_reg_rio_alloc_and_seed_teams	high	haiku	
-0x43a600	bra_reg_rio.cpp	bra_reg_rio::set_up_rules	medium	slot copy	
-0x43a6a0	bra_reg_rio.cpp	bra_reg_rio::start_new_season	medium	slot copy	
-0x43a870	bra_reg_rio.cpp	bra_reg_rio_retry_or_assert	medium	haiku	
-0x43a900	bra_reg_rio.cpp	bra_reg_rio_schedule_cup_pair	medium	haiku	
-0x43ab20	bra_reg_rio.cpp	comp_order_qualify_semi_or_champion_news	high	haiku	
-0x43ad20	bra_reg_rio.cpp	bra_reg_rio::record_season_honours	medium	slot copy	
-0x43add0	bra_reg_rio.cpp	bra_reg_rio::set_predicted_positions	medium	slot copy	
-0x43af20	bra_reg_rio.cpp	bra_reg_rio::add_result	medium	slot copy	
-0x43afa0	bra_reg_rio.cpp	bra_reg_rio_build_group_stage	medium	haiku	
-0x43b130	bra_reg_santa.cpp	Regional_Santa_constructor	high	haiku	
-0x43b350	bra_reg_santa.cpp	bra_reg_santa::`scalar deleting destructor'	medium	slot copy	
-0x43b370	bra_reg_santa.cpp	bra_reg_santa_dtor	high	haiku	
-0x43b430	bra_reg_santa.cpp	bra_reg_santa::create_schedule	medium	slot copy	
-0x43bb70	bra_reg_santa.cpp	bra_reg_santa_alloc_and_populate_teams	high	haiku	
-0x43bc70	bra_reg_santa.cpp	bra_reg_santa::set_up_rules	medium	slot copy	
-0x43bd10	bra_reg_santa.cpp	bra_reg_santa::start_new_season	medium	slot copy	
-0x43bec0	bra_reg_santa.cpp	assert_check_counter_step	medium	haiku	
-0x43bf50	bra_reg_santa.cpp	bra_reg_santa_create_cup_stage	medium	haiku	
-0x43c110	bra_reg_santa.cpp	bra_reg_santa::set_predicted_positions	medium	slot copy	
-0x43c280	bra_reg_sp.cpp	bra_reg_sp_init	medium	haiku	
-0x43c4a0	bra_reg_sp.cpp	bra_reg_sp_forward_to_league_stage	medium	haiku	
-0x43c4c0	bra_reg_sp.cpp	bra_reg_sp::`scalar deleting destructor'	medium	slot copy	
-0x43c4e0	bra_reg_sp.cpp	bra_reg_sp::~bra_reg_sp	high	haiku	
-0x43c5a0	bra_reg_sp.cpp	bra_reg_sp::create_schedule	medium	slot copy	
-0x43cc40	bra_reg_sp.cpp	bra_reg_sp_fill_slots	medium	haiku	
-0x43cd40	bra_reg_sp.cpp	bra_reg_sp::start_new_season	medium	slot copy	
-0x43cef0	bra_reg_sp.cpp	bra_reg_sp_counter_check	medium	haiku	
-0x43cf80	bra_reg_sp.cpp	bra_reg_sp_create_cup_stage_fallback	medium	haiku	
-0x43d140	bra_reg_sp.cpp	bra_reg_sp::set_predicted_positions	medium	slot copy	
-0x43d2b0	brazil_awards.cpp	brazil_awards_ctor	high	haiku	
-0x43d340	brazil_awards.cpp	Brazil_awards::init_awards	high	haiku	
-0x43e990	brazil_awards.cpp	Brazil_awards::populate_award_slots	medium	haiku	
-0x43f070	brazil_awards.cpp	brazil_awards_remove_entry	low	haiku	
+0x435340	bra_reg_north.cpp	BraRegNorth::BraRegNorth	high	opus	
+0x435560	bra_reg_north.cpp	BraRegNorth::`scalar deleting destructor'	high	opus	
+0x435580	bra_reg_north.cpp	BraRegNorth::~BraRegNorth	high	opus	
+0x435640	bra_reg_north.cpp	BraRegNorth::create_schedule	high	opus	
+0x435d80	bra_reg_north.cpp	BraRegNorth::create_table	high	opus	
+0x435e80	bra_reg_north.cpp	BraRegNorth::start_new_season	high	opus	
+0x436030	bra_reg_north.cpp	BraRegNorth::advance_stage	high	opus	
+0x4360c0	bra_reg_north.cpp	BraRegNorth::create_semi_final_stage	high	opus	
+0x436280	bra_reg_north.cpp	BraRegNorth::set_predicted_positions	high	opus	
+0x4363f0	bra_reg_northeast.cpp	BraRegNortheast::BraRegNortheast	high	opus	
+0x436610	bra_reg_northeast.cpp	BraRegNortheast::`scalar deleting destructor'	high	opus	
+0x436630	bra_reg_northeast.cpp	BraRegNortheast::~BraRegNortheast	high	opus	
+0x4366f0	bra_reg_northeast.cpp	BraRegNortheast::create_schedule	high	opus	
+0x436d90	bra_reg_northeast.cpp	BraRegNortheast::create_table	high	opus	
+0x436e90	bra_reg_northeast.cpp	BraRegNortheast::start_new_season	high	opus	
+0x437040	bra_reg_northeast.cpp	BraRegNortheast::advance_stage	high	opus	
+0x4370d0	bra_reg_northeast.cpp	BraRegNortheast::create_semi_final_stage	high	opus	
+0x437290	bra_reg_northeast.cpp	BraRegNortheast::set_predicted_positions	high	opus	
+0x437400	bra_reg_parana.cpp	BraRegParana::BraRegParana	high	opus	
+0x437620	bra_reg_parana.cpp	BraRegParana::`scalar deleting destructor'	high	opus	
+0x437640	bra_reg_parana.cpp	BraRegParana::~BraRegParana	high	opus	
+0x437700	bra_reg_parana.cpp	BraRegParana::create_schedule	high	opus	
+0x437ec0	bra_reg_parana.cpp	BraRegParana::create_table	high	opus	
+0x437fc0	bra_reg_parana.cpp	BraRegParana::set_up_rules	high	opus	
+0x438060	bra_reg_parana.cpp	BraRegParana::start_new_season	high	opus	
+0x438230	bra_reg_parana.cpp	BraRegParana::advance_stage	high	opus	
+0x4382c0	bra_reg_parana.cpp	BraRegParana::create_final_stage	medium	opus	
+0x4384e0	bra_reg_parana.cpp	BraRegParana::record_season_honours	high	opus	
+0x438590	bra_reg_parana.cpp	BraRegParana::set_predicted_positions	high	opus	
+0x4386e0	bra_reg_parana.cpp	BraRegParana::add_result	high	opus	
+0x438760	bra_reg_parana.cpp	BraRegParana::create_half_stage	medium	opus	
+0x4388f0	bra_reg_pern.cpp	BraRegPern::BraRegPern	high	opus	
+0x438b10	bra_reg_pern.cpp	BraRegPern::`scalar deleting destructor'	high	opus	
+0x438b30	bra_reg_pern.cpp	BraRegPern::~BraRegPern	high	opus	
+0x438bf0	bra_reg_pern.cpp	BraRegPern::create_schedule	high	opus	
+0x439330	bra_reg_pern.cpp	BraRegPern::create_table	high	opus	
+0x439430	bra_reg_pern.cpp	BraRegPern::set_up_rules	high	opus	
+0x4394d0	bra_reg_pern.cpp	BraRegPern::start_new_season	high	opus	
+0x439680	bra_reg_pern.cpp	BraRegPern::advance_stage	high	opus	
+0x439710	bra_reg_pern.cpp	BraRegPern::create_semi_final_stage	high	opus	
+0x4398d0	bra_reg_pern.cpp	BraRegPern::set_predicted_positions	high	opus	
+0x439a40	bra_reg_rio.cpp	BraRegRio::BraRegRio	high	opus	
+0x439c60	bra_reg_rio.cpp	BraRegRio::`scalar deleting destructor'	high	opus	
+0x439c80	bra_reg_rio.cpp	BraRegRio::~BraRegRio	high	opus	
+0x439d40	bra_reg_rio.cpp	BraRegRio::create_schedule	high	opus	
+0x43a500	bra_reg_rio.cpp	BraRegRio::create_table	high	opus	
+0x43a600	bra_reg_rio.cpp	BraRegRio::set_up_rules	high	opus	
+0x43a6a0	bra_reg_rio.cpp	BraRegRio::start_new_season	high	opus	
+0x43a870	bra_reg_rio.cpp	BraRegRio::advance_stage	high	opus	
+0x43a900	bra_reg_rio.cpp	BraRegRio::create_final_stage	high	opus	
+0x43ab20	bra_reg_rio.cpp	BraRegRio::build_fate_news_text	high	opus	
+0x43ad20	bra_reg_rio.cpp	BraRegRio::record_season_honours	high	opus	
+0x43add0	bra_reg_rio.cpp	BraRegRio::set_predicted_positions	high	opus	
+0x43af20	bra_reg_rio.cpp	BraRegRio::add_result	high	opus	
+0x43afa0	bra_reg_rio.cpp	BraRegRio::create_half_season_stage	high	opus	
+0x43b130	bra_reg_santa.cpp	BraRegSanta::BraRegSanta	high	opus	
+0x43b350	bra_reg_santa.cpp	BraRegSanta::`scalar deleting destructor'	high	opus	
+0x43b370	bra_reg_santa.cpp	BraRegSanta::~BraRegSanta	high	opus	
+0x43b430	bra_reg_santa.cpp	BraRegSanta::create_schedule	high	opus	
+0x43bb70	bra_reg_santa.cpp	BraRegSanta::create_table	high	opus	
+0x43bc70	bra_reg_santa.cpp	BraRegSanta::set_up_rules	high	opus	
+0x43bd10	bra_reg_santa.cpp	BraRegSanta::start_new_season	high	opus	
+0x43bec0	bra_reg_santa.cpp	BraRegSanta::advance_stage	high	opus	
+0x43bf50	bra_reg_santa.cpp	BraRegSanta::create_semi_final_stage	high	opus	
+0x43c110	bra_reg_santa.cpp	BraRegSanta::set_predicted_positions	high	opus	
+0x43c280	bra_reg_sp.cpp	BraRegSp::BraRegSp	high	opus	
+0x43c4a0	bra_reg_sp.cpp	BraRegSp::points_for_result	high	opus	
+0x43c4c0	bra_reg_sp.cpp	BraRegSp::`scalar deleting destructor'	high	opus	
+0x43c4e0	bra_reg_sp.cpp	BraRegSp::~BraRegSp	high	opus	
+0x43c5a0	bra_reg_sp.cpp	BraRegSp::create_schedule	high	opus	
+0x43cc40	bra_reg_sp.cpp	BraRegSp::create_table	high	opus	
+0x43cd40	bra_reg_sp.cpp	BraRegSp::start_new_season	high	opus	
+0x43cef0	bra_reg_sp.cpp	BraRegSp::advance_stage	high	opus	
+0x43cf80	bra_reg_sp.cpp	BraRegSp::create_semi_final_stage	high	opus	
+0x43d140	bra_reg_sp.cpp	BraRegSp::set_predicted_positions	high	opus	
+0x43d2b0	brazil_awards.cpp	BrazilAwards::BrazilAwards	high	opus	
+0x43d340	brazil_awards.cpp	BrazilAwards::init_awards	high	opus	
+0x43e990	brazil_awards.cpp	BrazilAwards::daily_update	high	opus	
+0x43f070	brazil_awards.cpp	BrazilAwards::update_team_of_the_week	high	opus	
 0x43f0e0	brazil_rules.cpp	BRAZIL_RULES::BRAZIL_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x43f210	brazil_rules.cpp	BRAZIL_RULES::get_ineligibility_code	medium	opus	
 0x43f2a0	brazil_rules.cpp	BRAZIL_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md
@@ -998,23 +998,23 @@ address	file	name	confidence	model	cited_in
 0x4c1440	con_champ.cpp	ConChamp::start_new_season	high	opus	
 0x4c15f0	con_champ.cpp	ConChamp::set_up_rounds	high	opus	
 0x4c1620	con_champ.cpp	ConChamp::update_for_date	high	opus	
-0x4c16f0	con_merc_cup.cpp	Merc_cup::Merc_cup	high	haiku	club-world.md
-0x4c1880	con_merc_cup.cpp	con_merc_cup::`scalar deleting destructor'	medium	slot copy	
-0x4c18a0	con_merc_cup.cpp	merc_cup_screen_dtor	high	haiku	
-0x4c1960	con_merc_cup.cpp	con_merc_cup::create_schedule	medium	slot copy	2026-10-16-sweep-europe.md
-0x4c1cc0	con_merc_cup.cpp	con_merc_cup_team_message_handler	medium	haiku	
-0x4c1de0	con_merc_cup.cpp	con_merc_cup_init_teams	medium	haiku	
-0x4c1ed0	con_merc_cup.cpp	con_merc_cup::set_up_rules	medium	slot copy	
-0x4c1fb0	con_merc_cup.cpp	con_merc_cup::start_new_season	medium	slot copy	
-0x4c2070	con_merc_cup.cpp	con_merc_cup_assert_check_0x4c2070	medium	haiku	2026-10-16-sweep-europe.md
-0x4c20b0	con_merc_cup.cpp	merc_cup_step_or_assert	medium	haiku	
-0x4c2140	con_merc_cup.cpp	con_merc_cup_create_group_fixtures	medium	haiku	
-0x4c2330	con_merc_cup.cpp	Merc_cup::build_stage_teams_and_create_cup	high	haiku	
-0x4c2560	con_merc_cup.cpp	con_merc_cup_fill_team_slots	medium	haiku	2026-10-16-sweep-europe.md
-0x4c2940	con_merc_cup.cpp	con_merc_cup::update_staff_records_for_status	medium	slot copy	
-0x4c2a90	con_merc_cup.cpp	con_merc_cup::set_predicted_positions	medium	slot copy	
-0x4c2c90	con_merc_cup.cpp	con_merc_cup::update_for_date	medium	slot copy	
-0x4c2e40	con_merc_cup.cpp	merc_cup_set_three_levels	medium	haiku	
+0x4c16f0	con_merc_cup.cpp	ConMercCup::ConMercCup	high	opus	club-world.md
+0x4c1880	con_merc_cup.cpp	ConMercCup::`scalar deleting destructor'	high	opus	
+0x4c18a0	con_merc_cup.cpp	ConMercCup::~ConMercCup	high	opus	
+0x4c1960	con_merc_cup.cpp	ConMercCup::create_schedule	high	opus	2026-10-16-sweep-europe.md
+0x4c1cc0	con_merc_cup.cpp	ConMercCup::build_fate_news_text	high	opus	
+0x4c1de0	con_merc_cup.cpp	ConMercCup::create_first_group_table	high	opus	
+0x4c1ed0	con_merc_cup.cpp	ConMercCup::set_up_rules	high	opus	
+0x4c1fb0	con_merc_cup.cpp	ConMercCup::start_new_season	high	opus	
+0x4c2070	con_merc_cup.cpp	con_merc_cup_start_new_season_error_tail	medium	opus	2026-10-16-sweep-europe.md
+0x4c20b0	con_merc_cup.cpp	ConMercCup::advance_stage	high	opus	
+0x4c2140	con_merc_cup.cpp	ConMercCup::create_group_stage	high	opus	
+0x4c2330	con_merc_cup.cpp	ConMercCup::create_semi_final_stage	high	opus	
+0x4c2560	con_merc_cup.cpp	ConMercCup::select_invited_clubs	high	opus	2026-10-16-sweep-europe.md
+0x4c2940	con_merc_cup.cpp	ConMercCup::update_staff_records_for_status	high	opus	
+0x4c2a90	con_merc_cup.cpp	ConMercCup::set_predicted_positions	medium	opus	
+0x4c2c90	con_merc_cup.cpp	ConMercCup::update_for_date	high	opus	
+0x4c2e40	con_merc_cup.cpp	ConMercCup::set_club_progress	high	opus	
 0x4c2f50	conmebol_liber.cpp	ConmebolLiber::ConmebolLiber	high	opus	club-world.md
 0x4c30e0	conmebol_liber.cpp	ConmebolLiber::`scalar deleting destructor'	high	opus	
 0x4c3100	conmebol_liber.cpp	ConmebolLiber::~ConmebolLiber	high	opus	
@@ -1203,76 +1203,76 @@ address	file	name	confidence	model	cited_in
 0x4e4160	contract_screens.cpp	contract_screens_handle_offer_response	high	haiku	
 0x4e4730	contract_screens.cpp	contract_screens_open_screen_with_params	medium	haiku	
 0x4e4820	contract_screens.cpp	contract_screens_offer_contract_dialog	high	haiku	
-0x4e4ea0	contract_screens.cpp	contract_screens_process_event	medium	haiku	
-0x4e53e0	contract_screens.cpp	staff_terminate_contract_open	high	haiku	
-0x4e5420	contract_screens.cpp	terminate_contract_dialog	high	haiku	
-0x4e5610	contract_screens.cpp	contract_screens_terminate_contract_action	medium	haiku	
-0x4e5770	contract_screens.cpp	contract_screens_open_staff_terminate_or_transfer_dialog	low	haiku	
-0x4e5850	contract_screens.cpp	compare_players_by_rating_then_age	medium	haiku	
-0x4e5920	contract_screens.cpp	contract_screens_open_credits_screen	medium	haiku	2026-10-13-screen-stack-inventory.md
-0x4e5970	contract_screens.cpp	credits_screen_populate_staff_list	high	haiku	
-0x4e6a70	contract_screens.cpp	credits_add_jask_xbox_entries	high	haiku	
-0x4e6dc0	contract_screens.cpp	build_nation_list_screen	high	haiku	
-0x4e92f0	contract_screens.cpp	credits_screen_list_tester_names	high	haiku	
-0x4eb110	contract_screens.cpp	contract_screens_add_feral_credit_entry	high	haiku	
-0x4eb480	contract_screens.cpp	contract_screens_add_staff_credit_rows	high	haiku	
-0x4eccd0	contract_screens.cpp	contract_screens_translation_credits_page	high	haiku	
-0x4eda90	contract_screens.cpp	populate_additional_research_credits	high	haiku	
-0x4f2070	contract_screens.cpp	contract_screens_squad_list_build_rows	medium	haiku	
-0x500030	contract_screens.cpp	contract_screens_populate_staff_list	medium	haiku	
-0x502070	contract_screens.cpp	contract_screens_emit_staff_name_rows	medium	haiku	
-0x503a50	contract_screens.cpp	Table::populate_staff_name_grid_	medium	haiku	
-0x50e000	contract_screens.cpp	contract_screens_add_credit_staff_rows	high	haiku	
-0x511320	contract_screens.cpp	contract_screens_credits_roll_build_credits	high	haiku	
-0x512d40	contract_screens.cpp	contract_screens_wedding_wishes_page	high	haiku	
-0x513180	contract_screens.cpp	show_game_credits_screen	high	haiku	
-0x5133c0	contract_screens.cpp	contract_screen_select_or_dispatch	low	haiku	2026-10-13-screen-stack-inventory.md
-0x513500	contract_screens.cpp	add_publisher_credit_lines	high	haiku	
-0x513750	contract_screens.cpp	populate_unofficial_sites_list	high	haiku	
-0x513a20	contract_screens.cpp	contract_screens_show_web_links_screen	high	haiku	
-0x5134c0	cro_a1.cpp	credits_screen_open	medium	haiku	2026-10-13-screen-stack-inventory.md
-0x513e10	cro_a1.cpp	cro_screen_ctor_checked	medium	haiku	
-0x514030	cro_a1.cpp	cro_a1::`scalar deleting destructor'	medium	slot copy	
-0x514050	cro_a1.cpp	cro_a1_destructor	medium	haiku	
-0x5140e0	cro_a1.cpp	cro_a1::create_schedule	medium	slot copy	
-0x5147b0	cro_a1.cpp	league_cup_init_fixtures	medium	haiku	
-0x5148e0	cro_a1.cpp	cro_a1::set_up_rules	medium	slot copy	
-0x5149a0	cro_a1.cpp	cro_a1::start_new_season	medium	slot copy	
-0x514bd0	cro_a1.cpp	assert_bounded_counter_step	medium	haiku	
-0x514c60	cro_a1.cpp	cup_stage_pairing_assert_or_create	medium	haiku	
-0x514ed0	cro_a1.cpp	cro_a1_select_cup_teams_and_assign	medium	haiku	
-0x5150f0	cro_a1.cpp	cro_a1::process_promotion_relegation_chain	medium	slot copy	
-0x515190	cro_a1.cpp	cro_a1_reassign_players_to_team_pair	medium	haiku	
-0x5152f0	cro_a1.cpp	cro_a1_gap_thunk_forward_to_crt_0x5152f0	medium	haiku	
-0x515310	cro_a2a.cpp	cro_a2a_constructor_assert_setup	high	haiku	
-0x515530	cro_a2a.cpp	cro_a2a::`scalar deleting destructor'	medium	slot copy	
-0x515550	cro_a2a.cpp	cro_a2a_destructor	high	haiku	
-0x5155e0	cro_a2a.cpp	cro_a2a::create_schedule	medium	slot copy	
-0x515cb0	cro_a2a.cpp	cro_a2a_allocate_and_seed_teams	medium	haiku	
-0x515de0	cro_a2a.cpp	cro_a2a::set_up_rules	medium	slot copy	
-0x515ea0	cro_a2a.cpp	cro_a2a::start_new_season	medium	slot copy	
-0x516060	cro_a2a.cpp	cro_a2a_cup_round_counter_advance	medium	haiku	
-0x5160f0	cro_a2a.cpp	cro_a2a_build_cup_round_pairings	medium	haiku	
-0x516360	cro_a2a.cpp	cro_a2a::update_for_date	medium	slot copy	
-0x516430	cro_a2b.cpp	Cro_a2b::Cro_a2b	high	haiku	
-0x516650	cro_a2b.cpp	cro_a2b::`scalar deleting destructor'	medium	slot copy	
-0x516670	cro_a2b.cpp	pfq_object_destructor	high	haiku	
-0x516700	cro_a2b.cpp	cro_a2b::create_schedule	medium	slot copy	
-0x516dd0	cro_a2b.cpp	cro_a2b_init_cup_teams	high	haiku	
-0x516f00	cro_a2b.cpp	cro_a2b::set_up_rules	medium	slot copy	
-0x516fc0	cro_a2b.cpp	cro_a2b::start_new_season	medium	slot copy	
-0x517180	cro_a2b.cpp	cro_a2b_assert_or_count_step	medium	haiku	
-0x517210	cro_a2b.cpp	cup_build_round_pairings	medium	haiku	
-0x517480	cro_cup.cpp	Cro_cup::Cro_cup	high	haiku	
-0x517650	cro_cup.cpp	cro_cup::`scalar deleting destructor'	medium	slot copy	
-0x517670	cro_cup.cpp	cro_cup_cup_scheduler_destructor	high	haiku	
-0x517740	cro_cup.cpp	cro_cup::create_round_table	medium	slot copy	
-0x517bb0	cro_cup.cpp	cro_cup_build_qualifier_table	medium	haiku	
-0x517d60	cro_cup.cpp	cro_cup::release_data	medium	slot copy	
-0x517f10	croatia_awards.cpp	croatia_awards_ctor	medium	haiku	
-0x517fa0	croatia_awards.cpp	Croatia_awards::init_awards	high	haiku	2026-10-14-widescreen-inventory.md
-0x5183a0	croatia_awards.cpp	Croatia_awards::on_player_award_check	medium	haiku	
-0x5184d0	croatia_awards.cpp	croatia_awards_maybe_build_team_of_the_week	medium	haiku	
+0x4e4ea0	contract_screens.cpp	contract_screens_handle_staff_offer_contract_screen	high	opus	
+0x4e53e0	contract_screens.cpp	contract_screens_open_terminate_contract_screen	high	opus	
+0x4e5420	contract_screens.cpp	contract_screens_build_terminate_contract_screen	high	opus	
+0x4e5610	contract_screens.cpp	contract_screens_handle_terminate_contract_screen	high	opus	
+0x4e5770	contract_screens.cpp	contract_screens_news_negotiate_action	high	opus	
+0x4e5850	contract_screens.cpp	compare_squad_players_by_rating_then_reputation	medium	opus	
+0x4e5920	contract_screens.cpp	credits_screen_open	high	opus	2026-10-13-screen-stack-inventory.md
+0x4e5970	contract_screens.cpp	credits_add_sports_interactive_rows	high	opus	
+0x4e6a70	contract_screens.cpp	credits_add_jask_xbox_rows	high	opus	
+0x4e6dc0	contract_screens.cpp	credits_add_research_rows	high	opus	
+0x4e92f0	contract_screens.cpp	credits_add_testing_rows	high	opus	
+0x4eb110	contract_screens.cpp	credits_add_feral_rows	high	opus	
+0x4eb480	contract_screens.cpp	credits_add_eidos_rows	high	opus	
+0x4eccd0	contract_screens.cpp	credits_add_translation_rows	high	opus	
+0x4eda90	contract_screens.cpp	credits_add_additional_research_rows	high	opus	
+0x4f2070	contract_screens.cpp	credits_add_additional_research_rows_fragment_4f2070	high	opus	
+0x500030	contract_screens.cpp	credits_add_additional_research_rows_fragment_500030	high	opus	
+0x502070	contract_screens.cpp	credits_add_additional_research_rows_fragment_502070	high	opus	
+0x503a50	contract_screens.cpp	credits_add_additional_research_rows_fragment_503a50	medium	opus	
+0x50e000	contract_screens.cpp	credits_add_additional_testing_rows	high	opus	
+0x511320	contract_screens.cpp	credits_add_special_thanks_rows	high	opus	
+0x512d40	contract_screens.cpp	credits_add_best_wishes_rows	high	opus	
+0x513180	contract_screens.cpp	credits_screen_build	high	opus	
+0x5133c0	contract_screens.cpp	credits_screen_handle_action	high	opus	2026-10-13-screen-stack-inventory.md
+0x5134c0	contract_screens.cpp	web_sites_screen_open	high	opus	2026-10-13-screen-stack-inventory.md
+0x513500	contract_screens.cpp	web_sites_add_publisher_rows	high	opus	
+0x513750	contract_screens.cpp	web_sites_add_fan_club_links	high	opus	
+0x513a20	contract_screens.cpp	web_sites_screen_build	high	opus	
+0x513e10	cro_a1.cpp	CroA1::CroA1	high	opus	
+0x514030	cro_a1.cpp	CroA1::`scalar deleting destructor'	high	opus	
+0x514050	cro_a1.cpp	CroA1::~CroA1	high	opus	
+0x5140e0	cro_a1.cpp	CroA1::create_schedule	high	opus	
+0x5147b0	cro_a1.cpp	CroA1::create_table	high	opus	
+0x5148e0	cro_a1.cpp	CroA1::set_up_rules	high	opus	
+0x5149a0	cro_a1.cpp	CroA1::start_new_season	high	opus	
+0x514bd0	cro_a1.cpp	CroA1::advance_stage	high	opus	
+0x514c60	cro_a1.cpp	CroA1::create_playoff_stage	medium	opus	
+0x514ed0	cro_a1.cpp	cro_a1_swap_second_and_third_tier_clubs	medium	opus	
+0x5150f0	cro_a1.cpp	CroA1::process_promotion_relegation_chain	high	opus	
+0x515190	cro_a1.cpp	cro_a1_realign_second_division_groups	medium	opus	
+0x5152f0	cro_a1.cpp	CroA1::load_extra_data	high	opus	
+0x515310	cro_a2a.cpp	CroA2a::CroA2a	high	opus	
+0x515530	cro_a2a.cpp	CroA2a::`scalar deleting destructor'	high	opus	
+0x515550	cro_a2a.cpp	CroA2a::~CroA2a	high	opus	
+0x5155e0	cro_a2a.cpp	CroA2a::create_schedule	high	opus	
+0x515cb0	cro_a2a.cpp	CroA2a::create_table	high	opus	
+0x515de0	cro_a2a.cpp	CroA2a::set_up_rules	high	opus	
+0x515ea0	cro_a2a.cpp	CroA2a::start_new_season	high	opus	
+0x516060	cro_a2a.cpp	CroA2a::advance_stage	high	opus	
+0x5160f0	cro_a2a.cpp	CroA2a::create_tiebreak_playoff_stage	medium	opus	
+0x516360	cro_a2a.cpp	CroA2a::update_for_date	high	opus	
+0x516430	cro_a2b.cpp	CroA2b::CroA2b	high	opus	
+0x516650	cro_a2b.cpp	CroA2b::`scalar deleting destructor'	high	opus	
+0x516670	cro_a2b.cpp	CroA2b::~CroA2b	high	opus	
+0x516700	cro_a2b.cpp	CroA2b::create_schedule	high	opus	
+0x516dd0	cro_a2b.cpp	CroA2b::create_table	high	opus	
+0x516f00	cro_a2b.cpp	CroA2b::set_up_rules	high	opus	
+0x516fc0	cro_a2b.cpp	CroA2b::start_new_season	high	opus	
+0x517180	cro_a2b.cpp	CroA2b::advance_stage	high	opus	
+0x517210	cro_a2b.cpp	CroA2b::create_tiebreak_playoff_stage	medium	opus	
+0x517480	cro_cup.cpp	CroCup::CroCup	high	opus	
+0x517650	cro_cup.cpp	CroCup::`scalar deleting destructor'	high	opus	
+0x517670	cro_cup.cpp	CroCup::~CroCup	high	opus	
+0x517740	cro_cup.cpp	CroCup::create_round_table	high	opus	
+0x517bb0	cro_cup.cpp	CroCup::collect_entrants	high	opus	
+0x517d60	cro_cup.cpp	CroCup::start_new_season	high	opus	
+0x517f10	croatia_awards.cpp	CroatiaAwards::CroatiaAwards	high	opus	
+0x517fa0	croatia_awards.cpp	CroatiaAwards::init_awards	high	opus	2026-10-14-widescreen-inventory.md
+0x5183a0	croatia_awards.cpp	CroatiaAwards::daily_update	high	opus	
+0x5184d0	croatia_awards.cpp	CroatiaAwards::update_team_of_the_week	high	opus	
 0x518500	croatia_rules.cpp	CROATIA_RULES::CROATIA_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x518620	croatia_rules.cpp	CROATIA_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md
 0x518640	Cup.cpp	Cup::Cup	high	opus	
@@ -1589,41 +1589,41 @@ address	file	name	confidence	model	cited_in
 0x550710	Db_files.cpp	db_files_check_record_version	medium	haiku	2026-10-13-database-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md
 0x550800	Db_files.cpp	db_write_field_checked	medium	haiku	
 0x550860	Db_files.cpp	db_read_checked_record	medium	haiku	2026-10-13-database-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md
-0x550950	Db_files.cpp	db_files_write_or_read_block	medium	haiku	
-0x5509b0	den_cup.cpp	den_cup::Cup_ctor	high	haiku	
-0x550b80	den_cup.cpp	den_cup::`scalar deleting destructor'	medium	slot copy	
-0x550ba0	den_cup.cpp	den_cup_obj::~den_cup_obj	high	haiku	
-0x550c70	den_cup.cpp	den_cup::create_round_table	medium	slot copy	
-0x551240	den_cup.cpp	den_cup::build_qualifier_list	medium	haiku	
-0x551500	den_cup.cpp	den_cup::release_data	medium	slot copy	
-0x5516b0	den_cup.cpp	den_cup::set_up_rounds	medium	slot copy	
-0x5516f0	den_first.cpp	den_first_ctor_load	high	haiku	
-0x551900	den_first.cpp	den_first::`scalar deleting destructor'	medium	slot copy	
-0x551920	den_first.cpp	den_first::~den_first	high	haiku	
-0x5519b0	den_first.cpp	den_first::create_schedule	medium	slot copy	
-0x552290	den_first.cpp	den_first_init_league_table	high	haiku	
-0x5523b0	den_first.cpp	den_first::set_up_rules	medium	slot copy	
-0x552450	den_first.cpp	den_first::start_new_season	medium	slot copy	
-0x5525e0	den_prm.cpp	DenPrm::init_from_setup	high	haiku	
-0x552850	den_prm.cpp	den_prm::`scalar deleting destructor'	medium	slot copy	
-0x552870	den_prm.cpp	den_prm_destructor	high	haiku	
-0x552900	den_prm.cpp	den_prm::create_schedule	medium	slot copy	
-0x5538d0	den_prm.cpp	den_prm::init_league_slots	high	haiku	
-0x553a00	den_prm.cpp	den_prm::set_up_rules	medium	slot copy	
-0x553aa0	den_prm.cpp	den_prm::start_new_season	medium	slot copy	
-0x553cb0	den_prm.cpp	den_prm_sort_and_assign_players	medium	haiku	
-0x553e80	den_second.cpp	den_second_assert_constructor	high	haiku	
-0x554090	den_second.cpp	den_second::`scalar deleting destructor'	medium	slot copy	
-0x5540b0	den_second.cpp	den_second_dtor	high	haiku	
-0x554170	den_second.cpp	den_second::create_schedule	medium	slot copy	
-0x554a40	den_second.cpp	den_second_init_teams	medium	haiku	
-0x554b60	den_second.cpp	den_second::set_up_rules	medium	slot copy	
-0x554c00	den_second.cpp	den_second::start_new_season	medium	slot copy	
-0x554dc0	denmark_awards.cpp	denmark_awards_ctor	high	haiku	
-0x554e50	denmark_awards.cpp	denmark_awards_init_awards	high	haiku	
-0x5552a0	denmark_awards.cpp	denmark_awards_refresh_ratings	medium	haiku	
-0x555430	denmark_awards.cpp	denmark_awards_on_award_event	medium	haiku	
-0x555460	denmark_awards.cpp	transfer_rules_ctor_gap_0x555460	medium	haiku	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
+0x550950	Db_files.cpp	db_files_write_or_read_records_0x3c	high	opus	
+0x5509b0	den_cup.cpp	DenCup::DenCup	high	opus	
+0x550b80	den_cup.cpp	DenCup::`scalar deleting destructor'	high	opus	
+0x550ba0	den_cup.cpp	DenCup::~DenCup	high	opus	
+0x550c70	den_cup.cpp	DenCup::create_round_table	high	opus	
+0x551240	den_cup.cpp	DenCup::collect_entrants	high	opus	
+0x551500	den_cup.cpp	DenCup::start_new_season	high	opus	
+0x5516b0	den_cup.cpp	DenCup::set_up_rounds	high	opus	
+0x5516f0	den_first.cpp	DenFirst::DenFirst	high	opus	
+0x551900	den_first.cpp	DenFirst::`scalar deleting destructor'	high	opus	
+0x551920	den_first.cpp	DenFirst::~DenFirst	high	opus	
+0x5519b0	den_first.cpp	DenFirst::create_schedule	high	opus	
+0x552290	den_first.cpp	DenFirst::create_table	high	opus	
+0x5523b0	den_first.cpp	DenFirst::set_up_rules	high	opus	
+0x552450	den_first.cpp	DenFirst::start_new_season	high	opus	
+0x5525e0	den_prm.cpp	DenPrm::DenPrm	high	opus	
+0x552850	den_prm.cpp	DenPrm::`scalar deleting destructor'	high	opus	
+0x552870	den_prm.cpp	DenPrm::~DenPrm	high	opus	
+0x552900	den_prm.cpp	DenPrm::create_schedule	high	opus	
+0x5538d0	den_prm.cpp	DenPrm::create_table	high	opus	
+0x553a00	den_prm.cpp	DenPrm::set_up_rules	high	opus	
+0x553aa0	den_prm.cpp	DenPrm::start_new_season	high	opus	
+0x553cb0	den_prm.cpp	den_prm_refresh_second_division_clubs	medium	opus	
+0x553e80	den_second.cpp	DenSecond::DenSecond	high	opus	
+0x554090	den_second.cpp	DenSecond::`scalar deleting destructor'	high	opus	
+0x5540b0	den_second.cpp	DenSecond::~DenSecond	high	opus	
+0x554170	den_second.cpp	DenSecond::create_schedule	high	opus	
+0x554a40	den_second.cpp	DenSecond::create_table	high	opus	
+0x554b60	den_second.cpp	DenSecond::set_up_rules	high	opus	
+0x554c00	den_second.cpp	DenSecond::start_new_season	high	opus	
+0x554dc0	denmark_awards.cpp	DenmarkAwards::DenmarkAwards	high	opus	
+0x554e50	denmark_awards.cpp	DenmarkAwards::init_awards	high	opus	
+0x5552a0	denmark_awards.cpp	DenmarkAwards::daily_update	high	opus	
+0x555430	denmark_awards.cpp	DenmarkAwards::update_team_of_the_week	high	opus	
+0x555460	denmark_awards.cpp	DENMARK_RULES::DENMARK_RULES	high	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
 0x5554a0	discipline.cpp	discipline_cd_check_and_init	high	haiku	2026-10-14-game-creation-inventory.md
 0x555790	discipline.cpp	discipline_table_destroy	medium	haiku	
 0x555860	discipline.cpp	Discipline::load_discipline_dat	high	haiku	

@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x43d2b0 | 40 (+1 unwind) | `brazil_awards_ctor` | thiscall (ECX = this, stack arg: int param_2 as nation/source pointer, ret 4) | Constructs a Brazil_awards object, sets its vtable, default fields, and loads nation awards or calls init_awards on failure. | high | haiku |  |
-| 0x43d340 | 1717 (+58 unwind) | `Brazil_awards::init_awards` | thiscall(this, int param_2) ret 4 | Allocates the awards table of 58 award objects and fills each slot, or reports a fatal allocation error. | high | haiku |  |
-| 0x43e990 | 688 | `Brazil_awards::populate_award_slots` | thiscall(Brazil_awards *this, Date-like key short *date_pair) ret 4 | Fills the monthly and annual award slots for a date pair, distributing player and team awards, then checks the month change. | medium | haiku |  |
-| 0x43f070 | 36 | `brazil_awards_remove_entry` | thiscall(this, int entry) ret 4 | Clears an awards entry from the Brazil awards table by calling the nation awards team-of-the-week routine when the entry matches a stored slot. | low | haiku |  |
+| 0x43d2b0 | 40 (+1 unwind) | `BrazilAwards::BrazilAwards` | thiscall(BrazilAwards* this, FILE* file) ret 4, returns this | Constructs the Brazilian awards on NationAwards and loads them from the file, or sets them up fresh when loading fails. | high | opus |  |
+| 0x43d340 | 1717 (+58 unwind) | `BrazilAwards::init_awards` | thiscall(BrazilAwards* this, FILE* file) ret 4 | Creates the 58 Brazilian awards, team and yearly awards for both national divisions and for the twelve state championships. | high | opus |  |
+| 0x43e990 | 688 | `BrazilAwards::daily_update` | thiscall(BrazilAwards* this, Date* date) ret 4 | Gives the state championship player awards on one fixed date and the national division awards on another, then runs the base month change check. | high | opus |  |
+| 0x43f070 | 36 | `BrazilAwards::update_team_of_the_week` | thiscall(BrazilAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week when the given award is one of the 14 weekly team awards in the Brazilian award table. | high | opus |  |

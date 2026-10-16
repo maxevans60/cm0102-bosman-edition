@@ -523,6 +523,24 @@ Run `sweep-w11`: 8 Opus agents named 215 functions of the Belgian competitions (
 | 0x41cdd0 | Picture lookup by the stadium (team-views inventory) | `background_lookup_entry_value` (Haiku) | `background_find_stadium_picture` | agrees |
 | 0x42b130 | Listed by a constant scan only (widescreen inventory) | `bra_nat_first_assign_national_squad_players` (Haiku) | `bra_nat_first_exchange_state_league_clubs` | no claim |
 
+#### Wave w12 (tier 4, 2026-10-16)
+
+Run `sweep-w12`: 8 Opus agents named 201 functions: the rest of the Brazilian state leagues, `brazil_awards.cpp`, `con_merc_cup.cpp`, the Croatian files with the credits and web sites screens from the `contract_screens.cpp` gap, and the Danish files. Each agent took 1 to 5 minutes and 99,000 to 171,000 tokens. Confidence: 189 high, 12 medium, 0 low. The merge needed no fixes. `denmark_awards.cpp` holds the `DENMARK_RULES` constructor from the gap before `discipline.cpp`.
+
+9 functions of the wave are cited. 6 agree, 1 agrees in area and 2 citations only list the address.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x4c16f0 | Merconorte Cup constructor (club-world) | `Merc_cup::Merc_cup` (Haiku) | `ConMercCup::ConMercCup` | agrees |
+| 0x4c1960 | Merconorte Cup, 3 groups, 16 clubs (sweep-europe) | `con_merc_cup::create_schedule` (slot copy) | `ConMercCup::create_schedule` | agrees in area. Opus finds four groups of four, the research says three groups. Not checked |
+| 0x4c2070 | Not a function start (sweep-europe) | `con_merc_cup_assert_check_0x4c2070` (Haiku) | `con_merc_cup_start_new_season_error_tail` | agrees |
+| 0x4c2560 | Takes 16 clubs from five nations (sweep-europe) | `con_merc_cup_fill_team_slots` (Haiku) | `ConMercCup::select_invited_clubs` | agrees |
+| 0x4e5920 | Opens the credits (screen-stack inventory) | `contract_screens_open_credits_screen` (Haiku) | `credits_screen_open` | agrees |
+| 0x5133c0 | Listed as a user of an injected action id only | `contract_screen_select_or_dispatch` (Haiku) | `credits_screen_handle_action` | no claim |
+| 0x5134c0 | Opens the web sites screen (screen-stack inventory) | `credits_screen_open` (Haiku) | `web_sites_screen_open` | agrees |
+| 0x517fa0 | Listed by a constant scan only (widescreen inventory) | `Croatia_awards::init_awards` (Haiku) | `CroatiaAwards::init_awards` | no claim |
+| 0x555460 | Denmark rules constructor with transfer windows (sweep-rulebooks) | `transfer_rules_ctor_gap_0x555460` (Haiku) | `DENMARK_RULES::DENMARK_RULES` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

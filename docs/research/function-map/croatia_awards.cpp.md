@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x517f10 | 40 (+1 unwind) | `croatia_awards_ctor` | thiscall(this, int param_2 loaded_flag_or_source) ret 4 | Constructs the Croatia awards object, sets its vtable and fields, then loads from the given source or initialises awards. | medium | haiku |  |
-| 0x517fa0 | 309 (+9 unwind) | `Croatia_awards::init_awards` | thiscall(this, int param_2 owner/parent pointer), ret 4 | Allocates the Croatia award block and constructs nine award objects, reporting a version-stamped error box on allocation failure. | high | haiku | 2026-10-14-widescreen-inventory.md |
-| 0x5183a0 | 118 | `Croatia_awards::on_player_award_check` | thiscall(this, short* player_ref) ret 4 | Checks a player's date-stamped award record and, when it matches, awards player of the year across six award slots before a month-change check. | medium | haiku |  |
-| 0x5184d0 | 14 | `croatia_awards_maybe_build_team_of_the_week` | thiscall(this, int param_2 team_or_nation pointer) ret 4 | Calls the team of the week builder when the given object matches one of three stored references in the awards object. | medium | haiku |  |
+| 0x517f10 | 40 (+1 unwind) | `CroatiaAwards::CroatiaAwards` | thiscall(CroatiaAwards* this, FILE* load_source or 0) ret 4, returns this | Constructs the Croatian awards object on NationAwards, sets its nation record, then loads saved awards or creates the award table. | high | opus |  |
+| 0x517fa0 | 309 (+9 unwind) | `CroatiaAwards::init_awards` | thiscall(CroatiaAwards* this, FILE* load_source or 0) ret 4 | Allocates the nine-award table and creates one team award and two year awards for each of the three Croatian divisions. | high | opus | 2026-10-14-widescreen-inventory.md |
+| 0x5183a0 | 118 | `CroatiaAwards::daily_update` | thiscall(CroatiaAwards* this, Date* date) ret 4 | On day 30 of month index 4, gives the two player of the year awards of each Croatian division, then runs the base update. | high | opus |  |
+| 0x5184d0 | 14 | `CroatiaAwards::update_team_of_the_week` | thiscall(CroatiaAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week for an award when it is one of the three Croatian team awards. | high | opus |  |

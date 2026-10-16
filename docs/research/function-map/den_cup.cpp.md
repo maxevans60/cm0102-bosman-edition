@@ -6,10 +6,10 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5509b0 | 132 (+2 unwind) | `den_cup::Cup_ctor` | thiscall(this, int param_2 as 16-bit value, int param_3 as owner or id), ret 8 | Constructs a den cup object, initialises its fields, loads cup data and builds the qualifier list, reporting an assert error on failure. | high | haiku |  |
-| 0x550b80 | 11 | `den_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of den_cup.cpp. | medium | slot copy |  |
-| 0x550ba0 | 62 (+1 unwind) | `den_cup_obj::~den_cup_obj` | thiscall(den_cup_obj *this) ret 0 | Destroys a den cup object by resetting its vtable, freeing owned buffers, a Comp_Stats member and the Cup base. | high | haiku |  |
-| 0x550c70 | 362 | `den_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of den_cup.cpp. | medium | slot copy |  |
-| 0x551240 | 211 | `den_cup::build_qualifier_list` | fastcall (ECX = this cup object, param_1), ret 0 | Allocates a 0x228-byte qualifier table and fills it with up to 0x5c teams selected by four rank or group globals. | medium | haiku |  |
-| 0x551500 | 132 | `den_cup::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of den_cup.cpp. | medium | slot copy |  |
-| 0x5516b0 | 18 | `den_cup::set_up_rounds` | thiscall(Cup* this), ret 0 | Override of Cup::set_up_rounds for the competition of den_cup.cpp. | medium | slot copy |  |
+| 0x5509b0 | 132 (+2 unwind) | `DenCup::DenCup` | thiscall(DenCup* this, short comp_id, CompRecord* comp) ret 8, returns this | Constructs the Danish cup on Cup, then loads saved data or collects entrants, builds the round table, fixture tree and stats and ranks the teams. | high | opus |  |
+| 0x550b80 | 11 | `DenCup::`scalar deleting destructor'` | thiscall(DenCup* this, unsigned flags) ret 4, returns this | Runs the Danish cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x550ba0 | 62 (+1 unwind) | `DenCup::~DenCup` | thiscall(DenCup* this) ret 0 | Destroys the Danish cup by freeing its entrant list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x550c70 | 362 | `DenCup::create_round_table` | thiscall(DenCup* this, char stage, short* round_count, short* extra, int* out) ret 0x10, returns round table pointer | Builds the eight-round table of the Danish cup with draw dates, match dates and round rules for stage -1, and returns null otherwise. | high | opus |  |
+| 0x551240 | 211 | `DenCup::collect_entrants` | thiscall(DenCup* this) ret 0, returns 1 when 92 entries fill, 0 when short, -1 on allocation failure | Fills the 92-entry six-byte entrant list with Danish lower division, Second Division, First Division and Premier Division clubs in that order. | high | opus |  |
+| 0x551500 | 132 | `DenCup::start_new_season` | thiscall(DenCup* this) ret 0 | Frees last season's cup data, archives the stats, advances the year and rebuilds the entrants, rounds, fixture tree and ranking. | high | opus |  |
+| 0x5516b0 | 18 | `DenCup::set_up_rounds` | thiscall(DenCup* this) ret 0, returns 1 | Sets a prize fund of 800000 and the round rules and builds the round table of the Danish cup. | high | opus |  |
