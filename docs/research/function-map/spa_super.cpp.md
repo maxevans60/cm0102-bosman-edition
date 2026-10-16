@@ -6,10 +6,10 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x8586b0 | 128 (+2 unwind) | `spa_super_cup_init` | thiscall(Cup* this, undefined2 param_2, int param_3) ret 8 | Initialises a Spanish super cup object, loading its data and building its fixture tree, reporting assert failures to an error box. | high | haiku |  |
-| 0x858870 | 11 | `spa_super::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of spa_super.cpp. | medium | slot copy |  |
-| 0x858890 | 62 (+1 unwind) | `super_cup_order_dtor` | thiscall(Super_Cup_Order *this) ret 0 | Destroys a Super Cup order object, releasing its owned arrays, stats object and base cup data. | high | haiku |  |
-| 0x858960 | 98 | `spa_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of spa_super.cpp. | medium | slot copy |  |
-| 0x858aa0 | 165 | `spa_super_init_records` | fastcall (ECX = param_1, the super-league state record); returns int, ret 0 | Allocates and fills the Spanish super league record pair from latest placed club lookups, reporting assert errors on failure. | medium | haiku |  |
-| 0x858cd0 | 125 | `spa_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of spa_super.cpp. | medium | slot copy |  |
-| 0x858e70 | 15 | `spa_super::set_up_rounds` | thiscall(Cup* this), ret 0 | Override of Cup::set_up_rounds for the competition of spa_super.cpp. | medium | slot copy | 2026-10-16-sweep-europe.md |
+| 0x8586b0 | 128 (+2 unwind) | `SpaSuper::SpaSuper` | thiscall(SpaSuper* this, short year, void* comp_record), ret 8, returns this | Constructs the Spanish Super Cup on Cup and, without saved data, picks its two clubs and builds its round table, tie tree and stats. | high | opus |  |
+| 0x858870 | 11 | `SpaSuper::`scalar deleting destructor'` | thiscall(SpaSuper* this, unsigned flags), ret 4, returns this | Runs the Spanish Super Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x858890 | 62 (+1 unwind) | `SpaSuper::~SpaSuper` | thiscall(SpaSuper* this), ret 0 | Destroys the Spanish Super Cup by freeing its team list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x858960 | 98 | `SpaSuper::create_round_table` | thiscall(SpaSuper* this, char stage, short* round_count, short* extra, int* out), ret 0x10, returns Round* or null | Builds the one-round, two-leg table of the Spanish Super Cup with its draw and match dates for two clubs. | high | opus |  |
+| 0x858aa0 | 165 | `SpaSuper::select_teams` | thiscall(SpaSuper* this), ret 0, returns 1, 0 or -1 | Picks the Spanish cup winner and the Spanish First Division champion, or the cup runner-up when one club won both. | high | opus |  |
+| 0x858cd0 | 125 | `SpaSuper::start_new_season` | thiscall(SpaSuper* this), ret 0 | Clears the finished Spanish Super Cup, archives its stats, moves the year on and picks the clubs and rounds again. | high | opus |  |
+| 0x858e70 | 15 | `SpaSuper::set_up_rounds` | thiscall(Cup* this), ret 0, returns 1 | Builds the round table from create_round_table with stage -1 and stores it at 0xa3, as the shared set-up of many simple cups. | medium | opus | 2026-10-16-sweep-europe.md |

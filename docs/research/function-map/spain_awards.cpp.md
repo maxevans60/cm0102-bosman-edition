@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x858ea0 | 40 (+1 unwind) | `spain_awards::SpainAwards::SpainAwards` | thiscall (ECX = this, param_2 = stream or load source) ret 4 | Constructs the Spanish awards object, sets its vtable and fields, then loads award data or falls back to init. | high | haiku |  |
-| 0x858f30 | 279 (+8 unwind) | `spain_awards_init_award_objects` | thiscall(this SpainAwards*, int param_2) with ret 4 | Allocates eight award objects into a table, reporting an assert and version error if the table allocation fails. | high | haiku |  |
-| 0x8592c0 | 111 | `spain_awards_vtable_slot_0x8592c0_award_handler` | thiscall(this, short *match_or_date_ptr) ret 4 | Checks a date-keyed match record, then awards manager and player of the year and runs month-change processing. | medium | haiku |  |
-| 0x8593e0 | 12 | `spain_award_visit_candidate` | thiscall (ECX this, one stack argument param_2 as candidate object pointer), ret 4 | Visits a candidate object and, when it matches one of two stored slots, forwards it to the team of the week builder. | medium | haiku |  |
+| 0x858ea0 | 40 (+1 unwind) | `SpainAwards::SpainAwards` | thiscall(SpainAwards* this, File* save) ret 4 | Constructs the Spanish awards on NationAwards, sets its nation record, then loads saved awards or creates the award table. | high | opus |  |
+| 0x858f30 | 279 (+8 unwind) | `SpainAwards::init_awards` | thiscall(SpainAwards* this, File* save) ret 4 | Allocates the table of eight Spanish awards and creates a team award and three year awards for each of the two Spanish divisions. | high | opus |  |
+| 0x8592c0 | 111 | `SpainAwards::daily_update` | thiscall(SpainAwards* this, Date* today) ret 4 | On day 16 of month index 5, gives the Spanish manager and player awards of both divisions, then runs the base update. | high | opus |  |
+| 0x8593e0 | 12 | `SpainAwards::update_team_of_the_week` | thiscall(SpainAwards* this, Award* award) ret 4 | Builds the team of the week when the given award is one of the two Spanish divisional team awards. | high | opus |  |

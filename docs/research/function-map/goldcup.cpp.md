@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5e0660 | 123 (+2 unwind) | `GoldCup::GoldCup` | thiscall(GoldCup* this, short year, Comp* owner) ret 8, returns this | Constructs the Gold Cup on the League base, moves the year to the next odd year, loads or sets up its rules, schedule and Comp_Stats. | high | opus | 2026-10-16-sweep-international.md |
+| 0x5e0660 | 123 (+2 unwind) | `GoldCup::GoldCup` | thiscall(GoldCup* this, short year, Comp* owner) ret 8, returns this | Constructs the Gold Cup on the League base, moves the year to the next odd year, loads or sets up its rules, schedule and Comp_Stats. | high | opus | 2026-10-16-sweep-international.md, int-continental.md |
 | 0x5e0820 | 11 | `GoldCup::`scalar deleting destructor'` | thiscall(GoldCup* this, unsigned flags) ret 4, returns this | Runs the Gold Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
 | 0x5e0840 | 60 (+1 unwind) | `GoldCup::~GoldCup` | thiscall(GoldCup* this) ret 0 | Destroys the Gold Cup by freeing its table, schedule, stage objects and stats, then runs the League destructor. | high | opus |  |
 | 0x5e0900 | 547 | `GoldCup::create_schedule` | thiscall(GoldCup* this, char stage, short* round_count, short* schedule_id, int* is_league) ret 0x10, returns schedule or null | Builds the round schedule of a Gold Cup stage, three rounds of a four-team group or the quarter-final, semi-final and final rounds. | high | opus |  |

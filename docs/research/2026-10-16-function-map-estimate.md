@@ -649,6 +649,27 @@ Run `sweep-w17`: 8 Opus agents named 216 functions: the Northern Irish, Norwegia
 | 0x78ac90 | Fills up to 30 top clubs (wal-nir-irl) | `nir_cup_build_order_table` (Haiku) | `NirCup::collect_entrants` | agrees in area. Opus finds 20 top clubs and 12 lower clubs, 32 entries. Not checked |
 | 0x79d680 | Listed by a constant scan only (widescreen inventory) | `old_finland_awards_init_award_objects` (Haiku) | `OldFinlandAwards::init_awards` | no claim |
 
+#### Wave w18 (tier 4, 2026-10-16)
+
+Run `sweep-w18`: 8 Opus agents named 195 functions: the Russian, Scottish, Spanish and Swedish competitions with their awards, and the printer and `SoundPlayer` gap functions in `simulated_stats.cpp`. Each agent took 2 to 4 minutes and 102,000 to 158,000 tokens. Confidence: 179 high, 16 medium, 0 low. One agent wrote the evidence and confidence values in each other's fields. The merge check caught it, and the 31 rows were swapped back.
+
+12 functions of the wave are cited. 8 agree and 4 agree in area. For 0x84cbc0 the code takes the arguments as pan, path and loop. The import inventory gives the path first.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x84c7f0 | Printer check before the print function (import inventory) | `printer_installed_check` (Haiku) | `printer_is_installed` | agrees |
+| 0x84c830 | Prints text lines in Courier, all GDI32 imports (import inventory) | `print_text_lines` (Haiku) | `print_text_lines` | agrees |
+| 0x84ca80 | Sound object constructor, DirectSoundCreate (columns inventory) | `init_directsound_device_wrapper` (Haiku) | `SoundPlayer::SoundPlayer` | agrees |
+| 0x84caf0 | Releases the sound object (import inventory) | `release_owned_object_field_0x28` (Haiku) | `SoundPlayer::~SoundPlayer` | agrees |
+| 0x84cb10 | Sound call from scrman (display inventory, import inventory) | `sound_slots_release_all` (Haiku) | `SoundPlayer::stop_all` | agrees in area |
+| 0x84cb70 | Sound call from scrman (display inventory, import inventory) | `slot_release_thiscall` (Haiku) | `SoundPlayer::stop_slot` | agrees in area |
+| 0x84cbc0 | Play a sound file, path first (import inventory) | `sound_play_slot` (Haiku) | `SoundPlayer::play_file` | agrees. The argument order differs: the code takes pan, path, loop, and the import inventory gives path first |
+| 0x84cc80 | Sound query from scrman (display inventory) | `array_slot_call_vfunc_0x24` (Haiku) | `SoundPlayer::is_slot_playing` | agrees in area |
+| 0x84ccc0 | Sound volume (display inventory, import inventory) | `set_slot_volume_percent` (Haiku) | `SoundPlayer::set_slot_volume` | agrees |
+| 0x84cd10 | One sound buffer for each play (columns inventory) | `load_wave_sound_buffer` (Haiku) | `SoundPlayer::load_wav` | agrees |
+| 0x84cf00 | Sound slot search (display inventory) | `find_ready_slot_handler` (Haiku) | `SoundPlayer::find_free_slot` | agrees in area |
+| 0x858e70 | Shared set_up_rounds when no prize fund is set (sweep-europe) | `spa_super::set_up_rounds` (slot copy) | `SpaSuper::set_up_rounds` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

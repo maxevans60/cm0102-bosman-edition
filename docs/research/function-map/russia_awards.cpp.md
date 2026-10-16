@@ -6,8 +6,8 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7ec210 | 40 (+1 unwind) | `russia_awards_ctor` | thiscall(this, int param) ret 4 | Constructs the Russian awards object, sets its vtable and fields, then loads or initialises award data. | high | haiku |  |
-| 0x7ec2a0 | 259 (+7 unwind) | `Russia_awards::init_awards` | thiscall(Russia_awards *this, int param_2) ret 4 | Allocates the seven Russian award objects into a 28-byte table and reports a fatal error on allocation failure. | high | haiku |  |
-| 0x7ec600 | 56 | `russia_awards_update_ratings` | thiscall(this, short *param_2 as month or date key) ret 4 | Updates Russian awards for a month once the date matches, distributing team and top-three player awards, then checks month change. | medium | haiku |  |
-| 0x7ec6a0 | 12 | `russia_awards_on_player_change` | thiscall(this, player_ptr param_2) with one stack argument, ret 4 | Rebuilds the team of the week when a player at one of two stored slots changes, forwarding to the nation awards builder. | medium | haiku |  |
-| 0x7ec6c0 | 64 | `russia_awards_dispatch_monthly_awards` | fastcall (ECX = this, object pointer to award record) with no stack arguments, ret 0 | Awards the monthly prizes to the two winners found in two global award slots, unless the record type is five. | medium | haiku |  |
+| 0x7ec210 | 40 (+1 unwind) | `RussiaAwards::RussiaAwards` | thiscall(RussiaAwards* this, FILE* file) ret 4, returns this | Constructs the Russian awards object on NationAwards, sets its nation record, then loads saved awards or creates the award table. | high | opus |  |
+| 0x7ec2a0 | 259 (+7 unwind) | `RussiaAwards::init_awards` | thiscall(RussiaAwards* this, FILE* file) ret 4 | Allocates the seven-award table and creates the player of the year award plus two team awards and a month award for each Russian division. | high | opus |  |
+| 0x7ec600 | 56 | `RussiaAwards::daily_update` | thiscall(RussiaAwards* this, Date* date) ret 4 | On day 30 of month index 10, gives the Russian player of the year and both teams of the season, then runs the base update. | high | opus |  |
+| 0x7ec6a0 | 12 | `RussiaAwards::update_team_of_the_week` | thiscall(RussiaAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week for an award when it is one of the two Russian weekly team awards. | high | opus |  |
+| 0x7ec6c0 | 64 | `RussiaAwards::on_month_change` | thiscall(RussiaAwards* this) ret 0 | Gives the player of the month award of the Premier League and of the First Division from the month ratings, except in month index 5. | medium | opus |  |
