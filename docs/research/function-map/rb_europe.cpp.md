@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dd400 | 21 | `rb_europe_ctor` | thiscall (ECX/param_1 is this, param 2 is the base ruling-body argument passed through to RulingBody::RulingBody), ret 4 | Constructs a European ruling body object by initialising its base ruling body and setting its vtable and default rule fields. | high | haiku |  |
-| 0x7dd450 | 98 (+1 unwind) | `rb_europe_fire_disciplinary_check` | thiscall(RbEurope* this, int param_2), ret 8 | Checks a European club's disciplinary counter and, when a ban is due, records it and posts news. | medium | haiku |  |
-| 0x7dd5a0 | 48 | `rb_europe_assert_or_dispatch` | cdecl-like thiscall-free function with three arguments (param_1 undefined4, param_2 int index or code, param_3 undefined4), returns with ret 0xc | Raises a version assertion error when the code is below 20, otherwise dispatches the request to a nationality text routine. | medium | haiku |  |
+| 0x7dd400 | 21 | `RbEurope::RbEurope` | thiscall (this, FILE* file), ret 4 | Constructs the European ruling body on the RulingBody base, then sets its vtable, nation and continent ids and ban scale fields. | high | opus |  |
+| 0x7dd450 | 98 (+1 unwind) | `RbEurope::process_match_cards` | thiscall (this, Booking* booking, Match* match), ret 8 | Adds a match's bookings to the player's European record, banning one match for a red card and one match per three yellows. | high | opus |  |
+| 0x7dd5a0 | 48 | `RbEurope::get_name` | thiscall (this, char* buf, int buf_len, int form), ret 0xc | Writes the European continent adjective into the buffer as its name, or shows a version error box when the buffer is under 20 bytes. | high | opus |  |

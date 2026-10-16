@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7de2e0 | 22 | `rb_germany_cup_ctor` | thiscall(RulingBody* this, undefined4 arg1) ret 4 | Constructs the German cup ruling body, runs the base RulingBody constructor and sets cup rule fields and vtable. | high | haiku |  |
-| 0x7de330 | 158 (+4 unwind) | `rb_germany_cup_daily_update` | thiscall-like cdecl with (int *param_1 this-like record, undefined4 *param_2 date or event record); ret 8 | Advances a cup entrant's counter daily and issues a points ban or discipline news when rules trigger. | medium | haiku |  |
-| 0x7de580 | 38 | `rb_germany_cup_assert_or_init` | cdecl(int line_or_flag, int code) with ret 0xc (stdcall-like cleanup not present; caller cleans up three arguments, so cdecl returns with ret 0xc only if stdcall: treated as stdcall(undefined4 param_1, int param_2) ret 0xc) | Reports a German cup assertion failure with version and file details, or initialises the cup module when the code is high enough. | medium | haiku |  |
+| 0x7de2e0 | 22 | `RbGermanyCup::RbGermanyCup` | thiscall(RbGermanyCup *this, FILE *file), ret 4 | Constructs the German cup ruling body on the RulingBody base and sets its kind, rule set index, nation and continent fields. | high | opus |  |
+| 0x7de330 | 158 (+4 unwind) | `RbGermanyCup::process_match_cards` | thiscall(RbGermanyCup *this, MatchPlayer *player, Fixture *fixture), ret 8 | Applies German cup card rules to one player after a match: one match ban every fifth booking, points ban for a red card. | high | opus |  |
+| 0x7de580 | 38 | `RbGermanyCup::get_name` | thiscall(RbGermanyCup *this unused, char *buf, int buf_len, int flag), ret 0xc | Writes the text German cup into the buffer as the ruling body name, or reports an assert when the buffer is too short. | high | opus |  |

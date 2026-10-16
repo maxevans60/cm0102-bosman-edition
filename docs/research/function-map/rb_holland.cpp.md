@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7ded90 | 22 | `rb_holland_ctor` | thiscall(this, RulingBody* base_ctor_arg) ret 4 | Constructs a Holland ruling body by initialising the RulingBody base then setting the vtable and default rule fields. | medium | haiku |  |
-| 0x7dede0 | 186 (+6 unwind) | `rb_holland_process_ruling_stage` | thiscall(RulingBody *this, const Date *date) ret 8 | Advances the ruling stage counters and, when a points ban is due, records a discipline ban and posts its news. | medium | haiku |  |
-| 0x7df090 | 47 | `rb_holland_assert_or_dispatch` | cdecl-like thiscall-free function with arguments (undefined4 param_1, int param_2, undefined4 param_3), ret 0xc | Shows a version assert error box when a rating value is below twenty, otherwise dispatches the request to a nationality routine. | medium | haiku |  |
-| 0x7df150 | 13 | `rb_holland_get_flags_and_check_type` | thiscall(this, out_flag_a: byte*, out_flag_b: byte*) returning bool; ret 0x10 | Writes two output flag bytes and reports whether the object's type byte equals 2. | medium | haiku |  |
+| 0x7ded90 | 22 | `RbHolland::RbHolland` | thiscall(RbHolland *this, FILE *file), ret 4 | Constructs the Dutch ruling body on the RulingBody base and sets its kind, rule set index, nation and continent fields. | high | opus |  |
+| 0x7dede0 | 186 (+6 unwind) | `RbHolland::process_match_cards` | thiscall(RbHolland *this, MatchPlayer *player, Fixture *fixture), ret 8 | Applies Dutch card rules to one player after a match: bans at the third and each later booking from five, points ban for red. | high | opus |  |
+| 0x7df090 | 47 | `RbHolland::get_name` | thiscall(RbHolland *this unused, char *buf, int buf_len, int flag), ret 0xc | Writes the Dutch nationality adjective into the buffer as the ruling body name, or reports an assert when the buffer is too short. | high | opus |  |
+| 0x7df150 | 13 | `RbHolland::is_one_booking_from_ban` | thiscall(RbHolland *this unused, DisciplineEntry *entry, char *out_matches, char *out_code, int comp_id), ret 0x10 | Reports whether the player has two bookings and so is one booking short of a Dutch ban, and sets the ban length to one match. | medium | opus |  |

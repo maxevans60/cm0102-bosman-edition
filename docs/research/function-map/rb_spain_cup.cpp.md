@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e2c30 | 22 | `rb_spain_cup_ctor_base` | thiscall(RulingBody* this, int param_2 passed through to base ctor) ret 4 | Constructs the Spanish cup ruling body by initialising the base ruling body and setting its vtable, rules and round parameters. | high | haiku |  |
-| 0x7e2c80 | 163 (+5 unwind) | `rb_spain_cup::on_round_complete` | thiscall(this, Date const* date) ret 8 | Applies a points ban to a team after a Spanish Cup round, recording a discipline entry and news when the flag is set. | medium | haiku |  |
-| 0x7e2ee0 | 38 | `rb_spain_cup_check_or_assert_version` | cdecl(int param_1 this-less argument pair: undefined4 param_1, int param_2 build or version id) ret 0 (caller cleans up) | Checks a version id against a threshold, showing an error box with the build string on failure, otherwise formatting the Spanish cup name. | medium | haiku |  |
+| 0x7e2c30 | 22 | `RbSpainCup::RbSpainCup` | thiscall(RbSpainCup* this, FILE* file) returning this, ret 4 | Constructs the Spanish cup ruling body on the RulingBody base, sets vtable 0x96ee54, rule set id 0x1b and the Spain nation fields. | high | opus |  |
+| 0x7e2c80 | 163 (+5 unwind) | `RbSpainCup::process_match_cards` | thiscall(RbSpainCup* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Spanish cup rules, queueing a points ban for a red card and banning him at each second booking. | high | opus |  |
+| 0x7e2ee0 | 38 | `RbSpainCup::get_name` | thiscall(RbSpainCup* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Spanish cup into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

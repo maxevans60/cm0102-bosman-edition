@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x929140 | 99 (+2 unwind) | `world_club_champ_init` | thiscall(this, short id, int param_3) ret 8 | Initialises a world club championship object, loads league data and builds its competition screens, reporting failure through an error box. | high | haiku |  |
+| 0x929140 | 99 (+2 unwind) | `world_club_champ_init` | thiscall(this, short id, int param_3) ret 8 | Initialises a world club championship object, loads league data and builds its competition screens, reporting failure through an error box. | high | haiku | club-world.md |
 | 0x9292b0 | 11 | `world_club_champ::`scalar deleting destructor'` | thiscall (League* this, unsigned flags), returns this, ret 4 | Override of League::`scalar deleting destructor' for the competition of world_club_champ.cpp. | medium | slot copy |  |
 | 0x9292d0 | 60 (+1 unwind) | `world_club_champ::~world_club_champ` | thiscall(this) ret 0 | Destructor that resets the vtable, frees the owned table and element array, then destroys the League base. | high | haiku |  |
 | 0x929390 | 443 | `world_club_champ::create_schedule` | thiscall (League* this, char stage, short* entry_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Override of League::create_schedule for the competition of world_club_champ.cpp. | medium | slot copy |  |

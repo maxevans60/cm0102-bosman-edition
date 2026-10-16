@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dd990 | 22 | `rb_finland_league_ctor` | thiscall(this, RulingBody* base_or_parent_arg) ret 4 | Constructs the Finnish league ruling body by initialising its base, vtable pointer, and league configuration fields. | high | haiku |  |
-| 0x7dd9e0 | 153 (+4 unwind) | `rb_finland_league_daily_tick` | thiscall(this in ECX, int param_2 Date/context pointer in stack); ret 8 | Advances a Finnish league ruling body's daily counters and issues points-ban discipline entries and news when thresholds are reached. | medium | haiku |  |
-| 0x7ddc20 | 38 | `rb_finland_league_assert_or_init` | cdecl-like stack function with two arguments: param_1 (the league object or destination buffer pointer) and param_2 (an integer compared against 0x14), returns with ret 0xc (stdcall-style callee cleanup of three arguments) | Shows a version assertion error box when the league index is below 20, otherwise records the Finnish league name. | medium | haiku |  |
+| 0x7dd990 | 22 | `RbFinlandLeague::RbFinlandLeague` | thiscall (this, FILE* file), ret 4 | Constructs the Finnish league ruling body on the RulingBody base, then sets its vtable, nation and continent ids and ban scale fields. | high | opus |  |
+| 0x7dd9e0 | 153 (+4 unwind) | `RbFinlandLeague::process_match_cards` | thiscall (this, Booking* booking, Match* match), ret 8 | Adds a match's bookings to the player's Finnish league record, banning per three yellows and queueing a red card points ban one week later. | high | opus |  |
+| 0x7ddc20 | 38 | `RbFinlandLeague::get_name` | thiscall (this, char* buf, int buf_len, int form), ret 0xc | Writes "Finnish league" into the buffer as its name, or shows a version error box when the buffer is under 20 bytes. | high | opus |  |

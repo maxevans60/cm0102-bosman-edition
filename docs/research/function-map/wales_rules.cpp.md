@@ -6,5 +6,5 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x90f080 | 79 (+1 unwind) | `wales_rules_ctor_with_alloc` | thiscall(this in ECX, plus 5 stack arguments forwarded to the base rules constructor); ret 0x14 | Constructs the Wales rules object, sets its vtable, and allocates a 12-byte rules table, reporting an assert error on allocation failure. | medium | haiku |  |
-| 0x90f1a0 | 38 | `wc_compute_match_date_and_month` | stdcall or cdecl with six stack arguments, ret 0x1c (7 dwords: param_1 nation or context id, param_2 unused, param_3 out month byte, param_4 out year short, param_5 out byte, param_6 out short) | Computes a match date as month and year from the current date and a nation-derived stamp, writing results through output pointers. | low | haiku |  |
+| 0x90f080 | 79 (+1 unwind) | `WALES_RULES::WALES_RULES` | thiscall(WALES_RULES* this, 5 args forwarded to TRANSFER_RULES::TRANSFER_RULES) ret 0x14 | Constructs the Wales transfer rules, sets vtable 0x970a9c and allocates and fills the 12-byte transfer window table. | high | opus |  |
+| 0x90f1a0 | 38 | `WALES_RULES::get_loan_period` | thiscall(WALES_RULES* this, int nation, int unused, char* out_month, short* out_year, char* out_stamp_month, short* out_stamp_year, int unused) ret 0x1c | Returns next month and year from today, then replaces them with the nation's contract date month and the year in which it next falls. | medium | opus |  |

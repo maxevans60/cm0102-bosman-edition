@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7e13d0 | 21 | `rb_oceania_ctor` | thiscall(RulingBody* this, int base_arg) ret 4 | Constructs an Oceania ruling body by initialising the base body and setting its vtable and default field values. | medium | haiku |  |
-| 0x7e1420 | 98 (+1 unwind) | `rb_oceania_ruling_body_tick` | thiscall(RulingBody* this, int param_2) ret 8 | Advances a ruling body discipline counter and, when a threshold is reached, records a ban and posts news about it. | medium | haiku |  |
-| 0x7e1570 | 40 | `rb_oceania_assert_version_or_fail` | cdecl(int line_or_code, int version_threshold) returns void, ret 0xc with 3 stack args in the callee frame | Checks a version threshold and shows a version error box, otherwise delegates to nation region naming. | medium | haiku |  |
+| 0x7e13d0 | 21 | `RbOceania::RbOceania` | thiscall(RbOceania* this, FILE* file) returning this, ret 4 | Constructs the Oceanian ruling body on the RulingBody base, sets vtable 0x96ed74, rule set id 0x23 and its nation fields. | high | opus |  |
+| 0x7e1420 | 98 (+1 unwind) | `RbOceania::process_match_cards` | thiscall(RbOceania* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Oceanian rules, banning him one match after a red card and one match for each third booking. | high | opus |  |
+| 0x7e1570 | 40 | `RbOceania::get_name` | thiscall(RbOceania* this unused, char* buf, int buf_len, int form) ret 0xc | Writes the Oceanian continent name into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |

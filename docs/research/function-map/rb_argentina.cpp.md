@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7db100 | 22 | `rb_argentina_ctor` | thiscall(this, RulingBody* base_arg) ret 4 | Constructs the Argentina ruling body object by running the base constructor then setting its vtable and default rule fields. | high | haiku |  |
-| 0x7db150 | 98 (+1 unwind) | `rb_argentina_vtable_update_wins_and_notify` | thiscall(this, int param_2) ret 8 | Accumulates a ban counter on the player record and, at a multiple of five, adds a ban and posts news. | low | haiku |  |
-| 0x7db2a0 | 47 | `rb_argentina_assert_or_dispatch` | cdecl-like stdcall with three arguments (int param_1, int index, int param_3), ret 0xc | Dispatches to nationality handling for valid indices, otherwise formats a version assert and shows an error box. | medium | haiku |  |
+| 0x7db100 | 22 | `RbArgentina::RbArgentina` | thiscall(RbArgentina* this, FILE* file) returning this, ret 4 | Constructs the Argentine ruling body on the RulingBody base, sets vtable 0x96e9f4, rule set id 3 and the Argentina nation fields. | high | opus |  |
+| 0x7db150 | 98 (+1 unwind) | `RbArgentina::process_match_cards` | thiscall(RbArgentina* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Argentine rules, banning him after a red card or each fifth booking and posting the ban news. | high | opus |  |
+| 0x7db2a0 | 47 | `RbArgentina::get_name` | thiscall(RbArgentina* this unused, char* buf, int buf_len, int form) ret 0xc | Writes the Argentine nationality adjective into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | medium | opus |  |

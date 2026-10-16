@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dd660 | 22 | `rb_finland_cup_ctor` | thiscall(RulingBody* this, int base_arg) ret 4 | Constructs the Finnish cup ruling body by initialising the base ruling body then setting the cup's vtable and rule fields. | high | haiku |  |
-| 0x7dd6b0 | 153 (+4 unwind) | `rb_finland_cup_on_day_tick` | thiscall-like member taking this in param_1 and a date pointer in param_2 (cdecl in pseudocode); ret 8 | Runs the daily Finland cup check, advancing a points-ban counter and issuing a discipline ban and news item when due. | medium | haiku |  |
-| 0x7dd8f0 | 38 | `rb_finland_cup_assert_or_init` | cdecl-like stack call with two arguments (param_1 pointer, param_2 int line or code) and ret 0xc, likely stdcall-compatible wrapper; treated as cdecl style with callee cleanup of 12 bytes | Raises a version-stamped error box when the line argument is below 20, otherwise formats the Finnish cup assert message. | medium | haiku |  |
+| 0x7dd660 | 22 | `RbFinlandCup::RbFinlandCup` | thiscall (this, FILE* file), ret 4 | Constructs the Finnish cup ruling body on the RulingBody base, then sets its vtable, nation and continent ids and ban scale fields. | high | opus |  |
+| 0x7dd6b0 | 153 (+4 unwind) | `RbFinlandCup::process_match_cards` | thiscall (this, Booking* booking, Match* match), ret 8 | Adds a match's bookings to the player's Finnish cup record, banning per three yellows and queueing a red card points ban one week later. | high | opus |  |
+| 0x7dd8f0 | 38 | `RbFinlandCup::get_name` | thiscall (this, char* buf, int buf_len, int form), ret 0xc | Writes "Finnish cup" into the buffer as its name, or shows a version error box when the buffer is under 20 bytes. | high | opus |  |

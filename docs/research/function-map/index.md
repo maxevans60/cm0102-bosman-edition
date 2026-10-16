@@ -9,26 +9,26 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 1777 high, 4698 medium, 388 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs.
+- Confidence: 2106 high, 4415 medium, 342 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
 |---|---|
-| [african_nations.cpp](african_nations.cpp.md) | 23 |
-| [Area.cpp](Area.cpp.md) | 12 |
+| [african_nations.cpp](african_nations.cpp.md) | 20 |
+| [Area.cpp](Area.cpp.md) | 15 |
 | [arg_prm.cpp](arg_prm.cpp.md) | 17 |
 | [arg_second.cpp](arg_second.cpp.md) | 19 |
-| [argentina_awards.cpp](argentina_awards.cpp.md) | 8 |
-| [argentina_rules.cpp](argentina_rules.cpp.md) | 8 |
+| [argentina_awards.cpp](argentina_awards.cpp.md) | 4 |
+| [argentina_rules.cpp](argentina_rules.cpp.md) | 12 |
 | [asia_club_champ.cpp](asia_club_champ.cpp.md) | 15 |
 | [asia_cup_winner.cpp](asia_cup_winner.cpp.md) | 17 |
 | [asia_nations.cpp](asia_nations.cpp.md) | 17 |
 | [asia_super_cup.cpp](asia_super_cup.cpp.md) | 7 |
 | [aus_nsl.cpp](aus_nsl.cpp.md) | 17 |
 | [australia_awards.cpp](australia_awards.cpp.md) | 4 |
-| [australia_rules.cpp](australia_rules.cpp.md) | 12 |
-| [award_manager.cpp](award_manager.cpp.md) | 14 |
+| [australia_rules.cpp](australia_rules.cpp.md) | 3 |
+| [award_manager.cpp](award_manager.cpp.md) | 23 |
 | [award_screens.cpp](award_screens.cpp.md) | 15 |
 | [award_shortlist.cpp](award_shortlist.cpp.md) | 17 |
 | [awol.cpp](awol.cpp.md) | 16 |
@@ -38,8 +38,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [bel_second.cpp](bel_second.cpp.md) | 18 |
 | [bel_super.cpp](bel_super.cpp.md) | 6 |
 | [bel_third.cpp](bel_third.cpp.md) | 25 |
-| [belgium_awards.cpp](belgium_awards.cpp.md) | 5 |
-| [belgium_rules.cpp](belgium_rules.cpp.md) | 9 |
+| [belgium_awards.cpp](belgium_awards.cpp.md) | 4 |
+| [belgium_rules.cpp](belgium_rules.cpp.md) | 10 |
 | [bra_champ_cup.cpp](bra_champ_cup.cpp.md) | 16 |
 | [bra_cup.cpp](bra_cup.cpp.md) | 8 |
 | [bra_nat_first.cpp](bra_nat_first.cpp.md) | 16 |
@@ -58,8 +58,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [bra_reg_santa.cpp](bra_reg_santa.cpp.md) | 10 |
 | [bra_reg_sp.cpp](bra_reg_sp.cpp.md) | 10 |
 | [brazil_awards.cpp](brazil_awards.cpp.md) | 4 |
-| [brazil_rules.cpp](brazil_rules.cpp.md) | 9 |
-| [cash.cpp](cash.cpp.md) | 10 |
+| [brazil_rules.cpp](brazil_rules.cpp.md) | 3 |
+| [cash.cpp](cash.cpp.md) | 16 |
 | [club_history.cpp](club_history.cpp.md) | 11 |
 | [club_records.cpp](club_records.cpp.md) | 69 |
 | [club_screens.cpp](club_screens.cpp.md) | 138 |
@@ -72,8 +72,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [con_merc_cup.cpp](con_merc_cup.cpp.md) | 17 |
 | [conmebol_liber.cpp](conmebol_liber.cpp.md) | 16 |
 | [conmebol_merc.cpp](conmebol_merc.cpp.md) | 18 |
-| [conmebol_seeding.cpp](conmebol_seeding.cpp.md) | 40 |
-| [contract_manager.cpp](contract_manager.cpp.md) | 95 |
+| [conmebol_seeding.cpp](conmebol_seeding.cpp.md) | 9 |
+| [contract_manager.cpp](contract_manager.cpp.md) | 126 |
 | [contract_screens.cpp](contract_screens.cpp.md) | 46 |
 | [cro_a1.cpp](cro_a1.cpp.md) | 14 |
 | [cro_a2a.cpp](cro_a2a.cpp.md) | 10 |
@@ -108,8 +108,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [england_rules.cpp](england_rules.cpp.md) | 7 |
 | [eur_super_cup.cpp](eur_super_cup.cpp.md) | 6 |
 | [euro_champ.cpp](euro_champ.cpp.md) | 25 |
-| [euro_champ_qual.cpp](euro_champ_qual.cpp.md) | 35 |
-| [european_awards.cpp](european_awards.cpp.md) | 4 |
+| [euro_champ_qual.cpp](euro_champ_qual.cpp.md) | 32 |
+| [european_awards.cpp](european_awards.cpp.md) | 7 |
 | [european_cup.cpp](european_cup.cpp.md) | 76 |
 | [fifa_confed.cpp](fifa_confed.cpp.md) | 19 |
 | [fifa_rankings.cpp](fifa_rankings.cpp.md) | 18 |
@@ -120,8 +120,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [find_screens.cpp](find_screens.cpp.md) | 23 |
 | [Fine.cpp](Fine.cpp.md) | 16 |
 | [finland_awards.cpp](finland_awards.cpp.md) | 6 |
-| [finland_rules.cpp](finland_rules.cpp.md) | 6 |
-| [fix_man.cpp](fix_man.cpp.md) | 37 |
+| [finland_rules.cpp](finland_rules.cpp.md) | 4 |
+| [fix_man.cpp](fix_man.cpp.md) | 39 |
 | [fog_of_war.cpp](fog_of_war.cpp.md) | 33 |
 | [formation.cpp](formation.cpp.md) | 46 |
 | [fra_cfa.cpp](fra_cfa.cpp.md) | 8 |
@@ -132,8 +132,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [fra_second.cpp](fra_second.cpp.md) | 7 |
 | [fra_super.cpp](fra_super.cpp.md) | 6 |
 | [fra_third.cpp](fra_third.cpp.md) | 7 |
-| [france_awards.cpp](france_awards.cpp.md) | 5 |
-| [france_rules.cpp](france_rules.cpp.md) | 9 |
+| [france_awards.cpp](france_awards.cpp.md) | 4 |
+| [france_rules.cpp](france_rules.cpp.md) | 10 |
 | [friendly.cpp](friendly.cpp.md) | 80 |
 | [game.cpp](game.cpp.md) | 21 |
 | [game_config.cpp](game_config.cpp.md) | 13 |
@@ -142,15 +142,15 @@ All 11747 functions with their category, file and placement method are in `funct
 | [ger_lge_cup.cpp](ger_lge_cup.cpp.md) | 7 |
 | [ger_regional.cpp](ger_regional.cpp.md) | 12 |
 | [ger_second.cpp](ger_second.cpp.md) | 7 |
-| [germany_awards.cpp](germany_awards.cpp.md) | 5 |
-| [germany_rules.cpp](germany_rules.cpp.md) | 6 |
+| [germany_awards.cpp](germany_awards.cpp.md) | 4 |
+| [germany_rules.cpp](germany_rules.cpp.md) | 7 |
 | [goldcup.cpp](goldcup.cpp.md) | 57 |
 | [gre_cup.cpp](gre_cup.cpp.md) | 19 |
 | [gre_prm.cpp](gre_prm.cpp.md) | 8 |
 | [gre_second.cpp](gre_second.cpp.md) | 7 |
 | [gre_super.cpp](gre_super.cpp.md) | 6 |
-| [greece_awards.cpp](greece_awards.cpp.md) | 5 |
-| [greece_rules.cpp](greece_rules.cpp.md) | 3 |
+| [greece_awards.cpp](greece_awards.cpp.md) | 4 |
+| [greece_rules.cpp](greece_rules.cpp.md) | 4 |
 | [gui_utils.cpp](gui_utils.cpp.md) | 11 |
 | [Guio.cpp](Guio.cpp.md) | 4 |
 | [hall_of_fame.cpp](hall_of_fame.cpp.md) | 20 |
@@ -189,23 +189,23 @@ All 11747 functions with their category, file and placement method are in `funct
 | [ita_ser_c2b.cpp](ita_ser_c2b.cpp.md) | 12 |
 | [ita_ser_c2c.cpp](ita_ser_c2c.cpp.md) | 11 |
 | [ita_super.cpp](ita_super.cpp.md) | 6 |
-| [italy_awards.cpp](italy_awards.cpp.md) | 5 |
-| [italy_rules.cpp](italy_rules.cpp.md) | 8 |
+| [italy_awards.cpp](italy_awards.cpp.md) | 4 |
+| [italy_rules.cpp](italy_rules.cpp.md) | 9 |
 | [jap_emp_cup.cpp](jap_emp_cup.cpp.md) | 7 |
 | [jap_j1.cpp](jap_j1.cpp.md) | 15 |
 | [jap_j2.cpp](jap_j2.cpp.md) | 7 |
 | [jap_j_cup.cpp](jap_j_cup.cpp.md) | 6 |
 | [jap_super.cpp](jap_super.cpp.md) | 6 |
-| [japan_awards.cpp](japan_awards.cpp.md) | 5 |
-| [japan_rules.cpp](japan_rules.cpp.md) | 7 |
-| [key_nation.cpp](key_nation.cpp.md) | 24 |
+| [japan_awards.cpp](japan_awards.cpp.md) | 4 |
+| [japan_rules.cpp](japan_rules.cpp.md) | 5 |
+| [key_nation.cpp](key_nation.cpp.md) | 27 |
 | [kor_fa_cup.cpp](kor_fa_cup.cpp.md) | 6 |
 | [kor_league.cpp](kor_league.cpp.md) | 7 |
 | [kor_league_cup.cpp](kor_league_cup.cpp.md) | 17 |
 | [kor_super_cup.cpp](kor_super_cup.cpp.md) | 6 |
 | [korea_awards.cpp](korea_awards.cpp.md) | 4 |
-| [korea_rules.cpp](korea_rules.cpp.md) | 6 |
-| [Langlib.cpp](Langlib.cpp.md) | 10 |
+| [korea_rules.cpp](korea_rules.cpp.md) | 3 |
+| [Langlib.cpp](Langlib.cpp.md) | 13 |
 | [league.cpp](league.cpp.md) | 62 |
 | [league_stage.cpp](league_stage.cpp.md) | 11 |
 | [library_without_asserts](library_without_asserts.md) | 254 |
@@ -243,8 +243,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [northern_ireland_awards.cpp](northern_ireland_awards.cpp.md) | 5 |
 | [northern_ireland_rules.cpp](northern_ireland_rules.cpp.md) | 4 |
 | [norway_awards.cpp](norway_awards.cpp.md) | 6 |
-| [norway_rules.cpp](norway_rules.cpp.md) | 8 |
-| [notes.cpp](notes.cpp.md) | 23 |
+| [norway_rules.cpp](norway_rules.cpp.md) | 6 |
+| [notes.cpp](notes.cpp.md) | 25 |
 | [oceania_club_champ.cpp](oceania_club_champ.cpp.md) | 16 |
 | [oceania_nations.cpp](oceania_nations.cpp.md) | 32 |
 | [officials_manager.cpp](officials_manager.cpp.md) | 18 |
@@ -271,9 +271,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [por_second.cpp](por_second.cpp.md) | 7 |
 | [por_second_b.cpp](por_second_b.cpp.md) | 10 |
 | [por_super.cpp](por_super.cpp.md) | 6 |
-| [portugal_awards.cpp](portugal_awards.cpp.md) | 5 |
-| [portugal_rules.cpp](portugal_rules.cpp.md) | 8 |
-| [printouts.cpp](printouts.cpp.md) | 16 |
+| [portugal_awards.cpp](portugal_awards.cpp.md) | 4 |
+| [portugal_rules.cpp](portugal_rules.cpp.md) | 5 |
+| [printouts.cpp](printouts.cpp.md) | 20 |
 | [rb_argentina.cpp](rb_argentina.cpp.md) | 3 |
 | [rb_asia.cpp](rb_asia.cpp.md) | 3 |
 | [rb_australia.cpp](rb_australia.cpp.md) | 4 |
@@ -322,8 +322,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [rus_cup.cpp](rus_cup.cpp.md) | 7 |
 | [rus_first.cpp](rus_first.cpp.md) | 7 |
 | [rus_prm.cpp](rus_prm.cpp.md) | 13 |
-| [russia_awards.cpp](russia_awards.cpp.md) | 6 |
-| [russia_rules.cpp](russia_rules.cpp.md) | 3 |
+| [russia_awards.cpp](russia_awards.cpp.md) | 5 |
+| [russia_rules.cpp](russia_rules.cpp.md) | 4 |
 | [sco_chal_cup.cpp](sco_chal_cup.cpp.md) | 7 |
 | [sco_fa_cup.cpp](sco_fa_cup.cpp.md) | 6 |
 | [sco_first.cpp](sco_first.cpp.md) | 12 |
@@ -332,8 +332,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [sco_second.cpp](sco_second.cpp.md) | 7 |
 | [sco_third.cpp](sco_third.cpp.md) | 7 |
 | [scotland_awards.cpp](scotland_awards.cpp.md) | 5 |
-| [scotland_rules.cpp](scotland_rules.cpp.md) | 7 |
-| [scout_manager.cpp](scout_manager.cpp.md) | 43 |
+| [scotland_rules.cpp](scotland_rules.cpp.md) | 5 |
+| [scout_manager.cpp](scout_manager.cpp.md) | 45 |
 | [scrman.cpp](scrman.cpp.md) | 63 |
 | [search_edit_session.cpp](search_edit_session.cpp.md) | 12 |
 | [search_eng.cpp](search_eng.cpp.md) | 15 |
@@ -348,9 +348,9 @@ All 11747 functions with their category, file and placement method are in `funct
 | [spa_second.cpp](spa_second.cpp.md) | 7 |
 | [spa_second_b.cpp](spa_second_b.cpp.md) | 18 |
 | [spa_super.cpp](spa_super.cpp.md) | 7 |
-| [spain_awards.cpp](spain_awards.cpp.md) | 5 |
+| [spain_awards.cpp](spain_awards.cpp.md) | 4 |
 | [spain_rules.cpp](spain_rules.cpp.md) | 7 |
-| [squad_manager.cpp](squad_manager.cpp.md) | 18 |
+| [squad_manager.cpp](squad_manager.cpp.md) | 19 |
 | [stadium.cpp](stadium.cpp.md) | 17 |
 | [staff_contracts.cpp](staff_contracts.cpp.md) | 42 |
 | [staff_records.cpp](staff_records.cpp.md) | 37 |

@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7db360 | 21 | `rb_asia_ctor` | thiscall(this, RulingBody base argument passed on stack, which is forwarded to RulingBody::RulingBody) ret 4 | Constructs the Asian ruling body object by running the base constructor and setting its vtable and default field values. | medium | haiku |  |
-| 0x7db3b0 | 101 (+1 unwind) | `rb_asia_flag_event_dispatch` | thiscall(this, int param_2) ret 8 (ECX is this, one stack argument plus an unused second; the pseudocode shows param_2 passed through to post_ban_news) | Raises a disciplinary ban for a flagged Asian rule body entry and posts the matching news item. | medium | haiku |  |
-| 0x7db510 | 40 | `rb_asia_assert_version_or_report` | stdcall-style ret 0xc: argument list (int param_1 region or handle, int param_2 version number) with callee cleanup of 12 bytes, cdecl-like caller, ret 0xc | Checks the Asia league data version number and, when stale, shows a version error box and clears a flag. | medium | haiku |  |
+| 0x7db360 | 21 | `RbAsia::RbAsia` | thiscall(RbAsia* this, FILE* file) returning this, ret 4 | Constructs the Asian ruling body on the RulingBody base, sets vtable 0x96ea14, rule set id 0x29 and the Asian continent field. | high | opus |  |
+| 0x7db3b0 | 101 (+1 unwind) | `RbAsia::process_match_cards` | thiscall(RbAsia* this unused, PlayerMatchRecord* rec, Fixture* fixture) ret 8 | Applies a player's match cards under Asian rules, banning him after a red card or each second booking and posting the ban news. | high | opus |  |
+| 0x7db510 | 40 | `RbAsia::get_name` | thiscall(RbAsia* this unused, char* buf, int buf_len, int form) ret 0xc | Writes the Asian continent name into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | medium | opus |  |

@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x92b4b0 | 133 (+2 unwind) | `WorldClubCup::WorldClubCup` | thiscall(WorldClubCup *this, undefined2 param_2, int param_3), ret 8 | Constructs the world club cup object, loads its cup data, builds the fixture tree and reports an assertion error on failure. | high | haiku |  |
+| 0x92b4b0 | 133 (+2 unwind) | `WorldClubCup::WorldClubCup` | thiscall(WorldClubCup *this, undefined2 param_2, int param_3), ret 8 | Constructs the world club cup object, loads its cup data, builds the fixture tree and reports an assertion error on failure. | high | haiku | club-world.md |
 | 0x92b680 | 11 | `world_club_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of world_club_cup.cpp. | medium | slot copy |  |
 | 0x92b6a0 | 62 (+1 unwind) | `WorldClubCup::~WorldClubCup` | thiscall(this in ECX, no stack arguments), ret 0 | Destructor that resets the vtable, frees owned buffers and a Comp_Stats object, then tears down the Cup base. | high | haiku |  |
 | 0x92b770 | 98 | `world_club_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of world_club_cup.cpp. | medium | slot copy |  |

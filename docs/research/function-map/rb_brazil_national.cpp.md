@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dc080 | 22 | `rb_brazil_national_ctor` | thiscall (ECX = this, stack: param_2 int) ret 4 | Constructs the Brazil national rules object by initialising its base RulingBody and setting its vtable and rule fields. | medium | haiku |  |
-| 0x7dc0d0 | 156 (+5 unwind) | `rb_brazil_national_on_event` | thiscall-like fastcall-style: param_1 is the ruling body or discipline object (this), param_2 is the event record pointer, ret 8 | Accumulates a national team's points or discipline counter, issuing a ban and news item once a threshold is reached. | medium | haiku |  |
-| 0x7dc320 | 38 | `rb_brazil_national_assert_or_init` | cdecl, arguments (undefined4 buffer, int code); ret 0xc | Shows a version-stamped error box when the code is below 20, otherwise formats the Brazilian national string into the buffer. | medium | haiku |  |
+| 0x7dc080 | 22 | `RbBrazilNational::RbBrazilNational` | thiscall (this, FILE* file), ret 4 | Constructs the Brazilian national ruling body on the RulingBody base, then sets its vtable, nation and continent ids and ban scale fields. | high | opus |  |
+| 0x7dc0d0 | 156 (+5 unwind) | `RbBrazilNational::process_match_cards` | thiscall (this, Booking* booking, Match* match), ret 8 | Adds a match's bookings to the player's Brazilian national record, banning one match per three yellows and queueing a points ban after a second red. | high | opus |  |
+| 0x7dc320 | 38 | `RbBrazilNational::get_name` | thiscall (this, char* buf, int buf_len, int form), ret 0xc | Writes "Brazilian national" into the buffer as its name, or shows a version error box when the buffer is under 20 bytes. | high | opus |  |

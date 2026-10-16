@@ -1,27 +1,27 @@
 address	file	name	confidence	model	cited_in
-0x401000	african_nations.cpp	African_Nations::African_Nations	high	haiku	2026-10-16-crash-fixes.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-season-change-points.md
-0x4011c0	african_nations.cpp	return_zero_stub	medium	haiku	
-0x4011d0	african_nations.cpp	return_zero_stub	high	haiku	
-0x4011e0	african_nations.cpp	stub_return_true_ff	medium	haiku	
-0x4011f0	african_nations.cpp	nop_stub_african_nations	medium	haiku	
-0x401200	african_nations.cpp	african_nations::`scalar deleting destructor'	medium	slot copy	
-0x401220	african_nations.cpp	african_nations_class_destructor	high	haiku	
-0x4012e0	african_nations.cpp	african_nations::create_schedule	medium	slot copy	
-0x4019c0	african_nations.cpp	african_nations_init_nation_slots	medium	haiku	
-0x401ab0	african_nations.cpp	african_nations::set_up_rules	medium	slot copy	
-0x401b90	african_nations.cpp	african_nations_forward_virtual_call	medium	haiku	
-0x401ba0	african_nations.cpp	african_nations::update_staff_records_for_status	medium	slot copy	
-0x401d20	african_nations.cpp	african_nations::start_new_season	medium	slot copy	
-0x401e10	african_nations.cpp	african_nations_assert_or_advance_counter	medium	haiku	
-0x401ea0	african_nations.cpp	african_nations::create_nation_cup_stage	high	haiku	
-0x402090	african_nations.cpp	african_nations_cup_stage_setup	medium	haiku	
-0x4022c0	african_nations.cpp	african_nations_build_team_pool	high	haiku	
-0x4025a0	african_nations.cpp	african_nations::update_for_date	medium	slot copy	
-0x4027d0	african_nations.cpp	african_nations::set_predicted_positions	medium	slot copy	
-0x4029c0	african_nations.cpp	african_nations_set_squad_levels	medium	haiku	
-0x402ac0	african_nations.cpp	area_init_bounds_and_tables	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md
-0x402d10	african_nations.cpp	area_refresh_view_pos	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
-0x402d80	african_nations.cpp	cup_flag_clear_and_release	low	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
+0x401000	african_nations.cpp	AfricanNations::AfricanNations	high	opus	2026-10-16-crash-fixes.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-season-change-points.md
+0x4011c0	african_nations.cpp	Comp::get_qualification_status	medium	opus	
+0x4011d0	african_nations.cpp	Comp::get_qualification_status_change	medium	opus	
+0x4011e0	african_nations.cpp	League::get_fixed_draw_slot	medium	opus	
+0x4011f0	african_nations.cpp	League::set_fixed_draw_slot	medium	opus	
+0x401200	african_nations.cpp	AfricanNations::`scalar deleting destructor'	high	opus	
+0x401220	african_nations.cpp	AfricanNations::~AfricanNations	high	opus	
+0x4012e0	african_nations.cpp	AfricanNations::create_schedule	high	opus	
+0x4019c0	african_nations.cpp	AfricanNations::init_group_a_table	medium	opus	
+0x401ab0	african_nations.cpp	AfricanNations::set_up_rules	high	opus	
+0x401b90	african_nations.cpp	AfricanNations::record_season_honours	medium	opus	
+0x401ba0	african_nations.cpp	AfricanNations::update_staff_records_for_status	high	opus	
+0x401d20	african_nations.cpp	AfricanNations::start_new_season	high	opus	
+0x401e10	african_nations.cpp	AfricanNations::advance_stage	medium	opus	
+0x401ea0	african_nations.cpp	AfricanNations::create_group_stage	high	opus	
+0x402090	african_nations.cpp	AfricanNations::create_knockout_stage	high	opus	
+0x4022c0	african_nations.cpp	AfricanNations::draw_finalists	high	opus	
+0x4025a0	african_nations.cpp	AfricanNations::update_for_date	high	opus	
+0x4027d0	african_nations.cpp	AfricanNations::set_predicted_positions	high	opus	
+0x4029c0	african_nations.cpp	AfricanNations::set_club_progress	medium	opus	
+0x402ac0	Area.cpp	Area::init	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-14-widescreen-inventory.md
+0x402d10	Area.cpp	Area::open_popup	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
+0x402d80	Area.cpp	Area::close_popup	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
 0x402e70	Area.cpp	Area::draw	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md
 0x4031a0	Area.cpp	Area::release_children	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-select-leagues-spec.md
 0x403200	Area.cpp	Area::insert_sorted_index	medium	haiku	2026-10-13-area-widget-draw-spec.md,2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md
@@ -74,74 +74,74 @@ address	file	name	confidence	model	cited_in
 0x40a3e0	argentina_awards.cpp	argentina_awards::ctor_with_assert_fallback	high	haiku	
 0x40a550	argentina_awards.cpp	argentina_awards_forward_to_month_ratings	medium	haiku	
 0x40a560	argentina_awards.cpp	argentina_awards_handle_event	medium	haiku	
-0x40a580	argentina_awards.cpp	argentina_awards_offer_ctor	medium	haiku	
-0x40a5f0	argentina_awards.cpp	return_true_stub_3arg	medium	haiku	
-0x40a600	argentina_awards.cpp	return_true_stub	medium	haiku	
-0x40a610	argentina_awards.cpp	return_true_stub_thiscall_5	high	haiku	
-0x40a620	argentina_rules.cpp	argentina_rules_Rules_init_rules_table	high	haiku	
-0x40a710	argentina_rules.cpp	asia_club_champ_clear_flag_for_team	medium	haiku	
-0x40a7d0	argentina_rules.cpp	date_from_record_fields	medium	haiku	
-0x40a810	argentina_rules.cpp	ctry_increment_club_counter_if_match	medium	haiku	
-0x40a860	argentina_rules.cpp	transfer_offer_check_eligibility_window	medium	haiku	
-0x40a900	argentina_rules.cpp	transfer_offer_validate_rules	medium	haiku	
-0x40aa10	argentina_rules.cpp	fill_rule_slots_invalid	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x40aa30	argentina_rules.cpp	argentina_rules_news_or_transfer_offer	high	haiku	
-0x40aae0	asia_club_champ.cpp	Asia_club_champ::ctor	high	haiku	
-0x40ad50	asia_club_champ.cpp	asia_club_champ::`scalar deleting destructor'	medium	slot copy	
-0x40ad70	asia_club_champ.cpp	asia_club_champ::dtor	high	haiku	
-0x40ae90	asia_club_champ.cpp	asia_club_champ::create_round_table	medium	slot copy	
-0x40b460	asia_club_champ.cpp	asia_club_champ_news_phase2_elimination	high	haiku	
-0x40b620	asia_club_champ.cpp	asia_club_champ_init_team_table	high	haiku	
-0x40b700	asia_club_champ.cpp	asia_club_champ::release_data	medium	slot copy	
-0x40b950	asia_club_champ.cpp	asia_club_champ_fill_squad_slots	high	haiku	
-0x40bec0	asia_club_champ.cpp	asia_club_champ_create_cup_instance	high	haiku	
-0x40c070	asia_club_champ.cpp	asia_club_champ_advance_stage	high	haiku	
-0x40c110	asia_club_champ.cpp	asia_club_champ_stage_setup_league_stages	medium	haiku	
-0x40c3d0	asia_club_champ.cpp	asia_club_champ_create_cup_stage_object	medium	haiku	
-0x40c5b0	asia_club_champ.cpp	asia_club_champ::apply_team_result_finance	medium	slot copy	
-0x40c720	asia_club_champ.cpp	asia_club_champ::rank_teams	medium	slot copy	
-0x40ca20	asia_club_champ.cpp	set_club_champ_fixture_stage	medium	haiku	
-0x40cba0	asia_cup_winner.cpp	asia_cup_winner_find_slot_index	medium	haiku	
-0x40cbe0	asia_cup_winner.cpp	asia_cup_winner_ctor	high	haiku	
-0x40ce50	asia_cup_winner.cpp	asia_cup_winner::`scalar deleting destructor'	medium	slot copy	
-0x40ce70	asia_cup_winner.cpp	asia_cup_winner_dtor	high	haiku	
-0x40cf90	asia_cup_winner.cpp	asia_cup_winner::create_round_table	medium	slot copy	
-0x40d460	asia_cup_winner.cpp	asia_cup_winner_order_dispatch	medium	haiku	
-0x40d4d0	asia_cup_winner.cpp	asia_cup_init_entries	medium	haiku	
-0x40d5b0	asia_cup_winner.cpp	asia_cup_winner::release_data	medium	slot copy	
-0x40d800	asia_cup_winner.cpp	asia_cup_winner::set_up_rounds	medium	slot copy	
-0x40d830	asia_cup_winner.cpp	asia_cup_winner_fill_squad_slots	medium	haiku	
-0x40ddf0	asia_cup_winner.cpp	asia_cup_winner_build_fixture_list	medium	haiku	
-0x40dfa0	asia_cup_winner.cpp	asia_cup_winner_check_retry_or_assert	medium	haiku	
-0x40e030	asia_cup_winner.cpp	asia_cup_winner_build_stage	medium	haiku	
-0x40e260	asia_cup_winner.cpp	asia_cup_winner::apply_team_result_finance	medium	slot copy	
-0x40e3b0	asia_cup_winner.cpp	asia_cup_winner::rank_teams	medium	slot copy	
-0x40e6b0	asia_cup_winner.cpp	asia_cup_winner_set_cup_fields	medium	haiku	
-0x40e7b0	asia_cup_winner.cpp	asia_cup_winner_is_player_member	medium	haiku	
-0x40e860	asia_nations.cpp	asia_nations_cup_ctor	high	haiku	
-0x40ea20	asia_nations.cpp	asia_nations::`scalar deleting destructor'	medium	slot copy	
-0x40ea40	asia_nations.cpp	asia_nations_team_list::~asia_nations_team_list	high	haiku	
-0x40eb00	asia_nations.cpp	asia_nations::create_schedule	medium	slot copy	
-0x40f130	asia_nations.cpp	Asia_nations_news_message::emit_result_news	high	haiku	
-0x40f3d0	asia_nations.cpp	asia_nations::init_team_slots	medium	haiku	
-0x40f4c0	asia_nations.cpp	asia_nations::set_up_rules	medium	slot copy	
-0x40f590	asia_nations.cpp	asia_nations::record_season_honours	medium	slot copy	
-0x40f5a0	asia_nations.cpp	asia_nations::update_staff_records_for_status	medium	slot copy	
-0x40f720	asia_nations.cpp	asia_nations::start_new_season	medium	slot copy	
-0x40f810	asia_nations.cpp	asia_nations_advance_stage	medium	haiku	
-0x40f8a0	asia_nations.cpp	Asia_Nations::create_group_stage_league	medium	haiku	
-0x40fa90	asia_nations.cpp	asia_nations_build_cup_stage	medium	haiku	
-0x40fdf0	asia_nations.cpp	asia_nations_build_qualifier_teams	medium	haiku	
-0x410170	asia_nations.cpp	asia_nations::update_for_date	medium	slot copy	
-0x4103a0	asia_nations.cpp	asia_nations::set_predicted_positions	medium	slot copy	
-0x410560	asia_nations.cpp	asia_nations_set_qualifier_status	medium	haiku	
-0x410650	asia_super_cup.cpp	asia_super_cup_init	high	haiku	
-0x410820	asia_super_cup.cpp	asia_super_cup::`scalar deleting destructor'	medium	slot copy	
-0x410840	asia_super_cup.cpp	AsiaSuperCup::~AsiaSuperCup	high	haiku	
-0x410910	asia_super_cup.cpp	asia_super_cup::create_round_table	medium	slot copy	
-0x410a50	asia_super_cup.cpp	asia_super_cup_init_save_buffer	high	haiku	
-0x410c50	asia_super_cup.cpp	asia_super_cup::release_data	medium	slot copy	
-0x410e20	asia_super_cup.cpp	asia_super_cup::update_for_date	medium	slot copy	
+0x40a580	argentina_rules.cpp	ARGENTINA_RULES::Argentina_rules	high	opus	
+0x40a5f0	argentina_rules.cpp	TRANSFER_RULES::rule_slot_5	low	opus	
+0x40a600	argentina_rules.cpp	TRANSFER_RULES::can_loan_player	high	opus	
+0x40a610	argentina_rules.cpp	TRANSFER_RULES::can_end_loan	high	opus	
+0x40a620	argentina_rules.cpp	ARGENTINA_RULES::init_transfer_windows	high	opus	
+0x40a710	argentina_rules.cpp	ARGENTINA_RULES::daily_update	medium	opus	
+0x40a7d0	argentina_rules.cpp	transfer_window_get_date	medium	opus	
+0x40a810	argentina_rules.cpp	ARGENTINA_RULES::record_transfer	high	opus	
+0x40a860	argentina_rules.cpp	ARGENTINA_RULES::can_sign_player	high	opus	
+0x40a900	argentina_rules.cpp	ARGENTINA_RULES::can_make_offer	high	opus	
+0x40aa10	argentina_rules.cpp	ARGENTINA_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x40aa30	argentina_rules.cpp	ARGENTINA_RULES::write_deadline_news_text	high	opus	
+0x40aae0	asia_club_champ.cpp	AsiaClubChamp::AsiaClubChamp	high	opus	club-world.md
+0x40ad50	asia_club_champ.cpp	AsiaClubChamp::`scalar deleting destructor'	high	opus	
+0x40ad70	asia_club_champ.cpp	AsiaClubChamp::~AsiaClubChamp	high	opus	
+0x40ae90	asia_club_champ.cpp	AsiaClubChamp::create_round_table	high	opus	
+0x40b460	asia_club_champ.cpp	AsiaClubChamp::build_fate_news_text	high	opus	
+0x40b620	asia_club_champ.cpp	AsiaClubChamp::build_team_table	medium	opus	
+0x40b700	asia_club_champ.cpp	AsiaClubChamp::release_data	high	opus	
+0x40b950	asia_club_champ.cpp	AsiaClubChamp::select_qualified_clubs	medium	opus	
+0x40bec0	asia_club_champ.cpp	AsiaClubChamp::create_second_zone_cup_stage	medium	opus	
+0x40c070	asia_club_champ.cpp	AsiaClubChamp::advance_stage	medium	opus	
+0x40c110	asia_club_champ.cpp	AsiaClubChamp::create_group_stages	high	opus	
+0x40c3d0	asia_club_champ.cpp	AsiaClubChamp::create_semi_final_stage	medium	opus	
+0x40c5b0	asia_club_champ.cpp	AsiaClubChamp::apply_team_result_finance	high	opus	
+0x40c720	asia_club_champ.cpp	AsiaClubChamp::rank_teams	high	opus	
+0x40ca20	asia_club_champ.cpp	AsiaClubChamp::set_club_progress	medium	opus	
+0x40cba0	asia_cup_winner.cpp	asia_cup_winner_find_club_nation_slot	medium	opus	
+0x40cbe0	asia_cup_winner.cpp	AsiaCupWinner::AsiaCupWinner	high	opus	club-world.md
+0x40ce50	asia_cup_winner.cpp	AsiaCupWinner::`scalar deleting destructor'	high	opus	
+0x40ce70	asia_cup_winner.cpp	AsiaCupWinner::~AsiaCupWinner	high	opus	
+0x40cf90	asia_cup_winner.cpp	AsiaCupWinner::create_round_table	high	opus	
+0x40d460	asia_cup_winner.cpp	AsiaCupWinner::build_fate_news_text	high	opus	
+0x40d4d0	asia_cup_winner.cpp	AsiaCupWinner::create_team_entries	high	opus	
+0x40d5b0	asia_cup_winner.cpp	AsiaCupWinner::release_data	high	opus	
+0x40d800	asia_cup_winner.cpp	AsiaCupWinner::set_up_rounds	high	opus	
+0x40d830	asia_cup_winner.cpp	AsiaCupWinner::select_qualified_clubs	medium	opus	
+0x40ddf0	asia_cup_winner.cpp	AsiaCupWinner::create_zone_stage	medium	opus	
+0x40dfa0	asia_cup_winner.cpp	AsiaCupWinner::advance_stage	medium	opus	
+0x40e030	asia_cup_winner.cpp	AsiaCupWinner::create_finals_stage	medium	opus	
+0x40e260	asia_cup_winner.cpp	AsiaCupWinner::apply_team_result_finance	high	opus	
+0x40e3b0	asia_cup_winner.cpp	AsiaCupWinner::rank_teams	high	opus	
+0x40e6b0	asia_cup_winner.cpp	AsiaCupWinner::set_club_progress	medium	opus	
+0x40e7b0	asia_cup_winner.cpp	asia_cup_winner_club_in_club_championship	medium	opus	
+0x40e860	asia_nations.cpp	AsiaNations::AsiaNations	high	opus	
+0x40ea20	asia_nations.cpp	AsiaNations::`scalar deleting destructor'	high	opus	
+0x40ea40	asia_nations.cpp	AsiaNations::~AsiaNations	high	opus	
+0x40eb00	asia_nations.cpp	AsiaNations::create_schedule	high	opus	
+0x40f130	asia_nations.cpp	AsiaNations::build_fate_news_text	high	opus	
+0x40f3d0	asia_nations.cpp	AsiaNations::create_group_table	high	opus	
+0x40f4c0	asia_nations.cpp	AsiaNations::set_up_rules	high	opus	
+0x40f590	asia_nations.cpp	AsiaNations::record_season_honours	medium	opus	
+0x40f5a0	asia_nations.cpp	AsiaNations::update_staff_records_for_status	high	opus	
+0x40f720	asia_nations.cpp	AsiaNations::start_new_season	high	opus	
+0x40f810	asia_nations.cpp	AsiaNations::advance_stage	medium	opus	
+0x40f8a0	asia_nations.cpp	AsiaNations::create_group_stage	high	opus	
+0x40fa90	asia_nations.cpp	AsiaNations::create_knockout_stage	high	opus	
+0x40fdf0	asia_nations.cpp	AsiaNations::select_and_draw_teams	high	opus	
+0x410170	asia_nations.cpp	AsiaNations::update_for_date	high	opus	
+0x4103a0	asia_nations.cpp	AsiaNations::set_predicted_positions	high	opus	
+0x410560	asia_nations.cpp	AsiaNations::set_club_progress	medium	opus	
+0x410650	asia_super_cup.cpp	AsiaSuperCup::AsiaSuperCup	high	opus	club-world.md
+0x410820	asia_super_cup.cpp	AsiaSuperCup::`scalar deleting destructor'	high	opus	
+0x410840	asia_super_cup.cpp	AsiaSuperCup::~AsiaSuperCup	high	opus	
+0x410910	asia_super_cup.cpp	AsiaSuperCup::create_round_table	high	opus	
+0x410a50	asia_super_cup.cpp	AsiaSuperCup::select_teams	high	opus	
+0x410c50	asia_super_cup.cpp	AsiaSuperCup::release_data	high	opus	
+0x410e20	asia_super_cup.cpp	AsiaSuperCup::update_for_date	high	opus	
 0x410e90	aus_nsl.cpp	aus_nsl_constructor	high	haiku	
 0x4110b0	aus_nsl.cpp	aus_nsl_return_three	medium	haiku	
 0x4110c0	aus_nsl.cpp	aus_nsl::`scalar deleting destructor'	medium	slot copy	
@@ -163,19 +163,19 @@ address	file	name	confidence	model	cited_in
 0x412680	australia_awards.cpp	AustraliaAwards::init_award_objects	high	haiku	2026-10-14-widescreen-inventory.md
 0x412ac0	australia_awards.cpp	australia_awards_thiscall_update	medium	haiku	
 0x412c20	australia_awards.cpp	australia_awards::vtable_slot_award_refresh	medium	haiku	
-0x412c80	australia_rules.cpp	Australia_rules::Australia_rules	medium	haiku	
-0x412db0	australia_rules.cpp	australia_rules_init_defaults_vtable_slot	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x412dd0	australia_rules.cpp	award_manager_loan_deadline_check	medium	haiku	
-0x412ec0	australia_rules.cpp	noop_stub_ret_12	medium	haiku	
-0x412ed0	australia_rules.cpp	vtable_object_destructor_scalar	high	haiku	
-0x412ef0	australia_rules.cpp	award_base::vtable_reset	medium	haiku	
-0x412f00	australia_rules.cpp	award_manager_update_player_ratings	medium	haiku	
-0x413180	australia_rules.cpp	Award_manager::open_cd_awards	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-import-inventory.md
-0x413410	australia_rules.cpp	award_manager_destructor_release_members	medium	haiku	
-0x4134c0	australia_rules.cpp	award_manager_dispatch_event	medium	haiku	
-0x413540	australia_rules.cpp	award_manager_serialise_or_reset	medium	haiku	2026-10-14-game-creation-inventory.md
-0x4135b0	australia_rules.cpp	Award_Manager::build_award_table	high	haiku	
-0x412e40	award_manager.cpp	award_record_init	medium	haiku	
+0x412c80	australia_rules.cpp	AUSTRALIA_RULES::Australia_rules	high	opus	
+0x412db0	australia_rules.cpp	AUSTRALIA_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x412dd0	australia_rules.cpp	AUSTRALIA_RULES::can_loan_player	high	opus	
+0x412e40	award_manager.cpp	AWARD::AWARD	high	opus	
+0x412ec0	award_manager.cpp	AWARD::write_news	high	opus	
+0x412ed0	award_manager.cpp	AWARD::`scalar deleting destructor'	high	opus	
+0x412ef0	award_manager.cpp	AWARD::~AWARD	high	opus	
+0x412f00	award_manager.cpp	award_raise_winner_reputation	medium	opus	
+0x413180	award_manager.cpp	AWARD_MANAGER::AWARD_MANAGER	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-import-inventory.md
+0x413410	award_manager.cpp	AWARD_MANAGER::~AWARD_MANAGER	high	opus	
+0x4134c0	award_manager.cpp	AWARD_MANAGER::process_fixture	high	opus	
+0x413540	award_manager.cpp	AWARD_MANAGER::process_date	high	opus	2026-10-14-game-creation-inventory.md
+0x4135b0	award_manager.cpp	AWARD_MANAGER::create_nation_awards	high	opus	
 0x413fe0	award_manager.cpp	award_manager_load_awards_dat	high	haiku	
 0x4141a0	award_manager.cpp	Award_Manager::save_awards_dat	medium	haiku	
 0x4142c0	award_manager.cpp	award_manager_forward_three_args	medium	haiku	
@@ -327,16 +327,16 @@ address	file	name	confidence	model	cited_in
 0x424510	belgium_awards.cpp	belgium_awards_init_awards	high	haiku	
 0x4249c0	belgium_awards.cpp	belgium_awards_ratings_apply	medium	haiku	
 0x424b60	belgium_awards.cpp	belgium_awards_on_player_event	medium	haiku	
-0x424b90	belgium_awards.cpp	belgium_awards_transfer_offer_ctor	medium	haiku	
-0x424c00	belgium_rules.cpp	belgium_rules_init_table	high	haiku	
-0x424d30	belgium_rules.cpp	belgium_rules_transfer_allowed	medium	haiku	
-0x424eb0	belgium_rules.cpp	belgium_rules_dispatch_transfer_offer	medium	haiku	
-0x424f80	belgium_rules.cpp	nationality_rule_reset	low	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x424fa0	belgium_rules.cpp	belgium_rules_send_news_message	medium	haiku	
-0x4250b0	belgium_rules.cpp	belgium_rules_transfer_news_post	medium	haiku	
-0x425390	belgium_rules.cpp	belgium_rules_open_requests_screen	medium	haiku	2026-10-16-stadium-research.md
-0x4253f0	belgium_rules.cpp	bel_board_meeting_dialog_show	high	haiku	2026-10-16-stadium-research.md
-0x4257f0	belgium_rules.cpp	belgium_rules_dispatch_event	low	haiku	
+0x424b90	belgium_rules.cpp	BELGIUM_RULES::BELGIUM_RULES	high	opus	
+0x424c00	belgium_rules.cpp	BELGIUM_RULES::init_transfer_windows	high	opus	
+0x424d30	belgium_rules.cpp	BELGIUM_RULES::can_sign_player	high	opus	
+0x424eb0	belgium_rules.cpp	BELGIUM_RULES::can_make_offer	high	opus	
+0x424f80	belgium_rules.cpp	BELGIUM_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x424fa0	belgium_rules.cpp	BELGIUM_RULES::post_deadline_news	high	opus	
+0x4250b0	belgium_rules.cpp	BELGIUM_RULES::write_deadline_news_text	high	opus	
+0x425390	belgium_rules.cpp	board_request_screen_open	high	opus	2026-10-16-stadium-research.md
+0x4253f0	belgium_rules.cpp	board_request_screen_draw	high	opus	2026-10-16-stadium-research.md
+0x4257f0	belgium_rules.cpp	board_request_screen_handle_event	medium	opus	
 0x4259a0	bra_champ_cup.cpp	bra_champ_cup_cup_constructor	high	haiku	
 0x425b30	bra_champ_cup.cpp	bra_champ_cup::`scalar deleting destructor'	medium	slot copy	
 0x425b50	bra_champ_cup.cpp	bra_champ_cup_dtor	high	haiku	
@@ -546,17 +546,17 @@ address	file	name	confidence	model	cited_in
 0x43d340	brazil_awards.cpp	Brazil_awards::init_awards	high	haiku	
 0x43e990	brazil_awards.cpp	Brazil_awards::populate_award_slots	medium	haiku	
 0x43f070	brazil_awards.cpp	brazil_awards_remove_entry	low	haiku	
-0x43f0e0	brazil_rules.cpp	brazil_rules_ctor	high	haiku	
-0x43f210	brazil_rules.cpp	brazil_rules_vtable_offer_check	medium	haiku	
-0x43f2a0	brazil_rules.cpp	brazil_rules_flags_block_reset	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x43f2d0	brazil_rules.cpp	swap_byte_pairs	medium	haiku	
-0x43f350	brazil_rules.cpp	rotate_qwords_by_byte_steps	low	haiku	
-0x43f440	brazil_rules.cpp	global_string_length	medium	haiku	
-0x43f4c0	brazil_rules.cpp	float_to_int_store	high	haiku	
-0x43f4e0	brazil_rules.cpp	cash_round_to_unit	medium	haiku	2026-10-16-slow-screens.md
-0x43f580	brazil_rules.cpp	cash_round_to_unit	medium	haiku	2026-10-16-slow-screens.md
-0x43f300	cash.cpp	swap_bytes_32_array	medium	haiku	
+0x43f0e0	brazil_rules.cpp	BRAZIL_RULES::BRAZIL_RULES	high	opus	
+0x43f210	brazil_rules.cpp	BRAZIL_RULES::get_ineligibility_code	medium	opus	
+0x43f2a0	brazil_rules.cpp	BRAZIL_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x43f2d0	cash.cpp	swap_bytes_16_array	high	opus	
+0x43f300	cash.cpp	swap_bytes_32_array	high	opus	
+0x43f350	cash.cpp	swap_bytes_64_array	medium	opus	
+0x43f440	cash.cpp	cash_currency_prefix_length	high	opus	
 0x43f460	cash.cpp	cash_round_to_display_unit	medium	opus	
+0x43f4c0	cash.cpp	Cash::set_from_display	high	opus	
+0x43f4e0	cash.cpp	Cash::step_up	high	opus	2026-10-16-slow-screens.md
+0x43f580	cash.cpp	Cash::step_down	high	opus	2026-10-16-slow-screens.md
 0x43f620	cash.cpp	Cash_set_fn_ret_range_or_assert	medium	haiku	
 0x43f720	cash.cpp	cash_amount_store_or_assert	medium	haiku	
 0x43f7f0	cash.cpp	cash_format_setup_currency_table	high	haiku	
@@ -986,19 +986,19 @@ address	file	name	confidence	model	cited_in
 0x4c06c0	comp_util.cpp	comp_util_compare_fields_and_string	medium	haiku	
 0x4c0720	comp_util.cpp	comp_util_team_strength_score	medium	haiku	
 0x4c08f0	comp_util.cpp	sort_indexed_pairs_by_key	medium	haiku	
-0x4c0a40	comp_util.cpp	comp_util_compare_round_order	medium	haiku	
+0x4c0a40	comp_util.cpp	compare_clubs_by_last_division	medium	opus	
 0x4c0aa0	comp_util.cpp	file_find_first	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md
-0x4c0b50	comp_util.cpp	find_next_matching_file	medium	haiku	2026-10-14-start-new-game-inventory.md
+0x4c0b50	comp_util.cpp	file_find_next	high	opus	2026-10-14-start-new-game-inventory.md
 0x4c0c10	comp_util.cpp	file_find_close	high	opus	2026-10-14-start-new-game-inventory.md
-0x4c0c40	con_champ.cpp	cup_champ_ctor_thiscall	high	haiku	
-0x4c0e10	con_champ.cpp	con_champ::`scalar deleting destructor'	medium	slot copy	
-0x4c0e30	con_champ.cpp	con_champ::~con_champ	high	haiku	
-0x4c0f00	con_champ.cpp	con_champ::create_round_table	medium	slot copy	
-0x4c11a0	con_champ.cpp	con_champ_fill_team_slots	medium	haiku	
-0x4c1440	con_champ.cpp	con_champ::release_data	medium	slot copy	
-0x4c15f0	con_champ.cpp	con_champ::set_up_rounds	medium	slot copy	
-0x4c1620	con_champ.cpp	con_champ::update_for_date	medium	slot copy	
-0x4c16f0	con_merc_cup.cpp	Merc_cup::Merc_cup	high	haiku	
+0x4c0c40	con_champ.cpp	ConChamp::ConChamp	high	opus	club-world.md
+0x4c0e10	con_champ.cpp	ConChamp::`scalar deleting destructor'	high	opus	
+0x4c0e30	con_champ.cpp	ConChamp::~ConChamp	high	opus	
+0x4c0f00	con_champ.cpp	ConChamp::create_round_table	high	opus	
+0x4c11a0	con_champ.cpp	ConChamp::select_qualified_clubs	medium	opus	
+0x4c1440	con_champ.cpp	ConChamp::release_data	high	opus	
+0x4c15f0	con_champ.cpp	ConChamp::set_up_rounds	high	opus	
+0x4c1620	con_champ.cpp	ConChamp::update_for_date	high	opus	
+0x4c16f0	con_merc_cup.cpp	Merc_cup::Merc_cup	high	haiku	club-world.md
 0x4c1880	con_merc_cup.cpp	con_merc_cup::`scalar deleting destructor'	medium	slot copy	
 0x4c18a0	con_merc_cup.cpp	merc_cup_screen_dtor	high	haiku	
 0x4c1960	con_merc_cup.cpp	con_merc_cup::create_schedule	medium	slot copy	
@@ -1015,83 +1015,83 @@ address	file	name	confidence	model	cited_in
 0x4c2a90	con_merc_cup.cpp	con_merc_cup::set_predicted_positions	medium	slot copy	
 0x4c2c90	con_merc_cup.cpp	con_merc_cup::update_for_date	medium	slot copy	
 0x4c2e40	con_merc_cup.cpp	merc_cup_set_three_levels	medium	haiku	
-0x4c2f50	conmebol_liber.cpp	conmebol_liber_ctor	high	haiku	
-0x4c30e0	conmebol_liber.cpp	conmebol_liber::`scalar deleting destructor'	medium	slot copy	
-0x4c3100	conmebol_liber.cpp	conmebol_liber_dtor_body	high	haiku	
-0x4c31c0	conmebol_liber.cpp	conmebol_liber::create_schedule	medium	slot copy	
-0x4c3680	conmebol_liber.cpp	conmebol_liber_qualify_team_message	high	haiku	
-0x4c37a0	conmebol_liber.cpp	conmebol_liber_alloc_and_init_teams	high	haiku	
-0x4c3890	conmebol_liber.cpp	conmebol_liber::set_up_rules	medium	slot copy	
-0x4c3980	conmebol_liber.cpp	conmebol_liber::start_new_season	medium	slot copy	
-0x4c3a80	conmebol_liber.cpp	conmebol_liber_advance_counter_or_assert	medium	haiku	
-0x4c3b10	conmebol_liber.cpp	conmebol_liber_create_league_stage	high	haiku	
-0x4c3d10	conmebol_liber.cpp	conmebol_liber_create_cup_stage	high	haiku	
-0x4c3f40	conmebol_liber.cpp	conmebol_liber_fill_team_list	medium	haiku	
-0x4c4080	conmebol_liber.cpp	conmebol_liber::update_staff_records_for_status	medium	slot copy	
-0x4c4210	conmebol_liber.cpp	conmebol_liber::set_predicted_positions	medium	slot copy	
-0x4c4410	conmebol_liber.cpp	conmebol_liber::update_for_date	medium	slot copy	
-0x4c4610	conmebol_liber.cpp	conmebol_liber_set_league_levels	medium	haiku	
-0x4c46c0	conmebol_merc.cpp	PHL_league_object::PHL_league_object	high	haiku	
-0x4c4850	conmebol_merc.cpp	conmebol_merc::`scalar deleting destructor'	medium	slot copy	
-0x4c4870	conmebol_merc.cpp	conmebol_merc_destructor_body	medium	haiku	
-0x4c4930	conmebol_merc.cpp	conmebol_merc::create_schedule	medium	slot copy	
-0x4c4b40	conmebol_merc.cpp	conmebol_merc_error_report	medium	haiku	
-0x4c4d40	conmebol_merc.cpp	conmebol_merc_write_quarter_finals_news	medium	haiku	
-0x4c4e60	conmebol_merc.cpp	conmebol_merc_init_slots	medium	haiku	
-0x4c4f50	conmebol_merc.cpp	conmebol_merc::set_up_rules	medium	slot copy	
-0x4c5040	conmebol_merc.cpp	conmebol_merc::start_new_season	medium	slot copy	
-0x4c5140	conmebol_merc.cpp	conmebol_merc_retry_or_assert	medium	haiku	
-0x4c51d0	conmebol_merc.cpp	conmebol_merc_create_league_stage_slot	medium	haiku	
-0x4c53d0	conmebol_merc.cpp	cup_build_group_stage	medium	haiku	
-0x4c5420	conmebol_merc.cpp	conmebol_merc_build_cup_round_table	low	haiku	
-0x4c5850	conmebol_merc.cpp	conmebol_merc_build_eligible_list	medium	haiku	
-0x4c5960	conmebol_merc.cpp	conmebol_merc::update_staff_records_for_status	medium	slot copy	
-0x4c5a90	conmebol_merc.cpp	conmebol_merc::set_predicted_positions	medium	slot copy	
-0x4c5c90	conmebol_merc.cpp	conmebol_merc::update_for_date	medium	slot copy	
-0x4c5ee0	conmebol_merc.cpp	set_squad_slot_counts	medium	haiku	
-0x4c5fe0	conmebol_seeding.cpp	find_cd_and_load_teams	high	haiku	2026-10-14-game-creation-inventory.md
-0x4c61b0	conmebol_seeding.cpp	conmebol_seeding_check_version	medium	haiku	
-0x4c6280	conmebol_seeding.cpp	conmebol_seeding_collect_clubs	medium	haiku	
-0x4c6430	conmebol_seeding.cpp	conmebol_seeding_fill_slots	medium	haiku	
-0x4c6730	conmebol_seeding.cpp	conmebol_seeding_find_candidate	medium	haiku	
-0x4c6890	conmebol_seeding.cpp	is_seeding_league_id	medium	haiku	
-0x4c6960	conmebol_seeding.cpp	conmebol_seeding_set_field_0x71	medium	haiku	
-0x4c6970	conmebol_seeding.cpp	conmebol_seeding_load_temp_file	high	haiku	
-0x4c6b70	conmebol_seeding.cpp	conmebol_seeding_load_file	high	haiku	
-0x4c6d40	conmebol_seeding.cpp	register_date_atexit_init	high	haiku	
-0x4c6d60	conmebol_seeding.cpp	noop_stub_4c6d60	medium	haiku	
-0x4c6d70	conmebol_seeding.cpp	register_atexit_contract_manager_stub	medium	haiku	
-0x4c6da0	conmebol_seeding.cpp	register_date_init_atexit_stub	medium	haiku	
-0x4c6dc0	conmebol_seeding.cpp	no_op_stub_0x4c6dc0	low	haiku	
-0x4c6dd0	conmebol_seeding.cpp	register_atexit_date_cleanup	medium	haiku	
-0x4c6df0	conmebol_seeding.cpp	empty_stub_0x4c6df0	high	haiku	
-0x4c6e00	conmebol_seeding.cpp	register_date_atexit_stub_0x4c6e00	medium	haiku	
-0x4c6e20	conmebol_seeding.cpp	empty_stub_0x4c6e20	medium	haiku	
-0x4c6e30	conmebol_seeding.cpp	register_date_atexit_stub_4c6e30	medium	haiku	
-0x4c6e50	conmebol_seeding.cpp	empty_stub_0x4c6e50	medium	haiku	
-0x4c6e60	conmebol_seeding.cpp	register_date_static_init_0x4c6e60	medium	haiku	
-0x4c6e80	conmebol_seeding.cpp	empty_stub_0x4c6e80	high	haiku	
-0x4c6e90	conmebol_seeding.cpp	register_atexit_date_init	medium	haiku	
-0x4c6eb0	conmebol_seeding.cpp	noop_stub_0x4c6eb0	medium	haiku	
-0x4c6ec0	conmebol_seeding.cpp	register_date_static_init_0x4c6ec0	medium	haiku	
-0x4c6ee0	conmebol_seeding.cpp	stub_noop_void_4c6ee0	high	haiku	
-0x4c6ef0	conmebol_seeding.cpp	register_date_init_atexit_stub_6ef0	medium	haiku	
-0x4c6f10	conmebol_seeding.cpp	stub_noop_0x4c6f10	low	haiku	
-0x4c6f20	conmebol_seeding.cpp	register_atexit_stub_0x4c6f20	medium	haiku	
-0x4c6f50	conmebol_seeding.cpp	register_date_static_initialiser	medium	haiku	
-0x4c6f70	conmebol_seeding.cpp	empty_stub_0x4c6f70	high	haiku	
-0x4c6f80	conmebol_seeding.cpp	register_date_atexit_init	medium	haiku	
-0x4c6fa0	conmebol_seeding.cpp	noop_stub_0x4c6fa0	medium	haiku	
-0x4c6fb0	conmebol_seeding.cpp	register_date_static_init_0x4c6fb0	medium	haiku	
-0x4c6fe0	conmebol_seeding.cpp	register_date_atexit_cleanup	medium	haiku	
-0x4c7000	conmebol_seeding.cpp	noop_stub_4c7000	low	haiku	
-0x4c7010	conmebol_seeding.cpp	register_date_init_at_exit	high	haiku	
-0x4c7030	conmebol_seeding.cpp	noop_stub_0x4c7030	high	haiku	
-0x4c7040	conmebol_seeding.cpp	cm_cd_check_and_load_seeding_data	high	haiku	2026-10-14-game-creation-inventory.md
-0x4c74f0	conmebol_seeding.cpp	seeding_state_release	medium	haiku	
-0x4c6d90	contract_manager.cpp	empty_stub_4c6d90	medium	haiku	
-0x4c6f40	contract_manager.cpp	empty_stub_0x4c6f40	low	haiku	
-0x4c6fd0	contract_manager.cpp	empty_stub_0x4c6fd0	low	haiku	
+0x4c2f50	conmebol_liber.cpp	ConmebolLiber::ConmebolLiber	high	opus	club-world.md
+0x4c30e0	conmebol_liber.cpp	ConmebolLiber::`scalar deleting destructor'	high	opus	
+0x4c3100	conmebol_liber.cpp	ConmebolLiber::~ConmebolLiber	high	opus	
+0x4c31c0	conmebol_liber.cpp	ConmebolLiber::create_schedule	high	opus	
+0x4c3680	conmebol_liber.cpp	ConmebolLiber::build_fate_news_text	high	opus	
+0x4c37a0	conmebol_liber.cpp	ConmebolLiber::build_first_group_table	medium	opus	
+0x4c3890	conmebol_liber.cpp	ConmebolLiber::set_up_rules	high	opus	
+0x4c3980	conmebol_liber.cpp	ConmebolLiber::start_new_season	high	opus	
+0x4c3a80	conmebol_liber.cpp	ConmebolLiber::advance_stage	high	opus	
+0x4c3b10	conmebol_liber.cpp	ConmebolLiber::create_group_stage	high	opus	
+0x4c3d10	conmebol_liber.cpp	ConmebolLiber::create_knockout_stage	high	opus	
+0x4c3f40	conmebol_liber.cpp	ConmebolLiber::select_qualified_clubs	high	opus	
+0x4c4080	conmebol_liber.cpp	ConmebolLiber::update_staff_records_for_status	high	opus	
+0x4c4210	conmebol_liber.cpp	ConmebolLiber::set_predicted_positions	high	opus	
+0x4c4410	conmebol_liber.cpp	ConmebolLiber::update_for_date	high	opus	
+0x4c4610	conmebol_liber.cpp	ConmebolLiber::set_club_progress	high	opus	
+0x4c46c0	conmebol_merc.cpp	ConmebolMerc::ConmebolMerc	high	opus	club-world.md
+0x4c4850	conmebol_merc.cpp	ConmebolMerc::`scalar deleting destructor'	high	opus	
+0x4c4870	conmebol_merc.cpp	ConmebolMerc::~ConmebolMerc	high	opus	
+0x4c4930	conmebol_merc.cpp	ConmebolMerc::create_schedule	high	opus	
+0x4c4b40	conmebol_merc.cpp	conmebol_merc_create_schedule_error_tail	medium	opus	
+0x4c4d40	conmebol_merc.cpp	ConmebolMerc::build_fate_news_text	high	opus	
+0x4c4e60	conmebol_merc.cpp	ConmebolMerc::create_first_group_table	medium	opus	
+0x4c4f50	conmebol_merc.cpp	ConmebolMerc::set_up_rules	high	opus	
+0x4c5040	conmebol_merc.cpp	ConmebolMerc::start_new_season	high	opus	
+0x4c5140	conmebol_merc.cpp	ConmebolMerc::advance_stage	high	opus	
+0x4c51d0	conmebol_merc.cpp	ConmebolMerc::create_group_stage	high	opus	
+0x4c53d0	conmebol_merc.cpp	ConmebolMerc::create_quarter_final_stage	high	opus	
+0x4c5420	conmebol_merc.cpp	conmebol_merc_create_quarter_final_stage_mid	medium	opus	
+0x4c5850	conmebol_merc.cpp	ConmebolMerc::select_invited_clubs	high	opus	
+0x4c5960	conmebol_merc.cpp	ConmebolMerc::update_staff_records_for_status	high	opus	
+0x4c5a90	conmebol_merc.cpp	ConmebolMerc::set_predicted_positions	medium	opus	
+0x4c5c90	conmebol_merc.cpp	ConmebolMerc::update_for_date	high	opus	
+0x4c5ee0	conmebol_merc.cpp	ConmebolMerc::set_club_progress	high	opus	
+0x4c5fe0	conmebol_seeding.cpp	ConmebolSeeding::ConmebolSeeding	medium	opus	2026-10-14-game-creation-inventory.md
+0x4c61b0	conmebol_seeding.cpp	ConmebolSeeding::update_for_new_season	medium	opus	
+0x4c6280	conmebol_seeding.cpp	collect_conmebol_clubs	medium	opus	
+0x4c6430	conmebol_seeding.cpp	ConmebolSeeding::assign_libertadores_places	medium	opus	
+0x4c6730	conmebol_seeding.cpp	find_nth_unqualified_club_of_nation	medium	opus	
+0x4c6890	conmebol_seeding.cpp	is_mercosur_invited_club	medium	opus	
+0x4c6960	conmebol_seeding.cpp	ConmebolSeeding::set_bra_champ_cup_winner	medium	opus	
+0x4c6970	conmebol_seeding.cpp	ConmebolSeeding::load_from_temp_file	high	opus	
+0x4c6b70	conmebol_seeding.cpp	ConmebolSeeding::save_to_temp_file	high	opus	
+0x4c6d40	contract_manager.cpp	contract_manager_static_date_ae1048_init	high	opus	
+0x4c6d60	contract_manager.cpp	contract_manager_static_date_ae1048_dtor	high	opus	
+0x4c6d70	contract_manager.cpp	contract_manager_static_date_ae1030_init	high	opus	
+0x4c6d90	contract_manager.cpp	contract_manager_static_date_ae1030_dtor	high	opus	
+0x4c6da0	contract_manager.cpp	contract_manager_static_date_ae1058_init	high	opus	
+0x4c6dc0	contract_manager.cpp	contract_manager_static_date_ae1058_dtor	high	opus	
+0x4c6dd0	contract_manager.cpp	contract_manager_static_date_ae1010_init	high	opus	
+0x4c6df0	contract_manager.cpp	contract_manager_static_date_ae1010_dtor	high	opus	
+0x4c6e00	contract_manager.cpp	contract_manager_static_date_ae1060_init	high	opus	
+0x4c6e20	contract_manager.cpp	contract_manager_static_date_ae1060_dtor	high	opus	
+0x4c6e30	contract_manager.cpp	contract_manager_static_date_ae1040_init	high	opus	
+0x4c6e50	contract_manager.cpp	contract_manager_static_date_ae1040_dtor	high	opus	
+0x4c6e60	contract_manager.cpp	contract_manager_static_date_ae1090_init	high	opus	
+0x4c6e80	contract_manager.cpp	contract_manager_static_date_ae1090_dtor	high	opus	
+0x4c6e90	contract_manager.cpp	contract_manager_static_date_ae1068_init	high	opus	
+0x4c6eb0	contract_manager.cpp	contract_manager_static_date_ae1068_dtor	high	opus	
+0x4c6ec0	contract_manager.cpp	contract_manager_static_date_ae1008_init	high	opus	
+0x4c6ee0	contract_manager.cpp	contract_manager_static_date_ae1008_dtor	high	opus	
+0x4c6ef0	contract_manager.cpp	contract_manager_static_date_ae1020_init	high	opus	
+0x4c6f10	contract_manager.cpp	contract_manager_static_date_ae1020_dtor	high	opus	
+0x4c6f20	contract_manager.cpp	contract_manager_static_date_ae1070_init	high	opus	
+0x4c6f40	contract_manager.cpp	contract_manager_static_date_ae1070_dtor	high	opus	
+0x4c6f50	contract_manager.cpp	contract_manager_static_date_ae1018_init	high	opus	
+0x4c6f70	contract_manager.cpp	contract_manager_static_date_ae1018_dtor	high	opus	
+0x4c6f80	contract_manager.cpp	contract_manager_static_date_ae1038_init	high	opus	
+0x4c6fa0	contract_manager.cpp	contract_manager_static_date_ae1038_dtor	high	opus	
+0x4c6fb0	contract_manager.cpp	contract_manager_static_date_ae1028_init	high	opus	
+0x4c6fd0	contract_manager.cpp	contract_manager_static_date_ae1028_dtor	high	opus	
+0x4c6fe0	contract_manager.cpp	contract_manager_static_date_ae1078_init	high	opus	
+0x4c7000	contract_manager.cpp	contract_manager_static_date_ae1078_dtor	high	opus	
+0x4c7010	contract_manager.cpp	contract_manager_static_date_ae1088_init	high	opus	
+0x4c7030	contract_manager.cpp	contract_manager_static_date_ae1088_dtor	high	opus	
+0x4c7040	contract_manager.cpp	CONTRACT_MANAGER::CONTRACT_MANAGER	high	opus	2026-10-14-game-creation-inventory.md
+0x4c74f0	contract_manager.cpp	CONTRACT_MANAGER::~CONTRACT_MANAGER	high	opus	
 0x4c7560	contract_manager.cpp	CONTRACT_MANAGER::initialise_all_staff_contracts	high	haiku	2026-10-14-game-creation-inventory.md
 0x4c7950	contract_manager.cpp	contract_manager_link_new_staff_contract	medium	haiku	
 0x4c79a0	contract_manager.cpp	contract_manager_get_free_staff_contract_space	high	haiku	
@@ -1197,7 +1197,7 @@ address	file	name	confidence	model	cited_in
 0x4e06a0	contract_screens.cpp	contract_screens_release_screen_2	medium	haiku	
 0x4e06e0	contract_screens.cpp	contract_offer_dialog_build	high	haiku	
 0x4e2070	contract_screens.cpp	contract_screens_draw_bonus_text	medium	haiku	
-0x4e2280	contract_screens.cpp	contract_screens_apply_clause_switch	medium	haiku	2026-10-16-slow-screens.md,user32.c
+0x4e2280	contract_screens.cpp	contract_screens_apply_clause_switch	medium	haiku	user32.c
 0x4e30f0	contract_screens.cpp	show_player_bonus_offer	high	haiku	
 0x4e39c0	contract_screens.cpp	contract_screens_offer_row_dispatch	medium	haiku	
 0x4e4160	contract_screens.cpp	contract_screens_handle_offer_response	high	haiku	
@@ -1273,8 +1273,8 @@ address	file	name	confidence	model	cited_in
 0x517fa0	croatia_awards.cpp	Croatia_awards::init_awards	high	haiku	2026-10-14-widescreen-inventory.md
 0x5183a0	croatia_awards.cpp	Croatia_awards::on_player_award_check	medium	haiku	
 0x5184d0	croatia_awards.cpp	croatia_awards_maybe_build_team_of_the_week	medium	haiku	
-0x518500	croatia_rules.cpp	croatia_rules_ctor	medium	haiku	
-0x518620	croatia_rules.cpp	croatia_rules_init_defaults	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
+0x518500	croatia_rules.cpp	CROATIA_RULES::CROATIA_RULES	high	opus	
+0x518620	croatia_rules.cpp	CROATIA_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
 0x518640	Cup.cpp	Cup::Cup	high	opus	
 0x518670	Cup.cpp	Cup::`scalar deleting destructor'	high	opus	
 0x518690	Cup.cpp	Cup::~Cup	high	opus	
@@ -1805,102 +1805,102 @@ address	file	name	confidence	model	cited_in
 0x579610	england_awards.cpp	england_awards_month_refresh	medium	haiku	
 0x579900	england_awards.cpp	england_awards_refresh_panel	medium	haiku	
 0x579af0	england_awards.cpp	england_awards_check_and_notify	medium	haiku	
-0x579b30	england_rules.cpp	loan_rules::loan_rules	high	haiku	2026-10-16-season-change-points.md
-0x579c50	england_rules.cpp	england_rules_init_loan_record	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x579c70	england_rules.cpp	england_rules_compute_transfer_window_dates	medium	haiku	
-0x579d60	england_rules.cpp	england_rules_check_loan_allowed	high	haiku	
-0x579fd0	england_rules.cpp	england_rules_bump_loan_counter	low	haiku	
-0x57a020	england_rules.cpp	england_rules_clear_club_flags	low	haiku	
-0x57a090	england_rules.cpp	england_rules_transfer_check	medium	haiku	
-0x57a100	eur_super_cup.cpp	Super_cup_constructor_ex	high	haiku	
-0x57a2d0	eur_super_cup.cpp	eur_super_cup::`scalar deleting destructor'	medium	slot copy	
-0x57a2f0	eur_super_cup.cpp	eur_super_cup::~eur_super_cup	high	haiku	
-0x57a3c0	eur_super_cup.cpp	eur_super_cup::create_round_table	medium	slot copy	
-0x57a500	eur_super_cup.cpp	eur_super_cup_allocate_and_load_record	medium	haiku	
-0x57a6d0	eur_super_cup.cpp	eur_super_cup::release_data	medium	slot copy	
-0x57a890	euro_champ.cpp	euro_champ_ctor	high	haiku	
-0x57aab0	euro_champ.cpp	euro_champ::`scalar deleting destructor'	medium	slot copy	
-0x57aad0	euro_champ.cpp	euro_champ::~euro_champ	high	haiku	
-0x57ab90	euro_champ.cpp	euro_champ::create_schedule	medium	slot copy	
-0x57b1d0	euro_champ.cpp	euro_champ::update_staff_records_for_status	medium	slot copy	
-0x57b330	euro_champ.cpp	euro_champ_report_result_news	high	haiku	
-0x57b530	euro_champ.cpp	euro_champ_init_qualifiers_slot	medium	haiku	
-0x57b630	euro_champ.cpp	euro_champ::set_up_rules	medium	slot copy	
-0x57b730	euro_champ.cpp	euro_champ::record_season_honours	medium	slot copy	
-0x57b750	euro_champ.cpp	euro_champ::start_new_season	medium	slot copy	
-0x57b880	euro_champ.cpp	euro_champ_stage_advance_or_assert	medium	haiku	
-0x57b910	euro_champ.cpp	euro_champ_build_team_round_entry	medium	haiku	
-0x57bb40	euro_champ.cpp	euro_champ_create_cup_stage	medium	haiku	
-0x57bd80	euro_champ.cpp	Euro_champ::populate_qualifier_teams	medium	haiku	
-0x57c120	euro_champ.cpp	euro_champ_qual_slot_push	high	haiku	
-0x57c1d0	euro_champ.cpp	euro_champ_setup_teams_or_assert	high	haiku	
-0x57c320	euro_champ.cpp	euro_champ_build_draw_pairing_list	medium	haiku	
-0x57c480	euro_champ.cpp	euro_champ_validate_load_fields	medium	haiku	
-0x57c5d0	euro_champ.cpp	euro_champ_serialise_fields	medium	haiku	
-0x57c620	euro_champ.cpp	euro_champ::update_for_date	medium	slot copy	
-0x57c710	euro_champ.cpp	euro_champ_seed_teams_by_rank	medium	haiku	
-0x57c9f0	euro_champ.cpp	euro_champ::set_predicted_positions	medium	slot copy	
-0x57cc30	euro_champ.cpp	euro_champ_set_qualification_levels	medium	haiku	
-0x57cd30	euro_champ.cpp	euro_champ_get_qualify_rank_bonus	medium	haiku	
-0x57cd80	euro_champ.cpp	euro_champ_grade_pair_bucket	low	haiku	
-0x57ce10	euro_champ_qual.cpp	euro_champ_qual_ctor	high	haiku	
-0x57d060	euro_champ_qual.cpp	euro_champ_qual_vtable_slot_hash	low	haiku	
-0x57d080	euro_champ_qual.cpp	euro_champ_qual::`scalar deleting destructor'	medium	slot copy	
-0x57d0a0	euro_champ_qual.cpp	euro_champ_qual_qualifier_dtor_body	medium	haiku	
-0x57d190	euro_champ_qual.cpp	euro_champ_qual::create_schedule	medium	slot copy	
-0x57d5b0	euro_champ_qual.cpp	euro_champ_qual::update_staff_records_for_status	medium	slot copy	
-0x57d700	euro_champ_qual.cpp	euro_champ_qual_post_news_item	high	haiku	
-0x57d9d0	euro_champ_qual.cpp	euro_champ_qual_check_stage_state	medium	haiku	
-0x57dab0	euro_champ_qual.cpp	euro_champ_qual_build_team_draw_table	high	haiku	
-0x57e7e0	euro_champ_qual.cpp	euro_champ_qual_allocate_teams	medium	haiku	
-0x57e8f0	euro_champ_qual.cpp	euro_champ_qual::set_up_rules	medium	slot copy	
-0x57e9d0	euro_champ_qual.cpp	euro_champ_qual_describe_stage	medium	haiku	
-0x57eb10	euro_champ_qual.cpp	euro_champ_qual_set_flag_b5	medium	haiku	
-0x57eb20	euro_champ_qual.cpp	euro_champ_qual::start_new_season	medium	slot copy	
-0x57ec60	euro_champ_qual.cpp	euro_champ_qual_advance_round_step	medium	haiku	
-0x57ed10	euro_champ_qual.cpp	euro_champ_qual_create_group_stage	medium	haiku	
-0x57ef50	euro_champ_qual.cpp	euro_champ_qual_build_qualifier_round	medium	haiku	
-0x57f600	euro_champ_qual.cpp	euro_champ_qual_load_qualified_teams	high	haiku	
-0x57f920	euro_champ_qual.cpp	euro_champ_qual_start_round_of_matches	medium	haiku	
-0x57fa10	euro_champ_qual.cpp	euro_champ_qual_build_qualifier_squads	medium	haiku	
-0x57fd60	euro_champ_qual.cpp	euro_champ_qual::update_for_date	medium	slot copy	
-0x57ffd0	euro_champ_qual.cpp	euro_champ_qual::add_result	medium	slot copy	
-0x580010	euro_champ_qual.cpp	euro_champ_qual::update_positions_and_status	medium	slot copy	
-0x580040	euro_champ_qual.cpp	euro_champ_qual::mark_qualified_teams	medium	haiku	
-0x580130	euro_champ_qual.cpp	euro_champ_qual_read_qualifiers	high	haiku	
-0x580410	euro_champ_qual.cpp	euro_champ_qual_serialise_load	medium	haiku	
-0x5806d0	euro_champ_qual.cpp	euro_champ_qual::set_predicted_positions	medium	slot copy	
-0x580980	euro_champ_qual.cpp	Qualification_Slot::set_fixture_round_code	medium	haiku	
-0x580b50	euro_champ_qual.cpp	euro_champ_qual_band_index	low	haiku	
-0x580b80	euro_champ_qual.cpp	euro_champ_qual_compare_slots	medium	haiku	
-0x580bd0	euro_champ_qual.cpp	euro_champ_qual_init_qualifying_groups	high	haiku	
-0x582ef0	euro_champ_qual.cpp	euro_champ_qual_add_qualifier_entry	medium	haiku	
-0x583280	euro_champ_qual.cpp	transfer_offer_ctor	medium	haiku	
-0x5832c0	euro_champ_qual.cpp	qual_reset_slots_to_minus_one	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x5832e0	euro_champ_qual.cpp	qualifier_team_eligible_check	low	haiku	
+0x579b30	england_rules.cpp	ENGLAND_RULES::ENGLAND_RULES	high	opus	2026-10-16-season-change-points.md
+0x579c50	england_rules.cpp	ENGLAND_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x579c70	england_rules.cpp	ENGLAND_RULES::get_loan_period	medium	opus	
+0x579d60	england_rules.cpp	ENGLAND_RULES::can_loan_player	high	opus	
+0x579fd0	england_rules.cpp	ENGLAND_RULES::record_loan	medium	opus	
+0x57a020	england_rules.cpp	ENGLAND_RULES::daily_update	medium	opus	
+0x57a090	england_rules.cpp	ENGLAND_RULES::get_ineligibility_code	medium	opus	
+0x57a100	eur_super_cup.cpp	EurSuperCup::EurSuperCup	high	opus	
+0x57a2d0	eur_super_cup.cpp	EurSuperCup::`scalar deleting destructor'	high	opus	
+0x57a2f0	eur_super_cup.cpp	EurSuperCup::~EurSuperCup	high	opus	
+0x57a3c0	eur_super_cup.cpp	EurSuperCup::create_round_table	high	opus	
+0x57a500	eur_super_cup.cpp	EurSuperCup::select_teams	high	opus	
+0x57a6d0	eur_super_cup.cpp	EurSuperCup::release_data	high	opus	
+0x57a890	euro_champ.cpp	EuroChamp::EuroChamp	high	opus	
+0x57aab0	euro_champ.cpp	EuroChamp::`scalar deleting destructor'	high	opus	
+0x57aad0	euro_champ.cpp	EuroChamp::~EuroChamp	high	opus	
+0x57ab90	euro_champ.cpp	EuroChamp::create_schedule	high	opus	
+0x57b1d0	euro_champ.cpp	EuroChamp::update_staff_records_for_status	high	opus	
+0x57b330	euro_champ.cpp	EuroChamp::build_fate_news_text	high	opus	
+0x57b530	euro_champ.cpp	EuroChamp::create_group_table	high	opus	
+0x57b630	euro_champ.cpp	EuroChamp::set_up_rules	high	opus	
+0x57b730	euro_champ.cpp	EuroChamp::record_season_honours	high	opus	
+0x57b750	euro_champ.cpp	EuroChamp::start_new_season	high	opus	
+0x57b880	euro_champ.cpp	EuroChamp::advance_stage	high	opus	
+0x57b910	euro_champ.cpp	EuroChamp::create_group_stage	high	opus	
+0x57bb40	euro_champ.cpp	EuroChamp::create_knockout_stage	high	opus	
+0x57bd80	euro_champ.cpp	EuroChamp::set_up_team_list	high	opus	
+0x57c120	euro_champ.cpp	EuroChamp::add_qualified_team	high	opus	
+0x57c1d0	euro_champ.cpp	EuroChamp::run_group_draw	high	opus	
+0x57c320	euro_champ.cpp	EuroChamp::draw_groups	high	opus	
+0x57c480	euro_champ.cpp	EuroChamp::load_extra_data	medium	opus	
+0x57c5d0	euro_champ.cpp	EuroChamp::save_extra_data	medium	opus	
+0x57c620	euro_champ.cpp	EuroChamp::update_for_date	high	opus	
+0x57c710	euro_champ.cpp	EuroChamp::seed_teams	high	opus	
+0x57c9f0	euro_champ.cpp	EuroChamp::set_predicted_positions	high	opus	
+0x57cc30	euro_champ.cpp	EuroChamp::set_club_progress	high	opus	
+0x57cd30	euro_champ.cpp	EuroChamp::get_qualification_status	high	opus	
+0x57cd80	euro_champ.cpp	EuroChamp::get_qualification_status_change	medium	opus	
+0x57ce10	euro_champ_qual.cpp	EuroChampQual::EuroChampQual	high	opus	
+0x57d060	euro_champ_qual.cpp	EuroChampQual::get_finals_comp	medium	opus	
+0x57d080	euro_champ_qual.cpp	EuroChampQual::`scalar deleting destructor'	high	opus	
+0x57d0a0	euro_champ_qual.cpp	EuroChampQual::~EuroChampQual	high	opus	
+0x57d190	euro_champ_qual.cpp	EuroChampQual::create_schedule	high	opus	
+0x57d5b0	euro_champ_qual.cpp	EuroChampQual::update_staff_records_for_status	high	opus	
+0x57d700	euro_champ_qual.cpp	EuroChampQual::build_fate_news_text	high	opus	
+0x57d9d0	euro_champ_qual.cpp	EuroChampQual::get_group_team_count	high	opus	
+0x57dab0	euro_champ_qual.cpp	EuroChampQual::draw_groups	high	opus	
+0x57e7e0	euro_champ_qual.cpp	EuroChampQual::init_group_one_table	medium	opus	
+0x57e8f0	euro_champ_qual.cpp	EuroChampQual::set_up_rules	high	opus	
+0x57e9d0	euro_champ_qual.cpp	EuroChampQual::write_progress_text	high	opus	
+0x57eb10	euro_champ_qual.cpp	EuroChampQual::skip_season_reset	medium	opus	
+0x57eb20	euro_champ_qual.cpp	EuroChampQual::start_new_season	high	opus	
+0x57ec60	euro_champ_qual.cpp	EuroChampQual::advance_stage	high	opus	
+0x57ed10	euro_champ_qual.cpp	EuroChampQual::create_group_stage	high	opus	
+0x57ef50	euro_champ_qual.cpp	EuroChampQual::create_playoff_stage	high	opus	
+0x57f600	euro_champ_qual.cpp	EuroChampQual::collect_entrants	high	opus	
+0x57f920	euro_champ_qual.cpp	EuroChampQual::create_runners_up_stage	medium	opus	
+0x57fa10	euro_champ_qual.cpp	EuroChampQual::update_runners_up_table	medium	opus	
+0x57fd60	euro_champ_qual.cpp	EuroChampQual::update_for_date	high	opus	
+0x57ffd0	euro_champ_qual.cpp	EuroChampQual::add_result	high	opus	
+0x580010	euro_champ_qual.cpp	EuroChampQual::update_positions_and_status	high	opus	
+0x580040	euro_champ_qual.cpp	EuroChampQual::mark_qualified_teams	medium	opus	
+0x580130	euro_champ_qual.cpp	EuroChampQual::load_extra_data	high	opus	
+0x580410	euro_champ_qual.cpp	EuroChampQual::save_extra_data	high	opus	
+0x5806d0	euro_champ_qual.cpp	EuroChampQual::set_predicted_positions	high	opus	
+0x580980	euro_champ_qual.cpp	EuroChampQual::set_club_progress	high	opus	
+0x580b50	euro_champ_qual.cpp	EuroChampQual::get_qualification_status	high	opus	
+0x580b80	euro_champ_qual.cpp	EuroChampQual::get_qualification_status_change	high	opus	
+0x580bd0	euro_champ_qual.cpp	EuroChampQual::create_groups_and_results	high	opus	
+0x582ef0	euro_champ_qual.cpp	EuroChampQual::add_historic_fixture	high	opus	
+0x583280	european_awards.cpp	EUROPE_RULES::EUROPE_RULES	medium	opus	
+0x5832c0	european_awards.cpp	TRANSFER_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x5832e0	european_awards.cpp	EUROPE_RULES::get_ineligibility_code	low	opus	
 0x583400	european_awards.cpp	european_awards_ctor	high	haiku	
 0x583470	european_awards.cpp	european_awards_noop	medium	haiku	
 0x583480	european_awards.cpp	European_Awards::init_awards	high	haiku	
 0x5836a0	european_awards.cpp	european_awards_vtable_refresh_entries	medium	haiku	
-0x5837c0	european_cup.cpp	European_Cup::European_Cup	high	haiku	
-0x5839d0	european_cup.cpp	return_zero_stub_5839d0	medium	haiku	
-0x5839e0	european_cup.cpp	european_cup::`scalar deleting destructor'	medium	slot copy	
-0x583a00	european_cup.cpp	european_cup_screen_dtor	high	haiku	
-0x583b10	european_cup.cpp	european_cup::process_fixture	medium	slot copy	
-0x583c50	european_cup.cpp	european_cup::create_round_table	medium	slot copy	
-0x584550	european_cup.cpp	european_cup_qualification_news_dispatch	high	haiku	
-0x584990	european_cup.cpp	european_cup_init_team_table	high	haiku	
-0x584ad0	european_cup.cpp	european_cup::record_season_history	medium	slot copy	
-0x584ae0	european_cup.cpp	european_cup::apply_team_result_finance	medium	slot copy	
-0x584d60	european_cup.cpp	european_cup::release_data	medium	slot copy	
-0x584fa0	european_cup.cpp	european_cup_fill_player_slots	medium	haiku	
-0x5851d0	european_cup.cpp	european_cup_advance_phase	medium	haiku	
-0x585290	european_cup.cpp	european_cup_build_round_groups	medium	haiku	
-0x585680	european_cup.cpp	european_cup_draw_seed_pots_and_assign_groups	medium	haiku	
-0x5858e0	european_cup.cpp	european_cup_fixture_round_robin_setup	medium	haiku	
-0x585920	european_cup.cpp	european_cup_transfer_players_into_club_or_abort	medium	haiku	
-0x585a00	european_cup.cpp	european_cup_fill_entries_from_table	medium	haiku	
-0x585a20	european_cup.cpp	european_cup_entry_array_push	medium	haiku	
+0x5837c0	european_cup.cpp	EuropeanCup::EuropeanCup	high	opus	
+0x5839d0	european_cup.cpp	comp_stub_return_zero	medium	opus	
+0x5839e0	european_cup.cpp	EuropeanCup::`scalar deleting destructor'	high	opus	
+0x583a00	european_cup.cpp	EuropeanCup::~EuropeanCup	high	opus	
+0x583b10	european_cup.cpp	EuropeanCup::process_fixture	high	opus	
+0x583c50	european_cup.cpp	EuropeanCup::create_round_table	high	opus	
+0x584550	european_cup.cpp	EuropeanCup::build_fate_news_text	high	opus	
+0x584990	european_cup.cpp	EuropeanCup::build_qualifying_entry_table	medium	opus	
+0x584ad0	european_cup.cpp	EuropeanCup::record_season_history	high	opus	
+0x584ae0	european_cup.cpp	EuropeanCup::apply_team_result_finance	medium	opus	
+0x584d60	european_cup.cpp	EuropeanCup::release_data	high	opus	
+0x584fa0	european_cup.cpp	EuropeanCup::collect_entrants	medium	opus	
+0x5851d0	european_cup.cpp	EuropeanCup::advance_stage	high	opus	
+0x585290	european_cup.cpp	EuropeanCup::draw_phase1_groups	high	opus	
+0x585680	european_cup.cpp	EuropeanCup::draw_phase1_groups_pot_loop	medium	opus	
+0x5858e0	european_cup.cpp	EuropeanCup::draw_phase1_groups_create_stages	medium	opus	
+0x585920	european_cup.cpp	EuropeanCup::draw_phase1_groups_send_losers_to_uefa_cup	medium	opus	
+0x585a00	european_cup.cpp	EuropeanCup::draw_phase1_groups_uefa_cup_copy_loop	medium	opus	
+0x585a20	european_cup.cpp	EuropeanCup::draw_phase1_groups_uefa_cup_copy_entry	medium	opus	
 0x585a50	european_cup.cpp	european_cup_set_state_five_and_bump_counter	low	haiku	
 0x585a60	european_cup.cpp	european_cup_copy_selected_entries	medium	haiku	
 0x585aa6	european_cup.cpp	european_cup_group_stage_seed_and_draw_entry	low	haiku	
@@ -2143,12 +2143,12 @@ address	file	name	confidence	model	cited_in
 0x5a96e0	finland_awards.cpp	finland_awards_run_award_cycle	medium	haiku	
 0x5a9890	finland_awards.cpp	finland_awards_vtable_refresh_winners	medium	haiku	
 0x5a9930	finland_awards.cpp	finland_awards_vtable_slot_team_of_the_week_check	medium	haiku	
-0x5a9950	finland_rules.cpp	finland_rules_ctor	high	haiku	
-0x5a9a80	finland_rules.cpp	finland_rules_compute_deadline_month_year	medium	haiku	
-0x5a9af0	finland_rules.cpp	finland_rules_loan_deadline_check	high	haiku	
-0x5a9ba0	finland_rules.cpp	finland_rules::can_move_player_until_november_15	high	haiku	
-0x5a9cc0	finland_rules.cpp	register_finland_rules_init	medium	haiku	
-0x5a9ce0	finland_rules.cpp	finland_rules_tail_jump_0x5a9ce0	low	haiku	
+0x5a9950	finland_rules.cpp	FINLAND_RULES::FINLAND_RULES	high	opus	
+0x5a9a80	finland_rules.cpp	FINLAND_RULES::get_loan_period	medium	opus	
+0x5a9af0	finland_rules.cpp	FINLAND_RULES::can_loan_player	high	opus	
+0x5a9ba0	finland_rules.cpp	FINLAND_RULES::can_end_loan	high	opus	
+0x5a9cc0	fix_man.cpp	fix_man_init_fixture_legs_list	medium	opus	
+0x5a9ce0	fix_man.cpp	fix_man_destroy_fixture_legs_list	medium	opus	
 0x5a9cf0	fix_man.cpp	fix_man_init_drive_scan	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-15-holiday-next-match-inventory.md
 0x5aa0d0	fix_man.cpp	fix_man_release_fixture_tables	medium	haiku	
 0x5aa2d0	fix_man.cpp	fix_man_set_current_fixture_week	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-15-holiday-next-match-inventory.md
@@ -2203,16 +2203,16 @@ address	file	name	confidence	model	cited_in
 0x5b09d0	fog_of_war.cpp	fog_of_war_update_cell	medium	haiku	
 0x5b0ab0	fog_of_war.cpp	font_path_object_init	medium	haiku	
 0x5b0b40	fog_of_war.cpp	formation_cleanup_release_handle	medium	haiku	
-0x5b0b60	fog_of_war.cpp	font_load_by_size_index	high	haiku	
-0x5b0d80	fog_of_war.cpp	blit_glyph_string_alpha	medium	haiku	
-0x5b18a0	fog_of_war.cpp	formation_sum_score	low	haiku	
+0x5b0b60	fog_of_war.cpp	font_load_by_size_index	high	haiku	2026-10-16-hd-text.md
+0x5b0d80	fog_of_war.cpp	blit_glyph_string_alpha	medium	haiku	2026-10-16-hd-text.md
+0x5b18a0	fog_of_war.cpp	formation_sum_score	low	haiku	2026-10-16-hd-text.md
 0x5b1940	fog_of_war.cpp	formation_destroy	medium	haiku	
-0x5b1a00	fog_of_war.cpp	fog_of_war_update_overlay	medium	haiku	
+0x5b1a00	fog_of_war.cpp	fog_of_war_update_overlay	medium	haiku	2026-10-16-hd-text.md
 0x5b1ba0	fog_of_war.cpp	fog_of_war_cache_lookup_or_build	medium	haiku	
 0x5b1f30	fog_of_war.cpp	fonts_path_init_and_select	medium	haiku	
 0x5b1fc0	fog_of_war.cpp	font_path_resolve_init	medium	haiku	
 0x5b2040	fog_of_war.cpp	font_name_lookup	medium	haiku	
-0x5b2170	fog_of_war.cpp	fog_of_war_load_fog_dat_entries	medium	haiku	
+0x5b2170	fog_of_war.cpp	fog_of_war_load_fog_dat_entries	medium	haiku	2026-10-16-hd-text.md
 0x5b25a0	fog_of_war.cpp	byte_swap_four_dwords	medium	haiku	
 0x5b2650	fog_of_war.cpp	swap_word_bytes_three	medium	haiku	
 0x5b2680	fog_of_war.cpp	byteswap_six_words	medium	haiku	
@@ -2332,16 +2332,16 @@ address	file	name	confidence	model	cited_in
 0x5c0a20	france_awards.cpp	France_Awards::init_awards	high	haiku	
 0x5c1260	france_awards.cpp	france_awards_vtable_update	medium	haiku	
 0x5c1540	france_awards.cpp	awards_on_player_event	medium	haiku	
-0x5c1570	france_awards.cpp	france_awards_award_ctor	medium	haiku	
-0x5c15e0	france_rules.cpp	france_rules_rules_ctor	medium	haiku	
-0x5c1710	france_rules.cpp	france_rules_clear_club_flags_for_nation	low	haiku	
-0x5c17d0	france_rules.cpp	france_rules_bump_club_counter	low	haiku	
-0x5c1830	france_rules.cpp	france_rules_check_transfer_offer	medium	haiku	
-0x5c1930	france_rules.cpp	france_rules_check_transfer_restriction	medium	haiku	
-0x5c1a30	france_rules.cpp	france_rules_set_default_rule_block	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x5c1a70	france_rules.cpp	france_rules_notify_transfer_restriction	medium	haiku	
-0x5c1b90	france_rules.cpp	france_rules_transfer_news_post	high	haiku	
-0x5c1ed0	france_rules.cpp	france_rules_loan_recall_check	medium	haiku	
+0x5c1570	france_rules.cpp	FRANCE_RULES::FRANCE_RULES	high	opus	
+0x5c15e0	france_rules.cpp	FRANCE_RULES::init_transfer_windows	high	opus	
+0x5c1710	france_rules.cpp	FRANCE_RULES::daily_update	medium	opus	
+0x5c17d0	france_rules.cpp	FRANCE_RULES::record_transfer	medium	opus	
+0x5c1830	france_rules.cpp	FRANCE_RULES::can_sign_player	high	opus	
+0x5c1930	france_rules.cpp	FRANCE_RULES::can_make_offer	high	opus	
+0x5c1a30	france_rules.cpp	FRANCE_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x5c1a70	france_rules.cpp	FRANCE_RULES::post_deadline_news	medium	opus	
+0x5c1b90	france_rules.cpp	FRANCE_RULES::write_deadline_news_text	high	opus	
+0x5c1ed0	france_rules.cpp	FRANCE_RULES::can_end_loan	high	opus	
 0x5c1f80	friendly.cpp	friendly_cup_load_cd_and_init	high	haiku	2026-10-14-game-creation-inventory.md
 0x5c22a0	friendly.cpp	friendly_match_dtor	medium	haiku	
 0x5c22c0	friendly.cpp	friendly_pass_through_date_call	medium	haiku	
@@ -2505,13 +2505,13 @@ address	file	name	confidence	model	cited_in
 0x5df790	germany_awards.cpp	germany_awards::init_award_objects	high	haiku	
 0x5dfd70	germany_awards.cpp	germany_awards::award_block_render	medium	haiku	
 0x5dff40	germany_awards.cpp	germany_awards_deleting_destructor	medium	haiku	
-0x5dff70	germany_awards.cpp	germany_awards_object_ctor	medium	haiku	
-0x5dffe0	germany_rules.cpp	germany_rules::init_rule_table	high	haiku	
-0x5e00e0	germany_rules.cpp	germany_rules_transfer_offer_check	medium	haiku	
-0x5e0210	germany_rules.cpp	germany_rules_loan_recall_message	high	haiku	
-0x5e02d0	germany_rules.cpp	fill_sentinel_and_set_status_byte	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x5e0310	germany_rules.cpp	germany_rules_news_transfer_report	low	haiku	
-0x5e0420	germany_rules.cpp	germany_rules_post_transfer_deadline_news	high	haiku	
+0x5dff70	germany_rules.cpp	GERMANY_RULES::GERMANY_RULES	high	opus	
+0x5dffe0	germany_rules.cpp	GERMANY_RULES::init_transfer_windows	high	opus	
+0x5e00e0	germany_rules.cpp	GERMANY_RULES::can_sign_player	medium	opus	
+0x5e0210	germany_rules.cpp	GERMANY_RULES::can_end_loan	high	opus	
+0x5e02d0	germany_rules.cpp	GERMANY_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x5e0310	germany_rules.cpp	GERMANY_RULES::post_deadline_news	medium	opus	
+0x5e0420	germany_rules.cpp	GERMANY_RULES::write_deadline_news_text	high	opus	
 0x5e0660	goldcup.cpp	gold_cup_ctor	high	haiku	
 0x5e0820	goldcup.cpp	goldcup::`scalar deleting destructor'	medium	slot copy	
 0x5e0840	goldcup.cpp	gold_cup_dtor	high	haiku	
@@ -2530,7 +2530,7 @@ address	file	name	confidence	model	cited_in
 0x5e2500	goldcup.cpp	gold_cup_set_entry_status	medium	haiku	
 0x5e25d0	goldcup.cpp	register_gre_cup_atexit_init	medium	haiku	
 0x5e2600	goldcup.cpp	register_atexit_destructor_gre_cup	medium	haiku	
-0x5e2620	goldcup.cpp	gre_cup_init_graphics_window	high	haiku	2026-10-14-import-inventory.md,2026-10-14-widescreen-inventory.md
+0x5e2620	goldcup.cpp	gre_cup_init_graphics_window	high	haiku	2026-10-14-import-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-hd-text.md
 0x5e2cc0	goldcup.cpp	goldcup_shutdown_ui_resources	medium	haiku	2026-10-14-import-inventory.md
 0x5e2e50	goldcup.cpp	goldcup_release_pending_objects	medium	haiku	2026-10-13-input-inventory.md,2026-10-14-import-inventory.md
 0x5e2ea0	goldcup.cpp	get_global_flag_ae319c	medium	haiku	2026-10-13-input-inventory.md
@@ -2552,13 +2552,13 @@ address	file	name	confidence	model	cited_in
 0x5e4a60	goldcup.cpp	gre_cup_load_fonts	high	haiku	
 0x5e4ba0	goldcup.cpp	load_font_set	medium	haiku	
 0x5e5060	goldcup.cpp	decode_hash_escaped_string	high	haiku	gui_font.c
-0x5e5160	goldcup.cpp	gre_cup_render_text_line	medium	haiku	2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md
+0x5e5160	goldcup.cpp	gre_cup_render_text_line	medium	haiku	2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-hd-text.md
 0x5e5aa0	goldcup.cpp	gold_cup_set_pending_index	low	haiku	
-0x5e5ad0	goldcup.cpp	font_text_width	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-comparison-screen-inventory.md,display.c,names.c,options_screen.c
-0x5e5cd0	goldcup.cpp	font_get_height	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-15-attribute-groups.md,2026-10-16-comparison-screen-inventory.md,guio.c
+0x5e5ad0	goldcup.cpp	font_text_width	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-hd-text.md,display.c,names.c,options_screen.c
+0x5e5cd0	goldcup.cpp	font_get_height	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-15-attribute-groups.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-hd-text.md,guio.c
 0x5e5d60	goldcup.cpp	kerning_adjust_pair	medium	haiku	gui_font.c
 0x5e5df0	goldcup.cpp	draw_styled_rect	medium	haiku	2026-10-13-display-and-scrman-inventory.md
-0x5e6d80	goldcup.cpp	gre_cup_draw_wrapped_text	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-14-clickable-names-inventory.md,names.c
+0x5e6d80	goldcup.cpp	gre_cup_draw_wrapped_text	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-14-clickable-names-inventory.md,2026-10-16-hd-text.md,names.c
 0x5e76f0	goldcup.cpp	gold_cup_draw_progress_panel	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-widescreen-inventory.md,display.c
 0x5e7840	goldcup.cpp	goldcup_draw_dashed_ellipse_pass	low	haiku	2026-10-13-area-widget-draw-spec.md,2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-widescreen-inventory.md
 0x5e7aa0	goldcup.cpp	draw_filled_ellipse_pixels	medium	haiku	2026-10-13-area-widget-draw-spec.md,2026-10-14-widescreen-inventory.md
@@ -2613,12 +2613,12 @@ address	file	name	confidence	model	cited_in
 0x5ec8e0	greece_awards.cpp	greece_awards::init_award_objects	high	haiku	
 0x5ecd30	greece_awards.cpp	greece_awards::save_award_record	medium	haiku	
 0x5ece90	greece_awards.cpp	greece_awards_on_nation_event	medium	haiku	
-0x5eceb0	greece_awards.cpp	greece_awards_constructor	medium	haiku	
-0x5ecf20	greece_rules.cpp	greece_rules_init_table	high	haiku	
-0x5ed020	greece_rules.cpp	greece_rules_init_fill_record	low	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x5ed060	greece_rules.cpp	return_true_stub_5ed060	medium	haiku	
+0x5eceb0	greece_rules.cpp	GREECE_RULES::GREECE_RULES	high	opus	
+0x5ecf20	greece_rules.cpp	GREECE_RULES::init_transfer_windows	high	opus	
+0x5ed020	greece_rules.cpp	GREECE_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x5ed060	greece_rules.cpp	GREECE_RULES::can_loan_player	medium	opus	
 0x5ed070	gui_utils.cpp	gui_add_text_area	medium	opus	2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-spec.md,2026-10-14-widescreen-inventory.md,2026-10-16-comparison-screen-inventory.md,display.c
-0x5ed200	gui_utils.cpp	gui_text_fit_draw_row	medium	haiku	2026-10-14-start-screen-spec.md,file_screens.c
+0x5ed200	gui_utils.cpp	gui_add_text_area_from_text	high	opus	2026-10-14-start-screen-spec.md,file_screens.c
 0x5ed300	gui_utils.cpp	gui_utils_build_button_grid_or_assert	medium	haiku	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,2026-10-16-options-screen.md,build-brief-0.5.0.md,database.c,gui_menu.c
 0x5ed780	gui_utils.cpp	gui_utils_paginated_list_layout	medium	haiku	2026-10-14-start-screen-helpers.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-options-screen.md
 0x5edcc0	gui_utils.cpp	gui_add_back_next_buttons	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
@@ -2721,7 +2721,7 @@ address	file	name	confidence	model	cited_in
 0x5f9070	holland_awards.cpp	holland_awards::HollandAwards::init_award_table	high	haiku	
 0x5f94c0	holland_awards.cpp	holland_award_record_build	medium	haiku	
 0x5f9670	holland_awards.cpp	holland_awards_vtable_slot_notify_match	medium	haiku	
-0x5f9690	holland_rules.cpp	transfer_rules_ctor_holland	medium	haiku	
+0x5f9690	holland_rules.cpp	HOLLAND_RULES::HOLLAND_RULES	high	opus	
 0x5f97c0	host_country.cpp	host_country_find_cd_and_load	high	haiku	2026-10-14-game-creation-inventory.md
 0x5f9970	host_country.cpp	host_country_init_table	medium	haiku	
 0x5fa730	host_country.cpp	HostCountry::find_hosts	medium	opus	
@@ -2863,7 +2863,7 @@ address	file	name	confidence	model	cited_in
 0x631dc0	injury.cpp	injury_add_match_news_item	high	haiku	
 0x631f90	injury.cpp	injury::Injury::set_player_injury	medium	haiku	
 0x632040	injury.cpp	injury_compare_pair_order	medium	haiku	
-0x632080	inter_amer_cup.cpp	Inter_Amer_Cup::Inter_Amer_Cup	high	haiku	
+0x632080	inter_amer_cup.cpp	Inter_Amer_Cup::Inter_Amer_Cup	high	haiku	club-world.md
 0x632250	inter_amer_cup.cpp	inter_amer_cup::`scalar deleting destructor'	medium	slot copy	
 0x632270	inter_amer_cup.cpp	inter_amer_cup::~inter_amer_cup	high	haiku	
 0x632340	inter_amer_cup.cpp	inter_amer_cup::create_round_table	medium	slot copy	
@@ -2950,7 +2950,7 @@ address	file	name	confidence	model	cited_in
 0x639de0	ire_prm.cpp	ire_prm::`scalar deleting destructor'	medium	slot copy	
 0x639e00	ire_prm.cpp	ire_prm_dtor	high	haiku	
 0x639e90	ire_prm.cpp	ire_prm::create_schedule	medium	slot copy	
-0x63a740	ire_prm.cpp	ire_prm_init_league_table	medium	haiku	
+0x63a740	ire_prm.cpp	ire_prm_init_league_table	medium	haiku	wal-nir-irl.md
 0x63a900	ire_prm.cpp	ire_prm::set_up_rules	medium	slot copy	
 0x63a9b0	ire_prm.cpp	ire_prm::start_new_season	medium	slot copy	
 0x63aba0	ire_prm.cpp	ire_prm_find_slot_by_id	medium	haiku	
@@ -2971,12 +2971,12 @@ address	file	name	confidence	model	cited_in
 0x63bf10	ireland_awards.cpp	ireland_awards::IrelandAwards::refresh_awards_display	medium	haiku	
 0x63c160	ireland_awards.cpp	ireland_awards_vtable_slot_refresh	medium	haiku	
 0x63c1f0	ireland_awards.cpp	ireland_awards_vtable_notify_award_changed	medium	haiku	
-0x63c210	ireland_rules.cpp	ireland_rules_ctor	high	haiku	
-0x63c330	ireland_rules.cpp	ireland_rules_reset_slots	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x63c350	ireland_rules.cpp	ireland_rules_loan_eligibility_check	medium	haiku	
-0x63c3d0	ireland_rules.cpp	Loan_Rules::can_loan_player	high	haiku	
-0x63c4e0	ireland_rules.cpp	ireland_rules_increment_loan_recall_counter	low	haiku	
-0x63c530	ireland_rules.cpp	ireland_rules_check_loan_return_deadline	high	haiku	
+0x63c210	ireland_rules.cpp	IRELAND_RULES::IRELAND_RULES	high	opus	
+0x63c330	ireland_rules.cpp	IRELAND_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x63c350	ireland_rules.cpp	IRELAND_RULES::get_ineligibility_code	medium	opus	
+0x63c3d0	ireland_rules.cpp	IRELAND_RULES::can_loan_player	high	opus	
+0x63c4e0	ireland_rules.cpp	IRELAND_RULES::record_loan	medium	opus	
+0x63c530	ireland_rules.cpp	IRELAND_RULES::can_end_loan	high	opus	
 0x63c5e0	ita_c1_super.cpp	Cup::Cup_italian_super_cup_ctor	medium	haiku	
 0x63c7a0	ita_c1_super.cpp	ita_c1_super::`scalar deleting destructor'	medium	slot copy	
 0x63c7c0	ita_c1_super.cpp	ita_c1_super::dtor_body	medium	haiku	
@@ -3125,15 +3125,15 @@ address	file	name	confidence	model	cited_in
 0x65fec0	italy_awards.cpp	Italy_awards::init_award_table	high	haiku	
 0x660ec0	italy_awards.cpp	Award_Table::populate_nation_awards	medium	haiku	
 0x661330	italy_awards.cpp	italy_awards::check_award_eligibility	medium	haiku	
-0x661380	italy_awards.cpp	italy_awards_obj_ctor	medium	haiku	2026-10-16-season-change-points.md
-0x6613f0	italy_rules.cpp	italy_rules::init_loan_rule_table	medium	haiku	
-0x661520	italy_rules.cpp	italy_rules_transfer_offer_check	medium	haiku	
-0x661630	italy_rules.cpp	transfer_rule_check_offer	medium	haiku	
-0x661770	italy_rules.cpp	loan_deadline_and_club_limit_check	high	haiku	
-0x6618f0	italy_rules.cpp	italy_rules_loan_return_block_check	high	haiku	
-0x6619e0	italy_rules.cpp	fill_italy_rule_result_and_flag_nation	low	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x661a30	italy_rules.cpp	italy_rules_report_transfer_news	low	haiku	
-0x661b40	italy_rules.cpp	transfer_deadline_news_for_nation	high	haiku	
+0x661380	italy_rules.cpp	ITALY_RULES::ITALY_RULES	high	opus	2026-10-16-season-change-points.md
+0x6613f0	italy_rules.cpp	ITALY_RULES::init_transfer_windows	high	opus	
+0x661520	italy_rules.cpp	ITALY_RULES::can_sign_player	medium	opus	
+0x661630	italy_rules.cpp	ITALY_RULES::can_make_offer	medium	opus	
+0x661770	italy_rules.cpp	ITALY_RULES::can_loan_player	high	opus	
+0x6618f0	italy_rules.cpp	ITALY_RULES::can_end_loan	high	opus	
+0x6619e0	italy_rules.cpp	ITALY_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x661a30	italy_rules.cpp	ITALY_RULES::post_deadline_news	medium	opus	
+0x661b40	italy_rules.cpp	ITALY_RULES::write_deadline_news_text	high	opus	
 0x661d30	jap_emp_cup.cpp	Jap_emp_cup::Jap_emp_cup_ctor	high	haiku	
 0x661f00	jap_emp_cup.cpp	jap_emp_cup::`scalar deleting destructor'	medium	slot copy	
 0x661f20	jap_emp_cup.cpp	jap_emp_cup_screen_dtor	high	haiku	
@@ -3179,14 +3179,14 @@ address	file	name	confidence	model	cited_in
 0x666720	japan_awards.cpp	japan_awards::init_award_objects	high	haiku	
 0x666ab0	japan_awards.cpp	japan_awards_vtable_slot_0x666ab0	medium	haiku	
 0x666bb0	japan_awards.cpp	japan_awards::on_award_match	medium	haiku	
-0x666bd0	japan_awards.cpp	TRANSFER_RULES::TRANSFER_RULES	medium	haiku	
-0x666c40	japan_rules.cpp	japan_rules_table_init_or_assert	high	haiku	
-0x666d40	japan_rules.cpp	japan_rules_validate_transfer_offer	medium	haiku	
-0x666e20	japan_rules.cpp	contract_rules_validate_transfer_offer	medium	haiku	
-0x667090	japan_rules.cpp	japan_rules_reset_record_slots	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x6670b0	japan_rules.cpp	register_japan_rules_atexit_init	medium	haiku	
-0x6670e0	japan_rules.cpp	japan_rules_register_global_0xb63d60	medium	haiku	
-0x667100	japan_rules.cpp	japan_rules_unwind_cleanup_wrapper	low	haiku	
+0x666bd0	japan_rules.cpp	JAPAN_RULES::JAPAN_RULES	high	opus	
+0x666c40	japan_rules.cpp	JAPAN_RULES::init_transfer_windows	high	opus	
+0x666d40	japan_rules.cpp	JAPAN_RULES::can_sign_player	high	opus	
+0x666e20	japan_rules.cpp	JAPAN_RULES::can_make_offer	high	opus	
+0x667090	japan_rules.cpp	JAPAN_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x6670b0	key_nation.cpp	key_nation_static_init	high	opus	
+0x6670e0	key_nation.cpp	key_nation_static_destroy	high	opus	
+0x667100	key_nation.cpp	KEY_NATION::KEY_NATION	medium	opus	
 0x667150	key_nation.cpp	key_nation_init_table	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-16-season-change-points.md,key_nation.c
 0x669140	key_nation.cpp	key_nation_reset_slots	medium	haiku	2026-10-14-game-creation-inventory.md
 0x669180	key_nation.cpp	key_nation_check_table_entries	medium	haiku	2026-10-14-game-creation-inventory.md
@@ -3251,12 +3251,12 @@ address	file	name	confidence	model	cited_in
 0x66e170	korea_awards.cpp	Korea_awards::init_award_set	medium	haiku	
 0x66e4d0	korea_awards.cpp	korea_awards_vtable_handler::process_award_record	medium	haiku	
 0x66e610	korea_awards.cpp	korea_awards::scalar_deleting_destructor_stub	medium	haiku	
-0x66e630	korea_rules.cpp	korea_rules_ctor	high	haiku	
-0x66e750	korea_rules.cpp	korea_rules_reset_record	medium	haiku	
-0x66e770	korea_rules.cpp	thunk_forward_two_args_to_transfer_offer_eligibility	medium	haiku	
-0x66e790	korea_rules.cpp	set_language_from_keyboard_layout	high	haiku	2026-10-14-import-inventory.md,2026-10-14-start-screen-helpers.md
-0x66e9c0	korea_rules.cpp	korea_rules_release_table	medium	haiku	
-0x66ea10	korea_rules.cpp	release_three_handles	medium	haiku	
+0x66e630	korea_rules.cpp	KOREA_RULES::KOREA_RULES	high	opus	
+0x66e750	korea_rules.cpp	KOREA_RULES::fill_squad_restrictions	high	opus	
+0x66e770	korea_rules.cpp	KOREA_RULES::get_ineligibility_code	high	opus	
+0x66e790	Langlib.cpp	langlib_setup	high	opus	2026-10-14-import-inventory.md,2026-10-14-start-screen-helpers.md
+0x66e9c0	Langlib.cpp	langlib_shutdown	high	opus	
+0x66ea10	Langlib.cpp	LANGLIB_ENTRY::~LANGLIB_ENTRY	high	opus	
 0x66ea50	Langlib.cpp	langlib_check_or_setup_error	medium	haiku	
 0x66eb40	Langlib.cpp	langlib_change_language	high	haiku	2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md
 0x66f4c0	Langlib.cpp	zero_three_dwords	medium	haiku	
@@ -3516,7 +3516,7 @@ address	file	name	confidence	model	cited_in
 0x93d870	library_without_asserts	smooth_polyline_points	low	haiku	
 0x93dd90	library_without_asserts	lib_stream_open_checked	medium	haiku	
 0x93ddb7	library_without_asserts	alloc_init_record_0x5ed	medium	haiku	
-0x93de70	library_without_asserts	map_view_init_with_setjmp_guard	medium	haiku	
+0x93de70	library_without_asserts	map_view_init_with_setjmp_guard	medium	haiku	2026-10-16-hd-text.md
 0x93de8a	library_without_asserts	map_view_set_clip_and_window_state	medium	haiku	
 0x93e5b0	library_without_asserts	match_state_refresh	low	haiku	
 0x93e780	library_without_asserts	try_call_with_setjmp	medium	haiku	
@@ -3526,7 +3526,7 @@ address	file	name	confidence	model	cited_in
 0x93e8d6	library_without_asserts	zlib_inflate_or_deflate_init_frame	medium	haiku	
 0x93e970	library_without_asserts	draw_glyph_sprite_recursive	medium	haiku	
 0x93f9a0	library_without_asserts	apply_linear_scale_table_s16_to_s32	medium	haiku	
-0x93fa90	library_without_asserts	lib_setjmp_guarded_cleanup	low	haiku	
+0x93fa90	library_without_asserts	lib_setjmp_guarded_cleanup	low	haiku	2026-10-16-hd-text.md
 0x93faa6	library_without_asserts	fn_93faa6_free_handle_block	low	haiku	
 0x93fb70	library_without_asserts	wavelet_or_filter_decode_block	low	haiku	
 0x93fd10	library_without_asserts	build_tri_span_context	medium	haiku	
@@ -4180,7 +4180,7 @@ address	file	name	confidence	model	cited_in
 0x75da50	media.cpp	register_media_static_init_thunk	medium	haiku	
 0x75da80	media.cpp	media_response_reset	low	haiku	
 0x75dae0	media.cpp	media_register_atexit_destructor	medium	haiku	
-0x75db00	Menubar.cpp	menubar_build	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-options-screen.md,keys.c
+0x75db00	Menubar.cpp	menubar_build	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md,keys.c
 0x761260	Menubar.cpp	menubar_add_item	medium	haiku	
 0x7612c0	Menubar.cpp	change_player_menu_build_list	high	haiku	
 0x7615d0	Menubar.cpp	menubar_handle_command	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,compare_screen.c,holiday.c,holiday_next.c,keys.c,options_screen.c,user32.c
@@ -4430,7 +4430,7 @@ address	file	name	confidence	model	cited_in
 0x78a780	nir_cup.cpp	nir_cup::`scalar deleting destructor'	medium	slot copy	
 0x78a7a0	nir_cup.cpp	nir_cup_cup_screen::~nir_cup_cup_screen	high	haiku	
 0x78a870	nir_cup.cpp	nir_cup::create_round_table	medium	slot copy	
-0x78ac90	nir_cup.cpp	nir_cup_build_order_table	high	haiku	
+0x78ac90	nir_cup.cpp	nir_cup_build_order_table	high	haiku	wal-nir-irl.md
 0x78ae30	nir_cup.cpp	nir_cup::release_data	medium	slot copy	
 0x78afe0	nir_cup.cpp	nir_cup::set_up_rounds	medium	slot copy	
 0x78b010	nir_first.cpp	nir_first_league_init	high	haiku	
@@ -4502,24 +4502,24 @@ address	file	name	confidence	model	cited_in
 0x793460	northern_ireland_awards.cpp	northern_ireland_awards_vtable_slot_write_record	medium	haiku	
 0x793630	northern_ireland_awards.cpp	northern_ireland_awards_announce_monthly_awards	medium	haiku	
 0x7936b0	northern_ireland_awards.cpp	northern_ireland_awards_vtable_on_award_removed	medium	haiku	
-0x7936d0	northern_ireland_rules.cpp	transfer_rules_ctor_alloc_buffer	high	haiku	
-0x7937f0	northern_ireland_rules.cpp	northern_ireland_rules_vtable_slot_offer_check	medium	haiku	
-0x793870	northern_ireland_rules.cpp	northern_ireland_rules::compute_next_month_date	medium	haiku	
-0x793900	northern_ireland_rules.cpp	northern_ireland_rules_set_contract_value	low	haiku	
+0x7936d0	northern_ireland_rules.cpp	NORTHERN_IRELAND_RULES::NORTHERN_IRELAND_RULES	high	opus	
+0x7937f0	northern_ireland_rules.cpp	NORTHERN_IRELAND_RULES::get_ineligibility_code	medium	opus	
+0x793870	northern_ireland_rules.cpp	NORTHERN_IRELAND_RULES::get_loan_period	medium	opus	
+0x793900	northern_ireland_rules.cpp	NORTHERN_IRELAND_RULES::can_loan_player	medium	opus	
 0x793940	norway_awards.cpp	norway_awards::NorwayAwards::NorwayAwards	high	haiku	
 0x793a80	norway_awards.cpp	Norway_awards::init_awards	high	haiku	
 0x794220	norway_awards.cpp	norway_awards_init_stage_fields	medium	haiku	
 0x7942c0	norway_awards.cpp	norway_awards::award_nation_month_ratings	medium	haiku	
 0x794430	norway_awards.cpp	norway_awards_vtable_refresh	medium	haiku	
 0x7944d0	norway_awards.cpp	norway_awards_on_notify	medium	haiku	
-0x7944f0	norway_rules.cpp	norway_rules_ctor	high	haiku	
-0x794610	norway_rules.cpp	norway_rules_transfer_deadline_check	medium	haiku	
-0x794740	norway_rules.cpp	norway_rules_init_slots	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x794760	norway_rules.cpp	norway_rules_loan_deadline_message	high	haiku	
-0x7947d0	norway_rules.cpp	norway_rules_send_loan_deadline_news	medium	haiku	
-0x7948e0	norway_rules.cpp	nation_transfer_deadline_notice	high	haiku	
-0x794ad0	norway_rules.cpp	norway_rules_init_slots	medium	haiku	2026-10-14-game-creation-inventory.md
-0x794ba0	norway_rules.cpp	release_norway_rule_slots	medium	haiku	
+0x7944f0	norway_rules.cpp	NORWAY_RULES::NORWAY_RULES	high	opus	
+0x794610	norway_rules.cpp	NORWAY_RULES::get_ineligibility_code	medium	opus	
+0x794740	norway_rules.cpp	NORWAY_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x794760	norway_rules.cpp	NORWAY_RULES::can_loan_player	high	opus	
+0x7947d0	norway_rules.cpp	NORWAY_RULES::post_deadline_news	medium	opus	
+0x7948e0	norway_rules.cpp	NORWAY_RULES::write_deadline_news_text	high	opus	
+0x794ad0	notes.cpp	Notes::Notes	high	opus	2026-10-14-game-creation-inventory.md
+0x794ba0	notes.cpp	Notes::~Notes	high	opus	
 0x794be0	notes.cpp	notes_load_dat	high	haiku	
 0x794f00	notes.cpp	Notes::load_notes_dat	high	haiku	
 0x795360	notes.cpp	notes_refresh_squad_flags	medium	haiku	
@@ -4543,7 +4543,7 @@ address	file	name	confidence	model	cited_in
 0x796850	notes.cpp	staff_note_confirm_dialog	medium	haiku	
 0x796870	notes.cpp	gap_stub_fild_ebx	low	haiku	
 0x796b30	notes.cpp	notes_dispatch_staff_note_action	medium	haiku	
-0x796fd0	oceania_club_champ.cpp	oceania_club_champ_ctor	high	haiku	
+0x796fd0	oceania_club_champ.cpp	oceania_club_champ_ctor	high	haiku	club-world.md
 0x797150	oceania_club_champ.cpp	oceania_club_champ::`scalar deleting destructor'	medium	slot copy	
 0x797170	oceania_club_champ.cpp	oceania_club_champ_destructor	high	haiku	
 0x797230	oceania_club_champ.cpp	oceania_club_champ::create_schedule	medium	slot copy	
@@ -4862,8 +4862,8 @@ address	file	name	confidence	model	cited_in
 0x7cd630	poland_awards.cpp	poland_awards_vtable_refresh_player_awards	medium	haiku	
 0x7cd790	poland_awards.cpp	poland_awards::award_to_staff_pair	medium	haiku	
 0x7cd810	poland_awards.cpp	poland_awards_on_event	medium	haiku	
-0x7cd830	poland_rules.cpp	poland_rules_ctor	medium	haiku	
-0x7cd960	poland_rules.cpp	poland_rules_reset_table	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
+0x7cd830	poland_rules.cpp	POLAND_RULES::POLAND_RULES	high	opus	
+0x7cd960	poland_rules.cpp	POLAND_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
 0x7cd980	por_cup.cpp	Cup::Cup	high	haiku	
 0x7cdb50	por_cup.cpp	por_cup::`scalar deleting destructor'	medium	slot copy	
 0x7cdb70	por_cup.cpp	por_cup_order_destructor	high	haiku	
@@ -4910,15 +4910,15 @@ address	file	name	confidence	model	cited_in
 0x7d36c0	portugal_awards.cpp	portugal_awards::PortugalAwards::init_awards	high	haiku	
 0x7d3be0	portugal_awards.cpp	portugal_awards_distribute_season_awards	medium	haiku	
 0x7d3d60	portugal_awards.cpp	portugal_awards_on_event	medium	haiku	
-0x7d3d80	portugal_awards.cpp	portugal_awards_construct	medium	haiku	
-0x7d3df0	portugal_rules.cpp	portugal_rules_init_table	high	haiku	
-0x7d3ef0	portugal_rules.cpp	portugal_rules_check_transfer_eligibility	medium	haiku	
-0x7d4040	portugal_rules.cpp	transfer_offer_foreign_quota_check	medium	haiku	
-0x7d43c0	portugal_rules.cpp	portugal_rules_fill_slots	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x7d4400	portugal_rules.cpp	register_portugal_rules_atexit_stub	high	haiku	
-0x7d4420	portugal_rules.cpp	no_op_stub_7d4420	medium	haiku	
-0x7d4430	portugal_rules.cpp	register_portugal_rules_atexit_stub	medium	haiku	
-0x7d4450	portugal_rules.cpp	no_op_stub_7d4450	high	haiku	
+0x7d3d80	portugal_rules.cpp	PORTUGAL_RULES::PORTUGAL_RULES	high	opus	
+0x7d3df0	portugal_rules.cpp	PORTUGAL_RULES::init_transfer_windows	high	opus	
+0x7d3ef0	portugal_rules.cpp	PORTUGAL_RULES::can_sign_player	medium	opus	
+0x7d4040	portugal_rules.cpp	PORTUGAL_RULES::can_make_offer	medium	opus	
+0x7d43c0	portugal_rules.cpp	PORTUGAL_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x7d4400	printouts.cpp	printouts_static_init_date_b74360	high	opus	
+0x7d4420	printouts.cpp	printouts_static_destroy_date_b74360	high	opus	
+0x7d4430	printouts.cpp	printouts_static_init_date_b74358	high	opus	
+0x7d4450	printouts.cpp	printouts_static_destroy_date_b74358	high	opus	
 0x7d5280	printouts.cpp	printouts_print_player_stats_table	high	haiku	
 0x7d60c0	printouts.cpp	printout_transfers	high	haiku	
 0x7d69f0	printouts.cpp	printouts_write_season_fixtures	high	haiku	
@@ -4926,171 +4926,171 @@ address	file	name	confidence	model	cited_in
 0x7d8120	printouts.cpp	printouts_print_league_table	high	haiku	
 0x7d9720	printouts.cpp	printout_player_stats_table	high	haiku	
 0x7da070	printouts.cpp	printout_pad_or_truncate_string	medium	haiku	
-0x7da130	printouts.cpp	printouts_compare_date_fields	medium	haiku	
-0x7da190	printouts.cpp	media_pundit_list_loader::load_and_export	high	haiku	2026-10-14-game-creation-inventory.md
-0x7da690	printouts.cpp	release_two_owned_pointers	medium	haiku	
-0x7da6e0	printouts.cpp	printouts_add_league_entry	medium	haiku	
-0x7daa70	printouts.cpp	parse_media_type_name	high	haiku	
-0x7dab30	printouts.cpp	parse_quoted_token	medium	haiku	
-0x7dab90	printouts.cpp	printouts_select_player_candidates	medium	haiku	
-0x7dad20	printouts.cpp	media_outlet_name_lookup	medium	haiku	
-0x7daf50	printouts.cpp	printouts_emit_match_result_if_eligible	low	haiku	
-0x7db100	rb_argentina.cpp	rb_argentina_ctor	high	haiku	
-0x7db150	rb_argentina.cpp	rb_argentina_vtable_update_wins_and_notify	low	haiku	
-0x7db2a0	rb_argentina.cpp	rb_argentina_assert_or_dispatch	medium	haiku	
-0x7db360	rb_asia.cpp	rb_asia_ctor	medium	haiku	
-0x7db3b0	rb_asia.cpp	rb_asia_flag_event_dispatch	medium	haiku	
-0x7db510	rb_asia.cpp	rb_asia_assert_version_or_report	medium	haiku	
-0x7db5b0	rb_australia.cpp	rb_australia_ctor	medium	haiku	
-0x7db600	rb_australia.cpp	rb_australia_tick_discipline_ban	medium	haiku	
-0x7db7e0	rb_australia.cpp	rb_australia_assert_or_dispatch	medium	haiku	
-0x7db8a0	rb_australia.cpp	rb_australia_is_in_range_flag	low	haiku	
-0x7db8f0	rb_belgium_cup.cpp	belgium_cup_ctor	high	haiku	
-0x7db940	rb_belgium_cup.cpp	rb_belgium_cup_season_tick	medium	haiku	
-0x7dbc00	rb_belgium_cup.cpp	rb_belgium_cup_assert_or_init	medium	haiku	
-0x7dbca0	rb_belgium_league.cpp	rb_belgium_league_ctor	high	haiku	
-0x7dbcf0	rb_belgium_league.cpp	rb_belgium_league_award_check	medium	haiku	
-0x7dbfe0	rb_belgium_league.cpp	rb_belgium_league_assert_or_register	medium	haiku	
-0x7dc080	rb_brazil_national.cpp	rb_brazil_national_ctor	medium	haiku	
-0x7dc0d0	rb_brazil_national.cpp	rb_brazil_national_on_event	medium	haiku	
-0x7dc320	rb_brazil_national.cpp	rb_brazil_national_assert_or_init	medium	haiku	
-0x7dc3c0	rb_brazil_regional.cpp	rb_brazil_regional_ctor	high	haiku	
-0x7dc410	rb_brazil_regional.cpp	rb_brazil_regional_on_match_day	medium	haiku	
-0x7dc660	rb_brazil_regional.cpp	rb_brazil_regional_assert_or_init	medium	haiku	
-0x7dc700	rb_croatia.cpp	rb_croatia_ctor	high	haiku	
-0x7dc750	rb_croatia.cpp	rb_croatia_check_and_notify_milestones	medium	haiku	
-0x7dca20	rb_croatia.cpp	rb_croatia_assert_or_dispatch	medium	haiku	
-0x7dcae0	rb_denmark.cpp	denmark_rules_ctor	medium	haiku	
-0x7dcb30	rb_denmark.cpp	rb_denmark_schedule_penalty_or_award_event	medium	haiku	
-0x7dce70	rb_denmark.cpp	rb_denmark_assert_or_dispatch	medium	haiku	
-0x7dcf30	rb_denmark.cpp	rb_denmark_get_min_ready_flag	low	haiku	
-0x7dcf90	rb_england.cpp	rb_england_ctor	medium	haiku	
-0x7dd010	rb_england.cpp	rb_england_update_ruling_body_standing	medium	haiku	
-0x7dd2e0	rb_england.cpp	rb_england_assert_or_dispatch	medium	haiku	
-0x7dd3a0	rb_england.cpp	rb_england_is_player_eligible	low	haiku	
-0x7dd400	rb_europe.cpp	rb_europe_ctor	high	haiku	
-0x7dd450	rb_europe.cpp	rb_europe_fire_disciplinary_check	medium	haiku	
-0x7dd5a0	rb_europe.cpp	rb_europe_assert_or_dispatch	medium	haiku	
-0x7dd660	rb_finland_cup.cpp	rb_finland_cup_ctor	high	haiku	
-0x7dd6b0	rb_finland_cup.cpp	rb_finland_cup_on_day_tick	medium	haiku	
-0x7dd8f0	rb_finland_cup.cpp	rb_finland_cup_assert_or_init	medium	haiku	
-0x7dd990	rb_finland_league.cpp	rb_finland_league_ctor	high	haiku	
-0x7dd9e0	rb_finland_league.cpp	rb_finland_league_daily_tick	medium	haiku	
-0x7ddc20	rb_finland_league.cpp	rb_finland_league_assert_or_init	medium	haiku	
-0x7ddcc0	rb_france.cpp	rb_france_constructor	high	haiku	
-0x7ddd10	rb_france.cpp	rb_france_process_event	medium	haiku	
-0x7de1a0	rb_france.cpp	rb_france_assert_or_dispatch	medium	haiku	
-0x7de260	rb_france.cpp	rb_france_has_multiple_flags	medium	haiku	
-0x7de2e0	rb_germany_cup.cpp	rb_germany_cup_ctor	high	haiku	
-0x7de330	rb_germany_cup.cpp	rb_germany_cup_daily_update	medium	haiku	
-0x7de580	rb_germany_cup.cpp	rb_germany_cup_assert_or_init	medium	haiku	
-0x7de620	rb_germany_league.cpp	rb_germany_league::ctor	medium	haiku	
-0x7de670	rb_germany_league.cpp	rb_germany_league_on_round_event	medium	haiku	
-0x7de8c0	rb_germany_league.cpp	rb_germany_league_assert_or_init	medium	haiku	
-0x7de960	rb_greece.cpp	rb_greece_ruling_body_ctor	medium	haiku	
-0x7de9b0	rb_greece.cpp	ruling_body_award_cycle_check	medium	haiku	
-0x7dec90	rb_greece.cpp	assert_or_dispatch_by_index	medium	haiku	
-0x7ded50	rb_greece.cpp	nation_rb_flag_check_stub	low	haiku	
-0x7ded90	rb_holland.cpp	rb_holland_ctor	medium	haiku	
-0x7dede0	rb_holland.cpp	rb_holland_process_ruling_stage	medium	haiku	
-0x7df090	rb_holland.cpp	rb_holland_assert_or_dispatch	medium	haiku	
-0x7df150	rb_holland.cpp	rb_holland_get_flags_and_check_type	medium	haiku	
-0x7df180	rb_international.cpp	rb_international_ctor	medium	haiku	
-0x7df1c0	rb_international.cpp	rb_international_ruling_body_update	medium	haiku	
-0x7df320	rb_international.cpp	rb_international_assert_or_report	medium	haiku	
-0x7df3c0	rb_international.cpp	rb_international_process_pending_entries	medium	haiku	
-0x7df480	rb_ireland.cpp	rb_ireland_ctor	medium	haiku	
-0x7df4d0	rb_ireland.cpp	ruling_body_update_rule_state	medium	haiku	
-0x7df850	rb_ireland.cpp	assert_or_dispatch_ireland_index	medium	haiku	
-0x7df910	rb_ireland.cpp	rb_ireland_is_valid_flag	medium	haiku	
-0x7df960	rb_italy_cup.cpp	italy_cup_ctor	medium	haiku	
-0x7df9b0	rb_italy_cup.cpp	rb_italy_cup_round_schedule_fixture	medium	haiku	
-0x7dfc90	rb_italy_cup.cpp	rb_italy_cup_assert_or_load_name	medium	haiku	
-0x7dfd30	rb_italy_cup.cpp	rb_italy_cup_get_flags	low	haiku	
-0x7dfd70	rb_italy_league.cpp	rb_italy_league_ctor	high	haiku	
-0x7dfdc0	rb_italy_league.cpp	rb_italy_league_on_round_event	medium	haiku	
-0x7e00c0	rb_italy_league.cpp	rb_italy_league_assert_or_register	medium	haiku	
-0x7e0160	rb_italy_league.cpp	italy_league_is_valid_for_slot	medium	haiku	
-0x7e01b0	rb_japan_cup.cpp	rb_japan_cup_ctor_base	medium	haiku	
-0x7e0200	rb_japan_cup.cpp	rb_japan_cup_tick_award_shortlist	medium	haiku	
-0x7e03b0	rb_japan_cup.cpp	rb_japan_cup_assert_or_dispatch	medium	haiku	
-0x7e0450	rb_japan_cup.cpp	japan_cup_get_dataflag_stub	low	haiku	
-0x7e0490	rb_japan_league.cpp	rb_japan_league_ctor	medium	haiku	
-0x7e04e0	rb_japan_league.cpp	rb_japan_league_on_match_result	medium	haiku	
-0x7e0690	rb_japan_league.cpp	rb_japan_league_assert_or_init	medium	haiku	
-0x7e0730	rb_korea.cpp	rb_korea_ctor_base	medium	haiku	
-0x7e0780	rb_korea.cpp	rb_korea_bid_vote_update	medium	haiku	
-0x7e09e0	rb_korea.cpp	rb_korea_assert_or_dispatch	medium	haiku	
-0x7e0aa0	rb_korea.cpp	rb_korea_get_flags_and_check_slot	medium	haiku	
-0x7e0af0	rb_northern_ireland.cpp	rb_northern_ireland_ctor_base	medium	haiku	
-0x7e0b40	rb_northern_ireland.cpp	rb_northern_ireland_award_fixture_suspension	medium	haiku	
-0x7e0d60	rb_northern_ireland.cpp	assert_or_dispatch_injury_event	medium	haiku	
-0x7e0e20	rb_northern_ireland.cpp	rb_northern_ireland_region_flags	medium	haiku	
-0x7e0ec0	rb_northern_ireland.cpp	rb_northern_ireland_reset_entries	medium	haiku	
-0x7e0ef0	rb_norway_cup.cpp	rb_norway_cup_ctor	high	haiku	
-0x7e0f40	rb_norway_cup.cpp	rb_norway_cup_announce_result	medium	haiku	
-0x7e1080	rb_norway_cup.cpp	rb_norway_cup_assert_or_hook_guard	medium	haiku	
-0x7e1120	rb_norway_cup.cpp	norway_cup_is_active_flag_query	medium	haiku	
-0x7e1150	rb_norway_league.cpp	rb_norway_league_ctor	high	haiku	
-0x7e11a0	rb_norway_league.cpp	ruling_body_norway_league_tick_penalty	medium	haiku	
-0x7e12f0	rb_norway_league.cpp	rb_norway_league_assert_or_init	medium	haiku	
-0x7e1390	rb_norway_league.cpp	rb_norway_league_get_status_flags	medium	haiku	
-0x7e13d0	rb_oceania.cpp	rb_oceania_ctor	medium	haiku	
-0x7e1420	rb_oceania.cpp	rb_oceania_ruling_body_tick	medium	haiku	
-0x7e1570	rb_oceania.cpp	rb_oceania_assert_version_or_fail	medium	haiku	
-0x7e1610	rb_poland.cpp	rb_poland_ctor	medium	haiku	
-0x7e1660	rb_poland.cpp	rb_poland_check_award_candidates	medium	haiku	
-0x7e1950	rb_poland.cpp	rb_poland_assert_or_dispatch	medium	haiku	
-0x7e1a10	rb_poland.cpp	rb_poland_is_valid_phase_check	low	haiku	
-0x7e1a60	rb_portugal.cpp	rb_portugal_constructor	medium	haiku	
-0x7e1ab0	rb_portugal.cpp	ruling_body_award_shortlist_dispatch	low	haiku	
-0x7e1cf0	rb_portugal.cpp	rb_portugal_assert_or_dispatch	medium	haiku	
-0x7e1db0	rb_portugal.cpp	rb_portugal_get_fixture_rotation_check	low	haiku	
-0x7e1e00	rb_russia.cpp	rb_russia_ruling_body_ctor	medium	haiku	
-0x7e1e50	rb_russia.cpp	rb_russia_fire_or_award_event	medium	haiku	
-0x7e20b0	rb_russia.cpp	rb_russia_assert_or_dispatch	medium	haiku	
-0x7e2170	rb_russia.cpp	rb_russia_vtable_slot_query_flags	medium	haiku	
-0x7e21a0	rb_scotland_cup.cpp	rb_scotland_cup::ctor	medium	haiku	
-0x7e21f0	rb_scotland_cup.cpp	Scotland_cup_round_end_award	medium	haiku	
-0x7e23a0	rb_scotland_cup.cpp	rb_scotland_cup_assert_or_name_check	medium	haiku	
-0x7e2440	rb_scotland_cup.cpp	rb_scotland_cup_vtable_slot_query_flags	medium	haiku	
-0x7e2470	rb_scotland_league.cpp	rb_scotland_league_ctor	high	haiku	
-0x7e24c0	rb_scotland_league.cpp	rb_scotland_league_award_points	medium	haiku	
-0x7e2720	rb_scotland_league.cpp	rb_scotland_league::process_rounds_or_points	low	haiku	
-0x7e2890	rb_scotland_league.cpp	rb_scotland_league_assert_or_init	medium	haiku	
-0x7e2930	rb_scotland_league.cpp	rb_scotland_league_ratings_byte	low	haiku	
-0x7e2980	rb_scotland_league.cpp	rb_scotland_league_clear_slot_bits	low	haiku	
-0x7e29e0	rb_south_america.cpp	rb_south_america_ctor	high	haiku	
-0x7e2a30	rb_south_america.cpp	rb_south_america_vtable_slot_update	low	haiku	
-0x7e2b90	rb_south_america.cpp	rb_south_america_assert_or_fail	medium	haiku	
-0x7e2c30	rb_spain_cup.cpp	rb_spain_cup_ctor_base	high	haiku	
-0x7e2c80	rb_spain_cup.cpp	rb_spain_cup::on_round_complete	medium	haiku	
-0x7e2ee0	rb_spain_cup.cpp	rb_spain_cup_check_or_assert_version	medium	haiku	
-0x7e2f80	rb_spain_league.cpp	rb_spain_league_ctor	medium	haiku	
-0x7e2fd0	rb_spain_league.cpp	Spain_league_stage_tick	medium	haiku	
-0x7e3230	rb_spain_league.cpp	assert_spanish_league_index	high	haiku	
-0x7e32d0	rb_sweden_cup.cpp	rb_sweden_cup_ctor	high	haiku	
-0x7e3320	rb_sweden_cup.cpp	rb_sweden_cup_handle_round_event	medium	haiku	
-0x7e35b0	rb_sweden_cup.cpp	rb_sweden_cup_assert_or_name	medium	haiku	
-0x7e3650	rb_sweden_league.cpp	rb_sweden_league_ctor	medium	haiku	
-0x7e36a0	rb_sweden_league.cpp	rb_sweden_league_on_event	medium	haiku	
-0x7e3920	rb_sweden_league.cpp	rb_sweden_league_assert_or_setup	medium	haiku	
-0x7e39c0	rb_sweden_league.cpp	rb_sweden_league_query_flags	low	haiku	
-0x7e3a10	rb_turkey_cup.cpp	RbTurkeyCup::RbTurkeyCup	medium	haiku	
-0x7e3a60	rb_turkey_cup.cpp	rb_turkey_cup_on_day_tick	medium	haiku	
-0x7e3cc0	rb_turkey_cup.cpp	rb_turkey_cup_assert_or_name_check	medium	haiku	
-0x7e3d60	rb_turkey_league.cpp	rb_turkey_league_ctor	high	haiku	
-0x7e3db0	rb_turkey_league.cpp	rb_turkey_league_fixture_event	medium	haiku	
-0x7e4010	rb_turkey_league.cpp	rb_turkey_league_assert_or_init	medium	haiku	
-0x7e40b0	rb_turkey_league.cpp	rb_turkey_league_is_last_round	low	haiku	
-0x7e40f0	rb_usa.cpp	rb_usa_ruling_body_ctor	high	haiku	
-0x7e4140	rb_usa.cpp	rb_usa_check_shortlist_and_award	medium	haiku	
-0x7e42f0	rb_usa.cpp	rb_usa_check_nation_or_assert	medium	haiku	
-0x7e4390	rb_usa.cpp	rb_usa_league_is_twenty_teams	medium	haiku	
-0x7e43c0	rb_wales.cpp	rb_wales_constructor	medium	haiku	
-0x7e4410	rb_wales.cpp	rb_wales_cup_round_event	medium	haiku	
-0x7e4650	rb_wales.cpp	rb_wales_assert_or_dispatch	medium	haiku	
-0x7e4710	rb_wales.cpp	rb_wales_get_result_flags	medium	haiku	
+0x7da130	printouts.cpp	printouts_compare_by_date	low	opus	
+0x7da190	printouts.cpp	PunditList::PunditList	high	opus	2026-10-14-game-creation-inventory.md
+0x7da690	printouts.cpp	PunditList::~PunditList	high	opus	
+0x7da6e0	printouts.cpp	PunditList::read_pundit_line	high	opus	
+0x7daa70	printouts.cpp	parse_media_type_name	high	opus	
+0x7dab30	printouts.cpp	parse_quoted_token	medium	opus	
+0x7dab90	printouts.cpp	PunditList::pick_random_pundit	high	opus	
+0x7dad20	printouts.cpp	PunditList::get_pundit_name	high	opus	
+0x7daf50	printouts.cpp	apply_match_incident_ban	low	opus	
+0x7db100	rb_argentina.cpp	RbArgentina::RbArgentina	high	opus	
+0x7db150	rb_argentina.cpp	RbArgentina::process_match_cards	high	opus	
+0x7db2a0	rb_argentina.cpp	RbArgentina::get_name	medium	opus	
+0x7db360	rb_asia.cpp	RbAsia::RbAsia	high	opus	
+0x7db3b0	rb_asia.cpp	RbAsia::process_match_cards	high	opus	
+0x7db510	rb_asia.cpp	RbAsia::get_name	medium	opus	
+0x7db5b0	rb_australia.cpp	RbAustralia::RbAustralia	high	opus	
+0x7db600	rb_australia.cpp	RbAustralia::process_match_cards	high	opus	
+0x7db7e0	rb_australia.cpp	RbAustralia::get_name	medium	opus	
+0x7db8a0	rb_australia.cpp	RbAustralia::is_one_booking_from_ban	medium	opus	
+0x7db8f0	rb_belgium_cup.cpp	RbBelgiumCup::RbBelgiumCup	high	opus	
+0x7db940	rb_belgium_cup.cpp	RbBelgiumCup::process_match_cards	high	opus	
+0x7dbc00	rb_belgium_cup.cpp	RbBelgiumCup::get_name	high	opus	
+0x7dbca0	rb_belgium_league.cpp	RbBelgiumLeague::RbBelgiumLeague	high	opus	
+0x7dbcf0	rb_belgium_league.cpp	RbBelgiumLeague::process_match_cards	high	opus	
+0x7dbfe0	rb_belgium_league.cpp	RbBelgiumLeague::get_name	high	opus	
+0x7dc080	rb_brazil_national.cpp	RbBrazilNational::RbBrazilNational	high	opus	
+0x7dc0d0	rb_brazil_national.cpp	RbBrazilNational::process_match_cards	high	opus	
+0x7dc320	rb_brazil_national.cpp	RbBrazilNational::get_name	high	opus	
+0x7dc3c0	rb_brazil_regional.cpp	RbBrazilRegional::RbBrazilRegional	high	opus	
+0x7dc410	rb_brazil_regional.cpp	RbBrazilRegional::process_match_cards	high	opus	
+0x7dc660	rb_brazil_regional.cpp	RbBrazilRegional::get_name	high	opus	
+0x7dc700	rb_croatia.cpp	RbCroatia::RbCroatia	high	opus	
+0x7dc750	rb_croatia.cpp	RbCroatia::process_match_cards	high	opus	
+0x7dca20	rb_croatia.cpp	RbCroatia::get_name	high	opus	
+0x7dcae0	rb_denmark.cpp	RbDenmark::RbDenmark	high	opus	
+0x7dcb30	rb_denmark.cpp	RbDenmark::process_match_cards	high	opus	
+0x7dce70	rb_denmark.cpp	RbDenmark::get_name	high	opus	
+0x7dcf30	rb_denmark.cpp	RbDenmark::is_one_booking_from_ban	medium	opus	
+0x7dcf90	rb_england.cpp	RbEngland::RbEngland	high	opus	
+0x7dd010	rb_england.cpp	RbEngland::process_match_cards	high	opus	
+0x7dd2e0	rb_england.cpp	RbEngland::get_name	high	opus	
+0x7dd3a0	rb_england.cpp	RbEngland::is_one_booking_from_ban	medium	opus	
+0x7dd400	rb_europe.cpp	RbEurope::RbEurope	high	opus	
+0x7dd450	rb_europe.cpp	RbEurope::process_match_cards	high	opus	
+0x7dd5a0	rb_europe.cpp	RbEurope::get_name	high	opus	
+0x7dd660	rb_finland_cup.cpp	RbFinlandCup::RbFinlandCup	high	opus	
+0x7dd6b0	rb_finland_cup.cpp	RbFinlandCup::process_match_cards	high	opus	
+0x7dd8f0	rb_finland_cup.cpp	RbFinlandCup::get_name	high	opus	
+0x7dd990	rb_finland_league.cpp	RbFinlandLeague::RbFinlandLeague	high	opus	
+0x7dd9e0	rb_finland_league.cpp	RbFinlandLeague::process_match_cards	high	opus	
+0x7ddc20	rb_finland_league.cpp	RbFinlandLeague::get_name	high	opus	
+0x7ddcc0	rb_france.cpp	RbFrance::RbFrance	high	opus	
+0x7ddd10	rb_france.cpp	RbFrance::process_match_cards	high	opus	
+0x7de1a0	rb_france.cpp	RbFrance::get_name	high	opus	
+0x7de260	rb_france.cpp	RbFrance::is_one_booking_from_ban	medium	opus	
+0x7de2e0	rb_germany_cup.cpp	RbGermanyCup::RbGermanyCup	high	opus	
+0x7de330	rb_germany_cup.cpp	RbGermanyCup::process_match_cards	high	opus	
+0x7de580	rb_germany_cup.cpp	RbGermanyCup::get_name	high	opus	
+0x7de620	rb_germany_league.cpp	RbGermanyLeague::RbGermanyLeague	high	opus	
+0x7de670	rb_germany_league.cpp	RbGermanyLeague::process_match_cards	high	opus	
+0x7de8c0	rb_germany_league.cpp	RbGermanyLeague::get_name	high	opus	
+0x7de960	rb_greece.cpp	RbGreece::RbGreece	high	opus	
+0x7de9b0	rb_greece.cpp	RbGreece::process_match_cards	high	opus	
+0x7dec90	rb_greece.cpp	RbGreece::get_name	high	opus	
+0x7ded50	rb_greece.cpp	RbGreece::is_one_booking_from_ban	medium	opus	
+0x7ded90	rb_holland.cpp	RbHolland::RbHolland	high	opus	
+0x7dede0	rb_holland.cpp	RbHolland::process_match_cards	high	opus	
+0x7df090	rb_holland.cpp	RbHolland::get_name	high	opus	
+0x7df150	rb_holland.cpp	RbHolland::is_one_booking_from_ban	medium	opus	
+0x7df180	rb_international.cpp	RbInternational::RbInternational	high	opus	
+0x7df1c0	rb_international.cpp	RbInternational::process_match_cards	high	opus	
+0x7df320	rb_international.cpp	RbInternational::get_name	high	opus	
+0x7df3c0	rb_international.cpp	RbInternational::start_new_season	medium	opus	
+0x7df480	rb_ireland.cpp	RbIreland::RbIreland	high	opus	
+0x7df4d0	rb_ireland.cpp	RbIreland::process_match_cards	high	opus	
+0x7df850	rb_ireland.cpp	RbIreland::get_name	high	opus	
+0x7df910	rb_ireland.cpp	RbIreland::is_one_booking_from_ban	medium	opus	
+0x7df960	rb_italy_cup.cpp	RbItalyCup::RbItalyCup	high	opus	
+0x7df9b0	rb_italy_cup.cpp	RbItalyCup::process_match_cards	high	opus	
+0x7dfc90	rb_italy_cup.cpp	RbItalyCup::get_name	high	opus	
+0x7dfd30	rb_italy_cup.cpp	RbItalyCup::is_one_booking_from_ban	medium	opus	
+0x7dfd70	rb_italy_league.cpp	RbItalyLeague::RbItalyLeague	high	opus	
+0x7dfdc0	rb_italy_league.cpp	RbItalyLeague::process_match_cards	high	opus	
+0x7e00c0	rb_italy_league.cpp	RbItalyLeague::get_name	high	opus	
+0x7e0160	rb_italy_league.cpp	RbItalyLeague::is_one_booking_from_ban	medium	opus	
+0x7e01b0	rb_japan_cup.cpp	RbJapanCup::RbJapanCup	high	opus	
+0x7e0200	rb_japan_cup.cpp	RbJapanCup::process_match_cards	high	opus	
+0x7e03b0	rb_japan_cup.cpp	RbJapanCup::get_name	high	opus	
+0x7e0450	rb_japan_cup.cpp	RbJapanCup::is_one_booking_from_ban	medium	opus	
+0x7e0490	rb_japan_league.cpp	RbJapanLeague::RbJapanLeague	high	opus	
+0x7e04e0	rb_japan_league.cpp	RbJapanLeague::process_match_cards	high	opus	
+0x7e0690	rb_japan_league.cpp	RbJapanLeague::get_name	high	opus	
+0x7e0730	rb_korea.cpp	RbKorea::RbKorea	high	opus	
+0x7e0780	rb_korea.cpp	RbKorea::process_match_cards	high	opus	
+0x7e09e0	rb_korea.cpp	RbKorea::get_name	high	opus	
+0x7e0aa0	rb_korea.cpp	RbKorea::is_one_booking_from_ban	medium	opus	
+0x7e0af0	rb_northern_ireland.cpp	RbNorthernIreland::RbNorthernIreland	high	opus	
+0x7e0b40	rb_northern_ireland.cpp	RbNorthernIreland::process_match_cards	high	opus	
+0x7e0d60	rb_northern_ireland.cpp	RbNorthernIreland::get_name	high	opus	
+0x7e0e20	rb_northern_ireland.cpp	RbNorthernIreland::is_one_booking_from_ban	high	opus	
+0x7e0ec0	rb_northern_ireland.cpp	RbNorthernIreland::start_new_season	high	opus	
+0x7e0ef0	rb_norway_cup.cpp	RbNorwayCup::RbNorwayCup	high	opus	
+0x7e0f40	rb_norway_cup.cpp	RbNorwayCup::process_match_cards	high	opus	
+0x7e1080	rb_norway_cup.cpp	RbNorwayCup::get_name	high	opus	
+0x7e1120	rb_norway_cup.cpp	RbNorwayCup::is_one_booking_from_ban	medium	opus	
+0x7e1150	rb_norway_league.cpp	RbNorwayLeague::RbNorwayLeague	high	opus	
+0x7e11a0	rb_norway_league.cpp	RbNorwayLeague::process_match_cards	high	opus	
+0x7e12f0	rb_norway_league.cpp	RbNorwayLeague::get_name	high	opus	
+0x7e1390	rb_norway_league.cpp	RbNorwayLeague::is_one_booking_from_ban	high	opus	
+0x7e13d0	rb_oceania.cpp	RbOceania::RbOceania	high	opus	
+0x7e1420	rb_oceania.cpp	RbOceania::process_match_cards	high	opus	
+0x7e1570	rb_oceania.cpp	RbOceania::get_name	high	opus	
+0x7e1610	rb_poland.cpp	RbPoland::RbPoland	high	opus	
+0x7e1660	rb_poland.cpp	RbPoland::process_match_cards	high	opus	
+0x7e1950	rb_poland.cpp	RbPoland::get_name	high	opus	
+0x7e1a10	rb_poland.cpp	RbPoland::is_one_booking_from_ban	high	opus	
+0x7e1a60	rb_portugal.cpp	RbPortugal::RbPortugal	high	opus	
+0x7e1ab0	rb_portugal.cpp	RbPortugal::process_match_cards	high	opus	
+0x7e1cf0	rb_portugal.cpp	RbPortugal::get_name	high	opus	
+0x7e1db0	rb_portugal.cpp	RbPortugal::is_one_booking_from_ban	high	opus	
+0x7e1e00	rb_russia.cpp	RbRussia::RbRussia	high	opus	
+0x7e1e50	rb_russia.cpp	RbRussia::process_match_cards	high	opus	
+0x7e20b0	rb_russia.cpp	RbRussia::get_name	high	opus	
+0x7e2170	rb_russia.cpp	RbRussia::is_one_booking_from_ban	high	opus	
+0x7e21a0	rb_scotland_cup.cpp	RbScotlandCup::RbScotlandCup	high	opus	
+0x7e21f0	rb_scotland_cup.cpp	RbScotlandCup::process_match_cards	high	opus	
+0x7e23a0	rb_scotland_cup.cpp	RbScotlandCup::get_name	high	opus	
+0x7e2440	rb_scotland_cup.cpp	RbScotlandCup::is_one_booking_from_ban	high	opus	
+0x7e2470	rb_scotland_league.cpp	RbScotlandLeague::RbScotlandLeague	high	opus	
+0x7e24c0	rb_scotland_league.cpp	RbScotlandLeague::process_match_cards	high	opus	
+0x7e2720	rb_scotland_league.cpp	RbScotlandLeague::check_points_ban	medium	opus	
+0x7e2890	rb_scotland_league.cpp	RbScotlandLeague::get_name	high	opus	
+0x7e2930	rb_scotland_league.cpp	RbScotlandLeague::is_one_booking_from_ban	high	opus	
+0x7e2980	rb_scotland_league.cpp	RbScotlandLeague::start_new_season	high	opus	
+0x7e29e0	rb_south_america.cpp	RbSouthAmerica::RbSouthAmerica	high	opus	int-continental.md
+0x7e2a30	rb_south_america.cpp	RbSouthAmerica::process_match_cards	high	opus	
+0x7e2b90	rb_south_america.cpp	RbSouthAmerica::get_name	medium	opus	
+0x7e2c30	rb_spain_cup.cpp	RbSpainCup::RbSpainCup	high	opus	
+0x7e2c80	rb_spain_cup.cpp	RbSpainCup::process_match_cards	high	opus	
+0x7e2ee0	rb_spain_cup.cpp	RbSpainCup::get_name	high	opus	
+0x7e2f80	rb_spain_league.cpp	RbSpainLeague::RbSpainLeague	high	opus	
+0x7e2fd0	rb_spain_league.cpp	RbSpainLeague::process_match_cards	high	opus	
+0x7e3230	rb_spain_league.cpp	RbSpainLeague::get_name	high	opus	
+0x7e32d0	rb_sweden_cup.cpp	RbSwedenCup::RbSwedenCup	high	opus	
+0x7e3320	rb_sweden_cup.cpp	RbSwedenCup::process_match_cards	high	opus	
+0x7e35b0	rb_sweden_cup.cpp	RbSwedenCup::get_name	high	opus	
+0x7e3650	rb_sweden_league.cpp	RbSwedenLeague::RbSwedenLeague	high	opus	
+0x7e36a0	rb_sweden_league.cpp	RbSwedenLeague::process_match_cards	high	opus	
+0x7e3920	rb_sweden_league.cpp	RbSwedenLeague::get_name	high	opus	
+0x7e39c0	rb_sweden_league.cpp	RbSwedenLeague::is_one_booking_from_ban	medium	opus	
+0x7e3a10	rb_turkey_cup.cpp	RbTurkeyCup::RbTurkeyCup	high	opus	
+0x7e3a60	rb_turkey_cup.cpp	RbTurkeyCup::process_match_cards	high	opus	
+0x7e3cc0	rb_turkey_cup.cpp	RbTurkeyCup::get_name	high	opus	
+0x7e3d60	rb_turkey_league.cpp	RbTurkeyLeague::RbTurkeyLeague	high	opus	
+0x7e3db0	rb_turkey_league.cpp	RbTurkeyLeague::process_match_cards	high	opus	
+0x7e4010	rb_turkey_league.cpp	RbTurkeyLeague::get_name	high	opus	
+0x7e40b0	rb_turkey_league.cpp	RbTurkeyLeague::is_one_booking_from_ban	medium	opus	
+0x7e40f0	rb_usa.cpp	RbUsa::RbUsa	high	opus	
+0x7e4140	rb_usa.cpp	RbUsa::process_match_cards	high	opus	
+0x7e42f0	rb_usa.cpp	RbUsa::get_name	high	opus	
+0x7e4390	rb_usa.cpp	RbUsa::is_one_booking_from_ban	medium	opus	
+0x7e43c0	rb_wales.cpp	RbWales::RbWales	high	opus	
+0x7e4410	rb_wales.cpp	RbWales::process_match_cards	high	opus	
+0x7e4650	rb_wales.cpp	RbWales::get_name	medium	opus	
+0x7e4710	rb_wales.cpp	RbWales::is_one_booking_from_ban	high	opus	
 0x7e4750	record_utils.cpp	record_utils_copy_player_record_or_assert	high	haiku	
 0x7e4920	record_utils.cpp	record_copy_ids_or_assert	medium	haiku	
 0x7e4a30	record_utils.cpp	record_utils_compare_range_assert	medium	haiku	
@@ -5174,10 +5174,10 @@ address	file	name	confidence	model	cited_in
 0x7ec600	russia_awards.cpp	russia_awards_update_ratings	medium	haiku	
 0x7ec6a0	russia_awards.cpp	russia_awards_on_player_change	medium	haiku	
 0x7ec6c0	russia_awards.cpp	russia_awards_dispatch_monthly_awards	medium	haiku	
-0x7ec770	russia_awards.cpp	russia_awards_ctor_gap_thunk	medium	haiku	
-0x7ec7e0	russia_rules.cpp	russia_rules::init_rule_table	high	haiku	
-0x7ec8e0	russia_rules.cpp	russia_rules_compute_deadline_month_year	low	haiku	
-0x7ec950	russia_rules.cpp	fill_sentinel_and_set_flag	low	haiku	2026-10-16-foreign-and-tactics-positions.md
+0x7ec770	russia_rules.cpp	RUSSIA_RULES::RUSSIA_RULES	high	opus	
+0x7ec7e0	russia_rules.cpp	RUSSIA_RULES::init_transfer_windows	high	opus	
+0x7ec8e0	russia_rules.cpp	RUSSIA_RULES::get_loan_period	medium	opus	
+0x7ec950	russia_rules.cpp	RUSSIA_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
 0x7ec980	sco_chal_cup.cpp	Cup_challenge_constructor	high	haiku	
 0x7ecb50	sco_chal_cup.cpp	sco_chal_cup::`scalar deleting destructor'	medium	slot copy	
 0x7ecb70	sco_chal_cup.cpp	Cup_challenge_screen::~Cup_challenge_screen	high	haiku	
@@ -5243,13 +5243,13 @@ address	file	name	confidence	model	cited_in
 0x7f5dc0	scotland_awards.cpp	scotland_awards::refresh_awards_for_player	medium	haiku	
 0x7f6010	scotland_awards.cpp	Scotland_awards::award_recipients_update	medium	haiku	
 0x7f6360	scotland_awards.cpp	scotland_awards::on_award_slot_changed	medium	haiku	
-0x7f6390	scotland_rules.cpp	scotland_rules_ctor	high	haiku	
-0x7f64c0	scotland_rules.cpp	scotland_rules_fill_slots	low	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x7f6530	scotland_rules.cpp	scotland_rules_compute_contract_expiry	medium	haiku	
-0x7f65d0	scotland_rules.cpp	scotland_rules_offer_check	medium	haiku	
-0x7f6650	scotland_rules.cpp	scotland_rules::check_player_loan_allowed	high	haiku	
-0x7f6730	scotland_rules.cpp	scotland_rules_register_atexit_handler	high	haiku	
-0x7f6750	scotland_rules.cpp	jmp_league_stage_thunk	medium	haiku	
+0x7f6390	scotland_rules.cpp	SCOTLAND_RULES::SCOTLAND_RULES	high	opus	
+0x7f64c0	scotland_rules.cpp	SCOTLAND_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x7f6530	scotland_rules.cpp	SCOTLAND_RULES::get_loan_period	medium	opus	
+0x7f65d0	scotland_rules.cpp	SCOTLAND_RULES::get_ineligibility_code	medium	opus	
+0x7f6650	scotland_rules.cpp	SCOTLAND_RULES::can_loan_player	high	opus	
+0x7f6730	scout_manager.cpp	scout_manager_static_init_list_b74438	medium	opus	
+0x7f6750	scout_manager.cpp	scout_manager_static_destroy_list_b74438	medium	opus	
 0x7f6760	scout_manager.cpp	scout_manager_init_and_load_cd_check	high	haiku	2026-10-14-game-creation-inventory.md
 0x7f6aa0	scout_manager.cpp	scout_manager_destroy	medium	haiku	
 0x7f6af0	scout_manager.cpp	scout_manager_set_slot	medium	haiku	
@@ -5349,7 +5349,7 @@ address	file	name	confidence	model	cited_in
 0x803fd0	scrman.cpp	display_add_text_item	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md,options_screen.c
 0x804030	scrman.cpp	display_add_button_item	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
 0x8040a0	scrman.cpp	display_add_area_button	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-options-screen.md,assistant.c,options_screen.c
-0x804100	scrman.cpp	display_add_area_text	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-options-screen.md,build-brief-0.5.0.md,columns.c,options_screen.c
+0x804100	scrman.cpp	display_add_area_text	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md,build-brief-0.5.0.md,columns.c,options_screen.c
 0x804160	scrman.cpp	display_add_item_ten_args_thunk	medium	haiku	2026-10-13-screen-stack-inventory.md
 0x8041c0	scrman.cpp	search_edit_session_init	medium	haiku	
 0x8042c0	scrman.cpp	scrman_destructor_thunk_2b0	medium	haiku	
@@ -5697,14 +5697,14 @@ address	file	name	confidence	model	cited_in
 0x858f30	spain_awards.cpp	spain_awards_init_award_objects	high	haiku	
 0x8592c0	spain_awards.cpp	spain_awards_vtable_slot_0x8592c0_award_handler	medium	haiku	
 0x8593e0	spain_awards.cpp	spain_award_visit_candidate	medium	haiku	
-0x859400	spain_awards.cpp	spain_awards_ctor_base	medium	haiku	2026-10-16-season-change-points.md
-0x859470	spain_rules.cpp	spain_rules_table_init_or_assert	medium	haiku	
-0x859570	spain_rules.cpp	spain_rules_loan_eligibility_flags	low	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x8595e0	spain_rules.cpp	transfer_eligibility_check_or_friendly_gate	low	haiku	
-0x859630	spain_rules.cpp	spain_loan_rule_check	high	haiku	
-0x859780	spain_rules.cpp	transfer_offer_validate_loan_or_transfer	medium	haiku	
-0x859850	spain_rules.cpp	transfer_loan_eligibility_check	medium	haiku	
-0x859aa0	spain_rules.cpp	find_cm_cd_drive	high	haiku	2026-10-14-game-creation-inventory.md
+0x859400	spain_rules.cpp	SPAIN_RULES::SPAIN_RULES	high	opus	2026-10-16-season-change-points.md
+0x859470	spain_rules.cpp	SPAIN_RULES::init_transfer_windows	high	opus	
+0x859570	spain_rules.cpp	SPAIN_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x8595e0	spain_rules.cpp	SPAIN_RULES::get_ineligibility_code	medium	opus	
+0x859630	spain_rules.cpp	SPAIN_RULES::can_loan_player	high	opus	
+0x859780	spain_rules.cpp	SPAIN_RULES::can_sign_player	high	opus	
+0x859850	spain_rules.cpp	SPAIN_RULES::can_make_offer	high	opus	
+0x859aa0	squad_manager.cpp	find_cm_cd_drive	high	opus	2026-10-14-game-creation-inventory.md
 0x859bc0	squad_manager.cpp	squad_manager_read_dat_version	high	haiku	
 0x859cc0	squad_manager.cpp	squad_manager_dat_write_header	high	haiku	
 0x859dc0	squad_manager.cpp	squad_manager_reset_registered_flags	medium	haiku	2026-10-14-game-creation-inventory.md
@@ -6342,7 +6342,7 @@ address	file	name	confidence	model	cited_in
 0x8e9350	transfer_offer.cpp	transfer_offer_screen_open	medium	haiku	
 0x8e9550	transfer_offer.cpp	transfer_offer_fill_screen_fields	medium	haiku	
 0x8e9760	transfer_screens.cpp	transfer_screens_build_bid_panel	high	haiku	2026-10-14-clickable-names-inventory.md,build-brief-0.3.0.md
-0x8ec420	transfer_screens.cpp	transfer_screens_handle_option_selection	medium	haiku	2026-10-16-slow-screens.md
+0x8ec420	transfer_screens.cpp	transfer_screens_handle_option_selection	medium	haiku	
 0x8eef60	transfer_screens.cpp	transfer_screens_build_transfer_offer_buttons	medium	haiku	
 0x8ef1e0	transfer_screens.cpp	transfer_screens_open_offer_screen	medium	haiku	
 0x8ef240	transfer_screens.cpp	transfer_screens_show_bid_dialog	high	haiku	
@@ -6454,9 +6454,9 @@ address	file	name	confidence	model	cited_in
 0x901d00	turkey_awards.cpp	turkey_awards_init	high	haiku	
 0x901fd0	turkey_awards.cpp	turkey_awards::award_month_check_and_record	medium	haiku	
 0x902080	turkey_awards.cpp	turkey_awards_on_award_event	medium	haiku	
-0x9020a0	turkey_rules.cpp	turkey_rules_ctor	high	haiku	
-0x9021d0	turkey_rules.cpp	turkey_rules_fill_option_list_for_player	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x902240	turkey_rules.cpp	turkey_rules_loan_deadline_passed_check	high	haiku	
+0x9020a0	turkey_rules.cpp	TURKEY_RULES::TURKEY_RULES	high	opus	
+0x9021d0	turkey_rules.cpp	TURKEY_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x902240	turkey_rules.cpp	TURKEY_RULES::can_loan_player	high	opus	
 0x9022e0	uefa_cup.cpp	uefa_cup_ctor	high	haiku	
 0x9024d0	uefa_cup.cpp	uefa_cup::`scalar deleting destructor'	medium	slot copy	
 0x9024f0	uefa_cup.cpp	cup_screen_destructor	high	haiku	
@@ -6537,8 +6537,8 @@ address	file	name	confidence	model	cited_in
 0x90b170	usa_open_cup.cpp	usa_open_cup::create_round_table	medium	slot copy	
 0x90b530	usa_open_cup.cpp	usa_open_cup::build_cup_entrants	high	haiku	
 0x90b790	usa_open_cup.cpp	usa_open_cup::release_data	medium	slot copy	
-0x90b940	usa_rules.cpp	usa_rules_ctor	high	haiku	
-0x90ba60	usa_rules.cpp	usa_rules_init_slot_table	medium	haiku	
+0x90b940	usa_rules.cpp	USA_RULES::USA_RULES	high	opus	
+0x90ba60	usa_rules.cpp	USA_RULES::fill_squad_restrictions	high	opus	
 0x90ba90	utils.cpp	assert_swap_bytes	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
 0x90bb70	utils.cpp	assert_or_trim_string	high	haiku	
 0x90bc50	utils.cpp	get_user_folder_path	high	haiku	2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md
@@ -6559,7 +6559,7 @@ address	file	name	confidence	model	cited_in
 0x90cc50	utils.cpp	copy_file_contents	medium	haiku	2026-10-14-start-new-game-inventory.md
 0x90cd50	utils.cpp	copy_cm3_temp_and_scan_dir	medium	haiku	2026-10-14-game-creation-inventory.md
 0x90cf20	utils.cpp	copy_path_stripping_spaces	medium	haiku	
-0x90cfc0	utils.cpp	utils_random	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-violent-conduct-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-slow-screens.md,background.c,compare_screen.c,user32.c
+0x90cfc0	utils.cpp	utils_random	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-violent-conduct-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-comparison-screen-inventory.md,background.c,compare_screen.c,user32.c
 0x90d0a0	utils.cpp	seed_random_generator	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-import-inventory.md,2026-10-14-start-screen-helpers.md
 0x90d130	utils.cpp	utils_get_version_string	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md
 0x90d140	utils.cpp	find_cd_and_load_config	high	haiku	2026-10-14-game-creation-inventory.md
@@ -6578,9 +6578,9 @@ address	file	name	confidence	model	cited_in
 0x90ec10	wales_awards.cpp	wales_awards::init_award_set	high	haiku	
 0x90ef10	wales_awards.cpp	wales_awards::process_award_entry	medium	haiku	
 0x90f020	wales_awards.cpp	wales_awards_award_for_manager_record	low	haiku	
-0x90f060	wales_awards.cpp	wales_awards_on_player_event	low	haiku	
-0x90f080	wales_rules.cpp	wales_rules_ctor_with_alloc	medium	haiku	
-0x90f1a0	wales_rules.cpp	wc_compute_match_date_and_month	low	haiku	
+0x90f060	wales_awards.cpp	WalesAwards::update_team_of_the_week	medium	opus	
+0x90f080	wales_rules.cpp	WALES_RULES::WALES_RULES	high	opus	
+0x90f1a0	wales_rules.cpp	WALES_RULES::get_loan_period	medium	opus	
 0x90f210	wc_african_cup.cpp	wc_african_cup::ctor	high	haiku	
 0x90f4d0	wc_african_cup.cpp	wc_african_cup::`scalar deleting destructor'	medium	slot copy	
 0x90f4f0	wc_african_cup.cpp	wc_african_cup_dtor	high	haiku	
@@ -6740,7 +6740,7 @@ address	file	name	confidence	model	cited_in
 0x925040	wel_first.cpp	wel_first::`scalar deleting destructor'	medium	slot copy	
 0x925060	wel_first.cpp	wel_first_dtor_wizard_page	medium	haiku	
 0x9250f0	wel_first.cpp	wel_first::create_schedule	medium	slot copy	
-0x925b30	wel_first.cpp	wel_first_alloc_and_fill_league_slots	medium	haiku	
+0x925b30	wel_first.cpp	wel_first_alloc_and_fill_league_slots	medium	haiku	wal-nir-irl.md
 0x925c50	wel_first.cpp	wel_first::set_up_rules	medium	slot copy	
 0x925cf0	wel_first.cpp	wel_first::start_new_season	medium	slot copy	
 0x925e90	wel_lge_cup.cpp	wel_lge_cup_ctor	high	haiku	
@@ -6776,7 +6776,7 @@ address	file	name	confidence	model	cited_in
 0x928c40	wel_prm_cup.cpp	wel_prm_cup_load_team_index_table	medium	haiku	
 0x928e00	wel_prm_cup.cpp	wel_prm_cup::set_predicted_positions	medium	slot copy	
 0x9290b0	wel_prm_cup.cpp	wel_prm_cup_set_fields_from_args	medium	haiku	
-0x929140	world_club_champ.cpp	world_club_champ_init	high	haiku	
+0x929140	world_club_champ.cpp	world_club_champ_init	high	haiku	club-world.md
 0x9292b0	world_club_champ.cpp	world_club_champ::`scalar deleting destructor'	medium	slot copy	
 0x9292d0	world_club_champ.cpp	world_club_champ::~world_club_champ	high	haiku	
 0x929390	world_club_champ.cpp	world_club_champ::create_schedule	medium	slot copy	
@@ -6794,7 +6794,7 @@ address	file	name	confidence	model	cited_in
 0x92ad50	world_club_champ.cpp	set_champ_round_rules	medium	haiku	
 0x92ae60	world_club_champ.cpp	world_club_champ_find_club_for_team_pick	medium	haiku	
 0x92b400	world_club_champ.cpp	compare_club_entries_by_rank	medium	haiku	
-0x92b4b0	world_club_cup.cpp	WorldClubCup::WorldClubCup	high	haiku	
+0x92b4b0	world_club_cup.cpp	WorldClubCup::WorldClubCup	high	haiku	club-world.md
 0x92b680	world_club_cup.cpp	world_club_cup::`scalar deleting destructor'	medium	slot copy	
 0x92b6a0	world_club_cup.cpp	WorldClubCup::~WorldClubCup	high	haiku	
 0x92b770	world_club_cup.cpp	world_club_cup::create_round_table	medium	slot copy	

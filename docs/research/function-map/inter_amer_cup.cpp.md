@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x632080 | 133 (+2 unwind) | `Inter_Amer_Cup::Inter_Amer_Cup` | thiscall(this, int param_2 as 16-bit value, int param_3) ret 8 | Constructs the Inter American Cup object, loads its data, builds qualifier lists and reports load failures through an assert-style error box. | high | haiku |  |
+| 0x632080 | 133 (+2 unwind) | `Inter_Amer_Cup::Inter_Amer_Cup` | thiscall(this, int param_2 as 16-bit value, int param_3) ret 8 | Constructs the Inter American Cup object, loads its data, builds qualifier lists and reports load failures through an assert-style error box. | high | haiku | club-world.md |
 | 0x632250 | 11 | `inter_amer_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of inter_amer_cup.cpp. | medium | slot copy |  |
 | 0x632270 | 62 (+1 unwind) | `inter_amer_cup::~inter_amer_cup` | thiscall (ECX = this) with no stack arguments, ret 0 | Destructor that resets the vtable, frees owned buffers and Comp_Stats, then runs the base Cup destructor. | high | haiku |  |
 | 0x632340 | 98 | `inter_amer_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of inter_amer_cup.cpp. | medium | slot copy |  |

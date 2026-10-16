@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x796fd0 | 105 (+2 unwind) | `oceania_club_champ_ctor` | thiscall(this, short club_count_or_id, undefined4 param) ret 8 | Constructs the Oceania club championship object, loads league state, and allocates its competition stats or raises an assertion error. | high | haiku |  |
+| 0x796fd0 | 105 (+2 unwind) | `oceania_club_champ_ctor` | thiscall(this, short club_count_or_id, undefined4 param) ret 8 | Constructs the Oceania club championship object, loads league state, and allocates its competition stats or raises an assertion error. | high | haiku | club-world.md |
 | 0x797150 | 11 | `oceania_club_champ::`scalar deleting destructor'` | thiscall (League* this, unsigned flags), returns this, ret 4 | Override of League::`scalar deleting destructor' for the competition of oceania_club_champ.cpp. | medium | slot copy |  |
 | 0x797170 | 60 (+1 unwind) | `oceania_club_champ_destructor` | thiscall(this) ret 0 | Destroys the Oceania club championship object, freeing its owned pointer array, comp stats and base league state. | high | haiku |  |
 | 0x797230 | 382 | `oceania_club_champ::create_schedule` | thiscall (League* this, char stage, short* entry_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Override of League::create_schedule for the competition of oceania_club_champ.cpp. | medium | slot copy |  |

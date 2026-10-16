@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7db8f0 | 22 | `belgium_cup_ctor` | thiscall (this in ECX, param_2 passed on stack to base constructor) returning this, ret 4 | Constructs the Belgian cup rules object by initialising the RulingBody base and setting the cup's vtable and default field values. | high | haiku |  |
-| 0x7db940 | 194 (+4 unwind) | `rb_belgium_cup_season_tick` | thiscall-like cdecl with stdcall-style ret 8: (int *ruling_body_or_comp, undefined4 *match_or_date_ref) returning uint, ret 8 | Ticks a Belgian cup competition record each season step, applying points bans and recording discipline news when a ban is issued. | medium | haiku |  |
-| 0x7dbc00 | 38 | `rb_belgium_cup_assert_or_init` | cdecl(param_1 pointer to output or context, param_2 int version or state code compared against 0x14), ret 0xc | Checks a state value and either reports a version error message box or formats a Belgian cup message. | medium | haiku |  |
+| 0x7db8f0 | 22 | `RbBelgiumCup::RbBelgiumCup` | thiscall(RbBelgiumCup* this, FILE* file) returning this, ret 4 | Constructs the Belgian cup ruling body on the RulingBody base, sets vtable 0x96ea54, rule set id 5 and the Belgium nation fields. | high | opus |  |
+| 0x7db940 | 194 (+4 unwind) | `RbBelgiumCup::process_match_cards` | thiscall(RbBelgiumCup* this unused, PlayerMatchRecord* rec, Fixture* fixture) returning uint, ret 8 | Applies a player's match cards under Belgian cup rules, queueing a points ban for a red card and banning him at each third booking. | high | opus |  |
+| 0x7dbc00 | 38 | `RbBelgiumCup::get_name` | thiscall(RbBelgiumCup* this unused, char* buf, int buf_len, int form) ret 0xc | Writes Belgian cup into the buffer as the ruling body name, or shows a version error when the buffer is shorter than twenty. | high | opus |  |
