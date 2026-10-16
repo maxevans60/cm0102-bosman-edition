@@ -93,7 +93,7 @@ int main(void)
     }
     CHECK(strstr(get(), "\nfaster_days = on\n") != NULL);
     CHECK(strstr(get(), "\ndisplay = widescreen\n") != NULL);
-    CHECK(strstr(get(), "display = hd draws it at 1920x1080") != NULL);
+    CHECK(strstr(get(), "display = classic draws it at 800x600.\n") != NULL);
     CHECK(strstr(get(), "\nsave_folder = \n") != NULL);
     CHECK(strstr(get(), "\nsave_backups = on\n") != NULL);
     CHECK(strstr(get(), "\nsquad_views = on\n") != NULL);
@@ -175,11 +175,13 @@ int main(void)
     options_load(path);
     CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
 
-    /* 6. HD mode (0.4.0 spec, slice 9): display = hd, in any case. */
-    put("display = HD\n");
+    /* 6. The HD mode of 0.4.0 to 0.5.0 is gone: an old display = hd gives widescreen, and the line stays. */
+    put("display = hd\n");
     options_load(path);
-    CHECK(options_enum(OPT_DISPLAY) == DISPLAY_HD);
-    CHECK(!strcmp(options_string(OPT_DISPLAY), "hd"));
+    CHECK(options_enum(OPT_DISPLAY) == DISPLAY_WIDESCREEN);
+    CHECK(!strcmp(options_string(OPT_DISPLAY), "widescreen"));
+    CHECK(strstr(get(), "display = hd\n") == get());
+    CHECK(options_set(OPT_DISPLAY, "hd") == 0);
 
     /* 7. The database option: its values, a bad value, and the Setup Game choice that writes the file. */
     put("database = 3.9.60\n");
@@ -285,7 +287,7 @@ int main(void)
     for (int id = 0; id < OPT_COUNT; id++) {
         const OptionId oid = (OptionId)id;
         if (!strcmp(options_name(oid), "display")) {
-            CHECK(options_set(oid, "hd") == 1 && options_enum(oid) == DISPLAY_HD);
+            CHECK(options_set(oid, "classic") == 1 && options_enum(oid) == DISPLAY_CLASSIC);
         } else if (!strcmp(options_name(oid), "save_folder")) {
             CHECK(options_set(oid, "  /Users/me/My Saves ") == 1 && !strcmp(options_string(oid), "/Users/me/My Saves"));
         } else if (!strcmp(options_name(oid), "database")) {
@@ -296,10 +298,10 @@ int main(void)
         CHECK(has_one_line(get(), oid) && has_one_comment(get(), oid));
     }
     CHECK(strstr(get(), "# x\nzebra = 1\n") == get());
-    CHECK(strstr(get(), "\ndisplay = hd\n") && strstr(get(), "\nsave_folder = /Users/me/My Saves\n") &&
+    CHECK(strstr(get(), "\ndisplay = classic\n") && strstr(get(), "\nsave_folder = /Users/me/My Saves\n") &&
           strstr(get(), "\ndatabase = folder:Mixed Case\n") && strstr(get(), "\nsquad_views = off\n"));
     options_load(path);
-    CHECK(options_enum(OPT_DISPLAY) == DISPLAY_HD && !strcmp(options_string(OPT_SAVE_FOLDER), "/Users/me/My Saves") &&
+    CHECK(options_enum(OPT_DISPLAY) == DISPLAY_CLASSIC && !strcmp(options_string(OPT_SAVE_FOLDER), "/Users/me/My Saves") &&
           options_bool(OPT_ATTRIBUTE_GROUPS) == 0 && options_enum(OPT_DATABASE) == DATABASE_CUSTOM);
     CHECK(options_set(OPT_SAVE_FOLDER, "") == 1 && !strcmp(options_string(OPT_SAVE_FOLDER), ""));   /* empty text */
     CHECK(strstr(get(), "\nsave_folder = \n") != NULL);

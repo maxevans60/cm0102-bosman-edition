@@ -2,9 +2,9 @@
 """Smoke run: the recompiled game plays the start screen, a new game and some days without a person.
 
 Usage:
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen|hd]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen|hd] [--days n] [--ref-build <program>]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -62,8 +62,7 @@ With --database, settings.txt also chooses the data set of the new game, and the
 Data-3.9.65, as in a download). Without it, the run uses the default 3.9.68 and <reference folder>/<mode>.
 
 Widescreen mode draws at 1280x800 and the runtime scales every area by 1280/800 across and 800/600
-down, so the run scales each click and the date box by the same factors. HD mode (display = hd) draws
-at 1920x1080 with the same rule.
+down, so the run scales each click and the date box by the same factors.
 
 Screens and checks:
     1 settings   the first-start settings screen: up to 20% of pixels differ (random background)
@@ -123,7 +122,7 @@ STEPS = [
     "wait first-news",
     "2000 dump {d}/4-news.bmp",
     "2500 click 45 165",                    # manager menu (the manager's name)
-    "4500 click 150 427 | 199 474 | 270 541",  # Go on Holiday (popup items keep their size in widescreen and HD)
+    "4500 click 150 427 | 199 474",  # Go on Holiday (popup items keep their size in widescreen and HD)
     "7000 click 705 572",                   # Please Confirm: Yes
     "37000 dump {d}/5-holiday.bmp",
     "38000 quit",
@@ -132,9 +131,9 @@ DATE_BOX = (0, 15, 90, 55)  # x0, y0, x1, y1 of the day and date in the left bar
 SCREENS = [("1-settings", 0.20), ("2-setup", 0.0), ("3-leagues", 0.0), ("4-news", 0.0), ("5-holiday", None)]
 
 
-SIZES = {"classic": (800, 600), "widescreen": (1280, 800), "hd": (1920, 1080)}
-# The modes that can have their own position after "|": "x y | widescreen x y | hd x y".
-OWN_POSITIONS = ["widescreen", "hd"]
+SIZES = {"classic": (800, 600), "widescreen": (1280, 800)}
+# The modes that can have their own position after "|": "x y | widescreen x y".
+OWN_POSITIONS = ["widescreen"]
 
 
 def scaled_steps(mode, shots, steps=STEPS):
@@ -142,7 +141,7 @@ def scaled_steps(mode, shots, steps=STEPS):
     w, h = SIZES[mode]
     out = []
     for step in steps:
-        # "| x y": the widescreen position, where it does not scale, and "| x y" after it: the HD position.
+        # "| x y": the widescreen position, where it does not scale.
         step, *own = step.split("|")
         parts = step.format(d=shots).split()
         if mode in OWN_POSITIONS and len(own) > OWN_POSITIONS.index(mode):
@@ -238,7 +237,7 @@ MATCH_STEPS = [
     "1000 click 705 573",                   # Proceed to the match? Yes
     "wait match",
     "1000 click 45 254",                    # Commentary Speed
-    "2500 click 120 255 | 192 344 | 260 451",  # Very Fast (widescreen and HD; the classic position is not checked)
+    "2500 click 120 255 | 192 344",  # Very Fast (widescreen and HD; the classic position is not checked)
     "4000 click 45 120",                    # Kick Off Match
     "wait label:Re-start 600000",           # half time
     "1000 click 45 120",                    # Re-start Match
@@ -409,8 +408,8 @@ SEARCH_RUNS = [
 
 # --options: after the load, open the Bosman Edition Options box (Game Options, then its item), switch
 # Faster holidays off and on on the Game tab, close the box, then go on holiday. Positions as in
-# tests/smoke/options_box_run.py. The drop-down item keeps its size, so it has widescreen and HD positions.
-OPTIONS_OPEN = ["1000 click 45 344", "wait popup", "1000 click 175 417 | 225 525 | 295 675", "wait options"]
+# tests/smoke/options_box_run.py. The drop-down item keeps its size, so it has a widescreen position.
+OPTIONS_OPEN = ["1000 click 45 344", "wait popup", "1000 click 175 417 | 225 525", "wait options"]
 OPTIONS_CLOSE = ["5500 click 444 524", "wait screen:0x7881e0"]
 OPTIONS_STEPS = OPTIONS_OPEN + [
     "1000 click 584 155",                   # the Game tab
@@ -468,8 +467,8 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
 
 
 # --speed fastest: the Fastest item (#31, commentary.c), one row above Very Fast.
-SPEED_CLICKS = {"very-fast": "2500 click 120 255 | 192 344 | 260 451",
-                "fastest": "2500 click 120 242 | 192 323 | 260 430"}
+SPEED_CLICKS = {"very-fast": "2500 click 120 255 | 192 344",
+                "fastest": "2500 click 120 242 | 192 323"}
 
 
 def match(program, game, days, speed="very-fast", sleep_danger=False):
@@ -498,7 +497,7 @@ def main(argv):
     if "--mode" in argv[3:]:
         mode = argv[argv.index("--mode") + 1]
     if mode not in SIZES:
-        print(f"unknown mode {mode}: use classic, widescreen or hd")
+        print(f"unknown mode {mode}: use classic or widescreen")
         return 2
     if "--match" in argv[3:]:
         days = int(argv[argv.index("--days") + 1]) if "--days" in argv[3:] else MATCH_DAYS

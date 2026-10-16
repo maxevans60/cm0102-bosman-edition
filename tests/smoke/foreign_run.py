@@ -3,14 +3,14 @@
 
 Usage:
     python3 tests/smoke/foreign_run.py <cm0102_recomp> <game folder> <out folder> [--dir <fixtures folder>]
-        [--mode classic|widescreen|hd]... [--make]
+        [--mode classic|widescreen]... [--make]
 
 Saved test games (tests/fixtures/fixtures.py): start.sav (Arsenal 14.7.01, England only) and foreign.sav, a
 new game with England and Croatia (Arsenal, 14.7.01). --make plays that new game and saves foreign.sav in
 the fixtures folder (about a minute). Without foreign.sav the Croatia run fails with a message.
 
 Runs, at the same time:
-    - start.sav in each mode (classic, widescreen and hd when no --mode is given): own squad, Assistant >
+    - start.sav in each mode (classic and widescreen when no --mode is given): own squad, Assistant >
       Pick best team, Tactics, Cancel, then Go on Holiday; the game is saved 6 game days after the load.
     - start.sav in classic with foreign_colours = off, the same steps.
     - foreign.sav in classic: Competitions > Croatia > First Division > Dinamo > Squad.
@@ -45,17 +45,17 @@ import smoke_run  # noqa: E402
 
 TOUR = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "4000 click 150 156 | 199 203",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 159 | 928 205 | 1460 274",  # Pick best team
+    "3000 click 540 159 | 928 205",  # Pick best team
     "5000 dump {d}/1-squad.bmp",
     "5500 click 169 527",                   # Tactics
     "8000 dump {d}/2-tactics.bmp",
     "8500 click 358 573",                   # Cancel
     "wait screen:0x454900",
     "1500 click 45 165",                    # the manager's menu
-    "3500 click 150 427 | 199 474 | 270 541",  # Go on Holiday
+    "3500 click 150 427 | 199 474",  # Go on Holiday
     "6000 click 705 572",                   # Please Confirm: Yes
 ]
 SAVE_DAYS = 6
@@ -214,7 +214,7 @@ def main(argv):
     if not os.path.exists(os.path.join(folder, "foreign.sav")):
         print(f"FAIL: no {os.path.join(folder, 'foreign.sav')}: run with --make once")
         return 1
-    modes = modes or ["classic", "widescreen", "hd"]
+    modes = modes or ["classic", "widescreen"]
     jobs = [(m, "start.sav", m, TOUR, [], SAVE_DAYS, check_arsenal) for m in modes]
     jobs.append(("classic-off", "start.sav", "classic", TOUR, [("foreign_colours", "off")], SAVE_DAYS, check_off))
     jobs.append(("croatia", "foreign.sav", "classic", CROATIA_TOUR, [], None, check_croatia))

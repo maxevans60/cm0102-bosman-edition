@@ -177,7 +177,7 @@ static int window_on_screen(int x, int y, int w, int h)
 }
 
 /* A new window (not a remembered one) that does not fit in the usable part of its screen, for example
- * HD mode on a 1080p screen, gets smaller with the same shape and goes to the middle (winfit.h). The
+ * a 1280x800 window on a small laptop screen, gets smaller with the same shape and goes to the middle (winfit.h). The
  * window opens hidden and shows after this. When the title bar size is unknown (SDL gives it on Windows
  * and Linux), 32 rows are kept for it. */
 static void fit_new_window(int w, int h)

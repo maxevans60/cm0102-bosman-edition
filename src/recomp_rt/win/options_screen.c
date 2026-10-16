@@ -126,8 +126,8 @@ static const Row rows[] = {
 #define ROW_COUNT ((int)(sizeof rows / sizeof rows[0]))
 
 static const char *const switch_text[] = {"On", "Off"}, *const switch_word[] = {"on", "off"};
-static const char *const display_text[] = {"Widescreen", "Classic", "HD"};
-static const char *const display_word[] = {"widescreen", "classic", "hd"};
+static const char *const display_text[] = {"Widescreen", "Classic"};
+static const char *const display_word[] = {"widescreen", "classic"};
 static const char *const database_word[] = {"3.9.68", "3.9.60", "3.9.65"};
 
 /* Game memory for the texts and the column weights. The create functions copy each text. */
@@ -220,12 +220,11 @@ static void plain(int a, int column, const char *s, uint32_t font, uint32_t colo
     call_this(CELL_LABEL, SCREENS, 9, l);
 }
 
-/* The characters of font 2 that fit width screen pixels: 8 pixels for each character in HD and 7 in the
- * other modes. Paths measured on the screen take about 7.4 (HD) and 6.4 (classic) pixels for each
- * character. The box does not call the game's text width 0x5e5ad0 for this: the count of its calls would
+/* The characters of font 2 that fit width screen pixels: 7 pixels for each character. Paths measured on
+ * the screen take about 6.4 pixels for each character. The box does not call the game's text width 0x5e5ad0 for this: the count of its calls would
  * then depend on the path. Note: the text that the game draws changes later days (Q152), so the path
  * itself does too; it is the same in every game of one player. */
-static size_t chars_for(int width) { return (size_t)(width > 0 ? width : 0) / (rt_screen_w >= 1920 ? 8u : 7u); }
+static size_t chars_for(int width) { return (size_t)(width > 0 ? width : 0) / 7u; }
 
 /* A label with a text wider than its cell shows nothing. This cuts the text at the front, with "..." before
  * it, to the characters that fit width screen pixels. */
@@ -324,7 +323,7 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
     }
     int cur = current_index(r);
     int custom = r->kind == ROW_DATABASE && cur == 3;
-    int count = r->kind == ROW_SWITCH ? 2 : 3;
+    int count = r->kind == ROW_DATABASE ? 3 : 2;
     int columns = custom ? 6 : count + 2;
     const uint8_t *weights = custom ? weights_custom : count == 2 ? weights_two : weights_three;
     int a = area(ROW_X1, y1, ROW_X2, y2, columns, weights, 1, 0);
@@ -400,7 +399,7 @@ static void apply(const Row *r, int index, int value)
 {
     const char *word = NULL;
     if (r->kind == ROW_SWITCH && value < 2) word = switch_word[value];
-    if (r->kind == ROW_DISPLAY && value < 3) word = display_word[value];
+    if (r->kind == ROW_DISPLAY && value < 2) word = display_word[value];
     if (r->kind == ROW_DATABASE && value < 3) word = database_word[value];
     if (!word) return;
     char old[1100];

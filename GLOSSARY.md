@@ -55,7 +55,7 @@ The game drawn at 1280x800. It is the default.
 _Avoid_: wide mode
 
 **HD mode**:
-The game drawn at 1920x1080 for big screens, made the same way as widescreen mode, with text at its pixel size. Opt-in with `display = hd`. Planned for 0.4.0 (#32).
+The game drawn at 1920x1080, in 0.4.0 to 0.5.0 only (`display = hd`). Removed after 0.5.0 (Max, 2026-10-16, Q267): widescreen looks better on large screens. An old `display = hd` gives widescreen.
 _Avoid_: larger text, 4K mode
 
 **Classic mode**:

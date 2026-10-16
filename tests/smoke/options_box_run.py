@@ -2,7 +2,7 @@
 """Options box check (spec 2026-10-16-features-0.5.0, slice 6; #56): the Bosman Edition Options box.
 
 Usage:
-    python3 tests/smoke/options_box_run.py <cm0102_recomp> <game folder> <out folder> [--modes classic,widescreen,hd]
+    python3 tests/smoke/options_box_run.py <cm0102_recomp> <game folder> <out folder> [--modes classic,widescreen]
         [--dir <fixtures folder>]
 
 Runs at the same time:
@@ -46,14 +46,14 @@ import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 
 # Positions for 800x600. The box scales as every area does. The side bar drop-down items keep their size,
-# so the item has its own widescreen and HD positions after "|". Box rows: y = 192 + 35 * row; On and the
+# so the item has its own widescreen position after "|". Box rows: y = 192 + 35 * row; On and the
 # first value at x 371, Off and the second value at 452; tabs Screen 304, Game 584 at y 155; Close 444, 524.
 GAME_OPTIONS = "click 45 344"
-OPTIONS_ITEM = "click 175 417 | 225 525 | 295 675"
+OPTIONS_ITEM = "click 175 417 | 225 525"
 SIDE_STEPS = [
     "1000 click 45 165",                        # the manager's menu
-    "2500 click 150 156 | 199 203 | 271 271",   # Arsenal Squad
-    "6000 click 210 369 | 336 492 | 460 664",   # Vieira
+    "2500 click 150 156 | 199 203",   # Arsenal Squad
+    "6000 click 210 369 | 336 492",   # Vieira
     "9000 dump {d}/profile-before.bmp",
     "10000 " + GAME_OPTIONS,
     "12000 " + OPTIONS_ITEM,                    # Bosman Edition Options
@@ -179,7 +179,7 @@ def side_run(program, game, folder, mode, out, work):
 
 def main(argv):
     args = argv[1:]
-    opts = {"--modes": "classic,widescreen,hd", "--dir": fixtures.DEFAULT_DIR}
+    opts = {"--modes": "classic,widescreen", "--dir": fixtures.DEFAULT_DIR}
     rest = []
     i = 0
     while i < len(args):

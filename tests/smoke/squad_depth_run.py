@@ -3,9 +3,9 @@
 
 Usage:
     python3 tests/smoke/squad_depth_run.py <cm0102_recomp> <game folder> <out folder> [--dir <fixtures folder>]
-        [--save start.sav] [--mode classic|widescreen|hd]...
+        [--save start.sav] [--mode classic|widescreen]...
 
-One run from the save (default start.sav, Arsenal 14.7.01) for each mode (classic, widescreen and hd when no
+One run from the save (default start.sav, Arsenal 14.7.01) for each mode (classic and widescreen when no
 --mode is given), at the same time. The tour: own squad > Assistant > Team views (Best XI) > Squad depth >
 Formation > 3-5-2 > Best XI > Back; Premier Division table > Liverpool > Squad > Assistant > Team views >
 Squad depth > Best XI. Screen dumps of each step in <out>/<mode>.
@@ -47,15 +47,15 @@ import hidden_check  # noqa: E402
 
 TOUR = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
+    "4000 click 150 156 | 199 203",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 241 | 928 288 | 1454 357",  # Team views
+    "3000 click 540 241 | 928 288",  # Team views
     "5000 dump {d}/1-best-xi.bmp",
     "5500 click 445 97",                    # Squad depth
     "7500 dump {d}/2-squad-depth.bmp",
     "8000 click 712 25",                    # Formation
-    "9500 click 720 174 | 1168 189 | 1800 201",  # 3-5-2, the seventh item
+    "9500 click 720 174 | 1168 189",  # 3-5-2, the seventh item
     "11500 dump {d}/3-other-formation.bmp",
     "12000 click 215 97",                   # Best XI
     "14000 dump {d}/4-best-xi-3-5-2.bmp",
@@ -66,7 +66,7 @@ TOUR = [
     "1500 click 215 462",                   # Liverpool
     "3500 click 169 97",                    # Squad
     "5500 click 592 135",                   # Assistant
-    "7000 click 540 159 | 928 205 | 1460 274",  # Team views, the only item
+    "7000 click 540 159 | 928 205",  # Team views, the only item
     "9000 click 445 97",                    # Squad depth
     "11000 dump {d}/5-other-club.bmp",
     "12000 click 215 97",                   # Best XI
@@ -231,7 +231,7 @@ def main(argv):
     if len(args) != 3:
         print(__doc__)
         return 2
-    modes = modes or ["classic", "widescreen", "hd"]
+    modes = modes or ["classic", "widescreen"]
     program, game, out = (os.path.abspath(a) for a in args)
     with ThreadPoolExecutor(len(modes)) as pool:
         futures = {m: pool.submit(run, program, game, folder, save, m, os.path.join(out, m)) for m in modes}

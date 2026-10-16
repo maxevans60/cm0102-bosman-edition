@@ -287,7 +287,7 @@ void rt_fatal(const char *fmt, ...) __attribute__((noreturn, format(printf, 1, 2
 #define RT_WRAP(addr, name) void f_##addr(void)
 
 /* The size of the screen that the original draws: 800x600 in classic mode, 1280x800 in widescreen
- * mode, 1920x1080 in HD mode. The constants of tools/recomp/widescreen.py read these. */
+ * mode. The constants of tools/recomp/widescreen.py read these. */
 extern uint32_t rt_screen_w, rt_screen_h;
 
 /* Full player search (#57, src/recomp_rt/win/playersearch.c): 1 when the option is on. The replaced jumps

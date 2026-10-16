@@ -2,7 +2,7 @@
 """Message box check (0.4.0 slice 10): the box of 0x5e8290 is centred on the screen in every mode.
 
 Usage: python3 tests/smoke/message_box_run.py <cm0102_recomp> <game folder> [--dir <fixtures folder>]
-    [--mode classic|widescreen|hd]...
+    [--mode classic|widescreen]...
 
 Each mode (default: all three, at the same time) loads tests/fixtures start.sav and prints the squad from
 the squad screen's Print drop-down. Print To is PDF (the default), so the game shows the path of the PDF
@@ -10,7 +10,7 @@ in its message box (print_pdf.c). The run dumps the screen, clicks Ok at the cen
 squad screen to take input again and dumps it once more.
 
 The box keeps its classic size in every mode (its text is not scaled). Classic draws it at y 242..357,
-with its blue title bar at y 244..264, so the box is centred on 600 rows. In widescreen and HD mode the
+with its blue title bar at y 244..264, so the box is centred on 600 rows. In widescreen mode the
 whole box moves down by (screen height - 600) / 2 rows. The checks:
     - the blue title bar is centred across the screen
     - the title bar starts at y 244 + (screen height - 600) / 2 (classic: 244, the original's place)
@@ -28,13 +28,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 
-# Squad > Print > Squad, "classic x y | widescreen x y | hd x y". Popup and drop-down items keep their size.
+# Squad > Print > Squad, "classic x y | widescreen x y". Popup and drop-down items keep their size.
 PRINT_SQUAD = [
-    "1000 click 45 165 | 72 220 | 108 297",         # manager menu
-    "3500 click 148 156 | 199 204 | 268 270",       # Squad
+    "1000 click 45 165 | 72 220",         # manager menu
+    "3500 click 148 156 | 199 204",       # Squad
     "wait screen:0x454900",
-    "1500 click 750 25 | 1200 33 | 1800 45",        # Print
-    "3500 click 700 49 | 1170 61 | 1790 78",        # Squad
+    "1500 click 750 25 | 1200 33",        # Print
+    "3500 click 700 49 | 1170 61",        # Squad
     "wait box",
 ]
 SQUAD_SCREEN = "screen:0x454900"
@@ -43,7 +43,7 @@ TITLE_BGR = (132, 0, 0)     # the blue of the title bar in a dump (0xaebe04)
 TITLE_Y = 244               # the first row of the title bar in classic mode
 TITLE_ROWS = 21             # its rows (244..264)
 OK = (399, 330)             # the Ok button in classic mode; x is the centre of the screen
-MODES = ["classic", "widescreen", "hd"]
+MODES = ["classic", "widescreen"]
 
 
 def title_bar(path):
