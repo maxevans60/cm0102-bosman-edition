@@ -348,7 +348,9 @@ void win_windows_path(const char *host, char *out, size_t room)
  * - The value folder:<name> is a folder of Databases in the save folder (dbfolders.h).
  * - The test switch RECOMP_DATA_DIR names any folder, for example a 3.9.60 data set that
  *   make_clean_files.py --data-3960 made. It wins over the option.
- * A missing folder gets a message, and the game reads its own Data. */
+ * A missing folder gets a message, and the game reads its own Data.
+ * Pictures (.rgn) always come from the game's own Data (Q205): an Update Team folder has its own intro
+ * pictures, for example its logo.RGN and eidos.RGN. */
 static int data_dir_known;
 static char data_dir[1024];
 
@@ -398,9 +400,26 @@ static void data_dir_swap(char *h, size_t room)
     if (!in_game_dir(h, gl) || strncasecmp(h + gl, "/Data/", 6)) return;
     const char *name = h + gl + 6;
     if (!*name || strchr(name, '/')) return;
+    size_t nl = strlen(name);
+    if (nl > 4 && !strcasecmp(name + nl - 4, ".rgn")) return;
     char found[256], alt[2048];
     ci_lookup(data_dir, name, found, sizeof found);
     snprintf(alt, sizeof alt, "%s/%s", data_dir, found[0] ? found : name);
+    if (exists(alt) && strlen(alt) < room) snprintf(h, room, "%s", alt);
+}
+
+/* The intro logo (Q206 to Q208): the game shows Data/logo.rgn, the Sports Interactive logo, first in its
+ * intro. When the game folder has Data/bosman_logo.rgn (tools/release/make_intro_logo.py, in the
+ * downloads only), the game reads that file in its place. Both pictures are 520x520, so the original
+ * allocates the same memory. Without the file the game shows its own logo. */
+static void intro_logo_swap(char *h, size_t room)
+{
+    size_t gl = strlen(win_game_dir);
+    if (!in_game_dir(h, gl) || strncasecmp(h + gl, "/Data/", 6) || strcasecmp(h + gl + 6, "logo.rgn")) return;
+    char dir[1100], found[256], alt[2048];
+    snprintf(dir, sizeof dir, "%.*s", (int)(gl + 5), h);
+    ci_lookup(dir, "bosman_logo.rgn", found, sizeof found);
+    snprintf(alt, sizeof alt, "%s/%s", dir, found[0] ? found : "bosman_logo.rgn");
     if (exists(alt) && strlen(alt) < room) snprintf(h, room, "%s", alt);
 }
 
@@ -409,6 +428,7 @@ static int win_paths(const char *name, char *h, char *u, size_t room)
 {
     if (!win_host_path(name, h, room) || !user_form(h, u, room)) return 0;
     data_dir_swap(h, room);
+    intro_logo_swap(h, room);
     return 1;
 }
 
