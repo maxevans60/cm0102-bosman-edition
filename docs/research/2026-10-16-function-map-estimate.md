@@ -541,6 +541,42 @@ Run `sweep-w12`: 8 Opus agents named 201 functions: the rest of the Brazilian st
 | 0x517fa0 | Listed by a constant scan only (widescreen inventory) | `Croatia_awards::init_awards` (Haiku) | `CroatiaAwards::init_awards` | no claim |
 | 0x555460 | Denmark rules constructor with transfer windows (sweep-rulebooks) | `transfer_rules_ctor_gap_0x555460` (Haiku) | `DENMARK_RULES::DENMARK_RULES` | agrees |
 
+#### Wave w13 (tier 4, 2026-10-16)
+
+Run `sweep-w13`: 8 Opus agents named 204 functions: the English competitions (`eng_*.cpp`, `england_awards.cpp`) with the `DISPUTE` gap functions, `european_awards.cpp`, `fin_cup.cpp`, `fin_first.cpp` and `fin_prm.cpp` with the finance code from the gap before `find_screens.cpp`. Each agent took 2 to 6 minutes and 107,000 to 180,000 tokens. Confidence: 172 high, 32 medium, 0 low.
+
+Merge fixes: the finance gap holds two classes from a lost `finance.cpp`. `Finance` is the club finance record (0x167 bytes), as the hub sweep named it. `FinanceTable` is the manager at global 0xae2a38. One agent had called the manager `Finance`, so 20 of its rows and the hub row 0x5a0590 changed to `FinanceTable`. The empty body 0x583470 sits in about 20 vtable slots and is now `shared_noop_ret4`.
+
+25 functions of the wave are cited. 21 agree and 4 agree in area.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x56aa30 | Competition constructor in the game creation table (game-creation inventory) | `cup_eng_auto_cup_init` (Haiku) | `EngAutoCup::EngAutoCup` | agrees |
+| 0x56c2a0 | Competition constructor in the game creation table (game-creation inventory) | `Cup::Cup_from_disk_init` (Haiku) | `EngCcCup::EngCcCup` | agrees |
+| 0x56d380 | Competition constructor in the game creation table (game-creation inventory) | `Charity_event::ctor` (Haiku) | `EngCharity::EngCharity` | agrees |
+| 0x56db60 | Competition constructor in the game creation table (game-creation inventory) | `eng_conf_engine_init` (Haiku) | `EngConf::EngConf` | agrees |
+| 0x56f040 | Competition constructor in the game creation table (game-creation inventory) | `FA_Cup::FA_Cup` (Haiku) | `EngFaCup::EngFaCup` | agrees |
+| 0x56fab0 | FA Cup replay rules (season-change-points) | `fa_cup_build_round_list` (Haiku) | `EngFaCup::collect_entrants` | agrees in area |
+| 0x570c00 | Competition constructor in the game creation table (game-creation inventory) | `Trophy::Trophy` (Haiku) | `EngFaTrophy::EngFaTrophy` | agrees |
+| 0x571680 | Competition constructor in the game creation table (game-creation inventory) | `Engine_Init::construct_engine_first` (Haiku) | `EngFirst::EngFirst` | agrees |
+| 0x573380 | Competition constructor in the game creation table (game-creation inventory) | `eng_prm_init_object` (Haiku) | `EngPrm::EngPrm` | agrees |
+| 0x574b70 | English Premier Division rules (sweep-rulebooks) | `eng_prm::set_up_rules` (slot copy) | `EngPrm::set_up_rules` | agrees |
+| 0x574c10 | start_new_season of a top league (sweep-season-end) | `eng_prm::start_new_season` (slot copy) | `EngPrm::start_new_season` | agrees |
+| 0x574e60 | Named in the start_new_season step (sweep-season-end) | `eng_prm_assign_players_to_team_slot` (Haiku) | `eng_prm_exchange_conference_clubs_unplayed` | agrees in area |
+| 0x5750a0 | Named in the start_new_season step (sweep-season-end) | `eng_prm_assign_top_teams` (Haiku) | `eng_prm_exchange_conference_feeder_clubs` | agrees in area |
+| 0x5752e0 | Promotion and relegation chain of five leagues (sweep-season-end) | `eng_prm::process_promotion_relegation_chain` (slot copy) | `EngPrm::process_promotion_relegation_chain` | agrees |
+| 0x5754a0 | Competition constructor in the game creation table (game-creation inventory) | `cm_object_init` (Haiku) | `EngSecond::EngSecond` | agrees |
+| 0x576dd0 | Competition constructor in the game creation table (game-creation inventory) | `eng_third_tournament_ctor` (Haiku) | `EngThird::EngThird` | agrees |
+| 0x591b70 | Build of the confirm screen (start-screen helpers) | `show_yes_no_dialog_screen` (Haiku) | `confirm_build` | agrees |
+| 0x591dc0 | Input of the confirm screen (start-screen helpers) | `fin_cup_key_dispatch` (Haiku) | `confirm_input` | agrees |
+| 0x59a370 | Setup step 31, global 0xae2a38 (game-creation inventory) | `fin_prm_load_from_cd` (Haiku) | `FinanceTable::FinanceTable` | agrees |
+| 0x59b9c0 | Daily call (game-creation inventory) | `fin_prm_apply_club_finance_events` (Haiku) | `FinanceTable::daily_update` | agrees |
+| 0x59cdd0 | Calls the season-end stadium routine (stadium research) | `fin_prm_copy_club_records_by_group` (Haiku) | `FinanceTable::end_season_for_nation` | agrees |
+| 0x59cf50 | Setup step 33 (game-creation inventory) | `fin_prm_refresh_records_loop` (Haiku) | `finance_refresh_all_wage_bills` | agrees in area |
+| 0x59cfa0 | Season-end stadium routine (stadium research) | `fin_prm_club_weekly_finance_tick` (Haiku) | `FinanceTable::season_end_club_update` | agrees |
+| 0x59fae0 | Expansion plans shelved news 0x1788 (stadium research) | `news_post_club_event` (Haiku) | `finance_post_works_cancelled_news` | agrees |
+| 0x5a0050 | Text of news 0x177d, stadium works (stadium research) | `fin_prm_news_headline_text` (Haiku) | `FinanceTable::write_stadium_works_news_text` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

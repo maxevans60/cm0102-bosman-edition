@@ -1696,115 +1696,115 @@ address	file	name	confidence	model	cited_in
 0x568470	display.cpp	Network::send_data_or_report_error	high	haiku	2026-10-13-display-and-scrman-inventory.md
 0x568560	display.cpp	Network_session::pack_and_send_player_record	medium	haiku	2026-10-13-display-and-scrman-inventory.md
 0x569ae0	dispute.cpp	dispute_load_dat	high	haiku	
-0x569e30	dispute.cpp	dispute_flag_check	medium	haiku	
-0x569ed0	dispute.cpp	dispute_process_pending_list	medium	haiku	
-0x56a030	dispute.cpp	dispute_find_entry_by_key	medium	haiku	
-0x56a090	dispute.cpp	dispute_clear_flag_and_remove_entry	medium	haiku	
-0x56a100	dispute.cpp	dispute_player_transfer_request	medium	haiku	
-0x56a3b0	dispute.cpp	dispute_queue_news_item	medium	haiku	
-0x56a560	dispute.cpp	dispute_news_story_resolve	high	haiku	
-0x56aa30	eng_auto_cup.cpp	cup_eng_auto_cup_init	high	haiku	2026-10-14-game-creation-inventory.md
-0x56aca0	eng_auto_cup.cpp	eng_auto_cup::`scalar deleting destructor'	medium	slot copy	
-0x56acc0	eng_auto_cup.cpp	eng_auto_cup_dtor_body	high	haiku	
-0x56ade0	eng_auto_cup.cpp	eng_auto_cup::create_round_table	medium	slot copy	
-0x56b2b0	eng_auto_cup.cpp	auto_cup_announce_final_qualifier	high	haiku	
-0x56b3c0	eng_auto_cup.cpp	eng_auto_cup_init_team_table	high	haiku	
-0x56b4b0	eng_auto_cup.cpp	eng_auto_cup::release_data	medium	slot copy	
-0x56b700	eng_auto_cup.cpp	eng_auto_cup::set_up_rounds	medium	slot copy	
-0x56b730	eng_auto_cup.cpp	eng_auto_cup_select_teams	medium	haiku	
-0x56bab0	eng_auto_cup.cpp	eng_auto_cup_build_stage_teams	medium	haiku	
-0x56bc50	eng_auto_cup.cpp	eng_auto_cup_assert_or_advance_counter	medium	haiku	
-0x56bce0	eng_auto_cup.cpp	eng_auto_cup_stage_setup_or_error	medium	haiku	
-0x56bee0	eng_auto_cup.cpp	eng_auto_cup::apply_team_result_finance	medium	slot copy	
-0x56c010	eng_auto_cup.cpp	eng_auto_cup::rank_teams	medium	slot copy	
-0x56c240	eng_cc_cup.cpp	comp_screen_set_flags	medium	haiku	
-0x56c2a0	eng_cc_cup.cpp	Cup::Cup_from_disk_init	medium	haiku	2026-10-14-game-creation-inventory.md
-0x56c480	eng_cc_cup.cpp	eng_cc_cup::`scalar deleting destructor'	medium	slot copy	
-0x56c4a0	eng_cc_cup.cpp	eng_cc_cup_screen_destructor	high	haiku	
-0x56c570	eng_cc_cup.cpp	eng_cc_cup::create_round_table	medium	slot copy	
-0x56caf0	eng_cc_cup.cpp	eng_cc_cup::update_for_date	medium	slot copy	
-0x56ccc0	eng_cc_cup.cpp	eng_cc_cup_build_candidate_list	medium	haiku	
-0x56d130	eng_cc_cup.cpp	eng_cc_cup::release_data	medium	slot copy	
-0x56d2e0	eng_cc_cup.cpp	cup_load_or_assert_file	medium	haiku	
-0x56d380	eng_charity.cpp	Charity_event::ctor	medium	haiku	2026-10-14-game-creation-inventory.md
-0x56d550	eng_charity.cpp	eng_charity::`scalar deleting destructor'	medium	slot copy	
-0x56d570	eng_charity.cpp	eng_charity_order_dtor	high	haiku	
-0x56d640	eng_charity.cpp	eng_charity::create_round_table	medium	slot copy	
-0x56d780	eng_charity.cpp	eng_charity_load_pair_record	medium	haiku	
-0x56d9b0	eng_charity.cpp	eng_charity::release_data	medium	slot copy	
-0x56db60	eng_conf.cpp	eng_conf_engine_init	high	haiku	2026-10-14-game-creation-inventory.md
-0x56dd80	eng_conf.cpp	eng_conf::`scalar deleting destructor'	medium	slot copy	
-0x56dda0	eng_conf.cpp	eng_conf::~eng_conf	high	haiku	
-0x56de60	eng_conf.cpp	eng_conf::create_schedule	medium	slot copy	
-0x56ecb0	eng_conf.cpp	eng_conf_init_league_slots	medium	haiku	
-0x56ede0	eng_conf.cpp	eng_conf::set_up_rules	medium	slot copy	
-0x56ee80	eng_conf.cpp	eng_conf::start_new_season	medium	slot copy	
-0x56f040	eng_fa_cup.cpp	FA_Cup::FA_Cup	high	haiku	2026-10-14-game-creation-inventory.md
-0x56f230	eng_fa_cup.cpp	eng_fa_cup::`scalar deleting destructor'	medium	slot copy	
-0x56f250	eng_fa_cup.cpp	eng_fa_cup::~eng_fa_cup	high	haiku	
-0x56f320	eng_fa_cup.cpp	eng_fa_cup::create_round_table	medium	slot copy	
-0x56fab0	eng_fa_cup.cpp	fa_cup_build_round_list	medium	haiku	2026-10-16-season-change-points.md
-0x570390	eng_fa_cup.cpp	eng_fa_cup::release_data	medium	slot copy	
-0x570550	eng_fa_cup.cpp	eng_fa_cup::update_for_date	medium	slot copy	
-0x570830	eng_fa_cup.cpp	eng_fa_cup_init_flags_thiscall	low	haiku	
-0x5708a0	eng_fa_cup.cpp	Competition::reset_trophy_flags	medium	haiku	
-0x5708f0	eng_fa_cup.cpp	fa_cup_open_confirm_screen	medium	haiku	
-0x570940	eng_fa_cup.cpp	eng_fa_cup_confirm_fifth_round_dialog	high	haiku	
-0x570ae0	eng_fa_cup.cpp	fa_cup_entry_check_and_dispatch	low	haiku	
-0x570c00	eng_fa_trophy.cpp	Trophy::Trophy	high	haiku	2026-10-14-game-creation-inventory.md
-0x570dd0	eng_fa_trophy.cpp	eng_fa_trophy::`scalar deleting destructor'	medium	slot copy	
-0x570df0	eng_fa_trophy.cpp	eng_fa_trophy_dtor	high	haiku	
-0x570ec0	eng_fa_trophy.cpp	eng_fa_trophy::create_round_table	medium	slot copy	
-0x5712b0	eng_fa_trophy.cpp	eng_fa_trophy_build_candidate_list	medium	haiku	
-0x5714a0	eng_fa_trophy.cpp	eng_fa_trophy::release_data	medium	slot copy	
-0x571650	eng_fa_trophy.cpp	eng_fa_trophy::set_up_rounds	medium	slot copy	
-0x571680	eng_first.cpp	Engine_Init::construct_engine_first	high	haiku	2026-10-14-game-creation-inventory.md
-0x5718a0	eng_first.cpp	eng_first::`scalar deleting destructor'	medium	slot copy	
-0x5718c0	eng_first.cpp	eng_first_object::~eng_first_object	high	haiku	
-0x571980	eng_first.cpp	eng_first::create_schedule	medium	slot copy	
-0x572bf0	eng_first.cpp	league_init_teams_and_allocate	medium	haiku	
-0x572d90	eng_first.cpp	eng_first::set_up_rules	medium	slot copy	
-0x572e30	eng_first.cpp	eng_first::start_new_season	medium	slot copy	
-0x572ff0	eng_first.cpp	eng_first_assert_counter_check	medium	haiku	
-0x573080	eng_first.cpp	eng_first_create_cup_stage_schedule	medium	haiku	
-0x573260	eng_first.cpp	comp_screen_set_mode_fields	low	haiku	
-0x573380	eng_prm.cpp	eng_prm_init_object	high	haiku	2026-10-14-game-creation-inventory.md
-0x5735b0	eng_prm.cpp	eng_prm::`scalar deleting destructor'	medium	slot copy	
-0x5735d0	eng_prm.cpp	eng_prm_dtor	high	haiku	
-0x573660	eng_prm.cpp	eng_prm::create_schedule	medium	slot copy	
-0x574a20	eng_prm.cpp	Season_Init::allocate_league_slots	medium	haiku	
-0x574b70	eng_prm.cpp	eng_prm::set_up_rules	medium	slot copy	2026-10-16-sweep-rulebooks.md
-0x574c10	eng_prm.cpp	eng_prm::start_new_season	medium	slot copy	2026-10-16-sweep-season-end.md
-0x574e60	eng_prm.cpp	eng_prm_assign_players_to_team_slot	medium	haiku	2026-10-16-sweep-season-end.md
-0x5750a0	eng_prm.cpp	eng_prm_assign_top_teams	medium	haiku	2026-10-16-sweep-season-end.md
-0x5752e0	eng_prm.cpp	eng_prm::process_promotion_relegation_chain	medium	slot copy	2026-10-16-sweep-season-end.md
-0x5752f0	eng_prm.cpp	eng_prm_promotion_relegation_step	medium	haiku	
-0x5754a0	eng_second.cpp	cm_object_init	medium	haiku	2026-10-14-game-creation-inventory.md
-0x5756c0	eng_second.cpp	eng_second::`scalar deleting destructor'	medium	slot copy	
-0x5756e0	eng_second.cpp	eng_second_scalar_deleting_destructor_body	medium	haiku	
-0x5757a0	eng_second.cpp	eng_second::create_schedule	medium	slot copy	
-0x576630	eng_second.cpp	eng_second_cm_table_init	medium	haiku	
-0x576780	eng_second.cpp	eng_second::set_up_rules	medium	slot copy	
-0x576820	eng_second.cpp	eng_second::start_new_season	medium	slot copy	
-0x5769e0	eng_second.cpp	assert_counter_check_fastcall	medium	haiku	
-0x576a70	eng_second.cpp	cup_stage_round_setup	medium	haiku	
-0x576c50	eng_second.cpp	eng_second::update_staff_records_for_status	medium	slot copy	
-0x576dd0	eng_third.cpp	eng_third_tournament_ctor	high	haiku	2026-10-14-game-creation-inventory.md
-0x577000	eng_third.cpp	eng_third::`scalar deleting destructor'	medium	slot copy	
-0x577020	eng_third.cpp	order_destructor_body	medium	haiku	
-0x5770e0	eng_third.cpp	eng_third::create_schedule	medium	slot copy	
-0x577f70	eng_third.cpp	Eng_third::setup_league_teams_and_allocate_buffer	high	haiku	
-0x5780c0	eng_third.cpp	eng_third::set_up_rules	medium	slot copy	
-0x578170	eng_third.cpp	eng_third::start_new_season	medium	slot copy	
-0x578330	eng_third.cpp	assert_counter_check_guard	medium	haiku	
-0x5783c0	eng_third.cpp	cup_stage_create_assert_guarded	medium	haiku	
-0x5785b0	eng_third.cpp	england_awards_promotion_message	high	haiku	
-0x578660	eng_third.cpp	comp_screens_set_club_result_state	medium	haiku	
-0x578780	england_awards.cpp	england_awards_ctor	high	haiku	
-0x5788c0	england_awards.cpp	england_awards::init_awards	high	haiku	
-0x579610	england_awards.cpp	england_awards_month_refresh	medium	haiku	
-0x579900	england_awards.cpp	england_awards_refresh_panel	medium	haiku	
-0x579af0	england_awards.cpp	england_awards_check_and_notify	medium	haiku	
+0x569e30	dispute.cpp	DISPUTE::is_in_dispute	medium	opus	
+0x569ed0	dispute.cpp	DISPUTE::process_hearings	medium	opus	
+0x56a030	dispute.cpp	DISPUTE::get_dispute_club_id	medium	opus	
+0x56a090	dispute.cpp	DISPUTE::remove_dispute	high	opus	
+0x56a100	dispute.cpp	DISPUTE::file_complaint	medium	opus	
+0x56a3b0	dispute.cpp	dispute_post_news	high	opus	
+0x56a560	dispute.cpp	dispute_write_news_text	high	opus	
+0x56aa30	eng_auto_cup.cpp	EngAutoCup::EngAutoCup	high	opus	2026-10-14-game-creation-inventory.md
+0x56aca0	eng_auto_cup.cpp	EngAutoCup::`scalar deleting destructor'	high	opus	
+0x56acc0	eng_auto_cup.cpp	EngAutoCup::~EngAutoCup	high	opus	
+0x56ade0	eng_auto_cup.cpp	EngAutoCup::create_round_table	high	opus	
+0x56b2b0	eng_auto_cup.cpp	EngAutoCup::build_fate_news_text	high	opus	
+0x56b3c0	eng_auto_cup.cpp	EngAutoCup::collect_entrants	medium	opus	
+0x56b4b0	eng_auto_cup.cpp	EngAutoCup::start_new_season	high	opus	
+0x56b700	eng_auto_cup.cpp	EngAutoCup::set_up_rounds	high	opus	
+0x56b730	eng_auto_cup.cpp	EngAutoCup::select_section_clubs	medium	opus	
+0x56bab0	eng_auto_cup.cpp	EngAutoCup::create_section_stage	medium	opus	
+0x56bc50	eng_auto_cup.cpp	EngAutoCup::advance_stage	high	opus	
+0x56bce0	eng_auto_cup.cpp	EngAutoCup::create_final_stage	high	opus	
+0x56bee0	eng_auto_cup.cpp	EngAutoCup::apply_team_result_finance	high	opus	
+0x56c010	eng_auto_cup.cpp	EngAutoCup::rank_teams	high	opus	
+0x56c240	eng_auto_cup.cpp	EngAutoCup::set_club_progress	high	opus	
+0x56c2a0	eng_cc_cup.cpp	EngCcCup::EngCcCup	high	opus	2026-10-14-game-creation-inventory.md
+0x56c480	eng_cc_cup.cpp	EngCcCup::`scalar deleting destructor'	high	opus	
+0x56c4a0	eng_cc_cup.cpp	EngCcCup::~EngCcCup	high	opus	
+0x56c570	eng_cc_cup.cpp	EngCcCup::create_round_table	high	opus	
+0x56caf0	eng_cc_cup.cpp	EngCcCup::update_for_date	high	opus	
+0x56ccc0	eng_cc_cup.cpp	EngCcCup::collect_entrants	high	opus	
+0x56d130	eng_cc_cup.cpp	EngCcCup::start_new_season	high	opus	
+0x56d2e0	eng_cc_cup.cpp	EngCcCup::load_extra_data	high	opus	
+0x56d380	eng_charity.cpp	EngCharity::EngCharity	high	opus	2026-10-14-game-creation-inventory.md
+0x56d550	eng_charity.cpp	EngCharity::`scalar deleting destructor'	high	opus	
+0x56d570	eng_charity.cpp	EngCharity::~EngCharity	high	opus	
+0x56d640	eng_charity.cpp	EngCharity::create_round_table	high	opus	
+0x56d780	eng_charity.cpp	EngCharity::select_teams	high	opus	
+0x56d9b0	eng_charity.cpp	EngCharity::start_new_season	high	opus	
+0x56db60	eng_conf.cpp	EngConf::EngConf	high	opus	2026-10-14-game-creation-inventory.md
+0x56dd80	eng_conf.cpp	EngConf::`scalar deleting destructor'	high	opus	
+0x56dda0	eng_conf.cpp	EngConf::~EngConf	high	opus	
+0x56de60	eng_conf.cpp	EngConf::create_schedule	high	opus	
+0x56ecb0	eng_conf.cpp	EngConf::create_table	high	opus	
+0x56ede0	eng_conf.cpp	EngConf::set_up_rules	high	opus	
+0x56ee80	eng_conf.cpp	EngConf::start_new_season	high	opus	
+0x56f040	eng_fa_cup.cpp	EngFaCup::EngFaCup	high	opus	2026-10-14-game-creation-inventory.md
+0x56f230	eng_fa_cup.cpp	EngFaCup::`scalar deleting destructor'	high	opus	
+0x56f250	eng_fa_cup.cpp	EngFaCup::~EngFaCup	high	opus	
+0x56f320	eng_fa_cup.cpp	EngFaCup::create_round_table	high	opus	
+0x56fab0	eng_fa_cup.cpp	EngFaCup::collect_entrants	medium	opus	2026-10-16-season-change-points.md
+0x570390	eng_fa_cup.cpp	EngFaCup::start_new_season	high	opus	
+0x570550	eng_fa_cup.cpp	EngFaCup::update_for_date	high	opus	
+0x570830	eng_fa_cup.cpp	EngFaCup::load_extra_data	high	opus	
+0x5708a0	eng_fa_cup.cpp	EngFaCup::save_extra_data	high	opus	
+0x5708f0	eng_fa_cup.cpp	fa_cup_open_fifth_round_entry_screen	medium	opus	
+0x570940	eng_fa_cup.cpp	fa_cup_draw_fifth_round_entry_screen	high	opus	
+0x570ae0	eng_fa_cup.cpp	fa_cup_handle_fifth_round_entry_screen	medium	opus	
+0x570c00	eng_fa_trophy.cpp	EngFaTrophy::EngFaTrophy	high	opus	2026-10-14-game-creation-inventory.md
+0x570dd0	eng_fa_trophy.cpp	EngFaTrophy::`scalar deleting destructor'	high	opus	
+0x570df0	eng_fa_trophy.cpp	EngFaTrophy::~EngFaTrophy	high	opus	
+0x570ec0	eng_fa_trophy.cpp	EngFaTrophy::create_round_table	high	opus	
+0x5712b0	eng_fa_trophy.cpp	EngFaTrophy::select_teams	medium	opus	
+0x5714a0	eng_fa_trophy.cpp	EngFaTrophy::start_new_season	high	opus	
+0x571650	eng_fa_trophy.cpp	EngFaTrophy::set_up_rounds	high	opus	
+0x571680	eng_first.cpp	EngFirst::EngFirst	high	opus	2026-10-14-game-creation-inventory.md
+0x5718a0	eng_first.cpp	EngFirst::`scalar deleting destructor'	high	opus	
+0x5718c0	eng_first.cpp	EngFirst::~EngFirst	high	opus	
+0x571980	eng_first.cpp	EngFirst::create_schedule	high	opus	
+0x572bf0	eng_first.cpp	EngFirst::create_table	high	opus	
+0x572d90	eng_first.cpp	EngFirst::set_up_rules	high	opus	
+0x572e30	eng_first.cpp	EngFirst::start_new_season	high	opus	
+0x572ff0	eng_first.cpp	EngFirst::advance_stage	high	opus	
+0x573080	eng_first.cpp	EngFirst::create_playoff_stage	high	opus	
+0x573260	eng_first.cpp	EngFirst::set_club_progress	medium	opus	
+0x573380	eng_prm.cpp	EngPrm::EngPrm	high	opus	2026-10-14-game-creation-inventory.md
+0x5735b0	eng_prm.cpp	EngPrm::`scalar deleting destructor'	high	opus	
+0x5735d0	eng_prm.cpp	EngPrm::~EngPrm	high	opus	
+0x573660	eng_prm.cpp	EngPrm::create_schedule	high	opus	
+0x574a20	eng_prm.cpp	EngPrm::create_table	high	opus	
+0x574b70	eng_prm.cpp	EngPrm::set_up_rules	high	opus	2026-10-16-sweep-rulebooks.md
+0x574c10	eng_prm.cpp	EngPrm::start_new_season	high	opus	2026-10-16-sweep-season-end.md
+0x574e60	eng_prm.cpp	eng_prm_exchange_conference_clubs_unplayed	medium	opus	2026-10-16-sweep-season-end.md
+0x5750a0	eng_prm.cpp	eng_prm_exchange_conference_feeder_clubs	medium	opus	2026-10-16-sweep-season-end.md
+0x5752e0	eng_prm.cpp	EngPrm::process_promotion_relegation_chain	high	opus	2026-10-16-sweep-season-end.md
+0x5752f0	eng_prm.cpp	EngPrm::process_promotion_relegation_chain_body	high	opus	
+0x5754a0	eng_second.cpp	EngSecond::EngSecond	high	opus	2026-10-14-game-creation-inventory.md
+0x5756c0	eng_second.cpp	EngSecond::`scalar deleting destructor'	high	opus	
+0x5756e0	eng_second.cpp	EngSecond::~EngSecond	high	opus	
+0x5757a0	eng_second.cpp	EngSecond::create_schedule	high	opus	
+0x576630	eng_second.cpp	EngSecond::create_table	high	opus	
+0x576780	eng_second.cpp	EngSecond::set_up_rules	high	opus	
+0x576820	eng_second.cpp	EngSecond::start_new_season	high	opus	
+0x5769e0	eng_second.cpp	EngSecond::advance_stage	high	opus	
+0x576a70	eng_second.cpp	EngSecond::create_play_off_stage	high	opus	
+0x576c50	eng_second.cpp	EngSecond::update_staff_records_for_status	high	opus	
+0x576dd0	eng_third.cpp	EngThird::EngThird	high	opus	2026-10-14-game-creation-inventory.md
+0x577000	eng_third.cpp	EngThird::`scalar deleting destructor'	high	opus	
+0x577020	eng_third.cpp	EngThird::~EngThird	high	opus	
+0x5770e0	eng_third.cpp	EngThird::create_schedule	high	opus	
+0x577f70	eng_third.cpp	EngThird::create_table	high	opus	
+0x5780c0	eng_third.cpp	EngThird::set_up_rules	high	opus	
+0x578170	eng_third.cpp	EngThird::start_new_season	high	opus	
+0x578330	eng_third.cpp	EngThird::advance_stage	high	opus	
+0x5783c0	eng_third.cpp	EngThird::create_play_off_stage	high	opus	
+0x5785b0	eng_third.cpp	EngThird::build_fate_news_text	high	opus	
+0x578660	eng_third.cpp	EngThird::set_club_progress	medium	opus	
+0x578780	england_awards.cpp	EnglandAwards::EnglandAwards	high	opus	
+0x5788c0	england_awards.cpp	EnglandAwards::init_awards	high	opus	
+0x579610	england_awards.cpp	EnglandAwards::daily_update	high	opus	
+0x579900	england_awards.cpp	EnglandAwards::on_month_change	medium	opus	
+0x579af0	england_awards.cpp	EnglandAwards::update_team_of_the_week	high	opus	
 0x579b30	england_rules.cpp	ENGLAND_RULES::ENGLAND_RULES	high	opus	2026-10-16-season-change-points.md,2026-10-16-sweep-rulebooks.md
 0x579c50	england_rules.cpp	ENGLAND_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
 0x579c70	england_rules.cpp	ENGLAND_RULES::get_loan_period	medium	opus	2026-10-16-sweep-rulebooks.md
@@ -1878,10 +1878,10 @@ address	file	name	confidence	model	cited_in
 0x583280	european_awards.cpp	EUROPE_RULES::EUROPE_RULES	medium	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
 0x5832c0	european_awards.cpp	TRANSFER_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
 0x5832e0	european_awards.cpp	EUROPE_RULES::get_ineligibility_code	low	opus	
-0x583400	european_awards.cpp	european_awards_ctor	high	haiku	
-0x583470	european_awards.cpp	european_awards_noop	medium	haiku	
-0x583480	european_awards.cpp	European_Awards::init_awards	high	haiku	
-0x5836a0	european_awards.cpp	european_awards_vtable_refresh_entries	medium	haiku	
+0x583400	european_awards.cpp	EuropeanAwards::EuropeanAwards	high	opus	
+0x583470	european_awards.cpp	shared_noop_ret4	medium	opus	
+0x583480	european_awards.cpp	EuropeanAwards::init_awards	high	opus	
+0x5836a0	european_awards.cpp	EuropeanAwards::daily_update	high	opus	
 0x5837c0	european_cup.cpp	EuropeanCup::EuropeanCup	high	opus	
 0x5839d0	european_cup.cpp	comp_stub_return_zero	medium	opus	
 0x5839e0	european_cup.cpp	EuropeanCup::`scalar deleting destructor'	high	opus	
@@ -2003,101 +2003,101 @@ address	file	name	confidence	model	cited_in
 0x5917f0	file_screens.cpp	get_screen_result_code	medium	haiku	
 0x591840	file_screens.cpp	assert_screen_args_and_open_screen	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-holiday-next-match-inventory.md
 0x5919b0	file_screens.cpp	create_screen_assert_or_open	high	haiku	2026-10-14-start-screen-spec.md,file_screens.c
-0x591b70	file_screens.cpp	show_yes_no_dialog_screen	medium	haiku	2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,display.c
-0x591dc0	file_screens.cpp	fin_cup_key_dispatch	medium	haiku	2026-10-14-start-screen-helpers.md,2026-10-15-holiday-next-match-inventory.md
-0x591f80	fin_cup.cpp	build_nation_and_club_summary_strings	high	haiku	
-0x592250	fin_cup.cpp	fin_cup_construct	high	haiku	
-0x592420	fin_cup.cpp	fin_cup::`scalar deleting destructor'	medium	slot copy	
-0x592440	fin_cup.cpp	fin_cup_screen::~fin_cup_screen	high	haiku	
-0x592510	fin_cup.cpp	fin_cup::create_round_table	medium	slot copy	
-0x592a20	fin_cup.cpp	fin_cup::build_qualifier_list	high	haiku	
-0x592d00	fin_cup.cpp	fin_cup::release_data	medium	slot copy	
-0x592eb0	fin_first.cpp	fin_first_ctor	high	haiku	
-0x5930e0	fin_first.cpp	fin_first::`scalar deleting destructor'	medium	slot copy	
-0x593100	fin_first.cpp	fin_first_object_destructor	high	haiku	
-0x5931c0	fin_first.cpp	fin_first::create_schedule	medium	slot copy	
-0x593a70	fin_first.cpp	fin_first_load_qualifying_teams	high	haiku	
-0x593b80	fin_first.cpp	fin_first::set_up_rules	medium	slot copy	
-0x593c20	fin_first.cpp	fin_first::start_new_season	medium	slot copy	
-0x593e10	fin_first.cpp	fin_set_screen_slots	medium	haiku	
-0x593f90	fin_first.cpp	fin_first_state_step	medium	haiku	
-0x594080	fin_first.cpp	fin_first_build_cup_draw_list	medium	haiku	
-0x594610	fin_first.cpp	fin_first_stage_cup_setup	medium	haiku	
-0x594810	fin_first.cpp	fin_first::update_staff_records_for_status	medium	slot copy	
-0x594850	fin_first.cpp	fin_first_order_handler_club_lookup	medium	haiku	
-0x594a10	fin_first.cpp	fin_promotion_relegation_news	high	haiku	
-0x594cd0	fin_first.cpp	fin_first_build_group_entries_and_create_stage	high	haiku	
-0x594fb0	fin_first.cpp	fin_first_set_field_0xee	medium	haiku	
-0x594fd0	fin_first.cpp	fin_first_set_field_ee_4	medium	haiku	
-0x594ff0	fin_first.cpp	fin_first::set_predicted_positions	medium	slot copy	
-0x595160	fin_first.cpp	fin_first_thunk_vcall_0x30	medium	haiku	
-0x595170	fin_prm.cpp	Finance_Params::ctor_init	high	haiku	
-0x595400	fin_prm.cpp	fin_prm::`scalar deleting destructor'	medium	slot copy	
-0x595420	fin_prm.cpp	fin_prm_screen::~fin_prm_screen	medium	haiku	
-0x5954b0	fin_prm.cpp	fin_prm::create_schedule	medium	slot copy	
-0x595b70	fin_prm.cpp	fin_prm_load_league_teams	medium	haiku	
-0x595c90	fin_prm.cpp	fin_prm::set_up_rules	medium	slot copy	
-0x595d40	fin_prm.cpp	fin_prm::start_new_season	medium	slot copy	
-0x595f00	fin_prm.cpp	fin_prm_move_clubs_to_season_divisions	medium	haiku	
-0x596020	fin_prm.cpp	fin_prm_set_entry_fields	medium	haiku	
-0x596050	fin_prm.cpp	fin_prm_sort_and_place_top_teams	medium	haiku	
-0x596110	fin_prm.cpp	fin_prm::process_promotion_relegation_chain	medium	slot copy	
-0x5961c0	fin_prm.cpp	identity_return_fastcall	low	haiku	
-0x5961d0	fin_prm.cpp	fin_prm_build_record	medium	haiku	
+0x591b70	file_screens.cpp	confirm_build	high	opus	2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,display.c
+0x591dc0	file_screens.cpp	confirm_input	high	opus	2026-10-14-start-screen-helpers.md,2026-10-15-holiday-next-match-inventory.md
+0x591f80	file_screens.cpp	build_save_game_summary	high	opus	
+0x592250	fin_cup.cpp	FinCup::FinCup	high	opus	
+0x592420	fin_cup.cpp	FinCup::`scalar deleting destructor'	high	opus	
+0x592440	fin_cup.cpp	FinCup::~FinCup	high	opus	
+0x592510	fin_cup.cpp	FinCup::create_round_table	high	opus	
+0x592a20	fin_cup.cpp	FinCup::collect_entrants	high	opus	
+0x592d00	fin_cup.cpp	FinCup::start_new_season	high	opus	
+0x592eb0	fin_first.cpp	FinFirst::FinFirst	high	opus	
+0x5930e0	fin_first.cpp	FinFirst::`scalar deleting destructor'	high	opus	
+0x593100	fin_first.cpp	FinFirst::~FinFirst	high	opus	
+0x5931c0	fin_first.cpp	FinFirst::create_schedule	high	opus	
+0x593a70	fin_first.cpp	FinFirst::create_table	high	opus	
+0x593b80	fin_first.cpp	FinFirst::set_up_rules	high	opus	
+0x593c20	fin_first.cpp	FinFirst::start_new_season	high	opus	
+0x593e10	fin_first.cpp	FinFirst::set_club_progress	high	opus	
+0x593f90	fin_first.cpp	FinFirst::advance_stage	high	opus	
+0x594080	fin_first.cpp	FinFirst::create_play_off_stages	medium	opus	
+0x594610	fin_first.cpp	FinFirst::create_premier_play_off_stage	high	opus	
+0x594810	fin_first.cpp	FinFirst::update_staff_records_for_status	high	opus	
+0x594850	fin_first.cpp	FinFirst::update_staff_records_for_status_fragment	medium	opus	
+0x594a10	fin_first.cpp	FinFirst::build_fate_news_text	high	opus	
+0x594cd0	fin_first.cpp	FinFirst::create_south_group_stage	high	opus	
+0x594fb0	fin_first.cpp	FinFirst::load_extra_data	high	opus	
+0x594fd0	fin_first.cpp	FinFirst::save_extra_data	high	opus	
+0x594ff0	fin_first.cpp	FinFirst::set_predicted_positions	high	opus	
+0x595160	fin_first.cpp	FinFirst::record_season_honours	high	opus	
+0x595170	fin_prm.cpp	FinPrm::FinPrm	high	opus	
+0x595400	fin_prm.cpp	FinPrm::`scalar deleting destructor'	high	opus	
+0x595420	fin_prm.cpp	FinPrm::~FinPrm	high	opus	
+0x5954b0	fin_prm.cpp	FinPrm::create_schedule	high	opus	
+0x595b70	fin_prm.cpp	FinPrm::create_table	high	opus	
+0x595c90	fin_prm.cpp	FinPrm::set_up_rules	high	opus	
+0x595d40	fin_prm.cpp	FinPrm::start_new_season	high	opus	
+0x595f00	fin_prm.cpp	fin_prm_refresh_first_division_clubs	medium	opus	
+0x596020	fin_prm.cpp	FinPrm::set_club_progress	high	opus	
+0x596050	fin_prm.cpp	fin_prm_assign_first_division_groups	medium	opus	
+0x596110	fin_prm.cpp	FinPrm::process_promotion_relegation_chain	high	opus	
+0x5961c0	fin_prm.cpp	Finance::Finance	medium	opus	
+0x5961d0	fin_prm.cpp	Finance::init_for_club	medium	opus	
 0x5968d0	fin_prm.cpp	Finance::get_max_wage	medium	opus	
-0x597db0	fin_prm.cpp	transfer_offer_amount_clamp	medium	haiku	
-0x598340	fin_prm.cpp	set_float_to_int_field	medium	haiku	
-0x598370	fin_prm.cpp	squad_wage_bill_totals	medium	haiku	
+0x597db0	fin_prm.cpp	Finance::get_max_staff_wage	high	opus	
+0x598340	fin_prm.cpp	Finance::adjust_max_wage	high	opus	
+0x598370	fin_prm.cpp	Finance::update_wage_bill	high	opus	
 0x5986b0	fin_prm.cpp	Finance::get_wealth_band	medium	opus	2026-10-16-crash-fixes.md
-0x5987c0	fin_prm.cpp	money_add_amount	medium	haiku	
+0x5987c0	fin_prm.cpp	Finance::add_tv_revenue	high	opus	
 0x598800	fin_prm.cpp	Finance::get_transfer_budget	medium	opus	
-0x599800	fin_prm.cpp	money_add_to_three_accounts	medium	haiku	
-0x599850	fin_prm.cpp	Money::add_signed_amount	medium	haiku	
-0x599890	fin_prm.cpp	money_add_to_balances	medium	haiku	
-0x5998e0	fin_prm.cpp	Money::subtract_amount_from_balance	low	haiku	
-0x599920	fin_prm.cpp	money_subtract_int64_pair_from_balance	low	haiku	
-0x599960	fin_prm.cpp	finance_record_add_amount_64	medium	haiku	
-0x5999a0	fin_prm.cpp	Money::add_amount	medium	haiku	
-0x5999e0	fin_prm.cpp	money_add_cash_adjust	low	haiku	
-0x599a20	fin_prm.cpp	fin_prm_accrue_club_income	medium	haiku	
-0x599e00	fin_prm.cpp	fin_prm_apply_wage_or_payment_ledger	medium	haiku	
-0x59a370	fin_prm.cpp	fin_prm_load_from_cd	high	haiku	2026-10-14-game-creation-inventory.md
-0x59a5a0	fin_prm.cpp	fin_prm_array_destroy	medium	haiku	
-0x59a5d0	fin_prm.cpp	match_day_settle_finances	high	haiku	
-0x59af40	fin_prm.cpp	fin_prm_match_fee_calc	medium	haiku	
-0x59b2a0	fin_prm.cpp	fin_prm_open_finance_dat	high	haiku	
-0x59b3b0	fin_prm.cpp	fin_prm_save_finance_dat	medium	haiku	
-0x59b4c0	fin_prm.cpp	fin_prm_check_contract_expiry_window	low	haiku	
-0x59b630	fin_prm.cpp	fin_prm_apply_sponsorship_payment	medium	haiku	
-0x59b7e0	fin_prm.cpp	fin_prm_add_club_finance_amount	medium	haiku	
-0x59b9c0	fin_prm.cpp	fin_prm_apply_club_finance_events	medium	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-stadium-research.md
-0x59cdd0	fin_prm.cpp	fin_prm_copy_club_records_by_group	medium	haiku	2026-10-16-stadium-research.md,2026-10-16-sweep-season-end.md
-0x59cf50	fin_prm.cpp	fin_prm_refresh_records_loop	medium	haiku	2026-10-14-game-creation-inventory.md
-0x59cfa0	fin_prm.cpp	fin_prm_club_weekly_finance_tick	medium	haiku	2026-10-14-widescreen-inventory.md,2026-10-16-stadium-research.md,HANDOVER.md
-0x59dd40	fin_prm.cpp	fin_prm_try_pay_club_monthly_wage	medium	haiku	
-0x59e050	fin_prm.cpp	fin_prm_club_sponsorship_tick	medium	haiku	
-0x59e5a0	fin_prm.cpp	fin_prm_stadium_expansion_budget_grant	low	haiku	
-0x59e940	fin_prm.cpp	fin_prm_club_wealth_injection	medium	haiku	
-0x59ed70	fin_prm.cpp	fin_prm_weekly_club_update	medium	haiku	
-0x59f300	fin_prm.cpp	fin_prm_post_transfer_news	low	haiku	
-0x59f3e0	fin_prm.cpp	news_format_financial_event_text	high	haiku	
-0x59f900	fin_prm.cpp	fin_prm_news_push_transfer_rule	medium	haiku	
-0x59f9c0	fin_prm.cpp	news_stand_closed_report	high	haiku	
-0x59fae0	fin_prm.cpp	news_post_club_event	medium	haiku	2026-10-16-stadium-research.md
-0x59fb90	fin_prm.cpp	news_ground_expansion_story	medium	haiku	
-0x59fc60	fin_prm.cpp	fin_prm_send_club_news_item	medium	haiku	
-0x59fcf0	fin_prm.cpp	news_financial_crisis_text	high	haiku	
-0x59fe10	fin_prm.cpp	fin_news_announce_club_event	medium	haiku	
-0x59feb0	fin_prm.cpp	news_shareholder_dividend_story	high	haiku	
-0x59ffb0	fin_prm.cpp	fin_prm_news_push_event	medium	haiku	
-0x5a0000	fin_prm.cpp	fin_prm_news_event_wrapper	medium	haiku	
-0x5a0050	fin_prm.cpp	fin_prm_news_headline_text	high	haiku	2026-10-16-stadium-research.md
-0x5a0230	fin_prm.cpp	news_club_relocation_story	high	haiku	
-0x5a02f0	fin_prm.cpp	news_post_club_event	medium	haiku	
-0x5a0380	fin_prm.cpp	news_receivers_appeased_story	high	haiku	
-0x5a0410	fin_prm.cpp	fin_prm_show_news_item	medium	haiku	
-0x5a04c0	fin_prm.cpp	news_stadium_expansion_story	high	haiku	
-0x5a0590	fin_prm.cpp	Finance::get_club_finance	high	opus	
+0x599800	fin_prm.cpp	Finance::add_players_sold	high	opus	
+0x599850	fin_prm.cpp	Finance::pay_league_fine	high	opus	
+0x599890	fin_prm.cpp	Finance::pay_players_bought	high	opus	
+0x5998e0	fin_prm.cpp	Finance::pay_sign_on_fee	high	opus	
+0x599920	fin_prm.cpp	Finance::pay_wages	high	opus	
+0x599960	fin_prm.cpp	Finance::pay_bonuses	high	opus	
+0x5999a0	fin_prm.cpp	Finance::add_prize_money	high	opus	
+0x5999e0	fin_prm.cpp	Finance::pay_other_costs	high	opus	
+0x599a20	fin_prm.cpp	Finance::sell_season_tickets	medium	opus	
+0x599e00	fin_prm.cpp	Finance::upgrade_stadium_for_league	medium	opus	
+0x59a370	fin_prm.cpp	FinanceTable::FinanceTable	high	opus	2026-10-14-game-creation-inventory.md
+0x59a5a0	fin_prm.cpp	FinanceTable::~FinanceTable	high	opus	
+0x59a5d0	fin_prm.cpp	FinanceTable::process_match_income	high	opus	
+0x59af40	fin_prm.cpp	FinanceTable::calc_gate_receipts	medium	opus	
+0x59b2a0	fin_prm.cpp	FinanceTable::load_from_save	high	opus	
+0x59b3b0	fin_prm.cpp	FinanceTable::save_finance_dat	high	opus	
+0x59b4c0	fin_prm.cpp	finance_get_days_to_season_start	medium	opus	
+0x59b630	fin_prm.cpp	FinanceTable::upgrade_training_facilities	high	opus	
+0x59b7e0	fin_prm.cpp	FinanceTable::add_weekly_commercial_income	medium	opus	
+0x59b9c0	fin_prm.cpp	FinanceTable::daily_update	high	opus	2026-10-14-game-creation-inventory.md,2026-10-16-stadium-research.md
+0x59cdd0	fin_prm.cpp	FinanceTable::end_season_for_nation	high	opus	2026-10-16-stadium-research.md,2026-10-16-sweep-season-end.md
+0x59cf50	fin_prm.cpp	finance_refresh_all_wage_bills	medium	opus	2026-10-14-game-creation-inventory.md
+0x59cfa0	fin_prm.cpp	FinanceTable::season_end_club_update	high	opus	2026-10-14-widescreen-inventory.md,2026-10-16-stadium-research.md,HANDOVER.md
+0x59dd40	fin_prm.cpp	FinanceTable::try_board_debt_payment	high	opus	
+0x59e050	fin_prm.cpp	FinanceTable::try_finance_boost_event	medium	opus	
+0x59e5a0	fin_prm.cpp	FinanceTable::try_cash_injection	medium	opus	
+0x59e940	fin_prm.cpp	FinanceTable::try_board_takeover	medium	opus	
+0x59ed70	fin_prm.cpp	FinanceTable::process_club_finance_events	high	opus	
+0x59f300	fin_prm.cpp	finance_post_finance_boost_news	high	opus	
+0x59f3e0	fin_prm.cpp	FinanceTable::write_finance_boost_news_text	high	opus	
+0x59f900	fin_prm.cpp	finance_post_stand_closed_news	high	opus	
+0x59f9c0	fin_prm.cpp	FinanceTable::write_stand_closed_news_text	high	opus	
+0x59fae0	fin_prm.cpp	finance_post_works_cancelled_news	high	opus	2026-10-16-stadium-research.md
+0x59fb90	fin_prm.cpp	FinanceTable::write_works_cancelled_news_text	high	opus	
+0x59fc60	fin_prm.cpp	finance_post_financial_crisis_news	high	opus	
+0x59fcf0	fin_prm.cpp	FinanceTable::write_financial_crisis_news_text	high	opus	
+0x59fe10	fin_prm.cpp	finance_post_dividend_news	high	opus	
+0x59feb0	fin_prm.cpp	FinanceTable::write_dividend_news_text	high	opus	
+0x59ffb0	fin_prm.cpp	finance_post_stadium_works_news	high	opus	
+0x5a0000	fin_prm.cpp	finance_post_stadium_works_news_tail	high	opus	
+0x5a0050	fin_prm.cpp	FinanceTable::write_stadium_works_news_text	high	opus	2026-10-16-stadium-research.md
+0x5a0230	fin_prm.cpp	FinanceTable::write_club_relocation_news_text	high	opus	
+0x5a02f0	fin_prm.cpp	finance_post_receivers_appeased_news	high	opus	
+0x5a0380	fin_prm.cpp	FinanceTable::write_receivers_appeased_news_text	high	opus	
+0x5a0410	fin_prm.cpp	finance_post_ground_upgrade_plans_news	high	opus	
+0x5a04c0	fin_prm.cpp	FinanceTable::write_ground_upgrade_plans_news_text	high	opus	
+0x5a0590	fin_prm.cpp	FinanceTable::get_club_finance	high	opus	
 0x5a0650	find_screens.cpp	find_screens_open_search_screen	medium	haiku	
 0x5a0840	find_screens.cpp	find_screens_dispatch_choose_teams	high	haiku	
 0x5a1030	find_screens.cpp	find_screens_continent_under21_list	high	haiku	

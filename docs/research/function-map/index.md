@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 3071 high, 3518 medium, 274 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12.
+- Confidence: 3197 high, 3402 medium, 264 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -94,8 +94,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [discipline.cpp](discipline.cpp.md) | 46 |
 | [display.cpp](display.cpp.md) | 25 |
 | [dispute.cpp](dispute.cpp.md) | 8 |
-| [eng_auto_cup.cpp](eng_auto_cup.cpp.md) | 14 |
-| [eng_cc_cup.cpp](eng_cc_cup.cpp.md) | 9 |
+| [eng_auto_cup.cpp](eng_auto_cup.cpp.md) | 15 |
+| [eng_cc_cup.cpp](eng_cc_cup.cpp.md) | 8 |
 | [eng_charity.cpp](eng_charity.cpp.md) | 6 |
 | [eng_conf.cpp](eng_conf.cpp.md) | 7 |
 | [eng_fa_cup.cpp](eng_fa_cup.cpp.md) | 12 |
@@ -113,8 +113,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [european_cup.cpp](european_cup.cpp.md) | 73 |
 | [fifa_confed.cpp](fifa_confed.cpp.md) | 20 |
 | [fifa_rankings.cpp](fifa_rankings.cpp.md) | 20 |
-| [file_screens.cpp](file_screens.cpp.md) | 10 |
-| [fin_cup.cpp](fin_cup.cpp.md) | 7 |
+| [file_screens.cpp](file_screens.cpp.md) | 11 |
+| [fin_cup.cpp](fin_cup.cpp.md) | 6 |
 | [fin_first.cpp](fin_first.cpp.md) | 19 |
 | [fin_prm.cpp](fin_prm.cpp.md) | 67 |
 | [find_screens.cpp](find_screens.cpp.md) | 23 |

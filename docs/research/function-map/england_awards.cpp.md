@@ -6,8 +6,8 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x578780 | 82 (+2 unwind) | `england_awards_ctor` | thiscall(England_awards* this, int param_2 /* data source, 0 means none */) ret 4 | Constructs the England awards object, loads its data source, and on failure reports a version error and aborts. | high | haiku |  |
-| 0x5788c0 | 1039 (+32 unwind) | `england_awards::init_awards` | thiscall(this, uint32 param_2) with ret 4 | Allocates the England awards pointer table and constructs each award object, sized to the game version flag. | high | haiku |  |
-| 0x579610 | 247 | `england_awards_month_refresh` | thiscall(this, short* key) ret 4 | Refreshes the England awards records for a key after a month change, distributing season and team awards to the nations. | medium | haiku |  |
-| 0x579900 | 165 | `england_awards_refresh_panel` | fastcall, one argument in ECX: this panel object pointer (param_1), ret 0 | Refreshes the England awards panel by pushing award winners from staff records into month award widgets and resetting list entries. | medium | haiku |  |
-| 0x579af0 | 23 | `england_awards_check_and_notify` | thiscall(this, int player_or_team pointer as arg1) ret 4 | Checks whether the given entity holds an England award slot and, if so, builds the team of the week via nation awards. | medium | haiku |  |
+| 0x578780 | 82 (+2 unwind) | `EnglandAwards::EnglandAwards` | thiscall(EnglandAwards* this, FILE* file) ret 4, returns this | Builds the England awards object, loads it from a save file when one is given, or creates its month ratings and award objects. | high | opus |  |
+| 0x5788c0 | 1039 (+32 unwind) | `EnglandAwards::init_awards` | thiscall(EnglandAwards* this, FILE* file) ret 4 | Allocates the award table and constructs the yearly, monthly and team awards of each English division, adding the Conference awards when it exists. | high | opus |  |
+| 0x579610 | 247 | `EnglandAwards::daily_update` | thiscall(EnglandAwards* this, Date* date) ret 4 | Gives the yearly player, team and manager awards on fixed dates and moves the month award slots on at the nation's season change. | high | opus |  |
+| 0x579900 | 165 | `EnglandAwards::on_month_change` | thiscall(EnglandAwards* this) ret 0 | Gives each English division's manager of the month award to its best staff record, then the player of the month awards. | medium | opus |  |
+| 0x579af0 | 23 | `EnglandAwards::update_team_of_the_week` | thiscall(EnglandAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week nominations when the given award is the team award of one of the English divisions. | high | opus |  |
