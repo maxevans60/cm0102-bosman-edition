@@ -79,6 +79,7 @@ void win_video_init(void);
 void win_save_window(void);
 void win_present(void);                /* show the primary surface */
 void win_poll_events(void);            /* SDL events to the message queue */
+void win_game_work(void);              /* user32.c: game work ran in this pass, no idle sleep (#58) */
 uint32_t win_back_buffer(void);        /* flat address of the RGB565 back buffer, or 0 */
 void win_dump_screen(const char *path);
 extern uint32_t win_wndproc;

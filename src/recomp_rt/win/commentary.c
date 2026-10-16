@@ -65,6 +65,7 @@ RT_WRAP(005fcff0, speed_get)
 /* The commentary step, thiscall (human game record). */
 RT_WRAP(006b55c0, commentary_step)
 {
+    win_game_work();                    /* a match runs: no idle sleep (user32.c, #58) */
     if (!match || g_mem[match + MATCH_SPEED] != FASTEST) {
         o_006b55c0();
         return;

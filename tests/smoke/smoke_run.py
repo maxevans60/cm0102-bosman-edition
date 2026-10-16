@@ -12,7 +12,7 @@ Usage:
 Mac reference pictures by 1 in some channels (the compilers round floating point differently), so its
 smoke run uses --tolerance 1.
 
-Same-save check (--same-save): the run plays the same new game five times, with -seed 1, the test
+Same-save check (--same-save): the run plays the same new game six times, with -seed 1, the test
 clock (RECOMP_FIXED_CLOCK=1) and the same steps to "Go on Holiday". The runtime saves the game n game
 days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops. The runs:
     normal   every option at its default, faster_days = off
@@ -20,6 +20,7 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
     faster   faster_days = on: faster days changes no game decision
     silent   sound = off: sound changes no game decision
     off      every switch option off: no option changes a game decision
+    sleep-off  RECOMP_IDLE_SLEEP=0: the idle sleep (#58) changes no game decision
 Each save must be byte for byte the same as the save of "normal". A failed check names the parts of
 the save file that differ. The runs play at the same time, about two minutes in all. A later option
 that must not change the game adds a run to SAME_SAVE_RUNS.
@@ -182,6 +183,8 @@ SAME_SAVE_RUNS = [
              "clickable_names": "off", "attribute_colours": "off", "faster_days": "off",
              "match_columns": "off", "condition_colours": "off", "save_backups": "off", "remember_window": "off",
              "squad_views": "off", "attribute_groups": "off"}),
+    # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
+    ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
 
 # The match check (--match): the steps after the load of prematch.sav (fixtures.LOAD_STEPS), positions
@@ -235,6 +238,7 @@ MATCH_RUNS = [
     ("colours-off", {"attribute_colours": "off"}),
     ("condition-on", {"condition_colours": "on"}),
     ("condition-off", {"condition_colours": "off"}),
+    ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
 

@@ -53,6 +53,7 @@ typedef struct { uint32_t msg, wparam, lparam, time; } Msg;
 static Msg queue[QUEUE];
 static uint32_t q_head, q_tail;
 static int mouse_x, mouse_y, buttons;
+static uint64_t last_input_at;                     /* the time of the last message, for idle_rest */
 
 static void post(uint32_t msg, uint32_t wparam, uint32_t lparam)
 {
@@ -62,6 +63,7 @@ static void post(uint32_t msg, uint32_t wparam, uint32_t lparam)
     m->wparam = wparam;
     m->lparam = lparam;
     m->time = (uint32_t)SDL_GetTicks();
+    last_input_at = SDL_GetTicks64();
 }
 
 static uint32_t mouse_lparam(void) { return ((uint32_t)mouse_y & 0xffff) << 16 | ((uint32_t)mouse_x & 0xffff); }
@@ -744,6 +746,58 @@ RT_IMPORT(GetMessageA)
 static uint32_t last_press, last_widget = 0xffffu;
 static uint64_t next_repeat_at;
 
+/* Idle CPU (#58). The original has no Sleep: a screen that waits for input runs the screen loop
+ * 0x7fc7e0 without a stop, and one pass takes about 1 ms here, so the game used one full core. So
+ * when a pass of the screen loop gives no input (the poll gives -1, no button is down, the queue is
+ * empty), no message came for IDLE_AFTER ms and no game work ran for WORK_HOLD ms, the runtime sleeps
+ * 1 ms after the poll. The sleep touches no game memory. It changes only the real time of a pass.
+ *
+ * The game work rule keeps match results. While a commentary line waits, each pass runs one step of
+ * a background match (0x6b5ce0 from the commentary step 0x6b55c0), and that step draws from the
+ * game's random function 0x90cfc0 (docs/research/2026-10-15-commentary-speed-inventory.md, section
+ * 3). The human match takes its numbers from the same table. A sleep in those passes gives fewer
+ * background steps per line, so the match takes other numbers: in the match check, two runs of the
+ * same steps gave two results. So a call of the commentary step or of the random function counts as
+ * game work, and the sleep waits until WORK_HOLD ms after the last one. An idle screen draws no
+ * number (docs/research/2026-10-14-assistant-and-days-inventory.md: no draw under the screen loop in
+ * a 10 s sample).
+ *
+ * A holiday day and Continue Game run their work inside one pass or between pump calls 0x68d520,
+ * not between polls, so the sleep does not slow them. Test runs only: RECOMP_IDLE_SLEEP=0 turns the
+ * sleep off (the same-save checks compare the two). */
+#define IDLE_AFTER 100u
+#define WORK_HOLD 1000u
+static int idle_sleep = -1;
+static uint32_t work_count, work_seen;            /* calls that count as game work; the count at the last poll */
+static uint64_t last_work_at;
+
+void win_game_work(void) { work_count++; }
+
+void o_0090cfc0(void);
+
+/* The game's random function random(n), 0x90cfc0: noted as game work for idle_rest only. */
+RT_WRAP(0090cfc0, game_random)
+{
+    win_game_work();
+    o_0090cfc0();
+}
+
+static void idle_rest(uint32_t widget)
+{
+    if (idle_sleep < 0) {
+        const char *v = getenv("RECOMP_IDLE_SLEEP");
+        idle_sleep = !(v && !strcmp(v, "0"));
+    }
+    uint64_t now = SDL_GetTicks64();
+    if (work_count != work_seen) {
+        work_seen = work_count;
+        last_work_at = now;
+    }
+    if (!idle_sleep || widget != 0xffffu || buttons || q_head != q_tail) return;
+    if (now - last_input_at < IDLE_AFTER || now - last_work_at < WORK_HOLD) return;
+    SDL_Delay(1);
+}
+
 void o_0055f620(void);
 
 /* The input poll, thiscall, no arguments: the widget index in AX, -1 for nothing. */
@@ -757,6 +811,7 @@ RT_WRAP(0055f620, input_poll)
     if (key_down_in) key_click.polls++;
     uint32_t widget = cpu.eax & 0xffffu;
     int held = (buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu);
+    idle_rest(widget);
     if (widget == 0xffffu || !held) return;
     if (press_count != last_press || widget != last_widget) {
         last_press = press_count;
