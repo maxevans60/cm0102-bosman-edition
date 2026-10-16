@@ -6,9 +6,9 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x420ef0 | 132 (+2 unwind) | `Cup::Cup` | thiscall(Cup* this, undefined2 id, int param), ret 8 | Constructs a Belgian cup object, loads its data from disk, and builds its fixture tree and ballot scheme, reporting failure via an assert dialog. | high | haiku |  |
-| 0x4210c0 | 11 | `bel_super::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of bel_super.cpp. | medium | slot copy |  |
-| 0x4210e0 | 62 (+1 unwind) | `bel_super::~bel_super` | thiscall(this in ECX) ret 0 | Destructor of bel_super that resets the vtable, frees its owned buffers and Comp_Stats object, then runs the base destructor. | high | haiku |  |
-| 0x4211b0 | 98 | `bel_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of bel_super.cpp. | medium | slot copy |  |
-| 0x4212f0 | 173 | `Cup::init_ballot_scheme` | fastcall (ECX = this, Cup object), no stack arguments, ret 0 | Allocates and fills the ballot scheme record for a cup, reporting an assert error and returning failure on each allocation or lookup miss. | high | haiku |  |
-| 0x421540 | 132 | `bel_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of bel_super.cpp. | medium | slot copy |  |
+| 0x420ef0 | 132 (+2 unwind) | `BelSuper::BelSuper` | thiscall(BelSuper* this, short year, void* comp_record) ret 8 | Constructs the Belgian Super Cup on Cup and, when no saved data loads, picks its two clubs and builds its rounds, tie tree and stats. | high | opus |  |
+| 0x4210c0 | 11 | `BelSuper::`scalar deleting destructor'` | thiscall(BelSuper* this, unsigned flags) ret 4 | Runs the Belgian Super Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x4210e0 | 62 (+1 unwind) | `BelSuper::~BelSuper` | thiscall(BelSuper* this) ret 0 | Destroys the Belgian Super Cup by freeing its team list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x4211b0 | 98 | `BelSuper::create_round_table` | thiscall(BelSuper* this, char stage, short* round_count, short* extra, int* out) ret 0x10 | Builds the one-round table of the Belgian Super Cup with its draw and match dates for two teams. | high | opus |  |
+| 0x4212f0 | 173 | `BelSuper::select_teams` | thiscall(BelSuper* this) ret 0, returns 1, 0 or -1 | Picks the Belgian First Division champion and the Belgian Cup winner, or the league runner-up when one club won both, and swaps them in 2001. | high | opus |  |
+| 0x421540 | 132 | `BelSuper::start_new_season` | thiscall(BelSuper* this) ret 0 | Clears the finished Belgian Super Cup, archives its stats, moves the year on and sets up the clubs and rounds of the next edition. | high | opus |  |

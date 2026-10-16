@@ -509,6 +509,20 @@ Before this wave the awards base `NationAwards` (vtable 0x96da10) joined the slo
 | 0x8f9a20 | Listed as a link site only (clickable-names inventory) | `transfer_screens_loan_bid_screen` (Haiku) | `transfer_screens_build_loan_bid_screen` | no claim |
 | 0x8fbcc0 | Listed as a link site only (clickable-names inventory) | `transfer_screens_loan_recall_guard` (Haiku) | `transfer_screens_open_end_loan_dialog` | no claim |
 
+#### Wave w11 (tier 4, 2026-10-16)
+
+Run `sweep-w11`: 8 Opus agents named 215 functions of the Belgian competitions (`bel_*.cpp`, `belgium_awards.cpp`, with background picture gap functions) and the first Brazilian files (`bra_champ_cup.cpp` to `bra_reg_minas_gerais.cpp`). Each agent took 2 to 4 minutes and 123,000 to 160,000 tokens. Confidence: 192 high, 23 medium, 0 low. The merge needed no fixes. Several agents report that the Setup function 0x832980, named `create_norwegian_comps`, makes the Brazilian competitions. Its error string says Norwegian, so the source has a copy slip. The Setup.cpp sweep in tier 5 decides its name.
+
+5 functions of the wave are cited. 4 agree and 1 citation only lists the address.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x41c9d0 | Picture lookup by club +0x53, the nation (team-views inventory) | `background_lookup_entry_value` (Haiku) | `background_find_nation_picture` | agrees |
+| 0x41cad0 | Club picture lookup (team-views inventory) | `background_lookup_entry_pointer` (Haiku) | `background_find_club_picture` | agrees |
+| 0x41cbd0 | Picture lookup by club +0x57, the division (team-views inventory) | `background_pick_entry_picture` (Haiku) | `background_find_comp_picture` | agrees |
+| 0x41cdd0 | Picture lookup by the stadium (team-views inventory) | `background_lookup_entry_value` (Haiku) | `background_find_stadium_picture` | agrees |
+| 0x42b130 | Listed by a constant scan only (widescreen inventory) | `bra_nat_first_assign_national_squad_players` (Haiku) | `bra_nat_first_exchange_state_league_clubs` | no claim |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

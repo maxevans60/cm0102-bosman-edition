@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x424480 | 40 (+1 unwind) | `belgium_awards::Belgium_awards_ctor` | thiscall(this in ECX, int load_arg on stack, ret 4) | Constructs the Belgian awards object, sets its vtable and fields, then loads saved data or initialises awards. | high | haiku |  |
-| 0x424510 | 365 (+11 unwind) | `belgium_awards_init_awards` | thiscall(this in ECX, int param_1 = award table owner, undefined4 param_2 = owner context passed to each award) ret 4 | Allocates eleven award objects into a 0x2c-byte table and reports allocation failure through a formatted error box. | high | haiku |  |
-| 0x4249c0 | 159 | `belgium_awards_ratings_apply` | thiscall(this ECX, const short* date_key param_2 pointer to two shorts year and month) ret 4 | Applies Belgian season awards for a given date, dispatching top player, manager and player-of-year awards after a date check. | medium | haiku |  |
-| 0x424b60 | 14 | `belgium_awards_on_player_event` | thiscall(this, int player_or_event_arg) ret 4 | Forwards a qualifying player event to the team of the week builder when the argument matches one of three stored award references. | medium | haiku |  |
+| 0x424480 | 40 (+1 unwind) | `BelgiumAwards::BelgiumAwards` | thiscall(BelgiumAwards* this, FILE* load_source or 0) ret 4, returns this | Constructs the Belgian awards object on NationAwards, sets its nation record, then loads saved awards or creates the award table. | high | opus |  |
+| 0x424510 | 365 (+11 unwind) | `BelgiumAwards::init_awards` | thiscall(BelgiumAwards* this, FILE* load_source or 0) ret 4 | Allocates the table of eleven Belgian awards and creates each year award and team award, reporting an error when the table allocation fails. | high | opus |  |
+| 0x4249c0 | 159 | `BelgiumAwards::daily_update` | thiscall(BelgiumAwards* this, Date* date) ret 4 | Gives the Belgian top player awards on 29 November and the year awards on 6 May, then runs the base update. | high | opus |  |
+| 0x424b60 | 14 | `BelgiumAwards::update_team_of_the_week` | thiscall(BelgiumAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week for an award when it is one of the three Belgian team awards. | high | opus |  |

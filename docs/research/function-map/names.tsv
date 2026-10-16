@@ -239,94 +239,94 @@ address	file	name	confidence	model	cited_in
 0x41b030	awol.cpp	awol_fitness_news_story	medium	haiku	
 0x41b3d0	background.cpp	setup_background_system	high	haiku	2026-10-14-start-screen-helpers.md
 0x41b8c0	background.cpp	setup_background_system_add_picture	high	haiku	2026-10-14-start-screen-helpers.md,background.c
-0x41bad0	background.cpp	background_free_config_tables	high	haiku	
-0x41bc20	background.cpp	verify_background_pictures	medium	haiku	
-0x41bf80	background.cpp	set_background_flag_inverted	medium	haiku	
-0x41bfa0	background.cpp	background_flag_is_clear	medium	haiku	
+0x41bad0	background.cpp	background_free_config_tables	high	opus	
+0x41bc20	background.cpp	verify_background_config	high	opus	
+0x41bf80	background.cpp	background_set_pictures_disabled	medium	opus	
+0x41bfa0	background.cpp	background_pictures_disabled	medium	opus	
 0x41bfb0	background.cpp	background_set_random_picture	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md
-0x41c0d0	background.cpp	screen_copy_name_or_forward_pointer	low	haiku	
-0x41c100	background.cpp	background_try_load_picture	medium	haiku	
+0x41c0d0	background.cpp	background_set_picture	medium	opus	
+0x41c100	background.cpp	background_set_nation_picture	high	opus	
 0x41c250	background.cpp	background_set_club_picture	high	opus	2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
-0x41c410	background.cpp	background_load_picture_for_object	medium	haiku	
-0x41c560	background.cpp	resolve_background_picture_path	medium	haiku	
-0x41c670	background.cpp	background_resolve_picture_path	medium	haiku	
+0x41c410	background.cpp	background_set_comp_picture	high	opus	
+0x41c560	background.cpp	background_set_award_picture	high	opus	
+0x41c670	background.cpp	background_set_stadium_picture	high	opus	
 0x41c790	background.cpp	background_set_staff_picture	high	opus	2026-10-16-comparison-screen-inventory.md
-0x41c8e0	background.cpp	background_load_picture_path	medium	haiku	
-0x41c9d0	background.cpp	background_lookup_entry_value	medium	haiku	2026-10-15-team-views-frame-inventory.md
-0x41cad0	background.cpp	background_lookup_entry_pointer	medium	haiku	2026-10-15-team-views-frame-inventory.md
-0x41cbd0	background.cpp	background_pick_entry_picture	medium	haiku	2026-10-15-team-views-frame-inventory.md
-0x41ccd0	background.cpp	background_pick_picture_entry	medium	haiku	
-0x41cdd0	background.cpp	background_lookup_entry_value	medium	haiku	2026-10-15-team-views-frame-inventory.md
-0x41ced0	background.cpp	background_lookup_picture_by_name	medium	haiku	
-0x41d050	bel_fa_cup.cpp	cup_ctor_belgian_comp	high	haiku	
-0x41d220	bel_fa_cup.cpp	bel_fa_cup::`scalar deleting destructor'	medium	slot copy	
-0x41d240	bel_fa_cup.cpp	bel_fa_cup::~bel_fa_cup	high	haiku	
-0x41d310	bel_fa_cup.cpp	bel_fa_cup::create_round_table	medium	slot copy	
-0x41d8d0	bel_fa_cup.cpp	bel_fa_cup_build_squad_list	high	haiku	
-0x41db90	bel_fa_cup.cpp	bel_fa_cup::release_data	medium	slot copy	
-0x41dd40	bel_first.cpp	belief_first_ctor_with_assert	high	haiku	
-0x41df60	bel_first.cpp	bel_first::`scalar deleting destructor'	medium	slot copy	
-0x41df80	bel_first.cpp	bel_first_dtor	high	haiku	
-0x41e010	bel_first.cpp	bel_first::create_schedule	medium	slot copy	
-0x41e8b0	bel_first.cpp	bel_first_league_init	high	haiku	
-0x41e9e0	bel_first.cpp	bel_first::set_up_rules	medium	slot copy	
-0x41ea90	bel_first.cpp	bel_first::start_new_season	medium	slot copy	
-0x41ec90	bel_first.cpp	bel_first_reassign_club_players	medium	haiku	
-0x41ee80	bel_first.cpp	bel_first::process_promotion_relegation_chain	medium	slot copy	
-0x41ef70	bel_first.cpp	bel_first_assign_slot_positions	medium	haiku	
-0x41f030	bel_second.cpp	League::League_belgian_init	medium	haiku	
-0x41f260	bel_second.cpp	bel_second::`scalar deleting destructor'	medium	slot copy	
-0x41f280	bel_second.cpp	bel_second::~bel_second	high	haiku	
-0x41f340	bel_second.cpp	bel_second::create_schedule	medium	slot copy	
-0x41fd70	bel_second.cpp	league_allocate_and_fill_teams	medium	haiku	
-0x41fea0	bel_second.cpp	bel_second::set_up_rules	medium	slot copy	
-0x41ff50	bel_second.cpp	bel_second::start_new_season	medium	slot copy	
-0x420110	bel_second.cpp	bel_second::add_result	medium	slot copy	
-0x4201a0	bel_second.cpp	assert_or_advance_counter	medium	haiku	
-0x420230	bel_second.cpp	bel_second_build_selection_and_spawn_league_stage	medium	haiku	
-0x4204d0	bel_second.cpp	bel_second_build_team_list_for_cup_round	medium	haiku	
-0x420680	bel_second.cpp	bel_second::update_positions_and_status	medium	slot copy	
-0x420790	bel_second.cpp	bel_second::update_staff_records_for_status	medium	slot copy	
-0x4209c0	bel_second.cpp	news_report_team_outcome	high	haiku	
-0x420ca0	bel_second.cpp	bel_second_news_item_build	medium	haiku	
-0x420d40	bel_second.cpp	bel_set_player_order_slot	medium	haiku	
-0x420e30	bel_second.cpp	bel_second_serialise_flags_thiscall	medium	haiku	
-0x420e90	bel_second.cpp	Sub_second_fields_serialise	medium	haiku	
-0x420ef0	bel_super.cpp	Cup::Cup	high	haiku	
-0x4210c0	bel_super.cpp	bel_super::`scalar deleting destructor'	medium	slot copy	
-0x4210e0	bel_super.cpp	bel_super::~bel_super	high	haiku	
-0x4211b0	bel_super.cpp	bel_super::create_round_table	medium	slot copy	
-0x4212f0	bel_super.cpp	Cup::init_ballot_scheme	high	haiku	
-0x421540	bel_super.cpp	bel_super::release_data	medium	slot copy	
-0x4216f0	bel_third.cpp	Bel_third_init::construct	high	haiku	
-0x421920	bel_third.cpp	bel_third::`scalar deleting destructor'	medium	slot copy	
-0x421940	bel_third.cpp	bel_third_vtable_destructor	high	haiku	
-0x421a00	bel_third.cpp	bel_third::create_schedule	medium	slot copy	
-0x422070	bel_third.cpp	bel_third_stack_epilogue_thunk_0x422070	low	haiku	
-0x4224e0	bel_third.cpp	bel_third_assign_players_to_slots	medium	haiku	
-0x4226f0	bel_third.cpp	bel_third::set_up_rules	medium	slot copy	
-0x4227b0	bel_third.cpp	bel_third::start_new_season	medium	slot copy	
-0x422970	bel_third.cpp	bel_third_collect_team_matches	medium	haiku	
-0x422c50	bel_third.cpp	bel_third::add_result	medium	slot copy	
-0x422cf0	bel_third.cpp	bel_third_add_team_or_cup_entry	medium	haiku	
-0x422f70	bel_third.cpp	bel_third::update_positions_and_status	medium	slot copy	
-0x4230d0	bel_third.cpp	bel_third::update_staff_records_for_status	medium	slot copy	
-0x423310	bel_third.cpp	Team_Notify_Promotion_Relegation_Event	medium	haiku	
-0x423640	bel_third.cpp	bel_third_advance_stage_checked	medium	haiku	
-0x423710	bel_third.cpp	bel_third_cup_stage_setup	medium	haiku	
-0x423880	bel_third.cpp	bel_third_build_cup_stage_round	medium	haiku	
-0x423ba0	bel_third.cpp	bel_third_cup_setup	medium	haiku	
-0x423f00	bel_third.cpp	bel_third::get_club_array	medium	slot copy	
-0x424030	bel_third.cpp	bel_third::set_predicted_positions	medium	slot copy	
-0x4241b0	bel_third.cpp	set_team_colour_shirts	medium	haiku	
-0x424220	bel_third.cpp	bel_third_serialise_fields	medium	haiku	
-0x424280	bel_third.cpp	bel_third_fields_serialise	medium	haiku	
-0x4242e0	bel_third.cpp	bel_third_queue_team_news	medium	haiku	
-0x424380	bel_third.cpp	belgium_award_compare_key	medium	haiku	
-0x424480	belgium_awards.cpp	belgium_awards::Belgium_awards_ctor	high	haiku	
-0x424510	belgium_awards.cpp	belgium_awards_init_awards	high	haiku	
-0x4249c0	belgium_awards.cpp	belgium_awards_ratings_apply	medium	haiku	
-0x424b60	belgium_awards.cpp	belgium_awards_on_player_event	medium	haiku	
+0x41c8e0	background.cpp	background_set_section_picture	high	opus	
+0x41c9d0	background.cpp	background_find_nation_picture	high	opus	2026-10-15-team-views-frame-inventory.md
+0x41cad0	background.cpp	background_find_club_picture	high	opus	2026-10-15-team-views-frame-inventory.md
+0x41cbd0	background.cpp	background_find_comp_picture	high	opus	2026-10-15-team-views-frame-inventory.md
+0x41ccd0	background.cpp	background_find_award_picture	high	opus	
+0x41cdd0	background.cpp	background_find_stadium_picture	high	opus	2026-10-15-team-views-frame-inventory.md
+0x41ced0	background.cpp	background_find_staff_picture	high	opus	
+0x41d050	bel_fa_cup.cpp	BelFaCup::BelFaCup	high	opus	
+0x41d220	bel_fa_cup.cpp	BelFaCup::`scalar deleting destructor'	high	opus	
+0x41d240	bel_fa_cup.cpp	BelFaCup::~BelFaCup	high	opus	
+0x41d310	bel_fa_cup.cpp	BelFaCup::create_round_table	high	opus	
+0x41d8d0	bel_fa_cup.cpp	BelFaCup::collect_entrants	high	opus	
+0x41db90	bel_fa_cup.cpp	BelFaCup::start_new_season	high	opus	
+0x41dd40	bel_first.cpp	BelFirst::BelFirst	high	opus	
+0x41df60	bel_first.cpp	BelFirst::`scalar deleting destructor'	high	opus	
+0x41df80	bel_first.cpp	BelFirst::~BelFirst	high	opus	
+0x41e010	bel_first.cpp	BelFirst::create_schedule	high	opus	
+0x41e8b0	bel_first.cpp	BelFirst::create_table	high	opus	
+0x41e9e0	bel_first.cpp	BelFirst::set_up_rules	high	opus	
+0x41ea90	bel_first.cpp	BelFirst::start_new_season	high	opus	
+0x41ec90	bel_first.cpp	bel_first_move_third_division_clubs	medium	opus	
+0x41ee80	bel_first.cpp	BelFirst::process_promotion_relegation_chain	high	opus	
+0x41ef70	bel_first.cpp	bel_first_split_third_division_groups	medium	opus	
+0x41f030	bel_second.cpp	BelSecond::BelSecond	high	opus	
+0x41f260	bel_second.cpp	BelSecond::`scalar deleting destructor'	high	opus	
+0x41f280	bel_second.cpp	BelSecond::~BelSecond	high	opus	
+0x41f340	bel_second.cpp	BelSecond::create_schedule	high	opus	
+0x41fd70	bel_second.cpp	BelSecond::create_table	high	opus	
+0x41fea0	bel_second.cpp	BelSecond::set_up_rules	high	opus	
+0x41ff50	bel_second.cpp	BelSecond::start_new_season	high	opus	
+0x420110	bel_second.cpp	BelSecond::add_result	high	opus	
+0x4201a0	bel_second.cpp	BelSecond::advance_stage	high	opus	
+0x420230	bel_second.cpp	BelSecond::create_playoff_group	high	opus	
+0x4204d0	bel_second.cpp	BelSecond::create_period_stage	high	opus	
+0x420680	bel_second.cpp	BelSecond::update_positions_and_status	high	opus	
+0x420790	bel_second.cpp	BelSecond::update_staff_records_for_status	high	opus	
+0x4209c0	bel_second.cpp	BelSecond::build_fate_news_text	high	opus	
+0x420ca0	bel_second.cpp	BelSecond::send_period_winner_news	medium	opus	
+0x420d40	bel_second.cpp	BelSecond::set_club_progress	high	opus	
+0x420e30	bel_second.cpp	BelSecond::load_extra_data	high	opus	
+0x420e90	bel_second.cpp	BelSecond::save_extra_data	high	opus	
+0x420ef0	bel_super.cpp	BelSuper::BelSuper	high	opus	
+0x4210c0	bel_super.cpp	BelSuper::`scalar deleting destructor'	high	opus	
+0x4210e0	bel_super.cpp	BelSuper::~BelSuper	high	opus	
+0x4211b0	bel_super.cpp	BelSuper::create_round_table	high	opus	
+0x4212f0	bel_super.cpp	BelSuper::select_teams	high	opus	
+0x421540	bel_super.cpp	BelSuper::start_new_season	high	opus	
+0x4216f0	bel_third.cpp	BelThird::BelThird	high	opus	
+0x421920	bel_third.cpp	BelThird::`scalar deleting destructor'	high	opus	
+0x421940	bel_third.cpp	BelThird::~BelThird	high	opus	
+0x421a00	bel_third.cpp	BelThird::create_schedule	high	opus	
+0x422070	bel_third.cpp	BelThird::create_schedule_fragment	medium	opus	
+0x4224e0	bel_third.cpp	BelThird::fill_league_table	medium	opus	
+0x4226f0	bel_third.cpp	BelThird::set_up_rules	high	opus	
+0x4227b0	bel_third.cpp	BelThird::start_new_season	high	opus	
+0x422970	bel_third.cpp	BelThird::create_group_b_stage	medium	opus	
+0x422c50	bel_third.cpp	BelThird::add_result	high	opus	
+0x422cf0	bel_third.cpp	BelThird::find_or_create_period_stage	medium	opus	
+0x422f70	bel_third.cpp	BelThird::update_positions_and_status	high	opus	
+0x4230d0	bel_third.cpp	BelThird::update_staff_records_for_status	high	opus	
+0x423310	bel_third.cpp	BelThird::build_fate_news_text	high	opus	
+0x423640	bel_third.cpp	BelThird::advance_stage	high	opus	
+0x423710	bel_third.cpp	BelThird::create_title_decider_stage	medium	opus	
+0x423880	bel_third.cpp	BelThird::create_promotion_playoff_stage	medium	opus	
+0x423ba0	bel_third.cpp	BelThird::create_relegation_playoff_stage	medium	opus	
+0x423f00	bel_third.cpp	BelThird::get_club_array	high	opus	
+0x424030	bel_third.cpp	BelThird::set_predicted_positions	high	opus	
+0x4241b0	bel_third.cpp	BelThird::set_club_progress	high	opus	
+0x424220	bel_third.cpp	BelThird::load_extra_data	high	opus	
+0x424280	bel_third.cpp	BelThird::save_extra_data	high	opus	
+0x4242e0	bel_third.cpp	BelThird::add_period_winner_news	medium	opus	
+0x424380	bel_third.cpp	bel_third_compare_period_stages	high	opus	
+0x424480	belgium_awards.cpp	BelgiumAwards::BelgiumAwards	high	opus	
+0x424510	belgium_awards.cpp	BelgiumAwards::init_awards	high	opus	
+0x4249c0	belgium_awards.cpp	BelgiumAwards::daily_update	high	opus	
+0x424b60	belgium_awards.cpp	BelgiumAwards::update_team_of_the_week	high	opus	
 0x424b90	belgium_rules.cpp	BELGIUM_RULES::BELGIUM_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x424c00	belgium_rules.cpp	BELGIUM_RULES::init_transfer_windows	high	opus	2026-10-16-sweep-rulebooks.md
 0x424d30	belgium_rules.cpp	BELGIUM_RULES::can_sign_player	high	opus	
@@ -337,136 +337,136 @@ address	file	name	confidence	model	cited_in
 0x425390	belgium_rules.cpp	board_request_screen_open	high	opus	2026-10-16-stadium-research.md
 0x4253f0	belgium_rules.cpp	board_request_screen_draw	high	opus	2026-10-16-stadium-research.md
 0x4257f0	belgium_rules.cpp	board_request_screen_handle_event	medium	opus	
-0x4259a0	bra_champ_cup.cpp	bra_champ_cup_cup_constructor	high	haiku	
-0x425b30	bra_champ_cup.cpp	bra_champ_cup::`scalar deleting destructor'	medium	slot copy	
-0x425b50	bra_champ_cup.cpp	bra_champ_cup_dtor	high	haiku	
-0x425c10	bra_champ_cup.cpp	bra_champ_cup::create_schedule	medium	slot copy	
-0x425fd0	bra_champ_cup.cpp	bra_champ_cup_qualify_news_dispatch	high	haiku	
-0x426130	bra_champ_cup.cpp	bra_champ_cup_init_teams	high	haiku	
-0x426230	bra_champ_cup.cpp	bra_champ_cup::set_up_rules	medium	slot copy	
-0x4262c0	bra_champ_cup.cpp	bra_champ_cup::start_new_season	medium	slot copy	
-0x4263c0	bra_champ_cup.cpp	bra_champ_cup_step_advance	high	haiku	
-0x426470	bra_champ_cup.cpp	bra_champ_cup_create_two_legs_fixtures	medium	haiku	
-0x426720	bra_champ_cup.cpp	bra_champ_cup_create_cup_stage_for_fixture	medium	haiku	
-0x426900	bra_champ_cup.cpp	bra_champ_cup::update_staff_records_for_status	medium	slot copy	
-0x426ab0	bra_champ_cup.cpp	bra_champ_cup::set_predicted_positions	medium	slot copy	
-0x426c20	bra_champ_cup.cpp	bra_champ_cup_set_round_codes	medium	haiku	
-0x426d80	bra_champ_cup.cpp	bra_champ_cup_seed_clubs	high	haiku	
-0x427320	bra_champ_cup.cpp	Champ_cup_check_entry_state	medium	haiku	
-0x427430	bra_cup.cpp	Cup::Cup	high	haiku	
-0x427610	bra_cup.cpp	bra_cup::`scalar deleting destructor'	medium	slot copy	
-0x427630	bra_cup.cpp	cup_screen_destructor	high	haiku	
-0x427700	bra_cup.cpp	bra_cup::create_round_table	medium	slot copy	
-0x427c20	bra_cup.cpp	bra_cup_load_teams	medium	haiku	
-0x427d10	bra_cup.cpp	bra_cup::release_data	medium	slot copy	
-0x427ec0	bra_cup.cpp	bra_cup::set_up_rounds	medium	slot copy	
-0x427f00	bra_cup.cpp	bra_cup_init_teams	high	haiku	
-0x429850	bra_nat_first.cpp	bra_nat_first_constructor_with_assert	high	haiku	
-0x429a70	bra_nat_first.cpp	bra_nat_first::`scalar deleting destructor'	medium	slot copy	
-0x429a90	bra_nat_first.cpp	bra_nat_first_destructor_scoped_list	medium	haiku	
-0x429b50	bra_nat_first.cpp	bra_nat_first::create_schedule	medium	slot copy	
-0x42a480	bra_nat_first.cpp	bra_nat_first_fill_qualifiers	medium	haiku	
-0x42a5a0	bra_nat_first.cpp	bra_nat_first::set_up_rules	medium	slot copy	
-0x42a640	bra_nat_first.cpp	bra_nat_first::start_new_season	medium	slot copy	
-0x42a950	bra_nat_first.cpp	bra_nat_assert_counter_check	medium	haiku	
-0x42a9e0	bra_nat_first.cpp	cup_create_stage_instance	medium	haiku	
-0x42abc0	bra_nat_first.cpp	bra_nat_first::update_staff_records_for_status	medium	slot copy	
-0x42ac70	bra_nat_first.cpp	competition_post_cup_result_news	high	haiku	
-0x42ae90	bra_nat_first.cpp	bra_nat_first::process_promotion_relegation_chain	medium	slot copy	
-0x42b130	bra_nat_first.cpp	bra_nat_first_assign_national_squad_players	medium	haiku	2026-10-14-widescreen-inventory.md
-0x42b520	bra_nat_first.cpp	bra_nat_first_select_qualifiers_and_apply_contracts	medium	haiku	
-0x42b760	bra_nat_first.cpp	bra_nat_first_fill_qualifier_slots	medium	haiku	
-0x42bba0	bra_nat_first.cpp	bra_nat_first_pick_ruling_side	medium	haiku	
-0x42be40	bra_nat_second.cpp	bra_nat_second_cup_init_checked	high	haiku	
-0x42c060	bra_nat_second.cpp	bra_nat_second::`scalar deleting destructor'	medium	slot copy	
-0x42c080	bra_nat_second.cpp	bra_nat_second_order_destructor	medium	haiku	
-0x42c140	bra_nat_second.cpp	bra_nat_second::create_schedule	medium	slot copy	
-0x42ca70	bra_nat_second.cpp	bra_nat_second_alloc_and_fill_slots	medium	haiku	
-0x42cb70	bra_nat_second.cpp	bra_nat_second::set_up_rules	medium	slot copy	
-0x42cc10	bra_nat_second.cpp	bra_nat_second::start_new_season	medium	slot copy	
-0x42cdd0	bra_nat_second.cpp	bra_nat_second_counter_check_or_advance	medium	haiku	
-0x42ce60	bra_nat_second.cpp	cup_stage_create_checked	medium	haiku	
-0x42d040	bra_nat_second.cpp	bra_nat_second::update_staff_records_for_status	medium	slot copy	
-0x42d0d0	bra_nat_second.cpp	bra_nat_second_news_result_message	high	haiku	
-0x42d260	bra_nat_second.cpp	comp_screen_set_tactic_fields	medium	haiku	
-0x42d2c0	bra_nat_third.cpp	bra_nat_third_ctor	high	haiku	
-0x42d520	bra_nat_third.cpp	bra_nat_third::`scalar deleting destructor'	medium	slot copy	
-0x42d540	bra_nat_third.cpp	bra_nat_third_dtor	high	haiku	
-0x42d620	bra_nat_third.cpp	bra_nat_third::create_schedule	medium	slot copy	
-0x42dc90	bra_nat_third.cpp	bra_nat_third_load_group_teams	medium	haiku	
-0x42de50	bra_nat_third.cpp	bra_nat_third::set_up_rules	medium	slot copy	
-0x42def0	bra_nat_third.cpp	bra_nat_third::start_new_season	medium	slot copy	
-0x42e100	bra_nat_third.cpp	bra_nat_set_tactic_codes	medium	haiku	
-0x42e380	bra_nat_third.cpp	bra_nat_third_advance_stage	high	haiku	
-0x42e430	bra_nat_third.cpp	bra_nat_third_build_cup_draw	medium	haiku	
-0x42e700	bra_nat_third.cpp	bra_nat_third_build_two_player_lists	medium	haiku	
-0x42e980	bra_nat_third.cpp	bra_nat_third_stage_create_or_assert	medium	haiku	
-0x42eb00	bra_nat_third.cpp	bra_nat_third::update_staff_records_for_status	medium	slot copy	
-0x42ec60	bra_nat_third.cpp	Comp::order_third_round_qualifier_news	medium	haiku	
-0x42ee80	bra_nat_third.cpp	bra_nat_third_build_group_fixture	medium	haiku	
-0x42f0a0	bra_nat_third.cpp	bra_nat_third::set_predicted_positions	medium	slot copy	
-0x42f2d0	bra_reg_bahia.cpp	Bra_reg_bahia::Bra_reg_bahia	high	haiku	
-0x42f4f0	bra_reg_bahia.cpp	bra_reg_bahia::`scalar deleting destructor'	medium	slot copy	
-0x42f510	bra_reg_bahia.cpp	bra_reg_bahia_dtor	high	haiku	
-0x42f5d0	bra_reg_bahia.cpp	bra_reg_bahia::create_schedule	medium	slot copy	
-0x42fd10	bra_reg_bahia.cpp	bra_reg_bahia_populate_teams	medium	haiku	
-0x42fe10	bra_reg_bahia.cpp	bra_reg_bahia::start_new_season	medium	slot copy	
-0x42ffc0	bra_reg_bahia.cpp	bra_reg_bahia_assert_or_advance_counter	medium	haiku	
-0x430050	bra_reg_bahia.cpp	bra_reg_bahia_create_stage_cup	medium	haiku	
-0x430210	bra_reg_bahia.cpp	bra_reg_bahia::update_staff_records_for_status	medium	slot copy	
-0x430340	bra_reg_bahia.cpp	bra_reg_bahia::set_predicted_positions	medium	slot copy	
-0x4304b0	bra_reg_central.cpp	bra_reg_central::ctor	high	haiku	
-0x4306d0	bra_reg_central.cpp	bra_reg_central::`scalar deleting destructor'	medium	slot copy	
-0x4306f0	bra_reg_central.cpp	bra_reg_central_dtor	high	haiku	
-0x4307b0	bra_reg_central.cpp	bra_reg_central::create_schedule	medium	slot copy	
-0x430ef0	bra_reg_central.cpp	bra_reg_central_allocate_and_load_teams	medium	haiku	
-0x430ff0	bra_reg_central.cpp	bra_reg_central::set_up_rules	medium	slot copy	
-0x431090	bra_reg_central.cpp	bra_reg_central::start_new_season	medium	slot copy	
-0x431240	bra_reg_central.cpp	bra_reg_central_assert_or_count_step	medium	haiku	
-0x4312d0	bra_reg_central.cpp	bra_reg_central_create_stage_assert	medium	haiku	
-0x4314e0	bra_reg_central.cpp	bra_reg_central::update_staff_records_for_status	medium	slot copy	
-0x431610	bra_reg_central.cpp	bra_reg_central::set_predicted_positions	medium	slot copy	
-0x4317c0	bra_reg_gaucho.cpp	Gaucho_region_init	high	haiku	
-0x4319e0	bra_reg_gaucho.cpp	bra_reg_gaucho::`scalar deleting destructor'	medium	slot copy	
-0x431a00	bra_reg_gaucho.cpp	Gaucho_region_screen::~Gaucho_region_screen	high	haiku	
-0x431ac0	bra_reg_gaucho.cpp	bra_reg_gaucho::create_schedule	medium	slot copy	
-0x432070	bra_reg_gaucho.cpp	bra_reg_gaucho_assert_fail	high	haiku	
-0x4321d0	bra_reg_gaucho.cpp	bra_reg_gaucho_fill_teams	medium	haiku	
-0x4322d0	bra_reg_gaucho.cpp	bra_reg_gaucho::set_up_rules	medium	slot copy	
-0x432370	bra_reg_gaucho.cpp	bra_reg_gaucho::start_new_season	medium	slot copy	
-0x432520	bra_reg_gaucho.cpp	reg_gaucho_counter_advance_or_assert	medium	haiku	
-0x4325b0	bra_reg_gaucho.cpp	bra_reg_gaucho_create_cup_stage	medium	haiku	
-0x432770	bra_reg_gaucho.cpp	cup_semi_final_or_winner_news	high	haiku	
-0x432970	bra_reg_gaucho.cpp	bra_reg_gaucho::record_season_honours	medium	slot copy	
-0x432980	bra_reg_gaucho.cpp	bra_reg_gaucho::set_predicted_positions	medium	slot copy	
-0x432af0	bra_reg_gaucho.cpp	comp_screens_set_team_flags	medium	haiku	
-0x432b50	bra_reg_goias.cpp	reg_goias_init	high	haiku	
-0x432d70	bra_reg_goias.cpp	bra_reg_goias::`scalar deleting destructor'	medium	slot copy	
-0x432d90	bra_reg_goias.cpp	p_c_region_dtor	high	haiku	
-0x432e50	bra_reg_goias.cpp	bra_reg_goias::create_schedule	medium	slot copy	
-0x433540	bra_reg_goias.cpp	bra_reg_goias_fill_league_teams	high	haiku	
-0x433640	bra_reg_goias.cpp	bra_reg_goias::set_up_rules	medium	slot copy	
-0x4336f0	bra_reg_goias.cpp	bra_reg_goias::start_new_season	medium	slot copy	
-0x4338a0	bra_reg_goias.cpp	bra_reg_goias_assert_counter_check	medium	haiku	
-0x433930	bra_reg_goias.cpp	bra_reg_goias_create_stage_cup	medium	haiku	
-0x433b40	bra_reg_goias.cpp	bra_reg_goias::set_predicted_positions	medium	slot copy	
-0x433cf0	bra_reg_goias.cpp	set_comp_screen_position_fields	medium	haiku	
-0x433d50	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_init	medium	haiku	
-0x433f70	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::`scalar deleting destructor'	medium	slot copy	
-0x433f90	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_destructor_body	high	haiku	
-0x434050	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::create_schedule	medium	slot copy	
-0x434550	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_schedule_rounds	medium	haiku	
-0x434620	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_league_init_round_schedule	medium	haiku	
-0x434810	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_load_league_teams	medium	haiku	
-0x434910	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::start_new_season	medium	slot copy	
-0x434ae0	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_retry_or_fail	medium	haiku	
-0x434b70	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_stage_setup_round	medium	haiku	
-0x434d90	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::update_staff_records_for_status	medium	slot copy	
-0x434ed0	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::record_season_honours	medium	slot copy	
-0x434f80	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::set_predicted_positions	medium	slot copy	
-0x4350d0	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais_set_league_fields	medium	haiku	
-0x435130	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::add_result	medium	slot copy	
-0x4351b0	bra_reg_minas_gerais.cpp	bra_reg_minas_gerais::create_league_stage_for_group	medium	haiku	
+0x4259a0	bra_champ_cup.cpp	BraChampCup::BraChampCup	high	opus	
+0x425b30	bra_champ_cup.cpp	BraChampCup::`scalar deleting destructor'	high	opus	
+0x425b50	bra_champ_cup.cpp	BraChampCup::~BraChampCup	high	opus	
+0x425c10	bra_champ_cup.cpp	BraChampCup::create_schedule	high	opus	
+0x425fd0	bra_champ_cup.cpp	BraChampCup::build_fate_news_text	high	opus	
+0x426130	bra_champ_cup.cpp	BraChampCup::create_preliminary_table	medium	opus	
+0x426230	bra_champ_cup.cpp	BraChampCup::set_up_rules	high	opus	
+0x4262c0	bra_champ_cup.cpp	BraChampCup::start_new_season	high	opus	
+0x4263c0	bra_champ_cup.cpp	BraChampCup::advance_stage	high	opus	
+0x426470	bra_champ_cup.cpp	BraChampCup::create_group_stages	high	opus	
+0x426720	bra_champ_cup.cpp	BraChampCup::create_semi_final_stage	high	opus	
+0x426900	bra_champ_cup.cpp	BraChampCup::update_staff_records_for_status	high	opus	
+0x426ab0	bra_champ_cup.cpp	BraChampCup::set_predicted_positions	high	opus	
+0x426c20	bra_champ_cup.cpp	BraChampCup::set_club_progress	high	opus	
+0x426d80	bra_champ_cup.cpp	BraChampCup::select_entrants	medium	opus	
+0x427320	bra_champ_cup.cpp	BraChampCup::start_preliminary_stage	medium	opus	
+0x427430	bra_cup.cpp	BraCup::BraCup	high	opus	
+0x427610	bra_cup.cpp	BraCup::`scalar deleting destructor'	high	opus	
+0x427630	bra_cup.cpp	BraCup::~BraCup	high	opus	
+0x427700	bra_cup.cpp	BraCup::create_round_table	high	opus	
+0x427c20	bra_cup.cpp	BraCup::build_team_table	high	opus	
+0x427d10	bra_cup.cpp	BraCup::start_new_season	high	opus	
+0x427ec0	bra_cup.cpp	BraCup::set_up_rounds	high	opus	
+0x427f00	bra_cup.cpp	BraCup::select_entrants	medium	opus	
+0x429850	bra_nat_first.cpp	BraNatFirst::BraNatFirst	high	opus	
+0x429a70	bra_nat_first.cpp	BraNatFirst::`scalar deleting destructor'	high	opus	
+0x429a90	bra_nat_first.cpp	BraNatFirst::~BraNatFirst	high	opus	
+0x429b50	bra_nat_first.cpp	BraNatFirst::create_schedule	high	opus	
+0x42a480	bra_nat_first.cpp	BraNatFirst::create_table	high	opus	
+0x42a5a0	bra_nat_first.cpp	BraNatFirst::set_up_rules	high	opus	
+0x42a640	bra_nat_first.cpp	BraNatFirst::start_new_season	high	opus	
+0x42a950	bra_nat_first.cpp	BraNatFirst::advance_stage	high	opus	
+0x42a9e0	bra_nat_first.cpp	BraNatFirst::create_play_off_stage	high	opus	
+0x42abc0	bra_nat_first.cpp	BraNatFirst::update_staff_records_for_status	high	opus	
+0x42ac70	bra_nat_first.cpp	BraNatFirst::build_fate_news_text	high	opus	
+0x42ae90	bra_nat_first.cpp	BraNatFirst::process_promotion_relegation_chain	high	opus	
+0x42b130	bra_nat_first.cpp	bra_nat_first_exchange_state_league_clubs	high	opus	2026-10-14-widescreen-inventory.md
+0x42b520	bra_nat_first.cpp	bra_nat_first_refresh_third_division_clubs	high	opus	
+0x42b760	bra_nat_first.cpp	bra_nat_first_fill_brazilian_cup_entrants	medium	opus	
+0x42bba0	bra_nat_first.cpp	bra_nat_first_fill_champions_cup_entrants	medium	opus	
+0x42be40	bra_nat_second.cpp	BraNatSecond::BraNatSecond	high	opus	
+0x42c060	bra_nat_second.cpp	BraNatSecond::`scalar deleting destructor'	high	opus	
+0x42c080	bra_nat_second.cpp	BraNatSecond::~BraNatSecond	high	opus	
+0x42c140	bra_nat_second.cpp	BraNatSecond::create_schedule	high	opus	
+0x42ca70	bra_nat_second.cpp	BraNatSecond::create_table	high	opus	
+0x42cb70	bra_nat_second.cpp	BraNatSecond::set_up_rules	high	opus	
+0x42cc10	bra_nat_second.cpp	BraNatSecond::start_new_season	high	opus	
+0x42cdd0	bra_nat_second.cpp	BraNatSecond::advance_stage	high	opus	
+0x42ce60	bra_nat_second.cpp	BraNatSecond::create_play_off_stage	high	opus	
+0x42d040	bra_nat_second.cpp	BraNatSecond::update_staff_records_for_status	high	opus	
+0x42d0d0	bra_nat_second.cpp	BraNatSecond::build_fate_news_text	high	opus	
+0x42d260	bra_nat_second.cpp	BraNatSecond::set_club_progress	high	opus	
+0x42d2c0	bra_nat_third.cpp	BraNatThird::BraNatThird	high	opus	
+0x42d520	bra_nat_third.cpp	BraNatThird::`scalar deleting destructor'	high	opus	
+0x42d540	bra_nat_third.cpp	BraNatThird::~BraNatThird	high	opus	
+0x42d620	bra_nat_third.cpp	BraNatThird::create_schedule	high	opus	
+0x42dc90	bra_nat_third.cpp	BraNatThird::create_table	high	opus	
+0x42de50	bra_nat_third.cpp	BraNatThird::set_up_rules	high	opus	
+0x42def0	bra_nat_third.cpp	BraNatThird::start_new_season	high	opus	
+0x42e100	bra_nat_third.cpp	BraNatThird::set_club_progress	high	opus	
+0x42e380	bra_nat_third.cpp	BraNatThird::advance_stage	high	opus	
+0x42e430	bra_nat_third.cpp	BraNatThird::create_second_round_stage	high	opus	
+0x42e700	bra_nat_third.cpp	BraNatThird::create_third_round_groups	high	opus	
+0x42e980	bra_nat_third.cpp	BraNatThird::create_final_stage	high	opus	
+0x42eb00	bra_nat_third.cpp	BraNatThird::update_staff_records_for_status	high	opus	
+0x42ec60	bra_nat_third.cpp	BraNatThird::build_fate_news_text	high	opus	
+0x42ee80	bra_nat_third.cpp	BraNatThird::create_group_stage	high	opus	
+0x42f0a0	bra_nat_third.cpp	BraNatThird::set_predicted_positions	high	opus	
+0x42f2d0	bra_reg_bahia.cpp	BraRegBahia::BraRegBahia	high	opus	
+0x42f4f0	bra_reg_bahia.cpp	BraRegBahia::`scalar deleting destructor'	high	opus	
+0x42f510	bra_reg_bahia.cpp	BraRegBahia::~BraRegBahia	high	opus	
+0x42f5d0	bra_reg_bahia.cpp	BraRegBahia::create_schedule	high	opus	
+0x42fd10	bra_reg_bahia.cpp	BraRegBahia::create_table	high	opus	
+0x42fe10	bra_reg_bahia.cpp	BraRegBahia::start_new_season	high	opus	
+0x42ffc0	bra_reg_bahia.cpp	BraRegBahia::advance_stage	high	opus	
+0x430050	bra_reg_bahia.cpp	BraRegBahia::create_semi_final_stage	high	opus	
+0x430210	bra_reg_bahia.cpp	BraRegBahia::update_staff_records_for_status	high	opus	
+0x430340	bra_reg_bahia.cpp	BraRegBahia::set_predicted_positions	high	opus	
+0x4304b0	bra_reg_central.cpp	BraRegCentral::BraRegCentral	high	opus	
+0x4306d0	bra_reg_central.cpp	BraRegCentral::`scalar deleting destructor'	high	opus	
+0x4306f0	bra_reg_central.cpp	BraRegCentral::~BraRegCentral	high	opus	
+0x4307b0	bra_reg_central.cpp	BraRegCentral::create_schedule	high	opus	
+0x430ef0	bra_reg_central.cpp	BraRegCentral::load_region_clubs	high	opus	
+0x430ff0	bra_reg_central.cpp	BraRegCentral::set_up_rules	high	opus	
+0x431090	bra_reg_central.cpp	BraRegCentral::start_new_season	high	opus	
+0x431240	bra_reg_central.cpp	BraRegCentral::advance_stage	high	opus	
+0x4312d0	bra_reg_central.cpp	BraRegCentral::create_knockout_stage	high	opus	
+0x4314e0	bra_reg_central.cpp	BraRegCentral::update_staff_records_for_status	high	opus	
+0x431610	bra_reg_central.cpp	BraRegCentral::set_predicted_positions	high	opus	
+0x4317c0	bra_reg_gaucho.cpp	BraRegGaucho::BraRegGaucho	high	opus	
+0x4319e0	bra_reg_gaucho.cpp	BraRegGaucho::`scalar deleting destructor'	high	opus	
+0x431a00	bra_reg_gaucho.cpp	BraRegGaucho::~BraRegGaucho	high	opus	
+0x431ac0	bra_reg_gaucho.cpp	BraRegGaucho::create_schedule	high	opus	
+0x432070	bra_reg_gaucho.cpp	bra_reg_gaucho_create_schedule_error_tail	high	opus	
+0x4321d0	bra_reg_gaucho.cpp	BraRegGaucho::load_region_clubs	high	opus	
+0x4322d0	bra_reg_gaucho.cpp	BraRegGaucho::set_up_rules	high	opus	
+0x432370	bra_reg_gaucho.cpp	BraRegGaucho::start_new_season	high	opus	
+0x432520	bra_reg_gaucho.cpp	BraRegGaucho::advance_stage	high	opus	
+0x4325b0	bra_reg_gaucho.cpp	BraRegGaucho::create_knockout_stage	high	opus	
+0x432770	bra_reg_gaucho.cpp	BraRegGaucho::build_fate_news_text	high	opus	
+0x432970	bra_reg_gaucho.cpp	BraRegGaucho::record_season_honours	high	opus	
+0x432980	bra_reg_gaucho.cpp	BraRegGaucho::set_predicted_positions	high	opus	
+0x432af0	bra_reg_gaucho.cpp	BraRegGaucho::set_club_progress	high	opus	
+0x432b50	bra_reg_goias.cpp	BraRegGoias::BraRegGoias	high	opus	
+0x432d70	bra_reg_goias.cpp	BraRegGoias::`scalar deleting destructor'	high	opus	
+0x432d90	bra_reg_goias.cpp	BraRegGoias::~BraRegGoias	high	opus	
+0x432e50	bra_reg_goias.cpp	BraRegGoias::create_schedule	high	opus	
+0x433540	bra_reg_goias.cpp	BraRegGoias::create_table	high	opus	
+0x433640	bra_reg_goias.cpp	BraRegGoias::set_up_rules	high	opus	
+0x4336f0	bra_reg_goias.cpp	BraRegGoias::start_new_season	high	opus	
+0x4338a0	bra_reg_goias.cpp	BraRegGoias::advance_stage	high	opus	
+0x433930	bra_reg_goias.cpp	BraRegGoias::create_knockout_stage	high	opus	
+0x433b40	bra_reg_goias.cpp	BraRegGoias::set_predicted_positions	high	opus	
+0x433cf0	bra_reg_goias.cpp	BraRegGoias::set_club_progress	medium	opus	
+0x433d50	bra_reg_minas_gerais.cpp	BraRegMinasGerais::BraRegMinasGerais	high	opus	
+0x433f70	bra_reg_minas_gerais.cpp	BraRegMinasGerais::`scalar deleting destructor'	high	opus	
+0x433f90	bra_reg_minas_gerais.cpp	BraRegMinasGerais::~BraRegMinasGerais	high	opus	
+0x434050	bra_reg_minas_gerais.cpp	BraRegMinasGerais::create_schedule	high	opus	
+0x434550	bra_reg_minas_gerais.cpp	BraRegMinasGerais::create_schedule_fragment_1	medium	opus	
+0x434620	bra_reg_minas_gerais.cpp	BraRegMinasGerais::create_schedule_fragment_2	medium	opus	
+0x434810	bra_reg_minas_gerais.cpp	BraRegMinasGerais::create_table	high	opus	
+0x434910	bra_reg_minas_gerais.cpp	BraRegMinasGerais::start_new_season	high	opus	
+0x434ae0	bra_reg_minas_gerais.cpp	BraRegMinasGerais::advance_stage	high	opus	
+0x434b70	bra_reg_minas_gerais.cpp	BraRegMinasGerais::create_final_stage	high	opus	
+0x434d90	bra_reg_minas_gerais.cpp	BraRegMinasGerais::update_staff_records_for_status	high	opus	
+0x434ed0	bra_reg_minas_gerais.cpp	BraRegMinasGerais::record_season_honours	high	opus	
+0x434f80	bra_reg_minas_gerais.cpp	BraRegMinasGerais::set_predicted_positions	high	opus	
+0x4350d0	bra_reg_minas_gerais.cpp	BraRegMinasGerais::set_club_progress	high	opus	
+0x435130	bra_reg_minas_gerais.cpp	BraRegMinasGerais::add_result	high	opus	
+0x4351b0	bra_reg_minas_gerais.cpp	BraRegMinasGerais::create_half_season_stage	high	opus	
 0x435340	bra_reg_north.cpp	Bra_Reg_North::construct	medium	haiku	
 0x435560	bra_reg_north.cpp	bra_reg_north::`scalar deleting destructor'	medium	slot copy	
 0x435580	bra_reg_north.cpp	regional_news_north_destructor	high	haiku	

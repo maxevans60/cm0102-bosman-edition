@@ -6,11 +6,11 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x427430 | 134 (+2 unwind) | `Cup::Cup` | thiscall(Cup *this, undefined2 cup_id, int owner_param), ret 8 | Constructs a Brazilian cup object, loads its teams and ranks them, or reports an assertion error on failure. | high | haiku |  |
-| 0x427610 | 11 | `bra_cup::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of bra_cup.cpp. | medium | slot copy |  |
-| 0x427630 | 62 (+1 unwind) | `cup_screen_destructor` | thiscall(this in ECX, no stack args) ret 0 | Destroys a Brazilian cup screen object, releasing its owned buffers, Comp_Stats member and base Cup state. | high | haiku |  |
-| 0x427700 | 324 | `bra_cup::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of bra_cup.cpp. | medium | slot copy |  |
-| 0x427c20 | 65 | `bra_cup_load_teams` | fastcall (ECX = this Cup object pointer), returns int, ret 0 | Allocates the Brazilian cup team table of 71 six-byte entries from the cup object and fills each with a default team id and flag, or reports an assertion error. | medium | haiku |  |
-| 0x427d10 | 132 | `bra_cup::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of bra_cup.cpp. | medium | slot copy |  |
-| 0x427ec0 | 18 | `bra_cup::set_up_rounds` | thiscall(Cup* this), ret 0 | Override of Cup::set_up_rounds for the competition of bra_cup.cpp. | medium | slot copy |  |
-| 0x427f00 | 2293 | `bra_cup_init_teams` | fastcall (ECX = this, Cup object pointer; no stack arguments), ret 0 | Fills the Brazilian cup team slots of the cup object by matching team names against a fixed table and reports failure. | high | haiku |  |
+| 0x427430 | 134 (+2 unwind) | `BraCup::BraCup` | thiscall(BraCup* this, short comp_id, Nation* owner) ret 8, returns this | Constructs the Brazilian Cup on Cup, then loads its saved state or selects the entrants, builds the team and round tables and ranks the teams. | high | opus |  |
+| 0x427610 | 11 | `BraCup::`scalar deleting destructor'` | thiscall(BraCup* this, unsigned flags) ret 4, returns this | Destroys the Brazilian Cup and frees its memory when bit 0 of the flags is set. | high | opus |  |
+| 0x427630 | 62 (+1 unwind) | `BraCup::~BraCup` | thiscall(BraCup* this) ret 0, ECX is this | Frees the team table, round table and per-round arrays and the statistics of the Brazilian Cup, then runs the Cup destructor. | high | opus |  |
+| 0x427700 | 324 | `BraCup::create_round_table` | thiscall(BraCup* this, char stage, short* round_count, short* extra, int* out) ret 0x10, returns round table pointer | Builds the seven-round table of the Brazilian Cup with draw dates, match dates and round rules. | high | opus |  |
+| 0x427c20 | 65 | `BraCup::build_team_table` | thiscall(BraCup* this) ret 0, returns 1 or -1 on failure | Sets the team count to 71 and builds the six-byte team table from the entrant list, clearing the status bytes. | high | opus |  |
+| 0x427d10 | 132 | `BraCup::start_new_season` | thiscall(BraCup* this) ret 0 | Frees last season's tables, archives the statistics, moves the year on and rebuilds the team table and rounds, then ranks the teams. | high | opus |  |
+| 0x427ec0 | 18 | `BraCup::set_up_rounds` | thiscall(BraCup* this) ret 0, returns 1 | Sets the round rules and a prize fund of 500000 and builds the round table of the Brazilian Cup. | high | opus |  |
+| 0x427f00 | 2293 | `BraCup::select_entrants` | thiscall(BraCup* this) ret 0 | Allocates the 71-slot entrant list and fills it with named Brazilian clubs, then with clubs of the regional leagues sorted by strength. | medium | opus |  |
