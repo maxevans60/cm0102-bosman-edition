@@ -55,8 +55,6 @@ static const OptionDef defs[OPT_COUNT] = {
         "foreign_colours = on shows in light violet the names of players who count against the foreign player limit of the club's next league or cup match, on the squad and tactics screens."},
     [OPT_FULL_PLAYER_SEARCH] = {"full_player_search", KIND_SWITCH, "off", NULL,
         "full_player_search = on makes the player search list every player, also players that your manager does not know."},
-    [OPT_HD_TEXT] = {"hd_text", KIND_ENUM, "large", "large|small",
-        "hd_text = large draws the text 1.35 times bigger in HD (display = hd). hd_text = small keeps the text size of widescreen. Applies at the next start."},
 };
 
 #define TEXT_MAX 1100

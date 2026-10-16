@@ -74,8 +74,6 @@ static void check_defaults(void)
     CHECK(options_bool(OPT_ATTRIBUTE_GROUPS) == 1);
     CHECK(options_bool(OPT_FOREIGN_COLOURS) == 1);
     CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
-    CHECK(options_enum(OPT_HD_TEXT) == HD_TEXT_LARGE);
-    CHECK(!strcmp(options_string(OPT_HD_TEXT), "large"));
     CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
     CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.68"));
 }
@@ -103,8 +101,6 @@ int main(void)
     CHECK(strstr(get(), "\nforeign_colours = on\n") != NULL);
     CHECK(strstr(get(), "\nfull_player_search = off\n") != NULL);
     CHECK(strstr(get(), "full_player_search = on makes the player search list every player") != NULL);
-    CHECK(strstr(get(), "\nhd_text = large\n") != NULL);
-    CHECK(strstr(get(), "# hd_text = large draws the text 1.35 times bigger in HD") != NULL);
     static char first[16384];
     snprintf(first, sizeof first, "%s", get());
     options_load(path);                         /* a second start changes nothing */
@@ -184,15 +180,6 @@ int main(void)
     options_load(path);
     CHECK(options_enum(OPT_DISPLAY) == DISPLAY_HD);
     CHECK(!strcmp(options_string(OPT_DISPLAY), "hd"));
-
-    /* 6b. hd_text (0.5.1): large by default, small when the file says so, in any case; a bad value keeps large. */
-    put("hd_text = Small\n");
-    options_load(path);
-    CHECK(options_enum(OPT_HD_TEXT) == HD_TEXT_SMALL);
-    CHECK(!strcmp(options_string(OPT_HD_TEXT), "small"));
-    put("hd_text = huge\n");
-    options_load(path);
-    CHECK(options_enum(OPT_HD_TEXT) == HD_TEXT_LARGE);
 
     /* 7. The database option: its values, a bad value, and the Setup Game choice that writes the file. */
     put("database = 3.9.60\n");
@@ -301,8 +288,6 @@ int main(void)
             CHECK(options_set(oid, "hd") == 1 && options_enum(oid) == DISPLAY_HD);
         } else if (!strcmp(options_name(oid), "save_folder")) {
             CHECK(options_set(oid, "  /Users/me/My Saves ") == 1 && !strcmp(options_string(oid), "/Users/me/My Saves"));
-        } else if (!strcmp(options_name(oid), "hd_text")) {
-            CHECK(options_set(oid, "small") == 1 && options_enum(oid) == HD_TEXT_SMALL);
         } else if (!strcmp(options_name(oid), "database")) {
             CHECK(options_set(oid, "folder:Mixed Case") == 1 && options_enum(oid) == DATABASE_CUSTOM);
         } else {
@@ -312,7 +297,7 @@ int main(void)
     }
     CHECK(strstr(get(), "# x\nzebra = 1\n") == get());
     CHECK(strstr(get(), "\ndisplay = hd\n") && strstr(get(), "\nsave_folder = /Users/me/My Saves\n") &&
-          strstr(get(), "\ndatabase = folder:Mixed Case\n") && strstr(get(), "\nsquad_views = off\n") && strstr(get(), "\nhd_text = small\n"));
+          strstr(get(), "\ndatabase = folder:Mixed Case\n") && strstr(get(), "\nsquad_views = off\n"));
     options_load(path);
     CHECK(options_enum(OPT_DISPLAY) == DISPLAY_HD && !strcmp(options_string(OPT_SAVE_FOLDER), "/Users/me/My Saves") &&
           options_bool(OPT_ATTRIBUTE_GROUPS) == 0 && options_enum(OPT_DATABASE) == DATABASE_CUSTOM);

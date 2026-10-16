@@ -1,7 +1,7 @@
 /* The Bosman Edition Options box (spec 2026-10-16-features-0.5.0, slice 6; #56).
  *
  * A box the size of the original's Game Settings box (build 0x823950), with every option of the settings
- * file (options.h) on two tabs, Screen (ten rows) and Game (nine rows). Labels and notes come from the mockup
+ * file (options.h) on two tabs, Screen and Game, nine rows each. Labels and notes come from the mockup
  * docs/research/mockups/2026-10-16-options-screen.html, variant B.
  *
  * The box is a screen of the runtime on the game's own screen stack, as Team views (views.c). The push of
@@ -24,7 +24,7 @@
  * A click on a value calls options_set at once: the running game has the new value, and settings.txt
  * gets it through its temporary file. Rows whose value the game reads only at start say so in a note.
  * When each value takes effect (docs/research/2026-10-16-options-screen.md, 3b):
- * - display, hd_text, sound and save_folder: at the next start.
+ * - display, sound and save_folder: at the next start.
  * - database: at the next Start New Game. In a game the box only writes the option. The data set folder
  *   of the open game stays (files.c keeps it until database.c tells it at the next start screen build).
  * - match_columns, attribute_groups and the colour switches: when their screen is built next. The screen
@@ -90,9 +90,10 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 #define REBUILD 0xfffffff5u         /* -0xb: build the box again */
 #define CLOSE 0xfffffff7u           /* -9: close the box, as Ok and Cancel of Game Settings (0x8259a0) */
 
+#define ROWS 9
 #define TEXT_SIZE 0x200u
 
-typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_DATABASE, ROW_PATH, ROW_HD_TEXT } RowKind;
+typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_DATABASE, ROW_PATH } RowKind;
 
 typedef struct {
     int tab;                        /* 1 Screen, 2 Game */
@@ -104,7 +105,6 @@ typedef struct {
 
 static const Row rows[] = {
     {1, OPT_DISPLAY, ROW_DISPLAY, "Display mode", "Applies at the next start"},
-    {1, OPT_HD_TEXT, ROW_HD_TEXT, "HD text", "Applies at the next start"},
     {1, OPT_SHARP_PICTURE, ROW_SWITCH, "Sharp picture", ""},
     {1, OPT_REMEMBER_WINDOW, ROW_SWITCH, "Remember window", ""},
     {1, OPT_SOUND, ROW_SWITCH, "All sound", "Applies at the next start"},
@@ -128,7 +128,6 @@ static const Row rows[] = {
 static const char *const switch_text[] = {"On", "Off"}, *const switch_word[] = {"on", "off"};
 static const char *const display_text[] = {"Widescreen", "Classic", "HD"};
 static const char *const display_word[] = {"widescreen", "classic", "hd"};
-static const char *const hd_text_text[] = {"Large", "Small"}, *const hd_text_word[] = {"large", "small"};
 static const char *const database_word[] = {"3.9.68", "3.9.60", "3.9.65"};
 
 /* Game memory for the texts and the column weights. The create functions copy each text. */
@@ -221,15 +220,12 @@ static void plain(int a, int column, const char *s, uint32_t font, uint32_t colo
     call_this(CELL_LABEL, SCREENS, 9, l);
 }
 
-/* The characters of font 2 that fit width screen pixels: 8 pixels for each character in HD (11 with HD Large
- * text) and 7 in the other modes. Paths measured on the screen take about 7.4 (HD) and 6.4 (classic) pixels for each
+/* The characters of font 2 that fit width screen pixels: 8 pixels for each character in HD and 7 in the
+ * other modes. Paths measured on the screen take about 7.4 (HD) and 6.4 (classic) pixels for each
  * character. The box does not call the game's text width 0x5e5ad0 for this: the count of its calls would
  * then depend on the path. Note: the text that the game draws changes later days (Q152), so the path
  * itself does too; it is the same in every game of one player. */
-static size_t chars_for(int width)
-{
-    return (size_t)(width > 0 ? width : 0) / (rt_screen_w >= 1920 ? rt_hd_text(8u) : 7u);
-}
+static size_t chars_for(int width) { return (size_t)(width > 0 ? width : 0) / (rt_screen_w >= 1920 ? 8u : 7u); }
 
 /* A label with a text wider than its cell shows nothing. This cuts the text at the front, with "..." before
  * it, to the characters that fit width screen pixels. */
@@ -258,7 +254,7 @@ static void folder_text(char *out, size_t room)
 static int current_index(const Row *r)
 {
     if (r->kind == ROW_SWITCH) return options_bool(r->id) ? 0 : 1;
-    if (r->kind == ROW_DISPLAY || r->kind == ROW_HD_TEXT) return options_enum(r->id);
+    if (r->kind == ROW_DISPLAY) return options_enum(r->id);
     if (r->kind == ROW_DATABASE) {
         int e = options_enum(r->id);
         if (e == DATABASE_CUSTOM) return 3;
@@ -328,7 +324,7 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
     }
     int cur = current_index(r);
     int custom = r->kind == ROW_DATABASE && cur == 3;
-    int count = r->kind == ROW_SWITCH || r->kind == ROW_HD_TEXT ? 2 : 3;
+    int count = r->kind == ROW_SWITCH ? 2 : 3;
     int columns = custom ? 6 : count + 2;
     const uint8_t *weights = custom ? weights_custom : count == 2 ? weights_two : weights_three;
     int a = area(ROW_X1, y1, ROW_X2, y2, columns, weights, 1, 0);
@@ -344,7 +340,7 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
     }
     for (int i = 0; i < count; i++, col++) {
         const char *s = r->kind == ROW_SWITCH ? switch_text[i] : r->kind == ROW_DISPLAY ? display_text[i]
-                        : r->kind == ROW_HD_TEXT ? hd_text_text[i] : database_word[i];
+                                                                                       : database_word[i];
         if (i == cur) current(a, col, s);
         else choice(a, col, s, VALUE_ID, (uint32_t)index * 16u + (uint32_t)i, green);
     }
@@ -372,23 +368,22 @@ static void options_build(void)
     uint32_t light = colour16(TEXT_LIGHT);
     area(145, 50, 744, 549, 1, NULL, 0x30, box_colour);
     box_text(155, 60, 734, 105, 0x30, colour16(TEXT_TITLE), 0xc, 4, colour16(BUTTON_TEXT), "Bosman Edition Options");
-    box_text(165, 111, 420, 131, 1, 0, 1, 1, light, "Bosman Edition " CM0102_VERSION);
-    box_text(490, 111, 724, 131, 1, 0, 1, 1, light, "Changes save at once to settings.txt");
+    box_text(165, 115, 420, 135, 1, 0, 1, 1, light, "Bosman Edition " CM0102_VERSION);
+    box_text(490, 115, 724, 135, 1, 0, 1, 1, light, "Changes save at once to settings.txt");
 
     /* The tabs: the open tab as a framed label, the other as a button. */
-    int t = area(165, 136, 724, 162, 2, NULL, 1, 0);
+    int t = area(165, 142, 724, 168, 2, NULL, 1, 0);
     static const char *const tab_names[2] = {"Screen", "Game"};
     for (int i = 1; i <= 2; i++) {
         if (i == tab) current(t, i - 1, tab_names[i - 1]);
         else choice(t, i - 1, tab_names[i - 1], TAB_ID, (uint32_t)i, green);
     }
 
-    /* Rows 33 apart, so that the ten rows of the Screen tab end above Close (0.5.1: 35 apart for nine). */
-    int y = 170;
+    int y = 176;
     for (int i = 0; i < ROW_COUNT; i++) {
         if (rows[i].tab != tab) continue;
-        build_row(&rows[i], i, y, y + 31, green, light);
-        y += 33;
+        build_row(&rows[i], i, y, y + 32, green, light);
+        y += 35;
     }
 
     int close = area(155, 509, 734, 539, 1, NULL, 1, 0);
@@ -406,7 +401,6 @@ static void apply(const Row *r, int index, int value)
     const char *word = NULL;
     if (r->kind == ROW_SWITCH && value < 2) word = switch_word[value];
     if (r->kind == ROW_DISPLAY && value < 3) word = display_word[value];
-    if (r->kind == ROW_HD_TEXT && value < 2) word = hd_text_word[value];
     if (r->kind == ROW_DATABASE && value < 3) word = database_word[value];
     if (!word) return;
     char old[1100];

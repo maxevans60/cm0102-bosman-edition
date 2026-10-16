@@ -47,15 +47,15 @@ import hidden_check  # noqa: E402
 
 TOUR = [
     "2500 click 45 165",                    # the manager's menu
-    "4000 click 150 156 | 199 203 | 270 270 | 288 274",  # Arsenal Squad
+    "4000 click 150 156 | 199 203 | 270 270",  # Arsenal Squad
     "wait screen:0x454900",
     "1500 click 592 135",                   # Assistant
-    "3000 click 540 241 | 928 288 | 1454 357 | 1460 379",  # Team views
+    "3000 click 540 241 | 928 288 | 1454 357",  # Team views
     "5000 dump {d}/1-best-xi.bmp",
     "5500 click 445 97",                    # Squad depth
     "7500 dump {d}/2-squad-depth.bmp",
     "8000 click 712 25",                    # Formation
-    "9500 click 720 174 | 1168 189 | 1800 201 | 1800 235",  # 3-5-2, the seventh item
+    "9500 click 720 174 | 1168 189 | 1800 201",  # 3-5-2, the seventh item
     "11500 dump {d}/3-other-formation.bmp",
     "12000 click 215 97",                   # Best XI
     "14000 dump {d}/4-best-xi-3-5-2.bmp",
@@ -63,10 +63,10 @@ TOUR = [
     "wait screen:0x454900",
     "1500 click 584 527",                   # Premier Division
     "wait screen:0x48fcd0",
-    "1500 click 215 462",                   # Liverpool (HD Large: Chelsea, the table shows 8 rows)
+    "1500 click 215 462",                   # Liverpool
     "3500 click 169 97",                    # Squad
     "5500 click 592 135",                   # Assistant
-    "7000 click 540 159 | 928 205 | 1460 274 | 1460 277",  # Team views, the only item
+    "7000 click 540 159 | 928 205 | 1460 274",  # Team views, the only item
     "9000 click 445 97",                    # Squad depth
     "11000 dump {d}/5-other-club.bmp",
     "12000 click 215 97",                   # Best XI

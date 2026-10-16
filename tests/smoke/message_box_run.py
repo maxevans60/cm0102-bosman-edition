@@ -28,14 +28,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 
-# Squad > Print > Squad, "classic x y | widescreen x y | hd-small x y | hd x y". Popup and drop-down items keep
-# their size, and grow with the HD Large text.
+# Squad > Print > Squad, "classic x y | widescreen x y | hd x y". Popup and drop-down items keep their size.
 PRINT_SQUAD = [
-    "1000 click 45 165 | 72 220 | 108 297 | 108 297",         # manager menu
-    "3500 click 148 156 | 199 204 | 268 270 | 288 274",       # Squad
+    "1000 click 45 165 | 72 220 | 108 297",         # manager menu
+    "3500 click 148 156 | 199 204 | 268 270",       # Squad
     "wait screen:0x454900",
-    "1500 click 750 25 | 1200 33 | 1800 45 | 1800 45",        # Print
-    "3500 click 700 49 | 1170 61 | 1790 78 | 1790 79",        # Squad
+    "1500 click 750 25 | 1200 33 | 1800 45",        # Print
+    "3500 click 700 49 | 1170 61 | 1790 78",        # Squad
     "wait box",
 ]
 SQUAD_SCREEN = "screen:0x454900"

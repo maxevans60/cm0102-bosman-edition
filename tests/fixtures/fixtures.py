@@ -4,7 +4,7 @@
 Usage:
     python3 tests/fixtures/fixtures.py make <cm0102_recomp> <game folder> [--dir <fixtures folder>]
     python3 tests/fixtures/fixtures.py play <cm0102_recomp> <game folder> <save name> <steps file> <out folder>
-        [--dir <fixtures folder>] [--mode classic|widescreen|hd|hd-small] [--set key=value]... [--days n]
+        [--dir <fixtures folder>] [--mode classic|widescreen|hd] [--set key=value]... [--days n]
 
 The saves stay outside git, because they hold the original's data. The default folder is
 /Users/max/Projects/cm0102/test-fixtures (FIXTURES_DIR in the environment changes it).
@@ -69,7 +69,7 @@ def run(program, game, mode, user, steps, env_extra, timeout):
 
 def write_settings(user, mode, options):
     with open(os.path.join(user, "settings.txt"), "w") as f:
-        f.write(smoke_run.settings_text(mode))
+        f.write(f"display = {mode}\n")
         for key, value in options:
             f.write(f"{key} = {value}\n")
 
@@ -153,7 +153,7 @@ def main(argv):
             rest.append(args[i])
             i += 1
     if opts["--mode"] not in smoke_run.SIZES:
-        print(f"unknown mode {opts['--mode']}: use classic, widescreen, hd or hd-small")
+        print(f"unknown mode {opts['--mode']}: use classic, widescreen or hd")
         return 2
     if argv[1] == "make":
         if len(rest) != 2:
