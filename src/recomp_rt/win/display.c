@@ -41,6 +41,7 @@ void win_read_settings(void)
         rt_screen_w = WIDE_W;
         rt_screen_h = WIDE_H;
     }
+    hd_text_init();
 }
 
 /* A coordinate for 800x600 on the screen. A left or top edge maps to the first pixel of its part of

@@ -95,6 +95,14 @@ from attribute_groups import PATCHES as GROUP_PATCHES  # noqa: E402
 
 PATCHES.update(GROUP_PATCHES)
 
+# HD Large text (0.5.1) replaces the text size constants of the line draw, the text width, the text height and
+# the text box in the same way.
+from hd_text import PATCHES as HD_TEXT_PATCHES  # noqa: E402
+
+if set(HD_TEXT_PATCHES) & set(PATCHES):
+    raise SystemExit("hd_text.py: an address is in widescreen.py too")
+PATCHES.update(HD_TEXT_PATCHES)
+
 # Not a screen size: a fix for an endless loop (0.4.0 slice 12, custom data sets). euro.cfg is read by 0x9059e0
 # (docs/research/2026-10-16-update-team-databases.md). When a line of it is not a "*" header (after a header
 # that names an unknown nation, or a file that does not match the database), the original tests the same line

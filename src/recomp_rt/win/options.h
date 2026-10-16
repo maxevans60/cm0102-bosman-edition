@@ -33,11 +33,15 @@ typedef enum {
     OPT_ATTRIBUTE_GROUPS,      /* switch, on */
     OPT_FOREIGN_COLOURS,       /* switch, on: foreign player colour (foreign.c) */
     OPT_FULL_PLAYER_SEARCH,    /* switch, off: the player search lists every player (playersearch.c) */
+    OPT_HD_TEXT,               /* enum: large (default), small: the text size in HD, read at start (hd_text.c) */
     OPT_COUNT
 } OptionId;
 
 /* Values of OPT_DISPLAY for options_enum. */
 enum { DISPLAY_WIDESCREEN = 0, DISPLAY_CLASSIC = 1, DISPLAY_HD = 2 };
+
+/* Values of OPT_HD_TEXT for options_enum. */
+enum { HD_TEXT_LARGE = 0, HD_TEXT_SMALL = 1 };
 
 /* Values of OPT_DATABASE for options_enum. */
 enum { DATABASE_3968 = 0, DATABASE_3960 = 1, DATABASE_3965 = 2, DATABASE_CUSTOM = 3 };   /* custom: the value "folder:<name>", a folder in Databases */
