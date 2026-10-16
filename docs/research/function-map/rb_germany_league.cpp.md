@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7de620 | 22 | `rb_germany_league::ctor` | thiscall(RulingBody *base, int league_id) ret 4 | Constructs a German league ruling body by initialising the base, setting the vtable and league rule fields. | medium | haiku |  |
-| 0x7de670 | 158 (+4 unwind) | `rb_germany_league_on_round_event` | thiscall-like member taking (int *league, undefined4 *date) with ret 8; first argument is the league record, second a date value, called through a vtable slot | Handles a round event for a German league, applying points bans and discipline entries when the league flags are set. | medium | haiku |  |
-| 0x7de8c0 | 38 | `rb_germany_league_assert_or_init` | cdecl, arguments (int param_1 unused in error path, int param_2 version or state index, compared against 0x14), ret 0xc | Checks a state index and either reports a version assertion error or formats the German league name. | medium | haiku |  |
+| 0x7de620 | 22 | `RbGermanyLeague::RbGermanyLeague` | thiscall(RbGermanyLeague *this, FILE *file), ret 4 | Constructs the German league ruling body on the RulingBody base and sets its kind, rule set index, nation and continent fields. | high | opus |  |
+| 0x7de670 | 158 (+4 unwind) | `RbGermanyLeague::process_match_cards` | thiscall(RbGermanyLeague *this, MatchPlayer *player, Fixture *fixture), ret 8 | Applies German league card rules to one player after a match: one match ban every fifth booking, points ban for a red card. | high | opus |  |
+| 0x7de8c0 | 38 | `RbGermanyLeague::get_name` | thiscall(RbGermanyLeague *this unused, char *buf, int buf_len, int flag), ret 0xc | Writes the text German league into the buffer as the ruling body name, or reports an assert when the buffer is too short. | high | opus |  |

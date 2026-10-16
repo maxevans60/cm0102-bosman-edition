@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x7dc700 | 22 | `rb_croatia_ctor` | thiscall(RulingBody *this, int base_arg) with ECX as this, ret 4 | Constructs the Croatian ruling body by chaining the RulingBody base constructor, installing the vtable and setting rule fields. | high | haiku |  |
-| 0x7dc750 | 195 (+6 unwind) | `rb_croatia_check_and_notify_milestones` | thiscall-like plain function taking (int *param_1, undefined4 *param_2) as cdecl or stdcall with ret 8 (argument-free ECX not used); param_1 is a ruling body record, param_2 a date value; ret 8 | Counts ruling body ban milestones every third step and issues ban records and news when a ban is due. | medium | haiku |  |
-| 0x7dca20 | 47 | `rb_croatia_assert_or_dispatch` | cdecl-like with three stack arguments (int param_1, int param_2 as a count or index threshold, int param_3), ret 0xc | Raises a version error box when the argument is below 20, otherwise forwards the call to a nationality adjective routine. | medium | haiku |  |
+| 0x7dc700 | 22 | `RbCroatia::RbCroatia` | thiscall (this, FILE* file), ret 4 | Constructs the Croatian ruling body on the RulingBody base, then sets its vtable, nation and continent ids and ban scale fields. | high | opus |  |
+| 0x7dc750 | 195 (+6 unwind) | `RbCroatia::process_match_cards` | thiscall (this, Booking* booking, Match* match), ret 8 | Adds a match's bookings to the player's Croatian record, banning per three yellows and queueing a red card points ban from the next Wednesday. | high | opus |  |
+| 0x7dca20 | 47 | `RbCroatia::get_name` | thiscall (this, char* buf, int buf_len, int form), ret 0xc | Writes the Croatian nationality adjective into the buffer as its name, or shows a version error box when the buffer is under 20 bytes. | high | opus |  |

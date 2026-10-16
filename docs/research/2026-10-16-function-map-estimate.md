@@ -133,6 +133,44 @@ No pilot proves a function of these files. Earlier research cites four of them, 
 | 0x689c20 | Holds 0x689c6e, a jump in the promotion chain | `league_cascade_remove_child_nodes` (low) | `League::process_promotion_relegation_chain` (medium) | agrees in area. The research gives no purpose, and a Northern League patch fits a promotion chain (inference) |
 | 0x6701f0 | Tag pass of the message formatter (start-screen helpers) | `league_name_translate_text` (medium), placed in league.cpp | `langlib_apply_grammar_modifier` (high), placed in Langlib.cpp | agrees |
 
+#### Wave t1a (tier 1, 2026-10-16)
+
+Run `sweep-t1a`: 8 Opus agents named 212 functions of the `*_rules.cpp` files from Argentina to Portugal, `rb_argentina.cpp` to `rb_ireland.cpp`, and their gap functions. Each agent took 3 to 8 minutes and 123,000 to 174,000 tokens. Confidence: 165 high, 44 medium, 3 low.
+
+The agents named the same vtable slots in different ways. After the merge, 56 names were changed to one method name a slot, by the slot index in the exe vtables. Transfer rules (base 0x970458, 13 slots) use `<NATION>_RULES` and ruling bodies (base 0x96f104, 8 slots) use `Rb<Name>`. `BRIEF-file.md` now gives these slot names. Two files keep two classes on purpose: `argentina_rules.cpp` holds three `TRANSFER_RULES` base defaults that many vtables share, and `award_manager.cpp` holds the `AWARD` base methods.
+
+27 functions of the wave are cited. All 27 agree.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x40aa10 | Argentina filler, 4 foreign (foreign-and-tactics) | `fill_rule_slots_invalid` (Haiku) | `ARGENTINA_RULES::fill_squad_restrictions` | agrees |
+| 0x412db0 | Australia filler, 6 foreign | `australia_rules_init_defaults_vtable_slot` (Haiku) | `AUSTRALIA_RULES::fill_squad_restrictions` | agrees |
+| 0x424f80 | Belgium filler, +6 = 21, +8 = 2 | `nationality_rule_reset` (Haiku) | `BELGIUM_RULES::fill_squad_restrictions` | agrees |
+| 0x43f2a0 | Brazil filler, 2 foreign | `brazil_rules_flags_block_reset` (Haiku) | `BRAZIL_RULES::fill_squad_restrictions` | agrees |
+| 0x518620 | Croatia filler, 4 foreign | `croatia_rules_init_defaults` (Haiku) | `CROATIA_RULES::fill_squad_restrictions` | agrees |
+| 0x579c50 | England filler, 3 non-EU | `england_rules_init_loan_record` (Haiku) | `ENGLAND_RULES::fill_squad_restrictions` | agrees |
+| 0x5c1a30 | France filler, 5 or 3 non-EU | `france_rules_set_default_rule_block` (Haiku) | `FRANCE_RULES::fill_squad_restrictions` | agrees |
+| 0x5e02d0 | Germany filler, 3 or 5 non-EU | `fill_sentinel_and_set_status_byte` (Haiku) | `GERMANY_RULES::fill_squad_restrictions` | agrees |
+| 0x5ed020 | Greece filler, 5 or 4 non-EU | `greece_rules_init_fill_record` (Haiku) | `GREECE_RULES::fill_squad_restrictions` | agrees |
+| 0x63c330 | Filler with no limit (Finland, Holland, Ireland and others) | `ireland_rules_reset_slots` (Haiku) | `IRELAND_RULES::fill_squad_restrictions` | agrees |
+| 0x6619e0 | Italy filler, +6 = 21, +8 = 5 | `fill_italy_rule_result_and_flag_nation` (Haiku) | `ITALY_RULES::fill_squad_restrictions` | agrees |
+| 0x667090 | Japan filler, 3 foreign | `japan_rules_reset_record_slots` (Haiku) | `JAPAN_RULES::fill_squad_restrictions` | agrees |
+| 0x794740 | Norway filler, 2 non-EU | `norway_rules_init_slots` (Haiku) | `NORWAY_RULES::fill_squad_restrictions` | agrees |
+| 0x7cd960 | Poland filler, 5 foreign | `poland_rules_reset_table` (Haiku) | `POLAND_RULES::fill_squad_restrictions` | agrees |
+| 0x7d43c0 | Portugal filler, 3 or 4 non-EU | `portugal_rules_fill_slots` (Haiku) | `PORTUGAL_RULES::fill_squad_restrictions` | agrees |
+| 0x579b30 | England rules object (season-change-points) | `loan_rules::loan_rules` (Haiku) | `ENGLAND_RULES::ENGLAND_RULES` | agrees |
+| 0x661380 | Italy rules object (season-change-points) | `italy_awards_obj_ctor` (Haiku) | `ITALY_RULES::ITALY_RULES` | agrees |
+| 0x413180 | Setup step 17 and a CD check (game-creation and import inventories) | `Award_manager::open_cd_awards` (Haiku) | `AWARD_MANAGER::AWARD_MANAGER` | agrees |
+| 0x413540 | Daily call after the discipline update (game-creation inventory) | `award_manager_serialise_or_reset` (Haiku) | `AWARD_MANAGER::process_date` | agrees |
+| 0x794ad0 | Setup step 21, global 0xb7433c | `norway_rules_init_slots` (Haiku) | `Notes::Notes` | agrees |
+| 0x7da190 | Setup step 44, global 0xb74430 | `media_pundit_list_loader::load_and_export` (Haiku) | `PunditList::PunditList` | agrees |
+| 0x425390 | Opens Meet with Board (stadium research) | `belgium_rules_open_requests_screen` (Haiku) | `board_request_screen_open` | agrees |
+| 0x4253f0 | Meet with Board screen | `bel_board_meeting_dialog_show` (Haiku) | `board_request_screen_draw` | agrees |
+| 0x43f4e0 | Asking price "+" step up (slow screens) | `cash_round_to_unit` (Haiku) | `Cash::step_up` | agrees |
+| 0x43f580 | Asking price "-" step down | `cash_round_to_unit` (Haiku) | `Cash::step_down` | agrees |
+| 0x5ed200 | Lists an object on the confirm screen (start-screen spec) | `gui_text_fit_draw_row` (Haiku) | `gui_add_text_area_from_text` | agrees in area |
+| 0x66e790 | Language choice from the keyboard layout (import inventory) | `set_language_from_keyboard_layout` (Haiku) | `langlib_setup` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
