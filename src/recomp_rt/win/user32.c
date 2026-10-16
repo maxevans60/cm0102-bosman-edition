@@ -100,6 +100,22 @@ static void update_scaling(void)
     }
 }
 
+/* The option sharp_picture changed in the options box (options_screen.c): the texture filter and the
+ * whole-pixel scale as at window create, at once. Off gives back the filter that the texture had. */
+static SDL_ScaleMode default_scale_mode = SDL_ScaleModeNearest;
+void win_sharp_picture_changed(void)
+{
+    if (!renderer || !texture) return;
+    if (options_bool(OPT_SHARP_PICTURE)) {
+        SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
+        update_scaling();
+    } else {
+        SDL_SetTextureScaleMode(texture, default_scale_mode);
+        SDL_RenderSetIntegerScale(renderer, SDL_FALSE);
+    }
+    win_screen_dirty = 1;
+}
+
 /* Full screen on and off: the desktop size, with the picture scaled as in a window. */
 static void toggle_full_screen(void)
 {
@@ -214,6 +230,7 @@ void win_video_init(void)
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING,
                                 (int)rt_screen_w, (int)rt_screen_h);
     if (!texture) rt_fatal("SDL_CreateTexture: %s", SDL_GetError());
+    SDL_GetTextureScaleMode(texture, &default_scale_mode);
     if (options_bool(OPT_SHARP_PICTURE)) SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
     update_scaling();
     SDL_StartTextInput();

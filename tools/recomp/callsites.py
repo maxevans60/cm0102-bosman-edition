@@ -50,6 +50,9 @@ CALL_SITES = {
     # widget create of the tactics screen 0x899ea0 (docs/research/2026-10-16-foreign-and-tactics-positions.md).
     "squad_name": (0x45BA84, 0x8040A0),
     "tactics_name": (0x89E3EB, 0x55F990),
+    # Options box (#56): the Game Settings item create of the side bar drop-down "Game Options" in 0x75db00
+    # (docs/research/2026-10-16-options-screen.md, 1a). The new item follows it.
+    "options_item": (0x760602, 0x55F990),
 }
 
 SITES = {addr: (name, target) for name, (addr, target) in CALL_SITES.items()}

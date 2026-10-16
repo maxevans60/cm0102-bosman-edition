@@ -168,6 +168,10 @@ RT_WRAP(007615d0, side_bar_input)
     if (w >= 0 && w < 1200) {
         uint32_t display = rd32(g_mem, SIDE_BAR_DISPLAY + (uint32_t)(int16_t)rd16(g_mem, PLAYER_SLOT) * 0x300u);
         int id = (int16_t)rd16(g_mem, display + 0xba966u + (uint32_t)w * 0x18cu);
+        if (options_screen_side_bar_click(id)) {     /* the Bosman Edition Options item (options_screen.c) */
+            rt_ret_cdecl((uint32_t)-4);
+            return;
+        }
         if (id == HOLIDAY_ID) pending = 0;
         if (id == NEXT_MATCH_ID) {
             uint32_t manager = current_manager();

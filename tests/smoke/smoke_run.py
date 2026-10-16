@@ -31,6 +31,11 @@ Search check (--same-save --save <name> --search): the runs open the player sear
 the holiday: search-off, search-on and search-on-again (full_player_search). Each save is compared with
 the save of search-off.
 
+Options box check (--same-save --save <name> --options): the runs open the Bosman Edition Options box from the
+side bar before the holiday (0.5.0 slice 6). options and options-again switch Faster holidays off and on and
+close the box; options-tabs clicks the tabs Game, Screen and Game in place of the two switches, so the box
+is built as often. Each save is compared with the save of options.
+
 Match check (--match): the same as the same-save check, but each run loads the saved test game
 prematch.sav (tests/fixtures/fixtures.py) and plays the friendly at Basel on Friday 20.7.01 to the end.
 The steps answer the Henry bid (Reject), go to the match, set the commentary speed to Very Fast and
@@ -379,7 +384,29 @@ SEARCH_RUNS = [
 ]
 
 
-def same_save(program, game, mode, days, save_name=None, search=False):
+# --options: after the load, open the Bosman Edition Options box (Game Options, then its item), switch
+# Faster holidays off and on on the Game tab, close the box, then go on holiday. Positions as in
+# tests/smoke/options_box_run.py. The drop-down item keeps its size, so it has widescreen and HD positions.
+OPTIONS_OPEN = ["1000 click 45 344", "3000 click 175 417 | 225 525 | 295 675"]
+OPTIONS_CLOSE = ["9500 click 444 524", "wait screen:0x7881e0"]
+OPTIONS_STEPS = OPTIONS_OPEN + [
+    "5000 click 584 155",                   # the Game tab
+    "6500 click 452 367",                   # Faster holidays: Off
+    "8000 click 371 367",                   # Faster holidays: On
+] + OPTIONS_CLOSE
+
+
+def options_runs(load, holiday):
+    """The runs of the options box check, each with its own steps."""
+    switch = load + OPTIONS_STEPS + holiday
+    tabs = load + OPTIONS_OPEN + ["5000 click 584 155", "6500 click 304 155", "8000 click 584 155"] + OPTIONS_CLOSE + \
+        holiday
+    return [("options", {"faster_days": "on", "_steps": switch}),
+            ("options-again", {"faster_days": "on", "_steps": switch}),
+            ("options-tabs", {"faster_days": "on", "_steps": tabs})]
+
+
+def same_save(program, game, mode, days, save_name=None, search=False, options=False):
     # No click ends the intro (without_intro_click).
     if save_name is None:
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
@@ -396,6 +423,9 @@ def same_save(program, game, mode, days, save_name=None, search=False):
     if search:
         steps = without_intro_click(fixtures.LOAD_STEPS) + SEARCH_STEPS + holiday + ["400000 quit"]
         return compare_runs(program, game, mode, SEARCH_RUNS, steps, days, save)
+    if options:
+        runs = options_runs(without_intro_click(fixtures.LOAD_STEPS), holiday + ["400000 quit"])
+        return compare_runs(program, game, mode, runs, runs[0][1]["_steps"], days, save)
     steps = without_intro_click(fixtures.LOAD_STEPS) + holiday + ["400000 quit"]
     return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save)
 
@@ -442,7 +472,8 @@ def main(argv):
     if "--same-save" in argv[3:]:
         days = int(argv[argv.index("--days") + 1]) if "--days" in argv[3:] else 14
         save_name = argv[argv.index("--save") + 1] if "--save" in argv[3:] else None
-        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days, save_name, "--search" in argv[3:])
+        return same_save(os.path.abspath(argv[1]), os.path.abspath(argv[2]), mode, days, save_name, "--search" in argv[3:],
+                         "--options" in argv[3:])
     program, game, ref = os.path.abspath(argv[1]), os.path.abspath(argv[2]), os.path.abspath(argv[3])
     record = "--record" in argv[4:]
     tol = int(argv[argv.index("--tolerance") + 1]) if "--tolerance" in argv[4:] else 0

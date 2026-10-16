@@ -98,6 +98,12 @@ extern uint32_t win_hwnd;
 int holiday_widget_before(void);               /* at each widget create: 1 for the Go on Holiday item */
 void holiday_widget_after(void);               /* after that create: adds the new item */
 void holiday_next_turn(void);                  /* at each human turn, before the original */
+/* The Bosman Edition Options box (options_screen.c). */
+void options_screen_open(void);                /* pushes the box on the screen stack */
+int options_screen_widget_before(void);        /* at each widget create: 1 for the Game Settings item */
+void options_screen_widget_after(void);        /* after that create: adds the Bosman Edition Options item */
+int options_screen_side_bar_click(int id);     /* a side bar click: 1 when it opened the box */
+void win_sharp_picture_changed(void);          /* user32.c: applies the option sharp_picture at once */
 /* The Assistant's picks (picker.c). picker_compute picks without writing; picker_pick stores the pick as
  * the club's selection. kind 1: best team, 2: most match-fit, 3: under-21. Both return the players picked. */
 #define PICK_SLOTS 20
