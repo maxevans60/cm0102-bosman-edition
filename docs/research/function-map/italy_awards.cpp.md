@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x65fe30 | 40 (+1 unwind) | `italy_awards::Awards::ctor` | thiscall, (this, int param_2 load_source) ret 4 | Constructs the Italian awards object, sets its vtable and fields, then loads data or initialises the award table. | medium | haiku |  |
-| 0x65fec0 | 1223 (+40 unwind) | `Italy_awards::init_award_table` | thiscall(this, int param_2 flag/season argument) ret 4 | Allocates the Italian award pointer table, sized 25 or 40 entries by a rule flag, and constructs each award object into it. | high | haiku |  |
-| 0x660ec0 | 429 | `Award_Table::populate_nation_awards` | thiscall(this in ECX, short *param_2 as award-record key pointer, ret 4) | Populates nation award tables for a matching season record, then refreshes month-change state for the given key. | medium | haiku |  |
-| 0x661330 | 27 | `italy_awards::check_award_eligibility` | thiscall(this, int nation_or_team_ptr) ret 4 | Checks whether a team qualifies for Italian awards and, if so, builds the team of the week. | medium | haiku |  |
+| 0x65fe30 | 40 (+1 unwind) | `ItalyAwards::ItalyAwards` | thiscall(ItalyAwards* this, FILE* file) ret 4, returns this | Builds the Italian awards object, loads it from a save file when one is given, or creates its award objects. | high | opus |  |
+| 0x65fec0 | 1223 (+40 unwind) | `ItalyAwards::init_awards` | thiscall(ItalyAwards* this, FILE* file) ret 4 | Allocates the award table and constructs the yearly, monthly and team awards of each Italian division, adding the lower divisions when they exist. | high | opus |  |
+| 0x660ec0 | 429 | `ItalyAwards::daily_update` | thiscall(ItalyAwards* this, Date* date) ret 4 | Gives the yearly manager, player and team awards of each Italian division on a fixed date, then runs the base daily update. | high | opus |  |
+| 0x661330 | 27 | `ItalyAwards::update_team_of_the_week` | thiscall(ItalyAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week nominations when the given award is the team award of one of the Italian divisions. | high | opus |  |

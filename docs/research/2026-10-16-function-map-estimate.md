@@ -617,6 +617,27 @@ Run `sweep-w15`: 8 Opus agents named 196 functions: the Dutch competitions with 
 | 0x5f73d0 | Crash guard site only (crash-fixes) | `hol_set_team_form_bands` (Haiku) | `HolFirst::set_club_progress` | no claim |
 | 0x63a740 | Sets the table size to ten or twelve (wal-nir-irl) | `ire_prm_init_league_table` (Haiku) | `IrePrm::create_table` | agrees |
 
+#### Wave w16 (tier 4, 2026-10-16)
+
+Run `sweep-w16`: 8 Opus agents named 218 functions: the Italian leagues (`ita_ser_*.cpp`, `ita_super.cpp`, `italy_awards.cpp`), the Japanese and Korean competitions, `korea_awards.cpp`, `nation_awards.cpp` with month ratings and news screen gap functions, and `nir_charity.cpp`. Each agent took 2 to 4 minutes and 128,000 to 158,000 tokens. Confidence: 192 high, 26 medium, 0 low. The merge needed no fixes. One more Setup function has another country's name: 0x837200 (`create_spanish_comps`) builds the Korean competitions.
+
+12 functions of the wave are cited. All 12 agree.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x641700 | start_new_season order, promotion then year + 1 (sweep-season-end) | `ita_ser_a::start_new_season` (slot copy) | `ItaSerA::start_new_season` | agrees |
+| 0x642a70 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `ita_ser_a_build_fixture_table` (Haiku) | `ItaSerA::create_fixed_fixtures` | agrees |
+| 0x647230 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `Table::build_serie_b_fixture_schedule` (Haiku) | `ItaSerB::set_up_fixed_fixtures` | agrees |
+| 0x64be90 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `ita_ser_c1a_build_fixture_table` (Haiku) | `ItaSerC1a::set_up_fixed_fixtures` | agrees |
+| 0x650100 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `ita_ser_c1b_build_league_fixtures` (Haiku) | `ItaSerC1b::set_up_fixed_fixtures` | agrees |
+| 0x6545c0 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `ita_ser_c2a_build_fixture_table` (Haiku) | `ItaSerC2a::set_up_fixed_fixtures` | agrees |
+| 0x656570 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `ita_ser_c2a_seed_league_teams` (Haiku) | `ita_ser_c2a_set_up_fixed_fixtures_tail` | agrees |
+| 0x658750 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `ita_ser_c2b_load_fixtures` (Haiku) | `ItaSerC2b::load_fixed_fixtures` | agrees |
+| 0x65c8e0 | Fixed 2001 fixtures of the Italian leagues (sweep-season-end) | `ita_ser_c2c_build_fixture_table` (Haiku) | `ItaSerC2c::load_fixed_fixtures` | agrees |
+| 0x7881e0 | Build of the news screen (clickable-names inventory) | `news_screens_show_news_list` (Haiku) | `news_screens_build_news_screen` | agrees |
+| 0x7892b0 | Input of the news screen (clickable-names inventory) | `news_screens_dispatch_selected_message` (Haiku) | `news_screens_news_input` | agrees |
+| 0x7897a0 | Leave function of the news screen (clickable-names inventory) | `scrman_close_screen_slot_2_if_open` (Haiku) | `news_screens_news_exit` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

@@ -6,9 +6,9 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x65f670 | 128 (+2 unwind) | `ita_super_cup_construct` | thiscall(Cup *this, undefined2 cup_id, int parent_arg) ret 8 | Constructs an Italian Super Cup object, loads its CM3 code data and maps the fixture tree, reporting failures through an error box. | high | haiku |  |
-| 0x65f830 | 11 | `ita_super::`scalar deleting destructor'` | thiscall(Cup* this, unsigned flags), ret 4 | Override of Cup::`scalar deleting destructor' for the competition of ita_super.cpp. | medium | slot copy |  |
-| 0x65f850 | 62 (+1 unwind) | `ita_super_screen_dtor` | thiscall(this in ECX, object pointer) ret 0 | Destroys an ita_super screen object by resetting its vtable, freeing owned buffers and Comp_Stats, then running the base Cup destructor. | high | haiku |  |
-| 0x65f920 | 98 | `ita_super::create_round_table` | thiscall(Cup* this, char stage, short* round_count, short* extra, int* out), ret 0x10 | Override of Cup::create_round_table for the competition of ita_super.cpp. | medium | slot copy |  |
-| 0x65fa60 | 165 | `ita_super_load_cm3_codes` | fastcall (ECX = param_1, the ita_super object; no stack arguments; ret 0) | Allocates and loads the CM3 code table, reporting a versioned assert error on any failed lookup and returning success or failure. | high | haiku |  |
-| 0x65fc90 | 125 | `ita_super::release_data` | thiscall(Cup* this), ret 0 | Override of Cup::release_data for the competition of ita_super.cpp. | medium | slot copy |  |
+| 0x65f670 | 128 (+2 unwind) | `ItaSuper::ItaSuper` | thiscall(ItaSuper* this, short year, void* comp_record) ret 8, returns this | Constructs the Italian Super Cup and, without saved data, picks its two clubs and builds its round table, tie tree and stats. | high | opus |  |
+| 0x65f830 | 11 | `ItaSuper::`scalar deleting destructor'` | thiscall(ItaSuper* this, unsigned flags) ret 4, returns this | Runs the Italian Super Cup destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
+| 0x65f850 | 62 (+1 unwind) | `ItaSuper::~ItaSuper` | thiscall(ItaSuper* this) ret 0 | Destroys the Italian Super Cup by freeing its team list, round table, tie arrays and stats, then runs the Cup destructor. | high | opus |  |
+| 0x65f920 | 98 | `ItaSuper::create_round_table` | thiscall(ItaSuper* this, char stage, short* round_count, short* extra, int* out) ret 0x10, returns Round* or null | Builds the one-round, one-leg table of the Italian Super Cup with its draw and match dates for two clubs. | high | opus |  |
+| 0x65fa60 | 165 | `ItaSuper::init_team_list` | thiscall(ItaSuper* this) ret 0, returns 1, 0 or -1 | Sets two teams and fills the team list with the Serie A champions and Coppa Italia winners, or the cup runners-up when they match. | high | opus |  |
+| 0x65fc90 | 125 | `ItaSuper::start_new_season` | thiscall(ItaSuper* this) ret 0 | Clears the finished Italian Super Cup, archives its stats, moves the year on and picks the clubs and rounds again. | high | opus |  |

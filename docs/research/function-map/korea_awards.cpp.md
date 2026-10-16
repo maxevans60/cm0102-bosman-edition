@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x66e030 | 82 (+2 unwind) | `korea_awards_ctor_from_source` | thiscall(this, int source_handle) ret 4 | Constructs a Korea awards object from an optional source, falling back to a version-stamped error message box when table creation fails. | medium | haiku |  |
-| 0x66e170 | 260 (+7 unwind) | `Korea_awards::init_award_set` | thiscall(this in ECX, param_2 int flag passed on stack as one argument, ret 4) | Allocates the Korea award object set, building a team award, a month award and five year awards, or reports a malloc failure. | medium | haiku |  |
-| 0x66e4d0 | 118 | `korea_awards_vtable_handler::process_award_record` | thiscall (ECX = this, vtable slot; param_2 short* record with year/nation fields) ret 4 | Processes an end-of-period award record by distributing award categories for the matching date and advancing month slots. | medium | haiku |  |
-| 0x66e610 | 7 | `korea_awards::scalar_deleting_destructor_stub` | fastcall (ECX = this, EDX unused), argument list: this (object pointer), ret 0 | Forwards the object's field at offset 0x28 with flag 0xffffffff to a month_award deletion helper, acting as a scalar deleting destructor thunk. | medium | haiku |  |
+| 0x66e030 | 82 (+2 unwind) | `KoreaAwards::KoreaAwards` | thiscall(KoreaAwards* this, FILE* file or 0) ret 4, returns this | Constructs the Korean awards on NationAwards, sets its nation record, then loads the awards from the file or creates the month ratings and award table. | high | opus |  |
+| 0x66e170 | 260 (+7 unwind) | `KoreaAwards::init_awards` | thiscall(KoreaAwards* this, FILE* file or 0) ret 4 | Allocates the table of seven Korean awards and creates one team award, one month award and five year awards. | high | opus |  |
+| 0x66e4d0 | 118 | `KoreaAwards::daily_update` | thiscall(KoreaAwards* this, Date* date) ret 4 | On day 26 of month index 10, gives the Korean year awards, advances the month award slots, then runs the base update. | high | opus |  |
+| 0x66e610 | 7 | `KoreaAwards::on_month_change` | thiscall(KoreaAwards* this) ret 0 | Gives the Korean player of the month award from the month ratings object. | high | opus |  |

@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 3479 high, 3132 medium, 252 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15.
+- Confidence: 3613 high, 3003 medium, 247 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -224,8 +224,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [mini_cup.cpp](mini_cup.cpp.md) | 8 |
 | [mini_league.cpp](mini_league.cpp.md) | 9 |
 | [month_award.cpp](month_award.cpp.md) | 11 |
-| [month_ratings.cpp](month_ratings.cpp.md) | 9 |
-| [nation_awards.cpp](nation_awards.cpp.md) | 18 |
+| [month_ratings.cpp](month_ratings.cpp.md) | 8 |
+| [nation_awards.cpp](nation_awards.cpp.md) | 19 |
 | [national_teams.cpp](national_teams.cpp.md) | 70 |
 | [national_teams_screens.cpp](national_teams_screens.cpp.md) | 19 |
 | [network.h](network.h.md) | 38 |

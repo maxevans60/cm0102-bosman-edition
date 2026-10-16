@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x666690 | 40 (+1 unwind) | `japan_awards::JapanAwards::JapanAwards` | thiscall (ECX = this, one stack argument param_2 as int load source or flag, ret 4) | Constructs the JapanAwards object, sets its vtable, base fields and loads awards data or initialises award objects. | medium | haiku |  |
-| 0x666720 | 275 (+8 unwind) | `japan_awards::init_award_objects` | thiscall(this in ECX, int param_1 is the award container object, undefined4 param_2 is the owner pointer), ret 4 | Allocates a 32-byte award table and eight award objects, reporting a fatal assert-style error if the table allocation fails. | high | haiku |  |
-| 0x666ab0 | 95 | `japan_awards_vtable_slot_0x666ab0` | thiscall(this, short *date_or_season_key) ret 4 | Checks a date key, then distributes player, manager and team awards for the year and runs the month-change check. | medium | haiku |  |
-| 0x666bb0 | 12 | `japan_awards::on_award_match` | thiscall(this, int match_or_player) ret 4 | Forwards a matching award event to the team of the week builder when the argument equals one of two stored award slots. | medium | haiku |  |
+| 0x666690 | 40 (+1 unwind) | `JapanAwards::JapanAwards` | thiscall(JapanAwards* this, FILE* file) ret 4, returns this | Builds the Japan awards object, loads it from a save file when one is given, or creates its award objects. | high | opus |  |
+| 0x666720 | 275 (+8 unwind) | `JapanAwards::init_awards` | thiscall(JapanAwards* this, FILE* file) ret 4 | Allocates the eight-award table and builds four year awards and four team awards for the J1 and J2 Leagues. | high | opus |  |
+| 0x666ab0 | 95 | `JapanAwards::daily_update` | thiscall(JapanAwards* this, Date* date) ret 4 | On 20 December gives the J1 year awards and the J1 and J2 team awards, then checks for a month change. | high | opus |  |
+| 0x666bb0 | 12 | `JapanAwards::update_team_of_the_week` | thiscall(JapanAwards* this, TEAM_AWARD* award) ret 4 | Builds the team of the week when the award is the J1 or the J2 weekly team award. | high | opus |  |
