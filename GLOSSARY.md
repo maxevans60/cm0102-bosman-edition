@@ -180,6 +180,14 @@ _Avoid_: restructure, year patch
 The researched season rules of every league and competition, one row per season, each fact with its source.
 _Avoid_: fact sheet
 
+**Rules report**:
+A test file that lists the competitions a game holds at the start of each season (file, year, club count, rounds, substitutes), for a comparison with the rules table.
+_Avoid_: dump, season log
+
+**Season jump**:
+A test run that plays from season to season with no match engine, the original's quick results only, and writes the rules report.
+_Avoid_: fast forward, simulation run
+
 **Changing rules**:
 The option that lets the season rules change each July as a game moves through the years. It is set for each game.
 _Avoid_: evolving rules, dynamic seasons
