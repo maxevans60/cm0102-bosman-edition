@@ -4,7 +4,7 @@
 Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>] [--runs a,b]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -318,6 +318,9 @@ def without_intro_click(steps):
 # --ref-build <program>: one more run, with the options of the first run, plays another build (for example the
 # build of main). For a change with no option, such as the crash guards: its save must equal the first run's.
 REF_BUILD = None
+# --runs a,b (0.6.0): only these runs of the list play, for example "--runs normal,again --ref-build <program>" for
+# a change with no option on a busy machine. The first named run is the one the others must equal.
+ONLY_RUNS = None
 
 
 def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None):
@@ -327,6 +330,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     the game, Q152); a difference in any other part fails. allowed may also be a dict {run name: parts}: then
     only those runs may differ, each in its own parts. required: {run name: part}: that run's save must hold
     the part (0.6.0 slice 11: rules-on of a new game has the season part)."""
+    if ONLY_RUNS:
+        runs = [r for r in runs if r[0] in ONLY_RUNS]
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
 
@@ -525,7 +530,9 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
-    global REF_BUILD
+    global REF_BUILD, ONLY_RUNS
+    if "--runs" in argv[3:]:
+        ONLY_RUNS = argv[argv.index("--runs") + 1].split(",")
     if "--ref-build" in argv[3:]:
         REF_BUILD = os.path.abspath(argv[argv.index("--ref-build") + 1])
     mode = "classic"

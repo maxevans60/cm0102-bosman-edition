@@ -4,6 +4,7 @@
 Usage:
     python3 tests/smoke/update_team_sweep.py <cm0102_recomp> <game folder> <folder of databases> [--jobs n]
         [--timeout s] [--out table.md] [--seasons <Seasons folder> --seasons-tool <seasons_db_test>]
+        [--select-all [--start <year>]]
 
 <folder of databases> holds one folder per database (Max keeps them in test-fixtures/databases). Each run
 copies one whole folder into Databases of a new user folder, sets database = folder:<name> and plays the
@@ -15,6 +16,12 @@ With --seasons the databases are those of a download (0.6.0 slice 14): <Seasons 
 database zips (tools/release/make_season_zips.py). The run unpacks each one with the first pick of the game
 (seasons_db_prepare_in, through the test program seasons_db_test that ctest builds) into a new save folder, and
 sweeps those folders. <folder of databases> is then not used: give any existing folder.
+
+With --select-all (0.6.0) each run clicks Select All on Select League(s) and starts the game in the season of
+its database (RECOMP_START_SEASON, the year from docs/research/2026-10-16-season-database-table.md). Only the 21
+season databases of that table run. A message box of the game ends the run and names its text in the failure
+step. The table gives the reserve rows of blank staff that the new game used (staff_reserve.c). --start <year>
+starts every game in that year instead.
 """
 import concurrent.futures
 import os
@@ -33,7 +40,7 @@ AFTER = {"1-settings": "the setup screen", "2-setup": "Select League(s) or the n
          "5-holiday": "the end"}
 
 
-def check(program, game, base, name, timeout, extra=None):
+def check(program, game, base, name, timeout, extra=None, steps=None, env_extra=None):
     """Returns (passed, seconds, failure text)."""
     start = time.time()
     with tempfile.TemporaryDirectory(prefix="cm0102-sweep-") as work:
@@ -47,18 +54,28 @@ def check(program, game, base, name, timeout, extra=None):
         with open(os.path.join(user, "settings.txt"), "w") as f:
             f.write(f"display = classic\ndatabase = folder:{name}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
-                   RECOMP_USER_DIR=user, RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots)))
+                   RECOMP_USER_DIR=user,
+                   RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots, *([steps] if steps else []))),
+                   **(env_extra or {}))
         try:
-            r = subprocess.run([program, "--game", game], env=env, capture_output=True, text=True, timeout=timeout)
-        except subprocess.TimeoutExpired:
+            if env_extra and env_extra.get("RECOMP_SCREEN_LOG"):     # --select-all: stop at a box of the game
+                r = run_to_box(program, game, env, timeout)
+                RESERVE[name] = reserve_text(r.stderr)
+            else:
+                r = subprocess.run([program, "--game", game], env=env, capture_output=True, text=True,
+                                   timeout=timeout)
+        except subprocess.TimeoutExpired as e:
             done = [s for s in SHOTS if os.path.exists(os.path.join(shots, s + ".bmp"))]
             last = done[-1] if done else "none"
-            return False, time.time() - start, f"hang (no end after {timeout} s) after {last}: {AFTER.get(last, '?')}"
+            return False, time.time() - start, f"hang (no end after {timeout} s) after {last}: {AFTER.get(last, '?')}" \
+                + box_text(e.stderr)
         took = time.time() - start
         done = [s for s in SHOTS if os.path.exists(os.path.join(shots, s + ".bmp"))]
         last = done[-1] if done else "none"
         if r.returncode != 0:
             line = next((ln for ln in r.stderr.splitlines() if "timed out" in ln), r.stderr[-120:].strip())
+            if r.returncode == 99:      # --select-all: a message box of the game ended the run
+                return False, took, f"box after {last}" + box_text(r.stderr)
             return False, took, f"code {r.returncode} after {last}: {line[:110]}"
         if "5-holiday" not in done:
             return False, took, f"no holiday picture, last {last}"
@@ -67,6 +84,99 @@ def check(program, game, base, name, timeout, extra=None):
         if moved <= 0.02:
             return False, took, "no days passed on holiday"
         return True, took, ""
+
+
+# --select-all (0.6.0): every league selected, the game in the season of its database.
+SELECT_ALL = "2000 click 592 155"           # Select League(s): Select All
+SEASON_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "docs", "research",
+                            "2026-10-16-season-database-table.md")
+
+
+RESERVE = {}                                # --select-all: database folder: reserve rows used (staff_reserve.c)
+
+
+def reserve_text(err):
+    """The reserve line of staff_reserve.c in the stderr of a run, shortened, or ''."""
+    line = next((ln for ln in (err or "").splitlines() if "extra non-playing staff:" in ln), "")
+    return line.split("staff: ", 1)[-1].replace(" reserve rows used", "") if line else ""
+
+
+def box_text(err):
+    """The text of the last message box of the game in the stderr of a run (RECOMP_SCREEN_LOG), or ''."""
+    if isinstance(err, bytes):
+        err = err.decode(errors="replace")
+    boxes = [ln.split(": ", 2)[-1] for ln in (err or "").splitlines() if "recomp: message box from" in ln]
+    return f"; box: {boxes[-1][:80]}" if boxes else ""
+
+
+def run_to_box(program, game, env, timeout):
+    """subprocess.run, but a message box of the game (it waits for a click for ever) ends the run at once with
+    code 99. The box text is in the stderr of the result."""
+    import threading
+    p = subprocess.Popen([program, "--game", game], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                         text=True, errors="replace")
+    lines, boxed = [], threading.Event()
+
+    def read():
+        for ln in p.stderr:
+            lines.append(ln)
+            if "recomp: message box from" in ln:
+                boxed.set()
+                p.kill()
+    t = threading.Thread(target=read, daemon=True)
+    t.start()
+    try:
+        p.wait(timeout)
+    except subprocess.TimeoutExpired:
+        p.kill()
+        t.join(5)
+        raise subprocess.TimeoutExpired(program, timeout, stderr="".join(lines))
+    t.join(5)
+    return subprocess.CompletedProcess(program, 99 if boxed.is_set() else p.returncode, "", "".join(lines))
+
+
+def season_databases():
+    """{database folder: start year} of the 21 season databases of the season database table."""
+    out = {}
+    for line in open(SEASON_TABLE):
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 2 and cells[0][:4].isdigit() and "/" in cells[0] and cells[1] not in ("none", "") \
+                and not cells[1].startswith("3.9."):
+            out[cells[1]] = int(cells[0][:4])
+    return out
+
+
+def season_folders(names):
+    """{folder: (neutral name, start year)} of the folders that hold a season database. A source folder can
+    have more words after the neutral name of the table (for example "October 2003 ..."): the tables and the
+    log print the neutral name only."""
+    out = {}
+    for key, year in season_databases().items():
+        folder = next((n for n in names if n == key), None) or next((n for n in names if n.startswith(key + " ")), None)
+        if folder:
+            out[folder] = (key, year)
+    return out
+
+
+def select_all_steps():
+    """The steps of smoke_run.py with Select All. With more than one league the game asks for the start season
+    (screen 0x81e8d0: Next keeps the first nation) and the Select Team screen has a Nation box above the
+    list, so the team is one row lower. A game with every league takes many minutes to make."""
+    out = []
+    for s in smoke_run.STEPS:
+        if s.startswith("2500 click 705 572") and not any(x == SELECT_ALL for x in out):
+            out += [SELECT_ALL, "4000 click 705 572", "wait screen:0x81e8d0 600000", "2500 click 705 572"]
+            continue
+        if s in ("wait typing", "wait first-news"):
+            s += " 1800000"
+        if s == "wait screen:0x454900":
+            s += " 600000"
+        if s.startswith("1000 click 155 163"):
+            s = "2000 click 155 188"
+        if s.endswith("quit"):
+            s = "60000 quit"
+        out.append(s)
+    return out
 
 
 def clean_euro(game):
@@ -117,19 +227,36 @@ def sweep(argv, program, game, base):
     timeout = int(argv[argv.index("--timeout") + 1]) if "--timeout" in argv else 420
     out = argv[argv.index("--out") + 1] if "--out" in argv else None
     names = sorted(n for n in os.listdir(base) if os.path.isdir(os.path.join(base, n)) and n != "zips")
+    years = season_folders(names) if "--select-all" in argv else None
+    if years:
+        names = sorted(years, key=lambda n: years[n][1])
+        if "--start" in argv:      # every game in this start year in place of the season of its database
+            start = int(argv[argv.index("--start") + 1])
+            years = {n: (key, start) for n, (key, _) in years.items()}
     work = [(n, None) for n in names]
-    if "May 2026" in names:
+    if "May 2026" in names and not years:
         work.append(("May 2026", clean_euro(game)))      # the guard case: euro.cfg that does not match
-    rows = []
+    rows, select_rows = [], []
     with concurrent.futures.ThreadPoolExecutor(jobs) as pool:
-        futs = [(n, ex, pool.submit(check, program, game, base, n, timeout, ex)) for n, ex in work]
+        if years:      # --select-all
+            futs = [(n, ex, pool.submit(check, program, game, base, n, timeout, ex, select_all_steps(),
+                                        {"RECOMP_START_SEASON": str(years[n][1]), "RECOMP_SCREEN_LOG": "1"}))
+                    for n, ex in work]
+        else:
+            futs = [(n, ex, pool.submit(check, program, game, base, n, timeout, ex)) for n, ex in work]
         for n, ex, fut in futs:
             ok, took, why = fut.result()
-            label = n + (" + clean euro.cfg" if ex else "")
+            label = (years[n][0] if years else n) + (" + clean euro.cfg" if ex else "")
             rows.append((label, ok, took, why))
+            if years:
+                select_rows.append((years[n][0], years[n][1], ok, took, RESERVE.get(n, ""), why))
             print(f"{'ok  ' if ok else 'FAIL'} {label}: {took:.0f} s {why}", flush=True)
     table = ["| Folder | Result | Seconds | Failure step |", "|---|---|---|---|"]
     table += [f"| {n} | {'pass' if ok else 'FAIL'} | {took:.0f} | {why} |" for n, ok, took, why in rows]
+    if years:      # --select-all: the start year and the reserve rows that the new game used
+        table = ["| Database | Start | Result | Seconds | Reserve rows used | Failure step |", "|---|---|---|---|---|---|"]
+        table += [f"| {n} | {y} | {'pass' if ok else 'FAIL'} | {took:.0f} | {res} | {why} |"
+                  for n, y, ok, took, res, why in select_rows]
     if out:
         with open(out, "w") as f:
             f.write("\n".join(table) + "\n")
