@@ -83,6 +83,22 @@ Research: the mockup `docs/research/mockups/2026-10-15-season-picker.html` (the 
 - Player-facing text: plain words, British English, no exclamation marks. Screenshots in classic and widescreen (HD mode is removed, Q267).
 - Test seam: a smoke run that opens the screen, picks a tile, starts the game and checks the first news date and the database loaded; one run per era; the same-save checks (a base game started through the screen with `changing_rules` off equals the 0.5.0 new game).
 
+### Slice 15, club moves and names (Opus), after slice 12
+Research: the rules table parts and `<part>-clubs.tsv` (club moves per season), `eng-academy.tsv`, the slice docs `docs/research/2026-10-16-seasons-slice-0[4-8]-*.md`, spec Q225, Q226, Q237, Q238, Q244, Q272, Q279, Q280, Q284, Q285, Q289, Q290, Q331, Q335, Q337.
+1. **Club moves at a new game (Q225, Q237):** for the start season, put every club of a resized or new division into its real division of that season, in memory, from the clubs files. Missing clubs come from that nation's clubs with no division, then lower and spare divisions (Q244, Q279, Q290). A real club that the database lacks becomes a new club record (Q335, as for reserve teams Q289); list every such case. The database files stay unchanged.
+2. **Names (Q226, Q238):** competitions get their name of the start season (the `name` column of the rules table) in memory when a game starts. Keep the names in one table that slice 16 can apply again each July.
+3. This slice changes no division sizes in the code (slice 18) and no July step (slice 16). Where a club move needs a size the code cannot hold yet, list it for slice 18.
+4. Test seam: the rules report (`tests/seasons/rules_report_check.py`, per-slice run `--year X --last X+1`) for the clubs per division and names of every season start that the report can reach. Select All is blocked in some databases by the Database.cpp 1844 stop (another agent fixes it): use the nation groups that load (slice 12 doc) and say which seasons and nations you covered. The same-save checks of this brief (Q342), and `RECOMP_SEASON_CODE=off` turns the slice off.
+
+### Slice 16, season change and news (Opus), after slice 12
+Research: `2026-10-16-sweep-season-end.md` (the update pass 0x5d5ae0, the per-entry update days, `start_new_season`), spec Q232, Q245, Q247, Q248, Q258.
+1. **The July step:** with `changing_rules` on, at each league table entry's season change apply the rules of the new season. Build it as a small registry: each later slice (17 to 29) adds its rule kinds to it, and this slice brings the first kinds: competition names (slice 15's names table) and the rules the table holds that the code already reads at `set_up_rules` (substitutes, bench) if that is simple. With `changing_rules` off, nothing changes after the start (Q232).
+2. **After 2025/26 (Q248):** the table rows up to 2027/28 apply; after the last row the rules stay.
+3. **News (Q258):** one news item at the start of each season in which the rules change, listing the changes in plain words (for example "The First Division is now the Championship."). Use the game's own news item code (`NewsItem::NewsItem` 0x77bbe0, read its callers first) so it shows like any other news.
+4. Test seam: the rules report across each era boundary (2002/03 to 2003/04, 2008/09 to 2009/10, 2020/21 to 2021/22, 2023/24 to 2024/25) shows the next season's names and the kinds this slice applies; a check that the news item lists the changes of that July; `changing_rules` off gives no change and no news; the same-save checks (Q342) and repeatability.
+
+Slices 15 and 16 run at the same time. Both may touch the names table: slice 15 owns it (a new file such as `season_names.c` with a lookup by competition and season), slice 16 calls it. Agree through this brief: the lookup is `const char *season_names_get(const char *comp_file, int season)`, NULL when the name does not change.
+
 ## Files that two slices share
 - `options.c`, `options.h`, the `ctest` options cases: slices 11 and 13. Keep each change in its own small block.
 - `SAME_SAVE_RUNS` and `MATCH_RUNS` in `smoke_run.py`: slices 11 and 13.
