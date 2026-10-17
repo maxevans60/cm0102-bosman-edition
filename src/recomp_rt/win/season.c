@@ -46,8 +46,24 @@ static int game_on;                             /* 1 from a made or loaded game 
 #define NAME_SIZE 260u
 #define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999 (0x932a3e) */
 
+/* The test switch RECOMP_SEASON_CODE=off (Q342): the season code does nothing. The start year stays 2001, so
+ * every year site of tools/recomp/seasons.py gives the original's result; the runtime reads and writes no
+ * season part, takes no year from RECOMP_START_SEASON or the Choose Season screen, and changing rules stay
+ * off. A base game with the switch must give the same save as the same game without it. */
+int season_code_on(void)
+{
+    static int on = -1;
+    if (on < 0) {
+        const char *v = getenv("RECOMP_SEASON_CODE");
+        on = !(v && !strcmp(v, "off"));
+        if (!on) fprintf(stderr, "recomp: season code off (RECOMP_SEASON_CODE=off)\n");
+    }
+    return on;
+}
+
 void season_init(void)
 {
+    if (!season_code_on()) return;
     const char *v = getenv("RECOMP_START_SEASON");     /* test only, until the Choose Season screen */
     if (!v || !*v) return;
     int y = atoi(v);
@@ -66,7 +82,7 @@ int season_changing_rules(void) { return rules_now; }
 
 int season_set_new_game(int start_year, int changing_rules)
 {
-    if (start_year < SEASON_FIRST_YEAR || start_year > SEASON_LAST_YEAR) return 0;
+    if (!season_code_on() || start_year < SEASON_FIRST_YEAR || start_year > SEASON_LAST_YEAR) return 0;
     new_year = start_year;
     new_rules = changing_rules < 0 ? -1 : !!changing_rules;
     if (game_on) return 1;          /* a game runs: the values apply at its end, to the next new game */
@@ -245,6 +261,14 @@ done:
     return result;
 }
 
+/* The start year of a save file for the Choose Season screen (slice 13): only reads the file. */
+int season_of_save(const char *host, int *year)
+{
+    int rules = 0;
+    *year = SEASON_FIRST_YEAR;
+    return read_part(host, year, &rules);
+}
+
 void o_0082e430(void);
 
 /* The save of a game, cdecl (path, flags): 1 when the file is written. The file at path is whole when it
@@ -252,6 +276,10 @@ void o_0082e430(void);
  * (0x82e5cb, 0x82f684). The test saves of testrun.c and the Auto Save (0x7617d8) come here too. */
 RT_WRAP(0082e430, save_game)
 {
+    if (!season_code_on()) {
+        o_0082e430();
+        return;
+    }
     char path[1024];
     snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
     o_0082e430();
@@ -275,6 +303,11 @@ void o_0082a9c0(void);
  * before any code of the load runs: the load builds the league table from the game year (0x82b845). */
 RT_WRAP(0082a9c0, load_game)
 {
+    if (!season_code_on()) {
+        o_0082a9c0();
+        if (!rt_unwinding && cpu.eax) game_on = 1;
+        return;
+    }
     char host[2048], path[1024];
     int year = SEASON_FIRST_YEAR, rules = 0;
     snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
@@ -311,7 +344,7 @@ void o_00828110(void);
 RT_WRAP(00828110, create_game)
 {
     rt_season_year = (uint32_t)new_year;
-    rules_now = new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
+    rules_now = !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
     o_00828110();
     if (!rt_unwinding && cpu.eax) game_on = 1;
 }

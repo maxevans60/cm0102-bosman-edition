@@ -51,17 +51,16 @@ typedef struct {
 extern const SeasonKnownDb seasons_known_dbs[];     /* seasons_table.c */
 extern const int seasons_known_count;               /* 49 */
 
-/* The five eras (Q166, Q240, Q261): the colours and the headings belong to the screen. */
+/* The three decades of the Choose Season screen (layout C, Q346): a season belongs to the decade of the year
+ * it starts in. The names and the colours belong to the screen; the names are in one table (seasons_db.c). */
 typedef enum {
-    SEASONS_ERA_ORIGINAL,           /* 2001/02 to 2002/03 */
-    SEASONS_ERA_2000S,              /* 2003/04 to 2008/09 */
-    SEASONS_ERA_2010S,              /* 2009/10 to 2019/20 */
-    SEASONS_ERA_EARLY_2020S,        /* 2020/21 to 2023/24 */
-    SEASONS_ERA_LEAGUE_PHASE        /* 2024/25 on */
-} SeasonsEra;
+    SEASONS_DECADE_2000S,           /* 2001/02 to 2009/10 */
+    SEASONS_DECADE_2010S,           /* 2010/11 to 2019/20 */
+    SEASONS_DECADE_2020S            /* 2020/21 on */
+} SeasonsDecade;
 
-SeasonsEra seasons_db_era(int start_year);
-const char *seasons_db_era_name(SeasonsEra era);    /* "Original", "2000s", "2010s", "Early 2020s", "League phase" */
+SeasonsDecade seasons_db_decade(int start_year);
+const char *seasons_db_decade_name(SeasonsDecade decade);    /* "2000s", "2010s", "2020s" */
 
 /* The status of a season's tile. */
 typedef enum {
@@ -82,7 +81,7 @@ typedef struct {
 typedef struct {
     int start_year;                 /* 2001 to 2025 */
     char label[16];                 /* "2003/04" */
-    SeasonsEra era;
+    SeasonsDecade decade;
     const char *database;           /* the name of the season's database: "October 2003", "3.9.68" for the
                                        two official seasons, NULL when no database exists */
     SeasonsStatus status;
