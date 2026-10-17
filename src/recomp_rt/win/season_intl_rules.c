@@ -114,3 +114,20 @@ uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags)
     }
     return golden ? flags : flags & ~GOLDEN_GOAL;
 }
+
+/* The first World Cup at which the holder had to qualify (int-world: "2002 is the last World Cup with an
+ * automatic place for the holders"). */
+#define FIRST_WC_WITHOUT_HOLDER 2006
+
+/* The World Cup holder that a qualifying section leaves out of its pool. In a season game every section plays
+ * for the 2006 World Cup or later, or for 2002 without the holder in its pool (season_intl.h, seasons.py). */
+uint32_t rt_intl_wc_holder(uint32_t holder)
+{
+    return season_intl_on() ? 0u : holder;
+}
+
+/* Slot 0 of the World Cup teams: the holder, to 2002. */
+uint32_t rt_intl_wc_holder_slot(uint32_t year)
+{
+    return !season_intl_on() || (int)(int16_t)(year & 0xffffu) < FIRST_WC_WITHOUT_HOLDER;
+}

@@ -301,6 +301,17 @@ extern uint32_t rt_season_year;
 uint32_t rt_season_text_mod(uint32_t original);
 uint32_t rt_season_text_format(uint32_t original);
 
+/* International competitions (0.6.0 slice 27, win/season_intl.h): the edition year of a finals class at its
+ * constructor and its start_new_season, the golden goal bit of a knockout round, and the World Cup holder of the
+ * qualifying sections and of slot 0. The sites of tools/recomp/seasons.py call them. Each gives the original's
+ * value in the base game. */
+uint32_t rt_intl_first_year(uint32_t cls, uint32_t year);
+uint32_t rt_intl_next_year(uint32_t cls, uint32_t year, uint32_t step);
+uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags);
+uint32_t rt_intl_wc_holder(uint32_t holder);
+uint32_t rt_intl_wc_holder_slot(uint32_t year);
+uint32_t rt_intl_oceania_left_out(uint32_t id);
+
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets
  * it for the load that runs (the first sizing site) and returns it. */

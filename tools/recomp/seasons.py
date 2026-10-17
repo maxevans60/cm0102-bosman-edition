@@ -92,6 +92,23 @@ PATCHES = {
     0x6696E6: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
     0x669869: (10, "rt_season_text_mod(10u)"),              # key_nation_format_comp_season 0x6697c0
     0x669876: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
+
+    # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). The golden goal is bit
+    # 0x80 of the rule flags of a knockout round (sweep-international section 7). The round template function
+    # of each class holds the competition in edi (set at 0x92c299, 0x57ab99, 0x58b56f) and the round records in
+    # esi. rt_intl_round_flags (win/season_intl_rules.c) clears the bit for an edition without golden goal; the
+    # base game keeps the flags. The first argument is the class (season_intl.h): 0 World Cup, 1 European
+    # Championship, 2 Confederations Cup.
+    0x92C96B: (0x383, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x383u)"),    # World Cup last 16
+    0x92CA46: (0x383, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x383u)"),    # quarter-final
+    0x92CB15: (0x383, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x383u)"),    # semi-final
+    0x92CBB9: (0x83, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x83u)"),      # third place
+    0x57B002: (0x383, "rt_intl_round_flags(1u, R16(edi + 0x40u), 0x383u)"),    # Euro quarter-final
+    0x57B0B2: (0x383, "rt_intl_round_flags(1u, R16(edi + 0x40u), 0x383u)"),    # semi-final
+    0x57B150: (0x283, "rt_intl_round_flags(1u, R16(edi + 0x40u), 0x283u)"),    # final
+    0x58B892: (0x383, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x383u)"),    # Confederations Cup semi-final
+    0x58B90B: (0x83, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x83u)"),      # third place
+    0x58B9A5: (0x83, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x83u)"),      # final
 }
 
 # address: (the instruction in the original, C code)
@@ -102,4 +119,50 @@ INSNS = {
     # data would go into a later campaign, and its asserts (0x91dbc4, 0x9223ab) want dates in 2000 and 2001.
     0x918473: ("jl 0x91847c", "if (cc_l(F) || rt_season_year != 2001u) goto L_91847c;"),
     0x9204B8: ("jl 0x9204c1", "if (cc_l(F) || rt_season_year != 2001u) goto L_9204c1;"),
+
+    # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). Each class keeps its
+    # edition year in the word +0x40 of the object (this in esi). The constructor rounds the game year up to the
+    # class's cycle; the first instruction after that loop also gets the year of rt_intl_first_year (the first
+    # edition of the table from the start season, win/season_intl_rules.c). start_new_season adds the step;
+    # rt_intl_next_year gives the next edition of the table. The base game keeps the original's values. The
+    # first argument is the class (season_intl.h): 0 World Cup, 1 European Championship, 2 Confederations Cup,
+    # 3 Copa America, 4 African Cup of Nations, 5 Asian Cup, 6 Oceania Nations Cup, 7 Olympics. No instruction
+    # after a step reads its flags before another instruction sets them.
+    0x92BFEE: ("push 6", "W16(esi + 0x40u, rt_intl_first_year(0u, R16(esi + 0x40u))); esp -= 4; W32(esp, 6u);"),  # world_cup ctor 0x92bf50
+    0x57A92B: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(1u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # euro_champ ctor 0x57a890
+    0x58B392: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(2u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # fifa_confed ctor 0x58b310
+    0x5E06FB: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(3u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # copa_america ctor 0x5e0660
+    0x401097: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(4u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # african_nations ctor 0x401000
+    0x40E8F5: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(5u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # asia_nations ctor 0x40e860
+    0x798952: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(6u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # oceania_nations ctor 0x7988b0
+    0x79F5C5: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(7u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # olympics ctor 0x79f530
+    0x92D409: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(0u, R16(esi + 0x40u), 4u));"),  # world_cup::start_new_season 0x92d330
+    0x57B7CA: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(1u, R16(esi + 0x40u), 4u));"),  # euro_champ 0x57b750
+    0x58C050: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(2u, R16(esi + 0x40u), 2u));"),  # fifa_confed 0x58bff0
+    0x5E1590: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(3u, R16(esi + 0x40u), 2u));"),  # copa_america 0x5e1530
+    0x401D80: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(4u, R16(esi + 0x40u), 2u));"),  # african_nations 0x401d20
+    0x40F780: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(5u, R16(esi + 0x40u), 4u));"),  # asia_nations 0x40f720
+    0x799940: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(6u, R16(esi + 0x40u), 2u));"),  # oceania_nations 0x7998e0
+    0x7A04B0: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(7u, R16(esi + 0x40u), 4u));"),  # olympics 0x7a0450
+
+    # The World Cup holder (0.6.0 slice 27): from the 2006 World Cup the holder qualifies like the others
+    # (int-world). Each qualifying section asks for the holder (comp_util_get_latest_placed_club 0x4afd80, place
+    # 0 of the World Cup history) and leaves it out of its pool; rt_intl_wc_holder gives no holder in a season
+    # game, at the instruction after each call. The sections of a 2001 game play the 2004 campaign (Europe,
+    # South America, Asia) or the 2000 campaign, whose holder France is in none of their pools.
+    0x919F47: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_europe_league
+    0x920E38: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_south_american_league
+    0x920F18: ("mov dword ptr [esp + 0x20], eax", "eax = rt_intl_wc_holder(eax); W32(esp + 0x20u, eax);"),  # wc_south_american_league, its pool
+    0x9107A6: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_african_cup
+    0x914077: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_asia_league
+    0x916394: ("mov edx, eax", "eax = rt_intl_wc_holder(eax); edx = eax;"),  # wc_concacaf_cup
+    0x91FB98: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_oceania_league
+    # world_cup build_team_slots 0x92da40 puts the holder in slot 0 (0x92da86) and counts it (0x92da89). From
+    # 2006 the slot is not counted, so the first host takes slot 0; slots 1 and 2 are cleared, because the
+    # checks at 0x92db02 and 0x92db57 compare slot 0 with them.
+    0x92DA89: ("inc word ptr [esi + 0x36]", "if (rt_intl_wc_holder_slot(R16(esi + 0x40u))) W16(esi + 0x36u, R16(esi + 0x36u) + 1u); else { W32(R32(esi + 0x14u) + 6u, 0u); W32(R32(esi + 0x14u) + 0xcu, 0u); }"),
+    # The World Cup Oceania section (wc_oceania_league, pool at 0x91fc66..0x91fcde) takes exactly 10 entrants
+    # (0x91fbda) and leaves out New Caledonia (key nation 0x9cf530) and Papua New Guinea (0x9cf41c). With
+    # Australia in Asia (win/season_intl.c) New Caledonia comes in, so the count of 10 stays.
+    0x91FC89: ("mov ecx, dword ptr [0x9cf530]", "ecx = rt_intl_oceania_left_out(R32(0x9cf530u));"),
 }

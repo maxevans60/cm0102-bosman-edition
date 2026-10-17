@@ -39,6 +39,8 @@ int main(void)
     CHECK(rt_intl_first_year(INTL_COPA, 2001) == 2001, "base game: Copa America year");
     CHECK(rt_intl_next_year(INTL_CONFED, 2017, 2) == 2019, "base game: Confederations Cup step");
     CHECK(rt_intl_round_flags(INTL_EURO, 2008, 0x383) == 0x383, "base game: golden goal stays");
+    CHECK(rt_intl_wc_holder(0x1234) == 0x1234, "base game: the holder is exempt");
+    CHECK(rt_intl_wc_holder_slot(2006), "base game: the holder has slot 0");
     game(0, 2010, 1);
     CHECK(!season_intl_on(), "season code off");
     CHECK(rt_intl_first_year(INTL_ACN, 2012) == 2012, "season code off: ACN year");
@@ -65,6 +67,10 @@ int main(void)
     CHECK(rt_intl_round_flags(INTL_EURO, 2004, 0x383) == 0x303, "2001 on: no golden goal at Euro 2004 (Q367)");
     CHECK(rt_intl_round_flags(INTL_CONFED, 2005, 0x83) == 0x3, "2001 on: no golden goal in 2005");
     CHECK(rt_intl_round_flags(INTL_WORLD_CUP, 2002, 0x3) == 0x3, "2001 on: a round without golden goal");
+
+    CHECK(rt_intl_wc_holder(0x1234) == 0, "2001 on: no holder exemption in the sections");
+    CHECK(rt_intl_wc_holder_slot(2002), "2001 on: the holder has slot 0 in 2002");
+    CHECK(!rt_intl_wc_holder_slot(2006), "2001 on: no holder slot in 2006");
 
     /* A later start: the first edition from the start season. */
     game(1, 2005, 0);

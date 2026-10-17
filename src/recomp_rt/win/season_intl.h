@@ -42,6 +42,14 @@ const SeasonIntlEdition *season_intl_next(const char *file, int year);
 uint32_t rt_intl_first_year(uint32_t cls, uint32_t year);              /* ctor: year after the original's rule */
 uint32_t rt_intl_next_year(uint32_t cls, uint32_t year, uint32_t step); /* start_new_season: year + step */
 uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags); /* golden goal bit 0x80 */
+uint32_t rt_intl_wc_holder(uint32_t holder);       /* a qualifying section's holder: 0 in a season game */
+uint32_t rt_intl_wc_holder_slot(uint32_t year);    /* 1 when the World Cup of the year gives the holder a slot */
+
+/* A new game (season.c, before the original makes it): the start of Australia's move to Asia. */
+void season_intl_at_create(void);
+
+/* The Oceania section's left-out nation at 0x91fc89 (New Caledonia): none with Australia in Asia. */
+uint32_t rt_intl_oceania_left_out(uint32_t id);
 
 /* The classes of the code sites (cls of the calls above). */
 enum {

@@ -8,7 +8,7 @@ Usage:
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
         [--extra conference,regional,c2]
-        [--keep <folder>] [--timeout s] [--update-expected]
+        [--keep <folder>] [--timeout s] [--changing-rules on|off] [--update-expected]
         plays the season jump, then compares its report
 
 Runs:
@@ -409,11 +409,18 @@ def main(argv):
         extra = [x for x in arg(argv, "--extra", "").split(",") if x]
         keep = os.path.abspath(arg(argv, "--keep")) if "--keep" in argv else None
         timeout = int(arg(argv, "--timeout", 7200))
-        code, report = run(program, game, last, year, database, nations, extra, keep, timeout)
+        # --changing-rules on|off (0.6.0 slice 27): the run plays with changing_rules on, and its expected file
+        # name ends in "-changing". Off is the default.
+        rules = arg(argv, "--changing-rules", "off")
+        if rules not in ("on", "off"):
+            print("--changing-rules takes on or off")
+            return 2
+        code, report = run(program, game, last, year, database, nations, extra, keep, timeout,
+                           {"changing_rules": rules})
         failed = [] if code == 0 else [f"the run ended with code {code}"]
         name = f"{year or 2001}-{nations[0].lower()}" + "".join(
             f"{'-no' if nations[0] == 'all' else '-'}{n.lower().replace(' ', '_')}" for n in nations[1:]) + \
-            "".join(f"-{e}" for e in extra)
+            "".join(f"-{e}" for e in extra) + ("-changing" if rules == "on" else "")
         if os.path.exists(report):
             failed += check(report, game if not database else None, last, name, update)
         else:
