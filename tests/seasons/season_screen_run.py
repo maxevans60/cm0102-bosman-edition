@@ -20,6 +20,11 @@ with the steps of tests/smoke/smoke_run.py and saves 1 day after the first news 
 screen is in July of the season, settings.txt has database and season of the tile, a zipped database is
 unpacked into Databases (the log of seasons_db_prepare), and the save has the season part with the year.
 
+    custom      two Custom database folders in Databases (copies of the clean Data and of the April 2022 database of
+                <folder of source zips>/.., each with one byte added to staff.dat, so neither is a known
+                database): the Custom tile, Next folder (the second folder), the season arrow three times (2022/23),
+                Choose and a new game. Checks: settings.txt has database = folder:B Custom and season = 2022/23,
+                and the first news screen is in July 2022.
     base        the 2001/02 tile through the screen with changing_rules = off, saved 14 days after the first
                 news screen: the save has no season part. With --ref-build the run "ref" plays the plain new game
                 of smoke_run.py --same-save with that build (no screen), and the two saves must be the same
@@ -29,6 +34,7 @@ unpacked into Databases (the log of seasons_db_prepare), and the save has the se
 import concurrent.futures
 import os
 import re
+import shutil
 import shutil
 import subprocess
 import sys
@@ -47,9 +53,13 @@ MAKE = os.path.join(ROOT, "tools", "release", "make_season_zips.py")
 # Classic positions (800 x 600). Setup Game: the Choose Season item, the cell after Web Sites. The screen:
 # the tiles (season_screen.c layout) and the Choose button of the strip.
 SETUP_SEASON = "click 613 437"
-TILE = {2001: (140, 113), 2002: (227, 113), 2003: (140, 175), 2010: (227, 238), 2021: (227, 341),
-        2025: (227, 403)}
-CHOOSE = "click 706 445"
+TILE = {2001: (140, 119), 2002: (226, 119), 2003: (316, 119), 2010: (226, 190), 2021: (488, 261),
+        2025: (226, 332)}
+CHOOSE = "click 675 573"                    # Start <season>, the yellow button
+CUSTOM_TILE = "click 358 332"
+NEXT_FOLDER = "click 500 447"
+EARLIER = "click 323 447"
+CUSTOM_FOLDERS = ("A Custom", "B Custom")
 # year: (database value, zip to make or None)
 RUNS = {2002: ("3.9.68", None), 2003: ("folder:October 2003", "October 2003"),
         2010: ("folder:September 2010 ODB", "September 2010 ODB"), 2021: ("folder:October 2021", "October 2021"),
@@ -69,6 +79,40 @@ def game_steps(year, shots):
     base = core.new_game_steps()
     i = base.index("wait setup") + 1
     return base[:i] + screen_steps(year, shots) + base[i:]
+
+
+def custom_steps():
+    base = core.new_game_steps()
+    i = base.index("wait setup") + 1
+    screen = [f"2000 {SETUP_SEASON}", "wait seasons", f"2000 {CUSTOM_TILE}", f"3500 {NEXT_FOLDER}",
+              f"5000 {EARLIER}", f"6500 {EARLIER}", f"8000 {EARLIER}", f"9500 {CHOOSE}", "wait setup"]
+    return base[:i] + screen + base[i:]
+
+
+def play_custom(program, game, work, zips):
+    """The custom run: its user folder gets the two Custom folders first, then core.play's settings."""
+    run = os.path.join(work, "custom")
+    user, home, shots = (os.path.join(run, d) for d in ("user", "home", "shots"))
+    sources = (os.path.join(game, "Data"), os.path.join(os.path.dirname(zips), "April 2022"))
+    for name, src in zip(CUSTOM_FOLDERS, sources):
+        dest = os.path.join(user, "Databases", name)
+        os.makedirs(dest)
+        for n in os.listdir(src):
+            if n.lower().endswith(".dat"):
+                shutil.copyfile(os.path.join(src, n), os.path.join(dest, n.lower()))
+        with open(os.path.join(dest, "staff.dat"), "ab") as f:
+            f.write(b"\0")
+    for d in (home, shots):
+        os.makedirs(d)
+    with open(os.path.join(user, "settings.txt"), "w") as f:
+        f.write("display = classic\n")
+    env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
+               RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS="1", RECOMP_SCREEN_LOG="1",
+               RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots, custom_steps())))
+    start = time.time()
+    r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True, timeout=900)
+    path = os.path.join(user, smoke_run.SAVE_NAME)
+    return (path if r.returncode == 0 and os.path.exists(path) else None), r.stderr, time.time() - start
 
 
 def make_game(game, zips, work):
@@ -124,12 +168,15 @@ def main(argv):
                 if only in (None, str(year)):
                     jobs[str(year)] = pool.submit(core.play, program, folder, work, str(year), {},
                                                   game_steps(year, shots), 1)
+            if only in (None, "custom"):
+                jobs["custom"] = pool.submit(play_custom, program, folder, work, zips)
             if only in (None, "base"):
                 jobs["base"] = pool.submit(core.play, program, folder, work, "base", {"changing_rules": "off"},
                                            game_steps(2001, shots), 14)
-                if ref:
-                    jobs["ref"] = pool.submit(core.play, ref, folder, work, "ref", {"changing_rules": "off"},
-                                              core.new_game_steps(), 14, None, None, None, 900)
+                # Q342: the reference is the plain new game of the same build (or of --ref-build, the main build
+                # from slice 13 on): opening the screen and choosing 2001/02 must not change the game.
+                jobs["ref"] = pool.submit(core.play, ref or program, folder, work, "ref", {"changing_rules": "off"},
+                                          core.new_game_steps(), 14, None, None, None, 900)
             results = {k: v.result() for k, v in jobs.items()}
         for name, (path, log, took) in results.items():
             print(f"run   {name}: {'saved' if path else 'NO SAVE'} in {took:.0f} s", flush=True)
@@ -156,18 +203,29 @@ def main(argv):
                       f"{year}: Databases/{zipname} is there")
             part = core.read_part(path)
             check(part is not None and part[2] == year, f"{year}: the save has the season part with {year} ({part})")
+        if "custom" in results:
+            path, log, _ = results["custom"]
+            s = settings_of(os.path.join(work, "custom", "user", "settings.txt"))
+            check(s.get("database") == "folder:B Custom" and s.get("season") == "2022/23",
+                  f"custom: settings.txt has database = {s.get('database')}, season = {s.get('season')}")
+            news = core.first_news(log) if path else None
+            check(news is not None and news[1] == 2022 and core.month_of(news[0], 2022) == 7,
+                  f"custom: the first news screen is in July 2022 (date {news})")
+            part = core.read_part(path) if path else None
+            check(part is not None and part[2] == 2022, f"custom: the save has the season part with 2022 ({part})")
         if "base" in results:
             path, log, _ = results["base"]
             check(path is not None and core.read_part(path) is None, "base: the save has no season part")
             news = core.first_news(log) if path else None
             check(news is not None and news[1] == 2001, f"base: the first news screen is in 2001 ({news})")
-            if ref and "ref" in results and results["ref"][0] and path:
+            if "ref" in results and results["ref"][0] and path:
                 same = open(path, "rb").read() == open(results["ref"][0], "rb").read()
                 if not same:
                     a, b = smoke_run.save_parts(path), smoke_run.save_parts(results["ref"][0])
                     differ = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
                     print("      parts that differ: " + ", ".join(differ))
-                check(same, "base: the save through the screen equals the plain new game of the reference build")
+                check(same, "base: the save through the screen equals the plain new game (Q152; a difference "
+                            "means the screen moved memory)")
         if shots:
             for n in os.listdir(shots):
                 if n.endswith(".bmp"):

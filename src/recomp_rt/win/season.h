@@ -22,6 +22,9 @@
 #define SEASON_FIRST_YEAR 2001       /* the start year of the original, the base game */
 #define SEASON_LAST_YEAR 2099        /* the latest start year that the part and the test variable accept */
 
+/* 0 with the test switch RECOMP_SEASON_CODE=off (Q342): the season code does nothing (season.c). */
+int season_code_on(void);
+
 /* Reads the test variable RECOMP_START_SEASON. Call it once at start, before the game runs. */
 void season_init(void);
 
