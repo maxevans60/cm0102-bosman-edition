@@ -149,11 +149,11 @@ static const Layout layout_classic = {
 
 static const Layout layout_wide = {
     1280, 800, 160, 1264,
-    160, 100, 77, 134, 6, 28, 4, 20,
-    40, 30, 22, 14, 7,
-    {4, 3, 2}, {7, 6, 4}, {4, 3, 2}, {2, 1},
-    1, 1000, 100, 1264, 644, 18, 0, 30,
-    664, 34,
+    160, 98, 103, 92, 8, 26, 4, 10,
+    26, 30, 20, 8, 7,
+    {6, 4, 3}, {7, 6, 4}, {6, 5, 4}, {3, 2},
+    0, 160, 498, 1264, 698, 16, 210, 28,
+    704, 30,
     740, 47, 330,
 };
 
@@ -725,50 +725,52 @@ static void details_strip(const Details *d)
     int lx = x1 + p + 4, rx = lx + L->left_w + 20, ex = x2 - p, y = y1 + p;
     uint32_t bf = fit_font(L->title_fonts, 3, d->big, L->left_w);
     plabel(lx, y, lx + L->left_w, y + line_h(bf), 1, bf, yellow_rgb, d->big);
+    uint32_t tf = L->text_fonts[0], sf = L->name_fonts[1];    /* small texts; the decade line */
     int ly = y + line_h(bf) + 2;
-    plabel(lx, ly, lx + L->left_w, ly + line_h(2), 1, fit_font((uint8_t[]){2, 1}, 2, d->decade, L->left_w),
-           d->decade_rgb, d->decade);
-    ly += line_h(2) + 8;
-    plabel(lx, ly, lx + L->left_w, ly + line_h(1), 1, 1, pale_rgb, d->start);
+    uint32_t decf = fit_font((uint8_t[]){(uint8_t)sf, 2, 1}, 3, d->decade, L->left_w);
+    plabel(lx, ly, lx + L->left_w, ly + line_h(decf), 1, decf, d->decade_rgb, d->decade);
+    ly += line_h(decf) + 8;
+    plabel(lx, ly, lx + L->left_w, ly + line_h(tf), 1, fit_font(L->text_fonts, 2, d->start, L->left_w), pale_rgb,
+           d->start);
 
     int width = ex - rx;
     uint32_t df = fit_font(L->name_fonts, 3, d->db, width);
     plabel(rx, y, ex, y + line_h(df), 1, df, white_rgb, d->db);
     y += line_h(df);
-    y = paragraph(rx, y, width, 1, pale_rgb, d->credit, 2);
+    y = paragraph(rx, y, width, tf, pale_rgb, d->credit, 2);
     if (!d->custom) {
-        int ew = text_w(1, "Europe:") + 8;
-        plabel(rx, y + 2, rx + ew, y + 2 + line_h(1), 1, 1, pale_rgb, "Europe:");
-        y = paragraph(rx + ew, y + 2, width - ew, 1, white_rgb, d->europe, 2);
+        int ew = text_w(tf, "Europe:") + 8;
+        plabel(rx, y + 2, rx + ew, y + 2 + line_h(tf), 1, tf, pale_rgb, "Europe:");
+        y = paragraph(rx + ew, y + 2, width - ew, tf, white_rgb, d->europe, 2);
     }
     y += 6;
     int h = L->button_h;
     if (d->row_note) {
-        paragraph(rx, y, width, 1, d->row_rgb, d->row_note, 2);
+        paragraph(rx, y, width, tf, d->row_rgb, d->row_note, 2);
         return;
     }
     if (d->custom) {
         custom_choices(d, rx, y, ex);
         return;
     }
-    int vw = text_w(1, "Version:") + 8;
-    plabel(rx, y, rx + vw, y + h, 1, 1, pale_rgb, "Version:");
+    int vw = text_w(tf, "Version:") + 8;
+    plabel(rx, y, rx + vw, y + h, 1, tf, pale_rgb, "Version:");
     int x = rx + vw, per = d->nv, page = d->page;
     /* As many buttons as fit; with more, the last place pages on. */
     int widths[SEASONS_EXTRA_MAX + 1], total = 0;
     for (int i = 0; i < d->nv; i++) {
         char t[80];
         db_title(d->v[i].name, t, sizeof t);
-        widths[i] = text_w(1, t) + 18;
+        widths[i] = text_w(tf, t) + 18;
         total += widths[i] + 6;
     }
     if (x + total > ex) per = 2;
     if (page < 0 || page * per >= d->nv) page = 0;
     for (int i = page * per, k = 0; i < d->nv && k < per; i++, k++) {
-        version_button(d, i, x, y, x + widths[i], y + h, 1);
+        version_button(d, i, x, y, x + widths[i], y + h, tf);
         x += widths[i] + 6;
     }
-    if (per < d->nv) pbutton(x, y, x + text_w(1, "More versions") + 18, y + h, 1, "More versions", PAGE_ID, 0, 1);
+    if (per < d->nv) pbutton(x, y, x + text_w(tf, "More versions") + 18, y + h, tf, "More versions", PAGE_ID, 0, 1);
 }
 
 /* Widescreen: the panel on the right of the grid, with the versions stacked. */
