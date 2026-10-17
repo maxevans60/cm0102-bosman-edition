@@ -32,7 +32,12 @@ The shown name (shown_name): the research name with these changes, so that the s
       competition can wait for another edition than the row's (the "idle" kind of the rules report), so a year
       in a name could be wrong. "UEFA Euro 2012" gives "UEFA European Championship";
     - a name in quotes at the end goes: 'Primera División "Julio H. Grondona"' gives "Primera División";
-    - a name over 51 characters is cut after the last whole word that fits.
+    - two editions in one row ("2020-21 Finals; 2022-23 UEFA Nations League (start)") give the later one;
+    - a name over 50 characters (the limit of slice 16's season_change_rename) loses its part in brackets
+      first ("FIFA World Cup qualification (inter-confederation play-offs)" gives "FIFA World Cup
+      inter-confederation play-offs"), then it is cut after the last whole word that fits, never inside a
+      bracket.
+The stop rule also stops the tool on a long name over 50 or a short name over 26 characters.
 The short name is the shown name when it has 26 characters or fewer; else shorter words of SHORTER come in
 ("FIFA World Cup qualification (UEFA)" gives "WC qualifying (UEFA)"); else a known opening goes
 ("Campeonato Brasileiro Série A" gives "Série A", "League of Ireland Premier Division" gives "Premier
@@ -51,11 +56,12 @@ sys.path.insert(0, HERE)
 import make_rules  # noqa: E402
 
 FORMAT = 1
-LONG = 51
+LONG = 50           # slice 16 (season_change_rename) takes 50 characters; the record holds 52 bytes
 SHORT = 26
 KEEP_BRACKETS = re.compile(r"^(UEFA|CAF|AFC|CONCACAF|CONMEBOL|OFC)$|play-off", re.I)
 # Shorter words for a short name, tried in order until the name fits.
-SHORTER = [("FIFA World Cup qualification", "WC qualifying"),
+SHORTER = [("FIFA World Cup inter-confederation play-offs", "WC play-offs"),
+           ("FIFA World Cup qualification", "WC qualifying"),
            ("European Championship qualifying", "Euro qualifying"),
            ("Football at the Summer Olympics", "Olympic Games"),
            ("Supercoppa di Lega di ", "Supercoppa "), ("Supertaça Cândido de Oliveira", "Supertaça"),
@@ -68,6 +74,7 @@ OPENINGS = ["Campeonato Brasileiro ", "Campeonato Nacional de ", "Campeonato ", 
 
 
 def cut(text, n):
+    """The words that fit in n characters; an open bracket at the end goes with its words."""
     if len(text) <= n:
         return text
     words, out = text.split(" "), ""
@@ -75,6 +82,8 @@ def cut(text, n):
         if len(out) + len(w) + (1 if out else 0) > n:
             break
         out = f"{out} {w}" if out else w
+    if out.count("(") > out.count(")"):
+        out = out[:out.rindex("(")].rstrip()
     return out or text[:n]
 
 
@@ -83,6 +92,8 @@ def shown_name(name):
     t = (name or "").strip()
     if not t or t.lower() in ("n/a", "unknown", "none") or t.lower().startswith("unknown"):
         return None
+    if "; " in t:                                      # two editions in one row: the later one
+        t = t.split("; ")[-1]
     m = re.match(r"^(.*\S)\s*\(([^()]*)\)$", t)
     if m and not KEEP_BRACKETS.search(m.group(2)):
         t = m.group(1)
@@ -90,6 +101,10 @@ def shown_name(name):
     t = re.sub(r"\bEuro (19|20)\d\d\b", "European Championship", t)
     t = re.sub(r"\b(19|20)\d\d([/\u2013-]\d{2,4})?\b", "", t)
     t = re.sub(r"\s+", " ", t).strip(" ,-")
+    if len(t) > LONG:                                  # too long: first the part in brackets goes
+        t = re.sub(r"\s*\(([^()]*)\)$", lambda b: " " + b.group(1) if "play-off" in b.group(1) else "", t)
+        t = t.replace("FIFA World Cup qualification inter-confederation play-offs",
+                      "FIFA World Cup inter-confederation play-offs")
     return cut(t, LONG) if t else None
 
 
@@ -156,6 +171,9 @@ def main(argv):
             long.encode("cp1252")
         except UnicodeEncodeError:
             print(f"make_names.py: {season} {file} {n}: {long!r} has a character that Windows-1252 cannot hold")
+            return 1
+        if len(long) > LONG or len(short) > SHORT or long.count("(") != long.count(")"):
+            print(f"make_names.py: {season} {file} {n}: {long!r} / {short!r} is too long or has an open bracket")
             return 1
     if a.list:
         for season, file, n, long, short in out:

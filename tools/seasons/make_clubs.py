@@ -31,11 +31,12 @@ empty), or when no line of TARGETS matches it.
 Several lists with one target in a season (the groups of a real division that the database holds in one
 division) give one list. A club in two lists of a season keeps the first (in the order of the files and
 their lines), and --lists names the second.
-A row with no db_club_id is a real club that the season's database lacks (Q335): it is not in the output,
-and --missing lists it.
+A row with no db_club_id goes out with club_id -1 and the real name: the game looks for the club by the plain
+form of its name in the nation of the division, and if no club or more than one has it, the place is that of
+a missing club (Q359). --missing lists these rows (the runs log the clubs that stay missing).
 
-The stop rule: a club id that is not a number, or a name that Windows-1252 cannot hold, stops the tool with
-exit code 1.
+The stop rule: a club id that is not a number, or a name that Windows-1252 cannot hold or that is longer than
+51 characters, stops the tool with exit code 1.
 """
 import argparse
 import collections
@@ -52,6 +53,7 @@ sys.path.insert(0, HERE)
 import make_rules  # noqa: E402
 
 FORMAT = 1
+LIMIT = 51          # the longest name that the loader takes (season_clubs.c): the record holds 52 bytes
 COLUMNS = ["season", "division", "club", "db_club_id", "db_club", "db_division", "source"]
 NOT_DIVISION = re.compile(r"\bcup\b|guest|play-off|\bB team\b", re.I)
 
@@ -176,17 +178,8 @@ def read_lists():
     return [(p, s, d, rows) for (p, s, d), rows in lists.items()]
 
 
-# Lists of one season left out after a test run. 2009/10, French CFA 2 (French Lower Division): with both the
-# CFA and the CFA 2 lists of that season a start with France selected stopped at the box "Disk Space Error"
-# (FILE_LLIST::add_node 0x58e340, file_llist.cpp 161) before the competitions were made; with either list alone
-# it starts. The cause is unknown (docs/research/2026-10-17-club-moves-and-names.md, Open).
-SKIP_SEASON = {("fra", 2009, "CFA 2"): "a start with this list stopped at a Disk Space Error box (cause unknown)"}
-
-
 def target_of(part, season, label, rows, rule_rows):
     """(database division, None) or (None, the reason the list is left out)."""
-    if (part, season, label) in SKIP_SEASON:
-        return None, SKIP_SEASON[(part, season, label)]
     if NOT_DIVISION.search(label):
         return None, SKIP_CUP
     plain = re.sub(r" \((19|20)\d\d\)$", "", label)
@@ -222,17 +215,26 @@ def build():
             report.append((season, part, label, len(rows), len(have), "", "left out: " + why))
             continue
         twice = []
-        for r in have:
+        for r in rows:
+            if not r["db_club_id"].strip():
+                # No record id in the research: the game looks for the club by its name (plain form) in the
+                # nation of the division (season_clubs.c), else the place is a missing club.
+                out.append((season, target, -1, plain(r["club"]), plain(r["club"])))
+                continue
             key = (season, int(r["db_club_id"]))
             if key in placed:
                 twice.append(r["db_club"])
                 continue
             placed[key] = (part, label)
-            real = r["club"].strip().encode("cp1252", "replace").decode("cp1252")     # for logs only
-            out.append((season, target, int(r["db_club_id"]), r["db_club"].strip(), real))
+            out.append((season, target, int(r["db_club_id"]), r["db_club"].strip(), plain(r["club"])))
         note = f"{len(twice)} clubs already in another list: {', '.join(twice)}" if twice else ""
         report.append((season, part, label, len(rows), len(have), target, note))
     return out, report, missing
+
+
+def plain(text):
+    """A real club name for the game's text: Windows-1252, a character it lacks becomes "?", 51 characters."""
+    return text.strip().encode("cp1252", "replace").decode("cp1252")[:LIMIT]
 
 
 def game_bytes(text):
@@ -270,6 +272,9 @@ def main(argv):
                 game_bytes(text)
             except UnicodeEncodeError:
                 print(f"make_clubs.py: {r[0]} {text!r} has a character that Windows-1252 cannot hold")
+                return 1
+            if len(text) > LIMIT:
+                print(f"make_clubs.py: {r[0]} {text!r} is longer than {LIMIT} characters")
                 return 1
     if a.check:
         kept = sum(1 for r in report if r[5])

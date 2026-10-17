@@ -4,19 +4,19 @@
 2003	bench	ger_cup (DFB-Pokal), row ger-36: game 6, table 7 (7)
 2003	bench	ger_first (Bundesliga), row ger-27: game 6, table 7 (7)
 2003	bench	ger_second (2. Bundesliga), row ger-28: game 6, table 7 (7)
-2003	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all
-2003	club_list	Brazilian National First Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all
-2003	club_list	Brazilian National Second Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all
-2003	club_list	Brazilian National Third Division: 47 of 47 listed clubs that the database holds (47 listed), 9 other clubs, 56 in all
-2003	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all
-2003	club_list	Croatian Second Division North: 10 of 10 listed clubs that the database holds (10 listed), 6 other clubs, 16 in all
-2003	club_list	Croatian Second Division South: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all
-2003	club_list	Dutch First Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all
-2003	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all
-2003	club_list	French Lower Division: 0 of 68 listed clubs that the database holds (68 listed), 0 other clubs, 0 in all
-2003	club_list	Italian Serie B: 20 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 20 in all
-2003	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all
-2003	club_list	Northern Irish League Premier Division: 10 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 10 in all
+2003	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all; not in it: -; others: Almirante Brown de Arrecifes, Atlético Tucumán, Central Córdoba de Rosario, Independiente Rivadavia de Mendoza, Platense
+2003	club_list	Brazilian National First Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all; not in it: -; others: 4 de Julho Esporte Clube, Associação Garanhuense de Atletismo, Botafogo Futebol Clube (SP), Clube 15 de Novembro
+2003	club_list	Brazilian National Second Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all; not in it: -; others: ABC Futebol Clube, Clube Atlético Bragantino, Clube Malutrom, Desportiva Capixaba
+2003	club_list	Brazilian National Third Division: 47 of 47 listed clubs that the database holds (60 listed), 9 other clubs, 56 in all; not in it: -; others: Agremiação Sportiva Arapiraquense, Associação Desportiva Comercial Bandeirante, Atlético Clube Goianiense, Bangu Atlético Clube, Baré Esporte Clube, Botafogo Futebol Clube (PB), Camaçari Futebol Clube, Centro Sportivo Alagoano, Esporte Clube Comercial
+2003	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Bojovnik 7, NK Amater, NK Bedem, NK Borac
+2003	club_list	Croatian Second Division North: 10 of 10 listed clubs that the database holds (12 listed), 6 other clubs, 16 in all; not in it: -; others: NK Bjelovar, NK Granicar, NK Metalac, NK Mladost Molve, NK Omladinac, NK Ðakovo
+2003	club_list	Croatian Second Division South: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK GOSK, NK Imotska Krajina, NK Istra, NK Karlovac
+2003	club_list	Dutch First Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all; not in it: AGOVV; others: -
+2003	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: FC Jazz, Rovaniemen Palloseura; others: -
+2003	club_list	French Lower Division: 0 of 70 listed clubs that the database holds (128 listed), 0 other clubs, 0 in all; not in it: AC Cambrai, AS Porto-Vecchio, AS Vitré, AS Yzeurienne Football, Andrézieux, Arin Luzien, Athletic Club Arles, Avranches, Balma SC, Bayeux, Blagnac, Bois-Guillaume, Borgo FC, CM Oissel, CO Châlons-en-Champagne, CSO 19 Amnéville-les-Thermes, Cercle Omnisports Saint-Dizier, Chartres, Chaumont FC, Colmar, Dole-Tavaux RC 1991, Douai SC, ES La Rochelle, ES Segré Haut Anjou, Echirolles, Etoile Filante Bastiaise, FA Carcassonne-Villalbe, FC Chalonnais, Hyères FC, JA Armentières, La Vitréenne, Langon-Castets FC, Les Herbiers, Levallois, Lunel, Lyon-Duchère, Marly USM, Montauban FC, Montluçon, Mâcon, Olympique Saint-Quentinois, Orange SC, Péronne, RC Fléchois, Rodez Aveyron Football, Rumilly, SC Abbeville, SC Draguignan, SR Haguenau, Saint-Raphaël, Sens, Stade Beaucairois, Stade Lamballais, Stade Montois, Stade Plabennécois, Thouars Foot 79, Toulouse Fontaines, US Forbach, US Ivry, US Jeanne-d'Arc Carquefou, US Joué-lès-Tours, US Luzenac, US Mondeville, US Montagnarde, US Orléans, US Reveloise, US Saint-Malo, Vauban Strasbourg, Vergèze, Vénissieux US; others: -
+2003	club_list	Italian Serie B: 20 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 20 in all; not in it: Catania, Fiorentina, Genoa, Salernitana; others: -
+2003	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Brantwood, Lurgan Celtic; others: -
+2003	club_list	Northern Irish League Premier Division: 10 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 10 in all; not in it: Ballymena United, Crusaders, Dungannon Swifts, Larne, Limavady United, Newry Town; others: -
 2003	clubs	african_nations (African Cup of Nations), row int-continental-29: game 0, table 16 (16)
 2003	clubs	arg_second (Primera B Nacional), row arg-usa-30: game 25, table 20 (20)
 2003	clubs	asia_club_champ (AFC Champions League), row club-world-51: game 16, table 28 (28)
@@ -61,6 +61,7 @@
 2003	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-31: game 0, table 39 (39 entrants)
 2003	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-29: game 24, table 34 (34 entrants)
 2003	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-32: game 5, table 12 (12 entrants)
+2003	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-28: game 9, table 10 (10)
 2003	down	arg_prm (Primera División), row arg-usa-3: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2003	down	arg_second (Primera B Nacional), row arg-usa-30: game 0 (+0 play-off places), table 2 (2 (infobox))
 2003	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 4 (+0 play-off places), table 6 (6)

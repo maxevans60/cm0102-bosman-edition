@@ -287,8 +287,8 @@ RT_WRAP(0082e430, save_game)
     snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
     season_names_save_begin();      /* the save holds the database names (season_names.h) */
     o_0082e430();
+    season_names_save_end();        /* also when the save unwinds: the game keeps the season names */
     if (rt_unwinding) return;
-    season_names_save_end();
     if (cpu.eax != 1 || !part_needed()) return;
     char host[2048];
     if (win_existing_file(path, host, sizeof host) && !add_part(host)) return;

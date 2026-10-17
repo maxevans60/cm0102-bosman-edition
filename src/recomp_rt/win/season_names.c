@@ -15,6 +15,7 @@
 #define MAX_BYTES (16u << 20)
 #define LONG_AT 4u                  /* record +4: long name, 52 bytes */
 #define LONG_SIZE 52u
+#define NAME_LIMIT 50u              /* the longest long name: the limit of slice 16 (season_change_rename) */
 #define SHORT_AT 56u                /* record +56: short name, 27 bytes */
 #define SHORT_SIZE 27u
 #define COMP_TABLE 0xadadfcu        /* g_comp_object_table: Comp ** */
@@ -133,7 +134,7 @@ int season_names_load(const char *path)
         r->long_name = c[3];
         r->short_name = c[4];
         if (r->season < 0 || r->n < 0 || !*r->file || !*r->long_name || !*r->short_name ||
-            strlen(r->long_name) >= LONG_SIZE || strlen(r->short_name) >= SHORT_SIZE)
+            strlen(r->long_name) > NAME_LIMIT || strlen(r->short_name) >= SHORT_SIZE)
             return fail(path, lineno, "a bad season, number or name");
         nrows++;
     }
@@ -245,6 +246,14 @@ static void put_name(uint32_t at, uint32_t size, const char *name)
     memcpy(g_mem + at, name, strnlen(name, size - 1));
 }
 
+/* The one place that renames a record. When slice 16 is on main, this calls its season_change_rename (which
+ * keeps the new name in the save and matches it at the load), and the save restore below goes. */
+static void rename_record(uint32_t rec, const char *long_name, const char *short_name)
+{
+    put_name(rec + LONG_AT, LONG_SIZE, long_name);
+    put_name(rec + SHORT_AT, SHORT_SIZE, short_name);
+}
+
 int season_names_apply(int season)
 {
     if (!season_game_changes() || !nrows) return 0;
@@ -269,8 +278,7 @@ int season_names_apply(int season)
         if (strncmp(win_str(rec + LONG_AT), long_name, LONG_SIZE) ||
             strncmp(win_str(rec + SHORT_AT), short_name, SHORT_SIZE))
             changed++;
-        put_name(rec + LONG_AT, LONG_SIZE, long_name);
-        put_name(rec + SHORT_AT, SHORT_SIZE, short_name);
+        rename_record(rec, long_name, short_name);
         memcpy(kp->now_long, g_mem + rec + LONG_AT, LONG_SIZE);
         memcpy(kp->now_short, g_mem + rec + SHORT_AT, SHORT_SIZE);
     }

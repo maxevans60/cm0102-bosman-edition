@@ -3,10 +3,10 @@
 2005	bench	eur_super_cup (UEFA Super Cup), row uefa-40: game 7, table 5 (5)
 2005	bench	world_club_champ (FIFA Club World Championship), row club-world-78: game 7, table 12 (12)
 2005	bench	world_cup (FIFA World Cup), row int-world-50: game 7, table 12 (12)
-2005	club_list	Korean League: 10 of 11 listed clubs that the database holds (11 listed), 0 other clubs, 10 in all
-2005	club_list	Polish Second Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all
-2005	club_list	Russian First Division: 18 of 21 listed clubs that the database holds (21 listed), 0 other clubs, 18 in all
-2005	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all
+2005	club_list	Korean League: 10 of 11 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Sangmoo; others: -
+2005	club_list	Polish Second Division: 16 of 17 listed clubs that the database holds (18 listed), 2 other clubs, 18 in all; not in it: Zawisza Bydgoszcz; others: Blekitni Stargard Szczecinski, Stasiak Opoczno
+2005	club_list	Russian First Division: 18 of 21 listed clubs that the database holds (22 listed), 0 other clubs, 18 in all; not in it: Angusht Nazran, FK Orel, Lada Togliatti; others: -
+2005	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Adanaspor A.S., Aydinspor
 2005	clubs	african_nations (Africa Cup of Nations), row int-continental-51: game 0, table 16 (16)
 2005	clubs	asia_club_champ (AFC Champions League), row club-world-89: game 16, table 25 (25)
 2005	clubs	european_cup (UEFA Champions League), row uefa-34: game 55, table 74 (74 (32 in the group stage))
@@ -27,6 +27,7 @@
 2005	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-53: game 24, table 6 (6)
 2005	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-51: game 0, table 51 (51 entrants)
 2005	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-56: game 5, table 2 (2)
+2005	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-52: game 9, table 10 (10)
 2005	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-108: game 3, table 18 (18)
 2005	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-109: game 4, table 16 (16)
 2005	clubs	world_club_champ (FIFA Club World Championship), row club-world-78: game 4, table 6 (6)

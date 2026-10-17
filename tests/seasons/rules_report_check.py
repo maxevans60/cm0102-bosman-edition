@@ -58,8 +58,9 @@ The differences, by kind:
                                 table holds the competition in that season
     club_list                   (a season game, its start season) a division with a club list of the club moves
                                 table (tools/seasons/make_clubs.py) whose listed clubs that the database holds
-                                are not all in it, or that holds other clubs too: the division keeps its count
-                                (slice 18 brings the real count), or the list lacks clubs of the database
+                                are not all in it, or that holds other clubs too: the division keeps the count of
+                                its class (slice 18 brings the real count), or the list lacks clubs of the
+                                database. The line names each club, so another fill is a new difference
     not_in_game                 a row with no competition in the game, of a nation (or body, such as UEFA)
                                 that has a numbered tier in the report, or of a file of the report
 
@@ -255,6 +256,19 @@ def division_records(folder):
     return out
 
 
+PLAIN_DROP = {"fc", "cf", "sc", "ac", "ec", "ca", "cd", "sd", "ud", "if", "fk", "sk", "bk", "afc", "club", "clube",
+              "futebol", "football", "ltda", "de", "da", "do", "das", "dos", "the", "e", "y", "and"}
+
+
+def plain_name(name):
+    """The plain form of a club name, as plain_name of src/recomp_rt/win/season_clubs.c."""
+    fold = "AAAAAAACEEEEIIIIDNOOOOOxOUUUUYTsaaaaaaaceeeeiiiidnooooo/ouuuuyty"     # bytes 0xc0 to 0xff
+    raw = name.encode("cp1252", "replace") if not all(ord(c) < 256 for c in name) else name.encode("latin-1")
+    text = "".join(fold[b - 0xc0] if b >= 0xc0 else chr(b) for b in raw).lower()
+    words = "".join(c if c.isascii() and c.isalnum() else " " for c in text).split()
+    return " ".join(w for w in words if w not in PLAIN_DROP)
+
+
 def club_differences(seasons, comps, clubs, data_dir):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
@@ -274,22 +288,33 @@ def club_differences(seasons, comps, clubs, data_dir):
         if c["season"] == season and c["phase"] == "start":
             game[c["division"]].add(c["name"])
     held = set(names.values())
+    plain_to = collections.defaultdict(set)
+    for n in held:
+        plain_to[plain_name(n)].add(n)
     lists = collections.OrderedDict()
     for s, division, club_id, club, _ in make_clubs.build()[0]:
-        if s == season:
-            lists.setdefault(division, []).append(names.get(club_id) if names.get(club_id) == club else club)
+        if s != season:
+            continue
+        if names.get(club_id) == club or club in held:
+            name = club
+        else:                               # the plain form, when one club of the database has it (season_clubs.c)
+            hits = plain_to.get(plain_name(club), set())
+            name = next(iter(hits)) if len(hits) == 1 else None
+        lists.setdefault(division, []).append(name)
     out = set()
     for division, listed in lists.items():
         rec = records.get(division)
         if rec is None or rec not in in_report:
             continue
-        found = [n for n in listed if n in held]
+        found = [n for n in listed if n]
         have = game[rec]
-        kept = [n for n in found if n in have]
-        others = len(have - set(found))
-        if len(kept) != len(found) or others:
-            out.add((season, "club_list", f"{division}: {len(kept)} of {len(found)} listed clubs that the database "
-                                          f"holds ({len(listed)} listed), {others} other clubs, {len(have)} in all"))
+        absent = sorted(n for n in found if n not in have)
+        others = sorted(have - set(found))
+        if absent or others:
+            out.add((season, "club_list", f"{division}: {len(found) - len(absent)} of {len(found)} listed clubs that "
+                                          f"the database holds ({len(listed)} listed), {len(others)} other clubs, "
+                                          f"{len(have)} in all; not in it: {', '.join(absent) or '-'}; others: "
+                                          f"{', '.join(others) or '-'}"))
     return out
 
 
