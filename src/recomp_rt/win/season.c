@@ -50,7 +50,8 @@ static int game_on;                             /* 1 from a made or loaded game 
 #define ROW_SIZE 0x10cu
 #define ROW_NAME 8u
 #define NAME_SIZE 260u
-#define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999 (0x932a3e) */
+#define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999: 0x932a3e
+                                      cmp edi, 0x3e7 and jl to the add (bytes 81 ff e7 03 00 00 7c 26) */
 /* The largest part that a reader takes. Version 1 has 16 bytes; version 2 adds the news texts (8 KB a season
  * at most, season_change.c) and the changed names, about 0.9 MB for 99 seasons, so the limit holds. It only
  * stops a damaged row from asking for a block of gigabytes. */

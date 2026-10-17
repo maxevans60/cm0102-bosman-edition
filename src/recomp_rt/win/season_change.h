@@ -30,7 +30,10 @@
  *   loaded(Y)     after a saved game is loaded. Example: rebuild that state from the game's memory.
  *   season(S)     once at the season point of S. Example: transfer windows of the new season.
  *   entry(c)      once per league table entry on its update day, before its first competition starts
- *                 (c->comp is 0). Scope by nation with c->nation, by entry with c->entry. Example: a
+ *                 (c->comp is 0). Scope by nation with c->nation, by entry with c->entry. The pass checks
+ *                 the nation's selected flag (+0x11c, 0x5d5be5) only for the step of the entry's season year,
+ *                 so this hook runs for an entry of a nation that is not selected too: a kind that adds a
+ *                 competition checks that flag itself. Example: a
  *                 competition that starts in season S gets its object with season_change_add_comp.
  *   before(c)     before the start_new_season of a competition (c->started is 1). The original's own
  *                 set_up_rules (vtable +0x8c) and create_fixtures (League::create_fixtures 0x6835c0) run
@@ -79,10 +82,25 @@ void season_change_news(const char *fmt, ...) __attribute__((format(printf, 1, 2
  * each two-byte sequence of a character up to U+00FF becomes one byte. Other bytes stay. */
 void season_change_latin1(char *s);
 
-/* Writes name (50 characters at most, in the game's code) as the long name (+4) of the competition record at
- * rec, and keeps the record's name in the data, by the record's index. The game finds its key competitions by
- * name at every load (match_club_comp_key_id 0x60efd0), so a load matches each changed record by its name in
- * the data. Every change of a competition's name in the season code goes through this function (slice 15 too). */
+/* Changes the name of a competition. Every change of a competition's name in the season code goes through
+ * this function: the names kind of this slice, and slice 15 at a new game.
+ *
+ * rec is the address of a competition record in the game's memory: a club_comp.dat or nation_comp.dat record
+ * (0x6b bytes) of the array at [0xae23d0], the club comps first and then the nation comps. A competition object
+ * holds the address of its record at +4. name is the new long name in the game's code (Windows-1252: call
+ * season_change_latin1 first on UTF-8 text). The function writes at most 50 characters and the 0 to the
+ * record +4 and clears the rest of the 51 bytes. A rec that is not a record of that array changes nothing.
+ *
+ * The game finds its key competitions by name at every load of the data, also of a saved game
+ * (set_key_ids 0x601a40, match_club_comp_key_id 0x60efd0, the box "index.cpp 5809" when a name is missing).
+ * So the function keeps the record's name in the data by the record's index, and the wrap of 0x60efd0 gives
+ * that name to the match. The first change of a record keeps the name in the data: a second change (a chain
+ * such as UEFA Cup, UEFA Europa League, then another name) does not overwrite it. The names go into the season
+ * part of the save (version 2), so a load knows them before the original reads the data.
+ *
+ * Call it while a game is made or on: after season_change_reset, which the runtime calls before a new game,
+ * a load and the end of a game (season.c). The list is cleared there, so call it again for each new game.
+ * It adds no news. A kind that wants a news sentence calls season_change_news inside its hook. */
 void season_change_rename(uint32_t rec, const char *name);
 
 /* The competition objects that the game holds: the table g_comp_object_table [0xadadfc] and the
