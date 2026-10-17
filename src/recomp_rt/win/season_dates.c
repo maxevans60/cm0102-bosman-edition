@@ -73,8 +73,9 @@
 #define EMPTY_YEAR 1900u
 #define FIRST_REAL_YEAR 1901
 #define LAST_ROW_YEAR 2001u        /* the history year where the Update Team databases keep the last champions */
-#define REAL_CONTRACT_FROM 2009    /* a contract end of 2009 or later is a real year: the ends of a 2001 start
-                                    * reach 2008 (3.9.68: 65 rows in 2008, 9 in 2009) */
+#define REAL_CONTRACT_FROM 2010    /* a contract end of 2010 or later can be a real year: the ends of a 2001
+                                    * start reach 2009 (3.9.68: 65 rows in 2008, 9 in 2009; September 2009,
+                                    * D = 2009: 30 ends in 2009, a 2001-based tail) */
 #define CONTRACT_YEARS 6           /* no contract end more than this many years after the start year */
 
 static void log_load(void);
@@ -110,6 +111,12 @@ static void keep(uint32_t a, uint8_t len)
     memcpy(c->old, g_mem + a, len);
 }
 
+/* Gives back the stored bytes of every journaled field. No code of the original writes these fields between
+ * the load and the creation of the game: Start New Game 0x81ce00 runs 0x5d8480 (Config::apply_and_save, the
+ * settings object), 0x827d50 (the league flags of the nations, nation +0x11c, and the Select League(s) globals)
+ * and 0x667150 (the league table of key_nation.cpp) after the load, and the Setup screens read the staff only.
+ * So the bytes that come back are the bytes that the load gave (inference from those functions, src/cm3/setup.c
+ * and src/cm3/key_nation.c port them; none touches staff +0x10..+0x4d, the officials or the history years). */
 static void restore(void)
 {
     while (journal_n) {
@@ -492,6 +499,7 @@ void season_dates_at_create(void)
                     "again\n", N, applied_year ? applied_year : SEASON_FIRST_YEAR);
     uint32_t eax = cpu.eax;
     shift_for(N);
+    loaded_year = N;
     log_load();
     cpu.eax = eax;
 }
@@ -525,11 +533,15 @@ void o_0081ce00(void);
 /* Start New Game, cdecl, no arguments: it loads the database only when no nation is loaded ([0xae23a8] is 0,
  * 0x81ce06). After Back from Select League(s) the data of the first start stays in memory. When the player has
  * chosen another season or database since that load, the tables are freed first, so this start loads the data
- * of its own season and database (and builds the league table with its year, 0x667150). The base game never
- * gets here with data in memory from another choice. */
+ * of its own season and database. The original frees the same way in two places: load_game frees the tables
+ * before it reads a save (0x82abe1..0x82abf2: when [0xae23a8] is set, 0x528080, then 0x524d10), and the loader
+ * frees the old tables itself (0x528540 calls 0x528080 at 0x5285a8). After the load 0x81ce00 builds the Select
+ * League(s) globals again (0x827d50, then key_nation_build_table 0x667150 with the year of the game date, called
+ * at 0x81cf32 and 0x81cf37). Not while a game runs. The base game never gets here with data in memory from
+ * another choice. */
 RT_WRAP(0081ce00, start_new_game)
 {
-    if (loaded && season_code_on() && rd32(g_mem, 0xae23a8u) &&
+    if (loaded && !season_game_on() && season_code_on() && rd32(g_mem, 0xae23a8u) &&
         (loaded_year != season_start_year() || strcmp(loaded_dir, win_data_set_dir()))) {
         fprintf(stderr, "recomp: season dates: the data of %d (%s) is freed for a start in %d with %s\n", loaded_year,
                 loaded_dir[0] ? "a database folder" : "the game's Data", season_start_year(),

@@ -79,6 +79,7 @@ void season_init(void)
 }
 
 int season_start_year(void) { return (int)rt_season_year; }
+int season_game_on(void) { return game_on; }
 int season_changing_rules(void) { return rules_now; }
 
 int season_set_new_game(int start_year, int changing_rules)

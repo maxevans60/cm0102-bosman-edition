@@ -25,6 +25,9 @@
 /* 0 with the test switch RECOMP_SEASON_CODE=off (Q342): the season code does nothing (season.c). */
 int season_code_on(void);
 
+/* 1 from a made or loaded game to its end (free_game_data 0x82ff40): a game runs. */
+int season_game_on(void);
+
 /* Reads the test variable RECOMP_START_SEASON. Call it once at start, before the game runs. */
 void season_init(void);
 
