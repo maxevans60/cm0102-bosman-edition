@@ -1418,6 +1418,31 @@ Max chose the Haiku route on 2026-10-16: Haiku names every function once, and sw
 
 Read a first-pass name as a hint of the area, not as a fact. Three of the five wrong names have medium confidence and one has high. A sweep with Opus fixes a file when a feature needs it.
 
+### Review pass
+
+Max chose the cheap review pass on 2026-10-17. A fresh Opus reviewer checks each row in scope against its dossier, and a fresh Opus third check decides each change of name, class or file. The brief is `sweep/BRIEF-review.md` and the plan is `sweep/REVIEW-PLAN.md` in the work folder. Waves r01 to r04 review the 430 hard rows and a sample of 200 medium rows.
+
+#### Review r01 (tiers 1 to 3, 2026-10-17)
+
+Run `review-r01`: 8 Opus reviewers checked 191 rows of the rule books, the international competitions, comp.cpp and the transfer files. Agree 107, fix 74, rename 10. The third check took the reviewer's name 9 times and wrote a new row once. 32 false entries got the name `<parent>_fragment_<addr>`. 114 rows changed in all.
+
+Tokens: the 8 reviewers took 110,000 to 179,000 tokens each, about 140,000 on average and 1.12 million in all. Each took 3 to 5.5 minutes. The third check took 108,000 tokens. The wave took about 1.23 million tokens.
+
+Most fixes raise a row to high confidence with a quoted vtable slot or update an old caller name in the evidence. The renames are mostly shared stubs that the sweep named after one slot. For example, 0x48ce70 and 0x48ce90 also have direct cdecl calls from `match_eng_choose_kit`, and 0x4011f0 is also slot 2 of the ruling body base vtable. The 20 "shared stub" rows from 0x585920 to 0x586180 are false entries: their two "pointers" are import table entries. transfer_offer.cpp keeps two classes, because `TRANSFER_OFFER` (no vtable) and `TRANSFER_RULES` (vtable 0x970458) are real classes.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x4011f0 | `League::set_fixed_draw_slot` | `shared_noop_ret8` | takes reviewer | `shared_noop_ret8` |
+| 0x5839d0 | `comp_stub_return_zero` | `shared_return_zero_ret8` | takes reviewer | `shared_return_zero_ret8` |
+| 0x776f70 | `national_teams_save_dat_error_tail` | `NationalTeams::save_dat_fragment_776f70` | takes reviewer | `NationalTeams::save_dat_fragment_776f70` |
+| 0x48ce70 | `Comp::skip_season_reset` | `shared_return_zero` | takes reviewer | `shared_return_zero` |
+| 0x48ce90 | `Comp::set_up_rules` | `shared_return_one` | takes reviewer | `shared_return_one` |
+| 0x48cea0 | `Comp::save_extra_data` | `shared_noop_ret4_48cea0` | takes reviewer | `shared_noop_ret4_48cea0` |
+| 0x48ceb0 | `Comp::load_extra_data` | `shared_return_zero_ret4` | takes reviewer | `shared_return_zero_ret4` |
+| 0x48e360 | `Comp::allows_fixture_clash` | `Comp::counts_for_fixture_clash` | new name | `Comp::counts_for_fixture_clash` |
+| 0x5af5b0 | `fix_man_get_partner_nation_type` | `fix_man_get_partner_key_nation_index` | takes reviewer | `fix_man_get_partner_key_nation_index` |
+| 0x404480 | `ArgPrm::has_relegation` | `shared_return_true` | takes reviewer | `shared_return_true` |
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.

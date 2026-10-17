@@ -7,7 +7,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
 | 0x404250 | 164 (+2 unwind) | `ArgPrm::ArgPrm` | thiscall(ArgPrm* this, short year, CompRecord* comp), ret 8 | Constructs the Argentine Premier Division on League, then loads saved data or sets up rules, table, fixtures, stats, both stages and the relegation averages. | high | opus |  |
-| 0x404480 | 2 | `ArgPrm::has_relegation` | thiscall(League* this), returns bool, ret 0 | Returns true so the Argentine league always reports relegation places, a stub that twelve other vtable slots share. | medium | opus |  |
+| 0x404480 | 2 | `shared_return_true` | thiscall(Comp* this), returns 1, ret 0 | Returns 1 as a shared override of three different competition vtable slots. | high | opus |  |
 | 0x404490 | 11 | `ArgPrm::`scalar deleting destructor'` | thiscall(ArgPrm* this, unsigned flags), returns this, ret 4 | Destroys the Argentine Premier Division object and frees its memory when bit 0 of the flags is set. | high | opus |  |
 | 0x4044b0 | 58 (+1 unwind) | `ArgPrm::~ArgPrm` | thiscall(ArgPrm* this), ret 0 | Destroys the Argentine Premier Division, freeing its table, schedule, stage objects and Comp_Stats before the League destructor runs. | high | opus |  |
 | 0x404570 | 1686 | `ArgPrm::create_schedule` | thiscall(ArgPrm* this, char stage, short* round_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Builds the 19-round schedule template of the first half from August for stage -1, or the second half from late January for stage 0. | high | opus |  |

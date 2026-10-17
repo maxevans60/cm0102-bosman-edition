@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x5b91c0 | 175 (+1 unwind) | `FraCfa::FraCfa` | thiscall(FraCfa* this, short season_year) ret 4, returns this | Constructs the French CFA background league, collects and shuffles up to 72 clubs, and builds a table and fixtures for four groups of 18. | high | opus |  |
+| 0x5b91c0 | 175 (+1 unwind) | `FraCfa::FraCfa` | thiscall(FraCfa* this, short season_year) ret 4, returns this | Constructs the French CFA background league, collects and shuffles up to 72 clubs, and builds a table and fixtures for four groups of 18. | high | opus | fra.md |
 | 0x5b9420 | 2 | `stub_return_zero_ret8` | thiscall(Comp* this, int a, int b) ret 8, returns 0 | Shared stub that ignores its two arguments and returns zero, used as check_complete and update_for_date of the inactive French competitions. | high | opus |  |
 | 0x5b9430 | 2 | `stub_return_zero_ret4` | thiscall(Comp* this, int a) ret 4, returns 0 | Shared stub that ignores its argument and returns zero, so an inactive competition refuses league fixtures and reports empty pure virtual slots. | medium | opus |  |
 | 0x5b9440 | 11 | `FraCfa::`scalar deleting destructor'` | thiscall(FraCfa* this, unsigned flags) ret 4, returns this | Runs the FraCfa destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
