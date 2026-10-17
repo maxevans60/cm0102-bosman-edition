@@ -199,8 +199,11 @@ static void test_table(void)
     fclose(f);
     CHECK(rows == seasons_known_count && rows == 51);
 #endif
-    /* 23 season databases, none for 2001 and 2002; every signature is unique. Summer 2004 and Summer 2006 are our own (Q351). Summer 2006 has the file sizes
-     * of November 2007 (the same record counts), so only the hashes tell them apart. */
+    /* 23 season databases, none for 2001 and 2002 (the official data); every signature is unique. Summer 2004 and
+     * Summer 2006 are our own (Q351). Every season from 2003/04 on has one, so the screen's "No database" tile
+     * cannot appear with these tables (this loop fails first). Summer 2004 has the club.dat size of September 2005
+     * and Summer 2006 that of November 2007 (the template keeps every club), with other staff.dat sizes, so the
+     * check also compares the hashes. */
     int have = 0;
     for (int y = SEASONS_FIRST; y < SEASONS_FIRST + SEASONS_COUNT; y++) {
         const SeasonKnownDb *k = seasons_db_for_season(y);

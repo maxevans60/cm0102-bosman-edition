@@ -180,9 +180,13 @@ def teams_of(s, clubs):
         if i < 0:
             continue
         e = i + len(pat)
+        if e >= len(s):
+            continue
         t = e + 1 + 7 * s[e]
+        if t >= len(s):
+            continue
         n = s[t]
-        if 1 <= n <= 8:
+        if 1 <= n <= 8 and t + 1 + 4 * n <= len(s):
             for j in range(n):
                 tm[struct.unpack_from("<I", s, t + 1 + 4 * j)[0]] = cid
             pos = i
@@ -194,10 +198,10 @@ def run_of(d, anchor, size, idoff):
     need(anchor >= 0, "anchor row not found")
     rid = lambda o: struct.unpack_from("<I", d, o + idoff)[0]  # noqa: E731
     o = anchor
-    while d[o - size] == 0 and rid(o - size) + 1 == rid(o):
+    while o - size >= 0 and d[o - size] == 0 and rid(o - size) + 1 == rid(o):
         o -= size
     rows = []
-    while d[o] == 0 and (not rows or rid(o) == rid(o - size) + 1):
+    while o + size <= len(d) and d[o] == 0 and (not rows or rid(o) == rid(o - size) + 1):
         rows.append(o)
         o += size
     return rows

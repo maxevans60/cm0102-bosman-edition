@@ -29,10 +29,11 @@ CLUB_FIX = {"Borussia Mönchengladbach": "Borussia M'gladbach", "Kayseri Erciyes
 SUCCESSORS = {}
 
 # The real 2006/07 divisions of the playable nations (and the top divisions of Austria and Switzerland), keyed by the
-# template's division name, each nation top down. Calendar-year leagues: the 2006 season, which runs in July 2006.
-# One URL per list (English Wikipedia where it has the season, else the Dutch, Polish or French page). Where the
-# game has fewer slots than the real league, the clubs left out are the lowest ranked by FM2007's 2005/06 table,
-# else the last in the list (most lists are the final table). Names follow the template where it differs (for
+# template's division name, each nation top down. Calendar-year leagues: the 2007 season (the project's club tables
+# put calendar year X+1 in game season X/X+1). One URL per list (English Wikipedia where it has the season, else the
+# Dutch, Polish or French page). Where the game has fewer slots than the real league, leagues.py keeps relegated
+# clubs first, then the division's own clubs, then promoted clubs, by FM2007's 2005/06 table; a real club with no
+# slot goes to the next list of its nation. Names follow the template where it differs (for
 # example Gravesend & Northfleet is the template's Ebbsfleet United, the club's name from 2007, and Pasching is
 # FC Austria Kärnten, the club its licence moved to in 2007).
 REAL = {
@@ -96,4 +97,40 @@ REAL = {
 # Promoted in 2006, in their 2005/06 second-tier order, where FM2007 has no 2005/06 table.
 PROMOTED = {
     'French First Division': ['Valenciennes', 'Sedan', 'Lorient'],   # https://en.wikipedia.org/wiki/2005–06_Ligue_2
+}
+
+# The part file and label of the rules club tables for each real list (club_rows.py): the labels that make_clubs.py
+# TARGETS maps to the database division. Spain, Germany, Austria, Switzerland and Scotland have no target yet.
+PARTS = {
+    'Italian Serie A': ('ita', 'Serie A'), 'Italian Serie B': ('ita', 'Serie B'),
+    'Italian Serie C1/A': ('ita', 'Serie C1 girone A'), 'Italian Serie C1/B': ('ita', 'Serie C1 girone B'),
+    'French First Division': ('fra', 'Ligue 1'), 'French Second Division': ('fra', 'Ligue 2'),
+    'French National': ('fra', 'Championnat National'),
+    'Dutch Premier Division': ('hol-bel', 'Eredivisie'), 'Dutch First Division': ('hol-bel', 'Eerste Divisie'),
+    'Belgian First Division': ('hol-bel', 'Belgian First Division'),
+    'Belgian Second Division': ('hol-bel', 'Belgian Second Division'),
+    'Portuguese Premier League': ('por', 'Primeira Liga'), 'Portuguese Second League': ('por', 'Liga de Honra'),
+    'Turkish Premier Division': ('rus-tur', 'Turkish Premier Division (real: Süper Lig)'),
+    'Turkish 2. Division Category A': ('rus-tur', 'Turkish 2. Division Category A (real: TFF 1. Lig)'),
+    'Russian Premier Division': ('rus-tur', 'Russian Premier Division (real: Premier League)'),
+    'Russian First Division': ('rus-tur', 'Russian First Division (real: First Division)'),
+    'Greek National A Division': ('gre-pol-cro', 'gre_prm'), 'Greek National B Division': ('gre-pol-cro', 'gre_second'),
+    'Polish First Division': ('gre-pol-cro', 'pol_first'), 'Polish Second Division': ('gre-pol-cro', 'pol_second'),
+    'Croatian First Division': ('gre-pol-cro', 'cro_a1'),
+    'Danish Premier Division': ('den-swe', 'Danish Superliga'), 'Danish First Division': ('den-swe', 'Danish 1st Division'),
+    'Swedish Premier Division': ('den-swe', 'Allsvenskan'), 'Swedish First Division': ('den-swe', 'Superettan'),
+    'English Conference': ('eng', 'Conference Premier'),
+    'Norwegian Premier Division': ('nor-fin', 'Tippeligaen'), 'Norwegian First Division': ('nor-fin', '1. divisjon'),
+    'Finnish Premier Division': ('nor-fin', 'Veikkausliiga'),
+    'Northern Irish League Premier Division': ('wal-nir-irl', 'Northern Irish League Premier Division'),
+    'Northern Irish League First Division': ('wal-nir-irl', 'Northern Irish League First Division'),
+    'Irish Premier Division': ('wal-nir-irl', 'Irish Premier Division'),
+    'Irish First Division': ('wal-nir-irl', 'Irish First Division'),
+    'Welsh Premier Division': ('wal-nir-irl', 'Welsh Premier Division'),
+    'Japanese J-League 1': ('aus-jap-kor', 'J1 League'), 'Japanese J-League 2': ('aus-jap-kor', 'J2 League'),
+    'Korean League': ('aus-jap-kor', 'K League'), 'Australian National Soccer League': ('aus-jap-kor', 'A-League'),
+    'Brazilian National First Division': ('bra', 'Série A (2007)'),
+    'Brazilian National Second Division': ('bra', 'Série B (2007)'),
+    'Argentine Premier Division': ('arg-usa', 'Primera División'),
+    'Argentine Second Division': ('arg-usa', 'Primera B Nacional'),
 }
