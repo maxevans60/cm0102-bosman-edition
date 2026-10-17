@@ -487,7 +487,6 @@ RT_IMPORT(CreateFileA)
     uint32_t access = rt_arg(1), disposition = rt_arg(4);
     char h[2048], u[2048];
     if (!win_paths(name, h, u, sizeof h)) {
-        fprintf(stderr, "recomp: CreateFileA: no host path for \"%.300s\"\n", name);
         win_last_error = ERROR_PATH_NOT_FOUND;
         rt_ret_stdcall(INVALID_HANDLE, 7);
         return;
