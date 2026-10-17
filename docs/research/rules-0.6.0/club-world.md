@@ -270,3 +270,44 @@ The notes of rows 311, 332, 336, 389 and 393 now say that the bench comes from t
 
 - The 2026 Recopa regulations give 12 substitutes on the bench (art. 67), but the line-up clause of the same text says "11 titulares y 9 suplentes" in a list of 23. Row 464 keeps 12.
 - Transfermarkt and worldfootball.net still block scripted reads. Archive.org was offline at times during the session.
+
+## Pass 3
+
+Date: 2026-10-17. Pass-3 agent. Every page below was read on 2026-10-17. `rules_lint.py`: 0 problems for `club-world.tsv` before and after. The table now has 432 rows.
+
+### Q334: Suruga Bank Championship (new competition)
+
+New rows club-world-513 to club-world-539, one per season from 2001/02 to 2027/28, with `comp` = `suruga_bank`, `comp_file` = `new`, `nation` = `AFC-CONMEBOL` and `tier` = `super cup`. Each row sits after the last row of its season. The order of the other rows is the same.
+
+- The match ran from 2008 to 2019: the J.League Cup winner against the Copa Sudamericana winner of the year before, one match at a stadium of the J.League Cup winner. An edition goes to the season of its match (July or August of year Y, so row Y/Y+1). Rows 520 (2008/09) to 531 (2019/20) give the clubs, the rules, the date, the venue, the substitutes and the bench.
+- The name is Suruga Bank Championship from 2008 to 2018 and J.League YBC Levain Cup / CONMEBOL Sudamericana Championship Final in 2019.
+- From 2010: 90 minutes, then penalties, no extra time. For 2008 and 2009 no page that I read states the tie rule. The row says `unknown`.
+- Substitutes: 7 in 2010 to 2014, 2016 and 2017, and 6 in 2015, 2018 and 2019. Bench: 7, but 9 in 2015 and 2019. The bench values of 2012, 2013, 2014 and 2016 to 2018 are inferences from the line-ups (each club named 7). 2008 and 2009 stay `unknown`. The notes give what the line-ups show.
+- Rows 513 to 519 (2001/02 to 2007/08) and 532 to 539 (2020/21 to 2027/28) say `not held`. The notes of rows 532 and 533 name the 2020 and 2021 matches that did not take place (Olympic dates). The 2022 edition was cancelled, and the competition was abolished in 2023.
+
+First source: the Wikipedia edition pages and https://en.wikipedia.org/wiki/J.League_Cup_/_Copa_Sudamericana_Championship. The 2011 bench comes from the CONMEBOL regulation 2011 (archived at https://web.archive.org/web/20130129151225/http://conmebol.com/export/sites/conmebol/Docs/Copa_Suruga/2011/Reglamento_Copa_Suruga_2011.pdf).
+
+Second source: 68 lines in `club-world.check2.tsv`. The pages are RSSSF (https://rsssf.org/tabless/suruga08.html), the JFA history pages, the JFA match reports (PDF) of 2014 to 2018, the JFA match pages of 2010 to 2013 and 2019, and the CONMEBOL regulation 2011.
+
+| Verdict | Lines |
+|---|---|
+| agree | 54 |
+| disagree, settled | 1 |
+| no second source | 13 |
+
+- Disagree, row 525 (2013), `format`: RSSSF gives 1 August 2013. The JFA history page (https://www.jfa.jp/match/j_conmebol_2019/history.html) and the JFA match page give 7 August 2013. Decision: first. The row keeps 7 August. The line is in `club-world.reconcile.tsv`.
+- The 13 `no second source` lines: the substitute limit of 2010, 2012 to 2019 (the JFA records show the substitutions made, not the limit), the bench of 2010, 2012 and 2013, and the tie rule of 2013.
+
+### Q333: Leagues Cup places of the CONCACAF Champions Cup
+
+The notes of rows 427 (2024), 446 (2025), 465 (2026), 484 (2027) and 503 (2028) no longer ask Max for a rule. Each note now says that the game has no Leagues Cup (Q288) and that its places go to the next MLS clubs in the league table that have no place yet. Each note gives the number of Leagues Cup places, with the source in `sources` (`notes=`):
+
+| Row | Edition | Leagues Cup places | Source |
+|---|---|---|---|
+| 427 | 2024 | 3 (2023 Leagues Cup) | https://en.wikipedia.org/wiki/2024_CONCACAF_Champions_Cup |
+| 446 | 2025 | 3 (2024 Leagues Cup) | https://en.wikipedia.org/wiki/2025_CONCACAF_Champions_Cup |
+| 465 | 2026 | 3 (2025 Leagues Cup) | https://en.wikipedia.org/wiki/2026_CONCACAF_Champions_Cup |
+| 484 | 2027 | 3 (2026 Leagues Cup) | https://www.concacaf.com/competitions/champions-cup/news/2027-concacaf-champions-cup-qualified-clubs |
+| 503 | 2028 | unknown; inference: 3, as 2024 to 2027 | https://en.wikipedia.org/wiki/CONCACAF_Champions_Cup |
+
+The open point on the Leagues Cup places in "Conflicts and open points" and "Closing" is closed by Q333.

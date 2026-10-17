@@ -24,7 +24,7 @@ def covered(sources):
 def lint(folder):
     bad = 0
     for name in sorted(os.listdir(folder)):
-        if not name.endswith('.tsv') or '.' in name[:-4] or name.endswith('-clubs.tsv') or name == 'databases-signatures.tsv':
+        if not name.endswith('.tsv') or '.' in name[:-4] or name.endswith(('-clubs.tsv', '-academy.tsv')) or name == 'databases-signatures.tsv':
             continue
         path = os.path.join(folder, name)
         problems = []

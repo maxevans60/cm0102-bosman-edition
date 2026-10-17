@@ -307,3 +307,11 @@ The file now holds 157 `agree`, 8 `disagree` and 43 `no second source` lines.
 - K League Super Cup 2003 (row 380): Xportsnews (2 Mar 2005) lists every Super Cup to 2005 with no 2003 match, and Goal Korea (2026) counts seven editions from 1999 to 2006. The `not held` value now has a second source.
 - J1 foreign rule 2021 to 2025 (rows 128 to 132): the Korea Times (21 May 2025) confirms the J1 part only. The J2 and J3 limit and the partner-nation exemption rest on the first source.
 - Still without a second source: the Korean foreign limits of 2002 to 2004 (rows 298 to 300), the substitutes of the Korean Super Cup (rows 379, 381 to 383) and League Cup (rows 433, 435 to 442), the League Cup `not held` rows 457 to 459, and the names of future seasons. Korean pages state the K League limit of 3 before 2021, not the rule of its cups.
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 336 to 342 and 344 to 349 (K League 1 against K League 2 clubs). The pass 2 note said that no club plays the promotion-relegation play-off in the game. It now says that no club goes down directly, and Q337 gives the play-off.
+
+Not changed: 241 (J2/J3 100 Year Vision League, 2025/26). Its play-off sets the final order and is not for a place, so Q337 does not apply. Its pass 2 note that the build decides how the J3 clubs take part stays. No J2 row has a play-off against J3 in `playoffs` or `notes`.

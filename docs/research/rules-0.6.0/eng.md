@@ -228,3 +228,55 @@ Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after. N
 
 - eng-26 (2026/27), `windows`: the value stands. The Premier League (https://www.premierleague.com/en/news/4664145/when-does-summer-2026-premier-league-transfer-window-open-and-close, read on 2026-10-17) gives the summer 2026 window from Monday 15 June to 23:00 BST on Tuesday 1 September 2026, and the January 2027 window from 1 January to 1 February. The page cited in the second-source section for a 31 August close (https://www.premierleague.com/news/4237397) is about the winter 2026 deadline of Monday 2 February. I added a note to the row.
 - eng-27 (2027/28), `windows`: no dates for the summer 2027 or January 2028 windows were announced by 17 October 2026. The value stays an inference, and the row notes say so.
+
+## Pass 3
+
+Pass 3 agent, 2026-10-17. Q336 lets the academy sides of the EFL Trophy (from 2016/17) and the National League Cup (from 2024/25) come in if the build finds it easy. `eng-academy.tsv` lists every academy side of each edition, so that the build can judge the work. `eng.tsv` is not changed.
+
+### Method
+
+- First source: the Wikipedia page of each edition, read as raw wikitext on 2026-10-17. The list comes from the team definitions of the group tables (sides marked as academy sides), and the `team` column keeps the Wikipedia name.
+- Second source: a page of another publisher for each edition, read on 2026-10-17 and compared name by name.
+- Database match: the database of each season is the one in the spec table. A side gets `db_club_id` and `db_club` only when that database holds an English club record for the side itself (a name such as "Chelsea FC U23", "Southampton FC B" or "Everton Reserves"). The parent club's record never counts.
+
+### Counts
+
+- 224 rows: 11 EFL Trophy editions (2016/17 to 2026/27) and 3 National League Cup editions (2024/25 to 2026/27), 16 academy sides each.
+- 192 rows fall in a season with a database. 171 of them have a database record for the side, and 21 do not:
+  - 2016/17 (October 2016): all 16. The Reserve division holds only two generic records ("Reserves", "Reserves 2").
+  - 2017/18 (October 2017): Middlesbrough, Reading and West Bromwich Albion.
+  - 2024/25 (October 2024), National League Cup: Derby County and Sunderland.
+- 32 rows (2026/27) have no database, so `db_club_id` is empty.
+- 2027/28: the sides are not yet known (`unknown`), so the file has no rows for that season.
+
+The academy records in the databases are in the English division 87 "Reserve". From October 2017 they cover most sides. For the build, this means that 171 sides need no new club record, and 21 sides (plus 2026/27 and 2027/28) need one under Q335 if the cups take academy sides.
+
+### Second source per season
+
+All 14 editions agree: the second publisher names the same 16 sides as Wikipedia.
+
+| Season | Cup | Second source | Result |
+|---|---|---|---|
+| 2016/17 | EFL Trophy | The League Paper, group stage draw: https://www.theleaguepaper.com/features/featured/5492/premier-league-academies-drawn-in-efl-trophy | agree (16) |
+| 2017/18 | EFL Trophy | Oxford United, invited U21 teams: https://www.oufc.co.uk/news/2017/june/checkatrade-u21-teams | agree (16) |
+| 2018/19 | EFL Trophy | Newport County, invited U21 teams: https://www.newport-county.co.uk/news/2018/june/arsenal-to-join-checkatrade-trophy-teams | agree (16) |
+| 2019/20 | EFL Trophy | Oxford United, invited teams: https://www.oufc.co.uk/news/2019/june/efl-trophy-invited-teams/ | agree (16) |
+| 2020/21 | EFL Trophy | Leeds United, Category One invited clubs: https://www.leedsunited.com/en/news/leeds-united-to-participate-in-efl-trophy | agree (16) |
+| 2021/22 | EFL Trophy | Port Vale (northern pool of 8): https://www.port-vale.co.uk/news/2021/june/papa-johns-trophy-opponents-revealed/ and Plymouth Argyle (southern pool of 8): https://pafc.co.uk/news/2021/june/papa-johns-trophy-draw | agree (16) |
+| 2022/23 | EFL Trophy | Sky Sports, group draw: https://www.skysports.com/football/news/11095/12638924/papa-johns-trophy-2022-23-manchester-united-u21-face-barrow-as-premier-league-invited-clubs-discover-groups | agree (16) |
+| 2023/24 | EFL Trophy | EFL, group stage draw (22 June 2023): https://www.efl.com/news/2023/june/efl-trophy-group-stage-draw-confirmed/ | agree (16) |
+| 2024/25 | EFL Trophy | EFL: https://efl.com/news/2024/june/24/under-21-teams-and-group-stage-draw-confirmed-for-2024-25-bristol-street-motors-trophy/ | agree (16) |
+| 2025/26 | EFL Trophy | EFL: https://efl.com/news/2025/june/25/under-21-teams-and-group-stage-draw-confirmed-for-2025-26-vertu-trophy/ | agree (16) |
+| 2026/27 | EFL Trophy | EFL: https://www.efl.com/news/2026/june/23/under-21-teams-and-group-stage-draw-confirmed-for-2026-27-efl-trophy/ | agree (16) |
+| 2024/25 | National League Cup | Premier League: https://www.premierleague.com/news/4121350 | agree (16, with Derby County for Reading) |
+| 2025/26 | National League Cup | Premier League: https://www.premierleague.com/en/news/4358790/draw-made-for-202526-national-league-cup | agree (16) |
+| 2026/27 | National League Cup | Fan Banter, group draw: https://fanbanter.co.uk/2026-27-national-league-cup-group-stage-draw-and-premier-league-2-sides-revealed/ | agree (16) |
+
+The 2021/22 check combines two club pages that each name one regional pool of 8. Club sites and Fan Banter reproduce the competition's own announcement, but they are other publishers than Wikipedia.
+
+### Notes
+
+- 2016/17: the EFL first invited 16 Category One academies (with Arsenal, Liverpool, Manchester City, Manchester United, Newcastle United and Tottenham Hotspur). Those six declined, and Blackburn Rovers, Brighton & Hove Albion, Derby County, Norwich City, Reading and Wolverhampton Wanderers took their places. The list holds the sides that played.
+- 2024/25 National League Cup: Reading withdrew on 25 September 2024, before the first match, and Derby County took their place. The list holds Derby County.
+- Team names: Wikipedia writes "U21" for every side, and "Manchester City EDS" in 2017/18. The squads were under-23 sides in some seasons (Premier League 2 was an under-23 league until 2021/22). The `team` column keeps the Wikipedia name. The database records use U21, U23, B or Reserves.
+- `eng.tsv` cup rows: `clubs` is `n/a` for every cup row, and the `format` entrant counts (64 with 16 academy sides, and 32 with 16 under-21 sides) agree with the list. No row is changed. The notes of eng-441, eng-447, eng-453 and eng-459 say "under-21 sides do not exist in the game". That is true for the base game, but not for the databases from October 2017. The lead decides whether to reword them.

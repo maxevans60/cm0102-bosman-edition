@@ -325,3 +325,9 @@ Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
 
 - fra-217 (2025/26 nation rules), `foreign`: unknown changed to "4 non-EU players per Ligue 1 club". Source: abargenteuil.fr, 12 March 2026 (https://abargenteuil.fr/blog/extra-communautaire-psg/, read on 2026-10-17). It gives the LFP limit of 4 as the rule in force. This is one publisher only, and the same publisher is the source of fra-208. The row notes say so.
 - fra-33 and fra-51 (CFA 2 2004/05 and 2006/07), `down`: I found no FFF rule text for these seasons (two searches, no archive copy). The value 23 stays, and the open point for Max in the second-source section stays open. A note in each row says so.
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 15, 24, 33, 42, 51, 60 (CFA 2 relegation play-offs against Division d'Honneur clubs).

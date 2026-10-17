@@ -334,3 +334,13 @@ Still no second source (30 lines):
 - Croatian `foreign` (466, 474, 475, 479): no other publisher found.
 
 Lint after the retry: 0 problems (0 before).
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 249 (I liga against third-level group runners-up), 257, 258, 259, 260 (I liga 15th against the II liga 4th), 368 (Croatian second tier 11th against the third-level South runner-up), 374 (against the 2. NL runner-up).
+
+Rows 56, 57 (Beta Ethniki 14th), 370, 373, 377, 378 (Croatian second tier, one group) get the note by a reading of the row: one club of a one-group lowest tier plays a relegation play-off, so its opponent can only come from a lower tier. This is an inference.
+
+Not changed, because the row does not say who the opponent is: 63 (play-out group), 246, 247, 248, 251 (several clubs of one division), 352 to 355 and 379 to 382 (two groups, so the play-off can be between them).

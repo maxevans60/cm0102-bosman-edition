@@ -310,3 +310,9 @@ No value in `arg-usa.tsv` changed.
 - The 2027 Copa Argentina entry rule (arg-usa-80). La Voz de San Justo confirms the 2027 edition but gives only the Federal A places.
 - The 2027/28 MLS club count (arg-usa-243). Flashscore gives 30 teams for the 2027 Sprint Season only.
 - Fields of future editions that no page names yet: Trofeo de Campeones 2027 and 2028, Copa de la Liga Profesional 2027 and 2028, MLS All-Star Game 2027 and 2028, and the MLS roster rules of 2027 and 2027/28.
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 34, 35, 36, 37, 38 (Primera B Nacional bottom clubs against the Primera B Metropolitana or Torneo Argentino A reducido winner).

@@ -372,3 +372,11 @@ No line disagrees, so `den-swe.tsv` and `den-swe-clubs.tsv` are unchanged. `rule
 - The SvFF representation rules give dates that the table holds as `unknown`. 2022: 8 January to 31 March and 15 July to 11 August (men). 2023 (in force 25 November 2022): 1 February to 28 March and 20 July to 16 August (men). The summer window was later extended to 7 July to 31 August. 2024: 1 February to 27 March and 2 July to 26 August (men). 2025: 29 January to 25 March and 8 July to 29 August. 2026: 29 January to 25 March and 7 July to 31 August.
 - The 2011 club article gives 1 January to 31 March and 1 August to 31 August for Sweden.
 - SvFF Tävlingsbestämmelser 2025 still allow at most seven substitutes in Superettan. The 2026 text allows nine in Allsvenskan and Superettan.
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 166, 172, 178 (Swedish Division 2, 10th against Division 3 clubs), 262, 268, 274, 280, 286, 292, 298, 304, 310, 316, 322 (Swedish Division 1, 13th against Division 2 clubs).
+
+Not changed, because the row does not say who the opponent is: 70 and 82 (Danish 2nd Divisions), 250 (Swedish Division 1, 2015/16).

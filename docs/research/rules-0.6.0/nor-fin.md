@@ -204,3 +204,9 @@ No second source (111 lines):
 Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
 
 - nor-fin-239 (Finnish Cup 2025), `format`: the old text said that the clubs of the top three tiers enter in round 3. The round table of the 2025 season page (https://en.wikipedia.org/wiki/2025_Finnish_Cup, read on 2026-10-17) shows that the 8 Veikkausliiga clubs not in UEFA competition, the 10 Ykkösliiga clubs and the entered Ykkönen and Kakkonen clubs enter in round 3, and the 4 Veikkausliiga clubs in UEFA competition enter in round 5. Lower-tier clubs play at home to round 4, and the draw is in geographic groups until round 5. I wrote this. I found no Palloliitto cup rules for 2025 (two searches and the archive), so the row is not checked against a rule text.
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 153, 163, 173, 183, 193, 203, 213, 223, 233, 243, 253, 263 (Norwegian First Division 14th against the 2. divisjon play-off winner), 8, 18, 28, 38 (Finnish First Division against Kakkonen clubs), 228, 238, 248, 258, 268 (Ykkösliiga 9th against the Ykkönen 2nd).

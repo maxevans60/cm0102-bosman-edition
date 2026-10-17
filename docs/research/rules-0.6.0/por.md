@@ -360,3 +360,9 @@ Date: 2026-10-17. Fix agent. Two open points of the retry, both written into `po
 
 - por-105 `clubs` (Taça de Portugal 2012/13): 162 stays. No FPF rule text or draw notice with a total was found (the archived FPF notice link returns a web page). The full round lists give 162. Round 1 has 50 matches and 30 byes, so 130 Segunda and Terceira Divisão clubs. Round 2 has 48 matches: 50 winners, 30 byes and 16 Segunda Liga clubs. Round 3 has 32 matches: 48 winners and 16 Primeira Liga clubs. The infobox value 165 has no support. Source: https://en.wikipedia.org/wiki/2012%E2%80%9313_Ta%C3%A7a_de_Portugal#First_round
 - por-147 `playoffs` (Campeonato de Portugal 2017/18): the FPF rules of 2017/18, art. 85.2 to 85.7, set 80 clubs in 5 series of 16. The 5 series winners and the 3 best runners-up play two-legged quarter-finals and semi-finals. The 2 semi-final winners go up and meet in a final at a neutral ground. The last 6 of each series go down. The row now says "5 series winners and the 3 best runners-up". `up` (2) and `down` (30) agree with the rules and stay. The `format` text now names the play-off rounds. Source: https://arquivo.pt/wayback/20170807062340/https://fpf.pt/downloaddocument.ashx?id=9122
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 30 (Açores play-off against the Açores champion of the Terceira Divisão), and 3, 12, 21 (the Açores rule in `playoffs` gives the same play-off when the cap applies).

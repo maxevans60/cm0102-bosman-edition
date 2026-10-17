@@ -300,3 +300,71 @@ club-world-507	name	agree	https://www.jfa.jp/news/00036643/	JFA names AFC Champi
 club-world-509	name	agree	https://www.jfa.jp/news/00036643/	JFA names AFC Champions League Two (ACL Two) for 2027/28
 club-world-509	notes	no second source		method or decision note, no outside fact to check
 club-world-512	name	no second source		no page of another publisher found for this edition (the 2027 and 2028 editions have no published details on 2026-10-17)
+club-world-520	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2008" (Suruga Bank Championship 2008)
+club-world-520	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-520	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-520	format	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	match facts and host: JFA history gives the same date and venue, at a stadium of the J.League Cup winner; tie rule is unknown in the row
+club-world-521	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2009" (Suruga Bank Championship 2009)
+club-world-521	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-521	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-521	format	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	match facts and host: JFA history gives the same date and venue, at a stadium of the J.League Cup winner; tie rule is unknown in the row
+club-world-522	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2010" (Suruga Bank Championship 2010)
+club-world-522	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-522	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-522	format	agree	https://www.jfa.jp/match/suruga_2014/news/00001409/	rules: JFA report, 90 minutes then penalties (1-1, 1-1, PK 4-3)
+club-world-522	subs_used	no second source		no page of another publisher states the limit of this edition
+club-world-522	bench	no second source		no page of another publisher states the squad of 18 for 2010
+club-world-523	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2011" (Suruga Bank Championship 2011)
+club-world-523	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-523	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-523	format	agree	https://web.archive.org/web/20130129151225/http://conmebol.com/export/sites/conmebol/Docs/Copa_Suruga/2011/Reglamento_Copa_Suruga_2011.pdf	rules: CONMEBOL regulation 2011, 90 minutes, then penalties
+club-world-523	subs_used	agree	https://web.archive.org/web/20130129151225/http://conmebol.com/export/sites/conmebol/Docs/Copa_Suruga/2011/Reglamento_Copa_Suruga_2011.pdf	regulation: the 7 substitutes of the 18 registered may be used
+club-world-523	bench	agree	https://en.wikipedia.org/wiki/2011_Suruga_Bank_Championship	line-ups: each club named 7 substitutes
+club-world-524	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2012" (Suruga Bank Championship 2012)
+club-world-524	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-524	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-524	format	agree	https://www.jfa.jp/match/suruga_2014/news/00001462/	rules: JFA report, 90 minutes then penalties ("大会規定により延長戦は行わず")
+club-world-524	subs_used	no second source		no page of another publisher states the limit of this edition
+club-world-524	bench	no second source		no JFA match report or regulation found for this edition
+club-world-525	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2013" (Suruga Bank Championship 2013)
+club-world-525	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-525	format	disagree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives Aug 1 for the 2013 match; clubs and venue agree. Settled in club-world.reconcile.tsv (JFA: 7 August 2013, first)
+club-world-525	format	no second source		rules: no page of another publisher states the tie rule of 2013 (the match had a winner in 90 minutes)
+club-world-525	subs_used	no second source		no page of another publisher states the limit of this edition
+club-world-525	bench	no second source		no JFA match report or regulation found for this edition
+club-world-526	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2014" (Suruga Bank Championship 2014)
+club-world-526	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-526	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-526	format	agree	https://www.jfa.jp/national_team/suruga/2014/schedule_result/pdf/m01.pdf	rules: JFA match report gives "試合形式 90分 PK"
+club-world-526	subs_used	no second source		no page of another publisher states the limit of this edition
+club-world-526	bench	agree	https://www.jfa.jp/national_team/suruga/2014/schedule_result/pdf/m01.pdf	JFA match report: each club named 7 substitutes
+club-world-527	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2015" (Suruga Bank Championship 2015)
+club-world-527	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-527	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-527	format	agree	https://www.jfa.jp/national_team/suruga_2015/schedule_result/pdf/m01.pdf	rules: JFA match report gives "試合形式 90分 PK"
+club-world-527	subs_used	no second source	https://www.jfa.jp/national_team/suruga_2015/schedule_result/pdf/m01.pdf	the JFA record shows a club with 6 substitutions, but no page of another publisher states the limit
+club-world-527	bench	agree	https://www.jfa.jp/national_team/suruga_2015/schedule_result/pdf/m01.pdf	JFA match report: each club named 9 substitutes
+club-world-528	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2016" (Suruga Bank Championship 2016)
+club-world-528	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-528	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-528	format	agree	https://www.jfa.jp/national_team/suruga_2016/schedule_result/pdf/m01.pdf	rules: JFA match report gives "試合形式 90分 PK"
+club-world-528	subs_used	no second source		no page of another publisher states the limit of this edition
+club-world-528	bench	agree	https://www.jfa.jp/national_team/suruga_2016/schedule_result/pdf/m01.pdf	JFA match report: each club named 7 substitutes
+club-world-529	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2017" (Suruga Bank Championship 2017)
+club-world-529	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-529	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-529	format	agree	https://www.jfa.jp/national_team/suruga_2017/schedule_result/pdf/m01.pdf	rules: JFA match report gives "試合形式 90分 PK"
+club-world-529	subs_used	no second source		no page of another publisher states the limit of this edition
+club-world-529	bench	agree	https://www.jfa.jp/national_team/suruga_2017/schedule_result/pdf/m01.pdf	JFA match report: each club named 7 substitutes
+club-world-530	name	agree	https://www.jfa.jp/match/j_conmebol_2019/history02.html	JFA history lists "スルガ銀行チャンピオンシップ2018" (Suruga Bank Championship 2018)
+club-world-530	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-530	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-530	format	agree	https://www.jfa.jp/national_team/suruga_2018/schedule_result/pdf/m01.pdf	rules: JFA match report gives "試合形式 90分 PK"
+club-world-530	subs_used	no second source	https://www.jfa.jp/national_team/suruga_2018/schedule_result/pdf/m01.pdf	the JFA record shows a club with 6 substitutions, but no page of another publisher states the limit
+club-world-530	bench	agree	https://www.jfa.jp/national_team/suruga_2018/schedule_result/pdf/m01.pdf	JFA match report: each club named 7 substitutes
+club-world-531	name	agree	https://www.jfa.jp/eng/match/j_conmebol_2019/	JFA names it J.LEAGUE YBC LEVAIN CUP / CONMEBOL SUDAMERICANA Championship Final 2019
+club-world-531	clubs	agree	https://rsssf.org/tabless/suruga08.html	RSSSF gives one match between the two clubs
+club-world-531	format	agree	https://rsssf.org/tabless/suruga08.html	match facts: RSSSF gives the same clubs, date and venue
+club-world-531	format	agree	https://www.jfa.jp/match/j_conmebol_2019/about.html	rules: JFA outline, 90 minutes, then penalties
+club-world-531	subs_used	no second source	https://www.jfa.jp/match/j_conmebol_2019/match_page/m1.html	the JFA record shows a club with 6 substitutions, but no page of another publisher states the limit
+club-world-531	bench	agree	https://www.jfa.jp/match/j_conmebol_2019/match_page/m1.html	JFA line-ups: Athletico Paranaense named 9 substitutes, Shonan Bellmare 7 (up to 9)

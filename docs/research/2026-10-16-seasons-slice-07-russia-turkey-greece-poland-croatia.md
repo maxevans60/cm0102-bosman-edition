@@ -23,5 +23,6 @@ Field verdicts count the latest verdict of each checked field of a row that stil
 4. Loose-ends, consistency and source-fill agents closed the points the earlier agents found.
 5. Pass 2 applied Max's decisions: no new tiers (Q331) and no new nations (Q288), conflicts settled by what happened in real life, club moves down every tier, and reserve teams listed.
 6. A second-source agent and a retry looked for a second publisher for every fact that only one publisher stated.
+7. Pass 3 applied Max's answers Q332 to Q339 (Brazilian state championships, the Suruga Bank Championship, the CONCACAF Champions Cup places, the English academy sides, play-offs against tiers that left the game).
 
 The open questions for Max are in `2026-10-16-seasons-research-for-max.md`.

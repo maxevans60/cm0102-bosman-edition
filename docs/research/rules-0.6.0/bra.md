@@ -588,3 +588,90 @@ Where RSSSF Brasil has no rule text, the `down` value agrees with the clubs that
 - Série A 2027 and 2028: in February 2026 the CBF began a study of 18 clubs and 3 relegated places. No decision was found.
 - The 2027 Supercopa is named "Supercopa Rei" in the CBF calendar of October 2026 (Gazeta Esportiva).
 - Paranaense 2022 and 2023: RSSSF Brasil lists Toledo among the participants, but its tables have 12 clubs without Toledo. The rows keep 12.
+
+## Pass 3
+
+Second-source pass of 2026-10-17 for the 12 state championships that Q332 keeps (bra-757 to bra-1080), and four 2027 values from news pages. Row ids and row order are unchanged. `rules_lint.py` gives 0 problems for `bra.tsv` after this pass. The verdicts are at the end of `bra.check2.tsv` (1,253 lines).
+
+Method:
+
+- Each filled field got one line. The second source is from another publisher than the first source of that field, and I read each page today.
+- RSSSF Brasil answered direct requests again, so its pages were read at the direct address.
+- Second publishers: pt.wikipedia and en.wikipedia season pages (only for facts whose first source is RSSSF Brasil), RSSSF Brasil (for facts whose first source is pt.wikipedia), soccerway standings and relegation marks (2005 on for some states, 2016 on for most), and ge.globo.
+- I treat pt.wikipedia and en.wikipedia as one publisher.
+- For `clubs`, a club that withdrew before its first match does not count. The game cannot play a club with no matches. A club that withdrew after it played counts, and the withdrawal stays in `notes`.
+
+### Counts
+
+| Field | Agree | Disagree | No second source |
+|---|---|---|---|
+| clubs | 170 | 10 | 62 |
+| down | 73 | 15 | 72 |
+| name | 97 | 27 | 200 |
+| notes | 31 | 0 | 16 |
+| playoffs | 0 | 0 | 240 |
+| format | 0 | 0 | 240 |
+
+- The 240 `playoffs` lines hold `see format`, and the 240 `format` lines are keyword summaries marked as inference. Neither states a value, so neither is checked.
+- `name` has no second source for 200 rows because RSSSF Brasil gives only an English title ("Alagoas State League") for most seasons, and no other publisher has a page for each season. The 2027 and 2028 names are future editions.
+- `clubs` and `down` have no second source mostly for 2002 to 2015 in states with no wikipedia season pages, where soccerway has no table or no relegation marks.
+
+Disagreements settled:
+
+| Decision | clubs | down | name |
+|---|---|---|---|
+| first | 3 | 2 | 0 |
+| second | 7 | 9 | 27 |
+| conflict (first value kept) | 0 | 4 | 0 |
+
+### Changes to bra.tsv
+
+`clubs`:
+
+- bra-913 Amazonense 2023: 10 is now 9. Nacional Fast Clube withdrew before its first match (https://pt.wikipedia.org/wiki/Campeonato_Amazonense_de_Futebol_de_2023, https://us.soccerway.com/brazil/amazonense-2023/standings/).
+- bra-964 Acriano 2020: 10 is now 9. Independência withdrew shortly before the start (https://pt.wikipedia.org/wiki/Campeonato_Acriano_de_Futebol_de_2020, https://us.soccerway.com/brazil/acreano-2020/standings/).
+- bra-984 Brasiliense 2013: 10 is now 12. The first value left out Luziânia (GO) and Unaí (MG). RSSSF Brasil, pt.wikipedia and soccerway all have 12 (https://us.soccerway.com/brazil/brasiliense-2013/standings/).
+- bra-1040 Sul-Mato-Grossense 2015: 14 is now 12. RSSSF Brasil lists 14 names, but its group tables have 12 clubs. pt.wikipedia and soccerway have 12 (https://us.soccerway.com/brazil/sul-matogrossense-2015/standings/).
+- bra-1008 Capixaba 2010: 11 is now 10. The RSSSF Brasil list and table have 10, and so has soccerway (https://us.soccerway.com/brazil/capixaba-2010/standings/).
+- bra-1071 Tocantinense 2019: 10 is now 9. Gurupi withdrew before its first match. The RSSSF Brasil results mark its round 1 match as cancelled, and soccerway has 9 clubs (https://us.soccerway.com/brazil/tocantinense-2019/standings/).
+- bra-970 Acriano 2026: 11 is now 8. The pt.wikipedia infobox gave 11. RSSSF Brasil and soccerway list 8 (http://www.rsssfbrasil.com/tablesae/ac2026.htm, https://us.soccerway.com/brazil/acreano/standings/).
+
+`down`:
+
+- bra-796 Paraibano 2014: 1 is now 2. RSSSF Brasil quotes the rule that the bottom two of the first round go down (http://www.rsssfbrasil.com/tablesfq/pb2014.htm). en.wikipedia names two relegated clubs.
+- bra-798 Paraibano 2016: 4 is now 2. Four clubs went to a relegation stage, and its rule relegates two (http://www.rsssfbrasil.com/tablesfq/pb2016.htm).
+- bra-799 Paraibano 2017: 1 is now 2. RSSSF Brasil quotes the rule that the two last clubs go down (http://www.rsssfbrasil.com/tablesfq/pb2017.htm).
+- bra-807 Paraibano 2025: 1 is now 2. RSSSF Brasil and the pt.wikipedia infobox both mark Auto Esporte and Picuiense as relegated (http://www.rsssfbrasil.com/tablesfq/pb2025.htm). No rule text was found, so the note marks it as an inference.
+- bra-850 Sergipano 2014: 1 is now 2. RSSSF Brasil quotes the rule that the two clubs with the fewest points go down (http://www.rsssfbrasil.com/tablessz/se2014.htm).
+- bra-851 Sergipano 2015: 1 is now 2. The RSSSF Brasil rule line relegates the bottom club of each of two groups, and pt.wikipedia names two clubs.
+- bra-1037 and bra-1038 Sul-Mato-Grossense 2012 and 2013: 1 is now 2 in both. The RSSSF Brasil rule line relegates the bottom club of each of two groups, and pt.wikipedia names two clubs each year.
+- bra-1045 Sul-Mato-Grossense 2020: 4 is now 2. RSSSF Brasil quotes the rule that the two last go down, and soccerway marks two (https://us.soccerway.com/brazil/sul-matogrossense-2020/standings/). pt.wikipedia lists four clubs after the COVID-19 stoppage.
+
+`name`:
+
+- bra-973 to bra-999 (Federal District, 27 rows): "Campeonato Candango" is now "Campeonato Brasiliense". ge.globo, soccerway and the pt.wikipedia season pages and infobox name the competition "Campeonato Brasiliense" (https://ge.globo.com/df/futebol/campeonato-brasiliense/). "Candangão" is a nickname that the federation also uses. The table in "Composite championships (Q283)" above still says Candango.
+
+2027 values from news pages (Max's list in "Seen, not changed"):
+
+- bra-674 Cearense 2027 `clubs`: 10. Diário do Nordeste of 16 October 2026 names the 10 clubs (https://diariodonordeste.verdesmares.com.br/jogada/conheca-novo-formato-do-campeonato-cearense-para-2027-veja-1-rodada-1.3799201).
+- bra-647 Paraense 2027 `clubs`: 12. Diário do Pará of 22 June 2026 (https://diariodopara.com.br/bola/parazao-2027-tem-12-clubes-definidos-veja-lista-completa-da-elite/).
+- bra-701 Paranaense 2027 `clubs`: 12. Um Dois Esportes of 25 May 2026 (https://www.umdoisesportes.com.br/futebol-paranaense/campeonato-paranaense-2027-times-definidos/).
+- bra-755 Pernambucano 2027 `format`: one competition without divisions. The council of 20 August 2026 merged Séries A1, A2 and A3. A first phase of 24 clubs in four groups of six starts on 17 October 2026, and three clubs join seven seeded clubs in a 10-club decisive stage from January 2027 (https://www.diariodepernambuco.com.br/esportes-dp/interior/2026/08/11721800-novo-campeonato-pernambucano-conselho-arbitral-define-formato-e-1-fase-comeca-em-outubro.html). Folha de Pernambuco states the same (https://www.folhape.com.br/esportes/fpf-define-modelo-do-primeiro-turno-do-pernambucano-confira/507820/). `clubs` stays `unknown`, because the edition has two stages of different sizes.
+- These four values each have one source and no `bra.check2.tsv` line, except bra-755, which has two sources.
+
+### Kept after a disagreement
+
+- bra-910 Amazonense 2020 `clubs` 8: the pt.wikipedia infobox says 7, but its own first-phase table and RSSSF Brasil have 8 clubs with 7 games each. Princesa do Solimões left only for the second championship.
+- bra-884 Maranhense 2021 `clubs` 8: soccerway lists Timon EC with no games. Timon lost its promotion in the sports court before the season, and Bacabal took the place (O Imparcial, 13 January 2021, https://oimparcial.com.br/esportes/2021/01/fmf-confirma-titulo-do-iape-na-segundinha-e-vaga-do-bacabal-na-serie-a-do-estadual/).
+- bra-934 Piauiense 2017 `clubs` 7: soccerway lists Comercial with no games. RSSSF Brasil and the soccerway table both show 7 clubs that played.
+- bra-856 Sergipano 2020 `down` 0: the rule at the start relegated two (RSSSF Brasil, soccerway). The federation and the clubs removed relegation in June 2020 after the COVID-19 stoppage (ge.globo, https://globoesporte.globo.com/se/futebol/campeonato-sergipano/noticia/fsf-e-clubes-definem-que-nao-havera-mais-rebaixados-no-campeonato-sergipano-de-2020.ghtml). Q274 keeps 0.
+- bra-969 Acriano 2025 `down` 2: soccerway marks only Plácido de Castro. goal.com states that the two worst go down (https://www.goal.com/br/listas/onde-assistir-campeonato-acreano-quem-transmite-estadual/bltf3bc55630ae16a12). São Francisco plays in 2026 by RSSSF Brasil, so it may have been reprieved. I don't know why.
+
+### Conflicts (first value kept, for Max)
+
+- bra-1008 Capixaba 2010 `down` 1: RSSSF Brasil gives the rule "bottom club is relegated" and marks only Desportiva. soccerway marks two (Galatas, Desportiva) and names Galatas where RSSSF Brasil has Espírito Santo FC.
+- bra-1012 Capixaba 2014 `down` 1: RSSSF Brasil gives the rule "bottom club is relegated". Aracruz quit and also went down. soccerway marks two other clubs (Colatina, Conilon).
+- bra-976 Brasiliense 2005 `down` 3: RSSSF Brasil marks three. soccerway marks four (adds Guará).
+- bra-977 Brasiliense 2006 `down` 3: RSSSF Brasil gives the rule "bottom 3 overall are relegated". soccerway marks two (Candango, Guará).
+
+No third publisher has a page for these four seasons.

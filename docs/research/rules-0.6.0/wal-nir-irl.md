@@ -485,3 +485,15 @@ The whole file now holds 390 agree, 15 disagree (all settled) and 366 no second 
 
 - Row 289: `clubs` 41 to 42, `notes` and `sources`. No other row changed. Row order and ids are unchanged.
 - `rules_lint.py`: 2 problems before and after (642 and 667, `split`).
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 192, 217, 642, 667 (Irish First Division against the Irish third tier), 361, 386, 411, 436, 461, 486, 511, 536, 561, 586, 636, 661 (NIFL Championship against the Northern Irish third tier), 629, 654 (Cymru Premier 14th against Cymru North and South clubs), and 167.
+
+The pass 2 note "has no opponent in the game" in these rows is replaced. The Pass 2 paragraph above that says the build decides is replaced by Q337. In 629 and 654 the note keeps that the clubs that come up come from the database pool.
+
+Row 167 (2007/08 First Division) gets the note by a reading of the row: the 10th of 10 in the lowest game tier plays a promotion/relegation play-off, so its opponent can only come from a lower tier. This is an inference.
+
+Not changed: 611 (2025/26) has a pass 2 note with no play-off against the third tier, and the row has no such play-off. 36 and 142 are play-offs against the tier above.

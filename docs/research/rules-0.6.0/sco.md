@@ -194,3 +194,9 @@ Main second sources:
 - sco-144 (Challenge Cup 2018/19) says "extra time and penalties". The SPFL rules of January 2018 give extra time in all rounds. The rules of July 2019 drop it before the semi-finals. I did not check the 2018/19 rounds against another publisher.
 - `no second source` remains for these values: `subs_used` 3 in 2017/18 (all leagues) and 2018/19 to 2019/20 (tiers 2 to 4), the extra-time substitute of the 2017/18 Scottish Cup and the 2019/20 Challenge Cup, the league benches of every season, `subs_used` 5 in the leagues from 2022/23, the League Cup bench of 2005/06 and 2020/21, the Challenge Cup bench of 2019/20 and from 2021/22, SPFL rule C43 (`foreign` and `registration`), the 2026/27 windows, the 2026/27 Premiership `down`, and the 2026/27 `format` and `split` of tiers 2 to 4.
 - 34 of the 181 `no second source` lines are 2027/28 values that copy 2026/27 (an inference). No page states 2027/28 rules yet.
+
+## Pass 3 (Q337)
+
+Q337 (2026-10-17): a real play-off against a tier that is not in the game is played against a club with no division, as for the Scottish pyramid play-off (Q284). The rows below keep the real format in `playoffs`. Each row gets this note: "Q337: the lower-tier side is a club with no division in the game." No other field changed.
+
+Rows: 109, 117, 125, 133, 141, 149, 157, 165, 173, 181, 189, 197, 205, 213 (League Two, 2014/15 to 2027/28, the pyramid play-off). The Q284 note stays.

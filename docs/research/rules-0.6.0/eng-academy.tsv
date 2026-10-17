@@ -1,0 +1,225 @@
+season	cup	club	team	db_club_id	db_club	source
+2016/17	EFL Trophy	Blackburn Rovers	Blackburn Rovers U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Chelsea	Chelsea U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Derby County	Derby County U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Everton	Everton U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Leicester City	Leicester City U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Middlesbrough	Middlesbrough U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Norwich City	Norwich City U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Reading	Reading U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Southampton	Southampton U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Stoke City	Stoke City U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Sunderland	Sunderland U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Swansea City	Swansea City U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	West Bromwich Albion	West Bromwich Albion U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	West Ham United	West Ham United U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2016/17	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21			https://en.wikipedia.org/wiki/2016%E2%80%9317_EFL_Trophy
+2017/18	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	11534	Brighton & Hove Albion Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Chelsea	Chelsea U21	11417	Chelsea Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Everton	Everton U21	11519	Everton Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Fulham	Fulham U21	11520	Fulham Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Leicester City	Leicester City U21	11521	Leicester City Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Manchester City	Manchester City EDS	11523	Manchester City Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Middlesbrough	Middlesbrough U21			https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Newcastle United	Newcastle United U21	11524	Newcastle United Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Reading	Reading U21			https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Southampton	Southampton U21	11528	Southampton Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Stoke City	Stoke City U21	11529	Stoke City Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Sunderland	Sunderland U21	11530	Sunderland Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Swansea City	Swansea City U21	11531	Swansea City Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	11533	Tottenham Hotspur Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	West Bromwich Albion	West Bromwich Albion U21			https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2017/18	EFL Trophy	West Ham United	West Ham United U21	11535	West Ham United Reserves	https://en.wikipedia.org/wiki/2017%E2%80%9318_EFL_Trophy
+2018/19	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Everton	Everton U21	7990	Everton FC U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Leicester City	Leicester City U21	10403	Leicester City U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Middlesbrough	Middlesbrough U21	11556	Middlesbrough FC U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Southampton	Southampton U21	3389	Southampton FC U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Stoke City	Stoke City U21	8795	Stoke City U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Swansea City	Swansea City U21	8679	Swansea City U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	West Bromwich Albion	West Bromwich Albion U21	3850	West Bromwich Albion U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2018/19	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U23	https://en.wikipedia.org/wiki/2018%E2%80%9319_EFL_Trophy
+2019/20	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Aston Villa	Aston Villa U21	4110	Aston Villa U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Everton	Everton U21	7990	Everton FC U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Leicester City	Leicester City U21	10403	Leicester City U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Liverpool	Liverpool U21	8872	Liverpool FC U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Manchester United	Manchester United U21	9784	Manchester United U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Norwich City	Norwich City U21	8461	Norwich City U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Southampton	Southampton U21	3389	Southampton FC U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2019/20	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U23	https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_Trophy
+2020/21	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Aston Villa	Aston Villa U21	4110	Aston Villa U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Leeds United	Leeds United U21	11129	Leeds United U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Leicester City	Leicester City U21	10403	Leicester City U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Liverpool	Liverpool U21	8872	Liverpool FC U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Manchester United	Manchester United U21	9784	Manchester United U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Norwich City	Norwich City U21	8461	Norwich City U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Southampton	Southampton U21	3389	Southampton FC B	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	West Bromwich Albion	West Bromwich Albion U21	3850	West Bromwich Albion U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2020/21	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U23	https://en.wikipedia.org/wiki/2020%E2%80%9321_EFL_Trophy
+2021/22	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Aston Villa	Aston Villa U21	4110	Aston Villa U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Crystal Palace	Crystal Palace U21	1879	Crystal Palace U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Everton	Everton U21	7990	Everton FC U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Leeds United	Leeds United U21	5904	Leeds United U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Leicester City	Leicester City U21	3060	Leicester City U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Liverpool	Liverpool U21	8872	Liverpool FC U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Manchester United	Manchester United U21	9784	Manchester United U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Southampton	Southampton U21	3389	Southampton FC B	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2021/22	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U23	https://en.wikipedia.org/wiki/2021%E2%80%9322_EFL_Trophy
+2022/23	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Aston Villa	Aston Villa U21	4110	Aston Villa U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Crystal Palace	Crystal Palace U21	1879	Crystal Palace U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Everton	Everton U21	7990	Everton FC U23	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Leeds United	Leeds United U21	5904	Leeds United U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Leicester City	Leicester City U21	3060	Leicester City U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Liverpool	Liverpool U21	8872	Liverpool FC U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Manchester United	Manchester United U21	9784	Manchester United U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Southampton	Southampton U21	3389	Southampton FC B	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U23	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2022/23	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U21	https://en.wikipedia.org/wiki/2022%E2%80%9323_EFL_Trophy
+2023/24	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Aston Villa	Aston Villa U21	4110	Aston Villa U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Crystal Palace	Crystal Palace U21	1879	Crystal Palace U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Everton	Everton U21	7990	Everton FC U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Leicester City	Leicester City U21	3060	Leicester City U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Liverpool	Liverpool U21	8872	Liverpool FC U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Manchester United	Manchester United U21	9784	Manchester United U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Nottingham Forest	Nottingham Forest U21	4766	Nottingham Forest U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2023/24	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U21	https://en.wikipedia.org/wiki/2023%E2%80%9324_EFL_Trophy
+2024/25	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Aston Villa	Aston Villa U21	4110	Aston Villa U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Crystal Palace	Crystal Palace U21	1879	Crystal Palace U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Everton	Everton U21	7990	Everton FC U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Leicester City	Leicester City U21	3060	Leicester City U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Liverpool	Liverpool U21	8872	Liverpool FC U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Manchester United	Manchester United U21	9784	Manchester United U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Nottingham Forest	Nottingham Forest U21	4766	Nottingham Forest U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_EFL_Trophy
+2024/25	National League Cup	Blackburn Rovers	Blackburn Rovers U21	6055	Blackburn Rovers U23	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Derby County	Derby County U21			https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Leeds United	Leeds United U21	5904	Leeds United U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Manchester United	Manchester United U21	9784	Manchester United U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Middlesbrough	Middlesbrough U21	664	Middlesbrough FC U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Newcastle United	Newcastle United U21	8852	Newcastle United U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Nottingham Forest	Nottingham Forest U21	4766	Nottingham Forest U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Southampton	Southampton U21	3389	Southampton FC B	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Stoke City	Stoke City U21	8795	Stoke City U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Sunderland	Sunderland U21			https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	West Bromwich Albion	West Bromwich Albion U21	3850	West Bromwich Albion U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	West Ham United	West Ham United U21	460	West Ham United U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2024/25	National League Cup	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U21	https://en.wikipedia.org/wiki/2024%E2%80%9325_National_League_Cup
+2025/26	EFL Trophy	Arsenal	Arsenal U21	3529	Arsenal FC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Aston Villa	Aston Villa U21	4110	Aston Villa U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Chelsea	Chelsea U21	2383	Chelsea FC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Crystal Palace	Crystal Palace U21	1879	Crystal Palace U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Everton	Everton U21	7990	Everton FC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Leeds United	Leeds United U21	5904	Leeds United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Liverpool	Liverpool U21	8872	Liverpool FC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Manchester City	Manchester City U21	4716	Manchester City U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Manchester United	Manchester United U21	9784	Manchester United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Newcastle United	Newcastle United U21	8852	Newcastle United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Nottingham Forest	Nottingham Forest U21	4766	Nottingham Forest U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21	8622	Tottenham Hotspur U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	West Ham United	West Ham United U21	460	West Ham United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	EFL Trophy	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_EFL_Trophy
+2025/26	National League Cup	Blackburn Rovers	Blackburn Rovers U21	6055	Blackburn Rovers U23	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Brighton & Hove Albion	Brighton & Hove Albion U21	8493	Brighton & Hove Albion U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Burnley	Burnley U21	4769	Burnley FC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Everton	Everton U21	7990	Everton FC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Fulham	Fulham U21	8747	Fulham FC U23	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Leeds United	Leeds United U21	5904	Leeds United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Leicester City	Leicester City U21	3060	Leicester City U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Manchester United	Manchester United U21	9784	Manchester United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Middlesbrough	Middlesbrough U21	664	Middlesbrough FC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Newcastle United	Newcastle United U21	8852	Newcastle United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Nottingham Forest	Nottingham Forest U21	4766	Nottingham Forest U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Southampton	Southampton U21	3389	Southampton FC B	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Sunderland	Sunderland U21	8461	Sunderland AFC U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	West Bromwich Albion	West Bromwich Albion U21	3850	West Bromwich Albion U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	West Ham United	West Ham United U21	460	West Ham United U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2025/26	National League Cup	Wolverhampton Wanderers	Wolverhampton Wanderers U21	7537	Wolverhampton Wanderers U21	https://en.wikipedia.org/wiki/2025%E2%80%9326_National_League_Cup
+2026/27	EFL Trophy	Arsenal	Arsenal U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Aston Villa	Aston Villa U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Brentford	Brentford U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Brighton & Hove Albion	Brighton & Hove Albion U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Chelsea	Chelsea U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Crystal Palace	Crystal Palace U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Everton	Everton U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Fulham	Fulham U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Ipswich Town	Ipswich Town U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Leeds United	Leeds United U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Liverpool	Liverpool U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Manchester City	Manchester City U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Newcastle United	Newcastle United U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Nottingham Forest	Nottingham Forest U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Sunderland	Sunderland U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	EFL Trophy	Tottenham Hotspur	Tottenham Hotspur U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_EFL_Trophy
+2026/27	National League Cup	Birmingham City	Birmingham City U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Derby County	Derby County U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Everton	Everton U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Fulham	Fulham U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Ipswich Town	Ipswich Town U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Leeds United	Leeds United U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Leicester City	Leicester City U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Middlesbrough	Middlesbrough U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Newcastle United	Newcastle United U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Norwich City	Norwich City U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Nottingham Forest	Nottingham Forest U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Southampton	Southampton U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Stoke City	Stoke City U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	West Bromwich Albion	West Bromwich Albion U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	West Ham United	West Ham United U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
+2026/27	National League Cup	Wolverhampton Wanderers	Wolverhampton Wanderers U21			https://en.wikipedia.org/wiki/2026%E2%80%9327_National_League_Cup
