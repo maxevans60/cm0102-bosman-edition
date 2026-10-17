@@ -1,0 +1,109 @@
+kind	competition	nation	label	real_season	part	held	first	second	third	host	notes	sources	ended
+club	English Charity Shield	England	2002	August 2002		yes	Arsenal	Liverpool			Real name FA Community Shield; played before the 2002/03 season	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2002-08
+club	English Charity Shield	England	2003	August 2003		yes	Manchester United	Arsenal			Real name FA Community Shield; played before the 2003/04 season; 1-1, 4-3 on penalties	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2003-08
+club	English Charity Shield	England	2004	August 2004		yes	Arsenal	Manchester United			Real name FA Community Shield; played before the 2004/05 season	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2004-08
+club	English Charity Shield	England	2005	August 2005		yes	Chelsea	Arsenal			Real name FA Community Shield; played before the 2005/06 season	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2005-08
+club	English Charity Shield	England	2006	August 2006		yes	Liverpool	Chelsea			Real name FA Community Shield; played before the 2006/07 season	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2006-08
+club	English Charity Shield	England	2007	August 2007		yes	Manchester United	Chelsea			Real name FA Community Shield; played before the 2007/08 season; 1-1, 3-0 on penalties	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2007-08
+club	English Charity Shield	England	2008	August 2008		yes	Manchester United	Portsmouth			Real name FA Community Shield; played before the 2008/09 season; 0-0, 3-1 on penalties	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2008-08
+club	English Charity Shield	England	2009	August 2009		yes	Chelsea	Manchester United			Real name FA Community Shield; played before the 2009/10 season; 2-2, 4-1 on penalties	all=https://en.wikipedia.org/wiki/List_of_FA_Community_Shield_matches	2009-08
+club	English Conference	England	2002	2001/02		yes	Boston United	Dagenham and Redbridge			Tier 5: Football Conference	all=https://en.wikipedia.org/wiki/2001–02_Football_Conference	unknown
+club	English Conference	England	2003	2002/03		yes	Yeovil Town	Morecambe			Tier 5: Football Conference	all=https://en.wikipedia.org/wiki/2002–03_Football_Conference	2003-04
+club	English Conference	England	2004	2003/04		yes	Chester City	Hereford United			Tier 5: Football Conference	all=https://en.wikipedia.org/wiki/2003–04_Football_Conference	2004-04
+club	English Conference	England	2005	2004/05		yes	Barnet	Hereford United			Tier 5: Conference National	all=https://en.wikipedia.org/wiki/2004–05_Football_Conference	unknown
+club	English Conference	England	2006	2005/06		yes	Accrington Stanley	Hereford United			Tier 5: Conference National	all=https://en.wikipedia.org/wiki/2005–06_Football_Conference	2006-04
+club	English Conference	England	2007	2006/07		yes	Dagenham and Redbridge	Oxford United			Tier 5: Conference National	all=https://en.wikipedia.org/wiki/2006–07_Football_Conference	2007-04
+club	English Conference	England	2008	2007/08		yes	Aldershot Town	Cambridge United			Tier 5: Conference National	all=https://en.wikipedia.org/wiki/2007–08_Football_Conference	2008-04
+club	English Conference	England	2009	2008/09		yes	Burton Albion	Cambridge United			Tier 5: Conference National	all=https://en.wikipedia.org/wiki/2008–09_Football_Conference	2009-04
+club	English Conference Cup	England	2002	2002/03		not held					Did not take place: axed after 2000/01, one edition in 2004/05, reintroduced 2007/08; label = season start year	held=https://en.wikipedia.org/wiki/Conference_League_Cup	
+club	English Conference Cup	England	2003	2003/04		not held					Did not take place: axed after 2000/01, one edition in 2004/05, reintroduced 2007/08; label = season start year	held=https://en.wikipedia.org/wiki/Conference_League_Cup	
+club	English Conference Cup	England	2004	2004/05		yes	Woking	Stalybridge Celtic			Label = season start year (3.9.68 convention for this cup, see md); played as the Conference Challenge Cup	all=https://en.wikipedia.org/wiki/Conference_League_Cup	unknown
+club	English Conference Cup	England	2005	2005/06		not held					Did not take place: axed after 2000/01, one edition in 2004/05, reintroduced 2007/08; label = season start year	held=https://en.wikipedia.org/wiki/Conference_League_Cup	
+club	English Conference Cup	England	2006	2006/07		not held					Did not take place: axed after 2000/01, one edition in 2004/05, reintroduced 2007/08; label = season start year	held=https://en.wikipedia.org/wiki/Conference_League_Cup	
+club	English Conference Cup	England	2007	2007/08		yes	Aldershot Town	Rushden & Diamonds			Label = season start year (3.9.68 convention for this cup, see md); played as the Setanta Shield	all=https://en.wikipedia.org/wiki/Conference_League_Cup	2008-04
+club	English Conference Cup	England	2008	2008/09		yes	AFC Telford United	Forest Green Rovers			Label = season start year (3.9.68 convention for this cup, see md); played as the Setanta Shield	all=https://en.wikipedia.org/wiki/Conference_League_Cup	2009-04
+club	English Conference Cup	England	2009	2009/10		not held					No longer exists: abolished after the 2008/09 edition; label = season start year	held=https://en.wikipedia.org/wiki/2008–09_Conference_League_Cup	
+club	English FA Cup	England	2002	2001/02		yes	Arsenal	Chelsea				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2002-05
+club	English FA Cup	England	2003	2002/03		yes	Arsenal	Southampton				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2003-05
+club	English FA Cup	England	2004	2003/04		yes	Manchester United	Millwall				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2004-05
+club	English FA Cup	England	2005	2004/05		yes	Arsenal	Manchester United				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2005-05
+club	English FA Cup	England	2006	2005/06		yes	Liverpool	West Ham United				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2006-05
+club	English FA Cup	England	2007	2006/07		yes	Chelsea	Manchester United				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2007-05
+club	English FA Cup	England	2008	2007/08		yes	Portsmouth	Cardiff City				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2008-05
+club	English FA Cup	England	2009	2008/09		yes	Chelsea	Everton				all=https://en.wikipedia.org/wiki/List_of_FA_Cup_finals	2009-05
+club	English FA Trophy	England	2002	2001/02		yes	Yeovil Town	Stevenage Borough				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2002-05
+club	English FA Trophy	England	2003	2002/03		yes	Burscough	Tamworth				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2003-05
+club	English FA Trophy	England	2004	2003/04		yes	Hednesford Town	Canvey Island				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2004-05
+club	English FA Trophy	England	2005	2004/05		yes	Grays Athletic	Hucknall Town				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2005-05
+club	English FA Trophy	England	2006	2005/06		yes	Grays Athletic	Woking				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2006-05
+club	English FA Trophy	England	2007	2006/07		yes	Stevenage Borough	Kidderminster Harriers				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2007-05
+club	English FA Trophy	England	2008	2007/08		yes	Ebbsfleet United	Torquay United				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2008-05
+club	English FA Trophy	England	2009	2008/09		yes	Stevenage Borough	York City				all=https://en.wikipedia.org/wiki/List_of_FA_Trophy_finals	2009-05
+club	English First Division	England	2002	2001/02		yes	Manchester City	West Bromwich Albion			Tier 2: Football League First Division	all=https://en.wikipedia.org/wiki/2001–02_Football_League	2002-04
+club	English First Division	England	2003	2002/03		yes	Portsmouth	Leicester City			Tier 2: Football League First Division	all=https://en.wikipedia.org/wiki/2002–03_Football_League_First_Division	2003-05
+club	English First Division	England	2004	2003/04		yes	Norwich City	West Bromwich Albion			Tier 2: Football League First Division	all=https://en.wikipedia.org/wiki/2003–04_Football_League_First_Division	2004-05
+club	English First Division	England	2005	2004/05		yes	Sunderland	Wigan Athletic			Tier 2: Football League Championship	all=https://en.wikipedia.org/wiki/2004–05_Football_League_Championship	2005-05
+club	English First Division	England	2006	2005/06		yes	Reading	Sheffield United			Tier 2: Football League Championship	all=https://en.wikipedia.org/wiki/2005–06_Football_League	2006-04
+club	English First Division	England	2007	2006/07		yes	Sunderland	Birmingham City			Tier 2: Football League Championship	all=https://en.wikipedia.org/wiki/2006–07_Football_League	2007-05
+club	English First Division	England	2008	2007/08		yes	West Bromwich Albion	Stoke City			Tier 2: Football League Championship	all=https://en.wikipedia.org/wiki/2007–08_Football_League_Championship	2008-05
+club	English First Division	England	2009	2008/09		yes	Wolverhampton Wanderers	Birmingham City			Tier 2: Football League Championship	all=https://en.wikipedia.org/wiki/2008–09_Football_League_Championship	2009-05
+club	English Isthmian League Premier Division	England	2002	2001/02		yes	Gravesend and Northfleet	Canvey Island			Tier 6: Isthmian League Premier Division	all=https://en.wikipedia.org/wiki/2001–02_Isthmian_League	unknown
+club	English Isthmian League Premier Division	England	2003	2002/03		yes	Aldershot Town	Canvey Island			Tier 6: Isthmian League Premier Division	all=https://en.wikipedia.org/wiki/2002–03_Isthmian_League	unknown
+club	English Isthmian League Premier Division	England	2004	2003/04		yes	Canvey Island	Sutton United			Tier 6: Isthmian League Premier Division	all=https://en.wikipedia.org/wiki/2003–04_Isthmian_League	unknown
+club	English Isthmian League Premier Division	England	2005	2004/05		not held					Replaced at tier 6 by Conference North and South from 2004/05; Conference South is mapped to Southern Premier, so nothing maps here (inference, see md). The Isthmian Premier, now tier 7, was won by Yeading with Billericay Town second	held=https://en.wikipedia.org/wiki/2004–05_Football_Conference ; notes=https://en.wikipedia.org/wiki/2004–05_Isthmian_League	
+club	English League Cup	England	2002	2001/02		yes	Blackburn Rovers	Tottenham Hotspur				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2002-02
+club	English League Cup	England	2003	2002/03		yes	Liverpool	Manchester United				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2003-03
+club	English League Cup	England	2004	2003/04		yes	Middlesbrough	Bolton Wanderers				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2004-02
+club	English League Cup	England	2005	2004/05		yes	Chelsea	Liverpool				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2005-02
+club	English League Cup	England	2006	2005/06		yes	Manchester United	Wigan Athletic				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2006-02
+club	English League Cup	England	2007	2006/07		yes	Chelsea	Arsenal				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2007-02
+club	English League Cup	England	2008	2007/08		yes	Tottenham Hotspur	Chelsea				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2008-02
+club	English League Cup	England	2009	2008/09		yes	Manchester United	Tottenham Hotspur				all=https://en.wikipedia.org/wiki/List_of_EFL_Cup_finals	2009-03
+club	English Northern Premier League Premier Division	England	2002	2001/02		yes	Burton Albion	Vauxhall Motors			Tier 6: Northern Premier League Premier Division	all=https://en.wikipedia.org/wiki/2001–02_Northern_Premier_League	2002-05
+club	English Northern Premier League Premier Division	England	2003	2002/03		yes	Accrington Stanley	Barrow AFC			Tier 6: Northern Premier League Premier Division; Barrow AFC is the 3.9.68 spelling (Barrow in the 2007 to 2010 databases)	all=https://en.wikipedia.org/wiki/2002–03_Northern_Premier_League	2003-04
+club	English Northern Premier League Premier Division	England	2004	2003/04		yes	Hucknall Town	Droylsden			Tier 6: Northern Premier League Premier Division	all=https://en.wikipedia.org/wiki/2003–04_Northern_Premier_League	2004-04
+club	English Northern Premier League Premier Division	England	2005	2004/05		yes	Southport	Nuneaton Borough			Maps to Conference North (tier 6 from 2004/05, when NPL Premier became tier 7), as the later databases do; Nuneaton Borough is the club of that time (Nuneaton Town is its 2008 successor)	all=https://en.wikipedia.org/wiki/2004–05_Football_Conference	unknown
+club	English Northern Premier League Premier Division	England	2006	2005/06		yes	Northwich Victoria	Stafford Rangers			Maps to Conference North (tier 6 from 2004/05, when NPL Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2005–06_Football_Conference	unknown
+club	English Northern Premier League Premier Division	England	2007	2006/07		yes	Droylsden	Kettering Town			Maps to Conference North (tier 6 from 2004/05, when NPL Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2006–07_Football_Conference	unknown
+club	English Northern Premier League Premier Division	England	2008	2007/08		yes	Kettering Town	AFC Telford United			Maps to Conference North (tier 6 from 2004/05, when NPL Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2007–08_Football_Conference	unknown
+club	English Northern Premier League Premier Division	England	2009	2008/09		yes	Tamworth	Gateshead			Maps to Conference North (tier 6 from 2004/05, when NPL Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2008–09_Football_Conference	unknown
+club	English Premier Division	England	2002	2001/02		yes	Arsenal	Liverpool			Tier 1: FA Premier League	all=https://en.wikipedia.org/wiki/2001–02_FA_Premier_League	2002-05
+club	English Premier Division	England	2003	2002/03		yes	Manchester United	Arsenal			Tier 1: FA Premier League	all=https://en.wikipedia.org/wiki/2002–03_FA_Premier_League	2003-05
+club	English Premier Division	England	2004	2003/04		yes	Arsenal	Chelsea			Tier 1: FA Premier League	all=https://en.wikipedia.org/wiki/2003–04_FA_Premier_League	2004-05
+club	English Premier Division	England	2005	2004/05		yes	Chelsea	Arsenal			Tier 1: FA Premier League	all=https://en.wikipedia.org/wiki/2004–05_FA_Premier_League	2005-05
+club	English Premier Division	England	2006	2005/06		yes	Chelsea	Manchester United			Tier 1: FA Premier League	all=https://en.wikipedia.org/wiki/2005–06_FA_Premier_League	2006-05
+club	English Premier Division	England	2007	2006/07		yes	Manchester United	Chelsea			Tier 1: FA Premier League	all=https://en.wikipedia.org/wiki/2006–07_FA_Premier_League	2007-05
+club	English Premier Division	England	2008	2007/08		yes	Manchester United	Chelsea			Tier 1: Premier League	all=https://en.wikipedia.org/wiki/2007–08_Premier_League	2008-05
+club	English Premier Division	England	2009	2008/09		yes	Manchester United	Liverpool			Tier 1: Premier League	all=https://en.wikipedia.org/wiki/2008–09_Premier_League	2009-05
+club	English Second Division	England	2002	2001/02		yes	Brighton and Hove Albion	Reading			Tier 3: Football League Second Division	all=https://en.wikipedia.org/wiki/2001–02_Football_League	2002-04
+club	English Second Division	England	2003	2002/03		yes	Wigan Athletic	Crewe Alexandra			Tier 3: Football League Second Division	all=https://en.wikipedia.org/wiki/2002–03_Football_League	2003-05
+club	English Second Division	England	2004	2003/04		yes	Plymouth Argyle	Queens Park Rangers			Tier 3: Football League Second Division	all=https://en.wikipedia.org/wiki/2003–04_Football_League	2004-05
+club	English Second Division	England	2005	2004/05		yes	Luton Town	Hull City			Tier 3: Football League One	all=https://en.wikipedia.org/wiki/2004–05_Football_League_One	2005-05
+club	English Second Division	England	2006	2005/06		yes	Southend United	Colchester United			Tier 3: Football League One	all=https://en.wikipedia.org/wiki/2005–06_Football_League	2006-05
+club	English Second Division	England	2007	2006/07		yes	Scunthorpe United	Bristol City			Tier 3: Football League One	all=https://en.wikipedia.org/wiki/2006–07_Football_League	2007-05
+club	English Second Division	England	2008	2007/08		yes	Swansea City	Nottingham Forest			Tier 3: Football League One	all=https://en.wikipedia.org/wiki/2007–08_Football_League_One	2008-05
+club	English Second Division	England	2009	2008/09		yes	Leicester City	Peterborough United			Tier 3: Football League One	all=https://en.wikipedia.org/wiki/2008–09_Football_League_One	2009-05
+club	English Southern League Premier Division	England	2002	2001/02		yes	Kettering Town	Tamworth			Tier 6: Southern League Premier Division	all=https://en.wikipedia.org/wiki/2001–02_Southern_Football_League	unknown
+club	English Southern League Premier Division	England	2003	2002/03		yes	Tamworth	Stafford Rangers			Tier 6: Southern League Premier Division	all=https://en.wikipedia.org/wiki/2002–03_Southern_Football_League	unknown
+club	English Southern League Premier Division	England	2004	2003/04		yes	Crawley Town	Weymouth			Tier 6: Southern League Premier Division	all=https://en.wikipedia.org/wiki/2003–04_Southern_Football_League	unknown
+club	English Southern League Premier Division	England	2005	2004/05		yes	Grays Athletic	Cambridge City			Maps to Conference South (tier 6 from 2004/05, when Southern Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2004–05_Football_Conference	unknown
+club	English Southern League Premier Division	England	2006	2005/06		yes	Weymouth	St. Albans City			Maps to Conference South (tier 6 from 2004/05, when Southern Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2005–06_Football_Conference	unknown
+club	English Southern League Premier Division	England	2007	2006/07		yes	Histon	Salisbury City			Maps to Conference South (tier 6 from 2004/05, when Southern Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2006–07_Football_Conference	unknown
+club	English Southern League Premier Division	England	2008	2007/08		yes	Lewes	Eastbourne Borough			Maps to Conference South (tier 6 from 2004/05, when Southern Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2007–08_Football_Conference	unknown
+club	English Southern League Premier Division	England	2009	2008/09		yes	AFC Wimbledon	Hampton & Richmond Borough			Maps to Conference South (tier 6 from 2004/05, when Southern Premier became tier 7), as the later databases do	all=https://en.wikipedia.org/wiki/2008–09_Football_Conference	unknown
+club	English Third Division	England	2002	2001/02		yes	Plymouth Argyle	Luton Town			Tier 4: Football League Third Division	all=https://en.wikipedia.org/wiki/2001–02_Football_League	2002-04
+club	English Third Division	England	2003	2002/03		yes	Rushden & Diamonds	Hartlepool United			Tier 4: Football League Third Division	all=https://en.wikipedia.org/wiki/2002–03_Football_League	2003-05
+club	English Third Division	England	2004	2003/04		yes	Doncaster Rovers	Hull City			Tier 4: Football League Third Division	all=https://en.wikipedia.org/wiki/2003–04_Football_League	2004-05
+club	English Third Division	England	2005	2004/05		yes	Yeovil Town	Scunthorpe United			Tier 4: Football League Two	all=https://en.wikipedia.org/wiki/2004–05_Football_League_Two	2005-05
+club	English Third Division	England	2006	2005/06		yes	Carlisle United	Northampton Town			Tier 4: Football League Two	all=https://en.wikipedia.org/wiki/2005–06_Football_League	2006-05
+club	English Third Division	England	2007	2006/07		yes	Walsall	Hartlepool United			Tier 4: Football League Two	all=https://en.wikipedia.org/wiki/2006–07_Football_League	2007-05
+club	English Third Division	England	2008	2007/08		yes	Milton Keynes Dons	Peterborough United			Tier 4: Football League Two	all=https://en.wikipedia.org/wiki/2007–08_Football_League_Two	2008-05
+club	English Third Division	England	2009	2008/09		yes	Brentford	Exeter City			Tier 4: Football League Two	all=https://en.wikipedia.org/wiki/2008–09_Football_League_Two	2009-05
+club	English Vans Trophy	England	2002	2001/02		yes	Blackpool	Cambridge United			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2002-03
+club	English Vans Trophy	England	2003	2002/03		yes	Bristol City	Carlisle United			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2003-04
+club	English Vans Trophy	England	2004	2003/04		yes	Blackpool	Southend United			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2004-03
+club	English Vans Trophy	England	2005	2004/05		yes	Wrexham	Southend United			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2005-04
+club	English Vans Trophy	England	2006	2005/06		yes	Swansea City	Carlisle United			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2006-04
+club	English Vans Trophy	England	2007	2006/07		yes	Doncaster Rovers	Bristol Rovers			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2007-04
+club	English Vans Trophy	England	2008	2007/08		yes	Milton Keynes Dons	Grimsby Town			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2008-03
+club	English Vans Trophy	England	2009	2008/09		yes	Luton Town	Scunthorpe United			Football League Trophy	all=https://en.wikipedia.org/wiki/List_of_EFL_Trophy_finals	2009-04
