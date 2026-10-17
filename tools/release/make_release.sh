@@ -3,7 +3,7 @@
 #
 # Usage:
 #   tools/release/make_release.sh --game <clean files> --data-3960 <folder> --data-3965 <folder>
-#       --sdl2-mac <folder> --sdl2-mingw <folder> --site-assets <folder> --season-dbs <folder> [--publish]
+#       --sdl2-mac <folder> --sdl2-mingw <folder> --site-assets <folder> --season-dbs <folder> --own-dbs <folder> [--publish]
 #
 #   --game         the clean files (tools/clean_files/make_clean_files.py). The script checks them
 #                  against tools/clean_files/manifest.tsv.
@@ -12,11 +12,13 @@
 #                  Both go into the game folder of each download as Data-3.9.60 and Data-3.9.65, where
 #                  the option database finds them (src/recomp_rt/win/files.c).
 #   --season-dbs   the folder with the zips of the Update Team databases (test-fixtures/databases/zips). The
-#                  script makes the 21 season database zips of the season database table from it
+#                  script makes the 23 season database zips of the season database table from it
 #                  (tools/release/make_season_zips.py): each holds only the 20 data files, in a folder with
 #                  the neutral name of docs/research/rules-0.6.0/databases-signatures.tsv. It checks each
 #                  zip against that table and stops on a mismatch. The zips go in Seasons/ of the game
 #                  folder of each download (src/recomp_rt/win/seasons_db.h unpacks them on the first pick).
+#   --own-dbs      the folder with the zips of our own season databases (Summer 2004 for 2004/05 and Summer 2006 for 2006/07, Q351), each a
+#                  zip of the converter's output folder. make_season_zips.py reads it as a second source.
 #   --sdl2-mac     the folder with mac-arm64 and mac-x86_64 SDL2 builds (tools/mac/build_sdl2.sh)
 #   --sdl2-mingw   the SDL2 mingw development release (SDL2-2.x.y)
 #   --site-assets  the site's pictures (logo, screenshots). They go into site-assets.zip on the release,
@@ -33,7 +35,7 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 GH_REPO="maxevans60/cm0102-bosman-edition"
-GAME=""; DATA_3960=""; DATA_3965=""; SDL_MAC=""; SDL_MINGW=""; SITE=""; SEASON_DBS=""; STAGE_ONLY=0; PUBLISH=0
+GAME=""; DATA_3960=""; DATA_3965=""; SDL_MAC=""; SDL_MINGW=""; SITE=""; SEASON_DBS=""; OWN_DBS=""; STAGE_ONLY=0; PUBLISH=0
 while [ $# -gt 0 ]; do
     case "$1" in
         --game) GAME="$2"; shift 2 ;;
@@ -43,13 +45,14 @@ while [ $# -gt 0 ]; do
         --sdl2-mingw) SDL_MINGW="$2"; shift 2 ;;
         --site-assets) SITE="$2"; shift 2 ;;
         --season-dbs) SEASON_DBS="$2"; shift 2 ;;
+        --own-dbs) OWN_DBS="$2"; shift 2 ;;
         --stage-only) STAGE_ONLY=1; shift ;;
         --publish) PUBLISH=1; shift ;;
         *) echo "make_release.sh: unknown option $1" >&2; exit 2 ;;
     esac
 done
-NEEDED="GAME DATA_3960 DATA_3965 SDL_MAC SDL_MINGW SITE SEASON_DBS"
-[ "$STAGE_ONLY" = 1 ] && NEEDED="GAME DATA_3960 DATA_3965 SITE SEASON_DBS"
+NEEDED="GAME DATA_3960 DATA_3965 SDL_MAC SDL_MINGW SITE SEASON_DBS OWN_DBS"
+[ "$STAGE_ONLY" = 1 ] && NEEDED="GAME DATA_3960 DATA_3965 SITE SEASON_DBS OWN_DBS"
 for v in $NEEDED; do
     [ -n "${!v}" ] || { echo "make_release.sh: give --$(echo $v | tr 'A-Z_' 'a-z-' | sed 's/sdl-/sdl2-/')." >&2; exit 2; }
 done
@@ -83,7 +86,7 @@ rsync -a --delete --exclude .DS_Store "$DATA_3965/" "$STAGE/Data-3.9.65/"
 python3 -I "$REPO/tools/release/make_intro_logo.py" "$SITE/logo.png" "$STAGE/Data/bosman_logo.rgn"
 # The season databases (0.6.0 slice 14): one zip each, checked against the signatures table. The first rsync
 # above removed any Seasons folder of an earlier run, and the tool stops when its output folder is not empty.
-python3 -I "$REPO/tools/release/make_season_zips.py" --season-dbs "$SEASON_DBS" --out "$STAGE/Seasons"
+python3 -I "$REPO/tools/release/make_season_zips.py" --season-dbs "$SEASON_DBS" --season-dbs "$OWN_DBS" --out "$STAGE/Seasons"
 # The rules table of the game (0.6.0 slice 12): one file from the parts of docs/research/rules-0.6.0. The game
 # reads Seasons/rules.tsv at the start (src/recomp_rt/win/season_rules.c). The tool stops on a row it cannot read.
 python3 -I "$REPO/tools/seasons/make_rules.py" --out "$STAGE/Seasons/rules.tsv"

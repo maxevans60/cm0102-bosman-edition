@@ -5,9 +5,11 @@ Usage:
     python3 -I tools/release/make_season_zips.py --season-dbs <folder of source zips> --out <new folder>
         [--signatures <databases-signatures.tsv>] [--only <name> ...]
 
---season-dbs  the folder with the zips of the Update Team databases (test-fixtures/databases/zips). A source
-              zip may have any file name and any extra files. The tool recognises each zip by the sizes and
-              SHA-256 of its index.dat, club.dat and staff.dat, never by its name.
+--season-dbs  a folder with source zips: the zips of the Update Team databases (test-fixtures/databases/zips),
+              and again for the folder with the zips of our own season databases (2004/05 and 2006/07, Q351). Give it
+              once for each folder. A source zip may have any file name and any extra files. The tool
+              recognises each zip by the sizes and SHA-256 of its index.dat, club.dat and staff.dat, never by
+              its name.
 --out         the folder for the new zips. It must not exist or must be empty.
 --signatures  the signatures table. Default: docs/research/rules-0.6.0/databases-signatures.tsv.
 --only        make only the zips of these databases (for tests). Without it every database with the
@@ -98,11 +100,11 @@ def row_matches(row, sig):
     return tuple(sig) == want
 
 
-def find_sources(folder, rows):
+def find_sources(folders, rows):
     """{database name: path of its source zip}. A zip that matches no row stops the tool."""
     found = {}
-    for name in sorted(os.listdir(folder)):
-        path = os.path.join(folder, name)
+    for path in sorted(os.path.join(d, n) for d in folders for n in os.listdir(d)):
+        name = os.path.basename(path)
         if not name.lower().endswith(".zip") or not os.path.isfile(path):
             continue
         with zipfile.ZipFile(path) as zf:
@@ -165,7 +167,7 @@ def check_zip(path, row):
 def main(argv):
     here = os.path.dirname(os.path.abspath(__file__))
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--season-dbs", required=True)
+    ap.add_argument("--season-dbs", action="append", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--signatures", default=os.path.join(here, "..", "..", "docs", "research", "rules-0.6.0",
                                                         "databases-signatures.tsv"))
@@ -182,8 +184,9 @@ def main(argv):
             wanted = [r for r in wanted if r["database"] in a.only]
         if not wanted:
             raise Stop("the signatures table has no season database")
-        if not os.path.isdir(a.season_dbs):
-            raise Stop(f"{a.season_dbs} is not a folder")
+        for d in a.season_dbs:
+            if not os.path.isdir(d):
+                raise Stop(f"{d} is not a folder")
         if os.path.exists(a.out) and os.listdir(a.out):
             raise Stop(f"{a.out} is not empty")
         sources = find_sources(a.season_dbs, rows)
