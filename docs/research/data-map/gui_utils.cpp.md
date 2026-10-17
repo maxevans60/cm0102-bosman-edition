@@ -6,7 +6,7 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0x9cdc2c | 40 | buffer | `g_unk_9cdc2c` |  |  | low | script |  | [0x5ede20](../function-map/gui_utils.cpp.md), [0x8f5080](../function-map/transfer_screens.cpp.md) |  |
-| 0x9cdc54 | 52 | buffer | `g_unk_9cdc54` |  |  | low | script |  | [0x5ede20](../function-map/gui_utils.cpp.md), [0x8f5080](../function-map/transfer_screens.cpp.md) |  |
+| 0x9cdc2c | 40 | buffer | `g_page_count_label_text` | The text entry with id 0x3c for the page count label, with the format Pg <%d - page>/<%d - maximum page>. | Holds that format string at +4. 0x5ede20 gui_add_page_buttons passes it as button text and to 0x66f4e0 langlib_sprintf, and 0x8f5080 uses it too. | high | sonnet |  | [0x5ede20](../function-map/gui_utils.cpp.md), [0x8f5080](../function-map/transfer_screens.cpp.md) |  |
+| 0x9cdc54 | 12 | buffer | `g_indented_name_label_text` | The text entry with id 0x3e that holds the format of five spaces followed by a string, used as a page button label. | Holds the string at +4. 0x5ede20 gui_add_page_buttons and 0x8f5080 transfer_screens_build_transfers_screen pass its address as button text. | medium | sonnet |  | [0x5ede20](../function-map/gui_utils.cpp.md), [0x8f5080](../function-map/transfer_screens.cpp.md) |  |
 | 0xb0be34 | 1 | u8 | `g_unk_b0be34` |  |  | low | script | [0x5ed780](../function-map/gui_utils.cpp.md) | [0x5ed780](../function-map/gui_utils.cpp.md) |  |
 | 0xb0be36 | 2 | u16 | `g_unk_b0be36` |  |  | low | script | [0x5ed780](../function-map/gui_utils.cpp.md) | [0x5ed780](../function-map/gui_utils.cpp.md) | 2026-10-15-team-views-frame-inventory.md |

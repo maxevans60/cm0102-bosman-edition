@@ -6,4 +6,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0x9c36c0 | 40 | buffer | `g_unk_9c36c0` |  |  | low | script |  | [0x55ea10](../function-map/discipline.cpp.md) |  |
+| 0x9c36c0 | 40 | char[40] | `g_str_overklaga_s_dom_pa_1_match_avstangning` | The text "Överklaga %s dom på 1 match avstängning". | the bytes at this address are the text "Överklaga %s dom på 1 match avstängning", and every access passes its address | high | script |  | [0x55ea10](../function-map/discipline.cpp.md) |  |

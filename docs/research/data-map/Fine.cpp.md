@@ -6,5 +6,5 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0x9cc03c | 20 | buffer | `g_unk_9cc03c` |  |  | low | script |  | [0x5a83e0](../function-map/Fine.cpp.md) |  |
-| 0x9cc050 | 0 | buffer | `g_unk_9cc050` |  |  | low | script |  | [0x5a83e0](../function-map/Fine.cpp.md) |  |
+| 0x9cc03c | 17 | char[17] | `g_str_d_veckors_boter` | The text "%d veckors böter". | the bytes at this address are the text "%d veckors böter", and every access passes its address | high | script |  | [0x5a83e0](../function-map/Fine.cpp.md) |  |
+| 0x9cc050 | 15 | char[15] | `g_str_1_veckas_boter` | The text "1 veckas böter". | the bytes at this address are the text "1 veckas böter", and every access passes its address | high | script |  | [0x5a83e0](../function-map/Fine.cpp.md) |  |

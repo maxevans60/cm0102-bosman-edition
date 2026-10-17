@@ -6,4 +6,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0x9674a0 | 52 | buffer | `g_unk_9674a0` |  |  | low | script |  | [0x40a580](../function-map/argentina_rules.cpp.md) |  |
+| 0x9674a0 | 52 | vtable | `g_vtable_argentina_rules` | The vtable of the ArgentinaRules competition object. | Stored at the start of the object by the constructor 0x40a580 ARGENTINA_RULES::Argentina_rules, its only reader. Next global starts 52 bytes later. | high | sonnet |  | [0x40a580](../function-map/argentina_rules.cpp.md) |  |

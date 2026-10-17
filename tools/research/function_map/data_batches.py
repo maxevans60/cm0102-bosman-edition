@@ -5,7 +5,8 @@ globals. Each batch gets a list file (one address a line) and one input file wit
 (every member of its groups with its current name) and the dossier of each global to name. Waves of
 WAVE batches take batches spread over the address range, so each wave samples the whole data.
 
-Usage: FUNCMAP_WORK=... data_batches.py <prefix> <run> [<run> ...]
+Usage: FUNCMAP_WORK=... data_batches.py <prefix> [--first-wave N] <run> [<run> ...]
+Globals that a sonnet or opus run already named stay out, whatever their confidence.
 Writes $FUNCMAP_WORK/sweep/<prefix>-wNN-aX (lists), data-dossiers/batches/<batch>.txt and
 sweep/<prefix>-batches.tsv (batch, wave, globals).
 """
@@ -21,6 +22,11 @@ CONTEXT = 4               # group members shown before and after each global of 
 
 
 def main(prefix, runs):
+    first = 1
+    if "--first-wave" in runs:
+        i = runs.index("--first-wave")
+        first = int(runs[i + 1])
+        runs = runs[:i] + runs[i + 2:]
     W = work_dir()
     D = load("globals.pkl")
     G, groups = D["G"], D["groups"]
@@ -29,7 +35,7 @@ def main(prefix, runs):
         for line in open(f"{W}/runs-data/{run}/names.jsonl"):
             r = json.loads(line)
             names[int(r["address"], 16)] = r
-    todo = lambda a: names.get(a, {}).get("confidence") != "high"
+    todo = lambda a: names.get(a, {}).get("confidence") != "high" and names.get(a, {}).get("model") in (None, "script")
     chunks = []
     for grp in groups:
         open_ = [a for a in grp if todo(a)]
@@ -51,7 +57,7 @@ def main(prefix, runs):
     os.makedirs(out, exist_ok=True)
     plan = ["batch\twave\tglobals\tfirst\tlast"]
     for i, b in enumerate(batches):
-        wave, slot = i % waves + 1, i // waves
+        wave, slot = i % waves + first, i // waves
         name = f"{prefix}-w{wave:02d}-a{string.ascii_lowercase[slot]}"
         items = [a for _, its in b for a in its]
         open(f"{W}/sweep/{name}", "w").write("".join(f"0x{a:06x}\n" for a in items))
@@ -81,7 +87,7 @@ def main(prefix, runs):
             text.append(open(f"{W}/data-dossiers/{a:06x}.txt").read())
         open(f"{out}/{name}.txt", "w").write("\n".join(text))
         plan.append(f"{name}\t{wave}\t{len(items)}\t0x{items[0]:06x}\t0x{items[-1]:06x}")
-    open(f"{W}/sweep/{prefix}-batches.tsv", "w").write("\n".join(plan) + "\n")
+    open(f"{W}/sweep/{prefix}-batches-from-w{first:02d}.tsv", "w").write("\n".join(plan) + "\n")
     print(len(batches), "batches in", waves, "waves,", sum(1 for a in G if todo(a)), "globals to name")
 
 

@@ -6,4 +6,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xad4e94 | 0 | buffer | `g_unk_ad4e94` |  |  | low | script |  | [0x9233a0](../function-map/weather.cpp.md) |  |
+| 0xad4e94 | 28 | char[28] | `g_str_d_temperature_eg_2_degree_c` | The text "<%d - Temperature eg -2 >°C". | the bytes at this address are the text "<%d - Temperature eg -2 >°C", and every access passes its address | high | script |  | [0x9233a0](../function-map/weather.cpp.md) |  |

@@ -15,6 +15,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 from capstone import x86_const as X
 
@@ -65,6 +66,20 @@ def string_at(a):
 def in_data(v):
     return any(name in (".rdata", ".data") and va <= v < va + max(vsize, rsize)
                for name, va, vsize, rptr, rsize, flags in img.sections)
+
+
+def text_at(a):
+    """The text at a in initialised data, with Latin-1 letters and of any length, or None."""
+    name, init = section_of(a)
+    if not init:
+        return None
+    b = img.read(a, 200)
+    if b"\0" not in b:
+        return None
+    b = b.split(b"\0")[0]
+    if b and all(32 <= c < 127 or c in (9, 10, 13) or c >= 0xa0 for c in b):
+        return b.decode("latin1")
+    return None
 
 
 def is_global(v):
@@ -134,6 +149,9 @@ def owner_file(funcs, fname):
 
 
 def slug(s, limit=40):
+    for sign, word in (("\u00a3", " pound "), ("\u00a5", " yen "), ("\u00a4", " currency "), ("\u00b0", " degree "), ("$", " dollar ")):
+        s = s.replace(sign, word)
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
     s = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s)
     s = re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
     return s[:limit].rstrip("_") or "empty"
@@ -148,7 +166,7 @@ def key_id_names():
                          r"const key_id_entry_t \w+\[\] = \{\n(.*?)\n\};", text, re.S):
         what, where = m.group(2), m.group(3)
         for name_addr, s1, s2, chain in re.findall(r"\{(0x[0-9a-f]+), (-?\d+), (-?\d+), (\d+)\}", m.group(4)):
-            name = string_at(int(name_addr, 16)) or ""
+            name = text_at(int(name_addr, 16)) or ""
             for s in (int(s1), int(s2)):
                 if not name:
                     continue
@@ -235,6 +253,13 @@ def script_names(G, fn):
                                 evidence=f"string 0x{v:06x} \"{s[:60]}\" is the value at this address, and no function writes it",
                                 confidence="high" if sec == ".rdata" else "medium")
                 continue
+        t = text_at(a)
+        if t and g["acc"] and all(x[2] == "address" for x in g["acc"]):
+            names[a] = dict(name=f"g_str_{slug(t, 40) if slug(t, 40) != 'empty' else 'chars_' + t.encode('latin1').hex()}", type=f"char[{len(t.encode('latin1')) + 1}]",
+                            size=len(t.encode("latin1")) + 1, description=f"The text \"{t}\".",
+                            evidence=f"the bytes at this address are the text \"{t}\", and every access passes its address",
+                            confidence="high")
+            continue
         if all(cat.get(r) in ("lib", "crt") for r in readers):
             first = min(readers)
             rn = fn.get(first, {}).get("name", f"sub_{first:06x}")

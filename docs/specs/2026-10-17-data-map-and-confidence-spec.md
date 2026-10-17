@@ -102,9 +102,11 @@ Done (2026-10-17): 2,289 script names (2,148 high: key ids, read-only float cons
 Blocked by: 1
 Delivers: the first wave of up to 8 Sonnet agents, and one Opus check of 60 random names from that wave. The estimate doc records the wave, its tokens and the gate result.
 Merge danger: two-way door. Blast radius: the names of one wave.
-- [ ] Every global of the wave's batches has a name.
-- [ ] The gate result is recorded. Above 10% wrong, the remaining waves are set to Opus in the brief.
-- [ ] The check script passes.
+- [x] Every global of the wave's batches has a name.
+- [x] The gate result is recorded. Above 10% wrong, the remaining waves are set to Opus in the brief.
+- [x] The check script passes.
+
+Done (2026-10-17): 600 names (435 high), 1 of 60 sample rows wrong (1.7%), so the rest stays on Sonnet. The string rule now names short and accented text, and 813 globals are left in 12 batches.
 
 ### 3. Remaining data map waves (repeat per wave)
 Blocked by: 2

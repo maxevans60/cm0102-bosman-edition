@@ -8,7 +8,7 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 |---|---|---|---|---|---|---|---|---|---|---|
 | 0x96a708 | 8 | double | `g_f64_0_024` | Read-only double constant 0.024. | the double at this address in .rdata is 0.024, and every access reads it | high | script |  | [0x59b9c0](../function-map/fin_prm.cpp.md), [0x6b6cc0](../function-map/match_day.cpp.md), [0x6b6d20](../function-map/match_day.cpp.md) |  |
 | 0xa15704 | 4 | u32 | `g_unk_a15704` |  |  | low | script | [0x6b66a0](../function-map/match_day.cpp.md), [0x81ce00](../function-map/Setup.cpp.md) | [0x6b66a0](../function-map/match_day.cpp.md) | 2026-10-14-select-leagues-spec.md, 2026-10-14-start-new-game-inventory.md |
-| 0xa15850 | 4 | buffer | `g_unk_a15850` |  |  | low | script |  | [0x6b4360](../function-map/match_day.cpp.md) |  |
+| 0xa15850 | 2 | char[2] | `g_str_chars_25` | The text "%". | the bytes at this address are the text "%", and every access passes its address | high | script |  | [0x6b4360](../function-map/match_day.cpp.md) |  |
 | 0xb67a54 | 4 | u32 | `g_unk_b67a54` |  |  | low | script | [0x6b5ce0](../function-map/match_day.cpp.md) | [0x6b5ce0](../function-map/match_day.cpp.md) |  |
 | 0xb67a58 | 12 | table | `g_unk_b67a58` |  |  | low | script | [0x6b66a0](../function-map/match_day.cpp.md) | [0x6b66a0](../function-map/match_day.cpp.md) |  |
 | 0xb67dc8 | 4 | u32 | `g_unk_b67dc8` |  |  | low | script | [0x6b3c10](../function-map/match_day.cpp.md), [0x6b4190](../function-map/match_day.cpp.md) | [0x6b4190](../function-map/match_day.cpp.md), [0x6b74a0](../function-map/match_day.cpp.md), [0x6d1cc0](../function-map/match_eng.cpp.md) |  |

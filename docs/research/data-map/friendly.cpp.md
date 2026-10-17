@@ -13,7 +13,7 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 | 0x96af20 | 8 | double | `g_f64_1_65` | Read-only double constant 1.65. | the double at this address in .rdata is 1.65, and every access reads it | high | script |  | [0x5c5820](../function-map/friendly.cpp.md), [0x5c5f40](../function-map/friendly.cpp.md) |  |
 | 0x96af28 | 8 | double | `g_f64_40000_0` | Read-only double constant 40000.0. | the double at this address in .rdata is 40000.0, and every access reads it | high | script |  | [0x5c5f40](../function-map/friendly.cpp.md) |  |
 | 0x96af38 | 8 | double | `g_f64_1_32` | Read-only double constant 1.32. | the double at this address in .rdata is 1.32, and every access reads it | high | script |  | [0x5c5f40](../function-map/friendly.cpp.md), [0x846920](../function-map/shortlist_manager.cpp.md) |  |
-| 0x9cd0f0 | 0 | buffer | `g_unk_9cd0f0` |  |  | low | script |  | [0x5c5820](../function-map/friendly.cpp.md) |  |
+| 0x9cd0f0 | 3 | char[3] | `g_str_fr` | The text "Fr". | the bytes at this address are the text "Fr", and every access passes its address | high | script |  | [0x5c5820](../function-map/friendly.cpp.md) |  |
 | 0xb63d8e | 6 | table | `g_unk_b63d8e` |  |  | low | script |  | [0x5c3040](../function-map/friendly.cpp.md), [0x5c6b70](../function-map/friendly.cpp.md), [0x842740](../function-map/shortlist_manager.cpp.md) |  |
 | 0xb63d9d | 11 | table | `g_unk_b63d9d` |  |  | low | script |  | [0x5c6b70](../function-map/friendly.cpp.md) |  |
 | 0xde1f7c | 1 | u8 | `g_unk_de1f7c` |  |  | low | script | [0x5c3be0](../function-map/friendly.cpp.md) |  |  |

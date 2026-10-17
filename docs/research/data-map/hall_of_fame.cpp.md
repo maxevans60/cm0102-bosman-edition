@@ -6,7 +6,7 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0x9cdc88 | 4 | table | `g_unk_9cdc88` |  |  | low | script |  | [0x5f00c0](../function-map/hall_of_fame.cpp.md), [0x5f0680](../function-map/hall_of_fame.cpp.md) |  |
+| 0x9cdc88 | 1920 | table | `g_hall_of_fame_scramble_keys` | The table of 480 key words that scrambles and unscrambles the hall of fame file by byte swaps and XOR. | 0x5f0680 hall_of_fame_unscramble_and_check is documented as using it as the key table. 0x5f00c0 HallOfFame::save indexes it by a value modulo 0x1e0. | high | sonnet |  | [0x5f00c0](../function-map/hall_of_fame.cpp.md), [0x5f0680](../function-map/hall_of_fame.cpp.md) |  |
 | 0xb0be38 | 0 | buffer | `g_unk_b0be38` |  |  | low | script |  | [0x5efd00](../function-map/hall_of_fame.cpp.md), [0x5efd30](../function-map/hall_of_fame.cpp.md), [0x5efd50](../function-map/hall_of_fame.cpp.md) |  |
 | 0xb5deb8 | 4 | u32 | `g_unk_b5deb8` |  |  | low | script | [0x5f10c0](../function-map/hall_of_fame.cpp.md) | [0x5f1100](../function-map/hall_of_fame.cpp.md) |  |
 | 0xb5debc | 28 | object | `g_unk_b5debc` |  |  | low | script |  | [0x5f10c0](../function-map/hall_of_fame.cpp.md) |  |

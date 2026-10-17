@@ -13,36 +13,36 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 | 0x9688e0 | 8 | double | `g_f64_250000_0` | Read-only double constant 250000.0. | the double at this address in .rdata is 250000.0, and every access reads it | high | script |  | [0x4426e0](../function-map/cash.cpp.md), [0x4d0c60](../function-map/contract_manager.cpp.md), [0x5961d0](../function-map/fin_prm.cpp.md) |  |
 | 0x9688f0 | 8 | double | `g_f64_100000_0` | Read-only double constant 100000.0. | the double at this address in .rdata is 100000.0, and every access reads it | high | script |  | [0x4426e0](../function-map/cash.cpp.md), [0x4cda70](../function-map/contract_manager.cpp.md) |  |
 | 0x968900 | 8 | double | `g_f64_30000_0` | Read-only double constant 30000.0. | the double at this address in .rdata is 30000.0, and every access reads it | high | script |  | [0x4426e0](../function-map/cash.cpp.md) |  |
-| 0x98b140 | 1 | u8 | `g_unk_98b140` |  |  | low | script | [0x43f7f0](../function-map/cash.cpp.md) | [0x4415e0](../function-map/cash.cpp.md) |  |
-| 0x98b148 | 4 | table | `g_unk_98b148` |  |  | low | script |  | [0x441c10](../function-map/cash.cpp.md) |  |
-| 0x98b14c | 4 | table | `g_unk_98b14c` |  |  | low | script |  | [0x441c10](../function-map/cash.cpp.md) |  |
-| 0x98b150 | 4 | table | `g_unk_98b150` |  |  | low | script |  | [0x441c10](../function-map/cash.cpp.md) |  |
-| 0x98b154 | 4 | table | `g_unk_98b154` |  |  | low | script |  | [0x441c10](../function-map/cash.cpp.md) |  |
-| 0x98b1e0 | 4 | object | `g_unk_98b1e0` |  |  | low | script |  | [0x43f620](../function-map/cash.cpp.md) |  |
-| 0x98b254 | 0 | buffer | `g_unk_98b254` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x4415f0](../function-map/cash.cpp.md) |  |
-| 0x98b2a8 | 20 | buffer | `g_unk_98b2a8` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b2bc | 24 | buffer | `g_unk_98b2bc` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b2d4 | 8 | buffer | `g_unk_98b2d4` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b2dc | 60 | buffer | `g_unk_98b2dc` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x4415f0](../function-map/cash.cpp.md) |  |
-| 0x98b318 | 12 | buffer | `g_unk_98b318` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b324 | 4 | buffer | `g_unk_98b324` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b328 | 20 | buffer | `g_unk_98b328` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b33c | 4 | buffer | `g_unk_98b33c` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b340 | 4 | buffer | `g_unk_98b340` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b344 | 60 | buffer | `g_unk_98b344` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b380 | 40 | buffer | `g_unk_98b380` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3a8 | 4 | buffer | `g_unk_98b3a8` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3ac | 12 | buffer | `g_unk_98b3ac` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3b8 | 12 | buffer | `g_unk_98b3b8` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3c4 | 40 | buffer | `g_unk_98b3c4` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3ec | 4 | buffer | `g_unk_98b3ec` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3f0 | 4 | buffer | `g_unk_98b3f0` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x53ee50](../function-map/Database.cpp.md) |  |
-| 0x98b3f4 | 4 | buffer | `g_unk_98b3f4` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3f8 | 4 | buffer | `g_unk_98b3f8` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
-| 0x98b3fc | 60 | buffer | `g_unk_98b3fc` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x4415f0](../function-map/cash.cpp.md) |  |
+| 0x98b140 | 1 | s8 | `g_current_currency` | The index of the selected currency, set to -1 in the file image until a currency is chosen. | Written only by 0x43f7f0 cash_set_currency and read only by 0x4415e0 cash_get_currency, both high. | high | sonnet | [0x43f7f0](../function-map/cash.cpp.md) | [0x4415e0](../function-map/cash.cpp.md) |  |
+| 0x98b148 | 136 | table | `g_pow10_table` | Table of 64-bit powers of ten from 1 up to 10 to the power 16, used to split money into digits. | Read by 0x441c10 cash_format_money at index times 8 for a divisor and a modulus. The exe holds 1, 10, 100, 1000 and so on. | high | sonnet |  | [0x441c10](../function-map/cash.cpp.md) |  |
+| 0x98b14c | 4 | u32 | `g_pow10_table_entry0_high` | High 32 bits of the first power of ten in g_pow10_table, the value 1. | Read by 0x441c10 cash_format_money as the upper half of the divisor of the 64-bit division. The 64-bit table starts at 0x98b148. | medium | sonnet |  | [0x441c10](../function-map/cash.cpp.md) |  |
+| 0x98b150 | 4 | u32 | `g_pow10_table_entry1_low` | Low 32 bits of the second power of ten in g_pow10_table, the value 10. | Read by 0x441c10 cash_format_money as the lower half of the modulus of the 64-bit remainder. The table starts at 0x98b148. | medium | sonnet |  | [0x441c10](../function-map/cash.cpp.md) |  |
+| 0x98b154 | 4 | u32 | `g_pow10_table_entry1_high` | High 32 bits of the second power of ten in g_pow10_table, the value 0. | Read by 0x441c10 cash_format_money as the upper half of the modulus of the 64-bit remainder. The table starts at 0x98b148. | medium | sonnet |  | [0x441c10](../function-map/cash.cpp.md) |  |
+| 0x98b1e0 | 28 | table | `g_cash_preset_amounts` | Table of seven money amounts that a Cash object takes by preset index, from 100000 to 10000000. | Read only by 0x43f620 Cash::set_from_preset_index, which accepts indexes 0 to 6 and converts the entry. The exe holds 100000, 250000, 500000, 1000000, 2000000, 5000000, 10000000. | high | sonnet |  | [0x43f620](../function-map/cash.cpp.md) |  |
+| 0x98b254 | 4 | char[4] | `g_str_currency_name_pound` | The currency name string for the first currency, the pound sign. | Copied by 0x4415f0 cash_get_currency_name for currency 0 and by 0x43f7f0 cash_set_currency. The bytes hold the pound sign. | high | sonnet |  | [0x43f7f0](../function-map/cash.cpp.md), [0x4415f0](../function-map/cash.cpp.md) |  |
+| 0x98b2a8 | 3 | char[3] | `g_str_r_98b2a8` | The text " R". | the bytes at this address are the text " R", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b2bc | 3 | char[3] | `g_str_c_98b2bc` | The text " c". | the bytes at this address are the text " c", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b2d4 | 3 | char[3] | `g_str_m_98b2d4` | The text " M". | the bytes at this address are the text " M", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b2dc | 2 | char[2] | `g_str_yen` | The text "¥". | the bytes at this address are the text "¥", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x4415f0](../function-map/cash.cpp.md) |  |
+| 0x98b318 | 2 | char[2] | `g_str_m_98b318` | The text "m". | the bytes at this address are the text "m", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b324 | 3 | char[3] | `g_str_k_98b324` | The text "K.". | the bytes at this address are the text "K.", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b328 | 5 | char[5] | `g_str_ir_pound` | The text "IR £". | the bytes at this address are the text "IR £", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b33c | 3 | char[3] | `g_str_dr` | The text "Dr". | the bytes at this address are the text "Dr", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b340 | 3 | char[3] | `g_str_chars_2c2d` | The text ",-". | the bytes at this address are the text ",-", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b344 | 3 | char[3] | `g_str_f_98b344` | The text "f ". | the bytes at this address are the text "f ", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b380 | 2 | char[2] | `g_str_currency` | The text "¤". | the bytes at this address are the text "¤", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3a8 | 3 | char[3] | `g_str_t_98b3a8` | The text " T". | the bytes at this address are the text " T", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3ac | 3 | char[3] | `g_str_b_98b3ac` | The text " B". | the bytes at this address are the text " B", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3b8 | 3 | char[3] | `g_str_k_98b3b8` | The text " K". | the bytes at this address are the text " K", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3c4 | 3 | char[3] | `g_str_r_dollar` | The text "R$". | the bytes at this address are the text "R$", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3ec | 2 | char[2] | `g_str_t_98b3ec` | The text "T". | the bytes at this address are the text "T", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3f0 | 2 | char[2] | `g_str_b_98b3f0` | The text "B". | the bytes at this address are the text "B", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x53ee50](../function-map/Database.cpp.md) |  |
+| 0x98b3f4 | 2 | char[2] | `g_str_m_98b3f4` | The text "M". | the bytes at this address are the text "M", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3f8 | 2 | char[2] | `g_str_k_98b3f8` | The text "K". | the bytes at this address are the text "K", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md) |  |
+| 0x98b3fc | 2 | char[2] | `g_str_dollar` | The text "$". | the bytes at this address are the text "$", and every access passes its address | high | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x4415f0](../function-map/cash.cpp.md) |  |
 | 0x98b438 | 4 | char * | `g_str_settle_the_player` | Pointer to the string "settle the player.". | string 0xa35249 "settle the player." is the value at this address, and no function writes it | medium | script |  | [0x4415f0](../function-map/cash.cpp.md) |  |
-| 0x98b448 | 16 | buffer | `g_unk_98b448` |  |  | low | script |  | [0x4415f0](../function-map/cash.cpp.md) |  |
-| 0x98b458 | 0 | buffer | `g_unk_98b458` |  |  | low | script |  | [0x4415f0](../function-map/cash.cpp.md) |  |
+| 0x98b448 | 3 | char[3] | `g_str_dm` | The text "DM". | the bytes at this address are the text "DM", and every access passes its address | high | script |  | [0x4415f0](../function-map/cash.cpp.md) |  |
+| 0x98b458 | 5 | char[5] | `g_str_currency_uro` | The text "¤uro". | the bytes at this address are the text "¤uro", and every access passes its address | high | script |  | [0x4415f0](../function-map/cash.cpp.md) |  |
 | 0xad9c70 | 50 | buffer | `g_unk_ad9c70` |  |  | low | script |  | [0x43f7f0](../function-map/cash.cpp.md), [0x441c10](../function-map/cash.cpp.md) |  |
 | 0xad9ca2 | 1 | u8 | `g_unk_ad9ca2` |  |  | low | script | [0x43f7f0](../function-map/cash.cpp.md) | [0x441c10](../function-map/cash.cpp.md) |  |
 | 0xad9ca4 | 4 | u32 | `g_unk_ad9ca4` |  |  | low | script | [0x43f7f0](../function-map/cash.cpp.md) | [0x441c10](../function-map/cash.cpp.md) |  |

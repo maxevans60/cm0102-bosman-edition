@@ -6,8 +6,8 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xa654a0 | 0 | buffer | `g_unk_a654a0` |  |  | low | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
-| 0xa65e94 | 0 | buffer | `g_unk_a65e94` |  |  | low | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
-| 0xa65edc | 0 | buffer | `g_unk_a65edc` |  |  | low | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
-| 0xa6648c | 0 | buffer | `g_unk_a6648c` |  |  | low | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
-| 0xb74344 | 4 | object | `g_unk_b74344` |  |  | low | script |  | [0x77bc80](../function-map/news.cpp.md), [0x7a2f10](../function-map/physio.cpp.md) |  |
+| 0xa654a0 | 3 | char[3] | `g_str_chars_3e20` | The text "> ". | the bytes at this address are the text "> ", and every access passes its address | high | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
+| 0xa65e94 | 72 | char[72] | `g_str_s_ar_borta_fran_spel_i_s_efter_att_han_f_a65e94` | The text "%s är borta från spel i %s efter att han fått %s under träningen i %ss.". | the bytes at this address are the text "%s är borta från spel i %s efter att han fått %s under träningen i %ss.", and every access passes its address | high | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
+| 0xa65edc | 71 | char[71] | `g_str_s_ar_borta_fran_spel_i_s_efter_att_han_f_a65edc` | The text "%s är borta från spel i %s efter att han fått %s under träningen i %s.". | the bytes at this address are the text "%s är borta från spel i %s efter att han fått %s under träningen i %s.", and every access passes its address | high | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
+| 0xa6648c | 87 | char[87] | `g_str_s_ar_borta_fran_spel_i_s_efter_att_han_f_a6648c` | The text "%s är borta från spel i %s efter att han fått %s i %s matchen mellan %s och %s den %s.". | the bytes at this address are the text "%s är borta från spel i %s efter att han fått %s i %s matchen mellan %s och %s den %s.", and every access passes its address | high | script |  | [0x77bc80](../function-map/news.cpp.md) |  |
+| 0xb74344 | 4 | object | `g_news_work_object` | An object in the news file that NewsItem::write_text and the physio report click handler take in ECX. | Only its address is taken, by 0x77bc80 NewsItem::write_text and 0x7a2f10 physio_report_screen_handle_click. The class is not shown. | low | sonnet |  | [0x77bc80](../function-map/news.cpp.md), [0x7a2f10](../function-map/physio.cpp.md) |  |

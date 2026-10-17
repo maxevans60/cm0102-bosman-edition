@@ -7,4 +7,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 0x96dd80 | 160 | vtable | `g_vtable_nor_cup` | Vtable of NorCup, 40 slots. | the destructor or constructor of NorCup holds it: 0x78f020 NorCup::NorCup, 0x78f210 NorCup::~NorCup | high | script |  | [0x78f020](../function-map/nor_cup.cpp.md), [0x78f210](../function-map/nor_cup.cpp.md) |  |
-| 0xa6973c | 0 | buffer | `g_unk_a6973c` |  |  | low | script |  | [0x78f890](../function-map/nor_cup.cpp.md) |  |
+| 0xa6973c | 2 | char[2] | `g_str_2` | The text "2". | the bytes at this address are the text "2", and every access passes its address | high | script |  | [0x78f890](../function-map/nor_cup.cpp.md) |  |

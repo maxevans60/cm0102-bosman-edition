@@ -6,7 +6,7 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xb74c54 | 4 | table | `g_unk_b74c54` |  |  | low | script |  | [0x7ff630](../function-map/scrman.cpp.md) |  |
+| 0xb74c54 | 48 | table | `g_screen_records_second_slot` | g_screen_records+0x60 second_slot: the second 48 byte record of the first channel, copied into a new channel record. | 0x7ff630 scrman_add_player_record copies 0x30 bytes from this address plus a channel offset into the channel record at 0xb74c24. | medium | sonnet |  | [0x7ff630](../function-map/scrman.cpp.md) |  |
 | 0xb77c7c | 2 | u16 | `g_unk_b77c7c` |  |  | low | script | [0x7ff630](../function-map/scrman.cpp.md) |  |  |
 | 0xb77c80 | 4 | u32 | `g_unk_b77c80` |  |  | low | script | [0x8388e0](../function-map/Setup.cpp.md) | [0x7ff630](../function-map/scrman.cpp.md), [0x7ff7b0](../function-map/scrman.cpp.md) |  |
 | 0xca72f5 | 0 | object | `g_unk_ca72f5` |  |  | low | script |  | [0x7ff630](../function-map/scrman.cpp.md), [0x800330](../function-map/scrman.cpp.md), [0x8388e0](../function-map/Setup.cpp.md) | 2026-10-13-display-and-scrman-inventory.md |

@@ -1732,6 +1732,27 @@ A check of 20 random high script names against the disassembly (7 key ids, 5 vta
 
 2,280 globals are left to name, in 31 batches of 47 to 80 globals and 4 waves. A batch input is 31 to 154 KB.
 
+#### Wave data-w01 and the Sonnet gate (2026-10-17)
+
+Eight Sonnet agents named the 600 globals of batches `data-w01-aa` to `-ah`: 435 high, 143 medium and 22 low. The merge found no problem, and the check passes.
+
+| Batch | Globals | High | Medium | Low | Tokens | What |
+|---|---|---|---|---|---|---|
+| aa | 68 | 58 | 10 | 0 | 148,000 | Vtables, background picture sections, cash tables, Brazilian club names |
+| ab | 80 | 74 | 5 | 1 | 174,000 | Key ids whose names have accents, history category names |
+| ac | 79 | 79 | 0 | 0 | 90,000 | Spanish nationality adjectives |
+| ad | 79 | 76 | 3 | 0 | 117,000 | Language library data and Spanish verb texts |
+| ae | 80 | 66 | 13 | 1 | 144,000 | Staff and transfer news texts, stat id lists |
+| af | 70 | 34 | 35 | 1 | 148,000 | Database table counts and pointers, static Dates |
+| ag | 70 | 23 | 47 | 0 | 112,000 | Fields of the league table at 0xb63d60 |
+| ah | 74 | 25 | 30 | 19 | 247,000 | Manager object pointers, commentary event table, screen records |
+
+The wave took about 1.18 million tokens and 7 minutes. The agents took 1 to 7 minutes each.
+
+Gate: one Opus agent checked 60 random rows (142,000 tokens). 59 are right and 1 is wrong (1.7%), under the 10% line, so the rest of the data map stays on Sonnet. The wrong row is 0xae23b4 `g_club_table`, high without a quote. The check kept the name and quoted 0x5267c0 `database_trim_club_table` and 0x53db40 `database_sort_clubs_by_reputation` (run `data-w01-check`). The brief now says that a row size and a reader count alone are medium, that a Date is 8 bytes, and that a namer names the base of its object. The league table base 0xb63d60 is in wave 2.
+
+The wave showed two gaps in the script rules. The string rule of the function map takes only ASCII text of three or more characters, so short strings and strings with accents came into scope as globals, and the key id rule missed names with accents. `globals.py` now names text that every access passes by address, with Latin-1 letters and of any length, and reads key id names with accents. This adds 1,052 script names, all high. 813 globals are left, in 12 batches over waves 2 and 3. One false global is known: 0xb71b00 is the number 12,000,000 in `EngPrm::create_table`, not an address.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.

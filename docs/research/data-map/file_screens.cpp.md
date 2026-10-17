@@ -8,7 +8,7 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 |---|---|---|---|---|---|---|---|---|---|---|
 | 0x96a358 | 4 | float | `g_f32_146` | Read-only float constant 146. | the float at this address in .rdata is 146, and every access reads it | high | script |  | [0x590c00](../function-map/file_screens.cpp.md) |  |
 | 0x96a35c | 4 | float | `g_f32_594` | Read-only float constant 594. | the float at this address in .rdata is 594, and every access reads it | high | script |  | [0x590c00](../function-map/file_screens.cpp.md) |  |
-| 0x9c7a80 | 4 | buffer | `g_unk_9c7a80` |  |  | low | script |  | [0x58f7c0](../function-map/file_screens.cpp.md) |  |
-| 0x9c7a84 | 0 | buffer | `g_unk_9c7a84` |  |  | low | script |  | [0x58f7c0](../function-map/file_screens.cpp.md) |  |
+| 0x9c7a80 | 3 | char[3] | `g_str_chars_2e2e` | The text "..". | the bytes at this address are the text "..", and every access passes its address | high | script |  | [0x58f7c0](../function-map/file_screens.cpp.md) |  |
+| 0x9c7a84 | 2 | char[2] | `g_str_chars_2e` | The text ".". | the bytes at this address are the text ".", and every access passes its address | high | script |  | [0x58f7c0](../function-map/file_screens.cpp.md) |  |
 | 0xae2a34 | 2 | u16 | `g_unk_ae2a34` |  |  | low | script | [0x590c00](../function-map/file_screens.cpp.md) |  |  |
 | 0xae2a36 | 1 | u8 | `g_unk_ae2a36` |  |  | low | script | [0x590c00](../function-map/file_screens.cpp.md) | [0x590c00](../function-map/file_screens.cpp.md) |  |

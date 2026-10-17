@@ -6,9 +6,9 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xad6aec | 4 | buffer | `g_lib_glyph_hint_measure_font_params_ad6aec` | Data of the library code, used by glyph_hint_measure_font_params. | only library functions touch it: 0x93b370 | medium | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
-| 0xad6af0 | 4 | buffer | `g_lib_glyph_hint_measure_font_params_ad6af0` | Data of the library code, used by glyph_hint_measure_font_params. | only library functions touch it: 0x93b370 | medium | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
-| 0xad6af4 | 48 | buffer | `g_lib_glyph_hint_measure_font_params_ad6af4` | Data of the library code, used by glyph_hint_measure_font_params. | only library functions touch it: 0x93b370 | medium | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
-| 0xad6b24 | 8 | buffer | `g_lib_glyph_hint_measure_font_params_ad6b24` | Data of the library code, used by glyph_hint_measure_font_params. | only library functions touch it: 0x93b370 | medium | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
-| 0xad6b2c | 20 | buffer | `g_lib_glyph_hint_measure_font_params_ad6b2c` | Data of the library code, used by glyph_hint_measure_font_params. | only library functions touch it: 0x93b370 | medium | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
-| 0xad6b40 | 0 | buffer | `g_lib_glyph_hint_measure_font_params_ad6b40` | Data of the library code, used by glyph_hint_measure_font_params. | only library functions touch it: 0x93b370 | medium | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
+| 0xad6aec | 3 | char[3] | `g_str_chars_5b5d` | The text "[]". | the bytes at this address are the text "[]", and every access passes its address | high | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
+| 0xad6af0 | 2 | char[2] | `g_str_g_ad6af0` | The text "g". | the bytes at this address are the text "g", and every access passes its address | high | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
+| 0xad6af4 | 3 | char[3] | `g_str_pq` | The text "pq". | the bytes at this address are the text "pq", and every access passes its address | high | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
+| 0xad6b24 | 2 | char[2] | `g_str_z` | The text "z". | the bytes at this address are the text "z", and every access passes its address | high | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
+| 0xad6b2c | 2 | char[2] | `g_str_7` | The text "7". | the bytes at this address are the text "7", and every access passes its address | high | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |
+| 0xad6b40 | 2 | char[2] | `g_str_f_ad6b40` | The text "f". | the bytes at this address are the text "f", and every access passes its address | high | script |  | [0x93b370](../function-map/library_without_asserts.md) |  |

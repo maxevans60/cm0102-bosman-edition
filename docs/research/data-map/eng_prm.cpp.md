@@ -7,4 +7,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 0x969d1c | 180 | vtable | `g_vtable_eng_prm` | Vtable of EngPrm, 45 slots. | the destructor or constructor of EngPrm holds it: 0x573380 EngPrm::EngPrm, 0x5735d0 EngPrm::~EngPrm | high | script |  | [0x573380](../function-map/eng_prm.cpp.md), [0x5735d0](../function-map/eng_prm.cpp.md) |  |
-| 0xb71b00 | 0 | buffer | `g_unk_b71b00` |  |  | low | script |  | [0x574a20](../function-map/eng_prm.cpp.md), [0x85e960](../function-map/staff_contracts.cpp.md) |  |
+| 0xb71b00 | 0 | unknown | `g_not_a_global_const_12000000` | Not a global. The value 0xb71b00 is the number 12,000,000 used as an immediate prize money amount. | EngPrm::create_table 0x574a20 picks 5,000,000 (0x4c4b40) before year 2000 and this value after, as the amount for 0x683010 League::pay_clubs. 0x85e960 only compares a register with it. | high | sonnet |  | [0x574a20](../function-map/eng_prm.cpp.md), [0x85e960](../function-map/staff_contracts.cpp.md) |  |

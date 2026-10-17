@@ -6,5 +6,5 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xb7443a | 4 | u32 | `g_unk_b7443a` |  |  | low | script |  | [0x7f9720](../function-map/scout_manager.cpp.md) |  |
-| 0xb74442 | 4 | u32 | `g_unk_b74442` |  |  | low | script | [0x7f9720](../function-map/scout_manager.cpp.md) |  |  |
+| 0xb7443a | 4 | u32 | `g_scout_club_table_list_head` | g_scout_club_table_list+0x2 head: the first entry pointer of the list, copied to the cursor before a walk. | 0x7f9720 SCOUT_MANAGER::fixture_has_scouted_player copies it to 0xb74442 and then steps through the entries with the list iterator. | medium | sonnet |  | [0x7f9720](../function-map/scout_manager.cpp.md) |  |
+| 0xb74442 | 4 | u32 | `g_scout_club_table_list_cursor` | g_scout_club_table_list+0xa cursor: the current entry pointer while the list is walked. | Written only by 0x7f9720 SCOUT_MANAGER::fixture_has_scouted_player from 0xb7443a before it walks the list. | medium | sonnet | [0x7f9720](../function-map/scout_manager.cpp.md) |  |  |

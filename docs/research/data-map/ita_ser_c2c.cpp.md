@@ -7,5 +7,5 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 0x96c804 | 180 | vtable | `g_vtable_ita_ser_c2c` | Vtable of ItaSerC2c, 45 slots. | the destructor or constructor of ItaSerC2c holds it: 0x65b4e0 ItaSerC2c::ItaSerC2c, 0x65b730 ItaSerC2c::~ItaSerC2c | high | script |  | [0x65b4e0](../function-map/ita_ser_c2c.cpp.md), [0x65b730](../function-map/ita_ser_c2c.cpp.md) |  |
-| 0x9ea890 | 44 | buffer | `g_unk_9ea890` |  |  | low | script |  | [0x65c8e0](../function-map/ita_ser_c2c.cpp.md) |  |
-| 0x9ea8bc | 0 | buffer | `g_unk_9ea8bc` |  |  | low | script |  | [0x65c8e0](../function-map/ita_ser_c2c.cpp.md) |  |
+| 0x9ea890 | 6 | char[6] | `g_str_nardo` | The text "Nardò". | the bytes at this address are the text "Nardò", and every access passes its address | high | script |  | [0x65c8e0](../function-map/ita_ser_c2c.cpp.md) |  |
+| 0x9ea8bc | 8 | char[8] | `g_str_paterno` | The text "Paternò". | the bytes at this address are the text "Paternò", and every access passes its address | high | script |  | [0x65c8e0](../function-map/ita_ser_c2c.cpp.md) |  |

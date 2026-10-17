@@ -100,4 +100,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 | 0xae108c | 4 | u32 | `g_unk_ae108c` |  |  | low | script |  | [0x4c7ac0](../function-map/contract_manager.cpp.md) |  |
 | 0xae1090 | 4 | object | `g_unk_ae1090` |  |  | low | script |  | [0x4c6e60](../function-map/contract_manager.cpp.md), [0x4c7040](../function-map/contract_manager.cpp.md), [0x4c7ac0](../function-map/contract_manager.cpp.md), [0x867d30](../function-map/staff_contracts.cpp.md) |  |
 | 0xae1094 | 4 | u32 | `g_unk_ae1094` |  |  | low | script |  | [0x4c7ac0](../function-map/contract_manager.cpp.md), [0x867d30](../function-map/staff_contracts.cpp.md) |  |
-| 0xae2332 | 2 | u16 | `g_unk_ae2332` |  |  | low | script |  | [0x4c7ac0](../function-map/contract_manager.cpp.md) |  |
+| 0xae2332 | 2 | u16 | `g_transfer_rule_change_date_year` | g_transfer_rule_change_date+0x2 year: the year part of the transfer rule change date. | Date layout from game creation inventory is day, year, leap flag. Read alone by 0x4c7ac0 CONTRACT_MANAGER::daily_update, offset 2 of the object at 0xae2330. | medium | sonnet |  | [0x4c7ac0](../function-map/contract_manager.cpp.md) |  |
