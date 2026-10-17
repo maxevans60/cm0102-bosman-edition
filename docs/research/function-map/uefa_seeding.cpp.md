@@ -7,7 +7,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
 | 0x903360 | 141 | `UefaSeeding::UefaSeeding` | thiscall(UefaSeeding* this), returns this, ret 0 | Waits for the game CD, then loads the UEFA seeding from disk or builds one 18-byte entry for each European nation. | high | opus | 2026-10-14-game-creation-inventory.md, 2026-10-16-sweep-europe.md |
-| 0x903570 | 7 | `UefaSeeding::free_club_list` | thiscall(UefaSeeding* this), ret 0 | Frees the club list at +0x43b of the UEFA seeding object. | medium | opus |  |
+| 0x903570 | 7 | `UefaSeeding::~UefaSeeding` | thiscall(UefaSeeding* this), ret 0 | Destroys the UEFA seeding object by freeing its Intertoto volunteer list at +0x43b. | high | opus |  |
 | 0x903590 | 4 | `UefaSeeding::get_nation_table` | thiscall(UefaSeeding* this, UefaSeeding** out), returns nation count, ret 4 | Returns the seeding object through the out pointer and the number of nation entries. | high | opus |  |
 | 0x9035a0 | 145 (+1 unwind) | `UefaSeeding::update_season` | thiscall(UefaSeeding* this, int daily_flag) ret 4 | Reseeds all European places once each new game year, or on daily calls asks English clubs for Intertoto volunteers and checks deadlines. | high | opus | 2026-10-14-game-creation-inventory.md, 2026-10-16-sweep-europe.md, 2026-10-16-sweep-season-end.md |
 | 0x9037b0 | 55 | `UefaSeeding::add_intertoto_volunteer` | thiscall(UefaSeeding* this, const int* club_id) ret 4 | Appends a club id to the list of up to 30 English Intertoto volunteers, allocating the 0x78-byte list on first use. | high | opus |  |

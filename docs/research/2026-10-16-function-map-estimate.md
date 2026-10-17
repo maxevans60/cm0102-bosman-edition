@@ -1508,6 +1508,25 @@ Over the four waves, 630 rows were reviewed and 311 rows changed: 36 new names f
 
 Two open points are outside the sample: the other Cup slot 17 overrides with the finance name (r02), and the four `match_eng_referee_*` forwarders (r03).
 
+#### Review r05 (medium rows of tiers 1 to 3, 2026-10-17)
+
+Max chose on 2026-10-17 to review the other 1,372 medium rows too, although the gate was under the line. Run `review-r05`: 8 Opus reviewers checked 184 medium rows of the rule books, ruling bodies, international competitions and national teams. Agree 72, fix 103, rename 9. The third check took the reviewer's name in all 9 rows. 3 false entries got the fragment name. 114 rows changed in all. The reviewers took 129,000 to 170,000 tokens each, and the third check took 102,000.
+
+Most fixes raise a row to high with a vtable slot that the reviewer read from the exe, or replace an old caller name in the evidence. The renames are two thiscall members of `ConmebolSeeding`, two more slot 17 overrides with the finance name (EuropeanCup and UefaCup), and four constructors and destructors (`TcpIp`, `NetworkBuffer`, `UefaSeeding`). national_teams_screens.cpp now holds `Network`, `TcpIp` and `NetworkBuffer`, and its assert path names network.CPP.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x4c6730 | `find_nth_unqualified_club_of_nation` | `ConmebolSeeding::find_nth_unqualified_club_of_nation` | takes reviewer | `ConmebolSeeding::find_nth_unqualified_club_of_nation` |
+| 0x4c6890 | `is_mercosur_invited_club` | `ConmebolSeeding::is_mercosur_invited_club` | takes reviewer | `ConmebolSeeding::is_mercosur_invited_club` |
+| 0x584ae0 | `EuropeanCup::apply_team_result_finance` | `EuropeanCup::update_staff_records_for_status` | takes reviewer | `EuropeanCup::update_staff_records_for_status` |
+| 0x778f60 | `national_teams_screens_open_squad_screen` | `national_teams_screens_open_squad_move_screen` | takes reviewer | `national_teams_screens_open_squad_move_screen` |
+| 0x77a870 | `Network::release_socket_table` | `TcpIp::~TcpIp` | takes reviewer | `TcpIp::~TcpIp` |
+| 0x77b630 | `net_buffer_init` | `NetworkBuffer::NetworkBuffer` | takes reviewer | `NetworkBuffer::NetworkBuffer` |
+| 0x77b6e0 | `net_buffer_free` | `NetworkBuffer::~NetworkBuffer` | takes reviewer | `NetworkBuffer::~NetworkBuffer` |
+| 0x9030e0 | `UefaCup::apply_team_result_finance` | `UefaCup::update_staff_records_for_status` | takes reviewer | `UefaCup::update_staff_records_for_status` |
+| 0x903570 | `UefaSeeding::free_club_list` | `UefaSeeding::~UefaSeeding` | takes reviewer | `UefaSeeding::~UefaSeeding` |
+
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
