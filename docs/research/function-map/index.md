@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4966 high, 1738 medium, 159 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27, sweep-w28, sweep-w29, sweep-w30.
+- Confidence: 4996 high, 1708 medium, 159 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27, sweep-w28, sweep-w29, sweep-w30, sweep-w31.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -367,8 +367,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [team_award.cpp](team_award.cpp.md) | 15 |
 | [training_edit_session.cpp](training_edit_session.cpp.md) | 11 |
 | [training_manager.cpp](training_manager.cpp.md) | 34 |
-| [training_schedule.cpp](training_schedule.cpp.md) | 12 |
-| [training_screens.cpp](training_screens.cpp.md) | 19 |
+| [training_schedule.cpp](training_schedule.cpp.md) | 10 |
+| [training_screens.cpp](training_screens.cpp.md) | 21 |
 | [transfer_manager.cpp](transfer_manager.cpp.md) | 199 |
 | [transfer_offer.cpp](transfer_offer.cpp.md) | 27 |
 | [transfer_screens.cpp](transfer_screens.cpp.md) | 69 |
@@ -386,8 +386,8 @@ All 11747 functions with their category, file and placement method are in `funct
 | [usa_mls_all_stars.cpp](usa_mls_all_stars.cpp.md) | 8 |
 | [usa_open_cup.cpp](usa_open_cup.cpp.md) | 6 |
 | [usa_rules.cpp](usa_rules.cpp.md) | 2 |
-| [utils.cpp](utils.cpp.md) | 25 |
-| [virtual_staff.cpp](virtual_staff.cpp.md) | 10 |
+| [utils.cpp](utils.cpp.md) | 23 |
+| [virtual_staff.cpp](virtual_staff.cpp.md) | 12 |
 | [wales_awards.cpp](wales_awards.cpp.md) | 5 |
 | [wales_rules.cpp](wales_rules.cpp.md) | 2 |
 | [wc_african_cup.cpp](wc_african_cup.cpp.md) | 20 |
@@ -405,6 +405,6 @@ All 11747 functions with their category, file and placement method are in `funct
 | [world_club_cup.cpp](world_club_cup.cpp.md) | 6 |
 | [world_cup.cpp](world_cup.cpp.md) | 26 |
 | [world_cup_awards.cpp](world_cup_awards.cpp.md) | 3 |
-| [year_award.cpp](year_award.cpp.md) | 10 |
-| [year_ratings.cpp](year_ratings.cpp.md) | 13 |
+| [year_award.cpp](year_award.cpp.md) | 9 |
+| [year_ratings.cpp](year_ratings.cpp.md) | 14 |
 | [zipdir.cpp](zipdir.cpp.md) | 10 |

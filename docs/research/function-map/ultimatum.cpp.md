@@ -6,6 +6,6 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x9064a0 | 100 (+1 unwind) | `ultimatum_issue_check_or_assert` | cdecl(undefined4 *ultimatum_ptr, undefined4 item_id) with ret 0; the second branch passes a callback at 0x906610 to ScreenManager::open_screen | Validates an ultimatum issue, asserting with a version and file message on failure, or else opens the confirmation screen. | medium | haiku |  |
+| 0x9064a0 | 100 (+1 unwind) | `ultimatum_news_issue_ultimatum_action` | cdecl(News *news, int news_item_id) ret 0 | Finds the news item and opens the ultimatum confirm screen with the manager, ultimatum type, club and item id as parameters. | high | opus |  |
 | 0x906610 | 175 | `ultimatum_screen_draw` | cdecl(void) ret 0, reads screen params 0 staff, 1 ultimatum type, 2 club | Draws the Please Confirm screen that asks whether the manager issues one of four ultimatum types to the club board, with Yes and No buttons. | high | opus |  |
 | 0x906830 | 117 | `ultimatum_screen_handle_event` | cdecl(short area_index) ret 0, returns a screen result code | Handles the ultimatum confirm screen, issuing the ultimatum on Yes, closing on No, else passing menu bar events on. | high | opus |  |

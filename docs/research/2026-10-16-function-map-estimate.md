@@ -1319,6 +1319,29 @@ The merge needed no fixes. Two files keep a second class: `tactics_screens.cpp` 
 | 0x8b1750 | Named in 2026-10-15-features-0.4.0-spec.md | `Training_Manager::apply_daily_training` (Haiku) | `TRAINING_MANAGER::update_player_training` | agrees in area |
 | 0x8b37c0 | Named in 2026-10-14-columns-and-colours-inventory.md | `training_manager_apply_stat_delta` (Haiku) | `TRAINING_MANAGER::get_training_attribute_change` | agrees in area |
 
+#### Wave w31 (tier 5, the last game files, 2026-10-17)
+
+Run `sweep-w31`: 3 Opus agents named the last 76 game functions: `training_schedule.cpp`, `training_screens.cpp`, `ultimatum.cpp`, `utils.cpp`, `virtual_staff.cpp` (`VIRTUAL_STAFF`), `weather.cpp` (`Weather`), `year_award.cpp` (`YEAR_AWARD`), `year_ratings.cpp` (`YEAR_RATINGS`) and `zipdir.cpp`. Each agent took 3 to 4 minutes and 142,000 to 150,000 tokens. Confidence: 57 high, 19 medium, none low. With this wave every game function of tiers 1 to 5 has an Opus name.
+
+The merge needed no fixes. `training_screens.cpp` holds one destructor each of `TRAINING_EDIT_SESSION` and `TRAINING_SCHEDULE`.
+
+12 functions of the wave are cited. 8 agree and 4 agree in area. None differs.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x90ba90 | Named in 2026-10-13-display-and-scrman-inventory.md | `assert_swap_bytes` (Haiku) | `utils_swap_bytes` | agrees in area |
+| 0x90bc50 | Named in 2026-10-14-import-inventory.md | `get_user_folder_path` (Haiku) | `utils_get_folder_for_key` | agrees in area |
+| 0x90bea0 | Named in 2026-10-16-tactics-inventory.md | `get_user_folder` (Haiku) | `utils_get_user_folder` | agrees |
+| 0x90c120 | Named in 2026-10-14-start-screen-helpers.md | `utils_is_zero_result` (Haiku) | `utils_file_exists` | agrees |
+| 0x90c140 | Named in 2026-10-16-tactics-inventory.md | `read_checked_value_from_stream` (Haiku) | `utils_read_file_format_marker` | agrees |
+| 0x90c510 | Named in 2026-10-13-display-and-scrman-inventory.md | `crt_system_time_thunk` (Haiku) | `utils_get_time_ms` | agrees in area |
+| 0x90cba0 | Named in 2026-10-14-start-screen-helpers.md | `read_config_line` (Haiku) | `utils_read_config_line` | agrees |
+| 0x90cc50 | Named in 2026-10-14-start-new-game-inventory.md | `copy_file_contents` (Haiku) | `utils_copy_file` | agrees |
+| 0x90cd50 | Named in 2026-10-14-game-creation-inventory.md | `copy_cm3_temp_and_scan_dir` (Haiku) | `utils_clear_temp_folder` | agrees |
+| 0x90d0a0 | Named in 2026-10-14-assistant-and-days-inventory.md | `seed_random_generator` (Haiku) | `utils_seed_random` | agrees |
+| 0x90d140 | Named in 2026-10-14-game-creation-inventory.md | `find_cd_and_load_config` (Haiku) | `VIRTUAL_STAFF::VIRTUAL_STAFF` | agrees |
+| 0x90e760 | Named in 2026-10-14-widescreen-inventory.md | `virtual_staff_slot_coords` (Haiku) | `VIRTUAL_STAFF::get_id_block` | agrees in area |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

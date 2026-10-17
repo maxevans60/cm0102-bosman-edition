@@ -6088,20 +6088,20 @@ address	file	name	confidence	model	cited_in
 0x8b50f0	training_schedule.cpp	TRAINING_SCHEDULE::set_default_name	high	opus	
 0x8b5220	training_schedule.cpp	TRAINING_SCHEDULE::load_from_file	high	opus	
 0x8b53d0	training_schedule.cpp	TRAINING_SCHEDULE::save_to_file	high	opus	
-0x8b5520	training_schedule.cpp	training_schedule_comment_for_type	high	haiku	
-0x8b5690	training_schedule.cpp	training_intensity_string_or_assert	high	haiku	
-0x8b57e0	training_schedule.cpp	training_schedule_check_version	medium	haiku	
-0x8b5820	training_schedule.cpp	training_schedule_load_header	high	haiku	
-0x8b5930	training_schedule.cpp	training_schedule_open_screen	medium	haiku	
-0x8b5a10	training_schedule.cpp	training_schedule_view_menu_build	high	haiku	
-0x8b83f0	training_screens.cpp	training_screens_handle_event	high	haiku	
-0x8b9740	training_screens.cpp	training_screen_free_schedule_list	medium	haiku	
-0x8b97a0	training_screens.cpp	training_screens_close_active_screen	medium	haiku	
-0x8b97e0	training_screens.cpp	training_screens_show_error_or_schedule	high	haiku	
-0x8b9940	training_screens.cpp	training_screens_build_position_side_dialog	high	haiku	
-0x8ba530	training_screens.cpp	training_screens_handle_click	medium	haiku	
-0x8ba920	training_screens.cpp	training_screens_scalar_deleting_destructor	high	haiku	
-0x8ba940	training_screens.cpp	training_screen_build_coaches_panel	high	haiku	
+0x8b5520	training_schedule.cpp	training_schedule_get_category_name	high	opus	
+0x8b5690	training_schedule.cpp	training_schedule_get_intensity_name	high	opus	
+0x8b57e0	training_schedule.cpp	training_schedule_check_file	high	opus	
+0x8b5820	training_schedule.cpp	training_schedule_read_file_header	high	opus	
+0x8b5930	training_screens.cpp	training_screens_open	high	opus	
+0x8b5a10	training_screens.cpp	training_screens_draw	high	opus	
+0x8b83f0	training_screens.cpp	training_screens_handle_event	high	opus	
+0x8b9740	training_screens.cpp	TRAINING_EDIT_SESSION::~TRAINING_EDIT_SESSION	high	opus	
+0x8b97a0	training_screens.cpp	training_screens_close	high	opus	
+0x8b97e0	training_screens.cpp	training_screens_open_schedule_editor	high	opus	
+0x8b9940	training_screens.cpp	training_screens_draw_schedule_editor	high	opus	
+0x8ba530	training_screens.cpp	training_screens_schedule_editor_handle_event	high	opus	
+0x8ba920	training_screens.cpp	TRAINING_SCHEDULE::scalar_deleting_destructor	high	opus	
+0x8ba940	training_screens.cpp	training_screens_draw_coaches_panel	high	opus	
 0x8baea0	training_screens.cpp	training_screens_coaches_panel_handle_event	high	opus	
 0x8bb190	training_screens.cpp	training_screens_compare_by_status_then_name	medium	opus	
 0x8bb2a0	training_screens.cpp	training_screens_compare_by_name	medium	opus	
@@ -6494,7 +6494,7 @@ address	file	name	confidence	model	cited_in
 0x905f00	uefa_seeding.cpp	uefa_post_qualifiers_news	high	opus	2026-10-16-sweep-europe.md
 0x906130	uefa_seeding.cpp	uefa_write_qualifiers_news_text	high	opus	
 0x906410	uefa_seeding.cpp	uefa_compare_qualified_clubs	high	opus	
-0x9064a0	ultimatum.cpp	ultimatum_issue_check_or_assert	medium	haiku	
+0x9064a0	ultimatum.cpp	ultimatum_news_issue_ultimatum_action	high	opus	
 0x906610	ultimatum.cpp	ultimatum_screen_draw	high	opus	
 0x906830	ultimatum.cpp	ultimatum_screen_handle_event	high	opus	
 0x906980	usa_awards.cpp	UsaAwards::UsaAwards	high	opus	
@@ -6539,41 +6539,41 @@ address	file	name	confidence	model	cited_in
 0x90b790	usa_open_cup.cpp	UsaOpenCup::start_new_season	high	opus	2026-10-16-research-name-check.md
 0x90b940	usa_rules.cpp	USA_RULES::USA_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x90ba60	usa_rules.cpp	USA_RULES::fill_squad_restrictions	high	opus	2026-10-16-sweep-rulebooks.md
-0x90ba90	utils.cpp	assert_swap_bytes	high	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
-0x90bb70	utils.cpp	assert_or_trim_string	high	haiku	
-0x90bc50	utils.cpp	get_user_folder_path	high	haiku	2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md
+0x90ba90	utils.cpp	utils_swap_bytes	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
+0x90bb70	utils.cpp	utils_trim_control_chars	high	opus	
+0x90bc50	utils.cpp	utils_get_folder_for_key	high	opus	2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md
 0x90bde0	utils.cpp	utils_build_file_path	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-import-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-16-tactics-inventory.md
-0x90bea0	utils.cpp	get_user_folder	high	haiku	2026-10-16-tactics-inventory.md
-0x90bf90	utils.cpp	is_valid_directory_path	medium	haiku	
-0x90c120	utils.cpp	utils_is_zero_result	medium	haiku	2026-10-14-start-screen-helpers.md
-0x90c140	utils.cpp	read_checked_value_from_stream	medium	haiku	2026-10-16-tactics-inventory.md
-0x90c1a0	utils.cpp	utils_fread_u32_wrapper	medium	haiku	
+0x90bea0	utils.cpp	utils_get_user_folder	high	opus	2026-10-16-tactics-inventory.md
+0x90bf90	utils.cpp	utils_is_directory	high	opus	
+0x90c120	utils.cpp	utils_file_exists	medium	opus	2026-10-14-start-screen-helpers.md
+0x90c140	utils.cpp	utils_read_file_format_marker	medium	opus	2026-10-16-tactics-inventory.md
+0x90c1a0	utils.cpp	utils_append_u32_to_file	medium	opus	
 0x90c1d0	utils.cpp	utils_string_compare	high	opus	2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md
-0x90c2d0	utils.cpp	char_to_lookup_code	medium	haiku	
-0x90c2f0	utils.cpp	utils_char_translate_byte	medium	haiku	
+0x90c2d0	utils.cpp	utils_char_to_upper	high	opus	
+0x90c2f0	utils.cpp	utils_char_to_lower	high	opus	
 0x90c310	utils.cpp	utils_format_ordinal	high	opus	
-0x90c510	utils.cpp	crt_system_time_thunk	medium	haiku	2026-10-13-display-and-scrman-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-slow-screens.md,user32.c
-0x90c520	utils.cpp	number_to_words_write	high	haiku	
-0x90cb20	utils.cpp	wrap_text_at_space	medium	haiku	
-0x90cba0	utils.cpp	read_config_line	high	haiku	2026-10-14-start-screen-helpers.md,2026-10-16-update-team-databases.md,background.c
-0x90cc50	utils.cpp	copy_file_contents	medium	haiku	2026-10-14-start-new-game-inventory.md
-0x90cd50	utils.cpp	copy_cm3_temp_and_scan_dir	medium	haiku	2026-10-14-game-creation-inventory.md
-0x90cf20	utils.cpp	copy_path_stripping_spaces	medium	haiku	
+0x90c510	utils.cpp	utils_get_time_ms	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-slow-screens.md,user32.c
+0x90c520	utils.cpp	utils_number_to_words	high	opus	
+0x90cb20	utils.cpp	utils_break_line_near_middle	high	opus	
+0x90cba0	utils.cpp	utils_read_config_line	high	opus	2026-10-14-start-screen-helpers.md,2026-10-16-update-team-databases.md,background.c
+0x90cc50	utils.cpp	utils_copy_file	high	opus	2026-10-14-start-new-game-inventory.md
+0x90cd50	utils.cpp	utils_clear_temp_folder	medium	opus	2026-10-14-game-creation-inventory.md
+0x90cf20	utils.cpp	utils_copy_path_limited	medium	opus	
 0x90cfc0	utils.cpp	utils_random	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-violent-conduct-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-comparison-screen-inventory.md,background.c,compare_screen.c,user32.c
-0x90d0a0	utils.cpp	seed_random_generator	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-import-inventory.md,2026-10-14-start-screen-helpers.md
+0x90d0a0	utils.cpp	utils_seed_random	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-import-inventory.md,2026-10-14-start-screen-helpers.md
 0x90d130	utils.cpp	utils_get_version_string	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-widescreen-inventory.md,2026-10-16-sweep-europe.md
-0x90d140	utils.cpp	find_cd_and_load_config	high	haiku	2026-10-14-game-creation-inventory.md
-0x90d2e0	utils.cpp	llist_destructor_tail_call_0x90d2e0	medium	haiku	
-0x90d2f0	virtual_staff.cpp	virtual_staff_fill_team_slot	medium	haiku	
-0x90d4f0	virtual_staff.cpp	virtual_staff_fill_slot	medium	haiku	
-0x90d6b0	virtual_staff.cpp	virtual_staff_replace_match_squad	medium	haiku	
-0x90d860	virtual_staff.cpp	virtual_staff_clear_expired_slots	medium	haiku	
-0x90d8f0	virtual_staff.cpp	virtual_staff_count_candidates	medium	haiku	
-0x90dae0	virtual_staff.cpp	virtual_staff_assign_players	medium	haiku	
-0x90e020	virtual_staff.cpp	virtual_staff_role_code	medium	haiku	
-0x90e0a0	virtual_staff.cpp	virtual_staff_create_member	medium	haiku	
-0x90e760	virtual_staff.cpp	virtual_staff_slot_coords	medium	haiku	2026-10-14-widescreen-inventory.md
-0x90e9a0	virtual_staff.cpp	virtual_staff_promote_loop	medium	haiku	
+0x90d140	virtual_staff.cpp	VIRTUAL_STAFF::VIRTUAL_STAFF	high	opus	2026-10-14-game-creation-inventory.md
+0x90d2e0	virtual_staff.cpp	VIRTUAL_STAFF::~VIRTUAL_STAFF	high	opus	
+0x90d2f0	virtual_staff.cpp	VIRTUAL_STAFF::fill_fixture_squads	high	opus	
+0x90d4f0	virtual_staff.cpp	VIRTUAL_STAFF::fill_viewed_club_squad	medium	opus	
+0x90d6b0	virtual_staff.cpp	VIRTUAL_STAFF::release_fixture	high	opus	
+0x90d860	virtual_staff.cpp	VIRTUAL_STAFF::remove_virtual_players	high	opus	
+0x90d8f0	virtual_staff.cpp	VIRTUAL_STAFF::count_available_players	medium	opus	
+0x90dae0	virtual_staff.cpp	VIRTUAL_STAFF::top_up_club_squad	medium	opus	
+0x90e020	virtual_staff.cpp	VIRTUAL_STAFF::get_player_position_group	medium	opus	
+0x90e0a0	virtual_staff.cpp	VIRTUAL_STAFF::create_virtual_player	medium	opus	
+0x90e760	virtual_staff.cpp	VIRTUAL_STAFF::get_id_block	high	opus	2026-10-14-widescreen-inventory.md
+0x90e9a0	virtual_staff.cpp	VIRTUAL_STAFF::relocate_virtual_players	medium	opus	
 0x90ead0	wales_awards.cpp	WalesAwards::WalesAwards	high	opus	
 0x90ec10	wales_awards.cpp	WalesAwards::init_awards	high	opus	
 0x90ef10	wales_awards.cpp	WalesAwards::daily_update	high	opus	
@@ -6715,9 +6715,9 @@ address	file	name	confidence	model	cited_in
 0x922350	wc_south_american_league.cpp	WcSouthAmericanLeague::add_fixed_fixture	high	opus	2026-10-16-sweep-season-end.md
 0x9226c0	weather.cpp	Weather::Weather	high	opus	2026-10-14-game-creation-inventory.md
 0x9227d0	weather.cpp	Weather::~Weather	high	opus	
-0x922810	weather.cpp	weather_load_config	high	haiku	
-0x922c40	weather.cpp	weather_load_record	high	haiku	
-0x922d20	weather.cpp	weather_read_cfg_record	medium	haiku	
+0x922810	weather.cpp	Weather::load_config	high	opus	
+0x922c40	weather.cpp	Weather::read_region	high	opus	
+0x922d20	weather.cpp	Weather::read_region_period	high	opus	
 0x922ee0	weather.cpp	Weather::update_city_weather	high	opus	2026-10-14-game-creation-inventory.md
 0x923010	weather.cpp	Weather::get_match_weather	medium	opus	
 0x9232c0	weather.cpp	weather_get_temperature	medium	opus	
@@ -6830,35 +6830,35 @@ address	file	name	confidence	model	cited_in
 0x92fc80	world_cup_awards.cpp	WorldCupAwards::init_awards	high	opus	
 0x92fdf0	world_cup_awards.cpp	WorldCupAwards::daily_update	high	opus	
 0x92fe80	year_award.cpp	YEAR_AWARD::YEAR_AWARD	high	opus	
-0x92ff60	year_award.cpp	year_award::scalar_deleting_destructor	high	haiku	
-0x92ff80	year_award.cpp	year_award::~year_award	high	haiku	
-0x92fff0	year_award.cpp	year_award_load_from_disk	high	haiku	
-0x9301f0	year_award.cpp	year_award_load_from_disk_check_version	high	haiku	
-0x9302f0	year_award.cpp	year_award::apply_to_award_slots	medium	haiku	
-0x9304d0	year_award.cpp	year_award_forward_fields	medium	haiku	
-0x9304f0	year_award.cpp	YEAR_AWARD::build_award_news_story	medium	haiku	
-0x930880	year_award.cpp	YEAR_AWARD::build_award_news_message	high	haiku	
-0x931360	year_award.cpp	year_award_init_with_ratings	medium	haiku	
-0x931390	year_ratings.cpp	year_ratings_load_records	high	haiku	
-0x9314e0	year_ratings.cpp	award_manager_read_awards_record	medium	haiku	
-0x9315d0	year_ratings.cpp	year_ratings_apply_filtered_pass	medium	haiku	
-0x931690	year_ratings.cpp	year_ratings_accumulate_player	high	haiku	
-0x931aa0	year_ratings.cpp	release_if_matching_slot	medium	haiku	
-0x931ae0	year_ratings.cpp	year_ratings_collect_players_filtered	medium	haiku	
-0x931d50	year_ratings.cpp	year_ratings_collect_candidates	medium	haiku	
-0x931f90	year_ratings.cpp	year_rating_compare	medium	haiku	
-0x9320e0	year_ratings.cpp	year_rating_compare_players	medium	haiku	
-0x932230	year_ratings.cpp	compare_player_year_rating	medium	haiku	
-0x9323b0	year_ratings.cpp	year_rating_compare	medium	haiku	
-0x932500	year_ratings.cpp	compare_year_rating_records	medium	haiku	
-0x932590	year_ratings.cpp	year_ratings_compare_players	medium	haiku	
+0x92ff60	year_award.cpp	YEAR_AWARD::`scalar deleting destructor'	high	opus	
+0x92ff80	year_award.cpp	YEAR_AWARD::~YEAR_AWARD	high	opus	
+0x92fff0	year_award.cpp	YEAR_AWARD::load_from_disk	high	opus	
+0x9301f0	year_award.cpp	YEAR_AWARD::save_to_disk	high	opus	
+0x9302f0	year_award.cpp	YEAR_AWARD::record_winners	high	opus	
+0x9304d0	year_award.cpp	YEAR_AWARD::get_history_list	medium	opus	
+0x9304f0	year_award.cpp	YEAR_AWARD::post_winner_news	high	opus	
+0x930880	year_award.cpp	YEAR_AWARD::write_news	high	opus	
+0x931360	year_ratings.cpp	YEAR_RATINGS::YEAR_RATINGS	high	opus	
+0x931390	year_ratings.cpp	YEAR_RATINGS::load_from_disk	high	opus	
+0x9314e0	year_ratings.cpp	YEAR_RATINGS::save_to_disk	high	opus	
+0x9315d0	year_ratings.cpp	YEAR_RATINGS::record_match_ratings	medium	opus	
+0x931690	year_ratings.cpp	YEAR_RATINGS::add_player_rating	high	opus	
+0x931aa0	year_ratings.cpp	YEAR_RATINGS::reset_if_year	high	opus	
+0x931ae0	year_ratings.cpp	YEAR_RATINGS::collect_best_players	high	opus	
+0x931d50	year_ratings.cpp	YEAR_RATINGS::collect_candidates	high	opus	
+0x931f90	year_ratings.cpp	year_ratings_compare_mode_0	medium	opus	
+0x9320e0	year_ratings.cpp	year_ratings_compare_mode_1	medium	opus	
+0x932230	year_ratings.cpp	year_ratings_compare_mode_2	medium	opus	
+0x9323b0	year_ratings.cpp	year_ratings_compare_mode_3	medium	opus	
+0x932500	year_ratings.cpp	year_ratings_compare_mode_4	medium	opus	
+0x932590	year_ratings.cpp	year_ratings_compare_mode_5	medium	opus	
 0x9326e0	zipdir.cpp	zopen	high	opus	2026-10-15-attribute-groups.md,testrun.c
 0x932b00	zipdir.cpp	zclose	high	opus	2026-10-15-attribute-groups.md,testrun.c
 0x932c30	zipdir.cpp	zread	high	opus	2026-10-13-database-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-holiday-next-match-inventory.md
 0x932e10	zipdir.cpp	zwrite	high	opus	2026-10-15-attribute-groups.md,2026-10-15-commentary-speed-inventory.md,testrun.c
-0x933080	zipdir.cpp	zipdir_seek	medium	haiku	
-0x933170	zipdir.cpp	zip_directory_entry_offset	medium	haiku	
-0x9331c0	zipdir.cpp	zip_directory_open	medium	haiku	
-0x933320	zipdir.cpp	load_zip_directory_entries	medium	haiku	
-0x933610	zipdir.cpp	zipdir_archive_each_file_into_zip	medium	haiku	
-0x933860	zipdir.cpp	zipdir_sum_matching_entry_sizes	high	haiku	
+0x933080	zipdir.cpp	zseek	high	opus	
+0x933170	zipdir.cpp	ztell	high	opus	
+0x9331c0	zipdir.cpp	zget_archive_id	high	opus	
+0x933320	zipdir.cpp	zextract_matching_files	high	opus	
+0x933610	zipdir.cpp	zadd_matching_files	high	opus	
+0x933860	zipdir.cpp	zget_matching_size	high	opus	
