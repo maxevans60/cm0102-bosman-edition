@@ -71,6 +71,7 @@ int win_fixed_clock(void);
 void win_read_settings(void);
 /* The option database changed: the next file open finds the data set folder again (files.c). */
 void win_data_set_changed(void);
+const char *win_data_set_dir(void);     /* the host folder of the data set, "" for the game's own Data */
 const char *win_databases_root(void);   /* the folder that holds Databases: the save folder */
 
 /* Sound (dsound.c): 0 mutes every sound while the window lacks focus, 1 makes them heard again. */
@@ -106,7 +107,6 @@ void holiday_next_turn(void);                  /* at each human turn, before the
 uint32_t options_screen_build_fn(void);        /* the build function of the box, for the wait state "options" */
 int options_screen_open(int from);             /* pushes the box (from: 1 start screen, 2 game); 0 when it fails */
 void options_screen_after_poll(uint32_t ret, uint32_t display, uint32_t widget);   /* after each input poll */
-void database_changed_in_game(void);           /* database.c: the data set changes at the next start screen */
 int options_screen_widget_before(void);        /* at each widget create: 1 for the Game Settings item */
 void options_screen_widget_after(void);        /* after that create: adds the Bosman Edition Options item */
 uint32_t win_press_count(void);                /* user32.c: the count of mouse presses so far */

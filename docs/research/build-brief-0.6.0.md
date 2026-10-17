@@ -18,7 +18,8 @@ Spec: `docs/specs/2026-10-16-seasons-0.6.0-spec.md` (Decisions, with the researc
 
 ## Same-save checks (every slice that touches game code)
 Use the `same-save-check` skill (`.claude/skills/same-save-check/SKILL.md`). With `G=/Users/max/Projects/cm0102/clean-3968` and `REF=/Users/max/Projects/cm0102/wt-ref-0.5.0/build/cm0102_recomp`:
-- **Base game against 0.5.0:** `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --ref-build $REF`, the same with `--save prematch.sav`, and `--same-save` without `--save` (a new game, `changing_rules = off`). Every save must equal the 0.5.0 save byte for byte.
+- **Q342 (Max, 2026-10-17):** from slice 13 on, the Setup Game text moves memory, so the base game is compared with the main build after slice 13, not with 0.5.0. Every slice adds its runs with the test switch `RECOMP_SEASON_CODE=off` (it turns the slice 11 year sites and the later season code off): with the season at 2001/02 and `changing_rules` off, the saves must be equal.
+- **Base game against 0.5.0 (slices 11, 12 and 14 only):** `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --ref-build $REF`, the same with `--save prematch.sav`, and `--same-save` without `--save` (a new game, `changing_rules = off`). Every save must equal the 0.5.0 save byte for byte.
 - **Yeovil:** the same with `--save yeovil.sav --days 7 --ref-build $REF`. If `--save` does not take a save outside the start list, add that to `smoke_run.py` in its own small block and say so.
 - **Repeatability of a moved season:** a new game in 2010/11 (September 2010 ODB) twice with the same steps gives equal saves.
 - A new switch adds itself to the `off` run of `SAME_SAVE_RUNS` and a pair `<name>-on` and `<name>-off` to `SAME_SAVE_RUNS` and `MATCH_RUNS`.
@@ -48,6 +49,23 @@ Research: `2026-10-16-season-database-table.md`, `rules-0.6.0/databases-signatur
 
 Test seam: a C or Python test that unpacks one season zip into a new user folder, checks the signature, and the second call uses the unpacked copy without a new unpack; `tests/smoke/update_team_sweep.py` on the 21 unpacked season databases (each reaches the first news screen, run in parallel, `--jobs 6`); a dry run of the release script with `--season-dbs` (no `--publish`). Never commit the databases or the zips.
 
+### Slice 11b, right ages and dates in every season (Opus), after slice 11
+Research: Q344 in the spec; `/Users/max/Projects/cm0102/p2004-work/FINDINGS.md` section 3 (outside the repo, for the facts only): the Update Team databases store dates early (Rooney is born 1979 in November 2007, 1982 in September 2005; real 1985), the staff fields +0x12, +0x18, +0x33, +0x40, +0x48 (when the year is 1901 or later), staff_history +8, club_comp_history and nation_comp_history years, and staff competition history in part. Do not use any outside program's code; find every field yourself from the 3.9.68 load code and the data map (`docs/research/data-map/`).
+
+1. Find every date and year field in the 20 data files whose value depends on the start year (dates of birth, contract start and end, joined dates, history years, first and last caps, club founded years if the game ages them, and so on). Write a table with the field, the file, the offset, the evidence address and whether it shifts.
+2. Measure the shift of each database: compare the year of birth of the players present in both the 3.9.68 data and that database (the shift is the most common difference after the real age gap is removed; check with several well-known players), and check the history years against the real champions. Do this for the 21 season databases, the 3.9.68 data on the 2002/03 tile, the 2001/02 versions and the extra databases. Mixed shifts inside one database (the source above says staff competition history is mixed) are measured per table or per row kind. Keep the shifts in the database table of `seasons_db` and in a doc `docs/research/2026-10-17-season-date-shifts.md`.
+3. Apply the shift in memory at the database load of a new game, before any game code reads the data, in a new file (for example `src/recomp_rt/win/season_dates.c`). A loaded save needs nothing: it holds the shifted data. The base game has shift 0 and must give the same save as now (`RECOMP_SEASON_CODE=off` must turn it off too). Custom databases: shift by the season the player names, minus the season the data was made for when it can be measured, else 0; write the rule in the doc.
+4. Test: for each season database, a game run that starts in its season and checks on screen (player profile) or in memory that at least five known players have the real year of birth and the right age on the first day, and that the club history shows the real last champions. Repeatability of a 2010/11 game.
+Another agent fixes the Select All stop at load time in memory (Database.cpp 1844). Keep your code in its own file and call, and say where it runs relative to the load.
+
+### Slice 11c, competition history between 2001 and the start season (Opus), research now, code after slice 11b is on main
+Spec: Q347, slice 11c. Research process: the `league-research` skill (`.claude/skills/league-research/`), as for the rules table (Q243, Q328): each fact has a source URL read on the day and a second-source check, and disagreements go to Max.
+
+1. For each season database before 2010/11 (October 2003, September 2005, November 2007, September 2008, September 2009, and the 3.9.68 data on the 2002/03 tile) list the competitions with history rows in `club_comp_history.dat` and `nation_comp_history.dat`, which seasons each one already holds after the slice 11b shift, and which seasons from 2001/02 to the season before the start are missing. Read the record layout from the 3.9.68 load code and the data map, and cite addresses.
+2. Research the missing rows: the fields the history rows hold (winner, runner-up, other places if the record holds them) for each missing season. Write them in `docs/research/history-0.6.0/` as TSV with sources, one part per nation or confederation, plus a check file.
+3. After slice 11b is on main (`git merge main`, check the log): add the rows in memory at a new game, after the 11b shift, matching clubs and nations by their database names (list every name that does not match). The database files stay unchanged. The base game is untouched and `RECOMP_SEASON_CODE=off` turns it off.
+4. Test: for each of these databases, a game run that opens the history of a few competitions (English league and cup, Champions League, a smaller nation) and checks every season up to the start with the right winner; the same-save checks of this brief.
+
 ### Slice 12, rules table reader and rules report (Opus), after slice 11 is on main
 Research: the rules table parts, `2026-10-16-sweep-season-end.md` section 2.4 (what a jump with no days played needs), the league and cup sweeps.
 
@@ -64,6 +82,22 @@ Research: the mockup `docs/research/mockups/2026-10-15-season-picker.html` (the 
 - Each tile starts its season database through `seasons_db_prepare` and `season_set_new_game`.
 - Player-facing text: plain words, British English, no exclamation marks. Screenshots in classic and widescreen (HD mode is removed, Q267).
 - Test seam: a smoke run that opens the screen, picks a tile, starts the game and checks the first news date and the database loaded; one run per era; the same-save checks (a base game started through the screen with `changing_rules` off equals the 0.5.0 new game).
+
+### Slice 15, club moves and names (Opus), after slice 12
+Research: the rules table parts and `<part>-clubs.tsv` (club moves per season), `eng-academy.tsv`, the slice docs `docs/research/2026-10-16-seasons-slice-0[4-8]-*.md`, spec Q225, Q226, Q237, Q238, Q244, Q272, Q279, Q280, Q284, Q285, Q289, Q290, Q331, Q335, Q337.
+1. **Club moves at a new game (Q225, Q237):** for the start season, put every club of a resized or new division into its real division of that season, in memory, from the clubs files. Missing clubs come from that nation's clubs with no division, then lower and spare divisions (Q244, Q279, Q290). A real club that the database lacks becomes a new club record (Q335, as for reserve teams Q289); list every such case. The database files stay unchanged.
+2. **Names (Q226, Q238):** competitions get their name of the start season (the `name` column of the rules table) in memory when a game starts. Keep the names in one table that slice 16 can apply again each July.
+3. This slice changes no division sizes in the code (slice 18) and no July step (slice 16). Where a club move needs a size the code cannot hold yet, list it for slice 18.
+4. Test seam: the rules report (`tests/seasons/rules_report_check.py`, per-slice run `--year X --last X+1`) for the clubs per division and names of every season start that the report can reach. Select All is blocked in some databases by the Database.cpp 1844 stop (another agent fixes it): use the nation groups that load (slice 12 doc) and say which seasons and nations you covered. The same-save checks of this brief (Q342), and `RECOMP_SEASON_CODE=off` turns the slice off.
+
+### Slice 16, season change and news (Opus), after slice 12
+Research: `2026-10-16-sweep-season-end.md` (the update pass 0x5d5ae0, the per-entry update days, `start_new_season`), spec Q232, Q245, Q247, Q248, Q258.
+1. **The July step:** with `changing_rules` on, at each league table entry's season change apply the rules of the new season. Build it as a small registry: each later slice (17 to 29) adds its rule kinds to it, and this slice brings the first kinds: competition names (slice 15's names table) and the rules the table holds that the code already reads at `set_up_rules` (substitutes, bench) if that is simple. With `changing_rules` off, nothing changes after the start (Q232).
+2. **After 2025/26 (Q248):** the table rows up to 2027/28 apply; after the last row the rules stay.
+3. **News (Q258):** one news item at the start of each season in which the rules change, listing the changes in plain words (for example "The First Division is now the Championship."). Use the game's own news item code (`NewsItem::NewsItem` 0x77bbe0, read its callers first) so it shows like any other news.
+4. Test seam: the rules report across each era boundary (2002/03 to 2003/04, 2008/09 to 2009/10, 2020/21 to 2021/22, 2023/24 to 2024/25) shows the next season's names and the kinds this slice applies; a check that the news item lists the changes of that July; `changing_rules` off gives no change and no news; the same-save checks (Q342) and repeatability.
+
+Slices 15 and 16 run at the same time. Both may touch the names table: slice 15 owns it (a new file such as `season_names.c` with a lookup by competition and season), slice 16 calls it. Agree through this brief: the lookup is `const char *season_names_get(const char *comp_file, int season)`, NULL when the name does not change.
 
 ## Files that two slices share
 - `options.c`, `options.h`, the `ctest` options cases: slices 11 and 13. Keep each change in its own small block.

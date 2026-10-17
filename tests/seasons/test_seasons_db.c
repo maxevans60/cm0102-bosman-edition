@@ -213,9 +213,10 @@ static void test_table(void)
             CHECK(seasons_known_dbs[i].club_size != seasons_known_dbs[j].club_size ||
                   seasons_known_dbs[i].staff_size != seasons_known_dbs[j].staff_size);
     CHECK(seasons_db_known("October 2003") && !seasons_db_known("October 2003 Extra"));
-    CHECK(seasons_db_era(2001) == SEASONS_ERA_ORIGINAL && seasons_db_era(2003) == SEASONS_ERA_2000S &&
-          seasons_db_era(2009) == SEASONS_ERA_2010S && seasons_db_era(2020) == SEASONS_ERA_EARLY_2020S &&
-          seasons_db_era(2024) == SEASONS_ERA_LEAGUE_PHASE && seasons_db_era(2025) == SEASONS_ERA_LEAGUE_PHASE);
+    CHECK(seasons_db_decade(2001) == SEASONS_DECADE_2000S && seasons_db_decade(2009) == SEASONS_DECADE_2000S &&
+          seasons_db_decade(2010) == SEASONS_DECADE_2010S && seasons_db_decade(2019) == SEASONS_DECADE_2010S &&
+          seasons_db_decade(2020) == SEASONS_DECADE_2020S && seasons_db_decade(2025) == SEASONS_DECADE_2020S);
+    CHECK(!strcmp(seasons_db_decade_name(SEASONS_DECADE_2010S), "2010s"));
 }
 
 static void test_prepare_without_zip(void)
@@ -321,7 +322,7 @@ int main(int argc, char **argv)
             seasons_db_scan_in(argv[2], argv[3], list);
             for (int i = 0; i < SEASONS_COUNT; i++) {
                 const SeasonsEntry *s = &list->season[i];
-                printf("%s era=%s db=%s status=%d folder=%s extras=", s->label, seasons_db_era_name(s->era),
+                printf("%s decade=%s db=%s status=%d folder=%s extras=", s->label, seasons_db_decade_name(s->decade),
                        s->database ? s->database : "-", (int)s->status, s->folder);
                 for (int k = 0; k < s->extra_count; k++) printf("%s%s", k ? "," : "", s->extra[k].db->name);
                 printf("\n");

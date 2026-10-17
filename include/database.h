@@ -236,8 +236,8 @@ struct staff {
     club_t *club;              /* +0x39 */
     s8 club_job;               /* +0x3d 1..10 non-player, 11 player, 12, 13
                                   and 15 both, 14 none */
-    cm_date_t contract_end;    /* +0x3e inference */
-    cm_date_t d46;             /* +0x46 */
+    cm_date_t date_joined;     /* +0x3e: the date of the last club move (0x53c190); data: Henry 3.8.1999 */
+    cm_date_t contract_end;    /* +0x46: read by the contract set-up 0x4c7560 */
     s32 i4e;                   /* +0x4e */
     s32 i52;                   /* +0x52 */
     u8 unknown_56[8];          /* +0x56 */
