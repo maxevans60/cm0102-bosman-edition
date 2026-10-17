@@ -182,3 +182,128 @@ Sources added: 49 fields (name 49).
 - `name` = none on not-held rows cites the page that gives the dates of the competition: https://en.wikipedia.org/wiki/K_League_2 (founded 2013) for aus-jap-kor-352 to 362, https://en.wikipedia.org/wiki/Korean_League_Cup (abolished 2012, last edition 2011) for aus-jap-kor-443 to 459, and https://en.wikipedia.org/wiki/2026–27_J.League_Cup (previous edition 2025, next 2027-28) for aus-jap-kor-187.
 
 Disagreements: none. Fields with no source: none.
+
+## Pass 2
+
+Date: 2026-10-17. Decision agent. Rules: the section "Pass 2" of `research-brief-0.6.0.md` and Q268 to Q331 of the spec. `rules_lint.py` gives 0 problems before and after.
+
+### No new tiers (Q331, Q288)
+
+The original runs one Australian league (`aus_nsl`), J1 and J2 (`jap_j1`, `jap_j2`) and one Korean league (`kor_league`). These are the lowest tiers. J3, K League 2 and the Australian Championship do not replace an existing tier, so they leave the game.
+
+- `aus-jap-kor.tsv`: 81 rows deleted. They are rows 78 to 104 (Australian Championship), 244 to 270 (J3 League) and 352 to 378 (K League 2). 378 rows stay. The other ids do not change.
+- `aus-jap-kor-clubs.tsv`: 398 club rows deleted (the J3 League, K League 2 and Australian Championship rows). 1,258 club rows stay.
+- No competition of this part needs a nation that a game cannot select.
+- The check and reconcile files still name the deleted ids. I did not change them.
+
+Q272 keeps the real rule places. The game has no tier below J2 or the K League. So I added a note to each J2 row with relegation (227 to 234, 236 to 240, 242) and to each K League row from 2013 (336 to 350). The note says that no club goes down in the game. Row 241 (J2 2025/26) now says that the build decides how the 20 J3 clubs take part in the shared half-season.
+
+Notes for the build: the J.League Cup from 2024 and the Emperor's Cup take J3 clubs, the Korea Cup takes K League 2 and K3 to K5 clubs, and the Australia Cup takes state league clubs. These clubs have no division in the game.
+
+### Conflicts and open points
+
+1. **Row 343, K League 1 2020, `down`.** Settled on 1 (12th). In real life Busan IPark (12th) and Sangju Sangmu (4th) went down. Sangju went down because the club moved to Gimcheon, a case that the game cannot copy (Q272). The value keeps the place by the rules, and the notes keep Sangju. Source: https://www.rsssf.org/tabless/skor2020.html. With no K League 2 in the game, no club goes down in any case.
+2. **Row 431, Korea Cup label.** The cup runs summer to spring from the 2026–27 edition, which starts on 20 June 2026 (row 430). By Q276 the 2027–28 edition goes in the 2026/27 row. Row 431 now has `real_season` "2027–28 (inference)" and row 432 "2028–29 (inference)". Source: https://en.wikipedia.org/wiki/2026%E2%80%9327_Korea_Cup.
+3. **Australia Cup in the Y/Y+1 row.** Q275 confirms it. No change.
+4. **Q244, the pool of club moves.** Q279 says yes. The pass 1 matches already took clubs from the spare and lower divisions ("A Premier Division", "A Lower Division", the JFL, the Japanese Administrative Division, the Korean Amateur League). No change.
+5. **Rows 45 to 47, A-League bench.** The loose ends section settles them by ESPN match rosters. No change.
+6. **Emperor's Cup and J.League Cup in 2025/26.** They stay `not held`. The 105th Emperor's Cup ended in 2025 and the 106th starts in August 2026 (row of 2026/27).
+
+### Club moves (Q279, Q280, Q290)
+
+I went down J1 and J2, the K League and the A-League in each season with a database. The tiers whose real count differs from the database count already list every real club. No club moved up leaves a gap above the lowest tier, because each tier that a club leaves is already listed. No database division of these nations is a real tier that ended (Q290).
+
+I searched each season database again for the 15 real clubs that had no match. Two are the same club under an older name:
+
+| Season | Club | Database club | Source |
+|---|---|---|---|
+| 2005/06 | Tokushima Vortis | 8406 Otsuka FC (Japanese Football League) | https://en.wikipedia.org/wiki/Tokushima_Vortis |
+| 2007/08 | Roasso Kumamoto | 7705 NTT Kumamoto FC (Japanese Football League) | https://en.wikipedia.org/wiki/Roasso_Kumamoto |
+
+Both pages give the old name as the founding name of the club. The clubs file now holds both matches.
+
+These 13 real clubs still have no record in the database of that season. Max decides them:
+
+| Season | Division | Clubs |
+|---|---|---|
+| 2002/03 | K League | Daegu FC |
+| 2003/04 | K League | Daegu FC, Incheon United |
+| 2005/06 | K League | Incheon United, Daegu FC, Gyeongnam FC |
+| 2005/06 | A-League | Central Coast Mariners, Queensland Roar |
+| 2008/09 | K League | Gangwon FC |
+| 2009/10 | K League | Gangwon FC |
+| 2010/11 | K League | Gwangju FC |
+| 2011/12 | J2 League | Matsumoto Yamaga |
+| 2025/26 | J2 League | Iwaki FC |
+
+Gwangju Sangmu Bulsajo (10106) is a different club from Gwangju FC. Iwaki Furukawa FC (7364) is a different club from Iwaki FC.
+
+### Reserve and B teams (Q289)
+
+None. J1, J2, the K League and the A-League have no reserve or B teams in any season. The U-23 sides and the J.League U-22 Selection played only in J3, which leaves the game.
+
+## Second source, pass 2
+
+Date: 2026-10-17. Second-source agent. File: `aus-jap-kor.check2.tsv` (208 lines). I took each check line with verdict `no second source` whose row still exists and whose field holds a value that is not `unknown` and not marked as an inference. 93 lines name rows that pass 2 deleted, and I skipped them. `rules_lint.py` gives 0 problems before and after.
+
+| Verdict | Lines |
+|---|---|
+| agree | 115 |
+| disagree, settled | 6 |
+| disagree, still split | 1 |
+| no second source | 86 |
+
+The session web search limit stopped the search part of the work before the K League, K League Super Cup, Korean League Cup and K League foreign-player lines. These 61 lines, and some others, have `no second source` for that reason. A later pass can take them again.
+
+### Changes to aus-jap-kor.tsv
+
+- aus-jap-kor-8 (Australia 2008/09), `foreign`: 5 changes to 4. The Roar (26 Oct 2010) says the quota was four in seasons 1 to 4 and five from 2009/10. The PFA table of 9 Dec 2008 (https://pfa.net.au/?p=4365) gives 4 for 2008/09 and 5 for 2009/10. The notes of rows 9 to 25 still say "5-visa rule cited from the 2008-2013 collective agreement". That statement is wrong for 2008/09.
+- aus-jap-kor-25 (Australia 2025/26), `registration`: "20 to 26 players" changes to "18 to 23 players". The A-Leagues site quotes the APL regulations (26 Aug 2025 and 17 Sep 2025).
+- aus-jap-kor-48 (A-League Men 2025/26), `bench`: 5 changes to 7. Sydney FC (16 Oct 2025) says the squad is "trimmed to 18 on match day". ESPN rosters of three 2025/26 matches show 7 substitutes for each team.
+- aus-jap-kor-139 (Emperor's Cup 2005), `format`: 12 J2 clubs and 2 JFL seeds in round 3, not 13 and 1 (RSSSF match lists. J2 had 12 clubs in 2005).
+- aus-jap-kor-142 (Emperor's Cup 2008), `format`: 82 clubs. 15 J2 clubs and 1 JFL seed play from round 3, and the university champion and 47 prefectural winners play from round 1 (RSSSF match lists).
+- aus-jap-kor-159 (Emperor's Cup 2025), `format`: 6 J2 clubs played in round 1, and 19 J1 and 14 J2 clubs entered in round 2. One J1 club entered later (an inference from the round counts). The JFA rules give 88 clubs and extra time then penalties. The notes now give the final date, 22 November 2025.
+
+### Still split
+
+- aus-jap-kor-74 (Australia Cup 2024/25), `format`: the first source gives 759 entrants. Football Australia gives 758. I read no third publisher because the Football NSW copy refused the request. The value stays, and the notes give both counts.
+
+### Other findings for Max
+
+- Rows 5 to 7 (Australia 2005/06 to 2007/08) hold `unknown` for `foreign`. The Roar (2010) and the PFA table (2008) give four visa players for those seasons.
+- Rows 21 to 24: the A-Leagues site (16 Jan 2022) gives a squad of 18 to 23 players in 2021/22. The `registration` fields of those rows say `unknown`.
+- Row 295 (Japanese Super Cup 2026): I found no 2026 edition on the J.League site. Max must check whether a 2026 edition took place.
+- Row 380 (K League Super Cup 2003): RSSSF holds the 2002 and 2004 editions but no 2003 edition. Max must check whether a 2003 edition took place.
+- The Japanese Super Cup rows use the generic name. The sponsor name was FUJI XEROX SUPER CUP up to 2021 and FUJIFILM SUPER CUP from 2022. I gave these lines `agree`.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after. Every page below was read on 2026-10-17.
+
+- Rows 5 to 7 (Australia 2005/06 to 2007/08), `foreign`: unknown changed to "max 4 foreign (visa) players per squad". The Roar (27 October 2010, https://web.archive.org/web/2020/https://www.theroar.com.au/2010/10/27/arrivederci-a-league-imports/) says each squad could sign up to 4 imported players in seasons 1 to 4, and 5 from 2009/10. The PFA table of 9 December 2008 (https://pfa.net.au/?p=4365) gives 4 for 2008/09. The live Roar page answers 403, so I read the archive copy.
+- Row 295 (Japanese Super Cup 2026): `format` changed to `not held`, and `subs_used` and `bench` to n/a. The sponsor's page (https://www.fujifilm.com/fb/company/event/ffsc) says the 2025 match was the last, because of the move to an autumn-spring season. Soccer King (30 January 2025) quotes the J.League chairman the same way. Wikipedia lists a 2026 edition (Kashima Antlers v Machida Zelvia) with the date TBA, and no match took place to 17 October 2026. If it is played later, it goes in this row (Q277). The old note "the 2026 edition opened the special half-season" was wrong and is replaced.
+- Row 380 (K League Super Cup 2003): `format` changed to `not held`, and `subs_used` and `bench` to n/a. On 21 February 2003 the league postponed the match of 16 March (Seongnam Ilhwa Chunma v Suwon Samsung Bluewings) without a new date, and it never took place (Yonhap via Daum, https://v.daum.net/v/M0IPVbK9gD, and https://en.wikipedia.org/wiki/K_League_Super_Cup, where the match shows as cancelled).
+
+## Second source, retry
+
+Date: 2026-10-17. Second-source retry agent. I took the 86 lines of `aus-jap-kor.check2.tsv` with verdict `no second source` again, with the 62 Korean lines first. I read Korean and Japanese press pages directly (Nocut News, Newsis, Goal Korea, Ilgan Sports, Dailian, Sports Kyunghyang, Xportsnews, Jeonbuk Ilbo, The Fact, Money Today, Korea Times, Soccer King) and used 16 web searches. `rules_lint.py` gives 0 problems for this part before and after.
+
+| Result | All lines | Korean lines |
+|---|---|---|
+| agree | 42 | 36 |
+| disagree, settled | 1 | 1 |
+| disagree, still split | 0 | 0 |
+| still no second source | 43 | 25 |
+
+The file now holds 157 `agree`, 8 `disagree` and 43 `no second source` lines.
+
+### Changes to aus-jap-kor.tsv
+
+- aus-jap-kor-403 (K League Super Cup 2026), `format`: "extra time and penalties" changes to "no extra time, a draw after 90 minutes goes to penalties". Goal Korea, Nocut News (19 Jan 2026) and Jeonbuk Ilbo (19 Jan 2026) all state it. Decision: second. Rows 404 and 405 copy the format, so they change the same way. The `sources` of the three rows add `format=` with the Goal Korea and Nocut News URLs.
+
+### Notes on the verdicts
+
+- K League 1 `subs_used` 3 for 2002 to 2019 (rows 325 to 342): Nocut News (23 Feb 2024) says substitutes went from 3 to 5 in 2021. It gives no start year, and the first source makes the same kind of statement.
+- K League Super Cup 2003 (row 380): Xportsnews (2 Mar 2005) lists every Super Cup to 2005 with no 2003 match, and Goal Korea (2026) counts seven editions from 1999 to 2006. The `not held` value now has a second source.
+- J1 foreign rule 2021 to 2025 (rows 128 to 132): the Korea Times (21 May 2025) confirms the J1 part only. The J2 and J3 limit and the partner-nation exemption rest on the first source.
+- Still without a second source: the Korean foreign limits of 2002 to 2004 (rows 298 to 300), the substitutes of the Korean Super Cup (rows 379, 381 to 383) and League Cup (rows 433, 435 to 442), the League Cup `not held` rows 457 to 459, and the names of future seasons. Korean pages state the K League limit of 3 before 2021, not the rule of its cups.

@@ -45,7 +45,7 @@ The six nations of the league table outside UEFA (Argentina, Australia, Brazil, 
 | U2 | 2004/05 | UEFA Cup groups: 8 groups of 5, single round robin, 4 matches each |
 | U3 | 2008 | Last Intertoto Cup. From 2006 it had 3 rounds and 11 winners to UEFA Cup Q2 |
 | U4 | 2009/10 | Europa League, 12 groups of 4 |
-| U5 | 2009/10 | Champions and non-champions split from Q3. The regulations name them Champions Path and League Path from 2016/17 |
+| U5 | 2009/10 | Champions and non-champions split from Q3. The regulations name them Champions Path and League Path from 2015/16. The table uses these names in every season (Q296) |
 | U6 | 2013 | Super Cup leaves Monaco (Prague) |
 | U7 | 2018/19 | Associations 1 to 4 get 4 places, all direct to the group stage |
 | U8 | 2021/22 | Conference League, Europa League groups cut to 32 |
@@ -142,3 +142,90 @@ Disagreements (value not changed, no source added, "no source found for name" ad
 - uefa-92 (2012/13): same `name`. The season page says "League route" and "non-champions path".
 - uefa-83 (2011/12), uefa-99 (2013/14), uefa-107 (2014/15): `name` "UEFA Champions League qualifying, Champions Path". The season pages say "Champions route". The regulations of these seasons do not use the word "path".
 - The first regulations that use "League path" and "Champions path" are those of 2015-16 (https://kassiesa.net/uefa/files/2015-16-uefa-cl-rules.pdf). The row notes say 2016/17. Max decides if the label stays for 2009/10 to 2014/15.
+
+## Pass 2
+
+Decision pass of 2026-10-17, by the decisions Q268 to Q331 of the spec. Row ids and row order are unchanged. Lint: 9 problems before, 0 after.
+
+### Tiers, nations, clubs (Q331, Q288, Q279, Q280, Q290, Q289)
+
+- No row is deleted. Each competition of this part is a UEFA club competition. None needs a nation that a game cannot select. Q331 applies to national tiers, so the Conference League (`comp_file` = `new`) stays.
+- Club moves and reserve teams do not apply to this part. No clubs file.
+
+### Two legs in 2019/20 and 2020/21 (Q294)
+
+- uefa-146, uefa-149: the sentence on single matches in Lisbon and Germany leaves `format`. The quarter-finals and semi-finals play two legs, as in the rest of the row. The real event is in `notes`.
+- uefa-154, uefa-157: the sentence on single-match qualifying ties leaves `format`. The real event is in `notes`. uefa-155 and uefa-156 get the same note.
+- The Champions League preliminary round (a mini-tournament of single matches) stays. It is the usual format of that round from 2018/19.
+- Subs in 2019/20 keep the real rule change of August 2020 (max 5) by Q293.
+- uefa-160: the 2020 Super Cup plays in its normal August slot (Q277). Note added.
+
+### Path names (Q296)
+
+- uefa-68, 76, 83, 84, 92, 99, 100, 107, 108: the names Champions Path and League Path stay. The note "no source found for name" is replaced by a Pass 2 note. `sources` gets `name=docs/specs/2026-10-16-seasons-0.6.0-spec.md (Q296)`, because the name is a decision and the real label of these seasons differs.
+- Path rows: "The regulations name the paths from 2016/17" becomes 2015/16, with the 2015-16 regulations URL. Change point U5 says the same.
+
+### Russia (Q293)
+
+- Russia has no places from 2022/23 to 2026/27 already. 2021/22 keeps its places, because the suspension came during the season (Q278).
+- uefa-209 (2027/28): Russia's places leave the row. The latest UEFA decision is that of the Executive Committee in June 2026. It amends the 2026/27 list to match the "current suspension of Russian national teams and clubs" (https://www.euronews.com/my-europe/2026/06/07/uefa-extends-ban-on-russian-national-teams-and-clubs-from-competitions-for-202627-season). No decision lifts it, and the 2027/28 Champions League page says Russia is suspended. The PDF places are kept in `notes`. The rounds of the other nations after UEFA rebalances the list are `unknown`.
+
+### Title holders: one rule for all seasons
+
+Rule, as in real life: a title holder that enters on the title-holder place is not counted in its nation, and the domestic place it held is vacated. A title holder that uses its own domestic place counts as that place. The rows from 2007/08 follow it already. Each access list row now states the rule. Four rows change:
+
+| Row | Nation | Before | After | Source |
+|---|---|---|---|---|
+| uefa-9 (2002/03) | Spain | CL 4 with CL3@TH | CL 3. Real Madrid (3rd) on the title-holder place | https://kassiesa.net/uefa/history/qual2002.html |
+| uefa-17 (2003/04) | Italy | CL 4 with CL3@TH | CL 3. AC Milan (3rd) on the title-holder place | https://kassiesa.net/uefa/history/qual2003.html |
+| uefa-33 (2005/06) | England | CL 5 | CL 4. Liverpool (5th) on the title-holder place in Q1 | https://kassiesa.net/uefa/history/qual2005.html |
+| uefa-49 (2007/08) | Italy | CL 4 | CL 3. AC Milan (4th) on the title-holder place | https://kassiesa.net/uefa/history/access2007.html |
+
+In each case, kassiesa.net states that the vacated place went to another association by rebalancing (Scotland 2002/03, Switzerland 2003/04 and 2007/08) or that the holder entered in addition to the four English clubs (2005/06).
+
+### Other open points
+
+- 2001/02 Champions League Q1: 20 clubs (Wikipedia). RSSSF lists 10 ties (https://www.rsssf.org/ec/ec200102.html). Settled: 20.
+- Points for Max 2 and 4 and the conflict and reading question of the Reconcile section are settled above.
+
+## Second source, pass 2
+
+Second-source pass of 2026-10-17. The file is `uefa.check2.tsv`. `uefa.tsv` is unchanged, because no line came out as `disagree`. Lint: 0 problems before and after.
+
+The check file has 265 lines with the verdict `no second source`. 48 lines are out of scope, because the field holds `unknown` or an inference. These are the Intertoto rules, the 2002/03 registration and windows, the Super Cup tie rule of 2006 and 2027, the Intertoto tie rule of 2003 and 2005, and the 2027/28 rules fields. The other 217 lines are in `uefa.check2.tsv`.
+
+| Verdict | Lines |
+|---|---|
+| agree | 50 |
+| disagree, settled | 0 |
+| disagree, still split | 0 |
+| no second source | 167 |
+
+### Agree
+
+- Path names 2015/16 to 2026/27 (24 lines): the Champions League regulations of each season use "champions path" and "league path".
+- Seeding with half the association coefficient, and the title holder as top seed (9 lines): Champions League and UEFA Cup regulations 2001/02 to 2003/04. The 2002/03 Champions League PDF has no text layer, so its pages were read as images. The text layer of the 2002/03 UEFA Cup PDF is shifted by 29 code points, and decoding it gives readable text.
+- Subs 3 and bench 7 for 2002/03, Champions League and UEFA Cup (4 lines): the 2002/03 regulations.
+- Super Cup 2007 (3 lines): subs 3, bench 7, and extra time then penalties, from the 2007 Super Cup regulations (uefa.com).
+- Super Cup 2005 bench 5: the UEFA line-up sheet lists 5 substitutes for each club. This is the line-up of the match, not a rule text.
+- Super Cup 2018 bench 12: FourFourTwo, 27 March 2018.
+- Windows 2022/23 and 2025/26, Champions League: the limit of 3 new players for the knockout matches, from Sky Sports and The Soccer Era. Neither page covers the 2 new players in qualifying.
+- 2027/28 Champions League rounds and club counts (6 lines): the access list PDF of 8 September 2026. It lists Russia and Ukraine in Q1. Once Russia leaves and Ukraine moves to Q2, as the Wikipedia note says, its counts give the row values: 83 clubs, Q1 30, Champions Path Q2 24, Q3 12, PO 10, League Path Q2 6, Q3 8, PO 4.
+
+### No second source (167 lines)
+
+- Windows (49 lines): no page outside UEFA states the rule for those seasons. uefa.com pages do not count, because UEFA publishes the regulations.
+- Path names 2009/10 to 2014/15 and 2027/28 (15 lines): 9 of them hold the Q296 decision, so no source can confirm them. 3 are on Wikipedia only. 3 are 2027/28 names, and no 2027/28 regulations exist yet.
+- Super Cup subs, bench and tie rule (51 lines): Wikipedia is the only source for those years. UEFA has online Super Cup regulations for 2007 and 2026 only.
+- Champions League and Europa League subs and bench 2005/06 to 2010/11 (14 lines): the only source is the regulations. The Wikipedia final pages of these seasons have no list of match rules.
+- Intertoto unused places (7 lines), 2026/27 pots (2 lines), 2027/28 seeding notes (2 lines), and the 2027/28 Europa League, Conference League and access list fields (27 lines).
+
+### For the lead
+
+- The 2002/03 regulations can fill the `unknown` registration and windows fields of uefa-10 and uefa-13. For the Champions League, read the image PDF as pictures. For the UEFA Cup, decode the shifted text. In the UEFA Cup file, Art. 6 gives a deadline of 31 January 2003 for later registrations. I did not write these values, because this pass checks only filled fields.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
+
+- uefa-10 (Champions League 2002/03) and uefa-13 (UEFA Cup 2002/03): `registration` and `windows` filled from the 2002/03 regulations, Art. 15.04, 15.05 and 15.08. Registration: list A of at most 25 players, and list B for young club-trained players (born on or after 1 January 1981), who do not count in the 25. Windows: at most 3 new players registered by 31 January 2003 for the rest of the competition. The wording is the same as the 2001/02 rows. I read the Champions League pages as images (PDF pages 22 and 23) and decoded the shifted text layer of the UEFA Cup file. URLs, read on 2026-10-17: https://kassiesa.net/uefa/files/2002-uefa-cl-rules.pdf and https://kassiesa.net/uefa/files/2002-uefa-uc-rules.pdf

@@ -23,6 +23,96 @@ season	division	club	db_club_id	db_club	db_division	source
 2003/04	Serie B	Pescara	8742	Pescara	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2003-2004
 2003/04	Serie B	Avellino	1088	Avellino	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2003-2004
 2003/04	Serie B	Como	2680	Como	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2003-2004
+2003/04	Serie C1 girone A	Arezzo	819	Arezzo	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Lumezzane	6819	Lumezzane	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Cesena	2373	Cesena	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Rimini	9556	Rimini	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Lucchese	6780	Lucchese-Libertas	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Spezia	10895	Spezia 1906	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Pisa	8826	Pisa	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Padova	8504	Padova	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	SPAL	10832	S.P.A.L.	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Pistoiese	8830	Pistoiese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Cittadella	2564	Cittadella Padova	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Novara	8055	Novara	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Torres	11716	Sassari Torres	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Pro Patria	9076	Pro Patria	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Reggiana	9462	Reggiana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Varese	12267	Varese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Prato	9032	Prato	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone A	Pavia	8635	Pavia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_A
+2003/04	Serie C1 girone B	Catanzaro	2296	Catanzaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Crotone	2823	Crotone	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Viterbese	12549	Viterbese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Acireale	229	Acireale	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Benevento	1496	Benevento Sporting	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Lanciano	6351	Lanciano	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Sambenedettese	10015	Sambenedettese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Chieti	2492	Chieti	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Foggia	4096	Foggia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Teramo	11466	Teramo	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Giulianova	4418	Giulianova	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Martina	7144	Martina	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Sora	10778	Sora	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Fermana	3986	Fermana	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Vis Pesaro	12536	Vis Pesaro 1898	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Paternò	8621	Paternò	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	Taranto	11373	Taranto 1906	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C1 girone B	L'Aquila	6257	L'Aquila	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2003-2004#Girone_B
+2003/04	Serie C2 girone A	Mantova	7059	Mantova 1994	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Cremonese	2797	Cremonese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Sudtirol	621	F.C. Sudtirol Alto Adige	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Valenzana	12215	Valenzana	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Pizzighettone	8835	Pizzighettone	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Meda	7216	Meda	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Ivrea	5489	Ivrea	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Monza	7538	Monza	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Pro Sesto	9077	Pro Sesto	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Biellese	1574	Biellese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Olbia	8195	Olbia	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Belluno	1476	Seppelfricke Bellunopontalpi	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Montichiari	7526	Montichiari	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Pro Vercelli	9079	Pro Vercelli	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Legnano	6448	Legnano	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Savona	10237	Savona	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Sassuolo	10215	Sassuolo	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone A	Palazzolo	8527	Palazzolo	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_A
+2003/04	Serie C2 girone B	Grosseto	4618	Grosseto	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Sangiovannese	10103	Sangiovannese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Gualdo	4636	Gualdo	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	San Marino	10063	San Marino	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Gubbio	4665	Gubbio	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Ravenna	9392	Ravenna	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Cuoiocappiano	2214	Cappiano-Romaiano	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Forlì	4121	Forlì	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Fano	3930	Fano	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Tolentino	11632	Tolentino	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Castelnuovo	2283	Castelnuovo Garfagnana	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Sansovino	10115	Sansovino	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Aglianese	277	Aglianese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Rosetana	9669	Rosetana	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Carrarese	2252	Carrarese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Imolese	5329	Imolese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Bellaria Igea Marina	1470	Bellaria Igea Marina	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone B	Montevarchi	7523	Montevarchi 1902	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_B
+2003/04	Serie C2 girone C	Frosinone	4208	Frosinone	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Brindisi	1889	Brindisi	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Vittoria	12559	Vittoria	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Fidelis Andria	4017	Fidelis Andria	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Giugliano	4417	Giugliano	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Melfi	7240	Melfi	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Igea Virtus	5311	Igea Virtus Barcellona	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Palmese (NA)	8549	Palmese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Nocerina	7978	Nocerina	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Latina	6394	Latina	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Cavese	2308	Cavese	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Lodigiani	6675	Lodigiani	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Gela	4334	Juveterranova Gela	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Isernia	5438	Isernia	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Ragusa	9312	Ragusa	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Castel di Sangro	2277	Castel di Sangro	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Tivoli	11608	Polisportiva Tivoli	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
+2003/04	Serie C2 girone C	Rutigliano	9776	Rutigliano	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2003-2004#Girone_C
 2005/06	Serie A	Inter	5377	Internazionale	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2005-2006
 2005/06	Serie A	Roma	9644	AS Roma	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2005-2006
 2005/06	Serie A	Milan	7369	AC Milan	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2005-2006
@@ -65,6 +155,96 @@ season	division	club	db_club_id	db_club	db_division	source
 2005/06	Serie B	Ternana	11476	Ternana	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2005-2006
 2005/06	Serie B	Cremonese	2797	Cremonese	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2005-2006
 2005/06	Serie B	Catanzaro	2296	Catanzaro	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2005-2006
+2005/06	Serie C1 girone A	Spezia	10895	Spezia 1906	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Genoa	4347	Genoa	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Monza	7538	Monza	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Pavia	8635	Pavia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Salernitana	9991	Salernitana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Cittadella	2564	Cittadella Padova	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Teramo	11466	Teramo	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Novara	8055	Novara	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Padova	8504	Padova	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Pro Patria	9076	Pro Patria	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Giulianova	4418	Giulianova	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Pizzighettone	8835	Pizzighettone	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Ravenna	9392	Ravenna	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Pro Sesto	9077	Pro Sesto	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Sambenedettese	10015	Sambenedettese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Lumezzane	6819	Lumezzane	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	San Marino	10063	San Marino	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone A	Fermana	3986	Fermana	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_A
+2005/06	Serie C1 girone B	Napoli	7752	Napoli Soccer	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Frosinone	4208	Frosinone	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Torres	11716	Sassari Torres	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Grosseto	4618	Grosseto	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Sangiovannese	10103	Sangiovannese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Perugia	8737	Perugia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Lucchese	6780	Lucchese-Libertas	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Martina	7144	Martina	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Gela JT	4334	Juveterranova Gela	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Manfredonia	7042	Sportiva Manfredonia	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Pistoiese	8830	Pistoiese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Lanciano	6351	Lanciano	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Foggia	4096	Foggia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Acireale	229	Acireale	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Pisa	8826	Pisa	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Massese	7164	Massese	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Juve Stabia	5677	Juve Stabia	none	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C1 girone B	Chieti	2492	Chieti	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2005-2006#Girone_B
+2005/06	Serie C2 girone A	Venezia	12352	Venezia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Cuneo	2858	Cuneo	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Ivrea	5489	Ivrea	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Sudtirol	621	F.C. Sudtirol Alto Adige	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Carpenedolo				https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Pro Vercelli	9079	Pro Vercelli	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Sanremese	10113	Sanremese	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Pergocrema	2796	Cremapergo	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Valenzana	12215	Valenzana	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Lecco	6427	Lecco	A Lower Division	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Legnano	6448	Legnano	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Montichiari	7526	Montichiari	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Bassano Virtus	1387	Bassano Virtus 55	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Città di Jesolo	5601	Città Di Jesolo	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Portogruaro	8990	Portogruaro-Summaga	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Biellese	1574	Biellese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Olbia	8195	Olbia	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone A	Casale	2264	Casale	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_A
+2005/06	Serie C2 girone B	Cavese	2308	Cavese	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Sassuolo	10215	Sassuolo	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Sansovino	10115	Sansovino	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Benevento	1496	Benevento Sporting	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Ancona	709	Ancona	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Cuoiocappiano	2214	Cappiano-Romaiano	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Castelnuovo	2283	Castelnuovo Garfagnana	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Reggiana	9462	Reggiana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Bellaria Igea Marina	1470	Bellaria Igea Marina	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Foligno	4099	Foligno	A Lower Division	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	SPAL	10832	S.P.A.L.	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Gualdo	4636	Gualdo	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Gubbio	4665	Gubbio	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Carrarese	2252	Carrarese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Prato	9032	Prato	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Montevarchi	7523	Montevarchi 1902	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Castel San Pietro	2276	Castel San Pietro	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone B	Forlì	4121	Forlì	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_B
+2005/06	Serie C2 girone C	Gallipoli				https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Taranto	11373	Taranto 1906	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Rende				https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Pro Vasto	9078	Pro Vasto	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Melfi	7240	Melfi	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Cisco Roma	2562	Cisco Collatino	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Viterbo	12549	Viterbese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Giugliano	4417	Giugliano	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Vigor Lamezia	12448	Vigor Lamezia	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Real Marcianise	7078	Marcianise	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Andria	4017	Fidelis Andria	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Igea Virtus	5311	Igea Virtus Barcellona	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Nocerina	7978	Nocerina	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Rieti	9545	Rieti	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Potenza	9014	Potenza	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Modica				https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Latina	6394	Latina	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
+2005/06	Serie C2 girone C	Vittoria	12559	Vittoria	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2005-2006#Girone_C
 2007/08	Serie A	Inter	5377	Internazionale	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2007-2008
 2007/08	Serie A	Roma	9644	AS Roma	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2007-2008
 2007/08	Serie A	Juventus	5691	Juventus	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2007-2008
@@ -107,6 +287,96 @@ season	division	club	db_club_id	db_club	db_division	source
 2007/08	Serie B	Ravenna	9392	Ravenna	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2007-2008
 2007/08	Serie B	Spezia	10895	Spezia 1906	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2007-2008
 2007/08	Serie B	Cesena	2373	Cesena	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_B_2007-2008
+2007/08	Serie C1 girone A	Sassuolo	10215	Sassuolo	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Cremonese	2797	Cremonese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Cittadella	2564	Cittadella	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Foligno	4099	Foligno	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Foggia	4096	Foggia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Padova	8504	Padova	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Legnano	6448	Legnano	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Monza	7538	Monza	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Novara	8055	Novara	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Cavese	2308	Cavese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Venezia	12352	Venezia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Pro Sesto	9077	Pro Sesto	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Ternana	11476	Ternana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Pro Patria	9076	Pro Patria	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Paganese	8506	Paganese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Lecco	6427	Lecco	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Verona	12377	Hellas Verona	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone A	Manfredonia	7042	Sportiva Manfredonia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_A
+2007/08	Serie C1 girone B	Salernitana	9991	Salernitana	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Ancona	709	Ancona	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Taranto	11373	Taranto 1906	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Crotone	2823	Crotone	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Perugia	8737	Perugia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Arezzo	819	Arezzo	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Pescara	8742	Pescara	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Lucchese	6780	Lucchese-Libertas	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Gallipoli	8880	Gallipoli Calcio SRL	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Sorrento	10782	Sorrento	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Potenza	9014	Potenza	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Massese	7164	Massese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Sambenedettese	10015	Sambenedettese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Pistoiese	8830	Pistoiese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Juve Stabia	5677	Juve Stabia	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Lanciano	6351	Lanciano	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Sangiovannese	10103	Sangiovannese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C1 girone B	Martina	7144	Martina	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C1_2007-2008#Girone_B
+2007/08	Serie C2 girone A	Pergocrema	2796	Pergocrema	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Carpenedolo	2864	Carpenedelo	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Rodengo Saiano	9632	Rodengo Saiano	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Lumezzane	6819	Lumezzane	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Mezzocorona	7336	Mezzocorona	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Canavese	2180	Canavese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Pro Vercelli	9079	Pro Vercelli	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Ivrea	5489	Ivrea	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Nuorese	8079	Nuorese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Olbia	8195	Olbia	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Varese	12267	Varese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Sudtirol	265	Alto Adige	none	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Sassari Torres	11716	Sassari Torres	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Cuneo	2858	Cuneo	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Pavia	8635	Pavia	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Caravaggese				https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Valenzana	12215	Valenzana	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone A	Pizzighettone	8835	Pizzighettone	Italian Serie C2/A	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_A
+2007/08	Serie C2 girone B	Reggiana	9462	Reggiana	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Bassano Virtus	1387	Bassano Virtus 55	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Portosummaga	8990	Portogruaro-Summaga	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	SPAL	10832	S.P.A.L.	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	San Marino	10063	San Marino	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Poggibonsi	8869	Poggibonsi Valdelsa	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Bellaria Igea Marina	1470	Bellaria Igea Marina	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Teramo	11466	Teramo	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Prato	9032	Prato	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Gubbio	4665	Gubbio	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Cuoiocappiano	740	Cuoiopelli	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Giulianova	4418	Giulianova	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Carrarese	2252	Carrarese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Viareggio	12416	Viareggio	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Castelnuovo	2283	Castelnuovo Garfagnana	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Rovigo	9712	Rovigo	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Viterbese	12549	Viterbese	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone B	Sansovino	10115	Sansovino	Italian Serie C2/B	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_B
+2007/08	Serie C2 girone C	Benevento	1496	Benevento Sporting	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Pescina VG				https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Real Marcianise	7078	Real Marcianise	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Vigor Lamezia	12448	Vigor Lamezia	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Celano				https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Monopoli	285	Monopoli	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Gela	4334	Juveterranova Gela	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Cassino	734	Cassino	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Catanzaro	2296	Catanzaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Cisco Roma	2562	Cisco Roma	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Melfi	7240	Melfi	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Noicattaro	7979	Noicattaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Igea Virtus	5311	Igea Virtus Barcellona	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Vibonese	703	Vibonese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Val di Sangro	12194	Val di Sangro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Scafatese	10243	Scafatese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Andria	4017	Andria BAT	Italian Serie C2/C	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
+2007/08	Serie C2 girone C	Sangiuseppese	10104	Sangiuseppese	Italian Serie D	https://it.wikipedia.org/wiki/Serie_C2_2007-2008#Girone_C
 2008/09	Serie A	Inter	5377	Internazionale	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2008-2009
 2008/09	Serie A	Juventus	5691	Juventus	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2008-2009
 2008/09	Serie A	Milan	7369	AC Milan	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2008-2009
@@ -149,6 +419,96 @@ season	division	club	db_club_id	db_club	db_division	source
 2008/09	Serie B	Pisa	8826	Pisa	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2008-2009
 2008/09	Serie B	Avellino	1088	Avellino	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2008-2009
 2008/09	Serie B	Treviso	11788	Treviso	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2008-2009
+2008/09	Lega Pro Prima Divisione girone A	Cesena	2373	Cesena	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Pro Patria	9076	Pro Patria	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Ravenna	9392	Ravenna	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Padova	8504	Padova	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Reggiana	9462	Reggiana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	SPAL	10832	S.P.A.L.	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Verona	12377	Hellas Verona	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Novara	8055	Novara	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Cremonese	2797	Cremonese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Lumezzane	6819	Lumezzane	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Pergocrema	2796	Pergocrema	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Portogruaro	8990	Portogruaro-Summaga	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Monza	7538	Monza	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Pro Sesto	9077	Pro Sesto	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Lecco	6427	Lecco	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Sambenedettese	10015	Sambenedettese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Venezia	12352	Venezia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone A	Legnano	6448	Legnano	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Prima Divisione girone B	Gallipoli	8880	Gallipoli Calcio SRL	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Benevento	1496	Benevento Sporting	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Crotone	2823	Crotone	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Arezzo	819	Arezzo	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Foggia	4096	Foggia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Cavese	2308	Cavese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Real Marcianise	7078	Real Marcianise	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Perugia	8737	Perugia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Taranto	11373	Taranto 1906	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Ternana	11476	Ternana	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Sorrento	10782	Sorrento	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Pescara	8742	Pescara	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Paganese	8506	Paganese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Virtus Lanciano	6351	Lanciano	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Foligno	4099	Foligno	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Pistoiese	8830	Pistoiese Calcio	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Juve Stabia	5677	Juve Stabia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Prima Divisione girone B	Potenza	9014	Potenza	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone A	Varese	12267	Varese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Alessandria	563	Alessandria	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Como	2680	Como	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Rodengo Saiano	9632	Rodengo Saiano	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Olbia	8195	Olbia	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Sambonifacese				https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Itala San Marco	5469	Itala San Marco	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Canavese	2180	Canavese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Ivrea	5489	Ivrea	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Mezzocorona	7336	Mezzocorona	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Pro Vercelli	9079	Pro Vercelli	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Pavia	8635	Pavia	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Alghero				https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Montichiari	7526	Montichiari	A Lower Division	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Sudtirol	265	Alto Adige	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Valenzana	12215	Valenzana	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Carpenedolo	2864	Carpenedolo	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone A	Pizzighettone	8835	Pizzighettone	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
+2008/09	Lega Pro Seconda Divisione girone B	Figline	13221	Figline Valdarno	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Viareggio	12416	Viareggio	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Giulianova	4418	Giulianova	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Bassano Virtus	1387	Bassano Virtus 55	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Prato	9032	Prato	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Cisco Roma	2562	Cisco Roma	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Giacomense	6747	Giacomense	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Gubbio	4665	Gubbio	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Carrarese	2252	Carrarese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Sangiustese	712	Sangiustese	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Celano	10191	Celano Olimpia	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Colligiana	2652	Colligiana	A Lower Division	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Sangiovannese	10103	Sangiovannese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Cuoiocappiano	740	Cuoiopelli Cappiano-Romaiano	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Poggibonsi	8869	Poggibonsi Valdelsa	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	San Marino	10063	San Marino	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Bellaria Igea Marina	1470	Bellaria Igea Marina	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone B	Rovigo	9712	Rovigo	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_B
+2008/09	Lega Pro Seconda Divisione girone C	Cosenza	2761	Cosenza	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Gela	4334	Juveterranova Gela	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Catanzaro	2296	Catanzaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Pescina VG	10432	Pescina Valle del Giovenco	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Andria	4017	Andria BAT	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Cassino	734	Cassino	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Barletta	1352	Barletta	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Monopoli	285	Monopoli	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Aversa Normanna	7131	Aversa Normanna	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Melfi	7240	Melfi	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Noicattaro	7979	Noicattaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Scafatese	10243	Scafatese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Igea Virtus	5311	Igea Virtus Barcellona	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Manfredonia	7042	Sportiva Manfredonia	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Val di Sangro	12194	Val di Sangro	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Vibonese	703	Vibonese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Isola Liri	5458	Isola Liri	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
+2008/09	Lega Pro Seconda Divisione girone C	Vigor Lamezia	12448	Vigor Lamezia	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_C
 2009/10	Serie A	Inter	5377	Internazionale	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2009-2010
 2009/10	Serie A	Roma	9644	AS Roma	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2009-2010
 2009/10	Serie A	Milan	7369	AC Milan	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2009-2010
@@ -191,6 +551,96 @@ season	division	club	db_club_id	db_club	db_division	source
 2009/10	Serie B	Mantova	7059	Mantova 1994	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2009-2010
 2009/10	Serie B	Gallipoli	8880	Gallipoli Calcio SRL	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2009-2010
 2009/10	Serie B	Salernitana	9991	Salernitana	Italian Serie B	https://it.wikipedia.org/wiki/Serie_B_2009-2010
+2009/10	Lega Pro Prima Divisione girone A	Novara	8055	Novara	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Varese	12267	Varese	A Lower Division	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Cremonese	2797	Cremonese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Arezzo	819	Arezzo	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Benevento	1496	Benevento Sporting	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Lumezzane	6819	Lumezzane	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Figline	12772	Figline Valdarno	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Alessandria	563	Alessandria	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Sorrento	10782	Sorrento	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Monza	7538	Monza	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Perugia	8737	Perugia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Como	2680	Como	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Foligno	4099	Foligno	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Viareggio	12416	Viareggio	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Pergocrema	2796	Pergocrema	none	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Pro Patria	9076	Pro Patria	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Paganese	8506	Paganese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone A	Lecco	6427	Lecco	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Prima Divisione girone B	Portogruaro	8990	Portogruaro-Summaga	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Pescara	8742	Pescara	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Verona	12377	Hellas Verona	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Rimini	9556	Rimini	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Reggiana	9462	Reggiana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Ternana	11476	Ternana	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	SPAL	10832	S.P.A.L.	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Taranto	11373	Taranto 1906	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Virtus Lanciano	6351	Lanciano	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Cavese	2308	Cavese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Cosenza	2761	Cosenza	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Real Marcianise	7078	Real Marcianise	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Ravenna	9392	Ravenna	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Andria	4017	Andria BAT	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Foggia	4096	Foggia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Pescina VG	10432	Pescina Valle del Giovenco	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Giulianova	4418	Giulianova	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Prima Divisione girone B	Potenza	9014	Potenza	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone A	Sudtirol	265	Alto Adige	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Spezia	10895	Spezia 1906	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Legnano	6448	Legnano	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Feralpisalò	13604	A.C. FerlapiSalò	A Lower Division	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Pavia	8635	Pavia	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Alghero	5165	Alghero	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Rodengo Saiano	9632	Rodengo Saiano	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Olbia	8195	Olbia	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Crociati Noceto	13397	Crociati Noceto	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Valenzana	12215	Valenzana	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Sambonifacese	5166	Sambonifacese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Pro Vercelli	9079	Pro Vercelli	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Canavese	2180	Canavese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Mezzocorona	7336	Mezzocorona	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Villacidrese	12492	Villacidrese	none	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Carpenedolo	2864	Carpenedolo	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Pro Belvedere Vercelli	13398	Pro Belvedere Vercelli	none	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone A	Pro Sesto	9077	Pro Sesto	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_A
+2009/10	Lega Pro Seconda Divisione girone B	Lucchese	6780	Lucchese-Libertas	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	San Marino	10063	San Marino	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Gubbio	4665	Gubbio	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Fano	3930	Fano	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Sangiovannese	10103	Sangiovannese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Prato	9032	Prato	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Bassano Virtus	1387	Bassano Virtus 55	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Sangiustese	712	Sangiustese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Itala San Marco	5469	Itala San Marco	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Celano	10191	Celano Olimpia	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Sacilese	13399	Sacilese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Pro Vasto	9078	Pro Vasto	A Lower Division	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Nocerina	7978	Nocerina	A Lower Division	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Giacomense	6747	Giacomense	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Poggibonsi	8869	Poggibonsi Valdelsa	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Bellaria Igea Marina	1470	Bellaria Igea Marina	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Colligiana	2652	Colligiana	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone B	Carrarese	2252	Carrarese	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_B
+2009/10	Lega Pro Seconda Divisione girone C	Juve Stabia	5677	Juve Stabia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Catanzaro	2296	Catanzaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Cisco Roma	2562	Cisco Roma	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Brindisi	1889	Brindisi	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Barletta	1352	Barletta	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Siracusa	10561	Siracusa	none	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Gela	4334	Juveterranova Gela	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Cassino	734	Cassino	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Melfi	7240	Melfi	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Monopoli	285	Monopoli	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Aversa Normanna	7131	Aversa Normanna	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Manfredonia	7042	Sportiva Manfredonia	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Scafatese	10243	Scafatese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Isola Liri	5458	Isola Liri	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Noicattaro	7979	Noicattaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Vibonese	703	Vibonese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Vico Equense	13400	Vico Equense	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
+2009/10	Lega Pro Seconda Divisione girone C	Igea Virtus	5311	Igea Virtus Barcellona	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2009-2010#Girone_C
 2010/11	Serie A	Milan	7369	AC Milan	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2010-2011
 2010/11	Serie A	Inter	5377	Internazionale	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2010-2011
 2010/11	Serie A	Napoli	7752	S.S.C. Napoli	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2010-2011
@@ -282,6 +732,42 @@ season	division	club	db_club_id	db_club	db_division	source
 2010/11	Lega Pro Seconda Divisione girone C	Vibonese	703	Vibonese	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2010-2011#Girone_C
 2010/11	Lega Pro Seconda Divisione girone C	Catanzaro	2296	Catanzaro	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2010-2011#Girone_C
 2010/11	Lega Pro Seconda Divisione girone C	Pomezia	4	Pomezia	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2010-2011#Girone_C
+2010/11	Lega Pro Prima Divisione girone A	Gubbio	4665	Gubbio	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Sorrento	10782	Sorrento	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Salernitana	9991	Salernitana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Verona	12377	Hellas Verona	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Spezia	10895	Spezia 1906	Italian Serie D	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Lumezzane	6819	Lumezzane	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Reggiana	9462	Reggiana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Como	2680	Como	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	SPAL	10832	S.P.A.L.	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Cremonese	2797	Cremonese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Bassano Virtus	1387	Bassano Virtus 55	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Pavia	8635	Pavia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Ravenna	9392	Ravenna	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Pergocrema	2796	Pergocrema	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Monza	7538	Monza	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Sudtirol	265	FC Südtirol-Alto Adige	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Paganese	8506	Paganese	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone A	Alessandria	563	Alessandria	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_A
+2010/11	Lega Pro Prima Divisione girone B	Nocerina	7978	Nocerina	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Benevento	1496	Benevento Sporting	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Atletico Roma	2562	Atletico Roma	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Taranto	11373	Taranto 1906	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Juve Stabia	5677	Juve Stabia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Foggia	4096	Foggia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Lucchese	6780	Lucchese-Libertas	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Lanciano	6351	Lanciano	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Siracusa	10561	Siracusa	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Pisa	8826	Pisa	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Barletta	1352	Barletta	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Gela	4334	Juveterranova Gela	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Andria	4017	Andria BAT	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Cosenza	2761	Cosenza	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Ternana	11476	Ternana	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Foligno	4099	Foligno	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Viareggio	12416	Viareggio	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
+2010/11	Lega Pro Prima Divisione girone B	Cavese	2308	Cavese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2010-2011#Girone_B
 2011/12	Serie A	Juventus	5691	Juventus	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2011-2012
 2011/12	Serie A	Milan	7369	AC Milan	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2011-2012
 2011/12	Serie A	Udinese	11994	Udinese	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2011-2012
@@ -365,6 +851,42 @@ season	division	club	db_club_id	db_club	db_division	source
 2011/12	Lega Pro Seconda Divisione girone B	Isola Liri	5458	Isola Liri	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2011-2012#Girone_B
 2011/12	Lega Pro Seconda Divisione girone B	Ebolitana	9072	Ebolitana	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2011-2012#Girone_B
 2011/12	Lega Pro Seconda Divisione girone B	Celano	10191	Celano Marsica	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone A	Ternana	11476	Ternana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Taranto	11373	Taranto	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Carpi	2249	Carpi	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Sorrento	10782	Sorrento	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Pro Vercelli	9079	Pro Vercelli	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Benevento	1496	Benevento	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Pisa	8826	Pisa	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Lumezzane	6819	Lumezzane	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Reggiana	9462	Reggiana	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Avellino	1088	Avellino	Italian Serie C2/C	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Foggia	4096	Foggia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Tritium	13869	Tritium 1908	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Como	2680	Como	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Viareggio	12416	Esperia Viareggio	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	SPAL	10832	S.P.A.L.	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Pavia	8635	Pavia	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Monza	7538	Monza Brianza 1912	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone A	Foligno	4099	Foligno	Italian Serie C1/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_A
+2011/12	Lega Pro Prima Divisione girone B	Spezia	10895	Spezia	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Trapani	11768	Trapani	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Siracusa	10561	Siracusa	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Virtus Lanciano	6351	Virtus Lanciano	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Cremonese	2797	Cremonese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Barletta	1352	Barletta	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Sudtirol	265	Südtirol-Alto Adige	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Frosinone	4208	Frosinone	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Carrarese	2252	Carrarese	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Portogruaro	8990	Portogruaro-Summaga	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Pergocrema	2796	Pergocrema	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Andria	4017	Andria BAT	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Feralpisalò	13604	FeralpiSalò	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Prato	9032	Prato	Italian Serie C2/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Triestina	11799	Triestina	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Latina	6394	Latina	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Piacenza	8783	Piacenza	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
+2011/12	Lega Pro Prima Divisione girone B	Bassano	1387	Bassano Virtus 55	Italian Serie C1/B	https://it.wikipedia.org/wiki/Lega_Pro_Prima_Divisione_2011-2012#Girone_B
 2012/13	Serie A	Juventus	5691	Juventus	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2012-2013
 2012/13	Serie A	Napoli	7752	Napoli	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2012-2013
 2012/13	Serie A	Milan	7369	A.C. Milan	Italian Serie A	https://it.wikipedia.org/wiki/Serie_A_2012-2013

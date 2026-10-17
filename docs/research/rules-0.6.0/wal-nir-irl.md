@@ -4,8 +4,8 @@ Part `wal-nir-irl` of the 0.6.0 rules table. Research of 2026-10-16. Seasons 200
 
 Files:
 
-- `wal-nir-irl.tsv`: 675 rows. One row per competition per season, and one `nation rules` row per nation per season.
-- `wal-nir-irl-clubs.tsv`: 1913 rows. Real clubs of each resized or new division at each season start that has a database.
+- `wal-nir-irl.tsv`: 567 rows after pass 2 (675 before). One row per competition per season, and one `nation rules` row per nation per season.
+- `wal-nir-irl-clubs.tsv`: 1192 rows after pass 2 (1913 before). Real clubs of each resized or new division at each season start that has a database.
 - This file: method, sources, missing clubs, unknowns and the decisions for Max.
 
 ## Scope
@@ -290,3 +290,198 @@ No source found (added to `notes`):
 - wal-nir-irl-642 and wal-nir-irl-667 (First Division, 2027 and 2028): `split`. The league article gives no format. The 2026 season page gives the 2026 format only.
 
 Disagreements: none.
+
+## Pass 2
+
+Date: 2026-10-17. Decision agent, by the brief section "Pass 2" and the spec decisions Q268 to Q331. Row ids are unchanged. Every changed row has a note that starts with "Pass 2". `tools/research/rules_lint.py` gives 2 problems for this part, the same as before (642 and 667, `split` of the First Division in 2027 and 2028).
+
+### No new tiers (Q331) and no new nations (Q288)
+
+The original runs `wel_first` for Wales (tier 1), `nir_prm` and `nir_first` for Northern Ireland (tiers 1 and 2), and `ire_prm` and `ire_first` for the Republic of Ireland (tiers 1 and 2). These rows are below those tiers, and I deleted them:
+
+| comp | Seasons | Rows |
+|---|---|---|
+| Welsh second tier north (Cymru Alliance, Cymru North) | 2001/02 to 2027/28 | 27 |
+| Welsh second tier south (Welsh Football League Division One, Cymru South) | 2001/02 to 2027/28 | 27 |
+| Northern Irish third tier | 2001/02 to 2027/28 | 27 |
+| Irish third tier (A Championship, FAI National League) | 2001/02 to 2027/28 | 27 |
+
+Rows deleted: 108. Club rows deleted: 906 (A Championship 68, Championship 2 108, Cymru Alliance 248, Cymru North 113, Cymru South 112, NIFL Premier Intermediate League 112, Welsh Football League Division One 145).
+
+The Setanta Sports Cup stays. It needs only Northern Ireland and the Republic of Ireland, and a game can select both. No other competition of this part needs a nation that a game cannot select.
+
+Rows that keep a play-off against a club of a deleted tier keep the rule text in `playoffs` and get a note: the game has no opponent for that play-off. Rows: 192, 217, 642, 667 (Irish third tier), 361, 386, 411, 436, 461, 486, 511, 536, 561, 586, 611, 636, 661 (Northern Irish third tier), 629, 654 (Welsh second tier). The build decides what happens to the club in that place. The note in 629 and 654 also says that the clubs that come up to the 16-club Cymru Premier come from the database pool.
+
+The two conflicts in deleted rows lapse: 406 (2017/18 Welsh League Division One) and 456 (2019/20 Cymru South).
+
+### Conflicts settled (Q293, Q272 to Q278)
+
+1. **161, 2007/08 Irish First Division, `up`.** Real life: the 12-club IFA Premiership of 2008/09 took its clubs by application and a points ranking. Bangor was the only second-level applicant and went up in 11th place of the ranking. No table place gave promotion, so `up` is now "1 (no table place: promotion by application and a criteria ranking; Bangor, the only second-level applicant, went up)". The table place stays split (3rd by RSSSF, 4th by Wikipedia), but the value no longer depends on it. Source: https://www.rsssf.org/tablesn/nil08.html and https://en.wikipedia.org/wiki/2007%E2%80%9308_Irish_First_Division
+2. **488, 2020/21 Irish Cup, `clubs`.** By Q278 a cut during a competition keeps the value at its start. 32 clubs were drawn into 16 first-round ties. Six Championship clubs withdrew before the first round, and 26 played. `clubs` is now 32, and `format` says so. Source: https://en.wikipedia.org/wiki/2020%E2%80%9321_Irish_Cup
+3. **406 and 456.** Deleted with the Welsh second tier (Q331).
+
+Conflicts settled: 4 (2 by real life, 2 by deletion).
+
+### Open points settled
+
+- **204, 2009/10 Welsh Premier, `down`.** The cut from 18 to 12 clubs relegated 6, or up to 8 if second-tier clubs went up. None went up, so the rules places are 13th to 18th. `down` is now "6 (pos 13,14,15,16,17,18)". Rhyl (6th) lost its licence, so 13th Newtown stayed. The season page legend marks 11th to 13th as spared. Source: https://en.wikipedia.org/wiki/2009%E2%80%9310_Welsh_Premier_League
+- **461, 2019/20 NIFL Championship, `playoffs`.** The season page gives two play-offs: 2nd against the Premiership 11th, and 11th against the Premier Intermediate League runner-up. COVID-19 cancelled both. `playoffs` now holds both. Source: https://en.wikipedia.org/wiki/2019%E2%80%9320_NIFL_Championship
+- **486, 2020/21 NIFL Championship (new point).** The clubs voided the season on 2 February 2021, before any match and during the Premiership season. By Q273 and Q278 the game plays it with the places of the season start. `clubs` is 12, and `up`, `down` and `playoffs` carry the rules of 2019/20 and 2021/22, marked as inference. The 12 member clubs are listed in the clubs file. Sources: https://en.wikipedia.org/wiki/2020%E2%80%9321_NIFL_Premiership, https://en.wikipedia.org/wiki/2021%E2%80%9322_NIFL_Championship
+- **361, 2015/16 NIFL Championship 1.** The value stays. The search for a second publisher belongs to the second-source agent.
+- **Decision 1, League of Ireland 2002/03 (rows 41, 42).** Real life played both seasons: the short 2002-03 season (27 matches, ended January 2003) and the 2003 summer season. The game plays both in the 2002/03 row. Source: https://en.wikipedia.org/wiki/2002%E2%80%9303_League_of_Ireland_Premier_Division
+- **Decision 2, `ire_pres_cup`.** Q286 says yes to the President of Ireland's Cup in place of the old President's Cup. The rows from 2013/14 (the 2014 edition) now say that it uses the `ire_pres_cup` slot. Rows 323, 348, 373, 398, 423, 448, 498, 523, 548, 573, 598, 623, 648.
+- **Decision 3, new competitions.** Q286 within Q331: the Setanta Sports Cup and the President of Ireland's Cup stay. The A Championship, the FAI National League, the Welsh second tier and the Northern Irish third tier leave (see above).
+- **Decision 4, County Antrim Shield, Gold Cup, all-Ireland Champions Cup.** They stay out. They were not on Max's list of Q286, and the original has no code for them. Max can still add them.
+- **Decision 5, missing clubs.** See the club moves below.
+
+### Club moves (Q279, Q280, Q290)
+
+Seasons with a database: 2001/02, 2002/03, 2003/04, 2005/06 and 2007/08 to 2025/26. The database counts are the same in every database: Welsh Premier 18, Northern Irish Premier 10 and First 10, Irish Premier 12 and First 10. Rule for Northern Ireland and the Republic of Ireland: when either tier of a nation differs from the database, both tiers are listed, because a club that moves between them leaves a gap in the other tier. The pool is the clubs with no division and the clubs of the spare divisions (Welsh Lower Division, Northern Irish League Lower Division, the Irish regional leagues, "A Lower Division").
+
+New lists (17 division-seasons, 185 club rows). The League of Ireland row Y/Y+1 holds the season of year Y+1, except 2001/02 (winter season 2001-02).
+
+| Season row | Division | Real season | Clubs | Source |
+|---|---|---|---|---|
+| 2001/02 | Irish Premier Division | 2001-02 | 12 | https://en.wikipedia.org/wiki/2001%E2%80%9302_League_of_Ireland_Premier_Division |
+| 2001/02 | Irish First Division | 2001-02 | 9 (St Francis withdrew before the start) | https://en.wikipedia.org/wiki/2001%E2%80%9302_League_of_Ireland_First_Division |
+| 2011/12 to 2016/17 | Irish Premier Division | 2012 to 2017 | 12 each | the season table template or season page of each year |
+| 2017/18 to 2020/21, 2022/23 to 2025/26 | Irish First Division | 2018 to 2021, 2023 to 2026 | 10 each | the season table template or season page of each year |
+| 2020/21 | Northern Irish League First Division | 2020-21 | 12 | https://en.wikipedia.org/wiki/2021%E2%80%9322_NIFL_Championship |
+
+Matches fixed in old rows (the name matcher had missed them):
+
+- 2011/12 SD Galway: Salthill Devon (10004). The season page says that Salthill Devon changed its name to SD Galway.
+- 2014/15, 2016/17 and 2017/18 PSNI: Police Service of Northern Ireland (359).
+- 2018/19 Llanelli Town: Llanelli AFC (6654), the record that the October 2018 database has in the Welsh Premier Division. Inference: the database uses the old club's record for its successor.
+- 2014/15 Galway United (new list): Galway FC (1752). The club took the name Galway United in 2014.
+
+Every listed club comes from the pool or from the other listed tier of its nation. No club is in two divisions in one season.
+
+### Reserve and B teams (Q289)
+
+The build adds these as new club records:
+
+| Season row | Division | Team | Database |
+|---|---|---|---|
+| 2013/14 | Irish First Division | Shamrock Rovers B (2014 season) | Autumn 2013 |
+| 2019/20 | Irish First Division | Shamrock Rovers II (2020 season) | October 2019 |
+
+The November 2020 database has a "Shamrock Rovers U19" record in the Irish First Division. The real 2021 First Division has no Shamrock Rovers side, so that record is not in the 2020/21 list.
+
+### Missing clubs after pass 2
+
+These real clubs have no record in that season's database. They are not reserve teams. Max decides them (Q244).
+
+| Season row | Division | Clubs |
+|---|---|---|
+| 2008/09 | Northern Irish League First Division | Glebe Rangers, Dergview, Killymoon Rangers |
+| 2009/10 | Northern Irish League First Division | Glebe Rangers |
+| 2010/11 | Northern Irish League First Division | Dergview, Glebe Rangers |
+| 2011/12 | Northern Irish League First Division | Dergview, Warrenpoint Town, Glebe Rangers |
+| 2013/14 | Irish First Division | Galway (Galway FC, 2014 season) |
+| 2014/15 | Irish First Division | Cabinteely |
+| 2020/21 | Irish First Division | Treaty United |
+| 2022/23 | Irish First Division | Kerry |
+
+13 clubs in all, down from 194. The table "Missing clubs" above is out of date.
+
+### Counts
+
+| Item | Count |
+|---|---|
+| Rows deleted | 108 |
+| Club rows deleted | 906 |
+| Conflicts settled | 4 |
+| Open points settled | 9 (204, 461, 486, 361, decisions 1 to 5 counted as one each) |
+| Rows changed | 37 |
+| Club rows added | 185 |
+| Old club matches fixed | 5 |
+| Reserve teams listed | 2 |
+| Missing clubs left | 13 |
+
+## Second source, pass 2
+
+Date: 2026-10-17. Second-source agent, by the brief section "Pass 2". The results are in `wal-nir-irl.check2.tsv` (`id field verdict second_url note`).
+
+Scope: every line of `wal-nir-irl.check.tsv` with verdict `no second source` whose field in `wal-nir-irl.tsv` still holds a value. I skipped 366 lines of rows that pass 2 deleted, 894 lines whose field is `unknown`, 84 lines whose value is an inference, and `n/a` fields. That leaves 771 lines.
+
+Method: I read each page today with curl, or in a browser where the site refuses scripts (fai.ie). No summary model gave a value. For cups, the entry count is the number of ties without replays plus one. A count from an incomplete round list is not used. A name counts as `agree` only when the page gives the same name, or the same name with its organiser written out (for example "FA of Ireland Cup" for FAI Cup). The web search budget of this session ran out during the work. The lines that I could not reach stay `no second source`.
+
+Main second sources: RSSSF (Ireland, Northern Ireland and Wales season pages, the Irish League Cup, Super Cup and President's Cup list, the Charity Shield list), the League of Ireland honours lists, fai.ie, the42.ie, eirball.ie, belfastmedia.com, faw.cymru, nwsport.co.uk and gov.uk.
+
+### Counts
+
+| Verdict | Lines |
+|---|---|
+| agree | 338 |
+| disagree, settled | 14 |
+| disagree, still split | 0 |
+| no second source | 419 |
+| total | 771 |
+
+### Disagreements settled
+
+1. **611, 2025/26 NIFL Championship, `down` and `playoffs`.** RSSSF (https://www.rsssf.org/tablesn/nil2026.html) shows no relegation, because the second level grows to 16 clubs in 2026/27. Third source: Belfast Media of 25 July 2025 (https://belfastmedia.com/ni-football-league-reveal-new-league-restructure-from-2026-27-season) says that there is no relegation from the Championship in 2025/26. The NIFL decided this before the season, so it is the rule of that season. Decision: second. `down` is now `0`. `playoffs` is now "2nd: play-off with Premiership 11th". The note about a play-off against the deleted third tier is removed from this row, and the new note gives the reason.
+2. **323, 348, 373, 398, 423, 448, 498, 523, 548, 573, 598, 623, President of Ireland's Cup 2014 to 2026, `format`.** RSSSF (https://rsssf.org/tablesi/iersupcuphist.html) marks the drawn matches of 2021 and 2022 "aet" before the penalties. The row says penalties if level, with no extra time. Third source: eirball.ie (https://eirball.ie/football-association-of-ireland-presidents-cup-2021) says that the 2021 match went to penalties after the 90 minutes. Decision: first. No value changed. The 2022 match has no third source.
+
+### Other findings
+
+- 2021/22 FAI Cup, `clubs` 38: RSSSF lists Round 1 (32 clubs) and no preliminary round, so it does not state the entry.
+- 2011/12 FAI Cup, `clubs` 40: RSSSF lists only 7 of the 8 round-3 ties.
+- 2008/09 Setanta Sports Cup, `format` not held: eirball.ie gives the Bohemians v St Patrick's Athletic final under 2009 and "No Competition" in 2010, with no dates. The season of the 2009-10 edition cannot be checked from it.
+- Irish First Division 2027 and 2028, `playoffs`: fai.ie (Aug 2026) says only that 2027 is the first season with a promotion mechanism for National League clubs, with the criteria still to be approved. It does not state a play-off with the bottom club.
+- 2026/27 and 2027/28 NIFL Cup: the row keeps a preliminary round for the Premier Intermediate League, which ended in 2026. No page gives the 2026/27 entry.
+
+### Split of rows 642 and 667
+
+I found no source for `split` of the League of Ireland First Division in 2027 and 2028. The FAI National League page (https://www.fai.ie/latest/new-fai-national-league-season-everything-you-need-know/) gives no First Division format. The field stays as it is, and `rules_lint.py` still reports these 2 problems.
+
+### Changes to `wal-nir-irl.tsv`
+
+- Row 611: `down`, `playoffs`, `notes` and `sources` (see above). No other row changed. Row order and ids are unchanged.
+- `rules_lint.py`: 2 problems before and after (642 and 667, `split`).
+
+## Second source, retry
+
+Date: 2026-10-17. The pass-2 agent ran out of web searches. This retry took the 419 lines of `wal-nir-irl.check2.tsv` with verdict `no second source` and tried again. I read pages directly first (RSSSF season pages, club and news sites) and used about 20 web searches. I updated the verdict, `second_url` and note of each line in place.
+
+### Counts
+
+| Verdict | Lines |
+|---|---|
+| agree | 52 |
+| disagree, settled | 1 |
+| disagree, still split | 0 |
+| still no second source | 366 |
+| total | 419 |
+
+The whole file now holds 390 agree, 15 disagree (all settled) and 366 no second source.
+
+### New second sources
+
+- RSSSF season pages, by counting ties without replays plus one: Irish Cup 2006/07, 2011/12, 2012/13, 2014/15 and 2018/19, and Welsh League Cup 2007/08, 2008/09, 2009/10 and 2013/14. For 2011/12, 2012/13 and 2014/15 the RSSSF count includes walkovers. Without the walkovers it equals the row, which counts the clubs that played.
+- The Northern Ireland football blog (nifootball.blogspot.com) season reviews: competition names in 2008/09, 2009/10, 2011/12, 2012/13, 2016/17, 2021/22 and 2023/24.
+- Historical Football Kits: the name NIFL Premiership in 2013/14 to 2015/16.
+- Belfast Media (25 July 2025): the name NIFL Championship in 2025/26 and 2026/27, and 16 clubs in 2026/27.
+- St Patrick's Athletic news of 8 February 2010: the Leinster Senior Cup was not held for 10 years before 2010, and the 2010 entrants. This covers name and format of 2001/02 to 2009, and of 2010.
+- European Football Statistics, promotion and relegation rules 2026: League of Ireland 2026, Premier Division 9th in a play-off and 10th down, First Division 1st up and 2nd to 5th in the play-off.
+- Irish Echo (30 January 2026): 10 clubs in the 2026 Premier Division.
+- Off The Ball: the name Leinster Senior Cup for the final of 29 August 2016.
+- Haverfordwest County (2023): the rule of seven substitutes with two Youth Substitutes, for the 2022/23 bench.
+
+### Disagreement settled
+
+**289, 2012/13 Irish League Cup, `clubs`.** The row said 41 (12 Premiership and 29 Championship clubs). RSSSF (https://www.rsssf.org/tablesn/nil2013.html) names 42 clubs in 10 round-1 and 16 round-2 ties. Third source: Lisburn Today, now Northern Ireland World (https://www.northernirelandworld.com/sport/football/dergview-next-up-for-glenavon-2737281), says that Dergview beat Newry City 2-1 in round 2. Newry City later lost their league record, so the season-end tables hold 41 clubs. Decision: second. `clubs` is now `42`, with the RSSSF and Northern Ireland World URLs and a note in the row.
+
+### Lines that stay without a second source
+
+- Names. Most name lines stay open. RSSSF gives its own generic labels ("League Cup", "Premier Division", "IFA Premiership" for the NIFL years, "League of Wales" to 2012/13). Under the rule of pass 2 a generic label does not count as the same name. Club and news pages call the President of Ireland's Cup the "President's Cup".
+- Irish Cup entrants of 2004/05, 2005/06, 2007/08, 2008/09, 2010/11, 2013/14, 2016/17, 2017/18 and 2019/20. The RSSSF counts differ from the rows, but I could not prove that the lists are complete. In 2017/18 one round-5 tie is missing. Each line has the RSSSF count in its note.
+- Welsh Cup entrants. RSSSF starts at the first round proper, after the qualifying rounds.
+- Leinster and Munster Senior Cup formats after 2010. The FAI, Leinster FA, Munster FA, NIFL and extratime.com pages are behind a bot check that I may not pass. The Internet Archive was offline.
+- Future seasons (2027, 2027/28 and 2028) and rows that copy a value forward.
+
+### Changes to `wal-nir-irl.tsv`
+
+- Row 289: `clubs` 41 to 42, `notes` and `sources`. No other row changed. Row order and ids are unchanged.
+- `rules_lint.py`: 2 problems before and after (642 and 667, `split`).

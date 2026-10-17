@@ -112,3 +112,81 @@ Method: I ran the rules lint and read each page on 2026-10-16 with curl. I added
 - int-continental-223: `name`, `clubs`, `playoffs`, `format` and `subs_used` from https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League (Finals 6 to 10 October 2021, League C play-outs in March 2022, five substitutes and a sixth in extra time). `name`, `clubs` (55) and `format` (league phase from 1 June 2022) also from https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League.
 
 No source found: none. Disagreements: none.
+
+## Pass 2
+
+Date 2026-10-17. Decision agent. Lint before and after: 0 problems. Row ids and order are the same. 16 rows changed. No clubs file: club moves (Q279, Q280, Q290) and reserve teams (Q289) do not apply.
+
+### No new tiers, no new nations (Q331, Q288)
+
+No row is deleted. Every competition of this part is a national-team competition. The game holds a national team for every nation, and the original already runs finals with nations that a player cannot select (Africa Cup of Nations, Asian Cup, Oceania Nations Cup). The Nations League leagues are not national tiers, so Q331 does not apply (inference from the wording of Q331 and Q288, which name club tiers and club competitions).
+
+### Late editions (Q277)
+
+Each edition that real life played after its planned slot moves to the season of the planned slot, with the planned dates and hosts. The row of the real season becomes `not held`, and its notes point to the new row. The rest of the format stays as played.
+
+| Edition | From row (real) | To row (planned) | Planned slot | Source |
+|---|---|---|---|---|
+| Euro 2020 | 210 (June to July 2021) | 199 | 12 June to 12 July 2020, 12 hosts with Dublin | https://en.wikipedia.org/wiki/UEFA_Euro_2020 |
+| Euro 2020 play-offs | 211 (October and November 2020) | 200 | 26 and 31 March 2020 | https://en.wikipedia.org/wiki/UEFA_Euro_2020_qualifying_play-offs |
+| CONCACAF Nations League 2019-20 Finals | 215 (June 2021, Denver) | 204 | 4 to 7 June 2020, Houston and Arlington | https://en.wikipedia.org/wiki/2021_CONCACAF_Nations_League_Finals |
+| Copa América 2020 (played as 2021) | 220 (June to July 2021, Brazil, 10 teams) | 209 | 12 June to 12 July 2020, Argentina and Colombia, 12 teams with guests Australia and Qatar | https://en.wikipedia.org/wiki/2021_Copa_Am%C3%A9rica |
+| Africa Cup of Nations 2021 | 227 (January 2022) | 216 | 9 January to 6 February 2021 | https://en.wikipedia.org/wiki/2021_Africa_Cup_of_Nations |
+| Africa Cup of Nations 2023 | 249 (January 2024) | 238 | June to July 2023 (days unknown) | https://en.wikipedia.org/wiki/2023_Africa_Cup_of_Nations |
+| Asian Cup 2023 | 251 (Qatar, January 2024) | 240 | 16 June to 16 July 2023, China | https://en.wikipedia.org/wiki/2023_AFC_Asian_Cup |
+
+- The Copa América zones of 6 are an inference: the plan had 12 teams in two zones.
+- The 2025 Africa Cup of Nations (row 271) stays. It started on 21 December 2025, inside its own year, and the page gives no earlier set dates (inference: not a late edition).
+- The 2020 OFC Nations Cup (row 208) stays cancelled. Real life cancelled it and did not play it later.
+- The 2026 Finalissima (row 268) stays cancelled. Real life did not play it.
+
+### Open points settled
+
+- **Golden goal at the 2004 Asian Cup (row 42):** no golden goal. RSSSF marks the semi-final Bahrain 3-4 Japan `[aet]` (full extra time), not `[asdet]` (golden goal). Japan scored at 93 minutes. Source: https://www.rsssf.org/tables/04asch.html. IFAB had removed the golden goal after Euro 2004, which ended before this tournament (https://en.wikipedia.org/wiki/Golden_goal).
+- **The 2001 Copa América at a 2001/02 start (row 11):** the row keeps the real dates, 11 to 29 July 2001, and the 12 real teams. The original already builds the 2001 edition with a fixed list of 12 (0x5e1d65, `2026-10-16-sweep-international.md`). Game creation runs the engine day by day from 1 January 2001 to the start date (14 July 2001 with England, `2026-10-14-game-creation-inventory.md`). So the matches before the start date play during game creation, and the player sees the rest live. With a later start date the whole tournament plays during creation. No special code for a tournament in progress is needed (inference from the creation run).
+- **int-continental-281 `down`:** already settled in "Loose ends" (League A 5th and 6th, League B 4th).
+- **Euro 2020 and the 2019-20 CONCACAF Finals (old note for Max):** replaced by Q277 above.
+
+### Unknowns left
+
+The unknowns of the first pass stay, except the 2004 Asian Cup golden goal. The planned days of the 2023 Africa Cup of Nations are unknown.
+
+## Second source, pass 2
+
+Date 2026-10-17. Second-source agent. The file is `int-continental.check2.tsv` (39 lines). Each page was read on this date with curl, or with a fetch that quotes the sentence. Lint before and after: 0 problems. Row ids and order are the same.
+
+Scope: the 27 check lines with verdict `no second source`, and 12 new lines for the planned dates, hosts and sizes of the late editions that pass 2 moved (rows 199, 200, 204, 209, 216, 238 and 240).
+
+### Counts
+
+| Lines | agree | disagree, settled | disagree, still split | no second source |
+|---|---|---|---|---|
+| 27 first-pass lines | 20 | 1 | 0 | 6 |
+| 12 moved-row lines | 12 | 0 | 0 | 0 |
+| Total | 32 | 1 | 0 | 6 |
+
+No second source stays for these lines:
+
+- int-continental-224 `subs_used` and `bench` (2022 Finalissima). UEFA confirms no extra time, but no page of another publisher gives the substitution limit or the squad size.
+- int-continental-277 `clubs` and int-continental-288 `clubs` (54 teams in Euro 2028 qualifying). UEFA and SI give 12 groups of four or five, with no team count.
+- int-continental-277 `notes` (Nations League quarter-finalists go into groups of 4). Wikipedia only.
+- int-continental-296 `notes` (season of the 2028 OFC finals). The field states an unknown, and no page gives the finals dates.
+
+### Changes to int-continental.tsv
+
+- int-continental-293 `clubs`: changed from "28 (Wikipedia infobox only: unknown)" to 24. The CAF executive committee rejected the 28-team plan in June 2026 (AllAfrica, reporting the Guardian, https://allafrica.com/stories/202607010070.html, and Inside World Football, https://www.insideworldfootball.com/2026/07/10/motsepe-plan-to-add-expand-afcon-crashes-and-burns-at-caf-exco/). The third source, NBS Sport (https://nbssport.co.ug/article/motsepes-plan-for-bigger-africa-cup-of-nations-voted-down), states that the 2028 tournament continues with the 24-team format. Decision: second. The unknown "team count of 28" in the Unknowns section above no longer applies.
+- int-continental-209 `format`: the 2020 Copa America zones of 6 are no longer an inference. The Buenos Aires Times (https://www.batimes.com.ar/news/amp/sports/co-hosts-argentina-to-face-australia-at-2020-copa-america.phtml) gives two first-round groups of six, the top four of each to the quarter-finals. The words "(inference: 12 teams in two zones)" are removed, and the URL is added as `zones=`.
+
+### Other findings
+
+- The first check said that RSSSF does not list promotions for the 2020-21 and 2022-23 UEFA Nations League (rows 212 and 234). It does: each table marks Promoted and Relegated.
+- Moved rows: every planned date, host and size agrees with a second publisher. Wembley Stadium gives the planned Euro 2020 final on 12 July 2020. Sky Sports gives the planned play-offs on 26 and 31 March 2020. CONCACAF gives the planned Nations League Finals on 4 and 7 June 2020 in Houston and Arlington. COSAFA gives 9 January to 6 February 2021 for the Africa Cup of Nations in Cameroon. Football Australia gives 16 June to 16 July 2023 for the Asian Cup in China.
+- The planned days of the 2023 Africa Cup of Nations stay unknown. Every page read gives only "June and July 2023".
+- int-continental-212: the UEFA decision of 24 September 2020 (PZPN reprint) also raised the match sheet to 23 players, which means 12 substitutes. The row's `bench` stays `unknown`, because it was not a check line.
+- int-continental-278: the 2028-29 Nations League of three leagues of 18 was to go for final approval on 15 September 2026 (FIGC, May 2026). The result of that meeting was not found, so the note "proposal" stays.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
+
+- int-continental-212 (UEFA Nations League 2020-21), `bench`: unknown changed to "12 (23 players on the match sheet, from October 2020)". The UEFA Executive Committee decision of 24 September 2020 raised the match sheet to 23 players for the Nations League group phase. 23 less 11 starters gives 12. Source: PZPN reprint, https://pzpn.pl/en/association/news/2020-09-24/five-substitutions-allowed-for-2020-21-club-and-national-team-competitions (read on 2026-10-17).

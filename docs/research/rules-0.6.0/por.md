@@ -181,3 +181,182 @@ Fields filled:
 Disagreements: none found.
 
 Lint after the pass: 0 problems.
+
+## Pass 2
+
+Date 2026-10-17. Decision agent, by the decisions Q268 to Q331 of the spec. Row ids are kept. `rules_lint.py`: 0 problems before and after.
+
+### Tiers (Q331, Q291, Q290)
+
+The original runs `por_prm`, `por_second`, `por_second_b`, `por_cup` and `por_super`. The lowest tier is tier 3 (`por_second_b`).
+
+- Deleted the 27 Terceira Divisão rows (tier 4, 2001/02 to 2027/28): por-5, 14, 23, 32, 41, 50, and so on, one per season.
+- Deleted the 7 Campeonato de Portugal rows from 2021/22 (tier 4 from then): por-183, 192, 201, 210, 219, 228, 237.
+- Liga 3 takes the code of `por_second_b` from 2021/22 (Q291). Its 7 rows (por-184, 193, 202, 211, 220, 229, 238) now have `comp_file` = `por_second_b` and `comp` = `Segunda Divisão B`, the label of that line. `name` stays Liga 3.
+- Deleted the 20 Liga 3 rows of 2001/02 to 2020/21 (`not held`). The `por_second_b` line now has one row per season, so these rows had no use.
+- Rows deleted from `por.tsv`: 54. The file now has 189 rows, 7 per season.
+- Each tier 3 row now has a note: clubs that go down become clubs with no division, and clubs that come up come from clubs with no division.
+- The clubs of the database division "Portuguese Third Division" have no real tier from 2013/14 to 2018/19. By Q290 they are clubs with no division for the club moves. The same applies to that division in every other season, because tier 4 is not in the game.
+- The Taça de Portugal rows keep their real entrants. Entrants below tier 3 come from clubs with no division.
+
+### Conflicts and open points
+
+| Item | Decision | URL |
+|---|---|---|
+| por-39 `down` (2005/06 Segunda Divisão) | 14 (3, 3, 3, 5), as in real life. An FPF rule change during the season sent one extra club down for each relegated B team. Vitória de Setúbal B went down, so União Micaelense went down too. Benfica B stayed. The note keeps 13 as the value without the rule change. | https://arquivo.pt/wayback/20060511160502/https://maisfutebol.iol.pt/noticia.php?id=679394&div_id=1679 |
+| por-41 `down` (2005/06 Terceira Divisão) | No decision needed. The row is deleted (Q331). | n/a |
+| por-105 clubs (2012/13 Taça de Portugal): 165 or 162 | 162. The round table gives 100 + 46 + 16 new entries, and the team list gives 16 + 16 + 48 + 82. The infobox value 165 has no support on the page. | https://en.wikipedia.org/wiki/2012%E2%80%9313_Ta%C3%A7a_de_Portugal |
+| `por_second_b` from 2021/22 | Liga 3 takes the code (Q291). | spec Q291 |
+| Third Division clubs 2013/14 to 2020/21 | Clubs with no division (Q290). | spec Q290 |
+| Açores play-offs (por-3, por-12, por-21, por-30) | The `playoffs` fields describe what happened. The Terceira Divisão club in the play-off comes from clubs with no division. por-32 is deleted. | rows' sources |
+
+Conflicts settled: 2 (por-39 decided, por-41 removed with its row). Open points settled: 4.
+
+### Club moves (Q279, Q280, Q290)
+
+Each season database was compared tier by tier, from tier 1 to tier 3. Every database holds 18, 18 and 60 (3 x 20) clubs in tiers 1 to 3.
+
+- Deleted 1,017 Terceira Divisão club rows and 285 Campeonato de Portugal club rows of 2021/22 to 2025/26. Rows deleted from `por-clubs.tsv`: 1,302.
+- Added 80 club rows. The third tier of 2002/03 (59 clubs) and 2003/04 (59 clubs) differs from the database (60). Pass 1 listed only the short zone. Pass 2 adds the other two zones: 2002/03 Norte and Sul, 2003/04 Centro and Sul. Source: the season pages `2002–03 Segunda Divisão B` and `2003–04 Segunda Divisão B`, read raw on 2026-10-17. Matched by name, by script, against Original 3.9.68 and October 2003. Two clubs have no record in October 2003: FC Pampilhosa and CD Santo António (2003/04).
+- Corrected 2 matches: Chaves B (2018/19, 2019/20) is id 8237 "GD Chaves Satelite", Portuguese Second Division B North, in October 2018 and October 2019. Inference: the database names the B team by its satellite club name, and puts it in tier 3 in the same seasons.
+- All other seasons with a database already list every club of each tier whose count differs: tier 1 2007/08 to 2013/14, tier 2 2007/08 to 2017/18, tier 3 2005/06 on. Tiers 1 and 2 in the other seasons and tier 3 in 2001/02 have the database count.
+- `por-clubs.tsv` now has 1,543 club rows.
+
+### Missing clubs after Pass 2
+
+Clubs of tiers 1 to 3 with no record in that season's database: 74.
+
+| Season | Division | Real clubs | No match | Clubs |
+|---|---|---|---|---|
+| 2003/04 | Segunda Divisão B | 59 | 2 | FC Pampilhosa, CD Santo António |
+| 2005/06 | Segunda Divisão | 58 | 8 | União Torcatense, Fiães SC, Aliados Lordelo, GD Tourizense, FC Pampilhosa, SL Nelas, RSC Queluz, Vitória Setúbal B |
+| 2007/08 | Segunda Divisão | 55 | 8 | Vila Meã, Fiães, Eléctrico, Pampilhosa, Nelas, Sátão, Carregado, Messinense |
+| 2008/09 | Segunda Divisão | 47 | 8 | Aliados Lordelo, Santana, FC Pampilhosa, GDR Monsanto, Eléctrico FC, AD Carregado, Real SC, Mineiro Aljustrelense |
+| 2009/10 | Segunda Divisão | 47 | 10 | Aliados FC Lordelo, Padroense FC, Vieira SC, FC Pampilhosa, Eléctrico FC, GDR Monsanto, Atlético de Reguengos, Aljustrelense, Igreja Nova, Santana |
+| 2010/11 | Segunda Divisão | 48 | 8 | CF Andorinha, Padroense FC, SC Coimbrões, Aliados FC Lordelo, FC Pampilhosa, Eléctrico FC, Atlético SC Reguengos, Real SC |
+| 2011/12 | Segunda Divisão | 48 | 2 | Marítimo B, Atlético SC |
+| 2012/13 | Segunda Liga | 22 | 1 | Vitória de Guimarães B |
+| 2013/14 | Campeonato Nacional de Seniores | 80 | 6 | Vitória de Guimarães B, Lusitano Vildemoinhos, Águias do Moradal, Carapinheirense, Almodôvar, Ferreiras |
+| 2014/15 | Campeonato Nacional de Seniores | 80 | 1 | Atl. Reguengos |
+| 2014/15 | Segunda Liga | 24 | 1 | Vitória de Guimarães B |
+| 2015/16 | Campeonato de Portugal | 80 | 2 | Varzim B, Atlético de Reguengos |
+| 2015/16 | LigaPro | 24 | 1 | Vitória de Guimarães B |
+| 2016/17 | LigaPro | 22 | 1 | Vitória de Guimarães B |
+| 2018/19 | Campeonato de Portugal | 72 | 4 | Mirandês, Mação, Santa Iria, Vasco da Gama Vidigueira |
+| 2020/21 | Campeonato de Portugal | 96 | 10 | Águia Vimioso, Vidago, Brito, Rio Ave B, Vila Cortez, GRAP, Belenenses SAD B, Estrela da Amadora, Oriental Dragon, Sporting CP B |
+| 2021/22 | Liga 3 | 24 | 1 | União de Santarém |
+
+Max decides the 63 clubs that are not reserve or B teams. No club record was added.
+
+### Reserve and B teams (Q289)
+
+The build adds these as new club records. 11 entries, 7 teams.
+
+| Season | Division | Team | Note |
+|---|---|---|---|
+| 2005/06 | Segunda Divisão Série D | Vitória Setúbal B | |
+| 2011/12 | Segunda Divisão Zona Norte | Marítimo B | |
+| 2012/13 | Segunda Liga | Vitória de Guimarães B | |
+| 2013/14 | Campeonato Nacional de Seniores Série B | Vitória de Guimarães B | |
+| 2014/15 | Segunda Liga | Vitória de Guimarães B | |
+| 2015/16 | LigaPro | Vitória de Guimarães B | |
+| 2015/16 | Campeonato de Portugal Série B | Varzim B | |
+| 2016/17 | LigaPro | Vitória de Guimarães B | |
+| 2020/21 | Campeonato de Portugal Série B | Rio Ave B | November 2020 has 11162 "Rio Ave FC U23" in its Reserve division |
+| 2020/21 | Campeonato de Portugal Série G | Belenenses SAD B | November 2020 has 11158 "Belenenses SAD U23" in its Reserve division |
+| 2020/21 | Campeonato de Portugal Série G | Sporting CP B | November 2020 has 6294 "Sporting CP U23" in its Reserve division |
+
+The U23 records play no league in the database. Pass 1 matched no B team to a U23 record, and Pass 2 keeps that rule.
+
+## Second source, pass 2
+
+Date 2026-10-17. Second-source agent. Input: the 155 check lines with verdict `no second source` whose row still exists and whose field holds a value. The 25 lines of the 2027/28 rows (por-235 to por-243) are inferences, so this pass does not check them. The other 130 lines are in `por.check2.tsv`.
+
+Second sources: FPF rule texts and zerozero.pt tables, read today as pages archived by arquivo.pt, and two Lusa and Ogolo news reports of 2009 and 2010. The web search budget of the session ran out during the pass. Lines that no page read today could cover stay `no second source`.
+
+| Verdict | Lines |
+|---|---|
+| agree | 35 |
+| disagree, settled | 1 |
+| disagree, still split (conflict) | 3 |
+| no second source | 91 |
+
+### Changes to `por.tsv`
+
+- por-66 `up` (2008/09 Segunda Divisão): 4 changed to 2. FPF notice 239, the rules for 2008/09, sends up only the two finalists of the third phase. The four promotion-group winners play two-legged ties (A v B, C v D). Penafiel and Carregado went up as well in July 2009, because the league invited them to fill the places of Boavista, Gondomar and Vizela, which were demoted. Decision `second`. Sources: https://arquivo.pt/wayback/20090927082038/https://fpf.pt/portal/page/portal/portal_futebol/comunicados2007/comunicadosoficiais/co239_quadro_competitivo_ii_divisao_cn_fut_11.pdf and https://arquivo.pt/wayback/20091223193953/https://ogolo.clix.pt/articles/ligavitaliscarregadoepenafieloficialmenteconvidados
+- por-66 `playoffs`: the third phase is added, because the new `up` value depends on it. Source: FPF notice 239.
+- por-66, por-75 and por-93: a note on `down` (see the conflicts below).
+
+### Conflicts (still split)
+
+- por-66 `down` (2008/09): the first source gives 15 (4, 4, 3, 4). FPF notice 239 gives the 4th, 5th and 6th of each relegation series, 12 in all, with more 3rd-placed clubs if Azores clubs go down directly. Série C had only 11 clubs, so its relegation series had 5. The value 15 stays. Max decides.
+- por-75 `down` (2009/10): the first source gives 13 (4, 5, 4). FPF notice 421, the rules from 2009/10, gives the 4 last clubs of each zone and, from the end of 2009/10, the 2 worst 12th-placed clubs, 14 in all. Valdevez was in the Norte zone in December 2009 (zerozero) but is not in the final table of the first source. Inference: the club left during the season, and this explains the difference. The value 13 stays. Max decides. Source: https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf
+- por-93 `down` (2011/12): the first source marks 4 per zone (12). FPF notice 421 gives 4 per zone and the 2 worst 12th-placed clubs. The zerozero legend for 2011/12 shows a relegation place for the worst 12th of the three zones. The value 12 stays. Max decides. Source: https://arquivo.pt/wayback/20120123103356/http://www.zerozero.pt/edicao.php?id_edicao=24169
+
+### Other findings
+
+- por-75 `playoffs`: the Lusa report and FPF notice 421 confirm a double round robin of the three zone winners. No page read today states the weighted starting points of the first source. The final zerozero table gives 6, 5 and 5 points, which equal the results. The verdict is `agree` for the mini-league. The weighting has no second source.
+- Tier 3 club counts: zerozero confirms 4 x 14 in 2006/07, 12, 12, 11 and 12 in 2008/09, 3 x 16 in 2010/11, 2011/12 and 2012/13, and 8 x 10 in 2014/15. For 2013/14 and 2015/16, zerozero gave only part of the series (each with 10 clubs). These counts stay `no second source`.
+- Lines that stay `no second source`: the Taça de Portugal entrant counts, the Taça da Liga entrant counts, the Taça de Portugal substitutes, the 2026/27 rows, the nation rules rows, the tier 3 substitutes from 2001/02 to 2003/04 and from 2006/07 on, and the tier 3 rows of 2013/14 to 2018/19 other than those named above. The FPF rules of 2005 (art. 104.06, three substitutes in official competitions) cover only 2004/05 and 2005/06.
+
+`rules_lint.py`: 0 problems for `por.tsv` before and after.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after. Q272: `down` holds the places by the rule text of the season, and the outcome is in `notes`.
+
+| Row | Old `down` | New `down` | Rule text |
+|---|---|---|---|
+| por-66 (2008/09) | 15 (4, 4, 3, 4) | 12 (3 per relegation series) | FPF notice 239, rule 2: the 4th, 5th and 6th of each of the 4 relegation series go down. More 3rd-placed clubs go down if Azores clubs go down directly. |
+| por-75 (2009/10) | 13 (4, 5, 4) | 14 | FPF notice 421, rule 2: the last 4 of each zone (12), and from the end of 2009/10 also the 2 worst 12th-placed clubs. |
+| por-93 (2011/12) | 12 (4 per zone) | 14 | FPF notice 421, rule 2, as por-75. The rectified notice sets the zones of 2011/12, so it is in force that season. |
+
+URLs, read on 2026-10-17:
+- https://arquivo.pt/wayback/20090927082038/https://fpf.pt/portal/page/portal/portal_futebol/comunicados2007/comunicadosoficiais/co239_quadro_competitivo_ii_divisao_cn_fut_11.pdf
+- https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf
+
+The three conflicts of the second-source pass on these rows are settled.
+
+## Second source, retry
+
+Date: 2026-10-17. Retry agent. Scope: the 91 lines of `por.check2.tsv` with the verdict `no second source`. The agent read archived pages first (arquivo.pt, archive.org, the AF Algarve file server that holds FPF notices, RSSSF) and used searches only where needed. Each changed line has a note that starts with "retry:".
+
+| Result | Lines |
+|---|---|
+| agree | 53 |
+| disagree, settled `first` | 1 |
+| disagree, settled `second` | 1 |
+| disagree, still split | 0 |
+| still `no second source` | 36 |
+
+File totals after the retry: 88 agree, 6 disagree, 36 no second source.
+
+### Disagreements settled
+
+- por-159 `subs_used` (Taça de Portugal 2018/19): the FPF cup rules of 2018/19 (start-of-season text, art. 44) give 3. The Record live report of V. Setúbal v Braga (18 December 2018, extra time) lists four V. Setúbal substitutions. Decision `first`: the value "3, plus a 4th in extra time" stays. Inference: the 4th substitute in extra time came in during the season. The source URL is added to the row.
+- por-231 `format` (Taça de Portugal 2026/27): Record (3 August 2026) and RTP (January 2026) state single-match semi-finals from 2026/27. Decision `second`. The row now reads "single-match semi-finals (new in 2026/27)". Record also states that I Liga clubs enter in round 3 and clubs in European competitions in round 4. The row holds this text. Open point: the round count "8 rounds" has no second source for 2026/27.
+
+### Other findings
+
+- por-129 `down` (2015/16): the FPF rules as changed by notice 438 give 22, as the first source does. A copy on sjpf.pt (uploaded November 2015) holds the text before notice 438 and gives 20. The verdict is `agree`.
+- por-186 `clubs` (2021/22): FPF notice CO-00070 (4 August 2021) gives 155. Notice CO-00074 (5 August 2021) gives 154 and replaces it. The verdict is `agree`.
+- por-48 `down` (2006/07): FPF notice 43 sends down every club from 12th place in each series. It gives 15 for a planned 3 x 14 + 1 x 16. The season had 4 x 14, so the rule gives 12 (inference). The verdict is `agree`.
+- por-105 `clubs` (2012/13): the first source page now gives 165 teams in its infobox, and the row holds 162. No second source was found. Max decides which value to keep.
+- The FPF rules of 2005 (art. 104.06, three substitutes) were still on the FPF site in July 2007. They cover 2006/07 and 2007/08 as well.
+- por-147 `playoffs` (2017/18, not in the retry scope): the FPF rules give the 5 series winners and the 3 best runners-up. The row text reads "top 5 of each series and 3 best runners-up". Max can have the wording fixed.
+
+### Still without a second source
+
+- Taça de Portugal entrant counts: 2002/03 to 2012/13 and 2015/16 to 2020/21 (17 lines). RSSSF and zerozero list the rounds but give no total. A count of the RSSSF lists for 2002/03 gives 224, which is an inference and not a stated total. Pages that give only the round 1 numbers are in the notes.
+- Taça da Liga entrant counts: 2010/11 to 2015/16 and 2021/22. A club page gives the entrants per stage for 2010/11 and 2011/12 (16 + 6 + 2 + 8 = 32), but no total.
+- 2026/27: Liga Portugal 2 (all five fields) and Liga 3 `up`, `down` and `playoffs`.
+- Nation rules: por-63 `foreign` and por-234 `foreign`, `work_permit` and `registration`.
+
+`rules_lint.py`: 0 problems for `por.tsv` before and after.
+
+## Fix
+
+Date: 2026-10-17. Fix agent. Two open points of the retry, both written into `por.tsv`.
+
+- por-105 `clubs` (Taça de Portugal 2012/13): 162 stays. No FPF rule text or draw notice with a total was found (the archived FPF notice link returns a web page). The full round lists give 162. Round 1 has 50 matches and 30 byes, so 130 Segunda and Terceira Divisão clubs. Round 2 has 48 matches: 50 winners, 30 byes and 16 Segunda Liga clubs. Round 3 has 32 matches: 48 winners and 16 Primeira Liga clubs. The infobox value 165 has no support. Source: https://en.wikipedia.org/wiki/2012%E2%80%9313_Ta%C3%A7a_de_Portugal#First_round
+- por-147 `playoffs` (Campeonato de Portugal 2017/18): the FPF rules of 2017/18, art. 85.2 to 85.7, set 80 clubs in 5 series of 16. The 5 series winners and the 3 best runners-up play two-legged quarter-finals and semi-finals. The 2 semi-final winners go up and meet in a final at a neutral ground. The last 6 of each series go down. The row now says "5 series winners and the 3 best runners-up". `up` (2) and `down` (30) agree with the rules and stay. The `format` text now names the play-off rounds. Source: https://arquivo.pt/wayback/20170807062340/https://fpf.pt/downloaddocument.ashx?id=9122

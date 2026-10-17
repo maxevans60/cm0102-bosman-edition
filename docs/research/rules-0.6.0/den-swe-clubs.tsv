@@ -578,7 +578,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2018/19	Danish 2nd Division group 1	Tarup-Paarup IF	3255	Tarup-Paarup IF	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
 2018/19	Danish 2nd Division group 1	Kjellerup IF	1136	Kjellerup IF	Danish Second Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
 2018/19	Danish 2nd Division group 2	Middelfart G&BK	2101	Middelfart G&BK	Danish Second Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
-2018/19	Danish 2nd Division group 2	AB Gladsaxe				https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
+2018/19	Danish 2nd Division group 2	AB Gladsaxe	55	Akademisk Boldklub	Danish Second Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
 2018/19	Danish 2nd Division group 2	Brønshøj BK	1923	Brönshöj Boldklub	Danish Second Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
 2018/19	Danish 2nd Division group 2	Boldklubben af 1893	1140	Boldklubben af 1893	Danish Second Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
 2018/19	Danish 2nd Division group 2	Vanløse IF	1488	Vanlöse IF	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Danish_2nd_Division
@@ -605,7 +605,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2019/20	Danish 2nd Division group 2	Middelfart G&BK	2101	Middelfart Boldklub	Danish Second Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
 2019/20	Danish 2nd Division group 2	Brabrand IF	9351	Brabrand IF	Danish Second Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
 2019/20	Danish 2nd Division group 2	Thisted FC	8034	Thisted FC	Danish First Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
-2019/20	Danish 2nd Division group 2	AB Gladsaxe				https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
+2019/20	Danish 2nd Division group 2	AB Gladsaxe	55	Akademisk Boldklub	Danish Second Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
 2019/20	Danish 2nd Division group 2	Jammerbugt FC	5602	Jammerbugt FC	Danish Second Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
 2019/20	Danish 2nd Division group 2	VSK Aarhus	10622	VSK Aarhus	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
 2019/20	Danish 2nd Division group 2	Dalum IF	8084	Dalum IF	Danish Second Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_2nd_Division
@@ -629,7 +629,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2020/21	Danish 2nd Division group 1	Holstebro BK	5109	Holstebro Boldklub	Danish Kvalifikationsrækken	https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
 2020/21	Danish 2nd Division group 2	Nykøbing FC	7686	Nyköbing FC	Danish First Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
 2020/21	Danish 2nd Division group 2	Hellerup IK	4729	Hellerup IK	Danish Second Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
-2020/21	Danish 2nd Division group 2	AB Gladsaxe				https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
+2020/21	Danish 2nd Division group 2	AB Gladsaxe	55	Akademisk Boldklub	Danish Second Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
 2020/21	Danish 2nd Division group 2	Næstved BK	7783	Naestved Boldklub	Danish First Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
 2020/21	Danish 2nd Division group 2	Hillerød Fodbold	1828	Hilleröd Fodbold	Danish Second Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
 2020/21	Danish 2nd Division group 2	FA 2000	6821	FA 2000	Danish Second Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Danish_2nd_Division
@@ -645,7 +645,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2021/22	Danish 2nd Division	Hillerød Fodbold	1828	Hilleröd Fodbold	Danish Second Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
 2021/22	Danish 2nd Division	Boldklubben af 1893	1140	Boldklubben af 1893	Danish Second Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
 2021/22	Danish 2nd Division	Thisted FC	8034	Thisted FC	Danish Second Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
-2021/22	Danish 2nd Division	AB Gladsaxe				https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
+2021/22	Danish 2nd Division	AB Gladsaxe	55	Akademisk Boldklub	Danish Second Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
 2021/22	Danish 2nd Division	Hellerup IK	4729	Hellerup IK	Danish Second Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
 2021/22	Danish 2nd Division	Aarhus Fremad	3761	Aarhus Fremad	Danish First Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
 2021/22	Danish 2nd Division	Skive IK	6946	Skive IK	Danish First Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Danish_2nd_Division
@@ -657,7 +657,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2022/23	Danish 2nd Division	Aarhus Fremad	3761	Aarhus Fremad	Danish Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
 2022/23	Danish 2nd Division	Kolding IF	6073	Kolding IF	Danish First Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
 2022/23	Danish 2nd Division	Esbjerg fB	3633	Esbjerg fB	Danish First Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
-2022/23	Danish 2nd Division	AB Gladsaxe				https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
+2022/23	Danish 2nd Division	AB Gladsaxe	55	Akademisk Boldklub	Danish Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
 2022/23	Danish 2nd Division	Thisted FC	8034	Thisted FC	Danish Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
 2022/23	Danish 2nd Division	Brabrand IF	9351	Brabrand IF	Danish Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
 2022/23	Danish 2nd Division	Hellerup IK	4729	Hellerup IK	Danish Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Danish_2nd_Division
@@ -762,7 +762,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2010/11	Allsvenskan	Djurgårdens IF Fotboll	3176	Djurgårdens IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2011_Allsvenskan
 2010/11	Allsvenskan	Örebro SK	8325	Örebro SK	Swedish Premier Division	https://en.wikipedia.org/wiki/2011_Allsvenskan
 2010/11	Allsvenskan	IFK Norrköping	8001	IFK Norrköping	Swedish First Division	https://en.wikipedia.org/wiki/2011_Allsvenskan
-2010/11	Allsvenskan	Syrianska FC				https://en.wikipedia.org/wiki/2011_Allsvenskan
+2010/11	Allsvenskan	Syrianska FC	11265	Syrianska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2011_Allsvenskan
 2010/11	Allsvenskan	Trelleborgs FF	11781	Trelleborgs FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2011_Allsvenskan
 2010/11	Allsvenskan	Halmstads BK	4814	Halmstad BK	Swedish Premier Division	https://en.wikipedia.org/wiki/2011_Allsvenskan
 2011/12	Allsvenskan	IF Elfsborg	3534	IF Elfsborg	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
@@ -777,7 +777,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2011/12	Allsvenskan	Kalmar FF	5793	Kalmar FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
 2011/12	Allsvenskan	Gefle IF	4331	Gefle IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
 2011/12	Allsvenskan	Mjällby AIF	7421	Mjällby AIF	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
-2011/12	Allsvenskan	Syrianska FC				https://en.wikipedia.org/wiki/2012_Allsvenskan
+2011/12	Allsvenskan	Syrianska FC	11265	Syrianska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
 2011/12	Allsvenskan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
 2011/12	Allsvenskan	Örebro SK	8325	Örebro SK	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
 2011/12	Allsvenskan	GAIS	4241	Göteborgs AIS	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Allsvenskan
@@ -796,7 +796,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2012/13	Allsvenskan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish First Division	https://en.wikipedia.org/wiki/2013_Allsvenskan
 2012/13	Allsvenskan	Halmstads BK	4814	Halmstad BK	Swedish First Division	https://en.wikipedia.org/wiki/2013_Allsvenskan
 2012/13	Allsvenskan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2013_Allsvenskan
-2012/13	Allsvenskan	Syrianska FC				https://en.wikipedia.org/wiki/2013_Allsvenskan
+2012/13	Allsvenskan	Syrianska FC	11265	Syrianska Föreningen	Swedish Premier Division	https://en.wikipedia.org/wiki/2013_Allsvenskan
 2013/14	Allsvenskan	Malmö FF	7008	Malmö FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2014_Allsvenskan
 2013/14	Allsvenskan	IFK Göteborg	5262	IFK Göteborg	Swedish Premier Division	https://en.wikipedia.org/wiki/2014_Allsvenskan
 2013/14	Allsvenskan	AIK Fotboll	95	AIK Solna	Swedish Premier Division	https://en.wikipedia.org/wiki/2014_Allsvenskan
@@ -1010,11 +1010,11 @@ season	division	club	db_club_id	db_club	db_division	source
 2005/06	Division 1 Norra	Västerås SK Fotboll	12294	Västerås SK	Swedish First Division	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Norra	Vasalund/Essinge IF	12281	Vasalunds IF	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Norra	Visby IF Gute	12538	Visby IF Gute	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
-2005/06	Division 1 Norra	Syrianska FC				https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
+2005/06	Division 1 Norra	Syrianska FC	11265	Syrianska Föreningen	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Norra	Valsta Syrianska IK	12240	Valsta/Syrianska IK	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Norra	Bodens BK	1701	Bodens BK	Swedish First Division	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Norra	BK Forward	4144	BK Forward	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
-2005/06	Division 1 Norra	Falu FK				https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
+2005/06	Division 1 Norra	Falu BS	3922	Falu BS	Swedish Second Division West Svealand	https://sv.wikipedia.org/wiki/Division_1_i_fotboll_f%C3%B6r_herrar_2006
 2005/06	Division 1 Norra	Östersunds FK	8391	Östersunds FK	Swedish Second Division North	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Norra	Robertsfors IK	9610	Robertsfors IK	Swedish Second Division North	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Norra	Anundsjö IF	766	Anundsjö IF	Swedish Second Division North	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
@@ -1033,7 +1033,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2005/06	Division 1 Södra	Myresjö IF	7666	Myresjö IF	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Södra	IFK Hässleholm	4908	IFK Hässleholm	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
 2005/06	Division 1 Södra	Lindome GIF	6600	Lindome IF	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2006_Division_1_(Swedish_football)
-2007/08	Division 1 Norra	Syrianska FC				https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
+2007/08	Division 1 Norra	Syrianska FC	11265	Syrianska Föreningen	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Norra	Vasalunds IF	12281	Vasalunds IF	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Norra	Västerås SK Fotboll	12294	Västerås SK	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Norra	Gröndals IK	7224	Gröndals IK	A Lower Division	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
@@ -1045,7 +1045,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2007/08	Division 1 Norra	Östersunds FK	8391	Östersunds FK	Swedish Second Division North	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Norra	IK Brage	1819	IK Brage	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Norra	Ersboda SK				https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
-2007/08	Division 1 Norra	Falu FK				https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
+2007/08	Division 1 Norra	Falu FK	3922	Falu BS	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Norra	Bodens BK	1701	Bodens BK	Swedish Second Division North	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Södra	FC Trollhättan	3854	FC Trollhättan	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2007/08	Division 1 Södra	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
@@ -1601,3 +1601,365 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	Ettan Södra	Laholms FK	6328	Laholms FK	Swedish Third Division Southwest Gotaland	https://sv.wikipedia.org/wiki/Ettan_2026
 2025/26	Ettan Södra	FC Trollhättan	3854	FC Trollhättan	Swedish Second Division South Gotaland	https://sv.wikipedia.org/wiki/Ettan_2026
 2025/26	Ettan Södra	Utsiktens BK	8936	Utsiktens BK	Swedish Second Division West Gotaland	https://sv.wikipedia.org/wiki/Ettan_2026
+2005/06	Allsvenskan	IF Elfsborg	3534	IF Elfsborg	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	AIK	95	AIK	Swedish First Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Hammarby IF	4833	Hammarby IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Helsingborgs IF	4969	Helsingborgs IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Kalmar FF	5793	Kalmar FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Djurgårdens IF	3176	Djurgårdens IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Malmö FF	7008	Malmö FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	IFK Göteborg	5262	IFK Göteborg	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Gefle IF	4331	Gefle IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	GAIS	4241	Göteborgs AIS	Swedish First Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Halmstads BK	4814	Halmstad BK	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	BK Häcken	4764	BK Häcken	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Allsvenskan	Örgryte IS	8115	Örgryte IS	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Allsvenskan
+2005/06	Superettan	Trelleborgs FF	11781	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Örebro SK	8325	Örebro SK	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	IFK Norrköping	8001	IFK Norrköping	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Ljungskile SK	6651	Panos Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Mjällby AIF	7421	Mjällby AIF	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Falkenbergs FF	3918	Falkenberg FF	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Åtvidabergs FF	1031	Åtvidabergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Assyriska FF	930	Assyriska FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	FC Väsby United	12283	Väsby United	Swedish First Division	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Qviding FIF	9198	Qviding Fräntorps IF	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2006_Superettan
+2005/06	Superettan	Umeå FC	12023	Umeå FC	Swedish Second Division North	https://en.wikipedia.org/wiki/2006_Superettan
+2007/08	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	BK Häcken	4764	BK Häcken	Swedish Premier Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Assyriska FF	930	Assyriska FF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Åtvidabergs FF	1031	Åtvidabergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Falkenbergs FF	3918	Falkenberg FF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Mjällby AIF	7421	Mjällby AIF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	FC Väsby United	12283	Väsby United	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Qviding FIF	9198	Qviding Fräntorps IF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	IK Sirius	10564	IK Sirius FK	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	IF Limhamn Bunkeflo	1993	Bunkeflo IF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Enköpings SK	3592	Enköpings SK	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2008_Superettan
+2007/08	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2008_Superettan
+2008/09	Superettan	Mjällby AIF	7421	Mjällby AIF	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Åtvidabergs FF	1031	Åtvidabergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Assyriska FF	930	Assyriska FF	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Syrianska FC	11265	Syrianska Föreningen	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Falkenbergs FF	3918	Falkenberg FF	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	IFK Norrköping	8001	IFK Norrköping	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	FC Väsby United	12283	Väsby United	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	FC Trollhättan	3854	FC Trollhättan	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Qviding FIF	9198	Qviding Fräntorps IF	Swedish First Division	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	IK Sirius	10564	IK Sirius FK	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2009_Superettan
+2008/09	Superettan	Vasalunds IF	12281	Vasalund Essinge	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2009_Superettan
+2009/10	Superettan	Syrianska FC	11265	Syrianska Föreningen	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	IFK Norrköping	8001	IFK Norrköping	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Assyriska FF	930	Assyriska FF	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Falkenbergs FF	3918	Falkenberg FF	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Hammarby IF	4833	Hammarby IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Degerfors IF	2972	Degerfors IF	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	IK Brage	1819	IK Brage	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	Östers IF	8385	Östers IF	Swedish Fourth Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	FC Trollhättan	3854	FC Trollhättan	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2009/10	Superettan	FC Väsby United	12283	Väsby United	Swedish First Division	https://en.wikipedia.org/wiki/2010_Superettan
+2010/11	Superettan	Åtvidabergs FF	1031	Åtvidabergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Degerfors IF	2972	Degerfors IF	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Falkenbergs FF	3918	Falkenberg FF	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Assyriska FF	930	Assyriska FF	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Hammarby IF	4833	Hammarby IF	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	IK Brage	1819	IK Brage	Swedish Second Division West Svealand	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Västerås SK	12294	Västerås SK	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2011_Superettan
+2010/11	Superettan	Qviding FIF	9198	Qviding Fräntorps IF	Swedish Fourth Division	https://en.wikipedia.org/wiki/2011_Superettan
+2011/12	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Halmstads BK	4814	Halmstad BK	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Hammarby IF	4833	Hammarby IF	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Assyriska FF	930	Assyriska FF	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Varbergs BoIS	12260	Varbergs BoIS FC	Swedish Fourth Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Falkenbergs FF	3918	Falkenberg FF	Swedish First Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Trelleborgs FF	11781	Trelleborgs FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2012_Superettan
+2011/12	Superettan	Umeå FC	12023	Umeå FC	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2012_Superettan
+2012/13	Superettan	Falkenbergs FF	3918	Falkenberg FF	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Örebro SK	8325	Örebro SK	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish Premier Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Hammarby IF	4833	Hammarby IF	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	GAIS	4241	Göteborgs AIS	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Assyriska FF	930	Assyriska FF	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Östersunds FK	8391	Östersunds FK	Swedish Second Division North	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Varbergs BoIS	12260	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	Örgryte IS	8115	Örgryte IS	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2013_Superettan
+2012/13	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2013_Superettan
+2013/14	Superettan	Hammarby IF	4833	Hammarby IF	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Östersunds FK	8391	Östersunds FK	Swedish Second Division North	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	IK Sirius	10564	IK Sirius FK	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Varbergs BoIS	12260	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Syrianska FC	11265	Syrianska Föreningen	Swedish Premier Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	GAIS	4241	Göteborgs AIS	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Östers IF	8385	Östers IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Assyriska FF	930	Assyriska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2014_Superettan
+2013/14	Superettan	Husqvarna FF	5221	Husqvarna FF	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2014_Superettan
+2014/15	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Östersunds FK	8391	Östersunds FK	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	IK Sirius	10564	IK Sirius FK	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Assyriska FF	930	Assyriska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Syrianska FC	10649	Syrianska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	AFC United	6133	AFC United	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	GAIS	4241	Göteborgs AIS	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish First Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Mjällby AIF	7421	Mjällby AIF	Swedish Premier Division	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	IK Frej	4183	IK Frej Täby	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	Utsiktens BK	8936	Utsiktens BK	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2015_Superettan
+2014/15	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish Premier Division	https://en.wikipedia.org/wiki/2015_Superettan
+2015/16	Superettan	IK Sirius	10564	IK Sirius FK	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	AFC United	6133	AFC United	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Halmstads BK	4814	Halmstads BK	Swedish Premier Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Dalkurd FF	8594	Dalkurd FF	Swedish Second Division North	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Åtvidabergs FF	1031	Åtvidabergs FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	GAIS	4241	Göteborgs AIS	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Örgryte IS	8115	Örgryte IS	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	IK Frej	4183	IK Frej	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Syrianska FC	10649	Syrianska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Assyriska FF	930	Assyriska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2015/16	Superettan	Ängelholms FF	735	Ängelholms FF	Swedish First Division	https://en.wikipedia.org/wiki/2016_Superettan
+2016/17	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Dalkurd FF	8594	Dalkurd FF	Swedish Second Division North	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Falkenbergs FF	3918	Falkenbergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Östers IF	8385	Östers IF	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Helsingborgs IF	4969	Helsingborgs IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	GAIS	4241	Göteborgs AIS	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Norrby IF	7999	Norrby IF	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Gefle IF	4331	Gefle IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Örgryte IS	8115	Örgryte IS	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	IK Frej	4183	IK Frej	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Syrianska FC	10649	Syrianska Föreningen	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2016/17	Superettan	Åtvidabergs FF	1031	Åtvidabergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2017_Superettan
+2017/18	Superettan	Helsingborgs IF	4969	Helsingborgs IF	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Falkenbergs FF	3918	Falkenbergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	AFC Eskilstuna	6133	AFC Eskilstuna	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Halmstads BK	4814	Halmstads BK	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	IK Brage	1819	IK Brage	Swedish Second Division North	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Östers IF	8385	Östers IF	Swedish Second Division East Svealand	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	IK Frej	4183	IK Frej	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	GAIS	4241	GAIS Göteborg	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Jönköpings Södra IF	5613	Jönköping Södra IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Norrby IF	7999	Norrby IF	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Gefle IF	4331	Gefle IF	Swedish First Division	https://en.wikipedia.org/wiki/2018_Superettan
+2017/18	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2018_Superettan
+2018/19	Superettan	Mjällby AIF	7421	Mjällby AIF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Jönköpings Södra IF	5613	Jönköpings Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Halmstads BK	4814	Halmstads BK	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Dalkurd FF	8594	Dalkurd FF	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Norrby IF	7999	Norrby IF	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Västerås SK	987	Västerås SK	Swedish Second Division North	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	GAIS	4241	GAIS Göteborg	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	IK Frej	4183	IK Frej	Swedish First Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish Premier Division	https://en.wikipedia.org/wiki/2019_Superettan
+2018/19	Superettan	Syrianska FC	10649	Syrianska FC	Swedish Second Division North	https://en.wikipedia.org/wiki/2019_Superettan
+2019/20	Superettan	Halmstads BK	4814	Halmstads BK	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Degerfors IF	2972	Degerfors IF	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Jönköpings Södra IF	5613	Jönköpings Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Östers IF	8385	Östers IF	Swedish Second Division East Gotaland	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Akropolis IF	354	Akropolis IF	Swedish Second Division North	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish Premier Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Västerås SK	987	Västerås SK	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	AFC Eskilstuna	6133	Athletic Eskilstuna	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	GAIS	4241	GAIS Göteborg	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Norrby IF	7999	Norrby IF	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Dalkurd FF	8594	Dalkurd FF	Swedish First Division	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Umeå FC	8963	Umeå FC	Swedish Second Division North	https://en.wikipedia.org/wiki/2020_Superettan
+2019/20	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2020_Superettan
+2020/21	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Helsingborgs IF	4969	Helsingborgs IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Norrby IF	7999	Norrby IF	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	AFC Eskilstuna	6133	Athletic Eskilstuna	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Jönköpings Södra IF	5613	Jönköpings Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Västerås SK	987	Västerås SK	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Akropolis IF	354	Akropolis IF	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	GAIS	4241	GAIS Göteborg	Swedish First Division	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Vasalunds IF	6211	Vasalunds IF	Swedish Second Division North	https://en.wikipedia.org/wiki/2021_Superettan
+2020/21	Superettan	Falkenbergs FF	3918	Falkenbergs FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2021_Superettan
+2021/22	Superettan	IF Brommapojkarna	1915	IF Brommapojkarna	Swedish Second Division North	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Halmstads BK	4814	Halmstads BK	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Skövde AIK	5669	Skövde AIK	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish Second Division North	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	AFC Eskilstuna	6133	AFC Eskilstuna	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Västerås SK	987	Västerås SK	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Örebro SK	8325	Örebro SK	Swedish Premier Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Utsiktens BK	8936	Utsiktens BK	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Jönköpings Södra IF	5613	Jönköpings Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Östersunds FK	8391	Östersunds FK	Swedish Premier Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Norrby IF	7999	Norrby IF	Swedish First Division	https://en.wikipedia.org/wiki/2022_Superettan
+2021/22	Superettan	Dalkurd FF	8594	Dalkurd FF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2022_Superettan
+2022/23	Superettan	Västerås SK	987	Västerås SK	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	GAIS	4241	GAIS Göteborg	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Utsiktens BK	8936	Utsiktens BK	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Östersunds FK	8391	Östersunds FK	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Gefle IF	4331	Gefle IF	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Örebro SK	8325	Örebro SK	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Helsingborgs IF	4969	Helsingborgs IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Skövde AIK	5669	Skövde AIK	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	Jönköpings Södra IF	5613	Jönköpings Södra IF	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2022/23	Superettan	AFC Eskilstuna	6133	AFC Eskilstuna	Swedish First Division	https://en.wikipedia.org/wiki/2023_Superettan
+2023/24	Superettan	Degerfors IF	2972	Degerfors IF	Swedish Premier Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Helsingborgs IF	4969	Helsingborgs IF	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Sandvikens IF	9457	Sandvikens IF	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Utsiktens BK	8936	Utsiktens BK	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish Premier Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Örebro SK	8325	Örebro SK	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	IK Oddevold	8157	IK Oddevold	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Östersunds FK	8391	Östersunds FK	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Gefle IF	4331	Gefle IF	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2024_Superettan
+2023/24	Superettan	Skövde AIK	5669	Skövde AIK	Swedish First Division	https://en.wikipedia.org/wiki/2024_Superettan
+2024/25	Superettan	Västerås SK	987	Västerås SK	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Kalmar FF	5793	Kalmar FF	Swedish Premier Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Örgryte IS	8115	Örgryte IS	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	IK Oddevold	8157	IK Oddevold	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Falkenbergs FF	3918	Falkenbergs FF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Helsingborgs IF	4969	Helsingborgs IF	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Sandvikens IF	9457	Sandvikens IF	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Östersunds FK	8391	Östersunds FK	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Utsiktens BK	8936	Utsiktens BK	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Örebro SK	8325	Örebro SK	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Trelleborgs FF	5144	Trelleborgs FF	Swedish First Division	https://en.wikipedia.org/wiki/2025_Superettan
+2024/25	Superettan	Umeå FC	8963	Umeå FC	Swedish Second Division West Gotaland	https://en.wikipedia.org/wiki/2025_Superettan
+2025/26	Superettan	IFK Norrköping	8001	IFK Norrköping	Swedish Premier Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Falkenbergs FF	3918	Falkenbergs FF	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Varbergs BoIS	924	Varbergs BoIS	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Östersunds FK	8391	Östersunds FK	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Landskrona BoIS	6356	Landskrona BOIS	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	IK Oddevold	8157	IK Oddevold	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Sandvikens IF	9457	Sandvikens IF	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Östers IF	8385	Östers IF	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Nordic United	10595	Nordic United FC	Swedish Second Division North	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Helsingborgs IF	4969	Helsingborgs IF	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	IFK Värnamo	5278	IFK Värnamo	Swedish Premier Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Norrby IF	7999	Norrby IF	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	IK Brage	1819	IK Brage	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Ljungskile SK	6651	Ljungskile SK	Swedish Second Division South Gotaland	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	Örebro SK	8325	Örebro SK	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2025/26	Superettan	GIF Sundsvall	4255	GIF Sundsvall	Swedish First Division	https://en.wikipedia.org/wiki/2026_Superettan
+2005/06	Danish 2nd Division group 1	Esbjerg fB 2				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Aarhus Fremad	184	Aarhus Fremad	A Lower Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Thisted FC	11536	Thisted FC	A Lower Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Jetsmark IF	5602	Jetsmark Idrætsforening	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	B 1913	1136	Boldklubben af 1913	Danish First Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Silkeborg IF 2				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Hobro IK				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Hjørring IF	5073	Hjørring Idrætsforening	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Næsby BK	7773	Næsby Boldklub	A Lower Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Holstebro BK	5109	Holstebro Boldklub	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Varde IF	12265	Varde Idrætsforening	A Lower Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Dalum IF	2928	Dalum Idrætsforening	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	Kalundborg GF&BK	5794	Kalundborg Gymnastik og Boldklub	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 1	B 1909	1135	Boldklubben af 1909	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Næstved BK	7783	Næstved Boldklub	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Holbæk B&IF	5097	Holbæk Bold- og Idrætsforening	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Hvidovre IF	5232	Hvidovre	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Brøndby IF 2				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	KB (FC København 2)				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	BSV				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Glostrup FK	4448	Glostrup FK	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	B 93	1140	Boldklubben af 1893	Danish First Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	FC Roskilde	9671	Roskilde Boldklub Af 1906	A Lower Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	AB 1970				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Slagelse BK&IF	10631	Slagelse Boldklub & Idrætsforening	Danish Second Division	https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Stenløse BK				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	Værløse BK				https://www.danskfodbold.com/tabel.php?seasonid=2006
+2005/06	Danish 2nd Division group 2	BK Avarta	1084	Boldklubben Avarta	A Lower Division	https://www.danskfodbold.com/tabel.php?seasonid=2006

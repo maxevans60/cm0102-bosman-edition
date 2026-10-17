@@ -1,25 +1,27 @@
 # Rules table, slice 9: the continental club competitions
 
-Date 2026-10-16. Slice 9 of `docs/specs/2026-10-16-seasons-0.6.0-spec.md`. Brief: `research-brief-0.6.0.md`. The rows cover the seasons 2001/02 to 2027/28.
+Slice 9 of `docs/specs/2026-10-16-seasons-0.6.0-spec.md`, researched on 2026-10-16 and 2026-10-17. Brief: `research-brief-0.6.0.md`. The rows cover the seasons 2001/02 to 2027/28 and follow Max's decisions Q268 to Q331 in the spec.
 
 ## Files
 
-Each part has its rules table (`<part>.tsv`), its notes (`<part>.md`, with the sections Reconcile, Loose ends and Source fill), the second-source check (`<part>.check.tsv`, `<part>.check.md`) and the reconcile decisions (`<part>.reconcile.tsv`). Parts with club moves also have `<part>-clubs.tsv`. All files are in `rules-0.6.0/`. Changes of the consistency pass are in `rules-0.6.0/consistency.md`.
+Each part has its rules table (`<part>.tsv`) and its notes (`<part>.md`, with the sections Reconcile, Loose ends, Source fill, Pass 2, Closing and the second-source sections). The checks are in `<part>.check.tsv` (first check) and `<part>.check2.tsv` (second source of pass 2 and the retry), and the reconcile decisions in `<part>.reconcile.tsv`. Parts with club moves also have `<part>-clubs.tsv`. All files are in `rules-0.6.0/`. The process is in the `league-research` skill.
 
 ## Counts
 
-Fields are filled fact fields of the rules table. "No second source" means that the check agent found no page of another publisher for that field. "Unknown" means that no page gave the fact. "Without a source" counts filled fields whose row cites no page for them (`tools/research/rules_lint.py`).
+Field verdicts count the latest verdict of each checked field of a row that still exists. "No second source" includes fields that hold `unknown`. "Without a source" counts filled fields whose row cites no page for them (`tools/research/rules_lint.py`). "Club rows not in the database" includes the reserve and B teams that the build adds as new clubs (Q289).
 
-| Part | Rows | Agree | Disagree | Found | No second source | Reconcile first / second / conflict | Unknown fields | Without a source | Club rows | Clubs not in the database |
-|---|---|---|---|---|---|---|---|---|---|---|
-| [uefa](rules-0.6.0/uefa.md) | 216 | 1337 | 26 | 10 | 265 | 4 / 21 / 1 | 41 | 9 | n/a | n/a |
-| [club-world](rules-0.6.0/club-world.md) | 513 | 1192 | 22 | 7 | 911 | 5 / 18 / 0 | 781 | 0 | n/a | n/a |
+| Part | Rows | Agree | Disagree (settled or listed) | Found | No second source | Unknown fields | Without a source | Club rows | Club rows not in the database |
+|---|---|---|---|---|---|---|---|---|---|
+| [uefa](rules-0.6.0/uefa.md) | 216 | 1387 | 26 | 10 | 215 | 37 | 0 | n/a | n/a |
+| [club-world](rules-0.6.0/club-world.md) | 405 | 1156 | 34 | 7 | 529 | 644 | 0 | n/a | n/a |
 
 ## Method
 
 1. An Opus agent wrote the rows of each part from pages read on the day.
 2. A second Opus agent checked every filled field against a page of another publisher.
-3. A third Opus agent read a third source for each disagreement, wrote the settled values into the table and listed the conflicts.
-4. Loose-ends, consistency and source-fill agents closed the points the earlier agents found, made `up`/`down` follow the rule places, and added a source for each filled field.
+3. A third Opus agent read a third source for each disagreement and wrote the settled values into the table.
+4. Loose-ends, consistency and source-fill agents closed the points the earlier agents found.
+5. Pass 2 applied Max's decisions: no new tiers (Q331) and no new nations (Q288), conflicts settled by what happened in real life, club moves down every tier, and reserve teams listed.
+6. A second-source agent and a retry looked for a second publisher for every fact that only one publisher stated.
 
-The conflicts and decisions for Max are in `2026-10-16-seasons-research-for-max.md`.
+The open questions for Max are in `2026-10-16-seasons-research-for-max.md`.

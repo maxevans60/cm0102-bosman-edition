@@ -189,3 +189,88 @@ Method: I ran the rules lint and took each filled fact field with no `field=URL`
 No source found: none.
 
 Disagreements: none. Note on a page: the 2008/09 Regionalliga page names a play-off between two Oberliga clubs for a Regionalliga Nord place. The Regionalliga divisions had no play-off of their own, so `playoffs` = none stays (ger-95 to ger-97).
+
+## Pass 2
+
+Date: 2026-10-17. Decision agent. Rules: Q331 (no new tiers), Q288, Q279, Q280, Q289, Q290 and Q297 to Q327 of the spec. Row ids are kept. `rules_lint.py`: 0 problems before and after.
+
+### 1. No new tiers (Q331)
+
+The original's lowest German tier is the Regionalliga (`ger_regional`, tier 3). From 2008/09 the 3. Liga is tier 3 and the Regionalliga is tier 4. The Regionalliga rows from 2008/09 leave the table.
+
+- Deleted from `ger.tsv`: 148 rows, 351 to 203.
+  - Regionalliga Nord and Regionalliga Süd, 2008/09 to 2027/28: 40 rows.
+  - Regionalliga West, Nordost, Südwest and Bayern, all 27 seasons: 108 rows. These groups run only at tier 4 from 2008/09. Their rows before 2008/09 were `not held`, so the competitions never run at a tier in the game.
+- Deleted from `ger-clubs.tsv`: 1,508 club rows (every Regionalliga list from 2008/09), 1,925 to 417.
+- `ger_regional` has rows only up to 2007/08. From 2008/09 the game does not run it. Tier 3 is the 3. Liga (`comp_file` = `new`) from 2008/09. Its 2001/02 to 2007/08 rows stay `not held`.
+- The 3. Liga promotes from the Regionalliga, which is not in the game. The build takes the clubs that go up to the 3. Liga from the German clubs with no division.
+- No German competition needs a nation that a game cannot select (Q288).
+- The conflict on ger-164 (Regionalliga Südwest 2013/14) and the consistency items on ger-238 to ger-255 are void, because their rows are deleted.
+
+### 2. Conflicts and open points
+
+| Row | Field | Old | New | Decision |
+|---|---|---|---|---|
+| ger-82, 2007/08 Regionalliga Nord | down | 0 | 9 | second |
+| ger-83, 2007/08 Regionalliga Süd | down | 1 | 8 | second |
+
+- ger-82 and ger-83: in real life, places 11 and lower dropped from tier 3 to the tier-4 Regionalliga. The game drops tier 4 (Q331), so these clubs leave the game's divisions. RSSSF marks them "Relegated", and the Wikipedia table marks them "Qualification to Regionalliga" (tier 4 from 2008/09). Sportfreunde Siegen (Süd) went to the Oberliga after insolvency. URLs: https://www.rsssf.org/tablesd/duit08.html and https://en.wikipedia.org/wiki/2007%E2%80%9308_Regionalliga (both read on 2026-10-17). The `down` source of both rows now cites RSSSF too.
+- ger-4 and ger-18 (open point of "Loose ends"): both rows use one reading, and they stay as they are. In those seasons the number of Regionalliga relegation places depended on how many clubs of that region came down from the 2. Bundesliga. ger-4 (2001/02 Nord) has 3 places because one Nord club came down. ger-18 (2002/03 Süd) has 5 places because SSV Reutlingen and SV Waldhof Mannheim came down. Their licence refusals later reprieved Stuttgarter Kickers and Sportfreunde Siegen, and that is in `notes` under Q272.
+- 2009 Supercup (ger-116) and 2008 T-Home Supercup (ger-103): both matches took place in real life, so the rows stay as played matches.
+- Non-EU limit 2001/02 to 2005/06 and bench 7 before 2014/15: no change in this pass. The check found that the 2004/05 and 2005/06 values agree with dfl.de. The second-source pass takes the rest.
+- 2027/28: the rows keep the current structure. The Regionalliga reform vote of 18 December 2026 touches tier 4 only, so it no longer changes this table.
+
+### 3. Club moves (Q279, Q280, Q290)
+
+- Tiers 1 and 2: every season database has 18 clubs in the Bundesliga and 18 in the 2. Bundesliga, the real count in every season. No rows.
+- Tier 3, 2001/02 to 2007/08: the lists of Süd 2002/03, Nord 2005/06 and Nord 2007/08 (19 clubs each) stay. The other seasons have the real counts.
+- Tier 3 from 2008/09: the databases hold 36 clubs in German Regional Division North and South, and the real 3. Liga has 20. The 20-club 3. Liga list of each season (2008/09 to 2025/26, 360 rows) stays. Under Q290 the two database Regionalliga divisions have no real tier from 2008/09, so their clubs are in the pool. The `db_division` of these rows is now a valid source.
+- Club rows added: 0. Club matches changed: 1. TuS Koblenz 2010/11 (3. Liga) is now club 6059 ("TuS Rot-Weiß Koblenz" in September 2010 ODB, German Regional Division South). Evidence: club 6059 is in German Second Division in the databases of November 2007 to June 2010, the seasons in which TuS Koblenz played in the 2. Bundesliga. From Autumn 2013 the same id carries the name "TuS Koblenz", and from October 2019 the other Koblenz club has its own id (9288). This is an inference from the database files. The real TuS Rot-Weiß Koblenz is another club (https://de.wikipedia.org/wiki/TuS_Koblenz, read on 2026-10-17).
+- Missing clubs: none. All 51 missing clubs of the first pass were in deleted Regionalliga lists, and TuS Koblenz is now matched.
+
+### 4. Reserve and B teams (Q289)
+
+Reserve teams listed for the build: 0. Every reserve team in a kept list has a club record in its season's database: Bayern Munich II, VfB Stuttgart II, Werder Bremen II, Borussia Dortmund II, Mainz 05 II, SC Freiburg II, Hannover 96 II and TSG Hoffenheim II in the 3. Liga, and the reserve teams of the 2002/03, 2005/06 and 2007/08 Regionalliga lists.
+
+### Files of other passes
+
+`ger.check.tsv`, `ger.check.md` and `ger.reconcile.tsv` are unchanged. Their lines on deleted rows (the ids in section 1) no longer apply. The second-source agent skips them.
+
+## Second source, pass 2
+
+Date: 2026-10-17. File: `ger.check2.tsv`. Input: the 426 lines of `ger.check.tsv` with verdict `no second source`. 222 lines name rows that pass 2 deleted, and I skipped them. 133 lines name a field that holds `unknown` or an inference (registration, and `subs_used` and `bench` with `unknown`), and I skipped them. 15 lines name the DFB-Pokal `bench` of 2001/02 to 2015/16 (ger-10 to ger-192). The row notes mark that value as an inference from final line-ups, so I skipped them too. 56 lines remained. Each second source is from another publisher than the first source. I read each page on 2026-10-17.
+
+| Verdict | Lines |
+|---|---|
+| agree | 51 |
+| disagree, settled | 1 |
+| disagree, still split | 0 |
+| no second source | 4 |
+
+Main second sources:
+
+- League cup 2001 to 2007 (name, clubs, format): fussballarchiv.de.tl (official names, entry rules per edition), fussballdaten.de (6 teams and the rounds of each edition) and Horizont of 10 July 2007 (2007 entry rule and the Premiere-Ligapokal name).
+- DFB-Pokal `bench` and `subs_used`: DFB Durchführungsbestimmungen of December 2016, September 2022, October 2023 and July 2024, DFB Offizielle Mitteilungen 4/2018, the DFB-Pokal implementing rules 2025/26, Sport1 (August 2019) and BDFL (August 2021).
+- 2027/28 rows (ger-339 to ger-341, ger-350, ger-351): the DFL Spielordnung of 4 August 2026, the DFL Lizenzordnung Spieler of 1 July 2026, bundesliga.com, dfb.de and fussballdaten.de. These rows carry the current rules forward. The second source confirms the 2026/27 rule, and states no change for 2027/28.
+
+### Change to ger.tsv
+
+- ger-338 (2026/27 nation rules) `windows`. Old: "winter from 1 January 2027, end date not announced on 2026-10-16 (standard rule: 31 January)". New: "winter 1 January to 1 February 2027, ending at 20:00". Decision: second. The DFL Lizenzordnung Spieler (Stand 1 July 2026, footnote to § 4) gives the decision of 10 June 2026. 31 January 2027 is a Sunday, so the window ends on Monday 1 February. The summer part agrees with fussballdaten (1 September 2026, 20:00). `notes` and `sources` of the row now cite https://media.bundesliga-gruppe.de/sites/2/2026/07/Lizenzordnung-Spieler-LOS-2026-07-01-Stand.pdf. This is primary rule text, so I did not look for a third publisher.
+
+### Other findings
+
+- ger-37 and ger-50 (league cup 2003 and 2004): the 9th-placed club took the last place, because places 6 to 8 played in the UI Cup. The `format` value "next club in" fits this reading. I did not change it.
+- DFB-Pokal bench: the team sheet grew from 18 to 20 players in 2019/20 (Sport1, and DFB text of July 2019). This agrees with bench 7 up to 2018/19.
+
+### No second source
+
+- ger-13 and ger-26 `foreign` (5 non-European players, 2001/02 and 2002/03). dfl.de gives the limit from 2004/05 only. A newsgroup thread gives 2003/04 only.
+- ger-335 and ger-348 `subs_used` (DFB-Pokal 2026/27 and 2027/28). No DFB-Pokal rule text for 2026/27 was found. The 2025/26 text gives five.
+
+`rules_lint.py`: ger.tsv 0 problems before and after.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
+
+- Added 40 rows, ger-352 to ger-391: `ger_regional` Regionalliga Nord and Regionalliga Süd, 2008/09 to 2027/28, with `format` = `not held`. The Regionalliga ended as tier 3 after 2007/08 and became tier 4 (Q331). Each pair follows the 3. Liga row of its season. Source: https://en.wikipedia.org/wiki/Regionalliga (levels 3 from 1994 to 2008, 4 from 2008), read on 2026-10-17.

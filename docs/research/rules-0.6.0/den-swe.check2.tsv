@@ -1,0 +1,190 @@
+id	field	verdict	second_url	note
+den-swe-3	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	same value on the DBU statistics page
+den-swe-3	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	same value on the DBU statistics page
+den-swe-3	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	no play-off listed; top 2 up, bottom 2 down
+den-swe-3	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	one table of 16, 30 rounds
+den-swe-3	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	page name "1. division"
+den-swe-4	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	same value on the DBU statistics page
+den-swe-4	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	same value on the DBU statistics page
+den-swe-4	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2002	page name "2. division"
+den-swe-9	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	same value on the DBU statistics page
+den-swe-9	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	Hvidovre IF, B 1909 and HIK relegated
+den-swe-9	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	same value on the DBU statistics page
+den-swe-9	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	same value on the DBU statistics page
+den-swe-9	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	page name "1. division"
+den-swe-10	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	same value on the DBU statistics page
+den-swe-10	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	same value on the DBU statistics page
+den-swe-10	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2003	page name "2. division"
+den-swe-16	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2004	same value on the DBU statistics page
+den-swe-16	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2004	same value on the DBU statistics page
+den-swe-16	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2004	page name "2. division"
+den-swe-22	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2005	same value on the DBU statistics page
+den-swe-22	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2005	same value on the DBU statistics page
+den-swe-22	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2005	page name "2. division"
+den-swe-28	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2006	same value on the DBU statistics page
+den-swe-28	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2006	2. division vest 14 and 2. division øst 14
+den-swe-28	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2006	page names "2. division vest" and "2. division øst"
+den-swe-58	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2011	same value on the DBU statistics page
+den-swe-58	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2011	4 per group to Danmarksserien
+den-swe-58	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2011	group winners qualify for play-off for promotion; the 1st Division page says promotion from the 2nd Division was cut to one club
+den-swe-58	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2011	same value on the DBU statistics page
+den-swe-58	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2011	same value on the DBU statistics page
+den-swe-64	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2012	same value on the DBU statistics page
+den-swe-64	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2012	4 per group to Danmarksserien
+den-swe-64	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2012	group winners qualify for play-off for promotion; promotion cut to one club
+den-swe-64	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2012	same value on the DBU statistics page
+den-swe-64	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2012	same value on the DBU statistics page
+den-swe-70	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2013	same value on the DBU statistics page
+den-swe-70	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2013	2 per group to Danmarksserien
+den-swe-70	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2013	14th of each group (Kjellerup IF, BK Fremad Amager) to extra play-offs for a 2nd Division place
+den-swe-70	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2013	same value on the DBU statistics page
+den-swe-70	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2013	same value on the DBU statistics page
+den-swe-76	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2014	same value on the DBU statistics page
+den-swe-76	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2014	3 per group to Danmarksserien
+den-swe-76	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2014	group winners promoted directly; no play-off listed
+den-swe-76	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2014	same value on the DBU statistics page
+den-swe-76	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2014	same value on the DBU statistics page
+den-swe-82	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2015	same value on the DBU statistics page
+den-swe-82	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2015	5 per group to Danmarksserien
+den-swe-82	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2015	11th of each group (Middelfart G&BK, Rishøj BK) to extra play-offs for a 2nd Division place
+den-swe-82	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2015	same value on the DBU statistics page
+den-swe-82	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2015	same value on the DBU statistics page
+den-swe-88	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2016	same value on the DBU statistics page
+den-swe-88	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2016	AB Tårnby and B 1908 relegated from the qualification play
+den-swe-88	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2016	same value on the DBU statistics page
+den-swe-88	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2016	3 groups of 8 (14 rounds), then promotion play (12 clubs) and qualification play (12 clubs)
+den-swe-88	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2016	same value on the DBU statistics page
+den-swe-94	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2017	same value on the DBU statistics page
+den-swe-94	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2017	Holbæk B&IF, FC Svendborg, Vejgaard BK and Fredensborg BI relegated
+den-swe-94	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2017	same value on the DBU statistics page
+den-swe-94	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2017	same value on the DBU statistics page
+den-swe-94	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2017	same value on the DBU statistics page
+den-swe-100	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2018	same value on the DBU statistics page
+den-swe-100	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2018	Greve Fodbold, Næsby BK, VSK Aarhus and IF Lyseng relegated
+den-swe-100	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2018	same value on the DBU statistics page
+den-swe-100	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2018	same value on the DBU statistics page
+den-swe-100	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2018	same value on the DBU statistics page
+den-swe-106	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2019	same value on the DBU statistics page
+den-swe-106	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2019	Odder I&GF, Tarup-Paarup IF, Kjellerup IF and BK Marienlyst relegated
+den-swe-106	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2019	same value on the DBU statistics page
+den-swe-106	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2019	vest 12 and øst 12 (22 rounds), top 6 of each to promotion play of 12, others to qualification play of 12
+den-swe-106	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2019	same value on the DBU statistics page
+den-swe-112	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2020	same value on the DBU statistics page
+den-swe-112	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2020	page: five clubs were to go down; in the COVID-19 pause the clubs agreed a change and only two went down
+den-swe-112	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2020	same value on the DBU statistics page
+den-swe-112	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2020	vest 12 and øst 12, then promotion play and qualification play
+den-swe-112	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2020	same value on the DBU statistics page
+den-swe-122	subs_used	agree	https://bold.dk/fodbold/nyheder/antal-baenkpladser-udvides-fra-syv-til-ni-i-sl	Divisionsforeningen (12 July 2022): five substitutions now permanent. Match report https://www.danskfodbold.com/kamp.php?ID=69640 (2021/22) shows 5 substitutions per team
+den-swe-122	bench	agree	https://bold.dk/fodbold/nyheder/antal-baenkpladser-udvides-fra-syv-til-ni-i-sl	bench rises from seven to nine (one a reserve goalkeeper) in the Superliga and the 1st Division from 2022/23
+den-swe-128	subs_used	agree	https://bold.dk/fodbold/nyheder/antal-baenkpladser-udvides-fra-syv-til-ni-i-sl	Divisionsforeningen (12 July 2022): five substitutions now permanent; bench rises from seven to nine for 2022/23
+den-swe-128	bench	agree	https://bold.dk/fodbold/nyheder/antal-baenkpladser-udvides-fra-syv-til-ni-i-sl	bench rises from seven to nine (one a reserve goalkeeper) in the Superliga and the 1st Division from 2022/23
+den-swe-142	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2025	same value on the DBU statistics page
+den-swe-142	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2025	BK Frem and Nykøbing FC to the 3rd Division
+den-swe-142	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2025	same value on the DBU statistics page
+den-swe-142	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2025	22 rounds, then promotion play of 6 and qualification play of 6; final tables show 32 matches with points carried
+den-swe-142	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2025	same value on the DBU statistics page
+den-swe-148	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2026	same value on the DBU statistics page
+den-swe-148	up	agree	https://www.danskfodbold.com/tabel.php?seasonid=2026	AB and Vendsyssel FF promoted
+den-swe-148	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2026	Ishøj IF and FC Helsingør to the 3rd Division
+den-swe-148	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2026	same value on the DBU statistics page
+den-swe-148	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2026	same value on the DBU statistics page
+den-swe-148	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2026	same value on the DBU statistics page
+den-swe-152	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-152	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	5th and 6th of the qualification play relegated
+den-swe-152	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	4th of the championship play meets the winner of the qualification play for a Conference League place; the page does not give the number of matches
+den-swe-152	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	1-6 to the championship play, 7-12 to the qualification play
+den-swe-152	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-153	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-153	up	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	1st and 2nd of the promotion play up
+den-swe-153	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	5th and 6th of the qualification play down
+den-swe-153	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-153	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-153	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-154	clubs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-154	up	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	1st and 2nd of the promotion play up
+den-swe-154	down	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	5th and 6th of the qualification play down to the 3rd Division
+den-swe-154	playoffs	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-154	split	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-154	name	agree	https://www.danskfodbold.com/tabel.php?seasonid=2027	same value on the DBU statistics page
+den-swe-155	name	agree	https://sport.tv2.dk/fodbold/pokalturnering	page title "DBU Pokalen 2026/27"; Danish Cup is the English name of DBU Pokalen (sponsor name Oddset Pokalen)
+den-swe-156	format	no second source	https://www.rsssf.org/tablesd/densupcuphist.html	RSSSF (updated 30 May 2025) lists the last final in 2004, but it does not cover 2026/27
+den-swe-156	name	agree	https://www.rsssf.org/tablesd/densupcuphist.html	RSSSF lists it as the Danish Super Cup
+den-swe-166	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=16054	6 groups of 12 in 2002 (Norrland 16054, Södra Götaland 22894, Västra Götaland 7043, Västra Svealand 6555, Östra Götaland 3916, Östra Svealand 5891), each page gives 12 clubs
+den-swe-166	up	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=16054	derived, not stated: 3 of the 6 group winners play in Superettan in 2003, the other 3 stay in Division 2, so no group winner went up directly
+den-swe-166	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=16054	derived, not stated: on the club pages linked from the six series pages, the 11th and 12th of every group play in Division 3 in 2003
+den-swe-166	playoffs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=16054	derived, not stated: half the group winners went up and the 10th went down in 3 of 6 groups, which fits winners and 10th in play-offs
+den-swe-166	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=16054	6 regional groups of 12 (same six series pages)
+den-swe-166	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=16054	series name "Division 2 <region>"
+den-swe-181	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-187	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-193	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-199	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-205	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-211	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-217	windows	agree	https://www.dif.se/nyheter/2011/transferfonstret-sa-funkar-det	Djurgarden club article of 2011: table 'Sverige 1/1-31/3 1/8-31/8' (window 1 and window 2); the Swedish window stays open to 31 March
+den-swe-220	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4664	Division 1 Norra 2011 (serieid 4664) and Södra (serieid 3925): 14 clubs each. https://ettanfotboll.se/om-oss/ states 14 clubs in each series from 2006 to 2017
+den-swe-220	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4664	derived, not stated: on the club pages, the 12th to 14th of both series play in Division 2 or lower the next year
+den-swe-220	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4664	two series, Norra (serieid 4664) and Södra (serieid 3925), 14 clubs each
+den-swe-220	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4664	series name "Division 1 Norra" and "Division 1 Södra"
+den-swe-223	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-226	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4665	Division 1 Norra 2012 (serieid 4665) and Södra (serieid 17846): 14 clubs each. https://ettanfotboll.se/om-oss/ states 14 clubs in each series from 2006 to 2017
+den-swe-226	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4665	derived, not stated: on the club pages, the 12th to 14th of both series play in Division 2 or lower the next year
+den-swe-226	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4665	two series, Norra (serieid 4665) and Södra (serieid 17846), 14 clubs each
+den-swe-226	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=4665	series name "Division 1 Norra" and "Division 1 Södra"
+den-swe-232	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=6415	Division 1 Norra 2013 (serieid 6415) and Södra (serieid 3927): 14 clubs each. https://ettanfotboll.se/om-oss/ states 14 clubs in each series from 2006 to 2017
+den-swe-232	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=6415	derived, not stated: on the club pages, the 12th to 14th of both series play in Division 2 or lower the next year
+den-swe-232	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=6415	two series, Norra (serieid 6415) and Södra (serieid 3927), 14 clubs each
+den-swe-232	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=6415	series name "Division 1 Norra" and "Division 1 Södra"
+den-swe-235	windows	no second source		no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-238	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=22026	Division 1 Norra 2014 (serieid 22026) and Södra (serieid 21715): 14 clubs each. https://ettanfotboll.se/om-oss/ states 14 clubs in each series from 2006 to 2017
+den-swe-238	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=22026	derived, not stated: on the club pages, the 12th to 14th of both series play in Division 2 or lower the next year
+den-swe-238	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=22026	two series, Norra (serieid 22026) and Södra (serieid 21715), 14 clubs each
+den-swe-238	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=22026	series name "Division 1 Norra" and "Division 1 Södra"
+den-swe-241	windows	agree	https://fotbolldirekt.se/?p=27423 ; https://fotbolldirekt.se/?p=68165	FotbollDirekt 1 Feb 2015: the Swedish window closes on 31 March; 24 June 2015: the Swedish summer window opens on 15 July
+den-swe-244	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=23525	Division 1 Norra 2015 (serieid 23525) and Södra (serieid 24557): 14 clubs each. https://ettanfotboll.se/om-oss/ states 14 clubs in each series from 2006 to 2017
+den-swe-244	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=23525	derived, not stated: on the club pages, the 12th to 14th of both series play in Division 2 or lower the next year
+den-swe-244	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=23525	two series, Norra (serieid 23525) and Södra (serieid 24557), 14 clubs each
+den-swe-244	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=23525	series name "Division 1 Norra" and "Division 1 Södra"
+den-swe-247	windows	agree	https://fotbolldirekt.se/?p=64659 ; https://fotbolldirekt.se/?p=62000	FotbollDirekt 1 Feb 2016: the Swedish window closes on 31 March; 13 July 2016: the window for Allsvenskan clubs opens on 15 July
+den-swe-250	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=26282	Division 1 Norra 2016 (serieid 26282) and Södra (serieid 26080): 14 clubs each. https://ettanfotboll.se/om-oss/ states 14 clubs in each series from 2006 to 2017
+den-swe-250	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=26282	derived, not stated: on the club pages, the 12th to 14th of both series play in Division 2 or lower the next year (the 11th of Södra also went down, after the relegation play-off that the row lists)
+den-swe-250	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=26282	two series, Norra (serieid 26282) and Södra (serieid 26080), 14 clubs each
+den-swe-250	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=26282	series name "Division 1 Norra" and "Division 1 Södra"
+den-swe-253	windows	agree	https://fotbolldirekt.se/?p=58162 ; https://fotbolldirekt.se/?p=57538	FotbollDirekt 24 Mar 2017: the Swedish window closes on 31 March; 4 May 2017: it opens again on 15 July and closes on 11 August
+den-swe-256	clubs	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=27466	Division 1 Norra 2017 (serieid 27466) and Södra (serieid 27087): 14 clubs each. https://ettanfotboll.se/om-oss/ states 14 clubs in each series from 2006 to 2017
+den-swe-256	down	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=27466	derived, not stated: on the club pages, the 12th to 14th of both series play in Division 2 or lower the next year
+den-swe-256	split	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=27466	two series, Norra (serieid 27466) and Södra (serieid 27087), 14 clubs each
+den-swe-256	name	agree	https://www.svenskafotbollsklubbar.se/showserie.php?serieid=27466	series name "Division 1 Norra" and "Division 1 Södra"
+den-swe-259	windows	no second source		only the 2018 summer window (closing 11 August) found on FotbollDirekt and Fotbollskanalen; no 2018 page of another publisher states the winter window. no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-265	windows	no second source		only the 2019 summer window (opening 15 July) found on FotbollDirekt (?p=47342); no 2019 page of another publisher states the winter window. no page of another publisher found in the retry (2026-10-17). Searched: fotbolldirekt.se archive (from 2012), Fotbollskanalen, dif.se, SvFF rule texts (the oldest SvFF representation rules online are of 2022). FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden
+den-swe-272	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2020/5/fem-byten/	SvFF board: five substitutions at three stoppages in 2020 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2019/20
+den-swe-273	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2020/5/fem-byten/	SvFF board: five substitutions at three stoppages in 2020 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2019/20
+den-swe-274	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2020/5/fem-byten/	SvFF board: five substitutions at three stoppages in 2020 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2019/20
+den-swe-275	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2020/5/fem-byten/	SvFF board: five substitutions at three stoppages in 2020 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2019/20
+den-swe-277	windows	agree	https://fotbolldirekt.se/?p=40249 ; https://fotbolldirekt.se/?p=39187	FotbollDirekt 17 Mar 2021: the Allsvenskan window closes on 31 March; 10 July 2021: the Swedish window opens on 15 July
+den-swe-278	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2021/02/coronaanpassade-bestammelser-2021/	SvFF board: five substitutions at three stoppages in 2021 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2020/21
+den-swe-279	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2021/02/coronaanpassade-bestammelser-2021/	SvFF board: five substitutions at three stoppages in 2021 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2020/21
+den-swe-280	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2021/02/coronaanpassade-bestammelser-2021/	SvFF board: five substitutions at three stoppages in 2021 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2020/21
+den-swe-281	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2021/02/coronaanpassade-bestammelser-2021/	SvFF board: five substitutions at three stoppages in 2021 in Allsvenskan, Superettan, Ettan and the rest of Svenska Cupen 2020/21
+den-swe-283	foreign	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/vasterbotten/block/tavling/tavlingsdokument/tb-2022.pdf ; https://fotbolldirekt.se/?p=38095	derived, not stated: SvFF Tavlingsbestammelser 2022, 4 kap. 4 and 5 §: at least half of the team sheet must be homegrown and at most 7 substitutes, so at most 9 of 18 non-homegrown. The explicit cap of nine is in the 2023 text. FotbollDirekt 27 Oct 2021 states the nine-player quota
+den-swe-283	windows	agree	https://aktiva.svenskfotboll.se/4ad8ea/globalassets/svff/dokumentdokumentblock/tavling/stadgar--reglementen/representationsbestammelser.pdf	SvFF Representationsbestammelser 2022 (in force 26 Nov 2021): two registration periods, 8 January to 31 March and, for men, 15 July to 11 August
+den-swe-284	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2022/03/fem-byten-i-de-hogre-forbundsserierna-aven-sasongen-2022/	SvFF board: five substitutions at three stoppages in Allsvenskan, Superettan and Ettan in 2022
+den-swe-284	bench	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/vasterbotten/block/tavling/tavlingsdokument/tb-2022.pdf	SvFF Tavlingsbestammelser 2022, 4 kap. 5 §: at most seven substitutes on the team sheet in the national leagues
+den-swe-285	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2022/03/fem-byten-i-de-hogre-forbundsserierna-aven-sasongen-2022/	SvFF board: five substitutions at three stoppages in Allsvenskan, Superettan and Ettan in 2022
+den-swe-285	bench	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/vasterbotten/block/tavling/tavlingsdokument/tb-2022.pdf	SvFF Tavlingsbestammelser 2022, 4 kap. 5 §: at most seven substitutes on the team sheet in the national leagues
+den-swe-286	subs_used	agree	https://www.svenskfotboll.se/nyheter/serier/2022/03/fem-byten-i-de-hogre-forbundsserierna-aven-sasongen-2022/	SvFF board: five substitutions at three stoppages in Allsvenskan, Superettan and Ettan in 2022
+den-swe-287	subs_used	agree	https://www.svenskfotboll.se/49be62/globalassets/distrikt/dalarna/dokument/tavling/2021-svenska-cupen-2021-2022---reviderade-2021-06-03.pdf	SvFF Svenska Cupen 2021/2022 rules 2 §: at most five of seven substitutes may come on
+den-swe-289	foreign	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/stockholm/dokument/tavling/2023/tavlingsbestammelser-2023.pdf	SvFF Tavlingsbestammelser 2023, 4 kap. 4 §: at least half of the team sheet homegrown, at most nine non-homegrown (Allsvenskan to Ettan)
+den-swe-290	bench	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/stockholm/dokument/tavling/2023/tavlingsbestammelser-2023.pdf	SvFF Tavlingsbestammelser 2023, 4 kap. 5 §: at most seven substitutes, but at most nine in Allsvenskan and its play-off
+den-swe-291	bench	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/stockholm/dokument/tavling/2023/tavlingsbestammelser-2023.pdf	SvFF Tavlingsbestammelser 2023, 4 kap. 5 §: at most seven substitutes; the exception of nine names only Allsvenskan
+den-swe-295	foreign	agree	https://www.svenskfotboll.se/48dc02/globalassets/svff/dokumentdokumentblock/tavling/tavlingsforeskrifter/2024/tb-2024-v1-231207.pdf	SvFF Tavlingsbestammelser 2024, 4 kap. 4 §: at most nine non-homegrown players on the team sheet
+den-swe-301	foreign	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/stockholm/dokument/tavling/2025/tavlingsbestammelser-2025.pdf	SvFF Tavlingsbestammelser 2025, 4 kap. 4 §: at most nine non-homegrown players on the team sheet
+den-swe-301	windows	agree	https://www.svenskfotboll.se/49ef73/globalassets/svff/dokumentdokumentblock/tavling/tavlingsforeskrifter/2025/representationsbestammelser-2025-v5-250703.pdf	SvFF Representationsbestammelser 2025: two registration periods, 29 January to 25 March and 8 July to 29 August
+den-swe-307	foreign	agree	https://www.svenskfotboll.se/4a7e60/globalassets/distrikt/stockholm/dokument/tavling/2026/tavlingsbestammelser-2026.pdf	SvFF Tavlingsbestammelser 2026, 4 kap. 4 §: at most nine non-homegrown players on the team sheet
+den-swe-307	windows	agree	https://www.svenskfotboll.se/494190/globalassets/svff/dokumentdokumentblock/tavling/tavlingsforeskrifter/2026/rb-2026-v2-20260311.pdf	SvFF Representationsbestammelser 2026 (v2, 11 March 2026): two registration periods, 29 January to 25 March and 7 July to 31 August
+den-swe-308	down	agree	https://svenskelitfotboll.se/en/allsvenskan	Svensk Elitfotboll: "The two teams at the bottom of Allsvenskan are relegated to Superettan" (the page still names the old 3rd-place play-off)
+den-swe-308	playoffs	agree	https://www.svenskfotboll.se/serier-cuper/kvalspel/kval/	SvFF play-off page 2026: 3rd and 4th of Superettan play round 1 (4th at home first); the winner plays the Allsvenskan 14th, winner of round 1 at home first. The page does not give the away-goals rule
+den-swe-308	split	agree	https://svenskelitfotboll.se/en/allsvenskan	one league of 16 clubs; no split on the page
+den-swe-310	up	agree	https://www.ettanfotboll.se/kvalet-till-ettan-och-superettan	league body (12 November 2025): the two series winners go up to Superettan and the runners-up play off; this is the 2025 season, and the 2026 SvFF play-off page keeps the runners-up play-off (https://www.svenskfotboll.se/serier-cuper/kvalspel/kval/)
+den-swe-310	down	no second source		no page of another publisher states the 2026 relegation places; the SvFF play-off page only gives the 13th play-off
+den-swe-310	playoffs	agree	https://www.svenskfotboll.se/serier-cuper/kvalspel/kval/	SvFF play-off page 2026: Superettan 13th and 14th play the Division 1 runners-up in pairs; the 13th of each Division 1 series plays a group winner of the Division 2 runners-up round

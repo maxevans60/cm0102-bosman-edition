@@ -2,8 +2,8 @@
 
 Files:
 
-- `ita.tsv`: 459 rows, 17 competitions for each of the 27 seasons from 2001/02 to 2027/28.
-- `ita-clubs.tsv`: 1,573 club rows for the divisions whose real club count differs from the season database, or that are new.
+- `ita.tsv`: 432 rows, 16 competitions for each of the 27 seasons from 2001/02 to 2027/28 (459 rows before pass 2, which deleted Serie D).
+- `ita-clubs.tsv`: 2,095 club rows for the divisions whose real club count differs from the season database, that are new, or that club moves leave short (1,573 before pass 2).
 
 ## Method
 
@@ -23,7 +23,6 @@ Files:
 | Serie C1 group A and B (Lega Pro Prima Divisione from 2008/09) | ita_ser_c1a, ita_ser_c1b | 2001/02 to 2013/14 |
 | Serie C2 group A, B and C (Lega Pro Seconda Divisione from 2008/09) | ita_ser_c2a, ita_ser_c2b, ita_ser_c2c | 2001/02 to 2013/14 (group C to 2010/11) |
 | Serie C group A, B and C (Lega Pro to 2016/17) | new | 2014/15 on |
-| Serie D | new | fourth tier from 2014/15; earlier rows for context only |
 | Coppa Italia | ita_cup | all |
 | Coppa Italia Serie C (Coppa Italia Lega Pro 2008/09 to 2016/17) | ita_c_cup | all except 2020/21 |
 | Supercoppa Italiana | ita_super | all |
@@ -143,3 +142,105 @@ Fields filled: 275 `name`. Every name matched a page that the row already cites.
 Disagreements: none found.
 
 Lint after the pass: 0 problems.
+
+## Pass 2
+
+Date: 2026-10-17. This pass applies Max's decisions Q268 to Q331. Row ids stay. Lint after the pass: 0 problems (0 before).
+
+### No new tiers (Q331, Q288)
+
+The original runs Italy down to Serie C2 (`ita_ser_c2a` to `ita_ser_c2c`). Max's own example for Q331 is that the original stops at Serie C, so Serie D does not come in.
+
+- Deleted the 27 Serie D rows (`comp` = `Serie D`, ids ita-12, ita-29, ita-46 and so on to ita-454). `ita-clubs.tsv` held no Serie D club rows.
+- The Serie C2 rows already say `not held` from 2014/15, when the real fourth tier of the Lega Pro ended. From 2014/15 the game's lowest Italian tier is Serie C.
+- Italy needs no nation that a game cannot select. No row was deleted for that reason.
+- The Coppa Italia rows of 2008/09 to 2013/14 keep their 9 Serie D entrants. A cup is not a tier. The build takes these entrants from the database clubs of the spare Serie D division.
+- The Supercoppa di Lega di Seconda Divisione stays, because it is the cup of an existing tier (Serie C2).
+
+### Conflicts and open points
+
+1. Non-EU rule 2001/02 (`ita-1`, `foreign`). Settled: Serie A clubs may register at most 5 non-EU players from foreign federations (Serie B 1), with no limit in the match list from May 2001. The FIGC dropped the cap of 3 in the match list on 4 May 2001 (https://sport.sky.it/calciomercato/2015/01/21/mercato_story_nakata_alla_roma_polemica_extracomunitari_juventus). L'Unita of 21 February 2003 says the limit of 5 registered stayed and that all 5 could play from 2001 (https://archivio.unita.news/assets/main/2003/02/21/page_020.pdf). FIGC C.U. 194/A still prints NOIF art. 40.7 with 5 and 1 in June 2004. The Serie B value of 1 comes from the 2004 text only.
+2. Substitutes in the third tier from 2017/18. Settled: 5 substitutes, in at most three stoppages plus half-time, in the league, the play-offs, the play-outs and the Supercoppa Serie C.
+   - 2017/18: Lega Pro trial (https://www.calcioefinanza.it/2017/08/22/lega-pro-2017-2018-sostituzioni/). Rows ita-281 to ita-283 and ita-288.
+   - 2018/19: FIGC authorisation for the 2018/19 season (https://archivio.tuttomercatoweb.com/2018/serie-c-confermate-le-5-sostituzioni-anche-nella-prossima-stagione-1141202). Rows ita-298 to ita-300 and ita-305.
+   - 2019/20: FIGC Federal Council authorisation of 31 July 2019 (https://www.tuttoreggina.com/serie-c/serie-c-2019-2020-confermate-le-cinque-sostituzioni-la-nota-51057). Rows ita-315 to ita-317.
+   - The authorisations name no Coppa Italia Serie C. Those rows keep 3. The Supercoppa rows before 2017/18 stay `unknown`.
+3. Serie D (open point in "Unknowns"). Closed by Q331: Serie D does not come in.
+4. The clubs of database group C2/C in 2011/12 to 2013/14 (open point in "Season databases and club moves"). Closed by Q290: they become clubs with no division. In the same way, from 2014/15 the database clubs of the five third-tier groups that have no real Serie C place have no division.
+
+### Club moves (Q279, Q280, Q290)
+
+The first pass listed a tier only where its real club count differed from the database. Where Serie A or Serie B takes clubs from Serie C1, C1 is short, and C1 then takes clubs from C2. This pass lists every real club of each tier that the club moves leave short, or whose database clubs differ from the real clubs. The source is the final table of each group on the Italian Wikipedia season page. A script matched each club to the season database by name, and I checked every match whose names differ. Where a name changed, the club id of a later database confirmed the match (for example Cremapergo and Pergocrema, Cisco Collatino and Cisco Roma).
+
+Added 522 club rows:
+
+| Season | Database | Tiers added |
+|---|---|---|
+| 2003/04 | October 2003 | C1 groups A and B, C2 groups A to C |
+| 2005/06 | September 2005 | C1 groups A and B, C2 groups A to C |
+| 2007/08 | November 2007 | C1 groups A and B, C2 groups A to C |
+| 2008/09 | September 2008 | Prima Divisione groups A and B, Seconda Divisione groups A to C |
+| 2009/10 | September 2009 | Prima Divisione groups A and B, Seconda Divisione groups A to C |
+| 2010/11 | September 2010 | Prima Divisione groups A and B |
+| 2011/12 | September 2011 | Prima Divisione groups A and B |
+
+The Seconda Divisione of 2012/13 and 2013/14 matches the database groups C2/A and C2/B club for club, so it gets no rows. Serie A 2003/04 matches the database.
+
+Matches to note:
+
+- CuoioCappiano 2003/04 and 2005/06 matches the database record "Cappiano-Romaiano". The club came from the merger of Cappiano Romaiano with Cuoiopelli in June 2003 (https://it.wikipedia.org/wiki/Cuoiopelli_Cappiano_Romaiano). From November 2007 the database has a record "Cuoiopelli" in C2/B, and the rows use it.
+- Belluno 2003/04 matches "Seppelfricke Bellunopontalpi" (the same club id is "Belluno" from September 2011).
+
+### Missing clubs (for Max)
+
+These divisions still lack a club after the club moves. The season database holds no record of the club. No club records were added.
+
+| Season | Division | Club |
+|---|---|---|
+| 2005/06 | Serie C2 girone A | Carpenedolo |
+| 2005/06 | Serie C2 girone C | Gallipoli, Rende, Modica |
+| 2007/08 | Serie C2 girone A | Caravaggese |
+| 2007/08 | Serie C2 girone C | Pescina Valle del Giovenco, Celano |
+| 2008/09 | Lega Pro Seconda Divisione girone A | Sambonifacese, Alghero |
+| 2020/21 | Serie C girone C | Trapani |
+| 2025/26 | Serie C girone B | Rimini |
+
+The November 2020 database holds "Trapani Calcio" with nation -1 and no division. The December 2025 database holds "Rimini FC" with nation -1 in the division "A Lower Division". These records are not Italian clubs by the database, so the pass did not take them (Q244). Max decides.
+
+### Reserve and B teams (Q289)
+
+Every reserve team that a tier needs is in its season database: Juventus U23 (Juventus Next Gen from 2022/23) from 2018/19, Atalanta U23 from 2023/24, Milan Futuro in 2024/25 and Inter U23 in 2025/26. The build adds no reserve team for Italy.
+
+### Part rules
+
+No part rule of the brief applies to Italy. Late editions already play in their normal slot (Q277).
+
+## Second source, pass 2
+
+Date: 2026-10-17. This pass took every line of `ita.check.tsv` with the verdict `no second source` and looked for a page of another publisher. It skipped 96 lines of rows that pass 2 deleted (Serie D), 282 lines whose field holds `unknown`, 6 lines whose value starts with `unknown` and 126 lines whose value is an inference. That leaves 374 lines, written to `ita.check2.tsv`. Lint after the pass: 0 problems (0 before).
+
+| Verdict | Lines |
+|---|---|
+| agree | 237 |
+| disagree, settled | 6 |
+| disagree, still split | 2 |
+| no second source | 129 |
+
+Main second sources:
+
+- Substitutes (3 to 2020, then 5): Virgilio Sport (https://sport.virgilio.it/sostituzioni-nel-calcio-come-funzionano-e-come-sono-cambiate-nel-tempo-794125) and La Sicilia, 5 June 2020, for the five substitutions to the end of 2019/20 (https://www.lasicilia.it/news/sport/786256/la-serie-a-come-la-serie-c-cinque-sostituzioni-ma-in-tre-slot.html).
+- Coppa Italia Serie C names: RSSSF (https://rsssf.org/tablesi/italcup2hist.html). Supercoppa di Serie C names: RSSSF (https://rsssf.org/tablesi/ital3supcuphist.html).
+- Serie A squad size with no cap to 2014/15: Il Post, 22 July 2015 (https://www.ilpost.it/2015/07/22/regola-25-calciatori-serie-a/).
+- Serie C promotion in 2026/27: Diretta.it.
+
+Changes to `ita.tsv`:
+
+1. Serie A tie-break play-offs, rows ita-376 (2023/24), ita-393, ita-410, ita-427 and ita-444. The first file had one match at a neutral venue for 1st and 17th place. Sky Sport (9 July 2023) and Calcio e Finanza (7 July 2023) agree that from 2023/24 the relegation play-off is two legs, with the better club by head-to-head at home in the second leg. The title play-off is one match at the home of the better club. Both play 90 minutes, then penalties. Sky Sport gives the same rule in May 2025. Decision: second. The `playoffs` field and its sources are new in these five rows. Row ita-359 (2022/23) keeps one match at a neutral venue.
+2. Rows ita-427 (2026/27) and ita-444 (2027/28) also say that no play-off is held when a club in it plays a UEFA club final. Head-to-head then decides. Source: Calcio e Finanza, 26 May 2026 (https://www.calcioefinanza.it/?p=227469).
+
+Other disagreements:
+
+- Supercoppa di Serie C, 2016/17 (ita-271). RSSSF says the cup kept the Prima Divisione name to 2017. Sky Sport, 27 May 2017, calls the 2017 edition the Supercoppa di Lega Pro. Decision: first. No change.
+- Supercoppa di Serie C, 2014/15 and 2015/16 (ita-237, ita-254). Conflict. RSSSF gives the Prima Divisione name to 2017. I found no third publisher that names these two editions. No Prima Divisione existed from 2014/15, so this is a question of reading. The value "Supercoppa di Lega Pro" stays. Max decides.
+
+Lines that still have no second source: the transfer windows (each page found confirms only one window of the season), the non-EU quotas, the Serie A squad list of 2018/19 to 2021/22, the Supercoppa names before 2008, the Seconda Divisione Supercoppa, the "Lega Pro girone" names, the cup club counts of 2004/05 to 2008/09 (Transfermarkt blocks scripted reads with a human check), the bench of 15 in Serie C and in the cups from 2023/24, the Serie B bench of 7, the Serie C2 rows of 2011/12 to 2013/14, and the rows of 2027/28, for which no page exists yet.

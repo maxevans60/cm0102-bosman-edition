@@ -1,0 +1,131 @@
+id	field	verdict	second_url	note
+por-3	subs_used	agree	https://arquivo.pt/wayback/20030614220113/https://afalgarve.pt/arbitragem/f11/lei03.htm	retry: Law III as published by AF Algarve (June 2003): at most three substitutions in official competitions
+por-12	subs_used	agree	https://arquivo.pt/wayback/20030614220113/https://afalgarve.pt/arbitragem/f11/lei03.htm	retry: Law III as published by AF Algarve (June 2003): at most three substitutions in official competitions
+por-15	clubs	no second source		retry: RSSSF lists every round; a count of its lists gives 224, an inference and not a stated total; no page states 226
+por-21	subs_used	agree	https://arquivo.pt/wayback/20030614220113/https://afalgarve.pt/arbitragem/f11/lei03.htm	retry: Law III as published by AF Algarve (June 2003): at most three substitutions in official competitions
+por-24	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-30	subs_used	agree	https://arquivo.pt/wayback/20060603175248/https://fpf.pt/regulamentos/rpo2005.pdf	FPF competition rules, 2005 edition, art. 104.06: three players may be substituted in official competitions
+por-33	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-39	subs_used	agree	https://arquivo.pt/wayback/20060603175248/https://fpf.pt/regulamentos/rpo2005.pdf	FPF competition rules, 2005 edition, art. 104.06: three substitutes in official competitions
+por-42	clubs	no second source		retry: Jornal de Matosinhos (October 2005) gives only the 140 clubs of round 1; no page states the total
+por-48	clubs	agree	https://arquivo.pt/wayback/20080223133816/http://www.zerozero.pt/edicao.php?id_edicao=1334	zerozero tables: Série A to D each 14 clubs (A id 1332, B 1331, C 1333, D 1334), 26 rounds
+por-48	down	agree	https://arquivo.pt/wayback/20070103221912/https://fpf.pt/comunicados/06/docs/co43.pdf	retry: FPF notice 43 (3 August 2006): clubs from 12th place down in each series go down; it gives 15 for a planned 3 x 14 + 1 x 16; with 4 x 14 the same rule gives 12 (inference)
+por-48	playoffs	agree	https://arquivo.pt/wayback/20070613114027/http://www.zerozero.pt/edicao.php?op=fasefinal&id_edicao=1330	zerozero final phase: the four series winners play two-legged ties, the two winners meet in the final
+por-48	split	agree	https://arquivo.pt/wayback/20080223133816/http://www.zerozero.pt/edicao.php?id_edicao=1334	zerozero: one stage of four series, then the play-off; no split
+por-48	format	agree	https://arquivo.pt/wayback/20080223133816/http://www.zerozero.pt/edicao.php?id_edicao=1334	zerozero: 4 series of 14, 26 rounds each (double round robin)
+por-48	subs_used	agree	https://arquivo.pt/wayback/20060603175248/https://fpf.pt/regulamentos/rpo2005.pdf	retry: FPF RPO art. 104.06, three substitutes in official competitions; the same text was on the FPF site in July 2007
+por-51	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-57	subs_used	agree	https://arquivo.pt/wayback/20070722075209/https://fpf.pt/portal/page/portal/portal_futebol/docs/regulamentos/rpo%202005.pdf	retry: FPF RPO art. 104.06 as on the FPF site in July 2007: three substitutes in official competitions
+por-60	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-63	foreign	no second source		retry: no page of another publisher states the 2007/08 rule
+por-66	clubs	agree	https://arquivo.pt/wayback/20091225143542/https://zerozero.pt/edicao.php?id_edicao=2366	zerozero series tables (ids 2364 to 2367): 12, 12, 11, 12 clubs
+por-66	up	disagree	https://arquivo.pt/wayback/20090927082038/https://fpf.pt/portal/page/portal/portal_futebol/comunicados2007/comunicadosoficiais/co239_quadro_competitivo_ii_divisao_cn_fut_11.pdf	FPF notice 239 (rules for 2008/09): only the two finalists of the third phase go up. Settled, see por.md
+por-66	down	disagree	https://arquivo.pt/wayback/20090927082038/https://fpf.pt/portal/page/portal/portal_futebol/comunicados2007/comunicadosoficiais/co239_quadro_competitivo_ii_divisao_cn_fut_11.pdf	FPF notice 239: 4th, 5th and 6th of each relegation series go down (3 per series), plus more 3rd-placed clubs if Azores clubs go down directly. Settled as conflict, see por.md
+por-66	playoffs	agree	https://arquivo.pt/wayback/20090927082038/https://fpf.pt/portal/page/portal/portal_futebol/comunicados2007/comunicadosoficiais/co239_quadro_competitivo_ii_divisao_cn_fut_11.pdf	FPF notice 239 and zerozero promotion series: top 6 of each series to a promotion series of 6, 7th to 12th to a relegation series
+por-66	split	agree	https://arquivo.pt/wayback/20090927082038/https://fpf.pt/portal/page/portal/portal_futebol/comunicados2007/comunicadosoficiais/co239_quadro_competitivo_ii_divisao_cn_fut_11.pdf	FPF notice 239: second phase in promotion and relegation series, clubs keep 50% of points
+por-66	format	agree	https://arquivo.pt/wayback/20090927082038/https://fpf.pt/portal/page/portal/portal_futebol/comunicados2007/comunicadosoficiais/co239_quadro_competitivo_ii_divisao_cn_fut_11.pdf	FPF notice 239: 4 series, double round robin, then second phase and a third phase
+por-66	name	agree	https://arquivo.pt/wayback/20091225143542/https://zerozero.pt/edicao.php?id_edicao=5631	zerozero and FPF: "II Divisão" (Campeonato Nacional da II Divisão)
+por-69	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-75	clubs	agree	https://arquivo.pt/wayback/20100505171430/https://desporto.publico.pt/noticia.aspx?id=1435624	Lusa report in Publico: Moreirense won Norte with 66 points; first source table gives 21-3-4 in 28 games, so Norte ended with 15 clubs. zerozero Dec 2009 still lists Valdevez as 16th club (withdrawn later, inference)
+por-75	up	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421 (rules from 2009/10): first and second of the second phase go up; Lusa: only two of the three go up
+por-75	down	disagree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421: 4 last of each zone (12), and from the end of 2009/10 the 2 worst 12th-placed clubs too (14). Settled as conflict, see por.md
+por-75	playoffs	agree	https://arquivo.pt/wayback/20100505171430/https://desporto.publico.pt/noticia.aspx?id=1435624	Lusa and FPF notice 421: the three zone winners play a double round robin mini-league. Neither page states weighted starting points; zerozero final table points (6, 5, 5) equal the results
+por-75	split	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421: first phase three zones, second phase of zone winners; no split
+por-75	format	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421: three zones (Norte, Centro, Sul) of 16, double round robin
+por-75	name	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421: Campeonato Nacional da II Divisão
+por-78	clubs	no second source		retry: Radio Portalegre (September 2009) gives only the 140 clubs of round 1 and 20 byes; no page states the total
+por-84	clubs	agree	https://arquivo.pt/wayback/20110704150234/http://www3.zerozero.pt/edicao.php?id_edicao=15964	zerozero 2010/11: Norte 16, Centro 16, Sul 16 (ids 15964, 15968, 15965), 30 rounds
+por-84	up	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421 (in force from 2009/10): first and second of the second phase go up
+por-84	down	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421: 4 last of each zone plus the 2 worst 12th-placed clubs (14)
+por-84	playoffs	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421: the three zone winners play a double round robin
+por-84	split	agree	https://arquivo.pt/wayback/20090926113934/https://oriental.pt/conteudos/uploads/files/oriental/regulamentoprovasoficiaisfut11cniidiviso.pdf	FPF notice 421: no split
+por-84	format	agree	https://arquivo.pt/wayback/20110704150234/http://www3.zerozero.pt/edicao.php?id_edicao=15964	zerozero: three zones of 16, 30 rounds
+por-84	name	agree	https://arquivo.pt/wayback/20110704150234/http://www3.zerozero.pt/edicao.php?id_edicao=15964	zerozero: II Divisão
+por-87	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-89	clubs	no second source		retry: the Portimonense club page (January 2012) gives the entrants per stage, 16 + 6 + 2 + 8 = 32, an inference and not a stated total
+por-93	clubs	agree	https://arquivo.pt/wayback/20120123103356/http://www.zerozero.pt/edicao.php?id_edicao=24169	zerozero 2011/12: Norte 16, Centro 16, Sul 16 (ids 24166, 24168, 24169)
+por-93	down	disagree	https://arquivo.pt/wayback/20120123103356/http://www.zerozero.pt/edicao.php?id_edicao=24169	zerozero legend for 2011/12 Sul shows an extra relegation place "worst 12th of the three series"; FPF notice 421 gives 4 per zone plus the 2 worst 12th-placed clubs. Settled as conflict, see por.md
+por-93	playoffs	agree	https://arquivo.pt/wayback/20180428064749/https://live.zerozero.pt/edicao.php?id_edicao=24171	retry: zerozero shows a 2nd phase of the three zone winners (Varzim, Tondela, Fatima), a double round robin
+por-93	split	agree	https://arquivo.pt/wayback/20141023195855/http://www.zerozero.pt/edicao.php?id_edicao=24168	zerozero: three zones, then a play-off; no split
+por-93	format	agree	https://arquivo.pt/wayback/20141023195855/http://www.zerozero.pt/edicao.php?id_edicao=24168	zerozero: three zones of 16, 30 rounds each
+por-93	name	agree	https://arquivo.pt/wayback/20141023195855/http://www.zerozero.pt/edicao.php?id_edicao=24168	zerozero: II Divisão
+por-96	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-98	clubs	no second source		retry: the Portimonense club page (January 2012) gives the entrants per stage, 16 + 6 + 2 + 8 = 32, an inference and not a stated total
+por-102	clubs	agree	https://arquivo.pt/wayback/20230218085955/https://www.zerozero.pt/edicao.php?id_edicao=48199	zerozero 2012/13: Norte 16, Centro 16, Sul 16 (ids 48199, 48201, 48202), 30 rounds
+por-102	down	agree	https://futalgarve.agr-tc.pt/2012/Reg_Pr_Ofics_CN_Seniores2012_13.pdf	retry: FPF notice 376 annex (April 2012): the last 2 clubs of each series go down to the districts
+por-102	playoffs	agree	https://futalgarve.agr-tc.pt/2012/Reg_Pr_Ofics_CN_Seniores2012_13.pdf	retry: FPF notice 376 annex: the 3 first-placed clubs go up to the II Liga; it names no play-off
+por-102	split	agree	https://arquivo.pt/wayback/20230218085955/https://www.zerozero.pt/edicao.php?id_edicao=48199	zerozero: three zones; no split
+por-102	format	agree	https://arquivo.pt/wayback/20230218085955/https://www.zerozero.pt/edicao.php?id_edicao=48199	zerozero: three zones of 16, double round robin (30 rounds)
+por-102	name	agree	https://arquivo.pt/wayback/20230218085955/https://www.zerozero.pt/edicao.php?id_edicao=48199	zerozero: II Divisão
+por-105	clubs	no second source		retry: no page of another publisher found; the first source infobox now reads 165, not 162 (see por.md)
+por-107	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-111	clubs	agree	https://arquivo.pt/wayback/20131107062443/https://fpf.pt/desktopmodules/bring2mind/dmx/download.aspx?portalid=0&tabid=156&entryid=25466	retry: FPF CNS rules: 80 clubs, 8 series of 10
+por-111	down	agree	https://arquivo.pt/wayback/20131107062443/https://fpf.pt/desktopmodules/bring2mind/dmx/download.aspx?portalid=0&tabid=156&entryid=25466	retry: FPF CNS rules: last 2 of each of 8 series and the 4 losers of the 6th-place ties, 20
+por-111	playoffs	agree	https://arquivo.pt/wayback/20131107062443/https://fpf.pt/desktopmodules/bring2mind/dmx/download.aspx?portalid=0&tabid=156&entryid=25466	retry: FPF CNS rules: top 2 of each series to 2 promotion series of 8, runners-up play a two-legged tie
+por-111	split	agree	https://arquivo.pt/wayback/20131107062443/https://fpf.pt/desktopmodules/bring2mind/dmx/download.aspx?portalid=0&tabid=156&entryid=25466	retry: FPF CNS rules: promotion series and maintenance/relegation series, the latter start with 50% of the points
+por-111	format	agree	https://arquivo.pt/wayback/20131107062443/https://fpf.pt/desktopmodules/bring2mind/dmx/download.aspx?portalid=0&tabid=156&entryid=25466	retry: FPF CNS rules: first phase double round robin, then second phase
+por-111	name	agree	https://arquivo.pt/wayback/20141001011123/https://zerozero.pt/edicao.php?id_edicao=59611	zerozero: Campeonato Nacional Seniores 2013/14
+por-114	clubs	agree	https://web.archive.org/web/20130709015759/https://www.fpf.pt/detalhenoticia/tabid/128/ArticleId/3187/language/pt-PT/Competicao-definida.aspx	retry: FPF news (July 2013): the cup will have 156 clubs
+por-116	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-120	clubs	agree	https://arquivo.pt/wayback/20141024014751/https://live.zerozero.pt/edicao.php?id_edicao=70060	zerozero 2014/15: Série A to H, each 10 clubs (ids 70060 to 70067)
+por-120	down	agree	https://arquivo.pt/wayback/20140930125320/https://fpf.pt/portals/0/documentos/regimentosregulamentos/c.o.%20n.%c2%ba%20444%20-%20campeonato%20nacional%20de%20s%c3%a9niores.pdf	retry: FPF CNS rules as online on 30 September 2014 (same text as 2013/14): 20
+por-120	playoffs	agree	https://arquivo.pt/wayback/20140930125320/https://fpf.pt/portals/0/documentos/regimentosregulamentos/c.o.%20n.%c2%ba%20444%20-%20campeonato%20nacional%20de%20s%c3%a9niores.pdf	retry: FPF CNS rules as online on 30 September 2014: as 2013/14
+por-120	split	agree	https://arquivo.pt/wayback/20140930125320/https://fpf.pt/portals/0/documentos/regimentosregulamentos/c.o.%20n.%c2%ba%20444%20-%20campeonato%20nacional%20de%20s%c3%a9niores.pdf	retry: FPF CNS rules as online on 30 September 2014: promotion and maintenance/relegation series
+por-120	format	agree	https://arquivo.pt/wayback/20140930125320/https://fpf.pt/portals/0/documentos/regimentosregulamentos/c.o.%20n.%c2%ba%20444%20-%20campeonato%20nacional%20de%20s%c3%a9niores.pdf	retry: FPF CNS rules as online on 30 September 2014: as 2013/14
+por-120	name	agree	https://arquivo.pt/wayback/20141024014751/https://live.zerozero.pt/edicao.php?id_edicao=70060	zerozero: Campeonato Nacional Seniores 2014/15
+por-123	clubs	agree	https://www.barlavento.pt/taca-de-portugal-201516-com-mais-equipas/	retry: Barlavento (May 2015): 135 teams took part in 2014/15
+por-125	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-126	registration	agree	https://arquivo.pt/wayback/20141008055720/https://ligaportugal.pt/media/37463/comunicado-oficial-01.zip	retry: Liga notice 1 of 2014/15: 27 senior players, 3 first-year seniors, 20 under-23 players, at least 8 locally trained; the figure of 10 with a B team is not on this page
+por-129	clubs	agree	https://arquivo.pt/wayback/20160210230933/https://fpf.pt/portals/0/documentos/regimentosregulamentos/regulamento%20campeonato%20nacional%20de%20seniores%20vf%20co%20438.pdf	retry: FPF CNS rules as changed by notice 438: 80 clubs
+por-129	down	agree	https://arquivo.pt/wayback/20160210230933/https://fpf.pt/portals/0/documentos/regimentosregulamentos/regulamento%20campeonato%20nacional%20de%20seniores%20vf%20co%20438.pdf	retry: FPF CNS rules as changed by notice 438: 22 (16 direct, 4 losers of the first ties, 2 losers of the second ties); an older copy without the change (sjpf.pt, November 2015) gives 20
+por-129	playoffs	agree	https://arquivo.pt/wayback/20160210230933/https://fpf.pt/portals/0/documentos/regimentosregulamentos/regulamento%20campeonato%20nacional%20de%20seniores%20vf%20co%20438.pdf	retry: FPF CNS rules as changed by notice 438
+por-129	split	agree	https://arquivo.pt/wayback/20160210230933/https://fpf.pt/portals/0/documentos/regimentosregulamentos/regulamento%20campeonato%20nacional%20de%20seniores%20vf%20co%20438.pdf	retry: FPF CNS rules as changed by notice 438
+por-129	format	agree	https://arquivo.pt/wayback/20160210230933/https://fpf.pt/portals/0/documentos/regimentosregulamentos/regulamento%20campeonato%20nacional%20de%20seniores%20vf%20co%20438.pdf	retry: FPF CNS rules as changed by notice 438
+por-132	clubs	no second source		retry: Barlavento (May 2015) gives a planned 160; no page states 155
+por-134	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-138	clubs	agree	https://arquivo.pt/wayback/20160606155025/https://fpf.pt/portals/0/documentos/regimentosregulamentos/campeonato_portugal_2016_17.pdf	retry: FPF CP rules 2016/17: 80 clubs, 8 series of 10
+por-138	down	agree	https://arquivo.pt/wayback/20160606155025/https://fpf.pt/portals/0/documentos/regimentosregulamentos/campeonato_portugal_2016_17.pdf	retry: FPF CP rules 2016/17: 16 direct, 4 losers of the first ties, 2 losers of the second ties, 22
+por-138	playoffs	agree	https://arquivo.pt/wayback/20160606155025/https://fpf.pt/portals/0/documentos/regimentosregulamentos/campeonato_portugal_2016_17.pdf	retry: FPF CP rules 2016/17: runners-up of the promotion series play the 17th and 18th of the II Liga; relegation series start with 25% of the points
+por-138	split	agree	https://arquivo.pt/wayback/20160606155025/https://fpf.pt/portals/0/documentos/regimentosregulamentos/campeonato_portugal_2016_17.pdf	retry: FPF CP rules 2016/17
+por-138	format	agree	https://arquivo.pt/wayback/20160606155025/https://fpf.pt/portals/0/documentos/regimentosregulamentos/campeonato_portugal_2016_17.pdf	retry: FPF CP rules 2016/17
+por-141	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-147	subs_used	agree	https://arquivo.pt/wayback/20170807062340/https://fpf.pt/downloaddocument.ashx?id=9122	retry: FPF CP rules 2017/18 art. on substitutions: up to 3
+por-150	clubs	no second source		retry: FPF news (August 2017) gives only the 120 clubs of round 1; no page states 153
+por-156	down	agree	https://arquivo.pt/wayback/20181110020142/https://fpf.pt/downloaddocument.ashx?id=11810	retry: FPF CP rules 2018/19: the last 5 of each series go down
+por-156	playoffs	agree	https://arquivo.pt/wayback/20181110020142/https://fpf.pt/downloaddocument.ashx?id=11810	retry: FPF CP rules 2018/19: top 2 of each series to two-legged play-offs; the 2 semi-final winners go up
+por-156	split	agree	https://arquivo.pt/wayback/20181110020142/https://fpf.pt/downloaddocument.ashx?id=11810	retry: FPF CP rules 2018/19: no second stage split
+por-156	format	agree	https://arquivo.pt/wayback/20181110020142/https://fpf.pt/downloaddocument.ashx?id=11810	retry: FPF CP rules 2018/19: 72 clubs in 4 series of 18, double round robin, then play-offs
+por-156	subs_used	agree	https://arquivo.pt/wayback/20181110020142/https://fpf.pt/downloaddocument.ashx?id=11810	retry: FPF CP rules 2018/19: up to 3
+por-159	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-159	subs_used	disagree	https://futalgarve.agr-tc.pt/2019/Regulamentos/Reg_Taca_Portugal.pdf	retry: FPF cup rules 2018/19 (start-of-season text, art. 44): up to 3, no 4th in extra time; settled in por.reconcile.tsv
+por-165	subs_used	agree	https://arquivo.pt/wayback/20190906165903/https://fpf.pt/downloaddocument.ashx?id=14855	retry: FPF CP rules 2019/20: up to 3
+por-168	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-168	subs_used	agree	https://futalgarve.agr-tc.pt/2020/Regulamentos/Reg_Taca_Portugal.pdf	retry: FPF cup rules 2019/20 art. 43: up to 3, and a 4th in extra time
+por-177	clubs	no second source		retry: AF Castelo Branco (September 2020) gives only the 131 clubs of the round 1 draw; no page states 165
+por-186	clubs	agree	https://arquivo.pt/wayback/20211010091343/https://fpf.pt/downloaddocument.ashx?id=19131	retry: FPF notice CO-00074 (5 August 2021): 154 clubs; notice CO-00070 of the day before gave 155
+por-188	clubs	no second source		retry: no page of another publisher that states the total was found; RSSSF and zerozero list the rounds but give no total
+por-195	clubs	agree	https://futalgarve.agr-tc.pt/2023/Formatos/FORMATO-TACA_PORTUGAL_2022-23.pdf	retry: FPF notice 102 (9 August 2022): 152 clubs
+por-204	clubs	agree	https://futalgarve.agr-tc.pt/2024/Formatos/TACA_PORTUGAL_FORMATO_23-24.pdf	retry: FPF notice 105 (7 August 2023): 146 clubs
+por-213	clubs	agree	https://arquivo.pt/wayback/20240812191407/https://fpf.pt/downloaddocument.ashx?id=28446	retry: FPF notice 94 (1 August 2024): 147 clubs
+por-222	clubs	agree	https://web.archive.org/web/20250814215453/https://www.fpf.pt/DownloadDocument.ashx?id=31140	retry: FPF notice 74 (6 August 2025): 149 clubs
+por-226	down	agree	https://www.flashscore.pt/noticias/liga-portugal-formato-e-criterios-de-classificacao/YasGteoI/	retry: Flashscore format of the 2026/27 Liga: the last 2 go down
+por-226	playoffs	agree	https://www.flashscore.pt/noticias/liga-portugal-formato-e-criterios-de-classificacao/YasGteoI/	retry: Flashscore: 16th v 3rd of Liga 2, two legs
+por-226	split	agree	https://www.flashscore.pt/noticias/liga-portugal-formato-e-criterios-de-classificacao/YasGteoI/	retry: Flashscore: no phases after the regular season
+por-226	format	agree	https://www.flashscore.pt/noticias/liga-portugal-formato-e-criterios-de-classificacao/YasGteoI/	retry: Flashscore: 18 clubs, double round robin
+por-227	up	no second source		retry: no page of another publisher for 2026/27 found
+por-227	down	no second source		retry: no page of another publisher for 2026/27 found
+por-227	playoffs	no second source		retry: Flashscore confirms only the 3rd v 16th of the Liga tie; the 16th v Liga 3 tie has no second source
+por-227	split	no second source		retry: no page of another publisher for 2026/27 found
+por-227	format	no second source		retry: no page of another publisher for 2026/27 found
+por-229	up	no second source		retry: A Bola gives the format but not the promotion places
+por-229	down	no second source		retry: A Bola gives the format but not the relegation places
+por-229	playoffs	no second source		retry: no page of another publisher for 2026/27 found
+por-229	split	agree	https://www.abola.pt/noticias/conhecido-o-calendario-da-liga-3-202627-2026071616583387520	retry: A Bola (July 2026): format unchanged, 2 series of 10, top 4 of each series to the promotion phase, the rest fight to stay up
+por-229	format	agree	https://www.abola.pt/noticias/conhecido-o-calendario-da-liga-3-202627-2026071616583387520	retry: A Bola (July 2026): 2 series of 10, then promotion and relegation phases
+por-231	clubs	agree	https://www.record.pt/futebol/futebol-nacional/taca-de-portugal/detalhe/sorteio-da-taca-de-portugal-as-novidades-na-competicao-e-a-confusao-entre-nogueirenses	retry: Record (3 August 2026): 146 teams
+por-231	format	disagree	https://www.record.pt/futebol/futebol-nacional/taca-de-portugal/detalhe/sorteio-da-taca-de-portugal-as-novidades-na-competicao-e-a-confusao-entre-nogueirenses	retry: Record (3 August 2026): semi-finals are single matches from 2026/27; settled in por.reconcile.tsv
+por-233	clubs	agree	https://www.dn.pt/11x11/leiria-recebe-final-four-da-taa-da-liga-pela-stima-vez-consecutiva	retry: DN (30 September 2026): knockout format with eight teams
+por-233	format	agree	https://www.dn.pt/11x11/leiria-recebe-final-four-da-taa-da-liga-pela-stima-vez-consecutiva	retry: DN (30 September 2026): quarter-finals, then the final four at Leiria
+por-234	foreign	no second source		retry: no page of another publisher found
+por-234	work_permit	no second source		retry: no page of another publisher found
+por-234	registration	no second source		retry: no page of another publisher found

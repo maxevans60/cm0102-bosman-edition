@@ -1,4 +1,22 @@
 season	division	club	db_club_id	db_club	db_division	source
+2003/04	Eredivisie	Ajax	331	Ajax	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	PSV	8487	PSV	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	Feyenoord	4012	Feyenoord	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	Heerenveen	4944	SC Heerenveen	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	AZ	173	AZ	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	Roda JC	9628	Roda JC	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	Willem II	12839	Willem II	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	FC Twente	11899	FC Twente	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	NAC Breda	7676	NAC	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	FC Utrecht	12142	FC Utrecht	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	RKC Waalwijk	9235	RKC Waalwijk	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	RBC Roosendaal	9210	RBC Roosendaal	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	FC Groningen	4614	FC Groningen	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	NEC	7684	NEC	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	ADO Den Haag	74	ADO Den Haag	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	Vitesse	12550	Vitesse	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	FC Volendam	12581	FC Volendam	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
+2003/04	Eredivisie	FC Zwolle	13202	FC Zwolle	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eredivisie
 2003/04	Eerste Divisie	FC Den Bosch	2990	FC Den Bosch	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
 2003/04	Eerste Divisie	Excelsior	3730	Excelsior	Dutch Premier Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
 2003/04	Eerste Divisie	Sparta Rotterdam	10840	Sparta	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
@@ -11,7 +29,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2003/04	Eerste Divisie	AGOVV Apeldoorn	91	AGOVV	A Lower Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
 2003/04	Eerste Divisie	TOP Oss	11293	TOP Oss	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
 2003/04	Eerste Divisie	Stormvogels/Telstar	11439	Stormvogels Telstar Combinatie	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
-2003/04	Eerste Divisie	HFC Haarlem	4724	HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
+2003/04	Eerste Divisie	HFC Haarlem	4760	Haarlem	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
 2003/04	Eerste Divisie	Veendam	12314	Veendam	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
 2003/04	Eerste Divisie	FC Dordrecht	3229	FC Dordrecht	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
 2003/04	Eerste Divisie	FC Eindhoven	3490	FC Eindhoven	Dutch First Division	https://en.wikipedia.org/wiki/2003%E2%80%9304_Eerste_Divisie
@@ -25,7 +43,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2005/06	Eerste Divisie	De Graafschap	13206	de Graafschap	Dutch First Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
 2005/06	Eerste Divisie	FC Emmen	3559	Emmen	Dutch First Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
 2005/06	Eerste Divisie	FC Den Bosch	2990	FC Den Bosch	Dutch First Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
-2005/06	Eerste Divisie	HFC Haarlem	4724	HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
+2005/06	Eerste Divisie	HFC Haarlem	4760	Haarlem	Dutch First Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
 2005/06	Eerste Divisie	FC Dordrecht	3229	FC Dordrecht	Dutch First Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
 2005/06	Eerste Divisie	AGOVV Apeldoorn	91	AGOVV	A Lower Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
 2005/06	Eerste Divisie	TOP Oss	11293	TOP Oss	Dutch First Division	https://en.wikipedia.org/wiki/2005%E2%80%9306_Eerste_Divisie
@@ -357,378 +375,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	Eerste Divisie	Helmond Sport	4968	Helmond Sport	Dutch First Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Eerste_Divisie
 2025/26	Eerste Divisie	MVV Maastricht	6928	MVV Maastricht	Dutch First Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Eerste_Divisie
 2025/26	Eerste Divisie	Jong Ajax	332	Ajax Amsterdam U21	Dutch First Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Eerste_Divisie
-2010/11	Topklasse Saturday	IJsselmeervogels	5283	Ijsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Excelsior '31	8490	SVV Excelsior '31	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Capelle	2209	VV Capelle	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Genemuiden	9831	SC Genemuiden	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Harkemase Boys	4879	Harkemase Boys	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	ARC	114	ARC	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	CSV Apeldoorn	13382	CSV Apeldoorn	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Flevo Boys	4073	Flevo Boys Emmeloord	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Sparta Nijkerk	10845	Sparta Nijkerk	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Saturday	Hoek	5087	HSV Hoek	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Oss	11293	FC Oss	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Achilles '29	226	Achilles 29	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Argon	828	SV Argon	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	AFC	81	Amsterdamsche Football Club	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	De Treffers	33	de Treffers	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	JVC Cuijk	5529	VC Cuijk	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Haaglandia	1555	VV Haaglandia/Sir Winston	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Quick '20	9187	KVV Quick 1920	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	EVV	3404	EVV Echt	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	VVSB				https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Hollandia	5102	HVV Hollandia	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Hilversum	5057	FC Hilversum	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Gemert	4339	VV Gemert	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Baronie	10803	de Baronie	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2010/11	Topklasse Sunday	Dijkse Boys	9224	VV Dijkse Boys	A Lower Division	https://en.wikipedia.org/wiki/2010%E2%80%9311_Topklasse
-2011/12	Topklasse Saturday	Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Noordwijk	7985	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	GVVV	4265	GVVV	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	IJsselmeervogels	5283	Ijsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Genemuiden	9831	SC Genemuiden	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Excelsior '31	8490	SVV Excelsior '31	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Capelle	2209	VV Capelle	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Harkemase Boys	4879	Harkemase Boys	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	SVZW				https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	Montfoort				https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Saturday	ARC	114	ARC	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	Achilles '29	226	Achilles 29	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	Haaglandia	1555	VV Haaglandia/Sir Winston	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	WKE				https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	De Treffers	33	de Treffers	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	HSC '21	4745	HSC'21	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	EVV	3404	EVV Echt	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	Hollandia	5102	HVV Hollandia	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	HBS	9913	HBS-Craeyenhout	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	AFC	81	Amsterdamsche Football Club	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	JVC Cuijk	5529	VC Cuijk	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	VVSB				https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	UNA	11941	UNA	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	Hilversum	5057	FC Hilversum	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	Argon	828	SV Argon	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2011/12	Topklasse Sunday	Quick '20	9187	KVV Quick 1920	A Lower Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Topklasse
-2012/13	Topklasse Saturday	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	GVVV	4265	GVVV	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	HHC Hardenberg	9255	Hardenberg Heemse Combinatie	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	FC Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Capelle	2209	VV Capelle	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Noordwijk	7985	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Excelsior '31	8490	SVV Excelsior '31	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Scheveningen	10253	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	IJsselmeervogels	5283	Ijsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Genemuiden	9831	SC Genemuiden	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	Jodan Boys	9219	CVV de Jodan Boys	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Saturday	DETO	9472	DETO	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	Achilles '29	226	Achilles 29	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	ADO '20	75	ADO´20	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	De Treffers	33	de Treffers	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	WKE				https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	EVV	3404	EVV Echt	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	HSC '21	4745	HSC'21	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	HBS	9913	HBS-Craeyenhout	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	VVSB				https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	JVC Cuijk	5529	JV Cuijk	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	AFC	81	Amsterdamsche Football Club	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	Chabab	7633	FC Chabab	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	Haaglandia	1555	VV Haaglandia/Sir Winston	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	Hollandia	5102	HVV Hollandia	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	Gemert	4339	VV Gemert	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2012/13	Topklasse Sunday	Sneek Wit Zwart	13384	VV Sneek Wit Zwart	A Lower Division	https://en.wikipedia.org/wiki/2012%E2%80%9313_Topklasse
-2013/14	Topklasse Saturday	GVVV	4265	GVVV	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	HHC Hardenberg	9255	Hardenberg Heemse Combinatie	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	IJsselmeervogels	5283	IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Scheveningen	10253	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	ONS Sneek	11754	Oranje Nassau Sneek	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Capelle	2209	VV Capelle	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Noordwijk	7985	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Excelsior '31	8490	SVV Excelsior '31	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Saturday	Ter Leede	11464	Ter Leede	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	AFC	81	Amsterdamsche Football Club	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	UNA	11941	UNA	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	VVSB				https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	JVC Cuijk	5529	JV Cuijk	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	EVV	3404	EVV Echt	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	HBS Craeyenhout	9913	HBS-Craeyenhout	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	Leonidas				https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	ADO '20	75	ADO'20	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	HSC '21	4745	HSC'21	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	De Treffers	33	de Treffers	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	WKE				https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	Haaglandia	1555	VV Haaglandia/Sir Winston	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	Be Quick 1887	1422	Be Quick 1887	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	Juliana '31	8396	SV Juliana '31	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2013/14	Topklasse Sunday	Chabab	7633	FC Chabab	A Lower Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Topklasse
-2014/15	Topklasse Saturday	Kozakken Boys	6140	SV Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	GVVV	4265	GVVV	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Capelle	2209	VV Capelle	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Scheveningen	10253	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	ONS Sneek	328	Oranje Nassau Sneek	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Hoek	5087	HSV Hoek	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Ajax (amateurs)				https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Sparta Nijkerk	10845	Sparta Nijkerk	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Saturday	Genemuiden	9831	SC Genemuiden	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	UNA	9451	UNA	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	VVSB				https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	JVC Cuijk	5529	JVC Cuijk	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	Koninklijke HFC	465	Koninklijke HFC	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	EVV	3404	EVV	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	WKE				https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	OJC Rosmalen	2840	OJC Rosmalen	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	AFC	81	Amsterdamsche FC	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	HSC '21	4745	HSC'21	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	Hercules				https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	HBS Craeyenhout	9913	HBS-Craeyenhout	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	ADO '20	75	ADO '20	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	Leonidas	653	RKSV Leonidas	A Lower Division	https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2014/15	Topklasse Sunday	EDO				https://en.wikipedia.org/wiki/2014%E2%80%9315_Topklasse
-2015/16	Topklasse Saturday	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Kozakken Boys	6140	SV Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	DVS '33	5916	SV DVS'33 Ermelo	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	ONS Sneek	328	Oranje Nassau Sneek	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Capelle	2209	VV Capelle	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Scheveningen	10253	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	SteDoCo	7121	VV SteDoCo	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Saturday	RVVH	988	RVVH Ridderkerk	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	TEC	6201	TEC VV	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	Koninklijke HFC	465	Koninklijke HFC	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	VVSB				https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	AFC	81	Amsterdamsche FC	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	UNA	9451	UNA	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	HSC '21	4745	HSC'21	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	JVC Cuijk	5529	JVC Cuijk	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	Hercules	399	USV Hercules	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	EVV	3404	EVV	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	HBS	9913	HBS-Craeyenhout	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	Magreb '90	3308	Magreb'90	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	OJC Rosmalen	2840	OJC Rosmalen	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	Sneek Wit Zwart	5973	VV SWZ BOSO Sneek	A Lower Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2015/16	Topklasse Sunday	WKE				https://en.wikipedia.org/wiki/2015%E2%80%9316_Topklasse
-2016/17	Tweede Divisie	Jong AZ	11315	Jong AZ Alkmaar	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Kozakken Boys	6140	SV Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Jong Sparta	10840	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	VVSB				https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	AFC	81	Amsterdamsche FC	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	TEC	6201	TEC VV	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	HHC	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	UNA	9451	UNA	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Jong Vitesse	11319	Jong SBV Vitesse	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2016/17	Tweede Divisie	Jong Twente	8361	FC Jong Twente	A Lower Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Tweede_Divisie
-2017/18	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Kozakken Boys	6140	SV Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	HHC	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	VVSB	7985	VVSB Noordwijkerhout	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Jong Sparta	10840	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	AFC	81	Amsterdamsche FC	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	TEC	6201	TEC VV	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	ASV De Dijk	11209	ASV De Dijk	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2017/18	Tweede Divisie	Achilles '29	226	RKSV Achilles '29	A Lower Division	https://en.wikipedia.org/wiki/2017%E2%80%9318_Tweede_Divisie
-2018/19	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Jong Vitesse	11319	Vitesse Arnhem U21	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	SV Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Jong Sparta	10840	Sparta Rotterdam	Dutch First Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Scheveningen	10253	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	VVSB	7985	VVSB Noordwijkerhout	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Jong Almere City	8283	Almere City FC	Dutch First Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Lienden	9249	FC Lienden	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2018/19	Tweede Divisie	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Tweede_Divisie
-2019/20	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	SV Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Noordwijk	3667	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Jong Sparta	10840	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Quick Boys	9188	Quick Boys	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Scheveningen	10253	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	TEC	6201	SV TEC Tiel	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	Jong Volendam	3786	Jong FC Volendam	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2019/20	Tweede Divisie	ASWH	172	ASWH Ambacht	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Tweede_Divisie
-2020/21	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	ASWH	172	ASWH Ambacht	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	SV Spakenburg	10831	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Quick Boys	9188	Quick Boys	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Jong Volendam	10758	FC Volendam	Dutch First Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	TEC	6201	SV TEC Tiel	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Jong Sparta	10840	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Scheveningen	10253	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	Noordwijk	3667	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2020/21	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Tweede_Divisie
-2021/22	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Jong Sparta	6005	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Noordwijk	3667	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Scheveningen	2825	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	SV Spakenburg	2363	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Jong Volendam	574	FC Volendam	Dutch First Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Quick Boys	9188	Quick Boys	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	TEC	6201	SV TEC Tiel	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2021/22	Tweede Divisie	ASWH	172	ASWH Ambacht	A Lower Division	https://en.wikipedia.org/wiki/2021%E2%80%9322_Tweede_Divisie
-2022/23	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Quick Boys	9188	Quick Boys	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Scheveningen	2825	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Noordwijk	3667	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Jong Sparta	6005	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Spakenburg	2363	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	TEC	6201	SV TEC Tiel	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	Jong Volendam	574	FC Volendam	Dutch Premier Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2022/23	Tweede Divisie	OFC	2949	OFC Oostzaan	A Lower Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Tweede_Divisie
-2023/24	Tweede Divisie	Spakenburg	2363	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Quick Boys	9188	Quick Boys	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Jong Sparta	6005	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Jong Almere City	8283	Almere City FC	Dutch Premier Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	ACV	71	ACV Assen	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	ADO '20	75	ADO '20 Heemskerk	A Lower Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Noordwijk	3667	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Scheveningen	2825	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2023/24	Tweede Divisie	Lisse	6626	FC Lisse	A Lower Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Tweede_Divisie
-2024/25	Tweede Divisie	Quick Boys	9188	Quick Boys	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Spakenburg	2363	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Jong Almere City	3786	Jong Almere City FC	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	ACV	71	ACV Assen	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	RKAV Volendam	5894	RKAV Volendam	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Noordwijk	3667	VV Noordwijk	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Jong Sparta	6005	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	Scheveningen	2825	SVV Scheveningen	A Lower Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2024/25	Tweede Divisie	ADO '20	75	ADO '20 Heemskerk	A Lower Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Tweede_Divisie
-2025/26	Tweede Divisie	Quick Boys	9188	Quick Boys	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Hoek	5087	HSV Hoek	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	De Treffers	33	De Treffers	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Spakenburg	2363	SV Spakenburg	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Rijnsburgse Boys	9552	Rijnsburgse Boys	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	HHC Hardenberg	9255	HHC Hardenberg	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Katwijk	5861	VV Katwijk	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Jong Almere City	3786	Jong Almere City FC	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Kozakken Boys	6140	Kozakken Boys	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Jong Sparta	6005	Sparta Rotterdam	Dutch Premier Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	AFC	81	AFC Amsterdam	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Barendrecht	1346	BVV Barendrecht	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	RKAV Volendam	5894	RKAV Volendam	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	GVVV	4265	GVVV Veenendaal	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Koninklijke HFC	465	Koninklijke HFC Haarlem	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	IJsselmeervogels	5283	VV IJsselmeervogels	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	Excelsior Maassluis	3732	Excelsior Maassluis	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
-2025/26	Tweede Divisie	ACV	71	ACV Assen	A Lower Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Tweede_Divisie
 2009/10	Belgian First Division	Anderlecht	715	RSC Anderlecht	Belgian First Division	https://en.wikipedia.org/wiki/2009%E2%80%9310_Belgian_Pro_League
 2009/10	Belgian First Division	Club Brugge	2608	Club Brugge KV	Belgian First Division	https://en.wikipedia.org/wiki/2009%E2%80%9310_Belgian_Pro_League
 2009/10	Belgian First Division	Gent	48	KAA Gent	Belgian First Division	https://en.wikipedia.org/wiki/2009%E2%80%9310_Belgian_Pro_League
@@ -1010,6 +656,96 @@ season	division	club	db_club_id	db_club	db_division	source
 2009/10	Belgian Second Division	Ronse	9654	KSK Ronse	Belgian Second Division	https://en.wikipedia.org/wiki/2009%E2%80%9310_Belgian_Second_Division
 2009/10	Belgian Second Division	Beveren	1556	KSK Beveren	Belgian Second Division	https://en.wikipedia.org/wiki/2009%E2%80%9310_Belgian_Second_Division
 2009/10	Belgian Second Division	RFC Liège	9227	RFC Liège	Belgian Second Division	https://en.wikipedia.org/wiki/2009%E2%80%9310_Belgian_Second_Division
+2010/11	Belgian Second Division	Oud-Heverlee Leuven	8411	FC ZD Oud-Heverlee Leuven	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	Lommel United	6723	KVSK United Overpelt-Lommel	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	RAEC Mons	7504	RAEC Mons	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	KVRS Waasland - SK Beveren	9243	RS Waasland-Beveren	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	RCS Visétois	12540	RCS Visétois	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	R. Antwerp FC	765	RFC Antwerp	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	FCV Dender EH	2994	FCV Dender EH	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	AFC Tubize	11850	AFC Tubize	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	KV Oostende	8298	KV Oostende	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	KSK Heist	4959	K Sportkring Heist	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	FC Brussels	3773	KFC Brussels	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	K. Standaard Wetteren	12790	Standaard Wetteren	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	R. Boussu Dour Borinage	4159	Royal Boussu Dour Borinage	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	KVK Tienen	11560	KVK Tienen	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	KSV Roeselare	9906	KSV Roeselare	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	KV Turnhout	11884	KV Turnhout	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	K. Rupel Boom FC	1743	K Rupel Boom FC	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2010/11	Belgian Second Division	RFC Tournai	9220	RFC Tournaisien	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2010-11_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	R. Sporting du Pays de Charleroi	2418	R Charleroi SC	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	KVRS Waasland - SK Beveren	9243	RS Waasland-Beveren	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	KAS Eupen	3708	KAS Eupen	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	KV Oostende	8298	KV Oostende	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	Lommel United	6723	KVSK United Overpelt-Lommel	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	R. White Star Woluwe FC	12638	White Star Woluwe FC	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	VC Eendracht Aalst 2002	3467	VC Eendracht Aalst 2002	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	KSK Heist	4959	K Sportkring Heist	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	RCS Visétois	12540	RCS Visétois	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	R. Antwerp FC	765	RFC Antwerp	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	R. Boussu Dour Borinage	4159	Royal Boussu Dour Borinage	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	AFC Tubize	11850	AFC Tubize	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	KSV Roeselare	9906	KSV Roeselare	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	FC Brussels	3773	KFC Brussels	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	SK Sint-Niklaas	7938	FC Nieuwkerken Sint-Niklaas	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	KVK Tienen	11560	KVK Tienen	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	FCV Dender EH	2994	FCV Dender EH	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2011/12	Belgian Second Division	K. Standaard Wetteren	12790	Standaard Wetteren	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2011-12_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	KV Oostende	8298	KV Oostende	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	R. Mouscron-Péruwelz	3091	RRC Mouscron-Péruwelz	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	KVC Westerlo	12771	KVC Westerlo	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	K. Sint-Truidense VV	10556	Sint-Truidense VV	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	Boussu Dour Borinage	4159	Royal Boussu Dour Borinage	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	Lommel United	6723	KVSK United Overpelt-Lommel	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	R. White Star Woluwe FC	12638	White Star Woluwe FC	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	KAS Eupen	3708	KAS Eupen	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	AFC Tubize	11850	AFC Tubize	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	R. Antwerp FC	765	RFC Antwerp	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	KSV Roeselare	9906	KSV Roeselare	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	KFC Dessel Sport	3056	KFC Dessel Sport	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	SC Eendracht Aalst	3467	VC Eendracht Aalst 2002	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	FC Brussels	3773	KFC Brussels	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	RCS Visétois	12540	RCS Visétois	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	KSK Heist	4959	KSK Heist	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	KSV Oudenaarde	8413	KSV Oudenaarde	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2012/13	Belgian Second Division	SK Sint-Niklaas	7938	FC Nieuwkerken Sint-Niklaas	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	KVC Westerlo	12771	KVC Westerlo	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	KAS Eupen	3708	KAS Eupen	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	K. Sint-Truidense VV	10556	Sint-Truidense VV	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	R. Mouscron-Péruwelz	3091	RRC Mouscron-Péruwelz	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	Lommel United	6723	KVSK United Overpelt-Lommel	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	AFC Tubize	11850	AFC Tubize	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	R. Antwerp FC	765	RFC Antwerp	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	RWDM Brussels FC	3773	RWDM Brussels	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	R. Boussu Dour Borinage	4159	Royal Boussu Dour Borinage	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	AS Verbroedering Geel	7226	AS Verbroedering Geel	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	SC Eendracht Aalst	3467	VC Eendracht Aalst 2002	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	R. White Star Bruxelles	12638	Royal White Star Brussels	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	R. Excelsior Virton	12530	Royal Excelsior Virton	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	KFC Dessel Sport	3056	KFC Dessel Sport	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	KSV Roeselare	9906	KSV Roeselare	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	KSK Heist	4959	KSK Heist	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	Hoogstraten VV	5141	Hoogstraten VV	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2013/14	Belgian Second Division	RCS Visétois	12540	RCS Visétois	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2013-14_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	K. Sint-Truidense VV	10556	Koninklijke Sint-Truidense VV	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	Lommel United	6723	KVSK United Overpelt-Lommel	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	KAS Eupen	3708	KAS Eupen	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	Seraing United	4159	Seraing United	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	Oud-Heverlee Leuven	8411	Oud-Heverlee Leuven	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	R. Excelsior Virton	2967	Royal Excelsior Virton	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	RAEC Mons	7504	RAEC Mons	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	AFC Tubize	9299	AFC Tubize	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	SC Eendracht Aalst	3467	SC Eendracht Aalst	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	R. Antwerp FC	765	Royal Antwerp	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	KSV Roeselare	9906	KSV Roeselare	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	R. White Star Bruxelles	1682	Royal White Star Bruxelles	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	AS Verbroedering Geel	7226	Allemaal Samen Verbroedering Geel	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	KSK Heist	4959	KSK Heist	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	KFC Dessel Sport	3056	KFC Dessel Sport	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	K. Patro Eisden Maasmechelen	8625	Patro Eisden Maasmechelen	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	KRC Mechelen	9218	KRC Mechelen	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
+2014/15	Belgian Second Division	KV Woluwe-Zaventem	6912	KV Woluwe-Zaventem	Belgian Second Division	https://nl.wikipedia.org/wiki/Tweede_klasse_2014-15_%28voetbal_Belgi%C3%AB%29
 2015/16	Belgian Second Division	RWS Brussels	1682	Royal White Star Bruxelles	Belgian Second Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Belgian_Second_Division
 2015/16	Belgian Second Division	Eupen	3708	KAS Eupen	Belgian Second Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Belgian_Second_Division
 2015/16	Belgian Second Division	Antwerp	765	Royal Antwerp	Belgian Second Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Belgian_Second_Division
@@ -1084,7 +820,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2022/23	Challenger Pro League	Lommel	6723	Lommel SK	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Challenger_Pro_League
 2022/23	Challenger Pro League	Deinze	2973	KMSK Deinze	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Challenger_Pro_League
 2022/23	Challenger Pro League	Dender EH	2994	FCV Dender EH	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Challenger_Pro_League
-2022/23	Challenger Pro League	SL16 FC	8118	Standard Liège	Belgian First Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Challenger_Pro_League
+2022/23	Challenger Pro League	SL16 FC	10438	Standard de Liège 16 FC	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Challenger_Pro_League
 2022/23	Challenger Pro League	Jong Genk	10435	KRC Genk B	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Challenger_Pro_League
 2022/23	Challenger Pro League	Virton	2967	Royal Excelsior Virton	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Challenger_Pro_League
 2023/24	Challenger Pro League	Beerschot	4623	Beerschot V.A.	Belgian Second Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Challenger_Pro_League
@@ -1102,7 +838,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2023/24	Challenger Pro League	Oostende	8298	KV Oostende	Belgian First Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Challenger_Pro_League
 2023/24	Challenger Pro League	Francs Borains	7172	Royal Francs Borains	Belgian Second Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Challenger_Pro_League
 2023/24	Challenger Pro League	Seraing	4159	RFC Seraing	Belgian Second Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Challenger_Pro_League
-2023/24	Challenger Pro League	SL16 FC	8118	Standard Liège	Belgian First Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Challenger_Pro_League
+2023/24	Challenger Pro League	SL16 FC	10438	Standard de Liège 16 FC	Belgian Second Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Challenger_Pro_League
 2024/25	Challenger Pro League	Zulte Waregem	8	Zulte Waregem	Belgian Second Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Challenger_Pro_League
 2024/25	Challenger Pro League	RAAL La Louvière	6340	RAAL La Louvière	Belgian Second Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Challenger_Pro_League
 2024/25	Challenger Pro League	RWD Molenbeek	8343	RWD Molenbeek	Belgian First Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Challenger_Pro_League
@@ -1136,6 +872,22 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	Challenger Pro League	Club NXT	5147	Club Brugge KV II	Belgian Second Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Challenger_Pro_League
 2025/26	Challenger Pro League	Olympic Charleroi	8258	Olympic Charleroi	Belgian Second Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Challenger_Pro_League
 2025/26	Challenger Pro League	RWDM Brussels	8343	RWDM Brussels	Belgian Second Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Challenger_Pro_League
+2007/08	Belgian Third Division A	KSK Ronse	9654	KSK Ronse	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	RAA Louviéroise	6294	RAA La Louviéroise	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	RRC Péruwelz	3091	RRC Péruwelz	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	KRC Waregem	9221	K Racing Waregem	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	KRC Mechelen	9218	Racing Mechelen	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	KSV Sottegem	105	KSV Zottegem	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	VC Eendracht Aalst 2002	3467	VC Eendracht Aalst 2002	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	KVC Willebroek-Meerhof	12838	KVC Willebroek-Meerhof	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	FC Nieuwkerken Sint-Niklaas	7938	FC Nieuwkerken Sint-Niklaas	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	K. Diegem Sport	3080	K Diegem Sport	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	R. Francs Borains	4159	R Francs Borains	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	KSV Oudenaarde	8413	KSV Oudenaarde	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	K. Standaard Wetteren	12790	Standaard Wetteren	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	K. Londerzeel SK	6724	SK Londerzeel	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	Torhout 1992 KM	11673	Torhout 1992 KM	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
+2007/08	Belgian Third Division A	RACS Couillet	2773	ACS Couillet	Belgian Third Division A	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
 2007/08	Belgian Third Division B	RFC Liège	9227	RFC Liège	Belgian Third Division B	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
 2007/08	Belgian Third Division B	KV Turnhout	11884	KV Turnhout	Belgian Third Division B	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
 2007/08	Belgian Third Division B	R. White Star Woluwe FC	12638	White Star Woluwe FC	Belgian Third Division B	https://nl.wikipedia.org/wiki/Derde_klasse_2007-08_%28voetbal_Belgi%C3%AB%29
@@ -1511,7 +1263,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2022/23	Belgian National Division 1	Knokke	8081	FC Knokke	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
 2022/23	Belgian National Division 1	Visé	9875	URSL Visé	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
 2022/23	Belgian National Division 1	Thes	4668	KVV Thes Sport	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
-2022/23	Belgian National Division 1	OH Leuven U-23	8411	Oud-Heverlee Leuven	Belgian First Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
+2022/23	Belgian National Division 1	OH Leuven U-23	10379	Oud-Heverlee Leuven U23	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
 2022/23	Belgian National Division 1	Tienen	6368	KVK Tienen	Belgian Second Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
 2022/23	Belgian National Division 1	Zébra Élites Charleroi	10426	RSC Charleroi B	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
 2022/23	Belgian National Division 1	Dessel	3056	KFC Dessel Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_National_Division_1
@@ -1536,7 +1288,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2023/24	Belgian National Division 1	Tienen	6368	KVK Tienen	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_National_Division_1
 2023/24	Belgian National Division 1	Young Reds Antwerp	10466	Royal Antwerp FC B	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_National_Division_1
 2023/24	Belgian National Division 1	Union Namur	5782	Union Namur	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_National_Division_1
-2023/24	Belgian National Division 1	OH Leuven U-23	8411	Oud-Heverlee Leuven	Belgian First Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_National_Division_1
+2023/24	Belgian National Division 1	OH Leuven U-23	10379	Oud-Heverlee Leuven U23	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_National_Division_1
 2023/24	Belgian National Division 1	Visé	9875	URSL Visé	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_National_Division_1
 2023/24	Belgian National Division 1	Cappellen	5812	Royal Cappellen FC	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_National_Division_1
 2024/25	Belgian Division 1 VV	Jong KAA Gent	10414	KAA Gent B	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
@@ -1550,7 +1302,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2024/25	Belgian Division 1 VV	Jong Cercle	10479	Cercle Brugge B	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 VV	Belisia	4779	Belisia Bilzen	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 VV	Hoogstraten	5141	Hoogstraten VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
-2024/25	Belgian Division 1 VV	OH Leuven U-23	8411	Oud-Heverlee Leuven	Belgian First Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
+2024/25	Belgian Division 1 VV	OH Leuven U-23	10379	Oud-Heverlee Leuven U23	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 VV	Merelbeke	3032	KFC Merelbeke	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 VV	Cappellen	5812	Royal Cappellen FC	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 VV	Young Reds Antwerp	10466	Royal Antwerp FC B	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
@@ -1564,9 +1316,9 @@ season	division	club	db_club_id	db_club	db_division	source
 2024/25	Belgian Division 1 ACFF	Union Namur	5782	Union Namur	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 ACFF	Binche	182	RUS Binche	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 ACFF	Zébra Élites	10426	RSC Charleroi B	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
-2024/25	Belgian Division 1 ACFF	Union SG B	9217	Union Saint-Gilloise	Belgian First Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
+2024/25	Belgian Division 1 ACFF	Union SG B	9450	Union Saint-Gilloise U23	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2024/25	Belgian Division 1 ACFF	Tournai	9220	RFC Tournai	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
-2024/25	Belgian Division 1 ACFF	SL16 FC	8118	Standard Liège	Belgian First Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
+2024/25	Belgian Division 1 ACFF	SL16 FC	10438	Standard de Liège 16 FC	Belgian Second Division	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Hasselt	5918	Sporting Hasselt	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Knokke	8081	RFC Knokke	Belgian Second Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Roeselare	9906	SK Roeselare	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
@@ -1579,7 +1331,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	Belgian Division 1 VV	Jong Cercle	10479	Cercle Brugge B	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Merelbeke	3032	KFC Merelbeke	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Zelzate	8679	KVV Zelzate	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
-2025/26	Belgian Division 1 VV	OH Leuven U-23	8411	Oud-Heverlee Leuven	Belgian First Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
+2025/26	Belgian Division 1 VV	OH Leuven U-23	10379	Oud-Heverlee Leuven U23	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Houtvenne	3965	KFC Houtvenne	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Diegem	3080	Diegem Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 VV	Ninove	5059	KVK Ninove	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
@@ -1591,569 +1343,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	Belgian Division 1 ACFF	Rochefort	6358	Union Rochefortoise	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 ACFF	Zébra Élites	10426	RSC Charleroi B	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 ACFF	Stockay	2774	RRC Stockay Saint-Georges S/M	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
-2025/26	Belgian Division 1 ACFF	Union SG B	9217	Union Saint-Gilloise	Belgian First Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
+2025/26	Belgian Division 1 ACFF	Union SG B	9450	Union Saint-Gilloise U23	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 ACFF	Union Namur	5782	Union Namur	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
 2025/26	Belgian Division 1 ACFF	Crossing Schaerbeek	3481	Crossing Schaerbeek	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
-2025/26	Belgian Division 1 ACFF	SL16 FC	8118	Standard Liège	Belgian First Division	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1
-2005/06	Belgian Fourth Division A	KSV Oudenaarde	8413	SV Oudenaarde	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	VG Oostende				https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	URS du Centre	11950	URS Centre	Belgian Fourth Division  D	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KVC Sint-Eloois-Winkel Sport	10552	Sint-Eloois-Winkel Sp.	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	RRC Péruwelz				https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KSV Diksmuide	3090	KSV Diksmuide	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KSK Wevelgem City	12792	KFC SV Wevelgem City	none	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KRC Gent-Zeehaven	9213	RRC Gent - Zeehaven	Belgian Fourth Division  D	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	K. White Star Lauwe	12638	White Star Woluwe FC	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KSV Sottegem	13171	KSV Zottegem	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KFC Evergem-Center	3719	KFC Evergem Center	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KSV Rumbeke	9764	KSV Rumbeke	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KVV Eendracht Aalter	182	VV Eendracht Aalter	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	WIK Eine	3491	KWIK Eine	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	SK Oostnieuwkerke	8301	SK Oostnieuwkerke	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KSK De Jeugd Lovendegem	6771	SK Lovendegem	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2005/06	Belgian Fourth Division A	KEG Gistel	4416	KEG Gistel	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2005-06_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	KFC Izegem	5497	KFC Izegem	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	RJS Heppignies-Lambusart-Fleurus	6340	Heppignies-Lambusart-Fleurus	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	K. Olsa Brakel	8243	Olsa Brakel	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	KRC Gent-Zeehaven	9213	RRC Gent - Zeehaven	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	KFC Sparta Petegem	8743	KFC Sparta Petegem	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	SK Berlare	11372	SK Berlare	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	KSV Diksmuide	3090	KSV Diksmuide	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	KVC Sint-Eloois-Winkel Sport	10552	Sint-Eloois-Winkel Sp.13	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	R. Géants Athois	964	RFC Athois	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	Football Couillet-La Louvière				https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	KFC Eendracht Zele	3470	KFC Eendracht Zele	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	K. Blue Star Poperinge	1378	KBS Poperinge	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	RSC Pâturageois	1035	RSC Paturageois	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	RUS Beloeil	11391	RUS Beloeil	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2009/10	Belgian Fourth Division A	Sporting West Harelbeke	5365	SW Harelbeke	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Vierde_klasse_2009-10_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	K. Londerzeel SK	6724	SK Londerzeel	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	K. Olympia SC Wijgmaal	8250	K Olympia SC Wijgmaal	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	Tempo Overijse	8424	Tempo Overijse	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	R. Wallonia Walhain Chaumont-Gistoux	12659	RW Walhain CG	Belgian Fourth Division  D	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	KOVC Sterrebeek	11095	KOVC Sterrebeek	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	R. Léopold Uccle FC	11991	Léopold-Uccle	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	RUS Genly-Quévy 89				https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	RES Acrenoise	14100	RES Acren	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	FC Ganshoren	10945	FC Ganshoren	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	KSK Halle	4803	KSK Halle	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	RSC Templeuvois				https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	KSK Lombeek-Ternat	2993	KVC Sporting Ternat	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	Union Saint-Ghislain Tertre-Hautrage	13851	RU Saint-Ghislain Tertre-Hautrage	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	K. Kampenhout SK	5801	K Kampenhout SK	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division B	Dilbeek Sport	3093	Dilbeek Sport	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	KFC Oosterzonen Oosterwijk	13385	KFC Oosterzonen	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	KESK Leopoldsburg	12738	KESK Leopoldsburg	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	KSK Bree	1864	SK Bree	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Sporting Hasselt	5918	KSK Kermt-Hasselt	Belgian Third Division B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	Spouwen-Mopertingen	10953	Spouwen-Mopertingen	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Esperanza Neerpelt	11975	Esperanza Neerpelt	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	KFC Sint-Lenaarts	10554	KFC Sint-Lenaarts	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	KFC Duffel	3307	FC Duffel	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Witgoor Sport Dessel	12877	Witgoor Sport Dessel	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Lyra TSV	6872	K Lyra TSV	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Overpeltse VV	8426	KVV Overpelt VV	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	KVV Vosselaar	12656	KVV Vosselaar	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	Merksem-Antwerpen Noord SC				https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Lutlommel VV	13884	K Lutlommel VV	A Lower Division	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	KFC Katelijne-Waver	3804	KFC Katelijne-Waver	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Everbeur Sport Averbode	13854	Everbeur Sport Averbode	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	K. Ternesse VV Wommelgem				https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2012/13	Belgian Fourth Division C	Excelsior Veldwezelt	12332	Excelsior Veldwezelt	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Vierde_klasse_2012-13_%28voetbal_Belgi%C3%AB%29
-2016/17	Belgian Second Amateur Division A	Knokke	8081	Royal Knokke	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Petegem	8167	KFC Sparta Petegem	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Aalst	3467	SC Eendracht Aalst	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Izegem	5497	KFC Izegem	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Sint-Eloois-Winkel	10552	Sint-Eloois-Winkel Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Brakel	8243	Olsa Brakel	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Temse	7445	KSV Temse	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Gent-Zeehaven	9213	KRC Gent-Zeehaven	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Torhout	9216	Torhout 1992 KM	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Gullegem	6909	Gullegem	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Sint-Niklaas	7938	SK Sint-Niklaas	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Harelbeke	5365	SW Harelbeke	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Westhoek	3392	VK Westhoek	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Bornem	1770	KSV Bornem	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Halle	4803	KSK Halle	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division A	Menen	195	SC Toekomst Menen	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Berchem Sport	1513	Berchem Sport 2004	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Tessenderlo	11116	The Sports Tessenderlo	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Rupel Boom	1743	Koninklijke Rupel Boom	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Spouwen-Mopertingen	10953	Spouwen-Mopertingen	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Wijgmaal	8250	Olympia SC Wijgmaal	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Bocholt	1697	Koninklijke Bocholter VV	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Zwarte Leeuw	3421	KFC Zwarte Leeuw	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Londerzeel	6724	Koninklijke Londerzeel SK	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Hoogstraten	5141	Hoogstraten VV	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Hades	1474	RC Hades	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Overijse	8424	Tempo Overijse	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Cappellen	5812	Royal Cappellen	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Duffel	3307	KFC Duffel	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Tienen-Hageland	6368	KVK Tienen	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Grimbergen	4605	KSC Grimbergen	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division B	Woluwe-Zaventem	6912	KV Woluwe-Zaventem	Belgian Third Division B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Châtelet	6050	Royal Châtelet SC	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	RFC Liège	9227	RFC Liège	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Olympic Charleroi	8258	ROC de Charleroi-Marchienne	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	La Louvière Centre	5146	UR La Louvière Centre	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Hamoir	4985	RRC Hamoir	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Acrenoise	9701	RES Acrenoise	Belgian Third Division A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Solières	714	Solières Sport	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Walhain	5452	Royal Wallonia Walhain CG	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Union La Calamine	6284	RFC Union La Calamine	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Waremme				https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Ciney	83	RU Wallonne Ciney	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Meux	7331	RFC Meux	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Couvin-Mariembourg	2777	RES Couvin-Mariembourg	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Givry	8575	US Givry	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Charleroi Fleurus	6340	Royal Charleroi Fleurus	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2016/17	Belgian Second Amateur Division C	Namur	5782	UR Namur	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2016%E2%80%9317_Belgian_Second_Amateur_Division
-2017/18	Belgian Second Amateur Division A	K. Rupel Boom FC	1743	Koninklijke Rupel Boom	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KFC Mandel United	9819	K.F.C Mandel United	A Lower Division	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KVC Sint-Eloois-Winkel Sport	10552	Sint-Eloois-Winkel Sport	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KFC Sparta Petegem	8167	KFC Sparta Petegem	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KVK Westhoek	3392	VK Westhoek	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	SK Sint-Niklaas	7938	SK Sint-Niklaas	A Lower Division	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KSV Temse	7445	KSV Temse	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	RC Harelbeke	5365	Racing Club Harelbeke	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	K. Olsa Brakel	8243	Olsa Brakel	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	FC Gullegem	6909	Gullegem	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KRC Gent	48	KAA Gent	Belgian First Division	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	K. Londerzeel SK	6724	Koninklijke Londerzeel SK	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KSK Ronse	9654	KSK Ronse	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	SK Pepingen-Halle	1530	Pepingen	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	Torhout 1992 KM	9216	Torhout 1992 KM	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division A	KSV Bornem	1770	KSV Bornem	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	KVV Thes Sport	11116	The Sports Tessenderlo	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	K. Bocholter VV	1697	Koninklijke Bocholter VV	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	Spouwen-Mopertingen	10953	Spouwen-Mopertingen	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	SC City Pirates Antwerpen				https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	K. Olympia SC Wijgmaal	8250	Olympia SC Wijgmaal	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	KVV Vosselaar	5180	KVV Vosselaar	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	RC Hades Hasselt	1474	RC Hades	A Lower Division	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	Tempo Overijse	8424	Tempo Overijse	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	R. Cappellen FC	5812	Royal Cappellen	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	KFC Duffel	3307	KFC Duffel	Belgian Fourth Division  B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	KFC Turnhout	7755	KV Turnhout	Belgian Fourth Division  A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	Hoogstraten VV	5141	Hoogstraten VV	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	K. Sporting Hasselt	5918	KSK Hasselt	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	KFC Zwarte Leeuw	3421	KFC Zwarte Leeuw	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	KVK Tienen	6368	KVK Tienen	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division B	KFC Sint-Lenaarts	10554	KFC Sint-Lenaarts	Belgian Fourth Division  D	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	Racing White Daring Molenbeek	3773	RWDM Brussels	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	RFC Liège	9227	RFC Liège	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	R. Olympic Club de Charleroi	8258	ROC de Charleroi-Marchienne	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	Entente Durbuy	11683	Royal Entente Durbuy	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	RRC Hamoir	4985	RRC Hamoir	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	UR La Louvière Centre	5146	UR La Louvière Centre	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	R. Stade Waremmien FC	11684	Royal Stade Waremme	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	R. Wallonia Walhain Chaumont-Gistoux	5452	Royal Wallonia Walhain CG	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	Solières Sport	714	Solières Sport	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	R. Entente Acren Lessines	9701	RES Acrenoise	Belgian Fourth Division  D	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	RFC Meux	7331	RFC Meux	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	RUS Rebecquoise	2046	RUS Rebecquoise	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	RUW Ciney	83	RU Wallonne Ciney	Belgian Fourth Division  C	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	R. Sprimont Comblain Sport	10954	Royal Sprimont Comblain Sport	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	RFC Union La Calamine	6284	RFC Union La Calamine	Belgian Third Division B	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2017/18	Belgian Second Amateur Division C	R. White Star Bruxelles	1682	Royal White Star Bruxelles	Belgian Third Division A	https://nl.wikipedia.org/wiki/Tweede_klasse_amateurs_2017-18_%28voetbal_Belgi%C3%AB%29
-2018/19	Belgian Second Amateur Division A	Sint-Eloois-Winkel	10552	Sint-Eloois-Winkel Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Mandel United	5497	KFC Mandel United	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Petegem	8167	KFC Sparta Petegem	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Gent-Zeehaven	9213	KRC Gent-Zeehaven	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Wijgmaal	8250	Olympia SC Wijgmaal	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Ronse	9654	KSK Ronse	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Menen	195	SC Toekomst Menen	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Londerzeel	6724	Koninklijke Londerzeel SK	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Diegem	3080	Koninklijke Diegem Sport	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Westhoek	3392	VK Westhoek	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Dikkelvenne	11112	Dikkelvenne	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Harelbeke	5365	Racing Club Harelbeke	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Gullegem	6909	Gullegem	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Eppegem	8389	KFC Eppegem	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Overijse	8424	Tempo Overijse	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division A	Brakel	8243	Olsa Brakel	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Patro Eisden Maasmechelen	8625	Patro Eisden Maasmechelen	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Hasselt	5918	KSK Hasselt	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Temse	7445	KSV Temse	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Bocholt	1697	Koninklijke Bocholter VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Berchem	1513	Berchem Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Hades	1474	RC Hades	A Lower Division	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Cappellen	5812	Royal Cappellen	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Duffel	3307	KFC Duffel	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Sint-Niklaas	7938	SK Sint-Niklaas	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Vosselaar	5180	KVV Vosselaar	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Hoogstraten	5141	Hoogstraten VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Hamme	6918	KFC VW Hamme	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Spouwen-Mopertingen	10953	Spouwen-Mopertingen	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	City Pirates				https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Turnhout	7755	KV Turnhout	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division B	Heur-Tongeren				https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	La Louvière Centre	5146	UR La Louvière Centre	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Visé	9875	CS Visé	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Hamoir	4985	RRC Hamoir	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Francs Borains	7172	Royal Francs Borains	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Rebecq	2046	RUS Rebecquoise	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Tilleur	796	RFC Tilleur Saint-Gilles	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	La Louvière	6340	RAAL La Louvière	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Durbuy	7156	Royal Entente Durbuy	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Meux	7331	RFC Meux	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Couvin-Mariembourg	2777	RES Couvin-Mariembourg	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Waremme	5755	Royal Stade Waremme	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Solières	714	Solières Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Acren-Lessines	9701	RES Acrenoise	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Walhain	5452	Royal Wallonia Walhain CG	Belgian Third Division B	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Olympic Charleroi	8258	Olympic Charleroi	Belgian Third Division A	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2018/19	Belgian Second Amateur Division C	Ciney	83	RU Wallonne Ciney	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2018%E2%80%9319_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Knokke	8081	FC Knokke	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Mandel United	5497	KFC Mandel United	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Ronse	9654	KSK Ronse	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Oudenaarde	8413	KSV Oudenaarde	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Gent-Zeehaven	9213	KRC Gent-Zeehaven	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Petegem	8167	KFC Sparta Petegem	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Gullegem	6909	FC Gullegem	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Zwevezele	11006	SKV Zwevezele	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Harelbeke	5365	Racing Harelbeke	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Dikkelvenne	3221	SC Dikkelvenne	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Westhoek	3392	KVK Westhoek	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Temse	7445	KSV Temse	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Menen	195	KSCT Menen	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Merelbeke	11003	KFC Merelbeke	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Sint-Niklaas	7938	SK Sint-Niklaas	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division A	Hamme	6918	KFC VW Hamme	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Tienen	6368	KVK Tienen	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Bocholt	1697	Bocholt VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Aalst	3467	SC Eendracht Aalst	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Cappellen	5812	Royal Cappellen FC	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Hades	1474	RC Hades	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Hasselt	5918	KSK Hasselt	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Vosselaar	5180	KVV Vosselaar	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Diegem	3080	Diegem Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Berchem	1513	Berchem Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Geel	7226	AS Verbroedering Geel	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Londerzeel	6724	SK Londerzeel	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Wijgmaal	8250	Olympia SC Wijgmaal	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Pepingen-Halle	1530	SK Pepingen-Halle	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Hoogstraten	5141	Hoogstraten VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Spouwen-Mopertingen	3179	Spouwen Mopertingen	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division B	Duffel	3307	KFC Duffel	Belgian Third Division A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Francs Borains	7172	Royal Francs Borains	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Meux	7331	RFC Meux	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	La Louvière	6340	RAAL La Louvière	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Rebecq	2046	RUS Rebecq	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Hamoir	4985	RRC Hamoir	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Stockay	11097	RRC Stockay-Warfusée	A Lower Division	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Durbuy	7156	Royale Entente Durbuy	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Givry	8575	RUS Givry	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Acren-Lessines	9701	RE Acren-Lessines	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Tilleur	796	RFC Tilleur	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Verlaine	5463	RCS Verlaine	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Couvin-Mariembourg	2777	RES Couvin-Mariembourg-Fraire	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Waremme	5755	RS Waremmien FC	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Solières	714	Solières Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Namur FLV	5782	Union Namur Fosses-la-Ville	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2019/20	Belgian Second Amateur Division C	Onhaye	327	CS Onhaye	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2019%E2%80%9320_Belgian_Second_Amateur_Division
-2020/21	Belgian Division 2 A	Ninove	5059	KVK Ninove	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Gent-Zeehaven	9213	KRC Gent-Zeehaven	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Oudenaarde	8413	KSV Oudenaarde	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Petegem	8167	KFC Sparta Petegem	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Harelbeke	5365	Racing Harelbeke	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Dikkelvenne	3221	SC Dikkelvenne	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Olsa Brakel	8243	Olsa Brakel	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Merelbeke	3032	KFC Merelbeke	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Lokeren-Temse	6686	KSC Lokeren-Temse	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Zwevezele	3309	SKV Zwevezele	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Zelzate	8679	KVV Zelzate	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Wetteren	2693	RFC Wetteren	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Ronse	9654	KSK Ronse	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Menen	195	KSCT Menen	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Gullegem	6909	FC Gullegem	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 A	Westhoek	3392	KVK Westhoek	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Bocholt	1697	Bocholt VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Hoogstraten	5141	Hoogstraten VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Lyra-Lierse	6872	Koninklijke Lyra-Lierse Berlaar	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Hasselt	5918	Koninklijke Sporting Hasselt	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Diegem	3080	Diegem Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Londerzeel	6724	SK Londerzeel	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Hades	1474	RC Hades	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Pepingen-Halle	1530	SK Pepingen-Halle	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Berchem	1513	Berchem Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Houtvenne	3965	KFC Houtvenne	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Cappellen	5812	Royal Cappellen FC	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Spouwen-Mopertingen	3179	Spouwen Mopertingen	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Heur-Tongeren	3048	KFC Heur Tongeren	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Aalst	3467	SC Eendracht Aalst	Belgian Third Division A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	City Pirates	1392	KSC City Pirates	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 B	Wijgmaal	8250	Olympia SC Wijgmaal	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Tubize	9299	AFC Tubize	Belgian Second Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Ganshoren	94	FC Ganshoren	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Stockay	2774	RRC Stockay-Warfusée	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	La Louvière	6340	RAAL La Louvière	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Hamoir	4985	RRC Hamoir	A Lower Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Givry	8575	RUS Givry	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Jette	9893	RSD Jette	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Solières	714	Solières Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Couvin-Mariembourg	2777	RES Couvin-Mariembourg-Fraire	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Verlaine	5463	RCS Verlaine	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Waremme	5755	RS Waremmien FC	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Meux	7331	RFC Meux	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Rebecq	2046	RUS Rebecq	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Acren-Lessines	9701	RE Acren-Lessines	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Warnant	11371	RFC Warnant	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Durbuy	7156	Royale Entente Durbuy	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2020/21	Belgian Division 2 C	Virton	2967	Royal Excelsior Virton	Belgian Second Division	https://en.wikipedia.org/wiki/2020%E2%80%9321_Belgian_Division_2
-2021/22	Belgian Division 2 A	Petegem	8167	KFC Sparta Petegem	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Ninove	5059	KVK Ninove	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Olsa Brakel	8243	Olsa Brakel	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Lokeren-Temse	6686	KSC Lokeren-Temse	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Zwevezele	3309	SKV Zwevezele	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Zelzate	8679	KVV Zelzate	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Merelbeke	3032	KFC Merelbeke	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Gullegem	6909	FC Gullegem	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Oudenaarde	8413	KSV Oudenaarde	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Harelbeke	5365	Racing Harelbeke	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Gent-Zeehaven	9213	KRC Gent	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Dikkelvenne	3221	SC Dikkelvenne	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Westhoek	3392	KVK Westhoek	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Wetteren	2693	RFC Wetteren	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Menen	195	KSCT Menen	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 A	Ronse	9654	KSK Ronse	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Hoogstraten	5141	Hoogstraten VV	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Aalst	3467	SC Eendracht Aalst	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Lyra-Lierse	6872	Koninklijke Lyra-Lierse Berlaar	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Cappellen	5812	Royal Cappellen FC	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Belisia	4779	Belisia Bilzen SV	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Bocholt	1697	Bocholt VV	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	City Pirates	1392	KSC City Pirates	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Londerzeel	6724	SK Londerzeel	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Diegem	3080	Diegem Sport	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Hasselt	5918	Koninklijke Sporting Hasselt	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Berchem	1513	Berchem Sport	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Tongeren	3048	KSK Tongeren	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Hades	1474	RC Hades	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Pepingen-Halle	1530	SK Pepingen-Halle	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Houtvenne	3965	KFC Houtvenne	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 B	Wijgmaal	8250	Olympia SC Wijgmaal	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	La Louvière	6340	RAAL La Louvière	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Meux	7331	RFC Meux	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Warnant	2150	RFC Warnant	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Tubize-Braine	9299	R Union Tubize-Braine	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Rebecq	2046	RUS Rebecq	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Ganshoren	94	FC Ganshoren	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Solières	714	Solières Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Hamoir	4985	RRC Hamoir	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Acren-Lessines	9701	RE Acren-Lessines	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Jette	9893	RSD Jette	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Waremme	5755	RS Waremmien FC	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Stockay	2774	RRC Stockay-Warfusée	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Verlaine	5463	RCS Verlaine	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Couvin-Mariembourg	2777	RES Couvin-Mariembourg-Fraire	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Givry	8575	RUS Givry	Belgian Third Division B	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2021/22	Belgian Division 2 C	Durbuy	7156	Royale Entente Durbuy	Belgian Third Division A	https://en.wikipedia.org/wiki/2021%E2%80%9322_Belgian_Division_2
-2022/23	Belgian Division 2 A	Lokeren-Temse	6686	KSC Lokeren-Temse	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Petegem	8167	KFC Sparta Petegem	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Oostkamp	7866	KSV Oostkamp	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Jong Cercle	10479	Cercle Brugge B	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Racing Gent	9213	KRC Gent	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Merelbeke	3032	KFC Merelbeke	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Aalst	3467	SC Eendracht Aalst	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Jong Essevee	10458	Zulte-Waregem B	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Dikkelvenne	3221	SC Dikkelvenne	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Oudenaarde	8413	KSV Oudenaarde	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Zelzate	8679	KVV Zelzate	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Torhout	9216	KM Torhout	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Olsa Brakel	8243	Olsa Brakel	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Harelbeke	5365	Racing Harelbeke	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Gullegem	6909	FC Gullegem	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Wetteren	2693	RFC Wetteren	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Westhoek	3392	KVK Westhoek	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 A	Erpe-Mere	1594	Erpe-Mere United	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Cappellen	5812	Royal Cappellen FC	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Hades	1474	RC Hades	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Hasselt	5918	Koninklijke Sporting Hasselt	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Belisia	4779	Belisia Bilzen SV	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Tongeren	3048	KSK Tongeren	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Lyra-Lierse Berlaar	6872	Koninklijke Lyra-Lierse Berlaar	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Jong KV Mechelen	10430	KV Mechelen U23	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Diegem	3080	Diegem Sport	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Bocholt	1697	Bocholt VV	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Racing Mechelen	9218	Racing Mechelen	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Lille	4863	KVC Lille United	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	City Pirates	1392	KSC City Pirates	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Londerzeel	6724	SK Londerzeel	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Berchem	1513	Berchem Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Lebbeke	2586	FC Lebbeke	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Turnhout	7755	KFC Turnhout	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Pepingen-Halle	1530	SK Pepingen-Halle	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 B	Beerschot U23	10490	Beerschot V.A U23	Belgian Third Division A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Warnant	2150	RFC Warnant	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Union Namur	5782	Union Namur Fosses-la-Ville	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Tubize-Braine	9299	R Union Tubize-Braine	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	La Louvière Centre	5146	UR La Louvière Centre	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Meux	7331	RFC Meux	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Binche	182	RUS Binche	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Rebecq	2046	RUS Rebecq	Belgian Third Division B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Stockay	2774	RRC Stockay-Warfusée	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Verlaine	5463	RCS Verlaine	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Dison	1436	Stade Disonais	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Hamoir	4985	RRC Hamoir	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Acren-Lessines	9701	RE Acren-Lessines	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Ganshoren	94	FC Ganshoren	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Union SG B	9217	Royale Union Saint Gilloise	Belgian First Division	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Jette	9893	RSD Jette	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Solières	714	Solières Sport	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	RFC Seraing U23	10274	RFC Seraing U23	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2022/23	Belgian Division 2 C	Waremme	5755	RS Waremmien FC	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2022%E2%80%9323_Belgian_Division_2
-2023/24	Belgian Division 2 A	Aalst	3467	SC Eendracht Aalst	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Ninove	5059	KVK Ninove	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Dikkelvenne	3221	SC Dikkelvenne	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Merelbeke	3032	KFC Merelbeke	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Jong Cercle	10479	Cercle Brugge B	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Voorde-Appelterre	6399	KFC Voorde-Appelterre	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Oudenaarde	8413	KSV Oudenaarde	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Oostkamp	7866	KSV Oostkamp	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Jong Essevee	10458	Zulte-Waregem B	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Gullegem	6909	FC Gullegem	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Torhout	9216	KM Torhout	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Racing Gent	9213	KRC Gent	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Zelzate	8679	KVV Zelzate	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Olsa Brakel	8243	Olsa Brakel	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Harelbeke	5365	Racing Harelbeke	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Petegem	8167	KFC Sparta Petegem	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Mandel United	5497	Royal FC Mandel United	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 A	Wetteren	2693	RFC Wetteren	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Belisia	4779	Belisia Bilzen SV	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Hasselt	5918	Koninklijke Sporting Hasselt	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Lyra-Lierse Berlaar	6872	Koninklijke Lyra-Lierse Berlaar	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Rupel Boom	1743	FC Rupel Boom	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Racing Mechelen	9218	Racing Mechelen	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Houtvenne	3965	KFC Houtvenne	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Bocholt	1697	Bocholt VV	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Tongeren	3048	KSK Tongeren	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Lebbeke	2586	FC Lebbeke	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Jong KV Mechelen	10430	KV Mechelen U23	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Berchem	1513	Berchem Sport	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Diegem	3080	Diegem Sport	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Wezel	10511	FC Wezel Sport	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Hades	1474	RC Hades	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Lille	4863	KVC Lille United	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Overijse	8424	Tempo Overijse	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	City Pirates	1392	KSC City Pirates	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 B	Londerzeel	6724	SK Londerzeel	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Mons	7504	Renaissance Mons 44	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Rochefort				https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Tubize-Braine	9299	R Union Tubize-Braine	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Tournai	9220	RFC Tournai	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Binche	182	RUS Binche	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Meux	7331	RFC Meux	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Warnant	2150	RFC Warnant	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Stockay	2774	RRC Stockay-Warfusée	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	La Calamine	10484	RFCU Kelmis	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	La Louvière Centre	5146	UR La Louvière Centre	Belgian Third Division B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Union SG B	9217	Royale Union Saint Gilloise	Belgian First Division	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Verviers	1436	Stade Disonais	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Verlaine	5463	RCS Verlaine	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Ganshoren	94	FC Ganshoren	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Jette	9893	RSD Jette	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Acren-Lessines	9701	RE Acren-Lessines	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Hamoir	4985	RRC Hamoir	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2023/24	Belgian Division 2 C	Rebecq	2046	RUS Rebecq	Belgian Third Division A	https://en.wikipedia.org/wiki/2023%E2%80%9324_Belgian_Division_2
-2024/25	Belgian Division 2 A	Roeselare	9906	SK Roeselare	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Oostkamp	7866	KSV Oostkamp	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Zelzate	8679	KVV Zelzate	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Harelbeke	5365	Racing Harelbeke	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Oudenaarde	8413	KSV Oudenaarde	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Dikkelvenne	3221	SC Dikkelvenne	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Jong Essevee	10458	Zulte-Waregem B	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Westhoek	3392	KVK Westhoek	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Petegem	8167	KFC Sparta Petegem	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Racing Gent	9213	KRC Gent	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Lebbeke	2586	FC Lebbeke	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Jong Westerlo	11042	Jong Westel	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Torhout	9216	KM Torhout	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Gullegem	6909	FC Gullegem	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Olsa Brakel	8243	Olsa Brakel	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 A	Voorde-Appelterre	6399	KFC Voorde-Appelterre	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Houtvenne	3965	KFC Houtvenne	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Rupel Boom	1743	FC Rupel Boom	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Diegem	3080	Diegem Sport	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Termien	209	Eendracht Termien	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Jong KV Mechelen	10430	KV Mechelen U23	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Racing Mechelen	9218	KRC Mechelen	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Hades	1474	RC Hades	Belgian Third Division A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Berg en Dal	10847	KVV Berg en Dal	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Jong STVV				https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Berchem	1513	Berchem Sport	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Tongeren	3048	KSK Tongeren	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Wellen	7860	KVK Wellen	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Bocholt	1697	Bocholt VV	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Lille	4863	KVC Lille United	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Pelt	1774	KFC Esperanza Pelt	Belgian Fourth Division  D	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 B	Wezel	10511	FC Wezel Sport	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Crossing Schaerbeek	3481	Crossing Schaerbeek	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Meux	7331	RFC Meux	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Onhaye	327	CS Onhaye	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Habay-la-Neuve	4955	RSC Habay-La-Neuve	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Acren-Lessines	9701	RE Acren-Lessines	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Verviers	10111	Stade Verviétois	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Raeren-Eynatten	3470	RFC Raeren-Eynatten	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	La Calamine	10484	RFCU Kelmis	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Seraing B	10274	RFC Seraing U23	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Jette	9893	RSD Jette	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Manageoise	3911	CS Entité Manageoise	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Aywaille	5061	Royal Aywaille	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Ganshoren	94	FC Ganshoren	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Union Hutoise	5230	Union Hutoise	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Ostiches-Ath	964	CS Pays Vert Ostiches Ath	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Verlaine	5463	RCS Verlaine	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	La Louvière Centre	5146	UR La Louvière Centre	Belgian Third Division B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2024/25	Belgian Division 2 C	Eupen U23	11008	KAS Eupen U23	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2024%E2%80%9325_Belgian_Division_2
-2025/26	Belgian Division 2 A	Mandel United	5497	RFC Mandel United	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Diksmuide-Oostende	11174	KV Diksmuide Oostende	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Lebbeke	2586	FC Lebbeke	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Wetteren	2693	RFC Wetteren	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Oostkamp	7866	KSV Oostkamp	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Torhout	9216	KM Torhout	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Petegem	8167	KFC Sparta Petegem	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Harelbeke	5365	Racing Club Harelbeke	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Kalken	10849	KFC Hoger Op Kalken	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Hamme	6918	KFC VW Hamme	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Jong Essevee	10458	Zulte-Waregem B	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Jong KV Mechelen	10430	KV Mechelen U23	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Oudenaarde	8413	KSV Oudenaarde	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Racing Gent	9213	KRC Gent	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Westhoek	3392	KVK Westhoek	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 A	Gullegem	6909	FC Gullegem	Belgian Fourth Division  B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Heist	4959	KSK Heist	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Londerzeel	6724	SK Londerzeel	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Young Reds Antwerp	10466	Royal Antwerp FC B	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Termien	209	Eendracht Termien	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Rupel Boom	1743	FC Rupel Boom	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Bocholt	1697	Bocholt VV	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Hades	1474	RC Hades	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Wellen	7860	KVK Wellen	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Racing Mechelen	9218	KRC Mechelen	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Nijlen	1035	KFC Nijlen	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	STVV Youth	11173	STVV Youth	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Tongeren	3048	KSK Tongeren	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Cappellen	5812	Royal Cappellen FC	Belgian Third Division B	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Rotselaar	9529	Sportief Rotselaar	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Berchem	1513	Berchem Sport	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 B	Berg en Dal	10847	KVV Berg en Dal	Belgian Fourth Division  A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Onhaye	327	CS Onhaye	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Ganshoren	94	FC Ganshoren	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Verviers	10111	Stade Verviétois	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Flénu	10844	FC Flénu	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Braine	3926	RCS Braine	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Union Hutoise	5230	Union Hutoise	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Ostiches-Ath	964	CS Pays Vert Ostiches Ath	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Raeren-Eynatten	3470	RFC Raeren-Eynatten	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Jette	9893	RSD Jette	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	La Calamine	10484	RFCU Kelmis	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Acren-Lessines	9701	RE Acren-Lessines	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Richelle United	5050	FC United Richelle	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Manageoise	3911	CS Entité Manageoise	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Binche	182	RUS Binche	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Aywaille	5061	Royal Aywaille	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Sporting Bruxelles	4490	Sporting Bruxelles	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Tilff	9903	RSC Tilffois	Belgian Fourth Division  C	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
-2025/26	Belgian Division 2 C	Tournai	9220	RFC Tournai	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_2
+2025/26	Belgian Division 1 ACFF	SL16 FC	10438	Standard de Liège 16 FC	Belgian Third Division A	https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Division_1

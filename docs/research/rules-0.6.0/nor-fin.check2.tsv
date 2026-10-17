@@ -1,0 +1,171 @@
+id	field	verdict	second_url	note
+nor-fin-9	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-10	format	agree	https://rsssf.org/tablesf/finleagcuphist.html	RSSSF: no competition 2001-2003
+nor-fin-14	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-19	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-20	format	agree	https://rsssf.org/tablesf/finleagcuphist.html	RSSSF: no competition 2001-2003
+nor-fin-24	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-29	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-33	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-34	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-39	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-43	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-49	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-53	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-59	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-63	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-69	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-70	name	agree	https://rsssf.org/tablesf/finleagcup08.html	RSSSF: Liigacup 2008, 2 groups of 7, top 4 to quarter-finals, semi-finals, final
+nor-fin-70	clubs	agree	https://rsssf.org/tablesf/finleagcup08.html	RSSSF: Liigacup 2008, 2 groups of 7, top 4 to quarter-finals, semi-finals, final
+nor-fin-70	format	agree	https://rsssf.org/tablesf/finleagcup08.html	RSSSF: Liigacup 2008, 2 groups of 7, top 4 to quarter-finals, semi-finals, final
+nor-fin-73	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-74	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-79	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-80	name	agree	https://rsssf.org/tablesf/finleagcup09.html	RSSSF: Liigacup 2009, 2 groups of 7 Veikkausliiga clubs, single round, top 4 to quarter-finals
+nor-fin-80	clubs	agree	https://rsssf.org/tablesf/finleagcup09.html	RSSSF: Liigacup 2009, 2 groups of 7 Veikkausliiga clubs, single round, top 4 to quarter-finals
+nor-fin-80	format	agree	https://rsssf.org/tablesf/finleagcup09.html	RSSSF: Liigacup 2009, 2 groups of 7 Veikkausliiga clubs, single round, top 4 to quarter-finals
+nor-fin-84	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-84	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-89	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-93	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-94	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-94	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-99	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-100	name	agree	https://www.finlandfootball.net/league-cup-2011.html	Finnish Football Archive page title: Finnish Liigacup
+nor-fin-100	clubs	agree	https://www.finlandfootball.net/league-cup-2011.html	Finnish Football Archive: 2 groups of 7 (14 Veikkausliiga clubs), top 4 to quarter-finals, final 23 April 2011
+nor-fin-100	format	agree	https://www.finlandfootball.net/league-cup-2011.html	Finnish Football Archive: 2 groups of 7 (14 Veikkausliiga clubs), top 4 to quarter-finals, final 23 April 2011
+nor-fin-103	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-104	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-104	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-109	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-110	name	agree	https://www.finlandfootball.net/league-cup-2012.html	Finnish Football Archive page title: Finnish Liigacup
+nor-fin-110	clubs	agree	https://www.finlandfootball.net/league-cup-2012.html	Finnish Football Archive: 3 groups of 4, top 2 and 2 best 3rd to quarter-finals
+nor-fin-110	format	agree	https://www.finlandfootball.net/league-cup-2012.html	Finnish Football Archive: 3 groups of 4, top 2 and 2 best 3rd to quarter-finals
+nor-fin-113	name	agree	https://www.kampanje.com/archive/adeccoligaen-forsvinner/293066	Kampanje 5 Feb 2014: the 1. divisjon was named Adeccoligaen from 2005; the deal was not extended after 2013
+nor-fin-114	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-114	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-119	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes
+nor-fin-120	name	agree	https://www.finlandfootball.net/league-cup-2013.html	Finnish Football Archive page title: Finnish Liigacup
+nor-fin-120	clubs	agree	https://www.finlandfootball.net/league-cup-2013.html	Finnish Football Archive: 3 groups of 4 (12 Veikkausliiga clubs), 6 matches each, top 2 and 2 best 3rd to quarter-finals
+nor-fin-120	format	agree	https://www.finlandfootball.net/league-cup-2013.html	Finnish Football Archive: 3 groups of 4 (12 Veikkausliiga clubs), 6 matches each, top 2 and 2 best 3rd to quarter-finals
+nor-fin-123	name	agree	https://lokalhistoriewiki.no/wiki/OBOS	OBOS sponsor only from 2015 (Aftenposten 15 Jan 2015, the division finally got a new name); Kampanje Feb 2014: Adecco deal ended after 2013
+nor-fin-124	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-124	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-129	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-130	name	agree	https://www.finlandfootball.net/league-cup-2014.html	Finnish Football Archive page title: Finnish Liigacup
+nor-fin-130	clubs	agree	https://www.finlandfootball.net/league-cup-2014.html	Finnish Football Archive: 4 groups of 3, 4 matches each, top 2 to quarter-finals; it does not state that the groups were by geography
+nor-fin-130	format	agree	https://www.finlandfootball.net/league-cup-2014.html	Finnish Football Archive: 4 groups of 3, 4 matches each, top 2 to quarter-finals; it does not state that the groups were by geography
+nor-fin-134	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-134	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-139	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-140	name	agree	https://www.finlandfootball.net/league-cup-2015.html	Finnish Football Archive page title: Finnish Liigacup
+nor-fin-140	clubs	agree	https://www.finlandfootball.net/league-cup-2015.html	Finnish Football Archive: 4 groups of 3 (12 Veikkausliiga clubs), 4 matches each, top 2 to quarter-finals
+nor-fin-140	format	agree	https://www.finlandfootball.net/league-cup-2015.html	Finnish Football Archive: 4 groups of 3 (12 Veikkausliiga clubs), 4 matches each, top 2 to quarter-finals
+nor-fin-144	subs_used	agree	https://web.archive.org/web/20160708085111/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2016 rules: 7 substitutes on the bench, 3 substitutions
+nor-fin-144	bench	agree	https://web.archive.org/web/20160708085111/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2016 rules: 7 substitutes on the bench, 3 substitutions
+nor-fin-149	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-150	name	agree	https://www.finlandfootball.net/league-cup-2016.html	Finnish Football Archive page title: Finnish Liigacup
+nor-fin-150	clubs	agree	https://www.finlandfootball.net/league-cup-2016.html	Finnish Football Archive: 2 groups of 6 (12 Veikkausliiga clubs), group winners in the final
+nor-fin-150	format	agree	https://www.finlandfootball.net/league-cup-2016.html	Finnish Football Archive: 2 groups of 6 (12 Veikkausliiga clubs), group winners in the final
+nor-fin-154	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-154	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-159	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-164	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-164	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-169	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-174	subs_used	agree	https://web.archive.org/web/20201111183412/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2019 rules: 7 substitutes on the bench, 3 substitutions (a 4th allowed in extra time)
+nor-fin-174	bench	agree	https://web.archive.org/web/20201111183412/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2019 rules: 7 substitutes on the bench, 3 substitutions (a 4th allowed in extra time)
+nor-fin-179	bench	no second source		RSSSF and the Finnish Football Archive give no line-ups with unused substitutes; the value is the 2013 count carried to this year, an inference in substance
+nor-fin-185	format	no second source		RSSSF list ends in 2019; no other publisher read today states that no edition took place
+nor-fin-194	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-194	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-195	format	no second source		RSSSF list ends in 2019; no other publisher read today states that no edition took place
+nor-fin-204	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-204	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-205	format	no second source		RSSSF list ends in 2019; no other publisher read today states that no edition took place
+nor-fin-214	subs_used	agree	https://web.archive.org/web/20240118185552/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2023 rules: 9 substitutes on the bench, 5 substitutions
+nor-fin-214	bench	agree	https://web.archive.org/web/20240118185552/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2023 rules: 9 substitutes on the bench, 5 substitutions
+nor-fin-215	format	no second source		RSSSF list ends in 2019; no other publisher read today states that no edition took place
+nor-fin-220	name	agree	https://www.veikkausliiga.com/uutiset/2023/03/31/sami-hyypia-trophy-jaossa-lauantaina-liigacup-2023-huipentuu-finaaliin	organiser: Liigacup 2023
+nor-fin-220	clubs	no second source		veikkausliiga.com reports of 2023 name only the finalists
+nor-fin-224	subs_used	agree	https://web.archive.org/web/20240909093138/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2024 rules: 9 substitutes on the bench, 5 substitutions
+nor-fin-224	bench	agree	https://web.archive.org/web/20240909093138/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2024 rules: 9 substitutes on the bench, 5 substitutions
+nor-fin-225	format	no second source		RSSSF list ends in 2019; no other publisher read today states that no edition took place
+nor-fin-234	subs_used	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-234	bench	no second source		RSSSF season pages give no line-ups after 2005 and list used substitutes only; no archived NFF cup rules for this edition
+nor-fin-235	format	no second source		RSSSF list ends in 2019; no other publisher read today states that no edition took place
+nor-fin-243	clubs	agree	https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-obos-ligaen.pdf	NFF OBOS-ligaen 2026 rules: 16 clubs, home and away, 1-2 up, 15-16 down, 3-6 play-off and 14th v 2. divisjon play-off winner, no split
+nor-fin-243	up	agree	https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-obos-ligaen.pdf	NFF OBOS-ligaen 2026 rules: 16 clubs, home and away, 1-2 up, 15-16 down, 3-6 play-off and 14th v 2. divisjon play-off winner, no split
+nor-fin-243	down	agree	https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-obos-ligaen.pdf	NFF OBOS-ligaen 2026 rules: 16 clubs, home and away, 1-2 up, 15-16 down, 3-6 play-off and 14th v 2. divisjon play-off winner, no split
+nor-fin-243	playoffs	agree	https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-obos-ligaen.pdf	NFF OBOS-ligaen 2026 rules: 16 clubs, home and away, 1-2 up, 15-16 down, 3-6 play-off and 14th v 2. divisjon play-off winner, no split
+nor-fin-243	split	agree	https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-obos-ligaen.pdf	NFF OBOS-ligaen 2026 rules: 16 clubs, home and away, 1-2 up, 15-16 down, 3-6 play-off and 14th v 2. divisjon play-off winner, no split
+nor-fin-243	format	agree	https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-obos-ligaen.pdf	NFF OBOS-ligaen 2026 rules: 16 clubs, home and away, 1-2 up, 15-16 down, 3-6 play-off and 14th v 2. divisjon play-off winner, no split
+nor-fin-244	subs_used	agree	https://web.archive.org/web/20250620234314/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2026 rules (the 2025-26 transition edition): 9 substitutes on the bench, 5 substitutions
+nor-fin-244	bench	agree	https://web.archive.org/web/20250620234314/https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NM Menn 2026 rules (the 2025-26 transition edition): 9 substitutes on the bench, 5 substitutions
+nor-fin-245	format	no second source		RSSSF list ends in 2019; no other publisher read today states that no edition took place
+nor-fin-248	clubs	agree	https://jpy.fi/en/welcome-to-finland/football-in-finland	JPY (players association): 10 clubs, double round plus a third round, 27 matches, 1st up, 2nd play-off, last down, 9th play-off
+nor-fin-248	up	agree	https://jpy.fi/en/welcome-to-finland/football-in-finland	JPY (players association): 10 clubs, double round plus a third round, 27 matches, 1st up, 2nd play-off, last down, 9th play-off
+nor-fin-248	down	agree	https://jpy.fi/en/welcome-to-finland/football-in-finland	JPY (players association): 10 clubs, double round plus a third round, 27 matches, 1st up, 2nd play-off, last down, 9th play-off
+nor-fin-248	split	agree	https://jpy.fi/en/welcome-to-finland/football-in-finland	JPY (players association): 10 clubs, double round plus a third round, 27 matches, 1st up, 2nd play-off, last down, 9th play-off
+nor-fin-248	format	agree	https://jpy.fi/en/welcome-to-finland/football-in-finland	JPY (players association): 10 clubs, double round plus a third round, 27 matches, 1st up, 2nd play-off, last down, 9th play-off
+nor-fin-249	format	disagree	https://www.flashscore.com/news/soccer-suomen-cup-four-hour-draws-flamingo-pants-santa-claus-welcome-to-the-2026-suomen-cup/OWKaJMeK	Flashscore: clubs of the top four tiers enter in round 3, the 4 clubs in European competition in round 5. Settled by the Palloliitto 2026 rules (second); value changed in nor-fin.tsv
+nor-fin-252	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-252	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-252	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-252	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-252	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-252	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-253	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-253	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-253	up	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-253	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-253	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-253	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-253	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-254	format	agree	https://www.fotball.no/globalassets/regler-og-retningslinjer/turneringsbestemmelser/turneringsbestemmelser-nmmenn.pdf	NFF NM Menn 2027 rules: over two calendar years, 128 clubs in round 1, 84 direct, the rest from district qualifiers and play-off, knockout. The dates are not stated
+nor-fin-255	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-257	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-257	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-257	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-257	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-257	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-257	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-258	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-258	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-258	up	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-258	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-258	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-258	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-258	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-259	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-260	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-262	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-262	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-262	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-262	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-262	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-262	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-263	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-263	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-263	up	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-263	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-263	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-263	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-263	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-264	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-265	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-267	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-267	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-267	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-267	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-267	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-267	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-268	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-268	clubs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-268	up	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-268	down	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-268	playoffs	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-268	split	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-268	format	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-269	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked
+nor-fin-270	name	no second source		2027 or 2028 row: the 2026 value carried forward, an inference (see notes); not checked

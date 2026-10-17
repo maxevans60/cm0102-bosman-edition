@@ -3,7 +3,7 @@
 Slice 6 of `docs/specs/2026-10-16-seasons-0.6.0-spec.md`. Files:
 
 - `nor-fin.tsv`: 270 rows, 10 per season for 2001/02 to 2027/28.
-- `nor-fin-clubs.tsv`: 644 club rows for the divisions whose real club count differs from the season database.
+- `nor-fin-clubs.tsv`: 1112 club rows for the divisions whose real club count differs from the season database (644 from pass 1, 468 added in pass 2).
 - This note.
 
 ## Method
@@ -118,3 +118,89 @@ Sources added: 82 fields (clubs 8, name 74).
 - Liigacup `clubs` = "Veikkausliiga clubs" cites the season page or https://en.wikipedia.org/wiki/Finnish_League_Cup, which states that teams from the Veikkausliiga contest the cup.
 
 Disagreements: none. Fields with no source: none.
+
+
+## Pass 2
+
+Date 2026-10-17. Decisions Q268 to Q331 of the spec apply. Row ids and row order stay the same. `rules_lint.py` gives 0 problems before and after.
+
+### No new tiers and no new nations (Q331, Q288)
+
+The original runs two tiers for each nation (`nor_prm`, `nor_first`, `fin_prm`, `fin_first`). The part has no rows below tier 2, and no row needs a nation that a game cannot select. The Norwegian Super Cup and the Finnish League Cup are cups of the existing tiers, so they stay.
+
+- Rows deleted: 0.
+- Club rows deleted: 0.
+
+### Conflicts and open points
+
+1. nor-fin-2 and nor-fin-4, 2002 Norwegian bench: settled as 7. A third publisher, the TV 2 match report on altomfotball.no, lists 7 Vålerenga substitutes on the bench and no Jonas Krogstad. Its Odd list agrees with the 7 of Wikipedia. URL: https://web.archive.org/web/20230426040929/https://www.altomfotball.no/element.do?cmd=match&matchId=45940&tournamentId=110&seasonId=324&useFullUrl=false
+2. nor-fin-5, 2002 Norwegian Super Cup: settled as `not held`. In real life no official edition took place. The Rosenborg v Viking match of 7 April 2002 was a friendly without official status, so the game does not play it. URL: https://www.rsssf.org/tablesn/noosupcuphist.html
+3. League Cup entry in 2006, 2007, 2009 to 2011 and 2013 to 2015: already settled under "Loose ends" (only Veikkausliiga clubs). No change.
+4. nor-fin-260 and nor-fin-270, League Cup 2027 and 2028: nothing has happened yet. The rows now carry the 2026 format and entry forward as an inference, as all other 2027 and 2028 rows do. URL: https://www.veikkausliiga.com/uutiset/2025/12/16/liigacupin-2026-lohkovaiheen-alustava-ohjelma-valmis-tasan-kuukausi-alkuun
+5. Knock-on of club moves ("Missing clubs" above): settled by the club moves below (Q279, Q280).
+6. The 2002 Ykkönen zones: real life had 9 and 9 clubs. The database has 10 and 10. The pass 1 list of 9 and 9 stays. The 2 extra database clubs become clubs with no division.
+7. Clubs in low database divisions (AC Oulu in "none", Sandefjord in a Second Division group): Q279 allows the club moves to take them. No change.
+
+Conflicts settled: 2 (nor-fin-2 and nor-fin-4 count as one conflict). Open points settled: 5.
+
+### Club moves (Q279, Q280, Q290)
+
+Pass 1 listed each division whose real count differs from the database. A listed division also takes clubs from the tier next to it. These clubs leave a gap in a division whose count is correct, so pass 2 lists that division too.
+
+- Norwegian 1. divisjon, 2008/09 to 2025/26 (18 seasons, 16 clubs each, 288 rows). Each season the two extra Eliteserien clubs come from the database First Division. Source: the season page `https://en.wikipedia.org/wiki/<year>_Norwegian_First_Division`.
+- Veikkausliiga, 2010/11 to 2015/16 and 2017/18 to 2025/26 (15 seasons, 12 clubs each, 180 rows). In these seasons the Ykkönen list takes 1 or 2 clubs from the database Premier Division. 2016/17 needs no list, because its Ykkönen list takes no Premier club. Source: `https://en.wikipedia.org/wiki/<year>_Veikkausliiga`.
+
+Club rows added: 468. Every real club has a record in its season database. No club appears twice in a season. Matches by database name, checked by hand where a club changed its name:
+
+- Sarpsborg 08 (2008/09, 2009/10): record 6496, named "Sparta Sarpsborg" in those databases. Later databases give the same record the name "Sarpsborg 08". In September 2008 it sits in a Second Division group.
+- Øygarden (2019/20): record 7857, named "Nest-Sotra IL" in October 2019. Øygarden FK took over the elite licence of Nest-Sotra in 2020 (https://en.wikipedia.org/wiki/Øygarden_FK), so the Nest-Sotra record takes the place.
+- Lyn (2009/10): record 6864, "FC Lyn Oslo". The real club withdrew on 7 July 2010 after bankruptcy (season page). By Q272 the club keeps its place in the list.
+- Lyn (2023/24 to 2025/26): record 6864, "Lyn 1896 FK", not Gjøvik-Lyn.
+- Some clubs have a new record id in later databases (for example Sandnes Ulf, Skeid, Sogndal, Start, Stabæk, SJK, TPS, VPS). Each row gives the id of its own season database.
+
+Seasons with no database (2004/05, 2006/07) and the seasons after 2025/26 have no club rows. Norway from 2002/03 to 2007/08 and Finland in 2001/02 and 2016/17 need no new list: each count agrees and no listed division takes a club from the other tier.
+
+### Reserve and B teams (Q289)
+
+The tiers of this part need two reserve teams: Klubi 04 (HJK) and SJK Akatemia. Each season database that needs them has a record ("HJK Reserves", "Klubi-04 Helsinki", "SJK Seinäjoki II"). Norway allows no reserve team in its top two tiers. "Atlantis Akatemia" and "KPV juniorit" are older database names of the first teams Atlantis FC and KPV, not reserve teams.
+
+Reserve teams that the build must add: 0.
+
+## Second source, pass 2
+
+Date 2026-10-17. The check file holds 558 lines with verdict `no second source`. 388 of them hold `unknown` or an inference, so I did not check them again. I took the other 170 lines and wrote the result in `nor-fin.check2.tsv`. `rules_lint.py` gives 0 problems before and after.
+
+| Verdict | Lines |
+|---|---|
+| agree | 58 |
+| disagree, settled | 1 |
+| disagree, still split | 0 |
+| no second source | 111 |
+
+Agree:
+
+- Finnish League Cup: 2002 and 2003 not held, and the name, entry and format of 2008 to 2016 (RSSSF and the Finnish Football Archive). The 2014 groups were 4 groups of 3, but the archive does not say that they were by geography. The 2023 name agrees with the organiser's page.
+- Norwegian 1. divisjon names: Adeccoligaen from 2005 to 2013 (Kampanje, February 2014), and no sponsor name in 2014 (Lokalhistoriewiki, with the Aftenposten report of 15 January 2015).
+- Norwegian Cup substitutes and bench in 2016, 2019, 2023, 2024 and 2025-26 (NFF cup rules of those years, read on the Wayback Machine). The 2019 rules also allowed a 4th substitution in extra time.
+- Norwegian 1. divisjon 2026: every field (NFF OBOS-ligaen rules 2026).
+- Ykkösliiga 2026: every field (the Finnish players' association JPY).
+- Norwegian Cup 2026-27 format (NFF NM Menn 2027 rules). The rules do not give the dates.
+
+Change to `nor-fin.tsv`:
+
+- nor-fin-249, Finnish Cup 2026, `format`. The first source said that the clubs of the top three tiers enter in round 3, with a regional draw to round 5. Flashscore says the top four tiers enter in round 3 and the 4 clubs in European competition in round 5. The third source is the primary record, the Palloliitto cup rules for 2026. They agree with Flashscore and give geographic draw pots to round 4 and an open draw from round 5. Decision: second. I wrote the rule-text format, with extra time and penalties, and replaced the `format` sources. URL: https://www-assets.palloliitto.fi/62562/1768387037-miesten-suomen-cup-ja-regions-cup-roots-saannot-2026.pdf
+- The 2027 and 2028 Finnish Cup rows hold `unknown`, so no row copies the old text. nor-fin-239 (2025) has the same wording as the old 2026 text. The check of pass 1 covered it, and I did not change it. Max may want it checked against the 2025 cup rules.
+
+No second source (111 lines):
+
+- Norwegian Cup bench and substitutes in the other years (26 lines). RSSSF gives no line-ups after 2005, and the Wayback Machine holds no NFF cup rules for those years.
+- Finnish Cup bench, 2002 to 2019 (18 lines). No other publisher gives unused substitutes. Every year except 2013 carries the 2013 count forward, which is an inference in substance.
+- Norwegian Super Cup `not held`, 2020 to 2026 (7 lines). The RSSSF list ends in 2019.
+- Finnish League Cup 2023 entry (1 line).
+- Rows for 2027 and 2028 (59 lines). Each carries the 2026 value forward as an inference, so I did not check them.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
+
+- nor-fin-239 (Finnish Cup 2025), `format`: the old text said that the clubs of the top three tiers enter in round 3. The round table of the 2025 season page (https://en.wikipedia.org/wiki/2025_Finnish_Cup, read on 2026-10-17) shows that the 8 Veikkausliiga clubs not in UEFA competition, the 10 Ykkösliiga clubs and the entered Ykkönen and Kakkonen clubs enter in round 3, and the 4 Veikkausliiga clubs in UEFA competition enter in round 5. Lower-tier clubs play at home to round 4, and the draw is in geographic groups until round 5. I wrote this. I found no Palloliitto cup rules for 2025 (two searches and the archive), so the row is not checked against a rule text.

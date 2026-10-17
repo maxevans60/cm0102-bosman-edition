@@ -130,3 +130,143 @@ Sources added: 89 fields (format 20, name 69).
 - A name with a part in brackets, for example "Intercontinental Cup (Toyota Cup)", counts as stated when the page holds the main name and the bracket text.
 
 Disagreements: none. Fields with no source: none.
+
+## Pass 2
+
+Date 2026-10-17. Decision agent. `club-world.tsv` now has 405 rows. Row ids of the kept rows are unchanged. The lint gives 0 problems, as before.
+
+### Competitions removed (Q288)
+
+A competition of the original stays, also when it holds clubs of nations that a game cannot select (CONCACAF Champions Cup, Copa Libertadores, Oceania Champions League, Club World Cup). A new competition stays only when clubs of the game's nations take part. I deleted the 108 rows (4 x 27) of these new competitions:
+
+- Leagues Cup: Q288 names it. It needs Liga MX clubs.
+- CONCACAF League: Central American and Caribbean clubs only. No US club took part.
+- AFC Cup: clubs of the developing AFC nations only. Japan, South Korea and Australia had no places.
+- OFC Professional League: 7 of its 8 clubs are from nations that a game cannot select. South Melbourne cannot qualify through it for other competitions.
+
+Kept new competitions: Copa Sudamericana, Recopa Sudamericana, AFC Champions League Two and the FIFA Intercontinental Cup. Argentine, Brazilian, Japanese, Korean, Australian or European clubs take part in each.
+
+Deleted ids: 10, 11, 14, 19, then every 19th id from each of these to 513 (the `leagues_cup`, `concacaf_league`, `afc_cup` and `ofc_pro_league` rows). No clubs file exists for this part, so no club rows were deleted.
+
+### Notes added for the removed competitions
+
+- CONCACAF Champions League 2018 to 2023 (313, 332, 351, 370, 389, 408): the places of the CONCACAF League winner (to 2021) and of its top clubs (2022, 2023). Inference: the build fills them with Central American and Caribbean clubs from the data, as the original does for those nations.
+- CONCACAF Champions Cup 2024 to 2028 (427, 446, 465, 484, 503): the three Leagues Cup places. Open point for Max, see below.
+- FIFA Intercontinental Cup 2026 and 2027 (478, 497): inference: the OFC entrant is the OFC Champions League winner, as to 2025.
+
+### Season of the 2026 OFC Champions League (Q276, Q277)
+
+The 2026 edition starts with qualifying on 31 January 2026. By Q276 its season is 2025/26, not 2026/27. I moved its values from 493 to 474. The competition proper was played in August 2026, after the season end. By Q277 the game plays the whole edition at the normal time of the competition in 2025/26. Rows 493 (2026/27) and 512 (2027/28) now hold the 2027 and 2028 editions, with `unknown` values. Their season is an inference: qualifying early in the year, as in 2026. Sources: https://en.wikipedia.org/wiki/2026_OFC_Champions_League and https://pina.com.fj/2026/01/30/ofc-mens-champions-league-2026-qualifying-ready-for-kick-off-in-samoa/
+
+Warning for the second-source agent: the check lines of 474 and 493 were written for the old content of those rows. Check 474 against the 2026 edition. The check lines of 493 and 512 now refer to `unknown` values.
+
+### Late editions (Q277)
+
+Each row stays in the season of its first match (Q276). The game plays it at the normal time of the competition in that season, with no special dates. I added a note to these rows:
+
+- 346 and 349: Copa Libertadores and Copa Sudamericana 2020, finals in January 2021.
+- 351 and 370: CONCACAF Champions League 2020 (finished December 2020) and 2021 (April to October).
+- 355, 374 and 393: AFC Champions League 2020 (to December 2020), 2021 (from April) and 2022 (final May 2023).
+- 363, 382 and 401: Club World Cup 2020, 2021 and 2022, played in February of the next year.
+- 369: Recopa 2021, played in April.
+- 398: OFC Champions League 2022, June to August.
+- 360: OFC Champions League 2020, knockout stage cancelled. The game plays it to the end (Q273).
+
+### Conflicts and open points
+
+The reconcile left no conflicts. The points listed above under "For Max", "Reconcile" and "Loose ends" are settled by what happened:
+
+- Copa Sudamericana entry rounds 2002 to 2009 (26 to 159): the rows already give the real entry stages from RSSSF (https://www.rsssf.org/sacups/sudamcup04.html and the other sudamcup pages).
+- Club World Cup host place (116, 135, 401): the rows already name the club that took the host place (https://www.rsssf.org/tablesf/fifa-wcc08.html).
+- Central Coast in the 2026 OFC final is the Solomon Islands club (https://www.scoop.co.nz/stories/CU2608/S00140.htm).
+- Season mapping: it agrees with Q276.
+- Campeones Cup: it is in the arg-usa part, and it needs a Liga MX club (Q288).
+
+Open for Max:
+
+1. The three Leagues Cup places in the CONCACAF Champions Cup from 2024. The real rule gives them to the Leagues Cup top three, MLS or Liga MX. The game has no Leagues Cup. I don't know which rule Max wants.
+2. The J.League Cup / Copa Sudamericana Championship (2008 to 2019) has clubs of game nations only. It was not researched in pass 1. Max decides whether it comes in.
+
+## Second source, pass 2
+
+Date 2026-10-17. Second-source agent. The lines are in `club-world.check2.tsv` (301 lines). I took each check line with verdict `no second source` whose row still exists and whose field holds a value. I skipped 159 lines of deleted rows, 448 lines whose field is `unknown`, and 8 lines whose value is an inference (the format of 484, 497, 498, 501, 503 and 509, the places of 509, the notes of 512). I also checked every filled field of row 474 against the 2026 edition. The lint gives 0 problems, as before.
+
+| Verdict | Lines |
+|---|---|
+| agree | 119 |
+| disagree, settled | 4 |
+| disagree, still split | 0 |
+| no second source | 178 |
+
+Sources: RSSSF for the OFC club counts. The OFC, CONMEBOL-calendar, AFC-draw and FIFA releases came through oceaniafootball.com, pina.com.fj, oceaniafootballcenter.org, theawayend.co, insideworldfootball.com, thepeninsulaqatar.com, qatar-tribune.com, en.vff.org.vn, inside.fifa.com, concacaf.com, jfa.jp and national newspapers. Transfermarkt and worldfootball.net show a bot check, so I did not use them. The web search limit of the session ran out near the end.
+
+### Changes to club-world.tsv
+
+Each change has its URLs in `sources`. Row order and ids are the same.
+
+1. club-world-387 (Copa Sudamericana 2022), `subs_used`: 5 is now "5, a sixth in extra time". The 2022 Manual de Clubes allows a sixth substitution in extra time of the single final, for both cups (442.perfil.com and opovo.com.br).
+2. club-world-479 (Copa Libertadores 2027), `format`: the start is now 3 February 2027, not 2 February (tribunadejundiai.com.br and alairelibre.cl, from the CONMEBOL calendar of 25 August 2026).
+3. club-world-482 (Copa Sudamericana 2027), `format`: the start is now 3 March 2027, not 2 March (same pages).
+4. club-world-490 (ACL Two 2026-27), `format` places: now "JPN 1, KOR 1 + 1, AUS 1 + 1". Gangwon and Adelaide United lost the ACL Elite preliminary stage and play in the ACL Two groups (en.vff.org.vn and qatar-tribune.com).
+
+### Points for the maintainer
+
+- Row 474 agrees in every filled field.
+- Club count reading: row 452 (ACL Two 2024-25) says 31 because Mohun Bagan was withdrawn and its matches were made void. Row 471 (2025-26) says 32, but Mohun Bagan was withdrawn again on 30 September 2025. Both rows follow a page. One rule for both rows is needed.
+- Found values that I did not write: the 2027 Recopa legs are on 17 and 24 February 2027 (row 483). The 2027 CONCACAF Champions Cup has 27 clubs (row 484, concacaf.com).
+- FIFA names Auckland FC, the OFC Professional League champion, as the OFC club in the 2026 FIFA Intercontinental Cup. Row 478 keeps the pass-2 inference (Q288) for the game.
+- Row 482: CONMEBOL gave the 2027 Sudamericana final to Santa Cruz de la Sierra, but no page that I read names the stadium.
+- Most `no second source` lines are substitutes and bench size. No page of another publisher that I could read states the rule of that edition. The other lines are method notes, code facts and the 2027 and 2028 editions.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after. Every page below was read on 2026-10-17.
+
+- Rows 452 and 471 (AFC Champions League Two 2024-25 and 2025-26), `clubs`: one rule for both. `clubs` counts the clubs at the start (32 in the group stage). Withdrawals go in `notes`. Row 452 changed from 31 to 32. Mohun Bagan Super Giant was withdrawn in both seasons and its matches were made void (Al Jazeera, 7 October 2024, https://www.aljazeera.com/sports/2024/10/7/indian-club-mohun-bagan-out-of-afc-competition-after-missing-match-in-iran, and The Away End, 30 September 2025, https://theawayend.co/2025/09/30/mohun-bagan-withdrawn-afc-champions-league-two-2025-26/).
+- Row 483 (Recopa Sudamericana 2027), `format`: unknown changed to two legs on 17 and 24 February 2027 (CONMEBOL calendar as reported by https://www.alairelibre.cl/futbol/copa-libertadores/conmebol-calendario-sudamericana-formato-ida-vuelta/).
+- Row 484 (CONCACAF Champions Cup 2027), `clubs`: unknown changed to 27. `format` now gives the places by route and the byes to the Round of 16 (Caribbean Cup winner, Leagues Cup winner, highest-ranked Liga MX champion, MLS Cup winner). Rounds and legs stay unknown. Source: https://www.concacaf.com/competitions/champions-cup/news/2027-concacaf-champions-cup-qualified-clubs. The open point on the three Leagues Cup places (Q288) stays open.
+- Row 478 (FIFA Intercontinental Cup 2026), checked: FIFA names Auckland FC, winner of the inaugural OFC Professional League, as the OFC club. It played Al-Ahli in Jeddah on 26 August 2026 (https://inside.fifa.com/news/al-ahli-auckland-fc-kick-off-intercontinental-cup-2026-jeddah). The row keeps the pass-2 inference for the game (Q288), and the note now gives the real entrant.
+
+## Second source, retry
+
+Date: 2026-10-17. Second-source retry agent. The earlier pass ran out of web searches. I took the 178 lines of `club-world.check2.tsv` with verdict `no second source` and tried again. I read regulation PDFs first: the IFAB Laws of the Game (downloads.theifab.com), FIFA Club World Cup regulations (fifa.com and digitalhub.fifa.com, through archive.org where needed), CONMEBOL regulations and club manuals (conmebol.com), AFC regulations (the-afc.com) and CONCACAF regulations (concacaf.com). I updated each line in place. The lint gives 0 problems for `club-world.tsv`, as before.
+
+| Verdict of the 178 lines | Lines |
+|---|---|
+| agree | 96 |
+| disagree, settled | 6 |
+| disagree, still split (conflict) | 3 |
+| no second source | 73 |
+
+New totals of `club-world.check2.tsv`: 215 agree, 13 disagree, 73 no second source.
+
+The 73 lines that stay `no second source`:
+
+- 43 method notes, code facts and inferences. No outside page applies.
+- 16 substitutes or bench lines with no regulation text found: the bench of rows 58, 75, 78, 97, 116, 135, 249, 255, 344 and 365, the substitutes of rows 313 and 382, and both fields of rows 325 and 363. Six of these lines now carry a note that says what the page read does and does not state.
+- 14 lines of the 2027 and 2028 editions (club counts, names, places). Row 507 now carries a note: the AFC Entry Regulations for 2027/28 give the East ranks 1, 2 and 5 the place patterns of the row, but do not name the nation of each rank.
+
+For the substitutes of 2004 to 2016 where no competition rule text was found, the second source is Law 3 of the IFAB Laws of the edition in force. It caps every official competition at three substitutes.
+
+### Changes to club-world.tsv
+
+Each change has the regulation URL in `sources` and a line in `club-world.reconcile.tsv`. Row order and ids are the same.
+
+1. club-world-311 (Copa Sudamericana 2018), `subs_used`: 3 is now "3, a fourth in extra time of the final" (regulations 2018, art. 90).
+2. club-world-332 (CONCACAF Champions League 2019), `subs_used`: 3 is now "3, a fourth in extra time" (regulations 2019).
+3. club-world-336 (AFC Champions League 2019), `subs_used`: 3 is now "3, a fourth in extra time" (regulations 2019, art. 13.3).
+4. club-world-389 (CONCACAF Champions League 2022), `subs_used`: 5 is now "5, a sixth in extra time" (regulations 2022, 12.8.5).
+5. club-world-393 (AFC Champions League 2022), `subs_used`: 5 is now "5, a sixth in extra time" (regulations 2022, art. 17.3 and 10.3).
+6. club-world-368 (Copa Sudamericana 2021), `subs_used`: 5 is kept. The club manual of March 2021 says 3, but the match report of the final (Gazeta Esportiva) shows five substitutions for each team in a match without extra time. The report is added to `sources`.
+
+The notes of rows 311, 332, 336, 389 and 393 now say that the bench comes from the final's match rules and the substitutions from the regulations.
+
+### Conflicts
+
+- club-world-351 (CONCACAF Champions League 2020), `subs_used` and `bench`: the row says "5, a sixth in extra time" and 12. The regulations of January 2020 say a fourth substitute in extra time and seven substitutes on the bench. The final was played in December 2020 in Orlando after the pause. No page that I read states the rules of the December 2020 matches. Inference: the IFAB temporary five-substitute option explains the row's value. Values kept.
+- club-world-355 (AFC Champions League 2020), `bench`: the row says 10. The regulations of October 2019 say seven players on the bench. The 2020 matches resumed in Qatar with five substitutions (The Peninsula, 13 September 2020), but no page that I read states the bench. Value kept.
+
+### Points for the maintainer
+
+- The 2026 Recopa regulations give 12 substitutes on the bench (art. 67), but the line-up clause of the same text says "11 titulares y 9 suplentes" in a list of 23. Row 464 keeps 12.
+- Transfermarkt and worldfootball.net still block scripted reads. Archive.org was offline at times during the session.

@@ -139,3 +139,92 @@ Disagreements: none. Notes on the pages:
 
 - 2019/20 League One (eng-210): the table lists 24 lines with Bury on 0 matches. The row has 23 clubs, which agrees with Bury's expulsion.
 - 2020/21 National League (eng-222): the table has 24 lines with 2 clubs on 0 matches. The other 22 clubs played 42 matches each.
+
+## Pass 2
+
+Decision agent, 2026-10-17. It applies the research decisions Q268 to Q331 of the spec. Row ids are kept. `tools/research/rules_lint.py` gives 0 problems for `eng.tsv` (9 before).
+
+### No new tiers (Q331)
+
+The lowest tier of the original's English files is `eng_conf` (tier 5). These rows are deleted, 27 seasons each, 135 rows in all:
+
+- Conference North and Conference South (tier 6, `new`)
+- Isthmian, Southern and Northern Premier League Premier Divisions (tier 7, database divisions 358 to 360 with no code)
+
+`eng.tsv` now has 324 rows: 12 per season. The 9 lint problems were all in deleted step 3 rows. The Conference League Cup rows stay. The cup is a real competition of tier 5. Its tier 6 entrants of 2004/05, 2007/08 and 2008/09 are clubs with no division in the game.
+
+`eng-clubs.tsv`: the 893 rows of Conference North, Conference South, National League North and National League South are deleted. 477 club rows remain.
+
+Conflicts 3, 4 and 6 of the Reconcile section (eng-133, eng-134, eng-213, eng-214, eng-223, eng-224) and the conflict on eng-153 go with their rows. The six near-name matches of the Club moves section were all in deleted North and South rows.
+
+### Conflicts and open points
+
+1. League Two and National League 2019/20 (eng-211, eng-212). Settled by Q278. The season began on 3 August 2019. Bury were expelled on 27 August 2019. The cuts came after the season start, so `down` stays 2 and 4. Source: https://en.wikipedia.org/wiki/2019%E2%80%9320_EFL_League_One
+2. National League 2020/21 (eng-222). Settled at 3. Macclesfield Town were expelled on 29 September 2020. The season began on 3 October 2020 with a maximum of 3 relegation places. Dover Athletic stopped playing from 30 January 2021, during the season, so Q278 keeps 3. Source: https://en.wikipedia.org/wiki/2020%E2%80%9321_National_League
+3. Football League matchday squad (eng-9 to eng-12). Settled by the bench sizes. The bench was 7 in 2009/10 and 2010/11, 5 in 2011/12 and 7 again from 1 June 2012. The squads were 18, 18, 16 and 18. `registration` now says 4 home-grown in 18 (2009/10, 2010/11), 4 in 16 (2011/12) and 6 in 18 (from 2012/13). The home-grown numbers for 18 in 2009/10 to 2010/11 and the rise to 6 in 2012/13 are inferences. No page states them. Sources: https://en.wikipedia.org/wiki/2009%E2%80%9310_Football_League_Championship, https://en.wikipedia.org/wiki/2011%E2%80%9312_Football_League_Championship, https://en.wikipedia.org/wiki/2012%E2%80%9313_Football_League_Championship
+4. FA Cup fifth-round replays (eng-400). Settled at 2018/19. The FA removed them on 18 December 2018, before the fifth round of that edition. Source: https://www.thefa.com/news/2018/dec/18/fa-cup-fifth-round-replays-181218
+5. National League substitutes 2020/21 and 2021/22. 2020/21 (eng-222) is 3 used from 5 named (reconcile). 2021/22 (eng-232) stays 3 from 5 as an inference: Wrexham asked for more substitutes during 2021/22, and no rule change is reported. Source: https://fanbanter.co.uk/wrexham-boss-phil-parkinson-makes-a-plea-to-the-national-league/
+6. Foreign players. The game uses the real rule: no nationality quota, with the work permit and from 2021 the GBE as the limit. The original's rule of 3 non-EU players goes. Sources: the `foreign` and `work_permit` entries of each nation rules row.
+7. Bury 2019/20. Q282 removes Bury from a 2019/20 start. League One plays with 23 clubs (eng-210). eng-210 keeps 4 relegation places by the rules. In real life Bury counted as the fourth. The one-off transition of Q281 must give 24 clubs in League One for 2020/21.
+8. Conference North and South substitutes from 2020/21: the rows are deleted.
+
+### Club moves (Q279, Q280, Q290)
+
+Every database season has 20, 24, 24, 24 and 22 clubs in tiers 1 to 5. Real counts differ only here:
+
+- tier 5, 2007/08 to 2025/26 (24 clubs, 23 in 2020/21 and 2021/22): already listed
+- tier 3, 2019/20 (23 clubs, Bury out): already listed
+
+The extra tier 5 clubs come from the step 3 divisions and "A Lower Division". These are no longer game tiers, so no gap opens below tier 5. No club for tiers 1 to 5 comes from a higher database division. No club row is added. No division lacks clubs.
+
+### Reserve and B teams (Q289)
+
+English tiers 1 to 5 hold no reserve or B teams in any season, so none are listed. Two cups use academy sides: the EFL Trophy from 2016/17 (16 sides) and the National League Cup from 2024/25 (16 under-21 sides). The brief limits this task to tiers, so these sides are not listed. Max decides whether the two cups get them as new club records.
+
+## Second source, pass 2
+
+Second-source agent, 2026-10-17. The work list is every check line with verdict `no second source` whose row still exists and whose field holds a value. 469 lines name deleted rows and 94 lines hold `unknown`. The 51 lines of the 2027/28 rows (eng-27, eng-288 to eng-292, eng-454 to eng-459) are skipped: their values are carried forward as inferences, and that season has no page yet. 308 lines remain. They are in `eng.check2.tsv`. Every page was read on 2026-10-17.
+
+Counts:
+
+- agree: 228
+- disagree: 3, all settled (decision `second`), none still split
+- no second source: 77
+
+Sources:
+
+- Cup finals, bench and substitutes: the ESPN match data of each final of the FA Cup, League Cup, Football League Trophy and Community Shield. It lists the named substitutes and the substitutes used. A `subs_used` line agrees only when a club used that many. Where no club reached the limit, the line stays `no second source`.
+- Football League Trophy format 2001/02 to 2015/16 and FA Trophy format and name 2001/02 to 2015/16: the season pages of the Football Club History Database (fchd.info). The entrant counts match: 56 in 2001/02, 60 in 2002/03 to 2005/06, 48 with 16 byes from 2006/07. These pages also confirm the two-leg area finals, which the rows mark as an inference.
+- FA Trophy from 2016/17: thefa.com news and draw pages, the Non-League Paper and club sites.
+- 2026/27 leagues: the BBC Sport tables (club count, promotion, play-off and relegation places) and ESPN match data (bench and substitutes).
+- Transfer windows: 90min, goal.com, Liverpool FC and premierleague.com.
+
+Changes to `eng.tsv` (row order and ids kept; `rules_lint.py` gives 0 problems, as before):
+
+1. eng-22 `windows`: the generic rule is replaced by `summer: end of season to 1 Sep 2022; winter: 1-31 Jan 2023`. The deadline was Thursday 1 Sep 2022, which the generic rule does not give. Second: https://www.90min.com/posts/summer-transfer-window-2022-open-close-dates. Third: https://www.footballtransfers.com/en/transfer-news/uk-premier-league/2022/02/does-summer-transfer-window-open-close
+2. eng-23 `windows`: now `summer: 14 Jun to 1 Sep 2023; winter: 1 Jan to 1 Feb 2024`. Second: https://www.90min.com/posts/premier-league-confirms-transfer-window-dates-2023-24-season. Third: https://www.premierleague.com/en/news/3485999
+3. eng-24 `windows`: now `summer: 14 Jun to 30 Aug 2024; winter: 1 Jan to 3 Feb 2025`. Second: https://www.liverpoolfc.com/news/2024-25-premier-league-transfer-window-dates-confirmed. Third: https://www.premierleague.com/news/4012986
+4. eng-209 `bench`: `7 (after the restart: unknown)` is now `7 (9 after the restart)`. The ESPN data of two Championship matches after the June 2020 restart (20 Jun and 22 Jul 2020) show 9 named substitutes for each club. Matches before the stop show 7.
+
+The old `windows=` sources of eng-22 to eng-24 gave only the generic rule, so the new URLs replace them.
+
+Points for Max (no change made):
+
+- eng-27 (2027/28) still carries the generic window rule. The rule is wrong for 2022/23 to 2024/25. Max decides whether 2027/28 copies the dates of 2026/27.
+- eng-26 (2026/27, settled in Reconcile at a 1 Sep 2026 deadline): https://www.premierleague.com/news/4237397 gives the summer 2026 close as Monday 31 August. 31 August 2026 is a bank holiday. This line is outside this pass and is not changed.
+- eng-439 (FA Trophy 2024/25): one Non-League Paper page says that the Oxford City v Woking quarter-final went to 120 minutes. The club report has an injury-time equaliser followed by a shoot-out, so the row (penalties after 90 minutes) stands.
+- Conference League Cup 2022/23 and 2023/24 (`not held`): club pages call the 2024 National League Cup a new competition. No page states outright that no cup was played in those seasons, so these lines stay `no second source`.
+
+Lines still with no second source (77):
+
+- `subs_used` of finals where no club used the full number (Community Shield in most years to 2024, FA Cup 2022/23 to 2025/26 and others)
+- FA Trophy bench and substitutes (eng-307, eng-331, eng-379 to eng-409, eng-421, eng-439, eng-445), and FA Trophy format and name of 2019/20 and 2020/21
+- Football League Trophy format of 2017/18 to 2023/24 and 2025/26
+- the `split` and `format` lines of the 2026/27 leagues, League One 2026/27 `subs_used`, the EFL home-grown rule of 2012/13 to 2014/15 and 2016/17, the FA Cup 2026/27 bench, substitutes and format, and the EFL Cup 2026/27 format
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after. No value changed.
+
+- eng-26 (2026/27), `windows`: the value stands. The Premier League (https://www.premierleague.com/en/news/4664145/when-does-summer-2026-premier-league-transfer-window-open-and-close, read on 2026-10-17) gives the summer 2026 window from Monday 15 June to 23:00 BST on Tuesday 1 September 2026, and the January 2027 window from 1 January to 1 February. The page cited in the second-source section for a 31 August close (https://www.premierleague.com/news/4237397) is about the winter 2026 deadline of Monday 2 February. I added a note to the row.
+- eng-27 (2027/28), `windows`: no dates for the summer 2027 or January 2028 windows were announced by 17 October 2026. The value stays an inference, and the row notes say so.

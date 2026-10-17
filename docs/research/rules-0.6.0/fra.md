@@ -149,3 +149,179 @@ Method: I ran the rules lint and read each page on 2026-10-16 with curl. I added
 - fra-240 (2027/28) `up` = 8 (group winners): https://en.wikipedia.org/wiki/Championnat_National_2 says the winner of each group goes up and gives 8 groups of 14 from 2025/26. Note: the lead of that page mixes the names National 2 and National 3 for the fifth tier.
 
 No source found: none. Disagreements: none.
+
+## Pass 2
+
+Date: 2026-10-17. Decision agent. Row ids and row order stay the same. Each note that this pass adds starts with "Pass 2". `tools/research/rules_lint.py` gives 0 problems for `fra.tsv`, the same as before.
+
+### Counts
+
+| Item | Count |
+|---|---|
+| Rows deleted from `fra.tsv` | 0 |
+| Club rows deleted from `fra-clubs.tsv` | 0 |
+| Conflicts and open points settled | 7 |
+| Club rows added (tier 5, 23 seasons) | 3,136 |
+| Club-match corrections (tier 4) | 7 |
+| Reserve teams that the databases lack (tiers 4 and 5) | 547 rows (188 in tier 4, 359 in tier 5) |
+
+### 1. Lowest tier (Q331, Q288)
+
+The lowest tier of the French files in the original is tier 5. `FraFirst::FraFirst` (0x5bb160) builds both `FraCfa` (0x5b91c0) and `FraLower` (0x5bd600) at a new game. Every season database holds the division "French Lower Division" (division 15, 138 to 194 clubs) below the CFA. The research list for Max (decision 3.2, Q280) also named tiers 2 to 5 for France. So the CFA 2, National 3 and National 2 (from 2026/27) rows stay. No French competition lies below tier 5, and no French competition needs a nation that a game cannot select. No row is deleted. Inference: `FraLower` mixes National clubs with clubs of the lower division and its real role in the original is not proven. The build slices 18 and 20 decide how tier 5 plays.
+
+### 2. Conflicts and open points
+
+All settled by what happened in real life, read with Q272 to Q278.
+
+1. fra-175 (National 2020/21) `down`: 1 becomes 4 (15th to 18th). The regulation at the season start relegates the 15th to 18th (https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_troisième_division_2020-2021). Only SC Lyon went down, because National 2 was declared void. This is in the notes (Q278).
+2. CFA 2 promotion 2002/03 to 2016/17 (Reconcile point 1): keep the rule places (12, or 8 in 2011/12 and 2012/13). The coloured rows of 12 to 15 clubs include reprieves, which go in notes by Q272. Source: the French Wikipedia season pages, for example https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2009-2010. A second publisher is the task of the second-source agent.
+3. Prose against table counts (Reconcile point 2): keep the table counts. The tables list every club that started the season.
+4. Withdrawals during a season (Reconcile point 3): keep the season-start counts (Q278).
+5. fra-176 and fra-177 (2020/21, stopped): keep the rule places (Q273). The notes say that no club went up or down.
+6. CFA 2 `down` counts (Reconcile point 5): already written in the loose ends. No change.
+7. Late editions (Q277): fra-169 and fra-170 (finals of July 2020) and fra-180, fra-207, fra-216 and fra-225 (Trophée des Champions played in January) now have a note. The game plays each in its normal slot.
+
+Also filled: the tier-5 club count of fra-60 (130), fra-69 (130), fra-78 (128), fra-87 (130) and fra-96 (128), from the group tables of the French Wikipedia season pages.
+
+### 3. Club moves (Q279, Q280, Q290)
+
+`fra-clubs.tsv` now lists tier 5 (CFA 2, then National 3) for each of the 23 seasons with a database, 2001/02 to 2025/26. The real count differs from the database count of "French Lower Division" in every season. Source: the group tables of https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_YYYY-YYYY, read on 2026-10-17. A third team is written "(C)".
+
+Method: a script matched each real club against the French clubs of the season database that tiers 1 to 4 do not use. It scores shared place-name tokens, with stems for adjectival forms (for example "dieppois" and "Dieppe"), a hand list of 14 aliases and a hand list of 43 rejected pairs. A reserve team matches only a database reserve team. Each database club takes at most one real club per season. I read every match below a full score and every full-score match with a different name by eye. Result: 2,159 of 3,136 rows have a database club (1,817 from French Lower Division, 183 from French CFA, 147 from A Lower Division, 8 with no division, 1 from French National).
+
+Tier 4 corrections (the pool now includes every division, Q279): 2005/06 Racing CF to 9266 Racing Club de Paris. 2007/08 and 2008/09 SO Châtellerault to 2431. 2008/09 to 2011/12 RCO Agde to 274. No other database club is used twice in a season.
+
+Weak point for Max: the Besançon clubs. The October 2018 database calls record 1541 "Racing Besançon", and later databases call it "Besançon Football". The 2018/19 and 2019/20 rows match "Besançon Football" to 1541 and leave the real "Racing Besançon" empty.
+
+### 4. Reserve and B teams (Q289)
+
+Each row below is a real reserve team that the tier needs and the season database lacks. The build adds them as new club records. Full names are in `fra-clubs.tsv` (rows with an empty `db_club_id`).
+
+| Season | Count | Reserve teams [division] |
+|---|---|---|
+| 2001/02 | 47 | Lille OSC (B) [CFA], FC Metz (B) [CFA], RC Lens (B) [CFA], RC Strasbourg (B) [CFA], AS Nancy-Lorraine (B) [CFA], ES Troyes AC (B) [CFA], Olympique Marseille (B) [CFA], SC Bastia (B) [CFA], Montpellier HSC (B) [CFA], AS Saint-Etienne (B) [CFA], AS Monaco FC (B) [CFA], OGC Nice (B) [CFA], Olympique Lyonnais (B) [CFA], FC Nantes-Atlantique (B) [CFA], Toulouse FC (B) [CFA], AJ Auxerre (B) [CFA], Stade Rennais (B) [CFA], Paris Saint-Germain FC (B) [CFA], Le Havre AC (B) [CFA], EA Guingamp (B) [CFA], Amiens SC (B) [CFA 2], SM Caen (B) [CFA 2], Paris Saint-Germain (C) [CFA 2], ES Wasquehal (B) [CFA 2], CS Sedan Ardennes (B) [CFA 2], Stade de Reims (B) [CFA 2], US Créteil (B) [CFA 2], AS Red Star (B) [CFA 2], FC Sochaux-Montbéliard (B) [CFA 2], AJ Auxerroise (C) [CFA 2], Louhans-Cuiseaux FC (B) [CFA 2], Dijon FCO (B) [CFA 2], ASOA Valence (B) [CFA 2], Grenoble Foot (B) [CFA 2], FC Gueugnon (B) [CFA 2], Olympique d'Alès (B) [CFA 2], AS Cannes (B) [CFA 2], Nîmes Olympique (B) [CFA 2], Girondins de Bordeaux (B) [CFA 2], FC Lorient (B) [CFA 2], Chamois Niortais FC (B) [CFA 2], Angers SCO (B) [CFA 2], La Roche VF (B) [CFA 2], Stade rennais FC (C) [CFA 2], Le Mans UC (B) [CFA 2], LB Châteauroux (B) [CFA 2], Stade lavallois (B) [CFA 2] |
+| 2002/03 | 48 | Paris Saint-Germain FC (B) [CFA], AJ Auxerre (B) [CFA], RC Lens (B) [CFA], EA Guingamp (B) [CFA], Lille OSC (B) [CFA], Le Havre AC (B) [CFA], ES Troyes AC (B) [CFA], FC Sochaux-Montbéliard(B) [CFA], AS Nancy Lorraine (B) [CFA], RC Strasbourg (B) [CFA], FC Metz (B) [CFA], CS Sedan Ardennes (B) [CFA], Olympique Lyonnais (B) [CFA], Montpellier HSC (B) [CFA], AS Monaco (B) [CFA], SC Bastia (B) [CFA], Olympique Marseille (B) [CFA], AS Saint-Etienne (B) [CFA], OGC Nice (B) [CFA], FC Girondins Bordeaux (B) [CFA], Stade Rennes (B) [CFA], FC Nantes (B) [CFA], Toulouse FC (B) [CFA], Amiens SC (B) [CFA 2], ES Wasquehal (B) [CFA 2], AJ Auxerroise (C) [CFA 2], AS Beauvais (B) [CFA 2], Stade de Reims (B) [CFA 2], US Créteil-Lusitanos (B) [CFA 2], Dijon FCO (B) [CFA 2], Louhans-Cuiseaux FC (B) [CFA 2], Racing Besançon (B) [CFA 2], FC Mulhouse (B) [CFA 2], Grenoble Foot (B) [CFA 2], ASOA Valence (B) [CFA 2], FC Gueugnon (B) [CFA 2], Clermont Foot (B) [CFA 2], AS Cannes (B) [CFA 2], Olympique d'Alès (B) [CFA 2], AS Angoulême (B) [CFA 2], La Roche VF (B) [CFA 2], Chamois Niortais FC (B) [CFA 2], Angers SCO (B) [CFA 2], LB Châteauroux (B) [CFA 2], Le Mans UC (B) [CFA 2], FC Lorient (B) [CFA 2], SM Caen (B) [CFA 2], Stade lavallois (B) [CFA 2] |
+| 2003/04 | 48 | Auxerre (2) [CFA], Paris Saint-Germain (2) [CFA], Lens (2) [CFA], Lille (2) [CFA], Olympique Lyonnais (2) [CFA], Metz (2) [CFA], Sochaux (2) [CFA], Saint-Etienne (2) [CFA], Strasbourg (2) [CFA], Nancy (2) [CFA], Troyes (2) [CFA], Monaco (2) [CFA], Montpellier (2) [CFA], Olmpique de Marseille (2) [CFA], Nice (2) [CFA], Bastia (2) [CFA], Toulouse (2) [CFA], Rennes (2) [CFA], Nantes (2) [CFA], Girondis de Bordeaux (2) [CFA], Guingamp (2) [CFA], Amiens SC (B) [CFA 2], Le Havre AC (B) [CFA 2], AS Beauvais (B) [CFA 2], CS Sedan Ardennes (B) [CFA 2], AJ Auxerroise (C) [CFA 2], US Créteil-Lusitanos (B) [CFA 2], Stade de Reims (B) [CFA 2], Dijon FCO (B) [CFA 2], Racing Besançon (B) [CFA 2], ASOA Valence (B) [CFA 2], Clermont Foot (B) [CFA 2], FC Gueugnon (B) [CFA 2], Grenoble Foot (B) [CFA 2], Louhans-Cuiseaux FC (B) [CFA 2], Nîmes Olympique (B) [CFA 2], AS Cannes (B) [CFA 2], Chamois Niortais FC (B) [CFA 2], LB Châteauroux (B) [CFA 2], FC Libourne-Saint-Seurin (B) [CFA 2], AS Angoulême (B) [CFA 2], Stade lavallois (B) [CFA 2], Le Mans UC (B) [CFA 2], SO Châtelleraudais (B) [CFA 2], Angers SCO (B) [CFA 2], La Roche VF (B) [CFA 2], SM Caen (B) [CFA 2], FC Lorient (B) [CFA 2] |
+| 2005/06 | 50 | Auxerre 2 (reserves) [CFA], Lens 2 (reserves) [CFA], Lille 2 (reserves) [CFA], Metz 2 (reserves) [CFA], Strasbourg 2 (reserves) [CFA], Nancy 2 (reserves) [CFA], Lyon 2 (reserves) [CFA], Nice 2 (reserves) [CFA], Sochaux 2 (reserves) [CFA], Montpellier 2 (reserves) [CFA], Monaco 2 (reserves) [CFA], Toulouse 2 (reserves) [CFA], Saint-Etienne 2 (reserves) [CFA], Le Mans 2 (reserves) [CFA], Nantes 2 (reserves) [CFA], Bordeaux 2 (reserves) [CFA], Rennes 2 (reserves) [CFA], Guingamp 2 (reserves) [CFA], Paris-S.G. 2 (reserves) [CFA], Le Havre AC (B) [CFA 2], Entente Sannois Saint-Gratien (B) [CFA 2], Valenciennes FC (B) [CFA 2], Amiens SC (B) [CFA 2], FC Rouen (B) [CFA 2], US Créteil-Lusitanos (B) [CFA 2], CS Sedan Ardennes (B) [CFA 2], Stade de Reims (B) [CFA 2], AJ Auxerroise (C) [CFA 2], ES Troyes AC (B) [CFA 2], Dijon FCO (B) [CFA 2], Racing Besançon (B) [CFA 2], Nîmes Olympique (B) [CFA 2], FC Gueugnon (B) [CFA 2], Grenoble Foot (B) [CFA 2], AC Ajaccien (B) [CFA 2], Clermont Foot (B) [CFA 2], SC Bastia (B) [CFA 2], GFCO Ajaccio (B) [CFA 2], Olympique de Marseille (B) [CFA 2], FC Libourne-Saint-Seurin (B) [CFA 2], ÉSA Briviste (B) [CFA 2], LB Châteauroux (B) [CFA 2], Stade lavallois (B) [CFA 2], Chamois Niortais FC (B) [CFA 2], Angers SCO (B) [CFA 2], SM Caen (B) [CFA 2], FC Lorient (B) [CFA 2], Stade brestois (B) [CFA 2], Vannes OC (B) [CFA 2], USON Mondeville (B) [CFA 2] |
+| 2007/08 | 46 | Lille OSC (reserves) [CFA], SM Caen (reserves) [CFA], En Avant Guingamp (reserves) [CFA], RC Lens (reserves) [CFA], Stade Rennais FC (reserves) [CFA], Le Havre AC (reserves) [CFA], Valenciennes FC (reserves) [CFA], FC Sochaux-Montbéliard (reserves) [CFA], Olympique Lyonnais (reserves) [CFA], AJ Auxerre (reserves) [CFA], RC Strasbourg (reserves) [CFA], FC Metz (reserves) [CFA], AS Nancy (reserves) [CFA], AS Monaco FC (reserves) [CFA], AS Saint-Étienne (reserves) [CFA], Montpellier HSC (reserves) [CFA], OGC Nice (reserves) [CFA], Toulouse FC (reserves) [CFA], FC Girondins de Bordeaux (reserves) [CFA], Le Mans Union Club (reserves) [CFA], Paris Saint-Germain FC (reserves) [CFA], FC Nantes (reserves) [CFA], CS Sedan Ardennes (B) [CFA 2], Amiens SC (B) [CFA 2], Stade de Reims (B) [CFA 2], ES Troyes AC (B) [CFA 2], Racing Besançon (B) [CFA 2], Olympique de Marseille (B) [CFA 2], FC Gueugnon (B) [CFA 2], Clermont Foot (B) [CFA 2], Dijon FCO (B) [CFA 2], Grenoble Foot (B) [CFA 2], Nîmes Olympique (B) [CFA 2], FC Sète (B) [CFA 2], Chamois Niortais FC (B) [CFA 2], FC Libourne-Saint-Seurin (B) [CFA 2], Angers SCO (B) [CFA 2], AJ Auxerroise (C) [CFA 2], LB Châteauroux (B) [CFA 2], US Créteil-Lusitanos (B) [CFA 2], SO Châtelleraudais (B) [CFA 2], Stade brestois (B) [CFA 2], FC Lorient (B) [CFA 2], Stade lavallois (B) [CFA 2], SC Bastia (B) [CFA 2], Entente Sannois Saint-Gratien (B) [CFA 2] |
+| 2008/09 | 53 | FC Sochaux-Montbéliard (reserves) [CFA], AJ Auxerre (reserves) [CFA], RC Lens (reserves) [CFA], RC Strasbourg (reserves) [CFA], Lille OSC (reserves) [CFA], AS Nancy (reserves) [CFA], FC Metz (reserves) [CFA], Olympique Lyonnais Reserves and Academy [CFA], Montpellier HSC (reserves) [CFA], AS Saint-Étienne (reserves) [CFA], AS Monaco FC (reserves) [CFA], FC Girondins de Bordeaux (reserves) [CFA], Le Mans Union Club (reserves) [CFA], Stade Rennais FC (reserves) [CFA], Paris Saint-Germain FC (reserves) [CFA], SM Caen (reserves) [CFA], Le Havre AC (reserves) [CFA], En Avant Guingamp (reserves) [CFA], US Créteil-Lusitanos (B) [CFA 2], Entente Sannois Saint-Gratien (B) [CFA 2], Amiens SC (B) [CFA 2], Pacy VEF (B) [CFA 2], Stade de Reims (B) [CFA 2], ES Troyes AC (B) [CFA 2], CS Sedan Ardennes (B) [CFA 2], Valenciennes FC (B) [CFA 2], Racing Besançon (B) [CFA 2], Vesoul HSC (B) [CFA 2], Grenoble Foot (B) [CFA 2], Clermont Foot (B) [CFA 2], ASF Andrézieux (B) [CFA 2], AC Ajaccien (B) [CFA 2], Dijon FCO (B) [CFA 2], FC Gueugnon (B) [CFA 2], FC Montceau Bourgogne (B) [CFA 2], Olympique de Marseille (B) [CFA 2], OGC Nice (B) [CFA 2], SC Bastia (B) [CFA 2], Nîmes Olympique (B) [CFA 2], Toulouse FC (B) [CFA 2], FC Sète (B) [CFA 2], Aviron bayonnais (B) [CFA 2], FC Libourne-Saint-Seurin (B) [CFA 2], Aurillac FCA (B) [CFA 2], Tours FC (B) [CFA 2], Chamois Niortais FC (B) [CFA 2], LB Châteauroux (B) [CFA 2], AJ Auxerroise (C) [CFA 2], FC Nantes (B) [CFA 2], Stade brestois (B) [CFA 2], Stade lavallois (B) [CFA 2], FC Lorient (B) [CFA 2], Angers SCO (B) [CFA 2] |
+| 2009/10 | 49 | AS Nancy (reserves) [CFA], Lille OSC (reserves) [CFA], RC Lens (reserves) [CFA], RC Strasbourg (reserves) [CFA], Olympique Lyonnais Reserves and Academy [CFA], FC Sochaux-Montbéliard (reserves) [CFA], Montpellier HSC (reserves) [CFA], Grenoble Foot (reserves) [CFA], Camp des Loges (reserves) [CFA], Le Mans Union Club (reserves) [CFA], FC Girondins de Bordeaux (reserves) [CFA], Le Havre AC (reserves) [CFA], AJ Auxerre (reserves) [CFA], Stade Rennais F.C. (reserves) [CFA], SM Caen (reserves) [CFA], Pacy VEF (B) [CFA 2], SC Bastia (B) [CFA 2], Amiens SC (B) [CFA 2], Entente Sannois Saint-Gratien (B) [CFA 2], Valenciennes FC (B) [CFA 2], CS Sedan Ardennes (B) [CFA 2], Stade de Reims (B) [CFA 2], AS Beauvais (B) [CFA 2], US Créteil-Lusitanos (B) [CFA 2], FC Metz (B) [CFA 2], ES Troyes AC (B) [CFA 2], AJ Auxerroise (C) [CFA 2], Racing Besançon (B) [CFA 2], AS Saint-Étienne (B) [CFA 2], Clermont Foot (B) [CFA 2], Dijon FCO (B) [CFA 2], ASF Andrézieux (B) [CFA 2], AS Monaco (B) [CFA 2], ÉFC Fréjus Saint-Raphaël (B) [CFA 2], OGC Nice (B) [CFA 2], Nîmes Olympique (B) [CFA 2], Olympique de Marseille (B) [CFA 2], AC Ajaccien (B) [CFA 2], Toulouse FC (B) [CFA 2], Aviron bayonnais (B) [CFA 2], Angers SCO (B) [CFA 2], FC Nantes (B) [CFA 2], LB Châteauroux (B) [CFA 2], Tours FC (B) [CFA 2], Chamois Niortais FC (B) [CFA 2], FC Lorient (B) [CFA 2], EA Guingamp (B) [CFA 2], Stade brestois (B) [CFA 2], Stade lavallois (B) [CFA 2] |
+| 2010/11 | 44 | FC Metz (reserves) [CFA], Havre Athletic Club (reserves) [CFA], RC Lens (reserves) [CFA], Lille OSC (reserves) [CFA], FC Sochaux-Montbéliard (reserves) [CFA], Paris Saint-Germain Youth Academy (reserves) [CFA], AJ Auxerre (reserves) [CFA], AS Nancy (reserves) [CFA], Olympique Lyonnais Reserves and Academy [CFA], AS Monaco FC (reserves) [CFA], AS Saint-Étienne (reserves) [CFA], Le Mans Union Club (reserves) [CFA], FC Lorient (reserves) [CFA], SM Caen (reserves) [CFA], Stade Rennais F.C. (reserves) [CFA], SC Bastia (B) [CFA 2], AS Beauvais (B) [CFA 2], Paris FC (B) [CFA 2], Pacy VEF (B) [CFA 2], Valenciennes FC (B) [CFA 2], CS Sedan Ardennes (B) [CFA 2], Stade de Reims (B) [CFA 2], US Créteil-Lusitanos (B) [CFA 2], RC Strasbourg (B) [CFA 2], Dijon FCO (B) [CFA 2], ES Troyes AC (B) [CFA 2], AJ Auxerroise (C) [CFA 2], Grenoble Foot (B) [CFA 2], Clermont Foot (B) [CFA 2], FC Gueugnon (B) [CFA 2], Nîmes Olympique (B) [CFA 2], Montpellier HSC (B) [CFA 2], OGC Nice (B) [CFA 2], ÉFC Fréjus Saint-Raphaël (B) [CFA 2], Girondins de Bordeaux (B) [CFA 2], Toulouse FC (B) [CFA 2], Angers SCO (B) [CFA 2], FC Nantes (B) [CFA 2], Tours FC (B) [CFA 2], LB Châteauroux (B) [CFA 2], EA Guingamp (B) [CFA 2], FC Rouen (B) [CFA 2], Stade brestois (B) [CFA 2], Stade lavallois (B) [CFA 2] |
+| 2011/12 | 49 | AJ Auxerre (reserves) [CFA], RC Lens (reserves) [CFA], AC Amiens (reserves) [CFA], Lille OSC (reserves) [CFA], Valenciennes FC (reserves) [CFA], Paris Saint-Germain Youth Academy (reserves) [CFA], Olympique Lyonnais Reserves and Academy [CFA], FC Metz (reserves) [CFA], AS Nancy (reserves) [CFA], FC Sochaux-Montbéliard (reserves) [CFA], AS Monaco FC (reserves) [CFA], AS Saint-Étienne (reserves) [CFA], FC Girondins de Bordeaux (reserves) [CFA], Havre Athletic Club (reserves) [CFA], Le Mans Union Club (reserves) [CFA], SM Caen (reserves) [CFA], FC Lorient (reserves) [CFA], US Boulogne CO (B) [CFA 2], Amiens SC (B) [CFA 2], FC Rouen (B) [CFA 2], AS Beauvais (B) [CFA 2], CS Sedan Ardennes (B) [CFA 2], ES Troyes AC (B) [CFA 2], Paris FC (B) [CFA 2], Stade de Reims (B) [CFA 2], US Créteil-Lusitanos (B) [CFA 2], AJ Auxerroise (C) [CFA 2], Dijon FCO (B) [CFA 2], Clermont Foot (B) [CFA 2], SC Bastia (B) [CFA 2], AC Ajaccien (B) [CFA 2], LB Châteauroux (B) [CFA 2], ÉFC Fréjus Saint-Raphaël (B) [CFA 2], Évian TG FC (B) [CFA 2], Olympique de Marseille (B) [CFA 2], OGC Nice (B) [CFA 2], Toulouse FC (B) [CFA 2], Nîmes Olympique (B) [CFA 2], Montpellier HSC (B) [CFA 2], Angers SCO (B) [CFA 2], FC Nantes (B) [CFA 2], Le Poiré-sur-Vie VF (B) [CFA 2], Tours FC (B) [CFA 2], Les Herbiers VF (B) [CFA 2], EA Guingamp (B) [CFA 2], Stade rennais FC (B) [CFA 2], Stade brestois (B) [CFA 2], Stade lavallois (B) [CFA 2], Vannes OC (B) [CFA 2] |
+| 2012/13 | 42 | Lille OSC (reserves) [CFA], RC Lens (reserves) [CFA], FC Metz (reserves) [CFA], Valenciennes FC (reserves) [CFA], Paris Saint-Germain Youth Academy (reserves) [CFA], FC Sochaux-Montbéliard (reserves) [CFA], AJ Auxerre (reserves) [CFA], AS Nancy (reserves) [CFA], Olympique Lyonnais Reserves and Academy [CFA], AS Monaco FC (reserves) [CFA], AS Saint-Étienne (reserves) [CFA], FC Girondins de Bordeaux (reserves) [CFA], Le Mans Union Club (reserves) [CFA], SM Caen (reserves) [CFA], FC Lorient (reserves) [CFA], Havre Athletic Club (reserves) [CFA], CS Sedan Ardennes (B) [CFA 2], Amiens SC (B) [CFA 2], US Boulogne CO (B) [CFA 2], SC Bastia (B) [CFA 2], Paris FC (B) [CFA 2], FC Rouen (B) [CFA 2], AS Beauvais (B) [CFA 2], Dijon FCO (B) [CFA 2], SR Colmar (B) [CFA 2], ES Troyes AC (B) [CFA 2], Évian TG FC (B) [CFA 2], Clermont Foot (B) [CFA 2], OGC Nice (B) [CFA 2], Olympique de Marseille (B) [CFA 2], AC Ajaccien (B) [CFA 2], ÉFC Fréjus Saint-Raphaël (B) [CFA 2], Toulouse FC (B) [CFA 2], Montpellier HSC (B) [CFA 2], Nîmes Olympique (B) [CFA 2], FC Nantes (B) [CFA 2], Angers SCO (B) [CFA 2], LB Châteauroux (B) [CFA 2], Le Poiré-sur-Vie VF (B) [CFA 2], Stade rennais FC (B) [CFA 2], EA Guingamp (B) [CFA 2], Stade brestois (B) [CFA 2] |
+| 2013/14 | 7 | Olympique Lyonnais Reserves and Academy [CFA], US Quevillaise (B) [CFA 2], Paris FC (B) [CFA 2], SR Colmar (B) [CFA 2], AS Moulins (B) [CFA 2], Le Poiré-sur-Vie VF (B) [CFA 2], EA Guingamp (B) [CFA 2] |
+| 2014/15 | 5 | EA Guingamp (B) [CFA 2], Le Poiré-sur-Vie VF (B) [CFA 2], US Quevillaise (B) [CFA 2], Paris FC (B) [CFA 2], SR Colmar (B) [CFA 2] |
+| 2015/16 | 1 | Chamois niortais (B) [CFA 2] |
+| 2016/17 | 6 | US Quevilly-Rouen Métropole (B) [CFA 2], US Avranches (B) [CFA 2], SC Toulon (B) [CFA 2], Chamois niortais (B) [CFA 2], Pau FC (B) [CFA 2], Les Herbiers VF (B) [CFA 2] |
+| 2017/18 | 11 | Bourg-en-Bresse 01 (B) [National 3], US Concarnoise (B) [National 3], US Orléans (B) [National 3], USL Dunkerque (B) [National 3], FC Chambly (B) [National 3], US Quevilly-Rouen Métropole (B) [National 3], US Avranches (B) [National 3], Chamois niortais (B) [National 3], Pau FC (B) [National 3], Les Herbiers VF (B) [National 3], FC Bastia-Borgo (B) [National 3] |
+| 2018/19 | 14 | FC Girondins de Bordeaux (reserves) [National 2], Lyon Duchère AS (B) [National 3], US Orléans (B) [National 3], C' Chartres Football (B) [National 3], FC Chambly (B) [National 3], USL Dunkerque (B) [National 3], US Créteil (B) [National 3], US Avranches (B) [National 3], US Quevilly-Rouen Métropole (B) [National 3], Chamois niortais (B) [National 3], Pau FC (B) [National 3], Rodez AF (B) [National 3], Le Mans FC (B) [National 3], Les Herbiers VF (B) [National 3] |
+| 2019/20 | 14 | Lyon Duchère AS (B) [National 3], Le Puy Foot (B) [National 3], US Orléans (B) [National 3], C' Chartres Football (B) [National 3], FC Chambly (B) [National 3], US Avranches (B) [National 3], US Quevilly-Rouen Métropole (B) [National 3], Girondins de Bordeaux (B) [National 3], Chamois niortais (B) [National 3], Pau FC (B) [National 3], Rodez AF (B) [National 3], AS Béziers (B) [National 3], US Créteil (B) [National 3], Les Herbiers VF (B) [National 3] |
+| 2020/21 | 5 | Stade briochin (B) [National 3], US Avranches (B) [National 3], US Quevilly-Rouen Métropole (B) [National 3], Rodez AF (B) [National 3], US Créteil (B) [National 3] |
+| 2021/22 | 7 | Stade briochin (B) [National 3], Bourges Foot 18 (B) [National 3], US Quevilly-Rouen Métropole (B) [National 3], US Avranches (B) [National 3], Rodez AF (B) [National 3], Nîmes Olympique (B) [National 3], US Créteil-Lusitanos (B) [National 3] |
+| 2025/26 | 1 | FC Versailles 78 (B) [National 3] |
+
+### Missing clubs that are not reserve teams (for Max)
+
+Real clubs with no record in that season's database, after the club moves. Names are in `fra-clubs.tsv`.
+
+| Season | Division | Clubs |
+|---|---|---|
+| 2001/02 | CFA 2 | 5 |
+| 2002/03 | CFA | 1 |
+| 2002/03 | CFA 2 | 16 |
+| 2003/04 | CFA | 1 |
+| 2003/04 | CFA 2 | 33 |
+| 2005/06 | CFA | 8 |
+| 2005/06 | CFA 2 | 36 |
+| 2007/08 | CFA | 3 |
+| 2007/08 | CFA 2 | 47 |
+| 2008/09 | CFA | 2 |
+| 2008/09 | CFA 2 | 39 |
+| 2009/10 | CFA | 4 |
+| 2009/10 | CFA 2 | 41 |
+| 2010/11 | CFA | 5 |
+| 2010/11 | CFA 2 | 37 |
+| 2011/12 | CFA | 2 |
+| 2011/12 | CFA 2 | 38 |
+| 2011/12 | Championnat National | 1 |
+| 2012/13 | CFA 2 | 20 |
+| 2013/14 | CFA 2 | 4 |
+| 2014/15 | CFA 2 | 18 |
+| 2015/16 | CFA 2 | 2 |
+| 2016/17 | CFA 2 | 13 |
+| 2017/18 | National 3 | 49 |
+| 2018/19 | National 3 | 55 |
+| 2019/20 | National 3 | 54 |
+| 2020/21 | National 3 | 34 |
+| 2021/22 | National 3 | 35 |
+| 2023/24 | National 3 | 27 |
+| 2024/25 | National 3 | 10 |
+| 2025/26 | National 3 | 5 |
+
+## Second source, pass 2
+
+Date: 2026-10-17. Second-source agent. File: `fra.check2.tsv` (265 lines). Row ids and row order stay the same. `tools/research/rules_lint.py` gives 0 problems for `fra.tsv`, the same as before.
+
+### Scope
+
+`fra.check.tsv` has 675 lines with `no second source`. I checked the 265 lines whose field in `fra.tsv` still holds a fact. I did not check these lines:
+
+- 301 lines whose field is `unknown`.
+- 109 lines whose value is an inference: every 2027/28 row (carried under Q248), the values marked "(inference)", the Ligue 1 bench before 2019/20 and in 2021/22 to 2023/24 and from 2025/26, and the Ligue 2 bench before 2019/20.
+
+### Counts
+
+| Verdict | Lines |
+|---|---|
+| agree | 115 |
+| disagree, settled | 1 |
+| disagree, still split (conflict) | 3 |
+| no second source | 146 |
+
+| Competition | agree | disagree | no second source |
+|---|---|---|---|
+| Ligue 1 | 8 | 0 | 1 |
+| Ligue 2 | 3 | 1 | 1 |
+| Championnat National and Ligue 3 | 18 | 0 | 0 |
+| CFA (tier 4) | 33 | 0 | 28 |
+| CFA 2 (tier 5) | 48 | 3 | 41 |
+| Coupe de France | 0 | 0 | 41 |
+| Coupe de la Ligue | 5 | 0 | 29 |
+| nation rules | 0 | 0 | 5 |
+
+### Second publishers
+
+- Stat Football Club France (statfootballclubfrance.fr), one page per season for the National, the CFA and the CFA 2, with group tables and the clubs that went up and down. It confirms names, club counts and groups. It gives the real outcome and no rules. I marked `up` and `down` `agree` only where the outcome count equals the rule count. Where reprieves, administrative relegations or withdrawals change the count, the line stays `no second source` and the note gives the outcome. This page names no play-offs, not even the known CFA 2 relegation play-offs of 2002 to 2007, so every tier 4 and 5 `playoffs` line stays `no second source`.
+- French Wikipedia for the National and the CFA of 2001/02 to 2005/06 and the CFA 2 of 2001/02 and 2004/05, where RSSSF is the first source.
+- RSSSF for the CFA 2 `down` lines whose first source is Wikipedia (2001/02, 2004/05, 2005/06, 2006/07). RSSSF has no CFA 2 tables for 2002/03, 2003/04, 2007/08 and 2008/09.
+- footballdatabase.eu for the venue of the Coupe de la Ligue finals of 2001/02 to 2004/05 and 2015/16 (Stade de France).
+- ligue1.com (LFP) and the Maxifoot table keys for the 2026/27 places of Ligue 1, Ligue 2 and Ligue 3.
+- abargenteuil.fr (December 2025) for five substitutes in Ligue 1 from 2021/22 to 2025/26 and 20 players on the Ligue 1 sheet in 2024/25. For these fields the first source is ligue1.com.
+
+fff.fr and its league sites refuse automated reads (HTTP 403), so no FFF rule text was read. Transfermarkt cup pages no longer give match links to a plain read.
+
+### Change to `fra.tsv`
+
+1. fra-228 (Ligue 2 2026/27) `playoffs`: "16th v Ligue 3 3rd" becomes "16th v the winner of the Ligue 3 play-offs (3rd to 6th), two legs". The LFP page https://ligue1.com/fr/articles/l1_article_5089- says that the 3rd to 6th of Ligue 3 play off and that the winner meets the Ligue 2 16th home and away. Third publisher: https://www.getfootballnewsfrance.com/2026/french-fa-president-philippe-diallo-confirms-ligue-3-launch-from-2026/ quotes the FFF president on two clubs up direct and four clubs in the play-offs. Decision: `second`. The Maxifoot Ligue 3 table key (https://www.maxifoot.fr/resultat-national.htm) still says "Place 3: barrage montée", which agrees with the old value. I take it as a key not yet updated (inference).
+2. fra-229 (Ligue 3 2026/27) `playoffs`: the inference "3rd v Ligue 2 16th" becomes "3rd to 6th play off; the winner plays the Ligue 2 16th over two legs", with the LFP page as source. This follows from change 1. The 2027/28 rows (fra-237, fra-238) say "as 2026/27", so they now carry the new format.
+
+### Conflicts (for Max)
+
+1. fra-33 (CFA 2 2004/05) `down` = 23. RSSSF (https://www.rsssf.org/tablesf/fran05.html) marks two "best 14th place" clubs (Belfort, Montélimar) and the worst 12th (Vénissieux) for the relegation play-off, so 22 go down direct. French Wikipedia (the first source) says that Belfort and Montélimar joined the play-off only after administrative relegations. No third publisher found. The row keeps 23.
+2. fra-33 `playoffs`. The row says "the 13th of each group, with the worst 12th and best 14th places". French Wikipedia says the 13th play the DH clubs and names the other places as fill-ins after administrative relegations. RSSSF names two best 14th. The row keeps its value.
+3. fra-51 (CFA 2 2006/07) `down` = 23. RSSSF (https://www.rsssf.org/tablesf/fran07.html) marks two 14th-placed clubs (Pontarlier, Locminé) and the worst 12th (La Valette) for the play-off, so 22 go down direct. French Wikipedia (https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinqui%C3%A8me_division_2006-2007) calls La Valette the worst 12th by rule and the two 14th fill-ins after administrative relegations. It also says that 11 CFA 2 clubs meet the winners of a first round of the 22 DH runners-up. The row keeps 23.
+
+Inference for Max: from 2004/05 to 2006/07 the play-off had 11 CFA 2 places each season (8 times 13th, the worst 12th and two 14th), and 2005/06 (fra-42) already has 22. If the 11 places are the rule, `down` is 22 for fra-33 and fra-51.
+
+### Other findings
+
+- CFA 2001/02 to 2005/06: French Wikipedia and RSSSF also show a final phase of the best reserve teams for the reserve title. It has no effect on promotion. The rows say `playoffs` = none. The game does not need it unless the build plays a reserve title.
+- fra-5 (CFA 2001/02) `up` = 6: French Wikipedia colours 7 clubs promoted and states no count.
+- abargenteuil.fr (12 March 2026, https://abargenteuil.fr/blog/extra-communautaire-psg/) gives four non-EU players per Ligue 1 club and the Samoa exemption as the rule in force. The 2025/26 nation rules row (fra-217) has `foreign` = unknown. This page can fill it, but abargenteuil.fr is the first source of fra-208, so Max or the build can decide.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
+
+- fra-217 (2025/26 nation rules), `foreign`: unknown changed to "4 non-EU players per Ligue 1 club". Source: abargenteuil.fr, 12 March 2026 (https://abargenteuil.fr/blog/extra-communautaire-psg/, read on 2026-10-17). It gives the LFP limit of 4 as the rule in force. This is one publisher only, and the same publisher is the source of fra-208. The row notes say so.
+- fra-33 and fra-51 (CFA 2 2004/05 and 2006/07), `down`: I found no FFF rule text for these seasons (two searches, no archive copy). The value 23 stays, and the open point for Max in the second-source section stays open. A note in each row says so.

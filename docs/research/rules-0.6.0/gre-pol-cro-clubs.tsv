@@ -142,7 +142,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2014/15	gre_prm	Veria	3182	Veria	Greek National B Division	https://en.wikipedia.org/wiki/Template:2014–15_Super_League_Greece_table
 2014/15	gre_prm	Levadiakos	6519	Levadiakos	Greek National A Division	https://en.wikipedia.org/wiki/Template:2014–15_Super_League_Greece_table
 2014/15	gre_prm	Ergotelis	3614	Ergotelis	Greek National A Division	https://en.wikipedia.org/wiki/Template:2014–15_Super_League_Greece_table
-2014/15	gre_prm	OFI				https://en.wikipedia.org/wiki/Template:2014–15_Super_League_Greece_table
+2014/15	gre_prm	OFI	8109	Omilos Filathlon Irakleiou	Greek National A Division	https://en.wikipedia.org/wiki/Template:2014–15_Super_League_Greece_table
 2014/15	gre_prm	Niki Volos	7950	Niki Volos	Greek National B Division	https://en.wikipedia.org/wiki/Template:2014–15_Super_League_Greece_table
 2014/15	gre_prm	Kerkyra	5917	PAE Kerkyras	Greek National B Division	https://en.wikipedia.org/wiki/Template:2014–15_Super_League_Greece_table
 2015/16	gre_prm	Olympiacos	8251	Olympiacos Piraeus	Greek National A Division	https://en.wikipedia.org/wiki/Template:2015–16_Super_League_Greece_Regular_Season_table
@@ -220,8 +220,8 @@ season	division	club	db_club_id	db_club	db_division	source
 2001/02	gre_second	Chalkidona	2399	Chalkidona	Greek National B Division	https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
 2001/02	gre_second	Paniliakos	8565	I.S. Paniliakos	Greek National B Division	https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
 2001/02	gre_second	Kalamata	5785	Kalamata	Greek National B Division	https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
-2001/02	gre_second	Apollon Smyrnis				https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
-2001/02	gre_second	Panegialios				https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
+2001/02	gre_second	Apollon Smyrnis	778	Apollon Athens	Greek National B Division	https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
+2001/02	gre_second	Panegialios	311	Panaigialeios	Greek National B Division	https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
 2001/02	gre_second	Agios Nikolaos	104	Agios Nikolaos	Greek Lower Division	https://en.wikipedia.org/wiki/2001–02_Beta_Ethniki
 2007/08	gre_second	Panserraikos	10360	Panseraikos	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
 2007/08	gre_second	Thrasyvoulos	11543	Thrasivoulos	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
@@ -229,9 +229,9 @@ season	division	club	db_club_id	db_club	db_division	source
 2007/08	gre_second	PAS Giannina	4380	Pas Giannena	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
 2007/08	gre_second	Ionikos	5410	Ionikos Nikeas	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
 2007/08	gre_second	Kallithea	5790	Kallithea	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
-2007/08	gre_second	Kerkyra				https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
+2007/08	gre_second	Kerkyra	5917	Kerkira	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
 2007/08	gre_second	Agrotikos Asteras	286	Agrotikos Asteras	Greek Lower Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
-2007/08	gre_second	Ethnikos Piraeus	3688	Ethnikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
+2007/08	gre_second	Ethnikos Piraeus				https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
 2007/08	gre_second	Ilisiakos	5319	Ilisiakos	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
 2007/08	gre_second	Kalamata	5785	Kalamata	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
 2007/08	gre_second	Ethnikos Asteras	3688	Ethnikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2007–08_Beta_Ethniki
@@ -253,7 +253,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2008/09	gre_second	Pierikos	8792	Pierikos	Greek National B Division	https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
 2008/09	gre_second	Olympiacos Volos	8254	Olympiakos Volou	Greek National B Division	https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
 2008/09	gre_second	Apollon Kalamarias	5783	MGS Apollon Kalamarias	Greek National B Division	https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
-2008/09	gre_second	Ethnikos Piraeus	3688	Ethnikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
+2008/09	gre_second	Ethnikos Piraeus				https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
 2008/09	gre_second	Ethnikos Asteras	3688	Ethnikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
 2008/09	gre_second	Anagennisi Karditsa	5824	Anagenisi Karditsas	Greek Lower Division	https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
 2008/09	gre_second	Veria	12340	Veroia	Greek National B Division	https://en.wikipedia.org/wiki/2008–09_Beta_Ethniki
@@ -262,10 +262,10 @@ season	division	club	db_club_id	db_club	db_division	source
 2009/10	gre_second	Olympiacos Volos	8254	Olympiakos Volou	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Kerkyra	5917	AO Kerkyras	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	OFI	8109	OFI Crete	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
-2009/10	gre_second	Ethnikos Piraeus	3688	Ethnikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
+2009/10	gre_second	Ethnikos Piraeus				https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Panserraikos	10360	Panserraikos	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Pierikos	8792	Pierikos	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
-2009/10	gre_second	Panetolikos				https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
+2009/10	gre_second	Panetolikos	8557	Panaitolikos	Greek Lower Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Diagoras Rodos	3071	Diagoras Rodou	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Ilioupoli	3376	GS Ilioupolis	Greek Lower Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Agrotikos Asteras	286	Agrotikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
@@ -277,7 +277,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2009/10	gre_second	Rodos	6526	Rodos A.S	Greek Lower Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Kalamata	5785	AO Kalamata	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
 2009/10	gre_second	Egaleo	5319	AO Aigaleo	Greek National B Division	https://en.wikipedia.org/wiki/2009–10_Beta_Ethniki
-2010/11	gre_second	Panetolikos				https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
+2010/11	gre_second	Panetolikos	8557	Panaitolikos	Greek Lower Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	PAS Giannina	4380	Panipeirotikos Athlitikos Syllogos Giannina	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	OFI	8109	OFI Crete	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	Levadiakos	6519	Levadiakos	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
@@ -290,7 +290,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2010/11	gre_second	Ethnikos Asteras	3688	Ethnikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	Thrasyvoulos	11543	PAE Thrasyvoulos	Greek Lower Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	Kallithea	5790	Kallithea GS	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
-2010/11	gre_second	Ethnikos Piraeus	3688	Ethnikos Asteras	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
+2010/11	gre_second	Ethnikos Piraeus				https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	Ionikos	5410	Ionikos Nikeas	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	Anagennisi Karditsa	5824	Anagennisi Karditsas	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
 2010/11	gre_second	Ilioupoli	3376	GS Ilioupolis	Greek National B Division	https://en.wikipedia.org/wiki/2010–11_Football_League_(Greece)
@@ -361,7 +361,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2016/17	gre_second	Sparta	1463	AO Sparti	Greek National B Division	https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
 2016/17	gre_second	Panserraikos	10360	Panserraikos	Greek National B Division	https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
 2016/17	gre_second	Panegialios	8623	GS Panegialios	Greek Lower Division	https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
-2016/17	gre_second	Aiginiakos				https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
+2016/17	gre_second	Aiginiakos	310	GAS Eginiakos	Greek Lower Division	https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
 2016/17	gre_second	Kissamikos	6135	PGS Kissamikos	Greek National B Division	https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
 2016/17	gre_second	Anagennisi Karditsa	5824	Anagennisi Karditsas	Greek National B Division	https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
 2016/17	gre_second	Acharnaikos	299	AO Acharnaikos	Greek Lower Division	https://en.wikipedia.org/wiki/2016–17_Football_League_(Greece)
@@ -388,13 +388,13 @@ season	division	club	db_club_id	db_club	db_division	source
 2013/14	new (gre second, group 2)	Chania	2409	PAE Chania	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Fostiras	4148	Fostiras	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Iraklis Psachna	6181	AO Iraklis Psachna	Greek National B Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
-2013/14	new (gre second, group 2)	Panegialios				https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
+2013/14	new (gre second, group 2)	Panegialios	311	Panaigialeios	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Panachaiki	8556	Panachaiki 2005	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Kallithea	5790	GS Kallithea	Greek National B Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Acharnaikos	299	Acharnaikos	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Fokikos	262	AS Fokikos Amfissas	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Paniliakos	8565	I.S. Paniliakos	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
-2013/14	new (gre second, group 2)	Episkopi				https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
+2013/14	new (gre second, group 2)	Episkopi	3551	A.O Episkopis Rethymno	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Asteras Magoula	7295	AO Asteras Magoulas	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Glyfada	10849	AO Glyfada	A Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
 2013/14	new (gre second, group 2)	Vyzas	12564	Vyzas FC	Greek Lower Division	https://en.wikipedia.org/wiki/2013–14_Football_League_(Greece)
@@ -415,7 +415,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2014/15	new (gre second, group 2)	Panachaiki	8556	Panachaiki GE	Greek National B Division	https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
 2014/15	new (gre second, group 2)	Apollon Smyrnis	907	GS Apollon Smyrnis	Greek National B Division	https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
 2014/15	new (gre second, group 2)	Chania	2409	AO Chania	Greek National B Division	https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
-2014/15	new (gre second, group 2)	Enosi Ermionida				https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
+2014/15	new (gre second, group 2)	Enosi Ermionida	3456	Ermionida Enosis	Greek Lower Division	https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
 2014/15	new (gre second, group 2)	Panegialios	8623	Panegialios	Greek Lower Division	https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
 2014/15	new (gre second, group 2)	Acharnaikos	299	AO Acharnaikos	Greek Lower Division	https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
 2014/15	new (gre second, group 2)	Kallithea	5790	Kallithea	Greek Lower Division	https://en.wikipedia.org/wiki/2014–15_Football_League_(Greece)
@@ -434,7 +434,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2017/18	gre_second	A.E. Karaiskakis	3693	AE Karaiskakis Artas	Greek National B Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
 2017/18	gre_second	Ergotelis	3614	GS Ergotelis	A Lower Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
 2017/18	gre_second	Apollon Larissa	11270	APO Apollon Larisas	Greek National B Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
-2017/18	gre_second	Aiginiakos				https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
+2017/18	gre_second	Aiginiakos	310	GAS Eginiakos	Greek Lower Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
 2017/18	gre_second	Sparti	1463	AO Spartis	Greek National B Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
 2017/18	gre_second	Anagennisi Karditsa	5824	Anagennisi Karditsas	Greek National B Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
 2017/18	gre_second	Panserraikos	10360	MGS Panserraikos	Greek National B Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
@@ -442,6 +442,22 @@ season	division	club	db_club_id	db_club	db_division	source
 2017/18	gre_second	Kallithea	5790	Kallithea	Greek Lower Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
 2017/18	gre_second	Veria	3182	PAE Veria	Greek National B Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
 2017/18	gre_second	Acharnaikos	299	AO Neos  Acharnaikos	Greek Lower Division	https://en.wikipedia.org/wiki/Template:2017–18_Football_League_(Greece)_table
+2018/19	gre_second	Volos	7603	Volos NPS	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Platanias	353	Platanias Chania	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Apollon Larissa	11270	Apollon Larisas	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Ergotelis	3614	GS Ergotelis	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Panachaiki	8556	Panachaiki Patras	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Chania	6135	AO Chania Kissamikos	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Apollon Pontus	5783	Apollon Pontou	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Doxa Drama	3252	Doxa Dramas	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Kerkyra	5917	AOK Kerkyra	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Karaiskakis	3693	AE Karaiskakis Artas	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Iraklis	5422	Iraklis Thessaloniki	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Trikala	6013	AO Trikala	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Irodotos	7027	PASA Irodotos	Greek Lower Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Aittitos Spata	967	Aittitos Spaton	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Aiginiakos	310	AP Eginiakos	Greek National B Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
+2018/19	gre_second	Sparti	1463	AE Sparti	Greek Lower Division	https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece)
 2019/20	gre_second	PAS Giannina	4380	PAS Giannina	Greek National B Division	https://en.wikipedia.org/wiki/2019–20_Super_League_Greece_2
 2019/20	gre_second	Apollon Smyrnis	907	Apollon Smyrnis	Greek National B Division	https://en.wikipedia.org/wiki/2019–20_Super_League_Greece_2
 2019/20	gre_second	Chania	6135	PAE Chania	Greek National B Division	https://en.wikipedia.org/wiki/2019–20_Super_League_Greece_2
@@ -465,13 +481,13 @@ season	division	club	db_club_id	db_club	db_division	source
 2020/21	gre_second	Apollon Larissa	4053	Apollon Larisas	Greek National B Division	https://en.wikipedia.org/wiki/2020–21_Super_League_Greece_2
 2020/21	gre_second	Doxa Drama	3252	Doxa Dramas	Greek National B Division	https://en.wikipedia.org/wiki/2020–21_Super_League_Greece_2
 2020/21	gre_second	Karaiskakis	3693	AE Karaiskakis Artas	Greek National B Division	https://en.wikipedia.org/wiki/2020–21_Super_League_Greece_2
-2020/21	gre_second	O.F. Ierapetra				https://en.wikipedia.org/wiki/2020–21_Super_League_Greece_2
+2020/21	gre_second	O.F. Ierapetra	4023	OF Ierapetras	Greek Lower Division	https://en.wikipedia.org/wiki/2020–21_Super_League_Greece_2
 2021/22	gre_second	Veria	3182	Veria NPS	Greek National B Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	AEL	6379	AE Larisa	Greek National B Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Xanthi	3	AO Xanthi	Greek National B Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Niki Volos	7950	Niki Volou	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Anagennisi Karditsa	5824	Anagennisi Karditsas	A Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
-2021/22	gre_second	Olympiacos B				https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
+2021/22	gre_second	Olympiacos B	6378	Olympiacos Piraeus B	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Iraklis	5422	Iraklis Thessaloniki	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	PAOK B	6130	PAOK Thessaloniki B	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Almopos Aridea	9809	Almopos Arideas	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
@@ -481,7 +497,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2021/22	gre_second	Panserraikos	7150	Panserraikos	Greek National B Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Pierikos	8792	Pierikos Katerini	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Kavala	5867	AO Kavala	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
-2021/22	gre_second	Olympiacos Volos	7603	Volos NPS	Greek National A Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
+2021/22	gre_second	Olympiacos Volos	8254	Olympiakos Volou	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	gre_second	Trikala	6013	AO Trikala	Greek National B Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	new (gre second, group 2)	Levadiakos	6519	APO Levadiakos	Greek National B Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
 2021/22	new (gre second, group 2)	Kallithea	5790	GS Kallithea	Greek Lower Division	https://en.wikipedia.org/wiki/2021–22_Super_League_Greece_2
@@ -523,7 +539,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2022/23	new (gre second, group 2)	Kalamata	5785	PS Kalamata	Greek National B Division	https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
 2022/23	new (gre second, group 2)	Ilioupoli	10582	GS Ilioupolis	Greek Lower Division	https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
 2022/23	new (gre second, group 2)	Panachaiki	8556	Panachaiki GE	Greek Lower Division	https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
-2022/23	new (gre second, group 2)	Olympiacos B				https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
+2022/23	new (gre second, group 2)	Olympiacos B	6378	Olympiacos Piraeus B	Greek Lower Division	https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
 2022/23	new (gre second, group 2)	Egaleo	5319	AO Egaleo	Greek National B Division	https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
 2022/23	new (gre second, group 2)	AEK Athens B	8549	AEK Athens B	Greek Lower Division	https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
 2022/23	new (gre second, group 2)	Proodeftiki	9096	Proodeftiki Neolea	Greek Lower Division	https://en.wikipedia.org/wiki/2022–23_Super_League_Greece_2
@@ -549,7 +565,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2023/24	new (gre second, group 2)	Ilioupoli	10582	GS Ilioupolis	Greek Lower Division	https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
 2023/24	new (gre second, group 2)	Diagoras	6485	AO Diagoras Vrachneikon	Greek Lower Division	https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
 2023/24	new (gre second, group 2)	Egaleo	5319	AO Egaleo	Greek National B Division	https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
-2023/24	new (gre second, group 2)	Olympiacos B				https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
+2023/24	new (gre second, group 2)	Olympiacos B	6378	Olympiacos Piraeus B	Greek Lower Division	https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
 2023/24	new (gre second, group 2)	Giouchtas	6862	AO Giouchtas	Greek Lower Division	https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
 2023/24	new (gre second, group 2)	Panathinaikos B	6732	Panathinaikos Athens B	Greek Lower Division	https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
 2023/24	new (gre second, group 2)	Panachaiki	8556	Panachaiki GE	Greek Lower Division	https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
@@ -587,9 +603,9 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	new (gre second, group 2)	Kalamata	5785	PS Kalamata	Greek National B Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
 2025/26	new (gre second, group 2)	Panionios	8566	Panionios Athens	Greek National B Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
 2025/26	new (gre second, group 2)	Marko	4781	GS Marko	Greek National B Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
-2025/26	new (gre second, group 2)	Olympiacos B				https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
+2025/26	new (gre second, group 2)	Olympiacos B	11277	Olympiacos Piraeus B	Greek Lower Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
 2025/26	new (gre second, group 2)	Athens Kallithea	5790	Athens Kallithea	Greek National B Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
-2025/26	new (gre second, group 2)	Hellas Syros				https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
+2025/26	new (gre second, group 2)	Hellas Syros	11271	Ellas Syrou	Greek Lower Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
 2025/26	new (gre second, group 2)	Egaleo	5319	AO Egaleo	Greek National B Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
 2025/26	new (gre second, group 2)	Ilioupoli	10582	GS Ilioupolis	Greek Lower Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
 2025/26	new (gre second, group 2)	Chania	6135	PAE Chania	Greek Lower Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
@@ -608,6 +624,22 @@ season	division	club	db_club_id	db_club	db_division	source
 2003/04	pol_first	Górnik Polkowice	8919	Gornik Polkowice	Polish First Division	https://en.wikipedia.org/wiki/2003–04_Ekstraklasa
 2003/04	pol_first	Świt Nowy Dwór Mazowiecki	11259	Swit Nowy Dwor Mazowiecki	Polish First Division	https://en.wikipedia.org/wiki/2003–04_Ekstraklasa
 2003/04	pol_first	Widzew Łódź	12820	Widzew Lodz	Polish First Division	https://en.wikipedia.org/wiki/2003–04_Ekstraklasa
+2005/06	pol_first	Legia Warsaw	6443	KP Legia Warszawa SSA	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Wisła Kraków	12870	Wisla Krakow SSA	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Zagłębie Lubin	13067	SSA Zaglebie Lubin	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Amica Wronki	682	Amica Wronki SSA	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Korona Kielce	6117	Korona Kielce	Polish Lower Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Odra Wodzisław	8163	Odra Wodzislaw Slaski	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Dyskobolia Grodzisk	4612	SSA Groclin Dyskobolia	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Cracovia	2787	MKS Cracovia SSA	Polish Second Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	GKS Bełchatów	1453	GKS Belchatow	Polish Second Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Pogoń Szczecin	8870	MKS Pogon Szczecin	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Wisła Płock	8347	Wisla Plock SSA	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Górnik Łęczna	6432	GKS Gornik Leczna	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Górnik Zabrze	4505	Gornik Zabrze SSA	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Arka Gdynia	840	Arka Gdynia	Polish Second Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Polonia Warsaw	8922	KS Polonia Warszawa	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
+2005/06	pol_first	Lech Poznań	6428	KKS Lech Poznan	Polish First Division	https://en.wikipedia.org/wiki/2005–06_Ekstraklasa
 2021/22	pol_first	Lech Poznań	6428	Lech Poznan	Polish First Division	https://en.wikipedia.org/wiki/2021–22_Ekstraklasa
 2021/22	pol_first	Raków Częstochowa	9334	Rakow Czestochowa	Polish First Division	https://en.wikipedia.org/wiki/2021–22_Ekstraklasa
 2021/22	pol_first	Pogoń Szczecin	8870	Pogon Szczecin	Polish First Division	https://en.wikipedia.org/wiki/2021–22_Ekstraklasa
@@ -702,14 +734,14 @@ season	division	club	db_club_id	db_club	db_division	source
 2002/03	pol_second	Lukullus/Swit Nowy Dwór	11259	Swit Nowy Dwor Mazowiecki	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Górnik Leczna	6432	Gornik Leczna	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	GKS Belchatów	1453	GKS Belchatow	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
-2002/03	pol_second	Aluminium Konin				https://www.rsssf.org/tablesp/pol03.html
+2002/03	pol_second	Aluminium Konin	5731	KP Konin	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Stasiak-Ceramika Opoczno	2354	Ceramika Opoczno	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Arka Gdynia	840	Arka Gdynia	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	RKS Radomsko	9304	RKS Fameg Radomsko	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	LKS Lódz	6270	Lodzki Klub Sportowy	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Piotrcovia Piotrków	8818	Piotrcovia Piotrkow	Polish Lower Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Polar Wroclaw	8882	Polar Wroclaw	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
-2002/03	pol_second	MCP Bielsko-Biala				https://www.rsssf.org/tablesp/pol03.html
+2002/03	pol_second	MCP Bielsko-Biala	8859	MC Podbeskidzie Bielsko-Biala	Polish Lower Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Tloki Gorzyce	11612	Tloki Gorzyce	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Stal Stalowa Wola	11047	Stal Stalowa Wola	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
 2002/03	pol_second	Slask Wroclaw	10633	Slask Wroclaw	Polish Second Division	https://www.rsssf.org/tablesp/pol03.html
@@ -731,7 +763,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2003/04	pol_second	Arka Gdynia	840	Arka Gdynia	Polish Second Division	https://www.rsssf.org/tablesp/pol04.html
 2003/04	pol_second	Tloki Gorzyce	11612	Tloki Gorzyce	Polish Second Division	https://www.rsssf.org/tablesp/pol04.html
 2003/04	pol_second	Polar Wroclaw	8882	Polar Wroclaw	Polish Second Division	https://www.rsssf.org/tablesp/pol04.html
-2003/04	pol_second	Aluminium Konin				https://www.rsssf.org/tablesp/pol04.html
+2003/04	pol_second	Aluminium Konin	5731	KP Konin	Polish Second Division	https://www.rsssf.org/tablesp/pol04.html
 2003/04	pol_second	KSZO Ostrowiec Swietokrzyski	5746	KSZO Ostrowiec Swietokrzyski	Polish Second Division	https://www.rsssf.org/tablesp/pol04.html
 2003/04	pol_second	Blekitni Stargard Szczecinski	1667	Blekitni Stargard Szczecinski	Polish Lower Division	https://www.rsssf.org/tablesp/pol04.html
 2005/06	pol_second	Widzew Łódź	12820	Widzew Lodz	Polish Second Division	https://www.rsssf.org/tablesp/pol06.html
@@ -745,7 +777,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2005/06	pol_second	KSZO Ostrowiec Świętokrzyski	5746	KSZO Ostrowiec Swietokrzyski	Polish Second Division	https://www.rsssf.org/tablesp/pol06.html
 2005/06	pol_second	Lechia Gdańsk	6430	Lechia Gdansk	Polish Lower Division	https://www.rsssf.org/tablesp/pol06.html
 2005/06	pol_second	Górnik Polkowice	8919	Gornik Polkowice	Polish First Division	https://www.rsssf.org/tablesp/pol06.html
-2005/06	pol_second	Heko Czermno				https://www.rsssf.org/tablesp/pol06.html
+2005/06	pol_second	Heko Czermno	634	Heko Czermno	A Lower Division	https://www.rsssf.org/tablesp/pol06.html
 2005/06	pol_second	Podbeskidzie Bielsko-Biała	8859	MC Podbeskidzie Bielsko-Biala	Polish Second Division	https://www.rsssf.org/tablesp/pol06.html
 2005/06	pol_second	Radomiak Radom	9303	RKS Radomiak Radom	Polish Second Division	https://www.rsssf.org/tablesp/pol06.html
 2005/06	pol_second	Polonia Bytom	8923	Polonia Bytom	Polish Lower Division	https://www.rsssf.org/tablesp/pol06.html
@@ -1113,7 +1145,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2003/04	cro_a1	Varteks	12277	NK Varteks	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
 2003/04	cro_a1	Zadar	13065	NK Zadar	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
 2003/04	cro_a1	Kamen Ingrad	5799	NK Kamen Ingrad	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
-2003/04	cro_a1	Inter Zaprešić				https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
+2003/04	cro_a1	Inter Zaprešić	5290	NK INKER	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
 2003/04	cro_a1	Slaven Belupo	10639	NK Slaven Belupo	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
 2003/04	cro_a1	Cibalia	2542	HNK Cibalia	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
 2003/04	cro_a1	NK Zagreb	13073	NK Zagreb	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_First_Football_League
@@ -1300,8 +1332,8 @@ season	division	club	db_club_id	db_club	db_division	source
 2002/03	cro_a2a	Belišće	1466	NK Belisce	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Čakovec	2128	NK Cakovec	Croatian First Division	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Koprivnica	6111	NK Koprivnica	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
-2002/03	cro_a2a	Omladinac Novo Selo Rok				https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
-2002/03	cro_a2a	Sloga Nova Gradiška				https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
+2002/03	cro_a2a	Omladinac Novo Selo Rok	8279	NK Omladinac	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
+2002/03	cro_a2a	Sloga Nova Gradiška	10676	NK Sloga	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Valpovka				https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Metalac Osijek	7289	NK Metalac (S)	Croatian Third Division Central	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Vukovar '91	12620	HNK Vukovar '91	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
@@ -1309,7 +1341,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2002/03	cro_a2a	Grafičar Vodovod	4532	NK Graficar Vodovod	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Dilj	3094	NK Dilj	Croatian Third Division East	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2b	Uljanik	12006	NK Uljanik	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
-2002/03	cro_a2b	Inker Zaprešić				https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
+2002/03	cro_a2b	Inker Zaprešić	5290	NK INKER	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2b	Solin Građa	10745	NK Solin Gradja	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2b	Uskok Klis	12132	NK Uskok	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2b	Croatia Sesvete	10372	NK Croatia Sesvete	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
@@ -1331,7 +1363,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2003/04	cro_a2a	Koprivnica	6111	NK Koprivnica	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Dilj	3094	NK Dilj	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Valpovka				https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
-2003/04	cro_a2a	Sloga Nova Gradiška				https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
+2003/04	cro_a2a	Sloga Nova Gradiška	10676	NK Sloga	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2b	Pula 1856	12006	NK Uljanik	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2b	Solin Građa	10745	NK Solin Gradja	Croatian Second Division South	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2b	Pomorac	8933	NK Pomorac	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
@@ -1352,7 +1384,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2005/06	cro_a2a	Metalac Osijek	7289	NK Metalac (S)	Croatian Third Division Central	https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League
 2005/06	cro_a2a	Marsonia	7138	NK Marsonia	Croatian First Division	https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League
 2005/06	cro_a2a	Čakovec				https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League
-2005/06	cro_a2a	Graničar Županja				https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League
+2005/06	cro_a2a	Graničar Županja	4545	NK Granicar	Croatian Second Division North	https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League
 2005/06	cro_a2a	Dilj	3094	NK Dilj	Croatian Second Division North	https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League
 2005/06	cro_a2a	Slavonija Požega	10654	NK Slavonija	Croatian Second Division North	https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League
 2005/06	cro_a2a	Mladost Molve	7435	NK Mladost Molve	Croatian Second Division North	https://en.wikipedia.org/wiki/2005–06_Croatian_Second_Football_League

@@ -1,6 +1,6 @@
 # Rules table: Spain (part `spa`, slice 5)
 
-Date 2026-10-16. Research only. Files: `spa.tsv` (216 rows), `spa-clubs.tsv` (912 rows), `spa.reconcile.tsv`, this note.
+Date 2026-10-16. Research only. Files: `spa.tsv` (216 rows, 162 after pass 2), `spa-clubs.tsv` (912 rows, 462 after pass 2), `spa.reconcile.tsv`, this note. Pass 2 (2026-10-17) changes the scope: see the section "Pass 2" at the end.
 
 ## Method
 
@@ -127,3 +127,98 @@ Fields filled:
 Disagreements: none found.
 
 Lint after the pass: 0 problems.
+
+## Pass 2
+
+Date 2026-10-17. Decision agent. Max's decisions Q268 to Q331 apply. Row ids are kept. Lint after the pass: 0 problems (0 before).
+
+### Lowest tier (Q331)
+
+The lowest tier that the original runs for Spain is tier 3 (Segunda B, `spa_second_b`). The code shows this:
+
+- `SpaFirst::SpaFirst` (0x84e130, test at 0x84e329) and `SpaFirst::load_extra_data` (0x8508c0, test at 0x8508df) create the Spanish Lower Division (`SpaLower::SpaLower`, 0x851020) only when bit 0x4 of the nation byte +0x11c is clear.
+- `SpaSecond::set_up_rules` (0x855cc0, test at 0x855d2a) links the competition 0x9cf7b8 as the league below when the same bit is set, and no league below when it is clear.
+- `SpaLower` is therefore a stand-in league for a game without Segunda B. It is not a tier below Segunda B. Every season database holds Segunda B (B1 to B4, 80 clubs).
+
+Changes:
+
+- Deleted from `spa.tsv`: 54 rows. These are the 27 Segunda Federación rows (`comp_file` = `new`, tier 4: spa-5, 13, 21 and so on to spa-213) and the 27 Tercera rows (`spa_lower` stand-in, tier 4 to 2020/21 and tier 5 from 2021/22: spa-6, 14, 22 and so on to spa-214).
+- Deleted from `spa-clubs.tsv`: 450 club rows of Segunda División RFEF and Segunda Federación (2021/22 to 2025/26, 90 a season).
+- Each tier 3 row (spa-4 to spa-212, 27 rows) gets this note: tier 3 is the lowest tier in the game, clubs that go down become clubs with no division, and clubs that come up come from that pool.
+- Not changed: the Copa del Rey rows keep their real entrants from tiers 4 and 5. In the game those entrants come from clubs with no division (inference for the build).
+- Not changed: `spa.check.tsv` and `spa.reconcile.tsv` belong to other agents. 326 check lines point to deleted rows, 225 of them `no second source`. The second-source agent can skip them.
+
+### Conflicts and open points
+
+| Point | Decision | URL |
+|---|---|---|
+| spa-190, Tercera Federación 2024/25: 325 or 324 clubs | Void: the row is deleted (Q331). | n/a |
+| spa-1, 9, 17, 25 `foreign`: es.wikipedia gives 3 and 4 non-EU places before 2005 | 4 registered, at most 3 on the pitch, kept. Racing de Santander fielded four non-EU players at once in December 2003 and lost the point. The 2005 rule cut the places from four to three. Notes and sources updated. | http://www.elmundo.es/elmundodeporte/2003/12/14/liga/1071426392.html |
+| spa-156 `down`, Segunda B 2020/21: 27 or 26 to tier 5 | 26 to tier 5 (5 per relegation group, 6 in group 5E), and 36 to tier 4. The field now says 62 leave tier 3. The 27 of pass 1 was a miscount of the season tables. | https://es.wikipedia.org/wiki/Segunda_Divisi%C3%B3n_B_de_Espa%C3%B1a_2020-21 |
+| Name map inferences (Mérida AD as "C.P. Mérida", Salamanca CF UDS as "U.D. Salamanca", Extremadura UD as "Extremadura C.F.", CD El Ejido as "CD El Ejido 2012", UD Logroñés 2012/13 as "C.D. Logroñés", Yeclano Deportivo 2012/13 as "Yeclano C.F.") | Kept. In each season the database puts the record in B1 to B4, where the real club played. The database maker uses the record for that club. | season pages already cited in `spa-clubs.tsv` |
+| Rayo Cantabria and CD El Ejido 2022/23 inferences | Void: those rows were tier 4 and are deleted. | n/a |
+| Tercera groups: does 0.6.0 need them? | No (Q331). | n/a |
+
+No conflict is left for Max.
+
+### Club moves (Q279, Q280, Q290)
+
+Seasons with a database: 2001/02 to 2003/04, 2005/06, 2007/08 to 2025/26. Spain has no database division whose real tier has ended, so Q290 adds no clubs to the pool. The pool is clubs with no division plus "Spanish Lower Division", "A Lower Division" and "Reserve".
+
+| Tier | Seasons where the count differs | Result |
+|---|---|---|
+| 1 (20) | none | no list |
+| 2 (22) | none | no list |
+| 3 | 2012/13 (81), 2013/14 (79), 2020/21 (102), 2021/22 to 2025/26 (40 against 80 in B1 to B4) | lists of pass 1 kept: 462 rows |
+
+No club moves up out of tier 3 and no tier lies below it, so no gap needs filling. No club row was added in pass 2. In 2021/22 to 2025/26 the 40 database clubs of B1 to B4 that are not on the list become clubs with no division.
+
+Missing clubs after pass 2: Ourense CF in Primera Federación group 1, 2024/25 and 2025/26. The databases of October 2024 and December 2025 hold only "C.D. Ourense" (in "Spanish Lower Division") and "C.D. Ourense B". Ourense CF is not the successor of CD Ourense, so the match stays empty. The other missing clubs of pass 1 were tier 4 and are deleted.
+
+### Reserve and B teams (Q289)
+
+None to add. Every B team in the tier 3 lists has a record in that season's database. Seasons where the tier 3 count matches the database keep the database clubs.
+
+## Second source, pass 2
+
+Scope: the check lines with verdict `no second source` whose row still exists and whose field holds a value. Lines for deleted rows (tier 4 and 5, and the other rows that pass 2 deleted) were skipped. Values marked `unknown` or as an inference were skipped. The result is in `spa.check2.tsv` (175 lines).
+
+| Verdict | Lines |
+|---|---|
+| agree | 76 |
+| disagree, settled | 1 |
+| disagree, still split | 0 |
+| no second source | 98 |
+
+Main second sources:
+
+- Newtral (8 June 2020), citing the RFEF: 3 substitutes in Primera and Segunda before June 2020. This covers `subs_used` of tiers 1 and 2 from 2001/02 to 2018/19 (36 lines). The page does not date the start of the rule.
+- es.wikipedia league pages (another publisher than the RFEF first source): 5 substitutes from 2019/20 in tiers 1 and 2.
+- RFEF rules for 2022/23, 2023/24, 2024/25 and 2026/27 (another publisher than the es.wikipedia or en.wikipedia first source): windows, the 25 licences and the 2026/27 league formats.
+- Reason Why (2019) and La República (2023) for the sponsor names of the Segunda División, and for the EA Sports deal to 2028.
+
+Changes to `spa.tsv`:
+
+- spa-153 `windows` (2020/21): disagree, settled as `second`. Goal and ESPN (third source) give a summer window of 4 August to 5 October 2020 because of COVID, and a winter window of 4 January to 1 February 2021. The value was "summer (July and August) and January". Sources and notes updated.
+- spa-169, spa-177, spa-185 `windows`: agree, and the RFEF text gives the exact dates, so "exact dates unknown" is replaced: 1 July to 1 September 2022 and 2 to 31 January 2023; 1 July to 1 September 2023 and 2 January to 1 February 2024; 1 July to 30 August 2024 and 2 January to 3 February 2025. The windows source is now the RFEF rules of each season.
+
+Still without a second source:
+
+- `foreign`, `registration` and `windows` of most nation rules rows before 2022/23. No dated page of another publisher was found for those seasons.
+- `bench` 12 from 2022/23 and all Primera Federación `subs_used` and `bench`. Only RFEF texts state them.
+- spa-156 `down`, spa-164 and spa-180 `name`, spa-167 `subs_used`, and spa-204 `playoffs` and `split`.
+- All 2027/28 fields except the two league names. The season is not played yet and its values are carried forward.
+
+Notes for the maintainer: Newtral gives 19 players in the matchday squad before June 2020, while the club page behind the `bench` 7 inference gives 18. spa-180 cites the 2022/23 RFEF Primera Federación rules for 2023/24. Neither point was changed here.
+
+`tools/research/rules_lint.py`: spa.tsv 0 problems after the changes.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
+
+- Bench before June 2020: the RFEF General Regulations 2013/14, art. 225.2, give at most 7 substitutes in the Primera and Segunda leagues, in the Copa del Rey when both clubs are LNFP clubs, and in the Supercopa. In other matches the limit is 5. This gives an 18-man matchday squad, so the club page (18) is right and Newtral (19) is wrong. URL, read on 2026-10-17: https://web.archive.org/web/20191021134133/https://www.rfef.es/sites/default/files/pdf/circulares/RG%201314.pdf
+- spa-98 and spa-99 (2013/14): `bench` changed from "7 (inference)" to 7.
+- spa-103 (Copa del Rey 2013/14): `bench` unknown changed to "7 when both clubs are LNFP clubs, otherwise 5". spa-104 (Supercopa 2013/14): `bench` unknown changed to 7.
+- The other 34 Primera and Segunda rows of 2001/02 to 2018/19 keep "7 (inference)". Their notes and `bench` sources now cite the 2013/14 rule text. I found no other edition of the General Regulations online, so the value for those seasons stays an inference.
+- The circular on the end of 2019/20 (RFEF, reprinted by iusport.com) confirms 12 substitutes in Primera and Segunda from the June 2020 restart. This agrees with spa-146 and spa-147.

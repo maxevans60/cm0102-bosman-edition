@@ -475,3 +475,116 @@ Disagreements (value kept, no source added):
 No source found (note added to the row):
 
 - `name` and `format` of the 81 rows of the three composite championships of the original (Central bra-514 to bra-540, North bra-622 to bra-648, Northeast bra-649 to bra-675). No real competition has these names or this format, so no page states them.
+
+## Pass 2
+
+Decision pass of 2026-10-17 (Q268 to Q331). Row ids are unchanged. New rows are at the end. `tools/research/rules_lint.py` gave 162 problems for `bra.tsv` before this pass and 0 after it.
+
+### No new tiers (Q331, Q288)
+
+- The lowest national tier of the original is `bra_nat_third` (Série C). Série D is a tier below it, so its 27 rows (bra-109 to bra-135) and its 1,040 club rows are deleted.
+- `bra.tsv` now has 1,053 rows. `bra-clubs.tsv` now has 1,649 club rows.
+- The relegation places of Série C stay as rule places. In the game, a club that goes down from Série C leaves the national divisions.
+- No competition of the part needs a nation that a game cannot select. The cups (Copa do Brasil, Supercopa, Copa dos Campeões and the regional cups) stay.
+
+### Composite championships (Q283)
+
+The original runs three composite championships made of clubs of several small states. Each composite code now runs one real state championship. The other states of each composite get `new` rows. The state of each composite club comes from the 3.9.68 `club.dat` (field +0x60) and from the names of the same records in later databases. River (PI) and AD Vasco da Gama of Rio Branco (AC) are in the North composite, so Piauí and Acre come in too (https://pt.wikipedia.org/wiki/R%C3%ADver_Atl%C3%A9tico_Clube, https://pt.wikipedia.org/wiki/Associa%C3%A7%C3%A3o_Desportiva_Vasco_da_Gama).
+
+| Code | Rows | Real competition | Other states, as `new` rows |
+|---|---|---|---|
+| bra_reg_northeast | bra-649 to bra-675 | Campeonato Cearense | Potiguar, Paraibano, Alagoano, Sergipano |
+| bra_reg_north | bra-622 to bra-648 | Campeonato Paraense | Maranhense, Amazonense, Piauiense, Acriano |
+| bra_reg_central | bra-514 to bra-540 | Campeonato Mato-Grossense | Candango (Federal District), Capixaba, Sul-Mato-Grossense, Tocantinense |
+
+- Rule for the code: the state whose clubs held the most Série A places from 2002 to 2026 in `bra-clubs.tsv`. Ceará has 17 (Ceará 8, Fortaleza 9) against 1 for Alagoas. Pará has 4 (Paysandu 3, Remo 1). Mato Grosso has 4 (Cuiabá) against 1 for the Federal District (Gama).
+- New rows: 12 championships of 27 seasons, bra-757 to bra-1080 (324 rows).
+- The regional cups stay as their own `new` rows, as they ran: Copa do Nordeste, Copa Verde (2014 on), Copa Norte and Copa Centro-Oeste (2002, then 2026).
+- The build gives each club of these 15 states the state championship of its state. A club of Rondônia, Roraima or Amapá has no state championship in the game, as in the original.
+
+Sources and method of the state rows:
+
+- RSSSF Brasil season pages give the participants, the rule lines and the stage headings. The site refused connections during the pass, so 285 pages were read as archived copies, and the `sources` give the web.archive.org address. The 25 pages read before the refusal give the direct address.
+- pt.wikipedia season pages give the infobox club count, the relegated clubs and the rules section where RSSSF has no page.
+- `clubs` is the RSSSF participants list. Where the RSSSF table has more places, the table count is used and the note says so. Where pt.wikipedia gives another count, the note says so.
+- `down` is the rule text of RSSSF ("bottom 2 are relegated") where it exists. Otherwise it counts the clubs marked relegated in the RSSSF tables or in the pt.wikipedia infobox, and the note marks it as an inference. A count of more than half the clubs was rejected.
+- `format` is a keyword summary and an inference, as in the other state rows. Substitutes and bench stay `unknown`, because no state regulation was read.
+- 2027 and 2028 rows are `unknown` (future editions).
+- Fields with no source: `clubs` 65, `down` 168 and `format` 71 of the 375 rows from 2002 to 2026 are `unknown`.
+
+### Conflicts and open points, settled by real life
+
+1. Comercial FC of Ribeirão Preto, Série C 2002 and 2003: keep the match with record 2676. That record is "Comercial Futebol Clube (SP)" in 13 later databases, and record 2674 is the club of Campo Grande, "Esporte Clube Comercial (MS)".
+2. Toledo Esporte Clube 2020 = record 516: keep. The club was founded as Toledo Colônia Work in 2004, became Toledo Futebol in 2015 and Toledo Esporte Clube in 2016 (https://pt.wikipedia.org/wiki/Toledo_Esporte_Clube). The database record carries these three names in that order.
+3. Série B 2026 to 2028 `up` and `playoffs`: settled before this pass by the lead edit of 2026-10-16. Two clubs go up directly, and 3rd to 6th play two-legged ties for two more places (CBF regulation, ge.globo of 5 February 2026). The 2027 and 2028 rows copy 2026 as an inference.
+4. Pernambucano 2026 (bra-754): `format` now names the two-legged quarter-finals of 3rd to 6th (https://pt.wikipedia.org/wiki/Campeonato_Pernambucano_de_Futebol_de_2026).
+5. Clube Esportivo Operário Várzea-Grandense: every missing entry was in Série D, so the point falls away with Série D.
+
+### Club moves (Q279, Q280, Q290)
+
+Every season with a database already lists every real club of Séries A, B and C (2002, 2003, 2004, 2006 and 2008 to 2026). Série C is the lowest tier, so no tier below it needs filling. The pool rule now also takes clubs of "A Lower Division" and clubs with no division. A second search of the season databases found four more matches:
+
+- União Bandeirante FC, Série C 2002 and 2003 = record 12035 "União Bandeirantes Futebol Clube" (Third Division in 3.9.68).
+- Americana Futebol, Série B 2011 = record 1861 "Guaratinguetá Futebol" (September 2010 ODB). The club moved from Guaratinguetá to Americana for 2011 (https://pt.wikipedia.org/wiki/Guaratinguet%C3%A1_Futebol_Ltda.), and the record is "Americana Futebol" in September 2011 ODB.
+- Cuiabá EC, Série C 2012 = record 3835 "Cuiabá" (September 2011 ODB). The record has no nation in that database. The build must give it Brazil.
+
+Club rows added: 0. The club lists of the national divisions were complete. The four matches fill empty `db_club_id` fields.
+
+Clubs of Séries A to C that still have no record in the season database: 65 rows, for Max.
+
+- Série C 2002 to 2008 (62 rows): the names in the missing list above, with the Reconcile changes, except União Bandeirante and Toledo Colônia Work. The Série D names of that list leave with Série D.
+- Atlético Acreano, Série C 2018 and 2019. Record 992 is an Italian club in October 2017 and October 2018.
+- Toledo Colônia Work, Série C 2008. Record 516 is a Sudanese club in November 2007.
+
+### Reserve and B teams (Q289)
+
+None. No reserve or B team played in Séries A, B or C from 2002 to 2026. Bragantino II played in Série D 2015, which is out of the game.
+
+## Second source, pass 2
+
+Pass of 2026-10-17. I took every check line with verdict `no second source` whose row still exists, whose id is bra-756 or lower, and whose field holds a value (not `unknown`, not `n/a`, not marked as inference). That gives 505 lines. The 41 lines of deleted Série D rows and the new rows bra-757 to bra-1080 were not checked. Each second source is from another publisher than the first source of that field, and I read each page today. Results are in `bra.check2.tsv`.
+
+### Counts
+
+| Verdict | Lines |
+|---|---|
+| agree | 427 |
+| disagree, settled | 1 |
+| disagree, still split | 0 |
+| no second source | 77 |
+
+Agree by field: substitutes 157, bench 121, name 91, down 22, clubs 19, format 10, playoffs 4, up 3.
+
+### Substitutes and bench
+
+The first sources (goal.com, Bahia Notícias) speak of CBF competitions in general. The second sources are the CBF rule books, which apply to every CBF competition:
+
+- Bench of 7: CBF Regulamento Geral das Competições dated 15 December 2010 (copy on the Pernambuco federation site, https://www.fpf-pe.com.br/assets/uploads/138564787574.pdf). It states the 2011 rule. The other years up to 2012 rest on it and on netflu 2013, which gives seven as the earlier limit.
+- Bench of 12 and 5 substitutes in 3 stoppages: CBF RGC 2024 (https://futeboldealagoas.net/assets/uploads/RGC_CBF_2024.pdf, art. 13) and the CBF Manual de Competições 2026 (https://stcbfsiteprdimgbrs.blob.core.windows.net/img-site/cdn/Manual_de_Competicoes_CBF_2026_f5b02a4e04.pdf). Each states the rule of its own year. The other years rest on netflu (12 from 2013, 5 from the 2020 restart).
+- Substitutes 3 to 2019: Law 3 allowed three from 1995 to 2020 (https://en.wikipedia.org/wiki/Substitute_(association_football)). Jovem Pan of 14 May 2020 gives three as the Brazilian limit before the change. This is a general rule, not a page of each competition.
+- No second source for the bench of the cups that the CBF did not run: Torneio Rio-São Paulo, Copa Sul-Minas, Copa Norte and Copa Centro-Oeste 2002, Copa do Nordeste 2002, 2003 and 2010, and the Primeira Liga.
+- netflu of 6 July 2013 says the CBF "now" allows 12 on the bench in the Campeonato Brasileiro. The first source dates the change to 1 January 2013. The 2013 rows keep 12.
+
+### Change to bra.tsv
+
+- Goiano 2026 (bra-592) `down`: 0 is now 2. The first value came from the empty relegated list of the pt.wikipedia infobox. O Hoje of 26 November 2025 states that the 12th goes down directly and that the 10th and 11th play two legs for the second place (https://ohoje.com/2025/11/26/goiano-de-2026-tera-calendario-ampliado/). The third source, Tribuna do Planalto, states the same (https://tribunadoplanalto.com.br/campeonato-goiano-tera-14-datas-e-comeca-em-11-de-janeiro/). The rules section of the pt.wikipedia page also names the 11th and 12th as relegated. Decision: second. The `sources` entry for `down` now cites both pages, and `notes` describes the play-off. `rules_lint.py` gives 0 problems for `bra.tsv` before and after.
+
+### No second source (77 lines)
+
+- 45 `playoffs` lines hold `see format`. The value points to the format field, which is a keyword summary marked as inference, so there is nothing to check.
+- 17 names and 2 Série A play-off fields of 2027 or 2028 rows that no page states yet: all 2028 state names, the 2028 Supercopa name, Mineiro and Mato-Grossense 2027, and Catarinense and Goiano 2027 (the pages found refused the request).
+- 9 bench lines of cups that the CBF did not run (see above).
+- Baiano 2005 `playoffs` (no other publisher), Catarinense 2017 `down` (RSSSF Brasil and pt.wikipedia are both first sources), Catarinense 2024 `down` (the RSSSF page has no rule text, and three clubs differ between the 2024 and 2025 lists), Série B 2014 `down` (the ESPN table has no relegation marks).
+
+### Agreements that rest on club moves
+
+Where RSSSF Brasil has no rule text, the `down` value agrees with the clubs that left the division by the next season's participants list. This is an inference, as in the first pass: Baiano 2013 and 2017, Gaúcho 2005 and 2006, Paranaense 2018, Paulista 2015, Pernambucano 2014, 2017 and 2018.
+
+### Seen, not changed (for Max)
+
+- Cearense 2027 (bra-674) has `clubs` = `unknown`. Diário do Nordeste of 16 October 2026 names 10 clubs (https://diariodonordeste.verdesmares.com.br/jogada/conheca-novo-formato-do-campeonato-cearense-para-2027-veja-1-rodada-1.3799201).
+- Paraense 2027 (bra-647) and Paranaense 2027 (bra-701): 12 clubs each (Diário do Pará, Um Dois Esportes).
+- Pernambucano 2027 (bra-755): the federation plans one competition without divisions, with a first stage of 24 clubs from October 2026 (Diário de Pernambuco, 6 May 2026).
+- Série A 2027 and 2028: in February 2026 the CBF began a study of 18 clubs and 3 relegated places. No decision was found.
+- The 2027 Supercopa is named "Supercopa Rei" in the CBF calendar of October 2026 (Gazeta Esportiva).
+- Paranaense 2022 and 2023: RSSSF Brasil lists Toledo among the participants, but its tables have 12 clubs without Toledo. The rows keep 12.

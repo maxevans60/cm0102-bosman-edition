@@ -29,7 +29,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2005/06	J2 League	Mito HollyHock	5104	FC Mito Holly Hock	Japanese J-League 2	https://en.wikipedia.org/wiki/2006_J.League_Division_2
 2005/06	J2 League	Shonan Bellmare	1473	Shonan Bellmare	Japanese J-League 2	https://en.wikipedia.org/wiki/2006_J.League_Division_2
 2005/06	J2 League	Thespa Kusatsu	11529	Thespa Kusatsu	none	https://en.wikipedia.org/wiki/2006_J.League_Division_2
-2005/06	J2 League	Tokushima Vortis				https://en.wikipedia.org/wiki/2006_J.League_Division_2
+2005/06	J2 League	Tokushima Vortis	8406	Otsuka FC	Japanese Football League	https://en.wikipedia.org/wiki/2006_J.League_Division_2 ; https://en.wikipedia.org/wiki/Tokushima_Vortis
 2007/08	J1 League	Kashima Antlers	760	Kashima Antlers	Japanese J-League 1	https://en.wikipedia.org/wiki/2008_J.League_Division_1
 2007/08	J1 League	Kawasaki Frontale	4205	Kawasaki Frontale	Japanese J-League 1	https://en.wikipedia.org/wiki/2008_J.League_Division_1
 2007/08	J1 League	Nagoya Grampus	4534	Nagoya Grampus Eight	Japanese J-League 1	https://en.wikipedia.org/wiki/2008_J.League_Division_1
@@ -59,7 +59,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2007/08	J2 League	Thespa Kusatsu	11529	Thespa Kusatsu	none	https://en.wikipedia.org/wiki/2008_J.League_Division_2
 2007/08	J2 League	Yokohama FC	13013	Yokohama FC	Japanese J-League 1	https://en.wikipedia.org/wiki/2008_J.League_Division_2
 2007/08	J2 League	Mito HollyHock	5104	FC Mito Holly Hock	Japanese J-League 2	https://en.wikipedia.org/wiki/2008_J.League_Division_2
-2007/08	J2 League	Roasso Kumamoto				https://en.wikipedia.org/wiki/2008_J.League_Division_2
+2007/08	J2 League	Roasso Kumamoto	7705	NTT Kumamoto FC	Japanese Football League	https://en.wikipedia.org/wiki/2008_J.League_Division_2 ; https://en.wikipedia.org/wiki/Roasso_Kumamoto
 2007/08	J2 League	FC Gifu	4385	Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2008_J.League_Division_2
 2007/08	J2 League	Ehime FC	3477	Ehime F.C.	Japanese J-League 2	https://en.wikipedia.org/wiki/2008_J.League_Division_2
 2007/08	J2 League	Tokushima Vortis	11628	Tokushima Vortis	Japanese Football League	https://en.wikipedia.org/wiki/2008_J.League_Division_2
@@ -294,18 +294,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2013/14	J2 League	Tokyo Verdy	12369	Tokyo Verdy	Japanese J-League 2	https://en.wikipedia.org/wiki/2014_J.League_Division_2
 2013/14	J2 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Football League	https://en.wikipedia.org/wiki/2014_J.League_Division_2
 2013/14	J2 League	Kataller Toyama	101	Kataller Toyama	A Lower Division	https://en.wikipedia.org/wiki/2014_J.League_Division_2
-2013/14	J3 League	Zweigen Kanazawa	5440	Zweigen Kanazawa	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	Nagano Parceiro	7733	AC Nagano Parceiro	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	Machida Zelvia	6534	Machida Zelvia	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	Gainare Tottori	9846	Gainere Tottori	A Lower Division	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	Grulla Morioka	6250	Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	Fukushima United	4222	Fukushima United	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	Blaublitz Akita	349	Blaublitz Akita	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	FC Ryukyu	430	FC Ryukyu	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	J.League U-22 Selection				https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
-2013/14	J3 League	YSCC Yokohama	7945	Yokohama SCC	Japanese Football League	https://en.wikipedia.org/wiki/2014_J3_League
 2014/15	J1 League	Urawa Red Diamonds	9949	Urawa Red Diamonds	Japanese J-League 1	https://en.wikipedia.org/wiki/2015_J1_League
 2014/15	J1 League	FC Tokyo	3853	FC Tokyo	Japanese J-League 1	https://en.wikipedia.org/wiki/2015_J1_League
 2014/15	J1 League	Sanfrecce Hiroshima	10101	Sanfrecce Hiroshima	Japanese J-League 1	https://en.wikipedia.org/wiki/2015_J1_League
@@ -346,19 +334,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2014/15	J2 League	FC Gifu	4385	FC Gifu	A Lower Division	https://en.wikipedia.org/wiki/2015_J2_League
 2014/15	J2 League	Oita Trinita	5320	Oita Trinita	A Lower Division	https://en.wikipedia.org/wiki/2015_J2_League
 2014/15	J2 League	Tochigi SC	7212	Tochigi SC	Japanese J-League 2	https://en.wikipedia.org/wiki/2015_J2_League
-2014/15	J3 League	Renofa Yamaguchi	8902	Renofa Yamaguchi	Japanese Administrative Division	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Machida Zelvia	6534	Machida Zelvia	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Nagano Parceiro	7733	AC Nagano Parceiro	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Kataller Toyama	101	Kataller Toyama	A Lower Division	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Gainare Tottori	9846	Gainere Tottori	A Lower Division	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Fukushima United	4222	Fukushima United	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Blaublitz Akita	349	Blaublitz Akita	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	FC Ryukyu	430	FC Ryukyu	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	Grulla Morioka	6250	Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	J.League U-22 Selection				https://en.wikipedia.org/wiki/2015_J3_League
-2014/15	J3 League	YSCC Yokohama	7945	Yokohama SCC	Japanese Football League	https://en.wikipedia.org/wiki/2015_J3_League
 2015/16	J1 League	Kashima Antlers	760	Kashima Antlers	Japanese J-League 1	https://en.wikipedia.org/wiki/2016_J1_League
 2015/16	J1 League	Kawasaki Frontale	4205	Kawasaki Frontale	Japanese J-League 1	https://en.wikipedia.org/wiki/2016_J1_League
 2015/16	J1 League	Urawa Red Diamonds	9949	Urawa Red Diamonds	Japanese J-League 1	https://en.wikipedia.org/wiki/2016_J1_League
@@ -399,22 +374,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2015/16	J2 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J2_League
 2015/16	J2 League	Zweigen Kanazawa	5440	Zweigen Kanazawa	Japanese J-League 2	https://en.wikipedia.org/wiki/2016_J2_League
 2015/16	J2 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese J-League 2	https://en.wikipedia.org/wiki/2016_J2_League
-2015/16	J3 League	Oita Trinita	5320	Oita Trinita	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Tochigi SC	7212	Tochigi SC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Nagano Parceiro	7733	AC Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Blaublitz Akita	349	Blaublitz Akita	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Kagoshima United				https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	FC Ryukyu	430	FC Ryukyu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Gamba Osaka U-23				https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	FC Tokyo U-23				https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Cerezo Osaka U-23				https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Grulla Morioka	6250	Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
-2015/16	J3 League	YSCC Yokohama	7945	Yokohama SCC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2016_J3_League
 2016/17	J1 League	Kawasaki Frontale	4205	Kawasaki Frontale	Japanese J-League 1	https://en.wikipedia.org/wiki/2017_J1_League
 2016/17	J1 League	Kashima Antlers	760	Kashima Antlers	Japanese J-League 1	https://en.wikipedia.org/wiki/2017_J1_League
 2016/17	J1 League	Cerezo Osaka	2360	Cerezo Osaka	Japanese J-League 2	https://en.wikipedia.org/wiki/2017_J1_League
@@ -455,23 +414,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2016/17	J2 League	Renofa Yamaguchi	8902	Renofa Yamaguchi	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J2_League
 2016/17	J2 League	Roasso Kumamoto	6205	Roasso Kumamoto	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J2_League
 2016/17	J2 League	Thespakusatsu Gunma	8608	ThespaKusatsu Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J2_League
-2016/17	J3 League	Blaublitz Akita	349	Blaublitz Akita	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Tochigi SC	7212	Tochigi SC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Azul Claro Numazu	1946	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Kagoshima United				https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Nagano Parceiro	7733	AC Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	FC Ryukyu	430	FC Ryukyu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese J-League 2	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	FC Tokyo U-23				https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Cerezo Osaka U-23				https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	YSCC Yokohama	7945	Yokohama SCC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Grulla Morioka	6250	Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Gamba Osaka U-23				https://en.wikipedia.org/wiki/2017_J3_League
-2016/17	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2017_J3_League
 2017/18	J1 League	Kawasaki Frontale	4205	Kawasaki Frontale	Japanese J-League 1	https://en.wikipedia.org/wiki/2018_J1_League
 2017/18	J1 League	Sanfrecce Hiroshima	10101	Sanfrecce Hiroshima	Japanese J-League 1	https://en.wikipedia.org/wiki/2018_J1_League
 2017/18	J1 League	Kashima Antlers	760	Kashima Antlers	Japanese J-League 1	https://en.wikipedia.org/wiki/2018_J1_League
@@ -512,23 +454,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2017/18	J2 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J2_League
 2017/18	J2 League	Roasso Kumamoto	6205	Roasso Kumamoto	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J2_League
 2017/18	J2 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J2_League
-2017/18	J3 League	FC Ryukyu	430	FC Ryukyu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Thespakusatsu Gunma	8608	ThespaKusatsu Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Gamba Osaka U-23	740	Gamba Osaka U-23	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Cerezo Osaka U-23	1946	Cerezo Osaka U-23	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Blaublitz Akita	349	Blaublitz Akita	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Nagano Parceiro	7733	AC Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Grulla Morioka	6250	Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	FC Tokyo U-23	9944	FC Tokyo U-23	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	YSCC Yokohama	7945	Yokohama SCC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
-2017/18	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2018_J3_League
 2018/19	J1 League	Yokohama F. Marinos	3748	Yokohama F. Marinos	Japanese J-League 1	https://en.wikipedia.org/wiki/2019_J1_League
 2018/19	J1 League	FC Tokyo	3853	FC Tokyo	Japanese J-League 1	https://en.wikipedia.org/wiki/2019_J1_League
 2018/19	J1 League	Kashima Antlers	760	Kashima Antlers	Japanese J-League 1	https://en.wikipedia.org/wiki/2019_J1_League
@@ -569,24 +494,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2018/19	J2 League	Tochigi SC	7212	Tochigi SC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J2_League
 2018/19	J2 League	Kagoshima United	28	Kagoshima United FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J2_League
 2018/19	J2 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J2_League
-2018/19	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Thespakusatsu Gunma	8608	ThespaKusatsu Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Roasso Kumamoto	6205	Roasso Kumamoto	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Cerezo Osaka U-23				https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Blaublitz Akita	349	Blaublitz Akita	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Nagano Parceiro	7733	AC Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Vanraure Hachinohe	10616	Vanraure Hachinohe	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Fukushima United	4222	Fukushima United FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	YSCC Yokohama	7945	Yokohama Sports & Culture Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	FC Tokyo U-23				https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Gamba Osaka U-23				https://en.wikipedia.org/wiki/2019_J3_League
-2018/19	J3 League	Iwate Grulla Morioka	6250	Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2019_J3_League
 2019/20	J1 League	Kawasaki Frontale	4205	Kawasaki Frontale	Japanese J-League 1	https://en.wikipedia.org/wiki/2020_J1_League
 2019/20	J1 League	Gamba Osaka	4290	Gamba Osaka	Japanese J-League 1	https://en.wikipedia.org/wiki/2020_J1_League
 2019/20	J1 League	Nagoya Grampus	4534	Nagoya Grampus	Japanese J-League 1	https://en.wikipedia.org/wiki/2020_J1_League
@@ -627,24 +534,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2019/20	J2 League	Thespakusatsu Gunma	8608	ThespaKusatsu Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J2_League
 2019/20	J2 League	Ehime FC	3478	Ehime FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J2_League
 2019/20	J2 League	Renofa Yamaguchi	8902	Renofa Yamaguchi	Japanese J-League 2	https://en.wikipedia.org/wiki/2020_J2_League
-2019/20	J3 League	Blaublitz Akita	349	Blaublitz Akita	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Nagano Parceiro	7733	AC Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	FC Imabari	4755	FC Imabari	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Roasso Kumamoto	6205	Roasso Kumamoto	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Iwate Grulla Morioka	6250	Iwate Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Gamba Osaka U-23				https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Vanraure Hachinohe	9297	Vanraure Hachinohe	A Lower Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	YSCC Yokohama	7945	Yokohama Sports & Culture Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2020_J3_League
-2019/20	J3 League	Cerezo Osaka U-23				https://en.wikipedia.org/wiki/2020_J3_League
 2020/21	J1 League	Kawasaki Frontale	4205	Kawasaki Frontale	Japanese J-League 1	https://en.wikipedia.org/wiki/2021_J1_League
 2020/21	J1 League	Yokohama F. Marinos	3748	Yokohama F. Marinos	Japanese J-League 1	https://en.wikipedia.org/wiki/2021_J1_League
 2020/21	J1 League	Vissel Kobe	3038	Vissel Kobe	Japanese J-League 1	https://en.wikipedia.org/wiki/2021_J1_League
@@ -687,21 +576,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2020/21	J2 League	Ehime FC	3478	Ehime FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J2_League
 2020/21	J2 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese J-League 2	https://en.wikipedia.org/wiki/2021_J2_League
 2020/21	J2 League	Matsumoto Yamaga	9674	Matsumoto Yamaga	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J2_League
-2020/21	J3 League	Roasso Kumamoto	6205	Roasso Kumamoto	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Iwate Grulla Morioka	6250	Iwate Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Tegevajaro Miyazaki	773	Tegevajaro Miyazaki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	YSCC Yokohama	7945	Yokohama Sports & Culture Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Nagano Parceiro	7733	Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Fujieda MYFC	10470	Fujieda MYFC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	FC Imabari	4755	FC Imabari	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Vanraure Hachinohe	9297	Vanraure Hachinohe	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
-2020/21	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2021_J3_League
 2021/22	J1 League	Yokohama F. Marinos	3748	Yokohama F. Marinos	Japanese J-League 1	https://en.wikipedia.org/wiki/2022_J1_League
 2021/22	J1 League	Kawasaki Frontale	4205	Kawasaki Frontale	Japanese J-League 1	https://en.wikipedia.org/wiki/2022_J1_League
 2021/22	J1 League	Sanfrecce Hiroshima	1479	Sanfrecce Hiroshima	Japanese J-League 1	https://en.wikipedia.org/wiki/2022_J1_League
@@ -742,24 +616,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2021/22	J2 League	Thespakusatsu Gunma	8608	ThespaKusatsu Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J2_League
 2021/22	J2 League	FC Ryukyu	430	FC Ryukyu	Japanese J-League 2	https://en.wikipedia.org/wiki/2022_J2_League
 2021/22	J2 League	Iwate Grulla Morioka	6250	Iwate Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J2_League
-2021/22	J3 League	Iwaki FC	7364	Iwaki FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Fujieda MYFC	9346	Fujieda MYFC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Matsumoto Yamaga	9674	Matsumoto Yamaga	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	FC Imabari	4755	FC Imabari	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Ehime FC	3478	Ehime FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Nagano Parceiro	7733	Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Tegevajaro Miyazaki	773	Tegevajaro Miyazaki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Vanraure Hachinohe	9297	Vanraure Hachinohe	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	YSCC Yokohama	7945	Yokohama Sports & Culture Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
-2021/22	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2022_J3_League
 2022/23	J1 League	Vissel Kobe	3038	Vissel Kobe	Japanese J-League 1	https://en.wikipedia.org/wiki/2023_J1_League
 2022/23	J1 League	Yokohama F. Marinos	3748	Yokohama F. Marinos	Japanese J-League 1	https://en.wikipedia.org/wiki/2023_J1_League
 2022/23	J1 League	Sanfrecce Hiroshima	1479	Sanfrecce Hiroshima	Japanese J-League 1	https://en.wikipedia.org/wiki/2023_J1_League
@@ -800,26 +656,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2022/23	J2 League	Renofa Yamaguchi	8902	Renofa Yamaguchi	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J2_League
 2022/23	J2 League	Omiya Ardija	811	Omiya Ardija	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J2_League
 2022/23	J2 League	Zweigen Kanazawa	5440	Zweigen Kanazawa	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J2_League
-2022/23	J3 League	Ehime FC	3478	Ehime FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	FC Imabari	4755	FC Imabari	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Nara Club	7759	Nara Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Vanraure Hachinohe	9297	Vanraure Hachinohe	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Matsumoto Yamaga	9674	Matsumoto Yamaga	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Iwate Grulla Morioka	6250	Iwate Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	FC Osaka	8362	FC Osaka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	YSCC Yokohama	7945	Yokohama Sports & Culture Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Nagano Parceiro	7733	Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	FC Ryukyu	430	FC Ryukyu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Tegevajaro Miyazaki	773	Tegevajaro Miyazaki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
-2022/23	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2023_J3_League
 2023/24	J1 League	Vissel Kobe	3038	Vissel Kobe	Japanese J-League 1	https://en.wikipedia.org/wiki/2024_J1_League
 2023/24	J1 League	Sanfrecce Hiroshima	1479	Sanfrecce Hiroshima	Japanese J-League 1	https://en.wikipedia.org/wiki/2024_J1_League
 2023/24	J1 League	Machida Zelvia	6534	Machida Zelvia	Japanese J-League 2	https://en.wikipedia.org/wiki/2024_J1_League
@@ -860,26 +696,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2023/24	J2 League	Tochigi SC	7212	Tochigi SC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J2_League
 2023/24	J2 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J2_League
 2023/24	J2 League	Thespa Gunma	8608	ThespaKusatsu Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J2_League
-2023/24	J3 League	Omiya Ardija	811	Omiya Ardija	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	FC Imabari	4755	FC Imabari	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Kataller Toyama	101	Kataller Toyama	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Matsumoto Yamaga	9674	Matsumoto Yamaga	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	FC Osaka	8362	FC Osaka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Vanraure Hachinohe	9297	Vanraure Hachinohe	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Zweigen Kanazawa	5440	Zweigen Kanazawa	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	FC Ryukyu	430	FC Ryukyu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Tegevajaro Miyazaki	773	Tegevajaro Miyazaki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Nara Club	7759	Nara Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Nagano Parceiro	7733	Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	YSCC Yokohama	7945	Yokohama Sports & Culture Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
-2023/24	J3 League	Iwate Grulla Morioka	6250	Iwate Grulla Morioka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2024_J3_League
 2024/25	J1 League	Kashima Antlers	760	Kashima Antlers	Japanese J-League 1	https://en.wikipedia.org/wiki/2025_J1_League
 2024/25	J1 League	Kashiwa Reysol	9505	Kashiwa Reysol	Japanese J-League 1	https://en.wikipedia.org/wiki/2025_J1_League
 2024/25	J1 League	Kyoto Sanga	9136	Kyoto Sanga	Japanese J-League 1	https://en.wikipedia.org/wiki/2025_J1_League
@@ -920,26 +736,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2024/25	J2 League	Roasso Kumamoto	6205	Roasso Kumamoto	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J2_League
 2024/25	J2 League	Renofa Yamaguchi	8902	Renofa Yamaguchi	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J2_League
 2024/25	J2 League	Ehime FC	3478	Ehime FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J2_League
-2024/25	J3 League	Tochigi City FC	832	Tochigi City	Japanese University League	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Vanraure Hachinohe	9297	Vanraure Hachinohe	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	FC Osaka	8362	FC Osaka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Tegevajaro Miyazaki	773	Tegevajaro Miyazaki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Zweigen Kanazawa	5440	Zweigen Kanazawa	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Tochigi SC	7212	Tochigi SC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Nara Club	7759	Nara Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Thespa Gunma	8608	Thespa Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Matsumoto Yamaga	9674	Matsumoto Yamaga	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Ryukyu Okinawa	430	FC Ryukyu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Kochi United	7290	Kochi United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Nagano Parceiro	7733	Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
-2024/25	J3 League	Azul Claro Numazu	8406	Azul Claro Numazu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2025_J3_League
 2025/26	J1 League	Kashiwa Reysol	9505	Kashiwa Reysol	Japanese J-League 1	https://en.wikipedia.org/wiki/2026–27_J1_League
 2025/26	J1 League	Sanfrecce Hiroshima	1479	Sanfrecce Hiroshima	Japanese J-League 1	https://en.wikipedia.org/wiki/2026–27_J1_League
 2025/26	J1 League	Machida Zelvia	6534	Machida Zelvia	Japanese J-League 1	https://en.wikipedia.org/wiki/2026–27_J1_League
@@ -980,26 +776,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	J2 League	Ventforet Kofu	6156	Ventforet Kofu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J2_League
 2025/26	J2 League	Vanraure Hachinohe	9297	Vanraure Hachinohe	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J2_League
 2025/26	J2 League	Hokkaido Consadole Sapporo	2705	Hokkaido Consadole Sapporo	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J2_League
-2025/26	J3 League	Ehime	3478	Ehime FC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Kagoshima United	28	Kagoshima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Renofa Yamaguchi	8902	Renofa Yamaguchi	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Nara Club	7759	Nara Club	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	SC Sagamihara	9940	SC Sagamihara	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	FC Osaka	8362	FC Osaka	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	FC Gifu	4385	FC Gifu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Zweigen Kanazawa	5440	Zweigen Kanazawa	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Roasso Kumamoto	6205	Roasso Kumamoto	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Reilac Shiga	5515	MIO Biwako Shiga	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Nagano Parceiro	7733	Nagano Parceiro	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Gainare Tottori	9846	Gainare Tottori	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Matsumoto Yamaga	9674	Matsumoto Yamaga	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Ryukyu Okinawa	430	FC Ryukyu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Tochigi SC	7212	Tochigi SC	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Giravanz Kitakyushu	6269	Giravanz Kitakyushu	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Thespa Gunma	8608	Thespa Gunma	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Fukushima United	4222	Fukushima United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Kamatamare Sanuki	5766	Kamatamare Sanuki	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
-2025/26	J3 League	Kochi United	7290	Kochi United	Japanese Administrative Division	https://en.wikipedia.org/wiki/2026–27_J3_League
 2002/03	K League	Seongnam Ilhwa Chunma	10765	Songnam Ilhwa Chunma	Korean League	https://en.wikipedia.org/wiki/2003_K_League
 2002/03	K League	Ulsan Hyundai Horang-i	12014	Ulsan Hyundai Horang-I	Korean League	https://en.wikipedia.org/wiki/2003_K_League
 2002/03	K League	Suwon Samsung Bluewings	11226	Suwon Samsung Blue Wings	Korean League	https://en.wikipedia.org/wiki/2003_K_League
@@ -1129,14 +905,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2012/13	K League	Gangwon FC	13042	Gangwon Football Club	A Premier Division	https://en.wikipedia.org/wiki/2013_K_League_Classic
 2012/13	K League	Daegu FC	2904	Daegu FC	A Premier Division	https://en.wikipedia.org/wiki/2013_K_League_Classic
 2012/13	K League	Daejeon Citizen	11325	Daejeon Citizen	A Premier Division	https://en.wikipedia.org/wiki/2013_K_League_Classic
-2012/13	K League 2	Sangju Sangmu	5798	Sangju Sangmu Phoenix FC	A Premier Division	https://en.wikipedia.org/wiki/2013_K_League_Challenge
-2012/13	K League 2	Korean Police	7789	National Police Agency	Korean Amateur League	https://en.wikipedia.org/wiki/2013_K_League_Challenge
-2012/13	K League 2	Gwangju FC	10106	Gwangju FC	A Premier Division	https://en.wikipedia.org/wiki/2013_K_League_Challenge
-2012/13	K League 2	Suwon FC	767	Suwon City	A Premier Division	https://en.wikipedia.org/wiki/2013_K_League_Challenge
-2012/13	K League 2	FC Anyang				https://en.wikipedia.org/wiki/2013_K_League_Challenge
-2012/13	K League 2	Goyang Hi FC				https://en.wikipedia.org/wiki/2013_K_League_Challenge
-2012/13	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	A Lower Division	https://en.wikipedia.org/wiki/2013_K_League_Challenge
-2012/13	K League 2	Chungju Hummel	5200	Chungju Hummel Korea	A Premier Division	https://en.wikipedia.org/wiki/2013_K_League_Challenge
 2013/14	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2014_K_League_Classic
 2013/14	K League	Suwon Samsung Bluewings	11226	Suwon Samsung Blue Wings	Korean League	https://en.wikipedia.org/wiki/2014_K_League_Classic
 2013/14	K League	FC Seoul	10345	FC Seoul	Korean League	https://en.wikipedia.org/wiki/2014_K_League_Classic
@@ -1149,16 +917,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2013/14	K League	Incheon United	7896	Incheon United	Korean League	https://en.wikipedia.org/wiki/2014_K_League_Classic
 2013/14	K League	Gyeongnam FC	4589	Gyeongnam FC	Korean League	https://en.wikipedia.org/wiki/2014_K_League_Classic
 2013/14	K League	Sangju Sangmu	5798	Sangju Sangmu Phoenix FC	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Classic
-2013/14	K League 2	Daejeon Citizen	11325	Daejeon Citizen	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Ansan Police				https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Gangwon FC	1640	Gangwon Football Club	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Gwangju FC	10106	Gwangju FC	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	FC Anyang	9376	FC Anyang	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Suwon FC	767	Suwon City	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Daegu FC	2904	Daegu FC	Korean League	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Goyang Hi FC	4805	Goyang Hi FC	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Chungju Hummel	5200	Chungbuk Chungju Hummel	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
-2013/14	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	A Premier Division	https://en.wikipedia.org/wiki/2014_K_League_Challenge
 2014/15	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2015_K_League_Classic
 2014/15	K League	Suwon Samsung Bluewings	4165	Suwon Samsung Bluewings	Korean League	https://en.wikipedia.org/wiki/2015_K_League_Classic
 2014/15	K League	Pohang Steelers	8873	Pohang Steelers	Korean League	https://en.wikipedia.org/wiki/2015_K_League_Classic
@@ -1171,17 +929,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2014/15	K League	Gwangju FC	10106	Gwangju FC	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Classic
 2014/15	K League	Busan IPark	9138	Busan l'Park	Korean League	https://en.wikipedia.org/wiki/2015_K_League_Classic
 2014/15	K League	Daejeon Citizen	9537	Daejeon Citizen	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Classic
-2014/15	K League 2	Sangju Sangmu	5798	Sangju Sangmu	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Daegu FC	2904	Daegu FC	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Suwon FC	767	Suwon City	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Seoul E-Land				https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	FC Anyang	9376	FC Anyang	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Gangwon FC	1640	Gangwon Football Club	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Goyang Hi FC	4805	Goyang Hi FC	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Gyeongnam FC	4589	Gyeongnam FC	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Ansan Police				https://en.wikipedia.org/wiki/2015_K_League_Challenge
-2014/15	K League 2	Chungju Hummel	5200	Chungbuk Chungju Hummel	A Premier Division	https://en.wikipedia.org/wiki/2015_K_League_Challenge
 2015/16	K League	FC Seoul	10345	FC Seoul	Korean League	https://en.wikipedia.org/wiki/2016_K_League_Classic
 2015/16	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2016_K_League_Classic
 2015/16	K League	Jeju United	9323	Jeju United	Korean League	https://en.wikipedia.org/wiki/2016_K_League_Classic
@@ -1194,17 +941,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2015/16	K League	Incheon United	7896	Incheon United	Korean League	https://en.wikipedia.org/wiki/2016_K_League_Classic
 2015/16	K League	Seongnam FC	10765	Seongnam FC	Korean League	https://en.wikipedia.org/wiki/2016_K_League_Classic
 2015/16	K League	Suwon FC	767	Suwon City	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Classic
-2015/16	K League 2	Ansan Mugunghwa	7789	Ansan Police	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Daegu FC	2904	Daegu FC	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Gangwon FC	1640	Gangwon Football Club	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Busan IPark	9138	Busan lPark	Korean League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Daejeon Citizen	9537	Daejeon Citizen	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Chungju Hummel	5200	Chungbuk Chungju Hummel	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
-2015/16	K League 2	Goyang Zaicro	4805	Goyang Hi FC	Korean Amateur League	https://en.wikipedia.org/wiki/2016_K_League_Challenge
 2016/17	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2017_K_League_Classic
 2016/17	K League	Jeju United	9323	Jeju United	Korean League	https://en.wikipedia.org/wiki/2017_K_League_Classic
 2016/17	K League	Suwon Samsung Bluewings	4165	Suwon Samsung Bluewings	Korean League	https://en.wikipedia.org/wiki/2017_K_League_Classic
@@ -1217,16 +953,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2016/17	K League	Jeonnam Dragons	2540	Jeonnam Dragons	Korean League	https://en.wikipedia.org/wiki/2017_K_League_Classic
 2016/17	K League	Sangju Sangmu	5798	Sangju Sangmu	Korean League	https://en.wikipedia.org/wiki/2017_K_League_Classic
 2016/17	K League	Gwangju FC	10106	Gwangju FC	Korean League	https://en.wikipedia.org/wiki/2017_K_League_Classic
-2016/17	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Busan IPark	9138	Busan lPark	Korean Amateur League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Asan Mugunghwa				https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Seongnam FC	10765	Seongnam FC	Korean League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Suwon FC	767	Suwon City	Korean Amateur League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Ansan Greeners				https://en.wikipedia.org/wiki/2017_K_League_Challenge
-2016/17	K League 2	Daejeon Citizen	9537	Daejeon Citizen	Korean Amateur League	https://en.wikipedia.org/wiki/2017_K_League_Challenge
 2017/18	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2018_K_League_1
 2017/18	K League	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_1
 2017/18	K League	Ulsan Hyundai	9810	Ulsan Hyundai	Korean League	https://en.wikipedia.org/wiki/2018_K_League_1
@@ -1239,16 +965,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2017/18	K League	Sangju Sangmu	5798	Sangju Sangmu	Korean League	https://en.wikipedia.org/wiki/2018_K_League_1
 2017/18	K League	FC Seoul	10345	FC Seoul	Korean League	https://en.wikipedia.org/wiki/2018_K_League_1
 2017/18	K League	Jeonnam Dragons	2540	Jeonnam Dragons	Korean League	https://en.wikipedia.org/wiki/2018_K_League_1
-2017/18	K League 2	Asan Mugunghwa	7789	Asan Mugunghwa	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Seongnam FC	10765	Seongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Busan IPark	9138	Busan lPark	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Daejeon Citizen	9537	Daejeon Citizen	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Gwangju FC	10106	Gwangju FC	Korean League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Suwon FC	767	Suwon FC	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Ansan Greeners	4736	Ansan Greeners	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
-2017/18	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2018_K_League_2
 2018/19	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors FC	Korean League	https://en.wikipedia.org/wiki/2019_K_League_1
 2018/19	K League	Ulsan Hyundai	9810	Ulsan Hyundai	Korean League	https://en.wikipedia.org/wiki/2019_K_League_1
 2018/19	K League	FC Seoul	10345	FC Seoul	Korean League	https://en.wikipedia.org/wiki/2019_K_League_1
@@ -1261,16 +977,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2018/19	K League	Incheon United	7896	Incheon United FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_1
 2018/19	K League	Gyeongnam FC	4589	Gyeongnam FC	Korean League	https://en.wikipedia.org/wiki/2019_K_League_1
 2018/19	K League	Jeju United	9323	Jeju United	Korean League	https://en.wikipedia.org/wiki/2019_K_League_1
-2018/19	K League 2	Gwangju FC	10106	Gwangju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Busan IPark	9138	Busan IPark FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Ansan Greeners	4736	Ansan Greeners FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons FC	Korean League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Asan Mugunghwa	7789	Asan Mugunghwa FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Suwon FC	767	Suwon FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Daejeon Citizen	9537	Daejeon Citizen FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
-2018/19	K League 2	Seoul E-Land	4146	Seoul E-Land FC	Korean Amateur League	https://en.wikipedia.org/wiki/2019_K_League_2
 2019/20	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors FC	Korean League	https://en.wikipedia.org/wiki/2020_K_League_1
 2019/20	K League	Ulsan Hyundai	9810	Ulsan Hyundai	Korean League	https://en.wikipedia.org/wiki/2020_K_League_1
 2019/20	K League	Pohang Steelers	8873	FC Pohang Steelers	Korean League	https://en.wikipedia.org/wiki/2020_K_League_1
@@ -1283,16 +989,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2019/20	K League	Seongnam FC	10765	Seongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_1
 2019/20	K League	Incheon United	7896	Incheon United FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_1
 2019/20	K League	Busan IPark	9138	Busan IPark FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_1
-2019/20	K League 2	Jeju United	9323	Jeju United	Korean League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Suwon FC	767	Suwon FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Daejeon Hana Citizen	9537	Daejeon Citizen FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Seoul E-Land	4146	Seoul E-Land FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Ansan Greeners	4736	Ansan Greeners FC	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2020_K_League_2
-2019/20	K League 2	Chungnam Asan				https://en.wikipedia.org/wiki/2020_K_League_2
 2020/21	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2021_K_League_1
 2020/21	K League	Ulsan Hyundai	9810	Ulsan Hyundai	Korean League	https://en.wikipedia.org/wiki/2021_K_League_1
 2020/21	K League	Daegu FC	2904	Daegu FC	Korean League	https://en.wikipedia.org/wiki/2021_K_League_1
@@ -1305,16 +1001,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2020/21	K League	Seongnam FC	10765	Seongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_1
 2020/21	K League	Gangwon FC	1640	Gangwon FC	Korean League	https://en.wikipedia.org/wiki/2021_K_League_1
 2020/21	K League	Gwangju FC	10106	Gwangju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_1
-2020/21	K League 2	Gimcheon Sangmu	5798	Sangju Sangmu	Korean League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Daejeon Hana Citizen	9537	Daejeon Hana Citizen	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Busan IPark	9138	Busan IPark	Korean League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Ansan Greeners	4736	Ansan Greeners	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Chungnam Asan	7789	Chungnam Asan	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
-2020/21	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2021_K_League_2
 2021/22	K League	Ulsan Hyundai	9810	Ulsan Hyundai	Korean League	https://en.wikipedia.org/wiki/2022_K_League_1
 2021/22	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2022_K_League_1
 2021/22	K League	Pohang Steelers	8873	Pohang Steelers	Korean League	https://en.wikipedia.org/wiki/2022_K_League_1
@@ -1327,17 +1013,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2021/22	K League	Suwon Samsung Bluewings	4165	Suwon Samsung Bluewings	Korean League	https://en.wikipedia.org/wiki/2022_K_League_1
 2021/22	K League	Gimcheon Sangmu	5798	Gimcheon Sangmu	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_1
 2021/22	K League	Seongnam FC	742	Seongnam FC	Korean League	https://en.wikipedia.org/wiki/2022_K_League_1
-2021/22	K League 2	Gwangju FC	7006	Gwangju FC	Korean League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Daejeon Hana Citizen	9537	Daejeon Hana Citizen	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Chungnam Asan	7789	Chungnam Asan	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Gimpo FC	5893	Gimpo FC	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Ansan Greeners	4736	Ansan Greeners	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Busan IPark	9138	Busan IPark	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
-2021/22	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons	Korean Amateur League	https://en.wikipedia.org/wiki/2022_K_League_2
 2022/23	K League	Ulsan Hyundai	9810	Ulsan Hyundai	Korean League	https://en.wikipedia.org/wiki/2023_K_League_1
 2022/23	K League	Pohang Steelers	8873	Pohang Steelers	Korean League	https://en.wikipedia.org/wiki/2023_K_League_1
 2022/23	K League	Gwangju FC	7006	Gwangju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_1
@@ -1350,19 +1025,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2022/23	K League	Gangwon FC	1640	Gangwon FC	Korean League	https://en.wikipedia.org/wiki/2023_K_League_1
 2022/23	K League	Suwon FC	767	Suwon FC	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_1
 2022/23	K League	Suwon Samsung Bluewings	4165	Suwon Samsung Bluewings	Korean League	https://en.wikipedia.org/wiki/2023_K_League_1
-2022/23	K League 2	Gimcheon Sangmu	5798	Gimcheon Sangmu	Korean League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Busan IPark	9138	Busan IPark	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Gimpo FC	5893	Gimpo FC	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Chungbuk Cheongju	9989	Cheongju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Seongnam FC	742	Seongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Chungnam Asan	7789	Chungnam Asan	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Ansan Greeners	4736	Ansan Greeners	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
-2022/23	K League 2	Cheonan City	2395	Cheonan City	Korean Amateur League	https://en.wikipedia.org/wiki/2023_K_League_2
 2023/24	K League	Ulsan HD	9810	Ulsan Hyundai	Korean League	https://en.wikipedia.org/wiki/2024_K_League_1
 2023/24	K League	Gangwon FC	1640	Gangwon FC	Korean League	https://en.wikipedia.org/wiki/2024_K_League_1
 2023/24	K League	Gimcheon Sangmu	5798	Gimcheon Sangmu	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_1
@@ -1375,19 +1037,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2023/24	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2024_K_League_1
 2023/24	K League	Daegu FC	2904	Daegu FC	Korean League	https://en.wikipedia.org/wiki/2024_K_League_1
 2023/24	K League	Incheon United	7896	Incheon United	Korean League	https://en.wikipedia.org/wiki/2024_K_League_1
-2023/24	K League 2	FC Anyang	9376	FC Anyang	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Chungnam Asan	7789	Chungnam Asan	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Busan IPark	9138	Busan IPark	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Suwon Samsung Bluewings	4165	Suwon Samsung Bluewings	Korean League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Gimpo FC	5893	Gimpo FC	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Cheonan City	2395	Cheonan City	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Chungbuk Cheongju	9989	Chungbuk Cheongju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Ansan Greeners	4736	Ansan Greeners	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
-2023/24	K League 2	Seongnam FC	742	Seongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2024_K_League_2
 2024/25	K League	Jeonbuk Hyundai Motors	2519	Jeonbuk Hyundai Motors	Korean League	https://en.wikipedia.org/wiki/2025_K_League_1
 2024/25	K League	Daejeon Hana Citizen	9537	Daejeon Hana Citizen	Korean League	https://en.wikipedia.org/wiki/2025_K_League_1
 2024/25	K League	Gimcheon Sangmu	5798	Gimcheon Sangmu	Korean League	https://en.wikipedia.org/wiki/2025_K_League_1
@@ -1400,20 +1049,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2024/25	K League	Suwon FC	767	Suwon FC	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_1
 2024/25	K League	Jeju SK	9323	Jeju United	Korean League	https://en.wikipedia.org/wiki/2025_K_League_1
 2024/25	K League	Daegu FC	2904	Daegu FC	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_1
-2024/25	K League 2	Incheon United	7896	Incheon United	Korean League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Suwon Samsung Bluewings	4165	Suwon Samsung Bluewings	Korean League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Seongnam FC	742	Seongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Gimpo FC	5893	Gimpo FC	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Busan IPark	9138	Busan IPark	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Chungnam Asan	7789	Chungnam Asan	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Hwaseong FC	4674	Hwaseong FC	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Chungbuk Cheongju	9989	Chungbuk Cheongju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Cheonan City	2395	Cheonan City	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
-2024/25	K League 2	Ansan Greeners	4736	Ansan Greeners	Korean Amateur League	https://en.wikipedia.org/wiki/2025_K_League_2
 2025/26	K League	FC Seoul	3434	FC Seoul	Korean League	https://en.wikipedia.org/wiki/2026_K_League_1
 2025/26	K League	Ulsan HD	9810	Ulsan HD FC	Korean League	https://en.wikipedia.org/wiki/2026_K_League_1
 2025/26	K League	Gangwon FC	1640	Gangwon FC	Korean League	https://en.wikipedia.org/wiki/2026_K_League_1
@@ -1426,23 +1061,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	K League	Gimcheon Sangmu	5798	Gimcheon Sangmu	Korean League	https://en.wikipedia.org/wiki/2026_K_League_1
 2025/26	K League	Bucheon FC 1995	1962	Bucheon FC 1995	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_1
 2025/26	K League	Gwangju FC	7006	Gwangju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_1
-2025/26	K League 2	Suwon Samsung Bluewings	4165	Suwon Samsung Bluewings	Korean League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Suwon FC	767	Suwon FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Seoul E-Land	4146	Seoul E-Land	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Daegu FC	2904	Daegu FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Hwaseong FC	4674	Hwaseong FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Busan IPark	9138	Busan IPark	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Chungnam Asan	7789	Chungnam Asan	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Gimpo FC	5893	Gimpo FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Gyeongnam FC	4589	Gyeongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Chungbuk Cheongju	9989	Chungbuk Cheongju FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Seongnam FC	742	Seongnam FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Paju Frontier	5940	Paju Citizen	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Yongin FC				https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Cheonan City	2395	Cheonan City	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Jeonnam Dragons	2540	Jeonnam Dragons	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Ansan Greeners	4736	Ansan Greeners	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
-2025/26	K League 2	Gimhae FC 2008	8445	Gimhae FC	Korean Amateur League	https://en.wikipedia.org/wiki/2026_K_League_2
 2005/06	A-League	Adelaide United	239	Adelaide United	Australian National Soccer League	https://en.wikipedia.org/wiki/2005–06_A-League
 2005/06	A-League	Sydney FC	11263	Sydney FC	Australian National Soccer League	https://en.wikipedia.org/wiki/2005–06_A-League
 2005/06	A-League	Central Coast Mariners				https://en.wikipedia.org/wiki/2005–06_A-League
@@ -1639,19 +1257,3 @@ season	division	club	db_club_id	db_club	db_division	source
 2025/26	A-League	Perth Glory	8735	Perth Glory	Australian National Soccer League	https://en.wikipedia.org/wiki/2025–26_A-League_Men
 2025/26	A-League	Brisbane Roar	1893	Brisbane Roar	Australian National Soccer League	https://en.wikipedia.org/wiki/2025–26_A-League_Men
 2025/26	A-League	Western Sydney Wanderers	2204	Western Sydney Wanderers	Australian National Soccer League	https://en.wikipedia.org/wiki/2025–26_A-League_Men
-2025/26	Australian Championship	South Melbourne	7396	South Melbourne FC	Victorian Premier League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Moreton City Excelsior	2601	Moreton City Excelsior	Queensland Premier League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Sydney Olympic	8264	Sydney Olympic FC	New South Wales Super League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Broadmeadow Magic	5337	Broadmeadow Magic FC	New South Wales State League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Heidelberg United	9064	Heidelberg United FC	Victorian Premier League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Marconi Stallions	7081	Marconi Stallions FC	New South Wales Super League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Wollongong Wolves	3782	Wollongong Wolves FC	New South Wales Super League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	South Hobart	689	South Hobart	South Australian State League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Avondale FC	1321	Avondale FC	Victorian Premier League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	NWS Spirit	10612	NWS Spirit	New South Wales Super League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Preston Lions	6767	Preston Lions	Victorian Premier League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Canberra Croatia	808	Canberra Croatia	Western Australian State League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Wests APIA	6456	APIA Leichhardt FC	New South Wales Super League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	North Eastern MetroStars	8023	MetroStars	South Australian Premier League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Bayswater City	1418	Bayswater City	Western Australian Premier League	https://en.wikipedia.org/wiki/2025_Australian_Championship
-2025/26	Australian Championship	Sydney United 58	5058	Sydney United 58 FC	New South Wales Super League	https://en.wikipedia.org/wiki/2025_Australian_Championship

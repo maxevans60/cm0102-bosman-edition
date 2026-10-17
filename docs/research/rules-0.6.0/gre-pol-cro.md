@@ -176,3 +176,161 @@ No source found for `name` in 19 rows: gre-pol-cro-109 to gre-pol-cro-120, gre-p
 Disagreements: none found.
 
 Lint after the pass: 19 problems (the 19 names above).
+
+## Pass 2
+
+Date: 2026-10-17. Decision agent, by the rules of Q268 to Q331. Row ids and row order stay. Lint after the pass: 0 problems (0 before).
+
+### No new tiers and no new nations (Q331, Q288)
+
+The original runs tiers 1 and 2 for Greece (`gre_prm`, `gre_second`), Poland (`pol_first`, `pol_second`) and Croatia (`cro_a1`, `cro_a2a`, `cro_a2b`). The table and the clubs file hold no competition below tier 2 and none that needs another nation. I deleted 0 rows and 0 club rows. The Croatian third divisions in the databases are spare divisions. Their clubs are part of the pool for club moves. The Croatian South division (`cro_a2b`) already says `not held` from 2006/07.
+
+### Conflicts settled (Q278, Q297 to Q327)
+
+| Row | Field | Decision | Reason |
+|---|---|---|---|
+| gre-pol-cro-66 (Football League 2012/13) | down | 2 (20th and 21st), was 3 | RSSSF ([grk2013](https://www.rsssf.org/tablesg/grk2013.html)) and the table keys of the English and the [Greek season page](https://el.wikipedia.org/wiki/Β΄_Εθνική_ποδοσφαίρου_ανδρών_2012-13) mark two places. The Greek page says Thrasyvoulos and Anagennisi Epanomi went down. The three-down text in the English prose is the general league text. No rule text exists in the web archive. |
+| gre-pol-cro-160 (Greece 2025/26) | foreign | first value kept (5 non-EU on the field, 6 non-EU over 23 in the squad) | [Insideworldfootball, 6 July 2026](https://www.insideworldfootball.com/2026/07/06/greek-super-league-increases-squad-cap-on-foreign-players-to-7/) says the cap rose from six to seven in July 2026. The Sportmonks glossary value of seven matches the later rule. I found no HFF text for 2025/26 and no third publisher. |
+| gre-pol-cro-361 (Druga HNL 2010/11) | down | 5 (12th to 16th), was 4 | At the season start the top flight was to go from 16 to 12 clubs, with the Druga HNL winner up and five clubs down ([season page](https://en.wikipedia.org/wiki/2010–11_Croatian_Second_Football_League), citing Prva-HNL.hr of 29 December 2010). The CFF Assembly of 17 December 2010 and the plenum of 14 February 2011 changed this to 3 up and 4 down. Q278 keeps the value at the season start, which also agrees with `up` = 1. The notes give the change and the outcome. |
+
+### Open points of the first pass, settled
+
+- Clubs from the "Lower Division" records (first pass, 145 clubs): allowed by Q279.
+- Surplus database clubs of short divisions (Croatian First Division from 2002/03, Greek tiers): they become clubs with no division and stay in the pool (Q279).
+- The 16 clubs of the Croatian Second Division South from 2006/07: clubs with no division (Q290).
+- Club pairs with a changed name (Dospel Katowice to GKS Katowice, GKS Bogdanka to Górnik Łęczna, Sesvete to Radnik Sesvete, and the other pairs whose names share no word): I read every pair. All are the same club.
+- Super cups after a double, and the 2027/28 rows: no change. They are rules of the season, and the game decides the double itself.
+
+### Club moves (Q279, Q280, Q290)
+
+I went down every tier of each season with a database, with the pool of clubs with no division, lower and spare divisions (also the cross-nation "A Lower Division" and "A Premier Division" records that hold clubs of these nations) and the ended Croatian South division.
+
+Fixes to existing club rows (32):
+
+- 27 real clubs now have a database record from the pool. Examples: Olympiacos B (6378, then 11277), OFI 2014/15 (8109 "Omilos Filathlon Irakleiou"), Kerkyra 2007/08 (5917), Panetolikos 2009/10 and 2010/11 (8557), Aiginiakos 2016/17 and 2017/18 (310), Panegialios (311), Aluminium Konin (5731, called "KP Konin" in the 3.9.68 data), Inker or Inter Zaprešić (5290 "NK INKER").
+- Inference (name and database division agree, town not in the data): Apollon Smyrnis 2001/02 to 778 "Apollon Athens", MCP Bielsko-Biala 2002/03 to 8859 "MC Podbeskidzie Bielsko-Biala", Omladinac Novo Selo Rok 2002/03 to 8279 "NK Omladinac", Sloga Nova Gradiška 2002/03 and 2003/04 to 10676 "NK Sloga", Graničar Županja 2005/06 to 4545 "NK Granicar", Heko Czermno 2005/06 to 634 (the September 2005 data also holds a second record, 13223).
+- Ethnikos Piraeus 2007/08 to 2010/11: the first pass matched it to 3688 "Ethnikos Asteras", which is another club in the same list. The match is now empty.
+- Olympiacos Volos 2021/22: was 7603 "Volos NPS" (a top-flight club of that season). Now 8254 "Olympiakos Volou".
+
+New club rows (32), where a tier above took clubs from a tier whose count matched:
+
+- 2005/06 `pol_first`, 16 clubs ([2005–06 Ekstraklasa](https://en.wikipedia.org/wiki/2005–06_Ekstraklasa)). The database top flight holds Górnik Polkowice, Ruch Chorzów and Szczakowianka Jaworzno, which played in tier 2.
+- 2018/19 `gre_second`, 16 clubs ([2018–19 Football League](https://en.wikipedia.org/wiki/2018–19_Football_League_(Greece))). Apollon Smyrnis and Lamia went up from the database tier 2. Aittitos Spata and Sparti withdrew during the season and stay in the list.
+
+The clubs file now has 1,666 rows. Real clubs with no record in that season's database (not reserve teams). The build fills these places from the pool. I don't know which pool club fits best, so Max decides if he wants a rule:
+
+| Season | Division | Clubs |
+|---|---|---|
+| 2002/03 | cro_a2a | Valpovka |
+| 2002/03 | cro_a2b | TŠK Topolovac |
+| 2003/04 | cro_a2a | Međimurje (3.9.68 lineage: record 2128 "NK Cakovec" is matched to Čakovec), Valpovka |
+| 2005/06 | cro_a2a | Čakovec |
+| 2005/06 | cro_a2b | Naftaš Ivanić Grad |
+| 2005/06 | pol_second | Zawisza Bydgoszcz, Drwęca Nowe Miasto Lubawskie |
+| 2007/08 to 2010/11 | gre_second | Ethnikos Piraeus |
+| 2009/10 | cro_a2a | Rudeš |
+| 2010/11 | cro_a2a | Dugopolje |
+| 2011/12 | gre_second | Iraklis Psachna |
+| 2013/14 | gre_second | Vataniakos |
+| 2014/15 | group 2 | Alimos |
+| 2016/17 | gre_prm | Kerkyra |
+| 2023/24 | gre_second, group 2 | Aiolikos, Tilikratis |
+
+### Reserve and B teams (Q289)
+
+The build adds these as new club records:
+
+| Team | Seasons | Division | Note |
+|---|---|---|---|
+| Dinamo Zagreb II | 2015/16, 2016/17, 2017/18 | cro_a2a | the data holds only 3259 "GNK Dinamo Zagreb U19" (a youth record) |
+| Hajduk Split II | 2017/18 | cro_a2a | the October 2017 data holds 459 "HNK Hajduk Split u19", which is "HNK Hajduk Split II" from October 2018 |
+| Asteras Tripolis B | 2024/25 (group 2), 2025/26 | gre_second | no B record |
+
+Olympiacos B, PAOK B, AEK Athens B, Panathinaikos B, Osijek II and the later Dinamo Zagreb II and Hajduk Split II have records.
+
+## Second source, pass 2
+
+Date: 2026-10-17. Second-source agent. The check file has 823 lines with the verdict `no second source`. I checked the 164 lines whose field holds a value, and wrote them to `gre-pol-cro.check2.tsv`. I did not check these 659 lines:
+
+- 530 fields that hold `unknown`, and 2 that start with "unknown" (gre-pol-cro-25 and 26 `clubs`).
+- 6 fields whose value is an inference.
+- 121 fields whose row notes call the value an inference: the 2027/28 rows carried from 2026/27, the 2026/27 Croatian Cup, the 5-substitute rows from 2022/23, row 27 `subs_used` and the Greek `foreign` fields of 2021/22, 2023/24 and 2024/25.
+
+Counts:
+
+| Verdict | Lines |
+|---|---|
+| agree | 83 |
+| disagree, settled | 1 |
+| disagree, still split | 0 |
+| no second source | 80 |
+
+Second publishers: RSSSF, 90minut.pl, HNS Semafor (the COMET match records of the HNS), ESPN, the PAOK club site and the FIFA Laws of the Game (2010/11 and 2017/18 editions, read in the web archive). The web search budget ran out during the pass. After that I read only pages whose address I already had.
+
+How I decided:
+
+- Substitutes 2001/02 to 2016/17, second tiers of Greece and Poland (34 lines): Law 3 of the 2010/11 Laws allows three substitutes in every official competition of a member association. The 2017/18 edition gives the same text as the old text. For seasons other than 2010/11, the edition I read is not the edition of that season.
+- I liga 2017/18 to 2019/20 (3 lines): I read 38 match reports of each season on 90minut.pl. No team used more than three substitutes. This is evidence of use, because the Laws of 2017/18 let the PZPN allow five below the top level.
+- Five substitutes, 2020/21 and 2021/22: a match report with four or five substitutes for one team shows that the five-substitute option applied. I found one for the Polish leagues, cup and Super Cup (90minut.pl), the Croatian HNL, Druga HNL and cup (HNS Semafor), the Greek Super League (ESPN) and the 2021 Greek Cup final (PAOK). The row notes of these 17 rows still call the value an inference. Max or the lead can drop that word from the notes. I did not change the notes. I found no data for the Greek Cup 2021/22 or Super League 2.
+- 2026/27 rows: the 90minut.pl pages of the Ekstraklasa, the I liga and the Polish Cup, the HNS Semafor pages of the HNL and the Prva NL and the ESPN Greek Super League table confirm the club counts, rounds and table zones. Down places and play-offs of the Croatian rows have no second source. The 90minut.pl zones come from the table colours, because the page has no legend.
+- Polish Cup 2014/15 (176): 90minut.pl names the entrants of each round, 16 + 36 + 18 + 16 = 86.
+- Greek Cup 2004/05 (4): RSSSF shows 32 two-legged ties and 2 supplementary ties with 2 new clubs, so 66 entrants.
+- Croatian Cup 2009/10 (414): HNS Semafor shows 48 clubs.
+- Druga HNL 2018/19 (369, playoffs): RSSSF marks 2nd Šibenik "promotion play-off" against Istra 1961, and HNS Semafor holds "Kvalifikacije za 1. HNL 2019". The first check missed this.
+- Bench size (344, 371, 425): the only text is the HNS rules, and HNS Semafor is the same publisher. No second source.
+
+Change to `gre-pol-cro.tsv`:
+
+- gre-pol-cro-375 (Prva NL 2024/25), `playoffs`: was "11th: relegation play-off", now "none". Decision: second. The [RSSSF page](https://www.rsssf.org/tablesk/kroa2025.html) states the licence rule that clubs placed 11th or better may play in the First league next season, and it marks only 12th as demoted. Third source: [HNS Semafor](https://semafor.hns.family/natjecanja/88814659/supersport-prva-nl/), the organiser's record, holds no men's Prva NL play-off competition for 2024/25. The English season page has a "Relegation play-off" line between 11th and 12th but names no play-off. I added both URLs to `sources` and the reason to `notes`. Row ids and row order stay. Row 374 (2023/24) has the same play-off value. I did not check it, because its check line was not part of this task.
+
+Lint after the pass: 0 problems (0 before).
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after.
+
+- gre-pol-cro-374 (Prva NL 2023/24), `playoffs`: the value stays a relegation play-off and now reads "11th v the 2. NL runner-up, two legs". Unlike 2024/25 (row 375), the play-off took place: Kustošija Zagreb v Orijent Rijeka 1:2 and 1:2, and Orijent stayed up. RSSSF marks Orijent "relegation play-off; remain" (https://www.rsssf.org/tablesk/kroa2024.html, read on 2026-10-17).
+- Five substitutes, 2020/21 and 2021/22: I removed the word "inference" from the notes of the 17 rows whose `subs_used` has an `agree` match report in `gre-pol-cro.check2.tsv`: rows 20, 47, 48, 182, 183, 209, 210, 263, 264, 290, 291, 344, 345, 371, 372, 425 and 426. Each row now cites its match report as a `subs_used` source. I fetched each report again on 2026-10-17. The 8 Polish reports (90minut.pl) list more than 6 substitutes in all, so at least one team used more than 3. Rows 21, 74, 75 and 129 keep the inference, because no report was found.
+
+## Second source, retry
+
+Date: 2026-10-17. Second-source retry agent. I took the 80 lines of `gre-pol-cro.check2.tsv` with the verdict `no second source` and tried again. I updated the verdict, `second_url` and note of each line in place. I used 8 web searches. The main new publisher is Transfermarkt: cup participant lists, league tables with zone colours, fixture lists and match sheets. Other pages: the HFF site and its cup rule texts (archive copies), and HNS Semafor match sheets as the primary record.
+
+Counts for the 80 lines:
+
+| Verdict | Lines |
+|---|---|
+| agree | 45 |
+| disagree, settled | 4 |
+| disagree, still split | 1 |
+| no second source | 30 |
+
+After the retry the whole check2 file has 128 agree, 6 disagree (5 from this retry and 1 from pass 2) and 30 no second source.
+
+Agreements:
+
+- Greek Cup `clubs`, 15 seasons (2005/06 to 2007/08, 2010/11 to 2019/20, 2023/24 and 2024/25): the Transfermarkt participant list gives the same count.
+- Greek Cup 2021/22 `subs_used`: the HFF cup rule text allows five substitutions.
+- Beta Ethniki 2005/06 (59), six fields: the Transfermarkt table.
+- Greek second tier `subs_used` 2017/18 to 2021/22 (71 to 75, 129): Transfermarkt match sheets. Up to 2019/20 no team used more than 3. From 2020/21 teams used 5.
+- 2026/27 rows: Super League 1 name and Greek Cup name (HFF site), Super League 2 (80, seven fields, Transfermarkt), Super Cup 2026 (107, HFF report of 13 August 2026), HNL `down` and `playoffs` (350) and Prva NL `up`, `down` and `playoffs` (377) from the Transfermarkt zone colours.
+
+Changes to `gre-pol-cro.tsv` (also in `gre-pol-cro.reconcile.tsv`):
+
+- gre-pol-cro-344, 371 and 425 (HNL, Druga HNL and Croatian Cup 2020/21), `bench`: was 7, now 9. Decision: second. The HNS rules 2020 (article 35) allow 7 substitutes on the match sheet. Transfermarkt line-ups and the HNS Semafor match sheets of 2020/21 list 9 substitutes for a team. I replaced the bench source with both pages and added the reason to `notes`. The rows of 2019/20 and 2021/22 hold `unknown` for `bench`, so no other row copies the value.
+- gre-pol-cro-21 (Greek Cup 2021/22), `clubs`: stays 128. Decision: first. The HFF cup rule text plans 82 + 32 + 14 = 128 entrants. Fewer clubs entered: Transfermarkt lists 122, and the Wikipedia round table gives 119 new entries. I added the rule text to `sources` and the actual entry to `notes`.
+
+Conflict (sources stay split):
+
+- gre-pol-cro-22 (Greek Cup 2022/23), `clubs`: Wikipedia gives 85, Transfermarkt 84, and the HFF draft rule text plans 53 + 26 + 14 = 93. The value stays 85. Max decides.
+
+Still no second source (30 lines):
+
+- Labels and not-held values with no page: 134 (2), 243 (2), 404, 405 (2), 459 (3).
+- Druga HNL 2011/12 `up` (362): the Transfermarkt table shows only the outcome.
+- Croatian Cup 2004/05 and 2008/09 `clubs` (409, 413): the Transfermarkt lists hold only 2 clubs.
+- Greek `foreign` and `registration` (142, 143, 155, 156, 157; 7 lines): efsyn.gr (18 November 2018) states the Super League 1 non-EU rule for 2018/19 only.
+- Polish `foreign` 2007/08 to 2012/13 (304 to 309): a Sejm committee record states "no limit" for 2021/22 only.
+- Croatian `foreign` (466, 474, 475, 479): no other publisher found.
+
+Lint after the retry: 0 problems (0 before).

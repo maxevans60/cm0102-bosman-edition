@@ -194,3 +194,213 @@ Disagreements: none. Notes on the pages:
 - 2005 Premier League (rus-tur-4): the page table gives Dynamo Moscow 20 matches and every other club 30. This looks like an error on the page.
 - 2011/12 Süper Lig (rus-tur-173): the page calls the post-season groups "European play-offs". The row puts them in `split` and keeps `playoffs` = none.
 - 2011–12 first stage (rus-tur-10, rus-tur-37): the pages put the relegation and promotion play-offs after the second stage. That agrees with `playoffs` = none for the first stage.
+
+## Pass 2
+
+Date 2026-10-17. Decision agent. Rules: the "Pass 2" section of `research-brief-0.6.0.md` and Q268 to Q331 of the spec. Row ids and row order are unchanged. `rules_lint.py` gives 1 problem for this part before and after (rus-tur-324 `foreign`, no 2027/28 source).
+
+### 1. No new tiers and no new nations (Q331, Q288)
+
+The original runs `rus_prm` and `rus_first` for Russia (lowest tier 2) and `tur_first`, `tur_second` and `tur_second_b` for Turkey (lowest tier 3). The part holds no row and no club row below these tiers, and no competition that needs another nation. Deleted: 0 rows, 0 club rows. No real tier of these competitions ended in 2001/02 to 2027/28, so no row changed to `not held`.
+
+### 2. Conflicts and open points
+
+Each point is settled by what happened in real life (Q272 to Q276, Q278, Q293).
+
+| Row | Field | Decision | Source |
+|---|---|---|---|
+| rus-tur-196 | name | TFF 1. Lig (first value). The league was renamed before the 2007–08 season. Bank Asya 1. Lig is the sponsor name from 16 January 2008. | https://en.wikipedia.org/wiki/TFF_1._Lig and https://tr.wikipedia.org/wiki/1._Lig |
+| rus-tur-301 | foreign | 5+1+2 (second value). Milliyet, Goal and Türkiye Gazetesi give the cut to at most 6 foreigners from the start of 2005/06. | https://www.milliyet.com.tr/turk-futbolunda-yabanci-kurali-ve-yurt-disina-transfer-olan-turk-futbolcular-molatik-11333/ |
+| rus-tur-241 | playoffs, format | 2nd to 5th of each group, two-legged semi-finals (30 April and 4 May 2026), one final per group (Red 9 May, White 10 May). `up` stays "2 + 2" and `down` stays 7 (White 4, Red 3). | https://www.politikam.com/nesine-2-lig-play-off-son-takimlar-senaryolar-2026 and https://www.evrensel.net/haber/5985688/profesyonel-futbol-liglerinde-dusenler-ve-cikanlar-belli-oldu-dusen-ve-yukselen-takimlarin-sayisi-kac-hangi-illerin-liglerde-takimi-yok |
+| rus-tur-211 | foreign | 8 registered, 7 in the list, 5 on the pitch. The June 2022 TFF text names the TFF 1. Lig, so this is no longer an inference. It replaced the plan of June 2021. | https://www.hurriyet.com.tr/sporarena/son-dakika-tffden-yabanci-kurali-aciklamasi-42086773 |
+| rus-tur-317 | foreign | 14 in the squad and no pitch limit in 2020/21. The TFF postponed the plan of 8 on the pitch on 29 July 2020 for one year. | https://www.tff.org/Resources/Tamsaha/200/140-141/ |
+| rus-tur-199 | down | 2 (16th and 17th). The league started with 17 clubs after the TFF dismissed Ankaraspor on 4 August 2010. | https://en.wikipedia.org/wiki/2010%E2%80%9311_TFF_1._Lig and https://www.rsssf.org/tablest/tur2011.html |
+| rus-tur-187 | down | 3 (unchanged). The 2026 news names three relegated clubs. | Evrensel, as above |
+| rus-tur-47, rus-tur-51 | subs_used | Stays `unknown`. I read both FNL regulations on 2026-10-17. Neither gives a number of substitutes. | the 1fnl.ru PDFs in the rows |
+| rus-tur-162 | notes | UEFA decided the Russian suspension only up to 2026/27. No decision for 2027/28 is known. By Q293 Russia gets no places while the suspension lasts. | none (no decision published) |
+
+Not changed: rus-tur-139 (the reconcile settled it), rus-tur-147 to 149 and rus-tur-305 (inferences that no source settles). I found no page that gives the first season of the Russian 7+4 rule or of the Turkish 6+2 rule.
+
+### 3. Club moves (Q279, Q280, Q290)
+
+I went down every tier for every season with a database. The pool for each move is clubs with no division, clubs in lower or spare divisions, and clubs of a higher division that the season lists in full.
+
+- **Cascade lists added (290 club rows).** Some real clubs of a listed tier stood in a tier above that had no list. The older databases hold the clubs of the season before, so relegated clubs still stand in the top division. That tier then lost a club, so it now has a full list too:
+  - Russian Premier League, 7 seasons: 2002/03 (real 2003), 2003/04 (2004), 2005/06 (2006), 2007/08 (2008), 2008/09 (2009), 2009/10 (2010), 2010/11 (2011–12). 16 clubs each.
+  - Süper Lig, 6 seasons: 2002/03, 2003/04, 2005/06, 2007/08, 2008/09, 2009/10. 18 clubs each.
+  - TFF 2. Lig 2007/08: 50 clubs in five first-stage groups. Category A took Sakaryaspor, Eskişehirspor and Boluspor from the November 2007 Category B. Group membership comes from the RSSSF round 1 fixtures (https://www.rsssf.org/tablest/tur08.html), the club names from the season page.
+  - TFF 1. Lig 2024/25: 20 clubs. The Süper Lig list took Bodrum from the October 2024 Category A.
+- **Wrong matches fixed (38 club rows).** The script matched some clubs to a club with a like name. Each fix gave one database club to two real clubs in a season:
+  - Gaziantep BB, which is not Gaziantepspor (4240, five seasons).
+  - İstanbul B.B., which is not İstanbulspor (2023).
+  - B.B. Ankaraspor and Ankaraspor, which are not Ankara Demirspor (745, four seasons).
+  - Kayseri Erciyesspor, which is not Kayserispor (3608).
+  - Dynamo St. Petersburg, which is not Zenit-2 (3132).
+  - Sivasspor, which is not Sivas Belediyespor (10573).
+  - Manisaspor, which is not Manisa BB (7048).
+  - Denizli Belediyespor, which is not Denizlispor. No record exists, so the row is now empty.
+- **Missing clubs found in the pool (Q279).**
+  - Siirtspor 2002/03 and 2003/04: 10515 "Siirt JETPAspor". Siirtspor was named Siirt Jetpa S.K. (https://en.wikipedia.org/wiki/Siirtspor).
+  - Hacettepe 2009/10 and 2010/11: 2938.
+  - 1461 Trabzon 2010/11, 2011/12 and 2021/22: 6345. The club was Değirmenderespor until 2008, then Trabzon Karadenizspor (https://en.wikipedia.org/wiki/1461_Trabzon_F.K.). Later databases call 6345 "1461 Trabzon".
+  - Yeni Malatyaspor 2010/11 and 2012/13: 6991 "Malatya Belediyespor". The club was founded as Malatya Belediyespor (https://en.wikipedia.org/wiki/Yeni_Malatyaspor). Yeni Malatyaspor 2023/24 Category A: 6992 in the spare division.
+  - Tepecikspor 2015/16 and 2016/17: 1995.
+  - Eyüpspor 2017/18: 3747 "Eyüp Sultan Spor". The same id is "Eyüpspor" in later databases.
+  - Kastamonuspor 1966 2023/24: 6438.
+  - Alanyaspor and Giresunspor 2005/06: 522 and 4407.
+- **Matches to check.** These rest on the id lineage or a database flag, not on the name:
+  - TKİ Tavşanlı Linyitspor 2009/10 and 2010/11: 11399, which the databases of those years call "Tavsancilspor". From Autumn 2013 the same id is "TKI Tavsanli Linyitspor".
+  - 522 and 4407 (September 2005) carry nation -2. 6345 (October 2021) and 6992 (October 2023) carry nation -1. The build must set the nation to Turkey, or Max decides.
+  - Afyonkarahisarspor 2007/08 is matched to 270 "Afyonspor".
+  - Tepecik Belediyespor 2007/08 is matched to 11275 "Tepecik Firatpenspor".
+- After the fixes no database club serves two real clubs in a season. No listed tier takes a club from a tier without a list.
+
+### 4. Missing clubs (for Max)
+
+29 club rows still have no database record:
+
+| Season | Division | Clubs |
+|---|---|---|
+| 2005/06 | Russian First Division | Spartak Nizhny Novgorod |
+| 2008/09 | Russian First Division | Krasnodar, Nizhny Novgorod |
+| 2003/04 | Category B | Sidespor, Yeni Kırşehirspor, Osmaniyespor |
+| 2005/06 | Category B | Yeni Kırşehirspor, Ünyespor, Pazarspor, İskenderun Demir Çelik, Osmaniyespor |
+| 2007/08 | Category B | Bozüyükspor, Bugsaşspor, Yeni Kırşehirspor, Araklıspor, Değirmenderespor, Pazarspor, Arsinspor, İskenderun Demir Çelikspor |
+| 2008/09 | Category B | Denizli Belediyespor, Altınordu, Karsspor |
+| 2009/10 | Category B | Denizli Belediyespor, Pursaklarspor, Karsspor, İskenderun Demir Çelikspor |
+| 2010/11 | Category B | İskenderun Demir Çelikspor, Pursaklarspor |
+| 2018/19 | Category B | Başkent Akademi |
+
+Without a list in 2007/08, Category B would keep the 47 clubs that the November 2007 database leaves there after the moves up. With the list, 42 real clubs are found and 8 are missing.
+
+### 5. Reserve and B teams (Q289)
+
+The tiers of this part need three reserve teams: Zenit-2, Spartak-2 and Krasnodar-2 (FNL 2015/16 to 2022/23). Every season database that needs one holds it: 670, 10863 or 5596, and 6705. I checked the October 2022 First Division too. It has no list but holds Krasnodar-2. The Turkish leagues have no reserve teams. Reserve teams to add: 0.
+
+### 6. Part rules
+
+None of the part rules of the brief applies to Russia or Turkey.
+
+## Second source, pass 2
+
+Date 2026-10-17. Second-source agent. I took every line of `rus-tur.check.tsv` with the verdict `no second source` whose field still holds a value. That gives 409 lines. I read each second page on 2026-10-17, with curl and a text search of the page or PDF. The results are in `rus-tur.check2.tsv`. Row ids and row order are unchanged. `rules_lint.py` gives 1 problem for this part before and after (rus-tur-324 `foreign`).
+
+| Verdict | Lines |
+|---|---|
+| agree | 313 |
+| disagree, settled | 14 |
+| disagree, still split | 2 |
+| no second source | 80 |
+
+### Main second sources
+
+- IFAB Laws of the Game, one edition per season from 2001/02 to 2019/20 (downloads.theifab.com). Law 3 gives at most three substitutes in official competitions up to 2016/17. From 2017/18 the limit of three applies only to competitions with top-division first teams. Below the top division a national FA may allow up to five, so the Law does not confirm 3 for the second and third tiers in 2017/18 and 2018/19.
+- FNL and First League regulations on 1fnl.ru and rfs.ru (2011-12, 2012-13, 2015-16, 2016-17, 2018-19, 2020-21 to 2026-27). The 2011-12 text is on nskhuman.ru.
+- RPL regulations 2021-22 to 2026-27 and Russian Cup regulations on rfs.ru.
+- RFS regulations on the status and transfer of players, one edition per season from May 2011 (rfs.ru, category 10).
+- TFF statutes of the Süper Lig, TFF 1. Lig, TFF 2. Lig, Turkish Cup and Super Cup (tff.org, Statüler page), and the TFF league and cup archive pages.
+- RSSSF season and cup pages; Sportbox and Sovetsky Sport histories of the Russian foreign limit; aspor (29 May 2020) for the TFF restart instruction.
+
+### Disagreements settled
+
+The second source is the rule text of the season. No other publisher states these numbers, so the rule text settles each one (decision `second`).
+
+| Row | Field | First value | New value | Source |
+|---|---|---|---|---|
+| rus-tur-37, 38 | subs_used | 3 | 4 | FNL regulation 2011-12, art. 8.10 (http://nskhuman.ru/fbdocs/fnlregl.php?numstat=8) |
+| rus-tur-39 | subs_used | 3 | 4 | FNL regulation 2012-13, art. 8.11 (1fnl.ru) |
+| rus-tur-42 | subs_used | 3 | 4 | FNL regulation 2015-16, art. 8.20 (1fnl.ru) |
+| rus-tur-43 | subs_used | 3 | 4 | FNL regulation 2016-17, art. 8.20 (1fnl.ru) |
+| rus-tur-45 | subs_used | 3 | 4 | FNL regulation 2018-19, art. 8.20 (1fnl.ru) |
+| rus-tur-47 to 53 | foreign | 4 registered, 3 on the pitch | 4 registered, at most 4 in the matchday list and on the pitch (from 2020); EAEU players not counted | FNL and First League regulations 2020-21 to 2026-27, art. 8.26 to 8.28 and 10.13 to 10.19 |
+| rus-tur-269 | format | Süper Lig clubs enter in the fifth round | Süper Lig clubs enter in round 3 (6 clubs), round 4 (4 clubs placed 6th to 9th and 3 promoted clubs) and round 5 (cup holders and 4 European qualifiers). The rest of the value is unchanged. | TFF Turkish Cup statute 2026-27, art. 1 to 3 |
+
+### Disagreements still split (for Max)
+
+- rus-tur-156 (Russia 2021/22) `foreign` and `registration`. The row gives a 25-man squad with at least 17 Russians. The RPL regulation 2021-22 on rfs.ru (documentId 932) gives at most 28 players in form 3A, at most 8 legionnaires and at least 6 home-grown. That text includes the amendments of 10 March, 1 April and 4 April 2022. The start-of-season text of July 2021 is not online, so I cannot tell when 28 began. Sovetsky Sport gives 8 foreigners and no pitch limit but no squad size. The first value stays.
+
+### Values found and added
+
+These fields held `unknown`, or lacked a rule that the second source states. Each new value has its URL in `sources`.
+
+- `foreign`, FNL, on-pitch limit added: rus-tur-37, 38 (2011-12 regulation) and rus-tur-39 (2012-13): at most 3 on the pitch. rus-tur-42, 43, 45 (2015-16, 2016-17, 2018-19): at most 5 in the matchday list and 3 on the pitch.
+- `bench` 7: rus-tur-37, 38, 39, 42, 43 (FNL regulations), rus-tur-175 (Süper Lig 2013-14), rus-tur-204, 205, 207 (TFF 1. Lig 2015-16, 2016-17, 2018-19), rus-tur-232, 233, 234 (TFF 2. Lig 2016-17 to 2018-19).
+- `bench` 10: rus-tur-183 to 188 (Süper Lig 2021-22 to 2026-27), rus-tur-206, 208 to 215 (TFF 1. Lig 2017-18, 2019-20 to 2026-27), rus-tur-236 to 242 (TFF 2. Lig 2020-21 to 2026-27).
+- `bench` 12: rus-tur-21 to 26 (RPL 2021-22 to 2026-27), rus-tur-45, 47 to 53 (FNL and First League).
+- `subs_used` 5 (in three windows): rus-tur-22 to 26 (RPL), rus-tur-49 to 53 (First League), rus-tur-182 to 188 (Süper Lig), rus-tur-209 to 215 (TFF 1. Lig), rus-tur-236 to 242 (TFF 2. Lig). rus-tur-47 (FNL 2020-21): 5; the regulation names no windows.
+- `registration`, rus-tur-161 (Russia 2026/27): form 3A at most 25, at most 12 foreigners, at least 12 home-grown (RPL regulation 2026-27).
+- `notes`, rus-tur-262 (Turkish Cup 2019/20): one more substitute in extra time of a knockout match after the June 2020 restart (aspor, 29 May 2020).
+
+### rus-tur-324 `foreign` (Süper Lig 2027/28)
+
+No source found. The TFF Süper Lig statute 2026-27 sets the foreign rule for 2026-27 only: 14 foreigners in the A list, at least 4 born on or after 1 January 2003. The 2025-26 statute names 2026-27 as its last step. No page gives a 2027/28 rule. The value stays `unknown`.
+
+### Points for Max
+
+- FNL substitutes before 2011. The FNL regulations of 2011-12 to 2018-19 allow 4 substitutes. No First Division regulation of 2002 to 2010 is online. Rows rus-tur-28 to 36 keep 3 on the IFAB Law alone. The rows of 2013/14, 2014/15 and 2017/18 (rus-tur-40, 41, 44) keep 3 with no second source, although the regulations on both sides give 4.
+- FNL foreign limit 2019/20 (rus-tur-46). No regulation of 2019-20 found. The value stays 5 registered.
+- Turkish second and third tiers 2017/18 and 2018/19 `subs_used` 3. The TFF statutes of those seasons give no number, and the IFAB Law allowed up to 5 below the top division. No second source.
+- Russian transfer windows before 2011 and in 2012/13 and 2013/14, and all Turkish windows: no second source. The TFF transfer regulation gives no period lengths.
+- Rows for 2027/28 (names, Super Cup, League Cup `not held`): no page of 2027/28 exists yet, except the Russian Cup regulation, which covers 2025-26 to 2028-29 (rus-tur-81).
+- The web search budget of the session ran out during the work. The last lines rest on pages that I reached directly (RSSSF, rfs.ru, 1fnl.ru, tff.org). A later pass with search may find second sources for the 80 lines without one.
+
+## Second source, retry
+
+Date 2026-10-17. Second-source retry agent. The pass 2 agent ran out of web searches and left 80 lines of `rus-tur.check2.tsv` at `no second source`. I tried each of them again. I read archive.org copies of 1fnl.ru, rfpl.org and tff.org first, then RSSSF and tff.org pages, and used searches only for Turkish news on transfer periods. I updated each line in place. Row ids and row order are unchanged. `rules_lint.py` gives 1 problem for this part before and after (rus-tur-324 `foreign`).
+
+| Verdict (the 80 retried lines) | Lines |
+|---|---|
+| agree | 38 |
+| disagree, settled | 9 |
+| disagree, still split | 0 |
+| still no second source | 33 |
+
+The whole file now holds 351 agree, 25 disagree and 33 no second source.
+
+### New second sources
+
+- RSSSF Russian cup history page (ruscuphist.html), Super Cup list, and RSSSF Russia 2010 (cup details).
+- FNL regulations 2013-14, 2014-15 and 2017-18 (archive.org copies of 1fnl.ru) and 2019-20 (1fnl.ru).
+- RFS status regulation as amended to 4 July 2014 (archive.org copy of 1fnl.ru). Art. 14 gives at most 12 weeks and at most 4 weeks.
+- Premier League regulations 2003, 2005, 2006, 2009 and 2010 (archive.org copies of rfpl.org), and the RFS status regulations of 2003 and 2006 (rfpl.org copies).
+- TFF Futbol Müsabaka Talimatı, August 2017 and 2018 texts, and the TFF instruction for the 2. Lig and 3. Lig play-offs of July 2020 (archive.org copies of tff.org).
+- tff.org champions page (pageID 371) for the name 2. Lig B Kategorisi.
+- Turkish newspapers with the TFF transfer period dates: Fanatik (2012), Türkiye (2016), A Spor (2017), beIN Sports (2018, 2024), Goal Türkiye (2019-20), Diken (2023), Milliyet (2023), CNN Türk (2025), BirGün (2026), Milli Gazete (Super Cup 2026).
+
+### Disagreements settled
+
+The second source is the rule text of the season in each case except rus-tur-138. No third publisher states these numbers, so the rule text settles each one (decision `second`).
+
+| Row | Field | First value | New value | Source |
+|---|---|---|---|---|
+| rus-tur-40 | subs_used | 3 | 4 | FNL regulation 2013-14, art. 8.21 |
+| rus-tur-41 | subs_used | 3 | 4 | FNL regulation 2014-15, art. 8.20 |
+| rus-tur-44 | subs_used | 3 | 4 | FNL regulation 2017-18, art. 8.20 |
+| rus-tur-137 | windows | between seasons (max 12 weeks), mid-season (max 4 weeks) | 25 February to 13 March and 1 July to 31 August 2003 | Premier League regulation 2003, art. 12 |
+| rus-tur-138 | windows | as above | between seasons (dates unknown), mid-season 1 July to 31 August 2004 | Gazeta.ru, July 2004. No third publisher. The 2003 and 2005 regulations set the same summer period. |
+| rus-tur-139 | windows | as above | 1 February to 10 March and 1 July to 31 August 2005 | Premier League regulation 2005, art. 11.3 and 11.4 |
+| rus-tur-140 | windows | as above | 1 February to 15 March and 1 July to 31 August 2006 | Premier League regulation 2006, art. 11.3 and 11.4 |
+| rus-tur-143 | windows | as above | 16 February to 12 March and 1 to 31 August 2009 | Premier League regulation 2009, art. 12.3 and 12.4 |
+| rus-tur-144 | windows | as above | 8 February to 8 April and 1 to 31 August 2010 | Premier League regulation 2010, art. 12.2 and 12.3 |
+
+The Russian summer period of 2003 to 2006 lasted about 9 weeks, and the August period of 2009 and 2010 lasted 31 days. Both are longer than the 4 weeks of the FIFA rule. The dates are those of the Premier League. The First Division dates may differ.
+
+### Values found and added
+
+- rus-tur-40, 41 `foreign`: at most 3 legionnaires on the pitch (FNL regulations 2013-14 and 2014-15). The registration count of 5 stays without a second source.
+- rus-tur-44, 46 `foreign`: at most 5 legionnaires registered, at most 5 in the matchday list and 3 on the pitch (FNL regulations 2017-18 and 2019-20).
+- `bench`: rus-tur-40 and 41 get 7, rus-tur-44 gets 11, rus-tur-46 gets 12 (same regulations).
+- rus-tur-46 `subs_used`: 3 changed to 4 (a fifth when a young player replaces a young player), from the FNL regulation 2019-20, art. 8.20. This field was not one of the 80 lines. Its earlier check covered only the restart. I changed it because the regulation of the season states 4.
+
+### Still no second source (33 lines)
+
+- Names of 2027/28 (rus-tur-27, 54, 108, 135, 189, 216, 243, 270, 297) and rus-tur-135 `format` `not held`. No page of 2027/28 exists yet.
+- FNL `foreign`, 5 registered, in 2010/11 to 2014/15 (rus-tur-37 to 41). The FNL regulations of those seasons give 3 on the pitch and no registration count. Sportbox confirms only the 1999 rule of 5.
+- Russian windows of 2007 and 2008 (rus-tur-141, 142). The RFS status regulation of 18 December 2006 sets the first period from the last match of the season to the day before the new championship, with no 12-week cap stated. No dates found.
+- Russian windows 2027/28 (rus-tur-162), Turkish windows 2027/28 and `foreign` 2027/28 (rus-tur-324).
+- Turkish windows 2002/03 to 2011/12, 2013/14 to 2015/16 (rus-tur-299 to 308, 310 to 312). No page with both periods of those seasons found. For 2013/14 the second period was 7 January to 3 February 2014, and for 2015/16 the first period was 9 June to 31 August 2015.
+
+### Points for Max
+
+- The windows rows of Russia before 2011 now hold real Premier League dates where a regulation exists (2003, 2005, 2006, 2009, 2010). Rows 2004, 2007 and 2008 keep the FIFA rule or partial dates.
+- FNL substitutes: the regulations of 2011-12 to 2019-20 all allow 4. The rows of 2013/14, 2014/15, 2017/18 and 2019/20 now say 4. The rows of 2002 to 2010 (rus-tur-28 to 36) keep 3 with no regulation found.

@@ -178,3 +178,197 @@ Method: I ran the rules lint and took each filled fact field with no `field=URL`
 - Sources added: 4 `split` entries (den-swe-4, 10, 16, 22, 2001/02 to 2004/05), from the Danish 1st Division season pages that the rows already cite.
 
 No source found: none. Disagreements: none.
+
+## Pass 2
+
+Date 2026-10-17. Decision agent. Input: Max's decisions Q268 to Q331 in the spec. Row ids and row order of `den-swe.tsv` are unchanged. `rules_lint.py` gives 0 problems before and after.
+
+### Counts
+
+| Item | Count |
+|---|---|
+| Rows deleted from `den-swe.tsv` | 0 |
+| Club rows deleted | 0 |
+| Conflicts and open points settled | 3 (den-swe-89, den-swe-274, den-swe-58) |
+| Club rows added | 334 (Superettan 320, Allsvenskan 2006 14) |
+| Club rows given a database match | 12 |
+| Reserve teams listed (Q289) | 23 entries, 8 teams |
+| Real clubs still without a database record | 37, plus the 23 reserve entries |
+
+### No new tiers (Q331) and no new nations (Q288)
+
+The original runs three tiers in each nation (`den_prm`, `den_first`, `den_second`; `swe_prm`, `swe_first`, `swe_second`). This part already had no row below tier 3, and no competition needs another nation. Nothing was deleted.
+
+- The Danish 3rd Division (tier 4 from 2021/22) and the Swedish Division 2 from 2006 (tier 4) stay out.
+- The Danish Super Cup and the Svenska Supercupen stay in. They are not tiers, and their clubs come from tier 1.
+- No real tier of this part ends. The Swedish third tier changes from Division 2 to Division 1 in 2006, and `swe_second` follows the real third tier.
+
+### Conflicts settled (Q293, Q297 to Q327)
+
+1. **den-swe-89, Danish Cup 2015/16: 107 clubs.** The `format` field now says 107. RSSSF lists 47 first-round ties (one awarded), 28 second-round ties and 16 third-round ties. That is 94 clubs, then 9 new clubs, then 4 new clubs. The Wikipedia round text gives the same figures. The infobox figure 108 matches no round. Sources: https://www.rsssf.org/tablesd/den2016.html and https://en.wikipedia.org/wiki/2015%E2%80%9316_Danish_Cup
+2. **den-swe-274, Swedish third tier name in 2020: Ettan.** The row keeps "Ettan". In 2020 the league body and the press call the tier Ettan Norra and Ettan Södra. The league body uses the name Ettan for the tier from 2006 (https://ettanfotboll.se/om-oss/). Division 1 remains the formal series name of the tier in the league system. I found no source with the year that the official name changed. The rows 2006 to 2019 keep "Division 1", which follows the season page titles.
+3. **den-swe-58, Danish 2nd Division 2010/11 `down`: 8.** The final tables mark 13th to 16th of each group as relegated. None of these 8 clubs is in the 2011-12 2nd Division (https://en.wikipedia.org/wiki/2011%E2%80%9312_Danish_2nd_Divisions). The plan of March 2010 for 3 relegations did not happen. The row keeps 8.
+
+The two Superettan and Allsvenskan play-off points of 2026 were settled in "Loose ends" above. The Superliga 2019/20 point was settled by the reconcile (14 clubs, 12 from 2020/21).
+
+### Club moves (Q279, Q280, Q290)
+
+I went down the three tiers of each nation in each season with a database. Clubs that a listed tier takes from an unlisted tier leave a gap there.
+
+- **Superettan, 2005/06 and 2007/08 to 2025/26 (years 2006 and 2008 to 2026).** Each season the Allsvenskan list and the third-tier list take 3 to 7 clubs from the database's Superettan. The real Superettan has 16 clubs, so the list holds all 16. Source: the Wikipedia season page of each year (`https://en.wikipedia.org/wiki/<year>_Superettan`).
+- **Allsvenskan 2005/06 (year 2006).** The Superettan list of 2006 takes Landskrona BoIS, GIF Sundsvall and Assyriska FF from the database's Allsvenskan. The list holds the 14 real clubs. Source: https://en.wikipedia.org/wiki/2006_Allsvenskan
+- **Denmark.** No listed tier takes a club from an unlisted Danish tier. No list was added.
+
+After these lists, no unlisted tier of this part loses or gains a club.
+
+New database matches (pool: clubs with no division and clubs of the lower and spare divisions):
+
+- Syrianska FC = "Syrianska Föreningen" (2005/06, 2007/08, 2010/11 to 2012/13, and the Superettan lists). The club was founded in 1977 in Södertälje as Syrianska Föreningen (https://sv.wikipedia.org/wiki/Syrianska_FC). Each database places the record in the real division of that year or one tier away.
+- AB Gladsaxe = "Akademisk Boldklub" (2018/19 to 2022/23). The full name of the club is Akademisk Boldklub Gladsaxe (https://en.wikipedia.org/wiki/Akademisk_Boldklub). The October 2017 database calls the same record "AB Gladsaxe".
+- 2005/06 Division 1 Norra: the club was Falu BS, not Falu FK (https://sv.wikipedia.org/wiki/Division_1_i_fotboll_f%C3%B6r_herrar_2006). Falu FK was formed in autumn 2006 as a joint club of Falu BS, Korsnäs IF and Slätta SK (https://sv.wikipedia.org/wiki/Falu_FK). The 2007/08 row of Falu FK takes the Falu BS record. This is an inference.
+- Ljungskile SK = "Panos Ljungskile SK" (Superettan 2006, September 2005 database).
+
+The Danish 2nd Division 2005/06 (28 real clubs against 16) is still not listed. No page that I could read gives the 2005-06 tables. The English season page now redirects to the main page, and the soccerway pages hold no table text.
+
+### Missing clubs for Max
+
+These real clubs have no record in their season's database after the pass-2 matches:
+
+- Danish 2nd Division: 2008/09 Blokhus FC, Aarhus Fremad; 2009/10 Boldklubberne Glostrup Albertslund, Allerød FK; 2010/11 Boldklubberne Glostrup Albertslund, Allerød FK, Ballerup-Skovlunde Fodbold, Rishøj Boldklub, FC Djursland; 2011/12 Rishøj Boldklub, Svebølle B&I, SC Egedal, Boldklubberne Glostrup Albertslund, Kjellerup IF, Aarup BK, Viby IF; 2013/14 Gentofte-Vangede IF, Odder IGF; 2015/16 Dalum IF; 2016/17 VSK Aarhus.
+- Swedish third tier: 2007/08 Ersboda SK; 2008/09 Skellefteå FF, FC Rosengård; 2009/10 Dalkurd FF, FC Rosengård; 2014/15 Södertälje FK; 2015/16 and 2016/17 Team TG FF; 2016/17 FK Karlskrona; 2018/19 Assyriska IK; 2019/20 IF Karlstad Fotboll; 2020/21 Hammarby TFF; 2021/22 FC Stockholm Internazionale; 2022/23 Nordic United FC, FC Stockholm Internazionale; 2023/24 FBK Karlstad; 2025/26 AFC Malmö.
+- Possible predecessor records (inference, not matched): Boldklubberne Glostrup Albertslund (Glostrup FK - IF 32 and Albertslund IF), Ballerup-Skovlunde Fodbold (Skovlunde IF).
+
+### Reserve and B teams (Q289)
+
+The Danish 2nd Division admitted Superliga reserve teams from 2005/06 to 2009/10. No season database holds them. The build adds them as new club records:
+
+| Season | Group | Reserve teams |
+|---|---|---|
+| 2007/08 | 1 | Brøndby 2, KB (FC København 2) |
+| 2007/08 | 2 | OB 2, AGF 2, AaB 2, Esbjerg 2, Ikast FS (FC Midtjylland 2) |
+| 2008/09 | 1 | Brøndby 2, FC København 2 |
+| 2008/09 | 2 | OB 2, Esbjerg 2, Randers Freja (Randers FC 2), AaB 2, Ikast FS (FC Midtjylland 2), AGF 2 |
+| 2009/10 | 1 | Brøndby 2, FC København 2 |
+| 2009/10 | 2 | Randers Freja (Randers FC 2), OB 2, Esbjerg 2, Ikast FS (FC Midtjylland 2), AGF 2, AaB 2 |
+
+The 8 teams are Brøndby 2, FC København 2 (KB in 2007/08), OB 2, AGF 2, AaB 2, Esbjerg 2, FC Midtjylland 2 (Ikast FS) and Randers FC 2 (Randers Freja). The sources are the season pages in `den-swe-clubs.tsv`. The 2005/06 list is unknown (see above), and 2006/07 has no database. Sweden needs no reserve or B team in tiers 1 to 3.
+
+### Part rules (Q277, Q283, Q284, Q294, Q296)
+
+None applies to this part. The Svenska Cupen and Danish Cup rows already put each edition in its normal slot.
+
+## Second source, pass 2
+
+Date 2026-10-17. Second-source agent. Input: the 840 lines of `den-swe.check.tsv` with verdict `no second source`. Output: `den-swe.check2.tsv`, 189 lines. I read every second page on 2026-10-17 with curl, except two pages that I read with WebFetch and quoted.
+
+### Scope
+
+| Item | Lines |
+|---|---|
+| `no second source` lines in the check file | 840 |
+| Field holds `unknown` (out of scope) | 377 |
+| Field holds an inference or a carried value (out of scope) | 274 |
+| Lines checked in `den-swe.check2.tsv` | 189 |
+
+The inferences out of scope are the rows that `notes` marks as inferences. These are the 3 substitutes before 2020 from the Laws of the Game, the 5 substitutes from the IFAB rule, bench sizes after the source season, the Danish 2nd Division `up` of 2001/02 and 2002/03, the Swedish "no transfer windows" of 2002 to 2004, and the 2027/28 Danish rows and 2027 and 2028 Swedish rows that carry the last known values.
+
+### Counts
+
+| Verdict | Lines |
+|---|---|
+| agree | 160 |
+| disagree, settled | 0 |
+| disagree, still split | 0 |
+| no second source | 29 |
+
+No line disagrees, so `den-swe.tsv` and `den-swe-clubs.tsv` are unchanged. `rules_lint.py` gives 0 problems for this part before and after.
+
+### Second sources
+
+- Denmark, leagues: the final tables of each season on danskfodbold.com, the site of the DBU's official statisticians (`https://www.danskfodbold.com/tabel.php?seasonid=<end year>`). They give the clubs, groups, promotion, relegation and play-off places of the Superliga, the 1st Division and the 2nd Division.
+- Denmark, bench and substitutes: bold.dk (12 July 2022), with the Divisionsforeningen decision of a bench of nine from 2022/23 and five substitutes. A danskfodbold.com match report of July 2021 shows 5 substitutions per team.
+- Denmark, cups: TV 2 Sport (DBU Pokalen 2026/27) and the RSSSF Super Cup list.
+- Sweden, Division 2 of 2002 and Division 1 of 2011 to 2017: svenskafotbollsklubbar.se series pages (clubs per series) and club pages (division of the next year). ettanfotboll.se states 14 clubs in each Division 1 series from 2006 to 2017.
+- Sweden, substitutes: the SvFF notices of 2020, 2021 and 2022 and the SvFF rules of Svenska Cupen 2021/2022.
+- Sweden, 2026: the SvFF play-off page for 2026, the Svensk Elitfotboll Allsvenskan page and ettanfotboll.se.
+
+### Derived values
+
+The `down` lines of the Swedish Division 2 of 2002 and Division 1 of 2011 to 2017, and the `up` and `playoffs` lines of the Swedish Division 2 of 2002, are marked `agree`, but the second publisher does not state them. I counted them from its club pages: a club that played in a lower division in the next year counts as relegated. Each such line says "derived, not stated" in its note.
+
+### Still no second source
+
+- 18 Swedish `windows` lines ("two windows since 15 November 2004"), 5 Swedish `foreign` lines and 4 Swedish `bench` lines (den-swe-284, 285, 290, 291). The web search limit of this session was reached before I found a second publisher.
+- den-swe-156 `format` (Danish Super Cup 2026/27, `not held`). The RSSSF list ends with the 2004 final, but its last update is 30 May 2025.
+- den-swe-310 `down` (Ettan 2026, 6). No page of another publisher states the 2026 relegation places.
+
+### Observations outside the checked fields (no change made)
+
+These fields are inferences or `unknown`, so pass 2 does not change them. The values are for the maintainer and Max.
+
+- den-swe-4, Danish 2nd Division 2001/02 `up` 2 (inference): the DBU statistics page lists 3 promoted clubs (BK Skjold, Ølstykke FC, HIK). Lyngby FC went bankrupt and was moved down two levels. The page does not say whether the third place was a rule place.
+- Danish 2nd Division `down` (`unknown` in den-swe-4, 10, 16, 22, 28): the DBU statistics pages list 2 relegated in 2001/02, 3 in 2002/03, 3 in 2003/04, none in 2004/05, and 5 in 2005/06 (3 from the west group, 2 from the east group).
+- Danish 2nd Division 2005/06: the DBU statistics page (`https://www.danskfodbold.com/tabel.php?seasonid=2006`) gives both group tables of 14. It lists the reserve teams Esbjerg fB 2 and Silkeborg IF 2 (west) and Brøndby IF 2 and KB (FC København 2) (east). The pass-2 decision section says this list was unknown.
+- The bold.dk article says the bench of nine from 2022/23 also applies to the Danish 1st Division.
+- The SvFF special rules for men 2026 (`https://www.svenskfotboll.se/48e766/globalassets/svff/dokumentdokumentblock/tavling/tavlingsforeskrifter/2026/stb-herr-2026-v1-251222.pdf`, 5 kap. 4 §) allow at most nine substitutes on the team sheet in Allsvenskan and Superettan.
+- The SvFF play-off page for 2026 does not give the away-goals rule. The playoffs text of den-swe-308 and the rows that copy it includes away goals.
+
+## Closing
+
+Date: 2026-10-17. Closing agent. `rules_lint.py`: 0 problems before and after. Source: the DBU statisticians' final tables, https://www.danskfodbold.com/tabel.php?seasonid=2002 to seasonid=2006, read on 2026-10-17.
+
+| Row | Field | Old | New |
+|---|---|---|---|
+| den-swe-4 (2001/02) | down, playoffs | unknown | 2 (15th, 16th), none |
+| den-swe-4 | up | 2 | 2 (kept; the page lists 3 promoted, see below) |
+| den-swe-10 (2002/03) | down, playoffs | unknown | 3 (14th to 16th), none |
+| den-swe-16 (2003/04) | down, playoffs | unknown | 3 (14th to 16th), none |
+| den-swe-22 (2004/05) | down, playoffs | unknown | 0, none (the level grew to 2 groups of 14) |
+| den-swe-28 (2005/06) | up | 3 | 2 (the best eligible club of each group) |
+| den-swe-28 | down | unknown | 4 (13th and 14th of each group) |
+| den-swe-28 | playoffs | unknown | the best eligible runner-up of each group play two legs for one 1st Division place |
+
+- den-swe-4 `up`: BK Skjold, Ølstykke FC and HIK (places 1 to 3) went up. The 1st Division had 2 relegation places. Lyngby BK went bankrupt and was sent from the Superliga to the Danmarksserien, so the third promotion filled its place. This reading is an inference from the same page, and it is in the row notes.
+- den-swe-28 outcome: Esbjerg fB 2 won the vest group but could not go up, so Aarhus Fremad went up. Næstved BK won the øst group. Thisted FC and Holbæk B&IF played off. Five clubs went down: Dalum IF (12th) was also sent down after the FC Fyn merger of B 1909, B 1913 and Dalum IF.
+- Club moves: the 2005/06 database (September 2005) has 16 clubs in the Danish Second Division, and the real level has 28. I added the 28 clubs to `den-swe-clubs.tsv` as "Danish 2nd Division group 1" (vest) and "group 2" (øst), in the table order of the DBU page.
+- Matches to note: Aarhus Fremad is club 184 ("Aarhus Fremad", A Lower Division). Club 3761 ("FC Aarhus", Danish First Division) is the same club under its 2002 to 2004 name (the DBU page records the change of name). FC Roskilde is club 9671 ("Roskilde Boldklub Af 1906"), which is an inference: the database name is the older club. B 1913 and B 93 are in the database's First Division.
+- Missing clubs for Max, 2005/06 Danish 2nd Division: Hobro IK, BSV, AB 1970, Stenløse BK, Værløse BK. Reserve teams for the build (Q289): Esbjerg fB 2, Silkeborg IF 2, Brøndby IF 2, KB (FC København 2). The line "2005/06 Danish 2nd Division: club list unknown" in "Missing clubs" no longer applies.
+
+## Second source, retry
+
+Date 2026-10-17. Second-source retry agent. Input: the 27 Swedish lines of `den-swe.check2.tsv` with verdict `no second source` (18 `windows`, 5 `foreign`, 4 `bench`). I updated these lines in place. I did not touch den-swe-156 and den-swe-310. I read every page on 2026-10-17 with curl, or through the FotbollDirekt site API.
+
+### Counts
+
+| Verdict | Lines |
+|---|---|
+| agree | 17 |
+| disagree, settled | 0 |
+| disagree, still split | 0 |
+| still no second source | 10 |
+
+| Field | Agree | Still no second source |
+|---|---|---|
+| windows | 8 (2011, 2015, 2016, 2017, 2021, 2022, 2025, 2026) | 10 (2005 to 2010, 2012, 2014, 2018, 2019) |
+| foreign | 5 (2022 to 2026) | 0 |
+| bench | 4 (den-swe-284, 285, 290, 291) | 0 |
+
+No line disagrees, so `den-swe.tsv` and `den-swe-clubs.tsv` are unchanged. `rules_lint.py` gives 0 problems for this part before and after.
+
+### Second sources
+
+- SvFF Tävlingsbestämmelser 2022 to 2026, 4 kap. 4 § (homegrown players) and 5 § (substitutes on the team sheet). I read copies on svenskfotboll.se and its district pages.
+- SvFF Representationsbestämmelser 2022, 2025 and 2026, which give the two registration periods and their dates.
+- FotbollDirekt articles of 2015, 2016, 2017 and 2021, which give the closing date of the winter window and the opening date of the summer window.
+- A Djurgården club article of 2011 with the two Swedish windows.
+
+### Notes on the checked lines
+
+- den-swe-283 `foreign` (2022) is marked `agree`, but the value is derived. The 2022 rules say that at least half of the team sheet must be homegrown, with at most seven substitutes. That makes at most 9 of 18 non-homegrown. The explicit cap of nine first appears in the 2023 text.
+- The 10 `windows` lines still without a second source need a dated page of that year. The oldest SvFF representation rules that I found online are those of 2022. FotbollDirekt has few pages before 2012. For 2018 and 2019 I found only the summer window. FIFA RSTP art. 6.1 requires two registration periods in every association, but it does not name Sweden, so I did not count it.
+
+### Observations outside the checked lines (no change made)
+
+- The SvFF representation rules give dates that the table holds as `unknown`. 2022: 8 January to 31 March and 15 July to 11 August (men). 2023 (in force 25 November 2022): 1 February to 28 March and 20 July to 16 August (men). The summer window was later extended to 7 July to 31 August. 2024: 1 February to 27 March and 2 July to 26 August (men). 2025: 29 January to 25 March and 8 July to 29 August. 2026: 29 January to 25 March and 7 July to 31 August.
+- The 2011 club article gives 1 January to 31 March and 1 August to 31 August for Sweden.
+- SvFF Tävlingsbestämmelser 2025 still allow at most seven substitutes in Superettan. The 2026 text allows nine in Allsvenskan and Superettan.

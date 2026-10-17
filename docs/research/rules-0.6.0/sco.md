@@ -100,3 +100,97 @@ Sources added: 80 fields (split 79, subs_used 1).
 - sco-214 `subs_used` = "5 (inference: copies 2026/27)" cites the 2026-27 Scottish Cup rules, rule 13.1: "not more than five may play in the match".
 
 Disagreements: none. Fields with no source: none.
+
+## Pass 2
+
+Date 2026-10-17. Decision agent. Rules: Q268 to Q331 in the spec. Row ids and row order are unchanged. `rules_lint.py` gives 0 problems for `sco.tsv`, as before.
+
+### 1. Tiers and nations (Q331, Q288)
+
+The original runs four Scottish tiers (`sco_prm` to `sco_third`). The table holds only these four leagues, the three cups and the nation rules. No row is below tier 4, and no row needs a nation that a game cannot select. The Challenge Cup guests come from Wales, Northern Ireland, the Republic of Ireland and England, which the original runs. Rows deleted: 0. Club rows deleted: 0. The Highland League, the Lowland League and the B-team leagues stay out of the table (tier 5).
+
+### 2. Conflicts and open points
+
+The reconcile left 0 conflicts. The three items for Max of the reconcile are already in the rows: sco-159 bench 9, sco-214 bench "up to 9 (inference)", sco-190 with 130 entrants. The open points of "Missing clubs and items for Max" above are settled by what happened in real life:
+
+- Pyramid play-off (Q284): the `sco_third` rows from 2014/15 keep the real play-off. A note in each row says that the game takes two Scottish clubs with no division as the Highland and Lowland League champions. In every database from October 2014 the real champions are in the spare division "A Lower Division", not in "none". By Q279 the spare division is part of the pool. The real champions of each database season are in `sco-clubs.tsv`. Sources: https://en.wikipedia.org/wiki/Highland_Football_League and https://en.wikipedia.org/wiki/Lowland_Football_League (champions lists and play-off results).
+- Cup guests (Q285): the game models the real guests of each season. `sco-clubs.tsv` lists every League Cup and Challenge Cup entrant that is not in the database's four Scottish divisions, for each database season. The counts agree with the `clubs` field of each row (for example 2016/17 Challenge Cup: 30 + 12 B teams + 12 guests = 54). Sources: the Wikipedia season page of each cup, and the League Cup group stage page from 2016/17.
+- 2019/20 Scottish Cup (sco-150): the semi-finals (31 October and 1 November 2020) and the final (20 December 2020) are a late edition. The game plays them at their normal time (Q277). Source: https://en.wikipedia.org/wiki/2019–20_Scottish_Cup
+- 2019/20 Challenge Cup (sco-152): the final was not played. The game plays it (Q273).
+- 2020/21 Challenge Cup (sco-160) stays `not held`, because it was cancelled in real life.
+
+### 3. Club moves (Q279, Q280, Q290)
+
+All 22 season databases hold 12, 10, 10 and 10 clubs in the four Scottish divisions. This agrees with the real count of every season. No tier needs a club move, so no tier leaves a gap below it. Tier club rows added: 0.
+
+### 4. Reserve and B teams (Q289)
+
+No Scottish tier from 1 to 4 has a B team in any season. The Challenge Cup has Premiership under-20 teams (2016/17, 2017/18), under-21 teams (2018/19, 2019/20) and B teams (2021/22 to 2025/26). `sco-clubs.tsv` lists 103 such entries, one per team per season (division "Challenge Cup B team"). The database holds 15 of them: Celtic (2019/20 to 2025/26), Rangers (2021/22 to 2025/26) and Heart of Midlothian (2022/23 to 2025/26), all in the division "Reserve". The other 88 entries have no record. The build adds them as new club records.
+
+### Rows added to `sco-clubs.tsv`
+
+| Division | Rows | No database record |
+|---|---|---|
+| pyramid play-off (Highland League champion) | 12 | 0 |
+| pyramid play-off (Lowland League champion) | 12 | 2 |
+| League Cup guest | 25 | 1 |
+| Challenge Cup guest | 105 | 6 |
+| Challenge Cup B team | 103 | 88 |
+| Total | 257 | 97 |
+
+Each club is matched by name to the database of that season. Guests from other nations show their nation in `db_division`. Matches by hand: Connah's Quay Nomads (2701), Bohemians (1710, "Bohemian Football Club Dublin"), Waterford (1347, "Waterford United"), Tranent (6745, "Tranent Juniors FC"), Banks O' Dee (9581) and Broomhill 2021/22 (9211, "BSC Glasgow", the club's former name: https://en.wikipedia.org/wiki/Broomhill_F.C._(Scotland)).
+
+### Missing clubs for Max
+
+These real entrants have no club record in the database of their season. No record was added.
+
+- East Kilbride: pyramid play-off 2016/17 and 2018/19, League Cup 2017/18, Challenge Cup 2017/18 and 2018/19 (October 2016, 2017 and 2018 databases).
+- University of Stirling: Challenge Cup 2016/17 and 2017/18.
+- Cumbernauld Colts and Turriff United: Challenge Cup 2016/17.
+- 88 B and youth teams of the Challenge Cup, 2016/17 to 2025/26 (Q289: the build adds them).
+
+### Changes to `sco.tsv`
+
+Only the `notes` field changed, in 36 rows, and sco-150 got one `notes=` source:
+
+- sco-150: late edition note (Q277).
+- sco-152: the game plays the final (Q273).
+- `sco_third` rows from 2014/15 (sco-109 to sco-213, 14 rows): the pyramid play-off note (Q284).
+- League Cup rows 2016/17 to 2025/26 and Challenge Cup rows 2014/15 to 2025/26 except 2020/21 (21 rows): a pointer to the guest and B-team lists (Q285, Q289).
+
+## Second source, pass 2
+
+Date 2026-10-17. Second-source agent. Input: the 508 check lines with verdict `no second source` in `sco.check.tsv`. 155 of them hold `unknown`, `n/a` or an inference, so they get no new check. The other 353 lines are in `sco.check2.tsv`. Each second source is a page of another publisher than the first source of that fact, read today.
+
+| Verdict | Lines |
+|---|---|
+| agree | 165 |
+| disagree, settled | 6 |
+| disagree, still split (conflict) | 1 |
+| no second source | 181 |
+
+Main second sources:
+
+- IFAB Laws of the Game, Law 3, editions 2001/02 to 2016/17 (theifab.com downloads): "up to a maximum of three substitutes" in any official competition. This covers every `subs_used` = 3 to 2016/17 (113 lines). The 2018/19 and 2019/20 editions keep three for top-division first teams, which covers the Premiership in those two seasons.
+- Wikipedia League Cup and Challenge Cup final pages (match rules box) for the cup bench and substitutes. The first source of these facts is the league rulebook.
+- BBC Sport tables of October 2026 for the 2026/27 club counts and direct places, the Edinburgh Reporter (22 April 2026) for the 2026/27 names, and Groundhopper Guides for the 38 Premiership matches.
+- SPFL news and club pages (Clyde FC, Livingston FC, Airdrieonians FC) for the League Cup entrants of 2023/24 to 2026/27 and the Challenge Cup of 2019/20. The first source of these facts is Wikipedia.
+- STV for the 2021/22 Premiership bench and the 2020/21 Challenge Cup name.
+
+### Disagreements
+
+1. sco-111 bench (League Cup 2014/15). First: 5, from the SPFL rules of 1 June 2014, League Cup rule 5.1. Second: the 2015 final page gives "Seven named substitutes". Third: thecelticwiki lists 7 substitutes for each team in the final of 15 March 2015. Decision: conflict. The rule at the start of the season says 5, and the final used 7. No page dates a change. `sco.tsv` keeps 5. Max decides.
+2. sco-120 bench (Challenge Cup 2015/16). First: 7. Second: the 2016 final page box says "Five named substitutes", but its own line-ups list 7 for each team. Third: ESPN line-ups of the final (https://africa.espn.com/football/lineups/_/gameId/427895) show 7 for each team. Decision: first. No change.
+3. to 6. sco-136, sco-143, sco-144, sco-151 `subs_used` = "3 (plus a fourth in extra time)" (Challenge Cup and League Cup, 2017/18 to 2019/20, as listed in `sco.check2.tsv`). Second: the final pages give "Maximum of three substitutions", with no extra-time rule. No third publisher. Primary record: the SPFL rules of 19 January 2018 and 22 July 2019 allow "an additional substitute, a fourth in total" in extra time in both cups. Decision: first. The final page box is a general template. A Livingston FC report of 8 August 2017 also shows a fourth substitute in a League Cup tie. No change.
+7. sco-152 format (Challenge Cup 2019/20). First: "guest clubs enter in R2 or R3; as 2018/19; extra time and penalties". Second: the Airdrieonians FC draw page (26 June 2019) gives penalties after 90 minutes in R1 and R2, and the 8 non-Scottish guests enter in R3. Third: the SPFL R2, R3 and R4 pages say the same, and the SPFL rules of 22 July 2019 (Challenge Cup rule 4.6) give extra time only in the semi-finals and final. Decision: second.
+
+### Changes to `sco.tsv`
+
+- sco-152 `format`: now gives the entrants of each round (R1 24, R2 16 more, R3 18 more, 58 in all) and "a draw after 90 minutes goes to penalties, with extra time only in the semi-finals and final". Three `format=` URLs are added to `sources`.
+- No other field changed. Row ids and row order are unchanged. `rules_lint.py` gives 0 problems for `sco.tsv`, as before.
+
+### Notes for the lead
+
+- sco-144 (Challenge Cup 2018/19) says "extra time and penalties". The SPFL rules of January 2018 give extra time in all rounds. The rules of July 2019 drop it before the semi-finals. I did not check the 2018/19 rounds against another publisher.
+- `no second source` remains for these values: `subs_used` 3 in 2017/18 (all leagues) and 2018/19 to 2019/20 (tiers 2 to 4), the extra-time substitute of the 2017/18 Scottish Cup and the 2019/20 Challenge Cup, the league benches of every season, `subs_used` 5 in the leagues from 2022/23, the League Cup bench of 2005/06 and 2020/21, the Challenge Cup bench of 2019/20 and from 2021/22, SPFL rule C43 (`foreign` and `registration`), the 2026/27 windows, the 2026/27 Premiership `down`, and the 2026/27 `format` and `split` of tiers 2 to 4.
+- 34 of the 181 `no second source` lines are 2027/28 values that copy 2026/27 (an inference). No page states 2027/28 rules yet.
