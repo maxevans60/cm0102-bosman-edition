@@ -35,3 +35,7 @@ These scripts build `docs/research/data-map/`: a name for each global that game 
 3. `check_maps.py` checks the data map: one row per global in scope, valid columns, links, a quote for each high row, and no code of the original in either map. `check_maps.py --selftest` plants one bad row of each kind and checks that each fails.
 4. `data_batches.py data data-script [<run> ...]` cuts the globals that are not high into batches of about 70 and writes the batch lists and inputs to the work folder. The naming agents follow `sweep/BRIEF-data.md` in the work folder.
 5. After a wave, `data_merge.py data-wNN data-script [<earlier waves> ...] [--sample 60]` checks the part files against the batch lists, makes names unique and writes `runs-data/data-wNN/names.jsonl`. With `--sample`, it also writes the input for the sample check. Then run steps 2 and 3 with the new run last.
+
+## Confidence pass
+
+`dossier.py` shows each global with its data map name and confidence, and each caller and callee with its confidence when `--names` rows carry one. `write_docs.py` adds the note of `docs/research/function-map/file-notes.tsv` to the purpose of its rows. The scope, batch and check scripts of the pass live in the work folder (`sweep/CONF-PLAN.md`), like those of the review pass.
