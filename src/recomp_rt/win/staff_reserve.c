@@ -41,13 +41,16 @@
  *   the count),
  * - loop 4: one manager for a club with no manager (+0xcf), in a selected nation with a division (+0x57) and a
  *   reputation, or with reputation 7501 or more; and one for each national team (nat_club.dat) with none.
- * A file value of -1 is an empty slot. The estimate is not a proven upper limit: the game clears some manager
- * links before 0x527240 runs (the staff pass at 0x52d353 and the trim 0x524d70), so loop 4 can need more. */
+ * A file value of -1 is an empty slot. Before 0x527240 runs, the game clears some manager links that the files
+ * hold (the staff pass, database_links.c database_leave_club and the national manager, and the trim 0x524d70),
+ * so loop 4 can need more than the files show: up to 9 % more in the 22 data sets that were measured. The
+ * estimate therefore adds a margin of LOOP4_MARGIN_PCT % of the loop 4 count. */
 static const char *const league_nations[] = {
     "Argentina", "Australia", "Belgium", "Brazil", "Croatia", "Denmark", "England", "Finland", "France", "Germany",
     "Greece", "Holland", "Republic Of Ireland", "Italy", "Japan", "Northern Ireland", "Norway", "Poland", "Portugal",
     "Russia", "Scotland", "South Korea", "Spain", "Sweden", "Turkey", "United States", "Wales"};
-enum { NATION_REC = 290, CLUB_REC = 0x245, NAME_LEN = 52, MAX_NATIONS = 1024 };
+enum { NATION_REC = 290, CLUB_REC = 0x245, NAME_LEN = 52, MAX_NATIONS = 1024, LEAGUE_NATIONS = 27,
+       LOOP4_MARGIN_PCT = 10 };
 
 /* The whole file <dir>/<name> (any case) in a new buffer, or NULL. */
 static uint8_t *read_data_file(const char *dir, const char *name, size_t *size)
@@ -82,14 +85,15 @@ static int per_club(int rep, int k)            /* loop 1 from 0x527429, loops 2 
     return n < 2 ? 1 : n > k - 1 ? k : n;
 }
 
-/* The estimate, or -1 when a file is missing. */
+/* The estimate, or -1 when a file is missing, a file size is not a whole number of records, or fewer than the 27
+ * league nations match: the caller then gives the large reserve. */
 static long staff_reserve_estimate(const char *dir)
 {
     size_t nn, nc, nk;
     uint8_t *na = read_data_file(dir, "nation.dat", &nn), *cl = read_data_file(dir, "club.dat", &nc),
             *nk_ = read_data_file(dir, "nat_club.dat", &nk);
-    long need = -1;
-    if (na && cl && nk_) {
+    long need = -1, loop4 = 0;
+    if (na && cl && nk_ && nn % NATION_REC == 0 && nc % CLUB_REC == 0 && nk % CLUB_REC == 0) {
         int32_t sel[64], eng = -2;
         int nsel = 0;
         for (size_t i = 0; i + NATION_REC <= nn && i / NATION_REC < MAX_NATIONS; i += NATION_REC) {
@@ -102,6 +106,7 @@ static long staff_reserve_estimate(const char *dir)
                     if (!strcasecmp(name, "England")) eng = get32(na + i);
                 }
         }
+        if (nsel < LEAGUE_NATIONS) goto out;
         static const int offs[3] = {0x19f, 0x1b3, 0x1cf}, ks[3] = {5, 7, 3};
         need = 0;
         for (size_t i = 0; i + CLUB_REC <= nc; i += CLUB_REC) {
@@ -117,11 +122,13 @@ static long staff_reserve_estimate(const char *dir)
                     for (int k = 0; k < ks[l]; k++) filled += get32(c + offs[l] + 4 * k) != -1;
                     if (per_club(rep, ks[l]) > filled) need += per_club(rep, ks[l]) - filled;
                 }
-            if (get32(c + 0xcf) == -1 && ((selected && get32(c + 0x57) != -1 && rep != 0) || rep >= 7501)) need++;
+            if (get32(c + 0xcf) == -1 && ((selected && get32(c + 0x57) != -1 && rep != 0) || rep >= 7501)) loop4++;
         }
         for (size_t i = 0; i + CLUB_REC <= nk; i += CLUB_REC)
-            if (!(get32(nk_ + i + 0x53) == eng && get16(nk_ + i + 0x80) <= 500) && get32(nk_ + i + 0xcf) == -1) need++;
+            if (!(get32(nk_ + i + 0x53) == eng && get16(nk_ + i + 0x80) <= 500) && get32(nk_ + i + 0xcf) == -1) loop4++;
+        need += loop4 + (loop4 * LOOP4_MARGIN_PCT + 99) / 100;
     }
+out:
     free(na);
     free(cl);
     free(nk_);
@@ -133,7 +140,7 @@ uint32_t rt_staff_reserve_size(void)
     uint32_t r = RESERVE_BASE;
     if (options_enum(OPT_DATABASE) == DATABASE_CUSTOM && win_data_set_dir()[0]) {
         long need = staff_reserve_estimate(win_data_set_dir());
-        if (need > (long)RESERVE_BASE) r = RESERVE_CUSTOM;
+        if (need < 0 || need > (long)RESERVE_BASE) r = RESERVE_CUSTOM;
         if (getenv("RECOMP_SCREEN_LOG"))
             fprintf(stderr, "recomp: staff reserve estimate %ld for Select All, reserve %u\n", need, r);
     }
