@@ -1352,6 +1352,22 @@ The merge needed one fix. The agents used five prefixes for two pieces of code. 
 
 No function of the run is cited.
 
+#### Wave lib-b (tier 6, Sonnet, 2026-10-17)
+
+Run `sweep-lib-b`: 5 Sonnet agents named the other 125 library functions (0x93a190 to 0x944c10). Each agent took 1 to 3 minutes and 112,000 to 150,000 tokens. Confidence: 63 high, 59 medium, 3 low. With this run every row of `names.tsv` has an Opus or Sonnet name: 6,613 opus and 250 sonnet.
+
+This part of the library is the rest of the font code. It holds the remaining TrueType opcode handlers, the font file loader (`tt_font_*`, `tt_read_*`), the glyph outline object, the byte stream (`input_stream_*`), a memory context (`lib_ctx_*`) and the T2K scaler with its scan converter (`t2k_*`). One agent read the stream tag T2KG (0x54324b47) and the game's `FONT` class as the only caller, and the HD text research also names the T2K engine. 0x944c10 is the `EnumPrintersA` import thunk.
+
+The merge needed one fix. One agent named five stream functions `t2k_stream_*`, while another named the same 0x1d-byte stream record `input_stream_*`. All now use `input_stream_`. One fragment now takes its parent's name `t2k_scaler_new`.
+
+3 functions of the run are cited. 1 agrees and 2 agree in area. None differs.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x93de70 | Named in 2026-10-16-hd-text.md | `map_view_init_with_setjmp_guard` (Haiku) | `t2k_new_transformation` | agrees in area |
+| 0x93fa90 | Named in 2026-10-16-hd-text.md | `lib_setjmp_guarded_cleanup` (Haiku) | `t2k_delete_t2k` | agrees in area |
+| 0x944c10 | Named in 2026-10-14-import-inventory.md | `enum_printers_a_import_thunk` (Haiku) | `EnumPrintersA_import_thunk` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
