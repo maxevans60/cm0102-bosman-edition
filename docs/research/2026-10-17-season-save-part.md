@@ -7,6 +7,7 @@ Date 2026-10-17. Original: `clean-3968/cm0102.exe` 3.9.68, virtual addresses. Co
 - A save keeps the start year and `changing_rules` of its game in a new part, `bosman_season.dat`, in the save container.
 - The runtime writes the part **only** when the start year is not 2001 or `changing_rules` is on. A base game save (2001/02, changing rules off) has no part, so it is byte for byte the save of 0.5.0.
 - A save without the part loads as 2001 with changing rules off. This covers every save of 0.5.0 and earlier.
+- A damaged part stops the load with a message box. A save whose part cannot be written makes the save fail with a message box (section 3).
 - The original never reads the part (section 2). The runtime adds it on the host side after the original's save returns, and reads it on the host side before the original's load runs (section 3). Neither step touches the game's memory.
 
 ## 1. The container
@@ -44,9 +45,9 @@ The matcher 0x933a00 (pattern, name): an equal string matches (0x933a53..0x933a8
 - `check_saved_game_file` 0x838e10 calls `zget_archive_id` 0x9331c0 (0x838e8d) and tests the archive id 0x16 (0x838e97). It reads the header only. The new part does not change the archive id.
 - The original itself added a part in a later version: `save_fifa_transfer_rules` 0x8395b0 adds a part (name at 0xa82518) with `zopen` in write mode (0x8395fd), and `load_fifa_transfer_rules` 0x839760 reads it by name. An older save without that part loads. This is the same pattern.
 
-### 2.4 Inference
+### 2.4 A run with the 0.5.0 build
 
-A save with the part loads in the original and in 0.5.0 as a 2001/02 game: they ignore the part. This was not run in the original; it follows from 2.1 to 2.3.
+The 0.5.0 build (`wt-ref-0.5.0/build/cm0102_recomp`) loaded a save of a 2010/11 game with the part (made by `tests/seasons/season_core_run.py --keep`). It showed the first news screen on day 204 of 2010, played 3 days on holiday and saved (result 1, exit code 0). Its new save has no part: 0.5.0 does not write it, so that save later loads in 0.6.0 as a 2001/02 game with 2010 dates. The game date comes from the save, so the 0.5.0 build plays the 2010 calendar with the year sites at 2001. The original (the Windows program) was not run; for it the result follows from 2.1 to 2.3.
 
 ## 3. The writer and the reader in the runtime
 
@@ -63,16 +64,24 @@ A save with the part loads in the original and in 0.5.0 as a 2001/02 game: they 
 The rename in `files.c` (MoveFileA) happens only with the bit, so a hook there would miss the saves without it. The runtime therefore wraps 0x82e430 (`RT_WRAP` in `season.c`). When the original returns 1, the file at the path is whole. The wrap then:
 
 1. opens the file on the host (`win_existing_file` in `files.c`: the user folder or the save folder, as the game's own write),
-2. checks the header: version 1 to 4, count below 999 (the limit of `zopen`, 0x932a3e), no row of that name yet,
+2. checks the header: version 1 to 4, a count below 999 for a new row (the limit of `zopen`, 0x932a3e),
 3. writes the part at the end of the file (with the byte run code for version 2 and 4),
-4. writes the new row (offset, size 16, name, the other bytes 0) at row `count`,
-5. writes count + 1.
+4. writes the row (offset, size 16, name, the other bytes 0): a new row at row `count`, or the row of the part when the file has one already (then the row points to the new bytes),
+5. for a new row, writes count + 1.
 
-The order keeps the file whole: if a write stops before step 5, the file is the old save without the part. A failure prints a message on stderr. The game's memory, its heap and its stack do not change, so the game plays on as before.
+The order keeps the file whole: if a write stops before step 5, the file is the old save without the part. These steps do not change the game's memory, heap or stack.
+
+When a step fails, the file stays a whole save without the part, which would load as a 2001/02 game. The wrap then shows a message box of the game (0x5e8290, texts in runtime memory) with plain words ("The game could not write its season ... Do not use this save ...") and returns 0, the result of a failed save. The box is the only change to the game in this case.
 
 ### 3.2 The reader
 
-The runtime wraps `load_game_data` 0x82a9c0. Before the original runs, it reads the header and the rows of the file on the host side, finds the row named `bosman_season.dat`, decodes the part and sets the start year and changing rules. Without the row it sets 2001 and off. The load needs the start year at once: it builds the league table from the game year at 0x82b845 (`key_nation_build_table` 0x667150), and the year sites of `tools/recomp/seasons.py` read the start year. A part that cannot be read (a bad version, a length below 16, a year outside 2001 to 2099, changing rules not 0 or 1) gives 2001 and off, with a message.
+The runtime wraps `load_game_data` 0x82a9c0. Before the original runs, it reads the header and the rows of the file on the host side, finds the row named `bosman_season.dat`, decodes the part and sets the start year and changing rules. Without the row it sets 2001 and off. The load needs the start year at once: it builds the league table from the game year at 0x82b845 (`key_nation_build_table` 0x667150), and the year sites of `tools/recomp/seasons.py` read the start year. Rules of the reader:
+
+- A file that is not a container (a bad header, rows that cannot be read) has no part for the runtime: the original's load then reports the file itself.
+- A part of any version from 1 on is read when its length is at least 16 and not larger than its size. A later version keeps the first four fields (section 4), so this version reads the year and changing rules of a later save.
+- A part is damaged when: its size is below 16 or above 1 MiB (a limit that only stops a damaged row from asking for gigabytes; version 1 has 16 bytes), its bytes end early or do not decode, its version is 0, its length is below 16 or larger than its size, the year is outside 2001 to 2099, or changing rules is not 0 or 1.
+- A damaged part stops the load before the original runs. The wrap shows a message box of the game: "This saved game cannot be loaded. Its season data is damaged, or it comes from a newer version of the Bosman Edition." Then it returns 0. The original's callers treat 0 as a failed load: the load list call at 0x81c53a shows its own box "Setup..cpp 1044" (from 0x81c668) and the game ends, as for any failed load in the original. A test run showed both boxes and the end (code 255).
+- A load that fails in the original sets the values of a new game again.
 
 ### 3.3 New game and end of game
 
@@ -94,15 +103,17 @@ Little endian, 16 bytes, stored in the container like any part.
 Rules for later slices:
 
 - A new field goes after the last field. The length grows. The version grows by 1. No field changes its meaning or its place.
-- A reader reads the fields it knows that lie inside the length. A field outside the length takes its old meaning (the value of a game before that field). It ignores bytes after the fields it knows.
+- A reader reads the fields it knows that lie inside the length. A field outside the length takes its old meaning (the value of a game before that field). It ignores bytes after the fields it knows. A newer version is not a reason to refuse a part.
+- A later field must not need more than 1 MiB, or the reader limit must grow with it.
 - The part is written only when the game is not the base game. A field that a base game needs must not force the part into a base game save.
 
 ## 5. Checks
 
-- `tests/seasons/season_core_run.py`: a base game save has no part; with changing rules on the part holds 2001 and 1; a 2010 game's part holds 2010 and 1; the 2010 save loads in a new folder with the year 2010 and saves the part again.
-- `tests/smoke/smoke_run.py --same-save` against the 0.5.0 build: equal saves for start.sav, prematch.sav, Yeovil and a new base game. The run `rules-on` of a new game differs only in this part.
+- `tests/seasons/season_core_run.py`: a base game save has no part; with changing rules on the part holds 2001 and 1; a 2010 game's part holds 2010 and 1, or 2010 and 0 with changing rules off; each 2010 save loads in a new folder with the year 2010 and saves the same part again; a part of version 2 with 24 bytes loads; a part with the year 1999 is refused with the box.
+- `tests/smoke/smoke_run.py --same-save` against the 0.5.0 build: equal saves for start.sav, prematch.sav, Yeovil and a new base game. The run `rules-on` of a new game must have this part and differs only in it.
+- The failure path of the writer (3.1) has no automatic test: a test cannot make the write fail without a test switch.
 
 ## 6. Unknowns
 
 - What the option bit 0x20000000 is called in the game's options screen, and its default. It does not change this design.
-- A 0.6.0 save with the part that a 0.5.0 build loads plays as a 2001/02 game with the later database's dates (inference from section 2). No test covers it.
+- How the year sites at 2001 change a 2010 game that the 0.5.0 build plays on for a long time (2.4).

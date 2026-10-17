@@ -320,12 +320,13 @@ def without_intro_click(steps):
 REF_BUILD = None
 
 
-def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=()):
+def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None):
     """Plays the runs at the same time, each with its option lines, and compares each saved game with
     the save of the first run. save: a saved game to copy into each user folder first. allowed: names of
     parts that may differ (an accepted difference, for example the parts that depend on the memory layout of
     the game, Q152); a difference in any other part fails. allowed may also be a dict {run name: parts}: then
-    only those runs may differ, each in its own parts."""
+    only those runs may differ, each in its own parts. required: {run name: part}: that run's save must hold
+    the part (0.6.0 slice 11: rules-on of a new game has the season part)."""
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
 
@@ -383,6 +384,10 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
         first = runs[0][0]
         want = open(saves[first], "rb").read()
         for name, _ in runs[1:]:
+            if required and name in required and required[name] not in save_parts(saves[name]):
+                failed += 1
+                print(f"FAIL  {name}: the save has no part {required[name]}")
+                continue
             if open(saves[name], "rb").read() == want:
                 print(f"ok    {name}: the save is the same as {first}")
                 continue
@@ -471,7 +476,8 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
     if save_name is None:
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
         return compare_runs(program, game, mode, new_game_runs(SAME_SAVE_RUNS),
-                            without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,)})
+                            without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,)},
+                            required={"rules-on": RULES_PART})
     # --save: load the saved test game, then the same Go on Holiday steps as the new game.
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))
     import fixtures  # noqa: E402  (fixtures.py imports this file)

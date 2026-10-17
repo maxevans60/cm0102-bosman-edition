@@ -201,8 +201,10 @@ RT_WRAP(005e8290, message_box)
         return;
     }
     if (getenv("RECOMP_SCREEN_LOG")) {     /* the box waits for a click: say which box (test runs) */
+        /* Every 32-bit address lies inside g_mem (rt_init maps 4 GB and a page), so the reads stay inside;
+         * the precision stops at 200 bytes when a text has no end. */
         uint32_t title = rt_arg(0), text = rt_arg(1);
-        fprintf(stderr, "recomp: message box from %#x: %s: %s\n", rd32(g_mem, cpu.esp),
+        fprintf(stderr, "recomp: message box from %#x: %.200s: %.200s\n", rd32(g_mem, cpu.esp),
                 title ? (const char *)(g_mem + title) : "", text ? (const char *)(g_mem + text) : "");
     }
     in_box++;

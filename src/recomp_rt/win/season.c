@@ -74,13 +74,31 @@ int season_set_new_game(int start_year, int changing_rules)
     /* The start screen set the game date to 1 January of the old start year (0x81b938). A new game takes its
      * season from the year of that date (key_nation_build_table 0x667150, called at 0x81cf37). */
     if ((int16_t)rd16(g_mem, GAME_DATE + 2) != start_year) {
-        Cpu saved = cpu;
+        uint32_t ecx = cpu.ecx;
         cpu.ecx = GAME_DATE;
         uint32_t args[4] = {1, 0, (uint32_t)start_year, 0xffffffffu};
-        rt_callback(DATE_SET, 4, args);
-        cpu = saved;
+        rt_callback(DATE_SET, 4, args);        /* it gives back the registers, except while it unwinds */
+        if (!rt_unwinding) cpu.ecx = ecx;
     }
     return 1;
+}
+
+/* A message box of the game (0x5e8290, cdecl (title, text, 0)) with plain words for the player. The texts
+ * live in runtime memory (win_static_alloc), not in the game's heap. */
+#define MESSAGE_BOX 0x005e8290u
+#define BOX_TEXT 400u
+static void season_box(const char *title, const char *text)
+{
+    static uint32_t title_at, text_at;
+    if (!title_at) {
+        title_at = win_static_alloc(64);
+        text_at = win_static_alloc(BOX_TEXT);
+    }
+    snprintf((char *)g_mem + title_at, 64, "%s", title);
+    snprintf((char *)g_mem + text_at, BOX_TEXT, "%s", text);
+    fprintf(stderr, "recomp: season box: %s: %s\n", title, text);
+    uint32_t args[3] = {title_at, text_at, 0};
+    rt_callback(MESSAGE_BOX, 3, args);
 }
 
 /* The part of a game: written only when the game is not 2001 with changing rules off. */
@@ -141,11 +159,13 @@ static int add_part(const char *host)
     uint8_t head[12], row[ROW_SIZE];
     if (!read_at(fd, 0, head, 12)) goto done;
     uint32_t version = get32(head), count = get32(head + 8);
-    if (version < 1 || version > 4 || count >= MAX_PARTS) goto done;
+    if (version < 1 || version > 4 || count > HEADER_ROWS) goto done;
+    uint32_t at = count;                        /* the row of the part: a new row, or the row it has */
     for (uint32_t k = 0; k < count; k++) {
         if (!read_at(fd, 12 + (int64_t)k * ROW_SIZE, row, ROW_SIZE)) goto done;
-        if (!strncmp((const char *)row + ROW_NAME, PART_NAME, NAME_SIZE)) goto done;   /* there already */
+        if (!strncmp((const char *)row + ROW_NAME, PART_NAME, NAME_SIZE)) { at = k; break; }
     }
+    if (at == count && count >= MAX_PARTS) goto done;
     uint8_t data[PART_SIZE], stored[2 * PART_SIZE];
     put32(data, PART_VERSION);
     put32(data + 4, PART_SIZE);
@@ -156,52 +176,61 @@ static int add_part(const char *host)
     else memcpy(stored, data, PART_SIZE);
     int64_t end = host_seek(fd, 0, SEEK_END);
     if (end < 12 + (int64_t)HEADER_ROWS * ROW_SIZE || end > 0x7fffffff) goto done;
-    /* The bytes first, then the row, then the count: a write that stops half way leaves the old file whole. */
+    /* The bytes first, then the row, then the count: a write that stops half way leaves the old file whole.
+     * A part that is there already gets the new bytes at the end, and its row points to them. */
     if (!write_at(fd, end, stored, n)) goto done;
     memset(row, 0, sizeof row);
     put32(row, (uint32_t)end);
     put32(row + 4, PART_SIZE);
     memcpy(row + ROW_NAME, PART_NAME, sizeof PART_NAME);
-    if (!write_at(fd, 12 + (int64_t)count * ROW_SIZE, row, ROW_SIZE)) goto done;
-    put32(head + 8, count + 1);
-    if (!write_at(fd, 8, head + 8, 4)) goto done;
+    if (!write_at(fd, 12 + (int64_t)at * ROW_SIZE, row, ROW_SIZE)) goto done;
+    if (at == count) {
+        put32(head + 8, count + 1);
+        if (!write_at(fd, 8, head + 8, 4)) goto done;
+    }
     bad = 0;
 done:
     host_close(fd);
     return bad;
 }
 
-/* Reads the part of the save file at host path into year and rules. 1 when the file has the part, 0 when
- * it has none, -1 when the file or the part cannot be read. */
+/* The largest part that a reader takes. Version 1 has 16 bytes; later versions add fields (rules of a
+ * season, names), so the limit leaves a wide margin. It only stops a damaged row from asking for a block of
+ * gigabytes. */
+#define PART_MAX (1u << 20)
+
+/* Reads the part of the save file at host path into year and rules. 1 when the file has the part, 0 when it
+ * has none (or the file is no container: the original's load then reports that itself), -1 when the part is
+ * damaged. A part of a later version is read: its first fields keep their meaning (see the top). */
 static int read_part(const char *host, int *year, int *rules)
 {
     int fd = host_open(host, O_RDONLY, 0);
-    if (fd < 0) return -1;
-    int result = -1;
-    uint8_t head[12], row[ROW_SIZE];
+    if (fd < 0) return 0;
+    int result = 0;
+    uint8_t head[12], row[ROW_SIZE], *stored = NULL, *data = NULL;
     if (!read_at(fd, 0, head, 12)) goto done;
     uint32_t version = get32(head), count = get32(head + 8);
     if (version < 1 || version > 4 || count > HEADER_ROWS) goto done;
-    result = 0;
     for (uint32_t k = 0; k < count; k++) {
-        if (!read_at(fd, 12 + (int64_t)k * ROW_SIZE, row, ROW_SIZE)) { result = -1; break; }
+        if (!read_at(fd, 12 + (int64_t)k * ROW_SIZE, row, ROW_SIZE)) goto done;
         if (strncmp((const char *)row + ROW_NAME, PART_NAME, NAME_SIZE)) continue;
         result = -1;
         uint32_t offset = get32(row), size = get32(row + 4);
-        if (size < 16 || size > 4096) break;
-        uint8_t stored[8192], data[4096];
+        if (size < 16 || size > PART_MAX) break;
         int64_t end = host_seek(fd, 0, SEEK_END);
-        if (end <= offset) break;
-        uint32_t room = (uint32_t)(end - offset) < sizeof stored ? (uint32_t)(end - offset) : sizeof stored;
-        if (!read_at(fd, offset, stored, room)) break;
+        if (end <= (int64_t)offset) break;
+        uint32_t room = end - offset < 2 * (int64_t)PART_MAX ? (uint32_t)(end - offset) : 2 * PART_MAX;
+        stored = malloc(room);
+        data = malloc(size);
+        if (!stored || !data || !read_at(fd, offset, stored, room)) break;
         if (version == 2 || version == 4) {
             if (!decode(stored, room, data, size)) break;
         } else {
             if (room < size) break;
             memcpy(data, stored, size);
         }
-        uint32_t length = get32(data + 4);
-        if (get32(data) < 1 || length < 16 || length > size) break;
+        uint32_t form = get32(data), length = get32(data + 4);
+        if (form < 1 || length < 16 || length > size) break;
         uint32_t y = get32(data + 8), r = get32(data + 12);
         if (y < SEASON_FIRST_YEAR || y > SEASON_LAST_YEAR || r > 1) break;
         *year = (int)y;
@@ -210,6 +239,8 @@ static int read_part(const char *host, int *year, int *rules)
         break;
     }
 done:
+    free(stored);
+    free(data);
     host_close(fd);
     return result;
 }
@@ -222,14 +253,20 @@ void o_0082e430(void);
 RT_WRAP(0082e430, save_game)
 {
     char path[1024];
-    snprintf(path, sizeof path, "%s", win_str(rt_arg(0)));
+    snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
     o_0082e430();
     if (rt_unwinding || cpu.eax != 1 || !part_needed()) return;
     char host[2048];
-    if (!win_existing_file(path, host, sizeof host) || add_part(host))
-        fprintf(stderr, "cm0102_recomp: the season of this game (%u, changing rules %s) could not be added to "
-                        "the save %s. The save loads as a 2001/02 game.\n", rt_season_year,
-                rules_now ? "on" : "off", path);
+    if (win_existing_file(path, host, sizeof host) && !add_part(host)) return;
+    /* The file stays a whole save without the part, which would load as a 2001/02 game: the save fails. */
+    fprintf(stderr, "cm0102_recomp: the season of this game (%u, changing rules %s) could not be added to the "
+                    "save %s.\n", rt_season_year, rules_now ? "on" : "off", path);
+    char text[BOX_TEXT];
+    snprintf(text, sizeof text, "The game could not write its season (%u/%02u) into the saved game. Do not use "
+             "this save: it would load as a 2001/02 game. Save the game again, perhaps under another name.",
+             rt_season_year, (rt_season_year + 1) % 100);
+    season_box("Save Game", text);
+    if (!rt_unwinding) cpu.eax = 0;             /* the result of a failed save */
 }
 
 void o_0082a9c0(void);
@@ -238,14 +275,19 @@ void o_0082a9c0(void);
  * before any code of the load runs: the load builds the league table from the game year (0x82b845). */
 RT_WRAP(0082a9c0, load_game)
 {
-    char host[2048];
+    char host[2048], path[1024];
     int year = SEASON_FIRST_YEAR, rules = 0;
-    const char *path = win_str(rt_arg(0));
+    snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
     if (win_existing_file(path, host, sizeof host) && read_part(host, &year, &rules) < 0) {
-        fprintf(stderr, "cm0102_recomp: the season part of the save %s cannot be read, so it loads as a 2001/02 "
-                        "game.\n", path);
-        year = SEASON_FIRST_YEAR;
-        rules = 0;
+        /* A damaged part: the season of the game is not known, so the game is not loaded. The load fails
+         * before any code of the original runs, as its own early failures do (0x82aa28), and the callers
+         * report a failed load (for example 0x81bef1). */
+        fprintf(stderr, "cm0102_recomp: the season part of the save %s is damaged, so the game does not load it.\n",
+                path);
+        season_box("Load Game", "This saved game cannot be loaded. Its season data is damaged, or it comes from "
+                   "a newer version of the Bosman Edition.");
+        if (!rt_unwinding) rt_ret_cdecl(0);
+        return;
     }
     rt_season_year = (uint32_t)year;
     rules_now = rules;
@@ -253,7 +295,13 @@ RT_WRAP(0082a9c0, load_game)
         fprintf(stderr, "recomp: the save is a game of %d/%02d with changing rules %s\n", year, (year + 1) % 100,
                 rules ? "on" : "off");
     o_0082a9c0();
-    if (!rt_unwinding && cpu.eax) game_on = 1;
+    if (rt_unwinding) return;
+    if (cpu.eax) {
+        game_on = 1;
+    } else {                                    /* a failed load: back to the values of a new game */
+        rt_season_year = (uint32_t)new_year;
+        rules_now = 0;
+    }
 }
 
 void o_00828110(void);
@@ -295,6 +343,7 @@ void season_log_turn(void)
     char now[512];
     size_t n = (size_t)snprintf(now, sizeof now, "start year %u, changing rules %s, fixture years", rt_season_year,
                                 rules_now ? "on" : "off");
+    /* Every 32-bit address lies inside g_mem (4 GB and a page, rt_init), so b + 0x1130 stays inside. */
     uint32_t store = rd32(g_mem, FIXTURES);
     for (uint32_t b = store, k = 0; b && k < 100 && n < sizeof now - 8; b = rd32(g_mem, b + 0x112c), k++) {
         if (k && b == store) break;            /* the blocks form a ring */

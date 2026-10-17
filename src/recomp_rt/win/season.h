@@ -9,9 +9,12 @@
  * - a new game takes the values of the last season_set_new_game call (start year 2001 and the option
  *   changing_rules before any call, or the year of the test variable RECOMP_START_SEASON);
  * - a loaded game takes the values of the season part of its save (bosman_season.dat). A save without the
- *   part, as every save of 0.5.0 and earlier and every base game save, is 2001 with changing rules off;
+ *   part, as every save of 0.5.0 and earlier and every base game save, is 2001 with changing rules off.
+ *   A damaged part stops the load with a message box. A part of a later version loads with the fields
+ *   that this version knows;
  * - at the end of a game (free_game_data 0x82ff40) the values go back to those of a new game.
- * The save writes the part only when the start year is not 2001 or changing rules is on. The format and the
+ * The save writes the part only when the start year is not 2001 or changing rules is on. When it cannot,
+ * the save reports a failure with a message box. The format and the
  * proof that the original skips the part are in docs/research/2026-10-17-season-save-part.md. */
 #ifndef RECOMP_SEASON_H
 #define RECOMP_SEASON_H

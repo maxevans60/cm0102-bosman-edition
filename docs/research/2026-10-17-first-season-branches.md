@@ -44,7 +44,7 @@ The Select Start Season screen 0x81e8d0 writes a split season as `%s %02d/%02d` 
 | 0x7cb4b8, 0x7cbdfd | pol_second create_schedule, create_table | +0x40 == 2001 | 38 rounds, 20 clubs | 34 rounds, 18 clubs | KEEP | gre-pol-cro pol_second: 18 from 2002/03, later changes. Slice 18 |
 | 0x7cbf4f | pol_second `PolSecond::set_up_rules` | +0x40 == 2001 | 6 down | 4 down | KEEP | 6, 4, 2, 3, then 4 to 2012/13, 3 in 2013/14. Slice 18 |
 | 0x66b1f1 | kor_league `KorLeague::create_schedule` | +0x40 == 2002 | A late first round after the 2002 World Cup (push 2002 at 0x66b1fb) | Generic template | KEEP | Later World Cup years may need a late start too: slices 18 and 27 |
-| 0x421513 | bel_super `BelSuper::select_teams` | +0x40 == 2001 | Swaps the two clubs | No swap: the champion hosts | KEEP | The reason for the 2001 swap is unknown. The other path fits hol-bel bel_super |
+| 0x421513 | bel_super `BelSuper::select_teams` | +0x40 == 2001 | Swaps the two clubs | No swap: the champion hosts | KEEP | The reason for the 2001 swap is unknown. The other path fits hol-bel bel_super. Slice 21 checks the host of each season |
 | 0x5bab83, 0x5bac2f, 0x5bace5 | fra_cup `FraCup::collect_entrants` | +0x40 - 2001 | Cap 184 for the lower clubs | Cap 182 | KEEP | The cap must be 222 - (Ligue 1 + Ligue 2 clubs): 182 to 2022/23, 184 in 2023/24, 186 from 2024/25. Slice 21 |
 | 0x5bd237 | fra_lge_cup `FraLgeCup::collect_entrants` | +0x40 - 2001 | First National pass capped at 16 | Capped at 14 | KEEP | Inference: in later seasons two Ligue 1 clubs can miss the cup. Slice 21 |
 | 0x5bf6c6 | fra_super `FraSuper::create_round_table` | +0x40 == 2001 | A fixed 2001 venue (push 2001 at 0x5bf6d3) | A random venue, the same date with +0x40 | KEEP | Slice 21 |
@@ -88,7 +88,7 @@ Entry +0x1b is the first season year of a league table entry. The other national
 | Address | File, function | Test | What the start in Y gives | Decision |
 |---|---|---|---|---|
 | 0x58b385 | fifa_confed `FifaConfed::FifaConfed` | year == 2001 | First odd year after Y (no edition in the run-up) | MOVE |
-| 0x58cd13 | fifa_confed `pick_continental_champion` | edition < 2002 | Never true (the edition is 2003 or later) | KEEP |
+| 0x58cd13 | fifa_confed `pick_continental_champion` | edition < 2002 | Never true: the edition is the first odd year after the start year, 2003 or later (0x58b36f..0x58b390) | KEEP, no later slice: dead code in every start year |
 | 0x92dfc4, 0x92eb46, 0x92f240 | world_cup `set_up_team_list`, `draw_groups`, `seed_teams` | edition == 2002 | Edition = Y + 1 rounded up to a World Cup year (0x92bf8c..0x92bfec): 2014 for Y = 2010. The 2002 branches never run | KEEP |
 | 0x797042 | oceania_club_champ constructor | year < 2001 | No effect for Y >= 2001 | KEEP |
 | 0x7988e9, 0x798918 | oceania_nations constructor | year < 2002 then 2002 | Y rounded up to an even year. Y = 2010 gives a 2010 edition on 5 March, in the run-up; there was no real 2010 edition | KEEP, cycle: slice 27 |
@@ -96,8 +96,8 @@ Entry +0x1b is the first season year of a league table entry. The other national
 | 0x92af4e, 0x92b24b | world_club_champ `pick_entrant` | edition == 2001 | First edition: winners of every continent from the history | MOVE |
 | 0x92b970, 0x92ba9c | world_club_cup `pick_qualifiers` | edition == 2001 | First edition: champions from the history | MOVE |
 | 0x632540, 0x63266c | inter_amer_cup `select_teams` | edition == 2001 | First edition: champions from the history | MOVE |
-| 0x5e1d65 | goldcup `GoldCup::set_up_team_list` (the Copa America) | edition == 2001 | The fixed 2001 field. Y = 2010 gives 2011 | KEEP |
-| 0x4c64fe | conmebol_seeding `assign_libertadores_places` | game year > 2002 | Brazil's places from the cup history for Y >= 2003 | KEEP |
+| 0x5e1d65 | goldcup `GoldCup::set_up_team_list` (the Copa America) | edition == 2001 | The fixed 2001 field. Y = 2010 gives 2011 | KEEP. Slice 27: the fields and years of 2015, 2016, 2019, 2021 and 2024 |
+| 0x4c64fe | conmebol_seeding `assign_libertadores_places` | game year > 2002 | Brazil's places from the cup history for Y >= 2003 | KEEP. Slice 26: the Libertadores places of each season |
 | 0x91f486 | wc_oceania_league `update_for_date` | year == 2001 | A campaign that began before the game starts at once in the first year | MOVE |
 
 The four MOVE sites that read the history need the history files of the database. The September 2010 ODB was not checked for them.
@@ -136,7 +136,7 @@ The access list of places (0x903d30..0x903db4) is the 2001 list. Later access li
 
 ## Not years
 
-Menubar.cpp 0x7647f7, 0x76488d, 0x764f7e (menu ids), news.cpp 0x78164b, 0x781671, 0x781697, 0x7835fb, 0x783602, 0x785102, 0x78510d, 0x785118 (news type ids, inference) and the glyph code at 0x93e9b4 compare ids, not years. They stay.
+Menubar.cpp 0x7647f7, 0x76488d, 0x764f7e (menu ids), news.cpp 0x78164b, 0x781671, 0x781697, 0x7835fb, 0x783602, 0x785102, 0x78510d, 0x785118 (news type ids, inference) and the glyph code at 0x93e9b4 compare ids, not years. They stay. Setup.cpp 0x833ca3 (`create_english_comps` 0x833750, named in the sweep with the +0x1b sites) is `mov word [esi+0x1b], ax`: it stores a register (ax, loaded from a local at 0x833c9a), not a constant. The other national create functions store the game year in the same way (`create_french_comps`: game year at 0x8340c6, stored at 0x8343ab). Inference: the local holds the game year, so the site moves with the start year already. It stays.
 
 ## Checks
 

@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/seasons/season_core_run.py <cm0102_recomp> <game folder> [--database <folder>] [--year y]
-        [--days n] [--only base|season]
+        [--days n] [--only base|season] [--keep <folder>]
 
 The checks, played at the same time:
     base-off    a new base game (2001/02, 3.9.68, changing_rules = off) saved after n days (default 14): its save
@@ -16,8 +16,14 @@ The checks, played at the same time:
     season-again  the same steps again: the save is byte for byte the same (the same clicks, the same game).
     season-italy  the season game with Italy selected too (the Italian leagues hold fixed 2001/02 fixture lists):
                 the first news screen is in July of the year and the fixture store holds no year before it.
+    season-off  the season game with changing_rules = off: the part holds the year and changing rules off.
     reload      loads the save of "season" in a new user folder with no RECOMP_START_SEASON, plays 3 days and
                 saves: the runtime reads the year from the part, and the new save has the part with the year.
+    reload-off  the same with the save of season-off: the new save keeps changing rules off.
+    later       the save of "season" with a part of a later version (version 2, 24 bytes): it loads with the
+                fields that this version knows, and the new save has a version 1 part.
+    damaged     the save of "season" with a damaged part (year 1999): the load is refused with a message box.
+--keep <folder> keeps the save of "season" there (for a check with another build).
 Each run uses -seed 1, the test clock and a new user folder. The steps are those of tests/smoke/smoke_run.py
 (Arsenal, or the first club of the list) in classic mode.
 """
@@ -71,6 +77,20 @@ def read_part(path):
     except KeyError:
         return None
     return struct.unpack_from("<4I", data, 0)
+
+
+def replace_part(src, dst, data):
+    """Writes dst: the save src with the bytes of its season part replaced by data (any length). The runtime
+    adds the part at the end of the file, so the new bytes go there and its row gets the new size."""
+    blob = bytearray(open(src, "rb").read())
+    sav = savfile.Sav(src)
+    m = sav.member(PART)
+    if m.offset != max(x.offset for x in sav.members):
+        raise ValueError("the season part is not the last part")
+    raw = savfile.encode(data) if sav.compressed else data
+    struct.pack_into("<i", blob, 12 + m.index * savfile.ENTRY_SIZE + 4, len(data))
+    with open(dst, "wb") as f:
+        f.write(bytes(blob[:m.offset]) + raw)
 
 
 def new_game_steps():
@@ -151,6 +171,7 @@ def main(argv):
     year = int(argv[argv.index("--year") + 1]) if "--year" in argv else 2010
     days = int(argv[argv.index("--days") + 1]) if "--days" in argv else 14
     only = argv[argv.index("--only") + 1] if "--only" in argv else None
+    keep = os.path.abspath(argv[argv.index("--keep") + 1]) if "--keep" in argv else None
     failed = []
 
     def fail(text):
@@ -161,7 +182,7 @@ def main(argv):
         steps = new_game_steps()
         season_env = {"RECOMP_START_SEASON": str(year)}
         jobs = {}
-        with concurrent.futures.ThreadPoolExecutor(5) as pool:
+        with concurrent.futures.ThreadPoolExecutor(6) as pool:
             if only in (None, "base"):
                 jobs["base-off"] = pool.submit(play, program, game, work, "base-off", {"changing_rules": "off"},
                                                steps, days)
@@ -170,6 +191,8 @@ def main(argv):
             if only in (None, "season"):
                 for name in ("season", "season-again"):
                     jobs[name] = pool.submit(play, program, game, work, name, {}, steps, days, season_env, database)
+                jobs["season-off"] = pool.submit(play, program, game, work, "season-off", {"changing_rules": "off"},
+                                                 steps, days, season_env, database)
                 jobs["season-italy"] = pool.submit(play, program, game, work, "season-italy", {}, italy_steps(), days,
                                                    season_env, database)
             results = {k: v.result() for k, v in jobs.items()}
@@ -206,6 +229,11 @@ def main(argv):
                 fail(f"season: the season part is {part}, not (1, 16, {year}, 1)")
             else:
                 print(f"ok    season: the save has the part with {year} and changing rules on")
+            opath = results.get("season-off", (None,))[0]
+            if opath and read_part(opath) != (1, 16, year, 0):
+                fail(f"season-off: the season part is {read_part(opath)}, not (1, 16, {year}, 0)")
+            elif opath:
+                print(f"ok    season-off: the save has the part with {year} and changing rules off")
             again = results["season-again"][0]
             if again and open(again, "rb").read() != open(path, "rb").read():
                 a, b = smoke_run.save_parts(path), smoke_run.save_parts(again)
@@ -221,25 +249,57 @@ def main(argv):
                     fail(f"season-italy: first news {news}, fixture years {sorted(years)}")
                 else:
                     print(f"ok    season-italy: with Italy, first news in July {year}, fixture years {sorted(years)}")
-            # The reload: the saved 2010 game in a new folder, with no test variable.
-            saved = os.path.join(work, "reload.sav")
-            shutil.copyfile(path, saved)
+            # Second round, from the saves of the first: reloads, a part of a later version and a damaged part.
             load = smoke_run.without_intro_click(fixtures.LOAD_STEPS) + ["400000 quit"]
             holiday = smoke_run.STEPS[smoke_run.STEPS.index("wait first-news") + 1:]
             holiday = [s for s in holiday if "dump" not in s and "quit" not in s]
-            rpath, rlog, took = play(program, game, work, "reload", {}, load[:-1] + holiday + load[-1:], 3,
-                                     database=database, save=saved)
-            print(f"run   reload: {'saved' if rpath else 'NO SAVE'} in {took:.0f} s", flush=True)
-            if not rpath:
-                fail(f"reload: no saved game; last lines: {rlog[-600:]!r}")
-            else:
+            reload_steps = load[:-1] + holiday + load[-1:]
+            refuse_steps = [s for s in load if s != "wait first-news"][:-1] + ["30000 quit"]
+            saves = {"reload": path}
+            if results.get("season-off", (None,))[0]:
+                saves["reload-off"] = results["season-off"][0]
+            later = os.path.join(work, "later.sav")
+            replace_part(path, later, struct.pack("<6I", 2, 24, year, 1, 7, 7))
+            saves["later"] = later
+            damaged = os.path.join(work, "damaged.sav")
+            replace_part(path, damaged, struct.pack("<4I", 1, 16, 1999, 1))
+            if keep:
+                shutil.copyfile(path, os.path.join(keep, f"season-{year}.sav"))
+            jobs = {}
+            with concurrent.futures.ThreadPoolExecutor(4) as pool:
+                for name, src in saves.items():
+                    saved = os.path.join(work, name + ".sav")
+                    if src != saved:
+                        shutil.copyfile(src, saved)
+                    jobs[name] = pool.submit(play, program, game, work, name, {}, reload_steps, 3, database=database,
+                                             save=saved)
+                dsave = os.path.join(work, "damaged-load.sav")
+                shutil.copyfile(damaged, dsave)
+                jobs["damaged"] = pool.submit(play, program, game, work, "damaged", {}, refuse_steps, 3,
+                                              database=database, save=dsave)
+                second = {k: v.result() for k, v in jobs.items()}
+            want = {"reload": (1, 16, year, 1), "reload-off": (1, 16, year, 0), "later": (1, 16, year, 1)}
+            for name, part_want in want.items():
+                if name not in second:
+                    continue
+                rpath, rlog, took = second[name]
+                print(f"run   {name}: {'saved' if rpath else 'NO SAVE'} in {took:.0f} s", flush=True)
+                if not rpath:
+                    fail(f"{name}: no saved game; last lines: {rlog[-600:]!r}")
+                    continue
                 if f"the save is a game of {year}/{(year + 1) % 100:02d}" not in rlog:
-                    fail("reload: the runtime did not read the year from the part")
+                    fail(f"{name}: the runtime did not read the year from the part")
                 part = read_part(rpath)
-                if part != (1, 16, year, 1):
-                    fail(f"reload: the season part of the new save is {part}")
+                if part != part_want:
+                    fail(f"{name}: the season part of the new save is {part}, not {part_want}")
                 else:
-                    print(f"ok    reload: the load read {year} from the part, and the new save has it")
+                    print(f"ok    {name}: the load read the part, and the new save has {part_want}")
+            dpath, dlog, took = second["damaged"]
+            print(f"run   damaged: {'saved' if dpath else 'no save'} in {took:.0f} s", flush=True)
+            if "season box: Load Game" not in dlog or "season log:" in dlog or dpath:
+                fail(f"damaged: the load was not refused with the box; last lines: {dlog[-600:]!r}")
+            else:
+                print("ok    damaged: the load is refused with a message box, and no game runs")
     print("PASS" if not failed else "FAIL")
     return 1 if failed else 0
 
