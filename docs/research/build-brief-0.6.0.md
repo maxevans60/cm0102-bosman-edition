@@ -18,7 +18,8 @@ Spec: `docs/specs/2026-10-16-seasons-0.6.0-spec.md` (Decisions, with the researc
 
 ## Same-save checks (every slice that touches game code)
 Use the `same-save-check` skill (`.claude/skills/same-save-check/SKILL.md`). With `G=/Users/max/Projects/cm0102/clean-3968` and `REF=/Users/max/Projects/cm0102/wt-ref-0.5.0/build/cm0102_recomp`:
-- **Base game against 0.5.0:** `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --ref-build $REF`, the same with `--save prematch.sav`, and `--same-save` without `--save` (a new game, `changing_rules = off`). Every save must equal the 0.5.0 save byte for byte.
+- **Q342 (Max, 2026-10-17):** from slice 13 on, the Setup Game text moves memory, so the base game is compared with the main build after slice 13, not with 0.5.0. Every slice adds its runs with the test switch `RECOMP_SEASON_CODE=off` (it turns the slice 11 year sites and the later season code off): with the season at 2001/02 and `changing_rules` off, the saves must be equal.
+- **Base game against 0.5.0 (slices 11, 12 and 14 only):** `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --ref-build $REF`, the same with `--save prematch.sav`, and `--same-save` without `--save` (a new game, `changing_rules = off`). Every save must equal the 0.5.0 save byte for byte.
 - **Yeovil:** the same with `--save yeovil.sav --days 7 --ref-build $REF`. If `--save` does not take a save outside the start list, add that to `smoke_run.py` in its own small block and say so.
 - **Repeatability of a moved season:** a new game in 2010/11 (September 2010 ODB) twice with the same steps gives equal saves.
 - A new switch adds itself to the `off` run of `SAME_SAVE_RUNS` and a pair `<name>-on` and `<name>-off` to `SAME_SAVE_RUNS` and `MATCH_RUNS`.
