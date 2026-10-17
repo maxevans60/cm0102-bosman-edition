@@ -114,6 +114,23 @@ def main(argv):
                 names = sorted(z.namelist())
             check(names == sorted(f"{n}/{f}" for f in FILES), f"{n}.zip holds the 20 data files in the folder {n}")
 
+        # The tool stops on a zip that does not match the signatures table, and leaves no zip.
+        src_zip = os.path.join(out1, "October 2003.zip")
+        for what in ("club.dat", "index.dat"):
+            tampered = os.path.join(work, "tampered-" + what)
+            os.makedirs(tampered)
+            with zipfile.ZipFile(src_zip) as zin, zipfile.ZipFile(os.path.join(tampered, "some name.zip"), "w", zipfile.ZIP_DEFLATED) as zout:
+                for info in zin.infolist():
+                    data = zin.read(info)
+                    if info.filename.endswith("/" + what):
+                        data = data[:-1] + bytes([data[-1] ^ 1])
+                    zout.writestr(info.filename, data)
+            bad_out = os.path.join(work, "bad-out-" + what)
+            r = subprocess.run([sys.executable, "-I", MAKE, "--season-dbs", tampered, "--out", bad_out, "--only", "October 2003"],
+                               capture_output=True, text=True)
+            check(r.returncode == 1 and (not os.path.exists(bad_out) or os.listdir(bad_out) == []),
+                  f"make_season_zips.py stops on a changed {what}: {r.stderr.strip()[:90]}")
+
         game, save = os.path.join(work, "game"), os.path.join(work, "save")
         os.makedirs(os.path.join(game, "Seasons"))
         os.makedirs(save)
@@ -154,6 +171,17 @@ def main(argv):
         check(tree_state(folder) == before, "prepare 2003 again: no file changed")
         rows, custom = scan(tool, game, save)
         check(rows["2003/04"][0] == STATUS["UNPACKED"], "scan: 2003/04 shows as unpacked")
+
+        cache = os.path.join(save, "Databases", ".identify-cache")
+        text = open(cache, encoding="utf-8").read() if os.path.exists(cache) else ""
+        check("October 2003" in text and text.count("\n") == 1, "the result of the recognition is kept in Databases/.identify-cache")
+        with open(cache, "w", encoding="utf-8") as f:
+            f.write("garbage without tabs\nmore\tgarbage\n")
+        out, _ = run(tool, "identify", folder)
+        check(out == "October 2003", "a damaged cache file changes nothing")
+        os.unlink(cache)
+        out, _ = run(tool, "identify", folder)
+        check(out == "October 2003" and os.path.exists(cache), "without the cache file the folder is read again and the file comes back")
 
         # 5. recognition by content
         moved = os.path.join(save, "Databases", "My own copy")

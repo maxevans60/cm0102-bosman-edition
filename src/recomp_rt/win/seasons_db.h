@@ -34,7 +34,7 @@ typedef enum {
     SEASONS_ROLE_OFFICIAL_VERSION,  /* 3.9.60 and 3.9.65: other versions of the 2001/02 data */
     SEASONS_ROLE_OFFICIAL_BASE,     /* 3.9.68: the data of 2001/02 and 2002/03 */
     SEASONS_ROLE_SEASON,            /* the database that a season uses */
-    SEASONS_ROLE_EXTRA,             /* another version of a season: shown as a version choice (Q252, Q257) */
+    SEASONS_ROLE_EXTRA,             /* an extra database of a season: shown as a version choice (Q252, Q257) */
     SEASONS_ROLE_NOT_SEASON         /* the Empty database: no clubs, no game */
 } SeasonsRole;
 
@@ -73,19 +73,19 @@ typedef enum {
 } SeasonsStatus;
 
 typedef struct {
-    const SeasonKnownDb *db;        /* a known extra version in Databases */
+    const SeasonKnownDb *db;        /* a known extra database in Databases */
     char folder[DBFOLDER_NAME];     /* its folder in Databases, whatever the player named it */
 } SeasonsExtra;
 
 typedef struct {
     int start_year;                 /* 2001 to 2025 */
-    char label[8];                  /* "2003/04" */
+    char label[16];                 /* "2003/04" */
     SeasonsEra era;
     const char *database;           /* the name of the season's database: "October 2003", "3.9.68" for the
                                        two official seasons, NULL when no database exists */
     SeasonsStatus status;
     char folder[DBFOLDER_NAME];     /* with SEASONS_UNPACKED: the folder in Databases that holds it */
-    int extra_count;                /* known other versions of this season in Databases (Update Team
+    int extra_count;                /* known extra databases of this season in Databases (the
                                        "extra version" rows; 3.9.60 and 3.9.65 too, when a folder holds them) */
     SeasonsExtra extra[SEASONS_EXTRA_MAX];
 } SeasonsEntry;
@@ -125,7 +125,7 @@ typedef enum {
 typedef struct {
     SeasonsPrepareStatus status;
     char name[DBFOLDER_NAME];       /* with OK: the folder name in Databases */
-    char path[1100];                /* with OK: the host path of the folder */
+    char path[1300];                /* with OK: the host path of the folder */
     int unpacked;                   /* 1 when this call unpacked the zip, 0 when the folder was there already */
     char error[240];                /* plain words, for the player; with NO_ZIP and FAILED */
     /* Optional: called after each of the 20 files with (done, 20). Set before the call. */

@@ -75,22 +75,105 @@ typedef struct {
     const SeasonKnownDb *db;
 } IdentCache;
 
-enum { CACHE_ROWS = 64 };
+/* The result per folder is kept in memory, and in the file .identify-cache in Databases, so that the SHA-256
+ * of a 45 MB database runs once for a folder and not at each start. A row counts when the path, both sizes
+ * and both modification times are the same. The file is a help only: the game works without it. */
+enum { CACHE_ROWS = 256 };
 static IdentCache cache[CACHE_ROWS];
 static int cache_used, cache_next;
+static char cache_loaded[1100];     /* the Databases folder whose file is loaded */
+
+static int parent_of(const char *folder, char *out, size_t room)
+{
+    const char *slash = strrchr(folder, '/');
+    if (!slash || slash == folder || (size_t)(slash - folder) >= room) return 0;
+    snprintf(out, room, "%.*s", (int)(slash - folder), folder);
+    return 1;
+}
+
+static void cache_add(const IdentCache *row)
+{
+    for (int i = 0; i < cache_used; i++)
+        if (!strcmp(cache[i].path, row->path)) { cache[i] = *row; return; }
+    cache[cache_next] = *row;
+    cache_next = (cache_next + 1) % CACHE_ROWS;
+    if (cache_used < CACHE_ROWS) cache_used++;
+}
+
+static void cache_load(const char *parent)
+{
+    if (!strcmp(cache_loaded, parent)) return;
+    snprintf(cache_loaded, sizeof cache_loaded, "%s", parent);
+    char file[1200], line[2048];
+    snprintf(file, sizeof file, "%s/.identify-cache", parent);
+    FILE *f = host_fopen(file, "r");
+    if (!f) return;
+    while (fgets(line, sizeof line, f)) {
+        IdentCache row;
+        char *col[6];
+        int n = 0;
+        line[strcspn(line, "\r\n")] = 0;
+        for (char *p = line; n < 6;) {
+            col[n++] = p;
+            char *t = strchr(p, '\t');
+            if (!t) break;
+            *t = 0;
+            p = t + 1;
+        }
+        if (n != 6 || strlen(col[0]) >= sizeof row.path) continue;
+        snprintf(row.path, sizeof row.path, "%s", col[0]);
+        row.club_size = strtoull(col[1], NULL, 10);
+        row.club_time = strtoll(col[2], NULL, 10);
+        row.staff_size = strtoull(col[3], NULL, 10);
+        row.staff_time = strtoll(col[4], NULL, 10);
+        row.db = NULL;
+        if (strcmp(col[5], "-")) {
+            row.db = seasons_db_known(col[5]);
+            if (!row.db) continue;                /* a name that the table no longer has: compute again */
+        }
+        cache_add(&row);
+    }
+    fclose(f);
+}
+
+static void cache_save(const char *parent)
+{
+    char file[1200], tmp[1210];
+    snprintf(file, sizeof file, "%s/.identify-cache", parent);
+    snprintf(tmp, sizeof tmp, "%s.tmp", file);
+    FILE *f = host_fopen(tmp, "w");
+    if (!f) return;
+    size_t pl = strlen(parent);
+    for (int i = 0; i < cache_used; i++) {
+        const IdentCache *c = &cache[i];
+        if (strncmp(c->path, parent, pl) || c->path[pl] != '/') continue;
+        fprintf(f, "%s\t%llu\t%lld\t%llu\t%lld\t%s\n", c->path, (unsigned long long)c->club_size,
+                (long long)c->club_time, (unsigned long long)c->staff_size, (long long)c->staff_time,
+                c->db ? c->db->name : "-");
+    }
+    int bad = ferror(f);
+    if (fclose(f) || bad || host_replace(tmp, file)) host_unlink(tmp);
+}
+
+/* The sizes and times of club.dat and staff.dat of a folder. 0 when a file is missing. */
+static int folder_files(const char *folder, char *club, size_t club_room, char *staff, size_t staff_room,
+                        HostStat *cs, HostStat *ss)
+{
+    return find_file(folder, "club.dat", club, club_room) && find_file(folder, "staff.dat", staff, staff_room) &&
+           !host_stat(club, cs) && !host_stat(staff, ss) && !cs->is_dir && !ss->is_dir;
+}
 
 const SeasonKnownDb *seasons_db_identify(const char *folder)
 {
-    char club[1100], staff[1100];
+    char club[1100], staff[1100], parent[1100];
     HostStat cs, ss;
-    if (!find_file(folder, "club.dat", club, sizeof club) || !find_file(folder, "staff.dat", staff, sizeof staff) ||
-        host_stat(club, &cs) || host_stat(staff, &ss) || cs.is_dir || ss.is_dir)
+    if (!folder_files(folder, club, sizeof club, staff, sizeof staff, &cs, &ss) || strlen(folder) >= sizeof cache[0].path)
         return NULL;
-    char key[1100];
-    snprintf(key, sizeof key, "%s", folder);
+    int have_parent = parent_of(folder, parent, sizeof parent);
+    if (have_parent) cache_load(parent);
     for (int i = 0; i < cache_used; i++) {
         IdentCache *c = &cache[i];
-        if (!strcmp(c->path, key) && c->club_size == cs.size && c->staff_size == ss.size &&
+        if (!strcmp(c->path, folder) && c->club_size == cs.size && c->staff_size == ss.size &&
             c->club_time == cs.mtime && c->staff_time == ss.mtime)
             return c->db;
     }
@@ -107,14 +190,23 @@ const SeasonKnownDb *seasons_db_identify(const char *folder)
         }
         if (!strcmp(k->club_sha256, club_hex) && !strcmp(k->staff_sha256, staff_hex)) found = k;
     }
-    IdentCache *c = &cache[cache_next];
-    snprintf(c->path, sizeof c->path, "%s", key);
-    c->club_size = cs.size; c->staff_size = ss.size;
-    c->club_time = cs.mtime; c->staff_time = ss.mtime;
-    c->db = found;
-    cache_next = (cache_next + 1) % CACHE_ROWS;
-    if (cache_used < CACHE_ROWS) cache_used++;
+    IdentCache row;
+    snprintf(row.path, sizeof row.path, "%s", folder);
+    row.club_size = cs.size; row.staff_size = ss.size;
+    row.club_time = cs.mtime; row.staff_time = ss.mtime;
+    row.db = found;
+    cache_add(&row);
+    if (hashed && have_parent) cache_save(parent);      /* only a hash is worth a write */
     return found;
+}
+
+/* 1 when the folder has the file sizes of this database. A fast test that reads no content. */
+static int sizes_match(const char *folder, const SeasonKnownDb *row)
+{
+    char club[1100], staff[1100];
+    HostStat cs, ss;
+    return folder_files(folder, club, sizeof club, staff, sizeof staff, &cs, &ss) && cs.size == row->club_size &&
+           ss.size == row->staff_size;
 }
 
 /* ---- The list for the Choose Season screen ---- */
@@ -312,7 +404,9 @@ SeasonsPrepareStatus seasons_db_prepare_in(const char *game_dir, const char *sav
     int n = dbfolders_list(save_dir, names, DBFOLDER_MAX), pick = -1;
     for (int i = 0; i < n; i++) {
         char path[1100];
-        if (!dbfolders_path(save_dir, names[i], path, sizeof path) || seasons_db_identify(path) != row) continue;
+        if (!dbfolders_path(save_dir, names[i], path, sizeof path) || !sizes_match(path, row) ||
+            seasons_db_identify(path) != row)
+            continue;
         if (pick < 0 || !strcmp(names[i], row->name)) pick = i;
     }
     if (pick >= 0) {
@@ -345,7 +439,7 @@ SeasonsPrepareStatus seasons_db_prepare_in(const char *game_dir, const char *sav
         return r->status;
     }
     if (!exists_dir(dbs)) host_mkdir(dbs);
-    char dest[1200];
+    char dest[1300];
     for (int k = 1; k < 10; k++) {                /* never replace a folder of the player */
         if (k == 1) snprintf(r->name, sizeof r->name, "%s", row->name);
         else snprintf(r->name, sizeof r->name, "%s (%d)", row->name, k);
