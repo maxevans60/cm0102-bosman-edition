@@ -3286,8 +3286,8 @@ address	file	name	confidence	model	cited_in
 0x682e10	league.cpp	League::pay_prize_money	high	opus	2026-10-16-sweep-season-end.md
 0x682f70	league.cpp	League::calc_prize_fund	high	sonnet	
 0x683010	league.cpp	League::pay_tv_rights	high	opus	
-0x6830b0	league.cpp	League::move_club_to_division	high	sonnet	
-0x6831a0	league.cpp	League::relegate_club_to_division	high	sonnet	
+0x6830b0	league.cpp	League::move_club_to_division	medium	opus	
+0x6831a0	league.cpp	League::relegate_club_to_division	medium	opus	
 0x683210	league.cpp	league_compare_table_rows	high	opus	
 0x683410	league.cpp	league_compare_table_rows_h2h	high	opus	
 0x6834f0	league.cpp	league_compare_h2h_rows	high	opus	
@@ -3377,7 +3377,7 @@ address	file	name	confidence	model	cited_in
 0x9364c0	library_without_asserts	glyph_hint_set_font_params	medium	sonnet	
 0x936510	library_without_asserts	glyph_hint_outline_and_get_advance	medium	opus	
 0x9365d0	library_without_asserts	glyph_hint_create	medium	sonnet	
-0x936840	library_without_asserts	glyph_hint_destroy	high	sonnet	
+0x936840	library_without_asserts	glyph_hint_destroy	medium	opus	
 0x9368e0	library_without_asserts	glyph_hint_set_size	medium	sonnet	
 0x936930	library_without_asserts	glyph_hint_scale_font_zones	medium	opus	
 0x936e80	library_without_asserts	tt_round_to_double_grid	medium	sonnet	
@@ -3598,7 +3598,7 @@ address	file	name	confidence	model	cited_in
 0x68cfc0	main.cpp	LLIST_NODE::LLIST_NODE	high	opus	
 0x68d010	main.cpp	LLIST_NODE::~LLIST_NODE	high	opus	2026-10-15-holiday-next-match-inventory.md
 0x68d020	main.cpp	LLIST::LLIST	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md
-0x68d040	main.cpp	LLIST::~LLIST	high	sonnet	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md
+0x68d040	main.cpp	LLIST::~LLIST	medium	opus	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md
 0x68d080	main.cpp	LLIST::clear	high	opus	
 0x68d0d0	main.cpp	LLIST::add_tail	high	opus	2026-10-14-game-creation-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-foreign-and-tactics-positions.md
 0x68d1b0	main.cpp	LLIST::get_next	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-16-foreign-and-tactics-positions.md

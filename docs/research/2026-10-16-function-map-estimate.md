@@ -1975,6 +1975,33 @@ The checkers took 695,699 tokens, about 4,490 per row, and 1 to 2 minutes each.
 
 The five waves checked all 956 rows with new evidence. 198 rows reached high (c01 43, c02 45 after the revert, c03 57, c04 33, c05 20), and 5 rows have a new name. No global was found wrong. The waves took 5,280,830 tokens in all, under the plan's 7 to 8 million, because c02 to c05 ran on Sonnet. Confidence in `names.tsv` went from 5,457 high, 1,378 medium and 28 low to 5,655 high, 1,180 medium and 28 low. 1,208 rows are still not high: the 450 rows with no new evidence and 758 rows that a checker kept. Slice 6 lists them for Max. The brief has no check for a circular caller quote. 39 of the 57 raises of c03 and 11 of the 33 raises of c04 rest on a caller quote, and no sample check covered them.
 
+#### Caller quote check (2026-10-17)
+
+The brief has no check for a circular caller quote. So one Opus agent checked the 60 rows that c02 to c05 raised on a caller quote and that no sample check saw (c02 7, c03 39, c04 11, c05 3). Run `conf-caller` holds the input. It took 131,864 tokens. 56 rows are right and 4 are wrong, all from c03:
+- 0x6830b0 `League::move_club_to_division` and 0x6831a0 `League::relegate_club_to_division`. Their caller 0x595f00 names its targets after these two rows.
+- 0x68d040 `LLIST::~LLIST`. Its caller 0x497910 is high only because it calls this row.
+- 0x936840 `glyph_hint_destroy`. Its caller calls the object a hinting instance only because of this row.
+
+The run `conf-caller-revert` puts the 4 rows back to medium. The agent also flagged 0x8c7470 `transfer_manager_offer_needs_work_permit`: its high rests only on its call to 0x8c7560, so it needs a recheck. Confidence in `names.tsv` is now 5,651 high, 1,184 medium and 28 low. The pass raised 194 rows in all.
+
+#### Returns of the pass (2026-10-17)
+
+| Wave | Checked | Raised (after reverts) | Yield | Tokens | Tokens per raised row |
+|---|---|---|---|---|---|
+| c01 (Opus) | 206 | 43 | 20.9% | 1,161,233 | 27,005 |
+| c02 | 183 | 45 | 24.6% | 1,201,375 | 26,697 |
+| c03 | 215 | 54 | 25.1% | 1,103,176 | 20,429 |
+| c04 | 197 | 33 | 16.8% | 1,119,347 | 33,920 |
+| c05 | 155 | 20 | 12.9% | 695,699 | 34,785 |
+
+The caller check adds 131,864 tokens to c02 to c05. The yield fell in c04 and c05. Those batches hold screens, transfer and training rows, where the high globals are mostly generic objects such as the staff table and the debug text buffer.
+
+1,212 rows are still not high:
+- 450 had no new evidence for this pass. 57 of them now have a caller or callee that this pass raised.
+- 762 were checked in this pass and kept. 201 of them now have a caller or callee that this pass raised.
+
+So about 260 rows have new evidence for a second round. Rows with only new neighbours gave 32% in this pass, but a second round reads weaker neighbours, so expect 15% to 25%: about 40 to 65 rows for about 1.4 million tokens. The other 950 rows have no new evidence. The same dossiers will not raise them. Only a new source can: a runtime trace, a disassembly study of field offsets, or an open source match for the library rows.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
