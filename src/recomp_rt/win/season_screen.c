@@ -94,13 +94,14 @@
 
 /* The credit of each database (Q147, Q269, Q340): the official data sets credit Sports Interactive, and every
  * Update Team database, October 2003 and September 2005 included, credits the Update Team. Our own season
- * databases (Summer 2006, Q351) take their facts from Football Manager and their ratings from the Update Team.
+ * databases (Summer 2004 and Summer 2006, Q351) take their facts from Football Manager and their ratings from the Update Team.
  * Never a person's name in the code. One table, so a later change is one line. */
 typedef struct { const char *name; const char *credit; } Credit;
 static const Credit credits[] = {
     {"3.9.68", "Data by Sports Interactive"},
     {"3.9.60", "Data by Sports Interactive"},
     {"3.9.65", "Data by Sports Interactive"},
+    {"Summer 2004", "Bosman Edition database, ratings by the CM 01/02 Update Team"},
     {"Summer 2006", "Bosman Edition database, ratings by the CM 01/02 Update Team"},
 };
 #define CREDIT_UPDATE_TEAM "Database by the CM 01/02 Update Team"

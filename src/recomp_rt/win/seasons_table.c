@@ -15,6 +15,9 @@ const SeasonKnownDb seasons_known_dbs[] = {
     {"October 2003", "n/a", 2003, SEASONS_ROLE_SEASON, 7678496u, 39458260u,
      "44d237b423f1c63ea8a3d63e53ff24b0c865c3ff1fa9cf17f8a7af247adfaa5f",
      "b705168377f9e9ae0014b7976093fc358b1d83da639bd5130f88644730154216"},
+    {"Summer 2004", "n/a", 2004, SEASONS_ROLE_SEASON, 7683725u, 40069724u,
+     "c2bd9f285323eb1d3eb7bc0de1ee3e23d9f73309b72bab08c1034b0734ae1ba0",
+     "68e967e1aa44391e4a680759eab750464a93abb74786a6017c8c381074d50349"},
     {"September 2005", "n/a", 2005, SEASONS_ROLE_SEASON, 7683725u, 40021236u,
      "a329e3154e1f9251797352a3de836f8372bdd4004947843a50a93f58f8ccfd32",
      "9d29062ccc3035e8fd9f49b05d69dca9c9e0ad56753d5aec02c53fc9de683431"},
@@ -155,4 +158,4 @@ const SeasonKnownDb seasons_known_dbs[] = {
      "ec878079d3224ac6d7f62d65a456519307acae9192af4fa08e92799263423853"},
 };
 
-const int seasons_known_count = 50;
+const int seasons_known_count = 51;

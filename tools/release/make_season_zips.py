@@ -6,7 +6,7 @@ Usage:
         [--signatures <databases-signatures.tsv>] [--only <name> ...]
 
 --season-dbs  a folder with source zips: the zips of the Update Team databases (test-fixtures/databases/zips),
-              and again for the folder with the zips of our own season databases (2006/07, Q351). Give it
+              and again for the folder with the zips of our own season databases (2004/05 and 2006/07, Q351). Give it
               once for each folder. A source zip may have any file name and any extra files. The tool
               recognises each zip by the sizes and SHA-256 of its index.dat, club.dat and staff.dat, never by
               its name.
