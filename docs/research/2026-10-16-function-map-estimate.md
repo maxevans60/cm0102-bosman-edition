@@ -1776,6 +1776,25 @@ Fixes at the merge:
 
 A second false global: 0xca0000 is the window style that `graphics_init_display` passes to `SetWindowLongA`. The league table rows of wave 1 give a Date 15 bytes, and wave 2 gives it 8 bytes.
 
+#### Wave data-w03 (2026-10-17)
+
+Six Sonnet agents named the last 379 globals, in batches `data-w03-aa` to `-af`: 167 high, 208 medium and 4 low. The batch inputs were cut again after wave 2, so they show its names as context.
+
+| Batch | Globals | High | Medium | Low | Tokens | What |
+|---|---|---|---|---|---|---|
+| aa | 80 | 42 | 37 | 1 | 224,000 | Award, AWOL and club history objects, currency state, random number table, news texts |
+| ab | 65 | 31 | 33 | 1 | 210,000 | Game objects, current date 0xae2c90, network buffers, error buffers |
+| ac | 44 | 34 | 10 | 0 | 159,000 | Display state, cursor handles, T2K fonts, hall of fame |
+| ad | 70 | 26 | 44 | 0 | 95,000 | League table entries of nine nations |
+| ae | 78 | 23 | 54 | 1 | 198,000 | Last league table entries, language library state, Win32 input state |
+| af | 42 | 11 | 30 | 1 | 140,000 | Training, transfer and weather objects, the shared text buffer |
+
+The wave took about 1.03 million tokens and 6 minutes. At the merge, the 18 Date fields of wave 1 got the size 8. One row quoted the string `%s.his` without quote marks, which the check could not see. `write_data_docs.py` now swaps an old `g_unk_<address>` in the evidence for the global's current name.
+
+#### End result of the data map (2026-10-17)
+
+All 4,428 globals have a name: 3,808 high, 574 medium and 46 low. Scripts named 3,015 of them, Sonnet 1,412 and Opus 1. Five high rows wait as medium for a global they quote. The three waves took about 3.6 million tokens for 1,413 globals, plus 142,000 for the gate. Two false globals are known: 0xb71b00 and 0xca0000 are numbers in an instruction, not addresses.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.

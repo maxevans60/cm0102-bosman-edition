@@ -6,5 +6,5 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xad9c68 | 4 | u32 | `g_unk_ad9c68` |  |  | low | script | [0x415f60](../function-map/award_screens.cpp.md) | [0x415f60](../function-map/award_screens.cpp.md), [0x416570](../function-map/award_screens.cpp.md) |  |
-| 0xad9c6a | 1 | u8 | `g_unk_ad9c6a` |  |  | low | script | [0x415f60](../function-map/award_screens.cpp.md) | [0x415f60](../function-map/award_screens.cpp.md) |  |
+| 0xad9c68 | 2 | u16 | `g_award_team_dark_blue_pixel` | Pixel value for a dark blue text colour, made once by the team award screen. | 0x415f60 award_screen_draw_team_award stores the result of 0x5e4800 graphics_rgb_to_pixel for red 0, green 0, blue 0x40 and passes it as a text colour. | high | sonnet | [0x415f60](../function-map/award_screens.cpp.md) | [0x415f60](../function-map/award_screens.cpp.md), [0x416570](../function-map/award_screens.cpp.md) |  |
+| 0xad9c6a | 1 | u8 | `g_award_team_dark_blue_pixel_ready` | Flag byte whose low bit is set once the dark blue pixel value has been made. | 0x415f60 award_screen_draw_team_award tests bit 0x10000 of the dword at 0xad9c68, which is bit 0 of this byte, before it creates the pixel. | medium | sonnet | [0x415f60](../function-map/award_screens.cpp.md) | [0x415f60](../function-map/award_screens.cpp.md) |  |

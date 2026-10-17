@@ -73,6 +73,12 @@ def rows_for(G, names):
                           confidence="low", model="script")
         out[a].setdefault("type", g["type"])
         out[a].setdefault("size", g["size"])
+    # Evidence written before a global had a name quotes it as g_unk_<address>: use its name now.
+    current = {f"g_unk_{a:06x}": r["name"] for a, r in out.items()}
+    for r in out.values():
+        for key in ("evidence", "description"):
+            if "g_unk_" in r.get(key, ""):
+                r[key] = re.sub(r"\bg_unk_[0-9a-f]{6}\b", lambda m: current.get(m.group(0), m.group(0)), r[key])
     # A high row cannot rest on a global that is not high: it drops to medium until that global is high.
     by_name = {r["name"]: r for r in out.values()}
     changed = True

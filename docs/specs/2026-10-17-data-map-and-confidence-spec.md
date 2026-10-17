@@ -112,9 +112,11 @@ Done (2026-10-17): 600 names (435 high), 1 of 60 sample rows wrong (1.7%), so th
 Blocked by: 2
 Delivers: names for every global in scope, one wave per run, on Sonnet or Opus as the gate decided.
 Merge danger: two-way door. Blast radius: the names of one wave.
-- [ ] No row is `g_unk_<addr>` after the last wave.
-- [ ] Each wave is in the estimate doc with its tokens.
-- [ ] The check script passes after each wave.
+- [x] No row is `g_unk_<addr>` after the last wave.
+- [x] Each wave is in the estimate doc with its tokens.
+- [x] The check script passes after each wave.
+
+Done (2026-10-17): waves data-w02 and data-w03 named the last 813 globals. The data map has 3,808 high, 574 medium and 46 low names.
 
 ### 4. Confidence pass setup
 Blocked by: 3
