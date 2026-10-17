@@ -1466,6 +1466,29 @@ Open point: the other Cup slot 17 overrides (about 10 rows, for example `UefaCup
 | 0x49f2a0 | `date_pair_record_construct` | `comp_unbeaten_run_record_construct` | takes reviewer | `comp_unbeaten_run_record_construct` |
 | 0x5a53c0 | `noop_destructor` | `shared_noop_ret0` | new name | `shared_noop_ret0_5a53c0` |
 
+#### Review r03 (tier 5, 2026-10-17)
+
+Run `review-r03`: 8 Opus reviewers checked 213 rows of league.cpp, the match engine, media, news, the screens and the staff files. Agree 156, fix 45, rename 12. The third check took the reviewer's name in all 12 rows. 6 false entries got the name `<parent>_fragment_<addr>`. 63 rows changed in all. The reviewers took 111,000 to 196,000 tokens each, and the third check took 118,000.
+
+Eight of the 12 renames correct the convention. Ghidra drops ECX in short bodies and forwarders, and the sweep took that output as given. The news.cpp rows 0x7861e0, 0x7863f0 and 0x786780 are now `News::` members with ret 8, ret 8 and ret 4, as the w27 agent found. news.cpp keeps two classes: `NewsItem` is a 0xdf-byte value object without a vtable, and `News` is the inbox store at 0xb7431c. Two reviewers found this on their own.
+
+Open point: the forwarders 0x6cfcd0, 0x6cfd10, 0x6cfd40 and 0x6cfd70 have the same shape as 0x6cfc60 and 0x6cfca0, but keep free `match_eng_referee_*` names. They are outside the sample.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x6831a0 | `League::move_club_to_unplayed_division` | `League::relegate_club_to_division` | takes reviewer | `League::relegate_club_to_division` |
+| 0x68aa80 | `League::review_club_managers` | `League::set_club_season_expectations` | takes reviewer | `League::set_club_season_expectations` |
+| 0x6cfc60 | `match_eng_referee_judge_tackle` | `CM3_MATCH_ENGINE::referee_judge_tackle` | takes reviewer | `CM3_MATCH_ENGINE::referee_judge_tackle` |
+| 0x6cfca0 | `match_eng_referee_check_foul` | `CM3_MATCH_ENGINE::referee_check_foul` | takes reviewer | `CM3_MATCH_ENGINE::referee_check_foul` |
+| 0x70a8c0 | `is_free_run_action_code` | `MATCH_PLAYER::is_free_run_action_code` | takes reviewer | `MATCH_PLAYER::is_free_run_action_code` |
+| 0x7861e0 | `news_send_to_club_manager` | `News::send_to_club_manager` | takes reviewer | `News::send_to_club_manager` |
+| 0x7863f0 | `news_send_to_nation_managers` | `News::send_to_nation_managers` | takes reviewer | `News::send_to_nation_managers` |
+| 0x786780 | `news_send_to_all_managers` | `News::send_to_all_managers` | takes reviewer | `News::send_to_all_managers` |
+| 0x7daf50 | `apply_match_incident_ban` | `apply_obscene_gesture_ban` | takes reviewer | `apply_obscene_gesture_ban` |
+| 0x803f80 | `display_add_screen_subtitle` | `ScreenManager::add_screen_subtitle` | takes reviewer | `ScreenManager::add_screen_subtitle` |
+| 0x819870 | `search_screens_compare_results_by_field_2b` | `search_screens_compare_results_by_status_code` | takes reviewer | `search_screens_compare_results_by_status_code` |
+| 0x846920 | `staff_interest_in_joining_club` | `Shortlist_Manager::staff_interest_in_joining_club` | takes reviewer | `Shortlist_Manager::staff_interest_in_joining_club` |
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
