@@ -3,13 +3,14 @@
 The database load reserves 23,000 blank staff rows, each with its own non-player row, at the end of the staff
 table (sizing in 0x528540: staff + 0x5f05 = 23,000 + 1,325 at 0x529b39, non-players + 0x59d8 at 0x529bd1; the
 blank rows at 0x52a1c2). When a new game is made, database_generate_extra_non_playing_staff 0x527240 fills
-these rows from the top down with the coaches, scouts, physios and chairmen that clubs of the selected nations
+these rows from the top down with the coaches, scouts, physios and managers that clubs of the selected nations
 lack. Each of its four loops stops the game at an error box when it needs row 23,001 (0x52747b, 0x52777c,
 0x527a77, 0x527d43; the box of the fourth loop is "Database.cpp 1844", 0x527e4c). Some Update Team databases
 need more rows when every league is selected.
 
 rt_staff_reserve (rt.h, staff_reserve.c) replaces the constant at all seven sites. It is 23,000 for the
-official data sets, so the base game allocates and does the same as before. The evidence is in
+official data sets and for a custom data set whose estimated Select All need fits (staff_reserve.c), so the
+base game allocates and does the same as before. The evidence is in
 docs/research/2026-10-17-select-all-databases.md.
 """
 
