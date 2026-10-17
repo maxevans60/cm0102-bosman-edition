@@ -1185,6 +1185,64 @@ The merge needed two fixes. One agent named four media news text writers as free
 | 0x7fffa0 | Named in 2026-10-13-display-and-scrman-inventory.md | `find_slot_by_id` (Haiku) | `ScreenManager::find_manager_channel` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
 | 0x800000 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_fill_buffer_or_fail` (Haiku) | `ScreenManager::send_clear_click` | differs. The research says opcode 0x11 is a redraw request. The sweep names it a clear click. Not checked |
 
+#### Wave w28 (tier 5, 2026-10-17)
+
+Run `sweep-w28`: 8 Opus agents named 223 functions: `player_search.cpp` (`PLAYER_SEARCH`), `player_stats.cpp` (`PlayerStats`), `plot.cpp` (`Plot`), `printouts.cpp`, `record_utils.cpp`, `scout_manager.cpp` (`SCOUT_MANAGER`), `scrman.cpp` (`ScreenManager`), `search_edit_session.cpp` (`SearchEditSession`), `search_eng.cpp` (`SearchEngine`) and three `search_filters.cpp` gap functions (`SearchFilters`). Each agent took 2 to 6 minutes and 140,000 to 187,000 tokens. Confidence: 132 high, 90 medium, 1 low.
+
+The merge needed one fix. Three false entries had a `_tail` suffix. They now use the `<parent>_fragment_<addr>` style. Two agents named the `search_edit_session.cpp` functions and both chose `SearchEditSession`. The scrman agents name most network sends after the opcode that the client applies, for example `set_widget_rect` for sub-operation 8 and `play_sound` for opcode 0x0a.
+
+47 functions of the wave are cited. 35 agree and 12 agree in area. None differs.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x7af160 | Named in build-brief-0.5.0.md | `Search_Engine::refresh_results` (Haiku) | `PLAYER_SEARCH::get_result_list` | agrees in area |
+| 0x7afa70 | Named in 2026-10-16-crash-fixes.md | `Search_Engine::collect_candidates` (Haiku) | `PLAYER_SEARCH::collect_known_people` | agrees |
+| 0x7bfd50 | Named in 2026-10-14-game-creation-inventory.md | `player_stats_load_from_cd` (Haiku) | `PlayerStats::PlayerStats` | agrees |
+| 0x7c1350 | Named in 2026-10-16-research-name-check.md | `player_stats_refresh_nation_players` (Haiku) | `PlayerStats::end_season_for_key_nation` | agrees in area |
+| 0x7c1660 | Named in 2026-10-14-columns-and-colours-inventory.md | `PLAYER_STATS::format_ability_string` (Haiku) | `PlayerStats::format_recent_ratings` | agrees |
+| 0x7c25b0 | Named in 2026-10-16-comparison-screen-inventory.md | `player_stats_format_name_or_error` (Haiku) | `PlayerStats::format_player_stat` | agrees |
+| 0x7c6a30 | Named in 2026-10-14-widescreen-inventory.md | `player_stats_list::append_record` (Haiku) | `PlayerStats::add_language` | agrees in area |
+| 0x7d7c80 | Named in print_pdf.c | `printouts_write_report` (Haiku) | `printouts_print_comp_report` | agrees |
+| 0x7f6760 | Named in 2026-10-14-game-creation-inventory.md | `scout_manager_init_and_load_cd_check` (Haiku) | `SCOUT_MANAGER::SCOUT_MANAGER` | agrees |
+| 0x7f7780 | Named in 2026-10-16-comparison-screen-inventory.md | `scout_manager_set_slot` (Haiku) | `SCOUT_MANAGER::set_compare_player` | agrees |
+| 0x7f7920 | Named in 2026-10-16-comparison-screen-inventory.md | `scout_manager_get_rating_slot` (Haiku) | `SCOUT_MANAGER::get_compare_player` | agrees |
+| 0x7f8610 | Named in 2026-10-16-comparison-screen-inventory.md | `scout_manager_find_scout_slot_for_player` (Haiku) | `SCOUT_MANAGER::find_club_search_entry` | agrees in area |
+| 0x7f8d70 | Named in 2026-10-16-crash-fixes.md | `scout_manager_check_scout_report_visible` (Haiku) | `SCOUT_MANAGER::has_scout_request` | agrees |
+| 0x7feb20 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_set_search_criteria` (Haiku) | `ScreenManager::set_default_screen` | agrees |
+| 0x7feb70 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_count_empty_slots` (Haiku) | `ScreenManager::count_active_records` | agrees in area |
+| 0x7fed30 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_get_slot_ptr_or_fatal` (Haiku) | `ScreenManager::get_current_screen_flag` | agrees in area |
+| 0x7fedd0 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_check_active_slot_or_abort` (Haiku) | `ScreenManager::current_screen_has_exit_fn` | agrees |
+| 0x7fee80 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_get_active_slot_ptr` (Haiku) | `ScreenManager::get_screen_title` | agrees |
+| 0x7feeb0 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_copy_name_into_slot` (Haiku) | `ScreenManager::set_screen_title` | agrees |
+| 0x7fef10 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_free_list_clear` (Haiku) | `ScreenManager::free_all_screens` | agrees |
+| 0x7ff130 | Named in 2026-10-13-display-and-scrman-inventory.md | `ScreenManager::iterate_order_list_filtered` (Haiku) | `ScreenManager::set_screen_param_for_each_record` | agrees |
+| 0x800160 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_build_message_packet` (Haiku) | `ScreenManager::set_pending_click_widget` | agrees in area |
+| 0x800330 | Named in 2026-10-13-display-and-scrman-inventory.md | `Net_Buffer::write_packet_fields` (Haiku) | `ScreenManager::send_area_scroll_row` | agrees in area |
+| 0x800580 | Named in 2026-10-13-display-and-scrman-inventory.md | `Scrman::queue_message_packet` (Haiku) | `ScreenManager::set_widget_flags` | agrees |
+| 0x800890 | Named in 2026-10-13-display-and-scrman-inventory.md | `Scrman::send_substitution_packet` (Haiku) | `ScreenManager::set_widget_rect` | agrees |
+| 0x800d30 | Named in 2026-10-13-display-and-scrman-inventory.md | `scr_write_net_message_packet` (Haiku) | `ScreenManager::set_widget_style` | agrees |
+| 0x801040 | Named in 2026-10-13-display-and-scrman-inventory.md | `Screen_Session::queue_message_packet` (Haiku) | `ScreenManager::set_widget_colour` | agrees |
+| 0x801350 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_queue_session_message` (Haiku) | `ScreenManager::set_widget_text_flags` | agrees |
+| 0x801660 | Named in 2026-10-13-display-and-scrman-inventory.md | `Net_message_write_header_and_send_match_packet` (Haiku) | `ScreenManager::set_widget_font` | agrees |
+| 0x801960 | Named in 2026-10-13-display-and-scrman-inventory.md | `Scrman::queue_net_message_bytes` (Haiku) | `ScreenManager::set_widget_text_colour` | agrees |
+| 0x801c70 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_build_and_send_packet` (Haiku) | `ScreenManager::set_widget_text` | agrees |
+| 0x801fc0 | Named in 2026-10-13-display-and-scrman-inventory.md | `Scrman::queue_packet_and_send` (Haiku) | `ScreenManager::set_widget_id` | agrees |
+| 0x8022d0 | Named in 2026-10-13-display-and-scrman-inventory.md | `Scrman::queue_net_message_bytes` (Haiku) | `ScreenManager::set_widget_data` | agrees |
+| 0x8025e0 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_send_net_message` (Haiku) | `ScreenManager::play_sound` | agrees |
+| 0x8029f0 | Named in 2026-10-13-display-and-scrman-inventory.md | `Scrman::get_player_value_or_fallback` (Haiku) | `ScreenManager::is_sound_playing` | agrees |
+| 0x802a50 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_search_edit_char_input` (Haiku) | `ScreenManager::stop_sound` | agrees |
+| 0x802cb0 | Named in 2026-10-13-display-and-scrman-inventory.md | `set_slot_flag_and_out_byte` (Haiku) | `ScreenManager::on_remote_sound_started` | agrees in area |
+| 0x802ce0 | Named in 2026-10-13-display-and-scrman-inventory.md | `Scrman::clear_slot_entry` (Haiku) | `ScreenManager::on_remote_sound_finished` | agrees in area |
+| 0x802d00 | Named in 2026-10-13-display-and-scrman-inventory.md | `search_edit_session_fill_slots` (Haiku) | `ScreenManager::redraw_screen` | agrees |
+| 0x803390 | Named in 2026-10-13-input-inventory.md | `forward_to_display_scroll_target` (Haiku) | `ScreenManager::press_scrollbar_key` | agrees |
+| 0x8033e0 | Named in print_pdf.c | `scr_write_search_key_and_player_record` (Haiku) | `ScreenManager::begin_print_job` | agrees |
+| 0x803710 | Named in print_pdf.c | `Message_Packet::write_string_packet` (Haiku) | `ScreenManager::add_print_line` | agrees |
+| 0x803930 | Named in print_pdf.c | `print_buffer_flush_or_assert` (Haiku) | `ScreenManager::add_print_page_break` | agrees |
+| 0x803a90 | Named in print_pdf.c | `scrman_write_search_entry_or_assert` (Haiku) | `ScreenManager::print_job` | agrees |
+| 0x803d50 | Named in 2026-10-13-screen-stack-inventory.md | `sum_16x16_word_grid_at_0x7e6` (Haiku) | `ScreenManager::count_flagged_screens` | agrees |
+| 0x803d80 | Named in 2026-10-13-display-and-scrman-inventory.md | `search_edit_session_advance_or_close` (Haiku) | `ScreenManager::close_all_screens` | agrees in area |
+| 0x804160 | Named in 2026-10-13-screen-stack-inventory.md | `display_add_item_ten_args_thunk` (Haiku) | `ScreenManager::add_area_text_by_ref` | agrees in area |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

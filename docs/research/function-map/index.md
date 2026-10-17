@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4701 high, 1989 medium, 173 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27.
+- Confidence: 4780 high, 1910 medium, 173 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27, sweep-w28.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -334,10 +334,10 @@ All 11747 functions with their category, file and placement method are in `funct
 | [scotland_awards.cpp](scotland_awards.cpp.md) | 5 |
 | [scotland_rules.cpp](scotland_rules.cpp.md) | 5 |
 | [scout_manager.cpp](scout_manager.cpp.md) | 40 |
-| [scrman.cpp](scrman.cpp.md) | 76 |
-| [search_edit_session.cpp](search_edit_session.cpp.md) | 12 |
-| [search_eng.cpp](search_eng.cpp.md) | 15 |
-| [search_filters.cpp](search_filters.cpp.md) | 13 |
+| [scrman.cpp](scrman.cpp.md) | 71 |
+| [search_edit_session.cpp](search_edit_session.cpp.md) | 19 |
+| [search_eng.cpp](search_eng.cpp.md) | 10 |
+| [search_filters.cpp](search_filters.cpp.md) | 16 |
 | [search_screens.cpp](search_screens.cpp.md) | 54 |
 | [Setup.cpp](Setup.cpp.md) | 107 |
 | [shortlist_manager.cpp](shortlist_manager.cpp.md) | 56 |
