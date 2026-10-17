@@ -55,6 +55,8 @@ static const OptionDef defs[OPT_COUNT] = {
         "foreign_colours = on shows in light violet the names of players who count against the foreign player limit of the club's next league or cup match, on the squad and tactics screens."},
     [OPT_FULL_PLAYER_SEARCH] = {"full_player_search", KIND_SWITCH, "off", NULL,
         "full_player_search = on makes the player search list every player, also players that your manager does not know."},
+    [OPT_CHANGING_RULES] = {"changing_rules", KIND_SWITCH, "on", NULL,
+        "changing_rules = on lets the rules of each league and cup change each July as a new game moves through the seasons. Each game keeps the value it started with."},
 };
 
 #define TEXT_MAX 1100

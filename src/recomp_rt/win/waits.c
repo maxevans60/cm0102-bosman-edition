@@ -200,6 +200,11 @@ RT_WRAP(005e8290, message_box)
         rt_ret_cdecl(0);
         return;
     }
+    if (getenv("RECOMP_SCREEN_LOG")) {     /* the box waits for a click: say which box (test runs) */
+        uint32_t title = rt_arg(0), text = rt_arg(1);
+        fprintf(stderr, "recomp: message box from %#x: %s: %s\n", rd32(g_mem, cpu.esp),
+                title ? (const char *)(g_mem + title) : "", text ? (const char *)(g_mem + text) : "");
+    }
     in_box++;
     o_005e8290();
     in_box--;

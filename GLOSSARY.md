@@ -184,6 +184,14 @@ _Avoid_: evolving rules, dynamic seasons
 The 2001/02 season with the 3.9.68 data set and changing rules off. It plays as the original.
 _Avoid_: vanilla, classic game
 
+**Start year**:
+The year in which a game's first season starts, such as 2010 for a game that starts in 2010/11. The base game has 2001.
+_Avoid_: start season (for the number), base year
+
+**Season part**:
+The part `bosman_season.dat` of a saved game that holds its start year and changing rules. A save has it only when the start year is not 2001 or changing rules is on.
+_Avoid_: season block, save field, header
+
 ### Options and features
 
 **Settings file**:

@@ -95,6 +95,12 @@ from attribute_groups import PATCHES as GROUP_PATCHES  # noqa: E402
 
 PATCHES.update(GROUP_PATCHES)
 
+# The season core (0.6.0 slice 11) replaces year constants in the same way.
+from seasons import INSNS as SEASON_INSNS, PATCHES as SEASON_PATCHES  # noqa: E402
+
+assert not set(SEASON_PATCHES) & set(PATCHES)
+PATCHES.update(SEASON_PATCHES)
+
 # Not a screen size: a fix for an endless loop (0.4.0 slice 12, custom data sets). euro.cfg is read by 0x9059e0
 # (docs/research/2026-10-16-update-team-databases.md). When a line of it is not a "*" header (after a header
 # that names an unknown nation, or a file that does not match the database), the original tests the same line
@@ -120,3 +126,7 @@ _FPS = "if (%s) { if (rt_full_player_search(ebp)) goto L_7afcee; goto L_7afe6b; 
 INSNS[0x7AFC8D] = ("je 0x7afe6b", _FPS % "cc_e(F)")
 INSNS[0x7AFC9D] = ("jne 0x7afe6b", _FPS % "!cc_e(F)")
 INSNS[0x7AFCDF] = ("je 0x7afcf3", "if (cc_e(F)) { if (rt_full_player_search(ebp)) ebx = 1; goto L_7afcf3; }")
+
+# The season core (0.6.0 slice 11): whole instructions of the year sites (seasons.py).
+assert not set(SEASON_INSNS) & set(INSNS) and not set(SEASON_PATCHES) & set(SEASON_INSNS)
+INSNS.update(SEASON_INSNS)

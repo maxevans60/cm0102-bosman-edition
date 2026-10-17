@@ -13,7 +13,7 @@ import re
 
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
-                  "foreign.c")
+                  "foreign.c", "season.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -72,6 +72,7 @@ CALLBACKS = {
     0x8CF6B0: ("515355568b742418", "foreign player rule of a fixture (fixture, record, 1)"),
     0x53D980: ("8b44240883ec1085", "is a person foreign for a nation (person, nation, 1)"),
     0x53D740: ("8b442404b102568b", "is a person an EU player for a nation (person, nation)"),
+    0x54A130: ("81ec000200005657", "set a date (day, month, year, weekday), thiscall: the game date of a new season"),
 }
 
 
