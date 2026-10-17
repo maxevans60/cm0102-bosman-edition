@@ -1527,6 +1527,37 @@ Most fixes raise a row to high with a vtable slot that the reviewer read from th
 | 0x903570 | `UefaSeeding::free_club_list` | `UefaSeeding::~UefaSeeding` | takes reviewer | `UefaSeeding::~UefaSeeding` |
 
 
+#### Review r06 (medium rows of tier 3, 2026-10-17)
+
+Run `review-r06`: 8 Opus reviewers checked 200 medium rows of the contract, fixture, game, player regen and transfer files and of some national leagues. Agree 105, fix 74, rename 21. The third check took the reviewer's name 19 times, kept the sweep name once and wrote a new row once. 94 rows changed in all. The reviewers took 133,000 to 203,000 tokens each, and the third check took 131,000.
+
+Twelve renames make free functions in fix_man.cpp and transfer_manager.cpp into `FIXTURE_MANAGER::` and `TRANSFER_MANAGER::` members, because every caller sets ECX. Four `TRANSFER_MANAGER` rows said "contract offer" but handle loan offers: offer byte +0x1f set to 1 marks a loan. The third check kept two rows as members although one reviewer made them stdcall: a body that does not read ECX is still a member when the callers set ECX.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x4d44e0 | `contract_manager_get_renewal_job` | `contract_manager_get_offer_job` | takes reviewer | `contract_manager_get_offer_job` |
+| 0x5ab3c0 | `fix_man_add_away_trip_injury_risk` | `FIXTURE_MANAGER::add_away_trip_illness_risk` | takes reviewer | `FIXTURE_MANAGER::add_away_trip_illness_risk` |
+| 0x5ab510 | `fix_man_find_new_fixture_date` | `FIXTURE_MANAGER::find_new_fixture_date` | takes reviewer | `FIXTURE_MANAGER::find_new_fixture_date` |
+| 0x5abb10 | `fix_man_reschedule_club_fixtures_near_date` | `FIXTURE_MANAGER::reschedule_club_fixtures_near_date` | takes reviewer | `FIXTURE_MANAGER::reschedule_club_fixtures_near_date` |
+| 0x5ad780 | `fix_man_find_fixture_clashes` | `FIXTURE_MANAGER::find_fixture_clashes` | takes reviewer | `FIXTURE_MANAGER::find_fixture_clashes` |
+| 0x5adba0 | `fix_man_collect_day_clashes` | `FIXTURE_MANAGER::collect_day_clashes` | takes reviewer | `FIXTURE_MANAGER::collect_day_clashes` |
+| 0x5ae380 | `fix_man_resolve_same_day_clash` | `FIXTURE_MANAGER::resolve_same_day_clash` | takes reviewer | `FIXTURE_MANAGER::resolve_same_day_clash` |
+| 0x5ae9d0 | `fix_man_move_clashing_club_fixtures` | `FIXTURE_MANAGER::move_nearby_club_fixtures` | takes reviewer | `FIXTURE_MANAGER::move_nearby_club_fixtures` |
+| 0x5aee40 | `fix_man_get_club_first_fixture_year` | `FIXTURE_MANAGER::get_club_first_fixture_year` | takes reviewer | `FIXTURE_MANAGER::get_club_first_fixture_year` |
+| 0x5aee60 | `fix_man_get_club_last_fixture_year` | `FIXTURE_MANAGER::get_club_last_fixture_year` | takes reviewer | `FIXTURE_MANAGER::get_club_last_fixture_year` |
+| 0x5af2f0 | `fix_man_get_time_slice` | `FIXTURE_MANAGER::get_time_slice` | takes reviewer | `FIXTURE_MANAGER::get_time_slice` |
+| 0x5cc830 | `Hall_of_Fame::~Hall_of_Fame` | `HallOfFame::~HallOfFame` | takes reviewer | `HallOfFame::~HallOfFame` |
+| 0x5d6aa0 | `game_check_players_going_awol` | `game_check_players_missing_training` | takes reviewer | `game_check_players_missing_training` |
+| 0x8bed60 | `TRANSFER_MANAGER::make_contract_offer` | `TRANSFER_MANAGER::make_loan_offer` | takes reviewer | `TRANSFER_MANAGER::make_loan_offer` |
+| 0x8bee50 | `TRANSFER_MANAGER::add_contract_negotiation` | `TRANSFER_MANAGER::add_loan_negotiation` | takes reviewer | `TRANSFER_MANAGER::add_loan_negotiation` |
+| 0x8bfa30 | `TRANSFER_MANAGER::reject_contract_offer` | `TRANSFER_MANAGER::reject_loan_offer` | takes reviewer | `TRANSFER_MANAGER::reject_loan_offer` |
+| 0x8c0660 | `TRANSFER_MANAGER::accept_contract_offer` | `TRANSFER_MANAGER::accept_loan_offer` | takes reviewer | `TRANSFER_MANAGER::accept_loan_offer` |
+| 0x8c6ae0 | `transfer_manager_detach_offer_players` | `TRANSFER_MANAGER::detach_offer_players` | takes reviewer | `TRANSFER_MANAGER::detach_offer_players` |
+| 0x8c8fd0 | `TRANSFER_MANAGER::build_clause_offer_option` | `transfer_manager_build_clause_offer_option` | keeps first | `TRANSFER_MANAGER::build_clause_offer_option` |
+| 0x8cdb80 | `transfer_manager_check_manager_veto` | `transfer_manager_check_board_veto` | new name | `TRANSFER_MANAGER::check_board_veto` |
+| 0x8ce0e0 | `transfer_manager_set_player_squad_status` | `TRANSFER_MANAGER::set_player_squad_status` | takes reviewer | `TRANSFER_MANAGER::set_player_squad_status` |
+
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
