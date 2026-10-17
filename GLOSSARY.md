@@ -241,3 +241,37 @@ _Avoid_: secret attribute, intrinsic (for the whole set)
 **Printout**:
 The text lines that the original makes from a print button, on the squad and competition screens. The PDF choice of Print To writes it to a PDF in the `Prints` folder.
 _Avoid_: report, export, screenshot
+
+### Research maps
+
+**Function map**:
+The list of every function of the original with a name, a source file, a confidence and the evidence for the name.
+_Avoid_: name map, symbol table
+
+**Data map**:
+The list of every global of the original that a function touches, with a name, a size, a type, its readers and writers, and a confidence.
+_Avoid_: globals map, variable map
+
+**Global**:
+A fixed address in the original's data that one or more functions read or write.
+_Avoid_: variable, static, data symbol
+
+**Address group**:
+A run of adjacent globals that the data map names as one object, usually one struct or one table.
+_Avoid_: cluster, block, region
+
+**Owner file**:
+The source file of most of a global's readers. The data map lists the global on that file's page.
+_Avoid_: home file, parent file
+
+**Quote**:
+Evidence that pins the purpose of a function or global: a string, an assert, a caller, a vtable slot, a high global or an open source match.
+_Avoid_: proof, hint (for a quote)
+
+**Confidence**:
+High, medium or low for each name in the maps. High needs a quote. Medium and low names are hints.
+_Avoid_: certainty, score
+
+**Dossier**:
+The file of facts for one function or global that an agent reads before it names it. Dossiers stay outside the repo.
+_Avoid_: brief (for a dossier), context file
