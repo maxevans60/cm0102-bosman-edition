@@ -177,21 +177,23 @@ def fill(T, F, fp, M, L, S_):
             else:
                 cmap[c] = tkey.get((nm, _i(r, 0x53)), -1)
 
+    for t in (6, 9, 10, 22):
+        T.table(t)                                  # each staff.dat table lies inside the file
     staff_b = T.raw["staff.dat"]
     idx = T.idx
     n6, n9, n10, n22 = (idx[t]["count"] for t in (6, 9, 10, 22))
     fplayer = {_i(r, 0): r for r in F.rows(10)}
     new_staff, new_player, new_pref, out = [], [], [], {}
     fh = collections.defaultdict(list)
-    fhist = F.raw["staff_history.dat"]
+    fhist, _, _, n_fhist = F.table(17)              # checked against the file length
     wanted_f = set(want.values())
-    for o in range(0, F.idx[17]["count"] * 17, 17):
+    for o in range(0, n_fhist * 17, 17):
         who = _i(fhist, o + 4)
         if who in wanted_f:
             fh[who].append(bytearray(fhist[o:o + 17]))
     hist_new = []
-    for k, (n, i) in enumerate(sorted(want.items())):
-        sid, pid = n6 + k, n10 + k
+    for n, i in sorted(want.items()):
+        sid, pid = n6 + len(new_staff), n10 + len(new_player)   # no gap in the ids when a person is skipped
         r = bytearray(frows[i])
         struct.pack_into("<i", r, 0, sid)
         struct.pack_into("<iii", r, 4, gf(_i(r, 4)), gs(_i(r, 8)), gc(_i(r, 0x0c)))

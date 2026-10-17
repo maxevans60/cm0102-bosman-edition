@@ -99,3 +99,23 @@ PROMOTED = {
     'Northern Irish League Premier Division': ['Loughgall'],   # https://en.wikipedia.org/wiki/2003–04_Irish_First_Division ; champion
     'Irish Premier Division': ['Finn Harps'],   # https://en.wikipedia.org/wiki/2005_League_of_Ireland_Premier_Division (the club new to the table)
 }
+
+# Part file and label of each real list in docs/research/rules-0.6.0/<part>-clubs.tsv (club_rows.py), with the
+# labels that make_clubs.py TARGETS maps to the database division. Lists with no target there are left out
+# (Spain and Germany above their group tiers, Scotland, Austria, Switzerland, Czech Republic, Serbia and Montenegro).
+PARTS = {
+    'Italian Serie A': ('ita', 'Serie A'), 'Italian Serie B': ('ita', 'Serie B'),
+    'French First Division': ('fra', 'Ligue 1'), 'French Second Division': ('fra', 'Ligue 2'),
+    'Dutch Premier Division': ('hol-bel', 'Eredivisie'), 'Dutch First Division': ('hol-bel', 'Eerste Divisie'),
+    'Belgian First Division': ('hol-bel', 'Belgian First Division'),
+    'Belgian Second Division': ('hol-bel', 'Belgian Second Division'),
+    'Portuguese Premier League': ('por', 'Primeira Liga'), 'Portuguese Second League': ('por', 'Liga de Honra'),
+    'Turkish Premier Division': ('rus-tur', 'Turkish Premier Division (real: Süper Lig)'),
+    'Russian Premier Division': ('rus-tur', 'Russian Premier Division (real: Premier League)'),
+    'Greek National A Division': ('gre-pol-cro', 'gre_prm'),
+    'Danish Premier Division': ('den-swe', 'Danish Superliga'), 'Swedish Premier Division': ('den-swe', 'Allsvenskan'),
+    'Norwegian Premier Division': ('nor-fin', 'Tippeligaen'), 'Finnish Premier Division': ('nor-fin', 'Veikkausliiga'),
+    'Welsh Premier Division': ('wal-nir-irl', 'Welsh Premier Division'),
+    'Northern Irish League Premier Division': ('wal-nir-irl', 'Northern Irish League Premier Division'),
+    'Irish Premier Division': ('wal-nir-irl', 'Irish Premier Division'),
+}
