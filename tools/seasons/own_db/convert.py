@@ -81,6 +81,21 @@ def set_count(buf, table, count):
     check(False, f"index.dat has no table {table}")
 
 
+def check_squad_lists(clubs, staff):
+    """Every squad list entry (club +0xd7, 50 ids) must name a player whose staff club (+0x39) is that club. The
+    computer's team pick 0x6dbc50 joins a club's list with the list of its linked B team (0x540a50) and stops with
+    "match_man..cpp 1225" (check at 0x6dd3a4) when one player comes twice."""
+    bad = []
+    for r in clubs:
+        c = struct.unpack_from("<i", r, 0)[0]
+        for k in range(50):
+            t = struct.unpack_from("<i", r, 0xd7 + 4 * k)[0]
+            if t >= 0 and (t >= len(staff) or struct.unpack_from("<i", staff[t], 0x39)[0] != c):
+                bad.append((c, t))
+    check(not bad, f"{len(bad)} squad list entries name a player of another club or none, "
+                   f"for example {bad[:5]}")
+
+
 def store_update_team_way(T, k):
     """Q381 (Max, 2026-10-17): the dates as an Update Team database of the start season stores them, early by
     k = start year - 2001, so the database works in three ways: as a known season database (its signature row
@@ -219,6 +234,8 @@ def main(argv):
                 unemploy(t)
                 cut += 1
             out[key] = group[:size]
+        for key in out:                              # a player-coach cut from one list leaves the others too
+            out[key] = [t for t in out[key] if g(staff[t], 0x39) == c]
         lists[c] = out
         mgr[c] = out["m"][0] if out["m"] else -1
         ass[c] = out["a"][0] if out["a"] else -1
@@ -237,13 +254,15 @@ def main(argv):
             struct.pack_into("<i", r, 0x5b, cur)
         ls = lists.get(c, {})
         for key, off, n in (("p", 0xd7, 50), ("c", 0x19f, 5), ("s", 0x1b3, 7), ("ph", 0x1cf, 3)):
-            if key == "p" and g(r, 0xd7) == -1:
-                continue                             # the template keeps no squad list for this club
+            if key == "p" and all(g(r, 0xd7 + 4 * k) == -1 for k in range(50)):
+                continue                             # the template keeps no squad list for this club (a list
+                                                     # can start with -1 and hold ids further on)
             ids = sorted(ls.get(key, []), key=lambda t: sn.get(g(staff[t], 0x08), ""))
             for k in range(n):
                 struct.pack_into("<i", r, off + 4 * k, ids[k] if k < len(ids) else -1)
         struct.pack_into("<i", r, 0xcf, mgr.get(c, -1))
         struct.pack_into("<i", r, 0xd3, ass.get(c, -1))
+    check_squad_lists(clubs, staff)
 
     # 4. Careers: real years, nothing from the start season on.
     kept, kept_rows = kept_careers(S_.TEMPLATE)
