@@ -1930,7 +1930,7 @@ const SeasonDateShifts season_date_shifts[] = {
     {"October 2003", 0, 0, 2, 0, 0, 0, 2, 74, last_October_2003, 0u, 0},
     {"Summer 2004", 3, 3, 3, 0, 3, 0, 0, 0, 0, 0u, 0},
     {"September 2005", 3, 0, 4, 0, 3, 0, 4, 103, last_September_2005, 172302u, kept_September_2005},
-    {"Summer 2006", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0u, 0},
+    {"Summer 2006", 5, 5, 5, 0, 5, 0, 0, 0, 0, 0u, 0},
     {"February 2008", 6, 6, 6, 0, 6, 0, 6, 54, last_February_2008, 155535u, kept_February_2008},
     {"November 2007", 6, 6, 6, 0, 6, 0, 6, 53, last_November_2007, 158451u, kept_November_2007},
     {"December 2008", 7, 7, 7, 0, 7, 0, 7, 58, last_December_2008, 128307u, kept_December_2008},
