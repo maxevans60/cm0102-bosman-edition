@@ -301,6 +301,12 @@ extern uint32_t rt_season_year;
 uint32_t rt_season_text_mod(uint32_t original);
 uint32_t rt_season_text_format(uint32_t original);
 
+/* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
+ * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets
+ * it for the load that runs (the first sizing site) and returns it. */
+extern uint32_t rt_staff_reserve;
+uint32_t rt_staff_reserve_size(void);
+
 /* Full player search (#57, src/recomp_rt/win/playersearch.c): 1 when the option is on. The replaced jumps
  * at 0x7afc8d, 0x7afc9d and 0x7afcdf in tools/recomp/widescreen.py ask it. */
 uint32_t rt_full_player_search(uint32_t screen);

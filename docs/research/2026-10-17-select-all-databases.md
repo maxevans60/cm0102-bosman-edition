@@ -1,0 +1,162 @@
+# Select All with the season databases
+
+Date 2026-10-17. 0.6.0 work. The question: why do some Update Team season databases stop at the error box "Database.cpp 1844" when every league is selected (Select All), and how does the runtime fix it without a change to the database files or to the base game.
+
+## Result
+
+- 7 of the 21 season databases stop at "Database.cpp 1844" with Select All: November 2007, September 2008, September 2009, September 2010 ODB, September 2011 ODB, September 2012 and Autumn 2013. The start year does not matter.
+- No single record breaks the check. The new game needs more blank staff rows than the database load reserves. The load reserves 23,000 rows. These 7 databases need 23,664 to 27,156.
+- Fix: the reserve is a run-time value, `rt_staff_reserve` (`tools/recomp/staff_reserve.py`, `src/recomp_rt/win/staff_reserve.c`). It is 23,000 for the official data sets and for a custom data set (`database = folder:<name>`) whose Select All need, estimated from its files, fits. Otherwise it is 46,000. The base game allocates and plays as before: the same-save checks pass.
+- The fix adds no club and no player. It lets the original make the coaches, scouts, physios and managers that it already makes for every other database. The database files on disk do not change.
+- With the fix, all 21 databases pass the staff step. With a 2001 start all 21 reach the first news screen and holiday. In its own start year every database then stops at a second box, "fra_first..cpp 108". That box comes from the French First Division size, not from the staff reserve (see "Second stop").
+
+## The assert
+
+The box text is "Error: v3.9.68 Database.cpp 1844". Line 1844 is 0x734.
+
+`database_generate_extra_non_playing_staff` 0x527240 (Database.cpp, called only from `database_trim_staff_tables` 0x524d70 in game creation) makes extra non-playing staff for clubs of the selected nations. It has four loops over the club table (0x245 bytes a club):
+
+| Loop | Club slots | New staff job (+0x3d) | Count per club | Limit check | Box line |
+|---|---|---|---|---|---|
+| 1 | 5 at club +0x19f | 8 | `(rep + 500) * 5 / 10000`, 1 to 5 | 0x52747b `cmp [esp+0x10], 0x59d8` | 0x65f (1631) |
+| 2 | 7 at club +0x1b3 | 9 | `(rep + 500) * 7 / 10000`, 1 to 7 | 0x52777c | 0x6aa (1706) |
+| 3 | 3 at club +0x1cf | 10 | `(rep + 500) * 3 / 10000`, 1 to 3 | 0x527a77 | 0x6f5 (1781) |
+| 4 | club +0xcf empty | 5 (also +0x28 = 5) | 1 | 0x527d43 `cmp ebx, 0x59d8` | 0x734 (1844), box at 0x527e4c |
+
+`rep` is the club word at +0x80. Loops 1 to 3 fill only the empty slots of a club whose nation is selected (nation +0x11c not 0, through club +0x53) and for which a test through 0x540a50 fails (its meaning is not read here). Loop 4 adds one staff member to each club with an empty +0xcf. Club +0xcf is the club's manager (`2026-10-15-assistant-pick-inventory.md`), so loop 4 makes managers. The job meanings of 8, 9 and 10 are not proven here.
+
+Each new staff member takes the next blank row: index `staff_count - n - 17` for the n-th new row (0x527489..0x527494). These are the reserve rows of the database load. The counter n is shared by the four loops. When n reaches 23,000 (0x59d8), the loop that runs shows its box and the function returns 0, so game creation stops.
+
+## The reserve
+
+`load_database` 0x528540 sizes the tables from index.dat:
+
+- staff: count + 16 + 0x5f05 (24,325 = 23,000 + 1,325) at 0x529b39, or + 0x52d when the load is not a new database (the flag at `cStack_81d`, a load of a saved game),
+- non-players: count + 16 + 0x59d8 (23,000) at 0x529bd1,
+- then the 1,325 spare staff rows are taken off the count again (0x52a04b),
+- the 23,000 blank rows get their default values in the loop at 0x52a1c2 (`cmp esi, 0x59d8`), each with its own non-player row (`docs/research/2026-10-14-game-creation-inventory.md`, section 2).
+
+The database loads at "Loading database", before Select League(s). So the reserve size is fixed before the player selects any nation, and it cannot depend on the selection.
+
+The constant 0x59d8 is in the code at these six places only (0x52747f, 0x527780, 0x527a7b, 0x527d45, 0x529bd4, 0x52a1c4, a byte search of the .text section). 0x5f05 is only at 0x529b3c. No other code holds the reserve size.
+
+## Reserve rows used with Select All
+
+From the test log of `staff_reserve.c` (it counts the reserve rows that are not blank after 0x527240). Each database in its own start year. The counts per loop are the rows with job 8, 9, 10 and the rest.
+
+| Database | Start | Rows used | Job 8 | Job 9 | Job 10 | Managers | Over 23,000 |
+|---|---|---|---|---|---|---|---|
+| October 2003 | 2003 | 22,809 | 5,572 | 8,033 | 5,419 | 3,785 | no |
+| September 2005 | 2005 | 22,908 | 5,585 | 8,039 | 5,434 | 3,850 | no |
+| November 2007 | 2007 | 23,664 | 5,731 | 8,325 | 5,672 | 3,936 | yes |
+| September 2008 | 2008 | 24,483 | 5,845 | 8,515 | 5,941 | 4,182 | yes |
+| September 2009 | 2009 | 24,636 | 5,891 | 8,396 | 6,033 | 4,316 | yes |
+| September 2010 ODB | 2010 | 24,926 | 5,961 | 8,470 | 6,101 | 4,394 | yes |
+| September 2011 ODB | 2011 | 25,779 | 6,123 | 8,712 | 6,251 | 4,693 | yes |
+| September 2012 | 2012 | 27,156 | 6,484 | 9,139 | 6,601 | 4,932 | yes |
+| Autumn 2013 | 2013 | 24,818 | 6,074 | 8,181 | 6,130 | 4,433 | yes |
+| October 2014 | 2014 | 22,758 | 5,514 | 7,486 | 5,610 | 4,148 | no |
+| October 2015 | 2015 | 21,820 | 5,283 | 7,093 | 5,346 | 4,098 | no |
+| October 2016 | 2016 | 21,844 | 5,289 | 7,091 | 5,372 | 4,092 | no |
+| October 2017 | 2017 | 21,841 | 5,379 | 7,181 | 5,464 | 3,817 | no |
+| October 2018 | 2018 | 22,245 | 5,485 | 7,327 | 5,588 | 3,845 | no |
+| October 2019 | 2019 | 19,488 | 4,771 | 6,540 | 4,929 | 3,248 | no |
+| November 2020 | 2020 | 19,324 | 4,745 | 6,449 | 4,915 | 3,215 | no |
+| October 2021 | 2021 | 14,499 | 3,435 | 4,960 | 3,703 | 2,401 | no |
+| October 2022 | 2022 | 14,902 | 3,564 | 4,959 | 3,828 | 2,551 | no |
+| October 2023 | 2023 | 14,776 | 3,541 | 4,911 | 3,865 | 2,459 | no |
+| October 2024 | 2024 | 15,187 | 3,645 | 4,982 | 3,970 | 2,590 | no |
+| December 2025 | 2025 | 15,542 | 3,703 | 5,042 | 4,049 | 2,749 | no |
+
+The 3.9.68 data with Select All uses 22,623 rows. Inference: the original sized the reserve for its own data.
+
+In every failing database, loops 1 to 3 together stay below 23,000 (September 2012: 22,224). So the counter reaches 23,000 in loop 4, and the box is always line 1844. This agrees with the box that the slice 11 agent saw.
+
+Why these 7: their clubs have more empty staff slots than the reserve holds. The club count alone does not decide it: the 7 hold 12,967 to 14,489 clubs (3.9.68: 13,214), and the databases from October 2014 hold 10,149 to 11,851. The per-loop counts above show the empty slots directly.
+
+## The fix
+
+`tools/recomp/staff_reserve.py` replaces the constant at the seven sites with `rt_staff_reserve` (rt.h, rt.c). The build stops when a site no longer holds its constant (`translate.py`, `widescreen.py` merge).
+
+| Site | Instruction | New value |
+|---|---|---|
+| 0x529b39 | `lea ecx, [eax + ebp + 0x5f05]` | `rt_staff_reserve_size() + 0x52d` |
+| 0x529bd1 | `lea eax, [eax + ebp + 0x59d8]` | `rt_staff_reserve_size()` |
+| 0x52a1c2 | `cmp esi, 0x59d8` | `rt_staff_reserve` |
+| 0x52747b, 0x52777c, 0x527a77 | `cmp dword [esp + 0x10], 0x59d8` | `rt_staff_reserve` |
+| 0x527d43 | `cmp ebx, 0x59d8` | `rt_staff_reserve` |
+
+`rt_staff_reserve_size()` (staff_reserve.c) sets the size for the load that runs: 23,000, or 46,000 for a custom data set (`database = folder:<name>`) whose estimated Select All need (below) is more than 23,000. Both sizing sites call it, as the order of the entries in index.dat decides which runs first. The test switch `RECOMP_STAFF_RESERVE=<rows>` (23,000 to 400,000) sets any size. With `RECOMP_SCREEN_LOG=1` a wrap of 0x527240 prints the rows used.
+
+Why 46,000: twice the original. The most that a season database needs is 27,156 (September 2012). Inference from the flag of the sizing branch (`cStack_81d`, game creation inventory): a load of a saved game takes the + 0x52d path at 0x529b42 and skips the blank rows (the jump at 0x52a1bc), so the size does not change a load of a saved game.
+
+### The estimate
+
+At the first sizing site, `staff_reserve_estimate` reads nation.dat, club.dat and nat_club.dat of the custom data set (the file records, 0x245 bytes a club, -1 for an empty id) and counts the four loops of 0x527240 with every nation of the league table selected (the 27 nations of the entries 8 to 34 at 0xb63d60, the most that Select All selects, 0x81dcca):
+
+- A club of England (`g_key_nation_england` 0x9cf2e4) with reputation (+0x80) 500 or less counts nothing (0x527334..0x527340, the same test at 0x527600, 0x527901, 0x527bf9).
+- Loops 1 to 3, a club of a selected nation (+0x53): `clamp((rep + 500) * k / 10000, 1, k)` less the filled slots, k = 5, 7, 3 at +0x19f, +0x1b3, +0x1cf (0x527429, 0x52772c, 0x527a2d).
+- The test through 0x540a50 is left out. It finds the parent club of some reserve clubs of Spain, Germany and Portugal (key ids 0x9cf488, 0x9cf314, 0x9cf434 and the club key ids from 0x9d0120). It can only lower the count.
+- Loop 4: one for a club with no manager (+0xcf is the club's manager, `2026-10-15-assistant-pick-inventory.md`) in a selected nation with a division (+0x57) and a reputation not 0, or with reputation 7501 or more (0x527d03..0x527d31); and one for each national team in nat_club.dat with no manager.
+
+The file counts alone are not an upper limit. Before 0x527240 runs, the game clears some manager links that the files hold: the staff pass (`database_links.c` `database_leave_club`, and the national manager at 0x52d353) and the trim 0x524d70. So loop 4 needs more than the files show: 3.9.68 3,712 against 3,404 from the files (read from memory with a test wrap), October 2003 168 more, September 2005 163 more, November 2007 79 more. Loops 1 to 3 count more than the game makes (3.9.68: 19,241 against 18,911), inference: because the 0x540a50 test is left out.
+
+For this reason the estimate adds a margin of 10 % of its loop 4 count (`LOOP4_MARGIN_PCT`, rounded up). The largest shortfall of loop 4 measured is 9 % (3.9.68). For every data set that keeps 23,000, the loop 4 count with the margin is more than the managers that the game makes (the column below), so the estimate stays above the real use without the overcount of loops 1 to 3. A data set gets 46,000 too when a file is missing, a file size is not a whole number of records, or fewer than the 27 league nations match by name.
+
+| Data set | Estimate | Used (Select All) | Managers used (loop 4) | Reserve |
+|---|---|---|---|---|
+| Original 3.9.68 (in Databases) | 22,986 | 22,623 | 3,712 | 23,000 |
+| October 2003 | 23,344 | 22,809 | 3,785 | 46,000 |
+| September 2005 | 23,430 | 22,908 | 3,850 | 46,000 |
+| November 2007 | 24,218 | 23,664 | 3,936 | 46,000 |
+| September 2008 | 25,049 | 24,483 | 4,182 | 46,000 |
+| September 2009 | 25,175 | 24,636 | 4,316 | 46,000 |
+| September 2010 ODB | 25,446 | 24,926 | 4,394 | 46,000 |
+| September 2011 ODB | 26,291 | 25,779 | 4,693 | 46,000 |
+| September 2012 | 27,880 | 27,156 | 4,932 | 46,000 |
+| Autumn 2013 | 25,528 | 24,818 | 4,433 | 46,000 |
+| October 2014 | 23,423 | 22,758 | 4,148 | 46,000 |
+| October 2015 | 22,336 | 21,820 | 4,098 | 23,000 |
+| October 2016 | 22,357 | 21,844 | 4,092 | 23,000 |
+| October 2017 | 22,432 | 21,841 | 3,817 | 23,000 |
+| October 2018 | 22,873 | 22,245 | 3,845 | 23,000 |
+| October 2019 | 20,043 | 19,488 | 3,248 | 23,000 |
+| November 2020 | 19,926 | 19,324 | 3,215 | 23,000 |
+| October 2021 | 14,887 | 14,499 | 2,401 | 23,000 |
+| October 2022 | 15,306 | 14,902 | 2,551 | 23,000 |
+| October 2023 | 15,154 | 14,776 | 2,459 | 23,000 |
+| October 2024 | 15,593 | 15,187 | 2,590 | 23,000 |
+| December 2025 | 15,987 | 15,542 | 2,749 | 23,000 |
+
+The 7 that need more than 23,000 get 46,000. 10 of the 14 that fit keep 23,000 (October 2015 to December 2025), and so does the 3.9.68 data in a Databases folder (22,986 for 22,623 used). October 2003, September 2005 and October 2014 fit (22,758 to 22,908 used) but get 46,000: with the margin they cannot be shown to fit. A smaller margin would not cover the 9 % shortfall of 3.9.68.
+
+Effects:
+
+- The official data sets (3.9.68, 3.9.60, 3.9.65) keep 23,000: the same memory, the same game.
+- A custom data set with an estimate of 23,000 or less keeps 23,000: the same game as main and 0.5.0 (checked with the 3.9.68 data and October 2019 in Databases).
+- A custom data set with a larger estimate gets 23,000 more blank staff rows and non-player rows (about 4 MB). Its memory layout changes against 0.5.0, so its game does not repeat a 0.5.0 game with the same clicks.
+- When a later slice starts a season database by another path than the option `database = folder:<name>`, `rt_staff_reserve_size()` must see that path too.
+
+## Second stop: the French First Division
+
+With the fix, every one of the 21 databases in its own start year stops at "Error: v3.9.68 fra_first..cpp 108" (box from 0x5bb36d in `FraFirst::FraFirst`). `FraFirst::create_table` 0x5bc2b0 sets the size to 18 when the season (+0x40) is 2001 (0x5bc2bd), else 20. It then counts the clubs whose division (+0x57) is the French First Division and returns 0 when the count is not that size.
+
+Every one of the 21 databases holds 18 clubs in the French First Division and 20 in the Second Division (club.dat +0x57 against club_comp.dat). Inference: the databases are made for a game that starts in 2001/02. So a start year that is not 2001 gets size 20 and stops. This is the known case of `docs/research/rules-0.6.0/fra.md` ("Every season database holds 18 clubs in the French First Division"): the club moves of slice 15 move 2 clubs up for 2002/03 to 2022/23, and slice 18 takes the size from the rules table (18 from 2023/24). It is not a staff reserve fault. Note for the lead: `2026-10-17-first-season-branches.md` (Checks) says that a season database of 2002/03 to 2022/23 has 20 Ligue 1 clubs. The data shows 18 in all 21 databases.
+
+## Checks
+
+Commands from the repo, with `G=/Users/max/Projects/cm0102/clean-3968`, `DB=/Users/max/Projects/cm0102/test-fixtures/databases`, `REF=/Users/max/Projects/cm0102/wt-ref-0.5.0/build/cm0102_recomp`:
+
+- Each database in its own start year: `python3 tests/smoke/update_team_sweep.py build/cm0102_recomp $G $DB --select-all --jobs 3 --timeout 2400`. The box "fra_first..cpp 108" is an expected stop there and counts as a pass (`EXPECTED_STOP`). "Database.cpp 1844" or any other box fails. Result (with the loop 4 margin): 21 of 21 pass, all at the expected stop with "result 1", none at line 1844. Each database gets the reserve of the estimate table and uses the rows of the table under "Reserve rows used".
+- Every database in 2001: the same with `--start 2001` (first round, with 46,000 for every custom data set). Result: 21 of 21 pass. Each game reaches the first news screen and holiday, and each uses the same reserve rows as in its own start year.
+- Before the fix: the main build (`/Users/max/Projects/cm0102/cm0102-mac/build/cm0102_recomp`) with September 2012, Select All, 2001: the box "Error: v3.9.68 Database..cpp 1844" from 0x527ea3, the box call of the 0x527e4c block.
+- The reserve of each data set (the table under "The estimate"): a run of each folder to Select League(s) with `RECOMP_SCREEN_LOG=1`, which prints "staff reserve estimate".
+- Same-save checks of the base game, with `MAIN=/Users/max/Projects/cm0102/cm0102-mac/build/cm0102_recomp` (Q342: after slice 13 the base game is compared with main) and the 0.5.0 build: `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --runs normal,again --ref-build $MAIN --ref-050 $REF --jobs 3`, the same with `--save prematch.sav`, without `--save` (a new game) and with `--save yeovil.sav --days 7`. Result: all four PASS: the saves equal main, and the text-0.5.0 run equals 0.5.0.
+- Custom data sets that fit: the same new game check with `--custom-db "$DB/Original 3.9.68"` and with `--custom-db "$DB/October 2019"` (new in `smoke_run.py`: each run plays that folder as `database = folder:<name>`). Result: the saves equal main (whose reserve is always 23,000). The text-0.5.0 run differs from 0.5.0 in both, and it differs in the same way with the main build itself (`$MAIN ... --runs normal --ref-050 $REF --custom-db "$DB/Original 3.9.68"`). So that difference comes from main (inference: `RECOMP_SETUP_TEXT=0.5.0` does not give the 0.5.0 Setup Game text of a custom data set), not from the staff reserve. For the lead: the custom data set case of `--ref-050` is open.
+- `--runs` stops on an unknown name ("--runs: no run named nosuch in this check") and when fewer than two runs are left ("--runs: fewer than two runs are left").
+
+## Unknowns
+
+- The meaning of jobs 8, 9 and 10. The names coach, scout and physio are inferences from the slot counts.
+- Which code clears the manager links that loop 4 then fills, so the estimate of loop 4 cannot be exact.
+- Whether a later season needs blank reserve rows (for example for new staff). The 3.9.68 data with Select All leaves 377 blank rows, so the original does not seem to need many. Not proven.

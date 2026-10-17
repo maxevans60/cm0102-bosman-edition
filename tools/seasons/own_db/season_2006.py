@@ -1,0 +1,136 @@
+"""Season settings: 2006/07 from Football Manager 2007 facts and the November 2007 Update Team database.
+
+FM2007's final tables are those of 2005/06 (season end year 2006). Sources of every fact that FM2007 lacks are
+given next to it (read 2026-10-17)."""
+START = 2006                        # first season of the new database (2006/07)
+TEMPLATE = "November 2007"          # the template's name in databases-date-shifts.tsv
+FILL = "September 2005"             # second ratings source for FM players that the template lacks
+HIST_SRC = "September 2010 ODB"     # competition history 2000/01 to 2005/06 where FM lacks it
+AFTER_START = ["Asian Games Football Tournament"]   # played in December 2006, after the start
+
+ENGLAND_NATION = 61                 # the template's nation id of England
+ENGLAND_DIVISIONS = {7: "English Premier Division", 8: "English First Division", 9: "English Second Division",
+                     10: "English Third Division"}
+ENGLAND_FEEDER = 99
+# (automatic promotions, relegations) of each division in 2005/06; one automatic promotion from the Conference.
+ENGLAND_MOVES = {7: (0, 3), 8: (2, 3), 9: (2, 4), 10: (3, 2)}
+FEEDER_AUTO = 1
+# Play-off winners of 2005/06, by FM competition id, with the template's club names.
+PLAYOFF_WINNERS = {
+    8: "Watford",                   # https://en.wikipedia.org/wiki/2006_Football_League_Championship_play-off_Final
+    9: "Barnsley",                  # https://en.wikipedia.org/wiki/2006_Football_League_One_play-off_Final
+    10: "Cheltenham Town",          # https://en.wikipedia.org/wiki/2006_Football_League_Two_play-off_Final
+    99: "Hereford United",          # https://en.wikipedia.org/wiki/2006_Conference_National_play-off_Final
+}
+
+# Clubs whose FM2007 and template names do not match (FM long name -> template long name). FM2007 also has an
+# older "Erciyesspor" with no players; the 2006/07 Süper Lig club is Kayseri Erciyesspor.
+CLUB_FIX = {"Borussia Mönchengladbach": "Borussia M'gladbach", "Kayseri Erciyesspor": "Erciyesspor"}
+SUCCESSORS = {}
+
+# The real 2006/07 divisions of the playable nations (and the top divisions of Austria and Switzerland), keyed by the
+# template's division name, each nation top down. Calendar-year leagues: the 2007 season (the project's club tables
+# put calendar year X+1 in game season X/X+1). One URL per list (English Wikipedia where it has the season, else the
+# Dutch, Polish or French page). Where the game has fewer slots than the real league, leagues.py keeps relegated
+# clubs first, then the division's own clubs, then promoted clubs, by FM2007's 2005/06 table; a real club with no
+# slot goes to the next list of its nation. Names follow the template where it differs (for
+# example Gravesend & Northfleet is the template's Ebbsfleet United, the club's name from 2007, and Pasching is
+# FC Austria Kärnten, the club its licence moved to in 2007).
+REAL = {
+    'Italian Serie A': ['Ascoli', 'Atalanta', 'Cagliari', 'Catania', 'Chievo', 'Empoli', 'Fiorentina', 'Inter', 'Lazio', 'Livorno', 'Messina', 'Milan', 'Palermo', 'Parma', 'Reggina', 'Roma', 'Sampdoria', 'Siena', 'Torino', 'Udinese'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Serie_A
+    'Italian Serie B': ['AlbinoLeffe', 'Arezzo', 'Bari', 'Bologna', 'Brescia', 'Cesena', 'Crotone', 'Frosinone', 'Genoa', 'Hellas Verona', 'Juventus', 'Lecce', 'Mantova', 'Modena', 'Napoli', 'Pescara', 'Piacenza', 'Rimini', 'Spezia', 'Treviso', 'Triestina', 'Vicenza'],   # 22 clubs, https://en.wikipedia.org/wiki/2006–07_Serie_B
+    'Italian Serie C1/A': ['Grosseto', 'Sassuolo', 'Pisa', 'Venezia', 'Monza', 'Cittadella', 'Padova', 'Lucchese', 'Pistoiese', 'Novara', 'Massese', 'Pro Patria', 'Cremonese', 'Pro Sesto', 'Sangiovannese', 'Pizzighettone', 'Ivrea', 'Pavia'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Serie_C1
+    'Italian Serie C1/B': ['Ravenna', 'Avellino', 'Cavese', 'Foggia', 'Taranto', 'Perugia', 'Juve Stabia', 'Sambenedettese', 'Manfredonia', 'Salernitana', 'Gallipoli', 'Lanciano', 'Ternana', 'Martina', 'Teramo', 'Ancona', 'San Marino', 'Giulianova'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Serie_C1
+    'Spanish First Division': ['Athletic Bilbao', 'Atlético Madrid', 'Barcelona', 'Real Betis', 'Celta de Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Gimnàstic', 'Levante', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Recreativo', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_La_Liga
+    # Ciudad de Murcia is in the template with no nation, so it cannot be placed. A filler takes its slot.
+    'Spanish Second Division': ['Alavés', 'Albacete', 'Almería', 'Cádiz', 'Castellón', 'Elche', 'Hércules', 'Las Palmas', 'Lorca Deportiva', 'Málaga', 'Numancia', 'Polideportivo Ejido', 'Ponferradina', 'Real Madrid C.F. B', 'Real Murcia C.F.', 'Salamanca', 'Sporting de Gijón', 'Tenerife', 'Real Valladolid', 'Vecindario', 'Xerez'],   # 22 clubs, https://en.wikipedia.org/wiki/2006–07_Segunda_División
+    'French First Division': ['Auxerre', 'Bordeaux', 'Le Mans', 'Lens', 'Lille', 'Lorient', 'Lyon', 'Marseille', 'Monaco', 'Nancy', 'Nantes', 'Nice', 'Paris Saint-Germain', 'Rennes', 'Saint-Étienne', 'Sedan', 'Sochaux', 'Toulouse', 'Troyes', 'Valenciennes'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Ligue_1
+    'French Second Division': ['Metz', 'Caen', 'Strasbourg', 'Amiens', 'Grenoble', 'Le Havre', 'Châteauroux', 'Dijon', 'Bastia', 'Gueugnon', 'Reims', 'Ajaccio', 'Guingamp', 'Brest', 'Montpellier', 'Niort', 'Libourne-Saint-Seurin', 'Créteil', 'Istres', 'Tours'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Ligue_2
+    'French National': ['Clermont Foot', 'US Boulogne', 'Angers SCO', 'Stade lavallois', 'Nîmes Olympique', 'Paris FC', 'FC Sète', 'CS Louhans-Cuiseaux', 'AS Beauvais', 'SO Romorantin', 'Entente Sannois-Saint-Gratien', 'AS Cherbourg', 'AS Cannes', 'FC Martigues', 'Vannes OC', 'Pau FC', 'Sporting Toulon Var', "US Raon L'Etape", 'SO Châtellerault', 'AS Yzeure'],   # 20 clubs, https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_National_2006-2007
+    'German First Division': ['Alemannia Aachen', 'Arminia Bielefeld', 'Bayer Leverkusen', 'Bayern Munich', 'VfL Bochum', 'Borussia Dortmund', "Borussia M'gladbach", 'Eintracht Frankfurt', 'Energie Cottbus', 'Hamburger SV', 'Hannover 96', 'Hertha BSC', 'Mainz 05', '1. FC Nürnberg', 'Schalke 04', 'VfB Stuttgart', 'Werder Bremen', 'VfL Wolfsburg'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Bundesliga
+    'German Second Division': ['Karlsruher SC', 'Hansa Rostock', 'MSV Duisburg', 'SC Freiburg', 'SpVgg Greuther Fürth', '1. FC Kaiserslautern', 'FC Augsburg', 'TSV 1860 München', '1. FC Köln', 'Erzgebirge Aue', 'SC Paderborn', 'TuS Koblenz', 'Carl Zeiss Jena', 'Kickers Offenbach', 'Rot-Weiss Essen', 'SpVgg Unterhaching', 'Wacker Burghausen', 'Eintracht Braunschweig'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_2._Bundesliga
+    'Dutch Premier Division': ['PSV', 'Ajax', 'AZ', 'Twente', 'Heerenveen', 'Roda JC', 'Feyenoord', 'Groningen', 'Utrecht', 'NEC', 'NAC Breda', 'Vitesse', 'Sparta Rotterdam', 'Heracles Almelo', 'Willem II', 'Excelsior', 'RKC Waalwijk', 'ADO Den Haag'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Eredivisie
+    'Dutch First Division': ['De Graafschap', 'VVV-Venlo', 'RBC Roosendaal', 'FC Volendam', 'FC Den Bosch', 'FC Dordrecht', 'Go Ahead Eagles', 'BV Veendam', 'FC Zwolle', 'Stormvogels Telstar', 'FC Emmen', 'Cambuur Leeuwarden', 'MVV', 'HFC Haarlem', 'Fortuna Sittard', 'FC Omniworld', 'TOP Oss', 'Helmond Sport', 'FC Eindhoven', 'AGOVV Apeldoorn'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Eerste_Divisie
+    'Portuguese Premier League': ['Académica', 'Beira-Mar', 'Belenenses', 'Benfica', 'Boavista', 'Braga', 'Desportivo das Aves', 'Estrela da Amadora', 'Marítimo', 'Nacional', 'Naval 1º de Maio', 'Paços de Ferreira', 'Porto', 'Sporting', 'União de Leiria', 'Vitória Futebol Clube'],   # 16 clubs, https://en.wikipedia.org/wiki/2006–07_Primeira_Liga
+    'Portuguese Second League': ['Leixões', 'Vitória Sport Club', 'Rio Ave', 'Santa Clara', 'Gondomar', 'Feirense', 'Varzim', 'Penafiel', 'Olhanense', 'Estoril', 'Trofense', 'Gil Vicente', 'Vizela', 'Portimonense', 'Olivais e Moscavide', 'Chaves'],   # 16 clubs, https://en.wikipedia.org/wiki/2006–07_Liga_de_Honra
+    'Belgian First Division': ['Anderlecht', 'Standard Liège', 'Club Brugge', 'Gent', 'Genk', 'Germinal Beerschot', 'Zulte-Waregem', 'Lokeren', 'Westerlo', 'FC Brussels', 'Charleroi', 'Roeselare', 'Mouscron', 'Cercle Brugge', 'Sint-Truiden', 'Beveren', 'Lierse', 'Mons'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Belgian_First_Division
+    'Belgian Second Division': ['FCV Dender EH', 'KV Mechelen', 'KV Kortrijk', 'R. Antwerp FC', 'Oud-Heverlee Leuven', 'KMSK Deinze', 'KAS Eupen', 'R. Union Saint-Gilloise', 'AFC Tubize', 'KVK Tienen', 'R. Excelsior Virton', 'KFC Vigor Wuitens Hamme', 'KV Oostende', 'KV Red Star Waasland', 'KVSK United Overpelt-Lommel', 'KFC Dessel Sport', 'K Racing Waregem', 'KSK Ronse'],   # 18 clubs, https://nl.wikipedia.org/wiki/Tweede_klasse_2006-07_(voetbal_België)
+    'Turkish Premier Division': ['Fenerbahçe', 'Beşiktaş', 'Kayserispor', 'Erciyesspor', 'Galatasaray', 'Konyaspor', 'Trabzonspor', 'Ankaragücü', 'Ankaraspor', 'Gençlerbirliği', 'Bursaspor', 'Denizlispor', 'Gaziantepspor', 'Sakaryaspor', 'Sivasspor', 'Antalyaspor', 'Rizespor', 'Manisaspor'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Süper_Lig
+    'Turkish 2. Division Category A': ['Gençlerbirliği OFTAŞ', 'Istanbul Büyüksehir Belediye Spor', 'Malatyaspor', 'Diyarbakırspor', 'Kasımpaşa', 'Altay', 'Elazığspor', 'Orduspor', 'İstanbulspor', 'Samsunspor', 'Kocaelispor', 'Gaziantep Büyüksehir Belediyespor', 'Eskişehirspor', 'Karşıyaka', 'Mardinspor', 'Türk Telekomspor', 'Akçaabat Sebatspor', 'Uşakspor'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_TFF_First_League
+    'Greek National A Division': ['AEK Athens', 'Larisa', 'Apollon Kalamarias', 'Aris', 'Atromitos', 'Aigaleo', 'Ergotelis', 'Ionikos', 'Iraklis', 'Kerkira', 'OFI', 'Olympiakos Piraeus', 'Panathinaikos', 'Panionios', 'PAOK', 'Skoda Xanthi'],   # 16 clubs, https://en.wikipedia.org/wiki/2006–07_Super_League_Greece
+    'Greek National B Division': ['Asteras Tripolis', 'Levadiakos', 'Veroia', 'Kastoria', 'Pas Giannena', 'Ethnikos Piraeus', 'Kallithea', 'Thrasivoulos', 'Agrotikos Asteras', 'Kalamata', 'Panthrakikos', 'Ilisiakos', 'Chaidari', 'Ethnikos Asteras', 'Panseraikos', 'Proodeftiki', 'Messiniakos', 'Niki Volos'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Beta_Ethniki
+    'Austrian Premier Division': ['Red Bull Salzburg', 'Ried', 'Mattersburg', 'Rapid Wien', 'FC Austria Kärnten', 'Austria Wien', 'Sturm Graz', 'Rheindorf Altach', 'Wacker Innsbruck', 'Liebherr GAK'],   # 10 clubs, https://en.wikipedia.org/wiki/2006–07_Austrian_Football_Bundesliga
+    'Swiss National Division A': ['Zürich', 'Basel', 'Sion', 'Young Boys', 'St. Gallen', 'Grasshopper', 'Thun', 'FC Lucerne', 'Aarau', 'FC Schaffhousen'],   # 10 clubs, https://en.wikipedia.org/wiki/2006–07_Swiss_Super_League
+    'Danish Premier Division': ['Aalborg', 'Horsens', 'Brøndby', 'Esbjerg fB', 'København', 'Midtjylland', 'Nordsjælland', 'OB', 'Randers', 'Silkeborg', 'Vejle', 'Viborg'],   # 12 clubs, https://en.wikipedia.org/wiki/2006–07_Danish_Superliga
+    'Danish First Division': ['Lyngby BK', 'Aarhus Gymnastik Forening', 'HFK Sonderjylland', 'FC Fredericia', 'BK Frem', 'Kolding FC', 'Køge BK', 'Næstved BK', 'Herfølge BK', 'AB Copenhagen', 'Aarhus Fremad', 'Ølstykke FC', 'Hellerup Idræts Klub', 'Brabrand IF', 'Thisted FC', 'BK Fremad Amager'],   # 16 clubs, https://en.wikipedia.org/wiki/2006–07_Danish_1st_Division
+    'English Conference': ['Dagenham & Redbridge', 'Oxford United', 'Morecambe', 'York City', 'Exeter City', 'Burton Albion', 'Ebbsfleet United', 'Stevenage Borough', 'Aldershot Town', 'Kidderminster Harriers', 'Weymouth', 'Rushden & Diamonds', 'Northwich Victoria', 'Forest Green Rovers', 'Woking', 'Halifax Town', 'Cambridge United', 'Crawley Town', 'Grays Athletic', 'Stafford Rangers', 'Altrincham', 'Tamworth', 'Southport', 'St Albans City'],   # 24 clubs, https://en.wikipedia.org/wiki/2006–07_Football_Conference
+    'Scottish Premier Division': ['Celtic', 'Heart of Midlothian', 'Aberdeen', 'Rangers', 'Hibernian', 'Falkirk', 'Inverness C.T', 'Dundee United', 'Kilmarnock', 'Motherwell', 'Dunfermline Athletic', 'St Mirren'],   # 12 clubs, https://en.wikipedia.org/wiki/2006–07_Scottish_Premier_League
+    'Scottish First Division': ['Gretna', 'St Johnstone', 'Dundee', 'Hamilton Academical', 'Clyde', 'Livingston', 'Partick Thistle', 'Queen of the South', 'Airdrie United', 'Ross County'],   # 10 clubs, https://en.wikipedia.org/wiki/2006–07_Scottish_First_Division
+    'Scottish Second Division': ['Greenock Morton', 'Stirling Albion', 'Raith Rovers', 'Brechin City', 'Ayr United', 'Cowdenbeath', 'Alloa Athletic', 'Peterhead', 'Stranraer', 'Forfar Athletic'],   # 10 clubs, https://en.wikipedia.org/wiki/2006–07_Scottish_Second_Division
+    'Scottish Third Division': ['Berwick Rangers', 'Arbroath', "Queen's Park", 'East Fife', 'Dumbarton', 'Albion Rovers', 'Stenhousemuir', 'Montrose', 'Elgin City', 'East Stirlingshire'],   # 10 clubs, https://en.wikipedia.org/wiki/2006–07_Scottish_Third_Division
+    'Norwegian Premier Division': ['Brann', 'Stabæk', 'Viking', 'Lillestrøm', 'Rosenborg', 'Tromsø', 'Vålerenga', 'Fredrikstad', 'Lyn', 'Strømsgodset', 'Aalesund', 'Odd Grenland', 'Start', 'Sandefjord'],   # 14 clubs, https://en.wikipedia.org/wiki/2007_Tippeligaen
+    'Norwegian First Division': ['Molde', 'Ham-Kam', 'Bodø/Glimt', 'Kongsvinger', 'Moss', 'Bryne', 'Sogndal', 'Haugesund', 'Notodden', 'Hønefoss', 'Raufoss', 'Løv-Ham', 'Sarpsborg Sparta', 'Tromsdalen', 'Skeid', 'Mandalskameratene'],   # 16 clubs, https://en.wikipedia.org/wiki/2007_Norwegian_First_Division
+    'Swedish Premier Division': ['IFK Göteborg', 'Kalmar FF', 'Djurgården', 'Elfsborg', 'AIK', 'Hammarby', 'Halmstad', 'Helsingborg', 'Malmö FF', 'Gefle', 'GAIS', 'Örebro', 'Trelleborg', 'Brommapojkarna'],   # 14 clubs, https://en.wikipedia.org/wiki/2007_Allsvenskan
+    'Swedish First Division': ['IFK Norrköping', 'Ljungskile', 'GIF Sundsvall', 'Häcken', 'Bunkeflo', 'Åtvidaberg', 'Sirius', 'Degerfors', 'Mjällby', 'Örgryte', 'Landskrona BoIS', 'Enköpings SK', 'Jönköping Södra', 'Falkenberg', 'Östers', 'Sylvia'],   # 16 clubs, https://en.wikipedia.org/wiki/2007_Superettan
+    'Finnish Premier Division': ['Tampere United', 'Haka', 'TPS', 'Honka', 'MyPa', 'Mariehamn', 'HJK', 'Lahti', 'Inter', 'VPS', 'Jaro', 'KooTeePee', 'Viikingit', 'Oulu'],   # 14 clubs, https://en.wikipedia.org/wiki/2007_Veikkausliiga
+    'Russian Premier Division': ['Zenith St. Petersburg', 'Spartak Moscow', 'CSKA Moscow', 'Moscow', 'Saturn', 'Dinamo Moscow', 'Lokomotiv Moscow', 'Amkar Perm', 'Khimki', 'Rubin Kazan', 'Tom Tomsk', 'Spartak Nalchik', 'Krylja Sovetov Samara', 'Luch-Energia Vladivostok', 'Kuban Krasnodar', 'Rostov'],   # 16 clubs, https://en.wikipedia.org/wiki/2007_Russian_Premier_League
+    'Russian First Division': ['Shinnik Yaroslavl', 'Terek Grozny', 'Sibir Novosibirsk', 'KAMAZ', 'Ural Yekaterinburg', 'Torpedo Moscow', 'Nosta Novotroitsk', 'Dinamo Bryansk', 'Salyut Belgorod', 'Anzhi Makhachkala', 'Zvezda Irkutsk', 'Alania Vladikavkaz', 'SKA-Khabarovsk', 'Mashuk-KMV', 'Baltika Kaliningrad', 'Metallurg-Kuzbass', 'SKA Rostov-on-Don', 'Avangard Kursk', 'Mordovia Saransk', 'Textilschik-Telecom Ivanovo', 'Sodovik Sterlitamak', 'Spartak-MZhK Ryazan'],   # 22 clubs, https://en.wikipedia.org/wiki/2007_Russian_First_Division
+    'Polish First Division': ['Zagłębie Lubin', 'GKS Bełchatów', 'Legia Warsaw', 'Cracovia', 'Dyskobolia', 'Lech Poznań', 'Korona Kielce', 'Wisła Kraków', 'ŁKS Łódź', 'Odra Wodzisław', 'Arka Gdynia', 'Widzew Łódź', 'Górnik Łęczna', 'Górnik Zabrze', 'Wisła Płock', 'Pogoń Szczecin'],   # 16 clubs, https://en.wikipedia.org/wiki/2006–07_Ekstraklasa
+    'Polish Second Division': ['Ruch Chorzów', 'Jagiellonia Białystok', 'Polonia Bytom', 'Zagłębie Sosnowiec', 'Lechia Gdańsk', 'Polonia Warszawa', 'Górnik Polkowice', 'Piast Gliwice', 'Śląsk Wrocław', 'Odra Opole', 'KSZO Ostrowiec Świętokrzyski', 'Podbeskidzie Bielsko-Biała', 'ŁKS Łomża', 'Kmita Zabierzów', 'Stal Stalowa Wola', 'Unia Janikowo', 'Miedź Legnica', 'Zawisza Bydgoszcz'],   # 18 clubs, https://pl.wikipedia.org/wiki/II_liga_polska_w_piłce_nożnej_(2006/2007)
+    'Croatian First Division': ['Dinamo Zagreb', 'Hajduk Split', 'NK Zagreb', 'Šibenik', 'Slaven Belupo', 'Osijek', 'Rijeka', 'Varteks', 'NK Medjimurje Cakovec', 'Cibalia', 'NK Istra', 'Kamen Ingrad'],   # 12 clubs, https://en.wikipedia.org/wiki/2006–07_Prva_HNL
+    'Northern Irish League Premier Division': ['Linfield', 'Glentoran', 'Cliftonville', 'Portadown', 'Lisburn Distillery', 'Crusaders', 'Coleraine', 'Dungannon Swifts', 'Ballymena United', 'Limavady United', 'Armagh City', 'Newry City', 'Donegal Celtic', 'Larne', 'Glenavon', 'Loughgall'],   # 16 clubs, https://en.wikipedia.org/wiki/2006–07_Irish_Premier_League
+    'Northern Irish League First Division': ['Institute', 'Bangor', 'Banbridge Town', 'Carrick Rangers', 'Ards', 'Dundela', 'Harland & Wolff Welders', 'Coagh United', 'Tobermore United', 'Portstewart', 'Ballinamallard United', 'Moyola Park'],   # 12 clubs, https://en.wikipedia.org/wiki/2006–07_Irish_First_Division
+    'Irish Premier Division': ['Drogheda United', "St Patrick's Athletic", 'Bohemians', 'Cork City', 'Shamrock Rovers', 'Sligo Rovers', 'Derry City', 'Galway United', 'Bray Wanderers', 'University College Dublin', 'Waterford United', 'Longford Town'],   # 12 clubs, https://en.wikipedia.org/wiki/2007_League_of_Ireland_Premier_Division
+    'Irish First Division': ['Cobh Ramblers', 'Finn Harps', 'Dundalk', 'Limerick 37', 'Shelbourne', 'Athlone Town', 'Kildare County', 'Monaghan United', 'Wexford Youths', 'Kilkenny City'],   # 10 clubs, https://en.wikipedia.org/wiki/2007_League_of_Ireland_First_Division
+    'Welsh Premier Division': ['The New Saints', 'Rhyl', 'Llanelli', 'Welshpool Town', "Connah's Quay Nomads", 'Port Talbot Town', 'Carmarthen Town', 'Aberystwyth Town', 'Bangor City', 'Haverfordwest County', 'Porthmadog', 'Airbus UK', 'NEWI Cefn Druids', 'Caersws', 'Caernarfon Town', 'Newtown', 'Cwmbran Town'],   # 17 clubs, https://en.wikipedia.org/wiki/2006–07_Welsh_Premier_League
+    'Japanese J-League 1': ['Kashima Antlers', 'Urawa Reds', 'Gamba Osaka', 'Shimizu S-Pulse', 'Kawasaki Frontale', 'Albirex Niigata', 'Yokohama F. Marinos', 'Kashiwa Reysol', 'Júbilo Iwata', 'Vissel Kobe', 'Nagoya Grampus', 'FC Tokyo', 'JEF United Chiba', 'Oita Trinita', 'Omiya Ardija', 'Sanfrecce Hiroshima', 'Ventforet Kofu', 'Yokohama FC'],   # 18 clubs, https://en.wikipedia.org/wiki/2007_J.League_Division_1
+    'Japanese J-League 2': ['Consadole Sapporo', 'Tokyo Verdy', 'Kyoto Sanga', 'Vegalta Sendai', 'Cerezo Osaka', 'Shonan Bellmare', 'Avispa Fukuoka', 'Sagan Tosu', 'Montedio Yamagata', 'Ehime FC', 'Thespa Kusatsu', 'FC Mito Holly Hock', 'Tokushima Vortis'],   # 13 clubs, https://en.wikipedia.org/wiki/2007_J.League_Division_2
+    'Korean League': ['Seongnam', 'Suwon', 'Ulsan', 'Gyeongnam', 'Pohang', 'Daejon Citizen', 'Seoul', 'Jeonbuk', 'Incheon', 'Chunnam Dragons', 'Jeju', 'Daegu', 'Busan', 'Gwangju Sangmu'],   # 14 clubs, https://en.wikipedia.org/wiki/2007_K_League
+    # No MLS list: the game knows its 12 MLS clubs by their records (usa_mls_get_club_division stops for any other
+    # club), and the template already gives those 12 records the 2007 names. Toronto FC cannot join.
+    'Australian National Soccer League': ['Melbourne Victory', 'Adelaide United', 'Newcastle Jets', 'Sydney FC', 'Queensland Roar', 'Central Coast Mariners', 'Perth Glory', 'New Zealand Knights'],   # 8 clubs, https://en.wikipedia.org/wiki/2006–07_A-League
+    'Brazilian National First Division': ['São Paulo', 'Santos', 'Flamengo', 'Fluminense', 'Cruzeiro', 'Grêmio', 'Palmeiras', 'Atlético Mineiro', 'Botafogo', 'Vasco da Gama', 'Internacional', 'Atlético Paranaense', 'Figueirense', 'Sport Club do Recife', 'Náutico', 'Goiás', 'Corinthians', 'Paraná', 'Juventude', 'América Futebol Clube (RN)'],   # 20 clubs, https://en.wikipedia.org/wiki/2007_Campeonato_Brasileiro_Série_A
+    'Brazilian National Second Division': ['Coritiba', 'Ipatinga', 'Portuguesa', 'Vitória', 'Fortaleza', 'Marília', 'Criciúma', 'CRB', 'Brasiliense', 'São Caetano', 'Ponte Preta', 'Gama', 'Barueri', 'Santo André', 'Avaí', 'Ceará', 'Paulista', 'Santa Cruz', 'Remo', 'Ituano'],   # 20 clubs, https://en.wikipedia.org/wiki/2007_Campeonato_Brasileiro_Série_B
+    'Argentine Premier Division': ['Estudiantes (LP)', 'Boca Juniors', 'River Plate', 'Independiente', 'Arsenal', 'Lanús', 'Vélez Sarsfield', 'Rosario Central', 'San Lorenzo', 'Racing', 'Gimnasia y Esgrima de Jujuy', 'Belgrano', 'Gimnasia y Esgrima de La Plata', 'Nueva Chicago', 'Banfield', 'Argentinos Juniors', 'Colón', 'Godoy Cruz', "Newell's Old Boys", 'Quilmes'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Argentine_Primera_División
+    'Argentine Second Division': ['Olimpo', 'Platense', 'Tigre', 'San Martín (SJ)', 'Chacarita Juniors', 'Huracán', 'Atlético de Rafaela', 'Unión', 'San Martín', 'Aldosivi', 'Comisión de Actividades Infantiles', 'Ferro Carril Oeste', 'Instituto', 'Talleres', 'Tiro Federal', 'Defensa y Justicia', 'Almagro', 'Villa Mitre de Bahía Blanca', 'Huracán de Tres Arroyos', 'Ben Hur'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Primera_B_Nacional
+}
+# Promoted in 2006, in their 2005/06 second-tier order, where FM2007 has no 2005/06 table.
+PROMOTED = {
+    'French First Division': ['Valenciennes', 'Sedan', 'Lorient'],   # https://en.wikipedia.org/wiki/2005–06_Ligue_2
+}
+
+# The part file and label of the rules club tables for each real list (club_rows.py): the labels that make_clubs.py
+# TARGETS maps to the database division. Spain, Germany, Austria, Switzerland and Scotland have no target yet.
+PARTS = {
+    'Italian Serie A': ('ita', 'Serie A'), 'Italian Serie B': ('ita', 'Serie B'),
+    'Italian Serie C1/A': ('ita', 'Serie C1 girone A'), 'Italian Serie C1/B': ('ita', 'Serie C1 girone B'),
+    'French First Division': ('fra', 'Ligue 1'), 'French Second Division': ('fra', 'Ligue 2'),
+    'French National': ('fra', 'Championnat National'),
+    'Dutch Premier Division': ('hol-bel', 'Eredivisie'), 'Dutch First Division': ('hol-bel', 'Eerste Divisie'),
+    'Belgian First Division': ('hol-bel', 'Belgian First Division'),
+    'Belgian Second Division': ('hol-bel', 'Belgian Second Division'),
+    'Portuguese Premier League': ('por', 'Primeira Liga'), 'Portuguese Second League': ('por', 'Liga de Honra'),
+    'Turkish Premier Division': ('rus-tur', 'Turkish Premier Division (real: Süper Lig)'),
+    'Turkish 2. Division Category A': ('rus-tur', 'Turkish 2. Division Category A (real: TFF 1. Lig)'),
+    'Russian Premier Division': ('rus-tur', 'Russian Premier Division (real: Premier League)'),
+    'Russian First Division': ('rus-tur', 'Russian First Division (real: First Division)'),
+    'Greek National A Division': ('gre-pol-cro', 'gre_prm'), 'Greek National B Division': ('gre-pol-cro', 'gre_second'),
+    'Polish First Division': ('gre-pol-cro', 'pol_first'), 'Polish Second Division': ('gre-pol-cro', 'pol_second'),
+    'Croatian First Division': ('gre-pol-cro', 'cro_a1'),
+    'Danish Premier Division': ('den-swe', 'Danish Superliga'), 'Danish First Division': ('den-swe', 'Danish 1st Division'),
+    'Swedish Premier Division': ('den-swe', 'Allsvenskan'), 'Swedish First Division': ('den-swe', 'Superettan'),
+    'English Conference': ('eng', 'Conference Premier'),
+    'Norwegian Premier Division': ('nor-fin', 'Tippeligaen'), 'Norwegian First Division': ('nor-fin', '1. divisjon'),
+    'Finnish Premier Division': ('nor-fin', 'Veikkausliiga'),
+    'Northern Irish League Premier Division': ('wal-nir-irl', 'Northern Irish League Premier Division'),
+    'Northern Irish League First Division': ('wal-nir-irl', 'Northern Irish League First Division'),
+    'Irish Premier Division': ('wal-nir-irl', 'Irish Premier Division'),
+    'Irish First Division': ('wal-nir-irl', 'Irish First Division'),
+    'Welsh Premier Division': ('wal-nir-irl', 'Welsh Premier Division'),
+    'Japanese J-League 1': ('aus-jap-kor', 'J1 League'), 'Japanese J-League 2': ('aus-jap-kor', 'J2 League'),
+    'Korean League': ('aus-jap-kor', 'K League'), 'Australian National Soccer League': ('aus-jap-kor', 'A-League'),
+    'Brazilian National First Division': ('bra', 'Série A (2007)'),
+    'Brazilian National Second Division': ('bra', 'Série B (2007)'),
+    'Argentine Premier Division': ('arg-usa', 'Primera División'),
+    'Argentine Second Division': ('arg-usa', 'Primera B Nacional'),
+}
