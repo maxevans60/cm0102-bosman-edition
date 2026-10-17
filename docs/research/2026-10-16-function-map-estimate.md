@@ -1489,6 +1489,25 @@ Open point: the forwarders 0x6cfcd0, 0x6cfd10, 0x6cfd40 and 0x6cfd70 have the sa
 | 0x819870 | `search_screens_compare_results_by_field_2b` | `search_screens_compare_results_by_status_code` | takes reviewer | `search_screens_compare_results_by_status_code` |
 | 0x846920 | `staff_interest_in_joining_club` | `Shortlist_Manager::staff_interest_in_joining_club` | takes reviewer | `Shortlist_Manager::staff_interest_in_joining_club` |
 
+#### Review r04 (tier 6, 2026-10-17)
+
+Run `review-r04`: 1 Opus reviewer checked the 31 library rows in scope (the Sonnet font code). Agree 17, fix 12, rename 2. The third check took the reviewer's name in both rows. The 11 false entries are setjmp return points inside their parents, and they already had the right fragment names. 14 rows changed, and the changed Sonnet rows are now `opus`. The reviewer took 131,000 tokens, and the third check took 75,000.
+
+The sweep missed two function pointers: `FONT::set_style_and_size` stores 0x93d870 and 0x93d820 as a bold style pair, so 0x93d820 widens the advance widths. The TrueType opcode table and the round state table raised six rows to high.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x936510 | `glyph_hint_row_and_get_advance` | `glyph_hint_outline_and_get_advance` | takes reviewer | `glyph_hint_outline_and_get_advance` |
+| 0x93d820 | `glyph_outline_embolden_widths` | `font_embolden_advance_widths` | takes reviewer | `font_embolden_advance_widths` |
+
+#### Gate after r01 to r04 (2026-10-17)
+
+`review.py gate`: all 200 sample rows were reviewed. 7 of them (3.5%) got a new name from the third check, and 83 got a field fix. This is under the 10% line (20 rows), so the plan stops here and does not review the other 1,372 medium rows (r05 to r11). Max decides.
+
+Over the four waves, 630 rows were reviewed and 311 rows changed: 36 new names from the third check, 78 false entries renamed to `<parent>_fragment_<addr>`, and the rest field fixes. The third check kept the sweep name in none of the 36 disagreements. It took the reviewer's row 33 times and wrote a new row 3 times. The hard rows hold most of the errors: shared stubs named after one slot, and thiscall members that Ghidra showed without ECX. Confidence in `names.tsv` is now 5,217 high, 1,618 medium and 28 low.
+
+Two open points are outside the sample: the other Cup slot 17 overrides with the finance name (r02), and the four `match_eng_referee_*` forwarders (r03).
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
