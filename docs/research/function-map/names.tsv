@@ -4757,9 +4757,9 @@ address	file	name	confidence	model	cited_in
 0x7bdee0	player_search.cpp	player_search_write_traits_report_text	high	opus	
 0x7be640	player_search.cpp	player_search_compare_report_entries	medium	opus	
 0x7be670	player_search.cpp	player_search_write_opposition_report_text	high	opus	
-0x7bfbd0	player_search.cpp	player_search_collect_report_midfielders	medium	opus	
-0x7bfc50	player_search.cpp	player_search_collect_report_strikers	medium	opus	
-0x7bfcd0	player_search.cpp	player_search_collect_report_defenders	medium	opus	
+0x7bfbd0	player_search.cpp	player_search_collect_report_midfielders	high	opus	
+0x7bfc50	player_search.cpp	player_search_collect_report_strikers	high	opus	
+0x7bfcd0	player_search.cpp	player_search_collect_report_defenders	high	opus	
 0x7bfd50	player_stats.cpp	PlayerStats::PlayerStats	high	opus	2026-10-14-game-creation-inventory.md
 0x7c0d00	player_stats.cpp	PlayerStats::~PlayerStats	high	opus	
 0x7c0d70	player_stats.cpp	PlayerStats::record_match	high	opus	
@@ -4773,7 +4773,7 @@ address	file	name	confidence	model	cited_in
 0x7c2150	player_stats.cpp	player_stats_get_record_value	high	opus	
 0x7c25b0	player_stats.cpp	PlayerStats::format_player_stat	high	opus	2026-10-16-comparison-screen-inventory.md
 0x7c2750	player_stats.cpp	player_stats_format_record_field	high	opus	
-0x7c3060	player_stats.cpp	player_stats_format_totals_field	medium	opus	
+0x7c3060	player_stats.cpp	PlayerStats::format_totals_field	medium	opus	
 0x7c3920	player_stats.cpp	PlayerStats::get_category_record	high	opus	
 0x7c3a40	player_stats.cpp	player_stats_get_apps_for_club	high	opus	
 0x7c3bb0	player_stats.cpp	player_stats_get_goals_for_club	high	opus	
@@ -4923,7 +4923,7 @@ address	file	name	confidence	model	cited_in
 0x7da690	printouts.cpp	PunditList::~PunditList	high	opus	
 0x7da6e0	printouts.cpp	PunditList::read_pundit_line	high	opus	
 0x7daa70	printouts.cpp	parse_media_type_name	high	opus	
-0x7dab30	printouts.cpp	parse_quoted_token	medium	opus	
+0x7dab30	printouts.cpp	PunditList::parse_quoted_token	medium	opus	
 0x7dab90	printouts.cpp	PunditList::pick_random_pundit	high	opus	
 0x7dad20	printouts.cpp	PunditList::get_pundit_name	high	opus	
 0x7daf50	printouts.cpp	apply_obscene_gesture_ban	medium	opus	
@@ -5108,10 +5108,10 @@ address	file	name	confidence	model	cited_in
 0x7e6340	record_utils.cpp	Under21IntComp::~Under21IntComp	high	opus	
 0x7e6350	record_utils.cpp	BIntComp::scalar_deleting_destructor	high	opus	
 0x7e6370	record_utils.cpp	BIntComp::~BIntComp	high	opus	
-0x7e6380	record_utils.cpp	schedule_reserve_fixtures	medium	opus	
-0x7e6720	record_utils.cpp	add_b_or_under21_fixture	medium	opus	
-0x7e6a70	record_utils.cpp	cancel_unplayable_reserve_fixtures	medium	opus	
-0x7e6ba0	record_utils.cpp	can_clubs_field_reserve_sides	medium	opus	
+0x7e6380	record_utils.cpp	ReserveComp::schedule_reserve_fixtures	medium	opus	
+0x7e6720	record_utils.cpp	ReserveComp::add_b_or_under21_fixture	medium	opus	
+0x7e6a70	record_utils.cpp	ReserveComp::cancel_unplayable_reserve_fixtures	medium	opus	
+0x7e6ba0	record_utils.cpp	ReserveComp::can_clubs_field_reserve_sides	medium	opus	
 0x7e6f20	record_utils.cpp	comp_is_non_competitive	medium	opus	
 0x7e6f70	record_utils.cpp	ReserveComp::add_result	high	opus	
 0x7e7280	record_utils.cpp	reserve_result_news_text	high	opus	
@@ -5279,7 +5279,7 @@ address	file	name	confidence	model	cited_in
 0x7fc150	scout_manager.cpp	scout_manager_write_list_name	high	opus	
 0x7fc270	scout_manager.cpp	scout_manager_compare_report_keys	high	opus	
 0x7fc2a0	scout_manager.cpp	scout_manager_compare_report_records	high	opus	
-0x7fc310	scout_manager.cpp	scout_manager_clear_manager_lists	medium	opus	
+0x7fc310	scout_manager.cpp	SCOUT_MANAGER::clear_manager_lists	medium	opus	
 0x7fc7c0	scrman.cpp	ScreenManager::get_local_addresses	high	opus	
 0x7fc7e0	scrman.cpp	ScreenManager::monitor	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-16-options-screen.md,2026-10-16-slow-screens.md,options_screen.c,user32.c,views.c,waits.c
 0x7fdc00	scrman.cpp	ScreenManager::run_network_client	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-input-inventory.md,2026-10-14-widescreen-inventory.md
@@ -5288,7 +5288,7 @@ address	file	name	confidence	model	cited_in
 0x7feb20	scrman.cpp	ScreenManager::set_default_screen	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-game-creation-inventory.md
 0x7feb70	scrman.cpp	ScreenManager::count_active_records	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-15-holiday-next-match-inventory.md
 0x7febb0	scrman.cpp	ScreenManager::is_forward_unavailable	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md
-0x7fec60	scrman.cpp	ScreenManager::is_back_unavailable	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md
+0x7fec60	scrman.cpp	ScreenManager::is_back_unavailable	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md
 0x7fed30	scrman.cpp	ScreenManager::get_current_screen_flag	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
 0x7fedd0	scrman.cpp	ScreenManager::current_screen_has_exit_fn	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
 0x7fee80	scrman.cpp	ScreenManager::get_screen_title	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-manager-spec.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md
@@ -5333,7 +5333,7 @@ address	file	name	confidence	model	cited_in
 0x802ce0	scrman.cpp	ScreenManager::on_remote_sound_finished	medium	opus	2026-10-13-display-and-scrman-inventory.md
 0x802d00	scrman.cpp	ScreenManager::redraw_screen	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,screen_stack.c
 0x802f80	scrman.cpp	ScreenManager::send_network_status_message	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md
-0x803320	scrman.cpp	ScreenManager::get_area_selection	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md
+0x803320	scrman.cpp	ScreenManager::get_area_scroll_row	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md
 0x803390	scrman.cpp	ScreenManager::press_scrollbar_key	high	opus	2026-10-13-input-inventory.md,2026-10-14-start-new-game-inventory.md
 0x8033c0	scrman.cpp	ScreenManager::count_all_records	medium	opus	
 0x8033e0	scrman.cpp	ScreenManager::begin_print_job	high	opus	print_pdf.c
@@ -5344,24 +5344,24 @@ address	file	name	confidence	model	cited_in
 0x803bf0	scrman.cpp	ScreenManager::print_screen	medium	opus	
 0x803d50	scrman.cpp	ScreenManager::count_flagged_screens	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md
 0x803d80	scrman.cpp	ScreenManager::close_all_screens	medium	opus	2026-10-13-display-and-scrman-inventory.md
-0x803f30	scrman.cpp	display_add_screen_title	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
+0x803f30	scrman.cpp	ScreenManager::add_screen_title	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
 0x803f80	scrman.cpp	ScreenManager::add_screen_subtitle	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-foreign-and-tactics-positions.md
-0x803fd0	scrman.cpp	display_add_text_item	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md,options_screen.c
-0x804030	scrman.cpp	display_add_button_item	medium	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
-0x8040a0	scrman.cpp	display_add_area_button	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-options-screen.md,2026-10-16-sweep-season-end.md,assistant.c,options_screen.c
-0x804100	scrman.cpp	display_add_area_text	medium	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md,2026-10-16-sweep-season-end.md,build-brief-0.5.0.md,columns.c,options_screen.c
+0x803fd0	scrman.cpp	ScreenManager::add_text_item	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md,options_screen.c
+0x804030	scrman.cpp	ScreenManager::add_button_item	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md
+0x8040a0	scrman.cpp	ScreenManager::add_area_button	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-options-screen.md,2026-10-16-sweep-season-end.md,assistant.c,options_screen.c
+0x804100	scrman.cpp	ScreenManager::add_area_text	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-commentary-speed-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-16-comparison-screen-inventory.md,2026-10-16-options-screen.md,2026-10-16-sweep-season-end.md,build-brief-0.5.0.md,columns.c,options_screen.c
 0x804160	scrman.cpp	ScreenManager::add_area_text_by_ref	medium	opus	2026-10-13-screen-stack-inventory.md
 0x8041c0	search_edit_session.cpp	SearchEditSession::SearchEditSession	high	opus	
 0x8042c0	search_edit_session.cpp	SearchEditSession::unwind_destroy_working_criteria	medium	opus	
 0x8042e0	search_edit_session.cpp	SearchEditSession::revert_current_slot	medium	opus	
-0x8043c0	search_edit_session.cpp	SearchEditSession::refresh_scout_player_slots	medium	opus	
+0x8043c0	search_edit_session.cpp	SearchEditSession::refresh_scout_assignments	medium	opus	
 0x804450	search_edit_session.cpp	SearchEditSession::save_all_slots	medium	opus	
 0x8044a0	search_edit_session.cpp	SearchEditSession::set_current_search	high	opus	
 0x804540	search_edit_session.cpp	SearchEditSession::is_player_on_short_list	medium	opus	
 0x804590	search_edit_session.cpp	SearchEditSession::add_player_to_short_list	medium	opus	
 0x804670	search_edit_session.cpp	SearchEditSession::remove_player_from_short_list	high	opus	
-0x804750	search_edit_session.cpp	SearchEditSession::unlock_current_search	medium	opus	
-0x804810	search_edit_session.cpp	SearchEditSession::lock_current_search	medium	opus	
+0x804750	search_edit_session.cpp	SearchEditSession::unlock_current_search	high	opus	
+0x804810	search_edit_session.cpp	SearchEditSession::lock_current_search	high	opus	
 0x8048e0	search_edit_session.cpp	SearchEditSession::set_search_scope	medium	opus	
 0x8049a0	search_edit_session.cpp	SearchEditSession::reset_scout_fields	high	opus	
 0x804a40	search_edit_session.cpp	SearchEditSession::get_current_results	high	opus	
@@ -5564,10 +5564,10 @@ address	file	name	confidence	model	cited_in
 0x83a730	shortlist_manager.cpp	Shortlist_Manager::update_club_shortlist	medium	opus	
 0x83a780	shortlist_manager.cpp	Shortlist_Manager::sort_position_lists	medium	opus	
 0x83a9d0	shortlist_manager.cpp	Shortlist_Manager::load	high	opus	
-0x83b360	shortlist_manager.cpp	shortlist_old_slot_record_ctor	medium	opus	
+0x83b360	shortlist_manager.cpp	ShortlistOldSlot::ShortlistOldSlot	medium	opus	
 0x83b370	shortlist_manager.cpp	Shortlist_Manager::save	high	opus	
 0x83b670	shortlist_manager.cpp	shortlist_compare_by_value_then_key	high	opus	
-0x83b690	shortlist_manager.cpp	shortlist_compare_slots_filled_first	medium	opus	
+0x83b690	shortlist_manager.cpp	shortlist_compare_slots_open_first	medium	opus	
 0x83b6c0	shortlist_manager.cpp	shortlist_compare_slots_by_index	medium	opus	
 0x83b6e0	shortlist_manager.cpp	Shortlist_Manager::allocate_transfer_budget	medium	opus	
 0x83bd00	shortlist_manager.cpp	shortlist_position_mask_to_index	medium	opus	
@@ -5590,8 +5590,8 @@ address	file	name	confidence	model	cited_in
 0x843800	shortlist_manager.cpp	Shortlist_Manager::club_wants_player	medium	opus	
 0x843e10	shortlist_manager.cpp	Shortlist_Manager::update_staff_status	medium	opus	
 0x844280	shortlist_manager.cpp	shortlist_manager_remove_from_transfer_list	high	opus	
-0x8442b0	shortlist_manager.cpp	shortlist_manager_add_to_loan_list	medium	opus	
-0x8442d0	shortlist_manager.cpp	shortlist_manager_remove_from_loan_list	medium	opus	
+0x8442b0	shortlist_manager.cpp	shortlist_manager_add_to_loan_list	high	opus	
+0x8442d0	shortlist_manager.cpp	shortlist_manager_remove_from_loan_list	high	opus	
 0x844300	shortlist_manager.cpp	shortlist_staff_fits_slot_position	medium	opus	
 0x844540	shortlist_manager.cpp	Shortlist_Manager::count_slots_with_bids	medium	opus	
 0x844660	shortlist_manager.cpp	shortlist_manager_release_club_slot_targets	medium	opus	2026-10-15-holiday-next-match-inventory.md
@@ -5619,7 +5619,7 @@ address	file	name	confidence	model	cited_in
 0x84c500	simulated_stats.cpp	simulated_stats_atexit_static_match_record	high	opus	
 0x84c510	simulated_stats.cpp	SimulatedStats::load	high	opus	
 0x84c680	simulated_stats.cpp	SimulatedStats::save	high	opus	
-0x84c7d0	simulated_stats.cpp	crt_init_register_atexit_84c7d0	medium	opus	
+0x84c7d0	simulated_stats.cpp	crt_init_register_atexit_84c7d0	high	opus	
 0x84c7e0	simulated_stats.cpp	crt_atexit_noop_84c7e0	high	opus	
 0x84c7f0	simulated_stats.cpp	printer_is_installed	high	opus	2026-10-14-import-inventory.md,net.c,print_pdf.c
 0x84c830	simulated_stats.cpp	print_text_lines	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-14-import-inventory.md,build-brief-0.4.0.md,net.c,print_pdf.c

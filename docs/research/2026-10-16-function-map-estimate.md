@@ -1616,7 +1616,7 @@ Run `review-r09`: 8 Opus reviewers checked 208 medium rows of the manager manage
 
 Seven renames correct the convention. Three are `MANAGER_MANAGER` members, and four are the referee forwarders 0x6cfcd0, 0x6cfd10, 0x6cfd40 and 0x6cfd70, which r03 left open. They are now `CM3_MATCH_ENGINE::` members. 0x6b6cc0 is `match_day_apply_post_match_player_changes`, because its main work copies morale and reputation back from the match record. Two Match_Stats rows now say match_stats.cpp, as the asserts do. The placement has no match_stats.cpp file, so the docs still show them under match_screens.cpp.
 
-From this wave on, the brief prints the current row in run order. Its earlier grep hint sorted the runs by folder name and could print an old Haiku row. The merge check refuses a fix whose name differs from the current row, so no wrong row got in.
+From wave r10 on, the brief prints the current row in run order. Its earlier grep hint sorted the runs by folder name and could print an old Haiku row. The merge check refuses a fix whose name differs from the current row, so no wrong row got in.
 
 | Address | First name | Reviewer name | Third check | Final name |
 |---|---|---|---|---|
@@ -1630,6 +1630,32 @@ From this wave on, the brief prints the current row in run order. Its earlier gr
 | 0x6cfd70 | `match_eng_referee_check_offside` | `CM3_MATCH_ENGINE::referee_check_offside` | takes reviewer | `CM3_MATCH_ENGINE::referee_check_offside` |
 | 0x729bd0 | `match_stats_get_record_bucket` | `match_stats_get_record_bucket` | takes reviewer | `match_stats_get_record_bucket` |
 | 0x72b160 | `match_stats_compare_events` | `match_stats_compare_events` | takes reviewer | `match_stats_compare_events` |
+
+
+#### Review r10 (medium rows of tier 5, 2026-10-17)
+
+Run `review-r10`: 8 Opus reviewers checked 207 medium rows of news, officials, player search, player stats, record utils, scouting, the screen manager, search, shortlists, squads and staff contracts. Agree 158, fix 33, rename 16. The third check took the reviewer's name in all 16 rows. 49 rows changed in all. The reviewers took 122,000 to 149,000 tokens each, and the third check took 117,000.
+
+Twelve renames make free functions into members, because the callers load a global object into ECX: `PlayerStats` (0xb74350), `PunditList`, `ReserveComp` (0xb74434), `SCOUT_MANAGER` (0xb74448) and `ScreenManager` (0xb74450). The five `display_add_*` rows said that ECX was a Display, but the bodies read the channel at this+0x382a. 0x83b690 had its sort order reversed in the name: open slots sort first.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x7c3060 | `player_stats_format_totals_field` | `PlayerStats::format_totals_field` | takes reviewer | `PlayerStats::format_totals_field` |
+| 0x7dab30 | `parse_quoted_token` | `PunditList::parse_quoted_token` | takes reviewer | `PunditList::parse_quoted_token` |
+| 0x7e6380 | `schedule_reserve_fixtures` | `ReserveComp::schedule_reserve_fixtures` | takes reviewer | `ReserveComp::schedule_reserve_fixtures` |
+| 0x7e6720 | `add_b_or_under21_fixture` | `ReserveComp::add_b_or_under21_fixture` | takes reviewer | `ReserveComp::add_b_or_under21_fixture` |
+| 0x7e6a70 | `cancel_unplayable_reserve_fixtures` | `ReserveComp::cancel_unplayable_reserve_fixtures` | takes reviewer | `ReserveComp::cancel_unplayable_reserve_fixtures` |
+| 0x7e6ba0 | `can_clubs_field_reserve_sides` | `ReserveComp::can_clubs_field_reserve_sides` | takes reviewer | `ReserveComp::can_clubs_field_reserve_sides` |
+| 0x7fc310 | `scout_manager_clear_manager_lists` | `SCOUT_MANAGER::clear_manager_lists` | takes reviewer | `SCOUT_MANAGER::clear_manager_lists` |
+| 0x803320 | `ScreenManager::get_area_selection` | `ScreenManager::get_area_scroll_row` | takes reviewer | `ScreenManager::get_area_scroll_row` |
+| 0x803f30 | `display_add_screen_title` | `ScreenManager::add_screen_title` | takes reviewer | `ScreenManager::add_screen_title` |
+| 0x803fd0 | `display_add_text_item` | `ScreenManager::add_text_item` | takes reviewer | `ScreenManager::add_text_item` |
+| 0x804030 | `display_add_button_item` | `ScreenManager::add_button_item` | takes reviewer | `ScreenManager::add_button_item` |
+| 0x8040a0 | `display_add_area_button` | `ScreenManager::add_area_button` | takes reviewer | `ScreenManager::add_area_button` |
+| 0x804100 | `display_add_area_text` | `ScreenManager::add_area_text` | takes reviewer | `ScreenManager::add_area_text` |
+| 0x8043c0 | `SearchEditSession::refresh_scout_player_slots` | `SearchEditSession::refresh_scout_assignments` | takes reviewer | `SearchEditSession::refresh_scout_assignments` |
+| 0x83b360 | `shortlist_old_slot_record_ctor` | `ShortlistOldSlot::ShortlistOldSlot` | takes reviewer | `ShortlistOldSlot::ShortlistOldSlot` |
+| 0x83b690 | `shortlist_compare_slots_filled_first` | `shortlist_compare_slots_open_first` | takes reviewer | `shortlist_compare_slots_open_first` |
 
 
 ## Recommendation
