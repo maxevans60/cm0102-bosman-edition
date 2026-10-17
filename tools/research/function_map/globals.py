@@ -244,6 +244,13 @@ def script_names(G, fn):
                             evidence=f"the {g['type']} at this address in .rdata is {txt}, and every access reads it",
                             confidence="high")
             continue
+        t = text_at(a)
+        if t and g["acc"] and all(x[2] == "address" for x in g["acc"]):
+            names[a] = dict(name=f"g_str_{slug(t, 40) if slug(t, 40) != 'empty' else 'chars_' + t.encode('latin1').hex()}", type=f"char[{len(t.encode('latin1')) + 1}]",
+                            size=len(t.encode("latin1")) + 1, description=f"The text \"{t}\".",
+                            evidence=f"the bytes at this address are the text \"{t}\", and every access passes its address",
+                            confidence="high")
+            continue
         if init:
             v = img.u32(a)
             s = string_at(v) if v else None
@@ -253,13 +260,6 @@ def script_names(G, fn):
                                 evidence=f"string 0x{v:06x} \"{s[:60]}\" is the value at this address, and no function writes it",
                                 confidence="high" if sec == ".rdata" else "medium")
                 continue
-        t = text_at(a)
-        if t and g["acc"] and all(x[2] == "address" for x in g["acc"]):
-            names[a] = dict(name=f"g_str_{slug(t, 40) if slug(t, 40) != 'empty' else 'chars_' + t.encode('latin1').hex()}", type=f"char[{len(t.encode('latin1')) + 1}]",
-                            size=len(t.encode("latin1")) + 1, description=f"The text \"{t}\".",
-                            evidence=f"the bytes at this address are the text \"{t}\", and every access passes its address",
-                            confidence="high")
-            continue
         if all(cat.get(r) in ("lib", "crt") for r in readers):
             first = min(readers)
             rn = fn.get(first, {}).get("name", f"sub_{first:06x}")

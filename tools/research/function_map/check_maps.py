@@ -24,7 +24,7 @@ DATA_DIR = os.path.join(REPO, "docs", "research", "data-map")
 CONFIDENCE = {"high", "medium", "low"}
 MODELS = {"script", "sonnet", "opus"}
 TYPES = re.compile(r"^(u8|s8|u16|s16|u32|s32|float|double|long double|char \*|vtable|object|table|buffer|unknown|"
-                   r"[A-Za-z_][A-Za-z0-9_ ]*\*?(\[[0-9a-fx]+\])?)$")
+                   r"[A-Za-z_][A-Za-z0-9_ ]*\**(\[[0-9a-fx]+\])?)$")
 NAME = re.compile(r"^g_[a-z0-9_]+$")
 QUOTE = re.compile(r"\"[^\"]*\"|\bassert\b|0x[0-9a-f]{6}\b|\bg_[a-z0-9_]+|\.rdata")
 CODE = re.compile(r"```|\bDAT_00[0-9a-f]{6}\b|\bFUN_00[0-9a-f]{6}\(|\bundefined[1248] \*?[a-zA-Z_]\w*;|"

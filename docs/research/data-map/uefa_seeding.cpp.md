@@ -6,5 +6,5 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xb63d7b | 2 | table | `g_unk_b63d7b` |  |  | low | script |  | [0x904580](../function-map/uefa_seeding.cpp.md) |  |
-| 0xb63d82 | 8 | table | `g_unk_b63d82` |  |  | low | script |  | [0x904580](../function-map/uefa_seeding.cpp.md) |  |
+| 0xb63d7b | 2 | u16 | `g_league_world_cup_first_season_year` | g_league_table+0x1b first_season_year: year of the first season of the world cup entry, which the setup function stores. | The setup function 0x830620 create_world_cup_qualifying_comps (high) stores 1996 here. 0x904580 UefaSeeding::assign_uefa_cup_places compares it with the season year of a comp. | medium | sonnet |  | [0x904580](../function-map/uefa_seeding.cpp.md) |  |
+| 0xb63d82 | 4 | ClubComp * | `g_league_world_cup_second_cup_comp` | g_league_table+0x22 club comp: pointer to the second cup competition record of the world cup entry, null for this entry. | 0x904580 UefaSeeding::assign_uefa_cup_places passes it to comp_util_get_latest_placed_club. repo doc 2026-10-14-start-new-game-inventory.md section 3c (league entry layout): second club comp pointer at +0x22, the English League Cup for England. | medium | sonnet |  | [0x904580](../function-map/uefa_seeding.cpp.md) |  |

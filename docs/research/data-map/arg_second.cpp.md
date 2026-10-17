@@ -6,4 +6,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xadae04 | 1 | u8 | `g_unk_adae04` |  |  | low | script | [0x408630](../function-map/arg_second.cpp.md), [0x408910](../function-map/arg_second.cpp.md) | [0x48f450](../function-map/comp.cpp.md) |  |
+| 0xadae04 | 1 | s8 | `g_average_sort_season_column` | The season column that the relegation average comparator uses to order its rows. | Written with 2 by 0x408630 ArgSecond::create_promotion_cup_stage and 0x408910 ArgSecond::create_promotion_playoffs. Read by 0x48f450 comp_compare_average_rows_by_season, which limits it to 0 to 3. | medium | sonnet | [0x408630](../function-map/arg_second.cpp.md), [0x408910](../function-map/arg_second.cpp.md) | [0x48f450](../function-map/comp.cpp.md) |  |

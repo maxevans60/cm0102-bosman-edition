@@ -8,5 +8,5 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 |---|---|---|---|---|---|---|---|---|---|---|
 | 0xb5e138 | 0 | buffer | `g_unk_b5e138` |  |  | low | script |  | [0x5fee50](../function-map/human_manager.cpp.md) |  |
 | 0xb61e22 | 0 | buffer | `g_unk_b61e22` |  |  | low | script |  | [0x5fee50](../function-map/human_manager.cpp.md) |  |
-| 0xb63c97 | 1 | buffer | `g_unk_b63c97` |  |  | low | script |  | [0x5fee50](../function-map/human_manager.cpp.md) |  |
+| 0xb63c97 | 1 | u8 | `g_human_manager_load_buffer_end` | The address after the last of three human manager records in the load buffer, used as the loop limit when HUMAN_MANAGER::load copies the records. | Only 0x5fee50 HUMAN_MANAGER::load touches it, as a loop bound. The distance from the buffer at 0xb5e138 is exactly three records of 0x1e75 bytes, the loop step. | medium | sonnet |  | [0x5fee50](../function-map/human_manager.cpp.md) |  |
 | 0xb67a48 | 4 | u32 | `g_unk_b67a48` |  |  | low | script | [0x6b42a0](../function-map/match_day.cpp.md) | [0x5fe500](../function-map/human_manager.cpp.md), [0x725ca0](../function-map/match_screens.cpp.md) | 2026-10-14-assistant-and-days-inventory.md |

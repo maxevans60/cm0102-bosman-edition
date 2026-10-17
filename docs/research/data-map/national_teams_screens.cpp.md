@@ -6,4 +6,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xb77c88 | 4 | u32 | `g_unk_b77c88` |  |  | low | script | [0x77a9f0](../function-map/national_teams_screens.cpp.md) |  |  |
+| 0xb77c88 | 4 | u32 | `g_network_join_name_unmatched_flag` | Set to 1 when a join starts and cleared when the typed host name matches a game in the list. | written only by 0x77a9f0 Network::host_or_join_game (high), which also sends the string CM3 LIST SERVER ACK | medium | sonnet | [0x77a9f0](../function-map/national_teams_screens.cpp.md) |  |  |

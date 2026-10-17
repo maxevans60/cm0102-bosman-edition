@@ -73,6 +73,20 @@ def rows_for(G, names):
                           confidence="low", model="script")
         out[a].setdefault("type", g["type"])
         out[a].setdefault("size", g["size"])
+    # A high row cannot rest on a global that is not high: it drops to medium until that global is high.
+    by_name = {r["name"]: r for r in out.values()}
+    changed = True
+    while changed:
+        changed = False
+        for r in out.values():
+            if r["confidence"] != "high":
+                continue
+            weak = [q for q in re.findall(r"\bg_[a-z0-9_]+", r.get("evidence", ""))
+                    if q != r["name"] and q in by_name and by_name[q]["confidence"] != "high"]
+            if weak:
+                r["confidence"] = "medium"
+                r["evidence"] = f"{r['evidence']} (medium until {', '.join(sorted(set(weak)))} is high)"
+                changed = True
     return out
 
 

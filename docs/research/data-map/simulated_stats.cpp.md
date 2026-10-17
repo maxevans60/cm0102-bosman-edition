@@ -6,6 +6,6 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xdd7160 | 1 | u8 | `g_unk_dd7160` |  |  | low | script | [0x84be20](../function-map/simulated_stats.cpp.md) | [0x84be20](../function-map/simulated_stats.cpp.md) |  |
-| 0xdd7168 | 0 | object | `g_unk_dd7168` |  |  | low | script |  | [0x84be20](../function-map/simulated_stats.cpp.md), [0x84c500](../function-map/simulated_stats.cpp.md) |  |
-| 0xdd7287 | 0 | buffer | `g_unk_dd7287` |  |  | low | script |  | [0x84be20](../function-map/simulated_stats.cpp.md) |  |
+| 0xdd7160 | 1 | u8 | `g_simulated_stats_static_init_flags` | Flag byte whose first bit marks that the static match record array in play_daily_matches is built. | read and written only by 0x84be20 SimulatedStats::play_daily_matches (medium), which ors in bit 1 once | medium | sonnet | [0x84be20](../function-map/simulated_stats.cpp.md) | [0x84be20](../function-map/simulated_stats.cpp.md) |  |
+| 0xdd7168 | 287 | object | `g_simulated_stats_static_match_record` | Static match record object that play_daily_matches uses, destroyed at exit. | destroyed by 0x84c500 simulated_stats_atexit_static_match_record (high) and passed by address in 0x84be20 | high | sonnet |  | [0x84be20](../function-map/simulated_stats.cpp.md), [0x84c500](../function-map/simulated_stats.cpp.md) |  |
+| 0xdd7287 | 3146 | buffer | `g_simulated_stats_static_match_records` | Static array of two 0x625 byte objects that play_daily_matches constructs once. | passed by 0x84be20 SimulatedStats::play_daily_matches (medium) to the array constructor with element size 0x625 and count 2 | medium | sonnet |  | [0x84be20](../function-map/simulated_stats.cpp.md) |  |

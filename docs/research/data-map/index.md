@@ -7,9 +7,9 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 All 4428 globals are in `globals.tsv`, one row per address, in 746 address groups. Each global is listed on the page of its owner file, the file of most of the functions that touch it. A global that four or more files touch, with no file holding half of them, is on `shared.md`.
 
-- Confidence: 3450 high, 149 medium, 829 low.
-- Model: 3828 script, 599 sonnet, 1 opus.
-- Runs: data-script, data-w01, data-w01-check.
+- Confidence: 3642 high, 365 medium, 421 low.
+- Model: 3394 script, 1033 sonnet, 1 opus.
+- Runs: data-script, data-w01, data-w01-check, data-w02.
 - Script names: key ids from the name chains of the key id load (0x601a40), read-only float constants by value, vtables by the constructor or destructor that stores them, string pointers, and globals that only library code touches.
 
 | Owner file | Globals |

@@ -6,5 +6,5 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xadae17 | 1 | table | `g_unk_adae17` |  |  | low | script |  | [0x4aeaf0](../function-map/comp_text.cpp.md) |  |
-| 0xadae1c | 4 | object | `g_unk_adae1c` |  |  | low | script | [0x4aeaf0](../function-map/comp_text.cpp.md) | [0x4aeaf0](../function-map/comp_text.cpp.md) | 2026-10-14-clickable-names-inventory.md |
+| 0xadae17 | 1 | u8 | `g_text_wrap_line_buffer_lookbehind` | An alias into the wrapped text line buffers, five bytes before the buffer start, that Text::draw_wrapped uses to test for a hash character. | Read only by 0x4aeaf0 Text::draw_wrapped, which indexes it by line times 501 plus a column. That equals g_text_wrap_line_buffers at column minus 5. | low | sonnet |  | [0x4aeaf0](../function-map/comp_text.cpp.md) |  |
+| 0xadae1c | 501 | buffer | `g_text_wrap_line_buffers` | The array of 501 byte line buffers that Text::draw_wrapped fills with the wrapped lines. | Only 0x4aeaf0 Text::draw_wrapped uses it, as the line buffer indexed by line number times 501. | medium | sonnet | [0x4aeaf0](../function-map/comp_text.cpp.md) | [0x4aeaf0](../function-map/comp_text.cpp.md) | 2026-10-14-clickable-names-inventory.md |

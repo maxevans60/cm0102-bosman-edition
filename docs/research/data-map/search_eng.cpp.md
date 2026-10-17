@@ -6,4 +6,4 @@ A global is high only when the evidence quotes a string, an assert, a constant i
 
 | Address | Size | Type | Name | Description | Evidence | Confidence | Model | Writers | Readers | Cited in |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0xdd6bfc | 0 | buffer | `g_unk_dd6bfc` |  |  | low | script |  | [0x806080](../function-map/search_eng.cpp.md) |  |
+| 0xdd6bfc | 200 | char[200] | `g_search_staff_name_buffer` | Buffer that holds the formatted staff name while the search text is matched against it. | used only by 0x806080 search_text_matches_staff_name (high), which formats the name into it with length 200 and matches the search text | medium | sonnet |  | [0x806080](../function-map/search_eng.cpp.md) |  |

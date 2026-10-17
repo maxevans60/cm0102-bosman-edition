@@ -1753,6 +1753,29 @@ Gate: one Opus agent checked 60 random rows (142,000 tokens). 59 are right and 1
 
 The wave showed two gaps in the script rules. The string rule of the function map takes only ASCII text of three or more characters, so short strings and strings with accents came into scope as globals, and the key id rule missed names with accents. `globals.py` now names text that every access passes by address, with Latin-1 letters and of any length, and reads key id names with accents. Script names rise from 2,289 to 3,341, and high script names from 2,148 to 3,317. 813 globals are left, in 12 batches over waves 2 and 3. One false global is known: 0xb71b00 is the number 12,000,000 in `EngPrm::create_table`, not an address.
 
+#### Wave data-w02 (2026-10-17)
+
+Six Sonnet agents named the 434 globals of batches `data-w02-aa` to `-af`: 196 high, 218 medium and 20 low.
+
+| Batch | Globals | High | Medium | Low | Tokens | What |
+|---|---|---|---|---|---|---|
+| aa | 80 | 43 | 36 | 1 | 364,000 | Club badge table, injury types, GUI glyphs, wage tables, language and region tables |
+| ab | 79 | 35 | 40 | 4 | 238,000 | Contract manager and its 16 static Dates, competition object table, index.dat entries |
+| ac | 56 | 45 | 11 | 0 | 221,000 | Config pointer, DirectDraw objects, bitmap font slots, GUI colours, setup tables |
+| ad | 70 | 23 | 47 | 0 | 222,000 | League table base 0xb63d60 and its first entries, fitness update statics |
+| ae | 70 | 27 | 43 | 0 | 126,000 | League table entries 23 to 32 |
+| af | 79 | 23 | 41 | 15 | 245,000 | Screen manager network fields, manager objects, game Dates, staff profile rows |
+
+The wave took about 1.42 million tokens and 13 minutes. Batch aa took the longest at 13 minutes.
+
+Fixes at the merge:
+- Two agents named a global `g_config`. 0xae3138 is the pointer that the game start code fills. 0xdd7ee8 is a static object that `Config::set_defaults` takes in ECX, now `g_config_static_object`.
+- The rule for string pointers ran before the text rule, so 0x98b438 (the text "IR£") got a pointer name. The text rule now runs first.
+- The check now accepts types with two stars, such as `Comp **`.
+- Four high rows quoted a global that is not high. `write_data_docs.py` now drops such a row to medium and names the global it waits for. The row goes back to high when that global becomes high.
+
+A second false global: 0xca0000 is the window style that `graphics_init_display` passes to `SetWindowLongA`. The league table rows of wave 1 give a Date 15 bytes, and wave 2 gives it 8 bytes.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
