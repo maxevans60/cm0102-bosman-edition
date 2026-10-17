@@ -121,6 +121,8 @@ if(NOT WIN32)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Competition history between 2001 and the start season (0.6.0 slice 11c): the C table matches plan.tsv.
+    add_test(NAME season_history_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_table.py" --check)
     # The rules table reader (0.6.0 slice 12): make the table from the parts, then read it.
     add_executable(season_rules_test tests/seasons/test_season_rules.c src/recomp_rt/win/season_rules.c
         src/recomp_rt/host/posix.c)

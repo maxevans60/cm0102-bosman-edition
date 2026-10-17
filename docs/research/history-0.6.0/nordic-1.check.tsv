@@ -1,0 +1,313 @@
+competition	label	part	field	value	check_url	result	note
+Swedish Cup	2002		first	Djurgårdens IF	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: Djurgårdens IF FF; cup final
+Swedish Cup	2002		second	AIK	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: AIK; cup final
+Swedish Cup	2002		ended	2002-11	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: final on Nov 9
+Swedish Cup	2003		first	IF Elfsborg	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: IF Elfsborg; cup final
+Swedish Cup	2003		second	Assyriska FF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Assyriska Föreningen; cup final
+Swedish Cup	2003		ended	2003-11	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: final on Nov 1
+Swedish Cup	2004		first	Djurgårdens IF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Djurgårdens IF FF; cup final
+Swedish Cup	2004		second	IFK Göteborg	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: IFK Göteborg; cup final
+Swedish Cup	2004		ended	2004-11	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: final on Nov 6
+Swedish Cup	2005		first	Djurgårdens IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Djurgårdens IF; cup final
+Swedish Cup	2005		second	Åtvidabergs FF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Åtvidabergs FF; cup final
+Swedish Cup	2005		ended	2005-10	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: final on Oct 29
+Swedish Cup	2006		first	Helsingborgs IF	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Helsingborgs IF; cup final
+Swedish Cup	2006		second	Gefle IF	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Gefle IF; cup final
+Swedish Cup	2006		ended	2006-11	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: final on Nov 11
+Swedish Cup	2007		first	Kalmar FF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Kalmar FF; cup final
+Swedish Cup	2007		second	IFK Göteborg	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: IFK Göteborg; cup final
+Swedish Cup	2007		ended	2007-09	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: final on Sep 27
+Swedish Cup	2008		first	IFK Göteborg	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: IFK Göteborg; cup final
+Swedish Cup	2008		second	Kalmar FF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Kalmar FF; cup final
+Swedish Cup	2008		ended	2008-09	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: final on Sep 21
+Swedish Cup	2009		first	AIK	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: AIK; cup final
+Swedish Cup	2009		second	IFK Göteborg	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: IFK Göteborg; cup final
+Swedish Cup	2009		ended	2009-11	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: final on Nov 7
+Swedish First Division	2002		first	Östers IF	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: Östers IF (Växjö); Superettan final table
+Swedish First Division	2002		second	Enköpings SK	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: Enköpings SK FK; Superettan final table
+Swedish First Division	2002		ended	2002-10		no second source	RSSSF 2002 page gives no match dates for this competition; no other source found
+Swedish First Division	2003		first	Kalmar FF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Kalmar FF; Superettan final table
+Swedish First Division	2003		second	Trelleborgs FF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Trelleborgs FF; Superettan final table
+Swedish First Division	2003		ended	2003-10		no second source	RSSSF 2003 page gives no match dates for this competition; no other source found
+Swedish First Division	2004		first	BK Häcken	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: BK Häcken; Superettan final table
+Swedish First Division	2004		second	Gefle IF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Gefle IF; Superettan final table
+Swedish First Division	2004		ended	2004-10		no second source	RSSSF 2004 page gives no match dates for this competition; no other source found
+Swedish First Division	2005		first	AIK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: AIK; Superettan final table
+Swedish First Division	2005		second	Östers IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Östers IF; Superettan final table
+Swedish First Division	2005		ended	2005-10	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: round 30 on Oct 22
+Swedish First Division	2006		first	Trelleborgs FF	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Trelleborgs FF; Superettan final table
+Swedish First Division	2006		second	Örebro SK	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Örebro SK FK; Superettan final table
+Swedish First Division	2006		ended	2006-10	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: round 30 on Oct 21
+Swedish First Division	2007		first	IFK Norrköping	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: IFK Norrköping; Superettan final table
+Swedish First Division	2007		second	Panos Ljungskile SK	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Ljungskile SK; Superettan final table
+Swedish First Division	2007		ended	2007-10	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: round 30 on Oct 27
+Swedish First Division	2008		first	Örgryte IS	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Örgryte IS; Superettan final table
+Swedish First Division	2008		second	BK Häcken	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: BK Häcken; Superettan final table
+Swedish First Division	2008		ended	2008-10	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: round 30 on Oct 25
+Swedish First Division	2009		first	Mjällby AIF	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: Mjällby AIF; Superettan final table
+Swedish First Division	2009		second	Åtvidabergs FF	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: Åtvidabergs FF; Superettan final table
+Swedish First Division	2009		ended	2009-10	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: round 30 on Oct 25
+Swedish Premier Division	2002		first	Djurgårdens IF	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: Djurgårdens IF; Allsvenskan final table
+Swedish Premier Division	2002		second	Malmö FF	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: Malmö FF; Allsvenskan final table
+Swedish Premier Division	2002		ended	2002-11	https://www.rsssf.org/tablesz/zwed02.html	agree	RSSSF: round 26 on Nov 2
+Swedish Premier Division	2003		first	Djurgårdens IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Djurgårdens IF; Allsvenskan final table
+Swedish Premier Division	2003		second	Hammarby IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Hammarby IF FF; Allsvenskan final table
+Swedish Premier Division	2003		ended	2003-10	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: round 26 on Oct 26
+Swedish Premier Division	2004		first	Malmö FF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Malmö FF; Allsvenskan final table
+Swedish Premier Division	2004		second	Halmstad BK	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Halmstads BK; Allsvenskan final table
+Swedish Premier Division	2004		ended	2004-10	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: round 26 on Oct 30
+Swedish Premier Division	2005		first	Djurgårdens IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Djurgårdens IF; Allsvenskan final table
+Swedish Premier Division	2005		second	IFK Göteborg	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: IFK Göteborg; Allsvenskan final table
+Swedish Premier Division	2005		ended	2005-10	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: round 26 on Oct 23
+Swedish Premier Division	2006		first	IF Elfsborg	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: IF Elfsborg; Allsvenskan final table
+Swedish Premier Division	2006		second	AIK	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: AIK Solna; Allsvenskan final table
+Swedish Premier Division	2006		ended	2006-11	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: round 26 on Nov 5
+Swedish Premier Division	2007		first	IFK Göteborg	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: IFK Göteborg; Allsvenskan final table
+Swedish Premier Division	2007		second	Kalmar FF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Kalmar FF; Allsvenskan final table
+Swedish Premier Division	2007		ended	2007-10	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: round 26 on Oct 28
+Swedish Premier Division	2008		first	Kalmar FF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Kalmar FF; Allsvenskan final table
+Swedish Premier Division	2008		second	IF Elfsborg	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: IF Elfsborg; Allsvenskan final table
+Swedish Premier Division	2008		ended	2008-11	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: round 30 on Nov 9
+Swedish Premier Division	2009		first	AIK	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: AIK; Allsvenskan final table
+Swedish Premier Division	2009		second	IFK Göteborg	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: IFK Göteborg; Allsvenskan final table
+Swedish Premier Division	2009		ended	2009-11	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: round 30 on Nov 1
+Swedish Second Division East Gotaland	2002		first	Husqvarna FF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division East Gotaland	2002		second	Linköpings FF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division East Gotaland	2003		first	Jönköping Södra IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Jönköpings Södra; Div 2 Östra Götaland, table worked out from the RSSSF match results of the group
+Swedish Second Division East Gotaland	2003		second	Husqvarna FF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Husqvarna FF; Div 2 Östra Götaland, table worked out from the RSSSF match results of the group
+Swedish Second Division East Gotaland	2004		first	Husqvarna FF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Husqvarna FF; Div 2 Östra Götaland final table
+Swedish Second Division East Gotaland	2004		second	Norrby IF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Norrby IF; Div 2 Östra Götaland final table
+Swedish Second Division East Gotaland	2005		first	Jönköping Södra IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Jönköpings Södra; Div 2 Mellersta Götaland final table (the research maps East Gotaland to Mellersta Götaland in 2005, an inference)
+Swedish Second Division East Gotaland	2005		second	Norrby IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Norrby IF; Div 2 Mellersta Götaland final table (the research maps East Gotaland to Mellersta Götaland in 2005, an inference)
+Swedish Second Division East Gotaland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	third level 2006 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division East Gotaland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	third level 2007 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division East Gotaland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	third level 2008 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division East Svealand	2002		first	Väsby IK FK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division East Svealand	2002		second	Visby IF Gute		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division East Svealand	2003		first	Väsby IK FK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Väsby IK FK; Div 2 Östra Svealand, table worked out from the RSSSF match results of the group
+Swedish Second Division East Svealand	2003		second	Valsta/Syrianska IK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Valsta Syrianska IK; Div 2 Östra Svealand, table worked out from the RSSSF match results of the group
+Swedish Second Division East Svealand	2004		first	Väsby IK FK	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Väsby IK FK; Div 2 Östra Svealand final table: 2. Valsta Syrianska IK 43 pts, 3. Vasalund/Essinge IF 41 pts
+Swedish Second Division East Svealand	2004		second	Vasalunds IF	https://www.rsssf.org/tablesz/zwed04.html	disagree	RSSSF: Valsta Syrianska IK; Div 2 Östra Svealand final table: 2. Valsta Syrianska IK 43 pts, 3. Vasalund/Essinge IF 41 pts
+Swedish Second Division East Svealand	2005		first	Syrianska Föreningen	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Syrianska FC; Div 2 Östra Svealand final table; both on 41 points
+Swedish Second Division East Svealand	2005		second	Vasalunds IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Vasalund/Essinge IF; Div 2 Östra Svealand final table; both on 41 points
+Swedish Second Division East Svealand	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	third level 2006 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division East Svealand	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	third level 2007 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division East Svealand	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	third level 2008 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division North	2002		first	Bodens BK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division North	2002		second	Umeå FC		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division North	2003		first	Friska Viljor FC	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Friska Viljor FC; Div 2 Norrland, table worked out from the RSSSF match results of the group
+Swedish Second Division North	2003		second	Östersunds FK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Östersunds FK; Div 2 Norrland, table worked out from the RSSSF match results of the group
+Swedish Second Division North	2004		first	Umeå FC	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Umeå FC; Div 2 Norrland final table
+Swedish Second Division North	2004		second	IFK Timrå	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: IFK Timrå; Div 2 Norrland final table
+Swedish Second Division North	2005		first	Umeå FC	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Umeå FC; Div 2 Norrland final table
+Swedish Second Division North	2005		second	Östersunds FK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Östersunds FK; Div 2 Norrland final table
+Swedish Second Division North	2006		first	Enköpings SK	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Enköpings SK FK; Div 1 Norra final table
+Swedish Second Division North	2006		second	IK Sirius FK	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: IK Sirius FK (Uppsala); Div 1 Norra final table
+Swedish Second Division North	2006		ended	2006-10		no second source	RSSSF 2006 page gives no match dates for this competition; no other source found
+Swedish Second Division North	2007		first	Assyriska FF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Assyriska FF (Södertälje); Div 1 Norra final table
+Swedish Second Division North	2007		second	Väsby United	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Väsby United; Div 1 Norra final table
+Swedish Second Division North	2007		ended	2007-10		no second source	RSSSF 2007 page gives no match dates for this competition; no other source found
+Swedish Second Division North	2008		first	Syrianska Föreningen	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Syrianska FC; Div 1 Norra final table
+Swedish Second Division North	2008		second	Vasalunds IF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Vasalunds IF; Div 1 Norra final table
+Swedish Second Division North	2008		ended	2008-10		no second source	RSSSF 2008 page gives no match dates for this competition; no other source found
+Swedish Second Division North	2009		first	Degerfors IF	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: Degerfors IF; Div 1 Norra final table
+Swedish Second Division North	2009		second	IK Brage	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: IK Brage; Div 1 Norra final table
+Swedish Second Division North	2009		ended	2009-10		no second source	RSSSF 2009 page gives no match dates for this competition; no other source found
+Swedish Second Division South Gotaland	2002		first	Falkenberg FF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division South Gotaland	2002		second	Lunds BK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division South Gotaland	2003		first	Mjällby AIF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Mjällby AIF; Div 2 Södra Götaland, table worked out from the RSSSF match results of the group; level on 43 points, Mjällby ahead on goal difference
+Swedish Second Division South Gotaland	2003		second	Ängelholms FF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Ängelholms FF; Div 2 Södra Götaland, table worked out from the RSSSF match results of the group; level on 43 points, Mjällby ahead on goal difference
+Swedish Second Division South Gotaland	2004		first	Mjällby AIF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Mjällby AIF; Div 2 Södra Götaland final table
+Swedish Second Division South Gotaland	2004		second	Ängelholms FF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Ängelholms FF; Div 2 Södra Götaland final table
+Swedish Second Division South Gotaland	2005		first	Bunkeflo IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Bunkeflo IF; Div 2 Södra Götaland final table
+Swedish Second Division South Gotaland	2005		second	Kristianstads FF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Kristianstad FF; Div 2 Södra Götaland final table
+Swedish Second Division South Gotaland	2006		first	IF Sylvia	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: IF Sylvia (Norrköping); Div 1 Södra final table
+Swedish Second Division South Gotaland	2006		second	Bunkeflo IF	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Bunkeflo IF; Div 1 Södra final table
+Swedish Second Division South Gotaland	2006		ended	2006-10		no second source	RSSSF 2006 page gives no match dates for this competition; no other source found
+Swedish Second Division South Gotaland	2007		first	Qviding Fräntorps IF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Qviding FIF (Göteborg); Div 1 Södra final table
+Swedish Second Division South Gotaland	2007		second	Ängelholms FF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Ängelholms FF; Div 1 Södra final table
+Swedish Second Division South Gotaland	2007		ended	2007-10		no second source	RSSSF 2007 page gives no match dates for this competition; no other source found
+Swedish Second Division South Gotaland	2008		first	FC Trollhättan	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: FC Trollhättan; Div 1 Södra final table
+Swedish Second Division South Gotaland	2008		second	Östers IF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Östers IF; Div 1 Södra final table
+Swedish Second Division South Gotaland	2008		ended	2008-10		no second source	RSSSF 2008 page gives no match dates for this competition; no other source found
+Swedish Second Division South Gotaland	2009		first	Östers IF	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: Östers IF; Div 1 Södra final table; both on 46 points
+Swedish Second Division South Gotaland	2009		second	Skövde AIK	https://www.rsssf.org/tablesz/zwed09.html	agree	RSSSF: Skövde AIK; Div 1 Södra final table; both on 46 points
+Swedish Second Division South Gotaland	2009		ended	2009-10		no second source	RSSSF 2009 page gives no match dates for this competition; no other source found
+Swedish Second Division West Gotaland	2002		first	FC Trollhättan		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division West Gotaland	2002		second	Göteborgs AIS		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division West Gotaland	2003		first	Göteborgs AIS	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: GAIS; Div 2 Västra Götaland, table worked out from the RSSSF match results of the group; level on 51 points, GAIS ahead on goal difference
+Swedish Second Division West Gotaland	2003		second	Panos Ljungskile SK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Ljungskile SK; Div 2 Västra Götaland, table worked out from the RSSSF match results of the group; level on 51 points, GAIS ahead on goal difference
+Swedish Second Division West Gotaland	2004		first	Panos Ljungskile SK	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Ljungskile SK; Div 2 Västra Götaland final table
+Swedish Second Division West Gotaland	2004		second	Floda BoIF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Floda BoIF; Div 2 Västra Götaland final table
+Swedish Second Division West Gotaland	2005		first	Qviding Fräntorps IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Qviding FIF; Div 2 Västra Götaland final table
+Swedish Second Division West Gotaland	2005		second	FC Trollhättan	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: FC Trollhättan; Div 2 Västra Götaland final table
+Swedish Second Division West Gotaland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	third level 2006 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division West Gotaland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	third level 2007 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division West Gotaland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	third level 2008 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division West Svealand	2002		first	BK Forward		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division West Svealand	2002		second	Rynninge IK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Second Division West Svealand	2003		first	IK Brage	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: IK Brage; Div 2 Västra Svealand, table worked out from the RSSSF match results of the group
+Swedish Second Division West Svealand	2003		second	Degerfors IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Degerfors IF; Div 2 Västra Svealand, table worked out from the RSSSF match results of the group
+Swedish Second Division West Svealand	2004		first	Degerfors IF	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: Degerfors IF; Div 2 Västra Svealand final table; both on 46 points
+Swedish Second Division West Svealand	2004		second	IFK Ölme	https://www.rsssf.org/tablesz/zwed04.html	agree	RSSSF: IFK Ölme; Div 2 Västra Svealand final table; both on 46 points
+Swedish Second Division West Svealand	2005		first	Enköpings SK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Enköping SK; Div 2 Norra Svealand final table (the research maps West Svealand to Norra Svealand in 2005, an inference)
+Swedish Second Division West Svealand	2005		second	IK Sirius FK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: IK Sirius FK; Div 2 Norra Svealand final table (the research maps West Svealand to Norra Svealand in 2005, an inference)
+Swedish Second Division West Svealand	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	third level 2006 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division West Svealand	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	third level 2007 has Division 1 Norra and Södra only; no group of this region
+Swedish Second Division West Svealand	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	third level 2008 has Division 1 Norra and Södra only; no group of this region
+Swedish Third Division East Svealand	2002		first	Tyresö FF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division East Svealand	2002		second	Älvsjö AIK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division East Svealand	2003		first	Enskede IK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Enskede IK; Div 3 Östra Svealand, table worked out from the RSSSF match results of the group
+Swedish Third Division East Svealand	2003		second	Älvsjö AIK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Älvsjö AIK FF; Div 3 Östra Svealand, table worked out from the RSSSF match results of the group
+Swedish Third Division East Svealand	2004		first	Hammarby TFF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division East Svealand	2004		second	Arameiska Syrianska KIF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division East Svealand	2005		first	Haningealliansens FF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Haningealliansens FF; Div 3 Östra Svealand final table
+Swedish Third Division East Svealand	2005		second	Arameiska Syrianska KIF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Arameiska-Syrianska; Div 3 Östra Svealand final table
+Swedish Third Division East Svealand	2006		first	Gröndals IK	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Gröndals IK; Div 2 Östra Svealand final table
+Swedish Third Division East Svealand	2006		second	Arameiska Syrianska KIF	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Arameiska-Syrianska; Div 2 Östra Svealand final table
+Swedish Third Division East Svealand	2006		ended	2006-10		no second source	RSSSF 2006 page gives no match dates for this competition; no other source found
+Swedish Third Division East Svealand	2007		first	Arameiska Syrianska KIF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Arameiska-Syrianska (Norsborg); Div 2 Östra Svealand final table
+Swedish Third Division East Svealand	2007		second	Eskilstuna City FK	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Eskilstuna City FK; Div 2 Östra Svealand final table
+Swedish Third Division East Svealand	2007		ended	2007-10		no second source	RSSSF 2007 page gives no match dates for this competition; no other source found
+Swedish Third Division East Svealand	2008		first	Karlslunds IF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Karlslund; Div 2 södra Svealand (RSSSF name; the research calls it Östra Svealand) final table
+Swedish Third Division East Svealand	2008		second	Eskilstuna City FK	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Eskilstuna City; Div 2 södra Svealand (RSSSF name; the research calls it Östra Svealand) final table
+Swedish Third Division East Svealand	2008		ended	2008-10		no second source	RSSSF 2008 page gives no match dates for this competition; no other source found
+Swedish Third Division Middle Gotaland	2002		first	Floda BoIF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Gotaland	2002		second	Jonsereds IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Gotaland	2003		first	Norrby IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Norrby IF; Div 3 Mellersta Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Middle Gotaland	2003		second	IF Hagapojkarna	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: IF Hagapojkarna; Div 3 Mellersta Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Middle Gotaland	2004		first	Lindome IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Gotaland	2004		second	Varbergs GIF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Gotaland	2005		first	Skövde AIK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Skövde AIK; Div 3 Mellersta Götaland final table
+Swedish Third Division Middle Gotaland	2005		second	Jonsereds IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Jonsereds IF; Div 3 Mellersta Götaland final table
+Swedish Third Division Middle Gotaland	2006		first	Skövde AIK	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Skövde AIK; Div 2 Mellersta Götaland final table
+Swedish Third Division Middle Gotaland	2006		second	IK Sleipner	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: IK Sleipner; Div 2 Mellersta Götaland final table
+Swedish Third Division Middle Gotaland	2006		ended	2006-10		no second source	RSSSF 2006 page gives no match dates for this competition; no other source found
+Swedish Third Division Middle Gotaland	2007		first	Motala AIF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Motala AIF FK; Div 2 Mellersta Götaland final table
+Swedish Third Division Middle Gotaland	2007		second	IK Sleipner	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: IK Sleipner (Norrköping); Div 2 Mellersta Götaland final table
+Swedish Third Division Middle Gotaland	2007		ended	2007-10		no second source	RSSSF 2007 page gives no match dates for this competition; no other source found
+Swedish Third Division Middle Gotaland	2008		first	IK Sleipner	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Sleipner; Div 2 östra Götaland final table
+Swedish Third Division Middle Gotaland	2008		second	Myresjö IF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Myresjö; Div 2 östra Götaland final table
+Swedish Third Division Middle Gotaland	2008		ended	2008-10		no second source	RSSSF 2008 page gives no match dates for this competition; no other source found
+Swedish Third Division Middle Norrland	2002		first	IFK Östersund		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Norrland	2002		second	IFK Sundsvall		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Norrland	2003		first	Anundsjö IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Anundsjö IF; Div 3 Mellersta Norrland, table worked out from the RSSSF match results of the group
+Swedish Third Division Middle Norrland	2003		second	Harmångers IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Harmångers IF; Div 3 Mellersta Norrland, table worked out from the RSSSF match results of the group
+Swedish Third Division Middle Norrland	2004		first	Gimonäs CK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Norrland	2004		second	Kubikenborgs IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Middle Norrland	2005		first	Ersboda SK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Ersboda SK; Div 3 Mellersta Norrland final table
+Swedish Third Division Middle Norrland	2005		second	Kubikenborgs IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Kubikenborgs IF; Div 3 Mellersta Norrland final table
+Swedish Third Division Middle Norrland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	fourth level 2006 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Middle Norrland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	fourth level 2007 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Middle Norrland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	fourth level 2008 (Division 2) has 6 groups: Norrland, Norra Svealand, Södra Svealand, Östra Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division North Norrland	2002		first	Sunnanå SK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Norrland	2002		second	Morön BK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Norrland	2003		first	Luleå SK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Luleå SK; Div 3 Norra Norrland final table on the page
+Swedish Third Division North Norrland	2003		second	Infjärdens SK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Infjärdens SK; Div 3 Norra Norrland final table on the page
+Swedish Third Division North Norrland	2004		first	Hemmingsmarks IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Norrland	2004		second	Furunäs/Bullmarks IK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Norrland	2005		first	Skellefteå AIK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Skellefteå AIK FK; Div 3 Norra Norrland final table
+Swedish Third Division North Norrland	2005		second	Infjärdens SK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Infjärdens FK; Div 3 Norra Norrland final table
+Swedish Third Division North Norrland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	fourth level 2006 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division North Norrland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	fourth level 2007 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division North Norrland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	fourth level 2008 (Division 2) has 6 groups: Norrland, Norra Svealand, Södra Svealand, Östra Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division North Svealand	2002		first	Vasalunds IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Svealand	2002		second	Heby AIF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Svealand	2003		first	Gamla Uppsala SK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Gamla Upsala SK; Div 3 Norra Svealand, table worked out from the RSSSF match results of the group
+Swedish Third Division North Svealand	2003		second	Bollstanäs SK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Bollstanäs SK; Div 3 Norra Svealand, table worked out from the RSSSF match results of the group
+Swedish Third Division North Svealand	2004		first	IK Frej Täby		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Svealand	2004		second	Bollstanäs SK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Svealand	2005		first	Värtans IK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Värtans IK; Div 3 Norra Svealand final table
+Swedish Third Division North Svealand	2005		second	Gröndals IK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Gröndals IK; Div 3 Norra Svealand final table
+Swedish Third Division North Svealand	2006		first	Skiljebo SK	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Skiljebo SK; Div 2 Norra Svealand final table
+Swedish Third Division North Svealand	2006		second	IK Brage	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: IK Brage; Div 2 Norra Svealand final table
+Swedish Third Division North Svealand	2006		ended	2006-10		no second source	RSSSF 2006 page gives no match dates for this competition; no other source found
+Swedish Third Division North Svealand	2007		first	IK Brage	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: IK Brage (Borlänge); Div 2 Norra Svealand final table
+Swedish Third Division North Svealand	2007		second	Syrianska IF Kerburan	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Syrianska IF Kerburan (Västerås); Div 2 Norra Svealand final table
+Swedish Third Division North Svealand	2007		ended	2007-10		no second source	RSSSF 2007 page gives no match dates for this competition; no other source found
+Swedish Third Division North Svealand	2008		first	Syrianska IF Kerburan	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Syrianska IF; Div 2 norra Svealand final table
+Swedish Third Division North Svealand	2008		second	Skiljebo SK	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Skiljebo; Div 2 norra Svealand final table
+Swedish Third Division North Svealand	2008		ended	2008-10		no second source	RSSSF 2008 page gives no match dates for this competition; no other source found
+Swedish Third Division North Svealand	2009		first	Dalkurd FF		no second source	RSSSF 2009 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division North Svealand	2009		second	Skiljebo SK		no second source	RSSSF 2009 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northeast Gotaland	2002		first	Smedby AIS		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northeast Gotaland	2002		second	LSW IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northeast Gotaland	2003		first	Nyköpings BIS	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Nyköpings BIS; Div 3 Nordöstra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Northeast Gotaland	2003		second	BK Wolfram	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: BK Wolfram; Div 3 Nordöstra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Northeast Gotaland	2004		first	IF Heimer		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northeast Gotaland	2004		second	Tenhults IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northeast Gotaland	2005		first	Motala AIF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Motala AIF FK; Div 3 Nordöstra Götaland final table
+Swedish Third Division Northeast Gotaland	2005		second	IK Tord	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: IK Tord; Div 3 Nordöstra Götaland final table
+Swedish Third Division Northeast Gotaland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	fourth level 2006 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Northeast Gotaland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	fourth level 2007 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Northeast Gotaland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	fourth level 2008 (Division 2) has 6 groups: Norrland, Norra Svealand, Södra Svealand, Östra Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Northwest Gotaland	2002		first	Melleruds IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northwest Gotaland	2002		second	Vallens IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northwest Gotaland	2003		first	IK Oddevold	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: IK Oddevold; Div 3 Nordvästra Götaland, table worked out from the RSSSF match results of the group; Lärje/Angereds level with IFK Trollhättan on 37 points, ahead on goal difference
+Swedish Third Division Northwest Gotaland	2003		second	Lärje/Angereds IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Lärje/Angereds IF; Div 3 Nordvästra Götaland, table worked out from the RSSSF match results of the group; Lärje/Angereds level with IFK Trollhättan on 37 points, ahead on goal difference
+Swedish Third Division Northwest Gotaland	2004		first	Melleruds IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northwest Gotaland	2004		second	Lärje/Angereds IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Northwest Gotaland	2005		first	Lärje/Angereds IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Lärje/Angereds IF; Div 3 Nordvästra Götaland final table
+Swedish Third Division Northwest Gotaland	2005		second	Lundby IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Lundby IF; Div 3 Nordvästra Götaland final table
+Swedish Third Division Northwest Gotaland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	fourth level 2006 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Northwest Gotaland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	fourth level 2007 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Northwest Gotaland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	fourth level 2008 (Division 2) has 6 groups: Norrland, Norra Svealand, Södra Svealand, Östra Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division South Gotaland	2002		first	Bunkeflo IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Gotaland	2002		second	Asmundstorps IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Gotaland	2003		first	Malmö Anadolu Boll IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Malmö Anadolu BI; Div 3 Södra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division South Gotaland	2003		second	Kirseberg IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Kirseberg IF; Div 3 Södra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division South Gotaland	2004		first	Helsingborgs Södra BIS		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Gotaland	2004		second	Limhamns IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Gotaland	2005		first	Malmö Anadolu Boll IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Malmö Anadolu BI; Div 3 Södra Götaland final table
+Swedish Third Division South Gotaland	2005		second	Asmundstorps IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Asmundtorps IF; Div 3 Södra Götaland final table
+Swedish Third Division South Gotaland	2006		first	IFK Malmö	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: IFK Malmö FK; Div 2 Södra Götaland final table
+Swedish Third Division South Gotaland	2006		second	Malmö Anadolu Boll IF	https://www.rsssf.org/tablesz/zwed06.html	agree	RSSSF: Malmö Anadolu BI; Div 2 Södra Götaland final table
+Swedish Third Division South Gotaland	2006		ended	2006-10		no second source	RSSSF 2006 page gives no match dates for this competition; no other source found
+Swedish Third Division South Gotaland	2007		first	Malmö Anadolu Boll IF	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Malmö Anadolu BI; Div 2 Södra Götaland final table
+Swedish Third Division South Gotaland	2007		second	Helsingborgs Södra BIS	https://www.rsssf.org/tablesz/zwed07.html	agree	RSSSF: Helsingborgs Södra BIS; Div 2 Södra Götaland final table
+Swedish Third Division South Gotaland	2007		ended	2007-10		no second source	RSSSF 2007 page gives no match dates for this competition; no other source found
+Swedish Third Division South Gotaland	2008		first	Kristianstads FF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Kristianstad FF; Div 2 södra Götaland final table
+Swedish Third Division South Gotaland	2008		second	Ramlösa Södra FF	https://www.rsssf.org/tablesz/zwed08.html	agree	RSSSF: Ramlösa Södra; Div 2 södra Götaland final table
+Swedish Third Division South Gotaland	2008		ended	2008-10		no second source	RSSSF 2008 page gives no match dates for this competition; no other source found
+Swedish Third Division South Norrland	2002		first	Falu BS		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Norrland	2002		second	Harmångers IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Norrland	2003		first	Sandvikens IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Sandvikens IF; Div 3 Södra Norrland, table worked out from the RSSSF match results of the group
+Swedish Third Division South Norrland	2003		second	Söderhamns FF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Söderhamns FF; Div 3 Södra Norrland, table worked out from the RSSSF match results of the group
+Swedish Third Division South Norrland	2004		first	Slätta SK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Norrland	2004		second	Hudiksvall ABK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division South Norrland	2005		first	Hudiksvall ABK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Hudiksvalls ABK; Div 3 Södra Norrland final table
+Swedish Third Division South Norrland	2005		second	Brynäs IF FK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Brynäs IF FK; Div 3 Södra Norrland final table
+Swedish Third Division South Norrland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	fourth level 2006 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division South Norrland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	fourth level 2007 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division South Norrland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	fourth level 2008 (Division 2) has 6 groups: Norrland, Norra Svealand, Södra Svealand, Östra Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Southeast Gotaland	2002		first	Växjö BK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southeast Gotaland	2002		second	Kristianstads FF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southeast Gotaland	2003		first	Oskarshamns AIK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Oskarshamns AIK; Div 3 Sydöstra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Southeast Gotaland	2003		second	Nybro IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Nybro IF; Div 3 Sydöstra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Southeast Gotaland	2004		first	Nybro IF		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southeast Gotaland	2004		second	Kalmar AIK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southeast Gotaland	2005		first	Ljungby IF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Ljungby IF; Div 3 Sydöstra Götaland final table
+Swedish Third Division Southeast Gotaland	2005		second	Karlskrona AIF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Karlskrona AIF; Div 3 Sydöstra Götaland final table
+Swedish Third Division Southwest Gotaland	2002		first	Skene IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southwest Gotaland	2002		second	Ljungby IF		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southwest Gotaland	2003		first	Kinna IF	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Kinna IF; Div 3 Sydvästra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Southwest Gotaland	2003		second	IS Halmia	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: IS Halmia; Div 3 Sydvästra Götaland, table worked out from the RSSSF match results of the group
+Swedish Third Division Southwest Gotaland	2004		first	VMA IK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southwest Gotaland	2004		second	Åhus Horna BK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division Southwest Gotaland	2005		first	Varbergs BoIS FC	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Varbergs BoIS FC; Div 3 Sydvästra Götaland final table
+Swedish Third Division Southwest Gotaland	2005		second	Sölvesborgs GoIF	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Sölvesborgs GoIF; Div 3 Sydvästra Götaland final table
+Swedish Third Division Southwest Gotaland	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	fourth level 2006 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Southwest Gotaland	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	fourth level 2007 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Southwest Gotaland	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	fourth level 2008 (Division 2) has 6 groups: Norrland, Norra Svealand, Södra Svealand, Östra Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division Southwest Gotaland	2009		held	not held		no second source	RSSSF 2009 page has no fourth level; no other source found
+Swedish Third Division West Svealand	2002		first	Strömtorps IK		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division West Svealand	2002		second	IFK Eskilstuna		no second source	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division West Svealand	2003		first	Västerås IK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Västerås IK; Div 3 Västra Svealand, table worked out from the RSSSF match results of the group
+Swedish Third Division West Svealand	2003		second	Carlstad United BK	https://www.rsssf.org/tablesz/zwed03.html	agree	RSSSF: Carlstad United BK; Div 3 Västra Svealand, table worked out from the RSSSF match results of the group
+Swedish Third Division West Svealand	2004		first	Örebro Ungdom		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division West Svealand	2004		second	Kungsörs BK		no second source	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+Swedish Third Division West Svealand	2005		first	Rynninge IK	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: Rynninge IK; Div 3 Västra Svealand final table
+Swedish Third Division West Svealand	2005		second	IFK Eskilstuna	https://www.rsssf.org/tablesz/zwed05.html	agree	RSSSF: IFK Eskilstuna; Div 3 Västra Svealand final table
+Swedish Third Division West Svealand	2006		held	not held	https://www.rsssf.org/tablesz/zwed06.html	agree	fourth level 2006 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division West Svealand	2007		held	not held	https://www.rsssf.org/tablesz/zwed07.html	agree	fourth level 2007 (Division 2) has 6 groups: Norrland, Norra Svealand, Östra Svealand, Mellersta Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
+Swedish Third Division West Svealand	2008		held	not held	https://www.rsssf.org/tablesz/zwed08.html	agree	fourth level 2008 (Division 2) has 6 groups: Norrland, Norra Svealand, Södra Svealand, Östra Götaland, Västra Götaland, Södra Götaland; none of this name. The map of the 12 old groups onto 6 is a choice, the check confirms only the group names
