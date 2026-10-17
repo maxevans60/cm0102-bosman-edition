@@ -84,6 +84,9 @@ python3 -I "$REPO/tools/release/make_intro_logo.py" "$SITE/logo.png" "$STAGE/Dat
 # The season databases (0.6.0 slice 14): one zip each, checked against the signatures table. The first rsync
 # above removed any Seasons folder of an earlier run, and the tool stops when its output folder is not empty.
 python3 -I "$REPO/tools/release/make_season_zips.py" --season-dbs "$SEASON_DBS" --out "$STAGE/Seasons"
+# The rules table of the game (0.6.0 slice 12): one file from the parts of docs/research/rules-0.6.0. The game
+# reads Seasons/rules.tsv at the start (src/recomp_rt/win/season_rules.c). The tool stops on a row it cannot read.
+python3 -I "$REPO/tools/seasons/make_rules.py" --out "$STAGE/Seasons/rules.tsv"
 GAME="$STAGE"
 MANIFEST="$OUT/manifest-download.tsv"
 {
@@ -95,6 +98,8 @@ MANIFEST="$OUT/manifest-download.tsv"
     for z in "$STAGE"/Seasons/*.zip; do
         printf '%s\t%s\tSeasons/%s\n' "$(shasum -a 256 "$z" | cut -d ' ' -f 1)" "$(wc -c < "$z" | tr -d ' ')" "$(basename "$z")"
     done
+    printf '%s\t%s\tSeasons/rules.tsv\n' "$(shasum -a 256 "$STAGE/Seasons/rules.tsv" | cut -d ' ' -f 1)" \
+        "$(wc -c < "$STAGE/Seasons/rules.tsv" | tr -d ' ')"
 } > "$MANIFEST"
 CHECK_ARGS=(--manifest "$MANIFEST")
 if [ "$STAGE_ONLY" = 1 ]; then

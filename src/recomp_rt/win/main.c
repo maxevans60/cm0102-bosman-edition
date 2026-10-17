@@ -13,6 +13,7 @@
 #include "win.h"
 #include "host.h"
 #include "season.h"
+#include "season_rules.h"
 
 #include <SDL.h>
 #include <stdlib.h>
@@ -115,6 +116,7 @@ int main(int argc, char **argv)
     win_trace = getenv("RECOMP_TRACE") && *getenv("RECOMP_TRACE");
     win_read_settings();
     season_init();                       /* RECOMP_START_SEASON (season.c) */
+    season_rules_init(win_game_dir);     /* Seasons/rules.tsv (season_rules.c) */
 
     /* The command line as Windows gives it: the quoted program path, then the options. */
     char exe_win[1100];
