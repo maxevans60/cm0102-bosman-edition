@@ -15,8 +15,9 @@ Runs, played at the same time (one per era, Q240):
     2010    2010s: the 2010/11 tile (September 2010 ODB)
     2021    early 2020s: the 2021/22 tile (October 2021)
     2025    league phase: the 2025/26 tile (December 2025)
+    2004    with --own-zips: the 2004/05 tile (Summer 2004, our own database, Q351)
     2006    with --own-zips: the 2006/07 tile (Summer 2006, our own database, Q351). <folder> holds the source
-            zip of the converted folder; it is a second source of make_season_zips.py.
+            zips of the converted folders; it is a second source of make_season_zips.py.
 Each run opens the screen from Setup Game, clicks the tile and Choose, waits for Setup Game, starts a new game
 with the steps of tests/smoke/smoke_run.py and saves 1 day after the first news screen. Checks: the first news
 screen is in July of the season, settings.txt has database and season of the tile, a zipped database is
@@ -56,7 +57,7 @@ MAKE = os.path.join(ROOT, "tools", "release", "make_season_zips.py")
 SETUP_SEASON = "click 613 437"
 # Layout C (Q346): a decade per row, a column per last digit of the start year: x = 132 + 69 * digit,
 # y = 89 + 93 * row.
-TILE = {2001: (201, 89), 2002: (270, 89), 2003: (339, 89), 2006: (546, 89), 2010: (132, 182), 2021: (201, 275),
+TILE = {2001: (201, 89), 2002: (270, 89), 2003: (339, 89), 2004: (408, 89), 2006: (546, 89), 2010: (132, 182), 2021: (201, 275),
         2025: (477, 275)}
 CHOOSE = "click 675 573"                    # Start <season>, the yellow button
 CUSTOM_TILE = "click 649 275"
@@ -156,6 +157,7 @@ def main(argv):
     shots = os.path.abspath(argv[argv.index("--shots") + 1]) if "--shots" in argv else None
     own = os.path.abspath(argv[argv.index("--own-zips") + 1]) if "--own-zips" in argv else None
     if own:
+        RUNS[2004] = ("folder:Summer 2004", "Summer 2004")
         RUNS[2006] = ("folder:Summer 2006", "Summer 2006")
     if shots:
         os.makedirs(shots, exist_ok=True)
