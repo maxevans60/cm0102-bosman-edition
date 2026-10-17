@@ -3,7 +3,7 @@
 #
 # Usage:
 #   tools/release/make_release.sh --game <clean files> --data-3960 <folder> --data-3965 <folder>
-#       --sdl2-mac <folder> --sdl2-mingw <folder> --site-assets <folder> [--publish]
+#       --sdl2-mac <folder> --sdl2-mingw <folder> --site-assets <folder> --season-dbs <folder> [--publish]
 #
 #   --game         the clean files (tools/clean_files/make_clean_files.py). The script checks them
 #                  against tools/clean_files/manifest.tsv.
@@ -11,11 +11,19 @@
 #   --data-3965    the 3.9.65 data set (make_clean_files.py --data-3965), checked against manifest-3965.tsv
 #                  Both go into the game folder of each download as Data-3.9.60 and Data-3.9.65, where
 #                  the option database finds them (src/recomp_rt/win/files.c).
+#   --season-dbs   the folder with the zips of the Update Team databases (test-fixtures/databases/zips). The
+#                  script makes the 21 season database zips of the season database table from it
+#                  (tools/release/make_season_zips.py): each holds only the 20 data files, in a folder with
+#                  the neutral name of docs/research/rules-0.6.0/databases-signatures.tsv. It checks each
+#                  zip against that table and stops on a mismatch. The zips go in Seasons/ of the game
+#                  folder of each download (src/recomp_rt/win/seasons_db.h unpacks them on the first pick).
 #   --sdl2-mac     the folder with mac-arm64 and mac-x86_64 SDL2 builds (tools/mac/build_sdl2.sh)
 #   --sdl2-mingw   the SDL2 mingw development release (SDL2-2.x.y)
 #   --site-assets  the site's pictures (logo, screenshots). They go into site-assets.zip on the release,
 #                  where the Pages workflow fetches them, so git never holds them. logo.png also gives
 #                  the intro logo, Data/bosman_logo.rgn of each download (tools/release/make_intro_logo.py).
+#   --stage-only   stop after the game folder and its manifest are staged in build/release-<version> (before the
+#                  Mac, Windows and Linux builds). --sdl2-mac and --sdl2-mingw are then not needed. For tests.
 #   --publish      tag v<version>, push the tag and upload the release. Without it the script only builds
 #                  and checks, and prints what it would upload.
 #
@@ -25,7 +33,7 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 GH_REPO="maxevans60/cm0102-bosman-edition"
-GAME=""; DATA_3960=""; DATA_3965=""; SDL_MAC=""; SDL_MINGW=""; SITE=""; PUBLISH=0
+GAME=""; DATA_3960=""; DATA_3965=""; SDL_MAC=""; SDL_MINGW=""; SITE=""; SEASON_DBS=""; STAGE_ONLY=0; PUBLISH=0
 while [ $# -gt 0 ]; do
     case "$1" in
         --game) GAME="$2"; shift 2 ;;
@@ -34,11 +42,15 @@ while [ $# -gt 0 ]; do
         --sdl2-mac) SDL_MAC="$2"; shift 2 ;;
         --sdl2-mingw) SDL_MINGW="$2"; shift 2 ;;
         --site-assets) SITE="$2"; shift 2 ;;
+        --season-dbs) SEASON_DBS="$2"; shift 2 ;;
+        --stage-only) STAGE_ONLY=1; shift ;;
         --publish) PUBLISH=1; shift ;;
         *) echo "make_release.sh: unknown option $1" >&2; exit 2 ;;
     esac
 done
-for v in GAME DATA_3960 DATA_3965 SDL_MAC SDL_MINGW SITE; do
+NEEDED="GAME DATA_3960 DATA_3965 SDL_MAC SDL_MINGW SITE SEASON_DBS"
+[ "$STAGE_ONLY" = 1 ] && NEEDED="GAME DATA_3960 DATA_3965 SITE SEASON_DBS"
+for v in $NEEDED; do
     [ -n "${!v}" ] || { echo "make_release.sh: give --$(echo $v | tr 'A-Z_' 'a-z-' | sed 's/sdl-/sdl2-/')." >&2; exit 2; }
 done
 [ -f "$GAME/cm0102.exe" ] || { echo "make_release.sh: $GAME has no cm0102.exe." >&2; exit 2; }
@@ -69,6 +81,9 @@ rsync -a --delete --exclude .DS_Store "$DATA_3965/" "$STAGE/Data-3.9.65/"
 # The intro logo (Q208): made from the site logo, in the downloads only. The game shows it in place of
 # Data/logo.rgn (src/recomp_rt/win/files.c).
 python3 -I "$REPO/tools/release/make_intro_logo.py" "$SITE/logo.png" "$STAGE/Data/bosman_logo.rgn"
+# The season databases (0.6.0 slice 14): one zip each, checked against the signatures table. The first rsync
+# above removed any Seasons folder of an earlier run, and the tool stops when its output folder is not empty.
+python3 -I "$REPO/tools/release/make_season_zips.py" --season-dbs "$SEASON_DBS" --out "$STAGE/Seasons"
 GAME="$STAGE"
 MANIFEST="$OUT/manifest-download.tsv"
 {
@@ -77,8 +92,16 @@ MANIFEST="$OUT/manifest-download.tsv"
     grep -v '^#' "$CLEAN/manifest-3965.tsv" | awk -F '\t' -v OFS='\t' '{ $3 = "Data-3.9.65/" $3; print }'
     printf '%s\t%s\tData/bosman_logo.rgn\n' "$(shasum -a 256 "$STAGE/Data/bosman_logo.rgn" | cut -d ' ' -f 1)" \
         "$(wc -c < "$STAGE/Data/bosman_logo.rgn" | tr -d ' ')"
+    for z in "$STAGE"/Seasons/*.zip; do
+        printf '%s\t%s\tSeasons/%s\n' "$(shasum -a 256 "$z" | cut -d ' ' -f 1)" "$(wc -c < "$z" | tr -d ' ')" "$(basename "$z")"
+    done
 } > "$MANIFEST"
 CHECK_ARGS=(--manifest "$MANIFEST")
+if [ "$STAGE_ONLY" = 1 ]; then
+    echo "== Staged in $STAGE, manifest $MANIFEST"
+    du -sh "$STAGE/Seasons"
+    exit 0
+fi
 
 echo "== Mac"
 "$REPO/tools/mac/make_app.sh" --game "$GAME" --sdl2-arm64 "$SDL_MAC/mac-arm64" --sdl2-x86_64 "$SDL_MAC/mac-x86_64" \

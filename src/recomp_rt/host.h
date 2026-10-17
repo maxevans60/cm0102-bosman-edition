@@ -39,6 +39,7 @@ typedef struct { int is_dir; uint64_t size; int64_t mtime; } HostStat;
 int host_stat(const char *path, HostStat *st);   /* 0 on success */
 int host_mkdir(const char *path);                /* 0 on success */
 int host_unlink(const char *path);               /* 0 on success */
+int host_rmdir(const char *path);                /* removes an empty folder; 0 on success */
 int host_rename(const char *from, const char *to);
 /* Moves from over to, and replaces to when it exists (also on Windows). 0 on success. */
 int host_replace(const char *from, const char *to);
