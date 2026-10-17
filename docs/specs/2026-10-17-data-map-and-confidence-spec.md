@@ -51,6 +51,7 @@ Data map
 Confidence pass
 - A script rebuilds the function dossiers with all runs and the global names. It sends a row to an agent only when its dossier has new evidence since its review: a high global, or a caller or callee with a new or raised name (Q14).
 - Opus agents check about 25 rows each. The 93 library rows also go to Opus (Q6).
+- Changed by Max on 2026-10-17, during wave c01, to save tokens: a gate after c01 stops the pass when fewer than 15% of the checked rows reach high or get a new name. From c02, Sonnet checkers read a short pack per row and open full dossiers only when needed. An Opus agent checks 30 changed rows of c02. Over 10% wrong, the rest goes back to Opus. The third check stays on Opus.
 - The quotes for high are a string, an assert, a caller, a vtable slot, a high global that pins the purpose (Q2) and an open source match. An open source match cites the project and the function by name. No code of that project goes anywhere (Q3).
 - The agent that quotes a global for high also checks the evidence of that global. Each global that raises a row thus gets an Opus check (Q13).
 - Each new name goes to a third check, as in the review pass. A raise of confidence that keeps the name needs no third check, because the brief makes the agent check that its quote exists (Q20).
