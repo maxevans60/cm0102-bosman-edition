@@ -55,7 +55,7 @@ Function map (2026-10-17): `docs/research/function-map/index.md` gives the sourc
 ## How to make a release
 
 1. Bump `project(... VERSION x.y.z)` and add the `CHANGELOG.md` section. Commit.
-2. Dry run: `tools/release/make_release.sh --game /Users/max/Projects/cm0102/clean-3968 --data-3960 /Users/max/Projects/cm0102/data-3960 --data-3965 /Users/max/Projects/cm0102/data-3965 --sdl2-mac /Users/max/Projects/cm0102/sdl2 --sdl2-mingw /Users/max/Projects/cm0102/sdl2/mingw-2.32.10 --site-assets /Users/max/Projects/cm0102/site-release-assets`. Then the same with `--publish` after Max says yes. Colima must run for the Linux step. The checkout must be clean.
+2. Dry run: `tools/release/make_release.sh --game /Users/max/Projects/cm0102/clean-3968 --data-3960 /Users/max/Projects/cm0102/data-3960 --data-3965 /Users/max/Projects/cm0102/data-3965 --sdl2-mac /Users/max/Projects/cm0102/sdl2 --sdl2-mingw /Users/max/Projects/cm0102/sdl2/mingw-2.32.10 --site-assets /Users/max/Projects/cm0102/site-release-assets --season-dbs /Users/max/Projects/cm0102/test-fixtures/databases/zips --own-dbs /Users/max/Projects/cm0102/fm2007-work/out/zips`. `--own-dbs` holds the source zip of our own 2006/07 database (Summer 2006). Then the same with `--publish` after Max says yes. Colima must run for the Linux step. The checkout must be clean.
 3. The site workflow runs on the release (the Pages environment allows `main` and tags `v*`). If not: `gh workflow run pages.yml --ref main`.
 4. Posts: the thread post with two or three pictures and the updated original Reddit post, every release. Use the `release-posts` skill (`.claude/skills/release-posts/`).
 
