@@ -168,10 +168,11 @@ static int in_byte(Inf *s)
 /* need bits from the stream, least significant first. -1 at the end of the input. */
 static int bits(Inf *s, int need)
 {
+    if (s->fail) return -1;                 /* after the end of the input the reader stays in error */
     uint32_t v = s->bitbuf;
     while (s->bitcnt < need) {
         int b = in_byte(s);
-        if (b < 0) return -1;
+        if (b < 0) { s->fail = 1; return -1; }
         v |= (uint32_t)b << s->bitcnt;
         s->bitcnt += 8;
     }
@@ -311,7 +312,7 @@ static int dynamic(Inf *s)
     uint16_t length[320];
     Huff lencode, distcode;
     int nlen = bits(s, 5), ndist = bits(s, 5), ncode = bits(s, 4);
-    if (ncode < 0) return -1;
+    if (nlen < 0 || ndist < 0 || ncode < 0) return -1;
     nlen += 257; ndist += 1; ncode += 4;
     if (nlen > 286 || ndist > 30) return -1;
     int index;
@@ -480,13 +481,14 @@ typedef struct {
     FILE *out;
     uint32_t crc;
     SeasonsSha sha;
-    uint64_t bytes;
-    int write_failed;
+    uint64_t bytes, limit;       /* limit: the size that the central directory gives; more data stops the unpack */
+    int write_failed, too_big;
 } FileSink;
 
 static int file_sink(void *ctx, const uint8_t *p, size_t n)
 {
     FileSink *fs = ctx;
+    if (fs->bytes + n > fs->limit) { fs->too_big = 1; return -1; }
     fs->crc = seasons_crc32(fs->crc, p, n);
     seasons_sha_update(&fs->sha, p, n);
     fs->bytes += n;
@@ -513,6 +515,7 @@ int seasons_zip_extract(SeasonsZip *z, int i, const char *path, char sha_hex[65]
     fs->out = host_fopen(path, "wb");
     if (!fs->out) { free(s); free(fs); set_err(err, err_room, "cannot create a file"); return -1; }
     seasons_sha_init(&fs->sha);
+    fs->limit = e->size;
     int rc = 0;
     if (e->method == 0) {
         if (e->csize != e->size) { set_err(err, err_room, "bad stored entry"); rc = -1; }
@@ -535,11 +538,15 @@ int seasons_zip_extract(SeasonsZip *z, int i, const char *path, char sha_hex[65]
         s->ctx = fs;
         int err2 = inflate_run(s);
         if (err2) {
-            set_err(err, err_room, fs->write_failed ? "cannot write a file (disk full?)" : "the compressed data is damaged");
+            set_err(err, err_room, fs->write_failed ? "cannot write a file (disk full?)" :
+                                fs->too_big ? "an entry holds more data than its size says" : "the compressed data is damaged");
             rc = -1;
         }
     }
-    int closed = fclose(fs->out);
+    /* Flush the file to the disk before it can be renamed into place (seasons_db.c). */
+    int closed = 0;
+    if (!rc && (fflush(fs->out) || host_sync(fs->out))) closed = 1;
+    closed |= fclose(fs->out);
     if (!rc && closed) { set_err(err, err_room, "cannot write a file (disk full?)"); rc = -1; }
     if (!rc && (fs->bytes != e->size || fs->crc != e->crc)) { set_err(err, err_room, "an entry does not match its size or CRC-32"); rc = -1; }
     if (!rc && sha_hex) seasons_sha_hex(&fs->sha, sha_hex);

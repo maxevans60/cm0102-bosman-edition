@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#ifdef _WIN32
+#include <process.h>
+#define getpid _getpid
+#else
+#include <unistd.h>
+#endif
 
 /* From win.h (files.c). Declared here so that the tests can link this file with two stand-ins. */
 extern char win_game_dir[1024];
@@ -72,23 +78,56 @@ typedef struct {
     char path[1100];
     uint64_t club_size, staff_size;
     int64_t club_time, staff_time;
+    int64_t checked;                /* the time (seconds) of the hash */
     const SeasonKnownDb *db;
 } IdentCache;
 
-/* The result per folder is kept in memory, and in the file .identify-cache in Databases, so that the SHA-256
- * of a 45 MB database runs once for a folder and not at each start. A row counts when the path, both sizes
- * and both modification times are the same. The file is a help only: the game works without it. */
-enum { CACHE_ROWS = 256 };
+/* The result per folder is kept in memory, and in the file .identify-cache in the Databases folder of the
+ * save folder, so that the SHA-256 of a 45 MB database runs once for a folder and not at each start (it runs
+ * at about 150 MB/s, so 49 folders would take about 13 seconds at each start).
+ * - A row counts when the path, both sizes and both modification times are the same, and the hash ran at
+ *   least 2 seconds after the last change of the files (a file that changes within a second of the hash with
+ *   the same size could be missed otherwise).
+ * - The first line holds a fingerprint of the signatures table. A release with another table ignores the old
+ *   rows.
+ * - A change of content that keeps both the size and the modification time is not seen. A tool that does
+ *   that on purpose gets a wrong answer, which only matters for a database that the player edits.
+ * The file is a help only: the game works without it. */
+enum { CACHE_ROWS = 256, CACHE_SETTLE = 2 };
 static IdentCache cache[CACHE_ROWS];
 static int cache_used, cache_next;
 static char cache_loaded[1100];     /* the Databases folder whose file is loaded */
 
-static int parent_of(const char *folder, char *out, size_t room)
+static int64_t now_seconds(void) { return (int64_t)(host_unix_time_us() / 1000000u); }
+
+/* The fingerprint of the table in the code (CRC-32 of names and hashes). */
+static uint32_t table_fingerprint(void)
+{
+    uint32_t crc = 0;
+    for (int i = 0; i < seasons_known_count; i++) {
+        const SeasonKnownDb *k = &seasons_known_dbs[i];
+        crc = seasons_crc32(crc, k->name, strlen(k->name));
+        crc = seasons_crc32(crc, k->club_sha256, 64);
+        crc = seasons_crc32(crc, k->staff_sha256, 64);
+    }
+    return crc;
+}
+
+/* The Databases folder of a database folder: its parent, when that is called Databases. */
+static int databases_of(const char *folder, char *out, size_t room)
 {
     const char *slash = strrchr(folder, '/');
     if (!slash || slash == folder || (size_t)(slash - folder) >= room) return 0;
     snprintf(out, room, "%.*s", (int)(slash - folder), folder);
-    return 1;
+    const char *name = strrchr(out, '/');
+    name = name ? name + 1 : out;
+    return !strcasecmp(name, "Databases");
+}
+
+static int row_trusted(const IdentCache *c)
+{
+    int64_t last = c->club_time > c->staff_time ? c->club_time : c->staff_time;
+    return c->checked >= last + CACHE_SETTLE;
 }
 
 static void cache_add(const IdentCache *row)
@@ -108,28 +147,32 @@ static void cache_load(const char *parent)
     snprintf(file, sizeof file, "%s/.identify-cache", parent);
     FILE *f = host_fopen(file, "r");
     if (!f) return;
+    char want[40];
+    snprintf(want, sizeof want, "table %08x", (unsigned)table_fingerprint());
+    if (!fgets(line, sizeof line, f) || strncmp(line, want, strlen(want))) { fclose(f); return; }
     while (fgets(line, sizeof line, f)) {
         IdentCache row;
-        char *col[6];
+        char *col[7];
         int n = 0;
         line[strcspn(line, "\r\n")] = 0;
-        for (char *p = line; n < 6;) {
+        for (char *p = line; n < 7;) {
             col[n++] = p;
             char *t = strchr(p, '\t');
             if (!t) break;
             *t = 0;
             p = t + 1;
         }
-        if (n != 6 || strlen(col[0]) >= sizeof row.path) continue;
+        if (n != 7 || strlen(col[0]) >= sizeof row.path) continue;
         snprintf(row.path, sizeof row.path, "%s", col[0]);
         row.club_size = strtoull(col[1], NULL, 10);
         row.club_time = strtoll(col[2], NULL, 10);
         row.staff_size = strtoull(col[3], NULL, 10);
         row.staff_time = strtoll(col[4], NULL, 10);
+        row.checked = strtoll(col[5], NULL, 10);
         row.db = NULL;
-        if (strcmp(col[5], "-")) {
-            row.db = seasons_db_known(col[5]);
-            if (!row.db) continue;                /* a name that the table no longer has: compute again */
+        if (strcmp(col[6], "-")) {
+            row.db = seasons_db_known(col[6]);
+            if (!row.db) continue;
         }
         cache_add(&row);
     }
@@ -143,13 +186,14 @@ static void cache_save(const char *parent)
     snprintf(tmp, sizeof tmp, "%s.tmp", file);
     FILE *f = host_fopen(tmp, "w");
     if (!f) return;
+    fprintf(f, "table %08x\n", (unsigned)table_fingerprint());
     size_t pl = strlen(parent);
     for (int i = 0; i < cache_used; i++) {
         const IdentCache *c = &cache[i];
-        if (strncmp(c->path, parent, pl) || c->path[pl] != '/') continue;
-        fprintf(f, "%s\t%llu\t%lld\t%llu\t%lld\t%s\n", c->path, (unsigned long long)c->club_size,
+        if (strncmp(c->path, parent, pl) || c->path[pl] != '/' || !row_trusted(c)) continue;
+        fprintf(f, "%s\t%llu\t%lld\t%llu\t%lld\t%lld\t%s\n", c->path, (unsigned long long)c->club_size,
                 (long long)c->club_time, (unsigned long long)c->staff_size, (long long)c->staff_time,
-                c->db ? c->db->name : "-");
+                (long long)c->checked, c->db ? c->db->name : "-");
     }
     int bad = ferror(f);
     if (fclose(f) || bad || host_replace(tmp, file)) host_unlink(tmp);
@@ -169,14 +213,15 @@ const SeasonKnownDb *seasons_db_identify(const char *folder)
     HostStat cs, ss;
     if (!folder_files(folder, club, sizeof club, staff, sizeof staff, &cs, &ss) || strlen(folder) >= sizeof cache[0].path)
         return NULL;
-    int have_parent = parent_of(folder, parent, sizeof parent);
+    int have_parent = databases_of(folder, parent, sizeof parent);
     if (have_parent) cache_load(parent);
     for (int i = 0; i < cache_used; i++) {
         IdentCache *c = &cache[i];
         if (!strcmp(c->path, folder) && c->club_size == cs.size && c->staff_size == ss.size &&
-            c->club_time == cs.mtime && c->staff_time == ss.mtime)
+            c->club_time == cs.mtime && c->staff_time == ss.mtime && row_trusted(c))
             return c->db;
     }
+    int64_t started = now_seconds();
     const SeasonKnownDb *found = NULL;
     char club_hex[65] = "", staff_hex[65] = "";
     int hashed = 0;
@@ -195,8 +240,11 @@ const SeasonKnownDb *seasons_db_identify(const char *folder)
     row.club_size = cs.size; row.staff_size = ss.size;
     row.club_time = cs.mtime; row.staff_time = ss.mtime;
     row.db = found;
-    cache_add(&row);
-    if (hashed && have_parent) cache_save(parent);      /* only a hash is worth a write */
+    row.checked = started;
+    if (row_trusted(&row)) {          /* a folder that changed a moment ago is looked at again next time */
+        cache_add(&row);
+        if (hashed && have_parent) cache_save(parent);    /* only a hash is worth a write */
+    }
     return found;
 }
 
@@ -233,6 +281,21 @@ void seasons_db_scan_in(const char *game_dir, const char *save_dir, SeasonsList 
             s->status = db ? SEASONS_MISSING : SEASONS_NO_DATABASE;
         }
     }
+    /* The official data sets of the game folder are the versions of 2001/02 (value = the option database). */
+    static const char *const sets[] = {"3.9.60", "3.9.65"};
+    for (int i = 0; i < 2; i++) {
+        char path[1100];
+        SeasonsEntry *s = &out->season[0];
+        snprintf(path, sizeof path, "%s/Data-%s", game_dir, sets[i]);
+        const SeasonKnownDb *db = seasons_db_known(sets[i]);
+        if (db && dbfolders_valid(path) && s->extra_count < SEASONS_EXTRA_MAX) {
+            SeasonsExtra *x = &s->extra[s->extra_count++];
+            x->db = db;
+            x->folder[0] = 0;
+            x->data_set = 1;
+            snprintf(x->value, sizeof x->value, "%s", sets[i]);
+        }
+    }
     static char names[DBFOLDER_MAX][DBFOLDER_NAME];     /* static: 16 KB, and the game runs this on one thread */
     int n = dbfolders_list(save_dir, names, DBFOLDER_MAX);
     for (int i = 0; i < n; i++) {
@@ -254,9 +317,14 @@ void seasons_db_scan_in(const char *game_dir, const char *save_dir, SeasonsList 
                 snprintf(s->folder, sizeof s->folder, "%s", names[i]);
             }
         } else if (s->extra_count < SEASONS_EXTRA_MAX) {
-            s->extra[s->extra_count].db = k;
-            snprintf(s->extra[s->extra_count].folder, DBFOLDER_NAME, "%s", names[i]);
-            s->extra_count++;
+            int dup = 0;                          /* a copy of a data set that the game folder holds */
+            for (int j = 0; j < s->extra_count; j++) dup |= s->extra[j].db == k;
+            if (dup) continue;
+            SeasonsExtra *x = &s->extra[s->extra_count++];
+            x->db = k;
+            x->data_set = 0;
+            snprintf(x->folder, DBFOLDER_NAME, "%s", names[i]);
+            snprintf(x->value, sizeof x->value, "folder:%s", names[i]);
         }
     }
     for (int i = 0; i < SEASONS_COUNT; i++) {
@@ -297,6 +365,26 @@ static void remove_flat_folder(const char *dir)
         host_unlink(p);
     }
     host_rmdir(dir);
+}
+
+/* Removes the folders of base that nobody changed for an hour: what a run that stopped left. */
+static void remove_stale_folders(const char *base)
+{
+    char names[32][260];
+    int n = 0;
+    HostDir *d = host_opendir(base);
+    if (!d) return;
+    const char *e;
+    while ((e = host_readdir(d)) && n < 32)
+        if (strcmp(e, ".") && strcmp(e, "..")) snprintf(names[n++], sizeof names[0], "%s", e);
+    host_closedir(d);
+    int64_t now = (int64_t)(host_unix_time_us() / 1000000u);
+    for (int i = 0; i < n; i++) {
+        char p[1400];
+        HostStat st;
+        snprintf(p, sizeof p, "%s/%s", base, names[i]);
+        if (!host_stat(p, &st) && st.is_dir && st.mtime < now - 3600) remove_flat_folder(p);
+    }
 }
 
 static int exists_dir(const char *path)
@@ -425,34 +513,51 @@ SeasonsPrepareStatus seasons_db_prepare_in(const char *game_dir, const char *sav
     }
     char base[1100], tmp[1200], dbs[1100];
     snprintf(base, sizeof base, "%s/unpack-tmp", save_dir);
-    snprintf(tmp, sizeof tmp, "%s/%s", base, row->name);
+    /* Each run has its own temporary folder, so two runs of one season cannot mix files. */
+    snprintf(tmp, sizeof tmp, "%s/%s.%lu-%llu", base, row->name, (unsigned long)getpid(),
+             (unsigned long long)host_unix_time_us());
     snprintf(dbs, sizeof dbs, "%s/Databases", save_dir);
     r->status = SEASONS_PREPARE_FAILED;
     if (!exists_dir(base)) host_mkdir(base);
-    remove_flat_folder(tmp);                      /* what an earlier unpack left, if the game stopped in it */
+    remove_stale_folders(base);                   /* what an earlier run left, if the game stopped in it */
     if (host_mkdir(tmp)) {
         say(r, "Could not make a folder for %s in the save folder.", row->name, "");
         return r->status;
     }
     if (unpack_zip(zip, tmp, row, r)) {
         remove_flat_folder(tmp);
+        host_rmdir(base);                         /* only when empty */
         return r->status;
     }
     if (!exists_dir(dbs)) host_mkdir(dbs);
+    /* Claim a free name with mkdir, which fails when the name exists: a folder of the player is never replaced,
+     * also not when another run takes the name at the same moment. The empty folder is then replaced by the
+     * rename (on Windows the rename needs the target to be gone, so it is removed first). */
     char dest[1300];
-    for (int k = 1; k < 10; k++) {                /* never replace a folder of the player */
-        if (k == 1) snprintf(r->name, sizeof r->name, "%s", row->name);
-        else snprintf(r->name, sizeof r->name, "%s (%d)", row->name, k);
-        snprintf(dest, sizeof dest, "%s/%s", dbs, r->name);
-        HostStat ds;
-        if (host_stat(dest, &ds)) break;
-        r->name[0] = 0;
+    r->name[0] = 0;
+    for (int k = 1; k < 10; k++) {
+        char name[DBFOLDER_NAME];
+        if (k == 1) snprintf(name, sizeof name, "%s", row->name);
+        else snprintf(name, sizeof name, "%s (%d)", row->name, k);
+        snprintf(dest, sizeof dest, "%s/%s", dbs, name);
+        if (!host_mkdir(dest)) { snprintf(r->name, sizeof r->name, "%s", name); break; }
     }
-    if (!r->name[0] || host_rename(tmp, dest)) {
+    int moved = 0;
+    if (r->name[0]) {
+#ifdef _WIN32
+        host_rmdir(dest);
+#endif
+        moved = !host_rename(tmp, dest);
+        if (!moved) host_rmdir(dest);
+    }
+    if (!moved) {
         remove_flat_folder(tmp);
+        host_rmdir(base);
+        r->name[0] = 0;
         say(r, "Could not move the unpacked season database %s into the Databases folder.", row->name, "");
         return r->status;
     }
+    host_rmdir(base);                             /* only when empty */
     snprintf(r->path, sizeof r->path, "%s", dest);
     r->unpacked = 1;
     return r->status = SEASONS_PREPARE_OK;

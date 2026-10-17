@@ -27,6 +27,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -162,7 +163,7 @@ def main(argv):
         check(sha(os.path.join(folder, "club.dat")) == rows_tsv["October 2003"]["club_sha256"] and
               sha(os.path.join(folder, "staff.dat")) == rows_tsv["October 2003"]["staff_sha256"],
               "the unpacked club.dat and staff.dat equal the signatures table")
-        check(not os.path.exists(os.path.join(save, "unpack-tmp", "October 2003")), "no temporary folder is left")
+        check(not os.path.exists(os.path.join(save, "unpack-tmp")), "no temporary folder is left, also not the empty parent")
 
         # 4. second pick
         before = tree_state(folder)
@@ -172,9 +173,42 @@ def main(argv):
         rows, custom = scan(tool, game, save)
         check(rows["2003/04"][0] == STATUS["UNPACKED"], "scan: 2003/04 shows as unpacked")
 
+        # The recognition cache: a file counts only when it is 2 seconds older than the last change, so age it.
         cache = os.path.join(save, "Databases", ".identify-cache")
+        check(not os.path.exists(cache), "fresh files (changed a moment ago) are not kept in the cache")
+        old = time.time() - 60
+        names_ = ("club.dat", "staff.dat")
+        for n in names_:
+            os.utime(os.path.join(folder, n), (old, old))
+        out, _ = run(tool, "identify", folder)
         text = open(cache, encoding="utf-8").read() if os.path.exists(cache) else ""
-        check("October 2003" in text and text.count("\n") == 1, "the result of the recognition is kept in Databases/.identify-cache")
+        check(out == "October 2003" and text.startswith("table ") and "October 2003" in text and text.count("\n") == 2,
+              "the result of the recognition is kept in Databases/.identify-cache with a table fingerprint")
+        # One byte changed, same size: the cached folder is read again (the time changed) and is Custom.
+        club = os.path.join(folder, "club.dat")
+        with open(club, "r+b") as f:
+            f.seek(1000)
+            b0 = f.read(1)
+            f.seek(1000)
+            f.write(bytes([b0[0] ^ 1]))
+        out, _ = run(tool, "identify", folder)
+        check(out == "custom", "one changed byte with the same size makes the folder Custom, also after a cached result")
+        out, _ = run(tool, "identify", folder)
+        check(out == "custom", "and again (a file changed a moment ago is not trusted from the cache)")
+        with open(club, "r+b") as f:
+            f.seek(1000)
+            f.write(b0)
+        os.utime(club, (old, old))
+        out, _ = run(tool, "identify", folder)
+        check(out == "October 2003", "with the byte put back the folder is known again")
+        # A cache of another table is ignored
+        lines = open(cache, encoding="utf-8").read().split("\n")
+        lines[0] = "table 00000000"
+        lines[1] = lines[1].replace("October 2003", "-")
+        with open(cache, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+        out, _ = run(tool, "identify", folder)
+        check(out == "October 2003", "a cache file of another table version is ignored")
         with open(cache, "w", encoding="utf-8") as f:
             f.write("garbage without tabs\nmore\tgarbage\n")
         out, _ = run(tool, "identify", folder)
@@ -182,6 +216,14 @@ def main(argv):
         os.unlink(cache)
         out, _ = run(tool, "identify", folder)
         check(out == "October 2003" and os.path.exists(cache), "without the cache file the folder is read again and the file comes back")
+        # A folder outside a Databases folder gets no cache file.
+        outside = os.path.join(work, "outside")
+        os.makedirs(outside)
+        shutil.copytree(folder, os.path.join(outside, "Copy"))
+        for n in names_:
+            os.utime(os.path.join(outside, "Copy", n), (old, old))
+        out, _ = run(tool, "identify", os.path.join(outside, "Copy"))
+        check(out == "October 2003" and os.listdir(outside) == ["Copy"], "a folder outside Databases gets no cache file")
 
         # 5. recognition by content
         moved = os.path.join(save, "Databases", "My own copy")
@@ -212,7 +254,7 @@ def main(argv):
         status, name, unpacked, err = prepare(tool, game, save, 2012)
         check(status == PREPARE["FAILED"] and err != "", f"a cut zip fails with a message ({err})")
         check(not os.path.exists(os.path.join(save, "Databases", "September 2012")), "a cut zip leaves no folder in Databases")
-        tmp = os.path.join(save, "unpack-tmp", "September 2012")
+        tmp = os.path.join(save, "unpack-tmp")
         check(not os.path.exists(tmp), "a cut zip leaves no temporary folder")
         flipped = bytearray(data)
         flipped[len(data) // 3] ^= 0x55
@@ -221,15 +263,18 @@ def main(argv):
         status, name, unpacked, err = prepare(tool, game, save, 2012)
         check(status == PREPARE["FAILED"] and not os.path.exists(os.path.join(save, "Databases", "September 2012")) and not os.path.exists(tmp),
               f"a zip with a changed byte fails and leaves nothing ({err})")
-        # 8. a stale temporary folder, then a good zip
-        os.makedirs(tmp)
-        with open(os.path.join(tmp, "club.dat"), "wb") as f:
+        # 8. a stale temporary folder (an hour old) of a run that stopped, then a good zip
+        stale = os.path.join(save, "unpack-tmp", "September 2012.1-1")
+        os.makedirs(stale)
+        with open(os.path.join(stale, "club.dat"), "wb") as f:
             f.write(b"half")
+        long_ago = time.time() - 7200
+        os.utime(stale, (long_ago, long_ago))
         with open(bad, "wb") as f:
             f.write(data)
         status, name, unpacked, err = prepare(tool, game, save, 2012)
-        check(status == PREPARE["OK"] and unpacked == 1 and name == "September 2012" and not os.path.exists(tmp),
-              "a retry with the good zip works and removes the stale temporary folder")
+        check(status == PREPARE["OK"] and unpacked == 1 and name == "September 2012" and not os.path.exists(os.path.join(save, "unpack-tmp")),
+              "a retry with the good zip works, removes the stale temporary folder and the empty parent")
         out, _ = run(tool, "identify", os.path.join(save, "Databases", "September 2012"))
         check(out == "September 2012", "the retry gives September 2012")
         check(prepare(tool, game, save, 2001)[0] == PREPARE["OFFICIAL"] and prepare(tool, game, save, 2004)[0] == PREPARE["NO_DATABASE"],

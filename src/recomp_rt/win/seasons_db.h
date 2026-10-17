@@ -73,8 +73,10 @@ typedef enum {
 } SeasonsStatus;
 
 typedef struct {
-    const SeasonKnownDb *db;        /* a known extra database in Databases */
-    char folder[DBFOLDER_NAME];     /* its folder in Databases, whatever the player named it */
+    const SeasonKnownDb *db;        /* a known extra database, or an official data set for 2001/02 */
+    char folder[DBFOLDER_NAME];     /* its folder in Databases, whatever the player named it; "" for a data set */
+    int data_set;                   /* 1 for 3.9.60 or 3.9.65 of the game folder (Data-3.9.60, Data-3.9.65) */
+    char value[DBFOLDER_NAME + 8];  /* what the option database takes to start it: "3.9.60", "3.9.65" or "folder:<name>" */
 } SeasonsExtra;
 
 typedef struct {
@@ -109,7 +111,10 @@ const SeasonKnownDb *seasons_db_known(const char *name);
  * have none. */
 const SeasonKnownDb *seasons_db_for_season(int start_year);
 
-/* Fills the list from the game folder and the Databases folder. Folders of Databases that hold the Empty
+/* Fills the list from the game folder and the Databases folder. The versions of 2001/02 (season[0].extra) are
+ * the data sets 3.9.60 and 3.9.65 of the game folder (when Data-3.9.60 and Data-3.9.65 hold the 20 data files;
+ * the default 3.9.68 is the season's own database), then the known databases of 2001/02 in Databases. So the
+ * screen gets every version from this one call, and each entry has the option value to start it. Folders of Databases that hold the Empty
  * database are in neither the versions nor the Custom list. */
 void seasons_db_scan(SeasonsList *out);
 void seasons_db_scan_in(const char *game_dir, const char *save_dir, SeasonsList *out);

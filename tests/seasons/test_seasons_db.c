@@ -141,6 +141,25 @@ static void test_zip(void)
     CHECK(host_stat(p, &st) != 0);
     seasons_zip_close(&z);
 
+    /* An entry that holds more data than its size says (a zip bomb): the unpack stops at the stated size. */
+    copy = malloc(sizeof small_zip);
+    memcpy(copy, small_zip, sizeof small_zip);
+    for (size_t i = 0; i + 46 < sizeof small_zip; i++)
+        if (!memcmp(copy + i, "PK\1\2", 4) && !memcmp(copy + i + 46, "Test db/club.dat", 16)) {
+            copy[i + 24] = 100; copy[i + 25] = 0; copy[i + 26] = 0; copy[i + 27] = 0;
+        }
+    path_of(zp, sizeof zp, root, "bomb.zip");
+    f = fopen(zp, "wb");
+    fwrite(copy, 1, sizeof small_zip, f);
+    fclose(f);
+    free(copy);
+    CHECK(seasons_zip_open(&z, zp, err, sizeof err) == 0);
+    path_of(p, sizeof p, root, "bomb.out");
+    err[0] = 0;
+    CHECK(seasons_zip_extract(&z, club, p, hex, err, sizeof err) != 0 && strstr(err, "more data"));
+    CHECK(host_stat(p, &st) != 0);
+    seasons_zip_close(&z);
+
     /* A file that is not a zip, and a cut zip. */
     path_of(zp, sizeof zp, root, "text.zip");
     f = fopen(zp, "wb");
@@ -235,7 +254,27 @@ static void test_prepare_without_zip(void)
     CHECK(list->season[3].status == SEASONS_NO_DATABASE && list->season[3].database == NULL);
     CHECK(list->season[4].status == SEASONS_MISSING && list->season[5].status == SEASONS_NO_DATABASE);
     CHECK(!strcmp(list->season[2].label, "2003/04") && !strcmp(list->season[24].label, "2025/26"));
-    CHECK(list->custom_count == 0);
+    CHECK(list->custom_count == 0 && list->season[0].extra_count == 0);
+    /* The data sets of the game folder are the versions of 2001/02. */
+    static const char *const files[] = {
+        "city.dat", "club.dat", "club_comp.dat", "club_comp_history.dat", "colour.dat", "common_names.dat",
+        "continent.dat", "first_names.dat", "index.dat", "nat_club.dat", "nation.dat", "nation_comp.dat",
+        "nation_comp_history.dat", "officials.dat", "second_names.dat", "stadium.dat", "staff.dat",
+        "staff_comp.dat", "staff_comp_history.dat", "staff_history.dat"};
+    char ds[1200], fp[1400];
+    path_of(ds, sizeof ds, game, "Data-3.9.60");
+    mkdir(ds, 0755);
+    for (size_t i = 0; i < sizeof files / sizeof *files; i++) {
+        path_of(fp, sizeof fp, ds, files[i]);
+        FILE *g = fopen(fp, "wb");
+        fputs("x", g);
+        fclose(g);
+    }
+    path_of(ds, sizeof ds, game, "Data-3.9.65");     /* an incomplete set does not count */
+    mkdir(ds, 0755);
+    seasons_db_scan_in(game, save, list);
+    CHECK(list->season[0].extra_count == 1 && list->season[0].extra[0].data_set &&
+          !strcmp(list->season[0].extra[0].value, "3.9.60") && !strcmp(list->season[0].extra[0].db->name, "3.9.60"));
     free(list);
 }
 

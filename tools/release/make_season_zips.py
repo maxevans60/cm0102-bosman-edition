@@ -126,19 +126,26 @@ def find_sources(folder, rows):
 
 def write_zip(src_path, row, dest):
     tmp = dest + ".tmp"
-    with zipfile.ZipFile(src_path) as src, zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as out:
-        entries = data_entries(src)
-        missing = [f for f in DATA_FILES if f not in entries]
-        if missing:
-            raise Stop(f"{os.path.basename(src_path)}: missing {', '.join(missing)}")
-        for f in DATA_FILES:
-            zi = zipfile.ZipInfo(f"{row['database']}/{f}", STAMP)
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            zi.create_system = 3
-            with src.open(entries[f]) as r, out.open(zi, "w") as w:
-                shutil.copyfileobj(r, w, CHUNK)
-    os.replace(tmp, dest)
+    try:
+        with zipfile.ZipFile(src_path) as src, zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as out:
+            entries = data_entries(src)
+            missing = [f for f in DATA_FILES if f not in entries]
+            if missing:
+                raise Stop(f"{os.path.basename(src_path)}: missing {', '.join(missing)}")
+            for f in DATA_FILES:
+                zi = zipfile.ZipInfo(f"{row['database']}/{f}", STAMP)
+                zi.compress_type = zipfile.ZIP_DEFLATED
+                zi.external_attr = 0o644 << 16
+                zi.create_system = 3
+                with src.open(entries[f]) as r, out.open(zi, "w") as w:
+                    shutil.copyfileobj(r, w, CHUNK)
+        os.replace(tmp, dest)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
 
 
 def check_zip(path, row):
