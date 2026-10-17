@@ -22,7 +22,9 @@
 
 #include "dbfolders.h"
 #include "season.h"
+#include "season_dates.h"
 #include "season_screen.h"
+#include "seasons_db.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,6 +63,14 @@ RT_WRAP(005ed300, menu_build)
         char db[DBFOLDER_NAME], text[ITEM_TEXT_SIZE];
         season_screen_database_text(db, dbfolders_label_room(rt_screen_w));
         snprintf(text, sizeof text, "Choose Season: %d/%02d\n%s", year, (year + 1) % 100, db);
+        /* Slice 11b: a Custom database in another season whose dates could not be checked keeps its dates. */
+        const char *opt = options_string(OPT_DATABASE);
+        char path[1100];
+        int shift;
+        if (season_code_on() && year != SEASON_FIRST_YEAR && !strncmp(opt, "folder:", 7) &&
+            dbfolders_path(win_databases_root(), opt + 7, path, sizeof path) && !seasons_db_identify(path) &&
+            !season_dates_custom_check(path, &shift))
+            snprintf(text + strlen(text), sizeof text - strlen(text), "\nAges could not be checked");
         uint32_t item = rt_arg(8) + 9 * ITEM_SIZE;
         const char *old = getenv("RECOMP_SETUP_TEXT");
         if (old && !strcmp(old, "0.5.0")) {
