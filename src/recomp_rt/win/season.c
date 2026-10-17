@@ -265,9 +265,13 @@ static int read_part(const char *host, int *year, int *rules, int news)
         if (form < 1 || length < 16 || length > size) break;
         uint32_t y = get32(data + 8), r = get32(data + 12);
         if (y < SEASON_FIRST_YEAR || y > SEASON_LAST_YEAR || r > 1) break;
+        /* Version 2 must hold whole news fields. A later version keeps them first (see the top), but this
+         * version cannot check its other fields, so news fields it cannot read are left out there. */
         if (news && form >= PART_VERSION_NEWS && length > PART_SIZE &&
-            !season_change_part_read(data + PART_SIZE, length - PART_SIZE))
-            break;
+            !season_change_part_read(data + PART_SIZE, length - PART_SIZE)) {
+            season_change_reset();
+            if (form == PART_VERSION_NEWS) break;
+        }
         *year = (int)y;
         *rules = (int)r;
         result = 1;

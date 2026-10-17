@@ -20,7 +20,7 @@ The checks, played at the same time:
     reload      loads the save of "season" in a new user folder with no RECOMP_START_SEASON, plays 3 days and
                 saves: the runtime reads the year from the part, and the new save has the part with the year.
     reload-off  the same with the save of season-off: the new save keeps changing rules off.
-    later       the save of "season" with a part of a later version (version 2, 24 bytes): it loads with the
+    later       the save of "season" with a part of a later version (version 3, 24 bytes): it loads with the
                 fields that this version knows, and the new save has a version 1 part.
     damaged     the save of "season" with a damaged part (year 1999): the load is refused with a message box.
 --keep <folder> keeps the save of "season" there (for a check with another build).
@@ -259,7 +259,7 @@ def main(argv):
             if results.get("season-off", (None,))[0]:
                 saves["reload-off"] = results["season-off"][0]
             later = os.path.join(work, "later.sav")
-            replace_part(path, later, struct.pack("<6I", 2, 24, year, 1, 7, 7))
+            replace_part(path, later, struct.pack("<6I", 3, 24, year, 1, 7, 7))   # 2 is the news version (slice 16)
             saves["later"] = later
             damaged = os.path.join(work, "damaged.sav")
             replace_part(path, damaged, struct.pack("<4I", 1, 16, 1999, 1))
