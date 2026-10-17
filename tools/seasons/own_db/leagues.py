@@ -134,23 +134,24 @@ for c,lst in want.items():
 # The real top divisions of other nations in the start season (season settings), fitted to the slots of the template. Rank:
 # last season's top-division clubs by position, then the others (promoted) by their second-tier position.
 # Too many: the lowest ranked stay out. Too few: the best placed of last season's top-division clubs come in.
-# The changes are swaps with the clubs that leave, so every division keeps its count.
+# The changes are swaps with the clubs that leave, so every division keeps its count. The lists run in their
+# order in the settings (each nation top down); a club placed by one list is locked for the lists after it.
 import unicodedata,re
 REAL, PROMOTED = S_.REAL, S_.PROMOTED
+TRANSLIT=str.maketrans({'ł':'l','Ł':'L','ø':'o','Ø':'O','æ':'ae','Æ':'AE','ß':'ss','đ':'d','Đ':'D','ı':'i','İ':'I','œ':'oe','þ':'th','ð':'d'})
 def nm(s):
-    s=unicodedata.normalize('NFKD',s).encode('ascii','ignore').decode().lower(); s=re.sub(r'[^a-z0-9 ]',' ',s); return ' '.join(s.split())
+    s=unicodedata.normalize('NFKD',s.translate(TRANSLIT)).encode('ascii','ignore').decode().lower(); s=re.sub(r'[^a-z0-9 ]',' ',s); return ' '.join(s.split())
 DROP={'fc','cf','sc','ac','sv','vfl','vfb','bk','if','fk','sk','k','r','s','v','c','f','a','d','de','club','sad','afc','1','04','05','96'}
-def toks(s): return {w for w in nm(s).split() if w not in DROP}
+import functools
+@functools.lru_cache(maxsize=None)
+def toks(s): return frozenset(w for w in nm(s).split() if w not in DROP)
+nm=functools.lru_cache(maxsize=None)(nm)
 invmap={v:k for k,v in M['clubmap'].items()}
 fmrow={}
 for comp,team,yr,pos,*rest in rows06:
     f=tm.get(team)
     if f is not None and (f not in fmrow or comp in compmap): fmrow[f]=(comp,pos)
-report=[]
-for dname,names in REAL.items():
-    d=tid[dname]; slots=n57[d]
-    nat=collections.Counter(g(r,0x53) for r in trow.values() if g(r,0x57)==d).most_common(1)[0][0]
-    pool=[c for c,r in trow.items() if g(r,0x53)==nat and cur[c]>=0]
+def pick(names,pool):
     chosen=[]; miss=[]
     for n in names:
         best=None;bs=0
@@ -161,27 +162,56 @@ for dname,names in REAL.items():
                 if not a or not b: continue
                 sc=len(a&b)/len(a|b) + (0.5 if nm(n)==nm(s_) else 0) - (0.3 if ({'b','ii','c'}&set(nm(s_).split())) else 0)
                 if sc>bs: bs,best=sc,c
-        if best is None or bs<0.5 or best in chosen: miss.append(n)
+        if best is None or bs<0.5 or best in chosen: miss.append(f"{n} [best {cstr(trow[best],4,51) if best is not None else None} {bs:.2f}{' taken' if best in chosen else ''}]")
         else: chosen.append(best)
+    return chosen,miss
+natof_c=lambda c:g(trow[c],0x53)
+@functools.lru_cache(maxsize=None)
+def natof(d): return collections.Counter(g(r,0x53) for r in trow.values() if g(r,0x57)==d).most_common(1)[0][0]
+# Clubs that a real list names. A division with more slots than real clubs fills its extra slots from other clubs,
+# so it must not take a club that another (lower) list names.
+named={dname:set(pick(names,[c for c,r in trow.items() if g(r,0x53)==natof(tid[dname])])[0]) for dname,names in REAL.items()}
+# REAL lists run top-down per nation. England's league divisions rank above its REAL lists.
+rk={tid[n]:i-len(E) for i,n in enumerate(E.values())}; rk.update({tid[k]:i for i,k in enumerate(REAL)})
+order=list(REAL)
+def fmdiv(c):
+    row=fmrow.get(invmap.get(c)); return compmap.get(row[0]) if row else None
+report=[]; placed={}; carry=[]   # carry: named clubs that a list had no slot for; the next list of the nation takes them
+locked=set()   # clubs that an earlier (higher) real list placed: later lists neither choose nor move them
+for dname,names in REAL.items():
+    d=tid[dname]; slots=n57[d]
+    nat=natof(d)
+    pool=[c for c,r in trow.items() if g(r,0x53)==nat and c not in locked]
+    others=set().union(*(v for k,v in named.items() if k!=dname))
+    chosen,miss=pick(names,pool)
+    later={tid[k] for k in order[order.index(dname)+1:] if natof(tid[k])==nat}
+    take=[c for c in carry if natof_c(c)==nat and c not in chosen and c not in locked and fmdiv(c) not in later]
+    carry=[c for c in carry if c not in take]; chosen=take+chosen
     prom=PROMOTED.get(dname,[])
     def rank(c):
         f=invmap.get(c); row=fmrow.get(f)
         if row is None:
             sn_=cstr(trow[c],0x38,26); hit=[i for i,n in enumerate(prom) if toks(n)&toks(sn_)]
-            return (1,hit[0]+1) if hit else (0,99)
-        comp,pos=row
-        return (0 if compmap.get(comp)==d else 1, pos)
+            return (2,hit[0]+1) if hit else (1,99)
+        comp,pos=row; fd=compmap.get(comp)
+        # Relegated clubs first, then the division's own clubs, then promoted clubs, each by last season's place.
+        return (1 if fd==d else 0 if fd in rk and rk[fd]<rk[d] and natof(fd)==nat else 2, pos)
     sel=sorted(chosen,key=rank)[:slots]
+    carry+=[c for c in chosen if c not in sel]; placed[dname]=sel
     if len(sel)<slots:
-        extra=sorted([c for c,(dv,pos) in lastdiv.items() if dv==d and c not in sel and c in trow],key=lambda c:lastdiv[c][1])
+        extra=sorted([c for c,(dv,pos) in lastdiv.items() if dv==d and c not in sel and c in trow and c not in locked and c not in others],key=lambda c:lastdiv[c][1])
         sel+=extra[:slots-len(sel)]
     if len(sel)<slots:
-        sel+=[c for c in pool if cur[c]==d and c not in sel][:slots-len(sel)]
+        sel+=[c for c in pool if cur[c]==d and c not in sel and c not in others][:slots-len(sel)]
+    if len(sel)<slots:   # more slots than real clubs: take unnamed clubs of the nation, highest current division first
+        sel+=sorted([c for c in pool if cur[c]>=0 and c not in sel and c not in others],key=lambda c:rk.get(cur[c],999))[:slots-len(sel)]
     X=[c for c in sel if cur[c]!=d]; Y=[c for c in pool if cur[c]==d and c not in sel]
     if len(X)!=len(Y): report.append((dname,'not applied: in',len(X),'out',len(Y),'missing names',miss)); continue
     for x,y in zip(X,Y): cur[y]=cur[x]; cur[x]=d
+    locked|=set(sel)
     report.append((dname,'applied',len(sel),'of',len(names),'real; in',[cstr(trow[c],0x38,26) for c in X],'missing names',miss))
 for r_ in report: print(*r_)
+print('real clubs with no slot, and where they go:',[(cstr(trow[c],0x38,26),comps.get(cur[c])) for c in carry])
 ncur=collections.Counter(cur.values())
 print('after overrides: divisions with a wrong count',[(comps[d],n57[d],ncur[d]) for d in n57 if d>=0 and n57[d]!=ncur[d]])
 pickle.dump(dict(cur=cur,lastdiv=lastdiv,compmap=compmap),open(os.path.join(W,'leagues.pkl'),'wb'))
