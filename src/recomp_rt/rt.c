@@ -220,6 +220,7 @@ void (*rt_on_fatal)(void);
 
 uint32_t rt_screen_w = 800, rt_screen_h = 600;
 uint32_t rt_season_year = 2001;       /* the start year: win/season.c sets it */
+uint32_t rt_staff_reserve = 23000;    /* the blank staff rows of a database load: win/staff_reserve.c */
 
 void rt_unimpl(uint32_t at, const char *text) { rt_fatal("instruction at %#x is not translated: %s", at, text); }
 void rt_fell_off(uint32_t at) { rt_fatal("execution reached %#x, where the recompiler found no code", at); }
