@@ -122,6 +122,13 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # International competitions (0.6.0 slice 27): the C table of the editions matches the rules table, and
+    # the editions and the rules of the code sites.
+    add_test(NAME season_intl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_intl.py" --check)
+    add_executable(season_intl_test tests/seasons/test_season_intl.c src/recomp_rt/win/season_intl_rules.c
+        src/recomp_rt/win/season_intl_table.c)
+    target_include_directories(season_intl_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_intl COMMAND season_intl_test)
     # The rules table reader (0.6.0 slice 12): make the table from the parts, then read it.
     add_executable(season_rules_test tests/seasons/test_season_rules.c src/recomp_rt/win/season_rules.c
         src/recomp_rt/host/posix.c)
