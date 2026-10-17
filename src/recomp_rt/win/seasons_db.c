@@ -28,16 +28,15 @@ enum { FILE_COUNT = sizeof data_files / sizeof *data_files };
 
 /* ---- Names and the table ---- */
 
-SeasonsEra seasons_db_era(int y)
+SeasonsDecade seasons_db_decade(int y)
 {
-    return y <= 2002 ? SEASONS_ERA_ORIGINAL : y <= 2008 ? SEASONS_ERA_2000S : y <= 2019 ? SEASONS_ERA_2010S
-         : y <= 2023 ? SEASONS_ERA_EARLY_2020S : SEASONS_ERA_LEAGUE_PHASE;
+    return y < 2010 ? SEASONS_DECADE_2000S : y < 2020 ? SEASONS_DECADE_2010S : SEASONS_DECADE_2020S;
 }
 
-const char *seasons_db_era_name(SeasonsEra era)
+const char *seasons_db_decade_name(SeasonsDecade decade)
 {
-    static const char *const names[] = {"Early 2000s", "Mid 2000s", "2010s", "Early 2020s", "Mid 2020s"};   /* Q343 */
-    return (unsigned)era < 5 ? names[era] : "";
+    static const char *const names[] = {"2000s", "2010s", "2020s"};   /* Q346 */
+    return (unsigned)decade < 3 ? names[decade] : "";
 }
 
 const SeasonKnownDb *seasons_db_known(const char *name)
@@ -271,7 +270,7 @@ void seasons_db_scan_in(const char *game_dir, const char *save_dir, SeasonsList 
         SeasonsEntry *s = &out->season[i];
         s->start_year = SEASONS_FIRST + i;
         snprintf(s->label, sizeof s->label, "%04d/%02d", s->start_year, (s->start_year + 1) % 100);
-        s->era = seasons_db_era(s->start_year);
+        s->decade = seasons_db_decade(s->start_year);
         if (s->start_year <= 2002) {
             s->database = "3.9.68";
             s->status = SEASONS_OFFICIAL;
