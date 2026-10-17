@@ -1658,6 +1658,42 @@ Twelve renames make free functions into members, because the callers load a glob
 | 0x83b690 | `shortlist_compare_slots_filled_first` | `shortlist_compare_slots_open_first` | takes reviewer | `shortlist_compare_slots_open_first` |
 
 
+#### Review r11 (medium rows of tiers 5 and 6, 2026-10-17)
+
+Run `review-r11`: 6 Opus reviewers checked 169 medium rows of tactics, training, weather, the year ratings and the font library. Agree 107, fix 54, rename 8. The third check took the reviewer's name in all 8 rows. 62 rows changed in all. The reviewers took 120,000 to 158,000 tokens each, and the third check took 99,000.
+
+The key player pair at Tactics record +0x56 is the playmaker, as the Team Instructions dialog says. Four weather.cpp rows are `Weather::` members, because every caller loads the Weather global 0xde2f74 into ECX. 12 library rows went to high on an opcode slot or a round state of the TrueType tables. Two hub rows used the file label `lib`. The reviewer changed it to `library_without_asserts` in a fix, which the merge refuses, so the part file keeps `lib`. The docs already show both rows under `library_without_asserts`.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x897dc0 | `Tactics::get_key_player` | `Tactics::get_playmaker` | takes reviewer | `Tactics::get_playmaker` |
+| 0x897ee0 | `Tactics::set_key_player` | `Tactics::set_playmaker` | takes reviewer | `Tactics::set_playmaker` |
+| 0x8bb6d0 | `training_screens_compare_by_ability_then_name` | `training_screens_compare_by_form_then_name` | takes reviewer | `training_screens_compare_by_form_then_name` |
+| 0x9232c0 | `weather_get_temperature` | `Weather::get_temperature` | takes reviewer | `Weather::get_temperature` |
+| 0x923970 | `weather_get_pitch_condition` | `Weather::get_pitch_condition` | takes reviewer | `Weather::get_pitch_condition` |
+| 0x923cc0 | `weather_post_postponed_news` | `Weather::post_postponed_news` | takes reviewer | `Weather::post_postponed_news` |
+| 0x924050 | `weather_post_abandoned_news` | `Weather::post_abandoned_news` | takes reviewer | `Weather::post_abandoned_news` |
+| 0x934b10 | `glyph_hint_grid_fit_checked` | `glyph_hint_collect_stem_widths_checked` | takes reviewer | `glyph_hint_collect_stem_widths_checked` |
+
+#### End result of the review pass (2026-10-17)
+
+The pass reviewed all 2,002 rows in scope over 11 waves: 1,234 agree, 638 fix and 130 rename. The third check took the reviewer's row 124 times, wrote a new row 4 times and kept the sweep row twice. 81 false entries got the name `<parent>_fragment_<addr>`. 842 rows changed in all. Confidence in `names.tsv` is now 5,454 high, 1,381 medium and 28 low. 201 library rows are still `sonnet`, and the reviewed and changed ones are `opus`.
+
+The medium rows (r05 to r11) had 105 new names from the third check in 1,372 rows, about 8%. The sample had 3.5%. Most fixes in all waves raise the confidence with a quoted vtable slot, string or caller, or replace an old caller name in the evidence.
+
+The sweep made the same few errors throughout. It named shared stubs after one slot. It read Ghidra's argument list as the convention, so many members whose callers load a global object into ECX became free functions. It named some functions from their callees and not from their vtable slot. The reviewers made few errors. One reviewer took "the body does not read ECX" as proof of a free function, and the third check kept the member. Two reviewers gave two bodies the same name, because no reviewer sees the other batches.
+
+A reviewer took 75,000 to 203,000 tokens, most of them 120,000 to 170,000, and 2 to 6 minutes. A third check took 75,000 to 131,000 tokens. A wave of 8 reviewers and one third check took about 1.2 to 1.4 million tokens.
+
+Open points for a later pass, outside the rows in scope:
+- Seven Cup slot 17 overrides still have the name `apply_team_result_finance`. Slot 17 is `update_staff_records_for_status`.
+- 0x8e9080 `TRANSFER_RULES::post_deadline_news`: the third argument is the year as a short, not a date pointer.
+- 0x8e7810 `TRANSFER_OFFER::init_contract_offer` sets the loan flag +0x1f, so it is probably `init_loan_offer`.
+- 0x7feeb0 `ScreenManager::set_screen_title` probably sets the name of the background picture.
+- 0x7c2750 `player_stats_format_record_field` and the `post_*_news` rows of manager_manager.cpp (for example 0x6ac700) are probably members, because their callers load ECX.
+- Four key_nation.cpp menu rows (0x66a280, 0x66a350, 0x66a360, 0x66a430) are thiscall on a small stack struct, with free names.
+- File questions: the Finance code asserts finance.CPP but sits under fin_prm.cpp, the Match_Stats block asserts match_stats.CPP but sits under match_screens.cpp, six `FILE_LLIST` rows sit under fifa_rankings.cpp, and some network.h rows lie in the display.cpp and scrman.cpp ranges. The placement decides these files, so they need one decision for all.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
