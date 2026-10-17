@@ -1243,6 +1243,36 @@ The merge needed one fix. Three false entries had a `_tail` suffix. They now use
 | 0x803d80 | Named in 2026-10-13-display-and-scrman-inventory.md | `search_edit_session_advance_or_close` (Haiku) | `ScreenManager::close_all_screens` | agrees in area |
 | 0x804160 | Named in 2026-10-13-screen-stack-inventory.md | `display_add_item_ten_args_thunk` (Haiku) | `ScreenManager::add_area_text_by_ref` | agrees in area |
 
+#### Wave w29 (tier 5, 2026-10-17)
+
+Run `sweep-w29`: 8 Opus agents named 199 functions: `search_filters.cpp` (`SearchFilters`), `search_screens.cpp`, `shortlist_manager.cpp` (`Shortlist_Manager`), `simulated_stats.cpp` (`SimulatedStats`), `squad_manager.cpp` (`SQUAD_MANAGER`), `stadium.cpp` (`Stadium`) and `staff_contracts.cpp` (`STAFF_CONTRACT`). Each agent took 1 to 6 minutes and 110,000 to 173,000 tokens. Confidence: 120 high, 78 medium, 1 low. From this wave on, the brief gives the `<parent>_fragment_<addr>` style for false entries, and the agents used it.
+
+The merge needed one fix. One agent gave the 26 column sort comparators of `search_screens.cpp` the prefix `search_`. They now use the file prefix `search_screens_`, as the other free functions of the file do.
+
+19 functions of the wave are cited. 7 agree and 12 agree in area. None differs.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x807450 | Named in 2026-10-14-columns-and-colours-inventory.md | `Search_Filters::player_matches_filter` (Haiku) | `SearchFilters::player_matches_filter` | agrees in area |
+| 0x808690 | Named in 2026-10-14-columns-and-colours-inventory.md | `search_screens_build_player_search_panel` (Haiku) | `search_screens_build_player_search_screen` | agrees in area |
+| 0x83a1b0 | Named in 2026-10-14-game-creation-inventory.md | `shortlist_manager_build_shortlists` (Haiku) | `Shortlist_Manager::create_initial_shortlists` | agrees |
+| 0x8420e0 | Named in 2026-10-15-holiday-next-match-inventory.md | `shortlist_manager_remove_entries_for_player` (Haiku) | `Shortlist_Manager::collect_club_shortlist_entries` | agrees in area |
+| 0x842180 | Named in 2026-10-16-foreign-and-tactics-positions.md | `shortlist_add_eligible_scouted_players` (Haiku) | `Shortlist_Manager::collect_interested_clubs` | agrees in area |
+| 0x8423f0 | Named in 2026-10-14-widescreen-inventory.md | `shortlist_add_entry` (Haiku) | `Shortlist_Manager::add_shortlist_entry` | agrees in area |
+| 0x844660 | Named in 2026-10-15-holiday-next-match-inventory.md | `shortlist_manager_refresh_slot_status` (Haiku) | `shortlist_manager_release_club_slot_targets` | agrees in area |
+| 0x844780 | Named in 2026-10-14-widescreen-inventory.md | `shortlist_manager_score_candidate_for_club` (Haiku) | `staff_interest_in_job_at_club` | agrees in area |
+| 0x84abe0 | Named in 2026-10-15-holiday-next-match-inventory.md | `shortlist_manager_refresh_club_shortlist` (Haiku) | `Shortlist_Manager::rebuild_club_shortlist` | agrees |
+| 0x84aeb0 | Named in 2026-10-16-crash-fixes.md | `shortlist_manager_clear_slot_entries_for_player` (Haiku) | `Shortlist_Manager::clear_bid_markers_for_player` | agrees in area |
+| 0x84b940 | Named in 2026-10-14-game-creation-inventory.md | `simulated_stats_build_ranking` (Haiku) | `SimulatedStats::SimulatedStats` | agrees |
+| 0x859dc0 | Named in 2026-10-14-game-creation-inventory.md | `squad_manager_reset_registered_flags` (Haiku) | `SQUAD_MANAGER::init_new_game` | agrees |
+| 0x85a470 | Named in 2026-10-16-crash-fixes.md | `squad_manager_assign_players_to_squad_slots` (Haiku) | `SQUAD_MANAGER::allocate_squad_number` | agrees in area |
+| 0x85a9b0 | Named in 2026-10-16-research-name-check.md | `squad_manager_reset_player_flags` (Haiku) | `SQUAD_MANAGER::process_euro_registration` | agrees in area |
+| 0x85b670 | Named in 2026-10-14-game-creation-inventory.md | `find_cd_and_load_squad_data` (Haiku) | `Stadium::Stadium` | agrees |
+| 0x85b820 | Named in 2026-10-14-game-creation-inventory.md | `squad_manager_release_transfer_slot` (Haiku) | `Stadium::daily_update` | agrees in area |
+| 0x85d8a0 | Named in 2026-10-16-crash-fixes.md | `stadium_crowd_pull_score` (Haiku) | `Stadium::get_travel_distance_factor` | agrees in area |
+| 0x85f7a0 | Named in 2026-10-15-contract-clauses.md | `STAFF_CONTRACT::set_release_clause_flag` (Haiku) | `STAFF_CONTRACT::add_release_clause` | agrees |
+| 0x868020 | Named in 2026-10-15-contract-clauses.md | `STAFF_CONTRACT::format_release_clause_comment` (Haiku) | `STAFF_CONTRACT::get_release_clause_abbreviation` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

@@ -5383,72 +5383,72 @@ address	file	name	confidence	model	cited_in
 0x806450	search_filters.cpp	SearchFilters::set_defaults	medium	opus	
 0x8064d0	search_filters.cpp	SearchFilters::reset_general_filters	medium	opus	
 0x8065d0	search_filters.cpp	SearchFilters::reset_attribute_filters	medium	opus	
-0x806630	search_filters.cpp	Search_Filters::set_filter_mask	medium	haiku	
-0x806ff0	search_filters.cpp	search_filter_set_index	high	haiku	
-0x807090	search_filters.cpp	search_filter_set_range_field	medium	haiku	
-0x807130	search_filters.cpp	search_filter::set_range_code	high	haiku	
-0x8071d0	search_filters.cpp	search_filter_set_index	high	haiku	
-0x807270	search_filters.cpp	search_filter_set_slot_range_checked	high	haiku	
-0x807310	search_filters.cpp	search_filter_set_range_field	medium	haiku	
-0x8073b0	search_filters.cpp	search_filter_set_field_checked	high	haiku	
-0x807450	search_filters.cpp	Search_Filters::player_matches_filter	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x808000	search_filters.cpp	search_filters_match_player	medium	haiku	
-0x808080	search_filters.cpp	search_filter_match_player_attributes	medium	haiku	
-0x808190	search_filters.cpp	search_filters_lookup_byte_table	medium	haiku	
-0x808280	search_filters.cpp	Search_Filters::set_filter_level	high	haiku	
-0x8084c0	search_screens.cpp	search_screen_try_advance_page	medium	haiku	
-0x808500	search_screens.cpp	search_screen_decrement_counter	medium	haiku	
-0x808540	search_screens.cpp	search_screens_open_search	high	haiku	
-0x808690	search_screens.cpp	search_screens_build_player_search_panel	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x808800	search_screens.cpp	search_screens_draw_player_search_results	high	haiku	
-0x80ea90	search_screens.cpp	read_qword_field	medium	haiku	
-0x80eaa0	search_screens.cpp	search_filter_lookup_value	medium	haiku	
-0x80ead0	search_screens.cpp	search_filter_slot_read	medium	haiku	
-0x80eb00	search_screens.cpp	search_screens_dispatch_command	high	haiku	
-0x813140	search_screens.cpp	search_screens_destroy_lists	medium	haiku	
-0x8131c0	search_screens.cpp	search_screens_release_session_if_active	medium	haiku	
-0x813210	search_screens.cpp	search_screens_assert_or_load_filter_dialog	high	haiku	
-0x8133a0	search_screens.cpp	Search_Filters::build_filter_dialog	high	haiku	
-0x818100	search_screens.cpp	search_screens_dispatch_button	medium	haiku	
-0x8189f0	search_screens.cpp	search_screens_compare_players_by_name	medium	haiku	
-0x818ab0	search_screens.cpp	search_result_compare_by_name	medium	haiku	
-0x818b60	search_screens.cpp	search_screens_compare_players_by_name	medium	haiku	
-0x818ce0	search_screens.cpp	search_result_compare_by_name	medium	haiku	
-0x818e70	search_screens.cpp	search_result_compare_by_name	medium	haiku	
-0x819000	search_screens.cpp	search_compare_players_by_name_sort	medium	haiku	
-0x819190	search_screens.cpp	search_screens_compare_players_for_sort	medium	haiku	
-0x819340	search_screens.cpp	search_compare_shortlist_players	medium	haiku	
-0x819620	search_screens.cpp	search_screens_compare_entries_by_name	medium	haiku	
-0x8196e0	search_screens.cpp	search_screens_compare_players_by_name	medium	haiku	
-0x819780	search_screens.cpp	compare_players_by_position_then_name	medium	haiku	
-0x819870	search_screens.cpp	search_result_compare	medium	haiku	
-0x819910	search_screens.cpp	search_compare_player_names	medium	haiku	
-0x819990	search_screens.cpp	search_result_compare_by_name	medium	haiku	
-0x819a80	search_screens.cpp	search_compare_players_by_name	medium	haiku	
-0x819ba0	search_screens.cpp	search_screens_compare_staff_by_name	medium	haiku	
-0x819da0	search_screens.cpp	search_screens_compare_list_entries	medium	haiku	
-0x819ea0	search_screens.cpp	search_screen_compare_players	medium	haiku	
-0x819f70	search_screens.cpp	search_screens_compare_staff_by_name	medium	haiku	
-0x81a000	search_screens.cpp	search_compare_player_by_rank_then_name	medium	haiku	
-0x81a0f0	search_screens.cpp	search_screens_compare_players_by_rating	medium	haiku	
-0x81a220	search_screens.cpp	search_result_compare_by_field	medium	haiku	
-0x81a360	search_screens.cpp	compare_players_by_sort_field	medium	haiku	
-0x81a450	search_screens.cpp	search_list_compare_by_name	medium	haiku	
-0x81a5a0	search_screens.cpp	search_screens_compare_player_names	medium	haiku	
-0x81a630	search_screens.cpp	search_screens_compare_players_by_name	medium	haiku	
-0x81a6c0	search_screens.cpp	search_screens_compare_players_by_name	medium	haiku	
-0x81a750	search_screens.cpp	search_list_compare_by_name	medium	haiku	
-0x81a860	search_screens.cpp	search_compare_players_by_key	medium	haiku	
-0x81a940	search_screens.cpp	search_result_compare_player	medium	haiku	
-0x81aa50	search_screens.cpp	search_screens_compare_players_by_name	medium	haiku	
-0x81ab60	search_screens.cpp	search_screens_compare_records	medium	haiku	
-0x81aca0	search_screens.cpp	search_screens_compare_players_by_name	medium	haiku	
-0x81ae60	search_screens.cpp	search_filter_compare_char_range	low	haiku	
-0x81af00	search_screens.cpp	search_screens_compare_position_codes	medium	haiku	
-0x81afa0	search_screens.cpp	compare_search_key_chars	medium	haiku	
-0x81b040	search_screens.cpp	search_screens_compare_staff_attribute_labels	medium	haiku	
-0x81b0e0	search_screens.cpp	search_filter_bit_to_index	medium	haiku	
-0x81b4e0	search_screens.cpp	search_filter_bit_for_index	medium	haiku	
+0x806630	search_filters.cpp	SearchFilters::set_option_flag	high	opus	
+0x806ff0	search_filters.cpp	SearchFilters::set_nationality_nation	high	opus	
+0x807090	search_filters.cpp	SearchFilters::set_nationality_region	high	opus	
+0x807130	search_filters.cpp	SearchFilters::set_language_option	medium	opus	
+0x8071d0	search_filters.cpp	SearchFilters::set_based_nation	high	opus	
+0x807270	search_filters.cpp	SearchFilters::set_based_region	high	opus	
+0x807310	search_filters.cpp	SearchFilters::set_value_band	medium	opus	
+0x8073b0	search_filters.cpp	SearchFilters::set_job_filter	medium	opus	
+0x807450	search_filters.cpp	SearchFilters::player_matches_filter	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x808000	search_filters.cpp	SearchFilters::player_matches_filter_fragment_808000	high	opus	
+0x808080	search_filters.cpp	SearchFilters::player_matches_filter_fragment_808080	high	opus	
+0x808190	search_filters.cpp	SearchFilters::get_attribute_minimum	high	opus	
+0x808280	search_filters.cpp	SearchFilters::set_attribute_minimum	high	opus	
+0x8084c0	search_screens.cpp	SearchFilters::increase_attributes_to_match	medium	opus	
+0x808500	search_screens.cpp	SearchFilters::decrease_attributes_to_match	medium	opus	
+0x808540	search_screens.cpp	search_screens_open_player_search_screen	high	opus	
+0x808690	search_screens.cpp	search_screens_build_player_search_screen	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x808800	search_screens.cpp	search_screens_build_player_search_screen_fragment_808800	high	opus	
+0x80ea90	search_screens.cpp	SearchFilters::get_flag_mask	medium	opus	
+0x80eaa0	search_screens.cpp	SearchEditSession::get_list_type	high	opus	
+0x80ead0	search_screens.cpp	SearchEditSession::get_assigned_club	high	opus	
+0x80eb00	search_screens.cpp	search_screens_handle_player_search_input	high	opus	
+0x813140	search_screens.cpp	SearchEditSession::~SearchEditSession	high	opus	
+0x8131c0	search_screens.cpp	search_screens_close_player_search_screen	high	opus	
+0x813210	search_screens.cpp	search_screens_open_filters_screen	high	opus	
+0x8133a0	search_screens.cpp	search_screens_build_filters_screen	high	opus	
+0x818100	search_screens.cpp	search_screens_handle_filters_input	high	opus	
+0x8189f0	search_screens.cpp	search_screens_compare_results_by_note_rating	medium	opus	
+0x818ab0	search_screens.cpp	search_screens_compare_results_by_best_stars	medium	opus	
+0x818b60	search_screens.cpp	search_screens_compare_results_by_matches_watched	medium	opus	
+0x818ce0	search_screens.cpp	search_screens_compare_results_by_scouted_goals	medium	opus	
+0x818e70	search_screens.cpp	search_screens_compare_results_by_scouted_assists	medium	opus	
+0x819000	search_screens.cpp	search_screens_compare_results_by_scouted_goals_conceded	medium	opus	
+0x819190	search_screens.cpp	search_screens_compare_results_by_scouted_average_rating	medium	opus	
+0x819340	search_screens.cpp	search_screens_compare_results_by_last_scouted_match	medium	opus	
+0x819620	search_screens.cpp	search_screens_compare_results_by_ability_stars	medium	opus	
+0x8196e0	search_screens.cpp	search_screens_compare_results_by_potential_stars	medium	opus	
+0x819780	search_screens.cpp	search_screens_compare_results_by_national_squad_slot	medium	opus	
+0x819870	search_screens.cpp	search_screens_compare_results_by_field_2b	low	opus	
+0x819910	search_screens.cpp	search_screens_compare_results_by_name	high	opus	
+0x819990	search_screens.cpp	search_screens_compare_staff_by_club	high	opus	
+0x819a80	search_screens.cpp	search_screens_compare_staff_by_employer	high	opus	
+0x819ba0	search_screens.cpp	search_screens_compare_staff_by_league	medium	opus	
+0x819da0	search_screens.cpp	search_screens_compare_staff_by_position	high	opus	
+0x819ea0	search_screens.cpp	search_screens_compare_staff_by_job	high	opus	
+0x819f70	search_screens.cpp	search_screens_compare_staff_by_value	high	opus	
+0x81a000	search_screens.cpp	search_screens_compare_staff_by_reputation	high	opus	
+0x81a0f0	search_screens.cpp	search_screens_compare_staff_by_stat	medium	opus	
+0x81a220	search_screens.cpp	search_screens_compare_staff_by_player_attribute	high	opus	
+0x81a360	search_screens.cpp	search_screens_compare_staff_by_non_player_attribute	high	opus	
+0x81a450	search_screens.cpp	search_screens_compare_staff_by_nationality	high	opus	
+0x81a5a0	search_screens.cpp	search_screens_compare_staff_by_age	high	opus	
+0x81a630	search_screens.cpp	search_screens_compare_staff_by_caps	high	opus	
+0x81a6c0	search_screens.cpp	search_screens_compare_staff_by_international_goals	high	opus	
+0x81a750	search_screens.cpp	search_screens_compare_staff_by_form	high	opus	
+0x81a860	search_screens.cpp	search_screens_compare_staff_by_morale	high	opus	
+0x81a940	search_screens.cpp	search_screens_compare_staff_by_fitness	high	opus	
+0x81aa50	search_screens.cpp	search_screens_compare_staff_by_wage	high	opus	
+0x81ab60	search_screens.cpp	search_screens_compare_staff_by_contract_end	high	opus	
+0x81aca0	search_screens.cpp	search_screens_compare_staff_by_release_clause	high	opus	
+0x81ae60	search_screens.cpp	search_screens_compare_player_attribute_short_names	high	opus	
+0x81af00	search_screens.cpp	search_screens_compare_non_player_attribute_short_names	high	opus	
+0x81afa0	search_screens.cpp	search_screens_compare_player_attribute_names	high	opus	
+0x81b040	search_screens.cpp	search_screens_compare_non_player_attribute_names	high	opus	
+0x81b0e0	search_screens.cpp	search_screens_filter_bit_to_index	high	opus	
+0x81b4e0	search_screens.cpp	search_screens_filter_index_to_bit	high	opus	
 0x81b800	search_screens.cpp	search_filter_record_init	low	opus	
 0x81b830	Setup.cpp	setup_static_init_start_date	medium	opus	
 0x81b850	Setup.cpp	setup_static_destroy_start_date	medium	opus	
@@ -5557,68 +5557,68 @@ address	file	name	confidence	model	cited_in
 0x8395b0	Setup.cpp	save_fifa_transfer_rules	high	opus	
 0x839760	Setup.cpp	load_fifa_transfer_rules	high	opus	2026-10-16-sweep-season-end.md
 0x839920	Setup.cpp	fix_division_club_count	high	opus	2026-10-14-game-creation-inventory.md
-0x839a80	shortlist_manager.cpp	ShortlistManager::init_shortlists	high	haiku	
-0x839d90	shortlist_manager.cpp	shortlist_manager_release_buffers	high	haiku	
-0x839e60	shortlist_manager.cpp	shortlist_manager_build_club_shortlists	high	haiku	
-0x83a1b0	shortlist_manager.cpp	shortlist_manager_build_shortlists	high	haiku	2026-10-14-game-creation-inventory.md
-0x83a730	shortlist_manager.cpp	shortlist_manager_add_club_squad_entry	medium	haiku	
-0x83a780	shortlist_manager.cpp	shortlist_manager_refresh_all_lists	medium	haiku	
-0x83a9d0	shortlist_manager.cpp	shortlist_manager_load	high	haiku	
-0x83b360	shortlist_manager.cpp	shortlist_manager_passthrough_0x83b360	medium	haiku	
-0x83b370	shortlist_manager.cpp	shortlist_manager_load_file	medium	haiku	
-0x83b670	shortlist_manager.cpp	shortlist_compare_by_rank_then_id	medium	haiku	
-0x83b690	shortlist_manager.cpp	shortlist_compare_players	medium	haiku	
-0x83b6c0	shortlist_manager.cpp	shortlist_entry_compare_flag	medium	haiku	
-0x83b6e0	shortlist_manager.cpp	shortlist_manager_allocate_club_squad_budget	medium	haiku	
-0x83bd00	shortlist_manager.cpp	map_key_flags_to_index	medium	haiku	
-0x83bf40	shortlist_manager.cpp	shortlist_manager_compute_player_rating	medium	haiku	
-0x83c090	shortlist_manager.cpp	init_squad_tactical_grid	medium	haiku	
-0x83cb40	shortlist_manager.cpp	shortlist_manager_build_shortlists_for_club	high	haiku	
-0x83f3a0	shortlist_manager.cpp	shortlist_manager_fill_slot	medium	haiku	
-0x840000	shortlist_manager.cpp	shortlist_manager_build_candidates	medium	haiku	
-0x840010	shortlist_manager.cpp	shortlist_manager_scan_candidates	medium	haiku	
-0x840d80	shortlist_manager.cpp	shortlist_manager_compute_bid_value	medium	haiku	
-0x842080	shortlist_manager.cpp	shortlist_entry_search	medium	haiku	
-0x8420e0	shortlist_manager.cpp	shortlist_manager_remove_entries_for_player	medium	haiku	2026-10-15-holiday-next-match-inventory.md
-0x842180	shortlist_manager.cpp	shortlist_add_eligible_scouted_players	medium	haiku	2026-10-16-foreign-and-tactics-positions.md
-0x842320	shortlist_manager.cpp	shortlist_manager_release_player_offer	low	haiku	
-0x8423f0	shortlist_manager.cpp	shortlist_add_entry	high	haiku	2026-10-14-widescreen-inventory.md
-0x842740	shortlist_manager.cpp	shortlist_manager_try_bid_for_player	medium	haiku	
-0x842b00	shortlist_manager.cpp	shortlist_manager_clear_squad_flags_for_player	low	haiku	
-0x842c00	shortlist_manager.cpp	shortlist_manager_add_candidates	medium	haiku	
-0x842e10	shortlist_manager.cpp	shortlist_manager_try_add_player	medium	haiku	
-0x843800	shortlist_manager.cpp	shortlist_manager_try_sign_shortlisted_player	medium	haiku	
+0x839a80	shortlist_manager.cpp	Shortlist_Manager::Shortlist_Manager	high	opus	
+0x839d90	shortlist_manager.cpp	Shortlist_Manager::~Shortlist_Manager	high	opus	
+0x839e60	shortlist_manager.cpp	Shortlist_Manager::build_position_lists	high	opus	
+0x83a1b0	shortlist_manager.cpp	Shortlist_Manager::create_initial_shortlists	high	opus	2026-10-14-game-creation-inventory.md
+0x83a730	shortlist_manager.cpp	Shortlist_Manager::update_club_shortlist	medium	opus	
+0x83a780	shortlist_manager.cpp	Shortlist_Manager::sort_position_lists	medium	opus	
+0x83a9d0	shortlist_manager.cpp	Shortlist_Manager::load	high	opus	
+0x83b360	shortlist_manager.cpp	shortlist_old_slot_record_ctor	medium	opus	
+0x83b370	shortlist_manager.cpp	Shortlist_Manager::save	high	opus	
+0x83b670	shortlist_manager.cpp	shortlist_compare_by_value_then_key	high	opus	
+0x83b690	shortlist_manager.cpp	shortlist_compare_slots_filled_first	medium	opus	
+0x83b6c0	shortlist_manager.cpp	shortlist_compare_slots_by_index	medium	opus	
+0x83b6e0	shortlist_manager.cpp	Shortlist_Manager::allocate_transfer_budget	medium	opus	
+0x83bd00	shortlist_manager.cpp	shortlist_position_mask_to_index	medium	opus	
+0x83bf40	shortlist_manager.cpp	Shortlist_Manager::update_club_target_reputation	medium	opus	
+0x83c090	shortlist_manager.cpp	shortlist_set_up_formation_slots	medium	opus	
+0x83cb40	shortlist_manager.cpp	Shortlist_Manager::assess_club_squad	high	opus	
+0x83f3a0	shortlist_manager.cpp	Shortlist_Manager::fill_shortlist_slot	medium	opus	
+0x840000	shortlist_manager.cpp	Shortlist_Manager::fill_shortlist_slot_fragment_840000	high	opus	
+0x840010	shortlist_manager.cpp	Shortlist_Manager::fill_shortlist_slot_fragment_840010	high	opus	
+0x840d80	shortlist_manager.cpp	Shortlist_Manager::value_player_for_club	medium	opus	
+0x842080	shortlist_manager.cpp	Shortlist_Manager::is_on_shortlist	high	opus	
+0x8420e0	shortlist_manager.cpp	Shortlist_Manager::collect_club_shortlist_entries	high	opus	2026-10-15-holiday-next-match-inventory.md
+0x842180	shortlist_manager.cpp	Shortlist_Manager::collect_interested_clubs	high	opus	2026-10-16-foreign-and-tactics-positions.md
+0x842320	shortlist_manager.cpp	Shortlist_Manager::transfer_list_player	high	opus	
+0x8423f0	shortlist_manager.cpp	Shortlist_Manager::add_shortlist_entry	high	opus	2026-10-14-widescreen-inventory.md
+0x842740	shortlist_manager.cpp	Shortlist_Manager::try_loan_offer_for_player	medium	opus	
+0x842b00	shortlist_manager.cpp	Shortlist_Manager::suspend_clubs_shortlisting_player	medium	opus	
+0x842c00	shortlist_manager.cpp	Shortlist_Manager::add_player_to_club_shortlists	medium	opus	
+0x842e10	shortlist_manager.cpp	Shortlist_Manager::try_add_player_to_club_shortlist	high	opus	
+0x843800	shortlist_manager.cpp	Shortlist_Manager::club_wants_player	medium	opus	
 0x843e10	shortlist_manager.cpp	Shortlist_Manager::update_staff_status	medium	opus	
-0x844280	shortlist_manager.cpp	shortlist_contract_clear_flag_bit0	medium	haiku	
-0x8442b0	shortlist_manager.cpp	contract_mark_flag_set_bit_one	medium	haiku	
-0x8442d0	shortlist_manager.cpp	shortlist_clear_contract_flag_bit1	medium	haiku	
-0x844300	shortlist_manager.cpp	shortlist_manager_position_qualifies	medium	haiku	
-0x844540	shortlist_manager.cpp	shortlist_manager_clear_unaffordable_slots	medium	haiku	
-0x844660	shortlist_manager.cpp	shortlist_manager_refresh_slot_status	medium	haiku	2026-10-15-holiday-next-match-inventory.md
-0x844740	shortlist_manager.cpp	shortlist_compare_entries	medium	haiku	
-0x844780	shortlist_manager.cpp	shortlist_manager_score_candidate_for_club	medium	haiku	2026-10-14-widescreen-inventory.md
+0x844280	shortlist_manager.cpp	shortlist_manager_remove_from_transfer_list	high	opus	
+0x8442b0	shortlist_manager.cpp	shortlist_manager_add_to_loan_list	medium	opus	
+0x8442d0	shortlist_manager.cpp	shortlist_manager_remove_from_loan_list	medium	opus	
+0x844300	shortlist_manager.cpp	shortlist_staff_fits_slot_position	medium	opus	
+0x844540	shortlist_manager.cpp	Shortlist_Manager::count_slots_with_bids	medium	opus	
+0x844660	shortlist_manager.cpp	shortlist_manager_release_club_slot_targets	medium	opus	2026-10-15-holiday-next-match-inventory.md
+0x844740	shortlist_manager.cpp	compare_id_pair_keys_by_second_id	high	opus	
+0x844780	shortlist_manager.cpp	staff_interest_in_job_at_club	medium	opus	2026-10-14-widescreen-inventory.md
 0x846920	shortlist_manager.cpp	staff_interest_in_joining_club	medium	opus	
 0x849ce0	shortlist_manager.cpp	Shortlist_Manager::find_club_shortlist_entry	medium	opus	
-0x849d60	shortlist_manager.cpp	shortlist_manager_classify_candidate_band	medium	haiku	
-0x849f00	shortlist_manager.cpp	shortlist_manager_player_status_for_club	medium	haiku	
-0x84a020	shortlist_manager.cpp	shortlist_manager_bid_for_club_squad_players	medium	haiku	
-0x84abe0	shortlist_manager.cpp	shortlist_manager_refresh_club_shortlist	medium	haiku	2026-10-15-holiday-next-match-inventory.md
-0x84aeb0	shortlist_manager.cpp	shortlist_manager_clear_slot_entries_for_player	medium	haiku	2026-10-16-crash-fixes.md
-0x84af00	shortlist_manager.cpp	shortlist_manager_transfer_offer_verdict	medium	haiku	
-0x84b180	shortlist_manager.cpp	shortlist_entry_blocks_transfer	medium	haiku	
-0x84b1f0	shortlist_manager.cpp	shortlist_manager_fee_for_player_position	low	haiku	
-0x84b230	shortlist_manager.cpp	shortlist_manager_fee_for_role	medium	haiku	
-0x84b330	shortlist_manager.cpp	shortlist_manager_player_status_text	high	haiku	
-0x84b4d0	shortlist_manager.cpp	shortlist_manager_check_player_eligible	medium	haiku	
-0x84b580	shortlist_manager.cpp	shortlist_manager_add_club_players	medium	haiku	
-0x84b6f0	shortlist_manager.cpp	shortlist_manager_can_sign_player	medium	haiku	
-0x84b8b0	shortlist_manager.cpp	string_equal_or_less_compare_buffered	low	haiku	
-0x84b940	simulated_stats.cpp	simulated_stats_build_ranking	medium	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
-0x84be10	simulated_stats.cpp	simulated_stats_release_owned_handle	medium	haiku	
-0x84be20	simulated_stats.cpp	simulated_stats_run_round_matches	medium	haiku	
-0x84c500	simulated_stats.cpp	simulated_stats_thunk_0x84c500	low	haiku	
-0x84c510	simulated_stats.cpp	simulated_stats_load_dat	high	haiku	
-0x84c680	simulated_stats.cpp	simulated_stats_save_file	high	haiku	
+0x849d60	shortlist_manager.cpp	shortlist_manager_estimate_squad_status	medium	opus	
+0x849f00	shortlist_manager.cpp	shortlist_manager_get_squad_status_for_club	high	opus	
+0x84a020	shortlist_manager.cpp	Shortlist_Manager::make_club_bids	high	opus	
+0x84abe0	shortlist_manager.cpp	Shortlist_Manager::rebuild_club_shortlist	high	opus	2026-10-15-holiday-next-match-inventory.md
+0x84aeb0	shortlist_manager.cpp	Shortlist_Manager::clear_bid_markers_for_player	high	opus	2026-10-16-crash-fixes.md
+0x84af00	shortlist_manager.cpp	shortlist_manager_predict_selling_club_response	medium	opus	
+0x84b180	shortlist_manager.cpp	shortlist_manager_passes_work_permit_check	medium	opus	
+0x84b1f0	shortlist_manager.cpp	shortlist_manager_max_fee_for_player_status	medium	opus	
+0x84b230	shortlist_manager.cpp	shortlist_manager_max_fee_for_squad_status	medium	opus	
+0x84b330	shortlist_manager.cpp	shortlist_manager_squad_status_text	high	opus	
+0x84b4d0	shortlist_manager.cpp	shortlist_manager_squad_status_allowed	high	opus	
+0x84b580	shortlist_manager.cpp	Shortlist_Manager::mark_player_under_offer	medium	opus	
+0x84b6f0	shortlist_manager.cpp	shortlist_manager_is_compensation_deal	medium	opus	
+0x84b8b0	shortlist_manager.cpp	staff_name_equals	high	opus	
+0x84b940	simulated_stats.cpp	SimulatedStats::SimulatedStats	high	opus	2026-10-14-game-creation-inventory.md,2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
+0x84be10	simulated_stats.cpp	SimulatedStats::~SimulatedStats	high	opus	
+0x84be20	simulated_stats.cpp	SimulatedStats::play_daily_matches	medium	opus	
+0x84c500	simulated_stats.cpp	simulated_stats_atexit_static_match_record	high	opus	
+0x84c510	simulated_stats.cpp	SimulatedStats::load	high	opus	
+0x84c680	simulated_stats.cpp	SimulatedStats::save	high	opus	
 0x84c7d0	simulated_stats.cpp	crt_init_register_atexit_84c7d0	medium	opus	
 0x84c7e0	simulated_stats.cpp	crt_atexit_noop_84c7e0	medium	opus	
 0x84c7f0	simulated_stats.cpp	printer_is_installed	high	opus	2026-10-14-import-inventory.md,net.c,print_pdf.c
@@ -5705,83 +5705,83 @@ address	file	name	confidence	model	cited_in
 0x859780	spain_rules.cpp	SPAIN_RULES::can_sign_player	high	opus	
 0x859850	spain_rules.cpp	SPAIN_RULES::can_make_offer	high	opus	
 0x859aa0	squad_manager.cpp	find_cm_cd_drive	high	opus	2026-10-14-game-creation-inventory.md
-0x859bc0	squad_manager.cpp	squad_manager_read_dat_version	high	haiku	
-0x859cc0	squad_manager.cpp	squad_manager_dat_write_header	high	haiku	
-0x859dc0	squad_manager.cpp	squad_manager_reset_registered_flags	medium	haiku	2026-10-14-game-creation-inventory.md
-0x859e20	squad_manager.cpp	squad_manager_rebuild_all_clubs	medium	haiku	
-0x859fe0	squad_manager.cpp	squad_manager_assign_squad_slots	medium	haiku	
-0x85a470	squad_manager.cpp	squad_manager_assign_players_to_squad_slots	medium	haiku	2026-10-16-crash-fixes.md
-0x85a760	squad_manager.cpp	squad_manager_player_status_for_club	medium	haiku	
-0x85a850	squad_manager.cpp	squad_manager_set_player_value_rating	medium	haiku	
-0x85a9b0	squad_manager.cpp	squad_manager_reset_player_flags	medium	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
-0x85aae0	squad_manager.cpp	squad_manager_select_players	medium	haiku	
-0x85add0	squad_manager.cpp	squad_manager_check_player_pair_valid	medium	haiku	
-0x85aec0	squad_manager.cpp	squad_manager_send_club_news_item	medium	haiku	
-0x85af40	squad_manager.cpp	squad_manager_request_squad_numbers_news	high	haiku	
-0x85b020	squad_manager.cpp	squad_manager_post_squad_news	medium	haiku	
-0x85b190	squad_manager.cpp	squad_manager_report_registration_status	high	haiku	
-0x85b670	squad_manager.cpp	find_cd_and_load_squad_data	high	haiku	2026-10-14-game-creation-inventory.md
-0x85b7f0	squad_manager.cpp	squad_manager_release_pair_fields	medium	haiku	
-0x85b820	squad_manager.cpp	squad_manager_release_transfer_slot	low	haiku	2026-10-14-game-creation-inventory.md
-0x85ba40	stadium.cpp	stadium_load_from_file	high	haiku	
-0x85bea0	stadium.cpp	Stadium::load_from_temp_file	high	haiku	
-0x85c260	stadium.cpp	stadium_select_for_fixture	medium	haiku	
-0x85c800	stadium.cpp	stadium_find_player_slot	medium	haiku	
-0x85cba0	stadium.cpp	stadium_match_attendance_and_gate	medium	haiku	
-0x85d8a0	stadium.cpp	stadium_crowd_pull_score	medium	haiku	2026-10-16-crash-fixes.md
-0x85da00	stadium.cpp	stadium_attendance_update	low	haiku	
-0x85ddb0	stadium.cpp	stadium_order_check_bsearch_wrapper	medium	haiku	
-0x85de20	stadium.cpp	stadium_entry_list_append	medium	haiku	
-0x85dfc0	stadium.cpp	Stadium::build_city_stadium_list	medium	haiku	
-0x85e2f0	stadium.cpp	compare_by_id_then_parent_stadium_capacity	low	haiku	
-0x85e320	stadium.cpp	compare_stadium_entries_by_key	low	haiku	
-0x85e350	stadium.cpp	compare_by_field_0x3c_of_pointer_0xc	medium	haiku	
-0x85e380	stadium.cpp	compare_date_fields_then_key	medium	haiku	
-0x85e3d0	stadium.cpp	register_date_init_at_exit	medium	haiku	
-0x85e400	stadium.cpp	stadium_noop_stub	medium	haiku	
-0x85e480	stadium.cpp	stadium_staff_init_from_pair	medium	haiku	
+0x859bc0	squad_manager.cpp	SQUAD_MANAGER::load	high	opus	
+0x859cc0	squad_manager.cpp	SQUAD_MANAGER::save	high	opus	
+0x859dc0	squad_manager.cpp	SQUAD_MANAGER::init_new_game	high	opus	2026-10-14-game-creation-inventory.md
+0x859e20	squad_manager.cpp	SQUAD_MANAGER::assign_league_squad_numbers	medium	opus	
+0x859fe0	squad_manager.cpp	SQUAD_MANAGER::assign_club_squad_numbers	medium	opus	
+0x85a470	squad_manager.cpp	SQUAD_MANAGER::allocate_squad_number	medium	opus	2026-10-16-crash-fixes.md
+0x85a760	squad_manager.cpp	SQUAD_MANAGER::get_squad_number	high	opus	
+0x85a850	squad_manager.cpp	SQUAD_MANAGER::set_squad_number	high	opus	
+0x85a9b0	squad_manager.cpp	SQUAD_MANAGER::process_euro_registration	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
+0x85aae0	squad_manager.cpp	SQUAD_MANAGER::select_euro_registered_players	medium	opus	
+0x85add0	squad_manager.cpp	SQUAD_MANAGER::club_uses_squad_numbers	medium	opus	
+0x85aec0	squad_manager.cpp	SQUAD_MANAGER::send_squad_numbers_request_news	high	opus	
+0x85af40	squad_manager.cpp	SQUAD_MANAGER::write_squad_numbers_news_text	high	opus	
+0x85b020	squad_manager.cpp	SQUAD_MANAGER::send_euro_registration_news	high	opus	
+0x85b190	squad_manager.cpp	SQUAD_MANAGER::write_euro_registration_news_text	high	opus	
+0x85b670	stadium.cpp	Stadium::Stadium	high	opus	2026-10-14-game-creation-inventory.md
+0x85b7f0	stadium.cpp	Stadium::~Stadium	high	opus	
+0x85b820	stadium.cpp	Stadium::daily_update	medium	opus	2026-10-14-game-creation-inventory.md
+0x85ba40	stadium.cpp	Stadium::load_from_temp_file	high	opus	
+0x85bea0	stadium.cpp	Stadium::save_to_temp_file	high	opus	
+0x85c260	stadium.cpp	Stadium::set_fixture_venue	high	opus	
+0x85c800	stadium.cpp	Stadium::find_available_venue	medium	opus	
+0x85cba0	stadium.cpp	Stadium::calculate_match_attendance	medium	opus	
+0x85d8a0	stadium.cpp	Stadium::get_travel_distance_factor	medium	opus	2026-10-16-crash-fixes.md
+0x85da00	stadium.cpp	Stadium::score_venue_for_fixture	medium	opus	
+0x85ddb0	stadium.cpp	Stadium::is_stadium_free_on_date	high	opus	
+0x85de20	stadium.cpp	Stadium::add_booking	high	opus	
+0x85dfc0	stadium.cpp	Stadium::build_venue_list	high	opus	
+0x85e2f0	stadium.cpp	stadium_compare_venues_by_nation	high	opus	
+0x85e320	stadium.cpp	stadium_compare_venues_by_continent	high	opus	
+0x85e350	stadium.cpp	stadium_compare_venues_by_capacity	high	opus	
+0x85e380	stadium.cpp	stadium_compare_bookings	high	opus	
+0x85e3d0	staff_contracts.cpp	staff_contracts_init_static_date	medium	opus	
+0x85e400	staff_contracts.cpp	staff_contracts_destroy_static_date	medium	opus	
 0x85e410	staff_contracts.cpp	STAFF_CONTRACT::STAFF_CONTRACT	high	opus	
-0x85e590	staff_contracts.cpp	staff_contract_init_from_player	medium	haiku	
-0x85e750	staff_contracts.cpp	staff_contract_format_wage_text	high	haiku	
-0x85e8f0	staff_contracts.cpp	STAFF_CONTRACT::describe_status	high	haiku	
-0x85e960	staff_contracts.cpp	STAFF_CONTRACT::build_offer	medium	haiku	
-0x85f7a0	staff_contracts.cpp	STAFF_CONTRACT::set_release_clause_flag	medium	haiku	2026-10-15-contract-clauses.md
-0x85f7d0	staff_contracts.cpp	STAFF_CONTRACT::set_slot_value	medium	haiku	
-0x85f7e0	staff_contracts.cpp	staff_contract_clear_flag_1c	medium	haiku	
-0x85f7f0	staff_contracts.cpp	STAFF_CONTRACT::clear_bonus_slot	medium	haiku	
-0x85f800	staff_contracts.cpp	staff_contract_clear_bonus_fields	medium	haiku	
-0x85f830	staff_contracts.cpp	staff_contract_bonus_text	high	haiku	
-0x85f940	staff_contracts.cpp	staff_contract_release_clause_name	high	haiku	
-0x85f9f0	staff_contracts.cpp	staff_contract_is_type_three	medium	haiku	
-0x85fa00	staff_contracts.cpp	staff_contract_days_since_stamp	low	haiku	
-0x85fa20	staff_contracts.cpp	staff_contract_is_expired_status	medium	haiku	
-0x85fa30	staff_contracts.cpp	STAFF_CONTRACT::format_expiry_text	high	haiku	
-0x85fc50	staff_contracts.cpp	staff_contract_set_to_desired_contract	high	haiku	
-0x8626e0	staff_contracts.cpp	staff_contract_set_default_wage	medium	haiku	
-0x862720	staff_contracts.cpp	staff_contract_default_wage	high	haiku	
-0x864550	staff_contracts.cpp	STAFF_CONTRACT::default_staff_contract	high	haiku	
-0x866620	staff_contracts.cpp	staff_contract_desire_level	medium	haiku	
-0x866830	staff_contracts.cpp	staff_contract_copy_or_default_field_block	medium	haiku	
-0x866ee0	staff_contracts.cpp	staff_contract_reset_and_set_rating	medium	haiku	
-0x866f60	staff_contracts.cpp	staff_contract_wants_release	medium	haiku	
-0x867240	staff_contracts.cpp	staff_contract::resolve_pending_flags_and_renew	medium	haiku	
-0x8674e0	staff_contracts.cpp	STAFF_CONTRACT::clear_flags_and_notify	medium	haiku	
-0x867520	staff_contracts.cpp	staff_contract_clear_expiry_state	medium	haiku	
-0x867560	staff_contracts.cpp	STAFF_CONTRACT::set_flag_and_refresh	medium	haiku	
-0x8676d0	staff_contracts.cpp	staff_contract_clear_flags	medium	haiku	
+0x85e480	staff_contracts.cpp	STAFF_CONTRACT::init_trial_offer	medium	opus	
+0x85e590	staff_contracts.cpp	STAFF_CONTRACT::init_from_current_contract	medium	opus	
+0x85e750	staff_contracts.cpp	STAFF_CONTRACT::format_wage_text	high	opus	
+0x85e8f0	staff_contracts.cpp	STAFF_CONTRACT::format_end_date_text	high	opus	
+0x85e960	staff_contracts.cpp	STAFF_CONTRACT::generate_initial_contract	medium	opus	
+0x85f7a0	staff_contracts.cpp	STAFF_CONTRACT::add_release_clause	high	opus	2026-10-15-contract-clauses.md
+0x85f7d0	staff_contracts.cpp	STAFF_CONTRACT::set_bonus	high	opus	
+0x85f7e0	staff_contracts.cpp	STAFF_CONTRACT::remove_release_clause	high	opus	
+0x85f7f0	staff_contracts.cpp	STAFF_CONTRACT::remove_bonus	high	opus	
+0x85f800	staff_contracts.cpp	STAFF_CONTRACT::clear_bonuses_and_clauses	high	opus	
+0x85f830	staff_contracts.cpp	staff_contract_format_bonus_text	high	opus	
+0x85f940	staff_contracts.cpp	staff_contract_format_release_clause_name	high	opus	
+0x85f9f0	staff_contracts.cpp	STAFF_CONTRACT::is_expired	high	opus	
+0x85fa00	staff_contracts.cpp	STAFF_CONTRACT::days_to_end_date	medium	opus	
+0x85fa20	staff_contracts.cpp	STAFF_CONTRACT::is_rolling	high	opus	
+0x85fa30	staff_contracts.cpp	STAFF_CONTRACT::format_expiry_text	high	opus	
+0x85fc50	staff_contracts.cpp	STAFF_CONTRACT::set_to_desired_contract	high	opus	
+0x8626e0	staff_contracts.cpp	STAFF_CONTRACT::set_default_wage	high	opus	
+0x862720	staff_contracts.cpp	staff_contract_calc_unset_default_wage	medium	opus	
+0x864550	staff_contracts.cpp	STAFF_CONTRACT::default_staff_contract	high	opus	
+0x866620	staff_contracts.cpp	STAFF_CONTRACT::get_contract_satisfaction	medium	opus	
+0x866830	staff_contracts.cpp	STAFF_CONTRACT::calc_contract_value	medium	opus	
+0x866ee0	staff_contracts.cpp	STAFF_CONTRACT::reset_morale_state	medium	opus	
+0x866f60	staff_contracts.cpp	STAFF_CONTRACT::wants_to_leave	medium	opus	
+0x867240	staff_contracts.cpp	STAFF_CONTRACT::check_transfer_request_withdrawal	medium	opus	
+0x8674e0	staff_contracts.cpp	STAFF_CONTRACT::clear_grievances	medium	opus	
+0x867520	staff_contracts.cpp	STAFF_CONTRACT::clear_all_grievances	medium	opus	
+0x867560	staff_contracts.cpp	STAFF_CONTRACT::set_flags	medium	opus	
+0x8676d0	staff_contracts.cpp	STAFF_CONTRACT::clear_flags	high	opus	
 0x8676f0	staff_contracts.cpp	STAFF_CONTRACT::get_flags	high	opus	
 0x867700	staff_contracts.cpp	STAFF_CONTRACT::apply_event_flags	medium	opus	
-0x8679a0	staff_contracts.cpp	staff_contract_bonus_type_label	high	haiku	
-0x867a00	staff_contracts.cpp	staff_contract_release_clause_name	high	haiku	
-0x867aa0	staff_contracts.cpp	staff_contract_is_bonus_type_mismatch	medium	haiku	
-0x867ad0	staff_contracts.cpp	staff_contract_has_clause	medium	haiku	
-0x867b50	staff_contracts.cpp	staff_contract_is_active_or_expiring	medium	haiku	
-0x867b70	staff_contracts.cpp	staff_contract_convert_wage_period	medium	haiku	
-0x867c50	staff_contracts.cpp	staff_contract_convert_wage_period	medium	haiku	
-0x867d30	staff_contracts.cpp	staff_contract_rank_from_status	medium	haiku	
-0x867ef0	staff_contracts.cpp	Staff_contract::squad_status_text	high	haiku	
-0x868020	staff_contracts.cpp	STAFF_CONTRACT::format_release_clause_comment	high	haiku	2026-10-15-contract-clauses.md
-0x868210	staff_contracts.cpp	staff_contract_expiry_check	medium	haiku	
+0x8679a0	staff_contracts.cpp	staff_contract_get_bonus_type_name	high	opus	
+0x867a00	staff_contracts.cpp	staff_contract_get_release_clause_name	high	opus	
+0x867aa0	staff_contracts.cpp	staff_contract_is_bonus_type_allowed	high	opus	
+0x867ad0	staff_contracts.cpp	staff_contract_is_clause_allowed	high	opus	
+0x867b50	staff_contracts.cpp	STAFF_CONTRACT::has_active_release_clause	medium	opus	
+0x867b70	staff_contracts.cpp	STAFF_CONTRACT::increase_wage_step	medium	opus	
+0x867c50	staff_contracts.cpp	STAFF_CONTRACT::decrease_wage_step	medium	opus	
+0x867d30	staff_contracts.cpp	STAFF_CONTRACT::get_expiry_band	medium	opus	
+0x867ef0	staff_contracts.cpp	STAFF_CONTRACT::get_squad_status_text	high	opus	
+0x868020	staff_contracts.cpp	STAFF_CONTRACT::get_release_clause_abbreviation	high	opus	2026-10-15-contract-clauses.md
+0x868210	staff_contracts.cpp	STAFF_CONTRACT::check_fifa_protected_period	medium	opus	
 0x868390	staff_records.cpp	staff_records_load_cd_and_init	high	haiku	2026-10-14-game-creation-inventory.md
 0x8687c0	staff_records.cpp	staff_records_release_members	medium	haiku	
 0x868830	staff_records.cpp	match_day_record_result_and_prize	medium	haiku	
