@@ -12,6 +12,8 @@
  *   +12 u32 changing rules (0 or 1)
  * A later version only adds fields after these and makes the length larger. A reader takes the fields that
  * it knows and that lie inside the length, and gives the others their old meaning.
+ * Version 2 (0.6.0 slice 16) adds the news texts of the season changes after +16 (season_change.h). A game
+ * with no news text writes version 1.
  *
  * The original opens a part by its exact name (zopen 0x9326e0, the name scan at 0x93293b) and extracts only
  * the parts whose name ends in .tmp (load_game_data 0x82a9c0 calls 0x933320 with "*.tmp" at 0x82acbc), so it
@@ -20,6 +22,7 @@
  * proof: docs/research/2026-10-17-season-save-part.md. */
 #include "win.h"
 #include "season.h"
+#include "season_change.h"
 #include "options.h"
 #include "../host.h"
 
@@ -39,12 +42,17 @@ static int game_on;                             /* 1 from a made or loaded game 
 
 #define PART_NAME "bosman_season.dat"
 #define PART_VERSION 1u
+#define PART_VERSION_NEWS 2u       /* with the news texts of season_change.c */
 #define PART_SIZE 16u
 #define HEADER_ROWS 1000u
 #define ROW_SIZE 0x10cu
 #define ROW_NAME 8u
 #define NAME_SIZE 260u
-#define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999 (0x932a3e) */
+#define MAX_PARTS 999u
+/* The largest part that a reader takes. Version 1 has 16 bytes; later versions add fields (rules of a
+ * season, names), so the limit leaves a wide margin. It only stops a damaged row from asking for a block of
+ * gigabytes. */
+#define PART_MAX (1u << 20)             /* zopen 0x9326e0 refuses a new part when the count is 999 (0x932a3e) */
 
 /* The test switch RECOMP_SEASON_CODE=off (Q342): the season code does nothing. The start year stays 2001, so
  * every year site of tools/recomp/seasons.py gives the original's result; the runtime reads and writes no
@@ -182,22 +190,33 @@ static int add_part(const char *host)
         if (!strncmp((const char *)row + ROW_NAME, PART_NAME, NAME_SIZE)) { at = k; break; }
     }
     if (at == count && count >= MAX_PARTS) goto done;
-    uint8_t data[PART_SIZE], stored[2 * PART_SIZE];
-    put32(data, PART_VERSION);
-    put32(data + 4, PART_SIZE);
+    uint32_t extra = season_change_part_size(), size = PART_SIZE + extra;
+    if (extra > PART_MAX - PART_SIZE) goto done;
+    uint8_t *data = malloc(size), *stored = malloc(2 * (size_t)size);
+    if (!data || !stored) {
+        free(data);
+        free(stored);
+        goto done;
+    }
+    put32(data, extra ? PART_VERSION_NEWS : PART_VERSION);
+    put32(data + 4, size);
     put32(data + 8, rt_season_year);
     put32(data + 12, (uint32_t)rules_now);
-    uint32_t n = PART_SIZE;
-    if (version == 2 || version == 4) n = encode(data, PART_SIZE, stored);
-    else memcpy(stored, data, PART_SIZE);
+    if (extra) season_change_part_write(data + PART_SIZE);
+    uint32_t n = size;
+    if (version == 2 || version == 4) n = encode(data, size, stored);
+    else memcpy(stored, data, size);
+    free(data);
     int64_t end = host_seek(fd, 0, SEEK_END);
     if (end < 12 + (int64_t)HEADER_ROWS * ROW_SIZE || end > 0x7fffffff) goto done;
     /* The bytes first, then the row, then the count: a write that stops half way leaves the old file whole.
      * A part that is there already gets the new bytes at the end, and its row points to them. */
-    if (!write_at(fd, end, stored, n)) goto done;
+    int wrote = write_at(fd, end, stored, n);
+    free(stored);
+    if (!wrote) goto done;
     memset(row, 0, sizeof row);
     put32(row, (uint32_t)end);
-    put32(row + 4, PART_SIZE);
+    put32(row + 4, size);
     memcpy(row + ROW_NAME, PART_NAME, sizeof PART_NAME);
     if (!write_at(fd, 12 + (int64_t)at * ROW_SIZE, row, ROW_SIZE)) goto done;
     if (at == count) {
@@ -210,15 +229,12 @@ done:
     return bad;
 }
 
-/* The largest part that a reader takes. Version 1 has 16 bytes; later versions add fields (rules of a
- * season, names), so the limit leaves a wide margin. It only stops a damaged row from asking for a block of
- * gigabytes. */
-#define PART_MAX (1u << 20)
 
 /* Reads the part of the save file at host path into year and rules. 1 when the file has the part, 0 when it
  * has none (or the file is no container: the original's load then reports that itself), -1 when the part is
- * damaged. A part of a later version is read: its first fields keep their meaning (see the top). */
-static int read_part(const char *host, int *year, int *rules)
+ * damaged. A part of a later version is read: its first fields keep their meaning (see the top). With news 1
+ * the news texts of version 2 go to season_change.c (a load); a damaged news field makes the part damaged. */
+static int read_part(const char *host, int *year, int *rules, int news)
 {
     int fd = host_open(host, O_RDONLY, 0);
     if (fd < 0) return 0;
@@ -249,6 +265,9 @@ static int read_part(const char *host, int *year, int *rules)
         if (form < 1 || length < 16 || length > size) break;
         uint32_t y = get32(data + 8), r = get32(data + 12);
         if (y < SEASON_FIRST_YEAR || y > SEASON_LAST_YEAR || r > 1) break;
+        if (news && form >= PART_VERSION_NEWS && length > PART_SIZE &&
+            !season_change_part_read(data + PART_SIZE, length - PART_SIZE))
+            break;
         *year = (int)y;
         *rules = (int)r;
         result = 1;
@@ -266,7 +285,7 @@ int season_of_save(const char *host, int *year)
 {
     int rules = 0;
     *year = SEASON_FIRST_YEAR;
-    return read_part(host, year, &rules);
+    return read_part(host, year, &rules, 0);
 }
 
 void o_0082e430(void);
@@ -311,7 +330,9 @@ RT_WRAP(0082a9c0, load_game)
     char host[2048], path[1024];
     int year = SEASON_FIRST_YEAR, rules = 0;
     snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
-    if (win_existing_file(path, host, sizeof host) && read_part(host, &year, &rules) < 0) {
+    season_change_reset();
+    if (win_existing_file(path, host, sizeof host) && read_part(host, &year, &rules, 1) < 0) {
+        season_change_reset();
         /* A damaged part: the season of the game is not known, so the game is not loaded. The load fails
          * before any code of the original runs, as its own early failures do (0x82aa28), and the callers
          * report a failed load (for example 0x81bef1). */
@@ -334,6 +355,7 @@ RT_WRAP(0082a9c0, load_game)
     } else {                                    /* a failed load: back to the values of a new game */
         rt_season_year = (uint32_t)new_year;
         rules_now = 0;
+        season_change_reset();
     }
 }
 
@@ -345,6 +367,7 @@ RT_WRAP(00828110, create_game)
 {
     rt_season_year = (uint32_t)new_year;
     rules_now = !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
+    season_change_reset();
     o_00828110();
     if (!rt_unwinding && cpu.eax) game_on = 1;
 }
@@ -358,6 +381,7 @@ RT_WRAP(0082ff40, free_game)
     game_on = 0;
     rt_season_year = (uint32_t)new_year;
     rules_now = 0;
+    season_change_reset();
     o_0082ff40();
 }
 

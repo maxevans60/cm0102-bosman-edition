@@ -373,10 +373,11 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
         return r, os.path.join(user, SAVE_NAME), time.time() - start
 
     # The runs play at the same time. The test clock and the wait steps make each run the same on a
-    # busy machine.
+    # busy machine. SAME_SAVE_JOBS=<n> in the environment plays at most n at a time (a shared machine).
     saves = {}
     with tempfile.TemporaryDirectory(prefix="cm0102-same-save-") as work:
-        with concurrent.futures.ThreadPoolExecutor(len(runs)) as pool:
+        jobs_max = int(os.environ.get("SAME_SAVE_JOBS", "0")) or len(runs)
+        with concurrent.futures.ThreadPoolExecutor(min(jobs_max, len(runs))) as pool:
             jobs = [(name, pool.submit(play, name, options, work)) for name, options in runs]
             failed_runs = 0
             for name, job in jobs:
