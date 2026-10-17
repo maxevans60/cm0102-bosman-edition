@@ -1,0 +1,343 @@
+competition	label	part	field	value	check_url	result	note
+Norwegian Premier Division	2002		first	Rosenborg BK	https://www.rsssf.no/2002/Premier.html	agree	final table top two
+Norwegian Premier Division	2002		second	Molde FK	https://www.rsssf.no/2002/Premier.html	agree	final table top two
+Norwegian Premier Division	2002		ended	2002-10	https://www.rsssf.no/2002/Premier.html	agree	last round 27/10
+Norwegian Premier Division	2003		first	Rosenborg BK	https://www.rsssf.no/2003/Premier.html	agree	final table top two
+Norwegian Premier Division	2003		second	FK Bodø/Glimt	https://www.rsssf.no/2003/Premier.html	agree	final table top two
+Norwegian Premier Division	2003		ended	2003-11	https://www.rsssf.no/2003/Premier.html	agree	last round 1/11
+Norwegian Premier Division	2004		first	Rosenborg BK	https://www.rsssf.no/2004/Premier.html	agree	final table top two
+Norwegian Premier Division	2004		second	Vålerenga Fotball	https://www.rsssf.no/2004/Premier.html	agree	final table top two
+Norwegian Premier Division	2004		ended	2004-10	https://www.rsssf.no/2004/Premier.html	agree	last round 30/10
+Norwegian Premier Division	2005		first	Vålerenga Fotball	https://www.rsssf.no/2005/Premier.html	agree	final table top two
+Norwegian Premier Division	2005		second	IK Start	https://www.rsssf.no/2005/Premier.html	agree	final table top two
+Norwegian Premier Division	2005		ended	2005-10	https://www.rsssf.no/2005/Premier.html	agree	last round 29/10
+Norwegian Premier Division	2006		first	Rosenborg BK	https://www.rsssf.no/2006/Premier.html	agree	final table top two
+Norwegian Premier Division	2006		second	SK Brann	https://www.rsssf.no/2006/Premier.html	agree	final table top two
+Norwegian Premier Division	2006		ended	2006-11	https://www.rsssf.no/2006/Premier.html	agree	last round 5/11
+Norwegian Premier Division	2007		first	SK Brann	https://www.rsssf.no/2007/Premier.html	agree	final table top two
+Norwegian Premier Division	2007		second	Stabæk IF	https://www.rsssf.no/2007/Premier.html	agree	final table top two
+Norwegian Premier Division	2007		ended	2007-11	https://www.rsssf.no/2007/Premier.html	agree	last round 3/11
+Norwegian Premier Division	2008		first	Stabæk IF	https://www.rsssf.no/2008/Premier.html	agree	final table top two
+Norwegian Premier Division	2008		second	Fredrikstad FK	https://www.rsssf.no/2008/Premier.html	agree	final table top two
+Norwegian Premier Division	2008		ended	2008-11	https://www.rsssf.no/2008/Premier.html	agree	last round 2/11
+Norwegian Premier Division	2009		first	Rosenborg BK	https://www.rsssf.no/2009/Premier.html	agree	final table top two
+Norwegian Premier Division	2009		second	Molde FK	https://www.rsssf.no/2009/Premier.html	agree	final table top two
+Norwegian Premier Division	2009		ended	2009-11	https://www.rsssf.no/2009/Premier.html	agree	last round 1/11
+Norwegian First Division	2002		first	Tromsø IL	https://www.rsssf.no/2002/First.html	agree	final table top two
+Norwegian First Division	2002		second	Aalesund FK	https://www.rsssf.no/2002/First.html	agree	final table top two
+Norwegian First Division	2002		ended	2002-10	https://www.rsssf.no/2002/First.html	agree	last round 27/10
+Norwegian First Division	2003		first	Hamarkameratene Toppfotball	https://www.rsssf.no/2003/First.html	agree	final table top two
+Norwegian First Division	2003		second	Fredrikstad FK	https://www.rsssf.no/2003/First.html	agree	final table top two
+Norwegian First Division	2003		ended	2003-11	https://www.rsssf.no/2003/First.html	agree	last round 1/11
+Norwegian First Division	2004		first	IK Start	https://www.rsssf.no/2004/First.html	agree	final table top two
+Norwegian First Division	2004		second	Aalesund FK	https://www.rsssf.no/2004/First.html	agree	final table top two
+Norwegian First Division	2004		ended	2004-10	https://www.rsssf.no/2004/First.html	agree	last round 31/10
+Norwegian First Division	2005		first	Stabæk IF	https://www.rsssf.no/2005/First.html	agree	final table top two
+Norwegian First Division	2005		second	Sandefjord Fotball	https://www.rsssf.no/2005/First.html	agree	final table top two
+Norwegian First Division	2005		ended	2005-10	https://www.rsssf.no/2005/First.html	agree	last round 30/10
+Norwegian First Division	2006		first	Strømsgodset IF	https://www.rsssf.no/2006/First.html	agree	final table top two
+Norwegian First Division	2006		second	Aalesund FK	https://www.rsssf.no/2006/First.html	agree	final table top two
+Norwegian First Division	2006		ended	2006-11	https://www.rsssf.no/2006/First.html	agree	last round 5/11
+Norwegian First Division	2007		first	Molde FK	https://www.rsssf.no/2007/First.html	agree	final table top two
+Norwegian First Division	2007		second	Hamarkameratene Toppfotball	https://www.rsssf.no/2007/First.html	agree	final table top two
+Norwegian First Division	2007		ended	2007-11	https://www.rsssf.no/2007/First.html	agree	last round 4/11
+Norwegian First Division	2008		first	Odd Grenland	https://www.rsssf.no/2008/First.html	agree	final table top two
+Norwegian First Division	2008		second	Sandefjord Fotball	https://www.rsssf.no/2008/First.html	agree	final table top two
+Norwegian First Division	2008		ended	2008-11	https://www.rsssf.no/2008/First.html	agree	last round 1/11
+Norwegian First Division	2009		first	FK Haugesund	https://www.rsssf.no/2009/First.html	agree	final table top two
+Norwegian First Division	2009		second	Hønefoss BK	https://www.rsssf.no/2009/First.html	agree	final table top two
+Norwegian First Division	2009		ended	2009-11	https://www.rsssf.no/2009/First.html	agree	last round 1/11
+Norwegian Cup	2002		first	Vålerenga Fotball	https://www.rsssf.no/2002/Cup.html	agree	final
+Norwegian Cup	2002		second	Odd Grenland	https://www.rsssf.no/2002/Cup.html	agree	final
+Norwegian Cup	2002		ended	2002-11	https://www.rsssf.no/2002/Cup.html	agree	final 3/11
+Norwegian Cup	2003		first	Rosenborg BK	https://www.rsssf.no/2003/Cup.html	agree	final
+Norwegian Cup	2003		second	FK Bodø/Glimt	https://www.rsssf.no/2003/Cup.html	agree	final
+Norwegian Cup	2003		ended	2003-11	https://www.rsssf.no/2003/Cup.html	agree	final 9/11
+Norwegian Cup	2004		first	SK Brann	https://www.rsssf.no/2004/Cup.html	agree	final
+Norwegian Cup	2004		second	Lyn Fotball	https://www.rsssf.no/2004/Cup.html	agree	final
+Norwegian Cup	2004		ended	2004-11	https://www.rsssf.no/2004/Cup.html	agree	final 7/11
+Norwegian Cup	2005		first	Molde FK	https://www.rsssf.no/2005/Cup.html	agree	final
+Norwegian Cup	2005		second	Lillestrøm SK	https://www.rsssf.no/2005/Cup.html	agree	final
+Norwegian Cup	2005		ended	2005-11	https://www.rsssf.no/2005/Cup.html	agree	final 6/11
+Norwegian Cup	2006		first	Fredrikstad FK	https://www.rsssf.no/2006/Cup.html	agree	final
+Norwegian Cup	2006		second	Sandefjord Fotball	https://www.rsssf.no/2006/Cup.html	agree	final
+Norwegian Cup	2006		ended	2006-11	https://www.rsssf.no/2006/Cup.html	agree	final 12/11
+Norwegian Cup	2007		first	Lillestrøm SK	https://www.rsssf.no/2007/Cup.html	agree	final
+Norwegian Cup	2007		second	FK Haugesund	https://www.rsssf.no/2007/Cup.html	agree	final
+Norwegian Cup	2007		ended	2007-11	https://www.rsssf.no/2007/Cup.html	agree	final 11/11
+Norwegian Cup	2008		first	Vålerenga Fotball	https://www.rsssf.no/2008/Cup.html	agree	final
+Norwegian Cup	2008		second	Stabæk IF	https://www.rsssf.no/2008/Cup.html	agree	final
+Norwegian Cup	2008		ended	2008-11	https://www.rsssf.no/2008/Cup.html	agree	final 9/11
+Norwegian Cup	2009		first	Aalesund FK	https://www.rsssf.no/2009/Cup.html	agree	final
+Norwegian Cup	2009		second	Molde FK	https://www.rsssf.no/2009/Cup.html	agree	final
+Norwegian Cup	2009		ended	2009-11	https://www.rsssf.no/2009/Cup.html	agree	final 8/11
+Norwegian Second Division Group 1	2002		first	Fredrikstad FK	https://www.rsssf.no/2002/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2002		second	Kvik Halden	https://www.rsssf.no/2002/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2002		ended	2002-10	https://www.rsssf.no/2002/Second1.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 2	2002		first	Bærum SK	https://www.rsssf.no/2002/Second2.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 2	2002		second	FK Tønsberg	https://www.rsssf.no/2002/Second2.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 2	2002		ended	2002-10	https://www.rsssf.no/2002/Second2.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 3	2002		first	Mandalskameratene	https://www.rsssf.no/2002/Second3.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 3	2002		second	IL Løv/Ham	https://www.rsssf.no/2002/Second3.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 3	2002		ended	2002-10	https://www.rsssf.no/2002/Second3.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 4	2002		first	Alta IL	https://www.rsssf.no/2002/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2002		second	Byåsen IL	https://www.rsssf.no/2002/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2002		ended	2002-10	https://www.rsssf.no/2002/Second4.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 5	2002		held	not held	https://www.rsssf.no/2002/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2002; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 6	2002		held	not held	https://www.rsssf.no/2002/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2002; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 7	2002		held	not held	https://www.rsssf.no/2002/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2002; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 8	2002		held	not held	https://www.rsssf.no/2002/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2002; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 1	2003		first	Pors Grenland	https://www.rsssf.no/2003/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2003		second	FK Tønsberg	https://www.rsssf.no/2003/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2003		ended	2003-10	https://www.rsssf.no/2003/Second1.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 2	2003		first	Kongsvinger IL	https://www.rsssf.no/2003/Second2.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 2	2003		second	Ullensaker-Kisa	https://www.rsssf.no/2003/Second2.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 2	2003		ended	2003-10	https://www.rsssf.no/2003/Second2.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 3	2003		first	SK Vard-Haugesund	https://www.rsssf.no/2003/Second3.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 3	2003		second	IL Løv/Ham	https://www.rsssf.no/2003/Second3.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 3	2003		ended	2003-10	https://www.rsssf.no/2003/Second3.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 4	2003		first	Tromsdalen UIL	https://www.rsssf.no/2003/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2003		second	Strindheim IL	https://www.rsssf.no/2003/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2003		ended	2003-10	https://www.rsssf.no/2003/Second4.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 5	2003		held	not held	https://www.rsssf.no/2003/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2003; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 6	2003		held	not held	https://www.rsssf.no/2003/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2003; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 7	2003		held	not held	https://www.rsssf.no/2003/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2003; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 8	2003		held	not held	https://www.rsssf.no/2003/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2003; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 1	2004		first	FK Tønsberg	https://www.rsssf.no/2004/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2004		second	Sparta Sarpsborg	https://www.rsssf.no/2004/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2004		ended	2004-10	https://www.rsssf.no/2004/Second1.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 2	2004		first	Follo Fotball	https://www.rsssf.no/2004/Second2.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 2	2004		second	Lørenskog IF	https://www.rsssf.no/2004/Second2.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 2	2004		ended	2004-10	https://www.rsssf.no/2004/Second2.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 3	2004		first	IL Løv/Ham	https://www.rsssf.no/2004/Second3.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 3	2004		second	Bærum SK	https://www.rsssf.no/2004/Second3.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 3	2004		ended	2004-10	https://www.rsssf.no/2004/Second3.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 4	2004		first	Alta IL	https://www.rsssf.no/2004/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2004		second	Levanger FK	https://www.rsssf.no/2004/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2004		ended	2004-10	https://www.rsssf.no/2004/Second4.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 5	2004		held	not held	https://www.rsssf.no/2004/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2004; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 6	2004		held	not held	https://www.rsssf.no/2004/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2004; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 7	2004		held	not held	https://www.rsssf.no/2004/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2004; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 8	2004		held	not held	https://www.rsssf.no/2004/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2004; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 1	2005		first	Sparta Sarpsborg	https://www.rsssf.no/2005/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2005		second	SK Vard-Haugesund	https://www.rsssf.no/2005/Second1.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 1	2005		ended	2005-10	https://www.rsssf.no/2005/Second1.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 2	2005		first	FK Oslo Øst	https://www.rsssf.no/2005/Second2.html	agree	RSSSF names the winner Oslo Øst; its 2005 summary says Oslo Øst will play as Manglerud Star Toppfotball in 2006
+Norwegian Second Division Group 2	2005		second	Raufoss IL	https://www.rsssf.no/2005/Second2.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 2	2005		ended	2005-10	https://www.rsssf.no/2005/Second2.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 3	2005		first	Viking FK B	https://www.rsssf.no/2005/Second3.html	agree	RSSSF Norway: Viking 2 (the Viking reserve side)
+Norwegian Second Division Group 3	2005		second	FK Haugesund	https://www.rsssf.no/2005/Second3.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 3	2005		ended	2005-10	https://www.rsssf.no/2005/Second3.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 4	2005		first	Tromsdalen UIL	https://www.rsssf.no/2005/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2005		second	Mo IL	https://www.rsssf.no/2005/Second4.html	agree	RSSSF Norway final table top two
+Norwegian Second Division Group 4	2005		ended	2005-10	https://www.rsssf.no/2005/Second4.html	no second source	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+Norwegian Second Division Group 5	2005		held	not held	https://www.rsssf.no/2005/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2005; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 6	2005		held	not held	https://www.rsssf.no/2005/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2005; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 7	2005		held	not held	https://www.rsssf.no/2005/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2005; its season summaries give SECOND DIVISION (4x14)
+Norwegian Second Division Group 8	2005		held	not held	https://www.rsssf.no/2005/index.html	agree	RSSSF Norway lists only Second1 to Second4 for 2005; its season summaries give SECOND DIVISION (4x14)
+Danish Premier Division	2002		first	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den02.html	agree	final table top two
+Danish Premier Division	2002		second	Football Club København	https://www.rsssf.org/tablesd/den02.html	agree	final table top two
+Danish Premier Division	2002		ended	2002-05	https://www.rsssf.org/tablesd/den02.html	agree	last league date May 16
+Danish Premier Division	2003		first	Football Club København	https://www.rsssf.org/tablesd/den03.html	agree	final table top two
+Danish Premier Division	2003		second	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den03.html	agree	final table top two
+Danish Premier Division	2003		ended	2003-06	https://www.rsssf.org/tablesd/den03.html	agree	last league date Jun 22
+Danish Premier Division	2004		first	Football Club København	https://www.rsssf.org/tablesd/den04.html	agree	final table top two
+Danish Premier Division	2004		second	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den04.html	agree	final table top two
+Danish Premier Division	2004		ended	2004-05	https://www.rsssf.org/tablesd/den04.html	agree	last league date May 29
+Danish Premier Division	2005		first	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den05.html	agree	final table top two
+Danish Premier Division	2005		second	Football Club København	https://www.rsssf.org/tablesd/den05.html	agree	final table top two
+Danish Premier Division	2005		ended	2005-06	https://www.rsssf.org/tablesd/den05.html	agree	last league date Jun 19
+Danish Premier Division	2006		first	Football Club København	https://www.rsssf.org/tablesd/den06.html	agree	final table top two
+Danish Premier Division	2006		second	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den06.html	agree	final table top two
+Danish Premier Division	2006		ended	2006-05	https://www.rsssf.org/tablesd/den06.html	agree	last league date May 14
+Danish Premier Division	2007		first	Football Club København	https://www.rsssf.org/tablesd/den07.html	agree	final table top two
+Danish Premier Division	2007		second	Football Club Midtjylland 1999	https://www.rsssf.org/tablesd/den07.html	agree	final table top two
+Danish Premier Division	2007		ended	2007-05	https://www.rsssf.org/tablesd/den07.html	agree	last league date May 27
+Danish Premier Division	2008		first	Aalborg Boldspilklub	https://www.rsssf.org/tablesd/den08.html	agree	final table top two
+Danish Premier Division	2008		second	Football Club Midtjylland 1999	https://www.rsssf.org/tablesd/den08.html	agree	final table top two
+Danish Premier Division	2008		ended	2008-05	https://www.rsssf.org/tablesd/den08.html	agree	last league date May 24
+Danish Premier Division	2009		first	Football Club København	https://www.rsssf.org/tablesd/den09.html	agree	final table top two
+Danish Premier Division	2009		second	Odense Boldklub	https://www.rsssf.org/tablesd/den09.html	agree	final table top two
+Danish Premier Division	2009		ended	2009-05	https://www.rsssf.org/tablesd/den09.html	agree	last league date May 31
+Danish First Division	2002		first	Køge Boldklub	https://www.danskfodbold.com/tabel.php?seasonid=2002	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2002		second	Farum Boldklub	https://www.danskfodbold.com/tabel.php?seasonid=2002	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2003		first	Herfølge Boldklub	https://www.danskfodbold.com/tabel.php?seasonid=2003	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2003		second	Boldklubben Frem 1886	https://www.danskfodbold.com/tabel.php?seasonid=2003	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2004		first	Silkeborg Idræts Forening	https://www.danskfodbold.com/tabel.php?seasonid=2004	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2004		second	Randers FC	https://www.danskfodbold.com/tabel.php?seasonid=2004	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2005		first	SønderjyskElitesport	https://www.danskfodbold.com/tabel.php?seasonid=2005	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2005		second	AC Horsens	https://www.danskfodbold.com/tabel.php?seasonid=2005	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2006		first	Vejle Boldklub	https://www.danskfodbold.com/tabel.php?seasonid=2006	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2006		second	Randers FC	https://www.danskfodbold.com/tabel.php?seasonid=2006	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2007		first	Lyngby Boldklub af 1921	https://www.danskfodbold.com/tabel.php?seasonid=2007	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2007		second	Aarhus Gymnastik Forening	https://www.danskfodbold.com/tabel.php?seasonid=2007	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2007		ended	2007-06	https://www.rsssf.org/tablesd/den07.html	agree	last round Jun 24
+Danish First Division	2008		first	Vejle Boldklub	https://www.danskfodbold.com/tabel.php?seasonid=2008	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2008		second	SønderjyskElitesport	https://www.danskfodbold.com/tabel.php?seasonid=2008	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2008		ended	2008-06	https://www.rsssf.org/tablesd/den08.html	agree	last round Jun 8
+Danish First Division	2009		first	Herfølge Boldklub	https://www.danskfodbold.com/tabel.php?seasonid=2009	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish First Division	2009		second	Silkeborg Idræts Forening	https://www.danskfodbold.com/tabel.php?seasonid=2009	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish Cup	2002		first	Odense Boldklub	https://www.rsssf.org/tablesd/den02.html	agree	final
+Danish Cup	2002		second	Football Club København	https://www.rsssf.org/tablesd/den02.html	agree	final
+Danish Cup	2002		ended	2002-05	https://www.rsssf.org/tablesd/den02.html	agree	final May 9
+Danish Cup	2003		first	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den03.html	agree	final
+Danish Cup	2003		second	Football Club Midtjylland 1999	https://www.rsssf.org/tablesd/den03.html	agree	final
+Danish Cup	2003		ended	2003-05	https://www.rsssf.org/tablesd/den03.html	agree	final May 29
+Danish Cup	2004		first	Football Club København	https://www.rsssf.org/tablesd/den04.html	agree	final
+Danish Cup	2004		second	Aalborg Boldspilklub	https://www.rsssf.org/tablesd/den04.html	agree	final
+Danish Cup	2004		ended	2004-05	https://www.rsssf.org/tablesd/den04.html	agree	final May 20
+Danish Cup	2005		first	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den05.html	agree	final
+Danish Cup	2005		second	Football Club Midtjylland 1999	https://www.rsssf.org/tablesd/den05.html	agree	final
+Danish Cup	2005		ended	2005-05	https://www.rsssf.org/tablesd/den05.html	agree	final May 5
+Danish Cup	2006		first	Randers FC	https://www.rsssf.org/tablesd/den06.html	agree	final
+Danish Cup	2006		second	Esbjerg Forenede Boldklubber	https://www.rsssf.org/tablesd/den06.html	agree	final
+Danish Cup	2006		ended	2006-05	https://www.rsssf.org/tablesd/den06.html	agree	final May 11
+Danish Cup	2007		first	Odense Boldklub	https://www.rsssf.org/tablesd/den07.html	agree	final
+Danish Cup	2007		second	Football Club København	https://www.rsssf.org/tablesd/den07.html	agree	final
+Danish Cup	2007		ended	2007-05	https://www.rsssf.org/tablesd/den07.html	agree	final May 17
+Danish Cup	2008		first	Brøndbyernes Idræts Forening	https://www.rsssf.org/tablesd/den08.html	agree	final
+Danish Cup	2008		second	Esbjerg Forenede Boldklubber	https://www.rsssf.org/tablesd/den08.html	agree	final
+Danish Cup	2008		ended	2008-05	https://www.rsssf.org/tablesd/den08.html	agree	final May 1
+Danish Cup	2009		first	Football Club København	https://www.rsssf.org/tablesd/den09.html	agree	final
+Danish Cup	2009		second	Aalborg Boldspilklub	https://www.rsssf.org/tablesd/den09.html	agree	final
+Danish Cup	2009		ended	2009-05	https://www.rsssf.org/tablesd/den09.html	agree	final May 21
+Danish Second Division	2002		first	Boldklubben Skjold	https://www.danskfodbold.com/tabel.php?seasonid=2002	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish Second Division	2002		second	Ølstykke Fodbold Club	https://www.danskfodbold.com/tabel.php?seasonid=2002	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish Second Division	2003		first	FC Nordjylland	https://www.danskfodbold.com/tabel.php?seasonid=2003	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish Second Division	2003		second	Nykøbing Falster Alliancen	https://www.danskfodbold.com/tabel.php?seasonid=2003	agree	danskfodbold.com: NFA
+Danish Second Division	2004		first	Hellerup Idræts Klub	https://www.danskfodbold.com/tabel.php?seasonid=2004	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish Second Division	2004		second	Dalum Idrætsforening	https://www.danskfodbold.com/tabel.php?seasonid=2004	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish Second Division	2005		first	Kolding Idrætsforening FC	https://www.danskfodbold.com/tabel.php?seasonid=2005	agree	danskfodbold.com gives Kolding FC; the match to Kolding Idrætsforening FC is the researcher inference
+Danish Second Division	2005		second	Brabrand IF	https://www.danskfodbold.com/tabel.php?seasonid=2005	agree	danskfodbold.com (DBU statisticians) final table top two
+Danish Second Division	2006	East	first	Næstved Boldklub	https://www.danskfodbold.com/tabel.php?seasonid=2006	agree	danskfodbold.com final table, 2. division Øst
+Danish Second Division	2006	East	second	Holbæk Bold- og Idrætsforening	https://www.danskfodbold.com/tabel.php?seasonid=2006	agree	danskfodbold.com final table, 2. division Øst
+Danish Second Division	2006	West	first	Esbjerg fB II	https://www.danskfodbold.com/tabel.php?seasonid=2006	agree	danskfodbold.com: Esbjerg fB [2]
+Danish Second Division	2006	West	second	Aarhus Fremad	https://www.danskfodbold.com/tabel.php?seasonid=2006	agree	danskfodbold.com final table, 2. division Vest
+Danish Second Division	2007	East	first	Lolland-Falster Alliancen	https://www.danskfodbold.com/tabel.php?seasonid=2007	agree	danskfodbold.com final table, 2. division Øst
+Danish Second Division	2007	East	second	Brøndby IF II	https://www.danskfodbold.com/tabel.php?seasonid=2007	agree	danskfodbold.com: Brøndby IF [2]
+Danish Second Division	2007	West	first	Skive Idrætsklub	https://www.danskfodbold.com/tabel.php?seasonid=2007	agree	danskfodbold.com final table, 2. division Vest
+Danish Second Division	2007	West	second	Ikast FS	https://www.danskfodbold.com/tabel.php?seasonid=2007	agree	danskfodbold.com: Ikast FS [FCM 2]
+Danish Second Division	2008	East	first	FC Roskilde	https://www.danskfodbold.com/tabel.php?seasonid=2008	agree	danskfodbold.com final table, 2. division Øst
+Danish Second Division	2008	East	second	Boldklubben Fremad Amager	https://www.danskfodbold.com/tabel.php?seasonid=2008	agree	danskfodbold.com final table, 2. division Øst
+Danish Second Division	2008	West	first	Thisted FC	https://www.danskfodbold.com/tabel.php?seasonid=2008	agree	danskfodbold.com final table, 2. division Vest
+Danish Second Division	2008	West	second	Brabrand IF	https://www.danskfodbold.com/tabel.php?seasonid=2008	agree	danskfodbold.com final table, 2. division Vest
+Danish Second Division	2009	East	first	Football Club Vestsjælland	https://www.danskfodbold.com/tabel.php?seasonid=2009	agree	danskfodbold.com final table, 2. division Øst
+Danish Second Division	2009	East	second	Boldklubben af 1893	https://www.danskfodbold.com/tabel.php?seasonid=2009	agree	danskfodbold.com final table, 2. division Øst
+Danish Second Division	2009	West	first	FC Fyn	https://www.danskfodbold.com/tabel.php?seasonid=2009	agree	danskfodbold.com final table, 2. division Vest
+Danish Second Division	2009	West	second	Odense BK II	https://www.danskfodbold.com/tabel.php?seasonid=2009	agree	danskfodbold.com: OB [2]
+Finnish Premier Division	2002		first	HJK Helsinki	https://en.wikipedia.org/wiki/2002_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2002		second	Myllykosken Pallo-47	https://en.wikipedia.org/wiki/2002_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2002		ended	2002-10	https://www.transfermarkt.com/veikkausliiga/gesamtspielplan/wettbewerb/FI1/saison_id/2001	no second source	transfermarkt lists matches only to 2 September 2002; the Wikipedia page has no dates
+Finnish Premier Division	2003		first	HJK Helsinki	https://en.wikipedia.org/wiki/2003_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2003		second	FC Haka Valkeakoski	https://en.wikipedia.org/wiki/2003_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2003		ended	2003-10	https://www.transfermarkt.com/veikkausliiga/gesamtspielplan/wettbewerb/FI1/saison_id/2002	agree	last listed match 25 Oct
+Finnish Premier Division	2004		first	FC Haka Valkeakoski	https://en.wikipedia.org/wiki/2004_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2004		second	AC Vantaan Allianssi	https://en.wikipedia.org/wiki/2004_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2004		ended	2004-10	https://www.transfermarkt.com/veikkausliiga/gesamtspielplan/wettbewerb/FI1/saison_id/2003	agree	last listed match 2 Oct
+Finnish Premier Division	2005		first	Myllykosken Pallo-47	https://en.wikipedia.org/wiki/2005_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2005		second	HJK Helsinki	https://en.wikipedia.org/wiki/2005_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2005		ended	2005-10	https://www.transfermarkt.com/veikkausliiga/gesamtspielplan/wettbewerb/FI1/saison_id/2004	agree	last listed match 15 Oct
+Finnish Premier Division	2006		first	Tampere United	https://en.wikipedia.org/wiki/2006_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2006		second	HJK Helsinki	https://en.wikipedia.org/wiki/2006_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2006		ended	2006-10	https://www.transfermarkt.com/veikkausliiga/gesamtspielplan/wettbewerb/FI1/saison_id/2005	agree	last listed match 29 Oct
+Finnish Premier Division	2007		first	Tampere United	https://en.wikipedia.org/wiki/2007_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2007		second	FC Haka Valkeakoski	https://en.wikipedia.org/wiki/2007_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2007		ended	2007-10	https://www.transfermarkt.com/veikkausliiga/gesamtspielplan/wettbewerb/FI1/saison_id/2006	agree	last listed match 27 Oct
+Finnish Premier Division	2008		first	FC Inter	https://en.wikipedia.org/wiki/2008_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2008		second	FC Honka	https://en.wikipedia.org/wiki/2008_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2008		ended	2008-10	https://en.wikipedia.org/wiki/2008_Veikkausliiga	agree	Wikipedia: ended on 26 October 2008
+Finnish Premier Division	2009		first	HJK Helsinki	https://en.wikipedia.org/wiki/2009_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2009		second	FC Honka	https://en.wikipedia.org/wiki/2009_Veikkausliiga	agree	league table top two
+Finnish Premier Division	2009		ended	2009-10	https://en.wikipedia.org/wiki/2009_Veikkausliiga	agree	Wikipedia: last dated match 25 October 2009
+Finnish First Division	2002		first	Jalkapallo TPS	https://en.wikipedia.org/wiki/2002_Ykk%C3%B6nen	agree	no single table; in the promotion/relegation group the Ykkönen sides rank TPS 2nd and Jokerit 4th, so this agrees with the researcher inference
+Finnish First Division	2002		second	FC Jokerit	https://en.wikipedia.org/wiki/2002_Ykk%C3%B6nen	agree	no single table; in the promotion/relegation group the Ykkönen sides rank TPS 2nd and Jokerit 4th, so this agrees with the researcher inference
+Finnish First Division	2002		ended	2002-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2001	no second source	transfermarkt has no matches for this season; the Wikipedia page has no dates
+Finnish First Division	2003		first	Tornion Pallo-47	https://en.wikipedia.org/wiki/2003_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2003		second	Rovaniemen Palloseura	https://en.wikipedia.org/wiki/2003_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2003		ended	2003-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2002	no second source	transfermarkt has no matches for this season; the Wikipedia page has no dates
+Finnish First Division	2004		first	Kuopion Palloseura	https://en.wikipedia.org/wiki/2004_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2004		second	IFK Mariehamn	https://en.wikipedia.org/wiki/2004_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2004		ended	2004-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2003	agree	last listed match 2 Oct
+Finnish First Division	2005		first	FC Honka	https://en.wikipedia.org/wiki/2005_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2005		second	Vaasan Palloseura	https://en.wikipedia.org/wiki/2005_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2005		ended	2005-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2004	no second source	transfermarkt has no matches for this season; the Wikipedia page has no dates
+Finnish First Division	2006		first	FC Viikingit	https://en.wikipedia.org/wiki/2006_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2006		second	AC Oulu	https://en.wikipedia.org/wiki/2006_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2006		ended	2006-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2005	agree	last listed match 21 Oct
+Finnish First Division	2007		first	Kuopion Palloseura	https://en.wikipedia.org/wiki/2007_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2007		second	Rovaniemen Palloseura	https://en.wikipedia.org/wiki/2007_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2007		ended	2007-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2006	agree	last listed match 20 Oct
+Finnish First Division	2008		first	Jyväskylän Jalkapalloklubi	https://en.wikipedia.org/wiki/2008_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2008		second	FC Viikingit	https://en.wikipedia.org/wiki/2008_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2008		ended	2008-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2007	agree	last listed match 18 Oct
+Finnish First Division	2009		first	AC Oulu	https://en.wikipedia.org/wiki/2009_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2009		second	Kokkolan Palloveikot	https://en.wikipedia.org/wiki/2009_Ykk%C3%B6nen	agree	league table top two
+Finnish First Division	2009		ended	2009-10	https://www.transfermarkt.com/ykkonen/gesamtspielplan/wettbewerb/FI2/saison_id/2008	agree	last listed match 17 Oct
+Finnish Cup	2002		first	FC Haka Valkeakoski	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 9 November 2002
+Finnish Cup	2002		second	FC Lahti	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 9 November 2002
+Finnish Cup	2002		ended	2002-11	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 9 November 2002
+Finnish Cup	2003		first	HJK Helsinki	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 1 November 2003
+Finnish Cup	2003		second	AC Vantaan Allianssi	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 1 November 2003
+Finnish Cup	2003		ended	2003-11	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 1 November 2003
+Finnish Cup	2004		first	Myllykosken Pallo-47	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 30 October 2004
+Finnish Cup	2004		second	FC Hämeenlinna	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 30 October 2004
+Finnish Cup	2004		ended	2004-10	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 30 October 2004
+Finnish Cup	2005		first	FC Haka Valkeakoski	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 29 October 2005
+Finnish Cup	2005		second	Jalkapallo TPS	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 29 October 2005
+Finnish Cup	2005		ended	2005-10	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 29 October 2005
+Finnish Cup	2006		first	HJK Helsinki	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 4 November 2006
+Finnish Cup	2006		second	Kokkolan Palloveikot	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 4 November 2006
+Finnish Cup	2006		ended	2006-11	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 4 November 2006
+Finnish Cup	2007		first	Tampere United	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 11 November 2007
+Finnish Cup	2007		second	FC Honka	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 11 November 2007
+Finnish Cup	2007		ended	2007-11	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 11 November 2007
+Finnish Cup	2008		first	HJK Helsinki	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 1 November 2008
+Finnish Cup	2008		second	FC Honka	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 1 November 2008
+Finnish Cup	2008		ended	2008-11	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 1 November 2008
+Finnish Cup	2009		first	FC Inter	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 31 October 2009
+Finnish Cup	2009		second	Tampere United	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 31 October 2009
+Finnish Cup	2009		ended	2009-10	https://en.wikipedia.org/wiki/Finnish_Cup	agree	list of finals: 31 October 2009
+Finnish Second Division South	2002		first	FC Espoo	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+Finnish Second Division South	2002		second	AC Vantaa	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002
+Finnish Second Division East	2002		first	Warkaus JK	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+Finnish Second Division East	2002		second	Mikkelin Palloilijat	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002
+Finnish Second Division West	2002		first	TPV Tampere	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+Finnish Second Division West	2002		second	Salon Palloilijat	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002
+Finnish Second Division North	2002		first	Oulun Luistinseura	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+Finnish Second Division North	2002		second	Kokkolan Palloveikot	https://www.rsssf.org/tablesf/fin02.html	no second source	RSSSF has no Kakkonen tables for 2002
+Finnish Second Division South	2003		first	Pallokerho-35	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division South	2003		second	IFK Mariehamn	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division South	2003		ended	2003-09	https://www.rsssf.org/tablesf/fin03.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division East	2003		first	Kings Soccer Club	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division East	2003		second	Mikkelin Palloilijat	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division East	2003		ended	2003-09	https://www.rsssf.org/tablesf/fin03.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division West	2003		first	Pallo-Iirot Rauma	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division West	2003		second	TPV Tampere	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division West	2003		ended	2003-09	https://www.rsssf.org/tablesf/fin03.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division North	2003		first	PS Kemi Kings	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division North	2003		second	Terjärv US	https://www.rsssf.org/tablesf/fin03.html	agree	RSSSF final table top two
+Finnish Second Division North	2003		ended	2003-09	https://www.rsssf.org/tablesf/fin03.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division South	2004		first	Atlantis FC	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division South	2004		second	Pallokerho-35	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division South	2004		ended	2004-09	https://www.rsssf.org/tablesf/fin04.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division East	2004		first	Jyväskylän Jalkapalloklubi	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division East	2004		second	JIPPO Joensuu	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division East	2004		ended	2004-09	https://www.rsssf.org/tablesf/fin04.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division West	2004		first	Forssan Jalkapalloklubi	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division West	2004		second	TPV Tampere	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division West	2004		ended	2004-09	https://www.rsssf.org/tablesf/fin04.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division North	2004		first	Kokkolan Palloveikot	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division North	2004		second	Oulun Luistinseura	https://www.rsssf.org/tablesf/fin04.html	agree	RSSSF final table top two
+Finnish Second Division North	2004		ended	2004-09	https://www.rsssf.org/tablesf/fin04.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division South	2005		first	Klubi-04 Helsinki	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division South	2005		second	IF Gnistan	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division South	2005		ended	2005-09	https://www.rsssf.org/tablesf/fin05.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division East	2005		first	JIPPO Joensuu	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division East	2005		second	TPV Tampere	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division East	2005		ended	2005-09	https://www.rsssf.org/tablesf/fin05.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division West	2005		first	Salon Palloilijat	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division West	2005		second	Porin Palloilijat	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division West	2005		ended	2005-09	https://www.rsssf.org/tablesf/fin05.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+Finnish Second Division North	2005		first	IFK Vasa	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division North	2005		second	Vaasan Kiisto	https://www.rsssf.org/tablesf/fin05.html	agree	RSSSF final table top two
+Finnish Second Division North	2005		ended	2005-09	https://www.rsssf.org/tablesf/fin05.html	no second source	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups

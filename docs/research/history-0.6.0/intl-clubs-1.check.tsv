@@ -1,0 +1,379 @@
+competition	label	part	field	value	check_url	result	note
+CONCACAF Champions Cup	2002		first	Club Deportivo Pachuca	https://www.rsssf.org/tablesc/cacups02.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2002		second	Club Monarcas Morelia	https://www.rsssf.org/tablesc/cacups02.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2002		ended	2002-09	https://www.rsssf.org/tablesc/cacups02.html	agree	month of last match on the check page
+CONCACAF Champions Cup	2003		first	Deportivo Toluca	https://www.rsssf.org/tablesc/cacups03.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2003		second	Club Monarcas Morelia	https://www.rsssf.org/tablesc/cacups03.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2003		ended	2003-10	https://www.rsssf.org/tablesc/cacups03.html	agree	month of last match on the check page
+CONCACAF Champions Cup	2004		first	Liga Deportiva Alajuelense	https://www.rsssf.org/tablesc/cacups04.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2004		second	Deportivo Saprissa	https://www.rsssf.org/tablesc/cacups04.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2004		ended	2004-05	https://www.rsssf.org/tablesc/cacups04.html	agree	month of last match on the check page
+CONCACAF Champions Cup	2005		first	Deportivo Saprissa	https://www.rsssf.org/tablesc/cacups05.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2005		second	Club de Fútbol Universidad	https://www.rsssf.org/tablesc/cacups05.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2005		ended	2005-05	https://www.rsssf.org/tablesc/cacups05.html	agree	month of last match on the check page
+CONCACAF Champions Cup	2006		first	Club de Fútbol América	https://www.rsssf.org/tablesc/cacups06.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2006		second	Deportivo Toluca	https://www.rsssf.org/tablesc/cacups06.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2006		ended	2006-04	https://www.rsssf.org/tablesc/cacups06.html	agree	month of last match on the check page
+CONCACAF Champions Cup	2007		first	Club Deportivo Pachuca	https://www.rsssf.org/tablesc/cacups07.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2007		second	Club Guadalajara	https://www.rsssf.org/tablesc/cacups07.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2007		ended	2007-04	https://www.rsssf.org/tablesc/cacups07.html	agree	month of last match on the check page
+CONCACAF Champions Cup	2008		first	Club Deportivo Pachuca	https://www.rsssf.org/tablesc/cacups08.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2008		second	Deportivo Saprissa	https://www.rsssf.org/tablesc/cacups08.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2008		ended	2008-04	https://www.rsssf.org/tablesc/cacups08.html	agree	month of last match on the check page
+CONCACAF Champions Cup	2009		first	Club de Fútbol Atlante	https://www.rsssf.org/tablesc/cacups09.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2009		second	Club Deportivo Cruz Azul	https://www.rsssf.org/tablesc/cacups09.html	agree	final on RSSSF edition page; also tablesc/ca1.html
+CONCACAF Champions Cup	2009		ended	2009-04	https://www.rsssf.org/tablesc/cacups09.html	disagree	RSSSF: final legs 22 Apr and 12 May 2009 (second leg moved from 29 Apr for the swine flu outbreak); real value 2009-05. The first source page en.wikipedia 2008-09 CONCACAF Champions League also says 12 May 2009
+CONCACAF Cup Winners Cup	2002		held	not held	https://www.rsssf.org/tablesc/ca2.html	agree	RSSSF: last tournaments abandoned, 2001 Giants Cup not repeated
+CONCACAF Cup Winners Cup	2003		held	not held	https://www.rsssf.org/tablesc/ca2.html	agree	RSSSF: last tournaments abandoned, 2001 Giants Cup not repeated
+CONCACAF Cup Winners Cup	2004		held	not held	https://www.rsssf.org/tablesc/ca2.html	agree	RSSSF: last tournaments abandoned, 2001 Giants Cup not repeated
+CONCACAF Cup Winners Cup	2005		held	not held	https://www.rsssf.org/tablesc/ca2.html	agree	RSSSF: last tournaments abandoned, 2001 Giants Cup not repeated
+European Champions Cup	2002		first	Real Madrid C.F.	https://www.rsssf.org/ec/ec200102.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2002		second	Bayer 04 Leverkusen	https://www.rsssf.org/ec/ec200102.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2002		ended	2002-05	https://www.rsssf.org/ec/ec200102.html	agree	month of last match on the check page
+European Champions Cup	2003		first	AC Milan	https://www.rsssf.org/ec/ec200203.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2003		second	Juventus	https://www.rsssf.org/ec/ec200203.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2003		ended	2003-05	https://www.rsssf.org/ec/ec200203.html	agree	month of last match on the check page
+European Champions Cup	2004		first	Futebol Clube do Porto	https://www.rsssf.org/ec/ec200304.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2004		second	AS Monaco	https://www.rsssf.org/ec/ec200304.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2004		ended	2004-05	https://www.rsssf.org/ec/ec200304.html	agree	month of last match on the check page
+European Champions Cup	2005		first	Liverpool	https://www.rsssf.org/ec/ec200405.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2005		second	AC Milan	https://www.rsssf.org/ec/ec200405.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2005		ended	2005-05	https://www.rsssf.org/ec/ec200405.html	agree	month of last match on the check page
+European Champions Cup	2006		first	F.C. Barcelona	https://www.rsssf.org/ec/ec200506.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2006		second	Arsenal	https://www.rsssf.org/ec/ec200506.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2006		ended	2006-05	https://www.rsssf.org/ec/ec200506.html	agree	month of last match on the check page
+European Champions Cup	2007		first	AC Milan	https://www.rsssf.org/ec/ec200607.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2007		second	Liverpool	https://www.rsssf.org/ec/ec200607.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2007		ended	2007-05	https://www.rsssf.org/ec/ec200607.html	agree	month of last match on the check page
+European Champions Cup	2008		first	Manchester United	https://www.rsssf.org/ec/ec200708.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2008		second	Chelsea	https://www.rsssf.org/ec/ec200708.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2008		ended	2008-05	https://www.rsssf.org/ec/ec200708.html	agree	month of last match on the check page
+European Champions Cup	2009		first	F.C. Barcelona	https://www.rsssf.org/ec/ec200809.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2009		second	Manchester United	https://www.rsssf.org/ec/ec200809.html	agree	final in RSSSF season page; also tablese/ec1.html
+European Champions Cup	2009		ended	2009-05	https://www.rsssf.org/ec/ec200809.html	agree	month of last match on the check page
+European Cup Winners Cup	2002		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Cup Winners Cup	2003		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Cup Winners Cup	2004		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Cup Winners Cup	2005		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Cup Winners Cup	2006		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Cup Winners Cup	2007		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Cup Winners Cup	2008		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Cup Winners Cup	2009		held	not held	https://www.rsssf.org/tablese/ec2.html	agree	RSSSF: 1998/99 edition was the last one
+European Super Cup	2002		first	Real Madrid C.F.	https://www.rsssf.org/ec/ec200102.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2002		second	Feyenoord	https://www.rsssf.org/ec/ec200102.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2002		ended	2002-08	https://www.rsssf.org/ec/ec200102.html	agree	month of last match on the check page
+European Super Cup	2003		first	AC Milan	https://www.rsssf.org/ec/ec200203.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2003		second	Futebol Clube do Porto	https://www.rsssf.org/ec/ec200203.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2003		ended	2003-08	https://www.rsssf.org/ec/ec200203.html	agree	month of last match on the check page
+European Super Cup	2004		first	Valencia C.F.	https://www.rsssf.org/ec/ec200304.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2004		second	Futebol Clube do Porto	https://www.rsssf.org/ec/ec200304.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2004		ended	2004-08	https://www.rsssf.org/ec/ec200304.html	agree	month of last match on the check page
+European Super Cup	2005		first	Liverpool	https://www.rsssf.org/ec/ec200405.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2005		second	CSKA Moscow	https://www.rsssf.org/ec/ec200405.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2005		ended	2005-08	https://www.rsssf.org/ec/ec200405.html	agree	month of last match on the check page
+European Super Cup	2006		first	Sevilla C.F.	https://www.rsssf.org/ec/ec200506.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2006		second	F.C. Barcelona	https://www.rsssf.org/ec/ec200506.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2006		ended	2006-08	https://www.rsssf.org/ec/ec200506.html	agree	month of last match on the check page
+European Super Cup	2007		first	AC Milan	https://www.rsssf.org/ec/ec200607.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2007		second	Sevilla C.F.	https://www.rsssf.org/ec/ec200607.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2007		ended	2007-08	https://www.rsssf.org/ec/ec200607.html	agree	month of last match on the check page
+European Super Cup	2008		first	Zenith St. Petersburg	https://www.rsssf.org/ec/ec200708.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2008		second	Manchester United	https://www.rsssf.org/ec/ec200708.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2008		ended	2008-08	https://www.rsssf.org/ec/ec200708.html	agree	month of last match on the check page
+European Super Cup	2009		first	F.C. Barcelona	https://www.rsssf.org/ec/ec200809.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2009		second	Shakhtar Donetsk	https://www.rsssf.org/ec/ec200809.html	agree	Super Cup section of RSSSF season page
+European Super Cup	2009		ended	2009-08	https://www.rsssf.org/ec/ec200809.html	agree	month of last match on the check page
+FIFA Club World Championship	2002		held	not held	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF: 2001 cancelled, 2002 to 2004 not held, returned in 2005
+FIFA Club World Championship	2003		held	not held	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF: 2001 cancelled, 2002 to 2004 not held, returned in 2005
+FIFA Club World Championship	2004		held	not held	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF: 2001 cancelled, 2002 to 2004 not held, returned in 2005
+FIFA Club World Championship	2005		first	São Paulo Futebol Clube	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2005		second	Liverpool	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2005		ended	2005-12	https://www.rsssf.org/tablesf/fifawcc.html	agree	month of last match on the check page
+FIFA Club World Championship	2006		first	Sport Club Internacional	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2006		second	F.C. Barcelona	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2006		ended	2006-12	https://www.rsssf.org/tablesf/fifawcc.html	agree	month of last match on the check page
+FIFA Club World Championship	2007		first	AC Milan	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2007		second	Boca Juniors	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2007		ended	2007-12	https://www.rsssf.org/tablesf/fifawcc.html	agree	month of last match on the check page
+FIFA Club World Championship	2008		first	Manchester United	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2008		second	Liga Universitaria de Quito	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2008		ended	2008-12	https://www.rsssf.org/tablesf/fifawcc.html	agree	month of last match on the check page
+FIFA Club World Championship	2009		first	F.C. Barcelona	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2009		second	Estudiantes de La Plata	https://www.rsssf.org/tablesf/fifawcc.html	agree	RSSSF final list with date
+FIFA Club World Championship	2009		ended	2009-12	https://www.rsssf.org/tablesf/fifawcc.html	agree	month of last match on the check page
+Inter-American Cup	2002		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-American Cup	2003		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-American Cup	2004		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-American Cup	2005		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-American Cup	2006		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-American Cup	2007		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-American Cup	2008		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-American Cup	2009		held	not held	https://www.rsssf.org/tablesi/intam.html	agree	RSSSF: last edition 1998
+Inter-Toto Cup	2002	Winner 1	first	Málaga C.F.	https://www.rsssf.org/tablesu/uic02.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2002	Winner 1	second	Villarreal C.F.	https://www.rsssf.org/tablesu/uic02.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2002	Winner 1	ended	2002-08	https://www.rsssf.org/tablesu/uic02.html	agree	month of last match on the check page
+Inter-Toto Cup	2002	Winner 2	first	Fulham	https://www.rsssf.org/tablesu/uic02.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2002	Winner 2	second	Bologna 1909	https://www.rsssf.org/tablesu/uic02.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2002	Winner 2	ended	2002-08	https://www.rsssf.org/tablesu/uic02.html	agree	month of last match on the check page
+Inter-Toto Cup	2002	Winner 3	first	VfB Stuttgart	https://www.rsssf.org/tablesu/uic02.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2002	Winner 3	second	Lille Olympique SC	https://www.rsssf.org/tablesu/uic02.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2002	Winner 3	ended	2002-08	https://www.rsssf.org/tablesu/uic02.html	agree	month of last match on the check page
+Inter-Toto Cup	2003	Winner 1	first	FC Schalke 04	https://www.rsssf.org/tablesu/uic03.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2003	Winner 1	second	SV Pasching	https://www.rsssf.org/tablesu/uic03.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2003	Winner 1	ended	2003-08	https://www.rsssf.org/tablesu/uic03.html	agree	month of last match on the check page
+Inter-Toto Cup	2003	Winner 2	first	Villarreal C.F.	https://www.rsssf.org/tablesu/uic03.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2003	Winner 2	second	SC Heerenveen	https://www.rsssf.org/tablesu/uic03.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2003	Winner 2	ended	2003-08	https://www.rsssf.org/tablesu/uic03.html	agree	month of last match on the check page
+Inter-Toto Cup	2003	Winner 3	first	Perugia	https://www.rsssf.org/tablesu/uic03.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2003	Winner 3	second	VfL Wolfsburg	https://www.rsssf.org/tablesu/uic03.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2003	Winner 3	ended	2003-08	https://www.rsssf.org/tablesu/uic03.html	agree	month of last match on the check page
+Inter-Toto Cup	2004	Winner 1	first	Lille Olympique SC	https://www.rsssf.org/tablesu/uic04.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2004	Winner 1	second	União Desportiva de Leiria	https://www.rsssf.org/tablesu/uic04.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2004	Winner 1	ended	2004-08	https://www.rsssf.org/tablesu/uic04.html	agree	month of last match on the check page
+Inter-Toto Cup	2004	Winner 2	first	FC Schalke 04	https://www.rsssf.org/tablesu/uic04.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2004	Winner 2	second	FC Slovan Liberec	https://www.rsssf.org/tablesu/uic04.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2004	Winner 2	ended	2004-08	https://www.rsssf.org/tablesu/uic04.html	agree	month of last match on the check page
+Inter-Toto Cup	2004	Winner 3	first	Villarreal C.F.	https://www.rsssf.org/tablesu/uic04.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2004	Winner 3	second	Atlético de Madrid	https://www.rsssf.org/tablesu/uic04.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2004	Winner 3	ended	2004-08	https://www.rsssf.org/tablesu/uic04.html	agree	month of last match on the check page
+Inter-Toto Cup	2005	Winner 1	first	Hamburger SV	https://www.rsssf.org/tablesu/uic05.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2005	Winner 1	second	Valencia C.F.	https://www.rsssf.org/tablesu/uic05.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2005	Winner 1	ended	2005-08	https://www.rsssf.org/tablesu/uic05.html	agree	month of last match on the check page
+Inter-Toto Cup	2005	Winner 2	first	Racing Club Lens	https://www.rsssf.org/tablesu/uic05.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2005	Winner 2	second	CFR Cluj	https://www.rsssf.org/tablesu/uic05.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2005	Winner 2	ended	2005-08	https://www.rsssf.org/tablesu/uic05.html	agree	month of last match on the check page
+Inter-Toto Cup	2005	Winner 3	first	Olympique Marseille	https://www.rsssf.org/tablesu/uic05.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2005	Winner 3	second	Deportivo de La Coruña	https://www.rsssf.org/tablesu/uic05.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2005	Winner 3	ended	2005-08	https://www.rsssf.org/tablesu/uic05.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 1	first	Newcastle United	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 1	second	Lillestrøm SK	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 1	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 2	first	AJ Auxerre	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 2	second	FC Farul Constanta	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 2	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 3	first	Kayserispor	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 3	second	Larisa	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 3	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 4	first	Maribor Pivovarna Lasko	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 4	second	Villarreal C.F.	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 4	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 5	first	Ethnikos Achnas	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 5	second	Maccabi Petach Tikva	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 5	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 6	first	Grasshopper Club Zurich	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 6	second	KAA Gent	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 6	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 7	first	Olympique Marseille	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 7	second	Dnipro Dnipropetrovsk	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 7	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 8	first	Hertha BSC Berlin	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 8	second	FC Moscow	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 8	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 9	first	SV Ried	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 9	second	FC Tiraspol	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 9	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 10	first	FC Twente	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 10	second	Kalmar FF	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 10	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2006	Winner 11	first	Odense Boldklub	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 11	second	Hibernian	https://www.rsssf.org/tablesu/uic06.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2006	Winner 11	ended	2006-07	https://www.rsssf.org/tablesu/uic06.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 1	first	Hamburger SV	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 1	second	Dacia (MOL)	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 1	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 2	first	Atlético de Madrid	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 2	second	Gloria Bistrita	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 2	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 3	first	Aalborg Boldspilklub	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 3	second	KAA Gent	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 3	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 4	first	Sampdoria	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 4	second	Cherno More Varna	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 4	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 5	first	Blackburn Rovers	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 5	second	Vetra Rudiskes	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 5	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 6	first	Racing Club Lens	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 6	second	Chernomorets Odessa	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 6	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 7	first	União Desportiva de Leiria	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 7	second	Hajduk Rodic MB Kula	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 7	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 8	first	SK Rapid Vienna	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 8	second	Rubin Kazan	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 8	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 9	first	Hammarby IF	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 9	second	FC Utrecht	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 9	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 10	first	Otelul Galati	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 10	second	Trabzonspor	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 10	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2007	Winner 11	first	Tobol Kostanay	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 11	second	OFI Crete	https://www.rsssf.org/tablesu/uic07.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2007	Winner 11	ended	2007-07	https://www.rsssf.org/tablesu/uic07.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 1	first	Sporting Clube de Braga	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 1	second	Sivasspor	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 1	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 2	first	Aston Villa	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 2	second	Odense Boldklub	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 2	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 3	first	Deportivo de La Coruña	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 3	second	Bnei Sakhnin	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 3	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 4	first	VfB Stuttgart	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 4	second	Saturn Ramenskoye	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 4	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 5	first	Rosenborg BK	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 5	second	NAC	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 5	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 6	first	Napoli	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 6	second	Panionios	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 6	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 7	first	Stade Rennais	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 7	second	Tavria Simferopol	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 7	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 8	first	FC Vaslui	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 8	second	SC Neftchi Baku	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 8	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 9	first	IF Elfsborg	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 9	second	FK Riga	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 9	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 10	first	Grasshopper Club Zurich	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 10	second	Chernomorets Burgas	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 10	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2008	Winner 11	first	SK Sturm Graz	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 11	second	Kispest-Honvéd FC	https://www.rsssf.org/tablesu/uic08.html	agree	final-round tie on RSSSF edition page
+Inter-Toto Cup	2008	Winner 11	ended	2008-07	https://www.rsssf.org/tablesu/uic08.html	agree	month of last match on the check page
+Inter-Toto Cup	2009		held	not held	https://www.rsssf.org/tablesi/intertoto.html	agree	RSSSF: final edition in 2008
+Intercontinental Cup	2002		first	Real Madrid C.F.	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF final list with date
+Intercontinental Cup	2002		second	Club Olimpia	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF final list with date
+Intercontinental Cup	2002		ended	2002-12	https://www.rsssf.org/tablest/toyota.html	agree	month of last match on the check page
+Intercontinental Cup	2003		first	Boca Juniors	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF final list with date
+Intercontinental Cup	2003		second	AC Milan	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF final list with date
+Intercontinental Cup	2003		ended	2003-12	https://www.rsssf.org/tablest/toyota.html	agree	month of last match on the check page
+Intercontinental Cup	2004		first	Futebol Clube do Porto	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF final list with date
+Intercontinental Cup	2004		second	Corporación Deportiva Once Caldas	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF final list with date
+Intercontinental Cup	2004		ended	2004-12	https://www.rsssf.org/tablest/toyota.html	agree	month of last match on the check page
+Intercontinental Cup	2005		held	not held	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF: final edition in 2004, FIFA took over in 2005
+Intercontinental Cup	2006		held	not held	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF: final edition in 2004, FIFA took over in 2005
+Intercontinental Cup	2007		held	not held	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF: final edition in 2004, FIFA took over in 2005
+Intercontinental Cup	2008		held	not held	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF: final edition in 2004, FIFA took over in 2005
+Intercontinental Cup	2009		held	not held	https://www.rsssf.org/tablest/toyota.html	agree	RSSSF: final edition in 2004, FIFA took over in 2005
+Merconorte Cup	2002		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+Merconorte Cup	2003		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+Merconorte Cup	2004		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+Merconorte Cup	2005		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+Merconorte Cup	2006		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+Merconorte Cup	2007		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+Merconorte Cup	2008		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+Merconorte Cup	2009		held	not held	https://www.rsssf.org/sacups/merconorte.html	agree	RSSSF: abolished after the 2001 edition
+South American CONMEBOL Cup	2002		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American CONMEBOL Cup	2003		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American CONMEBOL Cup	2004		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American CONMEBOL Cup	2005		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American CONMEBOL Cup	2006		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American CONMEBOL Cup	2007		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American CONMEBOL Cup	2008		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American CONMEBOL Cup	2009		held	not held	https://www.rsssf.org/sacups/conmebol.html	agree	RSSSF: last edition 1999, discontinued from 2000
+South American Copa Libertadores	2002		first	Club Olimpia	https://www.rsssf.org/sacups/copa02.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2002		second	Associação Desportiva São Caetano	https://www.rsssf.org/sacups/copa02.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2002		ended	2002-07	https://www.rsssf.org/sacups/copa02.html	agree	month of last match on the check page
+South American Copa Libertadores	2003		first	Boca Juniors	https://www.rsssf.org/sacups/copa03.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2003		second	Santos Futebol Clube	https://www.rsssf.org/sacups/copa03.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2003		ended	2003-07	https://www.rsssf.org/sacups/copa03.html	agree	month of last match on the check page
+South American Copa Libertadores	2004		first	Corporación Deportiva Once Caldas	https://www.rsssf.org/sacups/copa04.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2004		second	Boca Juniors	https://www.rsssf.org/sacups/copa04.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2004		ended	2004-07	https://www.rsssf.org/sacups/copa04.html	agree	month of last match on the check page
+South American Copa Libertadores	2005		first	São Paulo Futebol Clube	https://www.rsssf.org/sacups/copa05.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2005		second	Clube Atlético Paranaense	https://www.rsssf.org/sacups/copa05.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2005		ended	2005-07	https://www.rsssf.org/sacups/copa05.html	agree	month of last match on the check page
+South American Copa Libertadores	2006		first	Sport Club Internacional	https://www.rsssf.org/sacups/copa06.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2006		second	São Paulo Futebol Clube	https://www.rsssf.org/sacups/copa06.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2006		ended	2006-08	https://www.rsssf.org/sacups/copa06.html	agree	month of last match on the check page
+South American Copa Libertadores	2007		first	Boca Juniors	https://www.rsssf.org/sacups/copa07.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2007		second	Grêmio Foot-Ball Porto-Alegrense	https://www.rsssf.org/sacups/copa07.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2007		ended	2007-06	https://www.rsssf.org/sacups/copa07.html	agree	month of last match on the check page
+South American Copa Libertadores	2008		first	Liga Universitaria de Quito	https://www.rsssf.org/sacups/copa08.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2008		second	Fluminense Football Club	https://www.rsssf.org/sacups/copa08.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2008		ended	2008-07	https://www.rsssf.org/sacups/copa08.html	agree	month of last match on the check page
+South American Copa Libertadores	2009		first	Estudiantes de La Plata	https://www.rsssf.org/sacups/copa09.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2009		second	Cruzeiro Esporte Clube	https://www.rsssf.org/sacups/copa09.html	agree	final on RSSSF edition page
+South American Copa Libertadores	2009		ended	2009-07	https://www.rsssf.org/sacups/copa09.html	agree	month of last match on the check page
+South American Copa Mercosur	2002		first	San Lorenzo de Almagro	https://www.rsssf.org/sacups/sudamcup02.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2002		second	Corporación Deportiva Club Atlético Nacional	https://www.rsssf.org/sacups/sudamcup02.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2002		ended	2002-12	https://www.rsssf.org/sacups/sudamcup02.html	agree	month of last match on the check page
+South American Copa Mercosur	2003		first	ADFP Club Cienciano	https://www.rsssf.org/sacups/sudamcup03.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2003		second	River Plate	https://www.rsssf.org/sacups/sudamcup03.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2003		ended	2003-12	https://www.rsssf.org/sacups/sudamcup03.html	agree	month of last match on the check page
+South American Copa Mercosur	2004		first	Boca Juniors	https://www.rsssf.org/sacups/sudamcup04.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2004		second	Club Bolívar	https://www.rsssf.org/sacups/sudamcup04.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2004		ended	2004-12	https://www.rsssf.org/sacups/sudamcup04.html	agree	month of last match on the check page
+South American Copa Mercosur	2005		first	Boca Juniors	https://www.rsssf.org/sacups/sudamcup05.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2005		second	Club de Fútbol Universidad	https://www.rsssf.org/sacups/sudamcup05.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2005		ended	2005-12	https://www.rsssf.org/sacups/sudamcup05.html	agree	month of last match on the check page
+South American Copa Mercosur	2006		first	Club Deportivo Pachuca	https://www.rsssf.org/sacups/sudamcup06.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2006		second	Club Social y Deportivo Colo Colo	https://www.rsssf.org/sacups/sudamcup06.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2006		ended	2006-12	https://www.rsssf.org/sacups/sudamcup06.html	agree	month of last match on the check page
+South American Copa Mercosur	2007		first	Arsenal de Sarandí	https://www.rsssf.org/sacups/sudamcup07.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2007		second	Club de Fútbol América	https://www.rsssf.org/sacups/sudamcup07.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2007		ended	2007-12	https://www.rsssf.org/sacups/sudamcup07.html	agree	month of last match on the check page
+South American Copa Mercosur	2008		first	Sport Club Internacional	https://www.rsssf.org/sacups/sudamcup08.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2008		second	Estudiantes de La Plata	https://www.rsssf.org/sacups/sudamcup08.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2008		ended	2008-12	https://www.rsssf.org/sacups/sudamcup08.html	agree	month of last match on the check page
+South American Copa Mercosur	2009		first	Liga Universitaria de Quito	https://www.rsssf.org/sacups/sudamcup09.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2009		second	Fluminense Football Club	https://www.rsssf.org/sacups/sudamcup09.html	agree	Copa Sudamericana final on RSSSF edition page; checks the result, not the mapping to Copa Mercosur
+South American Copa Mercosur	2009		ended	2009-12	https://www.rsssf.org/sacups/sudamcup09.html	agree	month of last match on the check page
+South American Recopa	2002		held	not held	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF: not played 1998 to 2001 (qualifying-year label), so nothing in calendar 2002
+South American Recopa	2003		first	Club Olimpia	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2003		second	San Lorenzo de Almagro	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2003		ended	2003-07	https://www.rsssf.org/sacups/recopa.html	agree	month of last match on the check page
+South American Recopa	2004		first	ADFP Club Cienciano	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2004		second	Boca Juniors	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2004		ended	2004-09	https://www.rsssf.org/sacups/recopa.html	agree	month of last match on the check page
+South American Recopa	2005		first	Boca Juniors	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2005		second	Corporación Deportiva Once Caldas	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2005		ended	2005-08	https://www.rsssf.org/sacups/recopa.html	agree	month of last match on the check page
+South American Recopa	2006		first	Boca Juniors	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2006		second	São Paulo Futebol Clube	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2006		ended	2006-09	https://www.rsssf.org/sacups/recopa.html	agree	month of last match on the check page
+South American Recopa	2007		first	Sport Club Internacional	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2007		second	Club Deportivo Pachuca	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2007		ended	2007-06	https://www.rsssf.org/sacups/recopa.html	agree	month of last match on the check page
+South American Recopa	2008		first	Boca Juniors	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2008		second	Arsenal de Sarandí	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2008		ended	2008-08	https://www.rsssf.org/sacups/recopa.html	agree	month of last match on the check page
+South American Recopa	2009		first	Liga Universitaria de Quito	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2009		second	Sport Club Internacional	https://www.rsssf.org/sacups/recopa.html	agree	RSSSF lists by qualifying year (label minus 1); legs and dates agree
+South American Recopa	2009		ended	2009-07	https://www.rsssf.org/sacups/recopa.html	agree	month of last match on the check page
+South American Super Cup	2002		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+South American Super Cup	2003		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+South American Super Cup	2004		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+South American Super Cup	2005		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+South American Super Cup	2006		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+South American Super Cup	2007		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+South American Super Cup	2008		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+South American Super Cup	2009		held	not held	https://www.rsssf.org/sacups/sasup.html	agree	RSSSF: last edition 1997, then replaced
+UEFA Cup	2002		first	Feyenoord	https://www.rsssf.org/ec/ec200102.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2002		second	BV Borussia Dortmund	https://www.rsssf.org/ec/ec200102.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2002		ended	2002-05	https://www.rsssf.org/ec/ec200102.html	agree	month of last match on the check page
+UEFA Cup	2003		first	Futebol Clube do Porto	https://www.rsssf.org/ec/ec200203.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2003		second	Glasgow Celtic	https://www.rsssf.org/ec/ec200203.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2003		ended	2003-05	https://www.rsssf.org/ec/ec200203.html	agree	month of last match on the check page
+UEFA Cup	2004		first	Valencia C.F.	https://www.rsssf.org/ec/ec200304.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2004		second	Olympique Marseille	https://www.rsssf.org/ec/ec200304.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2004		ended	2004-05	https://www.rsssf.org/ec/ec200304.html	agree	month of last match on the check page
+UEFA Cup	2005		first	CSKA Moscow	https://www.rsssf.org/ec/ec200405.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2005		second	Sporting Clube de Portugal	https://www.rsssf.org/ec/ec200405.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2005		ended	2005-05	https://www.rsssf.org/ec/ec200405.html	agree	month of last match on the check page
+UEFA Cup	2006		first	Sevilla C.F.	https://www.rsssf.org/ec/ec200506.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2006		second	Middlesbrough	https://www.rsssf.org/ec/ec200506.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2006		ended	2006-05	https://www.rsssf.org/ec/ec200506.html	agree	month of last match on the check page
+UEFA Cup	2007		first	Sevilla C.F.	https://www.rsssf.org/ec/ec200607.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2007		second	R.C.D. Espanyol	https://www.rsssf.org/ec/ec200607.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2007		ended	2007-05	https://www.rsssf.org/ec/ec200607.html	agree	month of last match on the check page
+UEFA Cup	2008		first	Zenith St. Petersburg	https://www.rsssf.org/ec/ec200708.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2008		second	Glasgow Rangers	https://www.rsssf.org/ec/ec200708.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2008		ended	2008-05	https://www.rsssf.org/ec/ec200708.html	agree	month of last match on the check page
+UEFA Cup	2009		first	Shakhtar Donetsk	https://www.rsssf.org/ec/ec200809.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2009		second	SV Werder Bremen	https://www.rsssf.org/ec/ec200809.html	agree	final in RSSSF season page; also tablese/ec3b.html
+UEFA Cup	2009		ended	2009-05	https://www.rsssf.org/ec/ec200809.html	agree	month of last match on the check page

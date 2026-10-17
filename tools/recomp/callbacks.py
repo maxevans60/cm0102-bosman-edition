@@ -13,7 +13,7 @@ import re
 
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
-                  "foreign.c", "season.c", "season_dates.c")
+                  "foreign.c", "season.c", "season_dates.c", "season_history.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -22,6 +22,7 @@ CALLBACKS = {
     0x5431E0: ("8b44240481ec0002", "shown attribute of a player (staff, index 1 to 31)"),
     0x543280: ("8b4424045685c00f", "is an attribute shown to a manager (manager, staff, index)"),
     0x528080: ("a1a423ae005633f6", "database_free_all_tables (season_dates.c: a reload for another season)"),
+    0x527F60: ("a17c23ae00568b74", "database_grow_comp_history_table (season_history.c: the added history rows)"),
     0x54C5B0: ("83ec10a06924ae00", "date plus days"),
     0x55F990: ("81ec00020000568b", "popup item create"),
     0x55FBA0: ("a10c29ae008b1510", "popup area create"),
