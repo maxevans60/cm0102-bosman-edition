@@ -1885,6 +1885,40 @@ The Opus sample check took 30 of the 47 changed rows and found 2 wrong: 0x5b4a60
 
 The checkers took 1,035,017 tokens, about 5,650 per row, and 1 to 5 minutes each. That is close to the 1,062,466 tokens of the Opus checkers of c01. Sonnet saves only through its lower price per token.
 
+#### Confidence c03 (2026-10-17)
+
+Run `conf-c03`: 8 Sonnet checkers worked from short packs on the 215 rows of batches conf-c03-aa to conf-c03-ah (Italian, Japanese, key nation, Korean, league, library, main, manager, match day, match engine, match events, match player, match screens, media, menu bar, mini cup, monthly ratings, nation awards and national teams rows). Agree 158, fix 56, rename 1. The third check took the checker's row for the one rename. There were no global conflicts. 57 rows were written. No sample check ran, because the plan needs one only after c02.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 215 |
+| Rows raised to high | 57 (26.5%) |
+| Rows with a new name | 1 |
+| Globals found wrong | 0 |
+| Total tokens of the wave | 1,103,176 |
+
+Quote kinds of the 57 raised rows: caller 39, global 12, string 6. The rename is 0x6d5cd0 `match_events_get_event_category` to `match_events_get_event_priority`. The string at 0xa15bf0 names byte 0 of the event record as the priority. Every checker checked each global it quoted, and none was wrong. So `conf-c03-g` lowers no global and no row. Confidence in `names.tsv` is now 5,602 high, 1,233 medium and 28 low.
+
+21 of the 39 caller quotes are library rows of batch conf-c03-ab (T2K and TrueType glyph, outline, scan converter and input stream rows). Some rest on callers or parent functions that the same batch raised. The c02 sample check found the circular caller quote in this kind of row, and the brief still has no check for it. So these rows carry more risk than the global quotes.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c03-aa | 22 | 10 | 166,538 |
+| Checker | Sonnet | conf-c03-ab | 30 | 21 | 102,358 |
+| Checker | Sonnet | conf-c03-ac | 30 | 3 | 136,310 |
+| Checker | Sonnet | conf-c03-ad | 30 | 8 | 137,138 |
+| Checker | Sonnet | conf-c03-ae | 22 | 4 | 106,965 |
+| Checker | Sonnet | conf-c03-af | 30 | 3 | 127,522 |
+| Checker | Sonnet | conf-c03-ag | 21 | 4 | 112,703 |
+| Checker | Sonnet | conf-c03-ah | 30 | 4 | 134,297 |
+| Third check | Opus | judge-input (1 row) | 1 | 0 | 79,345 |
+
+The checkers took 1,023,831 tokens, about 4,760 per row, and 1 to 4 minutes each.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x6d5cd0 | `match_events_get_event_category` | `match_events_get_event_priority` | takes reviewer | `match_events_get_event_priority` |
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
