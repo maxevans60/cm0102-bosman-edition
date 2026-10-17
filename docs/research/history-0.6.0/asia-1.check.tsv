@@ -1,0 +1,355 @@
+competition	label	part	field	value	check_url	result	note
+Chinese FA Cup (China PR)	2002		first	Qingdao Yizhong	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	Qingdao Etsong Hainiu
+Chinese FA Cup (China PR)	2002		second	Liaoning Fushun		no second source	only Wikipedia (both languages) and RSSSF give the final; both are cited
+Chinese FA Cup (China PR)	2002		ended	2002-11	https://zh.wikipedia.org/zh-cn/2002年中国足协杯	agree	final second leg 16 Nov 2002
+Chinese FA Cup (China PR)	2003		first	Beijing Guo'an	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	
+Chinese FA Cup (China PR)	2003		second	Dalian Shide		no second source	only Wikipedia (both languages) and RSSSF give the final; both are cited
+Chinese FA Cup (China PR)	2003		ended	2003-10	https://zh.wikipedia.org/zh-cn/2003年中国足协杯	agree	final 1 Oct 2003
+Chinese FA Cup (China PR)	2004		first	Shandong Luneng	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	
+Chinese FA Cup (China PR)	2004		second	Sichuan Quanxing		no second source	only Wikipedia (both languages) and RSSSF give the final; both are cited
+Chinese FA Cup (China PR)	2004		ended	2004-12	https://en.wikipedia.org/wiki/2004_Chinese_FA_Cup	agree	final 18 Dec 2004
+Chinese FA Cup (China PR)	2005		first	Dalian Shide	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2004	agree	
+Chinese FA Cup (China PR)	2005		second	Shandong Luneng	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2004	agree	
+Chinese FA Cup (China PR)	2005		ended	2005-11	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2004	agree	
+Chinese FA Super Cup (China PR)	2002		first	Shanghai Shenhua	https://www.rsssf.org/tablesc/china01.html	agree	two legs, Shenhua won 3-1 on aggregate
+Chinese FA Super Cup (China PR)	2002		second	Dalian Shide	https://www.rsssf.org/tablesc/china01.html	agree	two legs, Shenhua won 3-1 on aggregate
+Chinese FA Super Cup (China PR)	2002		ended	2002-02	https://www.rsssf.org/tablesc/china01.html	disagree	two legs: 26 Feb 2002 and 2 Mar 2002; last match March 2002, real value 2002-03
+Chinese FA Super Cup (China PR)	2003		first	Dalian Shide	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	listed under 2002
+Chinese FA Super Cup (China PR)	2003		second	Qingdao Yizhong		no second source	only Wikipedia and RSSSF give the runner-up; both are cited
+Chinese FA Super Cup (China PR)	2003		ended	2003-02	https://en.wikipedia.org/wiki/Chinese_FA_Super_Cup	agree	6 Feb 2003
+Chinese FA Super Cup (China PR)	2004		first	Beijing Guo'an	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	listed under 2003
+Chinese FA Super Cup (China PR)	2004		second	Shanghai Shenhua		no second source	only Wikipedia and RSSSF give the runner-up; both are cited
+Chinese FA Super Cup (China PR)	2004		ended	2004-01	https://en.wikipedia.org/wiki/Chinese_FA_Super_Cup	agree	18 Jan 2004
+Chinese FA Super Cup (China PR)	2005		held	not held	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	winners list has no entry between 2003 and 2012
+Chinese First Division A (China PR)	2002		first	Dalian Shide	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2001	agree	
+Chinese First Division A (China PR)	2002		second	Shenzhen Pingan	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2001	agree	Shenzhen FC
+Chinese First Division A (China PR)	2002		ended	2002-11		no second source	no date on Transfermarkt or Wikipedia season pages
+Chinese First Division A (China PR)	2003		first	Shanghai Shenhua	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2002	agree	top of table; the Transfermarkt winners list leaves 2003 out (title revoked)
+Chinese First Division A (China PR)	2003		second	Shanghai Zhongyuan	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2002	agree	Shanghai COSCO Sanlin, same club id as International Shanghai and the later Shaanxi club
+Chinese First Division A (China PR)	2003		ended	2003-11	https://en.wikipedia.org/wiki/2003_Chinese_Jia-A_League	agree	last round 30 Nov 2003
+Chinese First Division A (China PR)	2004		first	Shenzhen Pingan	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2003	agree	
+Chinese First Division A (China PR)	2004		second	Shandong Luneng	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2003	agree	
+Chinese First Division A (China PR)	2004		ended	2004-12		no second source	no date on Transfermarkt or Wikipedia season pages
+Chinese First Division A (China PR)	2005		first	Dalian Shide	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2004	agree	
+Chinese First Division A (China PR)	2005		second	Shanghai Shenhua	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2004	agree	
+Chinese First Division A (China PR)	2005		ended	2005-11		no second source	no date on Transfermarkt or Wikipedia season pages
+Chinese First Division B (China PR)	2002		first	Xiamen Hongshi	https://zh.wikipedia.org/zh-cn/2002年中国足球甲B联赛	agree	
+Chinese First Division B (China PR)	2002		second	Dalian Sàidélóng	https://zh.wikipedia.org/zh-cn/2002年中国足球甲B联赛	agree	
+Chinese First Division B (China PR)	2002		ended	2002-11	https://zh.wikipedia.org/zh-cn/2002年中国足球甲B联赛	agree	ended 23 Nov
+Chinese First Division B (China PR)	2003		first	Changchun Yatai	https://zh.wikipedia.org/zh-cn/2003年中国足球甲B联赛	agree	
+Chinese First Division B (China PR)	2003		second	Henan Jianye	https://zh.wikipedia.org/zh-cn/2003年中国足球甲B联赛	agree	
+Chinese First Division B (China PR)	2003		ended	2003-11	https://zh.wikipedia.org/zh-cn/2003年中国足球甲B联赛	agree	ended 23 Nov
+Chinese First Division B (China PR)	2004		first	Wuhan Hongjinlong		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China PR)	2004		second	Dalian Sàidélóng		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China PR)	2004		ended	2004-11		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China PR)	2005		first	Xiamen Hongshi		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China PR)	2005		second	Changchun Yatai		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China PR)	2005		ended	2005-10		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese Second Division (China PR)	2002		first	Harbin Lange		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China PR)	2002		second	Guangdong Xiongying		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China PR)	2002		ended	2002-10	https://zh.wikipedia.org/zh-cn/2002年中国足球乙级联赛	agree	infobox 25 May to 21 Oct 2002
+Chinese Second Division (China PR)	2003		first	Dalian Sande		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China PR)	2003		second	Xi'an Anxinyuan		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China PR)	2003		ended	2003-11	https://zh.wikipedia.org/zh-cn/2003年中国足球乙级联赛	agree	infobox end 17 Nov (year misprinted 2004)
+Chinese Second Division (China PR)	2004		first	Shanghai Jiucheng		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China PR)	2004		second	Yanbian Century		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China PR)	2004		ended	2004-11	https://zh.wikipedia.org/zh-cn/2004年中国足球乙级联赛	agree	infobox 8 May to 6 Nov 2004
+Chinese Second Division (China PR)	2005		first	Nanchang Bayi Hengyuan	https://www.rsssf.org/tablesc/china05.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China PR)	2005		second	Beijing Hongdeng	https://www.rsssf.org/tablesc/china05.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China PR)	2005		ended	2005-11		no second source	no date on another publisher found
+Chinese FA Cup (China)	2002		first	Qingdao Zhongneng	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	Qingdao Etsong Hainiu
+Chinese FA Cup (China)	2002		second	Liaoning F.C.		no second source	only Wikipedia (both languages) and RSSSF give the final; both are cited
+Chinese FA Cup (China)	2002		ended	2002-11	https://zh.wikipedia.org/zh-cn/2002年中国足协杯	agree	final second leg 16 Nov 2002
+Chinese FA Cup (China)	2003		first	Beijing Guo'an	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	
+Chinese FA Cup (China)	2003		second	Dalian Shide		no second source	only Wikipedia (both languages) and RSSSF give the final; both are cited
+Chinese FA Cup (China)	2003		ended	2003-10	https://zh.wikipedia.org/zh-cn/2003年中国足协杯	agree	final 1 Oct 2003
+Chinese FA Cup (China)	2004		first	Shandong Luneng	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	
+Chinese FA Cup (China)	2004		second	Sichuan Quanxing		no second source	only Wikipedia (both languages) and RSSSF give the final; both are cited
+Chinese FA Cup (China)	2004		ended	2004-12	https://en.wikipedia.org/wiki/2004_Chinese_FA_Cup	agree	final 18 Dec 2004
+Chinese FA Cup (China)	2005		first	Dalian Shide	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2004	agree	
+Chinese FA Cup (China)	2005		second	Shandong Luneng	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2004	agree	
+Chinese FA Cup (China)	2005		ended	2005-11	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2004	agree	
+Chinese FA Cup (China)	2006		first	Shandong Luneng	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2005	agree	
+Chinese FA Cup (China)	2006		second	Dalian Shide	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2005	agree	
+Chinese FA Cup (China)	2006		ended	2006-11	https://www.transfermarkt.com/chinese-fa-cup/gesamtspielplan/pokalwettbewerb/CHFA/saison_id/2005	agree	
+Chinese FA Cup (China)	2007		held	not held	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	winners list has no 2007 to 2010 entries
+Chinese FA Cup (China)	2008		held	not held	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	winners list has no 2007 to 2010 entries
+Chinese FA Cup (China)	2009		held	not held	https://www.transfermarkt.com/chinese-fa-cup/erfolge/pokalwettbewerb/CHFA	agree	winners list has no 2007 to 2010 entries
+Chinese FA Super Cup (China)	2002		first	Shanghai Shenhua	https://www.rsssf.org/tablesc/china01.html	agree	two legs, Shenhua won 3-1 on aggregate
+Chinese FA Super Cup (China)	2002		second	Dalian Shide	https://www.rsssf.org/tablesc/china01.html	agree	two legs, Shenhua won 3-1 on aggregate
+Chinese FA Super Cup (China)	2002		ended	2002-02	https://www.rsssf.org/tablesc/china01.html	disagree	two legs: 26 Feb 2002 and 2 Mar 2002; last match March 2002, real value 2002-03
+Chinese FA Super Cup (China)	2003		first	Dalian Shide	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	listed under 2002
+Chinese FA Super Cup (China)	2003		second	Qingdao Zhongneng		no second source	only Wikipedia and RSSSF give the runner-up; both are cited
+Chinese FA Super Cup (China)	2003		ended	2003-02	https://en.wikipedia.org/wiki/Chinese_FA_Super_Cup	agree	6 Feb 2003
+Chinese FA Super Cup (China)	2004		first	Beijing Guo'an	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	listed under 2003
+Chinese FA Super Cup (China)	2004		second	Shanghai Shenhua		no second source	only Wikipedia and RSSSF give the runner-up; both are cited
+Chinese FA Super Cup (China)	2004		ended	2004-01	https://en.wikipedia.org/wiki/Chinese_FA_Super_Cup	agree	18 Jan 2004
+Chinese FA Super Cup (China)	2005		held	not held	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	winners list has no entry between 2003 and 2012
+Chinese FA Super Cup (China)	2006		held	not held	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	winners list has no entry between 2003 and 2012
+Chinese FA Super Cup (China)	2007		held	not held	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	winners list has no entry between 2003 and 2012
+Chinese FA Super Cup (China)	2008		held	not held	https://www.transfermarkt.com/chinese-fa-super-cup/erfolge/pokalwettbewerb/CHSC	agree	winners list has no entry between 2003 and 2012
+Chinese First Division A (China)	2002		first	Dalian Shide	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2001	agree	
+Chinese First Division A (China)	2002		second	Shenzhen Shangqingyin	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2001	agree	Shenzhen FC
+Chinese First Division A (China)	2002		ended	2002-11		no second source	no date on Transfermarkt or Wikipedia season pages
+Chinese First Division A (China)	2003		first	Shanghai Shenhua	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2002	agree	top of table; the Transfermarkt winners list leaves 2003 out (title revoked)
+Chinese First Division A (China)	2003		second	Shaanxi Baorong Chanba FC	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2002	agree	Shanghai COSCO Sanlin, same club id as International Shanghai and the later Shaanxi club
+Chinese First Division A (China)	2003		ended	2003-11	https://en.wikipedia.org/wiki/2003_Chinese_Jia-A_League	agree	last round 30 Nov 2003
+Chinese First Division A (China)	2004		first	Shenzhen Shangqingyin	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2003	agree	
+Chinese First Division A (China)	2004		second	Shandong Luneng	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2003	agree	
+Chinese First Division A (China)	2004		ended	2004-12		no second source	no date on Transfermarkt or Wikipedia season pages
+Chinese First Division A (China)	2005		first	Dalian Shide	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2004	agree	
+Chinese First Division A (China)	2005		second	Shanghai Shenhua	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2004	agree	
+Chinese First Division A (China)	2005		ended	2005-11		no second source	no date on Transfermarkt or Wikipedia season pages
+Chinese First Division A (China)	2006		first	Shandong Luneng	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2005	agree	
+Chinese First Division A (China)	2006		second	Shanghai Shenhua	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2005	agree	
+Chinese First Division A (China)	2006		ended	2006-10	https://www.transfermarkt.com/chinese-super-league/gesamtspielplan/wettbewerb/CSL/saison_id/2005	agree	last listed match
+Chinese First Division A (China)	2007		first	Changchun Yatai	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2006	agree	
+Chinese First Division A (China)	2007		second	Beijing Guo'an	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2006	agree	
+Chinese First Division A (China)	2007		ended	2007-11	https://www.transfermarkt.com/chinese-super-league/gesamtspielplan/wettbewerb/CSL/saison_id/2006	agree	last listed match
+Chinese First Division A (China)	2008		first	Shandong Luneng	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2007	agree	
+Chinese First Division A (China)	2008		second	Shanghai Shenhua	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2007	agree	
+Chinese First Division A (China)	2008		ended	2008-11	https://www.transfermarkt.com/chinese-super-league/gesamtspielplan/wettbewerb/CSL/saison_id/2007	agree	last listed match; fixture list incomplete (29 matches)
+Chinese First Division A (China)	2009		first	Beijing Guo'an	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2008	agree	
+Chinese First Division A (China)	2009		second	Changchun Yatai	https://www.transfermarkt.com/chinese-super-league/tabelle/wettbewerb/CSL/saison_id/2008	agree	
+Chinese First Division A (China)	2009		ended	2009-10	https://www.transfermarkt.com/chinese-super-league/gesamtspielplan/wettbewerb/CSL/saison_id/2008	agree	last listed match
+Chinese First Division B (China)	2002		first	Xiamen Hongshi	https://zh.wikipedia.org/zh-cn/2002年中国足球甲B联赛	agree	
+Chinese First Division B (China)	2002		second	Dalian Sàidélóng	https://zh.wikipedia.org/zh-cn/2002年中国足球甲B联赛	agree	
+Chinese First Division B (China)	2002		ended	2002-11	https://zh.wikipedia.org/zh-cn/2002年中国足球甲B联赛	agree	ended 23 Nov
+Chinese First Division B (China)	2003		first	Changchun Yatai	https://zh.wikipedia.org/zh-cn/2003年中国足球甲B联赛	agree	
+Chinese First Division B (China)	2003		second	Henan Jianye	https://zh.wikipedia.org/zh-cn/2003年中国足球甲B联赛	agree	
+Chinese First Division B (China)	2003		ended	2003-11	https://zh.wikipedia.org/zh-cn/2003年中国足球甲B联赛	agree	ended 23 Nov
+Chinese First Division B (China)	2004		first	Wuhan Hongjinlong		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China)	2004		second	Dalian Sàidélóng		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China)	2004		ended	2004-11		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China)	2005		first	Xiamen Hongshi		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China)	2005		second	Changchun Yatai		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China)	2005		ended	2005-10		no second source	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+Chinese First Division B (China)	2006		first	Henan Jianye	https://www.rsssf.org/tablesc/china06.html	agree	RSSSF is cited only for ended in this row
+Chinese First Division B (China)	2006		second	Zhejiang Lucheng	https://www.rsssf.org/tablesc/china06.html	agree	RSSSF is cited only for ended in this row
+Chinese First Division B (China)	2006		ended	2006-10		no second source	no date on another publisher found
+Chinese First Division B (China)	2007		first	Guangzhou Pharmaceutical	https://www.rsssf.org/tablesc/china07.html	agree	RSSSF is cited only for ended in this row
+Chinese First Division B (China)	2007		second	Chengdu Blades	https://www.rsssf.org/tablesc/china07.html	agree	RSSSF is cited only for ended in this row
+Chinese First Division B (China)	2007		ended	2007-10	https://en.wikipedia.org/wiki/2007_China_League_One	agree	table updated to last match
+Chinese First Division B (China)	2008		first	Jiangsu Shuntian	https://www.rsssf.org/tablesc/china08.html	agree	RSSSF is cited only for ended in this row
+Chinese First Division B (China)	2008		second	Chongqing Lifan	https://www.rsssf.org/tablesc/china08.html	agree	RSSSF is cited only for ended in this row
+Chinese First Division B (China)	2008		ended	2008-11	https://en.wikipedia.org/wiki/2008_China_League_One	agree	table updated to last match
+Chinese Second Division (China)	2002		first	Harbin Lange		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China)	2002		second	Guangdong Xiongying		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China)	2002		ended	2002-10	https://zh.wikipedia.org/zh-cn/2002年中国足球乙级联赛	agree	infobox 25 May to 21 Oct 2002
+Chinese Second Division (China)	2003		first	Dalian Sande		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China)	2003		second	Xi'an Anxinyuan		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China)	2003		ended	2003-11	https://zh.wikipedia.org/zh-cn/2003年中国足球乙级联赛	agree	infobox end 17 Nov (year misprinted 2004)
+Chinese Second Division (China)	2004		first	Shanghai Jiucheng		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China)	2004		second	Yanbian Century		no second source	Wikipedia and RSSSF are cited; no third publisher found
+Chinese Second Division (China)	2004		ended	2004-11	https://zh.wikipedia.org/zh-cn/2004年中国足球乙级联赛	agree	infobox 8 May to 6 Nov 2004
+Chinese Second Division (China)	2005		first	Nanchang Bayi	https://www.rsssf.org/tablesc/china05.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China)	2005		second	Beijing Hongdeng	https://www.rsssf.org/tablesc/china05.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China)	2005		ended	2005-11		no second source	no date on another publisher found
+Chinese Second Division (China)	2006		first	Beijing Institute of Technology Football Club	https://www.rsssf.org/tablesc/china06.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China)	2006		second	Harbin Yiteng	https://www.rsssf.org/tablesc/china06.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China)	2006		ended	2006-11		no second source	no date on another publisher found
+Chinese Second Division (China)	2007		first	Shanghai East Asia	https://www.rsssf.org/tablesc/china07.html	agree	RSSSF is cited only for ended in this row; RSSSF name Shanghai Dongya
+Chinese Second Division (China)	2007		second	Sichuan F.C.	https://www.rsssf.org/tablesc/china07.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China)	2007		ended	2007-11		no second source	no date on another publisher found
+Chinese Second Division (China)	2008		first	Shenyang Dongjin	https://www.rsssf.org/tablesc/china08.html	agree	RSSSF is cited only for ended in this row
+Chinese Second Division (China)	2008		second	Guangdong Sunray Cave	https://www.rsssf.org/tablesc/china08.html	agree	RSSSF is cited only for ended in this row; RSSSF name Guangdong Rizhiquan (Rizhiquan = Sunray Cave)
+Chinese Second Division (China)	2008		ended	2008-12	https://en.wikipedia.org/wiki/2008_China_League_Two	agree	final 23 Dec 2008
+Japanese Cup	2002		first	Kashima Antlers	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2001	agree	
+Japanese Cup	2002		second	Urawa Red Diamonds	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2001	agree	
+Japanese Cup	2002		ended	2002-11	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2001	agree	final listed with this date
+Japanese Cup	2003		first	Urawa Red Diamonds	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2002	agree	
+Japanese Cup	2003		second	Kashima Antlers	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2002	agree	
+Japanese Cup	2003		ended	2003-11	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2002	agree	final listed with this date
+Japanese Cup	2004		first	FC Tokyo	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2003	agree	
+Japanese Cup	2004		second	Urawa Red Diamonds	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2003	agree	
+Japanese Cup	2004		ended	2004-11	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2003	agree	final listed with this date
+Japanese Cup	2005		first	JEF United Ichihara	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2004	agree	
+Japanese Cup	2005		second	Gamba Osaka	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2004	agree	
+Japanese Cup	2005		ended	2005-11	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2004	agree	final listed with this date
+Japanese Cup	2006		first	JEF United Ichihara Chiba	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2005	agree	
+Japanese Cup	2006		second	Kashima Antlers	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2005	agree	
+Japanese Cup	2006		ended	2006-11	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2005	agree	final listed with this date
+Japanese Cup	2007		first	Gamba Osaka	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2006	agree	
+Japanese Cup	2007		second	Kawasaki Frontale	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2006	agree	
+Japanese Cup	2007		ended	2007-11	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2006	agree	final listed with this date
+Japanese Cup	2008		first	Oita Trinita	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2007	agree	
+Japanese Cup	2008		second	Shimizu S-Pulse	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2007	agree	
+Japanese Cup	2008		ended	2008-11	https://www.transfermarkt.com/j-league-cup/gesamtspielplan/pokalwettbewerb/JAPC/saison_id/2007	agree	final listed with this date
+Japanese Emperor's Cup	2002		first	Kyoto Purple Sanga	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2001	agree	
+Japanese Emperor's Cup	2002		second	Kashima Antlers	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2001	agree	
+Japanese Emperor's Cup	2002		ended	2003-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2001	agree	final on 1 January
+Japanese Emperor's Cup	2003		first	Jubilo Iwata	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2002	agree	
+Japanese Emperor's Cup	2003		second	Cerezo Osaka	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2002	agree	
+Japanese Emperor's Cup	2003		ended	2004-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2002	agree	final on 1 January
+Japanese Emperor's Cup	2004		first	Tokyo Verdy 1969	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2003	agree	
+Japanese Emperor's Cup	2004		second	Jubilo Iwata	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2003	agree	
+Japanese Emperor's Cup	2004		ended	2005-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2003	agree	final on 1 January
+Japanese Emperor's Cup	2005		first	Urawa Red Diamonds	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2004	agree	
+Japanese Emperor's Cup	2005		second	Shimizu S-Pulse	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2004	agree	
+Japanese Emperor's Cup	2005		ended	2006-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2004	agree	final on 1 January
+Japanese Emperor's Cup	2006		first	Urawa Red Diamonds	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2005	agree	
+Japanese Emperor's Cup	2006		second	Gamba Osaka	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2005	agree	
+Japanese Emperor's Cup	2006		ended	2007-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2005	agree	final on 1 January
+Japanese Emperor's Cup	2007		first	Kashima Antlers	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2006	agree	
+Japanese Emperor's Cup	2007		second	Sanfrecce Hiroshima	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2006	agree	
+Japanese Emperor's Cup	2007		ended	2008-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2006	agree	final on 1 January
+Japanese Emperor's Cup	2008		first	Gamba Osaka	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2007	agree	
+Japanese Emperor's Cup	2008		second	Kashiwa Reysol	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2007	agree	
+Japanese Emperor's Cup	2008		ended	2009-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2007	agree	final on 1 January
+Japanese Emperor's Cup	2009		first	Gamba Osaka	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2008	agree	
+Japanese Emperor's Cup	2009		second	Nagoya Grampus	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2008	agree	
+Japanese Emperor's Cup	2009		ended	2010-01	https://www.transfermarkt.com/emperors-cup/gesamtspielplan/pokalwettbewerb/JEMP/saison_id/2008	agree	final on 1 January
+Japanese Football League	2002		first	Honda Football Club	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2001	agree	
+Japanese Football League	2002		second	Sagawa Soccer Club	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2001	agree	Sagawa Express Tokyo SC; the data name is the inference in asia-1.md
+Japanese Football League	2002		ended	2002-11	https://en.wikipedia.org/wiki/2002_Japan_Football_League	agree	table updated to last league match
+Japanese Football League	2003		first	Otsuka FC	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2002	agree	
+Japanese Football League	2003		second	Honda Football Club	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2002	agree	
+Japanese Football League	2003		ended	2003-11	https://en.wikipedia.org/wiki/2003_Japan_Football_League	agree	table updated to last league match
+Japanese Football League	2004		first	Otsuka FC	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2003	agree	
+Japanese Football League	2004		second	Honda Football Club	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2003	agree	
+Japanese Football League	2004		ended	2004-12	https://en.wikipedia.org/wiki/2004_Japan_Football_League	agree	table updated to last league match
+Japanese Football League	2005		first	Ehime FC	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2004	agree	
+Japanese Football League	2005		second	YKK Football Club	https://www.transfermarkt.com/japan-football-league/tabelle/wettbewerb/JFL/saison_id/2004	agree	
+Japanese Football League	2005		ended	2005-12	https://en.wikipedia.org/wiki/2005_Japan_Football_League	agree	table updated to last league match
+Japanese J-League 1	2002		first	Jubilo Iwata	https://www.rsssf.org/tablesj/jap02.html	agree	
+Japanese J-League 1	2002		second	Yokohama F Marinos	https://www.rsssf.org/tablesj/jap02.html	agree	aggregate table, runner-up second in it
+Japanese J-League 1	2002		ended	2002-11	https://www.transfermarkt.com/j1-league-second-stage-93-95-97-04-15-16-/gesamtspielplan/wettbewerb/JL12/saison_id/2001	agree	last second-stage match
+Japanese J-League 1	2003		first	Yokohama F Marinos	https://www.rsssf.org/tablesj/jap03.html	agree	
+Japanese J-League 1	2003		second	Jubilo Iwata	https://www.rsssf.org/tablesj/jap03.html	agree	aggregate table, runner-up second in it
+Japanese J-League 1	2003		ended	2003-11	https://www.transfermarkt.com/j1-league-second-stage-93-95-97-04-15-16-/gesamtspielplan/wettbewerb/JL12/saison_id/2002	agree	last second-stage match
+Japanese J-League 1	2004		first	Yokohama F Marinos	https://www.transfermarkt.com/j-league-championship-93-95-97-04-15-16-/gesamtspielplan/wettbewerb/SUNC/saison_id/2003	agree	championship final Yokohama F. Marinos v Urawa
+Japanese J-League 1	2004		second	Urawa Red Diamonds	https://www.transfermarkt.com/j-league-championship-93-95-97-04-15-16-/gesamtspielplan/wettbewerb/SUNC/saison_id/2003	agree	championship final Yokohama F. Marinos v Urawa
+Japanese J-League 1	2004		ended	2004-12	https://www.transfermarkt.com/j-league-championship-93-95-97-04-15-16-/gesamtspielplan/wettbewerb/SUNC/saison_id/2003	agree	championship final, December 2004
+Japanese J-League 1	2005		first	Gamba Osaka	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2004	agree	
+Japanese J-League 1	2005		second	Urawa Red Diamonds	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2004	agree	
+Japanese J-League 1	2005		ended	2005-12	https://www.transfermarkt.com/j1-league/gesamtspielplan/wettbewerb/JAP1/saison_id/2004	agree	last listed match
+Japanese J-League 1	2006		first	Urawa Red Diamonds	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2005	agree	
+Japanese J-League 1	2006		second	Kawasaki Frontale	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2005	agree	
+Japanese J-League 1	2006		ended	2006-12	https://www.transfermarkt.com/j1-league/gesamtspielplan/wettbewerb/JAP1/saison_id/2005	agree	last listed match
+Japanese J-League 1	2007		first	Kashima Antlers	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2006	agree	
+Japanese J-League 1	2007		second	Urawa Red Diamonds	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2006	agree	
+Japanese J-League 1	2007		ended	2007-12	https://www.transfermarkt.com/j1-league/gesamtspielplan/wettbewerb/JAP1/saison_id/2006	agree	last listed match
+Japanese J-League 1	2008		first	Kashima Antlers	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2007	agree	
+Japanese J-League 1	2008		second	Kawasaki Frontale	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2007	agree	
+Japanese J-League 1	2008		ended	2008-12	https://www.transfermarkt.com/j1-league/gesamtspielplan/wettbewerb/JAP1/saison_id/2007	agree	last listed match
+Japanese J-League 1	2009		first	Kashima Antlers	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2008	agree	
+Japanese J-League 1	2009		second	Kawasaki Frontale	https://www.transfermarkt.com/j1-league/tabelle/wettbewerb/JAP1/saison_id/2008	agree	
+Japanese J-League 1	2009		ended	2009-12	https://www.transfermarkt.com/j1-league/gesamtspielplan/wettbewerb/JAP1/saison_id/2008	agree	last listed match
+Japanese J-League 2	2002		first	Oita Trinita	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2001	agree	
+Japanese J-League 2	2002		second	Cerezo Osaka	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2001	agree	
+Japanese J-League 2	2002		ended	2002-11	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2001	agree	last listed match
+Japanese J-League 2	2003		first	AlbireX Niigata	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2002	agree	
+Japanese J-League 2	2003		second	Sanfrecce Hiroshima	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2002	agree	
+Japanese J-League 2	2003		ended	2003-11	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2002	agree	last listed match
+Japanese J-League 2	2004		first	Kawasaki Frontale	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2003	agree	
+Japanese J-League 2	2004		second	Omiya Ardija	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2003	agree	
+Japanese J-League 2	2004		ended	2004-11	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2003	agree	last listed match
+Japanese J-League 2	2005		first	Kyoto Purple Sanga	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2004	agree	
+Japanese J-League 2	2005		second	Avispa Fukuoka	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2004	agree	
+Japanese J-League 2	2005		ended	2005-12	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2004	agree	last listed match
+Japanese J-League 2	2006		first	Yokohama FC	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2005	agree	
+Japanese J-League 2	2006		second	Kashiwa Reysol	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2005	agree	
+Japanese J-League 2	2006		ended	2006-12	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2005	agree	last listed match
+Japanese J-League 2	2007		first	Consadole Sapporo	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2006	agree	
+Japanese J-League 2	2007		second	Tokyo Verdy 1969	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2006	agree	
+Japanese J-League 2	2007		ended	2007-12	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2006	agree	last listed match
+Japanese J-League 2	2008		first	Sanfrecce Hiroshima	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2007	agree	
+Japanese J-League 2	2008		second	Montedio Yamagata	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2007	agree	
+Japanese J-League 2	2008		ended	2008-12	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2007	agree	last listed match
+Japanese J-League 2	2009		first	Vegalta Sendai	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2008	agree	
+Japanese J-League 2	2009		second	Cerezo Osaka	https://www.transfermarkt.com/j2-league/tabelle/wettbewerb/JAP2/saison_id/2008	agree	
+Japanese J-League 2	2009		ended	2009-12	https://www.transfermarkt.com/j2-league/gesamtspielplan/wettbewerb/JAP2/saison_id/2008	agree	last listed match
+Japanese Super Cup	2002		first	Shimizu S-Pulse	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2001	agree	
+Japanese Super Cup	2002		second	Kashima Antlers	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2001	agree	
+Japanese Super Cup	2002		ended	2002-02	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2001	agree	
+Japanese Super Cup	2003		first	Jubilo Iwata	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2002	agree	
+Japanese Super Cup	2003		second	Kyoto Purple Sanga	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2002	agree	
+Japanese Super Cup	2003		ended	2003-03	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2002	agree	
+Japanese Super Cup	2004		first	Jubilo Iwata	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2003	agree	
+Japanese Super Cup	2004		second	Yokohama F Marinos	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2003	agree	
+Japanese Super Cup	2004		ended	2004-03	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2003	agree	
+Japanese Super Cup	2005		first	Tokyo Verdy 1969	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2004	agree	
+Japanese Super Cup	2005		second	Yokohama F Marinos	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2004	agree	
+Japanese Super Cup	2005		ended	2005-02	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2004	agree	
+Japanese Super Cup	2006		first	Urawa Red Diamonds	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2005	agree	
+Japanese Super Cup	2006		second	Gamba Osaka	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2005	agree	
+Japanese Super Cup	2006		ended	2006-02	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2005	agree	
+Japanese Super Cup	2007		first	Gamba Osaka	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2006	agree	
+Japanese Super Cup	2007		second	Urawa Red Diamonds	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2006	agree	
+Japanese Super Cup	2007		ended	2007-02	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2006	agree	
+Japanese Super Cup	2008		first	Sanfrecce Hiroshima	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2007	agree	
+Japanese Super Cup	2008		second	Kashima Antlers	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2007	agree	
+Japanese Super Cup	2008		ended	2008-03	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2007	agree	
+Japanese Super Cup	2009		first	Kashima Antlers	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2008	agree	
+Japanese Super Cup	2009		second	Gamba Osaka	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2008	agree	
+Japanese Super Cup	2009		ended	2009-02	https://www.transfermarkt.com/japanese-super-cup/gesamtspielplan/pokalwettbewerb/JASP/saison_id/2008	agree	
+Japanese U-18 Championship	2002		first	Kunimi High School		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese U-18 Championship	2002		second	Seiryo High School		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese U-18 Championship	2003		first	Funabashi Municipal High School		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese U-18 Championship	2003		second	Shizuoka Gakuen High School		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese U-18 Championship	2004		first	Sanfrecce Hiroshima		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese U-18 Championship	2004		second	Jubilo Iwata		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese U-18 Championship	2005		first	Tokyo Verdy 1969		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese U-18 Championship	2005		second	Consadole Sapporo		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2002		first	Komazawa University		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2002		second	Kokushikan University Soccer Club		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2003		first	Komazawa University		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2003		second	Hannan University		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2004		first	Komazawa University		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2004		second	Momoyamagakuin University		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2005		first	Kansai University		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Japanese University League	2005		second	Waseda University		no second source	no page of another publisher found (JFA pages give no history before 2011)
+Korean FA Cup	2002		first	Suwon Samsung Blue Wings	https://www.transfermarkt.com/korea-cup/gesamtspielplan/pokalwettbewerb/RKPO/saison_id/2001	agree	
+Korean FA Cup	2002		second	Pohang Steelers	https://www.transfermarkt.com/korea-cup/gesamtspielplan/pokalwettbewerb/RKPO/saison_id/2001	agree	
+Korean FA Cup	2002		ended	2002-12	https://www.transfermarkt.com/korea-cup/gesamtspielplan/pokalwettbewerb/RKPO/saison_id/2001	agree	
+Korean FA Cup	2003		first	Chonbuk Hyundai Motors	https://www.transfermarkt.com/korea-cup/gesamtspielplan/pokalwettbewerb/RKPO/saison_id/2002	agree	
+Korean FA Cup	2003		second	Chunnam Dragons	https://www.transfermarkt.com/korea-cup/gesamtspielplan/pokalwettbewerb/RKPO/saison_id/2002	agree	
+Korean FA Cup	2003		ended	2003-11	https://www.transfermarkt.com/korea-cup/gesamtspielplan/pokalwettbewerb/RKPO/saison_id/2002	agree	
+Korean League	2002		first	Songnam Ilhwa Chunma	https://www.transfermarkt.com/k-league-1/tabelle/wettbewerb/RSK1/saison_id/2001	agree	
+Korean League	2002		second	Ulsan Hyundai Horang-I	https://www.transfermarkt.com/k-league-1/tabelle/wettbewerb/RSK1/saison_id/2001	agree	
+Korean League	2002		ended	2002-11	https://www.transfermarkt.com/k-league-1/gesamtspielplan/wettbewerb/RSK1/saison_id/2001	agree	last listed match
+Korean League	2003		first	Songnam Ilhwa Chunma	https://www.transfermarkt.com/k-league-1/tabelle/wettbewerb/RSK1/saison_id/2002	agree	
+Korean League	2003		second	Ulsan Hyundai Horang-I	https://www.transfermarkt.com/k-league-1/tabelle/wettbewerb/RSK1/saison_id/2002	agree	
+Korean League	2003		ended	2003-11	https://www.transfermarkt.com/k-league-1/gesamtspielplan/wettbewerb/RSK1/saison_id/2002	agree	last listed match
+Korean League	2004		first	Suwon Samsung Blue Wings	https://www.transfermarkt.com/k-league-1/erfolge/wettbewerb/RSK1	agree	
+Korean League	2004		second	Pohang Steelers	https://www.rsssf.org/tabless/skor04.html	agree	championship final loser
+Korean League	2004		ended	2004-12	https://en.wikipedia.org/wiki/2004_K_League	agree	championship final dates
+Korean League	2005		first	Ulsan Hyundai Horang-I	https://www.transfermarkt.com/k-league-1/erfolge/wettbewerb/RSK1	agree	
+Korean League	2005		second	Incheon United	https://www.rsssf.org/tabless/skor05.html	agree	championship final loser
+Korean League	2005		ended	2005-12	https://en.wikipedia.org/wiki/2005_K_League	agree	championship final dates
+Korean League	2006		first	Seongnam Ilhwa Chunma	https://www.transfermarkt.com/k-league-1/erfolge/wettbewerb/RSK1	agree	
+Korean League	2006		second	Suwon Samsung Blue Wings	https://www.rsssf.org/tabless/skor06.html	agree	championship final loser
+Korean League	2006		ended	2006-11	https://en.wikipedia.org/wiki/2006_K_League	agree	championship final dates
+Korean League	2007		first	Pohang Steelers	https://www.transfermarkt.com/k-league-1/erfolge/wettbewerb/RSK1	agree	
+Korean League	2007		second	Seongnam Ilhwa Chunma	https://www.rsssf.org/tabless/skor07.html	agree	championship final loser
+Korean League	2007		ended	2007-11	https://en.wikipedia.org/wiki/2007_K_League	agree	championship final dates
+Korean League	2008		first	Suwon Samsung Blue Wings	https://www.transfermarkt.com/k-league-1/erfolge/wettbewerb/RSK1	agree	
+Korean League	2008		second	FC Seoul	https://www.rsssf.org/tabless/skor08.html	agree	championship final loser
+Korean League	2008		ended	2008-12	https://en.wikipedia.org/wiki/2008_K_League	agree	championship final dates
+Korean League	2009		first	Jeonbuk Hyundai Motors	https://www.transfermarkt.com/k-league-1/erfolge/wettbewerb/RSK1	agree	
+Korean League	2009		second	Seongnam Ilhwa Chunma	https://www.rsssf.org/tabless/skor09.html	agree	championship final loser
+Korean League	2009		ended	2009-12	https://en.wikipedia.org/wiki/2009_K_League	agree	championship final dates
+Korean League Cup	2002		first	Songnam Ilhwa Chunma	https://www.transfermarkt.com/k-league-cup-92-02-04-11-/erfolge/pokalwettbewerb/KLCP	agree	
+Korean League Cup	2002		second	Ulsan Hyundai Horang-I	https://www.rsssf.org/tabless/skor02.html	agree	
+Korean League Cup	2002		ended	2002-05	https://en.wikipedia.org/wiki/2002_Korean_League_Cup	agree	infobox dates
+Korean League Cup	2003		held	not held	https://www.transfermarkt.com/k-league-cup-92-02-04-11-/erfolge/pokalwettbewerb/KLCP	agree	winners list has no 2003 entry
+Korean League Cup	2004		first	Songnam Ilhwa Chunma	https://www.transfermarkt.com/k-league-cup-92-02-04-11-/erfolge/pokalwettbewerb/KLCP	agree	
+Korean League Cup	2004		second	Taejon Citizen	https://www.rsssf.org/tabless/skor04.html	agree	
+Korean League Cup	2004		ended	2004-08	https://en.wikipedia.org/wiki/2004_Korean_League_Cup	agree	infobox dates
+Korean League Cup	2005		first	Suwon Samsung Blue Wings	https://www.transfermarkt.com/k-league-cup-92-02-04-11-/erfolge/pokalwettbewerb/KLCP	agree	
+Korean League Cup	2005		second	Ulsan Hyundai Horang-I	https://www.rsssf.org/tabless/skor05.html	agree	
+Korean League Cup	2005		ended	2005-05	https://en.wikipedia.org/wiki/2005_Korean_League_Cup	agree	infobox dates
+Korean President Cup	2002		first	Hongik University		no second source	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+Korean President Cup	2002		second	Hallelujah		no second source	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+Korean President Cup	2003		first	Gukmin Bank		no second source	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+Korean President Cup	2003		second	National Police Station		no second source	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+Korean Super Cup	2002		first	Songnam Ilhwa Chunma	https://www.transfermarkt.com/korean-super-cup/erfolge/pokalwettbewerb/KSC1	agree	
+Korean Super Cup	2002		second	Taejon Citizen	https://www.rsssf.org/tabless/skor02.html	agree	
+Korean Super Cup	2002		ended	2002-03	https://en.wikipedia.org/wiki/Korean_Super_Cup	agree	match date
+Korean Super Cup	2003		held	not held	https://www.transfermarkt.com/korean-super-cup/erfolge/pokalwettbewerb/KSC1	agree	winners list has no 2003 entry
+Korean Super Cup	2004		first	Chonbuk Hyundai Motors	https://www.transfermarkt.com/korean-super-cup/erfolge/pokalwettbewerb/KSC1	agree	
+Korean Super Cup	2004		second	Songnam Ilhwa Chunma	https://www.rsssf.org/tabless/skor03.html	agree	
+Korean Super Cup	2004		ended	2004-03	https://en.wikipedia.org/wiki/Korean_Super_Cup	agree	match date
+Korean Super Cup	2005		first	Suwon Samsung Blue Wings	https://www.transfermarkt.com/korean-super-cup/erfolge/pokalwettbewerb/KSC1	agree	
+Korean Super Cup	2005		second	Pusan I.cons	https://www.rsssf.org/tabless/skor04.html	agree	
+Korean Super Cup	2005		ended	2005-03	https://en.wikipedia.org/wiki/Korean_Super_Cup	agree	match date

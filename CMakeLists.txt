@@ -159,6 +159,7 @@ if(NOT WIN32)
     add_test(NAME compare COMMAND compare_test)
 endif()
 
+
 # The recompiled original (docs/specs/2026-10-14-recompile-spec.md). tools/recomp translates the
 # player's own cm0102.exe into C in the build folder; that C is a build product and stays out of git.
 # By default the first cm0102.exe in a folder above the repo (a git worktree sits deeper).
@@ -178,6 +179,10 @@ else()
     set(RECOMP_PYTHON_DEFAULT "python3")
 endif()
 set(RECOMP_PYTHON "${RECOMP_PYTHON_DEFAULT}" CACHE FILEPATH "A Python with capstone, for tools/recomp")
+# Competition history between 2001 and the start season (0.6.0 slice 11c): the C table matches plan.tsv and
+# every row is valid. A Python test, so it runs on every platform.
+enable_testing()
+add_test(NAME season_history_table COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_table.py" --check)
 
 if(EXISTS "${CM0102_EXE}")
     set(RECOMP_SHARDS 128)
@@ -225,6 +230,18 @@ if(EXISTS "${CM0102_EXE}")
         ${RECOMP_WIN}
     )
     add_dependencies(cm0102_recomp recomp_gen)
+    # 0.6.0 slice 11c: the build stops when the history table is not the one plan.tsv gives, or a row is not valid.
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/history.ok"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_table.py" --check
+            --stamp "${CMAKE_BINARY_DIR}/seasons/history.ok"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_table.py"
+            "${CMAKE_SOURCE_DIR}/docs/research/history-0.6.0/plan.tsv"
+            "${CMAKE_SOURCE_DIR}/src/recomp_rt/win/season_history_table.c"
+        COMMENT "Checking the competition history table"
+        VERBATIM)
+    add_custom_target(season_history_check DEPENDS "${CMAKE_BINARY_DIR}/seasons/history.ok")
+    add_dependencies(cm0102_recomp season_history_check)
     # 0.6.0 slice 12: the competition classes of the rules report (from the exe, not committed) and the
     # rules table of the game (Seasons/rules.tsv of the download; tests read it with RECOMP_RULES_TABLE).
     file(GLOB RULES_PARTS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/*.tsv")

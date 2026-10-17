@@ -1,0 +1,299 @@
+competition	label	part	field	value	check_url	result	note
+Indian Mumbai League	2001		first	Mahindra United	https://web.archive.org/web/2018/http://www.indianfootball.de/data/mfl.html	agree	indianfootball.de list: 2001-02 Mahindra United; RSSSF (row source) also has Mahindra United champion
+Indian Mumbai League	2001		second	Air India		no second source	only RSSSF gives the 2001/02 championship round; Wikipedia list has an empty 2001-02 line
+Indian Mumbai League	2001		ended	2002-01		no second source	only RSSSF gives the date (8 Jan 2002)
+Indian Punjab State Soccer League	2001		held	not held	https://en.wikipedia.org/wiki/Punjab_State_Super_League	agree	Wikipedia list: 2000-01 BSF, 2001 League not held
+Indian Super Cup	2001		held	not held	https://www.rsssf.org/tablesi/indiasupcuphist.html	agree	RSSSF: 2000, 2001, 2002 not held
+Italian C1 Super Cup	2001		first	Modena	https://www.rsssf.org/tablesi/ital3supcuphist.html	agree	RSSSF: 2000/01 Modena FC v Città di Palermo, 0-2 (judge decision) and 3-0
+Italian C1 Super Cup	2001		second	Città di Palermo	https://www.rsssf.org/tablesi/ital3supcuphist.html	agree	RSSSF: 2000/01 Modena FC v Città di Palermo, 0-2 (judge decision) and 3-0
+Italian C1 Super Cup	2001		ended	2001-05	https://www.rsssf.org/tablesi/ital3supcuphist.html	agree	RSSSF: legs 20 and 24 May 2001
+Italian Cup	2001		first	Fiorentina	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: final Parma 0-1 Fiorentina, Fiorentina 1-1 Parma
+Italian Cup	2001		second	Parma	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: final Parma 0-1 Fiorentina, Fiorentina 1-1 Parma
+Italian Cup	2001		ended	2001-06	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: second leg Jun 13
+Italian Serie A	2001		first	AS Roma	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: 1. AS Roma 75, 2. FC Juventus 73
+Italian Serie A	2001		second	Juventus	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: 1. AS Roma 75, 2. FC Juventus 73
+Italian Serie A	2001		ended	2001-06	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: Round 34 Jun 17; relegation play-off Jun 21 and 24
+Italian Serie B	2001		first	Torino	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: 1. Torino 73, 2. Piacenza 70
+Italian Serie B	2001		second	Piacenza	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: 1. Torino 73, 2. Piacenza 70
+Italian Serie B	2001		ended	2001-06	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: Round 38 Jun 10
+Italian Serie C Cup	2001		first	Prato	https://www.rsssf.org/tablesi/italcup2hist.html	agree	RSSSF: 2000/01 Prato - Lumezzane 2-1 1-0
+Italian Serie C Cup	2001		second	Lumezzane	https://www.rsssf.org/tablesi/italcup2hist.html	agree	RSSSF: 2000/01 Prato - Lumezzane 2-1 1-0
+Italian Serie C Cup	2001		ended	2001-05		no second source	RSSSF list has no dates
+Italian Serie C1/A	2001		first	Modena	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: Modena first; Como promoted after play-off
+Italian Serie C1/A	2001		second	Como	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: Modena first; Como promoted after play-off
+Italian Serie C1/A	2001		ended	2001-06	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: play-off final Jun 17
+Italian Serie C1/B	2001		first	Città di Palermo	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: Palermo first; Messina promoted after play-off
+Italian Serie C1/B	2001		second	Messina	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: Palermo first; Messina promoted after play-off
+Italian Serie C1/B	2001		ended	2001-06	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: play-off final Jun 17
+Italian Serie C2/A	2001		first	Padova	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: 1. Padova, promoted
+Italian Serie C2/A	2001		second	Triestina		no second source	RSSSF lists the play-off teams but not the play-off results
+Italian Serie C2/A	2001		ended	2001-06		no second source	RSSSF gives no C2 dates
+Italian Serie C2/B	2001		first	Lanciano	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: 1. Lanciano, promoted
+Italian Serie C2/B	2001		second	Chieti		no second source	RSSSF lists the play-off teams but not the play-off results
+Italian Serie C2/B	2001		ended	2001-06		no second source	RSSSF gives no C2 dates
+Italian Serie C2/C	2001		first	Taranto 1906	https://www.rsssf.org/tablesi/ital01.html	agree	RSSSF: 1. Taranto, promoted
+Italian Serie C2/C	2001		second	Sora		no second source	RSSSF lists the play-off teams but not the play-off results
+Italian Serie C2/C	2001		ended	2001-06		no second source	RSSSF gives no C2 dates
+Italian Super Cup	2001		first	AS Roma	https://www.rsssf.org/tablesi/italsupcuphist.html	agree	RSSSF: 19.08.2001 AS Roma - AC Fiorentina 3-0
+Italian Super Cup	2001		second	Fiorentina	https://www.rsssf.org/tablesi/italsupcuphist.html	agree	RSSSF: 19.08.2001 AS Roma - AC Fiorentina 3-0
+Italian Super Cup	2001		ended	2001-08	https://www.rsssf.org/tablesi/italsupcuphist.html	agree	RSSSF: 19.08.2001
+Japanese Cup	2001		first	Yokohama F Marinos	https://www.rsssf.org/tablesj/jap01.html	agree	RSSSF: League Cup final Oct 27, Jubilo Iwata 0-0 Yokohama F. Marinos, 1-3 pen
+Japanese Cup	2001		second	Jubilo Iwata	https://www.rsssf.org/tablesj/jap01.html	agree	RSSSF: League Cup final Oct 27, Jubilo Iwata 0-0 Yokohama F. Marinos, 1-3 pen
+Japanese Cup	2001		ended	2001-10	https://en.wikipedia.org/wiki/2001_J.League_Cup	agree	Wikipedia: final 27 October 2001 (row cites RSSSF for ended)
+Japanese Emperor's Cup	2001		first	Shimizu S-Pulse	https://www.rsssf.org/tablesj/jap01.html	agree	RSSSF: final Jan 1, Shimizu S-Pulse 3-2 Cerezo Osaka asdet
+Japanese Emperor's Cup	2001		second	Cerezo Osaka	https://www.rsssf.org/tablesj/jap01.html	agree	RSSSF: final Jan 1, Shimizu S-Pulse 3-2 Cerezo Osaka asdet
+Japanese Emperor's Cup	2001		ended	2002-01		no second source	row cites RSSSF for ended; the Wikipedia pages read give no date
+Japanese J-League 1	2001		first	Kashima Antlers	https://en.wikipedia.org/wiki/2001_J.League_Division_1	agree	Wikipedia: Kashima won the Suntory Championship against Jubilo Iwata; RSSSF (also cited) agrees
+Japanese J-League 1	2001		second	Jubilo Iwata	https://en.wikipedia.org/wiki/2001_J.League_Division_1	agree	Wikipedia: Kashima won the Suntory Championship against Jubilo Iwata; RSSSF (also cited) agrees
+Japanese J-League 1	2001		ended	2001-12	https://www.rsssf.org/tablesj/jap01.html	agree	RSSSF (also cited in the row): second leg Dec 9
+Japanese J-League 2	2001		first	Kyoto Purple Sanga	https://en.wikipedia.org/wiki/2001_J.League_Division_2	agree	Wikipedia: 1. Kyoto Purple Sanga, 2. Vegalta Sendai
+Japanese J-League 2	2001		second	Vegalta Sendai	https://en.wikipedia.org/wiki/2001_J.League_Division_2	agree	Wikipedia: 1. Kyoto Purple Sanga, 2. Vegalta Sendai
+Japanese J-League 2	2001		ended	2001-11		no second source	Wikipedia page gives no date
+Japanese Super Cup	2001		first	Shimizu S-Pulse	https://www.rsssf.org/tablesj/jap00.html	agree	RSSSF: Super (Xerox) Cup Mar 3, 2001, Shimizu S-Pulse 3-0 Kashima Antlers
+Japanese Super Cup	2001		second	Kashima Antlers	https://www.rsssf.org/tablesj/jap00.html	agree	RSSSF: Super (Xerox) Cup Mar 3, 2001, Shimizu S-Pulse 3-0 Kashima Antlers
+Japanese Super Cup	2001		ended	2001-03	https://www.rsssf.org/tablesj/jap00.html	agree	RSSSF: Mar 3, 2001
+Luxembourg Cup	2001		first	FC Etzella Ettelbruck	https://en.wikipedia.org/wiki/2000%E2%80%9301_Luxembourg_Cup	agree	Wikipedia season page: final 24 May 2001, Etzella Ettelbruck 5-3 FC Wiltz 71
+Luxembourg Cup	2001		second	FC Wiltz	https://en.wikipedia.org/wiki/2000%E2%80%9301_Luxembourg_Cup	agree	Wikipedia season page: final 24 May 2001, Etzella Ettelbruck 5-3 FC Wiltz 71
+Luxembourg Cup	2001		ended	2001-05	https://en.wikipedia.org/wiki/2000%E2%80%9301_Luxembourg_Cup	agree	Wikipedia: 24 May 2001
+Luxembourg National Division	2001		first	F91 Dudelange	https://en.wikipedia.org/wiki/2000%E2%80%9301_Luxembourg_National_Division	agree	Wikipedia season page: championship stage 1. F91 Dudelange, 2. CS Grevenmacher (its table cites RSSSF)
+Luxembourg National Division	2001		second	CS Grevenmacher	https://en.wikipedia.org/wiki/2000%E2%80%9301_Luxembourg_National_Division	agree	Wikipedia season page: championship stage 1. F91 Dudelange, 2. CS Grevenmacher (its table cites RSSSF)
+Luxembourg National Division	2001		ended	2001-05		no second source	Wikipedia season page gives no date
+Northern Irish County Antrim Shield	2001		first	Linfield	https://www.rsssf.org/tablesn/nilantrimshieldhist.html	agree	RSSSF: 2000/01 Linfield 2-1 Glentoran
+Northern Irish County Antrim Shield	2001		second	Glentoran	https://www.rsssf.org/tablesn/nilantrimshieldhist.html	agree	RSSSF: 2000/01 Linfield 2-1 Glentoran
+Northern Irish Cup	2001		first	Glentoran	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_Cup	agree	Wikipedia: final 5 May 2001, Linfield 0-1 Glentoran aet
+Northern Irish Cup	2001		second	Linfield	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_Cup	agree	Wikipedia: final 5 May 2001, Linfield 0-1 Glentoran aet
+Northern Irish Cup	2001		ended	2001-05	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_Cup	agree	Wikipedia: 5 May 2001
+Northern Irish Gold Cup	2001		held	not held	https://www.rsssf.org/tablesn/nilgoldcuphist.html	agree	RSSSF: last final 2000/01 Glentoran 4-3 Coleraine, apparently not held since 2001
+Northern Irish League Cup	2001		first	Glentoran	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_League_Cup	agree	Wikipedia: final 24 April 2001, Glenavon 0-1 Glentoran
+Northern Irish League Cup	2001		second	Glenavon	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_League_Cup	agree	Wikipedia: final 24 April 2001, Glenavon 0-1 Glentoran
+Northern Irish League Cup	2001		ended	2001-04	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_League_Cup	agree	Wikipedia: 24 April 2001
+Northern Irish League First Division	2001		first	Ards	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_League	agree	Wikipedia: First Division table 1. Ards, 2. Lisburn Distillery
+Northern Irish League First Division	2001		second	Lisburn Distillery	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_League	agree	Wikipedia: First Division table 1. Ards, 2. Lisburn Distillery
+Northern Irish League First Division	2001		ended	2001-04		no second source	Wikipedia gives no date
+Northern Irish League Premier Division	2001		first	Linfield	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_League	agree	Wikipedia: 1. Linfield, 2. Glenavon
+Northern Irish League Premier Division	2001		second	Glenavon	https://en.wikipedia.org/wiki/2000%E2%80%9301_Irish_League	agree	Wikipedia: 1. Linfield, 2. Glenavon
+Northern Irish League Premier Division	2001		ended	2001-05		no second source	Wikipedia gives no date
+Norwegian Cup	2001		first	Viking FK	https://www.rsssf.no/2001/Cup.html	agree	RSSSF Norway: final 4/11 Viking - Bryne 3-0
+Norwegian Cup	2001		second	Bryne FK	https://www.rsssf.no/2001/Cup.html	agree	RSSSF Norway: final 4/11 Viking - Bryne 3-0
+Norwegian Cup	2001		ended	2001-11	https://www.rsssf.no/2001/Cup.html	agree	RSSSF Norway: 4/11
+Norwegian First Division	2001		first	Vålerenga Fotball	https://www.rsssf.no/2001/First.html	agree	RSSSF Norway: Vålerenga 62, Start 62 (Vålerenga first)
+Norwegian First Division	2001		second	IK Start	https://www.rsssf.no/2001/First.html	agree	RSSSF Norway: Vålerenga 62, Start 62 (Vålerenga first)
+Norwegian First Division	2001		ended	2001-10	https://www.rsssf.no/2001/First.html	agree	RSSSF Norway: last matches 28/10
+Norwegian Premier Division	2001		first	Rosenborg BK	https://www.rsssf.no/2001/Premier.html	agree	RSSSF Norway: Rosenborg 57, Lillestrøm 56
+Norwegian Premier Division	2001		second	Lillestrøm SK	https://www.rsssf.no/2001/Premier.html	agree	RSSSF Norway: Rosenborg 57, Lillestrøm 56
+Norwegian Premier Division	2001		ended	2001-10	https://www.rsssf.no/2001/Premier.html	agree	RSSSF Norway: last round 28/10; play-off 7 and 10/11
+Norwegian Second Division Group 1	2001		first	Tollnes BK	https://www.rsssf.no/2001/Second1.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Tollnes 50, FF Lillehammer 50; Wikipedia group 1 has the same top two
+Norwegian Second Division Group 1	2001		second	FF Lillehammer	https://www.rsssf.no/2001/Second1.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Tollnes 50, FF Lillehammer 50; Wikipedia group 1 has the same top two
+Norwegian Second Division Group 1	2001		ended	2001-10	https://www.rsssf.no/2001/Second1.html	agree	RSSSF Norway (also cited): last match 13/10
+Norwegian Second Division Group 2	2001		first	Åsane IL	https://www.rsssf.no/2001/Second2.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Åsane 61, Fana 55; Wikipedia group 2 has the same top two
+Norwegian Second Division Group 2	2001		second	Fana IL	https://www.rsssf.no/2001/Second2.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Åsane 61, Fana 55; Wikipedia group 2 has the same top two
+Norwegian Second Division Group 2	2001		ended	2001-10	https://www.rsssf.no/2001/Second2.html	agree	RSSSF Norway (also cited): last match 13/10
+Norwegian Second Division Group 3	2001		first	FK Oslo Øst	https://www.rsssf.no/2001/Second3.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Oslo Øst 58, Strindheim 50; Wikipedia group 3 has the same top two
+Norwegian Second Division Group 3	2001		second	Strindheim IL	https://www.rsssf.no/2001/Second3.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Oslo Øst 58, Strindheim 50; Wikipedia group 3 has the same top two
+Norwegian Second Division Group 3	2001		ended	2001-10	https://www.rsssf.no/2001/Second3.html	agree	RSSSF Norway (also cited): last match 14/10
+Norwegian Second Division Group 4	2001		first	Lørenskog IF	https://www.rsssf.no/2001/Second4.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Lørenskog 59, Skarp 53; Wikipedia group 4 has the same top two
+Norwegian Second Division Group 4	2001		second	Skarp IF	https://www.rsssf.no/2001/Second4.html	agree	row cites RSSSF Norway and Wikipedia; both agree. RSSSF Norway: Lørenskog 59, Skarp 53; Wikipedia group 4 has the same top two
+Norwegian Second Division Group 4	2001		ended	2001-10	https://www.rsssf.no/2001/Second4.html	agree	RSSSF Norway (also cited): last match 13/10
+Norwegian Second Division Group 5	2001		held	not held	https://www.rsssf.no/2001/index.html	agree	RSSSF Norway 2001 index lists only Second1 to Second4
+Norwegian Second Division Group 6	2001		held	not held	https://www.rsssf.no/2001/index.html	agree	RSSSF Norway 2001 index lists only Second1 to Second4
+Norwegian Second Division Group 7	2001		held	not held	https://www.rsssf.no/2001/index.html	agree	RSSSF Norway 2001 index lists only Second1 to Second4
+Norwegian Second Division Group 8	2001		held	not held	https://www.rsssf.no/2001/index.html	agree	RSSSF Norway 2001 index lists only Second1 to Second4
+Polish FA Cup	2001		first	Polonia Warszawa	https://en.wikipedia.org/wiki/2000%E2%80%9301_Polish_Cup	agree	Wikipedia: final 16 May 2001 Górnik Zabrze 1-2 Polonia Warsaw, 27 May 2-2
+Polish FA Cup	2001		second	Gornik Zabrze	https://en.wikipedia.org/wiki/2000%E2%80%9301_Polish_Cup	agree	Wikipedia: final 16 May 2001 Górnik Zabrze 1-2 Polonia Warsaw, 27 May 2-2
+Polish FA Cup	2001		ended	2001-05	https://en.wikipedia.org/wiki/2000%E2%80%9301_Polish_Cup	agree	Wikipedia: 27 May 2001
+Polish First Division	2001		first	Wisla Krakow	https://en.wikipedia.org/wiki/2000%E2%80%9301_Ekstraklasa	agree	Wikipedia: 1. Wisła Kraków, 2. Pogoń Szczecin
+Polish First Division	2001		second	Pogon Szczecin	https://en.wikipedia.org/wiki/2000%E2%80%9301_Ekstraklasa	agree	Wikipedia: 1. Wisła Kraków, 2. Pogoń Szczecin
+Polish First Division	2001		ended	2001-06		no second source	Wikipedia gives no date
+Polish League Cup	2001		first	Wisla Krakow	https://pl.wikipedia.org/wiki/Puchar_ligi_w_polskiej_pi%C5%82ce_no%C5%BCnej	agree	Polish Wikipedia: 2000/2001 Wisła Kraków 3:0 and 1:2 Zagłębie Lubin
+Polish League Cup	2001		second	Zaglebie Lubin	https://pl.wikipedia.org/wiki/Puchar_ligi_w_polskiej_pi%C5%82ce_no%C5%BCnej	agree	Polish Wikipedia: 2000/2001 Wisła Kraków 3:0 and 1:2 Zagłębie Lubin
+Polish League Cup	2001		ended	2001-06	https://pl.wikipedia.org/wiki/Puchar_ligi_w_polskiej_pi%C5%82ce_no%C5%BCnej	agree	Polish Wikipedia: legs 26.05.2001 and 3.06.2001
+Polish Second Division	2001		first	RKS Fameg Radomsko	https://pl.wikipedia.org/wiki/II_liga_polska_w_pi%C5%82ce_no%C5%BCnej_(2000/2001)	agree	Polish Wikipedia: 1. RKS Radomsko, 2. KSZO Ostrowiec Świętokrzyski
+Polish Second Division	2001		second	KSZO Ostrowiec Swietokrzyski	https://pl.wikipedia.org/wiki/II_liga_polska_w_pi%C5%82ce_no%C5%BCnej_(2000/2001)	agree	Polish Wikipedia: 1. RKS Radomsko, 2. KSZO Ostrowiec Świętokrzyski
+Polish Second Division	2001		ended	2001-06		no second source	Polish Wikipedia page gives no date
+Polish Super Cup	2001		first	Wisla Krakow	https://pl.wikipedia.org/wiki/Superpuchar_Polski_w_pi%C5%82ce_no%C5%BCnej_2001	agree	Polish Wikipedia: 15 July 2001, Wisła Kraków 4:3 Polonia Warszawa
+Polish Super Cup	2001		second	Polonia Warszawa	https://pl.wikipedia.org/wiki/Superpuchar_Polski_w_pi%C5%82ce_no%C5%BCnej_2001	agree	Polish Wikipedia: 15 July 2001, Wisła Kraków 4:3 Polonia Warszawa
+Polish Super Cup	2001		ended	2001-07	https://pl.wikipedia.org/wiki/Superpuchar_Polski_w_pi%C5%82ce_no%C5%BCnej_2001	agree	Polish Wikipedia: 15 lipca 2001
+Portuguese Cup	2001		first	Futebol Clube do Porto	https://en.wikipedia.org/wiki/2001_Ta%C3%A7a_de_Portugal_final	agree	Wikipedia: 10 June 2001, Marítimo 0-2 Porto
+Portuguese Cup	2001		second	Clube Sport Marítimo	https://en.wikipedia.org/wiki/2001_Ta%C3%A7a_de_Portugal_final	agree	Wikipedia: 10 June 2001, Marítimo 0-2 Porto
+Portuguese Cup	2001		ended	2001-06	https://en.wikipedia.org/wiki/2001_Ta%C3%A7a_de_Portugal_final	agree	Wikipedia: 10 June 2001
+Portuguese Premier League	2001		first	Boavista Futebol Clube	https://en.wikipedia.org/wiki/2000%E2%80%9301_Primeira_Liga	agree	Wikipedia: 1. Boavista, 2. Porto
+Portuguese Premier League	2001		second	Futebol Clube do Porto	https://en.wikipedia.org/wiki/2000%E2%80%9301_Primeira_Liga	agree	Wikipedia: 1. Boavista, 2. Porto
+Portuguese Premier League	2001		ended	2001-05	https://en.wikipedia.org/wiki/2000%E2%80%9301_Primeira_Liga	agree	Wikipedia: dates 18 August 2000 to 27 May 2001
+Portuguese Second Division B Central	2001		first	União Desportiva Oliveirense	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divis%C3%A3o_B	agree	Wikipedia: Zona Centro 1. UD Oliveirense, 2. SC Covilhã
+Portuguese Second Division B Central	2001		second	Sporting Clube da Covilhã	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divis%C3%A3o_B	agree	Wikipedia: Zona Centro 1. UD Oliveirense, 2. SC Covilhã
+Portuguese Second Division B Central	2001		ended	2001-05		no second source	ended is an inference in the row; no page gives the date
+Portuguese Second Division B North	2001		first	Moreirense Futebol Clube	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divis%C3%A3o_B	agree	Wikipedia: Zona Norte 1. Moreirense FC, 2. FC Famalicão
+Portuguese Second Division B North	2001		second	Futebol Clube de Famalicão	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divis%C3%A3o_B	agree	Wikipedia: Zona Norte 1. Moreirense FC, 2. FC Famalicão
+Portuguese Second Division B North	2001		ended	2001-05		no second source	ended is an inference in the row; no page gives the date
+Portuguese Second Division B South	2001		first	Portimonense Sporting Clube	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divis%C3%A3o_B	agree	Wikipedia: Zona Sul 1. Portimonense SC, 2. União da Madeira
+Portuguese Second Division B South	2001		second	Clube Futebol União Madeira	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divis%C3%A3o_B	agree	Wikipedia: Zona Sul 1. Portimonense SC, 2. União da Madeira
+Portuguese Second Division B South	2001		ended	2001-05		no second source	ended is an inference in the row; no page gives the date
+Portuguese Second League	2001		first	Clube Desportivo Santa Clara	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Liga	agree	Wikipedia: 1. Santa Clara 67
+Portuguese Second League	2001		second	Varzim Sport Clube	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Liga	disagree	Wikipedia: 2. Vitória de Setúbal, 3. Varzim, 4. Maia, all on 64 pts, ordered by goal difference. RSSSF (row source): 2. Varzim 64, 3. Vitória 64, 4. Maia 62. Tie on points, sources differ
+Portuguese Second League	2001		ended	2001-05		no second source	ended is an inference in the row; no page gives the date
+Portuguese Third Division	2001		held	not held		no second source	RSSSF 2000/01 page has no III Divisão section; no other page found
+Irish First Division	2001		first	Dundalk F.C.	https://en.wikipedia.org/wiki/2000%E2%80%9301_League_of_Ireland_First_Division	agree	Wikipedia: 1. Dundalk, 2. Monaghan United
+Irish First Division	2001		second	Monaghan United	https://en.wikipedia.org/wiki/2000%E2%80%9301_League_of_Ireland_First_Division	agree	Wikipedia: 1. Dundalk, 2. Monaghan United
+Irish First Division	2001		ended	2001-05		no second source	Wikipedia gives no date
+Irish First Division Shield	2001		held	not held	https://en.wikipedia.org/wiki/League_of_Ireland_First_Division_Shield	agree	Wikipedia: last final 1997-98
+Irish League Cup	2001		first	Limerick F.C.	https://en.wikipedia.org/wiki/League_of_Ireland_Cup	agree	Wikipedia list: 2001-02 Limerick 2-2 Derry City (dagger: penalties)
+Irish League Cup	2001		second	Derry City	https://en.wikipedia.org/wiki/League_of_Ireland_Cup	agree	Wikipedia list: 2001-02 Limerick 2-2 Derry City (dagger: penalties)
+Irish League Cup	2001		ended	2002-04		no second source	Wikipedia list gives no date
+Irish Leinster Senior Cup	2001		held	not held	https://leagueofirelandhistory.wordpress.com/2015/02/06/the-abandoned-leinster-senior-cup-one-season-wonders-and-more/	agree	League of Ireland History blog: 2000-01 edition abandoned (foot and mouth) after the quarter-final draw
+Irish Munster Senior Cup	2001		first	Cork City		no second source	no page of another publisher found
+Irish Munster Senior Cup	2001		second	College Corinthians		no second source	no page of another publisher found
+Irish Premier Division	2001		first	Bohemian F.C.	https://en.wikipedia.org/wiki/2000%E2%80%9301_League_of_Ireland_Premier_Division	agree	Wikipedia: 1. Bohemians, 2. Shelbourne
+Irish Premier Division	2001		second	Shelbourne F.C.	https://en.wikipedia.org/wiki/2000%E2%80%9301_League_of_Ireland_Premier_Division	agree	Wikipedia: 1. Bohemians, 2. Shelbourne
+Irish Premier Division	2001		ended	2001-05		no second source	Wikipedia gives no date
+Irish Senior Challenge Cup	2001		first	Bohemian F.C.	https://en.wikipedia.org/wiki/2001_FAI_Cup_final	agree	Wikipedia: 13 May 2001, Bohemians 1-0 Longford Town
+Irish Senior Challenge Cup	2001		second	Longford Town	https://en.wikipedia.org/wiki/2001_FAI_Cup_final	agree	Wikipedia: 13 May 2001, Bohemians 1-0 Longford Town
+Irish Senior Challenge Cup	2001		ended	2001-05	https://en.wikipedia.org/wiki/2001_FAI_Cup_final	agree	Wikipedia: 13 May 2001
+Russian Cup	2001		first	Lokomotiv Moscow	https://en.wikipedia.org/wiki/2000%E2%80%9301_Russian_Cup	agree	Wikipedia: final 20 June 2001, Lokomotiv Moscow 1-1 Anzhi, 4-3 pen
+Russian Cup	2001		second	Anzhi Makhachkala	https://en.wikipedia.org/wiki/2000%E2%80%9301_Russian_Cup	agree	Wikipedia: final 20 June 2001, Lokomotiv Moscow 1-1 Anzhi, 4-3 pen
+Russian Cup	2001		ended	2001-06	https://en.wikipedia.org/wiki/2000%E2%80%9301_Russian_Cup	agree	Wikipedia: 20 June 2001
+Russian First Division	2001		first	Shinnik Yaroslavl	https://en.wikipedia.org/wiki/2001_Russian_First_Division	agree	Wikipedia: 1. Shinnik Yaroslavl, 2. Uralan Elista
+Russian First Division	2001		second	Uralan Elista	https://en.wikipedia.org/wiki/2001_Russian_First_Division	agree	Wikipedia: 1. Shinnik Yaroslavl, 2. Uralan Elista
+Russian First Division	2001		ended	2001-11		no second source	Wikipedia gives no date
+Russian Premier Division	2001		first	Spartak Moscow	https://en.wikipedia.org/wiki/2001_Russian_Top_Division	agree	Wikipedia: 1. Spartak Moscow, 2. Lokomotiv Moscow
+Russian Premier Division	2001		second	Lokomotiv Moscow	https://en.wikipedia.org/wiki/2001_Russian_Top_Division	agree	Wikipedia: 1. Spartak Moscow, 2. Lokomotiv Moscow
+Russian Premier Division	2001		ended	2001-11		no second source	Wikipedia gives no date
+Russian Second Division - Ural	2001		first	Uralmash Yekaterinburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2001	agree	Russian Wikipedia, zone Ural: 1. Uralmash, 2. Sodovik Sterlitamak
+Russian Second Division - Ural	2001		second	Sodovik Sterlitamak	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2001	agree	Russian Wikipedia, zone Ural: 1. Uralmash, 2. Sodovik Sterlitamak
+Russian Second Division - Ural	2001		ended	2001-10		no second source	no date read on the second page
+Russian Second Division - West	2001		first	Dinamo St. Petersburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2001	agree	Russian Wikipedia, zone West: 1. Dinamo SPb, 2. Pskov-2000
+Russian Second Division - West	2001		second	FC Pskov-2000	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2001	agree	Russian Wikipedia, zone West: 1. Dinamo SPb, 2. Pskov-2000
+Russian Second Division - West	2001		ended	2001-10		no second source	no date read on the second page
+Scottish Cup	2001		first	Glasgow Celtic	https://en.wikipedia.org/wiki/2001_Scottish_Cup_final	agree	Wikipedia: 26 May 2001, Celtic 3-0 Hibernian
+Scottish Cup	2001		second	Hibernian	https://en.wikipedia.org/wiki/2001_Scottish_Cup_final	agree	Wikipedia: 26 May 2001, Celtic 3-0 Hibernian
+Scottish Cup	2001		ended	2001-05	https://en.wikipedia.org/wiki/2001_Scottish_Cup_final	agree	Wikipedia: 26 May 2001
+Scottish First Division	2001		first	Livingston	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_First_Division	agree	Wikipedia: 1. Livingston, 2. Ayr United
+Scottish First Division	2001		second	Ayr United	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_First_Division	agree	Wikipedia: 1. Livingston, 2. Ayr United
+Scottish First Division	2001		ended	2001-05		no second source	Wikipedia gives no date
+Scottish League Challenge Cup	2001		first	Airdrieonians	https://www.rsssf.org/tabless/scot02.html	agree	RSSSF: final 14 October 2001, Airdrieonians - Alloa Athletic 2-1
+Scottish League Challenge Cup	2001		second	Alloa Athletic	https://www.rsssf.org/tabless/scot02.html	agree	RSSSF: final 14 October 2001, Airdrieonians - Alloa Athletic 2-1
+Scottish League Challenge Cup	2001		ended	2001-10	https://en.wikipedia.org/wiki/2001%E2%80%9302_Scottish_Challenge_Cup	agree	Wikipedia: final 14 October 2001 (row cites RSSSF for ended)
+Scottish League Cup	2001		first	Glasgow Celtic	https://en.wikipedia.org/wiki/2001_Scottish_League_Cup_final	agree	Wikipedia: 18 March 2001, Celtic 3-0 Kilmarnock
+Scottish League Cup	2001		second	Kilmarnock	https://en.wikipedia.org/wiki/2001_Scottish_League_Cup_final	agree	Wikipedia: 18 March 2001, Celtic 3-0 Kilmarnock
+Scottish League Cup	2001		ended	2001-03	https://en.wikipedia.org/wiki/2001_Scottish_League_Cup_final	agree	Wikipedia: 18 March 2001
+Scottish Premier Division	2001		first	Glasgow Celtic	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_Premier_League	agree	Wikipedia: 1. Celtic, 2. Rangers
+Scottish Premier Division	2001		second	Glasgow Rangers	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_Premier_League	agree	Wikipedia: 1. Celtic, 2. Rangers
+Scottish Premier Division	2001		ended	2001-05	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_Premier_League	agree	Wikipedia: dates 29 July 2000 to 20 May 2001
+Scottish Second Division	2001		first	Partick Thistle	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_Second_Division	agree	Wikipedia (table source SPFL archive): 1. Partick Thistle, 2. Arbroath
+Scottish Second Division	2001		second	Arbroath	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_Second_Division	agree	Wikipedia (table source SPFL archive): 1. Partick Thistle, 2. Arbroath
+Scottish Third Division	2001		first	Hamilton Academical	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_Third_Division	agree	Wikipedia (table source SPFL archive): 1. Hamilton Academical, 2. Cowdenbeath
+Scottish Third Division	2001		second	Cowdenbeath	https://en.wikipedia.org/wiki/2000%E2%80%9301_Scottish_Third_Division	agree	Wikipedia (table source SPFL archive): 1. Hamilton Academical, 2. Cowdenbeath
+South African Premier Division	2001		first	Orlando Pirates	https://en.wikipedia.org/wiki/2000%E2%80%9301_South_African_Premiership	agree	Wikipedia: 1. Orlando Pirates, 2. Kaizer Chiefs
+South African Premier Division	2001		second	Kaizer Chiefs	https://en.wikipedia.org/wiki/2000%E2%80%9301_South_African_Premiership	agree	Wikipedia: 1. Orlando Pirates, 2. Kaizer Chiefs
+South African Premier Division	2001		ended	2001-06		no second source	Wikipedia gives no date
+Korean League	2001		first	Songnam Ilhwa Chunma	https://en.wikipedia.org/wiki/2001_K_League	agree	row cites Wikipedia and RSSSF; both agree. Wikipedia season page: 1. Seongnam Ilhwa Chunma, 2. Anyang LG Cheetahs
+Korean League	2001		second	Anyang LG Cheetahs	https://en.wikipedia.org/wiki/2001_K_League	agree	row cites Wikipedia and RSSSF; both agree. Wikipedia season page: 1. Seongnam Ilhwa Chunma, 2. Anyang LG Cheetahs
+Korean League	2001		ended	2001-10	https://www.rsssf.org/tabless/skor01.html	agree	RSSSF (also cited): Round 27 2001/10/28
+Korean President Cup	2001		first	Kyunghee University	https://www.khan.co.kr/article/200103302319061	agree	Kyunghyang Shinmun, 30 March 2001: Kyung Hee University beat Ulsan University 2-0 in the final (the date gives ended 2001-03, the row has unknown)
+Korean President Cup	2001		second	Ulsan University	https://www.khan.co.kr/article/200103302319061	agree	Kyunghyang Shinmun, 30 March 2001: Kyung Hee University beat Ulsan University 2-0 in the final (the date gives ended 2001-03, the row has unknown)
+Spanish Cup	2001		first	Real Zaragoza	https://en.wikipedia.org/wiki/2001_Copa_del_Rey_final	agree	Wikipedia: 30 June 2001, Celta Vigo 1-3 Zaragoza
+Spanish Cup	2001		second	Real Club Celta de Vigo	https://en.wikipedia.org/wiki/2001_Copa_del_Rey_final	agree	Wikipedia: 30 June 2001, Celta Vigo 1-3 Zaragoza
+Spanish Cup	2001		ended	2001-06	https://en.wikipedia.org/wiki/2001_Copa_del_Rey_final	agree	Wikipedia: 30 June 2001
+Spanish First Division	2001		first	Real Madrid C.F.	https://en.wikipedia.org/wiki/2000%E2%80%9301_La_Liga	agree	Wikipedia: 1. Real Madrid, 2. Deportivo La Coruña
+Spanish First Division	2001		second	Deportivo de La Coruña	https://en.wikipedia.org/wiki/2000%E2%80%9301_La_Liga	agree	Wikipedia: 1. Real Madrid, 2. Deportivo La Coruña
+Spanish First Division	2001		ended	2001-06	https://en.wikipedia.org/wiki/2000%E2%80%9301_La_Liga	agree	Wikipedia: dates to 17 June 2001
+Spanish Second Division	2001		first	Sevilla C.F.	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n	agree	Wikipedia: 1. Sevilla, 2. Betis
+Spanish Second Division	2001		second	Real Betis Balompié	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n	agree	Wikipedia: 1. Sevilla, 2. Betis
+Spanish Second Division	2001		ended	2001-06		no second source	Wikipedia gives no date
+Spanish Second Division B1	2001		first	Atlético de Madrid B	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group I 1. Atlético Madrid B, 2. Ourense
+Spanish Second Division B1	2001		second	C.D. Ourense	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group I 1. Atlético Madrid B, 2. Ourense
+Spanish Second Division B1	2001		ended	2001-05		no second source	Wikipedia gives no date
+Spanish Second Division B2	2001		first	Burgos C.F.	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group II 1. Burgos, 2. Cultural Leonesa
+Spanish Second Division B2	2001		second	Cultural Leonesa	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group II 1. Burgos, 2. Cultural Leonesa
+Spanish Second Division B2	2001		ended	2001-05		no second source	Wikipedia gives no date
+Spanish Second Division B3	2001		first	U.D. Atlética Gramanet	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group III 1. Gramenet, 2. Gimnàstic
+Spanish Second Division B3	2001		second	Gimnástic Tarragona	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group III 1. Gramenet, 2. Gimnàstic
+Spanish Second Division B3	2001		ended	2001-05		no second source	Wikipedia gives no date
+Spanish Second Division B4	2001		first	Cádiz C.F.	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group IV 1. Cádiz, 2. Ejido
+Spanish Second Division B4	2001		second	Polideportivo Ejido	https://en.wikipedia.org/wiki/2000%E2%80%9301_Segunda_Divisi%C3%B3n_B	agree	Wikipedia: Group IV 1. Cádiz, 2. Ejido
+Spanish Second Division B4	2001		ended	2001-05		no second source	Wikipedia gives no date
+Spanish Super Cup	2001		first	Real Madrid C.F.	https://en.wikipedia.org/wiki/2001_Supercopa_de_Espa%C3%B1a	agree	Wikipedia: 19 August 2001 Zaragoza 1-1 Real Madrid, 22 August second leg, Real Madrid 4-1 on aggregate
+Spanish Super Cup	2001		second	Real Zaragoza	https://en.wikipedia.org/wiki/2001_Supercopa_de_Espa%C3%B1a	agree	Wikipedia: 19 August 2001 Zaragoza 1-1 Real Madrid, 22 August second leg, Real Madrid 4-1 on aggregate
+Spanish Super Cup	2001		ended	2001-08	https://en.wikipedia.org/wiki/2001_Supercopa_de_Espa%C3%B1a	agree	Wikipedia: 22 August 2001
+Swedish Cup	2001		first	IF Elfsborg	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: final May 25, AIK 1-1 IF Elfsborg asdet, 8-9 pen
+Swedish Cup	2001		second	AIK	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: final May 25, AIK 1-1 IF Elfsborg asdet, 8-9 pen
+Swedish Cup	2001		ended	2001-05	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: May 25
+Swedish First Division	2001		first	Kalmar FF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: 1. Kalmar FF 69, 2. Landskrona BoIS 65
+Swedish First Division	2001		second	Landskrona BOIS	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: 1. Kalmar FF 69, 2. Landskrona BoIS 65
+Swedish First Division	2001		ended	2001-10		no second source	RSSSF gives no Superettan dates; the second ended source is Swedish Wikipedia, same publisher
+Swedish Premier Division	2001		first	Hammarby IF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: 1. Hammarby IF FF 48, 2. Djurgårdens IF 47
+Swedish Premier Division	2001		second	Djurgårdens IF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: 1. Hammarby IF FF 48, 2. Djurgårdens IF 47
+Swedish Premier Division	2001		ended	2001-10	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Round 26 Oct 27
+Swedish Second Division North	2001		first	IFK Luleå	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Norrland 1. IFK Luleå, 2. Bodens BK
+Swedish Second Division North	2001		second	Bodens BK	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Norrland 1. IFK Luleå, 2. Bodens BK
+Swedish Second Division South Gotaland	2001		first	Ängelholms FF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Södra Götaland 1. Ängelholms FF, 2. Ystads IF FF
+Swedish Second Division South Gotaland	2001		second	Ystads IF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Södra Götaland 1. Ängelholms FF, 2. Ystads IF FF
+Swedish Second Division West Gotaland	2001		first	Panos Ljungskile SK	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Västra Götaland 1. Panos Ljungskile SK, 2. Ytterby IS
+Swedish Second Division West Gotaland	2001		second	Ytterby IS	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Västra Götaland 1. Panos Ljungskile SK, 2. Ytterby IS
+Swedish Third Division East Svealand	2001		first	IFK Lidingö	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Division 3 Östra Svealand 1. IFK Lidingö FK, 2. Gustavsbergs IF
+Swedish Third Division East Svealand	2001		second	Gustavsbergs IF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Division 3 Östra Svealand 1. IFK Lidingö FK, 2. Gustavsbergs IF
+Swedish Third Division Southwest Gotaland	2001		first	Askims IK	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Division 3 Sydvästra Götaland 1. Askims IK, 2. Varbergs GIF FF
+Swedish Third Division Southwest Gotaland	2001		second	Varbergs GIF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Division 3 Sydvästra Götaland 1. Askims IK, 2. Varbergs GIF FF
+Swedish Third Division West Svealand	2001		first	Ludvika FK	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Division 3 Västra Svealand 1. Ludvika FK, 2. Karlslunds IF HFK
+Swedish Third Division West Svealand	2001		second	Karlslunds IF	https://www.rsssf.org/tablesz/zwed01.html	agree	RSSSF: Division 3 Västra Svealand 1. Ludvika FK, 2. Karlslunds IF HFK
+Swiss Cup	2001		first	Servette FC	https://www.rsssf.org/tablesz/zwit01.html	agree	RSSSF: final June 10 at St. Jakob-Park, Servette FC Genève 3-0 Yverdon-Sport
+Swiss Cup	2001		second	Yverdon-Sports	https://www.rsssf.org/tablesz/zwit01.html	agree	RSSSF: final June 10 at St. Jakob-Park, Servette FC Genève 3-0 Yverdon-Sport
+Swiss Cup	2001		ended	2001-06	https://www.rsssf.org/tablesz/zwit01.html	agree	RSSSF: June 10
+Swiss National Division A	2001		first	Grasshopper Club Zurich	https://en.wikipedia.org/wiki/2000%E2%80%9301_Swiss_Football_League	agree	row cites Wikipedia and RSSSF; both agree. Wikipedia: Grasshopper Club champion; RSSSF play-off 1. Grasshopper 46, 2. FC Lugano 41
+Swiss National Division A	2001		second	FC Lugano	https://en.wikipedia.org/wiki/2000%E2%80%9301_Swiss_Football_League	agree	row cites Wikipedia and RSSSF; both agree. Wikipedia: Grasshopper Club champion; RSSSF play-off 1. Grasshopper 46, 2. FC Lugano 41
+Swiss National Division A	2001		ended	2001-05		no second source	only RSSSF (also cited) has dates
+Turkish FA Cup	2001		first	Kocaelispor	https://en.wikipedia.org/wiki/2001%E2%80%9302_Turkish_Cup	agree	Wikipedia: final 3 April 2002, Kocaelispor 4-0 Beşiktaş
+Turkish FA Cup	2001		second	Besiktas JK	https://en.wikipedia.org/wiki/2001%E2%80%9302_Turkish_Cup	agree	Wikipedia: final 3 April 2002, Kocaelispor 4-0 Beşiktaş
+Turkish FA Cup	2001		ended	2002-04	https://en.wikipedia.org/wiki/2001%E2%80%9302_Turkish_Cup	agree	Wikipedia: 3 April 2002
+Turkish Premier Division	2001		first	Galatasaray SK	https://en.wikipedia.org/wiki/2001%E2%80%9302_S%C3%BCper_Lig	agree	Wikipedia: 1. Galatasaray, 2. Fenerbahçe
+Turkish Premier Division	2001		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2001%E2%80%9302_S%C3%BCper_Lig	agree	Wikipedia: 1. Galatasaray, 2. Fenerbahçe
+Turkish Premier Division	2001		ended	2002-05		no second source	Wikipedia gives no date
+American Major League	2001		first	San Jose Earthquakes	https://www.rsssf.org/tablesu/usa01.html	agree	RSSSF: MLS Cup Final Oct 21, Los Angeles Galaxy 1-2 San Jose Earthquakes aet
+American Major League	2001		second	Los Angeles Galaxy	https://www.rsssf.org/tablesu/usa01.html	agree	RSSSF: MLS Cup Final Oct 21, Los Angeles Galaxy 1-2 San Jose Earthquakes aet
+American Major League	2001		ended	2001-10	https://www.rsssf.org/tablesu/usa01.html	agree	RSSSF: Oct 21
+US Open Cup	2001		first	Los Angeles Galaxy	https://www.rsssf.org/tablesu/usacuphist.html	agree	RSSSF: 2001 Oct 27, Los Angeles Galaxy 2-1 New England Revolution
+US Open Cup	2001		second	New England Revolution	https://www.rsssf.org/tablesu/usacuphist.html	agree	RSSSF: 2001 Oct 27, Los Angeles Galaxy 2-1 New England Revolution
+US Open Cup	2001		ended	2001-10	https://www.rsssf.org/tablesu/usacuphist.html	agree	RSSSF: Oct 27
+Welsh Cup	2001		first	Barry Town	https://en.wikipedia.org/wiki/List_of_Welsh_Cup_finals	agree	Wikipedia: 2000-01 Barry Town 2-0 Total Network Solutions
+Welsh Cup	2001		second	Total Network Solutions	https://en.wikipedia.org/wiki/List_of_Welsh_Cup_finals	agree	Wikipedia: 2000-01 Barry Town 2-0 Total Network Solutions
+Welsh Cup	2001		ended	2001-05		no second source	Wikipedia list gives no date
+Welsh Premier Cup	2001		first	Wrexham	https://www.rsssf.org/tablesw/walpremcuphist.html	agree	RSSSF: 2000/01 Wrexham 2-0 Swansea City [May 15] (the date gives ended 2001-05, the row has unknown)
+Welsh Premier Cup	2001		second	Swansea City	https://www.rsssf.org/tablesw/walpremcuphist.html	agree	RSSSF: 2000/01 Wrexham 2-0 Swansea City [May 15] (the date gives ended 2001-05, the row has unknown)
+Welsh Premier Division	2001		first	Barry Town	https://en.wikipedia.org/wiki/2000%E2%80%9301_League_of_Wales	agree	Wikipedia: 1. Barry Town, 2. Cwmbran Town
+Welsh Premier Division	2001		second	Cwmbran Town	https://en.wikipedia.org/wiki/2000%E2%80%9301_League_of_Wales	agree	Wikipedia: 1. Barry Town, 2. Cwmbran Town
+Welsh Premier Division	2001		ended	2001-05		no second source	Wikipedia gives no date
+Yugoslav Cup	2001		first	Partizan Belgrade	https://en.wikipedia.org/wiki/2000%E2%80%9301_FR_Yugoslavia_Cup	agree	Wikipedia: final 9 May 2001, Red Star 0-1 Partizan
+Yugoslav Cup	2001		second	Red Star Belgrade	https://en.wikipedia.org/wiki/2000%E2%80%9301_FR_Yugoslavia_Cup	agree	Wikipedia: final 9 May 2001, Red Star 0-1 Partizan
+Yugoslav Cup	2001		ended	2001-05	https://en.wikipedia.org/wiki/2000%E2%80%9301_FR_Yugoslavia_Cup	agree	Wikipedia: 9 May 2001
+Yugoslav First Division	2001		first	Red Star Belgrade	https://en.wikipedia.org/wiki/2000%E2%80%9301_First_League_of_FR_Yugoslavia	agree	Wikipedia: 1. Red Star Belgrade, 2. Partizan
+Yugoslav First Division	2001		second	Partizan Belgrade	https://en.wikipedia.org/wiki/2000%E2%80%9301_First_League_of_FR_Yugoslavia	agree	Wikipedia: 1. Red Star Belgrade, 2. Partizan
+Yugoslav First Division	2001		ended	2001-06	https://en.wikipedia.org/wiki/2000%E2%80%9301_First_League_of_FR_Yugoslavia	agree	Wikipedia: dates to 20 June 2001
+Yugoslav Second Division	2001		held	not held	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: four groups (North, East, West, South) and no single second level
+Yugoslav Second Division East	2001		first	OFK Zvezdara Belgrade	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: East 1. Zvezdara, 2. Hajduk Beograd
+Yugoslav Second Division East	2001		second	Hajduk Belgrade	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: East 1. Zvezdara, 2. Hajduk Beograd
+Yugoslav Second Division East	2001		ended	2001-06		no second source	ended is an inference in the row; no page gives the date
+Yugoslav Second Division North	2001		first	Mladost Apatin	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: North 1. Mladost Apatin, 2. Proleter Zrenjanin
+Yugoslav Second Division North	2001		second	Proleter Zrenjanin	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: North 1. Mladost Apatin, 2. Proleter Zrenjanin
+Yugoslav Second Division North	2001		ended	2001-06		no second source	ended is an inference in the row; no page gives the date
+Yugoslav Second Division South	2001		first	Rudar Pljevlja	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: South (Montenegro) 1. Rudar Pljevlja, 2. Bokelj
+Yugoslav Second Division South	2001		second	Bokelj Kotor	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: South (Montenegro) 1. Rudar Pljevlja, 2. Bokelj
+Yugoslav Second Division South	2001		ended	2001-06		no second source	ended is an inference in the row; no page gives the date
+Yugoslav Second Division West	2001		first	Mladost Lucani	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: West 1. Mladost Lučani, 2. Borac Čačak
+Yugoslav Second Division West	2001		second	Borac Auto Cacak	https://en.wikipedia.org/wiki/2000%E2%80%9301_Second_League_of_FR_Yugoslavia	agree	Wikipedia: West 1. Mladost Lučani, 2. Borac Čačak
+Yugoslav Second Division West	2001		ended	2001-06		no second source	ended is an inference in the row; no page gives the date
+African Cup of Nations	2001		held	not held	https://www.rsssf.org/tablesa/afrchamp.html	agree	RSSSF: editions 2000 and 2002, none in 2001
+Asian Cup	2001		held	not held	https://www.rsssf.org/tablesa/asiachamp.html	agree	RSSSF: editions 2000 and 2004
+Asian Games Football Tournament	2001		held	not held	https://www.rsssf.org/tablesa/asgames02.html	agree	RSSSF has edition pages asgames98 and asgames02, no 2001 page (inference from the page set)
+Confederations Cup	2001		first	France	https://www.rsssf.org/tablesi/intconcup.html	agree	RSSSF: final 10/6/01 Yokohama, Japan 0-1 France
+Confederations Cup	2001		second	Japan	https://www.rsssf.org/tablesi/intconcup.html	agree	RSSSF: final 10/6/01 Yokohama, Japan 0-1 France
+Confederations Cup	2001		third	Australia	https://www.rsssf.org/tablesi/intconcup.html	agree	RSSSF: third place match 9/6/01 Ulsan, Australia 1-0 Brazil
+Confederations Cup	2001		host	Japan	https://www.rsssf.org/tablesi/intconcup.html	agree	RSSSF: Japan and South Korea co-organisers; Japan is one of the two hosts
+Confederations Cup	2001		ended	2001-06	https://www.rsssf.org/tablesi/intconcup.html	agree	RSSSF: 10/6/01
+Copa America	2001		first	Colombia	https://www.rsssf.org/tables/2001sa.html	agree	RSSSF: final Jul 29 Bogotá, Colombia 1-0 Mexico
+Copa America	2001		second	Mexico	https://www.rsssf.org/tables/2001sa.html	agree	RSSSF: final Jul 29 Bogotá, Colombia 1-0 Mexico
+Copa America	2001		third	Honduras	https://www.rsssf.org/tables/2001sa.html	agree	RSSSF: third place match Jul 29, Uruguay 2-2 Honduras, 4-5 pen
+Copa America	2001		host	Colombia	https://www.rsssf.org/tables/2001sa.html	agree	RSSSF: Hosts: Colombia
+Copa America	2001		ended	2001-07	https://www.rsssf.org/tables/2001sa.html	agree	RSSSF: Jul 29
+European Football Championship	2001		held	not held	https://www.rsssf.org/tablese/eurochamp.html	agree	RSSSF: editions 2000 and 2004
+FIFA World Cup	2001		held	not held	https://www.rsssf.org/tablesw/worldcup.html	agree	RSSSF: editions 1998 and 2002
+Oceania Nations Cup	2001		held	not held	https://www.rsssf.org/tableso/oceania-cup.html	agree	RSSSF: editions 2000 and 2002
+Olympic Games	2001		held	not held	https://www.rsssf.org/tableso/olympics.html	agree	RSSSF: editions 2000 and 2004

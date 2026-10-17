@@ -1,0 +1,211 @@
+competition	label	part	field	value	check_url	result	note
+Irish Premier Division	2002		first	Shelbourne F.C.	https://en.wikipedia.org/wiki/2001%E2%80%9302_League_of_Ireland	agree	table position 1
+Irish Premier Division	2002		second	Shamrock Rovers	https://en.wikipedia.org/wiki/2001%E2%80%9302_League_of_Ireland	agree	table position 2
+Irish Premier Division	2002		ended	2002-03		no second source	Wikipedia season page gives no end date; Transfermarkt has no 2001/02 season
+Irish Premier Division	2003	2002/03	first	Bohemian F.C.	https://en.wikipedia.org/wiki/2002%E2%80%9303_League_of_Ireland	agree	table position 1
+Irish Premier Division	2003	2002/03	second	Shelbourne F.C.	https://en.wikipedia.org/wiki/2002%E2%80%9303_League_of_Ireland	agree	table position 2
+Irish Premier Division	2003	2002/03	ended	2003-01	https://www.transfermarkt.com/premier-division/gesamtspielplan/wettbewerb/IR1/saison_id/2001	agree	TM last league match 26/01/03
+Irish Premier Division	2003	2003	first	Shelbourne F.C.	https://en.wikipedia.org/wiki/2003_League_of_Ireland	agree	table position 1
+Irish Premier Division	2003	2003	second	Bohemian F.C.	https://en.wikipedia.org/wiki/2003_League_of_Ireland	agree	table position 2
+Irish Premier Division	2003	2003	ended	2003-11	https://www.transfermarkt.com/premier-division/gesamtspielplan/wettbewerb/IR1/saison_id/2002	agree	TM last match 30/11/03
+Irish Premier Division	2004		first	Shelbourne F.C.	https://en.wikipedia.org/wiki/2004_League_of_Ireland	agree	table position 1
+Irish Premier Division	2004		second	Cork City	https://en.wikipedia.org/wiki/2004_League_of_Ireland	agree	table position 2
+Irish Premier Division	2004		ended	2004-11	https://en.wikipedia.org/wiki/2004_League_of_Ireland	agree	Wikipedia: ended 22 November; TM last match 22/11/04
+Irish Premier Division	2005		first	Cork City	https://en.wikipedia.org/wiki/2005_League_of_Ireland	agree	table position 1
+Irish Premier Division	2005		second	Derry City	https://en.wikipedia.org/wiki/2005_League_of_Ireland	agree	table position 2
+Irish Premier Division	2005		ended	2005-11	https://en.wikipedia.org/wiki/2005_League_of_Ireland	agree	Wikipedia: ended 18 November
+Irish Premier Division	2006		first	Shelbourne F.C.	https://en.wikipedia.org/wiki/2006_League_of_Ireland	agree	table position 1
+Irish Premier Division	2006		second	Derry City	https://en.wikipedia.org/wiki/2006_League_of_Ireland	agree	table position 2
+Irish Premier Division	2006		ended	2006-11	https://en.wikipedia.org/wiki/2006_League_of_Ireland	agree	Wikipedia: concluded 17 November
+Irish Premier Division	2007		first	Drogheda United	https://en.wikipedia.org/wiki/2007_League_of_Ireland	agree	table position 1
+Irish Premier Division	2007		second	Saint Patrick's Athletic	https://en.wikipedia.org/wiki/2007_League_of_Ireland	agree	table position 2
+Irish Premier Division	2007		ended	2007-11	https://www.transfermarkt.com/premier-division/gesamtspielplan/wettbewerb/IR1/saison_id/2006	agree	TM last match 09/11/07
+Irish Premier Division	2008		first	Bohemian F.C.	https://en.wikipedia.org/wiki/2008_League_of_Ireland	agree	table position 1
+Irish Premier Division	2008		second	Saint Patrick's Athletic	https://en.wikipedia.org/wiki/2008_League_of_Ireland	agree	table position 2
+Irish Premier Division	2008		ended	2008-11	https://en.wikipedia.org/wiki/2008_League_of_Ireland	agree	Wikipedia: concluded 14 November
+Irish Premier Division	2009		first	Bohemian F.C.	https://en.wikipedia.org/wiki/2009_League_of_Ireland	agree	table position 1
+Irish Premier Division	2009		second	Shamrock Rovers	https://en.wikipedia.org/wiki/2009_League_of_Ireland	agree	table position 2
+Irish Premier Division	2009		ended	2009-11	https://en.wikipedia.org/wiki/2009_League_of_Ireland	agree	Wikipedia: concluded 6 November
+Irish First Division	2002		first	Drogheda United	https://en.wikipedia.org/wiki/2001%E2%80%9302_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2002		second	Finn Harps	https://en.wikipedia.org/wiki/2001%E2%80%9302_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2002		ended	2002-03		no second source	Wikipedia season page gives no end date; Transfermarkt has no 2001/02 season
+Irish First Division	2003	2002/03	first	Waterford United	https://en.wikipedia.org/wiki/2002%E2%80%9303_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2003	2002/03	second	Finn Harps	https://en.wikipedia.org/wiki/2002%E2%80%9303_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2003	2002/03	ended	2003-01	https://www.transfermarkt.com/first-division/gesamtspielplan/wettbewerb/IR2/saison_id/2001	agree	TM last league match 26/01/03; Wikipedia: regular season concluded in January
+Irish First Division	2003	2003	first	Dublin City F.C.	https://en.wikipedia.org/wiki/2003_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2003	2003	second	Bray Wanderers A.F.C.	https://en.wikipedia.org/wiki/2003_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2003	2003	ended	2003-11	https://www.transfermarkt.com/first-division/gesamtspielplan/wettbewerb/IR2/saison_id/2002	agree	TM last match 30/11/03
+Irish First Division	2004		first	Finn Harps	https://en.wikipedia.org/wiki/2004_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2004		second	University College Dublin	https://en.wikipedia.org/wiki/2004_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2005		first	Sligo Rovers	https://en.wikipedia.org/wiki/2005_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2005		second	Dublin City F.C.	https://en.wikipedia.org/wiki/2005_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2005		ended	2005-11	https://www.transfermarkt.com/first-division/gesamtspielplan/wettbewerb/IR2/saison_id/2004	agree	TM last match 19/11/05
+Irish First Division	2006		first	Shamrock Rovers	https://en.wikipedia.org/wiki/2006_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2006		second	Dundalk F.C.	https://en.wikipedia.org/wiki/2006_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2006		ended	2006-11	https://en.wikipedia.org/wiki/2006_League_of_Ireland_First_Division	agree	Wikipedia: finished on November 18
+Irish First Division	2007		first	Cobh Ramblers	https://en.wikipedia.org/wiki/2007_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2007		second	Finn Harps	https://en.wikipedia.org/wiki/2007_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2007		ended	2007-11	https://en.wikipedia.org/wiki/2007_League_of_Ireland_First_Division	agree	Wikipedia: concluded 10 November
+Irish First Division	2008		first	Dundalk F.C.	https://en.wikipedia.org/wiki/2008_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2008		second	Shelbourne F.C.	https://en.wikipedia.org/wiki/2008_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2008		ended	2008-11	https://en.wikipedia.org/wiki/2008_League_of_Ireland_First_Division	agree	Wikipedia: concluded 15 November
+Irish First Division	2009		first	University College Dublin	https://en.wikipedia.org/wiki/2009_League_of_Ireland_First_Division	agree	table position 1
+Irish First Division	2009		second	Shelbourne F.C.	https://en.wikipedia.org/wiki/2009_League_of_Ireland_First_Division	agree	table position 2
+Irish First Division	2009		ended	2009-11	https://en.wikipedia.org/wiki/2009_League_of_Ireland_First_Division	agree	Wikipedia: concluded 7 November
+Irish Senior Challenge Cup	2002		first	Dundalk F.C.	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2002		second	Bohemian F.C.	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2002		ended	2002-04	https://en.wikipedia.org/wiki/2002_FAI_Cup_final	agree	final 7 April 2002
+Irish Senior Challenge Cup	2003	2002/03	first	Derry City	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2003	2002/03	second	Shamrock Rovers	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2003	2002/03	ended	2002-10	https://news.bbc.co.uk/sport2/hi/bbc_pundits/2368247.stm	agree	BBC 28 Oct 2002: Derry beat Shamrock Rovers 1-0 in Sunday's final (27 Oct)
+Irish Senior Challenge Cup	2003	2003	first	Longford Town	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2003	2003	second	Saint Patrick's Athletic	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2003	2003	ended	2003-10	https://en.wikipedia.org/wiki/Longford_Town_F.C.	agree	won the FAI Cup in October 2003, 2-0 v St Patrick's Athletic
+Irish Senior Challenge Cup	2004		first	Longford Town	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2004		second	Waterford United	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2004		ended	2004-10	https://en.wikipedia.org/wiki/2004_FAI_Cup	agree	final 24 October 2004
+Irish Senior Challenge Cup	2005		first	Drogheda United	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2005		second	Cork City	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2005		ended	2005-12	https://en.wikipedia.org/wiki/2005_FAI_Cup	agree	final 4 December 2005
+Irish Senior Challenge Cup	2006		first	Derry City	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2006		second	Saint Patrick's Athletic	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2006		ended	2006-12	https://en.wikipedia.org/wiki/2006_FAI_Cup	agree	final 3 December 2006
+Irish Senior Challenge Cup	2007		first	Cork City	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2007		second	Longford Town	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2007		ended	2007-12	https://en.wikipedia.org/wiki/2007_FAI_Cup	agree	final 2 December 2007
+Irish Senior Challenge Cup	2008		first	Bohemian F.C.	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2008		second	Derry City	https://en.wikipedia.org/wiki/FAI_Cup	agree	list of finals
+Irish Senior Challenge Cup	2008		ended	2008-11	https://en.wikipedia.org/wiki/2008_FAI_Cup	agree	final 23 November 2008
+Irish League Cup	2002		held	not held	https://www.transfermarkt.com/league-of-ireland-cup/erfolge/pokalwettbewerb/ILIP	agree	TM winners list goes 2002 Limerick FC (2001/02) to 2003 St Patrick's Athletic; no 2002/03 edition
+Irish League Cup	2003		first	Saint Patrick's Athletic	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2002	agree	TM final
+Irish League Cup	2003		second	Longford Town	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2002	agree	TM final
+Irish League Cup	2003		ended	2003-08	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2002	agree	TM final 25/08/2003
+Irish League Cup	2004		first	Longford Town	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2003	agree	TM final
+Irish League Cup	2004		second	Bohemian F.C.	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2003	agree	TM final
+Irish League Cup	2004		ended	2004-08	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2003	agree	TM final 30/08/2004
+Irish League Cup	2005		first	Derry City	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2004	agree	TM final
+Irish League Cup	2005		second	University College Dublin	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2004	agree	TM final
+Irish League Cup	2005		ended	2005-09	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2004	agree	TM final 20/09/2005
+Irish League Cup	2006		first	Derry City	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2005	agree	TM final
+Irish League Cup	2006		second	Shelbourne F.C.	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2005	agree	TM final
+Irish League Cup	2006		ended	2006-09	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2005	agree	TM final 28/09/2006
+Irish League Cup	2007		first	Derry City	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2006	agree	TM final
+Irish League Cup	2007		second	Bohemian F.C.	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2006	agree	TM final
+Irish League Cup	2007		ended	2007-10	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2006	agree	TM final 09/10/2007
+Irish League Cup	2008		first	Derry City	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2007	agree	TM final
+Irish League Cup	2008		second	Wexford Youths F.C.	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2007	agree	TM final
+Irish League Cup	2008		ended	2008-09	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2007	agree	TM final 27/09/2008
+Irish League Cup	2009		first	Bohemian F.C.	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2008	agree	TM final
+Irish League Cup	2009		second	Waterford United	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2008	agree	TM final
+Irish League Cup	2009		ended	2009-09	https://www.transfermarkt.com/league-of-ireland-cup/gesamtspielplan/pokalwettbewerb/ILIP/saison_id/2008	agree	TM final 26/09/2009
+Irish Munster Senior Cup	2002		first	Cork City		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2002		second	Rockmount F.C.		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2003		first	Cork City		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2003		second	Waterford United		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2004		first	Cork City		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2004		second	Carrick United		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2004		ended	2004-05		no second source	Wikipedia cites a corkcityfc.ie report dated 30 May 2004, page now 404
+Irish Munster Senior Cup	2005		first	Cork City		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2005		second	Avondale United		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2006		first	Limerick F.C.		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2006		second	Cobh Ramblers		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2007		first	Waterford United		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2007		second	Passage		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2008		first	Cork City		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Munster Senior Cup	2008		second	Cobh Ramblers		no second source	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+Irish Leinster Senior Cup	2002		held	not held	https://trinitynews.ie/?p=61195	agree	Trinity News 2023: foot-and-mouth in 2001 ended it, re-inaugurated in 2009 (Wikipedia says 2010; both after this label)
+Irish Leinster Senior Cup	2003		held	not held	https://trinitynews.ie/?p=61195	agree	Trinity News 2023: foot-and-mouth in 2001 ended it, re-inaugurated in 2009 (Wikipedia says 2010; both after this label)
+Irish Leinster Senior Cup	2004		held	not held	https://trinitynews.ie/?p=61195	agree	Trinity News 2023: foot-and-mouth in 2001 ended it, re-inaugurated in 2009 (Wikipedia says 2010; both after this label)
+Irish Leinster Senior Cup	2005		held	not held	https://trinitynews.ie/?p=61195	agree	Trinity News 2023: foot-and-mouth in 2001 ended it, re-inaugurated in 2009 (Wikipedia says 2010; both after this label)
+Irish Leinster Senior Cup	2006		held	not held	https://trinitynews.ie/?p=61195	agree	Trinity News 2023: foot-and-mouth in 2001 ended it, re-inaugurated in 2009 (Wikipedia says 2010; both after this label)
+Irish Leinster Senior Cup	2007		held	not held	https://trinitynews.ie/?p=61195	agree	Trinity News 2023: foot-and-mouth in 2001 ended it, re-inaugurated in 2009 (Wikipedia says 2010; both after this label)
+Irish Presidents Cup	2002		first	Bohemian F.C.		no second source	RSSSF names the LFA President's Cup but lists no results
+Irish Presidents Cup	2002		second	Shelbourne F.C.		no second source	RSSSF names the LFA President's Cup but lists no results
+Irish Presidents Cup	2003		first	Shelbourne F.C.		no second source	RSSSF names the LFA President's Cup but lists no results
+Irish Presidents Cup	2003		second	Dundalk F.C.		no second source	RSSSF names the LFA President's Cup but lists no results
+Irish Presidents Cup	2003		ended	2002-09		no second source	
+Irish Presidents Cup	2004		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: Leinster FA President's Cup played between 1930 and 2002; FAI President's Cup since 2014
+Irish Presidents Cup	2005		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: Leinster FA President's Cup played between 1930 and 2002; FAI President's Cup since 2014
+Irish Presidents Cup	2006		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: Leinster FA President's Cup played between 1930 and 2002; FAI President's Cup since 2014
+Irish Presidents Cup	2007		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: Leinster FA President's Cup played between 1930 and 2002; FAI President's Cup since 2014
+Irish Presidents Cup	2008		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: Leinster FA President's Cup played between 1930 and 2002; FAI President's Cup since 2014
+Irish Super Cup	2002		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: FAI Super Cup 1998-2001 only
+Irish Super Cup	2003		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: FAI Super Cup 1998-2001 only
+Irish Super Cup	2004		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: FAI Super Cup 1998-2001 only
+Irish Super Cup	2005		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: FAI Super Cup 1998-2001 only
+Irish Super Cup	2006		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: FAI Super Cup 1998-2001 only
+Irish Super Cup	2007		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: FAI Super Cup 1998-2001 only
+Irish Super Cup	2008		held	not held	https://www.rsssf.org/tablesi/iersupcuphist.html	agree	RSSSF: FAI Super Cup 1998-2001 only
+Irish Blaxnit Cup	2002		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Blaxnit Cup	2003		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Blaxnit Cup	2004		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Blaxnit Cup	2005		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Blaxnit Cup	2006		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Blaxnit Cup	2007		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Blaxnit Cup	2008		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Blaxnit Cup	2009		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2002		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2003		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2004		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2005		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2006		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2007		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2008		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin City Cup	2009		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin and Belfast Inter-City Cup	2002		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Dublin and Belfast Inter-City Cup	2003		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Dublin and Belfast Inter-City Cup	2004		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Dublin and Belfast Inter-City Cup	2005		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin and Belfast Inter-City Cup	2006		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin and Belfast Inter-City Cup	2007		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin and Belfast Inter-City Cup	2008		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Dublin and Belfast Inter-City Cup	2009		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2002		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2003		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2004		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2005		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2006		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2007		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2008		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish First Division Shield	2009		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish North-South Cup	2002		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish North-South Cup	2003		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish North-South Cup	2004		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish North-South Cup	2005		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish North-South Cup	2006		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish North-South Cup	2007		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish P.J. Casey Cup	2002		held	not held	https://leagueofirelandseasons.com/tag/pj-casey-cup/	agree	only ever P.J. Casey Cup final was 1962/63; competition dropped after that season
+Irish P.J. Casey Cup	2003		held	not held	https://leagueofirelandseasons.com/tag/pj-casey-cup/	agree	only ever P.J. Casey Cup final was 1962/63; competition dropped after that season
+Irish P.J. Casey Cup	2004		held	not held	https://leagueofirelandseasons.com/tag/pj-casey-cup/	agree	only ever P.J. Casey Cup final was 1962/63; competition dropped after that season
+Irish P.J. Casey Cup	2005		held	not held	https://leagueofirelandseasons.com/tag/pj-casey-cup/	agree	only ever P.J. Casey Cup final was 1962/63; competition dropped after that season
+Irish P.J. Casey Cup	2006		held	not held	https://leagueofirelandseasons.com/tag/pj-casey-cup/	agree	only ever P.J. Casey Cup final was 1962/63; competition dropped after that season
+Irish P.J. Casey Cup	2007		held	not held	https://leagueofirelandseasons.com/tag/pj-casey-cup/	agree	only ever P.J. Casey Cup final was 1962/63; competition dropped after that season
+Irish P.J. Casey Cup	2008		held	not held	https://leagueofirelandseasons.com/tag/pj-casey-cup/	agree	only ever P.J. Casey Cup final was 1962/63; competition dropped after that season
+Irish Shield	2002		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Shield	2003		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Shield	2004		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Shield	2005		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Shield	2006		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Shield	2007		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Shield	2008		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Texaco Cup	2002		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Texaco Cup	2003		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Texaco Cup	2004		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Texaco Cup	2005		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Texaco Cup	2006		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Texaco Cup	2007		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Texaco Cup	2008		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Top Four Cup	2002		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Top Four Cup	2003		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Top Four Cup	2004		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Top Four Cup	2005		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Top Four Cup	2006		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Top Four Cup	2007		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Top Four Cup	2008		held	not held		no second source	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Tyler Cup	2002		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Tyler Cup	2003		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Tyler Cup	2004		held	not held	https://www.wsc.co.uk/the-archive/borderline-decisions/	agree	When Saturday Comes, Jan 2005: first competitive all-Ireland football since the Blaxnit Cup was abandoned 25 years ago (the 2005 Setanta Cup)
+Irish Tyler Cup	2005		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Tyler Cup	2006		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Tyler Cup	2007		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+Irish Tyler Cup	2008		held	not held		no second source	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
