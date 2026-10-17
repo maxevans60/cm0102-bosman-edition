@@ -43,6 +43,17 @@
  *                 competition of the entry that did not start (c->started 0: an unfinished competition, or an
  *                 international one that waits for its next edition, such as the 2010 qualifiers on 25 July
  *                 2009). Example: the name of the season (season_kind_names.c).
+ *
+ * The start season. The entry, before, after and season hooks run for the start season too (S equal to the
+ * start year, c->start 1, season_change_is_start() 1), with changing rules on or off: in the run to the start
+ * date of a new game (game_run_to_start_date 0x5cc850, called from create_game 0x828110 at 0x829fd9; c->creating
+ * 1, from 1 January of the start year) and on the update days of the start year after the start date (the
+ * international entries on 25 July and 15 August; c->creating 0). So a kind applies the rules of the start season
+ * before the first fixtures are made, for example 5 substitutes in a 2010/11 game. The start season gives no
+ * news: season_change_news does nothing in its hooks. A later season (S after the start year) runs the hooks only
+ * with changing rules on. The hooks of the start season also run after a load in the start year, so a kind
+ * writes only a real change, as for every season.
+ *
  * A kind applies the rule of season S from its own table (the rules table, season_rules.h, or another). It
  * writes the game's memory only for a real change, so a season with no rule change leaves the game as it is.
  * For each change the player sees, it calls season_change_news with one sentence. After the last row of a
@@ -60,6 +71,8 @@ typedef struct {
     int entry;              /* its league table entry, 0 to 34, or -1 when not known */
     uint32_t nation;        /* the entry's nation record (entry +0), 0 for a continental or world entry */
     int started;            /* 1: start_new_season runs for it now; 0: see after() above */
+    int start;              /* 1: S is the start season of the game (see "The start season" above) */
+    int creating;           /* 1: the game is being made now (the run to the start date of a new game) */
 } SeasonChange;
 
 typedef struct {
@@ -89,7 +102,8 @@ void season_change_latin1(char *s);
  * (0x6b bytes) of the array at [0xae23d0], the club comps first and then the nation comps. A competition object
  * holds the address of its record at +4. name is the new long name in the game's code (Windows-1252: call
  * season_change_latin1 first on UTF-8 text). The function writes at most 50 characters and the 0 to the
- * record +4 and clears the rest of the 51 bytes. A rec that is not a record of that array changes nothing.
+ * record +4 and clears the rest of the 51 bytes. A rec that is not a record of that array (an address before
+ * it, inside a record, or at or after its count [0xae2378]) changes nothing.
  *
  * The game finds its key competitions by name at every load of the data, also of a saved game
  * (set_key_ids 0x601a40, match_club_comp_key_id 0x60efd0, the box "index.cpp 5809" when a name is missing).
@@ -98,7 +112,8 @@ void season_change_latin1(char *s);
  * such as UEFA Cup, UEFA Europa League, then another name) does not overwrite it. The names go into the season
  * part of the save (version 2), so a load knows them before the original reads the data.
  *
- * Call it while a game is made or on: after season_change_reset, which the runtime calls before a new game,
+ * A game with a changed name always writes the season part, also a 2001/02 game with changing rules off
+ * (season.c, part_needed). Call it while a game is made or on: after season_change_reset, which the runtime calls before a new game,
  * a load and the end of a game (season.c). The list is cleared there, so call it again for each new game.
  * It adds no news. A kind that wants a news sentence calls season_change_news inside its hook. */
 void season_change_rename(uint32_t rec, const char *name);
@@ -110,6 +125,22 @@ int season_change_comps(uint32_t *out, int max);
 
 /* The competition objects of one league table entry (its array, +0xc count, +0x10 array). */
 int season_change_entry_comps(int entry, uint32_t *out, int max);
+
+/* Takes a competition object out of the array of a league table entry, so the pass starts no more seasons of
+ * it (a league cup that ends, the Intertoto Cup after 2008). Only inside an entry hook of that entry, before the
+ * pass reads the array. The array keeps its block: the later objects move down one place and the count goes
+ * down by one. The object itself stays (it is not freed, and the table [0xadadfc] still holds it), so its
+ * record, history and screens stay. Returns 1, or 0 when the object is not in the array. Not tested in a game
+ * yet: whether a save keeps the shorter array, and which screens still show the competition, are unknown, so
+ * the first kind that uses it checks both (as for season_change_add_comp). */
+int season_change_remove_comp(int entry, uint32_t obj);
+
+/* 1 while the hooks of the start season run (see "The start season" above). For the season hook, which gets
+ * no SeasonChange. */
+int season_change_is_start(void);
+
+/* 1 while create_game 0x828110 runs, so in the run to the start date of a new game. */
+int season_change_is_creating(void);
 
 /* The source file of a competition object's class (eng_first), or "?" for a class that is not known. */
 const char *season_change_file(uint32_t obj);
@@ -125,6 +156,7 @@ void season_change_start(uint32_t comp, int after);
 
 /* season.c calls these. */
 void season_change_new_game(void);                            /* a new game is made */
+void season_change_creating(int on);                          /* 1 before create_game runs, 0 after it */
 void season_change_loaded(void);                              /* a saved game is loaded */
 void season_change_reset(void);                               /* before a new game, a load, the end of a game */
 
