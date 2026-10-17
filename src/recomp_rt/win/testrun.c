@@ -18,6 +18,7 @@
  * the heap (docs/research/2026-10-15-attribute-groups.md). */
 #include "win.h"
 #include "season.h"
+#include "season_dates.h"
 
 #include <SDL.h>
 #include <stdio.h>
@@ -45,6 +46,7 @@ RT_WRAP(005cde40, human_turn)
 {
     holiday_next_turn();
     season_log_turn();
+    season_dates_log_turn();
     if (picker_check_turn()) {     /* RECOMP_PICK_CHECK: the dump is written */
         if (rt_on_fatal) rt_on_fatal();
         SDL_Quit();

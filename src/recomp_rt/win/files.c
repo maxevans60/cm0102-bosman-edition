@@ -392,6 +392,13 @@ static void data_dir_find(void)
     }
 }
 
+/* The host folder of the data set that a load reads, or "" for the game's own Data (season_dates.c). */
+const char *win_data_set_dir(void)
+{
+    if (!data_dir_known) data_dir_find();
+    return data_dir;
+}
+
 static void data_dir_swap(char *h, size_t room)
 {
     if (!data_dir_known) data_dir_find();

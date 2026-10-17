@@ -71,6 +71,7 @@ int win_fixed_clock(void);
 void win_read_settings(void);
 /* The option database changed: the next file open finds the data set folder again (files.c). */
 void win_data_set_changed(void);
+const char *win_data_set_dir(void);     /* the host folder of the data set, "" for the game's own Data */
 const char *win_databases_root(void);   /* the folder that holds Databases: the save folder */
 
 /* Sound (dsound.c): 0 mutes every sound while the window lacks focus, 1 makes them heard again. */
