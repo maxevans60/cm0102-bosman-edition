@@ -58,6 +58,14 @@ Research: Q344 in the spec; `/Users/max/Projects/cm0102/p2004-work/FINDINGS.md` 
 4. Test: for each season database, a game run that starts in its season and checks on screen (player profile) or in memory that at least five known players have the real year of birth and the right age on the first day, and that the club history shows the real last champions. Repeatability of a 2010/11 game.
 Another agent fixes the Select All stop at load time in memory (Database.cpp 1844). Keep your code in its own file and call, and say where it runs relative to the load.
 
+### Slice 11c, competition history between 2001 and the start season (Opus), research now, code after slice 11b is on main
+Spec: Q347, slice 11c. Research process: the `league-research` skill (`.claude/skills/league-research/`), as for the rules table (Q243, Q328): each fact has a source URL read on the day and a second-source check, and disagreements go to Max.
+
+1. For each season database before 2010/11 (October 2003, September 2005, November 2007, September 2008, September 2009, and the 3.9.68 data on the 2002/03 tile) list the competitions with history rows in `club_comp_history.dat` and `nation_comp_history.dat`, which seasons each one already holds after the slice 11b shift, and which seasons from 2001/02 to the season before the start are missing. Read the record layout from the 3.9.68 load code and the data map, and cite addresses.
+2. Research the missing rows: the fields the history rows hold (winner, runner-up, other places if the record holds them) for each missing season. Write them in `docs/research/history-0.6.0/` as TSV with sources, one part per nation or confederation, plus a check file.
+3. After slice 11b is on main (`git merge main`, check the log): add the rows in memory at a new game, after the 11b shift, matching clubs and nations by their database names (list every name that does not match). The database files stay unchanged. The base game is untouched and `RECOMP_SEASON_CODE=off` turns it off.
+4. Test: for each of these databases, a game run that opens the history of a few competitions (English league and cup, Champions League, a smaller nation) and checks every season up to the start with the right winner; the same-save checks of this brief.
+
 ### Slice 12, rules table reader and rules report (Opus), after slice 11 is on main
 Research: the rules table parts, `2026-10-16-sweep-season-end.md` section 2.4 (what a jump with no days played needs), the league and cup sweeps.
 
