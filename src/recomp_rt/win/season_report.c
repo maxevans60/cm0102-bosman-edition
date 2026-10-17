@@ -133,7 +133,7 @@ static void write_cup_rounds(FILE *f, int season, const char *phase, const char 
         fprintf(f, "%s%d:%d:%x:%x", i ? " " : "", g_mem[r + 0x21], g_mem[r + 0x20], rd16(g_mem, r + 0x0d),
                 rd16(g_mem, r + 0x0f));
     }
-    fprintf(f, "\n");
+    fprintf(f, "\t0x%x\n", obj);                  /* the object, for a test that follows one cup */
 }
 
 static void write_season(int season, const char *phase)
