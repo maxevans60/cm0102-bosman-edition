@@ -45,7 +45,7 @@ python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/Septemb
 
 ## After a rebuild
 
-1. Print the club table rows with `python3 -I club_rows.py <year> "<template>" "<work>"`. Add `--write` only for a season that has no rows in the part files yet.
+1. Print the club table rows with `python3 -I club_rows.py <year> "<template>" "<work>"`. `--write` puts them into the part files and replaces the rows of that season with the same labels.
 2. Put the new sizes and SHA-256 of `index.dat`, `club.dat` and `staff.dat` in `docs/research/rules-0.6.0/databases-signatures.tsv`.
 3. Measure the date shifts with `python3 -I ../measure_date_shifts.py <3.9.68 Data> <folder with the new database> --only "Summer 2006"`, or "Summer 2004". Copy the printed row into `databases-date-shifts.tsv`. Set careers_kept and last_rows to 0.
 4. Make the C tables with `python3 -I ../make_db_table.py` and `python3 -I ../make_dates_table.py`.
@@ -54,3 +54,21 @@ python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/Septemb
 
 The settings of each season are in `season_2004.py` and `season_2006.py`. Each file gives the template, the real
 lists with one source each, the play-off winners and the part file of each list.
+
+## Club tables of Spain, Germany, Scotland, Austria and Switzerland
+
+`club_rows.py` writes these lists with the labels below. `make_clubs.py` (slice 15 branch) maps a label to a
+database division only through its TARGETS list, so slice 15 adds these lines to TARGETS:
+
+```python
+    ("aut-sui", r"Austrian Bundesliga", "Austrian Premier Division"),
+    ("aut-sui", r"Swiss Super League", "Swiss National Division A"),
+    ("ger", r"Bundesliga", "German First Division"),
+    ("ger", r"2\. Bundesliga", "German Second Division"),
+    ("sco", r"Scottish Premier League", "Scottish Premier Division"),
+    ("sco", r"Scottish (First|Second|Third) Division", "="),
+    ("spa", r"La Liga", "Spanish First Division"),
+    ("spa", r"Segunda División", "Spanish Second Division"),
+```
+
+Switzerland has 12 places in the game and 10 real clubs in 2004/05 and 2006/07.

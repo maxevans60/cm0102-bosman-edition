@@ -4,6 +4,7 @@ settings(year) returns the module season_<year>.py. template_shifts(name), kept_
 last_row_comps(name) read docs/research/rules-0.6.0/databases-date-shifts*.tsv for an Update Team database."""
 import importlib
 import os
+import struct
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -52,3 +53,26 @@ def last_row_comps(name):
             if p[0] == name:
                 return {int(v) for v in p[1].split()}
     return set()
+
+
+def repair_clubs(T, S_):
+    """Season settings CLUB_REPAIR: {template long name: {"nation": template nation name, "stadium": stadium id}}.
+    Sets the nation (+0x53) and stadium (+0x69) of a template club record that lacks them, in memory, before the
+    match, the leagues and the conversion read it. Stadium ids are the same in the Update Team databases."""
+    fix = getattr(S_, "CLUB_REPAIR", {})
+    if not fix:
+        return
+    nat = {bytes(r[4:55]).split(b"\0")[0].decode("latin1"): struct.unpack_from("<i", r, 0)[0] for r in T.rows(4)}
+    n_stadium = T.idx[5]["count"]
+    done = set()
+    for r in T.rows(0):
+        name = bytes(r[4:55]).split(b"\0")[0].decode("latin1")
+        if name in fix:
+            f = fix[name]
+            if f["nation"] not in nat or not 0 <= f["stadium"] < n_stadium or name in done:
+                sys.exit(f"own_db: CLUB_REPAIR {name}: no nation {f['nation']}, no stadium {f['stadium']} or two clubs")
+            struct.pack_into("<i", r, 0x53, nat[f["nation"]])
+            struct.pack_into("<i", r, 0x69, f["stadium"])
+            done.add(name)
+    if done != set(fix):
+        sys.exit(f"own_db: CLUB_REPAIR names no template club: {sorted(set(fix) - done)}")

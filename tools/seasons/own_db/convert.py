@@ -37,7 +37,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from cmdb import Folder, cstr  # noqa: E402
 
-from seasons import settings, template_shifts, kept_careers, last_row_comps  # noqa: E402
+from seasons import settings, template_shifts, kept_careers, last_row_comps, repair_clubs  # noqa: E402
 
 S_ = START = SH = HIST_SHIFT = None   # set in main from the season settings and the date shift research
 AFTER_START = set()             # national competitions of the start year played after the start (filled in main)
@@ -132,6 +132,7 @@ def main(argv):
     fill_src = os.path.abspath(argv[6]) if len(argv) == 7 else None
     check(not os.path.exists(dst), f"{dst} exists")
     T = Folder(src)
+    repair_clubs(T, S_)
     for f in DAT_FILES:
         check(f in T.raw, f"{f} missing in the template")
     idx = T.idx

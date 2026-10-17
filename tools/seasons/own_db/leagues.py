@@ -7,9 +7,10 @@ usage: python3 -I leagues.py <season start year> <template folder> <facts folder
 import os,sys,struct,pickle,collections
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from cmdb import *
-from seasons import settings
+from seasons import repair_clubs,settings
 S_=settings(int(sys.argv[1]))
 T=Folder(sys.argv[2]); X=os.path.join(sys.argv[3],''); W=sys.argv[4]
+repair_clubs(T,S_)
 M=pickle.load(open(os.path.join(W,'match.pkl'),'rb'))
 hist=pickle.load(open(X+'clubhist.pkl','rb')); tm=pickle.load(open(X+'teammap.pkl','rb'))
 # Clubs of the final tables that closed before the start, mapped to the FM club that took their place.
@@ -155,12 +156,13 @@ def pick(names,pool):
     chosen=[]; miss=[]; pairs=[]
     for n in names:
         best=None;bs=0
+        n_=getattr(S_,'ALIAS',{}).get(n,n)   # the template's name of a real club, where the tokens differ
         for c in pool:
             r=trow[c]
             for s_ in (cstr(r,4,51),cstr(r,0x38,26)):
-                a,b=toks(n),toks(s_)
+                a,b=toks(n_),toks(s_)
                 if not a or not b: continue
-                sc=len(a&b)/len(a|b) + (0.5 if nm(n)==nm(s_) else 0) - (0.3 if ({'b','ii','c'}&set(nm(s_).split())) else 0)
+                sc=len(a&b)/len(a|b) + (0.5 if nm(n_)==nm(s_) else 0) - (0.3 if ({'b','ii','c'}&set(nm(s_).split())) else 0)
                 if sc>bs: bs,best=sc,c
         if best is None or bs<0.5 or best in chosen: miss.append(f"{n} [best {cstr(trow[best],4,51) if best is not None else None} {bs:.2f}{' taken' if best in chosen else ''}]")
         else: chosen.append(best); pairs.append((n,best))
@@ -192,7 +194,7 @@ for dname,names in REAL.items():
     def rank(c):
         f=invmap.get(c); row=fmrow.get(f)
         if row is None:
-            sn_=cstr(trow[c],0x38,26); hit=[i for i,n in enumerate(prom) if toks(n)&toks(sn_)]
+            sn_=cstr(trow[c],0x38,26); hit=[i for i,n in enumerate(prom) if toks(getattr(S_,'ALIAS',{}).get(n,n))&toks(sn_)]
             return (2,hit[0]+1) if hit else (1,99)
         comp,pos=row; fd=compmap.get(comp)
         # Relegated clubs first, then the division's own clubs, then promoted clubs, each by last season's place.
