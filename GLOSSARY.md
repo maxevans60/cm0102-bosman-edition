@@ -188,6 +188,14 @@ _Avoid_: dump, season log
 A test run that plays from season to season with no match engine, the original's quick results only, and writes the rules report.
 _Avoid_: fast forward, simulation run
 
+**Season change**:
+The day on which a competition starts its next season: the update day of its league table entry, mostly 20 or 21 June, in January or February for calendar-year leagues. With changing rules on, the competition takes the rules of the new season then, and the player gets the news item of that season's changes.
+_Avoid_: July step (in docs for players), rollover, new year
+
+**Rule kind**:
+One kind of season rule that the season change applies, such as competition names, with its own function in the list of `season_change.c`. Each build slice adds its kinds there.
+_Avoid_: rule handler, plugin
+
 **Changing rules**:
 The option that lets the season rules change each July as a game moves through the years. It is set for each game.
 _Avoid_: evolving rules, dynamic seasons
