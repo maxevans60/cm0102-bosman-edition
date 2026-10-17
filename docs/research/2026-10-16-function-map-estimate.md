@@ -1710,6 +1710,28 @@ One Opus check of the open points above, against the dossiers and the disassembl
 
 The `news_*_text` rows of manager_manager.cpp mix free and member names. This check did not cover them. The file questions above are still open for Max.
 
+### Data map
+
+Spec: `docs/specs/2026-10-17-data-map-and-confidence-spec.md`.
+
+#### Slice 1: dossiers, script names and docs (2026-10-17)
+
+`globals.py` finds 4,428 globals that game and library functions touch, in 746 address groups. The spec counted 3,431 from the "Globals referenced" lines of the function dossiers. Those lines stop at 80 globals per function, so the long functions lost about 1,000 read-only constants and tables. The import table is left out. 465 globals have readers in many files and go to `shared.md`. The rest go to 320 owner file pages.
+
+Script names: 2,289 rows, 2,148 high and 141 medium.
+
+| Kind | High | Medium | Quote |
+|---|---|---|---|
+| Key ids | 1,169 | 115 | The string of the name chain that stores the row (from `src/cm3/key_ids_table.c`). The 115 medium ones are set to -1 and no chain names them. |
+| Read-only float constants | 740 | 0 | The value in .rdata. Every access reads it. |
+| Vtables | 239 | 3 | The constructor or destructor of the class that stores the address. Medium when two classes store it. |
+| String pointers | 0 | 18 | The string at the address. Medium, because some are the first entry of a table. |
+| Library data | 0 | 6 | Only library functions touch it. |
+
+A check of 20 random high script names against the disassembly (7 key ids, 5 vtables, 8 constants) found 20 agree. Two vtables have no destructor slot: RbNorwayCup and BrazilAwards have no virtual destructor, and their slots hold their own members.
+
+2,280 globals are left to name, in 31 batches of 47 to 80 globals and 4 waves. A batch input is 31 to 154 KB.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.

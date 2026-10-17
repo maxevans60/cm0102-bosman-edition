@@ -1,5 +1,5 @@
 # Data map and confidence pass
-Status: Ready
+Status: In build
 
 Research: `docs/research/2026-10-16-function-map-estimate.md` (every sweep and review wave of the function map). Earlier spec: `docs/specs/2026-10-16-function-map-spec.md`.
 
@@ -33,7 +33,7 @@ Settled with Max on 2026-10-17 (grilling, Q1 to Q23).
 
 Order and scope
 - The data map comes first, then the confidence pass (Q1).
-- The data map covers all 3,431 globals in the "Globals referenced" lines of the function dossiers. Game functions touch 3,422 of them. Scripts name the 9 that only library or CRT code touches (Q7).
+- The data map covers every global that a game or library function touches (Q7). The interview counted 3,431 from the "Globals referenced" lines of the function dossiers. Those lines stop at 80 globals per function, so the full count is 4,428 (slice 1). Scripts name the globals that only library code touches.
 - The runtime trace is out of this spec. Max decides on it after the confidence pass, for the rows that are still medium (Q4).
 
 Data map
@@ -89,12 +89,14 @@ Each slice also has a manual acceptance check below. The checks of the function 
 ## Slices
 ### 1. Global dossiers, scripted names and docs
 Blocked by: none
-Delivers: a short dossier for each of the 3,431 globals, the address groups, the owner files, script names for the CRT and library globals, the key id table, string pointers and vtables, `globals.tsv`, one page per owner file, `shared.md`, the index and the check script. The Sonnet brief and the batch lists are ready in the work folder.
+Delivers: a short dossier for each global in scope (4,428), the address groups, the owner files, script names for the CRT and library globals, the key id table, string pointers and vtables, `globals.tsv`, one page per owner file, `shared.md`, the index and the check script. The Sonnet brief and the batch lists are ready in the work folder.
 Merge danger: two-way door. Blast radius: research docs only. A wrong script name can mislead an agent.
-- [ ] `globals.tsv` has exactly one row for each of the 3,431 globals.
-- [ ] Each script name is high only with its quote, and a sample of 20 script names agrees with the disassembly.
-- [ ] The check script passes, and it fails on a planted bad row of each kind.
-- [ ] No committed file holds a dossier line, pseudocode or code of the original.
+- [x] `globals.tsv` has exactly one row for each of the 4,428 globals.
+- [x] Each script name is high only with its quote, and a sample of 20 script names agrees with the disassembly.
+- [x] The check script passes, and it fails on a planted bad row of each kind.
+- [x] No committed file holds a dossier line, pseudocode or code of the original.
+
+Done (2026-10-17): 2,289 script names (2,148 high: key ids, read-only float constants, vtables), 2,280 globals left in 31 batches over 4 waves. The estimate doc records the counts under "Data map".
 
 ### 2. Data map wave 1 and the Sonnet gate
 Blocked by: 1
