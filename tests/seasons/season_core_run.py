@@ -138,7 +138,7 @@ def play(program, game, work, name, options, steps, days, env_extra=None, databa
                RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots, steps)), **(env_extra or {}))
     start = time.time()
     try:
-        r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
+        r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True, errors="replace",
                            timeout=timeout)
     except subprocess.TimeoutExpired as e:
         return None, (e.stderr or b"").decode("latin-1") if isinstance(e.stderr, bytes) else (e.stderr or ""), \
