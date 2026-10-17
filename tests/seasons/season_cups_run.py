@@ -150,7 +150,9 @@ def check_run(name, program, game, keep, originals, rows, reuse=False):
         if file not in originals or file not in rows:
             continue          # a cup with no row keeps what the game makes (the World Cup sections change by edition)
         want = expected(rows, originals, file, season if rules == "on" else year)
-        if key(rounds) != key(want):
+        later = expected(rows, originals, file, season + 1) if rules == "on" and phase == "end" else want
+        # A calendar-year cup (the Norwegian Cup) makes its next edition in January, before the end report.
+        if key(rounds) != key(want) and key(rounds) != key(later):
             fails.append(f"{name}: {file} {season}/{(season + 1) % 100:02d} {phase}: rounds {key(rounds)}, "
                          f"expected {key(want)}")
         if key(want) != key(originals[file]):
