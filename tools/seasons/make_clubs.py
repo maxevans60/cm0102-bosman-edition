@@ -176,8 +176,17 @@ def read_lists():
     return [(p, s, d, rows) for (p, s, d), rows in lists.items()]
 
 
+# Lists of one season left out after a test run. 2009/10, French CFA 2 (French Lower Division): with both the
+# CFA and the CFA 2 lists of that season a start with France selected stopped at the box "Disk Space Error"
+# (FILE_LLIST::add_node 0x58e340, file_llist.cpp 161) before the competitions were made; with either list alone
+# it starts. The cause is unknown (docs/research/2026-10-17-club-moves-and-names.md, Open).
+SKIP_SEASON = {("fra", 2009, "CFA 2"): "a start with this list stopped at a Disk Space Error box (cause unknown)"}
+
+
 def target_of(part, season, label, rows, rule_rows):
     """(database division, None) or (None, the reason the list is left out)."""
+    if (part, season, label) in SKIP_SEASON:
+        return None, SKIP_SEASON[(part, season, label)]
     if NOT_DIVISION.search(label):
         return None, SKIP_CUP
     plain = re.sub(r" \((19|20)\d\d\)$", "", label)

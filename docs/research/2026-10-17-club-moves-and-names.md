@@ -31,7 +31,7 @@ Slice 16 calls `season_names_get(comp_file, season)` (NULL when the table holds 
 
 ### The table
 
-`make_clubs.py` turns the 16 clubs files `rules-0.6.0/<part>-clubs.tsv` into `Seasons/clubs.tsv` (18,366 rows): season, database division (long name), club record id, club record name, real name. One list is the rows of one part, season and division label. The database division of each list comes from the table `TARGETS` of the tool, one line per part and label. A first version took the database division that most clubs of a list held; that is wrong for many lists (most of the real Série B clubs of 2008 sit in the database's first division, most J2 clubs of 2010 in the Japanese Administrative Division), so the tool now uses the fixed table. 931 lists are in the table and 359 are left out:
+`make_clubs.py` turns the 16 clubs files `rules-0.6.0/<part>-clubs.tsv` into `Seasons/clubs.tsv` (18,313 rows): season, database division (long name), club record id, club record name, real name. One list is the rows of one part, season and division label. The database division of each list comes from the table `TARGETS` of the tool, one line per part and label. A first version took the database division that most clubs of a list held; that is wrong for many lists (most of the real Série B clubs of 2008 sit in the database's first division, most J2 clubs of 2010 in the Japanese Administrative Division), so the tool now uses the fixed table. 930 lists are in the table and 360 are left out:
 
 | Part | Lists left out | Reason |
 |---|---|---|
@@ -46,6 +46,7 @@ Slice 16 calls `season_names_get(comp_file, season)` (NULL when the table holds 
 | rus-tur | 57 | Turkish Category B groups (slice 18) |
 | sco | 53 | cup entrants, guests and the pyramid play-off (slice 21) |
 | spa | 20 | the Segunda B subgroups of 2020/21 and Primera Federación (slices 18 and 20) |
+| fra | 1 | CFA 2 of 2009/10: see Open |
 
 Four clubs stand in two lists of one season (Brazil 2008, Portugal 2009 to 2011, see `lists.tsv`). The first list keeps them. The research should check these four rows.
 
@@ -84,7 +85,28 @@ The steps for each season:
 
 Seam: the rules report (`tests/seasons/rules_report_check.py`). New: at each season start the report writes the clubs of each division (club lines: division record, club id, club name), and `--start-only` ends the run after the first start report (`RECOMP_RULES_REPORT_STOP=start`, about 3 minutes with 15 nations). In a season game the check compares the clubs of each division with a list of the table with the listed clubs that the database holds (kind `club_list`, by name: the club trim gives clubs new ids). A name is right when it is the table name or its shown form. Expected files: `rules_report_expected/<year>-<nations>-start.tsv`.
 
-RESULTS
+### Runs of 2026-10-17
+
+`--start-only` runs of every season with a database (2002/03 with the 3.9.68 data, then the 20 season databases), each with two nation groups: (a) England and the first 15 rows of the Select League(s) screen, Argentina to Norway with France; (b) Select All without those 15 (the other 11 nations and England). 44 runs, 3 at a time, about 3 minutes each. All 44 pass against their expected files. Every run with France selected now reaches the game: before this slice each one stopped at fra_first.cpp 108 (a run of 2009/10 with `RECOMP_CLUB_MOVES=off` still stops there).
+
+- Names: no `name` difference is left in any run. Each season renames 29 to 117 records (log line "names of").
+- Club lists: 766 lists were checked (a list counts when its league is in the report), 169 of them exact. The other 597 are `club_list` lines of the expected files: the real count differs from the count of the class (slice 18), or real clubs lack a record.
+- 2009/10 group (a) stopped at a box "Disk Space Error" (FILE_LLIST::add_node 0x58e340, file_llist.cpp 161) three times. Without France, or without either the French CFA or the CFA 2 list of that season, it starts. The CFA 2 list of 2009/10 is left out (`SKIP_SEASON` in `make_clubs.py`); then the run passes.
+
+Commands (from the repo, `G=/Users/max/Projects/cm0102/clean-3968`, `D=/Users/max/Projects/cm0102/test-fixtures/databases`):
+
+- `python3 tests/seasons/rules_report_check.py --run build/cm0102_recomp $G --year 2010 --database "$D/September 2010 ODB" --nations argentina,australia,belgium,brazil,croatia,denmark,finland,france,germany,greece,holland,italy,japan,northern_ireland,norway --start-only`
+- the same with `--nations all,-argentina,-australia,-belgium,-brazil,-croatia,-denmark,-finland,-france,-germany,-greece,-holland,-italy,-japan,-northern_ireland,-norway`
+- for 2002 no `--database` (the 3.9.68 data of the game folder).
+
+Other checks of 2026-10-17, after the merge of main (slices 11b and 11c):
+
+| Command | Result |
+|---|---|
+| `python3 tests/seasons/season_core_run.py build/cm0102_recomp $G --jobs 3` | PASS: the base game has no names and no club moves; the 2010/11 game renames 29 records and moves clubs, its save holds the database names, it is the same save twice, and the save loads, gives the names again and plays 3 days |
+| `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --jobs 3` | PASS, `season-code-off` equal |
+| the same with `--save prematch.sav`, without `--save` (new game), and `--save yeovil.sav --days 7` | PASS each, `season-code-off` equal |
+| `cd build && ctest` | 17 of 17 pass, `season_names_table` and `season_clubs_table` among them |
 
 ## Open
 
@@ -94,3 +116,6 @@ RESULTS
 - Slice 20: 3. Liga, the single Serie C, the second Greek group, Liga 3, Primera Federación.
 - Slice 21: the Scottish cup entrants, guests and pyramid play-off, and the academy sides of `eng-academy.tsv` (Q336): cup entrants, not divisions.
 - Wembley for a 2003 to 2006 start (slice 11 table 3): not in this slice.
+- The Disk Space Error of 2009/10 with both French lower lists: cause unknown.
+- Slice 11c (`history-0.6.0/no-winner.tsv`): 10 of its 197 rows name a club of `missing.tsv` (Ersboda SK in six databases, Dalkurd FF in four). They become fillable only when the new club records come in.
+- Slice 16 (not on main yet) brings `season_change_rename`. When it is on main, the renames of `season_names_apply` go through that call. Until then a save holds the database names (see Names).
