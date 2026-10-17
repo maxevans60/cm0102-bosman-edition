@@ -111,57 +111,50 @@ const char *season_screen_credit(const char *name)
     return CREDIT_UPDATE_TEAM;
 }
 
-/* ---- Layout (Max's choice of 2026-10-17, layout A: tiles by era) ----
+/* ---- Layout C (Max, Q346): three decade rows, ten columns by the last digit of the start year ----
  *
- * Every number of the layout is in this block, as screen pixels of each display mode, so a change of the
- * look is a change of these tables. The widget create of the game scales classic numbers (800 x 600) to the
- * screen (display.c), so px() and py() turn a pixel of the mode into a classic number first. */
-
-/* A group of tiles under one heading bar: an era (a run of seasons) or the Custom database tile. */
-typedef struct {
-    int era;                        /* SeasonsEra, or -1 for the Custom database */
-    int first, count;               /* the seasons of the group: start years first .. first + count - 1 */
-    int heading;                    /* 0: a second row of an era, with an empty bar */
-} Group;
+ * Every number of the look is in this block, as screen pixels of each display mode (the mockups
+ * docs/research/mockups/2026-10-17-season-screen-c/GridClassic.dc.html and GridWide.dc.html). The widget create
+ * of the game scales classic numbers (800 x 600) to the screen (display.c), so px() and py() turn a pixel of the
+ * mode into a classic number first. Texts use the game's own fonts: each text takes the largest font of its list
+ * that fits its room, measured with the game's text width 0x5e5ad0, and long texts wrap at spaces. */
 
 typedef struct {
-    int w, h;                       /* the screen of the mode */
-    int left, right;                /* the content between the side bar and the right edge */
-    int top, row_gap, group_gap;    /* the first heading bar; the room between rows and between groups */
-    int bar_h, bar_gap;             /* a heading bar and the room under it */
-    int tile_w, tile_h, tile_gap;
-    uint32_t year_font;             /* the font of the season on a tile */
-    int strip_top, strip_h;         /* the strip of the chosen season */
-    int strip_pad, strip_left_w;    /* its inner margin and the width of the column of the year */
-    int version_h, version_w;       /* the version buttons */
-    int link_top, link_h;
-    int bottom_top, bottom_h, start_w;  /* Back and Start */
-    Group rows[4][3];               /* up to 4 rows of up to 3 groups; count 0 ends a row */
+    int w, h;                           /* the screen of the mode */
+    int left, right;                    /* the content between the side bar and the right edge */
+    int grid_x, grid_y;                 /* the first heading bar */
+    int tile_w, tile_h, tile_gap;       /* ten columns of tiles */
+    int bar_h, bar_gap, row_gap;        /* the heading bar of a decade, the room under it and between rows */
+    int star_pad;                       /* the room above the year, where the star sits */
+    int year_h, tag_h, tag_gap;         /* the year line, the tag box and the room between them */
+    int star_r;
+    uint8_t year_fonts[3], title_fonts[3], name_fonts[3], text_fonts[2];
+    int side;                           /* 1: the details are a panel on the right of the grid (widescreen) */
+    int det_x1, det_y1, det_x2, det_y2, pad;   /* the details: the strip (classic) or the panel (widescreen) */
+    int left_w;                         /* classic: the column of the year in the strip */
+    int button_h;                       /* the version and season buttons of the details */
+    int link_y, link_h;
+    int bottom_y, bottom_h, start_w;    /* Back and Start */
 } Layout;
 
 static const Layout layout_classic = {
-    800, 600, 100, 790, 76, 6, 10, 18, 3, 80, 44, 6, 2,
-    366, 132, 12, 140, 22, 132,
-    504, 26,
+    800, 600, 100, 790,
+    100, 66, 64, 60, 5, 20, 3, 10,
+    15, 18, 14, 4, 5,
+    {3, 2, 1}, {7, 6, 4}, {3, 2, 1}, {1, 1},
+    0, 100, 352, 790, 518, 12, 130, 22,
+    524, 26,
     555, 36, 230,
-    {
-        {{SEASONS_ERA_ORIGINAL, 2001, 2, 1}, {SEASONS_ERA_2000S, 2003, 6, 1}},
-        {{SEASONS_ERA_2010S, 2009, 8, 1}},
-        {{SEASONS_ERA_2010S, 2017, 3, 0}, {SEASONS_ERA_EARLY_2020S, 2020, 4, 1}},
-        {{SEASONS_ERA_LEAGUE_PHASE, 2024, 2, 1}, {-1, 0, 2, 1}},
-    },
 };
 
 static const Layout layout_wide = {
-    1280, 800, 160, 1264, 100, 12, 16, 24, 4, 94, 74, 6, 3,
-    440, 196, 20, 220, 30, 220,
-    650, 34,
+    1280, 800, 160, 1264,
+    160, 100, 77, 134, 6, 28, 4, 20,
+    40, 30, 22, 14, 7,
+    {4, 3, 2}, {7, 6, 4}, {4, 3, 2}, {2, 1},
+    1, 1000, 100, 1264, 644, 18, 0, 30,
+    664, 34,
     740, 47, 330,
-    {
-        {{SEASONS_ERA_ORIGINAL, 2001, 2, 1}, {SEASONS_ERA_2000S, 2003, 6, 1}},
-        {{SEASONS_ERA_2010S, 2009, 11, 1}},
-        {{SEASONS_ERA_EARLY_2020S, 2020, 4, 1}, {SEASONS_ERA_LEAGUE_PHASE, 2024, 2, 1}, {-1, 0, 2, 1}},
-    },
 };
 
 static const Layout *lay(void) { return rt_screen_w >= 1280 ? &layout_wide : &layout_classic; }
@@ -170,21 +163,37 @@ static const Layout *lay(void) { return rt_screen_w >= 1280 ? &layout_wide : &la
 static int px(int x) { return x * 800 / (int)lay()->w; }
 static int py(int y) { return y * 600 / (int)lay()->h; }
 
-/* The look of each era (Q166, Q240): the bar colour, a lighter colour for text on the dark strip and the run of
- * seasons. The era names come from seasons_db_era_name (seasons_db.c, Q343): one table for every screen. */
-typedef struct { uint8_t r, g, b; } Rgb;
-typedef struct { Rgb bar, text; const char *range; } EraLook;
-static const EraLook era_look[5] = {
-    {{224, 26, 50}, {255, 122, 138}, "2001/02 to 2002/03"},
-    {{224, 138, 0}, {255, 184, 74}, "2003/04 to 2008/09"},
-    {{44, 154, 68}, {111, 216, 138}, "2009/10 to 2019/20"},
-    {{47, 98, 224}, {142, 170, 255}, "2020/21 to 2023/24"},
-    {{138, 63, 208}, {199, 154, 242}, "From 2024/25"},
-};
-static const Rgb custom_bar = {90, 90, 114};
-static const char *const custom_heading = "Custom database", *const custom_range = "your own folder";
+/* The height in pixels that a line of each font takes (fonts 1 to 7 of the game). */
+static int line_h(uint32_t font)
+{
+    static const int h[8] = {14, 14, 17, 20, 25, 30, 34, 42};
+    return font < 8 ? h[font] : 20;
+}
 
-/* The tags of the tiles (the mockup): text and box colours. */
+typedef struct { uint8_t r, g, b; } Rgb;
+
+/* The decades (Q346): the colour of the bar, a lighter colour for text on the dark details and the run of
+ * seasons. The names come from seasons_db_decade_name (seasons_db.c): one table for every screen. */
+typedef struct { Rgb bar, text; const char *range; } DecadeLook;
+static const DecadeLook decade_look[3] = {
+    {{224, 138, 0}, {255, 184, 74}, "2001/02 to 2009/10"},
+    {{44, 154, 68}, {111, 216, 138}, "2010/11 to 2019/20"},
+    {{47, 98, 224}, {142, 170, 255}, "2020/21 to 2025/26"},
+};
+static const Rgb custom_bar = {138, 138, 160};
+
+/* The European cups of a season, for the details (the mockup's europe()). */
+static const char *europe_text(int y)
+{
+    if (y <= 2002) return "Champions League with two group stages, UEFA Cup, Intertoto Cup";
+    if (y == 2003) return "Champions League, UEFA Cup, Intertoto Cup";
+    if (y <= 2008) return "Champions League, UEFA Cup with groups, Intertoto Cup";
+    if (y <= 2020) return "Champions League, Europa League";
+    if (y <= 2023) return "Champions League, Europa League, Conference League";
+    return "Champions League, Europa League, Conference League, each with a 36-club league phase";
+}
+
+/* The tags of the tiles: text and box colours. */
 typedef struct { const char *text; Rgb box, ink; int boxed; } Tag;
 static const Tag tag_official = {"Official", {217, 168, 0}, {26, 18, 0}, 1};
 static const Tag tag_installed = {"Installed", {42, 154, 68}, {255, 255, 255}, 1};
@@ -194,7 +203,7 @@ static const Tag tag_none = {"No database", {40, 40, 52}, {154, 154, 171}, 0};
 
 static const Rgb yellow_rgb = {245, 224, 0}, navy_rgb = {14, 18, 66}, white_rgb = {255, 255, 255};
 static const Rgb pale_rgb = {214, 220, 255}, grey_text = {138, 138, 156}, greyed_box = {40, 40, 52};
-static const Rgb start_ink = {26, 20, 0}, error_rgb = {255, 120, 100};
+static const Rgb start_ink = {26, 20, 0}, error_rgb = {255, 120, 100}, rule_rgb = {80, 84, 130};
 
 static uint16_t rgb565(Rgb c) { return (uint16_t)(((c.r >> 3) << 11) | ((c.g >> 2) << 5) | (c.b >> 3)); }
 
@@ -354,6 +363,74 @@ static void panel(int x1, int y1, int x2, int y2)
     call_this(AREA_CREATE, display(), 11, a);
 }
 
+/* ---- Texts: the game's own fonts, measured ---- */
+
+#define TEXT_WIDTH 0x5e5ad0u        /* cdecl (font, text): the width in screen pixels (display.c) */
+
+static int text_w(uint32_t font, const char *s)
+{
+    return (int32_t)call(TEXT_WIDTH, 2, (uint32_t[2]){font, text(s)});
+}
+
+/* The first font of the list (largest first) whose text fits width pixels, or the last one. */
+static uint32_t fit_font(const uint8_t *fonts, int n, const char *s, int width)
+{
+    for (int i = 0; i < n; i++)
+        if (fonts[i] && text_w(fonts[i], s) <= width) return fonts[i];
+    return fonts[n - 1];
+}
+
+/* A label in pixels of the mode. flags 1: left, 0xc: centred. */
+static void plabel(int x1, int y1, int x2, int y2, uint32_t flags, uint32_t font, Rgb colour, const char *s)
+{
+    label(px(x1), py(y1), px(x2), py(y2), flags, font, rgb565(colour), s);
+}
+
+/* A text that wraps at spaces into lines of width pixels, from y down. Returns the y below it. At most
+ * max_lines lines; a last line that still does not fit takes the next smaller font (font 1 at the least). */
+static int paragraph(int x, int y, int width, uint32_t font, Rgb colour, const char *s, int max_lines)
+{
+    char line[256], rest[512];
+    snprintf(rest, sizeof rest, "%s", s);
+    int lh = line_h(font);
+    for (int n = 0; rest[0] && n < max_lines; n++) {
+        size_t cut = strlen(rest);
+        if (n < max_lines - 1) {
+            /* the longest run of words that fits */
+            while (cut > 0) {
+                snprintf(line, sizeof line, "%.*s", (int)cut, rest);
+                if (text_w(font, line) <= width) break;
+                char *sp = NULL;
+                for (size_t i = 0; i < cut; i++)
+                    if (rest[i] == ' ') sp = rest + i;
+                if (!sp) break;
+                cut = (size_t)(sp - rest);
+            }
+        }
+        snprintf(line, sizeof line, "%.*s", (int)cut, rest);
+        uint32_t f = font;
+        while (f > 1 && text_w(f, line) > width) f--;
+        plabel(x, y, x + width, y + lh, 1, f, colour, line);
+        y += lh;
+        const char *next = rest + cut;
+        while (*next == ' ') next++;
+        memmove(rest, next, strlen(next) + 1);
+    }
+    return y;
+}
+
+/* A grey button in pixels of the mode. */
+static void pbutton(int x1, int y1, int x2, int y2, uint32_t font, const char *s, uint32_t id, uint32_t data, int on)
+{
+    button(px(x1), py(y1), px(x2), py(y2), font, s, id, data, on);
+}
+
+/* A filled box with no text, in pixels of the mode. */
+static int pbox(int x1, int y1, int x2, int y2, Rgb c)
+{
+    return widget(1, px(x1), py(y1), px(x2), py(y2), 0x30, rgb565(c), 0xc, 1, 0, "", 0, 0);
+}
+
 /* ---- What the runtime draws over the widgets ---- */
 
 typedef enum { MARK_TILE, MARK_BAND } MarkKind;
@@ -424,7 +501,7 @@ void season_screen_widget_drawn(uint32_t w)
     int x2 = (int32_t)rd32(g_mem, w + 0x18), y2 = (int32_t)rd32(g_mem, w + 0x1c);
     uint16_t c = rgb565(m->colour);
     if (m->kind == MARK_BAND) {
-        /* The heading bar: the era colour, fading out towards 85 % of the width. */
+        /* The heading bar: the decade colour, fading out towards 85 % of the width. */
         int w85 = (x2 - x1) * 85 / 100;
         for (int x = x1; x <= x2; x++) {
             int a = x - x1 >= w85 ? 0 : 240 - 240 * (x - x1) / (w85 ? w85 : 1);
@@ -432,17 +509,16 @@ void season_screen_widget_drawn(uint32_t w)
         }
         return;
     }
-    int edge = rt_screen_w >= 1280 ? 3 : 3;
     uint16_t yellow = rgb565(yellow_rgb);
-    fill(&t, x1, y1, x2, y1 + edge - 1, m->chosen ? yellow : c, 256);     /* the top edge */
-    if (m->chosen) {                                                       /* the yellow frame */
+    fill(&t, x1, y1, x2, y1 + 2, m->chosen ? yellow : c, 256);           /* the top edge */
+    if (m->chosen) {                                                     /* the yellow frame */
         fill(&t, x1, y2 - 1, x2, y2, yellow, 256);
         fill(&t, x1, y1, x1 + 1, y2, yellow, 256);
         fill(&t, x2 - 1, y1, x2, y2, yellow, 256);
     }
-    if (m->star) {                                                         /* top right */
-        int r = rt_screen_w >= 1280 ? 8 : 6;
-        star(&t, x2 - r - 3, y1 + edge + r, r);
+    if (m->star) {               /* top right, in the room above the year (Layout star_pad) */
+        int r = lay()->star_r;
+        star(&t, x2 - r - 4, y1 + 3 + r + 2, r);
     }
 }
 
@@ -459,42 +535,56 @@ static Tag status_tag(const SeasonsEntry *s)
     }
 }
 
-/* One tile, in pixels of the mode: a button in the tint of its era, the season and the status tag. The
- * season and the tag are buttons with the same action, so a click anywhere on the tile chooses it. A tile
- * with no database is greyed and takes no click. */
-static void tile(int x1, int y1, int x2, int y2, const char *title, Tag tag, Rgb era, int index, int enabled,
+/* One tile, in pixels of the mode: a button in the tint of its decade with the year, then the status tag. The
+ * year and the tag are buttons with the same action, so a click anywhere on the tile chooses it. A tile with no
+ * database is greyed and takes no click. The star (season_screen_widget_drawn) sits above the year. */
+static uint32_t year_font;          /* one font for the years of all tiles: the largest that fits every year */
+
+static void tile(int x1, int y1, int x2, int y2, const char *title, Tag tag, Rgb colour, int index, int enabled,
                  int is_star, int chosen)
 {
     const Layout *L = lay();
     uint32_t flags = enabled ? 2 : 1, id = enabled ? TILE_ID : 0, data = enabled ? (uint32_t)index : 0;
-    uint16_t fill_c = rgb565(enabled ? mix(era, 80) : greyed_box);
-    uint16_t year_c = rgb565(!enabled ? grey_text : chosen ? yellow_rgb : white_rgb);
-    int w = widget(flags, px(x1), py(y1), px(x2), py(y2), 0x30, fill_c, 0xc, 3, year_c, "", id, data);
-    int mid = y1 + (y2 - y1) * 3 / 5;
-    int t = widget(flags, px(x1 + 3), py(y1 + 6), px(x2 - 3), py(mid), 0x30, fill_c, 0xc, L->year_font, year_c, title,
-                   id, data);
-    int th = (y2 - y1) / 4, tw = tag.boxed ? (x2 - x1) * 3 / 4 : x2 - x1 - 6;
-    int tx = x1 + (x2 - x1 - tw) / 2, ty = mid + (y2 - mid - th) / 2;
-    int g = widget(flags, px(tx), py(ty), px(tx + tw), py(ty + th), 0x30, tag.boxed ? rgb565(tag.box) : fill_c, 0xc, 1,
-                   rgb565(tag.ink), tag.text, id, data);
-    mark(w, t, g, MARK_TILE, enabled ? era : (Rgb){85, 85, 106}, is_star, chosen);
+    uint16_t fill_c = rgb565(enabled ? mix(colour, 80) : greyed_box);
+    Rgb year_rgb = !enabled ? grey_text : chosen ? yellow_rgb : white_rgb;
+    int w = widget(flags, px(x1), py(y1), px(x2), py(y2), 0x30, fill_c, 0xc, 1, 0, "", id, data);
+    int room = x2 - x1 - 6;
+    uint32_t yf = index == CUSTOM_TILE ? fit_font(L->year_fonts, 3, title, room) : year_font;
+    int yy = y1 + L->star_pad;
+    int t = widget(flags, px(x1 + 3), py(yy), px(x2 - 3), py(yy + L->year_h), 0x30, fill_c, 0xc, yf, rgb565(year_rgb),
+                   title, id, data);
+    int ty = yy + L->year_h + L->tag_gap, g;
+    uint32_t tf = fit_font(L->text_fonts, 2, tag.text, room - 8);
+    if (tag.boxed) {
+        int tw = text_w(tf, tag.text) + 10;
+        if (tw > room) tw = room;
+        int tx = x1 + (x2 - x1 - tw) / 2;
+        g = widget(flags, px(tx), py(ty), px(tx + tw), py(ty + L->tag_h), 0x30, rgb565(tag.box), 0xc, tf, rgb565(tag.ink),
+                   tag.text, id, data);
+    } else {
+        /* "No database": one line when it fits, else two lines (the greyed tile has the room). */
+        char two[64];
+        const char *sp = strrchr(tag.text, ' ');
+        if (text_w(tf, tag.text) <= room || !sp) snprintf(two, sizeof two, "%s", tag.text);
+        else snprintf(two, sizeof two, "%.*s\n%s", (int)(sp - tag.text), tag.text, sp + 1);
+        g = widget(1, px(x1 + 2), py(ty), px(x2 - 2), py(y2 - 2), 0x30, fill_c, 0xc, tf, rgb565(tag.ink), two, 0, 0);
+    }
+    mark(w, t, g, MARK_TILE, enabled ? colour : (Rgb){85, 85, 106}, is_star, chosen);
 }
 
-/* A heading bar over a group: the name and the run of seasons, on the era colour that fades out. */
+/* A heading bar: the decade name and the run of seasons, on the decade colour that fades out. */
 static void bar(int x1, int y1, int x2, int y2, Rgb colour, const char *name, const char *range)
 {
+    const Layout *L = lay();
     int w = widget(1, px(x1), py(y1), px(x2), py(y2), 1, 0, 1, 1, 0, "", 0, 0);
     mark(w, -1, -1, MARK_BAND, colour, 0, 0);
-    if (!name) return;
-    /* The widths of the game's fonts 2 and 1, about 8 and 6 pixels for each letter: the range shows only when it
-     * fits after the name, so a narrow group (two tiles in classic) shows the name alone. */
-    int name_w = (int)strlen(name) * 8 + 12, range_w = (int)strlen(range) * 6;
-    label(px(x1 + 6), py(y1), px(x1 + 6 + name_w), py(y2), 1, 2, rgb565(white_rgb), name);
-    if (x1 + 6 + name_w + range_w <= x2)
-        label(px(x1 + 6 + name_w), py(y1), px(x2), py(y2), 1, 1, rgb565(pale_rgb), range);
+    uint32_t nf = L->name_fonts[1], rf = L->text_fonts[0];
+    int name_w = text_w(nf, name) + 14;
+    plabel(x1 + 8, y1, x1 + 8 + name_w, y2, 1, nf, white_rgb, name);
+    plabel(x1 + 8 + name_w, y1, x2, y2, 1, rf, pale_rgb, range);
 }
 
-/* ---- The strip ---- */
+/* ---- The details of the chosen tile ---- */
 
 /* The versions of a season: its own database first, then the versions of seasons_db_scan. */
 typedef struct { const char *name; const char *value; int own; } Version;
@@ -508,7 +598,7 @@ static int versions_of(int index, Version *v, int max)
     return n;
 }
 
-static int folder_name_ok(const char *name);
+static int folder_fault(const char *name);
 static int chosen_version(int sel, int nv);
 
 /* A database name for the player: "Official data 3.9.68" for the data sets. */
@@ -518,127 +608,229 @@ static void db_title(const char *name, char *out, size_t room)
     else snprintf(out, room, "%s", name);
 }
 
-/* A grey button in pixels of the mode. */
-static void pbutton(int x1, int y1, int x2, int y2, uint32_t font, const char *s, uint32_t id, uint32_t data, int on)
+/* What the details show, worked out once for both layouts. */
+typedef struct {
+    int custom, year, ok;
+    char big[32], decade[48], start[40], db[160], credit[160], europe[160];
+    Rgb decade_rgb, top_rgb;
+    const char *row_note;           /* a line in place of the choices: unpack, error or a hint */
+    Rgb row_rgb;
+    int nv, ver, page;
+    Version v[SEASONS_EXTRA_MAX + 1];
+} Details;
+
+static const char *folder_fault_text(int fault)
 {
-    button(px(x1), py(y1), px(x2), py(y2), font, s, id, data, on);
+    return fault == 1 ? "Rename this folder: its name starts or ends with a space."
+                      : "Rename this folder: its name holds a tab or another control character.";
 }
 
-static void plabel(int x1, int y1, int x2, int y2, uint32_t flags, uint32_t font, Rgb colour, const char *s)
+static void details_of(int sel, Details *d)
 {
-    label(px(x1), py(y1), px(x2), py(y2), flags, font, rgb565(colour), s);
-}
-
-/* The strip shows the chosen tile. Returns 1 when Start can start it. */
-static int strip(int sel)
-{
-    const Layout *L = lay();
-    int x1 = L->left, x2 = L->right, y1 = L->strip_top, y2 = L->strip_top + L->strip_h;
+    memset(d, 0, sizeof *d);
     int state = (int)node_slot(4);
-    int custom = sel == CUSTOM_TILE;
-    Rgb era_bar = custom ? custom_bar : sel >= 0 ? era_look[list.season[sel].era].bar : custom_bar;
-    panel(px(x1), py(y1), px(x2), py(y2));
-    widget(1, px(x1), py(y1), px(x2), py(y1 + 3), 0x30, rgb565(era_bar), 0xc, 1, 0, "", 0, 0);   /* the top line */
-    if (sel < 0) {
-        plabel(x1 + L->strip_pad, y1 + L->strip_pad, x2 - L->strip_pad, y1 + L->strip_pad + 30, 1, 3, pale_rgb,
-               "Click a season to see its database.");
-        return 0;
-    }
-    int lx = x1 + L->strip_pad, mx = lx + L->strip_left_w, rx = x2 - L->strip_pad;
-    int line = (L->strip_h - 2 * L->strip_pad) / 5;          /* the rows of the strip */
-    int ty = y1 + L->strip_pad;
-    char a[200], b[200];
-    int ok = 1, year;
-    const char *note = NULL;
-
-    if (custom) {
-        year = (int)node_slot(3);
-        if (year < SEASONS_FIRST || year >= SEASONS_FIRST + SEASONS_COUNT) year = 2025;
-        plabel(lx, ty, mx, ty + 2 * line, 1, 6, yellow_rgb, "Custom");
-        snprintf(a, sizeof a, "Season: %d/%02d", year, (year + 1) % 100);
-        plabel(lx, ty + 2 * line, mx, ty + 3 * line, 1, 2, pale_rgb, a);
+    d->ok = 1;
+    if (sel == CUSTOM_TILE) {
+        d->custom = 1;
+        d->year = (int)node_slot(3);
+        if (d->year < SEASONS_FIRST || d->year >= SEASONS_FIRST + SEASONS_COUNT) d->year = 2025;
+        snprintf(d->big, sizeof d->big, "Custom");
+        snprintf(d->decade, sizeof d->decade, "Season: %d/%02d", d->year, (d->year + 1) % 100);
+        d->decade_rgb = pale_rgb;
+        d->top_rgb = custom_bar;
         int folder = (int)(node_slot(2) % (uint32_t)(list.custom_count ? list.custom_count : 1));
         if (list.custom_count) {
-            dbfolders_label(list.custom[folder], b, 48);
-            plabel(mx, ty, rx, ty + line + line / 2, 1, 3, white_rgb, b);
-            if (!folder_name_ok(list.custom[folder])) {
-                ok = 0;
-                note = "Rename this folder: its name starts or ends with a space.";
-            } else {
-                note = "A folder in Databases. You name its season.";
-            }
+            dbfolders_label(list.custom[folder], d->db, sizeof d->db);
+            int fault = folder_fault(list.custom[folder]);
+            snprintf(d->credit, sizeof d->credit, "%s",
+                     fault ? folder_fault_text(fault) : "A folder in Databases. You name its season.");
+            if (fault) d->ok = 0;
         } else {
-            ok = 0;
-            plabel(mx, ty, rx, ty + line + line / 2, 1, 3, white_rgb, "No folder found");
-            note = "Copy a database folder into Databases in the save folder, then open this screen again.";
+            d->ok = 0;
+            snprintf(d->db, sizeof d->db, "No folder found");
+            snprintf(d->credit, sizeof d->credit,
+                     "Copy a database folder into Databases in the save folder, then open this screen again.");
         }
     } else {
         const SeasonsEntry *s = &list.season[sel];
-        year = s->start_year;
-        Version v[SEASONS_EXTRA_MAX + 1];
-        int nv = versions_of(sel, v, SEASONS_EXTRA_MAX + 1), ver = chosen_version(sel, nv);
-        plabel(lx, ty, mx, ty + 2 * line, 1, 6, yellow_rgb, s->label);
-        snprintf(a, sizeof a, "%s era", seasons_db_era_name(s->era));
-        plabel(lx, ty + 2 * line, mx, ty + 3 * line, 1, 2, era_look[s->era].text, a);
-        db_title(nv ? v[ver].name : "No database", b, sizeof b);
-        plabel(mx, ty, rx, ty + line + line / 2, 1, 3, white_rgb, b);
-        if (nv) note = season_screen_credit(v[ver].name);
-        if (!nv || s->status == SEASONS_NO_DATABASE || (s->status == SEASONS_MISSING && v[ver].own)) ok = 0;
+        d->year = s->start_year;
+        d->nv = versions_of(sel, d->v, SEASONS_EXTRA_MAX + 1);
+        d->ver = chosen_version(sel, d->nv);
+        d->page = (int)node_slot(5);
+        snprintf(d->big, sizeof d->big, "%s", s->label);
+        snprintf(d->decade, sizeof d->decade, "%s", seasons_db_decade_name(s->decade));
+        d->decade_rgb = decade_look[s->decade].text;
+        d->top_rgb = decade_look[s->decade].bar;
+        db_title(d->nv ? d->v[d->ver].name : "No database", d->db, sizeof d->db);
+        if (d->nv) snprintf(d->credit, sizeof d->credit, "%s", season_screen_credit(d->v[d->ver].name));
+        if (!d->nv || s->status == SEASONS_NO_DATABASE || (s->status == SEASONS_MISSING && d->v[d->ver].own)) d->ok = 0;
+        if (d->nv < 2)
+            d->row_note = s->status == SEASONS_IN_DOWNLOAD ? "The first start unpacks this database into Databases."
+                          : s->status == SEASONS_MISSING   ? "This database is not in this game folder."
+                                                           : "Other versions show here once you add them to Databases.";
+        d->row_rgb = pale_rgb;
     }
-    snprintf(a, sizeof a, "Starts July %d", year);
-    plabel(lx, ty + 3 * line, mx, ty + 4 * line, 1, 1, pale_rgb, a);
-    if (note) plabel(mx, ty + line + line / 2, rx, ty + 2 * line + line / 2, 1, 1, pale_rgb, note);
-
-    /* The row of choices: the unpack, an error, the versions or the Custom choices. */
-    int cy = ty + 3 * line - L->version_h / 4, ch = L->version_h;
+    snprintf(d->start, sizeof d->start, "Starts July %d", d->year);
+    snprintf(d->europe, sizeof d->europe, "%s", europe_text(d->year));
     if (state == 1) {
-        snprintf(a, sizeof a, "Unpacking %d/%02d into Databases. This takes a few seconds.", year, (year + 1) % 100);
-        plabel(mx, cy, rx, cy + ch, 1, 2, yellow_rgb, a);
-        return 0;
+        static char unpack[120];
+        snprintf(unpack, sizeof unpack, "Unpacking %d/%02d into Databases. This takes a few seconds.", d->year,
+                 (d->year + 1) % 100);
+        d->row_note = unpack;
+        d->row_rgb = yellow_rgb;
+        d->ok = 0;
+    } else if (state == 2) {
+        d->row_note = error_text;
+        d->row_rgb = error_rgb;
     }
-    if (state == 2) {
-        plabel(mx, cy, rx, cy + ch, 1, 2, error_rgb, error_text);
-        return ok;
+}
+
+/* The Custom choices: Season < 2010/11 > and Next folder, from x on a row at y. */
+static void custom_choices(const Details *d, int x, int y, int x2)
+{
+    const Layout *L = lay();
+    int h = L->button_h, f = L->text_fonts[0];
+    char a[16];
+    snprintf(a, sizeof a, "%d/%02d", d->year, (d->year + 1) % 100);
+    int lw = text_w(f, "Season:") + 10, yw = text_w(f, a) + 16;
+    plabel(x, y, x + lw, y + h, 1, f, pale_rgb, "Season:");
+    x += lw;
+    pbutton(x, y, x + h, y + h, f, "<", CUSTOM_YEAR_ID, 0, d->year > SEASONS_FIRST);
+    plabel(x + h, y, x + h + yw, y + h, 0xc, f, yellow_rgb, a);
+    pbutton(x + h + yw, y, x + 2 * h + yw, y + h, f, ">", CUSTOM_YEAR_ID, 1, d->year < SEASONS_FIRST + SEASONS_COUNT - 1);
+    x += 2 * h + yw + 12;
+    int nw = text_w(f, "Next folder") + 20;
+    if (list.custom_count > 1 && x + nw <= x2) pbutton(x, y, x + nw, y + h, f, "Next folder", FOLDER_ID, 0, 1);
+}
+
+/* One version button: the chosen one is a yellow framed label. */
+static void version_button(const Details *d, int i, int x1, int y1, int x2, int y2, uint32_t font)
+{
+    char t[80];
+    db_title(d->v[i].name, t, sizeof t);
+    if (i == d->ver)
+        widget(1, px(x1), py(y1), px(x2), py(y2), 0x221, rgb565(yellow_rgb), 0xc, font, rgb565(yellow_rgb), t, 0, 0);
+    else
+        pbutton(x1, y1, x2, y2, font, t, VERSION_ID, (uint32_t)i, 1);
+}
+
+/* Classic: the strip below the grid. Two columns: the year, the decade and the start; the database, the
+ * credit, Europe and the versions. */
+static void details_strip(const Details *d)
+{
+    const Layout *L = lay();
+    int x1 = L->det_x1, y1 = L->det_y1, x2 = L->det_x2, y2 = L->det_y2, p = L->pad;
+    panel(px(x1), py(y1), px(x2), py(y2));
+    pbox(x1, y1, x2, y1 + 3, d->top_rgb);
+    int lx = x1 + p + 4, rx = lx + L->left_w + 20, ex = x2 - p, y = y1 + p;
+    uint32_t bf = fit_font(L->title_fonts, 3, d->big, L->left_w);
+    plabel(lx, y, lx + L->left_w, y + line_h(bf), 1, bf, yellow_rgb, d->big);
+    int ly = y + line_h(bf) + 2;
+    plabel(lx, ly, lx + L->left_w, ly + line_h(2), 1, fit_font((uint8_t[]){2, 1}, 2, d->decade, L->left_w),
+           d->decade_rgb, d->decade);
+    ly += line_h(2) + 8;
+    plabel(lx, ly, lx + L->left_w, ly + line_h(1), 1, 1, pale_rgb, d->start);
+
+    int width = ex - rx;
+    uint32_t df = fit_font(L->name_fonts, 3, d->db, width);
+    plabel(rx, y, ex, y + line_h(df), 1, df, white_rgb, d->db);
+    y += line_h(df);
+    y = paragraph(rx, y, width, 1, pale_rgb, d->credit, 2);
+    if (!d->custom) {
+        int ew = text_w(1, "Europe:") + 8;
+        plabel(rx, y + 2, rx + ew, y + 2 + line_h(1), 1, 1, pale_rgb, "Europe:");
+        y = paragraph(rx + ew, y + 2, width - ew, 1, white_rgb, d->europe, 2);
     }
-    int bx = mx + (L->w >= 1280 ? 80 : 60), bw = L->version_w, gap = L->tile_gap;
-    if (custom) {
-        plabel(mx, cy, bx, cy + ch, 1, 1, pale_rgb, "Season:");
-        pbutton(bx, cy, bx + ch, cy + ch, 2, "<", CUSTOM_YEAR_ID, 0, year > SEASONS_FIRST);
-        snprintf(a, sizeof a, "%d/%02d", year, (year + 1) % 100);
-        plabel(bx + ch, cy, bx + ch + bw / 2, cy + ch, 0xc, 2, yellow_rgb, a);
-        pbutton(bx + ch + bw / 2, cy, bx + 2 * ch + bw / 2, cy + ch, 2, ">", CUSTOM_YEAR_ID, 1,
-                year < SEASONS_FIRST + SEASONS_COUNT - 1);
-        if (list.custom_count > 1)
-            pbutton(bx + 2 * ch + bw / 2 + 2 * gap, cy, bx + 2 * ch + bw / 2 + 2 * gap + bw, cy + ch, 2, "Next folder",
-                    FOLDER_ID, 0, 1);
-        return ok;
+    y += 6;
+    int h = L->button_h;
+    if (d->row_note) {
+        paragraph(rx, y, width, 1, d->row_rgb, d->row_note, 2);
+        return;
     }
-    const SeasonsEntry *s = &list.season[sel];
-    Version v[SEASONS_EXTRA_MAX + 1];
-    int nv = versions_of(sel, v, SEASONS_EXTRA_MAX + 1), ver = chosen_version(sel, nv);
-    if (nv < 2) {
-        const char *t = s->status == SEASONS_IN_DOWNLOAD ? "The first start unpacks this database into Databases."
-                        : s->status == SEASONS_MISSING ? "This database is not in this game folder."
-                                                       : "Other versions of this season show here once you add them "
-                                                         "to Databases.";
-        plabel(mx, cy, rx, cy + ch, 1, 1, pale_rgb, t);
-        return ok;
+    if (d->custom) {
+        custom_choices(d, rx, y, ex);
+        return;
     }
-    plabel(mx, cy, bx, cy + ch, 1, 1, pale_rgb, "Version:");
-    int fit = (rx - bx + gap) / (bw + gap), page = (int)node_slot(5);
-    int per = nv > fit ? fit - 1 : nv;
-    if (per < 1) per = 1;
-    if (page < 0 || page * per >= nv) page = 0;
-    int x = bx;
-    for (int i = page * per, k = 0; i < nv && k < per; i++, k++, x += bw + gap) {
+    int vw = text_w(1, "Version:") + 8;
+    plabel(rx, y, rx + vw, y + h, 1, 1, pale_rgb, "Version:");
+    int x = rx + vw, per = d->nv, page = d->page;
+    /* As many buttons as fit; with more, the last place pages on. */
+    int widths[SEASONS_EXTRA_MAX + 1], total = 0;
+    for (int i = 0; i < d->nv; i++) {
         char t[80];
-        db_title(v[i].name, t, sizeof t);
-        if (i == ver) widget(1, px(x), py(cy), px(x + bw), py(cy + ch), 0x221, rgb565(yellow_rgb), 0xc, 1,
-                             rgb565(yellow_rgb), t, 0, 0);
-        else pbutton(x, cy, x + bw, cy + ch, 1, t, VERSION_ID, (uint32_t)i, 1);
+        db_title(d->v[i].name, t, sizeof t);
+        widths[i] = text_w(1, t) + 18;
+        total += widths[i] + 6;
     }
-    if (per < nv) pbutton(x, cy, x + bw, cy + ch, 1, "More versions", PAGE_ID, 0, 1);
-    return ok;
+    if (x + total > ex) per = 2;
+    if (page < 0 || page * per >= d->nv) page = 0;
+    for (int i = page * per, k = 0; i < d->nv && k < per; i++, k++) {
+        version_button(d, i, x, y, x + widths[i], y + h, 1);
+        x += widths[i] + 6;
+    }
+    if (per < d->nv) pbutton(x, y, x + text_w(1, "More versions") + 18, y + h, 1, "More versions", PAGE_ID, 0, 1);
+}
+
+/* Widescreen: the panel on the right of the grid, with the versions stacked. */
+static void details_panel(const Details *d)
+{
+    const Layout *L = lay();
+    int x1 = L->det_x1, y1 = L->det_y1, x2 = L->det_x2, y2 = L->det_y2, p = L->pad;
+    panel(px(x1), py(y1), px(x2), py(y2));
+    pbox(x1, y1, x2, y1 + 4, d->top_rgb);
+    int x = x1 + p, w = x2 - x1 - 2 * p, y = y1 + p, ex = x + w;
+    uint32_t bf = fit_font(L->title_fonts, 3, d->big, w);
+    plabel(x, y, ex, y + line_h(bf), 1, bf, yellow_rgb, d->big);
+    y += line_h(bf) + 4;
+    plabel(x, y, ex, y + line_h(3), 1, fit_font((uint8_t[]){3, 2}, 2, d->decade, w), d->decade_rgb, d->decade);
+    y += line_h(3);
+    plabel(x, y, ex, y + line_h(2), 1, 2, pale_rgb, d->start);
+    y += line_h(2) + 8;
+    pbox(x, y, ex, y + 1, rule_rgb);
+    y += 8;
+    plabel(x, y, ex, y + line_h(1), 1, 1, pale_rgb, "Database");
+    y += line_h(1);
+    uint32_t df = fit_font(L->name_fonts, 3, d->db, w);
+    y = paragraph(x, y, w, df, white_rgb, d->db, 2);
+    y = paragraph(x, y, w, 2, pale_rgb, d->credit, 3) + 6;
+    int h = L->button_h;
+    if (d->row_note) {
+        y = paragraph(x, y, w, 2, d->row_rgb, d->row_note, 3) + 6;
+    } else if (d->custom) {
+        custom_choices(d, x, y, ex);
+        y += h + 6;
+        if (list.custom_count > 1 && x + 300 > ex) {
+            /* the Next folder button goes on its own row when the row above has no room */
+            int nw = text_w(2, "Next folder") + 20;
+            pbutton(x, y, x + nw, y + h, 2, "Next folder", FOLDER_ID, 0, 1);
+            y += h + 6;
+        }
+    } else {
+        plabel(x, y, ex, y + line_h(1), 1, 1, pale_rgb, "Version");
+        y += line_h(1) + 2;
+        int max = (y2 - p - 120 - y) / (h + 6), page = d->page;
+        if (max < 1) max = 1;
+        int per = d->nv > max ? max - 1 : d->nv;
+        if (per < 1) per = 1;
+        if (page < 0 || page * per >= d->nv) page = 0;
+        for (int i = page * per, k = 0; i < d->nv && k < per; i++, k++) {
+            char t[80];
+            db_title(d->v[i].name, t, sizeof t);
+            version_button(d, i, x, y, ex, y + h, fit_font((uint8_t[]){2, 1}, 2, t, w - 12));
+            y += h + 6;
+        }
+        if (per < d->nv) {
+            pbutton(x, y, ex, y + h, 2, "More versions", PAGE_ID, 0, 1);
+            y += h + 6;
+        }
+    }
+    if (d->custom) return;
+    y += 4;
+    pbox(x, y, ex, y + 1, rule_rgb);
+    y += 8;
+    plabel(x, y, ex, y + line_h(1), 1, 1, pale_rgb, "Europe");
+    y += line_h(1);
+    paragraph(x, y, w, 2, white_rgb, d->europe, 4);
 }
 
 /* ---- Build and input ---- */
@@ -661,53 +853,68 @@ static void season_build(void)
 
     int sel = (int)node_slot(0) - 1;
     if (sel < -1 || sel >= TILES) sel = -1;
-    int y = L->top;
-    for (int r = 0; r < 4 && L->rows[r][0].count; r++) {
-        int x = L->left;
-        for (int g = 0; g < 3 && L->rows[r][g].count; g++) {
-            const Group *G = &L->rows[r][g];
-            int custom = G->era < 0;
-            int tiles = custom ? 1 : G->count;
-            int width = custom ? G->count * L->tile_w + (G->count - 1) * L->tile_gap
-                               : tiles * L->tile_w + (tiles - 1) * L->tile_gap;
-            Rgb colour = custom ? custom_bar : era_look[G->era].bar;
-            bar(x, y, x + width - 1, y + L->bar_h, colour,
-                !G->heading ? NULL : custom ? custom_heading : seasons_db_era_name((SeasonsEra)G->era),
-                custom ? custom_range : era_look[G->era].range);
-            int ty = y + L->bar_h + L->bar_gap;
-            if (custom) {
-                char tag[40];
-                snprintf(tag, sizeof tag, list.custom_count == 1 ? "1 folder" : "%d folders", list.custom_count);
-                Tag t = tag_included;
-                t.text = tag;
-                tile(x, ty, x + width - 1, ty + L->tile_h, "Custom", t, custom_bar, CUSTOM_TILE, 1, 0, sel == CUSTOM_TILE);
-            } else {
-                for (int k = 0; k < tiles; k++) {
-                    int i = G->first - SEASONS_FIRST + k, tx = x + k * (L->tile_w + L->tile_gap);
-                    if (i < 0 || i >= SEASONS_COUNT) continue;
-                    const SeasonsEntry *s = &list.season[i];
-                    tile(tx, ty, tx + L->tile_w - 1, ty + L->tile_h, s->label, status_tag(s), era_look[s->era].bar, i,
-                         s->status != SEASONS_NO_DATABASE, starred[i], sel == i);
-                }
-            }
-            x += width + L->group_gap;
+    int grid_w = 10 * L->tile_w + 9 * L->tile_gap;
+    year_font = L->year_fonts[2];
+    for (int f = 0; f < 3; f++) {
+        int fits = 1;
+        for (int i = 0; i < SEASONS_COUNT && fits; i++) fits = text_w(L->year_fonts[f], list.season[i].label) <= L->tile_w - 16;
+        if (fits) {
+            year_font = L->year_fonts[f];
+            break;
         }
-        y += L->bar_h + L->bar_gap + L->tile_h + L->row_gap;
+    }
+    for (int dec = 0; dec < 3; dec++) {
+        int y = L->grid_y + dec * (L->bar_h + L->bar_gap + L->tile_h + L->row_gap);
+        bar(L->grid_x, y, L->grid_x + grid_w - 1, y + L->bar_h, decade_look[dec].bar,
+            seasons_db_decade_name((SeasonsDecade)dec), decade_look[dec].range);
+        int ty = y + L->bar_h + L->bar_gap;
+        for (int col = 0; col < 10; col++) {
+            int year = 2000 + 10 * dec + col, i = year - SEASONS_FIRST;
+            if (i < 0 || i >= SEASONS_COUNT) continue;          /* 2000/01 and the cells after 2025/26 */
+            const SeasonsEntry *s = &list.season[i];
+            int tx = L->grid_x + col * (L->tile_w + L->tile_gap);
+            tile(tx, ty, tx + L->tile_w - 1, ty + L->tile_h, s->label, status_tag(s), decade_look[dec].bar, i,
+                 s->status != SEASONS_NO_DATABASE, starred[i], sel == i);
+        }
+        if (dec == 2) {                     /* the Custom database fills the free cells after 2025/26 */
+            int col = SEASONS_FIRST + SEASONS_COUNT - 2020;
+            int tx = L->grid_x + col * (L->tile_w + L->tile_gap);
+            char tag[40];
+            snprintf(tag, sizeof tag, list.custom_count == 1 ? "1 folder" : "%d folders", list.custom_count);
+            Tag t = tag_included;
+            t.text = tag;
+            tile(tx, ty, L->grid_x + grid_w - 1, ty + L->tile_h, "Custom database", t, custom_bar, CUSTOM_TILE, 1, 0,
+                 sel == CUSTOM_TILE);
+        }
     }
 
-    int ok = strip(sel);
-    int link_w = L->w >= 1280 ? 300 : 200;
-    plabel(L->left + 4, L->link_top, L->right - link_w - 8, L->link_top + L->link_h, 1, 1, pale_rgb,
-           "More versions of each season are on the Update Team's forum.");
-    pbutton(L->right - link_w, L->link_top, L->right, L->link_top + L->link_h, 2, "Open champman0102.co.uk", LINK_ID,
-            0, 1);
+    Details d;
+    memset(&d, 0, sizeof d);
+    int ok = 0;
+    if (sel >= 0) {
+        details_of(sel, &d);
+        ok = d.ok;
+        if (L->side) details_panel(&d);
+        else details_strip(&d);
+    } else {
+        panel(px(L->det_x1), py(L->det_y1), px(L->det_x2), py(L->det_y2));
+        paragraph(L->det_x1 + L->pad, L->det_y1 + L->pad, L->det_x2 - L->det_x1 - 2 * L->pad, 2, pale_rgb,
+                  "Click a season to see its database.", 2);
+    }
+
+    const char *more = "More versions of each season are on the Update Team's forum.", *open = "Open champman0102.co.uk";
+    uint32_t lf = L->text_fonts[0];
+    int link_w = text_w(lf, open) + 24;
+    plabel(L->left + 4, L->link_y, L->right - link_w - 8, L->link_y + L->link_h, 1,
+           fit_font(L->text_fonts, 2, more, L->right - link_w - 12 - L->left), pale_rgb, more);
+    pbutton(L->right - link_w, L->link_y, L->right, L->link_y + L->link_h, lf, open, LINK_ID, 0, 1);
 
     /* Back, and the yellow Start button of the chosen season. */
-    int by = L->bottom_top, bh = L->bottom_h, sx = L->right - L->start_w;
+    int by = L->bottom_y, bh = L->bottom_h, sx = L->right - L->start_w;
     pbutton(L->left, by, sx - 4, by + bh, 3, "Back", BACK_ID, 0, 1);
     char start[40];
     int state = (int)node_slot(4);
-    int year = sel == CUSTOM_TILE ? (int)node_slot(3) : sel >= 0 ? SEASONS_FIRST + sel : 0;
+    int year = sel == CUSTOM_TILE ? (sel >= 0 ? d.year : 0) : sel >= 0 ? SEASONS_FIRST + sel : 0;
     if (state == 1) snprintf(start, sizeof start, "Please wait");
     else if (year) snprintf(start, sizeof start, "Start %d/%02d", year, (year + 1) % 100);
     else snprintf(start, sizeof start, "Start");
@@ -717,7 +924,7 @@ static void season_build(void)
     else
         widget(1, px(sx), py(by), px(L->right), py(by + bh), 0x30, colour16(BUTTON_GREY), 0x2c, 3,
                colour16(TEXT_LIGHT), start, 0, 0);
-    fprintf(stderr, "recomp: choose season built, tile %d\n", sel + 1);
+    fprintf(stderr, "recomp: choose season built, tile %d, year font %u\n", sel + 1, year_font);
     rt_ret_cdecl(0);
 }
 
@@ -729,17 +936,15 @@ static void choose_select(int tile_index)
     set_slot(5, 0);
 }
 
-/* Starts the choice: the options database and season, and the season of the next new game. Returns 1 when
- * the screen goes back to Setup Game, 0 when it shows an error. */
-/* 1 when the option database can hold the folder name as it is: options.c trims spaces at the ends of a value
- * and a line cannot hold a control byte, so such a folder would start another data set. */
-static int folder_name_ok(const char *name)
+/* Why the option database cannot hold the folder name as it is: 0 it can, 1 a space at the start or the end
+ * (options.c trims a value), 2 a tab or another control character (a line of settings.txt cannot hold it). */
+static int folder_fault(const char *name)
 {
     size_t n = strlen(name);
-    if (!n || name[0] == ' ' || name[n - 1] == ' ' || name[0] == '\t' || name[n - 1] == '\t') return 0;
     for (size_t i = 0; i < n; i++)
-        if ((unsigned char)name[i] < 0x20 || name[i] == 0x7f) return 0;
-    return 1;
+        if ((unsigned char)name[i] < 0x20 || name[i] == 0x7f) return 2;
+    if (!n || name[0] == ' ' || name[n - 1] == ' ') return 1;
+    return 0;
 }
 
 /* The version index of the strip, checked against the versions of the tile. */
@@ -749,6 +954,8 @@ static int chosen_version(int sel, int nv)
     return sel >= 0 && sel < SEASONS_COUNT && ver >= 0 && ver < nv ? ver : 0;
 }
 
+/* Starts the choice: the options database and season, and the season of the next new game. Returns 1 when
+ * the screen goes back to Setup Game, 0 when it shows an error. */
 static int choose_apply(void)
 {
     int sel = (int)node_slot(0) - 1;
@@ -759,8 +966,8 @@ static int choose_apply(void)
         year = (int)node_slot(3);
         if (year < SEASONS_FIRST || year >= SEASONS_FIRST + SEASONS_COUNT) year = 2025;
         const char *name = list.custom[node_slot(2) % (uint32_t)list.custom_count];
-        if (!folder_name_ok(name)) {
-            snprintf(error_text, sizeof error_text, "Rename this folder: its name starts or ends with a space.");
+        if (folder_fault(name)) {
+            snprintf(error_text, sizeof error_text, "%s", folder_fault_text(folder_fault(name)));
             return 0;
         }
         snprintf(value, sizeof value, "folder:%s", name);
@@ -794,8 +1001,8 @@ static int choose_apply(void)
     }
     char season_word[16];
     snprintf(season_word, sizeof season_word, "%d/%02d", year, (year + 1) % 100);
-    if (!strncmp(value, "folder:", 7) && !folder_name_ok(value + 7)) {
-        snprintf(error_text, sizeof error_text, "Rename this folder: its name starts or ends with a space.");
+    if (!strncmp(value, "folder:", 7) && folder_fault(value + 7)) {
+        snprintf(error_text, sizeof error_text, "%s", folder_fault_text(folder_fault(value + 7)));
         return 0;
     }
     int a = options_set(OPT_DATABASE, value), b = options_set(OPT_SEASON, season_word);

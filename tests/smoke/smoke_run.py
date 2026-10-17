@@ -5,6 +5,7 @@ Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
+        [--ref-050 <0.5.0 program>]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -216,10 +217,12 @@ SAME_SAVE_RUNS = [
     ("season-code-off", {"faster_days": "off", "_env": {"RECOMP_SEASON_CODE": "off"}}),
 ]
 
-# With --ref-build: the Setup Game text of 0.5.0 (test variable RECOMP_SETUP_TEXT=0.5.0) and the season code off
-# give the save of the reference build, so the new Setup Game text is the only thing that moves memory (Q342).
-# Use the 0.5.0 build as the reference for this run. Compared with ref-build, not with normal.
-TEXT_050_RUN = ("text-0.5.0", {"faster_days": "off", "_against": "ref-build",
+# --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this
+# build with the Setup Game text of 0.5.0 (test variable RECOMP_SETUP_TEXT=0.5.0) and the season code off. Its
+# save must equal the save of ref-0.5.0, so the new Setup Game text is the only thing that moves memory.
+# ref-0.5.0 itself is not compared with normal. --ref-build stays free for the main build.
+REF_050 = None
+TEXT_050_RUN = ("text-0.5.0", {"faster_days": "off", "_against": "ref-0.5.0",
                                "_env": {"RECOMP_SETUP_TEXT": "0.5.0", "RECOMP_SEASON_CODE": "off"}})
 
 # The match check (--match): the steps after the load of prematch.sav (fixtures.LOAD_STEPS), positions
@@ -339,8 +342,9 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     the part (0.6.0 slice 11: rules-on of a new game has the season part)."""
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
-        if text_050:
-            runs.append((TEXT_050_RUN[0], dict(runs[0][1], **TEXT_050_RUN[1])))
+    if REF_050 and text_050:
+        runs = list(runs) + [("ref-0.5.0", dict(runs[0][1], _program=REF_050, _against="")),
+                             (TEXT_050_RUN[0], dict(runs[0][1], **TEXT_050_RUN[1]))]
     against = {name: options.get("_against") for name, options in runs}
 
     def play(name, options, work):
@@ -401,6 +405,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 failed += 1
                 print(f"FAIL  {name}: the save has no part {required[name]}")
                 continue
+            if against.get(name) == "":
+                continue                                    # a reference run for another run (ref-0.5.0)
             base = against.get(name) or first
             if open(saves[name], "rb").read() == open(saves[base], "rb").read():
                 print(f"ok    {name}: the save is the same as {base}")
@@ -409,7 +415,7 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
             differ = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
             ok_parts = allowed.get(name, ()) if isinstance(allowed, dict) else allowed
             if differ and set(differ) <= set(ok_parts):
-                print(f"ok    {name}: the save differs from {first} only in accepted parts: {', '.join(differ)}")
+                print(f"ok    {name}: the save differs from {base} only in accepted parts: {', '.join(differ)}")
                 continue
             failed += 1
             print(f"FAIL  {name}: the save differs from {base} in: {', '.join(differ) or 'the file header'}")
@@ -539,9 +545,11 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
-    global REF_BUILD
+    global REF_BUILD, REF_050
     if "--ref-build" in argv[3:]:
         REF_BUILD = os.path.abspath(argv[argv.index("--ref-build") + 1])
+    if "--ref-050" in argv[3:]:
+        REF_050 = os.path.abspath(argv[argv.index("--ref-050") + 1])
     mode = "classic"
     if "--mode" in argv[3:]:
         mode = argv[argv.index("--mode") + 1]

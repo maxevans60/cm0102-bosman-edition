@@ -78,8 +78,9 @@ RT_WRAP(005ed300, menu_build)
         }
         fill_item(item, text, SEASON_ID);
         fill_item(item + ITEM_SIZE, "Bosman Edition Options", OPTIONS_ID);
-        fill_item(item + 2 * ITEM_SIZE, season_screen_rules_on() ? "Changing rules: On" : "Changing rules: Off",
-                  RULES_ID);
+        /* RECOMP_SEASON_CODE=off: changing rules stay off (season.c), so the item says so and does nothing. */
+        fill_item(item + 2 * ITEM_SIZE,
+                  season_code_on() && season_screen_rules_on() ? "Changing rules: On" : "Changing rules: Off", RULES_ID);
         wr32(g_mem, cpu.esp + 4 + 4 * 7, 12);
     }
     o_005ed300();
@@ -102,6 +103,10 @@ RT_WRAP(0081bd70, setup_input)
         return;
     }
     if (id == RULES_ID) {
+        if (!season_code_on()) {
+            rt_ret_cdecl(0);
+            return;
+        }
         season_screen_toggle_rules();
         season_set_new_game(season_start_year(), season_screen_rules_choice());
         fprintf(stderr, "recomp: changing rules of the next new game: %s\n", season_screen_rules_on() ? "on" : "off");

@@ -35,7 +35,6 @@ import concurrent.futures
 import os
 import re
 import shutil
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -53,12 +52,13 @@ MAKE = os.path.join(ROOT, "tools", "release", "make_season_zips.py")
 # Classic positions (800 x 600). Setup Game: the Choose Season item, the cell after Web Sites. The screen:
 # the tiles (season_screen.c layout) and the Choose button of the strip.
 SETUP_SEASON = "click 613 437"
-TILE = {2001: (140, 119), 2002: (226, 119), 2003: (316, 119), 2010: (226, 190), 2021: (488, 261),
-        2025: (226, 332)}
+# Layout C (Q346): a decade per row, a column per last digit of the start year: x = 132 + 69 * digit,
+# y = 89 + 93 * row.
+TILE = {2001: (201, 89), 2002: (270, 89), 2003: (339, 89), 2010: (132, 182), 2021: (201, 275), 2025: (477, 275)}
 CHOOSE = "click 675 573"                    # Start <season>, the yellow button
-CUSTOM_TILE = "click 358 332"
-NEXT_FOLDER = "click 500 447"
-EARLIER = "click 323 447"
+CUSTOM_TILE = "click 649 275"
+NEXT_FOLDER = "click 470 415"
+EARLIER = "click 327 415"
 CUSTOM_FOLDERS = ("A Custom", "B Custom")
 # year: (database value, zip to make or None)
 RUNS = {2002: ("3.9.68", None), 2003: ("folder:October 2003", "October 2003"),
@@ -90,7 +90,7 @@ def custom_steps():
 
 
 def play_custom(program, game, work, zips):
-    """The custom run: its user folder gets the two Custom folders first, then core.play's settings."""
+    """The custom run: its user folder gets the two Custom folders first, then the settings of core.play."""
     run = os.path.join(work, "custom")
     user, home, shots = (os.path.join(run, d) for d in ("user", "home", "shots"))
     sources = (os.path.join(game, "Data"), os.path.join(os.path.dirname(zips), "April 2022"))
