@@ -62,5 +62,7 @@ Merge danger: two-way door. Blast radius: agents may trust a wrong name. The mod
 Blocked by: 2
 Delivers: Opus names for one source file on the subscription, following the README.
 Merge danger: two-way door. Blast radius: one file's names.
-- [ ] Every function of the file has a sweep row.
-- [ ] The proven functions of the file agree, or the doc says why not.
+- [x] Every function of the file has a sweep row.
+- [x] The proven functions of the file agree, or the doc says why not.
+
+Done (2026-10-17): the sweep ran over every file in 39 runs (league, cup, hubs, t1a, t1b and w03 to w31 on Opus, lib-a and lib-b on Sonnet). Max chose Sonnet for the 250 library functions without asserts on 2026-10-17. Every row of `names.tsv` is now opus (6,613) or sonnet (250). The estimate doc `docs/research/2026-10-16-function-map-estimate.md` records the cited-function checks of every wave under "Sweeps". The next steps are a review pass of the medium and low names, the shared stubs and the false entries, then a data map of the globals as a new spec.
