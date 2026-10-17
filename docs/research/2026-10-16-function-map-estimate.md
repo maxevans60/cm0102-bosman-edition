@@ -1946,6 +1946,35 @@ Quote kinds of the 33 raised rows: global 20, caller 11, string 2. Most global q
 
 The checkers took 1,119,347 tokens, about 5,680 per row, and 1 to 5 minutes each. There is no rename table, because the wave has no rename.
 
+#### Confidence c05 (2026-10-17)
+
+Run `conf-c05`: 6 Sonnet checkers worked from short packs on the 155 rows of batches conf-c05-aa to conf-c05-af (staff contract, staff records, staff screens, Swedish, tactics, training, transfer, Turkish, American, utils, virtual staff, world cup qualifying, weather, Welsh, world club and year award rows). Agree 135, fix 20, rename 0. There were no renames and no global conflicts, so the third check had no input and did not run. 20 rows were written.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 155 |
+| Rows raised to high | 20 (12.9%) |
+| Rows with a new name | 0 |
+| Globals found wrong | 0 |
+| Total tokens of the wave | 695,699 |
+
+Quote kinds of the 20 raised rows: global 16, caller 3, string 1. The global quotes are competition, nation and club key ids, the contract date limits and the FIFA transfer rule flag. Every checker checked each global it quoted, and none was wrong. So `conf-c05-g` lowers no global and no row. Confidence in `names.tsv` is now 5,655 high, 1,180 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c05-aa | 22 | 8 | 116,434 |
+| Checker | Sonnet | conf-c05-ab | 30 | 1 | 108,560 |
+| Checker | Sonnet | conf-c05-ac | 30 | 0 | 112,297 |
+| Checker | Sonnet | conf-c05-ad | 30 | 2 | 129,562 |
+| Checker | Sonnet | conf-c05-ae | 24 | 4 | 120,657 |
+| Checker | Sonnet | conf-c05-af | 19 | 5 | 108,189 |
+
+The checkers took 695,699 tokens, about 4,490 per row, and 1 to 2 minutes each.
+
+#### End result of waves c01 to c05 (2026-10-17)
+
+The five waves checked all 956 rows with new evidence. 198 rows reached high (c01 43, c02 45 after the revert, c03 57, c04 33, c05 20), and 5 rows have a new name. No global was found wrong. The waves took 5,280,830 tokens in all, under the plan's 7 to 8 million, because c02 to c05 ran on Sonnet. Confidence in `names.tsv` went from 5,457 high, 1,378 medium and 28 low to 5,655 high, 1,180 medium and 28 low. 1,208 rows are still not high: the 450 rows with no new evidence and 758 rows that a checker kept. Slice 6 lists them for Max. The brief has no check for a circular caller quote. 39 of the 57 raises of c03 and 11 of the 33 raises of c04 rest on a caller quote, and no sample check covered them.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
