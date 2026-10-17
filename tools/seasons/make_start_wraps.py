@@ -64,7 +64,7 @@ def make(exe, classes):
         name = names.get(fn, "?")
         if "start_new_season" not in name:
             continue        # a shared function of other slots too (shared_noop_ret0_5a8f60): no season start
-        lines += [f"/* {name}, {len(targets[fn])} classes */",
+        lines += [f"/* {name}, {len(targets[fn])} class{'' if len(targets[fn]) == 1 else 'es'} */",
                   f"void o_{fn:08x}(void);",
                   f"RT_WRAP({fn:08x}, start_{fn:06x})",
                   "{",

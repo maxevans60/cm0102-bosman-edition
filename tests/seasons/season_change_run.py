@@ -30,13 +30,14 @@ changes of name before slice 15 is on main. The runs (the era boundaries of the 
             2011, and no item is sent in 2010
 
 The checks (each run):
-    - the jump ends with code 0
+    - the jump ends with code 0 and the report holds the end of X and of X+1 (a stopped run fails)
     - on: the competitions whose rules table name changes from X to X+1 (first row of the file) have the new
       name at the end of X+1 in the rules report (1 June: the international entries change as late as 15 and
       28 August, after the start report of 1 August), and every other competition keeps its name
     - on: the news log lists exactly one sentence "<old name> is now called <new name>." for each of them,
       for season X+1, and the news item of X+1 is sent once (no news item when no name changes)
-    - off: the report names at the end of X+1 are the names at the end of X, and the log has no change
+    - off: the report names at the end of X+1 are the names at the end of X, and the log has no change after
+      the start season (the hooks of the start season run with any changing rules, "(start season)" in the log)
 A run takes about 6 to 8 minutes. --jobs (default 3) runs that many at the same time. --reuse checks the
 reports already in the --keep folder again without a new run.
 """
@@ -64,6 +65,12 @@ RUNS = {
     "december": (2010, os.path.join(DB, "September 2010 ODB"), "on"),
 }
 LOAD_NEWS = b"UEFA Cup is now called UEFA Europa League."
+# The staff reserve of the custom data sets (staff_reserve.c, on main since 2026-10-17) moves the game's memory, so
+# the games of these databases go another way. With 46,000 rows the September 2008 jump stops on 23 August 2008 at
+# the original's box "news..cpp 7797" (NewsItem::get_slot 0x785830 with a slot outside 0 to 49), in the main build
+# too, before any season change. With the 23,000 rows of the original the jump plays on. The runs of this check
+# take 23,000 rows, so they test the season change and not that box (a finding for main, in the slice 16 report).
+BASE_ENV = {"RECOMP_STAFF_RESERVE": "23000"}
 
 
 def season_part(path):
@@ -114,7 +121,7 @@ def check_load(program, game, keep):
     work = os.path.join(keep, "load") if keep else tempfile.mkdtemp(prefix="cm0102-season-change-load-")
     year, database, _ = RUNS["load"]
     code, _ = rrc.run(program, game, year + 2, year, database, ["England"], [], work, 7200, {"changing_rules": "on"},
-                      {"RECOMP_SEASON_CHANGE_LOG": "1", "RECOMP_SEASON_NAMES": "table", "RECOMP_SAVE_AFTER_DAYS": "352"})
+                      dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1", RECOMP_SEASON_NAMES="table", RECOMP_SAVE_AFTER_DAYS="352"))
     first = os.path.join(work, "user", "samesave.sav")
     if code != 0 or not os.path.exists(first):
         return [f"load: the first run made no save (code {code}, {work})"]
@@ -126,7 +133,7 @@ def check_load(program, game, keep):
     os.makedirs(again, exist_ok=True)
     shutil.copyfile(first, os.path.join(again, "change.sav"))
     r, saved = load_and_save(program, game, os.path.join(again, "change.sav"), again, 10,
-                             {"RECOMP_SEASON_CHANGE_LOG": "1"})
+                             dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1"))
     if r.returncode != 0 or not saved:
         fails.append(f"load: the save did not load and play on (code {r.returncode}, {again})")
     shown = [m.groups() for m in (SHOWN.search(x) for x in r.stderr.split("\n")) if m]
@@ -149,7 +156,7 @@ def check_december(program, game, keep):
     year, database, _ = RUNS["december"]
     code, _ = rrc.run(program, game, year + 1, year, database, ["England", "Japan", "Norway"], [], work, 10800,
                       {"changing_rules": "on"},
-                      {"RECOMP_SEASON_CHANGE_LOG": "1", "RECOMP_SEASON_CHANGE_TEST": "1"})
+                      dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1", RECOMP_SEASON_CHANGE_TEST="1"))
     if code != 0:
         return [f"december: the run ended with code {code} ({work})"]
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read().split("\n")
@@ -175,7 +182,7 @@ def check_december(program, game, keep):
 NEWS = re.compile(r"recomp: season change: news (\d{4})/\d\d: (.*)$")
 SENT = re.compile(r"recomp: season change: news item for (\d{4})/\d\d sent on day (\d+) of (\d+)$")
 SHOWN = re.compile(r"recomp: season change: news shown for (\d{4})/\d\d, dated day (\d+) of (\d+): (.*)$")
-POINT = re.compile(r"recomp: season change: season point of (\d{4})/\d\d on day (\d+) of (\d+)$")
+POINT = re.compile(r"recomp: season change: season point of (\d{4})/\d\d on day (\d+) of (\d+)(?: \(start season\))?$")
 HOOK = re.compile(r"recomp: season change: test: season hook (\d{4}) on day (\d+) of (\d+)$")
 
 
@@ -211,11 +218,14 @@ def check_run(name, program, game, keep, reuse=False):
     else:
         code, report = rrc.run(program, game, year + 1, year, database, ["England"], [], work, 7200,
                                {"changing_rules": rules},
-                               {"RECOMP_SEASON_CHANGE_LOG": "1", "RECOMP_SEASON_NAMES": "table"})
+                               dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1", RECOMP_SEASON_NAMES="table"))
     fails = []
     if code != 0:
         return [f"{name}: the run ended with code {code} ({work})"]
     seasons, comps = rrc.read_report(report)
+    ends = {x["season"] for x in seasons if x["phase"] == "end"}
+    if year not in ends or year + 1 not in ends:
+        return [f"{name}: the report has no end of {year} and {year + 1} (ends {sorted(ends)}): the run stopped ({work})"]
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read().split("\n")
     news = [(int(m.group(1)), m.group(2)) for m in (NEWS.search(x) for x in log) if m]
     sent_at = [tuple(int(g) for g in m.groups()) for m in (SENT.search(x) for x in log) if m]
@@ -249,7 +259,7 @@ def check_run(name, program, game, keep, reuse=False):
     want_sent = [year + 1] if expected else []
     if sent != want_sent:
         fails.append(f"{name}: news items sent {sent}, expected {want_sent}")
-    if rules == "off" and any("season change" in x for x in log):
+    if rules == "off" and any("season change" in x and "(start season)" not in x for x in log):
         fails.append(f"{name}: changing rules off, but the log shows a season change")
     print(f"{name}: {len(expected)} changes of name, news items {sent}, {len(fails)} problems ({work})")
     for t in got:

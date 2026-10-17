@@ -50,7 +50,8 @@ static int game_on;                             /* 1 from a made or loaded game 
 #define ROW_SIZE 0x10cu
 #define ROW_NAME 8u
 #define NAME_SIZE 260u
-#define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999 (0x932a3e) */
+#define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999: 0x932a3e
+                                      cmp edi, 0x3e7 and jl to the add (bytes 81 ff e7 03 00 00 7c 26) */
 /* The largest part that a reader takes. Version 1 has 16 bytes; version 2 adds the news texts (8 KB a season
  * at most, season_change.c) and the changed names, about 0.9 MB for 99 seasons, so the limit holds. It only
  * stops a damaged row from asking for a block of gigabytes. */
@@ -145,8 +146,12 @@ static void season_box(const char *title, const char *text)
     rt_callback(MESSAGE_BOX, 3, args);
 }
 
-/* The part of a game: written only when the game is not 2001 with changing rules off. */
-static int part_needed(void) { return rt_season_year != SEASON_FIRST_YEAR || rules_now; }
+/* The part of a game: written only when the game is not 2001 with changing rules off, or when the season
+ * code holds news or changed names (season_change.c): a load needs the names in the data (season_change_rename). */
+static int part_needed(void)
+{
+    return rt_season_year != SEASON_FIRST_YEAR || rules_now || season_change_part_size() != 0;
+}
 
 static int read_at(int fd, int64_t at, void *buf, uint32_t n)
 {
@@ -396,7 +401,9 @@ RT_WRAP(00828110, create_game)
     rules_now = !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
     season_change_reset();
     season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
+    season_change_creating(1);
     o_00828110();
+    season_change_creating(0);
     if (!rt_unwinding && cpu.eax) {
         game_on = 1;
         season_change_new_game();
