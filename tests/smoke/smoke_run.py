@@ -5,7 +5,7 @@ Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
-        [--ref-050 <0.5.0 program>] [--jobs n] [--runs a,b]
+        [--ref-050 <0.5.0 program>] [--jobs n] [--runs a,b] [--custom-db <folder>]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -331,10 +331,13 @@ def without_intro_click(steps):
 # --ref-build <program>: one more run, with the options of the first run, plays another build (for example the
 # build of main). For a change with no option, such as the crash guards: its save must equal the first run's.
 REF_BUILD = None
-# --jobs n: at most n games at the same time (default: all runs at once). --runs a,b,...: only these runs (the
-# first run stays first), for a short check on a busy machine.
+# --jobs n: at most n games at the same time (default: all runs at once). --runs a,b,...: only the first run
+# and these runs, for a short check on a busy machine. An unknown name or fewer than two runs stops the check.
 JOBS = 0
 ONLY_RUNS = None
+# --custom-db <folder> (0.6.0, staff reserve): each run copies the folder into Databases of its user folder and
+# plays it as a custom data set (database = folder:<name>), for example the 3.9.68 data against the 0.5.0 build.
+CUSTOM_DB = None
 
 
 def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None,
@@ -346,7 +349,12 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     only those runs may differ, each in its own parts. required: {run name: part}: that run's save must hold
     the part (0.6.0 slice 11: rules-on of a new game has the season part)."""
     if ONLY_RUNS:
+        unknown = [n for n in ONLY_RUNS if n not in [r[0] for r in runs]]
+        if unknown:
+            raise SystemExit(f"--runs: no run named {', '.join(unknown)} in this check")
         runs = [r for i, r in enumerate(runs) if i == 0 or r[0] in ONLY_RUNS]
+        if len(runs) + bool(REF_BUILD) + bool(REF_050 and text_050) < 2:
+            raise SystemExit("--runs: fewer than two runs are left, so nothing is compared")
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
     if REF_050 and text_050:
@@ -366,10 +374,14 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
             os.makedirs(d)
         if save:
             shutil.copyfile(save, os.path.join(user, os.path.basename(save)))
+        if CUSTOM_DB:      # --custom-db: every run plays this folder as a custom data set
+            shutil.copytree(CUSTOM_DB, os.path.join(user, "Databases", os.path.basename(CUSTOM_DB)))
         with open(os.path.join(user, "settings.txt"), "w") as f:
             f.write(f"display = {mode}\n")
             for key, value in options.items():
                 f.write(f"{key} = {value}\n")
+            if CUSTOM_DB:
+                f.write(f"database = folder:{os.path.basename(CUSTOM_DB)}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                    RECOMP_USER_DIR=user,
                    RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days), RECOMP_IDLE_COUNT="1",
@@ -552,7 +564,9 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
-    global REF_BUILD, REF_050, JOBS, ONLY_RUNS
+    global REF_BUILD, REF_050, JOBS, ONLY_RUNS, CUSTOM_DB
+    if "--custom-db" in argv[3:]:
+        CUSTOM_DB = os.path.abspath(argv[argv.index("--custom-db") + 1])
     if "--jobs" in argv[3:]:
         JOBS = int(argv[argv.index("--jobs") + 1])
         if JOBS < 1:
