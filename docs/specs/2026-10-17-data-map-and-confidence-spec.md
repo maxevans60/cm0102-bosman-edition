@@ -1,5 +1,5 @@
 # Data map and confidence pass
-Status: In build
+Status: Shipped (2026-10-17)
 
 Research: `docs/research/2026-10-16-function-map-estimate.md` (every sweep and review wave of the function map). Earlier spec: `docs/specs/2026-10-16-function-map-spec.md`.
 
@@ -133,14 +133,18 @@ Done (2026-10-17): 956 rows in 38 batches over 5 waves, 450 rows on the list for
 Blocked by: 4
 Delivers: Opus checks of the rows in scope, one wave per run, with a third check for each new name.
 Merge danger: two-way door. Blast radius: the names of one wave.
-- [ ] Each row of the wave is high with a quote, or keeps its confidence with one line on what is missing.
-- [ ] Each new name has a third check.
-- [ ] Each wave is in the estimate doc. The check script passes.
+- [x] Each row of the wave is high with a quote, or keeps its confidence with one line on what is missing.
+- [x] Each new name has a third check.
+- [x] Each wave is in the estimate doc. The check script passes.
+
+Done (2026-10-17): waves c01 to c05 checked 956 rows, and round 2 (c06, c07) checked 229 rows with a neighbour that round 1 raised. 245 rows reached high, 10 have a new name, and no global was found wrong. Two Opus caller checks undid 4 circular caller quotes. The estimate doc has each wave and the end result.
 
 ### 6. Close
 Blocked by: 5
 Delivers: the list for Max of every row that is not high, each with its reason, the end result in the estimate doc, the function map paragraph of the handover, the updated `HANDOVER-next.md` and this spec marked shipped.
 Merge danger: two-way door. Blast radius: docs only.
-- [ ] Max has decided on each row of the list.
-- [ ] The handover describes both maps.
-- [ ] The check script passes on the final state.
+- [x] Max has decided on each row of the list. Max accepted the rows by group (2026-10-17): each keeps its confidence and its reason in `function-map/not-high.tsv`.
+- [x] The handover describes both maps.
+- [x] The check script passes on the final state.
+
+Done (2026-10-17): 1,161 rows are not high, in `function-map/not-high.tsv`. The end result is in the estimate doc, section "End result of the confidence pass".

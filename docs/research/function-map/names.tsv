@@ -1109,8 +1109,8 @@ address	file	name	confidence	model	cited_in
 0x4cbb20	contract_manager.cpp	is_contract_staff_job	medium	opus	
 0x4cbb60	contract_manager.cpp	CONTRACT_MANAGER::get_squad_placement	high	sonnet	
 0x4cbd20	contract_manager.cpp	CONTRACT_MANAGER::toggle_squad_placement	high	sonnet	
-0x4cc0b0	contract_manager.cpp	CONTRACT_MANAGER::move_to_reserves	medium	opus	
-0x4cc0f0	contract_manager.cpp	CONTRACT_MANAGER::move_to_first_team	medium	opus	
+0x4cc0b0	contract_manager.cpp	CONTRACT_MANAGER::move_to_first_team	medium	opus	
+0x4cc0f0	contract_manager.cpp	CONTRACT_MANAGER::move_to_reserves	medium	opus	
 0x4cc130	contract_manager.cpp	CONTRACT_MANAGER::get_squad_flags_for_club	medium	opus	
 0x4cc2d0	contract_manager.cpp	contract_manager_get_player_morale	high	opus	
 0x4cc2e0	contract_manager.cpp	contract_manager_write_morale_text	high	opus	2026-10-14-columns-and-colours-inventory.md,columns.c
@@ -6178,7 +6178,7 @@ address	file	name	confidence	model	cited_in
 0x8c7260	transfer_manager.cpp	TRANSFER_MANAGER::find_work_permit	high	opus	
 0x8c72d0	transfer_manager.cpp	TRANSFER_MANAGER::find_negotiated_loan_contract	high	opus	
 0x8c7330	transfer_manager.cpp	TRANSFER_MANAGER::update_work_permits	medium	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
-0x8c7470	transfer_manager.cpp	transfer_manager_offer_needs_work_permit	high	opus	
+0x8c7470	transfer_manager.cpp	transfer_manager_offer_needs_work_permit	medium	opus	
 0x8c7560	transfer_manager.cpp	TRANSFER_MANAGER::player_needs_work_permit	high	sonnet	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-season-end.md
 0x8c7690	transfer_manager.cpp	TRANSFER_MANAGER::check_offer_work_permits	medium	opus	
 0x8c7950	transfer_manager.cpp	TRANSFER_MANAGER::is_work_permit_granted	medium	opus	

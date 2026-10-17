@@ -97,7 +97,7 @@ def main(runs):
     cats = collections.Counter(cat.values())
     index = [HEADER.format(title="Function map index"),
              f"All {len(db)} functions with their category, file and placement method are in `function-files.tsv`. "
-             f"All {len(members)} named functions are in `names.tsv`.", "",
+             f"All {len(members)} named functions are in `names.tsv`. Every row that is not high is in `not-high.tsv`, with one line on what is missing for high.", "",
              f"- Game functions: {cats['game']}. Library without asserts: {cats['lib']}.",
              f"- Not named, by category: {cats['funclet']} unwind funclets (each belongs to its parent, shown as \"+n unwind\"), "
              f"{cats['ehstub']} exception handler stubs, {cats['crt']} C runtime functions.",

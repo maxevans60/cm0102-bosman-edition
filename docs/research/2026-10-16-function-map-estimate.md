@@ -2042,9 +2042,35 @@ The checkers took 1,588,885 tokens, about 6,940 per row. That is more than in ro
 | 0x6ceb90 | `CM3_MATCH_ENGINE::pick_player_for_role` | `CM3_MATCH_ENGINE::pick_restart_taker` | takes reviewer | `CM3_MATCH_ENGINE::pick_restart_taker` |
 | 0x7e6f20 | `comp_is_non_competitive` | `comp_is_reserve_or_minor_comp` | takes reviewer | `comp_is_reserve_or_minor_comp` |
 
-Checker conf-c06-aa found that 0x4cc0b0 `move_to_reserves` and 0x4cc0f0 `move_to_first_team` look swapped: the first accepts the reserve placement codes and promotes. Both rows were outside its batch, so they need a check.
+Checker conf-c06-aa found that 0x4cc0b0 and 0x4cc0f0 had swapped names. The run `conf-fix` in "End result of the confidence pass" corrects them.
 
 1,160 rows are still not high. 181 of them have a caller or callee that round 2 raised. Most of those rows were in round 2 already, with other neighbours. A third round would read fewer new facts per row, so expect a yield under round 2's 22.7% at more than 35,000 tokens per raised row.
+
+#### End result of the confidence pass (2026-10-17)
+
+Max closed the pass after round 2, because the yield fell and the cost per raised row rose (see "Returns of the pass" and round 2). One Opus agent then checked three flagged rows (run `conf-fix`, 97,881 tokens):
+- 0x8c7470 `transfer_manager_offer_needs_work_permit` drops from high to medium. Its only fact was its call to 0x8c7560, which quotes it back, and its only caller 0x8c2f50 is medium.
+- 0x4cc0b0 is now `CONTRACT_MANAGER::move_to_first_team` and 0x4cc0f0 is now `CONTRACT_MANAGER::move_to_reserves`. The profile menu at 0x870700 shows codes 1 and 3 as "Promote To Seniors" and "Promote To 'A' Team", and 0x4cc0b0 acts on those codes. Both stay medium.
+
+| Figure | Value |
+|---|---|
+| Rows not high before the pass | 1,406 (1,378 medium, 28 low) |
+| Rows checked in round 1 (c01 to c05) | 956 |
+| Rows checked in round 2 (c06, c07) | 229 |
+| Rows raised to high, net | 245 |
+| Rows with a new name | 10 |
+| Globals found wrong | 0 |
+| Total tokens of the pass | 7,332,907 |
+| Confidence after the pass | 5,702 high, 1,133 medium, 28 low |
+
+The total holds round 1 (5,280,830), the caller check (131,864), round 2 (1,822,332) and `conf-fix` (97,881).
+
+The 1,161 rows that are not high are in `function-map/not-high.tsv`, each with its reason:
+- 396 rows had no new evidence in either round. Their reason is "no new evidence".
+- 762 rows were checked and kept. Their reason is the checker's line on what is missing for high.
+- 3 rows had a raise undone by a sample check, because the caller quote was circular.
+
+Max's decision (2026-10-17): the rows are accepted by group, not one by one. Each row keeps its confidence and its reason. A medium name stays a hint: read the code before you rely on it. Only new evidence can raise these rows, for example a runtime trace, which is out of this spec (Q4).
 
 ## Recommendation
 
