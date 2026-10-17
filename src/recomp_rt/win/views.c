@@ -22,6 +22,7 @@
 #include "draw.h"
 #include "views.h"
 #include "options.h"
+#include "season_screen.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -288,6 +289,7 @@ void views_pitch_rect(int *x1, int *y1, int *x2, int *y2)
 void views_widget_drawn(uint32_t w)
 {
     compare_widget_drawn(w);
+    season_screen_widget_drawn(w);      /* the Choose Season screen (0.6.0 slice 13) */
     if (pitch_widget < 0 || !on_top() || rd32(g_mem, NO_DRAW)) return;
     if (w != display() + WIDGETS + (uint32_t)pitch_widget * WIDGET_SIZE) return;
     uint32_t surface = rd32(g_mem, DRAW_SURFACE);

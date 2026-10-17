@@ -25,9 +25,11 @@ target_link_libraries(cm0102_recomp PRIVATE SDL2::SDL2main SDL2::SDL2-static)
 set(CM0102_GAME_DIR "" CACHE PATH "The folder of the clean files that the Windows installer holds")
 find_program(MAKENSIS makensis REQUIRED)
 set(CM0102_SETUP "CM0102-Bosman-Edition-${PROJECT_VERSION}-Setup.exe")
-# makensis on macOS stops with std::bad_alloc when the locale is not set.
+# makensis on macOS stops with std::bad_alloc when the locale is not set. The log (-V4) lists each packed
+# file: tools/windows/check_installer.py --nsis-log checks it against the manifest of the download.
 add_custom_target(windows_installer
-    COMMAND "${CMAKE_COMMAND}" -E env LC_ALL=en_US.UTF-8 "${MAKENSIS}" -V2 -INPUTCHARSET UTF8
+    COMMAND "${CMAKE_COMMAND}" -E env LC_ALL=en_US.UTF-8 "${MAKENSIS}" -V4 "-O${CMAKE_BINARY_DIR}/installer-log.txt"
+        -INPUTCHARSET UTF8
         "-DVERSION=${PROJECT_VERSION}"
         "-DEXE=$<TARGET_FILE:cm0102_recomp>"
         "-DGAME_DIR=${CM0102_GAME_DIR}"

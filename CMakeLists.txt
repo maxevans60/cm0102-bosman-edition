@@ -119,6 +119,18 @@ if(NOT WIN32)
         SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv")
     add_test(NAME seasons_db COMMAND seasons_db_test)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
+    # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
+    add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # The rules table reader (0.6.0 slice 12): make the table from the parts, then read it.
+    add_executable(season_rules_test tests/seasons/test_season_rules.c src/recomp_rt/win/season_rules.c
+        src/recomp_rt/host/posix.c)
+    target_include_directories(season_rules_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_rules_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py"
+        --out "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_rules_table PROPERTIES FIXTURES_SETUP rules_table)
+    add_test(NAME season_rules COMMAND season_rules_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv"
+        "${CMAKE_BINARY_DIR}/seasons")
+    set_tests_properties(season_rules PROPERTIES FIXTURES_REQUIRED rules_table)
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
@@ -210,6 +222,27 @@ if(EXISTS "${CM0102_EXE}")
         ${RECOMP_WIN}
     )
     add_dependencies(cm0102_recomp recomp_gen)
+    # 0.6.0 slice 12: the competition classes of the rules report (from the exe, not committed) and the
+    # rules table of the game (Seasons/rules.tsv of the download; tests read it with RECOMP_RULES_TABLE).
+    file(GLOB RULES_PARTS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/*.tsv")
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/comp_classes.c"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_comp_classes.py"
+            --exe "${CM0102_EXE}" --out "${CMAKE_BINARY_DIR}/seasons/comp_classes.c"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_comp_classes.py" "${CMAKE_SOURCE_DIR}/tools/recomp/pe.py"
+            "${CMAKE_SOURCE_DIR}/docs/research/function-map/names.tsv"
+        COMMENT "Finding the competition classes of cm0102.exe"
+        VERBATIM)
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/rules.tsv"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py"
+            --out "${CMAKE_BINARY_DIR}/seasons/rules.tsv"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py" ${RULES_PARTS}
+        COMMENT "Making the rules table"
+        VERBATIM)
+    add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv")
+    target_sources(cm0102_recomp PRIVATE "${CMAKE_BINARY_DIR}/seasons/comp_classes.c")
+    add_dependencies(cm0102_recomp seasons_rules)
     target_include_directories(cm0102_recomp PRIVATE src/recomp_rt src/recomp_rt/win "${RECOMP_OUT}/gen"
         ${SDL2_INCLUDE_DIRS})
     target_compile_definitions(cm0102_recomp PRIVATE CM0102_DEFAULT_EXE="${CM0102_EXE}"

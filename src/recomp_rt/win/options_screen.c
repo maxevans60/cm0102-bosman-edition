@@ -25,8 +25,9 @@
  * gets it through its temporary file. Rows whose value the game reads only at start say so in a note.
  * When each value takes effect (docs/research/2026-10-16-options-screen.md, 3b):
  * - display, sound and save_folder: at the next start.
- * - database: at the next Start New Game. In a game the box only writes the option. The data set folder
- *   of the open game stays (files.c keeps it until database.c tells it at the next start screen build).
+ * - changing_rules: the default of a new game. Setup Game shows and sets the value of the next new game
+ *   (database.c); a game keeps the value it started with. The database of a new game is chosen on the Choose
+ *   Season screen (0.6.0 slice 13, Q236), so the box has no Database row any more.
  * - match_columns, attribute_groups and the colour switches: when their screen is built next. The screen
  *   below the box is built again when the box closes.
  * - full_player_search: on the next game day (the search keeps its list for the day, 0x7af160).
@@ -93,7 +94,7 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 #define ROWS 9
 #define TEXT_SIZE 0x200u
 
-typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_DATABASE, ROW_PATH } RowKind;
+typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_PATH } RowKind;
 
 typedef struct {
     int tab;                        /* 1 Screen, 2 Game */
@@ -120,7 +121,7 @@ static const Row rows[] = {
     {2, OPT_FULL_PLAYER_SEARCH, ROW_SWITCH, "Full player search", "From the next game day"},
     {2, OPT_FASTER_DAYS, ROW_SWITCH, "Faster holidays", ""},
     {2, OPT_SAVE_BACKUPS, ROW_SWITCH, "Save backups", ""},
-    {2, OPT_DATABASE, ROW_DATABASE, "Database", "For the next new game"},
+    {2, OPT_CHANGING_RULES, ROW_SWITCH, "Changing rules", "Default for a new game\nSetup Game sets each game"},
     {2, OPT_SAVE_FOLDER, ROW_PATH, "Save folder", "Applies at the next start\nChange it in settings.txt"},
 };
 #define ROW_COUNT ((int)(sizeof rows / sizeof rows[0]))
@@ -128,7 +129,6 @@ static const Row rows[] = {
 static const char *const switch_text[] = {"On", "Off"}, *const switch_word[] = {"on", "off"};
 static const char *const display_text[] = {"Widescreen", "Classic"};
 static const char *const display_word[] = {"widescreen", "classic"};
-static const char *const database_word[] = {"3.9.68", "3.9.60", "3.9.65"};
 
 /* Game memory for the texts and the column weights. The create functions copy each text. */
 static uint32_t scratch;
@@ -248,27 +248,18 @@ static void folder_text(char *out, size_t room)
     dbfolders_label(path, out, room);
 }
 
-/* The index of the current value of a row: 0 or 1 for a switch, 0 to 2 for a choice, 3 for a custom
- * data set (folder:<name>). */
+/* The index of the current value of a row: 0 or 1. */
 static int current_index(const Row *r)
 {
     if (r->kind == ROW_SWITCH) return options_bool(r->id) ? 0 : 1;
     if (r->kind == ROW_DISPLAY) return options_enum(r->id);
-    if (r->kind == ROW_DATABASE) {
-        int e = options_enum(r->id);
-        if (e == DATABASE_CUSTOM) return 3;
-        for (int i = 0; i < 3; i++)
-            if (!strcmp(options_string(r->id), database_word[i])) return i;
-    }
     return 0;
 }
 
 /* Column weights: the label, three values and the note, as wide as the original's columns allow (Game
  * Settings: 3, 1, 1, 1, 1 at 0x8239ad). A switch row has two values, so its note starts in the third value
  * column. */
-static const uint8_t weights_three[] = {38, 17, 17, 17, 31};
 static const uint8_t weights_two[] = {38, 17, 17, 48};
-static const uint8_t weights_custom[] = {38, 17, 17, 17, 17, 14};    /* database with a custom data set */
 static const uint8_t weights_path[] = {38, 49, 33};
 #define ROW_X1 160
 #define ROW_X2 729
@@ -322,30 +313,14 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
         return;
     }
     int cur = current_index(r);
-    int custom = r->kind == ROW_DATABASE && cur == 3;
-    int count = r->kind == ROW_DATABASE ? 3 : 2;
-    int columns = custom ? 6 : count + 2;
-    const uint8_t *weights = custom ? weights_custom : count == 2 ? weights_two : weights_three;
-    int a = area(ROW_X1, y1, ROW_X2, y2, columns, weights, 1, 0);
+    int a = area(ROW_X1, y1, ROW_X2, y2, 4, weights_two, 1, 0);
     plain(a, 0, r->label, 3, light);
-    int col = 1;
-    if (custom) {
-        char label[64], name[72];
-        dbfolders_label(options_string(r->id) + 7, label, sizeof label);      /* after "folder:" */
-        size_t fit = chars_for(column_px(weights, columns, 1));
-        if (strlen(label) <= fit || fit < 4) snprintf(name, sizeof name, "%s", label);
-        else snprintf(name, sizeof name, "%.*s...", (int)(fit - 3), label);
-        current(a, col++, name);
+    for (int i = 0; i < 2; i++) {
+        const char *s = r->kind == ROW_SWITCH ? switch_text[i] : display_text[i];
+        if (i == cur) current(a, i + 1, s);
+        else choice(a, i + 1, s, VALUE_ID, (uint32_t)index * 16u + (uint32_t)i, green);
     }
-    for (int i = 0; i < count; i++, col++) {
-        const char *s = r->kind == ROW_SWITCH ? switch_text[i] : r->kind == ROW_DISPLAY ? display_text[i]
-                                                                                       : database_word[i];
-        if (i == cur) current(a, col, s);
-        else choice(a, col, s, VALUE_ID, (uint32_t)index * 16u + (uint32_t)i, green);
-    }
-    const char *n = index == failed_row ? "Not saved: settings.txt\ncannot be written"
-                    : custom ? "For the next\nnew game" : r->note;
-    note(n, weights, columns, y1, y2, light);
+    note(index == failed_row ? "Not saved: settings.txt\ncannot be written" : r->note, weights_two, 4, y1, y2, light);
 }
 
 /* The build of the box: cdecl, no arguments. The frame follows 0x823950. */
@@ -400,7 +375,6 @@ static void apply(const Row *r, int index, int value)
     const char *word = NULL;
     if (r->kind == ROW_SWITCH && value < 2) word = switch_word[value];
     if (r->kind == ROW_DISPLAY && value < 2) word = display_word[value];
-    if (r->kind == ROW_DATABASE && value < 3) word = database_word[value];
     if (!word) return;
     char old[1100];
     snprintf(old, sizeof old, "%s", options_string(r->id));
@@ -414,12 +388,6 @@ static void apply(const Row *r, int index, int value)
     failed_row = -1;
     fprintf(stderr, "recomp: option %s = %s (%d)\n", options_name(r->id), word, ok);
     if (r->id == OPT_SHARP_PICTURE) win_sharp_picture_changed();
-    if (r->id == OPT_DATABASE) {
-        /* On the start screen the data set changes now, as with the Database button. In a game it changes
-         * at the next start screen build, so the open game reads its own data set to its end. */
-        if (node_slot(1) == 1) win_data_set_changed();
-        else database_changed_in_game();
-    }
 }
 
 /* The input of the box: cdecl (s16 widget). Only the box's own widgets: the box covers the screen. */

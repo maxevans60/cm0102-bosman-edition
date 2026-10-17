@@ -92,13 +92,13 @@ READONLY_STEPS = [
 ]
 START_STEPS = fixtures.LOAD_STEPS[:fixtures.LOAD_STEPS.index("wait setup") + 1] + [
     "1000 dump {d}/setup.bmp",
-    "1500 click 445 503",                       # Bosman Edition Options, the last item of the menu
+    "1500 click 277 503",                       # Bosman Edition Options (0.6.0: left cell of the last row)
     "3500 dump {d}/box.bmp",
     "4000 click 452 192",                       # Display mode: Classic
     "4500 click 452 227",                       # Sharp picture: Off
     "5000 dump {d}/box-sharp-off.bmp",
     "5500 click 371 227",                       # Sharp picture: On
-    "6000 click 584 155",                       # the Game tab: the custom data set
+    "6000 click 584 155",                       # the Game tab
     "7000 dump {d}/game.bmp",
     "7500 click 444 524",                       # Close
     "wait setup",
