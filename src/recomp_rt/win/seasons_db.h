@@ -61,7 +61,7 @@ typedef enum {
 } SeasonsEra;
 
 SeasonsEra seasons_db_era(int start_year);
-const char *seasons_db_era_name(SeasonsEra era);    /* "Original", "2000s", "2010s", "Early 2020s", "League phase" */
+const char *seasons_db_era_name(SeasonsEra era);    /* "Early 2000s", "Mid 2000s", "2010s", "Early 2020s", "Mid 2020s" (Q343) */
 
 /* The status of a season's tile. */
 typedef enum {

@@ -14,12 +14,17 @@ database = folder:<name>. The Databases folder holds copies of data, so the play
     missing   the folder in the option does not exist: the game reads its own Data (the 3.9.68 pictures), and
               stderr names the folder
     --update-team   a folder that Max made from an Update Team database (copy it to
-              test-fixtures/databases/May 2026): the run reaches the first news screen and passes days
+              test-fixtures/databases/May 2026): the run reaches the first news screen and passes days. Since
+              0.6.0 slice 13 a folder that holds a known Update Team database starts in its own season (Q271):
+              the first news screen is in July of the season that docs/research/rules-0.6.0/databases-signatures.tsv
+              gives for its club.dat and staff.dat (an unknown folder starts in 2001/02).
 Every run also checks the date box moves on after "Go on Holiday".
 The reference pictures are those of tests/smoke/smoke_run.py (outside git).
 """
 import concurrent.futures
+import hashlib
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -29,6 +34,28 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import smoke_run  # noqa: E402
 
 DATA_FILES = None
+SIGNATURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "docs", "research", "rules-0.6.0",
+                          "databases-signatures.tsv")
+
+
+def known_season(folder):
+    """The start year of the known database in folder by club.dat and staff.dat (Q271), or 2001."""
+    def sha(name):
+        h = hashlib.sha256()
+        with open(os.path.join(folder, name), "rb") as f:
+            for b in iter(lambda: f.read(1 << 20), b""):
+                h.update(b)
+        return h.hexdigest()
+    try:
+        club, staff = sha("club.dat"), sha("staff.dat")
+    except OSError:
+        return 2001
+    with open(SIGNATURES, encoding="utf-8") as f:
+        for line in f.read().splitlines()[1:]:
+            c = line.split("\t")
+            if c[7] == club and c[9] == staff and c[3] in ("season database", "extra version") and c[2][:4].isdigit():
+                return int(c[2][:4])
+    return 2001
 
 
 def copy_data(src, dest):
@@ -50,7 +77,8 @@ def run(program, game, name, folder, source, ref_dir):
         with open(os.path.join(user, "settings.txt"), "w") as f:
             f.write(f"display = classic\ndatabase = folder:{folder}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
-                   RECOMP_USER_DIR=user, RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots)))
+                   RECOMP_USER_DIR=user, RECOMP_SCREEN_LOG="1",
+                   RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots)))
         r = subprocess.run([program, "--game", game], env=env, capture_output=True, text=True, timeout=600)
         if r.returncode != 0:
             return [f"{name}: the game ended with code {r.returncode}: {r.stderr[-500:]}"]
@@ -65,6 +93,13 @@ def run(program, game, name, folder, source, ref_dir):
         print(f"{'ok   ' if moved > 0.02 else 'FAIL '} {name} holiday: {moved:.0%} of the date box changed")
         if moved <= 0.02:
             out.append(f"{name}: no days passed on holiday")
+        if name == "update-team":
+            want = known_season(source)
+            m = re.search(r"date (\d+)/(\d+): screen 0x7881e0", r.stderr)
+            got = int(m.group(2)) if m else None
+            print(f"{'ok   ' if got == want else 'FAIL '} update-team: the first news screen is in {got} (want {want})")
+            if got != want:
+                out.append(f"update-team: first news in {got}, not {want}")
         if name == "missing":
             ok = "no usable folder" in r.stderr
             print(f"{'ok   ' if ok else 'FAIL '} missing: stderr names the folder")

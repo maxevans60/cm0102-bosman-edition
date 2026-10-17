@@ -211,7 +211,16 @@ SAME_SAVE_RUNS = [
     ("rules-off", {"faster_days": "off", "changing_rules": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
+    # Q342: the season code off (slice 11 year sites, the season part, the Choose Season code) gives the save of
+    # normal, a 2001/02 game with changing rules off. From slice 13 the base game of 0.6.0 is the reference.
+    ("season-code-off", {"faster_days": "off", "_env": {"RECOMP_SEASON_CODE": "off"}}),
 ]
+
+# With --ref-build: the Setup Game text of 0.5.0 (test variable RECOMP_SETUP_TEXT=0.5.0) and the season code off
+# give the save of the reference build, so the new Setup Game text is the only thing that moves memory (Q342).
+# Use the 0.5.0 build as the reference for this run. Compared with ref-build, not with normal.
+TEXT_050_RUN = ("text-0.5.0", {"faster_days": "off", "_against": "ref-build",
+                               "_env": {"RECOMP_SETUP_TEXT": "0.5.0", "RECOMP_SEASON_CODE": "off"}})
 
 # The match check (--match): the steps after the load of prematch.sav (fixtures.LOAD_STEPS), positions
 # for 800x600 as in STEPS. The times after a wait count from the moment it was reached. Each Space has
@@ -320,7 +329,8 @@ def without_intro_click(steps):
 REF_BUILD = None
 
 
-def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None):
+def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None,
+                 text_050=False):
     """Plays the runs at the same time, each with its option lines, and compares each saved game with
     the save of the first run. save: a saved game to copy into each user folder first. allowed: names of
     parts that may differ (an accepted difference, for example the parts that depend on the memory layout of
@@ -329,13 +339,16 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     the part (0.6.0 slice 11: rules-on of a new game has the season part)."""
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
+        if text_050:
+            runs.append((TEXT_050_RUN[0], dict(runs[0][1], **TEXT_050_RUN[1])))
+    against = {name: options.get("_against") for name, options in runs}
 
     def play(name, options, work):
         steps_of_run = options.get("_steps", steps)        # a run may have its own steps and environment
         extra_env = options.get("_env", {})
         run_program = options.get("_program", program)     # and its own build (--ref-build)
         user_sub = options.get("_user_sub", "")              # and a folder between the run and its user folder
-        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program", "_user_sub")}
+        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program", "_user_sub", "_against")}
         run = os.path.join(work, name)
         user, home, shots = (os.path.join(run, d) for d in (os.path.join(user_sub, "user"), "home", "shots"))
         for d in (user, home, shots):
@@ -388,17 +401,18 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 failed += 1
                 print(f"FAIL  {name}: the save has no part {required[name]}")
                 continue
-            if open(saves[name], "rb").read() == want:
-                print(f"ok    {name}: the save is the same as {first}")
+            base = against.get(name) or first
+            if open(saves[name], "rb").read() == open(saves[base], "rb").read():
+                print(f"ok    {name}: the save is the same as {base}")
                 continue
-            a, b = save_parts(saves[first]), save_parts(saves[name])
+            a, b = save_parts(saves[base]), save_parts(saves[name])
             differ = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
             ok_parts = allowed.get(name, ()) if isinstance(allowed, dict) else allowed
             if differ and set(differ) <= set(ok_parts):
                 print(f"ok    {name}: the save differs from {first} only in accepted parts: {', '.join(differ)}")
                 continue
             failed += 1
-            print(f"FAIL  {name}: the save differs from {first} in: {', '.join(differ) or 'the file header'}")
+            print(f"FAIL  {name}: the save differs from {base} in: {', '.join(differ) or 'the file header'}")
     print("PASS" if not failed else "FAIL")
     return 1 if failed else 0
 
@@ -477,7 +491,7 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
         return compare_runs(program, game, mode, new_game_runs(SAME_SAVE_RUNS),
                             without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,)},
-                            required={"rules-on": RULES_PART})
+                            required={"rules-on": RULES_PART}, text_050=True)
     # --save: load the saved test game, then the same Go on Holiday steps as the new game.
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))
     import fixtures  # noqa: E402  (fixtures.py imports this file)
@@ -498,7 +512,7 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
     if save_name in LOAD_END:
         load[load.index("wait first-news")] = LOAD_END[save_name]
     steps = without_intro_click(load) + holiday + ["400000 quit"]
-    return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save)
+    return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save, text_050=True)
 
 
 # --speed fastest: the Fastest item (#31, commentary.c), one row above Very Fast.

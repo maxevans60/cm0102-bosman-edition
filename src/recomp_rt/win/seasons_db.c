@@ -36,7 +36,7 @@ SeasonsEra seasons_db_era(int y)
 
 const char *seasons_db_era_name(SeasonsEra era)
 {
-    static const char *const names[] = {"Original", "2000s", "2010s", "Early 2020s", "League phase"};
+    static const char *const names[] = {"Early 2000s", "Mid 2000s", "2010s", "Early 2020s", "Mid 2020s"};   /* Q343 */
     return (unsigned)era < 5 ? names[era] : "";
 }
 

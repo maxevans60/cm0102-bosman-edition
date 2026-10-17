@@ -55,13 +55,27 @@ void o_0081bd70(void);
 RT_WRAP(005ed300, menu_build)
 {
     if (rd32(g_mem, cpu.esp) == rt_site_setup_menu && rt_arg(7) == 9) {
-        if (!getenv("RECOMP_START_SEASON") || !*getenv("RECOMP_START_SEASON"))
+        if (season_code_on() && (!getenv("RECOMP_START_SEASON") || !*getenv("RECOMP_START_SEASON")))
             season_set_new_game(season_screen_year(), season_screen_rules_choice());
         int year = season_start_year();
         char db[DBFOLDER_NAME], text[ITEM_TEXT_SIZE];
         season_screen_database_text(db, dbfolders_label_room(rt_screen_w));
         snprintf(text, sizeof text, "Choose Season: %d/%02d\n%s", year, (year + 1) % 100, db);
         uint32_t item = rt_arg(8) + 9 * ITEM_SIZE;
+        const char *old = getenv("RECOMP_SETUP_TEXT");
+        if (old && !strcmp(old, "0.5.0")) {
+            /* Test only (Q342): the Setup Game text of 0.5.0, the Database button and the options item, so a
+             * run shows that only this text moves memory against the 0.5.0 build. */
+            const char *d = options_string(OPT_DATABASE);
+            snprintf(text, sizeof text, "Database: %s", !strcmp(d, "3.9.60") ? "2001/02 (3.9.60)"
+                                                        : !strcmp(d, "3.9.65") ? "2001/02 Dec (3.9.65)"
+                                                                               : "2002/03 (3.9.68)");
+            fill_item(item, text, SEASON_ID);
+            fill_item(item + ITEM_SIZE, "Bosman Edition Options", OPTIONS_ID);
+            wr32(g_mem, cpu.esp + 4 + 4 * 7, 11);
+            o_005ed300();
+            return;
+        }
         fill_item(item, text, SEASON_ID);
         fill_item(item + ITEM_SIZE, "Bosman Edition Options", OPTIONS_ID);
         fill_item(item + 2 * ITEM_SIZE, season_screen_rules_on() ? "Changing rules: On" : "Changing rules: Off",
@@ -83,7 +97,7 @@ RT_WRAP(0081bd70, setup_input)
         return;
     }
     if (id == SEASON_ID) {
-        season_screen_open();
+        if (season_code_on()) season_screen_open();     /* RECOMP_SEASON_CODE=off: the item does nothing */
         rt_ret_cdecl((uint32_t)-4);
         return;
     }

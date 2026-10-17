@@ -207,8 +207,14 @@ void options_load(const char *path)
         fclose(f);
     }
 
+    /* The test switch RECOMP_SEASON_CODE=off (Q342, season.c) writes no season line: the file stays as a
+     * build without the season code leaves it. */
+    const char *season_code = getenv("RECOMP_SEASON_CODE");
+    int no_season_line = season_code && !strcmp(season_code, "off") && !present[OPT_SEASON];
+    if (no_season_line) present[OPT_SEASON] = 1;
     int missing = 0;
     for (int id = 0; id < OPT_COUNT; id++) missing += !present[id];
+    if (no_season_line) present[OPT_SEASON] = 0;
     if (!missing) return;
 
     /* A new file gets a header. A file of the player only gets the lines that it lacks, at the end. */
@@ -222,7 +228,7 @@ void options_load(const char *path)
         fputc('\n', f);
     }
     for (int id = 0; id < OPT_COUNT; id++) {
-        if (present[id]) continue;
+        if (present[id] || (no_season_line && id == OPT_SEASON)) continue;
         fprintf(f, "# %s\n%s = %s\n", defs[id].comment, defs[id].name, defs[id].def);
     }
     fclose(f);
