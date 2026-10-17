@@ -13,7 +13,8 @@ import re
 
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
-                  "foreign.c", "season.c", "season_dates.c", "season_history.c")
+                  "foreign.c", "season.c", "season_dates.c", "season_history.c",
+                  "season_change.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -75,6 +76,14 @@ CALLBACKS = {
     0x53D980: ("8b44240883ec1085", "is a person foreign for a nation (person, nation, 1)"),
     0x53D740: ("8b442404b102568b", "is a person an EU player for a nation (person, nation)"),
     0x54A130: ("81ec000200005657", "set a date (day, month, year, weekday), thiscall: the game date of a new season"),
+    # The news item of a season change (season_change.c, 0.6.0 slice 16).
+    0x77BBE0: ("6aff68fee0950064", "news item constructor (type, flag), thiscall"),
+    0x785790: ("8a44240481ec0002", "news item: set a slot (slot, value), thiscall"),
+    0x786780: ("81ec000200005556", "news store: send an item to every human manager (item), thiscall"),
+    0x4AFA40: ("568bf1578b0685c0", "text: clear, thiscall"),
+    0x4AE770: ("81ec000200005355", "text: append a string (text), thiscall"),
+    0x944CF1: ("6a01ff742408e85c", "operator new (size), cdecl: an entry's competition array (season_change.c)"),
+    0x944C94: ("ff742404e82d0600", "operator delete (block), cdecl"),
 }
 
 

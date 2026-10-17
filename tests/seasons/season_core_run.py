@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/seasons/season_core_run.py <cm0102_recomp> <game folder> [--database <folder>] [--year y]
-        [--days n] [--only base|season] [--keep <folder>]
+        [--days n] [--only base|season] [--keep <folder>] [--jobs n]
 
 The checks, played at the same time:
     base-off    a new base game (2001/02, 3.9.68, changing_rules = off) saved after n days (default 14): its save
@@ -20,10 +20,11 @@ The checks, played at the same time:
     reload      loads the save of "season" in a new user folder with no RECOMP_START_SEASON, plays 3 days and
                 saves: the runtime reads the year from the part, and the new save has the part with the year.
     reload-off  the same with the save of season-off: the new save keeps changing rules off.
-    later       the save of "season" with a part of a later version (version 2, 24 bytes): it loads with the
+    later       the save of "season" with a part of a later version (version 3, 36 bytes): it loads with the
                 fields that this version knows, and the new save has a version 1 part.
     damaged     the save of "season" with a damaged part (year 1999): the load is refused with a message box.
 --keep <folder> keeps the save of "season" there (for a check with another build).
+--jobs n plays at most n games at the same time (default 6).
 Each run uses -seed 1, the test clock and a new user folder. The steps are those of tests/smoke/smoke_run.py
 (Arsenal, or the first club of the list) in classic mode.
 """
@@ -172,6 +173,7 @@ def main(argv):
     days = int(argv[argv.index("--days") + 1]) if "--days" in argv else 14
     only = argv[argv.index("--only") + 1] if "--only" in argv else None
     keep = os.path.abspath(argv[argv.index("--keep") + 1]) if "--keep" in argv else None
+    jobs_max = int(argv[argv.index("--jobs") + 1]) if "--jobs" in argv else 6
     failed = []
 
     def fail(text):
@@ -182,7 +184,7 @@ def main(argv):
         steps = new_game_steps()
         season_env = {"RECOMP_START_SEASON": str(year)}
         jobs = {}
-        with concurrent.futures.ThreadPoolExecutor(6) as pool:
+        with concurrent.futures.ThreadPoolExecutor(jobs_max) as pool:
             if only in (None, "base"):
                 jobs["base-off"] = pool.submit(play, program, game, work, "base-off", {"changing_rules": "off"},
                                                steps, days)
@@ -259,14 +261,15 @@ def main(argv):
             if results.get("season-off", (None,))[0]:
                 saves["reload-off"] = results["season-off"][0]
             later = os.path.join(work, "later.sav")
-            replace_part(path, later, struct.pack("<6I", 2, 24, year, 1, 7, 7))
+            # Version 3: the fields of version 2 (no news, no names, season point 0, slice 16), then 8 unknown bytes.
+            replace_part(path, later, struct.pack("<9I", 3, 36, year, 1, 0, 0, 0, 7, 7))
             saves["later"] = later
             damaged = os.path.join(work, "damaged.sav")
             replace_part(path, damaged, struct.pack("<4I", 1, 16, 1999, 1))
             if keep:
                 shutil.copyfile(path, os.path.join(keep, f"season-{year}.sav"))
             jobs = {}
-            with concurrent.futures.ThreadPoolExecutor(4) as pool:
+            with concurrent.futures.ThreadPoolExecutor(min(4, jobs_max)) as pool:
                 for name, src in saves.items():
                     saved = os.path.join(work, name + ".sav")
                     if src != saved:
