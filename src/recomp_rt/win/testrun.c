@@ -17,6 +17,7 @@
  * (+0x108 of the row), after the name of each row and in the unused rows, which the open of a part 0x9326e0 leaves as they were in
  * the heap (docs/research/2026-10-15-attribute-groups.md). */
 #include "win.h"
+#include "season.h"
 
 #include <SDL.h>
 #include <stdio.h>
@@ -43,6 +44,7 @@ void o_005cde40(void);
 RT_WRAP(005cde40, human_turn)
 {
     holiday_next_turn();
+    season_log_turn();
     if (picker_check_turn()) {     /* RECOMP_PICK_CHECK: the dump is written */
         if (rt_on_fatal) rt_on_fatal();
         SDL_Quit();

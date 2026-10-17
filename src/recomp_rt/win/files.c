@@ -432,6 +432,18 @@ static int win_paths(const char *name, char *h, char *u, size_t room)
     return 1;
 }
 
+/* The host path that a read of the Windows path name opens: the user form U when it exists, else the game
+ * folder form H. 0 when neither exists. The season part of a save (season.c) uses it. */
+int win_existing_file(const char *name, char *out, size_t room)
+{
+    char h[2048], u[2048];
+    if (!win_paths(name, h, u, sizeof h)) return 0;
+    const char *p = exists(u) ? u : exists(h) ? h : NULL;
+    if (!p || is_dir(p) || strlen(p) >= room) return 0;
+    snprintf(out, room, "%s", p);
+    return 1;
+}
+
 /* Handles. Files are 0x100, 0x104, ...; finds are 0x20000, 0x20004, ... */
 #define MAX_FILES 256
 #define FILE_BASE 0x100u

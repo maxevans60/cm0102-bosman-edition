@@ -44,6 +44,9 @@ void win_error_from_errno(void);
 /* Paths (files.c). A Windows path maps to a host path: C:\ is the host root, D:\ is the CD drive, a
  * relative path starts at the current folder. Each part is matched without regard to case. */
 int win_host_path(const char *winpath, char *out, size_t room);
+/* The host path that a read of a Windows path opens (the user folder first, then the game folder); 0 when
+ * the file does not exist. */
+int win_existing_file(const char *winpath, char *out, size_t room);
 /* The Windows path of a host folder (C:\ plus the host path). */
 void win_windows_path(const char *host, char *out, size_t room);
 extern char win_cwd[1024];             /* current folder, as a Windows path */

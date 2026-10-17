@@ -21,6 +21,9 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
     silent   sound = off: sound changes no game decision
     off      every switch option off: no option changes a game decision
     sleep-off  RECOMP_IDLE_SLEEP=0: the idle sleep (#58) changes no game decision
+    rules-on, rules-off  changing_rules (0.6.0 slice 11): a new game with it on has the season part
+               bosman_season.dat in its save and no other difference. Every new-game run has
+               changing_rules = off unless it sets it (new_game_runs), so the new game is the base game.
 Each run prints its count of idle sleeps (RECOMP_IDLE_COUNT=1). The check fails when the normal run
 has none, here and in the match check.
 Each save must be byte for byte the same as the save of "normal". A failed check names the parts of
@@ -197,11 +200,15 @@ SAME_SAVE_RUNS = [
              "clickable_names": "off", "attribute_colours": "off", "faster_days": "off",
              "match_columns": "off", "condition_colours": "off", "save_backups": "off", "remember_window": "off",
              "squad_views": "off", "attribute_groups": "off", "foreign_colours": "off",
-             "full_player_search": "off"}),
+             "full_player_search": "off", "changing_rules": "off"}),
     ("foreign-on", {"faster_days": "off", "foreign_colours": "on"}),
     ("foreign-off", {"faster_days": "off", "foreign_colours": "off"}),
     ("search-on", {"faster_days": "off", "full_player_search": "on"}),
     ("search-off", {"faster_days": "off", "full_player_search": "off"}),
+    # Changing rules (0.6.0 slice 11): a new game with it on gets the season part bosman_season.dat in its save
+    # and must equal the game with it off in every other part (RULES_PART). A loaded old save has it off.
+    ("rules-on", {"faster_days": "off", "changing_rules": "on"}),
+    ("rules-off", {"faster_days": "off", "changing_rules": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
@@ -261,6 +268,8 @@ MATCH_RUNS = [
     ("foreign-off", {"foreign_colours": "off"}),
     ("search-on", {"full_player_search": "on"}),
     ("search-off", {"full_player_search": "off"}),
+    ("rules-on", {"changing_rules": "on"}),
+    ("rules-off", {"changing_rules": "off"}),
     ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
@@ -311,12 +320,13 @@ def without_intro_click(steps):
 REF_BUILD = None
 
 
-def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=()):
+def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None):
     """Plays the runs at the same time, each with its option lines, and compares each saved game with
     the save of the first run. save: a saved game to copy into each user folder first. allowed: names of
     parts that may differ (an accepted difference, for example the parts that depend on the memory layout of
     the game, Q152); a difference in any other part fails. allowed may also be a dict {run name: parts}: then
-    only those runs may differ, each in its own parts."""
+    only those runs may differ, each in its own parts. required: {run name: part}: that run's save must hold
+    the part (0.6.0 slice 11: rules-on of a new game has the season part)."""
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
 
@@ -374,6 +384,10 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
         first = runs[0][0]
         want = open(saves[first], "rb").read()
         for name, _ in runs[1:]:
+            if required and name in required and required[name] not in save_parts(saves[name]):
+                failed += 1
+                print(f"FAIL  {name}: the save has no part {required[name]}")
+                continue
             if open(saves[name], "rb").read() == want:
                 print(f"ok    {name}: the save is the same as {first}")
                 continue
@@ -441,11 +455,29 @@ def options_runs(load, holiday):
              run("options-database", database), run("options-backups", backups)],)
 
 
+# The season part of a save (0.6.0 slice 11, src/recomp_rt/win/season.c). A save of a new game with
+# changing_rules = on has it, and only that part may differ from the same game with it off.
+RULES_PART = "bosman_season.dat"
+
+
+# A saved test game that opens on another screen than the news ends its load at another wait (0.6.0 slice 11).
+# yeovil.sav (a copy of Max's save, 20.8.02) opens on the squad screen: the load ends when Continue Game shows.
+LOAD_END = {"yeovil.sav": "wait continue"}
+
+
+def new_game_runs(runs):
+    """The runs of a new game: changing_rules = off unless a run sets it, so that the new game is the base
+    game (2001/02, 3.9.68, changing rules off) and its save has no season part, as a save of 0.5.0."""
+    return [(name, dict({"changing_rules": "off"}, **options)) for name, options in runs]
+
+
 def same_save(program, game, mode, days, save_name=None, search=False, options=False):
     # No click ends the intro (without_intro_click).
     if save_name is None:
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
-        return compare_runs(program, game, mode, SAME_SAVE_RUNS, without_intro_click(steps) + ["400000 quit"], days)
+        return compare_runs(program, game, mode, new_game_runs(SAME_SAVE_RUNS),
+                            without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,)},
+                            required={"rules-on": RULES_PART})
     # --save: load the saved test game, then the same Go on Holiday steps as the new game.
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))
     import fixtures  # noqa: E402  (fixtures.py imports this file)
@@ -462,7 +494,10 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
         groups = options_runs(without_intro_click(fixtures.LOAD_STEPS), holiday + ["400000 quit"])
         codes = [compare_runs(program, game, mode, runs, runs[0][1]["_steps"], days, save) for runs in groups]
         return max(codes)
-    steps = without_intro_click(fixtures.LOAD_STEPS) + holiday + ["400000 quit"]
+    load = list(fixtures.LOAD_STEPS)
+    if save_name in LOAD_END:
+        load[load.index("wait first-news")] = LOAD_END[save_name]
+    steps = without_intro_click(load) + holiday + ["400000 quit"]
     return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save)
 
 

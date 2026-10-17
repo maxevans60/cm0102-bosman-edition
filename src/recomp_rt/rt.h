@@ -290,6 +290,10 @@ void rt_fatal(const char *fmt, ...) __attribute__((noreturn, format(printf, 1, 2
  * mode. The constants of tools/recomp/widescreen.py read these. */
 extern uint32_t rt_screen_w, rt_screen_h;
 
+/* The start year of the game (0.6.0 slice 11, src/recomp_rt/win/season.c): 2001 in the base game. The year
+ * sites of tools/recomp/seasons.py read it in place of the constants 2001, 2002 and 2003. */
+extern uint32_t rt_season_year;
+
 /* Full player search (#57, src/recomp_rt/win/playersearch.c): 1 when the option is on. The replaced jumps
  * at 0x7afc8d, 0x7afc9d and 0x7afcdf in tools/recomp/widescreen.py ask it. */
 uint32_t rt_full_player_search(uint32_t screen);
