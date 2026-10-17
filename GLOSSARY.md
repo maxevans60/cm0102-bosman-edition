@@ -152,6 +152,10 @@ _Avoid_: season picker, year select
 The Update Team database that a season uses, the earliest of that season unless players report it as faulty.
 _Avoid_: data update, DB
 
+**Seasons folder**:
+The folder `Seasons` in the game folder of a download. It holds one zip for each season database, named by the neutral name of the database, for example `October 2003.zip`. The first start of a season unpacks its zip into `Databases` of the save folder.
+_Avoid_: season pack, database zips
+
 **Extra database**:
 An Update Team database that is not a season database, such as an April or SIM version.
 _Avoid_: more versions, alternative database

@@ -1,5 +1,5 @@
 # Data map and confidence pass
-Status: In build
+Status: Shipped (2026-10-17)
 
 Research: `docs/research/2026-10-16-function-map-estimate.md` (every sweep and review wave of the function map). Earlier spec: `docs/specs/2026-10-16-function-map-spec.md`.
 
@@ -51,6 +51,7 @@ Data map
 Confidence pass
 - A script rebuilds the function dossiers with all runs and the global names. It sends a row to an agent only when its dossier has new evidence since its review: a high global, or a caller or callee with a new or raised name (Q14).
 - Opus agents check about 25 rows each. The 93 library rows also go to Opus (Q6).
+- Changed by Max on 2026-10-17, during wave c01, to save tokens: a gate after c01 stops the pass when fewer than 15% of the checked rows reach high or get a new name. From c02, Sonnet checkers read a short pack per row and open full dossiers only when needed. An Opus agent checks 30 changed rows of c02. Over 10% wrong, the rest goes back to Opus. The third check stays on Opus.
 - The quotes for high are a string, an assert, a caller, a vtable slot, a high global that pins the purpose (Q2) and an open source match. An open source match cites the project and the function by name. No code of that project goes anywhere (Q3).
 - The agent that quotes a global for high also checks the evidence of that global. Each global that raises a row thus gets an Opus check (Q13).
 - Each new name goes to a third check, as in the review pass. A raise of confidence that keeps the name needs no third check, because the brief makes the agent check that its quote exists (Q20).
@@ -122,22 +123,28 @@ Done (2026-10-17): waves data-w02 and data-w03 named the last 813 globals. The d
 Blocked by: 3
 Delivers: the function dossiers rebuilt with all runs and the global names, the new evidence filter with the count of rows it sends to agents, the Opus brief with the open source rule and the global check, the batch lists and the notes for the four file questions.
 Merge danger: two-way door. Blast radius: the scope of the pass. A filter that is too strict leaves rows without a check.
-- [ ] Each of the 1,406 rows is either in a batch or on the list for Max with "no new evidence".
-- [ ] A sample of 10 rows on the list for Max has no new evidence in its rebuilt dossier.
-- [ ] The rows of the four file questions carry their notes in the function map.
+- [x] Each of the 1,406 rows is either in a batch or on the list for Max with "no new evidence".
+- [x] A sample of 10 rows on the list for Max has no new evidence in its rebuilt dossier.
+- [x] The rows of the four file questions carry their notes in the function map.
+
+Done (2026-10-17): 956 rows in 38 batches over 5 waves, 450 rows on the list for Max. Float and double constants do not count as new evidence. A global that a check finds wrong drops to medium with every high row that quotes it. 99 rows carry a file note from `function-map/file-notes.tsv`. The plan and the brief are `sweep/CONF-PLAN.md` and `sweep/BRIEF-confidence.md` in the work folder.
 
 ### 5. Confidence pass waves (repeat per wave)
 Blocked by: 4
 Delivers: Opus checks of the rows in scope, one wave per run, with a third check for each new name.
 Merge danger: two-way door. Blast radius: the names of one wave.
-- [ ] Each row of the wave is high with a quote, or keeps its confidence with one line on what is missing.
-- [ ] Each new name has a third check.
-- [ ] Each wave is in the estimate doc. The check script passes.
+- [x] Each row of the wave is high with a quote, or keeps its confidence with one line on what is missing.
+- [x] Each new name has a third check.
+- [x] Each wave is in the estimate doc. The check script passes.
+
+Done (2026-10-17): waves c01 to c05 checked 956 rows, and round 2 (c06, c07) checked 229 rows with a neighbour that round 1 raised. 245 rows reached high, 10 have a new name, and no global was found wrong. Two Opus caller checks undid 4 circular caller quotes. The estimate doc has each wave and the end result.
 
 ### 6. Close
 Blocked by: 5
 Delivers: the list for Max of every row that is not high, each with its reason, the end result in the estimate doc, the function map paragraph of the handover, the updated `HANDOVER-next.md` and this spec marked shipped.
 Merge danger: two-way door. Blast radius: docs only.
-- [ ] Max has decided on each row of the list.
-- [ ] The handover describes both maps.
-- [ ] The check script passes on the final state.
+- [x] Max has decided on each row of the list. Max accepted the rows by group (2026-10-17): each keeps its confidence and its reason in `function-map/not-high.tsv`.
+- [x] The handover describes both maps.
+- [x] The check script passes on the final state.
+
+Done (2026-10-17): 1,161 rows are not high, in `function-map/not-high.tsv`. The end result is in the estimate doc, section "End result of the confidence pass".

@@ -1795,6 +1795,283 @@ The wave took about 1.03 million tokens and 6 minutes. At the merge, the 18 Date
 
 All 4,428 globals have a name: 3,808 high, 574 medium and 46 low. Scripts named 3,015 of them, Sonnet 1,412 and Opus 1. Five high rows wait as medium for a global they quote. The three waves took about 3.6 million tokens for 1,413 globals, plus 142,000 for the gate. Two false globals are known: 0xb71b00 and 0xca0000 are numbers in an instruction, not addresses.
 
+### Confidence pass
+
+Spec: `docs/specs/2026-10-17-data-map-and-confidence-spec.md`, slices 4 to 6.
+
+#### Slice 4: setup (2026-10-17)
+
+The function dossiers are rebuilt with every run to review-fix. Each global now shows its data map name and confidence, without the old cap of 80, and each caller and callee shows its confidence.
+
+A script sends a row that is not high to an agent only when its dossier has new evidence since its review run: a high global, or a caller or callee with a new name or a higher confidence. Callers come from the full call graph, because the dossier line stops at 60. The 740 float and double constants do not count, because their names only repeat the value.
+
+| Set | Rows |
+|---|---|
+| New evidence, in 38 batches over 5 waves | 956 (high globals only 707, new neighbours only 72, both 177) |
+| No new evidence, on the list for Max | 450 (429 medium, 21 low) |
+
+Most of the high globals have Sonnet names. So an agent that quotes a global for high checks that global first. A global that a check finds wrong drops to medium, and every high row that quotes it drops too. The library rows on the list are 55 of 93.
+
+A fresh Opus review of the setup found four faults, all fixed before any wave: the caller cap of 60 hid new names, a row from the third check could reach high without a quote, a global with mixed verdicts could keep its raised rows high, and a row could reach the list without a reason. The same review checked 10 random rows of the list against their dossiers and agreed with all 10.
+
+File questions (Q9): 99 rows keep their file and get a note in their purpose from `function-map/file-notes.tsv`. 56 Finance rows sit under fin_prm.cpp with asserts that name finance.CPP. 13 Match_Stats rows sit under match_screens.cpp with asserts that name match_stats.CPP. 6 `FILE_LLIST` rows sit in the gap after fifa_rankings.cpp with no assert. 24 network.h rows lie in the display.cpp and scrman.cpp ranges. The function map docs no longer list the data map pages under "Cited in".
+
+#### Confidence c01 (2026-10-17)
+
+Run `conf-c01`: 8 Opus checkers checked 206 rows of batches conf-c01-aa to conf-c01-ah (award, Belgian, Brazilian, club, comp, contract, Croatian, Cup and Database rows). Agree 153, fix 49, rename 4. The third check took the checker's row in all 4 renames. There were no global conflicts. 53 rows were written.
+
+Figures for the gate:
+
+| Figure | Value |
+|---|---|
+| Rows checked | 206 |
+| Rows raised to high | 43 (21%) |
+| Rows with a new name after the third check | 4 |
+| Total tokens of the wave | 1,161,233 |
+
+Quote kinds of the 43 raised rows: global 20, caller 14, string 9. The global quotes are mostly competition and nation key ids, which the script names from their strings in `set_key_ids` 0x601a40. The nine string quotes are false entries in club_screens.cpp whose strings lie in their own range. Every checker checked each global it quoted, and none was wrong. So `conf-c01-g` lowers no global and no row. Confidence in `names.tsv` is now 5,500 high, 1,335 medium and 28 low.
+
+Most rows that stay medium have only general globals as new evidence: the assert message buffer `g_file_debug_info_text`, manager objects such as `g_news` or `g_contract_manager`, and object tables. These name what a function uses, but not its purpose. The renames came from disassembly: two thiscalls on the ScreenManager and the Cash object, a field at +0x53 that the forum offset index names as the three-letter name, and a round entry that holds match days.
+
+| Agent | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|
+| Checker | conf-c01-aa | 23 | 2 | 129,672 |
+| Checker | conf-c01-ab | 20 | 6 | 126,993 |
+| Checker | conf-c01-ac | 29 | 10 | 129,571 |
+| Checker | conf-c01-ad | 30 | 2 | 142,491 |
+| Checker | conf-c01-ae | 30 | 10 | 133,258 |
+| Checker | conf-c01-af | 20 | 8 | 163,572 |
+| Checker | conf-c01-ag | 30 | 3 | 132,483 |
+| Checker | conf-c01-ah | 24 | 2 | 104,426 |
+| Third check | judge-input (4 rows) | 4 | 0 | 98,767 |
+
+The checkers took 1,062,466 tokens, about 5,200 per row, and 2 to 4 minutes each.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x415640 | `award_screens_add_menu_item` | `ScreenManager::add_menu_item` | takes reviewer | `ScreenManager::add_menu_item` |
+| 0x450aa0 | `cash_format_rounded` | `Cash::format_display_amount` | takes reviewer | `Cash::format_display_amount` |
+| 0x521f10 | `cup_set_round_progression_rule` | `cup_set_round_match_day` | takes reviewer | `cup_set_round_match_day` |
+| 0x5454c0 | `nation_get_english_short_name` | `nation_get_english_three_letter_name` | takes reviewer | `nation_get_english_three_letter_name` |
+
+#### Confidence c02 (2026-10-17)
+
+Run `conf-c02`: 8 Sonnet checkers worked from short packs (`confidence_pack.py`) on the 183 rows of batches conf-c02-aa to conf-c02-ah (Date, Danish, display, English cups and leagues, FIFA, Finnish, fixture, formation, French, friendly, game, German, Gold Cup, hall of fame, Dutch, host country, human manager, injury, Irish and Italian rows). Agree 133, fix 50, rename 0. There were no renames and no global conflicts, so the third check had no input and did not run. 50 rows were written.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 183 |
+| Rows raised to high | 47 (25.7%) |
+| Rows with a new name | 0 |
+| Wrong in the Opus sample check | 2 of 30 (6.7%) |
+| Rows raised to high after the revert | 45 |
+| Total tokens of the wave | 1,201,375 |
+
+Quote kinds of the 47 raised rows: global 29, caller 14, vtable 2, string 2. Most global quotes are competition and nation key ids from the string chain of `set_key_ids` 0x601a40. Every checker checked each global it quoted, and none was wrong. So `conf-c02-g` lowers no global and no row.
+
+The Opus sample check took 30 of the 47 changed rows and found 2 wrong: 0x5b4a60 `Formation::is_slot_customised` and 0x5b4b70 `Formation::is_slot_coordinate_customised`. Both quote the caller `Tactics_Screen::is_formation_slot_customised` 0x8a9fa0. That caller is high only on an assert line and on its forwards to these two rows, so the quote is circular. The global check catches this fault for globals. Nothing in the brief catches it for callers. The run `conf-c02-revert` puts both rows back to medium. At 6.7%, under the 10% line, Sonnet stays for c03 to c05. Confidence in `names.tsv` is now 5,545 high, 1,290 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c02-aa | 22 | 1 | 111,911 |
+| Checker | Sonnet | conf-c02-ab | 21 | 10 | 176,509 |
+| Checker | Sonnet | conf-c02-ac | 20 | 10 | 187,698 |
+| Checker | Sonnet | conf-c02-ad | 21 | 3 | 105,599 |
+| Checker | Sonnet | conf-c02-ae | 30 | 5 | 112,742 |
+| Checker | Sonnet | conf-c02-af | 21 | 6 | 126,914 |
+| Checker | Sonnet | conf-c02-ag | 25 | 4 | 105,961 |
+| Checker | Sonnet | conf-c02-ah | 23 | 8 | 107,683 |
+| Sample check | Opus | sample-input (30 rows) | 30 | 0 | 166,358 |
+
+The checkers took 1,035,017 tokens, about 5,650 per row, and 1 to 5 minutes each. That is close to the 1,062,466 tokens of the Opus checkers of c01. Sonnet saves only through its lower price per token.
+
+#### Confidence c03 (2026-10-17)
+
+Run `conf-c03`: 8 Sonnet checkers worked from short packs on the 215 rows of batches conf-c03-aa to conf-c03-ah (Italian, Japanese, key nation, Korean, league, library, main, manager, match day, match engine, match events, match player, match screens, media, menu bar, mini cup, monthly ratings, nation awards and national teams rows). Agree 158, fix 56, rename 1. The third check took the checker's row for the one rename. There were no global conflicts. 57 rows were written. No sample check ran, because the plan needs one only after c02.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 215 |
+| Rows raised to high | 57 (26.5%) |
+| Rows with a new name | 1 |
+| Globals found wrong | 0 |
+| Total tokens of the wave | 1,103,176 |
+
+Quote kinds of the 57 raised rows: caller 39, global 12, string 6. The rename is 0x6d5cd0 `match_events_get_event_category` to `match_events_get_event_priority`. The string at 0xa15bf0 names byte 0 of the event record as the priority. Every checker checked each global it quoted, and none was wrong. So `conf-c03-g` lowers no global and no row. Confidence in `names.tsv` is now 5,602 high, 1,233 medium and 28 low.
+
+21 of the 39 caller quotes are library rows of batch conf-c03-ab (T2K and TrueType glyph, outline, scan converter and input stream rows). Some rest on callers or parent functions that the same batch raised. The c02 sample check found the circular caller quote in this kind of row, and the brief still has no check for it. So these rows carry more risk than the global quotes.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c03-aa | 22 | 10 | 166,538 |
+| Checker | Sonnet | conf-c03-ab | 30 | 21 | 102,358 |
+| Checker | Sonnet | conf-c03-ac | 30 | 3 | 136,310 |
+| Checker | Sonnet | conf-c03-ad | 30 | 8 | 137,138 |
+| Checker | Sonnet | conf-c03-ae | 22 | 4 | 106,965 |
+| Checker | Sonnet | conf-c03-af | 30 | 3 | 127,522 |
+| Checker | Sonnet | conf-c03-ag | 21 | 4 | 112,703 |
+| Checker | Sonnet | conf-c03-ah | 30 | 4 | 134,297 |
+| Third check | Opus | judge-input (1 row) | 1 | 0 | 79,345 |
+
+The checkers took 1,023,831 tokens, about 4,760 per row, and 1 to 4 minutes each.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x6d5cd0 | `match_events_get_event_category` | `match_events_get_event_priority` | takes reviewer | `match_events_get_event_priority` |
+
+#### Confidence c04 (2026-10-17)
+
+Run `conf-c04`: 8 Sonnet checkers worked from short packs on the 197 rows of batches conf-c04-aa to conf-c04-ah (national teams, network, news, notes, Norwegian, officials, Olympics, physio, player regen, player search, player stats, plot, Portuguese, printouts, record utils, ruling body, Russian, scout, screen manager, search, setup, shortlist, simulated stats, Spanish, squad and staff contract rows). Agree 160, fix 37, rename 0. There were no renames and no global conflicts, so the third check had no input and did not run. 37 rows were written, of which 4 are evidence fixes that stay medium (the player regen rows 0x7abac0, 0x7ad0e0, 0x7ad220 and 0x7ad590).
+
+| Figure | Value |
+|---|---|
+| Rows checked | 197 |
+| Rows raised to high | 33 (16.8%) |
+| Rows with a new name | 0 |
+| Globals found wrong | 0 |
+| Total tokens of the wave | 1,119,347 |
+
+Quote kinds of the 33 raised rows: global 20, caller 11, string 2. Most global quotes are competition and nation key ids, for example the Portuguese, Russian, Norwegian and Spanish division keys. Every checker checked each global it quoted, and none was wrong. So `conf-c04-g` lowers no global and no row. Checker conf-c04-ah kept 0x85fa00 at medium because its high caller cites it, so that checker applied the circular caller test without a rule in the brief. Confidence in `names.tsv` is now 5,635 high, 1,200 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c04-aa | 23 | 7 | 166,066 |
+| Checker | Sonnet | conf-c04-ab | 21 | 3 | 137,458 |
+| Checker | Sonnet | conf-c04-ac | 21 | 6 | 137,494 |
+| Checker | Sonnet | conf-c04-ad | 24 | 11 | 165,790 |
+| Checker | Sonnet | conf-c04-ae | 22 | 2 | 120,479 |
+| Checker | Sonnet | conf-c04-af | 29 | 0 | 100,702 |
+| Checker | Sonnet | conf-c04-ag | 27 | 2 | 128,085 |
+| Checker | Sonnet | conf-c04-ah | 30 | 2 | 163,273 |
+
+The checkers took 1,119,347 tokens, about 5,680 per row, and 1 to 5 minutes each. There is no rename table, because the wave has no rename.
+
+#### Confidence c05 (2026-10-17)
+
+Run `conf-c05`: 6 Sonnet checkers worked from short packs on the 155 rows of batches conf-c05-aa to conf-c05-af (staff contract, staff records, staff screens, Swedish, tactics, training, transfer, Turkish, American, utils, virtual staff, world cup qualifying, weather, Welsh, world club and year award rows). Agree 135, fix 20, rename 0. There were no renames and no global conflicts, so the third check had no input and did not run. 20 rows were written.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 155 |
+| Rows raised to high | 20 (12.9%) |
+| Rows with a new name | 0 |
+| Globals found wrong | 0 |
+| Total tokens of the wave | 695,699 |
+
+Quote kinds of the 20 raised rows: global 16, caller 3, string 1. The global quotes are competition, nation and club key ids, the contract date limits and the FIFA transfer rule flag. Every checker checked each global it quoted, and none was wrong. So `conf-c05-g` lowers no global and no row. Confidence in `names.tsv` is now 5,655 high, 1,180 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c05-aa | 22 | 8 | 116,434 |
+| Checker | Sonnet | conf-c05-ab | 30 | 1 | 108,560 |
+| Checker | Sonnet | conf-c05-ac | 30 | 0 | 112,297 |
+| Checker | Sonnet | conf-c05-ad | 30 | 2 | 129,562 |
+| Checker | Sonnet | conf-c05-ae | 24 | 4 | 120,657 |
+| Checker | Sonnet | conf-c05-af | 19 | 5 | 108,189 |
+
+The checkers took 695,699 tokens, about 4,490 per row, and 1 to 2 minutes each.
+
+#### End result of waves c01 to c05 (2026-10-17)
+
+The five waves checked all 956 rows with new evidence. 198 rows reached high (c01 43, c02 45 after the revert, c03 57, c04 33, c05 20), and 5 rows have a new name. No global was found wrong. The waves took 5,280,830 tokens in all, under the plan's 7 to 8 million, because c02 to c05 ran on Sonnet. Confidence in `names.tsv` went from 5,457 high, 1,378 medium and 28 low to 5,655 high, 1,180 medium and 28 low. 1,208 rows are still not high: the 450 rows with no new evidence and 758 rows that a checker kept. Slice 6 lists them for Max. The brief has no check for a circular caller quote. 39 of the 57 raises of c03 and 11 of the 33 raises of c04 rest on a caller quote, and no sample check covered them.
+
+#### Caller quote check (2026-10-17)
+
+The brief has no check for a circular caller quote. So one Opus agent checked the 60 rows that c02 to c05 raised on a caller quote and that no sample check saw (c02 7, c03 39, c04 11, c05 3). Run `conf-caller` holds the input. It took 131,864 tokens. 56 rows are right and 4 are wrong, all from c03:
+- 0x6830b0 `League::move_club_to_division` and 0x6831a0 `League::relegate_club_to_division`. Their caller 0x595f00 names its targets after these two rows.
+- 0x68d040 `LLIST::~LLIST`. Its caller 0x497910 is high only because it calls this row.
+- 0x936840 `glyph_hint_destroy`. Its caller calls the object a hinting instance only because of this row.
+
+The run `conf-caller-revert` puts the 4 rows back to medium. The agent also flagged 0x8c7470 `transfer_manager_offer_needs_work_permit`: its high rests only on its call to 0x8c7560, so it needs a recheck. Confidence in `names.tsv` is now 5,651 high, 1,184 medium and 28 low. The pass raised 194 rows in all.
+
+#### Returns of the pass (2026-10-17)
+
+| Wave | Checked | Raised (after reverts) | Yield | Tokens | Tokens per raised row |
+|---|---|---|---|---|---|
+| c01 (Opus) | 206 | 43 | 20.9% | 1,161,233 | 27,005 |
+| c02 | 183 | 45 | 24.6% | 1,201,375 | 26,697 |
+| c03 | 215 | 54 | 25.1% | 1,103,176 | 20,429 |
+| c04 | 197 | 33 | 16.8% | 1,119,347 | 33,920 |
+| c05 | 155 | 20 | 12.9% | 695,699 | 34,785 |
+
+The caller check adds 131,864 tokens to c02 to c05. The yield fell in c04 and c05. Those batches hold screens, transfer and training rows, where the high globals are mostly generic objects such as the staff table and the debug text buffer.
+
+1,212 rows are still not high:
+- 450 had no new evidence for this pass. 57 of them now have a caller or callee that this pass raised.
+- 762 were checked in this pass and kept. 201 of them now have a caller or callee that this pass raised.
+
+So about 260 rows have new evidence for a second round. Rows with only new neighbours gave 32% in this pass, but a second round reads weaker neighbours, so expect 15% to 25%: about 40 to 65 rows for about 1.4 million tokens. The other 950 rows have no new evidence. The same dossiers will not raise them. Only a new source can: a runtime trace, a disassembly study of field offsets, or an open source match for the library rows.
+
+#### Confidence round 2: c06 and c07 (Max, 2026-10-17)
+
+Max chose a second round on the rows that a raise of c01 to c05 gave new evidence. `confidence_scope.py dossiers` rebuilt the dossiers with all runs. `confidence_round2.py` found 229 rows that are not high and have a caller or callee that c01 to c05 raised or renamed (`sweep/conf-scope-r2.tsv`). They went into 10 batches: conf-c06-aa to conf-c06-ah, and conf-c07-aa and conf-c07-ab. The Sonnet brief got a "Caller check" first: a caller whose high rests on the row cannot raise it.
+
+Run `conf-c06`: agree 141, fix 46, rename 3. The third check took the checker's row for all three renames. Run `conf-c07`: agree 35, fix 4, rename 0. There were no global conflicts and no global was found wrong. Then one Opus agent checked all 48 caller-quote raises of the round (run `conf-caller2`) and found none wrong. That includes 0x6830b0 and 0x6831a0, which `conf-caller` had reverted and which now quote other callers that are high on their own asserts and key globals.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 229 |
+| Rows raised to high | 52 (22.7%) |
+| Rows with a new name | 3 |
+| Wrong in the Opus caller check | 0 of 48 |
+| Total tokens of the round | 1,822,332 |
+| Tokens per raised row | 35,045 |
+
+Quote kinds of the 52 raised rows: caller 48, global 3, string 1. Confidence in `names.tsv` is now 5,703 high, 1,132 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c06-aa | 27 | 9 | 188,914 |
+| Checker | Sonnet | conf-c06-ab | 20 | 14 | 208,580 |
+| Checker | Sonnet | conf-c06-ac | 20 | 9 | 183,635 |
+| Checker | Sonnet | conf-c06-ad | 28 | 9 | 173,475 |
+| Checker | Sonnet | conf-c06-ae | 28 | 1 | 132,302 |
+| Checker | Sonnet | conf-c06-af | 20 | 0 | 108,345 |
+| Checker | Sonnet | conf-c06-ag | 25 | 2 | 166,433 |
+| Checker | Sonnet | conf-c06-ah | 22 | 4 | 180,531 |
+| Checker | Sonnet | conf-c07-aa | 20 | 2 | 120,378 |
+| Checker | Sonnet | conf-c07-ab | 19 | 2 | 126,292 |
+| Third check | Opus | judge-input of conf-c06 (3 rows) | 3 | 0 | 89,619 |
+| Caller check | Opus | conf-caller2 (48 rows) | 48 | 0 | 143,828 |
+
+The checkers took 1,588,885 tokens, about 6,940 per row. That is more than in round 1, because the caller check makes a checker read each quoted caller. The round cost about 1.8 million tokens, above the 1.4 million of the estimate, and gave 52 rows, inside the estimate of 40 to 65.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x4e5850 | `compare_squad_players_by_rating_then_reputation` | `compare_squad_players_by_appearances_then_reputation` | takes reviewer | `compare_squad_players_by_appearances_then_reputation` |
+| 0x6ceb90 | `CM3_MATCH_ENGINE::pick_player_for_role` | `CM3_MATCH_ENGINE::pick_restart_taker` | takes reviewer | `CM3_MATCH_ENGINE::pick_restart_taker` |
+| 0x7e6f20 | `comp_is_non_competitive` | `comp_is_reserve_or_minor_comp` | takes reviewer | `comp_is_reserve_or_minor_comp` |
+
+Checker conf-c06-aa found that 0x4cc0b0 and 0x4cc0f0 had swapped names. The run `conf-fix` in "End result of the confidence pass" corrects them.
+
+1,160 rows are still not high. 181 of them have a caller or callee that round 2 raised. Most of those rows were in round 2 already, with other neighbours. A third round would read fewer new facts per row, so expect a yield under round 2's 22.7% at more than 35,000 tokens per raised row.
+
+#### End result of the confidence pass (2026-10-17)
+
+Max closed the pass after round 2, because the yield fell and the cost per raised row rose (see "Returns of the pass" and round 2). One Opus agent then checked three flagged rows (run `conf-fix`, 97,881 tokens):
+- 0x8c7470 `transfer_manager_offer_needs_work_permit` drops from high to medium. Its only fact was its call to 0x8c7560, which quotes it back, and its only caller 0x8c2f50 is medium.
+- 0x4cc0b0 is now `CONTRACT_MANAGER::move_to_first_team` and 0x4cc0f0 is now `CONTRACT_MANAGER::move_to_reserves`. The profile menu at 0x870700 shows codes 1 and 3 as "Promote To Seniors" and "Promote To 'A' Team", and 0x4cc0b0 acts on those codes. Both stay medium.
+
+| Figure | Value |
+|---|---|
+| Rows not high before the pass | 1,406 (1,378 medium, 28 low) |
+| Rows checked in round 1 (c01 to c05) | 956 |
+| Rows checked in round 2 (c06, c07) | 229 |
+| Rows raised to high, net | 245 |
+| Rows with a new name | 10 |
+| Globals found wrong | 0 |
+| Total tokens of the pass | 7,332,907 |
+| Confidence after the pass | 5,702 high, 1,133 medium, 28 low |
+
+The total holds round 1 (5,280,830), the caller check (131,864), round 2 (1,822,332) and `conf-fix` (97,881).
+
+The 1,161 rows that are not high are in `function-map/not-high.tsv`, each with its reason:
+- 396 rows had no new evidence in either round. Their reason is "no new evidence".
+- 762 rows were checked and kept. Their reason is the checker's line on what is missing for high.
+- 3 rows had a raise undone by a sample check, because the caller quote was circular.
+
+Max's decision (2026-10-17): the rows are accepted by group, not one by one. Each row keeps its confidence and its reason. A medium name stays a hint: read the code before you rely on it. Only new evidence can raise these rows, for example a runtime trace, which is out of this spec (Q4).
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
