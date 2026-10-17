@@ -1,5 +1,5 @@
 # Function map of the original
-Status: In build
+Status: Shipped (2026-10-17)
 
 Research: `docs/research/2026-10-16-function-map-estimate.md`, `-pilot-discipline.md` and `-pilot-club-screens.md`.
 
