@@ -121,7 +121,8 @@ cmake -B "$REPO/build-win" -DCMAKE_TOOLCHAIN_FILE="$REPO/packaging/windows/mingw
     -DCM0102_GAME_DIR="$GAME" >/dev/null
 cmake --build "$REPO/build-win" -j --target windows_installer
 SETUP="$REPO/build-win/CM0102-Bosman-Edition-$VERSION-Setup.exe"
-python3 -I "$REPO/tools/windows/check_installer.py" "$REPO/build-win/cm0102_recomp.exe" "$SETUP" --version "$VERSION"
+python3 -I "$REPO/tools/windows/check_installer.py" "$REPO/build-win/cm0102_recomp.exe" "$SETUP" --version "$VERSION" \
+    --manifest "$MANIFEST" --game-dir "$GAME" --nsis-log "$REPO/build-win/installer-log.txt"
 cp "$SETUP" "$OUT/"
 
 echo "== Linux"

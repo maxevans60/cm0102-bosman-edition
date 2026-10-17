@@ -1,9 +1,10 @@
 /* Test of the rules table reader (0.6.0 slice 12, src/recomp_rt/win/season_rules.c).
  *
  * Usage: season_rules_test <rules.tsv made by tools/seasons/make_rules.py> <scratch folder>
- * ctest makes the table first (test season_rules_table). The checks: the row count, the values of known
- * rows, the lookup by season and file (also for a row with two files), and that a damaged or missing file
- * gives an empty table. */
+ * ctest makes the table first (test season_rules_table). The checks: the row count against the count line
+ * and the lines of the file, the values of known rows, the lookup by season and file (also for a row with
+ * two files), a file with Windows line ends, the limits of a season and a count, and that a damaged or
+ * missing file gives an empty table. */
 #include "season_rules.h"
 
 #include <stdio.h>
@@ -29,8 +30,16 @@ int main(int argc, char **argv)
         fprintf(stderr, "usage: season_rules_test <rules.tsv> <scratch folder>\n");
         return 2;
     }
+    /* The row count of the file: line 1 says it, and the file has 2 lines more. */
+    int want = -1, lines = 0, c;
+    FILE *f = fopen(argv[1], "rb");
+    if (!f) { perror(argv[1]); return 2; }
+    if (fscanf(f, "#bosman-rules\t1\t%d", &want) != 1) want = -1;
+    rewind(f);
+    while ((c = fgetc(f)) != EOF) lines += c == '\n';
+    fclose(f);
     int n = season_rules_load(argv[1]);
-    CHECK(n == 7101, "row count %d, want 7101", n);
+    CHECK(n > 0 && n == want && n == lines - 2, "row count %d, line 1 says %d, %d lines", n, want, lines);
     CHECK(season_rules_count() == n, "count");
 
     const SeasonRule *r = season_rules_find(2001, "eng_prm", 0);
@@ -65,8 +74,46 @@ int main(int argc, char **argv)
     CHECK(not_held > 0 && text > 0, "codes not_held %d text %d", not_held, text);
     CHECK(!season_rules_row(-1) && !season_rules_row(n), "rows out of range");
 
-    /* A damaged file and a missing file give an empty table. */
+    /* The same file with Windows line ends reads the same rows, with no '\r' in the last field. */
     char path[1024];
+    snprintf(path, sizeof path, "%s/crlf.tsv", argv[2]);
+    FILE *in = fopen(argv[1], "rb"), *out = fopen(path, "wb");
+    if (!in || !out) { perror(path); return 2; }
+    while ((c = fgetc(in)) != EOF) {
+        if (c == '\n') fputc('\r', out);
+        fputc(c, out);
+    }
+    fclose(in);
+    fclose(out);
+    CHECK(season_rules_load(path) == n, "a file with Windows line ends");
+    r = season_rules_find(2001, "eng_prm", 0);
+    CHECK(r && !strchr(r->sources, '\r'), "no CR in the last field");
+
+    /* A season and a count outside the limits stop the reader. The rows are made from the first row. */
+    snprintf(path, sizeof path, "%s/limits.tsv", argv[2]);
+    static char cols[8192], row[65536], bad[70000];
+    FILE *src = fopen(argv[1], "rb");
+    if (!src || !fgets(cols, sizeof cols, src) || !fgets(cols, sizeof cols, src) || !fgets(row, sizeof row, src))
+        return 2;
+    fclose(src);
+    char *tab = strchr(row, '\t');                    /* after the id: the season */
+    snprintf(bad, sizeof bad, "#bosman-rules\t1\t1\n%sx-1\t2100%s", cols, strchr(tab + 1, '\t'));
+    write_file(path, bad);
+    CHECK(season_rules_load(path) == 0, "a season of 2100");
+    char *clubs = tab;                                 /* the 8th field: clubs */
+    for (int k = 0; k < 6 && clubs; k++) clubs = strchr(clubs + 1, '\t');
+    char *after = clubs ? strchr(clubs + 1, '\t') : NULL;
+    CHECK(after != NULL, "the first row has a clubs field");
+    if (after) {
+        snprintf(bad, sizeof bad, "#bosman-rules\t1\t1\n%s%.*s100001%s", cols, (int)(clubs + 1 - row), row, after);
+        write_file(path, bad);
+        CHECK(season_rules_load(path) == 0, "a count of 100001");
+        snprintf(bad, sizeof bad, "#bosman-rules\t1\t1\n%s%.*s100000%s", cols, (int)(clubs + 1 - row), row, after);
+        write_file(path, bad);
+        CHECK(season_rules_load(path) == 1 && season_rules_row(0)->clubs == 100000, "a count of 100000");
+    }
+
+    /* A damaged file and a missing file give an empty table. */
     snprintf(path, sizeof path, "%s/damaged.tsv", argv[2]);
     write_file(path, "#bosman-rules\t1\t1\nid\tseason\n");
     CHECK(season_rules_load(path) == 0 && season_rules_count() == 0, "a damaged header");
