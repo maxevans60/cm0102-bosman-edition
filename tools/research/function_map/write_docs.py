@@ -2,6 +2,8 @@
 
 Later runs win over earlier ones for the same address (a sweep over one file, a second wave).
 Each function also lists the research docs and runtime files that cite its address.
+A row in file-notes.tsv (address, note) adds its note to the purpose: it says which file the asserts
+name when the placement files the code under another file.
 
 Usage: FUNCMAP_WORK=... write_docs.py <run> [<run> ...]
 Writes docs/research/function-map/index.md, names.tsv and one <file>.md per source file.
@@ -33,7 +35,7 @@ def citations(addresses):
     files = glob.glob(f"{REPO}/docs/**/*.md", recursive=True) + glob.glob(f"{REPO}/src/**/*.[ch]", recursive=True)
     for p in files:
         rel = os.path.relpath(p, REPO)
-        if rel.startswith("docs/research/function-map") or os.path.basename(rel).startswith("2026-10-16-function-map-"):
+        if rel.startswith(("docs/research/function-map", "docs/research/data-map")) or os.path.basename(rel).startswith("2026-10-16-function-map-"):
             continue
         for m in re.finditer(r"(?:0x|FUN_|f_|RT_REPLACE\(|RT_WRAP\()0*([0-9a-fA-F]{6})\b", open(p, errors="ignore").read()):
             a = int(m.group(1), 16)
@@ -54,6 +56,11 @@ def main(runs):
                 names[int(r["address"], 16)] = r
     members = sorted(e for e in db if cat[e] in ("game", "lib"))
     cited = citations(set(members))
+    notes = {}
+    if os.path.exists(f"{MAP_DIR}/file-notes.tsv"):
+        for line in list(open(f"{MAP_DIR}/file-notes.tsv"))[1:]:
+            a, note = line.rstrip("\n").split("\t")
+            notes[int(a, 16)] = note
     funclets = collections.Counter(owner.values())
 
     def home(e):
@@ -81,8 +88,9 @@ def main(runs):
                 c = r.get("confidence", "none")
                 conf[c] += 1
                 size = f"{db[e]['n']}" + (f" (+{funclets[e]} unwind)" if funclets[e] else "")
+                purpose = " ".join(x for x in (r.get("purpose"), notes.get(e)) if x)
                 rows.append(f"| 0x{e:06x} | {size} | `{cell(r.get('name'))}` | {cell(r.get('convention'))} | "
-                            f"{cell(r.get('purpose'))} | {c} | {r.get('model', '')} | {cell(', '.join(sorted(cited[e])))} |")
+                            f"{cell(purpose)} | {c} | {r.get('model', '')} | {cell(', '.join(sorted(cited[e])))} |")
                 tsv.write(f"0x{e:06x}\t{f}\t{r.get('name', '')}\t{c}\t{r.get('model', '')}\t{','.join(sorted(cited[e]))}\n")
             title = f"{f}: {len(by_file[f])} functions"
             open(f"{MAP_DIR}/{f}.md", "w").write(HEADER.format(title=title) + "\n".join(rows) + "\n")
@@ -95,6 +103,7 @@ def main(runs):
              f"{cats['ehstub']} exception handler stubs, {cats['crt']} C runtime functions.",
              f"- Confidence: {conf['high']} high, {conf['medium']} medium, {conf['low']} low, {conf['none']} without a name.",
              f"- Runs: {', '.join(runs)}.",
+             f"- File notes: {len(notes)} rows say in their purpose which file their asserts name (`file-notes.tsv`).",
              "- Quality of the Haiku first pass: see \"First pass\" in `../2026-10-16-function-map-estimate.md`.", "", "| File | Functions |", "|---|---|"]
     for f in sorted(by_file, key=str.lower):
         index.append(f"| [{f}]({f}.md) | {len(by_file[f])} |")

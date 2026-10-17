@@ -2,7 +2,8 @@
 
 A dossier holds the function's placement, size, ret, strings, assert line numbers, globals, callers
 and callees with their files, pointers to it from data, and the Ghidra pseudocode (or capstone
-disassembly when Ghidra gave none). With --names, callers and callees also show earlier names.
+disassembly when Ghidra gave none). With --names, callers and callees also show earlier names and
+their confidence. Globals show their data map name and confidence from docs/research/data-map/globals.tsv.
 
 Usage: CM0102_EXE=... FUNCMAP_WORK=... dossier.py --all [--names names.jsonl ...]
        CM0102_EXE=... FUNCMAP_WORK=... dossier.py <file.cpp> [--names names.jsonl]
@@ -14,7 +15,7 @@ import os
 import re
 import sys
 
-from common import image, load, work_dir
+from common import REPO, image, load, work_dir
 from analysis import Analyzer
 
 MAX_PSEUDO_LINES = 2500
@@ -27,6 +28,13 @@ an = Analyzer(img, fset)
 short = {a: os.path.basename(p.replace("\\", "/")) for a, p in paths.items()}
 WORK = work_dir()
 NAMES = {}
+CONF = {}
+GLOBALS_TSV = os.path.join(REPO, "docs", "research", "data-map", "globals.tsv")
+GLOBALS = {}
+if os.path.exists(GLOBALS_TSV):
+    for line in list(open(GLOBALS_TSV))[1:]:
+        c = line.rstrip("\n").split("\t")
+        GLOBALS[int(c[0], 16)] = (c[3], c[6])
 
 
 def string_at(a):
@@ -41,7 +49,16 @@ def string_at(a):
 def where(e):
     c = cat.get(e)
     w = (fo.get(e) or "/".join(bnd.get(e, ["?"]))) if c == "game" else (c or "?")
-    return f"{w}: {NAMES[e]}" if e in NAMES else w
+    if e not in NAMES:
+        return w
+    return f"{w}: {NAMES[e]}" + (f" ({CONF[e]})" if e in CONF else "")
+
+
+def global_label(v):
+    if v not in GLOBALS:
+        return f"0x{v:06x}"
+    name, conf = GLOBALS[v]
+    return f"0x{v:06x} {name} ({conf})"
 
 
 callers = collections.defaultdict(set)
@@ -99,7 +116,7 @@ def block(e):
             seen.add(v)
             lines.append(f"  0x{a:06x}: 0x{v:06x} \"{s[:160]}\"")
     if globals_:
-        lines.append("Globals referenced: " + ", ".join(f"0x{v:06x}" for v in globals_[:80]))
+        lines.append("Globals referenced: " + ", ".join(global_label(v) for v in globals_))
     cs = sorted(c for c in f.calls | f.tails if c in fset)
     if cs:
         lines.append("Calls: " + ", ".join(f"0x{c:06x} [{where(c)}]" for c in cs))
@@ -164,6 +181,8 @@ def main(argv):
             r = json.loads(line)
             if r.get("name"):
                 NAMES[int(r["address"], 16)] = r["name"]
+                if r.get("confidence"):
+                    CONF[int(r["address"], 16)] = r["confidence"]
         argv = argv[:i] + argv[i + 2:]
     if argv[0] == "--all":
         members = sorted(e for e in db if cat.get(e) in ("game", "lib"))

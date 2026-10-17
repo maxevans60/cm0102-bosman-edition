@@ -1795,6 +1795,27 @@ The wave took about 1.03 million tokens and 6 minutes. At the merge, the 18 Date
 
 All 4,428 globals have a name: 3,808 high, 574 medium and 46 low. Scripts named 3,015 of them, Sonnet 1,412 and Opus 1. Five high rows wait as medium for a global they quote. The three waves took about 3.6 million tokens for 1,413 globals, plus 142,000 for the gate. Two false globals are known: 0xb71b00 and 0xca0000 are numbers in an instruction, not addresses.
 
+### Confidence pass
+
+Spec: `docs/specs/2026-10-17-data-map-and-confidence-spec.md`, slices 4 to 6.
+
+#### Slice 4: setup (2026-10-17)
+
+The function dossiers are rebuilt with every run to review-fix. Each global now shows its data map name and confidence, without the old cap of 80, and each caller and callee shows its confidence.
+
+A script sends a row that is not high to an agent only when its dossier has new evidence since its review run: a high global, or a caller or callee with a new name or a higher confidence. Callers come from the full call graph, because the dossier line stops at 60. The 740 float and double constants do not count, because their names only repeat the value.
+
+| Set | Rows |
+|---|---|
+| New evidence, in 38 batches over 5 waves | 956 (high globals only 707, new neighbours only 72, both 177) |
+| No new evidence, on the list for Max | 450 (429 medium, 21 low) |
+
+Most of the high globals have Sonnet names. So an agent that quotes a global for high checks that global first. A global that a check finds wrong drops to medium, and every high row that quotes it drops too. The library rows on the list are 55 of 93.
+
+A fresh Opus review of the setup found four faults, all fixed before any wave: the caller cap of 60 hid new names, a row from the third check could reach high without a quote, a global with mixed verdicts could keep its raised rows high, and a row could reach the list without a reason. The same review checked 10 random rows of the list against their dossiers and agreed with all 10.
+
+File questions (Q9): 99 rows keep their file and get a note in their purpose from `function-map/file-notes.tsv`. 56 Finance rows sit under fin_prm.cpp with asserts that name finance.CPP. 13 Match_Stats rows sit under match_screens.cpp with asserts that name match_stats.CPP. 6 `FILE_LLIST` rows sit in the gap after fifa_rankings.cpp with no assert. 24 network.h rows lie in the display.cpp and scrman.cpp ranges. The function map docs no longer list the data map pages under "Cited in".
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.

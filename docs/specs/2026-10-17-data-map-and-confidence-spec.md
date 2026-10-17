@@ -122,9 +122,11 @@ Done (2026-10-17): waves data-w02 and data-w03 named the last 813 globals. The d
 Blocked by: 3
 Delivers: the function dossiers rebuilt with all runs and the global names, the new evidence filter with the count of rows it sends to agents, the Opus brief with the open source rule and the global check, the batch lists and the notes for the four file questions.
 Merge danger: two-way door. Blast radius: the scope of the pass. A filter that is too strict leaves rows without a check.
-- [ ] Each of the 1,406 rows is either in a batch or on the list for Max with "no new evidence".
-- [ ] A sample of 10 rows on the list for Max has no new evidence in its rebuilt dossier.
-- [ ] The rows of the four file questions carry their notes in the function map.
+- [x] Each of the 1,406 rows is either in a batch or on the list for Max with "no new evidence".
+- [x] A sample of 10 rows on the list for Max has no new evidence in its rebuilt dossier.
+- [x] The rows of the four file questions carry their notes in the function map.
+
+Done (2026-10-17): 956 rows in 38 batches over 5 waves, 450 rows on the list for Max. Float and double constants do not count as new evidence. A global that a check finds wrong drops to medium with every high row that quotes it. 99 rows carry a file note from `function-map/file-notes.tsv`. The plan and the brief are `sweep/CONF-PLAN.md` and `sweep/BRIEF-confidence.md` in the work folder.
 
 ### 5. Confidence pass waves (repeat per wave)
 Blocked by: 4
