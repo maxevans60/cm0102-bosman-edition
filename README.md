@@ -95,4 +95,6 @@ Open an [issue](https://github.com/maxevans60/cm0102-bosman-edition/issues/new/c
 
 The Bosman Edition is an unofficial fan project. It is not affiliated with or endorsed by Sports Interactive, SEGA, Eidos or Square Enix. Championship Manager is a trademark of Square Enix. The downloads include the game files from the 2008 free release.
 
-The code in this repository is released under [CC0 1.0](LICENSE). That covers only the code written for this project. It does not cover the original game, its data or its logo, which belong to their owners.
+From 0.6.0 the code in this repository is released under the [GNU General Public License v3.0](LICENSE). Releases up to 0.5.0 were released under CC0 1.0. The licence covers only the code written for this project. It does not cover the original game, its data, its logo or the Update Team databases, which belong to their owners.
+
+The function map (`docs/research/function-map/`) and the data map (`docs/research/data-map/`) are under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), as in their own repository, [cm0102-function-map](https://github.com/maxevans60/cm0102-function-map).
