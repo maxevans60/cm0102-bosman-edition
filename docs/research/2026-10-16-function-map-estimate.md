@@ -1128,6 +1128,63 @@ The merge needed two fixes. Nine `match_pl.cpp` getters and setters take the mat
 | 0x729e30 | Named in 2026-10-14-clickable-names-inventory.md | `match_stats_find_fixture_by_index` (Haiku) | `Match_Stats::find_record_fixture` | agrees |
 | 0x72b1d0 | Named in 2026-10-14-game-creation-inventory.md | `media_block_reset_and_release` (Haiku) | `Media::Media` | agrees |
 
+#### Wave w27 (tier 5, 2026-10-17)
+
+Run `sweep-w27`: 8 Opus agents named 203 functions: `media.cpp` (`Media`), `month_award.cpp`, `month_ratings.cpp`, `network.h`, `news.cpp`, `news_screens.cpp`, `notes.cpp`, `officials_manager.cpp`, `os.cpp`, `physio.cpp` and the `scrman.cpp` gap functions. Each agent took 2 to 7 minutes and 115,000 to 229,000 tokens. Confidence: 150 high, 53 medium, none low.
+
+The merge needed two fixes. One agent named four media news text writers as free stdcall functions. Two agents named the same kind of writer `Media::`, because every caller sets ECX to the Media object at 0xb6b7c8. The four rows now use `Media::`. Seventeen false entries had four name styles. They now use the `<parent>_fragment_<addr>` style. Three files keep more than one class, because their code serves more than one object: `network.h` (`Display`, `NetworkBuffer`, `ScreenManager`, a header with inline methods), `news.cpp` (`NewsItem` and `News`) and `officials_manager.cpp` (`OfficialsManager` and one `Official::operator=`).
+
+46 functions of the wave are cited. 20 agree, 24 agree in area and 2 differ. The display and scrman research calls the scrman record key a screen key. The sweep reads it as a manager key, with away and done flags. The two differences are 0x758de0 and 0x800000.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x55f7c0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_session_reset` (Haiku) | `Display::reset` | agrees |
+| 0x560140 | Named in 2026-10-13-display-and-scrman-inventory.md | `byte_buffer_push_byte` (Haiku) | `NetworkBuffer::put_char` | agrees |
+| 0x5601e0 | Named in 2026-10-13-display-and-scrman-inventory.md | `buffer_append_word` (Haiku) | `NetworkBuffer::put_short` | agrees |
+| 0x560290 | Named in 2026-10-13-display-and-scrman-inventory.md | `Network_buffer::put_word` (Haiku) | `NetworkBuffer::put_ushort` | agrees |
+| 0x560340 | Named in 2026-10-13-display-and-scrman-inventory.md | `buffer_write_u32` (Haiku) | `NetworkBuffer::put_ulong` | agrees |
+| 0x567b40 | Named in 2026-10-13-display-and-scrman-inventory.md | `buffer_write_u32` (Haiku) | `NetworkBuffer::put_int` | agrees in area |
+| 0x567be0 | Named in 2026-10-13-display-and-scrman-inventory.md | `net_buffer_read_byte` (Haiku) | `NetworkBuffer::get_char` | agrees in area |
+| 0x567c80 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_read_u16` (Haiku) | `NetworkBuffer::get_short` | agrees in area |
+| 0x567d30 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_buffer_read_u32` (Haiku) | `NetworkBuffer::get_long` | agrees in area |
+| 0x567de0 | Named in 2026-10-13-display-and-scrman-inventory.md | `buffer_read_u32` (Haiku) | `NetworkBuffer::get_int` | agrees in area |
+| 0x567e90 | Named in 2026-10-13-display-and-scrman-inventory.md | `buffer_read_u16` (Haiku) | `NetworkBuffer::get_ushort` | agrees in area |
+| 0x567f40 | Named in 2026-10-13-display-and-scrman-inventory.md | `buffer_read_u32` (Haiku) | `NetworkBuffer::get_ulong` | agrees in area |
+| 0x567ff0 | Named in 2026-10-13-display-and-scrman-inventory.md | `net_buffer_read_string` (Haiku) | `NetworkBuffer::get_sized_block` | agrees in area |
+| 0x5694a0 | Named in 2026-10-13-display-and-scrman-inventory.md | `buffer_write_u32` (Haiku) | `NetworkBuffer::put_long` | agrees in area |
+| 0x569540 | Named in 2026-10-13-display-and-scrman-inventory.md | `Packet::write_sized_payload` (Haiku) | `NetworkBuffer::put_sized_block` | agrees |
+| 0x72c1f0 | Named in 2026-10-14-columns-and-colours-inventory.md | `media_generate_player_interview` (Haiku) | `Media::create_player_media_story` | agrees in area |
+| 0x758de0 | Named in 2026-10-14-violent-conduct-inventory.md | `media_queue_response_screen` (Haiku) | `Media::queue_manager_fa_complaint_story` | differs. The violent conduct research guesses a club reaction (transfer list, fine or release). The sweep names it the queue function of news 0x178e, the manager's complaint to the FA. Not checked |
+| 0x77bc80 | Named in 2026-10-14-clickable-names-inventory.md | `news_queue_item_text` (Haiku) | `NewsItem::write_text` | agrees |
+| 0x784100 | Named in 2026-10-15-holiday-next-match-inventory.md | `news_respond_dispatch` (Haiku) | `NewsItem::auto_respond` | agrees in area |
+| 0x785670 | Named in 2026-10-14-clickable-names-inventory.md | `news_item_category_from_id` (Haiku) | `NewsItem::get_category` | agrees |
+| 0x785b20 | Named in 2026-10-14-game-creation-inventory.md | `news_cd_check_loop` (Haiku) | `News::News` | agrees |
+| 0x7874b0 | Named in 2026-10-15-holiday-next-match-inventory.md | `news_item_ring_walk_dispatch` (Haiku) | `News::auto_respond_all` | agrees in area |
+| 0x788010 | Named in 2026-10-14-assistant-and-days-inventory.md | `news_screens_build_manager_list_screen` (Haiku) | `news_screens_open_news_screen` | agrees |
+| 0x79bf40 | Named in 2026-10-14-game-creation-inventory.md | `officials_manager_clear_flags` (Haiku) | `OfficialsManager::clear_busy_flags` | agrees |
+| 0x7a1820 | Named in 2026-10-14-game-creation-inventory.md | `os_get_free_disk_space_mb` (Haiku) | `os_get_free_disk_space_mb` | agrees |
+| 0x7fc380 | Named in 2026-10-13-display-and-scrman-inventory.md | `scout_manager_reset_state` (Haiku) | `ScreenManager::ScreenManager` | agrees |
+| 0x7fc690 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_session_poll_and_flush` (Haiku) | `ScreenManager::disconnect_network` | agrees in area |
+| 0x7fc7e0 | Named in 2026-10-13-display-and-scrman-inventory.md | `SCREEN_MANAGER::monitor` (Haiku) | `ScreenManager::monitor` | agrees |
+| 0x7fdc00 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_session_loop` (Haiku) | `ScreenManager::run_network_client` | agrees |
+| 0x7fe4a0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_iterate_slots_notify` (Haiku) | `ScreenManager::open_screen_for_each_record` | agrees |
+| 0x7ff500 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_session_create_screen_manager` (Haiku) | `ScreenManager::start_network_session` | agrees |
+| 0x7ff5f0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_session_destroy` (Haiku) | `ScreenManager::end_network_session` | agrees |
+| 0x7ff630 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_player_slot_register` (Haiku) | `scrman_add_player_record` | agrees |
+| 0x7ff7b0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_flush_pending_for_slot` (Haiku) | `scrman_remove_player_records` | agrees |
+| 0x7ff810 | Named in 2026-10-13-display-and-scrman-inventory.md | `squad_swap_players_by_id` (Haiku) | `ScreenManager::swap_manager_keys` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7ff8f0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_set_slot_and_flag` (Haiku) | `ScreenManager::add_manager_record` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7ff990 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_remove_player_slot` (Haiku) | `ScreenManager::remove_manager_record` | agrees in area |
+| 0x7ffcd0 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_remove_player_slot` (Haiku) | `ScreenManager::switch_to_manager` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7ffd80 | Named in 2026-10-13-display-and-scrman-inventory.md | `get_screen_player_list` (Haiku) | `ScreenManager::get_channel_manager_keys` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7ffdd0 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_find_player_slot_value` (Haiku) | `ScreenManager::is_manager_away` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7ffe40 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_find_slot_value_by_key` (Haiku) | `ScreenManager::is_manager_done` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7ffeb0 | Named in 2026-10-13-display-and-scrman-inventory.md | `network_set_slot_value_by_id` (Haiku) | `ScreenManager::set_manager_done` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7fff20 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_slot_free_by_id` (Haiku) | `ScreenManager::is_player_done` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7fff70 | Named in 2026-10-13-display-and-scrman-inventory.md | `count_inactive_or_unset_slots` (Haiku) | `ScreenManager::count_idle_channels` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x7fffa0 | Named in 2026-10-13-display-and-scrman-inventory.md | `find_slot_by_id` (Haiku) | `ScreenManager::find_manager_channel` | agrees in area. The display and scrman research calls the record key a screen key. The sweep reads it as a manager key |
+| 0x800000 | Named in 2026-10-13-display-and-scrman-inventory.md | `scrman_fill_buffer_or_fail` (Haiku) | `ScreenManager::send_clear_click` | differs. The research says opcode 0x11 is a redraw request. The sweep names it a clear click. Not checked |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
