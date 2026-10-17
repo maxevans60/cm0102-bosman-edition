@@ -5782,63 +5782,63 @@ address	file	name	confidence	model	cited_in
 0x867ef0	staff_contracts.cpp	STAFF_CONTRACT::get_squad_status_text	high	opus	
 0x868020	staff_contracts.cpp	STAFF_CONTRACT::get_release_clause_abbreviation	high	opus	2026-10-15-contract-clauses.md
 0x868210	staff_contracts.cpp	STAFF_CONTRACT::check_fifa_protected_period	medium	opus	
-0x868390	staff_records.cpp	staff_records_load_cd_and_init	high	haiku	2026-10-14-game-creation-inventory.md
-0x8687c0	staff_records.cpp	staff_records_release_members	medium	haiku	
-0x868830	staff_records.cpp	match_day_record_result_and_prize	medium	haiku	
+0x868390	staff_records.cpp	Staff_Records::Staff_Records	high	opus	2026-10-14-game-creation-inventory.md
+0x8687c0	staff_records.cpp	Staff_Records::~Staff_Records	high	opus	
+0x868830	staff_records.cpp	Staff_Records::record_match_result	high	opus	
 0x868c50	staff_records.cpp	Staff_Records::add_league_champions_record	high	opus	
-0x869480	staff_records.cpp	staff_records_apply_weekly_wages_and_morale	medium	haiku	
-0x869aa0	staff_records.cpp	staff_records_update_contract_slot	medium	haiku	
-0x86a070	staff_records.cpp	staff_records_refresh_club_entries	low	haiku	
+0x869480	staff_records.cpp	Staff_Records::add_promotion_record	high	opus	
+0x869aa0	staff_records.cpp	Staff_Records::record_manager_job_change	medium	opus	
+0x86a070	staff_records.cpp	Staff_Records::add_league_finish_records	high	opus	
 0x86a1c0	staff_records.cpp	Staff_Records::add_relegation_record	high	opus	
 0x86a800	staff_records.cpp	Staff_Records::add_cup_winners_record	high	opus	
 0x86b0b0	staff_records.cpp	Staff_Records::add_cup_runners_up_record	high	opus	
-0x86b710	staff_records.cpp	Staff_Records::apply_club_season_finance_and_reputation	medium	haiku	
+0x86b710	staff_records.cpp	Staff_Records::add_cup_third_place_record	high	opus	
 0x86bdd0	staff_records.cpp	Staff_Records::add_qualified_for_round_record	high	opus	
 0x86c000	staff_records.cpp	Staff_Records::add_knocked_out_record	high	opus	
 0x86c1d0	staff_records.cpp	Staff_Records::add_failed_to_qualify_record	high	opus	
-0x86c390	staff_records.cpp	staff_records_award_candidate_check	medium	haiku	
-0x86c730	staff_records.cpp	staff_records_assert_or_copy_record	medium	haiku	
-0x86c8c0	staff_records.cpp	month_award_process_staff_candidate	medium	haiku	
-0x86cc50	staff_records.cpp	staff_records_assert_or_lookup	medium	haiku	
-0x86cd70	staff_records.cpp	staff_records_award_shortlist_update	low	haiku	2026-10-16-crash-fixes.md
-0x86d6e0	staff_records.cpp	staff_records_remove_player_from_teams	medium	haiku	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
-0x86d800	staff_records.cpp	staff_records_apply_player_entry	medium	haiku	
-0x86da20	staff_records.cpp	staff_record_link_assert_check	medium	haiku	
-0x86dc30	staff_records.cpp	staff_records_assert_index_and_sort	medium	haiku	
-0x86dda0	staff_records.cpp	staff_records_reset_slots_for_date	low	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md
-0x86de70	staff_records.cpp	staff_records_get_list_filtered	medium	haiku	
-0x86df90	staff_records.cpp	Staff_Records::filter_squad_by_age_band	medium	haiku	
-0x86e0b0	staff_records.cpp	staff_records::format_history_entry	high	haiku	
-0x86f300	staff_records.cpp	staff_records_news_message_format	high	haiku	
-0x86f5b0	staff_records.cpp	staff_record_find_or_create	high	haiku	
-0x86f950	staff_records.cpp	award_best_staff_record	medium	haiku	
-0x86fab0	staff_records.cpp	staff_records_collect_sacked_candidates	medium	haiku	
-0x86fb80	staff_records.cpp	staff_record_ensure_entry	medium	haiku	
-0x86fc20	staff_records.cpp	staff_record_clear	medium	haiku	
-0x86fc70	staff_records.cpp	staff_record_reset	medium	haiku	
-0x86fce0	staff_records.cpp	staff_records_load_file	high	haiku	
-0x86ffd0	staff_records.cpp	staff_records_load_dat	high	haiku	
-0x870220	staff_records.cpp	staff_compare_by_club	medium	haiku	
-0x8702a0	staff_screens.cpp	assert_staff_player_and_open_view	medium	haiku	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
-0x870650	staff_screens.cpp	staff_screens_check_build_and_quit_on_mismatch	medium	haiku	2026-10-16-comparison-screen-inventory.md,build-brief-0.4.0.md
-0x870700	staff_screens.cpp	Staff_Screens::build_player_context_menu	high	haiku	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
-0x87a510	staff_screens.cpp	draw_player_profile_panel	high	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-attribute-groups.md,2026-10-16-comparison-screen-inventory.md,build-brief-0.4.0.md,groups.c
-0x87cd90	staff_screens.cpp	Staff_Screens::contract_info_panel_fill	high	haiku	
-0x87dd80	staff_screens.cpp	staff_screens_player_detail_report	high	haiku	2026-10-14-widescreen-inventory.md
-0x880000	staff_screens.cpp	staff_screens_build_player_comment_list	high	haiku	
-0x8857b0	staff_screens.cpp	get_flag_byte_at_0x44	medium	haiku	
-0x8857c0	staff_screens.cpp	get_byte_flag_3f	medium	haiku	
-0x8857d0	staff_screens.cpp	get_flag_nibble_4f_high	medium	haiku	
-0x8857e0	staff_screens.cpp	get_byte_field_49	medium	haiku	
-0x8857f0	staff_screens.cpp	player_flag_bit_3_is_set	medium	haiku	
-0x885800	staff_screens.cpp	player_record_field_lookup	medium	haiku	
-0x885820	staff_screens.cpp	staff_screens_player_history_view	high	haiku	
-0x888260	staff_screens.cpp	staff_screens_handle_action	high	haiku	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
-0x889c30	staff_screens.cpp	staff_screens_dispatch_action	high	haiku	2026-10-16-comparison-screen-inventory.md,compare_screen.c
-0x88b2f0	staff_screens.cpp	staff_screens_check_squad_slot_limits	medium	haiku	2026-10-16-comparison-screen-inventory.md
-0x88b4b0	staff_screens.cpp	list_row_key_handler	medium	haiku	
-0x88b8a0	staff_screens.cpp	staff_screens_release_screen_slots	medium	haiku	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
-0x88b910	staff_screens.cpp	staff_screens_history_panel_build	medium	haiku	
+0x86c390	staff_records.cpp	Staff_Records::add_year_award_record	high	opus	
+0x86c730	staff_records.cpp	Staff_Records::add_team_of_year_record	high	opus	
+0x86c8c0	staff_records.cpp	Staff_Records::add_month_award_record	high	opus	
+0x86cc50	staff_records.cpp	Staff_Records::add_first_cap_record	high	opus	
+0x86cd70	staff_records.cpp	Staff_Records::add_transfer_records	high	opus	2026-10-16-crash-fixes.md
+0x86d6e0	staff_records.cpp	Staff_Records::end_season_for_nation	medium	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
+0x86d800	staff_records.cpp	Staff_Records::add_free_release_records	high	opus	
+0x86da20	staff_records.cpp	Staff_Records::add_loan_records	medium	opus	
+0x86dc30	staff_records.cpp	Staff_Records::add_supporters_player_of_year_record	high	opus	
+0x86dda0	staff_records.cpp	Staff_Records::daily_update	medium	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-14-game-creation-inventory.md
+0x86de70	staff_records.cpp	Staff_Records::get_staff_history	high	opus	
+0x86df90	staff_records.cpp	Staff_Records::get_club_history	high	opus	
+0x86e0b0	staff_records.cpp	Staff_Records::format_staff_history_entry	high	opus	
+0x86f300	staff_records.cpp	Staff_Records::format_club_history_entry	high	opus	
+0x86f5b0	staff_records.cpp	Staff_Records::get_manager_record	high	opus	
+0x86f950	staff_records.cpp	Staff_Records::find_manager_of_the_month	high	opus	
+0x86fab0	staff_records.cpp	Staff_Records::get_manager_of_year_candidates	high	opus	
+0x86fb80	staff_records.cpp	Staff_Records::rewind_staff_history	medium	opus	
+0x86fc20	staff_records.cpp	Staff_Records::clear_manager_record	high	opus	
+0x86fc70	staff_records.cpp	Staff_Records::clear_human_manager_record	medium	opus	
+0x86fce0	staff_records.cpp	Staff_Records::load	high	opus	
+0x86ffd0	staff_records.cpp	Staff_Records::save	high	opus	
+0x870220	staff_records.cpp	staff_records_compare_clubs_by_manager_points	high	opus	
+0x8702a0	staff_screens.cpp	staff_screens_open_staff_profile	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
+0x870650	staff_screens.cpp	staff_screens_open_compare_players_screen	high	opus	2026-10-16-comparison-screen-inventory.md,build-brief-0.4.0.md
+0x870700	staff_screens.cpp	staff_screens_build_profile_screen	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
+0x87a510	staff_screens.cpp	staff_screens_draw_profile_tab	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-15-attribute-groups.md,2026-10-16-comparison-screen-inventory.md,build-brief-0.4.0.md,groups.c
+0x87cd90	staff_screens.cpp	staff_screens_draw_contract_tab	high	opus	
+0x87dd80	staff_screens.cpp	staff_screens_draw_transfer_tab	high	opus	2026-10-14-widescreen-inventory.md
+0x880000	staff_screens.cpp	staff_screens_draw_transfer_tab_fragment_880000	high	opus	
+0x8857b0	staff_screens.cpp	staff_contract_get_happiness	medium	opus	
+0x8857c0	staff_screens.cpp	staff_contract_get_selection_streak	low	opus	
+0x8857d0	staff_screens.cpp	staff_contract_get_squad_status	medium	opus	
+0x8857e0	staff_screens.cpp	staff_contract_is_leaving_on_bosman	medium	opus	
+0x8857f0	staff_screens.cpp	staff_contract_has_transfer_request	medium	opus	
+0x885800	staff_screens.cpp	manager_manager_get_board_confidence	high	opus	
+0x885820	staff_screens.cpp	staff_screens_draw_history_tab	high	opus	
+0x888260	staff_screens.cpp	staff_screens_handle_profile_action	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
+0x889c30	staff_screens.cpp	staff_screens_handle_compare_action	high	opus	2026-10-16-comparison-screen-inventory.md,compare_screen.c
+0x88b2f0	staff_screens.cpp	staff_screens_handle_profile_tab_action	medium	opus	2026-10-16-comparison-screen-inventory.md
+0x88b4b0	staff_screens.cpp	staff_screens_handle_history_tab_action	medium	opus	
+0x88b8a0	staff_screens.cpp	staff_screens_leave_profile_screen	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-16-comparison-screen-inventory.md
+0x88b910	staff_screens.cpp	staff_screens_add_squad_and_history_menu	medium	opus	
 0x88bc50	staff_screens.cpp	staff_screens_compare_text_rows	high	opus	2026-10-15-attribute-groups.md,2026-10-16-comparison-screen-inventory.md
 0x88bc70	staff_screens.cpp	staff_screens_build_nickname_dialog	high	opus	
 0x88bee0	staff_screens.cpp	staff_screens_handle_nickname_dialog_action	high	opus	
@@ -5914,180 +5914,180 @@ address	file	name	confidence	model	cited_in
 0x893bf0	sweden_awards.cpp	SwedenAwards::daily_update	high	opus	
 0x893d60	sweden_awards.cpp	SwedenAwards::update_team_of_the_week	high	opus	
 0x893d80	sweden_awards.cpp	SWEDEN_RULES::SWEDEN_RULES	high	opus	2026-10-16-sweep-rulebooks.md
-0x893dc0	tactics.cpp	Tactics::load_tactics_files	high	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-tactics-inventory.md,tactics.c
-0x8961e0	tactics.cpp	tactics_list_free	medium	haiku	
-0x896290	tactics.cpp	tactics_record_match_result	high	haiku	
-0x896570	tactics.cpp	tactics_get_record_ptr	high	haiku	2026-10-16-tactics-inventory.md,tactics.c
-0x896660	tactics.cpp	tactics_get_error_or_resolve_slot	medium	haiku	2026-10-15-holiday-next-match-inventory.md
-0x8967d0	tactics.cpp	tactics_set_player_slot	medium	haiku	
-0x8968f0	tactics.cpp	tactics_get_slot_player_record	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,best_xi.c
-0x896a90	tactics.cpp	tactics_set_slot_value	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,best_xi.c,picker.c
-0x896c60	tactics.cpp	tactics_remove_player_from_slot	high	haiku	
-0x896e90	tactics.cpp	tactics_clear_slot_assignment	medium	haiku	
-0x896fe0	tactics.cpp	Tactics::store_restore_club_slot	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,picker.c
-0x897250	tactics.cpp	tactics_slot_matches	medium	haiku	2026-10-15-squad-dropdown-inventory.md
-0x8972c0	tactics.cpp	tactics_find_slot_index	medium	haiku	
-0x8973e0	tactics.cpp	tactics_set_player_slot_position	medium	haiku	
-0x897590	tactics.cpp	tactics_find_slot_for_player	medium	haiku	
-0x8976a0	tactics.cpp	Tactics::get_field_by_index	medium	haiku	
-0x897760	tactics.cpp	Tactics::set_slot_tactic	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-squad-dropdown-inventory.md,picker.c
-0x897880	tactics.cpp	Tactics::set_club_tactic_slot	medium	haiku	
-0x897990	tactics.cpp	tactics_lookup_slot_player	medium	haiku	
-0x897bb0	tactics.cpp	tactics_slot_set_entry	medium	haiku	
-0x897dc0	tactics.cpp	tactics_get_player_slot_record	medium	haiku	
-0x897ee0	tactics.cpp	tactics_slot_set_entry	medium	haiku	
-0x898040	tactics.cpp	tactics_get_player_slot_byte	medium	haiku	
-0x898150	tactics.cpp	tactics_set_player_role_slot	high	haiku	
+0x893dc0	tactics.cpp	Tactics::Tactics	high	opus	2026-10-14-game-creation-inventory.md,2026-10-16-tactics-inventory.md,tactics.c
+0x8961e0	tactics.cpp	Tactics::free_data	high	opus	
+0x896290	tactics.cpp	Tactics::record_tactic_result	high	opus	
+0x896570	tactics.cpp	Tactics::get_tactic_block	high	opus	2026-10-16-tactics-inventory.md,tactics.c
+0x896660	tactics.cpp	Tactics::get_club_tactic	high	opus	2026-10-15-holiday-next-match-inventory.md
+0x8967d0	tactics.cpp	Tactics::set_club_tactic_index	high	opus	
+0x8968f0	tactics.cpp	Tactics::get_selected_player	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,best_xi.c
+0x896a90	tactics.cpp	Tactics::set_selected_player	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,best_xi.c,picker.c
+0x896c60	tactics.cpp	Tactics::remove_player_from_selection	high	opus	
+0x896e90	tactics.cpp	Tactics::clear_selection_slot	high	opus	
+0x896fe0	tactics.cpp	Tactics::clear_or_restore_selection	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,picker.c
+0x897250	tactics.cpp	Tactics::has_selection_undo	high	opus	2026-10-15-squad-dropdown-inventory.md
+0x8972c0	tactics.cpp	Tactics::find_selection_slot	high	opus	
+0x8973e0	tactics.cpp	Tactics::swap_selection_slots	high	opus	
+0x897590	tactics.cpp	Tactics::find_captain_slot	high	opus	
+0x8976a0	tactics.cpp	Tactics::get_captain	high	opus	
+0x897760	tactics.cpp	Tactics::set_captain_from_slot	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-squad-dropdown-inventory.md,picker.c
+0x897880	tactics.cpp	Tactics::set_captain	high	opus	
+0x897990	tactics.cpp	Tactics::get_set_piece_taker	medium	opus	
+0x897bb0	tactics.cpp	Tactics::set_set_piece_taker	medium	opus	
+0x897dc0	tactics.cpp	Tactics::get_key_player	medium	opus	
+0x897ee0	tactics.cpp	Tactics::set_key_player	medium	opus	
+0x898040	tactics.cpp	Tactics::get_shootout_taker_slot	high	opus	
+0x898150	tactics.cpp	Tactics::set_shootout_taker_slot	high	opus	
 0x8982b0	tactics.cpp	Tactics::get_club_tactics_index	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-15-squad-dropdown-inventory.md
-0x8983f0	tactics.cpp	tactics_copy_record_by_id	high	haiku	2026-10-15-assistant-pick-inventory.md
-0x8984d0	tactics.cpp	tactics_store_entry	high	haiku	
-0x8985c0	tactics.cpp	tactics_load_dat	high	haiku	
-0x8995d0	tactics.cpp	tactics_load_from_zip	high	haiku	
-0x899a50	tactics_screens.cpp	tactics_screens_open_screen	medium	haiku	
+0x8983f0	tactics.cpp	Tactics::copy_selection_record	high	opus	2026-10-15-assistant-pick-inventory.md
+0x8984d0	tactics.cpp	Tactics::store_selection_record	high	opus	
+0x8985c0	tactics.cpp	Tactics::read_from_save	high	opus	
+0x8995d0	tactics.cpp	Tactics::write_to_save	high	opus	
+0x899a50	tactics_screens.cpp	tactics_screen_open	high	opus	
 0x899e50	tactics_screens.cpp	Tactics_Team_Data::~Tactics_Team_Data	medium	opus	
-0x899ea0	tactics_screens.cpp	tactics_screen_build_team_instructions	high	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-tactics-inventory.md,columns.c,foreign.c
-0x89f700	tactics_screens.cpp	thunk_tactics_screen_build	high	haiku	
-0x89f710	tactics_screens.cpp	tactics_formation_dialog_handler	high	haiku	2026-10-14-widescreen-inventory.md
-0x8a2c60	tactics_screens.cpp	tactics_screens_close_screen	medium	haiku	
-0x8a2ca0	tactics_screens.cpp	tactics_screen_init_lists	medium	haiku	2026-10-14-clickable-names-inventory.md
-0x8a2d70	tactics_screens.cpp	tactics_screens_close_active_screen	medium	haiku	
-0x8a2db0	tactics_screens.cpp	tactics_screens_build_team_instructions_panel	high	haiku	
-0x8a4830	tactics_screens.cpp	tactics_screens_build_team_instructions_page	medium	haiku	
-0x8a4840	tactics_screens.cpp	tactics_screen_handle_click_dispatch	medium	haiku	
-0x8a5010	tactics_screens.cpp	tactics_copy_formation_block	high	haiku	
-0x8a5330	tactics_screens.cpp	Tactics::build_team_instructions_panel	high	haiku	
-0x8a6f80	tactics_screens.cpp	tactics_screens_handle_selection_event	medium	haiku	
-0x8a7440	tactics_screens.cpp	Tactics_Screen::load_match_tactics	medium	haiku	
-0x8a7e00	tactics_screens.cpp	tactics_team_state::copy_from	medium	haiku	
-0x8a80d0	tactics_screens.cpp	tactics_refresh_screen_controls	medium	haiku	
-0x8a8330	tactics_screens.cpp	tactics_title_format	high	haiku	
-0x8a84a0	tactics_screens.cpp	tactics_screens_auto_select_best_tactic	medium	haiku	
-0x8a8630	tactics_screens.cpp	tactics_screens_build_set_piece_warnings	high	haiku	
-0x8a8ed0	tactics_screens.cpp	tactics_penalty_taker_set	high	haiku	
-0x8a9020	tactics_screens.cpp	tactics_team_set_slot	medium	haiku	
-0x8a9120	tactics_screens.cpp	tactics_set_position_swap	medium	haiku	
-0x8a9270	tactics_screens.cpp	tactics_swap_positions	medium	haiku	
-0x8a9370	tactics_screens.cpp	tactics_penalty_takers_select	medium	haiku	
-0x8a94d0	tactics_screens.cpp	tactics_screen_set_position_instruction	medium	haiku	
-0x8a95d0	tactics_screens.cpp	tactics_formation_load_into_team	medium	haiku	
-0x8a9700	tactics_screens.cpp	tactics_load_formation	high	haiku	
-0x8a9950	tactics_screens.cpp	tactics_screens_set_formation_from_name	medium	haiku	2026-10-16-tactics-inventory.md
-0x8a9c20	tactics_screens.cpp	tactics_snapshot_and_apply	medium	haiku	
-0x8a9cb0	tactics_screens.cpp	tactics_load_formation_copy	medium	haiku	
-0x8a9d70	tactics_screens.cpp	tactics_screen_set_formation_slot	medium	haiku	
-0x8a9e90	tactics_screens.cpp	tactics_screens_copy_formation_slot	medium	haiku	
-0x8a9fa0	tactics_screens.cpp	tactics_screen_formation_slot_valid	medium	haiku	
-0x8aa070	tactics_screens.cpp	tactics_load_formation_slot	medium	haiku	
-0x8aa150	tactics_screens.cpp	tactics_screens_check_slot_index_and_set_player	medium	haiku	
-0x8aa200	tactics_screens.cpp	tactics_substitute_label_write	high	haiku	
-0x8aa550	tactics_screens.cpp	tactics_screens_fill_player_name_or_assert	high	haiku	
-0x8aa830	tactics_screens.cpp	tactics_get_instruction_text	medium	haiku	
-0x8aa9d0	tactics_screens.cpp	tactics_lookup_slot_player	medium	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md
-0x8aaaa0	tactics_screens.cpp	tactics_team_slot_is_valid	medium	haiku	
-0x8aabb0	tactics_screens.cpp	tactics_screens_get_player_slot	medium	haiku	
-0x8aacb0	tactics_screens.cpp	tactics_screens_get_tactic_slot	high	haiku	
-0x8aadb0	tactics_screens.cpp	substitution_minute_text	high	haiku	2026-10-14-columns-and-colours-inventory.md,columns.c
-0x8aafd0	tactics_screens.cpp	tactics_screen_injury_or_player_slot_status	medium	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md,columns.c
-0x8ab150	tactics_screens.cpp	tactics_get_player_slot_byte	medium	haiku	2026-10-14-columns-and-colours-inventory.md
-0x8ab260	tactics_screens.cpp	tactics_screens_get_player_slot	medium	haiku	2026-10-14-columns-and-colours-inventory.md
-0x8ab360	tactics_screens.cpp	tactics_check_player_slot_valid	medium	haiku	
-0x8ab480	tactics_screens.cpp	tactics_get_slot_player_record	high	haiku	2026-10-14-columns-and-colours-inventory.md,columns.c
-0x8ab670	tactics_screens.cpp	tactics_find_player_slot	medium	haiku	
-0x8ab7e0	tactics_screens.cpp	tactics_formation_swap_players	medium	haiku	
-0x8aba70	tactics_screens.cpp	tactics_get_position_slot_index	medium	haiku	
-0x8abb50	tactics_screens.cpp	tactics_check_slot_available	medium	haiku	
-0x8abd00	tactics_screens.cpp	tactics_substitute_find_matching_slot	medium	haiku	
-0x8abe30	tactics_screens.cpp	tactics_screen_build_match_lineup_and_open_match	medium	haiku	
-0x8ac100	tactics_screens.cpp	tactics_substitute_player_slot	medium	haiku	
-0x8ac3d0	tactics_screens.cpp	tactics_swap_player_slots	medium	haiku	
-0x8ac600	tactics_screens.cpp	draw_pitch_tactics_diagram	medium	haiku	
-0x8ad780	tactics_screens.cpp	tactics_compute_pitch_position_for_flags	medium	haiku	
-0x8adbb0	tactics_screens.cpp	bitmask_to_index_lookup	medium	haiku	
-0x8ade80	tactics_screens.cpp	bit_for_index_u64	medium	haiku	
-0x8ae0d0	tactics_screens.cpp	parse_ipv4_address	medium	haiku	
-0x8ae140	tactics_screens.cpp	format_ipv4_address_string	high	haiku	
-0x8ae180	tcpip.cpp	tcpip_table_init	high	haiku	
-0x8ae260	tcpip.cpp	net_init_if_needed	medium	haiku	
-0x8ae2a0	tcpip.cpp	net_socket_set_close_all	medium	haiku	
-0x8ae340	tcpip.cpp	table_slot_release	medium	haiku	
-0x8ae370	tcpip.cpp	net_open_udp_sockets	medium	haiku	
-0x8ae640	tcpip.cpp	net_out_open_socket_slot	medium	haiku	
-0x8ae840	tcpip.cpp	tcpip_find_free_slot_and_store_socket	medium	haiku	
-0x8ae8d0	tcpip.cpp	socket_recv_sendish	medium	haiku	
-0x8ae9c0	tcpip.cpp	tcpip_socket_recv	high	haiku	
-0x8aea80	tcpip.cpp	tcpip_socket_bind_listen	medium	haiku	
-0x8aec60	tcpip.cpp	Net::out_close_handles	medium	haiku	
-0x8aec90	tcpip.cpp	net_out_send_to_sockets	medium	haiku	
-0x8aed80	tcpip.cpp	net_socket_try_slots_recv	medium	haiku	
-0x8aee00	tcpip.cpp	net_socket_ready_check	medium	haiku	
-0x8aee20	tcpip.cpp	tcpip_scan_ipconfig_adapters	high	haiku	
-0x8af290	tcpip.cpp	tcpip_open_udp_listen_pair	medium	haiku	
+0x899ea0	tactics_screens.cpp	tactics_screen_build	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-tactics-inventory.md,columns.c,foreign.c
+0x89f700	tactics_screens.cpp	thunk_tactics_screen_build	high	opus	
+0x89f710	tactics_screens.cpp	tactics_screen_handle_event	high	opus	2026-10-14-widescreen-inventory.md
+0x8a2c60	tactics_screens.cpp	tactics_screen_close_without_apply	high	opus	
+0x8a2ca0	tactics_screens.cpp	Tactics_Screen::~Tactics_Screen	high	opus	2026-10-14-clickable-names-inventory.md
+0x8a2d70	tactics_screens.cpp	tactics_screen_close_and_apply	high	opus	
+0x8a2db0	tactics_screens.cpp	tactics_build_team_instructions_dialog	high	opus	
+0x8a4830	tactics_screens.cpp	thunk_tactics_build_team_instructions_dialog	high	opus	
+0x8a4840	tactics_screens.cpp	tactics_team_instructions_dialog_handle_event	high	opus	
+0x8a5010	tactics_screens.cpp	match_stats_record_assign	high	opus	
+0x8a5330	tactics_screens.cpp	tactics_build_player_instructions_dialog	high	opus	
+0x8a6f80	tactics_screens.cpp	tactics_player_instructions_dialog_handle_event	high	opus	
+0x8a7440	tactics_screens.cpp	Tactics_Screen::Tactics_Screen	high	opus	
+0x8a7e00	tactics_screens.cpp	Tactics_Screen::Tactics_Screen	high	opus	
+0x8a80d0	tactics_screens.cpp	Tactics_Screen::apply_changes	high	opus	
+0x8a8330	tactics_screens.cpp	Tactics_Screen::format_title	high	opus	
+0x8a84a0	tactics_screens.cpp	Tactics_Screen::auto_select_captain	medium	opus	
+0x8a8630	tactics_screens.cpp	Tactics_Screen::build_return_to_match_text	high	opus	
+0x8a8ed0	tactics_screens.cpp	Tactics_Screen::set_set_piece_taker	high	opus	
+0x8a9020	tactics_screens.cpp	Tactics_Screen::set_playmaker	medium	opus	
+0x8a9120	tactics_screens.cpp	Tactics_Screen::set_penalty_taker	high	opus	
+0x8a9270	tactics_screens.cpp	Tactics_Screen::swap_penalty_takers	high	opus	
+0x8a9370	tactics_screens.cpp	Tactics_Screen::set_default_penalty_takers	medium	opus	
+0x8a94d0	tactics_screens.cpp	Tactics_Screen::get_slot_coordinate	high	opus	
+0x8a95d0	tactics_screens.cpp	Tactics_Screen::load_formation	high	opus	
+0x8a9700	tactics_screens.cpp	Tactics_Screen::save_formation	high	opus	
+0x8a9950	tactics_screens.cpp	Tactics_Screen::set_preset_formation	high	opus	2026-10-16-tactics-inventory.md
+0x8a9c20	tactics_screens.cpp	Tactics_Screen::set_player_instruction	high	opus	
+0x8a9cb0	tactics_screens.cpp	Tactics_Screen::paste_positions	medium	opus	
+0x8a9d70	tactics_screens.cpp	Tactics_Screen::swap_slot_coordinates	high	opus	
+0x8a9e90	tactics_screens.cpp	Tactics_Screen::set_formation_slot_coordinate	medium	opus	
+0x8a9fa0	tactics_screens.cpp	Tactics_Screen::is_formation_slot_customised	high	opus	
+0x8aa070	tactics_screens.cpp	Tactics_Screen::set_slot_marking_type	high	opus	
+0x8aa150	tactics_screens.cpp	Tactics_Screen::set_slot_marking_target	high	opus	
+0x8aa200	tactics_screens.cpp	Tactics_Screen::get_slot_number_text	high	opus	
+0x8aa550	tactics_screens.cpp	Tactics_Screen::get_slot_player_name_text	high	opus	
+0x8aa830	tactics_screens.cpp	Tactics_Screen::get_slot_number_and_name_text	high	opus	
+0x8aa9d0	tactics_screens.cpp	Tactics_Screen::get_slot_pitch_position	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md
+0x8aaaa0	tactics_screens.cpp	Tactics_Screen::is_slot_on_bench	medium	opus	
+0x8aabb0	tactics_screens.cpp	Tactics_Screen::get_slot_yellow_cards	high	opus	
+0x8aacb0	tactics_screens.cpp	Tactics_Screen::get_slot_red_cards	medium	opus	
+0x8aadb0	tactics_screens.cpp	Tactics_Screen::get_slot_match_status_text	high	opus	2026-10-14-columns-and-colours-inventory.md,columns.c
+0x8aafd0	tactics_screens.cpp	Tactics_Screen::get_slot_condition	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md,columns.c
+0x8ab150	tactics_screens.cpp	Tactics_Screen::get_slot_match_rating	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x8ab260	tactics_screens.cpp	Tactics_Screen::get_slot_goals	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x8ab360	tactics_screens.cpp	Tactics_Screen::is_slot_man_of_the_match	high	opus	
+0x8ab480	tactics_screens.cpp	Tactics_Screen::get_slot_player	high	opus	2026-10-14-columns-and-colours-inventory.md,columns.c
+0x8ab670	tactics_screens.cpp	Tactics_Screen::find_slot_at_position	high	opus	
+0x8ab7e0	tactics_screens.cpp	Tactics_Screen::swap_slots	high	opus	
+0x8aba70	tactics_screens.cpp	Tactics_Screen::get_slot_marking_target_row	medium	opus	
+0x8abb50	tactics_screens.cpp	Tactics_Screen::get_slot_marked_player	medium	opus	
+0x8abd00	tactics_screens.cpp	Tactics_Screen::get_slot_marker	medium	opus	
+0x8abe30	tactics_screens.cpp	Tactics_Screen::predict_opponent_lineup	medium	opus	
+0x8ac100	tactics_screens.cpp	Tactics_Screen::queue_substitution	high	opus	
+0x8ac3d0	tactics_screens.cpp	Tactics_Screen::apply_substitution	high	opus	
+0x8ac600	tactics_screens.cpp	draw_pitch	medium	opus	
+0x8ad780	tactics_screens.cpp	get_pitch_point_for_position_flags	medium	opus	
+0x8adbb0	tactics_screens.cpp	mask64_to_bit_index	high	opus	
+0x8ade80	tactics_screens.cpp	bit_index_to_mask64	high	opus	
+0x8ae0d0	tcpip.cpp	parse_ipv4_address	high	opus	
+0x8ae140	tcpip.cpp	format_ipv4_address	high	opus	
+0x8ae180	tcpip.cpp	TcpIp::TcpIp	high	opus	
+0x8ae260	tcpip.cpp	TcpIp::start_winsock	high	opus	
+0x8ae2a0	tcpip.cpp	TcpIp::close_all_sockets	high	opus	
+0x8ae340	tcpip.cpp	TcpIp::close_connection	high	opus	
+0x8ae370	tcpip.cpp	TcpIp::open_listen_sockets	high	opus	
+0x8ae640	tcpip.cpp	TcpIp::connect_to_host	high	opus	
+0x8ae840	tcpip.cpp	TcpIp::accept_connection	high	opus	
+0x8ae8d0	tcpip.cpp	TcpIp::send_to_connection	high	opus	
+0x8ae9c0	tcpip.cpp	TcpIp::receive_from_connection	high	opus	
+0x8aea80	tcpip.cpp	TcpIp::open_broadcast_sockets	high	opus	
+0x8aec60	tcpip.cpp	TcpIp::close_broadcast_sockets	high	opus	
+0x8aec90	tcpip.cpp	TcpIp::send_datagram	high	opus	
+0x8aed80	tcpip.cpp	TcpIp::receive_datagram	high	opus	
+0x8aee00	tcpip.cpp	TcpIp::can_resolve_address	medium	opus	
+0x8aee20	tcpip.cpp	tcpip_scan_adapter_addresses	high	opus	
+0x8af290	tcpip.cpp	TcpIp::test_loopback_connection	high	opus	
 0x8af520	team_award.cpp	TEAM_AWARD::TEAM_AWARD	high	opus	
-0x8af630	team_award.cpp	TEAM_AWARD::scalar_deleting_destructor	high	haiku	
-0x8af650	team_award.cpp	TEAM_AWARD::base_dtor_stub	medium	haiku	
-0x8af660	team_award.cpp	TEAM_AWARD::load_from_disk	high	haiku	
-0x8af870	team_award.cpp	TEAM_AWARD::load_from_file	high	haiku	
-0x8afa40	team_award.cpp	TEAM_AWARD::add_nomination	medium	haiku	
-0x8afd90	team_award.cpp	TEAM_AWARD::reset_award_table	medium	haiku	
-0x8afdc0	team_award.cpp	team_award_init_layout_table	medium	haiku	
-0x8aff00	team_award.cpp	team_award_copy_three_dates	low	haiku	
-0x8aff50	team_award.cpp	TEAM_AWARD::build_award_date_pair	medium	haiku	
-0x8affb0	team_award.cpp	team_award::reset_and_redraw_slots	medium	haiku	
-0x8b00a0	team_award.cpp	team_award::check_and_grant_award	medium	haiku	
-0x8b0140	team_award.cpp	team_award::build_award_text_entries	medium	haiku	
-0x8b0370	team_award.cpp	TEAM_AWARD::format_and_post_news	high	haiku	
-0x8b0b20	team_award.cpp	crt_register_destructor_at_offset_0x8b0b20	medium	haiku	
-0x8b0b40	team_award.cpp	team_award_commit_records	medium	haiku	
-0x8b0730	training_edit_session.cpp	training_edit_session_bit_table_setup	medium	haiku	
-0x8b0a00	training_edit_session.cpp	training_edit_session_init	medium	haiku	
-0x8b0bf0	training_edit_session.cpp	training_edit_session::set_intensity_checked	medium	haiku	
-0x8b0c90	training_edit_session.cpp	training_edit_session_store_entry	medium	haiku	
-0x8b0ce0	training_edit_session.cpp	training_edit_session_copy_record	medium	haiku	
-0x8b0d10	training_edit_session.cpp	training_manager_schedule_reset_flag	low	haiku	
-0x8b0dc0	training_edit_session.cpp	training_edit_session_set_flag	medium	haiku	
-0x8b0e00	training_edit_session.cpp	training_edit_session_mark_slot_edited	medium	haiku	
-0x8b0e70	training_edit_session.cpp	training_manager_load_record_or_insert_slot	medium	haiku	
-0x8b0ec0	training_edit_session.cpp	training_manager::wait_for_game_cd	high	haiku	2026-10-14-game-creation-inventory.md
-0x8b1070	training_edit_session.cpp	training_edit_session_release_resources	medium	haiku	
-0x8b0d60	training_manager.cpp	training_edit_session_bind_schedule_slot	medium	haiku	
-0x8b10d0	training_manager.cpp	training_manager_load_training_dat	high	haiku	
-0x8b1450	training_manager.cpp	training_manager_save_dat	high	haiku	
-0x8b1730	training_manager.cpp	training_manager_week_counter_tick	medium	haiku	
-0x8b1750	training_manager.cpp	Training_Manager::apply_daily_training	medium	haiku	2026-10-15-features-0.4.0-spec.md,2026-10-16-comparison-screen-inventory.md,compare_screen.c
-0x8b2230	training_manager.cpp	training_manager_repeat_label_loop_167	medium	haiku	
-0x8b2250	training_manager.cpp	training_manager_set_player_training_group	medium	haiku	
-0x8b23b0	training_manager.cpp	training_manager_load_record	medium	haiku	
-0x8b2470	training_manager.cpp	training_manager_apply_group_schedules	medium	haiku	
-0x8b2880	training_manager.cpp	training_manager_refresh_group_training_slots	medium	haiku	
-0x8b2be0	training_manager.cpp	training_manager_apply_session_effects	medium	haiku	
-0x8b3410	training_manager.cpp	training_manager_find_coach_slots	medium	haiku	
-0x8b35a0	training_manager.cpp	training_manager_copy_record	high	haiku	
-0x8b3640	training_manager.cpp	training_manager_apply_schedule_levels	medium	haiku	
-0x8b37c0	training_manager.cpp	training_manager_apply_stat_delta	medium	haiku	2026-10-14-columns-and-colours-inventory.md
-0x8b3930	training_manager.cpp	training_manager_slot_index	medium	haiku	
-0x8b39f0	training_manager.cpp	training_manager_get_slot	medium	haiku	
-0x8b3c50	training_manager.cpp	training_manager_init_flags	medium	haiku	
-0x8b3d40	training_manager.cpp	training_manager_validate_all_schedules	medium	haiku	
-0x8b41d0	training_manager.cpp	training_manager_compute_rating_percent	medium	haiku	
-0x8b42d0	training_manager.cpp	training_manager_apply_focus_flags	medium	haiku	
-0x8b4450	training_manager.cpp	training_manager_compute_injury_risk_byte	medium	haiku	
-0x8b4770	training_manager.cpp	training_manager_rating_by_focus	medium	haiku	
-0x8b49b0	training_manager.cpp	training_manager_add_player_entry	medium	haiku	
-0x8b4b20	training_manager.cpp	training_schedule_lookup_count	medium	haiku	
-0x8b4cd0	training_manager.cpp	training_manager_get_schedule_entry	medium	haiku	
-0x8b4db0	training_manager.cpp	training_manager_has_high_level_entry	medium	haiku	
-0x8b4e00	training_manager.cpp	compare_int_fields_ascending	medium	haiku	
-0x8b4e10	training_manager.cpp	training_manager_reset_state	medium	haiku	
-0x8b4e50	training_manager.cpp	training_focus_set_allocation	medium	haiku	
-0x8b4f30	training_manager.cpp	training_manager_set_byte_and_clear_counter	medium	haiku	
-0x8b4f50	training_manager.cpp	training_manager_get_flag_byte	medium	haiku	
-0x8b4f60	training_manager.cpp	training_manager_compute_remaining_pool_percent	medium	haiku	
-0x8b5000	training_manager.cpp	training_manager_count_eligible_players	medium	haiku	
-0x8b5090	training_manager.cpp	training_entry_set_flags	medium	haiku	
-0x8b50c0	training_manager.cpp	training_schedule_set_flags	medium	haiku	
-0x8b50f0	training_manager.cpp	training_schedule_set_label	high	haiku	
-0x8b53d0	training_manager.cpp	training_manager_load_record	medium	haiku	
-0x8b5220	training_schedule.cpp	training_schedule_load_record	medium	haiku	
+0x8af630	team_award.cpp	TEAM_AWARD::`scalar deleting destructor'	high	opus	
+0x8af650	team_award.cpp	TEAM_AWARD::~TEAM_AWARD	high	opus	
+0x8af660	team_award.cpp	TEAM_AWARD::load_from_disk	high	opus	
+0x8af870	team_award.cpp	TEAM_AWARD::save_to_disk	high	opus	
+0x8afa40	team_award.cpp	TEAM_AWARD::add_candidate	high	opus	
+0x8afd90	team_award.cpp	TEAM_AWARD::clear_selection	high	opus	
+0x8afdc0	team_award.cpp	TEAM_AWARD::init_slot_positions	high	opus	
+0x8aff00	team_award.cpp	TEAM_AWARD::set_dates	high	opus	
+0x8aff50	team_award.cpp	TEAM_AWARD::set_season_dates	high	opus	
+0x8affb0	team_award.cpp	TEAM_AWARD::record_winners	high	opus	
+0x8b00a0	team_award.cpp	TEAM_AWARD::get_history_list	high	opus	
+0x8b0140	team_award.cpp	TEAM_AWARD::send_club_news	high	opus	
+0x8b0370	team_award.cpp	TEAM_AWARD::write_news	high	opus	
+0x8b0730	team_award.cpp	TEAM_AWARD::apply_formation	high	opus	
+0x8b0a00	training_edit_session.cpp	TRAINING_EDIT_SESSION::TRAINING_EDIT_SESSION	high	opus	
+0x8b0b20	training_edit_session.cpp	TRAINING_EDIT_SESSION::destroy_schedule_slots	medium	opus	
+0x8b0b40	training_edit_session.cpp	TRAINING_EDIT_SESSION::apply_changes	high	opus	
+0x8b0bf0	training_edit_session.cpp	TRAINING_EDIT_SESSION::select_schedule	high	opus	
+0x8b0c90	training_edit_session.cpp	TRAINING_EDIT_SESSION::set_current_schedule	high	opus	
+0x8b0ce0	training_edit_session.cpp	TRAINING_EDIT_SESSION::set_coach_record	medium	opus	
+0x8b0d10	training_edit_session.cpp	TRAINING_EDIT_SESSION::count_schedule_players	high	opus	
+0x8b0d60	training_edit_session.cpp	TRAINING_EDIT_SESSION::list_schedule_players	high	opus	
+0x8b0dc0	training_edit_session.cpp	TRAINING_EDIT_SESSION::set_player_group	high	opus	
+0x8b0e00	training_edit_session.cpp	TRAINING_EDIT_SESSION::load_schedule_file	high	opus	
+0x8b0e70	training_edit_session.cpp	TRAINING_EDIT_SESSION::save_schedule_file	high	opus	
+0x8b0ec0	training_manager.cpp	TRAINING_MANAGER::TRAINING_MANAGER	high	opus	2026-10-14-game-creation-inventory.md
+0x8b1070	training_manager.cpp	TRAINING_MANAGER::~TRAINING_MANAGER	high	opus	
+0x8b10d0	training_manager.cpp	TRAINING_MANAGER::load_training_dat	high	opus	
+0x8b1450	training_manager.cpp	TRAINING_MANAGER::save_training_dat	high	opus	
+0x8b1730	training_manager.cpp	TRAINING_MANAGER::advance_week_counter	medium	opus	
+0x8b1750	training_manager.cpp	TRAINING_MANAGER::update_player_training	medium	opus	2026-10-15-features-0.4.0-spec.md,2026-10-16-comparison-screen-inventory.md,compare_screen.c
+0x8b2230	training_manager.cpp	TRAINING_MANAGER::set_default_schedule_names	high	opus	
+0x8b2250	training_manager.cpp	TRAINING_MANAGER::set_player_schedule	medium	opus	
+0x8b23b0	training_manager.cpp	TRAINING_MANAGER::set_coach_assignments	medium	opus	
+0x8b2470	training_manager.cpp	TRAINING_MANAGER::reassign_squad_schedules	medium	opus	
+0x8b2880	training_manager.cpp	TRAINING_MANAGER::update_coach_assignments	medium	opus	
+0x8b2be0	training_manager.cpp	TRAINING_MANAGER::apply_training_progress	medium	opus	
+0x8b3410	training_manager.cpp	TRAINING_MANAGER::collect_squad_schedules	medium	opus	
+0x8b35a0	training_manager.cpp	TRAINING_MANAGER::get_coach_assignments_copy	medium	opus	
+0x8b3640	training_manager.cpp	TRAINING_MANAGER::remove_or_restore_training_progress	medium	opus	
+0x8b37c0	training_manager.cpp	TRAINING_MANAGER::get_training_attribute_change	medium	opus	2026-10-14-columns-and-colours-inventory.md
+0x8b3930	training_manager.cpp	TRAINING_MANAGER::get_manager_schedule	high	opus	
+0x8b39f0	training_manager.cpp	TRAINING_MANAGER::get_player_schedule	medium	opus	
+0x8b3c50	training_manager.cpp	TRAINING_MANAGER::init_player_entries	medium	opus	
+0x8b3d40	training_manager.cpp	TRAINING_MANAGER::set_default_schedules	high	opus	
+0x8b41d0	training_manager.cpp	TRAINING_MANAGER::get_coaching_factor	medium	opus	
+0x8b42d0	training_manager.cpp	TRAINING_MANAGER::update_position_training	medium	opus	
+0x8b4450	training_manager.cpp	TRAINING_MANAGER::set_position_training_rate	medium	opus	
+0x8b4770	training_manager.cpp	TRAINING_MANAGER::get_position_aptitude	medium	opus	
+0x8b49b0	training_manager.cpp	TRAINING_MANAGER::add_position_training	medium	opus	
+0x8b4b20	training_manager.cpp	TRAINING_MANAGER::find_position_training	medium	opus	
+0x8b4cd0	training_manager.cpp	TRAINING_MANAGER::get_coach_assignments	medium	opus	
+0x8b4db0	training_manager.cpp	TRAINING_MANAGER::has_fast_position_training	medium	opus	
+0x8b4e00	training_manager.cpp	training_compare_entries_by_staff_id	high	opus	
+0x8b4e10	training_manager.cpp	TRAINING_SCHEDULE::TRAINING_SCHEDULE	high	opus	
+0x8b4e50	training_manager.cpp	TRAINING_SCHEDULE::set_type	high	opus	
+0x8b4f30	training_manager.cpp	TRAINING_SCHEDULE::set_category_level	medium	opus	
+0x8b4f50	training_manager.cpp	TRAINING_SCHEDULE::get_category_level	medium	opus	
+0x8b4f60	training_manager.cpp	TRAINING_SCHEDULE::get_training_load	medium	opus	
+0x8b5000	training_schedule.cpp	TRAINING_SCHEDULE::count_players	medium	opus	
+0x8b5090	training_schedule.cpp	TRAINING_SCHEDULE::set_position_training	medium	opus	
+0x8b50c0	training_schedule.cpp	TRAINING_SCHEDULE::set_side_training	medium	opus	
+0x8b50f0	training_schedule.cpp	TRAINING_SCHEDULE::set_default_name	high	opus	
+0x8b5220	training_schedule.cpp	TRAINING_SCHEDULE::load_from_file	high	opus	
+0x8b53d0	training_schedule.cpp	TRAINING_SCHEDULE::save_to_file	high	opus	
 0x8b5520	training_schedule.cpp	training_schedule_comment_for_type	high	haiku	
 0x8b5690	training_schedule.cpp	training_intensity_string_or_assert	high	haiku	
 0x8b57e0	training_schedule.cpp	training_schedule_check_version	medium	haiku	

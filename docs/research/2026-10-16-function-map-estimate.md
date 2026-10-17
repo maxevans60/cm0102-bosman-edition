@@ -1273,6 +1273,52 @@ The merge needed one fix. One agent gave the 26 column sort comparators of `sear
 | 0x85f7a0 | Named in 2026-10-15-contract-clauses.md | `STAFF_CONTRACT::set_release_clause_flag` (Haiku) | `STAFF_CONTRACT::add_release_clause` | agrees |
 | 0x868020 | Named in 2026-10-15-contract-clauses.md | `STAFF_CONTRACT::format_release_clause_comment` (Haiku) | `STAFF_CONTRACT::get_release_clause_abbreviation` | agrees |
 
+#### Wave w30 (tier 5, 2026-10-17)
+
+Run `sweep-w30`: 8 Opus agents named 221 functions: `staff_records.cpp` (`Staff_Records`), `staff_screens.cpp`, `tactics.cpp` (`Tactics`), `tactics_screens.cpp` (`Tactics_Screen`), `tcpip.cpp` (`TcpIp`), `team_award.cpp` (`TEAM_AWARD`), `training_edit_session.cpp` (`TRAINING_EDIT_SESSION`), `training_manager.cpp` (`TRAINING_MANAGER`) and six `training_schedule.cpp` gap functions (`TRAINING_SCHEDULE`). Each agent took 2 to 8 minutes and 107,000 to 200,000 tokens. Confidence: 160 high, 60 medium, 1 low.
+
+The merge needed no fixes. Two files keep a second class: `tactics_screens.cpp` has one earlier `Tactics_Team_Data` row (the team block inside `Tactics_Screen`), and `training_manager.cpp` holds five `TRAINING_SCHEDULE` methods beside `TRAINING_MANAGER`. The training agent notes that 0x8b1750 is now `TRAINING_MANAGER::update_player_training`, so the comparison screen inventory and `compare_screen.c` use an older name.
+
+35 functions of the wave are cited. 20 agree and 15 agree in area. None differs.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x868390 | Named in 2026-10-14-game-creation-inventory.md | `staff_records_load_cd_and_init` (Haiku) | `Staff_Records::Staff_Records` | agrees |
+| 0x86cd70 | Named in 2026-10-16-crash-fixes.md | `staff_records_award_shortlist_update` (Haiku) | `Staff_Records::add_transfer_records` | agrees in area |
+| 0x86d6e0 | Named in 2026-10-16-research-name-check.md | `staff_records_remove_player_from_teams` (Haiku) | `Staff_Records::end_season_for_nation` | agrees in area |
+| 0x86dda0 | Named in 2026-10-14-assistant-and-days-inventory.md | `staff_records_reset_slots_for_date` (Haiku) | `Staff_Records::daily_update` | agrees |
+| 0x8702a0 | Named in 2026-10-14-clickable-names-inventory.md | `assert_staff_player_and_open_view` (Haiku) | `staff_screens_open_staff_profile` | agrees |
+| 0x870650 | Named in 2026-10-16-comparison-screen-inventory.md | `staff_screens_check_build_and_quit_on_mismatch` (Haiku) | `staff_screens_open_compare_players_screen` | agrees |
+| 0x870700 | Named in 2026-10-14-clickable-names-inventory.md | `Staff_Screens::build_player_context_menu` (Haiku) | `staff_screens_build_profile_screen` | agrees |
+| 0x87a510 | Named in 2026-10-14-columns-and-colours-inventory.md | `draw_player_profile_panel` (Haiku) | `staff_screens_draw_profile_tab` | agrees |
+| 0x87dd80 | Named in 2026-10-14-widescreen-inventory.md | `staff_screens_player_detail_report` (Haiku) | `staff_screens_draw_transfer_tab` | agrees in area |
+| 0x888260 | Named in 2026-10-14-clickable-names-inventory.md | `staff_screens_handle_action` (Haiku) | `staff_screens_handle_profile_action` | agrees |
+| 0x889c30 | Named in 2026-10-16-comparison-screen-inventory.md | `staff_screens_dispatch_action` (Haiku) | `staff_screens_handle_compare_action` | agrees |
+| 0x88b2f0 | Named in 2026-10-16-comparison-screen-inventory.md | `staff_screens_check_squad_slot_limits` (Haiku) | `staff_screens_handle_profile_tab_action` | agrees in area |
+| 0x88b8a0 | Named in 2026-10-14-clickable-names-inventory.md | `staff_screens_release_screen_slots` (Haiku) | `staff_screens_leave_profile_screen` | agrees |
+| 0x893dc0 | Named in 2026-10-14-game-creation-inventory.md | `Tactics::load_tactics_files` (Haiku) | `Tactics::Tactics` | agrees |
+| 0x896570 | Named in 2026-10-16-tactics-inventory.md | `tactics_get_record_ptr` (Haiku) | `Tactics::get_tactic_block` | agrees |
+| 0x896660 | Named in 2026-10-15-holiday-next-match-inventory.md | `tactics_get_error_or_resolve_slot` (Haiku) | `Tactics::get_club_tactic` | agrees in area |
+| 0x8968f0 | Named in 2026-10-14-assistant-and-days-inventory.md | `tactics_get_slot_player_record` (Haiku) | `Tactics::get_selected_player` | agrees in area |
+| 0x896a90 | Named in 2026-10-14-assistant-and-days-inventory.md | `tactics_set_slot_value` (Haiku) | `Tactics::set_selected_player` | agrees in area |
+| 0x896fe0 | Named in 2026-10-14-assistant-and-days-inventory.md | `Tactics::store_restore_club_slot` (Haiku) | `Tactics::clear_or_restore_selection` | agrees in area |
+| 0x897250 | Named in 2026-10-15-squad-dropdown-inventory.md | `tactics_slot_matches` (Haiku) | `Tactics::has_selection_undo` | agrees in area |
+| 0x897760 | Named in 2026-10-14-assistant-and-days-inventory.md | `Tactics::set_slot_tactic` (Haiku) | `Tactics::set_captain_from_slot` | agrees in area |
+| 0x8983f0 | Named in 2026-10-15-assistant-pick-inventory.md | `tactics_copy_record_by_id` (Haiku) | `Tactics::copy_selection_record` | agrees |
+| 0x899ea0 | Named in 2026-10-14-columns-and-colours-inventory.md | `tactics_screen_build_team_instructions` (Haiku) | `tactics_screen_build` | agrees |
+| 0x89f710 | Named in 2026-10-14-widescreen-inventory.md | `tactics_formation_dialog_handler` (Haiku) | `tactics_screen_handle_event` | agrees in area |
+| 0x8a2ca0 | Named in 2026-10-14-clickable-names-inventory.md | `tactics_screen_init_lists` (Haiku) | `Tactics_Screen::~Tactics_Screen` | agrees in area |
+| 0x8a9950 | Named in 2026-10-16-tactics-inventory.md | `tactics_screens_set_formation_from_name` (Haiku) | `Tactics_Screen::set_preset_formation` | agrees |
+| 0x8aa9d0 | Named in 2026-10-14-columns-and-colours-inventory.md | `tactics_lookup_slot_player` (Haiku) | `Tactics_Screen::get_slot_pitch_position` | agrees |
+| 0x8aadb0 | Named in 2026-10-14-columns-and-colours-inventory.md | `substitution_minute_text` (Haiku) | `Tactics_Screen::get_slot_match_status_text` | agrees |
+| 0x8aafd0 | Named in 2026-10-14-columns-and-colours-inventory.md | `tactics_screen_injury_or_player_slot_status` (Haiku) | `Tactics_Screen::get_slot_condition` | agrees in area |
+| 0x8ab150 | Named in 2026-10-14-columns-and-colours-inventory.md | `tactics_get_player_slot_byte` (Haiku) | `Tactics_Screen::get_slot_match_rating` | agrees |
+| 0x8ab260 | Named in 2026-10-14-columns-and-colours-inventory.md | `tactics_screens_get_player_slot` (Haiku) | `Tactics_Screen::get_slot_goals` | agrees |
+| 0x8ab480 | Named in 2026-10-14-columns-and-colours-inventory.md | `tactics_get_slot_player_record` (Haiku) | `Tactics_Screen::get_slot_player` | agrees |
+| 0x8b0ec0 | Named in 2026-10-14-game-creation-inventory.md | `training_manager::wait_for_game_cd` (Haiku) | `TRAINING_MANAGER::TRAINING_MANAGER` | agrees |
+| 0x8b1750 | Named in 2026-10-15-features-0.4.0-spec.md | `Training_Manager::apply_daily_training` (Haiku) | `TRAINING_MANAGER::update_player_training` | agrees in area |
+| 0x8b37c0 | Named in 2026-10-14-columns-and-colours-inventory.md | `training_manager_apply_stat_delta` (Haiku) | `TRAINING_MANAGER::get_training_attribute_change` | agrees in area |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.

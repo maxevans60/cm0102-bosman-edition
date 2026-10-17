@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4858 high, 1842 medium, 163 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27, sweep-w28, sweep-w29.
+- Confidence: 4966 high, 1738 medium, 159 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27, sweep-w28, sweep-w29, sweep-w30.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |
@@ -362,12 +362,12 @@ All 11747 functions with their category, file and placement method are in `funct
 | [swe_second.cpp](swe_second.cpp.md) | 18 |
 | [sweden_awards.cpp](sweden_awards.cpp.md) | 5 |
 | [tactics.cpp](tactics.cpp.md) | 29 |
-| [tactics_screens.cpp](tactics_screens.cpp.md) | 63 |
-| [tcpip.cpp](tcpip.cpp.md) | 16 |
-| [team_award.cpp](team_award.cpp.md) | 16 |
+| [tactics_screens.cpp](tactics_screens.cpp.md) | 61 |
+| [tcpip.cpp](tcpip.cpp.md) | 18 |
+| [team_award.cpp](team_award.cpp.md) | 15 |
 | [training_edit_session.cpp](training_edit_session.cpp.md) | 11 |
-| [training_manager.cpp](training_manager.cpp.md) | 38 |
-| [training_schedule.cpp](training_schedule.cpp.md) | 7 |
+| [training_manager.cpp](training_manager.cpp.md) | 34 |
+| [training_schedule.cpp](training_schedule.cpp.md) | 12 |
 | [training_screens.cpp](training_screens.cpp.md) | 19 |
 | [transfer_manager.cpp](transfer_manager.cpp.md) | 199 |
 | [transfer_offer.cpp](transfer_offer.cpp.md) | 27 |
