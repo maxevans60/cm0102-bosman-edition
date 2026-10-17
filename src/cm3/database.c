@@ -165,7 +165,7 @@ static const db_field_t staff_fields[] = {
     PTRS(staff_t, 0x1e, nation2, DB_NATION), RAW(staff_t, 0x22, b22), RAW(staff_t, 0x23, b23),
     PTRS(staff_t, 0x24, national_club, DB_CLUB), RAW(staff_t, 0x28, national_job),
     RAW(staff_t, 0x29, d29), RAW(staff_t, 0x31, d31), PTRS(staff_t, 0x39, club, DB_CLUB),
-    RAW(staff_t, 0x3d, club_job), RAW(staff_t, 0x3e, contract_end), RAW(staff_t, 0x46, d46),
+    RAW(staff_t, 0x3d, club_job), RAW(staff_t, 0x3e, date_joined), RAW(staff_t, 0x46, contract_end),
     RAW(staff_t, 0x4e, i4e), RAW(staff_t, 0x52, i52), RAW(staff_t, 0x56, unknown_56),
     RAW(staff_t, 0x5e, b5e), RAW(staff_t, 0x5f, b5f), RAW(staff_t, 0x60, b60),
     PTRS(staff_t, 0x61, player, DB_PLAYER), PTRS(staff_t, 0x65, prefs, DB_PREFERENCES),
@@ -807,8 +807,8 @@ static void blank_staff(staff_t *s, s32 row)
     date_default(&s->d31);
     s->club = DB_FROM_ID(-1);
     s->club_job = 0;
+    date_default(&s->date_joined);
     date_default(&s->contract_end);
-    date_default(&s->d46);
     s->i4e = 0;
     s->i52 = 0;
     memset(s->unknown_56, 0, sizeof(s->unknown_56));
@@ -974,8 +974,8 @@ static bool convert_staff(void)
         dst->b23 = src[0x23];
         dst->club = DB_FROM_ID(get_s32(src + 0x39));
         dst->club_job = (s8)src[0x3d];
-        memcpy(&dst->contract_end, src + 0x3e, sizeof(dst->contract_end));
-        memcpy(&dst->d46, src + 0x46, sizeof(dst->d46));
+        memcpy(&dst->date_joined, src + 0x3e, sizeof(dst->date_joined));
+        memcpy(&dst->contract_end, src + 0x46, sizeof(dst->contract_end));
         dst->national_club = DB_FROM_ID(get_s32(src + 0x24));
         dst->national_job = (s8)src[0x28];
         memcpy(&dst->d29, src + 0x29, sizeof(dst->d29));
