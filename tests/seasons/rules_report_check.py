@@ -19,7 +19,8 @@ The checks that fail the test (exit code 1):
     - the run ends with code 0 and its report holds every season from the start year to the last year
     - every competition of the report has a known class (its vtable is in the class table of the build)
     - base game (start 2001): the name of each competition record is the name of that record in
-      club_comp.dat or nation_comp.dat of the game folder, so the report reads the original's competitions
+      club_comp.dat or nation_comp.dat of the game folder, so the report reads the original's competitions;
+      and each league with clubs in club.dat holds as many clubs as club.dat puts in its division
 The differences between the report and the rules table do not fail the test: this slice changes no rule.
 The script lists them by kind:
     clubs, subs_used, bench     the game's value differs from a count of the table row
@@ -86,6 +87,19 @@ def record_names(game):
         for i in range(len(data) // RECORD):
             r = data[i * RECORD:(i + 1) * RECORD]
             out[(name, struct.unpack_from("<i", r, 0)[0])] = r[4:56].split(b"\0")[0].decode("latin-1")[:51]
+    return out
+
+
+def division_counts(game):
+    """{division id: club count} of club.dat (581 bytes a record). Inference from the data: the int at +0x57
+    is the club's division (the club_comp id): 20 clubs hold 7 (English Premier Division) and 24 each hold
+    8, 9 and 10 in the 3.9.68 data, as the English divisions of 2001/02."""
+    path = os.path.join(game, "Data", "club.dat")
+    out = collections.Counter()
+    if os.path.exists(path):
+        data = open(path, "rb").read()
+        for i in range(len(data) // 581):
+            out[struct.unpack_from("<i", data, i * 581 + 0x57)[0]] += 1
     return out
 
 
@@ -159,6 +173,14 @@ def check(report, game=None, last=None):
             if c["name"] not in want:
                 failed.append(f"base game: {c['slot']} {c['file']} record {c['record']} is {c['name']!r}, "
                               f"the data has {want[0]!r} or {want[1]!r}")
+        divisions = division_counts(game)
+        for c in comps:
+            if c["season"] == 2001 and c["kind"] == "league" and divisions.get(c["record"]):
+                if c["clubs"] != divisions[c["record"]]:
+                    failed.append(f"base game: {c['file']} holds {c['clubs']} clubs, club.dat has "
+                                  f"{divisions[c['record']]} in division {c['record']}")
+                else:
+                    print(f"base game: {c['file']} holds {c['clubs']} clubs, as club.dat")
     per = collections.Counter(c["season"] for c in comps)
     print(f"report: {len(got)} seasons, {got[0]}/{(got[0] + 1) % 100:02d} to {got[-1]}/{(got[-1] + 1) % 100:02d}, "
           f"{min(per.values())} to {max(per.values())} competitions a season")
