@@ -1558,6 +1558,31 @@ Twelve renames make free functions in fix_man.cpp and transfer_manager.cpp into 
 | 0x8ce0e0 | `transfer_manager_set_player_squad_status` | `TRANSFER_MANAGER::set_player_squad_status` | takes reviewer | `TRANSFER_MANAGER::set_player_squad_status` |
 
 
+#### Review r07 (medium rows of tier 4, 2026-10-17)
+
+Run `review-r07`: 8 Opus reviewers checked 196 medium rows of the national leagues, cups and awards, Cup.cpp, Database.cpp and finance. Agree 97, fix 86, rename 13. The third check took the reviewer's name in all 13 rows. 99 rows changed in all. The reviewers took 127,000 to 195,000 tokens each, and the third check took 96,000.
+
+Six renames make league and finance helpers into members, because the caller sets ECX to `this`. The other renames take their meaning from strings that the sweep did not read: the transfer status screen strings name the contract flag bits at +0x4e (loan listed, listed by request), and two langlib tables hold Norwegian and German player-type phrases.
+
+Open point: the asserts of the Finance code name finance.CPP, but `names.tsv` files most Finance rows under fin_prm.cpp. Some rows say finance.cpp. The file of the Finance class needs one decision.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x553cb0 | `den_prm_refresh_second_division_clubs` | `DenPrm::refresh_second_division_clubs` | takes reviewer | `DenPrm::refresh_second_division_clubs` |
+| 0x574e60 | `eng_prm_exchange_conference_clubs_unplayed` | `EngPrm::exchange_conference_clubs_unplayed` | takes reviewer | `EngPrm::exchange_conference_clubs_unplayed` |
+| 0x5750a0 | `eng_prm_exchange_conference_feeder_clubs` | `EngPrm::exchange_conference_feeder_clubs` | takes reviewer | `EngPrm::exchange_conference_feeder_clubs` |
+| 0x595f00 | `fin_prm_refresh_first_division_clubs` | `FinPrm::refresh_first_division_clubs` | takes reviewer | `FinPrm::refresh_first_division_clubs` |
+| 0x596050 | `fin_prm_assign_first_division_groups` | `FinPrm::assign_first_division_groups` | takes reviewer | `FinPrm::assign_first_division_groups` |
+| 0x59b7e0 | `FinanceTable::add_weekly_commercial_income` | `FinanceTable::add_weekly_merchandising_income` | takes reviewer | `FinanceTable::add_weekly_merchandising_income` |
+| 0x59cf50 | `finance_refresh_all_wage_bills` | `FinanceTable::refresh_all_wage_bills` | takes reviewer | `FinanceTable::refresh_all_wage_bills` |
+| 0x53b610 | `database_is_not_player_job` | `database_is_not_plain_player_job` | takes reviewer | `database_is_not_plain_player_job` |
+| 0x544520 | `staff_is_listed_or_unsettled` | `staff_is_transfer_listed_or_requested` | takes reviewer | `staff_is_transfer_listed_or_requested` |
+| 0x544590 | `staff_contract_has_flag_02` | `staff_is_loan_listed` | takes reviewer | `staff_is_loan_listed` |
+| 0x544600 | `staff_contract_has_flag_08` | `staff_is_listed_by_request` | takes reviewer | `staff_is_listed_by_request` |
+| 0x6820a0 | `langlib_inflect_noun_table_9eb328` | `langlib_inflect_norwegian_player_type` | takes reviewer | `langlib_inflect_norwegian_player_type` |
+| 0x682150 | `langlib_inflect_noun_table_9eb7ac` | `langlib_inflect_german_player_type` | takes reviewer | `langlib_inflect_german_player_type` |
+
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
