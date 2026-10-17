@@ -128,7 +128,7 @@ for i,x in enumerate(fp):
     if not cands:
         tier=2
         sn=norm(x['sn']).split(); cn=norm(x['cn']).split()
-        for last in {sn[-1] if sn else '', cn[-1] if cn else ''}-{''}:
+        for last in sorted({sn[-1] if sn else '', cn[-1] if cn else ''}-{''}):   # a fixed order: the result must not depend on the hash seed
             for dd in (0,-1,1):
                 try: dt=x['dob']+datetime.timedelta(days=dd)
                 except: continue

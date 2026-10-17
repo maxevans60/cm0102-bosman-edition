@@ -13,7 +13,13 @@ class Folder:
             name=ib[i:i+51].split(b'\0')[0].decode('latin1'); tid,cnt,off,ver=struct.unpack_from('<iiii',ib,i+51)
             s.idx[tid]=dict(file=name,count=cnt,off=off,ver=ver,pos=i)
     def table(s,tid):
-        e=s.idx[tid]; size=REC[tid]; b=s.raw[e['file']]
+        """The table's file, offset, row size and count, checked against the file length (the data is input)."""
+        if tid not in s.idx: raise SystemExit(f'{s.path}: index.dat has no table {tid}')
+        e=s.idx[tid]; size=REC[tid]
+        if e['file'] not in s.raw: raise SystemExit(f"{s.path}: index.dat names {e['file']!r}, which the folder lacks")
+        b=s.raw[e['file']]
+        if e['count']<0 or e['off']<0 or e['off']+e['count']*size>len(b):
+            raise SystemExit(f"{s.path}: table {tid} ({e['count']} rows of {size} bytes at {e['off']}) runs past the end of {e['file']}")
         if tid==6 and e['ver']!=2: raise SystemExit('staff table is not version 2')
         return b,e['off'],size,e['count']
     def rows(s,tid):
