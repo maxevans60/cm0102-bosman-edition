@@ -152,7 +152,7 @@ for comp,team,yr,pos,*rest in rows06:
     f=tm.get(team)
     if f is not None and (f not in fmrow or comp in compmap): fmrow[f]=(comp,pos)
 def pick(names,pool):
-    chosen=[]; miss=[]
+    chosen=[]; miss=[]; pairs=[]
     for n in names:
         best=None;bs=0
         for c in pool:
@@ -163,7 +163,8 @@ def pick(names,pool):
                 sc=len(a&b)/len(a|b) + (0.5 if nm(n)==nm(s_) else 0) - (0.3 if ({'b','ii','c'}&set(nm(s_).split())) else 0)
                 if sc>bs: bs,best=sc,c
         if best is None or bs<0.5 or best in chosen: miss.append(f"{n} [best {cstr(trow[best],4,51) if best is not None else None} {bs:.2f}{' taken' if best in chosen else ''}]")
-        else: chosen.append(best)
+        else: chosen.append(best); pairs.append((n,best))
+    pick.pairs=pairs
     return chosen,miss
 natof_c=lambda c:g(trow[c],0x53)
 @functools.lru_cache(maxsize=None)
@@ -176,14 +177,14 @@ rk={tid[n]:i-len(E) for i,n in enumerate(E.values())}; rk.update({tid[k]:i for i
 order=list(REAL)
 def fmdiv(c):
     row=fmrow.get(invmap.get(c)); return compmap.get(row[0]) if row else None
-report=[]; placed={}; carry=[]   # carry: named clubs that a list had no slot for; the next list of the nation takes them
+realrows=[]; report=[]; placed={}; carry=[]   # carry: named clubs that a list had no slot for; the next list of the nation takes them
 locked=set()   # clubs that an earlier (higher) real list placed: later lists neither choose nor move them
 for dname,names in REAL.items():
     d=tid[dname]; slots=n57[d]
     nat=natof(d)
     pool=[c for c,r in trow.items() if g(r,0x53)==nat and c not in locked]
     others=set().union(*(v for k,v in named.items() if k!=dname))
-    chosen,miss=pick(names,pool)
+    chosen,miss=pick(names,pool); realrows+=[(dname,n,c) for n,c in pick.pairs]
     later={tid[k] for k in order[order.index(dname)+1:] if natof(tid[k])==nat}
     take=[c for c in carry if natof_c(c)==nat and c not in chosen and c not in locked and fmdiv(c) not in later]
     carry=[c for c in carry if c not in take]; chosen=take+chosen
@@ -214,4 +215,4 @@ for r_ in report: print(*r_)
 print('real clubs with no slot, and where they go:',[(cstr(trow[c],0x38,26),comps.get(cur[c])) for c in carry])
 ncur=collections.Counter(cur.values())
 print('after overrides: divisions with a wrong count',[(comps[d],n57[d],ncur[d]) for d in n57 if d>=0 and n57[d]!=ncur[d]])
-pickle.dump(dict(cur=cur,lastdiv=lastdiv,compmap=compmap),open(os.path.join(W,'leagues.pkl'),'wb'))
+pickle.dump(dict(cur=cur,lastdiv=lastdiv,compmap=compmap,realrows=realrows),open(os.path.join(W,'leagues.pkl'),'wb'))
