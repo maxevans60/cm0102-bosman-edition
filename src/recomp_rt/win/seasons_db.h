@@ -1,7 +1,7 @@
 /* Season databases in the download (0.6.0 slice 14; spec docs/specs/2026-10-16-seasons-0.6.0-spec.md,
  * "Seasons and databases").
  *
- * The download holds the 21 season databases of docs/research/2026-10-16-season-database-table.md as zips,
+ * The download holds the 22 season databases of docs/research/2026-10-16-season-database-table.md as zips,
  * Seasons/<name>.zip in the game folder (win_game_dir). A season database is "unpacked" when the save folder
  * holds it in Databases/<name> (dbfolders.h). The first pick of a season unpacks its zip once.
  *
@@ -49,7 +49,7 @@ typedef struct {
 } SeasonKnownDb;
 
 extern const SeasonKnownDb seasons_known_dbs[];     /* seasons_table.c */
-extern const int seasons_known_count;               /* 49 */
+extern const int seasons_known_count;               /* 50 */
 
 /* The three decades of the Choose Season screen (layout C, Q346): a season belongs to the decade of the year
  * it starts in. The names and the colours belong to the screen; the names are in one table (seasons_db.c). */
@@ -67,7 +67,7 @@ typedef enum {
     SEASONS_OFFICIAL,               /* 2001/02 and 2002/03: the official data sets, always there */
     SEASONS_UNPACKED,               /* the database is in Databases: a start needs no unpack */
     SEASONS_IN_DOWNLOAD,            /* Seasons/<name>.zip is there: the first start unpacks it */
-    SEASONS_NO_DATABASE,            /* no database exists for the season (2004/05, 2006/07) */
+    SEASONS_NO_DATABASE,            /* no database exists for the season (2004/05) */
     SEASONS_MISSING                 /* a database exists, but this game folder has neither its zip nor an unpacked copy */
 } SeasonsStatus;
 
