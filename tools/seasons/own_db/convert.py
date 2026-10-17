@@ -23,6 +23,8 @@ What changes:
 - Clubs. Current division and last division and position from leagues.pkl. Manager (+0xcf) and assistant
   manager (+0xd3) follow the staff. The squad list (+0xd7, 50 ids) is rebuilt for each club that has one; the
   staff lists lose people who left.
+- Loans (facts loans.pkl): a loaned player is at his loan club. Careers (facts careers.pkl): FM's rows for the
+  seasons from 2002/03 to the one before the start replace the template's rows of those seasons.
 - Competition history. The template's last champions (its 2001 rows of the competitions it updated) go. The
   seasons from 2000/01 to the one before the start come from FM where it has them, else from the history folder,
   for club and national competitions.
@@ -143,6 +145,19 @@ def main(argv):
     comphist = pickle.load(open(os.path.join(X, "comphist.pkl"), "rb"))
     teammap = pickle.load(open(os.path.join(X, "teammap.pkl"), "rb"))
     clubmap, pmap = M["clubmap"], M["pmap"]
+    # Loans (FM2005 STARTING_LOAN; facts loans.pkl): a loaned player plays for the loan club in the start season.
+    # A loan that starts after 31 August of the start year, or to a club that the template lacks, is left out.
+    lp = os.path.join(X, "loans.pkl")
+    n_loans = 0
+    if os.path.exists(lp):
+        for i, ln in pickle.load(open(lp, "rb")).items():
+            if ln["club"] not in clubmap or (ln["start"] and ln["start"] > datetime.date(START, 8, 31)):
+                continue
+            fp[i] = dict(fp[i], club=ln["club"], joined=ln["start"] or fp[i]["joined"])
+            n_loans += 1
+        print(f"loans: {n_loans} players at their loan club")
+    cp = os.path.join(X, "careers.pkl")
+    fm_careers = pickle.load(open(cp, "rb")) if os.path.exists(cp) else {}
     n_template = idx[6]["count"]
     if fill_src:
         from fill import fill                       # Q382: FM players that the template lacks, from an older database
@@ -279,6 +294,35 @@ def main(argv):
         if struct.unpack_from("<H", rr, 8)[0] >= START:
             continue
         rows.append(rr)
+    # FM careers (facts careers.pkl) for the seasons from 2002/03 to the one before the start: the Update Team
+    # templates end most careers with 2001/02 or hold later rows with mixed year shifts. For a matched person with
+    # FM rows, his rows of these seasons are FM's (season start year; club through the club map; loan byte 255 for
+    # a loan, apps, goals). A row whose club the template lacks is left out.
+    first_fm = 2002
+    fm_rows, fm_people = [], set()
+    for n, t in pmap.items():
+        hist = [h for h in fm_careers.get(n, ()) if first_fm <= h["season"] < START]
+        if not hist:
+            continue
+        fm_people.add(t)
+        merged = {}                                  # FM2007 can hold two rows of a season and club (two competitions)
+        for h in hist:
+            club = clubmap.get(h["club"], -1) if h["club"] is not None else -1
+            if club < 0:
+                continue
+            key = (h["season"], club, bool(h["loan"]))
+            a, b = merged.get(key, (0, 0))
+            merged[key] = (a + (h["apps"] or 0), b + (h["goals"] or 0))
+        for (season, club, loan), (a, b) in merged.items():
+            rr = bytearray(17)
+            struct.pack_into("<iiHiBBB", rr, 0, 0, t, season, club, 255 if loan else 0, min(a, 255), min(b, 255))
+            fm_rows.append(rr)
+    n_before = len(rows)
+    rows = [rr for rr in rows if not (struct.unpack_from("<i", rr, 4)[0] in fm_people
+                                      and struct.unpack_from("<H", rr, 8)[0] >= first_fm)]
+    print(f"careers from FM: {n_before - len(rows)} template rows of {first_fm} to {START - 1} replaced, "
+          f"{len(fm_rows)} FM rows for {len(fm_people)} people")
+    rows += fm_rows
     for i, rr in enumerate(rows):
         struct.pack_into("<i", rr, 0, i)
     T.raw["staff_history.dat"] = bytearray(b"".join(rows))

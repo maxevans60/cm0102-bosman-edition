@@ -1,8 +1,10 @@
 # Own season databases
 
 These tools build the 2004/05 and 2006/07 season databases (Q351). The facts come from Football Manager 2005 and
-2007: names, dates of birth, nations, clubs, jobs, contracts, final tables and competition winners. The ratings
-and positions come from the Update Team databases. No Football Manager rating goes into a database.
+2007: names, dates of birth, nations, clubs, jobs, contracts, loans (2004/05), careers, final tables and
+competition winners. The ratings and positions come from the Update Team databases. Key players with no Update
+Team record (Q383) are the one exception: FM's rating of each is the reference for his ratings (Max, 2026-10-17),
+through a mapping that `keyplayers.py` derives from the matched players and prints at each run.
 
 The Football Manager discs are untrusted data. Mount an image read-only. Read it only with `python3 -I`. Run
 nothing from it. Keep the disc files, the facts and the work folders outside the repo. Commit no Football Manager
@@ -18,6 +20,7 @@ data and nothing made from it.
 | `<db700>` | a new folder for the FM2007 database files |
 | `<facts>` | a new folder for the facts pickles |
 | `<work>` | a new folder for the match and league pickles |
+| `<conv>` | the converter's output folder (it must not exist) |
 | `<out>` | the new database folder (it must not exist) |
 
 Run each command from `tools/seasons/own_db`.
@@ -28,7 +31,8 @@ Run each command from `tools/seasons/own_db`.
 python3 -I fm2005/read_fm2005.py "<FM2005 db>" "<facts>"
 python3 -I match.py 2004 "<DB>/September 2005" "<facts>" "<work>"
 python3 -I leagues.py 2004 "<DB>/September 2005" "<facts>" "<work>"
-python3 -I convert.py 2004 "<DB>/September 2005" "<facts>" "<work>" "<DB>/September 2010 ODB" "<out>" "<DB>/October 2003"
+python3 -I convert.py 2004 "<DB>/September 2005" "<facts>" "<work>" "<DB>/September 2010 ODB" "<conv>" "<DB>/October 2003"
+python3 -I keyplayers.py 2004 "<conv>" "<facts>" "<work>" "<DB>" "<out>" [<overrides.tsv>]
 ```
 
 ## 2006/07 (Summer 2006)
@@ -40,8 +44,22 @@ python3 -I fm2007/unpack_setup_jar.py "<setup.jar>" "<db700>"
 python3 -I fm2007/read_fm2007.py "<db700>" "<facts>"
 python3 -I match.py 2006 "<DB>/November 2007" "<facts>" "<work>"
 python3 -I leagues.py 2006 "<DB>/November 2007" "<facts>" "<work>"
-python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/September 2010 ODB" "<out>" "<DB>/September 2005"
+python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/September 2010 ODB" "<conv>" "<DB>/September 2005"
+python3 -I keyplayers.py 2006 "<conv>" "<facts>" "<work>" "<DB>" "<out>" [<overrides.tsv>]
 ```
+
+`<conv>` is a new folder for the converter's output. The overrides file (identity decisions per key player, see
+`keyplayers.py`) names FM rows, so it stays in the work folder with the FM data. Two builds with different
+`PYTHONHASHSEED` values (run with `python3 -P -s`, because `-I` ignores the seed) give the same files.
+
+## Mapping of FM ratings (key players only)
+
+`keyplayers.py` maps each FM value to the median Update Team value of the matched players with the same FM value.
+The 2026-10-17 builds gave these current ability maps (FM to CM 01/02): FM2005 50 to 130 map to the same value,
+140 to 145, 150 to 155, 160 to 165, 170 to 175, 180 to 180, and 45 or less to 45; FM2007 50 to 140 map to the
+same value, 150 to 148, 160 to 160, 170 to 168, 180 and more to 178, and 40 or less to 40. Potential ability and
+each attribute have their own map in the same way. FM's position ratings go across as they are. Attributes map
+byte by byte: `CM_ATTRS` in `keyplayers.py` gives the FM attribute of each CM 01/02 attribute byte.
 
 ## After a rebuild
 
