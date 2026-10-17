@@ -39,9 +39,9 @@ the save of search-off.
 
 Options box check (--same-save --save <name> --options): the runs open the Bosman Edition Options box from the
 side bar before the holiday (0.5.0 slice 6). options and options-again switch Faster holidays off and on and
-close the box. options-tabs clicks the tabs Game, Screen and Game, options-database the Database values 3.9.60
-and 3.9.65 (the open game keeps its own data set; use a game folder with Data-3.9.60 and Data-3.9.65, as in
-a download), and options-backups switches Save backups off and on, so the box is built as often. Each save
+close the box. options-tabs clicks the tabs Game, Screen and Game, options-rules switches the default of
+Changing rules off and on (0.6.0 slice 13: the open game keeps its own value), and options-backups switches
+Save backups off and on, so the box is built as often. Each save
 must be the same as the save of options. The runs give the box the same save folder path end
 (OPTIONS_USER_SUB).
 
@@ -444,7 +444,7 @@ def options_runs(load, holiday):
     switch = load + OPTIONS_STEPS + holiday
     tabs = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 304 155", "4000 click 584 155"] + OPTIONS_CLOSE + \
         holiday
-    database = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 437", "4000 click 533 437"] + \
+    rules = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 437", "4000 click 371 437"] + \
         OPTIONS_CLOSE + holiday
     backups = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 402", "4000 click 371 402"] + \
         OPTIONS_CLOSE + holiday
@@ -452,7 +452,7 @@ def options_runs(load, holiday):
     def run(name, steps):
         return (name, {"faster_days": "on", "_steps": steps, "_user_sub": OPTIONS_USER_SUB})
     return ([run("options", switch), run("options-again", switch), run("options-tabs", tabs),
-             run("options-database", database), run("options-backups", backups)],)
+             run("options-rules", rules), run("options-backups", backups)],)
 
 
 # The season part of a save (0.6.0 slice 11, src/recomp_rt/win/season.c). A save of a new game with

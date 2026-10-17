@@ -245,6 +245,14 @@ done:
     return result;
 }
 
+/* The start year of a save file for the Choose Season screen (slice 13): only reads the file. */
+int season_of_save(const char *host, int *year)
+{
+    int rules = 0;
+    *year = SEASON_FIRST_YEAR;
+    return read_part(host, year, &rules);
+}
+
 void o_0082e430(void);
 
 /* The save of a game, cdecl (path, flags): 1 when the file is written. The file at path is whole when it
