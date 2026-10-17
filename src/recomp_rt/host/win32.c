@@ -128,6 +128,12 @@ int host_unlink(const char *path)
     return to_wide(path, w, WPATH) ? _wunlink(w) : -1;
 }
 
+int host_rmdir(const char *path)
+{
+    wchar_t w[WPATH];
+    return to_wide(path, w, WPATH) ? _wrmdir(w) : -1;
+}
+
 int host_rename(const char *from, const char *to)
 {
     wchar_t a[WPATH], b[WPATH];

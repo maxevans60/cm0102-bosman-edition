@@ -3,13 +3,18 @@
 
 Usage:
     python3 tests/smoke/update_team_sweep.py <cm0102_recomp> <game folder> <folder of databases> [--jobs n]
-        [--timeout s] [--out table.md]
+        [--timeout s] [--out table.md] [--seasons <Seasons folder> --seasons-tool <seasons_db_test>]
 
 <folder of databases> holds one folder per database (Max keeps them in test-fixtures/databases). Each run
 copies one whole folder into Databases of a new user folder, sets database = folder:<name> and plays the
 steps of smoke_run.py up to the first news screen and holiday. A run passes when the date box moves on
 after "Go on Holiday". A run that fails or hangs names the last step it reached. At most --jobs (6) games
 run at the same time. The table is a Markdown table (folder, result, seconds, failure step).
+
+With --seasons the databases are those of a download (0.6.0 slice 14): <Seasons folder> holds the season
+database zips (tools/release/make_season_zips.py). The run unpacks each one with the first pick of the game
+(seasons_db_prepare_in, through the test program seasons_db_test that ctest builds) into a new save folder, and
+sweeps those folders. <folder of databases> is then not used: give any existing folder.
 """
 import concurrent.futures
 import os
@@ -73,11 +78,41 @@ def clean_euro(game):
     return put
 
 
+def unpack_seasons(seasons, tool, work):
+    """Unpacks every season zip with the first pick of the game. Returns the Databases folder."""
+    game = os.path.join(work, "game")
+    save = os.path.join(work, "save")
+    os.makedirs(game)
+    os.makedirs(save)
+    os.symlink(seasons, os.path.join(game, "Seasons"))
+    for year in range(2001, 2026):
+        r = subprocess.run([tool, "prepare", game, save, str(year)], capture_output=True, text=True)
+        if "status=0 " in r.stdout:
+            print(f"unpacked {r.stdout.strip()}", flush=True)
+        elif "status=4 " in r.stdout or r.returncode:
+            raise SystemExit(f"first pick of {year} failed: {r.stdout} {r.stderr}")
+    return os.path.join(save, "Databases")
+
+
 def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
     program, game, base = (os.path.abspath(a) for a in argv[1:4])
+    if "--seasons" in argv:
+        import shutil
+        seasons = os.path.abspath(argv[argv.index("--seasons") + 1])
+        tool = os.path.abspath(argv[argv.index("--seasons-tool") + 1])
+        work = tempfile.mkdtemp(prefix="cm0102-seasons-sweep-")
+        try:
+            base = unpack_seasons(seasons, tool, work)
+            return sweep(argv, program, game, base)
+        finally:
+            shutil.rmtree(work, ignore_errors=True)
+    return sweep(argv, program, game, base)
+
+
+def sweep(argv, program, game, base):
     jobs = int(argv[argv.index("--jobs") + 1]) if "--jobs" in argv else 6
     timeout = int(argv[argv.index("--timeout") + 1]) if "--timeout" in argv else 420
     out = argv[argv.index("--out") + 1] if "--out" in argv else None

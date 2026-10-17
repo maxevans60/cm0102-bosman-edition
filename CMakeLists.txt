@@ -110,6 +110,15 @@ if(NOT WIN32)
         src/recomp_rt/host/posix.c)
     target_include_directories(dbfolders_test PRIVATE src/recomp_rt/win)
     add_test(NAME dbfolders COMMAND dbfolders_test)
+    # Season databases in the download (0.6.0 slice 14): zip reader, SHA-256, recognition, first pick.
+    add_executable(seasons_db_test tests/seasons/test_seasons_db.c src/recomp_rt/win/seasons_db.c
+        src/recomp_rt/win/seasons_zip.c src/recomp_rt/win/seasons_table.c src/recomp_rt/win/dbfolders.c
+        src/recomp_rt/host/posix.c)
+    target_include_directories(seasons_db_test PRIVATE src/recomp_rt/win tests/seasons)
+    target_compile_definitions(seasons_db_test PRIVATE
+        SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv")
+    add_test(NAME seasons_db COMMAND seasons_db_test)
+    add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
