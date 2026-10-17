@@ -153,7 +153,7 @@ for comp,team,yr,pos,*rest in rows06:
     f=tm.get(team)
     if f is not None and (f not in fmrow or comp in compmap): fmrow[f]=(comp,pos)
 def pick(names,pool):
-    chosen=[]; miss=[]; pairs=[]
+    chosen=[]; miss=[]; pairs=[]; pick.missing=[]
     for n in names:
         best=None;bs=0
         n_=getattr(S_,'ALIAS',{}).get(n,n)   # the template's name of a real club, where the tokens differ
@@ -164,7 +164,7 @@ def pick(names,pool):
                 if not a or not b: continue
                 sc=len(a&b)/len(a|b) + (0.5 if nm(n_)==nm(s_) else 0) - (0.3 if ({'b','ii','c'}&set(nm(s_).split())) else 0)
                 if sc>bs: bs,best=sc,c
-        if best is None or bs<0.5 or best in chosen: miss.append(f"{n} [best {cstr(trow[best],4,51) if best is not None else None} {bs:.2f}{' taken' if best in chosen else ''}]")
+        if best is None or bs<0.5 or best in chosen: pick.missing.append(n); miss.append(f"{n} [best {cstr(trow[best],4,51) if best is not None else None} {bs:.2f}{' taken' if best in chosen else ''}]")
         else: chosen.append(best); pairs.append((n,best))
     pick.pairs=pairs
     return chosen,miss
@@ -186,7 +186,7 @@ for dname,names in REAL.items():
     nat=natof(d)
     pool=[c for c,r in trow.items() if g(r,0x53)==nat and c not in locked]
     others=set().union(*(v for k,v in named.items() if k!=dname))
-    chosen,miss=pick(names,pool); realrows+=[(dname,n,c) for n,c in pick.pairs]
+    chosen,miss=pick(names,pool); realrows+=[(dname,n,c) for n,c in pick.pairs]+[(dname,n,None) for n in pick.missing]   # a real club with no template record: no id
     later={tid[k] for k in order[order.index(dname)+1:] if natof(tid[k])==nat}
     take=[c for c in carry if natof_c(c)==nat and c not in chosen and c not in locked and fmdiv(c) not in later]
     carry=[c for c in carry if c not in take]; chosen=take+chosen
