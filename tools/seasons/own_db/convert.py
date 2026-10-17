@@ -8,8 +8,8 @@ Run match.py and leagues.py first (they write match.pkl and leagues.pkl into the
 are season_<year>.py. The template and the history folder (an Update Team database whose competition history
 covers the seasons up to the start, settings HIST_SRC) are read only. The new folder must not exist. It gets the
 20 .dat files and index.dat, and no .cfg file: the game reads a file from a database folder only when the folder
-has it (src/recomp_rt/win/files.c), so it uses its own .cfg files. Every year is a real year, so the database needs
-its own signature row with every shift 0 (Q351, Q381).
+has it (src/recomp_rt/win/files.c), so it uses its own .cfg files. The work runs in real years. The last step
+stores the dates the Update Team way, as for a 2001 start (Q381): see store_update_team_way.
 
 What changes:
 - Dates. The template stores the dates of a 2001 start, early by a number of years per field (the date shift
@@ -79,6 +79,30 @@ def set_count(buf, table, count):
             struct.pack_into("<i", buf, i + 55, count)
             return
     check(False, f"index.dat has no table {table}")
+
+
+def store_update_team_way(T, k):
+    """Q381 (Max, 2026-10-17): the dates as an Update Team database of the start season stores them, early by
+    k = start year - 2001, so the database works in three ways: as a known season database (its signature row
+    carries these shifts), as a Custom database (the game measures the birth shift k against its own data and
+    adds it back, src/recomp_rt/win/season_dates.c plan_for) and in the original game, which always starts in
+    2001. Dates of birth (+0x10, age +0x18), joined dates (+0x3e), contract ends (+0x46) and national job dates
+    (+0x29, +0x31), and the career years (staff_history +8), move k years back. A contract end that would land in
+    2010 or later keeps its real year: the game reads an end of 2010 or later as a real year (REAL_CONTRACT_FROM).
+    Competition history and officials keep their real years (the rules for a database before 2010/11)."""
+    if k <= 0:
+        return
+    for r in T.rows(6):
+        for off in (0x12, 0x18, 0x40):
+            shift(r, off, -k)
+        for off in (0x2b, 0x33, 0x48):
+            y = struct.unpack_from("<H", r, off)[0]
+            if y >= 1901 and y - k < 2010:
+                struct.pack_into("<H", r, off, y - k)
+    sh = T.raw["staff_history.dat"]
+    for o in range(0, len(sh) - 16, 17):          # the file holds exactly the rows (step 4 wrote it)
+        shift(sh, o + 8, -k)
+    print(f"dates stored the Update Team way: {k} years early")
 
 
 def main(argv):
@@ -301,6 +325,7 @@ def main(argv):
     print(f"competition history: {idx[19]['count']} -> {len(crow)} club rows ({added} added), "
           f"{idx[20]['count']} -> {len(nrow)} nation rows")
 
+    store_update_team_way(T, START - 2001)
     os.makedirs(dst)
     for f in DAT_FILES:
         with open(os.path.join(dst, f), "wb") as h:
