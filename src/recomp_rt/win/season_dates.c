@@ -118,12 +118,27 @@ static void keep(uint32_t a, uint8_t len)
  * and 0x667150 (the league table of key_nation.cpp) after the load, and the Setup screens read the staff only.
  * So the bytes that come back are the bytes that the load gave (inference from those functions, src/cm3/setup.c
  * and src/cm3/key_nation.c port them; none touches staff +0x10..+0x4d, the officials or the history years). */
+/* The competition history block when the shift journaled its years. Slice 11c grows that block after the
+ * shift (season_history.c, the grow 0x527f60 reallocates it with 0x945667), so a restore finds the rows at the
+ * new base: the journaled addresses inside the old block move by the same distance. */
+static uint32_t journal_ch_base, journal_ch_end;
+
 static void restore(void)
 {
+    uint32_t now = rd32(g_mem, COMP_HISTORY_PTR), moved = 0;
     while (journal_n) {
         Change *c = &journal[--journal_n];
-        memcpy(g_mem + c->addr, c->old, c->len);
+        uint32_t a = c->addr;
+        if (journal_ch_base && now != journal_ch_base && a >= journal_ch_base && a < journal_ch_end) {
+            a = a - journal_ch_base + now;
+            moved++;
+        }
+        memcpy(g_mem + a, c->old, c->len);
     }
+    if (moved)
+        fprintf(stderr, "recomp: season dates: %u history years restored in the moved history table (%08x, was "
+                        "%08x)\n", moved, now, journal_ch_base);
+    journal_ch_base = journal_ch_end = 0;
 }
 
 /* --- The loaded data and the shift that it holds. --- */
@@ -251,6 +266,8 @@ static void apply(const Plan *p)
         n_ch = file_rows(T_COMP_HISTORY);
     }
     uint32_t comps = rd32(g_mem, COMPS_PTR);
+    journal_ch_base = ch;
+    journal_ch_end = ch + rd32(g_mem, COMP_HISTORY_COUNT) * COMP_HISTORY_SIZE;
     for (uint32_t i = 0; ch && i < n_ch; i++) {
         uint32_t r = ch + i * COMP_HISTORY_SIZE, c = rd32(g_mem, r + 4);
         int last = p->last_rows && rd16(g_mem, r + 8) == LAST_ROW_YEAR && c >= comps && (c - comps) % COMP_SIZE == 0 &&
@@ -489,6 +506,7 @@ static void shift_for(int N)
 void season_dates_forget(void)
 {
     season_history_forget();
+    journal_ch_base = journal_ch_end = 0;
     loaded = 0;
     applied_year = 0;
     journal_n = 0;
@@ -526,6 +544,15 @@ RT_WRAP(00524d50, database_load_files)
     fprintf(stderr, "recomp: season dates: data loaded from %s in %d\n", loaded_dir[0] ? "a database folder"
             : "the game's Data", season_start_year());
     shift_for(season_start_year());
+    /* Test switch RECOMP_DATES_RESHIFT=<year>: the shift is made again for that year and then for the start year,
+     * as season_dates_at_create does when the game is made in another year than the load. The data must end as
+     * after one shift (tests/seasons/season_history_run.py, run "reshift"). */
+    const char *re = getenv("RECOMP_DATES_RESHIFT");
+    if (re && atoi(re) > SEASON_FIRST_YEAR && season_start_year() != SEASON_FIRST_YEAR) {
+        fprintf(stderr, "recomp: season dates: test shift for %d, then %d again\n", atoi(re), season_start_year());
+        shift_for(atoi(re));
+        shift_for(season_start_year());
+    }
     log_load();
     cpu.eax = eax;
 }

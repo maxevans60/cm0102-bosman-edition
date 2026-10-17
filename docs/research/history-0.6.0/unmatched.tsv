@@ -1,4 +1,5 @@
 database	nation	name	rows
+3.9.68		Skonto Riga	1
 3.9.68	Finland	Kokkolan Palloveikot	1
 3.9.68	Hong Kong	unknown	2
 3.9.68	India	unknown	2
@@ -10,12 +11,13 @@ April 2010 SIM	Australia	PCYC Parramatta	2
 April 2010 SIM	Australia	Sydney Crescent Star	1
 April 2010 SIM	Austria	SV Feldkirchen	1
 April 2010 SIM	Belgium	FC Hedera Millen	2
+April 2010 SIM	Belgium	KFC Lommelse SK	2
 April 2010 SIM	Belgium	KFC Verbroedering Geel	1
-April 2010 SIM	Belgium	R Francs Borains	1
+April 2010 SIM	Belgium	R Francs Borains	2
 April 2010 SIM	Belgium	VV Eendracht Aalter	1
 April 2010 SIM	Brazil	Associação Esportiva Catuense	1
 April 2010 SIM	Brazil	Caxias Futebol Clube	1
-April 2010 SIM	Brazil	Esporte Clube Bahia	7
+April 2010 SIM	Brazil	Esporte Clube Bahia	9
 April 2010 SIM	Brazil	Grêmio de Esportes Maringá	1
 April 2010 SIM	Brazil	J. Malucelli Futebol	1
 April 2010 SIM	Brazil	Sport Club Ulbra	1
@@ -26,48 +28,49 @@ April 2010 SIM	Croatia	Zagora Unesic	1
 April 2010 SIM	Denmark	Køge Boldklub	1
 April 2010 SIM	Finland	FC Jokerit	1
 April 2010 SIM	France	ASO Arménienne Valence	1
+April 2010 SIM	France	Amiens SC	2
+April 2010 SIM	France	Lusitanos de Saint-Maur	1
 April 2010 SIM	Greece	Chalkidona	1
+April 2010 SIM	Russia	FC Pskov-2000	1
 April 2010 SIM	Russia	FK MVD Russia	1
-April 2010 SIM	Scotland	Airdrieonians	1
+April 2010 SIM	Scotland	Airdrieonians	2
 April 2010 SIM	Sweden	Dalkurd FF	1
 December 2008	Australia	PCYC Parramatta	1
 December 2008	Australia	Sydney Crescent Star	1
 December 2008	Austria	Grazer AK	7
 December 2008	Austria	SV Feldkirchen	1
 December 2008	Belgium	FC Hedera Millen	2
+December 2008	Belgium	KFC Lommelse SK	2
 December 2008	Belgium	KSV Ingelmunster	1
-December 2008	Belgium	R Francs Borains	1
+December 2008	Belgium	R Francs Borains	2
 December 2008	Belgium	R Union Liégeoise - Seraing	2
 December 2008	Belgium	VV Eendracht Aalter	1
 December 2008	Brazil	ADESG	2
 December 2008	Brazil	Associação Esportiva Catuense	1
 December 2008	Brazil	Atlético Clube Juventus	2
 December 2008	Brazil	Caxias Futebol Clube	1
-December 2008	Brazil	Esporte Clube Bahia	5
+December 2008	Brazil	Esporte Clube Bahia	6
 December 2008	Brazil	Grêmio de Esportes Maringá	1
 December 2008	China	Beijing Hongdeng	1
 December 2008	China	Beijing Institute of Technology Football Club	1
 December 2008	China	Guangdong Sunray Cave	1
 December 2008	China	Harbin Lange	1
+December 2008	China	Liaoning Youth	1
 December 2008	China	Nanchang Bayi	1
 December 2008	China	Shanghai East Asia	1
 December 2008	China	Shanghai Jiucheng	1
 December 2008	China	Shenyang Dongjin	1
 December 2008	China	Sichuan F.C.	1
 December 2008	China	Wuhan Hongjinlong	1
-December 2008	China PR	Beijing Hongdeng	1
-December 2008	China PR	Harbin Lange	1
-December 2008	China PR	Nanchang Bayi Hengyuan	1
-December 2008	China PR	Shanghai Jiucheng	1
-December 2008	China PR	Wuhan Hongjinlong	1
 December 2008	Croatia	Dugopolje	1
 December 2008	Croatia	Hrvace	1
 December 2008	Croatia	Zagora Unesic	1
 December 2008	Finland	FC Jokerit	1
+December 2008	France	Amiens SC	1
 December 2008	Greece	Chalkidona	1
 December 2008	Republic of Ireland	Carrick United	1
 December 2008	Republic of Ireland	Passage	1
-December 2008	Scotland	Airdrieonians	1
+December 2008	Scotland	Airdrieonians	2
 December 2008	Sweden	Ersboda SK	1
 December 2008	Sweden	Harmångers IF	2
 December 2008	Sweden	Kubikenborgs IF	2
@@ -79,32 +82,31 @@ February 2008		Waitakere United	1
 February 2008	Australia	Sydney Crescent Star	1
 February 2008	Australia	Sydney United	1
 February 2008	Austria	Grazer AK	7
+February 2008	Belgium	KFC Lommelse SK	2
 February 2008	Belgium	KSV Ingelmunster	1
 February 2008	Belgium	VV Eendracht Aalter	1
 February 2008	Brazil	ADAP Galo Maringá FC	1
 February 2008	Brazil	ADESG	2
 February 2008	Brazil	Atlético Clube Juventus	1
 February 2008	Brazil	Atlético Clube Paranavaí	2
-February 2008	Brazil	Esporte Clube Bahia	4
+February 2008	Brazil	Esporte Clube Bahia	5
 February 2008	Brazil	Grêmio de Esportes Maringá	1
 February 2008	China	Beijing Hongdeng	1
 February 2008	China	Beijing Institute of Technology Football Club	1
+February 2008	China	Liaoning Youth	1
 February 2008	China	Nanchang Bayi	1
 February 2008	China	Shanghai East Asia	1
 February 2008	China	Shanghai Jiucheng	1
 February 2008	China	Sichuan F.C.	1
 February 2008	China	Wuhan Hongjinlong	1
-February 2008	China PR	Beijing Hongdeng	1
-February 2008	China PR	Nanchang Bayi Hengyuan	1
-February 2008	China PR	Shanghai Jiucheng	1
-February 2008	China PR	Wuhan Hongjinlong	1
 February 2008	Croatia	Dugopolje	1
 February 2008	Finland	FC Jokerit	1
+February 2008	France	Amiens SC	1
 February 2008	Greece	Chalkidona	1
 February 2008	Republic of Ireland	Carrick United	1
 February 2008	Republic of Ireland	Passage	1
 February 2008	Russia	Chkalovets-1936 Novosibirsk	2
-February 2008	Scotland	Airdrieonians	1
+February 2008	Scotland	Airdrieonians	2
 February 2008	Sweden	Ersboda SK	1
 February 2008	Sweden	Harmångers IF	2
 February 2008	Sweden	Kubikenborgs IF	2
@@ -116,12 +118,13 @@ February 2010 ODB	Australia	Sydney Crescent Star	1
 February 2010 ODB	Austria	Grazer AK	7
 February 2010 ODB	Austria	SV Feldkirchen	1
 February 2010 ODB	Belgium	FC Hedera Millen	2
+February 2010 ODB	Belgium	KFC Lommelse SK	2
 February 2010 ODB	Belgium	KFC Verbroedering Geel	1
-February 2010 ODB	Belgium	R Francs Borains	1
+February 2010 ODB	Belgium	R Francs Borains	2
 February 2010 ODB	Belgium	VV Eendracht Aalter	1
 February 2010 ODB	Brazil	Associação Esportiva Catuense	1
 February 2010 ODB	Brazil	Caxias Futebol Clube	1
-February 2010 ODB	Brazil	Esporte Clube Bahia	7
+February 2010 ODB	Brazil	Esporte Clube Bahia	9
 February 2010 ODB	Brazil	Grêmio de Esportes Maringá	1
 February 2010 ODB	Brazil	J. Malucelli Futebol	1
 February 2010 ODB	Croatia	Dugopolje	1
@@ -135,7 +138,10 @@ February 2010 ODB	Denmark	Odense BK II	1
 February 2010 ODB	England	Nuneaton Borough	1
 February 2010 ODB	Finland	FC Jokerit	1
 February 2010 ODB	France	ASO Arménienne Valence	1
+February 2010 ODB	France	Amiens SC	2
+February 2010 ODB	France	Lusitanos de Saint-Maur	1
 February 2010 ODB	Greece	Chalkidona	1
+February 2010 ODB	Scotland	Airdrieonians	1
 February 2010 ODB	Sweden	Dalkurd FF	1
 June 2010		FK Riga	1
 June 2010		Heartland	1
@@ -144,12 +150,13 @@ June 2010	Australia	Sydney Crescent Star	1
 June 2010	Austria	Grazer AK	7
 June 2010	Austria	SV Feldkirchen	1
 June 2010	Belgium	FC Hedera Millen	2
+June 2010	Belgium	KFC Lommelse SK	2
 June 2010	Belgium	KFC Verbroedering Geel	1
-June 2010	Belgium	R Francs Borains	1
+June 2010	Belgium	R Francs Borains	2
 June 2010	Belgium	VV Eendracht Aalter	1
 June 2010	Brazil	Associação Esportiva Catuense	1
 June 2010	Brazil	Caxias Futebol Clube	1
-June 2010	Brazil	Esporte Clube Bahia	7
+June 2010	Brazil	Esporte Clube Bahia	9
 June 2010	Brazil	Grêmio de Esportes Maringá	1
 June 2010	Brazil	J. Malucelli Futebol	1
 June 2010	Croatia	Dugopolje	1
@@ -164,48 +171,50 @@ June 2010	England	Chester City	1
 June 2010	England	Nuneaton Borough	1
 June 2010	Finland	FC Jokerit	1
 June 2010	France	ASO Arménienne Valence	1
+June 2010	France	Amiens SC	2
+June 2010	France	Lusitanos de Saint-Maur	1
 June 2010	Greece	Chalkidona	1
 June 2010	Republic of Ireland	Dublin City F.C.	2
+June 2010	Scotland	Airdrieonians	1
 June 2010	Sweden	Dalkurd FF	1
 March 2009	Australia	PCYC Parramatta	1
 March 2009	Australia	Sydney Crescent Star	1
 March 2009	Austria	Grazer AK	7
 March 2009	Austria	SV Feldkirchen	1
 March 2009	Belgium	FC Hedera Millen	2
-March 2009	Belgium	R Francs Borains	1
+March 2009	Belgium	KFC Lommelse SK	2
+March 2009	Belgium	R Francs Borains	2
 March 2009	Belgium	R Union Liégeoise - Seraing	2
 March 2009	Belgium	VV Eendracht Aalter	1
 March 2009	Brazil	ADESG	2
 March 2009	Brazil	Associação Esportiva Catuense	1
 March 2009	Brazil	Atlético Clube Juventus	2
 March 2009	Brazil	Caxias Futebol Clube	1
-March 2009	Brazil	Esporte Clube Bahia	5
+March 2009	Brazil	Esporte Clube Bahia	6
 March 2009	Brazil	Grêmio de Esportes Maringá	1
 March 2009	China	Beijing Hongdeng	1
 March 2009	China	Beijing Institute of Technology Football Club	1
 March 2009	China	Guangdong Sunray Cave	1
 March 2009	China	Harbin Lange	1
+March 2009	China	Liaoning Youth	1
 March 2009	China	Nanchang Bayi	1
 March 2009	China	Shanghai East Asia	1
 March 2009	China	Shanghai Jiucheng	1
 March 2009	China	Shenyang Dongjin	1
 March 2009	China	Sichuan F.C.	1
 March 2009	China	Wuhan Hongjinlong	1
-March 2009	China PR	Beijing Hongdeng	1
-March 2009	China PR	Harbin Lange	1
-March 2009	China PR	Nanchang Bayi Hengyuan	1
-March 2009	China PR	Shanghai Jiucheng	1
-March 2009	China PR	Wuhan Hongjinlong	1
 March 2009	Croatia	Dugopolje	1
 March 2009	Croatia	Hrvace	1
 March 2009	Croatia	NK Medimurje	1
 March 2009	Croatia	Zagora Unesic	1
 March 2009	Finland	FC Jokerit	1
 March 2009	France	ASO Arménienne Valence	1
+March 2009	France	Amiens SC	2
+March 2009	France	Lusitanos de Saint-Maur	1
 March 2009	Greece	Chalkidona	1
 March 2009	Republic of Ireland	Carrick United	1
 March 2009	Republic of Ireland	Passage	1
-March 2009	Scotland	Airdrieonians	1
+March 2009	Scotland	Airdrieonians	2
 March 2009	Sweden	Ersboda SK	1
 March 2009	Sweden	Harmångers IF	2
 March 2009	Sweden	Kubikenborgs IF	2
@@ -217,38 +226,40 @@ November 2007		Waitakere United	1
 November 2007	Australia	Sydney Crescent Star	1
 November 2007	Australia	Sydney United	1
 November 2007	Austria	Grazer AK	7
+November 2007	Belgium	KFC Lommelse SK	2
 November 2007	Belgium	KSV Ingelmunster	1
 November 2007	Belgium	VV Eendracht Aalter	1
 November 2007	Brazil	ADAP Galo Maringá FC	1
 November 2007	Brazil	ADESG	2
 November 2007	Brazil	Atlético Clube Juventus	1
 November 2007	Brazil	Atlético Clube Paranavaí	2
-November 2007	Brazil	Esporte Clube Bahia	4
+November 2007	Brazil	Esporte Clube Bahia	5
 November 2007	Brazil	Grêmio de Esportes Maringá	1
 November 2007	China	Beijing Hongdeng	1
 November 2007	China	Beijing Institute of Technology Football Club	1
+November 2007	China	Liaoning Youth	1
 November 2007	China	Nanchang Bayi	1
 November 2007	China	Shanghai East Asia	1
 November 2007	China	Shanghai Jiucheng	1
 November 2007	China	Sichuan F.C.	1
-November 2007	China PR	Beijing Hongdeng	1
-November 2007	China PR	Nanchang Bayi Hengyuan	1
-November 2007	China PR	Shanghai Jiucheng	1
 November 2007	Croatia	Dugopolje	1
 November 2007	Finland	FC Jokerit	1
+November 2007	France	Amiens SC	1
 November 2007	Greece	Chalkidona	1
 November 2007	Republic of Ireland	Carrick United	1
 November 2007	Republic of Ireland	Passage	1
 November 2007	Russia	Chkalovets-1936 Novosibirsk	2
-November 2007	Scotland	Airdrieonians	1
+November 2007	Scotland	Airdrieonians	2
 November 2007	Sweden	Ersboda SK	1
 November 2007	Sweden	Harmångers IF	2
 November 2007	Sweden	Kubikenborgs IF	2
 November 2007	Sweden	LSW IF	1
 November 2007	Sweden	Syrianska IF Kerburan	1
 November 2007	United States	Milwaukee Rampage	1
+October 2003		Skonto Riga	1
 October 2003	Australia	Sydney Crescent Star	1
 October 2003	Belgium	FC ZD Oud-Heverlee Leuven	1
+October 2003	Belgium	KFC Lommelse SK	2
 October 2003	Belgium	KSV Ingelmunster	1
 October 2003	Brazil	Atlético Clube Paranavaí	1
 October 2003	Finland	Kokkolan Palloveikot	1
@@ -262,20 +273,21 @@ October 2003	Japan	Seiryo High School	1
 October 2003	Singapore	Sinchi FC	1
 October 2003	Sweden	Harmångers IF	2
 October 2003	Sweden	LSW IF	1
+September 2005		Skonto Riga	1
 September 2005	Australia	Palm Beach Sharks	1
 September 2005	Australia	Sydney Crescent Star	1
+September 2005	Austria	BSV Bad Bleiberg	1
+September 2005	Belgium	KFC Lommelse SK	2
 September 2005	Belgium	KSV Ingelmunster	1
 September 2005	Brazil	ADESG	1
 September 2005	Brazil	Associação Atlética Coruripe	2
 September 2005	Brazil	Atlético Clube Juventus	1
 September 2005	Brazil	Atlético Clube Paranavaí	1
 September 2005	Brazil	Clube Atlético Hermann Aichinger	2
+September 2005	Brazil	Etti Jundiaí Futebol Clube	1
 September 2005	Brazil	Grêmio Coariense	2
 September 2005	Brazil	Paulista Futebol Clube	2
 September 2005	Brazil	Sport Club Ulbra	1
-September 2005	China	Beijing Hongdeng	1
-September 2005	China	Nanchang Bayi	1
-September 2005	China	Shanghai Jiucheng	1
 September 2005	China PR	Beijing Hongdeng	1
 September 2005	China PR	Nanchang Bayi Hengyuan	1
 September 2005	China PR	Shanghai Jiucheng	1
@@ -317,39 +329,38 @@ September 2008	Australia	Sydney Crescent Star	1
 September 2008	Austria	Grazer AK	7
 September 2008	Austria	SV Feldkirchen	1
 September 2008	Austria	SV Horn	2
-September 2008	Belgium	R Francs Borains	1
+September 2008	Belgium	KFC Lommelse SK	2
+September 2008	Belgium	R Francs Borains	2
 September 2008	Belgium	VV Eendracht Aalter	1
 September 2008	Brazil	ADESG	2
 September 2008	Brazil	Associação Esportiva Catuense	1
 September 2008	Brazil	Atlético Clube Juventus	2
 September 2008	Brazil	Caxias Futebol Clube	1
-September 2008	Brazil	Esporte Clube Bahia	5
+September 2008	Brazil	Esporte Clube Bahia	6
 September 2008	Brazil	Grêmio de Esportes Maringá	1
 September 2008	China	Beijing Hongdeng	1
 September 2008	China	Beijing Institute of Technology Football Club	1
 September 2008	China	Guangdong Sunray Cave	1
 September 2008	China	Harbin Lange	1
+September 2008	China	Liaoning Youth	1
 September 2008	China	Nanchang Bayi	1
 September 2008	China	Shanghai East Asia	1
 September 2008	China	Shanghai Jiucheng	1
 September 2008	China	Shenyang Dongjin	1
 September 2008	China	Sichuan F.C.	1
 September 2008	China	Wuhan Hongjinlong	1
-September 2008	China PR	Beijing Hongdeng	1
-September 2008	China PR	Harbin Lange	1
-September 2008	China PR	Nanchang Bayi Hengyuan	1
-September 2008	China PR	Shanghai Jiucheng	1
-September 2008	China PR	Wuhan Hongjinlong	1
 September 2008	Croatia	Dugopolje	1
 September 2008	Croatia	Hrvace	1
 September 2008	Croatia	NK Medimurje	1
 September 2008	Croatia	Zagora Unesic	1
 September 2008	Finland	FC Jokerit	1
 September 2008	France	ASO Arménienne Valence	1
+September 2008	France	Amiens SC	2
+September 2008	France	Lusitanos de Saint-Maur	1
 September 2008	Greece	Chalkidona	1
 September 2008	Republic of Ireland	Carrick United	1
 September 2008	Republic of Ireland	Passage	1
-September 2008	Scotland	Airdrieonians	1
+September 2008	Scotland	Airdrieonians	2
 September 2008	Sweden	Ersboda SK	1
 September 2008	Sweden	Harmångers IF	2
 September 2008	Sweden	Kubikenborgs IF	2
@@ -362,12 +373,13 @@ September 2009	Australia	Sydney Crescent Star	1
 September 2009	Austria	Grazer AK	7
 September 2009	Austria	SV Feldkirchen	1
 September 2009	Belgium	FC Hedera Millen	2
+September 2009	Belgium	KFC Lommelse SK	2
 September 2009	Belgium	KFC Verbroedering Geel	1
-September 2009	Belgium	R Francs Borains	1
+September 2009	Belgium	R Francs Borains	2
 September 2009	Belgium	VV Eendracht Aalter	1
 September 2009	Brazil	Associação Esportiva Catuense	1
 September 2009	Brazil	Caxias Futebol Clube	1
-September 2009	Brazil	Esporte Clube Bahia	7
+September 2009	Brazil	Esporte Clube Bahia	9
 September 2009	Brazil	Grêmio de Esportes Maringá	1
 September 2009	Brazil	J. Malucelli Futebol	1
 September 2009	Croatia	Dugopolje	1
@@ -376,6 +388,8 @@ September 2009	Croatia	NK Medimurje	1
 September 2009	Croatia	Zagora Unesic	1
 September 2009	Finland	FC Jokerit	1
 September 2009	France	ASO Arménienne Valence	1
+September 2009	France	Amiens SC	2
+September 2009	France	Lusitanos de Saint-Maur	1
 September 2009	Greece	Chalkidona	1
-September 2009	Scotland	Airdrieonians	1
+September 2009	Scotland	Airdrieonians	2
 September 2009	Sweden	Dalkurd FF	1
