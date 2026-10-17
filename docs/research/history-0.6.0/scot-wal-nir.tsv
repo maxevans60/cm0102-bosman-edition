@@ -1,0 +1,137 @@
+kind	competition	nation	label	real_season	part	held	first	second	third	host	notes	sources	ended
+club	Northern Irish County Antrim Shield	Northern Ireland	2002	2001/02		yes	Glentoran	Linfield			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2002-02
+club	Northern Irish County Antrim Shield	Northern Ireland	2003	2002/03		yes	Glentoran	Ballymena United			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2003-03
+club	Northern Irish County Antrim Shield	Northern Ireland	2004	2003/04		yes	Linfield	Ards			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2004-03
+club	Northern Irish County Antrim Shield	Northern Ireland	2005	2004/05		yes	Linfield	Crusaders			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2005-03
+club	Northern Irish County Antrim Shield	Northern Ireland	2006	2005/06		yes	Linfield	Ballymena United			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2006-02
+club	Northern Irish County Antrim Shield	Northern Ireland	2007	2006/07		yes	Cliftonville	Lisburn Distillery			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2007-01
+club	Northern Irish County Antrim Shield	Northern Ireland	2008	2007/08		yes	Glentoran	Crusaders			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2007-10
+club	Northern Irish County Antrim Shield	Northern Ireland	2009	2008/09		yes	Cliftonville	Linfield			label = year the season ends: inference, no 3.9.68 rows (see md)	all=https://en.wikipedia.org/wiki/County_Antrim_Shield	2008-11
+club	Northern Irish Cup	Northern Ireland	2002	2001/02		yes	Linfield	Portadown			Irish Cup	all=https://en.wikipedia.org/wiki/Irish_Cup	2002-05
+club	Northern Irish Cup	Northern Ireland	2003	2002/03		yes	Coleraine	Glentoran			Irish Cup	all=https://en.wikipedia.org/wiki/Irish_Cup	2003-05
+club	Northern Irish Cup	Northern Ireland	2004	2003/04		yes	Glentoran	Coleraine			Irish Cup	all=https://en.wikipedia.org/wiki/Irish_Cup	2004-05
+club	Northern Irish Cup	Northern Ireland	2005	2004/05		yes	Portadown	Larne			Irish Cup	all=https://en.wikipedia.org/wiki/Irish_Cup	2005-05
+club	Northern Irish Cup	Northern Ireland	2006	2005/06		yes	Linfield	Glentoran			Irish Cup	all=https://en.wikipedia.org/wiki/Irish_Cup	2006-05
+club	Northern Irish Cup	Northern Ireland	2007	2006/07		yes	Linfield	Dungannon Swifts			Irish Cup; won on penalties after 2-2	all=https://en.wikipedia.org/wiki/Irish_Cup	2007-05
+club	Northern Irish Cup	Northern Ireland	2008	2007/08		yes	Linfield	Coleraine			Irish Cup	all=https://en.wikipedia.org/wiki/Irish_Cup	2008-05
+club	Northern Irish Cup	Northern Ireland	2009	2008/09		yes	Crusaders	Cliftonville			Irish Cup	all=https://en.wikipedia.org/wiki/Irish_Cup	2009-05
+club	Northern Irish Gold Cup	Northern Ireland	2002	2002/03		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish Gold Cup	Northern Ireland	2003	2003/04		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish Gold Cup	Northern Ireland	2004	2004/05		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish Gold Cup	Northern Ireland	2005	2005/06		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish Gold Cup	Northern Ireland	2006	2006/07		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish Gold Cup	Northern Ireland	2007	2007/08		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish Gold Cup	Northern Ireland	2008	2008/09		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish Gold Cup	Northern Ireland	2009	2009/10		not held					no longer exists: last Gold Cup was 2000/01 (label 2000 in 3.9.68); label = first year of the season (see md)	held=https://en.wikipedia.org/wiki/Gold_Cup_(Northern_Ireland)	
+club	Northern Irish League Cup	Northern Ireland	2002	2001/02		yes	Linfield	Glentoran			Irish League Cup (CIS / Co-operative Insurance Cup)	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2001-11
+club	Northern Irish League Cup	Northern Ireland	2003	2002/03		yes	Glentoran	Linfield			Irish League Cup (CIS / Co-operative Insurance Cup)	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2002-12
+club	Northern Irish League Cup	Northern Ireland	2004	2003/04		yes	Cliftonville	Larne			Irish League Cup (CIS / Co-operative Insurance Cup); won on penalties after 1-1	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2003-11
+club	Northern Irish League Cup	Northern Ireland	2005	2004/05		yes	Glentoran	Linfield			Irish League Cup (CIS / Co-operative Insurance Cup); after extra time	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2004-11
+club	Northern Irish League Cup	Northern Ireland	2006	2005/06		yes	Linfield	Glentoran			Irish League Cup (CIS / Co-operative Insurance Cup)	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2005-12
+club	Northern Irish League Cup	Northern Ireland	2007	2006/07		yes	Glentoran	Cliftonville			Irish League Cup (CIS / Co-operative Insurance Cup)	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2006-12
+club	Northern Irish League Cup	Northern Ireland	2008	2007/08		yes	Linfield	Crusaders			Irish League Cup (CIS / Co-operative Insurance Cup)	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2008-02
+club	Northern Irish League Cup	Northern Ireland	2009	2008/09		yes	Portadown	Newry Town			Irish League Cup (CIS / Co-operative Insurance Cup); Newry City at the time (renamed summer 2004); full name in the data: Newry Town	all=https://en.wikipedia.org/wiki/Northern_Ireland_Football_League_Cup	2009-02
+club	Northern Irish League First Division	Northern Ireland	2002	2001/02		yes	Lisburn Distillery	Institute			First Division (tier 2)	all=https://www.rsssf.org/tablesn/nil02.html	2002-04
+club	Northern Irish League First Division	Northern Ireland	2003	2002/03		yes	Dungannon Swifts	Ballymena United			First Division (tier 2)	all=https://www.rsssf.org/tablesn/nil03.html	unknown
+club	Northern Irish League First Division	Northern Ireland	2004	2003/04		yes	Loughgall	Armagh City			Irish League First Division (tier 2)	all=https://www.rsssf.org/tablesn/nil04.html	2004-05
+club	Northern Irish League First Division	Northern Ireland	2005	2004/05		yes	Armagh City	Glenavon			Intermediate League First Division (tier 2)	all=https://www.rsssf.org/tablesn/nil05.html	2005-04
+club	Northern Irish League First Division	Northern Ireland	2006	2005/06		yes	Crusaders	Donegal Celtic			Intermediate League First Division (tier 2)	all=https://www.rsssf.org/tablesn/nil06.html	2006-05
+club	Northern Irish League First Division	Northern Ireland	2007	2006/07		yes	Institute	Bangor			First Division (tier 2)	all=https://www.rsssf.org/tablesn/nil07.html	2007-05
+club	Northern Irish League First Division	Northern Ireland	2008	2007/08		yes	Loughgall	Dundela			First Division; Loughgall not promoted (tier 2)	all=https://www.rsssf.org/tablesn/nil08.html	2008-05
+club	Northern Irish League First Division	Northern Ireland	2009	2008/09		yes	Portadown	Donegal Celtic			IFA Championship (tier 2)	all=https://www.rsssf.org/tablesn/nil09.html	2009-05
+club	Northern Irish League Premier Division	Northern Ireland	2002	2001/02		yes	Portadown	Glentoran			Irish League Premier Division (top tier)	all=https://www.rsssf.org/tablesn/nil02.html	2002-04
+club	Northern Irish League Premier Division	Northern Ireland	2003	2002/03		yes	Glentoran	Portadown			Irish League Premier Division (top tier)	all=https://www.rsssf.org/tablesn/nil03.html	2003-04
+club	Northern Irish League Premier Division	Northern Ireland	2004	2003/04		yes	Linfield	Portadown			Irish Premier League (top tier)	all=https://www.rsssf.org/tablesn/nil04.html	2004-04
+club	Northern Irish League Premier Division	Northern Ireland	2005	2004/05		yes	Glentoran	Linfield			Irish Premier League (top tier)	all=https://www.rsssf.org/tablesn/nil05.html	2005-04
+club	Northern Irish League Premier Division	Northern Ireland	2006	2005/06		yes	Linfield	Glentoran			Irish Premier League (top tier)	all=https://www.rsssf.org/tablesn/nil06.html	2006-04
+club	Northern Irish League Premier Division	Northern Ireland	2007	2006/07		yes	Linfield	Glentoran			Irish Premier League (top tier)	all=https://www.rsssf.org/tablesn/nil07.html	2007-04
+club	Northern Irish League Premier Division	Northern Ireland	2008	2007/08		yes	Linfield	Glentoran			Irish Premier League (top tier)	all=https://www.rsssf.org/tablesn/nil08.html	2008-04
+club	Northern Irish League Premier Division	Northern Ireland	2009	2008/09		yes	Glentoran	Linfield			IFA Premiership (top tier)	all=https://www.rsssf.org/tablesn/nil09.html	2009-05
+club	Scottish Cup	Scotland	2002	2001/02		yes	Glasgow Rangers	Glasgow Celtic				all=https://www.rsssf.org/tabless/scotcuphist.html	2002-05
+club	Scottish Cup	Scotland	2003	2002/03		yes	Glasgow Rangers	Dundee				all=https://www.rsssf.org/tabless/scotcuphist.html	2003-05
+club	Scottish Cup	Scotland	2004	2003/04		yes	Glasgow Celtic	Dunfermline Athletic				all=https://www.rsssf.org/tabless/scotcuphist.html	2004-05
+club	Scottish Cup	Scotland	2005	2004/05		yes	Glasgow Celtic	Dundee United				all=https://www.rsssf.org/tabless/scotcuphist.html	2005-05
+club	Scottish Cup	Scotland	2006	2005/06		yes	Heart Of Midlothian	Gretna			won on penalties after 1-1	all=https://www.rsssf.org/tabless/scotcuphist.html	2006-05
+club	Scottish Cup	Scotland	2007	2006/07		yes	Glasgow Celtic	Dunfermline Athletic				all=https://www.rsssf.org/tabless/scotcuphist.html	2007-05
+club	Scottish Cup	Scotland	2008	2007/08		yes	Glasgow Rangers	Queen Of The South				all=https://www.rsssf.org/tabless/scotcuphist.html	2008-05
+club	Scottish Cup	Scotland	2009	2008/09		yes	Glasgow Rangers	Falkirk				all=https://www.rsssf.org/tabless/scotcuphist.html	2009-05
+club	Scottish First Division	Scotland	2002	2001/02		yes	Partick Thistle	Airdrieonians			Scottish Football League First Division (tier 2); Airdrieonians full name is in the no-nation club list (club liquidated 2002)	all=https://www.rsssf.org/tabless/scot02.html	2002-04
+club	Scottish First Division	Scotland	2003	2002/03		yes	Falkirk	Clyde			Scottish Football League First Division (tier 2); Falkirk champions but denied promotion (ground)	all=https://www.rsssf.org/tabless/scot03.html	2003-05
+club	Scottish First Division	Scotland	2004	2003/04		yes	Inverness Caledonian Thistle	Clyde			Scottish Football League First Division (tier 2)	all=https://www.rsssf.org/tabless/scot04.html	2004-05
+club	Scottish First Division	Scotland	2005	2004/05		yes	Falkirk	St. Mirren			Scottish Football League First Division (tier 2)	all=https://www.rsssf.org/tabless/scot05.html	2005-05
+club	Scottish First Division	Scotland	2006	2005/06		yes	St. Mirren	St. Johnstone			Scottish Football League First Division (tier 2)	all=https://www.rsssf.org/tabless/scot06.html	2006-04
+club	Scottish First Division	Scotland	2007	2006/07		yes	Gretna	St. Johnstone			Scottish Football League First Division (tier 2); Gretna: 3.9.68 spelling; Gretna FC in later databases	all=https://www.rsssf.org/tabless/scot07.html	2007-04
+club	Scottish First Division	Scotland	2008	2007/08		yes	Hamilton Academical	Dundee			Scottish Football League First Division (tier 2)	all=https://www.rsssf.org/tabless/scot08.html	2008-04
+club	Scottish First Division	Scotland	2009	2008/09		yes	St. Johnstone	Partick Thistle			Scottish Football League First Division (tier 2)	all=https://www.rsssf.org/tabless/scot09.html	2009-05
+club	Scottish League Challenge Cup	Scotland	2002	2002/03		yes	Queen Of The South	Brechin City			label = calendar year of the final = first year of the season (see md)	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2002-10
+club	Scottish League Challenge Cup	Scotland	2003	2003/04		yes	Inverness Caledonian Thistle	Airdrie United			label = calendar year of the final = first year of the season (see md)	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2003-10
+club	Scottish League Challenge Cup	Scotland	2004	2004/05		yes	Falkirk	Ross County			label = calendar year of the final = first year of the season (see md)	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2004-11
+club	Scottish League Challenge Cup	Scotland	2005	2005/06		yes	St. Mirren	Hamilton Academical			label = calendar year of the final = first year of the season (see md)	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2005-11
+club	Scottish League Challenge Cup	Scotland	2006	2006/07		yes	Ross County	Clyde			label = calendar year of the final = first year of the season (see md); won on penalties after 1-1	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2006-11
+club	Scottish League Challenge Cup	Scotland	2007	2007/08		yes	St. Johnstone	Dunfermline Athletic			label = calendar year of the final = first year of the season (see md)	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2007-11
+club	Scottish League Challenge Cup	Scotland	2008	2008/09		yes	Airdrie United	Ross County			label = calendar year of the final = first year of the season (see md); won on penalties after 2-2	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2008-11
+club	Scottish League Challenge Cup	Scotland	2009	2009/10		yes	Dundee	Inverness Caledonian Thistle			label = calendar year of the final = first year of the season (see md); final played in the autumn of 2009, after a game in the 2009/10 database starts	all=https://en.wikipedia.org/wiki/Scottish_Challenge_Cup	2009-11
+club	Scottish League Cup	Scotland	2002	2001/02		yes	Glasgow Rangers	Ayr United			CIS Insurance Cup	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2002-03
+club	Scottish League Cup	Scotland	2003	2002/03		yes	Glasgow Rangers	Glasgow Celtic			CIS Insurance Cup	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2003-03
+club	Scottish League Cup	Scotland	2004	2003/04		yes	Livingston	Hibernian			CIS Insurance Cup	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2004-03
+club	Scottish League Cup	Scotland	2005	2004/05		yes	Glasgow Rangers	Motherwell			CIS Insurance Cup	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2005-03
+club	Scottish League Cup	Scotland	2006	2005/06		yes	Glasgow Celtic	Dunfermline Athletic			CIS Insurance Cup	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2006-03
+club	Scottish League Cup	Scotland	2007	2006/07		yes	Hibernian	Kilmarnock			CIS Insurance Cup	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2007-03
+club	Scottish League Cup	Scotland	2008	2007/08		yes	Glasgow Rangers	Dundee United			CIS Insurance Cup; won on penalties after 2-2	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2008-03
+club	Scottish League Cup	Scotland	2009	2008/09		yes	Glasgow Celtic	Glasgow Rangers			CIS Insurance Cup; after extra time	all=https://www.rsssf.org/tabless/scotleagcuphist.html	2009-03
+club	Scottish Premier Division	Scotland	2002	2001/02		yes	Glasgow Celtic	Glasgow Rangers			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot02.html	2002-05
+club	Scottish Premier Division	Scotland	2003	2002/03		yes	Glasgow Rangers	Glasgow Celtic			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot03.html	2003-05
+club	Scottish Premier Division	Scotland	2004	2003/04		yes	Glasgow Celtic	Glasgow Rangers			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot04.html	2004-05
+club	Scottish Premier Division	Scotland	2005	2004/05		yes	Glasgow Rangers	Glasgow Celtic			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot05.html	2005-05
+club	Scottish Premier Division	Scotland	2006	2005/06		yes	Glasgow Celtic	Heart Of Midlothian			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot06.html	2006-05
+club	Scottish Premier Division	Scotland	2007	2006/07		yes	Glasgow Celtic	Glasgow Rangers			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot07.html	2007-05
+club	Scottish Premier Division	Scotland	2008	2007/08		yes	Glasgow Celtic	Glasgow Rangers			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot08.html	2008-05
+club	Scottish Premier Division	Scotland	2009	2008/09		yes	Glasgow Rangers	Glasgow Celtic			Scottish Premier League (top tier); final table after the split	all=https://www.rsssf.org/tabless/scot09.html	2009-05
+club	Scottish Second Division	Scotland	2002	2001/02		yes	Queen Of The South	Alloa Athletic			Scottish Football League Second Division (tier 3)	all=https://www.rsssf.org/tabless/scot02.html	unknown
+club	Scottish Second Division	Scotland	2003	2002/03		yes	Raith Rovers	Brechin City			Scottish Football League Second Division (tier 3)	all=https://www.rsssf.org/tabless/scot03.html	unknown
+club	Scottish Second Division	Scotland	2004	2003/04		yes	Airdrie United	Hamilton Academical			Scottish Football League Second Division (tier 3)	all=https://www.rsssf.org/tabless/scot04.html	2004-05
+club	Scottish Second Division	Scotland	2005	2004/05		yes	Brechin City	Stranraer			Scottish Football League Second Division (tier 3)	all=https://www.rsssf.org/tabless/scot05.html	2005-05
+club	Scottish Second Division	Scotland	2006	2005/06		yes	Gretna	Greenock Morton			Scottish Football League Second Division (tier 3); Gretna: 3.9.68 spelling	all=https://www.rsssf.org/tabless/scot06.html	2006-04
+club	Scottish Second Division	Scotland	2007	2006/07		yes	Greenock Morton	Stirling Albion			Scottish Football League Second Division (tier 3)	all=https://www.rsssf.org/tabless/scot07.html	2007-04
+club	Scottish Second Division	Scotland	2008	2007/08		yes	Ross County	Airdrie United			Scottish Football League Second Division (tier 3)	all=https://www.rsssf.org/tabless/scot08.html	2008-04
+club	Scottish Second Division	Scotland	2009	2008/09		yes	Raith Rovers	Ayr United			Scottish Football League Second Division (tier 3)	all=https://www.rsssf.org/tabless/scot09.html	2009-05
+club	Scottish Third Division	Scotland	2002	2001/02		yes	Brechin City	Dumbarton			Scottish Football League Third Division (tier 4)	all=https://www.rsssf.org/tabless/scot02.html	unknown
+club	Scottish Third Division	Scotland	2003	2002/03		yes	Greenock Morton	East Fife			Scottish Football League Third Division (tier 4)	all=https://www.rsssf.org/tabless/scot03.html	unknown
+club	Scottish Third Division	Scotland	2004	2003/04		yes	Stranraer	Stirling Albion			Scottish Football League Third Division (tier 4)	all=https://www.rsssf.org/tabless/scot04.html	2004-05
+club	Scottish Third Division	Scotland	2005	2004/05		yes	Gretna	Peterhead			Scottish Football League Third Division (tier 4); Gretna: 3.9.68 spelling	all=https://www.rsssf.org/tabless/scot05.html	2005-05
+club	Scottish Third Division	Scotland	2006	2005/06		yes	Cowdenbeath	Berwick Rangers			Scottish Football League Third Division (tier 4)	all=https://www.rsssf.org/tabless/scot06.html	2006-04
+club	Scottish Third Division	Scotland	2007	2006/07		yes	Berwick Rangers	Arbroath			Scottish Football League Third Division (tier 4)	all=https://www.rsssf.org/tabless/scot07.html	2007-04
+club	Scottish Third Division	Scotland	2008	2007/08		yes	East Fife	Stranraer			Scottish Football League Third Division (tier 4)	all=https://www.rsssf.org/tabless/scot08.html	2008-04
+club	Scottish Third Division	Scotland	2009	2008/09		yes	Dumbarton	Cowdenbeath			Scottish Football League Third Division (tier 4)	all=https://www.rsssf.org/tabless/scot09.html	2009-05
+club	Welsh Cup	Wales	2002	2001/02		yes	Barry Town	Bangor City				all=https://www.rsssf.org/tablesw/walcuphist.html	2002-05
+club	Welsh Cup	Wales	2003	2002/03		yes	Barry Town	Cwmbran Town			won on penalties after 2-2	all=https://www.rsssf.org/tablesw/walcuphist.html	2003-05
+club	Welsh Cup	Wales	2004	2003/04		yes	Rhyl	Total Network Solutions			after extra time; TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/walcuphist.html	2004-05
+club	Welsh Cup	Wales	2005	2004/05		yes	Total Network Solutions	Carmarthen Town			TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/walcuphist.html	2005-05
+club	Welsh Cup	Wales	2006	2005/06		yes	Rhyl	Bangor City				all=https://www.rsssf.org/tablesw/walcuphist.html	2006-05
+club	Welsh Cup	Wales	2007	2006/07		yes	Carmarthen Town	Afan Lido				all=https://www.rsssf.org/tablesw/walcuphist.html	2007-05
+club	Welsh Cup	Wales	2008	2007/08		yes	Bangor City	Llanelli AFC			after extra time	all=https://www.rsssf.org/tablesw/walcuphist.html	2008-05
+club	Welsh Cup	Wales	2009	2008/09		yes	Bangor City	Aberystwyth Town				all=https://www.rsssf.org/tablesw/walcuphist.html	2009-05
+club	Welsh League Cup	Wales	2002	2001/02		yes	Caersws	Cwmbran Town			League of Wales Cup / Loosemores League Cup	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2002-05
+club	Welsh League Cup	Wales	2003	2002/03		yes	Rhyl	Bangor City			League of Wales Cup / Loosemores League Cup; won on penalties after 2-2	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2003-05
+club	Welsh League Cup	Wales	2004	2003/04		yes	Rhyl	Carmarthen Town			League of Wales Cup / Loosemores League Cup	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2004-05
+club	Welsh League Cup	Wales	2005	2004/05		yes	Carmarthen Town	Rhyl			League of Wales Cup / Loosemores League Cup; after extra time	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2005-05
+club	Welsh League Cup	Wales	2006	2005/06		yes	Total Network Solutions	Port Talbot Town			League of Wales Cup / Loosemores League Cup; TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2006-04
+club	Welsh League Cup	Wales	2007	2006/07		yes	Caersws	Rhyl			League of Wales Cup / Loosemores League Cup; won on penalties after 1-1	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2007-03
+club	Welsh League Cup	Wales	2008	2007/08		yes	Llanelli AFC	Rhyl			League of Wales Cup / Loosemores League Cup	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2008-04
+club	Welsh League Cup	Wales	2009	2008/09		yes	Total Network Solutions	Bangor City			League of Wales Cup / Loosemores League Cup; The New Saints at the time (RSSSF 2006/07 notes the rename); full name in later databases: The New Saints	all=https://www.rsssf.org/tablesw/walleagcuphist.html	2009-04
+club	Welsh Premier Cup	Wales	2002	2001/02		yes	Cardiff City	Swansea City			FAW Premier Cup; Cardiff City, Swansea City, Wrexham and Newport County are in the England club list	all=https://en.wikipedia.org/wiki/FAW_Premier_Cup	2002-05
+club	Welsh Premier Cup	Wales	2003	2002/03		yes	Wrexham	Newport County			FAW Premier Cup; Cardiff City, Swansea City, Wrexham and Newport County are in the England club list	all=https://en.wikipedia.org/wiki/FAW_Premier_Cup	2003-05
+club	Welsh Premier Cup	Wales	2004	2003/04		yes	Wrexham	Rhyl			FAW Premier Cup; Cardiff City, Swansea City, Wrexham and Newport County are in the England club list	all=https://en.wikipedia.org/wiki/FAW_Premier_Cup	2004-05
+club	Welsh Premier Cup	Wales	2005	2004/05		yes	Swansea City	Wrexham			FAW Premier Cup; Cardiff City, Swansea City, Wrexham and Newport County are in the England club list	all=https://en.wikipedia.org/wiki/FAW_Premier_Cup	2005-05
+club	Welsh Premier Cup	Wales	2006	2005/06		yes	Swansea City	Wrexham			FAW Premier Cup; Cardiff City, Swansea City, Wrexham and Newport County are in the England club list	all=https://en.wikipedia.org/wiki/FAW_Premier_Cup	2006-03
+club	Welsh Premier Cup	Wales	2007	2006/07		yes	Total Network Solutions	Newport County			FAW Premier Cup; Cardiff City, Swansea City, Wrexham and Newport County are in the England club list; The New Saints at the time (RSSSF 2006/07 notes the rename); full name in later databases: The New Saints	all=https://en.wikipedia.org/wiki/FAW_Premier_Cup	2007-03
+club	Welsh Premier Cup	Wales	2008	2007/08		yes	Newport County	Llanelli AFC			FAW Premier Cup; Cardiff City, Swansea City, Wrexham and Newport County are in the England club list	all=https://en.wikipedia.org/wiki/FAW_Premier_Cup	2008-03
+club	Welsh Premier Cup	Wales	2009	2008/09		not held					no longer exists: FAW Premier Cup discontinued after 2007/08 when BBC Wales withdrew sponsorship	held=https://www.rsssf.org/tablesw/wal09.html	
+club	Welsh Premier Division	Wales	2002	2001/02		yes	Barry Town	Total Network Solutions			League of Wales; TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/wal02.html	2002-04
+club	Welsh Premier Division	Wales	2003	2002/03		yes	Barry Town	Total Network Solutions			Welsh Premier League; TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/wal03.html	2003-05
+club	Welsh Premier Division	Wales	2004	2003/04		yes	Rhyl	Total Network Solutions			Welsh Premier League; TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/wal04.html	2004-05
+club	Welsh Premier Division	Wales	2005	2004/05		yes	Total Network Solutions	Rhyl			Welsh Premier League; TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/wal05.html	2005-04
+club	Welsh Premier Division	Wales	2006	2005/06		yes	Total Network Solutions	Llanelli AFC			Welsh Premier League; TNS Llansantffraid at the time; same club as The New Saints	all=https://www.rsssf.org/tablesw/wal06.html	2006-04
+club	Welsh Premier Division	Wales	2007	2006/07		yes	Total Network Solutions	Rhyl			Welsh Premier League; The New Saints at the time (RSSSF 2006/07 notes the rename); full name in later databases: The New Saints	all=https://www.rsssf.org/tablesw/wal07.html	2007-04
+club	Welsh Premier Division	Wales	2008	2007/08		yes	Llanelli AFC	Total Network Solutions			Welsh Premier League; The New Saints at the time (RSSSF 2006/07 notes the rename); full name in later databases: The New Saints	all=https://www.rsssf.org/tablesw/wal08.html	2008-04
+club	Welsh Premier Division	Wales	2009	2008/09		yes	Rhyl	Llanelli AFC			Welsh Premier League	all=https://www.rsssf.org/tablesw/wal09.html	2009-04

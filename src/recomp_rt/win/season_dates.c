@@ -31,6 +31,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_dates.h"
+#include "season_history.h"
 #include "seasons_db.h"
 #include "../host.h"
 
@@ -474,6 +475,7 @@ static int plan_for(int N, Plan *p)
 
 static void shift_for(int N)
 {
+    season_history_undo();          /* slice 11c: its rows first, then the shift that they follow */
     restore();
     applied_year = 0;
     Plan p;
@@ -481,10 +483,12 @@ static void shift_for(int N)
     apply(&p);
     applied_year = N;
     log_stats();
+    season_history_fill(p.name, N); /* slice 11c: the history between 2001 and the start */
 }
 
 void season_dates_forget(void)
 {
+    season_history_forget();
     loaded = 0;
     applied_year = 0;
     journal_n = 0;
