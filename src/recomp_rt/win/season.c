@@ -12,8 +12,9 @@
  *   +12 u32 changing rules (0 or 1)
  * A later version only adds fields after these and makes the length larger. A reader takes the fields that
  * it knows and that lie inside the length, and gives the others their old meaning.
- * Version 2 (0.6.0 slice 16) adds the news texts of the season changes after +16 (season_change.h). A game
- * with no news text writes version 1.
+ * Version 2 (0.6.0 slice 16) adds the news texts, the changed names and the last season point of the season
+ * change after +16 (season_change.h). A game with none of them writes version 1. A later version keeps the
+ * fields of version 2 first, so this reader takes them and leaves what follows.
  *
  * The original opens a part by its exact name (zopen 0x9326e0, the name scan at 0x93293b) and extracts only
  * the parts whose name ends in .tmp (load_game_data 0x82a9c0 calls 0x933320 with "*.tmp" at 0x82acbc), so it
@@ -49,11 +50,11 @@ static int game_on;                             /* 1 from a made or loaded game 
 #define ROW_SIZE 0x10cu
 #define ROW_NAME 8u
 #define NAME_SIZE 260u
-#define MAX_PARTS 999u
-/* The largest part that a reader takes. Version 1 has 16 bytes; later versions add fields (rules of a
- * season, names), so the limit leaves a wide margin. It only stops a damaged row from asking for a block of
- * gigabytes. */
-#define PART_MAX (1u << 20)             /* zopen 0x9326e0 refuses a new part when the count is 999 (0x932a3e) */
+#define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999 (0x932a3e) */
+/* The largest part that a reader takes. Version 1 has 16 bytes; version 2 adds the news texts (8 KB a season
+ * at most, season_change.c) and the changed names, about 0.9 MB for 99 seasons, so the limit holds. It only
+ * stops a damaged row from asking for a block of gigabytes. */
+#define PART_MAX (1u << 20)
 
 /* The test switch RECOMP_SEASON_CODE=off (Q342): the season code does nothing. The start year stays 2001, so
  * every year site of tools/recomp/seasons.py gives the original's result; the runtime reads and writes no
@@ -84,6 +85,23 @@ void season_init(void)
     new_year = y;
     rt_season_year = (uint32_t)y;
     fprintf(stderr, "recomp: a new game starts in %d/%02d\n", y, (y + 1) % 100);
+}
+
+/* Q358: the season formatters key_nation_format_club_season 0x669630 and key_nation_format_comp_season
+ * 0x6697c0 write "%d/%d" (0x9eb024) with (year + 1) % 10 (0x6696d3..0x6696e6, 0x669869..0x669876): "2009/0".
+ * With the season code on they write "%d/%02d" with (year + 1) % 100: "2009/10", "2001/02". The format lives
+ * in runtime memory. */
+uint32_t rt_season_text_mod(uint32_t original) { return season_code_on() ? 100u : original; }
+
+uint32_t rt_season_text_format(uint32_t original)
+{
+    static uint32_t format;
+    if (!season_code_on()) return original;
+    if (!format) {
+        format = win_static_alloc(8);
+        win_put_str(format, "%d/%02d", 8);
+    }
+    return format;
 }
 
 int season_start_year(void) { return (int)rt_season_year; }
@@ -267,12 +285,13 @@ static int read_part(const char *host, int *year, int *rules, int news)
         if (form < 1 || length < 16 || length > size) break;
         uint32_t y = get32(data + 8), r = get32(data + 12);
         if (y < SEASON_FIRST_YEAR || y > SEASON_LAST_YEAR || r > 1) break;
-        /* Version 2 must hold whole news fields. A later version keeps them first (see the top), but this
-         * version cannot check its other fields, so news fields it cannot read are left out there. */
-        if (news && form >= PART_VERSION_NEWS && length > PART_SIZE &&
-            !season_change_part_read(data + PART_SIZE, length - PART_SIZE)) {
+        /* Version 2 and every later version hold whole news fields after +16 (see the top). A load that
+         * cannot read them is refused: the changed names in them are needed to load the game's data
+         * (season_change_rename). */
+        if (news && form >= PART_VERSION_NEWS &&
+            (length < PART_SIZE + 12 || !season_change_part_read(data + PART_SIZE, length - PART_SIZE))) {
             season_change_reset();
-            if (form == PART_VERSION_NEWS) break;
+            break;
         }
         *year = (int)y;
         *rules = (int)r;
@@ -359,6 +378,7 @@ RT_WRAP(0082a9c0, load_game)
     if (rt_unwinding) return;
     if (cpu.eax) {
         game_on = 1;
+        season_change_loaded();
     } else {                                    /* a failed load: back to the values of a new game */
         rt_season_year = (uint32_t)new_year;
         rules_now = 0;
@@ -377,7 +397,10 @@ RT_WRAP(00828110, create_game)
     season_change_reset();
     season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
     o_00828110();
-    if (!rt_unwinding && cpu.eax) game_on = 1;
+    if (!rt_unwinding && cpu.eax) {
+        game_on = 1;
+        season_change_new_game();
+    }
 }
 
 void o_0082ff40(void);

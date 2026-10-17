@@ -82,6 +82,8 @@ CALLBACKS = {
     0x786780: ("81ec000200005556", "news store: send an item to every human manager (item), thiscall"),
     0x4AFA40: ("568bf1578b0685c0", "text: clear, thiscall"),
     0x4AE770: ("81ec000200005355", "text: append a string (text), thiscall"),
+    0x944CF1: ("6a01ff742408e85c", "operator new (size), cdecl: an entry's competition array (season_change.c)"),
+    0x944C94: ("ff742404e82d0600", "operator delete (block), cdecl"),
 }
 
 

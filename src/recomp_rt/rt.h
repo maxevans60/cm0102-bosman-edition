@@ -294,6 +294,13 @@ extern uint32_t rt_screen_w, rt_screen_h;
  * sites of tools/recomp/seasons.py read it in place of the constants 2001, 2002 and 2003. */
 extern uint32_t rt_season_year;
 
+/* The season text "2009/10" in place of the original's "2009/0" (0.6.0, Q358; win/season.c). The patches of
+ * tools/recomp/seasons.py at the two season formatters of key_nation.cpp read these: the divisor of the second
+ * year (10 in the original) and the format string (0x9eb024 "%d/%d"). With RECOMP_SEASON_CODE=off they give
+ * the original's values. */
+uint32_t rt_season_text_mod(uint32_t original);
+uint32_t rt_season_text_format(uint32_t original);
+
 /* Full player search (#57, src/recomp_rt/win/playersearch.c): 1 when the option is on. The replaced jumps
  * at 0x7afc8d, 0x7afc9d and 0x7afcdf in tools/recomp/widescreen.py ask it. */
 uint32_t rt_full_player_search(uint32_t screen);

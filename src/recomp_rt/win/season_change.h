@@ -4,35 +4,46 @@
  * player gets one news item for each season in which the rules change. With changing rules off, nothing
  * changes after the start (Q232). Research and evidence: docs/research/2026-10-17-season-change.md.
  *
- * When it runs: the original has no single "new season" step. game_season_update_pass 0x5d5ae0 runs at the
- * end of every day. On the update day of a league table entry it moves the entry's season year (+0x35) and
- * calls start_new_season (vtable +0x8) of each finished competition of the entry. A top league also starts
- * its lower leagues. start_new_season adds 1 (or the edition step) to the competition's season year +0x40.
- * The runtime wraps the pass: a competition object whose year +0x40 changed in the pass, or that is in the
- * competition array of an entry whose +0x35 moved, had its season change on that day. The second case holds
- * the international competitions that wait for their next edition (their year stays, but the season
- * moves). The new season comes from the game date on that day: a change from January to September of year Y
- * starts season Y (2009 for 2009/10; update days 10 January to 28 August), a change from 1 October starts
- * season Y + 1 (calendar-year leagues with update days 27 November and 27 December start their next edition,
- * which the rules table puts in the row of the year it is played). The entry's own year +0x35 is not used:
- * international entries move it by the edition step (2008 to 2010 in July 2009), and a December entry
- * moves it a year late. The change applies only to a season after the start
- * year: the run from 1 January to the start date at a new game (0x5cc850) is not a change.
+ * When a season changes. The original has no single "new season" step. game_season_update_pass 0x5d5ae0 runs
+ * at the end of every day. On the update day of a league table entry (+0x15, compared at 0x5d5bc8) it may move
+ * the entry's season year (+0x35) and then calls start_new_season (vtable +0x8, at 0x5d5d1c) of each finished
+ * competition of the entry. A top league also starts its lower leagues. The runtime wraps the pass and every
+ * start_new_season (season_starts.c, made by tools/seasons/make_start_wraps.py). Hooks run only inside the
+ * pass, only with changing rules on, and only for a season after the start year (the run from 1 January to
+ * the start date at a new game, 0x5cc850, is not a change).
  *
- * The registry. A rule kind is a table of two functions. Each later slice (17 to 29) adds its kinds to the
- * list season_rule_kinds in season_change.c, one line each. For each season change:
- *   1. season(S) of each kind runs once, at the first competition change of season S in this run of the
- *      program, before the comp calls of that day;
- *   2. comp(obj, file, S) of each kind runs once for each competition object whose season changed.
- * A kind applies the rule of season S from its own table (the rules table, season_rules.h, or another).
- * It writes the game's memory only for a real change, so a season with no rule change leaves the game as it
- * is. For each change that the player sees, it calls season_change_news with one sentence in plain words.
- * After the last row of a table the rule stays (Q248): a kind that finds no row changes nothing.
+ * The season S of a change comes from the game date: a change from January to September of year Y starts
+ * season Y (2009 for 2009/10), a change from 1 October starts season Y + 1 (calendar-year leagues with update
+ * days 27 November and 27 December start their next edition then; the rules table puts an edition in the row
+ * of the year it is played).
  *
- * The news item (Q258): the sentences of one season go into one news item of the Competitions category,
- * made with the game's own news code (NewsItem::NewsItem 0x77bbe0, News::send_to_all_managers 0x786780).
- * Later changes of the same season (a calendar-year league changes in another month) add their sentences to
- * the same item. The text is kept in the season part of the save (season.c, part version 2). */
+ * The season point of S is the first pass from 1 June to 30 September of year S in which an entry has its
+ * update day (20 June in a game with England). The season hook runs there, and the news item of S is posted
+ * there. A calendar-year league that changes before (January or February of S, or December of S - 1) gets its
+ * rules on its own date; its sentences wait for the item of S. A sentence after the point goes into the item
+ * of S that is already posted (the text is read when the item is shown).
+ *
+ * The registry. A rule kind is a table of functions; NULL leaves a hook out. Each later slice (17 to 29) adds
+ * its kinds to the list season_rule_kinds in season_change.c, one line each. The hooks, in the order they run:
+ *   new_game(Y)   after a new game is made in start year Y (any changing rules). Example: build a kind's own
+ *                 state for the game, such as the season of each rule it has applied.
+ *   loaded(Y)     after a saved game is loaded. Example: rebuild that state from the game's memory.
+ *   season(S)     once at the season point of S. Example: transfer windows of the new season.
+ *   entry(c)      once per league table entry on its update day, before its first competition starts
+ *                 (c->comp is 0). Scope by nation with c->nation, by entry with c->entry. Example: a
+ *                 competition that starts in season S gets its object with season_change_add_comp.
+ *   before(c)     before the start_new_season of a competition (c->started is 1). The original's own
+ *                 set_up_rules (vtable +0x8c) and create_fixtures (League::create_fixtures 0x6835c0) run
+ *                 inside start_new_season after it, so fields they set are overwritten. Example: a club count
+ *                 that set_up_rules reads.
+ *   after(c)      after the start_new_season of a competition (c->started 1), and on the update day for each
+ *                 competition of the entry that did not start (c->started 0: an unfinished competition, or an
+ *                 international one that waits for its next edition, such as the 2010 qualifiers on 25 July
+ *                 2009). Example: the name of the season (season_kind_names.c).
+ * A kind applies the rule of season S from its own table (the rules table, season_rules.h, or another). It
+ * writes the game's memory only for a real change, so a season with no rule change leaves the game as it is.
+ * For each change the player sees, it calls season_change_news with one sentence. After the last row of a
+ * table the rule stays (Q248): a kind that finds no row changes nothing. */
 #ifndef RECOMP_SEASON_CHANGE_H
 #define RECOMP_SEASON_CHANGE_H
 
@@ -40,43 +51,74 @@
 #include <stdint.h>
 
 typedef struct {
+    int season;             /* S: 2009 for 2009/10 */
+    uint32_t comp;          /* the competition object, 0 in entry() */
+    const char *file;       /* the source file of its class (eng_first), "?" when not known, "" in entry() */
+    int entry;              /* its league table entry, 0 to 34, or -1 when not known */
+    uint32_t nation;        /* the entry's nation record (entry +0), 0 for a continental or world entry */
+    int started;            /* 1: start_new_season runs for it now; 0: see after() above */
+} SeasonChange;
+
+typedef struct {
     const char *name;                                         /* for the log: "names" */
-    void (*season)(int season);                               /* NULL: no rule for the whole season */
-    void (*comp)(uint32_t obj, const char *file, int season); /* NULL: no rule for each competition */
+    void (*new_game)(int start_year);
+    void (*loaded)(int start_year);
+    void (*season)(int season);
+    void (*entry)(const SeasonChange *c);
+    void (*before)(const SeasonChange *c);
+    void (*after)(const SeasonChange *c);
 } SeasonRuleKind;
 
-/* Adds one sentence to the news item of the season that changes now ("The UEFA Cup is now called ...").
- * Only a kind calls it, inside its season or comp function. The text is plain words, British English, no
- * exclamation marks, and no "<" (the game's text code reads it as the start of a token), in the game's code
- * (season_change_latin1). */
+/* Adds one sentence to the news item of the season of the hook that runs ("The UEFA Cup is now called ...").
+ * Only a kind calls it, inside a season, entry, before or after hook. Plain words, British English, no
+ * exclamation marks, no "<" (the game's text code reads it as the start of a token), in the game's code
+ * (season_change_latin1). The text of one season holds at most 8 KB; later sentences are left out. */
 void season_change_news(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 
 /* Turns UTF-8 text (the rules table is UTF-8) into the game's one-byte code (Windows-1252, as the data files):
  * each two-byte sequence of a character up to U+00FF becomes one byte. Other bytes stay. */
 void season_change_latin1(char *s);
 
+/* Writes name (50 characters at most, in the game's code) as the long name (+4) of the competition record at
+ * rec, and keeps the record's name in the data, by the record's index. The game finds its key competitions by
+ * name at every load (match_club_comp_key_id 0x60efd0), so a load matches each changed record by its name in
+ * the data. Every change of a competition's name in the season code goes through this function (slice 15 too). */
+void season_change_rename(uint32_t rec, const char *name);
+
 /* The competition objects that the game holds: the table g_comp_object_table [0xadadfc] and the
  * competition arrays of the 35 league table entries (as the rules report reads them, season_report.c).
  * Fills out with at most max distinct objects and returns their count. It only reads memory. */
 int season_change_comps(uint32_t *out, int max);
 
+/* The competition objects of one league table entry (its array, +0xc count, +0x10 array). */
+int season_change_entry_comps(int entry, uint32_t *out, int max);
+
 /* The source file of a competition object's class (eng_first), or "?" for a class that is not known. */
 const char *season_change_file(uint32_t obj);
 
-/* Writes name (50 characters at most, in the game's code) as the long name (+4) of the competition record at
- * rec, and keeps the record's name in the data. The game finds its key competitions by name at every load
- * (match_club_comp_key_id 0x60efd0), so a load matches each changed record by its name in the data. Every
- * change of a competition's name in the season code goes through this function (slice 15 too). */
-void season_change_rename(uint32_t rec, const char *name);
+/* Puts a competition object that a kind has made (in the game's heap) into the array of a league table
+ * entry, so the pass starts its seasons from then on. Only inside an entry hook of that entry, before the
+ * pass reads the array. The array is made again with the game's operator new 0x944cf1, and the old one goes
+ * back with operator delete 0x944c94. Returns 1, or 0 when it cannot. */
+int season_change_add_comp(int entry, uint32_t obj);
 
-/* The season part of the save (season.c). The news texts and the changed names go after the 16 bytes of
- * version 1:
- *   +16 u32 count, then count times: u32 season, u32 length n, n bytes of text (no 0 at the end);
- *   then u32 count of names, then count times: 51 bytes name in the data, 51 bytes name now.
- * season_change_part_size gives 0 when the game has neither (the part stays version 1). */
+/* season_starts.c calls it around each start_new_season (this, 0 before and 1 after). */
+void season_change_start(uint32_t comp, int after);
+
+/* season.c calls these. */
+void season_change_new_game(void);                            /* a new game is made */
+void season_change_loaded(void);                              /* a saved game is loaded */
+void season_change_reset(void);                               /* before a new game, a load, the end of a game */
+
+/* The season part of the save (season.c). Version 2 adds after the 16 bytes of version 1:
+ *   u32 count, then count times: u32 season, u32 posted (1 when the item is sent), u32 length n, n bytes;
+ *   u32 count, then count times: u32 record index (from [0xae23d0], 0x6b bytes a record), 51 bytes name in
+ *       the data;
+ *   u32 the last season point.
+ * season_change_part_size gives 0 when the game has none of these (the part stays version 1). A reader takes
+ * these fields of a later version too and leaves what follows them. */
 uint32_t season_change_part_size(void);
 void season_change_part_write(uint8_t *out);                  /* season_change_part_size bytes */
 int season_change_part_read(const uint8_t *in, uint32_t n);   /* 0 for damaged bytes */
-void season_change_reset(void);                               /* a new game, a load or the end of a game */
 
 #endif
