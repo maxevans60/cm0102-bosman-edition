@@ -100,7 +100,7 @@ def fill(T, F, fp, M, L, S_):
                 cidx[(_i(r, 0x39), w)].append((i, dob[1]))
     want, used = {}, set()
     for n, x in enumerate(fp):
-        if n in matched or not x["job"] & 1 or x["job"] != 1 or not x["dob"] or x["dob"].year <= 1900:
+        if n in matched or x["job"] != 1 or not x["dob"] or x["dob"].year <= 1900:
             continue
         if clubmap.get(x["club"]) not in in_div:
             continue
