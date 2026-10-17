@@ -77,6 +77,7 @@ static void check_defaults(void)
     CHECK(options_bool(OPT_CHANGING_RULES) == 1);
     CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
     CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.68"));
+    CHECK(options_enum(OPT_SEASON) == 0 && !strcmp(options_string(OPT_SEASON), "2001/02"));
 }
 
 int main(void)
@@ -104,6 +105,8 @@ int main(void)
     CHECK(strstr(get(), "full_player_search = on makes the player search list every player") != NULL);
     CHECK(strstr(get(), "\nchanging_rules = on\n") != NULL);
     CHECK(strstr(get(), "changing_rules = on lets the rules of each league and cup change each July") != NULL);
+    CHECK(strstr(get(), "\nseason = 2001/02\n") != NULL);
+    CHECK(strstr(get(), "season = the season of a new game, 2001/02 to 2025/26.") != NULL);
     static char first[16384];
     snprintf(first, sizeof first, "%s", get());
     options_load(path);                         /* a second start changes nothing */
@@ -185,6 +188,23 @@ int main(void)
     put("changing_rules = sometimes\n");
     options_load(path);
     CHECK(options_bool(OPT_CHANGING_RULES) == 1);
+
+    /* 5d. season (0.6.0 slice 13): the 25 seasons; a bad word keeps 2001/02. The Choose Season screen writes it. */
+    put("season = 2010/11\n");
+    options_load(path);
+    CHECK(options_enum(OPT_SEASON) == 9 && !strcmp(options_string(OPT_SEASON), "2010/11"));
+    put("season = 2025/26\n");
+    options_load(path);
+    CHECK(options_enum(OPT_SEASON) == 24);
+    put("season = 2026/27\n");
+    options_load(path);
+    CHECK(options_enum(OPT_SEASON) == 0);
+    put("season = 2010\n");
+    options_load(path);
+    CHECK(options_enum(OPT_SEASON) == 0);
+    CHECK(options_set(OPT_SEASON, "2003/04") == 1 && options_enum(OPT_SEASON) == 2);
+    CHECK(strstr(get(), "season = 2003/04\n") == get());
+    CHECK(options_set(OPT_SEASON, "2000/01") == 0 && options_enum(OPT_SEASON) == 2);
 
     /* 6. The HD mode of 0.4.0 to 0.5.0 is gone: an old display = hd gives widescreen, and the line stays. */
     put("display = hd\n");
@@ -303,6 +323,8 @@ int main(void)
             CHECK(options_set(oid, "  /Users/me/My Saves ") == 1 && !strcmp(options_string(oid), "/Users/me/My Saves"));
         } else if (!strcmp(options_name(oid), "database")) {
             CHECK(options_set(oid, "folder:Mixed Case") == 1 && options_enum(oid) == DATABASE_CUSTOM);
+        } else if (!strcmp(options_name(oid), "season")) {
+            CHECK(options_set(oid, "2025/26") == 1 && options_enum(oid) == 24);
         } else {
             CHECK(options_set(oid, "off") == 1 && options_bool(oid) == 0);
         }

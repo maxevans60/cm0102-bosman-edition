@@ -4,7 +4,8 @@
 Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>] [--jobs n] [--runs a,b]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
+        [--ref-050 <0.5.0 program>] [--jobs n] [--runs a,b]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -39,9 +40,9 @@ the save of search-off.
 
 Options box check (--same-save --save <name> --options): the runs open the Bosman Edition Options box from the
 side bar before the holiday (0.5.0 slice 6). options and options-again switch Faster holidays off and on and
-close the box. options-tabs clicks the tabs Game, Screen and Game, options-database the Database values 3.9.60
-and 3.9.65 (the open game keeps its own data set; use a game folder with Data-3.9.60 and Data-3.9.65, as in
-a download), and options-backups switches Save backups off and on, so the box is built as often. Each save
+close the box. options-tabs clicks the tabs Game, Screen and Game, options-rules switches the default of
+Changing rules off and on (0.6.0 slice 13: the open game keeps its own value), and options-backups switches
+Save backups off and on, so the box is built as often. Each save
 must be the same as the save of options. The runs give the box the same save folder path end
 (OPTIONS_USER_SUB).
 
@@ -211,9 +212,18 @@ SAME_SAVE_RUNS = [
     ("rules-off", {"faster_days": "off", "changing_rules": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
-    # The season code (0.6.0 slice 11b on, Q342): the test switch turns it off. A 2001/02 game is the same.
+    # Q342: the season code off (slice 11 year sites, the season part, the Choose Season code) gives the save of
+    # normal, a 2001/02 game with changing rules off. From slice 13 the base game of 0.6.0 is the reference.
     ("season-code-off", {"faster_days": "off", "_env": {"RECOMP_SEASON_CODE": "off"}}),
 ]
+
+# --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this
+# build with the Setup Game text of 0.5.0 (test variable RECOMP_SETUP_TEXT=0.5.0) and the season code off. Its
+# save must equal the save of ref-0.5.0, so the new Setup Game text is the only thing that moves memory.
+# ref-0.5.0 itself is not compared with normal. --ref-build stays free for the main build.
+REF_050 = None
+TEXT_050_RUN = ("text-0.5.0", {"faster_days": "off", "_against": "ref-0.5.0",
+                               "_env": {"RECOMP_SETUP_TEXT": "0.5.0", "RECOMP_SEASON_CODE": "off"}})
 
 # The match check (--match): the steps after the load of prematch.sav (fixtures.LOAD_STEPS), positions
 # for 800x600 as in STEPS. The times after a wait count from the moment it was reached. Each Space has
@@ -327,7 +337,8 @@ JOBS = 0
 ONLY_RUNS = None
 
 
-def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None):
+def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None,
+                 text_050=False):
     """Plays the runs at the same time, each with its option lines, and compares each saved game with
     the save of the first run. save: a saved game to copy into each user folder first. allowed: names of
     parts that may differ (an accepted difference, for example the parts that depend on the memory layout of
@@ -338,13 +349,17 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
         runs = [r for i, r in enumerate(runs) if i == 0 or r[0] in ONLY_RUNS]
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
+    if REF_050 and text_050:
+        runs = list(runs) + [("ref-0.5.0", dict(runs[0][1], _program=REF_050, _against="")),
+                             (TEXT_050_RUN[0], dict(runs[0][1], **TEXT_050_RUN[1]))]
+    against = {name: options.get("_against") for name, options in runs}
 
     def play(name, options, work):
         steps_of_run = options.get("_steps", steps)        # a run may have its own steps and environment
         extra_env = options.get("_env", {})
         run_program = options.get("_program", program)     # and its own build (--ref-build)
         user_sub = options.get("_user_sub", "")              # and a folder between the run and its user folder
-        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program", "_user_sub")}
+        options = {k: v for k, v in options.items() if k not in ("_steps", "_env", "_program", "_user_sub", "_against")}
         run = os.path.join(work, name)
         user, home, shots = (os.path.join(run, d) for d in (os.path.join(user_sub, "user"), "home", "shots"))
         for d in (user, home, shots):
@@ -397,17 +412,20 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 failed += 1
                 print(f"FAIL  {name}: the save has no part {required[name]}")
                 continue
-            if open(saves[name], "rb").read() == want:
-                print(f"ok    {name}: the save is the same as {first}")
+            if against.get(name) == "":
+                continue                                    # a reference run for another run (ref-0.5.0)
+            base = against.get(name) or first
+            if open(saves[name], "rb").read() == open(saves[base], "rb").read():
+                print(f"ok    {name}: the save is the same as {base}")
                 continue
-            a, b = save_parts(saves[first]), save_parts(saves[name])
+            a, b = save_parts(saves[base]), save_parts(saves[name])
             differ = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
             ok_parts = allowed.get(name, ()) if isinstance(allowed, dict) else allowed
             if differ and set(differ) <= set(ok_parts):
-                print(f"ok    {name}: the save differs from {first} only in accepted parts: {', '.join(differ)}")
+                print(f"ok    {name}: the save differs from {base} only in accepted parts: {', '.join(differ)}")
                 continue
             failed += 1
-            print(f"FAIL  {name}: the save differs from {first} in: {', '.join(differ) or 'the file header'}")
+            print(f"FAIL  {name}: the save differs from {base} in: {', '.join(differ) or 'the file header'}")
     print("PASS" if not failed else "FAIL")
     return 1 if failed else 0
 
@@ -453,7 +471,7 @@ def options_runs(load, holiday):
     switch = load + OPTIONS_STEPS + holiday
     tabs = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 304 155", "4000 click 584 155"] + OPTIONS_CLOSE + \
         holiday
-    database = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 437", "4000 click 533 437"] + \
+    rules = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 437", "4000 click 371 437"] + \
         OPTIONS_CLOSE + holiday
     backups = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 402", "4000 click 371 402"] + \
         OPTIONS_CLOSE + holiday
@@ -461,7 +479,7 @@ def options_runs(load, holiday):
     def run(name, steps):
         return (name, {"faster_days": "on", "_steps": steps, "_user_sub": OPTIONS_USER_SUB})
     return ([run("options", switch), run("options-again", switch), run("options-tabs", tabs),
-             run("options-database", database), run("options-backups", backups)],)
+             run("options-rules", rules), run("options-backups", backups)],)
 
 
 # The season part of a save (0.6.0 slice 11, src/recomp_rt/win/season.c). A save of a new game with
@@ -486,7 +504,7 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
         return compare_runs(program, game, mode, new_game_runs(SAME_SAVE_RUNS),
                             without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,)},
-                            required={"rules-on": RULES_PART})
+                            required={"rules-on": RULES_PART}, text_050=True)
     # --save: load the saved test game, then the same Go on Holiday steps as the new game.
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))
     import fixtures  # noqa: E402  (fixtures.py imports this file)
@@ -507,7 +525,7 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
     if save_name in LOAD_END:
         load[load.index("wait first-news")] = LOAD_END[save_name]
     steps = without_intro_click(load) + holiday + ["400000 quit"]
-    return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save)
+    return compare_runs(program, game, mode, SAME_SAVE_RUNS, steps, days, save, text_050=True)
 
 
 # --speed fastest: the Fastest item (#31, commentary.c), one row above Very Fast.
@@ -534,13 +552,18 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
-    global REF_BUILD, JOBS, ONLY_RUNS
+    global REF_BUILD, REF_050, JOBS, ONLY_RUNS
     if "--jobs" in argv[3:]:
         JOBS = int(argv[argv.index("--jobs") + 1])
+        if JOBS < 1:
+            print("--jobs needs a number of 1 or more")
+            return 2
     if "--runs" in argv[3:]:
         ONLY_RUNS = argv[argv.index("--runs") + 1].split(",")
     if "--ref-build" in argv[3:]:
         REF_BUILD = os.path.abspath(argv[argv.index("--ref-build") + 1])
+    if "--ref-050" in argv[3:]:
+        REF_050 = os.path.abspath(argv[argv.index("--ref-050") + 1])
     mode = "classic"
     if "--mode" in argv[3:]:
         mode = argv[argv.index("--mode") + 1]

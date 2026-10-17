@@ -22,6 +22,9 @@
 #define SEASON_FIRST_YEAR 2001       /* the start year of the original, the base game */
 #define SEASON_LAST_YEAR 2099        /* the latest start year that the part and the test variable accept */
 
+/* 0 with the test switch RECOMP_SEASON_CODE=off (Q342): the season code does nothing (season.c). */
+int season_code_on(void);
+
 /* Reads the test variable RECOMP_START_SEASON. Call it once at start, before the game runs. */
 void season_init(void);
 
@@ -37,6 +40,11 @@ int season_changing_rules(void);
  * On the start screen it also sets the game date to 1 January of the start year, as the original does
  * for 2001 (0x81b938). Returns 1. */
 int season_set_new_game(int start_year, int changing_rules);
+
+/* The start year of the save file at the host path, for the star of the Choose Season screen (slice 13).
+ * year gets 2001 for a save without a season part. Returns 1 with a part, 0 without one (or for a file that is
+ * no save), -1 for a damaged part (year stays 2001). It only reads the file. */
+int season_of_save(const char *host, int *year);
 
 /* At each human turn (testrun.c): the test log of RECOMP_SEASON_LOG=1. */
 void season_log_turn(void);
