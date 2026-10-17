@@ -79,7 +79,7 @@ def run(program, game, name, folder, source, ref_dir):
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                    RECOMP_USER_DIR=user, RECOMP_SCREEN_LOG="1",
                    RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots)))
-        r = subprocess.run([program, "--game", game], env=env, capture_output=True, text=True, timeout=600)
+        r = subprocess.run([program, "--game", game], env=env, capture_output=True, text=True, errors="replace", timeout=600)
         if r.returncode != 0:
             return [f"{name}: the game ended with code {r.returncode}: {r.stderr[-500:]}"]
         if ref_dir:
