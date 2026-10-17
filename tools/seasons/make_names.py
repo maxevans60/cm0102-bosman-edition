@@ -31,6 +31,7 @@ The shown name (shown_name): the research name with these changes, so that the s
     - the year of an edition goes: "2012 Africa Cup of Nations" gives "Africa Cup of Nations". The object of a
       competition can wait for another edition than the row's (the "idle" kind of the rules report), so a year
       in a name could be wrong. "UEFA Euro 2012" gives "UEFA European Championship";
+    - a name in quotes at the end goes: 'Primera División "Julio H. Grondona"' gives "Primera División";
     - a name over 51 characters is cut after the last whole word that fits.
 The short name is the shown name when it has 26 characters or fewer; else shorter words of SHORTER come in
 ("FIFA World Cup qualification (UEFA)" gives "WC qualifying (UEFA)"); else a known opening goes
@@ -85,6 +86,7 @@ def shown_name(name):
     m = re.match(r"^(.*\S)\s*\(([^()]*)\)$", t)
     if m and not KEEP_BRACKETS.search(m.group(2)):
         t = m.group(1)
+    t = re.sub(r'\s*"[^"]*"$', "", t)                 # a name in quotes at the end (a person's name)
     t = re.sub(r"\bEuro (19|20)\d\d\b", "European Championship", t)
     t = re.sub(r"\b(19|20)\d\d([/\u2013-]\d{2,4})?\b", "", t)
     t = re.sub(r"\s+", " ", t).strip(" ,-")

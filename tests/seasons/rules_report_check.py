@@ -4,7 +4,9 @@ with the rules table.
 
 Usage:
     python3 tests/seasons/rules_report_check.py <report> [--expected <name>] [--update-expected]
-        compares a report with the rules table and lists each difference
+        [--data <data folder>] [--start-only]
+        compares a report with the rules table and lists each difference (--data: the club checks against the
+        database of the run)
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
         [--extra conference,regional,c2]
@@ -215,7 +217,7 @@ def differences(seasons, comps, rows):
                 out.add((season, "playoffs", f"{label}: game {c['playoff_up']} up and {c['playoff_down']} down "
                                              f"play-off places, table {r['playoffs_text'][:80]!r}"))
         shown = make_names.shown_name(r["name"])
-        if r["name"] and r["name"] != "n/a" and c["name"] not in (r["name"], shown):
+        if shown and c["name"] not in (r["name"], shown):
             out.add((season, "name", f"{label}: game {c['name']!r}, table {r['name']!r}"))
     for s in sorted({x["season"] for x in seasons}):
         for r in rows:
@@ -264,34 +266,30 @@ def club_differences(seasons, comps, clubs, data_dir):
     records = division_records(data_dir)
     names = club_records(data_dir)
     in_report = {c["record"] for c in comps if c["season"] == season and c["kind"] == "league"}
+    # By name: the trim of the club table (database_trim_club_table 0x5267c0) gives the clubs new ids, so the
+    # ids of the report are not those of club.dat. The club table holds each name once per nation; a name in
+    # two nations counts once here, which the check accepts.
     game = collections.defaultdict(set)
     for c in clubs:
         if c["season"] == season and c["phase"] == "start":
-            game[c["division"]].add(c["club"])
-    by_name = collections.defaultdict(list)
-    for i, n in names.items():
-        by_name[n].append(i)
+            game[c["division"]].add(c["name"])
+    held = set(names.values())
     lists = collections.OrderedDict()
     for s, division, club_id, club, _ in make_clubs.build()[0]:
         if s == season:
-            lists.setdefault(division, []).append((club_id, club))
+            lists.setdefault(division, []).append(names.get(club_id) if names.get(club_id) == club else club)
     out = set()
-    for division, rows in lists.items():
+    for division, listed in lists.items():
         rec = records.get(division)
         if rec is None or rec not in in_report:
             continue
-        found = []
-        for club_id, club in rows:
-            if names.get(club_id) == club:
-                found.append(club_id)
-            elif by_name.get(club):
-                found.append(by_name[club][0])
+        found = [n for n in listed if n in held]
         have = game[rec]
-        kept = [i for i in found if i in have]
+        kept = [n for n in found if n in have]
         others = len(have - set(found))
         if len(kept) != len(found) or others:
             out.add((season, "club_list", f"{division}: {len(kept)} of {len(found)} listed clubs that the database "
-                                          f"holds ({len(rows)} listed), {others} other clubs, {len(have)} in all"))
+                                          f"holds ({len(listed)} listed), {others} other clubs, {len(have)} in all"))
     return out
 
 
@@ -477,7 +475,8 @@ def main(argv):
         return 2
     update = "--update-expected" in argv
     if argv[1] != "--run":
-        failed = check(argv[1], expected=arg(argv, "--expected"), update=update)
+        failed = check(argv[1], expected=arg(argv, "--expected"), update=update, data_dir=arg(argv, "--data"),
+                       start_only="--start-only" in argv)
     else:
         program, game = os.path.abspath(argv[2]), os.path.abspath(argv[3])
         year = int(arg(argv, "--year", 0)) or None

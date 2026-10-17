@@ -1,0 +1,285 @@
+# Differences between the rules report and the rules table that the check accepts. Made by
+# tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2022	bench	aus_nsl (A-League Men), row aus-jap-kor-45: game 4, table 7 (7 (inference: 77 of 78 sampled 2022/23 team-matches named 7, one named 6); the U)
+2022	bench	bel_super (Belgian Super Cup), row hol-bel-286: game 7, table 10 (10)
+2022	bench	bra_cup (Copa do Brasil), row bra-157: game 7, table 12 (12)
+2022	bench	bra_nat_first (Campeonato Brasileiro Série A), row bra-49: game 7, table 12 (12)
+2022	bench	bra_nat_second (Campeonato Brasileiro Série B), row bra-76: game 7, table 12 (12)
+2022	bench	bra_nat_third (Campeonato Brasileiro Série C), row bra-103: game 7, table 12 (12)
+2022	bench	conmebol_liber (Copa Libertadores), row club-world-403: game 7, table 12 (12)
+2022	bench	den_prm (Danish Superliga), row den-swe-128: game 4, table 9 (9)
+2022	bench	eng_cc_cup (EFL Cup), row eng-425: game 5, table 9 (9)
+2022	bench	eng_charity (FA Community Shield), row eng-428: game 7, table 9 (9)
+2022	bench	eng_fa_cup (FA Cup), row eng-424: game 5, table 9 (9)
+2022	bench	eng_first (EFL Championship), row eng-239: game 5, table 7 (7)
+2022	bench	eng_prm (Premier League), row eng-238: game 5, table 9 (9)
+2022	bench	eng_second (EFL League One), row eng-240: game 5, table 7 (7)
+2022	bench	eng_third (EFL League Two), row eng-241: game 5, table 7 (7)
+2022	bench	eur_super_cup (UEFA Super Cup), row uefa-176: game 7, table 12 (12)
+2022	bench	european_cup (UEFA Champions League), row uefa-170: game 7, table 12 (12)
+2022	bench	fra_cup (Coupe de France), row fra-196: game 3, table 9 (9)
+2022	bench	fra_first (Ligue 1), row fra-191: game 5, table 9 (9)
+2022	bench	ger_cup (DFB-Pokal), row ger-283: game 6, table 9 (9)
+2022	bench	ger_first (Bundesliga), row ger-274: game 6, table 9 (9)
+2022	bench	ger_second (2. Bundesliga), row ger-275: game 6, table 9 (9)
+2022	bench	hol_cup (KNVB Cup), row hol-bel-278: game 7, table 12 (12 (inference: same rule in 2019/20 and 2025/26))
+2022	bench	hol_first (Eerste Divisie), row hol-bel-276: game 7, table 12 (12 (inference: same rule in 2019/20 and 2025/26))
+2022	bench	hol_prm (Eredivisie), row hol-bel-275: game 7, table 12 (12 (inference: same rule in 2019/20 and 2025/26))
+2022	bench	ita_c_cup (Coppa Italia Serie C), row ita-371: game 7, table 15 (15)
+2022	bench	ita_cup (Coppa Italia), row ita-370: game 7, table 15 (15)
+2022	bench	ita_ser_a (Serie A), row ita-359: game 7, table 15 (15)
+2022	bench	jap_j_cup (J.League YBC Levain Cup), row aus-jap-kor-184: game 5, table 7 (7)
+2022	bench	nor_cup (Norgesmesterskapet), row nor-fin-214: game 7, table 9 (9)
+2022	bench	nor_first (OBOS-ligaen), row nor-fin-213: game 7, table 9 (9 (inference: cup final rule of the same year))
+2022	bench	nor_prm (Eliteserien), row nor-fin-212: game 7, table 9 (9 (inference: cup final rule of the same year))
+2022	bench	uefa_cup (UEFA Europa League), row uefa-173: game 7, table 12 (12)
+2022	bench	world_club_champ (FIFA Club World Cup), row club-world-401: game 7, table 12 (12)
+2022	club_list	Argentine Premier Division: 20 of 28 listed clubs that the database holds (28 listed), 0 other clubs, 20 in all
+2022	club_list	Argentine Second Division: 25 of 37 listed clubs that the database holds (37 listed), 0 other clubs, 25 in all
+2022	club_list	Australian National Soccer League: 12 of 12 listed clubs that the database holds (12 listed), 1 other clubs, 13 in all
+2022	club_list	Belgian Second Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all
+2022	club_list	Brazilian National First Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all
+2022	club_list	Brazilian National Second Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all
+2022	club_list	Brazilian National Third Division: 20 of 20 listed clubs that the database holds (20 listed), 36 other clubs, 56 in all
+2022	club_list	Croatian First Division: 10 of 10 listed clubs that the database holds (10 listed), 6 other clubs, 16 in all
+2022	club_list	Croatian Second Division North: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all
+2022	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all
+2022	club_list	Danish Second Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all
+2022	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all
+2022	club_list	French Lower Division: 0 of 168 listed clubs that the database holds (168 listed), 0 other clubs, 0 in all
+2022	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all
+2022	club_list	Greek National B Division: 13 of 15 listed clubs that the database holds (15 listed), 1 other clubs, 14 in all
+2022	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all
+2022	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all
+2022	club_list	Japanese J-League 2: 12 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 12 in all
+2022	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all
+2022	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all
+2022	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all
+2022	clubs	arg_prm (Liga Profesional de Fútbol), row arg-usa-22: game 20, table 28 (28)
+2022	clubs	arg_second (Primera Nacional), row arg-usa-49: game 25, table 37 (37)
+2022	clubs	aus_nsl (A-League Men), row aus-jap-kor-45: game 13, table 12 (12)
+2022	clubs	bel_second (Challenger Pro League), row hol-bel-282: game 18, table 12 (12)
+2022	clubs	bel_third (Belgian National Division 1), row hol-bel-283: game 16, table 20 (20 (16 + 4 U23 teams))
+2022	clubs	bra_champ_cup (Copa dos Campeões), row bra-211: game 3, table 0 (0)
+2022	clubs	bra_cup (Copa do Brasil), row bra-157: game 71, table 92 (92)
+2022	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-49: game 28, table 20 (20)
+2022	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-76: game 28, table 20 (20)
+2022	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-103: game 7, table 20 (20)
+2022	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-535: game 15, table 10 (10)
+2022	clubs	bra_reg_gaucho (Campeonato Gaúcho), row bra-562: game 17, table 12 (12)
+2022	clubs	bra_reg_goias (Campeonato Goiano), row bra-589: game 14, table 12 (12)
+2022	clubs	bra_reg_north (Campeonato Paraense), row bra-643: game 10, table 12 (12)
+2022	clubs	bra_reg_northeast (Campeonato Cearense), row bra-670: game 16, table 10 (10)
+2022	clubs	bra_reg_pern (Campeonato Pernambucano), row bra-751: game 10, table 13 (13)
+2022	clubs	bra_reg_santa (Campeonato Catarinense), row bra-508: game 10, table 12 (12)
+2022	clubs	conmebol_liber (Copa Libertadores), row club-world-403: game 4, table 47 (47)
+2022	clubs	cro_a1 (HNL), row gre-pol-cro-346: game 16, table 10 (10)
+2022	clubs	cro_a2a (Prva NL), row gre-pol-cro-373: game 16, table 12 (12)
+2022	clubs	den_first (Danish 1st Division), row den-swe-129: game 16, table 12 (12)
+2022	clubs	den_second (Danish 2nd Division), row den-swe-130: game 16, table 12 (12)
+2022	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-233: game 5, table 53 (53)
+2022	clubs	european_cup (UEFA Champions League), row uefa-170: game 55, table 78 (78 (32 in the group stage))
+2022	clubs	fin_first (Ykkönen), row nor-fin-218: game 10, table 12 (12)
+2022	clubs	fra_third (Championnat National), row fra-193: game 20, table 18 (18)
+2022	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-22: game 4, table 85 (85)
+2022	clubs	gre_second (Super League 2), row gre-pol-cro-76: game 14, table 15 (15)
+2022	clubs	hol_first (Eerste Divisie), row hol-bel-276: game 18, table 20 (20)
+2022	clubs	ita_c1_super (Supercoppa Serie C), row ita-373: game 2, table 3 (3)
+2022	clubs	ita_c_cup (Coppa Italia Serie C), row ita-371: game 5, table 60 (60)
+2022	clubs	ita_cup (Coppa Italia), row ita-370: game 4, table 44 (44)
+2022	clubs	ita_ser_a (Serie A), row ita-359: game 18, table 20 (20)
+2022	clubs	jap_j1 (J1 League), row aus-jap-kor-211: game 16, table 18 (18)
+2022	clubs	jap_j2 (J2 League), row aus-jap-kor-238: game 12, table 22 (22)
+2022	clubs	nir_cup (Irish Cup), row wal-nir-irl-538: game 32, table 128 (128)
+2022	clubs	nir_first (NIFL Championship), row wal-nir-irl-536: game 10, table 12 (12)
+2022	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-535: game 10, table 12 (12)
+2022	clubs	nor_prm (Eliteserien), row nor-fin-212: game 14, table 16 (16)
+2022	clubs	oceania_club_champ (OFC Champions League), row club-world-417: game 0, table 18 (18)
+2022	clubs	uefa_cup (UEFA Europa League), row uefa-173: game 145, table 57 (57 (21 entered + 36 from the Champions League); 32 in the group stage (+8 Champi)
+2022	clubs	world_club_champ (FIFA Club World Cup), row club-world-401: game 0, table 7 (7)
+2022	down	arg_prm (Liga Profesional de Fútbol), row arg-usa-22: game 0 (+0 play-off places), table 2 (2 (one by average, one bottom of the season aggregate table))
+2022	down	arg_second (Primera Nacional), row arg-usa-49: game 0 (+0 play-off places), table 2 (2 (infobox; a third relegation was voided))
+2022	down	bel_first (Belgian Pro League), row hol-bel-281: game 2 (+0 play-off places), table 3 (3 (16th to 18th; league cut to 16))
+2022	down	bel_second (Challenger Pro League), row hol-bel-282: game 2 (+1 play-off places), table 1 (1 (12th))
+2022	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-103: game 2 (+0 play-off places), table 4 (4)
+2022	down	cro_a1 (HNL), row gre-pol-cro-346: game 2 (+0 play-off places), table 1 (1 (10th))
+2022	down	cro_a2a (Prva NL), row gre-pol-cro-373: game 2 (+0 play-off places), table 1 (1 (12th))
+2022	down	cro_a2b (Druga HNL South), row gre-pol-cro-400: game 2 (+0 play-off places), table na (n/a)
+2022	down	den_first (Danish 1st Division), row den-swe-129: game 3 (+0 play-off places), table 2 (2)
+2022	down	den_second (Danish 2nd Division), row den-swe-130: game 4 (+0 play-off places), table 2 (2)
+2022	down	eng_third (EFL League Two), row eng-241: game 1 (+0 play-off places), table 2 (2)
+2022	down	fra_first (Ligue 1), row fra-191: game 3 (+0 play-off places), table 4 (4)
+2022	down	fra_second (Ligue 2), row fra-192: game 3 (+0 play-off places), table 4 (4)
+2022	down	fra_third (Championnat National), row fra-193: game 4 (+0 play-off places), table 6 (6)
+2022	down	ger_first (Bundesliga), row ger-274: game 3 (+0 play-off places), table 2 (2)
+2022	down	ger_second (2. Bundesliga), row ger-275: game 4 (+0 play-off places), table 2 (2)
+2022	down	gre_second (Super League 2), row gre-pol-cro-76: game 2 (+0 play-off places), table 4 (4 (12th-15th))
+2022	down	ita_ser_a (Serie A), row ita-359: game 4 (+0 play-off places), table 3 (3)
+2022	down	ita_ser_b (Serie B), row ita-360: game 4 (+0 play-off places), table 3 (3 direct (18th-20th) + play-out 16th v 17th (two legs; not held if gap over 4 po)
+2022	down	ita_ser_c1a (Italian Serie C1/A), row ita-361: game 1 (+4 play-off places), table na (n/a)
+2022	down	ita_ser_c1b (Italian Serie C1/B), row ita-362: game 1 (+4 play-off places), table na (n/a)
+2022	down	jap_j1 (J1 League), row aus-jap-kor-211: game 2 (+0 play-off places), table 1 (1)
+2022	down	jap_j2 (J2 League), row aus-jap-kor-238: game 0 (+0 play-off places), table 2 (2)
+2022	down	nir_first (NIFL Championship), row wal-nir-irl-536: game 0 (+0 play-off places), table 1 (1 (pos 12))
+2022	down	nor_first (OBOS-ligaen), row nor-fin-213: game 4 (+0 play-off places), table 2 (15th-16th (2))
+2022	idle	african_nations (Africa Cup of Nations), row int-continental-238: the game waits for 2024, the table holds it
+2022	idle	asia_nations (AFC Asian Cup), row int-continental-240: the game waits for 2024, the table holds it
+2022	idle	fra_first (French CFA), row fra-191: the game waits for 0, the table holds it
+2022	idle	fra_first (French Lower Division), row fra-191: the game waits for 0, the table holds it
+2022	idle	world_cup (FIFA World Cup), row int-world-254: the game waits for 2026, the table holds it
+2022	no_row	friendly (Friendly): no table row
+2022	no_row	record_utils ('B' International): no table row
+2022	no_row	record_utils (Reserve): no table row
+2022	no_row	record_utils (Under 21 International): no table row
+2022	not_held	asia_club_champ (AFC Champions League), row club-world-412: the game holds 2022, the table says not held
+2022	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-415: the game holds 2022, the table says not held
+2022	not_held	asia_super_cup (Asian Super Cup), row club-world-416: the game holds 2022, the table says not held
+2022	not_held	bra_champ_cup (Copa dos Campeões), row bra-211: the game holds 2022, the table says not held
+2022	not_held	conmebol_merc (Copa Mercosur), row club-world-404: the game holds 2022, the table says not held
+2022	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-400: the game holds 2022, the table says not held
+2022	not_held	fifa_confed (FIFA Confederations Cup), row int-world-262: the game holds 2023, the table says not held
+2022	not_held	fra_lge_cup (Coupe de la Ligue), row fra-197: the game holds 2022, the table says not held
+2022	not_held	ger_lge_cup (DFL-Ligapokal), row ger-284: the game holds 2022, the table says not held
+2022	not_held	goldcup (Copa América), row int-continental-242: the game holds 2023, the table says not held
+2022	not_held	gre_super (Greek Super Cup), row gre-pol-cro-103: the game holds 2022, the table says not held
+2022	not_held	inter_amer_cup (Copa Interamericana), row club-world-411: the game holds 2022, the table says not held
+2022	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-175: the game holds 2022, the table says not held
+2022	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-361: the game holds 2022, the table says not held
+2022	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-362: the game holds 2022, the table says not held
+2022	not_held	oceania_nations (OFC Nations Cup), row int-continental-241: the game holds 2022, the table says not held
+2022	not_held	world_club_cup (Intercontinental Cup), row club-world-400: the game holds 2022, the table says not held
+2022	not_in_game	arg-usa-103 new 'Supercopa Argentina' (Argentina)
+2022	not_in_game	arg-usa-130 new 'Trofeo de Campeones' (Argentina)
+2022	not_in_game	arg-usa-157 new 'Copa de la Liga Profesional 2023' (Argentina)
+2022	not_in_game	arg-usa-184 new 'Supercopa Internacional' (Argentina)
+2022	not_in_game	arg-usa-211 argentina_rules 'Argentina' (Argentina)
+2022	not_in_game	arg-usa-76 new 'Copa Argentina' (Argentina)
+2022	not_in_game	aus-jap-kor-130 japan_rules 'n/a' (Japan)
+2022	not_in_game	aus-jap-kor-22 australia_rules 'n/a' (Australia)
+2022	not_in_game	aus-jap-kor-72 new 'Australia Cup' (Australia)
+2022	not_in_game	bra-1021 new 'Campeonato Capixaba' (Brazil)
+2022	not_in_game	bra-1048 new 'Campeonato Sul-Mato-Grossense' (Brazil)
+2022	not_in_game	bra-1075 new 'Campeonato Tocantinense' (Brazil)
+2022	not_in_game	bra-184 new 'Supercopa do Brasil' (Brazil)
+2022	not_in_game	bra-22 brazil_rules 'Brazil' (Brazil)
+2022	not_in_game	bra-238 new 'Copa do Nordeste' (Brazil)
+2022	not_in_game	bra-265 new 'Copa Verde' (Brazil)
+2022	not_in_game	bra-778 new 'Campeonato Potiguar' (Brazil)
+2022	not_in_game	bra-805 new 'Campeonato Paraibano' (Brazil)
+2022	not_in_game	bra-832 new 'Campeonato Alagoano' (Brazil)
+2022	not_in_game	bra-859 new 'Campeonato Sergipano' (Brazil)
+2022	not_in_game	bra-886 new 'Campeonato Maranhense' (Brazil)
+2022	not_in_game	bra-913 new 'Campeonato Amazonense' (Brazil)
+2022	not_in_game	bra-940 new 'Campeonato Piauiense' (Brazil)
+2022	not_in_game	bra-967 new 'Campeonato Acriano' (Brazil)
+2022	not_in_game	bra-994 new 'Campeonato Brasiliense' (Brazil)
+2022	not_in_game	club-world-406 new 'Copa Sudamericana' (CONMEBOL)
+2022	not_in_game	club-world-407 new 'Recopa Sudamericana' (CONMEBOL)
+2022	not_in_game	eng-242 eng_conf 'National League' (England)
+2022	not_in_game	eng-427 eng_fa_trophy 'FA Trophy' (England)
+2022	not_in_game	fra-194 fra_cfa 'National 2' (France)
+2022	not_in_game	fra-195 fra_lower 'National 3' (France)
+2022	not_in_game	ger-276 new '3. Liga' (Germany)
+2022	not_in_game	ger-285 new 'DFL-Supercup' (Germany)
+2022	not_in_game	gre-pol-cro-130 new 'Super League 2 (South group)' (Greece)
+2022	not_in_game	gre-pol-cro-454 new 'Croatian Football Super Cup' (Croatia)
+2022	not_in_game	int-continental-234 new '2022-23 UEFA Nations League' (UEFA)
+2022	not_in_game	ita-366 new 'Serie C girone A' (Italy)
+2022	not_in_game	ita-367 new 'Serie C girone B' (Italy)
+2022	not_in_game	ita-368 new 'Serie C girone C' (Italy)
+2022	not_in_game	nor-fin-220 new 'Liigacup' (Finland)
+2022	not_in_game	uefa-169 uefa_seeding 'UEFA access list and seeding' (UEFA)
+2022	not_in_game	uefa-174 new 'UEFA Europa Conference League' (UEFA)
+2022	playoffs	arg_prm (Liga Profesional de Fútbol), row arg-usa-22: game 0 up and 0 down play-off places, table 'One-match tie-breaker at a neutral venue when clubs tie for the aggregate-table '
+2022	playoffs	arg_second (Primera Nacional), row arg-usa-49: game 0 up and 0 down play-off places, table 'Final of the two zone winners; Torneo Reducido of 2nd to 8th of each zone plus t'
+2022	playoffs	aus_nsl (A-League Men), row aus-jap-kor-45: game 0 up and 0 down play-off places, table 'top six; 3rd to 6th play single-leg elimination finals; two-legged semi-finals; '
+2022	playoffs	bel_first (Belgian Pro League), row hol-bel-281: game 0 up and 0 down play-off places, table 'see split'
+2022	playoffs	bel_second (Challenger Pro League), row hol-bel-282: game 0 up and 1 down play-off places, table 'none'
+2022	playoffs	bel_third (Belgian National Division 1), row hol-bel-283: game 0 up and 1 down play-off places, table 'none'
+2022	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-103: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
+2022	playoffs	cro_a2a (Prva NL), row gre-pol-cro-373: game 0 up and 0 down play-off places, table '11th: relegation play-off'
+2022	playoffs	den_prm (Danish Superliga), row den-swe-128: game 0 up and 0 down play-off places, table 'European play-off: relegation-round winner (7th) plays the lowest championship-r'
+2022	playoffs	ger_first (Bundesliga), row ger-274: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, no away goals rule, extra time and penalties'
+2022	playoffs	ger_second (2. Bundesliga), row ger-275: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, no away goals rule'
+2022	playoffs	hol_first (Eerste Divisie), row hol-bel-276: game 0 up and 0 down play-off places, table 'six clubs (3rd to 8th or period winners) with the Eredivisie 16th; knockout for '
+2022	playoffs	ita_ser_a (Serie A), row ita-359: game 0 up and 0 down play-off places, table 'single-match play-off (90 minutes then penalties, neutral venue) if level on poi'
+2022	playoffs	ita_ser_b (Serie B), row ita-360: game 0 up and 0 down play-off places, table '3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at'
+2022	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-361: game 4 up and 4 down play-off places, table 'n/a'
+2022	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-362: game 4 up and 4 down play-off places, table 'n/a'
+2022	playoffs	jap_j2 (J2 League), row aus-jap-kor-238: game 0 up and 0 down play-off places, table '3rd to 6th play-off, single matches; winner promoted'
+2022	subs_used	arg_prm (Liga Profesional de Fútbol), row arg-usa-22: game 3, table 5 (5 in three windows (inference: rule of 2022, no later change found))
+2022	subs_used	arg_second (Primera Nacional), row arg-usa-49: game 3, table 5 (5 in three windows (inference: rule of 2022, no later change found))
+2022	subs_used	aus_nsl (A-League Men), row aus-jap-kor-45: game 3, table 5 (5 (inference from ESPN match data: up to 5 per team in 39 sampled 2022/23 matche)
+2022	subs_used	bel_fa_cup (Belgian Cup), row hol-bel-285: game 3, table 5 (5 in 3 moments (6th in extra time))
+2022	subs_used	bel_first (Belgian Pro League), row hol-bel-281: game 3, table 5 (5 in 3 moments (6th in extra time))
+2022	subs_used	bel_second (Challenger Pro League), row hol-bel-282: game 3, table 5 (5 in 3 moments (6th in extra time))
+2022	subs_used	bel_super (Belgian Super Cup), row hol-bel-286: game 7, table 5 (5)
+2022	subs_used	bra_cup (Copa do Brasil), row bra-157: game 3, table 5 (5 in three stoppages plus half time)
+2022	subs_used	bra_nat_first (Campeonato Brasileiro Série A), row bra-49: game 3, table 5 (5 in three stoppages plus half time)
+2022	subs_used	bra_nat_second (Campeonato Brasileiro Série B), row bra-76: game 3, table 5 (5 in three stoppages plus half time)
+2022	subs_used	bra_nat_third (Campeonato Brasileiro Série C), row bra-103: game 3, table 5 (5 in three stoppages plus half time)
+2022	subs_used	conmebol_liber (Copa Libertadores), row club-world-403: game 3, table 5 (5, a sixth in extra time)
+2022	subs_used	cro_a1 (HNL), row gre-pol-cro-346: game 3, table 5 (5)
+2022	subs_used	cro_a2a (Prva NL), row gre-pol-cro-373: game 3, table 5 (5)
+2022	subs_used	cro_cup (Croatian Football Cup), row gre-pol-cro-427: game 3, table 5 (5)
+2022	subs_used	den_cup (Danish Cup), row den-swe-131: game 3, table 5 (5)
+2022	subs_used	den_first (Danish 1st Division), row den-swe-129: game 3, table 5 (5)
+2022	subs_used	den_prm (Danish Superliga), row den-swe-128: game 3, table 5 (5)
+2022	subs_used	den_second (Danish 2nd Division), row den-swe-130: game 3, table 5 (5)
+2022	subs_used	eng_cc_cup (EFL Cup), row eng-425: game 3, table 5 (5 (+1 in extra time))
+2022	subs_used	eng_charity (FA Community Shield), row eng-428: game 5, table 6 (6)
+2022	subs_used	eng_fa_cup (FA Cup), row eng-424: game 3, table 5 (5 (+1 in extra time))
+2022	subs_used	eng_first (EFL Championship), row eng-239: game 3, table 5 (5 (three stoppages plus half-time))
+2022	subs_used	eng_prm (Premier League), row eng-238: game 3, table 5 (5 (three stoppages plus half-time))
+2022	subs_used	eng_second (EFL League One), row eng-240: game 3, table 5 (5 (three stoppages plus half-time))
+2022	subs_used	eng_third (EFL League Two), row eng-241: game 3, table 5 (5 (three stoppages plus half-time))
+2022	subs_used	eur_super_cup (UEFA Super Cup), row uefa-176: game 3, table 5 (5, plus a 6th in extra time)
+2022	subs_used	european_cup (UEFA Champions League), row uefa-170: game 3, table 5 (5, plus a 6th in extra time of knockout matches)
+2022	subs_used	fin_first (Ykkönen), row nor-fin-218: game 3, table 5 (5 (observed))
+2022	subs_used	fin_prm (Veikkausliiga), row nor-fin-217: game 3, table 5 (5 (observed))
+2022	subs_used	fra_cup (Coupe de France), row fra-196: game 3, table 5 (5 (6th in extra time))
+2022	subs_used	fra_first (Ligue 1), row fra-191: game 3, table 5 (5)
+2022	subs_used	fra_second (Ligue 2), row fra-192: game 3, table 5 (5 (inference from 2020/21))
+2022	subs_used	ger_cup (DFB-Pokal), row ger-283: game 3, table 5 (5)
+2022	subs_used	ger_first (Bundesliga), row ger-274: game 3, table 5 (5)
+2022	subs_used	ger_second (2. Bundesliga), row ger-275: game 3, table 5 (5)
+2022	subs_used	gre_cup (Greek Football Cup), row gre-pol-cro-22: game 3, table 5 (5)
+2022	subs_used	gre_prm (Super League 1), row gre-pol-cro-49: game 3, table 5 (5)
+2022	subs_used	gre_second (Super League 2), row gre-pol-cro-76: game 3, table 5 (5)
+2022	subs_used	hol_cup (KNVB Cup), row hol-bel-278: game 3, table 5 (5 (inference: same rule in 2020/21 and 2025/26))
+2022	subs_used	hol_first (Eerste Divisie), row hol-bel-276: game 3, table 5 (5 (inference: same rule in 2020/21 and 2025/26))
+2022	subs_used	hol_prm (Eredivisie), row hol-bel-275: game 3, table 5 (5 (inference: same rule in 2020/21 and 2025/26))
+2022	subs_used	ita_c_cup (Coppa Italia Serie C), row ita-371: game 3, table 5 (5 (inference: as Serie C))
+2022	subs_used	ita_cup (Coppa Italia), row ita-370: game 3, table 5 (5 (inference: as Serie A))
+2022	subs_used	ita_ser_a (Serie A), row ita-359: game 3, table 5 (5)
+2022	subs_used	ita_ser_b (Serie B), row ita-360: game 3, table 5 (5 (inference))
+2022	subs_used	ita_super (Supercoppa Italiana), row ita-372: game 3, table 5 (5 (inference: as Serie A))
+2022	subs_used	jap_j1 (J1 League), row aus-jap-kor-211: game 3, table 5 (5 (inference: 5 in 2020 and in 2024))
+2022	subs_used	jap_j2 (J2 League), row aus-jap-kor-238: game 3, table 5 (5 (inference: 5 in 2020 and in 2024))
+2022	subs_used	jap_j_cup (J.League YBC Levain Cup), row aus-jap-kor-184: game 3, table 5 (5 (inference: 5 in 2020 and in 2024))
+2022	subs_used	jap_super (Japanese Super Cup), row aus-jap-kor-292: game 3, table 5 (5 (inference: 5 in 2020 and in 2024))
+2022	subs_used	nor_cup (Norgesmesterskapet), row nor-fin-214: game 3, table 5 (5)
+2022	subs_used	nor_first (OBOS-ligaen), row nor-fin-213: game 3, table 5 (5 (inference: cup final rule of the same year))
+2022	subs_used	nor_prm (Eliteserien), row nor-fin-212: game 3, table 5 (5 (inference: cup final rule of the same year))
+2022	subs_used	uefa_cup (UEFA Europa League), row uefa-173: game 3, table 5 (5, plus a 6th in extra time of knockout matches)
+2022	subs_used	world_club_champ (FIFA Club World Cup), row club-world-401: game 3, table 5 (5, a sixth in extra time)
+2022	up	arg_second (Primera Nacional), row arg-usa-49: game 1 (+0 play-off places), table 2 (2 (zone winners final; Torneo Reducido winner))
+2022	up	aus_nsl (A-League Men), row aus-jap-kor-45: game 6 (+0 play-off places), table na (n/a)
+2022	up	bel_third (Belgian National Division 1), row hol-bel-283: game 1 (+0 play-off places), table 3 (3)
+2022	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-49: game 4 (+0 play-off places), table na (n/a)
+2022	up	bra_nat_third (Campeonato Brasileiro Série C), row bra-103: game 2 (+0 play-off places), table 4 (4)
+2022	up	conmebol_liber (Copa Libertadores), row club-world-403: game 2 (+0 play-off places), table na (n/a)
+2022	up	conmebol_merc (Copa Mercosur), row club-world-404: game 1 (+0 play-off places), table na (n/a)
+2022	up	cro_a2a (Prva NL), row gre-pol-cro-373: game 0 (+0 play-off places), table 1 (1 (1st))
+2022	up	den_second (Danish 2nd Division), row den-swe-130: game 3 (+0 play-off places), table 2 (2)
+2022	up	fin_first (Ykkönen), row nor-fin-218: game 2 (+0 play-off places), table 1 (1st (1))
+2022	up	fra_second (Ligue 2), row fra-192: game 3 (+0 play-off places), table 2 (2)
+2022	up	fra_third (Championnat National), row fra-193: game 3 (+0 play-off places), table 2 (2)
+2022	up	ger_second (2. Bundesliga), row ger-275: game 3 (+0 play-off places), table 2 (2)
+2022	up	gre_cup (Greek Football Cup), row gre-pol-cro-22: game 2 (+0 play-off places), table na (n/a)
+2022	up	gre_second (Super League 2), row gre-pol-cro-76: game 2 (+0 play-off places), table 1 (1 (group winner))
+2022	up	hol_first (Eerste Divisie), row hol-bel-276: game 1 (+0 play-off places), table 2 (2 (champion and runner-up; Jong teams cannot be promoted))
+2022	up	ita_ser_b (Serie B), row ita-360: game 4 (+0 play-off places), table 3 (2 direct + 1 via play-offs)
+2022	up	ita_ser_c1a (Italian Serie C1/A), row ita-361: game 1 (+4 play-off places), table na (n/a)
+2022	up	ita_ser_c1b (Italian Serie C1/B), row ita-362: game 1 (+4 play-off places), table na (n/a)
+2022	up	oceania_club_champ (OFC Champions League), row club-world-417: game 2 (+0 play-off places), table na (n/a)

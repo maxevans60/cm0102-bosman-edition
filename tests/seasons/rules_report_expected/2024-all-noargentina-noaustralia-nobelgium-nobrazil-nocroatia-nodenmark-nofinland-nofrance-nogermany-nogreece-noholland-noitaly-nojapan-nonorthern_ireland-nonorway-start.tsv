@@ -1,0 +1,190 @@
+# Differences between the rules report and the rules table that the check accepts. Made by
+# tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2024	bench	asia_club_champ (AFC Champions League Elite), row club-world-450: game 5, table 12 (12)
+2024	bench	eng_cc_cup (EFL Cup), row eng-437: game 5, table 9 (9)
+2024	bench	eng_charity (FA Community Shield), row eng-440: game 7, table 9 (9)
+2024	bench	eng_fa_cup (FA Cup), row eng-436: game 5, table 9 (9)
+2024	bench	eng_first (EFL Championship), row eng-259: game 5, table 9 (9)
+2024	bench	eng_prm (Premier League), row eng-258: game 5, table 9 (9)
+2024	bench	eng_second (EFL League One), row eng-260: game 5, table 7 (7)
+2024	bench	eng_third (EFL League Two), row eng-261: game 5, table 7 (7)
+2024	bench	eur_super_cup (UEFA Super Cup), row uefa-192: game 7, table 12 (12)
+2024	bench	european_cup (UEFA Champions League), row uefa-186: game 7, table 12 (12)
+2024	bench	ire_chal_cup (FAI Cup), row wal-nir-irl-594: game 5, table 9 (9 (inference from final line-ups))
+2024	bench	ire_pres_cup (President of Ireland's Cup), row wal-nir-irl-598: game 5, table 9 (9 (inference from line-ups))
+2024	bench	kor_league (K League 1), row aus-jap-kor-348: game 7, table 9 (9 (20-man list))
+2024	bench	por_prm (Primeira Liga), row por-208: game 7, table 9 (9)
+2024	bench	por_second (Liga Portugal 2), row por-209: game 7, table 9 (9 (inference: as Primeira Liga))
+2024	bench	rus_first (Russian First League), row rus-tur-51: game 7, table 12 (12)
+2024	bench	rus_prm (Russian Premier League), row rus-tur-24: game 7, table 12 (12)
+2024	bench	sco_chal_cup (Scottish Challenge Cup), row sco-192: game 5, table 9 (9)
+2024	bench	sco_fa_cup (Scottish Cup), row sco-190: game 5, table 8 (up to 8)
+2024	bench	sco_first (Scottish Championship), row sco-187: game 5, table 9 (9)
+2024	bench	sco_lge_cup (Scottish League Cup), row sco-191: game 5, table 9 (9)
+2024	bench	sco_prm (Scottish Premiership), row sco-186: game 5, table 9 (9)
+2024	bench	sco_second (Scottish League One), row sco-188: game 5, table 9 (9)
+2024	bench	sco_third (Scottish League Two), row sco-189: game 5, table 9 (9)
+2024	bench	spa_cup (Copa del Rey), row spa-191: game 7, table 11 (11)
+2024	bench	spa_first (Primera División), row spa-186: game 7, table 12 (12 (inference))
+2024	bench	spa_second (Segunda División), row spa-187: game 7, table 12 (12 (inference))
+2024	bench	spa_super (Supercopa de España), row spa-192: game 7, table 11 (11)
+2024	bench	swe_first (Superettan), row den-swe-303: game 5, table 7 (7)
+2024	bench	swe_prm (Allsvenskan), row den-swe-302: game 5, table 9 (9)
+2024	bench	tur_first (Süper Lig), row rus-tur-186: game 7, table 10 (10)
+2024	bench	tur_second (TFF 1. Lig), row rus-tur-213: game 7, table 10 (10)
+2024	bench	tur_second_b (TFF 2. Lig), row rus-tur-240: game 7, table 10 (10)
+2024	bench	uefa_cup (UEFA Europa League), row uefa-189: game 7, table 12 (12)
+2024	bench	usa_mls (Major League Soccer), row arg-usa-240: game 5, table 9 (9)
+2024	club_list	Irish Premier Division: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all
+2024	club_list	Korean League: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all
+2024	club_list	Polish First Division: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all
+2024	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all
+2024	club_list	Turkish Premier Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all
+2024	club_list	Welsh Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all
+2024	clubs	asia_club_champ (AFC Champions League Elite), row club-world-450: game 16, table 24 (24)
+2024	clubs	con_champ (CONCACAF Champions Cup), row club-world-446: game 8, table 27 (27)
+2024	clubs	european_cup (UEFA Champions League), row uefa-186: game 55, table 81 (81 (36 in the league phase))
+2024	clubs	ire_chal_cup (FAI Cup), row wal-nir-irl-594: game 42, table 44 (44)
+2024	clubs	ire_prm (League of Ireland Premier Division), row wal-nir-irl-591: game 12, table 10 (10)
+2024	clubs	kor_league (K League 1), row aus-jap-kor-348: game 10, table 12 (12)
+2024	clubs	olympics (Football at the Summer Olympics), row int-world-287: game 4, table 16 (16)
+2024	clubs	pol_first (Ekstraklasa), row gre-pol-cro-213: game 8, table 18 (18)
+2024	clubs	por_cup (Taça de Portugal), row por-213: game 164, table 147 (147)
+2024	clubs	sco_chal_cup (Scottish Challenge Cup), row sco-192: game 30, table 52 (52)
+2024	clubs	sco_fa_cup (Scottish Cup), row sco-190: game 50, table 130 (130)
+2024	clubs	sco_lge_cup (Scottish League Cup), row sco-191: game 42, table 45 (45)
+2024	clubs	spa_cup (Copa del Rey), row spa-191: game 83, table 125 (125 clubs)
+2024	clubs	spa_super (Supercopa de España), row spa-192: game 2, table 4 (4)
+2024	clubs	swe_prm (Allsvenskan), row den-swe-302: game 14, table 16 (16)
+2024	clubs	tur_first (Süper Lig), row rus-tur-186: game 18, table 19 (19)
+2024	clubs	tur_second_b (TFF 2. Lig), row rus-tur-240: game 10, table 36 (36)
+2024	clubs	uefa_cup (UEFA Europa League), row uefa-189: game 145, table 76 (76 (45 entered + 31 from the Champions League); 36 in the league phase)
+2024	clubs	usa_mls (Major League Soccer), row arg-usa-240: game 4, table 30 (30)
+2024	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-294: game 32, table 96 (96 (16 of them MLS))
+2024	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-282: game 50, table 53 (53 in groups (Eritrea withdrew; group E has 5 teams))
+2024	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-283: game 0, table 18 (18)
+2024	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-281: game 24, table 30 (30)
+2024	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-279: game 5, table 54 (54 entrants)
+2024	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-284: game 5, table 11 (11 entrants)
+2024	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-280: game 8, table 10 (10)
+2024	clubs	wel_first (Cymru Premier), row wal-nir-irl-579: game 18, table 12 (12)
+2024	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-583: game 3, table 48 (48)
+2024	clubs	world_club_champ (FIFA Club World Cup), row club-world-439: game 0, table 32 (32)
+2024	down	eng_third (EFL League Two), row eng-261: game 1 (+0 play-off places), table 2 (2)
+2024	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-591: game 3 (+1 play-off places), table 1 (1 (pos 10))
+2024	down	kor_league (K League 1), row aus-jap-kor-348: game 0 (+0 play-off places), table 1 (1 (12th))
+2024	down	pol_first (Ekstraklasa), row gre-pol-cro-213: game 0 (+0 play-off places), table 3 (3 (16th-18th))
+2024	down	pol_second (I liga), row gre-pol-cro-267: game 4 (+0 play-off places), table 3 (3 (16th-18th))
+2024	down	por_prm (Primeira Liga), row por-208: game 3 (+0 play-off places), table 2 (2)
+2024	down	por_second (Liga Portugal 2), row por-209: game 3 (+0 play-off places), table 2 (2 (17th, 18th))
+2024	down	sco_first (Scottish Championship), row sco-187: game 2 (+0 play-off places), table 1 (1)
+2024	down	sco_second (Scottish League One), row sco-188: game 2 (+0 play-off places), table 1 (1)
+2024	down	swe_first (Superettan), row den-swe-303: game 3 (+0 play-off places), table 2 (2)
+2024	down	tur_first (Süper Lig), row rus-tur-186: game 3 (+0 play-off places), table 4 (4)
+2024	down	tur_second (TFF 1. Lig), row rus-tur-213: game 3 (+0 play-off places), table 4 (4)
+2024	down	tur_second_b (TFF 2. Lig), row rus-tur-240: game 0 (+0 play-off places), table 6 (6 (16th to 18th of each group))
+2024	down	wel_first (Cymru Premier), row wal-nir-irl-579: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
+2024	no_row	friendly (Friendly): no table row
+2024	no_row	record_utils ('B' International): no table row
+2024	no_row	record_utils (Reserve): no table row
+2024	no_row	record_utils (Under 21 International): no table row
+2024	no_row	spa_lower (Spanish Lower Division): no table row
+2024	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-453: the game holds 2024, the table says not held
+2024	not_held	asia_nations (AFC Asian Cup), row int-continental-262: the game holds 2024, the table says not held
+2024	not_held	asia_super_cup (Asian Super Cup), row club-world-454: the game holds 2024, the table says not held
+2024	not_held	con_merc_cup (Copa Merconorte), row club-world-443: the game holds 2024, the table says not held
+2024	not_held	fifa_confed (FIFA Confederations Cup), row int-world-286: the game holds 2025, the table says not held
+2024	not_held	goldcup (Copa América), row int-continental-264: the game holds 2025, the table says not held
+2024	not_held	inter_amer_cup (Copa Interamericana), row club-world-449: the game holds 2024, the table says not held
+2024	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-191: the game holds 2024, the table says not held
+2024	not_held	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-595: the game holds 2024, the table says not held
+2024	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-599: the game holds 2024, the table says not held
+2024	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-456: the game holds 2024, the table says not held
+2024	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-402: the game holds 2024, the table says not held
+2024	not_held	oceania_nations (OFC Nations Cup), row int-continental-263: the game holds 2024, the table says not held
+2024	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-240: the game holds 2024, the table says not held
+2024	not_held	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-584: the game holds 2024, the table says not held
+2024	not_held	world_club_cup (Intercontinental Cup), row club-world-438: the game holds 2024, the table says not held
+2024	not_in_game	arg-usa-375 usa_rules 'United States' (United States)
+2024	not_in_game	aus-jap-kor-321 korea_rules 'n/a' (South Korea)
+2024	not_in_game	club-world-441 conmebol_liber 'Copa Libertadores' (CONMEBOL)
+2024	not_in_game	club-world-444 new 'Copa Sudamericana' (CONMEBOL)
+2024	not_in_game	club-world-445 new 'Recopa Sudamericana' (CONMEBOL)
+2024	not_in_game	club-world-452 new 'AFC Champions League Two' (AFC)
+2024	not_in_game	den-swe-304 swe_second 'Ettan' (Sweden)
+2024	not_in_game	eng-262 eng_conf 'National League' (England)
+2024	not_in_game	eng-439 eng_fa_trophy 'FA Trophy' (England)
+2024	not_in_game	eng-441 new 'National League Cup' (England)
+2024	not_in_game	int-continental-256 new '2024-25 UEFA Nations League' (UEFA)
+2024	not_in_game	int-continental-258 new '2025 CONCACAF Gold Cup' (CONCACAF)
+2024	not_in_game	int-continental-259 new '2024-25 CONCACAF Nations League' (CONCACAF)
+2024	not_in_game	por-211 por_second_b 'Liga 3' (Portugal)
+2024	not_in_game	por-215 new 'Taça da Liga (Allianz Cup)' (Portugal)
+2024	not_in_game	rus-tur-105 new 'Russian Super Cup' (Russia)
+2024	not_in_game	rus-tur-294 new 'Turkish Super Cup' (Turkey)
+2024	not_in_game	spa-185 spain_rules 'n/a' (Spain)
+2024	not_in_game	spa-188 spa_second_b 'Primera Federación' (Spain)
+2024	not_in_game	uefa-185 uefa_seeding 'UEFA access list and seeding' (UEFA)
+2024	not_in_game	uefa-190 new 'UEFA Conference League' (UEFA)
+2024	playoffs	kor_league (K League 1), row aus-jap-kor-348: game 0 up and 0 down play-off places, table '10th v K League 2 play-off winner and 11th v K League 2 runner-up, two legs'
+2024	playoffs	por_prm (Primeira Liga), row por-208: game 0 up and 0 down play-off places, table '16th v 3rd of second tier (non-reserve), two legs'
+2024	playoffs	por_second (Liga Portugal 2), row por-209: game 0 up and 0 down play-off places, table '3rd (non-reserve) v 16th of Primeira Liga; 16th v Liga 3 play-off winner; both t'
+2024	playoffs	rus_first (Russian First League), row rus-tur-51: game 0 up and 0 down play-off places, table '3rd and 4th play the 14th and 13th of the Premier League over two legs'
+2024	playoffs	rus_prm (Russian Premier League), row rus-tur-24: game 0 up and 0 down play-off places, table '13th and 14th play the 4th and 3rd of the second tier over two legs; away goals '
+2024	playoffs	sco_first (Scottish Championship), row sco-187: game 0 up and 0 down play-off places, table '2nd to 4th: quarter-final 3rd v 4th, semi-final 2nd v winner, final v Premiershi'
+2024	playoffs	sco_prm (Scottish Premiership), row sco-186: game 0 up and 0 down play-off places, table '11th plays the Championship play-off winner (Championship 2nd to 4th) in a two-l'
+2024	playoffs	sco_second (Scottish League One), row sco-188: game 0 up and 0 down play-off places, table '2nd to 4th play off with Championship 9th for a Championship place; 9th plays of'
+2024	playoffs	sco_third (Scottish League Two), row sco-189: game 0 up and 0 down play-off places, table '2nd to 4th play off with League One 9th for a League One place (two-legged semi-'
+2024	playoffs	spa_second (Segunda División), row spa-187: game 0 up and 0 down play-off places, table '3rd to 6th (reserve teams excluded, next club moves up) play off for 1 place: tw'
+2024	playoffs	tur_second (TFF 1. Lig), row rus-tur-213: game 0 up and 0 down play-off places, table '3rd goes straight to the play-off final; 4th v 7th and 5th v 6th single match at'
+2024	playoffs	usa_mls (Major League Soccer), row arg-usa-240: game 0 up and 0 down play-off places, table '18 (as 2023)'
+2024	playoffs	wel_first (Cymru Premier), row wal-nir-irl-579: game 0 up and 0 down play-off places, table 'pos 3,4,5,6,7: European play-off'
+2024	subs_used	asia_club_champ (AFC Champions League Elite), row club-world-450: game 3, table 5 (5, a sixth in extra time)
+2024	subs_used	eng_cc_cup (EFL Cup), row eng-437: game 3, table 5 (5 (+1 in extra time))
+2024	subs_used	eng_charity (FA Community Shield), row eng-440: game 5, table 6 (6)
+2024	subs_used	eng_fa_cup (FA Cup), row eng-436: game 3, table 5 (5 (+1 in extra time))
+2024	subs_used	eng_first (EFL Championship), row eng-259: game 3, table 5 (5)
+2024	subs_used	eng_prm (Premier League), row eng-258: game 3, table 5 (5 (three stoppages plus half-time))
+2024	subs_used	eng_second (EFL League One), row eng-260: game 3, table 5 (5)
+2024	subs_used	eng_third (EFL League Two), row eng-261: game 3, table 5 (5)
+2024	subs_used	eur_super_cup (UEFA Super Cup), row uefa-192: game 3, table 5 (max 5 (3 stoppages))
+2024	subs_used	european_cup (UEFA Champions League), row uefa-186: game 3, table 5 (5, plus a 6th in extra time of knockout matches)
+2024	subs_used	ire_chal_cup (FAI Cup), row wal-nir-irl-594: game 3, table 5 (5 (inference from final line-ups))
+2024	subs_used	kor_league (K League 1), row aus-jap-kor-348: game 3, table 5 (5 with U-22 conditions; 3 even without a U-22 starter)
+2024	subs_used	pol_cup (Polish Cup), row gre-pol-cro-186: game 3, table 5 (5)
+2024	subs_used	pol_first (Ekstraklasa), row gre-pol-cro-213: game 3, table 5 (5)
+2024	subs_used	pol_second (I liga), row gre-pol-cro-267: game 3, table 5 (5)
+2024	subs_used	pol_super (Polish Super Cup), row gre-pol-cro-294: game 3, table 5 (5)
+2024	subs_used	por_cup (Taça de Portugal), row por-213: game 3, table 5 (5 (inference: IFAB temporary rule of 2020, permanent from 2022; FPF adoption not)
+2024	subs_used	por_prm (Primeira Liga), row por-208: game 3, table 5 (5 in 3 stoppages plus half-time)
+2024	subs_used	por_second (Liga Portugal 2), row por-209: game 3, table 5 (5 in 3 stoppages plus half-time (inference: Liga rule applies to both Liga compe)
+2024	subs_used	por_super (Supertaça Cândido de Oliveira), row por-214: game 3, table 5 (5 (inference: IFAB temporary rule of 2020, permanent from 2022; FPF adoption not)
+2024	subs_used	rus_first (Russian First League), row rus-tur-51: game 3, table 5 (5 (in three windows))
+2024	subs_used	rus_prm (Russian Premier League), row rus-tur-24: game 3, table 5 (5 (in three windows))
+2024	subs_used	sco_chal_cup (Scottish Challenge Cup), row sco-192: game 3, table 5 (5 (plus a sixth in extra time))
+2024	subs_used	sco_fa_cup (Scottish Cup), row sco-190: game 3, table 5 (5 (three substitution opportunities, plus a sixth in extra time))
+2024	subs_used	sco_first (Scottish Championship), row sco-187: game 3, table 5 (5 (plus a sixth in extra time))
+2024	subs_used	sco_lge_cup (Scottish League Cup), row sco-191: game 3, table 5 (5 (plus a sixth in extra time))
+2024	subs_used	sco_prm (Scottish Premiership), row sco-186: game 3, table 5 (5 (plus a sixth in extra time))
+2024	subs_used	sco_second (Scottish League One), row sco-188: game 3, table 5 (5 (plus a sixth in extra time))
+2024	subs_used	sco_third (Scottish League Two), row sco-189: game 3, table 5 (5 (plus a sixth in extra time))
+2024	subs_used	spa_cup (Copa del Rey), row spa-191: game 3, table 5 (5 (inference))
+2024	subs_used	spa_first (Primera División), row spa-186: game 3, table 5 (5 (inference))
+2024	subs_used	spa_second (Segunda División), row spa-187: game 3, table 5 (5 (inference))
+2024	subs_used	spa_super (Supercopa de España), row spa-192: game 3, table 5 (5 (inference))
+2024	subs_used	swe_cup (Svenska Cupen), row den-swe-305: game 3, table 5 (5)
+2024	subs_used	swe_first (Superettan), row den-swe-303: game 3, table 5 (5)
+2024	subs_used	swe_prm (Allsvenskan), row den-swe-302: game 3, table 5 (5)
+2024	subs_used	tur_first (Süper Lig), row rus-tur-186: game 3, table 5 (5 (in three windows))
+2024	subs_used	tur_second (TFF 1. Lig), row rus-tur-213: game 3, table 5 (5 (in three windows))
+2024	subs_used	tur_second_b (TFF 2. Lig), row rus-tur-240: game 3, table 5 (5 (in three windows))
+2024	subs_used	uefa_cup (UEFA Europa League), row uefa-189: game 3, table 5 (5, plus a 6th in extra time of knockout matches)
+2024	subs_used	usa_mls (Major League Soccer), row arg-usa-240: game 3, table 5 (5 in three opportunities, plus one concussion substitute)
+2024	subs_used	wel_first (Cymru Premier), row wal-nir-irl-579: game 3, table 5 (5)
+2024	up	con_merc_cup (Copa Merconorte), row club-world-443: game 1 (+0 play-off places), table na (n/a)
+2024	up	pol_first (Ekstraklasa), row gre-pol-cro-213: game 4 (+0 play-off places), table na (n/a)
+2024	up	por_second (Liga Portugal 2), row por-209: game 3 (+0 play-off places), table 2 (2)
+2024	up	sco_second (Scottish League One), row sco-188: game 2 (+0 play-off places), table 1 (1)
+2024	up	sco_third (Scottish League Two), row sco-189: game 2 (+0 play-off places), table 1 (1)
+2024	up	tur_second_b (TFF 2. Lig), row rus-tur-240: game 0 (+2 play-off places), table 3 (3)
+2024	up	usa_mls (Major League Soccer), row arg-usa-240: game 1 (+0 play-off places), table na (n/a (closed league))

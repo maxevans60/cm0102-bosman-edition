@@ -22,6 +22,7 @@
 #define CLUB_NAME 4u                /* long name, 52 bytes */
 #define CLUB_NATION 0x53u           /* nation pointer */
 #define CLUB_DIVISION 0x57u         /* club_comp pointer */
+#define CLUB_LAST_DIVISION 0x5bu    /* club_comp pointer: the division of the last season */
 #define COMPS 0xae23d0u             /* the club_comp table (0x6b bytes a record) */
 #define COMP_COUNT 0xae2378u
 #define COMP_SIZE 0x6bu
@@ -357,6 +358,11 @@ static void move_clubs(int season)
     for (int i = 0; i < count; i++)
         if (club[i].div != club[i].db_div) {
             wr32(g_mem, club[i].at + CLUB_DIVISION, club[i].div);
+            /* The division of the last season (+0x5b, resolve_database_indexes 0x5315a0 at 0x531657) becomes the
+             * database division: the club comes from there. FraLgeCup::collect_entrants 0x5bd160 takes 14 French
+             * National clubs whose last division is set and is not CFA (0x5bd222..0x5bd249) and stops at
+             * fra_lge_cup.cpp 73 (0x5bca3a) without 54 entrants. A club that had no division keeps its value. */
+            if (club[i].db_div) wr32(g_mem, club[i].at + CLUB_LAST_DIVISION, club[i].db_div);
             moved++;
         }
     int lists = 0, whole = 0;
@@ -379,12 +385,16 @@ static void move_clubs(int season)
     free(by_list);
 }
 
-void o_005267c0(void);
+void o_00524d70(void);
 
-/* database_trim_club_table 0x5267c0, cdecl (char database_size): called once, at 0x828395 in create_game. */
-RT_WRAP(005267c0, trim_club_table)
+/* database_trim_staff_tables 0x524d70, cdecl (char database_size): called once, at 0x828389 in create_game,
+ * after the load (0x8282a7) and before the trim of the club table (0x5267c0 at 0x828395). The moves run
+ * before it, on the whole data of every nation: the trims then keep the clubs and staff of the moved data, as
+ * they would for a database that held the real divisions. (After the trims the clubs of the nations that the
+ * player did not select are cut down to a few per nation, so a later point would see broken divisions.) */
+RT_WRAP(00524d70, trim_staff_tables)
 {
-    o_005267c0();
-    if (rt_unwinding || !season_game_changes() || !nrows) return;
-    move_clubs(season_start_year());
+    const char *off = getenv("RECOMP_CLUB_MOVES");     /* test switch: off moves no club */
+    if (season_game_changes() && nrows && !(off && !strcmp(off, "off"))) move_clubs(season_start_year());
+    o_00524d70();
 }

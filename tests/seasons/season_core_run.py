@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/seasons/season_core_run.py <cm0102_recomp> <game folder> [--database <folder>] [--year y]
-        [--days n] [--only base|season] [--keep <folder>]
+        [--days n] [--only base|season] [--keep <folder>] [--jobs n]
 
 The checks, played at the same time:
     base-off    a new base game (2001/02, 3.9.68, changing_rules = off) saved after n days (default 14): its save
@@ -23,7 +23,14 @@ The checks, played at the same time:
     later       the save of "season" with a part of a later version (version 2, 24 bytes): it loads with the
                 fields that this version knows, and the new save has a version 1 part.
     damaged     the save of "season" with a damaged part (year 1999): the load is refused with a message box.
---keep <folder> keeps the save of "season" there (for a check with another build).
+--keep <folder> keeps the save of "season" there (for a check with another build). --jobs n plays at most n
+games at a time (default 6).
+Names and club moves (slice 15): the runs read the season tables of the build (RECOMP_RULES_TABLE, build
+folder seasons/), when the build has them. Then also:
+    base-off    no competition gets a name and no club moves (the base game);
+    season      the log shows the club moves and the names of the start season, and the save holds the
+                database names of the competitions (club_comp.dat), which the load matches by name (0x60efd0);
+    reload      the load gives the names again.
 Each run uses -seed 1, the test clock and a new user folder. The steps are those of tests/smoke/smoke_run.py
 (Arsenal, or the first club of the list) in classic mode.
 """
@@ -136,6 +143,9 @@ def play(program, game, work, name, options, steps, days, env_extra=None, databa
                RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days),
                RECOMP_SCREEN_LOG="1", RECOMP_SEASON_LOG="1",
                RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots, steps)), **(env_extra or {}))
+    table = os.path.join(os.path.dirname(program), "seasons", "rules.tsv")
+    if os.path.exists(table):
+        env["RECOMP_RULES_TABLE"] = table
     start = time.time()
     try:
         r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True, errors="replace",
@@ -172,6 +182,8 @@ def main(argv):
     days = int(argv[argv.index("--days") + 1]) if "--days" in argv else 14
     only = argv[argv.index("--only") + 1] if "--only" in argv else None
     keep = os.path.abspath(argv[argv.index("--keep") + 1]) if "--keep" in argv else None
+    jobs_at_once = int(argv[argv.index("--jobs") + 1]) if "--jobs" in argv else 6
+    tables = os.path.exists(os.path.join(os.path.dirname(program), "seasons", "names.tsv"))
     failed = []
 
     def fail(text):
@@ -182,7 +194,7 @@ def main(argv):
         steps = new_game_steps()
         season_env = {"RECOMP_START_SEASON": str(year)}
         jobs = {}
-        with concurrent.futures.ThreadPoolExecutor(6) as pool:
+        with concurrent.futures.ThreadPoolExecutor(jobs_at_once) as pool:
             if only in (None, "base"):
                 jobs["base-off"] = pool.submit(play, program, game, work, "base-off", {"changing_rules": "off"},
                                                steps, days)
@@ -206,6 +218,11 @@ def main(argv):
                 fail(f"base-off: the save has the season part {part}")
             else:
                 print("ok    base-off: the save has no season part")
+            blog = results["base-off"][1]
+            if tables and ("recomp: names of" in blog or "recomp: club moves of" in blog):
+                fail("base-off: the base game got names or club moves")
+            elif tables:
+                print("ok    base-off: no names and no club moves")
         if "base-on" in results and results["base-on"][0]:
             part = read_part(results["base-on"][0])
             if part != (1, 16, 2001, 1):
@@ -229,6 +246,16 @@ def main(argv):
                 fail(f"season: the season part is {part}, not (1, 16, {year}, 1)")
             else:
                 print(f"ok    season: the save has the part with {year} and changing rules on")
+            if tables:
+                m = re.search(r"recomp: names of %d/\d\d: (\d+) competition records renamed" % year, log)
+                comps = savfile.Sav(path).read_member("club_comp.dat")
+                if not m or int(m.group(1)) == 0 or f"recomp: club moves of {year}/" not in log:
+                    fail(f"season: the log shows no names or no club moves of {year}")
+                elif b"English First Division" not in comps or b"Football League Championship" in comps:
+                    fail("season: the save does not hold the database names of the competitions")
+                else:
+                    print(f"ok    season: {m.group(1)} names and the club moves of {year}; the save holds the "
+                          "database names")
             opath = results.get("season-off", (None,))[0]
             if opath and read_part(opath) != (1, 16, year, 0):
                 fail(f"season-off: the season part is {read_part(opath)}, not (1, 16, {year}, 0)")
@@ -266,7 +293,7 @@ def main(argv):
             if keep:
                 shutil.copyfile(path, os.path.join(keep, f"season-{year}.sav"))
             jobs = {}
-            with concurrent.futures.ThreadPoolExecutor(4) as pool:
+            with concurrent.futures.ThreadPoolExecutor(min(4, jobs_at_once)) as pool:
                 for name, src in saves.items():
                     saved = os.path.join(work, name + ".sav")
                     if src != saved:
@@ -289,6 +316,8 @@ def main(argv):
                     continue
                 if f"the save is a game of {year}/{(year + 1) % 100:02d}" not in rlog:
                     fail(f"{name}: the runtime did not read the year from the part")
+                if tables and name == "reload" and "recomp: names of" not in rlog:
+                    fail("reload: the load did not give the names again")
                 part = read_part(rpath)
                 if part != part_want:
                     fail(f"{name}: the season part of the new save is {part}, not {part_want}")
