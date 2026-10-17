@@ -3635,16 +3635,16 @@ address	file	name	confidence	model	cited_in
 0x697240	manager_manager.cpp	MANAGER_MANAGER::judge_player_release	medium	opus	
 0x697430	manager_manager.cpp	MANAGER_MANAGER::apply_release_confidence_penalty	medium	opus	
 0x6978f0	manager_manager.cpp	MANAGER_MANAGER::apply_transfer_confidence_changes	high	opus	
-0x697c40	manager_manager.cpp	MANAGER_MANAGER::weekly_board_confidence_update	medium	opus	
+0x697c40	manager_manager.cpp	MANAGER_MANAGER::weekly_board_confidence_update	high	opus	
 0x69aba0	manager_manager.cpp	MANAGER_MANAGER::consider_sacking_manager	medium	opus	
 0x69b350	manager_manager.cpp	MANAGER_MANAGER::get_departure_reason	medium	opus	
 0x69b650	manager_manager.cpp	MANAGER_MANAGER::process_pending_departures	medium	opus	
 0x69b780	manager_manager.cpp	open_resign_confirm_dialog	high	opus	
 0x69b790	manager_manager.cpp	MANAGER_MANAGER::remove_club_manager	medium	opus	
 0x69ba50	manager_manager.cpp	MANAGER_MANAGER::add_job_vacancy	high	opus	
-0x69c540	manager_manager.cpp	best_manager_candidate_score	medium	opus	
+0x69c540	manager_manager.cpp	MANAGER_MANAGER::best_manager_candidate_score	medium	opus	
 0x69c6b0	manager_manager.cpp	news_job_application_reply_text	high	opus	
-0x69c7e0	manager_manager.cpp	post_board_interest_memo_news	medium	opus	
+0x69c7e0	manager_manager.cpp	MANAGER_MANAGER::post_board_interest_memo_news	medium	opus	
 0x69c910	manager_manager.cpp	news_board_interest_memo_text	high	opus	
 0x69ca00	manager_manager.cpp	MANAGER_MANAGER::apply_for_job	high	opus	
 0x69d060	manager_manager.cpp	MANAGER_MANAGER::fix_missing_jobs	high	opus	
@@ -3652,7 +3652,7 @@ address	file	name	confidence	model	cited_in
 0x69eb50	manager_manager.cpp	MANAGER_MANAGER::is_club_in_financial_trouble	low	opus	
 0x69ebc0	manager_manager.cpp	appoint_manager_to_club	high	opus	
 0x69f7c0	manager_manager.cpp	MANAGER_MANAGER::set_board_ratings	medium	opus	
-0x69f810	manager_manager.cpp	is_staff_suitable_for_job	medium	opus	
+0x69f810	manager_manager.cpp	MANAGER_MANAGER::is_staff_suitable_for_job	medium	opus	
 0x69fc60	manager_manager.cpp	MANAGER_MANAGER::is_vacancy_candidate	medium	opus	
 0x69fd50	manager_manager.cpp	post_job_rumour_news	high	opus	
 0x69fef0	manager_manager.cpp	news_job_rumour_text	high	opus	
@@ -3751,12 +3751,12 @@ address	file	name	confidence	model	cited_in
 0x6b5ce0	match_day.cpp	MATCH_DAY::step_background_match	high	opus	2026-10-15-commentary-speed-inventory.md,user32.c
 0x6b5f00	match_day.cpp	match_day_apply_match_result	high	opus	
 0x6b61e0	match_day.cpp	match_day_is_fixture_of_human_interest	medium	opus	
-0x6b6510	match_day.cpp	match_day_compare_entries	medium	opus	
+0x6b6510	match_day.cpp	match_day_compare_entries	high	opus	
 0x6b6570	match_day.cpp	match_day_get_period_rank	medium	opus	
 0x6b66a0	match_day.cpp	match_day_can_quick_simulate	medium	opus	
 0x6b696a	match_day.cpp	nop_padding_6b696a	high	opus	
 0x6b6970	match_day.cpp	match_day_drop_viewer_and_finish_match	medium	opus	
-0x6b6cc0	match_day.cpp	match_day_generate_player_match_stories	medium	opus	
+0x6b6cc0	match_day.cpp	match_day_apply_post_match_player_changes	medium	opus	
 0x6b6d20	match_day.cpp	mid_instruction_6b6d20	high	opus	
 0x6b74a0	match_day.cpp	match_day_process_player_incidents	medium	opus	
 0x6b79a0	match_day.cpp	match_day_post_player_reaction_news	medium	opus	
@@ -3783,7 +3783,7 @@ address	file	name	confidence	model	cited_in
 0x6bd5b0	match_eng.cpp	CM3_MATCH_ENGINE::is_path_ahead_clear	medium	opus	
 0x6bd6b0	match_eng.cpp	CM3_MATCH_ENGINE::update_side_pressure_flag	low	opus	
 0x6bd760	match_eng.cpp	CM3_MATCH_ENGINE::build_action_order	medium	opus	
-0x6bd840	match_eng.cpp	compare_action_order	medium	opus	
+0x6bd840	match_eng.cpp	compare_action_order	high	opus	
 0x6bd930	match_eng.cpp	CM3_MATCH_ENGINE::period_completed	high	opus	
 0x6be120	match_eng.cpp	CM3_MATCH_ENGINE::post_period_end_events	medium	opus	
 0x6be520	match_eng.cpp	CM3_MATCH_ENGINE::choose_shootout_takers	medium	opus	
@@ -3860,10 +3860,10 @@ address	file	name	confidence	model	cited_in
 0x6cf750	match_eng.cpp	CM3_MATCH_ENGINE::record_possession_tick	medium	opus	
 0x6cfc60	match_eng.cpp	CM3_MATCH_ENGINE::referee_judge_tackle	medium	opus	2026-10-14-violent-conduct-inventory.md
 0x6cfca0	match_eng.cpp	CM3_MATCH_ENGINE::referee_check_foul	medium	opus	
-0x6cfcd0	match_eng.cpp	match_eng_referee_decide_foul_punishment	medium	opus	
-0x6cfd10	match_eng.cpp	match_eng_referee_decide_booking	medium	opus	
-0x6cfd40	match_eng.cpp	match_eng_referee_decide_misconduct_card	medium	opus	2026-10-14-violent-conduct-inventory.md
-0x6cfd70	match_eng.cpp	match_eng_referee_check_offside	medium	opus	
+0x6cfcd0	match_eng.cpp	CM3_MATCH_ENGINE::referee_decide_foul_punishment	medium	opus	
+0x6cfd10	match_eng.cpp	CM3_MATCH_ENGINE::referee_decide_booking	medium	opus	
+0x6cfd40	match_eng.cpp	CM3_MATCH_ENGINE::referee_decide_misconduct_card	medium	opus	2026-10-14-violent-conduct-inventory.md
+0x6cfd70	match_eng.cpp	CM3_MATCH_ENGINE::referee_check_offside	medium	opus	
 0x6cfda0	match_eng.cpp	CM3_MATCH_ENGINE::is_player_nearest_to_ball	medium	opus	
 0x6cfe10	match_eng.cpp	CM3_MATCH_ENGINE::roll_challenge_injuries	medium	opus	
 0x6d0980	match_eng.cpp	CM3_MATCH_ENGINE::injure_player	high	opus	
@@ -3918,7 +3918,7 @@ address	file	name	confidence	model	cited_in
 0x6e0fe0	match_man.cpp	match_man_compare_players_by_condition	medium	opus	
 0x6e1090	match_man.cpp	MATCH_MAN::make_substitutions	high	opus	2026-10-14-assistant-and-days-inventory.md
 0x6e1940	match_man.cpp	MATCH_MAN::choose_captain	high	opus	2026-10-15-assistant-pick-inventory.md,picker.c
-0x6e1a40	match_man.cpp	MATCH_MAN::find_captain_slot	medium	opus	
+0x6e1a40	match_man.cpp	MATCH_MAN::find_captain_slot	high	opus	
 0x6e1aa0	match_man.cpp	MATCH_MAN::reassign_positions	medium	opus	2026-10-14-assistant-and-days-inventory.md
 0x6e1cd0	match_man.cpp	MATCH_MAN::find_match_player	high	opus	
 0x6e1cf0	match_man.cpp	match_man_get_captain_score	high	opus	2026-10-15-assistant-pick-inventory.md,picker.c
@@ -3956,8 +3956,8 @@ address	file	name	confidence	model	cited_in
 0x6f46b0	match_pl.cpp	MATCH_PLAYER::move_to_grid_cell	high	opus	
 0x6f4920	match_pl.cpp	MATCH_PLAYER::set_facing_direction	medium	opus	
 0x6f4a30	match_pl.cpp	MATCH_PLAYER::get_facing_angle	high	opus	
-0x6f4a40	match_pl.cpp	MATCH_PLAYER::get_own_team_goals	medium	opus	
-0x6f4a70	match_pl.cpp	MATCH_PLAYER::get_opposition_goals	medium	opus	
+0x6f4a40	match_pl.cpp	MATCH_PLAYER::get_own_team_goals	high	opus	
+0x6f4a70	match_pl.cpp	MATCH_PLAYER::get_opposition_goals	high	opus	
 0x6f4aa0	match_pl.cpp	MATCH_PLAYER::update_match_rating	medium	opus	
 0x6f55c0	match_pl.cpp	MATCH_PLAYER::update_ratings_and_condition	medium	opus	
 0x6f56c0	match_pl.cpp	MATCH_PLAYER::drain_stamina	medium	opus	
@@ -3974,9 +3974,9 @@ address	file	name	confidence	model	cited_in
 0x6fa490	match_pl.cpp	MATCH_PLAYER::play_ball_into_area	low	opus	
 0x6fad40	match_pl.cpp	MATCH_PLAYER::pass	high	opus	
 0x6fe364	match_pl.cpp	MATCH_PLAYER::pass_fragment_6fe364	high	opus	
-0x7002f0	match_pl.cpp	match_add_event_no_players	medium	opus	
-0x700320	match_pl.cpp	match_engine_get_ball_col	medium	opus	
-0x700330	match_pl.cpp	match_engine_get_ball_row	medium	opus	
+0x7002f0	match_pl.cpp	match_add_event_no_players	high	opus	
+0x700320	match_pl.cpp	match_engine_get_ball_col	high	opus	
+0x700330	match_pl.cpp	match_engine_get_ball_row	high	opus	
 0x700340	match_pl.cpp	match_engine_get_ball_height	low	opus	
 0x700350	match_pl.cpp	match_engine_set_ball_height	low	opus	
 0x700360	match_pl.cpp	match_engine_set_ball_col	high	opus	

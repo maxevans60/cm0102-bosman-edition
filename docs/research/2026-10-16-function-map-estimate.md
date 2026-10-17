@@ -1610,6 +1610,28 @@ Eleven renames make free functions into members, because the body reads ECX or e
 | 0x687470 | `League::init_table_row_after_assert` | `League::init_table_row_fragment_687470` | takes reviewer | `League::init_table_row_fragment_687470` |
 
 
+#### Review r09 (medium rows of tier 5, 2026-10-17)
+
+Run `review-r09`: 8 Opus reviewers checked 208 medium rows of the manager manager, the match day and match engine, the match player, the match officials, match stats, media and network.h. Agree 150, fix 48, rename 10. The third check took the reviewer's name in all 10 rows. 58 rows changed in all. The reviewers took 134,000 to 167,000 tokens each, and the third check took 99,000.
+
+Seven renames correct the convention. Three are `MANAGER_MANAGER` members, and four are the referee forwarders 0x6cfcd0, 0x6cfd10, 0x6cfd40 and 0x6cfd70, which r03 left open. They are now `CM3_MATCH_ENGINE::` members. 0x6b6cc0 is `match_day_apply_post_match_player_changes`, because its main work copies morale and reputation back from the match record. Two Match_Stats rows now say match_stats.cpp, as the asserts do. The placement has no match_stats.cpp file, so the docs still show them under match_screens.cpp.
+
+From this wave on, the brief prints the current row in run order. Its earlier grep hint sorted the runs by folder name and could print an old Haiku row. The merge check refuses a fix whose name differs from the current row, so no wrong row got in.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x69c540 | `best_manager_candidate_score` | `MANAGER_MANAGER::best_manager_candidate_score` | takes reviewer | `MANAGER_MANAGER::best_manager_candidate_score` |
+| 0x69c7e0 | `post_board_interest_memo_news` | `MANAGER_MANAGER::post_board_interest_memo_news` | takes reviewer | `MANAGER_MANAGER::post_board_interest_memo_news` |
+| 0x69f810 | `is_staff_suitable_for_job` | `MANAGER_MANAGER::is_staff_suitable_for_job` | takes reviewer | `MANAGER_MANAGER::is_staff_suitable_for_job` |
+| 0x6b6cc0 | `match_day_generate_player_match_stories` | `match_day_apply_post_match_player_changes` | takes reviewer | `match_day_apply_post_match_player_changes` |
+| 0x6cfcd0 | `match_eng_referee_decide_foul_punishment` | `CM3_MATCH_ENGINE::referee_decide_foul_punishment` | takes reviewer | `CM3_MATCH_ENGINE::referee_decide_foul_punishment` |
+| 0x6cfd10 | `match_eng_referee_decide_booking` | `CM3_MATCH_ENGINE::referee_decide_booking` | takes reviewer | `CM3_MATCH_ENGINE::referee_decide_booking` |
+| 0x6cfd40 | `match_eng_referee_decide_misconduct_card` | `CM3_MATCH_ENGINE::referee_decide_misconduct_card` | takes reviewer | `CM3_MATCH_ENGINE::referee_decide_misconduct_card` |
+| 0x6cfd70 | `match_eng_referee_check_offside` | `CM3_MATCH_ENGINE::referee_check_offside` | takes reviewer | `CM3_MATCH_ENGINE::referee_check_offside` |
+| 0x729bd0 | `match_stats_get_record_bucket` | `match_stats_get_record_bucket` | takes reviewer | `match_stats_get_record_bucket` |
+| 0x72b160 | `match_stats_compare_events` | `match_stats_compare_events` | takes reviewer | `match_stats_compare_events` |
+
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
