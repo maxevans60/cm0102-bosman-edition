@@ -143,8 +143,8 @@ def main(argv):
               "scan: 25 seasons, 2001/02 and 2002/03 official")
         check(rows["2003/04"][0] == STATUS["IN_DOWNLOAD"] and rows["2012/13"][0] == STATUS["IN_DOWNLOAD"],
               "scan: the two zips show as in the download")
-        check(rows["2004/05"][0] == STATUS["NO_DATABASE"] and rows["2006/07"][0] == STATUS["NO_DATABASE"],
-              "scan: 2004/05 and 2006/07 have no database")
+        check(rows["2004/05"][0] == STATUS["MISSING"] and rows["2006/07"][0] == STATUS["MISSING"],
+              "scan: 2004/05 (Summer 2004) and 2006/07 (Summer 2006) have no zip in this game folder")
         check(rows["2005/06"][0] == STATUS["MISSING"], "scan: a season without its zip shows as missing")
 
         # 3. first pick
@@ -277,8 +277,8 @@ def main(argv):
               "a retry with the good zip works, removes the stale temporary folder and the empty parent")
         out, _ = run(tool, "identify", os.path.join(save, "Databases", "September 2012"))
         check(out == "September 2012", "the retry gives September 2012")
-        check(prepare(tool, game, save, 2001)[0] == PREPARE["OFFICIAL"] and prepare(tool, game, save, 2004)[0] == PREPARE["NO_DATABASE"],
-              "prepare 2001 is official, prepare 2004 has no database")
+        check(prepare(tool, game, save, 2001)[0] == PREPARE["OFFICIAL"] and prepare(tool, game, save, 2026)[0] == PREPARE["NO_DATABASE"],
+              "prepare 2001 is official, prepare 2026 has no database")
         os.unlink(os.path.join(game, "Seasons", "October 2003.zip"))
         status, name, unpacked, err = prepare(tool, game, save, 2003)
         check(status == PREPARE["OK"] and unpacked == 0, "an unpacked season starts without its zip")

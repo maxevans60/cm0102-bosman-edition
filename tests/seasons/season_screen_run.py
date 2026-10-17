@@ -3,7 +3,7 @@
 
 Usage:
     python3 -I tests/seasons/season_screen_run.py <cm0102_recomp> <game folder> <folder of source zips>
-        [--ref-build <program>] [--only <run>] [--shots <folder>]
+        [--ref-build <program>] [--only <run>] [--shots <folder>] [--own-zips <folder>]
 
 <folder of source zips> is test-fixtures/databases/zips. The run makes the season zips of four seasons with
 tools/release/make_season_zips.py and a new game folder: links to the files of <game folder> and Seasons/ with
@@ -15,6 +15,9 @@ Runs, played at the same time (one per era, Q240):
     2010    2010s: the 2010/11 tile (September 2010 ODB)
     2021    early 2020s: the 2021/22 tile (October 2021)
     2025    league phase: the 2025/26 tile (December 2025)
+    2004    with --own-zips: the 2004/05 tile (Summer 2004, our own database, Q351)
+    2006    with --own-zips: the 2006/07 tile (Summer 2006, our own database, Q351). <folder> holds the source
+            zips of the converted folders; it is a second source of make_season_zips.py.
 Each run opens the screen from Setup Game, clicks the tile and Choose, waits for Setup Game, starts a new game
 with the steps of tests/smoke/smoke_run.py and saves 1 day after the first news screen. Checks: the first news
 screen is in July of the season, settings.txt has database and season of the tile, a zipped database is
@@ -54,7 +57,8 @@ MAKE = os.path.join(ROOT, "tools", "release", "make_season_zips.py")
 SETUP_SEASON = "click 613 437"
 # Layout C (Q346): a decade per row, a column per last digit of the start year: x = 132 + 69 * digit,
 # y = 89 + 93 * row.
-TILE = {2001: (201, 89), 2002: (270, 89), 2003: (339, 89), 2010: (132, 182), 2021: (201, 275), 2025: (477, 275)}
+TILE = {2001: (201, 89), 2002: (270, 89), 2003: (339, 89), 2004: (408, 89), 2006: (546, 89), 2010: (132, 182), 2021: (201, 275),
+        2025: (477, 275)}
 CHOOSE = "click 675 573"                    # Start <season>, the yellow button
 CUSTOM_TILE = "click 649 275"
 NEXT_FOLDER = "click 470 415"
@@ -115,12 +119,12 @@ def play_custom(program, game, work, zips):
     return (path if r.returncode == 0 and os.path.exists(path) else None), r.stderr, time.time() - start
 
 
-def make_game(game, zips, work):
+def make_game(game, zips, work, own=None):
     """A game folder as in a download: links to the files of game, and Seasons/ with the season zips."""
     out = os.path.join(work, "zips")
     only = [a for _, (_, z) in RUNS.items() if z for a in ("--only", z)]
-    r = subprocess.run([sys.executable, "-I", MAKE, "--season-dbs", zips, "--out", out, *only], capture_output=True,
-                       text=True)
+    sources = ["--season-dbs", zips] + (["--season-dbs", own] if own else [])
+    r = subprocess.run([sys.executable, "-I", MAKE, *sources, "--out", out, *only], capture_output=True, text=True)
     if r.returncode:
         raise SystemExit("make_season_zips.py failed: " + r.stderr[-400:])
     folder = os.path.join(work, "game")
@@ -151,6 +155,10 @@ def main(argv):
     ref = os.path.abspath(argv[argv.index("--ref-build") + 1]) if "--ref-build" in argv else None
     only = argv[argv.index("--only") + 1] if "--only" in argv else None
     shots = os.path.abspath(argv[argv.index("--shots") + 1]) if "--shots" in argv else None
+    own = os.path.abspath(argv[argv.index("--own-zips") + 1]) if "--own-zips" in argv else None
+    if own:
+        RUNS[2004] = ("folder:Summer 2004", "Summer 2004")
+        RUNS[2006] = ("folder:Summer 2006", "Summer 2006")
     if shots:
         os.makedirs(shots, exist_ok=True)
     failed = []
@@ -161,7 +169,7 @@ def main(argv):
             failed.append(text)
 
     with tempfile.TemporaryDirectory(prefix="cm0102-season-screen-") as work:
-        folder = make_game(game, zips, work)
+        folder = make_game(game, zips, work, own)
         jobs = {}
         with concurrent.futures.ThreadPoolExecutor(7) as pool:
             for year in RUNS:
