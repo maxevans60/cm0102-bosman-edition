@@ -9,7 +9,7 @@ All 4428 globals are in `globals.tsv`, one row per address, in 746 address group
 
 - Confidence: 3808 high, 574 medium, 46 low.
 - Model: 3015 script, 1412 sonnet, 1 opus.
-- Runs: data-script, data-w01, data-w01-check, data-w02, data-w03, conf-c01-g, conf-c02-g, conf-c03-g, conf-c04-g, conf-c05-g.
+- Runs: data-script, data-w01, data-w01-check, data-w02, data-w03, conf-c01-g, conf-c02-g, conf-c03-g, conf-c04-g, conf-c05-g, conf-c06-g, conf-c07-g.
 - Script names: key ids from the name chains of the key id load (0x601a40), read-only float constants by value, vtables by the constructor or destructor that stores them, string pointers, and globals that only library code touches.
 
 | Owner file | Globals |

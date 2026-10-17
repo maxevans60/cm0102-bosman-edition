@@ -2002,6 +2002,50 @@ The caller check adds 131,864 tokens to c02 to c05. The yield fell in c04 and c0
 
 So about 260 rows have new evidence for a second round. Rows with only new neighbours gave 32% in this pass, but a second round reads weaker neighbours, so expect 15% to 25%: about 40 to 65 rows for about 1.4 million tokens. The other 950 rows have no new evidence. The same dossiers will not raise them. Only a new source can: a runtime trace, a disassembly study of field offsets, or an open source match for the library rows.
 
+#### Confidence round 2: c06 and c07 (Max, 2026-10-17)
+
+Max chose a second round on the rows that a raise of c01 to c05 gave new evidence. `confidence_scope.py dossiers` rebuilt the dossiers with all runs. `confidence_round2.py` found 229 rows that are not high and have a caller or callee that c01 to c05 raised or renamed (`sweep/conf-scope-r2.tsv`). They went into 10 batches: conf-c06-aa to conf-c06-ah, and conf-c07-aa and conf-c07-ab. The Sonnet brief got a "Caller check" first: a caller whose high rests on the row cannot raise it.
+
+Run `conf-c06`: agree 141, fix 46, rename 3. The third check took the checker's row for all three renames. Run `conf-c07`: agree 35, fix 4, rename 0. There were no global conflicts and no global was found wrong. Then one Opus agent checked all 48 caller-quote raises of the round (run `conf-caller2`) and found none wrong. That includes 0x6830b0 and 0x6831a0, which `conf-caller` had reverted and which now quote other callers that are high on their own asserts and key globals.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 229 |
+| Rows raised to high | 52 (22.7%) |
+| Rows with a new name | 3 |
+| Wrong in the Opus caller check | 0 of 48 |
+| Total tokens of the round | 1,822,332 |
+| Tokens per raised row | 35,045 |
+
+Quote kinds of the 52 raised rows: caller 48, global 3, string 1. Confidence in `names.tsv` is now 5,703 high, 1,132 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c06-aa | 27 | 9 | 188,914 |
+| Checker | Sonnet | conf-c06-ab | 20 | 14 | 208,580 |
+| Checker | Sonnet | conf-c06-ac | 20 | 9 | 183,635 |
+| Checker | Sonnet | conf-c06-ad | 28 | 9 | 173,475 |
+| Checker | Sonnet | conf-c06-ae | 28 | 1 | 132,302 |
+| Checker | Sonnet | conf-c06-af | 20 | 0 | 108,345 |
+| Checker | Sonnet | conf-c06-ag | 25 | 2 | 166,433 |
+| Checker | Sonnet | conf-c06-ah | 22 | 4 | 180,531 |
+| Checker | Sonnet | conf-c07-aa | 20 | 2 | 120,378 |
+| Checker | Sonnet | conf-c07-ab | 19 | 2 | 126,292 |
+| Third check | Opus | judge-input of conf-c06 (3 rows) | 3 | 0 | 89,619 |
+| Caller check | Opus | conf-caller2 (48 rows) | 48 | 0 | 143,828 |
+
+The checkers took 1,588,885 tokens, about 6,940 per row. That is more than in round 1, because the caller check makes a checker read each quoted caller. The round cost about 1.8 million tokens, above the 1.4 million of the estimate, and gave 52 rows, inside the estimate of 40 to 65.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x4e5850 | `compare_squad_players_by_rating_then_reputation` | `compare_squad_players_by_appearances_then_reputation` | takes reviewer | `compare_squad_players_by_appearances_then_reputation` |
+| 0x6ceb90 | `CM3_MATCH_ENGINE::pick_player_for_role` | `CM3_MATCH_ENGINE::pick_restart_taker` | takes reviewer | `CM3_MATCH_ENGINE::pick_restart_taker` |
+| 0x7e6f20 | `comp_is_non_competitive` | `comp_is_reserve_or_minor_comp` | takes reviewer | `comp_is_reserve_or_minor_comp` |
+
+Checker conf-c06-aa found that 0x4cc0b0 `move_to_reserves` and 0x4cc0f0 `move_to_first_team` look swapped: the first accepts the reserve placement codes and promotes. Both rows were outside its batch, so they need a check.
+
+1,160 rows are still not high. 181 of them have a caller or callee that round 2 raised. Most of those rows were in round 2 already, with other neighbours. A third round would read fewer new facts per row, so expect a yield under round 2's 22.7% at more than 35,000 tokens per raised row.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
