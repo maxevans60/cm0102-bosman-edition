@@ -13,7 +13,7 @@ The final table is the same as the starting table in the spec. No forum post rep
 | 2003/04 | October 2003 | n/a | [t=266](https://champman0102.co.uk/viewtopic.php?t=266) | none |
 | 2004/05 | none | | | |
 | 2005/06 | September 2005 | n/a | [t=38](https://champman0102.co.uk/viewtopic.php?t=38) | none |
-| 2006/07 | none | | | |
+| 2006/07 | Summer 2006 (our own, Q351) | n/a | none | none |
 | 2007/08 | November 2007 | n/a | [t=39](https://champman0102.co.uk/viewtopic.php?t=39) | February 2008 |
 | 2008/09 | September 2008 | n/a | [t=41](https://champman0102.co.uk/viewtopic.php?t=41) | December 2008, March 2009 |
 | 2009/10 | September 2009 | n/a | [t=43](https://champman0102.co.uk/viewtopic.php?t=43) | February 2010 ODB, April 2010 SIM, June 2010 |
@@ -34,7 +34,7 @@ The final table is the same as the starting table in the spec. No forum post rep
 | 2024/25 | October 2024 | n/a | [t=6452](https://champman0102.co.uk/viewtopic.php?t=6452) | none |
 | 2025/26 | December 2025 | n/a | [t=10207](https://champman0102.co.uk/viewtopic.php?t=10207) | May 2026 |
 
-This gives 21 season databases, as the spec says. The Empty database ([t=275](https://champman0102.co.uk/viewtopic.php?t=275)) has no season. It holds no clubs and cannot start a game.
+This gives 21 season databases, as the spec says. Summer 2006 (2026-10-17, Q351) makes 22: our own 2006/07 database, made outside the repo from Football Manager 2007 facts with the November 2007 ratings and positions. It stores real years, so its date-shift row is 0 in every field, and the release script takes its source zip with `--own-dbs`. The Empty database ([t=275](https://champman0102.co.uk/viewtopic.php?t=275)) has no season. It holds no clubs and cannot start a game.
 
 ## Differences from the starting table
 

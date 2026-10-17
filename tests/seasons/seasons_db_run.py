@@ -143,8 +143,8 @@ def main(argv):
               "scan: 25 seasons, 2001/02 and 2002/03 official")
         check(rows["2003/04"][0] == STATUS["IN_DOWNLOAD"] and rows["2012/13"][0] == STATUS["IN_DOWNLOAD"],
               "scan: the two zips show as in the download")
-        check(rows["2004/05"][0] == STATUS["NO_DATABASE"] and rows["2006/07"][0] == STATUS["NO_DATABASE"],
-              "scan: 2004/05 and 2006/07 have no database")
+        check(rows["2004/05"][0] == STATUS["NO_DATABASE"] and rows["2006/07"][0] == STATUS["MISSING"],
+              "scan: 2004/05 has no database, 2006/07 (Summer 2006) has no zip in this game folder")
         check(rows["2005/06"][0] == STATUS["MISSING"], "scan: a season without its zip shows as missing")
 
         # 3. first pick
