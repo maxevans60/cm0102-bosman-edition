@@ -76,7 +76,8 @@ def check(program, game, base, name, timeout, extra=None, steps=None, env_extra=
         if r.returncode != 0:
             line = next((ln for ln in r.stderr.splitlines() if "timed out" in ln), r.stderr[-120:].strip())
             if r.returncode == 99:      # --select-all: a message box of the game ended the run
-                if EXPECTED_STOP in box_text(r.stderr) and env_extra.get("RECOMP_START_SEASON") != "2001":
+                if EXPECTED_STOP in box_text(r.stderr) and env_extra.get("RECOMP_START_SEASON") != "2001" \
+                        and reserve_text(r.stderr).endswith("result 1"):     # the staff step ran and passed
                     return True, took, f"expected stop after {last}: {EXPECTED_STOP} (Ligue 1 club count, slice 15)"
                 return False, took, f"box after {last}" + box_text(r.stderr)
             return False, took, f"code {r.returncode} after {last}: {line[:110]}"

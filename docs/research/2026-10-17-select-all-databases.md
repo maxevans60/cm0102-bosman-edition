@@ -99,39 +99,41 @@ At the first sizing site, `staff_reserve_estimate` reads nation.dat, club.dat an
 - The test through 0x540a50 is left out. It finds the parent club of some reserve clubs of Spain, Germany and Portugal (key ids 0x9cf488, 0x9cf314, 0x9cf434 and the club key ids from 0x9d0120). It can only lower the count.
 - Loop 4: one for a club with no manager (+0xcf is the club's manager, `2026-10-15-assistant-pick-inventory.md`) in a selected nation with a division (+0x57) and a reputation not 0, or with reputation 7501 or more (0x527d03..0x527d31); and one for each national team in nat_club.dat with no manager.
 
-The estimate is not a proven upper limit. Before 0x527240 runs, the game clears some manager links that the files hold (inference: the staff pass, for example at 0x52d353, and the trim 0x524d70), so loop 4 needs more than the files show (3.9.68: 3,712 against 3,404 from the files, read from memory with a test wrap). Loops 1 to 3 count more than the game makes (3.9.68: 19,241 against 18,911), inference: because the 0x540a50 test is left out. A proven upper limit (every manager slot counted as empty) is 24,920 for the 3.9.68 data, so it would give 46,000 to the 3.9.68 data in a Databases folder and to 7 of the 14 season databases that fit (October 2003 to October 2018).
+The file counts alone are not an upper limit. Before 0x527240 runs, the game clears some manager links that the files hold: the staff pass (`database_links.c` `database_leave_club`, and the national manager at 0x52d353) and the trim 0x524d70. So loop 4 needs more than the files show: 3.9.68 3,712 against 3,404 from the files (read from memory with a test wrap), October 2003 168 more, September 2005 163 more, November 2007 79 more. Loops 1 to 3 count more than the game makes (3.9.68: 19,241 against 18,911), inference: because the 0x540a50 test is left out.
 
-| Data set | Estimate | Used (Select All) | Reserve |
-|---|---|---|---|
-| Original 3.9.68 (in Databases) | 22,645 | 22,623 | 23,000 |
-| October 2003 | 22,982 | 22,809 | 23,000 |
-| September 2005 | 23,061 | 22,908 | 46,000 |
-| November 2007 | 23,832 | 23,664 | 46,000 |
-| September 2008 | 24,637 | 24,483 | 46,000 |
-| September 2009 | 24,752 | 24,636 | 46,000 |
-| September 2010 ODB | 25,017 | 24,926 | 46,000 |
-| September 2011 ODB | 25,836 | 25,779 | 46,000 |
-| September 2012 | 27,383 | 27,156 | 46,000 |
-| Autumn 2013 | 25,076 | 24,818 | 46,000 |
-| October 2014 | 23,004 | 22,758 | 46,000 |
-| October 2015 | 21,933 | 21,820 | 23,000 |
-| October 2016 | 21,954 | 21,844 | 23,000 |
-| October 2017 | 22,045 | 21,841 | 23,000 |
-| October 2018 | 22,480 | 22,245 | 23,000 |
-| October 2019 | 19,711 | 19,488 | 23,000 |
-| November 2020 | 19,591 | 19,324 | 23,000 |
-| October 2021 | 14,639 | 14,499 | 23,000 |
-| October 2022 | 15,043 | 14,902 | 23,000 |
-| October 2023 | 14,899 | 14,776 | 23,000 |
-| October 2024 | 15,323 | 15,187 | 23,000 |
-| December 2025 | 15,699 | 15,542 | 23,000 |
+For this reason the estimate adds a margin of 10 % of its loop 4 count (`LOOP4_MARGIN_PCT`, rounded up). The largest shortfall of loop 4 measured is 9 % (3.9.68). For every data set that keeps 23,000, the loop 4 count with the margin is more than the managers that the game makes (the column below), so the estimate stays above the real use without the overcount of loops 1 to 3. A data set gets 46,000 too when a file is missing, a file size is not a whole number of records, or fewer than the 27 league nations match by name.
 
-In all 22 data sets the estimate is more than the rows used (by 22 to 258). The 7 that need more than 23,000 get 46,000. 12 of the 14 that fit get 23,000. September 2005 (23,061 for 22,908 used) and October 2014 (23,004 for 22,758 used) get 46,000: their estimate is above 23,000 by less than its error. A threshold of 23,400 would give 23,000 to all 14, but then a database with an estimate between 23,000 and 23,400 could still stop at line 1844.
+| Data set | Estimate | Used (Select All) | Managers used (loop 4) | Reserve |
+|---|---|---|---|---|
+| Original 3.9.68 (in Databases) | 22,986 | 22,623 | 3,712 | 23,000 |
+| October 2003 | 23,344 | 22,809 | 3,785 | 46,000 |
+| September 2005 | 23,430 | 22,908 | 3,850 | 46,000 |
+| November 2007 | 24,218 | 23,664 | 3,936 | 46,000 |
+| September 2008 | 25,049 | 24,483 | 4,182 | 46,000 |
+| September 2009 | 25,175 | 24,636 | 4,316 | 46,000 |
+| September 2010 ODB | 25,446 | 24,926 | 4,394 | 46,000 |
+| September 2011 ODB | 26,291 | 25,779 | 4,693 | 46,000 |
+| September 2012 | 27,880 | 27,156 | 4,932 | 46,000 |
+| Autumn 2013 | 25,528 | 24,818 | 4,433 | 46,000 |
+| October 2014 | 23,423 | 22,758 | 4,148 | 46,000 |
+| October 2015 | 22,336 | 21,820 | 4,098 | 23,000 |
+| October 2016 | 22,357 | 21,844 | 4,092 | 23,000 |
+| October 2017 | 22,432 | 21,841 | 3,817 | 23,000 |
+| October 2018 | 22,873 | 22,245 | 3,845 | 23,000 |
+| October 2019 | 20,043 | 19,488 | 3,248 | 23,000 |
+| November 2020 | 19,926 | 19,324 | 3,215 | 23,000 |
+| October 2021 | 14,887 | 14,499 | 2,401 | 23,000 |
+| October 2022 | 15,306 | 14,902 | 2,551 | 23,000 |
+| October 2023 | 15,154 | 14,776 | 2,459 | 23,000 |
+| October 2024 | 15,593 | 15,187 | 2,590 | 23,000 |
+| December 2025 | 15,987 | 15,542 | 2,749 | 23,000 |
+
+The 7 that need more than 23,000 get 46,000. 10 of the 14 that fit keep 23,000 (October 2015 to December 2025), and so does the 3.9.68 data in a Databases folder (22,986 for 22,623 used). October 2003, September 2005 and October 2014 fit (22,758 to 22,908 used) but get 46,000: with the margin they cannot be shown to fit. A smaller margin would not cover the 9 % shortfall of 3.9.68.
 
 Effects:
 
 - The official data sets (3.9.68, 3.9.60, 3.9.65) keep 23,000: the same memory, the same game.
-- A custom data set with an estimate of 23,000 or less keeps 23,000: the same game as 0.5.0 (checked with the 3.9.68 data and October 2019 in Databases).
+- A custom data set with an estimate of 23,000 or less keeps 23,000: the same game as main and 0.5.0 (checked with the 3.9.68 data and October 2019 in Databases).
 - A custom data set with a larger estimate gets 23,000 more blank staff rows and non-player rows (about 4 MB). Its memory layout changes against 0.5.0, so its game does not repeat a 0.5.0 game with the same clicks.
 - When a later slice starts a season database by another path than the option `database = folder:<name>`, `rt_staff_reserve_size()` must see that path too.
 
@@ -145,7 +147,7 @@ Every one of the 21 databases holds 18 clubs in the French First Division and 20
 
 Commands from the repo, with `G=/Users/max/Projects/cm0102/clean-3968`, `DB=/Users/max/Projects/cm0102/test-fixtures/databases`, `REF=/Users/max/Projects/cm0102/wt-ref-0.5.0/build/cm0102_recomp`:
 
-- Each database in its own start year: `python3 tests/smoke/update_team_sweep.py build/cm0102_recomp $G $DB --select-all --jobs 3 --timeout 2400`. The box "fra_first..cpp 108" is an expected stop there and counts as a pass (`EXPECTED_STOP`). "Database.cpp 1844" or any other box fails. Result: 21 of 21 pass, all at the expected stop, none at line 1844. Each database gets the reserve of the estimate table and uses the rows of the table under "Reserve rows used".
+- Each database in its own start year: `python3 tests/smoke/update_team_sweep.py build/cm0102_recomp $G $DB --select-all --jobs 3 --timeout 2400`. The box "fra_first..cpp 108" is an expected stop there and counts as a pass (`EXPECTED_STOP`). "Database.cpp 1844" or any other box fails. Result (with the loop 4 margin): 21 of 21 pass, all at the expected stop with "result 1", none at line 1844. Each database gets the reserve of the estimate table and uses the rows of the table under "Reserve rows used".
 - Every database in 2001: the same with `--start 2001` (first round, with 46,000 for every custom data set). Result: 21 of 21 pass. Each game reaches the first news screen and holiday, and each uses the same reserve rows as in its own start year.
 - Before the fix: the main build (`/Users/max/Projects/cm0102/cm0102-mac/build/cm0102_recomp`) with September 2012, Select All, 2001: the box "Error: v3.9.68 Database..cpp 1844" from 0x527ea3, the box call of the 0x527e4c block.
 - The reserve of each data set (the table under "The estimate"): a run of each folder to Select League(s) with `RECOMP_SCREEN_LOG=1`, which prints "staff reserve estimate".
