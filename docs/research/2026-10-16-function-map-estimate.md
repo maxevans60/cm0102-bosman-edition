@@ -1583,6 +1583,33 @@ Open point: the asserts of the Finance code name finance.CPP, but `names.tsv` fi
 | 0x682150 | `langlib_inflect_noun_table_9eb7ac` | `langlib_inflect_german_player_type` | takes reviewer | `langlib_inflect_german_player_type` |
 
 
+#### Review r08 (medium rows of tier 5, 2026-10-17)
+
+Run `review-r08`: 8 Opus reviewers checked 208 medium rows of the award, club, comp, discipline, display, formation, friendly, human manager, injury and league files. Agree 152, fix 39, rename 17. The third check took the reviewer's name 16 times and kept the sweep row once, because both rows had the same name. 55 rows changed in all. The reviewers took 127,000 to 156,000 tokens each, and the third check took 111,000.
+
+Eleven renames make free functions into members, because the body reads ECX or every caller loads it: six in friendly.cpp, two in human_manager.cpp, and rows of award_screens.cpp, cash and club_records.cpp. Two false entries were named as real functions. `League::pay_clubs` (0x683010) is `League::pay_tv_rights`, and 0x4a7f20 is `Date::operator==`.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x415600 | `award_screens_add_menu_area` | `ScreenManager::add_menu_area` | takes reviewer | `ScreenManager::add_menu_area` |
+| 0x43f460 | `cash_round_to_display_unit` | `Cash::get_display_amount` | takes reviewer | `Cash::get_display_amount` |
+| 0x4486c0 | `club_records_offer_breaks_fee_record` | `Club_Records::offer_breaks_fee_record` | takes reviewer | `Club_Records::offer_breaks_fee_record` |
+| 0x4a7f20 | `id_pair_equals` | `Date::operator==` | takes reviewer | `Date::operator==` |
+| 0x5563f0 | `Discipline::hold_bans_on_transfer` | `Discipline::hold_bans_for_loan` | takes reviewer | `Discipline::hold_bans_for_loan` |
+| 0x5b3270 | `Formation::get_slots_in_position_order_loop` | `Formation::get_slots_in_position_order_fragment_5b3270` | takes reviewer | `Formation::get_slots_in_position_order_fragment_5b3270` |
+| 0x5c2d40 | `friendly_set_preseason_windows` | `Friendly::set_preseason_windows` | takes reviewer | `Friendly::set_preseason_windows` |
+| 0x5c45a0 | `friendly_candidate_has_nearby_date` | `Friendly::candidate_has_nearby_date` | takes reviewer | `Friendly::candidate_has_nearby_date` |
+| 0x5c4680 | `friendly_pick_tour_nation` | `Friendly::pick_tour_nation` | takes reviewer | `Friendly::pick_tour_nation` |
+| 0x5c57d0 | `friendly_schedule_assign_opponent` | `Friendly::schedule_assign_opponent` | takes reviewer | `Friendly::schedule_assign_opponent` |
+| 0x5c6350 | `friendly_pick_replacement_invitee` | `Friendly::pick_replacement_invitee` | takes reviewer | `Friendly::pick_replacement_invitee` |
+| 0x5c6710 | `Friendly::is_friendly_competition` | `Friendly::is_friendly_competition` | keeps first | `Friendly::is_friendly_competition` |
+| 0x5cb9e0 | `friendly_remove_national_fixture` | `Friendly::remove_national_fixture` | takes reviewer | `Friendly::remove_national_fixture` |
+| 0x5fe420 | `human_manager_is_fixture_watched` | `HUMAN_MANAGER::is_fixture_watched` | takes reviewer | `HUMAN_MANAGER::is_fixture_watched` |
+| 0x5fe700 | `human_manager_can_watch_fixture` | `HUMAN_MANAGER::can_watch_fixture` | takes reviewer | `HUMAN_MANAGER::can_watch_fixture` |
+| 0x683010 | `League::pay_clubs` | `League::pay_tv_rights` | takes reviewer | `League::pay_tv_rights` |
+| 0x687470 | `League::init_table_row_after_assert` | `League::init_table_row_fragment_687470` | takes reviewer | `League::init_table_row_fragment_687470` |
+
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
