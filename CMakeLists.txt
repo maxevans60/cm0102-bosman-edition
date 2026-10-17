@@ -132,6 +132,12 @@ if(NOT WIN32)
     add_test(NAME season_rules COMMAND season_rules_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv"
         "${CMAKE_BINARY_DIR}/seasons")
     set_tests_properties(season_rules PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The UEFA formats by season (0.6.0 slice 22): the committed table matches uefa.tsv, and its lookups.
+    add_test(NAME season_uefa_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_uefa_table.py" --check)
+    add_executable(season_uefa_test tests/seasons/test_season_uefa.c src/recomp_rt/win/season_uefa_table.c
+        src/recomp_rt/win/season_uefa_lookup.c)
+    target_include_directories(season_uefa_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_uefa COMMAND season_uefa_test)
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
