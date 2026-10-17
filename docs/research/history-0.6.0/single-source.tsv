@@ -1,0 +1,666 @@
+part	competition	label	part_of_label	field	value	note
+americas	Mexican Second Division	2002		first	Atlético Delfines de Coatzacoalcos	RSSSF mex03 and mex04 have no Segunda section; only es.wikipedia (the row's source) found
+americas	Mexican Second Division	2002		second	Club Deportivo Tepic	as above
+americas	Mexican Second Division	2002		ended	2003-06	doubt: RSSSF mex03 shows Tepic in the Primera A promotion/relegation play-off from 28 May 2003, so the Segunda final may have ended in May 2003 or earlier
+americas	Mexican Second Division	2003		first	Club Pachuca Junior	RSSSF mex03 and mex04 have no Segunda section; only es.wikipedia (the row's source) found
+americas	Mexican Second Division	2003		second	Lobos BUAP	as above
+americas	Mexican Second Division	2003		ended	2004-06	no dated page found
+americas	PrepreLibertadores Cup	2002		ended	2002-11	Wikipedia gives no match dates
+americas	American Major League	2004		ended	2004-11	RSSSF usa04 gives no date
+americas	American A-League	2002		ended	2002-09	RSSSF gives the result without a date
+americas	American A-League	2003		ended	2003-09	RSSSF gives the result without a date
+americas	American A-League	2004		ended	2004-09	RSSSF gives the result without a date
+americas	American A-League	2005		ended	2005-10	RSSSF gives the result without a date
+americas	American A-League	2006		ended	2006-09	RSSSF gives the result without a date
+americas	American A-League	2007		ended	2007-09	RSSSF gives the result without a date
+asia-1	Chinese FA Cup (China PR)	2002		second	Liaoning Fushun	only Wikipedia (both languages) and RSSSF give the final; both are cited
+asia-1	Chinese FA Cup (China PR)	2003		second	Dalian Shide	only Wikipedia (both languages) and RSSSF give the final; both are cited
+asia-1	Chinese FA Cup (China PR)	2004		second	Sichuan Quanxing	only Wikipedia (both languages) and RSSSF give the final; both are cited
+asia-1	Chinese FA Super Cup (China PR)	2003		second	Qingdao Yizhong	only Wikipedia and RSSSF give the runner-up; both are cited
+asia-1	Chinese FA Super Cup (China PR)	2004		second	Shanghai Shenhua	only Wikipedia and RSSSF give the runner-up; both are cited
+asia-1	Chinese First Division A (China PR)	2002		ended	2002-11	no date on Transfermarkt or Wikipedia season pages
+asia-1	Chinese First Division A (China PR)	2004		ended	2004-12	no date on Transfermarkt or Wikipedia season pages
+asia-1	Chinese First Division A (China PR)	2005		ended	2005-11	no date on Transfermarkt or Wikipedia season pages
+asia-1	Chinese First Division B (China PR)	2004		first	Wuhan Hongjinlong	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China PR)	2004		second	Dalian Sàidélóng	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China PR)	2004		ended	2004-11	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China PR)	2005		first	Xiamen Hongshi	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China PR)	2005		second	Changchun Yatai	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China PR)	2005		ended	2005-10	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese Second Division (China PR)	2002		first	Harbin Lange	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China PR)	2002		second	Guangdong Xiongying	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China PR)	2003		first	Dalian Sande	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China PR)	2003		second	Xi'an Anxinyuan	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China PR)	2004		first	Shanghai Jiucheng	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China PR)	2004		second	Yanbian Century	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China PR)	2005		ended	2005-11	no date on another publisher found
+asia-1	Chinese FA Cup (China)	2002		second	Liaoning F.C.	only Wikipedia (both languages) and RSSSF give the final; both are cited
+asia-1	Chinese FA Cup (China)	2003		second	Dalian Shide	only Wikipedia (both languages) and RSSSF give the final; both are cited
+asia-1	Chinese FA Cup (China)	2004		second	Sichuan Quanxing	only Wikipedia (both languages) and RSSSF give the final; both are cited
+asia-1	Chinese FA Super Cup (China)	2003		second	Qingdao Zhongneng	only Wikipedia and RSSSF give the runner-up; both are cited
+asia-1	Chinese FA Super Cup (China)	2004		second	Shanghai Shenhua	only Wikipedia and RSSSF give the runner-up; both are cited
+asia-1	Chinese First Division A (China)	2002		ended	2002-11	no date on Transfermarkt or Wikipedia season pages
+asia-1	Chinese First Division A (China)	2004		ended	2004-12	no date on Transfermarkt or Wikipedia season pages
+asia-1	Chinese First Division A (China)	2005		ended	2005-11	no date on Transfermarkt or Wikipedia season pages
+asia-1	Chinese First Division B (China)	2004		first	Wuhan Hongjinlong	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China)	2004		second	Dalian Sàidélóng	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China)	2004		ended	2004-11	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China)	2005		first	Xiamen Hongshi	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China)	2005		second	Changchun Yatai	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China)	2005		ended	2005-10	Wikipedia and RSSSF are cited; Transfermarkt has no table before 2008
+asia-1	Chinese First Division B (China)	2006		ended	2006-10	no date on another publisher found
+asia-1	Chinese Second Division (China)	2002		first	Harbin Lange	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China)	2002		second	Guangdong Xiongying	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China)	2003		first	Dalian Sande	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China)	2003		second	Xi'an Anxinyuan	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China)	2004		first	Shanghai Jiucheng	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China)	2004		second	Yanbian Century	Wikipedia and RSSSF are cited; no third publisher found
+asia-1	Chinese Second Division (China)	2005		ended	2005-11	no date on another publisher found
+asia-1	Chinese Second Division (China)	2006		ended	2006-11	no date on another publisher found
+asia-1	Chinese Second Division (China)	2007		ended	2007-11	no date on another publisher found
+asia-1	Japanese U-18 Championship	2002		first	Kunimi High School	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese U-18 Championship	2002		second	Seiryo High School	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese U-18 Championship	2003		first	Funabashi Municipal High School	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese U-18 Championship	2003		second	Shizuoka Gakuen High School	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese U-18 Championship	2004		first	Sanfrecce Hiroshima	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese U-18 Championship	2004		second	Jubilo Iwata	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese U-18 Championship	2005		first	Tokyo Verdy 1969	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese U-18 Championship	2005		second	Consadole Sapporo	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2002		first	Komazawa University	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2002		second	Kokushikan University Soccer Club	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2003		first	Komazawa University	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2003		second	Hannan University	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2004		first	Komazawa University	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2004		second	Momoyamagakuin University	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2005		first	Kansai University	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Japanese University League	2005		second	Waseda University	no page of another publisher found (JFA pages give no history before 2011)
+asia-1	Korean President Cup	2002		first	Hongik University	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+asia-1	Korean President Cup	2002		second	Hallelujah	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+asia-1	Korean President Cup	2003		first	Gukmin Bank	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+asia-1	Korean President Cup	2003		second	National Police Station	RSSSF 2002 and 2003 pages have no President Cup; no other page found
+asia-2	Hong Kong First Division	2002		ended	2002-04	Wikipedia season page gives no match dates.
+asia-2	Hong Kong First Division	2003		ended	2003-04	Wikipedia season page gives no match dates.
+asia-2	Hong Kong First Division	2004		ended	2004-05	Wikipedia season page gives no match dates.
+asia-2	Hong Kong Senior Challenge Shield	2002		ended	2003-03	No Wikipedia season page.
+asia-2	Hong Kong Senior Challenge Shield	2003		ended	2004-04	No Wikipedia season page.
+asia-2	Hong Kong Junior Challenge Shield	2002		first	Mutual	RSSSF season pages have no Junior Shield before 2005/06.
+asia-2	Hong Kong Junior Challenge Shield	2003		first	Fire Services	RSSSF season pages have no Junior Shield before 2005/06.
+asia-2	Hong Kong Junior Challenge Shield	2004		first	Tung Po	RSSSF season pages have no Junior Shield before 2005/06.
+asia-2	Hong Kong Junior Challenge Shield	2005		first	Hong Kong Football Club	RSSSF season pages have no Junior Shield before 2005/06.
+asia-2	Hong Kong Second Division	2002		second	Tung Po	RSSSF table of 29 March 2002 is incomplete (Mutual 2nd, Tung Po 3rd with a game in hand). No final table found.
+asia-2	Hong Kong Second Division	2004		second	Hong Kong 08	RSSSF hk04 has no second level table.
+asia-2	Hong Kong Third Division A	2003		second	Tung Sing	
+asia-2	Hong Kong Third Division B	2002		first	Ornaments	Only the row's source (incomplete RSSSF table of 29 March 2002).
+asia-2	Hong Kong Third Division B	2002		second	Hi Lee	Only the row's source (incomplete RSSSF table of 29 March 2002).
+asia-2	Hong Kong Third Division B	2004		first	Wofoo Tai Po	RSSSF hk04 has no third level tables. zh Wikipedia (same publisher as the source) also names Tai Po.
+asia-2	Hong Kong Third Division B	2004		second	Kwai Tsing	RSSSF hk04 has no third level tables.
+asia-2	Hong Kong Third Division B	2005		second	Yau Tsim Mong	RSSSF table is incomplete (Sham Shui Po 2nd, Yau Tsim Mong 4th with games in hand). No final table found.
+asia-2	Indian Super Cup	2003		ended	2003-11	The Wikipedia list has no date.
+asia-2	Indian Calcutta Super Division	2002		ended	2002-11	Only RSSSF gives the date.
+asia-2	Indian Calcutta Super Division	2003		ended	2003-11	Only RSSSF gives the date.
+asia-2	Indian Goan Professional League	2002		second	Vasco Sports Club	Only RSSSF.
+asia-2	Indian Goan Professional League	2002		ended	2002-10	Only RSSSF.
+asia-2	Indian Goan Professional League	2003		second	Dempo Sports Club	Only RSSSF.
+asia-2	Indian Goan Professional League	2003		ended	2003-10	Only RSSSF.
+asia-2	Indian Mumbai League	2002		second	Central Railway	Only RSSSF. The Wikipedia Mumbai Football League list is empty for these years.
+asia-2	Indian Mumbai League	2002		ended	2002-10	Only RSSSF.
+asia-2	Indian Mumbai League	2003		second	Haywards 2000-Holy Family	Only RSSSF. The Wikipedia Mumbai Football League list is empty for these years.
+asia-2	Indian Mumbai League	2003		ended	2003-10	Only RSSSF.
+asia-2	Indian Bangalore Super Division	2002		first	Hindustan Aeronautics Limited	The row's other source is indianfootball.de (web archive offline on the day). No RSSSF page for 2002.
+asia-2	Indian Bangalore Super Division	2003		first	Controllerate of Inspection Electronics	As for 2002.
+asia-2	Indian Bangalore Super Division	2004		second	Madras Engineering Group Centre	Only RSSSF.
+asia-2	Indian Bangalore Super Division	2004		ended	2004-10	Only RSSSF.
+asia-2	Indian Guwahati Super Division	2002		first	Guwahati Town Club	No Wikipedia list found. RSSSF regional pages have Guwahati from 2004. indianfootball.de archive offline on the day.
+asia-2	Indian Guwahati Super Division	2003		first	Assam State Election Board	No Wikipedia list found. RSSSF regional pages have Guwahati from 2004. indianfootball.de archive offline on the day.
+asia-2	Indian Punjab State Soccer League	2002		second	Border Security Force	The Wikipedia list gives the winner only.
+asia-2	Indian Punjab State Soccer League	2003		second	Railway Coach Factory	The Wikipedia list gives the winner only.
+asia-2	Indian Kerala Super League	2002		held	not held	Only Wikipedia readable. indianfootball.de archive offline on the day.
+asia-2	Indonesian Second Division	2002		ended	2002-08	Only RSSSF gives dates.
+asia-2	Indonesian Second Division	2003		ended	2003-10	Only RSSSF gives dates.
+asia-2	Indonesian Second Division	2004		ended	2004-10	Only RSSSF gives dates.
+asia-2	Indonesian Second Division	2005		ended	2005-09	Only RSSSF gives dates.
+asia-2	Malaysia Cup	2002		ended	2002-11	The Wikipedia list has no dates.
+asia-2	Malaysia Cup	2003		ended	2003-10	The Wikipedia list has no dates.
+asia-2	Malaysia Cup	2004		ended	2004-12	The Wikipedia list has no dates.
+asia-2	Malaysia Cup	2005		ended	2005-10	The Wikipedia list has no dates.
+asia-2	Malaysian Charity Shield	2002		ended	2002-01	The Wikipedia list has no dates.
+asia-2	Malaysian Charity Shield	2003		ended	2003-02	The Wikipedia list has no dates.
+asia-2	Malaysian FA Cup	2002		ended	2002-08	The Wikipedia list has no dates.
+asia-2	Malaysian FA Cup	2003		ended	2003-05	The Wikipedia list has no dates.
+asia-2	Malaysian League Premier Two	2002		ended	2002-06	The Wikipedia season page has no end date.
+asia-2	Malaysian League Premier Two	2003		ended	2003-08	The Wikipedia season page has no end date.
+asia-2	Singaporean League	2002		ended	2002-10	The Wikipedia season page has no end date.
+asia-2	Singaporean League	2003		ended	2003-10	The Wikipedia season page has no end date.
+asia-2	Singaporean League	2004		ended	2004-09	The Wikipedia season page has no end date.
+asia-2	Singaporean League	2005		ended	2005-10	The Wikipedia season page has no end date.
+asia-2	Singapore Cup	2002		ended	2002-10	The Wikipedia list has no dates.
+asia-2	Singapore Cup	2003		ended	2003-10	The Wikipedia list has no dates.
+asia-2	Singapore Cup	2004		ended	2004-10	The Wikipedia list has no dates.
+asia-2	Singapore Cup	2005		ended	2005-11	The Wikipedia list has no dates.
+asia-2	Singaporean Prime League	2002		first	Home United	
+asia-2	Singaporean Prime League	2002		second	Singapore Armed Forces FC	
+asia-2	Singaporean Prime League	2003		first	Home United	
+asia-2	Singaporean Prime League	2003		second	Sinchi FC	
+asia-2	Singaporean Prime League	2004		first	Home United	RSSSF has a 2004 table as of 21 May 2004 only (Home United top, Singapore Armed Forces 2nd).
+asia-2	Singaporean Prime League	2004		second	Singapore Armed Forces FC	
+asia-2	Singaporean Prime League	2005		first	Sinchi FC	
+asia-2	Singaporean Prime League	2005		second	Geylang United	
+asia-2	Singaporean President's Cup	2002		first	Police SA	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2002		second	Singapore Cricket Club	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2002		ended	2002-08	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2003		first	Tampines Rovers Sports Club	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2003		second	Police SA	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2003		ended	2003-08	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2004		first	Tampines Rovers Sports Club	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2004		second	Katong FC	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+asia-2	Singaporean President's Cup	2004		ended	2004-10	The RSSSF season page has no FA Cup. The newspaper pages cited by Wikipedia did not load.
+aus-rsa	New South Wales State League	2002		ended	2002-09	RSSSF gives no date; first source is socceraust
+aus-rsa	New South Wales State League	2003		ended	2003-09	RSSSF gives no date; first source is socceraust
+aus-rsa	New South Wales State League	2004		ended	2004-09	RSSSF gives no date; first source is socceraust
+aus-rsa	New South Wales State League	2005		ended	2005-09	RSSSF gives no date; first source is socceraust
+aus-rsa	New South Wales State League	2006		ended	2006-09	RSSSF gives no date; first source is socceraust
+aus-rsa	New South Wales State League	2007		ended	2007-09	RSSSF gives no date; first source is socceraust
+aus-rsa	New South Wales State League	2008		ended	2008-09	RSSSF gives no date; first source is socceraust
+aus-rsa	New South Wales State League	2009		ended	2009-09	RSSSF gives no date; first source is socceraust
+aus-rsa	Queensland Premier League	2002		ended	2002-09	RSSSF gives no date; first source is socceraust
+aus-rsa	Queensland Premier League	2003		ended	2003-09	RSSSF gives no date; first source is socceraust
+aus-rsa	Queensland Premier League	2004		ended	2004-09	RSSSF gives no date; first source is socceraust
+aus-rsa	Queensland Premier League	2005		ended	2005-09	RSSSF gives no date; first source is socceraust
+aus-rsa	South Australian Premier League	2003		ended	2003-09	RSSSF gives no date; first source is socceraust
+aus-rsa	South Australian Premier League	2004		ended	2004-10	RSSSF gives no date; first source is socceraust
+aus-rsa	South Australian Premier League	2005		ended	2005-09	RSSSF gives no date; first source is socceraust
+aus-rsa	Western Australian Premier League	2002		ended	2002-11	RSSSF gives no date; first source is socceraust
+aus-rsa	Western Australian Premier League	2003		ended	2003-10	RSSSF gives no date; first source is socceraust
+aus-rsa	Western Australian Premier League	2004		ended	2004-10	RSSSF gives no date; first source is socceraust
+aus-rsa	Western Australian Premier League	2005		ended	2005-09	RSSSF gives no date; first source is socceraust
+aus-rsa	South African Charity Cup	2002		second	Black Leopards	Wikipedia lists winners only, without date or runner-up
+aus-rsa	South African Charity Cup	2003		second	Sundowns	Wikipedia lists winners only, without date or runner-up
+aus-rsa	South African Charity Cup	2003		ended	2003-08	Wikipedia lists winners only, without date or runner-up
+aus-rsa	South African First Division	2002		held	not held	sources already cover RSSSF and Wikipedia; no third publisher found
+aus-rsa	South African First Division	2003		held	not held	sources already cover RSSSF and Wikipedia; no third publisher found
+aus-rsa	South African League Cup	2002		ended	2002-11	no date for the 2002 final on the page
+aus-rsa	South African Premier Division	2002		ended	2002-05	no date on the season page
+aus-rsa	South African Premier Division	2003		ended	2003-05	no date on the season page
+aus-rsa	South African Premier Division	2004		ended	2004-06	no date on the season page
+aus-rsa	South African Premier Division	2005		ended	2005-05	no date on the season page
+aus-rsa	South African Superbowl	2002		held	not held	sources already cover RSSSF and Wikipedia; no third publisher found
+brazil	Brazilian Northeast State Championship	2002		ended	2002-05	Bola na Area 2002 page has no data; RSSSF Brasil (the row's source) gives the final 30 May 2002
+brazil	Brazilian Central Regional Cup	2002		ended	2002-05	the row's source is RSSSF; no Wikipedia or other page with the final dates found (the RSSSF page agrees)
+brazil	Brazilian Northeast Regional Cup	2002		ended	2002-05	the row's source is RSSSF; no Wikipedia or other page with the final dates found (the RSSSF page agrees)
+brazil	Brazilian Northeast Regional Cup	2003		ended	2003-03	the row's source is RSSSF; no Wikipedia or other page with the final dates found (the RSSSF page agrees)
+brazil	Brazilian South-Minas Regional Cup	2002		ended	2002-05	the row's source is RSSSF; no Wikipedia or other page with the final dates found (the RSSSF page agrees)
+brazil	Brazilian Rio-São Paulo Tournement	2002		ended	2002-05	the row's source is RSSSF; no Wikipedia or other page with the final dates found (the RSSSF page agrees)
+brazil	Brazilian Rio-São Paulo Tournement	2009		held	not held	the RSSSF Brasil list was last updated October 2008; no 2009 page found
+brazil	Brazilian Minas Gerais Lower Division	2002		ended	2002-08	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Minas Gerais Lower Division	2003		ended	2003-07	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Minas Gerais Lower Division	2004		ended	2004-08	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Minas Gerais Lower Division	2005		ended	2005-08	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Minas Gerais Lower Division	2006		ended	2006-05	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Minas Gerais Lower Division	2007		ended	2007-07	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Minas Gerais Lower Division	2008		ended	2008-05	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Minas Gerais Lower Division	2009		ended	2009-04	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Rio de Janeiro Lower Division	2002		ended	2002-12	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Rio de Janeiro Lower Division	2003		ended	2003-08	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Rio de Janeiro Lower Division	2004		ended	2004-07	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Rio de Janeiro Lower Division	2005		ended	2005-07	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Rio de Janeiro Lower Division	2006		ended	2006-07	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Rio de Janeiro Lower Division	2007		ended	2007-12	the row's source is RSSSF Brasil; no page of another publisher with dates found
+brazil	Brazilian Rio de Janeiro Lower Division	2008		second	Esporte Clube Tigres do Brasil	RSSSF Brasil rj2008l2.htm is linked but missing; no other page found
+brazil	Brazilian Rio de Janeiro Lower Division	2009		second	Olaria Atlético Clube	RSSSF Brasil rj2009l2.htm missing; a soccer365 summary (page refused direct reads) puts Olaria first and America second in the promotion round, which supports Olaria as the other finalist but is not a direct read
+east-europe-1	Croatian Second Division	2006		ended	2007-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division North	2002		ended	2003-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division North	2003		ended	2004-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division North	2004		ended	2005-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division North	2005		ended	2006-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division South	2002		ended	2003-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division South	2003		ended	2004-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division South	2004		ended	2005-05	no end date found on a second publisher
+east-europe-1	Croatian Second Division South	2005		ended	2006-05	no end date found on a second publisher
+east-europe-1	Croatian Third Division South	2008		ended	2009-06	no end date on the page
+east-europe-1	Croatian Third Division South	2009		ended	2010-05	no end date on the page
+east-europe-1	Czech Second Division	2003		ended	2003-06	no end date on the page
+east-europe-1	Czech Second Division	2004		ended	2004-06	no end date on the page
+east-europe-1	Czech Second Division	2005		ended	2005-06	no end date on the page
+east-europe-2	Russian Second Division - Central	2002		ended	2002-10	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+east-europe-2	Russian Second Division - Central	2003		ended	2003-11	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+east-europe-2	Russian Second Division - Central	2004		ended	2004-10	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+east-europe-2	Russian Second Division - Central	2005		ended	2005-10	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+east-europe-2	Russian Second Division - Central	2006		ended	2006-10	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+east-europe-2	Russian Second Division - Central	2007		ended	2007-10	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+east-europe-2	Russian Second Division - Central	2008		ended	2008-10	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+east-europe-2	Russian Second Division - East	2002		ended	2002-10	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+east-europe-2	Russian Second Division - East	2003		ended	2003-10	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+east-europe-2	Russian Second Division - East	2004		ended	2004-10	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+east-europe-2	Russian Second Division - East	2005		ended	2005-10	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+east-europe-2	Russian Second Division - East	2006		ended	2006-10	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+east-europe-2	Russian Second Division - East	2007		ended	2007-10	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+east-europe-2	Russian Second Division - East	2008		ended	2008-10	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+east-europe-2	Russian Second Division - South	2002		ended	2002-11	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+east-europe-2	Russian Second Division - South	2003		ended	2003-11	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+east-europe-2	Russian Second Division - South	2004		ended	2004-11	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+east-europe-2	Russian Second Division - South	2005		ended	2005-10	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+east-europe-2	Russian Second Division - South	2006		ended	2006-11	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+east-europe-2	Russian Second Division - South	2007		ended	2007-10	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+east-europe-2	Russian Second Division - Ural	2002		ended	2002-10	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+east-europe-2	Russian Second Division - Ural	2003		ended	2003-10	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+east-europe-2	Russian Second Division - Ural	2004		ended	2004-10	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+east-europe-2	Russian Second Division - Ural	2005		ended	2005-10	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+east-europe-2	Russian Second Division - Ural	2006		ended	2006-10	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+east-europe-2	Russian Second Division - Ural	2007		ended	2007-10	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+east-europe-2	Russian Second Division - Ural	2008		ended	2008-10	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+east-europe-2	Russian Second Division - Volga	2002		ended	2002-10	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+east-europe-2	Russian Second Division - Volga	2003		ended	2003-10	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+east-europe-2	Russian Second Division - Volga	2004		ended	2004-10	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+east-europe-2	Russian Second Division - Volga	2005		ended	2005-10	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+east-europe-2	Russian Second Division - Volga	2006		ended	2006-10	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+east-europe-2	Russian Second Division - Volga	2007		ended	2007-10	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+east-europe-2	Russian Second Division - Volga	2008		ended	2008-10	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+east-europe-2	Russian Second Division - West	2002		ended	2002-10	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+east-europe-2	Russian Second Division - West	2003		ended	2003-10	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+east-europe-2	Russian Second Division - West	2004		ended	2004-10	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+east-europe-2	Russian Second Division - West	2005		ended	2005-10	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+east-europe-2	Russian Second Division - West	2006		ended	2006-10	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+east-europe-2	Russian Second Division - West	2007		ended	2007-10	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+east-europe-2	Russian Second Division - West	2008		ended	2008-10	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+east-europe-2	Russian Second Division - West	2009		ended	2009-10	page gives only the whole season end (8 Nov 2009), not the zone's last match day
+east-europe-2	Yugoslav Second Division East	2002		ended	2002-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division East	2003		ended	2003-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division North	2002		ended	2002-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division North	2003		ended	2003-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division North	2004		ended	2004-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division North	2005		ended	2005-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division South	2003		ended	2003-05	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division South	2005		ended	2005-06	league ended before the relegation play-off of 8 Jun 2005; month not shown
+east-europe-2	Yugoslav Second Division West	2002		ended	2002-08	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division West	2003		ended	2003-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division West	2004		ended	2004-06	no match dates found outside RSSSF
+east-europe-2	Yugoslav Second Division West	2005		ended	2005-06	no match dates found outside RSSSF
+esp-por	Portuguese Second Division B Central	2002		ended	2002-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B Central	2003		ended	2003-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B Central	2004		ended	2004-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B Central	2005		ended	2005-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B Central	2007		held	not held	Research cites both Wikipedia and RSSSF; no third publisher reachable (zerozero, foradejogo, worldfootball blocked)
+esp-por	Portuguese Second Division B Central	2008		held	not held	Research cites both Wikipedia and RSSSF; no third publisher reachable (zerozero, foradejogo, worldfootball blocked)
+esp-por	Portuguese Second Division B North	2002		ended	2002-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B North	2003		ended	2003-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B North	2004		ended	2004-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B North	2005		ended	2005-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B North	2007		held	not held	Research cites both Wikipedia and RSSSF; no third publisher reachable (zerozero, foradejogo, worldfootball blocked)
+esp-por	Portuguese Second Division B North	2008		held	not held	Research cites both Wikipedia and RSSSF; no third publisher reachable (zerozero, foradejogo, worldfootball blocked)
+esp-por	Portuguese Second Division B South	2002		ended	2002-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B South	2003		ended	2003-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B South	2004		ended	2004-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B South	2005		ended	2005-05	Research value is an inference; no dated second source found
+esp-por	Portuguese Second Division B South	2007		held	not held	Research cites both Wikipedia and RSSSF; no third publisher reachable (zerozero, foradejogo, worldfootball blocked)
+esp-por	Portuguese Second Division B South	2008		held	not held	Research cites both Wikipedia and RSSSF; no third publisher reachable (zerozero, foradejogo, worldfootball blocked)
+esp-por	Portuguese Second League	2002		ended	2002-05	Wikipedia gives no date for the last round; other publishers blocked
+esp-por	Portuguese Second League	2003		ended	2003-06	Wikipedia gives no date for the last round; other publishers blocked
+esp-por	Portuguese Second League	2004		ended	2004-05	Wikipedia gives no date for the last round; other publishers blocked
+esp-por	Portuguese Second League	2005		ended	2005-05	Wikipedia gives no date for the last round; other publishers blocked
+esp-por	Portuguese Second League	2006		ended	2006-05	Wikipedia gives no date for the last round; other publishers blocked
+esp-por	Portuguese Second League	2007		ended	2007-05	Wikipedia gives no date for the last round; other publishers blocked
+esp-por	Portuguese Second League	2008		ended	2008-05	Wikipedia gives no date for the last round; other publishers blocked
+esp-por	Portuguese Third Division	2002		second	"Sport Clube ""Os Dragões Sandinenses"""	RSSSF names the champion only; no other publisher names the losing finalist
+esp-por	Portuguese Third Division	2002		ended	2002-06	Research value is an inference; no date for the final found
+esp-por	Portuguese Third Division	2003		held	not held	Research cites both Wikipedia and RSSSF; RSSSF port4champ.html also says no final play-off 2002/03 to 2012/13, but it is the same publisher
+esp-por	Portuguese Third Division	2004		held	not held	Research cites both Wikipedia and RSSSF; RSSSF port4champ.html also says no final play-off 2002/03 to 2012/13, but it is the same publisher
+esp-por	Portuguese Third Division	2005		held	not held	Research cites both Wikipedia and RSSSF; RSSSF port4champ.html also says no final play-off 2002/03 to 2012/13, but it is the same publisher
+fra-bel-ned	Belgian Fourth Division  A	2005		first	RRC Tournaisien	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Fourth Division  A	2005		second	KSV Zottegem	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Fourth Division  B	2005		first	KVC Willebroek-Meerhof	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Fourth Division  B	2005		second	K Rupel Boom FC	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Fourth Division  C	2005		first	KESK Leopoldsburg	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Fourth Division  C	2005		second	FC Hedera Millen	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Fourth Division  D	2005		first	RCS Verviers	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Fourth Division  D	2005		second	RRFC Montegnée	first source is nl.wikipedia; RSSSF has no Vierde Klasse tables for 2004/05
+fra-bel-ned	Belgian Super Cup	2002		ended	2002-08	RSSSF pages give no date for this match
+fra-bel-ned	Belgian Super Cup	2008		ended	2008-08	RSSSF pages give no date for this match
+fra-bel-ned	Belgian Super Cup	2009		ended	2009-07	RSSSF pages give no date for this match
+fra-bel-ned	Belgian Third Division A	2009		ended	2009-05	nl.wikipedia says only spring 2009; fr.wikipedia gives no date
+fra-bel-ned	Belgian Third Division B	2009		ended	2009-05	nl.wikipedia says only spring 2009; fr.wikipedia gives no date
+fra-bel-ned	French CFA	2002		first	AS Cherbourg	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2002		ended	2002-06	RSSSF page has no reserve final date
+fra-bel-ned	French CFA	2003		first	Gazélec FCO Ajaccio	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2004		first	Football Croix-de-Savoie 74	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2005		first	US Boulogne-sur-Mer	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2005		ended	2005-06	RSSSF page has no reserve final date
+fra-bel-ned	French CFA	2006		first	AS Beauvais-Oise	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2007		first	Villemomble Sports	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2007		ended	2007-06	RSSSF page has no reserve final date
+fra-bel-ned	French CFA	2008		first	Football Croix-de-Savoie 74	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2008		ended	2008-05	RSSSF page has no reserve final date
+fra-bel-ned	French CFA	2009		first	US Luzenac	RSSSF gives the group tables but does not name the amateur champion; no other source found
+fra-bel-ned	French CFA	2009		ended	2009-06	RSSSF page has no reserve final date
+fra-bel-ned	Dutch Cup	2002		ended	2002-05	RSSSF page gives no date for the final
+fra-bel-ned	Dutch First Division	2008		ended	2008-04	nl.wikipedia gives no end date
+fra-bel-ned	Dutch Super Cup	2002		ended	2002-08	RSSSF pages give no date for this match
+fra-bel-ned	Dutch Super Cup	2003		ended	2003-08	RSSSF pages give no date for this match
+fra-bel-ned	Dutch Super Cup	2006		ended	2006-08	RSSSF pages give no date for this match
+fra-bel-ned	Dutch Super Cup	2007		ended	2007-08	RSSSF pages give no date for this match
+fra-bel-ned	Dutch Super Cup	2008		ended	2008-08	RSSSF pages give no date for this match
+fra-bel-ned	Dutch Super Cup	2009		ended	2009-07	RSSSF pages give no date for this match
+ger-aut-sui-lux	Austrian Super Cup	2008		ended	2008-10	RSSSF list gives no date; the transfermarkt Rapid 2008/09 fixture list and the RSSSF 2008/09 page do not list the match; only the research source gives 22 October 2008
+ger-aut-sui-lux	Luxembourg National Division	2002		ended	2002-05	research source is RSSSF (title round ended May 12); the transfermarkt list lacks the spring 2002 league rounds; Wikipedia season page has no dates
+intl-clubs-2	A Lower Division	2002		held	not held	not a real competition (catch-all division in the data); no outside page can confirm or deny
+intl-clubs-2	A Lower Division	2003		held	not held	not a real competition (catch-all division in the data); no outside page can confirm or deny
+intl-clubs-2	A Lower Division	2004		held	not held	not a real competition (catch-all division in the data); no outside page can confirm or deny
+intl-clubs-2	A Lower Division	2005		held	not held	not a real competition (catch-all division in the data); no outside page can confirm or deny
+intl-clubs-2	A Lower Division	2006		held	not held	not a real competition (catch-all division in the data); no outside page can confirm or deny
+intl-clubs-2	A Lower Division	2007		held	not held	not a real competition (catch-all division in the data); no outside page can confirm or deny
+intl-clubs-2	A Lower Division	2008		held	not held	not a real competition (catch-all division in the data); no outside page can confirm or deny
+ireland	Irish Premier Division	2002		ended	2002-03	Wikipedia season page gives no end date; Transfermarkt has no 2001/02 season
+ireland	Irish First Division	2002		ended	2002-03	Wikipedia season page gives no end date; Transfermarkt has no 2001/02 season
+ireland	Irish Munster Senior Cup	2002		first	Cork City	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2002		second	Rockmount F.C.	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2003		first	Cork City	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2003		second	Waterford United	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2004		first	Cork City	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2004		second	Carrick United	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2004		ended	2004-05	Wikipedia cites a corkcityfc.ie report dated 30 May 2004, page now 404
+ireland	Irish Munster Senior Cup	2005		first	Cork City	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2005		second	Avondale United	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2006		first	Limerick F.C.	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2006		second	Cobh Ramblers	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2007		first	Waterford United	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2007		second	Passage	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2008		first	Cork City	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Munster Senior Cup	2008		second	Cobh Ramblers	only Wikipedia (the row's source) found; extratime and Munster Express blocked or gone, Wayback not reachable
+ireland	Irish Presidents Cup	2002		first	Bohemian F.C.	RSSSF names the LFA President's Cup but lists no results
+ireland	Irish Presidents Cup	2002		second	Shelbourne F.C.	RSSSF names the LFA President's Cup but lists no results
+ireland	Irish Presidents Cup	2003		first	Shelbourne F.C.	RSSSF names the LFA President's Cup but lists no results
+ireland	Irish Presidents Cup	2003		second	Dundalk F.C.	RSSSF names the LFA President's Cup but lists no results
+ireland	Irish Presidents Cup	2003		ended	2002-09	
+ireland	Irish Blaxnit Cup	2005		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Blaxnit Cup	2006		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Blaxnit Cup	2007		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Blaxnit Cup	2008		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Blaxnit Cup	2009		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2002		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2003		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2004		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2005		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2006		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2007		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2008		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin City Cup	2009		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin and Belfast Inter-City Cup	2005		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin and Belfast Inter-City Cup	2006		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin and Belfast Inter-City Cup	2007		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin and Belfast Inter-City Cup	2008		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Dublin and Belfast Inter-City Cup	2009		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2002		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2003		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2004		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2005		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2006		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2007		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2008		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish First Division Shield	2009		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish North-South Cup	2005		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish North-South Cup	2006		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish North-South Cup	2007		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Shield	2002		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Shield	2003		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Shield	2004		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Shield	2005		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Shield	2006		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Shield	2007		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Shield	2008		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Texaco Cup	2005		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Texaco Cup	2006		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Texaco Cup	2007		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Texaco Cup	2008		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Top Four Cup	2002		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Top Four Cup	2003		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Top Four Cup	2004		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Top Four Cup	2005		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Top Four Cup	2006		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Top Four Cup	2007		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Top Four Cup	2008		held	not held	only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Tyler Cup	2005		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Tyler Cup	2006		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Tyler Cup	2007		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+ireland	Irish Tyler Cup	2008		held	not held	WSC Jan 2005 covers only up to 2004/05; only RSSSF and Wikipedia found, and both are the row's sources; both say the competition ended long before
+nordic-1	Swedish First Division	2002		ended	2002-10	RSSSF 2002 page gives no match dates for this competition; no other source found
+nordic-1	Swedish First Division	2003		ended	2003-10	RSSSF 2003 page gives no match dates for this competition; no other source found
+nordic-1	Swedish First Division	2004		ended	2004-10	RSSSF 2004 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division East Gotaland	2002		first	Husqvarna FF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division East Gotaland	2002		second	Linköpings FF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division East Svealand	2002		first	Väsby IK FK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division East Svealand	2002		second	Visby IF Gute	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division North	2002		first	Bodens BK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division North	2002		second	Umeå FC	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division North	2006		ended	2006-10	RSSSF 2006 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division North	2007		ended	2007-10	RSSSF 2007 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division North	2008		ended	2008-10	RSSSF 2008 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division North	2009		ended	2009-10	RSSSF 2009 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division South Gotaland	2002		first	Falkenberg FF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division South Gotaland	2002		second	Lunds BK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division South Gotaland	2006		ended	2006-10	RSSSF 2006 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division South Gotaland	2007		ended	2007-10	RSSSF 2007 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division South Gotaland	2008		ended	2008-10	RSSSF 2008 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division South Gotaland	2009		ended	2009-10	RSSSF 2009 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Second Division West Gotaland	2002		first	FC Trollhättan	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division West Gotaland	2002		second	Göteborgs AIS	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division West Svealand	2002		first	BK Forward	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Second Division West Svealand	2002		second	Rynninge IK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division East Svealand	2002		first	Tyresö FF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division East Svealand	2002		second	Älvsjö AIK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division East Svealand	2004		first	Hammarby TFF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division East Svealand	2004		second	Arameiska Syrianska KIF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division East Svealand	2006		ended	2006-10	RSSSF 2006 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division East Svealand	2007		ended	2007-10	RSSSF 2007 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division East Svealand	2008		ended	2008-10	RSSSF 2008 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division Middle Gotaland	2002		first	Floda BoIF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Middle Gotaland	2002		second	Jonsereds IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Middle Gotaland	2004		first	Lindome IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Middle Gotaland	2004		second	Varbergs GIF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Middle Gotaland	2006		ended	2006-10	RSSSF 2006 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division Middle Gotaland	2007		ended	2007-10	RSSSF 2007 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division Middle Gotaland	2008		ended	2008-10	RSSSF 2008 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division Middle Norrland	2002		first	IFK Östersund	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Middle Norrland	2002		second	IFK Sundsvall	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Middle Norrland	2004		first	Gimonäs CK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Middle Norrland	2004		second	Kubikenborgs IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Norrland	2002		first	Sunnanå SK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Norrland	2002		second	Morön BK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Norrland	2004		first	Hemmingsmarks IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Norrland	2004		second	Furunäs/Bullmarks IK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Svealand	2002		first	Vasalunds IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Svealand	2002		second	Heby AIF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Svealand	2004		first	IK Frej Täby	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Svealand	2004		second	Bollstanäs SK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Svealand	2006		ended	2006-10	RSSSF 2006 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division North Svealand	2007		ended	2007-10	RSSSF 2007 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division North Svealand	2008		ended	2008-10	RSSSF 2008 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division North Svealand	2009		first	Dalkurd FF	RSSSF 2009 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division North Svealand	2009		second	Skiljebo SK	RSSSF 2009 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northeast Gotaland	2002		first	Smedby AIS	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northeast Gotaland	2002		second	LSW IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northeast Gotaland	2004		first	IF Heimer	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northeast Gotaland	2004		second	Tenhults IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northwest Gotaland	2002		first	Melleruds IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northwest Gotaland	2002		second	Vallens IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northwest Gotaland	2004		first	Melleruds IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Northwest Gotaland	2004		second	Lärje/Angereds IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Gotaland	2002		first	Bunkeflo IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Gotaland	2002		second	Asmundstorps IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Gotaland	2004		first	Helsingborgs Södra BIS	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Gotaland	2004		second	Limhamns IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Gotaland	2006		ended	2006-10	RSSSF 2006 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division South Gotaland	2007		ended	2007-10	RSSSF 2007 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division South Gotaland	2008		ended	2008-10	RSSSF 2008 page gives no match dates for this competition; no other source found
+nordic-1	Swedish Third Division South Norrland	2002		first	Falu BS	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Norrland	2002		second	Harmångers IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Norrland	2004		first	Slätta SK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division South Norrland	2004		second	Hudiksvall ABK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southeast Gotaland	2002		first	Växjö BK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southeast Gotaland	2002		second	Kristianstads FF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southeast Gotaland	2004		first	Nybro IF	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southeast Gotaland	2004		second	Kalmar AIK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southwest Gotaland	2002		first	Skene IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southwest Gotaland	2002		second	Ljungby IF	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southwest Gotaland	2004		first	VMA IK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southwest Gotaland	2004		second	Åhus Horna BK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division Southwest Gotaland	2009		held	not held	RSSSF 2009 page has no fourth level; no other source found
+nordic-1	Swedish Third Division West Svealand	2002		first	Strömtorps IK	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division West Svealand	2002		second	IFK Eskilstuna	RSSSF 2002 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division West Svealand	2004		first	Örebro Ungdom	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-1	Swedish Third Division West Svealand	2004		second	Kungsörs BK	RSSSF 2004 page has no table or results for this group; worldfootball.net refused (403); no other source found
+nordic-2	Norwegian Second Division Group 1	2002		ended	2002-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 2	2002		ended	2002-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 3	2002		ended	2002-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 4	2002		ended	2002-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 1	2003		ended	2003-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 2	2003		ended	2003-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 3	2003		ended	2003-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 4	2003		ended	2003-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 1	2004		ended	2004-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 2	2004		ended	2004-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 3	2004		ended	2004-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 4	2004		ended	2004-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 1	2005		ended	2005-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 2	2005		ended	2005-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 3	2005		ended	2005-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Norwegian Second Division Group 4	2005		ended	2005-10	the source of ended is RSSSF Norway; the Wikipedia season page has no match dates and transfermarkt has no data for these groups
+nordic-2	Finnish Premier Division	2002		ended	2002-10	transfermarkt lists matches only to 2 September 2002; the Wikipedia page has no dates
+nordic-2	Finnish First Division	2002		ended	2002-10	transfermarkt has no matches for this season; the Wikipedia page has no dates
+nordic-2	Finnish First Division	2003		ended	2003-10	transfermarkt has no matches for this season; the Wikipedia page has no dates
+nordic-2	Finnish First Division	2005		ended	2005-10	transfermarkt has no matches for this season; the Wikipedia page has no dates
+nordic-2	Finnish Second Division South	2002		first	FC Espoo	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+nordic-2	Finnish Second Division South	2002		second	AC Vantaa	RSSSF has no Kakkonen tables for 2002
+nordic-2	Finnish Second Division East	2002		first	Warkaus JK	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+nordic-2	Finnish Second Division East	2002		second	Mikkelin Palloilijat	RSSSF has no Kakkonen tables for 2002
+nordic-2	Finnish Second Division West	2002		first	TPV Tampere	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+nordic-2	Finnish Second Division West	2002		second	Salon Palloilijat	RSSSF has no Kakkonen tables for 2002
+nordic-2	Finnish Second Division North	2002		first	Oulun Luistinseura	RSSSF has no Kakkonen tables for 2002; it lists this club in the Division One/Two promotion playoffs of October 2002, which fits a group winner
+nordic-2	Finnish Second Division North	2002		second	Kokkolan Palloveikot	RSSSF has no Kakkonen tables for 2002
+nordic-2	Finnish Second Division South	2003		ended	2003-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division East	2003		ended	2003-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division West	2003		ended	2003-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division North	2003		ended	2003-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division South	2004		ended	2004-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division East	2004		ended	2004-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division West	2004		ended	2004-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division North	2004		ended	2004-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division South	2005		ended	2005-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division East	2005		ended	2005-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division West	2005		ended	2005-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+nordic-2	Finnish Second Division North	2005		ended	2005-09	the source of ended is RSSSF; Wikipedia has no dates and transfermarkt has no data for these groups
+scot-wal-nir	Northern Irish County Antrim Shield	2003		ended	2003-03	RSSSF list and season pages give no date for this final; no other page found
+scot-wal-nir	Northern Irish County Antrim Shield	2005		ended	2005-03	RSSSF list and season pages give no date for this final; no other page found
+scot-wal-nir	Northern Irish County Antrim Shield	2006		ended	2006-02	RSSSF list and season pages give no date for this final; no other page found
+scot-wal-nir	Northern Irish County Antrim Shield	2008		ended	2007-10	RSSSF list and season pages give no date for this final; no other page found
+scot-wal-nir	Northern Irish County Antrim Shield	2009		ended	2008-11	RSSSF list and season pages give no date for this final; no other page found
+scot-wal-nir	Northern Irish League First Division	2002		ended	2002-04	Wikipedia season page gives no date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League First Division	2004		ended	2004-05	Wikipedia season page gives no date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League First Division	2005		ended	2005-04	Wikipedia season page gives no date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League First Division	2006		ended	2006-05	Wikipedia season page gives no date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League First Division	2007		ended	2007-05	Wikipedia season page gives no date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League First Division	2008		ended	2008-05	Wikipedia season page gives no date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League First Division	2009		ended	2009-05	Wikipedia season page gives no date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League Premier Division	2002		ended	2002-04	Wikipedia season page gives no last match date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League Premier Division	2003		ended	2003-04	Wikipedia season page gives no last match date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League Premier Division	2004		ended	2004-04	Wikipedia season page gives no last match date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League Premier Division	2005		ended	2005-04	Wikipedia season page gives no last match date; worldfootball.net refused the request
+scot-wal-nir	Northern Irish League Premier Division	2006		ended	2006-04	Wikipedia season page gives no last match date; worldfootball.net refused the request
+scot-wal-nir	Scottish First Division	2002		ended	2002-04	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish First Division	2003		ended	2003-05	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish First Division	2004		ended	2004-05	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish First Division	2005		ended	2005-05	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish First Division	2006		ended	2006-04	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish First Division	2008		ended	2008-04	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish First Division	2009		ended	2009-05	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish Second Division	2004		ended	2004-05	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish Second Division	2005		ended	2005-05	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish Second Division	2006		ended	2006-04	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish Second Division	2007		ended	2007-04	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish Second Division	2008		ended	2008-04	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish Second Division	2009		ended	2009-05	Wikipedia season page gives no last league match date (play-off dates only)
+scot-wal-nir	Scottish Third Division	2004		ended	2004-05	Wikipedia season page gives no date
+scot-wal-nir	Scottish Third Division	2005		ended	2005-05	Wikipedia season page gives no date
+scot-wal-nir	Welsh Cup	2002		ended	2002-05	no Wikipedia season page; no other page found
+scot-wal-nir	Welsh League Cup	2002		ended	2002-05	no Wikipedia season page; no other page found
+scot-wal-nir	Welsh League Cup	2003		ended	2003-05	no Wikipedia season page; no other page found
+scot-wal-nir	Welsh League Cup	2004		ended	2004-05	no Wikipedia season page; no other page found
+y2001-a	Asian Super Cup	2001		ended	2001-08	RSSSF assup.html gives no dates
+y2001-a	Brazilian Central Regional Cup	2001		ended	2001-03	no other page with the final dates
+y2001-a	Brazilian Central State Championship	2001		ended	2001-07	no pt.wikipedia page for 2001
+y2001-a	Brazilian Goiás State Championship	2001		ended	2001-06	no pt.wikipedia page for 2001
+y2001-a	Brazilian Minas Gerais Lower Division	2001		ended	2001-08	no pt.wikipedia page for 2001
+y2001-a	Brazilian Minas Gerais State Championship	2001		ended	2001-06	no pt.wikipedia page for 2001
+y2001-a	Brazilian National Second Division	2001		ended	2001-12	RSSSF lists give no dates
+y2001-a	Brazilian National Third Division	2001		ended	2001-12	RSSSF lists give no dates
+y2001-a	Brazilian North Regional Cup	2001		ended	2001-03	no other page with the final dates
+y2001-a	Brazilian North State Championship	2001		ended	2001-07	no pt.wikipedia page for 2001
+y2001-a	Brazilian Northeast Regional Cup	2001		ended	2001-04	no other page with the final date
+y2001-a	Brazilian Northeast State Championship	2001		ended	2001-07	no pt.wikipedia page for 2001
+y2001-a	Brazilian Pernambuco State Championship	2001		ended	2001-07	no pt.wikipedia page for 2001
+y2001-a	Brazilian Rio de Janeiro Lower Division	2001		ended	2001-10	no pt.wikipedia page for 2001
+y2001-a	Chinese Second Division	2001		ended	2001-10	zh.wikipedia gives no date
+y2001-a	Croatian Second Division North	2001		ended	2002-05	Wikipedia page gives no dates
+y2001-a	Croatian Second Division South	2001		ended	2002-05	Wikipedia page gives no dates
+y2001-a	Czech First Division	2001		ended	2001-05	Wikipedia page gives no dates
+y2001-a	English Charity Shield	2001		ended	2001-08	RSSSF list gives no date
+y2001-a	English Conference	2001		ended	2001-05	RSSSF gives no Conference dates
+y2001-a	English Conference Cup	2001		held	not held	no RSSSF or FCHD page found
+y2001-a	English FA Trophy	2001		ended	2001-05	RSSSF list gives no date
+y2001-a	English Second Division	2001		ended	2001-05	RSSSF gives no league dates for this division
+y2001-a	English Third Division	2001		ended	2001-05	RSSSF gives no league dates for this division
+y2001-a	English Vans Trophy	2001		ended	2001-04	RSSSF list gives no date
+y2001-a	Finnish Cup	2001		ended	2001-11	Wikipedia page gives no date
+y2001-a	Finnish First Division	2001		ended	2001-11	no non-RSSSF page with the play-off dates
+y2001-a	Finnish Premier Division	2001		ended	2001-10	Wikipedia page gives no date
+y2001-a	French National	2001		ended	2001-05	RSSSF gives no National dates
+y2001-a	German Regional Division North	2001		ended	2001-06	RSSSF and de.wikipedia give no dates
+y2001-a	German Regional Division South	2001		ended	2001-05	RSSSF and de.wikipedia give no dates
+y2001-a	Dutch Cup	2001		ended	2001-05	RSSSF gives no date
+y2001-a	Dutch First Division	2001		ended	2001-05	Wikipedia and RSSSF give no dates
+y2001-a	Dutch Premier Division	2001		ended	2001-05	RSSSF gives no dates
+y2001-a	Dutch Super Cup	2001		ended	2001-08	RSSSF list gives no date
+y2001-b	Indian Mumbai League	2001		second	Air India	only RSSSF gives the 2001/02 championship round; Wikipedia list has an empty 2001-02 line
+y2001-b	Indian Mumbai League	2001		ended	2002-01	only RSSSF gives the date (8 Jan 2002)
+y2001-b	Italian Serie C Cup	2001		ended	2001-05	RSSSF list has no dates
+y2001-b	Italian Serie C2/A	2001		second	Triestina	RSSSF lists the play-off teams but not the play-off results
+y2001-b	Italian Serie C2/A	2001		ended	2001-06	RSSSF gives no C2 dates
+y2001-b	Italian Serie C2/B	2001		second	Chieti	RSSSF lists the play-off teams but not the play-off results
+y2001-b	Italian Serie C2/B	2001		ended	2001-06	RSSSF gives no C2 dates
+y2001-b	Italian Serie C2/C	2001		second	Sora	RSSSF lists the play-off teams but not the play-off results
+y2001-b	Italian Serie C2/C	2001		ended	2001-06	RSSSF gives no C2 dates
+y2001-b	Japanese Emperor's Cup	2001		ended	2002-01	row cites RSSSF for ended; the Wikipedia pages read give no date
+y2001-b	Japanese J-League 2	2001		ended	2001-11	Wikipedia page gives no date
+y2001-b	Luxembourg National Division	2001		ended	2001-05	Wikipedia season page gives no date
+y2001-b	Northern Irish League First Division	2001		ended	2001-04	Wikipedia gives no date
+y2001-b	Northern Irish League Premier Division	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Polish First Division	2001		ended	2001-06	Wikipedia gives no date
+y2001-b	Polish Second Division	2001		ended	2001-06	Polish Wikipedia page gives no date
+y2001-b	Portuguese Second Division B Central	2001		ended	2001-05	ended is an inference in the row; no page gives the date
+y2001-b	Portuguese Second Division B North	2001		ended	2001-05	ended is an inference in the row; no page gives the date
+y2001-b	Portuguese Second Division B South	2001		ended	2001-05	ended is an inference in the row; no page gives the date
+y2001-b	Portuguese Second League	2001		ended	2001-05	ended is an inference in the row; no page gives the date
+y2001-b	Portuguese Third Division	2001		held	not held	RSSSF 2000/01 page has no III Divisão section; no other page found
+y2001-b	Irish First Division	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Irish League Cup	2001		ended	2002-04	Wikipedia list gives no date
+y2001-b	Irish Munster Senior Cup	2001		first	Cork City	no page of another publisher found
+y2001-b	Irish Munster Senior Cup	2001		second	College Corinthians	no page of another publisher found
+y2001-b	Irish Premier Division	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Russian First Division	2001		ended	2001-11	Wikipedia gives no date
+y2001-b	Russian Premier Division	2001		ended	2001-11	Wikipedia gives no date
+y2001-b	Russian Second Division - Ural	2001		ended	2001-10	no date read on the second page
+y2001-b	Russian Second Division - West	2001		ended	2001-10	no date read on the second page
+y2001-b	Scottish First Division	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	South African Premier Division	2001		ended	2001-06	Wikipedia gives no date
+y2001-b	Spanish Second Division	2001		ended	2001-06	Wikipedia gives no date
+y2001-b	Spanish Second Division B1	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Spanish Second Division B2	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Spanish Second Division B3	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Spanish Second Division B4	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Swedish First Division	2001		ended	2001-10	RSSSF gives no Superettan dates; the second ended source is Swedish Wikipedia, same publisher
+y2001-b	Swiss National Division A	2001		ended	2001-05	only RSSSF (also cited) has dates
+y2001-b	Turkish Premier Division	2001		ended	2002-05	Wikipedia gives no date
+y2001-b	Welsh Cup	2001		ended	2001-05	Wikipedia list gives no date
+y2001-b	Welsh Premier Division	2001		ended	2001-05	Wikipedia gives no date
+y2001-b	Yugoslav Second Division East	2001		ended	2001-06	ended is an inference in the row; no page gives the date
+y2001-b	Yugoslav Second Division North	2001		ended	2001-06	ended is an inference in the row; no page gives the date
+y2001-b	Yugoslav Second Division South	2001		ended	2001-06	ended is an inference in the row; no page gives the date
+y2001-b	Yugoslav Second Division West	2001		ended	2001-06	ended is an inference in the row; no page gives the date

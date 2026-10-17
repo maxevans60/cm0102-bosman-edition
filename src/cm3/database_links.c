@@ -223,7 +223,7 @@ bool database_leave_club(club_t *c, staff_t *s, const cm_date_t *date, bool unli
     national = is_national_club(c);
     if (date) {
         if (national) s->d29 = *date;
-        else s->contract_end = *date;
+        else s->date_joined = *date;
     }
     job = national ? s->national_job : s->club_job;
     if (as_player) job = job == 11 || job == 12 || job == 13 || job == 15 ? 11 : 0;
@@ -434,8 +434,8 @@ void database_staff_pass(void)
         }
         if (s->b23 && !s->b22) s->b23 = 0;
         if (!s->club && !s->national_club && s->non_player &&  /* 0x52d2d1 */
-            date_before(s->contract_end, make_date(1, 0, 1998))) {
-            s->contract_end = make_date(1, 8, 1997);
+            date_before(s->date_joined, make_date(1, 0, 1998))) {
+            s->date_joined = make_date(1, 8, 1997);
         }
         if (s->club_job == 7) s->club_job = 6;                 /* 0x52d33f */
         if (s->national_job == 7) s->national_job = 6;

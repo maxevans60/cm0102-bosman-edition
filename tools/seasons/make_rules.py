@@ -49,7 +49,8 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 PARTS = os.path.join(ROOT, "docs", "research", "rules-0.6.0")
-NOT_PARTS = ("-clubs.tsv", "-academy.tsv", ".check.tsv", ".check2.tsv", ".reconcile.tsv", "databases-signatures.tsv")
+NOT_PARTS = ("-clubs.tsv", "-academy.tsv", ".check.tsv", ".check2.tsv", ".reconcile.tsv", "databases-signatures.tsv",
+             "databases-date-shifts.tsv", "databases-date-shifts-last-rows.tsv", "databases-date-shifts-careers.tsv")  # slice 11b
 COLUMNS = ["id", "season", "real_season", "nation", "comp_file", "comp", "tier", "name", "clubs", "up", "down",
            "playoffs", "split", "format", "subs_used", "bench", "foreign", "work_permit", "registration",
            "windows", "notes", "sources"]
