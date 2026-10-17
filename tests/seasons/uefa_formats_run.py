@@ -9,7 +9,7 @@ Usage:
 Each run is a season jump of tests/seasons/rules_report_check.py. The rules report holds a "uefa" line for the
 Champions League and the UEFA Cup at the start and end of each season (src/recomp_rt/win/season_uefa.c): the
 stage count, the current stage, the clubs of the group stages in stages 0 to 7 and after them, and the clubs and
-rounds of the knockout stage. The runs:
+rounds of the knockout stage, and the winner of its history row of the season. The runs:
     2007    November 2007, changing rules off, the season 2007/08: Champions League with one group stage and a
             round of 16 (9 stages, 32 clubs in groups, 16 in the knockout), UEFA Cup with 40 clubs in groups and
             a knockout of 32 (9 stages), Intertoto Cup of 3 rounds (the log line of season_uefa_cup.c)
@@ -20,7 +20,8 @@ rounds of the knockout stage. The runs:
     load    November 2007: the game saves 240 days after the start (March 2008, the knockout stages of both
             cups), a new program loads the save, the holiday goes on to 1 June 2008, and the end report of
             2007/08 shows both knockout stages played to the end of the season (16 and 32 clubs)
-The checks: each jump ends with code 0 and shows no message box of the game, and the uefa lines are as above.
+The checks: each jump ends with code 0 and shows no message box of the game, the uefa lines are as above, and
+each end line names a winner.
 A run takes about 3 to 10 minutes. --jobs (default 2) runs that many at the same time.
 """
 import concurrent.futures
@@ -58,7 +59,10 @@ def expect(lines, season, file, want, label):
     if not u:
         return [f"{label}: no end line of {file} in {season}"]
     got = {k: u[k] for k in want}
-    return [] if got == want else [f"{label}: {file} {season}/{(season + 1) % 100:02d} {got}, want {want}"]
+    fails = [] if got == want else [f"{label}: {file} {season}/{(season + 1) % 100:02d} {got}, want {want}"]
+    if u["winner"] in ("", "-"):
+        fails.append(f"{label}: {file} {season}/{(season + 1) % 100:02d} has no winner in its history")
+    return fails
 
 
 def boxes(work):

@@ -107,7 +107,8 @@ def read_report(path):
         elif cells[0] == "uefa":                         # slice 22: the stages of the Champions League
             UEFA_LINES.append({"season": int(cells[1]), "phase": cells[2], "file": cells[3], "stages": int(cells[4]),
                                "current": int(cells[5]), "groups": int(cells[6]), "groups2": int(cells[7]),
-                               "ko_clubs": int(cells[8]), "ko_rounds": int(cells[9])})
+                               "ko_clubs": int(cells[8]), "ko_rounds": int(cells[9]),
+                               "winner": cells[10] if len(cells) > 10 else "-"})
         elif cells[0] == "comp":
             if len(cells) != len(COLS) + 1:
                 raise SystemExit(f"{path}: a comp line with {len(cells)} cells")

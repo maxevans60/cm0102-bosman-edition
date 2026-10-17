@@ -492,8 +492,22 @@ static void report_comp(FILE *f, int season, const char *phase, const char *file
             ko_rounds = (int16_t)rd16(g_mem, st + 0x3c);
         }
     }
-    fprintf(f, "uefa\t%d\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n", season, phase, file, count, now, groups, groups2,
-            ko_clubs, ko_rounds);
+    /* The winner of the history row of the competition with the label year season + 1 (the history table at
+     * [0xae23d4], 0x1a bytes a row, count [0xae237c]: +4 the competition record, +8 the label year, +0xa the
+     * winner; club +4 the name; season_history.c), or "-". */
+    char winner[64] = "-";
+    uint32_t rows = rd32(g_mem, 0xae23d4u), rec = rd32(g_mem, obj + 4);
+    int32_t n = (int32_t)rd32(g_mem, 0xae237cu);
+    for (int32_t i = 0; readable(rows) && readable(rec) && i < n && i < 200000; i++) {
+        uint32_t row = rows + 0x1au * (uint32_t)i;
+        if (rd32(g_mem, row + 4) != rec || (int16_t)rd16(g_mem, row + 8) != season + 1) continue;
+        uint32_t club = rd32(g_mem, row + 0xa);
+        if (readable(club)) snprintf(winner, sizeof winner, "%.50s", win_str(club + 4));
+    }
+    for (char *p = winner; *p; p++)
+        if (*p == '\t' || *p == '\n') *p = ' ';
+    fprintf(f, "uefa\t%d\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n", season, phase, file, count, now, groups, groups2,
+            ko_clubs, ko_rounds, winner);
 }
 
 void season_uefa_report(void *file, int season, const char *phase)
