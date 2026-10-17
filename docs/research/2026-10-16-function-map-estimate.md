@@ -1919,6 +1919,33 @@ The checkers took 1,023,831 tokens, about 4,760 per row, and 1 to 4 minutes each
 |---|---|---|---|---|
 | 0x6d5cd0 | `match_events_get_event_category` | `match_events_get_event_priority` | takes reviewer | `match_events_get_event_priority` |
 
+#### Confidence c04 (2026-10-17)
+
+Run `conf-c04`: 8 Sonnet checkers worked from short packs on the 197 rows of batches conf-c04-aa to conf-c04-ah (national teams, network, news, notes, Norwegian, officials, Olympics, physio, player regen, player search, player stats, plot, Portuguese, printouts, record utils, ruling body, Russian, scout, screen manager, search, setup, shortlist, simulated stats, Spanish, squad and staff contract rows). Agree 160, fix 37, rename 0. There were no renames and no global conflicts, so the third check had no input and did not run. 37 rows were written, of which 4 are evidence fixes that stay medium (the player regen rows 0x7abac0, 0x7ad0e0, 0x7ad220 and 0x7ad590).
+
+| Figure | Value |
+|---|---|
+| Rows checked | 197 |
+| Rows raised to high | 33 (16.8%) |
+| Rows with a new name | 0 |
+| Globals found wrong | 0 |
+| Total tokens of the wave | 1,119,347 |
+
+Quote kinds of the 33 raised rows: global 20, caller 11, string 2. Most global quotes are competition and nation key ids, for example the Portuguese, Russian, Norwegian and Spanish division keys. Every checker checked each global it quoted, and none was wrong. So `conf-c04-g` lowers no global and no row. Checker conf-c04-ah kept 0x85fa00 at medium because its high caller cites it, so that checker applied the circular caller test without a rule in the brief. Confidence in `names.tsv` is now 5,635 high, 1,200 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c04-aa | 23 | 7 | 166,066 |
+| Checker | Sonnet | conf-c04-ab | 21 | 3 | 137,458 |
+| Checker | Sonnet | conf-c04-ac | 21 | 6 | 137,494 |
+| Checker | Sonnet | conf-c04-ad | 24 | 11 | 165,790 |
+| Checker | Sonnet | conf-c04-ae | 22 | 2 | 120,479 |
+| Checker | Sonnet | conf-c04-af | 29 | 0 | 100,702 |
+| Checker | Sonnet | conf-c04-ag | 27 | 2 | 128,085 |
+| Checker | Sonnet | conf-c04-ah | 30 | 2 | 163,273 |
+
+The checkers took 1,119,347 tokens, about 5,680 per row, and 1 to 5 minutes each. There is no rename table, because the wave has no rename.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
