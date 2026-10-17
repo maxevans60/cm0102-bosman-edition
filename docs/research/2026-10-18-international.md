@@ -14,3 +14,76 @@ Code: `src/recomp_rt/win/season_intl.h`, `season_intl_rules.c` (editions and rul
 - Q367: the format of Euro 2004 says silver goal, so the edition has no golden goal: full extra time, then penalties.
 - Hosts with no automatic place get no host row: Euro 2020 (12 host nations, each had to qualify) and Euro 2028 (no automatic place; two places are kept for hosts that miss out in the qualifying, slice 28).
 - Nation names of the table that nation.dat writes another way: Netherlands is Holland, China is China PR (China in later databases), the United Kingdom of the 2012 Olympics is England (inference: the game has no Great Britain team).
+
+## Two paths
+
+A season game is a game with the season code on whose start year is not 2001 or whose changing rules are on (`season_intl_on`). The base game (2001/02, changing rules off) and `RECOMP_SEASON_CODE=off` get none of this slice: every site gives the original's value.
+
+- **At a new game** each finals class takes the first edition of the table whose season is the start season or later. A 2001 start keeps the original's first editions (the table holds the same ones).
+- **With changing rules on**, `start_new_season` of each class takes the next edition of the table. After the last edition of a class the object waits with the year 2200, which no game reaches: the Confederations Cup after 2017 (Q248: a competition that ended does not come back).
+- **With changing rules off**, the rules of the start season stay (Q232): after the first edition each class adds the original's step.
+
+## The editions (code sites)
+
+Every class keeps its edition year in the word +0x40 of its object (sweep section 2). The research of the sites (constructor, `start_new_season`, `this` in esi):
+
+| Class | Constructor | First instruction after the year loop | start_new_season | Step |
+|---|---|---|---|---|
+| world_cup | 0x92bf50 | 0x92bfee `push 6` (jump from 0x92bfcf) | 0x92d330 | 0x92d409 +4 |
+| euro_champ | 0x57a890 | 0x57a92b `push 1` (from 0x57a90c) | 0x57b750 | 0x57b7ca +4 |
+| fifa_confed | 0x58b310 | 0x58b392 `push 1` (from 0x58b389) | 0x58bff0 | 0x58c050 +2 |
+| copa_america (goldcup.cpp) | 0x5e0660 | 0x5e06fb `push 1` (from 0x5e06db) | 0x5e1530 | 0x5e1590 +2 |
+| african_nations | 0x401000 | 0x401097 `push 1` (from 0x40107a) | 0x401d20 | 0x401d80 +2 |
+| asia_nations | 0x40e860 | 0x40e8f5 `push 1` (from 0x40e8d8) | 0x40f720 | 0x40f780 +4 |
+| oceania_nations | 0x7988b0 | 0x798952 `push 1` (from 0x798935) | 0x7998e0 | 0x799940 +2 |
+| olympics | 0x79f530 | 0x79f5c5 `push 1` (from 0x79f5a8) | 0x7a0450 | 0x7a04b0 +4 |
+
+- The constructor uses the year after that instruction (team slots, stages, hosts), and `start_new_season` calls the stage builder (vtable +0x8c) after the step, so the new year reaches the stages and the hosts. The step is the only write of +0x40 in each `start_new_season`. No instruction after a step reads its flags before another sets them (read at each site).
+- Euro qualifying (0x57ce10) and the six World Cup sections keep the original's four-year cycle: the table's European Championships and World Cups come every four years (Euro 2020 at its planned time, Q277).
+- The finals dates are fixed in the class code, not in the host rows (the round dates of the template function vtable +0x3c build `Date::Date` 0x549f70 from the day, month and +0x40). For example the African Cup of Nations plays in February (0x401385), the Asian Cup in October (0x40eba5), the Olympics in September (0x79f875), the Confederations Cup from 29 July (0x58b601). So an edition plays in its year at the class's month. The table's months are not applied: see "Left out".
+- World Cup check at 0x92c175: when the year is the game year at the constructor, the class takes 32 teams from its default list (+0x36 = 0x20). A 2022 start meets it, because the class plays in June and the table's 2022 World Cup is in the start year.
+
+## Golden goal (Q367)
+
+Bit 0x80 of the rule flags word of a knockout round is the golden goal (sweep section 7). The round template functions hold the competition in edi (0x92c299 World Cup, 0x57ab99 Euro, 0x58b56f Confederations Cup). The PATCHES of `seasons.py` pass the word through `rt_intl_round_flags` at the ten sites of the sweep (0x92c96b, 0x92ca46, 0x92cb15, 0x92cbb9, 0x57b002, 0x57b0b2, 0x57b150, 0x58b892, 0x58b90b, 0x58b9a5). With changing rules on, the edition's golden flag of the table decides (golden goal only at the 2002 World Cup and the 2003 Confederations Cup; Euro 2004 plays full extra time, then penalties). With changing rules off, the start season's rule stays: golden goal in a game that starts in 2001/02 or 2002/03.
+
+## The World Cup holder
+
+From the 2006 World Cup the holder qualifies like the others (int-world, "Holders' place"). Each qualifying section asks for the holder with `comp_util_get_latest_placed_club` 0x4afd80 (place 0 of the World Cup history) and leaves it out of its pool. `rt_intl_wc_holder` gives no holder in a season game, at the instruction after each call: Europe 0x919f47, South America 0x920e38 and its pool 0x920f18, Africa 0x9107a6, Asia 0x914077, CONCACAF 0x916394, Oceania 0x91fb98. Each caller tests the result for NULL (0x919f50, 0x920e3d, 0x9107af, 0x914080, 0x91639f, 0x91fba1) or only compares with it (0x920ff9). In a season game every section plays for the 2006 World Cup or later, or plays the 2000 campaign, whose holder France is in none of those pools.
+
+`world_cup` `build_team_slots` 0x92da40 puts the holder in slot 0 (0x92da86) and counts it (0x92da89). From 2006 the count does not go up, so the first host takes slot 0 (0x92dac3), and slots 1 and 2 are cleared because 0x92db02 and 0x92db57 compare slot 0 with them. Inference, not traced: the sections' places give 31 qualifiers with one host; a slot that no qualifier fills keeps a nation of the default list (0x92dbd5..0x92dfb3).
+
+## Hosts
+
+The host table (`HostCountry`, global 0xb5e134: +0 the rows, +4 the count as a word) is made by the constructor 0x5f97c0 at a new game (called from `create_game` 0x828fb0) and at a load (0x82bfec). It first tries the temp file (0x5f98ab, `load_temp_file` 0x5fb160); only when that fails does it allocate 57 rows (0x5f98bd, malloc 0x944e46 at 0x5f98c3), call `init_default_table` 0x5f9970 (0x5f9945) and sort the rows by year and decision day (qsort 0x945333 with 0x5fb3f0 at 0x5f995a). The save writes the count and every row (0x5fb320: 0x5fb3bf, 0x5fb3ce), and the load reads them back (0x5fb19e, 0x5fb275), so changed rows and a larger count survive a save.
+
+Row (0x22 bytes): +0 the key id of the competition (the value of its key global, compared with the record at 0x5f99cf), +4 the year (word, 0 = every year), +6/+0xa, +0xe/+0x12, +0x16/+0x1a three host pairs (nation ids, the index into [0xae23a8] with 0x122 bytes a record, 0x92dacc; -1 for none), +0x1e the choice (0 to 2 the chosen pair, 0xfd fixed, 0xfe not decided, 0xff bidding open), +0x1f the decision day (word), +0x21 the years by which the row moves on 1 January once it lies in the past (`daily_update` 0x5fa850, 0x5faafa; its only reader).
+
+`find_hosts` 0x5fa730 takes the first row of the competition with the year or with year 0 and returns the count of hosts of the chosen pair (pair 1 for a fixed row). It cannot return a third host.
+
+The wrap of `init_default_table` (season game only) writes, for each edition of the table from the start year of the World Cup, European Championship, African Cup of Nations, Olympics, Copa America, Asian Cup and Confederations Cup: the comp key id, the year, pair 1 the first two hosts that the data holds (by name), the other pairs none, choice fixed, no move. An edition without a row of the original gets a new row (the table grows; new rows array with malloc 0x944e46, the old one back with free 0x9452ca), with the first day of the finals as its decision day. The constructor sorts them after the return. The original's 57 random draws of the decision days stay. An edition whose hosts have no automatic place (Euro 2020, Euro 2028) gets a row with no host, so `find_hosts` gives 0 and the class goes on without a host (sweep section 6).
+
+- The Confederations Cup has one row of every year (row 56) whose host `redraw_world_club_and_confed_hosts` 0x5fab70 draws at random. Its year becomes 2200 in a season game, so the rows of the table come first, and the wrap of 0x5fab70 puts the table's hosts back after the draw.
+- A row of the original that lies in the past moves on by its cycle and takes a random host. A row whose move would land on an edition of the table (the 1999 Copa America row on 2011, the 2010 African Cup of Nations row on 2026) stops where it is.
+- Rows of the original for years without an edition stay as they are (for example the World Cup rows after 2026 that the original makes by its move).
+- The Oceania Nations Cup calls no `find_hosts`.
+- Host news: `post_host_news` 0x5faec0 posts only for rows that `daily_update` opens or decides (choice 0xfe and 0xff). A fixed row gets no news. See "Left out".
+
+## Australia to Asia
+
+The confederation of a nation is the continent pointer at nation +0x71; its +0 is the continent id, compared with the key continents (Asia 0x9cfa0c, Oceania 0x9cfa18; for example 0x914037..0x914047 in the Asian section). Australia joined the AFC on 1 January 2006 (int-world-49).
+
+- A season game from 2006/07 moves Australia before the original makes the game (`season_intl_at_create`, from the wrap of `create_game` in `season.c`), so every competition takes it as an Asian nation. The new pointer is the continent record of an Asian nation of the data; the save keeps it.
+- With changing rules on and an earlier start, the rule kind moves it on the first update day from 1 January 2006 (the `entry` hook, entry 5 on 10 January), with the news sentence "Australia now plays in the Asian Football Confederation." A 2005/06 start with changing rules off keeps Australia in Oceania (Q232).
+- World Cup Oceania section: it takes exactly 10 entrants (+0xf3 from 0x91fbda) and leaves out New Caledonia (key nation 0x9cf530, 0x91fc89) and Papua New Guinea (0x9cf41c, 0x91fc93). With Australia in Asia, New Caledonia comes in (a FIFA member from 2004 that played the 2010 qualifying), so the count stays 10.
+- Oceania Nations Cup (`pick_entrants` 0x799e30): Australia and New Zealand by key id (0x799f9c, 0x799fc1; 0x9cf224 is Australia, 0x9cf3f4 New Zealand), then the two best Melanesian and Polynesian nations. With Australia in Asia the wrap puts the Oceania nation with the highest reputation that is not in the six in Australia's place (reputation at nation +0x8e, an inference from `2026-10-17-season-date-shifts.md`).
+- Host row of the World Cup Oceania section: 0x5fab70 swaps its host between Australia and New Zealand; with Australia in Asia the wrap sets New Zealand.
+
+## Left out of this slice (for a follow-up)
+
+- **Sizes.** Euro of 24 from 2016, African Cup of Nations of 24 from 2019, Asian Cup of 24 from 2019 and the Copa America of 16 in 2016 and 2024 need new stage shapes (6 groups and four best thirds, then a round of 16): the sizes are immediates and fixed stage tables (Euro 16 slots 0x57bd93, group size 0x57b53f, 4 stages 0x57a951; ACN 16 at 0x4022d3; Asian Cup 12 at 0x40fe02; Copa America 12 at 0x5e1cde, which must be 12 at 0x5e207c). The table holds the team counts. The OFC Nations Cup of 8 (6 at 0x799e42) and of 4 (2008 round robin) also stay 6.
+- **Dates.** The finals play at the month of their class code (section "The editions"). The table's months (for example the African Cup of Nations in June and July 2019, the Asian Cup in January) need the round dates of each template function as sites.
+- **Qualifying formats 2006 to 2022.** Places and formats of each section by the table, the inter-confederation pairings of 2006 to 2022 (the original builds only the 2002 pairings, 0x91f800 and 0x919c10), and the pool caps of 50 (0x919e41, 0x91a04a) and 51 (0x57f76f) for databases with more European nations.
+- **Nation names.** Every season database keeps the record "Yugoslavia" (the key nation found by name at 0x60ee83) and adds Serbia, Montenegro, Kosovo, Gibraltar and North Macedonia as new records when it has them (read from nation.dat of the 49 databases). So a rename applies only where the database lacks the new record, and it needs a saved list of renamed nations for the load (as `season_change_rename` does for competitions, with a new version of the season part). Not built.
+- **Host news.** The table's rows are fixed, so the game posts no host decision news for them.
+- **The other Australia sites** that name Australia or the Oceania continent for clubs (`OceaniaClubChamp::select_qualified_clubs` 0x798220, `RbAustralia` 0x7db5b0, `WorldClubChamp::pick_entrants` 0x92a8b0, `Friendly::build_international_date_table` 0x5ca4f0, the Setup filter 0x839340) and `national_teams::fill_squad` 0x76c120: not changed. The club sites belong with slice 26.
