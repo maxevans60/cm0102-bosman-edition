@@ -1,0 +1,415 @@
+competition	label	part	field	value	check_url	result	note
+Greek Cup	2002		first	PAOK Salonika	https://en.wikipedia.org/wiki/2002%E2%80%9303_Greek_Football_Cup	agree	
+Greek Cup	2002		second	Aris Salonika	https://en.wikipedia.org/wiki/2002%E2%80%9303_Greek_Football_Cup	agree	
+Greek Cup	2002		ended	2003-05	https://en.wikipedia.org/wiki/2003_Greek_Football_Cup_final	agree	
+Greek Cup	2003		first	Panathinaikos	https://en.wikipedia.org/wiki/2003%E2%80%9304_Greek_Football_Cup	agree	
+Greek Cup	2003		second	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2003%E2%80%9304_Greek_Football_Cup	agree	
+Greek Cup	2003		ended	2004-05	https://en.wikipedia.org/wiki/2004_Greek_Football_Cup_final	agree	
+Greek Cup	2004		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2004%E2%80%9305_Greek_Football_Cup	agree	
+Greek Cup	2004		second	Aris Salonika	https://en.wikipedia.org/wiki/2004%E2%80%9305_Greek_Football_Cup	agree	
+Greek Cup	2004		ended	2005-05	https://en.wikipedia.org/wiki/2005_Greek_Football_Cup_final	agree	
+Greek Cup	2005		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2005%E2%80%9306_Greek_Football_Cup	agree	
+Greek Cup	2005		second	AEK Athens	https://en.wikipedia.org/wiki/2005%E2%80%9306_Greek_Football_Cup	agree	
+Greek Cup	2005		ended	2006-05	https://en.wikipedia.org/wiki/2006_Greek_Football_Cup_final	agree	
+Greek Cup	2006		first	Larisa	https://en.wikipedia.org/wiki/2006%E2%80%9307_Greek_Football_Cup	agree	
+Greek Cup	2006		second	Panathinaikos	https://en.wikipedia.org/wiki/2006%E2%80%9307_Greek_Football_Cup	agree	
+Greek Cup	2006		ended	2007-05	https://www.rsssf.org/tablesg/grk07.html	agree	first source is Wikipedia; RSSSF final 5 May
+Greek Cup	2007		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2007%E2%80%9308_Greek_Football_Cup	agree	
+Greek Cup	2007		second	Aris Salonika	https://en.wikipedia.org/wiki/2007%E2%80%9308_Greek_Football_Cup	agree	
+Greek Cup	2007		ended	2008-05	https://en.wikipedia.org/wiki/2008_Greek_Football_Cup_final	agree	
+Greek Cup	2008		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2008%E2%80%9309_Greek_Football_Cup	agree	
+Greek Cup	2008		second	AEK Athens	https://en.wikipedia.org/wiki/2008%E2%80%9309_Greek_Football_Cup	agree	
+Greek Cup	2008		ended	2009-05	https://en.wikipedia.org/wiki/2009_Greek_Football_Cup_final	agree	
+Greek Cup	2009		first	Panathinaikos	https://en.wikipedia.org/wiki/2009%E2%80%9310_Greek_Football_Cup	agree	
+Greek Cup	2009		second	Aris Salonika	https://en.wikipedia.org/wiki/2009%E2%80%9310_Greek_Football_Cup	agree	
+Greek Cup	2009		ended	2010-04	https://en.wikipedia.org/wiki/2010_Greek_Football_Cup_final	agree	
+Greek National A Division	2002		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2002%E2%80%9303_Alpha_Ethniki	agree	
+Greek National A Division	2002		second	Panathinaikos	https://en.wikipedia.org/wiki/2002%E2%80%9303_Alpha_Ethniki	agree	
+Greek National A Division	2002		ended	2003-05	https://en.wikipedia.org/wiki/2002%E2%80%9303_Alpha_Ethniki	agree	
+Greek National A Division	2003		first	Panathinaikos	https://en.wikipedia.org/wiki/2003%E2%80%9304_Alpha_Ethniki	agree	
+Greek National A Division	2003		second	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2003%E2%80%9304_Alpha_Ethniki	agree	
+Greek National A Division	2003		ended	2004-05	https://en.wikipedia.org/wiki/2003%E2%80%9304_Alpha_Ethniki	agree	
+Greek National A Division	2004		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2004%E2%80%9305_Alpha_Ethniki	agree	
+Greek National A Division	2004		second	Panathinaikos	https://en.wikipedia.org/wiki/2004%E2%80%9305_Alpha_Ethniki	agree	
+Greek National A Division	2004		ended	2005-05	https://en.wikipedia.org/wiki/2004%E2%80%9305_Alpha_Ethniki	agree	
+Greek National A Division	2005		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2005%E2%80%9306_Alpha_Ethniki	agree	
+Greek National A Division	2005		second	AEK Athens	https://en.wikipedia.org/wiki/2005%E2%80%9306_Alpha_Ethniki	agree	
+Greek National A Division	2005		ended	2006-05	https://en.wikipedia.org/wiki/2005%E2%80%9306_Alpha_Ethniki	agree	
+Greek National A Division	2006		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2006%E2%80%9307_Super_League_Greece	agree	
+Greek National A Division	2006		second	AEK Athens	https://en.wikipedia.org/wiki/2006%E2%80%9307_Super_League_Greece	agree	
+Greek National A Division	2006		ended	2007-05	https://en.wikipedia.org/wiki/2006%E2%80%9307_Super_League_Greece	agree	
+Greek National A Division	2007		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2007%E2%80%9308_Super_League_Greece	agree	
+Greek National A Division	2007		second	AEK Athens	https://en.wikipedia.org/wiki/2007%E2%80%9308_Super_League_Greece	agree	
+Greek National A Division	2007		ended	2008-04	https://en.wikipedia.org/wiki/2007%E2%80%9308_Super_League_Greece	agree	regular season end; play-offs followed
+Greek National A Division	2008		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2008%E2%80%9309_Super_League_Greece	agree	
+Greek National A Division	2008		second	PAOK Salonika	https://en.wikipedia.org/wiki/2008%E2%80%9309_Super_League_Greece	agree	
+Greek National A Division	2008		ended	2009-04	https://en.wikipedia.org/wiki/2008%E2%80%9309_Super_League_Greece	agree	regular season end; play-offs followed
+Greek National A Division	2009		first	Panathinaikos	https://en.wikipedia.org/wiki/2009%E2%80%9310_Super_League_Greece	agree	
+Greek National A Division	2009		second	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2009%E2%80%9310_Super_League_Greece	agree	
+Greek National A Division	2009		ended	2010-04	https://en.wikipedia.org/wiki/2009%E2%80%9310_Super_League_Greece	agree	regular season end; play-offs followed
+Greek National B Division	2002		first	Chalkidona	https://en.wikipedia.org/wiki/2002%E2%80%9303_Beta_Ethniki	agree	
+Greek National B Division	2002		second	I.S. Paniliakos	https://en.wikipedia.org/wiki/2002%E2%80%9303_Beta_Ethniki	agree	
+Greek National B Division	2002		ended	2003-05	https://en.wikipedia.org/wiki/2002%E2%80%9303_Beta_Ethniki	agree	
+Greek National B Division	2003		first	Kerkira	https://en.wikipedia.org/wiki/2003%E2%80%9304_Beta_Ethniki	agree	
+Greek National B Division	2003		second	Apollon Kalamarias	https://en.wikipedia.org/wiki/2003%E2%80%9304_Beta_Ethniki	agree	
+Greek National B Division	2003		ended	2004-05	https://en.wikipedia.org/wiki/2003%E2%80%9304_Beta_Ethniki	agree	
+Greek National B Division	2004		first	Larisa	https://en.wikipedia.org/wiki/2004%E2%80%9305_Beta_Ethniki	agree	
+Greek National B Division	2004		second	Levadiakos	https://en.wikipedia.org/wiki/2004%E2%80%9305_Beta_Ethniki	agree	
+Greek National B Division	2004		ended	2005-05	https://en.wikipedia.org/wiki/2004%E2%80%9305_Beta_Ethniki	agree	
+Greek National B Division	2005		first	Ergotelis	https://en.wikipedia.org/wiki/2005%E2%80%9306_Beta_Ethniki	agree	
+Greek National B Division	2005		second	Kerkira	https://www.transfermarkt.com/football-league/tabelle/wettbewerb/GR2/saison_id/2005	agree	first source is Wikipedia
+Greek National B Division	2005		ended	2006-05	https://www.transfermarkt.com/football-league/gesamtspielplan/wettbewerb/GR2/saison_id/2005	agree	first source is Wikipedia; last match 14 May 2006
+Greek National B Division	2006		first	Asteras Tripolis	https://en.wikipedia.org/wiki/2006%E2%80%9307_Beta_Ethniki	agree	
+Greek National B Division	2006		second	Levadiakos	https://en.wikipedia.org/wiki/2006%E2%80%9307_Beta_Ethniki	agree	
+Greek National B Division	2006		ended	2007-06	https://en.wikipedia.org/wiki/2006%E2%80%9307_Beta_Ethniki	agree	
+Greek National B Division	2007		first	Panserraikos	https://en.wikipedia.org/wiki/2007%E2%80%9308_Beta_Ethniki	agree	
+Greek National B Division	2007		second	Thrasivoulos	https://en.wikipedia.org/wiki/2007%E2%80%9308_Beta_Ethniki	agree	
+Greek National B Division	2007		ended	2008-06	https://en.wikipedia.org/wiki/2007%E2%80%9308_Beta_Ethniki	agree	
+Greek National B Division	2008		first	Atromitos Athens	https://en.wikipedia.org/wiki/2008%E2%80%9309_Beta_Ethniki	agree	
+Greek National B Division	2008		second	Pas Giannena	https://en.wikipedia.org/wiki/2008%E2%80%9309_Beta_Ethniki	agree	
+Greek National B Division	2008		ended	2009-05	https://en.wikipedia.org/wiki/2008%E2%80%9309_Beta_Ethniki	agree	
+Greek National B Division	2009		first	Olympiakos Volou	https://en.wikipedia.org/wiki/2009%E2%80%9310_Beta_Ethniki	agree	
+Greek National B Division	2009		second	Kerkira	https://en.wikipedia.org/wiki/2009%E2%80%9310_Beta_Ethniki	agree	
+Greek National B Division	2009		ended	2010-05	https://en.wikipedia.org/wiki/2009%E2%80%9310_Beta_Ethniki	agree	
+Greek Super Cup	2002		held	not held	https://en.wikipedia.org/wiki/Greek_Super_Cup	agree	list has 1996 then 2007, then none until 2025
+Greek Super Cup	2003		held	not held	https://en.wikipedia.org/wiki/Greek_Super_Cup	agree	list has 1996 then 2007, then none until 2025
+Greek Super Cup	2004		held	not held	https://en.wikipedia.org/wiki/Greek_Super_Cup	agree	list has 1996 then 2007, then none until 2025
+Greek Super Cup	2005		held	not held	https://en.wikipedia.org/wiki/Greek_Super_Cup	agree	list has 1996 then 2007, then none until 2025
+Greek Super Cup	2006		held	not held	https://en.wikipedia.org/wiki/Greek_Super_Cup	agree	list has 1996 then 2007, then none until 2025
+Greek Super Cup	2007		first	Olympiakos Piraeus	https://en.wikipedia.org/wiki/2007_Greek_Super_Cup	agree	
+Greek Super Cup	2007		second	Larisa	https://en.wikipedia.org/wiki/2007_Greek_Super_Cup	agree	
+Greek Super Cup	2007		ended	2007-10	https://en.wikipedia.org/wiki/2007_Greek_Super_Cup	agree	
+Greek Super Cup	2008		held	not held	https://en.wikipedia.org/wiki/Greek_Super_Cup	agree	list has 1996 then 2007, then none until 2025
+Greek Super Cup	2009		held	not held	https://en.wikipedia.org/wiki/Greek_Super_Cup	agree	list has 1996 then 2007, then none until 2025
+Russian Cup	2002		first	CSKA Moscow	https://en.wikipedia.org/wiki/2001%E2%80%9302_Russian_Cup	agree	
+Russian Cup	2002		second	Zenith St. Petersburg	https://en.wikipedia.org/wiki/2001%E2%80%9302_Russian_Cup	agree	
+Russian Cup	2002		ended	2002-05	https://en.wikipedia.org/wiki/2001%E2%80%9302_Russian_Cup	agree	
+Russian Cup	2003		first	Spartak Moscow	https://en.wikipedia.org/wiki/2002%E2%80%9303_Russian_Cup	agree	
+Russian Cup	2003		second	FK Rostov	https://en.wikipedia.org/wiki/2002%E2%80%9303_Russian_Cup	agree	
+Russian Cup	2003		ended	2003-06	https://en.wikipedia.org/wiki/2002%E2%80%9303_Russian_Cup	agree	
+Russian Cup	2004		first	Terek Grozny	https://en.wikipedia.org/wiki/2003%E2%80%9304_Russian_Cup	agree	
+Russian Cup	2004		second	Krylja Sovetov Samara	https://en.wikipedia.org/wiki/2003%E2%80%9304_Russian_Cup	agree	
+Russian Cup	2004		ended	2004-05	https://en.wikipedia.org/wiki/2003%E2%80%9304_Russian_Cup	agree	
+Russian Cup	2005		first	CSKA Moscow	https://en.wikipedia.org/wiki/2004%E2%80%9305_Russian_Cup	agree	
+Russian Cup	2005		second	FC Khimki	https://en.wikipedia.org/wiki/2004%E2%80%9305_Russian_Cup	agree	
+Russian Cup	2005		ended	2005-05	https://en.wikipedia.org/wiki/2005_Russian_Cup_final	agree	
+Russian Cup	2006		first	CSKA Moscow	https://en.wikipedia.org/wiki/2005%E2%80%9306_Russian_Cup	agree	
+Russian Cup	2006		second	Spartak Moscow	https://en.wikipedia.org/wiki/2005%E2%80%9306_Russian_Cup	agree	
+Russian Cup	2006		ended	2006-05	https://en.wikipedia.org/wiki/2006_Russian_Cup_final	agree	
+Russian Cup	2007		first	Lokomotiv Moscow	https://en.wikipedia.org/wiki/2006%E2%80%9307_Russian_Cup	agree	
+Russian Cup	2007		second	FK Moscow	https://en.wikipedia.org/wiki/2006%E2%80%9307_Russian_Cup	agree	FC Moscow
+Russian Cup	2007		ended	2007-05	https://en.wikipedia.org/wiki/2006%E2%80%9307_Russian_Cup	agree	
+Russian Cup	2008		first	CSKA Moscow	https://en.wikipedia.org/wiki/2007%E2%80%9308_Russian_Cup	agree	
+Russian Cup	2008		second	Amkar Perm	https://en.wikipedia.org/wiki/2007%E2%80%9308_Russian_Cup	agree	
+Russian Cup	2008		ended	2008-05	https://en.wikipedia.org/wiki/2007%E2%80%9308_Russian_Cup	agree	
+Russian Cup	2009		first	CSKA Moscow	https://en.wikipedia.org/wiki/2008%E2%80%9309_Russian_Cup	agree	
+Russian Cup	2009		second	Rubin Kazan	https://en.wikipedia.org/wiki/2008%E2%80%9309_Russian_Cup	agree	
+Russian Cup	2009		ended	2009-05	https://en.wikipedia.org/wiki/2008%E2%80%9309_Russian_Cup	agree	
+Russian First Division	2002		first	Rubin Kazan	https://en.wikipedia.org/wiki/2002_Russian_First_Division	agree	
+Russian First Division	2002		second	Chernomorets Novorossiysk	https://en.wikipedia.org/wiki/2002_Russian_First_Division	agree	
+Russian First Division	2002		ended	2002-11	https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian First Division	2003		first	Amkar Perm	https://en.wikipedia.org/wiki/2003_Russian_First_Division	agree	
+Russian First Division	2003		second	Kuban Krasnodar	https://en.wikipedia.org/wiki/2003_Russian_First_Division	agree	
+Russian First Division	2003		ended	2003-11	https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian First Division	2004		first	Terek Grozny	https://en.wikipedia.org/wiki/2004_Russian_First_Division	agree	
+Russian First Division	2004		second	Tom Tomsk	https://en.wikipedia.org/wiki/2004_Russian_First_Division	agree	
+Russian First Division	2004		ended	2004-11	https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian First Division	2005		first	Luch-Energia Vladivostok	https://en.wikipedia.org/wiki/2005_Russian_First_Division	agree	
+Russian First Division	2005		second	Spartak Nalchik	https://en.wikipedia.org/wiki/2005_Russian_First_Division	agree	
+Russian First Division	2005		ended	2005-11	https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian First Division	2006		first	FC Khimki	https://en.wikipedia.org/wiki/2006_Russian_First_Division	agree	
+Russian First Division	2006		second	Kuban Krasnodar	https://en.wikipedia.org/wiki/2006_Russian_First_Division	agree	
+Russian First Division	2006		ended	2006-11	https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	
+Russian First Division	2007		first	Shinnik Yaroslavl	https://en.wikipedia.org/wiki/2007_Russian_First_Division	agree	
+Russian First Division	2007		second	Terek Grozny	https://en.wikipedia.org/wiki/2007_Russian_First_Division	agree	
+Russian First Division	2007		ended	2007-11	https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Premier Division	2002		first	Lokomotiv Moscow	https://en.wikipedia.org/wiki/2002_Russian_Premier_League	agree	
+Russian Premier Division	2002		second	CSKA Moscow	https://en.wikipedia.org/wiki/2002_Russian_Premier_League	agree	
+Russian Premier Division	2002		ended	2002-11	https://ru.wikipedia.org/wiki/%D0%A7%D0%B5%D0%BC%D0%BF%D0%B8%D0%BE%D0%BD%D0%B0%D1%82_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8_%D0%BF%D0%BE_%D1%84%D1%83%D1%82%D0%B1%D0%BE%D0%BB%D1%83_2002	agree	
+Russian Premier Division	2003		first	CSKA Moscow	https://en.wikipedia.org/wiki/2003_Russian_Premier_League	agree	
+Russian Premier Division	2003		second	Zenith St. Petersburg	https://en.wikipedia.org/wiki/2003_Russian_Premier_League	agree	
+Russian Premier Division	2003		ended	2003-11	https://ru.wikipedia.org/wiki/%D0%A7%D0%B5%D0%BC%D0%BF%D0%B8%D0%BE%D0%BD%D0%B0%D1%82_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8_%D0%BF%D0%BE_%D1%84%D1%83%D1%82%D0%B1%D0%BE%D0%BB%D1%83_2003	agree	
+Russian Premier Division	2004		first	Lokomotiv Moscow	https://en.wikipedia.org/wiki/2004_Russian_Premier_League	agree	
+Russian Premier Division	2004		second	CSKA Moscow	https://en.wikipedia.org/wiki/2004_Russian_Premier_League	agree	
+Russian Premier Division	2004		ended	2004-11	https://ru.wikipedia.org/wiki/%D0%A7%D0%B5%D0%BC%D0%BF%D0%B8%D0%BE%D0%BD%D0%B0%D1%82_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8_%D0%BF%D0%BE_%D1%84%D1%83%D1%82%D0%B1%D0%BE%D0%BB%D1%83_2004	agree	
+Russian Premier Division	2005		first	CSKA Moscow	https://en.wikipedia.org/wiki/2005_Russian_Premier_League	agree	
+Russian Premier Division	2005		second	Spartak Moscow	https://en.wikipedia.org/wiki/2005_Russian_Premier_League	agree	
+Russian Premier Division	2005		ended	2005-11	https://ru.wikipedia.org/wiki/%D0%A7%D0%B5%D0%BC%D0%BF%D0%B8%D0%BE%D0%BD%D0%B0%D1%82_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8_%D0%BF%D0%BE_%D1%84%D1%83%D1%82%D0%B1%D0%BE%D0%BB%D1%83_2005	agree	
+Russian Premier Division	2006		first	CSKA Moscow	https://en.wikipedia.org/wiki/2006_Russian_Premier_League	agree	
+Russian Premier Division	2006		second	Spartak Moscow	https://en.wikipedia.org/wiki/2006_Russian_Premier_League	agree	
+Russian Premier Division	2006		ended	2006-11	https://ru.wikipedia.org/wiki/%D0%A7%D0%B5%D0%BC%D0%BF%D0%B8%D0%BE%D0%BD%D0%B0%D1%82_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8_%D0%BF%D0%BE_%D1%84%D1%83%D1%82%D0%B1%D0%BE%D0%BB%D1%83_2006	agree	
+Russian Premier Division	2007		first	Zenith St. Petersburg	https://en.wikipedia.org/wiki/2007_Russian_Premier_League	agree	
+Russian Premier Division	2007		second	Spartak Moscow	https://en.wikipedia.org/wiki/2007_Russian_Premier_League	agree	
+Russian Premier Division	2007		ended	2007-11	https://ru.wikipedia.org/wiki/%D0%A7%D0%B5%D0%BC%D0%BF%D0%B8%D0%BE%D0%BD%D0%B0%D1%82_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8_%D0%BF%D0%BE_%D1%84%D1%83%D1%82%D0%B1%D0%BE%D0%BB%D1%83_2007	agree	
+Russian Premier Division	2008		first	Rubin Kazan	https://en.wikipedia.org/wiki/2008_Russian_Premier_League	agree	
+Russian Premier Division	2008		second	CSKA Moscow	https://en.wikipedia.org/wiki/2008_Russian_Premier_League	agree	
+Russian Premier Division	2008		ended	2008-11	https://en.wikipedia.org/wiki/2008_Russian_Premier_League	agree	
+Russian Premier Division	2009		first	Rubin Kazan	https://en.wikipedia.org/wiki/2009_Russian_Premier_League	agree	
+Russian Premier Division	2009		second	Spartak Moscow	https://en.wikipedia.org/wiki/2009_Russian_Premier_League	agree	
+Russian Premier Division	2009		ended	2009-11	https://en.wikipedia.org/wiki/2009_Russian_Premier_League	agree	
+Russian Second Division - Central	2002		first	Metallurg Lipetsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - Central	2002		second	Vityaz Podolsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - Central	2002		ended	2002-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	no second source	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+Russian Second Division - Central	2003		first	FC Orel	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - Central	2003		second	Dinamo Bryansk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - Central	2003		ended	2003-11	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	no second source	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+Russian Second Division - Central	2004		first	Fakel Voronezh	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - Central	2004		second	Avangard Kursk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - Central	2004		ended	2004-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	no second source	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+Russian Second Division - Central	2005		first	Salyut-Energia Belgorod	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - Central	2005		second	Agrocomplect Ryazan	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - Central	2005		ended	2005-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	no second source	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+Russian Second Division - Central	2006		first	Spartak-MGK	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	Spartak-MZhK Ryazan; data name match is the research's inference
+Russian Second Division - Central	2006		second	Mordovia Saransk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	
+Russian Second Division - Central	2006		ended	2006-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	no second source	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+Russian Second Division - Central	2007		first	Vityaz Podolsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - Central	2007		second	Metallurg Lipetsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - Central	2007		ended	2007-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	no second source	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+Russian Second Division - Central	2008		first	Metallurg Lipetsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	
+Russian Second Division - Central	2008		second	Avangard Kursk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	
+Russian Second Division - Central	2008		ended	2008-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	no second source	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+Russian Second Division - East	2002		first	Metallurg-Zapsib Novokuznetsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - East	2002		second	Chkalovets-1936 Novosibirsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - East	2002		ended	2002-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	no second source	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+Russian Second Division - East	2003		first	Luch-Energia Vladivostok	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - East	2003		second	Dinamo Barnaul	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - East	2003		ended	2003-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	no second source	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+Russian Second Division - East	2004		first	Chkalovets-1936 Novosibirsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - East	2004		second	Amur Blagoveschensk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - East	2004		ended	2004-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	no second source	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+Russian Second Division - East	2005		first	Metallurg Krasnoyarsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - East	2005		second	Okean Nakhodka	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - East	2005		ended	2005-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	no second source	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+Russian Second Division - East	2006		first	Zvezda Irkutsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	
+Russian Second Division - East	2006		second	Metallurg-Kuzbass Novokuznetsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	
+Russian Second Division - East	2006		ended	2006-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	no second source	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+Russian Second Division - East	2007		first	Dinamo Barnaul	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - East	2007		second	Amur Blagoveschensk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - East	2007		ended	2007-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	no second source	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+Russian Second Division - East	2008		first	FK Chita	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	
+Russian Second Division - East	2008		second	Smena Komsomolsk-na-Amure	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	
+Russian Second Division - East	2008		ended	2008-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	no second source	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+Russian Second Division - South	2002		first	Terek Grozny	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - South	2002		second	Dinamo Makhachkala	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - South	2002		ended	2002-11	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	no second source	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+Russian Second Division - South	2003		first	Dinamo Makhachkala	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - South	2003		second	Olimpia Volgograd	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - South	2003		ended	2003-11	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	no second source	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+Russian Second Division - South	2004		first	Dinamo Stavropol	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - South	2004		second	Volgar-Gazprom Astrakhan	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - South	2004		ended	2004-11	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	no second source	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+Russian Second Division - South	2005		first	Angusht Nazran	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - South	2005		second	Mashuk-KMV Pyatigorsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - South	2005		ended	2005-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	no second source	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+Russian Second Division - South	2006		first	Alania Vladikavkaz	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	Spartak Vladikavkaz (Alania)
+Russian Second Division - South	2006		second	SKA Rostov-na-Donu	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	
+Russian Second Division - South	2006		ended	2006-11	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	no second source	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+Russian Second Division - South	2007		first	Chernomorets Novorossiysk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - South	2007		second	Dinamo Stavropol	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - South	2007		ended	2007-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	no second source	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+Russian Second Division - Ural	2002		first	Uralmash Yekaterinburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - Ural	2002		second	Sodovik Sterlitamak	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - Ural	2002		ended	2002-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	no second source	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+Russian Second Division - Ural	2003		first	KamAZ Naberezhnye Chelny	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2003		second	Gelios-Lukoil Tchelyabinsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	Lukoil Chelyabinsk; data name match is the research's inference; merged Ural-Povolzhye zone
+Russian Second Division - Ural	2003		ended	2003-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	no second source	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+Russian Second Division - Ural	2004		first	Ural Yekaterinburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2004		second	Gelios-Lukoil Tchelyabinsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	Lukoil Chelyabinsk; data name match is the research's inference; merged Ural-Povolzhye zone
+Russian Second Division - Ural	2004		ended	2004-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	no second source	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+Russian Second Division - Ural	2005		first	Sodovik Sterlitamak	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2005		second	Lada Togliatti	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2005		ended	2005-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	no second source	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+Russian Second Division - Ural	2006		first	Nosta Novotroitsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2006		second	Gazovik Orenburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2006		ended	2006-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	no second source	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+Russian Second Division - Ural	2007		first	Volga Uljanovsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2007		second	Gazovik Orenburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2007		ended	2007-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	no second source	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+Russian Second Division - Ural	2008		first	Volga Nizhniy Novgorod	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2008		second	Gazovik Orenburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	merged Ural-Povolzhye zone
+Russian Second Division - Ural	2008		ended	2008-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	no second source	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+Russian Second Division - Volga	2002		first	Svetotekhnika Saransk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - Volga	2002		second	Volga Uljanovsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - Volga	2002		ended	2002-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	no second source	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+Russian Second Division - Volga	2003		first	KamAZ Naberezhnye Chelny	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2003		second	Gelios-Lukoil Tchelyabinsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	Lukoil Chelyabinsk; data name match is the research's inference; merged Ural-Povolzhye zone
+Russian Second Division - Volga	2003		ended	2003-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	no second source	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+Russian Second Division - Volga	2004		first	Ural Yekaterinburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2004		second	Gelios-Lukoil Tchelyabinsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	Lukoil Chelyabinsk; data name match is the research's inference; merged Ural-Povolzhye zone
+Russian Second Division - Volga	2004		ended	2004-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	no second source	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+Russian Second Division - Volga	2005		first	Sodovik Sterlitamak	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2005		second	Lada Togliatti	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2005		ended	2005-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	no second source	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+Russian Second Division - Volga	2006		first	Nosta Novotroitsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2006		second	Gazovik Orenburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2006		ended	2006-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	no second source	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+Russian Second Division - Volga	2007		first	Volga Uljanovsk	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2007		second	Gazovik Orenburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2007		ended	2007-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	no second source	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+Russian Second Division - Volga	2008		first	Volga Nizhniy Novgorod	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2008		second	Gazovik Orenburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	merged Ural-Povolzhye zone
+Russian Second Division - Volga	2008		ended	2008-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	no second source	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+Russian Second Division - West	2002		first	Baltika Kaliningrad	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - West	2002		second	Arsenal Tula	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	agree	
+Russian Second Division - West	2002		ended	2002-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2002	no second source	page gives only the whole season end (17 Nov 2002), not the zone's last match day
+Russian Second Division - West	2003		first	Arsenal Tula	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - West	2003		second	Dinamo Vologda	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	agree	
+Russian Second Division - West	2003		ended	2003-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2003	no second source	page gives only the whole season end (2 Nov 2003), not the zone's last match day
+Russian Second Division - West	2004		first	Torpedo Vladimir	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - West	2004		second	Petrotrest St. Petersburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	agree	
+Russian Second Division - West	2004		ended	2004-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2004	no second source	page gives only the whole season end (3 Nov 2004), not the zone's last match day
+Russian Second Division - West	2005		first	Baltika Kaliningrad	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - West	2005		second	Dinamo Vologda	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	agree	
+Russian Second Division - West	2005		ended	2005-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2005	no second source	page gives only the whole season end (29 Oct 2005), not the zone's last match day
+Russian Second Division - West	2006		first	Textilschik-Telecom Ivanovo	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	
+Russian Second Division - West	2006		second	Sheksna Cherepovets	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	agree	
+Russian Second Division - West	2006		ended	2006-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2006	no second source	page gives only the whole season end (4 Nov 2006), not the zone's last match day
+Russian Second Division - West	2007		first	Sportakademclub Moscow	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - West	2007		second	Sheksna Cherepovets	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	agree	
+Russian Second Division - West	2007		ended	2007-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2007	no second source	page gives only the whole season end (31 Oct 2007), not the zone's last match day
+Russian Second Division - West	2008		first	FK MVD Russia	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	
+Russian Second Division - West	2008		second	Torpedo Vladimir	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	agree	
+Russian Second Division - West	2008		ended	2008-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2008	no second source	page gives only the whole season end (2 Nov 2008), not the zone's last match day
+Russian Second Division - West	2009		first	Dinamo St. Petersburg	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2009	agree	
+Russian Second Division - West	2009		second	Torpedo Vladimir	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2009	agree	
+Russian Second Division - West	2009		ended	2009-10	https://ru.wikipedia.org/wiki/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D0%BE%D0%BD_%D0%9F%D0%A4%D0%9B_2009	no second source	page gives only the whole season end (8 Nov 2009), not the zone's last match day
+Turkish 2. Division	2002		first	Kombassan Konyaspor	https://en.wikipedia.org/wiki/2002%E2%80%9303_Turkish_Second_League_Category_A	agree	
+Turkish 2. Division	2002		second	Çaykur Rizespor	https://en.wikipedia.org/wiki/2002%E2%80%9303_Turkish_Second_League_Category_A	agree	
+Turkish 2. Division	2003		first	Sakaryaspor A.S.	https://en.wikipedia.org/wiki/2003%E2%80%9304_Turkish_Second_League_Category_A	agree	
+Turkish 2. Division	2003		second	Erciyesspor	https://en.wikipedia.org/wiki/2003%E2%80%9304_Turkish_Second_League_Category_A	agree	Kayseri Erciyesspor
+Turkish 2. Division	2004		first	Sivasspor	https://en.wikipedia.org/wiki/2004%E2%80%9305_Turkish_Second_League_Category_A	agree	
+Turkish 2. Division	2004		second	Vestel Manisaspor	https://en.wikipedia.org/wiki/2004%E2%80%9305_Turkish_Second_League_Category_A	agree	
+Turkish 2. Division	2004		ended	2005-05	https://www.transfermarkt.com/1-lig/gesamtspielplan/wettbewerb/TR2/saison_id/2004	agree	
+Turkish 2. Division	2005		first	Bursaspor	https://en.wikipedia.org/wiki/2005%E2%80%9306_TFF_Lig_A	agree	
+Turkish 2. Division	2005		second	Antalyaspor A.S.	https://en.wikipedia.org/wiki/2005%E2%80%9306_TFF_Lig_A	agree	
+Turkish 2. Division	2005		ended	2006-05	https://www.transfermarkt.com/1-lig/gesamtspielplan/wettbewerb/TR2/saison_id/2005	agree	
+Turkish 2. Division	2006		first	Gençlerbirligi OFTASSpor	https://en.wikipedia.org/wiki/2006%E2%80%9307_TFF_Lig_A	agree	
+Turkish 2. Division	2006		second	Istanbul Büyüksehir Belediye Spor	https://en.wikipedia.org/wiki/2006%E2%80%9307_TFF_Lig_A	agree	
+Turkish 2. Division	2006		ended	2007-05	https://www.transfermarkt.com/1-lig/gesamtspielplan/wettbewerb/TR2/saison_id/2006	agree	
+Turkish 2. Division	2007		first	Kocaelispor	https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_1._Lig	agree	
+Turkish 2. Division	2007		second	Antalyaspor A.S.	https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_1._Lig	agree	
+Turkish 2. Division	2007		ended	2008-05	https://www.transfermarkt.com/1-lig/gesamtspielplan/wettbewerb/TR2/saison_id/2007	agree	
+Turkish 2. Division	2008		first	Vestel Manisaspor	https://en.wikipedia.org/wiki/2008%E2%80%9309_TFF_1._Lig	agree	
+Turkish 2. Division	2008		second	Diyarbakirspor	https://en.wikipedia.org/wiki/2008%E2%80%9309_TFF_1._Lig	agree	
+Turkish 2. Division	2008		ended	2009-05	https://www.transfermarkt.com/1-lig/gesamtspielplan/wettbewerb/TR2/saison_id/2008	agree	
+Turkish 2. Division	2009		first	Kardemir Demir-Çelik Karabükspor	https://en.wikipedia.org/wiki/2009%E2%80%9310_TFF_1._Lig	agree	
+Turkish 2. Division	2009		second	Bucaspor	https://en.wikipedia.org/wiki/2009%E2%80%9310_TFF_1._Lig	agree	
+Turkish 2. Division	2009		ended	2010-05	https://www.transfermarkt.com/1-lig/gesamtspielplan/wettbewerb/TR2/saison_id/2009	agree	
+Turkish FA Cup	2002		first	Trabzonspor	https://en.wikipedia.org/wiki/2002%E2%80%9303_Turkish_Cup	agree	
+Turkish FA Cup	2002		second	Gençlerbirligi	https://en.wikipedia.org/wiki/2002%E2%80%9303_Turkish_Cup	agree	
+Turkish FA Cup	2002		ended	2003-04	https://en.wikipedia.org/wiki/2002%E2%80%9303_Turkish_Cup	agree	
+Turkish FA Cup	2003		first	Trabzonspor	https://en.wikipedia.org/wiki/2003%E2%80%9304_Turkish_Cup	agree	
+Turkish FA Cup	2003		second	Gençlerbirligi	https://en.wikipedia.org/wiki/2003%E2%80%9304_Turkish_Cup	agree	
+Turkish FA Cup	2003		ended	2004-05	https://en.wikipedia.org/wiki/2003%E2%80%9304_Turkish_Cup	agree	
+Turkish FA Cup	2004		first	Galatasaray SK	https://en.wikipedia.org/wiki/2004%E2%80%9305_Turkish_Cup	agree	
+Turkish FA Cup	2004		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2004%E2%80%9305_Turkish_Cup	agree	
+Turkish FA Cup	2004		ended	2005-05	https://en.wikipedia.org/wiki/2004%E2%80%9305_Turkish_Cup	agree	
+Turkish FA Cup	2005		first	Besiktas JK	https://en.wikipedia.org/wiki/2005%E2%80%9306_Turkish_Cup	agree	
+Turkish FA Cup	2005		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2005%E2%80%9306_Turkish_Cup	agree	
+Turkish FA Cup	2005		ended	2006-05	https://en.wikipedia.org/wiki/2005%E2%80%9306_Turkish_Cup	agree	
+Turkish FA Cup	2006		first	Besiktas JK	https://en.wikipedia.org/wiki/2006%E2%80%9307_Turkish_Cup	agree	
+Turkish FA Cup	2006		second	Erciyesspor	https://en.wikipedia.org/wiki/2006%E2%80%9307_Turkish_Cup	agree	Kayseri Erciyesspor
+Turkish FA Cup	2006		ended	2007-05	https://en.wikipedia.org/wiki/2006%E2%80%9307_Turkish_Cup	agree	
+Turkish FA Cup	2007		first	Kayserispor	https://en.wikipedia.org/wiki/2007%E2%80%9308_Turkish_Cup	agree	
+Turkish FA Cup	2007		second	Gençlerbirligi	https://en.wikipedia.org/wiki/2007%E2%80%9308_Turkish_Cup	agree	
+Turkish FA Cup	2007		ended	2008-05	https://en.wikipedia.org/wiki/2007%E2%80%9308_Turkish_Cup	agree	
+Turkish FA Cup	2008		first	Besiktas JK	https://en.wikipedia.org/wiki/2008%E2%80%9309_Turkish_Cup	agree	
+Turkish FA Cup	2008		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2008%E2%80%9309_Turkish_Cup	agree	
+Turkish FA Cup	2008		ended	2009-05	https://en.wikipedia.org/wiki/2008%E2%80%9309_Turkish_Cup	agree	
+Turkish FA Cup	2009		first	Trabzonspor	https://en.wikipedia.org/wiki/2009%E2%80%9310_Turkish_Cup	agree	
+Turkish FA Cup	2009		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2009%E2%80%9310_Turkish_Cup	agree	
+Turkish FA Cup	2009		ended	2010-05	https://en.wikipedia.org/wiki/2009%E2%80%9310_Turkish_Cup	agree	
+Turkish Premier Division	2002		first	Besiktas JK	https://en.wikipedia.org/wiki/2002%E2%80%9303_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2002		second	Galatasaray SK	https://en.wikipedia.org/wiki/2002%E2%80%9303_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2002		ended	2003-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2002	agree	
+Turkish Premier Division	2003		first	Fenerbahçe SK	https://en.wikipedia.org/wiki/2003%E2%80%9304_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2003		second	Trabzonspor	https://en.wikipedia.org/wiki/2003%E2%80%9304_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2003		ended	2004-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2003	agree	
+Turkish Premier Division	2004		first	Fenerbahçe SK	https://en.wikipedia.org/wiki/2004%E2%80%9305_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2004		second	Trabzonspor	https://en.wikipedia.org/wiki/2004%E2%80%9305_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2004		ended	2005-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2004	agree	
+Turkish Premier Division	2005		first	Galatasaray SK	https://en.wikipedia.org/wiki/2005%E2%80%9306_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2005		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2005%E2%80%9306_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2005		ended	2006-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2005	agree	
+Turkish Premier Division	2006		first	Fenerbahçe SK	https://en.wikipedia.org/wiki/2006%E2%80%9307_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2006		second	Besiktas JK	https://en.wikipedia.org/wiki/2006%E2%80%9307_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2006		ended	2007-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2006	agree	
+Turkish Premier Division	2007		first	Galatasaray SK	https://en.wikipedia.org/wiki/2007%E2%80%9308_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2007		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2007%E2%80%9308_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2007		ended	2008-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2007	agree	
+Turkish Premier Division	2008		first	Besiktas JK	https://en.wikipedia.org/wiki/2008%E2%80%9309_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2008		second	Sivasspor	https://en.wikipedia.org/wiki/2008%E2%80%9309_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2008		ended	2009-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2008	agree	
+Turkish Premier Division	2009		first	Bursaspor	https://en.wikipedia.org/wiki/2009%E2%80%9310_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2009		second	Fenerbahçe SK	https://en.wikipedia.org/wiki/2009%E2%80%9310_S%C3%BCper_Lig	agree	
+Turkish Premier Division	2009		ended	2010-05	https://www.transfermarkt.com/super-lig/gesamtspielplan/wettbewerb/TR1/saison_id/2009	agree	
+Yugoslav Cup	2002		first	Red Star Belgrade	https://en.wikipedia.org/wiki/2001%E2%80%9302_FR_Yugoslavia_Cup	agree	
+Yugoslav Cup	2002		second	Sartid Smederevo	https://en.wikipedia.org/wiki/2001%E2%80%9302_FR_Yugoslavia_Cup	agree	
+Yugoslav Cup	2002		ended	2002-05	https://en.wikipedia.org/wiki/2001%E2%80%9302_FR_Yugoslavia_Cup	agree	
+Yugoslav Cup	2003		first	Sartid Smederevo	https://en.wikipedia.org/wiki/2002%E2%80%9303_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2003		second	Red Star Belgrade	https://en.wikipedia.org/wiki/2002%E2%80%9303_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2003		ended	2003-05	https://en.wikipedia.org/wiki/2002%E2%80%9303_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2004		first	Red Star Belgrade	https://en.wikipedia.org/wiki/2003%E2%80%9304_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2004		second	Buducnost Banatski Dvor	https://en.wikipedia.org/wiki/2003%E2%80%9304_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2004		ended	2004-05	https://en.wikipedia.org/wiki/2003%E2%80%9304_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2005		first	Zeleznik Belgrade	https://en.wikipedia.org/wiki/2004%E2%80%9305_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2005		second	Red Star Belgrade	https://en.wikipedia.org/wiki/2004%E2%80%9305_Serbia_and_Montenegro_Cup	agree	
+Yugoslav Cup	2005		ended	2005-05	https://en.wikipedia.org/wiki/2004%E2%80%9305_Serbia_and_Montenegro_Cup	agree	
+Yugoslav First Division	2002		first	Partizan Belgrade	https://en.wikipedia.org/wiki/2001%E2%80%9302_First_League_of_FR_Yugoslavia	agree	
+Yugoslav First Division	2002		second	Red Star Belgrade	https://en.wikipedia.org/wiki/2001%E2%80%9302_First_League_of_FR_Yugoslavia	agree	
+Yugoslav First Division	2002		ended	2002-06	https://sr.wikipedia.org/wiki/%D0%9F%D1%80%D0%B2%D0%B0_%D0%BB%D0%B8%D0%B3%D0%B0_%D0%A1%D0%A0_%D0%88%D1%83%D0%B3%D0%BE%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D1%98%D0%B5_%D1%83_%D1%84%D1%83%D0%B4%D0%B1%D0%B0%D0%BB%D1%83_2001%2F02.	agree	
+Yugoslav First Division	2003		first	Partizan Belgrade	https://en.wikipedia.org/wiki/2002%E2%80%9303_First_League_of_Serbia_and_Montenegro	agree	
+Yugoslav First Division	2003		second	Red Star Belgrade	https://en.wikipedia.org/wiki/2002%E2%80%9303_First_League_of_Serbia_and_Montenegro	agree	
+Yugoslav First Division	2003		ended	2003-05	https://sr.wikipedia.org/wiki/%D0%9F%D1%80%D0%B2%D0%B0_%D0%BB%D0%B8%D0%B3%D0%B0_%D0%A1%D0%A0_%D0%88%D1%83%D0%B3%D0%BE%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D1%98%D0%B5_%D1%83_%D1%84%D1%83%D0%B4%D0%B1%D0%B0%D0%BB%D1%83_2002%2F03.	agree	
+Yugoslav First Division	2004		first	Red Star Belgrade	https://en.wikipedia.org/wiki/2003%E2%80%9304_First_League_of_Serbia_and_Montenegro	agree	
+Yugoslav First Division	2004		second	Partizan Belgrade	https://en.wikipedia.org/wiki/2003%E2%80%9304_First_League_of_Serbia_and_Montenegro	agree	
+Yugoslav First Division	2004		ended	2004-05	https://sr.wikipedia.org/wiki/%D0%9F%D1%80%D0%B2%D0%B0_%D0%BB%D0%B8%D0%B3%D0%B0_%D0%A1%D1%80%D0%B1%D0%B8%D1%98%D0%B5_%D0%B8_%D0%A6%D1%80%D0%BD%D0%B5_%D0%93%D0%BE%D1%80%D0%B5_%D1%83_%D1%84%D1%83%D0%B4%D0%B1%D0%B0%D0%BB%D1%83_2003%2F04.	agree	
+Yugoslav First Division	2005		first	Partizan Belgrade	https://en.wikipedia.org/wiki/2004%E2%80%9305_First_League_of_Serbia_and_Montenegro	agree	
+Yugoslav First Division	2005		second	Red Star Belgrade	https://en.wikipedia.org/wiki/2004%E2%80%9305_First_League_of_Serbia_and_Montenegro	agree	
+Yugoslav First Division	2005		ended	2005-05	https://sr.wikipedia.org/wiki/%D0%9F%D1%80%D0%B2%D0%B0_%D0%BB%D0%B8%D0%B3%D0%B0_%D0%A1%D1%80%D0%B1%D0%B8%D1%98%D0%B5_%D0%B8_%D0%A6%D1%80%D0%BD%D0%B5_%D0%93%D0%BE%D1%80%D0%B5_%D1%83_%D1%84%D1%83%D0%B4%D0%B1%D0%B0%D0%BB%D1%83_2004%2F05.	agree	
+Yugoslav Second Division	2002		held	not held	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	only regional groups in that season
+Yugoslav Second Division	2003		held	not held	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	only regional groups in that season
+Yugoslav Second Division	2004		held	not held	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	agree	only regional groups in that season
+Yugoslav Second Division	2005		held	not held	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro	agree	only regional groups in that season
+Yugoslav Second Division East	2002		first	Radnicki Nis	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division East	2002		second	Napredak Krusevac	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division East	2002		ended	2002-06	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	no second source	no match dates found outside RSSSF
+Yugoslav Second Division East	2003		first	Napredak Krusevac	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division East	2003		second	Mladi Radnik Pozarevac	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division East	2003		ended	2003-06	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	no second source	no match dates found outside RSSSF
+Yugoslav Second Division North	2002		first	Radnicki Obrenovac/Milicionar	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division North	2002		second	Buducnost Banatski Dvor	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division North	2002		ended	2002-06	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	no second source	no match dates found outside RSSSF
+Yugoslav Second Division North	2003		first	Buducnost Banatski Dvor	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division North	2003		second	Mladost Apatin	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division North	2003		ended	2003-06	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	no second source	no match dates found outside RSSSF
+Yugoslav Second Division North	2004		first	Radnicki Jugopetrol Belgrade	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division North	2004		second	Mladost Apatin	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division North	2004		ended	2004-06	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	no second source	no match dates found outside RSSSF
+Yugoslav Second Division North	2005		first	Buducnost Banatski Dvor	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Serbia	agree	Serbia group; Wikipedia table cites RSSSF
+Yugoslav Second Division North	2005		second	Javor Ivanjica	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Serbia	agree	Serbia group; Wikipedia table cites RSSSF
+Yugoslav Second Division North	2005		ended	2005-06	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Serbia	no second source	no match dates found outside RSSSF
+Yugoslav Second Division South	2002		first	Mogren Budva	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division South	2002		second	Buducnost Podgorica	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division South	2002		ended	2002-06	https://sr.wikipedia.org/wiki/%D0%94%D1%80%D1%83%D0%B3%D0%B0_%D1%81%D0%B0%D0%B2%D0%B5%D0%B7%D0%BD%D0%B0_%D0%BB%D0%B8%D0%B3%D0%B0_%D0%A1%D0%A0_%D0%88%D1%83%D0%B3%D0%BE%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D1%98%D0%B5_%D1%83_%D1%84%D1%83%D0%B4%D0%B1%D0%B0%D0%BB%D1%83_2001%2F02._%E2%80%94_%D0%88%D1%83%D0%B3	agree	33rd and last round 2 Jun 2002
+Yugoslav Second Division South	2003		first	FK Kom Zlatica Podgorica	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division South	2003		second	Bokelj Kotor	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division South	2003		ended	2003-05	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	no second source	no match dates found outside RSSSF
+Yugoslav Second Division South	2004		first	Buducnost Podgorica	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division South	2004		second	Bokelj Kotor	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division South	2004		ended	2004-06	https://sr.wikipedia.org/wiki/%D0%94%D1%80%D1%83%D0%B3%D0%B0_%D0%BB%D0%B8%D0%B3%D0%B0_%D0%A1%D1%80%D0%B1%D0%B8%D1%98%D0%B5_%D0%B8_%D0%A6%D1%80%D0%BD%D0%B5_%D0%93%D0%BE%D1%80%D0%B5_%D1%83_%D1%84%D1%83%D0%B4%D0%B1%D0%B0%D0%BB%D1%83_2003%2F04._%E2%80%94_%D0%88%D1%83%D0%B3	agree	36th and last round 4 Jun 2004
+Yugoslav Second Division South	2005		first	Jedinstvo Bijelo Polje	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Montenegro	agree	Montenegro group; Wikipedia table cites RSSSF
+Yugoslav Second Division South	2005		second	FK Kom Zlatica Podgorica	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Montenegro	agree	Montenegro group; Wikipedia table cites RSSSF
+Yugoslav Second Division South	2005		ended	2005-06	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Montenegro	no second source	league ended before the relegation play-off of 8 Jun 2005; month not shown
+Yugoslav Second Division West	2002		first	Javor Ivanjica	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division West	2002		second	Borac Auto Cacak	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division West	2002		ended	2002-08	https://en.wikipedia.org/wiki/2001%E2%80%9302_Second_League_of_FR_Yugoslavia	no second source	no match dates found outside RSSSF
+Yugoslav Second Division West	2003		first	Borac Auto Cacak	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division West	2003		second	Bane Raska	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division West	2003		ended	2003-06	https://en.wikipedia.org/wiki/2002%E2%80%9303_Second_League_of_Serbia_and_Montenegro	no second source	no match dates found outside RSSSF
+Yugoslav Second Division West	2004		first	Cukaricki Stankom Belgrade	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division West	2004		second	Rad Belgrade	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	agree	Wikipedia table cites RSSSF
+Yugoslav Second Division West	2004		ended	2004-06	https://en.wikipedia.org/wiki/2003%E2%80%9304_Second_League_of_Serbia_and_Montenegro	no second source	no match dates found outside RSSSF
+Yugoslav Second Division West	2005		first	Buducnost Banatski Dvor	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Serbia	agree	Serbia group; Wikipedia table cites RSSSF
+Yugoslav Second Division West	2005		second	Javor Ivanjica	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Serbia	agree	Serbia group; Wikipedia table cites RSSSF
+Yugoslav Second Division West	2005		ended	2005-06	https://en.wikipedia.org/wiki/2004%E2%80%9305_Second_League_of_Serbia_and_Montenegro_%E2%80%93_Group_Serbia	no second source	no match dates found outside RSSSF
