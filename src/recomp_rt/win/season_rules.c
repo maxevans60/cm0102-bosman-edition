@@ -45,8 +45,9 @@ static int count_of(const char *s)
     if (*s >= '0' && *s <= '9') {
         long v = 0;
         for (const char *p = s; *p; p++) {
-            if (*p < '0' || *p > '9' || v > 100000) return -100;
+            if (*p < '0' || *p > '9') return -100;
             v = v * 10 + (*p - '0');
+            if (v > SEASON_RULE_MAX_COUNT) return -100;
         }
         return (int)v;
     }
@@ -65,6 +66,16 @@ static int tier_of(const char *s)
     for (size_t i = 0; i < sizeof other / sizeof other[0]; i++)
         if (!strcmp(s, other[i])) return SEASON_TIER_OTHER;
     return -100;
+}
+
+/* Ends the line at its '\n' and drops a '\r' before it (a table saved on Windows). Returns the '\n' or NULL. */
+static char *end_line(char *line)
+{
+    char *nl = strchr(line, '\n');
+    if (!nl) return NULL;
+    *nl = 0;
+    if (nl > line && nl[-1] == '\r') nl[-1] = 0;
+    return nl;
 }
 
 /* Splits one line into NCOL fields in place. Returns 1 when it has exactly NCOL. */
@@ -116,17 +127,15 @@ int season_rules_load(const char *path)
     /* Line 1: the format and the row count. Line 2: the columns. */
     char *line = text, *next;
     int want = -1, lineno = 1, version = 0;
-    next = strchr(line, '\n');
+    next = end_line(line);
     if (!next) return fail(path, 1, "no header");
-    *next = 0;
     if (sscanf(line, "#bosman-rules\t%d\t%d", &version, &want) != 2 || version != FORMAT || want < 0
         || want > MAX_ROWS)
         return fail(path, 1, "not a rules table of format 1");
     line = next + 1;
     lineno = 2;
-    next = strchr(line, '\n');
+    next = end_line(line);
     if (!next) return fail(path, 2, "no column line");
-    *next = 0;
     char *f2[NCOL];
     if (!split(line, f2)) return fail(path, 2, "the columns are not those of format 1");
     for (int i = 0; i < NCOL; i++)
@@ -136,9 +145,8 @@ int season_rules_load(const char *path)
     if (!rows) return fail(path, 0, "no memory");
     for (line = next + 1; *line; line = next + 1) {
         lineno++;
-        next = strchr(line, '\n');
+        next = end_line(line);
         if (!next) return fail(path, lineno, "the last line has no end");
-        *next = 0;
         if (nrows == want) return fail(path, lineno, "more rows than line 1 says");
         char *c[NCOL];
         if (!split(line, c)) return fail(path, lineno, "a wrong number of columns");
@@ -171,7 +179,8 @@ int season_rules_load(const char *path)
         r->windows = c[27];
         r->notes = c[28];
         r->sources = c[29];
-        if (!*r->id || r->season < 2001 || r->season > 2099) return fail(path, lineno, "a bad id or season");
+        if (!*r->id || r->season < SEASON_RULE_FIRST || r->season > SEASON_RULE_LAST)
+            return fail(path, lineno, "a bad id or season");
         if (r->tier == -100) return fail(path, lineno, "a bad tier");
         for (int i = 0; i < 5; i++)
             if (*counts[i] == -100) return fail(path, lineno, "a bad count");

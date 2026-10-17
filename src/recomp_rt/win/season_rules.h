@@ -14,7 +14,12 @@
 
 #include <stdint.h>
 
-/* A count of the table: a number from 0, or one of these codes. */
+/* The limits of a row. tools/seasons/make_rules.py has the same, so a bad table stops the build. */
+#define SEASON_RULE_FIRST 2001       /* seasons: start years 2001 to 2099 */
+#define SEASON_RULE_LAST 2099
+#define SEASON_RULE_MAX_COUNT 100000 /* the largest count */
+
+/* A count of the table: a number from 0 to SEASON_RULE_MAX_COUNT, or one of these codes. */
 #define SEASON_RULE_NA (-1)          /* n/a: the column does not apply */
 #define SEASON_RULE_UNKNOWN (-2)     /* the research found no value */
 #define SEASON_RULE_NOT_HELD (-3)    /* the competition is not held in that season */
@@ -70,8 +75,10 @@ typedef struct {
 extern const SeasonCompClass season_comp_classes[];
 extern const int season_comp_class_count;
 
-/* At each human turn (testrun.c): the rules report and the season jump of the test variables
- * RECOMP_RULES_REPORT=<file> and RECOMP_SEASON_JUMP=<last start year> (season_report.c). */
+/* The rules report and the season jump of the test variables RECOMP_RULES_REPORT=<file> and
+ * RECOMP_SEASON_JUMP=<start year of the last season> (season_report.c). season_report_init reads them at the
+ * start (main.c) and stops the program on a bad value. season_report_turn runs at each human turn (testrun.c). */
+void season_report_init(void);
 void season_report_turn(void);
 
 #endif

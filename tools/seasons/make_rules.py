@@ -35,8 +35,9 @@ foreign, work_permit, registration, windows, notes, sources) are kept as text fo
 break in a value is not possible in the parts (the TSV reader would split it).
 
 The stop rule: a row that the tool cannot read stops it with exit code 1 and names the part, the line and the
-column: a wrong column count, an empty or repeated id, a season that is not Y/(Y+1), a comp_file that is
-not a file name, or a count that fits none of the forms above.
+column: a wrong column count, an empty or repeated id, a season that is not Y/(Y+1) or not from 2001 to
+2099, a comp_file that is not a file name, or a count that fits none of the forms above or is over 100000.
+The game's reader (src/recomp_rt/win/season_rules.c) has the same limits.
 """
 import argparse
 import csv
@@ -58,6 +59,9 @@ TEXTS = ["real_season", "foreign", "work_permit", "registration", "windows", "no
 OUT_COLUMNS = (["id", "season", "nation", "comp_file", "comp", "tier", "name"] + COUNTS + CODES
                + [c + "_text" for c in COUNTS + CODES] + TEXTS)
 FORMAT = 1
+# The limits of src/recomp_rt/win/season_rules.h: a row outside them stops the tool, so it never reaches a game.
+FIRST_SEASON, LAST_SEASON = 2001, 2099
+MAX_COUNT = 100000
 
 TIER_CODES = {"cup": "cup", "super cup": "super_cup", "state 1": "state_1", "international": "international",
               "national teams": "national_teams", "world": "world", "nation": "nation", "n/a": "na"}
@@ -74,7 +78,14 @@ class Stop(Exception):
 
 
 def count(text):
-    """The value of a count column: an int or a code (module docstring)."""
+    """The value of a count column: an int from 0 to MAX_COUNT or a code (module docstring)."""
+    v = count_value(text)
+    if isinstance(v, int) and v > MAX_COUNT:
+        raise Stop(f"the count {v} is larger than {MAX_COUNT}")
+    return v
+
+
+def count_value(text):
     t = text.strip()
     low = t.lower()
     if not t:
@@ -122,6 +133,8 @@ def season(text):
     m = re.match(r"^(\d{4})/(\d{2})$", text)
     if not m or (int(m.group(1)) + 1) % 100 != int(m.group(2)):
         raise Stop(f"season {text!r} is not Y/(Y+1)")
+    if not FIRST_SEASON <= int(m.group(1)) <= LAST_SEASON:
+        raise Stop(f"season {text!r} is not from {FIRST_SEASON} to {LAST_SEASON}")
     return int(m.group(1))
 
 

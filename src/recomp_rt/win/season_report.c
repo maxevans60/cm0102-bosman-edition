@@ -1,12 +1,16 @@
 /* The rules report and the season jump (0.6.0 slice 12, Q265). Test runs only: without the variables below
  * the human turn calls season_report_turn, which returns at once and changes nothing.
  *
- * RECOMP_RULES_REPORT=<file>: at the first human turn of the game, and at the first human turn on or after
- * 1 August of each later year, the runtime appends to the file the competitions that the game holds. It only
- * reads the game's memory.
+ * RECOMP_RULES_REPORT=<file>: the runtime writes the competitions that the game holds, twice for each season:
+ *   start  at the first human turn of the game, then at the first human turn on or after 1 August;
+ *   end    at the first human turn on or after 1 June of the next year (before the update days of the league
+ *          table entries, mostly 20 or 21 June: 2026-10-16-sweep-season-end.md, section 2.1). A national team
+ *          tournament makes its team list after the start (the World Cup holds 0 clubs on 14 July 2001).
+ * It only reads the game's memory.
  * RECOMP_SEASON_JUMP=<year>: the game plays on with no match engine, and the program ends with code 0 after
- * the report of the season that starts in that year. The test steps put the manager on holiday
- * (tests/seasons/rules_report_check.py), so the days pass with no input.
+ * the end report of the season that starts in that year. The test steps put the manager on holiday
+ * (tests/seasons/rules_report_check.py), so the days pass with no input. A value that is not a year from 2001
+ * to 2099 stops the program at the start (season_report_init).
  *
  * No match engine: the original has a switch for it, ENABLE_MATCH_ENGINE=NO in its setup file
  * (create_game_from_setup_file 0x827110 compares with "YES" 0xa812c0 and "NO" 0xa812bc and writes the byte
@@ -16,9 +20,10 @@
  * match is played by the quick result engine CM3_MATCH_ENGINE::quick_simulate_match 0x6beeb0. The results go
  * through match_day_apply_match_result 0x6b5f00 into each competition as in a normal day, so the tables,
  * prize money, history, records and the end-of-season step run (docs/research/2026-10-16-sweep-season-end.md,
- * section 2.4). The jump writes the byte at the first human turn, after the game is made.
+ * section 2.4). The fifth reader, match_stats_get_record_bucket 0x729bd0, returns bucket 3 at 0x729c32 only
+ * with the byte 1. The jump writes the byte at the first human turn, after the game is made.
  *
- * What the report reads, for each competition object:
+ * What the report reads, for each competition object (docs/research/2026-10-17-rules-report.md):
  * - The objects: the table g_comp_object_table [0xadadfc] with [0xadadf8] slots, one per club competition
  *   record (built by 0x8386f0 from the count 0xae2378), and the competition arrays of the 35 league table
  *   entries at 0xb63d60 (0x48 bytes each; +0xc count, +0x10 array; game_season_update_pass 0x5d5cab..0x5d5cbb).
@@ -31,9 +36,19 @@
  *   a cup sets it in its constructor (EngCcCup 0x56c32d: 92).
  * - +0x3c (s16): for a league, the times that each pair of clubs meets ((clubs - 1) * +0x3c = matches per
  *   club, 0x689b27..0x689b36); for a cup, the round count (Cup::map_fixture_tree 0x51879c).
- * - +0xa7 (s16, leagues only): matches per club (0x689b1d).
  * - +0x4a substitutes used and +0x49 substitutes named (bytes; Comp::Comp 0x48c5c9 sets 5 and 3;
- *   Comp::set_fixture_substitutes 0x48f2fa..0x48f32d packs them into the fixture). */
+ *   Comp::set_fixture_substitutes 0x48f2fa..0x48f32d packs them into the fixture).
+ * Leagues only (set_up_rules, for example EngFirst 0x572d90 and EngPrm 0x574b70):
+ * - +0xa7 (s16) matches per club (0x689b1d).
+ * - +0xbe promotion places: League::has_automatic_promotion 0x684790 reads it (EngFirst 2, EngPrm 0).
+ * - +0xbf promotion play-off places (EngFirst 4, EngThird 4 at 0x578104; inference from the values).
+ * - +0xc0 places beside both ends that are neither safe nor direct (League::update_positions_and_status
+ *   0x6852b3..0x6852e4 adds it to +0xbe at the top and to +0xc1 at the bottom; 0 in England; inference:
+ *   relegation play-off places).
+ * - +0xc1 relegation places: League::has_relegation 0x6847b0 reads it (EngPrm 3, EngFirst 3).
+ * - +0xd9 (u16) rule flags: bit 1 automatic promotion (0x68479a), bit 0x20 status marks (0x6852a0).
+ * - +0x1c and +0x20 (s32) the record ids of the divisions above and below: EngFirst 0x572dea and 0x572df6
+ *   store the key ids [0x9cf5bc] (English Premier Division) and [0x9cf5c4]; EngPrm 0x574bd0 stores -1. */
 #include "win.h"
 #include "season.h"
 #include "season_rules.h"
@@ -52,9 +67,11 @@
 #define ENTRY_COUNT 35u
 #define MAX_COMPS 4096
 
-static int jump_to = -2;            /* -2: not read yet, -1: off */
+static int jump_to = -1;            /* -1: off */
+static int started;                 /* the first human turn has run */
 static FILE *report;
-static int reported = -1;           /* the last start year in the report */
+static int last_start = -1;         /* the last season with a start report */
+static int last_end = -1;           /* the last season with an end report */
 
 static const SeasonCompClass *class_of(uint32_t vtable)
 {
@@ -71,11 +88,11 @@ static const SeasonCompClass *class_of(uint32_t vtable)
 /* A pointer of the game that can be read: inside the 32-bit space and not near 0. */
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
-static void write_comp(FILE *f, int season, const char *slot, uint32_t obj)
+static void write_comp(FILE *f, int season, const char *phase, const char *slot, uint32_t obj)
 {
     uint32_t vt = rd32(g_mem, obj), rec = rd32(g_mem, obj + 4);
     const SeasonCompClass *c = class_of(vt);
-    char name[64] = "?", vts[16];
+    char name[64] = "?";
     int id = -1;
     if (readable(rec)) {
         id = (int)rd32(g_mem, rec);
@@ -83,21 +100,25 @@ static void write_comp(FILE *f, int season, const char *slot, uint32_t obj)
         for (char *p = name; *p; p++)
             if (*p == '\t' || *p == '\n' || *p == '\r') *p = ' ';
     }
-    snprintf(vts, sizeof vts, "0x%x", vt);
     int league = c && c->kind == SEASON_KIND_LEAGUE;
-    char matches[16] = "-";
-    if (league) snprintf(matches, sizeof matches, "%d", (int16_t)rd16(g_mem, obj + 0xa7));
-    fprintf(f, "comp\t%d\t%s\t%d\t%s\t%s\t%s\t%s\t%d\t%d\t%d\t%s\t%d\t%d\t%s\n", season, slot, id,
-            c ? c->file : "?", c ? c->cls : "?", c ? (league ? "league" : c->kind == SEASON_KIND_CUP ? "cup" : "comp") : "?",
-            vts, (int16_t)rd16(g_mem, obj + 0x40), (int16_t)rd16(g_mem, obj + 0x3e), (int16_t)rd16(g_mem, obj + 0x3c),
-            matches, g_mem[obj + 0x4a], g_mem[obj + 0x49], name);
+    char rules[128] = "-\t-\t-\t-\t-\t-\t-\t-";
+    if (league)
+        snprintf(rules, sizeof rules, "%d\t%d\t%d\t%d\t%d\t0x%x\t%d\t%d", (int16_t)rd16(g_mem, obj + 0xa7),
+                 (int8_t)g_mem[obj + 0xbe], (int8_t)g_mem[obj + 0xbf], (int8_t)g_mem[obj + 0xc0],
+                 (int8_t)g_mem[obj + 0xc1], rd16(g_mem, obj + 0xd9), (int32_t)rd32(g_mem, obj + 0x1c),
+                 (int32_t)rd32(g_mem, obj + 0x20));
+    fprintf(f, "comp\t%d\t%s\t%s\t%d\t%s\t%s\t%s\t0x%x\t%d\t%d\t%d\t%d\t%d\t%s\t%s\n", season, phase, slot, id,
+            c ? c->file : "?", c ? c->cls : "?",
+            c ? (league ? "league" : c->kind == SEASON_KIND_CUP ? "cup" : "comp") : "?", vt,
+            (int16_t)rd16(g_mem, obj + 0x40), (int16_t)rd16(g_mem, obj + 0x3e), (int16_t)rd16(g_mem, obj + 0x3c),
+            g_mem[obj + 0x4a], g_mem[obj + 0x49], rules, name);
 }
 
-static void write_season(int season)
+static void write_season(int season, const char *phase)
 {
     int y = 0, m = 0, d = 0;
     win_game_date(&y, &m, &d);
-    fprintf(report, "season\t%d\t%04d-%02d-%02d\t%d\t%s\n", season, y, m, d, season_start_year(),
+    fprintf(report, "season\t%d\t%s\t%04d-%02d-%02d\t%d\t%s\n", season, phase, y, m, d, season_start_year(),
             season_changing_rules() ? "on" : "off");
     static uint32_t seen[MAX_COMPS];
     int nseen = 0;
@@ -109,7 +130,7 @@ static void write_season(int season)
         if (!readable(obj)) continue;
         if (nseen < MAX_COMPS) seen[nseen++] = obj;
         snprintf(slot, sizeof slot, "t%d", i);
-        write_comp(report, season, slot, obj);
+        write_comp(report, season, phase, slot, obj);
     }
     for (uint32_t e = 0; e < ENTRY_COUNT; e++) {
         uint32_t entry = ENTRIES + e * ENTRY_SIZE;
@@ -123,41 +144,65 @@ static void write_season(int season)
             if (dup) continue;
             if (nseen < MAX_COMPS) seen[nseen++] = obj;
             snprintf(slot, sizeof slot, "e%u.%d", e, k);
-            write_comp(report, season, slot, obj);
+            write_comp(report, season, phase, slot, obj);
         }
     }
     fflush(report);
-    fprintf(stderr, "recomp: rules report: season %d/%02d on %02d.%02d.%04d\n", season, (season + 1) % 100, d, m, y);
+    fprintf(stderr, "recomp: rules report: season %d/%02d %s on %02d.%02d.%04d\n", season, (season + 1) % 100, phase,
+            d, m, y);
+}
+
+void season_report_init(void)
+{
+    const char *v = getenv("RECOMP_SEASON_JUMP");
+    if (v && *v) {
+        char *end;
+        long y = strtol(v, &end, 10);
+        if (*end || y < 2001 || y > 2099) {
+            fprintf(stderr, "cm0102_recomp: RECOMP_SEASON_JUMP=%s is not a year from 2001 to 2099.\n", v);
+            exit(2);
+        }
+        jump_to = (int)y;
+    }
+    const char *path = getenv("RECOMP_RULES_REPORT");
+    if (path && *path) {
+        report = host_fopen(path, "w");
+        if (!report) {
+            fprintf(stderr, "cm0102_recomp: RECOMP_RULES_REPORT: cannot write %s.\n", path);
+            exit(2);
+        }
+        fprintf(report, "#bosman-rules-report\t2\n"
+                "columns\tseason\tphase\tslot\trecord\tfile\tclass\tkind\tvtable\tyear\tclubs\trounds\tsubs_used"
+                "\tbench\tmatches\tup\tplayoff_up\tplayoff_down\tdown\tflags\tabove\tbelow\tname\n");
+    }
 }
 
 void season_report_turn(void)
 {
-    if (jump_to == -2) {
-        const char *v = getenv("RECOMP_SEASON_JUMP");
-        jump_to = v && *v ? atoi(v) : -1;
-        const char *path = getenv("RECOMP_RULES_REPORT");
-        if (path && *path) {
-            report = host_fopen(path, "w");
-            if (!report) fprintf(stderr, "recomp: rules report: cannot write %s\n", path);
-            else fprintf(report, "#bosman-rules-report\t1\n"
-                         "columns\tseason\tslot\trecord\tfile\tclass\tkind\tvtable\tyear\tclubs\trounds\tmatches"
-                         "\tsubs_used\tbench\tname\n");
-        }
+    if (jump_to < 0 && !report) return;
+    if (!started) {
+        started = 1;
         if (jump_to >= 0) {
             g_mem[MATCH_ENGINE_ON] = 0;
-            fprintf(stderr, "recomp: season jump to %d/%02d with no match engine\n", jump_to, (jump_to + 1) % 100);
+            fprintf(stderr, "recomp: season jump to the end of %d/%02d with no match engine\n", jump_to,
+                    (jump_to + 1) % 100);
         }
     }
-    if (jump_to < 0 && !report) return;
     int y = 0, m = 0, d = 0;
     if (!win_game_date(&y, &m, &d)) return;
-    int season = reported < 0 ? season_start_year() : (m >= 8 ? y : -1);
-    if (season > reported) {
-        if (report) write_season(season);
-        else fprintf(stderr, "recomp: season jump: season %d/%02d\n", season, (season + 1) % 100);
-        reported = season;
+    int season = -1;
+    const char *phase = NULL;
+    if (last_start < 0) season = season_start_year(), phase = "start";
+    else if (m >= 8 && y > last_start) season = y, phase = "start";
+    else if (m >= 6 && m < 8 && y - 1 > last_end && y - 1 >= season_start_year())
+        season = y - 1, phase = "end";
+    if (phase) {
+        if (report) write_season(season, phase);
+        else fprintf(stderr, "recomp: season jump: season %d/%02d %s\n", season, (season + 1) % 100, phase);
+        if (*phase == 's') last_start = season;
+        else last_end = season;
     }
-    if (jump_to >= 0 && reported >= jump_to) {
+    if (jump_to >= 0 && last_end >= jump_to) {
         if (report) fclose(report);
         report = NULL;
         fprintf(stderr, "recomp: season jump: done\n");
