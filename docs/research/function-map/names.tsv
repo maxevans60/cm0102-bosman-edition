@@ -192,16 +192,16 @@ address	file	name	confidence	model	cited_in
 0x414a60	award_screens.cpp	AWARD_MANAGER::find_award_by_staff_comp	high	opus	
 0x414ac0	award_screens.cpp	AWARD_MANAGER::find_award_by_club_comp	high	opus	
 0x414b20	award_screens.cpp	award_rating_filter_reputation_over_2000	high	opus	
-0x414b40	award_screens.cpp	award_rating_filter_selected_nations	medium	opus	
+0x414b40	award_screens.cpp	award_rating_filter_selected_nations	high	opus	
 0x414c20	award_screens.cpp	award_screens_open_award_screen	high	opus	
 0x414cf0	award_screens.cpp	award_screen_draw	high	opus	
 0x415600	award_screens.cpp	ScreenManager::add_menu_area	medium	opus	
-0x415640	award_screens.cpp	award_screens_add_menu_item	medium	opus	
+0x415640	award_screens.cpp	ScreenManager::add_menu_item	medium	opus	
 0x4156a0	award_screens.cpp	award_screen_draw_year_award	high	opus	
 0x415f60	award_screens.cpp	award_screen_draw_team_award	high	opus	
 0x416570	award_screens.cpp	award_screen_draw_team_award_fragment_416570	high	opus	
 0x416960	award_screens.cpp	award_screen_handle_action	high	opus	
-0x416cb0	award_screens.cpp	award_screens_open_nominations_from_news	medium	opus	
+0x416cb0	award_screens.cpp	award_screens_open_nominations_from_news	high	opus	
 0x416d50	award_screens.cpp	award_screens_open_nominations_screen	high	opus	
 0x416e40	award_screens.cpp	award_nominations_screen_draw	high	opus	
 0x4172f0	award_screens.cpp	award_nominations_screen_handle_action	high	opus	
@@ -271,7 +271,7 @@ address	file	name	confidence	model	cited_in
 0x41e8b0	bel_first.cpp	BelFirst::create_table	high	opus	
 0x41e9e0	bel_first.cpp	BelFirst::set_up_rules	high	opus	
 0x41ea90	bel_first.cpp	BelFirst::start_new_season	high	opus	
-0x41ec90	bel_first.cpp	bel_first_move_third_division_clubs	medium	opus	hol-bel.md
+0x41ec90	bel_first.cpp	bel_first_move_third_division_clubs	high	opus	hol-bel.md
 0x41ee80	bel_first.cpp	BelFirst::process_promotion_relegation_chain	high	opus	
 0x41ef70	bel_first.cpp	bel_first_split_third_division_groups	high	opus	
 0x41f030	bel_second.cpp	BelSecond::BelSecond	high	opus	
@@ -303,10 +303,10 @@ address	file	name	confidence	model	cited_in
 0x421940	bel_third.cpp	BelThird::~BelThird	high	opus	
 0x421a00	bel_third.cpp	BelThird::create_schedule	high	opus	
 0x422070	bel_third.cpp	BelThird::create_schedule_fragment_422070	medium	opus	
-0x4224e0	bel_third.cpp	BelThird::fill_league_table	medium	opus	
+0x4224e0	bel_third.cpp	BelThird::fill_league_table	high	opus	
 0x4226f0	bel_third.cpp	BelThird::set_up_rules	high	opus	
 0x4227b0	bel_third.cpp	BelThird::start_new_season	high	opus	
-0x422970	bel_third.cpp	BelThird::create_group_b_stage	medium	opus	
+0x422970	bel_third.cpp	BelThird::create_group_b_stage	high	opus	
 0x422c50	bel_third.cpp	BelThird::add_result	high	opus	
 0x422cf0	bel_third.cpp	BelThird::find_or_create_period_stage	medium	opus	
 0x422f70	bel_third.cpp	BelThird::update_positions_and_status	high	opus	
@@ -315,7 +315,7 @@ address	file	name	confidence	model	cited_in
 0x423640	bel_third.cpp	BelThird::advance_stage	high	opus	
 0x423710	bel_third.cpp	BelThird::create_title_decider_stage	medium	opus	
 0x423880	bel_third.cpp	BelThird::create_promotion_playoff_stage	medium	opus	
-0x423ba0	bel_third.cpp	BelThird::create_relegation_playoff_stage	medium	opus	hol-bel.md
+0x423ba0	bel_third.cpp	BelThird::create_relegation_playoff_stage	high	opus	hol-bel.md
 0x423f00	bel_third.cpp	BelThird::get_club_array	high	opus	
 0x424030	bel_third.cpp	BelThird::set_predicted_positions	high	opus	
 0x4241b0	bel_third.cpp	BelThird::set_club_progress	high	opus	
@@ -375,8 +375,8 @@ address	file	name	confidence	model	cited_in
 0x42ae90	bra_nat_first.cpp	BraNatFirst::process_promotion_relegation_chain	high	opus	
 0x42b130	bra_nat_first.cpp	bra_nat_first_exchange_state_league_clubs	high	opus	2026-10-14-widescreen-inventory.md
 0x42b520	bra_nat_first.cpp	bra_nat_first_refresh_third_division_clubs	high	opus	
-0x42b760	bra_nat_first.cpp	bra_nat_first_fill_brazilian_cup_entrants	medium	opus	
-0x42bba0	bra_nat_first.cpp	bra_nat_first_fill_champions_cup_entrants	medium	opus	
+0x42b760	bra_nat_first.cpp	bra_nat_first_fill_brazilian_cup_entrants	high	opus	
+0x42bba0	bra_nat_first.cpp	bra_nat_first_fill_champions_cup_entrants	high	opus	
 0x42be40	bra_nat_second.cpp	BraNatSecond::BraNatSecond	high	opus	
 0x42c060	bra_nat_second.cpp	BraNatSecond::`scalar deleting destructor'	high	opus	
 0x42c080	bra_nat_second.cpp	BraNatSecond::~BraNatSecond	high	opus	
@@ -610,7 +610,7 @@ address	file	name	confidence	model	cited_in
 0x450a70	club_records.cpp	Date::get_day	medium	opus	
 0x450a80	club_records.cpp	Date::get_year	medium	opus	
 0x450a90	club_records.cpp	Cash::Cash	medium	opus	
-0x450aa0	club_records.cpp	cash_format_rounded	medium	opus	
+0x450aa0	club_records.cpp	Cash::format_display_amount	medium	opus	
 0x450ad0	club_records.cpp	won_run_record_construct	medium	opus	
 0x450b20	club_records.cpp	lost_run_record_construct	medium	opus	
 0x450b70	club_records.cpp	unbeaten_run_record_construct	medium	opus	
@@ -648,7 +648,7 @@ address	file	name	confidence	model	cited_in
 0x453d60	club_screens.cpp	open_club_squad_screen	medium	opus	2026-10-14-clickable-names-inventory.md
 0x4542f0	club_screens.cpp	open_manager_club_screen	high	opus	2026-10-14-assistant-and-days-inventory.md
 0x454900	club_screens.cpp	club_screen_build	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,assistant.c,build-brief-0.3.0.md,views.c
-0x454950	club_screens.cpp	club_screen_build_fragment_454950	medium	opus	
+0x454950	club_screens.cpp	club_screen_build_fragment_454950	high	opus	
 0x456740	club_screens.cpp	Date::operator>	high	opus	
 0x456770	club_screens.cpp	Date::operator<	high	opus	
 0x4567a0	club_screens.cpp	ScreenManager::set_area_scroll_row	high	opus	
@@ -663,12 +663,12 @@ address	file	name	confidence	model	cited_in
 0x45f380	club_screens.cpp	club_screen_draw_fixtures_tab	high	opus	
 0x460450	club_screens.cpp	find_club_badge_picture_path	high	opus	
 0x460590	club_screens.cpp	club_screen_draw_info_tab	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-stadium-research.md
-0x462070	club_screens.cpp	club_screen_draw_info_tab_fragment_462070	medium	opus	
-0x464220	club_screens.cpp	club_screen_draw_info_tab_fragment_464220	medium	opus	
-0x464620	club_screens.cpp	club_screen_draw_info_tab_fragment_464620	medium	opus	
-0x464b20	club_screens.cpp	club_screen_draw_info_tab_fragment_464b20	medium	opus	
-0x464d20	club_screens.cpp	club_screen_draw_info_tab_fragment_464d20	medium	opus	
-0x465420	club_screens.cpp	club_screen_draw_info_tab_fragment_465420	medium	opus	
+0x462070	club_screens.cpp	club_screen_draw_info_tab_fragment_462070	high	opus	
+0x464220	club_screens.cpp	club_screen_draw_info_tab_fragment_464220	high	opus	
+0x464620	club_screens.cpp	club_screen_draw_info_tab_fragment_464620	high	opus	
+0x464b20	club_screens.cpp	club_screen_draw_info_tab_fragment_464b20	high	opus	
+0x464d20	club_screens.cpp	club_screen_draw_info_tab_fragment_464d20	high	opus	
+0x465420	club_screens.cpp	club_screen_draw_info_tab_fragment_465420	high	opus	
 0x4671a0	club_screens.cpp	Cash::set	medium	opus	
 0x4671b0	club_screens.cpp	Finance::get_last_month	high	opus	
 0x4671c0	club_screens.cpp	Finance::get_this_month	high	opus	
@@ -730,13 +730,13 @@ address	file	name	confidence	model	cited_in
 0x47c070	club_screens.cpp	squad_numbers_screen_leave	high	opus	
 0x47c0b0	club_screens.cpp	open_add_part_exchange_player_screen	high	opus	
 0x47c180	club_screens.cpp	part_exchange_screen_build	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md
-0x480020	club_screens.cpp	part_exchange_screen_build_fragment_480020	medium	opus	
+0x480020	club_screens.cpp	part_exchange_screen_build_fragment_480020	high	opus	
 0x4814e0	club_screens.cpp	part_exchange_screen_handle_event	high	opus	
 0x481ef0	club_screens.cpp	build_club_squad_navigation_menu	high	opus	2026-10-15-team-views-frame-inventory.md
-0x482070	club_screens.cpp	build_club_squad_navigation_menu_fragment_482070	medium	opus	
+0x482070	club_screens.cpp	build_club_squad_navigation_menu_fragment_482070	high	opus	
 0x482a40	club_screens.cpp	add_club_screen_action_button	high	opus	2026-10-15-team-views-frame-inventory.md
 0x482d10	club_screens.cpp	handle_club_screen_action	high	opus	2026-10-15-team-views-frame-inventory.md
-0x483920	club_screens.cpp	club_record_type_to_category	medium	opus	
+0x483920	club_screens.cpp	club_record_type_to_category	high	opus	
 0x483a90	club_screens.cpp	add_club_fixture_row	high	opus	
 0x4841d0	club_screens.cpp	build_filtered_sorted_squad_list	high	opus	
 0x484980	club_screens.cpp	build_squad_list_for_staff_history	medium	opus	
@@ -813,7 +813,7 @@ address	file	name	confidence	model	cited_in
 0x48d500	comp.cpp	Comp::build_match_date_list	medium	opus	2026-10-14-widescreen-inventory.md
 0x48da90	comp.cpp	comp_compare_fixture_list_entries	high	opus	
 0x48db80	comp.cpp	Comp::includes_club	medium	opus	
-0x48dcd0	comp.cpp	comp_key_nation_entry_from_active_index	medium	opus	
+0x48dcd0	comp.cpp	comp_key_nation_entry_from_active_index	high	opus	
 0x48dd70	comp.cpp	comp_active_key_nation_of_fixture	medium	opus	2026-10-15-holiday-next-match-inventory.md
 0x48dee0	comp.cpp	comp_active_key_nation_of_club	high	opus	2026-10-15-holiday-next-match-inventory.md,2026-10-16-foreign-and-tactics-positions.md
 0x48df40	comp.cpp	comp_active_key_nation_of_stadium	medium	opus	
@@ -879,7 +879,7 @@ address	file	name	confidence	model	cited_in
 0x49cc60	comp_screens.cpp	comp_open_intertoto_apply_screen	high	opus	
 0x49ccb0	comp_screens.cpp	comp_intertoto_apply_screen_draw	high	opus	
 0x49ce50	comp_screens.cpp	comp_intertoto_apply_screen_handle_event	high	opus	
-0x49d070	comp_screens.cpp	comp_screens_add_related_comps_menu	medium	opus	
+0x49d070	comp_screens.cpp	comp_screens_add_related_comps_menu	high	opus	
 0x49d380	comp_screens.cpp	comp_screens_add_stage_selector	high	opus	
 0x49d930	comp_screens.cpp	comp_screens_add_stage_menu_item	high	opus	2026-10-13-display-and-scrman-inventory.md,2026-10-13-screen-stack-inventory.md
 0x49db00	comp_screens.cpp	comp_screens_add_fixture_row	high	opus	
@@ -994,7 +994,7 @@ address	file	name	confidence	model	cited_in
 0x4c0e10	con_champ.cpp	ConChamp::`scalar deleting destructor'	high	opus	
 0x4c0e30	con_champ.cpp	ConChamp::~ConChamp	high	opus	
 0x4c0f00	con_champ.cpp	ConChamp::create_round_table	high	opus	2026-10-16-sweep-europe.md
-0x4c11a0	con_champ.cpp	ConChamp::select_qualified_clubs	medium	opus	2026-10-16-sweep-europe.md
+0x4c11a0	con_champ.cpp	ConChamp::select_qualified_clubs	high	opus	2026-10-16-sweep-europe.md
 0x4c1440	con_champ.cpp	ConChamp::start_new_season	high	opus	2026-10-16-research-name-check.md
 0x4c15f0	con_champ.cpp	ConChamp::set_up_rounds	high	opus	
 0x4c1620	con_champ.cpp	ConChamp::update_for_date	high	opus	
@@ -1049,12 +1049,12 @@ address	file	name	confidence	model	cited_in
 0x4c5a90	conmebol_merc.cpp	ConmebolMerc::set_predicted_positions	high	opus	
 0x4c5c90	conmebol_merc.cpp	ConmebolMerc::update_for_date	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
 0x4c5ee0	conmebol_merc.cpp	ConmebolMerc::set_club_progress	high	opus	
-0x4c5fe0	conmebol_seeding.cpp	ConmebolSeeding::ConmebolSeeding	medium	opus	2026-10-14-game-creation-inventory.md,2026-10-16-sweep-europe.md
-0x4c61b0	conmebol_seeding.cpp	ConmebolSeeding::update_for_new_season	medium	opus	
-0x4c6280	conmebol_seeding.cpp	collect_conmebol_clubs	medium	opus	
-0x4c6430	conmebol_seeding.cpp	ConmebolSeeding::assign_libertadores_places	medium	opus	2026-10-16-sweep-europe.md
+0x4c5fe0	conmebol_seeding.cpp	ConmebolSeeding::ConmebolSeeding	high	opus	2026-10-14-game-creation-inventory.md,2026-10-16-sweep-europe.md
+0x4c61b0	conmebol_seeding.cpp	ConmebolSeeding::update_for_new_season	high	opus	
+0x4c6280	conmebol_seeding.cpp	collect_conmebol_clubs	high	opus	
+0x4c6430	conmebol_seeding.cpp	ConmebolSeeding::assign_libertadores_places	high	opus	2026-10-16-sweep-europe.md
 0x4c6730	conmebol_seeding.cpp	ConmebolSeeding::find_nth_unqualified_club_of_nation	medium	opus	
-0x4c6890	conmebol_seeding.cpp	ConmebolSeeding::is_mercosur_invited_club	medium	opus	2026-10-16-sweep-europe.md
+0x4c6890	conmebol_seeding.cpp	ConmebolSeeding::is_mercosur_invited_club	high	opus	2026-10-16-sweep-europe.md
 0x4c6960	conmebol_seeding.cpp	ConmebolSeeding::set_bra_champ_cup_winner	medium	opus	
 0x4c6970	conmebol_seeding.cpp	ConmebolSeeding::load_from_temp_file	high	opus	
 0x4c6b70	conmebol_seeding.cpp	ConmebolSeeding::save_to_temp_file	high	opus	
@@ -1095,13 +1095,13 @@ address	file	name	confidence	model	cited_in
 0x4c7560	contract_manager.cpp	CONTRACT_MANAGER::initialise_all_staff_contracts	high	opus	2026-10-14-game-creation-inventory.md
 0x4c7950	contract_manager.cpp	CONTRACT_MANAGER::add_staff_contract	high	opus	
 0x4c79a0	contract_manager.cpp	CONTRACT_MANAGER::get_free_staff_contract_space	high	opus	
-0x4c7ac0	contract_manager.cpp	CONTRACT_MANAGER::daily_update	medium	opus	2026-10-14-game-creation-inventory.md
+0x4c7ac0	contract_manager.cpp	CONTRACT_MANAGER::daily_update	high	opus	2026-10-14-game-creation-inventory.md
 0x4c9f60	contract_manager.cpp	CONTRACT_MANAGER::add_talks_record	medium	opus	
 0x4ca1c0	contract_manager.cpp	CONTRACT_MANAGER::remove_talks_records	medium	opus	
 0x4ca2a0	contract_manager.cpp	CONTRACT_MANAGER::find_talks_record	medium	opus	
 0x4ca300	contract_manager.cpp	CONTRACT_MANAGER::get_current_contract_offers	high	opus	
 0x4ca470	contract_manager.cpp	contract_manager_get_deserved_squad_status	medium	opus	
-0x4ca6d0	contract_manager.cpp	CONTRACT_MANAGER::update_after_match	medium	opus	
+0x4ca6d0	contract_manager.cpp	CONTRACT_MANAGER::update_after_match	high	opus	
 0x4cb0a0	contract_manager.cpp	contract_manager_raise_match_morale	medium	opus	
 0x4cb250	contract_manager.cpp	contract_manager_lower_match_morale	medium	opus	
 0x4cb960	contract_manager.cpp	staff_is_not_board_member	medium	opus	
@@ -1115,7 +1115,7 @@ address	file	name	confidence	model	cited_in
 0x4cc2d0	contract_manager.cpp	contract_manager_get_player_morale	high	opus	
 0x4cc2e0	contract_manager.cpp	contract_manager_write_morale_text	high	opus	2026-10-14-columns-and-colours-inventory.md,columns.c
 0x4cc3a0	contract_manager.cpp	contract_manager_write_morale_comparison_text	high	opus	2026-10-16-comparison-screen-inventory.md
-0x4cc490	contract_manager.cpp	CONTRACT_MANAGER::add_contract_offer	medium	opus	
+0x4cc490	contract_manager.cpp	CONTRACT_MANAGER::add_contract_offer	high	opus	
 0x4cc810	contract_manager.cpp	STAFF_CONTRACT::operator=	high	opus	
 0x4cc930	contract_manager.cpp	CONTRACT_MANAGER::schedule_decision_for_transfer	medium	opus	
 0x4cc9e0	contract_manager.cpp	CONTRACT_MANAGER::find_contract_offer	high	opus	2026-10-16-sweep-rulebooks.md
@@ -1123,9 +1123,9 @@ address	file	name	confidence	model	cited_in
 0x4cca70	contract_manager.cpp	CONTRACT_MANAGER::remove_contract_offer	high	opus	
 0x4ccb30	contract_manager.cpp	CONTRACT_MANAGER::remove_contract_offer_for_transfer	high	opus	
 0x4ccbf0	contract_manager.cpp	CONTRACT_MANAGER::remove_pending_offers_for_staff	medium	opus	
-0x4ccca0	contract_manager.cpp	CONTRACT_MANAGER::schedule_loan_end	medium	opus	
-0x4cced0	contract_manager.cpp	CONTRACT_MANAGER::trigger_non_promotion_clauses	medium	opus	
-0x4cd030	contract_manager.cpp	CONTRACT_MANAGER::trigger_relegation_clauses	medium	opus	
+0x4ccca0	contract_manager.cpp	CONTRACT_MANAGER::schedule_loan_end	high	opus	
+0x4cced0	contract_manager.cpp	CONTRACT_MANAGER::trigger_non_promotion_clauses	high	opus	
+0x4cd030	contract_manager.cpp	CONTRACT_MANAGER::trigger_relegation_clauses	high	opus	
 0x4cd120	contract_manager.cpp	CONTRACT_MANAGER::reset_division_clauses	medium	opus	
 0x4cd230	contract_manager.cpp	CONTRACT_MANAGER::schedule_offer_decision	medium	opus	
 0x4cd6d0	contract_manager.cpp	CONTRACT_MANAGER::add_decision_date	high	opus	
@@ -1137,22 +1137,22 @@ address	file	name	confidence	model	cited_in
 0x4cf560	contract_manager.cpp	CONTRACT_MANAGER::remove_held_offers	medium	opus	
 0x4cf5a0	contract_manager.cpp	CONTRACT_MANAGER::get_contract	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-15-contract-clauses.md,2026-10-16-comparison-screen-inventory.md
 0x4cf5f0	contract_manager.cpp	CONTRACT_MANAGER::get_contract_for_club	medium	opus	
-0x4cf6d0	contract_manager.cpp	CONTRACT_MANAGER::get_loan_contract	medium	opus	2026-10-15-assistant-pick-inventory.md,2026-10-16-comparison-screen-inventory.md
-0x4cf720	contract_manager.cpp	CONTRACT_MANAGER::sign_contract	medium	opus	
+0x4cf6d0	contract_manager.cpp	CONTRACT_MANAGER::get_loan_contract	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-16-comparison-screen-inventory.md
+0x4cf720	contract_manager.cpp	CONTRACT_MANAGER::sign_contract	high	opus	
 0x4d01e0	contract_manager.cpp	CONTRACT_MANAGER::sign_loan_contract	high	opus	
-0x4d07e0	contract_manager.cpp	CONTRACT_MANAGER::end_loan	medium	opus	
+0x4d07e0	contract_manager.cpp	CONTRACT_MANAGER::end_loan	high	opus	
 0x4d0b50	contract_manager.cpp	CONTRACT_MANAGER::remove_contract	high	opus	
 0x4d0bd0	contract_manager.cpp	CONTRACT_MANAGER::remove_loan_contract	high	opus	
 0x4d0c20	contract_manager.cpp	CONTRACT_MANAGER::get_wage	high	opus	
-0x4d0c60	contract_manager.cpp	contract_manager_calc_player_value	medium	opus	
-0x4d1600	contract_manager.cpp	contract_manager_calc_asking_price	medium	opus	2026-10-14-columns-and-colours-inventory.md
+0x4d0c60	contract_manager.cpp	contract_manager_calc_player_value	high	opus	
+0x4d1600	contract_manager.cpp	contract_manager_calc_asking_price	high	opus	2026-10-14-columns-and-colours-inventory.md
 0x4d2070	contract_manager.cpp	contract_manager_calc_asking_price_false_entry	high	opus	
 0x4d42d0	contract_manager.cpp	contract_manager_get_human_asking_price	medium	opus	
 0x4d4320	contract_manager.cpp	contract_manager_get_human_asking_price_fragment_4d4320	high	opus	
 0x4d4420	contract_manager.cpp	contract_manager_get_human_asking_price_fragment_4d4420	high	opus	
 0x4d44e0	contract_manager.cpp	contract_manager_get_offer_job	medium	opus	
 0x4d45f0	contract_manager.cpp	contract_manager_season_end_month	medium	opus	
-0x4d4660	contract_manager.cpp	CONTRACT_MANAGER::will_negotiate_offer	medium	opus	
+0x4d4660	contract_manager.cpp	CONTRACT_MANAGER::will_negotiate_offer	high	opus	
 0x4d4830	contract_manager.cpp	CONTRACT_MANAGER::prefill_offer_from_pending	medium	opus	
 0x4d49a0	contract_manager.cpp	contract_manager_post_offer_response_news	medium	opus	
 0x4d4fb0	contract_manager.cpp	contract_manager_write_offer_response_news_text	high	opus	2026-10-14-widescreen-inventory.md
@@ -1240,9 +1240,9 @@ address	file	name	confidence	model	cited_in
 0x5149a0	cro_a1.cpp	CroA1::start_new_season	high	opus	
 0x514bd0	cro_a1.cpp	CroA1::advance_stage	high	opus	
 0x514c60	cro_a1.cpp	CroA1::create_playoff_stage	medium	opus	
-0x514ed0	cro_a1.cpp	cro_a1_swap_second_and_third_tier_clubs	medium	opus	
+0x514ed0	cro_a1.cpp	cro_a1_swap_second_and_third_tier_clubs	high	opus	
 0x5150f0	cro_a1.cpp	CroA1::process_promotion_relegation_chain	high	opus	
-0x515190	cro_a1.cpp	cro_a1_realign_second_division_groups	medium	opus	
+0x515190	cro_a1.cpp	cro_a1_realign_second_division_groups	high	opus	
 0x5152f0	cro_a1.cpp	CroA1::load_extra_data	high	opus	
 0x515310	cro_a2a.cpp	CroA2a::CroA2a	high	opus	
 0x515530	cro_a2a.cpp	CroA2a::`scalar deleting destructor'	high	opus	
@@ -1310,7 +1310,7 @@ address	file	name	confidence	model	cited_in
 0x521e00	Cup.cpp	Cup::check_complete	high	opus	
 0x521e60	Cup.cpp	cup_set_round_draw_date	medium	opus	
 0x521eb0	Cup.cpp	cup_set_round_match_date	medium	opus	2026-10-16-sweep-season-end.md
-0x521f10	Cup.cpp	cup_set_round_progression_rule	medium	opus	
+0x521f10	Cup.cpp	cup_set_round_match_day	medium	opus	
 0x522190	Cup.cpp	cup_compare_entries_by_level_desc	high	opus	
 0x5221c0	Cup.cpp	cup_compare_entries_by_level_asc	high	opus	
 0x5221f0	Cup.cpp	Cup::get_match_importance	medium	opus	
@@ -1395,7 +1395,7 @@ address	file	name	confidence	model	cited_in
 0x53d7f0	Database.cpp	database_is_basque_club	high	opus	
 0x53d900	Database.cpp	database_is_melanesian_nation	high	opus	2026-10-16-sweep-international.md
 0x53d940	Database.cpp	database_is_polynesian_nation	high	opus	2026-10-16-sweep-international.md
-0x53d980	Database.cpp	database_is_staff_foreign	medium	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md,foreign.c
+0x53d980	Database.cpp	database_is_staff_foreign	high	opus	2026-10-16-foreign-and-tactics-positions.md,2026-10-16-sweep-rulebooks.md,foreign.c
 0x53db40	Database.cpp	database_sort_clubs_by_reputation	high	opus	2026-10-14-game-creation-inventory.md
 0x53dba0	Database.cpp	database_format_staff_name	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-16-comparison-screen-inventory.md,database_links.c
 0x53e140	Database.cpp	database_format_name_from_ids	high	opus	
@@ -1452,7 +1452,7 @@ address	file	name	confidence	model	cited_in
 0x544fc0	Database.cpp	eng_lng_load_tables	high	opus	
 0x545350	Database.cpp	eng_lng_load_tables_fragment_545350	high	opus	
 0x5453f0	Database.cpp	nation_get_english_name	high	opus	
-0x5454c0	Database.cpp	nation_get_english_short_name	medium	opus	
+0x5454c0	Database.cpp	nation_get_english_three_letter_name	high	opus	
 0x5455a0	Database.cpp	comp_get_english_name	high	opus	
 0x5456a0	Database.cpp	staff_comp_get_english_name	high	opus	
 0x545770	Database.cpp	club_get_english_short_name	high	opus	
@@ -1511,7 +1511,7 @@ address	file	name	confidence	model	cited_in
 0x549c90	Database.cpp	staff_clear_opinion_links	medium	opus	
 0x549cf0	Database.cpp	staff_add_opinion_link	medium	opus	
 0x549d60	Database.cpp	staff_remove_opinion_link	medium	opus	
-0x549dd0	Database.cpp	staff_get_opinion_link_staff	medium	opus	
+0x549dd0	Database.cpp	staff_get_opinion_link_staff	high	opus	
 0x549e50	Database.cpp	club_is_in_major_nation	high	opus	
 0x549ea0	Database.cpp	nation_is_major_nation	high	opus	
 0x549ef0	Date.cpp	Date::Date	high	opus	
