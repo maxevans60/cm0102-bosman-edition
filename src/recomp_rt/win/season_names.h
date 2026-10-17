@@ -33,8 +33,8 @@ int season_names_init(const char *game_dir);
 int season_names_load(const char *path);          /* also for tests; a later call replaces the table */
 
 /* The long name of the first competition object of a file (eng_first) in a season (start year), or NULL when
- * the table holds no name for it: the game keeps the name that the competition has. The agreed call of
- * slice 16. */
+ * the name does not change: outside a season game, in the base season 2001, when the table holds no name, or
+ * when the name is the database name of that competition. The agreed call of slice 16. */
 const char *season_names_get(const char *comp_file, int season);
 
 /* The long and short name of the n-th object (from 0) of a file in a season; an object after the last named

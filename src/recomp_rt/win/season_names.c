@@ -178,9 +178,14 @@ const char *season_names_get_nth(const char *comp_file, int season, int n, const
     return best ? best->long_name : NULL;
 }
 
+static const char *database_name_of(const char *comp_file);
+
 const char *season_names_get(const char *comp_file, int season)
 {
-    return season_names_get_nth(comp_file, season, 0, NULL);
+    if (!season_game_changes() || season == SEASON_FIRST_YEAR) return NULL;
+    const char *name = season_names_get_nth(comp_file, season, 0, NULL);
+    const char *db = name ? database_name_of(comp_file) : NULL;
+    return name && db && !strncmp(name, db, LONG_SIZE) ? NULL : name;
 }
 
 int season_game_changes(void)
@@ -238,6 +243,27 @@ static Kept *keep(uint32_t record)
     memcpy(k->now_long, k->db_long, LONG_SIZE);
     memcpy(k->now_short, k->db_short, SHORT_SIZE);
     return k;
+}
+
+/* The database long name of the first competition object of a file: the kept name when the record was renamed,
+ * else the name that it has. NULL when the game has no object of that file. */
+static const char *database_name_of(const char *comp_file)
+{
+    static uint32_t objs[MAX_OBJECTS];
+    static char name[LONG_SIZE + 1];
+    int n = season_comp_objects(objs, MAX_OBJECTS);
+    for (int i = 0; i < n; i++) {
+        uint32_t rec = rd32(g_mem, objs[i] + 4);
+        const SeasonCompClass *c = class_of(rd32(g_mem, objs[i]));
+        if (!c || !readable(rec) || strcmp(c->file, comp_file)) continue;
+        const uint8_t *from = g_mem + rec + LONG_AT;
+        for (int k = 0; k < nkept; k++)
+            if (kept[k].record == rec) from = (const uint8_t *)kept[k].db_long;
+        memcpy(name, from, LONG_SIZE);
+        name[LONG_SIZE] = 0;
+        return name;
+    }
+    return NULL;
 }
 
 static void put_name(uint32_t at, uint32_t size, const char *name)
