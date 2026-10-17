@@ -54,8 +54,13 @@ void season_dates_at_create(void);
 void season_dates_forget(void);
 
 /* The check of a Custom database folder (host path) against the game's own data, for Setup Game: 1 when its
- * dates could be checked (shift in *shift), 0 when not (too few people match, or the game's own data is not
- * the 3.9.68 data). Cached per folder. */
+ * dates could be checked (shift in *shift). 0, and Setup Game shows "Ages could not be checked", when:
+ * - fewer than 2,000 people (first name, second name, day of birth) match the game's own data;
+ * - fewer than 80 % of the matches agree on one shift;
+ * - the game's own Data is not the 3.9.68 data (its signature);
+ * - a file cannot be read (index.dat, staff.dat, first_names.dat, second_names.dat of either folder), or the
+ *   staff table does not fit its file.
+ * Cached per folder (path, size and time of staff.dat). */
 int season_dates_custom_check(const char *folder, int *shift);
 
 /* At each human turn (testrun.c): the test log of RECOMP_DATES_LOG=<name>;<name>;... (see season_dates.c). */
