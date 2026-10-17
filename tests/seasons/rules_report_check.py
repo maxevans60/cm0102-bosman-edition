@@ -256,19 +256,6 @@ def division_records(folder):
     return out
 
 
-PLAIN_DROP = {"fc", "cf", "sc", "ac", "ec", "ca", "cd", "sd", "ud", "if", "fk", "sk", "bk", "afc", "club", "clube",
-              "futebol", "football", "ltda", "de", "da", "do", "das", "dos", "the", "e", "y", "and"}
-
-
-def plain_name(name):
-    """The plain form of a club name, as plain_name of src/recomp_rt/win/season_clubs.c."""
-    fold = "AAAAAAACEEEEIIIIDNOOOOOxOUUUUYTsaaaaaaaceeeeiiiidnooooo/ouuuuyty"     # bytes 0xc0 to 0xff
-    raw = name.encode("cp1252", "replace") if not all(ord(c) < 256 for c in name) else name.encode("latin-1")
-    text = "".join(fold[b - 0xc0] if b >= 0xc0 else chr(b) for b in raw).lower()
-    words = "".join(c if c.isascii() and c.isalnum() else " " for c in text).split()
-    return " ".join(w for w in words if w not in PLAIN_DROP)
-
-
 def club_differences(seasons, comps, clubs, data_dir):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
@@ -279,7 +266,12 @@ def club_differences(seasons, comps, clubs, data_dir):
     season = start["season"]
     records = division_records(data_dir)
     names = club_records(data_dir)
-    in_report = {c["record"] for c in comps if c["season"] == season and c["kind"] == "league"}
+    # A league with no club count (+0x3e is 0) is a table entry that the game does not play: the French Lower
+    # Division (FraFirst class, record 15) in every start, the base game too. The game keeps no club in such a
+    # division: the clubs of the divisions it does not play go to "A Lower Division" before the start (a base
+    # game run of 2001/02 with France shows French CFA and Lower Division with 0 clubs and 558 in A Lower
+    # Division), so its list is not compared.
+    in_report = {c["record"] for c in comps if c["season"] == season and c["kind"] == "league" and c["clubs"] > 0}
     # By name: the trim of the club table (database_trim_club_table 0x5267c0) gives the clubs new ids, so the
     # ids of the report are not those of club.dat. The club table holds each name once per nation; a name in
     # two nations counts once here, which the check accepts.
@@ -290,7 +282,7 @@ def club_differences(seasons, comps, clubs, data_dir):
     held = set(names.values())
     plain_to = collections.defaultdict(set)
     for n in held:
-        plain_to[plain_name(n)].add(n)
+        plain_to[make_clubs.plain_name(n)].add(n)
     lists = collections.OrderedDict()
     for s, division, club_id, club, _ in make_clubs.build()[0]:
         if s != season:
@@ -298,8 +290,7 @@ def club_differences(seasons, comps, clubs, data_dir):
         if names.get(club_id) == club or club in held:
             name = club
         else:                               # the plain form, when one club of the database has it (season_clubs.c)
-            hits = plain_to.get(plain_name(club), set())
-            name = next(iter(hits)) if len(hits) == 1 else None
+            name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
         lists.setdefault(division, []).append(name)
     out = set()
     for division, listed in lists.items():

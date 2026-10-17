@@ -97,7 +97,6 @@ season	part	list	club	database_division	source
 2005	bra	Série C (2006)	Associação Desportiva Senador Guiomard	Brazilian National Third Division	https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2006_-_S%C3%A9rie_C
 2005	bra	Série C (2006)	Clube Municipal Ananindeua	Brazilian National Third Division	https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2006_-_S%C3%A9rie_C
 2005	bra	Série C (2006)	Amapá Clube	Brazilian National Third Division	https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2006_-_S%C3%A9rie_C
-2005	bra	Série C (2006)	Operário Futebol Clube Ltda	Brazilian National Third Division	https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2006_-_S%C3%A9rie_C
 2005	bra	Série C (2006)	Araguaína Futebol e Regatas	Brazilian National Third Division	https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2006_-_S%C3%A9rie_C
 2005	bra	Série C (2006)	Sport Club Ulbra Ji-Paraná	Brazilian National Third Division	https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2006_-_S%C3%A9rie_C
 2005	bra	Série C (2006)	Sociedade Esportiva Ypiranga Futebol Clube	Brazilian National Third Division	https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2006_-_S%C3%A9rie_C
@@ -165,8 +164,6 @@ season	part	list	club	database_division	source
 2011	den-swe	Danish 2nd Division group 2	Aarup BK	Danish Second Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Danish_2nd_Division
 2011	den-swe	Danish 2nd Division group 2	Viby IF	Danish Second Division	https://en.wikipedia.org/wiki/2011%E2%80%9312_Danish_2nd_Division
 2013	den-swe	Danish 2nd Division group 1	Gentofte-Vangede Idrætsforening	Danish Second Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Danish_2nd_Division
-2013	den-swe	Danish 2nd Division group 2	Odder IGF	Danish Second Division	https://en.wikipedia.org/wiki/2013%E2%80%9314_Danish_2nd_Division
-2015	den-swe	Danish 2nd Division group 2	Dalum IF	Danish Second Division	https://en.wikipedia.org/wiki/2015%E2%80%9316_Danish_2nd_Division
 2016	den-swe	Danish 2nd Division group 3	VSK Aarhus	Danish Second Division	https://en.wikipedia.org/wiki/2016%E2%80%9317_Danish_2nd_Division
 2007	den-swe	Division 1 Norra	Ersboda SK		https://en.wikipedia.org/wiki/2008_Division_1_(Swedish_football)
 2008	den-swe	Division 1 Norra	Skellefteå FF		https://en.wikipedia.org/wiki/2009_Division_1_(Swedish_football)
@@ -496,7 +493,6 @@ season	part	list	club	database_division	source
 2003	fra	CFA 2	RC Épernay	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	US Créteil-Lusitanos (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	FC Drouais	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
-2003	fra	CFA 2	FC Sens	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	Stade de Reims (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	Le Mée VSSF	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	SA Spinalien	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
@@ -515,7 +511,6 @@ season	part	list	club	database_division	source
 2003	fra	CFA 2	Louhans-Cuiseaux FC (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	JO Creusotine	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	US Le Pontet	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
-2003	fra	CFA 2	SC Orange	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	ES Cros-de-Cagnes	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	CA Bastiais	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
 2003	fra	CFA 2	Nîmes Olympique (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2003-2004
@@ -547,13 +542,11 @@ season	part	list	club	database_division	source
 2005	fra	CFA 2	Entente Sannois Saint-Gratien (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	Valenciennes FC (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	Amiens SC (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
-2005	fra	CFA 2	Évreux AC	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	FC Rouen (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	US Créteil-Lusitanos (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	RC Épernay	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	CS Sedan Ardennes (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	Stade de Reims (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
-2005	fra	CFA 2	FC Sens	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	Jarville JF	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	AS Taissy-Saint-Léonard	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
 2005	fra	CFA 2	AJ Auxerroise (C)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2005-2006
@@ -621,7 +614,6 @@ season	part	list	club	database_division	source
 2007	fra	CFA 2	ES Troyes AC (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	SR Déodatiens	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	SC Selongéen	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
-2007	fra	CFA 2	FC Sens	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	Jarville JF	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	Racing Besançon (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	ES Thaon	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
@@ -658,7 +650,6 @@ season	part	list	club	database_division	source
 2007	fra	CFA 2	FC Libourne-Saint-Seurin (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	JS Cugnalaise	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	Saint-Pryvé Saint-Hilaire FC	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
-2007	fra	CFA 2	Olympique de Saumur	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	Angers SCO (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	AJ Auxerroise (C)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	Ararat Issy	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
@@ -679,7 +670,6 @@ season	part	list	club	database_division	source
 2007	fra	CFA 2	SU Divaise	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	Entente Sannois Saint-Gratien (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2007	fra	CFA 2	AS Ifs	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
-2007	fra	CFA 2	Évreux AC	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2007-2008
 2008	fra	CFA 2	AS Marck	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2008-2009
 2008	fra	CFA 2	SC Hazebrouckois	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2008-2009
 2008	fra	CFA 2	AC Amiens	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2008-2009
@@ -1024,7 +1014,6 @@ season	part	list	club	database_division	source
 2014	fra	CFA 2	Voltigeurs de Châteaubriant	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2014-2015
 2014	fra	CFA 2	EA Guingamp (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2014-2015
 2014	fra	CFA 2	TA Rennes	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2014-2015
-2014	fra	CFA 2	Le Mans FC	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2014-2015
 2014	fra	CFA 2	Avoine OCC	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2014-2015
 2014	fra	CFA 2	Le Poiré-sur-Vie VF (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2014-2015
 2014	fra	CFA 2	AC Boulogne-Billancourt	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2014-2015
@@ -1136,7 +1125,6 @@ season	part	list	club	database_division	source
 2018	fra	National 3	AS Moulins	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	Ytrac Foot	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	Jura Dolois Football	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
-2018	fra	National 3	Racing Besançon	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	US Charitoise	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	CO Avallonnais	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	FC Grandvillars	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
@@ -1146,7 +1134,6 @@ season	part	list	club	database_division	source
 2018	fra	National 3	FC Ouest Tourangeau	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	US Orléans (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	AS Montlouis-sur-Loire	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
-2018	fra	National 3	Bourges 18	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	C' Chartres Football (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	USM Montargis	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
 2018	fra	National 3	US Châteauneuf-sur-Loire	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2018-2019
@@ -1202,7 +1189,6 @@ season	part	list	club	database_division	source
 2019	fra	National 3	Chambéry Savoie	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	Le Puy Foot (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	US Saint-Flour	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
-2019	fra	National 3	Racing Besançon	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	Jura Dolois Football	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	Valdahon	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	Stade Pontivyen	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
@@ -1210,7 +1196,6 @@ season	part	list	club	database_division	source
 2019	fra	National 3	US Trégunc	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	PD Ergué-Gabéric	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	FC Guichen	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
-2019	fra	National 3	Bourges 18	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	US Orléans (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	C' Chartres Football (B)	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
 2019	fra	National 3	USM Saran	French Lower Division	https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_de_cinquième_division_2019-2020
@@ -1398,7 +1383,6 @@ season	part	list	club	database_division	source
 2023	gre-pol-cro	new (gre second, group 2)	Tilikratis		https://en.wikipedia.org/wiki/2023–24_Super_League_Greece_2
 2024	gre-pol-cro	new (gre second, group 2)	Asteras Tripolis B		https://en.wikipedia.org/wiki/2024–25_Super_League_Greece_2
 2025	gre-pol-cro	gre_second	Asteras Tripolis B	Greek National B Division	https://en.wikipedia.org/wiki/2025–26_Super_League_Greece_2
-2005	gre-pol-cro	pol_second	Zawisza Bydgoszcz	Polish Second Division	https://www.rsssf.org/tablesp/pol06.html
 2005	gre-pol-cro	pol_second	Drwęca Nowe Miasto Lubawskie	Polish Second Division	https://www.rsssf.org/tablesp/pol06.html
 2002	gre-pol-cro	cro_a2a	Valpovka	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002	gre-pol-cro	cro_a2b	TŠK Topolovac	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
@@ -1422,9 +1406,7 @@ season	part	list	club	database_division	source
 2008	ita	Lega Pro Seconda Divisione girone A	Sambonifacese	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
 2008	ita	Lega Pro Seconda Divisione girone A	Alghero	Italian Serie C2/A	https://it.wikipedia.org/wiki/Lega_Pro_Seconda_Divisione_2008-2009#Girone_A
 2020	ita	Serie C girone C	Trapani		https://it.wikipedia.org/wiki/Serie_C_2020-2021#Girone_C
-2025	ita	Serie C girone B	Rimini		https://it.wikipedia.org/wiki/Serie_C_2025-2026#Girone_B
 2003	por	Segunda Divisão B Zona Centro	FC Pampilhosa	Portuguese Second Division B Central	https://en.wikipedia.org/wiki/2003%E2%80%9304_Segunda_Divis%C3%A3o_B
-2003	por	Segunda Divisão B Zona Sul	CD Santo António	Portuguese Second Division B South	https://en.wikipedia.org/wiki/2003%E2%80%9304_Segunda_Divis%C3%A3o_B
 2005	por	Segunda Divisão Série A	União Torcatense		https://en.wikipedia.org/wiki/2005%E2%80%9306_Segunda_Divis%C3%A3o
 2005	por	Segunda Divisão Série B	Fiães SC		https://en.wikipedia.org/wiki/2005%E2%80%9306_Segunda_Divis%C3%A3o
 2005	por	Segunda Divisão Série B	Aliados Lordelo		https://en.wikipedia.org/wiki/2005%E2%80%9306_Segunda_Divis%C3%A3o
@@ -1447,7 +1429,6 @@ season	part	list	club	database_division	source
 2008	por	Segunda Divisão Série C	GDR Monsanto		https://en.wikipedia.org/wiki/2008%E2%80%9309_Segunda_Divis%C3%A3o
 2008	por	Segunda Divisão Série C	Eléctrico FC		https://en.wikipedia.org/wiki/2008%E2%80%9309_Segunda_Divis%C3%A3o
 2008	por	Segunda Divisão Série D	AD Carregado		https://en.wikipedia.org/wiki/2008%E2%80%9309_Segunda_Divis%C3%A3o
-2008	por	Segunda Divisão Série D	Real SC		https://en.wikipedia.org/wiki/2008%E2%80%9309_Segunda_Divis%C3%A3o
 2008	por	Segunda Divisão Série D	Mineiro Aljustrelense		https://en.wikipedia.org/wiki/2008%E2%80%9309_Segunda_Divis%C3%A3o
 2009	por	Segunda Divisão Zona Norte	Aliados FC Lordelo	Portuguese Second Division B North	https://en.wikipedia.org/wiki/2009%E2%80%9310_Segunda_Divis%C3%A3o
 2009	por	Segunda Divisão Zona Norte	Padroense FC	Portuguese Second Division B North	https://en.wikipedia.org/wiki/2009%E2%80%9310_Segunda_Divis%C3%A3o
@@ -1466,7 +1447,6 @@ season	part	list	club	database_division	source
 2010	por	Segunda Divisão Zona Centro	FC Pampilhosa	Portuguese Second Division B Central	https://en.wikipedia.org/wiki/2010%E2%80%9311_Segunda_Divis%C3%A3o
 2010	por	Segunda Divisão Zona Centro	Eléctrico FC	Portuguese Second Division B Central	https://en.wikipedia.org/wiki/2010%E2%80%9311_Segunda_Divis%C3%A3o
 2010	por	Segunda Divisão Zona Sul	Atlético SC Reguengos	Portuguese Second Division B South	https://en.wikipedia.org/wiki/2010%E2%80%9311_Segunda_Divis%C3%A3o
-2010	por	Segunda Divisão Zona Sul	Real SC	Portuguese Second Division B South	https://en.wikipedia.org/wiki/2010%E2%80%9311_Segunda_Divis%C3%A3o
 2011	por	Segunda Divisão Zona Norte	Marítimo B	Portuguese Second Division B North	https://en.wikipedia.org/wiki/2011%E2%80%9312_Segunda_Divis%C3%A3o
 2011	por	Segunda Divisão Zona Sul	Atlético SC	Portuguese Second Division B South	https://en.wikipedia.org/wiki/2011%E2%80%9312_Segunda_Divis%C3%A3o
 2012	por	Segunda Liga	Vitória de Guimarães B	Portuguese Second League	https://en.wikipedia.org/wiki/2012%E2%80%9313_Segunda_Liga
@@ -1482,7 +1462,6 @@ season	part	list	club	database_division	source
 2015	por	Campeonato de Portugal Série B	Varzim B		https://en.wikipedia.org/wiki/2015%E2%80%9316_Campeonato_de_Portugal
 2015	por	Campeonato de Portugal Série H	Atlético de Reguengos		https://en.wikipedia.org/wiki/2015%E2%80%9316_Campeonato_de_Portugal
 2016	por	LigaPro	Vitória de Guimarães B	Portuguese Second League	https://en.wikipedia.org/wiki/2016%E2%80%9317_LigaPro
-2018	por	Campeonato de Portugal Série A	Mirandês		https://en.wikipedia.org/wiki/2018%E2%80%9319_Campeonato_de_Portugal
 2018	por	Campeonato de Portugal Série C	Mação		https://en.wikipedia.org/wiki/2018%E2%80%9319_Campeonato_de_Portugal
 2018	por	Campeonato de Portugal Série C	Santa Iria		https://en.wikipedia.org/wiki/2018%E2%80%9319_Campeonato_de_Portugal
 2018	por	Campeonato de Portugal Série D	Vasco da Gama Vidigueira		https://en.wikipedia.org/wiki/2018%E2%80%9319_Campeonato_de_Portugal
@@ -1493,7 +1472,6 @@ season	part	list	club	database_division	source
 2020	por	Campeonato de Portugal Série D	Vila Cortez		https://en.wikipedia.org/wiki/2020%E2%80%9321_Campeonato_de_Portugal
 2020	por	Campeonato de Portugal Série E	GRAP		https://en.wikipedia.org/wiki/2020%E2%80%9321_Campeonato_de_Portugal
 2020	por	Campeonato de Portugal Série G	Belenenses SAD B		https://en.wikipedia.org/wiki/2020%E2%80%9321_Campeonato_de_Portugal
-2020	por	Campeonato de Portugal Série G	Estrela da Amadora		https://en.wikipedia.org/wiki/2020%E2%80%9321_Campeonato_de_Portugal
 2020	por	Campeonato de Portugal Série G	Oriental Dragon		https://en.wikipedia.org/wiki/2020%E2%80%9321_Campeonato_de_Portugal
 2020	por	Campeonato de Portugal Série G	Sporting CP B		https://en.wikipedia.org/wiki/2020%E2%80%9321_Campeonato_de_Portugal
 2021	por	Liga 3 Série B	União de Santarém		https://en.wikipedia.org/wiki/2021%E2%80%9322_Liga_3_(Portugal)
@@ -1503,21 +1481,14 @@ season	part	list	club	database_division	source
 2005	rus-tur	Russian First Division (real: First Division)	Spartak Nizhny Novgorod	Russian First Division	https://en.wikipedia.org/wiki/2006_Russian_First_Division
 2008	rus-tur	Russian First Division (real: First Division)	Krasnodar	Russian First Division	https://en.wikipedia.org/wiki/2009_Russian_First_Division
 2008	rus-tur	Russian First Division (real: First Division)	Nizhny Novgorod	Russian First Division	https://en.wikipedia.org/wiki/2009_Russian_First_Division
-2003	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group A)	Sidespor		https://tr.wikipedia.org/wiki/2003-04_2._Futbol_Ligi_B_Kategorisi
 2003	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group B)	Yeni Kırşehirspor		https://tr.wikipedia.org/wiki/2003-04_2._Futbol_Ligi_B_Kategorisi
-2003	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group C)	Osmaniyespor		https://tr.wikipedia.org/wiki/2003-04_2._Futbol_Ligi_B_Kategorisi
 2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 3)	Yeni Kırşehirspor		https://www.rsssf.org/tablest/tur06.html
-2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 4)	Ünyespor		https://www.rsssf.org/tablest/tur06.html
-2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 4)	Pazarspor		https://www.rsssf.org/tablest/tur06.html
 2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 5)	İskenderun Demir Çelik		https://www.rsssf.org/tablest/tur06.html
-2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 5)	Osmaniyespor		https://www.rsssf.org/tablest/tur06.html
 2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 1)	Bozüyükspor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
 2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 3)	Bugsaşspor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
 2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 3)	Yeni Kırşehirspor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
 2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 4)	Araklıspor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
 2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 4)	Değirmenderespor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
-2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 4)	Pazarspor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
-2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 4)	Arsinspor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
 2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 5)	İskenderun Demir Çelikspor		https://en.wikipedia.org/wiki/2007%E2%80%9308_TFF_2._Lig ; groups=https://www.rsssf.org/tablest/tur08.html
 2008	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 2)	Denizli Belediyespor		https://tr.wikipedia.org/wiki/2008-09_2._Lig
 2008	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 2)	Altınordu		https://tr.wikipedia.org/wiki/2008-09_2._Lig

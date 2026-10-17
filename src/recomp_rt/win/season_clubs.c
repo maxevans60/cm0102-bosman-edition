@@ -250,9 +250,10 @@ static int class_size(const char *name, int season)
 }
 
 /* A club name in a plain form, to find a club whose name in the research differs a little from the database
- * ("Operário Futebol Clube Ltda" and "Operário FC"): the letters of Windows-1252 without accents, lower case,
- * words of letters and digits, and the words that only say "club" (fc, futebol, clube, ltda, ...) left out. */
-static void plain_name(const char *in, char *out, size_t room)
+ * ("Operário Futebol Clube Ltda" and "Operário Futebol Clube"): the letters of Windows-1252 without accents,
+ * lower case, words of letters and digits, and (when drop is set) the words that only say "club" (fc, futebol,
+ * clube, ltda, ...) left out. */
+static void plain_words(const char *in, char *out, size_t room, int drop_words)
 {
     static const char *const drop[] = {"fc", "cf", "sc", "ac", "ec", "ca", "cd", "sd", "ud", "if", "fk", "sk",
                                        "bk", "afc", "club", "clube", "futebol", "football", "ltda", "de", "da",
@@ -273,7 +274,7 @@ static void plain_name(const char *in, char *out, size_t room)
         if (w) {
             word[w] = 0;
             int skip = 0;
-            for (size_t k = 0; k < sizeof drop / sizeof drop[0] && !skip; k++) skip = !strcmp(word, drop[k]);
+            for (size_t k = 0; drop_words && k < sizeof drop / sizeof drop[0] && !skip; k++) skip = !strcmp(word, drop[k]);
             if (!skip && n + w + 2 < room) {
                 if (n) out[n++] = ' ';
                 memcpy(out + n, word, w);
@@ -284,6 +285,19 @@ static void plain_name(const char *in, char *out, size_t room)
         }
         if (!*p) break;
     }
+}
+
+static void plain_name(const char *in, char *out, size_t room)
+{
+    plain_words(in, out, room, 1);
+}
+
+/* 1 when the words of a are the first words of b, or those of b the first words of a. */
+static int word_prefix(const char *a, const char *b)
+{
+    size_t na = strlen(a), nb = strlen(b), n = na < nb ? na : nb;
+    if (strncmp(a, b, n)) return 0;
+    return na == nb || (na < nb ? b[n] == ' ' : a[n] == ' ');
 }
 
 /* 1 for the name of a reserve or B side: a last word B, II, 2 or Reserves, a word such as U21, Jong at the
@@ -403,16 +417,24 @@ static void move_clubs(int season)
         for (int i = 0; i < count && k < 0; i++)
             if (!club[i].national && club[i].nation == div[t].nation && same_name(club[i].at + CLUB_NAME, rows[r].club))
                 k = i;
-        if (k < 0) {                            /* the plain form, when exactly one club of the nation has it */
-            char want[128], have[128];
+        if (k < 0) {
+            /* The plain form, when exactly one club of the nation has it. When several have it, the one whose
+             * full words (with fc, clube, ...) begin the research name or begin with it: "Operário Futebol
+             * Clube" for "Operário Futebol Clube Ltda", not "Operário (SC)" (both "operario"). */
+            char want[128], have[128], want_full[128], have_full[128];
             plain_name(rows[r].club, want, sizeof want);
-            int hits = 0, hit = -1;
+            plain_words(rows[r].club, want_full, sizeof want_full, 0);
+            int hits = 0, hit = -1, close = 0, close_hit = -1;
             for (int i = 0; i < count && *want; i++) {
                 if (club[i].national || club[i].nation != div[t].nation) continue;
                 plain_name(win_str(club[i].at + CLUB_NAME), have, sizeof have);
-                if (!strcmp(have, want)) hits++, hit = i;
+                if (strcmp(have, want)) continue;
+                hits++, hit = i;
+                plain_words(win_str(club[i].at + CLUB_NAME), have_full, sizeof have_full, 0);
+                if (word_prefix(have_full, want_full)) close++, close_hit = i;
             }
             if (hits == 1) k = hit, by_plain++;
+            else if (hits > 1 && close == 1) k = close_hit, by_plain++;
         }
         if (k < 0) {
             unmatched++;
@@ -481,9 +503,10 @@ static void move_clubs(int season)
         /* Too few. First the clubs that the database had there and that no list keeps. Then two kinds of place:
          * - the place of a real club of the list that the database lacks (Q359): below the top two tiers it takes
          *   one of the nation's clubs that the database has in no division (no national team, and no reserve or
-         *   B side unless the list lacks one). In the top two tiers it stays open for slice 15b when the class
-         *   counts the clubs of the data. A class with a fixed count stops at its assert with an open place, so
-         *   there it takes a club with no division too, and the log calls it a stand-in;
+         *   B side unless the list lacks one). The place of a missing reserve or B side takes such a club in
+         *   every tier. In the top two tiers the place of another missing club stays open for slice 15b when the
+         *   class counts the clubs of the data. A class with a fixed count stops at its assert with an open
+         *   place, so there it takes a club with no division too, and the log calls it a stand-in;
          * - a place that the list leaves because the class takes more clubs than the real division has (slice
          *   18): the nation's clubs with no division, then the clubs of the spare divisions, then the clubs of
          *   lower divisions that no list keeps. */
@@ -497,7 +520,8 @@ static void move_clubs(int season)
         int need = d->want - now;
         int missing_places = need < d->missing ? need : d->missing;
         int fixed = class_size(d->name, season) > 0;
-        int places[2] = {d->tier > 2 || fixed ? missing_places : 0, need - missing_places};
+        int reserve_places = missing_places < d->missing_reserve ? missing_places : d->missing_reserve;
+        int places[2] = {d->tier > 2 || fixed ? missing_places : reserve_places, need - missing_places};
         for (int kind = 0; kind < 2; kind++)
             for (int group = 1; group <= (kind ? 3 : 1) && places[kind] > 0; group++)
                 for (int i = 0; i < count && places[kind] > 0; i++) {
@@ -519,7 +543,7 @@ static void move_clubs(int season)
                     if (group == 1) d->filled_pool++;
                     else if (group == 2) d->filled_spare++;
                     else d->filled_lower++;
-                    if (kind == 0 && d->tier <= 2) d->stand_in++;
+                    if (kind == 0 && d->tier <= 2 && reserve_places-- <= 0) d->stand_in++;
                 }
         d->open = d->want - now;
         if (now < d->want) {

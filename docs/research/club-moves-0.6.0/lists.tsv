@@ -217,6 +217,8 @@ season	part	list	clubs	with_record	database_division	note
 2025	bra	Série A (2026)	20	20	Brazilian National First Division	
 2025	bra	Série B (2026)	20	20	Brazilian National Second Division	
 2025	bra	Série C (2026)	20	20	Brazilian National Third Division	
+2004	den-swe	Danish Superliga	12	12	Danish Premier Division	
+2004	den-swe	Allsvenskan	14	14	Swedish Premier Division	
 2006	den-swe	Danish Superliga	12	12	Danish Premier Division	
 2006	den-swe	Danish 1st Division	16	16	Danish First Division	
 2006	den-swe	Allsvenskan	14	14	Swedish Premier Division	
@@ -385,6 +387,8 @@ season	part	list	clubs	with_record	database_division	note
 2003	fra	Ligue 1	20	20	French First Division	
 2003	fra	Ligue 2	20	20	French Second Division	
 2003	fra	Championnat National	20	20	French National	
+2004	fra	Ligue 1	20	20	French First Division	
+2004	fra	Ligue 2	20	20	French Second Division	
 2005	fra	Ligue 1	20	20	French First Division	
 2005	fra	Ligue 2	20	20	French Second Division	
 2005	fra	Championnat National	20	20	French National	
@@ -516,6 +520,7 @@ season	part	list	clubs	with_record	database_division	note
 2024	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
 2025	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
 2001	gre-pol-cro	gre_prm	14	14	Greek National A Division	
+2004	gre-pol-cro	gre_prm	15	15	Greek National A Division	
 2006	gre-pol-cro	gre_prm	16	16	Greek National A Division	
 2006	gre-pol-cro	gre_second	18	18	Greek National B Division	
 2006	gre-pol-cro	pol_first	16	16	Polish First Division	
@@ -635,6 +640,10 @@ season	part	list	clubs	with_record	database_division	note
 2025	gre-pol-cro	cro_a2a	12	12	Croatian Second Division North	
 2003	hol-bel	Eredivisie	18	18	Dutch Premier Division	
 2003	hol-bel	Eerste Divisie	19	19	Dutch First Division	
+2004	hol-bel	Eredivisie	18	18	Dutch Premier Division	
+2004	hol-bel	Eerste Divisie	19	19	Dutch First Division	
+2004	hol-bel	Belgian First Division	18	18	Belgian First Division	
+2004	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
 2005	hol-bel	Eerste Divisie	20	20	Dutch First Division	
 2006	hol-bel	Eredivisie	18	18	Dutch Premier Division	
 2006	hol-bel	Eerste Divisie	20	20	Dutch First Division	
@@ -723,6 +732,8 @@ season	part	list	clubs	with_record	database_division	note
 2003	ita	Serie C2 girone A	18	18	Italian Serie C2/A	
 2003	ita	Serie C2 girone B	18	18	Italian Serie C2/B	
 2003	ita	Serie C2 girone C	18	18	Italian Serie C2/C	
+2004	ita	Serie A	20	20	Italian Serie A	
+2004	ita	Serie B	22	22	Italian Serie B	
 2005	ita	Serie A	20	20	Italian Serie A	
 2005	ita	Serie B	22	22	Italian Serie B	
 2005	ita	Serie C1 girone A	18	18	Italian Serie C1/A	
@@ -835,6 +846,8 @@ season	part	list	clubs	with_record	database_division	note
 2002	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
 2003	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
 2003	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
+2004	nor-fin	Tippeligaen	14	14	Norwegian Premier Division	
+2004	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
 2005	nor-fin	Veikkausliiga	13	13	Finnish Premier Division	
 2005	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
 2006	nor-fin	Tippeligaen	14	14	Norwegian Premier Division	
@@ -919,6 +932,8 @@ season	part	list	clubs	with_record	database_division	note
 2003	por	Segunda Divisão B Zona Norte	19	19	Portuguese Second Division B North	
 2003	por	Segunda Divisão B Zona Centro	20	19	Portuguese Second Division B Central	
 2003	por	Segunda Divisão B Zona Sul	20	19	Portuguese Second Division B South	
+2004	por	Primeira Liga	18	18	Portuguese Premier League	
+2004	por	Liga de Honra	18	18	Portuguese Second League	
 2005	por	Segunda Divisão Série A	14	13		left out: the real groups do not match the database divisions (slice 18)
 2005	por	Segunda Divisão Série B	14	12		left out: the real groups do not match the database divisions (slice 18)
 2005	por	Segunda Divisão Série C	14	11		left out: the real groups do not match the database divisions (slice 18)
@@ -1028,6 +1043,8 @@ season	part	list	clubs	with_record	database_division	note
 2025	por	Liga 3 Série B	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
 2002	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
 2003	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2004	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2004	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
 2005	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
 2006	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
 2006	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	17	Turkish 2. Division Category A	
@@ -1235,6 +1252,9 @@ season	part	list	clubs	with_record	database_division	note
 2003	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
 2003	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
 2003	wal-nir-irl	Irish First Division	12	12	Irish First Division	
+2004	wal-nir-irl	Welsh Premier Division	18	18	Welsh Premier Division	
+2004	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	
+2004	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
 2005	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	
 2005	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
 2006	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	

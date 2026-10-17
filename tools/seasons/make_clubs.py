@@ -6,6 +6,8 @@ Usage:
     python3 -I tools/seasons/make_clubs.py --check               read the files, write nothing
     python3 -I tools/seasons/make_clubs.py --lists <file.tsv>    write each club list and what became of it
     python3 -I tools/seasons/make_clubs.py --missing <file.tsv>  write the real clubs that no database record matches
+        [--databases <folder>[,<folder>]]                        leave out the rows that the game finds by the plain
+                                                                 name in the season's database (<folder>/<name>...)
 
 Input: docs/research/rules-0.6.0/<part>-clubs.tsv. Each row is a real club of a division at the start of a
 season (columns season, division, club, db_club_id, db_club, db_division, source). db_club_id is the record id
@@ -232,6 +234,60 @@ def build():
     return out, report, missing
 
 
+PLAIN_DROP = {"fc", "cf", "sc", "ac", "ec", "ca", "cd", "sd", "ud", "if", "fk", "sk", "bk", "afc", "club", "clube",
+              "futebol", "football", "ltda", "de", "da", "do", "das", "dos", "the", "e", "y", "and"}
+PLAIN_FOLD = "AAAAAAACEEEEIIIIDNOOOOOxOUUUUYTsaaaaaaaceeeeiiiidnooooo/ouuuuyty"     # bytes 0xc0 to 0xff
+
+
+def plain_name(name, drop=True):
+    """The plain form of a club name, as plain_words of src/recomp_rt/win/season_clubs.c: the letters of
+    Windows-1252 without accents, lower case, words of letters and digits, the words of PLAIN_DROP left out
+    when drop is set."""
+    raw = name.encode("cp1252", "replace") if not all(ord(c) < 256 for c in name) else name.encode("latin-1")
+    text = "".join(PLAIN_FOLD[b - 0xc0] if b >= 0xc0 else chr(b) for b in raw).lower()
+    words = "".join(c if c.isascii() and c.isalnum() else " " for c in text).split()
+    return " ".join(w for w in words if not drop or w not in PLAIN_DROP)
+
+
+def word_prefix(a, b):
+    """True when the words of a are the first words of b, or those of b the first words of a."""
+    a, b = a.split(), b.split()
+    n = min(len(a), len(b))
+    return a[:n] == b[:n]
+
+
+def plain_match(want, names):
+    """The one name of names that the game takes for the research name want (season_clubs.c): the only name
+    with the same plain form, else of several such names the only one whose full words begin want or begin
+    with it. None when no name or more than one is left."""
+    hits = [n for n in names if plain_name(n) == plain_name(want)]
+    if len(hits) > 1:
+        hits = [n for n in hits if word_prefix(plain_name(n, False), plain_name(want, False))]
+    return hits[0] if len(hits) == 1 else None
+
+
+def season_databases(folders):
+    """{season: {plain name: [names]}} of the club.dat of each season database (databases-signatures.tsv) that
+    one of the folders (a list) holds. A record is 581 bytes, its long name at +4 (52 bytes)."""
+    out = {}
+    with open(os.path.join(ROOT, "docs", "research", "rules-0.6.0", "databases-signatures.tsv"), newline="",
+              encoding="utf-8") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            # A folder may hold the database under its name with more words after it.
+            paths = [os.path.join(d, e, "club.dat") for d in folders for e in sorted(os.listdir(d))
+                     if e == r["database"] or e.startswith(r["database"] + " ")]
+            path = next((p for p in paths if os.path.exists(p)), None)
+            if r["role"] != "season database" or not path:
+                continue
+            data = open(path, "rb").read()
+            by_plain = collections.defaultdict(list)
+            for i in range(len(data) // 581):
+                name = data[i * 581 + 4:i * 581 + 56].split(b"\0")[0].decode("latin-1")
+                by_plain[plain_name(name)].append(name)
+            out[int(r["data_season"][:4])] = by_plain
+    return out
+
+
 def plain(text):
     """A real club name for the game's text: Windows-1252, a character it lacks becomes "?", 51 characters."""
     return text.strip().encode("cp1252", "replace").decode("cp1252")[:LIMIT]
@@ -262,6 +318,7 @@ def main(argv):
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--lists")
     ap.add_argument("--missing")
+    ap.add_argument("--databases")
     a = ap.parse_args(argv)
     if not (a.out or a.check or a.lists or a.missing):
         ap.error("give --out, --check, --lists or --missing")
@@ -286,6 +343,15 @@ def main(argv):
         print(f"make_clubs.py: {len(out)} club moves written to {a.out}")
     if a.lists:
         write(a.lists, ["season\tpart\tlist\tclubs\twith_record\tdatabase_division\tnote"], report)
+    if a.missing and a.databases:
+        # The game finds a club with no record id by its plain name in the nation of the division
+        # (season_clubs.c). Here a row goes out when plain_match finds one club of the season's database (of
+        # any nation, so this is stricter than the game).
+        dbs = season_databases(a.databases.split(","))
+        found = [m for m in missing if plain_match(m[3], dbs.get(m[0], {}).get(plain_name(m[3]), []))]
+        missing = [m for m in missing if m not in found]
+        print(f"make_clubs.py: {len(found)} rows found by the plain name, {len(missing)} missing; seasons with a "
+              f"database: {len(dbs)}")
     if a.missing:
         write(a.missing, ["season\tpart\tlist\tclub\tdatabase_division\tsource"], missing)
     return 0
