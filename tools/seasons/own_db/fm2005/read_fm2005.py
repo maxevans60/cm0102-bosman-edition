@@ -12,7 +12,7 @@ the year from 0 and a u16 year, 1900 for no date). Found in the files with known
   first names (in two runs), surnames, common names.
 - Person (people_db): u32 first, u32 surname, i32 common (-1 none), u16 day, u16 year, u8, u32 nation; bytes +33 to
   +37 are 00 00 00 6c 07. At +38: u32 team id, u8 job (bit flags: 1 player, 2 coach, 12 physio, 14 scout,
-  16 manager, 20 assistant manager), u16 day, u16 year (joined), 00. At +95 (the date +83) the contract: u32 person
+  16 manager, 20 assistant manager), u16 day, u16 year (joined), 00. After it the contract (the date +83 for most people; optional blocks move it): u32 person
   id, 00, u32 club, u32 weekly wage, u16 day, u16 year (end), 02.
 - Club record (client_db): ..., long name, short name, u8 k kits, 7 bytes per kit, u32 club id, u32 id2, then the
   next record (type byte, i32 nation). A club's nation is therefore read at the end of the club before it.
@@ -103,16 +103,23 @@ def people(p, F, S, C):
                 x = dict(fn=F[fn], sn=S[sn], cn=C.get(cn), full="", dob=date(p, o + 12),
                          nat=struct.unpack_from("<I", p, o + 17)[0], team=struct.unpack_from("<I", p, j)[0],
                          job=p[j + 4], joined=date(p, j + 5), club=None, wage=None, cend=None, pid=None)
-                k = o + 12 + 83
-                if p[k + 4] == 0 and p[k + 17] == 2:
-                    club, wage, d_, y_ = struct.unpack_from("<IIHH", p, k + 5)
-                    if (2004 <= y_ <= 2014 or y_ == 1900) and d_ < 366 and club < 100000:
-                        x.update(pid=struct.unpack_from("<I", p, k)[0], club=club, wage=wage, cend=date(p, k + 13))
+                x["off"] = o
                 x["role"] = "player" if x["job"] & 1 else "staff"
                 out.append(x)
                 o += 38
                 continue
         o += 1
+    # The contract block lies after the join block; optional blocks before it change its offset (+83 from the date
+    # for most people, +87 for some). Search the record up to the next person.
+    for n, x in enumerate(out):
+        q = x["off"] + 12
+        end = min(out[n + 1]["off"] if n + 1 < len(out) else len(p), q + 400)
+        for k in range(q + 40, end - 18):
+            if p[k + 4] == 0 and p[k + 17] == 2:
+                club, wage, d_, y_ = struct.unpack_from("<IIHH", p, k + 5)
+                if (2004 <= y_ <= 2014 or y_ == 1900) and d_ < 366 and club < 100000 and wage < 10 ** 7:
+                    x.update(pid=struct.unpack_from("<I", p, k)[0], club=club, wage=wage, cend=date(p, k + 13))
+                    break
     return out
 
 
@@ -213,6 +220,13 @@ def main(argv):
     nations = nations_of(c, max(x["off"] for x in clubs.values()), T[0][0])   # after the club table
     P = people(p, F, S, C)
     teams = teams_of(s, clubs)
+    # A person with no contract block but a team in the join block plays for that team's club (no contract end).
+    fall = 0
+    for x in P:
+        if x["club"] is None and x["team"] in teams and x["joined"]:
+            x["club"] = teams[x["team"]]
+            fall += 1
+    print(f"club from the join block's team: {fall}")
     hist = []
     for o in run_of(s, s.find(struct.pack("<IIHB", 7, 516, 2004, 1)) - 1, 30, 22):
         comp, team, yr, pos, g, w, dr, l, gf, ga, pts = struct.unpack_from("<IIHBBBBBHHH", s, o + 1)

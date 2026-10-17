@@ -83,12 +83,14 @@ def set_count(buf, table, count):
 
 def main(argv):
     global S_, START, SH, HIST_SHIFT
-    check(len(argv) == 6, "usage: convert.py <season> <template> <facts> <work> <history folder> <new folder>")
+    check(len(argv) in (6, 7), "usage: convert.py <season> <template> <facts> <work> <history folder> <new folder> "
+                               "[<fill folder>]")
     S_ = settings(int(argv[0]))
     START = S_.START
     SH = template_shifts(S_.TEMPLATE)
     HIST_SHIFT = template_shifts(S_.HIST_SRC)["comp_history"]
-    src, X, W, hist_src, dst = (os.path.abspath(a) for a in argv[1:])
+    src, X, W, hist_src, dst = (os.path.abspath(a) for a in argv[1:6])
+    fill_src = os.path.abspath(argv[6]) if len(argv) == 7 else None
     check(not os.path.exists(dst), f"{dst} exists")
     T = Folder(src)
     for f in DAT_FILES:
@@ -101,6 +103,11 @@ def main(argv):
     comphist = pickle.load(open(os.path.join(X, "comphist.pkl"), "rb"))
     teammap = pickle.load(open(os.path.join(X, "teammap.pkl"), "rb"))
     clubmap, pmap = M["clubmap"], M["pmap"]
+    n_template = idx[6]["count"]
+    if fill_src:
+        from fill import fill                       # Q382: FM players that the template lacks, from an older database
+        pmap.update(fill(T, Folder(fill_src), fp, M, L, S_))
+        idx = T.idx
 
     staff = T.rows(6)
     n_staff = len(staff)
@@ -216,13 +223,13 @@ def main(argv):
 
     # 4. Careers: real years, nothing from the start season on.
     kept, kept_rows = kept_careers(S_.TEMPLATE)
-    check(not kept or kept_rows == n_staff, "kept careers list is for another staff count")
+    check(not kept or kept_rows == n_template, "kept careers list is for another staff count")
     sh = T.raw["staff_history.dat"]
     rows = []
     for o in range(0, idx[17]["count"] * 17, 17):
         rr = bytearray(sh[o:o + 17])
         who = struct.unpack_from("<i", rr, 4)[0]
-        k = kept and 0 <= who < n_staff and kept[who >> 3] >> (who & 7) & 1
+        k = kept and 0 <= who < n_template and kept[who >> 3] >> (who & 7) & 1
         if not k:
             shift(rr, 8, SH["staff_history"])
         if struct.unpack_from("<H", rr, 8)[0] >= START:

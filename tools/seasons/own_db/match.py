@@ -9,10 +9,6 @@ from seasons import settings,template_shifts
 S_=settings(int(sys.argv[1]))
 T=Folder(sys.argv[2]); X=os.path.join(sys.argv[3],''); W=sys.argv[4]
 SHIFT=template_shifts(S_.TEMPLATE)['birth']
-TRANS=str.maketrans({'æ':'ae','Æ':'Ae','ø':'o','Ø':'O','ß':'ss','ð':'d','þ':'th','ı':'i','ł':'l','Ł':'L','đ':'d','Đ':'D'})
-def norm(s):
-    s=unicodedata.normalize('NFKD',(s or '').translate(TRANS)).encode('ascii','ignore').decode().lower()
-    s=re.sub(r'[^a-z0-9 ]',' ',s); return ' '.join(s.split())
 STOP={'fc','f c','cf','c f','sc','ac','afc','cd','sd','ud','cfr','fk','sk','if','bk','sv','vfb','vfl','tsv','club','de','the','s a d','sad','calcio','football','futebol','clube'}
 def ckey(s):
     w=[x for x in norm(s).split() if x not in STOP and (len(x)>1 or x in ('b','c'))]
@@ -96,6 +92,27 @@ for x in S:
     if y<1901: continue
     for k in ((norm(x['first']),norm(x['second'])),('c',norm(x['common'])) if x['common'] else None):
         if k: nidx[k].append((x['id'],y+SHIFT,x['nation']))
+def nkeys(first,second,common):
+    f,sn_=norm(first).split(),norm(second).split()
+    out=[('n',norm(first),norm(second))]
+    if common: out.append(('c',norm(common)))
+    if f and sn_: out.append(('i',f[0],sn_[-1]))          # first word of the first name, last word of the surname
+    return out
+byclub=collections.defaultdict(set); nodob=collections.defaultdict(list); surclub=collections.defaultdict(set); tyear={}
+for x in S:
+    tyear[x['id']]=x['dob'][1]
+    if x['club']>=0:
+        for w in swords(x['second'],x['common']): surclub[(x['club'],w)].add(x['id'])
+for x in S:
+    ks=nkeys(x['first'],x['second'],x['common'])
+    if x['club']>=0:
+        for k in ks: byclub[(x['club'],k)].add(x['id'])
+    if x['dob'][1]<1901:
+        for k in ks[:2]: nodob[(x['nation'],k)].append(x['id'])
+iidx=collections.defaultdict(list)
+for x in S:
+    f_,s_=norm(x['first']).split(),norm(x['second']).split()
+    if f_ and s_ and x['dob'][1]>=1901: iidx[(f_[0],s_[-1])].append((x['id'],x['dob'][1]+SHIFT,x['nation']))
 pmap={}; amb=0
 for i,x in enumerate(fp):
     if not x['dob'] or x['dob'].year<=1900: continue
@@ -133,6 +150,38 @@ for i,x in enumerate(fp):
             if len(allc)==1:
                 tid,ty,tnat=allc[0]; fy=x['dob'].year
                 if abs(ty-fy)<=2 or abs(ty-SHIFT-fy)<=1: cands={tid}; break
+    if not cands:
+        # Tier 4b: the first word of the first name and the last word of the surname, the same nation, the birth
+        # year one year either way (FM's "David Pizarro" is the template's "David Marcelo Pizarro").
+        f_,s_=norm(x['fn']).split(),norm(x['sn']).split()
+        if f_ and s_:
+            tn_=natmap.get(x['nat'])
+            c4={tid for tid,ty,tnat in iidx.get((f_[0],s_[-1]),[]) if tnat==tn_ and abs(ty-x['dob'].year)<=1}
+            if len(c4)==1: cands=c4
+    if len(cands)!=1 and x['club'] in clubmap:
+        cands=set()
+        # Tier 5: the same name at the same club (the template club that FM's club maps to). Many template people
+        # have no date of birth (year 0 or 1900) or a wrong one, so dates do not help them.
+        tier=5
+        c5=set()
+        for k in nkeys(x['fn'],x['sn'],x['cn']):
+            c5|={tid for tid in byclub.get((clubmap[x['club']],k),())}
+        if len(c5)!=1:
+            # The same club and one word of the surname or common name (3 letters or more) in common, with a birth
+            # year one year either way when the template has one.
+            words=swords(x['sn'],x['cn'])
+            c5b=set()
+            for w in words: c5b|=surclub.get((clubmap[x['club']],w),set())
+            c5b={t for t in c5b if tyear[t]<1901 or abs(tyear[t]+SHIFT-x['dob'].year)<=1}
+            c5=c5b if not c5 else c5
+        if len(c5)==1: cands=c5
+    if not cands:
+        # Tier 6: a template person with no date of birth, of the same nation, whose name is unique among them.
+        tier=6
+        tn_=natmap.get(x['nat'])
+        for k in nkeys(x['fn'],x['sn'],x['cn'])[:2]:
+            c6=nodob.get((tn_,k),[])
+            if len(c6)==1: cands=set(c6); break
     if len(cands)==1: pmap[i]=(cands.pop(),tier,0 if x['club'] is not None else 1)
     elif len(cands)>1: amb+=1
 bestp={}
