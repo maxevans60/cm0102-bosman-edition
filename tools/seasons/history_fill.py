@@ -35,7 +35,8 @@ import history_gaps as hg  # noqa: E402
 from history_gaps import s32  # noqa: E402
 
 HIST = os.path.join(hg.ROOT, "docs", "research", "history-0.6.0")
-NOT_PARTS = {"gaps.tsv", "targets.tsv", "fill-report.tsv", "unmatched.tsv", "matched-by-id.tsv", "aliases.tsv", "plan.tsv", "not-same.tsv", "reconcile.tsv", "skip.tsv"}
+NOT_PARTS = {"gaps.tsv", "targets.tsv", "fill-report.tsv", "unmatched.tsv", "matched-by-id.tsv", "aliases.tsv", "plan.tsv", "not-same.tsv", "reconcile.tsv", "skip.tsv", "no-winner.tsv"}
+FIRST_FILL = 2001        # the first label year that the research fills: 2000/01 (Q354), then 2001/02 on
 START_MONTH = 7          # a new game starts in July of its start year
 CALENDAR_LAST_MONTH = 9  # a calendar-year edition of the start year that ends in this month or later counts
 
@@ -73,7 +74,7 @@ def kept(r, start):
     if r.get("held") != "yes":
         return False
     label = int(r["label"])
-    if not (hg.FIRST_LABEL <= label <= start):
+    if not (FIRST_FILL <= label <= start):
         return False
     y, m = ended_of(r)
     if (y, m) < (start, START_MONTH):
@@ -211,6 +212,7 @@ def main(argv):
                          "no_competition", "skipped_first_unmatched", "unmatched_other", "database_rows_cleared",
                          "database_rows_kept_in_range"])]
     plan = ["\t".join(PLAN_COLS)]
+    nowin = ["database\tcompetition\tlabel\tpart\twinner\tnation"]
     unmatched = collections.Counter()
     for name, start, folder in dbs:
         d = hg.Data(folder)
@@ -228,12 +230,16 @@ def main(argv):
             held[(cid, yy)].append((d.club(a), d.club(b)))
         names = Names(d, ref if name != "3.9.68" else None, alias)
         n = collections.Counter()
-        covered = set()
+        covered, keep_db = set(), set()
         for r in rows:
-            if not (r.get("label", "").isdigit() and hg.FIRST_LABEL <= int(r["label"]) <= start):
+            if not (r.get("label", "").isdigit() and FIRST_FILL <= int(r["label"]) <= start):
                 continue
             n["range"] += 1
             cid = comps.get(r["competition"])
+            # the nation of the research row must be the nation of the competition in this database ("China"
+            # and "China PR" are one nation under two names in different databases, each with its own rows)
+            if cid is not None and d.comp(cid)[2] != r["nation"]:
+                cid = None
             if cid is None or (name, r["competition"]) in skip:
                 n["nocomp"] += 1
                 continue
@@ -247,17 +253,20 @@ def main(argv):
                     unmatched[(name, r["nation"], r[f])] += 1
                     n["um_first" if f == "first" else "um_other"] += 1
             if places[0] is None or not places[0][0]:
-                continue                # no winner in this database: the row is not added
+                # no winner in this database: the row is not added and the database keeps its rows of that year
+                nowin.append("\t".join([name, r["competition"], r["label"], r.get("part", ""), r["first"], r["nation"]]))
+                keep_db.add((r["competition"], int(r["label"])))
+                continue
             places = [v or ("", "") for v in places]
             have = held.get((cid, int(r["label"])))
             res = "add" if not have else "agree" if (r["first"], r["second"]) in have else "differ"
             n[res] += 1
             plan.append("\t".join([ "add", name, str(start), r["competition"], r["label"], r.get("part", ""), res]
                                   + [x for v in places for x in v]))
-        for comp, label in sorted(covered):
+        for comp, label in sorted(covered - keep_db):
             plan.append("\t".join(["clear", name, str(start), comp, str(label)] + [""] * (len(PLAN_COLS) - 5)))
             n["cleared"] += len(held.get((comps[comp], label), []))
-        n["kept_db"] = sum(len(v) for (cid, y), v in held.items() if hg.FIRST_LABEL <= y <= start) - n["cleared"]
+        n["kept_db"] = sum(len(v) for (cid, y), v in held.items() if FIRST_FILL <= y <= start) - n["cleared"]
         via |= {(name,) + x for x in names.via_id}
         report.append("\t".join(map(str, [name, start, n["range"], n["kept"], n["add"], n["agree"], n["differ"],
                                           n["nocomp"], n["um_first"], n["um_other"], n["cleared"], n["kept_db"]])))
@@ -267,7 +276,7 @@ def main(argv):
     vl = ["database\tname\tdatabase_name"] + ["\t".join(x) for x in sorted(via)]
     if "--write" in argv:
         for fn, lines in (("fill-report.tsv", report), ("unmatched.tsv", um), ("matched-by-id.tsv", vl),
-                          ("plan.tsv", plan)):
+                          ("plan.tsv", plan), ("no-winner.tsv", nowin)):
             with open(os.path.join(HIST, fn), "w", encoding="utf-8") as f:
                 f.write("\n".join(lines) + "\n")
         print("wrote fill-report.tsv, unmatched.tsv, matched-by-id.tsv and plan.tsv in", HIST)

@@ -200,23 +200,16 @@ void season_history_fill(const char *name, int N)
     if (!hist || !clubs) return;
     index_comps(hist, count);
 
-    /* The rows to clear (their indices), so that the free rows can take the new ones. */
-    uint32_t *freed = malloc((count + 1) * sizeof *freed), n_freed = 0;
-    if (!freed) rt_fatal("season history: no memory");
-    for (uint32_t i = 0; i < count; i++) {
-        uint32_t r = hist + i * HISTORY_SIZE, c = rd32(g_mem, r + 4);
-        if (!c) continue;
-        uint16_t y = (uint16_t)rd16(g_mem, r + 8);
-        for (uint32_t k = 0; k < e->n_clears; k++)
-            if (e->clears[k].label == y && find_comp(e->clears[k].comp) == c) { freed[n_freed++] = i; break; }
-    }
-
-    /* The rows to write: those whose competition is in memory and whose first club is found. */
+    /* The rows to write: those whose competition is in memory and whose first club is found. A planned row
+     * whose winner is not in memory stays out, and the database keeps its own rows of that competition and
+     * year (dropped). */
     index_clubs(clubs, n_clubs);
     typedef struct { uint32_t comp, place[4]; uint16_t label; } New;
     New *nw = malloc((e->n_rows + 1) * sizeof *nw);
-    uint32_t n_new = 0;
-    if (!nw) rt_fatal("season history: no memory");
+    uint32_t n_new = 0, n_dropped = 0;
+    typedef struct { uint32_t comp; uint16_t label; } Key;
+    Key *dropped = malloc((e->n_rows + 1) * sizeof *dropped);
+    if (!nw || !dropped) rt_fatal("season history: no memory");
     for (uint32_t k = 0; k < e->n_rows; k++) {
         const SeasonHistRow *row = &e->rows[k];
         uint32_t c = find_comp(row->comp);
@@ -234,11 +227,31 @@ void season_history_fill(const char *name, int N)
                             row->label, row->place[f]);
             }
         }
-        if (!x->place[0]) continue;                 /* no winner: the row stays out */
+        if (!x->place[0]) {                         /* no winner: the row stays out, the database row stays */
+            dropped[n_dropped].comp = c;
+            dropped[n_dropped++].label = row->label;
+            continue;
+        }
         n_new++;
     }
 
+    /* The rows to clear (their indices), so that the free rows can take the new ones. */
+    uint32_t *freed = malloc((count + 1) * sizeof *freed), n_freed = 0;
+    if (!freed) rt_fatal("season history: no memory");
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t r = hist + i * HISTORY_SIZE, c = rd32(g_mem, r + 4);
+        if (!c) continue;
+        uint16_t y = (uint16_t)rd16(g_mem, r + 8);
+        int keep = 0;
+        for (uint32_t k = 0; k < n_dropped && !keep; k++) keep = dropped[k].comp == c && dropped[k].label == y;
+        if (keep) continue;
+        for (uint32_t k = 0; k < e->n_clears; k++)
+            if (e->clears[k].label == y && find_comp(e->clears[k].comp) == c) { freed[n_freed++] = i; break; }
+    }
+    free(dropped);
+
     old_count = count;
+    uint32_t base_before = hist;
     if (n_new > n_freed) {
         uint32_t grow = n_new - n_freed;
         if (!rt_callback(GROW_HISTORY, 1, &grow) || rt_unwinding) {
@@ -264,8 +277,8 @@ void season_history_fill(const char *name, int N)
     }
     n_added = n_new;
     fprintf(stderr, "recomp: season history: %s in %d: %u rows written, %u database rows cleared, %u names not "
-                    "found, %u rows in the table\n", e->db, N, n_added, n_cleared, n_unmatched,
-            rd32(g_mem, HISTORY_COUNT));
+                    "found, %u rows in the table (at %08x, before the grow %08x)\n", e->db, N, n_added, n_cleared,
+            n_unmatched, rd32(g_mem, HISTORY_COUNT), hist, base_before);
     free(freed);
     free(nw);
     log_rows("load");

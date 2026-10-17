@@ -18,6 +18,11 @@ Also:
     off        September 2005 in 2005/06 with RECOMP_SEASON_CODE=off: no row is written (the 2002 to 2004 labels
                of the English Premier Division stay empty).
     again      the September 2009 game twice: the saves are byte for byte the same.
+    reshift    September 2005 with RECOMP_DATES_RESHIFT=2006 (season_dates.c: the shift is made for 2006 and then
+               for 2005 again, as at a creation in another year than the load): the save equals the September
+               2005 save, so the undo of the fill and of the shift leave nothing behind.
+    load       the September 2005 save loads (tests/fixtures/fixtures.py play), holds the same rows at its first
+               turn, runs no fill, and plays 3 days to a save.
 At most --jobs (3) games run at the same time.
 """
 import collections
@@ -25,6 +30,8 @@ import concurrent.futures
 import csv
 import os
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -37,6 +44,25 @@ PLAN = os.path.join(ROOT, "docs", "research", "history-0.6.0", "plan.tsv")
 COMPS = ["English Premier Division", "English FA Cup", "European Champions Cup", "Scottish Premier Division",
          "Norwegian Premier Division", "Italian Serie A", "FIFA World Cup"]
 EPL = "English Premier Division"
+FIRST = 2001                    # 2000/01 (Q354) to the start year
+# Real winners from public records, independent of the research table: a part of each name (the databases
+# spell clubs in different ways). Label years as the 3.9.68 data labels each competition.
+FACTS = {
+    EPL: {2001: "Manchester United", 2002: "Arsenal", 2003: "Manchester United", 2004: "Arsenal", 2005: "Chelsea",
+          2006: "Chelsea", 2007: "Manchester United", 2008: "Manchester United", 2009: "Manchester United"},
+    "English FA Cup": {2001: "Liverpool", 2002: "Arsenal", 2003: "Arsenal", 2004: "Manchester United",
+                       2005: "Arsenal", 2006: "Liverpool", 2007: "Chelsea", 2008: "Portsmouth", 2009: "Chelsea"},
+    "European Champions Cup": {2001: "Bayern", 2002: "Real Madrid", 2003: "Milan", 2004: "Porto",
+                               2005: "Liverpool", 2006: "Barcelona", 2007: "Milan", 2008: "Manchester United",
+                               2009: "Barcelona"},
+    "Italian Serie A": {2001: "Roma", 2002: "Juventus", 2003: "Juventus", 2004: "Milan", 2005: "Juventus",
+                        2006: "Juventus", 2007: "Internazionale", 2008: "Internazionale", 2009: "Internazionale"},
+    "Scottish Premier Division": {2001: "Celtic", 2002: "Celtic", 2003: "Rangers", 2004: "Celtic",
+                                  2005: "Rangers", 2006: "Celtic", 2007: "Celtic", 2008: "Celtic", 2009: "Rangers"},
+    "Norwegian Premier Division": {2001: "Rosenborg", 2002: "Rosenborg", 2003: "Rosenborg", 2004: "Rosenborg",
+                                   2005: "lerenga", 2006: "Rosenborg", 2007: "Brann", 2008: "Stab", 2009: "Rosenborg"},
+    "FIFA World Cup": {2002: "Brazil", 2006: "Italy"},
+}
 
 
 def plan_rows():
@@ -73,7 +99,7 @@ def check(label, start, got, want, turn=False):
         if comp not in want or (turn and not got.get(comp)):
             continue
         rows = got.get(comp, {})
-        for y in range(2002, start + 1):
+        for y in range(FIRST, start + 1):
             if y not in want[comp]:
                 continue
             w = want[comp][y]
@@ -81,11 +107,16 @@ def check(label, start, got, want, turn=False):
             n += 1
             if have != w or len(rows.get(y, [])) != len(w):
                 bad.append(f"{comp} {y}: holds {sorted(have) or 'nothing'}, the plan {sorted(w) or 'nothing'}")
-    eng = got.get(EPL, {})
-    for y in range(2002, start + 1) if EPL in want else ():
-        first = {a for a, b in eng.get(y, [])}
-        if first != {sdr.CHAMPIONS[y]}:
-            bad.append(f"{EPL} {y}: champion {sorted(first) or 'none'}, real {sdr.CHAMPIONS[y]}")
+    for comp, facts in FACTS.items():
+        rows = got.get(comp, {})
+        if comp not in want or (turn and not rows):
+            continue
+        for y, part in facts.items():
+            if y > start or y not in want[comp]:
+                continue
+            first = [a for a, b in rows.get(y, [])]
+            if len(first) != 1 or part.lower() not in first[0].lower():
+                bad.append(f"{comp} {y}: winner {first or 'none'}, real {part}")
     return n, bad
 
 
@@ -93,6 +124,35 @@ def run_one(program, game, work, label, year, folder, env=None):
     env = dict(env or {}, RECOMP_HISTORY_LOG=";".join(COMPS))
     save, log, secs = sdr.play(program, game, work, label, year, folder, env)
     return save, log, secs
+
+
+LOAD_STEPS = ["2500 click 45 165", "4500 click 150 427", "7000 click 705 572", "400000 quit"]   # Go on Holiday
+
+
+def load_check(program, game, work, save, want_turn):
+    """The September 2005 save loads, holds the rows of the first turn, and plays 3 days to a save."""
+    folder = os.path.join(work, "load")
+    os.makedirs(folder)
+    shutil.copy(save, os.path.join(folder, "h.sav"))
+    steps = os.path.join(folder, "steps.txt")
+    with open(steps, "w") as f:
+        f.write("\n".join(LOAD_STEPS) + "\n")
+    out = os.path.join(folder, "out")
+    # fixtures.py reads the log as UTF-8: only competitions whose clubs have plain letters (England here)
+    plain = [c for c in COMPS if c.startswith("English")]
+    want_turn = {c: v for c, v in want_turn.items() if c in plain}
+    env = dict(os.environ, RECOMP_HISTORY_LOG=";".join(plain))
+    r = subprocess.run([sys.executable, os.path.join(ROOT, "tests", "fixtures", "fixtures.py"), "play", program, game,
+                        "h.sav", steps, out, "--dir", folder, "--days", "3"], env=env, capture_output=True, timeout=1800)
+    log = open(os.path.join(out, "stderr.txt"), encoding="latin-1").read() if os.path.exists(
+        os.path.join(out, "stderr.txt")) else ""
+    turn = parse(log, "turn")
+    saved = os.path.exists(os.path.join(out, "samesave.sav"))
+    same = all(turn.get(c) == want_turn.get(c) for c in want_turn)
+    ok = saved and same and bool(turn) and "season history:" not in log
+    print(f"{'ok  ' if ok else 'FAIL'}  load: the September 2005 save loads ({'the rows of the first turn are there' if same and turn else 'rows differ'}), "
+          f"{'plays 3 days to a save' if saved else 'no save after 3 days'}, no fill at the load")
+    return 0 if ok else 1
 
 
 def main(argv):
@@ -122,6 +182,7 @@ def main(argv):
     if "--no-extra-runs" not in argv:
         if "September 2005" in dbs:
             runs.append(("off", 2005, "September 2005", {"RECOMP_SEASON_CODE": "off"}))
+            runs.append(("reshift", 2005, "September 2005", {"RECOMP_DATES_RESHIFT": "2006"}))
         if "September 2009" in dbs:
             runs.append(("again", 2009, "September 2009", None))
     work = tempfile.mkdtemp(prefix="season-history-")
@@ -131,12 +192,18 @@ def main(argv):
         for label, year, name, env in runs:
             folder = sdr.neutral_copy(work, name, dbs[name][1]) if name else None
             futs[ex.submit(run_one, program, game, work, label, year, folder, env)] = (label, year, name)
-        results = {}
+        results, logs = {}, {}
         for f in concurrent.futures.as_completed(futs):
             label, year, name = futs[f]
             save, log, secs = f.result()
             results[label] = save
             got, turn = parse(log, "load"), parse(log, "turn")
+            logs[label] = turn
+            if label == "reshift":
+                m = re.search(r"season dates: (\d+) history years restored in the moved history table", log)
+                ok = bool(m)
+                print(f"{'ok  ' if ok else 'FAIL'}  reshift: {m.group(1) + ' history years restored at the new place of the table' if m else 'the table did not move, or the restore missed it'}")
+                failed += not ok
             if label == "off":
                 got = turn
                 eng = got.get(EPL, {})
@@ -170,6 +237,16 @@ def main(argv):
             else:
                 print("FAIL  again: a save is missing")
                 failed += 1
+        for other, base in (("reshift", "September 2005"),):
+            if other not in results:
+                continue
+            a, b = results.get(base), results[other]
+            same = bool(a and b) and open(a, "rb").read() == open(b, "rb").read()
+            print(f"{'ok  ' if same else 'FAIL'}  {other}: the save after a shift for 2006 and back to 2005 is "
+                  f"{'the same as' if same else 'not the same as'} the {base} save")
+            failed += not same
+    if "--no-extra-runs" not in argv and results.get("September 2005"):
+        failed += load_check(program, game, work, results["September 2005"], logs.get("September 2005", {}))
     print(f"{len(runs)} runs, {failed} failed; work folder {work}")
     return 1 if failed else 0
 

@@ -81,7 +81,7 @@ One Opus agent per part researched every competition and label year of `targets.
 | intl-clubs-2 (Africa, Asia, Arab, CIS, Gulf, Oceania) | 87 | 46 | 41 | 0 |
 | nations | 72 | 22 | 50 | 0 |
 
-Check pass, without Brazil: 4,396 fields agree, 10 disagree, 561 have no second source (mostly the month of the last match of lower divisions, and small cups that only one publisher lists). The reconcile pass settled 6 of the 10. The open points are in section 4. The Brazil check is in `brazil.check.md`.
+Check pass: 4,861 fields agree, 15 disagree (10 without Brazil, 5 in Brazil), 584 have no second source. The reconcile pass settled 6 of the 10. The open points are in section 4. `single-source.tsv` lists every single-source field, the 2000/01 pass included (665: 384 are the month of the last match, `ended`, 96 a winner, 110 a runner-up and 75 a `not held`). The 2000/01 checks: 529 agree, 1 disagrees (point 5 of section 4), 81 have no second source. They are mostly lower divisions, regional groups and small cups that only one publisher lists. They stay in the table as single-source facts.
 
 ### Conventions found
 
@@ -95,7 +95,7 @@ The label year follows the 3.9.68 data of each competition. The part `.md` files
 
 ### Names
 
-The rows name each club as the 3.9.68 data does. `tools/seasons/history_fill.py` finds each name in each database: the full name, then `aliases.tsv` (86 lines, renamed and merged clubs, each with a source), then the short name, then the club of the same id in the 3.9.68 data when the database gives it a similar name (`matched-by-id.tsv`, reviewed; `not-same.tsv` holds 3 pairs that are other clubs). `unmatched.tsv` lists the names that no club of a database holds (6 to 42 per database: clubs that the database does not have, for example Airdrieonians or small Swedish, Croatian and Chinese clubs). A row whose winner is not in the database is left out. A runner-up, third or host that is not in the database stays empty.
+The rows name each club as the 3.9.68 data does. `tools/seasons/history_fill.py` finds each name in each database: the full name, then `aliases.tsv` (86 lines, renamed and merged clubs, each with a source), then the short name, then the club of the same id in the 3.9.68 data when the database gives it a similar name (`matched-by-id.tsv`, reviewed; `not-same.tsv` holds 3 pairs that are other clubs). `unmatched.tsv` lists the names that no club of a database holds (clubs that the database does not have, for example Airdrieonians or small Swedish, Croatian and Chinese clubs). A row whose winner is not in the database is left out, and the database keeps its own rows of that year. `no-winner.tsv` lists each such row per database: slice 15 adds real clubs that a database lacks as new club records (Q335), and after slice 15 these rows can be filled. A runner-up, third or host that is not in the database stays empty.
 
 ## 3. In the game
 
@@ -106,8 +106,8 @@ Code: `src/recomp_rt/win/season_history.c` and `season_history.h`, the table `se
 For a database before 2010/11 and a new game in its own season (start year S):
 
 1. The competitions are those that hold history rows in the database. `skip.tsv` lists a competition whose name means another competition in one database.
-2. For each such competition and each label year from 2002 to S that the research covers, the rows of the database with that label year are cleared. Most of those rows hold the result of another season (the part `.md` files list them): for example the last row that slice 11b moves to S often holds the season before (Swedish Premier Division, September 2005: Malmö FF, the 2004 champion, at 2005).
-3. The researched rows with `held = yes` are written when the edition ended before July of S, or when it is a calendar-year edition of the year S that ends in September or later (as the 3.9.68 data holds the 2001 season of the calendar-year leagues in a game that starts in July 2001). So a super cup or a Libertadores final of July or August S stays out: the game plays that edition itself.
+2. For each such competition and each label year from 2001 to S that the research covers (2001 only from the 2000/01 pass, Q354), the rows of the database with that label year are cleared. Most of those rows hold the result of another season (the part `.md` files list them): for example the last row that slice 11b moves to S often holds the season before (Swedish Premier Division, September 2005: Malmö FF, the 2004 champion, at 2005).
+3. The researched rows with `held = yes` are written when the edition ended before July of S, or when it is a calendar-year edition of the year S that ends in September or later (as the 3.9.68 data holds the 2001 season of the calendar-year leagues in a game that starts in July 2001). So a super cup or a Libertadores final of July or August S stays out. Inference: the game plays that edition itself in its first season; no address shows it for each competition.
 
 `fill-report.tsv` gives the counts per database.
 
@@ -119,7 +119,12 @@ For a database before 2010/11 and a new game in its own season (start year S):
 - finds the clubs by full name in the club table [0xae23b4] (count [0xae235c], the clubs and then the national sides), the club of the right nation (+0x53, name at +0x04 of the nation) when several share a name;
 - clears a row by setting its competition to 0, the free row of the original (0x4afce0 reuses free rows; the id pass 0x532c1f writes 0 for a negative competition id, so the Update Team databases already hold such rows);
 - writes the new rows into the cleared rows first, then into new rows from the original's own grow function 0x527f60 (`rt_callback`, listed in `tools/recomp/callbacks.py` with its first bytes), which reallocates the table, adds blank rows and moves the nation part pointer [0xae23dc];
-- keeps the old bytes of each changed row and the old row count, so `season_history_undo` gives them back before a new shift (`shift_for`), and drops them in `season_dates_forget`.
+- keeps the old bytes of each changed row and the old row count, so `season_history_undo` gives them back before a new shift (`shift_for`), and drops them in `season_dates_forget`;
+- keeps the database rows of a competition and year when the planned row of that year has no winner in memory (the year does not become empty).
+
+The grow can move the table: in the test runs 0x945667 moved it each time (September 2005: from 7055a390 to 7029c830). The shift of slice 11b journals the history years by address, so its restore (`season_dates.c`, `restore`) moves each journaled address inside the old table to the same row of the new table. The test switch `RECOMP_DATES_RESHIFT=<year>` makes the shift again for another year and back, as `season_dates_at_create` does when a game is made in another year than the load. The run `reshift` of the test shows 103 history years restored at the new place, and a save equal to the save of one shift.
+
+The nation part pointer [0xae23dc]. After the grow it is base + (count - nation count) * 0x1a, as the original's grow sets it (0x527f8d to 0x527fb2) and as the original's prune sets it after it drops rows (0x539b49 to 0x539b70, called at the creation of the game, 0x828371). The original therefore never keeps the club and nation rows split by content after a grow or a prune. The readers: 0x52a01b, 0x52be64 and 0x52d1e8 are inside the loader 0x528540 (function map), so they run before the fill. 0x53005d, 0x5300ec and 0x530172 are inside the save writer 0x52dad0, which runs after the creation and its prune. No reader runs between the fill and the creation.
 
 The game then treats the rows as its own: at the creation of the game it keeps only the rows of the selected nations (0x539ae0, function map; seen in the test: the Scottish rows are in memory after the load and gone at the first turn of an England-only game). A saved game holds the rows; its load does not run the fill.
 
@@ -127,37 +132,56 @@ Nothing changes for a start in 2001, for a start year that is not the season of 
 
 ### Test
 
-`tests/seasons/season_history_run.py <program> <game> <test-fixtures/databases> [--extras] [--jobs 3]`: a new game in the season of each database before 2010/11 (and 3.9.68 on the 2002/03 tile). The test log `RECOMP_HISTORY_LOG=<competition>;...` prints the rows from 1999 on right after the fill and at the first turn. The checks: the English Premier Division, English FA Cup, European Champions Cup, Scottish Premier Division, Norwegian Premier Division, Italian Serie A and FIFA World Cup hold exactly the planned rows for every label year from 2002 to the start year (at the load; at the first turn for the competitions that the game kept), and the English Premier Division holds the real champion of every season from 2001/02 to the season before the start. Also `off` (September 2005 with `RECOMP_SEASON_CODE=off`: no row written) and `again` (September 2009 twice: equal saves).
+`tests/seasons/season_history_run.py <program> <game> <test-fixtures/databases> [--extras] [--jobs 3]`: a new game in the season of each database before 2010/11 (and 3.9.68 on the 2002/03 tile). The test log `RECOMP_HISTORY_LOG=<competition>;...` prints the rows from 1999 on right after the fill and at the first turn. The checks: the English Premier Division, English FA Cup, European Champions Cup, Scottish Premier Division, Norwegian Premier Division, Italian Serie A and FIFA World Cup hold exactly the planned rows for every label year from 2001 to the start year (at the load; at the first turn for the competitions that the game kept), and each of them holds the real winner of a list of public results written in the test, independent of the research table. Also `off` (September 2005 with `RECOMP_SEASON_CODE=off`: no row written), `again` (September 2009 twice: equal saves), `reshift` (section 3, How) and `load` (the September 2005 save loads with the same rows, runs no fill and plays 3 days to a save).
 
 ### Rows per database
 
-From `fill-report.tsv` (plan of 2026-10-17). "Added" are label years that the database lacked, "corrected" are label years where the database held another result, "agree" are database rows that the research confirms. A row is left out when its winner is not in the database ("no winner").
+From `fill-report.tsv` (plan after the fix round of 2026-10-17, with the 2000/01 rows of Q354). "Added" are label years that the database lacked, "corrected" are label years where the database held another result, "agree" are database rows that the research confirms. "No winner" rows are left out and the database keeps its rows of that year (`no-winner.tsv`).
 
 | Database | Start | Rows written | Added | Corrected | Agree | No winner | Database rows cleared |
 |---|---|---|---|---|---|---|---|
-| 3.9.68 (2002/03 tile) | 2002 | 235 | 142 | 11 | 82 | 0 | 97 |
-| October 2003 | 2003 | 511 | 407 | 66 | 38 | 3 | 105 |
-| September 2005 | 2005 | 959 | 841 | 78 | 40 | 21 | 128 |
-| November 2007 | 2007 | 903 | 850 | 29 | 24 | 20 | 64 |
-| February 2008 (extra) | 2007 | 907 | 853 | 31 | 23 | 22 | 65 |
-| September 2008 | 2008 | 1170 | 1083 | 48 | 39 | 23 | 103 |
-| December 2008 (extra) | 2008 | 914 | 858 | 29 | 27 | 22 | 67 |
-| March 2009 (extra) | 2008 | 1136 | 1051 | 47 | 38 | 23 | 100 |
-| September 2009 | 2009 | 1129 | 1047 | 39 | 43 | 10 | 96 |
-| February 2010 ODB (extra) | 2009 | 1194 | 1057 | 61 | 76 | 11 | 154 |
-| April 2010 SIM (extra) | 2009 | 1131 | 1048 | 70 | 13 | 8 | 100 |
-| June 2010 (extra) | 2009 | 1192 | 1055 | 62 | 75 | 13 | 154 |
+| 3.9.68 (2002/03 tile) | 2002 | 416 | 160 | 16 | 240 | 0 | 262 |
+| October 2003 | 2003 | 686 | 490 | 67 | 129 | 4 | 198 |
+| September 2005 | 2005 | 1115 | 944 | 80 | 91 | 21 | 184 |
+| November 2007 | 2007 | 1019 | 929 | 36 | 54 | 21 | 101 |
+| February 2008 (extra) | 2007 | 1025 | 935 | 38 | 52 | 22 | 101 |
+| September 2008 | 2008 | 1306 | 1205 | 52 | 49 | 23 | 117 |
+| December 2008 (extra) | 2008 | 1018 | 943 | 33 | 42 | 21 | 86 |
+| March 2009 (extra) | 2008 | 1271 | 1172 | 52 | 47 | 23 | 114 |
+| September 2009 | 2009 | 1255 | 1166 | 43 | 46 | 15 | 102 |
+| February 2010 ODB (extra) | 2009 | 1324 | 1175 | 66 | 83 | 16 | 164 |
+| April 2010 SIM (extra) | 2009 | 1257 | 1169 | 73 | 15 | 13 | 128 |
+| June 2010 (extra) | 2009 | 1322 | 1173 | 67 | 82 | 18 | 164 |
 
-## 4. Points for Max
+## 4. Max's answers and open points
 
-Each point has a recommended answer. The build follows the recommendation until Max answers.
+Max answered on 2026-10-17 (spec, Q352 to Q357), and the build follows each answer:
 
-1. **The research wins over the database rows** of the label years 2002 to the start year (section 3). Without it, the history shows two rows for one year, or an old season under a later year. Recommended: yes, as built.
-2. **The calendar-year season of the start year** (for example the Swedish 2005 season in a 2005/06 game) is added, as the 3.9.68 data adds 2001 in a 2001/02 game. Other editions that end after 1 July of the start year stay out, because the game plays them itself. Recommended: yes, as built.
-3. **2000/01 is missing** in the competitions whose 2001 row the database used for the last champions (slice 11b moves that row; the research starts at 2001/02). Example: English Premier Division, September 2009: 1999, 2000, 2002 to 2009. Recommended: a small extra research pass for label 2001 of those competitions.
-4. **Titles taken away later**: Serie A 2004/05 (revoked 2006, not assigned) and 2005/06 (given to Internazionale), the Chinese league 2003 (revoked 2013), the Polish Cup 2005 (revoked 2020). The rows now hold 2004/05 as on the pitch and 2005/06 as official, the others as on the pitch. Recommended: the result on the pitch for all four, because the game shows who won on the day. Max may prefer the official record.
-5. **Dutch Premier Division 2005/06, second**: AZ (second in the table) or Ajax (official second after the play-off). Recommended: AZ, the table place, as in the other leagues.
-6. **Austrian First Division and Swiss National Division A**: the 3.9.68 rows 1998 to 2000 use the year where the season starts, the research uses the year where it ends. Recommended: the year where it ends (no gap, and the game writes that year itself).
-7. **Mappings by inference**: English tier 6 from 2004/05 (Northern Premier is Conference North, Southern is Conference South, Isthmian not held), the Swedish Second and Third Divisions from 2006, the Copa Sudamericana in the Copa Mercosur rows, the CAF Confederation Cup in the African CAF Cup rows, the AFC Cup not in the Asian Cup Winners' Cup rows, the Belgian Third Division not held from 2002 (A and B have own rows). Recommended: as researched.
-8. **Open facts with one source each**: Malaysian Premier One 2003 last month, Indian Chennai League 2003 winner, Bahia 2002 (the FA championship went to Palmeiras do Nordeste, the row holds the Supercampeonato winner Vitória), Santa Catarina 2002 runner-up (Criciúma or Avaí). Recommended: keep the rows, except Bahia 2002 to the FA championship as for the other states (the winner is not in the data, so that row would drop out).
-9. **Oceania Nations Cup 2004 and 2008, third**: no third-place match. The rows hold none. Recommended: none.
+- Q352: the researched rows replace the database rows of the label years 2002 to the start year (and 2001 where the 2000/01 pass has a row).
+- Q353: the calendar-year season of the start year is added.
+- Q354: the 2000/01 pass: `y2001-a.tsv` and `y2001-b.tsv` (233 rows for the 230 competitions of `targets-2001.tsv` that lack the label 2001 in at least one database after the shift), with their checks. Of 165 of those competitions with a 3.9.68 row at 2001, 163 agree with the research; the research corrects Italian Serie B (second Piacenza) and the Polish Super Cup (second Polonia Warszawa).
+- Q355: titles taken away later show the result on the pitch: Serie A 2004/05 and 2005/06 Juventus (second AC Milan), the Chinese league 2003 Shanghai Shenhua, the Polish Cup 2005 Dyskobolia.
+- Q356: Dutch Premier Division 2005/06: PSV first, AZ second (the table). Ajax was 4th; the play-off decided a Champions League place.
+- Q357: the Austrian First Division and the Swiss National Division A rows carry the year where the season ends.
+
+Open points (the rows stay as researched):
+
+1. Mappings by inference: English tier 6 from 2004/05 (Northern Premier is Conference North, Southern is Conference South, Isthmian not held), the Swedish Second and Third Divisions from 2006, the Copa Sudamericana in the Copa Mercosur rows, the CAF Confederation Cup in the African CAF Cup rows, the AFC Cup not in the Asian Cup Winners' Cup rows, the Belgian Third Division not held from 2002 (A and B have their own rows).
+2. Facts with one source each: Malaysian Premier One 2003 last month, Indian Chennai League 2003 winner, Santa Catarina 2002 runner-up (Criciúma or Avaí), Bahia 2002 (the row holds the Supercampeonato winner Vitória; the state FA championship went to Palmeiras do Nordeste, who are not in the data).
+3. Oceania Nations Cup 2004 and 2008: no third-place match, so third is empty.
+4. A label year with two researched rows (Argentina, Mexico, the Inter-Toto Cup) where one winner is not in the database: the database rows of that year stay beside the other researched row.
+5. Portuguese Second League 2000/01, second: Varzim (RSSSF) or Vitória de Setúbal (Wikipedia); three clubs had 64 points. The row keeps Varzim.
+
+## 5. Test results (2026-10-17, build of this branch)
+
+With `G=/Users/max/Projects/cm0102/clean-3968`, `MAIN=/Users/max/Projects/cm0102/cm0102-mac/build/cm0102_recomp` and `R050=/Users/max/Projects/cm0102/wt-ref-0.5.0/build/cm0102_recomp`:
+
+| Command | Result |
+|---|---|
+| `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --runs normal,again,season-code-off --jobs 3 --ref-build $MAIN --ref-050 $R050` | PASS: again, season-code-off and ref-build equal normal; text-0.5.0 equals ref-0.5.0 |
+| the same with `--save start.sav` | PASS (the same four lines) |
+| the same with `--save prematch.sav` | PASS |
+| the same with `--save yeovil.sav --days 7` | PASS |
+| `python3 tests/seasons/season_history_run.py build/cm0102_recomp $G /Users/max/Projects/cm0102/test-fixtures/databases --extras --jobs 3` | 15 runs, 0 failed: the 12 databases, off, reshift (103 history years restored at the new place, equal save), again, load |
+| `python3 tests/seasons/season_dates_run.py build/cm0102_recomp $G /Users/max/Projects/cm0102/test-fixtures/databases --only 2002,2003,2005,2007,2008,2009,2010 --jobs 3` (first round) | all passed |
+| `ctest` in `build/` | all passed, `season_history_table` included |

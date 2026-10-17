@@ -3,7 +3,12 @@
 
 Usage:
     python3 -I tools/seasons/make_history_table.py           writes the C table
-    python3 -I tools/seasons/make_history_table.py --check   exits 1 when the C table is not the one plan.tsv gives
+    python3 -I tools/seasons/make_history_table.py --check [--stamp <file>]
+        exits 1 when the C table is not the one plan.tsv gives, or a row is not valid; writes the stamp file
+        when all is right (the build runs it before cm0102_recomp)
+
+A row is not valid when its winner is empty, its label year is outside 2001 to the start year of its database,
+a name is longer than 50 bytes in Latin-1 (the game keeps 51 bytes with the end byte), or it is a duplicate.
 
 plan.tsv comes from tools/seasons/history_fill.py --write. For each database before 2010/11 it holds the
 competition and label years whose history rows the game clears (`clear`), and the researched rows that it adds
@@ -33,9 +38,43 @@ def c_str(s):
     return '"' + "".join(out) + '"'
 
 
+FIRST_LABEL = 2001     # 2000/01 (Q354) to the start year
+NAME_MAX = 50
+
+
+def validate(rows):
+    """The texts of the rows that are not valid."""
+    bad, seen = [], set()
+    for i, r in enumerate(rows, 2):
+        where = f"plan.tsv line {i} ({r['database']}, {r['competition']} {r['label']})"
+        start, label = int(r["start_year"]), int(r["label"])
+        if not FIRST_LABEL <= label <= start:
+            bad.append(f"{where}: label outside {FIRST_LABEL} to {start}")
+        names = [r["competition"]] + ([r[f] for f in ("first", "second", "third", "host")] if r["action"] == "add" else [])
+        for n in names:
+            try:
+                b = n.encode("latin-1")
+            except UnicodeEncodeError:
+                bad.append(f"{where}: {n!r} is not Latin-1")
+                continue
+            if len(b) > NAME_MAX:
+                bad.append(f"{where}: {n!r} is longer than {NAME_MAX} bytes")
+        if r["action"] == "add" and not r["first"]:
+            bad.append(f"{where}: no winner")
+        key = (r["action"], r["database"], r["competition"], r["label"], r.get("part", ""), r.get("first", ""),
+               r.get("second", ""))
+        if key in seen:
+            bad.append(f"{where}: duplicate row")
+        seen.add(key)
+    return bad
+
+
 def make():
     with open(PLAN, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f, delimiter="\t"))
+    bad = validate(rows)
+    if bad:
+        raise SystemExit("plan.tsv has rows that are not valid:\n  " + "\n  ".join(bad[:50]))
     dbs = {}
     for r in rows:
         k = (r["database"], int(r["start_year"]))
@@ -71,6 +110,11 @@ def main(argv):
             print(f"{OUT} is not the table that {PLAN} gives: run tools/seasons/make_history_table.py")
             return 1
         print("season history table matches plan.tsv")
+        if "--stamp" in argv:
+            stamp = argv[argv.index("--stamp") + 1]
+            os.makedirs(os.path.dirname(stamp), exist_ok=True)
+            with open(stamp, "w") as f:
+                f.write("ok\n")
         return 0
     with open(OUT, "w", encoding="latin-1", newline="\n") as f:
         f.write(text)
