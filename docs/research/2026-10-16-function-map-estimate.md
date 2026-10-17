@@ -1694,6 +1694,22 @@ Open points for a later pass, outside the rows in scope:
 - Four key_nation.cpp menu rows (0x66a280, 0x66a350, 0x66a360, 0x66a430) are thiscall on a small stack struct, with free names.
 - File questions: the Finance code asserts finance.CPP but sits under fin_prm.cpp, the Match_Stats block asserts match_stats.CPP but sits under match_screens.cpp, six `FILE_LLIST` rows sit under fifa_rankings.cpp, and some network.h rows lie in the display.cpp and scrman.cpp ranges. The placement decides these files, so they need one decision for all.
 
+#### Review fixes (2026-10-17)
+
+One Opus check of the open points above, against the dossiers and the disassembly. The run `review-fix` changes 32 rows.
+
+| Address | Old name | New name | Evidence |
+|---|---|---|---|
+| 0x40c5b0, 0x40e260, 0x56bee0, 0x633c10, 0x88e2f0, 0x90fbf0, 0x915710 | `<Cup>::apply_team_result_finance` | `<Cup>::update_staff_records_for_status` | Each vtable pointer is slot 17 of its Cup vtable. The bodies call only Staff_Records and qualification functions. |
+| 0x8e9080 | `TRANSFER_RULES::post_deadline_news` | same name, new convention | The third argument goes to `transfer_window_get_date` as the year. The caller `update_transfer_window_news` compares it with the year word of a date. |
+| 0x8e7810 | `TRANSFER_OFFER::init_contract_offer` | `TRANSFER_OFFER::init_loan_offer` | The callers are `make_loan_offer` and `submit_loan_contract_offer`. It sets the loan flag +0x1f to 1. |
+| 0x7feeb0, 0x7fee80 | `ScreenManager::set_screen_title`, `get_screen_title` | `ScreenManager::set_background_picture`, `get_background_picture` | `Display::draw_screen` loads node +0x1fc with `gui_load_rgn_picture`, else DEFAULT_PIC.RGN. The setters are the `background_set_*_picture` helpers. |
+| 0x7c2750 | `player_stats_format_record_field` | `PlayerStats::format_record_field` | The callers load ECX with the PlayerStats global 0xb74350 or pass their own `this`. |
+| 15 `post_*_news` rows and 0x69ebc0 | free names | `MANAGER_MANAGER::` members | Every caller passes its own `this` or the global 0xb67a44 in ECX. |
+| 0x66a280, 0x66a350, 0x66a360, 0x66a430 | `key_nation_menu_split_*` | `NATION_MENU_SPLIT::` constructor, `part_count`, `format_header`, `in_second_part` | All six callers load ECX with the address of a 14-byte object on their stack. key_nation.cpp has two real classes: the 0x48-byte `KEY_NATION` entry and this object. |
+
+The `news_*_text` rows of manager_manager.cpp mix free and member names. This check did not cover them. The file questions above are still open for Max.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
