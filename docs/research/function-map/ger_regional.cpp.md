@@ -7,7 +7,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
 | 0x5dcbd0 | 162 (+2 unwind) | `GerRegional::GerRegional` | thiscall(GerRegional* this, short year, CompRecord* comp), returns this, ret 8 | Constructs German Regional on League, then sets up rules, the North table, Comp_Stats, fixtures, the South stage and predicted positions. | high | opus |  |
-| 0x5dce00 | 2 | `shared_return_false` | thiscall(void* this) ret 0, returns 0 | Returns 0. The linker shares this body across Comp slots 30 and 34 and GerRegional slot 39 (has_relegation). | medium | opus |  |
+| 0x5dce00 | 2 | `shared_return_false` | thiscall(void* this) ret 0, returns 0 | Returns zero for Comp slots 30 get_finals_comp and 34, and for the has_relegation slot of GerRegional. | high | opus |  |
 | 0x5dce10 | 11 | `GerRegional::`scalar deleting destructor'` | thiscall(GerRegional* this, unsigned flags), returns this, ret 4 | Runs the GerRegional destructor and frees the object when bit 0 of the flags is set. | high | opus |  |
 | 0x5dce30 | 60 (+1 unwind) | `GerRegional::~GerRegional` | thiscall(GerRegional* this), ret 0 | Destroys German Regional, freeing its table, schedule, child stages and Comp_Stats before the League destructor runs. | high | opus |  |
 | 0x5dcef0 | 992 | `GerRegional::create_schedule` | thiscall(GerRegional* this, char stage, short* round_count, short* out2, int* out_flag), returns schedule pointer, ret 0x10 | Builds the 34-round schedule template of German Regional, or 38 rounds for stage -1 in 2000, with dates and match slots. | high | opus |  |

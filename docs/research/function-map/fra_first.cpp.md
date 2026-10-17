@@ -7,8 +7,8 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
 | 0x5bb160 | 292 (+6 unwind) | `FraFirst::FraFirst` | thiscall(FraFirst* this, short season_year, int comp_record) ret 8, returns this | Constructs the French First Division, creates placeholder comps for CFA and the lower division, then loads saved data or builds rules, table, fixtures and stats. | high | opus | fra.md |
-| 0x5bb540 | 2 | `stub_return_one_ret8` | thiscall(Comp* this, int a, int b) ret 8, returns 1 | Shared stub that ignores its two arguments and returns one, used as add_result of the French placeholder comps. | high | opus |  |
-| 0x5bb550 | 2 | `stub_return_one_ret4` | thiscall(void* this, int a) ret 4, returns 1 | Shared stub that ignores its argument and returns one, the Comp default for slot 25 and a filler in many other vtables. | high | opus |  |
+| 0x5bb540 | 2 | `stub_return_one_ret8` | thiscall(Comp* this, int a, int b) ret 8, returns 1 | Shared stub that ignores its two arguments and returns one, used as add_result of competitions that never play matches. | high | opus |  |
+| 0x5bb550 | 2 | `stub_return_one_ret4` | thiscall(void* this, int a) ret 4, returns 1 | Shared stub that ignores its argument and returns one, the default for Comp slot 25 and RulingBody slot 6. | high | opus |  |
 | 0x5bb560 | 11 | `FraCfaStubComp::`scalar deleting destructor'` | thiscall(FraCfaStubComp* this, unsigned flags) ret 4, returns this | Runs the destructor of the CFA placeholder comp and frees the object when bit 0 of the flags is set. | medium | opus |  |
 | 0x5bb580 | 2 | `FraCfaStubComp::~FraCfaStubComp` | thiscall(FraCfaStubComp* this) ret 0 | Restores the CFA placeholder vtable and runs the Comp destructor. | medium | opus |  |
 | 0x5bb590 | 11 | `FraLowerStubComp::`scalar deleting destructor'` | thiscall(FraLowerStubComp* this, unsigned flags) ret 4, returns this | Runs the destructor of the French lower division placeholder comp and frees the object when bit 0 of the flags is set. | medium | opus |  |

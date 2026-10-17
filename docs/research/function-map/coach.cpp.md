@@ -6,7 +6,7 @@ Names are first-pass names from the model shown in each row. Treat a low or medi
 
 | Address | Size | Name | Convention | Purpose | Confidence | Model | Cited in |
 |---|---|---|---|---|---|---|---|
-| 0x487c50 | 4 | `coach_init_static_global` | cdecl, no arguments, ret 0 | Registers the empty exit routine at 0x487c60 with atexit during start-up for a static global of coach.cpp. | medium | opus |  |
+| 0x487c50 | 4 | `coach_init_static_global` | cdecl, no arguments, ret 0 | Registers the empty exit routine at 0x487c60 with atexit during start-up for a static global of coach.cpp. | high | opus |  |
 | 0x487c60 | 1 | `coach_exit_static_global` | cdecl, no arguments, ret 0 | Runs the empty destructor of a static global of coach.cpp at program exit and does nothing. | medium | opus |  |
 | 0x487c70 | 237 (+1 unwind) | `coach_post_report_news` | stdcall(Staff* coach, Staff* player) ret 8 | Assesses a player for a coach and posts a coach report news item with 23 slots to the coach's club. | high | opus |  |
 | 0x487f60 | 3475 | `write_coach_report_news_text` | stdcall(NewsItem* item, int full_text, Text* out) ret 0xc | Writes the coach report news text from the news slots, choosing wording by career stage and verdict flags. | high | opus |  |

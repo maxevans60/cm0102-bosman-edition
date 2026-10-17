@@ -187,7 +187,7 @@ address	file	name	confidence	model	cited_in
 0x414420	award_manager.cpp	AWARD_MANAGER::write_shortlist_news	high	opus	
 0x4147f0	award_manager.cpp	AWARD_MANAGER::add_shortlist	high	opus	
 0x4148e0	award_manager.cpp	AWARD_MANAGER::set_pending_vote	medium	opus	
-0x414950	award_manager.cpp	award_manager_set_pending_vote_error_tail	high	opus	
+0x414950	award_manager.cpp	AWARD_MANAGER::set_pending_vote_fragment_414950	high	opus	
 0x4149a0	award_manager.cpp	AWARD_MANAGER::get_pending_vote	medium	opus	
 0x414a60	award_screens.cpp	AWARD_MANAGER::find_award_by_staff_comp	high	opus	
 0x414ac0	award_screens.cpp	AWARD_MANAGER::find_award_by_club_comp	high	opus	
@@ -199,7 +199,7 @@ address	file	name	confidence	model	cited_in
 0x415640	award_screens.cpp	award_screens_add_menu_item	medium	opus	
 0x4156a0	award_screens.cpp	award_screen_draw_year_award	high	opus	
 0x415f60	award_screens.cpp	award_screen_draw_team_award	high	opus	
-0x416570	award_screens.cpp	award_screen_draw_team_award_fragment	high	opus	
+0x416570	award_screens.cpp	award_screen_draw_team_award_fragment_416570	high	opus	
 0x416960	award_screens.cpp	award_screen_handle_action	high	opus	
 0x416cb0	award_screens.cpp	award_screens_open_nominations_from_news	medium	opus	
 0x416d50	award_screens.cpp	award_screens_open_nominations_screen	high	opus	
@@ -584,7 +584,7 @@ address	file	name	confidence	model	cited_in
 0x448110	club_records.cpp	match_record_assign	medium	opus	
 0x448170	club_records.cpp	run_record_assign	medium	opus	
 0x4481b0	club_records.cpp	season_history_entry_destruct	medium	opus	
-0x448230	club_records.cpp	rating_record_assign	medium	opus	
+0x448230	club_records.cpp	rating_record_assign	high	opus	
 0x448260	club_records.cpp	season_history_entry_construct	medium	opus	
 0x448490	club_records.cpp	record_holder_assign	medium	opus	
 0x4484d0	club_records.cpp	man_of_match_record_assign	medium	opus	
@@ -592,8 +592,8 @@ address	file	name	confidence	model	cited_in
 0x448530	club_records.cpp	count_record_assign	medium	opus	
 0x448550	club_records.cpp	transfer_fee_record_assign	medium	opus	
 0x4485b0	club_records.cpp	fans_player_record_assign	medium	opus	
-0x4485d0	club_records.cpp	transfer_fee_record_construct	medium	opus	
-0x448620	club_records.cpp	transfer_fee_record_construct_2	low	opus	
+0x4485d0	club_records.cpp	transfer_fee_record_construct	high	opus	
+0x448620	club_records.cpp	transfer_fee_record_construct_2	high	opus	
 0x448670	club_records.cpp	run_record_construct	medium	opus	
 0x4486c0	club_records.cpp	club_records_offer_breaks_fee_record	medium	opus	
 0x448760	club_records.cpp	Club_Records::update_transfer_fee_records	high	opus	
@@ -605,16 +605,16 @@ address	file	name	confidence	model	cited_in
 0x449590	club_records.cpp	club_records_record_type_applies	high	opus	
 0x4496d0	club_records.cpp	club_records_get_record_text	high	opus	
 0x449810	club_records.cpp	club_records_format_record_text	high	opus	
-0x44aa20	club_records.cpp	club_records_format_record_text_fragment	high	opus	
+0x44aa20	club_records.cpp	club_records_format_record_text_fragment_44aa20	high	opus	
 0x44c650	club_records.cpp	club_records_write_record_news_text	high	opus	2026-10-14-clickable-names-inventory.md
 0x450a70	club_records.cpp	Date::get_day	medium	opus	
 0x450a80	club_records.cpp	Date::get_year	medium	opus	
-0x450a90	club_records.cpp	cash_set_value	low	opus	
+0x450a90	club_records.cpp	Cash::Cash	medium	opus	
 0x450aa0	club_records.cpp	cash_format_rounded	medium	opus	
 0x450ad0	club_records.cpp	won_run_record_construct	medium	opus	
 0x450b20	club_records.cpp	lost_run_record_construct	medium	opus	
 0x450b70	club_records.cpp	unbeaten_run_record_construct	medium	opus	
-0x450bc0	club_records.cpp	winless_run_record_construct	medium	opus	
+0x450bc0	club_records.cpp	winless_run_record_construct	high	opus	
 0x450c10	club_records.cpp	goals_in_match_record_construct	medium	opus	
 0x450c60	club_records.cpp	tally_record_construct	medium	opus	
 0x450c70	club_records.cpp	youngest_player_record_construct	medium	opus	
@@ -626,7 +626,7 @@ address	file	name	confidence	model	cited_in
 0x451570	club_records.cpp	goals_in_match_record_assign	high	opus	
 0x4515a0	club_records.cpp	Club_Records::load	high	opus	
 0x451ff0	club_records.cpp	Club_Records::save	high	opus	
-0x452070	club_records.cpp	Club_Records::save_false_entry_0x452070	high	opus	
+0x452070	club_records.cpp	Club_Records::save_fragment_452070	high	opus	
 0x452710	club_records.cpp	Club_Records::get_all_time_record	high	opus	
 0x4528d0	club_records.cpp	Club_Records::get_season_record	high	opus	
 0x452a90	club_records.cpp	Club_Records::update_season_rating_record	high	opus	
@@ -636,7 +636,7 @@ address	file	name	confidence	model	cited_in
 0x453120	club_records.cpp	club_records_write_record_news_fields	high	opus	
 0x453b90	club_screens.cpp	club_screens_init_match_record	medium	opus	
 0x453bb0	club_screens.cpp	club_screens_exit_match_record	high	opus	
-0x453bc0	club_screens.cpp	match_team_pair_destructor	low	opus	
+0x453bc0	club_screens.cpp	match_team_pair_destructor	medium	opus	
 0x453be0	club_screens.cpp	match_team_pair_construct	medium	opus	
 0x453c10	club_screens.cpp	match_team_block_destruct	medium	opus	
 0x453c30	club_screens.cpp	match_team_block_construct	medium	opus	
@@ -648,7 +648,7 @@ address	file	name	confidence	model	cited_in
 0x453d60	club_screens.cpp	open_club_squad_screen	medium	opus	2026-10-14-clickable-names-inventory.md
 0x4542f0	club_screens.cpp	open_manager_club_screen	high	opus	2026-10-14-assistant-and-days-inventory.md
 0x454900	club_screens.cpp	club_screen_build	high	opus	2026-10-15-assistant-pick-inventory.md,2026-10-15-holiday-next-match-inventory.md,2026-10-15-squad-dropdown-inventory.md,2026-10-15-team-views-frame-inventory.md,assistant.c,build-brief-0.3.0.md,views.c
-0x454950	club_screens.cpp	club_screen_build_body_fragment	medium	opus	
+0x454950	club_screens.cpp	club_screen_build_fragment_454950	medium	opus	
 0x456740	club_screens.cpp	Date::operator>	high	opus	
 0x456770	club_screens.cpp	Date::operator<	high	opus	
 0x4567a0	club_screens.cpp	ScreenManager::set_area_scroll_row	high	opus	
@@ -663,12 +663,12 @@ address	file	name	confidence	model	cited_in
 0x45f380	club_screens.cpp	club_screen_draw_fixtures_tab	high	opus	
 0x460450	club_screens.cpp	find_club_badge_picture_path	medium	opus	
 0x460590	club_screens.cpp	club_screen_draw_info_tab	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-14-widescreen-inventory.md,2026-10-16-foreign-and-tactics-positions.md,2026-10-16-stadium-research.md
-0x462070	club_screens.cpp	club_screen_draw_info_tab_stats_fragment	medium	opus	
-0x464220	club_screens.cpp	club_screen_draw_info_tab_income_fragment	medium	opus	
-0x464620	club_screens.cpp	club_screen_draw_info_tab_players_sold_fragment	medium	opus	
-0x464b20	club_screens.cpp	club_screen_draw_info_tab_investments_fragment	medium	opus	
-0x464d20	club_screens.cpp	club_screen_draw_info_tab_interest_other_fragment	medium	opus	
-0x465420	club_screens.cpp	club_screen_draw_info_tab_income_total_fragment	medium	opus	
+0x462070	club_screens.cpp	club_screen_draw_info_tab_fragment_462070	medium	opus	
+0x464220	club_screens.cpp	club_screen_draw_info_tab_fragment_464220	medium	opus	
+0x464620	club_screens.cpp	club_screen_draw_info_tab_fragment_464620	medium	opus	
+0x464b20	club_screens.cpp	club_screen_draw_info_tab_fragment_464b20	medium	opus	
+0x464d20	club_screens.cpp	club_screen_draw_info_tab_fragment_464d20	medium	opus	
+0x465420	club_screens.cpp	club_screen_draw_info_tab_fragment_465420	medium	opus	
 0x4671a0	club_screens.cpp	Cash::set	medium	opus	
 0x4671b0	club_screens.cpp	Finance::get_last_month	high	opus	
 0x4671c0	club_screens.cpp	Finance::get_this_month	high	opus	
@@ -705,7 +705,7 @@ address	file	name	confidence	model	cited_in
 0x4718f0	club_screens.cpp	arrange_friendly_dates_screen_leave	high	opus	
 0x4719a0	club_screens.cpp	open_friendly_tour_nation_screen	high	opus	
 0x471a90	club_screens.cpp	friendly_tour_nation_screen_build	high	opus	
-0x472070	club_screens.cpp	friendly_tour_nation_screen_build_fragment	medium	opus	
+0x472070	club_screens.cpp	friendly_tour_nation_screen_build_fragment_472070	medium	opus	
 0x472180	club_screens.cpp	friendly_tour_nation_screen_handle_event	high	opus	
 0x472380	club_screens.cpp	friendly_tour_club_screen_build	high	opus	
 0x472850	club_screens.cpp	friendly_tour_club_screen_handle_event	high	opus	
@@ -730,10 +730,10 @@ address	file	name	confidence	model	cited_in
 0x47c070	club_screens.cpp	squad_numbers_screen_leave	high	opus	
 0x47c0b0	club_screens.cpp	open_add_part_exchange_player_screen	high	opus	
 0x47c180	club_screens.cpp	part_exchange_screen_build	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md
-0x480020	club_screens.cpp	part_exchange_screen_build_rows_fragment	medium	opus	
+0x480020	club_screens.cpp	part_exchange_screen_build_fragment_480020	medium	opus	
 0x4814e0	club_screens.cpp	part_exchange_screen_handle_event	high	opus	
 0x481ef0	club_screens.cpp	build_club_squad_navigation_menu	high	opus	2026-10-15-team-views-frame-inventory.md
-0x482070	club_screens.cpp	build_club_squad_navigation_menu_body_fragment	medium	opus	
+0x482070	club_screens.cpp	build_club_squad_navigation_menu_fragment_482070	medium	opus	
 0x482a40	club_screens.cpp	add_club_screen_action_button	high	opus	2026-10-15-team-views-frame-inventory.md
 0x482d10	club_screens.cpp	handle_club_screen_action	high	opus	2026-10-15-team-views-frame-inventory.md
 0x483920	club_screens.cpp	club_record_type_to_category	medium	opus	
@@ -743,7 +743,7 @@ address	file	name	confidence	model	cited_in
 0x4849c0	club_screens.cpp	build_squad_list_by_name_for_printout	medium	opus	
 0x4849f0	club_screens.cpp	get_player_status_code	high	opus	2026-10-16-foreign-and-tactics-positions.md,foreign.c
 0x485470	club_screens.cpp	compare_players_by_selection_slot_then_name	medium	opus	
-0x485630	club_screens.cpp	compare_players_by_human_squad_slot	low	opus	
+0x485630	club_screens.cpp	compare_players_by_human_squad_slot	medium	opus	
 0x4856a0	club_screens.cpp	compare_players_by_status_code_then_name	high	opus	
 0x4857a0	club_screens.cpp	compare_players_by_name	high	opus	
 0x485830	club_screens.cpp	compare_players_by_positions_then_name	high	opus	
@@ -755,7 +755,7 @@ address	file	name	confidence	model	cited_in
 0x485fd0	club_screens.cpp	compare_players_by_form_then_name	medium	opus	
 0x4860e0	club_screens.cpp	compare_players_by_morale_then_name	high	opus	
 0x4861e0	club_screens.cpp	compare_players_by_staff_state_byte_then_name	low	opus	
-0x4862c0	club_screens.cpp	compare_players_by_fatigue_then_name	low	opus	
+0x4862c0	club_screens.cpp	compare_players_by_fatigue_then_name	medium	opus	
 0x4863c0	club_screens.cpp	compare_players_by_injury_recovery_then_name	high	opus	
 0x4864e0	club_screens.cpp	compare_players_by_selected_stat_then_name	high	opus	
 0x486620	club_screens.cpp	compare_players_by_selected_attribute_then_name	high	opus	
@@ -765,7 +765,7 @@ address	file	name	confidence	model	cited_in
 0x486a30	club_screens.cpp	compare_players_by_international_goals_then_name	high	opus	
 0x486af0	club_screens.cpp	compare_players_by_wage_then_name	high	opus	
 0x486c70	club_screens.cpp	compare_players_by_contract_expiry_then_name	high	opus	
-0x486e60	club_screens.cpp	compare_players_by_contract_check_then_name	low	opus	
+0x486e60	club_screens.cpp	compare_players_by_fifa_protected_period_then_name	medium	opus	
 0x486f80	club_screens.cpp	compare_players_by_value_then_name	high	opus	
 0x487030	club_screens.cpp	compare_players_by_appearances_then_name	high	opus	
 0x487140	club_screens.cpp	compare_players_by_goals_then_name	high	opus	
@@ -778,7 +778,7 @@ address	file	name	confidence	model	cited_in
 0x4877c0	club_screens.cpp	compare_dates_ascending	high	opus	
 0x487810	club_screens.cpp	squad_view_settings_construct	medium	opus	
 0x487840	club_screens.cpp	club_screen_collect_squad_stats	high	opus	
-0x487c50	coach.cpp	coach_init_static_global	medium	opus	
+0x487c50	coach.cpp	coach_init_static_global	high	opus	
 0x487c60	coach.cpp	coach_exit_static_global	medium	opus	
 0x487c70	coach.cpp	coach_post_report_news	high	opus	
 0x487f60	coach.cpp	write_coach_report_news_text	high	opus	
@@ -838,11 +838,11 @@ address	file	name	confidence	model	cited_in
 0x48f8e0	comp_screens.cpp	comp_screens_open_comp_fixtures	medium	opus	
 0x48fcd0	comp_screens.cpp	comp_screens_draw_comp_screen	high	opus	2026-10-14-clickable-names-inventory.md
 0x491380	comp_screens.cpp	comp_screens_draw_league_table_tab	high	opus	
-0x492070	comp_screens.cpp	comp_screens_draw_league_table_tab_tail	high	opus	
+0x492070	comp_screens.cpp	comp_screens_draw_league_table_tab_fragment_492070	high	opus	
 0x492980	comp_screens.cpp	comp_screens_draw_cup_rounds_tab	high	opus	
 0x493ee0	comp_screens.cpp	comp_screens_draw_fixtures_tab	high	opus	
 0x4947a0	comp_screens.cpp	comp_screens_draw_schedule_tab	high	opus	
-0x494920	comp_screens.cpp	comp_screens_draw_schedule_tab_tail	high	opus	
+0x494920	comp_screens.cpp	comp_screens_draw_schedule_tab_fragment_494920	high	opus	
 0x494c60	comp_screens.cpp	comp_screens_draw_seedings_tab	high	opus	
 0x495050	comp_screens.cpp	comp_screens_draw_average_points_tab	high	opus	
 0x4956e0	comp_screens.cpp	comp_screens_draw_team_stats_tab	high	opus	
@@ -888,7 +888,7 @@ address	file	name	confidence	model	cited_in
 0x49ecd0	comp_screens.cpp	comp_fixture_resolve_league_clubs	high	opus	
 0x49ee70	comp_screens.cpp	Comp_Stats::Comp_Stats	high	opus	
 0x49f160	comp_screens.cpp	Comp_Season_Records::Comp_Season_Records	medium	opus	
-0x49f2a0	comp_screens.cpp	date_pair_record_construct	medium	opus	
+0x49f2a0	comp_screens.cpp	comp_unbeaten_run_record_construct	medium	opus	
 0x49f2f0	comp_screens.cpp	comp_winless_run_record_construct	medium	opus	
 0x49f340	comp_screens.cpp	comp_goals_in_match_record_construct	medium	opus	
 0x49f390	comp_screens.cpp	comp_youngest_player_record_construct	medium	opus	
@@ -1006,7 +1006,7 @@ address	file	name	confidence	model	cited_in
 0x4c1de0	con_merc_cup.cpp	ConMercCup::create_first_group_table	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
 0x4c1ed0	con_merc_cup.cpp	ConMercCup::set_up_rules	high	opus	2026-10-16-research-name-check.md
 0x4c1fb0	con_merc_cup.cpp	ConMercCup::start_new_season	high	opus	
-0x4c2070	con_merc_cup.cpp	con_merc_cup_start_new_season_error_tail	medium	opus	2026-10-16-sweep-europe.md
+0x4c2070	con_merc_cup.cpp	ConMercCup::start_new_season_fragment_4c2070	medium	opus	2026-10-16-sweep-europe.md
 0x4c20b0	con_merc_cup.cpp	ConMercCup::advance_stage	high	opus	
 0x4c2140	con_merc_cup.cpp	ConMercCup::create_group_stage	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
 0x4c2330	con_merc_cup.cpp	ConMercCup::create_semi_final_stage	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
@@ -1221,7 +1221,7 @@ address	file	name	confidence	model	cited_in
 0x4f2070	contract_screens.cpp	credits_add_additional_research_rows_fragment_4f2070	high	opus	
 0x500030	contract_screens.cpp	credits_add_additional_research_rows_fragment_500030	high	opus	
 0x502070	contract_screens.cpp	credits_add_additional_research_rows_fragment_502070	high	opus	
-0x503a50	contract_screens.cpp	credits_add_additional_research_rows_fragment_503a50	medium	opus	
+0x503a50	contract_screens.cpp	credits_add_additional_research_rows_fragment_503a50	high	opus	
 0x50e000	contract_screens.cpp	credits_add_additional_testing_rows	high	opus	
 0x511320	contract_screens.cpp	credits_add_special_thanks_rows	high	opus	
 0x512d40	contract_screens.cpp	credits_add_best_wishes_rows	high	opus	
@@ -1280,11 +1280,11 @@ address	file	name	confidence	model	cited_in
 0x518690	Cup.cpp	Cup::~Cup	high	opus	
 0x5186a0	Cup.cpp	Cup::create_round_table	high	opus	
 0x518710	Cup.cpp	Cup::set_up_rounds	high	opus	
-0x518780	Cup.cpp	Cup::start_new_season	medium	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
+0x518780	Cup.cpp	Cup::start_new_season	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-europe.md
 0x518790	Cup.cpp	Cup::map_fixture_tree	high	opus	
-0x519690	Cup.cpp	Cup::add_team_result_news	medium	opus	
-0x519890	Cup.cpp	Cup::apply_team_result_finance	medium	opus	
-0x519a90	Cup.cpp	Cup::record_season_honours	medium	opus	
+0x519690	Cup.cpp	Cup::add_team_result_news	high	opus	
+0x519890	Cup.cpp	Cup::update_staff_records_for_status	high	opus	
+0x519a90	Cup.cpp	Cup::record_season_honours	high	opus	
 0x519c90	Cup.cpp	Cup::find_tree_slot_for_fixture	medium	opus	
 0x519d90	Cup.cpp	Cup::find_scheduled_fixture_for_tie	medium	opus	
 0x519fc0	Cup.cpp	Cup::register_semi_final_losers_for_uefa	medium	opus	
@@ -1298,29 +1298,29 @@ address	file	name	confidence	model	cited_in
 0x51e220	Cup.cpp	Cup::randomize_round_teams	high	opus	
 0x51e870	Cup.cpp	Cup::set_home_teams_for_round	medium	opus	
 0x51ebc0	Cup.cpp	cup_compare_draw_entries_by_seed	high	opus	
-0x51ebe0	Cup.cpp	Cup::move_round_fixtures_to_set_dates	low	opus	
+0x51ebe0	Cup.cpp	Cup::move_round_fixtures_to_set_dates	medium	opus	
 0x51f2f0	Cup.cpp	Cup::decide_tie_winner	medium	opus	
-0x51f890	Cup.cpp	Cup::update_for_date	medium	opus	
+0x51f890	Cup.cpp	Cup::update_for_date	high	opus	
 0x51fc00	Cup.cpp	Cup::load_from_disk	high	opus	
 0x5210f0	Cup.cpp	Cup::save_cup_to_disk	high	opus	
 0x521790	Cup.cpp	Cup::get_fixture_side_teams	medium	opus	
 0x5219b0	Cup.cpp	Cup::collect_possible_teams	medium	opus	
 0x521b30	Cup.cpp	Cup::record_team_progress	medium	opus	
 0x521d60	Cup.cpp	Cup::apply_round_rules_to_match	medium	opus	2026-10-16-sweep-international.md
-0x521e00	Cup.cpp	Cup::check_complete	medium	opus	
+0x521e00	Cup.cpp	Cup::check_complete	high	opus	
 0x521e60	Cup.cpp	cup_set_round_draw_date	medium	opus	
 0x521eb0	Cup.cpp	cup_set_round_match_date	medium	opus	2026-10-16-sweep-season-end.md
-0x521f10	Cup.cpp	cup_set_round_progression_rule	low	opus	
+0x521f10	Cup.cpp	cup_set_round_progression_rule	medium	opus	
 0x522190	Cup.cpp	cup_compare_entries_by_level_desc	high	opus	
 0x5221c0	Cup.cpp	cup_compare_entries_by_level_asc	high	opus	
-0x5221f0	Cup.cpp	Cup::get_match_importance	low	opus	
+0x5221f0	Cup.cpp	Cup::get_match_importance	medium	opus	
 0x522240	Cup.cpp	Cup::pay_round_prize_money	high	opus	
 0x522360	Cup.cpp	Cup::club_in_higher_division	medium	opus	
 0x5223a0	Cup.cpp	Cup::rank_teams	high	opus	
 0x522610	Cup.cpp	Cup::separate_shared_stadium_ties	high	opus	
 0x522910	Cup.cpp	Cup::has_club	high	opus	
 0x522950	Cup.cpp	Cup::post_draw_news	medium	opus	
-0x522c50	Cup.cpp	Cup::team_position	medium	opus	
+0x522c50	Cup.cpp	Cup::update_projected_positions	medium	opus	
 0x522c70	Cup.cpp	Cup::label_round_extra_fixtures	low	opus	
 0x522e00	cup_stage.cpp	Cup_Stage::Cup_Stage	high	opus	2026-10-16-sweep-europe.md,int-world.md
 0x5230c0	cup_stage.cpp	Cup_Stage::`scalar deleting destructor'	high	opus	
@@ -1336,7 +1336,7 @@ address	file	name	confidence	model	cited_in
 0x524d30	Database.cpp	save_database_for_game	medium	opus	
 0x524d50	Database.cpp	load_database_from_files	high	opus	2026-10-13-database-inventory.md,2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,database.c
 0x524d70	Database.cpp	database_trim_staff_tables	high	opus	2026-10-14-game-creation-inventory.md
-0x524f50	Database.cpp	database_trim_staff_tables_fragment	medium	opus	2026-10-16-sweep-international.md
+0x524f50	Database.cpp	database_trim_staff_tables_fragment_524f50	medium	opus	2026-10-16-sweep-international.md
 0x5267c0	Database.cpp	database_trim_club_table	high	opus	2026-10-14-game-creation-inventory.md
 0x527240	Database.cpp	database_generate_extra_non_playing_staff	high	opus	
 0x527ee0	Database.cpp	database_free_staff_history_table	high	opus	
@@ -1352,7 +1352,7 @@ address	file	name	confidence	model	cited_in
 0x533710	Database.cpp	database_shuffle_squad_player_attributes	medium	opus	
 0x5339a0	Database.cpp	database_load_language_names	high	opus	2026-10-14-start-new-game-inventory.md
 0x535920	Database.cpp	database_get_names_language	high	opus	
-0x535930	Database.cpp	database_language_file_exists	medium	opus	2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-start-new-game-inventory.md,database.c
+0x535930	Database.cpp	database_language_file_exists	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-start-new-game-inventory.md,database.c
 0x535a80	Database.cpp	database_player_initialisation	high	opus	2026-10-14-game-creation-inventory.md
 0x538bc0	Database.cpp	staff_normalise_player_attributes	medium	opus	
 0x538ec0	Database.cpp	staff_normalise_player_physical_attributes	medium	opus	
@@ -1436,7 +1436,7 @@ address	file	name	confidence	model	cited_in
 0x5442f0	Database.cpp	player_attribute_rating_with_scaled_ability	medium	opus	
 0x544380	Database.cpp	player_attribute_rating	high	opus	
 0x544410	Database.cpp	non_player_attribute_rating	medium	opus	
-0x544450	Database.cpp	non_player_attribute_rating_fragment	high	opus	
+0x544450	Database.cpp	non_player_attribute_rating_fragment_544450	high	opus	
 0x5444a0	Database.cpp	staff_is_transfer_listed	high	opus	
 0x544520	Database.cpp	staff_is_listed_or_unsettled	medium	opus	2026-10-16-crash-fixes.md,playersearch.c
 0x544590	Database.cpp	staff_contract_has_flag_02	medium	opus	2026-10-16-crash-fixes.md,playersearch.c
@@ -1450,7 +1450,7 @@ address	file	name	confidence	model	cited_in
 0x544c70	Database.cpp	club_collect_non_playing_staff	high	opus	
 0x544f30	Database.cpp	eng_lng_free_tables	high	opus	
 0x544fc0	Database.cpp	eng_lng_load_tables	high	opus	
-0x545350	Database.cpp	eng_lng_load_tables_fragment	high	opus	
+0x545350	Database.cpp	eng_lng_load_tables_fragment_545350	high	opus	
 0x5453f0	Database.cpp	nation_get_english_name	high	opus	
 0x5454c0	Database.cpp	nation_get_english_short_name	medium	opus	
 0x5455a0	Database.cpp	comp_get_english_name	high	opus	
@@ -1628,7 +1628,7 @@ address	file	name	confidence	model	cited_in
 0x555790	discipline.cpp	Discipline::~Discipline	high	opus	
 0x555860	discipline.cpp	Discipline::load	high	opus	
 0x555dd0	discipline.cpp	Discipline::save	high	opus	
-0x556210	discipline.cpp	Discipline::start_new_season_for_comp	medium	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
+0x556210	discipline.cpp	Discipline::start_new_season_for_comp	high	opus	2026-10-16-research-name-check.md,2026-10-16-sweep-season-end.md
 0x556240	discipline.cpp	Discipline::daily_update	high	opus	2026-10-14-game-creation-inventory.md
 0x556270	discipline.cpp	Discipline::clear_bans_invalid_for_club	medium	opus	
 0x5563f0	discipline.cpp	Discipline::hold_bans_on_transfer	medium	opus	
@@ -1639,7 +1639,7 @@ address	file	name	confidence	model	cited_in
 0x556c70	discipline.cpp	BanRecord::operator=	high	opus	
 0x556d00	discipline.cpp	Discipline::release_ban	high	opus	2026-10-14-violent-conduct-inventory.md
 0x556e90	discipline.cpp	Discipline::update_ban_progress	medium	opus	
-0x557000	discipline.cpp	Discipline::apply_appeal_result	low	opus	
+0x557000	discipline.cpp	Discipline::apply_appeal_result	high	opus	
 0x557120	discipline.cpp	Discipline::serve_international_bans	medium	opus	
 0x557280	discipline.cpp	Discipline::post_ban_news	medium	opus	2026-10-14-violent-conduct-inventory.md
 0x5576e0	discipline.cpp	Discipline::write_ban_news_text	high	opus	
@@ -1659,7 +1659,7 @@ address	file	name	confidence	model	cited_in
 0x55e1d0	discipline.cpp	Discipline::clear_ban_history	medium	opus	
 0x55e300	discipline.cpp	Discipline::handle_referee_assault	high	opus	2026-10-14-violent-conduct-inventory.md
 0x55e5f0	discipline.cpp	compare_nation_index_entries	high	opus	
-0x55e620	discipline.cpp	discipline_appeal_news_action	medium	opus	
+0x55e620	discipline.cpp	discipline_appeal_news_action	high	opus	
 0x55ea10	discipline.cpp	discipline_appeal_dialog_build	high	opus	
 0x55ed00	discipline.cpp	discipline_appeal_dialog_handle_click	medium	opus	
 0x55eef0	display.cpp	init_net_send_buffer	high	opus	
@@ -1773,7 +1773,7 @@ address	file	name	confidence	model	cited_in
 0x572e30	eng_first.cpp	EngFirst::start_new_season	high	opus	
 0x572ff0	eng_first.cpp	EngFirst::advance_stage	high	opus	
 0x573080	eng_first.cpp	EngFirst::create_playoff_stage	high	opus	
-0x573260	eng_first.cpp	EngFirst::set_club_progress	medium	opus	
+0x573260	eng_first.cpp	EngFirst::set_club_progress	high	opus	
 0x573380	eng_prm.cpp	EngPrm::EngPrm	high	opus	2026-10-14-game-creation-inventory.md
 0x5735b0	eng_prm.cpp	EngPrm::`scalar deleting destructor'	high	opus	
 0x5735d0	eng_prm.cpp	EngPrm::~EngPrm	high	opus	
@@ -1883,9 +1883,9 @@ address	file	name	confidence	model	cited_in
 0x582ef0	euro_champ_qual.cpp	EuroChampQual::add_historic_fixture	high	opus	
 0x583280	european_awards.cpp	EUROPE_RULES::EUROPE_RULES	medium	opus	2026-10-16-sweep-rulebooks.md,2026-10-16-sweep-season-end.md
 0x5832c0	european_awards.cpp	TRANSFER_RULES::fill_squad_restrictions	high	opus	2026-10-16-foreign-and-tactics-positions.md
-0x5832e0	european_awards.cpp	EUROPE_RULES::get_ineligibility_code	low	opus	
+0x5832e0	european_awards.cpp	EUROPE_RULES::get_ineligibility_code	high	opus	
 0x583400	european_awards.cpp	EuropeanAwards::EuropeanAwards	high	opus	
-0x583470	european_awards.cpp	shared_noop_ret4	medium	opus	
+0x583470	european_awards.cpp	shared_noop_ret4	high	opus	
 0x583480	european_awards.cpp	EuropeanAwards::init_awards	high	opus	
 0x5836a0	european_awards.cpp	EuropeanAwards::daily_update	high	opus	
 0x5837c0	european_cup.cpp	EuropeanCup::EuropeanCup	high	opus	
@@ -2004,7 +2004,7 @@ address	file	name	confidence	model	cited_in
 0x58f500	file_screens.cpp	open_file_dialog	high	opus	2026-10-13-screen-stack-inventory.md,savename.c
 0x58f7c0	file_screens.cpp	file_dialog_build	high	opus	
 0x58ff80	file_screens.cpp	file_dialog_input	high	opus	
-0x590000	file_screens.cpp	file_dialog_input_fragment	medium	opus	
+0x590000	file_screens.cpp	file_dialog_input_fragment_590000	medium	opus	
 0x590c00	file_screens.cpp	create_save_file_summary_screen	high	opus	
 0x5917f0	file_screens.cpp	save_game_info_input	high	opus	
 0x591840	file_screens.cpp	confirm_push	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-14-start-screen-spec.md,2026-10-14-widescreen-inventory.md,2026-10-15-holiday-next-match-inventory.md
@@ -2030,7 +2030,7 @@ address	file	name	confidence	model	cited_in
 0x594080	fin_first.cpp	FinFirst::create_play_off_stages	medium	opus	
 0x594610	fin_first.cpp	FinFirst::create_premier_play_off_stage	high	opus	
 0x594810	fin_first.cpp	FinFirst::update_staff_records_for_status	high	opus	
-0x594850	fin_first.cpp	FinFirst::update_staff_records_for_status_fragment	medium	opus	
+0x594850	fin_first.cpp	FinFirst::update_staff_records_for_status_fragment_594850	medium	opus	
 0x594a10	fin_first.cpp	FinFirst::build_fate_news_text	high	opus	
 0x594cd0	fin_first.cpp	FinFirst::create_south_group_stage	high	opus	
 0x594fb0	fin_first.cpp	FinFirst::load_extra_data	high	opus	
@@ -2082,7 +2082,7 @@ address	file	name	confidence	model	cited_in
 0x59cfa0	fin_prm.cpp	FinanceTable::season_end_club_update	high	opus	2026-10-14-widescreen-inventory.md,2026-10-16-stadium-research.md,HANDOVER.md
 0x59dd40	fin_prm.cpp	FinanceTable::try_board_debt_payment	high	opus	
 0x59e050	fin_prm.cpp	FinanceTable::try_finance_boost_event	medium	opus	
-0x59e5a0	fin_prm.cpp	FinanceTable::try_cash_injection	medium	opus	
+0x59e5a0	fin_prm.cpp	FinanceTable::try_cash_injection	high	opus	
 0x59e940	fin_prm.cpp	FinanceTable::try_board_takeover	medium	opus	
 0x59ed70	fin_prm.cpp	FinanceTable::process_club_finance_events	high	opus	
 0x59f300	fin_prm.cpp	finance_post_finance_boost_news	high	opus	
@@ -2096,7 +2096,7 @@ address	file	name	confidence	model	cited_in
 0x59fe10	fin_prm.cpp	finance_post_dividend_news	high	opus	
 0x59feb0	fin_prm.cpp	FinanceTable::write_dividend_news_text	high	opus	
 0x59ffb0	fin_prm.cpp	finance_post_stadium_works_news	high	opus	
-0x5a0000	fin_prm.cpp	finance_post_stadium_works_news_tail	high	opus	
+0x5a0000	fin_prm.cpp	finance_post_stadium_works_news_fragment_5a0000	high	opus	
 0x5a0050	fin_prm.cpp	FinanceTable::write_stadium_works_news_text	high	opus	2026-10-16-stadium-research.md
 0x5a0230	fin_prm.cpp	FinanceTable::write_club_relocation_news_text	high	opus	
 0x5a02f0	fin_prm.cpp	finance_post_receivers_appeased_news	high	opus	
@@ -2123,7 +2123,7 @@ address	file	name	confidence	model	cited_in
 0x5a4950	find_screens.cpp	find_screen_non_players_input	high	opus	
 0x5a4c00	find_screens.cpp	find_screen_players_input	high	opus	
 0x5a4eb0	find_screens.cpp	release_find_screen	high	opus	
-0x5a53c0	find_screens.cpp	noop_destructor	low	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md
+0x5a53c0	find_screens.cpp	shared_noop_ret0_5a53c0	high	opus	2026-10-13-screen-stack-inventory.md,2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md
 0x5a4fc0	Fine.cpp	Fine::Fine	high	opus	2026-10-14-game-creation-inventory.md
 0x5a5120	Fine.cpp	Fine::free_data	high	opus	
 0x5a5180	Fine.cpp	Fine::load	high	opus	
@@ -2142,10 +2142,10 @@ address	file	name	confidence	model	cited_in
 0x5a8380	Fine.cpp	open_discipline_player_screen	high	opus	
 0x5a83e0	Fine.cpp	draw_discipline_player_screen	high	opus	2026-10-16-slow-screens.md
 0x5a8990	Fine.cpp	discipline_player_screen_input	high	opus	2026-10-16-slow-screens.md
-0x5a8f60	Fine.cpp	pre_exit_noop	low	opus	2026-10-13-input-inventory.md,2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md
+0x5a8f60	Fine.cpp	shared_noop_ret0_5a8f60	high	opus	2026-10-13-input-inventory.md,2026-10-14-import-inventory.md,2026-10-14-start-new-game-inventory.md,2026-10-14-start-screen-helpers.md
 0x5a8f70	finland_awards.cpp	FinlandAwards::FinlandAwards	high	opus	
 0x5a90b0	finland_awards.cpp	FinlandAwards::init_awards	high	opus	2026-10-14-widescreen-inventory.md
-0x5a96b0	finland_awards.cpp	FinlandAwards::record_match_ratings	medium	opus	
+0x5a96b0	finland_awards.cpp	FinlandAwards::record_match_ratings	high	opus	
 0x5a96e0	finland_awards.cpp	FinlandAwards::daily_update	high	opus	
 0x5a9890	finland_awards.cpp	FinlandAwards::on_month_change	high	opus	
 0x5a9930	finland_awards.cpp	FinlandAwards::update_team_of_the_week	high	opus	
@@ -2269,11 +2269,11 @@ address	file	name	confidence	model	cited_in
 0x5b87e0	formation.cpp	formation_check_file_password	medium	opus	
 0x5b88a0	formation.cpp	formation_check_file_password_obfuscated	medium	opus	
 0x5b8960	formation.cpp	Formation::has_no_wide_midfield_or_attack	medium	opus	
-0x5b8d80	formation.cpp	Formation::has_no_wide_midfield_or_attack_fragment	high	opus	
+0x5b8d80	formation.cpp	Formation::has_no_wide_midfield_or_attack_fragment_5b8d80	high	opus	
 0x5b8dc0	formation.cpp	Formation::has_no_wide_defenders	medium	opus	
 0x5b91c0	fra_cfa.cpp	FraCfa::FraCfa	high	opus	fra.md
 0x5b9420	fra_cfa.cpp	stub_return_zero_ret8	high	opus	
-0x5b9430	fra_cfa.cpp	stub_return_zero_ret4	medium	opus	
+0x5b9430	fra_cfa.cpp	stub_return_zero_ret4	high	opus	
 0x5b9440	fra_cfa.cpp	FraCfa::`scalar deleting destructor'	high	opus	
 0x5b9460	fra_cfa.cpp	FraCfa::~FraCfa	high	opus	
 0x5b9510	fra_cfa.cpp	FraCfa::create_schedule	high	opus	
@@ -2489,7 +2489,7 @@ address	file	name	confidence	model	cited_in
 0x5dc9e0	ger_lge_cup.cpp	GerLgeCup::start_new_season	high	opus	
 0x5dcb90	ger_lge_cup.cpp	GerLgeCup::set_up_rounds	high	opus	
 0x5dcbd0	ger_regional.cpp	GerRegional::GerRegional	high	opus	
-0x5dce00	ger_regional.cpp	shared_return_false	medium	opus	
+0x5dce00	ger_regional.cpp	shared_return_false	high	opus	
 0x5dce10	ger_regional.cpp	GerRegional::`scalar deleting destructor'	high	opus	
 0x5dce30	ger_regional.cpp	GerRegional::~GerRegional	high	opus	
 0x5dcef0	ger_regional.cpp	GerRegional::create_schedule	high	opus	
@@ -2668,7 +2668,7 @@ address	file	name	confidence	model	cited_in
 0x5f2840	History.cpp	verify_history_files	high	opus	
 0x5f2b80	History.cpp	history_written_screen_open	high	opus	
 0x5f2c00	History.cpp	history_written_screen_draw	high	opus	
-0x5f3030	History.cpp	history_open_written_history_screen_mid_body	high	opus	
+0x5f3030	History.cpp	history_written_screen_draw_fragment_5f3030	high	opus	
 0x5f31c0	History.cpp	history_written_screen_handle_click	high	opus	
 0x5f33d0	History.cpp	history_written_screen_close	high	opus	
 0x5f3410	History.cpp	history_compare_entries_by_title	high	opus	
@@ -2802,7 +2802,7 @@ address	file	name	confidence	model	cited_in
 0x601880	human_manager.cpp	HUMAN_MANAGER::get_player_squad_number	medium	opus	
 0x601a10	human_manager.cpp	compare_int_keys	high	opus	
 0x601a40	index.cpp	set_key_ids	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-game-setup-spec.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,database.c,key_ids_table.c,key_index.c
-0x606060	index.cpp	set_key_ids_missing_check_fragment	high	opus	
+0x606060	index.cpp	set_key_ids_fragment_606060	high	opus	
 0x60ba80	index.cpp	remap_club_key_id	high	opus	
 0x60d780	index.cpp	report_missing_key_id	high	opus	2026-10-16-sweep-international.md
 0x60d810	index.cpp	match_nation_key_id	high	opus	2026-10-14-game-creation-inventory.md,2026-10-14-select-leagues-spec.md,2026-10-14-start-new-game-inventory.md,2026-10-16-sweep-europe.md,2026-10-16-sweep-international.md,key_ids_table.c
@@ -2892,7 +2892,7 @@ address	file	name	confidence	model	cited_in
 0x633f50	intertoto_cup.cpp	IntertotoCup::save_extra_data	high	opus	
 0x633f70	intertoto_cup.cpp	IntertotoCup::collect_club_list	medium	opus	
 0x6340a0	ire_chal_cup.cpp	IreChalCup::IreChalCup	high	opus	
-0x634220	ire_chal_cup.cpp	ire_chal_cup_ctor_error_tail	high	opus	
+0x634220	ire_chal_cup.cpp	IreChalCup::IreChalCup_fragment_634220	high	opus	
 0x634270	ire_chal_cup.cpp	IreChalCup::`scalar deleting destructor'	high	opus	
 0x634290	ire_chal_cup.cpp	IreChalCup::~IreChalCup	high	opus	
 0x634360	ire_chal_cup.cpp	IreChalCup::create_round_table	high	opus	
@@ -2900,18 +2900,18 @@ address	file	name	confidence	model	cited_in
 0x634a60	ire_chal_cup.cpp	IreChalCup::start_new_season	high	opus	
 0x634c10	ire_chal_cup.cpp	IreChalCup::set_up_rounds	high	opus	
 0x634c40	ire_first.cpp	IreFirst::IreFirst	high	opus	
-0x634d20	ire_first.cpp	IreFirst::IreFirst_fragment	high	opus	
+0x634d20	ire_first.cpp	IreFirst::IreFirst_fragment_634d20	high	opus	
 0x634e60	ire_first.cpp	IreFirst::`scalar deleting destructor'	high	opus	
 0x634e80	ire_first.cpp	IreFirst::~IreFirst	high	opus	
 0x634f40	ire_first.cpp	IreFirst::create_schedule	high	opus	
-0x635420	ire_first.cpp	IreFirst::create_schedule_fragment	high	opus	
+0x635420	ire_first.cpp	IreFirst::create_schedule_fragment_635420	high	opus	
 0x635910	ire_first.cpp	IreFirst::create_table	high	opus	
 0x635aa0	ire_first.cpp	IreFirst::set_up_rules	high	opus	
 0x635b30	ire_first.cpp	IreFirst::start_new_season	high	opus	
 0x635cf0	ire_first.cpp	IreFirst::advance_stage	high	opus	
 0x635dc0	ire_first.cpp	IreFirst::create_promotion_playoff_stage	high	opus	
 0x636020	ire_first.cpp	IreFirst::update_staff_records_for_status	high	opus	
-0x636150	ire_first.cpp	IreFirst::update_staff_records_for_status_fragment	high	opus	
+0x636150	ire_first.cpp	IreFirst::update_staff_records_for_status_fragment_636150	high	opus	
 0x636210	ire_first.cpp	IreFirst::build_fate_news_text	high	opus	
 0x636390	ire_first.cpp	IreFirst::set_club_progress	high	opus	
 0x6364a0	ire_leinster_cup.cpp	IreLeinsterCup::IreLeinsterCup	high	opus	
@@ -2920,9 +2920,9 @@ address	file	name	confidence	model	cited_in
 0x636760	ire_leinster_cup.cpp	IreLeinsterCup::create_round_table	high	opus	
 0x636a80	ire_leinster_cup.cpp	IreLeinsterCup::select_clubs	high	opus	
 0x636c20	ire_leinster_cup.cpp	IreLeinsterCup::start_new_season	high	opus	
-0x636d20	ire_leinster_cup.cpp	IreLeinsterCup::start_new_season_fragment	high	opus	
+0x636d20	ire_leinster_cup.cpp	IreLeinsterCup::start_new_season_fragment_636d20	high	opus	
 0x636dd0	ire_lge_cup.cpp	IreLgeCup::IreLgeCup	high	opus	
-0x636f6c	ire_lge_cup.cpp	IreLgeCup::IreLgeCup_error_tail	high	opus	
+0x636f6c	ire_lge_cup.cpp	IreLgeCup::IreLgeCup_fragment_636f6c	high	opus	
 0x637020	ire_lge_cup.cpp	IreLgeCup::`scalar deleting destructor'	high	opus	
 0x637040	ire_lge_cup.cpp	IreLgeCup::~IreLgeCup	high	opus	
 0x637120	ire_lge_cup.cpp	IreLgeCup::create_schedule	high	opus	
@@ -3021,7 +3021,7 @@ address	file	name	confidence	model	cited_in
 0x63ff00	ita_cup.cpp	ItaCup::update_staff_records_for_status	high	opus	
 0x640050	ita_cup.cpp	ItaCup::load_extra_data	high	opus	
 0x640210	ita_cup.cpp	ItaCup::set_predicted_positions	high	opus	
-0x640480	ita_cup.cpp	ItaCup::set_club_progress	medium	opus	
+0x640480	ita_cup.cpp	ItaCup::set_club_progress	high	opus	
 0x640590	ita_cup.cpp	compare_clubs_by_seeding_pot	medium	opus	
 0x6406d0	ita_ser_a.cpp	ItaSerA::ItaSerA	high	opus	
 0x640900	ita_ser_a.cpp	ItaSerA::`scalar deleting destructor'	high	opus	
@@ -3033,15 +3033,15 @@ address	file	name	confidence	model	cited_in
 0x6419e0	ita_ser_a.cpp	ItaSerA::advance_stage	high	opus	
 0x641a70	ita_ser_a.cpp	ItaSerA::create_tiebreak_playoffs	medium	opus	
 0x641dc0	ita_ser_a.cpp	ItaSerA::update_staff_records_for_status	medium	opus	
-0x641fc0	ita_ser_a.cpp	ita_ser_a_exchange_serie_c2_clubs_unplayed	medium	opus	
-0x6421c0	ita_ser_a.cpp	ita_ser_a_exchange_serie_d_clubs	medium	opus	
+0x641fc0	ita_ser_a.cpp	ItaSerA::exchange_serie_c2_clubs_unplayed	medium	opus	
+0x6421c0	ita_ser_a.cpp	ItaSerA::exchange_serie_d_clubs	medium	opus	
 0x642410	ita_ser_a.cpp	ItaSerA::process_promotion_relegation_chain	high	opus	
-0x642520	ita_ser_a.cpp	ita_ser_a_promotion_chain_mid_body	high	opus	
+0x642520	ita_ser_a.cpp	ItaSerA::process_promotion_relegation_chain_fragment_642520	high	opus	
 0x642630	ita_ser_a.cpp	ita_ser_a_regroup_serie_c1_clubs	medium	opus	
 0x642790	ita_ser_a.cpp	ita_ser_a_regroup_serie_c2_clubs	medium	opus	
 0x642880	ita_ser_a.cpp	ItaSerA::update_for_date	medium	opus	
 0x642a70	ita_ser_a.cpp	ItaSerA::create_fixed_fixtures	high	opus	2026-10-14-widescreen-inventory.md,2026-10-16-sweep-season-end.md
-0x643230	ita_ser_a.cpp	ita_ser_a_create_fixed_fixtures_mid_body	high	opus	
+0x643230	ita_ser_a.cpp	ItaSerA::create_fixed_fixtures_fragment_643230	high	opus	
 0x645800	ita_ser_a.cpp	FixedFixture::FixedFixture	medium	opus	
 0x645810	ita_ser_b.cpp	ItaSerB::ItaSerB	high	opus	
 0x645a40	ita_ser_b.cpp	ItaSerB::`scalar deleting destructor'	high	opus	
@@ -3049,12 +3049,12 @@ address	file	name	confidence	model	cited_in
 0x645af0	ita_ser_b.cpp	ItaSerB::create_schedule	high	opus	
 0x646780	ita_ser_b.cpp	ItaSerB::create_table	high	opus	
 0x6468a0	ita_ser_b.cpp	ItaSerB::set_up_rules	high	opus	
-0x646920	ita_ser_b.cpp	ItaSerB::set_up_rules_fragment	high	opus	
+0x646920	ita_ser_b.cpp	ItaSerB::set_up_rules_fragment_646920	high	opus	
 0x646960	ita_ser_b.cpp	ItaSerB::start_new_season	high	opus	
 0x646b20	ita_ser_b.cpp	ItaSerB::advance_stage	high	opus	
-0x646b50	ita_ser_b.cpp	ItaSerB::advance_stage_fragment	high	opus	
+0x646b50	ita_ser_b.cpp	ItaSerB::advance_stage_fragment_646b50	high	opus	
 0x646bb0	ita_ser_b.cpp	ItaSerB::create_tiebreak_playoff_stage	high	opus	
-0x646c50	ita_ser_b.cpp	ItaSerB::create_tiebreak_playoff_stage_fragment	high	opus	
+0x646c50	ita_ser_b.cpp	ItaSerB::create_tiebreak_playoff_stage_fragment_646c50	high	opus	
 0x646e6f	ita_ser_b.cpp	ita_ser_b_nop_pad_646e6f	high	opus	
 0x646e70	ita_ser_b.cpp	ItaSerB::update_staff_records_for_status	medium	opus	
 0x647050	ita_ser_b.cpp	ItaSerB::update_for_date	high	opus	
@@ -3096,10 +3096,10 @@ address	file	name	confidence	model	cited_in
 0x654390	ita_ser_c2a.cpp	ItaSerC2a::build_fate_news_text	high	opus	
 0x6544b0	ita_ser_c2a.cpp	ItaSerC2a::set_club_progress	high	opus	
 0x6545c0	ita_ser_c2a.cpp	ItaSerC2a::set_up_fixed_fixtures	high	opus	2026-10-16-sweep-season-end.md
-0x656570	ita_ser_c2a.cpp	ita_ser_c2a_set_up_fixed_fixtures_tail	medium	opus	2026-10-16-sweep-season-end.md
-0x657243	ita_ser_c2a.cpp	ita_ser_c2a_set_up_fixed_fixtures_tail_misaligned	medium	opus	
+0x656570	ita_ser_c2a.cpp	ItaSerC2a::set_up_fixed_fixtures_fragment_656570	high	opus	2026-10-16-sweep-season-end.md
+0x657243	ita_ser_c2a.cpp	ItaSerC2a::set_up_fixed_fixtures_fragment_657243	medium	opus	
 0x657350	ita_ser_c2b.cpp	ItaSerC2b::ItaSerC2b	high	opus	
-0x65746c	ita_ser_c2b.cpp	ita_ser_c2b_ctor_error_tail	medium	opus	
+0x65746c	ita_ser_c2b.cpp	ItaSerC2b::ItaSerC2b_fragment_65746c	medium	opus	
 0x657580	ita_ser_c2b.cpp	ItaSerC2b::`scalar deleting destructor'	high	opus	
 0x6575a0	ita_ser_c2b.cpp	ItaSerC2b::~ItaSerC2b	high	opus	
 0x657660	ita_ser_c2b.cpp	ItaSerC2b::create_schedule	high	opus	
@@ -3161,7 +3161,7 @@ address	file	name	confidence	model	cited_in
 0x663db0	jap_j1.cpp	JapJ1::update_staff_records_for_status	high	opus	
 0x6640a0	jap_j1.cpp	JapJ1::build_fate_news_text	high	opus	
 0x664390	jap_j1.cpp	JapJ1::record_season_honours	high	opus	
-0x664400	jap_j1.cpp	JapJ1::set_club_progress	medium	opus	
+0x664400	jap_j1.cpp	JapJ1::set_club_progress	high	opus	
 0x6644c0	jap_j2.cpp	JapJ2::JapJ2	high	opus	
 0x6646d0	jap_j2.cpp	JapJ2::`scalar deleting destructor'	high	opus	
 0x6646f0	jap_j2.cpp	JapJ2::~JapJ2	high	opus	
@@ -4244,12 +4244,12 @@ address	file	name	confidence	model	cited_in
 0x768cf0	nation_awards.cpp	nation_awards_award_player_of_year	medium	opus	
 0x7690c0	nation_awards.cpp	nation_awards_award_tournament_player	medium	opus	
 0x769380	nation_awards.cpp	nation_awards_award_player_of_year_by_stats	medium	opus	
-0x7698f0	nation_awards.cpp	nation_awards_award_team_of_season	medium	opus	
-0x769af0	nation_awards.cpp	nation_awards_award_tournament_team	medium	opus	
+0x7698f0	nation_awards.cpp	NationAwards::award_team_of_season	medium	opus	
+0x769af0	nation_awards.cpp	NationAwards::award_tournament_team	medium	opus	
 0x769c70	nation_awards.cpp	nation_awards_build_team_of_the_week	medium	opus	
 0x76a280	nation_awards.cpp	NationAwards::load	high	opus	
 0x76a380	nation_awards.cpp	NationAwards::save	high	opus	
-0x76a460	nation_awards.cpp	nation_awards_compare_byte_8_descending	low	opus	
+0x76a460	nation_awards.cpp	nation_awards_compare_byte_8_descending	high	opus	
 0x76a480	nation_awards.cpp	nation_awards_compare_score_ascending	high	opus	
 0x76a4b0	nation_awards.cpp	nation_awards_compare_score_descending	high	opus	
 0x76a4e0	national_teams.cpp	NationalTeams::NationalTeams	high	opus	2026-10-14-game-creation-inventory.md
@@ -4500,9 +4500,9 @@ address	file	name	confidence	model	cited_in
 0x793900	northern_ireland_rules.cpp	NORTHERN_IRELAND_RULES::can_loan_player	high	opus	
 0x793940	norway_awards.cpp	NorwayAwards::NorwayAwards	high	opus	
 0x793a80	norway_awards.cpp	NorwayAwards::init_awards	high	opus	
-0x794220	norway_awards.cpp	NorwayAwards::init_awards_month_awards_tail	medium	opus	
+0x794220	norway_awards.cpp	NorwayAwards::init_awards_fragment_794220	high	opus	
 0x7942c0	norway_awards.cpp	NorwayAwards::daily_update	high	opus	
-0x794430	norway_awards.cpp	NorwayAwards::on_month_change	medium	opus	
+0x794430	norway_awards.cpp	NorwayAwards::on_month_change	high	opus	
 0x7944d0	norway_awards.cpp	NorwayAwards::update_team_of_the_week	high	opus	
 0x7944f0	norway_rules.cpp	NORWAY_RULES::NORWAY_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x794610	norway_rules.cpp	NORWAY_RULES::get_ineligibility_code	medium	opus	
@@ -5157,7 +5157,7 @@ address	file	name	confidence	model	cited_in
 0x7eb800	rus_prm.cpp	RusPrm::start_new_season	high	opus	
 0x7eba00	rus_prm.cpp	RusPrm::advance_stage	high	opus	
 0x7eba90	rus_prm.cpp	RusPrm::create_title_playoff_stage	medium	opus	
-0x7ebc40	rus_prm.cpp	RusPrm::update_staff_records_for_status	medium	opus	
+0x7ebc40	rus_prm.cpp	RusPrm::update_staff_records_for_status	high	opus	
 0x7ebe20	rus_prm.cpp	rus_prm_exchange_first_and_second_division_clubs	medium	opus	
 0x7ec160	rus_prm.cpp	RusPrm::update_for_date	high	opus	
 0x7ec1f0	rus_prm.cpp	RusPrm::save_extra_data	high	opus	
@@ -5193,7 +5193,7 @@ address	file	name	confidence	model	cited_in
 0x7ef100	sco_first.cpp	ScoFirst::set_club_progress	high	opus	
 0x7ef270	sco_first.cpp	ScoFirst::advance_stage	high	opus	
 0x7ef340	sco_first.cpp	ScoFirst::create_playoff_group	high	opus	
-0x7ef5d0	sco_first.cpp	ScoFirst::update_staff_records_for_status	medium	opus	
+0x7ef5d0	sco_first.cpp	ScoFirst::update_staff_records_for_status	high	opus	
 0x7ef7c0	sco_first.cpp	ScoFirst::build_fate_news_text	high	opus	
 0x7ef9e0	sco_lge_cup.cpp	ScoLgeCup::ScoLgeCup	high	opus	
 0x7efbc0	sco_lge_cup.cpp	ScoLgeCup::`scalar deleting destructor'	high	opus	
@@ -5692,7 +5692,7 @@ address	file	name	confidence	model	cited_in
 0x858960	spa_super.cpp	SpaSuper::create_round_table	high	opus	
 0x858aa0	spa_super.cpp	SpaSuper::select_teams	high	opus	
 0x858cd0	spa_super.cpp	SpaSuper::start_new_season	high	opus	
-0x858e70	spa_super.cpp	SpaSuper::set_up_rounds	medium	opus	2026-10-16-sweep-europe.md
+0x858e70	spa_super.cpp	SpaSuper::set_up_rounds	high	opus	2026-10-16-sweep-europe.md
 0x858ea0	spain_awards.cpp	SpainAwards::SpainAwards	high	opus	
 0x858f30	spain_awards.cpp	SpainAwards::init_awards	high	opus	
 0x8592c0	spain_awards.cpp	SpainAwards::daily_update	high	opus	
@@ -6578,7 +6578,7 @@ address	file	name	confidence	model	cited_in
 0x90ec10	wales_awards.cpp	WalesAwards::init_awards	high	opus	
 0x90ef10	wales_awards.cpp	WalesAwards::daily_update	high	opus	
 0x90f020	wales_awards.cpp	WalesAwards::on_month_change	medium	opus	
-0x90f060	wales_awards.cpp	WalesAwards::update_team_of_the_week	medium	opus	
+0x90f060	wales_awards.cpp	WalesAwards::update_team_of_the_week	high	opus	
 0x90f080	wales_rules.cpp	WALES_RULES::WALES_RULES	high	opus	2026-10-16-sweep-rulebooks.md
 0x90f1a0	wales_rules.cpp	WALES_RULES::get_loan_period	high	opus	
 0x90f210	wc_african_cup.cpp	WcAfricanCup::WcAfricanCup	high	opus	2026-10-16-sweep-international.md

@@ -1443,6 +1443,29 @@ Most fixes raise a row to high confidence with a quoted vtable slot or update an
 | 0x5af5b0 | `fix_man_get_partner_nation_type` | `fix_man_get_partner_key_nation_index` | takes reviewer | `fix_man_get_partner_key_nation_index` |
 | 0x404480 | `ArgPrm::has_relegation` | `shared_return_true` | takes reviewer | `shared_return_true` |
 
+#### Review r02 (tiers 4 and 5, 2026-10-17)
+
+Run `review-r02`: 8 Opus reviewers checked 195 rows of the national leagues, cups and awards, Cup.cpp, Database.cpp and the first screen files. Agree 113, fix 70, rename 12. The third check took the reviewer's name 10 times and wrote a new row twice. 40 false entries got the name `<parent>_fragment_<addr>`. 120 rows changed in all. The reviewers took 134,000 to 179,000 tokens each, and the third check took 111,000.
+
+The sweep's errors fall into three kinds. Four rows were thiscall members written as free functions (ItaSerA 0x641fc0 and 0x6421c0, NationAwards 0x7698f0 and 0x769af0). Two slot overrides took a name from their callees and not from the slot: 0x519890 is Cup slot 17 `update_staff_records_for_status` and does no finance work, and 0x522c50 is slot 33 `update_projected_positions`. The rest were generic names that the code makes exact, such as `Cash::Cash` (0x450a90). Two reviewers gave two different single `ret` bodies the same name, so the third check added the address to each.
+
+Open point: the other Cup slot 17 overrides (about 10 rows, for example `UefaCup::apply_team_result_finance` 0x9030e0) still carry the finance name. They are outside the sample.
+
+| Address | First name | Reviewer name | Third check | Final name |
+|---|---|---|---|---|
+| 0x641fc0 | `ita_ser_a_exchange_serie_c2_clubs_unplayed` | `ItaSerA::exchange_serie_c2_clubs_unplayed` | takes reviewer | `ItaSerA::exchange_serie_c2_clubs_unplayed` |
+| 0x6421c0 | `ita_ser_a_exchange_serie_d_clubs` | `ItaSerA::exchange_serie_d_clubs` | takes reviewer | `ItaSerA::exchange_serie_d_clubs` |
+| 0x7698f0 | `nation_awards_award_team_of_season` | `NationAwards::award_team_of_season` | takes reviewer | `NationAwards::award_team_of_season` |
+| 0x769af0 | `nation_awards_award_tournament_team` | `NationAwards::award_tournament_team` | takes reviewer | `NationAwards::award_tournament_team` |
+| 0x794220 | `NorwayAwards::init_awards_month_awards_tail` | `NorwayAwards::init_awards_fragment_794220` | takes reviewer | `NorwayAwards::init_awards_fragment_794220` |
+| 0x519890 | `Cup::apply_team_result_finance` | `Cup::update_staff_records_for_status` | takes reviewer | `Cup::update_staff_records_for_status` |
+| 0x522c50 | `Cup::team_position` | `Cup::update_projected_positions` | takes reviewer | `Cup::update_projected_positions` |
+| 0x5a8f60 | `pre_exit_noop` | `shared_noop_ret0` | new name | `shared_noop_ret0_5a8f60` |
+| 0x450a90 | `cash_set_value` | `Cash::Cash` | takes reviewer | `Cash::Cash` |
+| 0x486e60 | `compare_players_by_contract_check_then_name` | `compare_players_by_fifa_protected_period_then_name` | takes reviewer | `compare_players_by_fifa_protected_period_then_name` |
+| 0x49f2a0 | `date_pair_record_construct` | `comp_unbeaten_run_record_construct` | takes reviewer | `comp_unbeaten_run_record_construct` |
+| 0x5a53c0 | `noop_destructor` | `shared_noop_ret0` | new name | `shared_noop_ret0_5a53c0` |
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
