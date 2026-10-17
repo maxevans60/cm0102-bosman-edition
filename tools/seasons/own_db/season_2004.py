@@ -34,7 +34,7 @@ CLUB_FIX = {"Borussia Mönchengladbach": "Borussia M'gladbach", "Randers Footbal
 SUCCESSORS = {"Wimbledon": "Milton Keynes Dons", "Telford United": "AFC Telford United"}
 
 # The real 2004/05 divisions of other nations, keyed by the template's division name (calendar-year leagues: the
-# 2004 season), and the clubs promoted into each, in the order of their finish below. English Wikipedia, one URL
+# 2005 season: the project's club tables put calendar year X+1 in game season X/X+1), and the clubs promoted into each, in the order of their finish below. English Wikipedia, one URL
 # per list. Club counts are the rows of each page's table. Names follow the template's spelling where it differs.
 # Kerkyra (Greece) is not in the template.
 REAL = {
@@ -61,15 +61,15 @@ REAL = {
     'Austrian Premier Division': ['Rapid Wien', 'Grazer AK', 'FK Austria Vienna', 'Pasching', 'Mattersburg', 'Wacker Tirol', 'Sturm Graz', 'Admira Wacker Mödling', 'Austria Salzburg', 'Bregenz'],   # 10 clubs, https://en.wikipedia.org/wiki/2004–05_Austrian_Football_Bundesliga
     'Swiss National Division A': ['Basel', 'Thun', 'Grasshopper', 'Young Boys', 'Zürich', 'Neuchâtel Xamax', 'St. Gallen', 'Aarau', 'FC Schaffhousen', 'Servette'],   # 10 clubs, https://en.wikipedia.org/wiki/2004–05_Swiss_Super_League
     'Danish Premier Division': ['Brøndby', 'Football Club København', 'Midtjylland', 'AaB', 'Esbjerg fB', 'OB', 'Viborg FF', 'Silkeborg IF', 'AGF', 'Football Club Nordsjaelland', 'Herfølge Boldklub', 'Randers'],   # 12 clubs, https://en.wikipedia.org/wiki/2004–05_Danish_Superliga
-    'Norwegian Premier Division': ['Rosenborg', 'Vålerenga', 'Brann', 'Tromsø', 'Ham-Kam', 'Lyn', 'Lillestrøm', 'Odd Grenland', 'Viking', 'Fredrikstad', 'Molde', 'Bodø/Glimt', 'Stabæk', 'Sogndal'],   # 14 clubs, https://en.wikipedia.org/wiki/2004_Tippeligaen
-    'Swedish Premier Division': ['Malmö FF', 'Halmstad BK', 'IFK Göteborg', 'Djurgårdens IF', 'Kalmar FF', 'Hammarby IF', 'GIF Sundsvall', 'Örebro SK', 'IF Elfsborg', 'Helsingborgs IF', 'Landskrona BoIS', 'Örgryte IS', 'AIK', 'Trelleborgs FF'],   # 14 clubs, https://en.wikipedia.org/wiki/2004_Allsvenskan
-    'Finnish Premier Division': ['Haka', 'AC Allianssi', 'Tampere United', 'FC Inter', 'TPS', 'HJK', 'FC Lahti', 'MYPA', 'FC KooTeePee', 'TP-47', 'FF Jaro', 'RoPS', 'FC Jazz', 'FC Hämeenlinna'],   # 14 clubs, https://en.wikipedia.org/wiki/2004_Veikkausliiga
-    'Russian Premier Division': ['Lokomotiv Moscow', 'CSKA Moscow', 'Krylia Sovetov Samara', 'Zenit St. Petersburg', 'Torpedo Moscow', 'Shinnik Yaroslavl', 'Saturn', 'Spartak Moscow', 'FK Moskva Moscow', 'Rubin Kazan', 'Amkar Perm', 'Rostov', 'Dinamo Moscow', 'Alania Vladikavkaz', 'Kuban Krasnodar', 'Rotor Volgograd'],   # 16 clubs, https://en.wikipedia.org/wiki/2004_Russian_Premier_League
+    'Norwegian Premier Division': ['Vålerenga', 'Start', 'Lyn', 'Lillestrøm', 'Viking', 'Brann', 'Rosenborg', 'Tromsø', 'Odd Grenland', 'Ham-Kam', 'Fredrikstad', 'Molde', 'Aalesund', 'Bodø/Glimt'],   # 14 clubs, https://en.wikipedia.org/wiki/2005_Tippeligaen
+    'Swedish Premier Division': ['Djurgårdens IF', 'IFK Göteborg', 'Kalmar FF', 'Hammarby IF', 'Malmö FF', 'Helsingborgs IF', 'IF Elfsborg', 'BK Häcken', 'Örgryte IS', 'Halmstad BK', 'Gefle IF', 'Landskrona BoIS', 'GIF Sundsvall', 'Assyriska FF'],   # 14 clubs, https://en.wikipedia.org/wiki/2005_Allsvenskan
+    'Finnish Premier Division': ['MYPA', 'HJK', 'Tampere United', 'Haka', 'FC Inter', 'FC Lahti', 'AC Allianssi', 'FC KooTeePee', 'TPS', 'KuPS', 'FF Jaro', 'IFK Mariehamn', 'RoPS', 'TP-47'],   # 14 clubs, https://en.wikipedia.org/wiki/2005_Veikkausliiga
+    'Russian Premier Division': ['CSKA Moscow', 'Spartak Moscow', 'Lokomotiv Moscow', 'Rubin Kazan', 'FK Moskva Moscow', 'Zenith St. Petersburg', 'Torpedo Moscow', 'Dinamo Moscow', 'Shinnik Yaroslavl', 'Tom Tomsk', 'Saturn', 'Amkar Perm', 'Rostov', 'Krylia Sovetov Samara', 'Alania Vladikavkaz', 'Terek Grozny'],   # 16 clubs, https://en.wikipedia.org/wiki/2005_Russian_Premier_League
     'Czech First Division': ['Sparta Prague', 'Slavia Prague', 'Teplice', 'Sigma Olomouc', 'Slovan Liberec', 'Jablonec', 'Baník Ostrava', 'Drnovice', 'Marila Příbram', 'Tescoma Zlín', 'Brno', 'Blšany', '1.FC Synot', 'Mladá Boleslav', 'Dynamo České Budějovice', 'Opava'],   # 16 clubs, https://en.wikipedia.org/wiki/2004–05_Czech_First_League
     'Yugoslav First Division': ['Partizan', 'Crvena Zvezda', 'Zeta', 'OFK Belgrade', 'Zemun', 'Budućnost Podgorica', 'Hajduk Kula', 'Vojvodina', 'Železnik', 'Smederevo', 'Obilić', 'Radnički Beograd', 'Borac Čačak', 'Čukarički', 'Sutjeska', 'Hajduk Belgrade'],   # 16 clubs, https://en.wikipedia.org/wiki/2004–05_First_League_of_Serbia_and_Montenegro
     'Welsh Premier Division': ['Total Network Solutions', 'Rhyl', 'Bangor City', 'Haverfordwest County', 'Caersws', 'Carmarthen Town', 'Cwmbran Town', 'Aberystwyth Town', 'Welshpool Town', 'Newtown', 'Porthmadog', "Connah's Quay Nomads", 'Port Talbot Town', 'Llanelli', 'Caernarfon Town', 'Airbus UK', 'NEWI Cefn Druids', 'Afan Lido'],   # 18 clubs, https://en.wikipedia.org/wiki/2004–05_Welsh_Premier_League
     'Northern Irish League Premier Division': ['Glentoran', 'Linfield', 'Portadown', 'Dungannon Swifts', 'Limavady United', 'Coleraine', 'Lisburn Distillery', 'Ballymena United', 'Institute', 'Newry City', 'Cliftonville', 'Loughgall', 'Larne', 'Ards', 'Crusaders', 'Omagh Town'],   # 16 clubs, https://en.wikipedia.org/wiki/2004–05_Irish_Premier_League
-    'Irish Premier Division': ['Shelbourne', 'Cork City', 'Bohemians', 'Drogheda United', 'Waterford United', 'Longford Town', 'Derry City', "St Patrick's Athletic", 'Shamrock Rovers', 'Dublin City'],   # 10 clubs, https://en.wikipedia.org/wiki/2004_League_of_Ireland_Premier_Division
+    'Irish Premier Division': ['Cork City', 'Derry City', 'Shelbourne', 'Drogheda United', 'Longford Town', 'Bohemians', 'Bray Wanderers', 'Waterford United', 'University College Dublin', "St Patrick's Athletic", 'Shamrock Rovers', 'Finn Harps'],   # 12 clubs, https://en.wikipedia.org/wiki/2005_League_of_Ireland_Premier_Division
 }
 PROMOTED = {
     'Italian Serie A': ['Palermo', 'Cagliari', 'Livorno', 'Messina', 'Atalanta', 'Fiorentina'],   # https://en.wikipedia.org/wiki/2003–04_Serie_B ; Serie B finish order; Fiorentina = play-off winner
@@ -89,13 +89,13 @@ PROMOTED = {
     'Austrian Premier Division': ['Wacker Tirol'],   # https://en.wikipedia.org/wiki/2004–05_Austrian_Football_Bundesliga ; inferred only: the one 2004-05 club absent from the 2003-04 table; page has no promotion text
     'Swiss National Division A': ['FC Schaffhousen'],   # https://en.wikipedia.org/wiki/2003–04_Swiss_Challenge_League ; champion
     'Danish Premier Division': ['Silkeborg IF', 'Randers'],   # https://en.wikipedia.org/wiki/2003–04_Danish_1st_Division
-    'Norwegian Premier Division': ['Ham-Kam', 'Fredrikstad'],   # https://en.wikipedia.org/wiki/2003_Norwegian_First_Division
-    'Swedish Premier Division': ['Kalmar FF', 'Trelleborgs FF'],   # https://en.wikipedia.org/wiki/2003_Superettan
-    'Finnish Premier Division': ['TP-47', 'RoPS'],   # https://en.wikipedia.org/wiki/2003_Ykkönen
-    'Russian Premier Division': ['Amkar Perm', 'Kuban Krasnodar'],   # https://en.wikipedia.org/wiki/2003_Russian_First_Division
+    'Norwegian Premier Division': ['Start', 'Aalesund'],   # https://en.wikipedia.org/wiki/2005_Tippeligaen
+    'Swedish Premier Division': ['Assyriska FF', 'Gefle IF', 'BK Häcken'],   # https://en.wikipedia.org/wiki/2005_Allsvenskan
+    'Finnish Premier Division': ['KuPS', 'IFK Mariehamn'],   # https://en.wikipedia.org/wiki/2005_Veikkausliiga (the two clubs new to the table)
+    'Russian Premier Division': ['Terek Grozny', 'Tom Tomsk'],   # https://en.wikipedia.org/wiki/2005_Russian_Premier_League
     'Czech First Division': ['Mladá Boleslav', 'Drnovice'],   # https://en.wikipedia.org/wiki/2003–04_Czech_2._Liga
     'Yugoslav First Division': ['Radnički Beograd', 'Hajduk Belgrade', 'Budućnost Podgorica', 'Čukarički'],   # https://en.wikipedia.org/wiki/2004–05_First_League_of_Serbia_and_Montenegro ; four Second League group champions, page order
     'Welsh Premier Division': ['Airbus UK'],   # https://en.wikipedia.org/wiki/2003–04_Cymru_Alliance ; PARTIAL: the table also has Llanelli as new, route not on any page checked
     'Northern Irish League Premier Division': ['Loughgall'],   # https://en.wikipedia.org/wiki/2003–04_Irish_First_Division ; champion
-    'Irish Premier Division': ['Dublin City'],   # https://en.wikipedia.org/wiki/2003_League_of_Ireland_First_Division ; champion
+    'Irish Premier Division': ['Finn Harps'],   # https://en.wikipedia.org/wiki/2005_League_of_Ireland_Premier_Division (the club new to the table)
 }
