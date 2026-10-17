@@ -20,8 +20,9 @@ sweeps those folders. <folder of databases> is then not used: give any existing 
 With --select-all (0.6.0) each run clicks Select All on Select League(s) and starts the game in the season of
 its database (RECOMP_START_SEASON, the year from docs/research/2026-10-16-season-database-table.md). Only the 21
 season databases of that table run. A message box of the game ends the run and names its text in the failure
-step. The table gives the reserve rows of blank staff that the new game used (staff_reserve.c). --start <year>
-starts every game in that year instead.
+step. In a season that is not 2001 the box "fra_first..cpp 108" is an expected stop and counts as a pass
+(EXPECTED_STOP); "Database.cpp 1844" and any other box fail. The table gives the reserve rows of blank staff
+that the new game used (staff_reserve.c). --start <year> starts every game in that year instead.
 """
 import concurrent.futures
 import os
@@ -75,6 +76,8 @@ def check(program, game, base, name, timeout, extra=None, steps=None, env_extra=
         if r.returncode != 0:
             line = next((ln for ln in r.stderr.splitlines() if "timed out" in ln), r.stderr[-120:].strip())
             if r.returncode == 99:      # --select-all: a message box of the game ended the run
+                if EXPECTED_STOP in box_text(r.stderr) and env_extra.get("RECOMP_START_SEASON") != "2001":
+                    return True, took, f"expected stop after {last}: {EXPECTED_STOP} (Ligue 1 club count, slice 15)"
                 return False, took, f"box after {last}" + box_text(r.stderr)
             return False, took, f"code {r.returncode} after {last}: {line[:110]}"
         if "5-holiday" not in done:
@@ -92,6 +95,10 @@ SEASON_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".
                             "2026-10-16-season-database-table.md")
 
 
+# --select-all in a season that is not 2001: every season database holds 18 Ligue 1 clubs, and FraFirst wants 20
+# (docs/research/2026-10-17-select-all-databases.md). Until slice 15 moves 2 clubs up, this box is the expected
+# end of the run. It counts as a pass: the run has passed the staff step, where "Database.cpp 1844" is the failure.
+EXPECTED_STOP = "fra_first..cpp 108"
 RESERVE = {}                                # --select-all: database folder: reserve rows used (staff_reserve.c)
 
 

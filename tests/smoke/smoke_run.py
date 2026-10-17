@@ -5,7 +5,7 @@ Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
-        [--ref-050 <0.5.0 program>] [--jobs n] [--runs a,b]
+        [--ref-050 <0.5.0 program>] [--jobs n] [--runs a,b] [--custom-db <folder>]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -335,6 +335,9 @@ REF_BUILD = None
 # and these runs, for a short check on a busy machine. An unknown name or fewer than two runs stops the check.
 JOBS = 0
 ONLY_RUNS = None
+# --custom-db <folder> (0.6.0, staff reserve): each run copies the folder into Databases of its user folder and
+# plays it as a custom data set (database = folder:<name>), for example the 3.9.68 data against the 0.5.0 build.
+CUSTOM_DB = None
 
 
 def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None,
@@ -371,10 +374,14 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
             os.makedirs(d)
         if save:
             shutil.copyfile(save, os.path.join(user, os.path.basename(save)))
+        if CUSTOM_DB:      # --custom-db: every run plays this folder as a custom data set
+            shutil.copytree(CUSTOM_DB, os.path.join(user, "Databases", os.path.basename(CUSTOM_DB)))
         with open(os.path.join(user, "settings.txt"), "w") as f:
             f.write(f"display = {mode}\n")
             for key, value in options.items():
                 f.write(f"{key} = {value}\n")
+            if CUSTOM_DB:
+                f.write(f"database = folder:{os.path.basename(CUSTOM_DB)}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                    RECOMP_USER_DIR=user,
                    RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days), RECOMP_IDLE_COUNT="1",
@@ -557,7 +564,9 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
-    global REF_BUILD, REF_050, JOBS, ONLY_RUNS
+    global REF_BUILD, REF_050, JOBS, ONLY_RUNS, CUSTOM_DB
+    if "--custom-db" in argv[3:]:
+        CUSTOM_DB = os.path.abspath(argv[argv.index("--custom-db") + 1])
     if "--jobs" in argv[3:]:
         JOBS = int(argv[argv.index("--jobs") + 1])
         if JOBS < 1:
