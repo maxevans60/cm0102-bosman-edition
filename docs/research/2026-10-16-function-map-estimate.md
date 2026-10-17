@@ -1854,6 +1854,37 @@ The checkers took 1,062,466 tokens, about 5,200 per row, and 2 to 4 minutes each
 | 0x521f10 | `cup_set_round_progression_rule` | `cup_set_round_match_day` | takes reviewer | `cup_set_round_match_day` |
 | 0x5454c0 | `nation_get_english_short_name` | `nation_get_english_three_letter_name` | takes reviewer | `nation_get_english_three_letter_name` |
 
+#### Confidence c02 (2026-10-17)
+
+Run `conf-c02`: 8 Sonnet checkers worked from short packs (`confidence_pack.py`) on the 183 rows of batches conf-c02-aa to conf-c02-ah (Date, Danish, display, English cups and leagues, FIFA, Finnish, fixture, formation, French, friendly, game, German, Gold Cup, hall of fame, Dutch, host country, human manager, injury, Irish and Italian rows). Agree 133, fix 50, rename 0. There were no renames and no global conflicts, so the third check had no input and did not run. 50 rows were written.
+
+| Figure | Value |
+|---|---|
+| Rows checked | 183 |
+| Rows raised to high | 47 (25.7%) |
+| Rows with a new name | 0 |
+| Wrong in the Opus sample check | 2 of 30 (6.7%) |
+| Rows raised to high after the revert | 45 |
+| Total tokens of the wave | 1,201,375 |
+
+Quote kinds of the 47 raised rows: global 29, caller 14, vtable 2, string 2. Most global quotes are competition and nation key ids from the string chain of `set_key_ids` 0x601a40. Every checker checked each global it quoted, and none was wrong. So `conf-c02-g` lowers no global and no row.
+
+The Opus sample check took 30 of the 47 changed rows and found 2 wrong: 0x5b4a60 `Formation::is_slot_customised` and 0x5b4b70 `Formation::is_slot_coordinate_customised`. Both quote the caller `Tactics_Screen::is_formation_slot_customised` 0x8a9fa0. That caller is high only on an assert line and on its forwards to these two rows, so the quote is circular. The global check catches this fault for globals. Nothing in the brief catches it for callers. The run `conf-c02-revert` puts both rows back to medium. At 6.7%, under the 10% line, Sonnet stays for c03 to c05. Confidence in `names.tsv` is now 5,545 high, 1,290 medium and 28 low.
+
+| Agent | Model | Batch | Rows | Raised | Tokens |
+|---|---|---|---|---|---|
+| Checker | Sonnet | conf-c02-aa | 22 | 1 | 111,911 |
+| Checker | Sonnet | conf-c02-ab | 21 | 10 | 176,509 |
+| Checker | Sonnet | conf-c02-ac | 20 | 10 | 187,698 |
+| Checker | Sonnet | conf-c02-ad | 21 | 3 | 105,599 |
+| Checker | Sonnet | conf-c02-ae | 30 | 5 | 112,742 |
+| Checker | Sonnet | conf-c02-af | 21 | 6 | 126,914 |
+| Checker | Sonnet | conf-c02-ag | 25 | 4 | 105,961 |
+| Checker | Sonnet | conf-c02-ah | 23 | 8 | 107,683 |
+| Sample check | Opus | sample-input (30 rows) | 30 | 0 | 166,358 |
+
+The checkers took 1,035,017 tokens, about 5,650 per row, and 1 to 5 minutes each. That is close to the 1,062,466 tokens of the Opus checkers of c01. Sonnet saves only through its lower price per token.
+
 ## Recommendation
 
 Run the full map on the fast route. It costs about $120 and takes an afternoon. Every later feature and research doc then starts from a name for each function.
