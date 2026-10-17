@@ -102,6 +102,10 @@ const char *season_change_file(uint32_t obj);
  * back with operator delete 0x944c94. Returns 1, or 0 when it cannot. */
 int season_change_add_comp(int entry, uint32_t obj);
 
+/* The last season whose season point ran, 0 before any (a saved game of slice 11 has none). A kind that rebuilds
+ * its state after a load takes the season of the game from it (the larger of this and the start year). */
+int season_change_point(void);
+
 /* season_starts.c calls it around each start_new_season (this, 0 before and 1 after). */
 void season_change_start(uint32_t comp, int after);
 

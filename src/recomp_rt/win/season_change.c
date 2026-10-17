@@ -35,9 +35,13 @@
 
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
+extern const SeasonRuleKind season_kind_subs;
+extern const SeasonRuleKind season_kind_nation;
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_names,                 /* slice 16: competition names (slice 15's names table) */
+    &season_kind_subs,                  /* slice 17: substitutes used and the bench */
+    &season_kind_nation,                /* slice 17: transfer windows, foreign player limits, work permits */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))
@@ -215,6 +219,8 @@ static SeasonNews *news;
 static int news_count, news_room;
 static int hook_season = -1;            /* the season of the hook that runs now; -1: no hook runs */
 static int season_point;                /* the last season whose season point ran (0: none) */
+
+int season_change_point(void) { return season_point; }
 
 static SeasonNews *news_of(int season)
 {
