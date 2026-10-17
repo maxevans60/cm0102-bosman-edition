@@ -4,7 +4,7 @@
 Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
-    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
+    python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>] [--jobs n] [--runs a,b]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -211,6 +211,8 @@ SAME_SAVE_RUNS = [
     ("rules-off", {"faster_days": "off", "changing_rules": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
+    # The season code (0.6.0 slice 11b on, Q342): the test switch turns it off. A 2001/02 game is the same.
+    ("season-code-off", {"faster_days": "off", "_env": {"RECOMP_SEASON_CODE": "off"}}),
 ]
 
 # The match check (--match): the steps after the load of prematch.sav (fixtures.LOAD_STEPS), positions
@@ -271,6 +273,7 @@ MATCH_RUNS = [
     ("rules-on", {"changing_rules": "on"}),
     ("rules-off", {"changing_rules": "off"}),
     ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
+    ("season-code-off", {"_env": {"RECOMP_SEASON_CODE": "off"}}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
 # --match --sleep-danger adds this run: the idle sleep without its time rules (RECOMP_IDLE_SLEEP=force), so
@@ -318,6 +321,10 @@ def without_intro_click(steps):
 # --ref-build <program>: one more run, with the options of the first run, plays another build (for example the
 # build of main). For a change with no option, such as the crash guards: its save must equal the first run's.
 REF_BUILD = None
+# --jobs n: at most n games at the same time (default: all runs at once). --runs a,b,...: only these runs (the
+# first run stays first), for a short check on a busy machine.
+JOBS = 0
+ONLY_RUNS = None
 
 
 def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600, allowed=(), required=None):
@@ -327,6 +334,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     the game, Q152); a difference in any other part fails. allowed may also be a dict {run name: parts}: then
     only those runs may differ, each in its own parts. required: {run name: part}: that run's save must hold
     the part (0.6.0 slice 11: rules-on of a new game has the season part)."""
+    if ONLY_RUNS:
+        runs = [r for i, r in enumerate(runs) if i == 0 or r[0] in ONLY_RUNS]
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
 
@@ -359,7 +368,7 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
     # busy machine.
     saves = {}
     with tempfile.TemporaryDirectory(prefix="cm0102-same-save-") as work:
-        with concurrent.futures.ThreadPoolExecutor(len(runs)) as pool:
+        with concurrent.futures.ThreadPoolExecutor(min(len(runs), JOBS) if JOBS else len(runs)) as pool:
             jobs = [(name, pool.submit(play, name, options, work)) for name, options in runs]
             failed_runs = 0
             for name, job in jobs:
@@ -525,7 +534,11 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
-    global REF_BUILD
+    global REF_BUILD, JOBS, ONLY_RUNS
+    if "--jobs" in argv[3:]:
+        JOBS = int(argv[argv.index("--jobs") + 1])
+    if "--runs" in argv[3:]:
+        ONLY_RUNS = argv[argv.index("--runs") + 1].split(",")
     if "--ref-build" in argv[3:]:
         REF_BUILD = os.path.abspath(argv[argv.index("--ref-build") + 1])
     mode = "classic"
