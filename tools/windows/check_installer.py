@@ -2,6 +2,7 @@
 
 Usage:
     python3 -I tools/windows/check_installer.py <cm0102_recomp.exe> <Setup.exe> [--version X.Y.Z]
+        [--manifest <manifest file> --game-dir <folder> --nsis-log <makensis log>]
 
 Checks:
   1. The program is a PE32+ file for x86-64.
@@ -11,9 +12,14 @@ Checks:
   4. The program has an icon resource and an icon group.
   5. The file name of the setup program holds the version.
   6. The setup program exists and is not empty.
+  7. With --manifest (0.6.0 slice 12): the game folder that makensis packed (--game-dir) holds exactly the
+     files of the manifest, each with its size and SHA-256 (Seasons/rules.tsv and the season zips among
+     them), and the makensis log (-V4, --nsis-log) adds exactly those files under game, each with its size.
+     The installer packs the folder with File /r (packaging/windows/installer.nsi).
 
 Exit code 0 when all checks pass, else 1."""
 import argparse
+import hashlib
 import os
 import re
 import struct
@@ -111,6 +117,58 @@ class PE:
         return out
 
 
+def parse_manifest(path):
+    """{path: (size, sha256)} of a manifest: SHA-256, size and path, separated by tabs."""
+    out = {}
+    for line in open(path, encoding="utf-8"):
+        if not line.strip() or line.startswith("#"):
+            continue
+        digest, size, rel = line.rstrip("\n").split("\t", 2)
+        out[rel] = (int(size), digest.lower())
+    return out
+
+
+def folder_files(root):
+    out = {}
+    for dirpath, _, files in os.walk(root):
+        for f in files:
+            if f == ".DS_Store":
+                continue
+            full = os.path.join(dirpath, f)
+            h = hashlib.sha256()
+            with open(full, "rb") as fh:
+                for block in iter(lambda: fh.read(1 << 20), b""):
+                    h.update(block)
+            out[os.path.relpath(full, root).replace(os.sep, "/")] = (os.path.getsize(full), h.hexdigest())
+    return out
+
+
+def nsis_game_files(log, game_dir):
+    """{path: size} of the files that makensis -V4 adds under $INSTDIR\\game. The log has
+    'SetOutPath: "$INSTDIR\\game"', then 'File: "name" [compress] N bytes' lines, with 'File: Descending to:'
+    and 'File: Returning to:' lines for the folders."""
+    root = os.path.realpath(game_dir)
+    out, in_game, cur = {}, False, ""
+    for line in open(log, encoding="utf-8", errors="replace"):
+        line = line.strip()
+        m = re.match(r'^SetOutPath: "(.*)"$', line)
+        if m:
+            in_game = m.group(1).replace("/", "\\").lower().endswith("\\game")
+            cur = ""
+            continue
+        if not in_game:
+            continue
+        m = re.match(r'^File: (?:Descending|Returning) to: "(.*)"$', line)
+        if m:
+            cur = os.path.relpath(os.path.realpath(m.group(1)), root).replace(os.sep, "/")
+            cur = "" if cur == "." else cur
+            continue
+        m = re.match(r'^File: "([^"]+)"(?:->"[^"]*")? \[[^\]]*\] (\d+) bytes', line)
+        if m:
+            out[(cur + "/" if cur else "") + m.group(1)] = int(m.group(2))
+    return out
+
+
 def cmake_version():
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     with open(os.path.join(root, "CMakeLists.txt")) as f:
@@ -130,6 +188,9 @@ def main():
     ap.add_argument("exe")
     ap.add_argument("setup")
     ap.add_argument("--version")
+    ap.add_argument("--manifest")
+    ap.add_argument("--game-dir")
+    ap.add_argument("--nsis-log")
     args = ap.parse_args()
     version = args.version or cmake_version()
     if not check(version is not None, "version is " + str(version), "cannot find the version"):
@@ -173,6 +234,21 @@ def main():
           "setup file name %r does not hold version %s" % (name, version))
     check(os.path.isfile(args.setup) and os.path.getsize(args.setup) > 0,
           "setup file exists and has content", "setup file is missing or empty: " + args.setup)
+
+    if args.manifest:
+        want = parse_manifest(args.manifest)
+        check(bool(want) and "Seasons/rules.tsv" in want and any(k.startswith("Seasons/") and k.endswith(".zip")
+                                                              for k in want),
+              "manifest has %d files, Seasons/rules.tsv and the season zips among them" % len(want),
+              "manifest %s lacks files, Seasons/rules.tsv or the season zips" % args.manifest)
+        have = folder_files(args.game_dir) if args.game_dir else {}
+        bad = sorted(k for k in set(want) | set(have) if want.get(k) != have.get(k))
+        check(bool(args.game_dir) and not bad, "the packed game folder matches the manifest",
+              "the packed game folder differs from the manifest: %s" % bad[:10])
+        packed = nsis_game_files(args.nsis_log, args.game_dir) if args.nsis_log and args.game_dir else {}
+        bad = sorted(k for k in set(want) | set(packed) if packed.get(k) != (want[k][0] if k in want else None))
+        check(bool(packed) and not bad, "the installer packs the %d files of the manifest" % len(packed),
+              "the installer log differs from the manifest: %s" % bad[:10])
 
     print("%d check(s) failed" % len(failures) if failures else "all checks passed")
     return 1 if failures else 0
