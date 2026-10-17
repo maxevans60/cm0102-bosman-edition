@@ -16,7 +16,15 @@ gives the data in memory at the first human turn. The checks:
                that the game keeps (+0x18) is the real age on the day of the first turn.
     champions  the last row of the English Premier Division history is the season before the start, with the
                real champions (for example 2019 Manchester City in a 2019/20 game).
+    fields     the stats line of the log: 95 % of the contract ends and 80 % of the national job dates from 2
+               years before the start to 6 years after, the latest joined date in the start year or the year
+               before and a quarter of them there (not where the joined dates are real), the latest career year
+               from 2 years before the start to the start year.
+               Each check fails when the shift of its field is left out.
 Also:
+    second     the Choose Season screen: a start in 2019/20 (October 2019), Back from Select League(s), the
+               2010/11 tile, a start again: the game is a 2010/11 game with the September 2010 ODB data and
+               passes the checks above.
     base       October 2019 in a game that starts in 2001/02: nothing moves (the database plays as in 0.5.0).
     off        October 2019 in 2019/20 with RECOMP_SEASON_CODE=off: nothing moves.
     again      the 2010/11 game twice: the saves are byte for byte the same.
@@ -58,6 +66,9 @@ CHAMPIONS = {
     2020: "Liverpool", 2021: "Manchester City", 2022: "Manchester City", 2023: "Manchester City",
     2024: "Manchester City", 2025: "Liverpool",
 }
+# Referees, logged for the report only: the referees that a database added after 2001 have early years that
+# differ per referee (no rule, docs/research/2026-10-17-season-date-shifts.md), so no check.
+REFEREES = {"Michael Oliver": (20, 2, 1985), "Anthony Taylor": (20, 10, 1978), "Howard Webb": (14, 7, 1971)}
 COMP = "English Premier Division"
 MIN_PEOPLE = 5
 
@@ -88,20 +99,26 @@ def neutral_copy(work, name, src):
     return dest
 
 
-def play(program, game, work, label, year, db_folder, env=None):
+def play(program, game, work, label, year, db_folder, env=None, steps=None, season=None, more_folders=()):
     """As season_core_run.play, with the log read as Latin-1: the game's own log lines may hold the letters of
-    code page 1252 (club names)."""
-    env = dict(env or {}, RECOMP_START_SEASON=str(year),
-               RECOMP_DATES_LOG=";".join(list(PEOPLE) + ["comp:" + COMP]))
-    steps = [s + " 600000" if s in ("wait typing", "wait first-news") else s for s in scr.new_game_steps()]
+    code page 1252 (club names). year None: no RECOMP_START_SEASON (the season comes from the settings file,
+    season). more_folders: more databases in Databases (for the Choose Season screen)."""
+    env = dict(env or {}, RECOMP_DATES_LOG=";".join(list(PEOPLE) + ["ref:" + r for r in REFEREES] + ["comp:" + COMP]))
+    if year:
+        env["RECOMP_START_SEASON"] = str(year)
+    steps = [s + " 600000" if s in ("wait typing", "wait first-news") else s for s in (steps or scr.new_game_steps())]
     run = os.path.join(work, label)
     user, home, shots = (os.path.join(run, d) for d in ("user", "home", "shots"))
     for d in (user, home, shots):
         os.makedirs(d)
     settings = "display = classic\n"
+    for f in more_folders:
+        scr.cdr.copy_data(f, os.path.join(user, "Databases", os.path.basename(f)))
     if db_folder:
         scr.cdr.copy_data(db_folder, os.path.join(user, "Databases", os.path.basename(db_folder)))
         settings += f"database = folder:{os.path.basename(db_folder)}\n"
+    if season:
+        settings += f"season = {season}/{(season + 1) % 100:02d}\n"
     with open(os.path.join(user, "settings.txt"), "w") as f:
         f.write(settings)
     full = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
@@ -117,6 +134,19 @@ def play(program, game, work, label, year, db_folder, env=None):
     return (path if r.returncode == 0 and os.path.exists(path) else None), log, time.time() - start
 
 
+# Choose Season screen positions in classic mode (tests/seasons/season_screen_run.py).
+SETUP_SEASON, TILE_2010, CHOOSE, BACK = "click 613 437", "click 132 182", "click 675 573", "click 358 573"
+
+
+def second_steps():
+    """Start New Game in the season of the settings file (2019/20), Back from Select League(s), the 2010/11
+    tile of the Choose Season screen, then the new game steps."""
+    base = scr.new_game_steps()
+    i, start = base.index("wait setup") + 1, base.index("2500 click 277 177")
+    return base[:i] + ["2500 click 277 177", "wait leagues", f"3000 {BACK}", "wait setup", f"2000 {SETUP_SEASON}",
+                       "wait seasons", f"2000 {TILE_2010}", f"4000 {CHOOSE}", "wait setup 300000"] + base[start:]
+
+
 def parse(log):
     m = re.search(r"dates log: date (-?\d+)/(\d+), start year (\d+), shifts (.*)", log)
     if not m:
@@ -125,17 +155,46 @@ def parse(log):
     out = {"date": (day, year), "shifts": m.group(4).strip(), "people": {}, "comp": None}
     careers = {}
     for p in re.finditer(r"dates log: career (.+?) born (\d+)\.(\d+): (\d+) to (\d+)", log):
-        careers.setdefault((p.group(1), int(p.group(2)), int(p.group(3))), (int(p.group(4)), int(p.group(5))))
+        careers[(p.group(1), int(p.group(2)), int(p.group(3)))] = (int(p.group(4)), int(p.group(5)))   # the last
     for p in re.finditer(r"dates log: person (.+?): born (\d+)\.(\d+)\.(\d+), age (-?\d+), joined (\d+), "
                          r"contract (\d+), club (.*)", log):
         born = (int(p.group(2)), int(p.group(3)), int(p.group(4)))
         out["people"].setdefault(p.group(1), []).append(
             dict(born=born, age=int(p.group(5)), joined=int(p.group(6)), contract=int(p.group(7)),
                  club=p.group(8).strip(), career=careers.get((p.group(1), born[0], born[1]), (0, 0))))
+    out["officials"] = {}
+    for p in re.finditer(r"dates log: official (.+?): born (\d+)\.(\d+)\.(\d+)", log):
+        out["officials"].setdefault(p.group(1), []).append((int(p.group(2)), int(p.group(3)), int(p.group(4))))
+    out["stats"] = None
+    for st in re.finditer(r"dates log: stats contracts (\d+) of (\d+) in \d+ to \d+; national dates (\d+) of (\d+); "
+                          r"joined max (\d+), (\d+) in \d+ or \d+, (\d+) earlier, (\d+) later; career max (\d+)", log):
+        out["stats"] = [int(x) for x in st.groups()]          # the last: after a second shift at the creation
     c = re.search(r"dates log: competition " + re.escape(COMP) + r": (\d+) (.*?); (\d+) ", log)
     if c:
         out["comp"] = (int(c.group(1)), c.group(2))
     return out
+
+
+# Databases whose joined dates keep their real years (measured, databases-date-shifts.tsv): no joined check.
+JOINED_REAL = ("October 2003", "September 2005", "3.9.68 in 2002/03")
+
+
+def check_fields(label, res, year):
+    """The fields beside the dates of birth: contract ends, national job dates, joined dates and careers. Each
+    check fails when the shift of its field is left out. Returns the texts of the failures."""
+    bad, st = [], res["stats"]
+    if not st:
+        return ["no stats line"]
+    c_in, c_set, n_in, n_set, j_max, j_now, j_early, j_late, career_max = st
+    if c_set and c_in < 0.95 * c_set:
+        bad.append(f"contracts: only {c_in} of {c_set} end from {year - 2} to {year + 6}")
+    if n_set >= 20 and n_in < 0.8 * n_set:
+        bad.append(f"national job dates: only {n_in} of {n_set} from {year - 2} to {year + 6}")
+    if label not in JOINED_REAL and (j_max not in (year - 1, year) or j_now < (j_now + j_early + j_late) / 4):
+        bad.append(f"joined: latest {j_max}, {j_now} in {year - 1} or {year}, {j_early} earlier, {j_late} later")
+    if not year - 2 <= career_max <= year:
+        bad.append(f"careers: the latest career year is {career_max}, not {year - 2} to {year}")
+    return bad
 
 
 def game_date(day, year):
@@ -191,6 +250,9 @@ def main(argv):
     if "--no-base" not in argv and "October 2019" in dbs:
         runs.append(("base", 2001, "October 2019", None))
         runs.append(("off", 2019, "October 2019", {"RECOMP_SEASON_CODE": "off"}))
+    if "--no-base" not in argv and "September 2010 ODB" in dbs and "October 2019" in dbs:
+        # Choose Season: a start in 2019/20, Back, the 2010/11 tile, a start again (Q344, review of slice 11b).
+        runs.append(("second", 2010, "October 2019", {"_second": "September 2010 ODB"}))
     if "--no-base" not in argv and "September 2010 ODB" in dbs:
         runs.append(("again", 2010, "September 2010 ODB", None))
         if not any(x[0] == "September 2010 ODB" for x in runs):
@@ -202,11 +264,17 @@ def main(argv):
         print("FAIL  " + text, flush=True)
 
     with tempfile.TemporaryDirectory(prefix="cm0102-dates-") as work:
-        folders = {n: neutral_copy(work, n, dbs[n][1]) for n in {x[2] for x in runs if x[2]}}
+        names = {x[2] for x in runs if x[2]} | {x[3]["_second"] for x in runs if x[3] and "_second" in x[3]}
+        folders = {n: neutral_copy(work, n, dbs[n][1]) for n in names}
         with concurrent.futures.ThreadPoolExecutor(jobs_n) as pool:
-            fut = {label: pool.submit(play, program, game, work, re.sub(r"[^A-Za-z0-9]", "_", label), year,
-                                      folders.get(name), env)
-                   for label, year, name, env in runs}
+            fut = {}
+            for label, year, name, env in runs:
+                tag = re.sub(r"[^A-Za-z0-9]", "_", label)
+                if env and "_second" in env:
+                    fut[label] = pool.submit(play, program, game, work, tag, None, folders[name], None,
+                                             second_steps(), 2019, [folders[env["_second"]]])
+                else:
+                    fut[label] = pool.submit(play, program, game, work, tag, year, folders.get(name), env)
             results = {k: v.result() for k, v in fut.items()}
         for label, year, name, env in runs:
             path, log, took = results[label]
@@ -231,6 +299,15 @@ def main(argv):
                 else:
                     fail("again: the two 2010/11 saves differ or are missing")
                 continue
+            if res["date"][1] != year:
+                fail(f"{label}: the game starts in {res['date'][1]}, not {year}")
+                continue
+            wrong = check_fields(label, res, year)
+            if wrong:
+                fail(f"{label}: " + "; ".join(wrong))
+            else:
+                print(f"ok    {label}: contracts, national job dates, joined dates and careers fit {year} "
+                      f"(stats {res['stats']})")
             good, bad = check_people(res)
             if len(good) >= MIN_PEOPLE and not bad:
                 print(f"ok    {label}: {len(good)} people right on {game_date(*res['date'])}: " + "; ".join(good))

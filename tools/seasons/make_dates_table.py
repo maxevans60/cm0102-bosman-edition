@@ -72,6 +72,14 @@ def text():
             for i in range(0, len(bits), 120):
                 lines.append(f'    "{bits[i:i + 120]}"' + (";" if i + 120 >= len(bits) else ""))
         rows.append((name, vals, f"last_{ident}" if ids else "0", len(ids), nrows, f"kept_{ident}" if nrows else "0"))
+    names = {r[0] for r in rows}
+    for name in sorted((set(last) | set(kept)) - names):
+        print(f"make_dates_table.py: warning: {name!r} has last rows or kept careers but no row in "
+              "databases-date-shifts.tsv: dropped", file=sys.stderr)
+    with_season = {r["database"] for r in read("databases-signatures.tsv") if r["data_season"] != "none"}
+    for name in sorted(with_season - names):
+        print(f"make_dates_table.py: warning: {name!r} of databases-signatures.tsv has no shift row: "
+              "the game moves none of its dates", file=sys.stderr)
     lines += ["", "const SeasonDateShifts season_date_shifts[] = {"]
     for name, vals, lname, lcount, nrows, kname in rows:
         lines.append(f'    {{"{name}", {", ".join(map(str, vals))}, {lcount}, {lname}, {nrows}u, {kname}}},')

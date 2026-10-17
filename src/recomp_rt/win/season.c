@@ -20,6 +20,7 @@
  * proof: docs/research/2026-10-17-season-save-part.md. */
 #include "win.h"
 #include "season.h"
+#include "season_dates.h"
 #include "options.h"
 #include "../host.h"
 
@@ -303,6 +304,7 @@ void o_0082a9c0(void);
  * before any code of the load runs: the load builds the league table from the game year (0x82b845). */
 RT_WRAP(0082a9c0, load_game)
 {
+    season_dates_forget();                      /* slice 11b: the data comes from the save */
     if (!season_code_on()) {
         o_0082a9c0();
         if (!rt_unwinding && cpu.eax) game_on = 1;
@@ -345,6 +347,7 @@ RT_WRAP(00828110, create_game)
 {
     rt_season_year = (uint32_t)new_year;
     rules_now = !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
+    season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
     o_00828110();
     if (!rt_unwinding && cpu.eax) game_on = 1;
 }
@@ -356,6 +359,7 @@ void o_0082ff40(void);
 RT_WRAP(0082ff40, free_game)
 {
     game_on = 0;
+    season_dates_forget();
     rt_season_year = (uint32_t)new_year;
     rules_now = 0;
     o_0082ff40();
