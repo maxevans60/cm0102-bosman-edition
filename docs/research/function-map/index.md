@@ -9,8 +9,8 @@ All 11747 functions with their category, file and placement method are in `funct
 
 - Game functions: 6609. Library without asserts: 254.
 - Not named, by category: 3873 unwind funclets (each belongs to its parent, shown as "+n unwind"), 624 exception handler stubs, 387 C runtime functions.
-- Confidence: 4996 high, 1708 medium, 159 low, 0 without a name.
-- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27, sweep-w28, sweep-w29, sweep-w30, sweep-w31.
+- Confidence: 5058 high, 1692 medium, 113 low, 0 without a name.
+- Runs: haiku-2026-10-16, haiku-2, slot-copy, sweep-league, sweep-cup, sweep-hubs, sweep-t1a, sweep-t1b, sweep-w03, sweep-w04, sweep-w05, sweep-w06, sweep-w07, sweep-w08, sweep-w09, sweep-w10, sweep-w11, sweep-w12, sweep-w13, sweep-w14, sweep-w15, sweep-w16, sweep-w17, sweep-w18, sweep-w19, sweep-w20, sweep-w21, sweep-w22, sweep-w23, sweep-w24, sweep-w25, sweep-w26, sweep-w27, sweep-w28, sweep-w29, sweep-w30, sweep-w31, sweep-lib-a.
 - Quality of the Haiku first pass: see "First pass" in `../2026-10-16-function-map-estimate.md`.
 
 | File | Functions |

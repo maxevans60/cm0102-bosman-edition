@@ -1342,6 +1342,16 @@ The merge needed no fixes. `training_screens.cpp` holds one destructor each of `
 | 0x90d140 | Named in 2026-10-14-game-creation-inventory.md | `find_cd_and_load_config` (Haiku) | `VIRTUAL_STAFF::VIRTUAL_STAFF` | agrees |
 | 0x90e760 | Named in 2026-10-14-widescreen-inventory.md | `virtual_staff_slot_coords` (Haiku) | `VIRTUAL_STAFF::get_id_block` | agrees in area |
 
+#### Wave lib-a (tier 6, Sonnet, 2026-10-17)
+
+Run `sweep-lib-a`: 5 Sonnet agents named the first 125 of the 250 library functions without asserts (0x933a00 to 0x939f50). Max chose Sonnet for tier 6 on 2026-10-17, so these rows carry `sonnet` in the model column. Each agent took 1 to 3 minutes and 98,000 to 112,000 tokens. Confidence: 63 high, 45 medium, 17 low.
+
+The agents found that this part of the library is font code: a glyph hinter that works in 26.6 fixed point, and a TrueType bytecode interpreter. One agent decoded the opcode table that `tt_init_opcode_table` (0x9375d0) fills, and the handler names follow the TrueType instruction in each slot. The Haiku names (match engine, audio, zlib, PE relocation) were all wrong. 0x933a00 is the one zip helper, `zipdir_match_filename_pattern`. No string confirms that the font code is TrueType, so the agents give low or medium confidence where only the fixed-point formats and the table order support the name.
+
+The merge needed one fix. The agents used five prefixes for two pieces of code. The rows now use `glyph_hint_` for the hinter context functions, `tt_` for the interpreter and `tt_op_<opcode>` for the opcode handlers.
+
+No function of the run is cited.
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
