@@ -3899,207 +3899,207 @@ address	file	name	confidence	model	cited_in
 0x6d60b0	match_events.cpp	Match_Events::combine_with_previous_event	medium	opus	
 0x6d6f70	match_events.cpp	Match_Events::add_event	medium	opus	2026-10-14-violent-conduct-inventory.md
 0x6d78b0	match_events.cpp	Match_Events::get_next_event	high	opus	2026-10-15-commentary-speed-inventory.md
-0x6d7b00	match_events.cpp	match_events_format_text_token	medium	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md,commentary.c
-0x6d8c70	match_events.cpp	match_events_check_order_ready	medium	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md,dsound.c,user32.c
-0x6d8d10	match_events.cpp	match_events_expand_message_template	high	haiku	
-0x6d98b0	match_events.cpp	match_events_open_tmp_file	high	haiku	
-0x6d9c40	match_events.cpp	match_events::load_events_tmp	high	haiku	
-0x6d9e50	match_events.cpp	match_event_handler_read_config	high	haiku	2026-10-14-violent-conduct-inventory.md
-0x6db2d0	match_events.cpp	match_events::report_referee_and_lineup_changes	medium	haiku	
-0x6db500	match_man.cpp	CM3_MATCH_ENGINE::init_match_player	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,picker.c
-0x6dbb10	match_man.cpp	match_man_order_tactic_check	medium	haiku	
-0x6dbb80	match_man.cpp	match_man_count_eligible_players	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
-0x6dbc50	match_man.cpp	CM3_MATCH_ENGINE::build_match_lineups	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-16-foreign-and-tactics-positions.md,picker.c
-0x6ddab0	match_man.cpp	match_man_tactical_step	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-15-assistant-pick-inventory.md
-0x6df460	match_man.cpp	match_man_score_next_action	medium	haiku	2026-10-15-assistant-pick-inventory.md
-0x6e0230	match_man.cpp	CM3_MATCH_ENGINE::select_team_tactic_score_tables	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-16-tactics-inventory.md
-0x6e0d00	match_man.cpp	CM3_MATCH_ENGINE::place_player_in_team	high	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
-0x6e0df0	match_man.cpp	match_man_compare_player_score	medium	haiku	
-0x6e0fe0	match_man.cpp	match_man_compare_players_for_sort	medium	haiku	
-0x6e1090	match_man.cpp	match_man_assign_players_to_slots	high	haiku	2026-10-14-assistant-and-days-inventory.md
-0x6e1940	match_man.cpp	match_man_best_candidate_player	medium	haiku	2026-10-15-assistant-pick-inventory.md,picker.c
-0x6e1a40	match_man.cpp	match_man_best_slot_for_player	medium	haiku	
-0x6e1aa0	match_man.cpp	match_man_assign_substitute_positions	medium	haiku	2026-10-14-assistant-and-days-inventory.md
-0x6e1cd0	match_man.cpp	match_man_find_player_by_id	medium	haiku	
-0x6e1cf0	match_man.cpp	match_man_player_rating_check	low	haiku	2026-10-15-assistant-pick-inventory.md,picker.c
-0x6e2000	match_man.cpp	match_man_assign_players_to_positions	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,picker.c
-0x6e2f20	match_man.cpp	match_man_score_player_for_role	medium	haiku	2026-10-15-assistant-pick-inventory.md,picker.c
-0x6e4920	match_man.cpp	match_man_compute_player_rating_for_match	medium	haiku	
-0x6e4b20	match_man.cpp	match_man_compute_player_rating	low	haiku	
-0x6e6340	match_man.cpp	match_man_score_player_for_selection	medium	haiku	
-0x6e6550	match_man.cpp	match_man_compute_player_rating	medium	haiku	
-0x6e6920	match_man.cpp	match_man_rate_action_score	medium	haiku	
-0x6e6f20	match_man.cpp	match_man_score_player_action	medium	haiku	
-0x6e86d0	match_man.cpp	match_man_roll_player_rating	low	haiku	
-0x6e8910	match_man.cpp	match_man_assign_substitutes	medium	haiku	2026-10-15-assistant-pick-inventory.md
-0x6e9460	match_man.cpp	match_man_zero_pair	medium	haiku	
-0x6e9470	match_man.cpp	match_man_init_rating_weight	medium	haiku	
-0x6e9540	match_man.cpp	match_man_check_substitute_candidate	medium	haiku	
-0x6e9630	match_man.cpp	match_man_decide_action	medium	haiku	
-0x6e9820	match_man.cpp	match_man_score_shot_attempt	medium	haiku	
-0x6ea4e0	match_man.cpp	match_man_resolve_shot_attempt	medium	haiku	
-0x6ea760	match_official.cpp	match_official_select_referee	medium	haiku	
-0x6eab60	match_official.cpp	match_official_shot_resolve	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x6eada0	match_official.cpp	match_official_reset_state	medium	haiku	
-0x6eaea0	match_official.cpp	CM3_MATCH_ENGINE::setup_non_playing_staff	high	haiku	2026-10-15-assistant-pick-inventory.md
-0x6ebd60	match_official.cpp	match_engine_clear_field_0x19e	low	haiku	
-0x6ebd70	match_official.cpp	match_pl_apply_team_contract_state	medium	haiku	
-0x6ec010	match_official.cpp	match_official_compute_player_ratings	medium	haiku	2026-10-14-game-creation-inventory.md,2026-10-16-crash-fixes.md
-0x6eecb0	match_official.cpp	match_official_compute_player_attributes	medium	haiku	2026-10-16-crash-fixes.md
-0x6f0970	match_official.cpp	match_state_reset	medium	haiku	
+0x6d7b00	match_events.cpp	Match_Events::show_event_text	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md,commentary.c
+0x6d8c70	match_events.cpp	Match_Events::is_line_finished	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-15-commentary-speed-inventory.md,dsound.c,user32.c
+0x6d8d10	match_events.cpp	Match_Events::build_report_text	medium	opus	
+0x6d98b0	match_events.cpp	Match_Events::save_event_log	high	opus	
+0x6d9c40	match_events.cpp	Match_Events::load_event_log	high	opus	
+0x6d9e50	match_events.cpp	match_events_read_config	high	opus	2026-10-14-violent-conduct-inventory.md
+0x6db2d0	match_events.cpp	match_events_format_player_name	medium	opus	
+0x6db500	match_man.cpp	MATCH_MAN::init	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,picker.c
+0x6dbb10	match_man.cpp	MATCH_MAN::save_team_selection	medium	opus	
+0x6dbb80	match_man.cpp	MATCH_MAN::place_selected_players	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
+0x6dbc50	match_man.cpp	MATCH_MAN::pick_team	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-16-foreign-and-tactics-positions.md,picker.c
+0x6ddab0	match_man.cpp	MATCH_MAN::set_computer_instructions	medium	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-15-assistant-pick-inventory.md
+0x6df460	match_man.cpp	MATCH_MAN::choose_mentality	medium	opus	2026-10-15-assistant-pick-inventory.md
+0x6e0230	match_man.cpp	MATCH_MAN::choose_computer_tactic	medium	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,2026-10-16-tactics-inventory.md
+0x6e0d00	match_man.cpp	MATCH_MAN::place_player_in_team	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md
+0x6e0df0	match_man.cpp	match_man_compare_players_by_weighted_condition	medium	opus	
+0x6e0fe0	match_man.cpp	match_man_compare_players_by_condition	medium	opus	
+0x6e1090	match_man.cpp	MATCH_MAN::make_substitutions	high	opus	2026-10-14-assistant-and-days-inventory.md
+0x6e1940	match_man.cpp	MATCH_MAN::choose_captain	high	opus	2026-10-15-assistant-pick-inventory.md,picker.c
+0x6e1a40	match_man.cpp	MATCH_MAN::find_captain_slot	medium	opus	
+0x6e1aa0	match_man.cpp	MATCH_MAN::reassign_positions	medium	opus	2026-10-14-assistant-and-days-inventory.md
+0x6e1cd0	match_man.cpp	MATCH_MAN::find_match_player	high	opus	
+0x6e1cf0	match_man.cpp	match_man_get_captain_score	high	opus	2026-10-15-assistant-pick-inventory.md,picker.c
+0x6e2000	match_man.cpp	match_man_assign_players_to_positions	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-15-assistant-pick-inventory.md,picker.c
+0x6e2f20	match_man.cpp	match_man_score_player_for_role	high	opus	2026-10-15-assistant-pick-inventory.md,picker.c
+0x6e4920	match_man.cpp	match_man_score_player_for_role_fragment_6e4920	high	opus	
+0x6e4b20	match_man.cpp	match_man_score_player_for_role_fragment_6e4b20	high	opus	
+0x6e6340	match_man.cpp	match_man_score_player_for_selection	medium	opus	
+0x6e6550	match_man.cpp	match_man_score_player_for_selection_fragment_6e6550	high	opus	
+0x6e6920	match_man.cpp	match_man_score_player_for_selection_fragment_6e6920	high	opus	
+0x6e6f20	match_man.cpp	match_man_score_player_for_selection_fragment_6e6f20	high	opus	
+0x6e86d0	match_man.cpp	match_man_judge_player_ability	high	opus	
+0x6e8910	match_man.cpp	match_man_apply_squad_restriction	medium	opus	2026-10-15-assistant-pick-inventory.md
+0x6e9460	match_official.cpp	MATCH_OFFICIAL::MATCH_OFFICIAL	high	opus	
+0x6e9470	match_official.cpp	MATCH_OFFICIAL::init	high	opus	
+0x6e9540	match_official.cpp	MATCH_OFFICIAL::check_foul	medium	opus	
+0x6e9630	match_official.cpp	MATCH_OFFICIAL::decide_booking	medium	opus	
+0x6e9820	match_official.cpp	MATCH_OFFICIAL::judge_tackle	medium	opus	
+0x6ea4e0	match_official.cpp	MATCH_OFFICIAL::decide_foul_punishment	medium	opus	
+0x6ea760	match_official.cpp	MATCH_OFFICIAL::find_offside_player	medium	opus	
+0x6eab60	match_official.cpp	MATCH_OFFICIAL::decide_card	high	opus	2026-10-14-violent-conduct-inventory.md
+0x6eada0	match_pl.cpp	MATCH_PLAYER::MATCH_PLAYER	high	opus	
+0x6eaea0	match_pl.cpp	MATCH_PLAYER::setup	high	opus	2026-10-15-assistant-pick-inventory.md
+0x6ebd60	match_pl.cpp	MATCH_PLAYER::~MATCH_PLAYER	high	opus	
+0x6ebd70	match_pl.cpp	MATCH_PLAYER::calc_influence_score	low	opus	
+0x6ec010	match_pl.cpp	MATCH_PLAYER::calc_match_attributes	medium	opus	2026-10-14-game-creation-inventory.md,2026-10-16-crash-fixes.md
+0x6eecb0	match_pl.cpp	MATCH_PLAYER::calc_ratings	medium	opus	2026-10-16-crash-fixes.md
 0x6f0630	match_pl.cpp	MATCH_PLAYER::take_possession	medium	opus	
+0x6f0970	match_pl.cpp	MATCH_PLAYER::release_possession	medium	opus	
 0x6f09b0	match_pl.cpp	MATCH_PLAYER::distance_to_cell	medium	opus	
-0x6f09f0	match_pl.cpp	MATCH_PLAYER::move_to	high	haiku	
-0x6f44a0	match_pl.cpp	MATCH_PLAYER::derive_ratings	medium	haiku	
-0x6f4600	match_pl.cpp	match_player_get_position_slot_byte	medium	haiku	
-0x6f4650	match_pl.cpp	match_player_in_attacking_state_check	medium	haiku	
-0x6f46b0	match_pl.cpp	MATCH_PLAYER::move_to_grid_cell	high	haiku	
-0x6f4920	match_pl.cpp	MATCH_PLAYER::set_facing_direction	medium	haiku	
-0x6f4a30	match_pl.cpp	match_player_get_field_19a	medium	haiku	
-0x6f4a40	match_pl.cpp	match_pl_get_side_flag	medium	haiku	
-0x6f4a70	match_pl.cpp	match_player_flag_byte_select	medium	haiku	
-0x6f4aa0	match_pl.cpp	match_player_update_morale_or_fatigue	medium	haiku	
-0x6f55c0	match_pl.cpp	MATCH_PLAYER::update_stamina_and_fatigue	medium	haiku	
-0x6f56c0	match_pl.cpp	MATCH_PLAYER::drain_stamina	medium	haiku	
-0x6f5810	match_pl.cpp	MATCH_PLAYER::update_stamina_and_position	medium	haiku	
-0x6f5b20	match_pl.cpp	MATCH_PLAYER::is_in_position_band	medium	haiku	
-0x6f5b80	match_pl.cpp	MATCH_PLAYER::step_position	medium	haiku	
-0x6f5c30	match_pl.cpp	MATCH_PLAYER::shot_decision	medium	haiku	
-0x6f6570	match_pl.cpp	match_pl_check_pass_event	medium	haiku	
-0x6f6c00	match_pl.cpp	MATCH_PLAYER::decide_action	high	haiku	
-0x6f9f90	match_pl.cpp	match_player_can_turn_to_direction	medium	haiku	
-0x6fa140	match_pl.cpp	match_player_can_turn_to_direction	medium	haiku	
-0x6fa1e0	match_pl.cpp	match_player_position_weight	medium	haiku	
-0x6fa250	match_pl.cpp	match_pl_attempt_pass_or_shot	medium	haiku	
-0x6fa490	match_pl.cpp	match_player_choose_shot_target_and_attempt	medium	haiku	
-0x6fad40	match_pl.cpp	match_player_pass_action	high	haiku	
-0x6fe364	match_pl.cpp	MATCH_PLAYER::resolve_shot_or_pass_action	medium	haiku	
-0x7002f0	match_pl.cpp	match_player_forward_add_event	medium	haiku	
-0x700320	match_pl.cpp	match_player_get_flag_8ea7	medium	haiku	
-0x700330	match_pl.cpp	match_player_get_flag_8ea8	medium	haiku	
-0x700340	match_pl.cpp	match_player_get_flag_8ea9	medium	haiku	
-0x700350	match_pl.cpp	MATCH_PLAYER::set_flag_0x8ea9	medium	haiku	
-0x700360	match_pl.cpp	MATCH_PLAYER::set_flag_0x8ea7	medium	haiku	
-0x700370	match_pl.cpp	MATCH_PLAYER::set_flag_0x8ea8	medium	haiku	
-0x700380	match_pl.cpp	match_player_get_flag_8eaa	medium	haiku	
-0x700390	match_pl.cpp	MATCH_PLAYER::set_flag_8eaa	medium	haiku	
-0x7003a0	match_pl.cpp	MATCH_PLAYER::set_field_8ed8	medium	haiku	
-0x7003b0	match_pl.cpp	MATCH_PLAYER::set_current_pass_target	medium	haiku	
-0x700400	match_pl.cpp	match_player_get_flag_8eb2	medium	haiku	
-0x700410	match_pl.cpp	match_player_get_field_8f7a	medium	haiku	
-0x700420	match_pl.cpp	MATCH_PLAYER::score_pass_option	medium	haiku	
-0x700bd0	match_pl.cpp	MATCH_PLAYER::get_shot_score	high	haiku	
-0x702050	match_pl.cpp	match_player_resolve_action	medium	haiku	
-0x707520	match_pl.cpp	match_pl_shot_or_pass_resolve	medium	haiku	
-0x70a860	match_pl.cpp	match_player_event_forward	medium	haiku	
-0x70a890	match_pl.cpp	MATCH_PLAYER::set_clamped_field_19c	high	haiku	
-0x70a8c0	match_pl.cpp	is_special_action_code	medium	haiku	
-0x70a910	match_pl.cpp	match_pl::end_of_match_commentary_tick	medium	haiku	
-0x70c040	match_pl.cpp	match_pl_play_chance_event	medium	haiku	
-0x70d430	match_pl.cpp	match_pl_injury_or_foul_roll	medium	haiku	
-0x70d630	match_pl.cpp	match_player_pass_threshold_check	low	haiku	
-0x70d690	match_pl.cpp	match_player_pass_or_shot_score	medium	haiku	
-0x70def0	match_pl.cpp	match_player_is_shot_eligible	medium	haiku	
-0x70df20	match_pl.cpp	match_player_is_out_of_range_position	medium	haiku	
-0x70df40	match_pl.cpp	match_player_is_active_slot	medium	haiku	
-0x70df70	match_pl.cpp	match_player_is_in_range	medium	haiku	
-0x70dfa0	match_pl.cpp	match_player_is_active_state	medium	haiku	
-0x70dfd0	match_pl.cpp	MATCH_PLAYER::attempt_action_or_shot	medium	haiku	
-0x70ec80	match_pl.cpp	match_pl_decide_action_and_play_event	medium	haiku	
-0x7103c0	match_pl.cpp	match_player_is_linked_to_player_0x19e	medium	haiku	
-0x7103e0	match_pl.cpp	MATCH_PLAYER::decide_action_order	medium	haiku	
-0x7109f0	match_pl.cpp	match_pl_decide_action_and_play_event_dispatch	medium	haiku	
-0x713d90	match_pl.cpp	match_pl_is_pass_viable	medium	haiku	
-0x713e90	match_pl.cpp	match_pl_compute_turn_direction	medium	haiku	
-0x713fc0	match_pl.cpp	MATCH_PLAYER::decide_action	high	haiku	
-0x714c60	match_pl.cpp	MATCH_PLAYER::has_entry	medium	haiku	
-0x714ca0	match_pl.cpp	MATCH_PLAYER::remove_from_list	medium	haiku	
-0x714d00	match_pl.cpp	match_player_is_low_stamina_flag	medium	haiku	
+0x6f09f0	match_pl.cpp	MATCH_PLAYER::move_to	high	opus	
+0x6f44a0	match_pl.cpp	MATCH_PLAYER::roll_current_ratings	medium	opus	
+0x6f4600	match_pl.cpp	MATCH_PLAYER::get_marking_rating	medium	opus	
+0x6f4650	match_pl.cpp	MATCH_PLAYER::can_see_opponent_goal	medium	opus	
+0x6f46b0	match_pl.cpp	MATCH_PLAYER::move_to_grid_cell	high	opus	
+0x6f4920	match_pl.cpp	MATCH_PLAYER::set_facing_direction	medium	opus	
+0x6f4a30	match_pl.cpp	MATCH_PLAYER::get_facing_angle	high	opus	
+0x6f4a40	match_pl.cpp	MATCH_PLAYER::get_own_team_goals	medium	opus	
+0x6f4a70	match_pl.cpp	MATCH_PLAYER::get_opposition_goals	medium	opus	
+0x6f4aa0	match_pl.cpp	MATCH_PLAYER::update_match_rating	medium	opus	
+0x6f55c0	match_pl.cpp	MATCH_PLAYER::update_ratings_and_condition	medium	opus	
+0x6f56c0	match_pl.cpp	MATCH_PLAYER::drain_stamina	medium	opus	
+0x6f5810	match_pl.cpp	MATCH_PLAYER::recover_condition_at_break	medium	opus	
+0x6f5b20	match_pl.cpp	MATCH_PLAYER::is_in_penalty_area	high	opus	
+0x6f5b80	match_pl.cpp	MATCH_PLAYER::drop_back_one_row	medium	opus	
+0x6f5c30	match_pl.cpp	MATCH_PLAYER::try_intercept_ball	medium	opus	
+0x6f6570	match_pl.cpp	MATCH_PLAYER::try_intercept_ball_fragment_6f6570	high	opus	
+0x6f6c00	match_pl.cpp	MATCH_PLAYER::receive_ball	medium	opus	
+0x6f9f90	match_pl.cpp	MATCH_PLAYER::is_cell_in_view	medium	opus	
+0x6fa140	match_pl.cpp	MATCH_PLAYER::is_cell_within_turn_arc	medium	opus	
+0x6fa1e0	match_pl.cpp	MATCH_PLAYER::distance_to_opponent_goal	medium	opus	
+0x6fa250	match_pl.cpp	MATCH_PLAYER::play_pass_to	medium	opus	
+0x6fa490	match_pl.cpp	MATCH_PLAYER::play_ball_into_area	low	opus	
+0x6fad40	match_pl.cpp	MATCH_PLAYER::pass	high	opus	
+0x6fe364	match_pl.cpp	MATCH_PLAYER::pass_fragment_6fe364	high	opus	
+0x7002f0	match_pl.cpp	match_add_event_no_players	medium	opus	
+0x700320	match_pl.cpp	match_engine_get_ball_col	medium	opus	
+0x700330	match_pl.cpp	match_engine_get_ball_row	medium	opus	
+0x700340	match_pl.cpp	match_engine_get_ball_height	low	opus	
+0x700350	match_pl.cpp	match_engine_set_ball_height	low	opus	
+0x700360	match_pl.cpp	match_engine_set_ball_col	high	opus	
+0x700370	match_pl.cpp	match_engine_set_ball_row	high	opus	
+0x700380	match_pl.cpp	match_engine_get_ball_roll	high	opus	
+0x700390	match_pl.cpp	match_engine_set_ball_roll	high	opus	
+0x7003a0	match_pl.cpp	match_engine_set_ball_direction	high	opus	
+0x7003b0	match_pl.cpp	match_engine_set_possession_side	high	opus	
+0x700400	match_pl.cpp	match_engine_get_stoppage_type	high	opus	
+0x700410	match_pl.cpp	match_engine_get_match_events	high	opus	
+0x700420	match_pl.cpp	MATCH_PLAYER::get_save_score	medium	opus	
+0x700bd0	match_pl.cpp	MATCH_PLAYER::get_shot_score	high	opus	
+0x702050	match_pl.cpp	MATCH_PLAYER::take_shot	high	opus	
+0x707520	match_pl.cpp	MATCH_PLAYER::take_shot_fragment_707520	high	opus	
+0x70a860	match_pl.cpp	match_events_add_side_event	high	opus	
+0x70a890	match_pl.cpp	MATCH_PLAYER::set_action_strength	medium	opus	
+0x70a8c0	match_pl.cpp	is_free_run_action_code	low	opus	
+0x70a910	match_pl.cpp	MATCH_PLAYER::resolve_fluke_goal_chance	high	opus	
+0x70c040	match_pl.cpp	MATCH_PLAYER::resolve_own_goal_chance	high	opus	
+0x70d430	match_pl.cpp	MATCH_PLAYER::keeper_try_catch	high	opus	
+0x70d630	match_pl.cpp	MATCH_PLAYER::is_last_defender	medium	opus	
+0x70d690	match_pl.cpp	MATCH_PLAYER::get_challenge_score	medium	opus	
+0x70def0	match_pl.cpp	MATCH_PLAYER::is_in_own_third	medium	opus	
+0x70df20	match_pl.cpp	MATCH_PLAYER::is_on_wing	medium	opus	
+0x70df40	match_pl.cpp	MATCH_PLAYER::is_in_attacking_third	medium	opus	
+0x70df70	match_pl.cpp	MATCH_PLAYER::is_in_attacking_quarter	medium	opus	
+0x70dfa0	match_pl.cpp	MATCH_PLAYER::is_in_own_half	medium	opus	
+0x70dfd0	match_pl.cpp	MATCH_PLAYER::try_block_shot	high	opus	
+0x70ec80	match_pl.cpp	MATCH_PLAYER::hold_ball	medium	opus	
+0x7103c0	match_pl.cpp	MATCH_PLAYER::has_ball	high	opus	
+0x7103e0	match_pl.cpp	MATCH_PLAYER::take_turn	medium	opus	
+0x7109f0	match_pl.cpp	MATCH_PLAYER::decide_ball_action	medium	opus	
+0x713d90	match_pl.cpp	MATCH_PLAYER::is_goal_side_of_cell	medium	opus	
+0x713e90	match_pl.cpp	MATCH_PLAYER::choose_kicking_foot	high	opus	
+0x713fc0	match_pl.cpp	MATCH_PLAYER::choose_attacking_off_ball_move	medium	opus	
+0x714c60	match_pl.cpp	MATCH_PLAYER::is_marked_by	high	opus	
+0x714ca0	match_pl.cpp	MATCH_PLAYER::remove_marker	high	opus	
+0x714d00	match_pl.cpp	MATCH_PLAYER::is_ball_in_own_half	medium	opus	
 0x714d30	match_pl.cpp	MATCH_PLAYER::get_side	high	opus	
-0x714d40	match_pl.cpp	MATCH_PLAYER::decide_action	high	haiku	
-0x715f30	match_pl.cpp	match_player_get_match_rating_delta_if_active	medium	haiku	
-0x715f50	match_pl.cpp	MATCH_PLAYER::get_action_weight	medium	haiku	
-0x7160d0	match_pl.cpp	MATCH_PLAYER::add_to_field_0x2b	medium	haiku	
-0x7160e0	match_pl.cpp	MATCH_PLAYER::set_field_2b	medium	haiku	
-0x7160f0	match_pl.cpp	match_player_find_marker_for_pass_target	medium	haiku	
-0x716270	match_pl.cpp	match_player_check_action_allowed	low	haiku	
-0x716310	match_pl.cpp	match_player_position_flags_check	low	haiku	
-0x7163c0	match_pl.cpp	match_player_get_formation_position	low	haiku	
-0x7163f0	match_pl.cpp	match_player_is_in_formation_slot	medium	haiku	
-0x716450	match_pl.cpp	match_player_scale_fatigue_factor	medium	haiku	
-0x7164b0	match_pl.cpp	match_player_check_threshold	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x7165b0	match_pl.cpp	match_player_clear_if_current_action	low	haiku	
-0x716630	match_pl.cpp	MATCH_PLAYER::try_shot_or_pass_action	medium	haiku	2026-10-14-violent-conduct-inventory.md
-0x716c90	match_pl.cpp	MATCH_PLAYER::dispatch_action_by_type	medium	haiku	
-0x716e10	match_pl.cpp	MATCH_PLAYER::resolve_shot_outcome	medium	haiku	2026-10-14-assistant-and-days-inventory.md,2026-10-14-violent-conduct-inventory.md
-0x7172d0	match_pl.cpp	MATCH_PLAYER::adjust_form	medium	haiku	
-0x717400	match_pl.cpp	match_player_get_field_1bc_word	medium	haiku	
+0x714d40	match_pl.cpp	MATCH_PLAYER::choose_defensive_off_ball_move	medium	opus	
+0x715f30	match_pl.cpp	MATCH_PLAYER::get_offside_margin	high	opus	
+0x715f50	match_pl.cpp	MATCH_PLAYER::bias_target_column	medium	opus	
+0x7160d0	match_pl.cpp	MATCH_PLAYER::add_action_delay	medium	opus	
+0x7160e0	match_pl.cpp	MATCH_PLAYER::set_action_delay	medium	opus	
+0x7160f0	match_pl.cpp	MATCH_PLAYER::find_man_marking_target	high	opus	
+0x716270	match_pl.cpp	MATCH_PLAYER::get_attacking_set_piece_role	medium	opus	
+0x716310	match_pl.cpp	MATCH_PLAYER::get_defending_set_piece_role	medium	opus	
+0x7163c0	match_pl.cpp	MATCH_PLAYER::get_instructions	high	opus	
+0x7163f0	match_pl.cpp	MATCH_PLAYER::has_marking_priority_flag	low	opus	
+0x716450	match_pl.cpp	MATCH_PLAYER::scale_anger	high	opus	
+0x7164b0	match_pl.cpp	MATCH_PLAYER::passes_anger_check	high	opus	2026-10-14-violent-conduct-inventory.md
+0x7165b0	match_pl.cpp	MATCH_PLAYER::get_foul_chance	medium	opus	
+0x716630	match_pl.cpp	MATCH_PLAYER::start_fight	high	opus	2026-10-14-violent-conduct-inventory.md
+0x716c90	match_pl.cpp	MATCH_PLAYER::handle_suspected_dive	high	opus	
+0x716e10	match_pl.cpp	MATCH_PLAYER::react_to_foul_decision	high	opus	2026-10-14-assistant-and-days-inventory.md,2026-10-14-violent-conduct-inventory.md
+0x7172d0	match_pl.cpp	MATCH_PLAYER::adjust_morale	high	opus	
+0x717400	match_pl.cpp	MATCH_PLAYER::get_starting_position	medium	opus	
 0x717410	match_pl.cpp	MATCH_PLAYER::get_position	medium	opus	2026-10-14-assistant-and-days-inventory.md
-0x717430	match_pl.cpp	match_player_get_rating_if_active	medium	haiku	
-0x717450	match_pl.cpp	match_player_forward_if_active	medium	haiku	2026-10-14-assistant-and-days-inventory.md
-0x717470	match_pl.cpp	MATCH_PLAYER::check_action_trigger	medium	haiku	2026-10-14-widescreen-inventory.md
-0x717c70	match_pl.cpp	match_player_has_flag_0x880	medium	haiku	
-0x717cc0	match_screens.cpp	match_screens_show_fixtures_or_assert	high	haiku	2026-10-14-assistant-and-days-inventory.md
-0x717db0	match_screens.cpp	match_screens_build_fixtures_panel	high	haiku	
-0x718930	match_screens.cpp	match_screens_dispatch_fixture_selection	medium	haiku	2026-10-14-assistant-and-days-inventory.md
-0x718aa0	match_screens.cpp	match_screens_init_window_or_assert	medium	haiku	2026-10-14-columns-and-colours-inventory.md
-0x718e90	match_screens.cpp	match_screens_draw_match_overview	high	haiku	2026-10-15-commentary-speed-inventory.md,2026-10-16-options-screen.md,build-brief-0.3.0.md
-0x71a240	match_screens.cpp	match_screens_handle_matchday_input	medium	haiku	2026-10-15-commentary-speed-inventory.md,commentary.c
-0x71b120	match_screens.cpp	close_match_screen_windows	medium	haiku	
-0x71b1b0	match_screens.cpp	match_screens_open_fixture_window	medium	haiku	
-0x71b300	match_screens.cpp	match_screens_show_latest_scores_screen	high	haiku	
-0x71b3d0	match_screens.cpp	match_screens_enter_state	medium	haiku	
-0x71b4a0	match_screens.cpp	match_screens_open_screen_with_config	medium	haiku	2026-10-14-clickable-names-inventory.md,2026-10-14-columns-and-colours-inventory.md
-0x71b630	match_screens.cpp	match_screens_dispatch_view	high	haiku	
-0x71bdc0	match_screens.cpp	match_screens_check_fixture_action	medium	haiku	
-0x71c170	match_screens.cpp	match_screens_release_slot_handles	medium	haiku	
-0x71c270	match_screens.cpp	match_screens_draw_match_report	high	haiku	2026-10-14-clickable-names-inventory.md,2026-10-14-columns-and-colours-inventory.md
-0x71d9e0	match_screens.cpp	match_screens_draw_possession_bars	medium	haiku	display.c
-0x71dd70	match_screens.cpp	match_screen_entry_copy	medium	haiku	
-0x71df00	match_screens.cpp	match_report_entry_copy_ctor	medium	haiku	
-0x71e040	match_screens.cpp	match_screens_build_stats_grid	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x71e750	match_screens.cpp	match_screens_diff_and_send_team_stat_fields	medium	haiku	
-0x71f500	match_screens.cpp	match_screens_draw_shot_zone_panel	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x720320	match_screens.cpp	match_screens_update_live_panels	high	haiku	2026-10-14-widescreen-inventory.md
-0x721000	match_screens.cpp	match_screens_show_match_report	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x7217a0	match_screens.cpp	match_screens_draw_team_stats_table	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x721cd0	match_screens.cpp	match_screens_fill_event_rows	high	haiku	
-0x722dc0	match_screens.cpp	match_screens_advance_live_match_selection	medium	haiku	
-0x722ed0	match_screens.cpp	match_screens_build_team_selection_rows	high	haiku	2026-10-14-clickable-names-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md,columns.c
-0x723350	match_screens.cpp	match_screens_fill_event_rows	high	haiku	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md,columns.c
-0x723d20	match_screens.cpp	match_screens_draw_latest_scores_body	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x724520	match_screens.cpp	match_screens_draw_fixture_list_rows	high	haiku	2026-10-14-widescreen-inventory.md
-0x725860	match_screens.cpp	match_screens_tick_view_cycle	medium	haiku	
-0x725a70	match_screens.cpp	match_screens_match_status_text	high	haiku	
-0x725ca0	match_screens.cpp	match_screens_wait_for_other_players_or_advance	medium	haiku	2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md,menubar.c
-0x725f70	match_screens.cpp	match_screens_open_team_select_view	medium	haiku	2026-10-14-clickable-names-inventory.md,2026-10-16-foreign-and-tactics-positions.md
-0x7260f0	match_screens.cpp	match_screens_team_selection_check_squad	high	haiku	build-brief-0.3.0.md
-0x726570	match_screens.cpp	match_screens_away_players_notice	high	haiku	
-0x726f20	match_screens.cpp	match_screens_build_ban_list_text	medium	haiku	
-0x7270e0	match_screens.cpp	match_screens_build_injury_list_message	high	haiku	
-0x727450	match_screens.cpp	match_screens_infinite_loop_stub	medium	haiku	
-0x727c30	match_screens.cpp	match_screens_handle_player_slot_click	medium	haiku	
-0x727e20	match_screens.cpp	match_stats_find_best_player_slot	medium	haiku	
-0x727f00	match_screens.cpp	match_screens_assert_or_start_worker	medium	haiku	2026-10-15-holiday-next-match-inventory.md
-0x727fa0	match_screens.cpp	match_screens_wrapper_call_0041c0d0_zero	medium	haiku	
-0x727fb0	match_screens.cpp	match_screens_wait_for_other_players	medium	haiku	
-0x7280e0	match_screens.cpp	match_screens_draw_league_table	high	haiku	2026-10-14-columns-and-colours-inventory.md
-0x728e90	match_screens.cpp	match_screens_count_fixture_record_stats	medium	haiku	
-0x729000	match_screens.cpp	match_stats_load_from_cd	medium	haiku	2026-10-14-game-creation-inventory.md
-0x7293c0	match_screens.cpp	match_stats_release_handle	medium	haiku	
-0x7293f0	match_screens.cpp	match_stats_record_result	medium	haiku	
+0x717430	match_pl.cpp	MATCH_PLAYER::get_alt_slot_position	high	opus	
+0x717450	match_pl.cpp	MATCH_PLAYER::get_secondary_position	high	opus	2026-10-14-assistant-and-days-inventory.md
+0x717470	match_pl.cpp	MATCH_PLAYER::is_story_event_applicable	high	opus	2026-10-14-widescreen-inventory.md
+0x717c70	match_pl.cpp	MATCH_PLAYER::is_wide_in_both_positions	medium	opus	
+0x717cc0	match_screens.cpp	open_day_fixtures_screen	high	opus	2026-10-14-assistant-and-days-inventory.md
+0x717db0	match_screens.cpp	build_day_fixtures_screen	high	opus	
+0x718930	match_screens.cpp	handle_day_fixtures_input	high	opus	2026-10-14-assistant-and-days-inventory.md
+0x718aa0	match_screens.cpp	open_match_screen	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x718e90	match_screens.cpp	build_match_screen	high	opus	2026-10-15-commentary-speed-inventory.md,2026-10-16-options-screen.md,build-brief-0.3.0.md
+0x71a240	match_screens.cpp	handle_match_screen_input	high	opus	2026-10-15-commentary-speed-inventory.md,commentary.c
+0x71b120	match_screens.cpp	close_match_screen	high	opus	
+0x71b1b0	match_screens.cpp	open_latest_scores_screen	high	opus	
+0x71b300	match_screens.cpp	build_latest_scores_screen	high	opus	
+0x71b3d0	match_screens.cpp	handle_latest_scores_input	high	opus	
+0x71b4a0	match_screens.cpp	open_match_details_screen	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-14-columns-and-colours-inventory.md
+0x71b630	match_screens.cpp	build_match_details_screen	high	opus	
+0x71bdc0	match_screens.cpp	handle_match_details_input	high	opus	
+0x71c170	match_screens.cpp	close_match_details_screen	high	opus	
+0x71c270	match_screens.cpp	draw_match_overview_panel	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-14-columns-and-colours-inventory.md
+0x71d9e0	match_screens.cpp	refresh_possession_bar	high	opus	display.c
+0x71dd70	match_screens.cpp	match_team_block_assign	high	opus	
+0x71df00	match_screens.cpp	match_player_row_assign	medium	opus	
+0x71e040	match_screens.cpp	draw_match_stats_panel	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x71e750	match_screens.cpp	refresh_match_stats_values	high	opus	
+0x71f500	match_screens.cpp	draw_action_zones_panel	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x720320	match_screens.cpp	refresh_action_zones_values	high	opus	2026-10-14-widescreen-inventory.md
+0x721000	match_screens.cpp	draw_match_report_panel	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x7217a0	match_screens.cpp	draw_team_stats_panel	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x721cd0	match_screens.cpp	fill_team_stats_rows	high	opus	
+0x722dc0	match_screens.cpp	handle_team_stats_input	high	opus	
+0x722ed0	match_screens.cpp	draw_player_ratings_panel	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md,columns.c
+0x723350	match_screens.cpp	refresh_player_ratings_rows	high	opus	2026-10-14-columns-and-colours-inventory.md,2026-10-16-foreign-and-tactics-positions.md,columns.c
+0x723d20	match_screens.cpp	draw_latest_scores_panel	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x724520	match_screens.cpp	refresh_latest_scores_rows	high	opus	2026-10-14-widescreen-inventory.md
+0x725860	match_screens.cpp	match_screens_handle_latest_scores_cycle	medium	opus	
+0x725a70	match_screens.cpp	match_screens_get_match_control_label	high	opus	
+0x725ca0	match_screens.cpp	match_screens_handle_continue_command	medium	opus	2026-10-14-start-screen-helpers.md,2026-10-15-team-views-frame-inventory.md,menubar.c
+0x725f70	match_screens.cpp	match_screens_open_team_selection	high	opus	2026-10-14-clickable-names-inventory.md,2026-10-16-foreign-and-tactics-positions.md
+0x7260f0	match_screens.cpp	match_screens_draw_team_selection	high	opus	build-brief-0.3.0.md
+0x726570	match_screens.cpp	match_screens_draw_team_selection_fragment_726570	high	opus	
+0x726f20	match_screens.cpp	match_screens_draw_team_selection_fragment_726f20	high	opus	
+0x7270e0	match_screens.cpp	match_screens_draw_team_selection_fragment_7270e0	high	opus	
+0x727450	match_screens.cpp	match_screens_draw_team_selection_fragment_727450	high	opus	
+0x727c30	match_screens.cpp	match_screens_handle_team_selection_input	medium	opus	
+0x727e20	match_screens.cpp	match_screens_find_best_rated_starter_slot	high	opus	
+0x727f00	match_screens.cpp	match_screens_open_waiting_screen_for_slot	medium	opus	2026-10-15-holiday-next-match-inventory.md
+0x727fa0	match_screens.cpp	match_screens_draw_waiting_screen	medium	opus	
+0x727fb0	match_screens.cpp	match_screens_handle_waiting_screen	medium	opus	
+0x7280e0	match_screens.cpp	match_screens_draw_live_league_table	high	opus	2026-10-14-columns-and-colours-inventory.md
+0x728e90	match_screens.cpp	match_screens_tally_live_score	medium	opus	
+0x729000	match_screens.cpp	Match_Stats::Match_Stats	high	opus	2026-10-14-game-creation-inventory.md
+0x7293c0	match_screens.cpp	Match_Stats::~Match_Stats	high	opus	
+0x7293f0	match_screens.cpp	Match_Stats::record_match	high	opus	
 0x729500	match_screens.cpp	Match_Stats::fixture_entry_matches	medium	opus	
-0x729600	match_screens.cpp	match_stats_matches_file_record_io	high	haiku	
-0x729820	match_screens.cpp	match_stats_append_match_record	high	haiku	
-0x729bd0	match_screens.cpp	match_screens_fixture_flag_for_state	medium	haiku	
-0x729e30	match_screens.cpp	match_stats_find_fixture_by_index	medium	haiku	2026-10-14-clickable-names-inventory.md
-0x729ff0	match_screens.cpp	match_screens_build_lineup_snapshot	medium	haiku	
-0x72aa70	match_screens.cpp	match_screens_noop_72aa70	low	haiku	
-0x72aa80	match_screens.cpp	Match_Stats::load_from_zip_archive	high	haiku	
-0x72adf0	match_screens.cpp	match_stats_load	high	haiku	
-0x72b160	match_screens.cpp	match_stats_compare_keys	medium	haiku	
-0x72b1d0	match_screens.cpp	media_block_reset_and_release	medium	haiku	2026-10-14-game-creation-inventory.md
-0x72b200	match_screens.cpp	free_two_buffers_and_clear	medium	haiku	
+0x729600	match_screens.cpp	Match_Stats::read_match_record	high	opus	
+0x729820	match_screens.cpp	Match_Stats::write_match_record	high	opus	
+0x729bd0	match_screens.cpp	match_stats_get_record_bucket	medium	opus	
+0x729e30	match_screens.cpp	Match_Stats::find_record_fixture	high	opus	2026-10-14-clickable-names-inventory.md
+0x729ff0	match_screens.cpp	Match_Stats::fill_match_record	high	opus	
+0x72aa70	match_screens.cpp	match_stats_static_date_atexit	high	opus	
+0x72aa80	match_screens.cpp	Match_Stats::load	high	opus	
+0x72adf0	match_screens.cpp	Match_Stats::save	high	opus	
+0x72b160	match_screens.cpp	match_stats_compare_events	medium	opus	
+0x72b1d0	media.cpp	Media::Media	high	opus	2026-10-14-game-creation-inventory.md
+0x72b200	media.cpp	Media::~Media	high	opus	
 0x72b240	media.cpp	media_dat_load	high	haiku	
 0x72b5f0	media.cpp	media_dat_save_to_zip	high	haiku	
 0x72b810	media.cpp	media_pick_staff_candidate	medium	haiku	

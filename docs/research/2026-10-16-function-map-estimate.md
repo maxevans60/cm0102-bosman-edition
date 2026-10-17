@@ -1066,6 +1066,68 @@ Run `sweep-w25`: 8 Opus agents named 234 functions: the rest of `manager_manager
 | 0x6d5bf0 | Named in 2026-10-14-columns-and-colours-inventory.md | `crowd_sound_init` (Haiku) | `Match_Events::Match_Events` | agrees |
 | 0x6d78b0 | Named in 2026-10-15-commentary-speed-inventory.md | `match_events_next_event` (Haiku) | `Match_Events::get_next_event` | agrees in area |
 
+#### Wave w26 (tier 5, 2026-10-17)
+
+Run `sweep-w26`: 7 Opus agents named 196 functions: `match_events.cpp` (`Match_Events`), `match_man.cpp` (`MATCH_MAN`), `match_official.cpp` (`MATCH_OFFICIAL`), `match_pl.cpp` (`MATCH_PLAYER`) and `match_screens.cpp` with its match stats functions (`Match_Stats`). The first launch stopped at the usage limit and wrote nothing, so the wave ran again. Each agent took 3 to 9 minutes and 150,000 to 232,000 tokens. Confidence: 116 high, 74 medium, 6 low.
+
+The merge needed two fixes. Nine `match_pl.cpp` getters and setters take the match engine or the event queue as ECX. One agent named them `CM3_MATCH_ENGINE::` and `Match_Events::` members. They now use the free style of the other engine getters in the file, for example `match_engine_get_ball_col`. Twelve false entries (addresses inside other functions) had three name styles. They now use the `<parent>_fragment_<addr>` style of the earlier waves. 0x6ea760 is `MATCH_OFFICIAL::find_offside_player`, as the known issue said.
+
+51 functions of the wave are cited. 38 agree and 13 agree in area. None differs.
+
+| Address | Earlier research | Earlier name | Opus name | Result |
+|---|---|---|---|---|
+| 0x6d7b00 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_events_format_text_token` (Haiku) | `Match_Events::show_event_text` | agrees |
+| 0x6d8c70 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_events_check_order_ready` (Haiku) | `Match_Events::is_line_finished` | agrees |
+| 0x6d9e50 | Named in 2026-10-14-violent-conduct-inventory.md | `match_event_handler_read_config` (Haiku) | `match_events_read_config` | agrees in area |
+| 0x6db500 | Named in 2026-10-14-assistant-and-days-inventory.md | `CM3_MATCH_ENGINE::init_match_player` (Haiku) | `MATCH_MAN::init` | agrees |
+| 0x6dbb80 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_man_count_eligible_players` (Haiku) | `MATCH_MAN::place_selected_players` | agrees |
+| 0x6dbc50 | Named in 2026-10-14-assistant-and-days-inventory.md | `CM3_MATCH_ENGINE::build_match_lineups` (Haiku) | `MATCH_MAN::pick_team` | agrees |
+| 0x6ddab0 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_man_tactical_step` (Haiku) | `MATCH_MAN::set_computer_instructions` | agrees |
+| 0x6df460 | Named in 2026-10-15-assistant-pick-inventory.md | `match_man_score_next_action` (Haiku) | `MATCH_MAN::choose_mentality` | agrees in area |
+| 0x6e0230 | Named in 2026-10-14-assistant-and-days-inventory.md | `CM3_MATCH_ENGINE::select_team_tactic_score_tables` (Haiku) | `MATCH_MAN::choose_computer_tactic` | agrees |
+| 0x6e0d00 | Named in 2026-10-14-assistant-and-days-inventory.md | `CM3_MATCH_ENGINE::place_player_in_team` (Haiku) | `MATCH_MAN::place_player_in_team` | agrees |
+| 0x6e1090 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_man_assign_players_to_slots` (Haiku) | `MATCH_MAN::make_substitutions` | agrees |
+| 0x6e1940 | Named in 2026-10-15-assistant-pick-inventory.md | `match_man_best_candidate_player` (Haiku) | `MATCH_MAN::choose_captain` | agrees |
+| 0x6e1aa0 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_man_assign_substitute_positions` (Haiku) | `MATCH_MAN::reassign_positions` | agrees |
+| 0x6e1cf0 | Named in 2026-10-15-assistant-pick-inventory.md | `match_man_player_rating_check` (Haiku) | `match_man_get_captain_score` | agrees in area |
+| 0x6e2000 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_man_assign_players_to_positions` (Haiku) | `match_man_assign_players_to_positions` | agrees |
+| 0x6e2f20 | Named in 2026-10-15-assistant-pick-inventory.md | `match_man_score_player_for_role` (Haiku) | `match_man_score_player_for_role` | agrees |
+| 0x6e8910 | Named in 2026-10-15-assistant-pick-inventory.md | `match_man_assign_substitutes` (Haiku) | `match_man_apply_squad_restriction` | agrees |
+| 0x6eab60 | Named in 2026-10-14-violent-conduct-inventory.md | `match_official_shot_resolve` (Haiku) | `MATCH_OFFICIAL::decide_card` | agrees |
+| 0x6eaea0 | Named in 2026-10-15-assistant-pick-inventory.md | `CM3_MATCH_ENGINE::setup_non_playing_staff` (Haiku) | `MATCH_PLAYER::setup` | agrees in area |
+| 0x6ec010 | Named in 2026-10-14-game-creation-inventory.md | `match_official_compute_player_ratings` (Haiku) | `MATCH_PLAYER::calc_match_attributes` | agrees in area |
+| 0x6eecb0 | Named in 2026-10-16-crash-fixes.md | `match_official_compute_player_attributes` (Haiku) | `MATCH_PLAYER::calc_ratings` | agrees |
+| 0x7164b0 | Named in 2026-10-14-violent-conduct-inventory.md | `match_player_check_threshold` (Haiku) | `MATCH_PLAYER::passes_anger_check` | agrees |
+| 0x716630 | Named in 2026-10-14-violent-conduct-inventory.md | `MATCH_PLAYER::try_shot_or_pass_action` (Haiku) | `MATCH_PLAYER::start_fight` | agrees |
+| 0x716e10 | Named in 2026-10-14-assistant-and-days-inventory.md | `MATCH_PLAYER::resolve_shot_outcome` (Haiku) | `MATCH_PLAYER::react_to_foul_decision` | agrees in area |
+| 0x717450 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_player_forward_if_active` (Haiku) | `MATCH_PLAYER::get_secondary_position` | agrees in area |
+| 0x717470 | Named in 2026-10-14-widescreen-inventory.md | `MATCH_PLAYER::check_action_trigger` (Haiku) | `MATCH_PLAYER::is_story_event_applicable` | agrees in area |
+| 0x717cc0 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_screens_show_fixtures_or_assert` (Haiku) | `open_day_fixtures_screen` | agrees |
+| 0x718930 | Named in 2026-10-14-assistant-and-days-inventory.md | `match_screens_dispatch_fixture_selection` (Haiku) | `handle_day_fixtures_input` | agrees |
+| 0x718aa0 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_init_window_or_assert` (Haiku) | `open_match_screen` | agrees |
+| 0x718e90 | Named in 2026-10-15-commentary-speed-inventory.md | `match_screens_draw_match_overview` (Haiku) | `build_match_screen` | agrees |
+| 0x71a240 | Named in 2026-10-15-commentary-speed-inventory.md | `match_screens_handle_matchday_input` (Haiku) | `handle_match_screen_input` | agrees |
+| 0x71b4a0 | Named in 2026-10-14-clickable-names-inventory.md | `match_screens_open_screen_with_config` (Haiku) | `open_match_details_screen` | agrees |
+| 0x71c270 | Named in 2026-10-14-clickable-names-inventory.md | `match_screens_draw_match_report` (Haiku) | `draw_match_overview_panel` | agrees |
+| 0x71d9e0 | Named in display.c | `match_screens_draw_possession_bars` (Haiku) | `refresh_possession_bar` | agrees |
+| 0x71e040 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_build_stats_grid` (Haiku) | `draw_match_stats_panel` | agrees |
+| 0x71f500 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_draw_shot_zone_panel` (Haiku) | `draw_action_zones_panel` | agrees |
+| 0x720320 | Named in 2026-10-14-widescreen-inventory.md | `match_screens_update_live_panels` (Haiku) | `refresh_action_zones_values` | agrees in area |
+| 0x721000 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_show_match_report` (Haiku) | `draw_match_report_panel` | agrees |
+| 0x7217a0 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_draw_team_stats_table` (Haiku) | `draw_team_stats_panel` | agrees |
+| 0x722ed0 | Named in 2026-10-14-clickable-names-inventory.md | `match_screens_build_team_selection_rows` (Haiku) | `draw_player_ratings_panel` | agrees |
+| 0x723350 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_fill_event_rows` (Haiku) | `refresh_player_ratings_rows` | agrees |
+| 0x723d20 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_draw_latest_scores_body` (Haiku) | `draw_latest_scores_panel` | agrees |
+| 0x724520 | Named in 2026-10-14-widescreen-inventory.md | `match_screens_draw_fixture_list_rows` (Haiku) | `refresh_latest_scores_rows` | agrees in area |
+| 0x725ca0 | Named in 2026-10-14-start-screen-helpers.md | `match_screens_wait_for_other_players_or_advance` (Haiku) | `match_screens_handle_continue_command` | agrees |
+| 0x725f70 | Named in 2026-10-14-clickable-names-inventory.md | `match_screens_open_team_select_view` (Haiku) | `match_screens_open_team_selection` | agrees |
+| 0x7260f0 | Named in build-brief-0.3.0.md | `match_screens_team_selection_check_squad` (Haiku) | `match_screens_draw_team_selection` | agrees in area |
+| 0x727f00 | Named in 2026-10-15-holiday-next-match-inventory.md | `match_screens_assert_or_start_worker` (Haiku) | `match_screens_open_waiting_screen_for_slot` | agrees in area |
+| 0x7280e0 | Named in 2026-10-14-columns-and-colours-inventory.md | `match_screens_draw_league_table` (Haiku) | `match_screens_draw_live_league_table` | agrees in area |
+| 0x729000 | Named in 2026-10-14-game-creation-inventory.md | `match_stats_load_from_cd` (Haiku) | `Match_Stats::Match_Stats` | agrees |
+| 0x729e30 | Named in 2026-10-14-clickable-names-inventory.md | `match_stats_find_fixture_by_index` (Haiku) | `Match_Stats::find_record_fixture` | agrees |
+| 0x72b1d0 | Named in 2026-10-14-game-creation-inventory.md | `media_block_reset_and_release` (Haiku) | `Media::Media` | agrees |
+
 ### Hub sweep
 
 The hubs are the game and library functions with 20 or more callers: 228 functions (224 game, 4 library) that take 71% of all calls. The league and cup sweeps already named 27 of them. Eight Opus agents on the subscription named the other 201 on 2026-10-16 (run `sweep-hubs`), with about 25 functions each. The dossiers showed the Haiku names and the league and cup sweep names. Each agent took 5 to 8 minutes and 155,000 to 194,000 tokens, about 1.4 million tokens in all. Confidence: 116 high, 81 medium, 4 low.
