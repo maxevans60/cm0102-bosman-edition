@@ -248,9 +248,9 @@ def main(argv):
     # 4. Careers: real years, nothing from the start season on.
     kept, kept_rows = kept_careers(S_.TEMPLATE)
     check(not kept or kept_rows == n_template, "kept careers list is for another staff count")
-    sh = T.raw["staff_history.dat"]
+    sh, _, _, n_hist = T.table(17)                  # checked against the file length
     rows = []
-    for o in range(0, idx[17]["count"] * 17, 17):
+    for o in range(0, n_hist * 17, 17):
         rr = bytearray(sh[o:o + 17])
         who = struct.unpack_from("<i", rr, 4)[0]
         k = kept and 0 <= who < n_template and kept[who >> 3] >> (who & 7) & 1
@@ -268,6 +268,7 @@ def main(argv):
     # 5. Competition history.
     last = last_row_comps(S_.TEMPLATE)
     ch, nh = T.raw["club_comp_history.dat"], T.raw["nation_comp_history.dat"]
+    T.table(19), T.table(20)                       # both tables lie inside their files
     crow = [bytearray(ch[o:o + 26]) for o in range(0, idx[19]["count"] * 26, 26)]
     crow = [r for r in crow if not (struct.unpack_from("<i", r, 4)[0] in last
                                     and struct.unpack_from("<H", r, 8)[0] == 2001)]

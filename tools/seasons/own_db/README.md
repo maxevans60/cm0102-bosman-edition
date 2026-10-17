@@ -1,0 +1,56 @@
+# Own season databases
+
+These tools build the 2004/05 and 2006/07 season databases (Q351). The facts come from Football Manager 2005 and
+2007: names, dates of birth, nations, clubs, jobs, contracts, final tables and competition winners. The ratings
+and positions come from the Update Team databases. No Football Manager rating goes into a database.
+
+The Football Manager discs are untrusted data. Mount an image read-only. Read it only with `python3 -I`. Run
+nothing from it. Keep the disc files, the facts and the work folders outside the repo. Commit no Football Manager
+data and nothing made from it.
+
+## Paths
+
+| Placeholder | What it is |
+|---|---|
+| `<DB>` | the folder of Update Team databases (`test-fixtures/databases`) |
+| `<FM2005 db>` | `data/db` of the FM2005 disc, copied as data |
+| `<setup.jar>` | `setup.jar` of the mounted FM2007 disc |
+| `<db700>` | a new folder for the FM2007 database files |
+| `<facts>` | a new folder for the facts pickles |
+| `<work>` | a new folder for the match and league pickles |
+| `<out>` | the new database folder (it must not exist) |
+
+Run each command from `tools/seasons/own_db`.
+
+## 2004/05 (Summer 2004)
+
+```bash
+python3 -I fm2005/read_fm2005.py "<FM2005 db>" "<facts>"
+python3 -I match.py 2004 "<DB>/September 2005" "<facts>" "<work>"
+python3 -I leagues.py 2004 "<DB>/September 2005" "<facts>" "<work>"
+python3 -I convert.py 2004 "<DB>/September 2005" "<facts>" "<work>" "<DB>/September 2010 ODB" "<out>" "<DB>/October 2003"
+```
+
+## 2006/07 (Summer 2006)
+
+Mount the FM2007 image read-only first, for example `hdiutil attach -readonly -nobrowse <image>` on macOS.
+
+```bash
+python3 -I fm2007/unpack_setup_jar.py "<setup.jar>" "<db700>"
+python3 -I fm2007/read_fm2007.py "<db700>" "<facts>"
+python3 -I match.py 2006 "<DB>/November 2007" "<facts>" "<work>"
+python3 -I leagues.py 2006 "<DB>/November 2007" "<facts>" "<work>"
+python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/September 2010 ODB" "<out>" "<DB>/September 2005"
+```
+
+## After a rebuild
+
+1. Print the club table rows with `python3 -I club_rows.py <year> "<template>" "<work>"`. Add `--write` only for a season that has no rows in the part files yet.
+2. Put the new sizes and SHA-256 of `index.dat`, `club.dat` and `staff.dat` in `docs/research/rules-0.6.0/databases-signatures.tsv`.
+3. Measure the date shifts with `python3 -I ../measure_date_shifts.py <3.9.68 Data> <folder with the new database> --only "Summer 2006"`, or "Summer 2004". Copy the printed row into `databases-date-shifts.tsv`. Set careers_kept and last_rows to 0.
+4. Make the C tables with `python3 -I ../make_db_table.py` and `python3 -I ../make_dates_table.py`.
+5. Zip the database folder under its name (for example `Summer 2006/`) into the own databases folder that `make_release.sh --own-dbs` takes.
+6. Run `ctest -R "seasons_table|season_dates_table"` and `tests/seasons/season_dates_run.py --only <year>`.
+
+The settings of each season are in `season_2004.py` and `season_2006.py`. Each file gives the template, the real
+lists with one source each, the play-off winners and the part file of each list.

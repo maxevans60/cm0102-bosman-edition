@@ -39,6 +39,13 @@ NOT_PARTS = {"gaps.tsv", "targets.tsv", "fill-report.tsv", "unmatched.tsv", "mat
 FIRST_FILL = 2001        # the first label year that the research fills: 2000/01 (Q354), then 2001/02 on
 START_MONTH = 7          # a new game starts in July of its start year
 CALENDAR_LAST_MONTH = 9  # a calendar-year edition of the start year that ends in this month or later counts
+# Editions whose final is in July of a start year before the game's first day, with the day of the final. The
+# research gives the month only. A new game's first news day is 10 July or later (seen: 10.7.2004 in Summer 2004,
+# 15.7.2006 in Summer 2006), so a final on 9 July or earlier is before the start. Only start years 2004 and 2006
+# have such a final (Euro 2004, World Cup 2006); for the other databases nothing changes.
+FIRST_DAY_MIN = 10
+EARLY_JULY = {("European Football Championship", 2004): 4,   # https://en.wikipedia.org/wiki/UEFA_Euro_2004_final
+              ("FIFA World Cup", 2006): 9}                    # https://en.wikipedia.org/wiki/2006_FIFA_World_Cup_final
 
 
 def research_rows():
@@ -78,6 +85,9 @@ def kept(r, start):
         return False
     y, m = ended_of(r)
     if (y, m) < (start, START_MONTH):
+        return True
+    day = EARLY_JULY.get((r.get("competition"), label))
+    if (y, m) == (start, START_MONTH) and day is not None and day < FIRST_DAY_MIN:
         return True
     single = re.fullmatch(r"\s*(\d{4})\s*", r.get("real_season", ""))
     return bool(single) and int(single.group(1)) == label == start == y and m >= CALENDAR_LAST_MONTH

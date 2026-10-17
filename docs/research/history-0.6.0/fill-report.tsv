@@ -1,7 +1,9 @@
 database	start_year	researched_rows_in_range	kept	add	agree	differ	no_competition	skipped_first_unmatched	unmatched_other	database_rows_cleared	database_rows_kept_in_range
 3.9.68	2002	584	416	160	240	16	28	0	9	262	98
 October 2003	2003	938	690	490	129	67	44	4	21	198	98
+Summer 2004	2004	1262	932	415	373	134	84	10	33	541	87
 September 2005	2005	1586	1136	944	91	80	162	21	49	184	75
+Summer 2006	2006	1826	1078	353	456	246	504	23	31	726	49
 February 2008	2007	2066	1047	935	52	38	759	22	30	101	25
 November 2007	2007	2066	1040	929	54	36	766	21	31	101	25
 December 2008	2008	2299	1039	943	42	33	993	21	41	86	21
