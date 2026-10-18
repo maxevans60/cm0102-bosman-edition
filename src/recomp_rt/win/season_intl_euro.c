@@ -21,6 +21,7 @@
  * were not read: second source needed. */
 #include "win.h"
 #include "season_intl.h"
+#include "euro_finals.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -123,7 +124,7 @@ static int year_of(uint32_t self) { return (int16_t)rd16(g_mem, self + 0x40u); }
 static int euro24(uint32_t self)
 {
     if (!season_intl_on() || !readable(self)) return 0;
-    const SeasonIntlEdition *e = season_intl_edition("euro_champ", year_of(self));
+    const SeasonIntlEdition *e = season_intl_rule_edition("euro_champ", year_of(self));
     return e && e->teams == TEAMS;
 }
 
@@ -419,8 +420,11 @@ RT_WRAP(0057c710, euro_seeding)
     if (rt_unwinding) return;
     cpu.ecx = self;
     if (!euro24(self)) {
-        /* The 16-team path. The staff reserve fix has its own fill of a short list (euro_finals_fill_short_list,
-         * on its branch a wrap of 0x57c710): at the merge that wrap goes and its function is called here. */
+        /* The 16-team path: the fill of a short list of the staff reserve fix (euro_finals.c), also in the base
+         * game, then the original. */
+        euro_finals_fill_short_list(self);
+        if (rt_unwinding) return;
+        cpu.ecx = self;
         o_0057c710();
         return;
     }
