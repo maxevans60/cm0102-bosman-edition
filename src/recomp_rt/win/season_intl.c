@@ -342,24 +342,28 @@ RT_WRAP(00799e30, ofc_entrants)
     uint32_t pool = rd32(g_mem, self + 0xee);
     int aus = key_nation(KEY_AUSTRALIA);
     if (!readable(pool) || aus < 0) return;
-    uint32_t args[1] = {nation_at(aus)};
-    uint32_t team = call_cdecl(NATIONAL_TEAM, 1, args);
-    if (rt_unwinding) return;
+    /* A team is found through its own nation (+0x53): see team_nation below. */
     int slot = -1;
-    for (int k = 0; k < 6; k++)
-        if (rd32(g_mem, pool + 4u * (uint32_t)k) == team) slot = k;
+    for (int k = 0; k < 6; k++) {
+        uint32_t t = rd32(g_mem, pool + 4u * (uint32_t)k);
+        if (readable(t) && rd32(g_mem, t + 0x53u) == nation_at(aus)) slot = k;
+    }
     if (slot < 0) return;
     uint32_t oceania = rd32(g_mem, CONTINENT_OCEANIA), best = 0;
     int best_rep = -1;
     for (int id = 0; id < nation_count(); id++) {
         if (id == aus || continent_id(id) != oceania) continue;
-        args[0] = nation_at(id);
+        int in = 0;
+        for (int k = 0; k < 6; k++) {
+            uint32_t t = rd32(g_mem, pool + 4u * (uint32_t)k);
+            in |= readable(t) && rd32(g_mem, t + 0x53u) == nation_at(id);
+        }
+        int rep = (int16_t)rd16(g_mem, nation_at(id) + 0x8eu);
+        if (in || rep <= best_rep) continue;
+        uint32_t args[1] = {nation_at(id)};
         uint32_t t = call_cdecl(NATIONAL_TEAM, 1, args);
         if (rt_unwinding) return;
-        int in = 0;
-        for (int k = 0; k < 6; k++) in |= rd32(g_mem, pool + 4u * (uint32_t)k) == t;
-        int rep = rd16(g_mem, nation_at(id) + 0x8eu);
-        if (!in && readable(t) && rep > best_rep) {
+        if (readable(t) && rd32(g_mem, t + 0x53u) == nation_at(id)) {
             best_rep = rep;
             best = t;
         }
@@ -385,23 +389,24 @@ RT_WRAP(00799e30, ofc_entrants)
  * EuroChamp::set_predicted_positions 0x57c9f0). In a season game the slots that no qualifier filled get the
  * class's default nations still in them (written by the team slot builders 0x92dbd5..0x92dfb3, 0x57bf2f),
  * then the nations with the highest reputation (European nations for the Euro) that are not in yet. */
-static int team_in(const uint32_t *teams, int n, uint32_t t)
-{
-    for (int k = 0; k < n; k++)
-        if (teams[k] == t) return 1;
-    return 0;
-}
-
-/* 1 when the club is the national team of its nation (+0x53 the nation record; national_team 0x53b3d0). */
-static int is_national_team(uint32_t club)
+/* The nation record of a team (+0x53), or 0 when the club has none. national_team 0x53b3d0 gives
+ * club[nation id + clubs - 2 * nations] (docs/research/2026-10-17-club-moves-and-names.md), but in a season
+ * database that row can be an empty club with no nation: a 2019 start (October 2019) gave an empty row for
+ * Denmark while the qualified Denmark team was another club. So a team counts only through its own nation. */
+static uint32_t team_nation(uint32_t club)
 {
     if (!readable(club)) return 0;
     uint32_t nation = rd32(g_mem, club + 0x53u), base = rd32(g_mem, NATIONS);
     if (!readable(nation) || nation < base || (nation - base) % NATION_SIZE ||
         (int)((nation - base) / NATION_SIZE) >= nation_count()) return 0;
-    uint32_t args[1] = {nation};
-    uint32_t team = call_cdecl(NATIONAL_TEAM, 1, args);
-    return !rt_unwinding && team == club;
+    return nation;
+}
+
+static int nation_in(const uint32_t *teams, int n, uint32_t nation)
+{
+    for (int k = 0; k < n; k++)
+        if (teams[k] && team_nation(teams[k]) == nation) return 1;
+    return 0;
 }
 
 static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
@@ -413,16 +418,14 @@ static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
     uint32_t teams[64], spare[64];
     int open[64], n_open = 0, n_spare = 0, empty = 0;
     for (int i = 0; i < room; i++) {
-        uint32_t t = rd32(g_mem, slots + (uint32_t)i * SLOT_SIZE);
+        uint32_t t = rd32(g_mem, slots + (uint32_t)i * SLOT_SIZE), nation = team_nation(t);
         teams[i] = 0;
-        int team = is_national_team(t);
-        if (rt_unwinding) return;
-        if (i < count && team && !team_in(teams, i, t)) {
+        if (i < count && nation && !nation_in(teams, i, nation)) {
             teams[i] = t;
         } else {
             open[n_open++] = i;
             empty += i < count;
-            if (i >= count && team) spare[n_spare++] = t;           /* a default nation still in the slot */
+            if (i >= count && nation) spare[n_spare++] = t;         /* a default nation still in the slot */
         }
     }
     if (!n_open) return;
@@ -431,17 +434,18 @@ static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
         uint32_t t = 0;
         while (s < n_spare && !t) {
             uint32_t c = spare[s++];
-            if (!team_in(teams, room, c)) t = c;
+            if (!nation_in(teams, room, team_nation(c))) t = c;
         }
         if (!t) {                                        /* the nation with the highest reputation */
             int best_rep = -1;
             for (int id = 0; id < nation_count(); id++) {
                 int rep = (int16_t)rd16(g_mem, nation_at(id) + NATION_REPUTATION);
-                if (rep <= best_rep || (continent && continent_id(id) != rd32(g_mem, continent))) continue;
+                if (rep <= best_rep || (continent && continent_id(id) != rd32(g_mem, continent)) ||
+                    nation_in(teams, room, nation_at(id))) continue;
                 uint32_t args[1] = {nation_at(id)};
                 uint32_t c = call_cdecl(NATIONAL_TEAM, 1, args);
                 if (rt_unwinding) return;
-                if (readable(c) && !team_in(teams, room, c)) {
+                if (team_nation(c) == nation_at(id)) {
                     best_rep = rep;
                     t = c;
                 }
@@ -511,27 +515,6 @@ RT_WRAP(0057c120, euro_add_qualified)
         return;
     }
     o_0057c120();
-}
-
-void o_0076d880(void);
-
-/* NationalTeams::release_overage_u21_players, thiscall (nation), ret 4: called for both teams of an
- * international fixture (0x76bc37, 0x76bc45, with the team's nation +0x53; the fixture in esi). It reads the
- * nation (0x76d88d) and asks for its under-21 team (database_get_national_u21_team 0x53b4f0), which stops at
- * the box "Database.cpp 13160" for no nation (0x53b4fc). A 2003 start met a team with no nation on 23 May 2004.
- * In a season game such a call does nothing, and the log names the fixture's teams. */
-RT_WRAP(0076d880, release_overage_u21)
-{
-    if (!season_intl_on() || rt_arg(0)) {
-        o_0076d880();
-        return;
-    }
-    if (logging()) {
-        uint32_t fx = cpu.esi, home = rd32(g_mem, fx + 0x1cu), away = rd32(g_mem, fx + 0x20u);
-        fprintf(stderr, "recomp: season intl: a fixture team has no nation: %s v %s\n",
-                readable(home) ? win_str(home + 4u) : "?", readable(away) ? win_str(away + 4u) : "?");
-    }
-    rt_ret_stdcall(0, 1);
 }
 
 /* EuroChamp build_team_slots 0x57bd80 stops at the box "euro_champ.cpp 837" when find_hosts gives no host

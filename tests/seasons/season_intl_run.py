@@ -114,9 +114,10 @@ def check(name, start, rules, work):
         for f, y, names in hosts:
             e = next((e for e in eds.get(f, []) if e["year"] == int(y)), None)
             # A host row holds two hosts (HostCountry pair 1): the first two of the table.
-            want = ";".join(h.split("/")[0] for h in e["hosts"][:2]) if e else None
-            got = ";".join(h.split("/")[0] for h in names.split(";")) if names != "-" else ""
-            if want is not None and got != want:
+            # A name of the table may have another spelling in a database ("China PR/China").
+            want = [h.split("/") for h in e["hosts"][:2]] if e else None
+            got = names.split(";") if names != "-" else []
+            if want is not None and (len(got) != len(want) or any(g not in w for g, w in zip(got, want))):
                 fails.append(f"{name}: host row {f} {y}: {names}, the table gives {want}")
     return fails
 
