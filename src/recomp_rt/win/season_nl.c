@@ -661,6 +661,8 @@ static void round_template(void)
     rt_ret_stdcall(rec, 4);
 }
 
+void season_nl_euro_log_paths(int day, int year);   /* test log, season_nl_euro.c */
+
 /* ---- The vtable slots ---- */
 
 /* The move to the next edition once the edition that the object holds is complete: its year and draw day.
@@ -760,6 +762,8 @@ static void update_for_date(void)
                     (int16_t)rd16(g_mem, today), (int16_t)rd16(g_mem, today + 2u), (int)(state & 0xff),
                     !!(state & 0x100), readable(cup) ? "made" : "none", (state & 0x200) ? " and finished" : "");
         last = state;
+        int td = (int16_t)rd16(g_mem, today), tyy = (int16_t)rd16(g_mem, today + 2u);
+        if ((tyy == 2020 && td >= 84 && td <= 92) || (tyy == 2019 && td == 330)) season_nl_euro_log_paths(td, tyy);
     }
     rt_ret_stdcall(r, 2);
 }

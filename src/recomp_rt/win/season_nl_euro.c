@@ -114,8 +114,8 @@ static void game_free(uint32_t p)
 }
 
 /* One round of the path play-off: its draw on the first day of the month of the matches, its match on the day
- * (weekday -1: no move, class doc 12.3), one leg with extra time and penalties (+0x0d 3, +0x21 1; the final
- * with bit 0x200 for the fixed links), the fields of the Euro's semi-final and final (0x57b0a2..0x57b194). */
+ * (weekday -1: no move, class doc 12.3), one leg with extra time and penalties (+0x0d 3, +0x21 1) and the fixed
+ * bracket bit 0x200, the fields of the Euro's semi-final and final (0x57b0a2..0x57b194). */
 void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams)
 {
     /* The record keeps a year offset from the stage's year (the campaign year, Cup_Stage argument 7), as the
@@ -130,7 +130,10 @@ void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign,
     uint32_t r = rec + (uint32_t)round * ROUND_SIZE;
     wr16(g_mem, r + 7u, round ? 0x96u : 0x82u);
     wr16(g_mem, r + 9u, (uint32_t)round);
-    wr16(g_mem, r + 0xdu, round ? 0x203u : 3u);
+    /* Bit 0x200 on both rounds: on round 0 it keeps the list's pairs (the class's fixed pairs set it there,
+     * 0x57f437; without it the ties are drawn at random), on the final it links ties 2k and 2k + 1 into final
+     * tie k (0x5245c3). */
+    wr16(g_mem, r + 0xdu, 0x203u);
     wr16(g_mem, r + 0xfu, 0);
     wr8(g_mem, r + 0x17u, 0xa);
     wr16(g_mem, r + 0x18u, (uint32_t)teams);
@@ -360,4 +363,39 @@ RT_WRAP(0057ef50, nl_euro_paths)
     build_paths(self, q);
     if (rt_unwinding) return;
     rt_ret_stdcall(0, 0);
+}
+
+/* Test log (RECOMP_SEASON_NL_LOG): the ties of the path play-off of the Euro qualifying object on a day, from the
+ * Nations League object's daily update (season_nl.c). Tie arrays +0xad, one a round, 0x35 bytes a tie; the team
+ * table +0xa7, 6 bytes a team (club, seed, status) (class doc 12.1). */
+void season_nl_euro_log_paths(int day, int year)
+{
+    if (!logging()) return;
+    int32_t id = (int32_t)rd32(g_mem, 0x9cf784u);
+    uint32_t table = rd32(g_mem, COMP_TABLE), q = id >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)id) : 0;
+    if (!readable(q) || !moved(q)) return;
+    int po = (int8_t)rd8(g_mem, q + F_PLAYOFF);
+    uint32_t cup = rd32(g_mem, rd32(g_mem, q + F_STAGES) + 4u * (uint32_t)po);
+    if (!readable(cup)) return;
+    uint32_t teams = rd32(g_mem, cup + 0xa7u), ties = rd32(g_mem, cup + 0xadu);
+    int nt = (int16_t)rd16(g_mem, cup + 0x3eu), nr = (int16_t)rd16(g_mem, cup + 0x3cu);
+    fprintf(stderr, "recomp: season nl: euro paths on day %d of %d: %d teams, %d rounds, complete %d\n", day, year, nt, nr,
+            rd8(g_mem, cup + 0xb1u));
+    for (int r = 0; readable(ties) && r < nr && r < 2; r++) {
+        uint32_t arr = rd32(g_mem, ties + 4u * (uint32_t)r);
+        int nties = (int16_t)rd16(g_mem, rd32(g_mem, cup + 0xa3u) + (uint32_t)r * ROUND_SIZE + 0x1au);
+        for (int t = 0; readable(arr) && t < nties && t < 8; t++) {
+            uint32_t tie = arr + (uint32_t)t * 0x35u;
+            fprintf(stderr, "recomp: season nl:   round %d tie %d: words", r, t);
+            for (int w = 0; w < 0x1a; w += 2) fprintf(stderr, " %04x", rd16(g_mem, tie + (uint32_t)w));
+            fputc('\n', stderr);
+        }
+    }
+    for (int k = 0; readable(teams) && k < nt && k < 16; k++) {
+        uint32_t club = rd32(g_mem, teams + 6u * (uint32_t)k);
+        int n = season_nl_nation_of_club(club);
+        fprintf(stderr, "recomp: season nl:   team %d: %s, seed %d, status %d\n", k,
+                n >= 0 ? win_str(rd32(g_mem, 0xae23a8u) + (uint32_t)n * 0x122u + 4u) : (club ? "?" : "none"),
+                (int8_t)rd8(g_mem, teams + 6u * (uint32_t)k + 4u), (int8_t)rd8(g_mem, teams + 6u * (uint32_t)k + 5u));
+    }
 }
