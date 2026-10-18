@@ -35,7 +35,6 @@ Slice 16 calls `season_names_get(comp_file, season)` (NULL when the table holds 
 
 | Part | Lists left out | Reason |
 |---|---|---|
-| arg-usa | 23 | MLS: the class knows its 12 clubs by their key ids (below) |
 | den-swe | 40 | Swedish Division 1 Norra and Södra, Ettan: the real groups do not match the six database divisions |
 | ger | 18 | 3. Liga: no class in the original (slice 20) |
 | gre-pol-cro | 7 | the new second Greek group: no class (slice 20) |
@@ -75,7 +74,7 @@ The steps for each season:
 
 ### MLS
 
-`usa_mls_get_club_division` 0x909ec0 knows the 12 MLS clubs of the original by their key ids (0x9d037c..0x9d03a8, compares at 0x909ee5..0x909f6b) and stops at usa_mls.cpp 1819 (0x909f96, box at 0x909fbe) for any other club in the American Major League. A 2010/11 start with the real MLS list stopped there. The MLS lists are left out (slice 18 or 20 must give the class its conferences by club).
+`usa_mls_get_club_division` 0x909ec0 knows the 12 MLS clubs of the original by their key ids (0x9d037c..0x9d03a8, compares at 0x909ee5..0x909f6b) and stops at usa_mls.cpp 1819 (0x909f96, box at 0x909fbe) for any other club in the American Major League. A 2010/11 start with the real MLS list stopped there. Slice 18 (`season_mls.c`) gives every other club of the division a free group place, so the MLS lists are in the table now. The class takes 12 clubs (three groups of 4), so a longer real list keeps 12 of its clubs (those that the database has there first) and a shorter one is filled from the pool.
 
 ### Real clubs that the database lacks (Q335)
 

@@ -176,11 +176,12 @@ static int same_name(uint32_t at, const char *name)
  * stops at its count (EngConf::create_table 0x56ecb0 at 0x56ed54..0x56ed7f); with fewer the table is not made
  * (0x56ed95..0x56edab) and the constructor stops at its assert (fra_first.cpp 108 for FraFirst). The address
  * is that of the write. Classes that count the clubs of the data (IrePrm 0x63a740, IreFirst 0x635910, PolFirst
- * 0x7c9450, NorFirst 0x7909a0) or that take groups (BraNatThird 0x42dc90, UsaMls 0x908560, FraLower 0x5be230,
+ * 0x7c9450, NorFirst 0x7909a0) or that take groups (BraNatThird 0x42dc90, FraLower 0x5be230,
  * SpaLower 0x8533d0, the Belgian, Portuguese, Spanish, Swedish, Italian C2 and Turkish group classes) are not
  * here: those divisions keep the database count. */
 typedef struct { const char *name; int size, first_season; } ClassSize;
 static const ClassSize CLASS_SIZE[] = {
+    {"American Major League", 12, 12},                   /* UsaMls::create_table 0x908572: 3 groups of 4 */
     {"Argentine Premier Division", 20, 20},              /* ArgPrm::create_table 0x405552 */
     {"Argentine Second Division", 25, 25},               /* ArgSecond::fill_league_table 0x407ce2 */
     {"Australian National Soccer League", 13, 13},       /* AusNsl 0x411b82 */

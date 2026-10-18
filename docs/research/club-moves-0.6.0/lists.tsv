@@ -1,66 +1,66 @@
 season	part	list	clubs	with_record	database_division	note
-2001	arg-usa	Major League Soccer	10	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2001	arg-usa	Major League Soccer	10	10	American Major League	
 2002	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2002	arg-usa	Major League Soccer	10	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2002	arg-usa	Major League Soccer	10	10	American Major League	
 2002	arg-usa	Primera División	20	20	Argentine Premier Division	
 2003	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2003	arg-usa	Major League Soccer	10	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2003	arg-usa	Major League Soccer	10	10	American Major League	
 2003	arg-usa	Primera División	20	20	Argentine Premier Division	
 2005	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
 2005	arg-usa	Primera División	20	20	Argentine Premier Division	
-2005	arg-usa	Major League Soccer	12	9		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2005	arg-usa	Major League Soccer	12	9	American Major League	
 2006	arg-usa	Primera División	20	20	Argentine Premier Division	
 2006	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
 2007	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2007	arg-usa	Major League Soccer	14	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2007	arg-usa	Major League Soccer	14	10	American Major League	
 2008	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2008	arg-usa	Major League Soccer	15	13		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2008	arg-usa	Major League Soccer	15	13	American Major League	
 2009	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2009	arg-usa	Major League Soccer	16	13		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2009	arg-usa	Major League Soccer	16	13	American Major League	
 2010	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2010	arg-usa	Major League Soccer	18	16		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2010	arg-usa	Major League Soccer	18	16	American Major League	
 2011	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2011	arg-usa	Major League Soccer	19	17		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2011	arg-usa	Major League Soccer	19	17	American Major League	
 2012	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
-2012	arg-usa	Major League Soccer	19	17		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2012	arg-usa	Major League Soccer	19	17	American Major League	
 2013	arg-usa	Primera B Nacional	22	22	Argentine Second Division	
-2013	arg-usa	Major League Soccer	19	17		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2013	arg-usa	Major League Soccer	19	17	American Major League	
 2014	arg-usa	Primera División	30	30	Argentine Premier Division	
 2014	arg-usa	Primera B Nacional	22	20	Argentine Second Division	
-2014	arg-usa	Major League Soccer	20	18		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2014	arg-usa	Major League Soccer	20	18	American Major League	
 2015	arg-usa	Primera División	30	30	Argentine Premier Division	
 2015	arg-usa	Primera B Nacional	22	22	Argentine Second Division	
-2015	arg-usa	Major League Soccer	20	18		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2015	arg-usa	Major League Soccer	20	18	American Major League	
 2016	arg-usa	Primera División	30	30	Argentine Premier Division	
 2016	arg-usa	Primera B Nacional	23	23	Argentine Second Division	
-2016	arg-usa	Major League Soccer	22	20		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2016	arg-usa	Major League Soccer	22	20	American Major League	
 2017	arg-usa	Primera División	28	28	Argentine Premier Division	
-2017	arg-usa	Major League Soccer	23	20		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2017	arg-usa	Major League Soccer	23	20	American Major League	
 2017	arg-usa	Primera B Nacional	25	25	Argentine Second Division	
 2018	arg-usa	Primera División	26	26	Argentine Premier Division	
-2018	arg-usa	Major League Soccer	24	22		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2018	arg-usa	Major League Soccer	24	22	American Major League	
 2018	arg-usa	Primera B Nacional	25	25	Argentine Second Division	
 2019	arg-usa	Primera División	24	24	Argentine Premier Division	
 2019	arg-usa	Primera Nacional	32	32	Argentine Second Division	
-2019	arg-usa	Major League Soccer	26	23		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2019	arg-usa	Major League Soccer	26	23	American Major League	
 2020	arg-usa	Primera División	26	26	Argentine Premier Division	
 2020	arg-usa	Primera Nacional	35	35	Argentine Second Division	
-2020	arg-usa	Major League Soccer	27	25		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2020	arg-usa	Major League Soccer	27	25	American Major League	
 2021	arg-usa	Primera División	28	28	Argentine Premier Division	
 2021	arg-usa	Primera Nacional	37	37	Argentine Second Division	
-2021	arg-usa	Major League Soccer	28	26		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2021	arg-usa	Major League Soccer	28	26	American Major League	
 2022	arg-usa	Primera División	28	28	Argentine Premier Division	
 2022	arg-usa	Primera Nacional	37	37	Argentine Second Division	
-2022	arg-usa	Major League Soccer	29	27		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2022	arg-usa	Major League Soccer	29	27	American Major League	
 2023	arg-usa	Primera División	28	28	Argentine Premier Division	
 2023	arg-usa	Primera Nacional	38	38	Argentine Second Division	
-2023	arg-usa	Major League Soccer	29	27		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2023	arg-usa	Major League Soccer	29	27	American Major League	
 2024	arg-usa	Primera División	30	30	Argentine Premier Division	
 2024	arg-usa	Primera Nacional	36	36	Argentine Second Division	
-2024	arg-usa	Major League Soccer	30	28		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2024	arg-usa	Major League Soccer	30	28	American Major League	
 2025	arg-usa	Primera División	30	30	Argentine Premier Division	
 2025	arg-usa	Primera Nacional	36	36	Argentine Second Division	
-2025	arg-usa	Major League Soccer	30	28		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2025	arg-usa	Major League Soccer	30	28	American Major League	
 2005	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
 2005	aus-jap-kor	J2 League	13	13	Japanese J-League 2	
 2006	aus-jap-kor	J1 League	18	18	Japanese J-League 1	

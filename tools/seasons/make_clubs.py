@@ -65,11 +65,9 @@ NOT_DIVISION = re.compile(r"\bcup\b|guest|play-off|\bB team\b", re.I)
 SKIP_GROUPS = "the real groups do not match the database divisions (slice 18)"
 SKIP_NEW = "a division that the original has no class for (comp_file new, slice 20)"
 SKIP_CUP = "cup entrants, guests or a play-off (not a division; slice 21)"
-SKIP_MLS = ("the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp "
-            "1819 for any other club; slice 18)")
 SKIP_EMPTY = "the mapping of Q292 leaves a database division empty (slice 18)"
 TARGETS = [
-    ("arg-usa", r"Major League Soccer", None, SKIP_MLS),
+    ("arg-usa", r"Major League Soccer", "American Major League"),     # 12 clubs kept (season_mls.c)
     ("arg-usa", r"Primera División", "Argentine Premier Division"),
     ("arg-usa", r"Primera B Nacional|Primera Nacional", "Argentine Second Division"),
     ("aus-jap-kor", r"A-League", "Australian National Soccer League"),
