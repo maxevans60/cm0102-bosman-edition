@@ -12,12 +12,12 @@ selected (a creator makes its objects only when a nation of its continent is sel
     2001-on   the 3.9.68 data from 2001/02 with changing_rules on, to 2002/03: the Inter-American Cup and the
               Oceania Champions Cup wait from the new game, the Club World Championship waits for 2005, the Copa
               Mercosur, the Merconorte Cup and the Asian Cup Winners' Cup stop after 2001/02
-    2003-on   October 2003 with changing_rules on, to 2005/06, with England and Australia only: the Oceania
-              Champions Cup comes back in 2004/05, the Intercontinental Cup stops after 2004/05, the Club World
-              Championship comes back in 2005/06. (A 2003/04 start with Japan stops on 7 February 2004 at the
-              box "comp_stats..CPP 1664", 0x4a25a8: Comp_Stats::set_club_final_position 0x4a2540 gets no club.
-              The build without this slice stops there too, with England, Argentina, Australia, Brazil and Japan.
-              Inference: the Japanese Super Cup of 2004, whose entry 22 starts on day 24.)
+    2003-on   October 2003 with changing_rules on, to 2005/06, with England only (entry 2): the Intercontinental
+              Cup stops after 2004/05, and the Club World Championship comes back in 2005/06. (A 2003/04 start
+              with Australia, or with Argentina, Australia, Brazil and Japan, stops on 7 February 2004 at the box
+              "comp_stats..CPP 1664", 0x4a25a8: Comp_Stats::set_club_final_position 0x4a2540 gets no club. The
+              build without this slice stops there too, with both sets of nations. Which competition calls it is
+              unknown.)
     2007      November 2007 with changing_rules off, to 2008/09: the start season rules at a new game, and the
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
               December 2005 with the box "world_cup..cpp 1438", 0x92f2b1, before this slice: fewer than 32
@@ -50,7 +50,7 @@ NATIONS = ["England", "Argentina", "Australia", "Brazil", "Japan"]
 # name: (start year, database folder or None, last season, changing rules, nations)
 RUNS = {
     "2001-on": (2001, None, 2002, "on", NATIONS),
-    "2003-on": (2003, "October 2003", 2005, "on", ["England", "Australia"]),
+    "2003-on": (2003, "October 2003", 2005, "on", ["England"]),
     "2007": (2007, "November 2007", 2008, "off", NATIONS),
     "2023-on": (2023, "October 2023", 2024, "on", NATIONS),
 }
