@@ -129,6 +129,13 @@ if(NOT WIN32)
         src/recomp_rt/win/season_intl_table.c)
     target_include_directories(season_intl_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_intl COMMAND season_intl_test)
+    # Nations Leagues (0.6.0 slice 28): the C table of the editions and leagues matches the tables, and the
+    # ranking, promotion and relegation and play-off path rules.
+    add_test(NAME season_nl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_nl.py" --check)
+    add_executable(season_nl_test tests/seasons/test_season_nl.c src/recomp_rt/win/season_nl_rules.c
+        src/recomp_rt/win/season_nl_table.c)
+    target_include_directories(season_nl_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_nl COMMAND season_nl_test)
     # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
     add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
         src/recomp_rt/win/season_cups_table.c)
