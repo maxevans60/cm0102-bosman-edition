@@ -66,7 +66,6 @@
 2002	name	oceania_nations (Oceania Nations Cup), row int-continental-21: game 'Oceania Nations Cup', table '2002 OFC Nations Cup'
 2002	name	world_club_cup (Intercontinental Cup), row club-world-20: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2002	no_row	friendly (Friendly): no table row
-2002	no_row	mini_league (Friendly League): no table row
 2002	no_row	record_utils ('B' International): no table row
 2002	no_row	record_utils (Reserve): no table row
 2002	no_row	record_utils (Under 21 International): no table row
@@ -119,8 +118,6 @@
 2003	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-28: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
 2003	name	world_club_cup (Intercontinental Cup), row club-world-39: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2003	no_row	friendly (Friendly): no table row
-2003	no_row	mini_cup (Friendly Cup): no table row
-2003	no_row	mini_league (Friendly League): no table row
 2003	no_row	record_utils ('B' International): no table row
 2003	no_row	record_utils (Reserve): no table row
 2003	no_row	record_utils (Under 21 International): no table row
@@ -177,7 +174,6 @@
 2004	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-40: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
 2004	name	world_club_cup (Intercontinental Cup), row club-world-58: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2004	no_row	friendly (Friendly): no table row
-2004	no_row	mini_cup (Friendly Cup): no table row
 2004	no_row	record_utils ('B' International): no table row
 2004	no_row	record_utils (Reserve): no table row
 2004	no_row	record_utils (Under 21 International): no table row
@@ -236,7 +232,6 @@
 2005	name	world_club_cup (Intercontinental Cup), row club-world-77: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2005	name	world_cup (FIFA World Cup), row int-world-50: game 'FIFA World Cup', table '2006 FIFA World Cup'
 2005	no_row	friendly (Friendly): no table row
-2005	no_row	mini_cup (Friendly Cup): no table row
 2005	no_row	record_utils ('B' International): no table row
 2005	no_row	record_utils (Reserve): no table row
 2005	no_row	record_utils (Under 21 International): no table row
@@ -282,7 +277,6 @@
 2006	name	world_club_champ (FIFA Club World Championship), row club-world-97: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2006	name	world_club_cup (Intercontinental Cup), row club-world-96: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2006	no_row	friendly (Friendly): no table row
-2006	no_row	mini_cup (Friendly Cup): no table row
 2006	no_row	record_utils ('B' International): no table row
 2006	no_row	record_utils (Reserve): no table row
 2006	no_row	record_utils (Under 21 International): no table row
@@ -342,8 +336,6 @@
 2007	name	world_club_champ (FIFA Club World Championship), row club-world-116: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2007	name	world_club_cup (Intercontinental Cup), row club-world-115: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2007	no_row	friendly (Friendly): no table row
-2007	no_row	mini_cup (Friendly Cup): no table row
-2007	no_row	mini_league (Friendly League): no table row
 2007	no_row	record_utils ('B' International): no table row
 2007	no_row	record_utils (Reserve): no table row
 2007	no_row	record_utils (Under 21 International): no table row
@@ -406,7 +398,6 @@
 2008	name	world_club_champ (FIFA Club World Championship), row club-world-135: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2008	name	world_club_cup (Intercontinental Cup), row club-world-134: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2008	no_row	friendly (Friendly): no table row
-2008	no_row	mini_league (Friendly League): no table row
 2008	no_row	record_utils ('B' International): no table row
 2008	no_row	record_utils (Reserve): no table row
 2008	no_row	record_utils (Under 21 International): no table row
@@ -473,7 +464,6 @@
 2009	name	world_club_cup (Intercontinental Cup), row club-world-153: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2009	name	world_cup (FIFA World Cup), row int-world-98: game 'FIFA World Cup', table '2010 FIFA World Cup'
 2009	no_row	friendly (Friendly): no table row
-2009	no_row	mini_league (Friendly League): no table row
 2009	no_row	record_utils ('B' International): no table row
 2009	no_row	record_utils (Reserve): no table row
 2009	no_row	record_utils (Under 21 International): no table row
@@ -528,7 +518,6 @@
 2010	name	world_club_champ (FIFA Club World Championship), row club-world-173: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2010	name	world_club_cup (Intercontinental Cup), row club-world-172: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2010	no_row	friendly (Friendly): no table row
-2010	no_row	mini_league (Friendly League): no table row
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
 2010	no_row	record_utils (Under 21 International): no table row
@@ -592,8 +581,6 @@
 2011	name	world_club_champ (FIFA Club World Championship), row club-world-192: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2011	name	world_club_cup (Intercontinental Cup), row club-world-191: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2011	no_row	friendly (Friendly): no table row
-2011	no_row	mini_cup (Friendly Cup): no table row
-2011	no_row	mini_league (Friendly League): no table row
 2011	no_row	record_utils ('B' International): no table row
 2011	no_row	record_utils (Reserve): no table row
 2011	no_row	record_utils (Under 21 International): no table row
@@ -657,8 +644,6 @@
 2012	name	world_club_champ (FIFA Club World Championship), row club-world-211: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2012	name	world_club_cup (Intercontinental Cup), row club-world-210: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2012	no_row	friendly (Friendly): no table row
-2012	no_row	mini_cup (Friendly Cup): no table row
-2012	no_row	mini_league (Friendly League): no table row
 2012	no_row	record_utils ('B' International): no table row
 2012	no_row	record_utils (Reserve): no table row
 2012	no_row	record_utils (Under 21 International): no table row
@@ -722,8 +707,6 @@
 2013	name	world_club_cup (Intercontinental Cup), row club-world-229: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2013	name	world_cup (FIFA World Cup), row int-world-146: game 'FIFA World Cup', table '2014 FIFA World Cup'
 2013	no_row	friendly (Friendly): no table row
-2013	no_row	mini_cup (Friendly Cup): no table row
-2013	no_row	mini_league (Friendly League): no table row
 2013	no_row	record_utils ('B' International): no table row
 2013	no_row	record_utils (Reserve): no table row
 2013	no_row	record_utils (Under 21 International): no table row
@@ -779,7 +762,6 @@
 2014	name	world_club_champ (FIFA Club World Championship), row club-world-249: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2014	name	world_club_cup (Intercontinental Cup), row club-world-248: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2014	no_row	friendly (Friendly): no table row
-2014	no_row	mini_cup (Friendly Cup): no table row
 2014	no_row	record_utils ('B' International): no table row
 2014	no_row	record_utils (Reserve): no table row
 2014	no_row	record_utils (Under 21 International): no table row
@@ -840,7 +822,6 @@
 2015	name	world_club_champ (FIFA Club World Championship), row club-world-268: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2015	name	world_club_cup (Intercontinental Cup), row club-world-267: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2015	no_row	friendly (Friendly): no table row
-2015	no_row	mini_cup (Friendly Cup): no table row
 2015	no_row	record_utils ('B' International): no table row
 2015	no_row	record_utils (Reserve): no table row
 2015	no_row	record_utils (Under 21 International): no table row
@@ -905,8 +886,6 @@
 2016	name	world_club_champ (FIFA Club World Championship), row club-world-287: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2016	name	world_club_cup (Intercontinental Cup), row club-world-286: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2016	no_row	friendly (Friendly): no table row
-2016	no_row	mini_cup (Friendly Cup): no table row
-2016	no_row	mini_league (Friendly League): no table row
 2016	no_row	record_utils ('B' International): no table row
 2016	no_row	record_utils (Reserve): no table row
 2016	no_row	record_utils (Under 21 International): no table row
@@ -971,7 +950,6 @@
 2017	name	world_club_cup (Intercontinental Cup), row club-world-305: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2017	name	world_cup (FIFA World Cup), row int-world-194: game 'FIFA World Cup', table '2018 FIFA World Cup'
 2017	no_row	friendly (Friendly): no table row
-2017	no_row	mini_league (Friendly League): no table row
 2017	no_row	record_utils ('B' International): no table row
 2017	no_row	record_utils (Reserve): no table row
 2017	no_row	record_utils (Under 21 International): no table row
@@ -1027,8 +1005,6 @@
 2018	name	world_club_champ (FIFA Club World Championship), row club-world-325: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2018	name	world_club_cup (Intercontinental Cup), row club-world-324: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2018	no_row	friendly (Friendly): no table row
-2018	no_row	mini_cup (Friendly Cup): no table row
-2018	no_row	mini_league (Friendly League): no table row
 2018	no_row	record_utils ('B' International): no table row
 2018	no_row	record_utils (Reserve): no table row
 2018	no_row	record_utils (Under 21 International): no table row
@@ -1090,7 +1066,6 @@
 2019	name	world_club_champ (FIFA Club World Championship), row club-world-344: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2019	name	world_club_cup (Intercontinental Cup), row club-world-343: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2019	no_row	friendly (Friendly): no table row
-2019	no_row	mini_cup (Friendly Cup): no table row
 2019	no_row	record_utils ('B' International): no table row
 2019	no_row	record_utils (Reserve): no table row
 2019	no_row	record_utils (Under 21 International): no table row
@@ -1158,7 +1133,6 @@
 2020	name	world_club_champ (FIFA Club World Championship), row club-world-363: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2020	name	world_club_cup (Intercontinental Cup), row club-world-362: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2020	no_row	friendly (Friendly): no table row
-2020	no_row	mini_cup (Friendly Cup): no table row
 2020	no_row	record_utils ('B' International): no table row
 2020	no_row	record_utils (Reserve): no table row
 2020	no_row	record_utils (Under 21 International): no table row
@@ -1230,7 +1204,6 @@
 2021	name	world_club_champ (FIFA Club World Championship), row club-world-382: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2021	name	world_club_cup (Intercontinental Cup), row club-world-381: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2021	no_row	friendly (Friendly): no table row
-2021	no_row	mini_cup (Friendly Cup): no table row
 2021	no_row	record_utils ('B' International): no table row
 2021	no_row	record_utils (Reserve): no table row
 2021	no_row	record_utils (Under 21 International): no table row
@@ -1296,7 +1269,6 @@
 2022	name	world_club_champ (FIFA Club World Championship), row club-world-401: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2022	name	world_club_cup (Intercontinental Cup), row club-world-400: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2022	no_row	friendly (Friendly): no table row
-2022	no_row	mini_cup (Friendly Cup): no table row
 2022	no_row	record_utils ('B' International): no table row
 2022	no_row	record_utils (Reserve): no table row
 2022	no_row	record_utils (Under 21 International): no table row
@@ -1375,7 +1347,6 @@
 2023	name	world_club_champ (FIFA Club World Championship), row club-world-420: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2023	name	world_club_cup (Intercontinental Cup), row club-world-419: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2023	no_row	friendly (Friendly): no table row
-2023	no_row	mini_cup (Friendly Cup): no table row
 2023	no_row	record_utils ('B' International): no table row
 2023	no_row	record_utils (Reserve): no table row
 2023	no_row	record_utils (Under 21 International): no table row
@@ -1452,8 +1423,6 @@
 2024	name	world_club_champ (FIFA Club World Championship), row club-world-439: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2024	name	world_club_cup (Intercontinental Cup), row club-world-438: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2024	no_row	friendly (Friendly): no table row
-2024	no_row	mini_cup (Friendly Cup): no table row
-2024	no_row	mini_league (Friendly League): no table row
 2024	no_row	record_utils ('B' International): no table row
 2024	no_row	record_utils (Reserve): no table row
 2024	no_row	record_utils (Under 21 International): no table row
@@ -1530,8 +1499,6 @@
 2025	name	world_club_cup (Intercontinental Cup), row club-world-457: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2025	name	world_cup (FIFA World Cup), row int-world-290: game 'FIFA World Cup', table '2026 FIFA World Cup'
 2025	no_row	friendly (Friendly): no table row
-2025	no_row	mini_cup (Friendly Cup): no table row
-2025	no_row	mini_league (Friendly League): no table row
 2025	no_row	record_utils ('B' International): no table row
 2025	no_row	record_utils (Reserve): no table row
 2025	no_row	record_utils (Under 21 International): no table row
@@ -1599,7 +1566,6 @@
 2026	name	world_club_champ (FIFA Club World Championship), row club-world-477: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2026	name	world_club_cup (Intercontinental Cup), row club-world-476: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2026	no_row	friendly (Friendly): no table row
-2026	no_row	mini_cup (Friendly Cup): no table row
 2026	no_row	record_utils ('B' International): no table row
 2026	no_row	record_utils (Reserve): no table row
 2026	no_row	record_utils (Under 21 International): no table row
@@ -1666,7 +1632,6 @@
 2027	name	world_club_champ (FIFA Club World Championship), row club-world-496: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2027	name	world_club_cup (Intercontinental Cup), row club-world-495: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2027	no_row	friendly (Friendly): no table row
-2027	no_row	mini_cup (Friendly Cup): no table row
 2027	no_row	record_utils ('B' International): no table row
 2027	no_row	record_utils (Reserve): no table row
 2027	no_row	record_utils (Under 21 International): no table row
