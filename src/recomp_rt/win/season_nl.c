@@ -85,6 +85,7 @@
 #define F_STAGE 0x30u                   /* current stage */
 #define F_YEAR 0x40u
 #define F_DRAWN 0x45u                   /* 1 after the draw (0x57fe1d) */
+#define F_FINISHED 0xddu                /* 1 when League::check_complete found it complete (0x689c06) */
 #define F_TABLE 0xb1u                   /* League table: rows of 0x3b bytes (0x57e7f7..0x57e803) */
 #define F_TEAMS 0x3eu
 #define F_DRAW_DAY 0xb6u                /* word: day of the year of the draw (0x57e98f) */
@@ -661,32 +662,32 @@ static void round_template(void)
 
 /* ---- The vtable slots ---- */
 
-/* vtable +0x8, thiscall (): the pass calls it on the update day of entry 1 (15 August) once the edition is
- * complete. It keeps the tables (the next draw reads them) and only moves the object on to the next edition:
- * its year and draw day. The object then waits: its update does nothing before the draw day (0x57fddf). A
- * second call before the draw changes nothing. */
+/* The move to the next edition once the edition that the object holds is complete: its year and draw day.
+ * The tables stay (the next draw reads them). The object then waits: its update does nothing before the draw
+ * day (0x57fddf). A second call before the draw changes nothing. */
+static void next_edition(uint32_t self)
+{
+    uint32_t st0 = stage_at(self, 0);
+    int year = year_of(self);
+    if (!rd32(g_mem, self + F_DRAWN) || !readable(st0) || year_of(st0) != year) return;
+    int next = next_year(year);
+    const SeasonNlEdition *e = edition(next);
+    if (!e) return;
+    wr16(g_mem, self + F_YEAR, (uint32_t)next);
+    set_draw_day(self, e);
+    if (logging())
+        fprintf(stderr, "recomp: season nl: the %d edition ends; the next is %s (%d), draw day %d of %d\n", year,
+                e->edition, next, (int16_t)rd16(g_mem, self + F_DRAW_DAY), next + (int16_t)rd16(g_mem, self + F_DRAW_YEAR));
+}
+
+/* vtable +0x8, thiscall (): the season pass calls it on the update day of entry 1 (15 August) for a complete
+ * competition whose vtable +0x2c gives 0 (0x5d5cab..0x5d5d1c; the copy takes the League base 0x48ce70 there,
+ * the class's 0x57eb10 gives 1). Entry 1 changes its season only every second year (year step 2 at
+ * 0x830fb6), so the update below also moves the object on the day after its finals end. */
 static void start_new_season(void)
 {
     uint32_t self = cpu.ecx;
-    if (is_nl(self) && logging())
-        fprintf(stderr, "recomp: season nl: start_new_season of %d (drawn %u, stage %d)\n", year_of(self),
-                rd32(g_mem, self + F_DRAWN), (int32_t)rd32(g_mem, self + F_STAGE));
-    if (is_nl(self)) {
-        uint32_t st0 = stage_at(self, 0);
-        int year = year_of(self);
-        if (rd32(g_mem, self + F_DRAWN) && readable(st0) && year_of(st0) == year) {
-            int next = next_year(year);
-            const SeasonNlEdition *e = edition(next);
-            if (e) {
-                wr16(g_mem, self + F_YEAR, (uint32_t)next);
-                set_draw_day(self, e);
-                if (logging())
-                    fprintf(stderr, "recomp: season nl: the %d edition ends; the next is %s (%d), draw day %d of %d\n",
-                            year, e->edition, next, (int16_t)rd16(g_mem, self + F_DRAW_DAY),
-                            next + (int16_t)rd16(g_mem, self + F_DRAW_YEAR));
-            }
-        }
-    }
+    if (is_nl(self)) next_edition(self);
     if (rt_unwinding) return;
     rt_ret_stdcall(0, 0);
 }
@@ -721,6 +722,7 @@ static void update_for_date(void)
                 wr16(g_mem, self + F_YEAR, (uint32_t)year);
             }
             if (!rd32(g_mem, self + F_DRAWN)) {
+                wr32(g_mem, self + F_FINISHED, 0);     /* else check_complete gives 1 at once (0x689b15) */
                 make_stages(self, group_count(&cur));
                 if (rt_unwinding) return;
                 game_free(rd32(g_mem, self + F_TEMPLATE));
@@ -737,12 +739,14 @@ static void update_for_date(void)
     uint32_t a[2] = {today, full};
     uint32_t r = call_this(QUAL_UPDATE, self, 2, a);
     if (rt_unwinding) return;
+    if (is_nl(self) && rd32(g_mem, self + F_FINISHED)) next_edition(self);
+    if (rt_unwinding) return;
     if (is_nl(self) && logging() && readable(today)) {
         /* Test log: the state of the edition when it changes (stage, the finished flag +0xdd of 0x689c06). */
         static uint32_t last = 0xffffffffu;
         int groups = held_groups(self);
         uint32_t cup = groups >= 2 ? stage_at(self, groups - 1) : 0;
-        uint32_t state = (rd32(g_mem, self + F_STAGE) & 0xff) | (rd32(g_mem, self + 0xddu) ? 0x100u : 0) |
+        uint32_t state = (rd32(g_mem, self + F_STAGE) & 0xff) | (rd32(g_mem, self + F_FINISHED) ? 0x100u : 0) |
                          (readable(cup) && rd32(g_mem, cup + 0xddu) ? 0x200u : 0) | (readable(cup) ? 0x400u : 0);
         if (state != last)
             fprintf(stderr, "recomp: season nl: day %d of %d: stage %d, finished %d, finals %s%s\n",
@@ -835,8 +839,9 @@ static uint32_t build_vtable(void)
     if (vtable_copy) return vtable_copy;
     uint32_t v = season_comps_vtable(QUAL_VTABLE, VTABLE_SLOTS);
     if (!v) return 0;
-    /* The League base functions where the class feeds the European Championship (class doc 10). */
-    static const int base_slots[] = {14, 17, 18, 23, 26, 28, 29, 30, 37};
+    /* The League base functions where the class feeds the European Championship (class doc 10), and slot 11
+     * (0x48ce70 returns 0, so the season pass may start the object; the class's 0x57eb10 returns 1). */
+    static const int base_slots[] = {11, 14, 17, 18, 23, 26, 28, 29, 30, 37};
     for (size_t i = 0; i < sizeof base_slots / sizeof base_slots[0]; i++)
         wr32(g_mem, v + 4u * (uint32_t)base_slots[i], rd32(g_mem, LEAGUE_VTABLE + 4u * (uint32_t)base_slots[i]));
     season_comps_set_slot(v, 2, "nl_start_new_season", start_new_season);
