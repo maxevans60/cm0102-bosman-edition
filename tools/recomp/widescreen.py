@@ -107,6 +107,12 @@ from staff_reserve import PATCHES as RESERVE_PATCHES  # noqa: E402
 assert not set(RESERVE_PATCHES) & set(PATCHES)
 PATCHES.update(RESERVE_PATCHES)
 
+# The knockout slot of the Champions League (0.6.0 slice 22) in the same way.
+from uefa import PATCHES as UEFA_PATCHES  # noqa: E402
+
+assert not set(UEFA_PATCHES) & set(PATCHES)
+PATCHES.update(UEFA_PATCHES)
+
 # Not a screen size: a fix for an endless loop (0.4.0 slice 12, custom data sets). euro.cfg is read by 0x9059e0
 # (docs/research/2026-10-16-update-team-databases.md). When a line of it is not a "*" header (after a header
 # that names an unknown nation, or a file that does not match the database), the original tests the same line

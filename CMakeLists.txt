@@ -144,6 +144,18 @@ if(NOT WIN32)
     target_include_directories(season_cup_breaks_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_breaks COMMAND season_cup_breaks_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_cup_breaks PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The UEFA formats by season (0.6.0 slice 22): the committed table matches uefa.tsv, and its lookups.
+    add_test(NAME season_uefa_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_uefa_table.py" --check)
+    add_executable(season_uefa_test tests/seasons/test_season_uefa.c src/recomp_rt/win/season_uefa_table.c
+        src/recomp_rt/win/season_uefa_lookup.c)
+    target_include_directories(season_uefa_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_uefa COMMAND season_uefa_test)
+    # The real round names (Q370): the committed table matches round-names.tsv, and its lookup.
+    add_test(NAME season_round_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_round_names.py" --check)
+    add_executable(season_round_names_test tests/seasons/test_season_round_names.c
+        src/recomp_rt/win/season_round_names.c src/recomp_rt/win/season_round_names_table.c)
+    target_include_directories(season_round_names_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_round_names COMMAND season_round_names_test)
     # The substitute rule lookup (0.6.0 slice 17).
     add_executable(season_subs_test tests/seasons/test_season_subs.c src/recomp_rt/win/season_subs_rule.c
         src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
