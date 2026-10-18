@@ -138,4 +138,16 @@ A smaller count works in every class of the size table (unused dates at the end 
 
 ## Tests
 
-Filled in from the runs.
+Runs of 2026-10-18 on this branch (`G=/Users/max/Projects/cm0102/clean-3968`, `D=/Users/max/Projects/cm0102/test-fixtures/databases`). The 2010 expected files lose the counts and places that the slice applies (Portugal 16 and 16, Australia 11, Brazil 20 and 20, many places) and get the MLS list (12 of 18 clubs).
+
+| Command | Result |
+|---|---|
+| `python3 tests/seasons/rules_report_check.py --run build/cm0102_recomp $G --year 2010 --database "$D/September 2010 ODB" --nations all,-argentina,-australia,-belgium,-brazil,-croatia,-denmark,-finland,-france,-germany,-greece,-holland,-italy,-japan,-northern_ireland,-norway --start-only` | PASS. Before the MLS fix: box usa_mls..cpp 1819 |
+| the same with `--nations argentina,australia,belgium,brazil,croatia,denmark,finland,france,germany,greece,holland,italy,japan,northern_ireland,norway` | PASS |
+| `python3 tests/seasons/rules_report_check.py --run build/cm0102_recomp $G --year 2022 --database "$D/October 2022" --nations france --last 2023 --changing-rules on` | PASS: Ligue 1 relegates 4, Ligue 2 promotes 2, and Ligue 1 holds 18 clubs on 34 dates in 2023/24; expected file `2022-england-france-changing.tsv` |
+| `--year 2023 --database "$D/October 2023" --nations france --last 2023` | stops on day 40 of 2024 at comp_stats.CPP 1664 (`EuroChamp::set_predicted_positions` 0x57c9f0, the Euro 2024 edition); the same with `RECOMP_LEAGUE_SIZES=off`, so not this slice (sent to slice 27) |
+| `cd build && ctest -R "season_size_wraps|season_clubs_table|season_starts"` | 3 of 3 pass |
+
+Test switches: `RECOMP_LEAGUE_SIZES=off` (original counts and places in a season game), `RECOMP_SIZE_LOG=1` (a line for each count, place, date count, cup cap and pair move).
+
+Not run here (the lead runs them in review): the same-save set (Q342), the full jump to 2027/28, and seasons other than 2010, 2022 and 2023.
