@@ -516,11 +516,22 @@ RT_WRAP(005a8f60, empty_or_uc_advance)
     if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
 }
 
-/* Cup::load_from_disk, thiscall (by_comp_id) ret 4: the stage array of a UEFA Cup before its stages load. */
+/* A season whose UEFA Cup has groups: the year of the object (+0x40, the game year that the constructor gives
+ * it at 0x902317, before the load) or the year before (a load from January to June). */
+static int groups_near(uint32_t uc)
+{
+    int year = (int16_t)rd16(g_mem, uc + 0x40);
+    const SeasonUefa *a = season_uefa_row(year), *b = season_uefa_row(year - 1);
+    return (a && a->uc_groups) || (b && b->uc_groups);
+}
+
+/* Cup::load_from_disk, thiscall (by_comp_id) ret 4: the stage array of a UEFA Cup before its stages load. The
+ * constructor calls it at a new game too (0x90235f), so the array is made only for a season with groups: a game
+ * of the original's format (a 2001 start with changing rules on) allocates nothing (Q152). */
 RT_WRAP(0051fc00, cup_load)
 {
     uint32_t obj = cpu.ecx;
-    if (is_uc(obj) && season_uefa_row(season_start_year()) && !readable(rd32(g_mem, obj + 0xc))) {
+    if (is_uc(obj) && groups_near(obj) && !readable(rd32(g_mem, obj + 0xc))) {
         uint32_t saved_ecx = cpu.ecx;
         ensure_stage_array(obj);
         if (rt_unwinding) return;
