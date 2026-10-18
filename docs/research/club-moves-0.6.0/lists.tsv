@@ -1,0 +1,1354 @@
+season	part	list	clubs	with_record	database_division	note
+2001	arg-usa	Major League Soccer	10	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2002	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2002	arg-usa	Major League Soccer	10	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2002	arg-usa	Primera División	20	20	Argentine Premier Division	
+2003	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2003	arg-usa	Major League Soccer	10	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2003	arg-usa	Primera División	20	20	Argentine Premier Division	
+2005	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2005	arg-usa	Primera División	20	20	Argentine Premier Division	
+2005	arg-usa	Major League Soccer	12	9		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2006	arg-usa	Primera División	20	20	Argentine Premier Division	
+2006	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2007	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2007	arg-usa	Major League Soccer	14	10		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2008	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2008	arg-usa	Major League Soccer	15	13		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2009	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2009	arg-usa	Major League Soccer	16	13		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2010	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2010	arg-usa	Major League Soccer	18	16		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2011	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2011	arg-usa	Major League Soccer	19	17		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2012	arg-usa	Primera B Nacional	20	20	Argentine Second Division	
+2012	arg-usa	Major League Soccer	19	17		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2013	arg-usa	Primera B Nacional	22	22	Argentine Second Division	
+2013	arg-usa	Major League Soccer	19	17		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2014	arg-usa	Primera División	30	30	Argentine Premier Division	
+2014	arg-usa	Primera B Nacional	22	20	Argentine Second Division	
+2014	arg-usa	Major League Soccer	20	18		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2015	arg-usa	Primera División	30	30	Argentine Premier Division	
+2015	arg-usa	Primera B Nacional	22	22	Argentine Second Division	
+2015	arg-usa	Major League Soccer	20	18		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2016	arg-usa	Primera División	30	30	Argentine Premier Division	
+2016	arg-usa	Primera B Nacional	23	23	Argentine Second Division	
+2016	arg-usa	Major League Soccer	22	20		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2017	arg-usa	Primera División	28	28	Argentine Premier Division	
+2017	arg-usa	Major League Soccer	23	20		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2017	arg-usa	Primera B Nacional	25	25	Argentine Second Division	
+2018	arg-usa	Primera División	26	26	Argentine Premier Division	
+2018	arg-usa	Major League Soccer	24	22		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2018	arg-usa	Primera B Nacional	25	25	Argentine Second Division	
+2019	arg-usa	Primera División	24	24	Argentine Premier Division	
+2019	arg-usa	Primera Nacional	32	32	Argentine Second Division	
+2019	arg-usa	Major League Soccer	26	23		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2020	arg-usa	Primera División	26	26	Argentine Premier Division	
+2020	arg-usa	Primera Nacional	35	35	Argentine Second Division	
+2020	arg-usa	Major League Soccer	27	25		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2021	arg-usa	Primera División	28	28	Argentine Premier Division	
+2021	arg-usa	Primera Nacional	37	37	Argentine Second Division	
+2021	arg-usa	Major League Soccer	28	26		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2022	arg-usa	Primera División	28	28	Argentine Premier Division	
+2022	arg-usa	Primera Nacional	37	37	Argentine Second Division	
+2022	arg-usa	Major League Soccer	29	27		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2023	arg-usa	Primera División	28	28	Argentine Premier Division	
+2023	arg-usa	Primera Nacional	38	38	Argentine Second Division	
+2023	arg-usa	Major League Soccer	29	27		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2024	arg-usa	Primera División	30	30	Argentine Premier Division	
+2024	arg-usa	Primera Nacional	36	36	Argentine Second Division	
+2024	arg-usa	Major League Soccer	30	28		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2025	arg-usa	Primera División	30	30	Argentine Premier Division	
+2025	arg-usa	Primera Nacional	36	36	Argentine Second Division	
+2025	arg-usa	Major League Soccer	30	28		left out: the class knows its 12 clubs by their key ids (usa_mls_get_club_division 0x909ec0 stops at usa_mls.cpp 1819 for any other club; slice 18)
+2005	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2005	aus-jap-kor	J2 League	13	13	Japanese J-League 2	
+2006	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2006	aus-jap-kor	J2 League	13	13	Japanese J-League 2	
+2006	aus-jap-kor	K League	14	14	Korean League	
+2006	aus-jap-kor	A-League	8	8	Australian National Soccer League	
+2007	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2007	aus-jap-kor	J2 League	15	15	Japanese J-League 2	
+2008	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2008	aus-jap-kor	J2 League	18	18	Japanese J-League 2	
+2009	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2009	aus-jap-kor	J2 League	19	19	Japanese J-League 2	
+2010	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2010	aus-jap-kor	J2 League	20	20	Japanese J-League 2	
+2011	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2011	aus-jap-kor	J2 League	22	21	Japanese J-League 2	
+2012	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2012	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2013	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2013	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2014	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2014	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2015	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2015	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2016	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2016	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2017	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2017	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2018	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2018	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2019	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2019	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2020	aus-jap-kor	J1 League	20	20	Japanese J-League 1	
+2020	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2021	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2021	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2022	aus-jap-kor	J1 League	18	18	Japanese J-League 1	
+2022	aus-jap-kor	J2 League	22	22	Japanese J-League 2	
+2023	aus-jap-kor	J1 League	20	20	Japanese J-League 1	
+2023	aus-jap-kor	J2 League	20	20	Japanese J-League 2	
+2024	aus-jap-kor	J1 League	20	20	Japanese J-League 1	
+2024	aus-jap-kor	J2 League	20	20	Japanese J-League 2	
+2025	aus-jap-kor	J1 League	20	20	Japanese J-League 1	
+2025	aus-jap-kor	J2 League	20	19	Japanese J-League 2	
+2002	aus-jap-kor	K League	12	11	Korean League	
+2003	aus-jap-kor	K League	13	11	Korean League	
+2005	aus-jap-kor	K League	14	11	Korean League	
+2007	aus-jap-kor	K League	14	14	Korean League	
+2008	aus-jap-kor	K League	15	14	Korean League	
+2009	aus-jap-kor	K League	15	14	Korean League	
+2010	aus-jap-kor	K League	16	15	Korean League	
+2011	aus-jap-kor	K League	16	16	Korean League	
+2012	aus-jap-kor	K League	14	14	Korean League	
+2013	aus-jap-kor	K League	12	12	Korean League	
+2014	aus-jap-kor	K League	12	12	Korean League	
+2015	aus-jap-kor	K League	12	12	Korean League	
+2016	aus-jap-kor	K League	12	12	Korean League	
+2017	aus-jap-kor	K League	12	12	Korean League	
+2018	aus-jap-kor	K League	12	12	Korean League	
+2019	aus-jap-kor	K League	12	12	Korean League	
+2020	aus-jap-kor	K League	12	12	Korean League	
+2021	aus-jap-kor	K League	12	12	Korean League	
+2022	aus-jap-kor	K League	12	12	Korean League	
+2023	aus-jap-kor	K League	12	12	Korean League	
+2024	aus-jap-kor	K League	12	12	Korean League	
+2025	aus-jap-kor	K League	12	12	Korean League	
+2005	aus-jap-kor	A-League	8	6	Australian National Soccer League	
+2007	aus-jap-kor	A-League	8	8	Australian National Soccer League	
+2008	aus-jap-kor	A-League	8	8	Australian National Soccer League	
+2009	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2010	aus-jap-kor	A-League	11	11	Australian National Soccer League	
+2011	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2012	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2013	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2014	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2015	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2016	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2017	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2018	aus-jap-kor	A-League	10	10	Australian National Soccer League	
+2019	aus-jap-kor	A-League	11	11	Australian National Soccer League	
+2020	aus-jap-kor	A-League	12	12	Australian National Soccer League	
+2021	aus-jap-kor	A-League	12	12	Australian National Soccer League	
+2022	aus-jap-kor	A-League	12	12	Australian National Soccer League	
+2023	aus-jap-kor	A-League	12	12	Australian National Soccer League	
+2025	aus-jap-kor	A-League	12	12	Australian National Soccer League	
+2001	bra	Série A (2002)	26	26	Brazilian National First Division	
+2001	bra	Série B (2002)	26	26	Brazilian National Second Division	
+2001	bra	Série C (2002)	61	54	Brazilian National Third Division	
+2002	bra	Série A (2003)	24	24	Brazilian National First Division	
+2002	bra	Série B (2003)	24	24	Brazilian National Second Division	
+2002	bra	Série C (2003)	93	79	Brazilian National Third Division	
+2003	bra	Série A (2004)	24	24	Brazilian National First Division	
+2003	bra	Série B (2004)	24	24	Brazilian National Second Division	
+2003	bra	Série C (2004)	60	47	Brazilian National Third Division	
+2005	bra	Série A (2006)	20	20	Brazilian National First Division	
+2005	bra	Série B (2006)	20	20	Brazilian National Second Division	
+2005	bra	Série C (2006)	63	45	Brazilian National Third Division	
+2006	bra	Série A (2007)	20	20	Brazilian National First Division	
+2006	bra	Série B (2007)	20	20	Brazilian National Second Division	
+2007	bra	Série A (2008)	20	20	Brazilian National First Division	
+2007	bra	Série B (2008)	20	20	Brazilian National Second Division	
+2007	bra	Série C (2008)	63	52	Brazilian National Third Division	
+2008	bra	Série A (2009)	20	20	Brazilian National First Division	
+2008	bra	Série B (2009)	20	20	Brazilian National Second Division	
+2008	bra	Série C (2009)	20	20	Brazilian National Third Division	1 clubs already in another list: Clube de Regatas Brasil
+2009	bra	Série A (2010)	20	20	Brazilian National First Division	
+2009	bra	Série B (2010)	20	20	Brazilian National Second Division	
+2009	bra	Série C (2010)	20	20	Brazilian National Third Division	
+2010	bra	Série A (2011)	20	20	Brazilian National First Division	
+2010	bra	Série B (2011)	20	20	Brazilian National Second Division	
+2010	bra	Série C (2011)	20	20	Brazilian National Third Division	
+2011	bra	Série A (2012)	20	20	Brazilian National First Division	
+2011	bra	Série B (2012)	20	20	Brazilian National Second Division	
+2011	bra	Série C (2012)	20	20	Brazilian National Third Division	
+2012	bra	Série A (2013)	20	20	Brazilian National First Division	
+2012	bra	Série B (2013)	20	20	Brazilian National Second Division	
+2012	bra	Série C (2013)	21	21	Brazilian National Third Division	
+2013	bra	Série A (2014)	20	20	Brazilian National First Division	
+2013	bra	Série B (2014)	20	20	Brazilian National Second Division	
+2013	bra	Série C (2014)	20	20	Brazilian National Third Division	
+2014	bra	Série A (2015)	20	20	Brazilian National First Division	
+2014	bra	Série B (2015)	20	20	Brazilian National Second Division	
+2014	bra	Série C (2015)	20	20	Brazilian National Third Division	
+2015	bra	Série A (2016)	20	20	Brazilian National First Division	
+2015	bra	Série B (2016)	20	20	Brazilian National Second Division	
+2015	bra	Série C (2016)	20	20	Brazilian National Third Division	
+2016	bra	Série A (2017)	20	20	Brazilian National First Division	
+2016	bra	Série B (2017)	20	20	Brazilian National Second Division	
+2016	bra	Série C (2017)	20	20	Brazilian National Third Division	
+2017	bra	Série A (2018)	20	20	Brazilian National First Division	
+2017	bra	Série B (2018)	20	20	Brazilian National Second Division	
+2017	bra	Série C (2018)	20	19	Brazilian National Third Division	
+2018	bra	Série A (2019)	20	20	Brazilian National First Division	
+2018	bra	Série B (2019)	20	20	Brazilian National Second Division	
+2018	bra	Série C (2019)	20	19	Brazilian National Third Division	
+2019	bra	Série A (2020)	20	20	Brazilian National First Division	
+2019	bra	Série B (2020)	20	20	Brazilian National Second Division	
+2019	bra	Série C (2020)	20	20	Brazilian National Third Division	
+2020	bra	Série A (2021)	20	20	Brazilian National First Division	
+2020	bra	Série B (2021)	20	20	Brazilian National Second Division	
+2020	bra	Série C (2021)	20	20	Brazilian National Third Division	
+2021	bra	Série A (2022)	20	20	Brazilian National First Division	
+2021	bra	Série B (2022)	20	20	Brazilian National Second Division	
+2021	bra	Série C (2022)	20	20	Brazilian National Third Division	
+2022	bra	Série A (2023)	20	20	Brazilian National First Division	
+2022	bra	Série B (2023)	20	20	Brazilian National Second Division	
+2022	bra	Série C (2023)	20	20	Brazilian National Third Division	
+2023	bra	Série A (2024)	20	20	Brazilian National First Division	
+2023	bra	Série B (2024)	20	20	Brazilian National Second Division	
+2023	bra	Série C (2024)	20	20	Brazilian National Third Division	
+2024	bra	Série A (2025)	20	20	Brazilian National First Division	
+2024	bra	Série B (2025)	20	20	Brazilian National Second Division	
+2024	bra	Série C (2025)	20	20	Brazilian National Third Division	
+2025	bra	Série A (2026)	20	20	Brazilian National First Division	
+2025	bra	Série B (2026)	20	20	Brazilian National Second Division	
+2025	bra	Série C (2026)	20	20	Brazilian National Third Division	
+2004	den-swe	Danish Superliga	12	12	Danish Premier Division	
+2004	den-swe	Allsvenskan	14	14	Swedish Premier Division	
+2006	den-swe	Danish Superliga	12	12	Danish Premier Division	
+2006	den-swe	Danish 1st Division	16	16	Danish First Division	
+2006	den-swe	Allsvenskan	14	14	Swedish Premier Division	
+2006	den-swe	Superettan	16	16	Swedish First Division	
+2016	den-swe	Danish Superliga	14	14	Danish Premier Division	
+2017	den-swe	Danish Superliga	14	14	Danish Premier Division	
+2018	den-swe	Danish Superliga	14	14	Danish Premier Division	
+2019	den-swe	Danish Superliga	14	14	Danish Premier Division	
+2011	den-swe	Danish 1st Division	14	14	Danish First Division	
+2012	den-swe	Danish 1st Division	12	12	Danish First Division	
+2013	den-swe	Danish 1st Division	12	12	Danish First Division	
+2014	den-swe	Danish 1st Division	12	12	Danish First Division	
+2015	den-swe	Danish 1st Division	12	12	Danish First Division	
+2016	den-swe	Danish 1st Division	12	12	Danish First Division	
+2017	den-swe	Danish 1st Division	12	12	Danish First Division	
+2018	den-swe	Danish 1st Division	12	12	Danish First Division	
+2019	den-swe	Danish 1st Division	12	12	Danish First Division	
+2020	den-swe	Danish 1st Division	12	12	Danish First Division	
+2021	den-swe	Danish 1st Division	12	12	Danish First Division	
+2022	den-swe	Danish 1st Division	12	12	Danish First Division	
+2023	den-swe	Danish 1st Division	12	12	Danish First Division	
+2024	den-swe	Danish 1st Division	12	12	Danish First Division	
+2025	den-swe	Danish 1st Division	12	12	Danish First Division	
+2007	den-swe	Danish 2nd Division group 1	16	14	Danish Second Division	
+2007	den-swe	Danish 2nd Division group 2	16	11	Danish Second Division	
+2008	den-swe	Danish 2nd Division group 1	16	14	Danish Second Division	
+2008	den-swe	Danish 2nd Division group 2	16	8	Danish Second Division	
+2009	den-swe	Danish 2nd Division group 1	16	12	Danish Second Division	
+2009	den-swe	Danish 2nd Division group 2	16	10	Danish Second Division	
+2010	den-swe	Danish 2nd Division group 1	16	13	Danish Second Division	
+2010	den-swe	Danish 2nd Division group 2	16	14	Danish Second Division	
+2011	den-swe	Danish 2nd Division group 1	16	12	Danish Second Division	
+2011	den-swe	Danish 2nd Division group 2	16	13	Danish Second Division	
+2012	den-swe	Danish 2nd Division group 1	16	16	Danish Second Division	
+2012	den-swe	Danish 2nd Division group 2	16	16	Danish Second Division	
+2013	den-swe	Danish 2nd Division group 1	16	15	Danish Second Division	
+2013	den-swe	Danish 2nd Division group 2	16	15	Danish Second Division	
+2014	den-swe	Danish 2nd Division group 1	16	16	Danish Second Division	
+2014	den-swe	Danish 2nd Division group 2	16	16	Danish Second Division	
+2015	den-swe	Danish 2nd Division group 1	8	8	Danish Second Division	
+2015	den-swe	Danish 2nd Division group 2	8	7	Danish Second Division	
+2015	den-swe	Danish 2nd Division group 3	8	8	Danish Second Division	
+2016	den-swe	Danish 2nd Division group 1	8	8	Danish Second Division	
+2016	den-swe	Danish 2nd Division group 2	8	8	Danish Second Division	
+2016	den-swe	Danish 2nd Division group 3	8	7	Danish Second Division	
+2017	den-swe	Danish 2nd Division group 1	8	8	Danish Second Division	
+2017	den-swe	Danish 2nd Division group 2	8	8	Danish Second Division	
+2017	den-swe	Danish 2nd Division group 3	8	8	Danish Second Division	
+2018	den-swe	Danish 2nd Division group 1	12	12	Danish Second Division	
+2018	den-swe	Danish 2nd Division group 2	12	12	Danish Second Division	
+2019	den-swe	Danish 2nd Division group 1	12	12	Danish Second Division	
+2019	den-swe	Danish 2nd Division group 2	12	12	Danish Second Division	
+2020	den-swe	Danish 2nd Division group 1	14	14	Danish Second Division	
+2020	den-swe	Danish 2nd Division group 2	14	14	Danish Second Division	
+2021	den-swe	Danish 2nd Division	12	12	Danish Second Division	
+2022	den-swe	Danish 2nd Division	12	12	Danish Second Division	
+2023	den-swe	Danish 2nd Division	12	12	Danish Second Division	
+2024	den-swe	Danish 2nd Division	12	12	Danish Second Division	
+2025	den-swe	Danish 2nd Division	12	12	Danish Second Division	
+2007	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2008	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2009	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2010	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2011	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2012	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2013	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2014	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2015	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2016	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2017	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2018	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2019	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2020	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2021	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2022	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2023	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2024	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2025	den-swe	Allsvenskan	16	16	Swedish Premier Division	
+2005	den-swe	Division 1 Norra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2005	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2007	den-swe	Division 1 Norra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2007	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2008	den-swe	Division 1 Norra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2008	den-swe	Division 1 Södra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2009	den-swe	Division 1 Norra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2009	den-swe	Division 1 Södra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2010	den-swe	Division 1 Norra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2010	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2011	den-swe	Division 1 Norra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2011	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2012	den-swe	Division 1 Norra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2012	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2013	den-swe	Division 1 Norra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2013	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2014	den-swe	Division 1 Norra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2014	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2015	den-swe	Division 1 Norra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2015	den-swe	Division 1 Södra	14	14		left out: the real groups do not match the database divisions (slice 18)
+2016	den-swe	Division 1 Norra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2016	den-swe	Division 1 Södra	14	13		left out: the real groups do not match the database divisions (slice 18)
+2017	den-swe	Division 1 Norra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2017	den-swe	Division 1 Södra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2018	den-swe	Division 1 Norra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2018	den-swe	Division 1 Södra	16	15		left out: the real groups do not match the database divisions (slice 18)
+2019	den-swe	Ettan Norra	16	15		left out: the real groups do not match the database divisions (slice 18)
+2019	den-swe	Ettan Södra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2020	den-swe	Ettan Norra	16	15		left out: the real groups do not match the database divisions (slice 18)
+2020	den-swe	Ettan Södra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2021	den-swe	Ettan Norra	16	15		left out: the real groups do not match the database divisions (slice 18)
+2021	den-swe	Ettan Södra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2022	den-swe	Ettan Norra	16	14		left out: the real groups do not match the database divisions (slice 18)
+2022	den-swe	Ettan Södra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2023	den-swe	Ettan Norra	16	15		left out: the real groups do not match the database divisions (slice 18)
+2023	den-swe	Ettan Södra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2024	den-swe	Ettan Norra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2024	den-swe	Ettan Södra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2025	den-swe	Ettan Norra	16	16		left out: the real groups do not match the database divisions (slice 18)
+2025	den-swe	Ettan Södra	16	15		left out: the real groups do not match the database divisions (slice 18)
+2005	den-swe	Allsvenskan	14	14	Swedish Premier Division	
+2005	den-swe	Superettan	16	16	Swedish First Division	
+2007	den-swe	Superettan	16	16	Swedish First Division	
+2008	den-swe	Superettan	16	16	Swedish First Division	
+2009	den-swe	Superettan	16	16	Swedish First Division	
+2010	den-swe	Superettan	16	16	Swedish First Division	
+2011	den-swe	Superettan	16	16	Swedish First Division	
+2012	den-swe	Superettan	16	16	Swedish First Division	
+2013	den-swe	Superettan	16	16	Swedish First Division	
+2014	den-swe	Superettan	16	16	Swedish First Division	
+2015	den-swe	Superettan	16	16	Swedish First Division	
+2016	den-swe	Superettan	16	16	Swedish First Division	
+2017	den-swe	Superettan	16	16	Swedish First Division	
+2018	den-swe	Superettan	16	16	Swedish First Division	
+2019	den-swe	Superettan	16	16	Swedish First Division	
+2020	den-swe	Superettan	16	16	Swedish First Division	
+2021	den-swe	Superettan	16	16	Swedish First Division	
+2022	den-swe	Superettan	16	16	Swedish First Division	
+2023	den-swe	Superettan	16	16	Swedish First Division	
+2024	den-swe	Superettan	16	16	Swedish First Division	
+2025	den-swe	Superettan	16	16	Swedish First Division	
+2005	den-swe	Danish 2nd Division group 1	14	11	Danish Second Division	
+2005	den-swe	Danish 2nd Division group 2	14	8	Danish Second Division	
+2006	eng	Conference Premier	24	24	English Conference	
+2007	eng	Conference Premier	24	24	English Conference	
+2008	eng	Conference Premier	24	24	English Conference	
+2009	eng	Conference Premier	24	24	English Conference	
+2010	eng	Conference Premier	24	24	English Conference	
+2011	eng	Conference Premier	24	24	English Conference	
+2012	eng	Conference Premier	24	24	English Conference	
+2013	eng	Conference Premier	24	24	English Conference	
+2014	eng	Conference Premier	24	24	English Conference	
+2015	eng	National League	24	24	English Conference	
+2016	eng	National League	24	24	English Conference	
+2017	eng	National League	24	24	English Conference	
+2018	eng	National League	24	24	English Conference	
+2019	eng	National League	24	24	English Conference	
+2019	eng	League One	23	23	English Second Division	
+2020	eng	National League	23	23	English Conference	
+2021	eng	National League	23	23	English Conference	
+2022	eng	National League	24	24	English Conference	
+2023	eng	National League	24	24	English Conference	
+2024	eng	National League	24	24	English Conference	
+2025	eng	National League	24	24	English Conference	
+2002	fra	Ligue 1	20	20	French First Division	
+2002	fra	Ligue 2	20	20	French Second Division	
+2002	fra	Championnat National	20	20	French National	
+2003	fra	Ligue 1	20	20	French First Division	
+2003	fra	Ligue 2	20	20	French Second Division	
+2003	fra	Championnat National	20	20	French National	
+2004	fra	Ligue 1	20	20	French First Division	
+2004	fra	Ligue 2	20	20	French Second Division	
+2005	fra	Ligue 1	20	20	French First Division	
+2005	fra	Ligue 2	20	20	French Second Division	
+2005	fra	Championnat National	20	20	French National	
+2006	fra	Ligue 1	20	20	French First Division	
+2006	fra	Ligue 2	20	20	French Second Division	
+2006	fra	Championnat National	20	20	French National	
+2007	fra	Ligue 1	20	20	French First Division	
+2007	fra	Ligue 2	20	20	French Second Division	
+2007	fra	Championnat National	20	20	French National	
+2008	fra	Ligue 1	20	20	French First Division	
+2008	fra	Ligue 2	20	20	French Second Division	
+2008	fra	Championnat National	20	20	French National	
+2009	fra	Ligue 1	20	20	French First Division	
+2009	fra	Ligue 2	20	20	French Second Division	
+2009	fra	Championnat National	20	20	French National	
+2010	fra	Ligue 1	20	20	French First Division	
+2010	fra	Ligue 2	20	20	French Second Division	
+2010	fra	Championnat National	21	21	French National	
+2011	fra	Ligue 1	20	20	French First Division	
+2011	fra	Ligue 2	20	20	French Second Division	
+2011	fra	Championnat National	20	19	French National	
+2012	fra	Ligue 1	20	20	French First Division	
+2012	fra	Ligue 2	20	20	French Second Division	
+2012	fra	Championnat National	20	20	French National	
+2013	fra	Ligue 1	20	20	French First Division	
+2013	fra	Ligue 2	20	20	French Second Division	
+2013	fra	Championnat National	18	18	French National	
+2014	fra	Ligue 1	20	20	French First Division	
+2014	fra	Ligue 2	20	20	French Second Division	
+2014	fra	Championnat National	18	18	French National	
+2015	fra	Ligue 1	20	20	French First Division	
+2015	fra	Ligue 2	20	20	French Second Division	
+2015	fra	Championnat National	18	18	French National	
+2016	fra	Ligue 1	20	20	French First Division	
+2016	fra	Ligue 2	20	20	French Second Division	
+2016	fra	Championnat National	18	18	French National	
+2017	fra	Ligue 1	20	20	French First Division	
+2017	fra	Ligue 2	20	20	French Second Division	
+2017	fra	Championnat National	17	17	French National	
+2018	fra	Ligue 1	20	20	French First Division	
+2018	fra	Ligue 2	20	20	French Second Division	
+2018	fra	Championnat National	18	18	French National	
+2019	fra	Ligue 1	20	20	French First Division	
+2019	fra	Ligue 2	20	20	French Second Division	
+2019	fra	Championnat National	18	18	French National	
+2020	fra	Ligue 1	20	20	French First Division	
+2020	fra	Ligue 2	20	20	French Second Division	
+2020	fra	Championnat National	18	18	French National	
+2021	fra	Ligue 1	20	20	French First Division	
+2021	fra	Ligue 2	20	20	French Second Division	
+2021	fra	Championnat National	18	18	French National	
+2022	fra	Ligue 1	20	20	French First Division	
+2022	fra	Ligue 2	20	20	French Second Division	
+2022	fra	Championnat National	18	18	French National	
+2023	fra	Ligue 1	18	18	French First Division	
+2023	fra	Ligue 2	20	20	French Second Division	
+2023	fra	Championnat National	18	18	French National	
+2024	fra	Ligue 1	18	18	French First Division	
+2024	fra	Ligue 2	18	18	French Second Division	
+2024	fra	Championnat National	17	17	French National	
+2025	fra	Ligue 1	18	18	French First Division	
+2025	fra	Ligue 2	18	18	French Second Division	
+2025	fra	Championnat National	18	18	French National	
+2001	fra	CFA	72	52	French CFA	
+2002	fra	CFA	72	48	French CFA	
+2003	fra	CFA	72	50	French CFA	
+2005	fra	CFA	72	45	French CFA	
+2007	fra	CFA	72	47	French CFA	
+2008	fra	CFA	72	52	French CFA	
+2009	fra	CFA	73	54	French CFA	
+2010	fra	CFA	69	49	French CFA	
+2011	fra	CFA	71	52	French CFA	
+2012	fra	CFA	72	56	French CFA	
+2013	fra	CFA	62	61	French CFA	
+2014	fra	CFA	64	64	French CFA	
+2015	fra	CFA	64	64	French CFA	
+2016	fra	CFA	64	64	French CFA	
+2017	fra	National 2	64	64	French CFA	
+2018	fra	National 2	64	63	French CFA	
+2019	fra	National 2	64	64	French CFA	
+2020	fra	National 2	64	64	French CFA	
+2021	fra	National 2	64	64	French CFA	
+2022	fra	National 2	64	64	French CFA	
+2023	fra	National 2	56	56	French CFA	
+2024	fra	National 2	48	48	French CFA	
+2025	fra	National 2	48	48	French CFA	
+2001	fra	CFA 2	128	96	French Lower Division	
+2002	fra	CFA 2	128	87	French Lower Division	
+2003	fra	CFA 2	128	68	French Lower Division	
+2005	fra	CFA 2	128	61	French Lower Division	
+2007	fra	CFA 2	130	59	French Lower Division	
+2008	fra	CFA 2	130	56	French Lower Division	
+2009	fra	CFA 2	128	53	French Lower Division	
+2010	fra	CFA 2	130	64	French Lower Division	
+2011	fra	CFA 2	128	58	French Lower Division	
+2012	fra	CFA 2	112	66	French Lower Division	
+2013	fra	CFA 2	112	102	French Lower Division	
+2014	fra	CFA 2	112	89	French Lower Division	
+2015	fra	CFA 2	112	109	French Lower Division	
+2016	fra	CFA 2	113	94	French Lower Division	
+2017	fra	National 3	171	111	French Lower Division	
+2018	fra	National 3	168	100	French Lower Division	
+2019	fra	National 3	168	100	French Lower Division	
+2020	fra	National 3	168	129	French Lower Division	
+2021	fra	National 3	169	127	French Lower Division	
+2022	fra	National 3	168	168	French Lower Division	
+2023	fra	National 3	153	126	French Lower Division	
+2024	fra	National 3	140	130	French Lower Division	
+2025	fra	National 3	112	106	French Lower Division	
+2002	ger	Regionalliga Süd	19	19	German Regional Division South	
+2005	ger	Regionalliga Nord	19	19	German Regional Division North	
+2007	ger	Regionalliga Nord	19	19	German Regional Division North	
+2008	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2009	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2010	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2011	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2012	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2013	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2014	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2015	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2016	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2017	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2018	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2019	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2020	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2021	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	ger	3. Liga	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2001	gre-pol-cro	gre_prm	14	14	Greek National A Division	
+2004	gre-pol-cro	gre_prm	15	15	Greek National A Division	
+2006	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2006	gre-pol-cro	gre_second	18	18	Greek National B Division	
+2006	gre-pol-cro	pol_first	16	16	Polish First Division	
+2006	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2006	gre-pol-cro	cro_a1	12	12	Croatian First Division	
+2007	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2008	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2009	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2010	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2011	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2012	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2013	gre-pol-cro	gre_prm	18	18	Greek National A Division	
+2014	gre-pol-cro	gre_prm	18	18	Greek National A Division	
+2015	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2017	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2018	gre-pol-cro	gre_prm	16	16	Greek National A Division	
+2016	gre-pol-cro	gre_prm	16	15	Greek National A Division	
+2001	gre-pol-cro	gre_second	14	14	Greek National B Division	
+2007	gre-pol-cro	gre_second	18	17	Greek National B Division	
+2008	gre-pol-cro	gre_second	18	17	Greek National B Division	
+2009	gre-pol-cro	gre_second	18	17	Greek National B Division	
+2010	gre-pol-cro	gre_second	18	17	Greek National B Division	
+2011	gre-pol-cro	gre_second	18	17	Greek National B Division	
+2012	gre-pol-cro	gre_second	21	21	Greek National B Division	
+2015	gre-pol-cro	gre_second	18	18	Greek National B Division	
+2016	gre-pol-cro	gre_second	18	18	Greek National B Division	
+2013	gre-pol-cro	gre_second	14	13	Greek National B Division	
+2013	gre-pol-cro	new (gre second, group 2)	14	14		left out: a division that the original has no class for (comp_file new, slice 20)
+2014	gre-pol-cro	gre_second	13	13	Greek National B Division	
+2014	gre-pol-cro	new (gre second, group 2)	13	12		left out: a division that the original has no class for (comp_file new, slice 20)
+2017	gre-pol-cro	gre_second	18	18	Greek National B Division	
+2018	gre-pol-cro	gre_second	16	16	Greek National B Division	
+2019	gre-pol-cro	gre_second	12	12	Greek National B Division	
+2020	gre-pol-cro	gre_second	12	12	Greek National B Division	
+2021	gre-pol-cro	gre_second	17	17	Greek National B Division	
+2021	gre-pol-cro	new (gre second, group 2)	17	17		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	gre-pol-cro	gre_second	15	15	Greek National B Division	
+2022	gre-pol-cro	new (gre second, group 2)	15	15		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	gre-pol-cro	gre_second	12	11	Greek National B Division	
+2023	gre-pol-cro	new (gre second, group 2)	12	11		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	gre-pol-cro	gre_second	10	10	Greek National B Division	
+2024	gre-pol-cro	new (gre second, group 2)	10	9		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	gre-pol-cro	gre_second	10	9	Greek National B Division	
+2025	gre-pol-cro	new (gre second, group 2)	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
+2003	gre-pol-cro	pol_first	14	14	Polish First Division	
+2005	gre-pol-cro	pol_first	16	16	Polish First Division	
+2021	gre-pol-cro	pol_first	18	18	Polish First Division	
+2022	gre-pol-cro	pol_first	18	18	Polish First Division	
+2023	gre-pol-cro	pol_first	18	18	Polish First Division	
+2024	gre-pol-cro	pol_first	18	18	Polish First Division	
+2025	gre-pol-cro	pol_first	18	18	Polish First Division	
+2002	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2003	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2005	gre-pol-cro	pol_second	18	16	Polish Second Division	
+2007	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2008	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2009	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2010	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2011	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2012	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2013	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2014	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2015	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2016	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2020	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2021	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2022	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2023	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2024	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2025	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2017	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2018	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2019	gre-pol-cro	pol_second	18	18	Polish Second Division	
+2002	gre-pol-cro	cro_a1	12	12	Croatian First Division	
+2003	gre-pol-cro	cro_a1	12	12	Croatian First Division	
+2005	gre-pol-cro	cro_a1	12	12	Croatian First Division	
+2007	gre-pol-cro	cro_a1	12	12	Croatian First Division	
+2008	gre-pol-cro	cro_a1	12	12	Croatian First Division	
+2012	gre-pol-cro	cro_a1	12	12	Croatian First Division	
+2013	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2014	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2015	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2016	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2017	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2018	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2019	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2020	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2021	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2022	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2023	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2024	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2025	gre-pol-cro	cro_a1	10	10	Croatian First Division	
+2002	gre-pol-cro	cro_a2a	12	11	Croatian Second Division North	
+2002	gre-pol-cro	cro_a2b	12	11	Croatian Second Division South	
+2003	gre-pol-cro	cro_a2a	12	10	Croatian Second Division North	
+2003	gre-pol-cro	cro_a2b	12	12	Croatian Second Division South	
+2005	gre-pol-cro	cro_a2a	12	11	Croatian Second Division North	
+2005	gre-pol-cro	cro_a2b	12	11	Croatian Second Division South	
+2007	gre-pol-cro	cro_a2a	16	16	Croatian Second Division North	
+2008	gre-pol-cro	cro_a2a	16	16	Croatian Second Division North	
+2009	gre-pol-cro	cro_a2a	14	13	Croatian Second Division North	
+2010	gre-pol-cro	cro_a2a	16	15	Croatian Second Division North	
+2011	gre-pol-cro	cro_a2a	15	15	Croatian Second Division North	
+2012	gre-pol-cro	cro_a2a	16	16	Croatian Second Division North	
+2013	gre-pol-cro	cro_a2a	12	12	Croatian Second Division North	
+2014	gre-pol-cro	cro_a2a	12	12	Croatian Second Division North	
+2015	gre-pol-cro	cro_a2a	12	11	Croatian Second Division North	
+2016	gre-pol-cro	cro_a2a	12	11	Croatian Second Division North	
+2017	gre-pol-cro	cro_a2a	12	10	Croatian Second Division North	
+2018	gre-pol-cro	cro_a2a	14	14	Croatian Second Division North	
+2019	gre-pol-cro	cro_a2a	16	16	Croatian Second Division North	
+2020	gre-pol-cro	cro_a2a	18	18	Croatian Second Division North	
+2021	gre-pol-cro	cro_a2a	16	16	Croatian Second Division North	
+2022	gre-pol-cro	cro_a2a	12	12	Croatian Second Division North	
+2023	gre-pol-cro	cro_a2a	12	12	Croatian Second Division North	
+2024	gre-pol-cro	cro_a2a	12	12	Croatian Second Division North	
+2025	gre-pol-cro	cro_a2a	12	12	Croatian Second Division North	
+2003	hol-bel	Eredivisie	18	18	Dutch Premier Division	
+2003	hol-bel	Eerste Divisie	19	19	Dutch First Division	
+2004	hol-bel	Eredivisie	18	18	Dutch Premier Division	
+2004	hol-bel	Eerste Divisie	19	19	Dutch First Division	
+2004	hol-bel	Belgian First Division	18	18	Belgian First Division	
+2004	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
+2005	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2006	hol-bel	Eredivisie	18	18	Dutch Premier Division	
+2006	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2006	hol-bel	Belgian First Division	18	18	Belgian First Division	
+2006	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
+2007	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2008	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2009	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2013	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2014	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2015	hol-bel	Eerste Divisie	19	19	Dutch First Division	
+2016	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2017	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2018	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2019	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2020	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2021	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2022	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2023	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2024	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2025	hol-bel	Eerste Divisie	20	20	Dutch First Division	
+2009	hol-bel	Belgian First Division	16	16	Belgian First Division	
+2010	hol-bel	Belgian First Division	16	16	Belgian First Division	
+2011	hol-bel	Belgian First Division	16	16	Belgian First Division	
+2012	hol-bel	Belgian First Division	16	16	Belgian First Division	
+2013	hol-bel	Belgian First Division	16	16	Belgian First Division	
+2014	hol-bel	Belgian First Division	16	16	Belgian First Division	
+2015	hol-bel	Belgian First Division	16	16	Belgian First Division	
+2016	hol-bel	Belgian First Division A	16	16	Belgian First Division	
+2017	hol-bel	Belgian First Division A	16	16	Belgian First Division	
+2018	hol-bel	Belgian First Division A	16	16	Belgian First Division	
+2019	hol-bel	Belgian First Division A	16	16	Belgian First Division	
+2023	hol-bel	Belgian Pro League	16	16	Belgian First Division	
+2024	hol-bel	Belgian Pro League	16	16	Belgian First Division	
+2025	hol-bel	Belgian Pro League	16	16	Belgian First Division	
+2007	hol-bel	Belgian Second Division	19	19	Belgian Second Division	
+2008	hol-bel	Belgian Second Division	19	19	Belgian Second Division	
+2009	hol-bel	Belgian Second Division	19	19	Belgian Second Division	
+2010	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
+2011	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
+2012	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
+2013	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
+2014	hol-bel	Belgian Second Division	18	18	Belgian Second Division	
+2015	hol-bel	Belgian Second Division	17	17	Belgian Second Division	
+2016	hol-bel	Belgian First Division B	8	8	Belgian Second Division	
+2017	hol-bel	Belgian First Division B	8	8	Belgian Second Division	
+2018	hol-bel	Belgian First Division B	8	8	Belgian Second Division	
+2019	hol-bel	Belgian First Division B	8	8	Belgian Second Division	
+2020	hol-bel	Belgian First Division B	8	8	Belgian Second Division	
+2021	hol-bel	Belgian First Division B	8	8	Belgian Second Division	
+2022	hol-bel	Challenger Pro League	12	12	Belgian Second Division	
+2023	hol-bel	Challenger Pro League	16	16	Belgian Second Division	
+2024	hol-bel	Challenger Pro League	16	16	Belgian Second Division	
+2025	hol-bel	Challenger Pro League	17	17	Belgian Second Division	
+2007	hol-bel	Belgian Third Division A	16	16	Belgian Third Division A	
+2007	hol-bel	Belgian Third Division B	15	15	Belgian Third Division B	
+2009	hol-bel	Belgian Third Division A	19	19	Belgian Third Division A	
+2009	hol-bel	Belgian Third Division B	18	18	Belgian Third Division B	
+2010	hol-bel	Belgian Third Division A	18	18	Belgian Third Division A	
+2010	hol-bel	Belgian Third Division B	18	18	Belgian Third Division B	
+2011	hol-bel	Belgian Third Division A	18	18	Belgian Third Division A	
+2011	hol-bel	Belgian Third Division B	18	18	Belgian Third Division B	
+2012	hol-bel	Belgian Third Division A	18	18	Belgian Third Division A	
+2012	hol-bel	Belgian Third Division B	19	19	Belgian Third Division B	
+2013	hol-bel	Belgian Third Division A	18	18	Belgian Third Division A	
+2013	hol-bel	Belgian Third Division B	18	18	Belgian Third Division B	
+2014	hol-bel	Belgian Third Division A	18	18	Belgian Third Division A	
+2014	hol-bel	Belgian Third Division B	18	18	Belgian Third Division B	
+2015	hol-bel	Belgian Third Division A	18	18	Belgian Third Division A	
+2015	hol-bel	Belgian Third Division B	19	19	Belgian Third Division B	
+2016	hol-bel	Belgian First Amateur Division	16	16		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2017	hol-bel	Belgian First Amateur Division	16	16		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2018	hol-bel	Belgian First Amateur Division	16	16		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2019	hol-bel	Belgian First Amateur Division	16	16		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2020	hol-bel	Belgian National Division 1	16	16		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2021	hol-bel	Belgian National Division 1	15	15		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2022	hol-bel	Belgian National Division 1	20	20		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2023	hol-bel	Belgian National Division 1	18	18		left out: the mapping of Q292 leaves a database division empty (slice 18)
+2024	hol-bel	Belgian Division 1 VV	16	16	Belgian Third Division A	
+2024	hol-bel	Belgian Division 1 ACFF	12	12	Belgian Third Division B	
+2025	hol-bel	Belgian Division 1 VV	16	16	Belgian Third Division A	
+2025	hol-bel	Belgian Division 1 ACFF	12	12	Belgian Third Division B	
+2003	ita	Serie B	24	24	Italian Serie B	
+2003	ita	Serie C1 girone A	18	18	Italian Serie C1/A	
+2003	ita	Serie C1 girone B	18	18	Italian Serie C1/B	
+2003	ita	Serie C2 girone A	18	18	Italian Serie C2/A	
+2003	ita	Serie C2 girone B	18	18	Italian Serie C2/B	
+2003	ita	Serie C2 girone C	18	18	Italian Serie C2/C	
+2004	ita	Serie A	20	20	Italian Serie A	
+2004	ita	Serie B	22	22	Italian Serie B	
+2005	ita	Serie A	20	20	Italian Serie A	
+2005	ita	Serie B	22	22	Italian Serie B	
+2005	ita	Serie C1 girone A	18	18	Italian Serie C1/A	
+2005	ita	Serie C1 girone B	18	18	Italian Serie C1/B	
+2005	ita	Serie C2 girone A	18	17	Italian Serie C2/A	
+2005	ita	Serie C2 girone B	18	18	Italian Serie C2/B	
+2005	ita	Serie C2 girone C	18	15	Italian Serie C2/C	
+2006	ita	Serie A	20	20	Italian Serie A	
+2006	ita	Serie B	22	22	Italian Serie B	
+2006	ita	Serie C1 girone A	18	18	Italian Serie C1/A	
+2006	ita	Serie C1 girone B	18	18	Italian Serie C1/B	
+2007	ita	Serie A	20	20	Italian Serie A	
+2007	ita	Serie B	22	22	Italian Serie B	
+2007	ita	Serie C1 girone A	18	18	Italian Serie C1/A	
+2007	ita	Serie C1 girone B	18	18	Italian Serie C1/B	
+2007	ita	Serie C2 girone A	18	17	Italian Serie C2/A	
+2007	ita	Serie C2 girone B	18	18	Italian Serie C2/B	
+2007	ita	Serie C2 girone C	18	16	Italian Serie C2/C	
+2008	ita	Serie A	20	20	Italian Serie A	
+2008	ita	Serie B	22	22	Italian Serie B	
+2008	ita	Lega Pro Prima Divisione girone A	18	18	Italian Serie C1/A	
+2008	ita	Lega Pro Prima Divisione girone B	18	18	Italian Serie C1/B	
+2008	ita	Lega Pro Seconda Divisione girone A	18	16	Italian Serie C2/A	
+2008	ita	Lega Pro Seconda Divisione girone B	18	18	Italian Serie C2/B	
+2008	ita	Lega Pro Seconda Divisione girone C	18	18	Italian Serie C2/C	
+2009	ita	Serie A	20	20	Italian Serie A	
+2009	ita	Serie B	22	22	Italian Serie B	
+2009	ita	Lega Pro Prima Divisione girone A	18	18	Italian Serie C1/A	
+2009	ita	Lega Pro Prima Divisione girone B	18	18	Italian Serie C1/B	
+2009	ita	Lega Pro Seconda Divisione girone A	18	18	Italian Serie C2/A	
+2009	ita	Lega Pro Seconda Divisione girone B	18	18	Italian Serie C2/B	
+2009	ita	Lega Pro Seconda Divisione girone C	18	18	Italian Serie C2/C	
+2010	ita	Serie A	20	20	Italian Serie A	
+2010	ita	Serie B	22	22	Italian Serie B	
+2010	ita	Lega Pro Seconda Divisione girone A	17	17	Italian Serie C2/A	
+2010	ita	Lega Pro Seconda Divisione girone B	16	16	Italian Serie C2/B	
+2010	ita	Lega Pro Seconda Divisione girone C	16	16	Italian Serie C2/C	
+2010	ita	Lega Pro Prima Divisione girone A	18	18	Italian Serie C1/A	
+2010	ita	Lega Pro Prima Divisione girone B	18	18	Italian Serie C1/B	
+2011	ita	Serie A	20	20	Italian Serie A	
+2011	ita	Serie B	22	22	Italian Serie B	
+2011	ita	Lega Pro Seconda Divisione girone A	20	20	Italian Serie C2/A	
+2011	ita	Lega Pro Seconda Divisione girone B	21	21	Italian Serie C2/B	
+2011	ita	Lega Pro Prima Divisione girone A	18	18	Italian Serie C1/A	
+2011	ita	Lega Pro Prima Divisione girone B	18	18	Italian Serie C1/B	
+2012	ita	Serie A	20	20	Italian Serie A	
+2012	ita	Serie B	22	22	Italian Serie B	
+2012	ita	Lega Pro Prima Divisione girone A	17	17	Italian Serie C1/A	
+2012	ita	Lega Pro Prima Divisione girone B	16	16	Italian Serie C1/B	
+2013	ita	Serie A	20	20	Italian Serie A	
+2013	ita	Serie B	22	22	Italian Serie B	
+2013	ita	Lega Pro Prima Divisione girone A	16	16	Italian Serie C1/A	
+2013	ita	Lega Pro Prima Divisione girone B	17	17	Italian Serie C1/B	
+2014	ita	Serie A	20	20	Italian Serie A	
+2014	ita	Serie B	22	22	Italian Serie B	
+2014	ita	Lega Pro girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2014	ita	Lega Pro girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2014	ita	Lega Pro girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2015	ita	Serie A	20	20	Italian Serie A	
+2015	ita	Serie B	22	22	Italian Serie B	
+2015	ita	Lega Pro girone A	18	18		left out: a division that the original has no class for (comp_file new, slice 20)
+2015	ita	Lega Pro girone B	18	18		left out: a division that the original has no class for (comp_file new, slice 20)
+2015	ita	Lega Pro girone C	18	18		left out: a division that the original has no class for (comp_file new, slice 20)
+2016	ita	Serie A	20	20	Italian Serie A	
+2016	ita	Serie B	22	22	Italian Serie B	
+2016	ita	Lega Pro girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2016	ita	Lega Pro girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2016	ita	Lega Pro girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2017	ita	Serie A	20	20	Italian Serie A	
+2017	ita	Serie B	22	22	Italian Serie B	
+2017	ita	Serie C girone A	19	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2017	ita	Serie C girone B	19	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2017	ita	Serie C girone C	19	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2018	ita	Serie A	20	20	Italian Serie A	
+2018	ita	Serie B	19	19	Italian Serie B	
+2018	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2018	ita	Serie C girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2018	ita	Serie C girone C	19	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2019	ita	Serie A	20	20	Italian Serie A	
+2019	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2019	ita	Serie C girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2019	ita	Serie C girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2020	ita	Serie A	20	20	Italian Serie A	
+2020	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2020	ita	Serie C girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2020	ita	Serie C girone C	20	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2021	ita	Serie A	20	20	Italian Serie A	
+2021	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2021	ita	Serie C girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2021	ita	Serie C girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	ita	Serie A	20	20	Italian Serie A	
+2022	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	ita	Serie C girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	ita	Serie C girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	ita	Serie A	20	20	Italian Serie A	
+2023	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	ita	Serie C girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	ita	Serie C girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	ita	Serie A	20	20	Italian Serie A	
+2024	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	ita	Serie C girone B	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	ita	Serie C girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	ita	Serie A	20	20	Italian Serie A	
+2025	ita	Serie C girone A	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	ita	Serie C girone B	20	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	ita	Serie C girone C	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2001	nor-fin	Ykkönen South zone	9	9	Finnish First Division South	
+2001	nor-fin	Ykkönen North zone	9	9	Finnish First Division North	
+2002	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
+2002	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
+2003	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
+2003	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
+2004	nor-fin	Tippeligaen	14	14	Norwegian Premier Division	
+2004	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
+2005	nor-fin	Veikkausliiga	13	13	Finnish Premier Division	
+2005	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
+2006	nor-fin	Tippeligaen	14	14	Norwegian Premier Division	
+2006	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2006	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
+2007	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
+2007	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
+2008	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2008	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
+2008	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
+2008	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2009	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2009	nor-fin	Veikkausliiga	14	14	Finnish Premier Division	
+2009	nor-fin	Ykkönen	14	14		left out: the real groups do not match the database divisions (slice 18)
+2009	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2010	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2010	nor-fin	Ykkönen	13	13		left out: the real groups do not match the database divisions (slice 18)
+2010	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2010	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2011	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2011	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2011	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2011	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2012	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2012	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2012	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2012	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2013	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2013	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2013	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2013	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2014	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2014	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2014	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2015	nor-fin	Tippeligaen	16	16	Norwegian Premier Division	
+2015	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2015	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2015	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2016	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2016	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2017	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2017	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2017	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2017	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2018	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2018	nor-fin	Ykkönen	10	10		left out: the real groups do not match the database divisions (slice 18)
+2018	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2018	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2019	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2019	nor-fin	Ykkönen	12	12		left out: the real groups do not match the database divisions (slice 18)
+2019	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2019	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2020	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2020	nor-fin	Ykkönen	12	12		left out: the real groups do not match the database divisions (slice 18)
+2020	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2020	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2021	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2021	nor-fin	Ykkönen	12	12		left out: the real groups do not match the database divisions (slice 18)
+2021	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2021	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2022	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2022	nor-fin	Ykkönen	12	12		left out: the real groups do not match the database divisions (slice 18)
+2022	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2022	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2023	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2023	nor-fin	Ykkösliiga	10	10		left out: the real groups do not match the database divisions (slice 18)
+2023	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2023	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2024	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2024	nor-fin	Ykkösliiga	10	10		left out: the real groups do not match the database divisions (slice 18)
+2024	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2024	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2025	nor-fin	Eliteserien	16	16	Norwegian Premier Division	
+2025	nor-fin	Ykkösliiga	10	10		left out: the real groups do not match the database divisions (slice 18)
+2025	nor-fin	1. divisjon	16	16	Norwegian First Division	
+2025	nor-fin	Veikkausliiga	12	12	Finnish Premier Division	
+2002	por	Segunda Divisão B Zona Centro	19	19	Portuguese Second Division B Central	
+2002	por	Segunda Divisão B Zona Norte	20	20	Portuguese Second Division B North	
+2002	por	Segunda Divisão B Zona Sul	20	20	Portuguese Second Division B South	
+2003	por	Segunda Divisão B Zona Norte	19	19	Portuguese Second Division B North	
+2003	por	Segunda Divisão B Zona Centro	20	19	Portuguese Second Division B Central	
+2003	por	Segunda Divisão B Zona Sul	20	19	Portuguese Second Division B South	
+2004	por	Primeira Liga	18	18	Portuguese Premier League	
+2004	por	Liga de Honra	18	18	Portuguese Second League	
+2005	por	Segunda Divisão Série A	14	13		left out: the real groups do not match the database divisions (slice 18)
+2005	por	Segunda Divisão Série B	14	12		left out: the real groups do not match the database divisions (slice 18)
+2005	por	Segunda Divisão Série C	14	11		left out: the real groups do not match the database divisions (slice 18)
+2005	por	Segunda Divisão Série D	16	14		left out: the real groups do not match the database divisions (slice 18)
+2006	por	Primeira Liga	16	16	Portuguese Premier League	
+2006	por	Liga de Honra	16	16	Portuguese Second League	
+2007	por	Primeira Liga	16	16	Portuguese Premier League	
+2007	por	Liga de Honra	16	16	Portuguese Second League	
+2007	por	Segunda Divisão Série A	14	14		left out: the real groups do not match the database divisions (slice 18)
+2007	por	Segunda Divisão Série B	13	11		left out: the real groups do not match the database divisions (slice 18)
+2007	por	Segunda Divisão Série C	14	10		left out: the real groups do not match the database divisions (slice 18)
+2007	por	Segunda Divisão Série D	14	12		left out: the real groups do not match the database divisions (slice 18)
+2008	por	Primeira Liga	16	16	Portuguese Premier League	
+2008	por	Liga de Honra	16	16	Portuguese Second League	
+2008	por	Segunda Divisão Série A	12	12		left out: the real groups do not match the database divisions (slice 18)
+2008	por	Segunda Divisão Série B	12	10		left out: the real groups do not match the database divisions (slice 18)
+2008	por	Segunda Divisão Série C	11	8		left out: the real groups do not match the database divisions (slice 18)
+2008	por	Segunda Divisão Série D	12	9		left out: the real groups do not match the database divisions (slice 18)
+2009	por	Primeira Liga	16	16	Portuguese Premier League	
+2009	por	Liga de Honra	16	16	Portuguese Second League	
+2009	por	Segunda Divisão Zona Norte	15	12	Portuguese Second Division B North	
+2009	por	Segunda Divisão Zona Centro	16	13	Portuguese Second Division B Central	1 clubs already in another list: Vitória Futebol Clube
+2009	por	Segunda Divisão Zona Sul	16	12	Portuguese Second Division B South	
+2010	por	Primeira Liga	16	16	Portuguese Premier League	
+2010	por	Liga de Honra	16	16	Portuguese Second League	
+2010	por	Segunda Divisão Zona Norte	16	15	Portuguese Second Division B North	1 clubs already in another list: União Desportiva Oliveirense
+2010	por	Segunda Divisão Zona Centro	16	11	Portuguese Second Division B Central	
+2010	por	Segunda Divisão Zona Sul	16	14	Portuguese Second Division B South	
+2011	por	Primeira Liga	16	16	Portuguese Premier League	
+2011	por	Liga de Honra	16	16	Portuguese Second League	
+2011	por	Segunda Divisão Zona Norte	16	15	Portuguese Second Division B North	1 clubs already in another list: Associação Desportiva Oliveirense
+2011	por	Segunda Divisão Zona Centro	16	16	Portuguese Second Division B Central	
+2011	por	Segunda Divisão Zona Sul	16	15	Portuguese Second Division B South	
+2012	por	Primeira Liga	16	16	Portuguese Premier League	
+2012	por	Segunda Liga	22	21	Portuguese Second League	
+2012	por	Segunda Divisão Zona Norte	16	16	Portuguese Second Division B North	
+2012	por	Segunda Divisão Zona Centro	16	16	Portuguese Second Division B Central	
+2012	por	Segunda Divisão Zona Sul	16	16	Portuguese Second Division B South	
+2013	por	Primeira Liga	16	16	Portuguese Premier League	
+2013	por	Segunda Liga	22	22	Portuguese Second League	
+2013	por	Campeonato Nacional de Seniores Série A	10	10		left out: the real groups do not match the database divisions (slice 18)
+2013	por	Campeonato Nacional de Seniores Série B	10	9		left out: the real groups do not match the database divisions (slice 18)
+2013	por	Campeonato Nacional de Seniores Série C	10	10		left out: the real groups do not match the database divisions (slice 18)
+2013	por	Campeonato Nacional de Seniores Série D	10	9		left out: the real groups do not match the database divisions (slice 18)
+2013	por	Campeonato Nacional de Seniores Série E	10	8		left out: the real groups do not match the database divisions (slice 18)
+2013	por	Campeonato Nacional de Seniores Série F	10	10		left out: the real groups do not match the database divisions (slice 18)
+2013	por	Campeonato Nacional de Seniores Série G	10	10		left out: the real groups do not match the database divisions (slice 18)
+2013	por	Campeonato Nacional de Seniores Série H	10	8		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Segunda Liga	24	23	Portuguese Second League	
+2014	por	Campeonato Nacional de Seniores Série A	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Campeonato Nacional de Seniores Série B	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Campeonato Nacional de Seniores Série C	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Campeonato Nacional de Seniores Série D	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Campeonato Nacional de Seniores Série E	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Campeonato Nacional de Seniores Série F	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Campeonato Nacional de Seniores Série G	10	10		left out: the real groups do not match the database divisions (slice 18)
+2014	por	Campeonato Nacional de Seniores Série H	10	9		left out: the real groups do not match the database divisions (slice 18)
+2015	por	LigaPro	24	23	Portuguese Second League	
+2015	por	Campeonato de Portugal Série A	10	10		left out: the real groups do not match the database divisions (slice 18)
+2015	por	Campeonato de Portugal Série B	10	9		left out: the real groups do not match the database divisions (slice 18)
+2015	por	Campeonato de Portugal Série C	10	10		left out: the real groups do not match the database divisions (slice 18)
+2015	por	Campeonato de Portugal Série D	10	10		left out: the real groups do not match the database divisions (slice 18)
+2015	por	Campeonato de Portugal Série E	10	10		left out: the real groups do not match the database divisions (slice 18)
+2015	por	Campeonato de Portugal Série F	10	10		left out: the real groups do not match the database divisions (slice 18)
+2015	por	Campeonato de Portugal Série G	10	10		left out: the real groups do not match the database divisions (slice 18)
+2015	por	Campeonato de Portugal Série H	10	9		left out: the real groups do not match the database divisions (slice 18)
+2016	por	LigaPro	22	21	Portuguese Second League	
+2016	por	Campeonato de Portugal Série A	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	por	Campeonato de Portugal Série B	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	por	Campeonato de Portugal Série C	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	por	Campeonato de Portugal Série D	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	por	Campeonato de Portugal Série E	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	por	Campeonato de Portugal Série F	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	por	Campeonato de Portugal Série G	10	10		left out: the real groups do not match the database divisions (slice 18)
+2016	por	Campeonato de Portugal Série H	10	10		left out: the real groups do not match the database divisions (slice 18)
+2017	por	LigaPro	20	20	Portuguese Second League	
+2017	por	Campeonato de Portugal Série A	16	16		left out: the real groups do not match the database divisions (slice 18)
+2017	por	Campeonato de Portugal Série B	16	16		left out: the real groups do not match the database divisions (slice 18)
+2017	por	Campeonato de Portugal Série C	16	16		left out: the real groups do not match the database divisions (slice 18)
+2017	por	Campeonato de Portugal Série D	16	16		left out: the real groups do not match the database divisions (slice 18)
+2017	por	Campeonato de Portugal Série E	16	16		left out: the real groups do not match the database divisions (slice 18)
+2018	por	Campeonato de Portugal Série A	18	17		left out: the real groups do not match the database divisions (slice 18)
+2018	por	Campeonato de Portugal Série B	18	18		left out: the real groups do not match the database divisions (slice 18)
+2018	por	Campeonato de Portugal Série C	18	16		left out: the real groups do not match the database divisions (slice 18)
+2018	por	Campeonato de Portugal Série D	18	17		left out: the real groups do not match the database divisions (slice 18)
+2019	por	Campeonato de Portugal Série A	18	18		left out: the real groups do not match the database divisions (slice 18)
+2019	por	Campeonato de Portugal Série B	18	18		left out: the real groups do not match the database divisions (slice 18)
+2019	por	Campeonato de Portugal Série C	18	18		left out: the real groups do not match the database divisions (slice 18)
+2019	por	Campeonato de Portugal Série D	18	18		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série A	12	10		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série B	12	10		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série C	12	12		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série D	12	11		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série E	12	11		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série F	12	12		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série G	12	8		left out: the real groups do not match the database divisions (slice 18)
+2020	por	Campeonato de Portugal Série H	12	12		left out: the real groups do not match the database divisions (slice 18)
+2021	por	Liga 3 Série A	12	12		left out: a division that the original has no class for (comp_file new, slice 20)
+2021	por	Liga 3 Série B	12	11		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	por	Liga 3 Série A	12	12		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	por	Liga 3 Série B	12	12		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	por	Liga 3 Série A	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	por	Liga 3 Série B	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	por	Liga 3 Série A	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	por	Liga 3 Série B	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	por	Liga 3 Série A	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	por	Liga 3 Série B	10	10		left out: a division that the original has no class for (comp_file new, slice 20)
+2002	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2003	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2004	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2004	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2005	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2006	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2006	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	17	Turkish 2. Division Category A	
+2006	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2006	rus-tur	Russian First Division (real: First Division)	22	20	Russian First Division	
+2007	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2008	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2009	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2010	rus-tur	Russian Premier Division (real: Premier League)	16	16	Russian Premier Division	
+2002	rus-tur	Russian First Division (real: First Division)	22	22	Russian First Division	
+2003	rus-tur	Russian First Division (real: First Division)	22	22	Russian First Division	
+2005	rus-tur	Russian First Division (real: First Division)	22	21	Russian First Division	
+2007	rus-tur	Russian First Division (real: First Division)	22	22	Russian First Division	
+2008	rus-tur	Russian First Division (real: First Division)	20	18	Russian First Division	
+2009	rus-tur	Russian First Division (real: First Division)	20	20	Russian First Division	
+2010	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2011	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2012	rus-tur	Russian First Division (real: FNL)	17	17	Russian First Division	
+2013	rus-tur	Russian First Division (real: FNL)	19	19	Russian First Division	
+2015	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2016	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2017	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2018	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2019	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2020	rus-tur	Russian First Division (real: FNL)	22	22	Russian First Division	
+2021	rus-tur	Russian First Division (real: FNL)	20	20	Russian First Division	
+2002	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2003	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2005	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2007	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2008	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2009	rus-tur	Turkish Premier Division (real: Süper Lig)	18	18	Turkish Premier Division	
+2020	rus-tur	Turkish Premier Division (real: Süper Lig)	21	21	Turkish Premier Division	
+2021	rus-tur	Turkish Premier Division (real: Süper Lig)	20	20	Turkish Premier Division	
+2022	rus-tur	Turkish Premier Division (real: Süper Lig)	19	19	Turkish Premier Division	
+2023	rus-tur	Turkish Premier Division (real: Süper Lig)	20	20	Turkish Premier Division	
+2024	rus-tur	Turkish Premier Division (real: Süper Lig)	19	19	Turkish Premier Division	
+2002	rus-tur	Turkish 2. Division Category A (real: 2. Lig Category A)	18	18	Turkish 2. Division Category A	
+2003	rus-tur	Turkish 2. Division Category A (real: 2. Lig Category A)	18	18	Turkish 2. Division Category A	
+2005	rus-tur	Turkish 2. Division Category A (real: Lig A)	18	18	Turkish 2. Division Category A	
+2007	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2008	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2009	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2010	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	17	17	Turkish 2. Division Category A	
+2011	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2012	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2013	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	19	19	Turkish 2. Division Category A	
+2014	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2015	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2016	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2017	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2018	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2019	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2020	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	18	18	Turkish 2. Division Category A	
+2021	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	19	19	Turkish 2. Division Category A	
+2022	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	19	19	Turkish 2. Division Category A	
+2023	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	19	19	Turkish 2. Division Category A	
+2024	rus-tur	Turkish 2. Division Category A (real: TFF 1. Lig)	20	20	Turkish 2. Division Category A	
+2002	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group A)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2002	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group B)	17	17		left out: the real groups do not match the database divisions (slice 18)
+2002	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group C)	17	17		left out: the real groups do not match the database divisions (slice 18)
+2003	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group A)	17	16		left out: the real groups do not match the database divisions (slice 18)
+2003	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group B)	17	16		left out: the real groups do not match the database divisions (slice 18)
+2003	rus-tur	Turkish 2. Division Category B (real: 2. Lig Category B, Group C)	17	16		left out: the real groups do not match the database divisions (slice 18)
+2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 1)	11	11		left out: the real groups do not match the database divisions (slice 18)
+2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 2)	10	10		left out: the real groups do not match the database divisions (slice 18)
+2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 3)	10	9		left out: the real groups do not match the database divisions (slice 18)
+2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 4)	10	8		left out: the real groups do not match the database divisions (slice 18)
+2005	rus-tur	Turkish 2. Division Category B (real: 2. Lig B first stage, Group 5)	10	8		left out: the real groups do not match the database divisions (slice 18)
+2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 1)	10	9		left out: the real groups do not match the database divisions (slice 18)
+2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 2)	10	10		left out: the real groups do not match the database divisions (slice 18)
+2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 3)	10	8		left out: the real groups do not match the database divisions (slice 18)
+2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 4)	10	6		left out: the real groups do not match the database divisions (slice 18)
+2007	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 5)	10	9		left out: the real groups do not match the database divisions (slice 18)
+2008	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 1)	11	11		left out: the real groups do not match the database divisions (slice 18)
+2008	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 2)	11	9		left out: the real groups do not match the database divisions (slice 18)
+2008	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 3)	11	11		left out: the real groups do not match the database divisions (slice 18)
+2008	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 4)	11	10		left out: the real groups do not match the database divisions (slice 18)
+2008	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 5)	10	10		left out: the real groups do not match the database divisions (slice 18)
+2009	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 1)	11	11		left out: the real groups do not match the database divisions (slice 18)
+2009	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 2)	11	10		left out: the real groups do not match the database divisions (slice 18)
+2009	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 3)	12	10		left out: the real groups do not match the database divisions (slice 18)
+2009	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig first stage, Group 4)	11	10		left out: the real groups do not match the database divisions (slice 18)
+2010	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	17		left out: the real groups do not match the database divisions (slice 18)
+2010	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	17		left out: the real groups do not match the database divisions (slice 18)
+2011	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	17	17		left out: the real groups do not match the database divisions (slice 18)
+2011	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	17	17		left out: the real groups do not match the database divisions (slice 18)
+2012	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	17	17		left out: the real groups do not match the database divisions (slice 18)
+2012	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	17	17		left out: the real groups do not match the database divisions (slice 18)
+2013	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2013	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2014	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	19	19		left out: the real groups do not match the database divisions (slice 18)
+2014	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2015	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2015	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2016	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2016	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2017	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2017	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2018	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2018	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	17		left out: the real groups do not match the database divisions (slice 18)
+2019	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2019	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2020	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	19	19		left out: the real groups do not match the database divisions (slice 18)
+2020	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	20	20		left out: the real groups do not match the database divisions (slice 18)
+2021	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	19	19		left out: the real groups do not match the database divisions (slice 18)
+2021	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	20	20		left out: the real groups do not match the database divisions (slice 18)
+2022	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	19	19		left out: the real groups do not match the database divisions (slice 18)
+2022	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	20	20		left out: the real groups do not match the database divisions (slice 18)
+2023	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	19	19		left out: the real groups do not match the database divisions (slice 18)
+2023	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	19	19		left out: the real groups do not match the database divisions (slice 18)
+2024	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2024	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2025	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, White Group)	19	19		left out: the real groups do not match the database divisions (slice 18)
+2025	rus-tur	Turkish 2. Division Category B (real: TFF 2. Lig, Red Group)	18	18		left out: the real groups do not match the database divisions (slice 18)
+2014	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2014	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2014	sco	Challenge Cup guest	2	2		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2015	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2015	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2015	sco	Challenge Cup guest	2	2		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2016	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2016	sco	pyramid play-off (Lowland League champion)	1	0		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2016	sco	League Cup guest	2	2		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2016	sco	Challenge Cup B team	12	0		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2016	sco	Challenge Cup guest	12	9		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2017	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2017	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2017	sco	League Cup guest	2	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2017	sco	Challenge Cup B team	12	0		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2017	sco	Challenge Cup guest	14	12		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2018	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2018	sco	pyramid play-off (Lowland League champion)	1	0		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2018	sco	League Cup guest	2	2		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2018	sco	Challenge Cup B team	12	0		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2018	sco	Challenge Cup guest	16	15		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2019	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2019	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2019	sco	League Cup guest	2	2		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2019	sco	Challenge Cup B team	12	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2019	sco	Challenge Cup guest	16	16		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2020	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2020	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2020	sco	League Cup guest	2	2		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2021	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2021	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2021	sco	League Cup guest	3	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2021	sco	Challenge Cup B team	12	2		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2021	sco	Challenge Cup guest	8	8		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2022	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2022	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2022	sco	League Cup guest	3	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2022	sco	Challenge Cup B team	11	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2022	sco	Challenge Cup guest	12	12		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2023	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2023	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2023	sco	League Cup guest	3	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2023	sco	Challenge Cup B team	11	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2023	sco	Challenge Cup guest	12	12		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2024	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2024	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2024	sco	League Cup guest	3	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2024	sco	Challenge Cup B team	11	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2024	sco	Challenge Cup guest	11	11		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2025	sco	pyramid play-off (Highland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2025	sco	pyramid play-off (Lowland League champion)	1	1		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2025	sco	League Cup guest	3	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2025	sco	Challenge Cup B team	10	3		left out: cup entrants, guests or a play-off (not a division; slice 21)
+2012	spa	Segunda División B Group I	20	20	Spanish Second Division B1	
+2012	spa	Segunda División B Group II	20	20	Spanish Second Division B2	
+2012	spa	Segunda División B Group III	21	21	Spanish Second Division B3	
+2012	spa	Segunda División B Group IV	20	20	Spanish Second Division B4	
+2013	spa	Segunda División B Group I	19	19	Spanish Second Division B1	
+2013	spa	Segunda División B Group II	20	20	Spanish Second Division B2	
+2013	spa	Segunda División B Group III	20	20	Spanish Second Division B3	
+2013	spa	Segunda División B Group IV	20	20	Spanish Second Division B4	
+2020	spa	Segunda División B Subgroup 1A	10	10		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 1B	10	10		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 2A	11	11		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 2B	10	10		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 3A	11	11		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 3B	10	10		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 4A	10	10		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 4B	10	10		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 5A	10	10		left out: the real groups do not match the database divisions (slice 18)
+2020	spa	Segunda División B Subgroup 5B	10	10		left out: the real groups do not match the database divisions (slice 18)
+2021	spa	Primera División RFEF Group 1 (North West)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2021	spa	Primera División RFEF Group 2 (South East)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	spa	Primera Federación Group 1 (West)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2022	spa	Primera Federación Group 2 (East)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	spa	Primera Federación Group 1 (North)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2023	spa	Primera Federación Group 2 (South)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	spa	Primera Federación Group 1 (North)	20	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2024	spa	Primera Federación Group 2 (South)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	spa	Primera Federación Group 1 (North West)	20	19		left out: a division that the original has no class for (comp_file new, slice 20)
+2025	spa	Primera Federación Group 2 (South East)	20	20		left out: a division that the original has no class for (comp_file new, slice 20)
+2001	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2001	wal-nir-irl	Irish First Division	9	9	Irish First Division	
+2002	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2002	wal-nir-irl	Northern Irish League First Division	8	8	Northern Irish League First Division	
+2002	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2002	wal-nir-irl	Irish First Division	12	12	Irish First Division	
+2003	wal-nir-irl	Welsh Premier Division	17	17	Welsh Premier Division	
+2003	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	
+2003	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2003	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2003	wal-nir-irl	Irish First Division	12	12	Irish First Division	
+2004	wal-nir-irl	Welsh Premier Division	18	18	Welsh Premier Division	
+2004	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	
+2004	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2005	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	
+2005	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2006	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	
+2006	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2006	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2006	wal-nir-irl	Irish First Division	10	9	Irish First Division	
+2006	wal-nir-irl	Welsh Premier Division	17	17	Welsh Premier Division	
+2007	wal-nir-irl	Northern Irish League Premier Division	16	16	Northern Irish League Premier Division	
+2007	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2008	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2008	wal-nir-irl	Northern Irish League First Division	17	14	Northern Irish League First Division	
+2008	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2008	wal-nir-irl	Irish First Division	12	12	Irish First Division	
+2009	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2009	wal-nir-irl	Northern Irish League First Division	14	13	Northern Irish League First Division	
+2009	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2009	wal-nir-irl	Irish First Division	12	12	Irish First Division	
+2010	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2010	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2010	wal-nir-irl	Northern Irish League First Division	14	12	Northern Irish League First Division	
+2010	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2010	wal-nir-irl	Irish First Division	11	11	Irish First Division	
+2011	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2011	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2011	wal-nir-irl	Northern Irish League First Division	14	11	Northern Irish League First Division	
+2011	wal-nir-irl	Irish First Division	8	8	Irish First Division	
+2011	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2012	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2012	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2012	wal-nir-irl	Northern Irish League First Division	13	13	Northern Irish League First Division	
+2012	wal-nir-irl	Irish First Division	8	8	Irish First Division	
+2012	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2013	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2013	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2013	wal-nir-irl	Northern Irish League First Division	14	14	Northern Irish League First Division	
+2013	wal-nir-irl	Irish First Division	8	6	Irish First Division	
+2013	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2014	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2014	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2014	wal-nir-irl	Northern Irish League First Division	14	14	Northern Irish League First Division	
+2014	wal-nir-irl	Irish First Division	8	7	Irish First Division	
+2014	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2015	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2015	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2015	wal-nir-irl	Northern Irish League First Division	14	14	Northern Irish League First Division	
+2015	wal-nir-irl	Irish First Division	8	8	Irish First Division	
+2015	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2016	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2016	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2016	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2016	wal-nir-irl	Irish First Division	8	8	Irish First Division	
+2016	wal-nir-irl	Irish Premier Division	12	12	Irish Premier Division	
+2017	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2017	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2017	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2017	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2017	wal-nir-irl	Irish First Division	10	10	Irish First Division	
+2018	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2018	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2018	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2018	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2018	wal-nir-irl	Irish First Division	10	10	Irish First Division	
+2019	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2019	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2019	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2019	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2019	wal-nir-irl	Irish First Division	10	9	Irish First Division	
+2020	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2020	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2020	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2020	wal-nir-irl	Irish First Division	10	9	Irish First Division	
+2020	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2021	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2021	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2021	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2021	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2021	wal-nir-irl	Irish First Division	9	9	Irish First Division	
+2022	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2022	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2022	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2022	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2022	wal-nir-irl	Irish First Division	10	9	Irish First Division	
+2023	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2023	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2023	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2023	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2023	wal-nir-irl	Irish First Division	10	10	Irish First Division	
+2024	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2024	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2024	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2024	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2024	wal-nir-irl	Irish First Division	10	10	Irish First Division	
+2025	wal-nir-irl	Welsh Premier Division	12	12	Welsh Premier Division	
+2025	wal-nir-irl	Northern Irish League Premier Division	12	12	Northern Irish League Premier Division	
+2025	wal-nir-irl	Northern Irish League First Division	12	12	Northern Irish League First Division	
+2025	wal-nir-irl	Irish Premier Division	10	10	Irish Premier Division	
+2025	wal-nir-irl	Irish First Division	10	10	Irish First Division	

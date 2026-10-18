@@ -132,6 +132,9 @@ if(NOT WIN32)
     add_test(NAME season_rules COMMAND season_rules_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv"
         "${CMAKE_BINARY_DIR}/seasons")
     set_tests_properties(season_rules PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The names table and the club moves table (0.6.0 slice 15): the tools read every part and stop on a bad row.
+    add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
+    add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
@@ -258,7 +261,26 @@ if(EXISTS "${CM0102_EXE}")
         DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py" ${RULES_PARTS}
         COMMENT "Making the rules table"
         VERBATIM)
-    add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv")
+    # 0.6.0 slice 15: the names table (Seasons/names.tsv) and the club moves table (Seasons/clubs.tsv).
+    file(GLOB CLUBS_PARTS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/*-clubs.tsv")
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/names.tsv"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py"
+            --out "${CMAKE_BINARY_DIR}/seasons/names.tsv"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py"
+            ${RULES_PARTS}
+        COMMENT "Making the names table"
+        VERBATIM)
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/clubs.tsv"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py"
+            --out "${CMAKE_BINARY_DIR}/seasons/clubs.tsv"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py"
+            ${RULES_PARTS} ${CLUBS_PARTS}
+        COMMENT "Making the club moves table"
+        VERBATIM)
+    add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv"
+        "${CMAKE_BINARY_DIR}/seasons/names.tsv" "${CMAKE_BINARY_DIR}/seasons/clubs.tsv")
     target_sources(cm0102_recomp PRIVATE "${CMAKE_BINARY_DIR}/seasons/comp_classes.c")
     add_dependencies(cm0102_recomp seasons_rules)
     # The season change (0.6.0 slice 16): the committed wraps of start_new_season match the class table.

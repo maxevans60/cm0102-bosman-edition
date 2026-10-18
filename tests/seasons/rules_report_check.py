@@ -4,16 +4,21 @@ with the rules table.
 
 Usage:
     python3 tests/seasons/rules_report_check.py <report> [--expected <name>] [--update-expected]
-        compares a report with the rules table and lists each difference
+        [--data <data folder>] [--start-only]
+        compares a report with the rules table and lists each difference (--data: the club checks against the
+        database of the run)
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
         [--extra conference,regional,c2]
-        [--keep <folder>] [--timeout s] [--update-expected]
+        [--keep <folder>] [--timeout s] [--start-only] [--update-expected]
         plays the season jump, then compares its report
 
 Runs:
     per slice   --year X --last X+1: two seasons from the start in X (about 6 minutes with England alone)
     release     the base game from 2001 with --last 2027: 27 seasons (about 65 minutes with England alone)
+    start only  --year X --start-only: the report of the first day of a season game, then the program ends
+                (RECOMP_RULES_REPORT_STOP=start): the club moves and names of that start (slice 15). Its
+                expected file has the name <year>-<nations>-start
 
 The run: a new game (Arsenal, as in tests/smoke/smoke_run.py) with changing_rules = off, then Go on Holiday.
 RECOMP_SEASON_JUMP=<last> turns the match engine off, so the original's quick result engine plays every match
@@ -44,12 +49,18 @@ The differences, by kind:
                                 the row (a row with a numbered tier); the row's count can also hold the
                                 play-off winner (+0xbf) or the play-out losers (+0xc0)
     playoffs                    a division has play-off places and the row has none, or the other way round
-    name                        the game's name differs from the table's name of that season
+    name                        the game's name differs from the table's name of that season and from its shown
+                                form (tools/seasons/make_names.py shown_name)
     no_row                      the game holds a competition whose file has no row in that season
     not_held                    the game holds a competition (its year is the season, one year before or one
                                 after) that the table marks not held in that season
     idle                        the game's object waits for a later edition (its year is later), but the
                                 table holds the competition in that season
+    club_list                   (a season game, its start season) a division with a club list of the club moves
+                                table (tools/seasons/make_clubs.py) whose listed clubs that the database holds
+                                are not all in it, or that holds other clubs too: the division keeps the count of
+                                its class (slice 18 brings the real count), or the list lacks clubs of the
+                                database. The line names each club, so another fill is a new difference
     not_in_game                 a row with no competition in the game, of a nation (or body, such as UEFA)
                                 that has a numbered tier in the report, or of a file of the report
 
@@ -71,6 +82,8 @@ EXPECTED_DIR = os.path.join(HERE, "rules_report_expected")
 sys.path.insert(0, os.path.join(HERE, "..", "smoke"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
 import make_rules  # noqa: E402
+import make_names  # noqa: E402
+import make_clubs  # noqa: E402
 
 COLS = ["season", "phase", "slot", "record", "file", "class", "kind", "vtable", "year", "clubs", "rounds",
         "subs_used", "bench", "matches", "up", "playoff_up", "playoff_down", "down", "flags", "above", "below",
@@ -83,7 +96,8 @@ NATION_ROWS = ["Argentina", "Australia", "Belgium", "Brazil", "Croatia", "Denmar
 EXTRA = {"conference": 320, "regional": 385, "c2": 451}     # y of the row; the extra division is at x 675
 
 
-def read_report(path):
+def read_report(path, clubs=None):
+    """(season lines, comp lines); club lines go into clubs when a list is given."""
     seasons, comps = [], []
     with open(path, encoding="latin-1") as f:
         lines = f.read().split("\n")
@@ -96,6 +110,10 @@ def read_report(path):
         if cells[0] == "season":
             seasons.append({"season": int(cells[1]), "phase": cells[2], "date": cells[3], "start": int(cells[4]),
                             "rules": cells[5]})
+        elif cells[0] == "club":
+            if clubs is not None and len(cells) == 6:
+                clubs.append({"season": int(cells[1]), "phase": cells[2], "division": int(cells[3]),
+                              "club": int(cells[4]), "name": cells[5]})
         elif cells[0] == "comp":
             if len(cells) != len(COLS) + 1:
                 raise SystemExit(f"{path}: a comp line with {len(cells)} cells")
@@ -199,7 +217,8 @@ def differences(seasons, comps, rows):
             if r["playoffs"] != "unknown" and table_po != game_po:
                 out.add((season, "playoffs", f"{label}: game {c['playoff_up']} up and {c['playoff_down']} down "
                                              f"play-off places, table {r['playoffs_text'][:80]!r}"))
-        if r["name"] and r["name"] != "n/a" and r["name"] != c["name"]:
+        shown = make_names.shown_name(r["name"])
+        if shown and c["name"] not in (r["name"], shown):
             out.add((season, "name", f"{label}: game {c['name']!r}, table {r['name']!r}"))
     for s in sorted({x["season"] for x in seasons}):
         for r in rows:
@@ -211,6 +230,83 @@ def differences(seasons, comps, rows):
             if r["nation"] in nations or any(f in files_in_report for f in files):
                 out.add((s, "not_in_game", f"{r['id']} {r['comp_file']} {r['name']!r} ({r['nation']})"))
     return sorted(out)
+
+
+def club_records(folder):
+    """{id: long name} of club.dat in a data folder (581 bytes a record: id +0, long name +4)."""
+    path = os.path.join(folder, "club.dat")
+    out = {}
+    if os.path.exists(path):
+        data = open(path, "rb").read()
+        for i in range(len(data) // 581):
+            r = data[i * 581:(i + 1) * 581]
+            out[struct.unpack_from("<i", r, 0)[0]] = r[4:56].split(b"\0")[0].decode("latin-1")
+    return out
+
+
+def division_records(folder):
+    """{long name: id} of club_comp.dat in a data folder."""
+    path = os.path.join(folder, "club_comp.dat")
+    out = {}
+    if os.path.exists(path):
+        data = open(path, "rb").read()
+        for i in range(len(data) // RECORD):
+            r = data[i * RECORD:(i + 1) * RECORD]
+            out.setdefault(r[4:56].split(b"\0")[0].decode("latin-1"), struct.unpack_from("<i", r, 0)[0])
+    return out
+
+
+def club_differences(seasons, comps, clubs, data_dir):
+    """The club moves of the start season (slice 15): for each division with a club list of the table
+    (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
+    must be the clubs of that division at the start. One difference line per division that differs."""
+    start = seasons[0]
+    if start["start"] == 2001 and start["rules"] == "off":
+        return set()                                   # the base game moves no club
+    season = start["season"]
+    records = division_records(data_dir)
+    names = club_records(data_dir)
+    # A league with no club count (+0x3e is 0) is a table entry that the game does not play: the French Lower
+    # Division (FraFirst class, record 15) in every start, the base game too. The game keeps no club in such a
+    # division: the clubs of the divisions it does not play go to "A Lower Division" before the start (a base
+    # game run of 2001/02 with France shows French CFA and Lower Division with 0 clubs and 558 in A Lower
+    # Division), so its list is not compared.
+    in_report = {c["record"] for c in comps if c["season"] == season and c["kind"] == "league" and c["clubs"] > 0}
+    # By name: the trim of the club table (database_trim_club_table 0x5267c0) gives the clubs new ids, so the
+    # ids of the report are not those of club.dat. The club table holds each name once per nation; a name in
+    # two nations counts once here, which the check accepts.
+    game = collections.defaultdict(set)
+    for c in clubs:
+        if c["season"] == season and c["phase"] == "start":
+            game[c["division"]].add(c["name"])
+    held = set(names.values())
+    plain_to = collections.defaultdict(set)
+    for n in held:
+        plain_to[make_clubs.plain_name(n)].add(n)
+    lists = collections.OrderedDict()
+    for s, division, club_id, club, _ in make_clubs.build()[0]:
+        if s != season:
+            continue
+        if names.get(club_id) == club or club in held:
+            name = club
+        else:                               # the plain form, when one club of the database has it (season_clubs.c)
+            name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
+        lists.setdefault(division, []).append(name)
+    out = set()
+    for division, listed in lists.items():
+        rec = records.get(division)
+        if rec is None or rec not in in_report:
+            continue
+        found = [n for n in listed if n]
+        have = game[rec]
+        absent = sorted(n for n in found if n not in have)
+        others = sorted(have - set(found))
+        if absent or others:
+            out.add((season, "club_list", f"{division}: {len(found) - len(absent)} of {len(found)} listed clubs that "
+                                          f"the database holds ({len(listed)} listed), {len(others)} other clubs, "
+                                          f"{len(have)} in all; not in it: {', '.join(absent) or '-'}; others: "
+                                          f"{', '.join(others) or '-'}"))
+    return out
 
 
 def expected_path(name):
@@ -243,9 +339,10 @@ def write_expected(name, diffs, seasons):
     print(f"expected differences written: {expected_path(name)}")
 
 
-def check(report, game=None, last=None, expected=None, update=False):
+def check(report, game=None, last=None, expected=None, update=False, data_dir=None, start_only=False):
     """Prints the checks and the differences. Returns the failure texts."""
-    seasons, comps = read_report(report)
+    clubs = []
+    seasons, comps = read_report(report, clubs)
     rows = make_rules.read_rows()
     failed = []
     if not seasons:
@@ -253,7 +350,7 @@ def check(report, game=None, last=None, expected=None, update=False):
     start = seasons[0]["season"]
     got = [(s["season"], s["phase"]) for s in seasons]
     if last is not None:
-        want = [(y, p) for y in range(start, last + 1) for p in ("start", "end")]
+        want = [(start, "start")] if start_only else [(y, p) for y in range(start, last + 1) for p in ("start", "end")]
         if got != want:
             failed.append(f"the report holds {got[:2]}...{got[-2:]} ({len(got)} parts), not the start and end of "
                           f"{start} to {last}")
@@ -285,6 +382,8 @@ def check(report, game=None, last=None, expected=None, update=False):
         print(f"  season {s['season']}/{(s['season'] + 1) % 100:02d} {s['phase']:5} on {s['date']}: "
               f"{per[(s['season'], s['phase'])]} competitions")
     diffs = differences(seasons, comps, rows)
+    if data_dir and clubs:
+        diffs = sorted(set(diffs) | club_differences(seasons, comps, clubs, data_dir))
     kinds = collections.Counter(k for _, k, _ in diffs)
     print(f"differences with the rules table: {len(diffs)} ({', '.join(f'{k} {n}' for k, n in sorted(kinds.items()))})")
     if expected:
@@ -344,7 +443,8 @@ def league_steps(nations, extra):
     return out
 
 
-def run(program, game, last, year, database, nations, extra, keep, timeout, options_more=None, env_more=None):
+def run(program, game, last, year, database, nations, extra, keep, timeout, options_more=None, env_more=None,
+        start_only=False):
     """Plays the season jump. options_more: lines of settings.txt over the defaults (for example
     changing_rules = on, tests/seasons/season_change_run.py); env_more: more environment variables."""
     import smoke_run
@@ -371,6 +471,7 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, opti
     env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SEASON_JUMP=str(last), RECOMP_SCREEN_LOG="1",
                RECOMP_RULES_REPORT=report, RECOMP_RULES_TABLE=table,
+               **({"RECOMP_RULES_REPORT_STOP": "start"} if start_only else {}),
                RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots, steps)), **env_extra)
     start = time.time()
     with open(os.path.join(work, "stderr.txt"), "w") as log:
@@ -394,7 +495,8 @@ def main(argv):
         return 2
     update = "--update-expected" in argv
     if argv[1] != "--run":
-        failed = check(argv[1], expected=arg(argv, "--expected"), update=update)
+        failed = check(argv[1], expected=arg(argv, "--expected"), update=update, data_dir=arg(argv, "--data"),
+                       start_only="--start-only" in argv)
     else:
         program, game = os.path.abspath(argv[2]), os.path.abspath(argv[3])
         year = int(arg(argv, "--year", 0)) or None
@@ -409,13 +511,18 @@ def main(argv):
         extra = [x for x in arg(argv, "--extra", "").split(",") if x]
         keep = os.path.abspath(arg(argv, "--keep")) if "--keep" in argv else None
         timeout = int(arg(argv, "--timeout", 7200))
-        code, report = run(program, game, last, year, database, nations, extra, keep, timeout)
+        start_only = "--start-only" in argv
+        if start_only:
+            last = year or 2001
+        code, report = run(program, game, last, year, database, nations, extra, keep, timeout,
+                           start_only=start_only)
         failed = [] if code == 0 else [f"the run ended with code {code}"]
         name = f"{year or 2001}-{nations[0].lower()}" + "".join(
             f"{'-no' if nations[0] == 'all' else '-'}{n.lower().replace(' ', '_')}" for n in nations[1:]) + \
-            "".join(f"-{e}" for e in extra)
+            "".join(f"-{e}" for e in extra) + ("-start" if start_only else "")
         if os.path.exists(report):
-            failed += check(report, game if not database else None, last, name, update)
+            failed += check(report, game if not database else None, last, name, update,
+                            data_dir=database or os.path.join(game, "Data"), start_only=start_only)
         else:
             failed.append("the run wrote no report")
     for text in failed:
