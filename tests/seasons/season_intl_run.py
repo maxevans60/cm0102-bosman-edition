@@ -59,6 +59,8 @@ RENAMES = {
     "2021": [("Czech Republic", "Czechia"), ("Swaziland", "Eswatini"), ("Turkey", "T\xfcrkiye")],
     "off": [("Czech Republic", "Czechia"), ("Swaziland", "Eswatini")],
 }
+# Renames that must not happen: the database holds Serbia, so the record Yugoslavia stays.
+UNRENAMED = {r: [("Yugoslavia", "Serbia and Montenegro")] for r in ("2017", "2019", "2021", "off")}
 # The finals that each run must move to the table's first day (log "moves by").
 MOVES = {"2021": [("world_cup", 2022, 161)]}
 STEPS = {"world_cup": 4, "euro_champ": 4, "fifa_confed": 2, "olympics": 4, "goldcup": 2, "african_nations": 2,
@@ -123,6 +125,9 @@ def check(name, start, rules, work):
     for old, new in RENAMES.get(name, []):
         if not any(f"season intl: nation {old} is now {new} " in x for x in log):
             fails.append(f"{name}: no rename of {old} to {new} in the log")
+    for old, new in UNRENAMED.get(name, []):
+        if any(f"season intl: nation {old} is now {new} " in x for x in log):
+            fails.append(f"{name}: {old} must keep its name (the database has a later name of the chain)")
     for f, y, days in MOVES.get(name, []):
         if not any(f"season intl: {f} {y} moves by {days} days" in x for x in log):
             fails.append(f"{name}: {f} {y} does not move by {days} days")

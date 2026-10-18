@@ -542,7 +542,7 @@ static void stage_builder(uint32_t cls, void (*original)(void))
     uint32_t self = cpu.ecx;
     int saved = date_shift;
     date_shift = season_intl_date_shift(cls, (int16_t)rd16(g_mem, self + 0x40u));
-    if (date_shift && logging())
+    if (date_shift && !saved && logging())
         fprintf(stderr, "recomp: season intl: %s %d moves by %d days\n", season_intl_class_file(cls),
                 (int16_t)rd16(g_mem, self + 0x40u), date_shift);
     original();
@@ -565,6 +565,26 @@ RT_WRAP(00401ab0, acn_stages) { stage_builder(INTL_ACN, o_00401ab0); }
 RT_WRAP(0040f4c0, asian_stages) { stage_builder(INTL_ASIAN, o_0040f4c0); }
 RT_WRAP(00799690, ofc_stages) { stage_builder(INTL_OFC, o_00799690); }
 RT_WRAP(007a0230, olympics_stages) { stage_builder(INTL_OLYMPICS, o_007a0230); }
+
+/* The template functions (vtable +0x3c: 0x92c290, 0x57ab90, 0x58b560, 0x5e0900, 0x4012e0, 0x40eb00, 0x798b60,
+ * 0x79f7d0) also run outside the stage builder: a knockout stage is made when the groups end (for example the
+ * Euro's quarter-finals in 0x57bb40 at 0x57bc4b, the group builder 0x57b910). So they set the same shift. */
+void o_0092c290(void);
+void o_0057ab90(void);
+void o_0058b560(void);
+void o_005e0900(void);
+void o_004012e0(void);
+void o_0040eb00(void);
+void o_00798b60(void);
+void o_0079f7d0(void);
+RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, o_0092c290); }
+RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, o_0057ab90); }
+RT_WRAP(0058b560, confed_template) { stage_builder(INTL_CONFED, o_0058b560); }
+RT_WRAP(005e0900, copa_template) { stage_builder(INTL_COPA, o_005e0900); }
+RT_WRAP(004012e0, acn_template) { stage_builder(INTL_ACN, o_004012e0); }
+RT_WRAP(0040eb00, asian_template) { stage_builder(INTL_ASIAN, o_0040eb00); }
+RT_WRAP(00798b60, ofc_template) { stage_builder(INTL_OFC, o_00798b60); }
+RT_WRAP(0079f7d0, olympics_template) { stage_builder(INTL_OLYMPICS, o_0079f7d0); }
 
 void o_00549f70(void);
 
@@ -626,8 +646,16 @@ static int nations_rename(int season, int news)
     if (!readable(rd32(g_mem, NATIONS))) return 0;
     for (int i = 0; i < NATION_RENAMES; i++) {
         if (nation_renames[i].season > season) continue;
-        int id = nation_named(nation_renames[i].old);
-        if (id < 0 || nation_named(nation_renames[i].name) >= 0) continue;
+        int id = nation_named(nation_renames[i].old), later = 0;
+        /* A database with a record of a later name of the chain (Serbia) keeps the old record as it is. */
+        for (const char *n = nation_renames[i].name; n && !later;) {
+            later = nation_named(n) >= 0;
+            const char *next = NULL;
+            for (int k = 0; k < NATION_RENAMES; k++)
+                if (!strcmp(nation_renames[k].old, n)) next = nation_renames[k].name;
+            n = next;
+        }
+        if (id < 0 || later) continue;
         uint32_t rec = nation_at(id);
         put_field(rec + NATION_NAME, nation_renames[i].name, 51);
         put_field(rec + 0x38u, nation_renames[i].short_name, 26);
