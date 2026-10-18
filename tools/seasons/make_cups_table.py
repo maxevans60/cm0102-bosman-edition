@@ -12,7 +12,9 @@ from the "format" column of the cup rows of the rules table (docs/research/rules
     season    the start year of the first season of the format (2016 for 2016/17), from 2002 on: the base game
               (2001/02) keeps the original's rounds
     rounds    how many rounds the class makes (cup+0x3c). The game applies the row only when the cup holds
-              this many rounds, so a wrong class stops at run time with a log line and does nothing
+              this many rounds, so a wrong class stops at run time with a log line and does nothing. For
+              ita_cup and hol_cup (League classes) it is the round count of the knockout stage that
+              create_schedule writes (5 at 0x63ed91, 6 at 0x5f381d; slice 21b)
     types     one word for each round, first round first: the way the round is played
                   .   keep the round as the original makes it
                   E   single match, extra time then penalties on the day, no replay
