@@ -19,6 +19,8 @@ selected (a creator makes its objects only when a nation of its continent is sel
               "comp_stats..CPP 1664", 0x4a25a8, with England alone too: Comp_Stats::set_club_final_position
               0x4a2540 gets no club. The build without this slice stops there too. Which competition calls it is
               unknown.)
+    2004      Summer 2004 (--own-dbs) with changing_rules off, to 2005/06, with England only: the start season
+              holds no Club World Championship, so it never comes (Q232), and the Intercontinental Cup plays on
     2007      November 2007 with changing_rules off, to 2008/09: the start season rules at a new game, and the
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
               December 2005 with the box "world_cup..cpp 1438", 0x92f2b1, before this slice: fewer than 32
@@ -41,7 +43,7 @@ The checks (each run):
       each competition that the table starts or stops holding in a season of the run
     - part b: each season that the table holds the Club World Championship with 6 or 7 clubs plays it as a
       knockout of that many clubs (the log line of season_kind_club_world.c); with changing rules off, the club
-      count of the first edition
+      count of the start season
 A run takes about 6 to 12 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the reports
 already in the --keep folder again without a new run.
 """
@@ -62,6 +64,7 @@ NATIONS = ["England", "Argentina", "Australia", "Brazil", "Japan"]
 RUNS = {
     "2001-on": (2001, None, 2002, "on", NATIONS),
     "2004-on": (2004, "Summer 2004", 2005, "on", ["England"]),
+    "2004": (2004, "Summer 2004", 2005, "off", ["England"]),
     "2007": (2007, "November 2007", 2008, "off", NATIONS),
     "2024-on": (2024, "October 2024", 2025, "on", NATIONS),
     "2007-load": (2007, "November 2007", 2007, "off", ["England"]),
@@ -111,7 +114,7 @@ def check(name, report, log, rules_on):
     found = {f for f, _ in years}
     for (file, slot), by_season in sorted(years.items()):
         for s in range(start, last + 1):
-            table = held(rows, file, s)
+            table = held(rows, file, s if rules_on else start)   # changing rules off: the start season (Q232)
             if table is None:
                 continue
             game = s in by_season.get(s, set())
@@ -127,11 +130,10 @@ def check(name, report, log, rules_on):
     text = open(log, encoding="latin-1").read() if os.path.exists(log) else ""
     made = {int(y): int(n) for n, y in re.findall(r"club world knockout of (\d+) clubs for (\d+)", text)}
     if "world_club_champ" in found:
-        first = next((y for y in range(start, 2100) if held(rows, "world_club_champ", y)), None)
         for s in range(start, last + 1):
-            if not held(rows, "world_club_champ", s):
+            if not held(rows, "world_club_champ", s if rules_on else start):
                 continue
-            row = next((r for r in rows if r["season"] == (s if rules_on else first) and
+            row = next((r for r in rows if r["season"] == (s if rules_on else start) and
                         "world_club_champ" in r["comp_file"].split(";")), None)
             want = row["clubs"] if row and row["clubs"] in (6, 7) else None
             ok = made.get(s) == want
