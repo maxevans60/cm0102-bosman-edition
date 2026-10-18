@@ -373,10 +373,13 @@ void season_nl_euro_log_paths(int day, int year)
     if (!logging()) return;
     int32_t id = (int32_t)rd32(g_mem, 0x9cf784u);
     uint32_t table = rd32(g_mem, COMP_TABLE), q = id >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)id) : 0;
-    if (!readable(q) || !moved(q)) return;
+    if (!readable(q)) return;
     int po = (int8_t)rd8(g_mem, q + F_PLAYOFF);
     uint32_t cup = rd32(g_mem, rd32(g_mem, q + F_STAGES) + 4u * (uint32_t)po);
-    if (!readable(cup)) return;
+    fprintf(stderr, "recomp: season nl: euro qualifying on day %d of %d: vtable 0x%x, year %d, stage %d of %d, "
+            "play-off %d at 0x%x (vtable 0x%x)\n", day, year, rd32(g_mem, q), (int16_t)rd16(g_mem, q + F_YEAR),
+            (int32_t)rd32(g_mem, q + F_STAGE), (int32_t)rd32(g_mem, q + 0x2cu), po, cup, readable(cup) ? rd32(g_mem, cup) : 0);
+    if (!moved(q) || !readable(cup)) return;
     uint32_t teams = rd32(g_mem, cup + 0xa7u), ties = rd32(g_mem, cup + 0xadu);
     int nt = (int16_t)rd16(g_mem, cup + 0x3eu), nr = (int16_t)rd16(g_mem, cup + 0x3cu);
     fprintf(stderr, "recomp: season nl: euro paths on day %d of %d: %d teams, %d rounds, complete %d\n", day, year, nt, nr,
@@ -398,4 +401,25 @@ void season_nl_euro_log_paths(int day, int year)
                 n >= 0 ? win_str(rd32(g_mem, 0xae23a8u) + (uint32_t)n * 0x122u + 4u) : (club ? "?" : "none"),
                 (int8_t)rd8(g_mem, teams + 6u * (uint32_t)k + 4u), (int8_t)rd8(g_mem, teams + 6u * (uint32_t)k + 5u));
     }
+}
+
+void o_0051ebe0(void);
+
+/* Test log only (RECOMP_SEASON_NL_LOG=2): which cup moves its round fixtures to set dates, thiscall (Date *date,
+ * int round), ret 8. The call does not change. */
+RT_WRAP(0051ebe0, nl_log_cup_moves)
+{
+    static int level = -1;
+    if (level < 0) {
+        const char *v = getenv("RECOMP_SEASON_NL_LOG");
+        level = v ? atoi(v) : 0;
+    }
+    if (level >= 2) {
+        uint32_t self = cpu.ecx, rec = rd32(g_mem, self + F_RECORD), date = rd32(g_mem, cpu.esp + 4u);
+        int round = (int32_t)rd32(g_mem, cpu.esp + 8u);
+        fprintf(stderr, "recomp: season nl: cup moves round %d to set dates: %.50s (stage 0x%x, vtable 0x%x), day %d of %d\n",
+                round, readable(rec) ? win_str(rec + 4u) : "?", self, rd32(g_mem, self),
+                readable(date) ? (int16_t)rd16(g_mem, date) : -1, readable(date) ? (int16_t)rd16(g_mem, date + 2u) : -1);
+    }
+    o_0051ebe0();
 }

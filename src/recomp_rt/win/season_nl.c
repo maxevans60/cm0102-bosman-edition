@@ -690,7 +690,13 @@ static void next_edition(uint32_t self)
 static void start_new_season(void)
 {
     uint32_t self = cpu.ecx;
-    if (is_nl(self)) next_edition(self);
+    /* The hooks of the season change around it, as the wraps of every start_new_season do (season_starts.c):
+     * the slot is a runtime function, so no wrap runs for it. The comps kind names the new season there. */
+    int skip = season_change_start(self, 0);
+    if (rt_unwinding) return;
+    if (!skip && is_nl(self)) next_edition(self);
+    if (rt_unwinding) return;
+    season_change_start(self, 1);
     if (rt_unwinding) return;
     rt_ret_stdcall(0, 0);
 }
@@ -763,7 +769,9 @@ static void update_for_date(void)
                     !!(state & 0x100), readable(cup) ? "made" : "none", (state & 0x200) ? " and finished" : "");
         last = state;
         int td = (int16_t)rd16(g_mem, today), tyy = (int16_t)rd16(g_mem, today + 2u);
-        if ((tyy == 2020 && td >= 84 && td <= 92) || (tyy == 2019 && td == 330)) season_nl_euro_log_paths(td, tyy);
+        if ((tyy == 2020 && td >= 84 && td <= 92) || (tyy == 2019 && (td == 330 || td == 340 || td == 360)) ||
+            (tyy == 2020 && (td == 10 || td == 40 || td == 70)))
+            season_nl_euro_log_paths(td, tyy);
     }
     rt_ret_stdcall(r, 2);
 }

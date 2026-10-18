@@ -191,7 +191,7 @@ def leagues_of(log, edition):
 
 def load_and_jump(program, game, database, save, work, last, timeout):
     """Loads a save in a new user folder and plays the season jump to the end of `last`, as rules_report_check.run
-    does for a new game (the jump goes on holiday from the first news, tests/seasons/season_core_run.py)."""
+    does for a new game."""
     user, home, shots = (os.path.join(work, d) for d in ("user", "home", "shots"))
     for d in (user, home, shots):
         os.makedirs(d, exist_ok=True)
@@ -199,10 +199,10 @@ def load_and_jump(program, game, database, save, work, last, timeout):
     shutil.copyfile(save, os.path.join(user, "nl.sav"))
     with open(os.path.join(user, "settings.txt"), "w") as f:
         f.write(f"display = classic\nchanging_rules = on\nfaster_days = on\ndatabase = folder:{os.path.basename(database)}\n")
+    # The save was made on holiday (RECOMP_SAVE_AFTER_DAYS in the jump), so the loaded game goes on by itself and
+    # shows no first news to wait for; the jump ends the program at the end of `last`.
     load = smoke_run.without_intro_click(fixtures.LOAD_STEPS)
-    holiday = smoke_run.STEPS[smoke_run.STEPS.index("wait first-news") + 1:]
-    holiday = [x for x in holiday if "dump" not in x and "quit" not in x]
-    steps = load + holiday
+    steps = [x for x in load if x != "wait first-news"] + ["5400000 quit"]
     table = os.path.join(os.path.dirname(os.path.abspath(program)), "seasons", "rules.tsv")
     env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SEASON_JUMP=str(last), RECOMP_SCREEN_LOG="1",
@@ -225,11 +225,14 @@ def save_run(program, game, keep, reuse):
     first, second = os.path.join(base, "save-a"), os.path.join(base, "save-b")
     db = database_folder(database)
     if not reuse:
-        code, _ = rrc.run(program, game, last, start, db, ["England"], [], first, 7200, {"changing_rules": "on"},
-                          dict(BASE_ENV, RECOMP_SAVE_AFTER_DAYS=str(SAVE_AFTER)))
         save = os.path.join(first, "user", smoke_run.SAVE_NAME)
-        if code != 0 or not os.path.exists(save):
-            return [f"save: the first game did not save (code {code}, {first})"]
+        if not os.path.exists(save):                     # a save of an earlier run in --keep is used again
+            code, _ = rrc.run(program, game, last, start, db, ["England"], [], first, 7200, {"changing_rules": "on"},
+                              dict(BASE_ENV, RECOMP_SAVE_AFTER_DAYS=str(SAVE_AFTER)))
+            if code != 0 or not os.path.exists(save):
+                return [f"save: the first game did not save (code {code}, {first})"]
+        if os.path.exists(second):
+            second = tempfile.mkdtemp(prefix="save-b-", dir=base)
         code = load_and_jump(program, game, db, save, second, last, 7200)
         if code != 0:
             return [f"save: the loaded game ended with code {code} ({second})"]

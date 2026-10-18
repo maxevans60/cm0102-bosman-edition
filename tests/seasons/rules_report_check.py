@@ -159,6 +159,13 @@ def pick_row(found, file, k):
     return main[min(k, len(main) - 1)]
 
 
+def new_matches(name, row):
+    """A new competition of the shared module (season_comps.h, slice 28) and a row of comp_file "new": the module
+    gives the object the name of each season's row, and keeps the name of the season before until its next
+    change ("2018-19 UEFA Nations League" in 2019/20 holds the comp "UEFA Nations League")."""
+    return name in (row["name"], row["comp"]) or (row["comp"] and row["comp"] in name)
+
+
 def differences(seasons, comps, rows):
     """A sorted list of (season, kind, text)."""
     by_season_file = collections.defaultdict(list)
@@ -173,16 +180,19 @@ def differences(seasons, comps, rows):
     files_in_report = {c["file"] for c in comps}
     nations = set()
     held = collections.defaultdict(set)
+    held_new = collections.defaultdict(set)         # the names of the new competitions of each season (slice 28)
     nth = collections.Counter()
     for (season, _), phases in objects.items():
         c = phases.get("start") or phases["end"]
         both = [x for x in (phases.get("start"), phases.get("end")) if x]
         held[season].add(c["file"])
+        if c["file"].startswith("new_"):
+            held_new[season].add(c["name"])
         found = by_season_file.get((season, c["file"]), [])
         if not found and c["file"].startswith("new_"):
             # A new competition of the shared module (season_comps.h, slice 28): the rows of comp_file "new"
             # with the object's name (the module gives it the name of each season's row).
-            found = [r for r in by_season_file.get((season, "new"), []) if c["name"] in (r["name"], r["comp"])]
+            found = [r for r in by_season_file.get((season, "new"), []) if new_matches(c["name"], r)]
         k = nth[(season, c["file"])]
         nth[(season, c["file"])] += 1
         if not found:
@@ -232,6 +242,8 @@ def differences(seasons, comps, rows):
                 continue
             files = r["comp_file"].split(";")
             if any(f in held[s] for f in files):
+                continue
+            if r["comp_file"] == "new" and any(new_matches(n, r) for n in held_new[s]):
                 continue
             if r["nation"] in nations or any(f in files_in_report for f in files):
                 out.add((s, "not_in_game", f"{r['id']} {r['comp_file']} {r['name']!r} ({r['nation']})"))
