@@ -188,8 +188,32 @@ _Avoid_: dump, season log
 A test run that plays from season to season with no match engine, the original's quick results only, and writes the rules report.
 _Avoid_: fast forward, simulation run
 
+**Season change**:
+The day on which a competition starts its next season: the update day of its league table entry, mostly 20 or 21 June, in January or February for calendar-year leagues. With changing rules on, the competition takes the rules of the new season then, and the player gets the news item of that season's changes.
+_Avoid_: July step (in docs for players), rollover, new year
+
+**Rule kind**:
+One kind of season rule that the season change applies, such as competition names, with its own function in the list of `season_change.c`. Each build slice adds its kinds there.
+_Avoid_: rule handler, plugin
+
+**Bench**:
+The named substitutes of a match. The rules table column `bench` holds the count. The match engine holds at most 9.
+_Avoid_: reserves, subs list
+
+**Substitutes used**:
+The substitutes a team may bring on in a match. The rules table column `subs_used` holds the count.
+_Avoid_: changes, swaps
+
+**Transfer window**:
+The days of a year on which a club may sign players, kept by nation in the game's transfer rules.
+_Avoid_: registration period (a research text uses it for the same thing)
+
+**Nation rules**:
+The windows, foreign player limits and work permit rule of one nation in one season, as the encoder `tools/seasons/encode_rules.py` writes them.
+_Avoid_: transfer rules (that is the game's own object)
+
 **Changing rules**:
-The option that lets the season rules change each July as a game moves through the years. It is set for each game.
+The option that lets the season rules change at each season change (mostly in June) as a game moves through the years. It is set for each game.
 _Avoid_: evolving rules, dynamic seasons
 
 **Base game**:

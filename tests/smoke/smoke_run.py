@@ -23,8 +23,10 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
     off      every switch option off: no option changes a game decision
     sleep-off  RECOMP_IDLE_SLEEP=0: the idle sleep (#58) changes no game decision
     rules-on, rules-off  changing_rules (0.6.0 slice 11): a new game with it on has the season part
-               bosman_season.dat in its save and no other difference. Every new-game run has
+               bosman_season.dat in its save; from slice 17 it also plays by the rules table of 2001/02 (RULES_ON_PARTS). Every new-game run has
                changing_rules = off unless it sets it (new_game_runs), so the new game is the base game.
+    kinds-base  RECOMP_SEASON_CHANGE_TEST=write (0.6.0 slice 16): a rule kind that writes the game in every
+               hook changes nothing in the base game, because the base game calls no kind
 Each run prints its count of idle sleeps (RECOMP_IDLE_COUNT=1). The check fails when the normal run
 has none, here and in the match check.
 Each save must be byte for byte the same as the save of "normal". A failed check names the parts of
@@ -215,6 +217,9 @@ SAME_SAVE_RUNS = [
     # Q342: the season code off (slice 11 year sites, the season part, the Choose Season code) gives the save of
     # normal, a 2001/02 game with changing rules off. From slice 13 the base game of 0.6.0 is the reference.
     ("season-code-off", {"faster_days": "off", "_env": {"RECOMP_SEASON_CODE": "off"}}),
+    # The season change (0.6.0 slice 16) calls no rule kind in the base game (2001, changing rules off): with the
+    # test kind that writes the game in every hook (RECOMP_SEASON_CHANGE_TEST=write) the save is that of normal.
+    ("kinds-base", {"faster_days": "off", "_env": {"RECOMP_SEASON_CHANGE_TEST": "write"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this
@@ -497,6 +502,12 @@ def options_runs(load, holiday):
 # The season part of a save (0.6.0 slice 11, src/recomp_rt/win/season.c). A save of a new game with
 # changing_rules = on has it, and only that part may differ from the same game with it off.
 RULES_PART = "bosman_season.dat"
+# Slice 17: with changing rules on, the rules of 2001/02 from the rules table apply to a new game (named
+# substitutes, English windows, foreign player caps: Q232), so the game plays differently and these parts of the
+# save differ as well. These four are the parts that differ in the new-game run of 2026-10-18 (all four, no
+# other: transfer.dat, clubs and staff are equal), so a fifth part that differs fails the check. The base game
+# (changing_rules off) is compared as before.
+RULES_ON_PARTS = ("fifa_rankings.dat", "general.dat", "national_teams.dat", "staff history.tmp")
 
 
 # A saved test game that opens on another screen than the news ends its load at another wait (0.6.0 slice 11).
@@ -515,7 +526,7 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
     if save_name is None:
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
         return compare_runs(program, game, mode, new_game_runs(SAME_SAVE_RUNS),
-                            without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,)},
+                            without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,) + RULES_ON_PARTS},
                             required={"rules-on": RULES_PART}, text_050=True)
     # --save: load the saved test game, then the same Go on Holiday steps as the new game.
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))

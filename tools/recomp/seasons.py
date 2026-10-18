@@ -84,6 +84,14 @@ PATCHES = {
     # (year + 1) % 10 (0x81e9c9): 2010 shows "10/01". With % 100 it shows "10/11". For 2001 to 2008 both give
     # the same text, so the base game is unchanged.
     0x81E9C9: (10, "100u"),
+
+    # Q358: the season formatters of key_nation.cpp write "%d/%d" (0x9eb024) with (year + 1) % 10, "2009/0".
+    # rt_season_text_mod and rt_season_text_format (win/season.c) give % 100 and "%d/%02d", "2009/10"; with
+    # RECOMP_SEASON_CODE=off the original's values.
+    0x6696D3: (10, "rt_season_text_mod(10u)"),              # key_nation_format_club_season 0x669630
+    0x6696E6: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
+    0x669869: (10, "rt_season_text_mod(10u)"),              # key_nation_format_comp_season 0x6697c0
+    0x669876: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
 }
 
 # address: (the instruction in the original, C code)
