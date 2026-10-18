@@ -28,3 +28,17 @@ ita_cup	2008	5	E E E L E	Coppa Italia ties are now single matches up to the quar
 ita_cup	2024	5	P P P L E	Coppa Italia ties before the semi-finals now go straight to penalties after 90 minutes.
 hol_cup	2009	6	. . . . . L	The KNVB Cup final is played over two legs this season.
 hol_cup	2010	6	. . . . . E	The KNVB Cup final is a single match again.
+spa_cup	2006	7	E E L L L L E	Copa del Rey ties from the round of 32 to the semi-finals are now over two legs.
+tur_cup	2005	7	E E E E L L E	The Turkish Cup quarter-finals and semi-finals are now over two legs.
+tur_cup	2011	7	E E E E E E E	Turkish Cup ties are all single matches again.
+tur_cup	2012	7	E E E E E L E	The Turkish Cup semi-finals are now over two legs.
+tur_cup	2014	7	E E E E L L E	The Turkish Cup quarter-finals are over two legs again.
+tur_cup	2017	7	E E L L L L E	Turkish Cup ties from the fifth round to the semi-finals are now over two legs.
+tur_cup	2020	7	E E E E E E E	Turkish Cup ties are all single matches this season.
+tur_cup	2021	7	E E E E E L E	The Turkish Cup semi-finals are over two legs again.
+tur_cup	2024	7	E E E E E E E	Turkish Cup ties are all single matches again.
+tur_cup	2026	7	E E E E E L E	The Turkish Cup semi-finals are over two legs again.
+rus_cup	2003	6	E L L L L E	Russian Cup ties from the round of 32 to the semi-finals are now over two legs.
+rus_cup	2007	6	E E E E E E	Russian Cup ties are all single matches again.
+rus_cup	2018	6	E E E L L E	The Russian Cup quarter-finals and semi-finals are now over two legs.
+rus_cup	2019	6	E E E E E E	Russian Cup ties are all single matches again.

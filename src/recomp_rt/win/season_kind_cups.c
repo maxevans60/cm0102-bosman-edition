@@ -51,41 +51,14 @@ static int cups_off(void)
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
-/* Slice 21b: a day count for comparing two dates of a round table (day of the year from 0, year). */
-static long day_number(int doy, int year)
-{
-    long y = year - 1;
-    return y * 365 + y / 4 - y / 100 + y / 400 + doy;
-}
-
-/* Slice 21b: 1 when the second leg of round i (match date +0x03, year offset +0x05, plus the days +0x22) lies
- * before the draw of round i + 1 (draw date +0x00, year offset +0x02). The year offsets count from the cup's year
- * (Cup::update_for_date 0x51fa2a..0x51fa30 adds +0x40). A round that becomes two legs needs this room: the next
- * draw would else come before the tie ends. The last round has room. */
-static int room_for_second_leg(uint32_t table, int n, int i, int days, int year)
-{
-    if (i + 1 >= n) return 1;
-    uint32_t at = table + (uint32_t)i * ROUND_SIZE, next = at + ROUND_SIZE;
-    long second = day_number((int16_t)rd16(g_mem, at + 3), year + (int8_t)g_mem[at + 5]) + days;
-    long draw = day_number((int16_t)rd16(g_mem, next + 0), year + (int8_t)g_mem[next + 2]);
-    return second < draw;
-}
-
-/* Writes the format of the row to a table of n rounds. Returns the number of rounds that changed, -1 when the
- * table has another round count than the row, or -2 when a round that becomes two legs has no room before the
- * next draw (room_for_second_leg). Nothing is written in both cases. year: the cup's year (+0x40). */
-static int apply_row(uint32_t table, int n, const SeasonCupRow *row, int year)
+/* Writes the format of the row to a table of n rounds. Returns the number of rounds that changed, or -1 when
+ * the table has another round count than the row (nothing is written). A round that becomes two legs can end
+ * after the draw date of the next round: Cup::draw_round 0x51c410 then finds a tie with no winner (0x51c47c..
+ * 0x51c495), moves the draw date one day on (0x51c4e9..0x51c549) and keeps the later rounds after it
+ * (0x51c54d..0x51c596), so the draw waits for the tie (slice 21b). */
+static int apply_row(uint32_t table, int n, const SeasonCupRow *row)
 {
     if (n != row->rounds || !readable(table) || !readable(table + (uint32_t)n * ROUND_SIZE)) return -1;
-    for (int i = 0; i < n; i++) {
-        uint32_t at = table + (uint32_t)i * ROUND_SIZE;
-        SeasonCupRound r = {(uint16_t)rd16(g_mem, at + ROUND_FIRST), (uint16_t)rd16(g_mem, at + ROUND_DECIDING),
-                            g_mem[at + ROUND_REPLAYS], g_mem[at + ROUND_LEGS], g_mem[at + ROUND_DAYS]};
-        uint8_t legs = r.legs;
-        if (season_cups_apply(row->types[i], &r) && r.legs == 2 && legs != 2 &&
-            !room_for_second_leg(table, n, i, r.days, year))
-            return -2;
-    }
     int changed = 0;
     for (int i = 0; i < n; i++) {
         uint32_t at = table + (uint32_t)i * ROUND_SIZE;
@@ -120,12 +93,10 @@ static void table_made_stage(uint32_t self, uint32_t stage, uint32_t count_ptr, 
     int season = cup_season(self);
     const SeasonCupRow *row = season_cups_row(file, season);
     if (!row) return;
-    int changed = apply_row(cpu.eax, (int16_t)rd16(g_mem, count_ptr), row, (int16_t)rd16(g_mem, self + CUP_YEAR));
-    if (logging() || changed == -2)
+    int changed = apply_row(cpu.eax, (int16_t)rd16(g_mem, count_ptr), row);
+    if (logging())
         fprintf(stderr, "recomp: cups: %s (0x%x) season %d, row %d: %s %d\n", file, self, season, row->season,
-                changed == -1 ? "not applied, another round count, rounds" :
-                changed == -2 ? "not applied, no room for a second leg before the next draw, rounds" : "rounds changed",
-                changed < 0 ? 0 : changed);
+                changed < 0 ? "not applied, another round count, rounds" : "rounds changed", changed < 0 ? 0 : changed);
 }
 
 static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
@@ -217,7 +188,8 @@ RT_WRAP(0078f2e0, cups_nor_cup)
     if (!rt_unwinding) table_made(self, stage, count);
 }
 
-/* Slice 21b: the Spanish Cup (SpaCup 0x84d220, vtable 0x96f9c8 slot +0x3c, stage 0xff from set_up_rounds), and the
+/* Slice 21b: the Spanish, Turkish and Russian cups (create_round_table, slot +0x3c, stage 0xff from set_up_rounds:
+ * SpaCup 0x84d220 in vtable 0x96f9c8, TurCup 0x8fc670 in 0x97048c, RusCup 0x7e9530 in 0x96f124), and the
  * knockout stage of the Coppa Italia and the KNVB Cup. ItaCup and HolCup are League classes with a group stage.
  * Their create_schedule (vtable +0x3c: ItaCup 0x63ec50 in vtable 0x96c318, HolCup 0x5f36e0 in vtable 0x96b7b8; thiscall: stage, short *round_count,
  * short *first_id, int *out; ret 0x10) makes the round table of the knockout stage for stage 7 (ItaCup, 5
@@ -230,6 +202,22 @@ RT_WRAP(0084d220, cups_spa_cup)
 {
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_0084d220();
+    if (!rt_unwinding) table_made(self, stage, count);
+}
+
+void o_008fc670(void);
+RT_WRAP(008fc670, cups_tur_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_008fc670();
+    if (!rt_unwinding) table_made(self, stage, count);
+}
+
+void o_007e9530(void);
+RT_WRAP(007e9530, cups_rus_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_007e9530();
     if (!rt_unwinding) table_made(self, stage, count);
 }
 

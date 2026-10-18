@@ -14,14 +14,16 @@ at a message box (world_cup..cpp 1438 at the 2026 World Cup draw of a 2025 start
 2001 (the original's finals) or in 2008, and the runs that check a new game in a later season ("start" runs) end
 at the first start report or at their time limit, whichever comes first.
 
-The runs:
-    r2001   3.9.68 data, changing rules on, 2001/02 to 2003/04, Select All: the Irish League Cup (2002/03), the K
-            League Super Cup (2003) and the Polish Super Cup (2002/03 and 2003/04) skip and come back; the Irish
-            Super Cup and the Copa dos Campeoes stop for good; the Leinster Cup and the Northern Irish Charity
-            Shield play 2001/02 (a 2001 game keeps the original's first season) and then stop
+The runs (Select All plays about 10 seconds a game day, so the played runs select few nations):
+    r2001   3.9.68 data, changing rules on, 2001/02 to 2007/08, Greece and Northern Ireland: the Greek Super Cup
+            plays 2001/02 (a 2001 game keeps the original's first season), skips 2002/03 to 2006/07 and comes back
+            in 2007/08; the Northern Irish Charity Shield skips every season from 2002/03
     f2008   September 2008, changing rules on, 2008/09 to 2010/11, Italy and Holland: the knockout stage of the
             Coppa Italia takes the format of 2008 (single matches to the quarter-finals), the KNVB Cup final is two
             legs in 2009/10 and one match again in 2010/11 (rows of tools/seasons/cup_formats.tsv)
+    x2008   September 2008, changing rules on, 2008/09, Select All without France (the French first division of
+            that database stops the game, a known slice 18 matter): the Copa del Rey plays the round of 32 over two
+            legs, the Turkish Cup its quarter-finals and semi-finals, the Russian Cup single matches
     s2020   start run, November 2020, changing rules off, Belgium, Holland, Italy, Northern Ireland and Norway: the
             cups that the table does not hold in 2020/21 wait at the new game for their next edition
     s2008   start run, September 2008, changing rules off, Select All without France (the French first division of
@@ -72,17 +74,17 @@ FILES = ["bel_super", "bra_champ_cup", "fra_lge_cup", "ger_lge_cup", "gre_super"
 # seconds, required log events). An event: ("waits", file, year), ("skip", file, edition), ("resumes", file,
 # edition), or a knockout table that takes a row of cup_formats.tsv: ("format", file, season, rounds changed).
 RUNS = {
-    "r2001": (2001, None, "on", 2003, ["all"], False, 7200, {
-        ("skip", "ire_lge_cup", 2002), ("resumes", "ire_lge_cup", 2003),
-        ("skip", "kor_super_cup", 2003), ("resumes", "kor_super_cup", 2004),
-        ("skip", "pol_super", 2002), ("skip", "pol_super", 2003),
-        ("skip", "ire_super_cup", 2002), ("skip", "ire_super_cup", 2003),
-        ("skip", "bra_champ_cup", 2003),
-        ("skip", "ire_leinster_cup", 2002), ("skip", "nir_charity", 2002),
+    "r2001": (2001, None, "on", 2007, ["Greece", "Northern Ireland"], False, 5400, {
+        ("skip", "gre_super", 2002), ("skip", "gre_super", 2003), ("skip", "gre_super", 2004),
+        ("skip", "gre_super", 2005), ("skip", "gre_super", 2006), ("resumes", "gre_super", 2007),
+        ("skip", "nir_charity", 2002), ("skip", "nir_charity", 2007),
     }),
-    "f2008": (2008, os.path.join(DB, "September 2008"), "on", 2010, ["Italy", "Holland"], False, 3600, {
+    "f2008": (2008, os.path.join(DB, "September 2008"), "on", 2010, ["Italy", "Holland"], False, 5400, {
         ("format", "ita_cup", 2008, 4), ("format", "ita_cup", 2009, 4), ("format", "ita_cup", 2010, 4),
         ("format", "hol_cup", 2009, 1), ("format", "hol_cup", 2010, 0),
+    }),
+    "x2008": (2008, os.path.join(DB, "September 2008"), "on", 2008, ["all", "France"], False, 7200, {
+        ("format", "spa_cup", 2008, 1), ("format", "tur_cup", 2008, 2), ("format", "rus_cup", 2008, 0),
     }),
     "s2020": (2020, os.path.join(DB, "November 2020"), "off", 2020, NATIONS, True, 1200, {
         ("waits", "bel_super", 2021), ("waits", "hol_super", 2021), ("waits", "ita_c_cup", 2021),
@@ -102,7 +104,7 @@ RUNS = {
     }),
 }
 OPT_IN = {"r2019"}
-FORMAT = re.compile(r"recomp: cups: (ita_cup|hol_cup) \(0x[0-9a-f]+\) season (\d+), row \d+: rounds changed (\d+)")
+FORMAT = re.compile(r"recomp: cups: (ita_cup|hol_cup|spa_cup|tur_cup|rus_cup) \(0x[0-9a-f]+\) season (\d+), row \d+: rounds changed (\d+)")
 WAITS = re.compile(r"recomp: cup_breaks: (\w+) waits for (\d+) \(edition (\d+) not held")
 SKIP = re.compile(r"recomp: cup_breaks: (\w+) is not held in (\d+)")
 RESUMES = re.compile(r"recomp: cup_breaks: (\w+) resumes in (\d+)")
@@ -227,7 +229,7 @@ def check_run(name, program, game, keep, table, reuse=False):
         if c["file"] not in FILES:
             continue
         seen.add(c["file"])
-        if table.held(c["file"], c["year"]) == 0:
+        if c["year"] != NEVER and table.held(c["file"], c["year"]) == 0:
             fails.append(f"{name}: {c['file']} holds {c['year']} in {c['season']} {c['phase']}, "
                          f"the table does not hold that edition")
     if year != 2001:
