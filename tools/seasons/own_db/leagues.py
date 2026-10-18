@@ -64,7 +64,15 @@ print('nations on their template leagues (swaps did not close):',sorted(tn.get(n
 print('divisions with a wrong count',bad)
 moved_n=collections.Counter(tn.get(g(r,0x53),'?') for c,r in trow.items() if cur[c]!=g(r,0x57))
 print('clubs on another division than the template, by nation:',sorted(moved_n.items(),key=lambda kv:-kv[1])[:30])
-rows06=[r for r in hist if r[2]==S_.START]   # final tables of the season before the start
+# A club's team ids come in the order of its server record, first team first (the readers keep that order in
+# teammap). Only first-team rows count: a reserve side's row (Bayern II in the Regionalliga) must not replace the
+# club's own last division and place (the German league cup takes the top six of last season's First Division,
+# GerLgeCup::collect_entrants 0x5dc700, and stops at ger_lge_cup.cpp 285 without them).
+FIRST=set()
+_seen=set()
+for _t,_c in pickle.load(open(X+'teammap.pkl','rb')).items():
+    if _c not in _seen: _seen.add(_c); FIRST.add(_t)
+rows06=[r for r in hist if r[2]==S_.START and r[1] in FIRST]   # final tables of the season before the start
 vote=collections.defaultdict(collections.Counter)
 last={}
 for comp,team,yr,pos,*rest in rows06:

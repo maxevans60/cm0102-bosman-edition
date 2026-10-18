@@ -21,14 +21,17 @@ What changes:
   His date of birth is FM's (the template's is sometimes one or two years out).
   Ratings, positions and every other field of the template stay.
 - Clubs. Current division and last division and position from leagues.pkl. Manager (+0xcf) and assistant
-  manager (+0xd3) follow the staff. The squad list (+0xd7, 50 ids) is rebuilt for each club that has one; the
-  staff lists lose people who left.
-- Loans (facts loans.pkl): a loaned player is at his loan club. Careers (facts careers.pkl): FM's rows for the
-  seasons from 2002/03 to the one before the start replace the template's rows of those seasons.
+  manager (+0xd3) follow the staff. The squad list (+0xd7, 50 ids) is rebuilt for every club from its players
+  (the template leaves the list empty for some clubs that the output gives players); the staff lists lose people
+  who left.
+- Loans (facts loans.pkl): a loaned player is at his loan club. Careers (facts careers.pkl): for the seasons from
+  2002/03 to the one before the start, a season that FM gives with a known club replaces the template's rows of
+  that season.
 - Competition history. The template's last champions (its 2001 rows of the competitions it updated) go. The
   seasons from 2000/01 to the one before the start come from FM where it has them, else from the history folder,
   for club and national competitions.
 """
+import collections
 import datetime
 import os
 import pickle
@@ -84,18 +87,43 @@ def set_count(buf, table, count):
 
 
 def check_squad_lists(clubs, staff):
-    """Every squad list entry (club +0xd7, 50 ids) must name a player whose staff club (+0x39) is that club. The
-    computer's team pick 0x6dbc50 joins a club's list with the list of its linked B team (0x540a50) and stops with
-    "match_man..cpp 1225" (check at 0x6dd3a4) when one player comes twice."""
-    bad = []
+    """The squad lists (club +0xd7, 50 ids) must agree with the staff rows: every entry names a player whose staff club
+    (+0x39) is that club, no player comes twice in one list, and every player (kind 2 or 3) at a club is in its list.
+    The computer's team pick 0x6dbc50 joins a club's list with the list of its linked B team (0x540a50) and stops
+    with "match_man..cpp 1225" (check at 0x6dd3a4) when one player comes twice."""
+    i32 = lambda r, o: struct.unpack_from("<i", r, o)[0]  # noqa: E731
+    lists = {}
+    bad, twice = [], []
     for r in clubs:
-        c = struct.unpack_from("<i", r, 0)[0]
-        for k in range(50):
-            t = struct.unpack_from("<i", r, 0xd7 + 4 * k)[0]
-            if t >= 0 and (t >= len(staff) or struct.unpack_from("<i", staff[t], 0x39)[0] != c):
-                bad.append((c, t))
-    check(not bad, f"{len(bad)} squad list entries name a player of another club or none, "
-                   f"for example {bad[:5]}")
+        c = i32(r, 0)
+        ids = [i32(r, 0xd7 + 4 * k) for k in range(50)]
+        ids = [t for t in ids if t >= 0]
+        if len(ids) != len(set(ids)):
+            twice.append(c)
+        lists[c] = set(ids)
+        bad += [(c, t) for t in ids if t >= len(staff) or i32(staff[t], 0x39) != c]
+    missing = [(i32(r, 0x39), i32(r, 0)) for r in staff
+               if r[0x5f] in (2, 3) and i32(r, 0x39) in lists and i32(r, 0) not in lists[i32(r, 0x39)]]
+    check(not bad, f"{len(bad)} squad list entries name a player of another club or none, for example {bad[:5]}")
+    check(not twice, f"{len(twice)} squad lists name one player twice, for example clubs {twice[:5]}")
+    check(not missing, f"{len(missing)} players are not in the squad list of their club, for example "
+                       f"(club, staff) {missing[:5]}")
+
+
+# League cups that take last season's top clubs by last division (+0x5b) and place (+0x5f). The other league cups of
+# 3.9.68 (France, Scotland, Ireland, Northern Ireland, Wales, Poland, Korea) take clubs by their current division or
+# reputation (their collect_entrants functions in docs/research/function-map).
+LAST_PLACE_CUPS = {"German First Division": 6}     # GerLgeCup::collect_entrants 0x5dc700, ger_lge_cup.cpp 285
+
+
+def check_last_places(clubs, comps):
+    """Each division of LAST_PLACE_CUPS must have clubs with the last places 1 to n in it, once each."""
+    by = collections.defaultdict(list)
+    for r in clubs:
+        by[comps.get(struct.unpack_from("<i", r, 0x5b)[0], "")].append(r[0x5f])
+    bad = [(d, sorted(by[d])[:10]) for d, n in LAST_PLACE_CUPS.items()
+           if d in comps.values() and any(by[d].count(p) != 1 for p in range(1, n + 1))]
+    check(not bad, f"last places 1 to n missing or twice (the league cup stops): {bad}")
 
 
 def store_update_team_way(T, k):
@@ -270,15 +298,13 @@ def main(argv):
             struct.pack_into("<i", r, 0x5b, cur)
         ls = lists.get(c, {})
         for key, off, n in (("p", 0xd7, 50), ("c", 0x19f, 5), ("s", 0x1b3, 7), ("ph", 0x1cf, 3)):
-            if key == "p" and all(g(r, 0xd7 + 4 * k) == -1 for k in range(50)):
-                continue                             # the template keeps no squad list for this club (a list
-                                                     # can start with -1 and hold ids further on)
             ids = sorted(ls.get(key, []), key=lambda t: sn.get(g(staff[t], 0x08), ""))
             for k in range(n):
                 struct.pack_into("<i", r, off + 4 * k, ids[k] if k < len(ids) else -1)
         struct.pack_into("<i", r, 0xcf, mgr.get(c, -1))
         struct.pack_into("<i", r, 0xd3, ass.get(c, -1))
     check_squad_lists(clubs, staff)
+    check_last_places(clubs, {g(rr, 0): cstr(rr, 4, 51) for rr in T.rows(12)})
 
     # 4. Careers: real years, nothing from the start season on.
     kept, kept_rows = kept_careers(S_.TEMPLATE)
@@ -295,16 +321,16 @@ def main(argv):
             continue
         rows.append(rr)
     # FM careers (facts careers.pkl) for the seasons from 2002/03 to the one before the start: the Update Team
-    # templates end most careers with 2001/02 or hold later rows with mixed year shifts. For a matched person with
-    # FM rows, his rows of these seasons are FM's (season start year; club through the club map; loan byte 255 for
-    # a loan, apps, goals). A row whose club the template lacks is left out.
+    # templates end most careers with 2001/02 or hold later rows with mixed year shifts. A season of a matched
+    # person for which FM gives a row with a club that the template has is FM's (season start year; club through
+    # the club map; loan byte 255 for a loan, apps, goals); his template rows of that season go. Other seasons keep
+    # the template's rows.
     first_fm = 2002
-    fm_rows, fm_people = [], set()
+    fm_rows, fm_seasons = [], set()                 # (staff id, season) pairs that FM gives a mapped row for
     for n, t in pmap.items():
         hist = [h for h in fm_careers.get(n, ()) if first_fm <= h["season"] < START]
         if not hist:
             continue
-        fm_people.add(t)
         merged = {}                                  # FM2007 can hold two rows of a season and club (two competitions)
         for h in hist:
             club = clubmap.get(h["club"], -1) if h["club"] is not None else -1
@@ -314,14 +340,15 @@ def main(argv):
             a, b = merged.get(key, (0, 0))
             merged[key] = (a + (h["apps"] or 0), b + (h["goals"] or 0))
         for (season, club, loan), (a, b) in merged.items():
+            fm_seasons.add((t, season))
             rr = bytearray(17)
             struct.pack_into("<iiHiBBB", rr, 0, 0, t, season, club, 255 if loan else 0, min(a, 255), min(b, 255))
             fm_rows.append(rr)
     n_before = len(rows)
-    rows = [rr for rr in rows if not (struct.unpack_from("<i", rr, 4)[0] in fm_people
-                                      and struct.unpack_from("<H", rr, 8)[0] >= first_fm)]
+    rows = [rr for rr in rows if (struct.unpack_from("<i", rr, 4)[0], struct.unpack_from("<H", rr, 8)[0])
+            not in fm_seasons]
     print(f"careers from FM: {n_before - len(rows)} template rows of {first_fm} to {START - 1} replaced, "
-          f"{len(fm_rows)} FM rows for {len(fm_people)} people")
+          f"{len(fm_rows)} FM rows for {len({t for t, _ in fm_seasons})} people")
     rows += fm_rows
     for i, rr in enumerate(rows):
         struct.pack_into("<i", rr, 0, i)

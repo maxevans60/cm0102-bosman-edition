@@ -3,11 +3,11 @@
 Usage as a module:
     careers(db_folder, people_all, clubs=None) -> {people_all index: [dict(season, club, apps, goals, loan, ...)]}
 Usage as a script:
-    python3 -I careers.py <db folder> <people_all.pkl> <clubs.pkl> <out.pkl>
+    python3 -I fm_careers.py <db folder> <people_all.pkl> <clubs.pkl> <out.pkl>
 
 Pure reader. Reads the files as data only. read_fm2005.py and read_fm2007.py call it and write careers.pkl.
-Evidence: Henry, Rooney, Lampard, Gerrard, Terry, van Nistelrooy and Ronaldinho have their real league apps and
-goals for 2002/03 and 2003/04 (and 2004/05, 2005/06 in FM2007); the loan flag is set on known loans (Lampard at
+Evidence: the careers of Henry, Rooney, Lampard, Gerrard, Terry, van Nistelrooy and Ronaldinho agree with their
+real careers; the loan flag is set on known loans (Lampard at
 Swansea, Defoe at Bournemouth).
 
 Files (little-endian, each starts with the 6 bytes 02 01 't' 'a' 'd' '.' and a u16 file version):

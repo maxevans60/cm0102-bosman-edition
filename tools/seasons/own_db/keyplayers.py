@@ -36,13 +36,15 @@ Ratings:
   an age within 3 years whose current ability is nearest).
 The mapping (Max: FM's rating is the reference for these players): for each FM value, the median value of the
 Update Team ratings of the matched players (match.py) whose FM value is the same (widened one step at a time
-until 25 players), made non-decreasing. FM's unset ratings (current ability 0) are left out. One map for current
+until 100 players), made non-decreasing; above and below the values that 100 players have, the map goes on with
+slope 1 (value_map). FM's unset ratings (current ability 0) count as no FM rating: a far record then keeps its
+Update Team ratings, and an "own" player with none is left out with a message. One map for current
 ability, one for potential ability (FM's ranges -10 to -1 map to the median of each range; the potential ability
 is at least the current ability), one per attribute. FM's position ratings are facts and go across as they are
 (the older FM scheme has the same twelve positions as CM 01/02 in another order).
 
 Dates are written the Update Team way of the output (k = start year - 2001; convert.py store_update_team_way).
-At the end every squad list must name only the club's own players (convert.check_squad_lists).
+At the end the squad lists must agree with the staff rows (convert.check_squad_lists).
 """
 import collections
 import datetime
@@ -65,8 +67,8 @@ TOP = ("Premier Division", "First Division", "Serie A", "Bundesliga", "Premier L
 MONTHS = {m: i + 1 for i, m in enumerate("January February March April May June July August September October "
                                           "November December".split())}
 # CM 01/02 player row +0x1b to +0x44, one attribute per byte, by the FM name of the same attribute (found by the
-# correlation of each byte with FM2005's attributes over 15,000 matched players: 0.72 to 0.82 for each byte, the
-# next best FM attribute at most 0.67). None: no FM attribute (+0x41 is 0 for most players).
+# correlation of each byte with FM2005's attributes over matched players: each byte goes clearly best with one FM
+# attribute). None: no FM attribute (+0x41 is 0 for most players).
 CM_ATTRS = ["Acceleration", "Aggression", "Agility", "Anticipation", "Balance", "Bravery", "Consistency", "Corners",
             "Crossing", "Decisions", "Dirtiness", "Dribbling", "Finishing", "Flair", "Free Kicks", "Handling",
             "Heading", "Important Matches", "Injury Proneness", "Jumping", "Leadership", "Left Foot", "Long Shots",
@@ -111,14 +113,20 @@ def dbseason(name):
     return int(m.group(2)) if mo >= 7 else int(m.group(2)) - 1
 
 
-def value_map(pairs, need=25):
-    """{FM value: mapped value} from (FM value, CM value) pairs: the median CM value of the pairs with the same FM
-    value, widened one step at a time until `need` pairs, then made non-decreasing."""
+def value_map(pairs, need=100):
+    """{FM value: mapped value} from (FM value, CM value) pairs. A value that at least `need` pairs have (dense) maps
+    to the median CM value of the pairs with that value, widened one step at a time until `need` pairs, made
+    non-decreasing. Above the highest dense value and below the lowest the map goes on with slope 1 from the last
+    dense value, so that the few top players are not pulled down to the median of a wide window."""
     by = collections.defaultdict(list)
     for a, b in pairs:
         by[a].append(b)
+    dense = [v for v in by if len(by[v]) >= need]
+    if not dense:
+        dense = [max(by, key=lambda v: len(by[v]))]
+    lo, hi = min(dense), max(dense)
     out, best = {}, None
-    for v in range(min(by), max(by) + 1):
+    for v in range(lo, hi + 1):
         w, got = 0, list(by.get(v, ()))
         while len(got) < need and w < 200:
             w += 1
@@ -130,9 +138,13 @@ def value_map(pairs, need=25):
 
 
 def mapped(vmap, v):
-    if v in vmap:
-        return vmap[v]
-    return vmap[min(vmap)] if v < min(vmap) else vmap[max(vmap)]
+    """The mapped value; beyond the dense values, slope 1 from the nearest end."""
+    lo, hi = min(vmap), max(vmap)
+    if v > hi:
+        return vmap[hi] + v - hi
+    if v < lo:
+        return vmap[lo] - (lo - v)
+    return vmap[v]
 
 
 def fm_positions(r):
@@ -206,7 +218,8 @@ def main(argv):
             try:
                 F = Folder(path)
                 rows = F.rows(6)
-            except (SystemExit, OSError, KeyError):
+            except (SystemExit, OSError, KeyError) as e:
+                print(f"  identity search: {name} skipped, not readable ({e})")
                 continue
             fn, sn, cn = names(F, 13), names(F, 14), names(F, 15)
             sh = None
@@ -265,8 +278,9 @@ def main(argv):
                        key=lambda x: (abs(x["season"] - Y), x["season"], x["db"]))
             d = dict(action="ut", db=c[0]["db"], sid=c[0]["sid"], pos=None, note="") if c else \
                 dict(action="own", db="", sid=-1, pos=None, note="no Update Team record")
-        if d["action"] == "own" and kk["fm"] not in R and not d["pos"]:
-            print(f"  left out (no FM rating, no positions): {kk['fm']}")
+        fmr = R.get(kk["fm"])
+        if d["action"] == "own" and (fmr is None or fmr["ca"] <= 0):
+            print(f"  left out: FM index {kk['fm']} has no Update Team record and no FM rating to map")
             continue
         dec.append((kk, d))
 
@@ -300,8 +314,8 @@ def main(argv):
 
     def map_pa(fca, v):
         """Mapped potential ability, at least the mapped current ability."""
-        m = pa_range.get(v, fca) if v <= 0 else mapped(vm["pa"], v)
-        return max(m, fca)
+        m = pa_range.get(v, fca) if v < 0 else fca if v == 0 else mapped(vm["pa"], v)
+        return max(min(m, 200), fca)
     print("current ability map (FM -> CM):", {v: vm["ca"][v] for v in range(0, 201, 10) if v in vm["ca"]})
     print("potential ability map (FM -> CM):", {v: vm["pa"][v] for v in range(0, 201, 10) if v in vm["pa"]},
           "ranges:", dict(sorted(pa_range.items())))
@@ -381,8 +395,10 @@ def main(argv):
     to_list = collections.defaultdict(list)
     for kk, d in dec:
         x, club, fmr = kk["x"], kk["club"], R.get(kk["fm"])
+        if fmr is not None and fmr["ca"] <= 0:
+            fmr = None                              # FM leaves the rating unset: no reference
         age = age_of(x["dob"])
-        fca = mapped(vm["ca"], fmr["ca"]) if fmr else None
+        fca = max(1, min(200, mapped(vm["ca"], fmr["ca"]))) if fmr else None
         fpa = map_pa(fca, fmr["pa"]) if fmr else None
         row = dict(fm=kk["fm"], name=x["cn"] or f"{x['fn']} {x['sn']}", club=cname.get(club), age=age,
                    wage=x["wage"], action=d["action"], src=d["db"], fm_ca=fmr["ca"] if fmr else "",
@@ -392,7 +408,8 @@ def main(argv):
             set_club(r, x, club)
             i = info.get(d["sid"], dict(ca="", pa="", pos=[]))
             row.update(ca=i["ca"], pa=i["pa"], how="template ratings", pos=i["pos"])
-            to_list[club].append(d["sid"])
+            if d["sid"] not in to_list[club]:
+                to_list[club].append(d["sid"])
             report.append(row)
             continue
         if d["action"] == "ut":
@@ -402,7 +419,7 @@ def main(argv):
             g = S_["season"] - Y
             sca, spa = struct.unpack_from("<hh", sp, 5)
             if abs(g) <= 1 or fmr is None:
-                ca, pa, how = sca, spa, f"Update Team ratings ({d['db']})"
+                ca, pa, how = sca, spa, f"Update Team ratings ({d['db']})" + ("" if abs(g) <= 1 else ", no FM rating")
             else:
                 ca, pa, how = fca, fpa, f"FM ratings mapped; positions and attributes of {d['db']}"
             if d["pos"]:
@@ -483,8 +500,8 @@ def main(argv):
         set_count(ib, t, cnt + len(new_names[t]))
     T.reindex()
 
-    # Squad lists (club +0xd7, 50 ids, sorted by surname as convert.py does). A club whose template keeps no list
-    # gets none; a full list leaves the player with no club.
+    # Squad lists (club +0xd7, 50 ids, sorted by surname as convert.py does). A player who would make a list longer
+    # than 50 leaves the club. A player already in the list is not added again.
     staff = T.rows(6)
     sn = {i32(r, 0x33): cstr(r, 0, 51) for r in T.rows(14)}
     cb = T.raw["club.dat"]
@@ -494,10 +511,10 @@ def main(argv):
         if i32(cb, o) != club:
             sys.exit(f"keyplayers: club row {club} is not at its place")
         cur = [i32(cb, o + 0xd7 + 4 * j) for j in range(50)]
-        cur = [v for v in cur if v >= 0]
+        cur = list(dict.fromkeys(v for v in cur if v >= 0))
         for sid in ids:
-            if not cur and not any(i32(cb, o + 0xd7 + 4 * j) >= 0 for j in range(50)):
-                continue                            # no list for this club
+            if sid in cur:
+                continue
             if len(cur) >= 50:
                 full.append((cname[club], sid))
                 struct.pack_into("<i", staff[sid], 0x39, -1)
@@ -505,9 +522,8 @@ def main(argv):
                 continue
             cur.append(sid)
         cur.sort(key=lambda t: sn.get(i32(staff[t], 0x08), ""))
-        if cur:
-            for j in range(50):
-                struct.pack_into("<i", cb, o + 0xd7 + 4 * j, cur[j] if j < len(cur) else -1)
+        for j in range(50):
+            struct.pack_into("<i", cb, o + 0xd7 + 4 * j, cur[j] if j < len(cur) else -1)
     check_squad_lists(T.rows(0), T.rows(6))
     for f, b in T.raw.items():
         with open(os.path.join(dst, f), "wb") as h:

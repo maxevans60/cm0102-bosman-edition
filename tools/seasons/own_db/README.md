@@ -54,12 +54,12 @@ python3 -I keyplayers.py 2006 "<conv>" "<facts>" "<work>" "<DB>" "<out>" [<overr
 
 ## Mapping of FM ratings (key players only)
 
-`keyplayers.py` maps each FM value to the median Update Team value of the matched players with the same FM value.
-The 2026-10-17 builds gave these current ability maps (FM to CM 01/02): FM2005 50 to 130 map to the same value,
-140 to 145, 150 to 155, 160 to 165, 170 to 175, 180 to 180, and 45 or less to 45; FM2007 50 to 140 map to the
-same value, 150 to 148, 160 to 160, 170 to 168, 180 and more to 178, and 40 or less to 40. Potential ability and
-each attribute have their own map in the same way. FM's position ratings go across as they are. Attributes map
-byte by byte: `CM_ATTRS` in `keyplayers.py` gives the FM attribute of each CM 01/02 attribute byte.
+`keyplayers.py` maps each FM value to the median Update Team value of the matched players with the same FM value
+(`value_map`), made non-decreasing. Above and below the values that at least 100 matched players have, the map goes
+on with slope 1 from the last such value. Potential ability and each attribute have their own map in the same
+way. FM's position ratings go across as they are. Attributes map byte by byte: `CM_ATTRS` in `keyplayers.py`
+gives the FM attribute of each CM 01/02 attribute byte. The tool prints the maps to its log; keep the log with the
+FM data, outside the repo.
 
 ## After a rebuild
 

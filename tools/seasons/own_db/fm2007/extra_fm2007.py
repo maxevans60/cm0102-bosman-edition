@@ -1,14 +1,14 @@
 """Football Manager 2007 (file version 0x042c): the ratings of each player, keyed by the people_all list index.
 
-Usage: python3 -I rating_link.py <db700 folder> <people_all.pkl> <out ratings.pkl>
+Usage: python3 -I extra_fm2007.py <db700 folder> <people_all.pkl> <out ratings.pkl>
 Library: ratings(db_folder, people_all) -> {people_all index: dict(ca, pa, pos, roles, attrs, pd, rid)}
 
 Pure reader, no FM data inside. The files are untrusted input: every read is bounds-checked.
 
 read_fm2007.py calls common_ratings() and writes ratings.pkl into the facts folder, with the names that
 extra_fm2005.py uses. The ratings serve only as the reference for key players with no Update Team record (Q383,
-Max 2026-10-17); keyplayers.py maps them. Checks: Henry 188/193, Rooney 179, Cech 181 (GK 20), Terry 182 (DC 20);
-current ability correlates 0.80 with November 2007 over 81,948 matched players.
+Max 2026-10-17); keyplayers.py maps them. Checked with Henry, Rooney, Cech, Terry, Cristiano Ronaldo, Messi and
+Walcott, and against the November 2007 ratings of the matched players.
 
 Layout, read from the game's own loaders in the Mac binary (fm_i386, read as data with objdump):
 - people_db.dat holds the PERSON table. A player is a type 2 record (ACTUAL_PLAYER, loader 0x8067ba) or a type 3
@@ -51,7 +51,7 @@ class Bad(Exception):
 
 def need(cond, msg):
     if not cond:
-        raise ValueError("rating_link: " + msg)
+        raise ValueError("extra_fm2007: " + msg)
 
 
 def _u(d, fmt, o):

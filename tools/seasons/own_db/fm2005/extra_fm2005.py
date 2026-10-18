@@ -9,8 +9,8 @@ ratings(db_folder, people_all) -> {people_all index: dict(ca, pa, pos={name: v},
 people_all, clubs and teammap are the facts pickles of read_fm2005.py (lists and dicts, already loaded).
 
 Layouts (found in the FM2005 Mac data editor's loaders, read as data: PLAYING_DATA::load, ACTUAL_PLAYER::load,
-PLAYING_DATA::get_ability_name; checked with Riquelme's loan to Villarreal and the ratings of Henry, Rooney,
-Cech, Terry and Fabregas; current ability correlates 0.87 with September 2005 over 84,143 matched players):
+PLAYING_DATA::get_ability_name; checked with Riquelme's loan to Villarreal, the ratings of Henry, Rooney,
+Cech, Terry and Fabregas, and the September 2005 ratings of the matched players):
 - STARTING_LOAN, server_db.dat: u32 count right after the last COMP_HISTORY row, then 27-byte rows:
   u8 0, u32 person id (the contract pid), u32 team id (loan club, map with teammap), u16 day + u16 year (start),
   u16 day + u16 year (end), u8 flag, u8 squad number, u32 row id, i32 -1.
