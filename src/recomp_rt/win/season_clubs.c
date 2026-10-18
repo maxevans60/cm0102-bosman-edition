@@ -160,7 +160,7 @@ typedef struct {
 typedef struct {
     uint32_t at, nation;
     int rank, n0, want, tier, target, spare, sized;
-    int listed, found, kept, missing, missing_reserve, filled_own, filled_pool, filled_spare, filled_lower;
+    int listed, found, kept, missing, missing_reserve, filled_own, filled_left, filled_pool, filled_spare, filled_lower;
     int open, stand_in;
     const char *name;
 } Division;
@@ -511,8 +511,11 @@ static void move_clubs(int season)
          *   every tier. In the top two tiers the place of another missing club stays open for slice 15b when the
          *   class counts the clubs of the data. A class with a fixed count stops at its assert with an open
          *   place, so there it takes a club with no division too, and the log calls it a stand-in;
-         * - a place that the list leaves because the class takes more clubs than the real division has (slice
-         *   18): the nation's clubs with no division, then the clubs of the spare divisions, then the clubs of
+         * - any other place (a club that moved up, or a class that takes more clubs than the real division has,
+         *   slice 18): first a club that left a division of the same or a higher rank (step "Leave"), so the
+         *   clubs of the nation stay in its divisions (SweCup::build_club_pool 0x88da20 needs 244 Swedish clubs in
+         *   them and loops for ever with fewer). Then the nation's clubs with no division, then the clubs of the
+         *   spare divisions, then the clubs of
          *   lower divisions that no list keeps. */
         for (int i = 0; i < count && now < d->want; i++) {
             Club *c = &club[i];
@@ -527,12 +530,15 @@ static void move_clubs(int season)
         int reserve_places = missing_places < d->missing_reserve ? missing_places : d->missing_reserve;
         int places[2] = {d->tier > 2 || fixed ? missing_places : reserve_places, need - missing_places};
         for (int kind = 0; kind < 2; kind++)
-            for (int group = 1; group <= (kind ? 3 : 1) && places[kind] > 0; group++)
+            for (int group = kind ? 0 : 1; group <= (kind ? 3 : 1) && places[kind] > 0; group++)
                 for (int i = 0; i < count && places[kind] > 0; i++) {
                     Club *c = &club[i];
                     if (c->kept || c->national || c->nation != d->nation || c->div == d->at) continue;
                     int take = 0;
-                    if (group == 1)
+                    if (group == 0) {           /* a club that left a division of the same or a higher rank */
+                        int t = c->db_div >= comps ? (int)((c->db_div - comps) / COMP_SIZE) : -1;
+                        take = !c->div && t >= 0 && t < ncomps && div[t].rank >= d->rank;
+                    } else if (group == 1)
                         take = !c->div && !c->db_div && (!reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve);
                     else if (group == 2)
                         take = c->div && (c->div == spare1 || c->div == spare2);
@@ -544,7 +550,8 @@ static void move_clubs(int season)
                     c->div = d->at;         /* a lower division that gives a club fills in its turn, later */
                     now++;
                     places[kind]--;
-                    if (group == 1) d->filled_pool++;
+                    if (group == 0) d->filled_left++;
+                    else if (group == 1) d->filled_pool++;
                     else if (group == 2) d->filled_spare++;
                     else d->filled_lower++;
                     if (kind == 0 && d->tier <= 2 && reserve_places-- <= 0) d->stand_in++;
@@ -576,9 +583,9 @@ static void move_clubs(int season)
                  div[t].listed == div[t].want;
         if (log)
             fprintf(stderr, "recomp: club moves: list: %d/%02d\t%s\ttier %d\treal %d\tfound %d\tkept %d\town %d\t"
-                            "no division %d\tspare %d\tlower %d\tstand-in %d\topen %d\tclass %d\tdatabase %d\n",
+                            "left %d\tno division %d\tspare %d\tlower %d\tstand-in %d\topen %d\tclass %d\tdatabase %d\n",
                     season, (season + 1) % 100, div[t].name, div[t].tier, div[t].listed, div[t].found, div[t].kept,
-                    div[t].filled_own, div[t].filled_pool, div[t].filled_spare, div[t].filled_lower, div[t].stand_in,
+                    div[t].filled_own, div[t].filled_left, div[t].filled_pool, div[t].filled_spare, div[t].filled_lower, div[t].stand_in,
                     div[t].open, div[t].want, div[t].n0);
     }
     fprintf(stderr, "recomp: club moves of %d/%02d: %d divisions with a list (%d whole), %d clubs moved, %d left "
