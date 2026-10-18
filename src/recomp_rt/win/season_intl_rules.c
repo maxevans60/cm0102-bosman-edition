@@ -174,18 +174,31 @@ static void civil_from_days(long z, int *y, int *m, int *d)
     *y = (int)(yoe + era * 400 + (*m <= 2));
 }
 
+/* The edition whose format a class plays in an edition year. With changing rules on, the edition of that year.
+ * With changing rules off, the rules of the start season stay (Q232): the first edition from the start season
+ * gives the size, the golden goal and the time of year of every edition. NULL outside a season game. */
+const SeasonIntlEdition *season_intl_rule_edition(const char *file, int year)
+{
+    if (!season_intl_on()) return NULL;
+    if (season_changing_rules()) return season_intl_edition(file, year);
+    return season_intl_first(file, season_start_year());
+}
+
 int season_intl_date_shift(uint32_t cls, int year)
 {
     if (!season_intl_on() || cls >= INTL_CLASSES) return 0;
-    const SeasonIntlEdition *e = season_intl_edition(class_files[cls], year);
+    const SeasonIntlEdition *e = season_intl_rule_edition(class_files[cls], year);
     if (!e || e->month < 1) return 0;
+    /* A game that starts in 2001/02 keeps the dates of the 2001/02 editions (Q152: the World Cup 2002 and the
+     * African Cup of Nations 2002 of a 2001 game with changing rules on play as in the base game). */
+    if (season_start_year() == SEASON_FIRST_YEAR && e->season == SEASON_FIRST_YEAR) return 0;
     int day = class_first[cls].day, month0 = class_first[cls].month0;
     if (cls == INTL_OFC && year % 4 != 2) {
         day = 19;
         month0 = 5;
     }
     long from = days_from_civil(year, month0 + 1, day);
-    long to = days_from_civil(e->start_year, e->month, e->day > 0 ? e->day : 1);
+    long to = days_from_civil(year + (e->start_year - e->year), e->month, e->day > 0 ? e->day : 1);
     return (int)(to - from);
 }
 

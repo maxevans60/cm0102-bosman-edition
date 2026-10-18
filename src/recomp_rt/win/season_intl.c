@@ -26,7 +26,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define HOSTS 0xb5e134u                 /* HostCountry: +0 rows, +4 count (word) */
+#define HOSTS 0xb5e134u                 /* HostCountry *: the object has +0 the rows, +4 the count (word);
+                                         * find_hosts gets ecx = [0xb5e134] (0x92daa2) */
 #define ROW_SIZE 0x22u
 #define ROW_COMP 0x0u
 #define ROW_YEAR 0x4u
@@ -206,18 +207,19 @@ static uint32_t row_find(uint32_t rows, int count, uint32_t key, int year)
 }
 
 /* The rows of the editions from the start year. The table grows by the editions that have no row. */
-static void hosts_apply(uint32_t self)
+static void hosts_apply(uint32_t self, int from_season, int sort)
 {
     uint32_t rows = rd32(g_mem, self);
     int count = (int16_t)rd16(g_mem, self + 4);
     if (!readable(rows) || count <= 0 || count > 1000) return;
-    int start = season_start_year(), extra = 0;
+    int extra = 0;
     for (int c = 0; c < HOST_COMPS; c++) {
         uint32_t key = rd32(g_mem, host_comps[c].key);
         if (key == 0xffffffffu) continue;
         for (int i = 0; i < season_intl_edition_count; i++) {
             const SeasonIntlEdition *e = &season_intl_editions[i];
-            if (!strcmp(e->file, host_comps[c].file) && e->year >= start && !row_find(rows, count, key, e->year))
+            if (!strcmp(e->file, host_comps[c].file) && e->season >= from_season &&
+                !row_find(rows, count, key, e->year))
                 extra++;
         }
     }
@@ -246,7 +248,7 @@ static void hosts_apply(uint32_t self)
         }
         for (int i = 0; i < season_intl_edition_count; i++) {
             const SeasonIntlEdition *e = &season_intl_editions[i];
-            if (strcmp(e->file, host_comps[c].file) || e->year < start) continue;
+            if (strcmp(e->file, host_comps[c].file) || e->season < from_season) continue;
             uint32_t row = row_find(rows, used, key, e->year);
             if (!row) {
                 row = rows + (uint32_t)used++ * ROW_SIZE;
@@ -273,6 +275,10 @@ static void hosts_apply(uint32_t self)
             }
     }
     wr16(g_mem, self + 4, (uint16_t)used);
+    if (sort) {                                 /* as the constructor after init (0x5f994a..0x5f995a) */
+        uint32_t qa[4] = {rows, (uint32_t)used, ROW_SIZE, ROW_COMPARE};
+        call_cdecl(GAME_QSORT, 4, qa);
+    }
 }
 
 void o_005f9970(void);
@@ -285,7 +291,11 @@ RT_WRAP(005f9970, host_init)
     uint32_t self = cpu.ecx;
     o_005f9970();
     if (rt_unwinding || !season_intl_on()) return;
-    hosts_apply(self);
+    /* A game that starts in 2001/02 (changing rules on) keeps the original's host table at the new game, and
+     * makes no game allocation there (Q152): the rows of the table come at the first season change
+     * (intl_season). */
+    if (season_start_year() == SEASON_FIRST_YEAR) return;
+    hosts_apply(self, season_start_year(), 0);
 }
 
 void o_005fab70(void);
@@ -301,8 +311,8 @@ RT_WRAP(005fab70, host_redraw)
         o_005fab70();
         return;
     }
-    uint32_t rows = rd32(g_mem, HOSTS);
-    int count = (int16_t)rd16(g_mem, HOSTS + 4);
+    uint32_t rows = readable(self) ? rd32(g_mem, self) : 0;
+    int count = readable(self) ? (int16_t)rd16(g_mem, self + 4) : 0;
     uint32_t key = rd32(g_mem, KEY_CONFED);
     enum { MAX_KEEP = 64 };
     uint32_t keep_at[MAX_KEEP], keep[MAX_KEEP];
@@ -734,14 +744,26 @@ RT_WRAP(0060d810, match_nation_key)
 void season_intl_at_create(void)
 {
     if (!season_intl_on()) return;
-    if (season_start_year() >= AUSTRALIA_TO_ASIA) australia_to_asia();
+    /* From a start in 2006/07, or in 2005/06 with changing rules off: the rule of the 2005/06 row
+     * (int-world-49, AFC member from 1 January 2006) is the start season's, so it holds for the whole game
+     * (Q232). With changing rules on a 2005/06 game moves on 1 January 2006 (intl_entry). */
+    if (season_start_year() >= AUSTRALIA_TO_ASIA ||
+        (season_start_year() == AUSTRALIA_TO_ASIA - 1 && !season_changing_rules()))
+        australia_to_asia();
     nations_rename(season_start_year(), 0);
 }
 
 /* The season point of a later season, with changing rules on: the renames of that season, with news. */
 static void intl_season(int season)
 {
-    if (!season_change_is_start()) nations_rename(season, 1);
+    if (season_change_is_start()) return;
+    nations_rename(season, 1);
+    /* The host rows of the table in a game that started in 2001/02: at its first season change, for the
+     * editions from 2002/03 (host_init). The table is sorted as the constructor sorts it. */
+    if (season_start_year() == SEASON_FIRST_YEAR && season == SEASON_FIRST_YEAR + 1) {
+        uint32_t obj = rd32(g_mem, HOSTS);
+        if (readable(obj)) hosts_apply(obj, season, 1);
+    }
 }
 
 /* Each league table entry on its update day, with changing rules on: Australia moves on the first one from

@@ -166,7 +166,7 @@ static int cup24(uint32_t self)
     if (!season_intl_on()) return -1;
     int c = cup_of(self);
     if (c < 0) return -1;
-    const SeasonIntlEdition *e = season_intl_edition(cups[c].file, year_of(self));
+    const SeasonIntlEdition *e = season_intl_rule_edition(cups[c].file, year_of(self));
     return e && e->teams == TEAMS ? c : -1;
 }
 

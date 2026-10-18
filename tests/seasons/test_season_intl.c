@@ -105,6 +105,17 @@ int main(void)
     CHECK(season_intl_date_shift(INTL_OFC, 2012) == -18, "OFC 2012: 19 June (2012 %% 4 is 0) to 1 June");
     CHECK(season_intl_date_shift(INTL_OFC, 2008) == 0, "OFC 2008: no date in the table");
     CHECK(season_intl_date_shift(INTL_COPA, 2009) == 0, "Copa America 2009: not an edition of the table");
+    game(1, 2001, 1);
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2002) == 0, "2001 on: the 2002 World Cup keeps its dates");
+    CHECK(season_intl_date_shift(INTL_ACN, 2002) == 0, "2001 on: the ACN 2002 keeps its dates");
+    CHECK(season_intl_date_shift(INTL_ACN, 2004) != 0, "2001 on: the ACN 2004 moves to the table's dates");
+    game(1, 2010, 0);
+    CHECK(season_intl_rule_edition("euro_champ", 2016)->teams == 16, "2010 off: Euro 2016 keeps 16 teams (Q232)");
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2022) == 0, "2010 off: World Cup 2022 in June, as 2014 (the first edition from 2010)");
+    game(1, 2015, 0);
+    CHECK(season_intl_rule_edition("euro_champ", 2020)->teams == 24, "2015 off: Euro 2020 with 24 teams");
+    game(1, 2010, 1);
+    CHECK(season_intl_rule_edition("euro_champ", 2016)->teams == 24, "2010 on: Euro 2016 with 24 teams");
     int d = 8, m = 1, y = 2026;
     season_intl_shift_date(-49, &d, &m, &y);
     CHECK(d == 21 && m == 11 && y == 2025, "shift into the year before: %d.%d.%d", d, m + 1, y);
