@@ -100,6 +100,11 @@ uint32_t season_comps_record(const char *name);
  * address of the copy, or 0. */
 uint32_t season_comps_vtable(uint32_t vtable, int slots);
 
+/* Slice 28: the class of a vtable copy (the original class and kind, the def's file), or NULL for another
+ * vtable. The rules report and season_change_file use it, so a new competition shows its def's file. */
+#include "season_rules.h"
+const SeasonCompClass *season_comps_class(uint32_t vtable);
+
 /* Points slot `slot` of a vtable copy at a runtime function (rt_host_fn gives it a game address). */
 void season_comps_set_slot(uint32_t vtable, int slot, const char *name, void (*fn)(void));
 

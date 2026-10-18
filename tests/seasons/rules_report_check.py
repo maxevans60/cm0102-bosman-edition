@@ -179,6 +179,10 @@ def differences(seasons, comps, rows):
         both = [x for x in (phases.get("start"), phases.get("end")) if x]
         held[season].add(c["file"])
         found = by_season_file.get((season, c["file"]), [])
+        if not found and c["file"].startswith("new_"):
+            # A new competition of the shared module (season_comps.h, slice 28): the rows of comp_file "new"
+            # with the object's name (the module gives it the name of each season's row).
+            found = [r for r in by_season_file.get((season, "new"), []) if c["name"] in (r["name"], r["comp"])]
         k = nth[(season, c["file"])]
         nth[(season, c["file"])] += 1
         if not found:

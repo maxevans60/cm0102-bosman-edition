@@ -50,6 +50,7 @@
  * - +0x1c and +0x20 (s32) the record ids of the divisions above and below: EngFirst 0x572dea and 0x572df6
  *   store the key ids [0x9cf5bc] (English Premier Division) and [0x9cf5c4]; EngPrm 0x574bd0 stores -1. */
 #include "win.h"
+#include "season_comps.h"
 #include "season.h"
 #include "season_rules.h"
 #include "season_uefa.h"
@@ -83,7 +84,7 @@ static const SeasonCompClass *class_of(uint32_t vtable)
         if (season_comp_classes[mid].vtable < vtable) lo = mid + 1;
         else hi = mid - 1;
     }
-    return NULL;
+    return season_comps_class(vtable);     /* slice 28: a vtable copy of a new competition (season_comps.h) */
 }
 
 /* A pointer of the game that can be read: inside the 32-bit space and not near 0. */

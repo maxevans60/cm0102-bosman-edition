@@ -110,13 +110,39 @@ uint32_t season_comps_record(const char *name)
     return 0;
 }
 
+/* Slice 28: the vtable copies and the class of their original, for the rules report (season_comps_class). */
+#define MAX_COPIES 32
+static struct { uint32_t copy, original; } copies[MAX_COPIES];
+static int copy_count;
+
 uint32_t season_comps_vtable(uint32_t vtable, int slots)
 {
     if (slots <= 0 || slots > 128) return 0;
     uint32_t copy = win_static_alloc(4u * (uint32_t)slots);
     if (!copy) return 0;
     memcpy(g_mem + copy, g_mem + vtable, 4u * (size_t)slots);
+    if (copy_count < MAX_COPIES) copies[copy_count].copy = copy, copies[copy_count++].original = vtable;
     return copy;
+}
+
+/* Slice 28: the class of a vtable copy for the rules report and the season change: the original's class and
+ * kind, with the file of the def whose object holds the copy (season_comps.h, "Rules for the slices"). */
+const SeasonCompClass *season_comps_class(uint32_t vtable)
+{
+    static SeasonCompClass out;
+    for (int i = 0; i < copy_count; i++) {
+        if (copies[i].copy != vtable) continue;
+        const SeasonCompClass *c = NULL;
+        for (int k = 0; k < season_comp_class_count; k++)
+            if (season_comp_classes[k].vtable == copies[i].original) c = &season_comp_classes[k];
+        if (!c) return NULL;
+        out = *c;
+        out.vtable = vtable;
+        for (int d = 0; d < season_comp_def_count && d < MAX_DEFS; d++)
+            if (season_comp_defs[d] && objects[d] && rd32(g_mem, objects[d]) == vtable) out.file = season_comp_defs[d]->file;
+        return &out;
+    }
+    return NULL;
 }
 
 void season_comps_set_slot(uint32_t vtable, int slot, const char *name, void (*fn)(void))
