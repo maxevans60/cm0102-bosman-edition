@@ -32,6 +32,15 @@
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
+/* A season game with the sizes on. Test switch RECOMP_LEAGUE_SIZES=off: the original's counts and places (the
+ * club moves of slice 15 still run). */
+static int sizes_on(void)
+{
+    static int off = -1;
+    if (off < 0) off = getenv("RECOMP_LEAGUE_SIZES") && !strcmp(getenv("RECOMP_LEAGUE_SIZES"), "off");
+    return !off && season_game_changes();
+}
+
 static int logging(void)
 {
     static int on = -1;
@@ -105,7 +114,7 @@ static const SeasonRule *row_now(uint32_t obj, const char *file)
 
 int season_sizes_clubs(const char *file, int season)
 {
-    if (!size_file(file)) return -1;
+    if (!sizes_on() || !size_file(file)) return -1;
     const SeasonRule *r = row_of_season(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
@@ -130,7 +139,7 @@ static const char *record_name(uint32_t obj)
 
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
 {
-    if (!season_game_changes() || !readable(obj)) return original;
+    if (!sizes_on() || !readable(obj)) return original;
     const char *file = season_change_file(obj);
     int have = clubs_in_division(obj);
     if (have < MIN_CLUBS || have > MAX_CLUBS) return original;
@@ -147,7 +156,7 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
 
 uint32_t rt_league_dates(uint32_t obj, uint32_t original)
 {
-    if (!season_game_changes() || !readable(obj)) return original;
+    if (!sizes_on() || !readable(obj)) return original;
     const char *file = season_change_file(obj);
     int have = clubs_in_division(obj), cap = cap_of(file);
     if (have < MIN_CLUBS || cap <= 0) return original;
@@ -182,7 +191,7 @@ static int top_clubs(uint32_t key_a, uint32_t key_b, uint32_t key_c)
 
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b)
 {
-    if (!season_game_changes()) return original;
+    if (!sizes_on()) return original;
     int top = top_clubs(key_a, key_b, 0);
     if (top < 0 || top > (int)entrants) return original;
     return (uint32_t)((int)entrants - top) - base;
@@ -190,7 +199,7 @@ uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_
 
 uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint32_t key_b, uint32_t key_c)
 {
-    if (!season_game_changes()) return original;
+    if (!sizes_on()) return original;
     int top = top_clubs(key_a, key_b, key_c);
     if (top < 0) return original;
     int room = (int)entrants - top;
@@ -221,7 +230,7 @@ static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want,
 
 void season_sizes_rules(uint32_t obj)
 {
-    if (!season_game_changes() || !readable(obj)) return;
+    if (!sizes_on() || !readable(obj)) return;
     const char *file = season_change_file(obj);
     if (!size_file(file)) return;
     const SeasonRule *r = row_now(obj, file);
@@ -255,7 +264,7 @@ void o_00689c80(void);
  * with the moves at 0x689f47 and 0x689fbb (asserts league.cpp 5596 and 5602). */
 RT_WRAP(00689c80, promote_relegate)
 {
-    if (!season_game_changes()) {
+    if (!sizes_on()) {
         o_00689c80();
         return;
     }
@@ -291,7 +300,7 @@ RT_WRAP(00689c80, promote_relegate)
 
 static void sizes_after(const SeasonChange *c)
 {
-    if (!c->started || c->start || !size_file(c->file)) return;
+    if (!sizes_on() || !c->started || c->start || !size_file(c->file)) return;
     const SeasonRule *now = row_of_season(c->file, c->season), *before = row_of_season(c->file, c->season - 1);
     if (!now || !before || now == before) return;
     const char *name = record_name(c->comp);
