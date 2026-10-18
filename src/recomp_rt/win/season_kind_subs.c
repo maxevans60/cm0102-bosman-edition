@@ -148,7 +148,10 @@ RT_WRAP(005ea3d0, gre_cup_set_fixture_subs)
     int used = 0, bench = 0;
     int mask = strcmp(file, "?") ? lookup(file, season_of(comp), &used, &bench) : 0;
     uint32_t word = rd16(g_mem, fixture + 0x4d);
-    if (mask & SEASON_SUBS_BENCH) word = (word & ~0xfu) | (uint32_t)bench;
+    /* Round 10 (0x5ea3d4: the word at fixture +0x30): the original names 7. The table has one count for the season,
+     * not one for a round, so round 10 keeps the original's bench. */
+    if ((mask & SEASON_SUBS_BENCH) && (int16_t)rd16(g_mem, fixture + 0x30) != 10)
+        word = (word & ~0xfu) | (uint32_t)bench;
     if (mask & SEASON_SUBS_USED) word = (word & ~0xf0u) | ((uint32_t)used << 4);
     wr16(g_mem, fixture + 0x4d, word);
 }

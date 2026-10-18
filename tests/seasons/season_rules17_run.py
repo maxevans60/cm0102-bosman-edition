@@ -46,7 +46,7 @@ RUNS = {
 EXTRA_ENV = {"ctl2020": {"RECOMP_SEASON_BREXIT_YEAR": "2099"}}
 SUBS = re.compile(r"season subs: (\w+) (\d+)/\d+ (used|bench) (\d+) -> (\d+)")
 WINDOWS = re.compile(r"season nation: ([\w ]+) windows (\d+) -> (\d+):(.*)")
-BREXIT = re.compile(r"season nation: Brexit: a player of the EU needs a work permit \((\d+)\)")
+BREXIT = re.compile(r"season nation: Brexit: (?:completion|offer check) of an EU player .*rule on: sent to the permit decision")
 NEWS = re.compile(r"season change: news (\d+)/\d+: (.*)")
 RULES = re.compile(r"season (?:subs|nation): new game (\d+), rules (on|off)")
 
@@ -87,7 +87,7 @@ def check_run(name, program, game, keep, reuse=False):
     n = check_report(name, report, fails, rules)
     subs = [m.groups() for m in (SUBS.search(x) for x in log) if m]
     wins = [m.groups() for m in (WINDOWS.search(x) for x in log) if m]
-    refused = [int(m.group(1)) for m in (BREXIT.search(x) for x in log) if m]
+    refused = [x for x in log if BREXIT.search(x)]
     news = [(int(m.group(1)), m.group(2)) for m in (NEWS.search(x) for x in log) if m]
     new_game = [m.groups() for m in (RULES.search(x) for x in log) if m]
     if rules == "off" and year == 2001:
@@ -136,10 +136,30 @@ def check_run(name, program, game, keep, reuse=False):
             if "permit group byte" in x:
                 print("    " + x.split("recomp: ")[-1])
     print(f"{name}: {n} competition lines, {len(subs)} changes of substitutes, {len(wins)} changes of windows, "
-          f"{len(refused) and refused[-1]} permit refusals, {len(fails)} problems ({work})")
+          f"{len(refused)} signings sent to the permit decision, {len(fails)} problems ({work})")
     for s, t in news[:12]:
         print(f"    news {s}: {t}")
     return fails
+
+
+def stop_games_at_exit():
+    """The script leads its own process group, and a signal, an error or the end stops every game it started
+    (a killed script must not leave a game that runs for hours)."""
+    import atexit
+    import signal
+    try:
+        os.setpgrp()
+    except OSError:
+        return
+
+    def stop(*_):
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        os.killpg(0, signal.SIGTERM)
+        os._exit(1)
+
+    for sig in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
+        signal.signal(sig, stop)
+    atexit.register(lambda: (signal.signal(signal.SIGTERM, signal.SIG_IGN), os.killpg(0, signal.SIGTERM)))
 
 
 def main(argv):
@@ -147,6 +167,7 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
+    stop_games_at_exit()
     only = rrc.arg(argv, "--only", ",".join(RUNS)).split(",")
     jobs = int(rrc.arg(argv, "--jobs", 1))
     keep = os.path.abspath(rrc.arg(argv, "--keep")) if "--keep" in argv else None

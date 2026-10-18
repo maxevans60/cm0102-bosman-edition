@@ -495,9 +495,13 @@ static const char *nationality_of(uint32_t player, int k)
  * 0x843a4d, flag 1); the screens (0x45ccd4, 0x45eb85, 0x484bec, 0x87d9f2, 0x88939a); the contract manager
  * (0x4ceb41, 0x4d24bb); and match selection scoring (0x6dcb32, 0x6e5d60, 0x6e5ebc, 0x6e834c, 0x6e8456,
  * 0x72639f), which must not drop players who are already at a club. */
+extern const uint32_t rt_site_permit_offer_a, rt_site_permit_offer_b, rt_site_permit_check_a, rt_site_permit_check_b,
+    rt_site_permit_complete, rt_site_permit_decide;      /* tools/recomp/callsites.py: the build checks each call */
+
 static int signing_return(uint32_t ret)
 {
-    return ret == 0x8c74ae || ret == 0x8c753e || ret == 0x8c7709 || ret == 0x8c7877 || ret == 0x8c3907;
+    return ret == rt_site_permit_offer_a || ret == rt_site_permit_offer_b || ret == rt_site_permit_check_a ||
+           ret == rt_site_permit_check_b || ret == rt_site_permit_complete;
 }
 
 static unsigned permit_signings[2];          /* log lines so far: the rule off, the rule on */
@@ -522,7 +526,7 @@ RT_WRAP(008c7560, player_needs_work_permit)
                 fprintf(stderr, "recomp: season nation: Brexit: an Irish player signs for a club of %s: goes through\n", nation);
             if (log_on() && permit_signings[rule != 0]++ < 8)
                 fprintf(stderr, "recomp: season nation: Brexit: %s of an EU player by a club of %s, %s, rule %s\n",
-                        ret == 0x8c3907 ? "completion" : "offer check", nation,
+                        ret == rt_site_permit_complete ? "completion" : "offer check", nation,
                         (int16_t)rd16(g_mem, GAME_DATE + 2) >= brexit_year() ? "from the date of the rule" : "before the date of the rule",
                         rule ? "on: sent to the permit decision" : "off: goes through");
             if (rule) {
@@ -534,20 +538,21 @@ RT_WRAP(008c7560, player_needs_work_permit)
     o_008c7560();
 }
 
-/* TRANSFER_MANAGER::is_work_permit_granted 0x8c7950, thiscall (player, nation, offer, 0, 0), ret 0x14: logs the
- * game's permit decision at the completion of a signing (0x8c3920 is its return address there). */
+/* TRANSFER_MANAGER::is_work_permit_granted 0x8c7950, thiscall (player, nation, record, 0, 0), ret 0x14; the third
+ * argument is the record that 0x4cc9e0 gives. It answers 1 when the permit is granted: the completion goes on
+ * (0x8c3920 jne). The wrap logs the answer at the completion of a signing. */
 void o_008c7950(void);
 RT_WRAP(008c7950, is_work_permit_granted)
 {
     uint32_t ret = rd32(g_mem, cpu.esp);
     o_008c7950();
-    if (!rt_unwinding && log_on() && ret == 0x8c3920) {
+    if (!rt_unwinding && log_on() && ret == rt_site_permit_decide) {
         static unsigned shown[2];
         int after = (int16_t)rd16(g_mem, GAME_DATE + 2) >= brexit_year();
         if (shown[after]++ < 8)
             fprintf(stderr, "recomp: season nation: permit decision at a completion %s: answer %u (%s)\n",
                     after ? "from the date of the rule" : "before the date of the rule", cpu.eax,
-                    cpu.eax ? "refused" : "granted");
+                    cpu.eax ? "granted" : "refused");
     }
 }
 
