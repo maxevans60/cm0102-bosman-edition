@@ -145,16 +145,20 @@ typedef struct {
 } Level;
 
 /* The dates. A game in a moved season starts on 11 July (the first day of the rules report of a 2010/11
- * game). The date function moves a match to the round's weekday on or before the date (0x549f70 from 0x521ed3;
- * the original passes weekday 2 for its first qualifying round on 12 July, 0x583cef..0x583d0e), so the first
- * legs of a cup are 14 days apart and its dates are 7-day steps: they keep their order in every year. Champions
- * League first legs 18 July (moved to 12..18 July), 1, 15 and 29 August; second legs 7 days later (+0x22), the
- * last by 5 September. A Europa League round comes the next weekday after the Champions League round of its date,
- * so it starts after the Champions League round whose losers it takes has ended (Q1 by 25 July before EL Q2,
- * Q2 by 8 August before EL Q3, Q3 by 22 August before EL PO), and its play-offs end a day after the Champions
- * League's, so the hand-over of the play-off losers (at the Champions League group draw) comes before the Europa
- * League group draw. The preliminary round has no clubs (season_uefa_code_clubs). The real calendar starts in late
- * June (rows uefa-66 to uefa-160): these dates keep its order. */
+ * game). The date function moves a match to the nearest day of the round's weekday, up to 3 days either way
+ * (0x549f70 from 0x521ed3; seen in a 2010/11 game: 29 August, a Sunday, gave Wednesday 1 September with weekday
+ * 2, and 30 August gave Friday 27 August with weekday 4). The original passes weekday 2 for its Champions League
+ * rounds (0x583cef..0x583d0e) and the UEFA Cup's 3 (0x9026a4): Wednesday and Thursday. So a cup's first legs are 14
+ * days apart on 7-day steps, and each Europa League date is the day after a Champions League date: the two move by
+ * the same days, and the order holds in every year. Champions League first legs 18 July (15 to 21 July after the
+ * move), 1, 15 and 29 August; second legs 7 days later (+0x22), the last by 8 September. A Europa League round
+ * starts after the Champions League round whose losers it takes has ended (Q1 before EL Q2, Q2 before EL Q3, Q3
+ * before EL PO), and its play-offs end the day after the Champions League's, so the hand-over of the play-off
+ * losers (at the Champions League group draw) comes before the Europa League group draw. The preliminary round
+ * has no clubs (season_uefa_code_clubs). The real calendar starts in late June (rows uefa-66 to uefa-160): these
+ * dates keep its order. */
+#define WEEKDAY_CL 2
+#define WEEKDAY_EL 3
 static const Level CL_LEVELS[] = {
     {240, SEASON_UEFA_CL_PR, 0, 1, {12, 6}, {11, 6}},
     {250, SEASON_UEFA_CL_Q1, 0, 2, {12, 6}, {18, 6}},
@@ -393,7 +397,7 @@ uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds_out, uint32_t *name_
         wr16(g_mem, rec + 0x1e, (uint16_t)L.first[i]);
         g_mem[rec + 0x21] = (uint8_t)lv->legs;
         g_mem[rec + 0x22] = 7;
-        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], 2, year);
+        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], WEEKDAY_CL, year);
     }
     game_free(orig);
     if (rt_unwinding || !t) return 0;
@@ -588,7 +592,7 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds_out)
         wr16(g_mem, x + 0x1e, (uint16_t)L.first[i]);
         g_mem[x + 0x21] = (uint8_t)lv->legs;
         g_mem[x + 0x22] = 7;
-        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], 4, year);
+        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], WEEKDAY_EL, year);
     }
     if (rt_unwinding || !t) return 0;
     *rounds_out = L.rounds;
