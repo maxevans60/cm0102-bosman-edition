@@ -122,6 +122,12 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
+    add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
+        src/recomp_rt/win/season_cups_table.c)
+    target_include_directories(season_cups_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cups COMMAND season_cups_test)
+    add_test(NAME season_cups_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_cups_table.py" --check)
     # The rules table reader (0.6.0 slice 12): make the table from the parts, then read it.
     add_executable(season_rules_test tests/seasons/test_season_rules.c src/recomp_rt/win/season_rules.c
         src/recomp_rt/host/posix.c)
@@ -261,6 +267,9 @@ if(EXISTS "${CM0102_EXE}")
     add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv")
     target_sources(cm0102_recomp PRIVATE "${CMAKE_BINARY_DIR}/seasons/comp_classes.c")
     add_dependencies(cm0102_recomp seasons_rules)
+    # The season change (0.6.0 slice 16): the committed wraps of start_new_season match the class table.
+    add_test(NAME season_starts COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_start_wraps.py"
+        --exe "${CM0102_EXE}" --classes "${CMAKE_BINARY_DIR}/seasons/comp_classes.c" --check)
     target_include_directories(cm0102_recomp PRIVATE src/recomp_rt src/recomp_rt/win "${RECOMP_OUT}/gen"
         ${SDL2_INCLUDE_DIRS})
     target_compile_definitions(cm0102_recomp PRIVATE CM0102_DEFAULT_EXE="${CM0102_EXE}"

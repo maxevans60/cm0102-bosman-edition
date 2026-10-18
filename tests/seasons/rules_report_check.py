@@ -344,7 +344,9 @@ def league_steps(nations, extra):
     return out
 
 
-def run(program, game, last, year, database, nations, extra, keep, timeout):
+def run(program, game, last, year, database, nations, extra, keep, timeout, options_more=None, env_more=None):
+    """Plays the season jump. options_more: lines of settings.txt over the defaults (for example
+    changing_rules = on, tests/seasons/season_change_run.py); env_more: more environment variables."""
     import smoke_run
     import custom_database_run as cdr
     work = keep or tempfile.mkdtemp(prefix="cm0102-rules-report-")
@@ -353,7 +355,8 @@ def run(program, game, last, year, database, nations, extra, keep, timeout):
     for d in (user, home, shots):
         os.makedirs(d)
     options = {"display": "classic", "changing_rules": "off", "faster_days": "on"}
-    env_extra = {}
+    options.update(options_more or {})
+    env_extra = dict(env_more or {})
     if year:
         env_extra["RECOMP_START_SEASON"] = str(year)
     if database:
