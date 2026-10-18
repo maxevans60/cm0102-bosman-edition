@@ -824,11 +824,25 @@ RT_WRAP(0051f890, cup_update_for_date)
 
 #define UIC_VTABLE 0x0096bb8cu
 
+#define GAME_YEAR 0xae2c92u               /* the game year (u16), as Uefa_Seeding::update_season reads it (0x9036b6) */
+
+/* 1 for the Intertoto Cup object in a season whose row has no Intertoto Cup. The season is the game year (in
+ * January to June of S + 1 the row of S + 1, which has none either from 2009/10 on): the object keeps the year of
+ * its last edition (below), so its own year +0x40 does not tell. */
 static int uic_not_held(uint32_t uic)
 {
     if (!readable(uic) || rd32(g_mem, uic) != UIC_VTABLE) return 0;
-    const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, uic + 0x40));
+    const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, GAME_YEAR));
     return r && r->uic_clubs < 0;
+}
+
+/* The last season up to S whose row holds the Intertoto Cup (2008), or S. */
+static int uic_last_year(int season)
+{
+    int last = season;
+    for (int i = 0; i < season_uefa_row_count; i++)
+        if (season_uefa_rows[i].season <= season && season_uefa_rows[i].uic_clubs >= 0) last = season_uefa_rows[i].season;
+    return last;
 }
 
 void o_006336c0(void);
@@ -843,6 +857,9 @@ RT_WRAP(006336c0, uic_build_entrants)
         return;
     }
     wr16(g_mem, uic + 0x36, 0);
+    /* The year of its last edition, so the object reads as an old, finished edition (the rules report: not
+     * held when the year is not the season, one before or one after). */
+    wr16(g_mem, uic + 0x40, (uint16_t)uic_last_year((int16_t)rd16(g_mem, GAME_YEAR)));
     rt_ret_cdecl(1);
 }
 
