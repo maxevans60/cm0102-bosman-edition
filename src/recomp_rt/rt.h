@@ -351,6 +351,15 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
 uint32_t rt_wcq_concacaf_playoff(uint32_t self);
 uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
 void rt_wcq_africa_format(uint32_t self, uint32_t pool);
+/* The club competitions outside UEFA (0.6.0 slice 26, src/recomp_rt/win/season_kind_club_world.c): in a season
+ * game the Club World Championship plays every year and draws on 1 July, the Oceania Champions Cup plays every
+ * year, and the Copa Mercosur does not start itself while it waits. The sites of tools/recomp/seasons.py read
+ * these. In the base game each gives the original's value. */
+uint32_t rt_club_world_annual(void);
+uint32_t rt_club_world_step(uint32_t original);
+uint32_t rt_club_world_month(uint32_t original);
+uint32_t rt_club_world_day(uint32_t original);
+uint32_t rt_club_world_waits(uint32_t obj);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets

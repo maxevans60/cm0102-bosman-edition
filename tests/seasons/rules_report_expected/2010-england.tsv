@@ -4,7 +4,7 @@
 2010	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-101: game 5, table 51 (51)
 2010	clubs	european_cup (European Champions Cup), row uefa-74: game 55, table 76 (76 (32 in the group stage))
 2010	clubs	uefa_cup (UEFA Cup), row uefa-77: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
-2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 0/4, table 7 (7)
+2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 4, table 7 (7)
 2010	down	eng_third (English Third Division), row eng-121: game 1 (+0 play-off places), table 2 (2)
 2010	format	uefa_cup, row uefa-77: game 40 clubs in the group stage and 32 in the knockout round after it, table 48 and 32
 2010	idle	asia_nations (Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
@@ -23,22 +23,18 @@
 2010	name	european_cup (European Champions Cup), row uefa-74: game 'European Champions Cup', table 'UEFA Champions League'
 2010	name	fifa_confed (Confederations Cup), row int-world-118: game 'Confederations Cup', table 'FIFA Confederations Cup'
 2010	name	goldcup (Copa America), row int-continental-110: game 'Copa America', table 'Copa América'
-2010	name	inter_amer_cup (Inter-American Cup), row club-world-183: game 'Inter-American Cup', table 'Copa Interamericana'
 2010	name	intertoto_cup (Inter-Toto Cup), row uefa-79: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
 2010	name	oceania_nations (Oceania Nations Cup), row int-continental-109: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2010	name	uefa_cup (UEFA Cup), row uefa-77: game 'UEFA Cup', table 'UEFA Europa League'
 2010	name	world_club_champ (FIFA Club World Championship), row club-world-173: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2010	name	world_club_cup (Intercontinental Cup), row club-world-172: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2010	no_row	friendly (Friendly): no table row
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
 2010	no_row	record_utils (Under 21 International): no table row
 2010	not_held	fifa_confed (Confederations Cup), row int-world-118: the game holds 2011, the table says not held
 2010	not_held	goldcup (Copa America), row int-continental-110: the game holds 2011, the table says not held
-2010	not_held	inter_amer_cup (Inter-American Cup), row club-world-183: the game holds 2010, the table says not held
 2010	not_held	intertoto_cup (Inter-Toto Cup), row uefa-79: the game holds 2010, the table says not held
 2010	not_held	oceania_nations (Oceania Nations Cup), row int-continental-109: the game holds 2010, the table says not held
-2010	not_held	world_club_cup (Intercontinental Cup), row club-world-172: the game holds 2010, the table says not held
 2010	not_in_game	eng-122 eng_conf 'Conference Premier' (England)
 2010	not_in_game	eng-355 eng_fa_trophy 'FA Trophy' (England)
 2010	not_in_game	uefa-73 uefa_seeding 'UEFA access list and seeding' (UEFA)
@@ -77,7 +73,6 @@
 2011	name	european_cup (European Champions Cup), row uefa-82: game 'European Champions Cup', table 'UEFA Champions League'
 2011	name	fifa_confed (Confederations Cup), row int-world-130: game 'Confederations Cup', table 'FIFA Confederations Cup'
 2011	name	goldcup (Copa America), row int-continental-121: game 'Copa America', table '2011 Copa América'
-2011	name	inter_amer_cup (Inter-American Cup), row club-world-202: game 'Inter-American Cup', table 'Copa Interamericana'
 2011	name	intertoto_cup (Inter-Toto Cup), row uefa-87: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
 2011	name	oceania_nations (Oceania Nations Cup), row int-continental-120: game 'Oceania Nations Cup', table '2012 OFC Nations Cup'
 2011	name	olympics (Olympic Games), row int-world-131: game 'Olympic Games', table 'Football at the Summer Olympics (men)'
@@ -89,18 +84,16 @@
 2011	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-128: game 'World Cup Oceania Qualifying Section', table '2014 FIFA World Cup qualification (OFC)'
 2011	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-124: game 'World Cup South American Qualifying Section', table '2014 FIFA World Cup qualification (CONMEBOL)'
 2011	name	world_club_champ (FIFA Club World Championship), row club-world-192: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2011	name	world_club_cup (Intercontinental Cup), row club-world-191: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2011	no_row	friendly (Friendly): no table row
+2011	no_row	mini_cup (Friendly Cup): no table row
 2011	no_row	record_utils ('B' International): no table row
 2011	no_row	record_utils (Reserve): no table row
 2011	no_row	record_utils (Under 21 International): no table row
 2011	not_held	asia_nations (Asian Cup), row int-continental-119: the game holds 2012, the table says not held
 2011	not_held	fifa_confed (Confederations Cup), row int-world-130: the game holds 2011, the table says not held
-2011	not_held	inter_amer_cup (Inter-American Cup), row club-world-202: the game holds 2011, the table says not held
 2011	not_held	intertoto_cup (Inter-Toto Cup), row uefa-87: the game holds 2011, the table says not held
 2011	not_held	olympics (Olympic Games), row int-world-131: the game holds 2012, the table says not held
 2011	not_held	wc_europe_league (World Cup European Qualifying Section), row int-world-123: the game holds 2012, the table says not held
-2011	not_held	world_club_cup (Intercontinental Cup), row club-world-191: the game holds 2011, the table says not held
 2011	not_in_game	eng-132 eng_conf 'Conference Premier' (England)
 2011	not_in_game	eng-361 eng_fa_trophy 'FA Trophy' (England)
 2011	not_in_game	uefa-81 uefa_seeding 'UEFA access list and seeding' (UEFA)

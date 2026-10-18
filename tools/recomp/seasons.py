@@ -186,6 +186,12 @@ PATCHES = {
     # (0x917830, this in esi from 0x91784e) gives its 4th the play-off place: the second byte of its rules
     # array (0x917878, 0 in the original; inference: the count of play-off places) becomes 1 in a season game.
     0x917878: (0x0, "rt_wcq_concacaf_playoff(esi)"),
+    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
+    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
+    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
+    0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
+    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
+    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
 }
 
 # address: (the instruction in the original, C code)
@@ -306,4 +312,10 @@ INSNS = {
     # the compare a pool of 50 or more takes the format of no host (South Africa 2010 stays out of the pool by
     # the compare at 0x9108aa).
     0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
+    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
+    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
+    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
+    # edition (the original skips it when +0x40 is the game year).
+    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
 }

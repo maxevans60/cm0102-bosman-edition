@@ -48,7 +48,7 @@
 2010	clubs	nor_prm (Norwegian Premier Division), row nor-fin-92: game 14, table 16 (16)
 2010	clubs	oceania_club_champ (Oceania Champions Cup), row club-world-189: game 0/4, table 8 (8)
 2010	clubs	uefa_cup (UEFA Cup), row uefa-77: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
-2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 0/4, table 7 (7)
+2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 4, table 7 (7)
 2010	down	arg_prm (Argentine Premier Division), row arg-usa-10: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2010	down	arg_second (Argentine Second Division), row arg-usa-37: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table); 3 relegated in total (infobox))
 2010	down	bel_first (Belgian First Division), row hol-bel-125: game 2 (+0 play-off places), table text (15th v 16th relegation play-off (five matches, 15th starts with 3 points): loser)
@@ -98,7 +98,6 @@
 2010	name	bra_reg_santa (Brazilian Santa Catarina State Championship), row bra-496: game 'Brazilian Santa Catarina State Championship', table 'Campeonato Catarinense'
 2010	name	bra_reg_sp (Brazilian São Paulo State Championship), row bra-712: game 'Brazilian São Paulo State Championship', table 'Campeonato Paulista Série A1'
 2010	name	conmebol_liber (South American Copa Libertadores), row club-world-175: game 'South American Copa Libertadores', table 'Copa Libertadores'
-2010	name	conmebol_merc (South American Copa Mercosur), row club-world-176: game 'South American Copa Mercosur', table 'Copa Mercosur'
 2010	name	cro_a1 (Croatian First Division), row gre-pol-cro-334: game 'Croatian First Division', table 'Prva HNL'
 2010	name	cro_a2a (Croatian Second Division North), row gre-pol-cro-361: game 'Croatian Second Division North', table 'Druga HNL'
 2010	name	cro_a2b (Croatian Second Division South), row gre-pol-cro-388: game 'Croatian Second Division South', table 'Druga HNL South'
@@ -133,7 +132,6 @@
 2010	name	hol_first (Dutch First Division), row hol-bel-120: game 'Dutch First Division', table 'Eerste Divisie'
 2010	name	hol_prm (Dutch Premier Division), row hol-bel-119: game 'Dutch Premier Division', table 'Eredivisie'
 2010	name	hol_super (Dutch Super Cup), row hol-bel-123: game 'Dutch Super Cup', table 'Johan Cruyff Shield'
-2010	name	inter_amer_cup (Inter-American Cup), row club-world-183: game 'Inter-American Cup', table 'Copa Interamericana'
 2010	name	intertoto_cup (Inter-Toto Cup), row uefa-79: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
 2010	name	ita_c1_super (Italian C1 Super Cup), row ita-169: game 'Italian C1 Super Cup', table 'Supercoppa di Lega di Prima Divisione'
 2010	name	ita_c_cup (Italian Serie C Cup), row ita-167: game 'Italian Serie C Cup', table 'Coppa Italia Lega Pro'
@@ -159,25 +157,19 @@
 2010	name	oceania_nations (Oceania Nations Cup), row int-continental-109: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2010	name	uefa_cup (UEFA Cup), row uefa-77: game 'UEFA Cup', table 'UEFA Europa League'
 2010	name	world_club_champ (FIFA Club World Championship), row club-world-173: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2010	name	world_club_cup (Intercontinental Cup), row club-world-172: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2010	no_row	friendly (Friendly): no table row
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
 2010	no_row	record_utils (Under 21 International): no table row
-2010	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-187: the game holds 2010, the table says not held
-2010	not_held	asia_super_cup (Asian Super Cup), row club-world-188: the game holds 2010, the table says not held
 2010	not_held	bra_champ_cup (Brazilian Champions Cup), row bra-199: the game holds 2010, the table says not held
-2010	not_held	conmebol_merc (South American Copa Mercosur), row club-world-176: the game holds 2010, the table says not held
 2010	not_held	cro_a2b (Croatian Second Division South), row gre-pol-cro-388: the game holds 2010, the table says not held
 2010	not_held	fifa_confed (Confederations Cup), row int-world-118: the game holds 2011, the table says not held
 2010	not_held	ger_lge_cup (German League Cup), row ger-128: the game holds 2010, the table says not held
 2010	not_held	goldcup (Copa America), row int-continental-110: the game holds 2011, the table says not held
 2010	not_held	gre_super (Greek Super Cup), row gre-pol-cro-91: the game holds 2010, the table says not held
-2010	not_held	inter_amer_cup (Inter-American Cup), row club-world-183: the game holds 2010, the table says not held
 2010	not_held	intertoto_cup (Inter-Toto Cup), row uefa-79: the game holds 2010, the table says not held
 2010	not_held	nir_charity (Northern Irish Charity Shield), row wal-nir-irl-240: the game holds 2010, the table says not held
 2010	not_held	oceania_nations (Oceania Nations Cup), row int-continental-109: the game holds 2010, the table says not held
-2010	not_held	world_club_cup (Intercontinental Cup), row club-world-172: the game holds 2010, the table says not held
 2010	not_in_game	arg-usa-199 argentina_rules 'Argentina' (Argentina)
 2010	not_in_game	aus-jap-kor-10 australia_rules 'n/a' (Australia)
 2010	not_in_game	aus-jap-kor-118 japan_rules 'n/a' (Japan)
@@ -230,7 +222,6 @@
 2010	up	bra_nat_first (Brazilian National First Division), row bra-37: game 4 (+0 play-off places), table na (n/a)
 2010	up	bra_nat_third (Brazilian National Third Division), row bra-91: game 2 (+0 play-off places), table 4 (4)
 2010	up	conmebol_liber (South American Copa Libertadores), row club-world-175: game 2 (+0 play-off places), table na (n/a)
-2010	up	conmebol_merc (South American Copa Mercosur), row club-world-176: game 1 (+0 play-off places), table na (n/a)
 2010	up	cro_a2a (Croatian Second Division North), row gre-pol-cro-361: game 0 (+0 play-off places), table 1 (1)
 2010	up	den_second (Danish Second Division), row den-swe-58: game 3 (+0 play-off places), table 0 (0)
 2010	up	fin_first (Finnish First Division), row nor-fin-98: game 2 (+0 play-off places), table 1 (1st (1))

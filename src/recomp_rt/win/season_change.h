@@ -131,6 +131,11 @@ void season_change_latin1(char *s);
  * It adds no news. A kind that wants a news sentence calls season_change_news inside its hook. */
 void season_change_rename(uint32_t rec, const char *name);
 
+/* Slice 26 (season_comps.c): the long name of a competition record in the data, before any season_change_rename
+ * (the name that the game's name matchers see, 0x60efd0), or its current name when it has no rename. NULL for
+ * an address that is not a record. */
+const char *season_change_data_name(uint32_t rec);
+
 /* The competition objects that the game holds: the table g_comp_object_table [0xadadfc] and the
  * competition arrays of the 35 league table entries (as the rules report reads them, season_report.c).
  * Fills out with at most max distinct objects and returns their count. It only reads memory. */
