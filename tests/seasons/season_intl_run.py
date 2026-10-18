@@ -22,7 +22,7 @@ The checks (each run):
       the table from the start season (or the waiting year 2200 when the table has none)
     - on: when the year of a class changes between two reports, the new year is the next edition of the
       table (tools/seasons/make_intl.py); off: the old year plus the original's step
-    - on: each host row that the runtime writes names the hosts of the table (log "host")
+    - on: each host row that the runtime writes names the first two hosts of the table (log "host")
 A run takes about 6 to 8 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the
 reports already in the --keep folder again without a new run.
 """
@@ -113,7 +113,8 @@ def check(name, start, rules, work):
             fails.append(f"{name}: no host row in the log")
         for f, y, names in hosts:
             e = next((e for e in eds.get(f, []) if e["year"] == int(y)), None)
-            want = ";".join(h.split("/")[0] for h in e["hosts"]) if e else None
+            # A host row holds two hosts (HostCountry pair 1): the first two of the table.
+            want = ";".join(h.split("/")[0] for h in e["hosts"][:2]) if e else None
             got = ";".join(h.split("/")[0] for h in names.split(";")) if names != "-" else ""
             if want is not None and got != want:
                 fails.append(f"{name}: host row {f} {y}: {names}, the table gives {want}")
