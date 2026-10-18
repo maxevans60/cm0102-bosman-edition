@@ -16,7 +16,8 @@ typedef struct {
     int year;               /* the edition year that the class holds at +0x40 */
     int teams;              /* teams in the finals */
     int golden;             /* 1: golden goal in extra time */
-    int month, day;         /* first day of the finals, 0 when the table gives none */
+    int start_year;         /* the year of the first day of the finals (2025 for the 2026 edition of ACN) */
+    int month, day;         /* first day of the finals (month 1 to 12), 0 when the table gives none */
     const char *hosts;      /* host nations: ";" between hosts, "/" between the names a database can use */
     const char *row;        /* id of the rules table row */
 } SeasonIntlEdition;
@@ -53,6 +54,16 @@ uint32_t rt_intl_oceania_left_out(uint32_t id);
 
 /* 1 when a European Championship without a host goes on (seasons.py 0x57be3d): in a season game. */
 uint32_t rt_intl_euro_no_host(void);
+
+/* The days by which the finals of a class in an edition year move, so the first group day is the table's
+ * (0 for the base game, an edition the table does not hold, or one without a date). */
+int season_intl_date_shift(uint32_t cls, int year);
+
+/* The source file of a class of the code sites ("?" for none). */
+const char *season_intl_class_file(uint32_t cls);
+
+/* Moves a date (day 1 to 31, month from 0, year) by shift days. */
+void season_intl_shift_date(int shift, int *day, int *month0, int *year);
 
 /* The classes of the code sites (cls of the calls above). */
 enum {

@@ -13,6 +13,7 @@ test log RECOMP_SEASON_INTL_LOG=1. The runs:
     2017    October 2017, 2017/18 to 2018/19, changing rules on (the last Confederations Cup lies before)
     2019    October 2019, 2019/20 to 2020/21, changing rules on (Euro 2020 and Copa America 2020 at their
             planned time, the Tokyo Olympics in 2020, Q277, Q366)
+    2021    October 2021, 2021/22 to 2022/23, changing rules on (the 2022 World Cup in November, Türkiye)
     off     October 2017 with changing rules off: the first editions of the table, then the original's steps
 
 The checks (each run):
@@ -22,6 +23,7 @@ The checks (each run):
       the table from the start season (or the waiting year 2200 when the table has none)
     - on: when the year of a class changes between two reports, the new year is the next edition of the
       table (tools/seasons/make_intl.py); off: the old year plus the original's step
+    - the nation renames of RENAMES and the date moves of MOVES are in the log
     - on: each host row that the runtime writes names the first two hosts of the table (log "host")
 A run takes about 6 to 8 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the
 reports already in the --keep folder again without a new run.
@@ -46,8 +48,19 @@ RUNS = {
     "2005": (2005, "September 2005", "on"),
     "2017": (2017, "October 2017", "on"),
     "2019": (2019, "October 2019", "on"),
+    "2021": (2021, "October 2021", "on"),
     "off": (2017, "October 2017", "off"),
 }
+# The nation renames each run must log (season_intl.c, int-world rows): the old name and the new.
+RENAMES = {
+    "2005": [("Yugoslavia", "Serbia and Montenegro"), ("Serbia and Montenegro", "Serbia")],
+    "2017": [("Czech Republic", "Czechia"), ("Swaziland", "Eswatini"), ("FYR of Macedonia", "North Macedonia")],
+    "2019": [("Czech Republic", "Czechia"), ("Swaziland", "Eswatini")],
+    "2021": [("Czech Republic", "Czechia"), ("Swaziland", "Eswatini"), ("Turkey", "T\xfcrkiye")],
+    "off": [("Czech Republic", "Czechia"), ("Swaziland", "Eswatini")],
+}
+# The finals that each run must move to the table's first day (log "moves by").
+MOVES = {"2021": [("world_cup", 2022, 161)]}
 STEPS = {"world_cup": 4, "euro_champ": 4, "fifa_confed": 2, "olympics": 4, "goldcup": 2, "african_nations": 2,
          "asia_nations": 4, "oceania_nations": 2}
 IDLE = 2200
@@ -106,8 +119,14 @@ def check(name, start, rules, work):
             want = nxt(eds[f], a) if rules == "on" else a + STEPS[f]
             if b != want:
                 fails.append(f"{name}: {f} goes from {a} to {b}, expected {want}")
+    log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read().split("\n")
+    for old, new in RENAMES.get(name, []):
+        if not any(f"season intl: nation {old} is now {new} " in x for x in log):
+            fails.append(f"{name}: no rename of {old} to {new} in the log")
+    for f, y, days in MOVES.get(name, []):
+        if not any(f"season intl: {f} {y} moves by {days} days" in x for x in log):
+            fails.append(f"{name}: {f} {y} does not move by {days} days")
     if rules == "on":
-        log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read().split("\n")
         hosts = [m.groups() for m in (HOST_LOG.search(x) for x in log) if m]
         if not hosts:
             fails.append(f"{name}: no host row in the log")

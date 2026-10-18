@@ -14,7 +14,7 @@ finals class of the original and whose format is not "not held". One edition per
                 ("19 January to 10 February 2002" gives 2002, "21 December 2025 to 18 January 2026" 2026)
     teams       the first count of the clubs column
     golden      1 when the format gives a golden goal (Q367: the Euro 2004 silver goal is 0)
-    month, day  the first day of the finals, 0 when the format gives none
+    start_year, month, day  the first day of the finals (month and day 0 when the format gives none)
     hosts       the host nations of the format, "/" between names, ";" between hosts. The names are those of
                 the game's nation.dat where the two differ (HOST_NAMES), with the other name a database
                 can use after a "/" (China PR and China)
@@ -122,9 +122,11 @@ def edition(r):
     m = RANGE.search(fmt)
     if row in YEARS:
         year, month, day = YEARS[row]
+        start_year = year
     elif m:
         day, month = int(m.group(1)), MONTHS[m.group(2) or m.group(5)]
         year = int(m.group(6))
+        start_year = int(m.group(3) or year)
     else:
         fail(f"{row}: no dates in the format: {fmt[:80]!r}")
     teams = re.match(r"^(\d+)", r["clubs"])
@@ -136,9 +138,11 @@ def edition(r):
     season = int(r["season"][:4])
     if row in MOVED:
         season, year, month, day = MOVED[row]
+        start_year = year
     host_list = [] if row in NO_HOST_PLACES else hosts(row, fmt)
     return {"file": FILES[r["comp_file"]], "season": season, "year": year, "teams": int(teams.group(1)),
-            "golden": golden, "month": month, "day": day, "hosts": host_list, "row": row}
+            "golden": golden, "start_year": start_year, "month": month, "day": day, "hosts": host_list,
+            "row": row}
 
 
 def editions():
@@ -167,7 +171,7 @@ def text():
     for e in editions():
         hosts_c = ";".join(e["hosts"]).replace('"', '\\"')
         lines.append(f'    {{"{e["file"]}", {e["season"]}, {e["year"]}, {e["teams"]}, {e["golden"]}, '
-                     f'{e["month"]}, {e["day"]}, "{hosts_c}", "{e["row"]}"}},')
+                     f'{e["start_year"]}, {e["month"]}, {e["day"]}, "{hosts_c}", "{e["row"]}"}},')
     lines += [
         "};",
         "const int season_intl_edition_count = (int)(sizeof season_intl_editions / sizeof season_intl_editions[0]);",

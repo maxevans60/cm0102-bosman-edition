@@ -93,6 +93,25 @@ int main(void)
     game(1, 2026, 1);
     CHECK(rt_intl_first_year(INTL_WORLD_CUP, 2026) == 2200, "2026: no World Cup in the table after 2026");
 
+    /* Finals dates. */
+    game(1, 2001, 0);
+    CHECK(season_intl_date_shift(INTL_ACN, 2019) == 0, "base game: no date shift");
+    game(1, 2010, 1);
+    CHECK(season_intl_date_shift(INTL_ACN, 2019) == 133, "ACN 2019: 8 February to 21 June");
+    CHECK(season_intl_date_shift(INTL_ACN, 2026) == -49, "ACN 2025/26: 8 February 2026 to 21 December 2025");
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2022) == 161, "World Cup 2022: 12 June to 20 November");
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2010) == -1, "World Cup 2010: 12 June to 11 June");
+    CHECK(season_intl_date_shift(INTL_ASIAN, 2011) == -279, "Asian Cup 2011: 13 October to 7 January");
+    CHECK(season_intl_date_shift(INTL_OFC, 2012) == -18, "OFC 2012: 19 June (2012 %% 4 is 0) to 1 June");
+    CHECK(season_intl_date_shift(INTL_OFC, 2008) == 0, "OFC 2008: no date in the table");
+    CHECK(season_intl_date_shift(INTL_COPA, 2009) == 0, "Copa America 2009: not an edition of the table");
+    int d = 8, m = 1, y = 2026;
+    season_intl_shift_date(-49, &d, &m, &y);
+    CHECK(d == 21 && m == 11 && y == 2025, "shift into the year before: %d.%d.%d", d, m + 1, y);
+    d = 28, m = 1, y = 2020;
+    season_intl_shift_date(1, &d, &m, &y);
+    CHECK(d == 29 && m == 1 && y == 2020, "leap day");
+
     /* The table. */
     const SeasonIntlEdition *e = season_intl_edition("olympics", 2020);
     CHECK(e && e->season == 2020 && e->month == 7 && !strcmp(e->hosts, "Japan"), "Tokyo Olympics in 2020/21");

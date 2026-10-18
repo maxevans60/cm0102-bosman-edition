@@ -525,13 +525,173 @@ uint32_t rt_intl_euro_no_host(void)
     return (uint32_t)season_intl_on();
 }
 
+/* ---- Finals dates ---- */
+
+/* The stage builder of each finals class (vtable +0x8c, thiscall: the vtables of sweep-international section 2
+ * hold 0x92d200, 0x57b630, 0x58bdb0, 0x5e12d0, 0x401ab0, 0x40f4c0, 0x799690, 0x7a0230). It sets the dates of
+ * the class's events with Date::Date 0x549f70 (thiscall (day 1 to 31, month from 0, year, flag), ret 0x10;
+ * for example the Euro seeding and draw dates at 0x57b6b9 and 0x57b6e4) and calls the template function
+ * (vtable +0x3c), whose round dates go through League_Stage 0x68a160 and the Cup round functions 0x521e60 and
+ * 0x521eb0, which make Date::Date too. While a builder runs for an edition of the table with a first day, every
+ * Date::Date moves by the days between the class's fixed first group day and the table's
+ * (season_intl_date_shift). The original's weekday flag (the fourth argument) stays. */
+static int date_shift;
+
+static void stage_builder(uint32_t cls, void (*original)(void))
+{
+    uint32_t self = cpu.ecx;
+    int saved = date_shift;
+    date_shift = season_intl_date_shift(cls, (int16_t)rd16(g_mem, self + 0x40u));
+    if (date_shift && logging())
+        fprintf(stderr, "recomp: season intl: %s %d moves by %d days\n", season_intl_class_file(cls),
+                (int16_t)rd16(g_mem, self + 0x40u), date_shift);
+    original();
+    date_shift = saved;
+}
+
+void o_0092d200(void);
+void o_0057b630(void);
+void o_0058bdb0(void);
+void o_005e12d0(void);
+void o_00401ab0(void);
+void o_0040f4c0(void);
+void o_00799690(void);
+void o_007a0230(void);
+RT_WRAP(0092d200, wc_stages) { stage_builder(INTL_WORLD_CUP, o_0092d200); }
+RT_WRAP(0057b630, euro_stages) { stage_builder(INTL_EURO, o_0057b630); }
+RT_WRAP(0058bdb0, confed_stages) { stage_builder(INTL_CONFED, o_0058bdb0); }
+RT_WRAP(005e12d0, copa_stages) { stage_builder(INTL_COPA, o_005e12d0); }
+RT_WRAP(00401ab0, acn_stages) { stage_builder(INTL_ACN, o_00401ab0); }
+RT_WRAP(0040f4c0, asian_stages) { stage_builder(INTL_ASIAN, o_0040f4c0); }
+RT_WRAP(00799690, ofc_stages) { stage_builder(INTL_OFC, o_00799690); }
+RT_WRAP(007a0230, olympics_stages) { stage_builder(INTL_OLYMPICS, o_007a0230); }
+
+void o_00549f70(void);
+
+RT_WRAP(00549f70, date_make)
+{
+    if (date_shift) {
+        int day = (int16_t)rd16(g_mem, cpu.esp + 4u), month0 = (int16_t)rd16(g_mem, cpu.esp + 8u);
+        int year = (int16_t)rd16(g_mem, cpu.esp + 12u);
+        if (day >= 1 && day <= 31 && month0 >= 0 && month0 <= 11 && year > 1900) {
+            season_intl_shift_date(date_shift, &day, &month0, &year);
+            wr32(g_mem, cpu.esp + 4u, (uint32_t)day);
+            wr32(g_mem, cpu.esp + 8u, (uint32_t)month0);
+            wr32(g_mem, cpu.esp + 12u, (uint32_t)year);
+        }
+    }
+    o_00549f70();
+}
+
+/* ---- Nation names ---- */
+
+/* The renamed nations of int-world.tsv ("nation rules" rows, the season of the row). A nation record
+ * (nation.dat, 0x122 bytes) holds the long name at +4 (51 bytes), the short name at +0x38 (26), the code at
+ * +0x53 (4) and the adjective at +0x57 (26; the continent follows at +0x71), read from the 3.9.68 nation.dat
+ * (Yugoslavia, row 209). Every season database keeps the record "Yugoslavia" and adds Serbia, Montenegro and
+ * North Macedonia as new records when it has them (the nation.dat of the 49 databases), so a rename applies
+ * only when the data holds the old name and no record with the new name. */
+static const struct {
+    int season;
+    const char *old, *name, *short_name, *code, *adjective, *row;
+} nation_renames[] = {
+    {2002, "Yugoslavia", "Serbia and Montenegro", "Serbia & Montenegro", "SCG", "Serbian", "int-world-13"},
+    {2006, "Serbia and Montenegro", "Serbia", "Serbia", "SRB", "Serbian", "int-world-61"},
+    {2016, "Czech Republic", "Czechia", "Czechia", "CZE", "Czech", "int-world-181"},
+    {2017, "Swaziland", "Eswatini", "Eswatini", "SWZ", "Swazi", "int-world-193"},
+    {2018, "FYR of Macedonia", "North Macedonia", "North Macedonia", "MKD", "Macedonian", "int-world-205"},
+    {2022, "Turkey", "T\xfcrkiye", "T\xfcrkiye", "TUR", "Turkish", "int-world-253"},
+};
+#define NATION_RENAMES ((int)(sizeof nation_renames / sizeof nation_renames[0]))
+
+static int nation_named(const char *name)
+{
+    for (int id = 0; id < nation_count(); id++)
+        if (!strcmp(win_str(nation_at(id) + NATION_NAME), name)) return id;
+    return -1;
+}
+
+static void put_field(uint32_t at, const char *text, uint32_t room)
+{
+    memset(g_mem + at, 0, room);
+    size_t n = strlen(text);
+    if (n > room - 1) n = room - 1;
+    memcpy(g_mem + at, text, n);
+}
+
+/* Applies every rename up to the season. Returns the count. news: 1 to add a sentence for each. */
+static int nations_rename(int season, int news)
+{
+    int done = 0;
+    if (!readable(rd32(g_mem, NATIONS))) return 0;
+    for (int i = 0; i < NATION_RENAMES; i++) {
+        if (nation_renames[i].season > season) continue;
+        int id = nation_named(nation_renames[i].old);
+        if (id < 0 || nation_named(nation_renames[i].name) >= 0) continue;
+        uint32_t rec = nation_at(id);
+        put_field(rec + NATION_NAME, nation_renames[i].name, 51);
+        put_field(rec + 0x38u, nation_renames[i].short_name, 26);
+        put_field(rec + 0x53u, nation_renames[i].code, 4);
+        put_field(rec + 0x57u, nation_renames[i].adjective, 26);
+        if (logging())
+            fprintf(stderr, "recomp: season intl: nation %s is now %s (%s)\n", nation_renames[i].old,
+                    nation_renames[i].name, nation_renames[i].row);
+        if (news) season_change_news("%s is now called %s.", nation_renames[i].old, nation_renames[i].name);
+        done++;
+    }
+    return done;
+}
+
+void o_0060d810(void);
+
+/* match_nation_key_id, cdecl (name, index): set_key_ids 0x601a40 finds the key nations by their name at every
+ * load of the data (the loop at 0x60421a passes the record +4), so a saved game with a renamed nation would
+ * lose its key id (for "Yugoslavia" the assert "Unable to find the YUGOSLAVIA index", 0x606182). In a season
+ * game a record with a name of the rename table, while no record holds the first old name of its chain, is
+ * matched by that first name. The other caller (0x604081) passes names read from a file. */
+RT_WRAP(0060d810, match_nation_key)
+{
+    uint32_t name = rt_arg(0);
+    if (!season_intl_on() || !readable(name)) {
+        o_0060d810();
+        return;
+    }
+    const char *now = win_str(name), *first = NULL;
+    for (int step = 0; step < NATION_RENAMES; step++) {
+        const char *older = NULL;
+        for (int i = 0; i < NATION_RENAMES; i++)
+            if (!strcmp(nation_renames[i].name, first ? first : now)) older = nation_renames[i].old;
+        if (!older) break;
+        first = older;
+    }
+    if (!first || nation_named(first) >= 0) {
+        o_0060d810();
+        return;
+    }
+    static uint32_t buf;
+    if (!buf) buf = win_static_alloc(64);
+    win_put_str(buf, first, 64);
+    uint32_t slot = cpu.esp + 4;
+    wr32(g_mem, slot, buf);
+    o_0060d810();
+    if (!rt_unwinding) wr32(g_mem, slot, name);
+}
+
 /* ---- The rule kind ---- */
 
 /* A new game (season.c, before the original makes it): a season game from 2006/07 starts with Australia in
  * Asia, before the competitions take their entrants. */
 void season_intl_at_create(void)
 {
-    if (season_intl_on() && season_start_year() >= AUSTRALIA_TO_ASIA) australia_to_asia();
+    if (!season_intl_on()) return;
+    if (season_start_year() >= AUSTRALIA_TO_ASIA) australia_to_asia();
+    nations_rename(season_start_year(), 0);
+}
+
+/* The season point of a later season, with changing rules on: the renames of that season, with news. */
+static void intl_season(int season)
+{
+    if (!season_change_is_start()) nations_rename(season, 1);
 }
 
 /* Each league table entry on its update day, with changing rules on: Australia moves on the first one from
@@ -543,4 +703,4 @@ static void intl_entry(const SeasonChange *c)
         season_change_news("Australia now plays in the Asian Football Confederation.");
 }
 
-const SeasonRuleKind season_kind_intl = {"international", NULL, NULL, NULL, intl_entry, NULL, NULL};
+const SeasonRuleKind season_kind_intl = {"international", NULL, NULL, intl_season, intl_entry, NULL, NULL};

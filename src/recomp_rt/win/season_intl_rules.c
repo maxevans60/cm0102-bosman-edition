@@ -70,6 +70,8 @@ static const char *class_file(uint32_t cls)
     return cls < INTL_CLASSES ? class_files[cls] : "?";
 }
 
+const char *season_intl_class_file(uint32_t cls) { return class_file(cls); }
+
 /* The constructor of a class: the original rounds the game year up to its cycle. A game that starts in
  * another season takes the first edition of the table from its start season. The base game and a 2001 start
  * keep the original's year (the table holds the same editions for 2001/02). */
@@ -132,4 +134,67 @@ uint32_t rt_intl_wc_holder(uint32_t holder)
 uint32_t rt_intl_wc_holder_slot(uint32_t year)
 {
     return !season_intl_on() || (int)(int16_t)(year & 0xffffu) < FIRST_WC_WITHOUT_HOLDER;
+}
+
+/* ---- Finals dates ---- */
+
+/* The first group day of each class in its template function (vtable +0x3c), the first call of
+ * League_Stage date 0x68a160 there: day, then the month from 0 (read at each address). */
+static const struct { int day, month0; } class_first[INTL_CLASSES] = {
+    {12, 5},    /* World Cup 12 June: 0x92c335 */
+    {9, 5},     /* European Championship 9 June: 0x57ac35 */
+    {29, 6},    /* Confederations Cup 29 July: 0x58b601 */
+    {6, 6},     /* Copa America 6 July: 0x5e09a5 */
+    {8, 1},     /* African Cup of Nations 8 February: 0x401385 */
+    {13, 9},    /* Asian Cup 13 October: 0x40eba5 */
+    {10, 10},   /* Oceania Nations Cup 10 November when the year % 4 is 2 (0x798b70, 0x798c23), else 19 June */
+    {13, 8},    /* Olympics 13 September: 0x79f875 */
+};
+
+static long days_from_civil(long y, int m, int d)    /* m 1 to 12; days from 1 January 1970 */
+{
+    y -= m <= 2;
+    long era = (y >= 0 ? y : y - 399) / 400;
+    long yoe = y - era * 400;
+    long doy = (153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1;
+    long doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    return era * 146097 + doe - 719468;
+}
+
+static void civil_from_days(long z, int *y, int *m, int *d)
+{
+    z += 719468;
+    long era = (z >= 0 ? z : z - 146096) / 146097;
+    long doe = z - era * 146097;
+    long yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+    long doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    long mp = (5 * doy + 2) / 153;
+    *d = (int)(doy - (153 * mp + 2) / 5 + 1);
+    *m = (int)(mp < 10 ? mp + 3 : mp - 9);
+    *y = (int)(yoe + era * 400 + (*m <= 2));
+}
+
+int season_intl_date_shift(uint32_t cls, int year)
+{
+    if (!season_intl_on() || cls >= INTL_CLASSES) return 0;
+    const SeasonIntlEdition *e = season_intl_edition(class_files[cls], year);
+    if (!e || e->month < 1) return 0;
+    int day = class_first[cls].day, month0 = class_first[cls].month0;
+    if (cls == INTL_OFC && year % 4 != 2) {
+        day = 19;
+        month0 = 5;
+    }
+    long from = days_from_civil(year, month0 + 1, day);
+    long to = days_from_civil(e->start_year, e->month, e->day > 0 ? e->day : 1);
+    return (int)(to - from);
+}
+
+void season_intl_shift_date(int shift, int *day, int *month0, int *year)
+{
+    if (!shift) return;
+    int y, m, d;
+    civil_from_days(days_from_civil(*year, *month0 + 1, *day) + shift, &y, &m, &d);
+    *day = d;
+    *month0 = m - 1;
+    *year = y;
 }
