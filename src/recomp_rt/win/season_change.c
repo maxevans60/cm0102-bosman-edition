@@ -309,6 +309,8 @@ static int record_index(uint32_t rec, uint32_t *index)
     return *index < (uint32_t)count && *index < 100000u;
 }
 
+int season_change_renames(void) { return rename_count; }
+
 static const SeasonRename *rename_of(uint32_t index)
 {
     for (int i = 0; i < rename_count; i++)

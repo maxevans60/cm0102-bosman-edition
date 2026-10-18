@@ -512,7 +512,8 @@ static void move_clubs(int season)
          *   class counts the clubs of the data. A class with a fixed count stops at its assert with an open
          *   place, so there it takes a club with no division too, and the log calls it a stand-in;
          * - any other place (a club that moved up, or a class that takes more clubs than the real division has,
-         *   slice 18): first a club that left a division of the same or a higher rank (step "Leave"), so the
+         *   slice 18): first a club that left a division of a higher rank (step "Leave"; no reserve or B side,
+         *   and no move between two divisions of one rank such as German Regional North and South), so the
          *   clubs of the nation stay in its divisions (SweCup::build_club_pool 0x88da20 needs 244 Swedish clubs in
          *   them and loops for ever with fewer). Then the nation's clubs with no division, then the clubs of the
          *   spare divisions, then the clubs of
@@ -535,9 +536,10 @@ static void move_clubs(int season)
                     Club *c = &club[i];
                     if (c->kept || c->national || c->nation != d->nation || c->div == d->at) continue;
                     int take = 0;
-                    if (group == 0) {           /* a club that left a division of the same or a higher rank */
+                    if (group == 0) {           /* a club that left a division of a higher rank */
                         int t = c->db_div >= comps ? (int)((c->db_div - comps) / COMP_SIZE) : -1;
-                        take = !c->div && t >= 0 && t < ncomps && div[t].rank >= d->rank;
+                        take = !c->div && t >= 0 && t < ncomps && div[t].rank > d->rank &&
+                               (!reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve);
                     } else if (group == 1)
                         take = !c->div && !c->db_div && (!reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve);
                     else if (group == 2)
