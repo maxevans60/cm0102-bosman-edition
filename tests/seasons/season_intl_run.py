@@ -27,6 +27,7 @@ The checks (each run):
       the table from the start season (or the waiting year 2200 when the table has none)
     - on: when the year of a class changes between two reports, the new year is the next edition of the
       table (tools/seasons/make_intl.py); off: the old year plus the original's step
+    - no inter-confederation play-off is built without a team (log "wc play-off ... v none")
     - the nation renames of RENAMES and the date moves of MOVES are in the log
     - on: each host row that the runtime writes names the first two hosts of the table (log "host")
 A run takes about 6 to 8 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the
@@ -144,6 +145,9 @@ def check(name, start, rules, work):
     for text in LINES.get(name, []):
         if not any(text in x for x in log):
             fails.append(f"{name}: no log line {text!r}")
+    for x in log:
+        if "season intl: wc play-off" in x and (" v none" in x or x.rstrip().endswith("none v")):
+            fails.append(f"{name}: a play-off without a team: {x.strip()}")
     for f, y, days in MOVES.get(name, []):
         if not any(f"season intl: {f} {y} moves by {days} days" in x for x in log):
             fails.append(f"{name}: {f} {y} does not move by {days} days")

@@ -195,6 +195,42 @@ static uint32_t playoff_team(int conf)
     return 0;
 }
 
+/* The strongest nation of a confederation that is not in the World Cup slots yet: the partner of a tie when
+ * neither the team of the cycle nor the original's partner is known (a 2005 start built the Asian tie of 2006
+ * before the CONCACAF final group ended, and E3 leaves no European runner-up). The continent of a nation is
+ * its pointer at +0x71, its id at +0 of that record, compared with the key continents (sweep section 8). The
+ * reputation is the s16 at +0x8e (3.9.68 nation.dat: 9500 for Brazil). The team is national_team 0x53b3d0,
+ * taken only when its own nation field names the nation (season_intl.c, team_nation). */
+static uint32_t strongest_free(int conf)
+{
+    static const uint32_t continent_key[] = {0x9cfa0cu, 0x9cfa14u, 0x9cfa1cu, 0x9cfa18u};   /* AFC .. OFC */
+    uint32_t nations = rd32(g_mem, 0xae23a8u), wc = comp_of(0x9cf79cu);
+    int count = (int)rd32(g_mem, 0xae2350u);
+    if (!readable(nations) || count <= 0 || count > 1000) return 0;
+    uint32_t slots = wc ? rd32(g_mem, wc + 0x14u) : 0;
+    int filled = wc ? (int16_t)rd16(g_mem, wc + 0x36u) : 0;
+    uint32_t want = rd32(g_mem, continent_key[conf]), best = 0;
+    int best_rep = -1;
+    for (int id = 0; id < count; id++) {
+        uint32_t nation = nations + (uint32_t)id * 0x122u, c = rd32(g_mem, nation + 0x71u);
+        int rep = (int16_t)rd16(g_mem, nation + 0x8eu);
+        if (!readable(c) || rd32(g_mem, c) != want || rep <= best_rep) continue;
+        Cpu saved = cpu;
+        uint32_t args[1] = {nation};
+        uint32_t team = rt_callback(0x0053b3d0u, 1, args);
+        if (rt_unwinding) return 0;
+        cpu = saved;
+        if (!readable(team) || rd32(g_mem, team + CLUB_NATION) != nation) continue;
+        int in = 0;
+        for (int k = 0; readable(slots) && k < filled && k < 64 && !in; k++)
+            in = rd32(g_mem, slots + 6u * (uint32_t)k) == team;
+        if (in) continue;
+        best = team;
+        best_rep = rep;
+    }
+    return best;
+}
+
 /* ---- Sites ---- */
 
 /* E1 (0x918923, 0x919a7e): the exempt count that sizes the European play-off. 2 gives a play-off of 6. */
@@ -227,9 +263,9 @@ uint32_t rt_wcq_asia_partner(uint32_t self, uint32_t asian, uint32_t original)
     uint32_t p = playoff_team(ties[t].afc_partner);
     if (!p) {
         if (logging())
-            fprintf(stderr, "recomp: season intl: wc play-off %d: %s team not known, the original partner plays\n",
+            fprintf(stderr, "recomp: season intl: wc play-off %d: %s team not known, the original partner or the strongest free nation plays\n",
                     y, conf_name[ties[t].afc_partner]);
-        p = original;
+        p = original ? original : strongest_free(ties[t].afc_partner);
     }
     if (logging())
         fprintf(stderr, "recomp: season intl: wc play-off %d: %s v %s\n", y, team_name(asian), team_name(p));
@@ -254,6 +290,8 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found)
                         conf_name[conf], conf_name[original[i]]);
         }
     }
+    for (int i = 0; i < 2; i++)
+        if (!pick[i]) pick[i] = strongest_free(ties[t].other[i]);
     if (!pick[0] || !pick[1]) return found;     /* as the original: its box at 0x91f917 */
     wr32(g_mem, teams, pick[0]);
     wr32(g_mem, teams + 4u, pick[1]);
