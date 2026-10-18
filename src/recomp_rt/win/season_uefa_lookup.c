@@ -20,6 +20,26 @@ static int round_clubs(const SeasonUefaRound *rs, int n, const char *name)
     return 0;
 }
 
+static int level_clubs(const SeasonUefaRound *rs, int n, const char *name)
+{
+    size_t k = strlen(name);
+    int sum = 0;
+    for (int i = 0; i < n && i < SEASON_UEFA_ROUNDS; i++)
+        if (rs[i].name && !strncmp(rs[i].name, name, k) && (rs[i].name[k] == 0 || rs[i].name[k] == ' '))
+            sum += rs[i].clubs;
+    return sum;
+}
+
+int season_uefa_cl_level(const SeasonUefa *r, const char *name)
+{
+    return r ? level_clubs(r->cl_rounds, r->cl_round_count, name) : 0;
+}
+
+int season_uefa_uc_level(const SeasonUefa *r, const char *name)
+{
+    return r ? level_clubs(r->uc_rounds, r->uc_round_count, name) : 0;
+}
+
 int season_uefa_cl_round(const SeasonUefa *r, const char *name)
 {
     return r ? round_clubs(r->cl_rounds, r->cl_round_count, name) : 0;

@@ -15,10 +15,13 @@
 
 #include <stdint.h>
 
-#define SEASON_UEFA_ROUNDS 8
+#define SEASON_UEFA_ROUNDS 12
 
 typedef struct {
-    const char *name;               /* Q1, Q2, Q3, QR, PO, R1 to R4, Groups, Groups 2, KO */
+    const char *name;               /* QR, PR, Q1, Q2, Q3, PO, R1 to R4, Groups, Groups 2, KO; a qualifying round
+                                     * of two paths (2009/10 on) is two rounds: "Q3 CP" and "Q3 LP" (Champions
+                                     * League: Champions Path, League Path), "Q2 CP" and "Q2 MP" (Europa League:
+                                     * Champions Path, main path) */
     int clubs;
 } SeasonUefaRound;
 
@@ -30,9 +33,13 @@ typedef struct {
     int uc_round_count;
     SeasonUefaRound uc_rounds[SEASON_UEFA_ROUNDS];
     int uc_groups, uc_group_clubs, uc_meetings;     /* UEFA Cup group stage, 0 when it has none */
+    int uc_through;                 /* the clubs of a UEFA Cup group that go to the knockout (2 or 3) */
     int uic_clubs;                  /* Intertoto Cup clubs, -1 when not held */
     int uic_rounds, uic_winners;
     const char *uic_entry;          /* the UEFA Cup round of its winners: R1 or Q2 */
+    const char *sc_stadium;         /* the Super Cup match: stadium and city (Windows-1252), day, month 0 to 11 */
+    const char *sc_city;
+    int sc_day, sc_month;
 } SeasonUefa;
 
 extern const SeasonUefa season_uefa_rows[];
@@ -47,6 +54,10 @@ const SeasonUefa *season_uefa_row(int season);
 /* The clubs of a named round of a row's Champions League or UEFA Cup, 0 when the row has no such round. */
 int season_uefa_cl_round(const SeasonUefa *r, const char *name);
 int season_uefa_uc_round(const SeasonUefa *r, const char *name);
+
+/* The clubs of a round of all paths: "Q3" gives "Q3" or "Q3 CP" + "Q3 LP" (+ "Q3 MP"). */
+int season_uefa_cl_level(const SeasonUefa *r, const char *name);
+int season_uefa_uc_level(const SeasonUefa *r, const char *name);
 
 /* 1 when the Champions League of row r has one group stage and a knockout round of 16 (2003/04 on). */
 int season_uefa_cl_round_of_16(const SeasonUefa *r);

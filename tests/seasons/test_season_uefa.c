@@ -42,6 +42,29 @@ int main(void)
     CHECK(season_uefa_table_row(2006)->uic_rounds == 3 && season_uefa_table_row(2006)->uic_winners == 11);
     CHECK(!strcmp(season_uefa_table_row(2006)->uic_entry, "Q2"));
 
+    /* Slice 23. The Europa League from 2009/10 (U4): 12 groups of 4, double round robin, top two and the 8
+     * Champions League thirds to a round of 32. The UEFA Cup groups of 2004/05 to 2008/09 send three. */
+    const SeasonUefa *r2009 = season_uefa_table_row(2009), *r2018 = season_uefa_table_row(2018);
+    CHECK(r2008->uc_groups == 8 && r2008->uc_through == 3);
+    CHECK(r2009 && r2009->season == 2009 && r2009->uc_groups == 12 && r2009->uc_group_clubs == 4);
+    CHECK(r2009->uc_meetings == 2 && r2009->uc_through == 2 && season_uefa_uc_round(r2009, "KO") == 32);
+    CHECK(season_uefa_uc_round(r2009, "PO") == 76 && season_uefa_uc_round(r2009, "Groups") == 48);
+    /* The Intertoto Cup is not held from 2009 (U3). */
+    CHECK(r2008->uic_clubs == 50 && r2009->uic_clubs == -1 && r2009->uic_rounds == 0);
+    /* The Champions League paths from 2009/10 (U5, Q296): Q3 and PO of two paths. */
+    CHECK(season_uefa_cl_round(r2009, "Q3 CP") == 20 && season_uefa_cl_round(r2009, "Q3 LP") == 10);
+    CHECK(season_uefa_cl_level(r2009, "Q3") == 30 && season_uefa_cl_level(r2009, "PO") == 20);
+    CHECK(season_uefa_cl_level(r2009, "Q2") == 34 && season_uefa_cl_round_of_16(r2009));
+    CHECK(season_uefa_cl_level(r2008, "Q3") == 32);
+    /* 2018/19: a preliminary round, paths from Q2; Europa League paths CP and MP. */
+    CHECK(season_uefa_cl_round(r2018, "PR") == 4 && season_uefa_cl_level(r2018, "Q2") == 24);
+    CHECK(season_uefa_uc_level(r2018, "Q2") == 92 && season_uefa_uc_round(r2018, "Q2 MP") == 74);
+    /* The Super Cup: Monaco to 2012, then a venue each year (U6). */
+    CHECK(!strcmp(r2008->sc_city, "Monaco") && r2008->sc_day == 29 && r2008->sc_month == 7);
+    const SeasonUefa *r2013 = season_uefa_table_row(2013);
+    CHECK(!strcmp(r2013->sc_city, "Prague") && r2013->sc_day == 30 && r2013->sc_month == 7);
+    CHECK(!strcmp(season_uefa_table_row(2020)->sc_city, "Budapest") && season_uefa_table_row(2020)->sc_month == 8);
+
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);
     CHECK(season_uefa_table_row(2099) == &season_uefa_rows[season_uefa_row_count - 1]);
