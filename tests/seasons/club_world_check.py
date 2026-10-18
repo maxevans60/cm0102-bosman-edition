@@ -5,18 +5,19 @@ src/recomp_rt/win/season_kind_club_world.c).
 
 Usage:
     python3 tests/seasons/club_world_check.py <cm0102_recomp> <game folder> [--only <name>,...] [--jobs n]
-        [--keep <folder>] [--reuse]
+        [--keep <folder>] [--reuse] [--own-dbs <folder>]
 
 Each run is a season jump of tests/seasons/rules_report_check.py with England, Argentina, Australia, Brazil and Japan
 selected (a creator makes its objects only when a nation of its continent is selected, 0x6699d0). The runs:
     2001-on   the 3.9.68 data from 2001/02 with changing_rules on, to 2002/03: the Inter-American Cup and the
               Oceania Champions Cup wait from the new game, the Club World Championship waits for 2005, the Copa
               Mercosur, the Merconorte Cup and the Asian Cup Winners' Cup stop after 2001/02
-    2003-on   October 2003 with changing_rules on, to 2005/06, with England only (entry 2): the Intercontinental
-              Cup stops after 2004/05, and the Club World Championship comes back in 2005/06. (A 2003/04 start
-              with Australia, or with Argentina, Australia, Brazil and Japan, stops on 7 February 2004 at the box
-              "comp_stats..CPP 1664", 0x4a25a8: Comp_Stats::set_club_final_position 0x4a2540 gets no club. The
-              build without this slice stops there too, with both sets of nations. Which competition calls it is
+    2004-on   Summer 2004 (our own database: --own-dbs names a folder that holds it unpacked, made from
+              Summer 2004.zip of the release input) with changing_rules on, to 2005/06, with England only
+              (entry 2): the Intercontinental Cup stops after 2004/05, and the Club World Championship comes
+              back in 2005/06. (A 2003/04 start with October 2003 stops on 7 February 2004 at the box
+              "comp_stats..CPP 1664", 0x4a25a8, with England alone too: Comp_Stats::set_club_final_position
+              0x4a2540 gets no club. The build without this slice stops there too. Which competition calls it is
               unknown.)
     2007      November 2007 with changing_rules off, to 2008/09: the start season rules at a new game, and the
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
@@ -50,7 +51,7 @@ NATIONS = ["England", "Argentina", "Australia", "Brazil", "Japan"]
 # name: (start year, database folder or None, last season, changing rules, nations)
 RUNS = {
     "2001-on": (2001, None, 2002, "on", NATIONS),
-    "2003-on": (2003, "October 2003", 2005, "on", ["England"]),
+    "2004-on": (2004, "Summer 2004", 2005, "on", ["England"]),
     "2007": (2007, "November 2007", 2008, "off", NATIONS),
     "2023-on": (2023, "October 2023", 2024, "on", NATIONS),
 }
@@ -58,14 +59,16 @@ FILES = ["world_club_champ", "world_club_cup", "inter_amer_cup", "con_merc_cup",
          "asia_cup_winner", "asia_super_cup", "oceania_club_champ"]
 
 
-def folder(name):
-    """The database folder whose name starts with the neutral name (some folder names add more words)."""
+def folder(name, own=None):
+    """The database folder whose name starts with the neutral name (some folder names add more words), in the
+    test databases or in the folder of our own databases."""
     if not name:
         return None
-    for d in sorted(os.listdir(DB)):
-        if d == name or d.startswith(name + " "):
-            return os.path.join(DB, d)
-    raise SystemExit(f"no database folder for {name} in {DB}")
+    for top in [DB] + ([own] if own else []):
+        for d in sorted(os.listdir(top)):
+            if d == name or d.startswith(name + " "):
+                return os.path.join(top, d)
+    raise SystemExit(f"no database folder for {name} in {DB} or {own}")
 
 
 def held(rows, file, season):
@@ -125,13 +128,13 @@ def check(name, report, log, rules_on):
     return failed
 
 
-def one(program, game, name, keep, reuse):
+def one(program, game, name, keep, reuse, own):
     year, db, last, rules, nations = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-club-world-{name}-")
     report = os.path.join(work, "report.tsv")
     log = os.path.join(work, "stderr.txt")
     if not reuse:
-        code, report = rrc.run(program, game, last, year, folder(db), nations, [], work, 7200,
+        code, report = rrc.run(program, game, last, year, folder(db, own), nations, [], work, 7200,
                                options_more={"changing_rules": rules}, env_more={"RECOMP_SEASON_CHANGE_LOG": "1"})
         if code != 0:
             return [f"{name}: the run ended with code {code} ({log})"]
@@ -150,9 +153,10 @@ def main(argv):
     jobs = int(rrc.arg(argv, "--jobs", 2))
     keep = os.path.abspath(rrc.arg(argv, "--keep")) if "--keep" in argv else None
     reuse = "--reuse" in argv
+    own = os.path.abspath(rrc.arg(argv, "--own-dbs")) if "--own-dbs" in argv else None
     failed = []
     with concurrent.futures.ThreadPoolExecutor(jobs) as pool:
-        for f in [pool.submit(one, program, game, n, keep, reuse) for n in names]:
+        for f in [pool.submit(one, program, game, n, keep, reuse, own) for n in names]:
             failed += f.result()
     for text in failed:
         print("FAIL  " + text)
