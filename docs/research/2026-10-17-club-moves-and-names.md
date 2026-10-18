@@ -23,9 +23,11 @@ Where the names go: the competition record holds the long name at +4 (52 bytes) 
 
 When: at the end of `build_comp_object_table` 0x8386f0. A new game calls it at 0x829640 in `create_game` 0x828110, after the competitions are made and before the run to the start date (0x5cc850 at 0x829fd9); a load calls it at 0x82c5f6 in `load_game_data` 0x82a9c0. A new game takes the names of the start season. A load takes the start season with changing rules off, else the season of the game date (a season starts on 1 July); slice 16 gives later names through `season_names_apply`.
 
-The save: the original finds each competition by its long name at every load (`match_club_comp_key_id` 0x60efd0, called from `set_key_ids` 0x601a40 at 0x52d8fa in `load_database` 0x528540; `load_game_data` reaches it through 0x524d10 at 0x82abf2), and a save holds the records (`club_comp.dat`, `nation_comp.dat`). A renamed record would lose its key id at the load. So the save wrap (`save_game` 0x82e430 in `season.c`) puts the database names back before the save writes and the season names in again after it. A save of a season game holds the database names; the load gives the names again. `season_core_run.py` checks both.
+The save: the original finds each competition by its long name at every load (`match_club_comp_key_id` 0x60efd0, called from `set_key_ids` 0x601a40 at 0x52d8fa in `load_database` 0x528540). Every long name goes in through `season_change_rename` of slice 16, which keeps the name in the data by record index, gives it to that match (its wrap of 0x60efd0) and writes it in the season part (version 2). The short name is not matched and goes in directly. A save of a season game holds the season names, and its part the database names; `season_core_run.py` checks both, and a load and a load of a later-version part play on.
 
-Slice 16 calls `season_names_get(comp_file, season)` (NULL when the table holds no name) and `season_names_apply(season)`.
+With the season names in the data a league writes its temp file as "<long name>_<id>.tmp" (`League::save_to_temp_file` 0x6891c0, sprintf at 0x689234). A name with an accent ("Copa América") is code page 1252, which macOS refuses as a file name, so the game stopped at league.cpp 5095. `win_host_path` (files.c) now turns a path part that is not UTF-8 into UTF-8.
+
+Slice 16 calls the names through its names kind (`season_kind_names.c`): `season_names_rename_object(obj, season, ...)` takes the object number, so the two objects of a file (ger_regional North and South) get their own names, and the news names only a change of the long name. `season_names_get_object(file, season, n)` and `season_names_get(file, season)` give NULL outside a season game, in 2001, with no row, or when the object has that name now.
 
 ## Club moves (Q225, Q237, Q244, Q279, Q290)
 
@@ -138,4 +140,4 @@ The original never gets past this case for an illness type: for other types add_
 - Slice 21: the Scottish cup entrants, guests and pyramid play-off, and the academy sides of `eng-academy.tsv` (Q336): cup entrants, not divisions.
 - Wembley for a 2003 to 2006 start (slice 11 table 3): not in this slice.
 - Slice 11c (`history-0.6.0/no-winner.tsv`): 10 of its 197 rows name a club of `missing.tsv` (Ersboda SK in six databases, Dalkurd FF in four). They become fillable only when the new club records come in.
-- Slice 16 (not on main yet) brings `season_change_rename`. When it is on main, the renames of `season_names_apply` go through that call. Until then a save holds the database names (see Names).
+- The load check of `season_change_run.py` ("the save did not load and play on") fails on main too (2026-10-18, 423ec0f): the game stays on the news screen after the Next Unread clicks. Not this slice.
