@@ -122,6 +122,12 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
+    add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
+        src/recomp_rt/win/season_cups_table.c)
+    target_include_directories(season_cups_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cups COMMAND season_cups_test)
+    add_test(NAME season_cups_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_cups_table.py" --check)
     # The rules table reader (0.6.0 slice 12): make the table from the parts, then read it.
     add_executable(season_rules_test tests/seasons/test_season_rules.c src/recomp_rt/win/season_rules.c
         src/recomp_rt/host/posix.c)

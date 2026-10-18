@@ -88,6 +88,9 @@ static const SeasonCompClass *class_of(uint32_t vtable)
 /* A pointer of the game that can be read: inside the 32-bit space and not near 0. */
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
+static void write_cup_rounds(FILE *f, int season, const char *phase, const char *slot, const char *file,
+                             uint32_t obj);
+
 static void write_comp(FILE *f, int season, const char *phase, const char *slot, uint32_t obj)
 {
     uint32_t vt = rd32(g_mem, obj), rec = rd32(g_mem, obj + 4);
@@ -112,6 +115,25 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
             c ? (league ? "league" : c->kind == SEASON_KIND_CUP ? "cup" : "comp") : "?", vt,
             (int16_t)rd16(g_mem, obj + 0x40), (int16_t)rd16(g_mem, obj + 0x3e), (int16_t)rd16(g_mem, obj + 0x3c),
             g_mem[obj + 0x4a], g_mem[obj + 0x49], rules, name);
+    if (c && c->kind == SEASON_KIND_CUP) write_cup_rounds(f, season, phase, slot, c->file, obj);
+}
+
+/* A cup line (slice 21): the rounds of a cup as the original's round table holds them (cup+0x3c rounds, table at
+ * cup+0xa3, 0x68 bytes a round; docs/research/2026-10-17-cup-round-record.md). One word for each round:
+ * legs (+0x21), replays (+0x20), the match flags of the first match (+0x0d) and of the deciding match (+0x0f),
+ * as legs:replays:first:deciding with the flags in hexadecimal. */
+static void write_cup_rounds(FILE *f, int season, const char *phase, const char *slot, const char *file, uint32_t obj)
+{
+    int n = (int16_t)rd16(g_mem, obj + 0x3c);
+    uint32_t table = rd32(g_mem, obj + 0xa3);
+    if (n < 1 || n > 32 || !readable(table) || !readable(table + 0x68u * (uint32_t)n)) return;
+    fprintf(f, "cup\t%d\t%s\t%s\t%s\t%d\t", season, phase, slot, file, n);
+    for (int i = 0; i < n; i++) {
+        uint32_t r = table + 0x68u * (uint32_t)i;
+        fprintf(f, "%s%d:%d:%x:%x", i ? " " : "", g_mem[r + 0x21], g_mem[r + 0x20], rd16(g_mem, r + 0x0d),
+                rd16(g_mem, r + 0x0f));
+    }
+    fprintf(f, "\t0x%x\n", obj);                  /* the object, for a test that follows one cup */
 }
 
 static void write_season(int season, const char *phase)
