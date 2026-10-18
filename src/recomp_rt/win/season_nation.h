@@ -56,4 +56,12 @@ int season_nation_state(const char *nation, int season, SeasonNationState *out);
 /* The nation of the table with that name, or NULL. */
 const SeasonNation *season_nation_find(const char *name);
 
+/* The Brexit rule for one signing (Q249, R10): 1 when a player of the EU needs the permit decision. It holds when
+ * the club's nation is one of England, Scotland, Wales and Northern Ireland and the table has the rule for it in
+ * the season, the date has reached the year of the rule, the player is of the EU, and neither of his nationalities
+ * (NULL for none) is a UK nation or the Republic of Ireland (the Common Travel Area). A club in the Republic of
+ * Ireland is never touched, and an Irish player at a UK club goes through. */
+int season_brexit_blocks(const char *club_nation, int season, int year, int rule_year, int eu, const char *nat1,
+                         const char *nat2);
+
 #endif

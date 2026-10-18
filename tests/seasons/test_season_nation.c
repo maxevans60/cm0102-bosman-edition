@@ -72,6 +72,18 @@ int main(void)
     season_nation_state("Brazil", 2023, &s);
     CHECK(s.squad_foreign == 9, "Brazil 2023: %d", s.squad_foreign);
 
+    /* Brexit for one signing (2021/22 = season 2021, the date in 2021, the rule from 2021). */
+    CHECK(season_brexit_blocks("England", 2021, 2021, 2021, 1, "France", NULL) == 1, "a French player at an English club: the permit decision");
+    CHECK(season_brexit_blocks("England", 2021, 2021, 2021, 1, "Republic of Ireland", NULL) == 0, "an Irish player at an English club goes through");
+    CHECK(season_brexit_blocks("England", 2021, 2021, 2021, 1, "France", "Republic of Ireland") == 0, "a second Irish nationality goes through");
+    CHECK(season_brexit_blocks("England", 2021, 2021, 2021, 1, "Wales", NULL) == 0, "a Welsh player goes through");
+    CHECK(season_brexit_blocks("Republic of Ireland", 2021, 2021, 2021, 1, "France", NULL) == 0, "a club in Ireland is never touched");
+    CHECK(season_brexit_blocks("Scotland", 2021, 2021, 2021, 1, "Spain", NULL) == 1, "Scotland");
+    CHECK(season_brexit_blocks("England", 2019, 2020, 2021, 1, "France", NULL) == 0, "2019/20: before the rule, a French player goes through");
+    CHECK(season_brexit_blocks("England", 2020, 2021, 2021, 1, "France", NULL) == 1, "January 2021 in season 2020/21");
+    CHECK(season_brexit_blocks("England", 2021, 2021, 2021, 0, "Brazil", NULL) == 0, "a player not of the EU is left to the game's own rule");
+    CHECK(season_brexit_blocks("Germany", 2021, 2021, 2021, 1, "France", NULL) == 0, "Germany");
+
     /* Sweden has no windows until the table knows its dates. */
     season_nation_state("Sweden", 2002, &s);
     CHECK(s.windows == SEASON_NATION_WINDOWS_NONE, "Sweden 2002 windows %d", s.windows);

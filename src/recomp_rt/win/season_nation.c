@@ -31,3 +31,20 @@ int season_nation_state(const char *nation, int season, SeasonNationState *out)
     }
     return found;
 }
+
+static int uk_nation(const char *n)
+{
+    return n && (!strcmp(n, "England") || !strcmp(n, "Scotland") || !strcmp(n, "Wales") || !strcmp(n, "Northern Ireland"));
+}
+
+int season_brexit_blocks(const char *club_nation, int season, int year, int rule_year, int eu, const char *nat1,
+                         const char *nat2)
+{
+    SeasonNationState st;
+    if (!uk_nation(club_nation) || year < rule_year || !eu) return 0;
+    if (uk_nation(nat1) || uk_nation(nat2) || (nat1 && !strcmp(nat1, "Republic of Ireland")) ||
+        (nat2 && !strcmp(nat2, "Republic of Ireland")))
+        return 0;
+    season_nation_state(club_nation, season, &st);
+    return st.brexit;
+}

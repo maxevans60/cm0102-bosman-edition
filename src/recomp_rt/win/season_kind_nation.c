@@ -471,27 +471,16 @@ static int brexit_year(void)
     return year;
 }
 
-/* The Brexit rule holds for the nation in the season of the game and the date is 1 January 2021 or later. */
-static int brexit_rule(const char *nation)
-{
-    if ((int16_t)rd16(g_mem, GAME_DATE + 2) < brexit_year()) return 0;
-    SeasonNationState st;
-    season_nation_state(nation, current_season(), &st);
-    return st.brexit;
-}
 
-/* The player is a citizen of the UK or Ireland (the Common Travel Area, no permit): either nationality. */
-static int uk_or_irish(uint32_t player)
+/* The table name of a player's nationality (k 0: +0x1a, k 1: the second one at +0x1e), or NULL. */
+static const char *nationality_of(uint32_t player, int k)
 {
-    static const char *const names[] = {"England", "Scotland", "Wales", "Northern Ireland", "Republic of Ireland"};
-    for (int k = 0; k < 2; k++) {
-        uint32_t nat = rd32(g_mem, player + (k ? 0x1eu : 0x1au));
-        if (!readable(nat)) continue;
-        int32_t id = (int32_t)rd32(g_mem, nat);
-        for (int i = 0; i < 5; i++)
-            if (id == nation_id_of(names[i])) return 1;
-    }
-    return 0;
+    uint32_t nat = rd32(g_mem, player + (k ? 0x1eu : 0x1au));
+    if (!readable(nat)) return NULL;
+    int32_t id = (int32_t)rd32(g_mem, nat);
+    for (int i = 0; i < season_nation_count; i++)
+        if (id == (int32_t)rd32(g_mem, season_nations[i].key_global)) return season_nations[i].name;
+    return NULL;
 }
 
 /* The callers of player_needs_work_permit 0x8c7560 (call site, flag; return address = site + 5), read from the
@@ -525,8 +514,12 @@ RT_WRAP(008c7560, player_needs_work_permit)
         uint32_t eu = rt_callback(IS_EU, 2, args);
         if (!rt_unwinding) cpu = saved;
         if (rt_unwinding) return;
-        if (eu && !uk_or_irish(player)) {
-            int rule = brexit_rule(nation);
+        if (eu) {
+            int rule = season_brexit_blocks(nation, current_season(), (int16_t)rd16(g_mem, GAME_DATE + 2), brexit_year(), 1,
+                                            nationality_of(player, 0), nationality_of(player, 1));
+            if (!rule && (nationality_of(player, 0) && !strcmp(nationality_of(player, 0), "Republic of Ireland")) &&
+                log_on())
+                fprintf(stderr, "recomp: season nation: Brexit: an Irish player signs for a club of %s: goes through\n", nation);
             if (log_on() && permit_signings[rule != 0]++ < 8)
                 fprintf(stderr, "recomp: season nation: Brexit: %s of an EU player by a club of %s, %s, rule %s\n",
                         ret == 0x8c3907 ? "completion" : "offer check", nation,
