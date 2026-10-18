@@ -87,6 +87,28 @@ int main(void)
     CHECK(!season_uefa_access_league_cup(2009, "Spain") && !season_uefa_access_league_cup(2008, "England"));
     CHECK(season_uefa_access_rule(2015, 'f') && season_uefa_access_rule(2016, 'f') == NULL);
 
+    /* The new clubs of each entry code. 2009/10 Champions League: Q1 4, Q2 34 (2 Q1 winners and 32 new),
+     * Q3 CP 20 (17 and 3), Q3 LP 10, PO CP 10 (10 winners), PO LP 10 (5 and 5), groups 32 (10 and 22). */
+    int t[SEASON_UEFA_CODE_SLOTS];
+    season_uefa_new_clubs(r2009, 'c', t);
+    CHECK(t[SEASON_UEFA_CL_Q1] == 4 && t[SEASON_UEFA_CL_Q2_CP] == 32 && t[SEASON_UEFA_CL_Q3_CP] == 3);
+    CHECK(t[SEASON_UEFA_CL_Q3_LP] == 10 && t[SEASON_UEFA_CL_PO_CP] == 0 && t[SEASON_UEFA_CL_PO_LP] == 5);
+    CHECK(t[SEASON_UEFA_CL_G] == 22 && t[SEASON_UEFA_CL_Q2_LP] == 0 && t[SEASON_UEFA_CL_PR] == 0);
+    /* Europa League 2009/10: Q1 46, Q2 80 (23 and 57), Q3 70 (40 and 30), PO 76 (35 winners, 15 Champions
+     * League Q3 losers, 26 new), groups 48 (38 winners, 10 Champions League PO losers). */
+    season_uefa_new_clubs(r2009, 'e', t);
+    CHECK(season_uefa_dropped(r2009, SEASON_UEFA_EL_PO) == 15 && season_uefa_dropped(r2009, SEASON_UEFA_EL_G) == 10);
+    CHECK(t[SEASON_UEFA_EL_Q1] == 46 && t[SEASON_UEFA_EL_Q2] == 57 && t[SEASON_UEFA_EL_Q3] == 30);
+    CHECK(t[SEASON_UEFA_EL_PO] == 26 && t[SEASON_UEFA_EL_G] == 0 && t[SEASON_UEFA_EL_PR] == 0);
+    /* 2018/19: CL PR 4 (2 winners in a knockout of the game), groups 26 new; EL Q2 takes the PR and Q1 losers. */
+    season_uefa_new_clubs(r2018, 'c', t);
+    CHECK(t[SEASON_UEFA_CL_PR] == 4 && t[SEASON_UEFA_CL_Q1] == 30 && t[SEASON_UEFA_CL_G] == 26);
+    CHECK(t[SEASON_UEFA_CL_Q2_LP] == 4 && t[SEASON_UEFA_CL_Q3_LP] == 6 && t[SEASON_UEFA_CL_Q3_CP] == 2);
+    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q2) == 18 && season_uefa_dropped(r2018, SEASON_UEFA_EL_G) == 10);
+    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q3) == 12 && season_uefa_dropped(r2018, SEASON_UEFA_EL_PO) == 6);
+    CHECK(season_uefa_code('c', "Q3-CP", 5) == SEASON_UEFA_CL_Q3_CP && season_uefa_code('e', "Q3-CP", 5) == SEASON_UEFA_EL_Q3);
+    CHECK(season_uefa_dropped(r2008, SEASON_UEFA_EL_G) == 0);
+
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);
     CHECK(season_uefa_table_row(2099) == &season_uefa_rows[season_uefa_row_count - 1]);

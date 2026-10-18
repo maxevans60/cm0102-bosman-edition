@@ -218,6 +218,33 @@ static uint32_t original_table(uint32_t uc, int *rounds)
 
 void o_009025c0(void);
 
+/* Slice 23: the qualifying rounds of the access list (season_uefa_qual.c) and a group stage of f, made from the
+ * original's qualifying round record (code 0xdc). Returns 1 when it returned the table to the caller. */
+static int uc_access_round_table(uint32_t uc, const UcGroups *f, uint32_t out_rounds)
+{
+    if (season_uefa_uc_direct_first(uc) < 0) return 0;
+    int rounds = 0;
+    uint32_t orig = original_table(uc, &rounds);
+    uint32_t qr = orig ? record_of(orig, rounds, 0xdc) : 0;
+    int n = 0;
+    uint32_t t = qr ? season_uefa_uc_qual_table(uc, qr, &n) : 0;
+    game_free(orig);
+    if (rt_unwinding || !t) return 0;
+    wr32(g_mem, uc + 0x2c, (uint32_t)(f->groups + 1));
+    wr32(g_mem, uc + 0x30, 0xffffffffu);
+    if (!ensure_stage_array(uc)) {
+        wr32(g_mem, uc + 0x2c, 0);
+        game_free(t);
+        return 0;
+    }
+    if (readable(out_rounds)) wr16(g_mem, out_rounds, (uint16_t)n);
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
+    fprintf(stderr, "recomp: uefa: Europa League %u/%02u: %d qualifying rounds, %d groups of %d\n", year,
+            (year + 1) % 100, n, f->groups, f->clubs);
+    rt_ret_stdcall(t, 4);
+    return 1;
+}
+
 /* Uefa_Cup::create_round_table, thiscall (stage, &rounds, &name, &league) ret 0x10. Stage -1 comes from the
  * constructor (0x9023cd) and from set_up_rules 0x9030b0 at each new season, after build_entrants: the format of
  * the season is chosen here. */
@@ -237,6 +264,8 @@ RT_WRAP(009025c0, uc_round_table)
     int r1 = r ? season_uefa_uc_round(r, "R1") : 0, q2 = r ? season_uefa_uc_round(r, "Q2") : 0;
     int q1 = 2 * (count - 8 - r1) - q2;
     UcGroups f;
+    if (uc_format(r, &f) && f.groups != 8 && b2 == 0 && uc_access_round_table(uc, &f, out_rounds)) return;
+    if (rt_unwinding) return;
     int ok = uc_format(r, &f) && f.groups == 8 && f.clubs == 5 && f.meetings == 1 &&
              season_uefa_uc_round(r, "KO") == KO_CLUBS && season_uefa_cl_round_of_16(r) && b2 == 0 && r1 == 80 &&
              q2 > 0 && q2 % 2 == 0 && q1 >= 2 && q1 % 2 == 0 && count > 100;
@@ -293,16 +322,23 @@ static int uc_group_entrants(uint32_t uc, uint32_t *clubs, int max)
 {
     int n = 0, count = (int16_t)rd16(g_mem, uc + 0x3e);
     uint32_t entries = rd32(g_mem, uc + 0xa7);
+    /* Slice 23, the access list: also every club in the slots after the rounds and before the 8 slots of the
+     * Champions League thirds (the group clubs, the Champions League losers for the groups). */
+    int direct = season_uefa_uc_direct_first(uc);
+    if (direct >= 0) season_uefa_uc_fill_drops(uc);
+    if (rt_unwinding) return 0;
     for (int i = 0; readable(entries) && i < count; i++)
-        if (g_mem[entries + 6u * (uint32_t)i + 5] == 1 && readable(rd32(g_mem, entries + 6u * (uint32_t)i))) {
+        if ((g_mem[entries + 6u * (uint32_t)i + 5] == 1 || (direct >= 0 && i >= direct && i < count - 8)) &&
+            readable(rd32(g_mem, entries + 6u * (uint32_t)i))) {
             if (n < max) clubs[n] = rd32(g_mem, entries + 6u * (uint32_t)i);
             n++;
         }
     return n;
 }
 
-/* The name of group g: 0x43d + g, the group names of the Champions League's phase 1 (0x583ed8). */
-static uint32_t uc_group_name(int g) { return 0x43du + (uint32_t)g; }
+/* The name of group g: 0x41f + g, "Group A" to "Group P" (the name table 0x4b9a44; 0x43d + g, the names of
+ * the Champions League's phase 1 at 0x583ed8, read "Phase 1 Group A"). */
+static uint32_t uc_group_name(int g) { return 0x41fu + (uint32_t)g; }
 
 /* The match days of the groups (Thursdays, month 0 to 11). 5 days: 21 October, 4 and 25 November, 2 and 16
  * December (UEFA Cup 2004/05). 6 days: 17 September, 1 and 22 October, 5 November, 2 and 17 December (Europa
@@ -704,6 +740,12 @@ RT_WRAP(00633300, uic_round_table)
 RT_WRAP(00902b90, uc_build_entrants)
 {
     uint32_t uc = cpu.ecx;
+    /* Slice 23: the entrants of the access list (season_uefa_qual.c) in place of the original's. */
+    if (is_uc(uc) && season_uefa_uc_entrants(uc)) {
+        rt_ret_cdecl(1);
+        return;
+    }
+    if (rt_unwinding) return;
     o_00902b90();
     if (rt_unwinding || cpu.eax != 1 || !is_uc(uc)) return;
     const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, uc + 0x40));

@@ -333,6 +333,19 @@ RT_WRAP(00583c50, cl_round_table)
         uint32_t cl = cpu.ecx;
         const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, cl + 0x40));
         if (r || stage_count(cl) != STAGES_ORIGINAL) cl_set_format(cl, r);
+        /* Slice 23: the qualifying rounds of the access list (season_uefa_qual.c), or 0 for the original's. */
+        int rounds = 0;
+        uint32_t name = 0, league = 0;
+        uint32_t t = r ? season_uefa_cl_qual_table(cl, &rounds, &name, &league) : 0;
+        if (rt_unwinding) return;
+        if (t) {
+            uint32_t out_rounds = rt_arg(1), out_name = rt_arg(2), out_league = rt_arg(3);
+            if (out_rounds >= 0x10000u) wr16(g_mem, out_rounds, (uint16_t)rounds);
+            if (out_name >= 0x10000u) wr32(g_mem, out_name, name);
+            if (out_league >= 0x10000u) wr32(g_mem, out_league, league);
+            rt_ret_stdcall(t, 4);
+            return;
+        }
     }
     o_00583c50();
 }
@@ -451,6 +464,15 @@ static const char *uc_name(int season)
     return strncmp(n, "UEFA ", 5) || !strcmp(n, "UEFA Cup") ? n : n + 5;
 }
 
+/* The group stage places of an access list bracket ("G G G PO-LP" gives 3). */
+static int group_places(const char *places)
+{
+    int n = 0;
+    for (const char *p = places; p && *p; p++)
+        if (*p == 'G' && (p == places || p[-1] == ' ') && (p[1] == ' ' || !p[1])) n++;
+    return n;
+}
+
 static void uefa_season(int season)
 {
     const SeasonUefa *now = season_uefa_row(season), *before = season_uefa_row(season - 1);
@@ -474,13 +496,26 @@ static void uefa_season(int season)
         season_change_news("The Champions League qualifying rounds now have a Champions Path for league champions "
                            "and a League Path for the other clubs.");
     if (now->uic_clubs < 0 && before->uic_clubs >= 0) season_change_news("The Intertoto Cup is no longer held.");
+    /* The access list (slice 23): the group places of the association ranked 4. */
+    const char *g_now = season_uefa_access_places(now->season, 'c', 4), *g_before = season_uefa_access_places(before->season, 'c', 4);
+    if (g_now && g_before && group_places(g_now) == 4 && group_places(g_before) < 4)
+        season_change_news("The four best-ranked associations now send four clubs each to the Champions League "
+                           "group stage.");
     else if (now->uic_rounds != before->uic_rounds && now->uic_rounds > 0)
         season_change_news("The Intertoto Cup now has %d rounds, and its %d winners enter the UEFA Cup in the %s.",
                            now->uic_rounds, now->uic_winners,
                            !strcmp(now->uic_entry, "Q2") ? "second qualifying round" : "first round");
 }
 
-const SeasonRuleKind season_kind_uefa = {"uefa", NULL, NULL, uefa_season, NULL, NULL, NULL};
+/* Slice 23: the Intertoto Cup is not held in a season whose row has no Intertoto Cup (2009/10 on): its
+ * start_new_season does not run (season_change_skip), and season_uefa_qual.c keeps its object idle. */
+static void uefa_before(const SeasonChange *c)
+{
+    const SeasonUefa *r = season_uefa_row(c->season);
+    if (r && r->uic_clubs < 0 && readable(c->comp) && rd32(g_mem, c->comp) == 0x0096bb8cu) season_change_skip();
+}
+
+const SeasonRuleKind season_kind_uefa = {"uefa", NULL, NULL, uefa_season, NULL, uefa_before, NULL};
 
 /* ---- The rules report ---- */
 

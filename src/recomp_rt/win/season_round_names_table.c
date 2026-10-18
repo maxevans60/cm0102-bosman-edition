@@ -8,5 +8,13 @@ const SeasonRoundName season_round_name_rows[] = {
     {"uefa_cup", 40, 2004, 3, "Round of 16"},
     {"uefa_cup", 250, 2004, 3, "First Qualifying Round"},
     {"uefa_cup", 260, 2004, 3, "Second Qualifying Round"},
+    {"european_cup", 250, 2003, 3, "First Qualifying Round"},
+    {"european_cup", 260, 2003, 3, "Second Qualifying Round"},
+    {"european_cup", 270, 2003, 3, "Third Qualifying Round"},
+    {"european_cup", 220, 2009, 3, "Play-off Round"},
+    {"european_cup", 240, 2018, 3, "Preliminary Round"},
+    {"uefa_cup", 270, 2009, 3, "Third Qualifying Round"},
+    {"uefa_cup", 220, 2009, 3, "Play-off Round"},
+    {"uefa_cup", 240, 2018, 3, "Preliminary Round"},
 };
 const int season_round_name_count = (int)(sizeof season_round_name_rows / sizeof season_round_name_rows[0]);

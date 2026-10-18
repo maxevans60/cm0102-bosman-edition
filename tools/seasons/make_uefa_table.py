@@ -36,6 +36,10 @@ PART = os.path.join(ROOT, "docs", "research", "rules-0.6.0", "uefa.tsv")
 ACCESS = os.path.join(ROOT, "docs", "research", "rules-0.6.0", "uefa-access.tsv")
 ACCESS_FIRST = 2009                 # Q369: the original's place brackets to 2008/09, the access list from 2009/10
 PLACE_TOKENS = {"G", "PO", "PO-CP", "PO-LP", "Q3", "Q3-CP", "Q3-LP", "Q2", "Q2-CP", "Q2-LP", "Q1", "PR"}
+# Where the losers of the Champions League qualifying rounds go in the Europa League, from the first season of
+# each rule: the club counts of the Europa League rows ("159 entered + 33 from the Champions League": 15 third
+# qualifying round losers to the play-offs, 10 play-off losers to the groups, 8 group thirds) and their format.
+DROPS = {2009: "Q3>PO PO>G", 2018: "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G"}
 LEAGUE_CUP = {"England", "France"}  # the nations whose league cup winner can take a Europa League place
 ACCESS_COMPS = {"cl": "c", "el": "e", "cl-holder": "h", "el-holder": "H", "el-fairplay": "f"}
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_uefa_table.c")
@@ -231,7 +235,11 @@ def text():
         sc = r["sc"]
         lines.append(f"     {c_rounds(r['uc_rounds'])}, {g[0]}, {g[1]}, {g[2]}, {g[3]},")
         lines.append(f"     {uic},")
-        lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}}},")
+        drops = ""
+        for first in sorted(DROPS):
+            if r["season"] >= first:
+                drops = DROPS[first]
+        lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}, {c_text(drops)}}},")
     lines += ["};", "const int season_uefa_row_count = (int)(sizeof season_uefa_rows / sizeof season_uefa_rows[0]);",
               "", f"/* The access list by association rank from {ACCESS_FIRST}/{(ACCESS_FIRST + 1) % 100:02d} "
               "(docs/research/rules-0.6.0/uefa-access.tsv). */",

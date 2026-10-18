@@ -40,7 +40,44 @@ typedef struct {
     const char *sc_stadium;         /* the Super Cup match: stadium and city (Windows-1252), day, month 0 to 11 */
     const char *sc_city;
     int sc_day, sc_month;
+    const char *drops;              /* where the losers of Champions League qualifying rounds enter the Europa
+                                     * League: "Q3>PO PO>G" (2009/10 on), "Q3-LP>G" a path; "" before 2009/10 */
 } SeasonUefa;
+
+/* The entry codes of the access list (club +0x1df) in a season with an access list (season_uefa_seeding.c).
+ * They replace the original's codes (1 to 4 for the Champions League, build_entrants 0x584fa0; 1, 2, 3 and
+ * 10 * b + 3 for the UEFA Cup, 0x902b90) only in those seasons, where the runtime builds the entrants of both
+ * cups. The group stage is 1, as the original's, so the group pots (0x586f60: code, then reputation) put the
+ * clubs that enter there first. */
+enum {
+    SEASON_UEFA_CL_G = 1,
+    SEASON_UEFA_CL_PO_LP, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_Q3_LP, SEASON_UEFA_CL_Q3_CP,
+    SEASON_UEFA_CL_Q2_LP, SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_CL_Q1, SEASON_UEFA_CL_PR,
+    SEASON_UEFA_CL_CODES                                        /* 10: codes 1 to 9 */
+};
+/* The Europa League codes are 11 to 16, apart from the Champions League's: a Champions League loser that goes
+ * to the Europa League keeps its code, so the two are never counted as one. The group pots then put the
+ * Champions League losers first (0x586f60 sorts by code). */
+enum {
+    SEASON_UEFA_EL_G = 11, SEASON_UEFA_EL_PO, SEASON_UEFA_EL_Q3, SEASON_UEFA_EL_Q2, SEASON_UEFA_EL_Q1, SEASON_UEFA_EL_PR,
+    SEASON_UEFA_EL_CODES                                        /* 17: codes 11 to 16 */
+};
+#define SEASON_UEFA_CODE_SLOTS 20                               /* arrays indexed by an entry code */
+
+/* The code of an access list token of n characters ("Q3-CP") for comp 'c' or 'e', 0 when unknown. */
+int season_uefa_code(char comp, const char *tok, int n);
+
+/* The clubs of a round of the row by code: the Champions League round of a code ("Q3 CP", or "Q3" when it has
+ * no paths), the Europa League round of all paths ("Q2 CP" + "Q2 MP"). 0 when the row has no such round. */
+int season_uefa_code_clubs(const SeasonUefa *r, char comp, int code);
+
+/* The Champions League losers of the row that enter Europa League round code (the drops of the row). */
+int season_uefa_dropped(const SeasonUefa *r, int el_code);
+
+/* The new clubs of each entry code of comp ('c' or 'e') that the round sizes of row r give: the clubs of the
+ * round, less the winners of the round below in its path, less (Europa League) the Champions League losers that
+ * enter it. out has SEASON_UEFA_CODE_SLOTS entries; out[code], 0 for codes the row does not play. */
+void season_uefa_new_clubs(const SeasonUefa *r, char comp, int *out);
 
 /* The access list by association rank (slice 23, Q369: from 2009/10; the original's brackets before). */
 typedef struct {
@@ -90,5 +127,12 @@ int season_uefa_cl_round_of_16(const SeasonUefa *r);
 
 /* The rules report (season_report.c): writes the uefa lines of one season and phase. */
 void season_uefa_report(void *file, int season, const char *phase);
+
+/* Slice 23, season_uefa_qual.c: the game only. */
+uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds, uint32_t *name, uint32_t *league);
+int season_uefa_uc_entrants(uint32_t uc);
+uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds);
+int season_uefa_uc_direct_first(uint32_t uc);
+void season_uefa_uc_fill_drops(uint32_t uc);
 
 #endif
