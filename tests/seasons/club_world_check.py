@@ -23,7 +23,9 @@ selected (a creator makes its objects only when a nation of its continent is sel
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
               December 2005 with the box "world_cup..cpp 1438", 0x92f2b1, before this slice: fewer than 32
               qualified nations. That is not a rule of this slice.)
-    2023-on   October 2023 with changing_rules on, to 2024/25
+    2024-on   October 2024 with changing_rules on, to 2025/26: the Club World Championship of 2024/25 is the
+              last in the table. (A 2023/24 start with October 2023 stops in February 2024 at the same
+              comp_stats box as a 2003/04 start, also without this slice.)
 
 The checks (each run):
     - the jump ends with code 0 and the report holds the start and end of each season (a stopped run fails)
@@ -53,7 +55,7 @@ RUNS = {
     "2001-on": (2001, None, 2002, "on", NATIONS),
     "2004-on": (2004, "Summer 2004", 2005, "on", ["England"]),
     "2007": (2007, "November 2007", 2008, "off", NATIONS),
-    "2023-on": (2023, "October 2023", 2024, "on", NATIONS),
+    "2024-on": (2024, "October 2024", 2025, "on", NATIONS),
 }
 FILES = ["world_club_champ", "world_club_cup", "inter_amer_cup", "con_merc_cup", "conmebol_merc", "asia_club_champ",
          "asia_cup_winner", "asia_super_cup", "oceania_club_champ"]
