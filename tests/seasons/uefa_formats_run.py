@@ -18,7 +18,10 @@ rounds of the knockout stage, and the winner of its history row of the season. T
             2003/04 has the round of 16; 2004/05 the UEFA Cup groups. The news log
             (RECOMP_SEASON_CHANGE_LOG=1) has the sentence of each change in its season, and the report has no
             difference with the rules table that tests/seasons/rules_report_expected/changing-2002-england.tsv
-            does not list (it lists no format line: each season plays the format of its row)
+            does not list (it lists no format line: each season plays the format of its row). The label of a
+            round (the game's formatter 0x4bffc0, as a fixture line writes it) has its real name from the
+            season of the rename (Q370): the Champions League "Round of 16" from 2003/04 (not in 2002/03),
+            the UEFA Cup "Round of 32" and "First Qualifying Round" from 2004/05 ("Third Round" in 2003/04)
     load    November 2007: the game saves 240 days after the start (March 2008, the knockout stages of both
             cups), a new program loads the save, the holiday goes on to 1 June 2008, and the end report of
             2007/08 shows both knockout stages played to the end of the season (16 and 32 clubs)
@@ -69,6 +72,28 @@ def uefa_lines(report):
     return out
 
 
+def round_labels(report):
+    """{(season, file, code): label} of the roundname lines (Q370): the label the game's formatter
+    0x4bffc0 gives a round code of the competition at the end of the season."""
+    out = {}
+    with open(report, encoding="latin-1") as f:
+        for line in f:
+            c = line.rstrip("\n").split("\t")
+            if c[0] == "roundname" and len(c) >= 6:
+                out[(int(c[1]), c[3], int(c[4]))] = c[5]
+    return out
+
+
+def expect_label(labels, season, file, code, want, label, absent=False):
+    got = labels.get((season, file, code))
+    if got is None:
+        return [f"{label}: no round label of {file} {code} in {season}"]
+    if (want in got) == absent:
+        return [f"{label}: {file} round {code} in {season}/{(season + 1) % 100:02d} shows {got!r}"
+                f"{', which has' if absent else ', not'} {want!r}"]
+    return []
+
+
 def expect(lines, season, file, want, label):
     u = lines.get((season, "end", file))
     if not u:
@@ -114,6 +139,14 @@ def run_change(program, game, work):
         fails += expect(lines, 2003, "uefa_cup", UC_ORIGINAL, "change")
         fails += expect(lines, 2004, "european_cup", CL_R16, "change")
         fails += expect(lines, 2004, "uefa_cup", UC_GROUPS, "change")
+    if os.path.exists(report):                  # Q370: the real round names from their season
+        labels = round_labels(report)
+        fails += expect_label(labels, 2002, "european_cup", 20, "Round of 16", "change", absent=True)
+        fails += expect_label(labels, 2003, "european_cup", 20, "Round of 16", "change")
+        fails += expect_label(labels, 2004, "european_cup", 20, "Round of 16", "change")
+        fails += expect_label(labels, 2003, "uefa_cup", 30, "Third Round", "change")
+        fails += expect_label(labels, 2004, "uefa_cup", 30, "Round of 32", "change")
+        fails += expect_label(labels, 2004, "uefa_cup", 250, "First Qualifying Round", "change")
     if os.path.exists(report):                  # the whole report against the expected file of changing rules on
         with CHECK_LOCK:
             fails += [f"change: {t}" for t in rrc.check(report, None, 2004, "changing-2002-england")]

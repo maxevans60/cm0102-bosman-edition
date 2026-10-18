@@ -138,6 +138,12 @@ if(NOT WIN32)
         src/recomp_rt/win/season_uefa_lookup.c)
     target_include_directories(season_uefa_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_uefa COMMAND season_uefa_test)
+    # The real round names (Q370): the committed table matches round-names.tsv, and its lookup.
+    add_test(NAME season_round_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_round_names.py" --check)
+    add_executable(season_round_names_test tests/seasons/test_season_round_names.c
+        src/recomp_rt/win/season_round_names.c src/recomp_rt/win/season_round_names_table.c)
+    target_include_directories(season_round_names_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_round_names COMMAND season_round_names_test)
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)

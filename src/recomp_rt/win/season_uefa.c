@@ -27,6 +27,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_uefa.h"
+#include "season_round_names.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -512,4 +513,16 @@ void season_uefa_report(void *file, int season, const char *phase)
     uint32_t table = rd32(g_mem, COMP_TABLE);
     uint32_t uc = key >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)key) : 0;
     if (readable(uc) && rd32(g_mem, uc) == 0x00970790u) report_comp(f, season, phase, "uefa_cup", uc);
+    /* The labels of the rounds that have a real name in the round names table (Q370), at the end of a season. */
+    if (strcmp(phase, "end")) return;
+    static const struct { const char *file; int code; } labels[] = {
+        {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250}};
+    for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++) {
+        uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : uc;
+        char text[128];
+        season_round_name_label(obj, labels[i].code, text, sizeof text);
+        for (char *p = text; *p; p++)
+            if (*p == '\t' || *p == '\n') *p = ' ';
+        fprintf(f, "roundname\t%d\t%s\t%s\t%d\t%s\n", season, phase, labels[i].file, labels[i].code, text);
+    }
 }
