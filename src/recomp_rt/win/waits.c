@@ -209,6 +209,14 @@ RT_WRAP(005e8290, message_box)
         uint32_t title = rt_arg(0), text = rt_arg(1);
         fprintf(stderr, "recomp: message box from %#x: %.200s: %.200s\n", rd32(g_mem, cpu.esp),
                 title ? (const char *)(g_mem + title) : "", text ? (const char *)(g_mem + text) : "");
+        /* The values on the stack that look like return addresses of the game's code, so that a test log
+         * names the callers of an error box. A value is only a guess: the scan does not follow the frames. */
+        fprintf(stderr, "recomp: message box stack:");
+        for (uint32_t k = 0; k < 400; k++) {
+            uint32_t v = rd32(g_mem, cpu.esp + 4 * k);
+            if (v >= 0x401000u && v < 0x944000u) fprintf(stderr, " %#x", v);
+        }
+        fprintf(stderr, "\n");
     }
     in_box++;
     o_005e8290();
