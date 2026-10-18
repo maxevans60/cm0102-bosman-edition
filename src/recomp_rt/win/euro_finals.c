@@ -15,10 +15,10 @@
  * and 14 qualifiers, and the host is a qualifier too.
  *
  * The wrap below runs before the seeding, only when the count is below the size. It takes out a team that is in
- * the list twice (the first stays, so a host keeps its slot) and fills the free slots with the national teams
- * of the default key nations of 0x57bf2f that are not in the list, in the order of that list, flag 0 as the
- * defaults have. A full list seeds and draws as in the original. The test switch RECOMP_BOX_FIXES=off turns the
- * wrap off (tests/seasons/season_boxes_run.py). */
+ * the list twice or has no nation (club +0x53); the first of two stays, so a host keeps its slot. It fills the
+ * free slots with the national teams of the default key nations of 0x57bf2f that are not in the list and have a
+ * nation, in the order of that list, flag 0 as the defaults have. A full list seeds and draws as in the
+ * original. The test switch RECOMP_BOX_FIXES=off turns the wrap off (tests/seasons/season_boxes_run.py). */
 #include "win.h"
 #include "../rt.h"
 
@@ -37,6 +37,7 @@
 #define CLUBS 0xae23b4u   /* the club table, 0x245 bytes a club */
 #define CLUB_ROW 0x245u
 #define CLUB_COUNT 0xae235cu
+#define CLUB_NATION 0x53u /* the nation of a club, a pointer after the load */
 
 /* The key ids of the default list, in the order of 0x57bf2f..0x57c0e3 (slots 2 to 15). */
 static const uint32_t default_keys[] = {0x9cf360, 0x9cf2fc, 0x9cf488, 0x9cf45c, 0x9cf444, 0x9cf314, 0x9cf300,
@@ -54,11 +55,14 @@ static uint32_t key_national_team(uint32_t key)
     return row >= 0 && row < clubs ? club_table + (uint32_t)row * CLUB_ROW : 0;
 }
 
-void o_0057c710(void);
+/* 1 for a club with a nation (club +0x53), the test of a real national team. */
+static int has_nation(uint32_t club) { return club && rd32(g_mem, club + CLUB_NATION); }
 
-RT_WRAP(0057c710, euro_seed_teams)
+/* The fill of a short list of the EuroChamp at ec, for the seeding. A slice that wraps 0x57c710 itself calls
+ * this first and leaves out the wrap below. */
+void euro_finals_fill_short_list(uint32_t ec)
 {
-    uint32_t ec = cpu.ecx, t = rd32(g_mem, ec + TEAMS);
+    uint32_t t = rd32(g_mem, ec + TEAMS);
     int count = (int16_t)rd16(g_mem, ec + COUNT), size = (int16_t)rd16(g_mem, ec + SIZE);
     const char *off = getenv("RECOMP_BOX_FIXES");
     if (t && count >= 0 && count < size && size <= MAX_SLOTS && !(off && !strcmp(off, "off"))) {
@@ -66,12 +70,12 @@ RT_WRAP(0057c710, euro_seed_teams)
         uint8_t flag[MAX_SLOTS];
         int n = 0;
         for (int i = 0; i < count; i++) {
-            uint32_t c = rd32(g_mem, t + SLOT_SIZE * (uint32_t)i), dup = !c;
+            uint32_t c = rd32(g_mem, t + SLOT_SIZE * (uint32_t)i), dup = !has_nation(c);
             for (int k = 0; k < n; k++) dup |= club[k] == c;
             if (!dup) { club[n] = c; flag[n++] = g_mem[t + SLOT_SIZE * (uint32_t)i + 4]; }
         }
         for (size_t d = 0; d < sizeof default_keys / sizeof *default_keys && n < size; d++) {
-            uint32_t c = key_national_team(default_keys[d]), dup = !c;
+            uint32_t c = key_national_team(default_keys[d]), dup = !has_nation(c);
             for (int k = 0; k < n; k++) dup |= club[k] == c;
             if (!dup) { club[n] = c; flag[n++] = 0; }
         }
@@ -83,5 +87,12 @@ RT_WRAP(0057c710, euro_seed_teams)
         }
         wr16(g_mem, ec + COUNT, (uint16_t)n);
     }
+}
+
+void o_0057c710(void);
+
+RT_WRAP(0057c710, euro_seed_teams)
+{
+    euro_finals_fill_short_list(cpu.ecx);
     o_0057c710();
 }

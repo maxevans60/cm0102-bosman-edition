@@ -100,6 +100,15 @@ The test switch `RECOMP_BOX_FIXES=off` turns both wraps off (`call_up_news.c`, `
 - world_cup..cpp 1438: the box at 0x92f2b1 in `WorldCup::seed_teams` 0x92f230. Slice 27 notes (shared notes folder) say its branch wraps `WorldCup::seed_teams` 0x92f230 and fills empty slots, after the same box in a 2005 start. Not changed here, to keep one fix.
 - fra_first..cpp 108: `FraFirst::create_table` 0x5bc2b0 takes 18 clubs for the season 2001 (0x5bc2bd) and 20 for any other, and every season database holds 18 (`2026-10-17-select-all-databases.md`, "Second stop"). So every start from 2002 on with France selected stops there. League sizes belong to slice 18 (and the club moves to slice 15). Not changed here.
 
+### The national team rows (question of slice 27)
+
+Slice 27 reported that `database_get_national_team` 0x53b3d0 (club table + (nation id + `g_club_count` - 2 * `g_nation_count`) * 0x245, 0x53b4c2) gives an empty club for Denmark in October 2019. The checks here:
+
+- Files: in 47 of the 49 databases, nat_club.dat holds 2 * nations records, record n has nation n (seniors first, then the under-21 teams at n - nations), and the club id of record k is the club.dat count + k. So the formula finds the right record. The two others are October 2003 and September 2005: the layout holds, but the club ids of nat_club.dat start 1 (October 2003) and 3 (September 2005) below the club.dat count.
+- Memory: a test wrap of 0x53b3d0 and 0x53b4f0 logged each nation whose returned club had another nation (club +0x53). On this branch, October 2019 (whole 2019/20) and October 2003 (whole 2003/04) logged none and had no box.
+- On slice 27's branch merged with this one, October 2019 still stops on 30.5.2020 at "Database..cpp 13126": `NationalTeams::select_squad` 0x76c120 (call 0x53b3d0 at 0x76c266) gets no nation from a fixture club of the Euro 2020 finals. The wrap logged no wrong row there either. So the empty club comes into the 24-team Euro of that branch (`season_intl_euro.c`) by another way, not from the formula and not from a database row. Unknown: where.
+- The fill now also takes out a list team with no nation (club +0x53 = 0) and uses a default nation only when its club has a nation. This changes nothing when the list is full.
+
 ## Base game
 
 Both wraps change nothing when the original does not stop at the box: the call-up reader acts only when it would read slot 50, and the finals list only when it is short. A short list always gives a row with no club, so the base game cannot have one and play on. The same-save checks against the main build pass (see Checks).
@@ -108,7 +117,7 @@ Both wraps change nothing when the original does not stop at the box: the call-u
 
 Commands from the repo, with `G=/Users/max/Projects/cm0102/clean-3968` and `MAIN=/Users/max/Projects/cm0102/cm0102-mac/build/cm0102_recomp`:
 
-- `python3 tests/seasons/season_boxes_run.py build/cm0102_recomp $G`: September 2008, October 2023 and October 2019 over their first season, October 2015 over two seasons, England selected, one game at a time, fail on any message box. On this branch: all four end with code 0 and no box ("FAILED: none"). `--fixes-off` sets `RECOMP_BOX_FIXES=off`. With `$MAIN`: "news..cpp 7797" on day 235 of 2008 and "Database..cpp 13126" on day 40 of 2024, and no end report (the games hang after the box; they were stopped by hand).
+- `python3 tests/seasons/season_boxes_run.py build/cm0102_recomp $G`: September 2008, October 2023, October 2019 and October 2003 over their first season, October 2015 over two seasons, England selected, one game at a time, fail on any message box. On this branch: all five end with code 0 and no box ("FAILED: none"). `--fixes-off` sets `RECOMP_BOX_FIXES=off`. With `$MAIN`: "news..cpp 7797" on day 235 of 2008 and "Database..cpp 13126" on day 40 of 2024, and no end report (the games hang after the box; they were stopped by hand).
 - The two-season jumps of the first section on this branch: September 2008 to the end of 2009/10 and October 2023 to the end of 2023/24, code 0, no box.
 - Same-save checks of the base game against main: `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --runs normal,again,season-code-off --ref-build $MAIN --jobs 2`, the same with `--save prematch.sav` and without `--save` (a new game). All three PASS: `again`, `season-code-off` (`RECOMP_SEASON_CODE=off`) and `ref-build` equal `normal`. Run again with `--jobs 1` after the test switch was added: all three PASS.
 - `python3 tests/smoke/update_team_sweep.py build/cm0102_recomp $G /Users/max/Projects/cm0102/test-fixtures/databases --select-all --jobs 2 --timeout 2400`: 21 of 21 pass, each at the expected stop "fra_first..cpp 108" with "result 1", and with the reserve rows of the table in `2026-10-17-select-all-databases.md`.

@@ -15,6 +15,8 @@ season, England selected, with the staff reserve of the build for that database 
             (Comp_Stats::set_club_final_position 0x4a2540 with no club, from 0x57cbea)
     2015    October 2015, two seasons. The same short list stopped it on 27.5.2016 at "Database..cpp 13160"
             (0x53b4f0 with no nation, from 0x76d8bd)
+    2003    October 2003 (the first folder whose name starts with that), one season: the Euro 2004 finals list
+            is short too (15 of 16)
 --fixes-off sets RECOMP_BOX_FIXES=off (call_up_news.c and euro_finals.c off): the runs must then show the boxes.
 
 The checks (each run):
@@ -39,12 +41,22 @@ RUNS = {
     "2023": (2023, 2023, os.path.join(DB, "October 2023")),
     "2019": (2019, 2019, os.path.join(DB, "October 2019")),
     "2015": (2015, 2016, os.path.join(DB, "October 2015")),
+    "2003": (2003, 2003, "October 2003"),
 }
+
+
+def database_folder(name):
+    """The folder of DB whose name is name or starts with it (some folder names hold more words)."""
+    if os.path.isabs(name):
+        return name
+    found = sorted(d for d in os.listdir(DB) if d == name or d.startswith(name + " "))
+    return os.path.join(DB, found[0]) if found else os.path.join(DB, name)
 BOX = re.compile(r"recomp: message box from (0x[0-9a-f]+): (.*)")
 
 
 def check_run(program, game, name, keep):
     year, last, database = RUNS[name]
+    database = database_folder(database)
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-season-boxes-{name}-")
     code, report = rrc.run(program, game, last, year, database, ["England"], [], work, 2400)
     fails = []
