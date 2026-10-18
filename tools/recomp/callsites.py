@@ -56,6 +56,16 @@ CALL_SITES = {
     # Options box (#56): the input poll of the main loop 0x7fc7e0. Its result goes to the Game Settings hook
     # test at 0x7fcd25.
     "main_poll": (0x7FCC14, 0x55F620),
+    # Work permits after Brexit (0.6.0 slice 17, season_kind_nation.c): the calls of player_needs_work_permit
+    # 0x8c7560 where a signing is decided (docs/research/2026-10-17-season-rules-17.md, section 5): the two offer
+    # checks of 0x8c7470 and the two of 0x8c7690, the completion 0x8c38b0 and its call of is_work_permit_granted
+    # 0x8c7950.
+    "permit_offer_a": (0x8C74A9, 0x8C7560),
+    "permit_offer_b": (0x8C7539, 0x8C7560),
+    "permit_check_a": (0x8C7704, 0x8C7560),
+    "permit_check_b": (0x8C7872, 0x8C7560),
+    "permit_complete": (0x8C3902, 0x8C7560),
+    "permit_decide": (0x8C391B, 0x8C7950),
 }
 
 SITES = {addr: (name, target) for name, (addr, target) in CALL_SITES.items()}
