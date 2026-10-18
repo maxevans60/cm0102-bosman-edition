@@ -11,12 +11,14 @@
  *
  * The wrap below runs the reader's loop on the slots first. Only when that loop would reach slot 50 does
  * the reader get, for this call, the count of different players among the groups of the item. Every other
- * item reads as in the original. The item itself does not change, so the saved game holds the same bytes. */
+ * item reads as in the original. The item itself does not change, so the saved game holds the same bytes. The
+ * test switch RECOMP_BOX_FIXES=off turns the wrap off (tests/seasons/season_boxes_run.py). */
 #include "win.h"
 #include "../rt.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SLOT(item, k) ((item) + 5u + 4u * (uint32_t)(k))   /* NewsItem::get_slot 0x785845 */
 #define SLOTS 50                                           /* 0x78583e */
@@ -46,7 +48,8 @@ RT_WRAP(0076e3b0, write_call_up_news_text)
 {
     uint32_t item = rt_arg(0), count_at = SLOT(item, COUNT_SLOT), count_word = rd32(g_mem, count_at);
     int count = (int8_t)count_word;
-    if (count < 1 || count > MAX_COUNT || !reader_overrun(item, count)) {
+    const char *off = getenv("RECOMP_BOX_FIXES");
+    if (count < 1 || count > MAX_COUNT || (off && !strcmp(off, "off")) || !reader_overrun(item, count)) {
         o_0076e3b0();
         return;
     }

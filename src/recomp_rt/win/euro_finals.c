@@ -17,12 +17,14 @@
  * The wrap below runs before the seeding, only when the count is below the size. It takes out a team that is in
  * the list twice (the first stays, so a host keeps its slot) and fills the free slots with the national teams
  * of the default key nations of 0x57bf2f that are not in the list, in the order of that list, flag 0 as the
- * defaults have. A list that is full draws as in the original. */
+ * defaults have. A full list seeds and draws as in the original. The test switch RECOMP_BOX_FIXES=off turns the
+ * wrap off (tests/seasons/season_boxes_run.py). */
 #include "win.h"
 #include "../rt.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SLOT_SIZE 6u
 #define TEAMS 0x14u       /* the slots (0x57bda1) */
@@ -58,7 +60,8 @@ RT_WRAP(0057c710, euro_seed_teams)
 {
     uint32_t ec = cpu.ecx, t = rd32(g_mem, ec + TEAMS);
     int count = (int16_t)rd16(g_mem, ec + COUNT), size = (int16_t)rd16(g_mem, ec + SIZE);
-    if (t && count >= 0 && count < size && size <= MAX_SLOTS) {
+    const char *off = getenv("RECOMP_BOX_FIXES");
+    if (t && count >= 0 && count < size && size <= MAX_SLOTS && !(off && !strcmp(off, "off"))) {
         uint32_t club[MAX_SLOTS];
         uint8_t flag[MAX_SLOTS];
         int n = 0;

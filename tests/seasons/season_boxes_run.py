@@ -3,19 +3,24 @@
 
 Usage:
     python3 tests/seasons/season_boxes_run.py <cm0102_recomp> <game folder> [--only <name>,...] [--jobs n]
-        [--keep <folder>]
+        [--keep <folder>] [--fixes-off]
 
-Each run is a season jump of tests/seasons/rules_report_check.py over one whole season (start in X, last season
-X), England selected, with the staff reserve of the build for that database (no RECOMP_STAFF_RESERVE):
-    2008    September 2008. Before the fix it stopped on 23.8.2008 at the box "news..cpp 7797": a call-up news
-            item with the same player three times (NewsItem::get_slot 0x785830 from 0x76e440)
-    2023    October 2023. Before the fix it stopped on 9.2.2024 at the box "Database..cpp 13126"
-            (0x53b3d0 with no nation, from 0x600c02)
+Each run is a season jump of tests/seasons/rules_report_check.py from the start in X to the end of the last
+season, England selected, with the staff reserve of the build for that database (no RECOMP_STAFF_RESERVE):
+    2008    September 2008, one season. Before the fix it stopped on 23.8.2008 at the box "news..cpp 7797": a
+            call-up news item with the same player three times (NewsItem::get_slot 0x785830 from 0x76e440)
+    2023    October 2023, one season. Before the fix it stopped on 9.2.2024 at the box "Database..cpp 13126"
+            (0x53b3d0 with no nation, from 0x600c02): the European Championship finals with 15 of 16 teams
+    2019    October 2019, one season. The same short list stopped it on 7.2.2020 at "comp_stats..CPP 1664"
+            (Comp_Stats::set_club_final_position 0x4a2540 with no club, from 0x57cbea)
+    2015    October 2015, two seasons. The same short list stopped it on 27.5.2016 at "Database..cpp 13160"
+            (0x53b4f0 with no nation, from 0x76d8bd)
+--fixes-off sets RECOMP_BOX_FIXES=off (call_up_news.c and euro_finals.c off): the runs must then show the boxes.
 
 The checks (each run):
-    - the jump ends with code 0 and the report holds the start and the end of season X
+    - the jump ends with code 0 and the report holds the start and the end of each season of the run
     - the log has no message box of the game (RECOMP_SCREEN_LOG prints each one, src/recomp_rt/win/waits.c)
-A run takes about 3 to 5 minutes. --jobs (default 2) runs that many at the same time.
+A run takes about 3 to 7 minutes. --jobs (default 1) runs that many at the same time.
 """
 import concurrent.futures
 import os
@@ -30,16 +35,18 @@ import rules_report_check as rrc  # noqa: E402
 
 DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
 RUNS = {
-    "2008": (2008, os.path.join(DB, "September 2008")),
-    "2023": (2023, os.path.join(DB, "October 2023")),
+    "2008": (2008, 2008, os.path.join(DB, "September 2008")),
+    "2023": (2023, 2023, os.path.join(DB, "October 2023")),
+    "2019": (2019, 2019, os.path.join(DB, "October 2019")),
+    "2015": (2015, 2016, os.path.join(DB, "October 2015")),
 }
 BOX = re.compile(r"recomp: message box from (0x[0-9a-f]+): (.*)")
 
 
 def check_run(program, game, name, keep):
-    year, database = RUNS[name]
+    year, last, database = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-season-boxes-{name}-")
-    code, report = rrc.run(program, game, year, year, database, ["England"], [], work, 2400)
+    code, report = rrc.run(program, game, last, year, database, ["England"], [], work, 2400)
     fails = []
     if code != 0:
         fails.append(f"{name}: the run ended with code {code} ({work})")
@@ -51,9 +58,10 @@ def check_run(program, game, name, keep):
     if os.path.exists(report):
         seasons, _ = rrc.read_report(report)
         phases = {(s["season"], s["phase"]) for s in seasons}
-    for phase in ("start", "end"):
-        if (year, phase) not in phases:
-            fails.append(f"{name}: the report has no {phase} of season {year} ({work})")
+    for season in range(year, last + 1):
+        for phase in ("start", "end"):
+            if (season, phase) not in phases:
+                fails.append(f"{name}: the report has no {phase} of season {season} ({work})")
     print(f"{name}: code {code}, {len(boxes)} boxes, {len(fails)} problems ({work})")
     return fails
 
@@ -64,7 +72,9 @@ def main(argv):
         return 2
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
     names = argv[argv.index("--only") + 1].split(",") if "--only" in argv else list(RUNS)
-    jobs = int(argv[argv.index("--jobs") + 1]) if "--jobs" in argv else 2
+    jobs = int(argv[argv.index("--jobs") + 1]) if "--jobs" in argv else 1
+    if "--fixes-off" in argv:
+        os.environ["RECOMP_BOX_FIXES"] = "off"
     keep = os.path.abspath(argv[argv.index("--keep") + 1]) if "--keep" in argv else None
     for n in names:
         if n not in RUNS:
