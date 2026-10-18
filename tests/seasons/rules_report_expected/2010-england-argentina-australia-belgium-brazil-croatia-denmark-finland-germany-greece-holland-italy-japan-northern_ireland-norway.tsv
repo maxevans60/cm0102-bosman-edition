@@ -47,7 +47,7 @@
 2010	clubs	nir_prm (Northern Irish League Premier Division), row wal-nir-irl-235: game 10, table 12 (12)
 2010	clubs	nor_prm (Norwegian Premier Division), row nor-fin-92: game 14, table 16 (16)
 2010	clubs	oceania_club_champ (Oceania Champions Cup), row club-world-189: game 0/4, table 8 (8)
-2010	clubs	uefa_cup (UEFA Cup), row uefa-77: game 145, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2010	clubs	uefa_cup (UEFA Cup), row uefa-77: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 0/4, table 7 (7)
 2010	down	arg_prm (Argentine Premier Division), row arg-usa-10: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2010	down	arg_second (Argentine Second Division), row arg-usa-37: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table); 3 relegated in total (infobox))
@@ -70,6 +70,7 @@
 2010	down	ita_ser_c1b (Italian Serie C1/B), row ita-158: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2010	down	jap_j1 (Japanese J-League 1), row aus-jap-kor-199: game 2 (+0 play-off places), table 3 (3)
 2010	down	nir_first (Northern Irish League First Division), row wal-nir-irl-236: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
+2010	format	uefa_cup, row uefa-77: game 40 clubs in the group stage and 32 in the knockout round after it, table 48 and 32
 2010	idle	asia_nations (Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
 2010	idle	wc_asia_league (World Cup Asian Qualifying Section), row int-world-115: the game waits for 2012, the table holds it
 2010	idle	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-113: the game waits for 2012, the table holds it
