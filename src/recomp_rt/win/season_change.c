@@ -35,6 +35,8 @@
 
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
+extern const SeasonRuleKind season_kind_subs;
+extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
 extern const SeasonRuleKind season_kind_cup_breaks;
 extern const SeasonRuleKind season_kind_club_world;
@@ -44,6 +46,8 @@ static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
     &season_kind_names,                 /* slice 16: competition names (slice 15's names table) */
+    &season_kind_subs,                  /* slice 17: substitutes used and the bench */
+    &season_kind_nation,                /* slice 17: transfer windows, foreign player limits, work permits */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
     &season_kind_cup_breaks,            /* slice 21b: domestic cups that are not held in some seasons */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
@@ -229,6 +233,8 @@ static int news_count, news_room;
 static int hook_season = -1;            /* the season of the hook that runs now; -1: no hook runs */
 static int season_point;                /* the last season whose season point ran (0: none) */
 static int creating;                    /* 1 while create_game 0x828110 runs (season_change_creating) */
+
+int season_change_point(void) { return season_point; }
 
 static SeasonNews *news_of(int season)
 {

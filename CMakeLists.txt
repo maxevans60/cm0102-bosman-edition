@@ -144,6 +144,19 @@ if(NOT WIN32)
     target_include_directories(season_cup_breaks_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_breaks COMMAND season_cup_breaks_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_cup_breaks PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The substitute rule lookup (0.6.0 slice 17).
+    add_executable(season_subs_test tests/seasons/test_season_subs.c src/recomp_rt/win/season_subs_rule.c
+        src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_subs_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_subs COMMAND season_subs_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_subs PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The nation rules (0.6.0 slice 17): windows, foreign player limits and the work permit rule. The encoder reads
+    # the research parts; its outputs are committed and checked here; the lookup runs on the C table.
+    add_executable(season_nation_test tests/seasons/test_season_nation.c src/recomp_rt/win/season_nation.c
+        src/recomp_rt/win/season_nation_table.c)
+    target_include_directories(season_nation_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_nation COMMAND season_nation_test)
+    add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
