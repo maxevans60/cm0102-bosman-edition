@@ -44,8 +44,12 @@
  * The record. Each new competition needs a competition record (0x6b bytes in the array at [0xae23d0]) for its
  * name, history and [0xadadfc] slot. The def names a record that the data holds and no object of the original
  * uses (for example "South American CONMEBOL Cup", record 60 in every Update Team database), and the module
- * gives it the competition's name through season_change_rename. A def with record NULL needs a new record;
- * the module does not make one yet (design doc, "Open").
+ * gives it the competition's name through season_change_rename. Or the def gives a record that the data lacks
+ * (field `like` set): the module then adds a new record with that long name at the database load of a new game
+ * (docs/research/2026-10-18-new-comp-records.md). The new records go after the last nation competition and
+ * before the 0x7f friendly records, so no index that game data holds moves; a save holds them in its
+ * nation_comp.dat part, so a load needs no change. The module adds one only for a def that the game can make
+ * (a season game whose start season, or with changing rules on a later season, holds the competition).
  *
  * Save and load (docs/research/2026-10-18-new-comps-load.md). The object saves itself like every object of an
  * entry array (key_nation_save_all_comps 0x6692f0 calls vtable +0x1c; the save packs every *.tmp file of
@@ -73,12 +77,19 @@ typedef struct SeasonCompDef SeasonCompDef;
 struct SeasonCompDef {
     const char *comp;          /* the rules table `comp` of its rows (comp_file "new"): "sudamericana" */
     const char *file;          /* its name in the rules report and the logs: "new_sudamericana" */
-    const char *record;        /* the long name in the data of the record it takes, or NULL (see above) */
+    const char *record;        /* the long name in the data of the record it takes (see above) */
     int entry;                 /* the league table entry whose array holds it, 0 to 34 */
     /* Makes the object in the game's heap for season year `year` with the record at `rec` (the address in the
      * array at [0xae23d0]) and returns it, or 0. `loading` is 1 at a load: the object then reads its state
      * from its saved file, as the original's constructors do. Called only by the module. */
     uint32_t (*make)(const SeasonCompDef *d, uint32_t rec, int year, int loading);
+    /* A new record when the data has no record `record` (NULL: the def takes a record of the data). The new
+     * record copies the continent, nation and colour ids (+0x59, +0x5d, +0x61, +0x65) of the data record `like`
+     * (for example "UEFA Cup") and takes `short_name` (+0x38, at most 26 characters) and `level` (+0x69, the
+     * level of the competition: UEFA Cup 18, Inter-Toto Cup 8; 0x79d447). */
+    const char *like;
+    const char *short_name;
+    int level;
 };
 
 /* The competitions. Each slice adds its lines in season_comps.c. */
@@ -113,6 +124,10 @@ void season_comps_set_slot(uint32_t vtable, int slot, const char *name, void (*f
 /* The rule kind "comps" (entry and loaded hooks). season_change.c lists it first in season_rule_kinds, so a
  * slice's own kind meets the object in the same season. */
 extern const SeasonRuleKind season_kind_comps;
+
+/* 1 when the records that the module added at the last database load of a new game differ from those that the next
+ * new game needs (another season or changing rules): Start New Game then loads the data again (season_dates.c). */
+int season_comps_records_stale(void);
 
 /* season_change_reset calls it: before a new game, a load and the end of a game. */
 void season_comps_reset(void);
