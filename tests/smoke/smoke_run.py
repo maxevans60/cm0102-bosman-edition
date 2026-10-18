@@ -220,6 +220,9 @@ SAME_SAVE_RUNS = [
     # The season change (0.6.0 slice 16) calls no rule kind in the base game (2001, changing rules off): with the
     # test kind that writes the game in every hook (RECOMP_SEASON_CHANGE_TEST=write) the save is that of normal.
     ("kinds-base", {"faster_days": "off", "_env": {"RECOMP_SEASON_CHANGE_TEST": "write"}}),
+    # The fixes of two error boxes of the original (call_up_news.c, euro_finals.c) act only where the original
+    # stops at the box. A test-only variable turns them off: the save must equal normal.
+    ("box-fixes-off", {"faster_days": "off", "_env": {"RECOMP_BOX_FIXES": "off"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this
@@ -289,6 +292,7 @@ MATCH_RUNS = [
     ("rules-off", {"changing_rules": "off"}),
     ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
     ("season-code-off", {"_env": {"RECOMP_SEASON_CODE": "off"}}),
+    ("box-fixes-off", {"_env": {"RECOMP_BOX_FIXES": "off"}}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
 # --match --sleep-danger adds this run: the idle sleep without its time rules (RECOMP_IDLE_SLEEP=force), so
