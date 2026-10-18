@@ -117,6 +117,17 @@ static int next_edition(const char *file, int s)
     return NEVER;
 }
 
+/* The year of the first edition of a new game that starts in season `start`. With changing rules on: the next
+ * edition from the start season on. With changing rules off the rules of the start season stay (Q232, lead
+ * 2026-10-18): a competition that the start season holds plays, one that it does not hold never comes, even when
+ * a later season of the table holds it. 0 when the table has no row. */
+static int start_edition(const char *file, int start)
+{
+    if (season_changing_rules()) return next_edition(file, start);
+    int h = held(file, start);
+    return h < 0 ? 0 : h ? start : NEVER;
+}
+
 /* ---- The year steps of tools/recomp/seasons.py (rt.h) ---- */
 
 uint32_t rt_club_world_annual(void) { return (uint32_t)season_game(); }
@@ -143,7 +154,7 @@ static void ctor(const char *file, void (*original)(void))
 {
     if (season_game() && season_change_is_creating()) {
         int start = season_start_year();
-        int year = next_edition(file, start);
+        int year = start_edition(file, start);
         uint32_t slot = cpu.esp + 4;                        /* thiscall (year, record), ret 8 */
         uint32_t arg = rd32(g_mem, slot);
         if (year && year != (int16_t)(arg & 0xffffu)) {
@@ -296,12 +307,12 @@ static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 }
 
 /* The club count of the knockout in the edition of year `year`: 6 or 7, or 0 for the original form. With
- * changing rules off the form of the first edition of the game stays (Q232). */
+ * changing rules off the form of the start season stays (Q232). */
 static int knockout_clubs(int year, int *host_in_place_of_ofc)
 {
     *host_in_place_of_ofc = 0;
     if (!season_game()) return 0;
-    int s = season_changing_rules() ? year : next_edition("world_club_champ", season_start_year());
+    int s = season_changing_rules() ? year : season_start_year();     /* the form of the start season, Q232 */
     const SeasonRule *r = s > 0 ? row_of("world_club_champ", s) : NULL;
     if (!r || (r->clubs != 6 && r->clubs != 7)) return 0;
     /* 2020/21: the OFC winner withdrew, so the host champion plays in the quarter-finals (club-world.tsv,

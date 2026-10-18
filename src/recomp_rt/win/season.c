@@ -108,6 +108,11 @@ uint32_t rt_season_text_format(uint32_t original)
 int season_start_year(void) { return (int)rt_season_year; }
 int season_game_on(void) { return game_on; }
 int season_changing_rules(void) { return rules_now; }
+/* Slice 26: the changing rules of the next new game, as create_game sets them (below). */
+int season_next_rules(void)
+{
+    return !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
+}
 
 int season_set_new_game(int start_year, int changing_rules)
 {

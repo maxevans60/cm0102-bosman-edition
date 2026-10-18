@@ -39,7 +39,7 @@
 2010	clubs	nor_prm (Norwegian Premier Division), row nor-fin-92: game 14, table 16 (16)
 2010	clubs	oceania_club_champ (Oceania Champions Cup), row club-world-189: game 0/4, table 8 (8)
 2010	clubs	uefa_cup (UEFA Cup), row uefa-77: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
-2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 4, table 7 (7)
+2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 0, table 7 (7)
 2010	down	arg_prm (Argentine Premier Division), row arg-usa-10: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2010	down	arg_second (Argentine Second Division), row arg-usa-37: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table); 3 relegated in total (infobox))
 2010	down	bel_first (Belgian First Division), row hol-bel-125: game 2 (+0 play-off places), table text (15th v 16th relegation play-off (five matches, 15th starts with 3 points): loser)
@@ -71,6 +71,7 @@
 2010	name	aus_nsl (Australian National Soccer League), row aus-jap-kor-33: game 'Australian National Soccer League', table 'A-League'
 2010	name	bel_first (Belgian First Division), row hol-bel-125: game 'Belgian First Division', table 'Belgian Pro League'
 2010	name	bel_third (Belgian Third Division), row hol-bel-127: game 'Belgian Third Division', table 'Belgian Third Division (A and B)'
+2010	name	bra_champ_cup (Brazilian Champions Cup), row bra-199: game 'Brazilian Champions Cup', table 'Copa dos Campeões'
 2010	name	bra_cup (Brazilian Cup), row bra-145: game 'Brazilian Cup', table 'Copa do Brasil'
 2010	name	bra_nat_first (Brazilian National First Division), row bra-37: game 'Brazilian National First Division', table 'Campeonato Brasileiro Série A'
 2010	name	bra_nat_second (Brazilian National Second Division), row bra-64: game 'Brazilian National Second Division', table 'Campeonato Brasileiro Série B'
@@ -112,6 +113,7 @@
 2010	name	fin_prm (Finnish Premier Division), row nor-fin-97: game 'Finnish Premier Division', table 'Veikkausliiga'
 2010	name	ger_cup (German Cup), row ger-127: game 'German Cup', table 'DFB-Pokal'
 2010	name	ger_first (German First Division), row ger-118: game 'German First Division', table 'Bundesliga'
+2010	name	ger_lge_cup (German League Cup), row ger-128: game 'German League Cup', table 'DFL-Ligapokal'
 2010	name	ger_second (German Second Division), row ger-119: game 'German Second Division', table '2. Bundesliga'
 2010	name	goldcup (Copa America), row int-continental-110: game 'Copa America', table 'Copa América'
 2010	name	gre_cup (Greek Cup), row gre-pol-cro-10: game 'Greek Cup', table 'Greek Football Cup'
@@ -134,6 +136,7 @@
 2010	name	jap_j1 (Japanese J-League 1), row aus-jap-kor-199: game 'Japanese J-League 1', table 'J.League Division 1'
 2010	name	jap_j2 (Japanese J-League 2), row aus-jap-kor-226: game 'Japanese J-League 2', table 'J.League Division 2'
 2010	name	jap_j_cup (Japanese Cup), row aus-jap-kor-172: game 'Japanese Cup', table 'J.League Yamazaki Nabisco Cup'
+2010	name	nir_charity (Northern Irish Charity Shield), row wal-nir-irl-240: game 'Northern Irish Charity Shield', table 'Charity Shield'
 2010	name	nir_cup (Northern Irish Cup), row wal-nir-irl-238: game 'Northern Irish Cup', table 'Irish Cup'
 2010	name	nir_first (Northern Irish League First Division), row wal-nir-irl-236: game 'Northern Irish League First Division', table 'IFA Championship 1'
 2010	name	nir_lge_cup (Northern Irish League Cup), row wal-nir-irl-239: game 'Northern Irish League Cup', table 'Irish League Cup'
@@ -149,10 +152,14 @@
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
 2010	no_row	record_utils (Under 21 International): no table row
+2010	not_held	bra_champ_cup (Brazilian Champions Cup), row bra-199: the game holds 2010, the table says not held
 2010	not_held	cro_a2b (Croatian Second Division South), row gre-pol-cro-388: the game holds 2010, the table says not held
 2010	not_held	fifa_confed (Confederations Cup), row int-world-118: the game holds 2011, the table says not held
+2010	not_held	ger_lge_cup (German League Cup), row ger-128: the game holds 2010, the table says not held
 2010	not_held	goldcup (Copa America), row int-continental-110: the game holds 2011, the table says not held
+2010	not_held	gre_super (Greek Super Cup), row gre-pol-cro-91: the game holds 2010, the table says not held
 2010	not_held	intertoto_cup (Inter-Toto Cup), row uefa-79: the game holds 2010, the table says not held
+2010	not_held	nir_charity (Northern Irish Charity Shield), row wal-nir-irl-240: the game holds 2010, the table says not held
 2010	not_held	oceania_nations (Oceania Nations Cup), row int-continental-109: the game holds 2010, the table says not held
 2010	not_in_game	arg-usa-199 argentina_rules 'Argentina' (Argentina)
 2010	not_in_game	aus-jap-kor-10 australia_rules 'n/a' (Australia)
