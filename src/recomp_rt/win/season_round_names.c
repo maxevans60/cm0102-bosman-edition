@@ -15,5 +15,5 @@ const char *season_round_name(const char *comp_file, int round_code, int season,
             continue;
         if (!best || r->first_season > best->first_season) best = r;
     }
-    return best ? best->name : NULL;
+    return best ? best->name : NULL;            /* a row with no name ends a name: the original's again */
 }

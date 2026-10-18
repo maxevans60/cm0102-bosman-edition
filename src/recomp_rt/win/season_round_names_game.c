@@ -2,17 +2,12 @@
  * section "Round names".
  *
  * The round name function 0x4b4850, cdecl (buffer, size, id, flag), writes the name of a round code (or of a
- * stage id) into the caller's buffer and returns it: flag 0 the long set ("Quarter Final", jump tables
- * 0x4b954c to 0x4b9744), flag 1 the short set ("Quarter Finals", 0x4b6947 on). A code + 1 to + 4 names a
- * replay or a leg. Its 23 calls are in 12 functions, and each one only puts the text on a screen, into a news
- * text or into a printout (none compares it or keeps it in a save): the competition screens 0x491380
- * (0x491570, 0x491a71), 0x492980 (0x492b3a), 0x495050 (0x495202), the league progress screen 0x49b990
- * (0x49babb), the cup tie news 0x4b0b80 (0x4b0e68), the group news 0x4b4590 (0x4b45d0, 0x4b46fd), the labels
- * 0x4bfa30 (6 calls) and 0x4bffc0 (4 calls), the live league table 0x7280e0 (0x7284ce, 0x7285e4),
- * NewsItem::write_text 0x77bc80 (0x77fad9), the printouts 0x7d8120 (0x7d82e9) and SpaSecondB news 0x857e20
- * (0x857f0a). The name function knows no competition, so the functions that take one set it for the call:
- * the label 0x4bfa30 (a competition record, arg 0) and the competition screens 0x491380, 0x492980, 0x495050
- * and the printouts 0x7d8120 (arg 0). A call with no competition known gets the original's text.
+ * stage id) into the caller's buffer and returns it: flag 0 the long set (0x4b48d2), flag 3 the plural set
+ * (0x4b6937), any other flag the abbreviated set (0x4b7a84). A code + 1 to + 5 names a replay, a leg or a
+ * decider. Its 23 calls only put the text on a screen, into a news text or into a printout (the list is in
+ * the doc). The name function knows no competition, so the functions below that know theirs set it for their
+ * calls. A call with no competition known, a set or season with no row, or a part the runtime does not name
+ * gets the original's text.
  *
  * The text goes into the caller's buffer with its size, as the original's (no buffer of the runtime). The base
  * game (start 2001, changing rules off) and RECOMP_SEASON_CODE=off get the original's text. */
@@ -45,103 +40,99 @@ static uint32_t comp_of(uint32_t p)
     return readable(obj) && rd32(g_mem, obj + 4) == rec ? obj : 0;
 }
 
-static int names_on(void)
+/* The season of the rules of a competition: its own season with changing rules on, the start year with changing
+ * rules off (as the formats, season_uefa_row). 0 in the base game and with the season code off. */
+static int rules_season(uint32_t obj)
 {
-    return season_code_on() && !(season_start_year() == SEASON_FIRST_YEAR && !season_changing_rules());
+    if (!season_code_on()) return 0;
+    if (!season_changing_rules()) return season_start_year() == SEASON_FIRST_YEAR ? 0 : season_start_year();
+    return (int16_t)rd16(g_mem, obj + 0x40);
 }
 
 void o_004b4850(void);
-void o_004bfa30(void);
-void o_00491380(void);
-void o_00492980(void);
-void o_00495050(void);
-void o_007d8120(void);
 
 /* The round name function. */
 RT_WRAP(004b4850, round_name)
 {
     uint32_t buf = rt_arg(0), size = rt_arg(1);
-    int code = (int16_t)rt_arg(2), shrt = (int8_t)rt_arg(3) != 0;
+    int code = (int16_t)rt_arg(2), flag = (int8_t)rt_arg(3);
+    int set = flag == 0 ? SEASON_ROUND_NAME_LONG : flag == 3 ? SEASON_ROUND_NAME_PLURAL : SEASON_ROUND_NAME_ABBREVIATED;
+    int part = code % 10, season = context ? rules_season(context) : 0;
+    /* The words of a replay, a leg or a decider, as the original's names write them: "Quarter Final First
+     * Leg" (0x4b48ff on), "Quarter Final First Legs" (plural), "Qtr Final Leg 1", "2nd Rnd Decider"
+     * (abbreviated). Part 5 (decider) exists only below 160 in the original (0x4b4981); parts 1 and 2 (replays)
+     * only below 160 too; codes 251 and 252 give the original's box, so they go to the original. */
+    static const char *const words[3][6] = {
+        {"", " Replay", " Second Replay", " First Leg", " Second Leg", " Decider"},
+        {"", " Replays", " Second Replays", " First Legs", " Second Legs", " Deciders"},
+        {"", " Replay", " Replay 2", " Leg 1", " Leg 2", " Decider"}};
     const char *name = NULL;
-    if (context && names_on() && code > 0 && code < 1000 && readable(buf) && size >= 2 && size <= 0x1000)
-        name = season_round_name(season_change_file(context), code - code % 10, (int16_t)rd16(g_mem, context + 0x40),
-                                 shrt ? SEASON_ROUND_NAME_SHORT : SEASON_ROUND_NAME_LONG);
+    int named_part = part == 0 || part == 3 || part == 4 || ((part == 1 || part == 2 || part == 5) && code < 160);
+    if (season && named_part && code > 0 && code < 1000 && readable(buf) && size >= 2 && size <= 0x1000)
+        name = season_round_name(season_change_file(context), code - part, season, set);
     if (!name) {
         o_004b4850();
         return;
     }
-    /* The words of a replay or a leg, as the original's names write them ("Quarter Final First Leg",
-     * "Quarter Final First Legs"). */
-    static const char *const long_words[5] = {"", " Replay", " Second Replay", " First Leg", " Second Leg"};
-    static const char *const short_words[5] = {"", " Replays", " Second Replays", " First Legs", " Second Legs"};
-    int part = code % 10;
-    snprintf(win_str(buf), size, "%s%s", name, part <= 4 ? (shrt ? short_words : long_words)[part] : "");
+    int w = set == SEASON_ROUND_NAME_LONG ? 0 : set == SEASON_ROUND_NAME_PLURAL ? 1 : 2;
+    snprintf(win_str(buf), size, "%s%s", name, words[w][part]);
     rt_ret_cdecl(buf);
 }
 
-/* The functions that know their competition (arg 0) set the context for their calls of the name function.
- * The recompiler reads each RT_WRAP line as it is, so they are written out in full. */
-/* comp_util_format_comp_stage_round_label (record, stage, round, ...) */
-RT_WRAP(004bfa30, label_round_name)
+/* The functions that know their competition set the context for their calls of the name function, and put the
+ * one before back after the call, also when the call unwinds. The recompiler reads each RT_WRAP line as it is,
+ * so they are written out in full. */
+static void with_comp(uint32_t comp, void (*original)(void))
 {
     uint32_t saved = context;
-    context = comp_of(rt_arg(0));
-    o_004bfa30();
+    context = comp_of(comp);
+    original();
     context = saved;
 }
 
-/* comp_screens_draw_league_table_tab (comp, ...) */
-RT_WRAP(00491380, table_tab_round_name)
-{
-    uint32_t saved = context;
-    context = comp_of(rt_arg(0));
-    o_00491380();
-    context = saved;
-}
+void o_004bfa30(void);
+void o_00491380(void);
+void o_00492980(void);
+void o_00493ee0(void);
+void o_004947a0(void);
+void o_00495050(void);
+void o_007d8120(void);
+void o_0048cab0(void);
+void o_00586fa0(void);
 
-/* comp_screens_draw_cup_rounds_tab (comp, ...) */
-RT_WRAP(00492980, rounds_tab_round_name)
-{
-    uint32_t saved = context;
-    context = comp_of(rt_arg(0));
-    o_00492980();
-    context = saved;
-}
+/* comp_util_format_comp_stage_round_label, cdecl (record, stage, round, style, out, size) */
+RT_WRAP(004bfa30, label_round_name) { with_comp(rt_arg(0), o_004bfa30); }
+/* comp_screens_draw_league_table_tab, cdecl (comp, top, bottom) */
+RT_WRAP(00491380, table_tab_round_name) { with_comp(rt_arg(0), o_00491380); }
+/* comp_screens_draw_cup_rounds_tab, cdecl (comp, top, bottom) */
+RT_WRAP(00492980, rounds_tab_round_name) { with_comp(rt_arg(0), o_00492980); }
+/* comp_screens_draw_fixtures_tab, cdecl (comp, top, bottom): calls 0x4bffc0 */
+RT_WRAP(00493ee0, fixtures_tab_round_name) { with_comp(rt_arg(0), o_00493ee0); }
+/* comp_screens_draw_schedule_tab, cdecl (comp, top, bottom): calls 0x4bffc0 */
+RT_WRAP(004947a0, schedule_tab_round_name) { with_comp(rt_arg(0), o_004947a0); }
+/* comp_screens_draw_average_points_tab, cdecl (comp, top, bottom) */
+RT_WRAP(00495050, points_tab_round_name) { with_comp(rt_arg(0), o_00495050); }
+/* printouts_write_league_tables, cdecl (record, file) */
+RT_WRAP(007d8120, printout_round_name) { with_comp(rt_arg(0), o_007d8120); }
+/* Comp::write_progress_text, thiscall: the progress of a club in a competition (calls 0x4bffc0) */
+RT_WRAP(0048cab0, progress_round_name) { with_comp(cpu.ecx, o_0048cab0); }
+/* EuropeanCup::write_progress_text, thiscall (calls 0x4bffc0) */
+RT_WRAP(00586fa0, cl_progress_round_name) { with_comp(cpu.ecx, o_00586fa0); }
 
-/* comp_screens_draw_average_points_tab (comp, ...) */
-RT_WRAP(00495050, points_tab_round_name)
-{
-    uint32_t saved = context;
-    context = comp_of(rt_arg(0));
-    o_00495050();
-    context = saved;
-}
-
-/* printouts_write_league_tables (record, file) */
-RT_WRAP(007d8120, printout_round_name)
-{
-    uint32_t saved = context;
-    context = comp_of(rt_arg(0));
-    o_007d8120();
-    context = saved;
-}
-
-/* The rules report (season_uefa.c): the name of a round of a competition as the game's formatter
- * comp_util_format_stage_round_name 0x4bffc0 writes it for a fixture (stage 0: the round alone), with the
- * competition as the context. Test runs only. Writes at most size bytes to out. */
-void season_round_name_label(uint32_t obj, int code, char *out, int size)
+/* The rules report (season_uefa.c): the label of a round of a competition through the label function 0x4bfa30
+ * (a wrap above sets the competition), style 1 (long names) or 3 (abbreviated names, 0x4bfc14). Test runs
+ * only. Writes at most size bytes to out. */
+void season_round_name_label(uint32_t obj, int code, int style, char *out, int size)
 {
     snprintf(out, (size_t)size, "-");
-    if (!readable(obj)) return;
-    uint32_t saved_esp = cpu.esp, saved_context = context;
+    if (!readable(obj) || !readable(rd32(g_mem, obj + 4))) return;
+    uint32_t saved_esp = cpu.esp;
     cpu.esp -= 0x400;
-    uint32_t buf = cpu.esp + 0x10;                  /* 0x4bffc0 wants 200 bytes or more (0x4bffdc) */
+    uint32_t buf = cpu.esp + 0x10;
     g_mem[buf] = 0;
-    uint32_t a[5] = {0, (uint32_t)code, buf, 0x100, 0};
+    uint32_t a[6] = {rd32(g_mem, obj + 4), 0, (uint32_t)code, (uint32_t)style, buf, 0x100};
     Cpu saved = cpu;
-    context = obj;
-    rt_callback(0x004bffc0u, 5, a);
-    context = saved_context;
+    rt_callback(0x004bfa30u, 6, a);
     if (rt_unwinding) return;
     cpu = saved;
     snprintf(out, (size_t)size, "%.120s", win_str(buf));
