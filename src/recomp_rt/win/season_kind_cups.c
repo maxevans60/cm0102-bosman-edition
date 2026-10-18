@@ -51,11 +51,41 @@ static int cups_off(void)
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
-/* Writes the format of the row to a table of n rounds. Returns the number of rounds that changed, or -1 when
- * the table has another round count than the row (nothing is written). */
-static int apply_row(uint32_t table, int n, const SeasonCupRow *row)
+/* Slice 21b: a day count for comparing two dates of a round table (day of the year from 0, year). */
+static long day_number(int doy, int year)
+{
+    long y = year - 1;
+    return y * 365 + y / 4 - y / 100 + y / 400 + doy;
+}
+
+/* Slice 21b: 1 when the second leg of round i (match date +0x03, year offset +0x05, plus the days +0x22) lies
+ * before the draw of round i + 1 (draw date +0x00, year offset +0x02). The year offsets count from the cup's year
+ * (Cup::update_for_date 0x51fa2a..0x51fa30 adds +0x40). A round that becomes two legs needs this room: the next
+ * draw would else come before the tie ends. The last round has room. */
+static int room_for_second_leg(uint32_t table, int n, int i, int days, int year)
+{
+    if (i + 1 >= n) return 1;
+    uint32_t at = table + (uint32_t)i * ROUND_SIZE, next = at + ROUND_SIZE;
+    long second = day_number((int16_t)rd16(g_mem, at + 3), year + (int8_t)g_mem[at + 5]) + days;
+    long draw = day_number((int16_t)rd16(g_mem, next + 0), year + (int8_t)g_mem[next + 2]);
+    return second < draw;
+}
+
+/* Writes the format of the row to a table of n rounds. Returns the number of rounds that changed, -1 when the
+ * table has another round count than the row, or -2 when a round that becomes two legs has no room before the
+ * next draw (room_for_second_leg). Nothing is written in both cases. year: the cup's year (+0x40). */
+static int apply_row(uint32_t table, int n, const SeasonCupRow *row, int year)
 {
     if (n != row->rounds || !readable(table) || !readable(table + (uint32_t)n * ROUND_SIZE)) return -1;
+    for (int i = 0; i < n; i++) {
+        uint32_t at = table + (uint32_t)i * ROUND_SIZE;
+        SeasonCupRound r = {(uint16_t)rd16(g_mem, at + ROUND_FIRST), (uint16_t)rd16(g_mem, at + ROUND_DECIDING),
+                            g_mem[at + ROUND_REPLAYS], g_mem[at + ROUND_LEGS], g_mem[at + ROUND_DAYS]};
+        uint8_t legs = r.legs;
+        if (season_cups_apply(row->types[i], &r) && r.legs == 2 && legs != 2 &&
+            !room_for_second_leg(table, n, i, r.days, year))
+            return -2;
+    }
     int changed = 0;
     for (int i = 0; i < n; i++) {
         uint32_t at = table + (uint32_t)i * ROUND_SIZE;
@@ -81,18 +111,26 @@ static int cup_season(uint32_t cup)
 }
 
 /* After create_round_table of a cup: self is the cup, stage and count_ptr are its first two arguments, the table
- * is the result (cpu.eax). */
-static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
+ * is the result (cpu.eax). want: the stage of the knockout table (0xff from set_up_rounds 0x4c15f0 for a Cup
+ * class; 7 and 0x13 for the knockout stage of ItaCup and HolCup, slice 21b). */
+static void table_made_stage(uint32_t self, uint32_t stage, uint32_t count_ptr, uint32_t want)
 {
-    if (stage != 0xffu || !season_code_on() || cups_off() || !readable(count_ptr)) return;
+    if (stage != want || !season_code_on() || cups_off() || !readable(count_ptr)) return;
     const char *file = season_change_file(self);
     int season = cup_season(self);
     const SeasonCupRow *row = season_cups_row(file, season);
     if (!row) return;
-    int changed = apply_row(cpu.eax, (int16_t)rd16(g_mem, count_ptr), row);
-    if (logging())
+    int changed = apply_row(cpu.eax, (int16_t)rd16(g_mem, count_ptr), row, (int16_t)rd16(g_mem, self + CUP_YEAR));
+    if (logging() || changed == -2)
         fprintf(stderr, "recomp: cups: %s (0x%x) season %d, row %d: %s %d\n", file, self, season, row->season,
-                changed < 0 ? "not applied, another round count, rounds" : "rounds changed", changed < 0 ? 0 : changed);
+                changed == -1 ? "not applied, another round count, rounds" :
+                changed == -2 ? "not applied, no room for a second leg before the next draw, rounds" : "rounds changed",
+                changed < 0 ? 0 : changed);
+}
+
+static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
+{
+    table_made_stage(self, stage, count_ptr, 0xffu);
 }
 
 /* The news of a row: with changing rules on, the cup that starts the season of a row says so. A row is a change by
@@ -102,7 +140,9 @@ static void cups_after(const SeasonChange *c)
     if (!c->started || cups_off()) return;
     const SeasonCupRow *row = season_cups_row(c->file, c->season);
     if (!row || row->season != c->season) return;
-    if ((int16_t)rd16(g_mem, c->comp + CUP_ROUND_COUNT) != row->rounds) return;
+    /* ItaCup and HolCup are League classes: their knockout stage is made later in the season (slice 21b). */
+    int league_cup = !strcmp(c->file, "ita_cup") || !strcmp(c->file, "hol_cup");
+    if (!league_cup && (int16_t)rd16(g_mem, c->comp + CUP_ROUND_COUNT) != row->rounds) return;
     season_change_news("%s", row->sentence);
 }
 
@@ -175,4 +215,36 @@ RT_WRAP(0078f2e0, cups_nor_cup)
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_0078f2e0();
     if (!rt_unwinding) table_made(self, stage, count);
+}
+
+/* Slice 21b: the Spanish Cup (SpaCup 0x84d220, vtable 0x96f9c8 slot +0x3c, stage 0xff from set_up_rounds), and the
+ * knockout stage of the Coppa Italia and the KNVB Cup. ItaCup and HolCup are League classes with a group stage.
+ * Their create_schedule (vtable +0x3c: ItaCup 0x63ec50 in vtable 0x96c318, HolCup 0x5f36e0 in vtable 0x96b7b8; thiscall: stage, short *round_count,
+ * short *first_id, int *out; ret 0x10) makes the round table of the knockout stage for stage 7 (ItaCup, 5
+ * rounds at 0x63ed91; called at 0x63f9c0 by create_knockout_stage 0x63f870) and stage 0x13 (HolCup, 6 rounds at
+ * 0x5f381d; called at 0x5f4708 by create_knockout_stage 0x5f4480). The table goes to a Cup_Stage object
+ * (constructor 0x522e00 at 0x63fa10 and 0x5f4755), which plays it with the Cup code of the other classes, so the
+ * same five fields hold the format. */
+void o_0084d220(void);
+RT_WRAP(0084d220, cups_spa_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_0084d220();
+    if (!rt_unwinding) table_made(self, stage, count);
+}
+
+void o_0063ec50(void);
+RT_WRAP(0063ec50, cups_ita_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_0063ec50();
+    if (!rt_unwinding) table_made_stage(self, stage, count, 7u);
+}
+
+void o_005f36e0(void);
+RT_WRAP(005f36e0, cups_hol_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_005f36e0();
+    if (!rt_unwinding) table_made_stage(self, stage, count, 0x13u);
 }

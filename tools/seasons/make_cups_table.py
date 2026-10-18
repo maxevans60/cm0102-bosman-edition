@@ -38,7 +38,8 @@ SRC = os.path.join(HERE, "cup_formats.tsv")
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_cups_table.c")
 WORDS = {".": ".", "E": "E", "P": "P", "R": "R", "RP": "S", "L": "L", "LN": "N", "LP": "Q", "LH": "H"}
 # The cup classes whose create_round_table the game wraps (src/recomp_rt/win/season_kind_cups.c).
-CLASSES = {"eng_fa_cup", "eng_cc_cup", "eng_fa_trophy", "sco_fa_cup", "bel_fa_cup", "fra_cup", "fra_lge_cup", "nor_cup"}   # word to the letter in C
+CLASSES = {"eng_fa_cup", "eng_cc_cup", "eng_fa_trophy", "sco_fa_cup", "bel_fa_cup", "fra_cup", "fra_lge_cup", "nor_cup",
+           "spa_cup", "ita_cup", "hol_cup"}   # word to the letter in C
 FIRST, LAST = 2002, 2099
 
 
