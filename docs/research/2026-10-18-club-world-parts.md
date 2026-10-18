@@ -16,6 +16,8 @@ Rule kind `club_world` (`src/recomp_rt/win/season_kind_club_world.c`), registere
 | Asia_Club_Champ | every season but 2022/23 | Skips 2022/23 |
 | Oceania_Club_Champ | 2004/05 to 2019/20, 2021/22 on | One edition a year from 2004/05; skips 2020/21 |
 
+Slice 16 offers `season_change_skip()` (the competition keeps its finished season). Part a does not use it: after a gap a skipped League class keeps the start date of its old year, so it never draws again (`2026-10-18-club-world-idle.md`, section 1), and the Oceania Champions Cup and the Asian Club Championship come back after a gap. A competition that waits for its next edition is also not complete, so the pass does not ask it again each season.
+
 Paths: at a new game of a season game (start year not 2001, or changing rules on) the constructors get the year of the first edition; with changing rules on the `before` hook of `start_new_season` moves the year at each season change, and the `after` hook adds one news sentence when the table starts or stops holding a competition. The base game and `RECOMP_SEASON_CODE=off` are unchanged (every patch gives the original's value outside a season game).
 
 Test: `tests/seasons/club_world_check.py` (its docstring gives the runs and checks).
