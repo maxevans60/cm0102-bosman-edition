@@ -165,6 +165,22 @@ PATCHES = {
     0x4100AF: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: random place in a pot
     0x4100CE: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: random place in a pot, again
     0x410102: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: next pot
+
+    # Copa America of 16 teams (0.6.0 slice 27, win/season_intl_copa.c). The Copa America Centenario of 2016 and
+    # the 2024 Copa America have 4 groups of 4 and quarter-finals. copa_america (ctor 0x5e0660) is the League of
+    # group A, stage[0..1] groups B and C, stage[2] the knockout. With 16 teams stage[0..2] are groups B to D and
+    # stage[3] the knockout. Group g takes the teams g, g + groups, ... of +0xee. rt_intl_copa_ko gives the
+    # knockout stage index (2), rt_intl_copa_groups the group count (3). Both give the original's value in the
+    # base game and for an edition of 12 teams. this in esi or ecx.
+    0x5E0710: (0xC, "(4u * (rt_intl_copa_ko(esi, 2u) + 1u))"),     # ctor: malloc of the stage array
+    0x5E0729: (0x3, "(rt_intl_copa_ko(esi, 2u) + 1u)"),             # ctor: stage count +0x2c
+    0x5E0F56: (0x2, "rt_intl_copa_ko(ecx, 2u)"),                    # result news (vtable +0x48)
+    0x5E13B5: (0x2, "rt_intl_copa_ko(ecx, 2u)"),                    # stage news (vtable +0x44)
+    0x5E1437: (0x8, "(4u * rt_intl_copa_ko(esi, 2u))"),             # stage news: round record of stage[ko]
+    0x5E169F: (0x2, "rt_intl_copa_ko(ecx, 2u)"),                    # stage step 0x5e1620: knockout at ko
+    0x5E22EB: (0x2, "rt_intl_copa_ko(esi, 2u)"),                    # update_for_date 0x5e2120: group stages
+    0x5E172E: (0xC, "(4u * rt_intl_copa_groups(esi, 3u))"),         # group builder 0x5e16b0: step in +0xee
+    0x5E1735: (-0xC, "(0u - 4u * rt_intl_copa_groups(esi, 3u))"),   # group builder: the same step back
 }
 
 # address: (the instruction in the original, C code)
@@ -241,4 +257,17 @@ INSNS = {
     # another size gets a new array. The instruction after the step only moves this to ecx.
     0x401D85: ("mov ecx, esi", "SYNC(); rt_intl_cup_stages(esi); ecx = esi;"),
     0x40F785: ("mov ecx, esi", "SYNC(); rt_intl_cup_stages(esi); ecx = esi;"),
+
+    # Copa America of 16 teams (0.6.0 slice 27, win/season_intl_copa.c). Group A (0x5e11e0) takes the teams
+    # 3 * k of +0xee: 4 * k with 16 teams. start_new_season 0x5e1530 keeps the stage array of the ctor: after
+    # the step (0x5e1590) an edition of another size gets a new array. The instruction only moves this to ecx.
+    0x5E128E: ("lea ecx, [eax + eax*2]", "ecx = eax * rt_intl_copa_groups(esi, 3u);"),
+    0x5E1595: ("mov ecx, esi", "SYNC(); rt_intl_copa_stages(esi); ecx = esi;"),
+    # EuroChampQual (0.6.0 slice 27): the hosts that the qualifying pool leaves out (+0xf6) are counted at
+    # 0x57f6b7..0x57f6e4 and must be 0 to 2 (box "euro_champ_qual.cpp 1245" at 0x57f6fa); the group sizes
+    # (0x57d9d0) and the play-off round (0x57d4f3: 6 teams for 1, 8 for 2, else the box "euro_champ_qual.cpp
+    # 283" at 0x57d597) take only 1 or 2. A Euro without a host place (2020, 2028) has 0: in a season game the
+    # count becomes 1 here, before the pool size 0x33 - count (0x57f76f), so the qualifying takes the shape of
+    # one host (a pool of 50).
+    0x57F768: ("movsx eax, byte ptr [esi + 0xf6]", "if (rt_intl_euro_no_host() && R8(esi + 0xf6u) == 0u) W8(esi + 0xf6u, 1u); eax = (uint32_t)(int32_t)(int8_t)R8(esi + 0xf6u);"),
 }

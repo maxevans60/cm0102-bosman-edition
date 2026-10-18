@@ -65,6 +65,10 @@ uint32_t season_intl_euro_template(void (*original)(void));
  * original. It completes the call and gives the result. */
 uint32_t season_intl_cup_template(uint32_t cls, void (*original)(void));
 
+/* The template function of the Copa America (0x5e0900) for editions of 16 teams (season_intl_copa.c). The wrap
+ * calls it at the entry state with the original o_005e0900. It completes the call and gives the result. */
+uint32_t season_intl_copa_template(void (*original)(void));
+
 /* The days by which the finals of a class in an edition year move, so the first group day is the table's
  * (0 for the base game, an edition the table does not hold, or one without a date). */
 int season_intl_date_shift(uint32_t cls, int year);

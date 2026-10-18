@@ -16,6 +16,7 @@ test log RECOMP_SEASON_INTL_LOG=1. The runs:
     2019    October 2019, 2019/20 to 2020/21, changing rules on (Euro 2020 and Copa America 2020 at their
             planned time, the Tokyo Olympics in 2020, Q277, Q366)
     2021    October 2021, 2021/22 to 2022/23, changing rules on (the 2022 World Cup in November, Türkiye)
+    2023    October 2023, 2023/24 to 2024/25, changing rules on (Copa America 2024 with 16 teams)
     off     October 2017 with changing rules off: the first editions of the table, then the original's steps
 
 The checks (each run):
@@ -53,6 +54,7 @@ RUNS = {
     "2018": (2018, "October 2018", "on"),
     "2019": (2019, "October 2019", "on"),
     "2021": (2021, "October 2021", "on"),
+    "2023": (2023, "October 2023", "on"),
     "off": (2017, "October 2017", "off"),
 }
 # The nation renames each run must log (season_intl.c, int-world rows): the old name and the new.
@@ -69,7 +71,8 @@ UNRENAMED = {r: [("Yugoslavia", "Serbia and Montenegro")] for r in ("2017", "201
 MOVES = {"2021": [("world_cup", 2022, 161)]}
 # Log lines each run must hold (season_intl_euro.c: the Euro of 24 teams).
 LINES = {"2015": ["euro_champ 2016 draw of 24 teams in 6 groups", "euro_champ 2016 round of 16"],
-         "2018": ["asia_nations 2019 round of 16", "african_nations 2019 round of 16"]}
+         "2018": ["asia_nations 2019 round of 16", "african_nations 2019 round of 16"],
+         "2023": ["goldcup 2024: 16 teams", "goldcup 2024 quarter-finals of 16 teams"]}
 STEPS = {"world_cup": 4, "euro_champ": 4, "fifa_confed": 2, "olympics": 4, "goldcup": 2, "african_nations": 2,
          "asia_nations": 4, "oceania_nations": 2}
 IDLE = 2200

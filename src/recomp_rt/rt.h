@@ -325,6 +325,12 @@ uint32_t rt_intl_cup_teams(uint32_t self, uint32_t original);
 uint32_t rt_intl_cup_groups(uint32_t self, uint32_t original);
 uint32_t rt_intl_cup_ko(uint32_t self, uint32_t original);
 void rt_intl_cup_stages(uint32_t self);
+/* The Copa America of 16 teams (win/season_intl_copa.c): the knockout stage index (2), the group count (3) and a
+ * new stage array after the step of start_new_season. Each gives the original's value for an edition of 12
+ * teams and in the base game. */
+uint32_t rt_intl_copa_ko(uint32_t self, uint32_t original);
+uint32_t rt_intl_copa_groups(uint32_t self, uint32_t original);
+void rt_intl_copa_stages(uint32_t self);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets
