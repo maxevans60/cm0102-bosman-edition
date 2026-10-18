@@ -367,6 +367,138 @@ RT_WRAP(00799e30, ofc_entrants)
     if (best) wr32(g_mem, pool + 4u * (uint32_t)slot, best);
 }
 
+/* ---- Finals that start before their qualifying can end ---- */
+
+#define SLOTS 0x14u                     /* team slots: 6 bytes each, +0 the team, +4 a flag */
+#define SLOT_COUNT 0x36u                /* word: the teams in the slots */
+#define SLOT_ROOM 0x38u                 /* word: 32 for the World Cup (0x92bffa), 16 for the Euro (0x57bd93) */
+#define SLOT_SIZE 6u
+#define NATION_REPUTATION 0x8eu         /* s16, 500 to 9500 in the 3.9.68 nation.dat (Brazil 9500) */
+#define CONTINENT_EUROPE 0x9cfa10u
+
+/* A game that starts in a later season meets finals whose qualifying began before the start: the sections of
+ * a 2005 start play the 2004 campaign from July 2005 and cannot end before the World Cup draw of December 2005,
+ * so WorldCup::seed_teams 0x92f230 finds fewer than 32 teams and stops at the box "world_cup.cpp 1438"
+ * (0x92f24c, 0x92f2b1). The main build does the same (a run of the main build with September 2005 stops at that
+ * box). EuroChamp::run_group_draw 0x57c1d0 of a 2003 start meets empty slots and stops at the box
+ * "comp_stats.CPP 1664" (Comp_Stats::set_club_final_position 0x4a2540 with no club, from
+ * EuroChamp::set_predicted_positions 0x57c9f0). In a season game the slots that no qualifier filled get the
+ * class's default nations still in them (written by the team slot builders 0x92dbd5..0x92dfb3, 0x57bf2f),
+ * then the nations with the highest reputation (European nations for the Euro) that are not in yet. */
+static int team_in(const uint32_t *teams, int n, uint32_t t)
+{
+    for (int k = 0; k < n; k++)
+        if (teams[k] == t) return 1;
+    return 0;
+}
+
+static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
+{
+    uint32_t slots = rd32(g_mem, comp + SLOTS);
+    int count = (int16_t)rd16(g_mem, comp + SLOT_COUNT), room = (int16_t)rd16(g_mem, comp + SLOT_ROOM);
+    if (!readable(slots) || count < 0 || room <= 0 || room > 64) return;
+    if (count > room) count = room;
+    uint32_t teams[64], spare[64];
+    int open[64], n_open = 0, n_spare = 0, empty = 0;
+    for (int i = 0; i < room; i++) {
+        uint32_t t = rd32(g_mem, slots + (uint32_t)i * SLOT_SIZE);
+        teams[i] = 0;
+        if (i < count && readable(t) && !team_in(teams, i, t)) {
+            teams[i] = t;
+        } else {
+            open[n_open++] = i;
+            empty += i < count;
+            if (i >= count && readable(t)) spare[n_spare++] = t;   /* a default nation still in the slot */
+        }
+    }
+    if (!n_open) return;
+    int filled = 0, s = 0;
+    for (int k = 0; k < n_open; k++) {
+        uint32_t t = 0;
+        while (s < n_spare && !t) {
+            uint32_t c = spare[s++];
+            if (!team_in(teams, room, c)) t = c;
+        }
+        if (!t) {                                        /* the nation with the highest reputation */
+            int best_rep = -1;
+            for (int id = 0; id < nation_count(); id++) {
+                int rep = (int16_t)rd16(g_mem, nation_at(id) + NATION_REPUTATION);
+                if (rep <= best_rep || (continent && continent_id(id) != rd32(g_mem, continent))) continue;
+                uint32_t args[1] = {nation_at(id)};
+                uint32_t c = call_cdecl(NATIONAL_TEAM, 1, args);
+                if (rt_unwinding) return;
+                if (readable(c) && !team_in(teams, room, c)) {
+                    best_rep = rep;
+                    t = c;
+                }
+            }
+        }
+        if (!t) break;
+        teams[open[k]] = t;
+        wr32(g_mem, slots + (uint32_t)open[k] * SLOT_SIZE, t);
+        wr8(g_mem, slots + (uint32_t)open[k] * SLOT_SIZE + 4u, 0);
+        filled++;
+    }
+    if (filled == n_open) wr16(g_mem, comp + SLOT_COUNT, (uint16_t)room);
+    if (logging()) fprintf(stderr, "recomp: season intl: %s %d: %d qualified teams of %d (%d empty), %d filled\n", name,
+                           (int16_t)rd16(g_mem, comp + 0x40u), count, room, empty, filled);
+}
+
+void o_0092f230(void);
+
+/* WorldCup::seed_teams, thiscall: the draw of the finals. The 2002 World Cup has its own draw (0x92f240). */
+RT_WRAP(0092f230, wc_seed_teams)
+{
+    uint32_t self = cpu.ecx;
+    if (season_intl_on() && (int16_t)rd16(g_mem, self + 0x40u) != 2002) fill_slots(self, 0, "world_cup");
+    if (rt_unwinding) return;
+    cpu.ecx = self;
+    o_0092f230();
+}
+
+void o_0057c1d0(void);
+
+/* EuroChamp::run_group_draw, thiscall: the draw of the finals. */
+RT_WRAP(0057c1d0, euro_group_draw)
+{
+    uint32_t self = cpu.ecx;
+    if (season_intl_on()) fill_slots(self, CONTINENT_EUROPE, "euro_champ");
+    if (rt_unwinding) return;
+    cpu.ecx = self;
+    o_0057c1d0();
+}
+
+void o_0092e740(void);
+void o_0057c120(void);
+
+/* A qualifier that ends after the fill finds no free slot: WorldCup::add_qualified_team 0x92e740 and
+ * EuroChamp::add_qualified_team 0x57c120 (thiscall (team), ret 4) stop at a box when the slots are full
+ * (0x92e74a, 0x57c12a). In a season game the team does not come in. */
+static int slots_full(uint32_t comp)
+{
+    return season_intl_on() && (int16_t)rd16(g_mem, comp + SLOT_COUNT) >= (int16_t)rd16(g_mem, comp + SLOT_ROOM);
+}
+
+RT_WRAP(0092e740, wc_add_qualified)
+{
+    if (slots_full(cpu.ecx)) {
+        if (logging()) fprintf(stderr, "recomp: season intl: world_cup is full, a qualifier stays out\n");
+        rt_ret_stdcall(0, 1);
+        return;
+    }
+    o_0092e740();
+}
+
+RT_WRAP(0057c120, euro_add_qualified)
+{
+    if (slots_full(cpu.ecx)) {
+        if (logging()) fprintf(stderr, "recomp: season intl: euro_champ is full, a qualifier stays out\n");
+        rt_ret_stdcall(0, 1);
+        return;
+    }
+    o_0057c120();
+}
+
 /* ---- The rule kind ---- */
 
 /* A new game (season.c, before the original makes it): a season game from 2006/07 starts with Australia in
