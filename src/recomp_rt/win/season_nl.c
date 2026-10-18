@@ -85,7 +85,7 @@
 #define F_STAGE 0x30u                   /* current stage */
 #define F_YEAR 0x40u
 #define F_DRAWN 0x45u                   /* 1 after the draw (0x57fe1d) */
-#define F_FINISHED 0xddu                /* 1 when League::check_complete found it complete (0x689c06) */
+#define F_FINISHED 0xddu                /* 1 once the League object's own table is done (0x689c06) */
 #define F_TABLE 0xb1u                   /* League table: rows of 0x3b bytes (0x57e7f7..0x57e803) */
 #define F_TEAMS 0x3eu
 #define F_DRAW_DAY 0xb6u                /* word: day of the year of the draw (0x57e98f) */
@@ -740,15 +740,21 @@ static void update_for_date(void)
     uint32_t a[2] = {today, full};
     uint32_t r = call_this(QUAL_UPDATE, self, 2, a);
     if (rt_unwinding) return;
-    if (is_nl(self) && rd32(g_mem, self + F_FINISHED)) next_edition(self);
+    /* All stages complete, the finals too: Comp::all_stages_complete (vtable +0xc, 0x48ce10) calls
+     * check_complete (1, 1), which tests every stage up to +0x30 (0x689bb6..0x689be8). The flag +0xdd alone
+     * is set when the League object's own table is done (0x689bea). */
+    if (is_nl(self) && rd32(g_mem, self + F_FINISHED) && (int32_t)rd32(g_mem, self + F_STAGE) == held_groups(self) - 1 &&
+        (vcall(self, 0xcu, 0, NULL) & 0xffu))
+        next_edition(self);
     if (rt_unwinding) return;
     if (is_nl(self) && logging() && readable(today)) {
-        /* Test log: the state of the edition when it changes (stage, the finished flag +0xdd of 0x689c06). */
+        /* Test log: the state of the edition when it changes (stage, +0xdd of 0x689c06, the finals' complete
+         * byte +0xb1 that Cup::check_complete 0x521e00 tests). */
         static uint32_t last = 0xffffffffu;
         int groups = held_groups(self);
         uint32_t cup = groups >= 2 ? stage_at(self, groups - 1) : 0;
         uint32_t state = (rd32(g_mem, self + F_STAGE) & 0xff) | (rd32(g_mem, self + F_FINISHED) ? 0x100u : 0) |
-                         (readable(cup) && rd32(g_mem, cup + 0xddu) ? 0x200u : 0) | (readable(cup) ? 0x400u : 0);
+                         (readable(cup) && rd8(g_mem, cup + 0xb1u) ? 0x200u : 0) | (readable(cup) ? 0x400u : 0);
         if (state != last)
             fprintf(stderr, "recomp: season nl: day %d of %d: stage %d, finished %d, finals %s%s\n",
                     (int16_t)rd16(g_mem, today), (int16_t)rd16(g_mem, today + 2u), (int)(state & 0xff),
