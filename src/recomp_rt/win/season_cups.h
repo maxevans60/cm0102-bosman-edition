@@ -65,4 +65,115 @@ int season_cups_held(const char *file, int edition);
 /* The first edition from `edition` on that the table holds, SEASON_CUPS_NEVER when none, 0 with no row. */
 int season_cups_next(const char *file, int edition);
 
+/* ---- Four-club super cups (slice 21c, season_cups_more.c; the game part is season_super_cups.c) ----
+ *
+ * A super cup class of the original makes one round of two clubs. In a season whose rules table row gives 4
+ * clubs, the cup plays two semi-finals and a final, one match each, on the dates of the row below. */
+typedef struct {
+    const char *file;        /* the class file (ita_super), or the file of a new competition (new_tur_super) */
+    int season;              /* the first season of these dates */
+    uint16_t flags;          /* the match flags (+0x0d) of both rounds: CUP_PENALTIES, and CUP_EXTRA_TIME */
+    int8_t sf_day, sf_month, sf_year;   /* the semi-finals: day 1 to 28, month 0 to 11, year after the season year */
+    int8_t f_day, f_month, f_year;      /* the final */
+} SeasonSuperFour;
+
+/* The four-club row of a cup in a season, or NULL when the rules table gives it two clubs (or no row). After the
+ * last row of the table the rule stays (Q248). */
+const SeasonSuperFour *season_super_four(const char *file, int season);
+
+/* The four clubs from in[]: league winner, league runner-up, cup winner, cup runner-up, league third (0: none).
+ * A cup place whose club already has a place, or none, goes to the league third, once. out[] gets the semi-final
+ * pairs: league winner v cup runner-up, cup winner v league runner-up. Returns 0 when four clubs are not found
+ * (the cup then keeps the class's two clubs). */
+int season_super_four_pick(const uint32_t in[5], uint32_t out[4]);
+
+/* The rules report lines "cupmore" of slice 21c (season_super_cups.c); file is the report's FILE *. */
+void season_cups_more_report(void *file, int season, const char *phase);
+
+/* ---- New cups (slice 21c, season_cups_more.c; the game part is season_new_cups.c) ----
+ *
+ * A new cup of slice 21c is an object of the class ItaSuper (a Cup of the original) with its own vtable copy, made
+ * by the new competitions module (season_comps.h). An edition is its year (+0x40). The rules table puts edition E
+ * in the row of season E - row_shift (row_shift 1 for a calendar-year cup in the row of the season before). A
+ * round is one match or two legs; the dates are the first match of each round, by day, month (0 to 11) and year
+ * after the edition year. */
+typedef struct {
+    int8_t legs;             /* 1 or 2 */
+    uint16_t flags;          /* the match flags of the deciding match: CUP_PENALTIES, CUP_EXTRA_TIME */
+    int8_t day, month, year; /* the first match */
+    int8_t gap;              /* the days from the first leg to the second */
+} SeasonNewRound;
+
+typedef struct {
+    const char *file;        /* new_tur_super */
+    int from;                /* the first edition of this format */
+    int row_shift;
+    int clubs;               /* 2: league champion v cup winner; 0: every club of the division; n: n clubs;
+                              * -1: the game does not play these editions (the reason is in the table's comment) */
+    SeasonNewRound round[5]; /* from the final back: final, semi-finals, quarter-finals, the rounds before them */
+} SeasonNewCup;
+
+/* The format of an edition, or NULL (no format: before the first, or a file that is not a new cup). */
+const SeasonNewCup *season_new_cup(const char *file, int edition);
+
+/* 1 when the game plays the edition (the table holds it and the format can be played), 0 when not, -1 with no row.
+ * After the last row of the table the rule stays (Q248). */
+int season_new_cup_held(const char *file, int edition);
+
+/* The first edition from `edition` on that the game plays, SEASON_CUPS_NEVER when none, 0 with no row. */
+int season_new_cup_next(const char *file, int edition);
+
+/* The knockout of n clubs: the ties of the first round and the round count (a first round with byes when n is not a
+ * power of 2). Returns 0 for fewer than 2 clubs or more than 32. */
+int season_new_cup_layout(int clubs, int *ties0, int *rounds);
+
+/* The round code of round r of n (name function 0x4b4850): 150 the final, 130 the semi-finals, 120 the
+ * quarter-finals, 10, 20, 30 the rounds before them from the first. */
+int season_new_cup_round_code(int rounds, int r);
+
+/* The game part of the new cups (season_new_cups.c), for the wraps of season_super_cups.c: the file of the def whose
+ * object is being made, or NULL; the clubs (after the team picker) and the rounds (after create_round_table, the
+ * table in cpu.eax) of a new cup. */
+const char *season_new_cups_making(void);
+int season_new_cups_teams(uint32_t cup, const char *file);
+int season_new_cups_rounds(uint32_t cup, const char *file, uint32_t count_ptr);
+
+/* The game part of the group stages (season_cup_groups.c): after the class's create_round_table (stage, count_ptr as
+ * its wrap read them; the table in cpu.eax); slot 10 of a cup (1 when it was a cup of a group format, which this call
+ * advanced); the knockout stage of a cup whose knockout is drawn, or 0; the stage array before a load. */
+void season_cup_groups_table(uint32_t cup, uint32_t stage, uint32_t count_ptr);
+int season_cup_groups_advance(uint32_t cup);
+uint32_t season_cup_groups_ko(uint32_t cup);
+void season_cup_groups_load(uint32_t cup);
+
+/* ---- Group stages (slice 21c, season_cups_more.c; the game part is season_cup_groups.c) ----
+ *
+ * A cup whose season has a group stage: the class's first base_rounds rounds (0: none), then groups of the clubs
+ * that won them and the clubs that had not played yet (less the byes), then a knockout of ko_clubs clubs: per_group
+ * clubs of each group, the best clubs of the next place, and the byes (the clubs of the cup that play in a European
+ * competition, when byes is 1), on the rounds of ko[] (from the final back, as SeasonNewRound). */
+typedef struct {
+    const char *file;        /* sco_lge_cup */
+    int from;                /* the first season of the format */
+    int groups;              /* 0: the class's format from this season */
+    int base_rounds;         /* the class's rounds before the groups */
+    int meetings;            /* 1 single, 2 double round robin */
+    int per_group;           /* the clubs of each group that go through */
+    int byes;                /* 1: the European clubs of the cup go straight to the knockout */
+    int ko_clubs;            /* the clubs of the knockout: a power of 2 */
+    int8_t days[10][3];      /* the group match days: day, month (0 to 11), year after the season year */
+    SeasonNewRound ko[5];    /* the knockout rounds from the final back */
+} SeasonCupGroups;
+
+/* The group format of a cup in a season, or NULL (the class's format). After the last row the rule stays (Q248). */
+const SeasonCupGroups *season_cup_groups(const char *file, int season);
+
+/* The sizes of g groups for n clubs, as even as they can be (the larger groups first). Returns 0 when a group
+ * would have fewer than 2 clubs or more than 10. */
+int season_cup_group_sizes(int clubs, int groups, int *sizes);
+
+/* The match days of a group of n clubs that meet `meetings` times: n - 1 rounds a meeting, n with a club resting
+ * when n is odd (League::create_fixtures 0x6835c0 adds a resting place, 0x683c1b). */
+int season_cup_group_days(int clubs, int meetings);
+
 #endif

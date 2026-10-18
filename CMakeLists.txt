@@ -144,6 +144,12 @@ if(NOT WIN32)
     target_include_directories(season_cup_breaks_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_breaks COMMAND season_cup_breaks_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_cup_breaks PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The rest of the domestic cups (0.6.0 slice 21c): four-club super cups, group stages and new cups.
+    add_executable(season_cups_more_test tests/seasons/test_season_cups_more.c
+        src/recomp_rt/win/season_cups_more.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_cups_more_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cups_more COMMAND season_cups_more_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_cups_more PROPERTIES FIXTURES_REQUIRED rules_table)
     # The UEFA formats by season (0.6.0 slice 22): the committed table matches uefa.tsv, and its lookups.
     add_test(NAME season_uefa_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_uefa_table.py" --check)
     add_executable(season_uefa_test tests/seasons/test_season_uefa.c src/recomp_rt/win/season_uefa_table.c

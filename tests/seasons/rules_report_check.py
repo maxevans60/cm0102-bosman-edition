@@ -159,11 +159,26 @@ def pick_row(found, file, k):
     return main[min(k, len(main) - 1)]
 
 
+# Slice 21c: the new cups of season_new_cups.c report the file of their def; their rows have comp_file "new" and are
+# found by nation and comp (the same pairs as new_keys in src/recomp_rt/win/season_cups_more.c).
+NEW_FILES = {("Turkey", "super cup"): "new_tur_super", ("Russia", "super cup"): "new_rus_super",
+             ("Norway", "Norwegian Super Cup"): "new_nor_super", ("Russia", "league cup"): "new_rus_lge_cup",
+             ("England", "Conference League Cup"): "new_conf_cup",
+             ("Northern Ireland and Republic of Ireland", "All-Ireland cup"): "new_all_ireland"}
+
+
+def row_files(r):
+    """The files of a row: its comp_file names, or the def file of a new cup."""
+    if r["comp_file"] == "new" and (r["nation"], r["comp"]) in NEW_FILES:
+        return [NEW_FILES[(r["nation"], r["comp"])]]
+    return r["comp_file"].split(";")
+
+
 def differences(seasons, comps, rows):
     """A sorted list of (season, kind, text)."""
     by_season_file = collections.defaultdict(list)
     for r in rows:
-        for f in r["comp_file"].split(";"):
+        for f in row_files(r):
             by_season_file[(r["season"], f)].append(r)
     # One entry per object and season: the start and end lines together.
     objects = collections.OrderedDict()
@@ -226,7 +241,7 @@ def differences(seasons, comps, rows):
         for r in rows:
             if r["season"] != s or r["comp_file"] == "na" or "not_held" in (r["clubs"], r["format"]):
                 continue
-            files = r["comp_file"].split(";")
+            files = row_files(r)
             if any(f in held[s] for f in files):
                 continue
             if r["nation"] in nations or any(f in files_in_report for f in files):

@@ -52,6 +52,8 @@
 #include "win.h"
 #include "season.h"
 #include "season_rules.h"
+#include "season_cups.h"
+#include "season_comps.h"
 #include "season_uefa.h"
 #include "../host.h"
 
@@ -96,6 +98,13 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
 {
     uint32_t vt = rd32(g_mem, obj), rec = rd32(g_mem, obj + 4);
     const SeasonCompClass *c = class_of(vt);
+    /* Slice 21c: a new competition with its def's vtable copy reports the class of the copy and the def's file. */
+    SeasonCompClass copy;
+    if (!c && season_comps_base_vtable(vt) && class_of(season_comps_base_vtable(vt))) {
+        copy = *class_of(season_comps_base_vtable(vt));
+        copy.file = season_comps_file_of(obj);
+        c = &copy;
+    }
     char name[64] = "?";
     int id = -1;
     if (readable(rec)) {
@@ -171,6 +180,7 @@ static void write_season(int season, const char *phase)
         }
     }
     season_uefa_report(report, season, phase);      /* slice 22: the stages of the Champions League */
+    season_cups_more_report(report, season, phase); /* slice 21c: super cups, group stages, new cups */
     fflush(report);
     fprintf(stderr, "recomp: rules report: season %d/%02d %s on %02d.%02d.%04d\n", season, (season + 1) % 100, phase,
             d, m, y);

@@ -90,6 +90,10 @@ struct SeasonCompDef {
     const char *like;
     const char *short_name;
     int level;
+    /* Slice 21c: the rule of season S of the entry hook, 1 held, 0 not held, -1 no row; NULL: the table by `comp`
+     * (season_comps_held). A cup whose editions do not map one to one to the rows (a calendar-year cup in the row
+     * before, or one that the game cannot play in some seasons) gives its own. */
+    int (*held)(const SeasonCompDef *d, int season);
 };
 
 /* The competitions. Each slice adds its lines in season_comps.c. */
@@ -117,6 +121,20 @@ uint32_t season_comps_record(const char *name);
  * some slots. slots: the count to copy (Cup classes 40, League classes 45, sweep-europe 2.2). Returns the
  * address of the copy, or 0. */
 uint32_t season_comps_vtable(uint32_t vtable, int slots);
+
+/* Slice 21c: the def's own copy of a class vtable, made once per run (the same address for every game), so that
+ * season_change_file and the rules report know the object by its vtable: season_comps_file_of gives the def's file
+ * and season_comps_base_vtable the class's vtable. */
+uint32_t season_comps_def_vtable(const SeasonCompDef *d, uint32_t vtable, int slots);
+
+/* The file of a def for an object with a def's vtable copy, or NULL. */
+const char *season_comps_file_of(uint32_t obj);
+
+/* The class vtable of a def's vtable copy, or 0. */
+uint32_t season_comps_base_vtable(uint32_t vtable);
+
+/* 1 when the def holds its competition in season s (its `held`, else the table by comp), 0 not, -1 no row. */
+int season_comps_def_held(const SeasonCompDef *d, int s);
 
 /* Points slot `slot` of a vtable copy at a runtime function (rt_host_fn gives it a game address). */
 void season_comps_set_slot(uint32_t vtable, int slot, const char *name, void (*fn)(void));

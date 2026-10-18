@@ -26,6 +26,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_comps.h"
 #include "season_rules.h"
 
 #include <stdarg.h>
@@ -39,6 +40,7 @@ extern const SeasonRuleKind season_kind_subs;
 extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
 extern const SeasonRuleKind season_kind_cup_breaks;  /* slice 21b: season_cup_breaks.c */
+extern const SeasonRuleKind season_kind_new_cups;    /* slice 21c: season_new_cups.c */
 extern const SeasonRuleKind season_kind_uefa;          /* slice 22: season_uefa.c */
 extern const SeasonRuleKind season_kind_club_world;
 extern const SeasonRuleKind season_kind_comps;         /* slice 26: season_comps.h */
@@ -51,6 +53,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_nation,                /* slice 17: transfer windows, foreign player limits, work permits */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
     &season_kind_cup_breaks,            /* slice 21b: domestic cups that are not held in some seasons */
+    &season_kind_new_cups,              /* slice 21c: the seasons of the new domestic cups */
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
@@ -151,6 +154,10 @@ static const SeasonCompClass *class_of(uint32_t vtable)
 const char *season_change_file(uint32_t obj)
 {
     const SeasonCompClass *c = readable(obj) ? class_of(rd32(g_mem, obj)) : NULL;
+    if (!c && readable(obj)) {                          /* slice 21c: a new competition with its vtable copy */
+        const char *f = season_comps_file_of(obj);
+        if (f) return f;
+    }
     return c ? c->file : "?";
 }
 

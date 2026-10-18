@@ -138,6 +138,7 @@ RT_WRAP(0056c570, cups_eng_cc_cup)
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_0056c570();
     if (!rt_unwinding) table_made(self, stage, count);
+    if (!rt_unwinding) season_cup_groups_table(self, stage, count);     /* slice 21c: a group stage */
 }
 
 void o_00570ec0(void);
@@ -211,6 +212,7 @@ RT_WRAP(008fc670, cups_tur_cup)
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_008fc670();
     if (!rt_unwinding) table_made(self, stage, count);
+    if (!rt_unwinding) season_cup_groups_table(self, stage, count);     /* slice 21c: a group stage */
 }
 
 void o_007e9530(void);
@@ -219,6 +221,7 @@ RT_WRAP(007e9530, cups_rus_cup)
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_007e9530();
     if (!rt_unwinding) table_made(self, stage, count);
+    if (!rt_unwinding) season_cup_groups_table(self, stage, count);     /* slice 21c: a group stage */
 }
 
 void o_0063ec50(void);
