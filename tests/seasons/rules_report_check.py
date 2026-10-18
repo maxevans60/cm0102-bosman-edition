@@ -10,7 +10,7 @@ Usage:
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
         [--extra conference,regional,c2]
-        [--keep <folder>] [--timeout s] [--start-only] [--update-expected]
+        [--keep <folder>] [--timeout s] [--start-only] [--changing-rules on|off] [--update-expected]
         plays the season jump, then compares its report
 
 Runs:
@@ -20,7 +20,8 @@ Runs:
                 (RECOMP_RULES_REPORT_STOP=start): the club moves and names of that start (slice 15). Its
                 expected file has the name <year>-<nations>-start
 
-The run: a new game (Arsenal, as in tests/smoke/smoke_run.py) with changing_rules = off, then Go on Holiday.
+The run: a new game (Arsenal, as in tests/smoke/smoke_run.py) with changing_rules = off (--changing-rules on: on,
+expected file name ending in -changing), then Go on Holiday.
 RECOMP_SEASON_JUMP=<last> turns the match engine off, so the original's quick result engine plays every match
 in the real day loop. RECOMP_RULES_REPORT writes the competitions at the start of each season (the first day,
 then 1 August) and at its end (1 June of the next year) (src/recomp_rt/win/season_report.c). The run ends after
@@ -514,12 +515,15 @@ def main(argv):
         start_only = "--start-only" in argv
         if start_only:
             last = year or 2001
+        # --changing-rules on|off (slice 18): the season change with the rules of each season. Its expected file
+        # ends in -changing.
+        changing = arg(argv, "--changing-rules", "off") == "on"
         code, report = run(program, game, last, year, database, nations, extra, keep, timeout,
-                           start_only=start_only)
+                           options_more={"changing_rules": "on"} if changing else None, start_only=start_only)
         failed = [] if code == 0 else [f"the run ended with code {code}"]
         name = f"{year or 2001}-{nations[0].lower()}" + "".join(
             f"{'-no' if nations[0] == 'all' else '-'}{n.lower().replace(' ', '_')}" for n in nations[1:]) + \
-            "".join(f"-{e}" for e in extra) + ("-start" if start_only else "")
+            "".join(f"-{e}" for e in extra) + ("-start" if start_only else "") + ("-changing" if changing else "")
         if os.path.exists(report):
             failed += check(report, game if not database else None, last, name, update,
                             data_dir=database or os.path.join(game, "Data"), start_only=start_only)
