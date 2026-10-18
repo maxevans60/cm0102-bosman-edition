@@ -1,0 +1,396 @@
+# Texts of the nation rules that the encoder (tools/seasons/encode_rules.py) does not encode. For Max: the reason says why. Columns: nation, season, column, reason, text.
+nation	season	column	reason	text
+Argentina	2017/18	foreign	mid_season	5 registered, 4 in the match until December 2017; from January 2018: 6 registered, 5 in the match; a foreigner with more than 30 months at one club stops counting
+Argentina	2020/21	windows	partial	Registration for the Copa LPF 2021 closed on 18 Feb 2021 at 18:00 (art. 11.1); later windows: unknown
+Argentina	2020/21	registration	new_code	Lista de Buena Fe in the COMET system: provisional list by 11 Feb 2021, final list by 18 Feb 2021; a list of 20 professionals under art. 205, at least 8 of them on each match sheet; with 6 foreign contracts, 2 of the foreigners need 10 senior caps
+Australia	2008/09	work_permit	new_code	visa players hold a temporary work visa
+Australia	2009/10	work_permit	new_code	visa players hold a temporary work visa
+Australia	2010/11	work_permit	new_code	visa players hold a temporary work visa
+Australia	2011/12	work_permit	new_code	visa players hold a temporary work visa
+Australia	2012/13	work_permit	new_code	visa players hold a temporary work visa
+Australia	2013/14	work_permit	new_code	visa players hold a temporary work visa
+Australia	2014/15	work_permit	new_code	visa players hold a temporary work visa
+Australia	2015/16	work_permit	new_code	visa players hold a temporary work visa
+Australia	2016/17	work_permit	new_code	visa players hold a temporary work visa
+Australia	2017/18	work_permit	new_code	visa players hold a temporary work visa
+Australia	2018/19	work_permit	new_code	visa players hold a temporary work visa
+Australia	2019/20	work_permit	new_code	visa players hold a temporary work visa
+Australia	2020/21	work_permit	new_code	visa players hold a temporary work visa
+Australia	2021/22	work_permit	new_code	visa players hold a temporary work visa
+Australia	2022/23	work_permit	new_code	visa players hold a temporary work visa
+Australia	2023/24	work_permit	new_code	visa players hold a temporary work visa
+Australia	2024/25	work_permit	new_code	visa players hold a temporary work visa
+Australia	2025/26	work_permit	new_code	visa players hold a temporary work visa
+Australia	2025/26	registration	new_code	squad of 18 to 23 players (2025/26 rule)
+Belgium	2011/12	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2012/13	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2013/14	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2014/15	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2015/16	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2016/17	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2017/18	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2018/19	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2019/20	work_permit	new_code	non-EU players: minimum salary EUR 84,896 gross a year (2020 figure)
+Belgium	2019/20	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2020/21	work_permit	new_code	non-EU players: minimum salary EUR 84,896 gross a year (2020 figure)
+Belgium	2020/21	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2021/22	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2022/23	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2023/24	windows	partial	summer 1 July to 6 September
+Belgium	2023/24	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2024/25	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2025/26	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2026/27	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Belgium	2027/28	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
+Brazil	2019/20	registration	new_code	Series A, B and C: at most 40 registered players, at most 8 replaced until the final registration date (CBF notice of 31 Jul 2020)
+Brazil	2026/27	registration	new_code	at most 50 registered players: Lista A 30 (over 23), Lista B 20 (under 23); split moves to 25/25 by 2030
+Brazil	2027/28	registration	new_code	at most 50 registered players; the A/B split moves from 30/20 (2027) to 25/25 (2030); 2028 split not stated
+Croatia	2016/17	foreign	mid_season	HNL and cup: 8 foreign players per team from 18 October 2016 (6 before)
+Croatia	2025/26	foreign	kind	HNL: 6 non-EU players per team per match; Ukrainian players counted as domestic (temporary FIFA measure)
+Croatia	2026/27	foreign	kind	HNL: 5 non-EU players per team per match; Ukrainian players no longer counted as domestic
+Croatia	2027/28	foreign	kind	HNL: 5 non-EU players per team per match; Ukrainian players no longer counted as domestic
+Denmark	2026/27	work_permit	new_code	Non-EU/EEA footballer needs a residence and work permit on special individual qualifications: club in a DIF-member association, advance statement from that association on pay and terms, pay and terms to Danish standards, full-time work (rule as read on 2026-10-16; start date unknown).
+Denmark	2027/28	work_permit	new_code	Non-EU/EEA footballer needs a residence and work permit on special individual qualifications: club in a DIF-member association, advance statement from that association on pay and terms, pay and terms to Danish standards, full-time work (carried from 2026/27, inference).
+England	2001/02	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2002/03	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2003/04	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2004/05	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2005/06	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2006/07	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2007/08	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2008/09	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2009/10	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2009/10	registration	new_code	Football League: at least 4 home-grown players in the matchday squad of 18 (11 and 7 substitutes)
+England	2010/11	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2010/11	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; Football League: at least 4 home-grown players in the matchday squad of 18 (11 and 7 substitutes)
+England	2011/12	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2011/12	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; Football League: at least 4 home-grown players in the matchday squad of 16 (11 and 5 substitutes)
+England	2012/13	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2012/13	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; Football League: at least 6 home-grown players in the 18-man matchday squad
+England	2013/14	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2013/14	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; Football League: at least 6 home-grown players in the 18-man matchday squad
+England	2014/15	work_permit	new_code	non-EEA player needs a work permit: international of a FIFA top-70 nation who played 75% of competitive internationals in the last 2 years
+England	2014/15	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; Football League: at least 6 home-grown players in the 18-man matchday squad
+England	2015/16	work_permit	new_code	non-EEA: FIFA top-50 nations only, share of competitive internationals in last 24 months by ranking band (1-10 30%, 11-20 45%, 21-30 60%, 31-50 75%); exceptions panel
+England	2015/16	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; Football League: at least 6 home-grown players in the 18-man matchday squad
+England	2016/17	work_permit	new_code	non-EEA: FIFA top-50 nations only, share of competitive internationals in last 24 months by ranking band (1-10 30%, 11-20 45%, 21-30 60%, 31-50 75%); exceptions panel
+England	2016/17	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; Football League: at least 6 home-grown players in the 18-man matchday squad
+England	2017/18	work_permit	new_code	non-EEA: FIFA top-50 nations only, share of competitive internationals in last 24 months by ranking band (1-10 30%, 11-20 45%, 21-30 60%, 31-50 75%); exceptions panel
+England	2017/18	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players in the 18-man matchday squad
+England	2018/19	windows	partial	Premier League and EFL summer window closed on 9 Aug 2018 (5pm for the EFL); EFL clubs could still sign loans and players without a club to 31 Aug; January window 1-31 Jan
+England	2018/19	work_permit	new_code	non-EEA: FIFA top-50 nations only, share of competitive internationals in last 24 months by ranking band (1-10 30%, 11-20 45%, 21-30 60%, 31-50 75%); exceptions panel
+England	2018/19	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2019/20	windows	partial	Premier League and Championship summer window closed on 8 Aug 2019; League One and League Two to 2 Sep 2019; January window 1-31 Jan
+England	2019/20	work_permit	new_code	non-EEA: FIFA top-50 nations only, share of competitive internationals in last 24 months by ranking band (1-10 30%, 11-20 45%, 21-30 60%, 31-50 75%); exceptions panel
+England	2019/20	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2020/21	windows	partial	summer window 27 Jul-5 Oct 2020 for international moves, domestic-only to 16 Oct 2020 (Premier League to EFL); January window
+England	2020/21	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2021/22	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2022/23	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2023/24	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2024/25	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2025/26	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2026/27	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+England	2027/28	registration	new_code	Premier League: 25-man squad of players over 21, at least 8 home-grown, list changed only in windows; EFL: at least 7 home-grown players and 1 club-developed player on the team sheet (without a club-developed player only 6 substitutes may be named)
+France	2024/25	windows	fixed_index	10 June to 30 August 2024 (23:00); 1 January to 3 February 2025 (23:00)
+France	2025/26	windows	fixed_index	16 June to 1 September 2025 (20:00); 1 January to 2 February 2026 (20:00)
+France	2026/27	foreign	form	Ligue 1: 4 non-EU/EEA under contract and on the match sheet; Ligue 2: 2; Samoa agreement (ACP) nationals do not count; British players count as EU only on contracts signed before 1 January 2022
+France	2027/28	foreign	form	as 2026/27 (inference: no announced change found)
+Germany	2001/02	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2002/03	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2003/04	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2004/05	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2005/06	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2006/07	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2007/08	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2008/09	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2009/10	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2010/11	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2011/12	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2012/13	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2013/14	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2014/15	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2015/16	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2016/17	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2017/18	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2018/19	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2019/20	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2020/21	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2021/22	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2022/23	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2023/24	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2024/25	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2025/26	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2026/27	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Germany	2027/28	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
+Greece	2020/21	registration	new_code	non-EU squad declaration to the HFF by 20 August, one change by 15 September
+Greece	2021/22	registration	new_code	non-EU squad declaration to the HFF by 20 August, one change by 15 September
+Greece	2022/23	registration	new_code	non-EU squad declaration to the HFF by 20 August, one change by 15 September
+Greece	2023/24	foreign	pitch	Super League 1: max 5 non-EU players on the field at once; squad cap of non-EU players over 23 was 6 before July 2026
+Greece	2024/25	foreign	pitch	Super League 1: max 5 non-EU players on the field at once; squad cap of non-EU players over 23 was 6 before July 2026
+Greece	2025/26	windows	partial	two registration periods (FIFA RSTP March 2023 edition, in force 1 April 2023): first 8 to 12 weeks between seasons, second 4 to 8 weeks mid-season, at most 16 weeks together (article 6 as in the March 2023 edition; later editions not read); HFF dates: summer 1 July to 12 September 2025 (unemployed 
+Greece	2025/26	foreign	pitch	Super League 1: max 5 non-EU players on the field at once; squad cap of non-EU players over 23 was 6 before July 2026
+Greece	2026/27	foreign	pitch	Super League 1: up to 7 non-EU players over 23 in the squad, max 5 non-EU on the field at once, at least 6 Greek under-23 players in the matchday roster; Super League 2: at least 6 Greek players, max 5 non-EU on the field
+Greece	2027/28	foreign	pitch	Super League 1: up to 7 non-EU players over 23 in the squad, max 5 non-EU on the field at once, at least 6 Greek under-23 players in the matchday roster; Super League 2: at least 6 Greek players, max 5 non-EU on the field
+Holland	2018/19	work_permit	new_code	non-EU: at least 150% of the average Eredivisie salary, EUR 422,000; age 19 or 20: EUR 211,000
+Holland	2023/24	work_permit	new_code	non-EU: at least 150% of the average Eredivisie salary, EUR 500,408; age 18 or 19: EUR 250,204; regular play at a comparable level
+Holland	2024/25	work_permit	new_code	non-EU: at least 150% of the average Eredivisie salary, EUR 560,691; age 18 or 19: EUR 280,345 (age 20 added from 1 April 2025)
+Holland	2025/26	work_permit	new_code	non-EU: EUR 608,000 (150% of average); under 21: EUR 304,000; must play in Eredivisie or Eerste Divisie; age at least 18
+Italy	2001/02	foreign	new_code	Serie A clubs may register at most 5 non-EU players from foreign federations (Serie B 1); no limit in the match list from May 2001
+Italy	2001/02	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2002/03	foreign	new_code	provisional: Serie A and B clubs may sign only one non-EU player from abroad in the summer 2002 window
+Italy	2002/03	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2003/04	foreign	new_code	quota of non-EU (non-EFTA, non-Swiss) signings from abroad per club per season; exact numbers unknown (rule changed August 2004, June 2005, June 2006, June 2007)
+Italy	2003/04	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2004/05	foreign	new_code	quota of non-EU (non-EFTA, non-Swiss) signings from abroad per club per season; exact numbers unknown (rule changed August 2004, June 2005, June 2006, June 2007)
+Italy	2004/05	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2005/06	foreign	new_code	quota of non-EU (non-EFTA, non-Swiss) signings from abroad per club per season; exact numbers unknown (rule changed August 2004, June 2005, June 2006, June 2007)
+Italy	2005/06	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2006/07	windows	partial	summer from 1 July 2006, close unknown; winter unknown
+Italy	2006/07	foreign	new_code	quota of non-EU (non-EFTA, non-Swiss) signings from abroad per club per season; exact numbers unknown (rule changed August 2004, June 2005, June 2006, June 2007)
+Italy	2006/07	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2007/08	foreign	new_code	quota of non-EU (non-EFTA, non-Swiss) signings from abroad per club per season; exact numbers unknown (rule changed August 2004, June 2005, June 2006, June 2007)
+Italy	2007/08	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2008/09	windows	partial	summer unknown; winter 7 January-2 February 2009
+Italy	2008/09	foreign	new_code	Serie A: 3 signings from abroad if no non-EU player in the squad, 2 if one, 1 + 1 conditional if two, 2 conditional if three or more; Serie B and Lega Pro: none from abroad except clubs promoted from Serie D
+Italy	2008/09	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2009/10	foreign	new_code	Serie A: 3 signings from abroad if no non-EU player in the squad, 2 if one, 1 + 1 conditional if two, 2 conditional if three or more; Serie B and Lega Pro: none from abroad except clubs promoted from Serie D
+Italy	2009/10	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2010/11	foreign	new_code	Serie A: conditional quota cut to one; a club with no non-EU players may sign up to 3; Serie B and Lega Pro: none (inference: unchanged)
+Italy	2010/11	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2011/12	windows	partial	summer from 1 July 2011, close unknown; winter from 3 January 2012, four weeks
+Italy	2011/12	foreign	new_code	Serie A: two non-EU signings from abroad per season, as replacements for departed non-EU players or for clubs with none
+Italy	2011/12	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2012/13	foreign	new_code	Serie A: two non-EU signings from abroad per season, as replacements for departed non-EU players or for clubs with none
+Italy	2012/13	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2013/14	foreign	new_code	Serie A: two non-EU signings from abroad per season, as replacements for departed non-EU players or for clubs with none
+Italy	2013/14	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2014/15	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2014/15	registration	new_code	Serie A: no cap on first-team squad size
+Italy	2015/16	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2015/16	registration	new_code	Serie A: 25 players over 21, at least 8 homegrown (up to 4 of them not from the own youth team); players not yet 21 on 31 December of the previous year are free ("under 21")
+Italy	2016/17	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2016/17	registration	new_code	Serie A: 25 players over 21 with at least 8 homegrown (inference: as 2015/16); players not yet 21 on 31 December of the previous year are free ("under 21")
+Italy	2017/18	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2017/18	registration	new_code	Serie A: 25 players over 21 with at least 8 homegrown (inference: as 2015/16); players born on or after 1 January 1996 are free ("under 21")
+Italy	2018/19	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2018/19	registration	new_code	Serie A: 25-player list with at least 8 trained in Italy, at least 4 of them trained in the club; players born on or after 1 January 1996 are free ("under 22", new in 2018/19)
+Italy	2019/20	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2019/20	registration	new_code	Serie A: 25-player list with at least 8 trained in Italy, at least 4 of them trained in the club; players born on or after 1 January 1997 are free ("under 22")
+Italy	2020/21	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2020/21	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players not yet 22 on 31 December of the previous season are free ("under 22") (born on or after 1 January 1998)
+Italy	2021/22	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2021/22	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players not yet 22 on 31 December of the previous season are free ("under 22") (born on or after 1 January 1999)
+Italy	2022/23	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2022/23	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players not yet 22 on 31 December of the previous season are free ("under 22") (FIGC C.U. 29/A, 4 August 2022)
+Italy	2023/24	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2023/24	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players not yet 22 on 31 December of the previous season are free ("under 22") (FIGC C.U. 29/A, 4 August 2022)
+Italy	2024/25	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2024/25	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players not yet 22 on 31 December of the previous season are free ("under 22") (FIGC C.U. 29/A, 4 August 2022)
+Italy	2025/26	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2025/26	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players under 23 on 31 December of the year the season starts are free ("under 23") (FIGC C.U. 269/A, from 1 July 2025)
+Italy	2026/27	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2026/27	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players under 23 on 31 December of the year the season starts are free ("under 23") (FIGC C.U. 245/A, from 1 July 2026)
+Italy	2027/28	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
+Italy	2027/28	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players under 23 on 31 December of the year the season starts are free ("under 23") (inference: as 2026/27)
+Japan	2007/08	registration	new_code	A-contract professional players max 25 per club
+Japan	2024/25	registration	new_code	Pro A players max 27 per club in principle, youth registrations included
+Northern Ireland	2001/02	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2002/03	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2003/04	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2004/05	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2005/06	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2006/07	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2007/08	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2008/09	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2009/10	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2010/11	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2011/12	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2012/13	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2013/14	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2014/15	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2015/16	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2016/17	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2017/18	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2018/19	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Northern Ireland	2019/20	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Poland	2015/16	foreign	pitch	Ekstraklasa: max 3 non-EU players on the pitch at once
+Poland	2016/17	foreign	pitch	Ekstraklasa: max 2 non-EU players on the pitch at once
+Poland	2017/18	foreign	pitch	Ekstraklasa: max 2 non-EU players on the pitch at once
+Poland	2018/19	foreign	pitch	Ekstraklasa: max 2 non-EU players on the pitch at once
+Poland	2023/24	windows	partial	two registration periods (FIFA RSTP March 2023 edition, in force 1 April 2023): first 8 to 12 weeks between seasons, second 4 to 8 weeks mid-season, at most 16 weeks together; Ekstraklasa dates (Ekstraklasa SA): summer 2023 unknown, winter 29 January to 27 February 2024
+Portugal	2014/15	registration	new_code	Liga clubs: at least 8 locally trained players in the squad (10 with a B team); at most 27 senior contracts plus 3 first-year seniors and 20 under-23 players
+Portugal	2024/25	work_permit	new_code	non-EU players need a residence visa; the 'manifestação de interesse' route ended on 3 June 2024
+Portugal	2025/26	work_permit	new_code	non-EU players need a residence visa; the 'manifestação de interesse' route ended on 3 June 2024
+Portugal	2026/27	work_permit	new_code	non-EU players need a residence visa or permit tied to the contract
+Portugal	2026/27	registration	new_code	up to 22 under-23 players in the squad (31 for clubs with a B team); locally trained minimum unknown
+Portugal	2027/28	work_permit	new_code	non-EU players need a residence visa or permit tied to the contract
+Republic of Ireland	2024/25	work_permit	new_code	only non-EEA or non-UK players who played most games of the previous season in a top-flight or second-tier league get a work permit (current rule; start year unknown); review agreed October 2025
+Republic of Ireland	2025/26	work_permit	new_code	only non-EEA or non-UK players who played most games of the previous season in a top-flight or second-tier league get a work permit (current rule; start year unknown); review agreed October 2025
+Republic of Ireland	2026/27	work_permit	new_code	only non-EEA or non-UK players who played most games of the previous season in a top-flight or second-tier league get a work permit (current rule; start year unknown); review agreed October 2025
+Republic of Ireland	2027/28	work_permit	new_code	only non-EEA or non-UK players who played most games of the previous season in a top-flight or second-tier league get a work permit (current rule; start year unknown); review agreed October 2025
+Russia	2003/04	windows	partial	two registration periods: one between seasons (dates unknown) and a mid-season period from 1 July to 31 August 2004 (Premier League)
+Russia	2005/06	foreign	pitch	Premier League: at most 7 foreigners on the pitch (7+4); exemptions removed
+Russia	2006/07	foreign	pitch	Premier League: at most 7 foreigners on the pitch (7+4); exemptions removed
+Russia	2007/08	foreign	pitch	Premier League: at most 7 foreigners on the pitch (7+4); exemptions removed
+Russia	2008/09	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5)
+Russia	2009/10	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5)
+Russia	2010/11	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5)
+Russia	2011/12	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5)
+Russia	2012/13	foreign	pitch	Premier League: at most 7 foreigners on the pitch (7+4) (ru wiki: back to 7+4 in 2012; inference: from 2012–13)
+Russia	2013/14	foreign	pitch	Premier League: at most 7 foreigners on the pitch (7+4) (ru wiki: back to 7+4 in 2012; inference: from 2012–13)
+Russia	2014/15	foreign	pitch	Premier League: at most 7 foreigners on the pitch (7+4) (ru wiki: back to 7+4 in 2012; inference: from 2012–13)
+Russia	2015/16	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5), from July 2015 to summer 2020
+Russia	2016/17	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5), from July 2015 to summer 2020
+Russia	2017/18	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5), from July 2015 to summer 2020
+Russia	2018/19	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5), from July 2015 to summer 2020
+Russia	2019/20	foreign	pitch	Premier League: at most 6 foreigners on the pitch (6+5), from July 2015 to summer 2020
+Russia	2020/21	windows	partial	two registration periods: one between seasons (max 12 weeks) and one mid-season (max 4 weeks); exact dates: summer 2020 window 26 July to 17 October, others unknown
+Russia	2020/21	registration	new_code	Premier League season squad at most 25, of whom at least 17 Russian
+Russia	2021/22	registration	new_code	Premier League season squad at most 25, of whom at least 17 Russian
+Russia	2022/23	registration	new_code	Premier League season squad: at most 13 foreigners and at least 12 home-grown players
+Russia	2023/24	registration	new_code	Premier League season squad: at most 13 foreigners and at least 12 home-grown players
+Russia	2024/25	registration	new_code	Premier League season squad: at most 13 foreigners and at least 12 home-grown players
+Russia	2025/26	registration	new_code	Premier League season squad: at most 13 foreigners and at least 12 home-grown players
+Russia	2026/27	registration	new_code	Premier League season squad (form 3A) at most 25, of whom at most 12 foreigners and at least 12 home-grown
+Scotland	2001/02	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2002/03	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2003/04	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2004/05	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2005/06	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2006/07	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2007/08	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2008/09	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2009/10	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2010/11	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2011/12	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2012/13	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2013/14	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2014/15	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2015/16	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2016/17	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2017/18	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2018/19	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+Scotland	2019/20	work_permit	new_code	EU/EEA players need no permit; non-EEA players need a work permit with a Scottish FA governing body endorsement
+South Korea	2025/26	registration	new_code	U-22 players: at least 2 in the 20-man K League 1 list (19 with one, 18 with none)
+Spain	2001/02	foreign	hardcoded	Primera: 4 non-EU players registered, at most 3 on the pitch together; Segunda: unknown; Segunda B: unknown
+Spain	2001/02	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2002/03	foreign	hardcoded	Primera: 4 non-EU players registered, at most 3 on the pitch together; Segunda: unknown; Segunda B: unknown
+Spain	2002/03	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2003/04	foreign	hardcoded	Primera: 4 non-EU players registered, at most 3 on the pitch together; Segunda: unknown; Segunda B: unknown
+Spain	2003/04	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2004/05	foreign	hardcoded	Primera: 4 non-EU players registered, at most 3 on the pitch together; Segunda: unknown; Segunda B: unknown
+Spain	2004/05	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2005/06	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: unknown; tier 3: unknown
+Spain	2005/06	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2006/07	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: unknown; tier 3: unknown
+Spain	2006/07	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2007/08	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: unknown; tier 3: unknown
+Spain	2007/08	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2008/09	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2008/09	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2009/10	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2009/10	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2010/11	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2010/11	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2011/12	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2011/12	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2012/13	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2012/13	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2013/14	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2013/14	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2014/15	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2014/15	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2015/16	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2015/16	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2016/17	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2016/17	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2017/18	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2017/18	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2018/19	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2018/19	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2019/20	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2019/20	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2020/21	foreign	hardcoded	Primera: 3 non-EU players registered in the first team, all may play together; Segunda: 2 non-EU; tier 3: no non-EU players except those already registered with a relegated club (stated as of 2008)
+Spain	2020/21	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2021/22	foreign	hardcoded	Primera: 3 non-EU in the first team, all may play together; Segunda: 2 non-EU; tier 3 to 5: unknown
+Spain	2021/22	registration	new_code	25 first-team licences (Primera and Segunda)
+Spain	2022/23	foreign	hardcoded	Primera: 3 non-EU in the first team, all may play together; Segunda: 2 non-EU; tier 3 to 5: unknown
+Spain	2022/23	registration	new_code	25 first-team licences (Primera and Segunda)
+Spain	2023/24	foreign	hardcoded	Primera: 3 non-EU in the first team, all may play together; Segunda: 2 non-EU; tier 3 to 5: no limit on foreign players with legal residence in Spain (RFEF General Regulation, art. 134)
+Spain	2023/24	registration	new_code	25 first-team licences (Primera and Segunda)
+Spain	2024/25	foreign	hardcoded	Primera: 3 non-EU in the first team, all may play together; Segunda: 2 non-EU; tier 3 to 5: no limit on foreign players with legal residence in Spain (inference: 2023/24 rule)
+Spain	2024/25	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2025/26	foreign	hardcoded	Primera: 3 non-EU in the first team, all may play together; Segunda: 2 non-EU; tier 3 to 5: no limit on foreign players with legal residence in Spain (inference: 2023/24 rule)
+Spain	2025/26	registration	new_code	25 first-team licences (Primera and Segunda)
+Spain	2026/27	foreign	hardcoded	Primera: 3 non-EU in the first team, all may play together; Segunda: 2 non-EU; tier 3 to 5: no limit on foreign players with legal residence in Spain (inference: 2023/24 rule)
+Spain	2026/27	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Spain	2027/28	foreign	hardcoded	Primera: 3 non-EU in the first team, all may play together; Segunda: 2 non-EU; tier 3 to 5: no limit on foreign players with legal residence in Spain (inference: 2023/24 rule)
+Spain	2027/28	registration	new_code	25 first-team licences (Primera and Segunda); start year of the 25 limit unknown
+Sweden	2005/06	foreign	pitch	max 3 players from non-EU/EEA countries on the pitch at once
+Sweden	2006/07	foreign	pitch	max 3 players from non-EU/EEA countries on the pitch at once
+Sweden	2016/17	foreign	kind	Allsvenskan: half of the matchday squad must be homegrown (3 years with a Swedish club between ages 12 and 21), so 9 of 18
+Sweden	2021/22	foreign	kind	Allsvenskan: max 9 foreign or non-homegrown players in the matchday squad
+Sweden	2022/23	foreign	kind	Allsvenskan: max 9 foreign or non-homegrown players in the matchday squad
+Sweden	2023/24	windows	partial	two windows of 8 weeks each; the summer window closed on 26 August 2024
+Sweden	2023/24	foreign	kind	Allsvenskan: max 9 foreign or non-homegrown players in the matchday squad
+Sweden	2024/25	foreign	kind	Allsvenskan: max 9 foreign or non-homegrown players in the matchday squad
+Sweden	2025/26	foreign	kind	Allsvenskan: max 9 foreign or non-homegrown players in the matchday squad
+Sweden	2026/27	foreign	kind	Allsvenskan: max 9 foreign or non-homegrown players in the matchday squad
+Sweden	2027/28	foreign	kind	Allsvenskan: max 9 foreign or non-homegrown players in the matchday squad
+Turkey	2007/08	foreign	mid_season	Süper Lig: 6+1 at the start, 6+2 from the winter break; Goal adds a later 6+2+2 (6 on the pitch, 2 on the bench, 2 registered only)
+Turkey	2015/16	registration	new_code	28-man squad with at least 14 Turkish players
+Turkey	2016/17	registration	new_code	28-man squad with at least 14 Turkish players
+Turkey	2017/18	registration	new_code	28-man squad with at least 14 Turkish players
+Turkey	2018/19	registration	new_code	28-man squad with at least 14 Turkish players
+Turkey	2019/20	registration	new_code	28-man squad with at least 14 Turkish players
+Turkey	2020/21	windows	partial	first period 4 August to 5 October 2020; second period unknown
+Turkey	2024/25	foreign	form	Süper Lig: 14 foreigners in the 28-man A list (plan to cut to 12 reversed), 12 of them may be in the matchday list; pitch limit unknown
+Turkey	2024/25	registration	new_code	Süper Lig A list raised from 26 to 28 players
+Turkey	2027/28	foreign	form	Süper Lig: unknown
+United States	2001/02	registration	new_code	No Designated Player rule (adopted for 2007)
+United States	2002/03	registration	new_code	No Designated Player rule (adopted for 2007)
+United States	2003/04	registration	new_code	No Designated Player rule (adopted for 2007)
+United States	2004/05	registration	new_code	No Designated Player rule (adopted for 2007)
+United States	2005/06	registration	new_code	No Designated Player rule (adopted for 2007)
+United States	2006/07	registration	new_code	1 Designated Player spot (tradable; maximum 2 per club)
+United States	2007/08	registration	new_code	1 Designated Player spot (tradable; maximum 2 per club)
+United States	2008/09	registration	new_code	1 Designated Player spot (tradable; maximum 2 per club)
+United States	2009/10	registration	new_code	2 Designated Players; a third for a 250,000 dollar luxury tax
+United States	2010/11	registration	new_code	Roster of 30; maximum 3 Designated Players
+United States	2011/12	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2012/13	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2013/14	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2014/15	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2015/16	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2016/17	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2017/18	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2018/19	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2019/20	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2020/21	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2021/22	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2022/23	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2023/24	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2024/25	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2025/26	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2026/27	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+United States	2027/28	registration	new_code	Up to 3 Designated Players (from 2012 lower budget charges for DPs aged 23 or under)
+Wales	2001/02	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2002/03	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2003/04	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2004/05	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2005/06	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2006/07	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2007/08	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2008/09	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2009/10	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2010/11	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2011/12	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2012/13	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2013/14	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2014/15	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2015/16	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2016/17	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2017/18	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2018/19	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)
+Wales	2019/20	work_permit	new_code	non-EEA players need a UK work permit (inference: UK immigration rules; criteria for these leagues unknown)

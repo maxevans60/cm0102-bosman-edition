@@ -122,6 +122,12 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
+    add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
+        src/recomp_rt/win/season_cups_table.c)
+    target_include_directories(season_cups_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cups COMMAND season_cups_test)
+    add_test(NAME season_cups_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_cups_table.py" --check)
     # The rules table reader (0.6.0 slice 12): make the table from the parts, then read it.
     add_executable(season_rules_test tests/seasons/test_season_rules.c src/recomp_rt/win/season_rules.c
         src/recomp_rt/host/posix.c)
@@ -135,6 +141,19 @@ if(NOT WIN32)
     # The names table and the club moves table (0.6.0 slice 15): the tools read every part and stop on a bad row.
     add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
     add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)
+    # The substitute rule lookup (0.6.0 slice 17).
+    add_executable(season_subs_test tests/seasons/test_season_subs.c src/recomp_rt/win/season_subs_rule.c
+        src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_subs_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_subs COMMAND season_subs_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_subs PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The nation rules (0.6.0 slice 17): windows, foreign player limits and the work permit rule. The encoder reads
+    # the research parts; its outputs are committed and checked here; the lookup runs on the C table.
+    add_executable(season_nation_test tests/seasons/test_season_nation.c src/recomp_rt/win/season_nation.c
+        src/recomp_rt/win/season_nation_table.c)
+    target_include_directories(season_nation_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_nation COMMAND season_nation_test)
+    add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
