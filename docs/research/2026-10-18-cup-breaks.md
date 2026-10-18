@@ -35,7 +35,7 @@ The lead's rule for a cup that comes back was the wait of slice 26 (+0x40 at the
 
 ### Not checked in a game run
 
-The run `r2019` of `cup_breaks_run.py` checks Belgium, Holland, Italy, Northern Ireland and Norway. The Irish, Welsh, Korean, Scottish, Polish, Swedish, Brazilian and American cups need Select All in the test steps (their nations are not in the 16 rows that the steps click); their classes follow the same code (section "The classes").
+The runs `r2019`, `s2020`, `r2001` and `s2008` of `cup_breaks_run.py` check Belgium, Holland, Italy, Northern Ireland, Norway and Greece, and the new game with Select All in 2008. The Irish, Welsh, Korean, Scottish, Polish, Swedish, Brazilian and American cups need Select All in the test steps (their nations are not in the 16 rows that the steps click); their classes follow the same code (section "The classes").
 
 ## 2. Round counts that differ from the class
 

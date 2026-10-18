@@ -8,11 +8,9 @@ Usage:
 Each run is a season jump of tests/seasons/rules_report_check.py with changing rules on or off and the nations
 of its cups selected (src/recomp_rt/win/season_kind_cup_breaks.c, docs/research/2026-10-18-cup-breaks.md).
 
-A start in a later season meets finals whose qualifying began before the start, and on main such a game stops
-at a message box (world_cup..cpp 1438 at the 2026 World Cup draw of a 2025 start, comp_stats..CPP 1664 at the Euro
-2020 draw of a 2019 start, also with RECOMP_CUPS=off; slice 27 fixes them). So the runs that play seasons start in
-2001 (the original's finals) or in 2008, and the runs that check a new game in a later season ("start" runs) end
-at the first start report or at their time limit, whichever comes first.
+The box fixes on main (euro_finals.c, 7a99f82) let a start in a later season play through the finals whose
+qualifying began before the start. The "start" runs check a new game in a later season and end at the first start
+report or at their time limit, whichever comes first.
 
 The runs (Select All plays about 10 seconds a game day, so the played runs select few nations):
     r2001   3.9.68 data, changing rules on, 2001/02 to 2007/08, Greece and Northern Ireland: the Greek Super Cup
@@ -29,9 +27,10 @@ The runs (Select All plays about 10 seconds a game day, so the played runs selec
     s2008   start run, September 2008, changing rules off, Select All without France (the French first division of
             that database stops the game, a known slice 18 matter): the cups that never come back (Welsh Premier
             Cup, German League Cup, Irish Super Cup, Copa dos Campeoes) wait for ever with no fixtures
-    r2019   (opt-in, --only r2019) October 2019, changing rules on, 2019/20 to 2021/22, the five nations of s2020:
-            the 2020/21 gaps skip and come back. It stops at the comp_stats box in February 2020 until slice 27 is on
-            main
+    r2019   October 2019, changing rules on, 2019/20 to 2021/22, the five nations of s2020: the Belgian and Dutch
+            super cups, the Coppa Italia Serie C, the Northern Irish League Cup (2020/21) and the Norwegian Cup
+            (2020) skip one season and come back; at the new game the Supercoppa di Serie C waits for 2020 and the
+            Northern Irish Charity Shield for 2022
 The checks of each run:
     - a played run ends with code 0 and its report holds the end of its last season; a start run holds the start
       report of its first season (a time limit after that is no fault);
@@ -104,7 +103,7 @@ RUNS = {
         ("skip", "nor_cup", 2020), ("resumes", "nor_cup", 2021),
     }),
 }
-OPT_IN = {"r2019"}
+OPT_IN = set()
 FORMAT = re.compile(r"recomp: cups: (ita_cup|hol_cup|spa_cup|tur_cup|rus_cup) \(0x[0-9a-f]+\) season (\d+), row \d+: rounds changed (\d+)")
 WAITS = re.compile(r"recomp: cup_breaks: (\w+) waits for (\d+) \(edition (\d+) not held")
 SKIP = re.compile(r"recomp: cup_breaks: (\w+) is not held in (\d+)")
