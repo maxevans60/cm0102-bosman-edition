@@ -1,0 +1,139 @@
+/* Test of the editions of the international finals (0.6.0 slice 27, src/recomp_rt/win/season_intl_rules.c and
+ * the table season_intl_table.c that tools/seasons/make_intl.py makes).
+ *
+ * Usage: season_intl_test
+ * The test gives the season state itself (start year, changing rules, season code). The checks: the base game
+ * and RECOMP_SEASON_CODE=off keep the original's years and flags; the first edition of a later start season;
+ * the next edition with changing rules on and the original's step with it off; the Confederations Cup waits
+ * after 2017; the Tokyo Olympics in 2020 (Q366); the golden goal to the 2003 Confederations Cup and none at
+ * Euro 2004 (Q367); the hosts of some editions. */
+#include "season.h"
+#include "season_intl.h"
+
+#include <stdio.h>
+#include <string.h>
+
+static int failures;
+
+#define CHECK(cond, ...) do { if (!(cond)) { failures++; fprintf(stderr, "FAIL %s:%d: ", __FILE__, __LINE__); \
+    fprintf(stderr, __VA_ARGS__); fputc('\n', stderr); } } while (0)
+
+/* The season state of the test (season.c in the game). */
+static int code_on = 1, start_year = SEASON_FIRST_YEAR, changing = 0;
+int season_code_on(void) { return code_on; }
+int season_start_year(void) { return start_year; }
+int season_changing_rules(void) { return changing; }
+
+static void game(int on, int year, int rules)
+{
+    code_on = on;
+    start_year = year;
+    changing = rules;
+}
+
+int main(void)
+{
+    /* The base game and the season code off: the original's values. */
+    game(1, 2001, 0);
+    CHECK(!season_intl_on(), "the base game is not a season game");
+    CHECK(rt_intl_first_year(INTL_COPA, 2001) == 2001, "base game: Copa America year");
+    CHECK(rt_intl_next_year(INTL_CONFED, 2017, 2) == 2019, "base game: Confederations Cup step");
+    CHECK(rt_intl_round_flags(INTL_EURO, 2008, 0x383) == 0x383, "base game: golden goal stays");
+    CHECK(rt_intl_wc_holder(0x1234) == 0x1234, "base game: the holder is exempt");
+    CHECK(rt_intl_wc_holder_slot(2006), "base game: the holder has slot 0");
+    game(0, 2010, 1);
+    CHECK(!season_intl_on(), "season code off");
+    CHECK(rt_intl_first_year(INTL_ACN, 2012) == 2012, "season code off: ACN year");
+    CHECK(rt_intl_next_year(INTL_ACN, 2012, 2) == 2014, "season code off: ACN step");
+
+    /* A 2001 start with changing rules on: the first editions are the original's, the steps the table's. */
+    game(1, 2001, 1);
+    CHECK(season_intl_on(), "2001 with changing rules on is a season game");
+    CHECK(rt_intl_first_year(INTL_EURO, 2004) == 2004, "2001 on: Euro first edition stays");
+    CHECK(rt_intl_next_year(INTL_CONFED, 2003, 2) == 2005, "2001 on: Confederations Cup 2005");
+    CHECK(rt_intl_next_year(INTL_CONFED, 2005, 2) == 2009, "2001 on: Confederations Cup 2009");
+    CHECK(rt_intl_next_year(INTL_CONFED, 2017, 2) == 2200, "2001 on: no Confederations Cup after 2017");
+    CHECK(rt_intl_next_year(INTL_CONFED, 2200, 2) == 2200, "2001 on: the waiting object stays");
+    CHECK(rt_intl_next_year(INTL_COPA, 2001, 2) == 2004, "2001 on: Copa America 2004");
+    CHECK(rt_intl_next_year(INTL_COPA, 2015, 2) == 2016, "2001 on: Copa America Centenario");
+    CHECK(rt_intl_next_year(INTL_ASIAN, 2004, 4) == 2007, "2001 on: Asian Cup 2007");
+    CHECK(rt_intl_next_year(INTL_ACN, 2012, 2) == 2013, "2001 on: ACN moves to odd years");
+    CHECK(rt_intl_next_year(INTL_ACN, 2023, 2) == 2026, "2001 on: ACN 2025 plays in January 2026");
+    CHECK(rt_intl_next_year(INTL_OLYMPICS, 2016, 4) == 2020, "2001 on: Olympics 2020 (Q366)");
+    CHECK(rt_intl_next_year(INTL_WORLD_CUP, 2018, 4) == 2022, "2001 on: World Cup 2022");
+    CHECK(rt_intl_next_year(INTL_OFC, 2016, 2) == 2024, "2001 on: no OFC Nations Cup in 2020");
+    CHECK(rt_intl_round_flags(INTL_WORLD_CUP, 2002, 0x383) == 0x383, "2001 on: golden goal in 2002");
+    CHECK(rt_intl_round_flags(INTL_CONFED, 2003, 0x83) == 0x83, "2001 on: golden goal in the 2003 Confed Cup");
+    CHECK(rt_intl_round_flags(INTL_EURO, 2004, 0x383) == 0x303, "2001 on: no golden goal at Euro 2004 (Q367)");
+    CHECK(rt_intl_round_flags(INTL_CONFED, 2005, 0x83) == 0x3, "2001 on: no golden goal in 2005");
+    CHECK(rt_intl_round_flags(INTL_WORLD_CUP, 2002, 0x3) == 0x3, "2001 on: a round without golden goal");
+
+    CHECK(rt_intl_wc_holder(0x1234) == 0, "2001 on: no holder exemption in the sections");
+    CHECK(rt_intl_wc_holder_slot(2002), "2001 on: the holder has slot 0 in 2002");
+    CHECK(!rt_intl_wc_holder_slot(2006), "2001 on: no holder slot in 2006");
+
+    /* A later start: the first edition from the start season. */
+    game(1, 2005, 0);
+    CHECK(rt_intl_first_year(INTL_WORLD_CUP, 2006) == 2006, "2005: World Cup 2006");
+    CHECK(rt_intl_first_year(INTL_CONFED, 2005) == 2009, "2005: the 2005 Confederations Cup lies before");
+    CHECK(rt_intl_first_year(INTL_ASIAN, 2008) == 2007, "2005: Asian Cup 2007");
+    CHECK(rt_intl_first_year(INTL_COPA, 2005) == 2007, "2005: Copa America 2007");
+    CHECK(rt_intl_first_year(INTL_ACN, 2006) == 2006, "2005: ACN 2006");
+    CHECK(rt_intl_next_year(INTL_COPA, 2007, 2) == 2009, "2005 off: the original's step");
+    CHECK(rt_intl_round_flags(INTL_WORLD_CUP, 2006, 0x383) == 0x303, "2005 off: no golden goal");
+    game(1, 2002, 0);
+    CHECK(rt_intl_round_flags(INTL_EURO, 2008, 0x383) == 0x383, "2002 off: the golden goal of 2002/03 stays");
+    game(1, 2016, 1);
+    CHECK(rt_intl_first_year(INTL_EURO, 2016) == 2020, "2016: Euro 2016 lies before the start");
+    CHECK(rt_intl_first_year(INTL_COPA, 2017) == 2019, "2016: Copa America 2019");
+    CHECK(rt_intl_first_year(INTL_ACN, 2016) == 2017, "2016: ACN 2017");
+    CHECK(rt_intl_first_year(INTL_OLYMPICS, 2016) == 2016, "2016: Olympics in August 2016");
+    game(1, 2018, 1);
+    CHECK(rt_intl_first_year(INTL_CONFED, 2019) == 2200, "2018: no Confederations Cup");
+    game(1, 2026, 1);
+    CHECK(rt_intl_first_year(INTL_WORLD_CUP, 2026) == 2200, "2026: no World Cup in the table after 2026");
+
+    /* Finals dates. */
+    game(1, 2001, 0);
+    CHECK(season_intl_date_shift(INTL_ACN, 2019) == 0, "base game: no date shift");
+    game(1, 2010, 1);
+    CHECK(season_intl_date_shift(INTL_ACN, 2019) == 133, "ACN 2019: 8 February to 21 June");
+    CHECK(season_intl_date_shift(INTL_ACN, 2026) == -49, "ACN 2025/26: 8 February 2026 to 21 December 2025");
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2022) == 161, "World Cup 2022: 12 June to 20 November");
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2010) == -1, "World Cup 2010: 12 June to 11 June");
+    CHECK(season_intl_date_shift(INTL_ASIAN, 2011) == -279, "Asian Cup 2011: 13 October to 7 January");
+    CHECK(season_intl_date_shift(INTL_OFC, 2012) == -18, "OFC 2012: 19 June (2012 %% 4 is 0) to 1 June");
+    CHECK(season_intl_date_shift(INTL_OFC, 2008) == 0, "OFC 2008: no date in the table");
+    CHECK(season_intl_date_shift(INTL_COPA, 2009) == 0, "Copa America 2009: not an edition of the table");
+    int d = 8, m = 1, y = 2026;
+    season_intl_shift_date(-49, &d, &m, &y);
+    CHECK(d == 21 && m == 11 && y == 2025, "shift into the year before: %d.%d.%d", d, m + 1, y);
+    d = 28, m = 1, y = 2020;
+    season_intl_shift_date(1, &d, &m, &y);
+    CHECK(d == 29 && m == 1 && y == 2020, "leap day");
+
+    /* The table. */
+    const SeasonIntlEdition *e = season_intl_edition("olympics", 2020);
+    CHECK(e && e->season == 2020 && e->month == 7 && !strcmp(e->hosts, "Japan"), "Tokyo Olympics in 2020/21");
+    CHECK(!season_intl_edition("olympics", 2021), "no Olympics in 2021");
+    e = season_intl_edition("euro_champ", 2008);
+    CHECK(e && !strcmp(e->hosts, "Austria;Switzerland") && e->teams == 16, "Euro 2008 hosts");
+    e = season_intl_edition("euro_champ", 2020);
+    CHECK(e && !*e->hosts && e->teams == 24, "Euro 2020: no host places, 24 teams");
+    e = season_intl_edition("world_cup", 2010);
+    CHECK(e && !strcmp(e->hosts, "South Africa") && e->month == 6 && e->day == 11, "World Cup 2010");
+    e = season_intl_edition("asia_nations", 2004);
+    CHECK(e && !strcmp(e->hosts, "China PR/China"), "Asian Cup 2004 host names");
+    for (int i = 1; i < season_intl_edition_count; i++) {
+        const SeasonIntlEdition *a = &season_intl_editions[i - 1], *b = &season_intl_editions[i];
+        int c = strcmp(a->file, b->file);
+        CHECK(c < 0 || (c == 0 && a->year < b->year), "table order at %s", b->row);
+    }
+
+    if (failures) {
+        fprintf(stderr, "season_intl_test: %d failures\n", failures);
+        return 1;
+    }
+    printf("season_intl_test: all checks pass\n");
+    return 0;
+}

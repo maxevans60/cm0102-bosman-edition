@@ -310,6 +310,48 @@ uint32_t rt_uefa_uic_winners(uint32_t uc, uint32_t uic);
 uint32_t rt_season_text_mod(uint32_t original);
 uint32_t rt_season_text_format(uint32_t original);
 
+/* International competitions (0.6.0 slice 27, win/season_intl.h): the edition year of a finals class at its
+ * constructor and its start_new_season, the golden goal bit of a knockout round, and the World Cup holder of the
+ * qualifying sections and of slot 0. The sites of tools/recomp/seasons.py call them. Each gives the original's
+ * value in the base game. */
+uint32_t rt_intl_first_year(uint32_t cls, uint32_t year);
+uint32_t rt_intl_next_year(uint32_t cls, uint32_t year, uint32_t step);
+uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags);
+uint32_t rt_intl_wc_holder(uint32_t holder);
+uint32_t rt_intl_wc_holder_slot(uint32_t year);
+uint32_t rt_intl_oceania_left_out(uint32_t id);
+uint32_t rt_intl_euro_no_host(void);
+/* The European Championship of 24 teams (win/season_intl_euro.c): the team count (16), the knockout stage index
+ * (3) and a new stage array after the step of start_new_season. Each gives the original's value for an edition
+ * of 16 teams and in the base game. */
+uint32_t rt_intl_euro_teams(uint32_t self, uint32_t original);
+uint32_t rt_intl_euro_ko(uint32_t self, uint32_t original);
+void rt_intl_euro_stages(uint32_t self);
+/* The African Cup of Nations and the Asian Cup of 24 teams (win/season_intl_cups.c): the team count (16, 12),
+ * the group count of the draw (4, 3), the knockout stage index (3, 2) and a new stage array after the step of
+ * start_new_season. Each gives the original's value for another edition, another class and the base game. */
+uint32_t rt_intl_cup_teams(uint32_t self, uint32_t original);
+uint32_t rt_intl_cup_groups(uint32_t self, uint32_t original);
+uint32_t rt_intl_cup_ko(uint32_t self, uint32_t original);
+void rt_intl_cup_stages(uint32_t self);
+/* The Copa America of 16 teams (win/season_intl_copa.c): the knockout stage index (2), the group count (3) and a
+ * new stage array after the step of start_new_season. Each gives the original's value for an edition of 12
+ * teams and in the base game. */
+uint32_t rt_intl_copa_ko(uint32_t self, uint32_t original);
+uint32_t rt_intl_copa_groups(uint32_t self, uint32_t original);
+void rt_intl_copa_stages(uint32_t self);
+/* World Cup qualifying 2006 to 2022 (win/season_intl_qual.c): the places of each section and the
+ * inter-confederation play-offs. Each gives the original's value outside a season game and the cycles 2006 to
+ * 2022. */
+uint32_t rt_wcq_europe_playoff(uint32_t self, uint32_t exempt);
+uint32_t rt_wcq_europe_no_asia(uint32_t self);
+void rt_wcq_asia_format(uint32_t self);
+uint32_t rt_wcq_asia_partner(uint32_t self, uint32_t asian, uint32_t original);
+uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
+uint32_t rt_wcq_concacaf_playoff(uint32_t self);
+uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
+void rt_wcq_africa_format(uint32_t self, uint32_t pool);
+
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets
  * it for the load that runs (the first sizing site) and returns it. */
