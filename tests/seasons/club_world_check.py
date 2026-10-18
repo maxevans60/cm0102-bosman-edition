@@ -44,7 +44,14 @@ The checks (each run):
     - part b: each season that the table holds the Club World Championship with 6 or 7 clubs plays it as a
       knockout of that many clubs (the log line of season_kind_club_world.c); with changing rules off, the club
       count of the start season
-A run takes about 6 to 12 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the reports
+    - each class whose continent has a selected nation is in the report (NEEDS)
+The other runs: 2019-on (October 2019, Oceania into its gap of 2020/21 in the game), 2020-on (November 2020, Oceania
+waits from the new game and comes back in 2021/22), 2022-on (October 2022, the Asian Club Championship waits from the
+new game and comes back in 2023/24), 2001-all (Select All, so the Merconorte stops after 2001/02), 2002-on, 2008-on
+and 2017-on (more start seasons). Runs end before a World Cup draw where they can: a start inside a qualifying
+campaign stops at the draw with the box "world_cup..cpp 1438" (0x92f2b1) until slice 27's fix is on main, so 2008-on
+and 2017-on end after their start season, and 2020-on crosses the draw of December 2021.
+A run takes about 6 to 12 minutes (2001-all longer). --jobs (default 2) runs that many at the same time. --reuse checks the reports
 already in the --keep folder again without a new run.
 """
 import concurrent.futures
@@ -68,7 +75,20 @@ RUNS = {
     "2007": (2007, "November 2007", 2008, "off", NATIONS),
     "2024-on": (2024, "October 2024", 2025, "on", NATIONS),
     "2007-load": (2007, "November 2007", 2007, "off", ["England"]),
+    # Gaps and their returns, and more starts (the review of 2026-10-18).
+    "2019-on": (2019, "October 2019", 2020, "on", NATIONS),         # Oceania into its gap of 2020/21 in the game
+    "2020-on": (2020, "November 2020", 2021, "on", NATIONS),        # Oceania waits from the new game, back in 2021
+    "2022-on": (2022, "October 2022", 2023, "on", NATIONS),         # Asia waits from the new game, back in 2023
+    "2001-all": (2001, None, 2002, "on", ["all"]),                  # Select All: the Merconorte (needs the USA)
+    "2002-on": (2002, None, 2003, "on", NATIONS),
+    "2008-on": (2008, "September 2008", 2008, "on", NATIONS),
+    "2017-on": (2017, "October 2017", 2017, "on", NATIONS),
 }
+# The classes that a run must hold: entry 2 is made in every game; a continental entry when a nation of its
+# continent is selected (0x6699d0). The Merconorte and the CONCACAF classes need the United States (Select All).
+NEEDS = {"world_club_champ": None, "world_club_cup": None, "inter_amer_cup": None, "con_merc_cup": "all",
+         "conmebol_merc": "Brazil", "asia_club_champ": "Japan", "asia_cup_winner": "Japan", "asia_super_cup": "Japan",
+         "oceania_club_champ": "Australia"}
 FILES = ["world_club_champ", "world_club_cup", "inter_amer_cup", "con_merc_cup", "conmebol_merc", "asia_club_champ",
          "asia_cup_winner", "asia_super_cup", "oceania_club_champ"]
 
@@ -124,7 +144,12 @@ def check(name, report, log, rules_on):
             if game != table:
                 failed.append(line)
     missing = [f for f in FILES if f not in found]
-    print(f"  {name}: classes not in the report (no nation of their continent): {', '.join(missing) or 'none'}")
+    print(f"  {name}: classes not in the report: {', '.join(missing) or 'none'}")
+    nations = RUNS[name][4]
+    for f in missing:
+        need = NEEDS[f]
+        if need is None or need in nations:
+            failed.append(f"{name}: {f} is not in the report, but a nation of its continent is selected ({need})")
     # Part b: an edition of 6 or 7 clubs in the table is a knockout (season_kind_club_world.c, Form K). The form
     # of the first edition stays with changing rules off (Q232).
     text = open(log, encoding="latin-1").read() if os.path.exists(log) else ""
