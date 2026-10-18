@@ -41,6 +41,14 @@ static int logging(void)
     return v && *v;
 }
 
+/* Test switch: RECOMP_CUPS=off leaves the cups as the original makes them (to find out whether a fault of a run
+ * comes from this kind). */
+static int cups_off(void)
+{
+    const char *v = getenv("RECOMP_CUPS");
+    return v && !strcmp(v, "off");
+}
+
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
 /* Writes the format of the row to a table of n rounds. Returns the number of rounds that changed, or -1 when
@@ -76,7 +84,7 @@ static int cup_season(uint32_t cup)
  * is the result (cpu.eax). */
 static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
 {
-    if (stage != 0xffu || !season_code_on() || !readable(count_ptr)) return;
+    if (stage != 0xffu || !season_code_on() || cups_off() || !readable(count_ptr)) return;
     const char *file = season_change_file(self);
     int season = cup_season(self);
     const SeasonCupRow *row = season_cups_row(file, season);
@@ -90,7 +98,7 @@ static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
 /* The news of a row: with changing rules on, the cup that starts the season of a row says so. */
 static void cups_after(const SeasonChange *c)
 {
-    if (!c->started) return;
+    if (!c->started || cups_off()) return;
     const SeasonCupRow *row = season_cups_row(c->file, c->season);
     if (!row || row->season != c->season) return;
     if ((int16_t)rd16(g_mem, c->comp + CUP_ROUND_COUNT) != row->rounds) return;
