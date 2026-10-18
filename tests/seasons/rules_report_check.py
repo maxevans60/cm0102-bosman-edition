@@ -108,7 +108,7 @@ UEFA_LINES = []          # the uefa lines of the last report that read_report re
 
 
 def read_report(path, clubs=None):
-    """(season lines, comp lines); club lines go into clubs when a list is given."""
+    """(season lines, comp lines); club lines go into clubs when a list is given (slice 15)."""
     seasons, comps = [], []
     UEFA_LINES.clear()
     with open(path, encoding="latin-1") as f:
