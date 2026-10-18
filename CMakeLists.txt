@@ -286,6 +286,8 @@ if(EXISTS "${CM0102_EXE}")
     # The season change (0.6.0 slice 16): the committed wraps of start_new_season match the class table.
     add_test(NAME season_starts COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_start_wraps.py"
         --exe "${CM0102_EXE}" --classes "${CMAKE_BINARY_DIR}/seasons/comp_classes.c" --check)
+    # League sizes (0.6.0 slice 18): the committed wraps of set_up_rules match tools/recomp/league_sizes.py.
+    add_test(NAME season_size_wraps COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_size_wraps.py" --check)
     target_include_directories(cm0102_recomp PRIVATE src/recomp_rt src/recomp_rt/win "${RECOMP_OUT}/gen"
         ${SDL2_INCLUDE_DIRS})
     target_compile_definitions(cm0102_recomp PRIVATE CM0102_DEFAULT_EXE="${CM0102_EXE}"

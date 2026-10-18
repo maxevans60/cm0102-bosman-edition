@@ -294,6 +294,17 @@ extern uint32_t rt_screen_w, rt_screen_h;
  * sites of tools/recomp/seasons.py read it in place of the constants 2001, 2002 and 2003. */
 extern uint32_t rt_season_year;
 
+/* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
+ * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
+uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
+/* The date count of a French league's template for the clubs that its division holds (slice 18). */
+uint32_t rt_league_dates(uint32_t obj, uint32_t original);
+/* The room for lower clubs of a cup with a fixed entrant count (6 bytes a place): the entrants less the clubs
+ * of the top divisions of keys a, b and c (key ids, 0 for none). The original in the base game (slice 18).
+ * rt_cup_add: the value to add to base so that the sum is that count (FraCup). */
+uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint32_t key_b, uint32_t key_c);
+uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
+
 /* The season text "2009/10" in place of the original's "2009/0" (0.6.0, Q358; win/season.c). The patches of
  * tools/recomp/seasons.py at the two season formatters of key_nation.cpp read these: the divisor of the second
  * year (10 in the original) and the format string (0x9eb024 "%d/%d"). With RECOMP_SEASON_CODE=off they give

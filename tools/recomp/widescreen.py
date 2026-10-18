@@ -136,3 +136,10 @@ INSNS[0x7AFCDF] = ("je 0x7afcf3", "if (cc_e(F)) { if (rt_full_player_search(ebp)
 # The season core (0.6.0 slice 11): whole instructions of the year sites (seasons.py).
 assert not set(SEASON_INSNS) & set(INSNS) and not set(SEASON_PATCHES) & set(SEASON_INSNS)
 INSNS.update(SEASON_INSNS)
+
+# League sizes (0.6.0 slice 18): the club count stores of create_table (league_sizes.py).
+from league_sizes import INSNS as SIZE_INSNS, PATCHES as SIZE_PATCHES  # noqa: E402
+
+assert not set(SIZE_INSNS) & (set(INSNS) | set(PATCHES)) and not set(SIZE_PATCHES) & (set(PATCHES) | set(SIZE_INSNS))
+INSNS.update(SIZE_INSNS)
+PATCHES.update(SIZE_PATCHES)

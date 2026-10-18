@@ -5,6 +5,7 @@
 #include "season_clubs.h"
 #include "season_names.h"
 #include "season_rules.h"
+#include "season_sizes.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -179,74 +180,79 @@ static int same_name(uint32_t at, const char *name)
  * 0x7c9450, NorFirst 0x7909a0) or that take groups (BraNatThird 0x42dc90, FraLower 0x5be230,
  * SpaLower 0x8533d0, the Belgian, Portuguese, Spanish, Swedish, Italian C2 and Turkish group classes) are not
  * here: those divisions keep the database count. */
-typedef struct { const char *name; int size, first_season; } ClassSize;
+typedef struct { const char *name, *file; int size, first_season; } ClassSize;
 static const ClassSize CLASS_SIZE[] = {
-    {"American Major League", 12, 12},                   /* UsaMls::create_table 0x908572: 3 groups of 4 */
-    {"Argentine Premier Division", 20, 20},              /* ArgPrm::create_table 0x405552 */
-    {"Argentine Second Division", 25, 25},               /* ArgSecond::fill_league_table 0x407ce2 */
-    {"Australian National Soccer League", 13, 13},       /* AusNsl 0x411b82 */
-    {"Belgian First Division", 18, 18},                  /* 0x41e8c2 */
-    {"Belgian Second Division", 18, 18},                 /* 0x41fd82 */
-    {"Brazilian National First Division", 28, 28},       /* 0x42a492 */
-    {"Brazilian National Second Division", 28, 28},      /* 0x42ca82 */
-    {"Croatian First Division", 16, 16},                 /* 0x5147c2 */
-    {"Croatian Second Division North", 16, 16},          /* 0x515cc2 */
-    {"Croatian Second Division South", 16, 16},          /* 0x516de2 */
-    {"Danish First Division", 16, 16},                   /* 0x5522a2 */
-    {"Danish Premier Division", 12, 12},                 /* 0x5538e2 */
-    {"Danish Second Division", 16, 16},                  /* 0x554a52 */
-    {"English Conference", 22, 22},                      /* 0x56ecc2 */
-    {"English First Division", 24, 24},                  /* 0x572c01 */
-    {"English Premier Division", 20, 20},                /* 0x574a32 */
-    {"English Second Division", 24, 24},                 /* 0x576642 */
-    {"English Third Division", 24, 24},                  /* 0x577f82 */
-    {"Finnish First Division North", 10, 10},            /* 0x593a82 */
-    {"Finnish First Division South", 10, 10},            /* 0x593a82 */
-    {"Finnish Premier Division", 12, 12},                /* 0x595b82 */
-    {"French First Division", 20, 18},                   /* 0x5bc2bd: 18 at 0x5bc2c5 when +0x40 is 2001 */
-    {"French Second Division", 20, 20},                  /* 0x5bef21 */
-    {"French National", 20, 20},                         /* 0x5c05e2 */
-    {"German First Division", 18, 18},                   /* 0x5db244 */
-    {"German Second Division", 18, 18},                  /* 0x5df2c2 */
-    {"German Regional Division North", 18, 18},          /* 0x5dd809; 19 only when +0x40 is 2000 */
-    {"German Regional Division South", 18, 18},
-    {"Greek National A Division", 14, 14},               /* 0x5ead72 */
-    {"Greek National B Division", 14, 14},               /* 0x5ebcc2; the databases hold 16 */
-    {"Dutch First Division", 18, 18},                    /* 0x5f6252 */
-    {"Dutch Premier Division", 18, 18},                  /* 0x5f8442 */
-    {"Italian Serie A", 18, 18},                         /* 0x641522; the later databases hold 20 */
-    {"Italian Serie B", 20, 20},                         /* 0x646792 */
-    {"Italian Serie C1/A", 18, 18},                      /* 0x64b682 */
-    {"Italian Serie C1/B", 18, 18},                      /* 0x64f832 */
-    {"Japanese J-League 1", 16, 16},                     /* 0x6634f2 */
-    {"Japanese J-League 2", 12, 12},                     /* 0x665042 */
-    {"Korean League", 10, 10},                           /* 0x66bbb2 */
-    {"Northern Irish League First Division", 10, 10},    /* 0x78bc62 */
-    {"Northern Irish League Premier Division", 10, 10},  /* 0x78ec72 */
-    {"Norwegian Premier Division", 14, 14},              /* 0x7925f2 */
-    {"Polish Second Division", 18, 20},                  /* 0x7cbdfd: 20 at 0x7cbe03 when +0x40 is 2001 */
-    {"Portuguese Premier League", 18, 18},               /* 0x7cf812 */
-    {"Portuguese Second League", 18, 18},                /* 0x7d1532 */
-    {"Russian First Division", 18, 18},                  /* 0x7ea6d3 */
-    {"Russian Premier Division", 16, 16},                /* 0x7eb622 */
-    {"Scottish First Division", 10, 10},                 /* 0x7eed42 */
-    {"Scottish Premier Division", 12, 12},               /* 0x7f283d; 10 only when +0x40 is 1999 */
-    {"Scottish Second Division", 10, 10},                /* 0x7f3e92 */
-    {"Scottish Third Division", 10, 10},                 /* 0x7f4e32 */
-    {"Spanish First Division", 20, 20},                  /* 0x84fc82 */
-    {"Spanish Second Division", 22, 22},                 /* 0x855b52 */
-    {"Swedish First Division", 16, 16},                  /* 0x88efa2 */
-    {"Swedish Premier Division", 14, 14},                /* 0x890442 */
-    {"Turkish Premier Division", 18, 18},                /* 0x8fddd4 */
-    {"Turkish 2. Division Category A", 20, 20},          /* 0x8ff162 */
-    {"Welsh Premier Division", 18, 18},                  /* 0x925b42 */
+    {"American Major League", "usa_mls", 12, 12},                   /* UsaMls::create_table 0x908572: 3 groups of 4 */
+    {"Argentine Premier Division", "arg_prm", 20, 20},              /* ArgPrm::create_table 0x405552 */
+    {"Argentine Second Division", "arg_second", 25, 25},               /* ArgSecond::fill_league_table 0x407ce2 */
+    {"Australian National Soccer League", "aus_nsl", 13, 13},       /* AusNsl 0x411b82 */
+    {"Belgian First Division", "bel_first", 18, 18},                  /* 0x41e8c2 */
+    {"Belgian Second Division", "bel_second", 18, 18},                 /* 0x41fd82 */
+    {"Brazilian National First Division", "bra_nat_first", 28, 28},       /* 0x42a492 */
+    {"Brazilian National Second Division", "bra_nat_second", 28, 28},      /* 0x42ca82 */
+    {"Croatian First Division", "cro_a1", 16, 16},                 /* 0x5147c2 */
+    {"Croatian Second Division North", "cro_a2a", 16, 16},          /* 0x515cc2 */
+    {"Croatian Second Division South", "cro_a2b", 16, 16},          /* 0x516de2 */
+    {"Danish First Division", "den_first", 16, 16},                   /* 0x5522a2 */
+    {"Danish Premier Division", "den_prm", 12, 12},                 /* 0x5538e2 */
+    {"Danish Second Division", "den_second", 16, 16},                  /* 0x554a52 */
+    {"English Conference", "eng_conf", 22, 22},                      /* 0x56ecc2 */
+    {"English First Division", "eng_first", 24, 24},                  /* 0x572c01 */
+    {"English Premier Division", "eng_prm", 20, 20},                /* 0x574a32 */
+    {"English Second Division", "eng_second", 24, 24},                 /* 0x576642 */
+    {"English Third Division", "eng_third", 24, 24},                  /* 0x577f82 */
+    {"Finnish First Division North", "fin_first", 10, 10},            /* 0x593a82 */
+    {"Finnish First Division South", "fin_first", 10, 10},            /* 0x593a82 */
+    {"Finnish Premier Division", "fin_prm", 12, 12},                /* 0x595b82 */
+    {"French First Division", "fra_first", 20, 18},                   /* 0x5bc2bd: 18 at 0x5bc2c5 when +0x40 is 2001 */
+    {"French Second Division", "fra_second", 20, 20},                  /* 0x5bef21 */
+    {"French National", "fra_third", 20, 20},                         /* 0x5c05e2 */
+    {"German First Division", "ger_first", 18, 18},                   /* 0x5db244 */
+    {"German Second Division", "ger_second", 18, 18},                  /* 0x5df2c2 */
+    {"German Regional Division North", "ger_regional", 18, 18},          /* 0x5dd809; 19 only when +0x40 is 2000 */
+    {"German Regional Division South", "ger_regional", 18, 18},
+    {"Greek National A Division", "gre_prm", 14, 14},               /* 0x5ead72 */
+    {"Greek National B Division", "gre_second", 14, 14},               /* 0x5ebcc2; the databases hold 16 */
+    {"Dutch First Division", "hol_first", 18, 18},                    /* 0x5f6252 */
+    {"Dutch Premier Division", "hol_prm", 18, 18},                  /* 0x5f8442 */
+    {"Italian Serie A", "ita_ser_a", 18, 18},                         /* 0x641522; the later databases hold 20 */
+    {"Italian Serie B", "ita_ser_b", 20, 20},                         /* 0x646792 */
+    {"Italian Serie C1/A", "ita_ser_c1a", 18, 18},                      /* 0x64b682 */
+    {"Italian Serie C1/B", "ita_ser_c1b", 18, 18},                      /* 0x64f832 */
+    {"Japanese J-League 1", "jap_j1", 16, 16},                     /* 0x6634f2 */
+    {"Japanese J-League 2", "jap_j2", 12, 12},                     /* 0x665042 */
+    {"Korean League", "kor_league", 10, 10},                           /* 0x66bbb2 */
+    {"Northern Irish League First Division", "nir_first", 10, 10},    /* 0x78bc62 */
+    {"Northern Irish League Premier Division", "nir_prm", 10, 10},  /* 0x78ec72 */
+    {"Norwegian Premier Division", "nor_prm", 14, 14},              /* 0x7925f2 */
+    {"Polish Second Division", "pol_second", 18, 20},                  /* 0x7cbdfd: 20 at 0x7cbe03 when +0x40 is 2001 */
+    {"Portuguese Premier League", "por_prm", 18, 18},               /* 0x7cf812 */
+    {"Portuguese Second League", "por_second", 18, 18},                /* 0x7d1532 */
+    {"Russian First Division", "rus_first", 18, 18},                  /* 0x7ea6d3 */
+    {"Russian Premier Division", "rus_prm", 16, 16},                /* 0x7eb622 */
+    {"Scottish First Division", "sco_first", 10, 10},                 /* 0x7eed42 */
+    {"Scottish Premier Division", "sco_prm", 12, 12},               /* 0x7f283d; 10 only when +0x40 is 1999 */
+    {"Scottish Second Division", "sco_second", 10, 10},                /* 0x7f3e92 */
+    {"Scottish Third Division", "sco_third", 10, 10},                 /* 0x7f4e32 */
+    {"Spanish First Division", "spa_first", 20, 20},                  /* 0x84fc82 */
+    {"Spanish Second Division", "spa_second", 22, 22},                 /* 0x855b52 */
+    {"Swedish First Division", "swe_first", 16, 16},                  /* 0x88efa2 */
+    {"Swedish Premier Division", "swe_prm", 14, 14},                /* 0x890442 */
+    {"Turkish Premier Division", "tur_first", 18, 18},                /* 0x8fddd4 */
+    {"Turkish 2. Division Category A", "tur_second", 20, 20},          /* 0x8ff162 */
+    {"Welsh Premier Division", "wel_first", 18, 18},                  /* 0x925b42 */
 };
 
+/* The count of a division in a season: the count of the rules table row of its class (slice 18,
+ * season_sizes_clubs: create_table then takes the clubs that the division holds), else the count of the class. */
 static int class_size(const char *name, int season)
 {
     for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
-        if (!strncmp(name, CLASS_SIZE[k].name, 52))
+        if (!strncmp(name, CLASS_SIZE[k].name, 52)) {
+            int table = season_sizes_clubs(CLASS_SIZE[k].file, season);
+            if (table > 0) return table;
             return season == SEASON_FIRST_YEAR ? CLASS_SIZE[k].first_season : CLASS_SIZE[k].size;
+        }
     return -1;
 }
 
@@ -555,7 +561,14 @@ static void move_clubs(int season)
     }
     /* Write the moves. */
     int moved = 0;
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < count; i++) {
+        /* A club that leaves a division goes to "A Lower Division", where the databases keep the clubs of a
+         * nation with no league (the September 2010 ODB holds 81 Portuguese clubs there and 1 with none). Cups
+         * count them: PorCup::collect_entrants 0x7ce220 needs exactly 164 entrants (0xa4 at 0x7ce234) and takes
+         * the Portuguese clubs of that division (0x7ce38b..0x7ce3a4); with the clubs of smaller leagues at no
+         * division the 2010/11 start stopped at por_cup.cpp 74 (slice 18). */
+        if (!club[i].div && club[i].db_div && spare1 && club[i].db_div != spare1 && club[i].db_div != spare2)
+            club[i].div = spare1;
         if (club[i].div != club[i].db_div) {
             wr32(g_mem, club[i].at + CLUB_DIVISION, club[i].div);
             /* The division of the last season (+0x5b, resolve_database_indexes 0x5315a0 at 0x531657) becomes the
@@ -565,6 +578,7 @@ static void move_clubs(int season)
             if (club[i].db_div) wr32(g_mem, club[i].at + CLUB_LAST_DIVISION, club[i].db_div);
             moved++;
         }
+    }
     int lists = 0, whole = 0;
     for (int t = 0; t < ncomps; t++) {
         if (!div[t].target && !div[t].sized) continue;

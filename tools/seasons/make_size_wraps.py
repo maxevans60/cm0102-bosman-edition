@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Makes src/recomp_rt/win/season_size_wraps.c: one RT_WRAP for each set_up_rules of the league classes of
+tools/recomp/league_sizes.py (0.6.0 slice 18).
+
+Usage:
+    python3 -I tools/seasons/make_size_wraps.py [--out src/recomp_rt/win/season_size_wraps.c] [--check]
+
+set_up_rules (vtable +0x8c) writes the promotion and relegation places of a league (+0xbe promotion, +0xbf
+promotion play-off, +0xc0 relegation play-off, +0xc1 relegation; League::has_automatic_promotion 0x684790,
+League::has_relegation 0x6847b0). The constructor and start_new_season call it. Each wrap calls the original
+and then season_sizes_rules(this), which sets the places of the season in a season game
+(src/recomp_rt/win/season_sizes.c).
+
+The file is committed, because the recompiler reads the RT_WRAP lines of src/recomp_rt/win/*.c. --check
+writes nothing and exits with code 1 when the committed file differs from what the tool makes (ctest
+season_size_wraps). RT_WRAP stops the build when an address is not a translated function.
+"""
+import argparse
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
+sys.path.insert(0, os.path.join(ROOT, "tools", "recomp"))
+from league_sizes import CAPS, CLASSES, FLOOR_COUNT  # noqa: E402
+
+OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_size_wraps.c")
+
+
+def make():
+    lines = [
+        "/* The set_up_rules functions of the league classes of tools/recomp/league_sizes.py, wrapped for the",
+        " * promotion and relegation places of each season (season_sizes.h). Made by tools/seasons/make_size_wraps.py:",
+        " * do not edit by hand. */",
+        '#include "win.h"',
+        '#include "season_sizes.h"',
+        "",
+        "/* Each wrap: the original (thiscall, no arguments), then season_sizes_rules(this). The recompiler reads",
+        " * the RT_WRAP lines as they are (tools/recomp/recomp.py), so they are written out in full. */",
+    ]
+    seen = set()
+    for cls, _file, rules, _stores in CLASSES:
+        if rules in seen:
+            raise SystemExit(f"make_size_wraps.py: {cls}: set_up_rules {rules:#x} twice")
+        seen.add(rules)
+        lines += ["",
+                  f"/* {cls}::set_up_rules */",
+                  f"void o_{rules:08x}(void);",
+                  f"RT_WRAP({rules:08x}, rules_{rules:06x})",
+                  "{",
+                  "    uint32_t self = cpu.ecx;",
+                  f"    o_{rules:08x}();",
+                  "    if (rt_unwinding) return;",
+                  "    season_sizes_rules(self);",
+                  "}"]
+    files = sorted({f for _c, f, _r, _s in CLASSES})
+    lines += ["", "/* The source files of these classes (season_sizes.h). */",
+              "const char *const season_size_files[] = {"]
+    lines += [f'    "{f}",' for f in files]
+    lines += ["};", f"const int season_size_file_count = {len(files)};",
+              "/* The largest count of each file (0: the class counts the clubs of the data). */",
+              "const int season_size_caps[] = {"]
+    lines += [f"    {CAPS.get(f, 0)},       /* {f} */" for f in files]
+    lines += ["};", "/* The smallest count of each file: the largest where a cup of the nation needs it (league_sizes.py FLOORS). */",
+              "const int season_size_floors[] = {"]
+    lines += [f"    {FLOOR_COUNT.get(f, 0)},       /* {f} */" for f in files]
+    lines += ["};"]
+    return "\n".join(lines) + "\n"
+
+
+def main(argv):
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=OUT)
+    ap.add_argument("--check", action="store_true")
+    a = ap.parse_args(argv)
+    text = make()
+    if a.check:
+        have = open(a.out, encoding="utf-8").read() if os.path.exists(a.out) else ""
+        if have != text:
+            print(f"make_size_wraps.py: {a.out} differs from the class table: run the tool again")
+            return 1
+        print(f"make_size_wraps.py: {a.out} matches {len(CLASSES)} classes")
+        return 0
+    with open(a.out, "w", encoding="utf-8") as f:
+        f.write(text)
+    print(f"make_size_wraps.py: {len(CLASSES)} wraps written to {a.out}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
