@@ -44,6 +44,9 @@ int season_changing_rules(void);
  * for 2001 (0x81b938). Returns 1. */
 int season_set_new_game(int start_year, int changing_rules);
 
+/* 1 while the original makes a new game (create_game 0x828110), not at a load (slice 26). */
+int season_creating_game(void);
+
 /* The start year of the save file at the host path, for the star of the Choose Season screen (slice 13).
  * year gets 2001 for a save without a season part. Returns 1 with a part, 0 without one (or for a file that is
  * no save), -1 for a damaged part (year stays 2001). It only reads the file. */

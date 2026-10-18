@@ -92,6 +92,13 @@ PATCHES = {
     0x6696E6: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
     0x669869: (10, "rt_season_text_mod(10u)"),              # key_nation_format_comp_season 0x6697c0
     0x669876: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
+
+    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
+    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
+    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
+    0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
+    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
+    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
 }
 
 # address: (the instruction in the original, C code)
@@ -102,4 +109,10 @@ INSNS = {
     # data would go into a later campaign, and its asserts (0x91dbc4, 0x9223ab) want dates in 2000 and 2001.
     0x918473: ("jl 0x91847c", "if (cc_l(F) || rt_season_year != 2001u) goto L_91847c;"),
     0x9204B8: ("jl 0x9204c1", "if (cc_l(F) || rt_season_year != 2001u) goto L_9204c1;"),
+    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
+    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
+    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
+    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
+    # edition (the original skips it when +0x40 is the game year).
+    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
 }
