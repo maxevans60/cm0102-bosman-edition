@@ -139,11 +139,13 @@ PATCHES = {
 # fixed places), NirCup 0x78ac90 (Premier and First from place 12), ItaCCup 0x63dfe0 (90 C1 and C2 places), HolCup
 # 0x5f4820 (86 places), JapJCup 0x665a00 (28 = J2 + J1), JapEmpCup 0x6624f0 (J1 16 sorted at 0x6628af),
 # KorLeagueCup 0x66cf20 (10 places, box line 703), ScoLgeCup 0x7f0400 and ScoChalCup 0x7ed010 (sums of the four
-# divisions), PolLgeCup 0x7cad30 (Second + First = 34).
+# divisions), PolLgeCup 0x7cad30 (Second + First = 34), FraCup 0x5baa50 (the whole National, then lower clubs to
+# 182: a National of 18 gave 2 more squadless lower clubs, and a 2022/23 game stopped in January 2023 at
+# virtual_staff.cpp 195, VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0).
 FLOORS = {"eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first", "bel_first", "bel_second",
           "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first", "tur_second",
           "nir_first", "nir_prm", "ita_ser_c1a", "ita_ser_c1b", "hol_first", "hol_prm", "jap_j1", "jap_j2",
-          "kor_league", "sco_first", "sco_prm", "sco_second", "sco_third", "pol_second"}
+          "kor_league", "sco_first", "sco_prm", "sco_second", "sco_third", "pol_second", "fra_third"}
 # The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
 # after 2001, 0x7cad4f), else its largest count.
 FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}

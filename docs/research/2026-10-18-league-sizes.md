@@ -72,7 +72,7 @@ Cups that take a capped number of lower clubs and then every club of the top div
 
 The French League Cup already holds a Ligue 1 of 18 (16 National clubs, 20 and 18), as in 2001/02. Its cap matters from 2024/25, when Ligue 2 has 18 too.
 
-The other cups fill fixed places with every club of a division, need the sum of whole divisions, or sort a fixed number. A smaller division breaks them: `EngCcCup` 0x56ccc0 and `EngFaCup` 0x56fab0 (England), `WelLgeCup` 0x927010 (Wales), `BelFaCup` 0x41d8d0 (Belgium), `GreCup` 0x5e9a80 (the Greek second tier), `CroCup` 0x517bb0, `RusCup` 0x7e99a0, `TurCup` 0x8fcb90, `NirCup` 0x78ac90, `ItaCCup` 0x63dfe0 (Serie C1), `HolCup` 0x5f4820, `JapJCup` 0x665a00 and `JapEmpCup` 0x6624f0, `KorLeagueCup` 0x66cf20, `ScoLgeCup` 0x7f0400 and `ScoChalCup` 0x7ed010, `PolLgeCup` 0x7cad30. So the divisions that these cups read never go below their class's count (`FLOORS` in `league_sizes.py`). Making those cups follow the sizes is slice 21's work (domestic cups).
+The other cups fill fixed places with every club of a division, need the sum of whole divisions, or sort a fixed number. A smaller division breaks them: `EngCcCup` 0x56ccc0 and `EngFaCup` 0x56fab0 (England), `WelLgeCup` 0x927010 (Wales), `BelFaCup` 0x41d8d0 (Belgium), `GreCup` 0x5e9a80 (the Greek second tier), `CroCup` 0x517bb0, `RusCup` 0x7e99a0, `TurCup` 0x8fcb90, `NirCup` 0x78ac90, `ItaCCup` 0x63dfe0 (Serie C1), `HolCup` 0x5f4820, `JapJCup` 0x665a00 and `JapEmpCup` 0x6624f0, `KorLeagueCup` 0x66cf20, `ScoLgeCup` 0x7f0400 and `ScoChalCup` 0x7ed010, `PolLgeCup` 0x7cad30, and `FraCup` 0x5baa50 for the National (it takes the whole National, then lower clubs up to 182: with a National of 18 two more lower clubs with almost no players came in, and a 2022/23 game with changing rules on stopped in January 2023 at virtual_staff.cpp 195; with the National at 20 it does not). So the divisions that these cups read never go below their class's count (`FLOORS` in `league_sizes.py`). Making those cups follow the sizes is slice 21's work (domestic cups).
 
 ## Leagues whose size change the code cannot hold
 
@@ -127,6 +127,7 @@ Also not held, for other reasons:
 - Russian First Division 17 (2012/13);
 - Turkish Second Division 17 to 19;
 - Northern Irish First Division 8 (2002/03);
+- French National 17 and 18 (2013/14 on; 20 kept);
 - Serie C1 groups 16 and 17 (2012/13, 2013/14).
 
 Serie B 19 (2018/19) is allowed: the Italian Cup takes positions (`ItaCup::select_entrants` 0x63faf0).

@@ -2,18 +2,11 @@
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2010	bench	eng_cc_cup (Football League Cup), row eng-353: game 5, table 7 (7)
 2010	bench	eng_fa_cup (FA Cup), row eng-352: game 5, table 7 (7)
-2010	bench	eng_first (Football League Championship), row eng-119: game 5, table 7 (7)
-2010	bench	eng_prm (Premier League), row eng-118: game 5, table 7 (7)
-2010	bench	eng_second (Football League One), row eng-120: game 5, table 7 (7)
-2010	bench	eng_third (Football League Two), row eng-121: game 5, table 7 (7)
-2010	bench	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-245: game 5, table 7 (7 (inference from final line-ups))
-2010	bench	sco_prm (Scottish Premier League), row sco-74: game 5, table 7 (7)
 2010	bench	world_club_champ (FIFA Club World Cup), row club-world-173: game 7, table 12 (12)
+2010	club_list	American Major League: 12 of 16 listed clubs that the database holds (18 listed), 0 other clubs, 12 in all; not in it: Real Salt Lake, Seattle Sounders, Toronto FC, Vancouver Whitecaps; others: -
 2010	club_list	Irish First Division: 10 of 11 listed clubs that the database holds (11 listed), 0 other clubs, 10 in all; not in it: Cork City FORAS Co-op; others: -
 2010	club_list	Irish Premier Division: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all; not in it: -; others: Cork City FORAS Co-op, Sporting Fingal
 2010	club_list	Korean League: 10 of 15 listed clubs that the database holds (16 listed), 0 other clubs, 10 in all; not in it: Daegu FC, Daejon Citizen, Gangwon FC, Gwangju Sangmu Bulsajo, Incheon United; others: -
-2010	club_list	Portuguese Premier League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Associação Académica de Coimbra B, Real Sport Club Massamá
-2010	club_list	Portuguese Second League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Associação Académica de Coimbra/Secção de Futebol, Associação Recreativa Aguinense
 2010	club_list	Russian First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Fakel Voronezh, Zhemchuzhina Sochi; others: -
 2010	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: IFK Norrköping, Syrianska Föreningen; others: -
 2010	club_list	Turkish 2. Division Category A: 17 of 17 listed clubs that the database holds (17 listed), 3 other clubs, 20 in all; not in it: -; others: Gençlerbirligi Hacettepespor, Istanbulspor A.S., Malatyaspor
@@ -29,8 +22,6 @@
 2010	clubs	kor_league (K League), row aus-jap-kor-334: game 10, table 16 (16)
 2010	clubs	pol_first (Ekstraklasa), row gre-pol-cro-199: game 8, table 16 (16)
 2010	clubs	por_cup (Taça de Portugal), row por-87: game 164, table 172 (172)
-2010	clubs	por_prm (Primeira Liga), row por-82: game 18, table 16 (16)
-2010	clubs	por_second (Liga de Honra), row por-83: game 18, table 16 (16)
 2010	clubs	rus_first (Football National League), row rus-tur-37: game 18, table 20 (20)
 2010	clubs	swe_prm (Allsvenskan), row den-swe-218: game 14, table 16 (16)
 2010	clubs	tur_second (TFF 1. Lig), row rus-tur-199: game 20, table 17 (17)
@@ -42,17 +33,10 @@
 2010	clubs	wel_first (Welsh Premier League), row wal-nir-irl-229: game 18, table 12 (12)
 2010	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-233: game 3, table 12 (12)
 2010	clubs	world_club_champ (FIFA Club World Cup), row club-world-173: game 0, table 7 (7)
-2010	down	eng_third (Football League Two), row eng-121: game 1 (+0 play-off places), table 2 (2)
 2010	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-241: game 3 (+1 play-off places), table 0 (0)
 2010	down	pol_first (Ekstraklasa), row gre-pol-cro-199: game 0 (+0 play-off places), table 2 (2 (15th-16th))
-2010	down	por_prm (Primeira Liga), row por-82: game 3 (+0 play-off places), table 2 (2)
-2010	down	por_second (Liga de Honra), row por-83: game 3 (+0 play-off places), table 2 (2)
 2010	down	rus_first (Football National League), row rus-tur-37: game 3 (+0 play-off places), table na (n/a (no end of season in 2011))
 2010	down	rus_prm (Russian Football Premier League), row rus-tur-10: game 2 (+0 play-off places), table na (n/a (no end of season in 2011))
-2010	down	sco_first (Scottish First Division), row sco-75: game 2 (+0 play-off places), table 1 (1)
-2010	down	sco_second (Scottish Second Division), row sco-76: game 2 (+0 play-off places), table 1 (1)
-2010	down	swe_first (Superettan), row den-swe-219: game 3 (+0 play-off places), table 2 (2)
-2010	down	tur_second (TFF 1. Lig), row rus-tur-199: game 3 (+0 play-off places), table 2 (2 (16th and 17th))
 2010	down	tur_second_b (TFF 2. Lig), row rus-tur-226: game 0 (+0 play-off places), table 6 (6)
 2010	down	wel_first (Welsh Premier League), row wal-nir-irl-229: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
 2010	idle	asia_nations (AFC Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
@@ -103,13 +87,8 @@
 2010	playoffs	tur_second (TFF 1. Lig), row rus-tur-199: game 0 up and 0 down play-off places, table '3rd to 6th: two-legged semi-finals, final for the third place'
 2010	playoffs	usa_mls (Major League Soccer), row arg-usa-226: game 0 up and 0 down play-off places, table '10 (top 3 of each conference get a bye; 4 wild cards play one-match ties)'
 2010	playoffs	wel_first (Welsh Premier League), row wal-nir-irl-229: game 0 up and 0 down play-off places, table 'pos 3,5,6,7,8: European play-off'
-2010	subs_used	eng_charity (FA Community Shield), row eng-356: game 5, table 6 (6)
-2010	subs_used	rus_first (Football National League), row rus-tur-37: game 3, table 4 (4)
 2010	up	con_merc_cup (Copa Merconorte), row club-world-177: game 1 (+0 play-off places), table na (n/a)
 2010	up	pol_first (Ekstraklasa), row gre-pol-cro-199: game 4 (+0 play-off places), table na (n/a)
-2010	up	por_second (Liga de Honra), row por-83: game 3 (+0 play-off places), table 2 (2)
 2010	up	rus_first (Football National League), row rus-tur-37: game 2 (+0 play-off places), table na (n/a)
-2010	up	sco_second (Scottish Second Division), row sco-76: game 2 (+0 play-off places), table 1 (1)
-2010	up	sco_third (Scottish Third Division), row sco-77: game 2 (+0 play-off places), table 1 (1)
 2010	up	tur_second_b (TFF 2. Lig), row rus-tur-226: game 0 (+2 play-off places), table 3 (3)
 2010	up	usa_mls (Major League Soccer), row arg-usa-226: game 1 (+0 play-off places), table na (n/a (closed league))
