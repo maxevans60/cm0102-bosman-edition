@@ -77,4 +77,25 @@ At the season point the kind adds one sentence for each nation that has a compet
 
 ## 8. Tests and results
 
-See the slice report. Commands and results are recorded at the end of this file when the runs finish.
+Run on 2026-10-17 and 2026-10-18 (load 10 to 24 from other runs):
+
+| Command | Result |
+|---|---|
+| `cd build && ctest` | 20 of 20 pass (`season_subs`, `season_nation`, `season_encode_rules` among them) |
+| `python3 tests/seasons/season_rules17_run.py build/cm0102_recomp $G --only on2010` | PASS (310 s): 7 named substitutes from 2010/11, 5 for the Football League from 2011/12, England with windows 1.6-31.8 and 1.1-31.1, the squad record without the non-EU limit of 3 |
+| same, `--only off2010` | PASS (298 s): the rules of 2010/11 stay in 2011/12 |
+| same, `--only on2020` | PASS (460 s): 3,540,500 asks of the permit function with the flag set and an EU player at an English club after 1 January 2021 (the same count in two runs) |
+| `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --ref-build <main build>` | PASS, also `prematch.sav` and `yeovil.sav --days 7`. `season-code-off` and the main build equal `normal` |
+| the same without `--save` (a new game) | FAIL before the change to `smoke_run.py`: `rules-on` differs from `normal` in the season part and in four parts of the game (`general.dat` ...). This is by design (Q232): with changing rules on the 2001/02 rules of the table apply. `RULES_ON_PARTS` in `smoke_run.py` allows these parts for `rules-on` only. The new-game run was not repeated after that change (the lead runs the full set) |
+| `rules_report_check.py --run ... --year 2010 --last 2011` (changing rules off) | 18 lines of `2010-england.tsv` changed: 13 bench and subs_used differences gone, 5 new (the Football League keeps 7 in 2011/12; the Club World Cup holds 9 where the table has 12) |
+
+A start in 2019 (October 2019 or March 2020 database) stops at `comp_stats.CPP 1664` (`Comp_Stats::set_club_final_position` 0x4a2540 with a null club) on 7 February 2020 in the season jump. The main build stops at the same place, so it is not a finding of this slice. It blocks a news check for the Brexit sentence, which needs a start before 2020.
+
+Tests that I mutated to see them fail: the clamp of the lookup (`season_subs`).
+
+## 9. Questions for Max
+
+1. England has no nationality quota in the table, and the original limits non-EU players in the match squad to 3. With changing rules on the kind takes that limit away. Recommended: yes.
+2. The Brexit rule for Wales and Northern Ireland: the texts say the scope for their leagues is unknown. Applied to all four. Recommended: yes.
+3. A bench above 9 is held at 9 (World Cup 12, Serie A and Serie C 15 from 2022/23). Recommended: accept; a larger bench needs a change to the match engine.
+4. The rules of 2001/02 now apply to a 2001 game with changing rules on (new defaults: 7 named substitutes in some leagues, one English window change, foreign caps). Recommended: accept, it is what Q232 says.
