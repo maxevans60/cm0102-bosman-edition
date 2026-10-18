@@ -55,6 +55,11 @@ uint32_t rt_intl_oceania_left_out(uint32_t id);
 /* 1 when a European Championship without a host goes on (seasons.py 0x57be3d): in a season game. */
 uint32_t rt_intl_euro_no_host(void);
 
+/* The template function of the European Championship (vtable +0x3c, 0x57ab90) for editions of 24 teams
+ * (season_intl_euro.c). The wrap of 0x57ab90 calls it at the entry state with the original o_0057ab90. It
+ * completes the call (it calls the original or makes the knockout of 24 itself) and gives the result. */
+uint32_t season_intl_euro_template(void (*original)(void));
+
 /* The days by which the finals of a class in an edition year move, so the first group day is the table's
  * (0 for the base game, an edition the table does not hold, or one without a date). */
 int season_intl_date_shift(uint32_t cls, int year);

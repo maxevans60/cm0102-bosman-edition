@@ -109,6 +109,25 @@ PATCHES = {
     0x58B892: (0x383, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x383u)"),    # Confederations Cup semi-final
     0x58B90B: (0x83, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x83u)"),      # third place
     0x58B9A5: (0x83, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x83u)"),      # final
+
+    # Euro of 24 teams (0.6.0 slice 27, win/season_intl_euro.c). From Euro 2016 the finals have 6 groups of 4
+    # and a round of 16. euro_champ (ctor 0x57a890) is the League of group A, stage[0..2] are groups B to D and
+    # stage[3] the knockout of 8. With 24 teams stage[0..4] are groups B to F and stage[5] the knockout of 16.
+    # rt_intl_euro_teams gives the team count (16 in the original), rt_intl_euro_ko the knockout stage index (3).
+    # Both give the original's value in the base game and for an edition of 16 teams. this is in esi or ecx.
+    0x57A949: (0x10, "(4u * (rt_intl_euro_ko(esi, 3u) + 1u))"),     # ctor: malloc of the stage array
+    0x57A951: (0x4, "(rt_intl_euro_ko(esi, 3u) + 1u)"),             # ctor: stage count +0x2c
+    0x57AA72: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # ctor: edition in the game year, +0x36
+    0x57BD8B: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # build_team_slots 0x57bd80: calloc of slots
+    0x57BD93: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # build_team_slots: slot room +0x38
+    0x57B60B: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # group A from the draw array (0x57b530)
+    0x57B9CB: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # groups B.. from the draw array (0x57b910)
+    0x57C2E5: (0x3, "rt_intl_euro_ko(esi, 3u)"),                   # run_group_draw 0x57c1d0: League_Stage groups
+    0x57B8FC: (0x3, "rt_intl_euro_ko(ecx, 3u)"),                   # stage step 0x57b880: knockout made at ko
+    0x57B1D5: (0x3, "rt_intl_euro_ko(ecx, 3u)"),                   # stage news (vtable +0x44): group or knockout
+    0x57B334: (0x3, "rt_intl_euro_ko(ecx, 3u)"),                   # result news (vtable +0x48)
+    0x57B736: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # vtable +0x30: the knockout stage[ko]
+    0x57B255: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # stage news: round record of stage[ko]
 }
 
 # address: (the instruction in the original, C code)
@@ -174,4 +193,9 @@ INSNS = {
     # A Euro without a host place (2020, 2028) has 0: in a season game it takes the sizes of 1 host (groups 0,
     # 2, 5 and 7 of six, the others of five: room for 54, the pool holds at most 51, 0x57f76f).
     0x57D9DE: ("je 0x57da7b", "if (cc_e(F) || (rt_intl_euro_no_host() && R8(ecx + 0xf6u) == 0u)) goto L_57da7b;"),
+
+    # Euro of 24 teams (0.6.0 slice 27, win/season_intl_euro.c). start_new_season 0x57b750 keeps the stage array
+    # of the ctor (+0xc, count +0x2c). After the step (0x57b7ca) an edition of another size gets a new array.
+    # The flags of "or eax, -1" are not read: the next instructions only move, and add esp at 0x57b7e1 sets them.
+    0x57B7CF: ("or eax, 0xffffffff", "SYNC(); rt_intl_euro_stages(esi); eax = 0xffffffffu; SETF(K_RES | SZ4, 0, 0, eax, 0);"),
 }

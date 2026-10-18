@@ -578,7 +578,9 @@ void o_0040eb00(void);
 void o_00798b60(void);
 void o_0079f7d0(void);
 RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, o_0092c290); }
-RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, o_0057ab90); }
+/* The Euro of 24 teams makes its groups E and F and its knockout of 16 in season_intl_euro.c. */
+static void euro_template_body(void) { season_intl_euro_template(o_0057ab90); }
+RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, euro_template_body); }
 RT_WRAP(0058b560, confed_template) { stage_builder(INTL_CONFED, o_0058b560); }
 RT_WRAP(005e0900, copa_template) { stage_builder(INTL_COPA, o_005e0900); }
 RT_WRAP(004012e0, acn_template) { stage_builder(INTL_ACN, o_004012e0); }

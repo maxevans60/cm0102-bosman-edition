@@ -312,6 +312,12 @@ uint32_t rt_intl_wc_holder(uint32_t holder);
 uint32_t rt_intl_wc_holder_slot(uint32_t year);
 uint32_t rt_intl_oceania_left_out(uint32_t id);
 uint32_t rt_intl_euro_no_host(void);
+/* The European Championship of 24 teams (win/season_intl_euro.c): the team count (16), the knockout stage index
+ * (3) and a new stage array after the step of start_new_season. Each gives the original's value for an edition
+ * of 16 teams and in the base game. */
+uint32_t rt_intl_euro_teams(uint32_t self, uint32_t original);
+uint32_t rt_intl_euro_ko(uint32_t self, uint32_t original);
+void rt_intl_euro_stages(uint32_t self);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets

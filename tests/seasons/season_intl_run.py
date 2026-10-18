@@ -10,6 +10,7 @@ Each run is a season jump of tests/seasons/rules_report_check.py (England, the q
 test log RECOMP_SEASON_INTL_LOG=1. The runs:
     2003    October 2003, 2003/04 to 2004/05, changing rules on (Euro 2004, no golden goal from 2004/05)
     2005    September 2005, 2005/06 to 2006/07, changing rules on (World Cup 2006, Australia to Asia)
+    2015    October 2015, 2015/16 to 2016/17, changing rules on (Euro 2016 with 24 teams)
     2017    October 2017, 2017/18 to 2018/19, changing rules on (the last Confederations Cup lies before)
     2019    October 2019, 2019/20 to 2020/21, changing rules on (Euro 2020 and Copa America 2020 at their
             planned time, the Tokyo Olympics in 2020, Q277, Q366)
@@ -46,6 +47,7 @@ DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
 RUNS = {
     "2003": (2003, "October 2003", "on"),
     "2005": (2005, "September 2005", "on"),
+    "2015": (2015, "October 2015", "on"),
     "2017": (2017, "October 2017", "on"),
     "2019": (2019, "October 2019", "on"),
     "2021": (2021, "October 2021", "on"),
@@ -63,6 +65,8 @@ RENAMES = {
 UNRENAMED = {r: [("Yugoslavia", "Serbia and Montenegro")] for r in ("2017", "2019", "2021", "off")}
 # The finals that each run must move to the table's first day (log "moves by").
 MOVES = {"2021": [("world_cup", 2022, 161)]}
+# Log lines each run must hold (season_intl_euro.c: the Euro of 24 teams).
+LINES = {"2015": ["euro_champ 2016 draw of 24 teams in 6 groups", "euro_champ 2016 round of 16"]}
 STEPS = {"world_cup": 4, "euro_champ": 4, "fifa_confed": 2, "olympics": 4, "goldcup": 2, "african_nations": 2,
          "asia_nations": 4, "oceania_nations": 2}
 IDLE = 2200
@@ -128,6 +132,9 @@ def check(name, start, rules, work):
     for old, new in UNRENAMED.get(name, []):
         if any(f"season intl: nation {old} is now {new} " in x for x in log):
             fails.append(f"{name}: {old} must keep its name (the database has a later name of the chain)")
+    for text in LINES.get(name, []):
+        if not any(text in x for x in log):
+            fails.append(f"{name}: no log line {text!r}")
     for f, y, days in MOVES.get(name, []):
         if not any(f"season intl: {f} {y} moves by {days} days" in x for x in log):
             fails.append(f"{name}: {f} {y} does not move by {days} days")
