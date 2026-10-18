@@ -46,4 +46,23 @@ typedef struct {
  * letter is not a type. */
 int season_cups_apply(char type, SeasonCupRound *round);
 
+/* ---- Cups that the rules table does not hold in some seasons (slice 21b, season_cup_breaks.c) ----
+ *
+ * An edition of a cup is its season year (cup+0x40). The rules table puts the edition of a split-season cup
+ * (2009/10) in the row of season 2009, and the edition of a calendar-year cup (the Norwegian Cup of 2010) in
+ * the row of season 2009 (2009/10), as docs/research/rules-0.6.0/club-world.md says. These functions read the
+ * rules table (season_rules.h) and no game memory. */
+#define SEASON_CUPS_NEVER 2999   /* the edition of a cup that the table never holds again */
+
+/* 1 when the table puts edition Y of the cup in the row of season Y - 1: its first row (2001/02) holds the real
+ * season 2002 alone. 0 for a split-season cup and for a file with no row. */
+int season_cups_calendar(const char *file);
+
+/* 1 when the table holds the edition, 0 when the row says not held, -1 with no row. After the last row of the
+ * table the rule stays (Q248). */
+int season_cups_held(const char *file, int edition);
+
+/* The first edition from `edition` on that the table holds, SEASON_CUPS_NEVER when none, 0 with no row. */
+int season_cups_next(const char *file, int edition);
+
 #endif

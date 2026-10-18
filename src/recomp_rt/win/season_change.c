@@ -36,6 +36,7 @@
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
 extern const SeasonRuleKind season_kind_cups;
+extern const SeasonRuleKind season_kind_cup_breaks;
 extern const SeasonRuleKind season_kind_club_world;
 extern const SeasonRuleKind season_kind_comps;         /* slice 26: season_comps.h */
 void season_comps_reset(void);                         /* slice 26: season_comps.h */
@@ -44,6 +45,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
     &season_kind_names,                 /* slice 16: competition names (slice 15's names table) */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
+    &season_kind_cup_breaks,            /* slice 21b: domestic cups that are not held in some seasons */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
