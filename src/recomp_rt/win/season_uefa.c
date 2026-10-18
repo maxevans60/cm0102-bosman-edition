@@ -571,7 +571,9 @@ void season_uefa_report(void *file, int season, const char *phase)
     /* The labels of the rounds that have a real name in the round names table (Q370), at the end of a season. */
     if (strcmp(phase, "end")) return;
     static const struct { const char *file; int code; } labels[] = {
-        {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250}};
+        {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250},
+        /* slice 23: the qualifying rounds of 2009/10 on */
+        {"european_cup", 220}, {"european_cup", 240}, {"european_cup", 250}, {"uefa_cup", 220}, {"uefa_cup", 270}};
     for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++) {
         uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : uc;
         char text[128];
