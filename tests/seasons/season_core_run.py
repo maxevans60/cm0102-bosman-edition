@@ -20,8 +20,9 @@ The checks, played at the same time:
     reload      loads the save of "season" in a new user folder with no RECOMP_START_SEASON, plays 3 days and
                 saves: the runtime reads the year from the part, and the new save has the part with the year.
     reload-off  the same with the save of season-off: the new save keeps changing rules off.
-    later       the save of "season" with a part of a later version (version 3, 36 bytes): it loads with the
-                fields that this version knows, and the new save has a version 1 part.
+    later       the save of "season" with a part of a later version (version 3: the fields of version 2, then 8
+                bytes): it loads with the fields that this version knows, and the new save has a version 1 or 2
+                part (2 when the game has names, slice 15).
     damaged     the save of "season" with a damaged part (year 1999): the load is refused with a message box.
 Names and club moves (slice 15): the runs read the season tables of the build (RECOMP_RULES_TABLE, build
 folder seasons/), when the build has them. Then also:
@@ -300,8 +301,14 @@ def main(argv):
             if results.get("season-off", (None,))[0]:
                 saves["reload-off"] = results["season-off"][0]
             later = os.path.join(work, "later.sav")
-            # Version 3: the fields of version 2 (no news, no names, season point 0, slice 16), then 8 unknown bytes.
-            replace_part(path, later, struct.pack("<9I", 3, 36, year, 1, 0, 0, 0, 7, 7))
+            # Version 3: the fields of version 2 (slice 16), then 8 unknown bytes. A season game with names
+            # (slice 15) has the names in the data in those fields, which the load needs (0x60efd0); without
+            # them it is the version 2 fields with no news, no names and season point 0.
+            data = savfile.Sav(path).read_member(PART)
+            if struct.unpack_from("<I", data, 0)[0] == 2:
+                replace_part(path, later, struct.pack("<2I", 3, len(data) + 8) + data[8:] + struct.pack("<2I", 7, 7))
+            else:
+                replace_part(path, later, struct.pack("<9I", 3, 36, year, 1, 0, 0, 0, 7, 7))
             saves["later"] = later
             damaged = os.path.join(work, "damaged.sav")
             replace_part(path, damaged, struct.pack("<4I", 1, 16, 1999, 1))
