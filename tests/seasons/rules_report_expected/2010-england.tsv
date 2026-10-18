@@ -91,6 +91,7 @@
 2011	name	world_club_champ (FIFA Club World Championship), row club-world-192: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
 2011	name	world_club_cup (Intercontinental Cup), row club-world-191: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2011	no_row	friendly (Friendly): no table row
+2011	no_row	mini_cup (Friendly Cup): no table row
 2011	no_row	record_utils ('B' International): no table row
 2011	no_row	record_utils (Reserve): no table row
 2011	no_row	record_utils (Under 21 International): no table row
