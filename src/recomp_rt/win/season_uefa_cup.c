@@ -24,6 +24,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_uefa.h"
+#include "season_playoffs.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -505,6 +506,10 @@ void o_009030e0(void);
 RT_WRAP(005a8f60, empty_or_uc_advance)
 {
     uint32_t uc = cpu.ecx;
+    if (season_playoffs_advance(uc)) {               /* slice 19: a league's play-off (season_playoffs.c) */
+        if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
+        return;
+    }
     if (!groups_layout(uc)) {
         o_005a8f60();
         return;
