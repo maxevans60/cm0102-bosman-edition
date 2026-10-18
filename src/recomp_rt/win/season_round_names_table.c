@@ -11,5 +11,13 @@ const SeasonRoundName season_round_name_rows[] = {
     {"uefa_cup", 40, 2004, 4, "Rnd of 16"},
     {"uefa_cup", 250, 2004, 3, "First Qualifying Round"},
     {"uefa_cup", 260, 2004, 3, "Second Qualifying Round"},
+    {"world_cup", 20, 2001, 3, "Round of 16"},
+    {"world_cup", 20, 2001, 4, "Rnd of 16"},
+    {"euro_champ", 20, 2015, 3, "Round of 16"},
+    {"euro_champ", 20, 2015, 4, "Rnd of 16"},
+    {"african_nations", 20, 2018, 3, "Round of 16"},
+    {"african_nations", 20, 2018, 4, "Rnd of 16"},
+    {"asia_nations", 20, 2018, 3, "Round of 16"},
+    {"asia_nations", 20, 2018, 4, "Rnd of 16"},
 };
 const int season_round_name_count = (int)(sizeof season_round_name_rows / sizeof season_round_name_rows[0]);
