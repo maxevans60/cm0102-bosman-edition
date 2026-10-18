@@ -452,7 +452,12 @@ static void knockout16(int e, uint32_t self)
     g[0] = self;
     for (int i = 1; i < GROUPS; i++) g[i] = rd32(g_mem, stages + 4u * (uint32_t)(i - 1));
     uint32_t teams = game_malloc(8u * 4u), out = game_malloc(8);
-    if (rt_unwinding || !teams || !out) return;
+    if (rt_unwinding) return;
+    if (!teams || !out) {                               /* no leak when only one block came */
+        if (teams) game_free(teams);
+        if (out) game_free(out);
+        return;
+    }
     for (int k = 0; k < 8; k++) {
         const char *b = editions[e].bracket[k];
         wr32(g_mem, teams + 4u * (uint32_t)k, table_club(g[b[1] - 'A'], b[0] - '1'));

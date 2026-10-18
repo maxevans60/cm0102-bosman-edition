@@ -519,7 +519,12 @@ static void knockout24(int c, uint32_t self)
         if (thirds_table[r].mask == mask) row = r;
 
     uint32_t teams = game_malloc(16u * 4u), out = game_malloc(8);
-    if (rt_unwinding || !teams || !out) return;
+    if (rt_unwinding) return;
+    if (!teams || !out) {                               /* no leak when only one block came */
+        if (teams) game_free(teams);
+        if (out) game_free(out);
+        return;
+    }
     for (int k = 0; k < 16; k++) {
         const char *b = cups[c].bracket[k];
         int grp = b[1] - 'A', pos = b[0] - '1';
