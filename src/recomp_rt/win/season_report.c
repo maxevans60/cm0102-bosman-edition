@@ -54,6 +54,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_rules.h"
+#include "season_uefa.h"
 #include "../host.h"
 
 #include <SDL.h>
@@ -192,6 +193,7 @@ static void write_season(int season, const char *phase)
         }
     }
     if (*phase == 's') write_clubs(season, phase);
+    season_uefa_report(report, season, phase);      /* slice 22: the stages of the Champions League */
     fflush(report);
     fprintf(stderr, "recomp: rules report: season %d/%02d %s on %02d.%02d.%04d\n", season, (season + 1) % 100, phase,
             d, m, y);

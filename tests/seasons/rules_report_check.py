@@ -10,7 +10,7 @@ Usage:
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
         [--extra conference,regional,c2]
-        [--keep <folder>] [--timeout s] [--start-only] [--changing-rules on|off] [--update-expected]
+        [--keep <folder>] [--timeout s] [--start-only] [--update-expected] [--changing-rules on|off]
         plays the season jump, then compares its report
 
 Runs:
@@ -20,8 +20,7 @@ Runs:
                 (RECOMP_RULES_REPORT_STOP=start): the club moves and names of that start (slice 15). Its
                 expected file has the name <year>-<nations>-start
 
-The run: a new game (Arsenal, as in tests/smoke/smoke_run.py) with changing_rules = off (--changing-rules on: on,
-expected file name ending in -changing), then Go on Holiday.
+The run: a new game (Arsenal, as in tests/smoke/smoke_run.py) with changing_rules = off, then Go on Holiday.
 RECOMP_SEASON_JUMP=<last> turns the match engine off, so the original's quick result engine plays every match
 in the real day loop. RECOMP_RULES_REPORT writes the competitions at the start of each season (the first day,
 then 1 August) and at its end (1 June of the next year) (src/recomp_rt/win/season_report.c). The run ends after
@@ -29,7 +28,8 @@ the end report of the last season. --year starts the game in that season (RECOMP
 database folder. --nations picks the leagues on the Select League(s) screen: england (the default
 selection), all (Select All), all,-france (Select All, then France out), or names of the first 16 rows
 (Argentina to Norway). --extra adds the lower
-divisions of the screen: the English Conference, the German regional divisions and Serie C2. --keep keeps the
+divisions of the screen: the English Conference, the German regional divisions and Serie C2. --changing-rules on
+plays the jump with changing rules on (slice 22; the default is off, the start season's rules). --keep keeps the
 report and the log there.
 
 The checks that fail the test (exit code 1):
@@ -62,6 +62,9 @@ The differences, by kind:
                                 are not all in it, or that holds other clubs too: the division keeps the count of
                                 its class (slice 18 brings the real count), or the list lacks clubs of the
                                 database. The line names each club, so another fill is a new difference
+    format                      the stages of the Champions League at the end of a season (the uefa line of the
+                                report, slice 22): the second group stage and the first knockout round differ
+                                from the "Rounds (clubs):" list of the row ("Groups 2 16, KO 8" or "KO 16")
     not_in_game                 a row with no competition in the game, of a nation (or body, such as UEFA)
                                 that has a numbered tier in the report, or of a file of the report
 
@@ -76,6 +79,10 @@ import subprocess
 import sys
 import tempfile
 import time
+
+
+# Friendly competitions: made by chance, not in the rules table.
+FRIENDLY_FILES = {"mini_cup", "mini_league"}
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -97,9 +104,13 @@ NATION_ROWS = ["Argentina", "Australia", "Belgium", "Brazil", "Croatia", "Denmar
 EXTRA = {"conference": 320, "regional": 385, "c2": 451}     # y of the row; the extra division is at x 675
 
 
+UEFA_LINES = []          # the uefa lines of the last report that read_report read (slice 22)
+
+
 def read_report(path, clubs=None):
     """(season lines, comp lines); club lines go into clubs when a list is given."""
     seasons, comps = [], []
+    UEFA_LINES.clear()
     with open(path, encoding="latin-1") as f:
         lines = f.read().split("\n")
     if not lines or not lines[0].startswith("#bosman-rules-report\t2"):
@@ -115,6 +126,11 @@ def read_report(path, clubs=None):
             if clubs is not None and len(cells) == 6:
                 clubs.append({"season": int(cells[1]), "phase": cells[2], "division": int(cells[3]),
                               "club": int(cells[4]), "name": cells[5]})
+        elif cells[0] == "uefa":                         # slice 22: the stages of the Champions League
+            UEFA_LINES.append({"season": int(cells[1]), "phase": cells[2], "file": cells[3], "stages": int(cells[4]),
+                               "current": int(cells[5]), "groups": int(cells[6]), "groups2": int(cells[7]),
+                               "ko_clubs": int(cells[8]), "ko_rounds": int(cells[9]),
+                               "winner": cells[10] if len(cells) > 10 else "-"})
         elif cells[0] == "comp":
             if len(cells) != len(COLS) + 1:
                 raise SystemExit(f"{path}: a comp line with {len(cells)} cells")
@@ -184,7 +200,10 @@ def differences(seasons, comps, rows):
         k = nth[(season, c["file"])]
         nth[(season, c["file"])] += 1
         if not found:
-            out.add((season, "no_row", f"{c['file']} ({c['name']}): no table row"))
+            # The game makes the friendly competitions by chance at each start,
+            # and the rules table has no rows for them. So they give no line.
+            if c["file"] not in FRIENDLY_FILES:
+                out.add((season, "no_row", f"{c['file']} ({c['name']}): no table row"))
             continue
         r = pick_row(found, c["file"], k)
         nations |= {x["nation"] for x in found if isinstance(x["tier"], int)}
@@ -221,6 +240,7 @@ def differences(seasons, comps, rows):
         shown = make_names.shown_name(r["name"])
         if shown and c["name"] not in (r["name"], shown):
             out.add((season, "name", f"{label}: game {c['name']!r}, table {r['name']!r}"))
+    out |= uefa_format_differences(rows)
     for s in sorted({x["season"] for x in seasons}):
         for r in rows:
             if r["season"] != s or r["comp_file"] == "na" or "not_held" in (r["clubs"], r["format"]):
@@ -317,6 +337,40 @@ def club_differences(seasons, comps, clubs, data_dir):
                                           f"the database holds ({len(listed)} listed), {len(others)} other clubs, "
                                           f"{len(have)} in all; not in it: {', '.join(absent) or '-'}; others: "
                                           f"{', '.join(others) or '-'}"))
+
+
+def uefa_format_differences(rows):
+    """Slice 22: the stages that the Champions League and the UEFA Cup played in a season (their end lines)
+    against the "Rounds (clubs):" list of the row. Champions League: the clubs of a second group stage and of the
+    first knockout round. UEFA Cup: the clubs of the group stage and of the knockout round after it (0 and 0 for
+    a row with no groups)."""
+    import re
+    out = set()
+    for u in UEFA_LINES:
+        if u["phase"] != "end":
+            continue
+        found = [r for r in rows if r["season"] == u["season"] and r["comp_file"] == u["file"]
+                 and "qualifying" not in r["comp"].lower()]
+        if not found:
+            continue
+        r = found[0]
+        text = r["format_text"] or ""
+        groups = re.search(r"Groups (\d+)", text)
+        groups2 = re.search(r"Groups 2 (\d+)", text)
+        ko = re.search(r"\b(?:KO|R3) (\d+)\.", text) or re.search(r"\bKO (\d+)", text)
+        if u["file"] == "european_cup":
+            if not ko:
+                continue
+            want = (int(groups2.group(1)) if groups2 else 0, int(ko.group(1)))
+            game = (u["groups2"], u["ko_clubs"])
+            words = ("in a second group stage", "in the first knockout round")
+        else:
+            want = (int(groups.group(1)), int(ko.group(1)) if ko else 0) if groups else (0, 0)
+            game = (u["groups"], u["ko_clubs"])
+            words = ("in the group stage", "in the knockout round after it")
+        if game != want:
+            out.add((u["season"], "format", f"{u['file']}, row {r['id']}: game {game[0]} clubs {words[0]} and "
+                                            f"{game[1]} {words[1]}, table {want[0]} and {want[1]}"))
     return out
 
 
@@ -526,15 +580,16 @@ def main(argv):
         start_only = "--start-only" in argv
         if start_only:
             last = year or 2001
-        # --changing-rules on|off (slice 18): the season change with the rules of each season. Its expected file
-        # ends in -changing.
-        changing = arg(argv, "--changing-rules", "off") == "on"
+        rules = arg(argv, "--changing-rules", "off")                    # slices 18 and 22
+        if rules not in ("on", "off"):
+            print("--changing-rules takes on or off")
+            return 2
         code, report = run(program, game, last, year, database, nations, extra, keep, timeout,
-                           options_more={"changing_rules": "on"} if changing else None, start_only=start_only)
+                           options_more={"changing_rules": rules}, start_only=start_only)
         failed = [] if code == 0 else [f"the run ended with code {code}"]
-        name = f"{year or 2001}-{nations[0].lower()}" + "".join(
+        name = ("changing-" if rules == "on" else "") + f"{year or 2001}-{nations[0].lower()}" + "".join(
             f"{'-no' if nations[0] == 'all' else '-'}{n.lower().replace(' ', '_')}" for n in nations[1:]) + \
-            "".join(f"-{e}" for e in extra) + ("-start" if start_only else "") + ("-changing" if changing else "")
+            "".join(f"-{e}" for e in extra) + ("-start" if start_only else "")
         if os.path.exists(report):
             failed += check(report, game if not database else None, last, name, update,
                             data_dir=database or os.path.join(game, "Data"), start_only=start_only)
