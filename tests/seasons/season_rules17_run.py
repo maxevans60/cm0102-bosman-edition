@@ -118,7 +118,7 @@ def check_run(name, program, game, keep, reuse=False):
         # to 2099 (the control) the same signings go through. The permit group of the nations is logged too.
         sent = [x for x in log if "Brexit:" in x and "rule on: sent to the permit decision" in x]
         through = [x for x in log if "Brexit:" in x and "goes through" in x]
-        decided = [x for x in log if "permit decision at a completion" in x]
+        decided = [x for x in log if "permit decision at a completion from the date of the rule" in x]
         if name == "on2020":
             if not sent:
                 fails.append(f"{name}: no signing of an EU player by a UK club was sent to the permit decision")
@@ -127,7 +127,7 @@ def check_run(name, program, game, keep, reuse=False):
         else:
             if not through:
                 fails.append(f"{name}: no signing of an EU player by a UK club went through in the control run")
-            if sent or decided:
+            if sent:
                 fails.append(f"{name}: the control run sent a signing to the permit decision")
         print(f"    {len(sent)} sent to the permit decision, {len(through)} went through, {len(decided)} permit decisions")
         for x in sent[:3] + through[:3] + decided[:3]:

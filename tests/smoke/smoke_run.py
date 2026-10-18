@@ -504,7 +504,9 @@ def options_runs(load, holiday):
 RULES_PART = "bosman_season.dat"
 # Slice 17: with changing rules on, the rules of 2001/02 from the rules table apply to a new game (named
 # substitutes, English windows, foreign player caps: Q232), so the game plays differently and these parts of the
-# save differ as well. The base game (changing_rules off) is compared as before.
+# save differ as well. These four are the parts that differ in the new-game run of 2026-10-18 (all four, no
+# other: transfer.dat, clubs and staff are equal), so a fifth part that differs fails the check. The base game
+# (changing_rules off) is compared as before.
 RULES_ON_PARTS = ("fifa_rankings.dat", "general.dat", "national_teams.dat", "staff history.tmp")
 
 
