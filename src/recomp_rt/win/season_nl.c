@@ -487,8 +487,9 @@ static int left_out(const SeasonNlEdition *e, int nation)
 static int read_results(uint32_t self, const SeasonNlEdition *old, SeasonNlRow *rows)
 {
     int n = 0, groups = held_groups(self);
-    for (int g = 0; g < groups - 1 + 1 && g < MAX_GROUPS; g++) {
-        if (g == groups - 1 && g > 0) break;            /* the finals stage */
+    /* Group g is the League object (g 0) or stage[g - 1]; the stage array has a slot for each group after the
+     * first and one for the finals (make_stages), so the groups are 0 to +0x2c - 1. */
+    for (int g = 0; g < groups && g < MAX_GROUPS; g++) {
         uint32_t st = stage_at(self, g - 1);
         if (!readable(st)) continue;
         uint32_t a[1] = {0};
@@ -805,6 +806,21 @@ static void advance_stage(void)
             call_this(CUP_START, cup, 1, z);
             if (rt_unwinding) return;
             wr32(g_mem, self + F_STAGE, (uint32_t)(groups - 1));
+        }
+        if (logging() && cup) {
+            /* Test log: the round records as the stage holds them (+0xa3, count +0x3c; class doc 12.1). */
+            uint32_t rr = rd32(g_mem, cup + 0xa3u);
+            int nr = (int16_t)rd16(g_mem, cup + 0x3cu);
+            for (int k = 0; readable(rr) && k < nr && k < 4; k++) {
+                uint32_t r = rr + (uint32_t)k * ROUND_SIZE;
+                fprintf(stderr, "recomp: season nl: finals round %d: draw day %d +%d, match day %d +%d, id 0x%x, flags 0x%x, "
+                        "teams %d, ties %d, entrants %d, legs %d\n", k, (int16_t)rd16(g_mem, r), (int8_t)rd8(g_mem, r + 2u),
+                        (int16_t)rd16(g_mem, r + 3u), (int8_t)rd8(g_mem, r + 5u), rd16(g_mem, r + 7u), rd16(g_mem, r + 0xdu),
+                        (int16_t)rd16(g_mem, r + 0x18u), (int16_t)rd16(g_mem, r + 0x1au), (int16_t)rd16(g_mem, r + 0x1cu),
+                        rd8(g_mem, r + 0x21u));
+            }
+            fprintf(stderr, "recomp: season nl: finals stage: rounds %d, year %d, complete %d\n", nr,
+                    (int16_t)rd16(g_mem, cup + 0x40u), rd8(g_mem, cup + 0xb1u));
         }
         if (logging()) {
             fprintf(stderr, "recomp: season nl: %s finals:", e->edition);
