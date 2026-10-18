@@ -318,6 +318,13 @@ uint32_t rt_intl_euro_no_host(void);
 uint32_t rt_intl_euro_teams(uint32_t self, uint32_t original);
 uint32_t rt_intl_euro_ko(uint32_t self, uint32_t original);
 void rt_intl_euro_stages(uint32_t self);
+/* The African Cup of Nations and the Asian Cup of 24 teams (win/season_intl_cups.c): the team count (16, 12),
+ * the group count of the draw (4, 3), the knockout stage index (3, 2) and a new stage array after the step of
+ * start_new_season. Each gives the original's value for another edition, another class and the base game. */
+uint32_t rt_intl_cup_teams(uint32_t self, uint32_t original);
+uint32_t rt_intl_cup_groups(uint32_t self, uint32_t original);
+uint32_t rt_intl_cup_ko(uint32_t self, uint32_t original);
+void rt_intl_cup_stages(uint32_t self);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets

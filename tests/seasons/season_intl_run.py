@@ -12,6 +12,7 @@ test log RECOMP_SEASON_INTL_LOG=1. The runs:
     2005    September 2005, 2005/06 to 2006/07, changing rules on (World Cup 2006, Australia to Asia)
     2015    October 2015, 2015/16 to 2016/17, changing rules on (Euro 2016 with 24 teams)
     2017    October 2017, 2017/18 to 2018/19, changing rules on (the last Confederations Cup lies before)
+    2018    October 2018, 2018/19 to 2019/20, changing rules on (Asian Cup and Africa Cup of Nations of 24 teams)
     2019    October 2019, 2019/20 to 2020/21, changing rules on (Euro 2020 and Copa America 2020 at their
             planned time, the Tokyo Olympics in 2020, Q277, Q366)
     2021    October 2021, 2021/22 to 2022/23, changing rules on (the 2022 World Cup in November, Türkiye)
@@ -49,6 +50,7 @@ RUNS = {
     "2005": (2005, "September 2005", "on"),
     "2015": (2015, "October 2015", "on"),
     "2017": (2017, "October 2017", "on"),
+    "2018": (2018, "October 2018", "on"),
     "2019": (2019, "October 2019", "on"),
     "2021": (2021, "October 2021", "on"),
     "off": (2017, "October 2017", "off"),
@@ -66,7 +68,8 @@ UNRENAMED = {r: [("Yugoslavia", "Serbia and Montenegro")] for r in ("2017", "201
 # The finals that each run must move to the table's first day (log "moves by").
 MOVES = {"2021": [("world_cup", 2022, 161)]}
 # Log lines each run must hold (season_intl_euro.c: the Euro of 24 teams).
-LINES = {"2015": ["euro_champ 2016 draw of 24 teams in 6 groups", "euro_champ 2016 round of 16"]}
+LINES = {"2015": ["euro_champ 2016 draw of 24 teams in 6 groups", "euro_champ 2016 round of 16"],
+         "2018": ["asia_nations 2019 round of 16", "african_nations 2019 round of 16"]}
 STEPS = {"world_cup": 4, "euro_champ": 4, "fifa_confed": 2, "olympics": 4, "goldcup": 2, "african_nations": 2,
          "asia_nations": 4, "oceania_nations": 2}
 IDLE = 2200

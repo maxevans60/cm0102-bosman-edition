@@ -60,6 +60,11 @@ uint32_t rt_intl_euro_no_host(void);
  * completes the call (it calls the original or makes the knockout of 24 itself) and gives the result. */
 uint32_t season_intl_euro_template(void (*original)(void));
 
+/* The template function of the African Cup of Nations (cls INTL_ACN, 0x4012e0) and the Asian Cup (INTL_ASIAN,
+ * 0x40eb00) for editions of 24 teams (season_intl_cups.c). The wraps call it at the entry state with the
+ * original. It completes the call and gives the result. */
+uint32_t season_intl_cup_template(uint32_t cls, void (*original)(void));
+
 /* The days by which the finals of a class in an edition year move, so the first group day is the table's
  * (0 for the base game, an edition the table does not hold, or one without a date). */
 int season_intl_date_shift(uint32_t cls, int year);

@@ -583,8 +583,10 @@ static void euro_template_body(void) { season_intl_euro_template(o_0057ab90); }
 RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, euro_template_body); }
 RT_WRAP(0058b560, confed_template) { stage_builder(INTL_CONFED, o_0058b560); }
 RT_WRAP(005e0900, copa_template) { stage_builder(INTL_COPA, o_005e0900); }
-RT_WRAP(004012e0, acn_template) { stage_builder(INTL_ACN, o_004012e0); }
-RT_WRAP(0040eb00, asian_template) { stage_builder(INTL_ASIAN, o_0040eb00); }
+static void acn_template_body(void) { season_intl_cup_template(INTL_ACN, o_004012e0); }
+RT_WRAP(004012e0, acn_template) { stage_builder(INTL_ACN, acn_template_body); }
+static void asian_template_body(void) { season_intl_cup_template(INTL_ASIAN, o_0040eb00); }
+RT_WRAP(0040eb00, asian_template) { stage_builder(INTL_ASIAN, asian_template_body); }
 RT_WRAP(00798b60, ofc_template) { stage_builder(INTL_OFC, o_00798b60); }
 RT_WRAP(0079f7d0, olympics_template) { stage_builder(INTL_OLYMPICS, o_0079f7d0); }
 

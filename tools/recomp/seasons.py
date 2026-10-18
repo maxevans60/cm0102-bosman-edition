@@ -128,6 +128,43 @@ PATCHES = {
     0x57B334: (0x3, "rt_intl_euro_ko(ecx, 3u)"),                   # result news (vtable +0x48)
     0x57B736: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # vtable +0x30: the knockout stage[ko]
     0x57B255: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # stage news: round record of stage[ko]
+
+    # ACN and Asian Cup of 24 teams (0.6.0 slice 27, win/season_intl_cups.c). From 2019 both finals have 6 groups
+    # of 4 and a round of 16. african_nations (ctor 0x401000) is the League of group A, stage[0..2] groups B to D,
+    # stage[3] the knockout of 8. asia_nations (ctor 0x40e860): group A, stage[0..1] groups B and C, stage[2] the
+    # knockout of 8. With 24 teams stage[0..4] are groups B to F and stage[5] the knockout of 16 in both.
+    # rt_intl_cup_teams gives the team count, rt_intl_cup_groups the group count of the draw (also the size of a
+    # pot), rt_intl_cup_ko the knockout stage index. Each gives the original's value in the base game, for an
+    # edition of 16 or 12 teams and for another class (0x79fea6 is shared with the Olympics). this in esi or ecx.
+    0x4010AC: (0x10, "(4u * (rt_intl_cup_ko(esi, 3u) + 1u))"),      # ACN ctor: malloc of the stage array
+    0x4010C5: (0x4, "(rt_intl_cup_ko(esi, 3u) + 1u)"),              # ACN ctor: stage count +0x2c
+    0x401B93: (0xC, "(4u * rt_intl_cup_ko(ecx, 3u))"),              # ACN vtable +0x30: stage[ko]
+    0x401BA5: (0x3, "rt_intl_cup_ko(ecx, 3u)"),                     # ACN stage news (vtable +0x44)
+    0x401C27: (0xC, "(4u * rt_intl_cup_ko(esi, 3u))"),              # ACN stage news: round record of stage[ko]
+    0x79FEA6: (0x3, "rt_intl_cup_ko(ecx, 3u)"),                     # ACN and Olympics result news (vtable +0x48)
+    0x401E8C: (0x3, "rt_intl_cup_ko(ecx, 3u)"),                     # ACN stage step 0x401e10: knockout at ko
+    0x4022D3: (0x10, "rt_intl_cup_teams(esi, 0x10u)"),              # ACN entrants 0x4022c0: team count +0xf2
+    0x40241D: (0x10, "rt_intl_cup_teams(esi, 0x10u)"),              # ACN entrants: enough nations found
+    0x40244B: (0x40, "(4u * rt_intl_cup_teams(esi, 0x10u))"),       # ACN draw: malloc of the groups
+    0x4024CA: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: groups
+    0x4024DE: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: random place in a pot
+    0x4024FD: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: random place in a pot, again
+    0x402531: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: next pot
+    0x402772: (0x3, "rt_intl_cup_ko(esi, 3u)"),                     # ACN update_for_date 0x4025a0: group stages
+    0x40E90A: (0xC, "(4u * (rt_intl_cup_ko(esi, 2u) + 1u))"),       # Asian Cup ctor: malloc of the stage array
+    0x40E923: (0x3, "(rt_intl_cup_ko(esi, 2u) + 1u)"),              # Asian Cup ctor: stage count +0x2c
+    0x40F593: (0x8, "(4u * rt_intl_cup_ko(ecx, 2u))"),              # Asian Cup vtable +0x30: stage[ko]
+    0x40F5A5: (0x2, "rt_intl_cup_ko(ecx, 2u)"),                     # Asian Cup stage news (vtable +0x44)
+    0x40F627: (0x8, "(4u * rt_intl_cup_ko(esi, 2u))"),              # Asian Cup stage news: round record of stage[ko]
+    0x40F136: (0x2, "rt_intl_cup_ko(ecx, 2u)"),                     # Asian Cup result news (vtable +0x48)
+    0x40F88F: (0x2, "rt_intl_cup_ko(ecx, 2u)"),                     # Asian Cup stage step 0x40f810: knockout at ko
+    0x40FDFE: (0x30, "(4u * rt_intl_cup_teams(esi, 0xcu))"),        # Asian Cup entrants 0x40fdf0: malloc of teams
+    0x40FE02: (0xC, "rt_intl_cup_teams(esi, 0xcu)"),                # Asian Cup entrants: team count +0xf2
+    0x41001C: (0x30, "(4u * rt_intl_cup_teams(esi, 0xcu))"),        # Asian Cup draw: malloc of the groups
+    0x41009B: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: groups
+    0x4100AF: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: random place in a pot
+    0x4100CE: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: random place in a pot, again
+    0x410102: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: next pot
 }
 
 # address: (the instruction in the original, C code)
@@ -198,4 +235,10 @@ INSNS = {
     # of the ctor (+0xc, count +0x2c). After the step (0x57b7ca) an edition of another size gets a new array.
     # The flags of "or eax, -1" are not read: the next instructions only move, and add esp at 0x57b7e1 sets them.
     0x57B7CF: ("or eax, 0xffffffff", "SYNC(); rt_intl_euro_stages(esi); eax = 0xffffffffu; SETF(K_RES | SZ4, 0, 0, eax, 0);"),
+
+    # ACN and Asian Cup of 24 teams (0.6.0 slice 27, win/season_intl_cups.c). start_new_season (ACN 0x401d20,
+    # Asian Cup 0x40f720) keeps the stage array of the ctor. After the step (0x401d80, 0x40f780) an edition of
+    # another size gets a new array. The instruction after the step only moves this to ecx.
+    0x401D85: ("mov ecx, esi", "SYNC(); rt_intl_cup_stages(esi); ecx = esi;"),
+    0x40F785: ("mov ecx, esi", "SYNC(); rt_intl_cup_stages(esi); ecx = esi;"),
 }
