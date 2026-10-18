@@ -27,6 +27,12 @@ const SeasonNlEdition season_nl_editions[] = {
 };
 const int season_nl_edition_count = (int)(sizeof season_nl_editions / sizeof season_nl_editions[0]);
 
+const SeasonNlQualifying season_nl_qualifying[] = {
+    {2020, {{21, 3, 1}, {24, 3, 1}, {7, 6, 1}, {10, 6, 1}, {5, 9, 1}, {8, 9, 1}, {10, 10, 1}, {13, 10, 1}, {14, 11, 1}, {17, 11, 1}}, 4, {26, 3, 2}, {31, 3, 2}},
+    {2024, {{23, 3, 1}, {26, 3, 1}, {16, 6, 1}, {19, 6, 1}, {7, 9, 1}, {10, 9, 1}, {12, 10, 1}, {15, 10, 1}, {16, 11, 1}, {19, 11, 1}}, 3, {21, 3, 2}, {26, 3, 2}},
+};
+const int season_nl_qualifying_count = (int)(sizeof season_nl_qualifying / sizeof season_nl_qualifying[0]);
+
 const SeasonNlTier season_nl_tiers[] = {
     {"UEFA", "2018-19", 0, 1, "France", 0},
     {"UEFA", "2018-19", 0, 1, "Germany", 0},

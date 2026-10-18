@@ -151,6 +151,11 @@ def editions():
 # planned for June 2021 and moved to October 2021 because Euro 2020 moved to June 2021; in the game Euro 2020
 # plays in June 2020 (slice 27), so the finals keep June 2021. The days are those of the 2018-19 finals, two
 # years on (inference: the planned days are not known).
+# The European Championships whose qualifying has Nations League paths (int-continental rows 189 and 233): the
+# group matchdays of the year after the campaign year come from the dates file (events euro<year>_qual_md<k>).
+# Paths: Euro 2020 "4 paths of 4" (row 189), Euro 2024 "3 paths" (row 233).
+QUALIFYING = {2020: 4, 2024: 3}
+
 MOVED_DATES = {
     ("2020-21", "sf1"): "2021-06-02",
     ("2020-21", "final"): "2021-06-06",
@@ -219,6 +224,29 @@ def text():
     lines += [
         "};",
         "const int season_nl_edition_count = (int)(sizeof season_nl_editions / sizeof season_nl_editions[0]);",
+        "",
+        "const SeasonNlQualifying season_nl_qualifying[] = {",
+    ]
+    ds = dates()
+    for euro in QUALIFYING:
+        days = []
+        for k in range(1, 11):
+            key = (f"euro{euro}", f"euro{euro}_qual_md{k}")
+            if key not in ds:
+                fail(f"no date {key[1]} in nations-league-dates.tsv")
+            y, mo, d = ds[key]
+            days.append(f"{{{d}, {mo}, {y - (euro - 2)}}}")
+        po = []
+        for ev in ("po_sf", "po_final"):
+            key = (f"euro{euro}", f"euro{euro}_{ev}")
+            if key not in ds:
+                fail(f"no date {key[1]} in nations-league-dates.tsv")
+            y, mo, d = ds[key]
+            po.append(f"{{{d}, {mo}, {y - (euro - 2)}}}")
+        lines.append(f"    {{{euro}, {{{', '.join(days)}}}, {QUALIFYING[euro]}, {po[0]}, {po[1]}}},")
+    lines += [
+        "};",
+        "const int season_nl_qualifying_count = (int)(sizeof season_nl_qualifying / sizeof season_nl_qualifying[0]);",
         "",
         "const SeasonNlTier season_nl_tiers[] = {",
     ]

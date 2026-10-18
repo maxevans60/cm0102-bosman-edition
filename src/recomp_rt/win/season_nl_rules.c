@@ -6,6 +6,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+int season_nl_weekday(int day, int month, int year)
+{
+    static const int t[12] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+    if (month < 1 || month > 12) return 0;
+    if (month < 3) year--;
+    int sunday0 = (year + year / 4 - year / 100 + year / 400 + t[month - 1] + day) % 7;
+    return (sunday0 + 6) % 7;
+}
+
 const SeasonNlEdition *season_nl_first(const char *confed, int s)
 {
     for (int i = 0; i < season_nl_edition_count; i++)

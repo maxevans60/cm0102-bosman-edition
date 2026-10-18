@@ -163,7 +163,7 @@ static int year_of(uint32_t comp) { return (int16_t)rd16(g_mem, comp + F_YEAR); 
 
 /* The day of the year of a date (Date::Date 0x549f70 with weekday 0xffff: no move, 0x54a0f2): +0 of the Date.
  * The game compares dates by year (+2) and day of the year (+0), as update_for_date does (0x57fdcf..0x57fdf0). */
-static int day_of_year(int day, int month1, int year)
+int season_nl_day_of_year(int day, int month1, int year)
 {
     uint32_t d = game_malloc(8);
     if (!d || rt_unwinding) return 0;
@@ -185,7 +185,7 @@ static int european(int id)
     return readable(cont) && rd32(g_mem, cont) == rd32(g_mem, CONTINENT_EUROPE);
 }
 
-static int nation_of_club(uint32_t club)
+int season_nl_nation_of_club(uint32_t club)
 {
     if (!readable(club)) return -1;
     uint32_t n = rd32(g_mem, club + CLUB_NATION), base = rd32(g_mem, NATIONS);
@@ -198,17 +198,17 @@ static int nation_of_club(uint32_t club)
  * season databases is an empty club with no nation (docs/research/2026-10-18-international.md, "Finals that
  * start before their qualifying ends"). Then the national team rows (from clubs - 2 * nations, 0x53b4c2) are
  * searched for the club whose nation is this one. 0 when none. */
-static uint32_t nation_team(int id)
+uint32_t season_nl_nation_team(int id)
 {
     uint32_t a[1] = {nation_at(id)};
     uint32_t c = call_cdecl(NATIONAL_TEAM, 1, a);
     if (rt_unwinding) return 0;
-    if (nation_of_club(c) == id) return c;
+    if (season_nl_nation_of_club(c) == id) return c;
     int clubs = (int)rd32(g_mem, CLUB_COUNT), nations = nation_count();
     uint32_t base = rd32(g_mem, CLUBS);
     for (int i = clubs - 2 * nations; i >= 0 && i < clubs - nations; i++) {
         uint32_t club = base + (uint32_t)i * CLUB_SIZE;
-        if (nation_of_club(club) == id) return club;
+        if (season_nl_nation_of_club(club) == id) return club;
     }
     return 0;
 }
@@ -363,13 +363,13 @@ static void make_stages(uint32_t self, int groups)
 static void set_draw_day(uint32_t self, const SeasonNlEdition *e)
 {
     int year = year_of(self);
-    int y = year + e->draw.year, doy = day_of_year(e->draw.day, e->draw.month, y);
+    int y = year + e->draw.year, doy = season_nl_day_of_year(e->draw.day, e->draw.month, y);
     if (rt_unwinding) return;
     int ty = (int16_t)rd16(g_mem, 0xae2c90u + 2u), td = (int16_t)rd16(g_mem, 0xae2c90u);
     if (y < ty || (y == ty && doy <= td)) {
         y = ty;
         doy = td + 1;
-        if (doy > day_of_year(31, 12, ty)) {
+        if (doy > season_nl_day_of_year(31, 12, ty)) {
             y++;
             doy = 0;
         }
@@ -424,7 +424,7 @@ static void draw_league(const SeasonNlEdition *e, int l, Entrant *list, int n)
     if (known) {
         for (int i = 0; i < k; i++) {
             int g = g0 + mine[i].group - 1;
-            if (draw_size[g] < GROUP_ROOM) draw_team[g][draw_size[g]++] = nation_team(mine[i].nation);
+            if (draw_size[g] < GROUP_ROOM) draw_team[g][draw_size[g]++] = season_nl_nation_team(mine[i].nation);
             if (rt_unwinding) return;
         }
         return;
@@ -443,7 +443,7 @@ static void draw_league(const SeasonNlEdition *e, int l, Entrant *list, int n)
         }
         for (int j = 0; j < groups && pot * groups + j < k; j++) {
             int g = g0 + order[j];
-            if (draw_size[g] < GROUP_ROOM) draw_team[g][draw_size[g]++] = nation_team(mine[pot * groups + j].nation);
+            if (draw_size[g] < GROUP_ROOM) draw_team[g][draw_size[g]++] = season_nl_nation_team(mine[pot * groups + j].nation);
             if (rt_unwinding) return;
         }
     }
@@ -497,13 +497,26 @@ static int read_results(uint32_t self, const SeasonNlEdition *old, SeasonNlRow *
         if (!readable(table) || teams <= 0 || teams > GROUP_ROOM) continue;
         for (int r = 0; r < teams && n < NL_MAX_NATIONS; r++) {
             uint32_t row = table + (uint32_t)r * ROW_SIZE;
-            int nation = nation_of_club(rd32(g_mem, row));
+            int nation = season_nl_nation_of_club(rd32(g_mem, row));
             if (nation < 0) continue;
             rows[n++] = (SeasonNlRow){nation, group_league(old, g), g - first_group(old, group_league(old, g)) + 1,
                                       r + 1, rd8(g_mem, row + 0x11u), (int16_t)rd16(g_mem, row + ROW_POINTS), 0, 0,
                                       0};
         }
     }
+    return n;
+}
+
+int season_nl_held_results(int year, SeasonNlRow *rows)
+{
+    uint32_t self = nl_object(), st0 = self ? stage_at(self, 0) : 0;
+    if (!self || !readable(st0) || !rd32(g_mem, self + F_DRAWN) || year_of(st0) != year) return 0;
+    const SeasonNlEdition *e = edition(year);
+    if (!e) return 0;
+    SeasonNlEdition old = *e;
+    int n = read_results(self, &old, rows);
+    if (rt_unwinding) return 0;
+    season_nl_rank(rows, n);
     return n;
 }
 
@@ -560,18 +573,18 @@ static void prepare_draw(uint32_t self, const SeasonNlEdition *e)
             fprintf(stderr, "recomp: season nl: %s draw league %c group %d:", e->edition, 'A' + l,
                     g - first_group(e, l) + 1);
             for (int i = 0; i < draw_size[g]; i++)
-                fprintf(stderr, " %s;", win_str(nation_at(nation_of_club(draw_team[g][i])) + NATION_NAME));
+                fprintf(stderr, " %s;", win_str(nation_at(season_nl_nation_of_club(draw_team[g][i])) + NATION_NAME));
             fputc('\n', stderr);
         }
 }
 
 /* ---- The round templates (vtable +0x3c) ---- */
 
-static void league_round(uint32_t rec, int i, SeasonNlDate d, int year)
+void season_nl_league_round(uint32_t rec, int i, SeasonNlDate d, int year)
 {
-    /* Weekday: Thursday (3) for the first matchday of a window, Sunday (6) for the second; flag 2 midweek,
-     * 1 weekend, as the class's own rounds (0x57d22b..0x57d261). */
-    int weekday = i % 2 ? 6 : 3, flag = i % 2 ? 1 : 2;
+    /* The weekday of the date itself, so the date does not move; flag 1 for a weekend and 2 for a midweek
+     * round, as the class's own rounds (Saturday 1, Wednesday 2: 0x57d22b..0x57d261). */
+    int weekday = season_nl_weekday(d.day, d.month, year + d.year), flag = weekday >= 5 ? 1 : 2;
     uint32_t a[9] = {rec, (uint32_t)i, (uint32_t)d.day, (uint32_t)(d.month - 1), (uint32_t)d.year,
                      (uint32_t)weekday, (uint32_t)flag, (uint32_t)year, 0};
     call_cdecl(ROUND_DATE, 9, a);
@@ -637,7 +650,7 @@ static void round_template(void)
         if (readable(out_rounds)) wr16(g_mem, out_rounds, 6);
         if (readable(out_code)) wr16(g_mem, out_code, (uint32_t)(0x3e9 + stage));
         rec = game_malloc(6u * LEAGUE_ROUND);
-        for (int i = 0; rec && i < 6 && !rt_unwinding; i++) league_round(rec, i, e->md[i], year);
+        for (int i = 0; rec && i < 6 && !rt_unwinding; i++) season_nl_league_round(rec, i, e->md[i], year);
     } else if (e && stage == (int8_t)rd8(g_mem, self + F_PLAYOFF)) {
         if (readable(out_league)) wr32(g_mem, out_league, 0);
         if (readable(out_rounds)) wr16(g_mem, out_rounds, 2);
@@ -661,6 +674,9 @@ static void round_template(void)
 static void start_new_season(void)
 {
     uint32_t self = cpu.ecx;
+    if (is_nl(self) && logging())
+        fprintf(stderr, "recomp: season nl: start_new_season of %d (drawn %u, stage %d)\n", year_of(self),
+                rd32(g_mem, self + F_DRAWN), (int32_t)rd32(g_mem, self + F_STAGE));
     if (is_nl(self)) {
         uint32_t st0 = stage_at(self, 0);
         int year = year_of(self);
@@ -727,6 +743,19 @@ static void update_for_date(void)
     uint32_t a[2] = {today, full};
     uint32_t r = call_this(QUAL_UPDATE, self, 2, a);
     if (rt_unwinding) return;
+    if (is_nl(self) && logging() && readable(today)) {
+        /* Test log: the state of the edition when it changes (stage, the finished flag +0xdd of 0x689c06). */
+        static uint32_t last = 0xffffffffu;
+        int groups = held_groups(self);
+        uint32_t cup = groups >= 2 ? stage_at(self, groups - 1) : 0;
+        uint32_t state = (rd32(g_mem, self + F_STAGE) & 0xff) | (rd32(g_mem, self + 0xddu) ? 0x100u : 0) |
+                         (readable(cup) && rd32(g_mem, cup + 0xddu) ? 0x200u : 0) | (readable(cup) ? 0x400u : 0);
+        if (state != last)
+            fprintf(stderr, "recomp: season nl: day %d of %d: stage %d, finished %d, finals %s%s\n",
+                    (int16_t)rd16(g_mem, today), (int16_t)rd16(g_mem, today + 2u), (int)(state & 0xff),
+                    !!(state & 0x100), readable(cup) ? "made" : "none", (state & 0x200) ? " and finished" : "");
+        last = state;
+    }
     rt_ret_stdcall(r, 2);
 }
 
@@ -782,7 +811,7 @@ static void advance_stage(void)
         if (logging()) {
             fprintf(stderr, "recomp: season nl: %s finals:", e->edition);
             for (int k = 0; k < 4; k++)
-                fprintf(stderr, " %s;", bracket[k] ? win_str(nation_at(nation_of_club(bracket[k])) + NATION_NAME) : "none");
+                fprintf(stderr, " %s;", bracket[k] ? win_str(nation_at(season_nl_nation_of_club(bracket[k])) + NATION_NAME) : "none");
             fputc('\n', stderr);
         }
     }

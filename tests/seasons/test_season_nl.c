@@ -236,6 +236,12 @@ static void check_paths(void)
 
 int main(void)
 {
+    CHECK(season_nl_weekday(6, 9, 2018) == 3, "6 September 2018 is a Thursday");
+    CHECK(season_nl_weekday(18, 10, 2026) == 6, "18 October 2026 is a Sunday");
+    CHECK(season_nl_weekday(29, 2, 2020) == 5, "29 February 2020 is a Saturday");
+    CHECK(season_nl_qualifying_count == 2 && season_nl_qualifying[0].euro == 2020 &&
+          season_nl_qualifying[0].md[0].month == 3 && season_nl_qualifying[0].md[0].year == 1,
+          "Euro 2020 qualifying starts in March of the year after the campaign year");
     check_table();
     check_promotion();
     check_paths();

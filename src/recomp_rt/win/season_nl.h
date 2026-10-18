@@ -51,10 +51,26 @@ typedef struct {
     int out;                    /* 1: in the draw, but out before the first match (Russia in 2022-23) */
 } SeasonNlTier;
 
+/* The group matchdays of a European Championship qualifying with Nations League paths (Euro 2020 and Euro
+ * 2024): the real days, in the year after the campaign year that the class holds at +0x40. */
+typedef struct {
+    int euro;                   /* the year of the finals */
+    SeasonNlDate md[10];        /* year: offset from the campaign year (1) */
+    int paths;                  /* play-off paths of four nations (4 for Euro 2020, 3 for Euro 2024) */
+    SeasonNlDate po_sf, po_final;  /* the path semi-finals and finals (year: offset from the campaign year, 2) */
+} SeasonNlQualifying;
+
+extern const SeasonNlQualifying season_nl_qualifying[];
+extern const int season_nl_qualifying_count;
+
 extern const SeasonNlEdition season_nl_editions[];
 extern const int season_nl_edition_count;
 extern const SeasonNlTier season_nl_tiers[];
 extern const int season_nl_tier_count;
+
+/* The day of the week of a date (month 1 to 12): 0 Monday to 6 Sunday, the code of Date::Date 0x549f70 and of
+ * the round dates (5 Saturday and 2 Wednesday at 0x57d22f and 0x57d257). */
+int season_nl_weekday(int day, int month, int year);
 
 /* The first edition of a confederation whose league phase starts in season s or later, or NULL. */
 const SeasonNlEdition *season_nl_first(const char *confed, int s);
@@ -95,5 +111,24 @@ int season_nl_paths(const SeasonNlRow *rows, int n, int paths, int per, int *out
 /* The semi-finals of a path of four (out[0..3] in the path's order, best first): 1 v 4 and 2 v 3, the
  * better nation at home. Writes home and away of each semi-final into pairs[0..3]. */
 void season_nl_path_pairs(const int *path, int *pairs);
+
+/* The game part (season_nl.c, season_nl_euro.c). */
+/* One round of a league template (0x41 bytes a round) on a day: league_round_set_date 0x68a160 and the match
+ * slot 0x68a1c0, as the class's own template 0x57d190. year: the year that d.year is an offset from. */
+void season_nl_league_round(uint32_t rec, int i, SeasonNlDate d, int year);
+
+/* The day of the year of a date (Date::Date 0x549f70, no weekday move), as the game compares dates. */
+int season_nl_day_of_year(int day, int month1, int year);
+
+/* The nation id of a team (club +0x53), or -1. */
+int season_nl_nation_of_club(uint32_t club);
+
+/* The national team of a nation id (national_team 0x53b3d0, or the national team row whose nation is the
+ * nation), or 0. */
+uint32_t season_nl_nation_team(int id);
+
+/* The ranked results of the UEFA edition of year `year` (2018 for 2018-19) while the Nations League object
+ * holds its tables (from its draw to the draw of the next edition), else 0. */
+int season_nl_held_results(int year, SeasonNlRow *rows);
 
 #endif
