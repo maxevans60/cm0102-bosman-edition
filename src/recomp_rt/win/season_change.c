@@ -35,6 +35,7 @@
 
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
+extern const SeasonRuleKind season_kind_sizes;
 extern const SeasonRuleKind season_kind_subs;
 extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
@@ -46,6 +47,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_nation,                /* slice 17: transfer windows, foreign player limits, work permits */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
+    &season_kind_sizes,                 /* slice 18: news of league sizes and places (season_sizes.c) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))

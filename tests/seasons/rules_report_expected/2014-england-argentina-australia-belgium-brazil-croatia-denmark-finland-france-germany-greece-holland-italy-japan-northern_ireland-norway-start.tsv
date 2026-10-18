@@ -1,0 +1,209 @@
+# Differences between the rules report and the rules table that the check accepts. Made by
+# tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2014	bench	aus_nsl (A-League), row aus-jap-kor-37: game 4, table 5 (5 (inference for the years between 2013/14 and 2025/26))
+2014	bench	bra_cup (Copa do Brasil), row bra-149: game 7, table 12 (12)
+2014	bench	bra_nat_first (Campeonato Brasileiro Série A), row bra-41: game 7, table 12 (12)
+2014	bench	bra_nat_second (Campeonato Brasileiro Série B), row bra-68: game 7, table 12 (12)
+2014	bench	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 7, table 12 (12)
+2014	bench	eng_cc_cup (Football League Cup), row eng-377: game 5, table 7 (7)
+2014	bench	eng_fa_cup (FA Cup), row eng-376: game 5, table 7 (7)
+2014	bench	eng_first (Football League Championship), row eng-159: game 5, table 7 (7)
+2014	bench	eng_prm (Premier League), row eng-158: game 5, table 7 (7)
+2014	bench	eng_second (Football League One), row eng-160: game 5, table 7 (7)
+2014	bench	eng_third (Football League Two), row eng-161: game 5, table 7 (7)
+2014	bench	fra_cup (Coupe de France), row fra-124: game 3, table 7 (7)
+2014	bench	fra_first (Ligue 1), row fra-119: game 5, table 7 (7)
+2014	bench	fra_lge_cup (Coupe de la Ligue), row fra-125: game 3, table 7 (7)
+2014	bench	ger_cup (DFB-Pokal), row ger-179: game 6, table 7 (7)
+2014	bench	ger_first (Bundesliga), row ger-170: game 6, table 7 (7)
+2014	bench	ger_second (2. Bundesliga), row ger-171: game 6, table 7 (7)
+2014	bench	ita_ser_a (Serie A), row ita-223: game 7, table 12 (12)
+2014	bench	world_club_champ (FIFA Club World Cup), row club-world-249: game 7, table 12 (12)
+2014	club_list	Argentine Premier Division: 20 of 30 listed clubs that the database holds (30 listed), 0 other clubs, 20 in all; not in it: Aldosivi, Argentinos Juniors, Club Atletico Crucero del Norte, Colón de Santa Fé, Huracán, Nueva Chicago, San Martín de San Juan, Sarmiento de Junín, Temperley, Unión de Santa Fé; others: -
+2014	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (22 listed), 6 other clubs, 26 in all; not in it: -; others: Aldosivi, Almirante Brown, Argentinos Juniors, Atlanta, Colón de Santa Fé, Huracán de Tres Arroyos
+2014	club_list	Australian National Soccer League: 10 of 10 listed clubs that the database holds (10 listed), 3 other clubs, 13 in all; not in it: -; others: Marconi Stallions, Sutherland Sharks, Sydney Olympic
+2014	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: ROC de Charleroi-Marchienne, RUS Genly-Quévy 89
+2014	club_list	Brazilian National First Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: 4 de Julho Esporte Clube, Clube 15 de Novembro (RS), Elosport Capão Bonito, Funorte Esporte Clube, Igaci Futebol Clube, Maguari, Sport Club Barueri, Taguatinga
+2014	club_list	Brazilian National Second Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: Associação Desportiva São Caetano, Associação Sportiva Sociedade Unida, Atlético Monte Azul, Betim Esporte Clube, Centro Sportivo Paraibano, Duque de Caxias Futebol Clube, Osasco Futebol Clube, Treze Futebol Clube
+2014	club_list	Brazilian National Third Division: 20 of 20 listed clubs that the database holds (20 listed), 36 other clubs, 56 in all; not in it: -; others: América Futebol Clube (AM), Associação Atlética Aparecidense, Associação Atlética Caldense, Associação Esportiva Clube Baraúnas, Associação Esportiva Tiradentes, Audax São Paulo Esporte Clube, Botafogo Futebol Clube (SP), Brasiliense Futebol Clube, Brasília Futebol Clube, Central Sport Club, Centro Sportivo Alagoano, Clube Atlético Metropolitano, Clube Náutico Marcílio Dias, Clube Recreativo e Atlético Catalano, Esporte Clube Aracruz, Esporte Clube Noroeste, Esporte Clube XV de Novembro, Esporte Clube Ypiranga (BA), Esporte Clube Águia Negra, Feirense Futebol Clube, Ferroviário Atlético Clube, Goianésia Esporte Clube, Grêmio Barueri Futebol Ltda., Guarany Sporting Clube, Gurupi Esporte Clube, J.Malucelli Futebol S/A, Maranhão Atlético Clube, Marília Atlético Clube, Mirassol Futebol Clube, Mixto Esporte Clube, Nacional Futebol Clube (AM), Náutico Futebol Clube, Plácido de Castro Futebol Club, SC Gênus de Porto Velho, SE Ypiranga Futebol Clube (PE), Villa Nova Atlético Clube
+2014	club_list	Croatian First Division: 10 of 10 listed clubs that the database holds (10 listed), 6 other clubs, 16 in all; not in it: -; others: HNK Hajduk Split u19, NK Jedinstvo Omladinac, NK Polet Sveti Martin na Muri, NK Solin, NK Zelina, NK Zrinski Tordinci
+2014	club_list	Croatian Second Division North: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK Grobnican Cavle, NK Junak Sinj, NK Mladost Zdralovi, NK Val Kastel Stari
+2014	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: BK Marienlyst, Hellerup IK, KFUM BK Roskilde, Næstved BK
+2014	club_list	Danish Second Division: 16 of 32 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Avedøre IF, BK Avarta, BK Marienlyst, FC Svendborg, FC Sydvest 05, Gentofte-Vangede Idrætsforening, Hellerup IK, Herlev IF, Kjellerup IF, Kolding BK, Kolding IF, Næsby BK, Næstved BK, Odder IGF, Svebølle B&I, Varde IF; others: -
+2014	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong FC Twente, Jong PSV; others: -
+2014	club_list	French Lower Division: 0 of 90 listed clubs that the database holds (112 listed), 0 other clubs, 0 in all; not in it: AC Arles-Avignon II, AJ Auxerre II, AS Aulnoye-Aymeries, AS Forez Andrézieux-Bouthéon, AS Illzach-Modenheim, AS Marck, AS Nancy-Lorraine II, AS Saint-Ouen-l'Aumône, AS d'Evry, AS de Poissy, ASC Biesheim, Amiens Sporting Club II, Angers SCO II, Angoulême Charente, Athletic Club Ajaccio II, Aubagne, Aurillac Foot Cantal Auvergne, Aviron Bayonnais, Balma Sporting Club, Bergerac Périgord Foot, Blagnac, Bourges, Bourgoin-Jallieu, Bressuire, CS Louhans-Cuiseaux 71, CSO Amnéville, Chartres, Chauray, Clermont Foot Auvergne 63 II, Club Athlétique de Pontarlier, Club Municipal Sportif d'Oissel, Dinan-Léhon, ES Pennoise, ES Thaon, Entente Sportive de Wasquehal, Epernay Champagne, FA Ile-Rousse Monticello, FCO Dijon II, Gueugnon, Jeunesse Villenavaise, La Berrichonne de Châteauroux II, La Roche-sur-Yon Vendée, Le Havre AC II, Le Mans FC, Le Puy Foot 43 Auvergne, Les Genêts d'Anglet, Nîmes Olympique II, Olympique Alès en Cévennes, Olympique Grande-Synthe, Olympique Noisy-le-Sec Banlieue 93, Olympique Saint-Quentinois, Olympique de Marseille II, RC Olympique Agathois, Racing Besançon, Rodéo Toulouse, SC Bastia II, SC Hérouvillais, SC Toulon-Le Las, SM Caen II, SO Cholet, Sablé-sur-Sarthe, Saint-Colomban Locminé, Saint-Louis Neuweg, Saint-Lô Manche, Saint-Pryvé Saint-Hilaire, Sainte-Geneviève-des-Bois Sports, Sarreguemines, Sporting Club Schiltigheim, Sporting Club de Feignies, Stade Brest 29 II, Stade Briochin, Stade Lannionnais, Stade Lavallois II, Stade Olympique Châtelleraudais, Stade Rennais II, Thouars Foot 79, Toulouse FC II, Tours Football Club II, UJA Maccabi Paris Métropole, US Granvillaise, US Lège-Cap-Ferret, USSA Vertou, Union Sportive Sénart-Moissy, Union Sportive de Forbach, Uzès Pont du Gard, Valenciennes II, Vaulx-en-Velin, Villemomble Sports, Échirolles, Évian Thonon Gaillard II; others: -
+2014	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: US Marseille Endoume, Vierzon Foot 18
+2014	club_list	Greek National A Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: Niki Volos, PAE Kerkyras, Skoda Xanthi, Veria; others: -
+2014	club_list	Greek National B Division: 13 of 13 listed clubs that the database holds (13 listed), 1 other clubs, 14 in all; not in it: -; others: Skoda Xanthi
+2014	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Cesena, Empoli; others: -
+2014	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Pro Vercelli, Virtus Entella; others: -
+2014	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Matsumoto Yamaga, Montedio Yamagata; others: -
+2014	club_list	Japanese J-League 2: 12 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 12 in all; not in it: Cerezo Osaka, Ehime FC, FC Gifu, Giravanz Kitakyushu, Kamatamare Sanuki, Mito HollyHock, Oita Trinita, Roasso Kumamoto, ThespaKusatsu Gunma, Zweigen Kanazawa; others: -
+2014	club_list	Northern Irish League First Division: 10 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Armagh City, Donegal Celtic, Lisburn Distillery, Police Service of Northern Ireland ; others: -
+2014	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Ballinamallard United, Warrenpoint Town; others: -
+2014	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Mjøndalen IF, Sandefjord Fotball; others: -
+2014	clubs	arg_prm (Primera División), row arg-usa-14: game 20, table 30 (30)
+2014	clubs	arg_second (Primera B Nacional), row arg-usa-41: game 25, table 22 (22)
+2014	clubs	asia_club_champ (AFC Champions League), row club-world-260: game 16, table 32 (32)
+2014	clubs	aus_nsl (A-League), row aus-jap-kor-37: game 13, table 10 (10)
+2014	clubs	bel_first (Belgian Pro League), row hol-bel-177: game 18, table 16 (16)
+2014	clubs	bel_third (Belgian Third Division), row hol-bel-179: game 16, table 36 (36 (A 18, B 18))
+2014	clubs	bra_champ_cup (Copa dos Campeões), row bra-203: game 3, table 0 (0)
+2014	clubs	bra_cup (Copa do Brasil), row bra-149: game 71, table 87 (87)
+2014	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-41: game 28, table 20 (20)
+2014	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-68: game 28, table 20 (20)
+2014	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 7, table 20 (20)
+2014	clubs	bra_reg_bahia (Campeonato Baiano), row bra-446: game 10, table 12 (12)
+2014	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-527: game 15, table 10 (10)
+2014	clubs	bra_reg_gaucho (Campeonato Gaúcho), row bra-554: game 17, table 16 (16)
+2014	clubs	bra_reg_goias (Campeonato Goiano), row bra-581: game 14, table 10 (10)
+2014	clubs	bra_reg_north (Campeonato Paraense), row bra-635: game 10, table 16 (16)
+2014	clubs	bra_reg_northeast (Campeonato Cearense), row bra-662: game 16, table 10 (10)
+2014	clubs	bra_reg_pern (Campeonato Pernambucano), row bra-743: game 10, table 12 (12)
+2014	clubs	bra_reg_rio (Campeonato Carioca), row bra-473: game 12, table 16 (16)
+2014	clubs	bra_reg_sp (Campeonato Paulista Série A1), row bra-716: game 16, table 20 (20)
+2014	clubs	conmebol_liber (Copa Libertadores), row club-world-251: game 4, table 38 (38)
+2014	clubs	cro_a1 (Prva HNL), row gre-pol-cro-338: game 16, table 10 (10)
+2014	clubs	cro_a2a (Druga HNL), row gre-pol-cro-365: game 16, table 12 (12)
+2014	clubs	den_first (Danish 1st Division), row den-swe-81: game 16, table 12 (12)
+2014	clubs	den_second (Danish 2nd Divisions), row den-swe-82: game 16, table 32 (32)
+2014	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-145: game 5, table 53 (53)
+2014	clubs	european_cup (UEFA Champions League), row uefa-106: game 55, table 77 (77 (32 in the group stage))
+2014	clubs	fra_third (Championnat National), row fra-121: game 20, table 18 (18)
+2014	clubs	goldcup (Copa América), row int-continental-154: game 0, table 12 (12)
+2014	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-14: game 4, table 46 (46)
+2014	clubs	gre_prm (Super League Greece), row gre-pol-cro-41: game 14, table 18 (18)
+2014	clubs	gre_second (Football League), row gre-pol-cro-68: game 14, table 13 (13)
+2014	clubs	hol_first (Eerste Divisie), row hol-bel-172: game 18, table 20 (20)
+2014	clubs	ita_c1_super (Supercoppa di Lega Pro), row ita-237: game 2, table 3 (3)
+2014	clubs	ita_c_cup (Coppa Italia Lega Pro), row ita-235: game 5, table 59 (59)
+2014	clubs	ita_cup (Coppa Italia), row ita-234: game 4, table 78 (78)
+2014	clubs	ita_ser_a (Serie A), row ita-223: game 18, table 20 (20)
+2014	clubs	ita_ser_b (Serie B), row ita-224: game 20, table 22 (22)
+2014	clubs	jap_j1 (J1 League), row aus-jap-kor-203: game 16, table 18 (18)
+2014	clubs	jap_j2 (J2 League), row aus-jap-kor-230: game 12, table 22 (22)
+2014	clubs	nir_cup (Irish Cup), row wal-nir-irl-338: game 32, table 125 (125)
+2014	clubs	nir_first (NIFL Championship 1), row wal-nir-irl-336: game 10, table 14 (14)
+2014	clubs	nir_lge_cup (NIFL Cup), row wal-nir-irl-339: game 5, table 41 (41)
+2014	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-335: game 10, table 12 (12)
+2014	clubs	nor_prm (Tippeligaen), row nor-fin-132: game 14, table 16 (16)
+2014	clubs	oceania_club_champ (OFC Champions League), row club-world-265: game 0, table 12 (12)
+2014	clubs	uefa_cup (UEFA Europa League), row uefa-109: game 145, table 195 (195 (162 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2014	clubs	world_club_champ (FIFA Club World Cup), row club-world-249: game 0, table 7 (7)
+2014	down	arg_prm (Primera División), row arg-usa-14: game 0 (+0 play-off places), table 2 (2 (worst average))
+2014	down	arg_second (Primera B Nacional), row arg-usa-41: game 0 (+0 play-off places), table 4 (4 (bottom four of the table, by affiliation))
+2014	down	bel_first (Belgian Pro League), row hol-bel-177: game 2 (+0 play-off places), table text (15th v 16th relegation play-off (five matches, 15th starts with 3 points): loser)
+2014	down	bel_third (Belgian Third Division), row hol-bel-179: game 2 (+1 play-off places), table text (bottom clubs of each group (more in 2009/10); play-off for the rest)
+2014	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 2 (+0 play-off places), table 4 (4)
+2014	down	cro_a1 (Prva HNL), row gre-pol-cro-338: game 2 (+0 play-off places), table 1 (1 (10th))
+2014	down	cro_a2b (Druga HNL South), row gre-pol-cro-392: game 2 (+0 play-off places), table na (n/a)
+2014	down	den_first (Danish 1st Division), row den-swe-81: game 3 (+0 play-off places), table 2 (2)
+2014	down	den_second (Danish 2nd Divisions), row den-swe-82: game 4 (+0 play-off places), table 10 (10)
+2014	down	eng_third (Football League Two), row eng-161: game 1 (+0 play-off places), table 2 (2)
+2014	down	ger_first (Bundesliga), row ger-170: game 3 (+0 play-off places), table 2 (2)
+2014	down	ger_second (2. Bundesliga), row ger-171: game 4 (+0 play-off places), table 2 (2)
+2014	down	gre_prm (Super League Greece), row gre-pol-cro-41: game 2 (+0 play-off places), table 4 (4 (15th-18th))
+2014	down	gre_second (Football League), row gre-pol-cro-68: game 2 (+0 play-off places), table 3 (3 per group (bottom three))
+2014	down	ita_ser_a (Serie A), row ita-223: game 4 (+0 play-off places), table 3 (3)
+2014	down	ita_ser_b (Serie B), row ita-224: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
+2014	down	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 1 (+4 play-off places), table na (n/a)
+2014	down	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 1 (+4 play-off places), table na (n/a)
+2014	down	jap_j1 (J1 League), row aus-jap-kor-203: game 2 (+0 play-off places), table 3 (3)
+2014	down	jap_j2 (J2 League), row aus-jap-kor-230: game 0 (+0 play-off places), table 1 (1; 21st v J3 runner-up in a promotion/relegation series)
+2014	down	nir_first (NIFL Championship 1), row wal-nir-irl-336: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
+2014	idle	african_nations (Africa Cup of Nations), row int-continental-150: the game waits for 2016, the table holds it
+2014	idle	asia_nations (AFC Asian Cup), row int-continental-152: the game waits for 2016, the table holds it
+2014	idle	fra_first (French CFA), row fra-119: the game waits for 255, the table holds it
+2014	idle	fra_first (French Lower Division), row fra-119: the game waits for 0, the table holds it
+2014	idle	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-163: the game waits for 2016, the table holds it
+2014	idle	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-161: the game waits for 2016, the table holds it
+2014	no_row	friendly (Friendly): no table row
+2014	no_row	record_utils ('B' International): no table row
+2014	no_row	record_utils (Reserve): no table row
+2014	no_row	record_utils (Under 21 International): no table row
+2014	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-263: the game holds 2014, the table says not held
+2014	not_held	asia_super_cup (Asian Super Cup), row club-world-264: the game holds 2014, the table says not held
+2014	not_held	bra_champ_cup (Copa dos Campeões), row bra-203: the game holds 2014, the table says not held
+2014	not_held	conmebol_merc (Copa Mercosur), row club-world-252: the game holds 2014, the table says not held
+2014	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-392: the game holds 2014, the table says not held
+2014	not_held	fifa_confed (FIFA Confederations Cup), row int-world-166: the game holds 2015, the table says not held
+2014	not_held	ger_lge_cup (DFL-Ligapokal), row ger-180: the game holds 2014, the table says not held
+2014	not_held	gre_super (Greek Super Cup), row gre-pol-cro-95: the game holds 2014, the table says not held
+2014	not_held	inter_amer_cup (Copa Interamericana), row club-world-259: the game holds 2014, the table says not held
+2014	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-111: the game holds 2014, the table says not held
+2014	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-225: the game holds 2014, the table says not held
+2014	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-226: the game holds 2014, the table says not held
+2014	not_held	oceania_nations (OFC Nations Cup), row int-continental-153: the game holds 2014, the table says not held
+2014	not_held	world_club_cup (Intercontinental Cup), row club-world-248: the game holds 2014, the table says not held
+2014	not_in_game	arg-usa-203 argentina_rules 'Argentina' (Argentina)
+2014	not_in_game	arg-usa-68 new 'Copa Argentina' (Argentina)
+2014	not_in_game	arg-usa-95 new 'Supercopa Argentina' (Argentina)
+2014	not_in_game	aus-jap-kor-122 japan_rules 'n/a' (Japan)
+2014	not_in_game	aus-jap-kor-14 australia_rules 'n/a' (Australia)
+2014	not_in_game	aus-jap-kor-64 new 'FFA Cup' (Australia)
+2014	not_in_game	bra-1013 new 'Campeonato Capixaba' (Brazil)
+2014	not_in_game	bra-1040 new 'Campeonato Sul-Mato-Grossense' (Brazil)
+2014	not_in_game	bra-1067 new 'Campeonato Tocantinense' (Brazil)
+2014	not_in_game	bra-14 brazil_rules 'Brazil' (Brazil)
+2014	not_in_game	bra-230 new 'Copa do Nordeste' (Brazil)
+2014	not_in_game	bra-257 new 'Copa Verde' (Brazil)
+2014	not_in_game	bra-770 new 'Campeonato Potiguar' (Brazil)
+2014	not_in_game	bra-797 new 'Campeonato Paraibano' (Brazil)
+2014	not_in_game	bra-824 new 'Campeonato Alagoano' (Brazil)
+2014	not_in_game	bra-851 new 'Campeonato Sergipano' (Brazil)
+2014	not_in_game	bra-878 new 'Campeonato Maranhense' (Brazil)
+2014	not_in_game	bra-905 new 'Campeonato Amazonense' (Brazil)
+2014	not_in_game	bra-932 new 'Campeonato Piauiense' (Brazil)
+2014	not_in_game	bra-959 new 'Campeonato Acriano' (Brazil)
+2014	not_in_game	bra-986 new 'Campeonato Brasiliense' (Brazil)
+2014	not_in_game	club-world-254 new 'Copa Sudamericana' (CONMEBOL)
+2014	not_in_game	club-world-255 new 'Recopa Sudamericana' (CONMEBOL)
+2014	not_in_game	eng-162 eng_conf 'Conference Premier' (England)
+2014	not_in_game	eng-379 eng_fa_trophy 'FA Trophy' (England)
+2014	not_in_game	fra-122 fra_cfa 'CFA' (France)
+2014	not_in_game	fra-123 fra_lower 'CFA 2' (France)
+2014	not_in_game	ger-172 new '3. Liga' (Germany)
+2014	not_in_game	ger-181 new 'DFL-Supercup' (Germany)
+2014	not_in_game	gre-pol-cro-122 new 'Football League (South group)' (Greece)
+2014	not_in_game	gre-pol-cro-446 new 'Croatian Football Super Cup' (Croatia)
+2014	not_in_game	ita-230 new 'Lega Pro girone A' (Italy)
+2014	not_in_game	ita-231 new 'Lega Pro girone B' (Italy)
+2014	not_in_game	ita-232 new 'Lega Pro girone C' (Italy)
+2014	not_in_game	nor-fin-140 new 'Liigacup' (Finland)
+2014	not_in_game	uefa-105 uefa_seeding 'UEFA access list and seeding' (UEFA)
+2014	playoffs	arg_prm (Primera División), row arg-usa-14: game 0 up and 0 down play-off places, table 'Liguilla Pre-Libertadores (3rd to 6th) and Liguilla Pre-Sudamericana for contine'
+2014	playoffs	arg_second (Primera B Nacional), row arg-usa-41: game 0 up and 0 down play-off places, table 'Torneo Reducido of 2nd to 5th, two-leg ties'
+2014	playoffs	aus_nsl (A-League), row aus-jap-kor-37: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
+2014	playoffs	bel_first (Belgian Pro League), row hol-bel-177: game 0 up and 0 down play-off places, table 'see split'
+2014	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
+2014	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-338: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
+2014	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-365: game 0 up and 0 down play-off places, table '2nd: promotion play-off v HNL 9th'
+2014	playoffs	den_second (Danish 2nd Divisions), row den-swe-82: game 0 up and 0 down play-off places, table '11th of each group in play-offs.'
+2014	playoffs	ger_first (Bundesliga), row ger-170: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
+2014	playoffs	ger_second (2. Bundesliga), row ger-171: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
+2014	playoffs	gre_prm (Super League Greece), row gre-pol-cro-41: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league, teams start with weighted points (5th st'
+2014	playoffs	gre_second (Football League), row gre-pol-cro-68: game 0 up and 0 down play-off places, table 'top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: releg'
+2014	playoffs	hol_first (Eerste Divisie), row hol-bel-172: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
+2014	playoffs	ita_ser_b (Serie B), row ita-224: game 0 up and 0 down play-off places, table '3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);'
+2014	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 4 up and 4 down play-off places, table 'n/a'
+2014	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 4 up and 4 down play-off places, table 'n/a'
+2014	playoffs	jap_j1 (J1 League), row aus-jap-kor-203: game 0 up and 0 down play-off places, table 'championship stage of 3 to 5 clubs (stage winners and top three overall)'
+2014	playoffs	jap_j2 (J2 League), row aus-jap-kor-230: game 0 up and 0 down play-off places, table '3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw'
+2014	subs_used	eng_charity (FA Community Shield), row eng-380: game 5, table 6 (6)
+2014	up	arg_second (Primera B Nacional), row arg-usa-41: game 1 (+0 play-off places), table 2 (2 (champion; Torneo Reducido winner))
+2014	up	aus_nsl (A-League), row aus-jap-kor-37: game 6 (+0 play-off places), table na (n/a)
+2014	up	bel_third (Belgian Third Division), row hol-bel-179: game 1 (+0 play-off places), table 2 (2 (group champions))
+2014	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-41: game 4 (+0 play-off places), table na (n/a)
+2014	up	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 2 (+0 play-off places), table 4 (4)
+2014	up	conmebol_liber (Copa Libertadores), row club-world-251: game 2 (+0 play-off places), table na (n/a)
+2014	up	conmebol_merc (Copa Mercosur), row club-world-252: game 1 (+0 play-off places), table na (n/a)
+2014	up	cro_a2a (Druga HNL), row gre-pol-cro-365: game 0 (+0 play-off places), table 1 (1 (1st))
+2014	up	den_second (Danish 2nd Divisions), row den-swe-82: game 3 (+0 play-off places), table 2 (2)
+2014	up	fin_first (Ykkönen), row nor-fin-138: game 2 (+0 play-off places), table 1 (1st (1))
+2014	up	ger_second (2. Bundesliga), row ger-171: game 3 (+0 play-off places), table 2 (2)
+2014	up	gre_cup (Greek Football Cup), row gre-pol-cro-14: game 2 (+0 play-off places), table na (n/a)
+2014	up	gre_second (Football League), row gre-pol-cro-68: game 2 (+0 play-off places), table 0 (0)
+2014	up	ita_ser_b (Serie B), row ita-224: game 4 (+0 play-off places), table 3 (2 direct + 1 via play-offs)
+2014	up	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 1 (+4 play-off places), table na (n/a)
+2014	up	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 1 (+4 play-off places), table na (n/a)
+2014	up	oceania_club_champ (OFC Champions League), row club-world-265: game 2 (+0 play-off places), table na (n/a)
