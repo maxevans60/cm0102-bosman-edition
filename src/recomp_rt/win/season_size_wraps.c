@@ -707,7 +707,7 @@ const int season_size_floors[] = {
     0,       /* fin_prm */
     0,       /* fra_first */
     0,       /* fra_second */
-    0,       /* fra_third */
+    20,       /* fra_third */
     0,       /* ger_first */
     0,       /* ger_second */
     0,       /* gre_prm */
