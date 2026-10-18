@@ -4,9 +4,20 @@
  * A new competition is one that the original has no object for (the Copa Sudamericana, the Conference League,
  * the 3. Liga, the Nations League). This module makes its object, puts it into its league table entry and keeps
  * it across a save and a load. A slice adds one SeasonCompDef line per competition to season_comp_defs in
- * season_comps.c, in its own small block. Ending or idling a competition of the original is not this module's:
- * use season_change_skip() of season_change.h in a before hook, or keep the object waiting for its next edition
- * as season_kind_club_world.c does (its season year +0x40 at the year of that edition).
+ * season_comps.c, in its own small block.
+ *
+ * The shared rule for a season with no edition (lead, 2026-10-18), for the original's competitions and the new
+ * ones alike. Never remove an object: other code reads it with no null test (0x4c41a0..0x4c41d0, 0x56fb08).
+ *   - A competition that comes back after a gap waits for its next edition: in the before hook of
+ *     start_new_season set its season year +0x40 to (next edition year - the class's year step), and at a new
+ *     game give the constructor that year. Its dates then lie in that year, it is not complete, the pass does not
+ *     start it again (0x5d5ccb), and it draws on its start date. Example: season_kind_club_world.c.
+ *   - Only a competition that never comes back uses season_change_skip() in a before hook.
+ * Why: a skipped competition keeps the start date of its old year. A League class draws only when today equals
+ * that start date (WorldClubChamp::update_for_date 0x92a73d..0x92a74f, Copa Mercosur 0x4c5d2c..0x4c5d3d,
+ * Merconorte 0x4c2ce5..0x4c2cf6), so after a skip and a later start_new_season it never draws again; a Cup class
+ * draws its past rounds at once (0x51fa45..0x51fa7d). Evidence: docs/research/2026-10-18-club-world-idle.md,
+ * section 1.
  *
  * When an object is made (the module, not the slice, decides it): once per game, in the entry hook of its
  * entry (season_change.h) in the first season S from the start season on that the table holds it, with
