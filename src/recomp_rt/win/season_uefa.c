@@ -1,0 +1,530 @@
+/* The formats of the UEFA club competitions by season (season_uefa.h), 0.6.0 slice 22. Evidence and the
+ * reasons for each step: docs/research/2026-10-17-uefa-formats.md.
+ *
+ * What this file changes in the game, only when season_uefa_row gives a row (never in the base game or with
+ * RECOMP_SEASON_CODE=off):
+ *
+ * The Champions League with one group stage and a round of 16 (2003/04 on, change point U1). The original
+ * (EuropeanCup, vtable 0x96a1d0) holds 13 stages: +0xc the stage array, +0x2c the stage count 13 (set at
+ * 0x583820), +0x30 the current stage (-1: the qualifying rounds of the Cup base). advance_stage 0x5851d0 draws
+ * the 8 groups of phase 1 into stages 0 to 7 (0x585290), the 4 groups of phase 2 into 8 to 11 (0x585ab0) and
+ * the quarter-finals into 12 (0x586330). Code of the Cup base walks every stage up to +0x30 with no NULL test
+ * (Cup::update_for_date 0x51f8da, Cup::check_complete 0x521e2b, Cup::save_cup_to_disk 0x521573, and the
+ * competition screens), and Club_History reads a stage's +0x44 as its index (0x443051). So the new format
+ * holds 9 stages: the groups in 0 to 7 and a knockout stage of 16 clubs and 4 rounds in 8 (+0x44 = 8). The
+ * save keeps +0x2c and +0x30 (0x521535, 0x521541; the load 0x520c48, 0x520c56), so a stage count of 9 marks
+ * a Champions League of this format in a loaded game too. The functions of the class that know the stage
+ * numbers of the original are wrapped below for a count of 9: advance_stage, rank_teams 0x586900, and the
+ * stage argument 8 of set_club_progress 0x586c00, build_fate_news_text 0x584550 and
+ * update_staff_records_for_status 0x584ae0 becomes 12, the knockout of the original. The two reads of the
+ * knockout slot (+0x30 of the stage array, 0x584ad3 and 0x584cf2) read rt_uefa_cl_ko_offset (tools/recomp/
+ * uefa.py).
+ *
+ * The stage count of a season is set when the class asks for its qualifying round table (create_round_table
+ * with stage -1: the constructor and start_new_season, after the year moves; 0x584d60 frees the stages up to
+ * +0x30 and never sets +0x2c). The rule kind "uefa" (season_change.h) writes the news of a change of format. */
+#include "win.h"
+#include "season.h"
+#include "season_change.h"
+#include "season_uefa.h"
+#include "season_round_names.h"
+
+#include <stdio.h>
+#include <string.h>
+
+#define COMP_TABLE 0xadadfcu            /* Comp **, one slot per competition record */
+#define KEY_CL 0x9cf6e8u                /* record index of the Champions League (match at 0x60efd0) */
+#define KEY_UC 0x9cf6f0u                /* record index of the UEFA Cup */
+#define CL_VTABLE 0x0096a1d0u
+#define SEEDING 0xde1f58u               /* Uefa_Seeding * */
+#define FINANCES 0xae2a38u              /* the finance table */
+#define RULING_BODIES 0xae28f0u         /* table of the ruling bodies, by the competition's +0x50 */
+
+#define F_LEAGUE_ROW 0x006826d0u        /* League::get_table_row, thiscall (index): the row, club at +0 */
+#define F_RANDOM 0x0090cfc0u            /* utils_random, cdecl (range) */
+#define F_CALLOC 0x00945501u            /* cdecl (count, size), as 0x586355 */
+#define F_MALLOC 0x00944e46u            /* cdecl (size), as the round tables 0x583caa */
+#define F_FREE 0x009452cau              /* cdecl (block) */
+#define F_NEW 0x00944cf1u               /* operator new, cdecl (size), as 0x58650f */
+#define F_BOOKINGS 0x007e9180u          /* RulingBody::reset_bookings_for_club, thiscall (club) */
+#define F_NATION_POINTS 0x009058b0u     /* UefaSeeding::add_nation_points, thiscall (club +0x53, points) */
+#define F_GET_FINANCE 0x005a0590u       /* FinanceTable::get_club_finance, thiscall (club) */
+#define F_ADD_PRIZE 0x005999a0u         /* Finance::add_prize_money, thiscall (amount) */
+#define F_PRIZE_NEWS 0x0048e3e0u        /* Comp::send_prize_money_news, thiscall, 7 arguments */
+#define F_CUP_STAGE 0x00522e00u         /* Cup_Stage::Cup_Stage, thiscall, 15 arguments */
+#define F_SET_UP_ROUND 0x0051c800u      /* Cup::set_up_round, thiscall (round) */
+#define F_ROUND_TABLE 0x00583c50u       /* EuropeanCup::create_round_table, thiscall (stage, &rounds, &name, &league) */
+#define F_DRAW_DATE 0x00521e60u         /* cup_set_round_draw_date, cdecl (table, round, day, month, year+, weekday, year) */
+#define F_MATCH_DATE 0x00521eb0u        /* cup_set_round_match_date, cdecl (..., weekday, time, year, venue) */
+#define F_SORT_ENTRANTS 0x004c08f0u     /* cdecl (club list, count), as 0x5869ee */
+#define F_SET_POSITION 0x004a2540u      /* Comp_Stats: thiscall (club, position), as 0x586a62 */
+
+#define ROUND_SIZE 0x68u                /* a round of a Cup round table */
+#define STAGES_ORIGINAL 13
+#define STAGES_ROUND_OF_16 9
+#define KO_SLOT_ORIGINAL 12
+#define KO_SLOT_ROUND_OF_16 8
+#define PHASE2_PRIZE 0x124f80u          /* 1,200,000: the entry money of phase 2 (0x586065), here of the round of 16 */
+#define ROUND_CODE_R16 20               /* "Second Round" (round name function 0x4b4850; codes 10 to 150 are taken) */
+
+static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
+
+static uint32_t call_this(uint32_t fn, uint32_t self, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+/* ---- The row of a season ---- */
+
+
+static uint32_t cl_object(void)
+{
+    int32_t key = (int32_t)rd32(g_mem, KEY_CL);
+    uint32_t table = rd32(g_mem, COMP_TABLE);
+    if (key < 0 || !readable(table)) return 0;
+    uint32_t obj = rd32(g_mem, table + 4u * (uint32_t)key);
+    return readable(obj) && rd32(g_mem, obj) == CL_VTABLE ? obj : 0;
+}
+
+static int stage_count(uint32_t cl) { return (int32_t)rd32(g_mem, cl + 0x2c); }
+static int round_of_16_layout(uint32_t cl) { return readable(cl) && stage_count(cl) == STAGES_ROUND_OF_16; }
+static uint32_t stage_at(uint32_t cl, int i) { return rd32(g_mem, rd32(g_mem, cl + 0xc) + 4u * (uint32_t)i); }
+
+uint32_t rt_uefa_cl_ko_offset(uint32_t cl)
+{
+    return 4u * (round_of_16_layout(cl) ? KO_SLOT_ROUND_OF_16 : KO_SLOT_ORIGINAL);
+}
+
+/* Sets the stage count of the format of row r (NULL: the original's 13). */
+static void cl_set_format(uint32_t cl, const SeasonUefa *r)
+{
+    int want = r && season_uefa_cl_round_of_16(r) ? STAGES_ROUND_OF_16 : STAGES_ORIGINAL;
+    if (stage_count(cl) == want) return;
+    wr32(g_mem, cl + 0x2c, (uint32_t)want);
+    fprintf(stderr, "recomp: uefa: Champions League %d/%02d with %d stages\n", (int16_t)rd16(g_mem, cl + 0x40),
+            ((int16_t)rd16(g_mem, cl + 0x40) + 1) % 100, want);
+}
+
+/* ---- The knockout round table of 4 rounds ---- */
+
+/* The original's table of the quarter-finals, semi-finals and final (create_round_table, stage 12: 3 rounds,
+ * codes 0x78, 0x82, 0x96 at 0x58437f..0x584409), with a round of 16 before it. Returns the table (game
+ * memory from F_MALLOC, as the original's) and its name id, or 0. */
+static uint32_t ko_table(uint32_t cl, uint32_t *name_id)
+{
+    uint32_t saved_esp = cpu.esp;
+    cpu.esp -= 16;                                  /* room for the three outputs, below the frame */
+    uint32_t out = cpu.esp;
+    for (int i = 0; i < 16; i += 4) wr32(g_mem, out + (uint32_t)i, 0);
+    uint32_t a[4] = {KO_SLOT_ORIGINAL, out, out + 4, out + 8};
+    uint32_t t3 = call_this(F_ROUND_TABLE, cl, 4, a);
+    int16_t rounds = (int16_t)rd16(g_mem, out);
+    *name_id = rd16(g_mem, out + 4);
+    if (rt_unwinding) return 0;
+    cpu.esp = saved_esp;
+    if (!readable(t3) || rounds != 3) return 0;
+    uint32_t size[1] = {4u * ROUND_SIZE};
+    uint32_t t = call_cdecl(F_MALLOC, 1, size);
+    if (rt_unwinding || !readable(t)) return 0;
+    memcpy(g_mem + t + ROUND_SIZE, g_mem + t3, 3u * ROUND_SIZE);
+    memcpy(g_mem + t, g_mem + t3, ROUND_SIZE);      /* the round of 16 from the quarter-final's record */
+    uint32_t f[1] = {t3};
+    call_cdecl(F_FREE, 1, f);
+    if (rt_unwinding) return 0;
+    for (int r = 0; r < 4; r++) wr16(g_mem, t + (uint32_t)r * ROUND_SIZE + 9, (uint16_t)r);      /* round index */
+    /* Round of 16: 16 clubs, 8 winners, all 16 new from the list (+0x1c) at its start (+0x1e). Flag 0x200 of
+     * +0xd: the ties are the pairs of the list, no draw (Cup draw 0x51c410: 0x51c5e4..0x51c5ec skips the
+     * random draw 0x51e220). The entry money of the round comes with the draw, so +0x5c holds nothing. */
+    wr16(g_mem, t + 7, ROUND_CODE_R16);
+    wr16(g_mem, t + 0xd, 0x200);
+    wr16(g_mem, t + 0x18, 16);
+    wr16(g_mem, t + 0x1a, 8);
+    wr16(g_mem, t + 0x1c, 16);
+    wr16(g_mem, t + 0x1e, 0);
+    wr32(g_mem, t + 0x5c, 0);
+    wr32(g_mem, t + 0x60, 0);
+    wr32(g_mem, t + 0x64, 0);
+    /* Quarter-final: no new clubs and a random draw on its draw date (map_fixture_tree 0x518dc6 links the
+     * winners of the round before to a random tie when the next round has no flag 0x200). */
+    wr16(g_mem, t + ROUND_SIZE + 0xd, 0);
+    wr16(g_mem, t + ROUND_SIZE + 0x1c, 0);
+    wr16(g_mem, t + ROUND_SIZE + 0x1e, 0);
+    /* Dates: the draw on 22 November and the first legs on 20 February, the weeks of the second group stage
+     * of the original (its fourth match day, 0x58415a..0x584171), the second legs 14 days later (+0x22 of the
+     * quarter-final record). Weekday and time as the quarter-final (0x584344..0x584368). */
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, cl + 0x40);
+    uint32_t d[7] = {t, 0, 22, 10, 0, 3, year};
+    call_cdecl(F_DRAW_DATE, 7, d);
+    uint32_t m[9] = {t, 0, 20, 1, 1, 2, 2, year, 0};
+    if (!rt_unwinding) call_cdecl(F_MATCH_DATE, 9, m);
+    return rt_unwinding ? 0 : t;
+}
+
+/* ---- The draw of the round of 16 (in place of draw_phase2_groups 0x585ab0) ---- */
+
+static uint32_t row_club(uint32_t stage, int pos)
+{
+    uint32_t a[1] = {(uint32_t)pos};
+    uint32_t row = call_this(F_LEAGUE_ROW, stage, 1, a);
+    return rt_unwinding || !readable(row) ? 0 : rd32(g_mem, row);
+}
+
+static int random_below(int n)
+{
+    uint32_t a[1] = {(uint32_t)n};
+    return (int)call_cdecl(F_RANDOM, 1, a);
+}
+
+/* Pairs each group runner-up with the winner of another group, of another nation when it can (club +0x53,
+ * the field draw_phase2_groups compares at 0x585bab). out[i] is the group of the winner for runner-up i. */
+static int pair_groups(const uint32_t *win, const uint32_t *run, int *out)
+{
+    for (int relax = 0; relax < 2; relax++)
+        for (int attempt = 0; attempt < 50; attempt++) {
+            int used[8] = {0}, ok = 1;
+            for (int i = 0; i < 8 && ok; i++) {
+                int cand[8], n = 0;
+                for (int j = 0; j < 8; j++)
+                    if (!used[j] && j != i &&
+                        (relax || rd32(g_mem, win[j] + 0x53) != rd32(g_mem, run[i] + 0x53)))
+                        cand[n++] = j;
+                if (!n) {
+                    ok = 0;
+                    break;
+                }
+                int k = random_below(n);
+                if (rt_unwinding) return 0;
+                out[i] = cand[k < 0 || k >= n ? 0 : k];
+                used[out[i]] = 1;
+            }
+            if (ok) return 1;
+        }
+    return 0;
+}
+
+static void draw_round_of_16(uint32_t cl)
+{
+    uint32_t win[8], run[8];
+    for (int g = 0; g < 8; g++) {
+        uint32_t st = stage_at(cl, g);
+        if (!readable(st)) return;
+        win[g] = row_club(st, 0);
+        run[g] = row_club(st, 1);
+        if (rt_unwinding || !readable(win[g]) || !readable(run[g])) return;
+    }
+    int pair[8];
+    if (!pair_groups(win, run, pair)) return;
+    uint32_t ca[2] = {16, 4};
+    uint32_t list = call_cdecl(F_CALLOC, 2, ca);
+    if (rt_unwinding || !readable(list)) return;
+    /* Each tie: the runner-up first, the group winner second (inference: the second club of a tie plays the
+     * second leg at home, as the group winners do in the real competition). */
+    for (int i = 0; i < 8; i++) {
+        wr32(g_mem, list + 8u * (uint32_t)i, run[i]);
+        wr32(g_mem, list + 8u * (uint32_t)i + 4, win[pair[i]]);
+    }
+    /* As the draws of the original (0x585bdd, 0x5864d5): the bookings of each club start again. */
+    uint32_t bodies = rd32(g_mem, RULING_BODIES);
+    uint32_t body = readable(bodies) ? rd32(g_mem, rd32(g_mem, bodies) + 4u * (uint32_t)(int8_t)g_mem[cl + 0x50]) : 0;
+    for (int i = 0; i < 16 && readable(body) && !rt_unwinding; i++) {
+        uint32_t a[1] = {rd32(g_mem, list + 4u * (uint32_t)i)};
+        call_this(F_BOOKINGS, body, 1, a);
+    }
+    /* As phase 2 of the original (0x58604c..0x58608c): a coefficient point and the entry money for each club. */
+    for (int i = 0; i < 16 && !rt_unwinding; i++) {
+        uint32_t club = rd32(g_mem, list + 4u * (uint32_t)i);
+        uint32_t p[2] = {rd32(g_mem, club + 0x53), 1};
+        call_this(F_NATION_POINTS, rd32(g_mem, SEEDING), 2, p);
+        if (rt_unwinding) return;
+        uint32_t c[1] = {club};
+        uint32_t fin = call_this(F_GET_FINANCE, rd32(g_mem, FINANCES), 1, c);
+        if (rt_unwinding) return;
+        uint32_t m[1] = {PHASE2_PRIZE};
+        if (readable(fin)) call_this(F_ADD_PRIZE, fin, 1, m);
+        if (rt_unwinding) return;
+        uint32_t n[7] = {club, PHASE2_PRIZE, 0, 0xffffffffu, ROUND_CODE_R16, 0, 0xfffffffeu};
+        call_this(F_PRIZE_NEWS, cl, 7, n);
+    }
+    if (rt_unwinding) return;
+    /* The knockout stage in slot 8 (as 0x586508..0x58656d does in slot 12). */
+    uint32_t name_id = 0;
+    uint32_t table = ko_table(cl, &name_id);
+    if (!table) return;
+    uint32_t sz[1] = {0xb2};
+    uint32_t obj = call_cdecl(F_NEW, 1, sz);
+    if (rt_unwinding || !readable(obj)) return;
+    uint32_t args[15] = {cl, 16, list, 4, rd32(g_mem, cl + 4), table, (uint32_t)(int16_t)rd16(g_mem, cl + 0x40),
+                         KO_SLOT_ROUND_OF_16, 2, name_id, 0x14, 1, 0, 0, 0};
+    call_this(F_CUP_STAGE, obj, 15, args);
+    if (rt_unwinding) return;
+    wr32(g_mem, rd32(g_mem, cl + 0xc) + 4u * KO_SLOT_ROUND_OF_16, obj);
+    uint32_t fl[1] = {list}, ft[1] = {table};
+    call_cdecl(F_FREE, 1, fl);
+    if (!rt_unwinding) call_cdecl(F_FREE, 1, ft);
+    if (rt_unwinding) return;
+    /* The group thirds go to the UEFA Cup and the fourths are out (as 0x586282..0x58630b). */
+    int32_t uc_key = (int32_t)rd32(g_mem, KEY_UC);
+    uint32_t uc = uc_key >= 0 ? rd32(g_mem, rd32(g_mem, COMP_TABLE) + 4u * (uint32_t)uc_key) : 0;
+    for (int g = 0; g < 8 && !rt_unwinding; g++) {
+        uint32_t st = stage_at(cl, g);
+        uint32_t third = row_club(st, 2);
+        if (rt_unwinding) return;
+        if (readable(uc) && readable(third)) {
+            int32_t slots = (int16_t)rd16(g_mem, uc + 0x3e);
+            uint32_t slot = rd32(g_mem, uc + 0xa7) + 6u * (uint32_t)(slots - 1 - g);
+            wr32(g_mem, slot, third);
+            g_mem[slot + 4] = 0;
+            g_mem[slot + 5] = 0;
+            int16_t n = (int16_t)rd16(g_mem, uc + 0x36);
+            uint32_t at = rd32(g_mem, uc + 0x14) + 6u * (uint32_t)n;
+            wr32(g_mem, at, third);
+            g_mem[at + 4] = 5;
+            wr16(g_mem, uc + 0x36, (uint16_t)(n + 1));
+            wr32(g_mem, third + 0x1db, rd32(g_mem, KEY_UC));
+        }
+        uint32_t fourth = row_club(st, 3);
+        if (!rt_unwinding && readable(fourth)) wr32(g_mem, fourth + 0x1db, 0xffffffffu);
+    }
+    if (rt_unwinding) return;
+    if (readable(uc)) {
+        Cpu saved = cpu;
+        cpu.ecx = uc;
+        rt_callback(rd32(g_mem, rd32(g_mem, uc) + 0x5c), 0, NULL);      /* the UEFA Cup's rank_teams */
+        if (rt_unwinding) return;
+        cpu = saved;
+    }
+    uint32_t r0[1] = {0};
+    call_this(F_SET_UP_ROUND, obj, 1, r0);
+    if (rt_unwinding) return;
+    wr32(g_mem, cl + 0x30, KO_SLOT_ROUND_OF_16);
+    fprintf(stderr, "recomp: uefa: Champions League round of 16 drawn\n");
+}
+
+/* ---- Wraps of the Champions League class ---- */
+
+void o_005851d0(void);
+void o_00586900(void);
+void o_00586c00(void);
+void o_00584550(void);
+void o_00584ae0(void);
+
+void o_00583c50(void);
+
+/* EuropeanCup::create_round_table, thiscall (stage, &rounds, &name, &league) ret 0x10. Stage -1 (the qualifying
+ * rounds) is asked for by the constructor (0x5838d4) and at each new season (start_new_season 0x584d60 through
+ * set_up_rules 0x858e70), after the season year is set: the format of the season is chosen there. A loaded
+ * game takes +0x2c from its save and does not come here. */
+RT_WRAP(00583c50, cl_round_table)
+{
+    if ((int8_t)rt_arg(0) == -1) {
+        uint32_t cl = cpu.ecx;
+        const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, cl + 0x40));
+        if (r || stage_count(cl) != STAGES_ORIGINAL) cl_set_format(cl, r);
+    }
+    o_00583c50();
+}
+
+/* EuropeanCup::advance_stage, thiscall (). */
+RT_WRAP(005851d0, cl_advance_stage)
+{
+    uint32_t cl = cpu.ecx;
+    int32_t now = (int32_t)rd32(g_mem, cl + 0x30);
+    if (!round_of_16_layout(cl) || now != KO_SLOT_ROUND_OF_16 - 1) {
+        o_005851d0();
+        return;
+    }
+    draw_round_of_16(cl);                   /* it sets +0x30 to 8 once the stage is in its slot */
+    if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
+}
+
+/* EuropeanCup::rank_teams, thiscall (): final positions by bands of the entry list (0x586900). The bands of
+ * the original: the knockout rounds from the round table of stage 12 (0x586a08), the thirds and fourths of
+ * phase 2 (2 bands of 4, 0x586aef) and of phase 1 (2 bands of 8, 0x586b30), then the qualifying rounds of
+ * +0xa3 (0x586b71). Here the knockout has 4 rounds and phase 2 is gone. */
+RT_WRAP(00586900, cl_rank_teams)
+{
+    uint32_t cl = cpu.ecx;
+    if (!round_of_16_layout(cl)) {
+        o_00586900();
+        return;
+    }
+    uint32_t stats = rd32(g_mem, cl + 8);
+    int16_t n = (int16_t)rd16(g_mem, cl + 0x36);
+    if (!readable(stats) || n <= 0) {
+        rt_ret_cdecl(0);
+        return;
+    }
+    uint32_t sz[1] = {4u * (uint32_t)n};
+    uint32_t list = call_cdecl(F_MALLOC, 1, sz);
+    if (rt_unwinding) return;
+    if (!readable(list)) {
+        rt_ret_cdecl(0);
+        return;
+    }
+    for (int i = 0; i < n; i++) wr32(g_mem, list + 4u * (uint32_t)i, rd32(g_mem, rd32(g_mem, cl + 0x14) + 6u * (uint32_t)i));
+    uint32_t sa[2] = {list, (uint32_t)n};
+    call_cdecl(F_SORT_ENTRANTS, 2, sa);
+    if (rt_unwinding) return;
+    int pos = 1, next = 0;
+#define BAND(count)                                                                              \
+    do {                                                                                         \
+        int start = pos;                                                                         \
+        for (int k_ = 0; k_ < (count) && next < n && !rt_unwinding; k_++, pos++) {               \
+            uint32_t a_[2] = {rd32(g_mem, list + 4u * (uint32_t)next++), (uint32_t)(start & 0xff)}; \
+            call_this(F_SET_POSITION, stats, 2, a_);                                             \
+        }                                                                                        \
+    } while (0)
+    uint32_t name_id = 0;
+    uint32_t ko = ko_table(cl, &name_id);
+    if (rt_unwinding) return;
+    if (ko) {
+        for (int r = 3; r >= 0; r--) {
+            int winners = (int16_t)rd16(g_mem, ko + (uint32_t)r * ROUND_SIZE + 0x1a);
+            if (r == 3) BAND(winners);
+            BAND(winners);
+        }
+        uint32_t f[1] = {ko};
+        call_cdecl(F_FREE, 1, f);
+        if (rt_unwinding) return;
+    }
+    BAND(8);
+    BAND(8);
+    uint32_t qual = rd32(g_mem, cl + 0xa3);
+    for (int r = (int16_t)rd16(g_mem, cl + 0x3c) - 1; r >= 0 && readable(qual) && !rt_unwinding; r--)
+        BAND((int16_t)rd16(g_mem, qual + (uint32_t)r * ROUND_SIZE + 0x1a));
+#undef BAND
+    if (rt_unwinding) return;
+    uint32_t f[1] = {list};
+    call_cdecl(F_FREE, 1, f);
+    if (!rt_unwinding) rt_ret_cdecl(0);
+}
+
+/* The stage argument at stack index arg: the knockout in slot 8 is the knockout 12 of the original. */
+static void map_stage_arg(uint32_t cl, int arg)
+{
+    if (!round_of_16_layout(cl)) return;
+    uint32_t at = cpu.esp + 4 + 4u * (uint32_t)arg;
+    if ((int8_t)g_mem[at] == KO_SLOT_ROUND_OF_16) g_mem[at] = KO_SLOT_ORIGINAL;
+}
+
+/* EuropeanCup::set_club_progress, thiscall (club, stage, code, code, code). */
+RT_WRAP(00586c00, cl_set_club_progress)
+{
+    map_stage_arg(cpu.ecx, 1);
+    o_00586c00();
+}
+
+/* EuropeanCup::build_fate_news_text, thiscall (club index, fate, stage, ...). */
+RT_WRAP(00584550, cl_fate_news)
+{
+    map_stage_arg(cpu.ecx, 2);
+    o_00584550();
+}
+
+/* EuropeanCup::update_staff_records_for_status, thiscall (club, outcome, stage, ...). */
+RT_WRAP(00584ae0, cl_staff_records)
+{
+    map_stage_arg(cpu.ecx, 2);
+    o_00584ae0();
+}
+
+/* ---- The rule kind ---- */
+
+static void uefa_season(int season)
+{
+    const SeasonUefa *now = season_uefa_row(season), *before = season_uefa_row(season - 1);
+    if (!now || !before || now == before) return;
+    if (season_uefa_cl_round_of_16(now) && !season_uefa_cl_round_of_16(before))
+        season_change_news("The Champions League now has one group stage of 8 groups and a knockout round of 16.");
+    else if (!season_uefa_cl_round_of_16(now) && season_uefa_cl_round_of_16(before))
+        season_change_news("The Champions League now has two group stages and quarter-finals.");
+    if (now->uc_groups && !before->uc_groups)
+        season_change_news("The UEFA Cup now has a group stage of %d groups of %d clubs, then a round of %d.",
+                           now->uc_groups, now->uc_group_clubs, season_uefa_uc_round(now, "KO"));
+    else if (!now->uc_groups && before->uc_groups)
+        season_change_news("The UEFA Cup no longer has a group stage.");
+    if (now->uic_rounds != before->uic_rounds && now->uic_rounds > 0)
+        season_change_news("The Intertoto Cup now has %d rounds, and its %d winners enter the UEFA Cup in the %s.",
+                           now->uic_rounds, now->uic_winners,
+                           !strcmp(now->uic_entry, "Q2") ? "second qualifying round" : "first round");
+}
+
+const SeasonRuleKind season_kind_uefa = {"uefa", NULL, NULL, uefa_season, NULL, NULL, NULL};
+
+/* ---- The rules report ---- */
+
+/* One line for a competition object: its stage count, its current stage, the clubs of the group stages in
+ * stages 0 to 7 and in the stages after them, and the clubs and rounds of its knockout stage (a League_Stage has
+ * type byte 2 at +0x43, a Cup_Stage 1: the load reads the same byte, 0x5230e0 and 0x68b4f0; +0x3e is the club
+ * count of both, +0x3c the rounds of a Cup_Stage). It only reads memory. */
+static void report_comp(FILE *f, int season, const char *phase, const char *file, uint32_t obj)
+{
+    int count = stage_count(obj), now = (int32_t)rd32(g_mem, obj + 0x30);
+    uint32_t arr = rd32(g_mem, obj + 0xc);
+    int groups = 0, groups2 = 0, ko_clubs = 0, ko_rounds = 0;
+    for (int i = 0; i <= now && i < count && i < 16 && readable(arr); i++) {
+        uint32_t st = rd32(g_mem, arr + 4u * (uint32_t)i);
+        if (!readable(st)) continue;
+        if (g_mem[st + 0x43] == 2) {
+            if (i < 8) groups += (int16_t)rd16(g_mem, st + 0x3e);
+            else groups2 += (int16_t)rd16(g_mem, st + 0x3e);
+        } else if (g_mem[st + 0x43] == 1) {
+            ko_clubs = (int16_t)rd16(g_mem, st + 0x3e);
+            ko_rounds = (int16_t)rd16(g_mem, st + 0x3c);
+        }
+    }
+    /* The winner of the history row of the competition with the label year season + 1 (the history table at
+     * [0xae23d4], 0x1a bytes a row, count [0xae237c]: +4 the competition record, +8 the label year, +0xa the
+     * winner; club +4 the name; season_history.c), or "-". */
+    char winner[64] = "-";
+    uint32_t rows = rd32(g_mem, 0xae23d4u), rec = rd32(g_mem, obj + 4);
+    int32_t n = (int32_t)rd32(g_mem, 0xae237cu);
+    for (int32_t i = 0; readable(rows) && readable(rec) && i < n && i < 200000; i++) {
+        uint32_t row = rows + 0x1au * (uint32_t)i;
+        if (rd32(g_mem, row + 4) != rec || (int16_t)rd16(g_mem, row + 8) != season + 1) continue;
+        uint32_t club = rd32(g_mem, row + 0xa);
+        if (readable(club)) snprintf(winner, sizeof winner, "%.50s", win_str(club + 4));
+    }
+    for (char *p = winner; *p; p++)
+        if (*p == '\t' || *p == '\n') *p = ' ';
+    fprintf(f, "uefa\t%d\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n", season, phase, file, count, now, groups, groups2,
+            ko_clubs, ko_rounds, winner);
+}
+
+void season_uefa_report(void *file, int season, const char *phase)
+{
+    FILE *f = (FILE *)file;
+    if (!f) return;
+    uint32_t cl = cl_object();
+    if (cl) report_comp(f, season, phase, "european_cup", cl);
+    int32_t key = (int32_t)rd32(g_mem, KEY_UC);
+    uint32_t table = rd32(g_mem, COMP_TABLE);
+    uint32_t uc = key >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)key) : 0;
+    if (readable(uc) && rd32(g_mem, uc) == 0x00970790u) report_comp(f, season, phase, "uefa_cup", uc);
+    /* The labels of the rounds that have a real name in the round names table (Q370), at the end of a season. */
+    if (strcmp(phase, "end")) return;
+    static const struct { const char *file; int code; } labels[] = {
+        {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250}};
+    for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++)
+        for (int style = 1; style <= 3 && !rt_unwinding; style += 2) {      /* 1 long names, 3 abbreviated */
+            uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : uc;
+            char text[128];
+            season_round_name_label(obj, labels[i].code, style, text, sizeof text);
+            for (char *p = text; *p; p++)
+                if (*p == '\t' || *p == '\n') *p = ' ';
+            fprintf(f, "roundname\t%d\t%s\t%s\t%d\t%s\t%d\n", season, phase, labels[i].file, labels[i].code, text,
+                    style);
+        }
+}
