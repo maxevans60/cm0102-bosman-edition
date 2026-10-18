@@ -56,6 +56,8 @@ So a class holds any count from 8 up to its own largest constant (`CAPS` in `lea
 
 ## Cups
 
+A club that leaves a division at a new game goes to no division, as slice 15 does. A first form of this slice put it in "A Lower Division" (where the databases keep a nation's clubs with no league). The staff trim of `create_game` then left it with no players, and the cups take the clubs of that division: a 2022/23 game with an 18-club National stopped in January 2023 at virtual_staff.cpp 195 (`VIRTUAL_STAFF::fill_fixture_squads` 0x90d2f0 wants 15 players of 50 slots at club +0xd7, 0x90d43a..0x90d469) with SC Toulon, a club cut from the National, in a cup tie. So that form is gone.
+
 A domestic cup with a fixed entrant count takes the clubs of whole divisions, so a smaller division can leave it short (a research pass of 2026-10-18 read every cup entrant function; the sites below were read again). The constructor then shows a box: the 2010/11 start of the second nation group stopped at por_cup.cpp 74 (box at 0x7cdb19) with a Portuguese Premier League and Second League of 16, then at wel_cup.cpp 70 and wel_lge_cup.cpp 743 with a Welsh Premier of 12. In a later season the callers of most cups accept the short list (`jge` after the call, for example `EngCcCup` in `update_for_date` 0x56cba0), so the cup plays with stale heap data and no box.
 
 Cups that take a capped number of lower clubs and then every club of the top divisions get a cap of the entrants less the clubs of those divisions (`rt_cup_room`, `rt_cup_add`; the original's cap in the base game):
@@ -76,7 +78,7 @@ The other cups fill fixed places with every club of a division, need the sum of 
 
 **Decision taken (the lead, 2026-10-18, on Max's behalf; Max may change it):** a class keeps its own largest count, and a division that a cup needs keeps at least its class count, until a later slice builds date templates and tables of any size (and slice 21 the cups). Recommended follow-up: one slice that makes the date template and the table of each simple class at run time from the count (the class's own dates spread over the season), which holds every larger count of the first table below except the classes with halves, periods or groups.
 
-These rows of the table have more clubs than the class holds. The division keeps the class's largest count; the other real clubs stay in the division below or in "A Lower Division". Each row stays a `clubs` line of the expected files.
+These rows of the table have more clubs than the class holds. The division keeps the class's largest count; the other real clubs stay where the club moves of slice 15 put them (the division below, or no division). Each row stays a `clubs` line of the expected files.
 
 | File | Class holds | Seasons with more | Largest real count | Sites (table, dates) |
 |---|---|---|---|---|

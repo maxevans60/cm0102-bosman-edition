@@ -562,13 +562,6 @@ static void move_clubs(int season)
     /* Write the moves. */
     int moved = 0;
     for (int i = 0; i < count; i++) {
-        /* A club that leaves a division goes to "A Lower Division", where the databases keep the clubs of a
-         * nation with no league (the September 2010 ODB holds 81 Portuguese clubs there and 1 with none). Cups
-         * count them: PorCup::collect_entrants 0x7ce220 needs exactly 164 entrants (0xa4 at 0x7ce234) and takes
-         * the Portuguese clubs of that division (0x7ce38b..0x7ce3a4); with the clubs of smaller leagues at no
-         * division the 2010/11 start stopped at por_cup.cpp 74 (slice 18). */
-        if (!club[i].div && club[i].db_div && spare1 && club[i].db_div != spare1 && club[i].db_div != spare2)
-            club[i].div = spare1;
         if (club[i].div != club[i].db_div) {
             wr32(g_mem, club[i].at + CLUB_DIVISION, club[i].div);
             /* The division of the last season (+0x5b, resolve_database_indexes 0x5315a0 at 0x531657) becomes the
