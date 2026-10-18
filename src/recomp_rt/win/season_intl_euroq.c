@@ -18,7 +18,7 @@
  * Euro 2016 (24 teams, campaign 2014): 9 groups (the original's), the top two direct (+0xbe 2), the third
  * ranked (+0xbf 1, the ranking takes place 3 at 0x57fb4f), the best third direct and the other 8 in 4 ties (the
  * original's two-host shape: 0x57f014, 0x57f115, 0x57d4f3). Group sizes 8 of six and 1 of five (room for 53:
- * the real draw had 53 teams, the pool holds at most 50). 18 + 1 + 4 + host France = 24.
+ * Group sizes spread the pool over the groups (rt_euroq_group_size). 18 + 1 + 4 + host France = 24.
  * Euro 2020 and later (24 teams): 10 groups (+0xff 8, stage[8] built by the wrap of 0x57ed10), the top two
  * direct (+0xbe 2, +0xbf 0), no ranking stage (+0x100 -1: 0x57ff50 and 0x57ff9c skip 0x57f920 and 0x57fa10).
  * The stage step still calls 0x57ef50 at stage 9 (+0x101), which takes its no-ranking path (0x57ef71: news for
@@ -115,12 +115,32 @@ uint32_t rt_euroq_no_ranking(uint32_t self)
     return format_of(self) == TEN_GROUPS && (int8_t)rd8(g_mem, self + 0x100u) < 0;
 }
 
-/* The size of a group (get_group_team_count 0x57d9d0, its results 5 at 0x57da6e, 0x57da8e and 6 at 0x57da9b):
- * Euro 2016 groups 0 to 7 of six and group 8 of five. */
+/* The size of a group (get_group_team_count 0x57d9d0, its results 5 at 0x57da6e, 0x57da8e and 6 at 0x57da9b).
+ * The group index is -1 (group A, 0x57e7e9) to +0xff (the draw pushes order - 1 at 0x57e76b, the group stages
+ * their index at 0x57ed5f). The original's sizes fit its pool: with two hosts 4 groups of six and 5 of five
+ * hold the 49 teams, with one host 3 of six and 6 of five hold 48 of 50 (two teams stay out). Its draw
+ * (0x57e6e6..0x57e7ce) deals the teams of +0xee in 6 rounds, one team per group and round in a random group
+ * order, to a group that has fewer teams than its size, until the pool count +0xf2 is dealt. A group stage then
+ * copies "size" teams from the 6 places of its group at +0xf7 (0x57edbe..0x57eddb), so a size above the dealt
+ * teams gives empty places and fixtures with no team (box "Database.cpp 13471" from 0x53b900). So with 24 teams
+ * the sizes spread the pool count over the groups and sum to it: count / groups each, one more for the first
+ * count % groups groups (50 in 9 groups: 5 of six, 4 of five; 50 in 10 groups: 10 of five). */
 uint32_t rt_euroq_group_size(uint32_t self, uint32_t group, uint32_t original)
 {
-    if (format_of(self) != NINE_GROUPS) return original;
-    return (int8_t)group == 8 ? 5u : 6u;
+    int f = format_of(self);
+    if (f != NINE_GROUPS && f != TEN_GROUPS) return original;
+    int n = (int)rd32(g_mem, self + 0xf2u), groups = (int8_t)rd8(g_mem, self + 0xffu) + 2;
+    int index = (int8_t)group + 1;
+    if (n <= 0 || groups <= 0 || index < 0 || index >= groups) return original;
+    int size = n / groups + (index < n % groups);
+    return (uint32_t)(size > 6 ? 6 : size);
+}
+
+/* 1 when the format has 10 groups: the draw 0x57dab0 sets its group order 0 to 8 and the dealt counts of 9
+ * groups (0x57dae0..0x57db2b), so with 10 groups the order entry 9 and its count are set too (0x57db30). */
+uint32_t rt_euroq_ten_groups(uint32_t self)
+{
+    return format_of(self) == TEN_GROUPS;
 }
 
 /* The log of a qualifier added to the Euro (0x57d605 for code 7 of a group stage or of the ranking stage,

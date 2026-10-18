@@ -322,7 +322,9 @@ INSNS = {
     # bytes +0xff..+0x101 are not saved). The play-off size by the host count +0xf6: 0x57f014 (best places),
     # 0x57f115 (play-off teams), both in 0x57ef50, and 0x57d4f3 (play-off template, in 0x57d190): Euro 2016 takes
     # the two-host shape (1 best third, 8 in the play-off). The group sizes of 0x57d9d0 (0x57da6e, 0x57da8e,
-    # 0x57da9b; ecx this, the group at [esp + 0x204]): Euro 2016 8 of six and 1 of five. With 10 groups there
+    # 0x57da9b; ecx this, the group at [esp + 0x204]): with 24 teams the pool count over the groups, so the
+    # places sum to the pool. The draw 0x57dab0 sets the order and counts of 9 groups: 0x57db30 sets entry 9 of
+    # the order ([esp + 0x21]) and its count ([esp + 0x2d]) for 10 groups (this in esi). With 10 groups there
     # is no ranking stage: 0x57ff50 and 0x57ff9c (in update_for_date 0x57fd60, this in esi) skip 0x57f920 and
     # 0x57fa10. The log of each qualifier before the add (0x57d605 group or best place, 0x57d69c play-off; the
     # Euro is [0xadadfc][key 0x9cf7a4], the stage at [esp + 0x10]). The flags of the replaced instructions are not
@@ -335,6 +337,7 @@ INSNS = {
     0x57DA6E: ("mov ax, 5", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 5u) & 0xffffu);"),
     0x57DA8E: ("mov ax, 5", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 5u) & 0xffffu);"),
     0x57DA9B: ("mov ax, 6", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 6u) & 0xffffu);"),
+    0x57DB30: ("mov byte ptr [esp + 0x14], 0", "W8(esp + 0x14u, 0u); if (rt_euroq_ten_groups(esi)) { W8(esp + 0x21u, 9u); W8(esp + 0x2du, 0u); }"),
     0x57FF50: ("call 0x57f920", "if (!rt_euroq_no_ranking(esi)) { esp -= 4; W32(esp, 0x57ff55u); SYNC(); f_0057f920(); LOAD(); RT_AFTER_CALL(); }"),
     0x57FF9C: ("call 0x57fa10", "if (!rt_euroq_no_ranking(esi)) { esp -= 4; W32(esp, 0x57ffa1u); SYNC(); f_0057fa10(); LOAD(); RT_AFTER_CALL(); }"),
     0x57D605: ("push esi", "rt_euroq_log(R32(eax + edx * 4u), esi, R32(esp + 0x10u), 0u); esp -= 4; W32(esp, esi);"),

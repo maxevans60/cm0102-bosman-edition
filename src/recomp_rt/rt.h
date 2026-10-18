@@ -349,6 +349,7 @@ uint32_t rt_euroq_ranked_place(uint32_t self, uint32_t original);
 uint32_t rt_euroq_direct(uint32_t self, uint32_t original);
 uint32_t rt_euroq_no_ranking(uint32_t self);
 uint32_t rt_euroq_group_size(uint32_t self, uint32_t group, uint32_t original);
+uint32_t rt_euroq_ten_groups(uint32_t self);
 void rt_euroq_log(uint32_t euro, uint32_t club, uint32_t stage, uint32_t playoff);
 /* World Cup qualifying 2006 to 2022 (win/season_intl_qual.c): the places of each section and the
  * inter-confederation play-offs. Each gives the original's value outside a season game and the cycles 2006 to
