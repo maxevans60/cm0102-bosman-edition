@@ -4,6 +4,8 @@
 #include "season.h"
 #include "season_intl.h"
 
+int season_change_is_creating(void);    /* season_change.c: 1 while create_game 0x828110 runs */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -105,9 +107,21 @@ uint32_t rt_intl_next_year(uint32_t cls, uint32_t year, uint32_t step)
 /* The rule flags of a knockout round (sweep-international section 7): bit 0x80 is the golden goal. With
  * changing rules on, the edition of the table decides, or the season of the year for a year that the table
  * has no edition for. With changing rules off, the rule of the start season stays. */
+/* 1 for the edition of a class that a game started in 2001/02 builds at the new game: the original's first
+ * edition (the table's first edition from 2001/02 is the same year). It keeps the original's dates and round
+ * flags, because its stages are made at the new game (Q152: a 2001 game with changing rules on equals the base
+ * game at the start). */
+static int start_edition_2001(uint32_t cls, int year)
+{
+    if (season_start_year() != SEASON_FIRST_YEAR || cls >= INTL_CLASSES) return 0;
+    const SeasonIntlEdition *e = season_intl_first(class_files[cls], SEASON_FIRST_YEAR);
+    return e && e->year == year;
+}
+
 uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags)
 {
     if (!season_intl_on() || !(flags & GOLDEN_GOAL)) return flags;
+    if (start_edition_2001(cls, (int)(int16_t)(year & 0xffffu))) return flags;
     int golden;
     if (season_changing_rules()) {
         int y = (int)(int16_t)(year & 0xffffu);
@@ -127,6 +141,8 @@ uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags)
  * for the 2006 World Cup or later, or for 2002 without the holder in its pool (season_intl.h, seasons.py). */
 uint32_t rt_intl_wc_holder(uint32_t holder)
 {
+    /* A game started in 2001/02 makes its sections at the new game as the base game does (Q152). */
+    if (season_start_year() == SEASON_FIRST_YEAR && season_change_is_creating()) return holder;
     return season_intl_on() ? 0u : holder;
 }
 
@@ -189,9 +205,10 @@ int season_intl_date_shift(uint32_t cls, int year)
     if (!season_intl_on() || cls >= INTL_CLASSES) return 0;
     const SeasonIntlEdition *e = season_intl_rule_edition(class_files[cls], year);
     if (!e || e->month < 1) return 0;
-    /* A game that starts in 2001/02 keeps the dates of the 2001/02 editions (Q152: the World Cup 2002 and the
-     * African Cup of Nations 2002 of a 2001 game with changing rules on play as in the base game). */
-    if (season_start_year() == SEASON_FIRST_YEAR && e->season == SEASON_FIRST_YEAR) return 0;
+    /* A game that starts in 2001/02 keeps the dates of the editions it builds at the new game (Q152: the World
+     * Cup 2002, the African Cup of Nations 2002, the Confederations Cup 2003, Euro 2004 and the others of a 2001
+     * game with changing rules on play as in the base game). */
+    if (start_edition_2001(cls, year)) return 0;
     int day = class_first[cls].day, month0 = class_first[cls].month0;
     if (cls == INTL_OFC && year % 4 != 2) {
         day = 19;
