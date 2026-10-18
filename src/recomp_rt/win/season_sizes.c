@@ -311,10 +311,14 @@ RT_WRAP(00689c80, promote_relegate)
         fprintf(stderr, "recomp: league sizes: %s (%.50s) down %d, %s (%.50s) up %d, pairs %u, expected %d up %d down%s\n",
                 season_change_file(upper), record_name(upper), down, season_change_file(lower), record_name(lower), up,
                 pairwise, exp_up, exp_down, change ? ": each club moves on its own" : "");
-    if (change) {
-        wr32(g_mem, cpu.esp + 4 + 4 * 3, 0);           /* pairwise off */
-        if (exp_up != -1 && exp_up != up) wr32(g_mem, cpu.esp + 4 + 4 * 4, 0xffu);
-        if (exp_down != -1 && exp_down != down) wr32(g_mem, cpu.esp + 4 + 4 * 5, 0xffu);
+    if (change) wr32(g_mem, cpu.esp + 4 + 4 * 3, 0);   /* pairwise off */
+    /* The moves that the call makes: each row on its own, or pairs. An expected count that differs from them is
+     * dropped (Serie A and B pass 4 and 4 at 0x642476, the 2016/17 places are 3 and 3: league.cpp 5596). */
+    int pairs = rd32(g_mem, cpu.esp + 4 + 4 * 3) != 0, n = down < up ? down : up;
+    int moved_up = pairs ? n : up, moved_down = pairs ? n : down;
+    if (down >= 0 && up >= 0) {
+        if (exp_up != -1 && exp_up != moved_up) wr32(g_mem, cpu.esp + 4 + 4 * 4, 0xffu);
+        if (exp_down != -1 && exp_down != moved_down) wr32(g_mem, cpu.esp + 4 + 4 * 5, 0xffu);
     }
     o_00689c80();
 }
