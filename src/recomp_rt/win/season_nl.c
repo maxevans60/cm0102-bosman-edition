@@ -59,8 +59,9 @@
 #define ROUND_DATE 0x0068a160u          /* league_round_set_date, cdecl (rounds, i, day, month0, yoff, weekday,
                                            flag, year, 0) */
 #define ROUND_MATCH 0x0068a1c0u         /* league_round_set_match_slot, cdecl (rounds, i, 0, -1, -1, -1, 0) */
-#define CUP_FIRST_DATE 0x00521e60u      /* cdecl (rec, round, day, month0, yoff, weekday, year) */
-#define CUP_LAST_DATE 0x00521eb0u       /* cdecl (rec, round, day, month0, yoff, weekday, x, year, y) */
+#define CUP_FIRST_DATE 0x00521e60u      /* cup_set_round_draw_date, cdecl (rec, round, day, month0, yoff, weekday, year) */
+#define CUP_LAST_DATE 0x00521eb0u       /* cup_set_round_match_date, cdecl (rec, round, day, month0, yoff, weekday,
+                                           time, year, venue) */
 #define CUP_SLOT 0x00521f10u            /* cdecl (rec, round, slot, weekday, time, 3, flag) */
 #define QUAL_CLEAR 0x0090fbe0u          /* the class's slot 12: clear_competition_for_comp_clubs, thiscall () */
 
@@ -595,24 +596,17 @@ void season_nl_league_round(uint32_t rec, int i, SeasonNlDate d, int year)
 
 static void cup_round(uint32_t rec, int round, SeasonNlDate d, int year, int teams, int value, uint32_t flags)
 {
-    /* The dates and fields as the Euro finals (season_intl_euro.c, knockout_template; 0x57b048..0x57b1a6). */
-    int y = year + d.year;
-    uint32_t f[7] = {rec, (uint32_t)round, (uint32_t)d.day, (uint32_t)(d.month - 1), 0, 2, (uint32_t)y};
+    /* A cup round record keeps the day of the year and a year offset from the stage's year (+0x00 and +0x02 for
+     * the draw, +0x03 and +0x05 for the match: 0x521ea6, 0x521ea9, 0x521ef6, 0x521efe), so the year argument is
+     * the edition year and the offset is the day's (the class's play-off passes +0x40 and 1, 0x57d494..0x57d4b6).
+     * The draw on the first day of the month, the match on its day, weekday -1 (no move). */
+    uint32_t f[7] = {rec, (uint32_t)round, 1, (uint32_t)(d.month - 1), (uint32_t)d.year, 0xffffffffu, (uint32_t)year};
     call_cdecl(CUP_FIRST_DATE, 7, f);
     if (rt_unwinding) return;
-    int last = d.day + (teams > 2 ? 1 : 0);
-    uint32_t l[9] = {rec, (uint32_t)round, (uint32_t)last, (uint32_t)(d.month - 1), 0, 2, 1, (uint32_t)y, 1};
+    uint32_t l[9] = {rec, (uint32_t)round, (uint32_t)d.day, (uint32_t)(d.month - 1), (uint32_t)d.year, 0xffffffffu, 1,
+                     (uint32_t)year, 0};
     call_cdecl(CUP_LAST_DATE, 9, l);
     if (rt_unwinding) return;
-    if (teams > 2) {
-        uint32_t s0[7] = {rec, (uint32_t)round, 0, 2, 2, 3, 0x40};
-        uint32_t s1[7] = {rec, (uint32_t)round, 1, 3, 2, 3, 0x80};
-        uint32_t s2[7] = {rec, (uint32_t)round, 2, 0xffffffffu, 0xffffffffu, 0xffffffffu, 0};
-        call_cdecl(CUP_SLOT, 7, s0);
-        if (!rt_unwinding) call_cdecl(CUP_SLOT, 7, s1);
-        if (!rt_unwinding) call_cdecl(CUP_SLOT, 7, s2);
-        if (rt_unwinding) return;
-    }
     uint32_t r = rec + (uint32_t)round * ROUND_SIZE;
     wr16(g_mem, r + 7u, (uint32_t)value);
     wr16(g_mem, r + 9u, (uint32_t)round);

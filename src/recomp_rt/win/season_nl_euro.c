@@ -117,11 +117,13 @@ static void game_free(uint32_t p)
  * with bit 0x200 for the fixed links), the fields of the Euro's semi-final and final (0x57b0a2..0x57b194). */
 static void path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams)
 {
-    int y = campaign + d.year;
-    uint32_t a[7] = {rec, (uint32_t)round, 1, (uint32_t)(d.month - 1), 0, 0xffffffffu, (uint32_t)y};
+    /* The record keeps a year offset from the stage's year (the campaign year, Cup_Stage argument 7), as the
+     * class's play-off (+0x40 and offset 1 at 0x57d494..0x57d4b6). */
+    uint32_t a[7] = {rec, (uint32_t)round, 1, (uint32_t)(d.month - 1), (uint32_t)d.year, 0xffffffffu, (uint32_t)campaign};
     call_cdecl(CUP_DRAW_DATE, 7, a);
     if (rt_unwinding) return;
-    uint32_t b[9] = {rec, (uint32_t)round, (uint32_t)d.day, (uint32_t)(d.month - 1), 0, 0xffffffffu, 1, (uint32_t)y, 0};
+    uint32_t b[9] = {rec, (uint32_t)round, (uint32_t)d.day, (uint32_t)(d.month - 1), (uint32_t)d.year, 0xffffffffu, 1,
+                     (uint32_t)campaign, 0};
     call_cdecl(CUP_MATCH_DATE, 9, b);
     if (rt_unwinding) return;
     uint32_t r = rec + (uint32_t)round * ROUND_SIZE;
