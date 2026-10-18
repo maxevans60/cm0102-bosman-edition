@@ -142,7 +142,7 @@ static int step_of(const char *file)
  * so the wraps act only while a new game is made. */
 static void ctor(const char *file, void (*original)(void))
 {
-    if (season_game() && season_creating_game()) {
+    if (season_game() && season_change_is_creating()) {
         int start = season_start_year();
         int year = next_edition(file, start);
         uint32_t slot = cpu.esp + 4;                        /* thiscall (year, record), ret 8 */
@@ -201,6 +201,9 @@ static void club_world_before(const SeasonChange *c)
 {
     const ClubWorldClass *k = class_of(c->file);
     if (!k || !c->started) return;
+    /* The start season hooks run with changing rules off too (season_change.h, "The start season"). A late
+     * class sets the edition of the next season there, which is a change only with changing rules on. */
+    if (k->late && c->start && !season_changing_rules()) return;
     int s = c->season + k->late;                            /* the season of the edition that starts next */
     int year = next_edition(k->file, s);
     if (!year) return;

@@ -38,7 +38,6 @@ static int rules_now;                          /* changing rules of the game tha
 static int new_year = SEASON_FIRST_YEAR;        /* the season of the next new game */
 static int new_rules = -1;                      /* -1: the option changing_rules */
 static int game_on;                             /* 1 from a made or loaded game to free_game_data */
-static int creating;                            /* slice 26: 1 while create_game 0x828110 runs */
 
 #define GAME_DATE 0xae2c90u        /* the game date: s16 day of the year, s16 year, u32 leap year */
 #define DATE_SET 0x0054a130u       /* Date::set, thiscall (day 1 to 31, month 0 to 11, year, weekday or -1) */
@@ -147,8 +146,12 @@ static void season_box(const char *title, const char *text)
     rt_callback(MESSAGE_BOX, 3, args);
 }
 
-/* The part of a game: written only when the game is not 2001 with changing rules off. */
-static int part_needed(void) { return rt_season_year != SEASON_FIRST_YEAR || rules_now; }
+/* The part of a game: written only when the game is not 2001 with changing rules off, or when the season
+ * code holds news or changed names (season_change.c): a load needs the names in the data (season_change_rename). */
+static int part_needed(void)
+{
+    return rt_season_year != SEASON_FIRST_YEAR || rules_now || season_change_part_size() != 0;
+}
 
 static int read_at(int fd, int64_t at, void *buf, uint32_t n)
 {
@@ -398,16 +401,14 @@ RT_WRAP(00828110, create_game)
     rules_now = !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
     season_change_reset();
     season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
-    creating = 1;
+    season_change_creating(1);
     o_00828110();
-    creating = 0;
+    season_change_creating(0);
     if (!rt_unwinding && cpu.eax) {
         game_on = 1;
         season_change_new_game();
     }
 }
-
-int season_creating_game(void) { return creating; }
 
 void o_0082ff40(void);
 
