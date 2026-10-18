@@ -318,7 +318,7 @@ static int random_below(int n)
  * and gives pot i / 4 (0x57c9c4). Its draw 0x57c320 puts pot 1 in groups 1 to 4 in order (0x57c3b7..0x57c3e6)
  * and the others at random, one per group and pot (0x57c403..0x57c46b). Here the same rules with pot i / 6:
  * the first seed (the host) goes to group 1, the rest of pot 1 and every other pot at random, one team per
- * group and pot. The result is the original's: calloc(count, 5) of {team, group 1 to 6}, freed by
+ * group and pot. The result is the original's: calloc(count, 5) of {club index, group 1 to 6}, freed by
  * run_group_draw (0x57c2f8). The seeding is done at the draw, because the pot array +0xee of the object holds
  * 16 entries only (the object has 0x142 bytes, 0x830cb3, and +0x13e follows the array) and the save writes 16
  * (0x57c492, 0x57c5d9). */
@@ -380,7 +380,10 @@ static uint32_t draw24(uint32_t self)
         }
         for (int i = 0, used = 0; i < GROUPS && pot * GROUPS + i < n; i++) {
             int k = pot * GROUPS + i, g = (pot == 0 && i == 0) ? 1 : groups[used++];
-            wr32(g_mem, res + (uint32_t)k * 5u, order[k]);
+            /* The entry holds the club's index in the club table, not its address: the group builders take
+             * the club as [0xae23b4] + index * 0x245 (0x57b5e4..0x57b5fd), as the pots of the seeding do. */
+            uint32_t clubs = rd32(g_mem, 0xae23b4u);
+            wr32(g_mem, res + (uint32_t)k * 5u, (order[k] - clubs) / 0x245u);
             wr8(g_mem, res + (uint32_t)k * 5u + 4u, (uint32_t)g);
         }
     }
@@ -411,7 +414,13 @@ void o_0057c710(void);
  * +0xee holds 16 (see draw24), and the draw sorts the teams itself. */
 RT_WRAP(0057c710, euro_seeding)
 {
-    if (!euro24(cpu.ecx)) {
+    uint32_t self = cpu.ecx;
+    season_intl_euro_fill(self);            /* the pots take the slots: no empty slot may go in (season_intl.c) */
+    if (rt_unwinding) return;
+    cpu.ecx = self;
+    if (!euro24(self)) {
+        /* The 16-team path. The staff reserve fix has its own fill of a short list (euro_finals_fill_short_list,
+         * on its branch a wrap of 0x57c710): at the merge that wrap goes and its function is called here. */
         o_0057c710();
         return;
     }
@@ -565,6 +574,11 @@ static void knockout24(uint32_t self)
             uint32_t src = rd32(g_mem, g[i] + TABLE);
             if (!readable(src)) continue;
             memmove(g_mem + dst + (uint32_t)i * ROW_SIZE, g_mem + src + 2u * ROW_SIZE, ROW_SIZE);
+            /* The row's blocks at +5 and +9 stay with the group table: League::free_table 0x687970 frees both
+             * (0x6879b7, 0x6879e4) when the temporary stage is deleted below, and again at the season end
+             * (0x57b775), "free of ... not a heap block" in a 2015, 2019 and 2023 start. The sort 0x6827d0
+             * reads the points and goals of the row, not these blocks (inference). */
+            wr32(g_mem, dst + (uint32_t)i * ROW_SIZE + 5u, 0);
             wr32(g_mem, dst + (uint32_t)i * ROW_SIZE + 9u, 0);
         }
         call_this(TABLE_SORT, rank, 1, a1);
@@ -674,4 +688,38 @@ RT_WRAP(0057bb40, euro_knockout)
     knockout24(self);
     if (rt_unwinding) return;
     rt_ret_stdcall(cpu.eax, 0);
+}
+
+/* ---- Test log of a fixture club with no nation ---- */
+
+void o_0076c120(void);
+
+/* NationalTeams::select_squad, thiscall (nation, flag, date, fixture, flag), ret 0x14 (from 0x76bc23 with the
+ * home team's nation; 0x76c266 inside). Test log only (RECOMP_SEASON_INTL_LOG=1): with no nation it logs the
+ * fixture and the clubs of each Euro group table, then calls the original. */
+RT_WRAP(0076c120, euro_select_squad_log)
+{
+    if (logging() && !rt_arg(0)) {
+        uint32_t fx = rt_arg(3), euro = 0, comps = rd32(g_mem, 0xadadfcu);
+        fprintf(stderr, "recomp: season intl: select_squad with no nation, fixture %08x:", fx);
+        for (uint32_t k = 0; readable(fx) && k < 0x40u; k += 4) fprintf(stderr, " %08x", rd32(g_mem, fx + k));
+        fprintf(stderr, "\n");
+        if (readable(comps)) euro = rd32(g_mem, comps + rd32(g_mem, EURO_KEY) * 4u);
+        if (readable(euro)) {
+            int stages = (int)rd32(g_mem, euro + 0x2cu);
+            for (int g = -1; g < stages && g < 8; g++) {
+                uint32_t obj = g < 0 ? euro : rd32(g_mem, rd32(g_mem, euro + 0xcu) + 4u * (uint32_t)g);
+                if (!readable(obj)) continue;
+                uint32_t table = rd32(g_mem, obj + TABLE);
+                int teams = (int16_t)rd16(g_mem, obj + 0x3eu);
+                fprintf(stderr, "recomp: season intl:   stage %d obj %08x teams %d:", g, obj, teams);
+                for (int r = 0; readable(table) && r < teams && r < 8; r++) {
+                    uint32_t c = rd32(g_mem, table + (uint32_t)r * ROW_SIZE), n = club_nation(c);
+                    fprintf(stderr, " %08x(%s)", c, readable(n) ? win_str(n + 4u) : "NO NATION");
+                }
+                fprintf(stderr, "\n");
+            }
+        }
+    }
+    o_0076c120();
 }
