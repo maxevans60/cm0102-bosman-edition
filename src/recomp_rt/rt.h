@@ -351,6 +351,9 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
 uint32_t rt_wcq_concacaf_playoff(uint32_t self);
 uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
 void rt_wcq_africa_format(uint32_t self, uint32_t pool);
+/* The UEFA Nations League (0.6.0 slice 28, win/season_nl.c): the group stages that the draw of
+ * EuroChampQual::update_for_date makes (8 at 0x57ff34). The original's value for every other object. */
+uint32_t rt_nl_group_stages(uint32_t self, uint32_t original);
 /* The club competitions outside UEFA (0.6.0 slice 26, src/recomp_rt/win/season_kind_club_world.c): in a season
  * game the Club World Championship plays every year and draws on 1 July, the Oceania Champions Cup plays every
  * year, and the Copa Mercosur does not start itself while it waits. The sites of tools/recomp/seasons.py read

@@ -14,12 +14,20 @@
 #define NL_MAX_LEAGUES 4        /* UEFA A to D; CONCACAF A to C */
 #define NL_MAX_NATIONS 64       /* UEFA has 55 members */
 
+/* A day of an edition: month 1 to 12, year as an offset from the edition year (0 for the year of the league
+ * phase, 1 for the finals the year after, -1 for a draw in the year before). Day 0: none. */
+typedef struct {
+    int day, month, year;
+} SeasonNlDate;
+
 /* One edition of a Nations League (season_nl_table.c, made by tools/seasons/make_nl.py from the rules table
  * int-continental.tsv and docs/research/rules-0.6.0/nations-league-tiers.tsv). */
 typedef struct {
     const char *confed;         /* "UEFA" or "CONCACAF" */
     const char *edition;        /* "2018-19" */
-    int season;                 /* the season of the first match of the league phase (2018 for 2018/19) */
+    int season;                 /* the season of the first match of the league phase (2018 for 2018/19; 2021
+                                   for 2022-23, which started on 1 June 2022) */
+    int year;                   /* the edition year: the first year of the name (2022 for 2022-23) */
     int leagues;                /* 4 (A to D) or 3 (A to C) */
     int size[NL_MAX_LEAGUES];   /* nations in each league */
     int groups[NL_MAX_LEAGUES]; /* groups in each league */
@@ -27,6 +35,9 @@ typedef struct {
     int up_winners;             /* 1: the group winners of each league below A go up one league */
     int down_last[NL_MAX_LEAGUES];   /* 1: the last of each group of the league goes down one league */
     int down_lowest[NL_MAX_LEAGUES]; /* more nations of the league that go down: the lowest of the ranking */
+    SeasonNlDate draw;          /* the draw of the league phase */
+    SeasonNlDate md[6];         /* the first day of each of the six matchdays of the league phase */
+    SeasonNlDate sf, final;     /* the semi-finals and the final of the finals of four */
     const char *row;            /* id of the rules table row */
 } SeasonNlEdition;
 

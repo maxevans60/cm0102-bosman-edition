@@ -11,6 +11,8 @@ The editions: EDITIONS below, one per row of docs/research/rules-0.6.0/int-conti
 Nations League and whose format gives a league phase. The sizes, group counts and moves are read from the
 row's clubs, format, up and down text by hand and written here, because the text has no one form; the tool
 checks each edition against its row (season, the total of the clubs column, each size in the format text).
+The dates of the UEFA editions: docs/research/rules-0.6.0/nations-league-dates.tsv (the draw, the first day
+of each matchday, the first semi-final and the final; MOVED_DATES for a decision).
 The real leagues: docs/research/rules-0.6.0/nations-league-tiers.tsv (edition, confed, league, group, nation,
 two sources). The nation names become the names of the game's nation.dat (NAMES), with the other names that a
 database or a rename of slice 27 can give after a "/".
@@ -24,6 +26,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 RULES = os.path.join(ROOT, "docs", "research", "rules-0.6.0")
 TIERS = os.path.join(RULES, "nations-league-tiers.tsv")
+DATES = os.path.join(RULES, "nations-league-dates.tsv")
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_nl_table.c")
 
 # row id: (confed, edition, season, sizes, groups, up_winners, down_last, down_lowest)
@@ -40,7 +43,8 @@ EDITIONS = {
                             (0, 0, 2, 0)),
     # "League A, B, C 16 (4 groups of 4), D 7"; up "group winners of B, C, D"; down "last-placed teams of A
     # and B groups; 1 League C team by play-out". 55 entered, 54 played (Russia).
-    "int-continental-234": ("UEFA", "2022-23", 2022, (16, 16, 16, 7), (4, 4, 4, 2), 1, (1, 1, 0, 0),
+    # The league phase starts on 1 June 2022 (row int-continental-223, season 2021/22): season 2021.
+    "int-continental-234": ("UEFA", "2022-23", 2021, (16, 16, 16, 7), (4, 4, 4, 2), 1, (1, 1, 0, 0),
                             (0, 0, 1, 0)),
     # "League A, B, C 16 (4 groups of 4), D 6 (2 groups of 3)"; up "group winners of B, C, D; play-off
     # winners"; down "last-placed teams of A and B; two lowest League C teams".
@@ -57,7 +61,8 @@ EDITIONS = {
     # "league phase to 28 March 2023 (League A 12 teams, structure unchanged from 2019-20: inference)"; up
     # "group winners of B and C"; down "none (no relegation from 2022-23)". The league phase starts 2 June
     # 2022 (row int-continental-226, season 2021/22).
-    "int-continental-237": ("CONCACAF", "2022-23", 2022, (12, 16, 13), (4, 4, 4), 1, (0, 0, 0), (0, 0, 0)),
+    # The league phase starts on 2 June 2022 (row int-continental-226, season 2021/22): season 2021.
+    "int-continental-237": ("CONCACAF", "2022-23", 2021, (12, 16, 13), (4, 4, 4), 1, (0, 0, 0), (0, 0, 0)),
     # "League A 16: 12 in two groups of 6 (4 matches each), top 4 plus 4 top-ranked teams to quarter-finals;
     # League B 16 (4 groups of 4); League C 9 (3 groups of 3)"; up "group winners of B and C, best League C
     # runner-up"; down "5th and 6th of A groups, 4th of B groups".
@@ -117,7 +122,8 @@ def editions():
         r = rows.get(row)
         if not r:
             fail(f"{row}: no such row")
-        if int(r["season"][:4]) != season and not (row == "int-continental-237" and season == 2022):
+        if int(r["season"][:4]) != season and not (row in ("int-continental-234", "int-continental-237")
+                                                   and season == int(r["season"][:4]) - 1):
             fail(f"{row}: season {r['season']}, the tool gives {season}")
         total = re.match(r"^(\d+)", r["clubs"])
         if not total or int(total.group(1)) not in (sum(sizes), sum(sizes) + 1):
@@ -126,9 +132,41 @@ def editions():
         for n in sizes:
             if str(n) not in fmt and str(n) not in r["clubs"]:
                 fail(f"{row}: the size {n} is not in the format")
-        out.append({"confed": confed, "edition": ed, "season": season, "sizes": sizes, "groups": groups, "up": up,
-                    "down": down, "lowest": lowest, "row": row})
+        year = int(ed[:4])
+        when = {}
+        if confed == "UEFA":
+            ds = dates()
+            for ev in ("draw", "md1", "md2", "md3", "md4", "md5", "md6", "sf1", "final"):
+                if (ed, ev) not in ds:
+                    fail(f"{row}: no date {ev} of {ed} in nations-league-dates.tsv")
+                y, mo, d = ds[(ed, ev)]
+                when[ev] = (d, mo, y - year)
+        out.append({"confed": confed, "edition": ed, "season": season, "year": year, "sizes": sizes,
+                    "groups": groups, "up": up, "down": down, "lowest": lowest, "when": when, "row": row})
     out.sort(key=lambda e: (e["confed"] != "UEFA", e["confed"], e["season"]))
+    return out
+
+
+# Dates that a decision moves (Q277: a late edition plays at its planned time). The 2020-21 finals were
+# planned for June 2021 and moved to October 2021 because Euro 2020 moved to June 2021; in the game Euro 2020
+# plays in June 2020 (slice 27), so the finals keep June 2021. The days are those of the 2018-19 finals, two
+# years on (inference: the planned days are not known).
+MOVED_DATES = {
+    ("2020-21", "sf1"): "2021-06-02",
+    ("2020-21", "final"): "2021-06-06",
+}
+
+
+def dates():
+    out = {}
+    if not os.path.exists(DATES):
+        return out
+    with open(DATES, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            d = MOVED_DATES.get((r["edition"], r["event"]), r["date"])
+            m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", d)
+            if m:
+                out[(r["edition"], r["event"])] = tuple(int(x) for x in m.groups())
     return out
 
 
@@ -170,9 +208,14 @@ def text():
         def arr(v):
             v = list(v) + [0] * (4 - len(v))
             return "{" + ", ".join(str(x) for x in v) + "}"
-        lines.append(f'    {{{c_str(e["confed"])}, {c_str(e["edition"])}, {e["season"]}, {len(e["sizes"])}, '
-                     f'{arr(e["sizes"])}, {arr(e["groups"])}, {e["up"]}, {arr(e["down"])}, {arr(e["lowest"])}, '
-                     f'{c_str(e["row"])}}},')
+        def day(ev):
+            d = e["when"].get(ev)
+            return "{" + ", ".join(str(x) for x in d) + "}" if d else "{0, 0, 0}"
+        mds = "{" + ", ".join(day(f"md{k}") for k in range(1, 7)) + "}"
+        lines.append(f'    {{{c_str(e["confed"])}, {c_str(e["edition"])}, {e["season"]}, {e["year"]}, '
+                     f'{len(e["sizes"])}, {arr(e["sizes"])}, {arr(e["groups"])}, {e["up"]}, {arr(e["down"])}, '
+                     f'{arr(e["lowest"])},')
+        lines.append(f'     {day("draw")}, {mds}, {day("sf1")}, {day("final")}, {c_str(e["row"])}}},')
     lines += [
         "};",
         "const int season_nl_edition_count = (int)(sizeof season_nl_editions / sizeof season_nl_editions[0]);",

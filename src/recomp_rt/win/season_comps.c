@@ -22,8 +22,12 @@
 
 /* ---- The competitions: each slice adds its lines here, in its own block ---- */
 
+/* Slice 28 (season_nl.c): the UEFA Nations League. */
+extern const SeasonCompDef season_nl_comp;
+
 const SeasonCompDef *const season_comp_defs[] = {
     NULL,                               /* keeps the array non-empty; the module skips NULL */
+    &season_nl_comp,                    /* slice 28 */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 

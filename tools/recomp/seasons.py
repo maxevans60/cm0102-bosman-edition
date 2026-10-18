@@ -312,6 +312,11 @@ INSNS = {
     # the compare a pool of 50 or more takes the format of no host (South Africa 2010 stays out of the pool by
     # the compare at 0x9108aa).
     0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+
+    # UEFA Nations League (0.6.0 slice 28, season_nl.c). EuroChampQual::update_for_date 0x57fd60 makes the group
+    # stages 0 to 7 on its draw day (create_group_stage 0x57ed10 at 0x57ff2e, `cmp edi, 8`, this in esi). The
+    # Nations League object makes one stage for each group after group one: G - 1. Other objects: 8.
+    0x57FF34: ("cmp edi, 8", "t0 = edi; t1 = rt_nl_group_stages(esi, 8u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
     # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
     # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
     0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),

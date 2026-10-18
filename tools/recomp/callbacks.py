@@ -14,11 +14,26 @@ import re
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
-                  "season_change.c", "season_kind_club_world.c", "season_comps.c")
+                  "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_nl.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
+    # Slice 28 (season_nl.c): the UEFA Nations League, an object of the class euro_champ_qual.
+    0x57CE10: ("6aff686788950064", "EuroChampQual::EuroChampQual (this, year, record)"),
+    0x57E8F0: ("6aff68a888950064", "EuroChampQual::set_up_rules (this)"),
+    0x57EB20: ("81ec000200005356", "EuroChampQual::start_new_season (this)"),
+    0x57FD60: ("6aff68a689950064", "EuroChampQual::update_for_date (this, today, full)"),
+    0x90FBE0: ("8b41048b0d1843b7", "EuroChampQual slot 12: clear_competition_for_comp_clubs (this)"),
+    0x521E60: ("8b4c24148b442418", "cup round: first date (rec, round, day, month0, yoff, weekday, year)"),
+    0x521EB0: ("8b4c24148b442418", "cup round: last date (rec, round, day, month0, yoff, weekday, x, year, y)"),
+    0x521F10: ("668b4c240c81ec00", "cup round: match slot (rec, round, slot, weekday, time, 3, flag)"),
+    0x53B3D0: ("8b44240481ec0002", "database_get_national_team (nation)"),
+    0x549F70: ("81ec000200005657", "Date::Date (this, day, month0, year, weekday)"),
+    0x6827D0: ("83ec4c535556578b", "League table sort (this, 0)"),
+    0x68A160: ("8b4c24148b442418", "league_round_set_date (rounds, i, day, month0, yoff, weekday, flag, year, 0)"),
+    0x68A1C0: ("81ec000200005356", "league_round_set_match_slot (rounds, i, 0, -1, -1, -1, 0)"),
+    0x90CFC0: ("51568b74240c85f6", "random (n)"),
     # Slice 26 (season_kind_club_world.c): the knockout of the FIFA Club World Championship.
     0x92A8B0: ("81ec08020000568b", "WorldClubChamp::pick_entrants (this): the 12 entrants into +0xee"),
     0x929390: ("81ec000200005356", "WorldClubChamp::create_schedule (this, stage, &rounds, &code, &is_league)"),

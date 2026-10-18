@@ -1,0 +1,70 @@
+edition	event	date	source1	source2	note
+2018-19	draw	2018-01-24	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://www.maltafootball.com/2018/01/23/uefa-nations-league-draw-to-be-held-on-wednesday/	
+2018-19	md1	2018-09-06	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://uefa.com/uefanationsleague/news/0253-0d81efc3a33f-dd2083a5720d-1000--uefa-nations-league-2018-19-league-phase-draw	Wikipedia and UEFA/news give md1 6-8 Sep, md6 18-20 Nov
+2018-19	md2	2018-09-09	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://uefa.com/uefanationsleague/news/0253-0d81efc3a33f-dd2083a5720d-1000--uefa-nations-league-2018-19-league-phase-draw	Wikipedia and UEFA/news give md1 6-8 Sep, md6 18-20 Nov
+2018-19	md3	2018-10-11	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://uefa.com/uefanationsleague/news/0253-0d81efc3a33f-dd2083a5720d-1000--uefa-nations-league-2018-19-league-phase-draw	Wikipedia and UEFA/news give md1 6-8 Sep, md6 18-20 Nov
+2018-19	md4	2018-10-14	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://uefa.com/uefanationsleague/news/0253-0d81efc3a33f-dd2083a5720d-1000--uefa-nations-league-2018-19-league-phase-draw	Wikipedia and UEFA/news give md1 6-8 Sep, md6 18-20 Nov
+2018-19	md5	2018-11-15	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://uefa.com/uefanationsleague/news/0253-0d81efc3a33f-dd2083a5720d-1000--uefa-nations-league-2018-19-league-phase-draw	Wikipedia and UEFA/news give md1 6-8 Sep, md6 18-20 Nov
+2018-19	md6	2018-11-18	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://uefa.com/uefanationsleague/news/0253-0d81efc3a33f-dd2083a5720d-1000--uefa-nations-league-2018-19-league-phase-draw	Wikipedia and UEFA/news give md1 6-8 Sep, md6 18-20 Nov
+2018-19	sf1	2019-06-05	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League		one source
+2018-19	sf2	2019-06-06	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League		one source
+2018-19	third	2019-06-09	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League		one source
+2018-19	final	2019-06-09	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League		one source
+2020-21	draw	2020-03-03	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/0258-0e2c81a543f9-6ea26061c2b5-1000--2020-21-uefa-nations-league-league-phase-draw/	
+2020-21	md1	2020-09-03	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/0258-0e2c81a543f9-6ea26061c2b5-1000--2020-21-uefa-nations-league-league-phase-draw/	
+2020-21	md2	2020-09-06	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/0258-0e2c81a543f9-6ea26061c2b5-1000--2020-21-uefa-nations-league-league-phase-draw/	
+2020-21	md3	2020-10-10	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/0258-0e2c81a543f9-6ea26061c2b5-1000--2020-21-uefa-nations-league-league-phase-draw/	
+2020-21	md4	2020-10-13	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/0258-0e2c81a543f9-6ea26061c2b5-1000--2020-21-uefa-nations-league-league-phase-draw/	
+2020-21	md5	2020-11-14	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/0258-0e2c81a543f9-6ea26061c2b5-1000--2020-21-uefa-nations-league-league-phase-draw/	
+2020-21	md6	2020-11-17	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/0258-0e2c81a543f9-6ea26061c2b5-1000--2020-21-uefa-nations-league-league-phase-draw/	
+2020-21	sf1	2021-10-06	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League		one source
+2020-21	sf2	2021-10-07	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League		one source
+2020-21	third	2021-10-10	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League		one source
+2020-21	final	2021-10-10	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League		one source
+2022-23	draw	2021-12-16	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://www.maltafootball.com/2021/12/15/2022-23-uefa-nations-league-draw-to-be-held-on-thursday	
+2022-23	md1	2022-06-01	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/026f-13c83126e65f-3ab9c4e54708-1000--2022-23-uefa-nations-league-league-phase-draw	Wikipedia 1-4 June; UEFA pages give 1-8 or 2-7 June for md1 and md2
+2022-23	md2	2022-06-05	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/026f-13c83126e65f-3ab9c4e54708-1000--2022-23-uefa-nations-league-league-phase-draw	
+2022-23	md3	2022-06-09	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/026f-13c83126e65f-3ab9c4e54708-1000--2022-23-uefa-nations-league-league-phase-draw	
+2022-23	md4	2022-06-12	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/026f-13c83126e65f-3ab9c4e54708-1000--2022-23-uefa-nations-league-league-phase-draw	
+2022-23	md5	2022-09-22	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/026f-13c83126e65f-3ab9c4e54708-1000--2022-23-uefa-nations-league-league-phase-draw	
+2022-23	md6	2022-09-25	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/026f-13c83126e65f-3ab9c4e54708-1000--2022-23-uefa-nations-league-league-phase-draw	
+2022-23	sf1	2023-06-14	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League		one source
+2022-23	sf2	2023-06-15	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League		one source
+2022-23	third	2023-06-18	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League		one source
+2022-23	final	2023-06-18	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League		one source
+2024-25	draw	2024-02-08	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/028a-1a1579c12dec-5cadac35d0a0-1000--2024-25-uefa-nations-league-league-phase-draw	
+2024-25	md1	2024-09-05	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/028a-1a1579c12dec-5cadac35d0a0-1000--2024-25-uefa-nations-league-league-phase-draw	
+2024-25	md2	2024-09-08	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/028a-1a1579c12dec-5cadac35d0a0-1000--2024-25-uefa-nations-league-league-phase-draw	
+2024-25	md3	2024-10-10	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/028a-1a1579c12dec-5cadac35d0a0-1000--2024-25-uefa-nations-league-league-phase-draw	
+2024-25	md4	2024-10-13	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/028a-1a1579c12dec-5cadac35d0a0-1000--2024-25-uefa-nations-league-league-phase-draw	
+2024-25	md5	2024-11-14	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/028a-1a1579c12dec-5cadac35d0a0-1000--2024-25-uefa-nations-league-league-phase-draw	
+2024-25	md6	2024-11-17	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.uefa.com/uefanationsleague/news/028a-1a1579c12dec-5cadac35d0a0-1000--2024-25-uefa-nations-league-league-phase-draw	
+2024-25	sf1	2025-06-04	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League		one source
+2024-25	sf2	2025-06-05	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League		one source
+2024-25	third	2025-06-08	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League		one source
+2024-25	final	2025-06-08	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League		one source
+2026-27	draw	2026-02-12	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.englandfootball.com/articles/2026/Feb/13/uefa-nations-league-2026-27-fixture-dates-confirmed-20261302	Brussels
+2026-27	md1	2026-09-24	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.englandfootball.com/articles/2026/Feb/13/uefa-nations-league-2026-27-fixture-dates-confirmed-20261302	
+2026-27	md2	2026-09-27	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.englandfootball.com/articles/2026/Feb/13/uefa-nations-league-2026-27-fixture-dates-confirmed-20261302	
+2026-27	md3	2026-10-01	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.englandfootball.com/articles/2026/Feb/13/uefa-nations-league-2026-27-fixture-dates-confirmed-20261302	
+2026-27	md4	2026-10-04	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.englandfootball.com/articles/2026/Feb/13/uefa-nations-league-2026-27-fixture-dates-confirmed-20261302	
+2026-27	md5	2026-11-12	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.englandfootball.com/articles/2026/Feb/13/uefa-nations-league-2026-27-fixture-dates-confirmed-20261302	
+2026-27	md6	2026-11-15	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.englandfootball.com/articles/2026/Feb/13/uefa-nations-league-2026-27-fixture-dates-confirmed-20261302	
+2026-27	sf1	2027-06-09	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League		one source
+2026-27	sf2	2027-06-10	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League		one source
+2026-27	third	2027-06-13	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League		one source
+2026-27	final	2027-06-13	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League		one source
+2024-25	qf1	2025-03-20	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.90min.com/2024-25-nations-league-play-offs-teams-involved-when-fixtures-take-place	League A quarter-finals first legs 20 Mar
+2024-25	qf2	2025-03-23	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.90min.com/2024-25-nations-league-play-offs-teams-involved-when-fixtures-take-place	second legs 23 Mar
+2024-25	po1	2025-03-20	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.90min.com/2024-25-nations-league-play-offs-teams-involved-when-fixtures-take-place	A/B and B/C play-offs first legs; C/D play-offs listed 26 Mar by Wikipedia but its year is unclear, not confirmed
+2024-25	po2	2025-03-23	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://www.90min.com/2024-25-nations-league-play-offs-teams-involved-when-fixtures-take-place	A/B and B/C second legs; C/D second legs 31 Mar listed, year unclear
+2026-27	qf1	2027-03-25	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://www.flashscore.com/news/uefa-nations-league-2026-27-a-complete-guide-to-league-a/Isf9tZu3/	window 25-27 Mar 2027, exact day per match not checked
+2026-27	qf2	2027-03-28	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League		one source; window 28-30 Mar 2027, exact day per match not checked
+2026-27	po1	2027-03-25	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League		one source; A/B and B/C play-offs first-leg window 25-27 Mar 2027; C/D play-offs reported for March 2028
+2026-27	po2	2027-03-28	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League		one source; second-leg window 28-30 Mar 2027
+euro2020	euro2020_po_sf	2020-03-26	https://en.wikipedia.org/wiki/UEFA_Euro_2020_qualifying	https://www.uefa.com/european-qualifiers/news/newsid=2581807.html	planned date; postponed, played 8 Oct 2020
+euro2020	euro2020_po_final	2020-03-31	https://en.wikipedia.org/wiki/UEFA_Euro_2020_qualifying	https://www.uefa.com/european-qualifiers/news/newsid=2581807.html	planned date; played 12 Nov 2020
+euro2024	euro2024_po_sf	2024-03-21	https://en.wikipedia.org/wiki/UEFA_Euro_2024_qualifying	https://www.uefa.com/uefaeuro/history/news/0286-19342fbbac5e-53603029d526-1000--uefa-euro-2024-play-off-draw/	
+euro2024	euro2024_po_final	2024-03-26	https://en.wikipedia.org/wiki/UEFA_Euro_2024_qualifying	https://www.uefa.com/uefaeuro/history/news/0286-19342fbbac5e-53603029d526-1000--uefa-euro-2024-play-off-draw/	
+wc2022	wc2022_po_sf	2022-03-24	https://en.wikipedia.org/wiki/2022_FIFA_World_Cup_qualification_(UEFA)	https://www.uefa.com/european-qualifiers/news/026f-13ac16a363d7-d4a0239a3889-1000--2022-world-cup-play-off-draw/	two Path A ties (Scotland v Ukraine, Russia v Poland) were later changed; original date
+wc2022	wc2022_po_final	2022-03-29	https://en.wikipedia.org/wiki/2022_FIFA_World_Cup_qualification_(UEFA)	https://www.uefa.com/european-qualifiers/news/026f-13ac16a363d7-d4a0239a3889-1000--2022-world-cup-play-off-draw/	original date
