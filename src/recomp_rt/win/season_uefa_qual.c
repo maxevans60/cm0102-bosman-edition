@@ -140,40 +140,46 @@ static void set_dates(uint32_t t, int r, int draw_day, int draw_month, int day, 
 typedef struct {
     int round_code;
     int cp, lp;                         /* entry codes of the Champions Path and League Path (lp 0: one path) */
-    int legs;
+    int final;                          /* 1: a round of the winners of the round before only (no new clubs) */
+    int legs, gap;                      /* matches a tie, days between them (+0x21, +0x22) */
+    int weekday;                        /* 0 Monday .. 6 Sunday, the match day (cup_set_round_match_date) */
     int draw[2], match[2];              /* draw and first leg: day, month 0 to 11 */
 } Level;
 
 /* The dates. A game in a moved season starts on 11 July (the first day of the rules report of a 2010/11
- * game). The date function moves a match to the nearest day of the round's weekday, up to 3 days either way
- * (0x549f70 from 0x521ed3; seen in a 2010/11 game: 29 August, a Sunday, gave Wednesday 1 September with weekday
- * 2, and 30 August gave Friday 27 August with weekday 4). The original passes weekday 2 for its Champions League
- * rounds (0x583cef..0x583d0e) and the UEFA Cup's 3 (0x9026a4): Wednesday and Thursday. So a cup's first legs are 14
- * days apart on 7-day steps, and each Europa League date is the day after a Champions League date: the two move by
- * the same days, and the order holds in every year. Champions League first legs 18 July (15 to 21 July after the
- * move), 1, 15 and 29 August; second legs 7 days later (+0x22), the last by 8 September. A Europa League round
- * starts after the Champions League round whose losers it takes has ended (Q1 before EL Q2, Q2 before EL Q3, Q3
- * before EL PO), and its play-offs end the day after the Champions League's, so the hand-over of the play-off
- * losers (at the Champions League group draw) comes before the Europa League group draw. The preliminary round
- * has no clubs (season_uefa_code_clubs). The real calendar starts in late June (rows uefa-66 to uefa-160): these
- * dates keep its order. */
-#define WEEKDAY_CL 2
-#define WEEKDAY_EL 3
+ * game), and the Champions League groups start on 12 September (the original's first group match day, weekday
+ * 1, 0x583f41..0x583f5e). The date function moves a match to the nearest day of its weekday, up to 3 days either
+ * way (0x549f70 from 0x521ed3; seen in a 2010/11 game: 29 August, a Sunday, gave Wednesday 1 September with
+ * weekday 2, and 30 August gave Friday 27 August with weekday 4). The original passes weekday 2 for its Champions
+ * League rounds (0x583cef..0x583d0e) and 3 for the UEFA Cup's (0x9026a4). A date d with weekday w moves by the same
+ * days as d + n with weekday w + n, so the dates below keep their order in every year:
+ *   Champions League: the preliminary round (2018/19 on) is a tournament of single matches, as the real one
+ *   (rows uefa-138, uefa-139: "PR 4", one winner): semi-finals on the Sunday and the final on the Tuesday before
+ *   the first qualifying round (15 and 17 July, so from 12 July); first legs on Wednesday 18 July, 1, 15 and 29
+ *   August, second legs 7 days later (+0x22), the last by 8 September.
+ *   Europa League: one day after the Champions League (Thursday). The preliminary round has two legs, on the
+ *   Sunday and the Tuesday before its first qualifying round. So each round starts after the Champions League
+ *   round whose losers it takes has ended (the preliminary round and Q1 before EL Q2, Q2 before EL Q3, Q3 before
+ *   EL PO), and its play-offs end the day after the Champions League's: the hand-over of the play-off losers (at the
+ *   Champions League group draw) comes before the Europa League group draw.
+ * The real calendar starts in late June (rows uefa-66 to uefa-160): these dates keep its order in fewer weeks. */
 static const Level CL_LEVELS[] = {
-    {240, SEASON_UEFA_CL_PR, 0, 1, {12, 6}, {11, 6}},
-    {250, SEASON_UEFA_CL_Q1, 0, 2, {12, 6}, {18, 6}},
-    {260, SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_CL_Q2_LP, 2, {26, 6}, {1, 7}},
-    {270, SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_CL_Q3_LP, 2, {9, 7}, {15, 7}},
-    {220, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_PO_LP, 2, {23, 7}, {29, 7}},
+    {240, SEASON_UEFA_CL_PR, 0, 0, 1, 0, 6, {12, 6}, {15, 6}},
+    {230, 0, 0, 1, 1, 0, 1, {12, 6}, {17, 6}},
+    {250, SEASON_UEFA_CL_Q1, 0, 0, 2, 7, 2, {12, 6}, {18, 6}},
+    {260, SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_CL_Q2_LP, 0, 2, 7, 2, {26, 6}, {1, 7}},
+    {270, SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_CL_Q3_LP, 0, 2, 7, 2, {9, 7}, {15, 7}},
+    {220, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_PO_LP, 0, 2, 7, 2, {23, 7}, {29, 7}},
 };
 static const Level EL_LEVELS[] = {
-    {240, SEASON_UEFA_EL_PR, 0, 1, {12, 6}, {12, 6}},
-    {250, SEASON_UEFA_EL_Q1, 0, 2, {12, 6}, {19, 6}},
-    {260, SEASON_UEFA_EL_Q2, 0, 2, {26, 6}, {2, 7}},
-    {270, SEASON_UEFA_EL_Q3, 0, 2, {9, 7}, {16, 7}},
-    {220, SEASON_UEFA_EL_PO, 0, 2, {23, 7}, {30, 7}},
+    {240, SEASON_UEFA_EL_PR, 0, 0, 2, 2, 6, {12, 6}, {15, 6}},
+    {250, SEASON_UEFA_EL_Q1, 0, 0, 2, 7, 3, {12, 6}, {19, 6}},
+    {260, SEASON_UEFA_EL_Q2, 0, 0, 2, 7, 3, {26, 6}, {2, 7}},
+    {270, SEASON_UEFA_EL_Q3, 0, 0, 2, 7, 3, {9, 7}, {16, 7}},
+    {220, SEASON_UEFA_EL_PO, 0, 0, 2, 7, 3, {23, 7}, {30, 7}},
 };
-#define N_LEVELS 5
+#define CL_N ((int)(sizeof CL_LEVELS / sizeof CL_LEVELS[0]))
+#define EL_N ((int)(sizeof EL_LEVELS / sizeof EL_LEVELS[0]))
 
 typedef struct {
     int n;                              /* entrants of the list */
@@ -220,11 +226,12 @@ static int make_layout(const SeasonUefa *r, char comp, Layout *L, uint32_t cl)
     if (comp == 'e')
         for (int code = lo; code < codes; code++) L->drops[code] = season_uefa_dropped(r, code);
     const Level *lv = comp == 'c' ? CL_LEVELS : EL_LEVELS;
-    int slot = 0, cp_win = 0, lp_win = 0;
-    for (int k = 0; k < N_LEVELS; k++) {
-        int cp = L->count[lv[k].cp] + L->drops[lv[k].cp], lp = lv[k].lp ? L->count[lv[k].lp] : 0;
+    int slot = 0, cp_win = 0, lp_win = 0, levels = comp == 'c' ? CL_N : EL_N;
+    for (int k = 0; k < levels; k++) {
+        int cp = lv[k].cp ? L->count[lv[k].cp] + L->drops[lv[k].cp] : 0, lp = lv[k].lp ? L->count[lv[k].lp] : 0;
+        if (lv[k].final && (k == 0 || L->rounds == 0 || L->level[L->rounds - 1] != k - 1)) continue;
         if (!cp && !lp && !cp_win && !lp_win) continue;
-        if (!cp && !lp) {                              /* a round with no new clubs: not in the access list */
+        if (!cp && !lp && !lv[k].final) {              /* a round with no new clubs: not in the access list */
             fprintf(stderr, "recomp: uefa: %s round %d has no new clubs\n", comp == 'c' ? "CL" : "EL", lv[k].round_code);
             return 0;
         }
@@ -290,13 +297,14 @@ static int cl_entrants(uint32_t cl, const Layout *L)
         g_mem[list + ENTRY * (uint32_t)at + 4] = 7;
         at++;
     }
-    for (int k = 0; k < N_LEVELS; k++)
+    for (int k = 0; k < CL_N; k++)
         for (int path = 0; path < 2; path++) {
             int code = path ? CL_LEVELS[k].lp : CL_LEVELS[k].cp;
             for (int i = 0; code && i < L->n; i++) {
                 if (club_code(L->clubs[i]) != code) continue;
                 wr32(g_mem, list + ENTRY * (uint32_t)at, L->clubs[i]);
-                g_mem[list + ENTRY * (uint32_t)at + 4] = k == 3 ? 8 : k == 2 ? 13 : 0;
+                g_mem[list + ENTRY * (uint32_t)at + 4] =
+                    CL_LEVELS[k].round_code == 270 ? 8 : CL_LEVELS[k].round_code == 260 ? 13 : 0;
                 at++;
             }
         }
@@ -379,8 +387,9 @@ uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds_out, uint32_t *name_
     int orig_rounds = (int16_t)rd16(g_mem, out);
     *name_out = rd32(g_mem, out + 4);
     *league_out = rd32(g_mem, out + 8);
+    if (rt_unwinding) return 0;
     cpu.esp = saved_esp;
-    if (rt_unwinding || !readable(orig) || orig_rounds < 2) return 0;
+    if (!readable(orig) || orig_rounds < 2) return 0;
     uint32_t t = game_malloc(ROUND_SIZE * (uint32_t)L.rounds);
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, cl + 0x40);
     for (int i = 0; t && i < L.rounds && !rt_unwinding; i++) {
@@ -396,8 +405,8 @@ uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds_out, uint32_t *name_
         wr16(g_mem, rec + 0x1c, (uint16_t)L.fresh[i]);
         wr16(g_mem, rec + 0x1e, (uint16_t)L.first[i]);
         g_mem[rec + 0x21] = (uint8_t)lv->legs;
-        g_mem[rec + 0x22] = 7;
-        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], WEEKDAY_CL, year);
+        g_mem[rec + 0x22] = (uint8_t)lv->gap;
+        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], lv->weekday, year);
     }
     game_free(orig);
     if (rt_unwinding || !t) return 0;
@@ -591,8 +600,8 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds_out)
         wr16(g_mem, x + 0x1c, (uint16_t)L.fresh[i]);
         wr16(g_mem, x + 0x1e, (uint16_t)L.first[i]);
         g_mem[x + 0x21] = (uint8_t)lv->legs;
-        g_mem[x + 0x22] = 7;
-        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], WEEKDAY_EL, year);
+        g_mem[x + 0x22] = (uint8_t)lv->gap;
+        set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], lv->weekday, year);
     }
     if (rt_unwinding || !t) return 0;
     *rounds_out = L.rounds;
@@ -612,8 +621,8 @@ static int uc_table_layout(uint32_t uc, const SeasonUefa *r, Layout *L)
     for (int i = 0; i < rounds; i++) {
         uint32_t rec = t + ROUND_SIZE * (uint32_t)i;
         int code = (int16_t)rd16(g_mem, rec + 7);
-        while (k < N_LEVELS && EL_LEVELS[k].round_code != code) k++;
-        if (k == N_LEVELS || (int16_t)rd16(g_mem, rec + 0x1e) != slot) return 0;
+        while (k < EL_N && EL_LEVELS[k].round_code != code) k++;
+        if (k == EL_N || (int16_t)rd16(g_mem, rec + 0x1e) != slot) return 0;
         int lv = EL_LEVELS[k].cp, fresh = (int16_t)rd16(g_mem, rec + 0x1c);
         L->level[i] = k, L->first[i] = slot, L->fresh[i] = fresh, L->cp_fresh[i] = fresh;
         L->clubs_in[i] = (int16_t)rd16(g_mem, rec + 0x18);
@@ -638,6 +647,38 @@ int season_uefa_uc_direct_first(uint32_t uc)
 }
 
 /* ---- The Champions League losers into the Europa League ---- */
+
+/* The layout of the Champions League from its round table +0xa3 (+0x3c rounds) and its entry table +0xa7, after
+ * build_entrants: both are in the save (Cup::save_cup_to_disk 0x5210f0), and the clubs keep their entry codes
+ * (+0x1df), so a loaded game gives the same layout. Round i takes +0x1c new slots from +0x1e; the League Path
+ * clubs of a round are those with a League Path code. Returns 0 when the table is not one of the access list. */
+static int cl_table_layout(uint32_t cl, Layout *L)
+{
+    memset(L, 0, sizeof *L);
+    uint32_t t = rd32(g_mem, cl + 0xa3), e = rd32(g_mem, cl + 0xa7);
+    int rounds = (int16_t)rd16(g_mem, cl + 0x3c), slot = 0, k = 0;
+    if (!readable(t) || !readable(e) || rounds < 1 || rounds > MAX_ROUNDS) return 0;
+    for (int i = 0; i < rounds; i++) {
+        uint32_t rec = t + ROUND_SIZE * (uint32_t)i;
+        int code = (int16_t)rd16(g_mem, rec + 7);
+        while (k < CL_N && CL_LEVELS[k].round_code != code) k++;
+        if (k == CL_N || (int16_t)rd16(g_mem, rec + 0x1e) != slot) return 0;
+        int fresh = (int16_t)rd16(g_mem, rec + 0x1c), lp = 0;
+        for (int j = slot; j < slot + fresh; j++) {
+            uint32_t club = rd32(g_mem, e + ENTRY * (uint32_t)j);
+            int c = readable(club) ? club_code(club) : 0;
+            lp += CL_LEVELS[k].lp && c == CL_LEVELS[k].lp;
+        }
+        L->level[i] = k, L->first[i] = slot, L->fresh[i] = fresh, L->cp_fresh[i] = fresh - lp, L->lp_fresh[i] = lp;
+        L->clubs_in[i] = (int16_t)rd16(g_mem, rec + 0x18);
+        slot += fresh;
+        k++;
+    }
+    L->rounds = rounds;
+    L->direct_first = slot;
+    L->slots = (int16_t)rd16(g_mem, cl + 0x3e);
+    return L->slots >= slot;
+}
 
 /* The round of the Champions League layout at level k, or -1. */
 static int cl_round_of_level(const Layout *L, int k)
@@ -681,29 +722,67 @@ static int cl_losers(uint32_t cl, const Layout *L, int r, int path, uint32_t *ou
 
 /* The source of a drop ("Q3-CP"): its Champions League level (index of CL_LEVELS) and path (0 Champions Path,
  * 1 League Path, 2 both), or -1. */
+#define LEVEL_PR 0
+#define LEVEL_PR_FINAL 1
+#define LEVEL_PO 5
 static int drop_source(const char *tok, int n, int *path)
 {
-    static const char *const names[N_LEVELS] = {"PR", "Q1", "Q2", "Q3", "PO"};
+    static const struct { const char *name; int level; } names[] = {
+        {"PR", LEVEL_PR}, {"Q1", 2}, {"Q2", 3}, {"Q3", 4}, {"PO", LEVEL_PO}};
     *path = n == 5 && !strncmp(tok + 2, "-CP", 3) ? 0 : n == 5 && !strncmp(tok + 2, "-LP", 3) ? 1 : 2;
-    for (int k = 0; k < N_LEVELS; k++)
-        if (n >= 2 && !strncmp(tok, names[k], 2)) return k;
+    for (unsigned k = 0; k < sizeof names / sizeof names[0]; k++)
+        if (n >= 2 && !strncmp(tok, names[k].name, 2)) return names[k].level;
     return -1;
 }
 
+/* The losers that Champions League round r gives in a path: one a tie. */
+static int expected_losers(const Layout *C, int r, int path)
+{
+    int ties = C->clubs_in[r] / 2, cp = cp_ties_of(C, r);
+    return path == 2 ? ties : path == 0 ? cp : ties - cp;
+}
+
+/* Puts the losers of Champions League round cr (path) into the Europa League slots from first (down from first
+ * when down is 1). A slot that holds a club is left as it is. */
+static void put_losers(uint32_t uc, uint32_t cl, const Layout *C, int cr, int path, int first, int down)
+{
+    uint32_t e = rd32(g_mem, uc + 0xa7), list = rd32(g_mem, uc + 0x14), losers[64];
+    int count = (int16_t)rd16(g_mem, uc + 0x3e), n = cl_losers(cl, C, cr, path, losers, 64), moved = 0;
+    for (int k = 0; k < n && k < 64; k++) {
+        int slot = down ? first - k : first + k;
+        if (slot < 0 || slot >= count || !readable(losers[k])) continue;
+        uint32_t at = e + ENTRY * (uint32_t)slot;
+        if (readable(rd32(g_mem, at))) continue;
+        wr32(g_mem, at, losers[k]);                               /* as the hand-over 0x585a32..0x585a6a */
+        g_mem[at + 5] = 0;
+        int16_t m = (int16_t)rd16(g_mem, uc + 0x36);
+        if (m < (int16_t)rd16(g_mem, uc + 0x38)) {
+            wr32(g_mem, list + ENTRY * (uint32_t)m, losers[k]);
+            g_mem[list + ENTRY * (uint32_t)m + 4] = 5;
+            wr16(g_mem, uc + 0x36, (uint16_t)(m + 1));
+        }
+        wr32(g_mem, losers[k] + 0x1db, rd32(g_mem, KEY_UC));
+        moved++;
+    }
+    if (moved)
+        fprintf(stderr, "recomp: uefa: %d losers of Champions League round %d (path %d) into Europa League slots from %d\n",
+                moved, CL_LEVELS[C->level[cr]].round_code, path, first);
+}
+
 /* The losers of each decided Champions League round go into their Europa League slots (the drops of the row).
- * The play-off losers that go to the groups come with the original's hand-over (0x585a02) into the slots from
- * count - 0x18; other losers for the groups (a League Path third qualifying round, 2018/19 on) take the slots
- * from count - 9 down, so the two never meet. A slot that holds a club is left as it is. */
+ * The slots of each source follow those of the sources before it to the same round, by the losers each gives
+ * (expected_losers), so the order does not depend on which round ends first. The play-off losers that go to the
+ * groups come with the original's hand-over (0x585a02) into the slots from count - 0x18. Other losers for the
+ * groups (a League Path third qualifying round, 2018/19 on) take the slots from count - 9 down, so the two never
+ * meet. The preliminary round gives the losers of its semi-finals and of its final. */
 static void uc_fill_drops(uint32_t uc)
 {
     const SeasonUefa *r = access_row_of(uc);
     uint32_t cl = comp_object(KEY_CL, CL_VTABLE);
     Layout L, C;
     if (!r || !cl || !r->drops || !*r->drops || !access_row_of(cl) || !uc_table_layout(uc, r, &L) ||
-        !make_layout(access_row_of(cl), 'c', &C, cl) ||
-        (int16_t)rd16(g_mem, cl + 0x3e) != C.slots || (int16_t)rd16(g_mem, cl + 0x3c) != C.rounds)
+        !cl_table_layout(cl, &C))
         return;
-    uint32_t e = rd32(g_mem, uc + 0xa7), list = rd32(g_mem, uc + 0x14);
     int used[SEASON_UEFA_CODE_SLOTS] = {0}, count = (int16_t)rd16(g_mem, uc + 0x3e);
     for (const char *p = r->drops; *p && !rt_unwinding;) {
         while (*p == ' ') p++;
@@ -712,11 +791,9 @@ static void uc_fill_drops(uint32_t uc)
         const char *end = gt + 1;
         while (*end && *end != ' ') end++;
         int path, level = drop_source(p, (int)(gt - p), &path);
-        int to = season_uefa_code('e', gt + 1, (int)(end - gt - 1)), cr = level >= 0 ? cl_round_of_level(&C, level) : -1;
+        int to = season_uefa_code('e', gt + 1, (int)(end - gt - 1));
         p = end;
-        if (cr < 0 || to <= 0 || (to == SEASON_UEFA_EL_G && level == 4)) continue;   /* PO>G: the hand-over */
-        uint32_t losers[64];
-        int n = cl_losers(cl, &C, cr, path, losers, 64);
+        if (level < 0 || to <= 0 || (to == SEASON_UEFA_EL_G && level == LEVEL_PO)) continue;   /* PO>G: the hand-over */
         int first;
         if (to == SEASON_UEFA_EL_G) {
             first = count - THIRDS - 1;                           /* from count - 9 down */
@@ -726,28 +803,13 @@ static void uc_fill_drops(uint32_t uc)
             if (i == L.rounds) continue;
             first = L.first[i] + L.count[to];
         }
-        int base = used[to];
-        used[to] += n > 0 ? n : (path == 2 ? C.clubs_in[cr] / 2 : 0);
-        int moved = 0;
-        for (int k = 0; k < n && k < 64; k++) {
-            int slot = to == SEASON_UEFA_EL_G ? first - base - k : first + base + k;
-            if (slot < 0 || slot >= count || !readable(losers[k])) continue;
-            uint32_t at = e + ENTRY * (uint32_t)slot;
-            if (readable(rd32(g_mem, at))) continue;
-            wr32(g_mem, at, losers[k]);                           /* as the hand-over 0x585a32..0x585a6a */
-            g_mem[at + 5] = 0;
-            int16_t m = (int16_t)rd16(g_mem, uc + 0x36);
-            if (m < (int16_t)rd16(g_mem, uc + 0x38)) {
-                wr32(g_mem, list + ENTRY * (uint32_t)m, losers[k]);
-                g_mem[list + ENTRY * (uint32_t)m + 4] = 5;
-                wr16(g_mem, uc + 0x36, (uint16_t)(m + 1));
-            }
-            wr32(g_mem, losers[k] + 0x1db, rd32(g_mem, KEY_UC));
-            moved++;
+        int sources[2] = {cl_round_of_level(&C, level), level == LEVEL_PR ? cl_round_of_level(&C, LEVEL_PR_FINAL) : -1};
+        for (int k = 0; k < 2 && !rt_unwinding; k++) {
+            if (sources[k] < 0) continue;
+            int down = to == SEASON_UEFA_EL_G;
+            put_losers(uc, cl, &C, sources[k], path, down ? first - used[to] : first + used[to], down);
+            used[to] += expected_losers(&C, sources[k], path);
         }
-        if (moved)
-            fprintf(stderr, "recomp: uefa: %d losers of Champions League round %d (path %d) into Europa League slots from %d\n",
-                    moved, CL_LEVELS[level].round_code, path, first);
     }
 }
 

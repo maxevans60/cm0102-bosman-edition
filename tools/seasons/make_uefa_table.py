@@ -169,11 +169,17 @@ def read_access():
     with open(ACCESS, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f, delimiter="\t"))
     out = []
+    brackets = {}                       # (season, comp): [(from, to, row)] of every rank row, "-" rows too
     for r in rows:
         season = int(r["season"][:4])
         if season < ACCESS_FIRST or season > LAST:
             continue
         r = dict(r, id=f"access {r['season']} {r['comp']} {r['rank_from']}")
+        if r["comp"] in ("cl", "el"):
+            try:
+                brackets.setdefault((season, r["comp"]), []).append((int(r["rank_from"]), int(r["rank_to"]), r))
+            except ValueError:
+                fail(r, "a rank bracket that is not two numbers")
         comp = ACCESS_COMPS.get(r["comp"])
         if not comp:
             fail(r, f"comp {r['comp']!r} is not one of {sorted(ACCESS_COMPS)}")
@@ -193,10 +199,27 @@ def read_access():
         # The Europa League place of a league cup winner (the notes of the bracket: "England: last place to the
         # league cup winner"): a row L with the nation's name. The game knows England and France (LEAGUE_CUP).
         if comp == "e":
-            for nation in re.findall(r"([A-Z][a-z]+)(?: \(rank \d+\))?: last place to the league cup", r["notes"]):
+            found = re.findall(r"([A-Z][a-z]+)(?: \(rank \d+\))?: last place to the league cup", r["notes"])
+            mentions = len(re.findall(r"league cup", r["notes"], re.I))
+            if mentions != len(found):
+                fail(r, f"the notes name {mentions} league cup places, {len(found)} as '<Nation>: last place to the "
+                        "league cup'")
+            for nation in found:
                 if nation not in LEAGUE_CUP:
                     fail(r, f"league cup place of {nation}, not one of {sorted(LEAGUE_CUP)}")
                 out.append((season, "L", 0, 0, nation))
+    # The brackets of a season and cup follow each other from rank 1: no overlap, no repeat, no gap.
+    for (season, comp), bs in sorted(brackets.items()):
+        bs.sort(key=lambda b: (b[0], b[1]))
+        expect = 1
+        for lo, hi, r in bs:
+            if lo > hi:
+                fail(r, f"rank bracket {lo} to {hi} runs backwards")
+            if lo < expect:
+                fail(r, f"rank bracket {lo} to {hi} overlaps the bracket before it (ranks to {expect - 1})")
+            if lo > expect:
+                fail(r, f"no bracket for ranks {expect} to {lo - 1}")
+            expect = hi + 1
     for season in range(ACCESS_FIRST, LAST + 1):
         for comp in "ceh":
             if not any(a[0] == season and a[1] == comp for a in out):

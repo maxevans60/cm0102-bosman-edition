@@ -64,6 +64,16 @@ static int stadium_of_row(const char *name)
     return id;
 }
 
+/* The weekday of a date, 0 Monday to 6 Sunday (the game's weekdays: 2 Wednesday, 3 Thursday, 4 Friday, seen in
+ * season_uefa_qual.c), month 0 to 11. */
+static int weekday_of(int year, int month, int day)
+{
+    static const int t[12] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+    int y = year - (month < 2);
+    int sunday0 = (y + y / 4 - y / 100 + y / 400 + t[month] + day) % 7;     /* 0 Sunday */
+    return (sunday0 + 6) % 7;
+}
+
 void o_0057a3c0(void);
 
 RT_WRAP(0057a3c0, super_cup_round_table)
@@ -87,8 +97,11 @@ RT_WRAP(0057a3c0, super_cup_round_table)
                     r->sc_stadium);
         }
     }
+    /* The weekday of the real date, so the date function (0x549f70 from 0x521ed3), which moves a match to the
+     * nearest day of the round's weekday, keeps the real day (the original passes 4, a Friday, at 0x57a48d). */
     Cpu saved = cpu;
-    uint32_t m[9] = {t, 0, (uint32_t)r->sc_day, (uint32_t)r->sc_month, 0, 4, 2, year, venue};
+    uint32_t m[9] = {t, 0, (uint32_t)r->sc_day, (uint32_t)r->sc_month, 0, (uint32_t)weekday_of((int)year, r->sc_month,
+                     r->sc_day), 2, year, venue};
     rt_callback(F_MATCH_DATE, 9, m);
     if (rt_unwinding) return;
     cpu = saved;

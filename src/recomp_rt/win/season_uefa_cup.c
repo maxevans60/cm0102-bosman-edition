@@ -236,7 +236,11 @@ static int uc_access_round_table(uint32_t uc, const UcGroups *f, uint32_t out_ro
         game_free(t);
         return 0;
     }
+    /* As the original writes them (0x9025e7, 0x902601): the rounds and a name of 0 as words, the fourth a dword 0. */
+    uint32_t out_name = rt_arg(2), out_fourth = rt_arg(3);
     if (readable(out_rounds)) wr16(g_mem, out_rounds, (uint16_t)n);
+    if (readable(out_name)) wr16(g_mem, out_name, 0);
+    if (readable(out_fourth)) wr32(g_mem, out_fourth, 0);
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
     fprintf(stderr, "recomp: uefa: Europa League %u/%02u: %d qualifying rounds, %d groups of %d\n", year,
             (year + 1) % 100, n, f->groups, f->clubs);

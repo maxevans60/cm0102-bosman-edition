@@ -100,14 +100,19 @@ int main(void)
     CHECK(season_uefa_dropped(r2009, SEASON_UEFA_EL_PO) == 15 && season_uefa_dropped(r2009, SEASON_UEFA_EL_G) == 10);
     CHECK(t[SEASON_UEFA_EL_Q1] == 46 && t[SEASON_UEFA_EL_Q2] == 57 && t[SEASON_UEFA_EL_Q3] == 30);
     CHECK(t[SEASON_UEFA_EL_PO] == 26 && t[SEASON_UEFA_EL_G] == 0 && t[SEASON_UEFA_EL_PR] == 0);
-    /* 2018/19: the preliminary round is not played (its clubs enter Q1): CL Q1 32 new, groups 26 new; EL Q2
-     * takes the Q1 losers. */
+    /* 2018/19: the preliminary round of 4 (semi-finals and a final, one winner): CL Q1 31 new, groups 26 new;
+     * EL Q2 takes the 3 preliminary round losers and the 16 Q1 losers; EL PR 14 (7 winners), Q1 87 new. */
     season_uefa_new_clubs(r2018, 'c', t);
-    CHECK(t[SEASON_UEFA_CL_PR] == 0 && t[SEASON_UEFA_CL_Q1] == 32 && t[SEASON_UEFA_CL_G] == 26);
+    CHECK(t[SEASON_UEFA_CL_PR] == 4 && t[SEASON_UEFA_CL_Q1] == 31 && t[SEASON_UEFA_CL_G] == 26);
     CHECK(t[SEASON_UEFA_CL_Q2_LP] == 4 && t[SEASON_UEFA_CL_Q3_LP] == 6 && t[SEASON_UEFA_CL_Q3_CP] == 2);
-    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q2) == 16 && season_uefa_dropped(r2018, SEASON_UEFA_EL_G) == 10);
+    int cl_sum = 0, el_sum = 0;
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) cl_sum += t[i];
+    CHECK(cl_sum == 79);                                                /* the row's 79 clubs */
+    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q2) == 19 && season_uefa_dropped(r2018, SEASON_UEFA_EL_G) == 10);
     season_uefa_new_clubs(r2018, 'e', t);
-    CHECK(t[SEASON_UEFA_EL_PR] == 0 && t[SEASON_UEFA_EL_Q1] == 94);
+    CHECK(t[SEASON_UEFA_EL_PR] == 14 && t[SEASON_UEFA_EL_Q1] == 87);
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) el_sum += t[i];
+    CHECK(el_sum + 19 + 12 + 6 + 10 + 8 == 213);                         /* 158 entered and 55 from the CL */
     CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q3) == 12 && season_uefa_dropped(r2018, SEASON_UEFA_EL_PO) == 6);
     CHECK(season_uefa_code('c', "Q3-CP", 5) == SEASON_UEFA_CL_Q3_CP && season_uefa_code('e', "Q3-CP", 5) == SEASON_UEFA_EL_Q3);
     CHECK(season_uefa_dropped(r2008, SEASON_UEFA_EL_G) == 0);

@@ -140,11 +140,7 @@ static const char *const EL_LEVEL[SEASON_UEFA_EL_CODES - SEASON_UEFA_EL_G + 1] =
 
 int season_uefa_code_clubs(const SeasonUefa *r, char comp, int code)
 {
-    /* The preliminary round is not played: its clubs enter the first qualifying round, and the cascade of the
-     * seeding drops the lowest-ranked of them (season_uefa_seeding.c), as the real round would. Four rounds of
-     * two legs every 14 days fit between the first day of a moved season (11 July) and the group stages; a
-     * fifth does not (season_uefa_qual.c, the dates). */
-    if (!r || code == SEASON_UEFA_CL_PR || code == SEASON_UEFA_EL_PR) return 0;
+    if (!r) return 0;
     if (comp == 'c') {
         if (code < 1 || code >= SEASON_UEFA_CL_CODES) return 0;
         int n = season_uefa_cl_round(r, CL_ROUND[code][0]);
@@ -154,6 +150,10 @@ int season_uefa_code_clubs(const SeasonUefa *r, char comp, int code)
     return season_uefa_uc_level(r, EL_LEVEL[code - SEASON_UEFA_EL_G]);
 }
 
+/* The winners of a Champions League round of clubs clubs. The preliminary round is a tournament of semi-finals
+ * and a final (rows uefa-138, uefa-139: "PR 4", one winner to Q1), so a quarter of its clubs go through. */
+static int cl_winners(int code, int clubs) { return code == SEASON_UEFA_CL_PR ? clubs / 4 : clubs / 2; }
+
 /* The Champions League losers of round tok ("Q3", "Q3-LP", "PR") of the row. */
 static int cl_losers(const SeasonUefa *r, const char *tok, int n)
 {
@@ -161,7 +161,10 @@ static int cl_losers(const SeasonUefa *r, const char *tok, int n)
     if (n <= 0 || n >= (int)sizeof name) return 0;
     memcpy(name, tok, (size_t)n);
     name[n] = 0;
-    if (!strcmp(name, "PR")) return 0;          /* not played (season_uefa_code_clubs) */
+    if (!strcmp(name, "PR")) {
+        int clubs = season_uefa_cl_round(r, "PR");
+        return clubs - cl_winners(SEASON_UEFA_CL_PR, clubs);
+    }
     if (name[2] == '-') {                       /* a path: "Q3-LP" is the round "Q3 LP" */
         name[2] = ' ';
         return season_uefa_cl_round(r, name) / 2;
@@ -199,10 +202,13 @@ void season_uefa_new_clubs(const SeasonUefa *r, char comp, int *out)
         out[SEASON_UEFA_CL_G] = season_uefa_code_clubs(r, 'c', SEASON_UEFA_CL_G);
         for (int p = 0; p < 2; p++)
             for (int i = 0; i < lens[p]; i++) {
-                int code = paths[p][i], below = 0;
-                for (int j = i + 1; j < lens[p] && !below; j++) below = season_uefa_code_clubs(r, 'c', paths[p][j]);
-                if (code == SEASON_UEFA_CL_G) out[code] -= below / 2;
-                else out[code] = season_uefa_code_clubs(r, 'c', code) - below / 2;
+                int code = paths[p][i], below = 0, won = 0;
+                for (int j = i + 1; j < lens[p] && !below; j++) {
+                    below = season_uefa_code_clubs(r, 'c', paths[p][j]);
+                    won = cl_winners(paths[p][j], below);
+                }
+                if (code == SEASON_UEFA_CL_G) out[code] -= won;
+                else out[code] = season_uefa_code_clubs(r, 'c', code) - won;
             }
         return;
     }
