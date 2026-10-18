@@ -213,7 +213,7 @@ The windows, foreign player limits and work permit rule of one nation in one sea
 _Avoid_: transfer rules (that is the game's own object)
 
 **Changing rules**:
-The option that lets the season rules change each July as a game moves through the years. It is set for each game.
+The option that lets the season rules change at each season change (mostly in June) as a game moves through the years. It is set for each game.
 _Avoid_: evolving rules, dynamic seasons
 
 **Base game**:

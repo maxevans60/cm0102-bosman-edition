@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/seasons/season_core_run.py <cm0102_recomp> <game folder> [--database <folder>] [--year y]
-        [--days n] [--only base|season] [--keep <folder>] [--jobs n]
+        [--days n] [--only base|season|rename] [--keep <folder>] [--jobs n]
 
 The checks, played at the same time:
     base-off    a new base game (2001/02, 3.9.68, changing_rules = off) saved after n days (default 14): its save
@@ -23,6 +23,11 @@ The checks, played at the same time:
     later       the save of "season" with a part of a later version (version 3, 36 bytes): it loads with the
                 fields that this version knows, and the new save has a version 1 part.
     damaged     the save of "season" with a damaged part (year 1999): the load is refused with a message box.
+    rename      a new base game (2001/02, changing_rules = off) with the test variable
+                RECOMP_SEASON_CHANGE_TEST=rename (the record "UEFA Cup" becomes "Test Cup" at the new game, as a
+                name of slice 15 would): its save has the season part, version 2, with the name in the data.
+    rename-reload  loads that save, plays 3 days and saves: the load finds its key competitions (no box
+                "index.cpp 5809"), and the new save keeps the name in the data.
 --keep <folder> keeps the save of "season" there (for a check with another build).
 --jobs n plays at most n games at the same time (default 6).
 Each run uses -seed 1, the test clock and a new user folder. The steps are those of tests/smoke/smoke_run.py
@@ -303,6 +308,30 @@ def main(argv):
                 fail(f"damaged: the load was not refused with the box; last lines: {dlog[-600:]!r}")
             else:
                 print("ok    damaged: the load is refused with a message box, and no game runs")
+        if only in (None, "rename"):
+            rpath, rlog, took = play(program, game, work, "rename", {"changing_rules": "off"}, steps, 7,
+                                     {"RECOMP_SEASON_CHANGE_TEST": "rename"})
+            print(f"run   rename: {'saved' if rpath else 'NO SAVE'} in {took:.0f} s", flush=True)
+            data = savfile.Sav(rpath).read_member(PART) if rpath and read_part(rpath) else b""
+            if "renamed to Test Cup" not in rlog:
+                fail("rename: the test kind renamed no record")
+            elif not rpath or data[:4] != struct.pack("<I", 2) or b"UEFA Cup\x00" not in data:
+                fail(f"rename: the save has no version 2 part with the name in the data: {data[:80]!r}")
+            else:
+                print("ok    rename: the save has the season part, version 2, with the name in the data")
+                load = smoke_run.without_intro_click(fixtures.LOAD_STEPS) + ["400000 quit"]
+                holiday = smoke_run.STEPS[smoke_run.STEPS.index("wait first-news") + 1:]
+                holiday = [s for s in holiday if "dump" not in s and "quit" not in s]
+                saved = os.path.join(work, "rename-load.sav")
+                shutil.copyfile(rpath, saved)
+                lpath, llog, took = play(program, game, work, "rename-reload", {}, load[:-1] + holiday + load[-1:], 3,
+                                         save=saved)
+                print(f"run   rename-reload: {'saved' if lpath else 'NO SAVE'} in {took:.0f} s", flush=True)
+                ldata = savfile.Sav(lpath).read_member(PART) if lpath and read_part(lpath) else b""
+                if not lpath or "index..cpp" in llog or b"UEFA Cup\x00" not in ldata:
+                    fail(f"rename-reload: the save did not load and keep the name; last lines: {llog[-600:]!r}")
+                else:
+                    print("ok    rename-reload: the save loads, and the new save keeps the name in the data")
     print("PASS" if not failed else "FAIL")
     return 1 if failed else 0
 

@@ -25,6 +25,8 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
     rules-on, rules-off  changing_rules (0.6.0 slice 11): a new game with it on has the season part
                bosman_season.dat in its save; from slice 17 it also plays by the rules table of 2001/02 (RULES_ON_PARTS). Every new-game run has
                changing_rules = off unless it sets it (new_game_runs), so the new game is the base game.
+    kinds-base  RECOMP_SEASON_CHANGE_TEST=write (0.6.0 slice 16): a rule kind that writes the game in every
+               hook changes nothing in the base game, because the base game calls no kind
 Each run prints its count of idle sleeps (RECOMP_IDLE_COUNT=1). The check fails when the normal run
 has none, here and in the match check.
 Each save must be byte for byte the same as the save of "normal". A failed check names the parts of
@@ -215,6 +217,9 @@ SAME_SAVE_RUNS = [
     # Q342: the season code off (slice 11 year sites, the season part, the Choose Season code) gives the save of
     # normal, a 2001/02 game with changing rules off. From slice 13 the base game of 0.6.0 is the reference.
     ("season-code-off", {"faster_days": "off", "_env": {"RECOMP_SEASON_CODE": "off"}}),
+    # The season change (0.6.0 slice 16) calls no rule kind in the base game (2001, changing rules off): with the
+    # test kind that writes the game in every hook (RECOMP_SEASON_CHANGE_TEST=write) the save is that of normal.
+    ("kinds-base", {"faster_days": "off", "_env": {"RECOMP_SEASON_CHANGE_TEST": "write"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this

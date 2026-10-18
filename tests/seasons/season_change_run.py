@@ -36,7 +36,8 @@ The checks (each run):
       28 August, after the start report of 1 August), and every other competition keeps its name
     - on: the news log lists exactly one sentence "<old name> is now called <new name>." for each of them,
       for season X+1, and the news item of X+1 is sent once (no news item when no name changes)
-    - off: the report names at the end of X+1 are the names at the end of X, and the log has no change
+    - off: the report names at the end of X+1 are the names at the end of X, and the log has no change after
+      the start season (the hooks of the start season run with any changing rules, "(start season)" in the log)
 A run takes about 6 to 8 minutes. --jobs (default 3) runs that many at the same time. --reuse checks the
 reports already in the --keep folder again without a new run.
 """
@@ -181,7 +182,7 @@ def check_december(program, game, keep):
 NEWS = re.compile(r"recomp: season change: news (\d{4})/\d\d: (.*)$")
 SENT = re.compile(r"recomp: season change: news item for (\d{4})/\d\d sent on day (\d+) of (\d+)$")
 SHOWN = re.compile(r"recomp: season change: news shown for (\d{4})/\d\d, dated day (\d+) of (\d+): (.*)$")
-POINT = re.compile(r"recomp: season change: season point of (\d{4})/\d\d on day (\d+) of (\d+)$")
+POINT = re.compile(r"recomp: season change: season point of (\d{4})/\d\d on day (\d+) of (\d+)(?: \(start season\))?$")
 HOOK = re.compile(r"recomp: season change: test: season hook (\d{4}) on day (\d+) of (\d+)$")
 
 
@@ -258,7 +259,7 @@ def check_run(name, program, game, keep, reuse=False):
     want_sent = [year + 1] if expected else []
     if sent != want_sent:
         fails.append(f"{name}: news items sent {sent}, expected {want_sent}")
-    if rules == "off" and any("season change" in x for x in log):
+    if rules == "off" and any("season change" in x and "(start season)" not in x for x in log):
         fails.append(f"{name}: changing rules off, but the log shows a season change")
     print(f"{name}: {len(expected)} changes of name, news items {sent}, {len(fails)} problems ({work})")
     for t in got:
