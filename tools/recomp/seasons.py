@@ -169,4 +169,9 @@ INSNS = {
     # 837" (0x57becc..0x57bf22). Euro 2020 and 2028 have no host place in the table, so in a season game the
     # builder goes on to the default nations (0x57bf2f) with no host (win/season_intl.c).
     0x57BE3D: ("jle 0x57becc", "if (cc_le(F)) { if (rt_intl_euro_no_host()) goto L_57bf2f; goto L_57becc; }"),
+    # EuroChampQual::get_group_team_count 0x57d9d0 gives the size of each qualifying group by the hosts that the
+    # pool leaves out (+0xf6): 1 (0x57d9de) or 2 (0x57d9e5), else the box "euro_champ_qual.cpp 581" (0x57da3d).
+    # A Euro without a host place (2020, 2028) has 0: in a season game it takes the sizes of 1 host (groups 0,
+    # 2, 5 and 7 of six, the others of five: room for 54, the pool holds at most 51, 0x57f76f).
+    0x57D9DE: ("je 0x57da7b", "if (cc_e(F) || (rt_intl_euro_no_host() && R8(ecx + 0xf6u) == 0u)) goto L_57da7b;"),
 }
