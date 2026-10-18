@@ -45,6 +45,7 @@
 2023	clubs	euro_champ (UEFA European Championship), row int-continental-243: game 0/4, table 24 (24)
 2023	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-244: game 5, table 53 (53)
 2023	clubs	european_cup (UEFA Champions League), row uefa-178: game 55, table 78 (78 (32 in the group stage))
+2023	clubs	fra_first (Ligue 1), row fra-200: game 20, table 18 (18)
 2023	clubs	fra_third (Championnat National), row fra-202: game 20, table 18 (18)
 2023	clubs	goldcup (Copa América), row int-continental-253: game 0/4, table 16 (16)
 2023	clubs	oceania_nations (OFC Nations Cup), row int-continental-252: game 3, table 8 (8 (7 played))
