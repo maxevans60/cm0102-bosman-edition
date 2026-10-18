@@ -462,11 +462,11 @@ RT_WRAP(0092a6b0, world_club_champ_update)
     o_0092a6b0();
 }
 
-void o_0040f590(void);
-
 /* The history thunk of slot 12 (vtable +0x30), shared by 4 vtables: it forwards to stage slot 2 (0x40f593). A
- * Club World Championship of Form K holds its knockout in slot 0. */
-RT_WRAP(0040f590, comp_history_thunk)
+ * Club World Championship of Form K holds its knockout in slot 0. Slice 27 wraps the same function for the Copa
+ * America of 16 (season_intl_copa.c); its wrap calls this first (merge of slices 26 and 27 in slice 28). Returns
+ * 1 when it forwarded the call. */
+int season_club_world_history_thunk(void)
 {
     uint32_t obj = cpu.ecx;
     if (rd32(g_mem, obj) == CWC_VTABLE && rd32(g_mem, obj + CWC_STAGE_COUNT) == 1) {   /* Form K */
@@ -485,10 +485,10 @@ RT_WRAP(0040f590, comp_history_thunk)
             }
             cpu.ecx = stage;
             rt_jump(rd32(g_mem, rd32(g_mem, stage) + 0x30));
-            return;
+            return 1;
         }
     }
-    o_0040f590();
+    return 0;
 }
 
 /* Form K: 1 for a Club World Championship whose knockout is its only stage. */

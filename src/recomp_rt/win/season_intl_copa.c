@@ -411,8 +411,11 @@ void o_0040f590(void);
 /* vtable +0x30 of the Copa America and the Asian Cup (0x96b430, 0x967644): a jump to vtable +0x30 of stage[2]
  * (0x40f590..0x40f598). The Asian Cup's stage index is a site of season_intl_cups.c (0x40f593). For a Copa
  * America of 16 the jump goes to stage[3]. */
+int season_club_world_history_thunk(void);      /* slice 26, season_kind_club_world.c */
+
 RT_WRAP(0040f590, copa_asian_final_stage)
 {
+    if (season_club_world_history_thunk() || rt_unwinding) return;
     uint32_t self = cpu.ecx;
     if (copa16(self) < 0) {
         o_0040f590();
