@@ -419,8 +419,31 @@ static int nation_in(const uint32_t *teams, int n, uint32_t nation)
     return 0;
 }
 
+/* 1 when the finals of an edition year may take teams that no qualifier gave. The fill is for the slots that
+ * qualifying cannot fill:
+ * - a game that starts in the season of the finals or the one before: the qualifying began before the game
+ *   (the 2006 World Cup draw of a 2005 start, Euro 2004 of a 2003 start);
+ * - the Nations League path places of Euro 2020 and 2024 (4 and 3), until slice 28 plays the paths: Euro
+ *   qualifying gives only the 20 group places there (season_intl_euroq.c).
+ * Else a full qualifying gives every team, and a short list is logged, not filled. */
+static int fill_allowed(const char *name, int year)
+{
+    if (season_start_year() >= year - 1) return 1;
+    return !strcmp(name, "euro_champ") && (year == 2020 || year == 2024);
+}
+
 static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
 {
+    int year = (int16_t)rd16(g_mem, comp + 0x40u);
+    if (!fill_allowed(name, year)) {
+        if (logging()) {
+            int count = (int16_t)rd16(g_mem, comp + SLOT_COUNT), room = (int16_t)rd16(g_mem, comp + SLOT_ROOM);
+            if (count < room)
+                fprintf(stderr, "recomp: season intl: %s %d: %d qualified teams of %d, no fill (full qualifying)\n",
+                        name, year, count, room);
+        }
+        return;
+    }
     uint32_t slots = rd32(g_mem, comp + SLOTS);
     int count = (int16_t)rd16(g_mem, comp + SLOT_COUNT), room = (int16_t)rd16(g_mem, comp + SLOT_ROOM);
     if (!readable(slots) || count < 0 || room <= 0 || room > 64) return;
