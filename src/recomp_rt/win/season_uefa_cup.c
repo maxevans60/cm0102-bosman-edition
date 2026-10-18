@@ -20,9 +20,7 @@
  * and the 8 Champions League group thirds. The Cup base plays the stages: Cup::update_for_date 0x51f890 calls
  * slot 10 when the rounds of the Cup end and when a stage ends while +0x30 < +0x2c - 1. Slot 10 of the UEFA
  * Cup is the empty function 0x5a8f60 (a "ret" that many vtables share), so its wrap acts only for a UEFA Cup
- * object with 9 stages. The save keeps +0x2c, +0x30 and the stages (Cup::load_from_disk 0x51fc00 reads them into
- * the array +0xc, which the UEFA Cup's constructor does not make: the wrap of the load makes it first, in a
- * season game only). */
+ * object with 9 stages. The save keeps +0x2c, +0x30 and the stages (see the wrap of Cup::load_from_disk). */
 #include "win.h"
 #include "season.h"
 #include "season_uefa.h"
@@ -211,6 +209,7 @@ static uint32_t original_table(uint32_t uc, int *rounds)
     uint32_t t = call_this(rd32(g_mem, rd32(g_mem, uc) + 0x3c), uc, 4, a);
     uc_inner = 0;
     *rounds = (int16_t)rd16(g_mem, out);
+    if (rt_unwinding) return 0;
     cpu.esp = saved_esp;
     return rt_unwinding || !readable(t) ? 0 : t;
 }
@@ -229,7 +228,7 @@ RT_WRAP(009025c0, uc_round_table)
         o_009025c0();
         return;
     }
-    uint32_t out_rounds = rt_arg(1);
+    uint32_t out_rounds = rt_arg(1), out_name = rt_arg(2);
     if (readable(rd32(g_mem, uc + 0xc)) && (int32_t)rd32(g_mem, uc + 0x30) >= 0) free_stages(uc);
     if (rt_unwinding) return;
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
@@ -280,6 +279,7 @@ RT_WRAP(009025c0, uc_round_table)
         return;
     }
     if (readable(out_rounds)) wr16(g_mem, out_rounds, 3);
+    if (readable(out_name)) wr16(g_mem, out_name, 0);           /* as the original (0x902601) */
     fprintf(stderr, "recomp: uefa: UEFA Cup %u/%02u with groups: Q1 %d, Q2 %d, R1 %d\n", year, (year + 1) % 100, q1,
             q2, r1);
     rt_ret_stdcall(t, 4);
@@ -411,8 +411,8 @@ static void draw_group_stage(uint32_t uc)
                           (uint32_t)f.days, 3, 1, 8, order, places, year, (uint32_t)g, uc_group_name(g), 0xf, 2, 0, 8,
                           0xffffffffu, 0, 2};
         call_this(F_LEAGUE_STAGE, obj, 22, a);
-        cpu.esp = saved_esp;
         if (rt_unwinding) return;
+        cpu.esp = saved_esp;
         wr32(g_mem, rd32(g_mem, uc + 0xc) + 4u * (uint32_t)g, obj);
         game_free(members);
         game_free(table);

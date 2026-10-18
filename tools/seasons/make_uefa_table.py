@@ -102,6 +102,14 @@ def super_cup(row):
     return m.group(1), m.group(2), int(m.group(3)), MONTHS.index(m.group(4))
 
 
+def uc_groups(row):
+    """groups(row), and a stop when the rounds list names a group stage that the text does not describe."""
+    g = groups(row)
+    if any(n == "Groups" for n, _ in rounds(row)) and not g[0]:
+        fail(row, "the rounds name a group stage, but no 'N groups of M, single|double round robin'")
+    return g
+
+
 def intertoto(row):
     """(clubs, rounds, winners, entry round) or None when not held."""
     if row["format"].startswith("not held"):
@@ -140,7 +148,7 @@ def read_rows():
             "ids": f"{cl['id']} {uc['id']} {uic['id']} {by['eur_super_cup']['id']}",
             "sc": super_cup(by["eur_super_cup"]),
             "cl_clubs": first_int(cl, "clubs"), "cl_rounds": rounds(cl),
-            "uc_rounds": rounds(uc), "uc_groups": groups(uc),
+            "uc_rounds": rounds(uc), "uc_groups": uc_groups(uc),
             "uic": intertoto(uic),
         })
     return out
