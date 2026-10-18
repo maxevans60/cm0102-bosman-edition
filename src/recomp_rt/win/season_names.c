@@ -168,24 +168,33 @@ int season_names_init(const char *game_dir)
 
 const char *season_names_get_nth(const char *comp_file, int season, int n, const char **short_name)
 {
-    const NameRow *best = NULL;
+    const NameRow *exact = NULL, *last = NULL;
     for (int i = 0; i < nrows; i++) {
         const NameRow *r = &rows[i];
         if (r->season != season || strcmp(r->file, comp_file)) continue;
-        if (r->n <= n && (!best || r->n > best->n)) best = r;
+        if (r->n == n) exact = r;
+        if (!last || r->n > last->n) last = r;
     }
+    /* A gap in the numbers (a row with no shown name) gives no name. An object after the last row takes the
+     * name of the last row. */
+    const NameRow *best = exact ? exact : last && n > last->n ? last : NULL;
     if (short_name) *short_name = best ? best->short_name : NULL;
     return best ? best->long_name : NULL;
 }
 
-static const char *database_name_of(const char *comp_file);
+static const char *current_name_of(const char *comp_file, int n);
+
+const char *season_names_get_object(const char *comp_file, int season, int n)
+{
+    if (!season_game_changes() || season == SEASON_FIRST_YEAR) return NULL;
+    const char *name = season_names_get_nth(comp_file, season, n, NULL);
+    const char *now = name ? current_name_of(comp_file, n) : NULL;
+    return name && now && !strncmp(name, now, LONG_SIZE) ? NULL : name;
+}
 
 const char *season_names_get(const char *comp_file, int season)
 {
-    if (!season_game_changes() || season == SEASON_FIRST_YEAR) return NULL;
-    const char *name = season_names_get_nth(comp_file, season, 0, NULL);
-    const char *db = name ? database_name_of(comp_file) : NULL;
-    return name && db && !strncmp(name, db, LONG_SIZE) ? NULL : name;
+    return season_names_get_object(comp_file, season, 0);
 }
 
 int season_game_changes(void)
@@ -245,21 +254,19 @@ static Kept *keep(uint32_t record)
     return k;
 }
 
-/* The database long name of the first competition object of a file: the kept name when the record was renamed,
- * else the name that it has. NULL when the game has no object of that file. */
-static const char *database_name_of(const char *comp_file)
+/* The long name that the n-th competition object of a file has now (n from 0, counted as in
+ * season_names_apply). NULL when the game has no such object. */
+static const char *current_name_of(const char *comp_file, int n)
 {
     static uint32_t objs[MAX_OBJECTS];
     static char name[LONG_SIZE + 1];
-    int n = season_comp_objects(objs, MAX_OBJECTS);
-    for (int i = 0; i < n; i++) {
+    int count = season_comp_objects(objs, MAX_OBJECTS), k = 0;
+    for (int i = 0; i < count; i++) {
         uint32_t rec = rd32(g_mem, objs[i] + 4);
         const SeasonCompClass *c = class_of(rd32(g_mem, objs[i]));
         if (!c || !readable(rec) || strcmp(c->file, comp_file)) continue;
-        const uint8_t *from = g_mem + rec + LONG_AT;
-        for (int k = 0; k < nkept; k++)
-            if (kept[k].record == rec) from = (const uint8_t *)kept[k].db_long;
-        memcpy(name, from, LONG_SIZE);
+        if (k++ != n) continue;
+        memcpy(name, g_mem + rec + LONG_AT, LONG_SIZE);
         name[LONG_SIZE] = 0;
         return name;
     }

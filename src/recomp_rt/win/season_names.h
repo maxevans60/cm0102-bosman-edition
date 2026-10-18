@@ -32,13 +32,18 @@
 int season_names_init(const char *game_dir);
 int season_names_load(const char *path);          /* also for tests; a later call replaces the table */
 
-/* The long name of the first competition object of a file (eng_first) in a season (start year), or NULL when
- * the name does not change: outside a season game, in the base season 2001, when the table holds no name, or
- * when the name is the database name of that competition. The agreed call of slice 16. */
+/* The long name of the n-th competition object (from 0) of a file (eng_first) in a season (start year). NULL
+ * when the name does not change: outside a season game, in the base season 2001, when the table holds no name,
+ * or when the object has that name now. A record that returns to its database name gets it. The objects of a
+ * file count as in season_names_apply (ger_regional: North, then South). */
+const char *season_names_get_object(const char *comp_file, int season, int n);
+
+/* season_names_get_object for object 0: the agreed call of slice 16. */
 const char *season_names_get(const char *comp_file, int season);
 
-/* The long and short name of the n-th object (from 0) of a file in a season; an object after the last named
- * one takes the last name. NULL when the table holds none. */
+/* The long and short name of the n-th object (from 0) of a file in a season, from the table only. A gap in the
+ * numbers gives NULL; an object after the last row takes the name of the last row. NULL when the table holds
+ * none. */
 const char *season_names_get_nth(const char *comp_file, int season, int n, const char **short_name);
 
 /* Gives every competition object of the game the names of that season. The first call keeps the database

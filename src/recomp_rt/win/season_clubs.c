@@ -170,15 +170,19 @@ static int same_name(uint32_t at, const char *name)
     return !strncmp(win_str(at), name, 52);
 }
 
-/* The club count that the class of a division takes in create_table (the write of +0x3e), and its count in
- * the first season where the class has a year branch (+0x40 == 2001). A division keeps this count, not the
- * count of the database: the class takes the first clubs of the division in the order of the club table and
- * stops at its count (EngConf::create_table 0x56ecb0 at 0x56ed54..0x56ed7f); with fewer the table is not made
- * (0x56ed95..0x56edab) and the constructor stops at its assert (fra_first.cpp 108 for FraFirst). The address
- * is that of the write. Classes that count the clubs of the data (IrePrm 0x63a740, IreFirst 0x635910, PolFirst
- * 0x7c9450, NorFirst 0x7909a0) or that take groups (BraNatThird 0x42dc90, UsaMls 0x908560, FraLower 0x5be230,
- * SpaLower 0x8533d0, the Belgian, Portuguese, Spanish, Swedish, Italian C2 and Turkish group classes) are not
- * here: those divisions keep the database count. */
+/* The club count that the class of a division takes in create_table (the write of +0x3e). The second count is
+ * that of the first season, where the class has a year branch (+0x40 == 2001). A division keeps this count,
+ * not the count of the database. The class takes the first clubs of the division in the order of the club
+ * table and stops at its count (EngConf::create_table 0x56ecb0 at 0x56ed54..0x56ed7f). With fewer the table
+ * is not made (0x56ed95..0x56edab), and the constructor stops at its assert (fra_first.cpp 108 for FraFirst).
+ * The address is that of the write. These classes are not here, so their divisions keep the database count:
+ * - classes that count the clubs of the data: IrePrm 0x63a740, IreFirst 0x635910, PolFirst 0x7c9450,
+ *   NorFirst 0x7909a0;
+ * - classes that take groups: BraNatThird 0x42dc90, UsaMls 0x908560, FraLower 0x5be230, SpaLower 0x8533d0,
+ *   and the Belgian, Portuguese, Spanish, Swedish, Italian C2 and Turkish group classes;
+ * - classes that take no club by the division pointer: the Brazilian state classes (BraRegSp::create_table
+ *   0x43cc40 and the others take the clubs of a region, BraRegCentral::load_region_clubs 0x430ef0), and
+ *   FraCfa 0x5b9fa0, a stub with no table (the French CFA clubs go to "A Lower Division", see the doc). */
 typedef struct { const char *name; int size, first_season; } ClassSize;
 static const ClassSize CLASS_SIZE[] = {
     {"Argentine Premier Division", 20, 20},              /* ArgPrm::create_table 0x405552 */
@@ -208,7 +212,7 @@ static const ClassSize CLASS_SIZE[] = {
     {"German First Division", 18, 18},                   /* 0x5db244 */
     {"German Second Division", 18, 18},                  /* 0x5df2c2 */
     {"German Regional Division North", 18, 18},          /* 0x5dd809; 19 only when +0x40 is 2000 */
-    {"German Regional Division South", 18, 18},
+    {"German Regional Division South", 18, 18},          /* the same class GerRegional, 0x5dd809 */
     {"Greek National A Division", 14, 14},               /* 0x5ead72 */
     {"Greek National B Division", 14, 14},               /* 0x5ebcc2; the databases hold 16 */
     {"Dutch First Division", 18, 18},                    /* 0x5f6252 */

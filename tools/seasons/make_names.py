@@ -37,7 +37,9 @@ The shown name (shown_name): the research name with these changes, so that the s
       first ("FIFA World Cup qualification (inter-confederation play-offs)" gives "FIFA World Cup
       inter-confederation play-offs"), then it is cut after the last whole word that fits, never inside a
       bracket.
-The stop rule also stops the tool on a long name over 50 or a short name over 26 characters.
+The stop rule also stops the tool on a long name over 50 or a short name over 26 characters, and on a row that
+the game's loader rejects (a season outside 2001 to 2099, an empty file name, a number over 999): the loader
+then drops the whole file.
 The short name is the shown name when it has 26 characters or fewer; else shorter words of SHORTER come in
 ("FIFA World Cup qualification (UEFA)" gives "WC qualifying (UEFA)"); else a known opening goes
 ("Campeonato Brasileiro Série A" gives "Série A", "League of Ireland Premier Division" gives "Premier
@@ -171,6 +173,10 @@ def main(argv):
             long.encode("cp1252")
         except UnicodeEncodeError:
             print(f"make_names.py: {season} {file} {n}: {long!r} has a character that Windows-1252 cannot hold")
+            return 1
+        if not 2001 <= int(season) <= 2099 or not file.strip() or "\t" in file or not 0 <= n <= 999:
+            print(f"make_names.py: {season} {file!r} {n}: a season, file or number that the game's loader rejects "
+                  f"(season_names.c drops the whole file)")
             return 1
         if len(long) > LONG or len(short) > SHORT or long.count("(") != long.count(")"):
             print(f"make_names.py: {season} {file} {n}: {long!r} / {short!r} is too long or has an open bracket")
