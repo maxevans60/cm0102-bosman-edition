@@ -6,7 +6,7 @@
  * makes one round and calls cup_set_round_match_date 0x521eb0 at 0x57a4a2 with 24 August and the venue flags
  * 0x8000, which the function writes as a dword to the round record +0x13 (0x521f08). When the fixture is made
  * (Cup::create_tie_fixtures 0x51cb90, 0x51ceb6), Stadium::set_fixture_venue 0x85c260 reads the flags: 0x8000
- * is the home ground (club +0x69) of the club [0x9d0264], the key id of "AS Monaco" (0x85c346..0x85c37a);
+ * is the home ground (club +0x69) of the club [0x9d0264], the key id of "AS Monaco" (0x85c346..0x85c37a).
  * flag 0x10 is the stadium record of the cup's +0x24 ([0xae23b0] + id * 78, 0x85c5a7..0x85c5d3), which the Comp
  * constructor sets to -1 (0x48c5df) and the cup save keeps (0x5212a4).
  *

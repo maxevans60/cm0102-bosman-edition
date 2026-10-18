@@ -5,11 +5,11 @@
  * SEASON_UEFA_EL_*). This file builds both cups from those codes, in place of the original's fixed counts:
  *
  * Champions League (EuropeanCup, vtable 0x96a1d0). build_entrants 0x584fa0 wants exactly 71 clubs with codes 1
- * to 4 (0x584faa, caps 0x585095..0x585135); the entry table 0x584990 makes 55 slots (0x5849a5) of the Q1, Q2
- * and Q3 clubs; create_round_table 0x583c50 with stage -1 makes 3 rounds (0x583c9b). Here the list +0x14 holds
- * every entrant: the group clubs first, then the qualifying clubs; the entry table holds the qualifying clubs
+ * to 4 (0x584faa, caps 0x585095..0x585135). The entry table 0x584990 makes 55 slots (0x5849a5) of the Q1, Q2
+ * and Q3 clubs. Create_round_table 0x583c50 with stage -1 makes 3 rounds (0x583c9b). Here the list +0x14 holds
+ * every entrant: the group clubs first, then the qualifying clubs. The entry table holds the qualifying clubs
  * by round from the lowest (PR, Q1, Q2 CP, Q2 LP, Q3 CP, Q3 LP, PO CP, PO LP), then the group clubs after the
- * first 16; the round table has one round for each round the row plays (codes 240 PR, 250 Q1, 260 Q2, 270 Q3,
+ * first 16. The round table has one round for each round the row plays (codes 240 PR, 250 Q1, 260 Q2, 270 Q3,
  * 220 PO: the round names table gives their real names, season_round_names.h). The group draw
  * draw_phase1_groups 0x585290 takes the 16 clubs of list slots 0 to 15 and the clubs with entry byte +5 = 1
  * (0x585358..0x5853ba, 32 in all): the play-off winners get 1 from the last round (0x51af97), and the group
@@ -155,7 +155,7 @@ typedef struct {
  * days as d + n with weekday w + n, so the dates below keep their order in every year:
  *   Champions League: the preliminary round (2018/19 on) is a tournament of single matches, as the real one
  *   (rows uefa-138, uefa-139: "PR 4", one winner): semi-finals on the Sunday and the final on the Tuesday before
- *   the first qualifying round (15 and 17 July, so from 12 July); first legs on Wednesday 18 July, 1, 15 and 29
+ *   the first qualifying round (15 and 17 July, so from 12 July). First legs on Wednesday 18 July, 1, 15 and 29
  *   August, second legs 7 days later (+0x22), the last by 8 September.
  *   Europa League: one day after the Champions League (Thursday). The preliminary round has two legs, on the
  *   Sunday and the Tuesday before its first qualifying round. So each round starts after the Champions League
@@ -197,7 +197,7 @@ static int club_code(uint32_t club) { return g_mem[club + 0x1df]; }
 
 /* The layout of comp ('c' or 'e'). The Champions League's from the list +0x14 of cl when cl is given (after
  * build_entrants: a loser that goes to the Europa League gets that cup's id at +0x1db, 0x585a6a, but stays in the
- * list), else from the clubs with its id at +0x1db; the Europa League's from the clubs with its id and a code of
+ * list), else from the clubs with its id at +0x1db. The Europa League's from the clubs with its id and a code of
  * 11 to 16 (the Champions League losers there keep their codes of 1 to 9). Returns 0 when the counts cannot make
  * rounds (an odd number of clubs in a path). */
 static int make_layout(const SeasonUefa *r, char comp, Layout *L, uint32_t cl)
@@ -238,7 +238,7 @@ static int make_layout(const SeasonUefa *r, char comp, Layout *L, uint32_t cl)
         int i = L->rounds++;
         if (i >= MAX_ROUNDS) return 0;
         L->level[i] = k;
-        /* Champions League: the winners stay in their path; a round of one path (Q2 to 2017/18) takes both. */
+        /* Champions League: the winners stay in their path. A round of one path (Q2 to 2017/18) takes both. */
         if (comp == 'c' && !lp) cp_win += lp_win, lp_win = 0;
         if (comp == 'e') cp_win += lp_win, lp_win = 0;
         L->cp_fresh[i] = cp, L->lp_fresh[i] = lp;
@@ -282,7 +282,7 @@ static int list_index_of_code(const Layout *L, int code)
 void o_00584fa0(void);
 void o_00584990(void);
 
-/* The list +0x14 of the access list: the group clubs, then the qualifying clubs from the lowest round; list
+/* The list +0x14 of the access list: the group clubs, then the qualifying clubs from the lowest round. List
  * byte +4 as the original's tiers (7 group, 8 Q3, 13 Q2, 0 others: 0x584fa0). */
 static int cl_entrants(uint32_t cl, const Layout *L)
 {
@@ -610,7 +610,7 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds_out)
 
 /* The layout of the Europa League from its round table +0xa3 (+0x3c rounds), once the season has started: its
  * clubs lose their id at +0x1db when they go out, so make_layout cannot count them any more. Round i takes
- * +0x1c new slots from +0x1e; the last of them are the drop slots of the row. Returns 0 when the table is not
+ * +0x1c new slots from +0x1e. The last of them are the drop slots of the row. Returns 0 when the table is not
  * one of the access list (a round code that is not of EL_LEVELS, slots that do not follow each other). */
 static int uc_table_layout(uint32_t uc, const SeasonUefa *r, Layout *L)
 {
@@ -650,7 +650,7 @@ int season_uefa_uc_direct_first(uint32_t uc)
 
 /* The layout of the Champions League from its round table +0xa3 (+0x3c rounds) and its entry table +0xa7, after
  * build_entrants: both are in the save (Cup::save_cup_to_disk 0x5210f0), and the clubs keep their entry codes
- * (+0x1df), so a loaded game gives the same layout. Round i takes +0x1c new slots from +0x1e; the League Path
+ * (+0x1df), so a loaded game gives the same layout. Round i takes +0x1c new slots from +0x1e. The League Path
  * clubs of a round are those with a League Path code. Returns 0 when the table is not one of the access list. */
 static int cl_table_layout(uint32_t cl, Layout *L)
 {
@@ -690,7 +690,7 @@ static int cl_round_of_level(const Layout *L, int k)
 
 /* The losers of the decided ties of Champions League round r and path (0 Champions Path, 1 League Path, 2
  * both), in tie order, into out (max). A tie is decided when its winner is in the tie of the next round
- * (+6/+8/+0x12); the loser is the other side. Returns the count, or -1 when a tie is not decided yet. */
+ * (+6/+8/+0x12). The loser is the other side. Returns the count, or -1 when a tie is not decided yet. */
 static int cl_losers(uint32_t cl, const Layout *L, int r, int path, uint32_t *out, int max)
 {
     uint32_t e = rd32(g_mem, cl + 0xa7);
@@ -822,7 +822,7 @@ void o_0051f890(void);
 
 /* Test only (RECOMP_UEFA_LOG=1): each week, the state of a cup's qualifying rounds: the current stage +0x30,
  * the next round +0xab, the rounds set up +0xac, +0xb1, and for each round its ties by state (+0x34: 0 not
- * drawn, 1 drawn, 2 ready, 3 fixtures made) and its sides still to come (-1); the entry bytes +5 of the slots. */
+ * drawn, 1 drawn, 2 ready, 3 fixtures made) and its sides still to come (-1). The entry bytes +5 of the slots. */
 static void log_cup(const char *name, uint32_t cup)
 {
     uint32_t t = rd32(g_mem, cup + 0xa3), e = rd32(g_mem, cup + 0xa7);
@@ -865,7 +865,7 @@ static void log_week(void)
     if (uc) log_cup("EL", uc);
 }
 
-/* Cup::update_for_date, thiscall (slot 5 of the UEFA Cup, 0x970794): the drops before the draws of the day. */
+/* Cup::update_for_date, thiscall (slot 5 of the UEFA Cup, 0x9707a4): the drops before the draws of the day. */
 RT_WRAP(0051f890, cup_update_for_date)
 {
     uint32_t cup = cpu.ecx;
@@ -885,8 +885,10 @@ RT_WRAP(0051f890, cup_update_for_date)
  * shows a box with fewer than 60 clubs (0x6336d7, 0x6337a0). In a season with no Intertoto Cup (uic_clubs -1
  * in the row) the seeding gives none, so the wrap of 0x6336c0 returns 1 with no entrants, the round table
  * keeps its slots empty, and the wrap of its update_for_date 0x633d40 (slot 5, 0x96bba0) does nothing: no
- * draw, no match, no hand-over to the UEFA Cup (0x633deb). Its start_new_season does not run (the before hook
- * of the kind uefa, season_change_skip). */
+ * draw, no match, no hand-over to the UEFA Cup (0x633deb). With changing rules on, its start_new_season does not
+ * run (the before hook of the kind uefa, season_change_skip). With changing rules off no kind runs after the start
+ * season (Q232), so its start_new_season (slot 2, 0x633920) runs each year: it calls build_entrants and the rank
+ * again, and the wraps here keep it idle (no entrants, the year of its last edition, no positions). */
 
 #define UIC_VTABLE 0x0096bb8cu
 
@@ -929,7 +931,7 @@ RT_WRAP(006336c0, uic_build_entrants)
     rt_ret_cdecl(1);
 }
 
-/* Intertoto_Cup::update_for_date, thiscall (2 arguments) ret 8; it returns what Cup::update_for_date 0x51f890
+/* Intertoto_Cup::update_for_date, thiscall (2 arguments) ret 8. It returns what Cup::update_for_date 0x51f890
  * returns (0x633e92). */
 RT_WRAP(00633d40, uic_update_for_date)
 {

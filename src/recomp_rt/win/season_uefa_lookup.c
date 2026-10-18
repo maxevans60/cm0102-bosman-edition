@@ -115,7 +115,7 @@ int season_uefa_access_league_cup(int season, const char *name)
 /* ---- Entry codes and round sizes (slice 23) ---- */
 
 /* The code of a token of the access list. Champions League: the plain Q1, Q2 and PR rounds are for champions
- * only, so they are the Champions Path; a plain PO or Q3 too. */
+ * only, so they are the Champions Path. A plain PO or Q3 too. */
 int season_uefa_code(char comp, const char *tok, int n)
 {
     static const struct { const char *t; int cl, el; } map[] = {
