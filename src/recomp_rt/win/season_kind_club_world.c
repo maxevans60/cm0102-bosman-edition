@@ -137,7 +137,9 @@ static int step_of(const char *file)
 
 /* The year argument of a constructor at a new game of a season game: the first edition from the start season
  * on. At a load the creators run too, and the object takes its year from its saved state (League::load
- * 0x687b10 reads +0x40, doc section 2), so the wraps act only while a new game is made. */
+ * 0x687b10 reads +0x40, doc section 2; Cup::save_cup_to_disk 0x5210f0 writes +0x40 at 0x521315, and
+ * Cup::load_from_disk 0x51fc00 reads the same fields: inference from the symmetry, not read field by field),
+ * so the wraps act only while a new game is made. */
 static void ctor(const char *file, void (*original)(void))
 {
     if (season_game() && season_creating_game()) {
