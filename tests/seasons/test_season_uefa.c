@@ -1,10 +1,17 @@
 /* The UEFA formats table (0.6.0 slice 22): the rows that the game reads for each season. ctest season_uefa. */
+#include "season.h"
 #include "season_uefa.h"
 
 #include <stdio.h>
 #include <string.h>
 
 static int failures;
+
+/* Stand-ins of the season of the game (season.c). */
+static int code_on = 1, start_year = 2001, changing = 0;
+int season_code_on(void) { return code_on; }
+int season_start_year(void) { return start_year; }
+int season_changing_rules(void) { return changing; }
 
 #define CHECK(cond)                                                                 \
     do {                                                                            \
@@ -46,6 +53,23 @@ int main(void)
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);
     CHECK(season_uefa_table_row(2099) == &season_uefa_rows[season_uefa_row_count - 1]);
     CHECK(season_uefa_table_row(2099)->season >= r2008->season);
+
+    /* The row of the game that runs: none for the base game and with the season code off (the original runs),
+     * the row of each season with changing rules on, the row of the start year with changing rules off. */
+    start_year = 2001, changing = 0;
+    CHECK(season_uefa_row(2001) == NULL && season_uefa_row(2005) == NULL);
+    changing = 1;
+    CHECK(season_uefa_row(2003) == r2003 && season_uefa_row(2001) == r2001);
+    code_on = 0;
+    CHECK(season_uefa_row(2003) == NULL);
+    code_on = 1, start_year = 2005, changing = 0;
+    CHECK(season_uefa_row(2007) == season_uefa_table_row(2005) && season_uefa_row(2003) == season_uefa_table_row(2005));
+    changing = 1;
+    CHECK(season_uefa_row(2007) == season_uefa_table_row(2007));
+    start_year = 2010, changing = 0;
+    CHECK(season_uefa_row(2010) == &season_uefa_rows[season_uefa_row_count - 1]);
+    code_on = 0;
+    CHECK(season_uefa_row(2010) == NULL);
 
     if (failures) return 1;
     printf("season_uefa: all checks pass\n");

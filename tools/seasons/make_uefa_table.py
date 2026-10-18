@@ -75,6 +75,14 @@ def groups(row):
     return int(m.group(1)), int(m.group(2)), 1 if m.group(3) == "single" else 2
 
 
+def uc_groups(row):
+    """groups(row), and a stop when the rounds list names a group stage that the text does not describe."""
+    g = groups(row)
+    if any(n == "Groups" for n, _ in rounds(row)) and not g[0]:
+        fail(row, "the rounds name a group stage, but no 'N groups of M, single|double round robin'")
+    return g
+
+
 def intertoto(row):
     """(clubs, rounds, winners, entry round) or None when not held."""
     if row["format"].startswith("not held"):
@@ -112,7 +120,7 @@ def read_rows():
             "season": season,
             "ids": f"{cl['id']} {uc['id']} {uic['id']}",
             "cl_clubs": first_int(cl, "clubs"), "cl_rounds": rounds(cl),
-            "uc_rounds": rounds(uc), "uc_groups": groups(uc),
+            "uc_rounds": rounds(uc), "uc_groups": uc_groups(uc),
             "uic": intertoto(uic),
         })
     return out

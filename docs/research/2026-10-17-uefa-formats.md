@@ -52,12 +52,28 @@ The kind `uefa` of the season change writes one sentence for each change of form
 
 `season_report.c` writes a `uefa` line for the Champions League and the UEFA Cup at each report: stage count, current stage, clubs of the group stages in stages 0 to 7 and after them, clubs and rounds of the knockout stage. The check compares the end line of each season with the "Rounds (clubs):" list of the row (kind `format`).
 
-## Not done, for Max
+## Entry counts (Q369)
 
-1. The entry counts of the access list (Champions League 72 to 76 clubs, UEFA Cup Q1 62 to 74, Intertoto 49 to 50). The game keeps the original's place brackets by rank (`UefaSeeding::set_place_counts` 0x903cc0, `assign_champions_league_places` 0x904210, built from registers at 0x904219..0x9042ce) and the exact entrant counts the classes check (Champions League 71 at 0x584faa and the fill check 0x5851a1, UEFA Cup 118 seeded, Intertoto 60 at 0x6336db). The access list rows give places only for the 21 nations of the league table, so the brackets of the other nations need the rank rules of each season (`uefa.md`, "Points for Max" 1). Recommended: keep the original's brackets and counts to 2008/09 and encode the brackets with slice 23.
-2. The name of the Champions League round of 16: the round names of the original have no "Round of 16" (0x4b4850). It shows as "Second Round". Recommended: keep it; a new name needs a new round code and a check of every compare of round codes.
-3. Dates: the group stages of both cups keep the original's weeks where they can (Champions League groups to 7 November).
-4. The UEFA Cup's stage objects are not freed when a game ends (the class's destructor 0x9024d0 knows no stages). The game's memory of that game is freed with it.
+Up to 2008/09 the game keeps the original's place brackets by rank (`UefaSeeding::set_place_counts` 0x903cc0, `assign_champions_league_places` 0x904210, built from registers at 0x904219..0x9042ce) and the entrant counts the classes check (Champions League 71 at 0x584faa and the fill check 0x5851a1, UEFA Cup 118 seeded at 0x902cb0, Intertoto 60 at 0x6336db). The real counts (Champions League 72 to 76, UEFA Cup Q1 62 to 74, Intertoto 49 to 50) stay as expected differences of the rules report. Slice 23 owns the real access list from 2009/10 (Q369).
+
+## Round names (Q370)
+
+The real names of the new rounds, by season, with a source:
+
+| Round | Seasons | Real name | Source |
+|---|---|---|---|
+| Champions League, first knockout round | 2003/04 on | Round of 16 | rules table row uefa-18 ("round of 16"); https://en.wikipedia.org/wiki/2003%E2%80%9304_UEFA_Champions_League_knockout_stage (section "Round of 16"); the same in 2009/10, https://en.wikipedia.org/wiki/2009%E2%80%9310_UEFA_Champions_League_knockout_phase |
+| UEFA Cup, first knockout round | 2004/05 to 2008/09 | Round of 32 | https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup_knockout_stage (section "Round of 32") |
+| UEFA Cup, second knockout round | 2004/05 to 2008/09 | Round of 16 | the same page (section "Round of 16") |
+| UEFA Cup, first and second qualifying rounds | 2004/05 to 2008/09 | First qualifying round, Second qualifying round | rules table rows uefa-29 to uefa-61 (Q1, Q2) |
+
+The limit: the game shows a round's name from its round code (+7 of a round record) through the name function 0x4b4850, a switch over fixed codes (the jump tables at 0x4b954c, 0x4b95ec, 0x4b9684, 0x4b9744 and their short-name twins at 0x4b9bd8 to 0x4b9d10). It has no text "Round of 16", "Round of 32" or "First qualifying round": codes 10 to 150 are the numbered rounds, the quarter-final, semi-final, third place and final, and 250 and 260 are "First" and "Second Qualifying Phase". A code also names the legs (code + 3, code + 4: Cup::label_round_extra_fixtures 0x522c70). So this slice uses the nearest names that exist: "Second Round" (20) for the Champions League round of 16, "Third Round" and "Fourth Round" (30, 40, the original UEFA Cup's own names for its rounds of 32 and 16) and "First" and "Second Qualifying Phase" for the UEFA Cup. A real name needs a new round code and new text: a wrap of 0x4b4850 for both name sets, and proof that no code tests the new code by range. A search finds 28 compares of a word at +7 with a constant (for example 0x8c at 0x51af63, 0x51c6a9 and 0x51caea, 0xa0 at 0x48ba66 and 0x7a294c, 0x64 at 0x4c8455 and 0x87f193, 0x28 and 0x50 at 0x525930 and 0x52597c), and every load of +7 into a register still needs a trace. That proof is not done, so the names are not changed in this slice.
+
+## Other limits
+
+1. Dates: the group stages of both cups keep the original's weeks where they can (Champions League groups to 7 November).
+2. The UEFA Cup's stage objects are not freed when a game ends (the class's destructor 0x9024d0 knows no stages). The game's memory of that game is freed with it.
+3. The Intertoto Cup after 2008 is slice 23's (with slice 16's interface to idle a competition).
 
 ## Boxes that are not from this slice
 

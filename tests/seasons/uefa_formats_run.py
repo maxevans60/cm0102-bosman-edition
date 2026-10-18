@@ -16,7 +16,9 @@ rounds of the knockout stage, and the winner of its history row of the season. T
     change  3.9.68 data from 2002/03, changing rules on, to the end of 2004/05: 2002/03 is the original's
             format (13 stages, a second group stage of 16, quarter-finals, a UEFA Cup with no stages);
             2003/04 has the round of 16; 2004/05 the UEFA Cup groups. The news log
-            (RECOMP_SEASON_CHANGE_LOG=1) has the sentence of each change in its season
+            (RECOMP_SEASON_CHANGE_LOG=1) has the sentence of each change in its season, and the report has no
+            difference with the rules table that tests/seasons/rules_report_expected/changing-2002-england.tsv
+            does not list (it lists no format line: each season plays the format of its row)
     load    November 2007: the game saves 240 days after the start (March 2008, the knockout stages of both
             cups), a new program loads the save, the holiday goes on to 1 June 2008, and the end report of
             2007/08 shows both knockout stages played to the end of the season (16 and 32 clubs)
@@ -31,6 +33,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -46,12 +49,24 @@ UC_ORIGINAL = {"stages": 0, "groups": 0, "groups2": 0, "ko_clubs": 0, "ko_rounds
 UC_GROUPS = {"stages": 9, "groups": 40, "groups2": 0, "ko_clubs": 32, "ko_rounds": 5}
 NEWS_R16 = "The Champions League now has one group stage of 8 groups and a knockout round of 16."
 NEWS_UC = "The UEFA Cup now has a group stage of 8 groups of 5 clubs, then a round of 32."
+CHECK_LOCK = threading.Lock()   # rules_report_check.check keeps the uefa lines of a report in a module global
 BOX = re.compile(r"message box from 0x[0-9a-f]+: (.*)")
 
 
 def uefa_lines(report):
-    rrc.read_report(report)
-    return {(u["season"], u["phase"], u["file"]): u for u in rrc.UEFA_LINES}
+    """{(season, phase, file): line} of the uefa lines of one report. Each run reads its own report here, so the
+    runs of the thread pool share no state."""
+    out = {}
+    with open(report, encoding="latin-1") as f:
+        for line in f:
+            c = line.rstrip("\n").split("\t")
+            if c[0] != "uefa" or len(c) < 10:
+                continue
+            u = {"season": int(c[1]), "phase": c[2], "file": c[3], "stages": int(c[4]), "current": int(c[5]),
+                 "groups": int(c[6]), "groups2": int(c[7]), "ko_clubs": int(c[8]), "ko_rounds": int(c[9]),
+                 "winner": c[10] if len(c) > 10 else "-"}
+            out[(u["season"], u["phase"], u["file"])] = u
+    return out
 
 
 def expect(lines, season, file, want, label):
@@ -99,6 +114,9 @@ def run_change(program, game, work):
         fails += expect(lines, 2003, "uefa_cup", UC_ORIGINAL, "change")
         fails += expect(lines, 2004, "european_cup", CL_R16, "change")
         fails += expect(lines, 2004, "uefa_cup", UC_GROUPS, "change")
+    if os.path.exists(report):                  # the whole report against the expected file of changing rules on
+        with CHECK_LOCK:
+            fails += [f"change: {t}" for t in rrc.check(report, None, 2004, "changing-2002-england")]
     for sentence, season in ((NEWS_R16, 2003), (NEWS_UC, 2004)):
         if not re.search(rf"news.*{season}.*{re.escape(sentence)}|{re.escape(sentence)}", log):
             fails.append(f"change: no news sentence {sentence!r}")

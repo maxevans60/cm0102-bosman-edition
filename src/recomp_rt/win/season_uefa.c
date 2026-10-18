@@ -87,14 +87,6 @@ static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 
 /* ---- The row of a season ---- */
 
-const SeasonUefa *season_uefa_row(int season)
-{
-    if (!season_code_on()) return NULL;
-    int start = season_start_year();
-    int changing = season_changing_rules();
-    if (start == SEASON_FIRST_YEAR && !changing) return NULL;    /* the base game */
-    return season_uefa_table_row(changing ? season : start);
-}
 
 static uint32_t cl_object(void)
 {
@@ -139,8 +131,9 @@ static uint32_t ko_table(uint32_t cl, uint32_t *name_id)
     uint32_t t3 = call_this(F_ROUND_TABLE, cl, 4, a);
     int16_t rounds = (int16_t)rd16(g_mem, out);
     *name_id = rd16(g_mem, out + 4);
+    if (rt_unwinding) return 0;
     cpu.esp = saved_esp;
-    if (rt_unwinding || !readable(t3) || rounds != 3) return 0;
+    if (!readable(t3) || rounds != 3) return 0;
     uint32_t size[1] = {4u * ROUND_SIZE};
     uint32_t t = call_cdecl(F_MALLOC, 1, size);
     if (rt_unwinding || !readable(t)) return 0;
@@ -351,8 +344,7 @@ RT_WRAP(005851d0, cl_advance_stage)
         o_005851d0();
         return;
     }
-    wr32(g_mem, cl + 0x30, KO_SLOT_ROUND_OF_16);
-    draw_round_of_16(cl);
+    draw_round_of_16(cl);                   /* it sets +0x30 to 8 once the stage is in its slot */
     if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
 }
 
