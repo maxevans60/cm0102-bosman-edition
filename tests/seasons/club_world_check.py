@@ -12,8 +12,12 @@ selected (a creator makes its objects only when a nation of its continent is sel
     2001-on   the 3.9.68 data from 2001/02 with changing_rules on, to 2002/03: the Inter-American Cup and the
               Oceania Champions Cup wait from the new game, the Club World Championship waits for 2005, the Copa
               Mercosur, the Merconorte Cup and the Asian Cup Winners' Cup stop after 2001/02
-    2003-on   October 2003 with changing_rules on, to 2005/06: the Oceania Champions Cup comes back in 2004/05, the
-              Intercontinental Cup stops after 2004/05, the Club World Championship comes back in 2005/06
+    2003-on   October 2003 with changing_rules on, to 2005/06, with England, Australia and Japan only: the Oceania
+              Champions Cup comes back in 2004/05, the Asian Super Cup stops after 2002/03, the Intercontinental
+              Cup stops after 2004/05, the Club World Championship comes back in 2005/06. (With Argentina and
+              Brazil too, a 2003/04 start stops on 7 February 2004 at the box "comp_stats..CPP 1664", 0x4a25a8:
+              Comp_Stats::set_club_final_position 0x4a2540 gets no club. The build without this slice stops
+              there too.)
     2007      November 2007 with changing_rules off, to 2008/09: the start season rules at a new game, and the
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
               December 2005 with the box "world_cup..cpp 1438", 0x92f2b1, before this slice: fewer than 32
@@ -43,12 +47,12 @@ import rules_report_check as rrc  # noqa: E402
 
 DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
 NATIONS = ["England", "Argentina", "Australia", "Brazil", "Japan"]
-# name: (start year, database folder or None, last season, changing rules)
+# name: (start year, database folder or None, last season, changing rules, nations)
 RUNS = {
-    "2001-on": (2001, None, 2002, "on"),
-    "2003-on": (2003, "October 2003", 2005, "on"),
-    "2007": (2007, "November 2007", 2008, "off"),
-    "2023-on": (2023, "October 2023", 2024, "on"),
+    "2001-on": (2001, None, 2002, "on", NATIONS),
+    "2003-on": (2003, "October 2003", 2005, "on", ["England", "Australia", "Japan"]),
+    "2007": (2007, "November 2007", 2008, "off", NATIONS),
+    "2023-on": (2023, "October 2023", 2024, "on", NATIONS),
 }
 FILES = ["world_club_champ", "world_club_cup", "inter_amer_cup", "con_merc_cup", "conmebol_merc", "asia_club_champ",
          "asia_cup_winner", "asia_super_cup", "oceania_club_champ"]
@@ -122,12 +126,12 @@ def check(name, report, log, rules_on):
 
 
 def one(program, game, name, keep, reuse):
-    year, db, last, rules = RUNS[name]
+    year, db, last, rules, nations = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-club-world-{name}-")
     report = os.path.join(work, "report.tsv")
     log = os.path.join(work, "stderr.txt")
     if not reuse:
-        code, report = rrc.run(program, game, last, year, folder(db), NATIONS, [], work, 7200,
+        code, report = rrc.run(program, game, last, year, folder(db), nations, [], work, 7200,
                                options_more={"changing_rules": rules}, env_more={"RECOMP_SEASON_CHANGE_LOG": "1"})
         if code != 0:
             return [f"{name}: the run ended with code {code} ({log})"]
