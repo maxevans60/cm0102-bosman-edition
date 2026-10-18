@@ -392,6 +392,18 @@ static int team_in(const uint32_t *teams, int n, uint32_t t)
     return 0;
 }
 
+/* 1 when the club is the national team of its nation (+0x53 the nation record; national_team 0x53b3d0). */
+static int is_national_team(uint32_t club)
+{
+    if (!readable(club)) return 0;
+    uint32_t nation = rd32(g_mem, club + 0x53u), base = rd32(g_mem, NATIONS);
+    if (!readable(nation) || nation < base || (nation - base) % NATION_SIZE ||
+        (int)((nation - base) / NATION_SIZE) >= nation_count()) return 0;
+    uint32_t args[1] = {nation};
+    uint32_t team = call_cdecl(NATIONAL_TEAM, 1, args);
+    return !rt_unwinding && team == club;
+}
+
 static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
 {
     uint32_t slots = rd32(g_mem, comp + SLOTS);
@@ -403,12 +415,14 @@ static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
     for (int i = 0; i < room; i++) {
         uint32_t t = rd32(g_mem, slots + (uint32_t)i * SLOT_SIZE);
         teams[i] = 0;
-        if (i < count && readable(t) && !team_in(teams, i, t)) {
+        int team = is_national_team(t);
+        if (rt_unwinding) return;
+        if (i < count && team && !team_in(teams, i, t)) {
             teams[i] = t;
         } else {
             open[n_open++] = i;
             empty += i < count;
-            if (i >= count && readable(t)) spare[n_spare++] = t;   /* a default nation still in the slot */
+            if (i >= count && team) spare[n_spare++] = t;           /* a default nation still in the slot */
         }
     }
     if (!n_open) return;
@@ -518,6 +532,14 @@ RT_WRAP(0076d880, release_overage_u21)
                 readable(home) ? win_str(home + 4u) : "?", readable(away) ? win_str(away + 4u) : "?");
     }
     rt_ret_stdcall(0, 1);
+}
+
+/* EuroChamp build_team_slots 0x57bd80 stops at the box "euro_champ.cpp 837" when find_hosts gives no host
+ * (0x57be3d to 0x57becc). Euro 2020 and Euro 2028 have no host place (season_intl_table.c), so in a season game
+ * the builder goes on with the default nations (0x57bf2f): seasons.py 0x57be3d. */
+uint32_t rt_intl_euro_no_host(void)
+{
+    return (uint32_t)season_intl_on();
 }
 
 /* ---- The rule kind ---- */

@@ -51,6 +51,9 @@ void season_intl_at_create(void);
 /* The Oceania section's left-out nation at 0x91fc89 (New Caledonia): none with Australia in Asia. */
 uint32_t rt_intl_oceania_left_out(uint32_t id);
 
+/* 1 when a European Championship without a host goes on (seasons.py 0x57be3d): in a season game. */
+uint32_t rt_intl_euro_no_host(void);
+
 /* The classes of the code sites (cls of the calls above). */
 enum {
     INTL_WORLD_CUP, INTL_EURO, INTL_CONFED, INTL_COPA, INTL_ACN, INTL_ASIAN, INTL_OFC, INTL_OLYMPICS,

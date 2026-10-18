@@ -311,6 +311,7 @@ uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags);
 uint32_t rt_intl_wc_holder(uint32_t holder);
 uint32_t rt_intl_wc_holder_slot(uint32_t year);
 uint32_t rt_intl_oceania_left_out(uint32_t id);
+uint32_t rt_intl_euro_no_host(void);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets

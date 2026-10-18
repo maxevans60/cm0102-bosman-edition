@@ -165,4 +165,8 @@ INSNS = {
     # (0x91fbda) and leaves out New Caledonia (key nation 0x9cf530) and Papua New Guinea (0x9cf41c). With
     # Australia in Asia (win/season_intl.c) New Caledonia comes in, so the count of 10 stays.
     0x91FC89: ("mov ecx, dword ptr [0x9cf530]", "ecx = rt_intl_oceania_left_out(R32(0x9cf530u));"),
+    # EuroChamp build_team_slots 0x57bd80: no host from find_hosts (0x57be34) leads to the box "euro_champ.cpp
+    # 837" (0x57becc..0x57bf22). Euro 2020 and 2028 have no host place in the table, so in a season game the
+    # builder goes on to the default nations (0x57bf2f) with no host (win/season_intl.c).
+    0x57BE3D: ("jle 0x57becc", "if (cc_le(F)) { if (rt_intl_euro_no_host()) goto L_57bf2f; goto L_57becc; }"),
 }
