@@ -26,6 +26,9 @@
 #define UP_PLAYOFF 0xbfu            /* s8: promotion play-off places (inference, rules report doc) */
 #define DOWN_PLAYOFF 0xc0u          /* s8: relegation play-off places (inference) */
 #define DOWN 0xc1u                  /* s8: relegation places (League::has_relegation 0x6847b0) */
+#define ABOVE 0x1cu                 /* s32: record id of the division above, -1 for none */
+#define BELOW 0x20u                 /* s32: record id of the division below */
+#define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table: the object of each competition record */
 #define STATUS_DOWN 3               /* league_promote_and_relegate 0x689c80: moves down a row of 3 (0x689d26) */
 #define MIN_CLUBS 2
 #define MAX_CLUBS 60
@@ -228,6 +231,20 @@ static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want,
                 playoff);
 }
 
+/* 1 when the division above or below (league +0x1c, +0x20: the record ids, -1 for none; EngFirst::set_up_rules
+ * stores them at 0x572dea and 0x572df6) is a league of the size table with no floor. The object of a record is
+ * g_comp_object_table [0xadadfc] at the record id (League::process_promotion_relegation_chain 0x689c42). */
+static int open_neighbour(uint32_t obj, uint32_t at)
+{
+    int32_t id = (int32_t)rd32(g_mem, obj + at);
+    uint32_t table = rd32(g_mem, COMP_OBJECTS);
+    if (id < 0 || id > 100000 || !readable(table)) return 0;
+    uint32_t other = rd32(g_mem, table + 4u * (uint32_t)id);
+    if (!readable(other)) return 0;
+    const char *f = season_change_file(other);
+    return cap_of(f) > 0 && floor_of(f) == 0;
+}
+
 void season_sizes_rules(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return;
@@ -237,8 +254,12 @@ void season_sizes_rules(uint32_t obj)
     if (!size_file(file) || floor_of(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
-    set_places(obj, UP, UP_PLAYOFF, r->up, "promotion");
-    set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+    /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
+     * with fixed counts (the German Regionalliga split needs exactly 36 clubs, cmp bl, 0x24 at 0x5dbc3b, box
+     * ger_first.cpp 1049 at 0x5dbcd9: the 2. Bundesliga with 2 relegation places against the Regionalliga's 4
+     * promotions left it short in June 2017). */
+    if (open_neighbour(obj, ABOVE)) set_places(obj, UP, UP_PLAYOFF, r->up, "promotion");
+    if (open_neighbour(obj, BELOW)) set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
 }
 
 /* ---- Promotion and relegation of a size change ---- */
@@ -317,4 +338,16 @@ static void sizes_after(const SeasonChange *c)
                            now->down == 1 ? "" : "s", now->down == 1 ? "es" : "", name, before->down);
 }
 
-const SeasonRuleKind season_kind_sizes = {"sizes", NULL, NULL, NULL, NULL, NULL, sizes_after};
+/* At a new game the constructors' set_up_rules run before g_comp_object_table is filled (build_comp_object_table
+ * 0x8386f0, called at 0x829640 in create_game), so no neighbour is known there: the places of the start season
+ * are set again once the game is made. */
+static void sizes_new_game(int start_year)
+{
+    (void)start_year;
+    if (!sizes_on()) return;
+    uint32_t comps[512];
+    int n = season_change_comps(comps, 512);
+    for (int i = 0; i < n && !rt_unwinding; i++) season_sizes_rules(comps[i]);
+}
+
+const SeasonRuleKind season_kind_sizes = {"sizes", sizes_new_game, NULL, NULL, NULL, NULL, sizes_after};
