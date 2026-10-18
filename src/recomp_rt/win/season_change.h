@@ -25,7 +25,8 @@
  *
  * The registry. A rule kind is a table of functions; NULL leaves a hook out. Each later slice (17 to 29) adds
  * its kinds to the list season_rule_kinds in season_change.c, one line each. The hooks, in the order they run:
- *   new_game(Y)   after a new game is made in start year Y (any changing rules). Example: build a kind's own
+ *   new_game(Y)   after a new game is made in start year Y (any changing rules; after the start season hooks
+ *                 of the run to the start date, see "The start season"). Example: build a kind's own
  *                 state for the game, such as the season of each rule it has applied.
  *   loaded(Y)     after a saved game is loaded. Example: rebuild that state from the game's memory.
  *   season(S)     once at the season point of S. Example: transfer windows of the new season.
@@ -44,15 +45,27 @@
  *                 international one that waits for its next edition, such as the 2010 qualifiers on 25 July
  *                 2009). Example: the name of the season (season_kind_names.c).
  *
- * The start season. The entry, before, after and season hooks run for the start season too (S equal to the
- * start year, c->start 1, season_change_is_start() 1), with changing rules on or off: in the run to the start
- * date of a new game (game_run_to_start_date 0x5cc850, called from create_game 0x828110 at 0x829fd9; c->creating
- * 1, from 1 January of the start year) and on the update days of the start year after the start date (the
- * international entries on 25 July and 15 August; c->creating 0). So a kind applies the rules of the start season
- * before the first fixtures are made, for example 5 substitutes in a 2010/11 game. The start season gives no
- * news: season_change_news does nothing in its hooks. A later season (S after the start year) runs the hooks only
- * with changing rules on. The hooks of the start season also run after a load in the start year, so a kind
- * writes only a real change, as for every season.
+ * The base game. No kind is called at all (no hook of any kind) in the base game, a game that starts in 2001
+ * with changing rules off, and with the test switch RECOMP_SEASON_CODE=off. So the base game and its saves stay
+ * as they are (Q152, Q342), whatever a kind does.
+ *
+ * The start season. A game that starts after 2001 runs the entry, before, after and season hooks for its start
+ * season too (S equal to the start year, c->start 1, season_change_is_start() 1), with changing rules on or off.
+ * A game that starts in 2001 does not: the 2001/02 rules are the original's. Each league table entry gets the
+ * hooks of the start season once:
+ *   - an entry with its update day from 1 January to the start date (entries 5, 4, 11, 22, 2, 14, 3 and others):
+ *     in the run to the start date of a new game (game_run_to_start_date 0x5cc850, called from create_game
+ *     0x828110 at 0x829fd9; c->creating 1), before the first fixtures of the game are made;
+ *   - an entry with its update day after the start date and before 1 October (entries 7 on 21 July, 0 on 25 July,
+ *     8 on 31 July, 1 on 15 August, 6 on 28 August and others): on that day in the game (c->creating 0);
+ *   - an entry with its update day from 1 October (entries 24 on 27 November, 15 on 27 December and others): its
+ *     start season began in the year before the start year, before the game. At the end of the new game, its
+ *     entry hook and the after hook of each of its competitions run (c->started 0, c->creating 1); there is no
+ *     start_new_season, so no before hook. A kind that changes fixtures fixes the ones that are made.
+ * So a kind applies the rules of the start season, for example 5 substitutes in a 2010/11 game. The start season
+ * gives no news: season_change_news does nothing in its hooks. A later season (S after the start year) runs the
+ * hooks only with changing rules on. The hooks of the start season also run after a load in the start year (the
+ * in-game days above), so a kind writes only a real change, as for every season.
  *
  * A kind applies the rule of season S from its own table (the rules table, season_rules.h, or another). It
  * writes the game's memory only for a real change, so a season with no rule change leaves the game as it is.
@@ -126,14 +139,15 @@ int season_change_comps(uint32_t *out, int max);
 /* The competition objects of one league table entry (its array, +0xc count, +0x10 array). */
 int season_change_entry_comps(int entry, uint32_t *out, int max);
 
-/* Takes a competition object out of the array of a league table entry, so the pass starts no more seasons of
- * it (a league cup that ends, the Intertoto Cup after 2008). Only inside an entry hook of that entry, before the
- * pass reads the array. The array keeps its block: the later objects move down one place and the count goes
- * down by one. The object itself stays (it is not freed, and the table [0xadadfc] still holds it), so its
- * record, history and screens stay. Returns 1, or 0 when the object is not in the array. Not tested in a game
- * yet: whether a save keeps the shorter array, and which screens still show the competition, are unknown, so
- * the first kind that uses it checks both (as for season_change_add_comp). */
-int season_change_remove_comp(int entry, uint32_t obj);
+/* Keeps a competition idle for the season that starts (a league cup that ends, the Intertoto Cup after 2008).
+ * Only inside a before hook. The start_new_season of that competition does not run: it keeps its finished
+ * season, makes no fixtures and plays no matches. The object stays in its entry's array, so the game saves it,
+ * loads it and frees it as before (the arrays own the objects: save 0x6692f0 from 0x82f139, the load rebuilds
+ * [0xadadfc] from them at 0x82c5f6, the free 0x669290 from 0x82ffa3), and its record and history stay. The after
+ * hook then runs with c->started 0. The pass asks again each season (the competition stays finished), so a kind
+ * calls this in each season in which the competition does not run; nothing is kept in the save. Not tested in a
+ * game yet: which screens show an idle competition is unknown, so the first kind that uses it checks that. */
+void season_change_skip(void);
 
 /* 1 while the hooks of the start season run (see "The start season" above). For the season hook, which gets
  * no SeasonChange. */
@@ -152,7 +166,7 @@ const char *season_change_file(uint32_t obj);
 int season_change_add_comp(int entry, uint32_t obj);
 
 /* season_starts.c calls it around each start_new_season (this, 0 before and 1 after). */
-void season_change_start(uint32_t comp, int after);
+int season_change_start(uint32_t comp, int after);   /* 1 before: a kind skips this season */
 
 /* season.c calls these. */
 void season_change_new_game(void);                            /* a new game is made */
