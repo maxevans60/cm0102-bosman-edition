@@ -9,11 +9,11 @@ Usage:
 Each run is a season jump of tests/seasons/rules_report_check.py with England (changing rules off: the start
 season's rules). The runs:
     2010    September 2010 ODB, the season 2010/11 (the format of 2009/10 to 2017/18)
-    2018    October 2018, the season 2018/19 (a preliminary round, paths from Q2, four group places for the
-            top four associations)
+    2018    October 2018, the season 2018/19 (paths from Q2, four group places for the top four associations;
+            the preliminary round clubs enter the first qualifying round)
 The checks of each run: the jump ends with code 0 and shows no message box of the game; the log of
 src/recomp_rt/win/season_uefa_seeding.c and season_uefa_qual.c shows the places of the access list and the
-entrants of both cups (Champions League 76 or 79 clubs as the row); the uefa lines of the report at the end of
+entrants of both cups (Champions League 76 clubs); the uefa lines of the report at the end of
 the season: Champions League 9 stages, 32 clubs in groups, a knockout of 16 and 4 rounds; Europa League 13
 stages, 48 clubs in 12 groups, a knockout of 32 and 5 rounds, each with a winner; the round labels of Q370
 (Play-off Round, Preliminary Round from 2018/19, Third Qualifying Round of the Europa League); and the
@@ -70,7 +70,9 @@ LABELS_2009 = [("european_cup", 220, "Play-off Round"), ("uefa_cup", 220, "Play-
                ("uefa_cup", 270, "Third Qualifying Round"), ("european_cup", 250, "First Qualifying Round")]
 RUNS = {
     "2010": run_season("2010", 2010, "September 2010 ODB", 76, LABELS_2009),
-    "2018": run_season("2018", 2018, "October 2018", 79, LABELS_2009 + [("european_cup", 240, "Preliminary Round")]),
+    # 2018/19: 79 clubs in the row, 76 in the game: the 4 clubs of the preliminary round enter the first
+    # qualifying round and the lowest-ranked 3 of them get no place (season_uefa_code_clubs).
+    "2018": run_season("2018", 2018, "October 2018", 76, LABELS_2009 + [("european_cup", 240, "Preliminary Round")]),
 }
 
 
