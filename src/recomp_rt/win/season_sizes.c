@@ -232,7 +232,9 @@ void season_sizes_rules(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return;
     const char *file = season_change_file(obj);
-    if (!size_file(file)) return;
+    /* A floor division keeps its places too: its count must stay, and some of its exchanges are fixed code (League
+     * Two with the Conference: 2 down and 1 back gave 23 clubs in 2023/24 of a 2022/23 game). */
+    if (!size_file(file) || floor_of(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
     set_places(obj, UP, UP_PLAYOFF, r->up, "promotion");
@@ -279,7 +281,7 @@ RT_WRAP(00689c80, promote_relegate)
         int fu = floor_of(season_change_file(upper)), fl = floor_of(season_change_file(lower));
         if (cu <= 0 || cl <= 0 || nu > cu || nl > cl || nu < MIN_CLUBS * 4 || nl < MIN_CLUBS * 4 || nu < fu || nl < fl) {
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the moves do not fit (hold %d "
-                            "and %d): the clubs move in pairs\n", season_change_file(upper), nu,
+                            "and %d): the call stays as it is\n", season_change_file(upper), nu,
                     season_change_file(lower), nl, cu, cl);
             change = 0;
         }
