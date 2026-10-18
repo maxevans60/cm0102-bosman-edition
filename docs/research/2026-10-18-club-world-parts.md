@@ -28,9 +28,15 @@ Not covered by the tests: the CONCACAF classes (entry 4 is made only when the Un
 
 ### 26b: club counts and formats of the original's competitions
 
-The rules report shows the club count of the table against the game for most seasons. Each needs new stages or new entrant code:
+**Built (2026-10-18): the Club World Championship knockout (Form K).** Research: `2026-10-18-club-world-formats.md`. In a season game an edition with 6 or 7 clubs in the table (2005/06 to 2023/24) is one Cup_Stage made on the start date (1 July): for 7 clubs a play-off of the host champion and the OFC winner, quarter-finals with the AFC, CAF and CONCACAF winners, the UEFA and CONMEBOL winners from the semi-finals, the final and the third place match; for 6 clubs the quarter-finals of the AFC, CAF, CONCACAF and OFC winners (2020/21: the host champion in place of the OFC winner). The clubs are the original's picks (`pick_entrants` 0x92a8b0) in round order. The matches keep the original's weeks (1 to 12 August), not December: the fixture checks then stay as they are (Q277, a late edition plays at its normal time). Left out: the fifth place match (no class of the original has one) and the rule of 2011/12 on of penalties with no extra time in the place matches. Code: the part b block of `season_kind_club_world.c`. Tests: `club_world_check.py` runs 2004-on, 2007 and 2007-load.
 
-- Club World Championship: 6 clubs (2005/06, 2006/07), 7 from 2007/08 (knockout with a play-off of the host champion), 32 in 2024/25 (8 groups of 4). The original has 3 groups of 4 and a knockout of 4 (`World_Club_Champ` 0x929140, 3 stages at 0x9291e5, picks 0x92a8b0, `pick_entrant` 0x92ae60). The host comes from `HostCountry::pick_club_world_champ_hosts` 0x5fab70 (random): the host of the table needs the host table that slice 27 owns.
+The rules report reads the parent's club count +0x3e, which is 0 for Form K, so its `clubs` line for this class says 0 against 6 or 7. That line stays in the expected files: the report needs another count for a class whose clubs are all in a stage (owner of `season_report.c`: slice 12).
+
+**Not built yet:**
+
+- Form G, the 32-club edition of 2024/25 (8 groups of 4 and a knockout from the round of 16, with the Libertadores builders, doc section 4). That season plays the original's 12-club form.
+
+- The Club World Championship host comes from `HostCountry::pick_club_world_champ_hosts` 0x5fab70 (random): the host of the table needs the host table that slice 27 owns.
 - Copa Libertadores: 38 clubs from 2005, 47 from 2017 with a calendar to November, a single final from 2019, no away goals from 2022 (`Conmebol_Seeding` 0x4c5fe0, places at 0x4c6168 and 0x4c617a, `assign_libertadores_places` 0x4c6430).
 - CONCACAF: Champions Cup of 8 to 2008 (0x4c11a0), Champions League 2008/09 to 2023, Champions Cup of 27 from 2024; the three Leagues Cup places go to the next MLS clubs in the league table (Q333).
 - Asian Club Championship to AFC Champions League from 2002/03 (entrants 0x40b950), autumn to spring from 2023/24, ACL Elite from 2024/25. Australian clubs: Oceania to 2005, the ACL from 2007. Australia's confederation is slice 27's.

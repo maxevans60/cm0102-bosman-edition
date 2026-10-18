@@ -14,11 +14,18 @@ import re
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
-                  "season_change.c")
+                  "season_change.c", "season_kind_club_world.c", "season_comps.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
+    # Slice 26 (season_kind_club_world.c): the knockout of the FIFA Club World Championship.
+    0x92A8B0: ("81ec08020000568b", "WorldClubChamp::pick_entrants (this): the 12 entrants into +0xee"),
+    0x929390: ("81ec000200005356", "WorldClubChamp::create_schedule (this, stage, &rounds, &code, &is_league)"),
+    0x522E00: ("6aff683b78950064", "Cup_Stage::Cup_Stage (this, parent, clubs, club array, rounds, record, ...)"),
+    0x51C800: ("6aff68d976950064", "Cup::set_up_round (this, round)"),
+    0x9452CA: ("558bec51568b7508", "free (block)"),
+    0x944E46: ("ff350830de00ff74", "operator new of the stage arrays (size), cdecl (0x9291e9)"),
     0x45CBE0: ("5355568b74241085", "can the player play the fixture (squad screen test)"),
     0x5431E0: ("8b44240481ec0002", "shown attribute of a player (staff, index 1 to 31)"),
     0x543280: ("8b4424045685c00f", "is an attribute shown to a manager (manager, staff, index)"),
