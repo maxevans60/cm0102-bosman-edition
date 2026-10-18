@@ -4,8 +4,8 @@ Date 2026-10-18. 0.6.0 work. The question: why do new games of September 2008 an
 
 ## Result
 
-- Neither box comes from the size of the staff reserve. Both are faults of the original that the season databases reach.
-- "news..cpp 7797": a national squad call-up news item lists the same player three times. Its text writer then reads past the item and stops at slot 50. The staff reserve of 46,000 rows (doc `2026-10-17-select-all-databases.md`) only moves memory, so the game goes another way. Inference: with 23,000 rows that game makes no such squad, which is why `RECOMP_STAFF_RESERVE=23000` plays on.
+- Box 2 does not come from the size of the staff reserve: October 2023 has the original's 23,000 rows. For box 1 that is an inference only: the run stops with 46,000 rows and plays on with 23,000. Both boxes are checks of the original that the season databases reach.
+- "news..cpp 7797": a national squad call-up news item lists the same player three times. Its text writer then reads past the item and stops at slot 50. Inference: the staff reserve of 46,000 rows (doc `2026-10-17-select-all-databases.md`) only moves memory, so the game goes another way, and with 23,000 rows it makes no such squad. Not proven: why `select_squad` picks the same player three times is unknown (see "Where the repeat comes from").
 - "Database..cpp 13126": the European Championship finals of 2024 get 15 teams for 16 places. The group draw puts a row with no club in the last group, and the group draw news reads that row as a club.
 - Fixes: two `RT_WRAP` functions that act only where the original would stop at the box. `src/recomp_rt/win/call_up_news.c` and `src/recomp_rt/win/euro_finals.c`.
 
@@ -48,7 +48,7 @@ Unknown: why `select_squad` picks the same player three times in this game. Infe
 
 ### Why the staff reserve seemed to matter
 
-With `RECOMP_STAFF_RESERVE=23000` the same run plays on (slice 16 report). The reserve does not take part in the squad pick: the 46,000 rows only change the size of the staff and non-player tables, so the blocks after them sit elsewhere. The original's results depend on where its memory blocks sit (Q152, HANDOVER). Inference: with 23,000 rows the game makes another squad on that day. This is the same as a screen that opens, not a fault of the reserve.
+With `RECOMP_STAFF_RESERVE=23000` the same run plays on (slice 16 report). The reserve does not take part in the squad pick: the 46,000 rows only change the size of the staff and non-player tables, so the blocks after them sit elsewhere. The original's results depend on where its memory blocks sit (Q152, HANDOVER). Inference: with 23,000 rows the game makes another squad on that day, the same as a screen that opens. This is not proven: the cause of the triple pick is unknown, so a link between the reserve and the pick cannot be ruled out.
 
 ### The fix
 
@@ -120,6 +120,8 @@ Commands from the repo, with `G=/Users/max/Projects/cm0102/clean-3968` and `MAIN
 - `python3 tests/seasons/season_boxes_run.py build/cm0102_recomp $G`: September 2008, October 2023, October 2019 and October 2003 over their first season, October 2015 over two seasons, England selected, one game at a time, fail on any message box. On this branch: all five end with code 0 and no box ("FAILED: none"). `--fixes-off` sets `RECOMP_BOX_FIXES=off`. With `$MAIN`: "news..cpp 7797" on day 235 of 2008 and "Database..cpp 13126" on day 40 of 2024, and no end report (the games hang after the box; they were stopped by hand).
 - The two-season jumps of the first section on this branch: September 2008 to the end of 2009/10 and October 2023 to the end of 2023/24, code 0, no box.
 - Same-save checks of the base game against main: `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save start.sav --runs normal,again,season-code-off --ref-build $MAIN --jobs 2`, the same with `--save prematch.sav` and without `--save` (a new game). All three PASS: `again`, `season-code-off` (`RECOMP_SEASON_CODE=off`) and `ref-build` equal `normal`. Run again with `--jobs 1` after the test switch was added: all three PASS.
+- Yeovil: `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --save yeovil.sav --days 7 --runs normal,again,box-fixes-off --ref-build $MAIN --jobs 2`: PASS (`again`, `box-fixes-off` and `ref-build` equal `normal`).
+- The run `box-fixes-off` (`RECOMP_BOX_FIXES=off`) is in `SAME_SAVE_RUNS` and `MATCH_RUNS` of `smoke_run.py`. `--same-save --save start.sav --runs normal,again,box-fixes-off --jobs 2`: PASS. `--match --runs normal,again,box-fixes-off --jobs 2`: PASS.
 - `python3 tests/smoke/update_team_sweep.py build/cm0102_recomp $G /Users/max/Projects/cm0102/test-fixtures/databases --select-all --jobs 2 --timeout 2400`: 21 of 21 pass, each at the expected stop "fra_first..cpp 108" with "result 1", and with the reserve rows of the table in `2026-10-17-select-all-databases.md`.
 
 ## Unknowns

@@ -65,5 +65,8 @@ RT_WRAP(0076e3b0, write_call_up_news_text)
                 distinct);
     wr32(g_mem, count_at, (count_word & ~0xffu) | (uint32_t)distinct);
     o_0076e3b0();
-    wr32(g_mem, count_at, count_word);
+    /* When the call unwinds (rt_unwinding, rt.h: a longjmp of the game ran an older frame), the item may be
+     * gone, so the old count is not written back. The item then keeps the count of different players, which
+     * names each player once. */
+    if (!rt_unwinding) wr32(g_mem, count_at, count_word);
 }

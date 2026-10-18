@@ -19,6 +19,7 @@
  * free slots with the national teams of the default key nations of 0x57bf2f that are not in the list and have a
  * nation, in the order of that list, flag 0 as the defaults have. A full list seeds and draws as in the
  * original. The test switch RECOMP_BOX_FIXES=off turns the wrap off (tests/seasons/season_boxes_run.py). */
+#include "euro_finals.h"
 #include "win.h"
 #include "../rt.h"
 
@@ -58,8 +59,8 @@ static uint32_t key_national_team(uint32_t key)
 /* 1 for a club with a nation (club +0x53), the test of a real national team. */
 static int has_nation(uint32_t club) { return club && rd32(g_mem, club + CLUB_NATION); }
 
-/* The fill of a short list of the EuroChamp at ec, for the seeding. A slice that wraps 0x57c710 itself calls
- * this first and leaves out the wrap below. */
+/* The fill of a short list of the EuroChamp at ec, for the seeding (euro_finals.h). A slice that wraps 0x57c710
+ * itself calls this first and leaves out the wrap below. */
 void euro_finals_fill_short_list(uint32_t ec)
 {
     uint32_t t = rd32(g_mem, ec + TEAMS);
