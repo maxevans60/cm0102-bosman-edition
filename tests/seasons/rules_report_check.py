@@ -360,6 +360,7 @@ def club_differences(seasons, comps, clubs, data_dir):
                                           f"the database holds ({len(listed)} listed), {len(others)} other clubs, "
                                           f"{len(have)} in all; not in it: {', '.join(absent) or '-'}; others: "
                                           f"{', '.join(others) or '-'}"))
+    return out
 
 
 def uefa_format_differences(rows):
