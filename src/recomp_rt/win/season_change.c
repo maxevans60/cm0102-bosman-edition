@@ -36,10 +36,15 @@
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
 extern const SeasonRuleKind season_kind_cups;
+extern const SeasonRuleKind season_kind_club_world;
+extern const SeasonRuleKind season_kind_comps;         /* slice 26: season_comps.h */
+void season_comps_reset(void);                         /* slice 26: season_comps.h */
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
+    &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
     &season_kind_names,                 /* slice 16: competition names (slice 15's names table) */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
+    &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))
@@ -332,6 +337,15 @@ void season_change_rename(uint32_t rec, const char *name)
     memcpy(g_mem + rec + NAME_AT, now, strlen(now));
 }
 
+/* Slice 26: see season_change.h. */
+const char *season_change_data_name(uint32_t rec)
+{
+    uint32_t index;
+    if (!record_index(rec, &index)) return NULL;
+    const SeasonRename *r = rename_of(index);
+    return r ? r->original : win_str(rec + NAME_AT);
+}
+
 void o_0060efd0(void);
 
 /* match_club_comp_key_id, cdecl (name, index): a renamed record is matched by its name in the data. The two
@@ -361,6 +375,7 @@ void season_change_reset(void)
     for (int i = 0; i < news_count; i++) free(news[i].text);
     news_count = 0;
     rename_count = 0;
+    season_comps_reset();               /* slice 26 */
     season_point = 0;
     creating = 0;                               /* also when a longjmp left create_game */
 }
