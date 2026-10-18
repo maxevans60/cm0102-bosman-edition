@@ -7,11 +7,11 @@ Date 2026-10-17. Original: `clean-3968/cm0102.exe` 3.9.68, virtual addresses. Co
 The rules table gives `subs_used` and `bench` for 2,852 and 1,461 rows. The kind `subs` writes them into the competition object before the original packs them into a fixture.
 
 - A competition object keeps the named substitutes at +0x49 (`Comp::Comp` 0x48c5c9 sets 5) and the substitutes used at +0x4a (0x48c5cd sets 3). `Comp::set_fixture_substitutes` 0x48f2d0 (vtable +0x7c) packs them into the word at fixture +0x4d: named in bits 0 to 3, used in bits 4 to 7 (0x48f2fa..0x48f32d).
-- Four classes override that slot: `AusNsl` 0x4124e0, `FraCup` and `FraLgeCup` 0x5bb100, `GreCup` 0x5ea3d0. All four read +0x49 and +0x4a. French and Greek cups set fixed values for some rounds (0x5bb10c, 0x5ea3db). The kind wraps all four functions and sets +0x49 and +0x4a first, so the fixed rounds stay.
+- Four classes override that slot: `AusNsl` 0x4124e0, `FraCup` and `FraLgeCup` 0x5bb100, `GreCup` 0x5ea3d0. The first three read +0x49 and +0x4a; the French cup sets the named substitutes to 5 in its final round (0x5bb10c), which the kind leaves (a gap for that round). `GreCup` writes 0x77 (round 10) or 0x37 into the word and never reads the two fields (0x5ea3db..0x5ea3fc). The kind wraps the first three and sets +0x49 and +0x4a first; for `GreCup` it changes the two nibbles of the fixture after the original has written them, so the Greek cup takes the table's counts (5 used from 2020/21).
 - The match engine and the team screens read the nibbles as `(word & 0xf) + 11` for the squad size (for example 0x459aa8, 0x474e49, 0x478d49, 0x47b0ff, 0x6d0f8c, 0x6db9ad, 0x721e84, 0x7261cf, 0x8cf8cf) and `init_match` 0x6b7fe6..0x6b8015 sets a nibble above 9 to 9. The Greek cup already names 7. So a bench of up to 9 works where the original reads it. **Proven:** the clamp at 0x6b7feb and 0x6b8006. **Not proven:** that the human team sheet screen shows 9 free slots (no match was played with a bench of 9 in these tests).
 - A count above 9 gives 9. The table has 12 for the World Cup and many 2016+ competitions, and 15 for the Serie A and Serie C rows from 2022/23. These are the rows the game cannot hold.
 - A row with `unknown`, `n/a`, `as the Champions League`, `see each` or a description gives no count and the competition keeps what it has. The first row of a file with a count wins. No competition file has two rows of one season with different counts (checked on the 4,914 file and season pairs).
-- The season is the start year with changing rules off (Q232), the season of the pass that starts the competition (before hook), else the season year +0x40 of the object.
+- The season is the start year with changing rules off (Q232), the season of the before hook of the same day (it is valid for that date only, so a skipped competition or an unwind cannot leave it set), else the season year +0x40 of the object.
 - The base game (start 2001, changing rules off) and `RECOMP_SEASON_CODE=off` keep the original's values.
 
 Result (`season_rules17_run.py`, September 2010 ODB, England): with the start in 2010/11 the Premier Division and the three divisions, the League Cup, the FA Cup and the Charity Shield take 7 named substitutes (6 used for the Shield); the report equals the table for every competition with a count that the engine can hold; with changing rules on the three Football League divisions go to 5 named in 2011/12 as the table says, with changing rules off they keep 7.
@@ -44,7 +44,7 @@ Evidence in `2026-10-16-sweep-rulebooks.md` section 3.1 and `sweep-season-end.md
 Two mechanisms, both data in the rules objects or the restriction record (`2026-10-16-foreign-and-tactics-positions.md`):
 
 - **Signing caps** `+0x13` (foreign) and `+0x14` (non-EU) of the nation's rules object: `can_sign_player` 0x8e8560 refuses a signing at the cap; 0xff turns the check off (0x8e8614). The kind writes the number of the table ("a club may hold at most N").
-- **Match squad limit**: the kind wraps the lookup 0x8cf6b0 and, for a fixture of a first division (the table row of the competition has tier 1), gives the slots of the record that are already set (+0..+2 foreign, +3..+5 non-EU) the number of the table, or 0xff for no limit. It adds no limit that the game does not have.
+- **Match squad limit**: the kind wraps the lookup 0x8cf6b0 and gives the slots of the record that are already set (+0..+2 foreign, +3..+5 non-EU) the number of the table, or 0xff for no limit. A number acts in a first division (the table row of the competition has tier 1). "No limit" acts in every competition of the nation of the table row, because the English filler 0x579c50 sets +5 = 3 for all English competitions. Denmark and Sweden share that filler; their competitions belong to their own rows, which keep it. The kind adds no limit that the game does not have.
 
 Not applied, with reasons in the gaps file:
 
@@ -54,13 +54,28 @@ Not applied, with reasons in the gaps file:
 - `kind` (11): a non-EU limit where the game's record holds a foreign slot (Croatia from 2025, Sweden): applying it would limit EU players.
 - `mid_season` (3): a rule that changes during a season (Argentina 2017, Croatia 2016, Turkey 2007).
 
-England: the table says there is no nationality quota. The original has a limit of 3 non-EU players in the match squad of every English competition (0x579c63, in the filler 0x579c50). With changing rules on, the kind takes that limit away for English first division fixtures. **Question for Max (1), recommended: yes**, because the table is the rule of the season and the work permit still limits non-EU players.
+England: the table says there is no nationality quota. The original has a limit of 3 non-EU players in the match squad of every English competition (0x579c63, in the filler 0x579c50). With changing rules on, the kind takes that limit away for every English competition (the lead accepted this on 2026-10-18).
 
 ## 5. Work permits and Brexit
 
-`player_needs_work_permit` 0x8c7560 (thiscall: player, club, flag) asks 0x53d740 whether the player is of the EU and stops when he is. With the flag set it returns 1 for the others at once (0x8c760d); with the flag clear it looks for a permit in the manager's list (0x8c7650). The 30 callers push 0 or 1 for the flag (`callers.py` scan of the .text).
+`player_needs_work_permit` 0x8c7560 (thiscall: player, club, flag) returns 0 at once when the club's nation byte +0x76 is not 14 (0x8c75ed). Then it asks 0x53d740 whether the player is of the EU and stops when he is. With the flag set it returns 1 for the others at once (0x8c760d); with the flag clear it looks for a permit in the manager's list (0x8c7650).
 
-The kind answers 1 for a player of the EU who is not a citizen of the UK or Ireland, when the flag is set, the club is of England, Scotland, Wales or Northern Ireland, the table row of the season has the Brexit rule (England 2020/21, the others the same season) and the game date is 1 January 2021 or later. **Inference, not proven:** the flag marks a new signing. The players already at a club are asked with the flag clear and stay, as the real transition did. If the flag means something else for some callers, EU players could be refused outside a signing. The test run counts the refusals; it does not show which screen asked.
+The 30 callers (call sites in the .text), by what they decide:
+
+| Callers | Flag | What the answer does |
+|---|---|---|
+| 0x8c74a9, 0x8c7539 (`transfer_manager_offer_needs_work_permit` 0x8c7470, from 0x8c31a4) and 0x8c7704, 0x8c7872 (`check_offer_work_permits` 0x8c7690, from 0x8c6951 and 0x8cbcb3) | 0 | the offer check: an answer of 1 means the offer has a permit problem |
+| 0x8c3902 (`complete_accepted_contract_offer` 0x8c38b0) | 1 | an answer of 1 goes to `is_work_permit_granted` 0x8c7950 (0x8c391b), the game's permit decision; a refusal ends the signing |
+| 0x8c7e5d (`update_work_permit_on_move` 0x8c7e20) | 1 | stamps the permit when a player moves |
+| 0x7b4450, 0x7b495d, 0x7b4f43, 0x7b5095, 0x7b6e99, 0x83fddd, 0x843249, 0x843a4d | 1 | AI scout and shortlist loops |
+| 0x45ccd4, 0x45eb85, 0x484bec, 0x87d9f2, 0x88939a, 0x8bf62a, 0x4ceb41, 0x4d24bb | 0 and 1 | screens and the contract manager |
+| 0x6dcb32, 0x6e5d60, 0x6e5ebc, 0x6e834c, 0x6e8456, 0x72639f | 0 and 1 | match selection scoring (`flag` varies; not read one by one, **inference**) |
+
+The kind acts only at the five return addresses of the offer checks and the completion (0x8c74ae, 0x8c753e, 0x8c7709, 0x8c7877, 0x8c3907). There it answers 1 for a player of the EU who is not a citizen of the UK or Ireland, when the club's nation is one of England, Scotland, Wales and Northern Ireland and holds the permit group 14, the table row of the season has the Brexit rule, and the game date is 1 January 2021 or later. The answer 1 sends the signing to the game's own permit decision (`is_work_permit_granted`), as for a non-EU player. The scouting, screens and selection scoring are not changed, so a player who is already at a club stays in his squad, as the real transition did.
+
+The permit group byte of the four UK nations and Ireland is written to the log of a new game (`RECOMP_SEASON_NATION_LOG=1`, "permit group byte"); the result is in section 8. A nation without group 14 has no permits in the game, so the rule does nothing there.
+
+Proof of the effect: `season_rules17_run.py` `on2020` and `ctl2020` log each signing of an EU player by a UK club at these addresses, and the permit decision at the completion. The control moves the date of the rule to 2099 (`RECOMP_SEASON_BREXIT_YEAR`), so the same signings go through. A start in 2019/20 cannot be run (section 8), so the "goes through" case is the control run and the days before 1 January 2021.
 
 The permit criteria themselves (FIFA ranking bands, the points system) are not coded in the game: the game's own permit decision stays. This is listed as `new_code` for 137 texts.
 
@@ -95,7 +110,4 @@ Tests that I mutated to see them fail: the clamp of the lookup (`season_subs`).
 
 ## 9. Questions for Max
 
-1. England has no nationality quota in the table, and the original limits non-EU players in the match squad to 3. With changing rules on the kind takes that limit away. Recommended: yes.
-2. The Brexit rule for Wales and Northern Ireland: the texts say the scope for their leagues is unknown. Applied to all four. Recommended: yes.
-3. A bench above 9 is held at 9 (World Cup 12, Serie A and Serie C 15 from 2022/23). Recommended: accept; a larger bench needs a change to the match engine.
-4. The rules of 2001/02 now apply to a 2001 game with changing rules on (new defaults: 7 named substitutes in some leagues, one English window change, foreign caps). Recommended: accept, it is what Q232 says.
+The lead accepted these four on 2026-10-18 as recommended (Max is asleep): no non-EU limit in England with rules on; the Brexit rule for all four UK nations; a bench and substitutes used held at 9 (World Cup 12, Serie A and Serie C 15 from 2022/23); a 2001 game with changing rules on follows the 2001/02 table.

@@ -43,7 +43,6 @@ Belgium	2025/26	registration	new_code	8 players developed in Belgium in the squa
 Belgium	2026/27	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
 Belgium	2027/28	registration	new_code	8 players developed in Belgium in the squad; at least 6 homegrown players on the match sheet (rule applied since 2011)
 Brazil	2019/20	registration	new_code	Series A, B and C: at most 40 registered players, at most 8 replaced until the final registration date (CBF notice of 31 Jul 2020)
-Brazil	2025/26	windows	partial	5 January to 3 March; complementary domestic window 4 to 27 March; 20 July to 11 September
 Brazil	2026/27	registration	new_code	at most 50 registered players: Lista A 30 (over 23), Lista B 20 (under 23); split moves to 25/25 by 2030
 Brazil	2027/28	registration	new_code	at most 50 registered players; the A/B split moves from 30/20 (2027) to 25/25 (2030); 2028 split not stated
 Croatia	2016/17	foreign	mid_season	HNL and cup: 8 foreign players per team from 18 October 2016 (6 before)
@@ -116,7 +115,6 @@ Germany	2016/17	work_permit	new_code	Non-EU players need a national work visa an
 Germany	2017/18	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
 Germany	2018/19	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
 Germany	2019/20	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
-Germany	2020/21	windows	partial	Summer 2020: 1 July, then 15 July to 5 October; winter 1 to 31 January, moved to the next bank working day if needed
 Germany	2020/21	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
 Germany	2021/22	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
 Germany	2022/23	work_permit	new_code	Non-EU players need a national work visa and a residence permit for employment; no points system
@@ -175,7 +173,6 @@ Italy	2016/17	foreign	new_code	Serie A: two non-EU signings from abroad per seas
 Italy	2016/17	registration	new_code	Serie A: 25 players over 21 with at least 8 homegrown (inference: as 2015/16); players not yet 21 on 31 December of the previous year are free ("under 21")
 Italy	2017/18	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
 Italy	2017/18	registration	new_code	Serie A: 25 players over 21 with at least 8 homegrown (inference: as 2015/16); players born on or after 1 January 1996 are free ("under 21")
-Italy	2018/19	windows	partial	summer 1 July-17 August 2018 (incoming from abroad to 25 August); winter 3-31 January 2019
 Italy	2018/19	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
 Italy	2018/19	registration	new_code	Serie A: 25-player list with at least 8 trained in Italy, at least 4 of them trained in the club; players born on or after 1 January 1996 are free ("under 22", new in 2018/19)
 Italy	2019/20	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
@@ -192,7 +189,6 @@ Italy	2024/25	foreign	new_code	Serie A: two non-EU signings from abroad per seas
 Italy	2024/25	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players not yet 22 on 31 December of the previous season are free ("under 22") (FIGC C.U. 29/A, 4 August 2022)
 Italy	2025/26	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
 Italy	2025/26	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players under 23 on 31 December of the year the season starts are free ("under 23") (FIGC C.U. 269/A, from 1 July 2025)
-Italy	2026/27	windows	partial	summer 29 June-1 September 2026 (Serie B and C from 1 July); winter 2 January-1 February 2027
 Italy	2026/27	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
 Italy	2026/27	registration	new_code	Serie A: 25-player list with at least 4 club-trained and 4 Italy-trained players; players under 23 on 31 December of the year the season starts are free ("under 23") (FIGC C.U. 245/A, from 1 July 2026)
 Italy	2027/28	foreign	new_code	Serie A: two non-EU signings from abroad per season (inference: no later change found)
@@ -223,8 +219,6 @@ Poland	2016/17	foreign	pitch	Ekstraklasa: max 2 non-EU players on the pitch at o
 Poland	2017/18	foreign	pitch	Ekstraklasa: max 2 non-EU players on the pitch at once
 Poland	2018/19	foreign	pitch	Ekstraklasa: max 2 non-EU players on the pitch at once
 Poland	2023/24	windows	partial	two registration periods (FIFA RSTP March 2023 edition, in force 1 April 2023): first 8 to 12 weeks between seasons, second 4 to 8 weeks mid-season, at most 16 weeks together; Ekstraklasa dates (Ekstraklasa SA): summer 2023 unknown, winter 29 January to 27 February 2024
-Poland	2024/25	windows	partial	two registration periods (FIFA RSTP March 2023 edition, in force 1 April 2023): first 8 to 12 weeks between seasons, second 4 to 8 weeks mid-season, at most 16 weeks together (article 6 as in the March 2023 edition; later editions not read); Ekstraklasa dates (Ekstraklasa SA): summer 1 July to 6 Sep
-Poland	2025/26	windows	partial	two registration periods (FIFA RSTP March 2023 edition, in force 1 April 2023): first 8 to 12 weeks between seasons, second 4 to 8 weeks mid-season, at most 16 weeks together (article 6 as in the March 2023 edition; later editions not read); Ekstraklasa dates (Ekstraklasa SA): summer 1 July to 8 Sep
 Portugal	2014/15	registration	new_code	Liga clubs: at least 8 locally trained players in the squad (10 with a B team); at most 27 senior contracts plus 3 first-year seniors and 20 under-23 players
 Portugal	2024/25	work_permit	new_code	non-EU players need a residence visa; the 'manifestação de interesse' route ended on 3 June 2024
 Portugal	2025/26	work_permit	new_code	non-EU players need a residence visa; the 'manifestação de interesse' route ended on 3 June 2024

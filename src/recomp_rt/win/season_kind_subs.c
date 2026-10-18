@@ -6,8 +6,9 @@
  *   used at +0x4a (0x48c5cd sets 3). A fixture holds both in the word at +0x4d: the named substitutes in bits 0
  *   to 3, the substitutes used in bits 4 to 7. Comp::set_fixture_substitutes 0x48f2d0 (vtable +0x7c) packs them
  *   when a fixture is made (0x48f2fa..0x48f32d).
- * - Four classes override the slot: AusNsl 0x4124e0, FraCup and FraLgeCup 0x5bb100 and GreCup 0x5ea3d0. They
- *   pack the same two fields and set fixed values for some rounds (a final, the Greek cup round 10).
+ * - Three classes override the slot and still pack the two fields: AusNsl 0x4124e0, FraCup and FraLgeCup 0x5bb100
+ *   (a final round sets the named substitutes to 5, 0x5bb10c). GreCup 0x5ea3d0 does not read them: it writes
+ *   0x77 (round 10) or 0x37 into the word. The kind changes the nibbles after it with the table's counts.
  * - The match engine and the team screens read the nibbles: the squad is 11 plus the low nibble (for example
  *   0x459aa8, 0x474e49, 0x6d0f8c, 0x6db9ad, 0x8cf8cf), and CM3_MATCH_ENGINE::init_match 0x6b7fe6..0x6b8015 sets a
  *   nibble above 9 to 9. So a count up to 9 works wherever the original reads them (the Greek cup already names 7).
@@ -36,8 +37,8 @@
 #define COMP_NAMED 0x49u             /* byte: named substitutes */
 #define COMP_USED 0x4au              /* byte: substitutes used */
 
-static int depth;                    /* the start_new_season calls that run (before without after) */
-static int pass_season;              /* the season of the outermost one */
+static int pass_season;              /* the season of the last before hook, valid on the day it was set */
+static int pass_day, pass_year;
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -56,7 +57,10 @@ static int logging(void)
 static int season_of(uint32_t comp)
 {
     if (!season_changing_rules()) return season_start_year();
-    if (depth > 0 && pass_season) return pass_season;
+    /* start_new_season runs inside one day's pass, so the season of the before hook holds for that date only: a
+     * competition that is skipped, or an unwind between hooks, cannot leave it set. */
+    if (pass_season && (int16_t)rd16(g_mem, 0xae2c90) == pass_day && (int16_t)rd16(g_mem, 0xae2c92) == pass_year)
+        return pass_season;
     int y = (int16_t)rd16(g_mem, comp + COMP_YEAR);
     return y >= SEASON_FIRST_YEAR && y <= SEASON_LAST_YEAR ? y : season_start_year();
 }
@@ -132,30 +136,35 @@ RT_WRAP(005bb100, fra_cup_set_fixture_subs)
     o_005bb100();
 }
 
-/* GreCup::set_fixture_substitutes 0x5ea3d0. */
+/* GreCup::set_fixture_substitutes 0x5ea3d0, thiscall (fixture), ret 4: the original writes the word (0x77 for
+ * round 10, else 0x37) and ignores +0x49 and +0x4a, so the table's counts go into the nibbles afterwards. */
 void o_005ea3d0(void);
 RT_WRAP(005ea3d0, gre_cup_set_fixture_subs)
 {
-    apply(cpu.ecx);
+    uint32_t comp = cpu.ecx, fixture = rd32(g_mem, cpu.esp + 4);
     o_005ea3d0();
+    if (rt_unwinding || !active() || !readable(comp) || !readable(fixture)) return;
+    const char *file = season_change_file(comp);
+    int used = 0, bench = 0;
+    int mask = strcmp(file, "?") ? lookup(file, season_of(comp), &used, &bench) : 0;
+    uint32_t word = rd16(g_mem, fixture + 0x4d);
+    if (mask & SEASON_SUBS_BENCH) word = (word & ~0xfu) | (uint32_t)bench;
+    if (mask & SEASON_SUBS_USED) word = (word & ~0xf0u) | ((uint32_t)used << 4);
+    wr16(g_mem, fixture + 0x4d, word);
 }
 
 static void subs_before(const SeasonChange *c)
 {
-    if (depth++ == 0) pass_season = c->season;
-}
-
-static void subs_after(const SeasonChange *c)
-{
-    if (c->started && depth > 0 && --depth == 0) pass_season = 0;
+    pass_season = c->season;
+    pass_day = (int16_t)rd16(g_mem, 0xae2c90);
+    pass_year = (int16_t)rd16(g_mem, 0xae2c92);
 }
 
 /* A new game, a load and the end of a game: no start_new_season runs. */
 static void subs_new_game(int start_year)
 {
     if (logging()) fprintf(stderr, "recomp: season subs: new game %d, rules %s\n", start_year, active() ? "on" : "off");
-    depth = 0;
     pass_season = 0;
 }
 
-const SeasonRuleKind season_kind_subs = {"subs", subs_new_game, subs_new_game, NULL, NULL, subs_before, subs_after};
+const SeasonRuleKind season_kind_subs = {"subs", subs_new_game, subs_new_game, NULL, NULL, subs_before, NULL};

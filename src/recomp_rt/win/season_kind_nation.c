@@ -64,6 +64,8 @@
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
+static const char *const uk_names[] = {"England", "Scotland", "Wales", "Northern Ireland"};
+
 static int log_on(void)
 {
     static int on = -1;
@@ -198,6 +200,9 @@ static int apply_windows(const SeasonNation *n, uint32_t rules, const SeasonNati
     int old_count = (int8_t)rd8(g_mem, rules + R_COUNT);
     if (old_count == count && (count == 0 || (readable(old) && !memcmp(g_mem + old, want, WINDOW_SIZE * (size_t)count))))
         return 0;
+    /* The old window array and the old sorted table of bounds are not freed: the old table points into the old
+     * arrays, the manager's destructor is not known to free them from these pointers, and a few hundred bytes a
+     * season are left. */
     if (count > 0) {
         uint32_t size[1] = {WINDOW_SIZE * (uint32_t)count};
         uint32_t arr = call_cdecl(MALLOC, 1, size);
@@ -336,6 +341,14 @@ static void news_for(const SeasonNation *n, int season)
 static void nation_new_game(int start_year)
 {
     if (log_on()) fprintf(stderr, "recomp: season nation: new game %d, rules %s\n", start_year, active() ? "on" : "off");
+    if (log_on() && manager())
+        for (int i = 0; i < 5; i++) {
+            const char *nm = i < 4 ? uk_names[i] : "Republic of Ireland";
+            const SeasonNation *n = season_nation_find(nm);
+            uint32_t r = n ? rules_of(n) : 0, nat = r ? rd32(g_mem, r + R_NATION) : 0;
+            fprintf(stderr, "recomp: season nation: %s permit group byte %d\n", nm,
+                    readable(nat) ? (int)rd8(g_mem, nat + 0x76u) : -1);
+        }
     if (active()) apply_all(start_year);
 }
 
@@ -357,19 +370,27 @@ static void nation_season(int season)
 typedef struct {
     const char *file;
     int season;
-    const SeasonNation *nation;     /* NULL: no nation rule for the file in that season */
+    const SeasonNation *nation;     /* NULL: the file is a competition of no nation of the table in that season */
+    int top;                        /* 1: a first division */
 } FileNation;
 static FileNation file_cache[256];
 static int file_cached;
 
-/* The nation whose first division the competition class file is in the season, or NULL. */
-static const SeasonNation *top_division_nation(const char *file, int season)
+/* The nation of the competition class file in the season (the first table row of the file), and whether it is
+ * the nation's first division. A limit with a number acts in the first division only; "no limit" acts in every
+ * competition of the nation, as the English filler 0x579c50 sets the limit of 3 for all of them. */
+static const SeasonNation *file_nation(const char *file, int season, int *top)
 {
     for (int i = 0; i < file_cached; i++)
-        if (file_cache[i].file == file && file_cache[i].season == season) return file_cache[i].nation;
+        if (file_cache[i].file == file && file_cache[i].season == season) {
+            *top = file_cache[i].top;
+            return file_cache[i].nation;
+        }
     const SeasonRule *r = season_rules_find(season, file, 0);
-    const SeasonNation *n = r && r->tier == 1 ? season_nation_find(r->nation) : NULL;
-    if (file_cached < (int)(sizeof file_cache / sizeof file_cache[0])) file_cache[file_cached++] = (FileNation){file, season, n};
+    const SeasonNation *n = r ? season_nation_find(r->nation) : NULL;
+    int t = r && r->tier == 1;
+    if (file_cached < (int)(sizeof file_cache / sizeof file_cache[0])) file_cache[file_cached++] = (FileNation){file, season, n, t};
+    *top = t;
     return n;
 }
 
@@ -396,13 +417,14 @@ RT_WRAP(008cf6b0, restriction_lookup)
     if (!readable(obj)) return;
     const char *file = season_change_file(obj);
     int season = current_season();
-    const SeasonNation *n = strcmp(file, "?") ? top_division_nation(file, season) : NULL;
+    int top = 0;
+    const SeasonNation *n = strcmp(file, "?") ? file_nation(file, season, &top) : NULL;
     SeasonNationState st;
     if (!n || !season_nation_state(n->name, season, &st)) return;
     uint8_t before[6];
     memcpy(before, g_mem + rec, 6);
-    set_slots(rec, 3, st.squad_non_eu);
-    set_slots(rec, 0, st.squad_foreign);
+    if (top || st.squad_non_eu == SEASON_NATION_NONE) set_slots(rec, 3, st.squad_non_eu);
+    if (top || st.squad_foreign == SEASON_NATION_NONE) set_slots(rec, 0, st.squad_foreign);
     if (log_on() && memcmp(before, g_mem + rec, 6)) {
         static unsigned shown;
         if (shown++ < 12)
@@ -420,21 +442,42 @@ static int32_t nation_id_of(const char *name)
     return n ? (int32_t)rd32(g_mem, n->key_global) : -2;
 }
 
-/* A club of the nation with the Brexit rule from the season of the game. */
-static int brexit_club(uint32_t club)
+/* The nation of the club has the work permit group of the game: player_needs_work_permit answers 0 at once for
+ * a club whose nation byte +0x76 is not 14 (0x8c75ed), so no permit exists there. */
+#define NATION_GROUP 0x76u
+#define PERMIT_GROUP 14
+
+/* The club's nation is one of the four UK nations and holds the permit group: the name, else NULL. */
+static const char *uk_permit_nation(uint32_t club)
 {
-    if (!readable(club)) return 0;
+    if (!readable(club)) return NULL;
     uint32_t nat = rd32(g_mem, club + 0x53);
-    if (!readable(nat) || (int16_t)rd16(g_mem, GAME_DATE + 2) < BREXIT_YEAR) return 0;
+    if (!readable(nat) || rd8(g_mem, nat + NATION_GROUP) != PERMIT_GROUP) return NULL;
     int32_t id = (int32_t)rd32(g_mem, nat);
-    static const char *const uk[] = {"England", "Scotland", "Wales", "Northern Ireland"};
-    for (int i = 0; i < 4; i++) {
-        if (id != nation_id_of(uk[i])) continue;
-        SeasonNationState st;
-        season_nation_state(uk[i], current_season(), &st);
-        return st.brexit;
+    for (int i = 0; i < 4; i++)
+        if (id == nation_id_of(uk_names[i])) return uk_names[i];
+    return NULL;
+}
+
+/* The year from which the Brexit rule holds, from 1 January: 2021. The test variable RECOMP_SEASON_BREXIT_YEAR
+ * moves it, so a control run has signings before the date (season_rules17_run.py). */
+static int brexit_year(void)
+{
+    static int year;
+    if (!year) {
+        const char *v = getenv("RECOMP_SEASON_BREXIT_YEAR");
+        year = v && atoi(v) >= 2001 ? atoi(v) : BREXIT_YEAR;
     }
-    return 0;
+    return year;
+}
+
+/* The Brexit rule holds for the nation in the season of the game and the date is 1 January 2021 or later. */
+static int brexit_rule(const char *nation)
+{
+    if ((int16_t)rd16(g_mem, GAME_DATE + 2) < brexit_year()) return 0;
+    SeasonNationState st;
+    season_nation_state(nation, current_season(), &st);
+    return st.brexit;
 }
 
 /* The player is a citizen of the UK or Ireland (the Common Travel Area, no permit): either nationality. */
@@ -451,30 +494,68 @@ static int uk_or_irish(uint32_t player)
     return 0;
 }
 
-static unsigned permit_asked, permit_refused;
+/* The callers of player_needs_work_permit 0x8c7560 (call site, flag; return address = site + 5), read from the
+ * .text of 3.9.68. The rule acts where a signing is decided:
+ *   offer checks, flag 0 (the player has no permit in the list): transfer_manager_offer_needs_work_permit
+ *     0x8c7470 at 0x8c74a9 and 0x8c7539, TRANSFER_MANAGER::check_offer_work_permits 0x8c7690 at 0x8c7704 and
+ *     0x8c7872. The first is called from 0x8c31a4, the second from 0x8c6951 and 0x8cbcb3.
+ *   complete_accepted_contract_offer 0x8c38b0 at 0x8c3902, flag 1: when it answers 1 the manager asks
+ *     is_work_permit_granted 0x8c7950 (0x8c391b), the game's own permit decision, and a refusal ends the signing.
+ * Left alone: update_work_permit_on_move 0x8c7e20 (0x8c7e5d, flag 1: the permit is stamped when a player moves);
+ * the AI scout and shortlist loops (0x7b4450, 0x7b495d, 0x7b4f43, 0x7b5095, 0x7b6e99, 0x83fddd, 0x843249,
+ * 0x843a4d, flag 1); the screens (0x45ccd4, 0x45eb85, 0x484bec, 0x87d9f2, 0x88939a); the contract manager
+ * (0x4ceb41, 0x4d24bb); and match selection scoring (0x6dcb32, 0x6e5d60, 0x6e5ebc, 0x6e834c, 0x6e8456,
+ * 0x72639f), which must not drop players who are already at a club. */
+static int signing_return(uint32_t ret)
+{
+    return ret == 0x8c74ae || ret == 0x8c753e || ret == 0x8c7709 || ret == 0x8c7877 || ret == 0x8c3907;
+}
+
+static unsigned permit_signings[2];          /* log lines so far: the rule off, the rule on */
 
 /* TRANSFER_MANAGER::player_needs_work_permit 0x8c7560, thiscall (player, club, flag), ret 0xc. */
 void o_008c7560(void);
 RT_WRAP(008c7560, player_needs_work_permit)
 {
-    uint32_t player = rd32(g_mem, cpu.esp + 4), club = rd32(g_mem, cpu.esp + 8), flag = rd32(g_mem, cpu.esp + 12);
-    if (flag && active() && readable(player) && brexit_club(club)) {
+    uint32_t ret = rd32(g_mem, cpu.esp), player = rd32(g_mem, cpu.esp + 4), club = rd32(g_mem, cpu.esp + 8);
+    const char *nation;
+    if (active() && signing_return(ret) && readable(player) && (nation = uk_permit_nation(club)) != NULL) {
         uint32_t args[2] = {player, 0};
         Cpu saved = cpu;
         uint32_t eu = rt_callback(IS_EU, 2, args);
         if (!rt_unwinding) cpu = saved;
         if (rt_unwinding) return;
         if (eu && !uk_or_irish(player)) {
-            permit_refused++;
-            if (log_on() && (permit_refused <= 5 || permit_refused % 100 == 0))
-                fprintf(stderr, "recomp: season nation: Brexit: a player of the EU needs a work permit (%u)\n",
-                        permit_refused);
-            rt_ret_stdcall(1, 3);
-            return;
+            int rule = brexit_rule(nation);
+            if (log_on() && permit_signings[rule != 0]++ < 8)
+                fprintf(stderr, "recomp: season nation: Brexit: %s of an EU player by a club of %s, %s, rule %s\n",
+                        ret == 0x8c3907 ? "completion" : "offer check", nation,
+                        (int16_t)rd16(g_mem, GAME_DATE + 2) >= brexit_year() ? "from the date of the rule" : "before the date of the rule",
+                        rule ? "on: sent to the permit decision" : "off: goes through");
+            if (rule) {
+                rt_ret_stdcall(1, 3);
+                return;
+            }
         }
     }
-    permit_asked++;
     o_008c7560();
+}
+
+/* TRANSFER_MANAGER::is_work_permit_granted 0x8c7950, thiscall (player, nation, offer, 0, 0), ret 0x14: logs the
+ * game's permit decision at the completion of a signing (0x8c3920 is its return address there). */
+void o_008c7950(void);
+RT_WRAP(008c7950, is_work_permit_granted)
+{
+    uint32_t ret = rd32(g_mem, cpu.esp);
+    o_008c7950();
+    if (!rt_unwinding && log_on() && ret == 0x8c3920) {
+        static unsigned shown[2];
+        int after = (int16_t)rd16(g_mem, GAME_DATE + 2) >= brexit_year();
+        if (shown[after]++ < 8)
+            fprintf(stderr, "recomp: season nation: permit decision at a completion %s: answer %u (%s)\n",
+                    after ? "from the date of the rule" : "before the date of the rule", cpu.eax,
+                    cpu.eax ? "refused" : "granted");
+    }
 }
 
 const SeasonRuleKind season_kind_nation = {"nation", nation_new_game, nation_loaded, nation_season, NULL, NULL, NULL};

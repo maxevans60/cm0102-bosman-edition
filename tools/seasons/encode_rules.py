@@ -125,8 +125,7 @@ def parse_windows(nation, text):
         return "ok", "none", ""
     if low.startswith("no fifa windows yet") or low.startswith("none ("):
         return "keep", "keep", ""        # the game's own windows for 2001/02 (England one window)
-    if re.search(r"domestic|closed on|could still|international moves|first period|second period|"
-                 r"complementary|unemployed", low):
+    if re.search(r"closed on|could still|international moves|first period|second period|unemployed", low):
         return "gap", "", "partial"
     # England 2002 form: "summer: end of season to 31 Aug (...); winter: 1-31 Jan". The season ends in May, so the
     # summer window starts on 1 June (inference).
@@ -160,6 +159,12 @@ def parse_windows(nation, text):
             end, em = end - 31, 2
         return "ok", "%d.%d-%d.%d,%d.%d-%d.%d" % (int(m.group(1)), month_number(m.group(2)), int(m.group(3)),
                                                     month_number(m.group(4)), d, mo, end, em), ""
+    # A window for domestic moves only is left out: the game has no window of that kind, and the other windows
+    # hold. A text in brackets is a remark ("incoming from abroad to 25 August"), not a window. A single first day
+    # before the next range ("1 July, then 15 July to 5 October") is a window of one day.
+    t = "; ".join(c for c in t.split(";") if not re.search(r"domestic|complementary", c, re.I))
+    t = re.sub(r"\([^)]*\)", " ", t)
+    t = re.sub(r"(\d{1,2} (?:" + MONTH_RE + r")), then (\d{1,2} (?:" + MONTH_RE + r") to)", r"\1 to \1; \2", t, flags=re.I)
     ranges = []
     rest = t
     for m in RANGE.finditer(t):
@@ -499,7 +504,15 @@ def gaps_text(gaps):
 
 
 def num(v):
-    return -1 if v == "keep" else 255 if v == "none" else int(v)
+    """The C value: -1 keep, 255 none (no limit), else the limit, 0 to 254 (255 would read as no limit)."""
+    if v == "keep":
+        return -1
+    if v == "none":
+        return 255
+    n = int(v)
+    if not 0 <= n <= 254:
+        raise SystemExit("encode_rules.py: a limit of %d is outside 0 to 254" % n)
+    return n
 
 
 def c_text(rows):

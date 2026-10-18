@@ -55,9 +55,14 @@ check(windows("Greece", "two registration periods: one between seasons (max 12 w
                         "exact dates: unknown")[0] == "keep", "exact dates unknown keeps")
 check(windows("Belgium", "summer 1 July to 6 September")[0] == "gap", "one window only is a gap")
 check(windows("Brazil", "5 January to 3 March; complementary domestic window 4 to 27 March; 20 July to 11 September")
-      == ("gap", "", "partial"), "domestic window is a gap")
+      == ("ok", "5.1-3.3,20.7-11.9", ""), "a domestic window is left out, the others hold")
 check(windows("Germany", "Summer 2020: 1 July, then 15 July to 5 October; winter 1 to 31 January, moved to the next bank "
-                         "working day if needed")[0] == "gap", "a stray date is a gap")
+                         "working day if needed") == ("ok", "1.7-1.7,15.7-5.10,1.1-31.1", ""), "a first day, then a range")
+check(windows("Italy", "summer 1 July-17 August 2018 (incoming from abroad to 25 August); winter 3-31 January 2019")
+      == ("ok", "1.7-17.8,3.1-31.1", ""), "a remark in brackets is not a window")
+check(windows("Germany", "summer 1 July to 31 August; winter around 5 January")[0] == "gap", "a stray date is a gap")
+check(windows("England", "Premier League and EFL summer window closed on 9 Aug 2018; January window 1-31 Jan")[0] == "gap",
+      "a window with an end only is a gap")
 check(windows("USA", "x")[0] == "gap", "an unknown form is a gap")
 
 # --- foreign players
@@ -96,6 +101,12 @@ check(e.parse_permit("Scotland", "all players without UK status need a governing
                      "keep") == "brexit", "Scotland")
 check(e.parse_permit("Germany", "Non-EU players need a national work visa", "keep") == "keep", "Germany")
 check(e.classify_registration_gap("England", "no squad size or home-grown rule") is None, "no rule is no gap")
+try:
+    e.num("255")
+    check(False, "a limit of 255 must stop")
+except SystemExit:
+    pass
+check(e.num("none") == 255 and e.num("keep") == -1 and e.num("0") == 0 and e.num("254") == 254, "num values")
 check(e.classify_registration_gap("Spain", "25 first-team licences") == "new_code", "squad cap needs code")
 
 # --- the whole table

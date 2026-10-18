@@ -15,6 +15,7 @@ RECOMP_SEASON_NATION_LOG=1 and RECOMP_SEASON_CHANGE_LOG=1. The runs:
     off2010   the same with changing_rules off: the rules of 2010/11 stay in 2011/12 (the English Football
               League keeps 7 named substitutes, where the table has 5 from 2011/12), and the log shows no season
               hook of the nation kind
+    ctl2020   the same with the date of the rule moved to 2099 (RECOMP_SEASON_BREXIT_YEAR): the signings go through
     on2020    November 2020, 2020/21 to 2021/22, changing_rules on: from 1 January 2021 a player of the EU needs a
               work permit to sign for an English club (the log counts the refusals)
     base      the base game (2001, changing_rules off): the kinds do nothing (the log shows the new game as
@@ -39,8 +40,10 @@ RUNS = {
     "on2010": (2010, os.path.join(DB, "September 2010 ODB"), "on", 2011),
     "off2010": (2010, os.path.join(DB, "September 2010 ODB"), "off", 2011),
     "on2020": (2020, os.path.join(DB, "November 2020"), "on", 2021),
+    "ctl2020": (2020, os.path.join(DB, "November 2020"), "on", 2021),
     "base": (2001, None, "off", 2001),
 }
+EXTRA_ENV = {"ctl2020": {"RECOMP_SEASON_BREXIT_YEAR": "2099"}}
 SUBS = re.compile(r"season subs: (\w+) (\d+)/\d+ (used|bench) (\d+) -> (\d+)")
 WINDOWS = re.compile(r"season nation: ([\w ]+) windows (\d+) -> (\d+):(.*)")
 BREXIT = re.compile(r"season nation: Brexit: a player of the EU needs a work permit \((\d+)\)")
@@ -74,6 +77,7 @@ def check_run(name, program, game, keep, reuse=False):
         code = 0
     else:
         env = {"RECOMP_SEASON_SUBS_LOG": "1", "RECOMP_SEASON_NATION_LOG": "1", "RECOMP_SEASON_CHANGE_LOG": "1"}
+        env.update(EXTRA_ENV.get(name, {}))
         code, report = rrc.run(program, game, last, year if year != 2001 else None, database, ["England"], [], work, 7200,
                                {"changing_rules": rules}, env)
     if code != 0:
@@ -108,11 +112,29 @@ def check_run(name, program, game, keep, reuse=False):
                          f"expected {want}")
         if first.get((2010, "start")) != 7:
             fails.append(f"{name}: eng_first bench at the start of 2010/11 is {first.get((2010, 'start'))}, expected 7")
-    if name == "on2020":
-        if not refused:
-            fails.append(f"{name}: no player of the EU was refused a work permit for an English club")
-        # No news check: a game that starts in 2020 has no season hook before 1 January 2021. A start in 2019 stops
-        # at comp_stats.CPP 1664 on 7 February 2020 in the main build too (not a finding of this slice).
+    if name in ("on2020", "ctl2020"):
+        # Brexit (doc section 5): a signing of an EU player by a UK club is decided in the offer checks and at the
+        # completion. With the rule on it is sent to the game's permit decision; with the date of the rule moved
+        # to 2099 (the control) the same signings go through. The permit group of the nations is logged too.
+        sent = [x for x in log if "Brexit:" in x and "rule on: sent to the permit decision" in x]
+        through = [x for x in log if "Brexit:" in x and "goes through" in x]
+        decided = [x for x in log if "permit decision at a completion" in x]
+        if name == "on2020":
+            if not sent:
+                fails.append(f"{name}: no signing of an EU player by a UK club was sent to the permit decision")
+            if not decided:
+                fails.append(f"{name}: no permit decision at a completion in the log")
+        else:
+            if not through:
+                fails.append(f"{name}: no signing of an EU player by a UK club went through in the control run")
+            if sent or decided:
+                fails.append(f"{name}: the control run sent a signing to the permit decision")
+        print(f"    {len(sent)} sent to the permit decision, {len(through)} went through, {len(decided)} permit decisions")
+        for x in sent[:3] + through[:3] + decided[:3]:
+            print("    " + x.split("recomp: ")[-1][:150])
+        for x in log:
+            if "permit group byte" in x:
+                print("    " + x.split("recomp: ")[-1])
     print(f"{name}: {n} competition lines, {len(subs)} changes of substitutes, {len(wins)} changes of windows, "
           f"{len(refused) and refused[-1]} permit refusals, {len(fails)} problems ({work})")
     for s, t in news[:12]:
