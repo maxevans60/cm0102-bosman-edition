@@ -81,12 +81,25 @@ def repair_clubs(T, S_):
 RESERVE_WORDS = {"amateure", "ii", "u23", "u21", "b", "2", "reserves"}
 
 
+def reserve_base(name):
+    """The senior club's name (normalised) of a reserve record's long name, or None: a reserve word at the end
+    ("FC Bayern München Amateure", "Real Madrid C.F. B", "Zawisza Bydgoszcz (2)") or "Jong" in front ("Jong Ajax")."""
+    from cmdb import norm
+    words = norm(name).split()
+    if len(words) >= 2 and words[-1] in RESERVE_WORDS:
+        return " ".join(words[:-1])
+    if len(words) >= 2 and words[0] == "jong":
+        return " ".join(words[1:])
+    return None
+
+
 def reserve_teams(T, X, clubmap, fp):
     """FM keeps a club's reserve side as its second team id (teammap order: the first team first), and its players
     have the club as their contract club and the reserve team in the join block (people_all "team"). The template
     keeps the reserve side as a club record of its own (for example "FC Bayern München Amateure", "Real Madrid C.F.
     B"), which the game pairs with the senior club (club_get_linked_b_team 0x540a50). A reserve record whose long name is
-    the senior record's long name (or short name) plus one reserve word gets the players of the second team.
+    the senior record's long name (or short name) with a reserve word (reserve_base) gets the players of the second
+    team.
     Returns (fp with those players at a new club key ("B", FM club id), clubmap with that key, count of players)."""
     import pickle
     from cmdb import cstr, norm
@@ -100,9 +113,9 @@ def reserve_teams(T, X, clubmap, fp):
     rows = T.rows(0)
     by_name = {}
     for r in rows:
-        words = norm(cstr(r, 4, 51)).split()
-        if words and words[-1] in RESERVE_WORDS:
-            by_name.setdefault((" ".join(words[:-1]), struct.unpack_from("<i", r, 0x53)[0]), []).append(
+        base = reserve_base(cstr(r, 4, 51))
+        if base:
+            by_name.setdefault((base, struct.unpack_from("<i", r, 0x53)[0]), []).append(
                 struct.unpack_from("<i", r, 0)[0])
     senior = {struct.unpack_from("<i", r, 0)[0]: [(norm(cstr(r, o, n)), struct.unpack_from("<i", r, 0x53)[0])
                                                   for o, n in ((4, 51), (0x38, 26))] for r in rows}

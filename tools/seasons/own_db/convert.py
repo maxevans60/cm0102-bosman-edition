@@ -43,8 +43,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from cmdb import Folder, cstr, norm  # noqa: E402
 
-from seasons import settings, template_shifts, kept_careers, last_row_comps, repair_clubs, reserve_teams, RESERVE_WORDS  # noqa: E402
+from seasons import settings, template_shifts, kept_careers, last_row_comps, repair_clubs, reserve_teams, reserve_base  # noqa: E402
 
+# A side needs 11 players: CM3_MATCH_ENGINE::init_match 0x6b7f20 calls the side set-up 0x6db500 and stops with an
+# error (match_eng line 0x264 at 0x6b8947, and 0x28c for the away side) when it returns fewer than 11 (cmp al, 0xb at
+# 0x6b886b and 0x6b89be). MIN_SQUAD leaves room for injuries, bans and the substitutes.
+MATCH_SIDE = 11
+MIN_SQUAD = 16
+PLAYED = set()                  # divisions whose clubs all have MATCH_SIDE players in the template (filled in main)
 S_ = START = SH = HIST_SHIFT = None   # set in main from the season settings and the date shift research
 AFTER_START = set()             # national competitions of the start year played after the start (filled in main)
 DAT_FILES = ["city.dat", "club.dat", "club_comp.dat", "club_comp_history.dat", "colour.dat", "common_names.dat",
@@ -127,6 +133,20 @@ def check_last_places(clubs, comps):
     check(not bad, f"last places 1 to n missing or twice (the league cup stops): {bad}")
 
 
+def check_played_squads(clubs, staff, comps):
+    """Every club of a played division (PLAYED) names at least MATCH_SIDE players in its squad list (the match engine
+    stops below 11, see MATCH_SIDE)."""
+    bad = []
+    for r in clubs:
+        d = struct.unpack_from("<i", r, 0x57)[0]
+        if d not in PLAYED:
+            continue
+        n = sum(1 for k in range(50) if struct.unpack_from("<i", r, 0xd7 + 4 * k)[0] >= 0)
+        if n < MATCH_SIDE:
+            bad.append((cstr(r, 4, 51), comps.get(d, d), n))
+    check(not bad, f"{len(bad)} clubs of played divisions have fewer than {MATCH_SIDE} players: {bad[:8]}")
+
+
 def store_update_team_way(T, k):
     """Q381 (Max, 2026-10-17): the dates as an Update Team database of the start season stores them, early by
     k = start year - 2001, so the database works in three ways: as a known season database (its signature row
@@ -200,6 +220,13 @@ def main(argv):
 
     staff = T.rows(6)
     n_staff = len(staff)
+    # Played divisions: every club of the division has at least MATCH_SIDE players in the template.
+    tcount = collections.Counter(struct.unpack_from("<i", r, 0x39)[0] for r in staff if r[0x5f] in (2, 3))
+    tdiv = collections.defaultdict(list)
+    for rr in T.rows(0):
+        tdiv[struct.unpack_from("<i", rr, 0x57)[0]].append(tcount[struct.unpack_from("<i", rr, 0)[0]])
+    PLAYED.update(d for d, v in tdiv.items() if d >= 0 and min(v) >= MATCH_SIDE)
+    orig_club = [struct.unpack_from("<i", r, 0x39)[0] for r in staff]   # template clubs, before the FM facts
     g = lambda r, o: struct.unpack_from("<i", r, o)[0]  # noqa: E731
 
     # 1. Real years for every staff row.
@@ -246,12 +273,13 @@ def main(argv):
             if x["role"] == "staff":
                 r[0x3d] = JOBS[x["job"]]
         moved += new != old
-    # An unmatched template player at a club that FM covers leaves it: FM does not have him there. A reserve record
-    # (seasons.RESERVE_WORDS) that would keep fewer than MIN_SQUAD players keeps its template players: FM lists few
-    # players of many reserve sides, and the game pairs a reserve side with its senior club (0x540a50).
-    MIN_SQUAD = 16
-    reserve = {g(rr, 0) for rr in T.rows(0) if cstr(rr, 4, 51).lower().split()[-1:] and
-               norm(cstr(rr, 4, 51)).split()[-1:][0] in RESERVE_WORDS}
+    # An unmatched template player at a club that FM covers leaves it: FM does not have him there. A club that would
+    # keep fewer than MIN_SQUAD players keeps its template players when it is a reserve record (seasons.reserve_base:
+    # the game pairs a reserve side with its senior club, 0x540a50) or when its new division is a played division
+    # (PLAYED: every club of the division has at least MATCH_SIDE players in the template). FM lists few players of
+    # many reserve and lower sides.
+    reserve = {g(rr, 0) for rr in T.rows(0) if reserve_base(cstr(rr, 4, 51))}
+    played = {c for c in reserve} | {g(rr, 0) for rr in T.rows(0) if L["cur"].get(g(rr, 0), -1) in PLAYED}
     leave = collections.defaultdict(list)
     count = collections.Counter(g(r, 0x39) for r in staff if r[0x5f] in (2, 3))
     for t, r in enumerate(staff):
@@ -259,15 +287,51 @@ def main(argv):
             leave[g(r, 0x39)].append(t)
     gone = kept_small = 0
     for c, ts in leave.items():
-        if c in reserve and count[c] - len(ts) < MIN_SQUAD:
+        if c in played and count[c] - len(ts) < MIN_SQUAD:
             kept_small += len(ts)
             continue
         for t in ts:
             struct.pack_into("<i", staff[t], 0x39, -1)
             put_date(staff[t], 0x46, EMPTY)
             gone += 1
-    print(f"people: {len(by_t)} matched, {moved} moved, {gone} unmatched players left their club, {kept_small} "
-          f"kept at reserve records that would have fewer than {MIN_SQUAD} players")
+    # A club of a played division, or a reserve record, that still has fewer than MIN_SQUAD players gets back its
+    # template players who now have no club (FM has them nowhere); a club of a played division then takes players
+    # with no club of its nation (an unmatched player of the template, FM has him nowhere), so that it can field a
+    # side.
+    back = 0
+    count = collections.Counter(g(r, 0x39) for r in staff if r[0x5f] in (2, 3))
+    spare = collections.defaultdict(list)
+    for t, r in enumerate(staff):
+        if r[0x5f] == 2 and g(r, 0x39) == -1 and orig_club[t] in played:
+            spare[orig_club[t]].append(t)
+    for c in sorted(spare):
+        for t in spare[c][:max(0, MIN_SQUAD - count[c])]:
+            struct.pack_into("<i", staff[t], 0x39, c)
+            count[c] += 1
+            back += 1
+    # Then players with no club of the same nation, first those whose template club played in the same division.
+    nat_of = {g(rr, 0): g(rr, 0x53) for rr in T.rows(0)}
+    div_of = {g(rr, 0): L["cur"].get(g(rr, 0), g(rr, 0x57)) for rr in T.rows(0)}
+    tdiv_of = {g(rr, 0): g(rr, 0x57) for rr in T.rows(0)}
+    free = collections.defaultdict(list)
+    for t, r in enumerate(staff):
+        if r[0x5f] == 2 and g(r, 0x39) == -1 and t not in by_t:
+            free[g(r, 0x1a)].append(t)
+    filled = 0
+    for c in sorted(played):
+        need = MIN_SQUAD - count[c]
+        if need <= 0 or div_of.get(c, -1) not in PLAYED:
+            continue
+        pool = sorted(free.get(nat_of.get(c), []), key=lambda t: (tdiv_of.get(orig_club[t]) != div_of[c], t))
+        for t in [t for t in pool if g(staff[t], 0x39) == -1][:need]:
+            struct.pack_into("<i", staff[t], 0x39, c)
+            count[c] += 1
+            filled += 1
+    print(f"thin clubs of played divisions: {back} template players back, {filled} players with no club of the "
+          f"nation added")
+    print(f"people: {len(by_t)} matched, {moved} moved, {gone} unmatched players left their club, {back} players "
+          f"with no club back at their template club (fewer than {MIN_SQUAD} players), {kept_small} "
+          f"kept at reserve records and clubs of played divisions that would have fewer than {MIN_SQUAD} players")
 
     # 3. Clubs.
     # The game checks that every coach with a club is in the club's coach list (0x527240, Database.cpp line
@@ -305,9 +369,8 @@ def main(argv):
     print(f"club lists: {cut} people beyond a list's size or a second manager left their club")
     for r in clubs:
         c = g(r, 0)
-        cur = L["cur"].get(c, -1)
-        if cur < 0:
-            cur = g(r, 0x57)                         # no last division in the template: keep its division
+        cur = L["cur"].get(c, g(r, 0x57))            # leagues.py gives every club its division, -1 for none (a club
+                                                     # that a swap moved out, as C.P. Granada 74 in 2006/07)
         struct.pack_into("<i", r, 0x57, cur)
         if c in L["lastdiv"]:
             div, pos = L["lastdiv"][c]
@@ -324,6 +387,7 @@ def main(argv):
         struct.pack_into("<i", r, 0xd3, ass.get(c, -1))
     check_squad_lists(clubs, staff)
     check_last_places(clubs, {g(rr, 0): cstr(rr, 4, 51) for rr in T.rows(12)})
+    check_played_squads(clubs, staff, {g(rr, 0): cstr(rr, 4, 51) for rr in T.rows(12)})
 
     # 4. Careers: real years, nothing from the start season on.
     kept, kept_rows = kept_careers(S_.TEMPLATE)
