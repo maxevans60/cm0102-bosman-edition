@@ -23,8 +23,8 @@
  * proof: docs/research/2026-10-17-season-save-part.md. */
 #include "win.h"
 #include "season.h"
-#include "season_change.h"
 #include "season_names.h"
+#include "season_change.h"
 #include "season_dates.h"
 #include "options.h"
 #include "../host.h"
@@ -332,9 +332,7 @@ RT_WRAP(0082e430, save_game)
     }
     char path[1024];
     snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
-    season_names_save_begin();      /* the save holds the database names (season_names.h) */
     o_0082e430();
-    season_names_save_end();        /* also when the save unwinds: the game keeps the season names */
     if (rt_unwinding) return;
     if (cpu.eax != 1 || !part_needed()) return;
     char host[2048];

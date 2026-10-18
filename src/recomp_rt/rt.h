@@ -294,14 +294,6 @@ extern uint32_t rt_screen_w, rt_screen_h;
  * sites of tools/recomp/seasons.py read it in place of the constants 2001, 2002 and 2003. */
 extern uint32_t rt_season_year;
 
-/* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
- * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group
- * stage. The sites of tools/recomp/uefa.py read it. */
-uint32_t rt_uefa_cl_ko_offset(uint32_t cl);
-/* The Intertoto Cup winners in the UEFA Cup (0.6.0 slice 22, win/season_uefa_cup.c): the first slot counted
- * back from the UEFA Cup's slot count (0x1b in the original) and the number of winners (3). */
-uint32_t rt_uefa_uic_back(uint32_t uc, uint32_t uic);
-uint32_t rt_uefa_uic_winners(uint32_t uc, uint32_t uic);
 /* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
  * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
@@ -312,6 +304,14 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
  * rt_cup_add: the value to add to base so that the sum is that count (FraCup). */
 uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint32_t key_b, uint32_t key_c);
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
+/* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
+ * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group
+ * stage. The sites of tools/recomp/uefa.py read it. */
+uint32_t rt_uefa_cl_ko_offset(uint32_t cl);
+/* The Intertoto Cup winners in the UEFA Cup (0.6.0 slice 22, win/season_uefa_cup.c): the first slot counted
+ * back from the UEFA Cup's slot count (0x1b in the original) and the number of winners (3). */
+uint32_t rt_uefa_uic_back(uint32_t uc, uint32_t uic);
+uint32_t rt_uefa_uic_winners(uint32_t uc, uint32_t uic);
 
 /* The season text "2009/10" in place of the original's "2009/0" (0.6.0, Q358; win/season.c). The patches of
  * tools/recomp/seasons.py at the two season formatters of key_nation.cpp read these: the divisor of the second

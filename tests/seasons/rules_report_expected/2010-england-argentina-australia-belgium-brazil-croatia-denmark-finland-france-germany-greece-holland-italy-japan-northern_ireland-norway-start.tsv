@@ -64,10 +64,17 @@
 2010	down	bel_first (Belgian Pro League), row hol-bel-125: game 2 (+0 play-off places), table text (15th v 16th relegation play-off (five matches, 15th starts with 3 points): loser)
 2010	down	bel_third (Belgian Third Division), row hol-bel-127: game 2 (+1 play-off places), table text (bottom clubs of each group (more in 2009/10); play-off for the rest)
 2010	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-91: game 2 (+0 play-off places), table 4 (4)
+2010	down	cro_a1 (Prva HNL), row gre-pol-cro-334: game 2 (+0 play-off places), table 1 (1 (16th))
+2010	down	cro_a2a (Druga HNL), row gre-pol-cro-361: game 2 (+0 play-off places), table 5 (5 (12th-16th))
 2010	down	cro_a2b (Druga HNL South), row gre-pol-cro-388: game 2 (+0 play-off places), table na (n/a)
 2010	down	den_second (Danish 2nd Divisions), row den-swe-58: game 4 (+0 play-off places), table 8 (8)
+2010	down	eng_third (Football League Two), row eng-121: game 1 (+0 play-off places), table 2 (2)
 2010	down	fin_first (Ykkönen), row nor-fin-98: game 2 (+1 play-off places), table 4 (10th-13th (4))
+2010	down	fra_third (Championnat National), row fra-85: game 4 (+0 play-off places), table 5 (5)
 2010	down	gre_second (Football League), row gre-pol-cro-64: game 2 (+0 play-off places), table unknown (unknown)
+2010	down	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-157: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2010	down	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-158: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2010	down	jap_j1 (J.League Division 1), row aus-jap-kor-199: game 2 (+0 play-off places), table 3 (3)
 2010	down	nir_first (IFA Championship 1), row wal-nir-irl-236: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
 2010	idle	asia_nations (AFC Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
 2010	idle	fra_first (French CFA), row fra-83: the game waits for 0, the table holds it
@@ -150,4 +157,5 @@
 2010	up	den_second (Danish 2nd Divisions), row den-swe-58: game 3 (+0 play-off places), table 0 (0)
 2010	up	fin_first (Ykkönen), row nor-fin-98: game 2 (+0 play-off places), table 1 (1st (1))
 2010	up	gre_cup (Greek Football Cup), row gre-pol-cro-10: game 2 (+0 play-off places), table na (n/a)
+2010	up	jap_j2 (J.League Division 2), row aus-jap-kor-226: game 2 (+0 play-off places), table 3 (3)
 2010	up	oceania_club_champ (OFC Champions League), row club-world-189: game 2 (+0 play-off places), table na (n/a)

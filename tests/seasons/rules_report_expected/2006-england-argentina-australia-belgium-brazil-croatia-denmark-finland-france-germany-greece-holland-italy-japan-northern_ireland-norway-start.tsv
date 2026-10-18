@@ -1,0 +1,159 @@
+# Differences between the rules report and the rules table that the check accepts. Made by
+# tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2006	bench	fra_cup (Coupe de France), row fra-52: game 3, table 5 (5)
+2006	bench	fra_first (Ligue 1), row fra-47: game 5, table 7 (7)
+2006	bench	fra_lge_cup (Coupe de la Ligue), row fra-53: game 3, table 7 (7)
+2006	bench	ger_cup (DFB-Pokal), row ger-75: game 6, table 7 (7)
+2006	bench	ger_first (Bundesliga), row ger-66: game 6, table 7 (7)
+2006	bench	ger_second (2. Bundesliga), row ger-67: game 6, table 7 (7)
+2006	bench	world_club_champ (FIFA Club World Cup), row club-world-97: game 7, table 12 (12)
+2006	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all; not in it: -; others: All Boys, Almirante Brown, Estudiantes de Buenos Aires, Independiente Rivadavia de Mendoza, Los Andes
+2006	club_list	Australian National Soccer League: 8 of 8 listed clubs that the database holds (8 listed), 5 other clubs, 13 in all; not in it: -; others: Marconi Stallions, Parramatta Power, South Melbourne, Sydney Olympic Sharks, Wellington Phoenix
+2006	club_list	Brazilian National First Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: ABC Futebol Clube, América Football Club (RJ), América Futebol Clube (MG), Atlético Clube Goianiense, Botafogo Futebol Clube (PB), EC Bahia, Grêmio Esportivo Brasil, Sociedade Esportiva Caxias do Sul
+2006	club_list	Brazilian National Second Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: Esporte Clube Noroeste, Guarani Futebol Clube, Joinville Esporte Clube, Paysandu Sport Club, Rio Branco Esporte Clube, São Raimundo Esporte Clube (AM), Vila Nova Futebol Clube, Volta Redonda Futebol Clube
+2006	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Istra 1961, NK Belisce, NK Inter Zapresic, NK Koprivnica
+2006	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: AGOVV Apeldoorn, FC Eindhoven; others: -
+2006	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: AC Oulu, FC Viikingit; others: -
+2006	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Aris Salonika, Ergotelis; others: -
+2006	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: Agrotikos Asteras, Ethnikos/A.O. Manis, Messiniakos, Panthrakikos; others: -
+2006	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Calcio Catania, Torino; others: -
+2006	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: S.S.C. Napoli, Spezia 1906; others: -
+2006	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Ventforet Kofu, Yokohama FC; others: -
+2006	club_list	Japanese J-League 2: 12 of 13 listed clubs that the database holds (13 listed), 0 other clubs, 12 in all; not in it: Tokushima Vortis; others: -
+2006	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Moyola Park, Tobermore United; others: -
+2006	club_list	Northern Irish League Premier Division: 10 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 10 in all; not in it: Armagh City, Crusaders, Donegal Celtic, Glenavon, Larne, Loughgall; others: -
+2006	clubs	arg_second (Primera B Nacional), row arg-usa-33: game 25, table 20 (20)
+2006	clubs	asia_club_champ (AFC Champions League), row club-world-108: game 16, table 27 (27)
+2006	clubs	aus_nsl (A-League), row aus-jap-kor-29: game 13, table 8 (8)
+2006	clubs	bel_third (Belgian Third Division), row hol-bel-75: game 16, table 32 (32 (A 16, B 16))
+2006	clubs	bra_champ_cup (Copa dos Campeões), row bra-195: game 3, table 0 (0)
+2006	clubs	bra_cup (Copa do Brasil), row bra-141: game 71, table 64 (64)
+2006	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-33: game 28, table 20 (20)
+2006	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-60: game 28, table 20 (20)
+2006	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-87: game 7, table 64 (64)
+2006	clubs	bra_reg_bahia (Campeonato Baiano), row bra-438: game 10, table 12 (12)
+2006	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-519: game 15, table 12 (12)
+2006	clubs	bra_reg_gaucho (Campeonato Gaúcho), row bra-546: game 17, table 18 (18)
+2006	clubs	bra_reg_goias (Campeonato Goiano), row bra-573: game 14, table 12 (12)
+2006	clubs	bra_reg_north (Campeonato Paraense), row bra-627: game 10, table 14 (14)
+2006	clubs	bra_reg_northeast (Campeonato Cearense), row bra-654: game 16, table 10 (10)
+2006	clubs	bra_reg_parana (Campeonato Paranaense), row bra-681: game 12, table 16 (16)
+2006	clubs	bra_reg_santa (Campeonato Catarinense), row bra-492: game 10, table 12 (12)
+2006	clubs	bra_reg_sp (Campeonato Paulista Série A1), row bra-708: game 16, table 20 (20)
+2006	clubs	conmebol_liber (Copa Libertadores), row club-world-99: game 4, table 38 (38)
+2006	clubs	cro_a1 (Prva HNL), row gre-pol-cro-330: game 16, table 12 (12)
+2006	clubs	den_second (Danish 2nd Divisions), row den-swe-34: game 16, table 28 (28)
+2006	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-57: game 5, table 50 (50)
+2006	clubs	european_cup (UEFA Champions League), row uefa-42: game 55, table 73 (73 (32 in the group stage))
+2006	clubs	fin_first (Ykkönen), row nor-fin-58: game 10, table 14 (14)
+2006	clubs	fin_prm (Veikkausliiga), row nor-fin-57: game 12, table 14 (14)
+2006	clubs	goldcup (Copa América), row int-continental-66: game 0, table 12 (12)
+2006	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-6: game 4, table 67 (67)
+2006	clubs	gre_prm (Super League Greece), row gre-pol-cro-33: game 14, table 16 (16)
+2006	clubs	gre_second (Beta Ethniki), row gre-pol-cro-60: game 14, table 18 (18)
+2006	clubs	hol_first (Eerste Divisie), row hol-bel-68: game 18, table 20 (20)
+2006	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-47: game 60, table 49 (49)
+2006	clubs	ita_c_cup (Coppa Italia Serie C), row ita-99: game 5, table 90 (90)
+2006	clubs	ita_cup (Coppa Italia), row ita-98: game 4, table 72 (72)
+2006	clubs	ita_ser_a (Serie A), row ita-87: game 18, table 20 (20)
+2006	clubs	ita_ser_b (Serie B), row ita-88: game 20, table 22 (22)
+2006	clubs	jap_j1 (J.League Division 1), row aus-jap-kor-195: game 16, table 18 (18)
+2006	clubs	jap_j2 (J.League Division 2), row aus-jap-kor-222: game 12, table 13 (13)
+2006	clubs	nir_cup (Irish Cup), row wal-nir-irl-138: game 32, table 114 (114)
+2006	clubs	nir_first (Irish First Division), row wal-nir-irl-136: game 10, table 12 (12)
+2006	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-139: game 5, table 16 (16)
+2006	clubs	nir_prm (Irish Premier League), row wal-nir-irl-135: game 10, table 16 (16)
+2006	clubs	oceania_club_champ (OFC Champions League), row club-world-113: game 0, table 6 (6)
+2006	clubs	uefa_cup (UEFA Cup), row uefa-45: game 145, table 155 (155 in all: 131 direct entrants (Q1 70, Q2 29 with 11 Intertoto winners, R1 32 w)
+2006	clubs	world_club_champ (FIFA Club World Cup), row club-world-97: game 0, table 6 (6)
+2006	down	arg_prm (Primera División), row arg-usa-6: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
+2006	down	arg_second (Primera B Nacional), row arg-usa-33: game 0 (+0 play-off places), table 2 (2 (infobox))
+2006	down	bel_first (Belgian First Division), row hol-bel-73: game 2 (+0 play-off places), table 1 (1 (18th); 17th to the second division final round)
+2006	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-87: game 2 (+0 play-off places), table na (n/a)
+2006	down	cro_a1 (Prva HNL), row gre-pol-cro-330: game 2 (+0 play-off places), table 1 (1 (12th))
+2006	down	cro_a2a (Druga HNL), row gre-pol-cro-357: game 2 (+0 play-off places), table 4 (4 (13th-16th))
+2006	down	cro_a2b (Druga HNL South), row gre-pol-cro-384: game 2 (+0 play-off places), table na (n/a)
+2006	down	den_second (Danish 2nd Divisions), row den-swe-34: game 4 (+0 play-off places), table 0 (0)
+2006	down	eng_third (Football League Two), row eng-81: game 1 (+0 play-off places), table 2 (2)
+2006	down	gre_prm (Super League Greece), row gre-pol-cro-33: game 2 (+0 play-off places), table 3 (3 (14th-16th))
+2006	down	gre_second (Beta Ethniki), row gre-pol-cro-60: game 2 (+0 play-off places), table 3 (3 (16th-18th))
+2006	down	ita_ser_a (Serie A), row ita-87: game 4 (+0 play-off places), table 3 (3)
+2006	down	ita_ser_b (Serie B), row ita-88: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
+2006	down	ita_ser_c1a (Serie C1 girone A), row ita-89: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2006	down	ita_ser_c1b (Serie C1 girone B), row ita-90: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2006	down	nir_first (Irish First Division), row wal-nir-irl-136: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
+2006	idle	fra_first (French CFA), row fra-47: the game waits for 0, the table holds it
+2006	idle	fra_first (French Lower Division), row fra-47: the game waits for 0, the table holds it
+2006	no_row	friendly (Friendly): no table row
+2006	no_row	record_utils ('B' International): no table row
+2006	no_row	record_utils (Reserve): no table row
+2006	no_row	record_utils (Under 21 International): no table row
+2006	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-111: the game holds 2006, the table says not held
+2006	not_held	asia_super_cup (Asian Super Cup), row club-world-112: the game holds 2006, the table says not held
+2006	not_held	bra_champ_cup (Copa dos Campeões), row bra-195: the game holds 2006, the table says not held
+2006	not_held	conmebol_merc (Copa Mercosur), row club-world-100: the game holds 2006, the table says not held
+2006	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-384: the game holds 2006, the table says not held
+2006	not_held	fifa_confed (FIFA Confederations Cup), row int-world-70: the game holds 2007, the table says not held
+2006	not_held	gre_super (Greek Super Cup), row gre-pol-cro-87: the game holds 2006, the table says not held
+2006	not_held	inter_amer_cup (Copa Interamericana), row club-world-107: the game holds 2006, the table says not held
+2006	not_held	nir_charity (Charity Shield), row wal-nir-irl-140: the game holds 2006, the table says not held
+2006	not_held	oceania_nations (OFC Nations Cup), row int-continental-65: the game holds 2006, the table says not held
+2006	not_held	world_club_cup (Intercontinental Cup), row club-world-96: the game holds 2006, the table says not held
+2006	not_in_game	arg-usa-195 argentina_rules 'Argentina' (Argentina)
+2006	not_in_game	aus-jap-kor-114 japan_rules 'n/a' (Japan)
+2006	not_in_game	aus-jap-kor-6 australia_rules 'n/a' (Australia)
+2006	not_in_game	bra-1005 new 'Campeonato Capixaba' (Brazil)
+2006	not_in_game	bra-1032 new 'Campeonato Sul-Mato-Grossense' (Brazil)
+2006	not_in_game	bra-1059 new 'Campeonato Tocantinense' (Brazil)
+2006	not_in_game	bra-6 brazil_rules 'Brazil' (Brazil)
+2006	not_in_game	bra-762 new 'Campeonato Potiguar' (Brazil)
+2006	not_in_game	bra-789 new 'Campeonato Paraibano' (Brazil)
+2006	not_in_game	bra-816 new 'Campeonato Alagoano' (Brazil)
+2006	not_in_game	bra-843 new 'Campeonato Sergipano' (Brazil)
+2006	not_in_game	bra-870 new 'Campeonato Maranhense' (Brazil)
+2006	not_in_game	bra-897 new 'Campeonato Amazonense' (Brazil)
+2006	not_in_game	bra-924 new 'Campeonato Piauiense' (Brazil)
+2006	not_in_game	bra-951 new 'Campeonato Acriano' (Brazil)
+2006	not_in_game	bra-978 new 'Campeonato Brasiliense' (Brazil)
+2006	not_in_game	club-world-102 new 'Copa Sudamericana' (CONMEBOL)
+2006	not_in_game	club-world-103 new 'Recopa Sudamericana' (CONMEBOL)
+2006	not_in_game	eng-331 eng_fa_trophy 'FA Trophy' (England)
+2006	not_in_game	eng-82 eng_conf 'Conference National' (England)
+2006	not_in_game	fra-50 fra_cfa 'CFA' (France)
+2006	not_in_game	fra-51 fra_lower 'CFA 2' (France)
+2006	not_in_game	ger-69 ger_regional 'Regionalliga Nord' (Germany)
+2006	not_in_game	ger-70 ger_regional 'Regionalliga Süd' (Germany)
+2006	not_in_game	gre-pol-cro-438 new 'Croatian Football Super Cup' (Croatia)
+2006	not_in_game	ita-102 new 'Supercoppa di Lega di Seconda Divisione (Serie C2 to 2008)' (Italy)
+2006	not_in_game	ita-91 ita_ser_c2a 'Serie C2 girone A' (Italy)
+2006	not_in_game	ita-92 ita_ser_c2b 'Serie C2 girone B' (Italy)
+2006	not_in_game	ita-93 ita_ser_c2c 'Serie C2 girone C' (Italy)
+2006	not_in_game	nor-fin-60 new 'Liigacup' (Finland)
+2006	not_in_game	uefa-41 uefa_seeding 'UEFA access list and seeding' (UEFA)
+2006	playoffs	arg_prm (Primera División), row arg-usa-6: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
+2006	playoffs	arg_second (Primera B Nacional), row arg-usa-33: game 0 up and 0 down play-off places, table 'As 2003/04; Torneo Reducido of 4th to 7th'
+2006	playoffs	aus_nsl (A-League), row aus-jap-kor-29: game 0 up and 0 down play-off places, table 'top four, page play-off system, grand final'
+2006	playoffs	bel_first (Belgian First Division), row hol-bel-73: game 0 up and 0 down play-off places, table '17th plays the second division final round for one top-flight place'
+2006	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-87: game 0 up and 0 down play-off places, table 'see format'
+2006	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-330: game 0 up and 0 down play-off places, table '11th: relegation play-off v second tier'
+2006	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-357: game 0 up and 0 down play-off places, table '2nd: promotion play-off'
+2006	playoffs	den_second (Danish 2nd Divisions), row den-swe-34: game 0 up and 0 down play-off places, table "Promotion game between the two groups' next-best eligible clubs (table shows 3rd"
+2006	playoffs	hol_first (Eerste Divisie), row hol-bel-68: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
+2006	playoffs	ita_ser_b (Serie B), row ita-88: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
+2006	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-195: game 0 up and 0 down play-off places, table '16th v J2 3rd in a two-legged promotion/relegation series'
+2006	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-222: game 0 up and 0 down play-off places, table '3rd v J1 16th in a two-legged promotion/relegation series'
+2006	subs_used	eng_charity (FA Community Shield), row eng-332: game 5, table 6 (6)
+2006	up	arg_second (Primera B Nacional), row arg-usa-33: game 1 (+0 play-off places), table 2 (2 (as 2002/03))
+2006	up	aus_nsl (A-League), row aus-jap-kor-29: game 6 (+0 play-off places), table na (n/a)
+2006	up	bel_third (Belgian Third Division), row hol-bel-75: game 1 (+0 play-off places), table 2 (2 (group champions))
+2006	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-33: game 4 (+0 play-off places), table na (n/a)
+2006	up	bra_nat_third (Campeonato Brasileiro Série C), row bra-87: game 2 (+0 play-off places), table 4 (4)
+2006	up	conmebol_liber (Copa Libertadores), row club-world-99: game 2 (+0 play-off places), table na (n/a)
+2006	up	conmebol_merc (Copa Mercosur), row club-world-100: game 1 (+0 play-off places), table na (n/a)
+2006	up	cro_a2a (Druga HNL), row gre-pol-cro-357: game 0 (+0 play-off places), table 1 (1 (1st))
+2006	up	den_second (Danish 2nd Divisions), row den-swe-34: game 3 (+0 play-off places), table 2 (2)
+2006	up	fin_first (Ykkönen), row nor-fin-58: game 2 (+0 play-off places), table 1 (1st (1))
+2006	up	gre_cup (Greek Football Cup), row gre-pol-cro-6: game 2 (+0 play-off places), table na (n/a)
+2006	up	gre_second (Beta Ethniki), row gre-pol-cro-60: game 2 (+0 play-off places), table 3 (3 (1st-3rd))
+2006	up	ita_ser_b (Serie B), row ita-88: game 4 (+0 play-off places), table 3 (2 direct + 1 via play-offs)
+2006	up	oceania_club_champ (OFC Champions League), row club-world-113: game 2 (+0 play-off places), table na (n/a)

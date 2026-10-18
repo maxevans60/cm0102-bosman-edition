@@ -14,22 +14,25 @@
  * the end of that load) and before the trims of the staff and club tables (0x524d70, 0x5267c0) and before the
  * competitions are made. A loaded game needs nothing: its save holds the clubs as they were moved.
  *
- * A division keeps the club count that the database gives it (the count that the class of the division
- * takes; a different count is slice 18), except the divisions of LATER_SIZE (season_clubs.c): their class
- * takes another count after 2001/02 than the database keeps (Ligue 1: 20, not 18), so they get that count when
- * the start year is not 2001. So:
- *   - a list with more clubs than the division holds keeps the clubs that the database has there first, then
+ * A division keeps the club count that its class takes (CLASS_SIZE in season_clubs.c, with the address of
+ * each count), not the count of the database. A class that counts the clubs of the data, or takes groups,
+ * keeps the database count. A real count that differs from the class count is slice 18. So:
+ *   - a list with more clubs than the class takes keeps the clubs that the database has there first, then
  *     the others in the order of the list;
  *   - a club that the database has in a listed division and that no list keeps there leaves the division
  *     (no division, as the original's clubs with no division; Q290);
- *   - a division with fewer clubs than before (a short list, or clubs that moved up into another division)
- *     takes clubs in this order (Q244, Q279): the clubs that the database had there and that no list keeps;
- *     the nation's clubs with no division; the clubs of the spare divisions "A Lower Division" and "A Premier
- *     Division" (keys 0x9cf764 and 0x9cf6b8); the clubs of lower divisions (club_comp +0x69, the rank) that no
- *     list keeps. The divisions are filled from the highest rank down, so a lower division that gives a club
- *     takes one in its turn. Inside each group the order is that of the club table.
- * A club of a list must have the record id and the name of the row and the nation of the division; else the
- * club of that name in the nation; else it is left out (an extra database of the season can hold other ids).
+ *   - a division with too many clubs loses the last clubs of the club table, as the class would leave them out;
+ *   - a division with too few clubs first takes back the clubs that the database had there and that no list
+ *     keeps. The place of a listed club that the database lacks (Q359) takes a club of the same nation with no
+ *     division. In the top two tiers that place stays open for slice 15b, except for a reserve or B side and in
+ *     a class with a fixed count (a stand-in, the lead's interim decision). Other places take the nation's clubs
+ *     with no division, then the clubs of the spare divisions "A Lower Division" and "A Premier Division"
+ *     (keys 0x9cf764 and 0x9cf6b8), then the clubs of lower divisions (club_comp +0x69, the rank) that no list
+ *     keeps (Q244, Q279). The divisions are filled from the highest rank down, so a lower division that gives
+ *     a club takes one in its turn. Inside each group the order is that of the club table.
+ * A club of a list must have the record id and the name of the row and the nation of the division. Else it is
+ * the club of that name in the nation, else the club of the nation with the same plain name (season_clubs.c),
+ * else the place is that of a missing club.
  *
  * The test switch RECOMP_SEASON_CODE=off and the base game (2001/02 with changing rules off) move no club.
  * RECOMP_CLUB_LOG=1 writes a line for each list to stderr. The test switch RECOMP_CLUB_MOVES=off moves no club

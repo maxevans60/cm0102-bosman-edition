@@ -37,8 +37,9 @@ A row with no db_club_id goes out with club_id -1 and the real name: the game lo
 form of its name in the nation of the division, and if no club or more than one has it, the place is that of
 a missing club (Q359). --missing lists these rows (the runs log the clubs that stay missing).
 
-The stop rule: a club id that is not a number, or a name that Windows-1252 cannot hold or that is longer than
-51 characters, stops the tool with exit code 1.
+The stop rule: a club id that is not a number, a name that Windows-1252 cannot hold or that is longer than 51
+characters, a season outside 2001 to 2099, or an empty division, club or real name stops the tool with exit
+code 1. The game's loader drops the whole file on such a row.
 """
 import argparse
 import collections
@@ -322,6 +323,11 @@ def main(argv):
         ap.error("give --out, --check, --lists or --missing")
     out, report, missing = build()
     for r in out:
+        # The game's loader (season_clubs.c) drops the whole file on one bad row, so the tool stops on it.
+        if not 2001 <= r[0] <= 2099 or not r[1].strip() or not r[3].strip() or not r[4].strip():
+            print(f"make_clubs.py: {r[0]} {r[1]!r} {r[3]!r} {r[4]!r}: a season outside 2001 to 2099 or an empty "
+                  f"division, club or real name")
+            return 1
         for text in (r[1], r[3]):
             try:
                 game_bytes(text)
