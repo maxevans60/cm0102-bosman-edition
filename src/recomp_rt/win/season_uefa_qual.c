@@ -64,8 +64,9 @@
 #define MAX_ROUNDS 6
 #define MAX_ENTRANTS 260
 #define DIRECT_IN_LIST 16               /* the group clubs that draw_phase1_groups reads from the list (0x585358) */
-#define HANDOVER 0x18                   /* the hand-over slots of the play-off losers: count - 0x18 (0x585a02) */
 #define THIRDS 8
+#define HANDOVER (0x18 - THIRDS)        /* the hand-over slots of the play-off losers: from count - 0x18 (0x585a02)
+                                         * to the thirds' slots */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -144,25 +145,29 @@ typedef struct {
 } Level;
 
 /* The dates. A game in a moved season starts on 11 July (the first day of the rules report of a 2010/11
- * game), so every round is played from 12 July on, as the original's first qualifying round (12 July, 0x583c50).
- * The second leg comes 7 days after the first (+0x22). A round starts after the round below ends, and a Europa
- * League round after the Champions League round whose losers it takes (CL Q1 ends 21 July: EL Q2 from 26 July;
- * CL Q2 4 August: EL Q3 9 August; CL Q3 18 August: EL PO 23 August; CL PO 28 August, before the Europa League's
- * group draw after 30 August). The preliminary round is one match (the real one is a tournament of single
- * matches). The real calendar starts in late June (rows uefa-66 to uefa-160): these dates keep its order. */
+ * game). The date function moves a match to the round's weekday on or before the date (0x549f70 from 0x521ed3;
+ * the original passes weekday 2 for its first qualifying round on 12 July, 0x583cef..0x583d0e), so the first
+ * legs of a cup are 14 days apart and its dates are 7-day steps: they keep their order in every year. Champions
+ * League first legs 18 July (moved to 12..18 July), 1, 15 and 29 August; second legs 7 days later (+0x22), the
+ * last by 5 September. A Europa League round comes the next weekday after the Champions League round of its date,
+ * so it starts after the Champions League round whose losers it takes has ended (Q1 by 25 July before EL Q2,
+ * Q2 by 8 August before EL Q3, Q3 by 22 August before EL PO), and its play-offs end a day after the Champions
+ * League's, so the hand-over of the play-off losers (at the Champions League group draw) comes before the Europa
+ * League group draw. The preliminary round has no clubs (season_uefa_code_clubs). The real calendar starts in late
+ * June (rows uefa-66 to uefa-160): these dates keep its order. */
 static const Level CL_LEVELS[] = {
-    {240, SEASON_UEFA_CL_PR, 0, 1, {12, 6}, {13, 6}},
-    {250, SEASON_UEFA_CL_Q1, 0, 2, {12, 6}, {14, 6}},
-    {260, SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_CL_Q2_LP, 2, {22, 6}, {28, 6}},
-    {270, SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_CL_Q3_LP, 2, {5, 7}, {11, 7}},
-    {220, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_PO_LP, 2, {19, 7}, {21, 7}},
+    {240, SEASON_UEFA_CL_PR, 0, 1, {12, 6}, {11, 6}},
+    {250, SEASON_UEFA_CL_Q1, 0, 2, {12, 6}, {18, 6}},
+    {260, SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_CL_Q2_LP, 2, {26, 6}, {1, 7}},
+    {270, SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_CL_Q3_LP, 2, {9, 7}, {15, 7}},
+    {220, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_PO_LP, 2, {23, 7}, {29, 7}},
 };
 static const Level EL_LEVELS[] = {
-    {240, SEASON_UEFA_EL_PR, 0, 1, {12, 6}, {13, 6}},
-    {250, SEASON_UEFA_EL_Q1, 0, 2, {14, 6}, {16, 6}},
-    {260, SEASON_UEFA_EL_Q2, 0, 2, {22, 6}, {26, 6}},
-    {270, SEASON_UEFA_EL_Q3, 0, 2, {5, 7}, {9, 7}},
-    {220, SEASON_UEFA_EL_PO, 0, 2, {19, 7}, {23, 7}},
+    {240, SEASON_UEFA_EL_PR, 0, 1, {12, 6}, {12, 6}},
+    {250, SEASON_UEFA_EL_Q1, 0, 2, {12, 6}, {19, 6}},
+    {260, SEASON_UEFA_EL_Q2, 0, 2, {26, 6}, {2, 7}},
+    {270, SEASON_UEFA_EL_Q3, 0, 2, {9, 7}, {16, 7}},
+    {220, SEASON_UEFA_EL_PO, 0, 2, {23, 7}, {30, 7}},
 };
 #define N_LEVELS 5
 
@@ -617,7 +622,7 @@ static int uc_table_layout(uint32_t uc, const SeasonUefa *r, Layout *L)
     L->direct_first = slot;
     L->slots = (int16_t)rd16(g_mem, uc + 0x3e);
     L->drops[SEASON_UEFA_EL_G] = season_uefa_dropped(r, SEASON_UEFA_EL_G);
-    return L->slots > slot + HANDOVER + THIRDS - 1;
+    return L->slots >= slot + HANDOVER + THIRDS;
 }
 
 /* The first slot after the Europa League's rounds (the group clubs, the hand-over, the thirds), or -1. */
@@ -865,4 +870,19 @@ RT_WRAP(005223a0, cup_rank_teams)
         return;
     }
     rt_ret_cdecl(0);
+}
+
+/* The rules report (season_report.c): the clubs of a cup of the access list, -1 for any other. Champions
+ * League: the entrants of its list (+0x36; its entry table holds only the qualifying clubs). Europa League: the
+ * clubs in its slots, the Champions League clubs that came to it included (the rules table counts them: "161
+ * entered + 33 from the Champions League"). */
+int season_uefa_report_clubs(uint32_t obj)
+{
+    if (!readable(obj) || (rd32(g_mem, obj) != CL_VTABLE && rd32(g_mem, obj) != UC_VTABLE) || !access_row_of(obj))
+        return -1;
+    if (rd32(g_mem, obj) == CL_VTABLE) return (int16_t)rd16(g_mem, obj + 0x36);
+    uint32_t e = rd32(g_mem, obj + 0xa7);
+    int n = 0, slots = (int16_t)rd16(g_mem, obj + 0x3e);
+    for (int i = 0; readable(e) && i < slots; i++) n += readable(rd32(g_mem, e + ENTRY * (uint32_t)i));
+    return n;
 }

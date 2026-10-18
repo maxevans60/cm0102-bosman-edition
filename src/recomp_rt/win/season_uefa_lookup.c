@@ -140,7 +140,11 @@ static const char *const EL_LEVEL[SEASON_UEFA_EL_CODES - SEASON_UEFA_EL_G + 1] =
 
 int season_uefa_code_clubs(const SeasonUefa *r, char comp, int code)
 {
-    if (!r) return 0;
+    /* The preliminary round is not played: its clubs enter the first qualifying round, and the cascade of the
+     * seeding drops the lowest-ranked of them (season_uefa_seeding.c), as the real round would. Four rounds of
+     * two legs every 14 days fit between the first day of a moved season (11 July) and the group stages; a
+     * fifth does not (season_uefa_qual.c, the dates). */
+    if (!r || code == SEASON_UEFA_CL_PR || code == SEASON_UEFA_EL_PR) return 0;
     if (comp == 'c') {
         if (code < 1 || code >= SEASON_UEFA_CL_CODES) return 0;
         int n = season_uefa_cl_round(r, CL_ROUND[code][0]);
@@ -157,6 +161,7 @@ static int cl_losers(const SeasonUefa *r, const char *tok, int n)
     if (n <= 0 || n >= (int)sizeof name) return 0;
     memcpy(name, tok, (size_t)n);
     name[n] = 0;
+    if (!strcmp(name, "PR")) return 0;          /* not played (season_uefa_code_clubs) */
     if (name[2] == '-') {                       /* a path: "Q3-LP" is the round "Q3 LP" */
         name[2] = ' ';
         return season_uefa_cl_round(r, name) / 2;

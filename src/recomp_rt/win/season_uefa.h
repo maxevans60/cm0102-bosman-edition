@@ -134,5 +134,6 @@ int season_uefa_uc_entrants(uint32_t uc);
 uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds);
 int season_uefa_uc_direct_first(uint32_t uc);
 void season_uefa_uc_fill_drops(uint32_t uc);
+int season_uefa_report_clubs(uint32_t obj);
 
 #endif
