@@ -13,10 +13,10 @@
  * - a loaded game: at the end of the same function at 0x82c5f6 in load_game_data 0x82a9c0. The names are those
  *   of the start season with changing rules off, else those of the season of the game date (a season starts
  *   on 1 July). Slice 16 gives the names of each later season through season_names_apply.
- * The original finds each competition by its long name once at load (match_club_comp_key_id 0x60efd0, called
- * from set_key_ids 0x601a40 at 0x52d8fa in load_database 0x528540), and a save holds the records
- * (club_comp.dat, nation_comp.dat). So a save must hold the database names: season_names_save_begin puts them
- * back before the save writes, and season_names_save_end puts the season names in again after it.
+ * The original finds each competition by its long name at every load (match_club_comp_key_id 0x60efd0, called
+ * from set_key_ids 0x601a40 at 0x52d8fa in load_database 0x528540). So every long name goes in through
+ * season_change_rename (season_change.h, slice 16): it keeps the name in the data for that match and puts the
+ * names in the season part of the save. The short name is not matched and goes in directly.
  *
  * Only a season game gets names: a game whose start year is not 2001 or whose changing rules are on. The base
  * game (2001/02 with changing rules off) and the test switch RECOMP_SEASON_CODE=off keep the database names. */
@@ -46,14 +46,14 @@ const char *season_names_get(const char *comp_file, int season);
  * none. */
 const char *season_names_get_nth(const char *comp_file, int season, int n, const char **short_name);
 
-/* Gives every competition object of the game the names of that season. The first call keeps the database
- * names of each record, so that a save can put them back. Returns the number of records that changed.
- * Does nothing (returns 0) outside a season game. */
+/* Gives every competition object of the game the names of that season. Returns the number of records that
+ * changed. Does nothing (returns 0) outside a season game. */
 int season_names_apply(int season);
 
-/* Around the save of a game (save_game 0x82e430, season.c): the database names back, then the season names. */
-void season_names_save_begin(void);
-void season_names_save_end(void);
+/* The names kind of slice 16 (season_kind_names.c): gives the competition object obj the long and short name
+ * of the season, as season_names_apply does for every object. old gets the long name before (room bytes).
+ * Returns 1 when the name changed, 0 when it did not or outside a season game. */
+int season_names_rename_object(uint32_t obj, int season, char *old, size_t room);
 
 /* The competition objects of the game in the order of the rules report: the slots of g_comp_object_table
  * [0xadadfc], then the arrays of the 35 league table entries at 0xb63d60, each object once. Returns the count

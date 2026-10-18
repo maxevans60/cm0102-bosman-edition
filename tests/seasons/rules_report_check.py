@@ -453,7 +453,11 @@ def league_steps(nations, extra):
     return out
 
 
-def run(program, game, last, year, database, nations, extra, keep, timeout, start_only=False):
+def run(program, game, last, year, database, nations, extra, keep, timeout, options_more=None, env_more=None,
+        start_only=False):
+    """Plays the season jump. options_more: lines of settings.txt over the defaults (for example
+    changing_rules = on, tests/seasons/season_change_run.py); env_more: more environment variables; start_only:
+    the run ends after the first start report (slice 15)."""
     import smoke_run
     import custom_database_run as cdr
     work = keep or tempfile.mkdtemp(prefix="cm0102-rules-report-")
@@ -462,7 +466,8 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, star
     for d in (user, home, shots):
         os.makedirs(d)
     options = {"display": "classic", "changing_rules": "off", "faster_days": "on"}
-    env_extra = {}
+    options.update(options_more or {})
+    env_extra = dict(env_more or {})
     if year:
         env_extra["RECOMP_START_SEASON"] = str(year)
     if database:
@@ -520,7 +525,7 @@ def main(argv):
         start_only = "--start-only" in argv
         if start_only:
             last = year or 2001
-        code, report = run(program, game, last, year, database, nations, extra, keep, timeout, start_only)
+        code, report = run(program, game, last, year, database, nations, extra, keep, timeout, start_only=start_only)
         failed = [] if code == 0 else [f"the run ended with code {code}"]
         name = f"{year or 2001}-{nations[0].lower()}" + "".join(
             f"{'-no' if nations[0] == 'all' else '-'}{n.lower().replace(' ', '_')}" for n in nations[1:]) + \
