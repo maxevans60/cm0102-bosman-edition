@@ -18,8 +18,10 @@ from the "format" column of the cup rows of the rules table (docs/research/rules
                   E   single match, extra time then penalties on the day, no replay
                   P   single match, penalties after 90 minutes, no replay
                   R   single match, a level match is replayed once (the replay has extra time and penalties)
+                  RP  as R, a level replay goes straight to penalties
                   L   two legs, away goals count (extra time and penalties after the second leg)
-                  LN  two legs, no away goals rule
+                  LN  two legs, no away goals rule (extra time and penalties after the second leg)
+                  LP  two legs, no away goals rule, penalties after the second leg, no extra time
                   LH  two legs, away goals count only after extra time (the League Cup rule)
     sentence  the news sentence of the change, plain words (no "<" and no "%")
 A row holds the whole format of its cup from that season on: the game takes the latest row of a cup that is not
@@ -34,7 +36,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 SRC = os.path.join(HERE, "cup_formats.tsv")
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_cups_table.c")
-WORDS = {".": ".", "E": "E", "P": "P", "R": "R", "L": "L", "LN": "N", "LH": "H"}   # word to the letter in C
+WORDS = {".": ".", "E": "E", "P": "P", "R": "R", "RP": "S", "L": "L", "LN": "N", "LP": "Q", "LH": "H"}
+# The cup classes whose create_round_table the game wraps (src/recomp_rt/win/season_kind_cups.c).
+CLASSES = {"eng_fa_cup", "eng_cc_cup", "eng_fa_trophy", "sco_fa_cup", "bel_fa_cup", "fra_cup", "fra_lge_cup", "nor_cup"}   # word to the letter in C
 FIRST, LAST = 2002, 2099
 
 
@@ -51,8 +55,11 @@ def text():
     seen = set()
     for n, r in enumerate(rows, 2):
         where = f"cup_formats.tsv line {n}"
-        if not r["file"].replace("_", "").isalnum() or not r["file"].islower():
-            fail(f"{where}: bad file {r['file']!r}")
+        if None in r.values() or None in r:
+            fail(f"{where}: a row needs 5 columns (file, season, rounds, types, sentence) separated by tabs")
+        if r["file"] not in CLASSES:
+            fail(f"{where}: {r['file']!r} is not a cup class that the game wraps; the classes are "
+                 f"{', '.join(sorted(CLASSES))} (add the wrap in season_kind_cups.c first)")
         if not r["season"].isdigit() or not FIRST <= int(r["season"]) <= LAST:
             fail(f"{where}: the season must be a start year from {FIRST} to {LAST}")
         if not r["rounds"].isdigit() or not 1 <= int(r["rounds"]) <= 32:

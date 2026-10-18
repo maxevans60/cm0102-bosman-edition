@@ -7,9 +7,9 @@ const SeasonCupRow season_cup_rows[] = {
     {"bel_fa_cup", 2015, 8, ".....ELE", "The Belgian Cup quarter-finals are single matches again. Only the semi-finals have two legs."},
     {"bel_fa_cup", 2020, 8, ".....EEE", "The Belgian Cup semi-finals are single matches this season."},
     {"bel_fa_cup", 2021, 8, ".....ELE", "The Belgian Cup semi-finals are over two legs again."},
-    {"eng_cc_cup", 2018, 7, "PPPPPNE", "League Cup ties are now settled by penalties after 90 minutes before the final. The semi-finals have no away goals rule."},
+    {"eng_cc_cup", 2018, 7, "PPPPPQE", "League Cup ties are now settled by penalties after 90 minutes before the final. The semi-finals are over two legs with no away goals rule and penalties after the second leg."},
     {"eng_cc_cup", 2020, 7, "PPPPPPE", "The League Cup semi-finals are single matches this season. Only the final has extra time."},
-    {"eng_cc_cup", 2021, 7, "PPPPPNE", "The League Cup semi-finals are over two legs again, with no away goals rule."},
+    {"eng_cc_cup", 2021, 7, "PPPPPQE", "The League Cup semi-finals are over two legs again, with no away goals rule and penalties after the second leg."},
     {"eng_fa_cup", 2016, 9, "RRRRRREEE", "FA Cup replays now stop after the fifth round. The quarter-finals are settled on the day."},
     {"eng_fa_cup", 2018, 9, "RRRRREEEE", "FA Cup replays now stop after the fourth round."},
     {"eng_fa_cup", 2020, 9, "EEEEEEEEE", "The FA Cup has no replays this season. Level ties go to extra time and penalties."},
@@ -22,5 +22,7 @@ const SeasonCupRow season_cup_rows[] = {
     {"nor_cup", 2002, 7, "EEEEEEE", "Norwegian Cup ties are now settled on the day. Level ties go to extra time and penalties."},
     {"sco_fa_cup", 2007, 7, "RRRRREE", "Scottish Cup replays now stop after the quarter-finals. The semi-finals are settled on the day."},
     {"sco_fa_cup", 2020, 7, "EEEEEEE", "The Scottish Cup has no replays. Level ties go to extra time and penalties."},
+    {"sco_fa_cup", 2021, 7, "SSEEEEE", "The Scottish Cup brings back replays in the early rounds. A level replay goes straight to penalties."},
+    {"sco_fa_cup", 2022, 7, "EEEEEEE", "The Scottish Cup has no replays again. Level ties go to extra time and penalties."},
 };
-const int season_cup_row_count = 19;
+const int season_cup_row_count = 21;

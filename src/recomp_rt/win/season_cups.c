@@ -16,6 +16,8 @@ const SeasonCupRow *season_cups_row(const char *file, int season)
 /* The days to a second leg when a single-match round becomes a two-leg round (the original's two-leg rounds use
  * 7 and 14: SpaCup 0x84d220, BelFaCup 0x41d310). */
 #define SECOND_LEG_DAYS 7
+/* The days to a replay when a round that had none gets one (the FA Cup rounds use 10, EngFaCup 0x56f320). */
+#define REPLAY_DAYS 10
 
 int season_cups_apply(char type, SeasonCupRound *r)
 {
@@ -33,16 +35,20 @@ int season_cups_apply(char type, SeasonCupRound *r)
         r->legs = 1;
         break;
     case 'R':                                   /* single match, one replay with extra time and penalties */
+    case 'S':                                   /* the same, a level replay goes straight to penalties */
         r->first = keep;
-        r->deciding = CUP_EXTRA_TIME | CUP_PENALTIES;
+        r->deciding = type == 'S' ? CUP_PENALTIES : CUP_EXTRA_TIME | CUP_PENALTIES;
+        if (r->replays == 0) r->days = REPLAY_DAYS;
         r->replays = 1;
         r->legs = 1;
         break;
     case 'L':                                   /* two legs, away goals count */
     case 'N':                                   /* two legs, no away goals rule */
+    case 'Q':                                   /* the same, penalties after the second leg, no extra time */
     case 'H':                                   /* two legs, away goals count only after extra time */
         r->first = (uint16_t)(keep | (type == 'H' ? CUP_AWAY_AFTER_ET : 0));
-        r->deciding = (uint16_t)(CUP_EXTRA_TIME | CUP_PENALTIES |
+        r->deciding = (uint16_t)(type == 'Q' ? CUP_PENALTIES | CUP_NO_AWAY_GOALS :
+                                 CUP_EXTRA_TIME | CUP_PENALTIES |
                                  (type == 'N' ? CUP_NO_AWAY_GOALS : type == 'H' ? CUP_AWAY_AFTER_ET : 0));
         r->replays = 0;
         if (r->legs != 2) r->days = SECOND_LEG_DAYS;

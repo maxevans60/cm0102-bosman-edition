@@ -95,7 +95,8 @@ static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
                 changed < 0 ? "not applied, another round count, rounds" : "rounds changed", changed < 0 ? 0 : changed);
 }
 
-/* The news of a row: with changing rules on, the cup that starts the season of a row says so. */
+/* The news of a row: with changing rules on, the cup that starts the season of a row says so. A row is a change by
+ * design (the table holds only seasons in which a format changes), so the sentence does not check the rounds. */
 static void cups_after(const SeasonChange *c)
 {
     if (!c->started || cups_off()) return;
@@ -108,8 +109,10 @@ static void cups_after(const SeasonChange *c)
 const SeasonRuleKind season_kind_cups = {"cups", NULL, NULL, NULL, NULL, NULL, cups_after};
 
 /* create_round_table of the cup classes that have a row in the cups table (thiscall: this, char stage, short
- * *round_count, short *first_id, int *out; ret 0x10; the function map and the read of each, docs/research/
- * 2026-10-17-cup-round-record.md). The recompiler reads the RT_WRAP lines as they are, so each is written out. */
+ * *round_count, short *first_id, int *out; ret 0x10). It is slot +0x3c of the class vtable (EngFaCup 0x969b28 calls
+ * 0x56f320 at 0x56f13b through it). The vtables: EngFaCup 0x969b28, EngCcCup 0x969934, EngFaTrophy 0x969bc8,
+ * ScoFaCup 0x96f414, BelFaCup 0x9678a0, FraCup 0x96a864, FraLgeCup 0x96aad8, NorCup 0x96dd80; each slot +0x3c holds
+ * the address of its wrap below. The recompiler reads the RT_WRAP lines as they are, so each is written out. */
 void o_0056f320(void);
 RT_WRAP(0056f320, cups_eng_fa_cup)
 {

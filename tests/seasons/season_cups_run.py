@@ -13,6 +13,7 @@ deciding (src/recomp_rt/win/season_report.c). The runs:
                takes its expected rounds from these, by applying the table rows (the same rule as
                season_cups_apply in src/recomp_rt/win/season_cups.c)
     s2020      November 2020, changing rules off: the cups hold the formats of 2020/21 for the whole season
+    s2018      October 2018, changing rules off: the formats of 2018/19 (the League Cup semi-final with penalties only)
     s2024      October 2024, changing rules off: the formats of 2024/25
     c2001      3.9.68 data, changing rules on, 2001/02 to 2002/03: only the Norwegian Cup changes
     c2015      October 2015, changing rules on, 2015/16 to 2016/17: the FA Cup changes
@@ -47,11 +48,24 @@ EXTRA = ["conference"]
 RUNS = {
     "base": (2001, None, "off", 2001),
     "s2020": (2020, os.path.join(DB, "November 2020"), "off", 2020),
+    "s2018": (2018, os.path.join(DB, "October 2018"), "off", 2018),
     "s2024": (2024, os.path.join(DB, "October 2024"), "off", 2024),
     "c2001": (2001, None, "on", 2002),
     "c2015": (2015, os.path.join(DB, "October 2015"), "on", 2016),
     "c2017": (2017, os.path.join(DB, "October 2017"), "on", 2018),
     "c2020": (2020, os.path.join(DB, "November 2020"), "on", 2022),
+}
+# The rounds of the original in 2001/02 (docs/research/2026-10-17-cup-round-record.md), legs:replays:first:deciding with
+# the flags in hexadecimal. The base run must give exactly these, so a change of the base game fails the test. The
+# Scottish Cup is not in the test steps (Scotland cannot be selected), so it has no entry.
+FIXED = {
+    "eng_fa_cup": "0:1:0:3 " + "1:1:0:3 " * 6 + "1:0:3:0 1:0:3:0",
+    "eng_cc_cup": "1:0:403:0 1:0:403:0 1:0:3:0 1:0:203:0 1:0:203:0 2:0:4200:4003 1:0:3:0",
+    "eng_fa_trophy": "1:2:0:2 0:2:0:2 0:2:0:2 2:1:0:4 1:1:0:3",
+    "bel_fa_cup": "1:0:401:0 1:0:403:0 1:0:403:0 1:0:3:0 1:0:3:0 1:1:2:3 2:0:0:3 1:1:2:3",
+    "fra_cup": " ".join(["1:0:3:0"] * 9),
+    "fra_lge_cup": " ".join(["1:0:3:0"] * 7),
+    "nor_cup": "1:0:403:0 1:0:403:0 1:0:3:0 0:1:2:3 1:1:2:3 1:1:2:3 0:1:2:3",
 }
 NEWS = re.compile(r"recomp: season change: news (\d{4})/\d\d: (.*)$")
 NOT_APPLIED = re.compile(r"recomp: cups: .* not applied")
@@ -78,9 +92,11 @@ def apply_type(word, rnd):
         first, replays, legs = keep | 1, 0, 1
     elif word == "R":
         first, deciding, replays, legs = keep, 3, 1, 1
-    elif word in ("L", "LN", "LH"):
+    elif word == "RP":
+        first, deciding, replays, legs = keep, 1, 1, 1
+    elif word in ("L", "LN", "LP", "LH"):
         first = keep | (0x4000 if word == "LH" else 0)
-        deciding = 3 | (4 if word == "LN" else 0x4000 if word == "LH" else 0)
+        deciding = 5 if word == "LP" else 3 | (4 if word == "LN" else 0x4000 if word == "LH" else 0)
         replays = 0
         legs = 2
     return [legs, replays, first, deciding, rnd[4]]
@@ -125,6 +141,8 @@ def check_run(name, program, game, keep, originals, rows, reuse=False):
     report = os.path.join(work, "report.tsv")
     if reuse and os.path.exists(report):
         code = 0
+    elif os.path.exists(work) and keep:
+        return [f"{name}: the folder {work} exists; use --reuse to check it again, or another --keep folder"], None
     else:
         code, report = rrc.run(program, game, last, year, database, nations, EXTRA, work, 10800,
                                {"changing_rules": rules}, {"RECOMP_SEASON_CHANGE_LOG": "1"})
@@ -136,6 +154,8 @@ def check_run(name, program, game, keep, originals, rows, reuse=False):
     if name == "base":
         for _, phase, _, file, rounds in cups:
             originals.setdefault(file, rounds)
+            if file in FIXED and " ".join(f"{r[0]}:{r[1]}:{r[2]:x}:{r[3]:x}" for r in rounds) != FIXED[file]:
+                fails.append(f"{name}: {file} in the base game holds {rounds}, the original has {FIXED[file]}")
         wanted = {"eng_fa_cup", "eng_cc_cup", "eng_fa_trophy", "bel_fa_cup", "fra_cup", "fra_lge_cup", "nor_cup"}
         if wanted - set(files):
             fails.append(f"{name}: no cup line for {sorted(wanted - set(files))}")
@@ -170,8 +190,8 @@ def check_run(name, program, game, keep, originals, rows, reuse=False):
         fails.append(f"{name}: the news of {k[0]} lacks: {k[1]}")
     for k in sorted(set(got) - set(want_news)):
         fails.append(f"{name}: the news of {k[0]} has an extra line: {k[1]}")
-    if rules == "off" and any("season change" in x for x in log):
-        fails.append(f"{name}: changing rules off, but the log shows a season change")
+    if rules == "off" and any("season change: news" in x for x in log):
+        fails.append(f"{name}: changing rules off, but the log shows news")
     print(f"{name}: {len(cups)} cup lines, {changed} with a changed format, {sum(got.values())} news lines, "
           f"{len(fails)} problems ({work})")
     return fails, files

@@ -16,7 +16,7 @@ typedef struct {
     const char *file;        /* the source file of the cup class: eng_fa_cup */
     int season;              /* the first season of the format (start year), 2002 or later */
     int rounds;              /* the round count that the class makes (cup+0x3c) */
-    const char *types;       /* one letter for each round: . E P R L N H (make_cups_table.py) */
+    const char *types;       /* one letter for each round: . E P R S L N Q H (make_cups_table.py) */
     const char *sentence;    /* the news sentence of the change */
 } SeasonCupRow;
 

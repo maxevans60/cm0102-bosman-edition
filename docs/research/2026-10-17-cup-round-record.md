@@ -4,10 +4,11 @@ Date 2026-10-17. Original: `clean-3968/cm0102.exe` 3.9.68, virtual addresses. Co
 
 ## What the slice does
 
-The rules table gives the format of each domestic cup as text. The cup classes of the original hold five fields for each round: the match flags of the first match, the flags of the deciding match, the replays allowed, the legs and the days to the replay. The slice writes these five fields after the original makes its round table:
+The rules table gives the format of each domestic cup as text. The cup classes of the original hold five fields for each round: the match flags of the first match, the flags of the deciding match, the replays allowed, the legs and the days to the replay. The slice wraps `create_round_table` of each cup class that has a row (8 classes, `season_kind_cups.c`) and writes these five fields into the table that the function returns, before the caller stores it. The original also makes the table anew at times that are not a season start (the FA Cup table was made again by 1 June of its first season, and a log of every `start_new_season` showed no call in between), so a write after a season start was lost. Whatever makes the table, it holds the format of the season:
 
-- At a new game, for the start year (hook `new_game`).
-- At each season change with changing rules on, after `start_new_season` of the cup (hook `after`), with one news sentence when a row starts in that season and the rounds change.
+- The season of a cup is its season year (`cup+0x40`, set before the table is made) with changing rules on, and the start year of the game with changing rules off.
+- The news sentence of a row comes in the `after` hook of the season change, once for the cup that starts the season of the row (changing rules on, the cup holds the row's round count).
+- This slice is part 21a. Part 21b holds the rest: cups that start or end, new cups, four-club super cups, group stages, other round counts, the Coppa Italia, the KNVB Cup and the round names (Q370).
 
 `cup_formats.tsv` holds one row for each cup and season in which the format changes, as one word for each round (E, P, R, L, LN, LH, or . to keep the round). A row holds the whole format from its season on. A cup with no row for the season keeps the rounds of the original. The first row is 2002: a game that starts in 2001/02 with changing rules off gets nothing, and the table has no row at or before 2001, so a base game is the same as 0.5.0.
 
@@ -40,6 +41,7 @@ Each one has the reason. A cup that is not listed has no row in the rules table 
 - **Entrant counts**: the FA Cup holds 152 entrants (a fixed array, `EngFaCup::collect_entrants` 0x56fab0), the League Cup 92. The cup rows give other counts in some seasons (Scottish Cup 106 to 137, Copa del Rey 80 to 126). Not changed.
 - **Cups of a nation the game cannot select** (Q288) are out.
 - **Q336 (EFL Trophy academy sides from 2016/17, National League Cup from 2024/25):** not built. It needs a new competition (see the first point), so it is not easy. Recommended answer: leave it out of 0.6.0.
+- **Not known**: whether the FA Cup qualifying rounds of 2021/22 had replays (the table keeps the original's `R` for round 0), and the Belgian Cup rounds 1 to 4 that go straight to penalties in 2023/24 and 2024/25 (no row).
 - **Not checked in a game run**: `sco_fa_cup` (Scotland is not one of the 16 nations that the test steps can select), the Spanish Cup and the German, Portuguese, Swedish and Danish cups (no row).
 
 ## Cup round record research (from the code)

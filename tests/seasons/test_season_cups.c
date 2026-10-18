@@ -46,6 +46,12 @@ int main(void)
     CHECK(season_cups_apply('L', &r) && r.legs == 2 && r.days == 7 && r.first == 0 && r.deciding == 3, "L on a single match");
     r = (SeasonCupRound){0, 3, 0, 2, 14};
     CHECK(season_cups_apply('E', &r) && r.legs == 1 && r.first == 3 && r.days == 14, "E on a two-leg round");
+    r = (SeasonCupRound){0x4200, 0x4003, 0, 2, 21};
+    CHECK(season_cups_apply('Q', &r) && r.first == 0x200 && r.deciding == 5 && r.legs == 2, "Q on the League Cup semi-final");
+    r = (SeasonCupRound){3, 0, 0, 1, 7};
+    CHECK(season_cups_apply('S', &r) && r.deciding == 1 && r.replays == 1 && r.first == 0 && r.days == 10, "S on a single match");
+    r = (SeasonCupRound){3, 0, 0, 1, 7};
+    CHECK(season_cups_apply('R', &r) && r.days == 10 && r.deciding == 3, "R sets the replay days");
     CHECK(!season_cups_apply('.', &r) && !season_cups_apply('x', &r), "a letter that is no type changed a round");
 
     /* The table: the latest row not later than the season. */
