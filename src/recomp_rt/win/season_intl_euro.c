@@ -21,6 +21,7 @@
  * were not read: second source needed. */
 #include "win.h"
 #include "season_intl.h"
+#include "euro_finals.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -419,8 +420,10 @@ RT_WRAP(0057c710, euro_seeding)
     if (rt_unwinding) return;
     cpu.ecx = self;
     if (!euro24(self)) {
-        /* The 16-team path. The staff reserve fix has its own fill of a short list (euro_finals_fill_short_list,
-         * on its branch a wrap of 0x57c710): at the merge that wrap goes and its function is called here. */
+        /* The 16-team path: the staff reserve fix's fill of a short list (euro_finals.c), then the original. */
+        euro_finals_fill_short_list(self);
+        if (rt_unwinding) return;
+        cpu.ecx = self;
         o_0057c710();
         return;
     }
