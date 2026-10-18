@@ -441,6 +441,12 @@ void o_0057c9f0(void);
 RT_WRAP(0057c9f0, euro_predicted)
 {
     uint32_t self = cpu.ecx, stats = readable(self) ? rd32(g_mem, self + 8u) : 0;
+    /* The original gives a position to each of its 16 slots (0x57cb10..0x57cbe5) and stops at the box
+     * "comp_stats.CPP 1664" for an empty one (0x4a2540, return 0x57cbea): a 2023 start with France met it on
+     * 9 February 2024 on a build without this file. The slots are filled first, on both paths. */
+    season_intl_euro_fill(self);
+    if (rt_unwinding) return;
+    cpu.ecx = self;
     if (!euro24(self) || !stats) {
         o_0057c9f0();
         return;
