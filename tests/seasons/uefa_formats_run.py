@@ -19,9 +19,12 @@ rounds of the knockout stage, and the winner of its history row of the season. T
             (RECOMP_SEASON_CHANGE_LOG=1) has the sentence of each change in its season, and the report has no
             difference with the rules table that tests/seasons/rules_report_expected/changing-2002-england.tsv
             does not list (it lists no format line: each season plays the format of its row). The label of a
-            round (the game's formatter 0x4bffc0, as a fixture line writes it) has its real name from the
+            round (the game's label function 0x4bfa30, long and abbreviated names) has its real name from the
             season of the rename (Q370): the Champions League "Round of 16" from 2003/04 (not in 2002/03),
-            the UEFA Cup "Round of 32" and "First Qualifying Round" from 2004/05 ("Third Round" in 2003/04)
+            the UEFA Cup "Round of 32" and "First Qualifying Round" from 2004/05 ("Third Round" in 2003/04), and in
+            the abbreviated names "Rnd of 16", "Rnd of 32" and the original's "Qual.1"
+    off2002 3.9.68 data from 2002/03, changing rules off, to the end of 2003/04: both seasons keep the format and
+            the round names of 2002/03 (Q232): 13 stages and "Second Round", not "Round of 16"
     load    November 2007: the game saves 240 days after the start (March 2008, the knockout stages of both
             cups), a new program loads the save, the holiday goes on to 1 June 2008, and the end report of
             2007/08 shows both knockout stages played to the end of the season (16 and 32 clubs)
@@ -73,23 +76,24 @@ def uefa_lines(report):
 
 
 def round_labels(report):
-    """{(season, file, code): label} of the roundname lines (Q370): the label the game's formatter
-    0x4bffc0 gives a round code of the competition at the end of the season."""
+    """{(season, file, code, style): label} of the roundname lines (Q370): the label that the game's label
+    function 0x4bfa30 gives a round code of the competition at the end of the season, style 1 (long names) or
+    3 (abbreviated names)."""
     out = {}
     with open(report, encoding="latin-1") as f:
         for line in f:
             c = line.rstrip("\n").split("\t")
-            if c[0] == "roundname" and len(c) >= 6:
-                out[(int(c[1]), c[3], int(c[4]))] = c[5]
+            if c[0] == "roundname" and len(c) >= 7:
+                out[(int(c[1]), c[3], int(c[4]), int(c[6]))] = c[5]
     return out
 
 
-def expect_label(labels, season, file, code, want, label, absent=False):
-    got = labels.get((season, file, code))
+def expect_label(labels, season, file, code, want, label, absent=False, style=1):
+    got = labels.get((season, file, code, style))
     if got is None:
-        return [f"{label}: no round label of {file} {code} in {season}"]
+        return [f"{label}: no round label of {file} {code} style {style} in {season}"]
     if (want in got) == absent:
-        return [f"{label}: {file} round {code} in {season}/{(season + 1) % 100:02d} shows {got!r}"
+        return [f"{label}: {file} round {code} style {style} in {season}/{(season + 1) % 100:02d} shows {got!r}"
                 f"{', which has' if absent else ', not'} {want!r}"]
     return []
 
@@ -147,6 +151,10 @@ def run_change(program, game, work):
         fails += expect_label(labels, 2003, "uefa_cup", 30, "Third Round", "change")
         fails += expect_label(labels, 2004, "uefa_cup", 30, "Round of 32", "change")
         fails += expect_label(labels, 2004, "uefa_cup", 250, "First Qualifying Round", "change")
+        fails += expect_label(labels, 2004, "european_cup", 20, "Rnd of 16", "change", style=3)
+        fails += expect_label(labels, 2004, "uefa_cup", 30, "Rnd of 32", "change", style=3)
+        fails += expect_label(labels, 2004, "uefa_cup", 250, "Qual.1", "change", style=3)
+        fails += expect_label(labels, 2004, "uefa_cup", 250, "Round", "change", absent=True, style=3)
     if os.path.exists(report):                  # the whole report against the expected file of changing rules on
         with CHECK_LOCK:
             fails += [f"change: {t}" for t in rrc.check(report, None, 2004, "changing-2002-england")]
@@ -190,7 +198,21 @@ def run_load(program, game, work):
     return fails
 
 
-RUNS = {"2007": run_2007, "change": run_change, "load": run_load}
+def run_off2002(program, game, work):
+    code, report = rrc.run(program, game, 2003, 2002, None, ["England"], [], work, 7200)
+    fails = [] if code == 0 else [f"off2002: the jump ended with code {code}"]
+    found, _ = boxes(work)
+    fails += [f"off2002: message box {b}" for b in found]
+    if os.path.exists(report):
+        lines = uefa_lines(report)
+        fails += expect(lines, 2003, "european_cup", CL_ORIGINAL, "off2002")
+        labels = round_labels(report)
+        fails += expect_label(labels, 2003, "european_cup", 20, "Round of 16", "off2002", absent=True)
+        fails += expect_label(labels, 2003, "european_cup", 20, "Second Round", "off2002")
+    return fails
+
+
+RUNS = {"2007": run_2007, "change": run_change, "load": run_load, "off2002": run_off2002}
 
 
 def main(argv):

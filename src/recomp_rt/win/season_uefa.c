@@ -576,12 +576,14 @@ void season_uefa_report(void *file, int season, const char *phase)
         {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250},
         /* slice 23: the qualifying rounds of 2009/10 on */
         {"european_cup", 220}, {"european_cup", 240}, {"european_cup", 250}, {"uefa_cup", 220}, {"uefa_cup", 270}};
-    for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++) {
-        uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : uc;
-        char text[128];
-        season_round_name_label(obj, labels[i].code, text, sizeof text);
-        for (char *p = text; *p; p++)
-            if (*p == '\t' || *p == '\n') *p = ' ';
-        fprintf(f, "roundname\t%d\t%s\t%s\t%d\t%s\n", season, phase, labels[i].file, labels[i].code, text);
-    }
+    for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++)
+        for (int style = 1; style <= 3 && !rt_unwinding; style += 2) {      /* 1 long names, 3 abbreviated */
+            uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : uc;
+            char text[128];
+            season_round_name_label(obj, labels[i].code, style, text, sizeof text);
+            for (char *p = text; *p; p++)
+                if (*p == '\t' || *p == '\n') *p = ' ';
+            fprintf(f, "roundname\t%d\t%s\t%s\t%d\t%s\t%d\n", season, phase, labels[i].file, labels[i].code, text,
+                    style);
+        }
 }

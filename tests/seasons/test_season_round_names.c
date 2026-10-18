@@ -20,12 +20,16 @@ int main(void)
 {
     /* The Champions League round of 16 from 2003/04 in both name sets; the original's name before. */
     CHECK(is(season_round_name("european_cup", 20, 2003, SEASON_ROUND_NAME_LONG), "Round of 16"));
-    CHECK(is(season_round_name("european_cup", 20, 2008, SEASON_ROUND_NAME_SHORT), "Round of 16"));
+    CHECK(is(season_round_name("european_cup", 20, 2008, SEASON_ROUND_NAME_PLURAL), "Round of 16"));
     CHECK(season_round_name("european_cup", 20, 2002, SEASON_ROUND_NAME_LONG) == NULL);
     /* The UEFA Cup rounds of its group format from 2004/05; the original's names in 2003/04. */
     CHECK(is(season_round_name("uefa_cup", 30, 2004, SEASON_ROUND_NAME_LONG), "Round of 32"));
     CHECK(is(season_round_name("uefa_cup", 40, 2006, SEASON_ROUND_NAME_LONG), "Round of 16"));
-    CHECK(is(season_round_name("uefa_cup", 250, 2004, SEASON_ROUND_NAME_SHORT), "First Qualifying Round"));
+    CHECK(is(season_round_name("uefa_cup", 250, 2004, SEASON_ROUND_NAME_PLURAL), "First Qualifying Round"));
+    /* The abbreviated set has its own short names; a set with no row keeps the original's ("Qual.1"). */
+    CHECK(is(season_round_name("european_cup", 20, 2004, SEASON_ROUND_NAME_ABBREVIATED), "Rnd of 16"));
+    CHECK(is(season_round_name("uefa_cup", 30, 2004, SEASON_ROUND_NAME_ABBREVIATED), "Rnd of 32"));
+    CHECK(season_round_name("uefa_cup", 250, 2004, SEASON_ROUND_NAME_ABBREVIATED) == NULL);
     CHECK(is(season_round_name("uefa_cup", 260, 2008, SEASON_ROUND_NAME_LONG), "Second Qualifying Round"));
     CHECK(season_round_name("uefa_cup", 30, 2003, SEASON_ROUND_NAME_LONG) == NULL);
     /* Another competition with the same code keeps the original's name. */

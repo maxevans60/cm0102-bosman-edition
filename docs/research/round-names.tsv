@@ -1,14 +1,21 @@
-comp_file	round_code	first_season	set	name	source
-european_cup	20	2003	both	Round of 16	https://en.wikipedia.org/wiki/2003%E2%80%9304_UEFA_Champions_League_knockout_stage (section "Round of 16"); rules table row uefa-18
-uefa_cup	30	2004	both	Round of 32	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup_knockout_stage (section "Round of 32"); rules table row uefa-29
-uefa_cup	40	2004	both	Round of 16	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup_knockout_stage (section "Round of 16"); rules table row uefa-29
-uefa_cup	250	2004	both	First Qualifying Round	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup (section "First qualifying round"); rules table row uefa-29 (Q1)
-uefa_cup	260	2004	both	Second Qualifying Round	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup (section "Second qualifying round"); rules table row uefa-29 (Q2)
-european_cup	250	2003	both	First Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("first qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23)
-european_cup	260	2003	both	Second Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("second qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23)
-european_cup	270	2003	both	Third Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("third qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23)
-european_cup	220	2009	both	Play-off Round	https://kassiesa.net/uefa/files/2009-10-uefa-cl-rules.pdf ("play-offs"); https://en.wikipedia.org/wiki/2009%E2%80%9310_UEFA_Champions_League ("Play-off round"); slice 23
-european_cup	240	2018	both	Preliminary Round	https://kassiesa.net/uefa/files/2018-19-uefa-cl-rules.pdf ("preliminary round"); slice 23
-uefa_cup	270	2009	both	Third Qualifying Round	https://kassiesa.net/uefa/files/2009-10-uefa-el-rules.pdf ("third qualifying round"); slice 23
-uefa_cup	220	2009	both	Play-off Round	https://kassiesa.net/uefa/files/2009-10-uefa-el-rules.pdf ("play-offs"); https://en.wikipedia.org/wiki/2009%E2%80%9310_UEFA_Europa_League ("Play-off round"); slice 23
-uefa_cup	240	2018	both	Preliminary Round	https://kassiesa.net/uefa/files/2018-19-uefa-el-rules.pdf ("preliminary round"); slice 23
+comp_file	round_code	first_season	sets	name	source
+european_cup	20	2003	long,plural	Round of 16	https://en.wikipedia.org/wiki/2003%E2%80%9304_UEFA_Champions_League_knockout_stage (section "Round of 16"); rules table row uefa-18
+european_cup	20	2003	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+uefa_cup	30	2004	long,plural	Round of 32	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup_knockout_stage (section "Round of 32"); rules table row uefa-29
+uefa_cup	30	2004	abbreviated	Rnd of 32	the long name in the original's short words ("3rd Rnd"); source of the name as the row above
+uefa_cup	40	2004	long,plural	Round of 16	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup_knockout_stage (section "Round of 16"); rules table row uefa-29
+uefa_cup	40	2004	abbreviated	Rnd of 16	the long name in the original's short words ("4th Rnd"); source of the name as the row above
+uefa_cup	250	2004	long,plural	First Qualifying Round	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup (section "First qualifying round"); rules table row uefa-29 (Q1); the original's short "Qual.1" stays
+uefa_cup	260	2004	long,plural	Second Qualifying Round	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup (section "Second qualifying round"); rules table row uefa-29 (Q2); the original's short "Qual.2" stays
+european_cup	250	2003	long,plural	First Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("first qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23); the original's short "Qual.1" stays
+european_cup	260	2003	long,plural	Second Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("second qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23); the original's short "Qual.2" stays
+european_cup	270	2003	long,plural	Third Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("third qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23); the original's short "Qual.3" stays
+european_cup	220	2009	long,plural	Play-off Round	https://kassiesa.net/uefa/files/2009-10-uefa-cl-rules.pdf ("play-offs"); https://en.wikipedia.org/wiki/2009%E2%80%9310_UEFA_Champions_League ("Play-off round"); slice 23
+european_cup	220	2009	abbreviated	Play-off Rnd	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+european_cup	240	2018	long,plural	Preliminary Round	https://kassiesa.net/uefa/files/2018-19-uefa-cl-rules.pdf ("preliminary round"); slice 23
+european_cup	240	2018	abbreviated	Prelim. Rnd	the long name in the original's short words; source of the name as the row above
+uefa_cup	270	2009	long,plural	Third Qualifying Round	https://kassiesa.net/uefa/files/2009-10-uefa-el-rules.pdf ("third qualifying round"); slice 23; the original's short "Qual.3" stays
+uefa_cup	220	2009	long,plural	Play-off Round	https://kassiesa.net/uefa/files/2009-10-uefa-el-rules.pdf ("play-offs"); https://en.wikipedia.org/wiki/2009%E2%80%9310_UEFA_Europa_League ("Play-off round"); slice 23
+uefa_cup	220	2009	abbreviated	Play-off Rnd	the long name in the original's short words; source of the name as the row above
+uefa_cup	240	2018	long,plural	Preliminary Round	https://kassiesa.net/uefa/files/2018-19-uefa-el-rules.pdf ("preliminary round"); slice 23
+uefa_cup	240	2018	abbreviated	Prelim. Rnd	the long name in the original's short words; source of the name as the row above
