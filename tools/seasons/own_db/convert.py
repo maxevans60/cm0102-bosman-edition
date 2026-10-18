@@ -17,7 +17,8 @@ What changes:
   start season and later go: careers from the start year, competition history after the start year.
 - People. A template person matched to an FM person (match.py) gets the FM club and job, joined date and
   contract end. A matched person whom FM has at no club, or at a club that the template lacks, has no club.
-  An unmatched template player at a club that FM covers has no club: FM does not have him there.
+  An unmatched template player at a club that FM covers has no club: FM does not have him there (unless a
+  reserve record would keep fewer than 16 players).
   His date of birth is FM's (the template's is sometimes one or two years out).
   Ratings, positions and every other field of the template stay.
 - Clubs. Current division and last division and position from leagues.pkl. Manager (+0xcf) and assistant
@@ -40,9 +41,9 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from cmdb import Folder, cstr  # noqa: E402
+from cmdb import Folder, cstr, norm  # noqa: E402
 
-from seasons import settings, template_shifts, kept_careers, last_row_comps, repair_clubs  # noqa: E402
+from seasons import settings, template_shifts, kept_careers, last_row_comps, repair_clubs, reserve_teams, RESERVE_WORDS  # noqa: E402
 
 S_ = START = SH = HIST_SHIFT = None   # set in main from the season settings and the date shift research
 AFTER_START = set()             # national competitions of the start year played after the start (filled in main)
@@ -184,6 +185,11 @@ def main(argv):
             fp[i] = dict(fp[i], club=ln["club"], joined=ln["start"] or fp[i]["joined"])
             n_loans += 1
         print(f"loans: {n_loans} players at their loan club")
+    # Reserve sides: FM's second team of a club goes to the template's reserve record (seasons.reserve_teams), so
+    # that "Amateure", "II" and "B" clubs in a division have their players.
+    fp, clubmap, n_res = reserve_teams(T, X, clubmap, fp)
+    M["clubmap"] = clubmap
+    print(f"reserve sides: {n_res} players at {sum(isinstance(k, tuple) for k in clubmap)} reserve records")
     cp = os.path.join(X, "careers.pkl")
     fm_careers = pickle.load(open(cp, "rb")) if os.path.exists(cp) else {}
     n_template = idx[6]["count"]
@@ -240,15 +246,28 @@ def main(argv):
             if x["role"] == "staff":
                 r[0x3d] = JOBS[x["job"]]
         moved += new != old
-    gone = 0
+    # An unmatched template player at a club that FM covers leaves it: FM does not have him there. A reserve record
+    # (seasons.RESERVE_WORDS) that would keep fewer than MIN_SQUAD players keeps its template players: FM lists few
+    # players of many reserve sides, and the game pairs a reserve side with its senior club (0x540a50).
+    MIN_SQUAD = 16
+    reserve = {g(rr, 0) for rr in T.rows(0) if cstr(rr, 4, 51).lower().split()[-1:] and
+               norm(cstr(rr, 4, 51)).split()[-1:][0] in RESERVE_WORDS}
+    leave = collections.defaultdict(list)
+    count = collections.Counter(g(r, 0x39) for r in staff if r[0x5f] in (2, 3))
     for t, r in enumerate(staff):
-        if t in by_t or r[0x5f] != 2:
+        if t not in by_t and r[0x5f] == 2 and g(r, 0x39) in covered:
+            leave[g(r, 0x39)].append(t)
+    gone = kept_small = 0
+    for c, ts in leave.items():
+        if c in reserve and count[c] - len(ts) < MIN_SQUAD:
+            kept_small += len(ts)
             continue
-        if g(r, 0x39) in covered:                   # FM knows the club and does not have him there
-            struct.pack_into("<i", r, 0x39, -1)
-            put_date(r, 0x46, EMPTY)
+        for t in ts:
+            struct.pack_into("<i", staff[t], 0x39, -1)
+            put_date(staff[t], 0x46, EMPTY)
             gone += 1
-    print(f"people: {len(by_t)} matched, {moved} moved, {gone} unmatched players left their club")
+    print(f"people: {len(by_t)} matched, {moved} moved, {gone} unmatched players left their club, {kept_small} "
+          f"kept at reserve records that would have fewer than {MIN_SQUAD} players")
 
     # 3. Clubs.
     # The game checks that every coach with a club is in the club's coach list (0x527240, Database.cpp line

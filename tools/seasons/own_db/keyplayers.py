@@ -181,6 +181,8 @@ def main(argv):
             if ln["club"] in M["clubmap"] and not (ln["start"] and ln["start"] > datetime.date(Y, 8, 31)):
                 fp[i] = dict(fp[i], club=ln["club"], joined=ln["start"] or fp[i]["joined"])
     O = Folder(final)
+    from seasons import reserve_teams              # as convert.py: reserve players at the reserve record
+    fp, M["clubmap"], _ = reserve_teams(O, X, M["clubmap"], fp)
 
     # 1. The key list.
     comps = {i32(r, 0): cstr(r, 4, 51) for r in O.rows(12)}

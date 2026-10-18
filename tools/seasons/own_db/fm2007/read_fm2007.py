@@ -143,11 +143,12 @@ def people(p, F, S, C):
         x["role"] = "player" if p[x["off"] - 6:x["off"]] == PLAYER else "staff"
         q = x["q"]
         end = min(P[i + 1]["off"] if i + 1 < len(P) else q + 400, q + 400, L)
-        x["job"] = x["joined"] = x["club"] = x["wage"] = x["cend"] = x["pid"] = None
-        m = re.search(rb"(?s)\x6c\x07....(.)(....)\x00", p[q + 9:q + 80])
+        x["job"] = x["joined"] = x["club"] = x["wage"] = x["cend"] = x["pid"] = x["team"] = None
+        m = re.search(rb"(?s)\x6c\x07(....)(.)(....)\x00", p[q + 9:q + 80])
         if m:
-            x["job"] = m.group(1)[0]
-            x["joined"] = date(p, q + 9 + m.start(2))
+            x["team"] = struct.unpack_from("<I", m.group(1))[0]     # the team id of the join block (as FM2005)
+            x["job"] = m.group(2)[0]
+            x["joined"] = date(p, q + 9 + m.start(3))
         for k in range(q + 9, end - 20):
             if p[k] == 0x64 and p[k + 5] == 0:
                 club, wage, day, yr = struct.unpack_from("<IIHH", p, k + 6)

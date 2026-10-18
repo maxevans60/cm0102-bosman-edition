@@ -76,3 +76,48 @@ def repair_clubs(T, S_):
             done.add(name)
     if done != set(fix):
         sys.exit(f"own_db: CLUB_REPAIR names no template club: {sorted(set(fix) - done)}")
+
+
+RESERVE_WORDS = {"amateure", "ii", "u23", "u21", "b", "2", "reserves"}
+
+
+def reserve_teams(T, X, clubmap, fp):
+    """FM keeps a club's reserve side as its second team id (teammap order: the first team first), and its players
+    have the club as their contract club and the reserve team in the join block (people_all "team"). The template
+    keeps the reserve side as a club record of its own (for example "FC Bayern München Amateure", "Real Madrid C.F.
+    B"), which the game pairs with the senior club (club_get_linked_b_team 0x540a50). A reserve record whose long name is
+    the senior record's long name (or short name) plus one reserve word gets the players of the second team.
+    Returns (fp with those players at a new club key ("B", FM club id), clubmap with that key, count of players)."""
+    import pickle
+    from cmdb import cstr, norm
+    tm = pickle.load(open(os.path.join(X, "teammap.pkl"), "rb"))
+    second, seen = {}, {}
+    for t, c in tm.items():
+        n = seen.get(c, 0)
+        if n == 1:
+            second[c] = t
+        seen[c] = n + 1
+    rows = T.rows(0)
+    by_name = {}
+    for r in rows:
+        words = norm(cstr(r, 4, 51)).split()
+        if words and words[-1] in RESERVE_WORDS:
+            by_name.setdefault((" ".join(words[:-1]), struct.unpack_from("<i", r, 0x53)[0]), []).append(
+                struct.unpack_from("<i", r, 0)[0])
+    senior = {struct.unpack_from("<i", r, 0)[0]: [(norm(cstr(r, o, n)), struct.unpack_from("<i", r, 0x53)[0])
+                                                  for o, n in ((4, 51), (0x38, 26))] for r in rows}
+    clubmap = dict(clubmap)
+    for c, t in second.items():
+        s = clubmap.get(c)
+        hit = None
+        for key in (senior[s] if s is not None else ()):      # the long name, then the short name
+            hit = hit or by_name.get(key)
+        if hit and len(hit) == 1 and hit[0] != s:
+            clubmap[("B", c)] = hit[0]
+    out, moved = list(fp), 0
+    for i, x in enumerate(fp):
+        c = x.get("club")
+        if c is not None and ("B", c) in clubmap and x.get("team") == second.get(c):
+            out[i] = dict(x, club=("B", c))
+            moved += 1
+    return out, clubmap, moved
