@@ -13,6 +13,11 @@ test log RECOMP_SEASON_NL_LOG=1. The runs:
     2022    October 2022, 2022/23 to 2023/24, changing rules on: the 2024-25 edition (draw February 2024)
     2024    October 2024, 2024/25, changing rules on: the 2024-25 edition and its finals
     off     October 2018, 2018/19 to 2019/20, changing rules off: the 2018-19 shape again for 2020
+    save    October 2018, changing rules on: the jump saves after 430 days (September 2019, after the 2018-19
+            finals and before the 2020-21 draw) and stops; a second game loads that save in a new user folder and
+            jumps to the end of 2019/20. The leagues of its 2020-21 draw must be those of run 2018 (the same
+            seed and clicks give the same 2018-19 results), so promotion and relegation hold across a save and a
+            load. Run 2018 first (or with it, in --keep).
 
 The checks (each run):
     - the jump ends with code 0 and the report holds the end of the last season
@@ -25,11 +30,13 @@ A run takes about 6 to 10 minutes. --jobs (default 1) runs that many at the same
 logs already in the --keep folder again without a new run.
 """
 import concurrent.futures
-import csv
 import os
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -38,6 +45,10 @@ sys.path.insert(0, os.path.join(HERE, "..", "smoke"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
 import make_nl  # noqa: E402
 import rules_report_check as rrc  # noqa: E402
+sys.path.insert(0, os.path.join(HERE, "..", "fixtures"))
+import custom_database_run as cdr  # noqa: E402
+import fixtures  # noqa: E402
+import smoke_run  # noqa: E402
 
 DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
 # name: (start year, database, changing rules, last season, first edition, editions drawn in the run)
@@ -47,7 +58,9 @@ RUNS = {
     "2022": (2022, "October 2022", "on", 2023, "2024-25", ["2024-25"]),
     "2024": (2024, "October 2024", "on", 2024, "2024-25", ["2024-25"]),
     "off": (2018, "October 2018", "off", 2019, "2018-19", ["2018-19", "2018-19"]),
+    "save": (2018, "October 2018", "on", 2019, "2018-19", ["2018-19", "2020-21"]),
 }
+SAVE_AFTER = 430
 BASE_ENV = {"RECOMP_STAFF_RESERVE": "23000", "RECOMP_SEASON_NL_LOG": "1"}
 DRAW = re.compile(r"recomp: season nl: (\S+) draw league ([A-D]) group (\d+):(.*)$")
 FINALS = re.compile(r"recomp: season nl: (\S+) finals:(.*)$")
@@ -150,7 +163,78 @@ def check(name, work):
     return fails
 
 
+def leagues_of(log, edition):
+    """nation -> league of the draw of an edition in a log."""
+    for ed, leagues in draws(log):
+        if ed == edition:
+            return {n: lg for lg, gs in leagues.items() for g in gs for n in g}
+    return {}
+
+
+def load_and_jump(program, game, database, save, work, last, timeout):
+    """Loads a save in a new user folder and plays the season jump to the end of `last`, as rules_report_check.run
+    does for a new game (the jump goes on holiday from the first news, tests/seasons/season_core_run.py)."""
+    user, home, shots = (os.path.join(work, d) for d in ("user", "home", "shots"))
+    for d in (user, home, shots):
+        os.makedirs(d, exist_ok=True)
+    cdr.copy_data(database, os.path.join(user, "Databases", os.path.basename(database)))
+    shutil.copyfile(save, os.path.join(user, "nl.sav"))
+    with open(os.path.join(user, "settings.txt"), "w") as f:
+        f.write(f"display = classic\nchanging_rules = on\nfaster_days = on\ndatabase = folder:{os.path.basename(database)}\n")
+    load = smoke_run.without_intro_click(fixtures.LOAD_STEPS)
+    holiday = smoke_run.STEPS[smoke_run.STEPS.index("wait first-news") + 1:]
+    holiday = [x for x in holiday if "dump" not in x and "quit" not in x]
+    steps = load + holiday
+    table = os.path.join(os.path.dirname(os.path.abspath(program)), "seasons", "rules.tsv")
+    env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
+               RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SEASON_JUMP=str(last), RECOMP_SCREEN_LOG="1",
+               RECOMP_RULES_TABLE=table, RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots, steps)),
+               **BASE_ENV)
+    start = time.time()
+    with open(os.path.join(work, "stderr.txt"), "w") as log:
+        try:
+            code = subprocess.run([program, "--game", game, "-seed", "1"], env=env, stdout=subprocess.DEVNULL,
+                                  stderr=log, timeout=timeout).returncode
+        except subprocess.TimeoutExpired:
+            code = "timeout"
+    print(f"run: load and jump: code {code} after {time.time() - start:.0f} s, log {os.path.join(work, 'stderr.txt')}")
+    return code
+
+
+def save_run(program, game, keep, reuse):
+    start, database, _, last, _, _ = RUNS["save"]
+    base = keep or tempfile.mkdtemp(prefix="cm0102-season-nl-save-")
+    first, second = os.path.join(base, "save-a"), os.path.join(base, "save-b")
+    db = database_folder(database)
+    if not reuse:
+        code, _ = rrc.run(program, game, last, start, db, ["England"], [], first, 7200, {"changing_rules": "on"},
+                          dict(BASE_ENV, RECOMP_SAVE_AFTER_DAYS=str(SAVE_AFTER)))
+        save = os.path.join(first, "user", smoke_run.SAVE_NAME)
+        if code != 0 or not os.path.exists(save):
+            return [f"save: the first game did not save (code {code}, {first})"]
+        code = load_and_jump(program, game, db, save, second, last, 7200)
+        if code != 0:
+            return [f"save: the loaded game ended with code {code} ({second})"]
+    fails = []
+    log_b = open(os.path.join(second, "stderr.txt"), encoding="latin-1").read().split("\n")
+    ref = os.path.join(base, "2018", "stderr.txt")
+    if not os.path.exists(ref):
+        return [f"save: no log of run 2018 in {base} to compare with"]
+    log_ref = open(ref, encoding="latin-1").read().split("\n")
+    want, got = leagues_of(log_ref, "2020-21"), leagues_of(log_b, "2020-21")
+    if not want or not got:
+        return [f"save: no 2020-21 draw (run 2018: {len(want)} nations, loaded game: {len(got)})"]
+    for n in sorted(set(want) | set(got)):
+        if want.get(n) != got.get(n):
+            fails.append(f"save: {n} in league {got.get(n)} after the load, {want.get(n)} in run 2018")
+    if not any("season nl: 2018-19 finals:" in x for x in open(os.path.join(first, "stderr.txt"), encoding="latin-1")):
+        fails.append("save: the first game made no finals before the save")
+    return fails
+
+
 def one(program, game, name, keep, reuse):
+    if name == "save":
+        return save_run(program, game, keep, reuse)
     start, database, rules, last, _, _ = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-season-nl-{name}-")
     if not reuse:

@@ -40,9 +40,27 @@ See the head of `season_nl.c` for the design: one `euro_champ_qual` object on th
 | slot 15 | round templates: six matchdays, the finals | 0x57d190, league_round_set_date 0x68a160 |
 | slots 14, 17, 18, 23, 26, 28, 29, 30, 37 | the League base (0x96d020): no Euro qualification, news, predictions or status 7 | class doc 10 |
 
+### Moving to the next edition
+
+The season pass starts a competition only when `all_stages_complete` (vtable +0xc) is true and vtable +0x2c gives 0 (0x5d5cab..0x5d5d1c). The class's +0x2c is `skip_season_reset` 0x57eb10, which gives 1, so the copy takes the League base 0x48ce70 (gives 0). Entry 1 changes its season only every second year (year step 2, 0x830fb6), so a game that starts in an odd year would meet its update day one year late. So the object's own update moves it to the next edition on the day after its finals end: when `all_stages_complete` is true, it writes the next edition year at +0x40 and the draw day. The flag +0xdd alone is not the end: League::check_complete sets it once the League object's own table is done (0x689bea), before the other stages.
+
+### Cup rounds
+
+A cup round record keeps the day of the year and a year offset from the year argument of `cup_set_round_draw_date` 0x521e60 and `cup_set_round_match_date` 0x521eb0 (offset = the date's year minus that argument, 0x521ea3; stored at +0x02 and +0x05). The Cup_Stage counts the offset from its own year (argument 7). So the finals pass the edition year and an offset of 1, as the class's play-off passes +0x40 and 1 (0x57d494..0x57d4b6).
+
 ### The save
 
 No new field. The object saves and loads as every League object (League::save 0x6891c0 writes the stage count +0x2c and the stages up to +0x30 at 0x6898dc..0x6899f1; the constructor returns after a load at 0x57cf28). The module makes the object again at a load from its file (season_comps.c). After an edition ends, start_new_season keeps its tables, so the leagues of the next edition come from them at the next draw, also after a save and a load.
+
+## Euro qualifying
+
+`season_nl_euro.c`. Euro 2020 and Euro 2024 qualifying played their groups from March to November of the year after the campaign year (int-continental-189, -233), because the Nations League took the autumn before. The class plays them from September of the campaign year (template 0x57d190, class doc 4), which would meet the Nations League matchdays. Slice 27 gives these two campaigns ten groups and the top two of each (`season_intl_euroq.c`); this slice owns their dates and the play-off.
+
+- **Matchdays.** The wrap of 0x57d190 gives the group stages of the two campaigns the ten real matchdays (`nations-league-dates.tsv`, events `euro2020_qual_md1..10` and `euro2024_qual_md1..10`, each checked on Wikipedia and a UEFA page), in a season game, for the original object only (the Nations League copy has its own slot).
+- **Paths.** The wrap of `create_playoff_stage` 0x57ef50 for the two campaigns builds the paths in place of the class's two-leg ties: four paths (2020) or three (2024) of four nations that did not qualify (the top two of each group and the teams already in the Euro's slots, the 2024 host), by the ranking of the Nations League edition two years before the finals (season_nl_paths; the object still holds those tables in November of the year before the finals). One Cup_Stage of two rounds, semi-finals 1 v 4 and 2 v 3 at the better nation's ground, then the path final, single matches with extra time and penalties, on the real days (26 and 31 March 2020; 21 and 26 March 2024). Link mode 1 pairs the list two by two (0x524a20) and bit 0x200 of the final's flags links ties 2k and 2k + 1 into final tie k (0x5245c3). Only a final winner gets status 1 (0x51af95) and so `add_qualified_team` through the class's slot 17 (0x57d6a0), so the path winners take exactly the places that slice 27's fill held for them.
+- **No Nations League tables** (a game that started after the edition): the paths take the best of the nations that did not qualify, by group place and points.
+- **The Euro draw.** The Euro's seeding (+0x13e) and draw (+0xb6) days move to two and four days after the path finals, when the paths are built. Both are saved (0x57c5e9, 0x689411; class doc 12.2).
+- The real path rules of 2024 also used a draw for some places; the rule here is the ranking (an inference that matches the real Euro 2020 paths, test `season_nl`).
 
 ## Decisions for Max to confirm
 
@@ -53,4 +71,6 @@ No new field. The object saves and loads as every League object (League::save 0x
 5. **The 2020-21 finals** play in June 2021 (2 and 6 June), the planned time before Euro 2020 moved to 2021 (Q277).
 6. **A game that starts after an edition's league phase** (for example 2021/22, before the 2020-21 finals) starts with the next edition. The finals of the edition before are not played.
 7. **Russia** plays to 2020-21 and is left out from 2022-23, as it was in real life (Q293, Q365).
-8. **After the table (2028-29 on)** the 2026-27 edition is played again every two years (Q248: the rules stay). With changing rules off the edition of the start season is played again every two years (Q232).
+8. **The Euro draw after the play-offs.** The Euro finals of 2020 and 2024 draw two days after the path finals (early April), not in November or December of the year before as in real life: the game's draw cannot hold places for teams that are not known yet.
+9. **Paths without Nations League tables** take the best non-qualified nations of the qualifying groups.
+10. **After the table (2028-29 on)** the 2026-27 edition is played again every two years (Q248: the rules stay). With changing rules off the edition of the start season is played again every two years (Q232).
