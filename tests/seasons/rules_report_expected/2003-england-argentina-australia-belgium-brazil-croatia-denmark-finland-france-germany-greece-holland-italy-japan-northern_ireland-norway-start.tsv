@@ -2,18 +2,13 @@
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2003	bench	fra_lge_cup (Coupe de la Ligue), row fra-26: game 3, table 5 (5)
 2003	bench	ger_cup (DFB-Pokal), row ger-36: game 6, table 7 (7)
-2003	bench	ger_first (Bundesliga), row ger-27: game 6, table 7 (7)
-2003	bench	ger_second (2. Bundesliga), row ger-28: game 6, table 7 (7)
 2003	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all; not in it: -; others: Almirante Brown de Arrecifes, Atlético Tucumán, Central Córdoba de Rosario, Independiente Rivadavia de Mendoza, Platense
-2003	club_list	Brazilian National First Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all; not in it: -; others: 4 de Julho Esporte Clube, Associação Garanhuense de Atletismo, Botafogo Futebol Clube (SP), Clube 15 de Novembro
-2003	club_list	Brazilian National Second Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all; not in it: -; others: ABC Futebol Clube, Clube Atlético Bragantino, Clube Malutrom, Desportiva Capixaba
 2003	club_list	Brazilian National Third Division: 47 of 47 listed clubs that the database holds (60 listed), 9 other clubs, 56 in all; not in it: -; others: Agremiação Sportiva Arapiraquense, Associação Desportiva Comercial Bandeirante, Atlético Clube Goianiense, Bangu Atlético Clube, Baré Esporte Clube, Botafogo Futebol Clube (PB), Camaçari Futebol Clube, Centro Sportivo Alagoano, Esporte Clube Comercial
 2003	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Bojovnik 7, NK Amater, NK Bedem, NK Borac
 2003	club_list	Croatian Second Division North: 10 of 10 listed clubs that the database holds (12 listed), 6 other clubs, 16 in all; not in it: -; others: NK Bjelovar, NK Granicar, NK Metalac, NK Mladost Molve, NK Omladinac, NK Ðakovo
 2003	club_list	Croatian Second Division South: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK GOSK, NK Imotska Krajina, NK Istra, NK Karlovac
 2003	club_list	Dutch First Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all; not in it: AGOVV; others: -
 2003	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: FC Jazz, Rovaniemen Palloseura; others: -
-2003	club_list	French Lower Division: 0 of 70 listed clubs that the database holds (128 listed), 0 other clubs, 0 in all; not in it: AC Cambrai, AS Porto-Vecchio, AS Vitré, AS Yzeurienne Football, Andrézieux, Arin Luzien, Athletic Club Arles, Avranches, Balma SC, Bayeux, Blagnac, Bois-Guillaume, Borgo FC, CM Oissel, CO Châlons-en-Champagne, CSO 19 Amnéville-les-Thermes, Cercle Omnisports Saint-Dizier, Chartres, Chaumont FC, Colmar, Dole-Tavaux RC 1991, Douai SC, ES La Rochelle, ES Segré Haut Anjou, Echirolles, Etoile Filante Bastiaise, FA Carcassonne-Villalbe, FC Chalonnais, Hyères FC, JA Armentières, La Vitréenne, Langon-Castets FC, Les Herbiers, Levallois, Lunel, Lyon-Duchère, Marly USM, Montauban FC, Montluçon, Mâcon, Olympique Saint-Quentinois, Orange SC, Péronne, RC Fléchois, Rodez Aveyron Football, Rumilly, SC Abbeville, SC Draguignan, SR Haguenau, Saint-Raphaël, Sens, Stade Beaucairois, Stade Lamballais, Stade Montois, Stade Plabennécois, Thouars Foot 79, Toulouse Fontaines, US Forbach, US Ivry, US Jeanne-d'Arc Carquefou, US Joué-lès-Tours, US Luzenac, US Mondeville, US Montagnarde, US Orléans, US Reveloise, US Saint-Malo, Vauban Strasbourg, Vergèze, Vénissieux US; others: -
 2003	club_list	Italian Serie B: 20 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 20 in all; not in it: Catania, Fiorentina, Genoa, Salernitana; others: -
 2003	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Brantwood, Lurgan Celtic; others: -
 2003	club_list	Northern Irish League Premier Division: 10 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 10 in all; not in it: Ballymena United, Crusaders, Dungannon Swifts, Larne, Limavady United, Newry Town; others: -
@@ -23,8 +18,6 @@
 2003	clubs	bel_third (Belgian Third Division), row hol-bel-36: game 16, table 32 (32 (A 16, B 16))
 2003	clubs	bra_champ_cup (Copa dos Campeões), row bra-192: game 3, table 0 (0)
 2003	clubs	bra_cup (Copa do Brasil), row bra-138: game 71, table 64 (64)
-2003	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-30: game 28, table 24 (24)
-2003	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 28, table 24 (24)
 2003	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-84: game 7, table 60 (60)
 2003	clubs	bra_reg_bahia (Campeonato Baiano), row bra-435: game 10, table 13 (13)
 2003	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-516: game 15, table 14 (14)
@@ -64,15 +57,12 @@
 2003	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-28: game 9, table 10 (10)
 2003	down	arg_prm (Primera División), row arg-usa-3: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2003	down	arg_second (Primera B Nacional), row arg-usa-30: game 0 (+0 play-off places), table 2 (2 (infobox))
-2003	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 4 (+0 play-off places), table 6 (6)
 2003	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-84: game 2 (+0 play-off places), table na (n/a)
 2003	down	cro_a1 (Prva HNL), row gre-pol-cro-327: game 2 (+0 play-off places), table 1 (1 (12th))
 2003	down	cro_a2a (Druga HNL North), row gre-pol-cro-354: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
 2003	down	cro_a2b (Druga HNL South), row gre-pol-cro-381: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
 2003	down	den_second (Danish 2nd Division), row den-swe-16: game 4 (+0 play-off places), table 3 (3 (14th to 16th))
 2003	down	eng_third (Football League Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
-2003	down	ita_ser_a (Serie A), row ita-36: game 4 (+0 play-off places), table 3 (3 direct (16th-18th) + 15th in a two-leg play-off against the 6th of Serie B)
-2003	down	ita_ser_b (Serie B), row ita-37: game 4 (+0 play-off places), table 3 (3 direct (22nd-24th) + relegation play-out 20th v 21st)
 2003	down	ita_ser_c1a (Serie C1 girone A), row ita-38: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2003	down	ita_ser_c1b (Serie C1 girone B), row ita-39: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2003	down	jap_j1 (J.League Division 1), row aus-jap-kor-192: game 2 (+0 play-off places), table 0 (0)
@@ -126,30 +116,28 @@
 2003	not_in_game	ita-42 ita_ser_c2c 'Serie C2 girone C' (Italy)
 2003	not_in_game	nor-fin-30 new 'Liigacup' (Finland)
 2003	not_in_game	uefa-17 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2003	playoffs	arg_prm (Primera División), row arg-usa-3: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
-2003	playoffs	arg_second (Primera B Nacional), row arg-usa-30: game 0 up and 0 down play-off places, table 'As 2002/03, plus a Torneo Reducido for a promoción place'
-2003	playoffs	aus_nsl (National Soccer League), row aus-jap-kor-107: game 0 up and 0 down play-off places, table 'top six to a finals series (major and minor semi-finals, two legs, grand final)'
-2003	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 0 up and 0 down play-off places, table 'top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac'
-2003	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-84: game 0 up and 0 down play-off places, table 'see format'
-2003	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-327: game 0 up and 0 down play-off places, table '11th: relegation play-off'
-2003	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-354: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
-2003	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-381: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
-2003	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-30: game 0 up and 0 down play-off places, table '14th: relegation play-off v Beta Ethniki 3rd at a neutral venue'
-2003	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-57: game 0 up and 0 down play-off places, table '3rd: promotion play-off v Alpha Ethniki 14th; 14th: relegation play-off'
-2003	playoffs	hol_first (Eerste Divisie), row hol-bel-29: game 0 up and 0 down play-off places, table 'six clubs (period winners) join the Eredivisie 16th and 17th in two groups of fo'
-2003	playoffs	ita_ser_a (Serie A), row ita-36: game 0 up and 0 down play-off places, table '15th v Serie B 6th, two legs, for one Serie A place; tie-break play-off match if'
-2003	playoffs	ita_ser_b (Serie B), row ita-37: game 0 up and 0 down play-off places, table '6th v Serie A 15th, two legs, for one Serie A place'
-2003	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-192: game 0 up and 0 down play-off places, table 'stage winners meet in a two-legged championship; 16th v J2 3rd in a two-legged p'
-2003	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-219: game 0 up and 0 down play-off places, table '3rd v J1 16th in a two-legged promotion/relegation series'
-2003	subs_used	eng_charity (FA Community Shield), row eng-314: game 5, table 6 (6)
+2003	playoffs	arg_prm (Primera División), row arg-usa-3: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
+2003	playoffs	bel_second (Belgian Second Division), row hol-bel-35: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
+2003	playoffs	bel_third (Belgian Third Division), row hol-bel-36: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2003	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 0 up and 0 down play-off places, table 8 and 0 ('top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac')
+2003	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-327: game 0 up and 0 down play-off places, table 0 and 1 ('11th: relegation play-off')
+2003	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-354: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
+2003	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-381: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
+2003	playoffs	fin_first (Ykkönen), row nor-fin-28: game 0 up and 1 down play-off places, table 1 and 2 ('2nd v Veikkausliiga 13th, two legs; 11th-12th v Kakkonen clubs')
+2003	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-30: game 0 up and 0 down play-off places, table 0 and 1 ('14th: relegation play-off v Beta Ethniki 3rd at a neutral venue')
+2003	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-57: game 0 up and 0 down play-off places, table 1 and 1 ('3rd: promotion play-off v Alpha Ethniki 14th; 14th: relegation play-off')
+2003	playoffs	ita_ser_a (Serie A), row ita-36: game 0 up and 0 down play-off places, table 0 and 1 ('15th v Serie B 6th, two legs, for one Serie A place; tie-break play-off match if')
+2003	playoffs	ita_ser_b (Serie B), row ita-37: game 0 up and 0 down play-off places, table 1 and 0 ('6th v Serie A 15th, two legs, for one Serie A place')
+2003	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-38: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2003	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-39: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2003	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-192: game 0 up and 0 down play-off places, table 0 and 1 ('stage winners meet in a two-legged championship; 16th v J2 3rd in a two-legged p')
+2003	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-219: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v J1 16th in a two-legged promotion/relegation series')
 2003	up	arg_second (Primera B Nacional), row arg-usa-30: game 1 (+0 play-off places), table 2 (2 (as 2002/03))
 2003	up	aus_nsl (National Soccer League), row aus-jap-kor-107: game 6 (+0 play-off places), table na (n/a)
 2003	up	bel_third (Belgian Third Division), row hol-bel-36: game 1 (+0 play-off places), table 2 (2 (group champions))
 2003	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-30: game 4 (+0 play-off places), table na (n/a)
-2003	up	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 4 (+0 play-off places), table 2 (2)
 2003	up	conmebol_liber (Copa Libertadores), row club-world-42: game 2 (+0 play-off places), table na (n/a)
 2003	up	conmebol_merc (Copa Mercosur), row club-world-43: game 1 (+0 play-off places), table na (n/a)
 2003	up	fin_first (Ykkönen), row nor-fin-28: game 2 (+0 play-off places), table 1 (1st (1))
 2003	up	gre_cup (Greek Football Cup), row gre-pol-cro-3: game 2 (+0 play-off places), table na (n/a)
-2003	up	ita_ser_b (Serie B), row ita-37: game 4 (+0 play-off places), table 5 (5 direct)
 2003	up	oceania_club_champ (Oceania Club Championship), row club-world-56: game 2 (+0 play-off places), table na (n/a)
