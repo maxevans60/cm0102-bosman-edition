@@ -90,6 +90,7 @@
 2003	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-32: game 5, table 12 (12 entrants)
 2003	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-28: game 9, table 10 (10)
 2003	down	eng_third (English Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
+2003	format	european_cup, row uefa-18: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
 2003	name	african_nations (African Cup of Nations), row int-continental-29: game 'African Cup of Nations', table '2004 African Cup of Nations'
 2003	name	asia_nations (Asian Cup), row int-continental-31: game 'Asian Cup', table 'AFC Asian Cup'
 2003	name	eng_auto_cup (English Vans Trophy), row eng-312: game 'English Vans Trophy', table 'Football League Trophy'
@@ -147,6 +148,8 @@
 2004	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-39: game 5, table 51 (51 entrants)
 2004	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-40: game 9, table 10 (10)
 2004	down	eng_third (English Third Division), row eng-61: game 1 (+0 play-off places), table 2 (2)
+2004	format	european_cup, row uefa-26: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2004	format	uefa_cup, row uefa-29: game 0 clubs in the group stage and 0 in the knockout round after it, table 40 and 32
 2004	name	african_nations (African Cup of Nations), row int-continental-40: game 'African Cup of Nations', table 'Africa Cup of Nations'
 2004	name	asia_nations (Asian Cup), row int-continental-42: game 'Asian Cup', table '2004 AFC Asian Cup'
 2004	name	eng_auto_cup (English Vans Trophy), row eng-318: game 'English Vans Trophy', table 'Football League Trophy'
@@ -203,6 +206,8 @@
 2005	clubs	world_club_champ (FIFA Club World Championship), row club-world-78: game 4, table 6 (6)
 2005	clubs	world_cup (FIFA World Cup), row int-world-50: game 0/4, table 32 (32)
 2005	down	eng_third (English Third Division), row eng-71: game 1 (+0 play-off places), table 2 (2)
+2005	format	european_cup, row uefa-34: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2005	format	uefa_cup, row uefa-37: game 0 clubs in the group stage and 0 in the knockout round after it, table 40 and 32
 2005	name	african_nations (African Cup of Nations), row int-continental-51: game 'African Cup of Nations', table '2006 Africa Cup of Nations'
 2005	name	asia_nations (Asian Cup), row int-continental-53: game 'Asian Cup', table 'AFC Asian Cup'
 2005	name	eng_auto_cup (English Vans Trophy), row eng-324: game 'English Vans Trophy', table 'Football League Trophy'
@@ -255,6 +260,8 @@
 2006	clubs	uefa_cup (UEFA Cup), row uefa-45: game 145, table 155 (155 in all: 131 direct entrants (Q1 70, Q2 29 with 11 Intertoto winners, R1 32 w)
 2006	clubs	world_club_champ (FIFA Club World Championship), row club-world-97: game 0/4, table 6 (6)
 2006	down	eng_third (English Third Division), row eng-81: game 1 (+0 play-off places), table 2 (2)
+2006	format	european_cup, row uefa-42: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2006	format	uefa_cup, row uefa-45: game 0 clubs in the group stage and 0 in the knockout round after it, table 40 and 32
 2006	name	african_nations (African Cup of Nations), row int-continental-62: game 'African Cup of Nations', table 'Africa Cup of Nations'
 2006	name	eng_auto_cup (English Vans Trophy), row eng-330: game 'English Vans Trophy', table 'Football League Trophy'
 2006	name	eng_cc_cup (English League Cup), row eng-329: game 'English League Cup', table 'Football League Cup'
@@ -304,6 +311,8 @@
 2007	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-76: game 9, table 10 (10)
 2007	clubs	world_club_champ (FIFA Club World Championship), row club-world-116: game 4, table 7 (7)
 2007	down	eng_third (English Third Division), row eng-91: game 1 (+0 play-off places), table 2 (2)
+2007	format	european_cup, row uefa-50: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2007	format	uefa_cup, row uefa-53: game 0 clubs in the group stage and 0 in the knockout round after it, table 40 and 32
 2007	name	african_nations (African Cup of Nations), row int-continental-73: game 'African Cup of Nations', table '2008 Africa Cup of Nations'
 2007	name	asia_nations (Asian Cup), row int-continental-75: game 'Asian Cup', table '2007 AFC Asian Cup'
 2007	name	eng_auto_cup (English Vans Trophy), row eng-336: game 'English Vans Trophy', table 'Football League Trophy'
@@ -367,6 +376,8 @@
 2008	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-88: game 9, table 10 (10)
 2008	clubs	world_club_champ (FIFA Club World Championship), row club-world-135: game 0/4, table 7 (7)
 2008	down	eng_third (English Third Division), row eng-101: game 1 (+0 play-off places), table 2 (2)
+2008	format	european_cup, row uefa-58: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2008	format	uefa_cup, row uefa-61: game 0 clubs in the group stage and 0 in the knockout round after it, table 40 and 32
 2008	name	african_nations (African Cup of Nations), row int-continental-84: game 'African Cup of Nations', table 'Africa Cup of Nations'
 2008	name	asia_nations (Asian Cup), row int-continental-86: game 'Asian Cup', table 'AFC Asian Cup'
 2008	name	eng_auto_cup (English Vans Trophy), row eng-342: game 'English Vans Trophy', table 'Football League Trophy'
@@ -430,6 +441,8 @@
 2009	clubs	world_club_champ (FIFA Club World Championship), row club-world-154: game 4, table 7 (7)
 2009	clubs	world_cup (FIFA World Cup), row int-world-98: game 0/4, table 32 (32)
 2009	down	eng_third (English Third Division), row eng-111: game 1 (+0 play-off places), table 2 (2)
+2009	format	european_cup, row uefa-66: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2009	format	uefa_cup, row uefa-69: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2009	name	african_nations (African Cup of Nations), row int-continental-95: game 'African Cup of Nations', table '2010 Africa Cup of Nations'
 2009	name	asia_nations (Asian Cup), row int-continental-97: game 'Asian Cup', table 'AFC Asian Cup'
 2009	name	eng_auto_cup (English Vans Trophy), row eng-348: game 'English Vans Trophy', table 'Football League Trophy'
@@ -489,6 +502,8 @@
 2010	clubs	uefa_cup (UEFA Cup), row uefa-77: game 145, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 0/4, table 7 (7)
 2010	down	eng_third (English Third Division), row eng-121: game 1 (+0 play-off places), table 2 (2)
+2010	format	european_cup, row uefa-74: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2010	format	uefa_cup, row uefa-77: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2010	idle	asia_nations (Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
 2010	idle	wc_asia_league (World Cup Asian Qualifying Section), row int-world-115: the game waits for 2012, the table holds it
 2010	idle	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-113: the game waits for 2012, the table holds it
@@ -546,6 +561,8 @@
 2011	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-124: game 10, table 9 (9 (Brazil qualified as host))
 2011	clubs	world_club_champ (FIFA Club World Championship), row club-world-192: game 4, table 7 (7)
 2011	down	eng_third (English Third Division), row eng-131: game 1 (+0 play-off places), table 2 (2)
+2011	format	european_cup, row uefa-82: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2011	format	uefa_cup, row uefa-85: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2011	name	african_nations (African Cup of Nations), row int-continental-117: game 'African Cup of Nations', table '2012 Africa Cup of Nations'
 2011	name	asia_nations (Asian Cup), row int-continental-119: game 'Asian Cup', table 'AFC Asian Cup'
 2011	name	eng_auto_cup (English Vans Trophy), row eng-360: game 'English Vans Trophy', table 'Football League Trophy'
@@ -609,6 +626,8 @@
 2012	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-136: game 10, table 9 (9)
 2012	clubs	world_club_champ (FIFA Club World Championship), row club-world-211: game 0/4, table 7 (7)
 2012	down	eng_third (English Third Division), row eng-141: game 1 (+0 play-off places), table 2 (2)
+2012	format	european_cup, row uefa-90: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2012	format	uefa_cup, row uefa-93: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2012	idle	fifa_confed (Confederations Cup), row int-world-142: the game waits for 2009, the table holds it
 2012	name	african_nations (African Cup of Nations), row int-continental-128: game 'African Cup of Nations', table '2013 Africa Cup of Nations'
 2012	name	asia_nations (Asian Cup), row int-continental-130: game 'Asian Cup', table 'AFC Asian Cup'
@@ -672,6 +691,8 @@
 2013	clubs	world_club_champ (FIFA Club World Championship), row club-world-230: game 4, table 7 (7)
 2013	clubs	world_cup (FIFA World Cup), row int-world-146: game 0/4, table 32 (32)
 2013	down	eng_third (English Third Division), row eng-151: game 1 (+0 play-off places), table 2 (2)
+2013	format	european_cup, row uefa-98: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2013	format	uefa_cup, row uefa-101: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2013	name	african_nations (African Cup of Nations), row int-continental-139: game 'African Cup of Nations', table 'Africa Cup of Nations'
 2013	name	asia_nations (Asian Cup), row int-continental-141: game 'Asian Cup', table 'AFC Asian Cup'
 2013	name	eng_auto_cup (English Vans Trophy), row eng-372: game 'English Vans Trophy', table 'Football League Trophy'
@@ -733,6 +754,8 @@
 2014	clubs	uefa_cup (UEFA Cup), row uefa-109: game 145, table 195 (195 (162 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2014	clubs	world_club_champ (FIFA Club World Championship), row club-world-249: game 0/4, table 7 (7)
 2014	down	eng_third (English Third Division), row eng-161: game 1 (+0 play-off places), table 2 (2)
+2014	format	european_cup, row uefa-106: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2014	format	uefa_cup, row uefa-109: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2014	idle	asia_nations (Asian Cup), row int-continental-152: the game waits for 2016, the table holds it
 2014	idle	wc_asia_league (World Cup Asian Qualifying Section), row int-world-163: the game waits for 2016, the table holds it
 2014	idle	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-161: the game waits for 2016, the table holds it
@@ -786,6 +809,8 @@
 2015	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-172: game 9, table 10 (10)
 2015	clubs	world_club_champ (FIFA Club World Championship), row club-world-268: game 4, table 7 (7)
 2015	down	eng_third (English Third Division), row eng-171: game 1 (+0 play-off places), table 2 (2)
+2015	format	european_cup, row uefa-114: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2015	format	uefa_cup, row uefa-117: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2015	name	african_nations (African Cup of Nations), row int-continental-161: game 'African Cup of Nations', table 'Africa Cup of Nations'
 2015	name	asia_nations (Asian Cup), row int-continental-163: game 'Asian Cup', table 'AFC Asian Cup'
 2015	name	eng_auto_cup (English Vans Trophy), row eng-384: game 'English Vans Trophy', table 'Football League Trophy'
@@ -849,6 +874,8 @@
 2016	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-184: game 9, table 10 (10)
 2016	clubs	world_club_champ (FIFA Club World Championship), row club-world-287: game 0/4, table 7 (7)
 2016	down	eng_third (English Third Division), row eng-181: game 1 (+0 play-off places), table 2 (2)
+2016	format	european_cup, row uefa-122: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2016	format	uefa_cup, row uefa-125: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2016	idle	fifa_confed (Confederations Cup), row int-world-190: the game waits for 2009, the table holds it
 2016	name	african_nations (African Cup of Nations), row int-continental-172: game 'African Cup of Nations', table '2017 Africa Cup of Nations'
 2016	name	asia_nations (Asian Cup), row int-continental-174: game 'Asian Cup', table 'AFC Asian Cup'
@@ -913,6 +940,8 @@
 2017	clubs	world_club_champ (FIFA Club World Championship), row club-world-306: game 4, table 7 (7)
 2017	clubs	world_cup (FIFA World Cup), row int-world-194: game 0/4, table 32 (32)
 2017	down	eng_third (English Third Division), row eng-191: game 1 (+0 play-off places), table 2 (2)
+2017	format	european_cup, row uefa-130: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2017	format	uefa_cup, row uefa-133: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2017	name	african_nations (African Cup of Nations), row int-continental-183: game 'African Cup of Nations', table 'Africa Cup of Nations'
 2017	name	asia_nations (Asian Cup), row int-continental-185: game 'Asian Cup', table 'AFC Asian Cup'
 2017	name	eng_auto_cup (English Vans Trophy), row eng-396: game 'English Vans Trophy', table 'EFL Trophy'
@@ -974,6 +1003,8 @@
 2018	clubs	uefa_cup (UEFA Cup), row uefa-141: game 145, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
 2018	clubs	world_club_champ (FIFA Club World Championship), row club-world-325: game 0/4, table 7 (7)
 2018	down	eng_third (English Third Division), row eng-201: game 1 (+0 play-off places), table 2 (2)
+2018	format	european_cup, row uefa-138: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2018	format	uefa_cup, row uefa-141: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2018	idle	asia_nations (Asian Cup), row int-continental-196: the game waits for 2020, the table holds it
 2018	idle	wc_asia_league (World Cup Asian Qualifying Section), row int-world-211: the game waits for 2020, the table holds it
 2018	name	african_nations (African Cup of Nations), row int-continental-194: game 'African Cup of Nations', table '2019 Africa Cup of Nations'
@@ -1028,6 +1059,8 @@
 2019	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-223: game 0, table 40 (40)
 2019	clubs	world_club_champ (FIFA Club World Championship), row club-world-344: game 4, table 7 (7)
 2019	down	eng_third (English Third Division), row eng-211: game 1 (+0 play-off places), table 2 (2)
+2019	format	european_cup, row uefa-146: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2019	format	uefa_cup, row uefa-149: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2019	name	african_nations (African Cup of Nations), row int-continental-205: game 'African Cup of Nations', table 'Africa Cup of Nations'
 2019	name	asia_nations (Asian Cup), row int-continental-207: game 'Asian Cup', table 'AFC Asian Cup'
 2019	name	eng_auto_cup (English Vans Trophy), row eng-408: game 'English Vans Trophy', table 'EFL Trophy'
@@ -1095,6 +1128,8 @@
 2020	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-231: game 5, table 55 (55 entrants)
 2020	clubs	world_club_champ (FIFA Club World Championship), row club-world-363: game 0/4, table 6 (6)
 2020	down	eng_third (English Third Division), row eng-221: game 1 (+0 play-off places), table 2 (2)
+2020	format	european_cup, row uefa-154: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2020	format	uefa_cup, row uefa-157: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
 2020	name	african_nations (African Cup of Nations), row int-continental-216: game 'African Cup of Nations', table '2021 Africa Cup of Nations'
 2020	name	asia_nations (Asian Cup), row int-continental-218: game 'Asian Cup', table 'AFC Asian Cup'
 2020	name	eng_auto_cup (English Vans Trophy), row eng-414: game 'English Vans Trophy', table 'EFL Trophy'
@@ -1165,6 +1200,8 @@
 2021	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-248: game 5, table 8 (8 in groups (Tonga withdrew); Cook Islands and Vanuatu withdrew because of COVID)
 2021	clubs	world_club_champ (FIFA Club World Championship), row club-world-382: game 4, table 7 (7)
 2021	down	eng_third (English Third Division), row eng-231: game 1 (+0 play-off places), table 2 (2)
+2021	format	european_cup, row uefa-162: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2021	format	uefa_cup, row uefa-165: game 0 clubs in the group stage and 0 in the knockout round after it, table 32 and 16
 2021	name	african_nations (African Cup of Nations), row int-continental-227: game 'African Cup of Nations', table '2021 Africa Cup of Nations'
 2021	name	asia_nations (Asian Cup), row int-continental-229: game 'Asian Cup', table 'AFC Asian Cup'
 2021	name	eng_auto_cup (English Vans Trophy), row eng-420: game 'English Vans Trophy', table 'EFL Trophy'
@@ -1235,6 +1272,8 @@
 2022	clubs	uefa_cup (UEFA Cup), row uefa-173: game 145, table 57 (57 (21 entered + 36 from the Champions League); 32 in the group stage (+8 Champi)
 2022	clubs	world_club_champ (FIFA Club World Championship), row club-world-401: game 0/4, table 7 (7)
 2022	down	eng_third (English Third Division), row eng-241: game 1 (+0 play-off places), table 2 (2)
+2022	format	european_cup, row uefa-170: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2022	format	uefa_cup, row uefa-173: game 0 clubs in the group stage and 0 in the knockout round after it, table 32 and 16
 2022	idle	asia_nations (Asian Cup), row int-continental-240: the game waits for 2024, the table holds it
 2022	idle	world_cup (FIFA World Cup), row int-world-254: the game waits for 2026, the table holds it
 2022	name	african_nations (African Cup of Nations), row int-continental-238: game 'African Cup of Nations', table '2023 Africa Cup of Nations'
@@ -1305,6 +1344,8 @@
 2023	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-268: game 9, table 10 (10)
 2023	clubs	world_club_champ (FIFA Club World Championship), row club-world-420: game 4, table 7 (7)
 2023	down	eng_third (English Third Division), row eng-251: game 1 (+0 play-off places), table 2 (2)
+2023	format	european_cup, row uefa-178: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
+2023	format	uefa_cup, row uefa-181: game 0 clubs in the group stage and 0 in the knockout round after it, table 32 and 16
 2023	name	african_nations (African Cup of Nations), row int-continental-249: game 'African Cup of Nations', table '2023 Africa Cup of Nations'
 2023	name	asia_nations (Asian Cup), row int-continental-251: game 'Asian Cup', table '2023 AFC Asian Cup'
 2023	name	eng_auto_cup (English Vans Trophy), row eng-432: game 'English Vans Trophy', table 'EFL Trophy'

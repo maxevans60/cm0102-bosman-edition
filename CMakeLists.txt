@@ -122,6 +122,12 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
+    add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
+        src/recomp_rt/win/season_cups_table.c)
+    target_include_directories(season_cups_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cups COMMAND season_cups_test)
+    add_test(NAME season_cups_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_cups_table.py" --check)
     # The rules table reader (0.6.0 slice 12): make the table from the parts, then read it.
     add_executable(season_rules_test tests/seasons/test_season_rules.c src/recomp_rt/win/season_rules.c
         src/recomp_rt/host/posix.c)
@@ -132,6 +138,31 @@ if(NOT WIN32)
     add_test(NAME season_rules COMMAND season_rules_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv"
         "${CMAKE_BINARY_DIR}/seasons")
     set_tests_properties(season_rules PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The UEFA formats by season (0.6.0 slice 22): the committed table matches uefa.tsv, and its lookups.
+    add_test(NAME season_uefa_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_uefa_table.py" --check)
+    add_executable(season_uefa_test tests/seasons/test_season_uefa.c src/recomp_rt/win/season_uefa_table.c
+        src/recomp_rt/win/season_uefa_lookup.c)
+    target_include_directories(season_uefa_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_uefa COMMAND season_uefa_test)
+    # The real round names (Q370): the committed table matches round-names.tsv, and its lookup.
+    add_test(NAME season_round_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_round_names.py" --check)
+    add_executable(season_round_names_test tests/seasons/test_season_round_names.c
+        src/recomp_rt/win/season_round_names.c src/recomp_rt/win/season_round_names_table.c)
+    target_include_directories(season_round_names_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_round_names COMMAND season_round_names_test)
+    # The substitute rule lookup (0.6.0 slice 17).
+    add_executable(season_subs_test tests/seasons/test_season_subs.c src/recomp_rt/win/season_subs_rule.c
+        src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_subs_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_subs COMMAND season_subs_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_subs PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The nation rules (0.6.0 slice 17): windows, foreign player limits and the work permit rule. The encoder reads
+    # the research parts; its outputs are committed and checked here; the lookup runs on the C table.
+    add_executable(season_nation_test tests/seasons/test_season_nation.c src/recomp_rt/win/season_nation.c
+        src/recomp_rt/win/season_nation_table.c)
+    target_include_directories(season_nation_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_nation COMMAND season_nation_test)
+    add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
@@ -261,6 +292,9 @@ if(EXISTS "${CM0102_EXE}")
     add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv")
     target_sources(cm0102_recomp PRIVATE "${CMAKE_BINARY_DIR}/seasons/comp_classes.c")
     add_dependencies(cm0102_recomp seasons_rules)
+    # The season change (0.6.0 slice 16): the committed wraps of start_new_season match the class table.
+    add_test(NAME season_starts COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_start_wraps.py"
+        --exe "${CM0102_EXE}" --classes "${CMAKE_BINARY_DIR}/seasons/comp_classes.c" --check)
     target_include_directories(cm0102_recomp PRIVATE src/recomp_rt src/recomp_rt/win "${RECOMP_OUT}/gen"
         ${SDL2_INCLUDE_DIRS})
     target_compile_definitions(cm0102_recomp PRIVATE CM0102_DEFAULT_EXE="${CM0102_EXE}"
