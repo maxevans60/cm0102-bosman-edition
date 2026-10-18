@@ -48,15 +48,19 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
 #define COMP_TABLE 0xadadfcu            /* Comp ** */
 #define COMP_SLOTS 0xadadf8u            /* s32 */
 #define COMP_RECORDS 0xae23d0u          /* the club comp records, then the nation comp records */
+#define COMP_RECORD_COUNT 0xae2378u     /* s32: the records of that array (set_key_ids reads it at 0x604241) */
 #define RECORD_SIZE 0x6bu
 #define ENTRIES 0xb63d60u               /* league table entries */
 #define ENTRY_SIZE 0x48u
 #define ENTRY_COUNT 35
 #define ENTRY_DAY 0x15u                 /* s16 */
 #define MAX_COMPS 4096
-#define POINT_FIRST 151                 /* 1 June (day 0 is 1 January; 152 in a leap year) */
-#define POINT_LAST 272                  /* 30 September (273 in a leap year) */
-#define LATE_DAY 273                    /* 1 October (274 in a leap year); no update day lies near these */
+/* Days of the year, day 0 is 1 January. In a leap year each limit is one day earlier in the calendar (151 is
+ * 31 May, 273 is 30 September). No update day lies within a week of these limits (the table in
+ * docs/research/2026-10-17-season-change.md), so the limits are kept the same in every year. */
+#define POINT_FIRST 151                 /* 1 June */
+#define POINT_LAST 272                  /* 30 September */
+#define LATE_DAY 273                    /* 1 October */
 #define NAME_AT 4u                      /* the long name of a competition record */
 #define NAME_ROOM 51                    /* 50 characters and the 0 */
 #define TEXT_ROOM 0x2000u               /* the news text of one season */
@@ -217,6 +221,7 @@ static SeasonNews *news;
 static int news_count, news_room;
 static int hook_season = -1;            /* the season of the hook that runs now; -1: no hook runs */
 static int season_point;                /* the last season whose season point ran (0: none) */
+static int creating;                    /* 1 while create_game 0x828110 runs (season_change_creating) */
 
 static SeasonNews *news_of(int season)
 {
@@ -290,9 +295,10 @@ static int rename_count, rename_room;
 static int record_index(uint32_t rec, uint32_t *index)
 {
     uint32_t base = rd32(g_mem, COMP_RECORDS);
-    if (!readable(base) || rec < base || (rec - base) % RECORD_SIZE) return 0;
+    int32_t count = (int32_t)rd32(g_mem, COMP_RECORD_COUNT);
+    if (!readable(base) || rec < base || (rec - base) % RECORD_SIZE || count <= 0) return 0;
     *index = (rec - base) / RECORD_SIZE;
-    return *index < 100000u;
+    return *index < (uint32_t)count && *index < 100000u;
 }
 
 static const SeasonRename *rename_of(uint32_t index)
@@ -356,6 +362,7 @@ void season_change_reset(void)
     news_count = 0;
     rename_count = 0;
     season_point = 0;
+    creating = 0;                               /* also when a longjmp left create_game */
 }
 
 uint32_t season_change_part_size(void)
@@ -551,6 +558,22 @@ static int due[ENTRY_COUNT];            /* the entries on their update day in th
 static uint32_t started[MAX_COMPS];     /* the competitions whose start_new_season ran in that pass */
 static int started_count;
 static int stack[32], depth;            /* the entry of each start_new_season that runs, inner last */
+static int pass_start;                  /* 1: S of that pass is the start season of the game */
+static int hooks_start;                 /* 1 while the hooks of the start season run (season_change_is_start) */
+
+static int skip_now;                    /* 1: a before hook called season_change_skip */
+static int in_before;                   /* 1 while the before hooks run */
+
+int season_change_is_start(void) { return hooks_start; }
+void season_change_skip(void) { if (in_before) skip_now = 1; }
+
+/* No kind is called in the base game (2001 with changing rules off) or with RECOMP_SEASON_CODE=off. */
+static int kinds_on(void)
+{
+    return season_code_on() && (season_start_year() != SEASON_FIRST_YEAR || season_changing_rules());
+}
+int season_change_is_creating(void) { return creating; }
+void season_change_creating(int on) { creating = on; }
 
 static void run_hook(int k, int which, const SeasonChange *c)
 {
@@ -562,10 +585,12 @@ static void run_hook(int k, int which, const SeasonChange *c)
 static void hooks(int which, uint32_t comp, int entry, int is_started)
 {
     SeasonChange c = {pass_season, comp, comp ? season_change_file(comp) : "", entry,
-                      entry >= 0 ? rd32(g_mem, entry_at(entry)) : 0, is_started};
-    hook_season = pass_season;
+                      entry >= 0 ? rd32(g_mem, entry_at(entry)) : 0, is_started, pass_start, creating};
+    hook_season = pass_start ? -1 : pass_season;  /* the start season gives no news */
+    hooks_start = pass_start;
     for (int k = 0; k < KIND_COUNT && !rt_unwinding; k++) run_hook(k, which, &c);
     hook_season = -1;
+    hooks_start = 0;
 }
 
 static int entry_for(uint32_t comp)
@@ -577,38 +602,72 @@ static int entry_for(uint32_t comp)
     return -1;
 }
 
-void season_change_start(uint32_t comp, int after)
+int season_change_start(uint32_t comp, int after)
 {
-    if (!in_pass) return;
+    if (!in_pass) return 0;
     if (!after) {
         int e = depth > 0 ? stack[depth - 1] : entry_for(comp);
         if (depth < 32) stack[depth] = e;
         depth++;
         if (logging()) {
             uint32_t rec = rd32(g_mem, comp + 4);
-            fprintf(stderr, "recomp: season change: %s (%.50s) starts %d, entry %d\n", season_change_file(comp),
-                    readable(rec) ? win_str(rec + NAME_AT) : "?", pass_season, e);
+            fprintf(stderr, "recomp: season change: %s (%.50s) starts %d, entry %d%s\n", season_change_file(comp),
+                    readable(rec) ? win_str(rec + NAME_AT) : "?", pass_season, e, pass_start ? " (start season)" : "");
         }
+        skip_now = 0;
+        in_before = 1;
         hooks(1, comp, e, 1);
+        in_before = 0;
+        int skip = skip_now;
+        skip_now = 0;
+        if (skip && depth <= 32) stack[depth - 1] = -2 - e;     /* the after hook gets started 0 */
+        if (skip && logging()) fprintf(stderr, "recomp: season change: %s skips %d\n", season_change_file(comp), pass_season);
+        return skip;
     } else {
-        int e = depth > 0 && depth <= 32 ? stack[depth - 1] : -1;
+        int e = depth > 0 && depth <= 32 ? stack[depth - 1] : -1, skipped = e <= -2;
+        if (skipped) e = -2 - e;
         if (depth > 0) depth--;
         if (started_count < MAX_COMPS) started[started_count++] = comp;
-        hooks(2, comp, e, 1);
+        hooks(2, comp, e, !skipped);
+        return 0;
     }
 }
+
+static void test_rename(void);
 
 void season_change_new_game(void)
 {
     if (!season_code_on()) return;
     season_point = season_start_year();         /* the start season's point lay in the run to the start date */
+    test_rename();                              /* test only: a stand-in for a name of slice 15 */
+    if (!kinds_on()) return;
     for (int k = 0; k < KIND_COUNT && !rt_unwinding; k++)
         if (season_rule_kinds[k]->new_game) season_rule_kinds[k]->new_game(season_start_year());
+    if (season_start_year() == SEASON_FIRST_YEAR) return;
+    /* The entries whose start season began before the game (update day from 1 October): their entry hook and
+     * the after hook of each competition, once (season_change.h, "The start season"). */
+    pass_season = season_start_year();
+    pass_start = 1;
+    creating = 1;
+    for (int e = 0; e < ENTRY_COUNT && !rt_unwinding; e++) {
+        if ((int16_t)rd16(g_mem, entry_at(e) + ENTRY_DAY) < LATE_DAY) continue;
+        if (logging())
+            fprintf(stderr, "recomp: season change: entry %d starts %d/%02d before the game (start season)\n", e,
+                    pass_season, (pass_season + 1) % 100);
+        hooks(0, 0, e, 0);
+        uint32_t comps[256];
+        int n = season_change_entry_comps(e, comps, 256);
+        for (int i = 0; i < n && !rt_unwinding; i++) hooks(2, comps[i], e, 0);
+    }
+    creating = 0;
+    pass_start = 0;
 }
 
 void season_change_loaded(void)
 {
     if (!season_code_on()) return;
+    if (season_point < season_start_year()) season_point = season_start_year();   /* a version 1 part */
+    if (!kinds_on()) return;
     for (int k = 0; k < KIND_COUNT && !rt_unwinding; k++)
         if (season_rule_kinds[k]->loaded) season_rule_kinds[k]->loaded(season_start_year());
 }
@@ -618,7 +677,7 @@ void o_005d5ae0(void);
 /* game_season_update_pass, cdecl (): at the end of every day. */
 RT_WRAP(005d5ae0, season_update_pass)
 {
-    if (!season_code_on() || !season_changing_rules()) {
+    if (!kinds_on()) {
         o_005d5ae0();
         return;
     }
@@ -628,27 +687,35 @@ RT_WRAP(005d5ae0, season_update_pass)
         due[e] = (int16_t)rd16(g_mem, entry_at(e) + ENTRY_DAY) == day;
         any |= due[e];
     }
-    if (!any || season <= season_start_year() || season > SEASON_LAST_YEAR) {
+    /* The start season: its hooks run with any changing rules, in the run to the start date of a new game
+     * (game_run_to_start_date 0x5cc850, called from create_game at 0x829fd9) and on the update days of the
+     * start year after the start date (25 July, 15 August). A later season: only with changing rules on. */
+    int start = season == season_start_year();
+    if (!any || season < season_start_year() || season > SEASON_LAST_YEAR || (!start && !season_changing_rules()) ||
+        (start && season == SEASON_FIRST_YEAR)) {
         o_005d5ae0();
         return;
     }
     pass_season = season;
+    pass_start = start;
     started_count = 0;
     depth = 0;
     if (logging())
         for (int e = 0; e < ENTRY_COUNT; e++)
             if (due[e])
-                fprintf(stderr, "recomp: season change: entry %d starts %d/%02d on day %d of %d\n", e, season,
-                        (season + 1) % 100, day, year);
+                fprintf(stderr, "recomp: season change: entry %d starts %d/%02d on day %d of %d%s\n", e, season,
+                        (season + 1) % 100, day, year, start ? " (start season)" : "");
     /* The season point: the season hooks, before the entries and competitions of the day. */
     if (day >= POINT_FIRST && day <= POINT_LAST && season > season_point) {
         season_point = season;
-        if (logging()) fprintf(stderr, "recomp: season change: season point of %d/%02d on day %d of %d\n", season,
-                               (season + 1) % 100, day, year);
-        hook_season = season;
+        if (logging()) fprintf(stderr, "recomp: season change: season point of %d/%02d on day %d of %d%s\n", season,
+                               (season + 1) % 100, day, year, start ? " (start season)" : "");
+        hook_season = start ? -1 : season;
+        hooks_start = start;
         for (int k = 0; k < KIND_COUNT && !rt_unwinding; k++)
             if (season_rule_kinds[k]->season) season_rule_kinds[k]->season(season);
         hook_season = -1;
+        hooks_start = 0;
         if (rt_unwinding) return;
     }
     for (int e = 0; e < ENTRY_COUNT && !rt_unwinding; e++)
@@ -687,7 +754,7 @@ RT_WRAP(005d5ae0, season_update_pass)
 static int test_on(void)
 {
     static int on = -1;
-    if (on < 0) on = getenv("RECOMP_SEASON_CHANGE_TEST") && *getenv("RECOMP_SEASON_CHANGE_TEST");
+    if (on < 0) on = getenv("RECOMP_SEASON_CHANGE_TEST") && !strcmp(getenv("RECOMP_SEASON_CHANGE_TEST"), "1");
     return on;
 }
 
@@ -705,4 +772,54 @@ static void test_season(int season)
                            game_year());
 }
 
-static const SeasonRuleKind season_kind_test = {"test", NULL, NULL, test_season, NULL, NULL, test_after};
+static int test_mode(const char *mode)
+{
+    const char *v = getenv("RECOMP_SEASON_CHANGE_TEST");
+    return v && !strcmp(v, mode);
+}
+
+/* RECOMP_SEASON_CHANGE_TEST=rename: a new game renames the record "UEFA Cup" to "Test Cup", as a name of
+ * slice 15 would (slice 15 calls season_change_rename at a new game, not through a kind), so
+ * tests/seasons/season_core_run.py (--only rename) can check that a 2001/02 game with changing rules off and a
+ * changed name writes the season part, and that its save loads. */
+static void test_rename(void)
+{
+    if (!test_mode("rename")) return;
+    uint32_t base = rd32(g_mem, COMP_RECORDS);
+    int32_t count = (int32_t)rd32(g_mem, COMP_RECORD_COUNT);
+    for (int32_t i = 0; readable(base) && i < count && i < 100000; i++) {
+        uint32_t rec = base + (uint32_t)i * RECORD_SIZE;
+        if (!strcmp(win_str(rec + NAME_AT), "UEFA Cup")) {
+            season_change_rename(rec, "Test Cup");
+            fprintf(stderr, "recomp: season change: test: record %d renamed to Test Cup\n", (int)i);
+            return;
+        }
+    }
+}
+
+/* RECOMP_SEASON_CHANGE_TEST=write: a kind that writes the game in every hook (it renames each competition it
+ * meets to "Test Write"). The base game calls no kind, so its save must stay the same
+ * (tests/smoke/smoke_run.py, the run kinds-base). */
+static void test_write_comp(const SeasonChange *c)
+{
+    if (!test_mode("write") || !c->comp) return;
+    uint32_t rec = rd32(g_mem, c->comp + 4);
+    if (readable(rec)) season_change_rename(rec, "Test Write");
+}
+
+static void test_write_game(int start_year)
+{
+    (void)start_year;
+    if (!test_mode("write")) return;
+    uint32_t base = rd32(g_mem, COMP_RECORDS);
+    if (readable(base)) season_change_rename(base, "Test Write");
+}
+
+static void test_after_all(const SeasonChange *c)
+{
+    test_after(c);
+    test_write_comp(c);
+}
+
+static const SeasonRuleKind season_kind_test = {"test", test_write_game, test_write_game, test_season, NULL,
+                                                test_write_comp, test_after_all};

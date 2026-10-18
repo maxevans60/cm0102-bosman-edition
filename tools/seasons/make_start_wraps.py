@@ -56,21 +56,28 @@ def make(exe, classes):
         '#include "win.h"',
         '#include "season_change.h"',
         "",
-        "/* Each wrap: season_change_start(this, 0), the original, season_change_start(this, 1). The recompiler",
-        " * reads the RT_WRAP lines as they are (tools/recomp/recomp.py), so they are written out in full. */",
+        "/* Each wrap: season_change_start(this, 0), the original, season_change_start(this, 1). When a kind",
+        " * skips the season (season_change_skip), the original does not run: the function returns as the shared",
+        " * \"ret\" 0x5a8f60 of other classes in this slot (thiscall, no arguments). The recompiler reads the RT_WRAP",
+        " * lines as they are (tools/recomp/recomp.py), so they are written out in full. */",
         "",
     ]
     for fn in sorted(targets):
         name = names.get(fn, "?")
         if "start_new_season" not in name:
             continue        # a shared function of other slots too (shared_noop_ret0_5a8f60): no season start
-        lines += [f"/* {name}, {len(targets[fn])} classes */",
+        lines += [f"/* {name}, {len(targets[fn])} class{'' if len(targets[fn]) == 1 else 'es'} */",
                   f"void o_{fn:08x}(void);",
                   f"RT_WRAP({fn:08x}, start_{fn:06x})",
                   "{",
                   "    uint32_t self = cpu.ecx;",
-                  "    season_change_start(self, 0);",
+                  "    int skip = season_change_start(self, 0);",
                   "    if (rt_unwinding) return;",
+                  "    if (skip) {",
+                  "        rt_ret_stdcall(cpu.eax, 0);",
+                  "        season_change_start(self, 1);",
+                  "        return;",
+                  "    }",
                   f"    o_{fn:08x}();",
                   "    if (rt_unwinding) return;",
                   "    season_change_start(self, 1);",

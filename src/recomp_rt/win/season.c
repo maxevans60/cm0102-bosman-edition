@@ -147,8 +147,12 @@ static void season_box(const char *title, const char *text)
     rt_callback(MESSAGE_BOX, 3, args);
 }
 
-/* The part of a game: written only when the game is not 2001 with changing rules off. */
-static int part_needed(void) { return rt_season_year != SEASON_FIRST_YEAR || rules_now; }
+/* The part of a game: written only when the game is not 2001 with changing rules off, or when the season
+ * code holds news or changed names (season_change.c): a load needs the names in the data (season_change_rename). */
+static int part_needed(void)
+{
+    return rt_season_year != SEASON_FIRST_YEAR || rules_now || season_change_part_size() != 0;
+}
 
 static int read_at(int fd, int64_t at, void *buf, uint32_t n)
 {
@@ -399,7 +403,9 @@ RT_WRAP(00828110, create_game)
     season_change_reset();
     season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
     season_intl_at_create();                    /* slice 27: Australia in Asia from 2006/07 */
+    season_change_creating(1);
     o_00828110();
+    season_change_creating(0);
     if (!rt_unwinding && cpu.eax) {
         game_on = 1;
         season_change_new_game();
