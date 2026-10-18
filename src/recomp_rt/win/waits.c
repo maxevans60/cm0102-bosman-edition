@@ -209,6 +209,13 @@ RT_WRAP(005e8290, message_box)
         uint32_t title = rt_arg(0), text = rt_arg(1);
         fprintf(stderr, "recomp: message box from %#x: %.200s: %.200s\n", rd32(g_mem, cpu.esp),
                 title ? (const char *)(g_mem + title) : "", text ? (const char *)(g_mem + text) : "");
+        if (getenv("RECOMP_BOX_STACK")) {     /* TEMP slice 23 debug */
+            for (uint32_t k = 0; k < 0x2000; k += 4) {
+                uint32_t v = rd32(g_mem, cpu.esp + k);
+                if (v > 0x401000u && v < 0x960000u) fprintf(stderr, " %#x", v);
+            }
+            fprintf(stderr, "\n");
+        }
     }
     in_box++;
     o_005e8290();

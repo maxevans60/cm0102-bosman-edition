@@ -222,7 +222,6 @@ void o_009025c0(void);
  * original's qualifying round record (code 0xdc). Returns 1 when it returned the table to the caller. */
 static int uc_access_round_table(uint32_t uc, const UcGroups *f, uint32_t out_rounds)
 {
-    if (season_uefa_uc_direct_first(uc) < 0) return 0;
     int rounds = 0;
     uint32_t orig = original_table(uc, &rounds);
     uint32_t qr = orig ? record_of(orig, rounds, 0xdc) : 0;

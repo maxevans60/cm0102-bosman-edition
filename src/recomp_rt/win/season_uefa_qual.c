@@ -577,13 +577,42 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds_out)
     return t;
 }
 
+/* The layout of the Europa League from its round table +0xa3 (+0x3c rounds), once the season has started: its
+ * clubs lose their id at +0x1db when they go out, so make_layout cannot count them any more. Round i takes
+ * +0x1c new slots from +0x1e; the last of them are the drop slots of the row. Returns 0 when the table is not
+ * one of the access list (a round code that is not of EL_LEVELS, slots that do not follow each other). */
+static int uc_table_layout(uint32_t uc, const SeasonUefa *r, Layout *L)
+{
+    memset(L, 0, sizeof *L);
+    uint32_t t = rd32(g_mem, uc + 0xa3);
+    int rounds = (int16_t)rd16(g_mem, uc + 0x3c), slot = 0, k = 0;
+    if (!readable(t) || rounds < 1 || rounds > MAX_ROUNDS || (int32_t)rd32(g_mem, uc + 0x30) != -1) return 0;
+    for (int i = 0; i < rounds; i++) {
+        uint32_t rec = t + ROUND_SIZE * (uint32_t)i;
+        int code = (int16_t)rd16(g_mem, rec + 7);
+        while (k < N_LEVELS && EL_LEVELS[k].round_code != code) k++;
+        if (k == N_LEVELS || (int16_t)rd16(g_mem, rec + 0x1e) != slot) return 0;
+        int lv = EL_LEVELS[k].cp, fresh = (int16_t)rd16(g_mem, rec + 0x1c);
+        L->level[i] = k, L->first[i] = slot, L->fresh[i] = fresh, L->cp_fresh[i] = fresh;
+        L->clubs_in[i] = (int16_t)rd16(g_mem, rec + 0x18);
+        L->drops[lv] = season_uefa_dropped(r, lv);
+        L->count[lv] = fresh - L->drops[lv];
+        slot += fresh;
+        k++;
+    }
+    L->rounds = rounds;
+    L->direct_first = slot;
+    L->slots = (int16_t)rd16(g_mem, uc + 0x3e);
+    L->drops[SEASON_UEFA_EL_G] = season_uefa_dropped(r, SEASON_UEFA_EL_G);
+    return L->slots > slot + HANDOVER + THIRDS - 1;
+}
+
 /* The first slot after the Europa League's rounds (the group clubs, the hand-over, the thirds), or -1. */
 int season_uefa_uc_direct_first(uint32_t uc)
 {
     const SeasonUefa *r = access_row_of(uc);
     Layout L;
-    if (!r || !make_layout(r, 'e', &L, 0) || (int16_t)rd16(g_mem, uc + 0x3e) != L.slots) return -1;
-    return L.direct_first;
+    return r && uc_table_layout(uc, r, &L) ? L.direct_first : -1;
 }
 
 /* ---- The Champions League losers into the Europa League ---- */
@@ -648,8 +677,8 @@ static void uc_fill_drops(uint32_t uc)
     const SeasonUefa *r = access_row_of(uc);
     uint32_t cl = comp_object(KEY_CL, CL_VTABLE);
     Layout L, C;
-    if (!r || !cl || !r->drops || !*r->drops || !access_row_of(cl) || !make_layout(r, 'e', &L, 0) ||
-        (int16_t)rd16(g_mem, uc + 0x3e) != L.slots || !make_layout(access_row_of(cl), 'c', &C, cl) ||
+    if (!r || !cl || !r->drops || !*r->drops || !access_row_of(cl) || !uc_table_layout(uc, r, &L) ||
+        !make_layout(access_row_of(cl), 'c', &C, cl) ||
         (int16_t)rd16(g_mem, cl + 0x3e) != C.slots || (int16_t)rd16(g_mem, cl + 0x3c) != C.rounds)
         return;
     uint32_t e = rd32(g_mem, uc + 0xa7), list = rd32(g_mem, uc + 0x14);
