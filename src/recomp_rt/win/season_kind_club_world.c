@@ -199,6 +199,7 @@ static const char *name_of(uint32_t comp, char *buf, size_t n)
 
 static void club_world_before(const SeasonChange *c)
 {
+    if (!season_game()) return;                             /* never in the base game (Q152, Q342) */
     const ClubWorldClass *k = class_of(c->file);
     if (!k || !c->started) return;
     /* The start season hooks run with changing rules off too (season_change.h, "The start season"). A late
@@ -219,6 +220,7 @@ static void club_world_before(const SeasonChange *c)
  * after a gap gets its sentence too. */
 static void club_world_after(const SeasonChange *c)
 {
+    if (!season_game()) return;                             /* never in the base game (Q152, Q342) */
     const ClubWorldClass *k = class_of(c->file);
     if (!k) return;
     int s = c->season;
