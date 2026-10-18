@@ -42,6 +42,17 @@ typedef struct {
     int sc_day, sc_month;
     const char *drops;              /* where the losers of Champions League qualifying rounds enter the Europa
                                      * League: "Q3>PO PO>G" (2009/10 on), "Q3-LP>G" a path; "" before 2009/10 */
+    /* Slice 24 (2021/22 on). */
+    int uc_ko_po;                   /* clubs of the Europa League knockout round play-offs (the group runners-up
+                                     * and the Champions League thirds; the winners go to the round of 16), 0
+                                     * when the groups send their clubs to the first knockout round */
+    int away_goals;                 /* 1: away goals decide a level two-legged tie (to 2020/21); 0: no away goals
+                                     * rule, extra time and penalties (U9, 2021/22 on), in all three cups */
+    const char *suspended;          /* nations with no UEFA places, by name, separated by commas ("Russia"
+                                     * from 2022/23, Q293); "" for none */
+    int ecl_round_count;            /* the Conference League (U8, 2021/22 on), 0 when not held */
+    SeasonUefaRound ecl_rounds[SEASON_UEFA_ROUNDS];
+    int ecl_groups, ecl_group_clubs, ecl_ko_po;
 } SeasonUefa;
 
 /* The entry codes of the access list (club +0x1df) in a season with an access list (season_uefa_seeding.c).
@@ -84,8 +95,11 @@ typedef struct {
     int season;
     char comp;                      /* c Champions League, e Europa League, h CL title holder, H EL title holder
                                      * (EL place), X EL title holder with a CL place, f fair play places, L a
-                                     * nation whose last EL place is its league cup winner's (places: the name) */
-    int rank_from, rank_to;         /* 1 is the top association; 0 for h, H, X and f */
+                                     * nation whose last EL place is its league cup winner's (places: the name);
+                                     * slice 24: k Conference League, K its title holder, Y the same with an EL
+                                     * place, M as L for the Conference League */
+    int rank_from, rank_to;         /* 1 is the top association; 0 for h, H, X, f, K and Y. Places "" (2021/22
+                                     * on): the ranks of the bracket have no place in that competition */
     const char *places;             /* the entry round of each place in domestic order (CL: the champion first;
                                      * EL: the cup winner first): G, PO, PO-CP, PO-LP, Q3, Q3-CP, Q3-LP, Q2, Q2-CP,
                                      * Q2-LP, Q1, PR */
@@ -122,6 +136,13 @@ int season_uefa_uc_round(const SeasonUefa *r, const char *name);
 int season_uefa_cl_level(const SeasonUefa *r, const char *name);
 int season_uefa_uc_level(const SeasonUefa *r, const char *name);
 
+/* The clubs of a named round of a row's Conference League, and of a round of all its paths. */
+int season_uefa_ecl_round(const SeasonUefa *r, const char *name);
+int season_uefa_ecl_level(const SeasonUefa *r, const char *name);
+
+/* 1 when the clubs of the nation named name have no UEFA places in row r (a suspension). */
+int season_uefa_suspended(const SeasonUefa *r, const char *name);
+
 /* 1 when the Champions League of row r has one group stage and a knockout round of 16 (2003/04 on). */
 int season_uefa_cl_round_of_16(const SeasonUefa *r);
 
@@ -135,5 +156,9 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds);
 int season_uefa_uc_direct_first(uint32_t uc);
 void season_uefa_uc_fill_drops(uint32_t uc);
 int season_uefa_report_clubs(uint32_t obj);
+
+/* Slice 24, season_uefa.c: flag 0x4 (no away goals rule) in +0x0f of each two-legged round of a round table of
+ * a season whose row has no away goals rule. The game only. */
+void season_uefa_no_away_goals(uint32_t table, int rounds, int season);
 
 #endif

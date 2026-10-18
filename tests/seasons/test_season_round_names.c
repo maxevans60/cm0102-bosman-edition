@@ -32,6 +32,11 @@ int main(void)
     CHECK(season_round_name("uefa_cup", 250, 2004, SEASON_ROUND_NAME_ABBREVIATED) == NULL);
     CHECK(is(season_round_name("uefa_cup", 260, 2008, SEASON_ROUND_NAME_LONG), "Second Qualifying Round"));
     CHECK(season_round_name("uefa_cup", 30, 2003, SEASON_ROUND_NAME_LONG) == NULL);
+    /* Slice 24: round 30 of the Europa League is the knockout round play-offs from 2021/22. */
+    CHECK(is(season_round_name("uefa_cup", 30, 2020, SEASON_ROUND_NAME_LONG), "Round of 32"));
+    CHECK(is(season_round_name("uefa_cup", 30, 2021, SEASON_ROUND_NAME_LONG), "Knockout Round Play-offs"));
+    CHECK(is(season_round_name("uefa_cup", 30, 2023, SEASON_ROUND_NAME_ABBREVIATED), "KO Play-offs"));
+    CHECK(is(season_round_name("uefa_cup", 40, 2021, SEASON_ROUND_NAME_LONG), "Round of 16"));
     /* Another competition with the same code keeps the original's name. */
     CHECK(season_round_name("eng_fa_cup", 20, 2005, SEASON_ROUND_NAME_LONG) == NULL);
     CHECK(season_round_name("european_cup", 30, 2005, SEASON_ROUND_NAME_LONG) == NULL);

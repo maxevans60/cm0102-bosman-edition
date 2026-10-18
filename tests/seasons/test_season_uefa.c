@@ -112,6 +112,45 @@ int main(void)
     CHECK(season_uefa_code('c', "Q3-CP", 5) == SEASON_UEFA_CL_Q3_CP && season_uefa_code('e', "Q3-CP", 5) == SEASON_UEFA_EL_Q3);
     CHECK(season_uefa_dropped(r2008, SEASON_UEFA_EL_G) == 0);
 
+    /* Slice 24. The Europa League of 2021/22 (U8): Q3, play-offs, 8 groups of 4, the winners to the round of
+     * 16, the runners-up and the 8 Champions League thirds to knockout round play-offs of 16. */
+    const SeasonUefa *r2020 = season_uefa_table_row(2020), *r2021 = season_uefa_table_row(2021);
+    const SeasonUefa *r2022 = season_uefa_table_row(2022), *r2023 = season_uefa_table_row(2023);
+    CHECK(r2021 && r2021->season == 2021 && r2023 && r2023->season == 2023);
+    CHECK(r2021->uc_groups == 8 && r2021->uc_group_clubs == 4 && r2021->uc_meetings == 2 && r2021->uc_through == 2);
+    CHECK(r2021->uc_ko_po == 16 && season_uefa_uc_round(r2021, "KO") == 16 && season_uefa_uc_round(r2021, "PO") == 20);
+    CHECK(season_uefa_uc_level(r2021, "Q3") == 16 && season_uefa_uc_round(r2021, "Q2 MP") == 0);
+    CHECK(r2020->uc_ko_po == 0 && r2020->uc_groups == 12);
+    /* No away goals rule from 2021/22 (U9). */
+    CHECK(r2020->away_goals == 1 && r2021->away_goals == 0 && r2023->away_goals == 0 && r2009->away_goals == 1);
+    /* Russia has no UEFA places from 2022/23 (Q293, Q365); in 2021/22 the places of the start stay (Q278). */
+    CHECK(!strcmp(r2021->suspended, "") && !strcmp(r2022->suspended, "Russia") && !strcmp(r2023->suspended, "Russia"));
+    CHECK(season_uefa_suspended(r2022, "Russia") && !season_uefa_suspended(r2021, "Russia"));
+    CHECK(!season_uefa_suspended(r2022, "Russ") && !season_uefa_suspended(r2022, "England"));
+    /* The Conference League from 2021/22 (U8): its rounds in the table. */
+    CHECK(r2020->ecl_round_count == 0 && season_uefa_ecl_round(r2021, "Q1") == 66);
+    CHECK(season_uefa_ecl_level(r2021, "Q2") == 108 && season_uefa_ecl_level(r2021, "PO") == 44);
+    CHECK(r2021->ecl_groups == 8 && r2021->ecl_group_clubs == 4 && r2021->ecl_ko_po == 16);
+    CHECK(season_uefa_ecl_round(r2022, "Q1") == 60 && season_uefa_ecl_round(r2023, "Q1") == 62);
+    /* The Champions League losers into the Europa League, 2021/22: Q2 losers to Q3 (10 and 3), Champions Path
+     * Q3 losers to the play-offs (6), League Path Q3 losers and play-off losers to the groups (4 and 6). */
+    CHECK(season_uefa_dropped(r2021, SEASON_UEFA_EL_Q3) == 13 && season_uefa_dropped(r2021, SEASON_UEFA_EL_PO) == 6);
+    CHECK(season_uefa_dropped(r2021, SEASON_UEFA_EL_G) == 10 && season_uefa_dropped(r2021, SEASON_UEFA_EL_Q2) == 0);
+    season_uefa_new_clubs(r2021, 'e', t);
+    CHECK(t[SEASON_UEFA_EL_Q3] == 3 && t[SEASON_UEFA_EL_PO] == 6 && t[SEASON_UEFA_EL_G] == 12);
+    CHECK(t[SEASON_UEFA_EL_Q2] == 0 && t[SEASON_UEFA_EL_Q1] == 0);
+    season_uefa_new_clubs(r2022, 'e', t);
+    CHECK(t[SEASON_UEFA_EL_Q3] == 2 && t[SEASON_UEFA_EL_PO] == 7 && t[SEASON_UEFA_EL_G] == 12);
+    /* The access list of 2021/22: Europa League places only for the associations ranked 1 to 15, the rest go to
+     * the Conference League. */
+    CHECK(!strcmp(season_uefa_access_places(2021, 'c', 1), "G G G G"));
+    CHECK(!strcmp(season_uefa_access_places(2021, 'e', 1), "G G") && !strcmp(season_uefa_access_places(2021, 'e', 13), "Q3"));
+    CHECK(!strcmp(season_uefa_access_places(2021, 'e', 20), "") && !strcmp(season_uefa_access_places(2021, 'e', 60), ""));
+    CHECK(!strcmp(season_uefa_access_places(2021, 'k', 1), "PO") && !strcmp(season_uefa_access_rule(2021, 'X'), "G"));
+    CHECK(!season_uefa_access_league_cup(2021, "England") && !strcmp(season_uefa_access_rule(2022, 'Y'), "G"));
+    /* The Super Cup of 2023 at Piraeus (no extra time from 2023 is not encoded: one match, penalties stay). */
+    CHECK(!strcmp(r2021->sc_city, "Belfast") && !strcmp(r2023->sc_city, "Piraeus") && r2023->sc_day == 16);
+
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);
     CHECK(season_uefa_table_row(2099) == &season_uefa_rows[season_uefa_row_count - 1]);

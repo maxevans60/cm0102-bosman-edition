@@ -39,13 +39,21 @@ PLACE_TOKENS = {"G", "PO", "PO-CP", "PO-LP", "Q3", "Q3-CP", "Q3-LP", "Q2", "Q2-C
 # Where the losers of the Champions League qualifying rounds go in the Europa League, from the first season of
 # each rule: the club counts of the Europa League rows ("159 entered + 33 from the Champions League": 15 third
 # qualifying round losers to the play-offs, 10 play-off losers to the groups, 8 group thirds) and their format.
-DROPS = {2009: "Q3>PO PO>G", 2018: "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G"}
+# 2021/22 on (slice 24): Q2 losers to Q3, Champions Path Q3 losers to the play-offs, League Path Q3 losers and
+# play-off losers to the groups ("21 entered + 37 from the Champions League" = 10 + 3 + 6 + 4 + 6 + 8 thirds);
+# the preliminary round and Q1 losers go to the Conference League.
+DROPS = {2009: "Q3>PO PO>G", 2018: "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G",
+         2021: "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G"}
 LEAGUE_CUP = {"England", "France"}  # the nations whose league cup winner can take a Europa League place
-ACCESS_COMPS = {"cl": "c", "el": "e", "cl-holder": "h", "el-holder": "H", "el-fairplay": "f"}
+# Slice 24: ecl the Conference League (k), ecl-holder its title holder (K; "G (EL)" a Europa League place, Y).
+ACCESS_COMPS = {"cl": "c", "el": "e", "cl-holder": "h", "el-holder": "H", "el-fairplay": "f", "ecl": "k",
+                "ecl-holder": "K"}
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_uefa_table.c")
-FIRST, LAST = 2001, 2020
+FIRST, LAST = 2001, 2023
 MAX_ROUNDS = 12
-ROUND_NAMES = ["QR", "PR", "Q1", "Q2", "Q3", "PO", "R1", "R2", "R3", "R4", "Groups", "Groups 2", "KO"]
+ROUND_NAMES = ["QR", "PR", "Q1", "Q2", "Q3", "PO", "R1", "R2", "R3", "R4", "Groups", "Groups 2", "KO PO", "KO"]
+# The rounds list writes the knockout round play-offs (2021/22 on) "KO play-offs".
+ROUND_ALIASES = {"KO play-offs": "KO PO"}
 # A qualifying round split in two paths (2009/10 on): "Q3 CP" (Champions Path) and "Q3 LP" (League Path) of the
 # Champions League, "Q2 CP" and "Q2 MP" (the main path) of the Europa League. Q296: the names of every season.
 PATHS = ["CP", "LP", "MP"]
@@ -68,6 +76,8 @@ def rounds(row):
     out = []
     for part in m.group(1).split(","):
         r = re.fullmatch(r"\s*(.+?) (\d+)\s*", part)
+        if r and r.group(1) in ROUND_ALIASES:
+            r = re.fullmatch(r"(.+) (\d+)", f"{ROUND_ALIASES[r.group(1)]} {r.group(2)}")
         words = r.group(1).split(" ") if r else []
         path_round = len(words) == 2 and words[0] in ("PR", "Q1", "Q2", "Q3", "PO") and words[1] in PATHS
         if not r or (r.group(1) not in ROUND_NAMES and not path_round):
@@ -89,14 +99,19 @@ def first_int(row, column):
 
 
 def groups(row):
-    """(groups, clubs a group, meetings, places through a group) or (0, 0, 0, 0)."""
+    """(groups, clubs a group, meetings, places through a group) or (0, 0, 0, 0). From 2021/22 the winners go to
+    the round of 16 and the runners-up to the knockout round play-offs: two through."""
     m = re.search(r"(\d+) groups of (\d+), (single|double) round robin", row["format"])
     if not m:
         return 0, 0, 0, 0
     t = re.search(r"top (two|three) plus", row["format"])
-    if not t:
-        fail(row, "UEFA Cup groups with no 'top two|three plus'")
-    return int(m.group(1)), int(m.group(2)), 1 if m.group(3) == "single" else 2, THROUGH[t.group(1)]
+    po = re.search(r"winners to the round of 16; runners-up play the (?:Champions|Europa) League group thirds in "
+                   r"knockout round play-offs", row["format"])
+    if not t and not po:
+        fail(row, "groups with no 'top two|three plus' and no 'winners to the round of 16; runners-up play'")
+    if po and not any(n == "KO PO" for n, _ in rounds(row)):
+        fail(row, "knockout round play-offs in the text, but no 'KO play-offs' round")
+    return int(m.group(1)), int(m.group(2)), 1 if m.group(3) == "single" else 2, THROUGH[t.group(1)] if t else 2
 
 
 def super_cup(row):
@@ -127,6 +142,20 @@ def intertoto(row):
     return first_int(row, "clubs"), WORDS[m.group(1)], int(w.group(1)), UIC_ENTRY[w.group(2)]
 
 
+def away_goals(row):
+    """1 when away goals decide a level two-legged tie, 0 with 'no away goals rule' (U9, 2021/22 on)."""
+    return 0 if "no away goals rule" in row["format"] else 1
+
+
+def suspended(row):
+    """The nations of the access list row with no places ("Russia suspended: no places"), comma separated."""
+    return ",".join(re.findall(r"([A-Z][a-z]+(?: [A-Z][a-z]+)*) suspended: no places", row["notes"]))
+
+
+def ko_po(row):
+    return sum(c for n, c in rounds(row) if n == "KO PO")
+
+
 def read_rows():
     with open(PART, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f, delimiter="\t"))
@@ -137,6 +166,10 @@ def read_rows():
         for r in rows:
             if r["season"] != key or "qualifying" in r["comp"].lower():
                 continue
+            if r["comp_file"] == "uefa_seeding" and r["comp"] == "access list":
+                by["access"] = r
+            if r["comp_file"] == "new" and r["comp"] == "Conference League":
+                by["ecl"] = r
             if r["comp_file"] in ("european_cup", "uefa_cup", "intertoto_cup", "eur_super_cup"):
                 if r["comp_file"] in by:
                     fail(r, f"two {r['comp_file']} rows in {key}")
@@ -145,6 +178,12 @@ def read_rows():
             if f not in by:
                 raise SystemExit(f"make_uefa_table.py: no {f} row in {key}")
         cl, uc, uic = by["european_cup"], by["uefa_cup"], by["intertoto_cup"]
+        ecl = by.get("ecl")
+        if ecl and ecl["format"].startswith("not held"):
+            ecl = None
+        for x in (uc, ecl):
+            if x and any(n == "KO PO" for n, _ in rounds(x)) and not groups(x)[0]:
+                fail(x, "knockout round play-offs with no group stage")
         names = [n for n, _ in rounds(cl)]
         if "Groups" not in names or "KO" not in names:
             fail(cl, "the Champions League rounds have no Groups or no KO")
@@ -155,6 +194,10 @@ def read_rows():
             "cl_clubs": first_int(cl, "clubs"), "cl_rounds": rounds(cl),
             "uc_rounds": rounds(uc), "uc_groups": uc_groups(uc),
             "uic": intertoto(uic),
+            "uc_ko_po": ko_po(uc), "away_goals": away_goals(cl),
+            "suspended": suspended(by["access"]) if "access" in by else "",
+            "ecl_rounds": rounds(ecl) if ecl else [], "ecl_groups": groups(ecl) if ecl else (0, 0, 0, 0),
+            "ecl_ko_po": ko_po(ecl) if ecl else 0,
         })
     return out
 
@@ -163,7 +206,9 @@ def read_access():
     """The access list by association rank (Q369), seasons ACCESS_FIRST to LAST: [(season, comp, from, to,
     places)]. comp: c Champions League, e Europa League (the cup winner's place first), h the Champions League
     title holder, H the Europa League title holder ("PO-LP (CL)" or "G (CL)": a Champions League place, given as
-    comp X), f the fair play places, L a nation whose last Europa League place goes to its league cup winner. places: the entry round of each place in domestic order (PLACE_TOKENS). A
+    comp X), f the fair play places, L a nation whose last Europa League place goes to its league cup winner;
+    slice 24: k the Conference League, K its title holder (Y with a Europa League place), M a nation whose last
+    Conference League place goes to its league cup winner. places: the entry round of each place in domestic order (PLACE_TOKENS). A
     rank with no places ("-": Liechtenstein, which has no league) is left out; the game gives that rank the
     places of the next bracket."""
     with open(ACCESS, newline="", encoding="utf-8") as f:
@@ -178,25 +223,29 @@ def read_access():
         if not comp:
             fail(r, f"comp {r['comp']!r} is not one of {sorted(ACCESS_COMPS)}")
         places = r["places"].strip()
-        if places == "-":
+        if places == "-" and "Liechtenstein" in r["notes"]:
             continue
+        if places == "-":               # slice 24: ranks with no place in this competition (EL from 2021/22)
+            places = ""
         if places.endswith(" (CL)") and comp == "H":
             comp, places = "X", places[:-5]
+        if places.endswith(" (EL)") and comp == "K":
+            comp, places = "Y", places[:-5]
         toks = places.split()
-        if not toks or any(t not in PLACE_TOKENS for t in toks):
+        if (not toks and r["places"].strip() != "-") or any(t not in PLACE_TOKENS for t in toks):
             fail(r, f"places {places!r} hold a token that is not one of {sorted(PLACE_TOKENS)}")
         lo = int(r["rank_from"]) if r["rank_from"] not in ("-", "") else 0
         hi = int(r["rank_to"]) if r["rank_to"] not in ("-", "") else 0
-        if comp in "ce" and (lo < 1 or hi < lo):
+        if comp in "cek" and (lo < 1 or hi < lo):
             fail(r, "no rank bracket")
         out.append((season, comp, lo, hi, places))
         # The Europa League place of a league cup winner (the notes of the bracket: "England: last place to the
         # league cup winner"): a row L with the nation's name. The game knows England and France (LEAGUE_CUP).
-        if comp == "e":
+        if comp in "ek":
             for nation in re.findall(r"([A-Z][a-z]+)(?: \(rank \d+\))?: last place to the league cup", r["notes"]):
                 if nation not in LEAGUE_CUP:
                     fail(r, f"league cup place of {nation}, not one of {sorted(LEAGUE_CUP)}")
-                out.append((season, "L", 0, 0, nation))
+                out.append((season, "L" if comp == "e" else "M", 0, 0, nation))   # M: the Conference League's
     for season in range(ACCESS_FIRST, LAST + 1):
         for comp in "ceh":
             if not any(a[0] == season and a[1] == comp for a in out):
@@ -239,7 +288,10 @@ def text():
         for first in sorted(DROPS):
             if r["season"] >= first:
                 drops = DROPS[first]
-        lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}, {c_text(drops)}}},")
+        lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}, {c_text(drops)},")
+        eg = r["ecl_groups"]
+        lines.append(f"     {r['uc_ko_po']}, {r['away_goals']}, {c_text(r['suspended'])},")
+        lines.append(f"     {c_rounds(r['ecl_rounds'])}, {eg[0]}, {eg[1]}, {r['ecl_ko_po']}}},")
     lines += ["};", "const int season_uefa_row_count = (int)(sizeof season_uefa_rows / sizeof season_uefa_rows[0]);",
               "", f"/* The access list by association rank from {ACCESS_FIRST}/{(ACCESS_FIRST + 1) % 100:02d} "
               "(docs/research/rules-0.6.0/uefa-access.tsv). */",

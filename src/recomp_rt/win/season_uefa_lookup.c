@@ -60,6 +60,28 @@ int season_uefa_uc_round(const SeasonUefa *r, const char *name)
     return r ? round_clubs(r->uc_rounds, r->uc_round_count, name) : 0;
 }
 
+int season_uefa_ecl_round(const SeasonUefa *r, const char *name)
+{
+    return r ? round_clubs(r->ecl_rounds, r->ecl_round_count, name) : 0;
+}
+
+int season_uefa_ecl_level(const SeasonUefa *r, const char *name)
+{
+    return r ? level_clubs(r->ecl_rounds, r->ecl_round_count, name) : 0;
+}
+
+int season_uefa_suspended(const SeasonUefa *r, const char *name)
+{
+    size_t k = name ? strlen(name) : 0;
+    for (const char *p = r && r->suspended ? r->suspended : ""; k && *p;) {
+        const char *e = p;
+        while (*e && *e != ',') e++;
+        if ((size_t)(e - p) == k && !strncmp(p, name, k)) return 1;
+        p = *e ? e + 1 : e;
+    }
+    return 0;
+}
+
 int season_uefa_cl_round_of_16(const SeasonUefa *r)
 {
     return r && season_uefa_cl_round(r, "Groups") == 32 && season_uefa_cl_round(r, "Groups 2") == 0 &&

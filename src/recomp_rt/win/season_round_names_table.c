@@ -23,5 +23,7 @@ const SeasonRoundName season_round_name_rows[] = {
     {"uefa_cup", 220, 2009, 4, "Play-off Rnd"},
     {"uefa_cup", 240, 2018, 3, "Preliminary Round"},
     {"uefa_cup", 240, 2018, 4, "Prelim. Rnd"},
+    {"uefa_cup", 30, 2021, 3, "Knockout Round Play-offs"},
+    {"uefa_cup", 30, 2021, 4, "KO Play-offs"},
 };
 const int season_round_name_count = (int)(sizeof season_round_name_rows / sizeof season_round_name_rows[0]);

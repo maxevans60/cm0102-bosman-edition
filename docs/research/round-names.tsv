@@ -19,3 +19,5 @@ uefa_cup	220	2009	long,plural	Play-off Round	https://kassiesa.net/uefa/files/200
 uefa_cup	220	2009	abbreviated	Play-off Rnd	the long name in the original's short words; source of the name as the row above
 uefa_cup	240	2018	long,plural	Preliminary Round	https://kassiesa.net/uefa/files/2018-19-uefa-el-rules.pdf ("preliminary round"); slice 23
 uefa_cup	240	2018	abbreviated	Prelim. Rnd	the long name in the original's short words; source of the name as the row above
+uefa_cup	30	2021	long,plural	Knockout Round Play-offs	https://kassiesa.net/uefa/files/2021-22-uefa-el-rules.pdf ("knockout round play-offs", Article 17); https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_League_knockout_phase (section "Knockout round play-offs"); slice 24, rules table row uefa-165
+uefa_cup	30	2021	abbreviated	KO Play-offs	the long name in the original's short words; source of the name as the row above
