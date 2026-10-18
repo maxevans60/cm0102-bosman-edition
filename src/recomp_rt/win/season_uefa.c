@@ -339,9 +339,11 @@ RT_WRAP(00583c50, cl_round_table)
         uint32_t t = r ? season_uefa_cl_qual_table(cl, &rounds, &name, &league) : 0;
         if (rt_unwinding) return;
         if (t) {
+            /* As the original writes them (0x583c8a..0x583ca7): a word to the rounds and to the name (set_up_rules
+             * 0x858e70 passes +0x3c and +0x3a, so a dword at +0x3a would cover the rounds), a dword to the fourth. */
             uint32_t out_rounds = rt_arg(1), out_name = rt_arg(2), out_league = rt_arg(3);
             if (out_rounds >= 0x10000u) wr16(g_mem, out_rounds, (uint16_t)rounds);
-            if (out_name >= 0x10000u) wr32(g_mem, out_name, name);
+            if (out_name >= 0x10000u) wr16(g_mem, out_name, (uint16_t)name);
             if (out_league >= 0x10000u) wr32(g_mem, out_league, league);
             rt_ret_stdcall(t, 4);
             return;

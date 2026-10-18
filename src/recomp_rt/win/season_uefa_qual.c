@@ -393,6 +393,8 @@ uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds_out, uint32_t *name_
     game_free(orig);
     if (rt_unwinding || !t) return 0;
     *rounds_out = L.rounds;
+    fprintf(stderr, "recomp: uefa: Champions League %u/%02u: %d qualifying rounds, %d slots\n", year, (year + 1) % 100,
+            L.rounds, L.slots);
     return t;
 }
 
@@ -498,9 +500,13 @@ RT_WRAP(00518790, cup_map_fixture_tree)
     const SeasonUefa *r = access_row_of(cup);
     Layout L;
     uint32_t t = rd32(g_mem, cup + 0xa3);
-    if (!r || !make_layout(r, 'c', &L, cup) || !readable(t) || (int16_t)rd16(g_mem, cup + 0x3c) != L.rounds ||
-        (int16_t)rd16(g_mem, cup + 0x3e) != L.slots || (int16_t)rd16(g_mem, t + 7) != CL_LEVELS[L.level[0]].round_code)
+    if (!r) return;
+    if (!make_layout(r, 'c', &L, cup) || !readable(t) || (int16_t)rd16(g_mem, cup + 0x3c) != L.rounds ||
+        (int16_t)rd16(g_mem, cup + 0x3e) != L.slots || (int16_t)rd16(g_mem, t + 7) != CL_LEVELS[L.level[0]].round_code) {
+        fprintf(stderr, "recomp: uefa: Champions League ties: the cup does not hold the access list layout (%d rounds, "
+                "%d slots)\n", (int16_t)rd16(g_mem, cup + 0x3c), (int16_t)rd16(g_mem, cup + 0x3e));
         return;
+    }
     Cpu saved = cpu;
     cl_paths(cup, &L);
     if (rt_unwinding) return;
@@ -508,6 +514,7 @@ RT_WRAP(00518790, cup_map_fixture_tree)
     uint32_t e = rd32(g_mem, cup + 0xa7);
     for (int i = L.direct_first; i < L.slots; i++) g_mem[e + ENTRY * (uint32_t)i + 5] = 1;
     cpu = saved;
+    fprintf(stderr, "recomp: uefa: Champions League ties of %d rounds in two paths\n", L.rounds);
 }
 
 /* ---- Europa League ---- */
@@ -740,12 +747,60 @@ void season_uefa_uc_fill_drops(uint32_t uc) { uc_fill_drops(uc); }
 
 void o_0051f890(void);
 
+#include <stdlib.h>
+
+/* Test only (RECOMP_UEFA_LOG=1): each week, the state of a cup's qualifying rounds: the current stage +0x30,
+ * the next round +0xab, the rounds set up +0xac, +0xb1, and for each round its ties by state (+0x34: 0 not
+ * drawn, 1 drawn, 2 ready, 3 fixtures made) and its sides still to come (-1); the entry bytes +5 of the slots. */
+static void log_cup(const char *name, uint32_t cup)
+{
+    uint32_t t = rd32(g_mem, cup + 0xa3), e = rd32(g_mem, cup + 0xa7);
+    int rounds = (int16_t)rd16(g_mem, cup + 0x3c), slots = (int16_t)rd16(g_mem, cup + 0x3e);
+    fprintf(stderr, "recomp: uefa log %s day %d: stage %d next %d set %d done %d slots %d", name,
+            (int16_t)rd16(g_mem, 0xae2c90u), (int32_t)rd32(g_mem, cup + 0x30), g_mem[cup + 0xab], g_mem[cup + 0xac],
+            g_mem[cup + 0xb1], slots);
+    for (int r = 0; r < rounds && r < MAX_ROUNDS && readable(t); r++) {
+        uint32_t rec = t + ROUND_SIZE * (uint32_t)r;
+        int ties = (int16_t)rd16(g_mem, rec + 0x1a), st[4] = {0}, open = 0, empty = 0;
+        for (int k = 0; k < ties; k++) {
+            uint32_t tie = tie_at(cup, r, k);
+            if (g_mem[tie + 0x34] < 4) st[g_mem[tie + 0x34]]++;
+            for (int h = 0; h < 2; h++) {
+                int16_t side = (int16_t)rd16(g_mem, tie + (h ? 0 : 2));
+                if (side < 0) open++;
+                else if (readable(e) && !readable(rd32(g_mem, e + ENTRY * (uint32_t)side))) empty++;
+            }
+        }
+        fprintf(stderr, " | r%d code %d draw %d/%d match %d/%d ties %d st %d/%d/%d/%d open %d empty %d", r,
+                (int16_t)rd16(g_mem, rec + 7), (int16_t)rd16(g_mem, rec), g_mem[rec + 2], (int16_t)rd16(g_mem, rec + 3),
+                g_mem[rec + 5], ties, st[0], st[1], st[2], st[3], open, empty);
+    }
+    int h[4] = {0};
+    for (int i = 0; i < slots && readable(e); i++) {
+        int8_t b5 = (int8_t)g_mem[e + ENTRY * (uint32_t)i + 5];
+        h[b5 == -1 ? 0 : b5 == 0 ? 1 : b5 == 1 ? 2 : 3]++;
+    }
+    fprintf(stderr, " | +5: out %d in %d won %d other %d\n", h[0], h[1], h[2], h[3]);
+}
+
+static void log_week(void)
+{
+    static int last = -1;
+    int day = (int16_t)rd16(g_mem, 0xae2c90u);
+    if (!getenv("RECOMP_UEFA_LOG") || day == last || day % 7) return;
+    last = day;
+    uint32_t cl = comp_object(KEY_CL, CL_VTABLE), uc = comp_object(KEY_UC, UC_VTABLE);
+    if (cl) log_cup("CL", cl);
+    if (uc) log_cup("EL", uc);
+}
+
 /* Cup::update_for_date, thiscall (slot 5 of the UEFA Cup, 0x970794): the drops before the draws of the day. */
 RT_WRAP(0051f890, cup_update_for_date)
 {
     uint32_t cup = cpu.ecx;
     if (readable(cup) && rd32(g_mem, cup) == UC_VTABLE && access_row_of(cup)) {
         Cpu saved = cpu;
+        log_week();
         uc_fill_drops(cup);
         if (rt_unwinding) return;
         cpu = saved;
