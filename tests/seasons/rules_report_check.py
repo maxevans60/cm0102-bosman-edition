@@ -257,6 +257,9 @@ def division_records(folder):
     return out
 
 
+DATA_COUNTING = {"IrePrm", "IreFirst", "PolFirst", "NorFirst"}     # the classes that count the clubs of the data
+
+
 def club_differences(seasons, comps, clubs, data_dir):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
@@ -273,6 +276,10 @@ def club_differences(seasons, comps, clubs, data_dir):
     # game run of 2001/02 with France shows French CFA and Lower Division with 0 clubs and 558 in A Lower
     # Division), so its list is not compared.
     in_report = {c["record"] for c in comps if c["season"] == season and c["kind"] == "league" and c["clubs"] > 0}
+    # A class that counts the clubs of the data (season_clubs.c) has no club count when the moves leave its
+    # division empty. That must fail, so such a league with no clubs is a difference.
+    emptied = {c["record"]: c["class"] for c in comps if c["season"] == season and c["kind"] == "league"
+               and c["clubs"] == 0 and c["class"] in DATA_COUNTING}
     # By name: the trim of the club table (database_trim_club_table 0x5267c0) gives the clubs new ids, so the
     # ids of the report are not those of club.dat. The club table holds each name once per nation; a name in
     # two nations counts once here, which the check accepts.
@@ -296,6 +303,9 @@ def club_differences(seasons, comps, clubs, data_dir):
     out = set()
     for division, listed in lists.items():
         rec = records.get(division)
+        if rec in emptied:
+            out.add((season, "club_list", f"{division}: no clubs at the start ({emptied[rec]} counts the clubs of "
+                                          f"the data)"))
         if rec is None or rec not in in_report:
             continue
         found = [n for n in listed if n]
@@ -447,7 +457,8 @@ def league_steps(nations, extra):
 def run(program, game, last, year, database, nations, extra, keep, timeout, options_more=None, env_more=None,
         start_only=False):
     """Plays the season jump. options_more: lines of settings.txt over the defaults (for example
-    changing_rules = on, tests/seasons/season_change_run.py); env_more: more environment variables."""
+    changing_rules = on, tests/seasons/season_change_run.py); env_more: more environment variables; start_only:
+    the run ends after the first start report (slice 15)."""
     import smoke_run
     import custom_database_run as cdr
     work = keep or tempfile.mkdtemp(prefix="cm0102-rules-report-")
