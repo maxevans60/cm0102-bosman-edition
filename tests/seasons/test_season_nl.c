@@ -239,9 +239,12 @@ int main(void)
     CHECK(season_nl_weekday(6, 9, 2018) == 3, "6 September 2018 is a Thursday");
     CHECK(season_nl_weekday(18, 10, 2026) == 6, "18 October 2026 is a Sunday");
     CHECK(season_nl_weekday(29, 2, 2020) == 5, "29 February 2020 is a Saturday");
-    CHECK(season_nl_qualifying_count == 2 && season_nl_qualifying[0].euro == 2020 &&
+    CHECK(season_nl_qualifying_count == 3 && season_nl_qualifying[0].euro == 2020 &&
           season_nl_qualifying[0].md[0].month == 3 && season_nl_qualifying[0].md[0].year == 1,
           "Euro 2020 qualifying starts in March of the year after the campaign year");
+    CHECK(season_nl_qualifying[2].world_cup && season_nl_qualifying[2].euro == 2022 && season_nl_qualifying[2].paths == 3 &&
+          season_nl_qualifying[2].po_final.day == 29 && season_nl_qualifying[2].po_final.year == 2,
+          "the 2022 World Cup paths: 3, the finals on 29 March 2022");
     check_table();
     check_promotion();
     check_paths();

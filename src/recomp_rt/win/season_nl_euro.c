@@ -77,7 +77,8 @@ static const SeasonNlQualifying *moved(uint32_t self)
     if (!season_comps_on() || !readable(self) || rd32(g_mem, self) != QUAL_VTABLE) return NULL;
     int campaign = (int16_t)rd16(g_mem, self + F_YEAR);
     for (int i = 0; i < season_nl_qualifying_count; i++)
-        if (season_nl_qualifying[i].euro == campaign + 2) return &season_nl_qualifying[i];
+        if (!season_nl_qualifying[i].world_cup && season_nl_qualifying[i].euro == campaign + 2)
+            return &season_nl_qualifying[i];
     return NULL;
 }
 
@@ -115,7 +116,7 @@ static void game_free(uint32_t p)
 /* One round of the path play-off: its draw on the first day of the month of the matches, its match on the day
  * (weekday -1: no move, class doc 12.3), one leg with extra time and penalties (+0x0d 3, +0x21 1; the final
  * with bit 0x200 for the fixed links), the fields of the Euro's semi-final and final (0x57b0a2..0x57b194). */
-static void path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams)
+void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams)
 {
     /* The record keeps a year offset from the stage's year (the campaign year, Cup_Stage argument 7), as the
      * class's play-off (+0x40 and offset 1 at 0x57d494..0x57d4b6). */
@@ -162,8 +163,8 @@ RT_WRAP(0057d190, nl_euro_qual_template)
         uint32_t rec = game_malloc(2u * ROUND_SIZE);
         if (rt_unwinding) return;
         int campaign = (int16_t)rd16(g_mem, self + F_YEAR);
-        if (rec) path_round(rec, 0, q->po_sf, campaign, teams);
-        if (rec && !rt_unwinding) path_round(rec, 1, q->po_final, campaign, teams / 2);
+        if (rec) season_nl_path_round(rec, 0, q->po_sf, campaign, teams);
+        if (rec && !rt_unwinding) season_nl_path_round(rec, 1, q->po_final, campaign, teams / 2);
         if (rt_unwinding) return;
         rt_ret_stdcall(rec, 4);
         return;

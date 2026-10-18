@@ -51,13 +51,14 @@ typedef struct {
     int out;                    /* 1: in the draw, but out before the first match (Russia in 2022-23) */
 } SeasonNlTier;
 
-/* The group matchdays of a European Championship qualifying with Nations League paths (Euro 2020 and Euro
- * 2024): the real days, in the year after the campaign year that the class holds at +0x40. */
+/* The group matchdays of a qualifying with Nations League paths (Euro 2020, Euro 2024 and the 2022 World Cup):
+ * the real days, in the year after the campaign year that the class holds at +0x40. */
 typedef struct {
     int euro;                   /* the year of the finals */
     SeasonNlDate md[10];        /* year: offset from the campaign year (1) */
     int paths;                  /* play-off paths of four nations (4 for Euro 2020, 3 for Euro 2024) */
     SeasonNlDate po_sf, po_final;  /* the path semi-finals and finals (year: offset from the campaign year, 2) */
+    int world_cup;              /* 1: the World Cup European qualifying (wc_europe_league), 0: the Euro's */
 } SeasonNlQualifying;
 
 extern const SeasonNlQualifying season_nl_qualifying[];
@@ -130,5 +131,10 @@ uint32_t season_nl_nation_team(int id);
 /* The ranked results of the UEFA edition of year `year` (2018 for 2018-19) while the Nations League object
  * holds its tables (from its draw to the draw of the next edition), else 0. */
 int season_nl_held_results(int year, SeasonNlRow *rows);
+
+/* One round of a path play-off template (season_nl_euro.c): a cup round record of 0x68 bytes at rec + round *
+ * 0x68, one match with extra time and penalties on day d (year offset from the campaign year), the final with
+ * bit 0x200 for the fixed links. */
+void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams);
 
 #endif

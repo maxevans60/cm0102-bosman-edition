@@ -9,7 +9,8 @@ Each run is a season jump of tests/seasons/rules_report_check.py (England, the q
 test log RECOMP_SEASON_NL_LOG=1. The runs:
     2018    October 2018, 2018/19 to 2019/20, changing rules on: the 2018-19 edition from the real leagues,
             the finals in June 2019, the 2020-21 leagues from the results (draw in March 2020)
-    2020    November 2020, 2020/21, changing rules on: the 2020-21 edition, finals in June 2021 (Q277)
+    2020    November 2020, 2020/21 to 2021/22, changing rules on: the 2020-21 edition, finals in June 2021 (Q277),
+            the 2022 World Cup qualifying on its 2021 matchdays and its three paths in March 2022
     2022    October 2022, 2022/23 to 2023/24, changing rules on: the 2024-25 edition (draw February 2024)
     2024    October 2024, 2024/25, changing rules on: the 2024-25 edition and its finals
     off     October 2018, 2018/19 to 2019/20, changing rules off: the 2018-19 shape again for 2020
@@ -54,13 +55,20 @@ DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
 # name: (start year, database, changing rules, last season, first edition, editions drawn in the run)
 RUNS = {
     "2018": (2018, "October 2018", "on", 2019, "2018-19", ["2018-19", "2020-21"]),
-    "2020": (2020, "November 2020", "on", 2020, "2020-21", ["2020-21"]),
+    "2020": (2020, "November 2020", "on", 2021, "2020-21", ["2020-21", "2022-23"]),
     "2022": (2022, "October 2022", "on", 2023, "2024-25", ["2024-25"]),
     "2024": (2024, "October 2024", "on", 2024, "2024-25", ["2024-25"]),
     "off": (2018, "October 2018", "off", 2019, "2018-19", ["2018-19", "2018-19"]),
     "save": (2018, "October 2018", "on", 2019, "2018-19", ["2018-19", "2020-21"]),
 }
 SAVE_AFTER = 430
+# Log lines each run must hold: the play-off paths (season_nl_euro.c, season_nl_wc.c).
+LINES = {"2018": ["euro 2020 qualifying groups from 21 March 2019", "euro 2020 path A (", "euro 2020 path D (",
+                  "euro 2020 seeding on day"],
+         "2020": ["world cup 2022 qualifying groups from 24 March 2021", "world cup 2022 path A:",
+                  "world cup 2022 path C:"],
+         "2022": ["euro 2024 qualifying groups from 23 March 2023", "euro 2024 path C ("]}
+NO_LINES = ["no path play-off", ": no paths ("]
 BASE_ENV = {"RECOMP_STAFF_RESERVE": "23000", "RECOMP_SEASON_NL_LOG": "1"}
 DRAW = re.compile(r"recomp: season nl: (\S+) draw league ([A-D]) group (\d+):(.*)$")
 FINALS = re.compile(r"recomp: season nl: (\S+) finals:(.*)$")
@@ -140,6 +148,16 @@ def check(name, work):
                         elif want and want[1] and want[1] != gi + 1:
                             fails.append(f"{name}: {ed}: {nation} in group {league}{gi + 1}, the real group is "
                                          f"{want[0]}{want[1]}")
+    for text in LINES.get(name, []):
+        if not any(text in x for x in log):
+            fails.append(f"{name}: no log line {text!r}")
+    for text in NO_LINES:
+        for x in log:
+            if text in x:
+                fails.append(f"{name}: {x.strip()}")
+    for x in log:
+        if "path" in x and "season nl:" in x and " none;" in x:
+            fails.append(f"{name}: a path with a missing nation: {x.strip()}")
     league_a = {ed: {n for g in leagues.get("A", []) for n in g} for ed, leagues in seen}
     finals = [m.groups() for m in (FINALS.search(x) for x in log) if m]
     for ed, names in finals:

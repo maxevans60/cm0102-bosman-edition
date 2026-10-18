@@ -14,7 +14,7 @@ import re
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
-                  "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_nl.c", "season_nl_euro.c")
+                  "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)

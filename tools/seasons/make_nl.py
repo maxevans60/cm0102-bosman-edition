@@ -153,8 +153,10 @@ def editions():
 # years on (inference: the planned days are not known).
 # The European Championships whose qualifying has Nations League paths (int-continental rows 189 and 233): the
 # group matchdays of the year after the campaign year come from the dates file (events euro<year>_qual_md<k>).
-# Paths: Euro 2020 "4 paths of 4" (row 189), Euro 2024 "3 paths" (row 233).
-QUALIFYING = {2020: 4, 2024: 3}
+# Paths: Euro 2020 "4 paths of 4" (row 189), Euro 2024 "3 paths" (row 233), the 2022 World Cup UEFA qualifying
+# (3 paths of 4: the 10 runners-up and the 2 best 2020-21 Nations League group winners, int-world rows of the
+# 2022 cycle). key: (prefix of the events, finals year, paths, 1 for a World Cup)
+QUALIFYING = {"euro2020": (2020, 4, 0), "euro2024": (2024, 3, 0), "wc2022": (2022, 3, 1)}
 
 MOVED_DATES = {
     ("2020-21", "sf1"): "2021-06-02",
@@ -228,22 +230,22 @@ def text():
         "const SeasonNlQualifying season_nl_qualifying[] = {",
     ]
     ds = dates()
-    for euro in QUALIFYING:
+    for prefix, (euro, paths, world_cup) in QUALIFYING.items():
         days = []
         for k in range(1, 11):
-            key = (f"euro{euro}", f"euro{euro}_qual_md{k}")
+            key = (prefix, f"{prefix}_qual_md{k}")
             if key not in ds:
                 fail(f"no date {key[1]} in nations-league-dates.tsv")
             y, mo, d = ds[key]
             days.append(f"{{{d}, {mo}, {y - (euro - 2)}}}")
         po = []
         for ev in ("po_sf", "po_final"):
-            key = (f"euro{euro}", f"euro{euro}_{ev}")
+            key = (prefix, f"{prefix}_{ev}")
             if key not in ds:
                 fail(f"no date {key[1]} in nations-league-dates.tsv")
             y, mo, d = ds[key]
             po.append(f"{{{d}, {mo}, {y - (euro - 2)}}}")
-        lines.append(f"    {{{euro}, {{{', '.join(days)}}}, {QUALIFYING[euro]}, {po[0]}, {po[1]}}},")
+        lines.append(f"    {{{euro}, {{{', '.join(days)}}}, {paths}, {po[0]}, {po[1]}, {world_cup}}},")
     lines += [
         "};",
         "const int season_nl_qualifying_count = (int)(sizeof season_nl_qualifying / sizeof season_nl_qualifying[0]);",
