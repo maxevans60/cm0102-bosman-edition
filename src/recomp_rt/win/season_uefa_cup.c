@@ -55,13 +55,34 @@
 
 #define ROUND_SIZE 0x68u                /* a round of a Cup round table */
 #define GROUP_ROUND_SIZE 0x41u          /* a match day of a League round table (0x68a160) */
-#define STAGES 9
-#define KO_SLOT 8
-#define GROUPS 8
-#define GROUP_CLUBS 5
-#define GROUP_DAYS 5                    /* 5 clubs meet once: 5 match days, one club rests on each */
+#define MAX_STAGES 13                   /* the stage array (ensure_stage_array), as the Champions League's */
+#define MAX_GROUPS 12
+#define MAX_GROUP_CLUBS 5
+#define MAX_GROUP_DAYS 6
 #define KO_CLUBS 32
 #define KO_ROUNDS 5
+#define KO_TIES 16
+
+/* The group stage of a row: 8 groups of 5 that meet once and send three (2004/05 to 2008/09), or 12 groups of 4
+ * that meet twice and send two (the Europa League, 2009/10 on). The object holds groups + 1 stages: the groups
+ * in stages 0 to groups - 1 and the knockout of 32 in stage groups. */
+typedef struct {
+    int groups, clubs, meetings, through, days;
+} UcGroups;
+
+static int uc_format(const SeasonUefa *r, UcGroups *f)
+{
+    if (!r || r->uc_groups < 2 || r->uc_groups > MAX_GROUPS || r->uc_group_clubs < 3 ||
+        r->uc_group_clubs > MAX_GROUP_CLUBS || r->uc_meetings < 1 || r->uc_meetings > 2)
+        return 0;
+    f->groups = r->uc_groups, f->clubs = r->uc_group_clubs, f->meetings = r->uc_meetings, f->through = r->uc_through;
+    /* An odd count rests one club on each match day (League::create_fixtures 0x6835c0 adds the resting place,
+     * 0x683c1b): 5 clubs meet once on 5 days, 4 clubs twice on 6 days. */
+    f->days = (f->clubs % 2 ? f->clubs : f->clubs - 1) * f->meetings;
+    /* The knockout of 32: the clubs that go through and the 8 Champions League thirds. */
+    if (f->days > MAX_GROUP_DAYS || f->groups * f->through + 8 != KO_CLUBS) return 0;
+    return 1;
+}
 #define WEEKDAY_UC 3                    /* the weekday of the UEFA Cup rounds of the original (0x9026a4) */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
@@ -85,7 +106,13 @@ static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 }
 
 static int is_uc(uint32_t obj) { return readable(obj) && rd32(g_mem, obj) == UC_VTABLE; }
-static int groups_layout(uint32_t uc) { return is_uc(uc) && (int32_t)rd32(g_mem, uc + 0x2c) == STAGES; }
+/* A UEFA Cup with a group stage holds 3 to 13 stages (the original's has none, +0x2c = 0 at 0x902344). */
+static int groups_layout(uint32_t uc)
+{
+    int32_t n = is_uc(uc) ? (int32_t)rd32(g_mem, uc + 0x2c) : 0;
+    return n >= 3 && n <= MAX_STAGES;
+}
+static int ko_slot(uint32_t uc) { return (int32_t)rd32(g_mem, uc + 0x2c) - 1; }
 static uint32_t stage_at(uint32_t uc, int i) { return rd32(g_mem, rd32(g_mem, uc + 0xc) + 4u * (uint32_t)i); }
 
 static int random_below(int n)
@@ -210,7 +237,8 @@ RT_WRAP(009025c0, uc_round_table)
     int count = (int16_t)rd16(g_mem, uc + 0x3e), b2 = (int8_t)g_mem[uc + 0xb2];
     int r1 = r ? season_uefa_uc_round(r, "R1") : 0, q2 = r ? season_uefa_uc_round(r, "Q2") : 0;
     int q1 = 2 * (count - 8 - r1) - q2;
-    int ok = r && r->uc_groups == GROUPS && r->uc_group_clubs == GROUP_CLUBS && r->uc_meetings == 1 &&
+    UcGroups f;
+    int ok = uc_format(r, &f) && f.groups == 8 && f.clubs == 5 && f.meetings == 1 &&
              season_uefa_uc_round(r, "KO") == KO_CLUBS && season_uefa_cl_round_of_16(r) && b2 == 0 && r1 == 80 &&
              q2 > 0 && q2 % 2 == 0 && q1 >= 2 && q1 % 2 == 0 && count > 100;
     if (!ok) {
@@ -243,7 +271,7 @@ RT_WRAP(009025c0, uc_round_table)
      * R1 on its first round dates (14 September); each second leg 14 days later (+0x22). */
     set_date(t, 0, 1, 6, 0, 13, 6, 0, 0, year);
     if (rt_unwinding) return;
-    wr32(g_mem, uc + 0x2c, STAGES);
+    wr32(g_mem, uc + 0x2c, (uint32_t)(f.groups + 1));
     wr32(g_mem, uc + 0x30, 0xffffffffu);
     if (!ensure_stage_array(uc)) {
         wr32(g_mem, uc + 0x2c, 0);
@@ -259,15 +287,35 @@ RT_WRAP(009025c0, uc_round_table)
 
 /* ---- The group stage ---- */
 
-/* The match days of the groups: 21 October, 4 and 25 November, 2 and 16 December (Thursdays of 2004). */
-static const int GROUP_DATES[GROUP_DAYS][2] = {{21, 9}, {4, 10}, {25, 10}, {2, 11}, {16, 11}};
-
-static uint32_t group_table(uint32_t year)
+/* The clubs of the group draw: those that won their last round, entry byte +5 = 1, as the Champions League's
+ * qualifiers (draw_phase1_groups 0x585383..0x5853a6). Returns their count (it can be above max). */
+static int uc_group_entrants(uint32_t uc, uint32_t *clubs, int max)
 {
-    uint32_t t = game_malloc(GROUP_DAYS * GROUP_ROUND_SIZE);
-    for (int d = 0; t && d < GROUP_DAYS && !rt_unwinding; d++) {
-        uint32_t a[9] = {t, (uint32_t)d, (uint32_t)GROUP_DATES[d][0], (uint32_t)GROUP_DATES[d][1], 0, WEEKDAY_UC, 2,
-                         year, 0};
+    int n = 0, count = (int16_t)rd16(g_mem, uc + 0x3e);
+    uint32_t entries = rd32(g_mem, uc + 0xa7);
+    for (int i = 0; readable(entries) && i < count; i++)
+        if (g_mem[entries + 6u * (uint32_t)i + 5] == 1 && readable(rd32(g_mem, entries + 6u * (uint32_t)i))) {
+            if (n < max) clubs[n] = rd32(g_mem, entries + 6u * (uint32_t)i);
+            n++;
+        }
+    return n;
+}
+
+/* The name of group g: 0x43d + g, the group names of the Champions League's phase 1 (0x583ed8). */
+static uint32_t uc_group_name(int g) { return 0x43du + (uint32_t)g; }
+
+/* The match days of the groups (Thursdays, month 0 to 11). 5 days: 21 October, 4 and 25 November, 2 and 16
+ * December (UEFA Cup 2004/05). 6 days: 17 September, 1 and 22 October, 5 November, 2 and 17 December (Europa
+ * League 2009/10, row uefa-69 of the rules table). */
+static const int GROUP_DATES_5[5][2] = {{21, 9}, {4, 10}, {25, 10}, {2, 11}, {16, 11}};
+static const int GROUP_DATES_6[6][2] = {{17, 8}, {1, 9}, {22, 9}, {5, 10}, {2, 11}, {17, 11}};
+
+static uint32_t group_table(uint32_t year, int days)
+{
+    const int (*dates)[2] = days == 6 ? GROUP_DATES_6 : GROUP_DATES_5;
+    uint32_t t = game_malloc((uint32_t)days * GROUP_ROUND_SIZE);
+    for (int d = 0; t && d < days && !rt_unwinding; d++) {
+        uint32_t a[9] = {t, (uint32_t)d, (uint32_t)dates[d][0], (uint32_t)dates[d][1], 0, WEEKDAY_UC, 2, year, 0};
         call_cdecl(F_GROUP_DATE, 9, a);
         uint32_t s[7] = {t, (uint32_t)d, 0, 0xffffffffu, 0xffffffffu, 0xffffffffu, 0};
         if (!rt_unwinding) call_cdecl(F_GROUP_SLOT, 7, s);
@@ -275,19 +323,19 @@ static uint32_t group_table(uint32_t year)
     return rt_unwinding ? 0 : t;
 }
 
-/* Puts the 40 clubs (in pots of 8 by seed) into 8 groups of 5, one of each pot a group, two clubs of one nation
- * (club +0x53) in a group only when no other draw is found. */
-static int draw_groups(const uint32_t *clubs, uint32_t groups[GROUPS][GROUP_CLUBS])
+/* Puts the clubs (in pots of f->groups by seed) into the groups, one of each pot a group, two clubs of one
+ * nation (club +0x53) in a group only when no other draw is found. */
+static int draw_groups(const UcGroups *f, const uint32_t *clubs, uint32_t groups[MAX_GROUPS][MAX_GROUP_CLUBS])
 {
     for (int relax = 0; relax < 2; relax++)
         for (int attempt = 0; attempt < 50; attempt++) {
             int ok = 1;
-            for (int pot = 0; pot < GROUP_CLUBS && ok; pot++) {
-                int used[GROUPS] = {0};
-                for (int k = 0; k < GROUPS && ok; k++) {
-                    uint32_t club = clubs[pot * GROUPS + k];
-                    int cand[GROUPS], n = 0;
-                    for (int g = 0; g < GROUPS; g++) {
+            for (int pot = 0; pot < f->clubs && ok; pot++) {
+                int used[MAX_GROUPS] = {0};
+                for (int k = 0; k < f->groups && ok; k++) {
+                    uint32_t club = clubs[pot * f->groups + k];
+                    int cand[MAX_GROUPS], n = 0;
+                    for (int g = 0; g < f->groups; g++) {
                         if (used[g]) continue;
                         int same = 0;
                         for (int p = 0; p < pot && !relax; p++)
@@ -309,53 +357,59 @@ static int draw_groups(const uint32_t *clubs, uint32_t groups[GROUPS][GROUP_CLUB
     return 0;
 }
 
-static void draw_group_stage(uint32_t uc)
+/* Sorts n clubs by the European seed (0x586f60, as the original's draws 0x585435). */
+static int sort_by_seed(uint32_t *clubs, int n)
 {
-    uint32_t clubs[GROUPS * GROUP_CLUBS];
-    int n = 0, count = (int16_t)rd16(g_mem, uc + 0x3e);
-    uint32_t entries = rd32(g_mem, uc + 0xa7);
-    /* The clubs that won their last round: entry byte +5 = 1, as the Champions League's qualifiers
-     * (draw_phase1_groups 0x585383..0x5853a6). */
-    for (int i = 0; readable(entries) && i < count; i++)
-        if (g_mem[entries + 6u * (uint32_t)i + 5] == 1 && readable(rd32(g_mem, entries + 6u * (uint32_t)i))) {
-            if (n < GROUPS * GROUP_CLUBS) clubs[n] = rd32(g_mem, entries + 6u * (uint32_t)i);
-            n++;
-        }
-    if (n != GROUPS * GROUP_CLUBS) {
-        fprintf(stderr, "recomp: uefa: UEFA Cup groups: %d clubs, not 40; no group stage\n", n);
-        return;
-    }
-    uint32_t list = game_malloc(4 * GROUPS * GROUP_CLUBS);
-    if (!list) return;
+    uint32_t list = game_malloc(4u * (uint32_t)n);
+    if (!list) return 0;
     for (int i = 0; i < n; i++) wr32(g_mem, list + 4u * (uint32_t)i, clubs[i]);
     uint32_t q[4] = {list, (uint32_t)n, 4, F_SEED_ORDER};
     call_cdecl(F_QSORT, 4, q);
-    if (rt_unwinding) return;
+    if (rt_unwinding) return 0;
     for (int i = 0; i < n; i++) clubs[i] = rd32(g_mem, list + 4u * (uint32_t)i);
     game_free(list);
-    uint32_t groups[GROUPS][GROUP_CLUBS];
-    if (rt_unwinding || !draw_groups(clubs, groups)) return;
+    return !rt_unwinding;
+}
+
+static void draw_group_stage(uint32_t uc)
+{
+    UcGroups f;
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
-    for (int g = 0; g < GROUPS && !rt_unwinding; g++) {
-        uint32_t members = game_malloc(4 * GROUP_CLUBS);
-        uint32_t table = group_table(year);
+    if (!uc_format(season_uefa_row((int)year), &f) || f.groups + 1 != (int32_t)rd32(g_mem, uc + 0x2c)) {
+        fprintf(stderr, "recomp: uefa: UEFA Cup groups: no format for %u with %d stages\n", year,
+                (int32_t)rd32(g_mem, uc + 0x2c));
+        return;
+    }
+    int want = f.groups * f.clubs;
+    uint32_t clubs[MAX_GROUPS * MAX_GROUP_CLUBS];
+    int n = uc_group_entrants(uc, clubs, MAX_GROUPS * MAX_GROUP_CLUBS);
+    if (n != want) {
+        fprintf(stderr, "recomp: uefa: UEFA Cup groups: %d clubs, not %d; no group stage\n", n, want);
+        return;
+    }
+    if (!sort_by_seed(clubs, n)) return;
+    uint32_t groups[MAX_GROUPS][MAX_GROUP_CLUBS];
+    if (rt_unwinding || !draw_groups(&f, clubs, groups)) return;
+    for (int g = 0; g < f.groups && !rt_unwinding; g++) {
+        uint32_t members = game_malloc(4u * (uint32_t)f.clubs);
+        uint32_t table = group_table(year, f.days);
         uint32_t sz[1] = {0xee};                                      /* as 0x5860b3 */
         uint32_t obj = members && table ? call_cdecl(F_NEW, 1, sz) : 0;
         if (rt_unwinding || !readable(obj)) return;
-        for (int k = 0; k < GROUP_CLUBS; k++) wr32(g_mem, members + 4u * (uint32_t)k, groups[g][k]);
+        for (int k = 0; k < f.clubs; k++) wr32(g_mem, members + 4u * (uint32_t)k, groups[g][k]);
         /* Two small byte tables on the game stack: the order of the table (4, 1, 2, 0, as 0x585ad9) and the
-         * places that go through (+0xbe: 3, the top three). */
+         * places that go through (+0xbe: the top two or three). */
         uint32_t saved_esp = cpu.esp;
         cpu.esp -= 16;
         uint32_t order = cpu.esp, places = cpu.esp + 8;
         g_mem[order] = 4, g_mem[order + 1] = 1, g_mem[order + 2] = 2, g_mem[order + 3] = 0;
-        g_mem[places] = 3, g_mem[places + 1] = 0, g_mem[places + 2] = 0, g_mem[places + 3] = 0;
+        g_mem[places] = (uint8_t)f.through, g_mem[places + 1] = 0, g_mem[places + 2] = 0, g_mem[places + 3] = 0;
         /* The arguments as draw_phase2_groups gives them (0x5860dd..0x58611d): parent, clubs, list, meetings,
          * record, round table, match days, 3 and 1 (+0xc2, +0xc3: points of a win and a draw, inference), 8,
-         * order, places, year, stage, name (0x43d + stage: the group names of phase 1, 0x583ed8), 0xf, 2, 0, 8,
-         * -1, 0, 2. */
-        uint32_t a[22] = {uc, GROUP_CLUBS, members, 1, rd32(g_mem, uc + 4), table, GROUP_DAYS, 3, 1, 8, order, places,
-                          year, (uint32_t)g, 0x43du + (uint32_t)g, 0xf, 2, 0, 8, 0xffffffffu, 0, 2};
+         * order, places, year, stage, name, 0xf, 2, 0, 8, -1, 0, 2. */
+        uint32_t a[22] = {uc, (uint32_t)f.clubs, members, (uint32_t)f.meetings, rd32(g_mem, uc + 4), table,
+                          (uint32_t)f.days, 3, 1, 8, order, places, year, (uint32_t)g, uc_group_name(g), 0xf, 2, 0, 8,
+                          0xffffffffu, 0, 2};
         call_this(F_LEAGUE_STAGE, obj, 22, a);
         cpu.esp = saved_esp;
         if (rt_unwinding) return;
@@ -365,8 +419,9 @@ static void draw_group_stage(uint32_t uc)
         if (!rt_unwinding) call_this(F_GROUP_NEWS, obj, 0, NULL);
     }
     if (rt_unwinding) return;
-    wr32(g_mem, uc + 0x30, GROUPS - 1);          /* the last group, as draw_phase2_groups leaves it (0x586182) */
-    fprintf(stderr, "recomp: uefa: UEFA Cup %u/%02u groups drawn\n", year, (year + 1) % 100);
+    wr32(g_mem, uc + 0x30, (uint32_t)(f.groups - 1));    /* the last group, as draw_phase2_groups leaves it (0x586182) */
+    fprintf(stderr, "recomp: uefa: UEFA Cup %u/%02u: %d groups of %d drawn\n", year, (year + 1) % 100, f.groups,
+            f.clubs);
 }
 
 /* ---- The knockout stage of 32 ---- */
@@ -406,17 +461,16 @@ static uint32_t ko_table(uint32_t uc)
     return rt_unwinding ? 0 : t;
 }
 
-/* Pairs each unseeded club (a group third or a Champions League third) with a seeded one (a group winner or
- * runner-up): not of its own group, of another nation when a draw is found. */
+/* Pairs each unseeded club with a seeded one: not of its own group, of another nation when a draw is found. */
 static int pair_ko(const uint32_t *seed, const int *seed_group, const uint32_t *unseed, const int *unseed_group,
                    int *out)
 {
     for (int relax = 0; relax < 3; relax++)
         for (int attempt = 0; attempt < 50; attempt++) {
-            int used[16] = {0}, ok = 1;
-            for (int i = 0; i < 16 && ok; i++) {
-                int cand[16], n = 0;
-                for (int j = 0; j < 16; j++) {
+            int used[KO_TIES] = {0}, ok = 1;
+            for (int i = 0; i < KO_TIES && ok; i++) {
+                int cand[KO_TIES], n = 0;
+                for (int j = 0; j < KO_TIES; j++) {
                     if (used[j]) continue;
                     if (relax < 2 && unseed_group[i] >= 0 && unseed_group[i] == seed_group[j]) continue;
                     if (relax < 1 && rd32(g_mem, unseed[i] + 0x53) == rd32(g_mem, seed[j] + 0x53)) continue;
@@ -435,38 +489,59 @@ static int pair_ko(const uint32_t *seed, const int *seed_group, const uint32_t *
     return 0;
 }
 
+/* The draw of the round of 32. Three through a group (8 groups): the 8 winners and 8 runners-up are seeded,
+ * the 8 thirds and the 8 Champions League thirds are not. Two through a group (12 groups, the Europa League):
+ * the 12 winners and 4 Champions League thirds are seeded, the 12 runners-up and the other 4 Champions League
+ * thirds are not; the thirds are split by the European seed (inference: the seed stands in for the group
+ * record that the real draw uses). The clubs below the places that go through are out (+0x1db = -1). */
 static void draw_knockout(uint32_t uc)
 {
-    uint32_t seed[16], unseed[16];
-    int seed_group[16], unseed_group[16];
-    for (int g = 0; g < GROUPS; g++) {
+    UcGroups f;
+    int groups = ko_slot(uc);
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
+    if (!uc_format(season_uefa_row((int)year), &f) || f.groups != groups) return;
+    uint32_t seed[KO_TIES], unseed[KO_TIES];
+    int seed_group[KO_TIES], unseed_group[KO_TIES], ns = 0, nu = 0;
+    for (int g = 0; g < f.groups; g++) {
         uint32_t st = stage_at(uc, g);
         if (!readable(st)) return;
-        seed[g] = row_club(st, 0), seed_group[g] = g;
-        seed[8 + g] = row_club(st, 1), seed_group[8 + g] = g;
-        unseed[g] = row_club(st, 2), unseed_group[g] = g;
-        for (int p = 3; p < GROUP_CLUBS && !rt_unwinding; p++) {
-            uint32_t out = row_club(st, p);                           /* out, as the fourths of 0x5862fe */
-            if (readable(out)) wr32(g_mem, out + 0x1db, 0xffffffffu);
+        for (int p = 0; p < f.clubs && !rt_unwinding; p++) {
+            uint32_t club = row_club(st, p);
+            if (rt_unwinding) return;
+            if (p >= f.through) {                                     /* out, as the fourths of 0x5862fe */
+                if (readable(club)) wr32(g_mem, club + 0x1db, 0xffffffffu);
+                continue;
+            }
+            if (!readable(club)) return;
+            int seeded = p == 0 || (f.through == 3 && p == 1);
+            if (seeded && ns < KO_TIES) seed[ns] = club, seed_group[ns++] = g;
+            else if (!seeded && nu < KO_TIES) unseed[nu] = club, unseed_group[nu++] = g;
         }
-        if (rt_unwinding || !readable(seed[g]) || !readable(seed[8 + g]) || !readable(unseed[g])) return;
     }
     int count = (int16_t)rd16(g_mem, uc + 0x3e);
-    uint32_t entries = rd32(g_mem, uc + 0xa7);
+    uint32_t entries = rd32(g_mem, uc + 0xa7), thirds[8];
     for (int k = 0; k < 8; k++) {                                     /* the slots of the Champions League thirds */
-        unseed[8 + k] = readable(entries) ? rd32(g_mem, entries + 6u * (uint32_t)(count - 8 + k)) : 0;
-        unseed_group[8 + k] = -1;
-        if (!readable(unseed[8 + k])) {
+        thirds[k] = readable(entries) ? rd32(g_mem, entries + 6u * (uint32_t)(count - 8 + k)) : 0;
+        if (!readable(thirds[k])) {
             fprintf(stderr, "recomp: uefa: UEFA Cup knockout: no Champions League third in slot %d\n", count - 8 + k);
             return;
         }
     }
-    int pair[16];
+    if (!sort_by_seed(thirds, 8)) return;
+    for (int k = 0; k < 8; k++) {
+        if (ns < KO_TIES && k < KO_TIES - f.groups * (f.through == 3 ? 2 : 1)) seed[ns] = thirds[k], seed_group[ns++] = -1;
+        else if (nu < KO_TIES) unseed[nu] = thirds[k], unseed_group[nu++] = -1;
+    }
+    if (ns != KO_TIES || nu != KO_TIES) {
+        fprintf(stderr, "recomp: uefa: UEFA Cup knockout: %d seeded and %d unseeded clubs\n", ns, nu);
+        return;
+    }
+    int pair[KO_TIES];
     if (!pair_ko(seed, seed_group, unseed, unseed_group, pair)) return;
     uint32_t ca[2] = {KO_CLUBS, 4};
     uint32_t list = call_cdecl(F_CALLOC, 2, ca);
     if (rt_unwinding || !readable(list)) return;
-    for (int i = 0; i < 16; i++) {                                    /* the seeded club plays the second leg at home */
+    for (int i = 0; i < KO_TIES; i++) {                               /* the seeded club plays the second leg at home */
         wr32(g_mem, list + 8u * (uint32_t)i, unseed[i]);
         wr32(g_mem, list + 8u * (uint32_t)i + 4, seed[pair[i]]);
     }
@@ -480,17 +555,17 @@ static void draw_knockout(uint32_t uc)
     uint32_t sz[1] = {0xb2};
     uint32_t obj = table ? call_cdecl(F_NEW, 1, sz) : 0;
     if (rt_unwinding || !readable(obj)) return;
-    uint32_t args[15] = {uc, KO_CLUBS, list, KO_ROUNDS, rd32(g_mem, uc + 4), table,
-                         (uint32_t)(int16_t)rd16(g_mem, uc + 0x40), KO_SLOT, 2, 0, 0x14, 1, 0, 0, 0};
+    uint32_t args[15] = {uc, KO_CLUBS, list, KO_ROUNDS, rd32(g_mem, uc + 4), table, year, (uint32_t)groups, 2, 0, 0x14,
+                         1, 0, 0, 0};
     call_this(F_CUP_STAGE, obj, 15, args);
     if (rt_unwinding) return;
-    wr32(g_mem, rd32(g_mem, uc + 0xc) + 4u * KO_SLOT, obj);
+    wr32(g_mem, rd32(g_mem, uc + 0xc) + 4u * (uint32_t)groups, obj);
     game_free(list);
     game_free(table);
     uint32_t r0[1] = {0};
     if (!rt_unwinding) call_this(F_SET_UP_ROUND, obj, 1, r0);
     if (rt_unwinding) return;
-    wr32(g_mem, uc + 0x30, KO_SLOT);
+    wr32(g_mem, uc + 0x30, (uint32_t)groups);
     fprintf(stderr, "recomp: uefa: UEFA Cup round of 32 drawn\n");
 }
 
@@ -511,8 +586,8 @@ RT_WRAP(005a8f60, empty_or_uc_advance)
     }
     int32_t now = (int32_t)rd32(g_mem, uc + 0x30);
     if (now == -1) draw_group_stage(uc);
-    else if (now == GROUPS - 1) draw_knockout(uc);
-    else if (now >= 0 && now < KO_SLOT - 1) wr32(g_mem, uc + 0x30, (uint32_t)(now + 1));
+    else if (now == ko_slot(uc) - 1) draw_knockout(uc);
+    else if (now >= 0 && now < ko_slot(uc) - 1) wr32(g_mem, uc + 0x30, (uint32_t)(now + 1));
     if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
 }
 
@@ -534,7 +609,7 @@ RT_WRAP(0051fc00, cup_load)
 RT_WRAP(00519a90, cup_honours)
 {
     uint32_t uc = cpu.ecx;
-    uint32_t ko = groups_layout(uc) && (int32_t)rd32(g_mem, uc + 0x30) == KO_SLOT ? stage_at(uc, KO_SLOT) : 0;
+    uint32_t ko = groups_layout(uc) && (int32_t)rd32(g_mem, uc + 0x30) == ko_slot(uc) ? stage_at(uc, ko_slot(uc)) : 0;
     if (!readable(ko)) {
         o_00519a90();
         return;
@@ -553,9 +628,10 @@ RT_WRAP(009030e0, uc_result)
         o_009030e0();
         return;
     }
+    uint32_t stages = rd32(g_mem, uc + 0x2c);
     wr32(g_mem, uc + 0x2c, 0);
     o_009030e0();
-    wr32(g_mem, uc + 0x2c, STAGES);
+    wr32(g_mem, uc + 0x2c, stages);
 }
 
 /* ---- The Intertoto Cup of 3 rounds, its 11 winners in the UEFA Cup Q2 (change point U3: 2006 to 2008) ----
@@ -578,7 +654,7 @@ RT_WRAP(009030e0, uc_result)
 static int uic_to_q2(const SeasonUefa *r)
 {
     return r && r->uic_rounds == 3 && r->uic_winners == UIC_WINNERS && r->uic_entry && !strcmp(r->uic_entry, "Q2") &&
-           r->uc_groups == GROUPS && season_uefa_cl_round_of_16(r);
+           r->uc_groups == 8 && season_uefa_cl_round_of_16(r);
 }
 
 /* The UEFA Cup takes the 11 winners: it has 9 stages, 153 slots, and the Intertoto Cup has 3 rounds. */

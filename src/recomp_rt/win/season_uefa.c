@@ -26,6 +26,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_rules.h"
 #include "season_uefa.h"
 
 #include <stdio.h>
@@ -449,6 +450,14 @@ RT_WRAP(00584ae0, cl_staff_records)
 
 /* ---- The rule kind ---- */
 
+/* The name of the UEFA Cup in a season, from the rules table (UEFA Europa League from 2009/10), without "UEFA ". */
+static const char *uc_name(int season)
+{
+    const SeasonRule *r = season_rules_find(season, "uefa_cup", 0);
+    const char *n = r && r->name && *r->name ? r->name : "UEFA Cup";
+    return strncmp(n, "UEFA ", 5) || !strcmp(n, "UEFA Cup") ? n : n + 5;
+}
+
 static void uefa_season(int season)
 {
     const SeasonUefa *now = season_uefa_row(season), *before = season_uefa_row(season - 1);
@@ -462,7 +471,17 @@ static void uefa_season(int season)
                            now->uc_groups, now->uc_group_clubs, season_uefa_uc_round(now, "KO"));
     else if (!now->uc_groups && before->uc_groups)
         season_change_news("The UEFA Cup no longer has a group stage.");
-    if (now->uic_rounds != before->uic_rounds && now->uic_rounds > 0)
+    else if (now->uc_groups && (now->uc_groups != before->uc_groups || now->uc_group_clubs != before->uc_group_clubs))
+        season_change_news("The %s group stage now has %d groups of %d clubs who meet %s, then a round of %d.",
+                           uc_name(season), now->uc_groups, now->uc_group_clubs, now->uc_meetings == 2 ? "twice" : "once",
+                           season_uefa_uc_round(now, "KO"));
+    int paths_now = season_uefa_cl_round(now, "Q3 CP") || season_uefa_cl_round(now, "Q2 CP");
+    int paths_before = season_uefa_cl_round(before, "Q3 CP") || season_uefa_cl_round(before, "Q2 CP");
+    if (paths_now && !paths_before)
+        season_change_news("The Champions League qualifying rounds now have a Champions Path for league champions "
+                           "and a League Path for the other clubs.");
+    if (now->uic_clubs < 0 && before->uic_clubs >= 0) season_change_news("The Intertoto Cup is no longer held.");
+    else if (now->uic_rounds != before->uic_rounds && now->uic_rounds > 0)
         season_change_news("The Intertoto Cup now has %d rounds, and its %d winners enter the UEFA Cup in the %s.",
                            now->uic_rounds, now->uic_winners,
                            !strcmp(now->uic_entry, "Q2") ? "second qualifying round" : "first round");
@@ -473,10 +492,11 @@ const SeasonRuleKind season_kind_uefa = {"uefa", NULL, NULL, uefa_season, NULL, 
 /* ---- The rules report ---- */
 
 /* One line for a competition object: its stage count, its current stage, the clubs of the group stages in
- * stages 0 to 7 and in the stages after them, and the clubs and rounds of its knockout stage (a League_Stage has
+ * stages 0 to phase2 - 1 and in the stages after them (phase2: 8 for the Champions League, whose second group
+ * stage of the original starts at stage 8, 0x585255; 13 for the UEFA Cup, whose groups are all one stage), and the clubs and rounds of its knockout stage (a League_Stage has
  * type byte 2 at +0x43, a Cup_Stage 1: the load reads the same byte, 0x5230e0 and 0x68b4f0; +0x3e is the club
  * count of both, +0x3c the rounds of a Cup_Stage). It only reads memory. */
-static void report_comp(FILE *f, int season, const char *phase, const char *file, uint32_t obj)
+static void report_comp(FILE *f, int season, const char *phase, const char *file, uint32_t obj, int phase2)
 {
     int count = stage_count(obj), now = (int32_t)rd32(g_mem, obj + 0x30);
     uint32_t arr = rd32(g_mem, obj + 0xc);
@@ -485,7 +505,7 @@ static void report_comp(FILE *f, int season, const char *phase, const char *file
         uint32_t st = rd32(g_mem, arr + 4u * (uint32_t)i);
         if (!readable(st)) continue;
         if (g_mem[st + 0x43] == 2) {
-            if (i < 8) groups += (int16_t)rd16(g_mem, st + 0x3e);
+            if (i < phase2) groups += (int16_t)rd16(g_mem, st + 0x3e);
             else groups2 += (int16_t)rd16(g_mem, st + 0x3e);
         } else if (g_mem[st + 0x43] == 1) {
             ko_clubs = (int16_t)rd16(g_mem, st + 0x3e);
@@ -515,9 +535,9 @@ void season_uefa_report(void *file, int season, const char *phase)
     FILE *f = (FILE *)file;
     if (!f) return;
     uint32_t cl = cl_object();
-    if (cl) report_comp(f, season, phase, "european_cup", cl);
+    if (cl) report_comp(f, season, phase, "european_cup", cl, 8);
     int32_t key = (int32_t)rd32(g_mem, KEY_UC);
     uint32_t table = rd32(g_mem, COMP_TABLE);
     uint32_t uc = key >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)key) : 0;
-    if (readable(uc) && rd32(g_mem, uc) == 0x00970790u) report_comp(f, season, phase, "uefa_cup", uc);
+    if (readable(uc) && rd32(g_mem, uc) == 0x00970790u) report_comp(f, season, phase, "uefa_cup", uc, 13);
 }
