@@ -143,6 +143,27 @@ void season_uefa_no_away_goals(uint32_t table, int rounds, int season)
             (int16_t)rd16(g_mem, table + 7), season, (season + 1) % 100);
 }
 
+void o_0051f2f0(void);
+
+/* The tie result code 0x51f2f0 (stdcall (result, fixture) ret 8; the flags word fixture +0x38 at 0x51f30f, the
+ * winner codes at fixture +0x3d and +0x3e, 6 for away goals at 0x51f6d0, 0x51f6e8, 0x51f76c and 0x51f784). It
+ * only watches: a tie of the Champions League or the Europa League that away goals decide writes a log line
+ * for the test (tests/seasons/uefa_2021_run.py). The fixture's competition is the record at +0x14, whose first
+ * dword is its id (as the eligibility test 0x55d29f..0x55d2a1 reads it). */
+RT_WRAP(0051f2f0, cup_tie_result)
+{
+    uint32_t fixture = rt_arg(1);
+    o_0051f2f0();
+    if (rt_unwinding || !readable(fixture) || (g_mem[fixture + 0x3d] != 6 && g_mem[fixture + 0x3e] != 6)) return;
+    uint32_t rec = rd32(g_mem, fixture + 0x14);
+    int32_t id = readable(rec) ? (int32_t)rd32(g_mem, rec) : -1;
+    if (id < 0 || (id != (int32_t)rd32(g_mem, KEY_CL) && id != (int32_t)rd32(g_mem, KEY_UC))) return;
+    int year = (int16_t)rd16(g_mem, 0xae2c92u), day = (int16_t)rd16(g_mem, 0xae2c90u);
+    fprintf(stderr, "recomp: uefa: a %s tie decided on away goals on day %d of %d (flags %04x)\n",
+            id == (int32_t)rd32(g_mem, KEY_CL) ? "Champions League" : "Europa League", day, year,
+            rd16(g_mem, fixture + 0x38));
+}
+
 /* ---- The knockout round table of 4 rounds ---- */
 
 /* The original's table of the quarter-finals, semi-finals and final (create_round_table, stage 12: 3 rounds,

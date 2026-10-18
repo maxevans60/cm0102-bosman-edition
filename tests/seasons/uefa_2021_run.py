@@ -9,6 +9,8 @@ Usage:
 Each run is a season jump of tests/seasons/rules_report_check.py with England. The runs:
     2021    October 2021, changing rules off, the season 2021/22
     2022    October 2022, changing rules off, the season 2022/23: Russia is suspended
+    2023    October 2023, the season 2023/24: Russia is suspended, the Super Cup goes to penalties after 90
+            minutes
     change  November 2020, changing rules on, 2020/21 to the end of 2021/22: the news sentences of the change
 The checks of each run: the jump ends with code 0 and shows no message box of the game; the log of
 src/recomp_rt/win/season_uefa*.c shows the access list places, 8 Europa League groups of 4 drawn, the knockout
@@ -17,7 +19,9 @@ Europa League (qualifying rounds and knockout stages, 4 round tables); the uefa 
 each season of the rules: Champions League 9 stages, 32 clubs in groups, a knockout of 16 in 4 rounds; Europa
 League 9 stages, 32 clubs in 8 groups, a knockout stage of 24 clubs (16 in the play-offs and the 8 group winners)
 in 5 rounds, each with a winner; the label of round code 30 of the Europa League is the real name of 2021/22.
-2022: the log line of the seeding counts 0 clubs of Russia with a UEFA place.
+2022 and 2023: the log line of the seeding counts 0 clubs of Russia with a UEFA place. No Champions League or
+Europa League tie of a season from 2021/22 is decided on away goals (the log line of the wrap of 0x51f2f0), and
+in the change run at least one of 2020/21 is.
 The Conference League is not in this check (not in the game yet: docs/research/2026-10-18-uefa-2021-2023.md).
 A run takes about 10 to 40 minutes on a loaded machine. --jobs (default 1).
 """
@@ -52,9 +56,19 @@ def season_checks(name, log, report, season):
                     r"Champions League round of 16 drawn"):
         if not re.search(pattern, log):
             fails.append(f"{name}: no log line {pattern!r}")
-    tables = re.findall(rf"no away goals rule in (\d+) of \d+ rounds, first code \d+ \({key}\)", log)
-    if len(tables) < 4 or not all(int(n) > 0 for n in tables):
-        fails.append(f"{name}: the no away goals rule in {len(tables)} round tables of {key}, not 4 or more")
+    # Each round table by its first code (a knockout can log twice: cl_rank_teams asks for its table too): the
+    # Champions League qualifying rounds (250), its knockout (20), the Europa League qualifying rounds (270) and
+    # its knockout (30).
+    tables = {int(c): int(n) for n, c in
+              re.findall(rf"no away goals rule in (\d+) of \d+ rounds, first code (\d+) \({key}\)", log)}
+    for code in (250, 20, 270, 30):
+        if tables.get(code, 0) <= 0:
+            fails.append(f"{name}: no round table of first code {code} with the no away goals rule in {key}")
+    # Real ties: no Champions League or Europa League tie of the season is decided on away goals (the log line of
+    # the wrap of 0x51f2f0, season_uefa.c). The log of the season starts at its access list line.
+    at = log.find(f"access list {key}:")
+    if at >= 0 and "decided on away goals" in log[at:]:
+        fails.append(f"{name}: a UEFA tie decided on away goals in {key}")
     for bad in ("not even", "gives no layout", "not 32", "no Champions League third", "runners-up\n",
                 "clubs, not 32", "no format for"):
         if bad in log:
@@ -69,7 +83,7 @@ def season_checks(name, log, report, season):
     return fails
 
 
-def run_season(name, season, database, suspended_check):
+def run_season(name, season, database, suspended_check, super_cup_penalties=False):
     def run(program, game, work):
         code, report = rrc.run(program, game, season, season, os.path.join(DB, database), ["England"], [], work, 7200)
         fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
@@ -81,6 +95,9 @@ def run_season(name, season, database, suspended_check):
             fails.append(f"{name}: Russia: {m.group(0) if m else 'no log line of the suspension'}")
         if not suspended_check and m:
             fails.append(f"{name}: Russia is suspended in {season}")
+        sc = f"Super Cup {season}: penalties after 90 minutes" in log
+        if sc != super_cup_penalties:
+            fails.append(f"{name}: the Super Cup of {season} {'has' if super_cup_penalties else 'has no'} extra time")
         return fails
     return run
 
@@ -97,6 +114,9 @@ def run_change(program, game, work):
         fails += ufr.expect_label(ufr.round_labels(report), 2020, "uefa_cup", 30, KO_PO_NAME, "change", absent=True)
     if re.search(r"no away goals rule in \d+ of \d+ rounds, first code \d+ \(2020/21\)", log):
         fails.append("change: the no away goals rule in 2020/21")
+    before = log[:log.find("access list 2021/22:")] if "access list 2021/22:" in log else log
+    if "decided on away goals" not in before:
+        fails.append("change: no UEFA tie of 2020/21 decided on away goals (the rule still holds in 2020/21)")
     fails += season_checks("change", log, report, 2021)
     for sentence in NEWS:
         if sentence not in log:
@@ -107,6 +127,7 @@ def run_change(program, game, work):
 RUNS = {
     "2021": run_season("2021", 2021, "October 2021", False),
     "2022": run_season("2022", 2022, "October 2022", True),
+    "2023": run_season("2023", 2023, "October 2023", True, True),
     "change": run_change,
 }
 

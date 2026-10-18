@@ -115,11 +115,13 @@ def groups(row):
 
 
 def super_cup(row):
-    """(stadium, city, day, month 0 to 11) of the Super Cup row."""
+    """(stadium, city, day, month 0 to 11, extra time 1 or 0) of the Super Cup row."""
     m = re.search(r"one match at (.+), ([^,]+), (\d+) (\w+) \d{4};", row["format"])
     if not m or m.group(4) not in MONTHS:
         fail(row, "no 'one match at <stadium>, <city>, <day> <month> <year>;'")
-    return m.group(1), m.group(2), int(m.group(3)), MONTHS.index(m.group(4))
+    # "if level: unknown" (2006, the row of 2026/27) keeps the original's extra time.
+    no_et = "no extra time; penalties after 90 minutes" in row["format"]
+    return m.group(1), m.group(2), int(m.group(3)), MONTHS.index(m.group(4)), 0 if no_et else 1
 
 
 def uc_groups(row):
@@ -147,9 +149,24 @@ def away_goals(row):
     return 0 if "no away goals rule" in row["format"] else 1
 
 
+NATIONS = os.path.join(ROOT, "src", "recomp_rt", "win", "season_nation_table.c")
+
+
+def game_nations():
+    """The nation names of the nations table (season_nation.h), which the game uses to find a nation's record."""
+    with open(NATIONS, encoding="utf-8") as f:
+        return set(re.findall(r'^\s*\{"([^"]+)", 0x[0-9a-f]+u, \d+\},', f.read(), re.M))
+
+
 def suspended(row):
-    """The nations of the access list row with no places ("Russia suspended: no places"), comma separated."""
-    return ",".join(re.findall(r"([A-Z][a-z]+(?: [A-Z][a-z]+)*) suspended: no places", row["notes"]))
+    """The nations of the access list row with no places ("Russia suspended: no places"), comma separated. A name
+    that the nations table does not hold stops the tool: the game could not find it."""
+    names = re.findall(r"([A-Z][a-z]+(?: [A-Z][a-z]+)*) suspended: no places", row["notes"])
+    known = game_nations()
+    for n in names:
+        if n not in known:
+            fail(row, f"suspended nation {n!r} is not in {os.path.relpath(NATIONS, ROOT)}")
+    return ",".join(names)
 
 
 def ko_po(row):
@@ -181,6 +198,9 @@ def read_rows():
         ecl = by.get("ecl")
         if ecl and ecl["format"].startswith("not held"):
             ecl = None
+        for x in (uc, ecl):             # one away goals rule for the three cups (the game has one per season)
+            if x and away_goals(x) != away_goals(cl):
+                fail(x, f"away goals rule {away_goals(x)}, the Champions League row has {away_goals(cl)}")
         for x in (uc, ecl):
             if x and any(n == "KO PO" for n, _ in rounds(x)) and not groups(x)[0]:
                 fail(x, "knockout round play-offs with no group stage")
@@ -226,6 +246,8 @@ def read_access():
         if places == "-" and "Liechtenstein" in r["notes"]:
             continue
         if places == "-":               # slice 24: ranks with no place in this competition (EL from 2021/22)
+            if comp != "e" or season < 2021:
+                fail(r, "places '-' for a range of ranks: only the Europa League from 2021/22 has ranks with no place")
             places = ""
         if places.endswith(" (CL)") and comp == "H":
             comp, places = "X", places[:-5]
@@ -291,7 +313,7 @@ def text():
         lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}, {c_text(drops)},")
         eg = r["ecl_groups"]
         lines.append(f"     {r['uc_ko_po']}, {r['away_goals']}, {c_text(r['suspended'])},")
-        lines.append(f"     {c_rounds(r['ecl_rounds'])}, {eg[0]}, {eg[1]}, {r['ecl_ko_po']}}},")
+        lines.append(f"     {c_rounds(r['ecl_rounds'])}, {eg[0]}, {eg[1]}, {r['ecl_ko_po']}, {sc[4]}}},")
     lines += ["};", "const int season_uefa_row_count = (int)(sizeof season_uefa_rows / sizeof season_uefa_rows[0]);",
               "", f"/* The access list by association rank from {ACCESS_FIRST}/{(ACCESS_FIRST + 1) % 100:02d} "
               "(docs/research/rules-0.6.0/uefa-access.tsv). */",

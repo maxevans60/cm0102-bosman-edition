@@ -148,8 +148,9 @@ int main(void)
     CHECK(!strcmp(season_uefa_access_places(2021, 'e', 20), "") && !strcmp(season_uefa_access_places(2021, 'e', 60), ""));
     CHECK(!strcmp(season_uefa_access_places(2021, 'k', 1), "PO") && !strcmp(season_uefa_access_rule(2021, 'X'), "G"));
     CHECK(!season_uefa_access_league_cup(2021, "England") && !strcmp(season_uefa_access_rule(2022, 'Y'), "G"));
-    /* The Super Cup of 2023 at Piraeus (no extra time from 2023 is not encoded: one match, penalties stay). */
+    /* The Super Cup of 2023 at Piraeus, penalties after 90 minutes (no extra time from 2023). */
     CHECK(!strcmp(r2021->sc_city, "Belfast") && !strcmp(r2023->sc_city, "Piraeus") && r2023->sc_day == 16);
+    CHECK(r2022->sc_extra_time == 1 && r2023->sc_extra_time == 0 && r2008->sc_extra_time == 1);
 
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);

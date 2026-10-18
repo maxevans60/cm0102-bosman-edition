@@ -53,6 +53,8 @@ typedef struct {
     int ecl_round_count;            /* the Conference League (U8, 2021/22 on), 0 when not held */
     SeasonUefaRound ecl_rounds[SEASON_UEFA_ROUNDS];
     int ecl_groups, ecl_group_clubs, ecl_ko_po;
+    int sc_extra_time;              /* 1: a level Super Cup has extra time, then penalties; 0: penalties after 90
+                                     * minutes (2023 on) */
 } SeasonUefa;
 
 /* The entry codes of the access list (club +0x1df) in a season with an access list (season_uefa_seeding.c).

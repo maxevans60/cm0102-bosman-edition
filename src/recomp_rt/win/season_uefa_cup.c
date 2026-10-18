@@ -590,8 +590,13 @@ static void draw_knockout_po(uint32_t uc, const UcGroups *f, uint32_t year, int 
     if (!pair_ko(seed, seed_group, unseed, unseed_group, pair, 8)) return;
     uint32_t ca[2] = {KO_PO_ALL, 4};
     uint32_t list = call_cdecl(F_CALLOC, 2, ca);
-    uint32_t tiers = list ? game_malloc(KO_PO_ALL) : 0;
-    if (rt_unwinding || !readable(list) || !tiers) return;
+    if (rt_unwinding || !readable(list)) return;
+    uint32_t tiers = game_malloc(KO_PO_ALL);
+    if (rt_unwinding) return;
+    if (!tiers) {
+        game_free(list);
+        return;
+    }
     for (int i = 0; i < 8; i++) {
         wr32(g_mem, list + 8u * (uint32_t)i, unseed[i]);
         wr32(g_mem, list + 8u * (uint32_t)i + 4, seed[pair[i]]);
@@ -606,8 +611,14 @@ static void draw_knockout_po(uint32_t uc, const UcGroups *f, uint32_t year, int 
     }
     uint32_t table = rt_unwinding ? 0 : ko_table(uc, 1);
     uint32_t sz[1] = {0xb2};
-    uint32_t obj = table ? call_cdecl(F_NEW, 1, sz) : 0;
-    if (rt_unwinding || !readable(obj)) return;
+    uint32_t obj = table && !rt_unwinding ? call_cdecl(F_NEW, 1, sz) : 0;
+    if (rt_unwinding) return;
+    if (!readable(obj)) {                       /* no stage: give back what this draw allocated */
+        game_free(list);
+        game_free(tiers);
+        game_free(table);
+        return;
+    }
     uint32_t args[15] = {uc, KO_PO_ALL, list, KO_ROUNDS, rd32(g_mem, uc + 4), table, year, (uint32_t)groups, 2, 0, 0x14,
                          1, 0, 0, tiers};
     call_this(F_CUP_STAGE, obj, 15, args);
@@ -691,8 +702,13 @@ static void draw_knockout(uint32_t uc)
     }
     uint32_t table = rt_unwinding ? 0 : ko_table(uc, 0);
     uint32_t sz[1] = {0xb2};
-    uint32_t obj = table ? call_cdecl(F_NEW, 1, sz) : 0;
-    if (rt_unwinding || !readable(obj)) return;
+    uint32_t obj = table && !rt_unwinding ? call_cdecl(F_NEW, 1, sz) : 0;
+    if (rt_unwinding) return;
+    if (!readable(obj)) {                       /* slice 24: no stage, so give back the list and the table */
+        game_free(list);
+        game_free(table);
+        return;
+    }
     uint32_t args[15] = {uc, KO_CLUBS, list, KO_ROUNDS, rd32(g_mem, uc + 4), table, year, (uint32_t)groups, 2, 0, 0x14,
                          1, 0, 0, 0};
     call_this(F_CUP_STAGE, obj, 15, args);

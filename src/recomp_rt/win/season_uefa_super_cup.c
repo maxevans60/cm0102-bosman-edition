@@ -87,6 +87,13 @@ RT_WRAP(0057a3c0, super_cup_round_table)
                     r->sc_stadium);
         }
     }
+    /* Slice 24: no extra time from 2023 (the row's "penalties after 90 minutes"). The original writes the round
+     * flags 0x83 at 0x57a4be: 0x2 extra time, 0x80 golden goal, 0x1 penalties (2026-10-17-cup-round-record.md,
+     * section 2). With no extra time only 0x1 stays. */
+    if (!r->sc_extra_time) {
+        wr16(g_mem, t + 0xd, (uint16_t)((rd16(g_mem, t + 0xd) & ~0x83u) | 0x1u));
+        fprintf(stderr, "recomp: uefa: Super Cup %u: penalties after 90 minutes\n", year);
+    }
     Cpu saved = cpu;
     uint32_t m[9] = {t, 0, (uint32_t)r->sc_day, (uint32_t)r->sc_month, 0, 4, 2, year, venue};
     rt_callback(F_MATCH_DATE, 9, m);

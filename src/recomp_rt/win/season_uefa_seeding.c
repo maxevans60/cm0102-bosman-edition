@@ -56,6 +56,11 @@
 #define LEAGUE_TABLE 0xb63d60u          /* league table entries, 0x48 bytes: +0 nation, +0x1e cup, +0x22 league cup */
 #define LEAGUE_ENGLAND 0xb64150u        /* the England entry's nation (key_nation_build_table 0x667150) */
 #define LEAGUE_FRANCE 0xb641e0u
+/* The club table and its count, as collect_european_clubs 0x904040 walks them (count [0xae235c] at 0x9040df,
+ * table [0xae23b4] at 0x9040e5, 0x245 bytes a club at 0x9041b9). */
+#define CLUBS 0xae23b4u
+#define CLUB_COUNT 0xae235cu
+#define CLUB_SIZE 0x245u
 
 #define F_PICK 0x009050d0u              /* thiscall (records, short count, nation id, char n, skip placed, skip human) */
 #define F_HISTORY_CLUB 0x004afd80u      /* cdecl (comp record, k): k 0 the last winner, 1 the runner-up */
@@ -256,6 +261,31 @@ static void move_down(int i, const int *target)
 
 static const SeasonUefa *cascade_row;   /* the row of assign_all, for the fillers of the cascade */
 
+/* Slice 24: the filler of a Europa League gap from 2021/22. The access list then gives Europa League places only
+ * to the best-ranked associations (ranks 16 and below have places "", their clubs go to the Conference League).
+ * A vacancy (the title holder places, a suspended nation) moves the best-ranked cup winners up one round, and the
+ * gap at the bottom goes to the cup winner of the best-ranked association with no Europa League place (the notes
+ * of the access list rows: in 2021/22 Cyprus, rank 16; in 2022/23 Serbia and Czech Republic, 16 and 17). The cup
+ * winner as in step 4 (0x9047e2: the winner, else the runner-up), else the first club with no place. Returns 0
+ * in a season where every rank has places (to 2020/21): the original's filler then applies. */
+static uint32_t el_cup_filler(uint32_t self, uint32_t records, int count, int entries, int *rank)
+{
+    const SeasonUefa *r = cascade_row;
+    for (int e = 0; r && e < entries && !rt_unwinding; e++) {
+        uint32_t ent = self + 0x12u * (uint32_t)e, nation = rd32(g_mem, ent + 4);
+        const char *pl = season_uefa_access_places(r->season, 'e', e + 1);
+        if (!pl || *pl || nation_suspended(r, nation)) continue;
+        uint32_t club = cup_club(nation, 0x1e, 0);
+        if (!club || has_place(club)) club = cup_club(nation, 0x1e, 1);
+        if (!club || has_place(club)) club = pick(self, records, count, rd32(g_mem, ent), 1, 1);
+        if (club && !has_place(club)) {
+            *rank = e + 1;
+            return club;
+        }
+    }
+    return 0;
+}
+
 static void cascade(char comp, const int *p, int n, const int *target, uint32_t self, uint32_t records, int count,
                     int entries)
 {
@@ -291,6 +321,7 @@ static void cascade(char comp, const int *p, int n, const int *target, uint32_t 
             /* No club below: the first club with no place of the best-ranked nations. */
             uint32_t club = 0;
             int rank = 0;
+            if (comp == 'e') club = el_cup_filler(self, records, count, entries, &rank);
             for (int e = 0; e < entries && !club && !rt_unwinding; e++) {
                 if (nation_suspended(cascade_row, rd32(g_mem, self + 0x12u * (uint32_t)e + 4))) continue;
                 club = pick(self, records, count, rd32(g_mem, self + 0x12u * (uint32_t)e), 1, 1);
@@ -400,10 +431,10 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     }
     /* Slice 24: the clubs of the club table with a UEFA place from a suspended nation (0 when the rule holds). */
     int n_susp = 0;
-    uint32_t clubs = rd32(g_mem, 0xae23b4u);
-    int n_clubs = (int32_t)rd32(g_mem, 0xae235cu);
+    uint32_t clubs = rd32(g_mem, CLUBS);
+    int n_clubs = (int32_t)rd32(g_mem, CLUB_COUNT);
     for (int i = 0; r->suspended && *r->suspended && readable(clubs) && i < n_clubs; i++) {
-        uint32_t c = clubs + 0x245u * (uint32_t)i, id = rd32(g_mem, c + 0x1db);
+        uint32_t c = clubs + CLUB_SIZE * (uint32_t)i, id = rd32(g_mem, c + 0x1db);
         if ((id == rd32(g_mem, KEY_CL) || id == rd32(g_mem, KEY_UC)) && club_suspended(r, c)) n_susp++;
     }
     fprintf(stderr, "recomp: uefa: access list %d/%02d: %d Champions League and %d Europa League places\n", s,
