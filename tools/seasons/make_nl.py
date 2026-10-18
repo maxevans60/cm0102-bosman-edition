@@ -144,7 +144,8 @@ def tiers(known):
             group = int(r["group"]) if r["group"].strip().isdigit() else 0
             name = r["nation"].strip()
             out.append({"confed": r["confed"], "edition": r["edition"], "league": LEAGUES.index(r["league"]),
-                        "group": group, "nation": NAMES.get(name, name)})
+                        "group": group, "nation": NAMES.get(name, name),
+                        "out": 1 if "disqualified" in r.get("note", "").lower() else 0})
     out.sort(key=lambda t: (t["confed"] != "UEFA", t["confed"], t["edition"], t["league"], t["group"],
                             t["nation"]))
     return out
@@ -181,9 +182,9 @@ def text():
     t = tiers(known)
     for x in t:
         lines.append(f'    {{{c_str(x["confed"])}, {c_str(x["edition"])}, {x["league"]}, {x["group"]}, '
-                     f'{c_str(x["nation"])}}},')
+                     f'{c_str(x["nation"])}, {x["out"]}}},')
     if not t:
-        lines.append('    {"", "", 0, 0, ""},')
+        lines.append('    {"", "", 0, 0, "", 0},')
     lines += [
         "};",
         f"const int season_nl_tier_count = {len(t)};",

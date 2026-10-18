@@ -37,6 +37,7 @@ typedef struct {
     int league;                 /* 0 = A */
     int group;                  /* 1 to 4, 0 when the draw is not known */
     const char *nation;         /* names as the game's nation.dat writes them, "/" between other names */
+    int out;                    /* 1: in the draw, but out before the first match (Russia in 2022-23) */
 } SeasonNlTier;
 
 extern const SeasonNlEdition season_nl_editions[];
