@@ -261,6 +261,11 @@ def uefa_format_differences(rows):
             words = ("in a second group stage", "in the first knockout round")
         else:
             want = (int(groups.group(1)), int(ko.group(1)) if ko else 0) if groups else (0, 0)
+            # Slice 24: knockout round play-offs (2021/22 on) are one knockout stage with the round of 16: its
+            # 16 clubs and the 8 group winners who enter the round of 16.
+            ko_po = re.search(r"\bKO play-offs (\d+)", text)
+            if groups and ko and ko_po:
+                want = (want[0], int(ko_po.group(1)) + int(ko.group(1)) - int(ko_po.group(1)) // 2)
             game = (u["groups"], u["ko_clubs"])
             words = ("in the group stage", "in the knockout round after it")
         if game != want:

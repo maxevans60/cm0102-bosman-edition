@@ -401,6 +401,7 @@ uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds_out, uint32_t *name_
     }
     game_free(orig);
     if (rt_unwinding || !t) return 0;
+    season_uefa_no_away_goals(t, L.rounds, (int)year);
     *rounds_out = L.rounds;
     fprintf(stderr, "recomp: uefa: Champions League %u/%02u: %d qualifying rounds, %d slots\n", year, (year + 1) % 100,
             L.rounds, L.slots);
@@ -595,6 +596,7 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds_out)
         set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], WEEKDAY_EL, year);
     }
     if (rt_unwinding || !t) return 0;
+    season_uefa_no_away_goals(t, L.rounds, (int)year);
     *rounds_out = L.rounds;
     return t;
 }

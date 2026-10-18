@@ -118,6 +118,31 @@ static void cl_set_format(uint32_t cl, const SeasonUefa *r)
             ((int16_t)rd16(g_mem, cl + 0x40) + 1) % 100, want);
 }
 
+/* ---- No away goals rule (slice 24, U9: 2021/22 on) ----
+ *
+ * A two-legged tie that is level on aggregate goes to the away goals rule in the Cup's tie result code
+ * (0x51f74c..0x51f79e: with flag 0x4 of the flags argument clear, the side with more away goals wins, winner
+ * code 6 at +0x3d or +0x3e), and the match engine 0x6bd930 tests the same flag before it compares the away goals
+ * (0x6bdab9, 0x6bdbc1), so it plays no extra time when they decide. Flag 0x4 skips both
+ * (docs/research/2026-10-17-cup-round-record.md, section 2). The second leg takes its flags from the round's
+ * +0x0f (OR'd in after the first leg). So in a season whose row has no away goals rule, each two-legged round
+ * (+0x21 = 2) of the three cups gets 0x4 in +0x0f: level on aggregate means extra time, then penalties (the
+ * 3 = extra time and penalties that the original's records hold). */
+void season_uefa_no_away_goals(uint32_t table, int rounds, int season)
+{
+    const SeasonUefa *r = season_uefa_row(season);
+    if (!r || r->away_goals || !readable(table)) return;
+    int n = 0;
+    for (int i = 0; i < rounds; i++) {
+        uint32_t rec = table + ROUND_SIZE * (uint32_t)i;
+        if (g_mem[rec + 0x21] != 2) continue;
+        wr16(g_mem, rec + 0xf, (uint16_t)(rd16(g_mem, rec + 0xf) | 0x4));
+        n++;
+    }
+    fprintf(stderr, "recomp: uefa: no away goals rule in %d of %d rounds, first code %d (%d/%02d)\n", n, rounds,
+            (int16_t)rd16(g_mem, table + 7), season, (season + 1) % 100);
+}
+
 /* ---- The knockout round table of 4 rounds ---- */
 
 /* The original's table of the quarter-finals, semi-finals and final (create_round_table, stage 12: 3 rounds,
@@ -170,6 +195,7 @@ static uint32_t ko_table(uint32_t cl, uint32_t *name_id)
     call_cdecl(F_DRAW_DATE, 7, d);
     uint32_t m[9] = {t, 0, 20, 1, 1, 2, 2, year, 0};
     if (!rt_unwinding) call_cdecl(F_MATCH_DATE, 9, m);
+    if (!rt_unwinding) season_uefa_no_away_goals(t, 4, (int)year);
     return rt_unwinding ? 0 : t;
 }
 
@@ -498,6 +524,26 @@ static void uefa_season(int season)
         season_change_news("The Champions League qualifying rounds now have a Champions Path for league champions "
                            "and a League Path for the other clubs.");
     if (now->uic_clubs < 0 && before->uic_clubs >= 0) season_change_news("The Intertoto Cup is no longer held.");
+    /* Slice 24. */
+    if (now->uc_ko_po && !before->uc_ko_po)
+        season_change_news("The %s group winners now go to the round of 16, and the runners-up meet the Champions "
+                           "League group thirds in knockout round play-offs.", uc_name(season));
+    if (!now->away_goals && before->away_goals)
+        season_change_news("Away goals no longer decide UEFA ties: a tie level on aggregate goes to extra time and "
+                           "penalties.");
+    for (const char *p = now->suspended ? now->suspended : ""; *p;) {
+        const char *e = strchr(p, ',');
+        int n = e ? (int)(e - p) : (int)strlen(p);
+        char name[40];
+        if (n > 0 && n < (int)sizeof name) {
+            memcpy(name, p, (size_t)n);
+            name[n] = 0;
+            if (!season_uefa_suspended(before, name))
+                season_change_news("Clubs from %s have no places in the UEFA competitions while the suspension lasts.",
+                                   name);
+        }
+        p += n + (e ? 1 : 0);
+    }
     /* The access list (slice 23): the group places of the association ranked 4. */
     const char *g_now = season_uefa_access_places(now->season, 'c', 4), *g_before = season_uefa_access_places(before->season, 'c', 4);
     if (g_now && g_before && group_places(g_now) == 4 && group_places(g_before) < 4)

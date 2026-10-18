@@ -45,6 +45,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_uefa.h"
+#include "season_nation.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -147,6 +148,24 @@ static int rank_of_nation(uint32_t self, int entries, uint32_t nation)
     return 99;
 }
 
+/* Slice 24 (Q293, Q365): 1 when the nation (a nation record) is suspended in row r: its clubs get no place,
+ * the title holders included, and no filler comes from it. The nation's record id is in the key global of the
+ * nations table (season_nation.h), as season_kind_nation.c reads it. */
+static int nation_suspended(const SeasonUefa *r, uint32_t nation)
+{
+    if (!r || !r->suspended || !*r->suspended || !readable(nation)) return 0;
+    for (int i = 0; i < season_nation_count; i++) {
+        int32_t id = (int32_t)rd32(g_mem, season_nations[i].key_global);
+        if (id >= 0 && (int32_t)rd32(g_mem, nation) == id) return season_uefa_suspended(r, season_nations[i].name);
+    }
+    return 0;
+}
+
+static int club_suspended(const SeasonUefa *r, uint32_t club)
+{
+    return readable(club) && nation_suspended(r, rd32(g_mem, club + 0x53));
+}
+
 static int count_tokens(const char *s)
 {
     int n = 0;
@@ -235,6 +254,8 @@ static void move_down(int i, const int *target)
     placed[i].club = 0;
 }
 
+static const SeasonUefa *cascade_row;   /* the row of assign_all, for the fillers of the cascade */
+
 static void cascade(char comp, const int *p, int n, const int *target, uint32_t self, uint32_t records, int count,
                     int entries)
 {
@@ -271,6 +292,7 @@ static void cascade(char comp, const int *p, int n, const int *target, uint32_t 
             uint32_t club = 0;
             int rank = 0;
             for (int e = 0; e < entries && !club && !rt_unwinding; e++) {
+                if (nation_suspended(cascade_row, rd32(g_mem, self + 0x12u * (uint32_t)e + 4))) continue;
                 club = pick(self, records, count, rd32(g_mem, self + 0x12u * (uint32_t)e), 1, 1);
                 rank = e + 1;
             }
@@ -300,11 +322,12 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     int s = r->season, entries = (int8_t)g_mem[self + 0x438];
     if (entries > MAX_NATIONS) entries = MAX_NATIONS;
     n_placed = 0;
+    cascade_row = r;
     /* 1. Champions League places by league position. */
     for (int e = 0; e < entries && !rt_unwinding; e++) {
         uint32_t ent = self + 0x12u * (uint32_t)e;
         const char *pl = season_uefa_access_places(s, 'c', e + 1);
-        int n = count_tokens(pl);
+        int n = nation_suspended(r, rd32(g_mem, ent + 4)) ? 0 : count_tokens(pl);
         g_mem[ent + 0xc] = (uint8_t)n;
         g_mem[ent + 0xe] = 0;
         for (int k = 0; k < n && !rt_unwinding; k++)
@@ -313,12 +336,12 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     /* 2. The Champions League title holder. */
     uint32_t holder = rt_unwinding ? 0 : history_club(KEY_CL, 0);
     const char *h = season_uefa_access_rule(s, 'h');
-    if (holder && h && !rt_unwinding)
+    if (holder && h && !rt_unwinding && !club_suspended(r, holder))
         add(holder, 'c', token_code('c', h, 0), rank_of_nation(self, entries, rd32(g_mem, holder + 0x53)), 1);
     /* 3. The Europa League title holder. */
     uint32_t el_holder = rt_unwinding ? 0 : history_club(KEY_UC, 0);
     const char *x = season_uefa_access_rule(s, 'X'), *hh = season_uefa_access_rule(s, 'H');
-    if (el_holder && !rt_unwinding) {
+    if (el_holder && !rt_unwinding && !club_suspended(r, el_holder)) {
         int rank = rank_of_nation(self, entries, rd32(g_mem, el_holder + 0x53));
         if (x) add(el_holder, 'c', token_code('c', x, 0), rank, 0);
         else if (hh) add(el_holder, 'e', token_code('e', hh, 0), rank, 0);
@@ -335,6 +358,10 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     for (int e = 0; e < entries && !rt_unwinding; e++) {
         uint32_t ent = self + 0x12u * (uint32_t)e, nation = rd32(g_mem, ent + 4);
         const char *pl = season_uefa_access_places(s, 'e', e + 1);
+        if (nation_suspended(r, nation)) {
+            g_mem[ent + 0xd] = 0;
+            continue;
+        }
         int n = count_tokens(pl), extra = e == fair[0] || e == fair[1] || e == fair[2];
         g_mem[ent + 0xd] = (uint8_t)n;
         int league_cup = (nation == rd32(g_mem, LEAGUE_ENGLAND) && season_uefa_access_league_cup(s, "England")) ||
@@ -371,8 +398,18 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
         if (placed[i].comp == 'c') n_cl++;
         else n_el++;
     }
+    /* Slice 24: the clubs of the club table with a UEFA place from a suspended nation (0 when the rule holds). */
+    int n_susp = 0;
+    uint32_t clubs = rd32(g_mem, 0xae23b4u);
+    int n_clubs = (int32_t)rd32(g_mem, 0xae235cu);
+    for (int i = 0; r->suspended && *r->suspended && readable(clubs) && i < n_clubs; i++) {
+        uint32_t c = clubs + 0x245u * (uint32_t)i, id = rd32(g_mem, c + 0x1db);
+        if ((id == rd32(g_mem, KEY_CL) || id == rd32(g_mem, KEY_UC)) && club_suspended(r, c)) n_susp++;
+    }
     fprintf(stderr, "recomp: uefa: access list %d/%02d: %d Champions League and %d Europa League places\n", s,
             (s + 1) % 100, n_cl, n_el);
+    if (r->suspended && *r->suspended)
+        fprintf(stderr, "recomp: uefa: suspended %s: %d clubs with a place\n", r->suspended, n_susp);
 }
 
 /* Uefa_Seeding::assign_champions_league_places, thiscall (records, short count) ret 8. */
