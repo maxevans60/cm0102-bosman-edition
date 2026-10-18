@@ -8,7 +8,8 @@ Usage:
                                                            the rules table would give
     python3 -I tools/seasons/make_uefa_table.py --print    print the encoded rows
 
-Input: docs/research/rules-0.6.0/uefa.tsv, the rows of the seasons FIRST to LAST. Each season gives one row of
+Input: docs/research/rules-0.6.0/uefa-access.tsv (slice 23: the access list by association rank from 2009/10,
+read_access) and docs/research/rules-0.6.0/uefa.tsv, the rows of the seasons FIRST to LAST. Each season gives one row of
 the C table (season_uefa.h) from four rows of the part:
     european_cup    the Champions League row (not the qualifying path rows): the "Rounds (clubs):" list of its
                     format and the club count
@@ -32,6 +33,10 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 PART = os.path.join(ROOT, "docs", "research", "rules-0.6.0", "uefa.tsv")
+ACCESS = os.path.join(ROOT, "docs", "research", "rules-0.6.0", "uefa-access.tsv")
+ACCESS_FIRST = 2009                 # Q369: the original's place brackets to 2008/09, the access list from 2009/10
+PLACE_TOKENS = {"G", "PO", "PO-CP", "PO-LP", "Q3", "Q3-CP", "Q3-LP", "Q2", "Q2-CP", "Q2-LP", "Q1", "PR"}
+ACCESS_COMPS = {"cl": "c", "el": "e", "cl-holder": "h", "el-holder": "H", "el-fairplay": "f"}
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_uefa_table.c")
 FIRST, LAST = 2001, 2020
 MAX_ROUNDS = 12
@@ -141,6 +146,44 @@ def read_rows():
     return out
 
 
+def read_access():
+    """The access list by association rank (Q369), seasons ACCESS_FIRST to LAST: [(season, comp, from, to,
+    places)]. comp: c Champions League, e Europa League (the cup winner's place first), h the Champions League
+    title holder, H the Europa League title holder ("PO-LP (CL)" or "G (CL)": a Champions League place, given as
+    comp X), f the fair play places. places: the entry round of each place in domestic order (PLACE_TOKENS). A
+    rank with no places ("-": Liechtenstein, which has no league) is left out; the game gives that rank the
+    places of the next bracket."""
+    with open(ACCESS, newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f, delimiter="\t"))
+    out = []
+    for r in rows:
+        season = int(r["season"][:4])
+        if season < ACCESS_FIRST or season > LAST:
+            continue
+        r = dict(r, id=f"access {r['season']} {r['comp']} {r['rank_from']}")
+        comp = ACCESS_COMPS.get(r["comp"])
+        if not comp:
+            fail(r, f"comp {r['comp']!r} is not one of {sorted(ACCESS_COMPS)}")
+        places = r["places"].strip()
+        if places == "-":
+            continue
+        if places.endswith(" (CL)") and comp == "H":
+            comp, places = "X", places[:-5]
+        toks = places.split()
+        if not toks or any(t not in PLACE_TOKENS for t in toks):
+            fail(r, f"places {places!r} hold a token that is not one of {sorted(PLACE_TOKENS)}")
+        lo = int(r["rank_from"]) if r["rank_from"] not in ("-", "") else 0
+        hi = int(r["rank_to"]) if r["rank_to"] not in ("-", "") else 0
+        if comp in "ce" and (lo < 1 or hi < lo):
+            fail(r, "no rank bracket")
+        out.append((season, comp, lo, hi, places))
+    for season in range(ACCESS_FIRST, LAST + 1):
+        for comp in "ceh":
+            if not any(a[0] == season and a[1] == comp for a in out):
+                raise SystemExit(f"make_uefa_table.py: no access list rows {comp} in {season}")
+    return out
+
+
 def c_text(t):
     """A C string in the game's code (Windows-1252), each byte above 127 as an octal escape."""
     out = ""
@@ -174,6 +217,13 @@ def text():
         lines.append(f"     {uic},")
         lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}}},")
     lines += ["};", "const int season_uefa_row_count = (int)(sizeof season_uefa_rows / sizeof season_uefa_rows[0]);",
+              "", f"/* The access list by association rank from {ACCESS_FIRST}/{(ACCESS_FIRST + 1) % 100:02d} "
+              "(docs/research/rules-0.6.0/uefa-access.tsv). */",
+              "const SeasonUefaAccess season_uefa_access[] = {"]
+    for a in read_access():
+        lines.append(f"    {{{a[0]}, '{a[1]}', {a[2]}, {a[3]}, {c_text(a[4])}}},")
+    lines += ["};",
+              "const int season_uefa_access_count = (int)(sizeof season_uefa_access / sizeof season_uefa_access[0]);",
               ""]
     return "\n".join(lines)
 

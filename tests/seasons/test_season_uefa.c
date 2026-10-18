@@ -65,6 +65,19 @@ int main(void)
     CHECK(!strcmp(r2013->sc_city, "Prague") && r2013->sc_day == 30 && r2013->sc_month == 7);
     CHECK(!strcmp(season_uefa_table_row(2020)->sc_city, "Budapest") && season_uefa_table_row(2020)->sc_month == 8);
 
+    /* The access list by rank (Q369): none to 2008/09, the real list from 2009/10. */
+    CHECK(season_uefa_access_places(2008, 'c', 1) == NULL);
+    CHECK(!strcmp(season_uefa_access_places(2009, 'c', 1), "G G G PO-LP"));
+    CHECK(!strcmp(season_uefa_access_places(2009, 'c', 39), "Q2"));       /* Liechtenstein's rank: the next bracket */
+    CHECK(!strcmp(season_uefa_access_places(2009, 'c', 70), "Q1"));       /* after the last bracket: the last */
+    CHECK(!strcmp(season_uefa_access_places(2009, 'e', 1), "PO PO Q3"));
+    CHECK(!strcmp(season_uefa_access_places(2018, 'c', 4), "G G G G"));  /* four places for the top four (U7) */
+    CHECK(!strcmp(season_uefa_access_places(2017, 'c', 4), "G G PO-LP"));
+    CHECK(!strcmp(season_uefa_access_places(2030, 'c', 4), "G G G G"));  /* after the table: the last season */
+    CHECK(!strcmp(season_uefa_access_rule(2009, 'h'), "G"));
+    CHECK(!strcmp(season_uefa_access_rule(2015, 'X'), "PO-LP") && !strcmp(season_uefa_access_rule(2018, 'X'), "G"));
+    CHECK(season_uefa_access_rule(2015, 'f') && season_uefa_access_rule(2016, 'f') == NULL);
+
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);
     CHECK(season_uefa_table_row(2099) == &season_uefa_rows[season_uefa_row_count - 1]);

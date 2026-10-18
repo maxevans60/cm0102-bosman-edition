@@ -42,6 +42,28 @@ typedef struct {
     int sc_day, sc_month;
 } SeasonUefa;
 
+/* The access list by association rank (slice 23, Q369: from 2009/10; the original's brackets before). */
+typedef struct {
+    int season;
+    char comp;                      /* c Champions League, e Europa League, h CL title holder, H EL title holder
+                                     * (EL place), X EL title holder with a CL place, f fair play places */
+    int rank_from, rank_to;         /* 1 is the top association; 0 for h, H, X and f */
+    const char *places;             /* the entry round of each place in domestic order (CL: the champion first;
+                                     * EL: the cup winner first): G, PO, PO-CP, PO-LP, Q3, Q3-CP, Q3-LP, Q2, Q2-CP,
+                                     * Q2-LP, Q1, PR */
+} SeasonUefaAccess;
+
+extern const SeasonUefaAccess season_uefa_access[];
+extern const int season_uefa_access_count;
+
+/* The places of comp ('c' or 'e') for an association of rank (1 is the top) in season S, or NULL before the
+ * first season of the access list. A rank between brackets (Liechtenstein's, which has no league) takes the
+ * next bracket; a rank after the last takes the last. After the last season the last season applies (Q248). */
+const char *season_uefa_access_places(int season, char comp, int rank);
+
+/* The places of a rule row ('h', 'H', 'X', 'f') in season S, or NULL. */
+const char *season_uefa_access_rule(int season, char comp);
+
 extern const SeasonUefa season_uefa_rows[];
 extern const int season_uefa_row_count;
 
