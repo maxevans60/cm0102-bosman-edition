@@ -166,6 +166,8 @@ if(NOT WIN32)
     target_include_directories(season_nation_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_nation COMMAND season_nation_test)
     add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
+    # The league rules (0.6.0 slice 19): play-off places, splits and calendars. The outputs are committed.
+    add_test(NAME season_encode_leagues COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_leagues.py")
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
