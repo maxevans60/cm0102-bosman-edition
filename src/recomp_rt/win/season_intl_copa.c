@@ -411,9 +411,17 @@ void o_0040f590(void);
 /* vtable +0x30 of the Copa America and the Asian Cup (0x96b430, 0x967644): a jump to vtable +0x30 of stage[2]
  * (0x40f590..0x40f598). The Asian Cup's stage index is a site of season_intl_cups.c (0x40f593). For a Copa
  * America of 16 the jump goes to stage[3]. */
+/* One wrap of 0x40f590 serves every slice. Another slice that needs this function (slice 26: the Club World
+ * Championship's history thunk of slot 12) defines season_club_world_history_thunk(): it runs first and gives 1
+ * when it handled the call. The weak definition here gives 0, so this file links alone (clang and gcc keep the
+ * other file's strong definition). */
+__attribute__((weak)) int season_club_world_history_thunk(void) { return 0; }
+
 RT_WRAP(0040f590, copa_asian_final_stage)
 {
     uint32_t self = cpu.ecx;
+    if (season_club_world_history_thunk() || rt_unwinding) return;
+    cpu.ecx = self;
     if (copa16(self) < 0) {
         o_0040f590();
         return;
