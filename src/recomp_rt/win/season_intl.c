@@ -499,6 +499,27 @@ RT_WRAP(0057c120, euro_add_qualified)
     o_0057c120();
 }
 
+void o_0076d880(void);
+
+/* NationalTeams::release_overage_u21_players, thiscall (nation), ret 4: called for both teams of an
+ * international fixture (0x76bc37, 0x76bc45, with the team's nation +0x53; the fixture in esi). It reads the
+ * nation (0x76d88d) and asks for its under-21 team (database_get_national_u21_team 0x53b4f0), which stops at
+ * the box "Database.cpp 13160" for no nation (0x53b4fc). A 2003 start met a team with no nation on 23 May 2004.
+ * In a season game such a call does nothing, and the log names the fixture's teams. */
+RT_WRAP(0076d880, release_overage_u21)
+{
+    if (!season_intl_on() || rt_arg(0)) {
+        o_0076d880();
+        return;
+    }
+    if (logging()) {
+        uint32_t fx = cpu.esi, home = rd32(g_mem, fx + 0x1cu), away = rd32(g_mem, fx + 0x20u);
+        fprintf(stderr, "recomp: season intl: a fixture team has no nation: %s v %s\n",
+                readable(home) ? win_str(home + 4u) : "?", readable(away) ? win_str(away + 4u) : "?");
+    }
+    rt_ret_stdcall(0, 1);
+}
+
 /* ---- The rule kind ---- */
 
 /* A new game (season.c, before the original makes it): a season game from 2006/07 starts with Australia in
