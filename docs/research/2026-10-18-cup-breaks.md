@@ -71,4 +71,6 @@ Not built. The module (`season_comps.h`, version 1) takes only a club_comp recor
 
 ## 6. Round names (Q370)
 
-Not built: the shared table of slice 22 (`season_round_names.c`, `docs/research/round-names.tsv`) is not on main yet.
+The shared table of slice 22 (`docs/research/round-names.tsv`, `season_round_names.c`) gives a round its real name from the season in which the real competition renamed it, and the original's names stay until then (Q370). The original names the rounds of a domestic cup by number and stage: "First Round" to "Eighth Round", "Preliminary Round", "Quarter Final", "Semi Final", "Final" (strings of the long set, name function 0x4b4850), and "1st Rnd" and so on in the abbreviated set. The cup rows of the rules table describe the structure of each season (rounds, legs, entrants) and record no rename of a round, and the formats of this part keep every round code (+0x07) as the class makes it. So part 21b adds no row: no domestic cup round of the classes here has a rename with a source.
+
+Decision for Max: names such as "Round of 32" for the Copa del Rey or "Round of 16" for the Coppa Italia were the real names before 2001 too, so Q370 keeps the original's "Third Round" and "Fourth Round" for them. Recommended answer: keep it so; if Max wants the real names of every season (not only renames), a research pass with a source per name adds rows to `round-names.tsv` for the cups of section 2 and 3.

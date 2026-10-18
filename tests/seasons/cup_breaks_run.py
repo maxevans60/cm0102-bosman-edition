@@ -42,7 +42,8 @@ The checks of each run:
       the year of its last edition, a waiting cup holds the year of its next edition);
     - a cup that never skipped starts the edition of the season of the change (log "season S, year Y": Y + 1 = S);
     - with changing rules on, the news of each season holds one sentence for each cup of the run whose table
-      status changes in it; with changing rules off, none.
+      status changes in it (sentences of other kinds, such as the club competitions of slice 26, do not count);
+      with changing rules off, none.
 --reuse checks the reports in the --keep folder again without a new run.
 """
 import collections
@@ -224,12 +225,14 @@ def check_run(name, program, game, keep, table, reuse=False):
                 fails.append(f"{name}: {m.group(1)} starts season {m.group(2)} with year {m.group(3)}")
     # No cup holds an edition that the table does not hold; a new game in a later season waits when the table does
     # not hold the first edition (the constructor gets the start year, log of the runs).
-    seen = set()
+    seen, names = set(), set()
     for c in comps:
         if c["file"] not in FILES:
             continue
         seen.add(c["file"])
-        if c["year"] != NEVER and table.held(c["file"], c["year"]) == 0:
+        names.add(c["name"])
+        # 2999: a cup that never comes back; 2001 in a 2001 game: the original's first season, which stays.
+        if c["year"] != NEVER and not (year == 2001 and c["year"] == 2001) and table.held(c["file"], c["year"]) == 0:
             fails.append(f"{name}: {c['file']} holds {c['year']} in {c['season']} {c['phase']}, "
                          f"the table does not hold that edition")
     if year != 2001:
@@ -241,7 +244,8 @@ def check_run(name, program, game, keep, table, reuse=False):
         fails.append(f"{name}: the report has no {f}")
     # The news of the kind.
     news = collections.Counter((int(m.group(1)), m.group(2)) for m in (NEWS.search(x) for x in log) if m)
-    mine = {k: v for k, v in news.items() if KIND_NEWS.match(k[1])}
+    mine = {k: v for k, v in news.items()
+            if KIND_NEWS.match(k[1]) and any(k[1].startswith(f"The {n} ") for n in names)}
     if rules == "off" and mine:
         fails.append(f"{name}: changing rules off, but the news has {sorted(mine)[:3]}")
     if rules == "on":
