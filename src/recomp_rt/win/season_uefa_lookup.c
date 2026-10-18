@@ -101,3 +101,13 @@ const char *season_uefa_access_rule(int season, char comp)
         if (season_uefa_access[i].season == s && season_uefa_access[i].comp == comp) return season_uefa_access[i].places;
     return NULL;
 }
+
+int season_uefa_access_league_cup(int season, const char *name)
+{
+    int s = access_season(season);
+    for (int i = 0; s >= 0 && i < season_uefa_access_count; i++)
+        if (season_uefa_access[i].season == s && season_uefa_access[i].comp == 'L' &&
+            !strcmp(season_uefa_access[i].places, name))
+            return 1;
+    return 0;
+}

@@ -46,7 +46,8 @@ typedef struct {
 typedef struct {
     int season;
     char comp;                      /* c Champions League, e Europa League, h CL title holder, H EL title holder
-                                     * (EL place), X EL title holder with a CL place, f fair play places */
+                                     * (EL place), X EL title holder with a CL place, f fair play places, L a
+                                     * nation whose last EL place is its league cup winner's (places: the name) */
     int rank_from, rank_to;         /* 1 is the top association; 0 for h, H, X and f */
     const char *places;             /* the entry round of each place in domestic order (CL: the champion first;
                                      * EL: the cup winner first): G, PO, PO-CP, PO-LP, Q3, Q3-CP, Q3-LP, Q2, Q2-CP,
@@ -62,6 +63,9 @@ extern const int season_uefa_access_count;
 const char *season_uefa_access_places(int season, char comp, int rank);
 
 /* The places of a rule row ('h', 'H', 'X', 'f') in season S, or NULL. */
+/* 1 when the last Europa League place of the nation named name ("England") goes to its league cup winner in S. */
+int season_uefa_access_league_cup(int season, const char *name);
+
 const char *season_uefa_access_rule(int season, char comp);
 
 extern const SeasonUefa season_uefa_rows[];

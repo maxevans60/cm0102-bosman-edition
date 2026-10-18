@@ -83,6 +83,8 @@ int main(void)
     CHECK(!strcmp(season_uefa_access_places(2030, 'c', 4), "G G G G"));  /* after the table: the last season */
     CHECK(!strcmp(season_uefa_access_rule(2009, 'h'), "G"));
     CHECK(!strcmp(season_uefa_access_rule(2015, 'X'), "PO-LP") && !strcmp(season_uefa_access_rule(2018, 'X'), "G"));
+    CHECK(season_uefa_access_league_cup(2009, "France") && season_uefa_access_league_cup(2015, "England"));
+    CHECK(!season_uefa_access_league_cup(2009, "Spain") && !season_uefa_access_league_cup(2008, "England"));
     CHECK(season_uefa_access_rule(2015, 'f') && season_uefa_access_rule(2016, 'f') == NULL);
 
     /* Outside the table: the first row before it, the last row after it (Q248). */
@@ -103,7 +105,7 @@ int main(void)
     changing = 1;
     CHECK(season_uefa_row(2007) == season_uefa_table_row(2007));
     start_year = 2010, changing = 0;
-    CHECK(season_uefa_row(2010) == &season_uefa_rows[season_uefa_row_count - 1]);
+    CHECK(season_uefa_row(2010) == season_uefa_table_row(2010) && season_uefa_row(2012) == season_uefa_table_row(2010));
     code_on = 0;
     CHECK(season_uefa_row(2010) == NULL);
 

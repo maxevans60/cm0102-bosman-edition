@@ -36,6 +36,7 @@ PART = os.path.join(ROOT, "docs", "research", "rules-0.6.0", "uefa.tsv")
 ACCESS = os.path.join(ROOT, "docs", "research", "rules-0.6.0", "uefa-access.tsv")
 ACCESS_FIRST = 2009                 # Q369: the original's place brackets to 2008/09, the access list from 2009/10
 PLACE_TOKENS = {"G", "PO", "PO-CP", "PO-LP", "Q3", "Q3-CP", "Q3-LP", "Q2", "Q2-CP", "Q2-LP", "Q1", "PR"}
+LEAGUE_CUP = {"England", "France"}  # the nations whose league cup winner can take a Europa League place
 ACCESS_COMPS = {"cl": "c", "el": "e", "cl-holder": "h", "el-holder": "H", "el-fairplay": "f"}
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_uefa_table.c")
 FIRST, LAST = 2001, 2020
@@ -158,7 +159,7 @@ def read_access():
     """The access list by association rank (Q369), seasons ACCESS_FIRST to LAST: [(season, comp, from, to,
     places)]. comp: c Champions League, e Europa League (the cup winner's place first), h the Champions League
     title holder, H the Europa League title holder ("PO-LP (CL)" or "G (CL)": a Champions League place, given as
-    comp X), f the fair play places. places: the entry round of each place in domestic order (PLACE_TOKENS). A
+    comp X), f the fair play places, L a nation whose last Europa League place goes to its league cup winner. places: the entry round of each place in domestic order (PLACE_TOKENS). A
     rank with no places ("-": Liechtenstein, which has no league) is left out; the game gives that rank the
     places of the next bracket."""
     with open(ACCESS, newline="", encoding="utf-8") as f:
@@ -185,6 +186,13 @@ def read_access():
         if comp in "ce" and (lo < 1 or hi < lo):
             fail(r, "no rank bracket")
         out.append((season, comp, lo, hi, places))
+        # The Europa League place of a league cup winner (the notes of the bracket: "England: last place to the
+        # league cup winner"): a row L with the nation's name. The game knows England and France (LEAGUE_CUP).
+        if comp == "e":
+            for nation in re.findall(r"([A-Z][a-z]+)(?: \(rank \d+\))?: last place to the league cup", r["notes"]):
+                if nation not in LEAGUE_CUP:
+                    fail(r, f"league cup place of {nation}, not one of {sorted(LEAGUE_CUP)}")
+                out.append((season, "L", 0, 0, nation))
     for season in range(ACCESS_FIRST, LAST + 1):
         for comp in "ceh":
             if not any(a[0] == season and a[1] == comp for a in out):
