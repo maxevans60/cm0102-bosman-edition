@@ -15,7 +15,9 @@ static const char *const class_files[INTL_CLASSES] = {
 };
 
 /* The year that a class holds when the table has no later edition: the object waits and plays no more
- * finals (the Confederations Cup after 2017). No game reaches it. */
+ * finals (the Confederations Cup after 2017). No game reaches it.
+ * TODO (slice 16 interface): idle the object with season_change_skip() in a before hook instead, once a game
+ * run has tested that interface with an international class. */
 #define IDLE_YEAR 2200u
 
 /* The last season with a golden goal (int-world: the 2003 Confederations Cup used it, "golden goal ceased in
