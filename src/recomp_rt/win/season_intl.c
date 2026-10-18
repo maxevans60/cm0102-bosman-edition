@@ -453,6 +453,9 @@ static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
         }
         if (!t) break;
         teams[open[k]] = t;
+        if (logging())
+            fprintf(stderr, "recomp: season intl: %s %d slot %d: %s\n", name, (int16_t)rd16(g_mem, comp + 0x40u),
+                    open[k], win_str(team_nation(t) + NATION_NAME));
         wr32(g_mem, slots + (uint32_t)open[k] * SLOT_SIZE, t);
         wr8(g_mem, slots + (uint32_t)open[k] * SLOT_SIZE + 4u, 0);
         filled++;
@@ -477,6 +480,15 @@ RT_WRAP(0092f230, wc_seed_teams)
 void o_0057c1d0(void);
 
 /* EuroChamp::run_group_draw, thiscall: the draw of the finals. */
+/* EuroChamp seeding 0x57c710 (from update_for_date at the date +0x13e/+0x140, 0x57c66c..0x57c698) copies the
+ * team slots into the pot array +0xee before the draw: so the slots are filled there too (season_intl_euro.c,
+ * euro_seeding). A slot left empty at the seeding put a club with no nation into a Euro 2020 group, and the
+ * game stopped on 30 May 2020 in NationalTeams::select_squad 0x76c120 (box "Database.cpp 13126"). */
+void season_intl_euro_fill(uint32_t self)
+{
+    if (season_intl_on()) fill_slots(self, CONTINENT_EUROPE, "euro_champ");
+}
+
 RT_WRAP(0057c1d0, euro_group_draw)
 {
     uint32_t self = cpu.ecx;
@@ -509,6 +521,11 @@ RT_WRAP(0092e740, wc_add_qualified)
 
 RT_WRAP(0057c120, euro_add_qualified)
 {
+    if (season_intl_on() && !team_nation(rt_arg(0))) {
+        if (logging()) fprintf(stderr, "recomp: season intl: euro_champ: a qualifier with no nation stays out\n");
+        rt_ret_stdcall(0, 1);
+        return;
+    }
     if (slots_full(cpu.ecx)) {
         if (logging()) fprintf(stderr, "recomp: season intl: euro_champ is full, a qualifier stays out\n");
         rt_ret_stdcall(0, 1);

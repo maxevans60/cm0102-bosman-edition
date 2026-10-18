@@ -79,6 +79,9 @@ const char *season_intl_class_file(uint32_t cls);
 /* Moves a date (day 1 to 31, month from 0, year) by shift days. */
 void season_intl_shift_date(int shift, int *day, int *month0, int *year);
 
+/* Fills the empty Euro team slots in a season game (season_intl.c): at the seeding and at the draw. */
+void season_intl_euro_fill(uint32_t self);
+
 /* The classes of the code sites (cls of the calls above). */
 enum {
     INTL_WORLD_CUP, INTL_EURO, INTL_CONFED, INTL_COPA, INTL_ACN, INTL_ASIAN, INTL_OFC, INTL_OLYMPICS,
