@@ -32,7 +32,6 @@
 2002	not_in_game	eng-307 eng_fa_trophy 'FA Trophy' (England)
 2002	not_in_game	eng-42 eng_conf 'Football Conference' (England)
 2002	not_in_game	uefa-9 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2002	subs_used	eng_charity (English Charity Shield), row eng-308: game 5, table 6 (6)
 2003	clubs	african_nations (African Cup of Nations), row int-continental-29: game 0/4, table 16 (16)
 2003	clubs	euro_champ (European Football Championship), row int-continental-23: game 0/4, table 16 (16)
 2003	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-24: game 5, table 50 (50)
@@ -73,7 +72,6 @@
 2003	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-28: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
 2003	name	world_club_cup (Intercontinental Cup), row club-world-39: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2003	no_row	friendly (Friendly): no table row
-2003	no_row	mini_league (Friendly League): no table row
 2003	no_row	record_utils ('B' International): no table row
 2003	no_row	record_utils (Reserve): no table row
 2003	no_row	record_utils (Under 21 International): no table row
@@ -87,7 +85,6 @@
 2003	not_in_game	eng-313 eng_fa_trophy 'FA Trophy' (England)
 2003	not_in_game	eng-52 eng_conf 'Football Conference' (England)
 2003	not_in_game	uefa-17 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2003	subs_used	eng_charity (English Charity Shield), row eng-314: game 5, table 6 (6)
 2004	clubs	asia_nations (Asian Cup), row int-continental-42: game 4, table 16 (16)
 2004	clubs	european_cup (European Champions Cup), row uefa-26: game 55, table 72 (72 (32 in the group stage))
 2004	clubs	fifa_confed (Confederations Cup), row int-world-46: game 0/4, table 8 (8)
@@ -128,8 +125,6 @@
 2004	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-40: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
 2004	name	world_club_cup (Intercontinental Cup), row club-world-58: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2004	no_row	friendly (Friendly): no table row
-2004	no_row	mini_cup (Friendly Cup): no table row
-2004	no_row	mini_league (Friendly League): no table row
 2004	no_row	record_utils ('B' International): no table row
 2004	no_row	record_utils (Reserve): no table row
 2004	no_row	record_utils (Under 21 International): no table row
@@ -141,4 +136,3 @@
 2004	not_in_game	eng-321 new 'Conference Cup' (England)
 2004	not_in_game	eng-62 eng_conf 'Conference National' (England)
 2004	not_in_game	uefa-25 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2004	subs_used	eng_charity (English Charity Shield), row eng-320: game 5, table 6 (6)

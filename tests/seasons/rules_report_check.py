@@ -69,6 +69,10 @@ import sys
 import tempfile
 import time
 
+
+# Friendly competitions: made by chance, not in the rules table.
+FRIENDLY_FILES = {"mini_cup", "mini_league"}
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 EXPECTED_DIR = os.path.join(HERE, "rules_report_expected")
@@ -178,7 +182,10 @@ def differences(seasons, comps, rows):
         k = nth[(season, c["file"])]
         nth[(season, c["file"])] += 1
         if not found:
-            out.add((season, "no_row", f"{c['file']} ({c['name']}): no table row"))
+            # The game makes the friendly competitions by chance at each start,
+            # and the rules table has no rows for them. So they give no line.
+            if c["file"] not in FRIENDLY_FILES:
+                out.add((season, "no_row", f"{c['file']} ({c['name']}): no table row"))
             continue
         r = pick_row(found, c["file"], k)
         nations |= {x["nation"] for x in found if isinstance(x["tier"], int)}
