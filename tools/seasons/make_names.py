@@ -38,8 +38,9 @@ The shown name (shown_name): the research name with these changes, so that the s
       inter-confederation play-offs"), then it is cut after the last whole word that fits, never inside a
       bracket.
 The stop rule also stops the tool on a long name over 50 or a short name over 26 characters, and on a row that
-the game's loader rejects (a season outside 2001 to 2099, an empty file name, a number over 999): the loader
-then drops the whole file.
+the game's loader rejects (a season outside 2001 to 2099, an empty file name, a number over 999, an empty long
+or short name, a tab in a name, a long or short name that Windows-1252 cannot hold): the loader then drops the
+whole file.
 The short name is the shown name when it has 26 characters or fewer; else shorter words of SHORTER come in
 ("FIFA World Cup qualification (UEFA)" gives "WC qualifying (UEFA)"); else a known opening goes
 ("Campeonato Brasileiro Série A" gives "Série A", "League of Ireland Premier Division" gives "Premier
@@ -169,11 +170,15 @@ def main(argv):
     rows = make_rules.read_rows()
     out = table(rows)
     for season, file, n, long, short in out:
-        try:
-            long.encode("cp1252")
-        except UnicodeEncodeError:
-            print(f"make_names.py: {season} {file} {n}: {long!r} has a character that Windows-1252 cannot hold")
-            return 1
+        for text in (long, short):
+            if not text or not text.strip() or "\t" in text or "\n" in text:
+                print(f"make_names.py: {season} {file} {n}: an empty name or a name with a tab: {long!r} / {short!r}")
+                return 1
+            try:
+                text.encode("cp1252")
+            except UnicodeEncodeError:
+                print(f"make_names.py: {season} {file} {n}: {text!r} has a character that Windows-1252 cannot hold")
+                return 1
         if not 2001 <= int(season) <= 2099 or not file.strip() or "\t" in file or not 0 <= n <= 999:
             print(f"make_names.py: {season} {file!r} {n}: a season, file or number that the game's loader rejects "
                   f"(season_names.c drops the whole file)")
