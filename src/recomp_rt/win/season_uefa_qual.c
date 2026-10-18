@@ -134,31 +134,35 @@ static void set_dates(uint32_t t, int r, int draw_day, int draw_month, int day, 
 
 /* ---- The layout of a cup's entrants ---- */
 
-/* A qualifying round: its code (the round code of the game), the entry codes of its paths, and the dates. */
+/* A qualifying round: its code (the round code of the game), the entry codes of its paths, its legs and the
+ * dates. */
 typedef struct {
     int round_code;
     int cp, lp;                         /* entry codes of the Champions Path and League Path (lp 0: one path) */
+    int legs;
     int draw[2], match[2];              /* draw and first leg: day, month 0 to 11 */
 } Level;
 
-/* The Champions League rounds from the lowest: preliminary round, Q1 to Q3, play-offs. Dates of 2018/19 (CL
- * regulations, rows uefa-138 to uefa-140): first legs 26 June, 10 July, 24 July, 7 August, 21 August, second legs
- * 7 days later (+0x22). The draw of each round (with flag 0x200 it keeps the ties) a week before. */
+/* The dates. A game in a moved season starts on 11 July (the first day of the rules report of a 2010/11
+ * game), so every round is played from 12 July on, as the original's first qualifying round (12 July, 0x583c50).
+ * The second leg comes 7 days after the first (+0x22). A round starts after the round below ends, and a Europa
+ * League round after the Champions League round whose losers it takes (CL Q1 ends 21 July: EL Q2 from 26 July;
+ * CL Q2 4 August: EL Q3 9 August; CL Q3 18 August: EL PO 23 August; CL PO 28 August, before the Europa League's
+ * group draw after 30 August). The preliminary round is one match (the real one is a tournament of single
+ * matches). The real calendar starts in late June (rows uefa-66 to uefa-160): these dates keep its order. */
 static const Level CL_LEVELS[] = {
-    {240, SEASON_UEFA_CL_PR, 0, {19, 5}, {26, 5}},
-    {250, SEASON_UEFA_CL_Q1, 0, {3, 6}, {10, 6}},
-    {260, SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_CL_Q2_LP, {17, 6}, {24, 6}},
-    {270, SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_CL_Q3_LP, {31, 6}, {7, 7}},
-    {220, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_PO_LP, {14, 7}, {21, 7}},
+    {240, SEASON_UEFA_CL_PR, 0, 1, {12, 6}, {13, 6}},
+    {250, SEASON_UEFA_CL_Q1, 0, 2, {12, 6}, {14, 6}},
+    {260, SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_CL_Q2_LP, 2, {22, 6}, {28, 6}},
+    {270, SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_CL_Q3_LP, 2, {5, 7}, {11, 7}},
+    {220, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_PO_LP, 2, {19, 7}, {21, 7}},
 };
-/* The Europa League rounds, each drawn the day after the Champions League round whose losers it takes ends
- * (CL Q1 on 17 July, Q2 on 31 July, Q3 on 14 August). Dates of 2018/19 (EL regulations, row uefa-141). */
 static const Level EL_LEVELS[] = {
-    {240, SEASON_UEFA_EL_PR, 0, {12, 5}, {28, 5}},
-    {250, SEASON_UEFA_EL_Q1, 0, {20, 5}, {12, 6}},
-    {260, SEASON_UEFA_EL_Q2, 0, {18, 6}, {26, 6}},
-    {270, SEASON_UEFA_EL_Q3, 0, {1, 7}, {9, 7}},
-    {220, SEASON_UEFA_EL_PO, 0, {15, 7}, {23, 7}},
+    {240, SEASON_UEFA_EL_PR, 0, 1, {12, 6}, {13, 6}},
+    {250, SEASON_UEFA_EL_Q1, 0, 2, {14, 6}, {16, 6}},
+    {260, SEASON_UEFA_EL_Q2, 0, 2, {22, 6}, {26, 6}},
+    {270, SEASON_UEFA_EL_Q3, 0, 2, {5, 7}, {9, 7}},
+    {220, SEASON_UEFA_EL_PO, 0, 2, {19, 7}, {23, 7}},
 };
 #define N_LEVELS 5
 
@@ -382,6 +386,7 @@ uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds_out, uint32_t *name_
         wr16(g_mem, rec + 0x1a, (uint16_t)(L.clubs_in[i] / 2));
         wr16(g_mem, rec + 0x1c, (uint16_t)L.fresh[i]);
         wr16(g_mem, rec + 0x1e, (uint16_t)L.first[i]);
+        g_mem[rec + 0x21] = (uint8_t)lv->legs;
         g_mem[rec + 0x22] = 7;
         set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], 2, year);
     }
@@ -569,6 +574,7 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds_out)
         wr16(g_mem, x + 0x1a, (uint16_t)(L.clubs_in[i] / 2));
         wr16(g_mem, x + 0x1c, (uint16_t)L.fresh[i]);
         wr16(g_mem, x + 0x1e, (uint16_t)L.first[i]);
+        g_mem[x + 0x21] = (uint8_t)lv->legs;
         g_mem[x + 0x22] = 7;
         set_dates(t, i, lv->draw[0], lv->draw[1], lv->match[0], lv->match[1], 4, year);
     }
@@ -706,6 +712,7 @@ static void uc_fill_drops(uint32_t uc)
         }
         int base = used[to];
         used[to] += n > 0 ? n : (path == 2 ? C.clubs_in[cr] / 2 : 0);
+        int moved = 0;
         for (int k = 0; k < n && k < 64; k++) {
             int slot = to == SEASON_UEFA_EL_G ? first - base - k : first + base + k;
             if (slot < 0 || slot >= count || !readable(losers[k])) continue;
@@ -720,7 +727,11 @@ static void uc_fill_drops(uint32_t uc)
                 wr16(g_mem, uc + 0x36, (uint16_t)(m + 1));
             }
             wr32(g_mem, losers[k] + 0x1db, rd32(g_mem, KEY_UC));
+            moved++;
         }
+        if (moved)
+            fprintf(stderr, "recomp: uefa: %d losers of Champions League round %d (path %d) into Europa League slots from %d\n",
+                    moved, CL_LEVELS[level].round_code, path, first);
     }
 }
 
