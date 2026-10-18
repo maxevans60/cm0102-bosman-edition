@@ -23,6 +23,11 @@ selected (a creator makes its objects only when a nation of its continent is sel
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
               December 2005 with the box "world_cup..cpp 1438", 0x92f2b1, before this slice: fewer than 32
               qualified nations. That is not a rule of this slice.)
+    2007-load November 2007 with changing_rules off: the game saves 24 days after the start (7 August 2007, after
+              the quarter-finals of the 7-club knockout), a new program loads that save, returns from holiday
+              and plays 10 days (the semi-finals on 9 August, the final and the third place match on 12 August).
+              The loaded game must end the knockout with places 1 to 3 (the test log of the history thunk) and
+              save again. It needs no Select League(s) nations of other continents: entry 2 is made for every game
     2024-on   October 2024 with changing_rules on, to 2025/26: the Club World Championship of 2024/25 is the
               last in the table. (A 2023/24 start with October 2023 stops in February 2024 at the same
               comp_stats box as a 2003/04 start, also without this slice.)
@@ -34,6 +39,9 @@ The checks (each run):
       game season Y, docs/research/2026-10-18-club-world-idle.md section 6)
     - changing_rules on: the news log of the season change (RECOMP_SEASON_CHANGE_LOG=1) has one sentence for
       each competition that the table starts or stops holding in a season of the run
+    - part b: each season that the table holds the Club World Championship with 6 or 7 clubs plays it as a
+      knockout of that many clubs (the log line of season_kind_club_world.c); with changing rules off, the club
+      count of the first edition
 A run takes about 6 to 12 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the reports
 already in the --keep folder again without a new run.
 """
@@ -56,6 +64,7 @@ RUNS = {
     "2004-on": (2004, "Summer 2004", 2005, "on", ["England"]),
     "2007": (2007, "November 2007", 2008, "off", NATIONS),
     "2024-on": (2024, "October 2024", 2025, "on", NATIONS),
+    "2007-load": (2007, "November 2007", 2007, "off", ["England"]),
 }
 FILES = ["world_club_champ", "world_club_cup", "inter_amer_cup", "con_merc_cup", "conmebol_merc", "asia_club_champ",
          "asia_cup_winner", "asia_super_cup", "oceania_club_champ"]
@@ -113,8 +122,24 @@ def check(name, report, log, rules_on):
                 failed.append(line)
     missing = [f for f in FILES if f not in found]
     print(f"  {name}: classes not in the report (no nation of their continent): {', '.join(missing) or 'none'}")
+    # Part b: an edition of 6 or 7 clubs in the table is a knockout (season_kind_club_world.c, Form K). The form
+    # of the first edition stays with changing rules off (Q232).
+    text = open(log, encoding="latin-1").read() if os.path.exists(log) else ""
+    made = {int(y): int(n) for n, y in re.findall(r"club world knockout of (\d+) clubs for (\d+)", text)}
+    if "world_club_champ" in found:
+        first = next((y for y in range(start, 2100) if held(rows, "world_club_champ", y)), None)
+        for s in range(start, last + 1):
+            if not held(rows, "world_club_champ", s):
+                continue
+            row = next((r for r in rows if r["season"] == (s if rules_on else first) and
+                        "world_club_champ" in r["comp_file"].split(";")), None)
+            want = row["clubs"] if row and row["clubs"] in (6, 7) else None
+            ok = made.get(s) == want
+            print(f"  {'ok  ' if ok else 'FAIL'}  {name}: Club World Championship {s}/{(s + 1) % 100:02d}: "
+                  f"knockout of {made.get(s)} clubs, table {want}")
+            if not ok:
+                failed.append(f"{name}: Club World Championship {s}: knockout of {made.get(s)}, want {want}")
     if rules_on:
-        text = open(log, encoding="latin-1").read() if os.path.exists(log) else ""
         sentences = re.findall(r"The (.+?) (is played again from the \d{4}/\d\d season|is no longer played|is not "
                                r"played in the \d{4}/\d\d season)\.", text)
         for file in sorted(found):
@@ -130,7 +155,57 @@ def check(name, report, log, rules_on):
     return failed
 
 
+def load_and_play(program, game, save, out, days):
+    """Loads save, lets the game go on with its holiday (a loaded game keeps it) and saves `days` game days after
+    the load (RECOMP_SAVE_AFTER_DAYS ends the program). Returns the result and the path of the new save, or None."""
+    sys.path.insert(0, os.path.join(HERE, "..", "fixtures"))
+    import fixtures
+    import smoke_run
+    user = os.path.join(out, "user")
+    os.makedirs(user, exist_ok=True)
+    os.replace(save, os.path.join(user, os.path.basename(save)))
+    fixtures.write_settings(user, "classic", [])
+    steps = fixtures.LOAD_STEPS[:-1] + ["900000 quit"]
+    table = os.path.join(os.path.dirname(os.path.abspath(program)), "seasons", "rules.tsv")
+    r, _ = fixtures.run(program, game, "classic", user, smoke_run.scaled_steps("classic", out, steps),
+                        {"RECOMP_SAVE_AFTER_DAYS": str(days), "RECOMP_RULES_TABLE": table}, 1200)
+    with open(os.path.join(out, "stderr.txt"), "w") as f:
+        f.write(r.stderr)
+    saved = os.path.join(user, smoke_run.SAVE_NAME)
+    return r, saved if os.path.exists(saved) else None
+
+
+def knockout_load(program, game, keep):
+    """The 2007-load run (module docstring)."""
+    import shutil
+    work = os.path.join(keep, "2007-load") if keep else tempfile.mkdtemp(prefix="cm0102-club-world-load-")
+    code, _ = rrc.run(program, game, 2007, 2007, folder("November 2007"), ["England"], [], work, 7200,
+                      options_more={"changing_rules": "off"}, env_more={"RECOMP_SAVE_AFTER_DAYS": "24"})
+    first = os.path.join(work, "user", "samesave.sav")
+    log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
+    if code != 0 or not os.path.exists(first):
+        return [f"2007-load: the first run made no save (code {code}, {work})"]
+    if "club world knockout of 7 clubs for 2007" not in log or "club world knockout 2007: place" in log:
+        return [f"2007-load: the save is not inside the knockout ({work}/stderr.txt)"]
+    again = os.path.join(work, "again")
+    os.makedirs(again, exist_ok=True)
+    shutil.copyfile(first, os.path.join(again, "knockout.sav"))
+    r, saved = load_and_play(program, game, os.path.join(again, "knockout.sav"), again, 10)
+    places = sorted(set(re.findall(r"club world knockout 2007: place (\d) (.+)", r.stderr)))
+    print(f"  2007-load: places after the load: {places}")
+    fails = []
+    if r.returncode != 0 or not saved:
+        fails.append(f"2007-load: the save did not load and play on (code {r.returncode}, {again})")
+    if [p for p, _ in places] != ["1", "2", "3"]:
+        fails.append(f"2007-load: the knockout did not end with places 1 to 3 after the load ({again}/stderr.txt)")
+    if "message box" in r.stderr:
+        fails.append(f"2007-load: a message box after the load ({again}/stderr.txt)")
+    return fails
+
+
 def one(program, game, name, keep, reuse, own):
+    if name == "2007-load":
+        return knockout_load(program, game, keep)
     year, db, last, rules, nations = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-club-world-{name}-")
     report = os.path.join(work, "report.tsv")
