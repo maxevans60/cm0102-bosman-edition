@@ -411,8 +411,11 @@ uint32_t season_uefa_cl_qual_table(uint32_t cl, int *rounds_out, uint32_t *name_
     game_free(orig);
     if (rt_unwinding || !t) return 0;
     *rounds_out = L.rounds;
-    fprintf(stderr, "recomp: uefa: Champions League %u/%02u: %d qualifying rounds, %d slots\n", year, (year + 1) % 100,
-            L.rounds, L.slots);
+    char codes[64] = "";
+    for (int i = 0; i < L.rounds; i++)
+        snprintf(codes + strlen(codes), sizeof codes - strlen(codes), " %d", CL_LEVELS[L.level[i]].round_code);
+    fprintf(stderr, "recomp: uefa: Champions League %u/%02u: %d qualifying rounds (codes%s), %d slots\n", year,
+            (year + 1) % 100, L.rounds, codes, L.slots);
     return t;
 }
 

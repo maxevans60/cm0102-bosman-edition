@@ -373,6 +373,15 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     }
     fprintf(stderr, "recomp: uefa: access list %d/%02d: %d Champions League and %d Europa League places\n", s,
             (s + 1) % 100, n_cl, n_el);
+    /* For the tests: England's places (the England entry's nation, LEAGUE_ENGLAND). */
+    int en_cl = 0, en_g = 0, en_el = 0;
+    for (int i = 0; i < n_placed; i++)
+        if (placed[i].club && rd32(g_mem, placed[i].club + 0x53) == rd32(g_mem, LEAGUE_ENGLAND)) {
+            if (placed[i].comp == 'c') en_cl++, en_g += placed[i].code == SEASON_UEFA_CL_G;
+            else en_el++;
+        }
+    fprintf(stderr, "recomp: uefa: England %d/%02d: %d Champions League places, %d in the group stage, %d Europa "
+            "League places\n", s, (s + 1) % 100, en_cl, en_g, en_el);
 }
 
 /* Uefa_Seeding::assign_champions_league_places, thiscall (records, short count) ret 8. */
