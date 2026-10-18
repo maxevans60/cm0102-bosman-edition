@@ -181,6 +181,11 @@ PATCHES = {
     0x5E22EB: (0x2, "rt_intl_copa_ko(esi, 2u)"),                    # update_for_date 0x5e2120: group stages
     0x5E172E: (0xC, "(4u * rt_intl_copa_groups(esi, 3u))"),         # group builder 0x5e16b0: step in +0xee
     0x5E1735: (-0xC, "(0u - 4u * rt_intl_copa_groups(esi, 3u))"),   # group builder: the same step back
+
+    # World Cup qualifying 2006 to 2022 (0.6.0 slice 27, win/season_intl_qual.c). C1: the CONCACAF final group
+    # (0x917830, this in esi from 0x91784e) gives its 4th the play-off place: the second byte of its rules
+    # array (0x917878, 0 in the original; inference: the count of play-off places) becomes 1 in a season game.
+    0x917878: (0x0, "rt_wcq_concacaf_playoff(esi)"),
 }
 
 # address: (the instruction in the original, C code)
@@ -270,4 +275,35 @@ INSNS = {
     # count becomes 1 here, before the pool size 0x33 - count (0x57f76f), so the qualifying takes the shape of
     # one host (a pool of 50).
     0x57F768: ("movsx eax, byte ptr [esi + 0xf6]", "if (rt_intl_euro_no_host() && R8(esi + 0xf6u) == 0u) W8(esi + 0xf6u, 1u); eax = (uint32_t)(int32_t)(int8_t)R8(esi + 0xf6u);"),
+
+    # World Cup qualifying 2006 to 2022 (0.6.0 slice 27, win/season_intl_qual.c). Gate: a season game and the
+    # World Cup year (campaign +0x40 + 2) in 2006 to 2022; outside it each site gives the original's value.
+    # E1: the European play-off (template 0x918920 and builder 0x919910, this in edi) is sized by the exempt
+    # count +0xf6: 0 or 1 give 8 teams, else 6. With no European host it becomes 6 (3 places, 10 + 3 = 13).
+    0x918923: ("mov al, byte ptr [edi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_wcq_europe_playoff(edi, R8(edi + 0xf6u)) & 0xffu);"),
+    0x919A7E: ("mov al, byte ptr [edi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_wcq_europe_playoff(edi, R8(edi + 0xf6u)) & 0xffu);"),
+    # E2, E3: the play-off takes N of the N + 1 best runners-up (ebx = N + 1, pushed at 0x919b4e); the one at the
+    # random index (0x90cfc0, cdecl) goes to the Asian tie (0x919c10). In a season game the index is the last
+    # (the weakest is out) and no runner-up is kept for Asia ([esp + 0x28] 0, so 0x919bec never matches and the
+    # team gets the news of 0x919c45). The add esp, 4 at 0x919b58 sets the flags.
+    0x919B4F: ("call 0x90cfc0", "if (rt_wcq_europe_no_asia(edi)) eax = ebx - 1u; else { esp -= 4; W32(esp, 0x919b54u); SYNC(); f_0090cfc0(); LOAD(); RT_AFTER_CALL(); }"),
+    0x919B5E: ("mov dword ptr [esp + 0x28], ecx", "W32(esp + 0x28u, rt_wcq_europe_no_asia(edi) ? 0u : ecx);"),
+    # A1: the Asian pool builder 0x913f60 stores its kept count; after it the exempt count +0xee becomes 0, so
+    # the final groups (0x913740), the play-off (0x913bc1) and the statuses (0x912642) take the format of no
+    # host. The flags are not read before pop and ret.
+    0x9141EA: ("mov dword ptr [esi + 0xf3], ecx", "W32(esi + 0xf3u, ecx); rt_wcq_asia_format(esi);"),
+    # A2: Asia stage 12 (0x913d50, this in esi, the two teams at [ebp]) takes its partner from the European
+    # section (0x91def0, ecx the Europe object). The partner of the cycle replaces it; the European runner-up
+    # stays the fallback.
+    0x913E42: ("call 0x91def0", "esp -= 4; W32(esp, 0x913e47u); SYNC(); f_0091def0(); LOAD(); RT_AFTER_CALL(); eax = rt_wcq_asia_partner(esi, R32(ebp), eax);"),
+    # O1: Oceania stage 2 (0x91f800, this in esi) found ebp teams in the array ebx: the OFC winner and the
+    # South American play-off team. The pair of the cycle replaces them, then the compare with 2.
+    0x91F8E9: ("cmp ebp, 2", "ebp = rt_wcq_oceania_pair(esi, ebx, ebp); t0 = ebp; t1 = 0x2u; t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    # S1: the South American direct places +0xbe = 4 - ef - ee (0x921098..0x9210ad, this in esi). A host
+    # (Brazil 2014) does not take a direct place in a season game: 4 direct places with a pool of 9.
+    0x9210A2: ("sub cl, dl", "t0 = (ecx & 0xffu); t1 = rt_wcq_south_america_hosts(esi, edx & 0xffu) & 0xffu; t2 = ((t0 - t1) & 0xffu); SETF(K_SUB | SZ1, t0, t1, t2, 0); ecx = (ecx & 0xffffff00u) | t2;"),
+    # F1: the African pool builder 0x9106a0 (this in esi) compares its count ebx with the pool size +0xb6. Before
+    # the compare a pool of 50 or more takes the format of no host (South Africa 2010 stays out of the pool by
+    # the compare at 0x9108aa).
+    0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
 }

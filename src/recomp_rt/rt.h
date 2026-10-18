@@ -331,6 +331,17 @@ void rt_intl_cup_stages(uint32_t self);
 uint32_t rt_intl_copa_ko(uint32_t self, uint32_t original);
 uint32_t rt_intl_copa_groups(uint32_t self, uint32_t original);
 void rt_intl_copa_stages(uint32_t self);
+/* World Cup qualifying 2006 to 2022 (win/season_intl_qual.c): the places of each section and the
+ * inter-confederation play-offs. Each gives the original's value outside a season game and the cycles 2006 to
+ * 2022. */
+uint32_t rt_wcq_europe_playoff(uint32_t self, uint32_t exempt);
+uint32_t rt_wcq_europe_no_asia(uint32_t self);
+void rt_wcq_asia_format(uint32_t self);
+uint32_t rt_wcq_asia_partner(uint32_t self, uint32_t asian, uint32_t original);
+uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
+uint32_t rt_wcq_concacaf_playoff(uint32_t self);
+uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
+void rt_wcq_africa_format(uint32_t self, uint32_t pool);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets
