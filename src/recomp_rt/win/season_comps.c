@@ -152,6 +152,24 @@ uint32_t season_comps_record(const char *name)
     return 0;
 }
 
+uint32_t season_comps_top_club(uint32_t continent_key, const uint32_t *skip, int n)
+{
+    uint32_t clubs = rd32(g_mem, 0xae23b4u), want = rd32(g_mem, continent_key), best = 0;
+    int32_t count = (int32_t)rd32(g_mem, 0xae235cu) - 2 * (int32_t)rd32(g_mem, 0xae2350u);
+    int best_rep = -100000;
+    for (int32_t i = 0; clubs && i < count; i++) {
+        uint32_t c = clubs + (uint32_t)i * 0x245u, nation = rd32(g_mem, c + 0x53);
+        uint32_t cont = nation ? rd32(g_mem, nation + 0x71) : 0;
+        if (!cont || rd32(g_mem, cont) != want) continue;
+        int rep = (int16_t)rd16(g_mem, c + 0x80);
+        if (rep <= best_rep) continue;
+        int taken = 0;
+        for (int j = 0; j < n && !taken; j++) taken = skip[j] == c;
+        if (!taken) best = c, best_rep = rep;
+    }
+    return best;
+}
+
 /* One copy per def for the whole run (runtime memory from win_static_alloc, never freed): a later call for the
  * same def gives the same copy, made again from the class's vtable. */
 uint32_t season_comps_vtable(const SeasonCompDef *d, uint32_t vtable, int slots)

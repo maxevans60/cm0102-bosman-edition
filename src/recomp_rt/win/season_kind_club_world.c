@@ -34,6 +34,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_comps.h"
 #include "season_rules.h"
 
 #include <stdio.h>
@@ -668,17 +669,19 @@ static int pick_groups(uint32_t obj)
         if (rt_unwinding) { game_free(all); return 0; }
         wr32(g_mem, all + 4u * PICK_AFC, club);
     }
-    /* 20 more: indexes 12 to 21 UEFA, 22 to 25 CONMEBOL, 26 and 27 AFC, 28 and 29 CAF, 30 and 31 CONCACAF. The
-     * continent globals are those of pick_entrants (0x92a9e3..0x92ab5a). */
+    /* 20 more: indexes 12 to 21 UEFA, 22 to 25 CONMEBOL, 26 and 27 AFC, 28 and 29 CAF, 30 and 31 CONCACAF, the
+     * clubs of the highest reputation of the continent not yet picked (season_comps_top_club: pick_entrant gives
+     * at most about 6 clubs of a continent, then its error box 0x92b0fd). The continent globals are those of
+     * pick_entrants (0x92a9e3..0x92ab5a). */
     static const struct { uint32_t continent; int count; } more[] = {
         {0x9cfa10u, 10}, {0x9cfa1cu, 4}, {0x9cfa0cu, 2}, {0x9cfa08u, 2}, {0x9cfa14u, 2}};
+    uint32_t got[32];
+    for (int i = 0; i < 12; i++) got[i] = rd32(g_mem, all + 4u * (uint32_t)i);
     int n = 12;
     for (int k = 0; k < 5; k++)
         for (int i = 0; i < more[k].count; i++, n++) {
-            uint32_t pa[5] = {rd32(g_mem, more[k].continent), 0xffffffffu, all, (uint32_t)n, 0xffffffffu};
-            uint32_t club = call_this(0x92ae60u, obj, 5, pa);
-            if (rt_unwinding) { game_free(all); return 0; }
-            wr32(g_mem, all + 4u * (uint32_t)n, club);
+            got[n] = season_comps_top_club(more[k].continent, got, n);
+            wr32(g_mem, all + 4u * (uint32_t)n, got[n]);
         }
     for (int i = 0; i < 32; i++)
         if (!rd32(g_mem, all + 4u * (uint32_t)i)) { game_free(all); return 0; }

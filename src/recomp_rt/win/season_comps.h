@@ -109,6 +109,13 @@ int season_comps_next_edition(const char *comp, int s);
 /* The object of a def in the game that runs, or 0 (not made, or the game has none). */
 uint32_t season_comps_object(const SeasonCompDef *d);
 
+/* The club of the highest reputation (club +0x80) of a continent (key id global, for example 0x9cfa0c for Asia)
+ * that is not in skip[0..n), or 0. The walk of WorldClubChamp::pick_entrant 0x92afbd..0x92aff4: [0xae235c] -
+ * 2 x [0xae2350] clubs of the club table [0xae23b4] (so no national team), club +0x53 the nation, nation +0x71 the
+ * continent, continent +0 its id. No random number: the original's pick takes a short list of about 6 clubs and
+ * shows an error box when all are picked (0x92b0fd). */
+uint32_t season_comps_top_club(uint32_t continent_key, const uint32_t *skip, int n);
+
 /* The address of a competition record by its long name in the data (the name before any season_change_rename),
  * or 0. */
 uint32_t season_comps_record(const char *name);

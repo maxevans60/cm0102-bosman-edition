@@ -495,24 +495,12 @@ static int listed(const uint32_t *out, int n, uint32_t club)
     return 0;
 }
 
-/* A club of a continent's top reputations that is not in out[0..n) (WorldClubChamp::pick_entrant 0x92ae60,
- * thiscall (continent, nation, Club **picked, short count, record), ret 0x14; it reads +0x40 of its object). The
- * record override -1 with no selected nation of the continent gives a random club of the top reputations. */
-static uint32_t any_club(uint32_t obj, uint32_t continent, const uint32_t *out, int n, uint32_t record_id)
-{
-    static uint32_t picked;
-    if (!picked) picked = win_static_alloc(4u * MAX_CLUBS);
-    for (int i = 0; i < n && i < MAX_CLUBS; i++) wr32(g_mem, picked + 4u * (uint32_t)i, out[i]);
-    uint32_t a[5] = {rd32(g_mem, continent), 0xffffffffu, picked, (uint32_t)n, record_id};
-    uint32_t club = call_this(0x92ae60u, obj, 5, a);
-    return rt_unwinding || listed(out, n, club) ? 0 : club;
-}
-
 static int add_winner(uint32_t *out, int n, uint32_t rec, int y, uint32_t obj, uint32_t continent)
 {
+    (void)obj;
     uint32_t c = history_club(rec, y, 0);
     if (!c || listed(out, n, c)) c = history_club(rec, y, 1);
-    if (!c || listed(out, n, c)) c = any_club(obj, continent, out, n, rec ? rd32(g_mem, rec) : 0xffffffffu);
+    if (!c || listed(out, n, c)) c = season_comps_top_club(continent, out, n);
     if (c && !listed(out, n, c)) out[n++] = c;
     return n;
 }
@@ -554,11 +542,12 @@ static int pick_intercontinental(const ClubCup *k, uint32_t obj, int year, uint3
 
 static int pick_acl_two(const ClubCup *k, uint32_t obj, int year, uint32_t *out, int n)
 {
+    (void)k;
+    (void)obj;
     (void)year;
-    uint32_t own = season_comps_record(k->def->record);
     int m = 0;
     while (m < n) {
-        uint32_t c = any_club(obj, CONT_ASIA, out, m, own ? rd32(g_mem, own) : 0xffffffffu);
+        uint32_t c = season_comps_top_club(CONT_ASIA, out, m);
         if (!c) break;
         out[m++] = c;
     }
@@ -576,8 +565,9 @@ static int pick_sudamericana(const ClubCup *k, uint32_t obj, int year, uint32_t 
         uint32_t c = clubs + (uint32_t)i * CLUB_ROW;
         if (rd32(g_mem, c + CLUB_CONTINENTAL) == rd32(g_mem, rec)) out[m++] = c;
     }
+    (void)obj;
     while (m < n) {                                             /* no marks yet (before the first seeding) */
-        uint32_t c = any_club(obj, CONT_SOUTH_AMERICA, out, m, rd32(g_mem, rec));
+        uint32_t c = season_comps_top_club(CONT_SOUTH_AMERICA, out, m);
         if (!c) break;
         out[m++] = c;
     }
@@ -602,8 +592,7 @@ static int fill_clubs(const ClubCup *k, uint32_t obj, int again)
     int m = k->pick(k, obj, year, out, n);
     if (rt_unwinding) return 0;
     for (uint32_t cont = CONT_SOUTH_AMERICA; m < n;) {         /* never fewer clubs than the tree holds */
-        uint32_t c = any_club(obj, cont, out, m, 0xffffffffu);
-        if (rt_unwinding) return 0;
+        uint32_t c = season_comps_top_club(cont, out, m);
         if (!c) { if (cont == CONT_EUROPE) break; cont = CONT_EUROPE; continue; }
         out[m++] = c;
     }
