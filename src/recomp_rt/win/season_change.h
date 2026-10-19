@@ -131,6 +131,11 @@ void season_change_latin1(char *s);
  * It adds no news. A kind that wants a news sentence calls season_change_news inside its hook. */
 void season_change_rename(uint32_t rec, const char *name);
 
+/* Slice 26 (season_kind_club_world.c): the Club World Championship's part of the shared history thunk of slot 12,
+ * 0x40f590. The one wrap of 0x40f590 calls it first; it returns 1 when it handled the call (it then did the jump or
+ * the return), 0 when the wrap goes on. */
+int season_club_world_history_thunk(void);
+
 /* Slice 26 (season_comps.c): the long name of a competition record in the data, before any season_change_rename
  * (the name that the game's name matchers see, 0x60efd0), or its current name when it has no rename. NULL for
  * an address that is not a record. */

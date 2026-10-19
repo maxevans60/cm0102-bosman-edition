@@ -182,13 +182,20 @@ uint32_t season_comps_record(const char *name)
     return 0;
 }
 
-uint32_t season_comps_vtable(uint32_t vtable, int slots)
+/* One copy per def for the whole run (runtime memory from win_static_alloc, never freed): a later call for the
+ * same def gives the same copy, made again from the class's vtable. */
+uint32_t season_comps_vtable(const SeasonCompDef *d, uint32_t vtable, int slots)
 {
-    if (slots <= 0 || slots > 128) return 0;
-    uint32_t copy = win_static_alloc(4u * (uint32_t)slots);
-    if (!copy) return 0;
-    memcpy(g_mem + copy, g_mem + vtable, 4u * (size_t)slots);
-    return copy;
+    static uint32_t copies[MAX_DEFS], sizes[MAX_DEFS];
+    int i = def_index(d);
+    if (i < 0 || i >= MAX_DEFS || slots <= 0 || slots > 128) return 0;
+    if (!copies[i] || sizes[i] < (uint32_t)slots) {
+        copies[i] = win_static_alloc(4u * (uint32_t)slots);
+        sizes[i] = copies[i] ? (uint32_t)slots : 0;
+    }
+    if (!copies[i]) return 0;
+    memcpy(g_mem + copies[i], g_mem + vtable, 4u * (size_t)slots);
+    return copies[i];
 }
 
 /* Slice 21c: one vtable copy per def, kept for the run (static memory). */
@@ -348,7 +355,10 @@ RT_WRAP(008386f0, build_comp_object_table)
             if (!rec) continue;
             char file[128], host[2048];
             save_file(rec, file, sizeof file);
-            if (win_existing_file(file, host, sizeof host)) make(d, i, year, 1);
+            /* Only the file of the user folder, where the load extracts the save's *.tmp files: a stale file of
+             * the game folder (win_existing_file gives that form too) is not this game's. */
+            if (win_existing_file(file, host, sizeof host) && !strncmp(host, win_user_dir, strlen(win_user_dir)))
+                make(d, i, year, 1);
             if (rt_unwinding) return;
         }
     }

@@ -35,6 +35,7 @@ CALLBACKS = {
     0x68A1C0: ("81ec000200005356", "league_round_set_match_slot (table, round, slot, weekday, kind, option, value)"),
     # Slice 26 (season_kind_club_world.c): the knockout of the FIFA Club World Championship.
     0x92A8B0: ("81ec08020000568b", "WorldClubChamp::pick_entrants (this): the 12 entrants into +0xee"),
+    0x92AE60: ("b844210000e8a6a7", "WorldClubChamp::pick_entrant (this, continent, nation, picked, count, record)"),
     0x929390: ("81ec000200005356", "WorldClubChamp::create_schedule (this, stage, &rounds, &code, &is_league)"),
     0x522E00: ("6aff683b78950064", "Cup_Stage::Cup_Stage (this, parent, clubs, club array, rounds, record, ...)"),
     0x51C800: ("6aff68d976950064", "Cup::set_up_round (this, round)"),

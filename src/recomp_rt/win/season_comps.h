@@ -120,10 +120,11 @@ uint32_t season_comps_object(const SeasonCompDef *d);
  * or 0. */
 uint32_t season_comps_record(const char *name);
 
-/* A copy of a class's vtable in runtime memory, so a new competition can take an original class and change
- * some slots. slots: the count to copy (Cup classes 40, League classes 45, sweep-europe 2.2). Returns the
- * address of the copy, or 0. */
-uint32_t season_comps_vtable(uint32_t vtable, int slots);
+/* The copy of a class's vtable in runtime memory for def d, so a new competition can take an original class and
+ * change some slots. One copy per def for the whole run: each call fills it again from vtable and gives the same
+ * address. slots: the count to copy (Cup classes 40, League classes 45, sweep-europe 2.2). Returns the address
+ * of the copy, or 0. */
+uint32_t season_comps_vtable(const SeasonCompDef *d, uint32_t vtable, int slots);
 
 /* Slice 21c: the def's own copy of a class vtable, made once per run (the same address for every game), so that
  * season_change_file and the rules report know the object by its vtable: season_comps_file_of gives the def's file
