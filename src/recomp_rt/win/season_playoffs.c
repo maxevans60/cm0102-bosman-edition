@@ -69,8 +69,6 @@
 #define ENTRY_SIZE 0x48u
 #define ENTRY_COUNT 35
 #define ENTRY_UPDATE_DAY 0x15u          /* s16 day of the year of the season change (compared at 0x5d5bc8) */
-#define ENTRY_YEAR 0x35u                /* s16 season year, moved at the change (0x5d5c0f), compared with the game
-                                         * year at 0x5d5bf3 */
 #define LATE_DAY 273                    /* 1 October: an update day from here is a calendar-year change */
 #define WAIT_DAYS 60                    /* the longest wait of a season change for a play-off */
 
@@ -442,28 +440,40 @@ void season_playoffs_rules(uint32_t obj)
 /* ---- The season change waits for the play-off ---- */
 
 /* game_season_update_pass 0x5d5ae0 calls start_new_season only on an entry's update day (+0x15 against the day of
- * the year at 0x5d5bc8) and only for a competition whose vtable +0xc (0x48ce10, every stage complete) is true
- * (0x5d5ccb). A play-off match can be moved by the game (the Segunda's final of 2011/12, due on 13 June 2012,
- * was played after the update day of 20 June in a test run). Then the league stays in its old season, and so do
- * the other Spanish leagues (their year +0x40 stayed 2011 in 2012/13). So an entry with a marked league whose
- * stage is not complete waits: on its update day the pass sees no update day for it, and on the first later day
- * that every stage is complete the pass sees today. The original then does the change as on its own day. A
- * waiting entry is one past its update day whose season year +0x35 has not moved, so a save and load in the wait
- * keeps it. At most WAIT_DAYS: then the change comes as the original's would (the league stays). */
+ * the year at 0x5d5bc8) and only for a competition whose vtable +0xc is true (0x5d5ccb). For a league that is
+ * 0x48ce10: false when it has a division above (+0x1c >= 0, 0x48ce13), else its own check_complete(1, 1) (vtable
+ * +0x10) and that of each division below along +0x20 (0x48ce30..0x48ce48). So the pass starts only the top
+ * division, and a lower division that is not complete holds the whole chain. The game can move a play-off match: in
+ * a test run the Segunda's final of 2011/12, due on 13 June 2012, was played after the update day of 20 June, and
+ * all Spanish leagues stayed in their old season (year +0x40 2011 in 2012/13). So an entry with a marked league
+ * that is not complete (check_complete(1, 1): the table and every stage, 0x689bbc..0x689be8) waits: on its update
+ * day the pass sees no update day for it, and on the first later day that the league is complete the pass sees
+ * today. The original then does the change as on its own day. A waiting entry is one past its update day with a
+ * marked league whose year +0x40 is before the game year (start_new_season moves it). +0x40 is in the save. A first
+ * form read the entry's season year +0x35 instead, and a game loaded in the wait never changed its season
+ * (inference: a load sets +0x35 from the game year, as create_spanish_comps does at 0x83761b). At most WAIT_DAYS:
+ * then the change comes as the original's would (the league stays). */
 
 static int16_t held_day[ENTRY_COUNT];
 static int held[ENTRY_COUNT];
+static int logged[ENTRY_COUNT];         /* the day of the last log line of an entry, +1 */
 
-/* 0: the entry has no marked league; 1: all their stages are complete; 2: one is not. */
-static int entry_playoffs(int e)
+/* The marked leagues of an entry with a built stage and a year before the game year. 0: none; 1: all their
+ * stages are complete; 2: one is not (*file gets its file). */
+static int entry_playoffs(int e, int year, const char **file)
 {
     uint32_t buf[64];
     int n = season_change_entry_comps(e, buf, 64), seen = 0;
     for (int i = 0; i < n && !rt_unwinding; i++) {
-        if (!marked(buf[i]) || (int32_t)rd32(g_mem, buf[i] + COMP_STAGE_NOW) < 0) continue;
+        if (!marked(buf[i]) || (int32_t)rd32(g_mem, buf[i] + COMP_STAGE_NOW) < 0 ||
+            (int16_t)rd16(g_mem, buf[i] + COMP_YEAR) >= year)
+            continue;
         seen = 1;
-        uint32_t vt = rd32(g_mem, buf[i]);
-        if (!(call_this(rd32(g_mem, vt + 0xc), buf[i], 0, NULL) & 0xff)) return 2;
+        uint32_t vt = rd32(g_mem, buf[i]), args[2] = {1, 1};
+        if (!(call_this(rd32(g_mem, vt + 0x10), buf[i], 2, args) & 0xff)) {   /* check_complete(1, 1) */
+            *file = season_change_file(buf[i]);
+            return 2;
+        }
     }
     return seen;
 }
@@ -476,23 +486,26 @@ int season_playoffs_hold(void)
         uint32_t at = ENTRIES + (uint32_t)e * ENTRY_SIZE;
         int upd = (int16_t)rd16(g_mem, at + ENTRY_UPDATE_DAY);
         held[e] = 0;
-        if (upd < 0 || upd >= LATE_DAY || today < upd || today - upd > WAIT_DAYS ||
-            (int16_t)rd16(g_mem, at + ENTRY_YEAR) == year)
-            continue;
-        int state = entry_playoffs(e);
+        if (upd < 0 || upd >= LATE_DAY || today < upd || today - upd > WAIT_DAYS) continue;
+        const char *file = "";
+        int state = entry_playoffs(e, year, &file);
         if (!state) continue;
         if (today == upd && state == 2) {
             held_day[e] = (int16_t)upd;
             held[e] = 1;
             wr16(g_mem, at + ENTRY_UPDATE_DAY, 0xffffu);
-            fprintf(stderr, "recomp: playoffs: entry %d waits for its play-off (update day %d of %d)\n", e, upd, year);
+            if (logged[e] != today + 1)
+                fprintf(stderr, "recomp: playoffs: entry %d waits for the play-off of %s (update day %d of %d)\n", e,
+                        file, upd, year);
         } else if (today > upd && (state == 1 || today - upd == WAIT_DAYS)) {
             held_day[e] = (int16_t)upd;
             held[e] = 1;
             wr16(g_mem, at + ENTRY_UPDATE_DAY, (uint16_t)today);
-            fprintf(stderr, "recomp: playoffs: entry %d changes its season on day %d of %d, %d days late%s\n", e,
-                    today, year, today - upd, state == 2 ? " (the play-off is not complete)" : "");
+            if (logged[e] != today + 1)
+                fprintf(stderr, "recomp: playoffs: entry %d changes its season on day %d of %d, %d days late%s\n", e,
+                        today, year, today - upd, state == 2 ? " (the play-off is not complete)" : "");
         }
+        if (held[e]) logged[e] = today + 1;
         any |= held[e];
     }
     return any;
