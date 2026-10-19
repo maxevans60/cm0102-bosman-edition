@@ -36,10 +36,12 @@ CALLBACKS = {
     0x90CFC0: ("51568b74240c85f6", "random (n)"),
     # Slice 26 (season_kind_club_world.c): the knockout of the FIFA Club World Championship.
     0x92A8B0: ("81ec08020000568b", "WorldClubChamp::pick_entrants (this): the 12 entrants into +0xee"),
+    0x92AE60: ("b844210000e8a6a7", "WorldClubChamp::pick_entrant (this, continent, nation, picked, count, record)"),
     0x929390: ("81ec000200005356", "WorldClubChamp::create_schedule (this, stage, &rounds, &code, &is_league)"),
     0x522E00: ("6aff683b78950064", "Cup_Stage::Cup_Stage (this, parent, clubs, club array, rounds, record, ...)"),
     0x51C800: ("6aff68d976950064", "Cup::set_up_round (this, round)"),
     0x9452CA: ("558bec51568b7508", "free (block)"),
+    0x632080: ("6aff6819b2950064", "Inter_Amer_Cup::Inter_Amer_Cup (this, year, record), ret 8: the test def of season_comps.c"),
     0x944E46: ("ff350830de00ff74", "operator new of the stage arrays (size), cdecl (0x9291e9)"),
     0x45CBE0: ("5355568b74241085", "can the player play the fixture (squad screen test)"),
     0x5431E0: ("8b44240481ec0002", "shown attribute of a player (staff, index 1 to 31)"),

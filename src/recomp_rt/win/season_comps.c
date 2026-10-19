@@ -6,6 +6,7 @@
 #include "season_rules.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define COMP_RECORDS 0xae23d0u          /* the club comp records, then the nation comp records */
@@ -25,11 +26,49 @@
 /* Slice 28 (season_nl.c): the UEFA Nations League. */
 extern const SeasonCompDef season_nl_comp;
 
+/* Test only (RECOMP_SEASON_COMPS_TEST=1, tests/seasons/season_comps_check.py): a new record "Test New Cup" with an
+ * object of the Inter-American Cup class (Inter_Amer_Cup 0x632080, thiscall (year, record), ret 8, new 0xb2,
+ * sweep-europe 2.1) in entry 2. It takes the rows of the Intercontinental Cup, so it is made in 2001/02 to
+ * 2004/05. Without the variable the module skips it. */
+static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int loading);
+static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup", "Test New Cup", 2, test_make,
+                                           "UEFA Cup", "Test Cup", 10};
+
 const SeasonCompDef *const season_comp_defs[] = {
-    NULL,                               /* keeps the array non-empty; the module skips NULL */
+    &test_new_cup,                      /* test only, see above */
     &season_nl_comp,                    /* slice 28 */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
+
+static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
+{
+    (void)d;
+    (void)loading;
+    Cpu saved = cpu;
+    uint32_t size[1] = {0xb2};
+    uint32_t obj = rt_callback(0x944cf1u, 1, size);
+    if (rt_unwinding || !obj) return 0;
+    uint32_t args[2] = {(uint32_t)year, rec};
+    cpu.ecx = obj;
+    rt_callback(0x632080u, 2, args);
+    if (rt_unwinding) return 0;
+    cpu = saved;
+    return obj;
+}
+
+static int test_on(void)
+{
+    static int on = -1;
+    if (on < 0) on = getenv("RECOMP_SEASON_COMPS_TEST") && *getenv("RECOMP_SEASON_COMPS_TEST");
+    return on;
+}
+
+/* The defs of this game: the test def only with its variable. */
+static const SeasonCompDef *def_at(int i)
+{
+    const SeasonCompDef *d = season_comp_defs[i];
+    return d == &test_new_cup && !test_on() ? NULL : d;
+}
 
 /* ---- State of the game that runs ---- */
 
@@ -110,19 +149,32 @@ uint32_t season_comps_record(const char *name)
     return 0;
 }
 
-/* Slice 28: the vtable copies and the class of their original, for the rules report (season_comps_class). */
-#define MAX_COPIES 32
+/* One copy per def for the whole run (runtime memory from win_static_alloc, never freed): a later call for the
+ * same def gives the same copy, made again from the class's vtable. Slice 28: each copy and the class of its
+ * original are kept for the rules report (season_comps_class). */
+#define MAX_COPIES MAX_DEFS
 static struct { uint32_t copy, original; } copies[MAX_COPIES];
 static int copy_count;
 
-uint32_t season_comps_vtable(uint32_t vtable, int slots)
+uint32_t season_comps_vtable(const SeasonCompDef *d, uint32_t vtable, int slots)
 {
-    if (slots <= 0 || slots > 128) return 0;
-    uint32_t copy = win_static_alloc(4u * (uint32_t)slots);
-    if (!copy) return 0;
-    memcpy(g_mem + copy, g_mem + vtable, 4u * (size_t)slots);
-    if (copy_count < MAX_COPIES) copies[copy_count].copy = copy, copies[copy_count++].original = vtable;
-    return copy;
+    static uint32_t made[MAX_DEFS], sizes[MAX_DEFS];
+    int i = def_index(d);
+    if (i < 0 || i >= MAX_DEFS || slots <= 0 || slots > 128) return 0;
+    if (!made[i] || sizes[i] < (uint32_t)slots) {
+        made[i] = win_static_alloc(4u * (uint32_t)slots);
+        sizes[i] = made[i] ? (uint32_t)slots : 0;
+    }
+    if (!made[i]) return 0;
+    memcpy(g_mem + made[i], g_mem + vtable, 4u * (size_t)slots);
+    int k = 0;
+    while (k < copy_count && copies[k].copy != made[i]) k++;
+    if (k < MAX_COPIES) {
+        copies[k].copy = made[i];
+        copies[k].original = vtable;
+        if (k == copy_count) copy_count++;
+    }
+    return made[i];
 }
 
 /* Slice 28: the class of a vtable copy for the rules report and the season change: the original's class and
@@ -207,7 +259,7 @@ static void comps_entry(const SeasonChange *c)
 {
     if (!season_comps_on() || !entry_in_game(c->entry)) return;
     for (int i = 0; i < season_comp_def_count && i < MAX_DEFS; i++) {
-        const SeasonCompDef *d = season_comp_defs[i];
+        const SeasonCompDef *d = def_at(i);
         if (!d || d->entry != c->entry || objects[i] || season_comps_held(d->comp, c->season) != 1) continue;
         uint32_t obj = make(d, i, c->season, 0);
         if (!obj) continue;
@@ -223,7 +275,7 @@ static void comps_after(const SeasonChange *c)
 {
     if (!season_comps_on()) return;
     for (int i = 0; i < season_comp_def_count && i < MAX_DEFS; i++) {
-        const SeasonCompDef *d = season_comp_defs[i];
+        const SeasonCompDef *d = def_at(i);
         if (!d || !objects[i] || objects[i] != c->comp) continue;
         char name[64];
         table_name(d, c->season, name, sizeof name);
@@ -266,15 +318,227 @@ RT_WRAP(008386f0, build_comp_object_table)
         reset();
         int year = (int16_t)rd16(g_mem, GAME_YEAR);
         for (int i = 0; i < season_comp_def_count && i < MAX_DEFS; i++) {
-            const SeasonCompDef *d = season_comp_defs[i];
+            const SeasonCompDef *d = def_at(i);
             if (!d || !entry_in_game(d->entry)) continue;
             uint32_t rec = season_comps_record(d->record);
             if (!rec) continue;
             char file[128], host[2048];
             save_file(rec, file, sizeof file);
-            if (win_existing_file(file, host, sizeof host)) make(d, i, year, 1);
+            /* Only the file of the user folder, where the load extracts the save's *.tmp files: a stale file of
+             * the game folder (win_existing_file gives that form too) is not this game's. */
+            if (win_existing_file(file, host, sizeof host) && !strncmp(host, win_user_dir, strlen(win_user_dir)))
+                make(d, i, year, 1);
             if (rt_unwinding) return;
         }
     }
     o_008386f0();
 }
+
+/* ---- New records (docs/research/2026-10-18-new-comp-records.md) ----
+ *
+ * The comp records are one array of 0x6b-byte records at [0xae23d0]: C club comps, N nation comps, then F = 0x7f
+ * friendly records. [0xae2378] = C + N + F, [0xae2380] = N, [0xae23d8] = the first nation comp (the loader's
+ * sizing 0x529a8a..0x529aca and layout 0x529f6f..0x529fba). Record +0 is its index (doc 1.5). A new record goes
+ * at C + N, before the friendly records: only the friendly records move, and they are blank at a new game
+ * (0x52a060..0x52a1ab). The array lies in the loader's one block [0xae23a4], so the module copies it into a new
+ * block (the game's malloc 0x944e46) and frees that block itself (database_free_all_tables 0x528080 only clears
+ * the pointer, 0x528234). It does this only at the database load of a new game (database_load 0x528540 with the
+ * file source, stream 0), before the id pass 0x5315a0 turns the ids of the records into pointers. A save holds
+ * the records in its nation_comp.dat part (writer 0x52fb65), so a load gets them back with no change. */
+
+#define NATION_COUNT 0xae2380u          /* s32: N */
+#define NATION_RECORDS 0xae23d8u        /* the first nation comp */
+#define FRIENDLY_RECORDS 0x7f
+#define MAX_NEW 16
+
+static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static int loading_files;               /* 1 inside database_load 0x528540 of a new game's files */
+static int grown;                       /* 1 when the id pass of this load ran */
+static uint32_t new_block;              /* the module's copy of the array, 0 when none */
+
+/* The records the next new game needs: each def with `like` whose record the data lacks, and that the game can
+ * make. wanted fills names (at most MAX_NEW) and returns the count. It needs the data (the record names). */
+static int wanted(const char (*have)[52], int have_count, char (*names)[52])
+{
+    int start = season_start_year(), rules = season_next_rules(), n = 0;
+    if (!season_code_on() || (start == SEASON_FIRST_YEAR && !rules)) return 0;   /* the base game, Q152 */
+    for (int i = 0; i < season_comp_def_count && n < MAX_NEW; i++) {
+        const SeasonCompDef *d = def_at(i);
+        if (!d || !d->like || !d->record) continue;
+        int h = season_comps_held(d->comp, start);
+        if (h < 0 || (!h && (!rules || season_comps_next_edition(d->comp, start) == NEVER))) continue;  /* Q232 */
+        int known = 0;
+        for (int j = 0; j < have_count; j++)
+            if (!strcmp(have[j], d->record)) known = 1;
+        if (known) continue;
+        snprintf(names[n++], 52, "%.50s", d->record);
+    }
+    return n;
+}
+
+static void put_name(uint32_t at, const char *name, uint32_t room)
+{
+    memset(g_mem + at, 0, room);
+    size_t len = strlen(name);
+    if (len > room - 1) len = room - 1;
+    memcpy(g_mem + at, name, len);
+}
+
+static const SeasonCompDef *def_of_record(const char *name)
+{
+    for (int i = 0; i < season_comp_def_count; i++)
+        if (season_comp_defs[i] && def_at(i) && def_at(i)->record && !strcmp(def_at(i)->record, name))
+            return def_at(i);
+    return NULL;
+}
+
+/* Before the id pass of a new game's load: the array gets the new records. */
+static void grow(void)
+{
+    uint32_t base = rd32(g_mem, COMP_RECORDS);
+    int32_t count = (int32_t)rd32(g_mem, COMP_RECORD_COUNT), nations = (int32_t)rd32(g_mem, NATION_COUNT);
+    int32_t cn = count - FRIENDLY_RECORDS;
+    if (!base || cn <= 0 || nations < 0 || nations > cn || count > 100000) return;
+    static char have[4096][52];
+    int have_count = cn < 4096 ? cn : 4096;
+    for (int i = 0; i < have_count; i++)
+        snprintf(have[i], 52, "%.50s", win_str(base + (uint32_t)i * RECORD_SIZE + NAME_AT));
+    char names[MAX_NEW][52];
+    int k = wanted((const char (*)[52])have, have_count, names);
+    if (!k) return;
+    uint32_t size[1] = {(uint32_t)(count + k) * RECORD_SIZE};
+    uint32_t block = call_cdecl(0x944e46u, 1, size);
+    if (rt_unwinding || !block) return;
+    memcpy(g_mem + block, g_mem + base, (size_t)cn * RECORD_SIZE);
+    for (int j = 0; j < k; j++) {
+        uint32_t r = block + (uint32_t)(cn + j) * RECORD_SIZE;
+        const SeasonCompDef *d = def_of_record(names[j]);
+        uint32_t like = 0;
+        for (int i = 0; d && i < have_count && !like; i++)
+            if (!strcmp(have[i], d->like)) like = base + (uint32_t)i * RECORD_SIZE;
+        memset(g_mem + r, 0, RECORD_SIZE);
+        if (like) memcpy(g_mem + r + 0x59, g_mem + like + 0x59, 0x10);   /* continent, nation, two colours: ids */
+        else for (uint32_t f = 0x59; f <= 0x65; f += 4) wr32(g_mem, r + f, (uint32_t)-2);
+        wr32(g_mem, r, (uint32_t)(cn + j));                             /* id = index (doc 1.5) */
+        put_name(r + NAME_AT, names[j], 0x34);
+        put_name(r + 0x38, d && d->short_name ? d->short_name : names[j], 0x1b);
+        wr16(g_mem, r + 0x69, (uint32_t)(d && d->level ? d->level : 1));
+    }
+    /* The friendly records again, blank, as the loader writes them (0x52a060..0x52a1ab). */
+    for (int i = 0; i < FRIENDLY_RECORDS; i++) {
+        uint32_t r = block + (uint32_t)(cn + k + i) * RECORD_SIZE;
+        memset(g_mem + r, 0, RECORD_SIZE);
+        wr32(g_mem, r, (uint32_t)(cn + k + i));
+        for (uint32_t f = 0x59; f <= 0x65; f += 4) wr32(g_mem, r + f, 0xffffffffu);
+    }
+    if (new_block) {
+        uint32_t b[1] = {new_block};
+        call_cdecl(0x9452cau, 1, b);
+    }
+    new_block = block;
+    wr32(g_mem, COMP_RECORDS, block);
+    wr32(g_mem, NATION_RECORDS, block + (uint32_t)(cn - nations) * RECORD_SIZE);
+    wr32(g_mem, COMP_RECORD_COUNT, (uint32_t)(count + k));
+    wr32(g_mem, NATION_COUNT, (uint32_t)(nations + k));
+    fprintf(stderr, "recomp: new competitions: %d new records from index %d\n", k, cn);
+}
+
+/* The added records in the data that runs: the last records of the nation block whose name is the record of a def
+ * with `like` (at a load they come from the save). For the hiding wraps below. */
+static int added_in_data(void)
+{
+    uint32_t base = rd32(g_mem, COMP_RECORDS);
+    int32_t cn = (int32_t)rd32(g_mem, COMP_RECORD_COUNT) - FRIENDLY_RECORDS;
+    int k = 0;
+    for (int32_t i = cn - 1; base && i >= 0 && k < MAX_NEW; i--) {
+        const char *n = season_change_data_name(base + (uint32_t)i * RECORD_SIZE);
+        const SeasonCompDef *d = n ? def_of_record(n) : NULL;
+        if (!d || !d->like) break;
+        k++;
+    }
+    return k;
+}
+
+int season_comps_records_stale(void)
+{
+    if (!rd32(g_mem, COMP_RECORDS)) return 0;
+    uint32_t base = rd32(g_mem, COMP_RECORDS);
+    int now = added_in_data();
+    int32_t all = (int32_t)rd32(g_mem, COMP_RECORD_COUNT) - FRIENDLY_RECORDS, cn = all - now;
+    if (cn <= 0) return 0;
+    static char have[4096][52];
+    int have_count = cn < 4096 ? cn : 4096;
+    for (int i = 0; i < have_count; i++)
+        snprintf(have[i], 52, "%.50s", win_str(base + (uint32_t)i * RECORD_SIZE + NAME_AT));
+    char names[MAX_NEW][52];
+    int k = wanted((const char (*)[52])have, have_count, names);
+    if (k != now) return 1;
+    for (int j = 0; j < k; j++)
+        if (strcmp(names[j], win_str(base + (uint32_t)(cn + j) * RECORD_SIZE + NAME_AT))) return 1;
+    return 0;
+}
+
+void o_00528540(void);
+void o_005315a0(void);
+void o_00528080(void);
+void o_00601a40(void);
+void o_005339a0(void);
+void o_00544fc0(void);
+
+/* database_load, cdecl (path, mode, stream): stream 0 is the files of a new game (0x524d50), 1 a save (0x524d10). */
+RT_WRAP(00528540, database_load)
+{
+    int was = loading_files;
+    loading_files = rt_arg(2) == 0;
+    grown = 0;
+    o_00528540();
+    loading_files = was;
+}
+
+/* The id pass of the records (called at 0x52d1aa in the load, and by the writer at each save). */
+RT_WRAP(005315a0, database_id_pass)
+{
+    if (loading_files && !grown) {
+        grown = 1;
+        Cpu saved = cpu;
+        grow();
+        if (rt_unwinding) return;
+        cpu = saved;
+    }
+    o_005315a0();
+}
+
+/* database_free_all_tables: the module's copy of the record array goes too. */
+RT_WRAP(00528080, database_free_all_tables)
+{
+    o_00528080();
+    if (rt_unwinding) return;
+    if (new_block) {
+        uint32_t eax = cpu.eax, b[1] = {new_block};
+        new_block = 0;
+        call_cdecl(0x9452cau, 1, b);
+        if (rt_unwinding) return;
+        cpu.eax = eax;
+    }
+}
+
+/* Three functions take [0xae2378] - 0x7f as C + N: the key id matcher loop 0x604241 and the language checks
+ * 0x533e94 and 0x5451c1. They run with the added records hidden, as the original sees the data (doc 2.1, 2.4). */
+static void hidden(void (*fn)(void))
+{
+    int k = added_in_data();
+    if (k) wr32(g_mem, COMP_RECORD_COUNT, rd32(g_mem, COMP_RECORD_COUNT) - (uint32_t)k);
+    fn();
+    if (k) wr32(g_mem, COMP_RECORD_COUNT, rd32(g_mem, COMP_RECORD_COUNT) + (uint32_t)k);
+}
+
+RT_WRAP(00601a40, set_key_ids) { hidden(o_00601a40); }
+RT_WRAP(005339a0, database_load_language_names) { hidden(o_005339a0); }
+RT_WRAP(00544fc0, eng_lng_load_tables) { hidden(o_00544fc0); }

@@ -1,15 +1,6 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
-2010	bench	eng_cc_cup (English League Cup), row eng-353: game 5, table 7 (7)
-2010	bench	eng_fa_cup (English FA Cup), row eng-352: game 5, table 7 (7)
-2010	bench	eng_first (English First Division), row eng-119: game 5, table 7 (7)
-2010	bench	eng_prm (English Premier Division), row eng-118: game 5, table 7 (7)
-2010	bench	eng_second (English Second Division), row eng-120: game 5, table 7 (7)
-2010	bench	eng_third (English Third Division), row eng-121: game 5, table 7 (7)
-2010	bench	ger_cup (German Cup), row ger-127: game 6, table 7 (7)
-2010	bench	ger_first (German First Division), row ger-118: game 6, table 7 (7)
-2010	bench	ger_second (German Second Division), row ger-119: game 6, table 7 (7)
-2010	bench	world_club_champ (FIFA Club World Championship), row club-world-173: game 7, table 12 (12)
+2010	bench	world_club_champ (FIFA Club World Championship), row club-world-173: game 9, table 12 (12)
 2010	clubs	arg_second (Argentine Second Division), row arg-usa-37: game 25, table 20 (20)
 2010	clubs	asia_club_champ (Asian Club Championship), row club-world-184: game 16, table 32 (32)
 2010	clubs	aus_nsl (Australian National Soccer League), row aus-jap-kor-33: game 13, table 11 (11)
@@ -48,7 +39,7 @@
 2010	clubs	nor_prm (Norwegian Premier Division), row nor-fin-92: game 14, table 16 (16)
 2010	clubs	oceania_club_champ (Oceania Champions Cup), row club-world-189: game 0/4, table 8 (8)
 2010	clubs	uefa_cup (UEFA Cup), row uefa-77: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
-2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 4, table 7 (7)
+2010	clubs	world_club_champ (FIFA Club World Championship), row club-world-173: game 0, table 7 (7)
 2010	down	arg_prm (Argentine Premier Division), row arg-usa-10: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2010	down	arg_second (Argentine Second Division), row arg-usa-37: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table); 3 relegated in total (infobox))
 2010	down	bel_first (Belgian First Division), row hol-bel-125: game 2 (+0 play-off places), table text (15th v 16th relegation play-off (five matches, 15th starts with 3 points): loser)
@@ -215,7 +206,6 @@
 2010	playoffs	ita_ser_b (Italian Serie B), row ita-156: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
 2010	playoffs	nor_first (Norwegian First Division), row nor-fin-93: game 1 up and 0 down play-off places, table 'none'
 2010	playoffs	nor_prm (Norwegian Premier Division), row nor-fin-92: game 0 up and 1 down play-off places, table 'none'
-2010	subs_used	eng_charity (English Charity Shield), row eng-356: game 5, table 6 (6)
 2010	up	arg_second (Argentine Second Division), row arg-usa-37: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2010	up	aus_nsl (Australian National Soccer League), row aus-jap-kor-33: game 6 (+0 play-off places), table na (n/a)
 2010	up	bel_third (Belgian Third Division), row hol-bel-127: game 1 (+0 play-off places), table 2 (2 (group champions))

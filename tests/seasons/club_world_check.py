@@ -19,6 +19,8 @@ selected (a creator makes its objects only when a nation of its continent is sel
               "comp_stats..CPP 1664", 0x4a25a8, with England alone too: Comp_Stats::set_club_final_position
               0x4a2540 gets no club. The build without this slice stops there too. Which competition calls it is
               unknown.)
+    2004      Summer 2004 (--own-dbs) with changing_rules off, to 2005/06, with England only: the start season
+              holds no Club World Championship, so it never comes (Q232), and the Intercontinental Cup plays on
     2007      November 2007 with changing_rules off, to 2008/09: the start season rules at a new game, and the
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
               December 2005 with the box "world_cup..cpp 1438", 0x92f2b1, before this slice: fewer than 32
@@ -41,8 +43,15 @@ The checks (each run):
       each competition that the table starts or stops holding in a season of the run
     - part b: each season that the table holds the Club World Championship with 6 or 7 clubs plays it as a
       knockout of that many clubs (the log line of season_kind_club_world.c); with changing rules off, the club
-      count of the first edition
-A run takes about 6 to 12 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the reports
+      count of the start season
+    - each class whose continent has a selected nation is in the report (NEEDS)
+The other runs: 2019-on (October 2019, Oceania into its gap of 2020/21 in the game), 2020-on (November 2020, Oceania
+waits from the new game and comes back in 2021/22), 2022-on (October 2022, the Asian Club Championship waits from the
+new game and comes back in 2023/24), 2001-all (Select All, so the Merconorte stops after 2001/02), 2002-on, 2008-on
+and 2017-on (more start seasons). Runs end before a World Cup draw where they can: a start inside a qualifying
+campaign stops at the draw with the box "world_cup..cpp 1438" (0x92f2b1) until slice 27's fix is on main, so 2008-on
+and 2017-on end after their start season, and 2020-on crosses the draw of December 2021.
+A run takes about 6 to 12 minutes (2001-all longer). --jobs (default 2) runs that many at the same time. --reuse checks the reports
 already in the --keep folder again without a new run.
 """
 import concurrent.futures
@@ -62,10 +71,24 @@ NATIONS = ["England", "Argentina", "Australia", "Brazil", "Japan"]
 RUNS = {
     "2001-on": (2001, None, 2002, "on", NATIONS),
     "2004-on": (2004, "Summer 2004", 2005, "on", ["England"]),
+    "2004": (2004, "Summer 2004", 2005, "off", ["England"]),
     "2007": (2007, "November 2007", 2008, "off", NATIONS),
     "2024-on": (2024, "October 2024", 2025, "on", NATIONS),
     "2007-load": (2007, "November 2007", 2007, "off", ["England"]),
+    # Gaps and their returns, and more starts (the review of 2026-10-18).
+    "2019-on": (2019, "October 2019", 2020, "on", NATIONS),         # Oceania into its gap of 2020/21 in the game
+    "2020-on": (2020, "November 2020", 2021, "on", NATIONS),        # Oceania waits from the new game, back in 2021
+    "2022-on": (2022, "October 2022", 2023, "on", NATIONS),         # Asia waits from the new game, back in 2023
+    "2001-all": (2001, None, 2002, "on", ["all"]),                  # Select All: the Merconorte (needs the USA)
+    "2002-on": (2002, None, 2003, "on", NATIONS),
+    "2008-on": (2008, "September 2008", 2008, "on", NATIONS),
+    "2017-on": (2017, "October 2017", 2017, "on", NATIONS),
 }
+# The classes that a run must hold: entry 2 is made in every game; a continental entry when a nation of its
+# continent is selected (0x6699d0). The Merconorte and the CONCACAF classes need the United States (Select All).
+NEEDS = {"world_club_champ": None, "world_club_cup": None, "inter_amer_cup": None, "con_merc_cup": "all",
+         "conmebol_merc": "Brazil", "asia_club_champ": "Japan", "asia_cup_winner": "Japan", "asia_super_cup": "Japan",
+         "oceania_club_champ": "Australia"}
 FILES = ["world_club_champ", "world_club_cup", "inter_amer_cup", "con_merc_cup", "conmebol_merc", "asia_club_champ",
          "asia_cup_winner", "asia_super_cup", "oceania_club_champ"]
 
@@ -111,7 +134,7 @@ def check(name, report, log, rules_on):
     found = {f for f, _ in years}
     for (file, slot), by_season in sorted(years.items()):
         for s in range(start, last + 1):
-            table = held(rows, file, s)
+            table = held(rows, file, s if rules_on else start)   # changing rules off: the start season (Q232)
             if table is None:
                 continue
             game = s in by_season.get(s, set())
@@ -121,17 +144,21 @@ def check(name, report, log, rules_on):
             if game != table:
                 failed.append(line)
     missing = [f for f in FILES if f not in found]
-    print(f"  {name}: classes not in the report (no nation of their continent): {', '.join(missing) or 'none'}")
+    print(f"  {name}: classes not in the report: {', '.join(missing) or 'none'}")
+    nations = RUNS[name][4]
+    for f in missing:
+        need = NEEDS[f]
+        if need is None or need in nations:
+            failed.append(f"{name}: {f} is not in the report, but a nation of its continent is selected ({need})")
     # Part b: an edition of 6 or 7 clubs in the table is a knockout (season_kind_club_world.c, Form K). The form
     # of the first edition stays with changing rules off (Q232).
     text = open(log, encoding="latin-1").read() if os.path.exists(log) else ""
     made = {int(y): int(n) for n, y in re.findall(r"club world knockout of (\d+) clubs for (\d+)", text)}
     if "world_club_champ" in found:
-        first = next((y for y in range(start, 2100) if held(rows, "world_club_champ", y)), None)
         for s in range(start, last + 1):
-            if not held(rows, "world_club_champ", s):
+            if not held(rows, "world_club_champ", s if rules_on else start):
                 continue
-            row = next((r for r in rows if r["season"] == (s if rules_on else first) and
+            row = next((r for r in rows if r["season"] == (s if rules_on else start) and
                         "world_club_champ" in r["comp_file"].split(";")), None)
             want = row["clubs"] if row and row["clubs"] in (6, 7) else None
             ok = made.get(s) == want

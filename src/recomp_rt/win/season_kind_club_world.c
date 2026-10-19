@@ -117,6 +117,17 @@ static int next_edition(const char *file, int s)
     return NEVER;
 }
 
+/* The year of the first edition of a new game that starts in season `start`. With changing rules on: the next
+ * edition from the start season on. With changing rules off the rules of the start season stay (Q232, lead
+ * 2026-10-18): a competition that the start season holds plays, one that it does not hold never comes, even when
+ * a later season of the table holds it. 0 when the table has no row. */
+static int start_edition(const char *file, int start)
+{
+    if (season_changing_rules()) return next_edition(file, start);
+    int h = held(file, start);
+    return h < 0 ? 0 : h ? start : NEVER;
+}
+
 /* ---- The year steps of tools/recomp/seasons.py (rt.h) ---- */
 
 uint32_t rt_club_world_annual(void) { return (uint32_t)season_game(); }
@@ -143,7 +154,7 @@ static void ctor(const char *file, void (*original)(void))
 {
     if (season_game() && season_change_is_creating()) {
         int start = season_start_year();
-        int year = next_edition(file, start);
+        int year = start_edition(file, start);
         uint32_t slot = cpu.esp + 4;                        /* thiscall (year, record), ret 8 */
         uint32_t arg = rd32(g_mem, slot);
         if (year && year != (int16_t)(arg & 0xffffu)) {
@@ -205,7 +216,8 @@ static void club_world_before(const SeasonChange *c)
      * class sets the edition of the next season there, which is a change only with changing rules on. */
     if (k->late && c->start && !season_changing_rules()) return;
     int s = c->season + k->late;                            /* the season of the edition that starts next */
-    int year = next_edition(k->file, s);
+    /* With changing rules off the start season's rule stays (Q232), whatever the date of the hook. */
+    int year = season_changing_rules() ? next_edition(k->file, s) : start_edition(k->file, season_start_year());
     if (!year) return;
     int want = year - step_of(k->file);
     int now = (int16_t)rd16(g_mem, c->comp + YEAR_AT);
@@ -249,8 +261,8 @@ const SeasonRuleKind season_kind_club_world = {"club_world", NULL, NULL, NULL, N
  * slot 0 with stage index 0: League::add_result gives a result to the stage slot of the fixture's stage index
  * (0x685dd0..0x685dfa), and the parent updates the stages from slot 0 to +0x30 with no null test (0x6848e5).
  * The three slots that test the stage index for the knockout (2) get 2 for this stage: staff records 0x929c70,
- * fate news 0x9298a0, progress codes 0x92ad50. Clubs that enter in a later round are byes of the round table (+0x1c new entrants
- * from club list index +0x1e, map_fixture_tree 0x519265..0x519504). The third place match is the last round
+ * fate news 0x9298a0, progress codes 0x92ad50. Clubs that enter in a later round are byes of the round table
+ * (+0x1c new entrants from club list index +0x1e, map_fixture_tree 0x519265..0x519504). The third place match is the last round
  * (round id 140: Cup::process_fixture puts the semi-final losers there, 0x51b129..0x51b158). No fifth place
  * match: no class of the original has one (doc 3.4).
  *
@@ -296,12 +308,12 @@ static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 }
 
 /* The club count of the knockout in the edition of year `year`: 6 or 7, or 0 for the original form. With
- * changing rules off the form of the first edition of the game stays (Q232). */
+ * changing rules off the form of the start season stays (Q232). */
 static int knockout_clubs(int year, int *host_in_place_of_ofc)
 {
     *host_in_place_of_ofc = 0;
     if (!season_game()) return 0;
-    int s = season_changing_rules() ? year : next_edition("world_club_champ", season_start_year());
+    int s = season_changing_rules() ? year : season_start_year();     /* the form of the start season, Q232 */
     const SeasonRule *r = s > 0 ? row_of("world_club_champ", s) : NULL;
     if (!r || (r->clubs != 6 && r->clubs != 7)) return 0;
     /* 2020/21: the OFC winner withdrew, so the host champion plays in the quarter-finals (club-world.tsv,
@@ -335,11 +347,32 @@ static int build_knockout(uint32_t obj, int clubs, int host_for_ofc)
     int order6[6] = {PICK_AFC, PICK_CAF, PICK_CONCACAF, PICK_OFC, PICK_UEFA, PICK_CONMEBOL};
     int *order = clubs == 7 ? order7 : order6;
     if (clubs == 6 && host_for_ofc) order6[3] = PICK_HOST;
+    /* The AFC place. pick_entrant 0x92ae60 takes for Asia the record at entry +0x1e of the Asian entry, else the
+     * Asian Super Cup (0x92aebf..0x92aec7), which waits from 2003/04 (part a), so each edition would get its last
+     * winner. So the AFC club is picked again with the record override (argument 5, 0x92aef7..0x92af0e) of the
+     * Asian Club Championship (key id [0x9cf64c]): place 0 of its latest history row (0x4afd80), or a club of
+     * the top reputations of Asia (0x92afb1..0x92b093). The old pick leaves the list first, so it is no bar.
+     * pick_entrant is thiscall (continent, nation, Club **picked, short count, record), ret 0x14 (0x92a9e3..0x92a9f2
+     * pass [0x9cfa08] for Africa; Asia is [0x9cfa0c], 0x92aa37). */
+    int32_t acl = (int32_t)rd32(g_mem, 0x9cf64cu);
+    if (acl >= 0) {
+        wr32(g_mem, picks + 4u * PICK_AFC, 0);
+        uint32_t pa[5] = {rd32(g_mem, 0x9cfa0cu), 0xffffffffu, picks, 12, (uint32_t)acl};
+        uint32_t club = call_this(0x92ae60u, obj, 5, pa);
+        if (rt_unwinding) return 0;
+        wr32(g_mem, picks + 4u * PICK_AFC, club);
+    }
     static uint32_t list;
     if (!list) list = win_static_alloc(4u * 8u);
     for (int i = 0; i < clubs; i++) {
         uint32_t club = rd32(g_mem, picks + 4u * (uint32_t)order[i]);
-        if (!club) return 0;                                    /* the original form then plays */
+        if (!club) {                                            /* the original form then plays */
+            uint32_t f[1] = {picks};
+            call_cdecl(0x9452cau, 1, f);                        /* its start branch picks again (0x92a8bb) */
+            wr32(g_mem, obj + CWC_PICKS, 0);
+            wr32(g_mem, obj + CWC_PICK_COUNT, 0);
+            return 0;
+        }
         wr32(g_mem, list + 4u * (uint32_t)i, club);
     }
     uint32_t b[1] = {picks};
@@ -376,7 +409,9 @@ static int build_knockout(uint32_t obj, int clubs, int host_for_ofc)
         wr16(g_mem, r + 0x03, rd16(g_mem, r + 0x03) + (uint32_t)rounds[i].days);   /* match day of the year */
         wr16(g_mem, r + 0x07, (uint32_t)rounds[i].id);
         wr16(g_mem, r + 0x09, (uint32_t)i);
-        g_mem[r + 0x0d] = 0x03;                                 /* extra time and penalties, no golden goal */
+        /* Match flags: 0x2 extra time, 0x1 penalties; no 0x80 golden goal (is_golden_goal_active 0x6d4269 reads it,
+         * cup-round-record doc section 2). */
+        g_mem[r + 0x0d] = 0x03;
         wr16(g_mem, r + 0x18, (uint32_t)rounds[i].teams);
         wr16(g_mem, r + 0x1a, (uint32_t)rounds[i].ties);
         wr16(g_mem, r + 0x1c, (uint32_t)rounds[i].fresh);
@@ -462,33 +497,36 @@ RT_WRAP(0092a6b0, world_club_champ_update)
     o_0092a6b0();
 }
 
+
 /* The history thunk of slot 12 (vtable +0x30), shared by 4 vtables: it forwards to stage slot 2 (0x40f593). A
- * Club World Championship of Form K holds its knockout in slot 0. Slice 27 wraps the same function for the Copa
- * America of 16 (season_intl_copa.c); its wrap calls this first (merge of slices 26 and 27 in slice 28). Returns
- * 1 when it forwarded the call. */
+ * Club World Championship of Form K holds its knockout in slot 0. Called first by the one wrap of 0x40f590
+ * (season_change.h). Returns 1 when it handled the call. The target, Cup::record_season_honours 0x519a90 of the
+ * Cup_Stage (vtable 0x969468 +0x30), is thiscall with no argument (ret 0 at 0x519c89). With slot 0 empty it
+ * returns as that function does and writes no history: after a load the stage array has the saved +0x2c slots
+ * (League::load 0x688e3a), so the original thunk would read slot 2 of a 1-slot array. */
 int season_club_world_history_thunk(void)
 {
     uint32_t obj = cpu.ecx;
-    if (rd32(g_mem, obj) == CWC_VTABLE && rd32(g_mem, obj + CWC_STAGE_COUNT) == 1) {   /* Form K */
-        uint32_t stage = rd32(g_mem, rd32(g_mem, obj + CWC_STAGES));
-        if (stage) {
-            /* Test log: the clubs with fates 1 to 3 of the club list +0xa7 (6 bytes a club: pointer, seed, fate;
-             * Cup slot 12 0x519aca..0x519aeb reads them), count +0x3e. The club's name is at +0x04 (51 bytes). */
-            uint32_t list = rd32(g_mem, stage + 0xa7);
-            int n = (int16_t)rd16(g_mem, stage + 0x3e);
-            for (int i = 0; list && i < n && i < 8; i++) {
-                uint32_t e = list + 6u * (uint32_t)i, club = rd32(g_mem, e);
-                int fate = g_mem[e + 5];
-                if (club && fate >= 1 && fate <= 3)
-                    fprintf(stderr, "recomp: club world knockout %d: place %d %.50s\n",
-                            (int16_t)rd16(g_mem, obj + YEAR_AT), fate, win_str(club + 4));
-            }
-            cpu.ecx = stage;
-            rt_jump(rd32(g_mem, rd32(g_mem, stage) + 0x30));
-            return 1;
-        }
+    if (rd32(g_mem, obj) != CWC_VTABLE || rd32(g_mem, obj + CWC_STAGE_COUNT) != 1) return 0;   /* not Form K */
+    uint32_t stage = rd32(g_mem, rd32(g_mem, obj + CWC_STAGES));
+    if (!stage) {
+        rt_ret_cdecl(0);                                        /* ret 0: the return address only */
+        return 1;
     }
-    return 0;
+    /* Test log: the clubs with fates 1 to 3 of the club list +0xa7 (6 bytes a club: pointer, seed, fate;
+     * Cup slot 12 0x519aca..0x519aeb reads them), count +0x3e. The club's name is at +0x04 (51 bytes). */
+    uint32_t list = rd32(g_mem, stage + 0xa7);
+    int n = (int16_t)rd16(g_mem, stage + 0x3e);
+    for (int i = 0; list && i < n && i < 8; i++) {
+        uint32_t e = list + 6u * (uint32_t)i, club = rd32(g_mem, e);
+        int fate = g_mem[e + 5];
+        if (club && fate >= 1 && fate <= 3)
+            fprintf(stderr, "recomp: club world knockout %d: place %d %.50s\n",
+                    (int16_t)rd16(g_mem, obj + YEAR_AT), fate, win_str(club + 4));
+    }
+    cpu.ecx = stage;
+    rt_jump(rd32(g_mem, rd32(g_mem, stage) + 0x30));
+    return 1;
 }
 
 /* Form K: 1 for a Club World Championship whose knockout is its only stage. */

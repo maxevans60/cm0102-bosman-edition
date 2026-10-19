@@ -866,7 +866,7 @@ static void history(void)
 static uint32_t build_vtable(void)
 {
     if (vtable_copy) return vtable_copy;
-    uint32_t v = season_comps_vtable(QUAL_VTABLE, VTABLE_SLOTS);
+    uint32_t v = season_comps_vtable(&season_nl_comp, QUAL_VTABLE, VTABLE_SLOTS);
     if (!v) return 0;
     /* The League base functions where the class feeds the European Championship (class doc 10), and slot 11
      * (0x48ce70 returns 0, so the season pass may start the object; the class's 0x57eb10 returns 1). */
