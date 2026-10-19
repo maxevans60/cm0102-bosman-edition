@@ -18,7 +18,7 @@
  * the list twice or has no nation (club +0x53); the first of two stays, so a host keeps its slot. It fills the
  * free slots with the national teams of the default key nations of 0x57bf2f that are not in the list and have a
  * nation, in the order of that list, flag 0 as the defaults have. A full list seeds and draws as in the
- * original. The test switch RECOMP_BOX_FIXES=off turns the fill off (tests/seasons/season_boxes_run.py). */
+ * original. The test switch RECOMP_BOX_FIXES=off turns the wrap off (tests/seasons/season_boxes_run.py). */
 #include "euro_finals.h"
 #include "win.h"
 #include "../rt.h"
@@ -90,5 +90,5 @@ void euro_finals_fill_short_list(uint32_t ec)
     }
 }
 
-/* The wrap of EuroChamp::seed_teams 0x57c710 is slice 27's (season_intl_euro.c, euro_seeding): it calls
- * euro_finals_fill_short_list before the original on the 16-team path (merge of main and slice 27 in slice 28). */
+/* EuroChamp::seed_teams 0x57c710 is wrapped in season_intl_euro.c (0.6.0 slice 27, euro_seeding), which calls
+ * euro_finals_fill_short_list on the 16-team path before the original. */

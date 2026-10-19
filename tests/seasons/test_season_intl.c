@@ -23,6 +23,8 @@ static int code_on = 1, start_year = SEASON_FIRST_YEAR, changing = 0;
 int season_code_on(void) { return code_on; }
 int season_start_year(void) { return start_year; }
 int season_changing_rules(void) { return changing; }
+static int creating;
+int season_change_is_creating(void) { return creating; }
 
 static void game(int on, int year, int rules)
 {
@@ -64,7 +66,7 @@ int main(void)
     CHECK(rt_intl_next_year(INTL_OFC, 2016, 2) == 2024, "2001 on: no OFC Nations Cup in 2020");
     CHECK(rt_intl_round_flags(INTL_WORLD_CUP, 2002, 0x383) == 0x383, "2001 on: golden goal in 2002");
     CHECK(rt_intl_round_flags(INTL_CONFED, 2003, 0x83) == 0x83, "2001 on: golden goal in the 2003 Confed Cup");
-    CHECK(rt_intl_round_flags(INTL_EURO, 2004, 0x383) == 0x303, "2001 on: no golden goal at Euro 2004 (Q367)");
+    CHECK(rt_intl_round_flags(INTL_EURO, 2008, 0x383) == 0x303, "2001 on: no golden goal at Euro 2008");
     CHECK(rt_intl_round_flags(INTL_CONFED, 2005, 0x83) == 0x3, "2001 on: no golden goal in 2005");
     CHECK(rt_intl_round_flags(INTL_WORLD_CUP, 2002, 0x3) == 0x3, "2001 on: a round without golden goal");
 
@@ -105,6 +107,22 @@ int main(void)
     CHECK(season_intl_date_shift(INTL_OFC, 2012) == -18, "OFC 2012: 19 June (2012 %% 4 is 0) to 1 June");
     CHECK(season_intl_date_shift(INTL_OFC, 2008) == 0, "OFC 2008: no date in the table");
     CHECK(season_intl_date_shift(INTL_COPA, 2009) == 0, "Copa America 2009: not an edition of the table");
+    game(1, 2001, 1);
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2002) == 0, "2001 on: the 2002 World Cup keeps its dates");
+    CHECK(season_intl_date_shift(INTL_ACN, 2002) == 0, "2001 on: the ACN 2002 keeps its dates");
+    CHECK(season_intl_date_shift(INTL_ACN, 2004) != 0, "2001 on: the ACN 2004 moves to the table's dates");
+    CHECK(season_intl_date_shift(INTL_CONFED, 2003) == 0, "2001 on: the Confederations Cup 2003 keeps its dates");
+    CHECK(rt_intl_round_flags(INTL_EURO, 2004, 0x383) == 0x383, "2001 on: Euro 2004, built at the new game, keeps its flags");
+    creating = 1;
+    CHECK(rt_intl_wc_holder(0x1234) == 0x1234, "2001 on: the sections made at the new game keep the holder");
+    creating = 0;
+    game(1, 2010, 0);
+    CHECK(season_intl_rule_edition("euro_champ", 2016)->teams == 16, "2010 off: Euro 2016 keeps 16 teams (Q232)");
+    CHECK(season_intl_date_shift(INTL_WORLD_CUP, 2022) == 0, "2010 off: World Cup 2022 in June, as 2014 (the first edition from 2010)");
+    game(1, 2015, 0);
+    CHECK(season_intl_rule_edition("euro_champ", 2020)->teams == 24, "2015 off: Euro 2020 with 24 teams");
+    game(1, 2010, 1);
+    CHECK(season_intl_rule_edition("euro_champ", 2016)->teams == 24, "2010 on: Euro 2016 with 24 teams");
     int d = 8, m = 1, y = 2026;
     season_intl_shift_date(-49, &d, &m, &y);
     CHECK(d == 21 && m == 11 && y == 2025, "shift into the year before: %d.%d.%d", d, m + 1, y);

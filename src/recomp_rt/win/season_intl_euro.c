@@ -124,7 +124,7 @@ static int year_of(uint32_t self) { return (int16_t)rd16(g_mem, self + 0x40u); }
 static int euro24(uint32_t self)
 {
     if (!season_intl_on() || !readable(self)) return 0;
-    const SeasonIntlEdition *e = season_intl_edition("euro_champ", year_of(self));
+    const SeasonIntlEdition *e = season_intl_rule_edition("euro_champ", year_of(self));
     return e && e->teams == TEAMS;
 }
 
@@ -381,10 +381,11 @@ static uint32_t draw24(uint32_t self)
         }
         for (int i = 0, used = 0; i < GROUPS && pot * GROUPS + i < n; i++) {
             int k = pot * GROUPS + i, g = (pot == 0 && i == 0) ? 1 : groups[used++];
-            /* The entry holds the club's index in the club table, not its address: the group builders take
-             * the club as [0xae23b4] + index * 0x245 (0x57b5e4..0x57b5fd), as the pots of the seeding do. */
-            uint32_t clubs = rd32(g_mem, 0xae23b4u);
-            wr32(g_mem, res + (uint32_t)k * 5u, (order[k] - clubs) / 0x245u);
+            /* The entry holds the club's own +0 field, as the seeding writes its pots (0x57c9b8..0x57c9be):
+             * the group builders take the club as [0xae23b4] + that value * 0x245 (0x57b5e4..0x57b5fd). An
+             * empty slot (the fill found no team) gives no entry: its group stays one short. */
+            if (!readable(order[k])) continue;
+            wr32(g_mem, res + (uint32_t)k * 5u, rd32(g_mem, order[k]));
             wr8(g_mem, res + (uint32_t)k * 5u + 4u, (uint32_t)g);
         }
     }
@@ -420,13 +421,18 @@ RT_WRAP(0057c710, euro_seeding)
     if (rt_unwinding) return;
     cpu.ecx = self;
     if (!euro24(self)) {
-        /* The 16-team path: the staff reserve fix's fill of a short list (euro_finals.c), then the original. */
+        /* The 16-team path: the fill of a short list of the staff reserve fix (euro_finals.c), also in the base
+         * game, then the original. */
         euro_finals_fill_short_list(self);
         if (rt_unwinding) return;
         cpu.ecx = self;
         o_0057c710();
         return;
     }
+    /* 24 teams: no pots here (the draw sorts the teams, draw24). The pot array of 16 entries of 5 bytes at
+     * +0xee, which the save writes (0x57c5d9) and the load reads (0x57c4a5), is cleared, so it keeps no clubs
+     * of an earlier 16-team edition. */
+    memset(g_mem + self + 0xeeu, 0, 16u * 5u);
     rt_ret_stdcall(cpu.eax, 0);
 }
 
@@ -538,8 +544,9 @@ static uint32_t table_club(uint32_t stage, int pos)
 /* The knockout of 24 teams. The 16-team original (0x57bb40) takes the top two of the 4 groups in fixed pairs
  * and makes a Cup_Stage of 8 at stage[3]. The best thirds follow copa_america::create_knockout_stage 0x5e18a0
  * (and the Asian Cup 0x40fa90): a League_Stage of the thirds with no fixtures (0x5e191e: stage index -2, no
- * team list), row 2 of each group table copied in (0x5e193b..0x5e19bb, rows of 0x3b bytes, dword +9 of each
- * copy cleared, meaning unknown), sorted (0x5e19c7). Then for each group vtable +0x94 (0x5e1ace) and the news of
+ * team list), row 2 of each group table copied in (0x5e193b..0x5e19bb, rows of 0x3b bytes; the store at 0x5e19b3 is +0x44
+ * from the start of the copied row i, so it clears +9 of row i + 1, inference: the original's own off-by-one),
+ * sorted (0x5e19c7). Here +5 and +9 of each copy are cleared (the blocks stay with the group table). Then for each group vtable +0x94 (0x5e1ace) and the news of
  * vtable +0x40: code 6 and one more place (+0xbe) for a third that goes through, -2 for a third that is out and
  * for the fourth (0x5e1b27..0x5e1b6a). The comp's vtable +0x68 gives a third that is out its final position
  * (0x5e1aa6: -1, 3, 3, 3). Copa then draws the 8 at random (0x4afb40); here the pairs are the Euro 2016
@@ -647,7 +654,12 @@ static void knockout24(uint32_t self)
                                   w[2], t[2], w[4], ru[3], w[0], t[0], ru[1], ru[5]};
     uint32_t teams = game_malloc(16u * 4u);
     uint32_t out = game_malloc(8);
-    if (rt_unwinding || !teams || !out) return;
+    if (rt_unwinding) return;
+    if (!teams || !out) {                               /* no leak when only one block came */
+        if (teams) game_free(teams);
+        if (out) game_free(out);
+        return;
+    }
     for (int k = 0; k < 16; k++) wr32(g_mem, teams + 4u * (uint32_t)k, bracket[k]);
 
     /* Template (0x57bc4f: index, &rounds, &id, 0) and Cup_Stage (0x57bc9c) */
