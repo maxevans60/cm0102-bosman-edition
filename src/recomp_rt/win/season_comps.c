@@ -31,8 +31,15 @@ static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
 static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup", "Test New Cup", 2, test_make,
                                            "UEFA Cup", "Test Cup", 10};
 
+/* Slice 26c: the new club cups (season_club_cups.c). */
+extern const SeasonCompDef season_cup_sudamericana, season_cup_recopa, season_cup_suruga_bank,
+    season_cup_intercontinental, season_cup_acl_two;
+
 const SeasonCompDef *const season_comp_defs[] = {
     &test_new_cup,                      /* test only, see above */
+    /* slice 26c */
+    &season_cup_sudamericana, &season_cup_recopa, &season_cup_suruga_bank, &season_cup_intercontinental,
+    &season_cup_acl_two,
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 

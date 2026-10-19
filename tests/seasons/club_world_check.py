@@ -25,9 +25,10 @@ selected (a creator makes its objects only when a nation of its continent is sel
               Club World Championship in two seasons in a row. (A 2005/06 start stops at the World Cup draw of
               December 2005 with the box "world_cup..cpp 1438", 0x92f2b1, before this slice: fewer than 32
               qualified nations. That is not a rule of this slice.)
-    2007-load November 2007 with changing_rules off: the game saves 24 days after the start (7 August 2007, after
-              the quarter-finals of the 7-club knockout), a new program loads that save, returns from holiday
-              and plays 10 days (the semi-finals on 9 August, the final and the third place match on 12 August).
+    2007-load November 2007 with changing_rules off: the game saves 150 days after the start (11 December 2007,
+              after the quarter-finals of the 7-club knockout on 10 December), a new program loads that save,
+              returns from holiday and plays 10 days (the semi-finals on 13 December, the final and the third
+              place match on 16 December).
               The loaded game must end the knockout with places 1 to 3 (the test log of the history thunk) and
               save again. It needs no Select League(s) nations of other continents: entry 2 is made for every game
     2024-on   October 2024 with changing_rules on, to 2025/26: the Club World Championship of 2024/25 is the
@@ -44,6 +45,9 @@ The checks (each run):
     - part b: each season that the table holds the Club World Championship with 6 or 7 clubs plays it as a
       knockout of that many clubs (the log line of season_kind_club_world.c); with changing rules off, the club
       count of the start season
+    - part 26c: a season with 32 clubs in the table plays the groups of Form G (log line "club world groups")
+    - part 26c (Q401): the knockout's first match and final are on the days of the table's format text (December,
+      or February for 2020/21 to 2022/23), and when the run reaches the final, places 1 to 3 are written that day
     - each class whose continent has a selected nation is in the report (NEEDS)
 The other runs: 2019-on (October 2019, Oceania into its gap of 2020/21 in the game), 2020-on (November 2020, Oceania
 waits from the new game and comes back in 2021/22), 2022-on (October 2022, the Asian Club Championship waits from the
@@ -162,19 +166,22 @@ def check(name, report, log, rules_on):
     # Part b: an edition of 6 or 7 clubs in the table is a knockout (season_kind_club_world.c, Form K). The form
     # of the first edition stays with changing rules off (Q232).
     text = open(log, encoding="latin-1").read() if os.path.exists(log) else ""
-    made = {int(y): int(n) for n, y in re.findall(r"club world knockout of (\d+) clubs for (\d+)", text)}
+    made = {int(y): int(n) for n, y in re.findall(r"club world (?:knockout|groups) of (\d+) clubs for (\d+)", text)}
     if "world_club_champ" in found:
         for s in range(start, last + 1):
             if not held(rows, "world_club_champ", s if rules_on else start):
                 continue
             row = next((r for r in rows if r["season"] == (s if rules_on else start) and
                         "world_club_champ" in r["comp_file"].split(";")), None)
-            want = row["clubs"] if row and row["clubs"] in (6, 7) else None
+            want = row["clubs"] if row and row["clubs"] in (6, 7, 32) else None   # 32: Form G, part 26c
             ok = made.get(s) == want
             print(f"  {'ok  ' if ok else 'FAIL'}  {name}: Club World Championship {s}/{(s + 1) % 100:02d}: "
                   f"knockout of {made.get(s)} clubs, table {want}")
             if not ok:
                 failed.append(f"{name}: Club World Championship {s}: knockout of {made.get(s)}, want {want}")
+            # Part 26c (Q401): the knockout plays on the real dates of the table, the first match to the final.
+            if want and row:
+                failed += check_dates(name, s, row, text, last)
     if rules_on:
         sentences = re.findall(r"The (.+?) (is played again from the \d{4}/\d\d season|is no longer played|is not "
                                r"played in the \d{4}/\d\d season)\.", text)
@@ -189,6 +196,45 @@ def check(name, report, log, rules_on):
                 if not ok:
                     failed.append(f"{name}: no news sentence for {file} in {s}")
     return failed
+
+
+MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+          "November", "December"]
+
+
+def table_dates(row, year):
+    """The first and the last day of the edition of game year `year` from the format text of the row: (first, last)
+    as (day, month, year), or None. "11–18 December 2005" plays in the row's season; "4–11 February 2021" one
+    year later. With changing rules off the row is that of the start season, so the year moves with `year`."""
+    months = "|".join(MONTHS)
+    m = re.search(rf"\b(\d{{1,2}})(?: ({months}))?\s*[\u2013-]\s*(\d{{1,2}}) ({months}) (\d{{4}})", row["format_text"] or "")
+    if not m:
+        return None
+    last = MONTHS.index(m.group(4)) + 1
+    first = MONTHS.index(m.group(2)) + 1 if m.group(2) else last
+    y = year + int(m.group(5)) - row["season"]
+    return (int(m.group(1)), first, y), (int(m.group(3)), last, y)
+
+
+def check_dates(name, s, row, text, last):
+    """The log line of the knockout's rounds and the dates of its places (season_kind_club_world.c)."""
+    want = table_dates(row, s)
+    got = re.search(rf"club world knockout {s}: first match (\d+)\.(\d+)\.(\d+), final (\d+)\.(\d+)\.(\d+)", text)
+    got = ((int(got[1]), int(got[2]), int(got[3])), (int(got[4]), int(got[5]), int(got[6]))) if got else None
+    ok = want is not None and got == want
+    print(f"  {'ok  ' if ok else 'FAIL'}  {name}: Club World Championship {s}: rounds {got}, table {want}")
+    fails = [] if ok else [f"{name}: Club World Championship {s}: rounds {got}, table {want}"]
+    # The places are written on the day of the final, when the run reaches it.
+    places = re.findall(rf"club world knockout {s}: place (\d) .+ on (\d+)\.(\d+)\.(\d+)", text)
+    final = want[1] if want else None
+    if final and (final[2], final[1]) <= (last + 1, 6):
+        days = sorted({(int(d), int(m), int(y)) for _, d, m, y in places})
+        want_places = ["1", "2"] if row["clubs"] == 32 else ["1", "2", "3"]      # Form G: no third place match
+        ok = sorted({p for p, *_ in places}) == want_places and days == [final]
+        print(f"  {'ok  ' if ok else 'FAIL'}  {name}: Club World Championship {s}: places {sorted(places)}")
+        if not ok:
+            fails.append(f"{name}: Club World Championship {s}: places {sorted(places)}, want {want_places} on {final}")
+    return fails
 
 
 def load_and_play(program, game, save, out, days):
@@ -216,7 +262,7 @@ def knockout_load(program, game, keep):
     import shutil
     work = os.path.join(keep, "2007-load") if keep else tempfile.mkdtemp(prefix="cm0102-club-world-load-")
     code, _ = rrc.run(program, game, 2007, 2007, folder("November 2007"), ["England"], [], work, 7200,
-                      options_more={"changing_rules": "off"}, env_more={"RECOMP_SAVE_AFTER_DAYS": "24"})
+                      options_more={"changing_rules": "off"}, env_more={"RECOMP_SAVE_AFTER_DAYS": "150"})
     first = os.path.join(work, "user", "samesave.sav")
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
     if code != 0 or not os.path.exists(first):
@@ -227,7 +273,7 @@ def knockout_load(program, game, keep):
     os.makedirs(again, exist_ok=True)
     shutil.copyfile(first, os.path.join(again, "knockout.sav"))
     r, saved = load_and_play(program, game, os.path.join(again, "knockout.sav"), again, 10)
-    places = sorted(set(re.findall(r"club world knockout 2007: place (\d) (.+)", r.stderr)))
+    places = sorted(set(re.findall(r"club world knockout 2007: place (\d) (.+) on ", r.stderr)))
     print(f"  2007-load: places after the load: {places}")
     fails = []
     if r.returncode != 0 or not saved:
