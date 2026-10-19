@@ -103,7 +103,9 @@ def run_load(program, game, work):
     with open(os.path.join(user, "settings.txt"), "a") as f:
         f.write(f"database = folder:{os.path.basename(db)}\nfaster_days = on\n")
     report = os.path.join(again, "report.tsv")
-    steps = fixtures.LOAD_STEPS + ["3600000 quit"]       # the loaded game goes on with its holiday
+    # The loaded game goes on with its holiday at once and ends when the season jump ends: no wait for the first
+    # news (its 120 s limit is shorter than the jump on a loaded machine).
+    steps = fixtures.LOAD_STEPS[:-1] + ["3600000 quit"]
     r, _ = fixtures.run(program, game, "classic", user, smoke_run.scaled_steps("classic", again, steps),
                         {"RECOMP_SEASON_JUMP": "2010", "RECOMP_RULES_REPORT": report}, 7200)
     with open(os.path.join(again, "stderr.txt"), "w") as f:

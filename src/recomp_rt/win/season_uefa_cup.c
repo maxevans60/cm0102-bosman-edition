@@ -230,6 +230,20 @@ static uint32_t uc_access_table(uint32_t uc, int *n)
     return rt_unwinding ? 0 : t;
 }
 
+/* A copy of the round table that the set-up made (+0xa3, +0x3c rounds), for a reader of stage -1 at any date: the
+ * clubs' entry codes change in the season, so the layout is not made again. */
+static uint32_t uc_saved_table(uint32_t uc, int *n)
+{
+    uint32_t src = rd32(g_mem, uc + 0xa3);
+    int rounds = (int16_t)rd16(g_mem, uc + 0x3c);
+    if (!readable(src) || rounds < 1 || rounds > 16) return 0;
+    uint32_t t = game_malloc(ROUND_SIZE * (uint32_t)rounds);
+    if (rt_unwinding || !t) return 0;
+    memcpy(g_mem + t, g_mem + src, ROUND_SIZE * (uint32_t)rounds);
+    *n = rounds;
+    return t;
+}
+
 /* The access list at the set-up of a season: the qualifying rounds and a group stage of f. Returns 1 when it
  * returned the table to the caller. */
 static int uc_access_round_table(uint32_t uc, const UcGroups *f, uint32_t out_rounds)
@@ -365,7 +379,7 @@ RT_WRAP(009025c0, uc_round_table)
     uint32_t t = 0;
     int rounds = 0, name = 0, league = 0;
     if (stage == -1) {
-        if (f.groups != 8) t = uc_access_table(uc, &rounds);
+        if (f.groups != 8) t = uc_saved_table(uc, &rounds);
         else if (qual_sizes(uc, r, &q1, &q2, &r1)) t = qual_table(uc, q1, q2, r1), rounds = 3;
     } else if (stage < f.groups) {
         t = group_table(year, f.days), rounds = f.days, name = (int)uc_group_name(stage), league = 1;
