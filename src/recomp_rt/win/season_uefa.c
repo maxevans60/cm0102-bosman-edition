@@ -29,6 +29,7 @@
 #include "season_rules.h"
 #include "season_uefa.h"
 #include "season_round_names.h"
+#include "season_uefa_league.h"
 #include "season_comps.h"
 
 #include <stdio.h>
@@ -66,6 +67,13 @@
 #define STAGES_ROUND_OF_16 9
 #define KO_SLOT_ORIGINAL 12
 #define KO_SLOT_ROUND_OF_16 8
+#define STAGES_LEAGUE 2                 /* slice 25: the league phase in stage 0, the knockout phase in stage 1 */
+#define KO_SLOT_LEAGUE 1
+#define LEAGUE_KO_CLUBS 24              /* the knockout phase play-offs (16) and places 1 to 8 */
+#define LEAGUE_KO_ROUNDS 5
+#define ROUND_CODE_KO_PO 10             /* "First Round"; named "Knockout Phase Play-offs" from 2024/25 (round names) */
+#define GROUP_PRIZE 0x1b7740u           /* 1,800,000: the group stage money of each club (0x585803) */
+#define LEAGUE_NAME 0x41fu              /* the stage name id ("Group A", 0x4b9a44); named "League Phase" from 2024/25 */
 #define PHASE2_PRIZE 0x124f80u          /* 1,200,000: the entry money of phase 2 (0x586065), here of the round of 16 */
 #define ROUND_CODE_R16 20               /* "Second Round" (round name function 0x4b4850; codes 10 to 150 are taken) */
 
@@ -102,17 +110,18 @@ static uint32_t cl_object(void)
 
 static int stage_count(uint32_t cl) { return (int32_t)rd32(g_mem, cl + 0x2c); }
 static int round_of_16_layout(uint32_t cl) { return readable(cl) && stage_count(cl) == STAGES_ROUND_OF_16; }
+static int league_layout(uint32_t cl) { return readable(cl) && stage_count(cl) == STAGES_LEAGUE; }
 static uint32_t stage_at(uint32_t cl, int i) { return rd32(g_mem, rd32(g_mem, cl + 0xc) + 4u * (uint32_t)i); }
 
 uint32_t rt_uefa_cl_ko_offset(uint32_t cl)
 {
-    return 4u * (round_of_16_layout(cl) ? KO_SLOT_ROUND_OF_16 : KO_SLOT_ORIGINAL);
+    return 4u * (league_layout(cl) ? KO_SLOT_LEAGUE : round_of_16_layout(cl) ? KO_SLOT_ROUND_OF_16 : KO_SLOT_ORIGINAL);
 }
 
 /* Sets the stage count of the format of row r (NULL: the original's 13). */
 static void cl_set_format(uint32_t cl, const SeasonUefa *r)
 {
-    int want = r && season_uefa_cl_round_of_16(r) ? STAGES_ROUND_OF_16 : STAGES_ORIGINAL;
+    int want = r && r->cl_league ? STAGES_LEAGUE : r && season_uefa_cl_round_of_16(r) ? STAGES_ROUND_OF_16 : STAGES_ORIGINAL;
     if (stage_count(cl) == want) return;
     wr32(g_mem, cl + 0x2c, (uint32_t)want);
     fprintf(stderr, "recomp: uefa: Champions League %d/%02d with %d stages\n", (int16_t)rd16(g_mem, cl + 0x40),
@@ -361,6 +370,199 @@ static void draw_round_of_16(uint32_t cl)
     fprintf(stderr, "recomp: uefa: Champions League round of 16 drawn\n");
 }
 
+/* ---- The league phase (slice 25, 2024/25 on) ----
+ *
+ * The object holds 2 stages: the league phase of 36 clubs (a League_Stage, season_uefa_league.c) in stage 0 and a
+ * knockout stage of 24 clubs in stage 1: the knockout phase play-offs (16 clubs of places 9 to 24 in the fixed
+ * ties of the bracket), the round of 16 (the 8 play-off winners and places 1 to 8, a seeded draw), the
+ * quarter-finals, semi-finals and final of the original (create_round_table stage 12). */
+
+/* The knockout table of 5 rounds, from the original's table of the quarter-finals, semi-finals and final, or 0. */
+static uint32_t league_ko_table(uint32_t cl, uint32_t *name_id)
+{
+    uint32_t saved_esp = cpu.esp;
+    cpu.esp -= 16;
+    uint32_t out = cpu.esp;
+    for (int i = 0; i < 16; i += 4) wr32(g_mem, out + (uint32_t)i, 0);
+    uint32_t a[4] = {KO_SLOT_ORIGINAL, out, out + 4, out + 8};
+    uint32_t t3 = call_this(F_ROUND_TABLE, cl, 4, a);
+    int16_t rounds = (int16_t)rd16(g_mem, out);
+    *name_id = rd16(g_mem, out + 4);
+    if (rt_unwinding) return 0;
+    cpu.esp = saved_esp;
+    if (!readable(t3) || rounds != 3) return 0;
+    uint32_t size[1] = {LEAGUE_KO_ROUNDS * ROUND_SIZE};
+    uint32_t t = call_cdecl(F_MALLOC, 1, size);
+    if (rt_unwinding || !readable(t)) return 0;
+    memcpy(g_mem + t + 2 * ROUND_SIZE, g_mem + t3, 3u * ROUND_SIZE);
+    memcpy(g_mem + t, g_mem + t3, ROUND_SIZE);                      /* the play-offs and the round of 16 from */
+    memcpy(g_mem + t + ROUND_SIZE, g_mem + t3, ROUND_SIZE);         /* the quarter-final's record */
+    uint32_t f[1] = {t3};
+    call_cdecl(F_FREE, 1, f);
+    if (rt_unwinding) return 0;
+    for (int r = 0; r < LEAGUE_KO_ROUNDS; r++) wr16(g_mem, t + (uint32_t)r * ROUND_SIZE + 9, (uint16_t)r);
+    /* The play-offs: 16 clubs, all new from slot 0, in the ties of the list (0x200, as the round of 16 of the
+     * format before). Then the round of 16: the 8 winners and 8 new clubs from slot 16, a seeded draw (0x400:
+     * 0x51d2d0 pairs the clubs of the higher tier byte with the winners) that keeps clubs of one nation apart
+     * (+0xb 4). The quarter-final keeps no new clubs. */
+    uint32_t po = t, r16 = t + ROUND_SIZE, qf = t + 2 * ROUND_SIZE;
+    wr16(g_mem, po + 7, ROUND_CODE_KO_PO);
+    wr16(g_mem, po + 0xd, 0x200);
+    wr16(g_mem, po + 0x18, 16), wr16(g_mem, po + 0x1a, 8), wr16(g_mem, po + 0x1c, 16), wr16(g_mem, po + 0x1e, 0);
+    wr16(g_mem, r16 + 7, ROUND_CODE_R16);
+    wr16(g_mem, r16 + 0xd, 0x400);
+    g_mem[r16 + 0xb] = 4;
+    wr16(g_mem, r16 + 0x18, 16), wr16(g_mem, r16 + 0x1a, 8), wr16(g_mem, r16 + 0x1c, 8), wr16(g_mem, r16 + 0x1e, 16);
+    for (uint32_t x = po; x <= r16; x += ROUND_SIZE) {
+        wr32(g_mem, x + 0x5c, 0), wr32(g_mem, x + 0x60, 0), wr32(g_mem, x + 0x64, 0);
+        g_mem[x + 0x22] = 7;                                        /* the second leg a week later */
+    }
+    wr16(g_mem, qf + 0xd, 0);
+    wr16(g_mem, qf + 0x1c, 0);
+    wr16(g_mem, qf + 0x1e, 0);
+    /* Dates of 2024/25 (Q547): the play-off draw on 31 January, first legs on 12 February; the round of 16 draw
+     * on 21 February, first legs on 5 March. Weekday and time as the quarter-final (0x584344..0x584368). */
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, cl + 0x40);
+    uint32_t d0[7] = {t, 0, 31, 0, 1, 4, year};
+    call_cdecl(F_DRAW_DATE, 7, d0);
+    uint32_t m0[9] = {t, 0, 12, 1, 1, 2, 2, year, 0};
+    if (!rt_unwinding) call_cdecl(F_MATCH_DATE, 9, m0);
+    uint32_t d1[7] = {t, 1, 21, 1, 1, 4, year};
+    if (!rt_unwinding) call_cdecl(F_DRAW_DATE, 7, d1);
+    uint32_t m1[9] = {t, 1, 5, 2, 1, 2, 2, year, 0};
+    if (!rt_unwinding) call_cdecl(F_MATCH_DATE, 9, m1);
+    if (!rt_unwinding) season_uefa_no_away_goals(t, LEAGUE_KO_ROUNDS, (int)year);
+    return rt_unwinding ? 0 : t;
+}
+
+/* A coefficient point, the money and its news for each club (as each group of the original's group draw,
+ * 0x5857ea..0x58582a; code 0x449, 0x585819). */
+static void pay_clubs(uint32_t cl, const uint32_t *clubs, int n, uint32_t amount, uint32_t code)
+{
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        uint32_t p[2] = {rd32(g_mem, clubs[i] + 0x53), 1};
+        call_this(F_NATION_POINTS, rd32(g_mem, SEEDING), 2, p);
+        if (rt_unwinding) return;
+        uint32_t c[1] = {clubs[i]};
+        uint32_t fin = call_this(F_GET_FINANCE, rd32(g_mem, FINANCES), 1, c);
+        if (rt_unwinding) return;
+        uint32_t m[1] = {amount};
+        if (readable(fin)) call_this(F_ADD_PRIZE, fin, 1, m);
+        if (rt_unwinding) return;
+        uint32_t nw[7] = {clubs[i], amount, 0, 0xffffffffu, code, 0, 0xfffffffeu};
+        call_this(F_PRIZE_NEWS, cl, 7, nw);
+    }
+}
+
+static void reset_bookings(uint32_t cl, const uint32_t *clubs, int n)
+{
+    uint32_t bodies = rd32(g_mem, RULING_BODIES);
+    uint32_t body = readable(bodies) ? rd32(g_mem, rd32(g_mem, bodies) + 4u * (uint32_t)(int8_t)g_mem[cl + 0x50]) : 0;
+    for (int i = 0; i < n && readable(body) && !rt_unwinding; i++) {
+        uint32_t a[1] = {clubs[i]};
+        call_this(F_BOOKINGS, body, 1, a);
+    }
+}
+
+/* The draw of the league phase, in place of draw_phase1_groups 0x585290 at stage -1. Its clubs as the original
+ * takes them (0x585358..0x5853ba): list slots 0 to 15 and every entry with byte +5 = 1 (the play-off winners and
+ * the other direct clubs, season_uefa_qual.c). Then the play-off losers go to the Europa League (entry byte
+ * +5 = 2, from its slot count - 0x18, as 0x5859fa..0x585a86). */
+static void draw_league(uint32_t cl)
+{
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, cl + 0x40);
+    const SeasonUefa *r = season_uefa_row((int)year);
+    uint32_t clubs[SEASON_LEAGUE_CLUBS + 8];
+    int n = 0;
+    uint32_t list = rd32(g_mem, cl + 0x14), entries = rd32(g_mem, cl + 0xa7);
+    for (int i = 0; i < 16 && readable(list); i++)
+        if (n < SEASON_LEAGUE_CLUBS + 8) clubs[n++] = rd32(g_mem, list + 6u * (uint32_t)i);
+    int count = (int16_t)rd16(g_mem, cl + 0x3e);
+    for (int i = 0; i < count && readable(entries); i++)
+        if (g_mem[entries + 6u * (uint32_t)i + 5] == 1 && n < SEASON_LEAGUE_CLUBS + 8)
+            clubs[n++] = rd32(g_mem, entries + 6u * (uint32_t)i);
+    if (!r || !r->cl_league || n != SEASON_LEAGUE_CLUBS) {
+        fprintf(stderr, "recomp: uefa: Champions League league phase: %d clubs, not 36\n", n);
+        return;
+    }
+    reset_bookings(cl, clubs, n);
+    pay_clubs(cl, clubs, n, GROUP_PRIZE, 0x449);
+    if (rt_unwinding) return;
+    int weekday = 0;
+    const SeasonLeagueDay *days = season_uefa_league_days('c', &weekday);
+    uint32_t st = season_uefa_league_make(cl, clubs, r->cl_league, 0, LEAGUE_NAME, days, weekday);
+    if (rt_unwinding || !st) return;
+    wr32(g_mem, rd32(g_mem, cl + 0xc), st);
+    wr32(g_mem, cl + 0x30, 0);
+    season_uefa_league_news(st);
+    if (rt_unwinding) return;
+    /* The play-off losers to the Europa League. */
+    int32_t uc_key = (int32_t)rd32(g_mem, KEY_UC);
+    uint32_t uc = uc_key >= 0 ? rd32(g_mem, rd32(g_mem, COMP_TABLE) + 4u * (uint32_t)uc_key) : 0;
+    if (!readable(uc) || !readable(entries)) return;
+    uint32_t at = rd32(g_mem, uc + 0xa7) + 6u * (uint32_t)((int16_t)rd16(g_mem, uc + 0x3e) - 0x18);
+    for (int i = 0; i < count; i++) {
+        if (g_mem[entries + 6u * (uint32_t)i + 5] != 2) continue;
+        uint32_t club = rd32(g_mem, entries + 6u * (uint32_t)i);
+        wr32(g_mem, at, club);
+        g_mem[at + 4] = 0, g_mem[at + 5] = 0;
+        at += 6;
+        int16_t k = (int16_t)rd16(g_mem, uc + 0x36);
+        uint32_t e = rd32(g_mem, uc + 0x14) + 6u * (uint32_t)k;
+        wr32(g_mem, e, club);
+        g_mem[e + 4] = 5;
+        wr16(g_mem, uc + 0x36, (uint16_t)(k + 1));
+        wr32(g_mem, club + 0x1db, rd32(g_mem, KEY_UC));
+    }
+    Cpu saved = cpu;
+    cpu.ecx = uc;
+    rt_callback(rd32(g_mem, rd32(g_mem, uc) + 0x5c), 0, NULL);          /* the UEFA Cup's rank_teams (0x585a86) */
+    if (rt_unwinding) return;
+    cpu = saved;
+}
+
+/* The knockout stage after the league phase, in slot 1. */
+static void draw_league_ko(uint32_t cl)
+{
+    uint32_t league = stage_at(cl, 0);
+    if (!readable(league)) return;
+    uint32_t ca[2] = {LEAGUE_KO_CLUBS, 4};
+    uint32_t list = call_cdecl(F_CALLOC, 2, ca);
+    uint32_t sz[1] = {LEAGUE_KO_CLUBS};
+    uint32_t tiers = rt_unwinding || !readable(list) ? 0 : call_cdecl(F_MALLOC, 1, sz);
+    if (rt_unwinding) return;
+    uint32_t name_id = 0, table = 0, obj = 0;
+    if (readable(tiers) && season_uefa_league_knockout_list(league, list, tiers)) {
+        uint32_t clubs[LEAGUE_KO_CLUBS];
+        for (int i = 0; i < LEAGUE_KO_CLUBS; i++) clubs[i] = rd32(g_mem, list + 4u * (uint32_t)i);
+        reset_bookings(cl, clubs, LEAGUE_KO_CLUBS);
+        pay_clubs(cl, clubs, LEAGUE_KO_CLUBS, PHASE2_PRIZE, ROUND_CODE_KO_PO);
+        table = rt_unwinding ? 0 : league_ko_table(cl, &name_id);
+        uint32_t ns[1] = {0xb2};
+        obj = table && !rt_unwinding ? call_cdecl(F_NEW, 1, ns) : 0;
+    }
+    if (rt_unwinding) return;
+    if (readable(obj)) {
+        uint32_t args[15] = {cl, LEAGUE_KO_CLUBS, list, LEAGUE_KO_ROUNDS, rd32(g_mem, cl + 4), table,
+                             (uint32_t)(int16_t)rd16(g_mem, cl + 0x40), KO_SLOT_LEAGUE, 2, name_id, 0x14, 1, 0, 0, tiers};
+        call_this(F_CUP_STAGE, obj, 15, args);
+        if (rt_unwinding) return;
+        wr32(g_mem, rd32(g_mem, cl + 0xc) + 4u * KO_SLOT_LEAGUE, obj);
+    }
+    uint32_t fl[1] = {list};
+    if (readable(list)) call_cdecl(F_FREE, 1, fl);
+    uint32_t ft[1] = {tiers};
+    if (!rt_unwinding && readable(tiers)) call_cdecl(F_FREE, 1, ft);
+    uint32_t fb[1] = {table};
+    if (!rt_unwinding && readable(table)) call_cdecl(F_FREE, 1, fb);
+    if (rt_unwinding || !readable(obj)) return;
+    uint32_t r0[1] = {0};
+    call_this(F_SET_UP_ROUND, obj, 1, r0);
+    if (rt_unwinding) return;
+    wr32(g_mem, cl + 0x30, KO_SLOT_LEAGUE);
+    fprintf(stderr, "recomp: uefa: Champions League knockout phase play-offs drawn\n");
+}
+
 /* ---- Wraps of the Champions League class ---- */
 
 void o_005851d0(void);
@@ -406,6 +608,27 @@ RT_WRAP(00583c50, cl_round_table)
     /* Stage 8 of the format with a round of 16 is its knockout stage. Comp::build_match_date_list 0x48d500 (the
      * Schedule tab) asks for each stage up to +0x2c - 1 (0x48d5b0..0x48d5cb); the original's stage 8 is the
      * first group of phase 2 (0x58406b). */
+    /* Slice 25: the league phase (stage 0: 8 match days, a league table) and its knockout stage (stage 1). */
+    if ((stage == 0 || stage == KO_SLOT_LEAGUE) && league_layout(cl)) {
+        uint32_t out_rounds = rt_arg(1), out_name = rt_arg(2), out_league = rt_arg(3), name_id = 0, t;
+        const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, cl + 0x40));
+        int weekday = 0, rounds = r && r->cl_league ? r->cl_league : 8;
+        if (stage == 0) {
+            const SeasonLeagueDay *days = season_uefa_league_days('c', &weekday);
+            t = season_uefa_league_table((uint32_t)(int16_t)rd16(g_mem, cl + 0x40), rounds, days, weekday);
+            name_id = LEAGUE_NAME;
+        } else {
+            t = league_ko_table(cl, &name_id), rounds = LEAGUE_KO_ROUNDS;
+        }
+        if (rt_unwinding) return;
+        if (t) {
+            if (readable(out_rounds)) wr16(g_mem, out_rounds, (uint16_t)rounds);
+            if (readable(out_name)) wr16(g_mem, out_name, (uint16_t)name_id);
+            if (readable(out_league)) wr32(g_mem, out_league, stage == 0 ? 1u : 0u);
+            rt_ret_stdcall(t, 4);
+            return;
+        }
+    }
     if (stage == KO_SLOT_ROUND_OF_16 && round_of_16_layout(cl)) {
         uint32_t out_rounds = rt_arg(1), out_name = rt_arg(2), out_league = rt_arg(3), name_id = 0;
         uint32_t t = ko_table(cl, &name_id);
@@ -426,6 +649,12 @@ RT_WRAP(005851d0, cl_advance_stage)
 {
     uint32_t cl = cpu.ecx;
     int32_t now = (int32_t)rd32(g_mem, cl + 0x30);
+    if (league_layout(cl) && (now == -1 || now == 0)) {
+        if (now == -1) draw_league(cl);         /* each sets +0x30 once its stage is in its slot */
+        else draw_league_ko(cl);
+        if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
+        return;
+    }
     if (!round_of_16_layout(cl) || now != KO_SLOT_ROUND_OF_16 - 1) {
         o_005851d0();
         return;
@@ -441,10 +670,11 @@ RT_WRAP(005851d0, cl_advance_stage)
 RT_WRAP(00586900, cl_rank_teams)
 {
     uint32_t cl = cpu.ecx;
-    if (!round_of_16_layout(cl)) {
+    if (!round_of_16_layout(cl) && !league_layout(cl)) {
         o_00586900();
         return;
     }
+    int league = league_layout(cl);
     uint32_t stats = rd32(g_mem, cl + 8);
     int16_t n = (int16_t)rd16(g_mem, cl + 0x36);
     if (!readable(stats) || n <= 0) {
@@ -472,20 +702,25 @@ RT_WRAP(00586900, cl_rank_teams)
         }                                                                                        \
     } while (0)
     uint32_t name_id = 0;
-    uint32_t ko = ko_table(cl, &name_id);
+    int ko_rounds = league ? LEAGUE_KO_ROUNDS : 4;
+    uint32_t ko = league ? league_ko_table(cl, &name_id) : ko_table(cl, &name_id);
     if (rt_unwinding) return;
     if (ko) {
-        for (int r = 3; r >= 0; r--) {
+        for (int r = ko_rounds - 1; r >= 0; r--) {
             int winners = (int16_t)rd16(g_mem, ko + (uint32_t)r * ROUND_SIZE + 0x1a);
-            if (r == 3) BAND(winners);
+            if (r == ko_rounds - 1) BAND(winners);
             BAND(winners);
         }
         uint32_t f[1] = {ko};
         call_cdecl(F_FREE, 1, f);
         if (rt_unwinding) return;
     }
-    BAND(8);
-    BAND(8);
+    if (league) {
+        BAND(SEASON_LEAGUE_CLUBS - LEAGUE_KO_CLUBS);        /* places 25 to 36 of the league phase */
+    } else {
+        BAND(8);
+        BAND(8);
+    }
     uint32_t qual = rd32(g_mem, cl + 0xa3);
     for (int r = (int16_t)rd16(g_mem, cl + 0x3c) - 1; r >= 0 && readable(qual) && !rt_unwinding; r--)
         BAND((int16_t)rd16(g_mem, qual + (uint32_t)r * ROUND_SIZE + 0x1a));
@@ -496,12 +731,14 @@ RT_WRAP(00586900, cl_rank_teams)
     if (!rt_unwinding) rt_ret_cdecl(0);
 }
 
-/* The stage argument at stack index arg: the knockout in slot 8 is the knockout 12 of the original. */
+/* The stage argument at stack index arg: the knockout in slot 8 (slot 1 with a league phase) is the knockout 12
+ * of the original. */
 static void map_stage_arg(uint32_t cl, int arg)
 {
-    if (!round_of_16_layout(cl)) return;
+    int slot = league_layout(cl) ? KO_SLOT_LEAGUE : round_of_16_layout(cl) ? KO_SLOT_ROUND_OF_16 : -1;
+    if (slot < 0) return;
     uint32_t at = cpu.esp + 4 + 4u * (uint32_t)arg;
-    if ((int8_t)g_mem[at] == KO_SLOT_ROUND_OF_16) g_mem[at] = KO_SLOT_ORIGINAL;
+    if ((int8_t)g_mem[at] == slot) g_mem[at] = KO_SLOT_ORIGINAL;
 }
 
 /* EuropeanCup::set_club_progress, thiscall (club, stage, code, code, code). */
@@ -548,11 +785,22 @@ static void uefa_season(int season)
 {
     const SeasonUefa *now = season_uefa_row(season), *before = season_uefa_row(season - 1);
     if (!now || !before || now == before) return;
-    if (season_uefa_cl_round_of_16(now) && !season_uefa_cl_round_of_16(before))
+    /* Slice 25: the league phase (2024/25 on). */
+    if (now->cl_league && !before->cl_league)
+        season_change_news("The Champions League group stage is now a league phase: one table of 36 clubs who play %d "
+                           "matches each. Places 1 to 8 go to the round of 16, places 9 to 24 to knockout phase "
+                           "play-offs.", now->cl_league);
+    if (now->uc_league && !before->uc_league)
+        season_change_news("The %s and the Conference League now also have a league phase of 36 clubs, with %d and "
+                           "%d matches each.", uc_name(season), now->uc_league, now->ecl_league);
+    if (now->cl_league || before->cl_league) {
+        /* No group stage news across the change to the league phase: the sentences above say it. */
+    } else if (season_uefa_cl_round_of_16(now) && !season_uefa_cl_round_of_16(before))
         season_change_news("The Champions League now has one group stage of 8 groups and a knockout round of 16.");
     else if (!season_uefa_cl_round_of_16(now) && season_uefa_cl_round_of_16(before))
         season_change_news("The Champions League now has two group stages and quarter-finals.");
-    if (now->uc_groups && !before->uc_groups)
+    if (now->uc_league || before->uc_league) {
+    } else if (now->uc_groups && !before->uc_groups)
         season_change_news("The UEFA Cup now has a group stage of %d groups of %d clubs, then a round of %d.",
                            now->uc_groups, now->uc_group_clubs, season_uefa_uc_round(now, "KO"));
     else if (!now->uc_groups && before->uc_groups)
@@ -568,7 +816,7 @@ static void uefa_season(int season)
                            "and a League Path for the other clubs.");
     if (now->uic_clubs < 0 && before->uic_clubs >= 0) season_change_news("The Intertoto Cup is no longer held.");
     /* Slice 24. */
-    if (now->uc_ko_po && !before->uc_ko_po)
+    if (now->uc_ko_po && !before->uc_ko_po && !now->uc_league)
         season_change_news("The %s group winners now go to the round of 16, and the runners-up meet the Champions "
                            "League group thirds in knockout round play-offs.", uc_name(season));
     if (!now->away_goals && before->away_goals)

@@ -294,8 +294,11 @@ static int make_layout(const SeasonUefa *r, char comp, Layout *L, uint32_t cl)
     L->direct_first = slot;
     int direct = L->count[group_code(comp)];
     if (comp == 'c') {
-        if (direct < DIRECT_IN_LIST || direct + cp_win + lp_win != 32) {
-            fprintf(stderr, "recomp: uefa: CL groups: %d direct and %d winners, not 32\n", direct, cp_win + lp_win);
+        /* Slice 25: the league phase has 36 clubs (2024/25 on), the group stage 32. */
+        int group = season_uefa_cl_round(r, "Groups");
+        if (direct < DIRECT_IN_LIST || direct + cp_win + lp_win != group) {
+            fprintf(stderr, "recomp: uefa: CL groups: %d direct and %d winners, not %d\n", direct, cp_win + lp_win,
+                    group);
             return 0;
         }
         L->slots = slot + direct - DIRECT_IN_LIST;
