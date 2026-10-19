@@ -282,6 +282,16 @@ def division_records(folder):
 DATA_COUNTING = {"IrePrm", "IreFirst", "PolFirst", "NorFirst"}     # the classes that count the clubs of the data
 
 
+def record_names(season):
+    """Slice 15b: {(division, real name of the club moves table): the name of the new club record} of a season
+    (tools/seasons/make_club_records.py). RECOMP_CLUB_RECORDS=off: none."""
+    if os.environ.get("RECOMP_CLUB_RECORDS") == "off":
+        return {}
+    import make_club_records
+    out, _errors = make_club_records.build()
+    return {(r[1], r[2]): r[3] for r in out if r[0] == season}
+
+
 def club_differences(seasons, comps, clubs, data_dir):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
@@ -314,11 +324,14 @@ def club_differences(seasons, comps, clubs, data_dir):
     for n in held:
         plain_to[make_clubs.plain_name(n)].add(n)
     lists = collections.OrderedDict()
+    records = record_names(season)                  # slice 15b: the new club records of the start season
     for s, division, club_id, club, _ in make_clubs.build()[0]:
         if s != season:
             continue
         if names.get(club_id) == club or club in held:
             name = club
+        elif club_id == -1 and (division, club) in records:
+            name = records[(division, club)]
         else:                               # the plain form, when one club of the database has it (season_clubs.c)
             name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
         lists.setdefault(division, []).append(name)

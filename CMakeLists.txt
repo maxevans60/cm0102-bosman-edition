@@ -141,6 +141,7 @@ if(NOT WIN32)
     # The names table and the club moves table (0.6.0 slice 15): the tools read every part and stop on a bad row.
     add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
     add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)
+    add_test(NAME season_club_records_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_club_records.py" --check)
     # The UEFA formats by season (0.6.0 slice 22): the committed table matches uefa.tsv, and its lookups.
     add_test(NAME season_uefa_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_uefa_table.py" --check)
     add_executable(season_uefa_test tests/seasons/test_season_uefa.c src/recomp_rt/win/season_uefa_table.c
@@ -314,8 +315,19 @@ if(EXISTS "${CM0102_EXE}")
             ${RULES_PARTS} ${CLUBS_PARTS}
         COMMENT "Making the club moves table"
         VERBATIM)
+    # 0.6.0 slice 15b: the club records table (Seasons/club_records.tsv).
+    file(GLOB CLUB_RECORDS_PARTS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/docs/research/club-records-0.6.0/*.tsv")
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/club_records.tsv"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_club_records.py"
+            --out "${CMAKE_BINARY_DIR}/seasons/club_records.tsv"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_club_records.py" "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py"
+            ${RULES_PARTS} ${CLUBS_PARTS} ${CLUB_RECORDS_PARTS}
+        COMMENT "Making the club records table"
+        VERBATIM)
     add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv"
-        "${CMAKE_BINARY_DIR}/seasons/names.tsv" "${CMAKE_BINARY_DIR}/seasons/clubs.tsv")
+        "${CMAKE_BINARY_DIR}/seasons/names.tsv" "${CMAKE_BINARY_DIR}/seasons/clubs.tsv"
+        "${CMAKE_BINARY_DIR}/seasons/club_records.tsv")
     target_sources(cm0102_recomp PRIVATE "${CMAKE_BINARY_DIR}/seasons/comp_classes.c")
     add_dependencies(cm0102_recomp seasons_rules)
     # The season change (0.6.0 slice 16): the committed wraps of start_new_season match the class table.

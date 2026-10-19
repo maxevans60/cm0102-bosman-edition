@@ -54,6 +54,10 @@ extern char win_cwd[1024];             /* current folder, as a Windows path */
 /* Handles of files (files.c). */
 int win_is_file_handle(uint32_t h);
 int win_close_file(uint32_t h);
+/* Memory files (season_records.c, 0.6.0 slice 15b): a read-only open of the host path gives these bytes in place
+ * of the file on disk. The caller keeps the buffer until win_memory_files_clear. */
+void win_memory_file(const char *host_path, const uint8_t *data, size_t size);
+void win_memory_files_clear(void);
 
 /* Memory that the runtime owns and never frees, zeroed (kernel32.c). */
 uint32_t win_static_alloc(uint32_t size);
