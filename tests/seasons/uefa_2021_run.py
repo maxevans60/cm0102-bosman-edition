@@ -32,6 +32,8 @@ its first season.
     load    October 2021: the game saves 30 days after the start (inside the qualifying rounds) and 120 days after
             the start (in the group stage); a new program loads each save and plays to the end of the season;
             the three cups play to a winner
+    repeat  October 2021, twice: the saves 120 days after the start (in the group stages, with the Conference League)
+            are equal (a moved season repeats)
 A run takes about 10 to 40 minutes on a loaded machine. --jobs (default 1).
 """
 import concurrent.futures
@@ -209,12 +211,29 @@ def run_load(program, game, work):
     return fails
 
 
+def run_repeat(program, game, work):
+    """Two 2021/22 games with the same steps give equal saves 120 days after the start
+    (tests/seasons/uefa_access_run.py run_repeat)."""
+    import smoke_run
+    saves = []
+    for k in ("a", "b"):
+        w = os.path.join(work, k)
+        rrc.run(program, game, 2021, 2021, os.path.join(DB, "October 2021"), ["England"], [], w, 1800, None,
+                {"RECOMP_SAVE_AFTER_DAYS": "120"})
+        path = os.path.join(w, "user", smoke_run.SAVE_NAME)
+        if not os.path.exists(path):
+            return [f"repeat: run {k} made no save ({w})"]
+        saves.append(open(path, "rb").read())
+    return [] if saves[0] == saves[1] else ["repeat: the two 2021/22 saves differ"]
+
+
 RUNS = {
     "2021": run_season("2021", 2021, "October 2021", False),
     "2022": run_season("2022", 2022, "October 2022", True),
     "2023": run_season("2023", 2023, "October 2023", True, True),
     "change": run_change,
     "load": run_load,
+    "repeat": run_repeat,
 }
 
 
