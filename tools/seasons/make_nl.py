@@ -100,6 +100,14 @@ NAMES = {
 }
 LEAGUES = "ABCD"
 
+# The best runners-up of a league that go up too, by league (the up column of the row: "best League C
+# runner-up" of CONCACAF 2023-24 and 2024-25; 2026-27 as 2024-25).
+UP_SECOND = {
+    "int-continental-248": (0, 0, 1),
+    "int-continental-259": (0, 0, 1),
+    "int-continental-281": (0, 0, 1),
+}
+
 # Rows whose format does not give every size: the sizes are checked against the row named here. 2022-23:
 # "structure unchanged from 2019-20: inference" (row 237). 2024-25 and 2026-27: League C 9 from the moves of
 # 2023-24 (3 winners and the best runner-up up, 4 down from B), as row 248 gives it.
@@ -262,7 +270,7 @@ def text():
         mds = "{" + ", ".join(day(f"md{k}") for k in range(1, 7)) + "}"
         lines.append(f'    {{{c_str(e["confed"])}, {c_str(e["edition"])}, {e["season"]}, {e["year"]}, '
                      f'{len(e["sizes"])}, {arr(e["sizes"])}, {arr(e["groups"])}, {e["up"]}, {arr(e["down"])}, '
-                     f'{arr(e["lowest"])},')
+                     f'{arr(e["lowest"])}, {arr(UP_SECOND.get(e["row"], ()))},')
         lines.append(f'     {day("draw")}, {mds}, {day("sf1")}, {day("final")}, {c_str(e["row"])}}},')
     lines += [
         "};",

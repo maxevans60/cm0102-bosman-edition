@@ -35,6 +35,8 @@ typedef struct {
     int up_winners;             /* 1: the group winners of each league below A go up one league */
     int down_last[NL_MAX_LEAGUES];   /* 1: the last of each group of the league goes down one league */
     int down_lowest[NL_MAX_LEAGUES]; /* more nations of the league that go down: the lowest of the ranking */
+    int up_second[NL_MAX_LEAGUES];   /* the best runners-up of the league by the ranking that go up too (the best
+                                        League C runner-up of CONCACAF from 2023-24) */
     SeasonNlDate draw;          /* the draw of the league phase */
     SeasonNlDate md[6];         /* the first day of each of the six matchdays of the league phase */
     SeasonNlDate sf, final;     /* the semi-finals and the final of the finals of four */
