@@ -319,6 +319,9 @@ uint32_t rt_club_world_step(uint32_t original);
 uint32_t rt_club_world_month(uint32_t original);
 uint32_t rt_club_world_day(uint32_t original);
 uint32_t rt_club_world_waits(uint32_t obj);
+/* The CONCACAF Champions Cup's club count of the edition of `year` (slice 26c, win/season_club_cups.c): 8 in the
+ * base game and with no row. */
+uint32_t rt_concacaf_clubs(uint32_t year, uint32_t original);
 /* International competitions (0.6.0 slice 27, win/season_intl.h): the edition year of a finals class at its
  * constructor and its start_new_season, the golden goal bit of a knockout round, and the World Cup holder of the
  * qualifying sections and of slot 0. The sites of tools/recomp/seasons.py call them. Each gives the original's

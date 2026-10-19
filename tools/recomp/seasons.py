@@ -99,6 +99,12 @@ PATCHES = {
     0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
     0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
     0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
+    # Slice 26c (season_club_cups.c): the club count of the CONCACAF Champions Cup (Con_Champ) by season, 8 in
+    # the original: the constructor's club list (calloc count 0x4c0cc2, +0x3e at 0x4c0cc4) and the picker's +0x3e
+    # (0x4c11af). esi is the object; +0x40 is its year (set at 0x4c0c8d).
+    0x4C0CC2: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
+    0x4C0CC4: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
+    0x4C11AF: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
     # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). The golden goal is bit
     # 0x80 of the rule flags of a knockout round (sweep-international section 7). The round template function
     # of each class holds the competition in edi (set at 0x92c299, 0x57ab99, 0x58b56f) and the round records in

@@ -383,6 +383,8 @@ static uint32_t original_table(uint32_t obj)
 
 typedef struct { int id, teams, ties, fresh, first, legs, match; } Round;
 
+static int plan_knockout(const Edition *e, int n, Round *r);
+
 /* The rounds of an edition of n clubs: a knockout with the byes in the first round, or the stepladder. Returns the
  * count. match: the day of the first leg, a day of the year of e->year (it may pass 365). */
 static int plan_rounds(const ClubCup *k, const Edition *e, int n, Round *r)
@@ -400,6 +402,14 @@ static int plan_rounds(const ClubCup *k, const Edition *e, int n, Round *r)
         r[count++] = (Round){0x96, 2, 1, 1, 5, 1, last};
         return count;
     }
+    return plan_knockout(e, n, r);
+}
+
+/* A knockout of n clubs with the byes in the first round: the rounds and their days (see plan_rounds). */
+static int plan_knockout(const Edition *e, int n, Round *r)
+{
+    int count = 0;
+    int last = e->last + (e->last_year > e->year ? 365 + is_leap(e->year) : 0);
     int p = 1;
     while (p * 2 <= n) p *= 2;
     int teams = p;
@@ -827,10 +837,131 @@ RT_WRAP(004c6430, assign_libertadores_places)
     fprintf(stderr, "recomp: club cup new_sudamericana %d: %d clubs marked (ARG %d, BRA %d)\n", y, marked, arg, bra);
 }
 
+/* ---- The CONCACAF Champions Cup's club count (part 26c; research: the shared notes, counts research section 3) ----
+ *
+ * Con_Champ (constructor 0x4c0c40, vtable 0x968aa0, Cup base) plays 8 clubs in 3 one-match rounds (round table
+ * 0x4c0f00, stage -1 only: 0x4c0f0a; draw 1 August, matches 28 September, 1 and 4 October). The table gives 16
+ * (2001/02, 2002/03, 2017/18 to 2022/23), 8 (2003/04 to 2007/08), 24 (2008/09 to 2016/17) and 27 (2023/24 on).
+ * The count goes to the constructor's club list and +0x3e (seasons.py sites 0x4c0cc2, 0x4c0cc4), to the picker's
+ * +0x3e (0x4c11af) and, for a later edition, to +0x3e before start_new_season, which makes the list of +0x3e clubs
+ * (0x4c14de..0x4c14f5) and the round table and tree again (slot 35). The round table wrap gives a knockout with
+ * the byes in the first round (plan_rounds). The picker wrap keeps the original's 8 clubs (Mexico, the MLS and US
+ * Open Cup winners, Central America, the Caribbean, 0x4c1203..0x4c136b) at the end of the list, where the byes
+ * enter, and fills the first places with the North American clubs of the highest reputation. Decisions (club-cups
+ * doc): one match a round, 3 days apart, in the original's weeks; 15 clubs (2021/22) play as 16; the group
+ * seasons play as a knockout of the same count. */
+
+#define CON_CHAMP_VTABLE 0x968aa0u
+#define CON_CHAMP_ORIGINAL 8
+
+static int concacaf_count(int year)
+{
+    if (!season_comps_on()) return 0;
+    int s = season_changing_rules() ? year : season_start_year();
+    for (int y = s; y >= SEASON_RULE_FIRST; y--) {               /* after the last known count it stays (Q248) */
+        const SeasonRule *r = row_of("concacaf_champions", y);
+        if (!r) return 0;
+        if (r->season != y) { y = r->season + 1; continue; }
+        if (r->clubs >= 2) {
+            int n = r->clubs == 15 ? 16 : r->clubs;
+            return n < CON_CHAMP_ORIGINAL ? CON_CHAMP_ORIGINAL : n > MAX_CLUBS ? MAX_CLUBS : n;
+        }
+    }
+    return 0;
+}
+
+uint32_t rt_concacaf_clubs(uint32_t year, uint32_t original)
+{
+    int n = concacaf_count((int16_t)year);
+    return n ? (uint32_t)n : original;
+}
+
+static int is_con_champ(uint32_t obj) { return obj && rd32(g_mem, obj) == CON_CHAMP_VTABLE; }
+
+void o_004c11a0(void);
+void o_004c0f00(void);
+
+/* Con_Champ::pick_clubs (this), returns 1 (0x4c1433). The original writes club list slots 0 to 7. */
+RT_WRAP(004c11a0, con_champ_pick)
+{
+    uint32_t obj = cpu.ecx;
+    o_004c11a0();
+    if (rt_unwinding || !is_con_champ(obj)) return;
+    int n = (int16_t)rd16(g_mem, obj + CLUB_COUNT_AT);
+    uint32_t list = rd32(g_mem, obj + CLUB_LIST_AT);
+    if (n <= CON_CHAMP_ORIGINAL || n > MAX_CLUBS || !list || !concacaf_count((int16_t)rd16(g_mem, obj + YEAR_AT)))
+        return;
+    uint32_t out[MAX_CLUBS] = {0};
+    for (int i = 0; i < CON_CHAMP_ORIGINAL; i++) out[n - CON_CHAMP_ORIGINAL + i] = rd32(g_mem, list + 6u * (uint32_t)i);
+    int filled = 0;
+    for (int i = 0; i < n - CON_CHAMP_ORIGINAL; i++) {
+        uint32_t skip[MAX_CLUBS];
+        int k = 0;
+        for (int j = 0; j < n; j++) if (out[j]) skip[k++] = out[j];
+        uint32_t c = season_comps_top_club(CONT_NORTH_AMERICA, skip, k);
+        if (!c) c = season_comps_top_club(CONT_SOUTH_AMERICA, skip, k);
+        if (c) out[i] = c, filled++;
+    }
+    for (int i = 0; i < n; i++) {
+        uint32_t e = list + 6u * (uint32_t)i;
+        wr32(g_mem, e, out[i]);
+        g_mem[e + 4] = 0;
+        g_mem[e + 5] = 0;
+    }
+    fprintf(stderr, "recomp: concacaf champions %d: %d clubs (%d added)\n", (int16_t)rd16(g_mem, obj + YEAR_AT), n,
+            filled);
+}
+
+/* Con_Champ::create_round_table (char stage, short *rounds, short *code, int *is_league), ret 0x10: stage -1. */
+RT_WRAP(004c0f00, con_champ_rounds)
+{
+    uint32_t obj = cpu.ecx, rounds_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xffu);
+    int n = is_con_champ(obj) ? (int16_t)rd16(g_mem, obj + CLUB_COUNT_AT) : 0;
+    o_004c0f00();
+    uint32_t tmpl = cpu.eax;
+    if (rt_unwinding || stage != -1 || n <= CON_CHAMP_ORIGINAL || n > MAX_CLUBS || !tmpl ||
+        !concacaf_count((int16_t)rd16(g_mem, obj + YEAR_AT)))
+        return;
+    Cpu saved = cpu;
+    /* The knockout of n clubs (one leg a round): plan_rounds gives teams, ties and byes. */
+    Edition e = {0, 60, 0, 0, n, 1, 1};
+    Round r[8];
+    int count = plan_knockout(&e, n, r);
+    uint32_t table = game_new((uint32_t)count * ROUND_SIZE);
+    if (rt_unwinding || !table) return;
+    int first = (int16_t)rd16(g_mem, tmpl + 0x03), draw0 = (int16_t)rd16(g_mem, tmpl + 0x00);
+    for (int i = 0; i < count; i++) {
+        uint32_t t = table + (uint32_t)i * ROUND_SIZE;
+        int src = i == count - 1 ? 2 : i == count - 2 ? 1 : 0;   /* the original's final, semi-final, first round */
+        memcpy(g_mem + t, g_mem + tmpl + (uint32_t)src * ROUND_SIZE, ROUND_SIZE);
+        int match = first + 3 * i;
+        wr16(g_mem, t + 0x00, (uint16_t)(i == 0 ? draw0 : match - 2));
+        wr16(g_mem, t + 0x03, (uint16_t)match);
+        wr16(g_mem, t + 0x07, (uint32_t)r[i].id);
+        wr16(g_mem, t + 0x09, (uint32_t)i);
+        wr16(g_mem, t + 0x18, (uint32_t)r[i].teams);
+        wr16(g_mem, t + 0x1a, (uint32_t)r[i].ties);
+        wr16(g_mem, t + 0x1c, (uint32_t)r[i].fresh);
+        wr16(g_mem, t + 0x1e, (uint32_t)r[i].first);
+    }
+    game_free(tmpl);
+    if (rt_unwinding) return;
+    cpu = saved;
+    wr16(g_mem, rounds_at, (uint16_t)count);
+    cpu.eax = table;
+    fprintf(stderr, "recomp: concacaf champions %d: %d clubs, %d rounds\n", (int16_t)rd16(g_mem, obj + YEAR_AT), n,
+            count);
+}
+
 /* ---- Years with no edition (the shared rule of season_comps.h) ---- */
 
 static void cups_before(const SeasonChange *c)
 {
+    if (is_con_champ(c->comp) && c->started) {                  /* the next edition's club count, see above */
+        int n = concacaf_count((int16_t)rd16(g_mem, c->comp + YEAR_AT) + 1);
+        if (n) wr16(g_mem, c->comp + CLUB_COUNT_AT, (uint16_t)n);
+    }
     const ClubCup *k = cup_of_object(c->comp);
     if (!k || !c->started) return;
     int next = (int16_t)rd16(g_mem, c->comp + YEAR_AT) + 1;     /* start_new_season adds 1 (0x92be3e) */

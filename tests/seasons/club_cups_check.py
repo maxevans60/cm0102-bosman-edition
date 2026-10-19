@@ -19,6 +19,8 @@ RECOMP_SEASON_CHANGE_LOG=1. The runs and the editions each must show:
               the AFC Champions League Two of 2024/25 (32 clubs, final May 2025), the Recopa and the Copa
               Sudamericana of 2025
     2001      the base game (2001/02, changing rules off) to 2002/03: no new cup at all (Q152, Q342)
+    2008-all  September 2008, 2008/09 only, Select All: the CONCACAF Champions Cup of 24 clubs (the original
+              plays 8; the United States, entry 4, needs Select All). It takes 2 hours or more
 
 The checks (each run): the jump ends with code 0; each listed edition logs its club list with the table's club
 count ("club cup <file> <year>: <n> clubs, <r> rounds"), and its winner ("winner") when the run passes its final;
@@ -53,7 +55,11 @@ RUNS = {
                                                    ("new_acl_two", 2024, 32, True), ("new_recopa", 2025, 2, True),
                                                    ("new_sudamericana", 2025, 44, True)]),
     "2001": (2001, None, 2002, "off", []),
+    # The CONCACAF Champions Cup's club count (Con_Champ, 8 in the original): 24 in 2008/09. Select All: the
+    # United States (entry 4) is below row 16 of Select League(s). Long (Select All).
+    "2008-all": (2008, "September 2008", 2008, "on", [("concacaf", 2008, 24, False)]),
 }
+RUN_NATIONS = {"2008-all": ["all"]}
 
 
 def folder(name):
@@ -76,7 +82,10 @@ def check(name, log):
             failed.append(f"{name}: the base game has new cup lines: {hits[:3]}")
         return failed
     for file, year, clubs, winner in editions:
-        made = re.findall(rf"club cup {file} {year}: (\d+) clubs, (\d+) rounds", text)
+        if file == "concacaf":
+            made = re.findall(rf"concacaf champions {year}: (\d+) clubs, (\d+) rounds", text)
+        else:
+            made = re.findall(rf"club cup {file} {year}: (\d+) clubs, (\d+) rounds", text)
         ok = bool(made) and int(made[-1][0]) == clubs
         print(f"  {'ok  ' if ok else 'FAIL'}  {name}: {file} {year}: rounds of {made[-1] if made else None} clubs, "
               f"table {clubs}")
@@ -104,7 +113,7 @@ def one(program, game, name, keep, reuse):
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-club-cups-{name}-")
     log = os.path.join(work, "stderr.txt")
     if not reuse:
-        code, _ = rrc.run(program, game, last, year, folder(db), NATIONS, [], work, 7200,
+        code, _ = rrc.run(program, game, last, year, folder(db), RUN_NATIONS.get(name, NATIONS), [], work, 14400,
                           options_more={"changing_rules": rules}, env_more={"RECOMP_SEASON_CHANGE_LOG": "1"})
         if code != 0:
             return [f"{name}: the run ended with code {code} ({log})"] + check(name, log)
