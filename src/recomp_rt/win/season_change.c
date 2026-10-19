@@ -26,6 +26,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_playoffs.h"
 #include "season_rules.h"
 
 #include <stdarg.h>
@@ -688,8 +689,18 @@ void season_change_loaded(void)
 
 void o_005d5ae0(void);
 
-/* game_season_update_pass, cdecl (): at the end of every day. */
+static void update_pass(void);
+
+/* game_season_update_pass, cdecl (): at the end of every day. Slice 19: an entry's change waits for its play-off
+ * (season_playoffs.c). */
 RT_WRAP(005d5ae0, season_update_pass)
+{
+    int held = season_playoffs_hold();
+    update_pass();
+    season_playoffs_release(held);
+}
+
+static void update_pass(void)
 {
     if (!kinds_on()) {
         o_005d5ae0();

@@ -16,4 +16,9 @@ int season_playoffs_shape(const char *file, int season, int *direct);
  * of the season, or none. */
 void season_playoffs_rules(uint32_t obj);
 
+/* Around game_season_update_pass 0x5d5ae0 (season_change.c): an entry whose play-off stage is not complete
+ * waits for it (season_playoffs.c). hold returns 1 when it changed an update day; release puts it back. */
+int season_playoffs_hold(void);
+void season_playoffs_release(int held);
+
 #endif
