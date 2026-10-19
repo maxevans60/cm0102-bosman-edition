@@ -983,7 +983,9 @@ void season_uefa_report(void *file, int season, const char *phase)
         {"uefa_cup", 270},
         /* slice 24: the Conference League */
         {SEASON_UEFA_ECL_FILE, 250}, {SEASON_UEFA_ECL_FILE, 260}, {SEASON_UEFA_ECL_FILE, 270}, {SEASON_UEFA_ECL_FILE, 220},
-        {SEASON_UEFA_ECL_FILE, 30}, {SEASON_UEFA_ECL_FILE, 40}};
+        {SEASON_UEFA_ECL_FILE, 30}, {SEASON_UEFA_ECL_FILE, 40},
+        /* slice 25: the Champions League knockout phase play-offs */
+        {"european_cup", 10}};
     for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++)
         for (int style = 1; style <= 3 && !rt_unwinding; style += 2) {      /* 1 long names, 3 abbreviated */
             uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : !strcmp(labels[i].file, "uefa_cup") ? uc : ecl;

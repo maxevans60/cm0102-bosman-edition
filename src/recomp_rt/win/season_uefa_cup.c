@@ -549,6 +549,11 @@ static void draw_league_stage(uint32_t uc, const UcGroups *f)
         fprintf(stderr, "recomp: uefa: %s league phase: %d clubs, not 36\n", uc_name(uc), n);
         return;
     }
+    /* The Europa League play-off losers go to the Conference League now, while the Europa League still is in its
+     * qualifying stage (+0x30 -1): season_uefa_qual.c reads the Europa League's rounds only then. */
+    uint32_t ecl = is_uc(uc) == 'e' ? season_uefa_ecl_object() : 0;
+    if (is_uc(ecl) == 'k') season_uefa_ecl_fill_drops(ecl);
+    if (rt_unwinding) return;
     int weekday = 0;
     const SeasonLeagueDay *days = season_uefa_league_days((char)is_uc(uc), &weekday);
     uint32_t st = season_uefa_league_make(uc, clubs, f->league, 0, uc_group_name(0), days, weekday);
