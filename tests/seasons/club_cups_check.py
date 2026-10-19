@@ -151,7 +151,7 @@ def load_run(program, game, name, keep):
     import club_world_check as cwc
     year, db, nations, save_days, play_days, made, wants = LOAD_RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-club-cups-{name}-")
-    code, _ = rrc.run(program, game, year, year, folder(db), nations, [], work, 14400,
+    code, _ = rrc.run(program, game, year + 1, year, folder(db), nations, [], work, 14400,
                       options_more={"changing_rules": "on"}, env_more={"RECOMP_SAVE_AFTER_DAYS": str(save_days)})
     first = os.path.join(work, "user", "samesave.sav")
     if code != 0 or not os.path.exists(first):
