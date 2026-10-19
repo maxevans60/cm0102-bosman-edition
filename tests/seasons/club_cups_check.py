@@ -19,7 +19,7 @@ RECOMP_SEASON_CHANGE_LOG=1. The runs and the editions each must show:
               the AFC Champions League Two of 2024/25 (32 clubs, final May 2025), the Recopa and the Copa
               Sudamericana of 2025
     2001      the base game (2001/02, changing rules off) to 2002/03: no new cup at all (Q152, Q342)
-    2008-all  September 2008, 2008/09 only, Select All: the CONCACAF Champions Cup of 24 clubs (the original
+    2008-all  September 2008, 2008/09 only, Select All but France (a known stop at "fra_first 108"): the CONCACAF Champions Cup of 24 clubs (the original
               plays 8; the United States, entry 4, needs Select All). It takes 2 hours or more
 
 The checks (each run): the jump ends with code 0; each listed edition logs its club list with the table's club
@@ -60,7 +60,7 @@ RUNS = {
     # United States (entry 4) is below row 16 of Select League(s). Long (Select All).
     "2008-all": (2008, "September 2008", 2008, "on", [("concacaf", 2008, 24, False)]),
 }
-RUN_NATIONS = {"2008-all": ["all"]}
+RUN_NATIONS = {"2008-all": ["all", "France"]}   # France with September 2008 stops at fra_first 108 (known)
 
 
 def folder(name):
