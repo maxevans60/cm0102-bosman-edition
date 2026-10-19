@@ -11,7 +11,7 @@
  * 0x904210 (0x90375d), assign_uefa_cup_places 0x904580 (0x90376a) and assign_intertoto_places 0x904e30
  * (0x903777). They write club +0x1db (the record id of the cup: [0x9cf6e8], [0x9cf6f0], [0x9cf6f8]) and +0x1df
  * (the entry code) and count each club in entry +0x11 (the coefficient divisor, 0x903c00). Their places come
- * from rank brackets in the code, not from entry +0xc and +0xd; those two are read only by get_nation_places
+ * from rank brackets in the code, not from entry +0xc and +0xd. Those two are read only by get_nation_places
  * 0x905c60 (the league table marks 0x6853f5, the Serie A play-offs 0x641af7, the board 0x6a3a32).
  *
  * This file. In a season of the access list (season_uefa_access_places gives places for the row of the season),
@@ -22,17 +22,17 @@
  *
  * The places, in this order:
  *   1. the Champions League places of each nation by league position (the p-th club of its records,
- *      0x9050d0 with skip placed 0, as 0x904465), with the entry round of the access list;
+ *      0x9050d0 with skip placed 0, as 0x904465), with the entry round of the access list.
  *   2. the Champions League title holder (the history winner of the cup, 0x4afd80 as 0x9042e3) in the group
- *      stage, when it has no place yet; else its place is free (the cascade of step 6 fills it);
+ *      stage, when it has no place yet. Else its place is free (the cascade of step 6 fills it).
  *   3. the Europa League title holder: from 2015/16 a Champions League place ("X" rows), before a Europa League
- *      group place ("H" rows), when it has no place yet;
+ *      group place ("H" rows), when it has no place yet.
  *   4. the Europa League places of each nation: the first the domestic cup winner (the cup of the league
  *      table entry, 0xb63d7e, as 0x9047e2: the winner, else the runner-up), the last the league cup winner for the
  *      nations of the "L" rows (0xb63d82, as 0x904ad8), the others the first club with no place (0x9050d0 with
- *      skip placed 1);
+ *      skip placed 1).
  *   5. the fair play places (to 2015/16): three nations at random (0x90cfc0, as 0x904670) get one Europa League
- *      place more;
+ *      place more.
  *   6. the cascade: the number of new clubs of each entry round must be the number the round sizes of the row
  *      give (season_uefa_new_clubs). From the group stage down, a round with too many clubs moves its
  *      lowest-ranked club down one round of its path, and a round with too few takes the best-ranked club of
@@ -244,7 +244,7 @@ static int lowest(char comp, const int *p, int n, const int *target)
     return low;
 }
 
-/* Moves the club i one round down its path; at the lowest round of the path it loses its place. */
+/* Moves the club i one round down its path. At the lowest round of the path it loses its place. */
 static void move_down(int i, const int *target)
 {
     const int *p;
@@ -441,6 +441,15 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
             (s + 1) % 100, n_cl, n_el);
     if (r->suspended && *r->suspended)
         fprintf(stderr, "recomp: uefa: suspended %s: %d clubs with a place\n", r->suspended, n_susp);
+    /* For the tests: England's places (the England entry's nation, LEAGUE_ENGLAND). */
+    int en_cl = 0, en_g = 0, en_el = 0;
+    for (int i = 0; i < n_placed; i++)
+        if (placed[i].club && rd32(g_mem, placed[i].club + 0x53) == rd32(g_mem, LEAGUE_ENGLAND)) {
+            if (placed[i].comp == 'c') en_cl++, en_g += placed[i].code == SEASON_UEFA_CL_G;
+            else en_el++;
+        }
+    fprintf(stderr, "recomp: uefa: England %d/%02d: %d Champions League places, %d in the group stage, %d Europa "
+            "League places\n", s, (s + 1) % 100, en_cl, en_g, en_el);
 }
 
 /* Uefa_Seeding::assign_champions_league_places, thiscall (records, short count) ret 8. */
@@ -468,7 +477,7 @@ RT_WRAP(00904580, uefa_assign_uc)
     rt_ret_stdcall(0, 2);
 }
 
-/* Uefa_Seeding::assign_intertoto_places, thiscall (records, short count) ret 8: none; the volunteer list goes
+/* Uefa_Seeding::assign_intertoto_places, thiscall (records, short count) ret 8: none. The volunteer list goes
  * as 0x904fc0..0x904fe1 frees it. */
 RT_WRAP(00904e30, uefa_assign_uic)
 {

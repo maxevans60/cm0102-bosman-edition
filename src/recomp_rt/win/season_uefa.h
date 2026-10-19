@@ -4,11 +4,11 @@
  * The table (season_uefa_table.c, made by tools/seasons/make_uefa_table.py from
  * docs/research/rules-0.6.0/uefa.tsv) holds one row per season: the rounds of the Champions League, of the UEFA
  * Cup and of the Intertoto Cup. Slices 23 to 25 add their seasons as rows of the same table. The code reads a
- * format from the row; it does not test a year.
+ * format from the row. It does not test a year.
  *
  * The row of a season S for the game that runs (season_uefa_row): NULL for the base game (start year 2001,
  * changing rules off) and with RECOMP_SEASON_CODE=off, so the original runs as it is. With changing rules on,
- * the row of S; with changing rules off, the row of the start year (Q232). Before the first row the first row
+ * the row of S. With changing rules off, the row of the start year (Q232). Before the first row the first row
  * applies, after the last row the last row (Q248). */
 #ifndef RECOMP_SEASON_UEFA_H
 #define RECOMP_SEASON_UEFA_H
@@ -89,7 +89,7 @@ int season_uefa_dropped(const SeasonUefa *r, int el_code);
 
 /* The new clubs of each entry code of comp ('c' or 'e') that the round sizes of row r give: the clubs of the
  * round, less the winners of the round below in its path, less (Europa League) the Champions League losers that
- * enter it. out has SEASON_UEFA_CODE_SLOTS entries; out[code], 0 for codes the row does not play. */
+ * enter it. out has SEASON_UEFA_CODE_SLOTS entries. Out[code], 0 for codes the row does not play. */
 void season_uefa_new_clubs(const SeasonUefa *r, char comp, int *out);
 
 /* The access list by association rank (slice 23, Q369: from 2009/10; the original's brackets before). */
@@ -112,14 +112,14 @@ extern const int season_uefa_access_count;
 
 /* The places of comp ('c' or 'e') for an association of rank (1 is the top) in season S, or NULL before the
  * first season of the access list. A rank between brackets (Liechtenstein's, which has no league) takes the
- * next bracket; a rank after the last takes the last. After the last season the last season applies (Q248). */
+ * next bracket. A rank after the last takes the last. After the last season the last season applies (Q248). */
 const char *season_uefa_access_places(int season, char comp, int rank);
 
 /* The places of a rule row ('h', 'H', 'X', 'f') in season S, or NULL. */
+const char *season_uefa_access_rule(int season, char comp);
+
 /* 1 when the last Europa League place of the nation named name ("England") goes to its league cup winner in S. */
 int season_uefa_access_league_cup(int season, const char *name);
-
-const char *season_uefa_access_rule(int season, char comp);
 
 extern const SeasonUefa season_uefa_rows[];
 extern const int season_uefa_row_count;

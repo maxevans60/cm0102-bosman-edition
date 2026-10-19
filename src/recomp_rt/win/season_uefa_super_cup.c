@@ -6,7 +6,7 @@
  * makes one round and calls cup_set_round_match_date 0x521eb0 at 0x57a4a2 with 24 August and the venue flags
  * 0x8000, which the function writes as a dword to the round record +0x13 (0x521f08). When the fixture is made
  * (Cup::create_tie_fixtures 0x51cb90, 0x51ceb6), Stadium::set_fixture_venue 0x85c260 reads the flags: 0x8000
- * is the home ground (club +0x69) of the club [0x9d0264], the key id of "AS Monaco" (0x85c346..0x85c37a);
+ * is the home ground (club +0x69) of the club [0x9d0264], the key id of "AS Monaco" (0x85c346..0x85c37a).
  * flag 0x10 is the stadium record of the cup's +0x24 ([0xae23b0] + id * 78, 0x85c5a7..0x85c5d3), which the Comp
  * constructor sets to -1 (0x48c5df) and the cup save keeps (0x5212a4).
  *
@@ -64,6 +64,16 @@ static int stadium_of_row(const char *name)
     return id;
 }
 
+/* The weekday of a date, 0 Monday to 6 Sunday (the game's weekdays: 2 Wednesday, 3 Thursday, 4 Friday, seen in
+ * season_uefa_qual.c), month 0 to 11. */
+static int weekday_of(int year, int month, int day)
+{
+    static const int t[12] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+    int y = year - (month < 2);
+    int sunday0 = (y + y / 4 - y / 100 + y / 400 + t[month] + day) % 7;     /* 0 Sunday */
+    return (sunday0 + 6) % 7;
+}
+
 void o_0057a3c0(void);
 
 RT_WRAP(0057a3c0, super_cup_round_table)
@@ -94,8 +104,11 @@ RT_WRAP(0057a3c0, super_cup_round_table)
         wr16(g_mem, t + 0xd, (uint16_t)((rd16(g_mem, t + 0xd) & ~0x83u) | 0x1u));
         fprintf(stderr, "recomp: uefa: Super Cup %u: penalties after 90 minutes\n", year);
     }
+    /* The weekday of the real date, so the date function (0x549f70 from 0x521ed3), which moves a match to the
+     * nearest day of the round's weekday, keeps the real day (the original passes 4, a Friday, at 0x57a48d). */
     Cpu saved = cpu;
-    uint32_t m[9] = {t, 0, (uint32_t)r->sc_day, (uint32_t)r->sc_month, 0, 4, 2, year, venue};
+    uint32_t m[9] = {t, 0, (uint32_t)r->sc_day, (uint32_t)r->sc_month, 0, (uint32_t)weekday_of((int)year, r->sc_month,
+                     r->sc_day), 2, year, venue};
     rt_callback(F_MATCH_DATE, 9, m);
     if (rt_unwinding) return;
     cpu = saved;
