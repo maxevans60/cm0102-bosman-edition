@@ -13,7 +13,10 @@ The runs (the 3.9.68 data from 2001/02, England, changing_rules on):
     load   the game saves 400 days after the start (August 2002, after the object is made); a new program loads that
            save and plays 10 days: the module makes the object again from its saved file, and the record is in the
            loaded data, so no new record is added at the load
-    off    the jump to 2002/03 without the test variable: no new record and no object
+    off    the jump to 2002/03 without the test variable: no test record and no object
+Slice 24: with changing rules on from 2001/02 the game also gets the Conference League record (def
+new_conference_league, played from 2021/22) at the data load, after the test record. So the load adds 2 records
+with the test variable, 1 without; the Conference League object is not made before 2021/22.
 A run takes about 5 to 8 minutes.
 """
 import os
@@ -44,7 +47,7 @@ def check_jump(program, game, work):
     code, report, log = jump(program, game, work, TEST)
     fails = [] if code == 0 else [f"jump: code {code} ({work})"]
     m = re.search(r"new competitions: (\d+) new records from index (\d+)", log)
-    if not m or m.group(1) != "1":
+    if not m or m.group(1) != "2":                          # the test record, then the Conference League's
         fails.append(f"jump: no new record at the data load ({work}/stderr.txt)")
     index = int(m.group(2)) if m else -1
     if "new competition test_new_cup made for 2002" not in log:
@@ -76,7 +79,11 @@ def check_load(program, game, work):
     os.makedirs(again, exist_ok=True)
     shutil.copyfile(first, os.path.join(again, "comps.sav"))
     os.environ.update(TEST)                                  # fixtures.run takes the environment of this process
-    r, saved = cwc.load_and_play(program, game, os.path.join(again, "comps.sav"), again, 10)
+    try:
+        r, saved = cwc.load_and_play(program, game, os.path.join(again, "comps.sav"), again, 10)
+    finally:
+        for k in TEST:                                       # slice 24: the off run after this one has no test def
+            os.environ.pop(k, None)
     fails = []
     made = re.findall(r"new competition test_new_cup made for (\d+) \(entry 2, record (\d+)\) from the save", r.stderr)
     print(f"  load: made again {made}")
@@ -94,8 +101,11 @@ def check_load(program, game, work):
 def check_off(program, game, work):
     code, report, log = jump(program, game, work, {})
     fails = [] if code == 0 else [f"off: code {code} ({work})"]
-    if "new records from index" in log or "new competition test_new_cup" in log:
-        fails.append(f"off: a record or an object without the test variable ({work}/stderr.txt)")
+    m = re.search(r"new competitions: (\d+) new records from index", log)
+    if (m and m.group(1) != "1") or "new competition test_new_cup" in log:
+        fails.append(f"off: a test record or object without the test variable ({work}/stderr.txt)")
+    if "new competition new_conference_league made" in log:
+        fails.append(f"off: the Conference League made before 2021/22 ({work}/stderr.txt)")
     return fails
 
 

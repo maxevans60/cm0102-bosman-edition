@@ -182,9 +182,8 @@ static const Level CL_LEVELS[] = {
 };
 /* The Conference League plays on the Europa League's days. Each round starts after the rounds whose losers it
  * takes: Q2 after the Champions League's preliminary round and Q1, the play-offs after the Europa League's Q3,
- * the groups after the Europa League's play-offs (the group draw comes when the play-offs end, after those of
- * the Europa League on the same day: inference from the daily update order by record id, 0x5ce060, where the
- * Conference League's record comes last). */
+ * the groups after the Europa League's play-offs (the group draw waits until it has its 32 clubs, as the Europa
+ * League's does). */
 static const Level ECL_LEVELS[] = {
     {250, SEASON_UEFA_ECL_Q1, 0, 0, 2, 7, 3, {12, 6}, {19, 6}},
     {260, SEASON_UEFA_ECL_Q2, 0, 0, 2, 7, 3, {26, 6}, {2, 7}},
