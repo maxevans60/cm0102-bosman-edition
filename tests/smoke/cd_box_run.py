@@ -3,6 +3,7 @@
 
 Usage:
     python3 tests/smoke/cd_box_run.py <cm0102_recomp> <game folder> [--dir <fixtures folder>]
+        [--data-3965 <3.9.65 data set folder>]
 
 The original shows the message box "CD Not Required" ("You may now remove the CM01/02 CD at any time")
 at the end of a new game (call 0x82a98b in 0x828110) and of a load (call 0x82e400 in 0x82a9c0). The
@@ -14,6 +15,16 @@ The runs play at the same time, with steps that never click Ok:
     new-game         Start New Game, England, Next, to the Enter Name screen
 A run fails when a wait does not end (code 3; the box loop has no input poll, so the game stops there)
 or when the log of the runtime does not name the skipped box.
+
+The Italian runs play in the language Italian (game.cfg, see italian_cfg). There the title of the box is
+"CD Non Richiesto", and a player with any database other than 3.9.68 also saw the box "Database..cpp 7784"
+of database_load_language_names 0x5339a0 at each load and new game (call 0x5358b7). The runs log each
+box that shows (RECOMP_SCREEN_LOG), and any box fails the run:
+    load-italian         start.sav (3.9.68) in Italian, to the first news screen
+    new-italian-3965     a new game on 3.9.65 in Italian, to the first news screen, then Save Game "Ita65"
+    load-italian-3965    then a load of Ita65 in Italian, to the first news screen
+The 3.9.65 runs use a game folder of links to the given one, with Data-3.9.65 (--data-3965, by default
+/Users/max/Projects/cm0102/data-3965). Their game.cfg comes from a first start in English.
 """
 import concurrent.futures
 import os
@@ -28,10 +39,79 @@ import fixtures  # noqa: E402
 import smoke_run  # noqa: E402
 
 SKIPPED = "recomp: skipped the box CD Not Required"
+SHOWN = "recomp: message box from"
+DATA_3965 = "/Users/max/Projects/cm0102/data-3965"
+ITALIAN = 4                 # the language Italian: database_language_file_exists 0x535930 gives it ita.lng
+SETTINGS = ["8200 click 522 272", "8500 click 662 524"]  # the settings screen of a first start (no game.cfg)
 
 LOAD = [s for s in fixtures.LOAD_STEPS if "box" not in s and "399 330" not in s] + ["2000 quit"]
 NEW_GAME = smoke_run.STEPS[:smoke_run.STEPS.index("wait typing") + 1]
 NEW_GAME = [s for s in NEW_GAME if "dump" not in s and "box" not in s and "399 330" not in s] + ["2000 quit"]
+
+
+# Save Game after the first news screen (tests/smoke/save_folder_run.py): Backspace deletes the suggested
+# name of 18 characters.
+SAVE_AS = (["2500 click 45 342", "4500 click 140 334"] + [f"{5000 + 50 * i} key 8" for i in range(18)] +
+           ["6500 type Ita65", "8500 click 705 572", "15500 quit"])
+NEW_ITALIAN = [s for s in smoke_run.STEPS if " dump " not in s and s not in SETTINGS]
+NEW_ITALIAN = NEW_ITALIAN[:NEW_ITALIAN.index("wait first-news") + 1] + SAVE_AS
+LOAD_ITALIAN = [s for s in LOAD if s not in SETTINGS]
+
+
+def italian_cfg(program, game, user):
+    """game.cfg of a first start, with the settings language (the int at offset 8, Config +0x08, that
+    Config::apply_and_save 0x5d8480 compares with langlib_get_language 0x66f4d0) set to Italian."""
+    steps = ["1000 click 400 300", *SETTINGS, "wait setup", "2000 quit"]
+    r, _ = fixtures.run(program, game, "classic", user, steps, {}, 300)
+    path = os.path.join(user, "game.cfg")
+    if r.returncode != 0 or not os.path.exists(path):
+        return False
+    with open(path, "r+b") as f:
+        f.seek(8)
+        f.write(ITALIAN.to_bytes(4, "little"))
+    return True
+
+
+def play_italian(program, game, folder, data_3965):
+    """The three Italian runs. Returns a list of (name, seconds, problems)."""
+    out = []
+    with tempfile.TemporaryDirectory(prefix="cm0102-cd-box-ita-") as work:
+        game65 = os.path.join(work, "game")
+        os.makedirs(game65)
+        for n in os.listdir(game):
+            if n.lower() != "data-3.9.65":
+                os.symlink(os.path.join(game, n), os.path.join(game65, n))
+        os.symlink(data_3965, os.path.join(game65, "Data-3.9.65"))
+        runs = [("load-italian", game, [], LOAD_ITALIAN, "start.sav"),
+                ("new-italian-3965", game65, [("database", "3.9.65")], NEW_ITALIAN, None),
+                ("load-italian-3965", game65, [("database", "3.9.65")], LOAD_ITALIAN, "Ita65.sav")]
+        user65 = os.path.join(work, "user65")
+        for name, g, options, steps, save in runs:
+            user = user65 if g is game65 else os.path.join(work, name)
+            if not os.path.exists(os.path.join(user, "game.cfg")):
+                os.makedirs(user, exist_ok=True)
+                fixtures.write_settings(user, "classic", options)
+                if not italian_cfg(program, g, user):
+                    out.append((name, 0, ["no game.cfg from the first start"]))
+                    continue
+            if save == "start.sav":
+                shutil.copyfile(os.path.join(folder, save), os.path.join(user, save))
+            elif save and not os.path.exists(os.path.join(user, save)):
+                out.append((name, 0, [f"no {save} from the run before"]))
+                continue
+            if save:     # one save in the user folder: the load list shows it first
+                for n in os.listdir(user):
+                    if n.lower().endswith(".sav") and n != save:
+                        os.rename(os.path.join(user, n), os.path.join(user, n + ".off"))
+            r, took = fixtures.run(program, g, "classic", user, smoke_run.scaled_steps("classic", work, steps),
+                                   {"RECOMP_SCREEN_LOG": "1"}, 900)
+            problems = [l.split(": ", 1)[1][:120] for l in r.stderr.splitlines() if l.startswith(SHOWN)]
+            if r.returncode != 0:
+                problems.append(f"code {r.returncode}")
+            if save and SKIPPED not in r.stderr:
+                problems.append("the log does not name the skipped box")
+            out.append((name, took, problems))
+    return out
 
 
 def play(program, game, folder, name, mode, steps):
@@ -60,13 +140,15 @@ def main(argv):
         print(f"no saved game {os.path.join(folder, 'start.sav')}: see tests/fixtures/fixtures.py")
         return 2
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
+    data_3965 = os.path.abspath(argv[argv.index("--data-3965") + 1] if "--data-3965" in argv else DATA_3965)
     runs = [("load-classic", "classic", LOAD), ("load-widescreen", "widescreen", LOAD),
             ("new-game", "classic", NEW_GAME)]
     failed = 0
-    with concurrent.futures.ThreadPoolExecutor(len(runs)) as pool:
+    with concurrent.futures.ThreadPoolExecutor(len(runs) + 1) as pool:
         jobs = [pool.submit(play, program, game, folder, n, m, s) for n, m, s in runs]
-        for job in jobs:
-            name, took, problems = job.result()
+        italian = pool.submit(play_italian, program, game, folder, data_3965)
+        results = [job.result() for job in jobs] + italian.result()
+        for name, took, problems in results:
             print(f"{'FAIL ' if problems else 'ok   '} {name} ({took:.0f} s){': ' + '; '.join(problems) if problems else ''}")
             failed += bool(problems)
     return 1 if failed else 0

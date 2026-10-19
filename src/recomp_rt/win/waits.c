@@ -186,13 +186,14 @@ void o_005e8290(void);
 extern const uint32_t rt_site_cd_box_new, rt_site_cd_box_load;
 
 /* The box "CD Not Required" at the end of a new game (call 0x82a98b) and of a load (call 0x82e400). The
- * build uses no CD, so the box never shows. Both callers drop the return value of the box. The title is
- * checked too, so that another box at these calls still shows. */
+ * build uses no CD, so the box never shows. Both callers drop the return value of the box. Each call
+ * shows only this box: its title is langlib_sprintf 0x66f4e0 of the text 0xa81384 just before the call
+ * (0x82a95a, 0x82e3d1), so the return address alone finds it. The title is in the language of the game,
+ * "CD Non Richiesto" in Italian, so a check of the English title missed the other languages. */
 static int cd_box(void)
 {
-    uint32_t back = rd32(g_mem, cpu.esp), title = rt_arg(0);
-    return (back == rt_site_cd_box_new || back == rt_site_cd_box_load) && title &&
-           !strcmp((const char *)(g_mem + title), "CD Not Required");
+    uint32_t back = rd32(g_mem, cpu.esp);
+    return back == rt_site_cd_box_new || back == rt_site_cd_box_load;
 }
 
 /* The message box of the game: its own loop draws it and waits for Ok. */

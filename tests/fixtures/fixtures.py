@@ -63,7 +63,7 @@ def run(program, game, mode, user, steps, env_extra, timeout):
                RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SCRIPT="; ".join(steps), **env_extra)
     start = time.time()
     r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
-                       timeout=timeout)
+                       errors="replace", timeout=timeout)    # a translated box text is Latin-1
     return r, time.time() - start
 
 
