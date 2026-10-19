@@ -163,6 +163,7 @@ def check(name, work):
                         elif want and want[1] and want[1] != gi + 1:
                             fails.append(f"{name}: {ed}: {nation} in group {league}{gi + 1}, the real group is "
                                          f"{want[0]}{want[1]}")
+    fails += [f"{name}: {x.strip()}" for x in log if "recomp: message box from" in x]
     for text in LINES.get(name, []):
         if not any(text in x for x in log):
             fails.append(f"{name}: no log line {text!r}")
@@ -273,6 +274,9 @@ def save_run(program, game, keep, reuse):
             return [f"save: the loaded game ended with code {code} ({second})"]
     fails = []
     log_b = open(os.path.join(second, "stderr.txt"), encoding="latin-1").read().split("\n")
+    fails += [f"save: the loaded game: {x.strip()}" for x in log_b if "recomp: message box from" in x]
+    if not any("season jump: done" in x for x in log_b):
+        fails.append(f"save: the loaded game did not reach the end of {last}/{(last + 1) % 100:02d}")
     ref = os.path.join(base, "2018", "stderr.txt")
     if not os.path.exists(ref):
         return [f"save: no log of run 2018 in {base} to compare with"]
