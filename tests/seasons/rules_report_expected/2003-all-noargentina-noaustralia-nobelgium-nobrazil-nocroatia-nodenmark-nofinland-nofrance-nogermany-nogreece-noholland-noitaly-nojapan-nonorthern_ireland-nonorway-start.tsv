@@ -1,5 +1,6 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2003	club_list	American Major League: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all; not in it: -; others: Miami Fusion FC, Tampa Bay Mutiny
 2003	club_list	Irish First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Dundalk F.C., Monaghan United; others: -
 2003	club_list	Irish Premier Division: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all; not in it: -; others: Dundalk F.C., Monaghan United
 2003	club_list	Korean League: 10 of 11 listed clubs that the database holds (13 listed), 0 other clubs, 10 in all; not in it: Sangmoo; others: -
@@ -33,7 +34,6 @@
 2003	clubs	wel_first (Welsh Premier League), row wal-nir-irl-54: game 18, table 17 (17)
 2003	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-59: game 4, table 12 (12)
 2003	down	eng_third (Football League Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
-2003	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-66: game 3 (+1 play-off places), table 1 (1 (pos 10))
 2003	down	pol_first (I liga), row gre-pol-cro-192: game 0 (+0 play-off places), table 2 (2 (13th-14th))
 2003	down	rus_first (Russian First Division), row rus-tur-30: game 3 (+0 play-off places), table 5 (5)
 2003	down	tur_second_b (Second League Category B), row rus-tur-219: game 0 (+0 play-off places), table 6 (6 (16th and 17th of each of three groups))
@@ -77,9 +77,7 @@
 2003	playoffs	pol_first (I liga), row gre-pol-cro-192: game 0 up and 0 down play-off places, table '12th: relegation play-off'
 2003	playoffs	tur_second_b (Second League Category B), row rus-tur-219: game 2 up and 0 down play-off places, table 'none'
 2003	playoffs	usa_mls (Major League Soccer), row arg-usa-219: game 0 up and 0 down play-off places, table '8 (as 2003)'
-2003	subs_used	eng_charity (FA Community Shield), row eng-314: game 5, table 6 (6)
 2003	up	con_merc_cup (Copa Merconorte), row club-world-44: game 1 (+0 play-off places), table na (n/a)
-2003	up	ire_first (League of Ireland First Division), row wal-nir-irl-67: game 1 (+1 play-off places), table 3 (3 (pos 1,2,3))
 2003	up	pol_first (I liga), row gre-pol-cro-192: game 4 (+0 play-off places), table na (n/a)
 2003	up	tur_second_b (Second League Category B), row rus-tur-219: game 0 (+2 play-off places), table 3 (3)
 2003	up	usa_mls (Major League Soccer), row arg-usa-219: game 1 (+0 play-off places), table na (n/a (closed league))

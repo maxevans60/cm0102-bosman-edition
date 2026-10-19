@@ -2,13 +2,11 @@
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2008	bench	eng_cc_cup (Football League Cup), row eng-341: game 5, table 7 (7)
 2008	bench	eng_fa_cup (FA Cup), row eng-340: game 5, table 7 (7)
-2008	bench	eng_prm (Premier League), row eng-98: game 5, table 7 (7)
 2008	bench	world_club_champ (FIFA Club World Cup), row club-world-135: game 7, table 12 (12)
+2008	club_list	American Major League: 12 of 13 listed clubs that the database holds (15 listed), 0 other clubs, 12 in all; not in it: Toronto FC; others: -
 2008	club_list	Irish First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Finn Harps, Mervue United; others: -
 2008	club_list	Irish Premier Division: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all; not in it: -; others: Cobh Ramblers, Finn Harps
 2008	club_list	Korean League: 10 of 14 listed clubs that the database holds (15 listed), 0 other clubs, 10 in all; not in it: Daegu FC, Gwangju Sangmu Bulsajo, Incheon United, Jeju United; others: -
-2008	club_list	Portuguese Premier League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Associação Académica de Coimbra B, Associação Académica de Coimbra/Secção de Futebol
-2008	club_list	Portuguese Second League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Grupo Desportivo de Chaves, Real Sport Club Massamá
 2008	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: IF Brommapojkarna, Örgryte IS; others: -
 2008	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Dardanelspor A.S., Elazigspor
 2008	clubs	asia_club_champ (AFC Champions League), row club-world-146: game 16, table 32 (32)
@@ -25,13 +23,11 @@
 2008	clubs	pol_first (Ekstraklasa), row gre-pol-cro-197: game 8, table 16 (16)
 2008	clubs	pol_lge_cup (Puchar Ekstraklasy), row gre-pol-cro-224: game 34, table 16 (16)
 2008	clubs	por_cup (Taça de Portugal), row por-69: game 164, table 173 (173)
-2008	clubs	por_prm (Primeira Liga), row por-64: game 18, table 16 (16)
-2008	clubs	por_second (Liga de Honra), row por-65: game 18, table 16 (16)
 2008	clubs	rus_first (Russian First Division), row rus-tur-35: game 18, table 20 (20)
 2008	clubs	swe_prm (Allsvenskan), row den-swe-206: game 14, table 16 (16)
 2008	clubs	tur_second (TFF 1. Lig), row rus-tur-197: game 20, table 18 (18)
 2008	clubs	tur_second_b (TFF 2. Lig), row rus-tur-224: game 10, table 54 (54)
-2008	clubs	uefa_cup (UEFA Cup), row uefa-61: game 145, table 157 (157 in all, with the 24 Champions League clubs (the page labels it qualifying; i)
+2008	clubs	uefa_cup (UEFA Cup), row uefa-61: game 153, table 157 (157 in all, with the 24 Champions League clubs (the page labels it qualifying; i)
 2008	clubs	usa_mls (Major League Soccer), row arg-usa-224: game 4, table 15 (15)
 2008	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-278: game 32, table 40 (40)
 2008	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-90: game 50, table 20 (20)
@@ -43,9 +39,7 @@
 2008	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-183: game 3, table 18 (18)
 2008	clubs	world_club_champ (FIFA Club World Cup), row club-world-135: game 0, table 7 (7)
 2008	down	eng_third (Football League Two), row eng-101: game 1 (+0 play-off places), table 2 (2)
-2008	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-191: game 3 (+1 play-off places), table 1 (1 (pos 10))
 2008	down	pol_first (Ekstraklasa), row gre-pol-cro-197: game 0 (+0 play-off places), table 2 (2 (15th-16th))
-2008	down	por_prm (Primeira Liga), row por-64: game 3 (+0 play-off places), table 2 (2)
 2008	down	por_second (Liga de Honra), row por-65: game 3 (+0 play-off places), table 2 (2)
 2008	down	rus_first (Russian First Division), row rus-tur-35: game 3 (+0 play-off places), table 5 (5)
 2008	down	sco_first (Scottish First Division), row sco-59: game 2 (+0 play-off places), table 1 (1)
@@ -94,10 +88,8 @@
 2008	playoffs	sco_third (Scottish Third Division), row sco-61: game 0 up and 0 down play-off places, table '2nd to 4th play off with Second Division 9th for a Second Division place (two-le'
 2008	playoffs	tur_second (TFF 1. Lig), row rus-tur-197: game 0 up and 0 down play-off places, table '3rd v 6th and 4th v 5th, winners meet for the third place'
 2008	playoffs	usa_mls (Major League Soccer), row arg-usa-224: game 0 up and 0 down play-off places, table '8 (top 2 of each conference plus the 4 next best)'
-2008	subs_used	eng_charity (FA Community Shield), row eng-344: game 5, table 6 (6)
 2008	up	con_merc_cup (Copa Merconorte), row club-world-139: game 1 (+0 play-off places), table na (n/a)
 2008	up	pol_first (Ekstraklasa), row gre-pol-cro-197: game 4 (+0 play-off places), table na (n/a)
-2008	up	por_second (Liga de Honra), row por-65: game 3 (+0 play-off places), table 2 (2)
 2008	up	sco_second (Scottish Second Division), row sco-60: game 2 (+0 play-off places), table 1 (1)
 2008	up	sco_third (Scottish Third Division), row sco-61: game 2 (+0 play-off places), table 1 (1)
 2008	up	tur_second_b (TFF 2. Lig), row rus-tur-224: game 0 (+2 play-off places), table 3 (3)

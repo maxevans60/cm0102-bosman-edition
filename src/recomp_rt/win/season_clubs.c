@@ -260,6 +260,22 @@ static int class_size(const char *name, int season)
     return -1;
 }
 
+/* The file of a division's class, or NULL. */
+static const char *class_file(const char *name)
+{
+    for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
+        if (!strncmp(name, CLASS_SIZE[k].name, 52)) return CLASS_SIZE[k].file;
+    return NULL;
+}
+
+/* The count of a class after 2001. */
+static int class_size_of(const char *file)
+{
+    for (size_t k = 0; file && k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
+        if (!strcmp(file, CLASS_SIZE[k].file)) return CLASS_SIZE[k].size;
+    return 0;
+}
+
 /* A club name in a plain form, to find a club whose name in the research differs a little from the database
  * ("Operário Futebol Clube Ltda" and "Operário Futebol Clube"): the letters of Windows-1252 without accents,
  * lower case, words of letters and digits, and (when drop is set) the words that only say "club" (fc, futebol,
@@ -390,6 +406,11 @@ static void move_clubs(int season)
     int resized = 0;
     for (int i = 0; i < ncomps; i++) {
         int size = div[i].n0 > 0 && !div[i].spare ? class_size(div[i].name, season) : -1;
+        const char *file = class_file(div[i].name);
+        if (size > 0 && div[i].n0 > size && season_sizes_keeps_database(file)) {     /* a cup takes it whole */
+            int most = class_size_of(file);
+            size = div[i].n0 < most ? div[i].n0 : most;
+        }
         div[i].want = size > 0 ? size : div[i].n0;
         if (div[i].want != div[i].n0) {
             div[i].sized = 1;

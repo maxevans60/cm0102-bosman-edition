@@ -1,8 +1,8 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
-2005	bench	eur_super_cup (UEFA Super Cup), row uefa-40: game 7, table 5 (5)
-2005	bench	world_club_champ (FIFA Club World Championship), row club-world-78: game 7, table 12 (12)
+2005	bench	world_club_champ (FIFA Club World Championship), row club-world-78: game 9, table 12 (12)
 2005	bench	world_cup (FIFA World Cup), row int-world-50: game 7, table 12 (12)
+2005	club_list	American Major League: 9 of 9 listed clubs that the database holds (12 listed), 3 other clubs, 12 in all; not in it: -; others: Miami Fusion FC, San Jose Earthquakes, Tampa Bay Mutiny
 2005	club_list	Korean League: 10 of 11 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Sangmoo; others: -
 2005	club_list	Polish Second Division: 16 of 17 listed clubs that the database holds (18 listed), 2 other clubs, 18 in all; not in it: Zawisza Bydgoszcz; others: Blekitni Stargard Szczecinski, Stasiak Opoczno
 2005	club_list	Russian First Division: 18 of 21 listed clubs that the database holds (22 listed), 0 other clubs, 18 in all; not in it: Angusht Nazran, FK Orel, Lada Togliatti; others: -
@@ -33,10 +33,8 @@
 2005	clubs	world_club_champ (FIFA Club World Championship), row club-world-78: game 4, table 6 (6)
 2005	clubs	world_cup (FIFA World Cup), row int-world-50: game 0, table 32 (32)
 2005	down	eng_third (Football League Two), row eng-71: game 1 (+0 play-off places), table 2 (2)
-2005	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-116: game 3 (+1 play-off places), table 1 (1 (pos 12))
 2005	down	pol_first (I liga), row gre-pol-cro-194: game 0 (+0 play-off places), table 2 (2 (15th-16th))
 2005	down	pol_second (II liga), row gre-pol-cro-248: game 4 (+0 play-off places), table 3 (3 (16th-18th))
-2005	down	por_prm (Primeira Liga), row por-37: game 3 (+0 play-off places), table 4 (4)
 2005	down	por_second (Liga de Honra), row por-38: game 3 (+0 play-off places), table 6 (6 (13th to 18th; league cut to 16))
 2005	down	rus_first (Russian First Division), row rus-tur-32: game 3 (+0 play-off places), table 5 (5)
 2005	down	sco_first (Scottish First Division), row sco-35: game 2 (+0 play-off places), table 1 (1)
@@ -83,10 +81,8 @@
 2005	playoffs	sco_third (Scottish Third Division), row sco-37: game 0 up and 0 down play-off places, table '2nd to 4th play off with Second Division 9th for a Second Division place (two-le'
 2005	playoffs	tur_second (Lig A), row rus-tur-194: game 0 up and 0 down play-off places, table '3rd v 6th and 4th v 5th, winners meet for the third place'
 2005	playoffs	usa_mls (Major League Soccer), row arg-usa-221: game 0 up and 0 down play-off places, table '8 (as 2003)'
-2005	subs_used	eng_charity (FA Community Shield), row eng-326: game 5, table 6 (6)
 2005	up	con_merc_cup (Copa Merconorte), row club-world-82: game 1 (+0 play-off places), table na (n/a)
 2005	up	pol_first (I liga), row gre-pol-cro-194: game 4 (+0 play-off places), table na (n/a)
-2005	up	por_second (Liga de Honra), row por-38: game 3 (+0 play-off places), table 2 (2)
 2005	up	sco_second (Scottish Second Division), row sco-36: game 2 (+0 play-off places), table 1 (1)
 2005	up	sco_third (Scottish Third Division), row sco-37: game 2 (+0 play-off places), table 1 (1)
 2005	up	tur_second_b (Lig B), row rus-tur-221: game 0 (+2 play-off places), table 3 (3)

@@ -3,15 +3,11 @@
 2011	bench	asia_club_champ (AFC Champions League), row club-world-203: game 5, table 7 (7)
 2011	bench	eng_cc_cup (Football League Cup), row eng-359: game 5, table 7 (7)
 2011	bench	eng_fa_cup (FA Cup), row eng-358: game 5, table 7 (7)
-2011	bench	eng_prm (Premier League), row eng-128: game 5, table 7 (7)
 2011	bench	ire_chal_cup (FAI Cup), row wal-nir-irl-269: game 5, table 7 (7 (inference from final line-ups))
-2011	bench	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-270: game 5, table 7 (7 (inference from final line-ups))
-2011	bench	sco_prm (Scottish Premier League), row sco-82: game 5, table 7 (7)
-2011	bench	world_club_champ (FIFA Club World Cup), row club-world-192: game 7, table 12 (12)
-2011	club_list	Irish First Division: 8 of 8 listed clubs that the database holds (8 listed), 2 other clubs, 10 in all; not in it: -; others: Cobh Ramblers, Mullingar Town
+2011	bench	world_club_champ (FIFA Club World Cup), row club-world-192: game 9, table 12 (12)
+2011	club_list	American Major League: 12 of 17 listed clubs that the database holds (19 listed), 0 other clubs, 12 in all; not in it: Montreal Impact, Portland Timbers, Seattle Sounders, Toronto FC, Vancouver Whitecaps; others: -
+2011	club_list	Irish First Division: 8 of 8 listed clubs that the database holds (8 listed), 2 other clubs, 10 in all; not in it: -; others: Cobh Ramblers, Galway United
 2011	club_list	Korean League: 10 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 10 in all; not in it: Daegu FC, Daejon Citizen, Gangwon Football Club, Gwangju FC, Incheon United, Sangju Sangmu Phoenix FC; others: -
-2011	club_list	Portuguese Premier League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Associação Académica de Coimbra/Secção de Futebol, Associação Recreativa Aguinense
-2011	club_list	Portuguese Second League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Clube Desportivo Águias, União Desportiva Oliveirense
 2011	club_list	Russian First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: FC Yenisey Krasnoyarsk, Gazovik Orenburg; others: -
 2011	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: GIF Sundsvall, Syrianska Föreningen; others: -
 2011	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: BUGSAS Spor, Bandirmaspor
@@ -30,15 +26,13 @@
 2011	clubs	oceania_nations (OFC Nations Cup), row int-continental-120: game 0, table 8 (8)
 2011	clubs	pol_first (Ekstraklasa), row gre-pol-cro-200: game 8, table 16 (16)
 2011	clubs	por_cup (Taça de Portugal), row por-96: game 164, table 173 (173)
-2011	clubs	por_prm (Primeira Liga), row por-91: game 18, table 16 (16)
-2011	clubs	por_second (Liga de Honra), row por-92: game 18, table 16 (16)
 2011	clubs	rus_first (Football National League), row rus-tur-38: game 18, table 20 (20)
 2011	clubs	sco_chal_cup (Scottish Challenge Cup), row sco-88: game 30, table 32 (32)
 2011	clubs	spa_cup (Copa del Rey), row spa-87: game 83, table 84 (84 clubs (20 Primera, Segunda non-reserve clubs, top Segunda B clubs, Tercera gr)
 2011	clubs	swe_prm (Allsvenskan), row den-swe-224: game 14, table 16 (16)
 2011	clubs	tur_second (TFF 1. Lig), row rus-tur-200: game 20, table 18 (18)
 2011	clubs	tur_second_b (TFF 2. Lig), row rus-tur-227: game 10, table 34 (34)
-2011	clubs	uefa_cup (UEFA Europa League), row uefa-85: game 145, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2011	clubs	uefa_cup (UEFA Europa League), row uefa-85: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2011	clubs	usa_mls (Major League Soccer), row arg-usa-227: game 4, table 19 (19)
 2011	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-281: game 32, table 64 (64)
 2011	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-126: game 50, table 52 (52 entrants)
@@ -51,10 +45,8 @@
 2011	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-258: game 3, table 12 (12)
 2011	clubs	world_club_champ (FIFA Club World Cup), row club-world-192: game 4, table 7 (7)
 2011	down	eng_third (Football League Two), row eng-131: game 1 (+0 play-off places), table 2 (2)
-2011	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-266: game 3 (+1 play-off places), table 1 (1 (pos 12))
 2011	down	kor_league (K League), row aus-jap-kor-335: game 0 (+0 play-off places), table 2 (2 (15th and 16th))
 2011	down	pol_first (Ekstraklasa), row gre-pol-cro-200: game 0 (+0 play-off places), table 2 (2 (15th-16th))
-2011	down	por_prm (Primeira Liga), row por-91: game 3 (+0 play-off places), table 2 (2)
 2011	down	por_second (Liga de Honra), row por-92: game 3 (+0 play-off places), table 2 (2)
 2011	down	rus_first (Football National League), row rus-tur-38: game 3 (+0 play-off places), table 4 (4 (16th to 19th of the relegation group))
 2011	down	sco_first (Scottish First Division), row sco-83: game 2 (+0 play-off places), table 1 (1)
@@ -109,11 +101,8 @@
 2011	playoffs	tur_second (TFF 1. Lig), row rus-tur-200: game 0 up and 0 down play-off places, table '3rd to 6th: two-legged semi-finals, final for the third place'
 2011	playoffs	usa_mls (Major League Soccer), row arg-usa-227: game 0 up and 0 down play-off places, table '10 (top 5 of each conference; 4 v 5 one-match wild card)'
 2011	playoffs	wel_first (Welsh Premier League), row wal-nir-irl-254: game 0 up and 0 down play-off places, table 'pos 4,5,6,7,8: European play-off'
-2011	subs_used	eng_charity (FA Community Shield), row eng-362: game 5, table 6 (6)
-2011	subs_used	rus_first (Football National League), row rus-tur-38: game 3, table 4 (4)
 2011	up	con_merc_cup (Copa Merconorte), row club-world-196: game 1 (+0 play-off places), table na (n/a)
 2011	up	pol_first (Ekstraklasa), row gre-pol-cro-200: game 4 (+0 play-off places), table na (n/a)
-2011	up	por_second (Liga de Honra), row por-92: game 3 (+0 play-off places), table 2 (2)
 2011	up	sco_second (Scottish Second Division), row sco-84: game 2 (+0 play-off places), table 1 (1)
 2011	up	sco_third (Scottish Third Division), row sco-85: game 2 (+0 play-off places), table 1 (1)
 2011	up	tur_second_b (TFF 2. Lig), row rus-tur-227: game 0 (+2 play-off places), table 3 (3)

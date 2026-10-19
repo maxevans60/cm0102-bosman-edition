@@ -1,25 +1,18 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
-2005	bench	eur_super_cup (UEFA Super Cup), row uefa-40: game 7, table 5 (5)
 2005	bench	fra_cup (Coupe de France), row fra-43: game 3, table 5 (5)
 2005	bench	fra_lge_cup (Coupe de la Ligue), row fra-44: game 3, table 5 (5)
-2005	bench	ger_cup (DFB-Pokal), row ger-62: game 6, table 7 (7)
-2005	bench	ger_first (Bundesliga), row ger-53: game 6, table 7 (7)
-2005	bench	ger_second (2. Bundesliga), row ger-54: game 6, table 7 (7)
-2005	bench	world_club_champ (FIFA Club World Championship), row club-world-78: game 7, table 12 (12)
+2005	bench	world_club_champ (FIFA Club World Championship), row club-world-78: game 9, table 12 (12)
 2005	bench	world_cup (FIFA World Cup), row int-world-50: game 7, table 12 (12)
 2005	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all; not in it: -; others: Almirante Brown de Arrecifes, Atlético Tucumán, Central Córdoba de Rosario, Defensores de Belgrano, Gimnasia y Esgrima de Concepción del Uruguay
-2005	club_list	Australian National Soccer League: 6 of 6 listed clubs that the database holds (8 listed), 7 other clubs, 13 in all; not in it: -; others: Brisbane Strikers, Marconi Stallions, Northern Spirit, Parramatta Power, South Melbourne, Sydney Olympic Sharks, Wollongong Wolves
-2005	club_list	Brazilian National First Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: 4 de Julho Esporte Clube, Alecrim Futebol Clube, Alegrense Futebol Clube, Associação Garanhuense de Atletismo, Botafogo Futebol Clube (SP), Clube 15 de Novembro, Clube Atlético Aliança, Águia de Marabá Futebol Clube
-2005	club_list	Brazilian National Second Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: ABC Futebol Clube, Club Sportivo Sergipe, Clube Atlético Bragantino, Desportiva Capixaba, Londrina Esporte Clube, Nacional Futebol Clube (AM), Sampaio Corrêa Futebol Clube, Serra Futebol Clube
-2005	club_list	Brazilian National Third Division: 45 of 45 listed clubs that the database holds (63 listed), 11 other clubs, 56 in all; not in it: -; others: Agremiação Sportiva Arapiraquense, Associação Desportiva Comercial Bandeirante, Bangu Atlético Clube, Baré Esporte Clube, Camaçari Futebol Clube, Esporte Clube Comercial, Esporte Clube Gênus Rondoniense, Fluminense de Feira Futebol Clube, Friburguense Atlético Clube, Operário Futebol Clube, Sport Club Corinthians Alagoano
+2005	club_list	Australian National Soccer League: 6 of 6 listed clubs that the database holds (8 listed), 2 other clubs, 8 in all; not in it: -; others: Brisbane Strikers, Marconi Stallions
+2005	club_list	Brazilian National Third Division: 46 of 46 listed clubs that the database holds (63 listed), 10 other clubs, 56 in all; not in it: -; others: Agremiação Sportiva Arapiraquense, Associação Desportiva Comercial Bandeirante, Bangu Atlético Clube, Baré Esporte Clube, Camaçari Futebol Clube, Esporte Clube Comercial, Esporte Clube Gênus Rondoniense, Fluminense de Feira Futebol Clube, Friburguense Atlético Clube, Sport Club Corinthians Alagoano
 2005	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Bojovnik 7, NK Amater, NK Bedem, NK Borac
 2005	club_list	Croatian Second Division North: 11 of 11 listed clubs that the database holds (12 listed), 5 other clubs, 16 in all; not in it: -; others: NK Metalac, NK Omladinac, NK Podravac, NK Sloga, NK Ðakovo
 2005	club_list	Croatian Second Division South: 11 of 11 listed clubs that the database holds (12 listed), 5 other clubs, 16 in all; not in it: -; others: NK GOSK, NK Imotska Krajina, NK Istra, NK Konavljanin, NK Krk
 2005	club_list	Danish Second Division: 16 of 19 listed clubs that the database holds (28 listed), 0 other clubs, 16 in all; not in it: Boldklubben Avarta, Boldklubben af 1893, Roskilde Boldklub Af 1906; others: -
 2005	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: AGOVV, FC Omniworld; others: -
 2005	club_list	Finnish Premier Division: 12 of 13 listed clubs that the database holds (13 listed), 0 other clubs, 12 in all; not in it: Kuopion Palloseura; others: -
-2005	club_list	French Lower Division: 0 of 63 listed clubs that the database holds (128 listed), 0 other clubs, 0 in all; not in it: AC Cambrai, Athletic Club Arles, Avranches, Bayeux, Blagnac, Borgo FC, CM Oissel, CO Châlons-en-Champagne, CS Avion, CS Blénod, CSO 19 Amnéville-les-Thermes, Chantilly, Chartres, Colmar, Dole-Tavaux RC 1991, ES La Rochelle, ES Viry-Châtillon, Echirolles, Evreux AC, FA Carcassonne-Villalbe, FA Ile-Rousse Monticello, FC Ecommoy, FC Les Lilas, FC Marmande 47, FC Saint-Lô Manche, FC Villefranche Beaujolais, Fontenay-le-Comte, Hyères FC, JA Armentières, La Chapelle Saint-Luc, La Roche-sur-Yon Vendée, Les Herbiers, Levallois, Limoges Foot 87, Lunel, Manosque, Montceau, Mâcon, Olympique Saint-Quentinois, RC Fléchois, Red Star 93, SC Abbeville, SC Draguignan, SR Haguenau, Saint-Colomban Locminé, Saint-Raphaël, Sens, Stade Bordelais UC, Stade Lamballais, Stade Montois, Stade Plabennécois, Thouars Foot 79, Toulouse Fontaines, US Concarneau, US Forbach, US Ivry, US Jeanne-d'Arc Carquefou, US Marignane, US Montagnarde, US Saint-Omer, US St-Georges-les-Ancizes, Vesoul, Vénissieux US; others: -
 2005	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Ascoli, Treviso; others: -
 2005	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Avellino, Rimini; others: -
 2005	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Avispa Fukuoka, Kyoto Purple Sanga; others: -
@@ -29,12 +22,9 @@
 2005	clubs	african_nations (Africa Cup of Nations), row int-continental-51: game 0, table 16 (16)
 2005	clubs	arg_second (Primera B Nacional), row arg-usa-32: game 25, table 20 (20)
 2005	clubs	asia_club_champ (AFC Champions League), row club-world-89: game 16, table 25 (25)
-2005	clubs	aus_nsl (A-League), row aus-jap-kor-28: game 13, table 8 (8)
 2005	clubs	bel_third (Belgian Third Division), row hol-bel-62: game 16, table 32 (32 (A 16, B 16))
 2005	clubs	bra_champ_cup (Copa dos Campeões), row bra-194: game 3, table 0 (0)
 2005	clubs	bra_cup (Copa do Brasil), row bra-140: game 71, table 64 (64)
-2005	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-32: game 28, table 20 (20)
-2005	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-59: game 28, table 20 (20)
 2005	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-86: game 7, table 63 (63)
 2005	clubs	bra_reg_bahia (Campeonato Baiano), row bra-437: game 10, table 12 (12)
 2005	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-518: game 15, table 12 (12)
@@ -87,7 +77,6 @@
 2005	down	eng_third (Football League Two), row eng-71: game 1 (+0 play-off places), table 2 (2)
 2005	down	gre_prm (Alpha Ethniki), row gre-pol-cro-32: game 2 (+0 play-off places), table 3 (3 (14th-16th))
 2005	down	gre_second (Beta Ethniki), row gre-pol-cro-59: game 2 (+0 play-off places), table 3 (3 (14th-16th))
-2005	down	ita_ser_a (Serie A), row ita-70: game 4 (+0 play-off places), table 3 (3)
 2005	down	ita_ser_b (Serie B), row ita-71: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2005	down	ita_ser_c1a (Serie C1 girone A), row ita-72: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2005	down	ita_ser_c1b (Serie C1 girone B), row ita-73: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
@@ -155,7 +144,6 @@
 2005	playoffs	ita_ser_b (Serie B), row ita-71: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
 2005	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-194: game 0 up and 0 down play-off places, table '16th v J2 3rd in a two-legged promotion/relegation series'
 2005	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-221: game 0 up and 0 down play-off places, table '3rd v J1 16th in a two-legged promotion/relegation series'
-2005	subs_used	eng_charity (FA Community Shield), row eng-326: game 5, table 6 (6)
 2005	up	arg_second (Primera B Nacional), row arg-usa-32: game 1 (+0 play-off places), table 2 (2 (as 2002/03))
 2005	up	aus_nsl (A-League), row aus-jap-kor-28: game 6 (+0 play-off places), table na (n/a)
 2005	up	bel_third (Belgian Third Division), row hol-bel-62: game 1 (+0 play-off places), table 2 (2 (group champions))
@@ -166,5 +154,4 @@
 2005	up	den_second (Danish 2nd Divisions), row den-swe-28: game 3 (+0 play-off places), table 2 (2 (the best eligible club of each group))
 2005	up	gre_cup (Greek Football Cup), row gre-pol-cro-5: game 2 (+0 play-off places), table na (n/a)
 2005	up	gre_second (Beta Ethniki), row gre-pol-cro-59: game 2 (+0 play-off places), table 3 (3 (1st-3rd))
-2005	up	ita_ser_b (Serie B), row ita-71: game 4 (+0 play-off places), table 3 (2 direct + 1 via play-offs)
 2005	up	oceania_club_champ (OFC Club Championship), row club-world-94: game 2 (+0 play-off places), table na (n/a)

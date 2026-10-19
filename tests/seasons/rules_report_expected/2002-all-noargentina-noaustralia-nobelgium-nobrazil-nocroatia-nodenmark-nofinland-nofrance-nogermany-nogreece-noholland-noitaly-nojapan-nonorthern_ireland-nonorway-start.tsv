@@ -1,5 +1,6 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2002	club_list	American Major League: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all; not in it: -; others: Miami Fusion FC, Tampa Bay Mutiny
 2002	club_list	Irish First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Dundalk F.C., Monaghan United; others: -
 2002	club_list	Irish Premier Division: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all; not in it: -; others: Dundalk F.C., Monaghan United
 2002	club_list	Korean League: 10 of 11 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Sangmoo; others: -
@@ -23,7 +24,6 @@
 2002	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-272: game 32, table 34 (34)
 2002	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-34: game 4, table 12 (12)
 2002	down	eng_third (Football League Third Division), row eng-41: game 1 (+0 play-off places), table 2 (2)
-2002	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-41: game 3 (+1 play-off places), table 1 (1 (pos 10))
 2002	down	pol_first (I liga), row gre-pol-cro-191: game 0 (+0 play-off places), table 3 (3 (14th-16th))
 2002	down	pol_second (II liga), row gre-pol-cro-245: game 4 (+0 play-off places), table 6 (6 (13th-18th))
 2002	down	rus_first (Russian First Division), row rus-tur-29: game 3 (+0 play-off places), table 5 (5)
@@ -62,7 +62,6 @@
 2002	playoffs	pol_first (I liga), row gre-pol-cro-191: game 0 up and 0 down play-off places, table '12th-13th: relegation play-offs'
 2002	playoffs	tur_second_b (Second League Category B), row rus-tur-218: game 2 up and 0 down play-off places, table 'none'
 2002	playoffs	usa_mls (Major League Soccer), row arg-usa-218: game 0 up and 0 down play-off places, table '8 (top 4 of each conference): two-leg aggregate conference semi-finals, one-matc'
-2002	subs_used	eng_charity (FA Community Shield), row eng-308: game 5, table 6 (6)
 2002	up	con_merc_cup (Copa Merconorte), row club-world-25: game 1 (+0 play-off places), table na (n/a)
 2002	up	pol_first (I liga), row gre-pol-cro-191: game 4 (+0 play-off places), table na (n/a)
 2002	up	pol_second (II liga), row gre-pol-cro-245: game 2 (+2 play-off places), table 1 (1 (1st))
