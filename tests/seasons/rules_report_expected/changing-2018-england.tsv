@@ -2,11 +2,13 @@
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2018	bench	eur_super_cup (European Super Cup), row uefa-144: game 9, table 12 (12)
 2018	bench	world_club_champ (FIFA Club World Championship), row club-world-325: game 9, table 12 (12)
-2018	clubs	african_nations (African Cup of Nations), row int-continental-194: game 4, table 24 (24)
-2018	clubs	asia_nations (Asian Cup), row int-continental-196: game 0, table 24 (24)
+2018	clubs	african_nations (African Cup of Nations), row int-continental-194: game 0/4, table 24 (24)
+2018	clubs	asia_nations (Asian Cup), row int-continental-196: game 0/4, table 24 (24)
 2018	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-189: game 5, table 55 (55)
 2018	clubs	european_cup (European Champions Cup), row uefa-138: game 55, table 79 (79 (32 in the group stage))
 2018	clubs	goldcup (Copa America), row int-continental-198: game 0/4, table 12 (12)
+2018	clubs	new_concacaf_nations_league (2019-20 CONCACAF Nations League qualifying), row int-continental-193: game 3, table 34 (34)
+2018	clubs	new_gold_cup (2019 CONCACAF Gold Cup), row int-continental-192: game 4, table 16 (16)
 2018	clubs	new_nations_league (2018-19 UEFA Nations League), row int-continental-190: game 3, table 55 (55)
 2018	clubs	uefa_cup (UEFA Cup), row uefa-141: game 153, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
 2018	clubs	world_club_champ (FIFA Club World Championship), row club-world-325: game 0, table 7 (7)
@@ -45,6 +47,7 @@
 2019	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-200: game 5, table 55 (55)
 2019	clubs	european_cup (European Champions Cup), row uefa-146: game 55, table 79 (79 (32 in the group stage))
 2019	clubs	goldcup (Copa America), row int-continental-209: game 4, table 12 (12)
+2019	clubs	new_concacaf_nations_league (2019-20 CONCACAF Nations League qualifying), row int-continental-204: game 3, table 41 (41)
 2019	clubs	uefa_cup (UEFA Cup), row uefa-149: game 153, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
 2019	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-222: game 50, table 54 (54 entrants)
 2019	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-223: game 0, table 40 (40)
@@ -68,6 +71,8 @@
 2019	name	european_cup (European Champions Cup), row uefa-146: game 'European Champions Cup', table 'UEFA Champions League'
 2019	name	goldcup (Copa America), row int-continental-209: game 'Copa America', table '2020 Copa América'
 2019	name	intertoto_cup (Inter-Toto Cup), row uefa-151: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
+2019	name	new_concacaf_nations_league (2019-20 CONCACAF Nations League qualifying), row int-continental-204: game '2019-20 CONCACAF Nations League qualifying', table '2019-20 CONCACAF Nations League'
+2019	name	new_gold_cup (2019 CONCACAF Gold Cup), row int-continental-203: game '2019 CONCACAF Gold Cup', table 'CONCACAF Gold Cup'
 2019	name	new_nations_league (2018-19 UEFA Nations League), row int-continental-201: game '2018-19 UEFA Nations League', table 'UEFA Nations League'
 2019	name	olympics (Olympic Games), row int-world-227: game 'Olympic Games', table 'Football at the Summer Olympics (men)'
 2019	name	uefa_cup (UEFA Cup), row uefa-149: game 'UEFA Cup', table 'UEFA Europa League'
@@ -85,6 +90,7 @@
 2019	not_held	african_nations (African Cup of Nations), row int-continental-205: the game holds 2019, the table says not held
 2019	not_held	asia_nations (Asian Cup), row int-continental-207: the game holds 2019, the table says not held
 2019	not_held	intertoto_cup (Inter-Toto Cup), row uefa-151: the game holds 2019, the table says not held
+2019	not_held	new_gold_cup (2019 CONCACAF Gold Cup), row int-continental-203: the game holds 2019, the table says not held
 2019	not_held	new_nations_league (2018-19 UEFA Nations League), row int-continental-201: the game holds 2020, the table says not held
 2019	not_held	olympics (Olympic Games), row int-world-227: the game holds 2020, the table says not held
 2019	not_held	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-221: the game holds 2020, the table says not held
