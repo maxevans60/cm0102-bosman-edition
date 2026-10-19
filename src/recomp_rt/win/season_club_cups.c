@@ -485,17 +485,22 @@ static uint32_t round_table(const ClubCup *k, uint32_t obj, int *rounds)
 
 /* ---- Clubs ---- */
 
-/* The club at `place` (0 winner, 1 runner-up) of the history row of record rec written in year y, or 0. */
+/* The club at `place` (0 winner, 1 runner-up) of the latest history row of record rec written in year y or
+ * before, or 0. The latest row up to y gives the reigning champion of a competition whose edition of year y ends
+ * after the pick (the CONCACAF Champions Cup plays from 28 September, after the Intercontinental Cup's pick). */
 static uint32_t history_club(uint32_t rec, int y, int place)
 {
-    uint32_t rows = rd32(g_mem, HISTORY);
+    uint32_t rows = rd32(g_mem, HISTORY), best = 0;
     int32_t count = (int32_t)rd32(g_mem, HISTORY_COUNT);
-    for (int32_t i = count - 1; rec && rows && i >= 0; i--) {
+    int best_year = -1;
+    for (int32_t i = 0; rec && rows && i < count; i++) {
         uint32_t row = rows + (uint32_t)i * HISTORY_ROW;
-        if (rd32(g_mem, row + 4) == rec && (int16_t)rd16(g_mem, row + 8) == y)
-            return rd32(g_mem, row + 0xa + 4u * (uint32_t)place);
+        int year = (int16_t)rd16(g_mem, row + 8);
+        if (rd32(g_mem, row + 4) != rec || year > y || year < best_year) continue;
+        best = rd32(g_mem, row + 0xa + 4u * (uint32_t)place);
+        best_year = year;
     }
-    return 0;
+    return best;
 }
 
 static int listed(const uint32_t *out, int n, uint32_t club)
@@ -870,9 +875,28 @@ static int concacaf_count(int year)
     return 0;
 }
 
+/* The clubs of North and South America in the game (the picker's sources): the count never asks for more, so the
+ * picker never leaves an empty place (review 1, item 2). The walk of season_comps_top_club. */
+static int americas_clubs(void)
+{
+    uint32_t clubs = rd32(g_mem, CLUBS), na = rd32(g_mem, CONT_NORTH_AMERICA), sa = rd32(g_mem, CONT_SOUTH_AMERICA);
+    int32_t count = (int32_t)rd32(g_mem, CLUB_TABLE_COUNT) - 2 * (int32_t)rd32(g_mem, 0xae2350u);
+    int n = 0;
+    for (int32_t i = 0; clubs && i < count; i++) {
+        uint32_t nation = rd32(g_mem, clubs + (uint32_t)i * CLUB_ROW + 0x53);
+        uint32_t cont = nation ? rd32(g_mem, nation + 0x71) : 0;
+        if (cont && (rd32(g_mem, cont) == na || rd32(g_mem, cont) == sa)) n++;
+    }
+    return n;
+}
+
 uint32_t rt_concacaf_clubs(uint32_t year, uint32_t original)
 {
     int n = concacaf_count((int16_t)year);
+    if (n > CON_CHAMP_ORIGINAL) {
+        int have = americas_clubs();
+        if (n > have) n = have > CON_CHAMP_ORIGINAL ? have : CON_CHAMP_ORIGINAL;
+    }
     return n ? (uint32_t)n : original;
 }
 
@@ -893,13 +917,17 @@ RT_WRAP(004c11a0, con_champ_pick)
         return;
     uint32_t out[MAX_CLUBS] = {0};
     for (int i = 0; i < CON_CHAMP_ORIGINAL; i++) out[n - CON_CHAMP_ORIGINAL + i] = rd32(g_mem, list + 6u * (uint32_t)i);
+    /* Every empty place (the added ones, and an original place that found no club) gets the next club of North,
+     * then South America, then Europe: never a null club (review 1, item 2; the count is capped above). */
     int filled = 0;
-    for (int i = 0; i < n - CON_CHAMP_ORIGINAL; i++) {
+    for (int i = 0; i < n; i++) {
+        if (out[i]) continue;
         uint32_t skip[MAX_CLUBS];
         int k = 0;
         for (int j = 0; j < n; j++) if (out[j]) skip[k++] = out[j];
         uint32_t c = season_comps_top_club(CONT_NORTH_AMERICA, skip, k);
         if (!c) c = season_comps_top_club(CONT_SOUTH_AMERICA, skip, k);
+        if (!c) c = season_comps_top_club(CONT_EUROPE, skip, k);
         if (c) out[i] = c, filled++;
     }
     for (int i = 0; i < n; i++) {
@@ -1047,7 +1075,15 @@ RT_WRAP(0040b950, asia_club_champ_entrants)
 static void cups_before(const SeasonChange *c)
 {
     if (is_con_champ(c->comp) && c->started) {                  /* the next edition's club count, see above */
-        int n = concacaf_count((int16_t)rd16(g_mem, c->comp + YEAR_AT) + 1);
+        int year = (int16_t)rd16(g_mem, c->comp + YEAR_AT);
+        uint32_t list = rd32(g_mem, c->comp + CLUB_LIST_AT);    /* test log: the winner of the edition (fate 1) */
+        for (int i = 0; list && concacaf_count(year) && i < (int16_t)rd16(g_mem, c->comp + CLUB_COUNT_AT) &&
+                        i < MAX_CLUBS; i++) {
+            uint32_t club = rd32(g_mem, list + 6u * (uint32_t)i);
+            if (club && g_mem[list + 6u * (uint32_t)i + 5] == 1)
+                fprintf(stderr, "recomp: concacaf champions %d: winner %.50s\n", year, win_str(club + 4));
+        }
+        int n = (int)rt_concacaf_clubs((uint32_t)(year + 1), 0);
         if (n) wr16(g_mem, c->comp + CLUB_COUNT_AT, (uint16_t)n);
     }
     const ClubCup *k = cup_of_object(c->comp);

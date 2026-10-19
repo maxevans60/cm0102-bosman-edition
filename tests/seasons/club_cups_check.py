@@ -22,6 +22,10 @@ RECOMP_SEASON_CHANGE_LOG=1. The runs and the editions each must show:
     2008-all  September 2008, 2008/09 only, Select All but France (a known stop at "fra_first 108"): the CONCACAF Champions Cup of 24 clubs (the original
               plays 8; the United States, entry 4, needs Select All). It takes 2 hours or more
 
+Load runs (LOAD_RUNS below): 2010-load (inside the Sudamericana), 2024-load-acl (inside ACL Two), 2024-load-cwc (inside
+the groups of the 32-club Club World Cup) and 2008-load-all (inside the CONCACAF Champions Cup of 24 clubs, Select
+All): each saves inside a running edition, loads and plays to its winner with no error box.
+
 The checks (each run): the jump ends with code 0; each listed edition logs its club list with the table's club
 count ("club cup <file> <year>: <n> clubs, <r> rounds"), and its winner ("winner") when the run passes its final;
 each draw of the Asian Club Championship adds Japanese places (step A1, the table's "places: JPN n");
@@ -61,6 +65,30 @@ RUNS = {
     "2008-all": (2008, "September 2008", 2008, "on", [("concacaf", 2008, 24, False)]),
 }
 RUN_NATIONS = {"2008-all": ["all", "France"]}   # France with September 2008 stops at fra_first 108 (known)
+
+# Load runs (reviews of 85c04f1): the first run saves after `save` game days, inside a running edition; a new
+# program loads that save and plays `play` more days. The loaded game must make the new cup again from its save
+# (when `made` is set), log each `want` line, and show no error box. Brazil is not selected: until slice 18 is on
+# main a season game with Brazil cannot save (the accented names of its state championships, "league..cpp 5095").
+# name: (start year, database, nations, save days, play days, made, [regex of each wanted line after the load])
+LOAD_RUNS = {
+    # Start 10.07.2010; saved 18.10.2010 inside the Sudamericana (3 August to 8 December 2010); played to
+    # 27.01.2011, after its season start of 10 January 2011, which logs the winner.
+    "2010-load": (2010, "September 2010 ODB", ["England", "Argentina", "Japan"], 100, 100, "new_sudamericana",
+                  [r"club cup new_sudamericana 2010: winner "]),
+    # Start 13.07.2024; saved 21.10.2024 inside ACL Two (17 September 2024 to 18 May 2025); played to 16.09.2025,
+    # after its season start of 28 August 2025.
+    "2024-load-acl": (2024, "October 2024", ["England", "Argentina", "Australia", "Japan"], 100, 330, "new_acl_two",
+                      [r"club cup new_acl_two 2024: winner "]),
+    # Saved 20.06.2025 inside the groups of the 32-club Club World Cup (14 to 24 June 2025); played to 30.07.2025:
+    # places 1 and 2 of the knockout (final 13 July).
+    "2024-load-cwc": (2024, "October 2024", ["England", "Argentina", "Australia", "Japan"], 342, 40, None,
+                      [r"club world knockout 2024: place 1 ", r"club world knockout 2024: place 2 "]),
+    # Select All but France. Start 12.07.2008; saved 02.10.2008 inside the CONCACAF Champions Cup of 24 clubs (28
+    # September to 10 October); played to 01.03.2009, after its season start of 21 February 2009.
+    "2008-load-all": (2008, "September 2008", ["all", "France"], 82, 150, None,
+                      [r"concacaf champions 2008: winner "]),
+}
 
 
 def folder(name):
@@ -116,7 +144,40 @@ def check(name, log):
     return failed
 
 
+def load_run(program, game, name, keep):
+    """A run of LOAD_RUNS (see above)."""
+    import shutil
+    sys.path.insert(0, HERE)
+    import club_world_check as cwc
+    year, db, nations, save_days, play_days, made, wants = LOAD_RUNS[name]
+    work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-club-cups-{name}-")
+    code, _ = rrc.run(program, game, year, year, folder(db), nations, [], work, 14400,
+                      options_more={"changing_rules": "on"}, env_more={"RECOMP_SAVE_AFTER_DAYS": str(save_days)})
+    first = os.path.join(work, "user", "samesave.sav")
+    if code != 0 or not os.path.exists(first):
+        return [f"{name}: the first run made no save (code {code}, {work})"]
+    again = os.path.join(work, "again")
+    os.makedirs(again, exist_ok=True)
+    shutil.copyfile(first, os.path.join(again, "cups.sav"))
+    r, saved = cwc.load_and_play(program, game, os.path.join(again, "cups.sav"), again, play_days, timeout=7200)
+    fails = []
+    if r.returncode != 0 or not saved:
+        fails.append(f"{name}: the save did not load and play on (code {r.returncode}, {again})")
+    if made and not re.search(rf"new competition {made} made for \d+ .*from the save", r.stderr):
+        fails.append(f"{name}: {made} was not made again from the save ({again}/stderr.txt)")
+    for w in wants:
+        hit = re.search(w + r".*", r.stderr)
+        print(f"  {'ok  ' if hit else 'FAIL'}  {name}: after the load: {hit.group(0) if hit else w}")
+        if not hit:
+            fails.append(f"{name}: no line {w!r} after the load ({again}/stderr.txt)")
+    if "message box" in r.stderr:
+        fails.append(f"{name}: a message box after the load ({again}/stderr.txt)")
+    return fails
+
+
 def one(program, game, name, keep, reuse):
+    if name in LOAD_RUNS:
+        return load_run(program, game, name, keep)
     year, db, last, rules, _ = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-club-cups-{name}-")
     log = os.path.join(work, "stderr.txt")
@@ -134,7 +195,7 @@ def main(argv):
         return 2
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
     only = rrc.arg(argv, "--only")
-    names = only.split(",") if only else list(RUNS)
+    names = only.split(",") if only else list(RUNS) + list(LOAD_RUNS)
     jobs = int(rrc.arg(argv, "--jobs", 2))
     keep = os.path.abspath(rrc.arg(argv, "--keep")) if "--keep" in argv else None
     reuse = "--reuse" in argv

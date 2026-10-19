@@ -247,9 +247,10 @@ def check_dates(name, s, row, text, last):
     return fails
 
 
-def load_and_play(program, game, save, out, days):
+def load_and_play(program, game, save, out, days, timeout=1200):
     """Loads save, lets the game go on with its holiday (a loaded game keeps it) and saves `days` game days after
-    the load (RECOMP_SAVE_AFTER_DAYS ends the program). Returns the result and the path of the new save, or None."""
+    the load (RECOMP_SAVE_AFTER_DAYS ends the program). timeout: seconds (the quit step comes 300 s before it).
+    Returns the result and the path of the new save, or None."""
     sys.path.insert(0, os.path.join(HERE, "..", "fixtures"))
     import fixtures
     import smoke_run
@@ -257,10 +258,10 @@ def load_and_play(program, game, save, out, days):
     os.makedirs(user, exist_ok=True)
     os.replace(save, os.path.join(user, os.path.basename(save)))
     fixtures.write_settings(user, "classic", [])
-    steps = fixtures.LOAD_STEPS[:-1] + ["900000 quit"]
+    steps = fixtures.LOAD_STEPS[:-1] + [f"{(timeout - 300) * 1000} quit"]
     table = os.path.join(os.path.dirname(os.path.abspath(program)), "seasons", "rules.tsv")
     r, _ = fixtures.run(program, game, "classic", user, smoke_run.scaled_steps("classic", out, steps),
-                        {"RECOMP_SAVE_AFTER_DAYS": str(days), "RECOMP_RULES_TABLE": table}, 1200)
+                        {"RECOMP_SAVE_AFTER_DAYS": str(days), "RECOMP_RULES_TABLE": table}, timeout)
     with open(os.path.join(out, "stderr.txt"), "w") as f:
         f.write(r.stderr)
     saved = os.path.join(user, smoke_run.SAVE_NAME)
