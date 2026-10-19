@@ -39,7 +39,7 @@ The lead's rule for a cup that comes back was the wait of slice 26 (+0x40 at the
 
 ### Review round (2026-10-18)
 
-- **Slice 26's constructor wrap has the same fault** as this kind had: `season_kind_club_world.c` (`ctor`) gives the constructor the next edition with no test of `season_changing_rules()`, so in a game with changing rules off a competition that the start season does not hold comes back in a later season.
+- **Slice 26's constructor wrap has the same fault** as this kind had: `season_kind_club_world.c` (`ctor`) gives the constructor the next edition with no test of `season_changing_rules()`, so in a game with changing rules off a competition that the start season does not hold comes back in a later season. Slice 26's review fixes (commit "Slice 26: review fixes") add the test: its `start_edition` gives the start season's rule with changing rules off.
 - **Screens of a cup that waits for ever: not known.** The comp season formatter `key_nation_format_comp_season` 0x6697c0 takes its year from its caller or from the game date and the entry's update day (0x66982e..0x669850), not from the object, so whether a screen writes "2999/00" needs a look at the screen. Not checked.
 - **The French league cup's UEFA Cup place.** `assign_uefa_cup_places` 0x904580 gives a nation's second place to its league cup winner: the record id at league table entry +0x1e (0x90480a), then the club in place 0 of the latest history row (`comp_util_get_latest_placed_club` 0x4afd80, call at 0x904890), the runner-up or a league club (0x9050d0) when that club already has a place. It reads no object. So with the Coupe de la Ligue idle from 2020/21 the place does not break, but it goes each season to the last winner in the history (2019/20), or to its runner-up. In real life the place moved to the league. Decision for Max: recommended answer, a later UEFA slice gives the place to the next league club when the league cup is not held (a wrap of 0x904580 or a site at 0x904890).
 
@@ -66,18 +66,13 @@ A row of `cup_formats.tsv` gives the rounds counted from the final, as many as t
 - `hol_cup` 2009: the final over two legs (one season); 2010: a single final again.
 - **Not held:** the group stages themselves (the Coppa Italia has none from 2005/06, the KNVB Cup none from 2003/04): see section 4.
 
-## 4. Group stages and four-club super cups: decision for Max
+## 4. Group stages and four-club super cups
 
-Not built. Each needs a stage object the class does not make in that season:
+Part 21c builds them: `docs/research/2026-10-18-cups-more.md`, sections 1 and 2. The Coppa Italia and KNVB Cup keep their group stages in every season (section 4 of that doc).
 
-- Group stage in a knockout cup (Scottish League Cup from 2016/17, EFL Trophy from 2016/17, Turkish Cup 2005/06 to 2010/11, 2012/13 to 2016/17 and 2024/25 to 2025/26, Russian Cup from 2020/21): the Cup classes make knockout rounds only (`create_round_table` and `set_up_rounds` 0x4c15f0). A group stage needs a League stage object before the knockout rounds, as ItaCup makes one (`create_group_stage` 0x63f640) and hands its winners to a `Cup_Stage` (`create_knockout_stage` 0x63f870).
-- A group stage that ends (Coppa Italia from 2005/06, KNVB Cup from 2003/04): ItaCup and HolCup always start with the group stage (`create_group_stage` 0x63f640, 0x5f4220).
-- Four-club super cups (Supercoppa Italiana 2023/24 to 2025/26, Supercopa de Espana from 2019/20): the classes make one round of two clubs. Semi-finals need a second round and two more entrants (the runners-up of the league and the cup).
-- Recommended answer: a later slice builds a shared stage helper (a League group stage that feeds a `Cup_Stage`, as ItaCup does) and uses it for these cups. Until then they play the original's format.
+## 5. New cups (slice 26's module)
 
-## 5. New cups (slice 26's module): decision for Max
-
-Not built. The module (`season_comps.h`, version 1) takes only a club_comp record that the data holds and no object uses. Every Update Team database checked has about five such records (CONMEBOL Cup, Recopa, CONCACAF Cup Winners Cup, Afro-Asian Champions Cup, European Cup Winners Cup), and slice 26 needs them for its own competitions. The six new domestic cups (Russian Premier League Cup 2003, the Turkish, Russian and Norwegian super cups, the All-Ireland cup, the Conference League Cup) each need a record of their own, so they wait for new records ("Open", point 1, of `2026-10-18-new-comps.md`). Each also needs a club picker for its nation (the original super cup classes read their own nation's key ids). Recommended answer: build them after the module can make new records. Q336 (EFL Trophy academy sides, National League Cup): not easy with version 1 of the module, so left out, as part 21a recommended.
+Part 21c builds the six new cups on new competition records of slice 26's module: `docs/research/2026-10-18-cups-more.md`, section 3. Q336 (EFL Trophy academy sides, National League Cup from 2024/25) stays out.
 
 ## 6. Round names (Q370)
 

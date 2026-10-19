@@ -206,7 +206,7 @@ uint32_t season_comps_def_vtable(const SeasonCompDef *d, uint32_t vtable, int sl
     int i = def_index(d);
     if (i < 0) return 0;
     if (!def_vtables[i]) {
-        def_vtables[i] = season_comps_vtable(vtable, slots);
+        def_vtables[i] = season_comps_vtable(d, vtable, slots);
         def_bases[i] = def_vtables[i] ? vtable : 0;
     }
     return def_vtables[i];

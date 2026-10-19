@@ -179,11 +179,11 @@ def first_edition(table, file, edition, rules):
 
 
 def wait_for_room():
-    """Starts a game only when fewer than 12 games run on this Mac and the load of the last minute is below 18
+    """Starts a game only when fewer than 16 games run on this Mac and the load of the last minute is below 24
     (Max's limit for the 0.6.0 build sessions)."""
     while True:
         games = subprocess.run(["pgrep", "-x", "cm0102_recomp"], capture_output=True, text=True).stdout.split()
-        if len(games) < 12 and os.getloadavg()[0] < 18:
+        if len(games) < 16 and os.getloadavg()[0] < 24:
             return
         time.sleep(20)
 
