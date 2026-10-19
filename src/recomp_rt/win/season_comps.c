@@ -264,7 +264,9 @@ static void comps_entry(const SeasonChange *c)
     if (!season_comps_on() || !entry_in_game(c->entry)) return;
     for (int i = 0; i < season_comp_def_count && i < MAX_DEFS; i++) {
         const SeasonCompDef *d = def_at(i);
-        if (!d || d->entry != c->entry || objects[i] || season_comps_held(d->comp, c->season) != 1) continue;
+        if (!d || d->entry != c->entry || objects[i]) continue;
+        if (season_comps_held(d->comp, c->season) != 1 &&
+            !(d->early && season_comps_held(d->comp, c->season + 1) == 1)) continue;   /* slice 28: `early` */
         uint32_t obj = make(d, i, c->season, 0);
         if (!obj) continue;
         char name[64];
@@ -377,6 +379,7 @@ static int wanted(const char (*have)[52], int have_count, char (*names)[52])
         const SeasonCompDef *d = def_at(i);
         if (!d || !d->like || !d->record) continue;
         int h = season_comps_held(d->comp, start);
+        if (h == 0 && d->early && season_comps_held(d->comp, start + 1) == 1) h = 1;        /* slice 28: `early` */
         if (h < 0 || (!h && (!rules || season_comps_next_edition(d->comp, start) == NEVER))) continue;  /* Q232 */
         int known = 0;
         for (int j = 0; j < have_count; j++)

@@ -90,6 +90,10 @@ struct SeasonCompDef {
     const char *like;
     const char *short_name;
     int level;
+    /* Slice 28: 1 when an edition starts before the update day of its entry in the season that the table gives
+     * it (the Gold Cup of July 2021 in 2021/22, entry 1 on 15 August): the object is also made in the season
+     * before a season that holds the competition. */
+    int early;
 };
 
 /* The competitions. Each slice adds its lines in season_comps.c. */

@@ -247,10 +247,11 @@ typedef struct {
     const char *confed;
     const SeasonCompDef *def;
     SeasonNlEdition repeat;     /* an edition after the table, or with changing rules off */
+    uint32_t log_state;         /* test log: the state of the edition last written */
 } NlConf;
 
 extern const SeasonCompDef season_nl_comp, season_nl_concacaf_comp;
-static NlConf confs[] = {{"UEFA", &season_nl_comp, {0}}, {"CONCACAF", &season_nl_concacaf_comp, {0}}};
+static NlConf confs[] = {{"UEFA", &season_nl_comp, {0}, 0xffffffffu}, {"CONCACAF", &season_nl_concacaf_comp, {0}, 0xffffffffu}};
 #define CONFS ((int)(sizeof confs / sizeof confs[0]))
 
 static NlConf *conf_of_def(const SeasonCompDef *d)
@@ -299,6 +300,18 @@ static int next_year(const NlConf *c, int year)
             if (!strcmp(season_nl_editions[i].confed, c->confed) && season_nl_editions[i].year > year)
                 return season_nl_editions[i].year;
     return year + 2;
+}
+
+/* The name of an edition in the test log: "2018-19" for UEFA (tests/seasons/season_nl_run.py reads it),
+ * "CONCACAF-2019-20" for CONCACAF. */
+static const char *label(const SeasonNlEdition *e)
+{
+    static char buf[2][40];
+    static int k;
+    if (!strcmp(e->confed, "UEFA")) return e->edition;
+    k ^= 1;
+    snprintf(buf[k], sizeof buf[k], "%s-%s", e->confed, e->edition);
+    return buf[k];
 }
 
 static int group_count(const SeasonNlEdition *e)
@@ -437,9 +450,15 @@ static void draw_league(const SeasonNlEdition *e, int l, Entrant *list, int n)
     int k = 0;
     for (int i = 0; i < n; i++)
         if (list[i].league == l && k < NL_MAX_NATIONS) mine[k++] = list[i];
-    int known = k > 0;
-    for (int i = 0; i < k; i++)
+    int known = k > 0, per[MAX_GROUPS] = {0};
+    for (int i = 0; i < k; i++) {
         if (mine[i].group < 1 || mine[i].group > groups) known = 0;
+        else per[mine[i].group - 1]++;
+    }
+    /* A real group that keeps fewer than two nations of the data (CONCACAF members that the game lacks, such as
+     * Bonaire or Sint Maarten) cannot play: the league is drawn by pots instead. */
+    for (int g = 0; known && g < groups; g++)
+        if (per[g] < 2) known = 0;
     if (known) {
         for (int i = 0; i < k; i++) {
             int g = g0 + mine[i].group - 1;
@@ -560,8 +579,10 @@ static int entrants(uint32_t self, const SeasonNlEdition *e, Entrant *out)
         if (left_out(e, rows[i].nation)) continue;
         out[k++] = (Entrant){rows[i].nation, next[i], 0, 0};
         if (logging() && next[i] != rows[i].league)
-            fprintf(stderr, "recomp: season nl: %s goes from league %c to %c\n",
-                    win_str(nation_at(rows[i].nation) + NATION_NAME), 'A' + rows[i].league, 'A' + next[i]);
+            fprintf(stderr, strcmp(e->confed, "UEFA") ? "recomp: season nl: %s: %s moves from league %c to %c\n"
+                                                      : "recomp: season nl: %s%s goes from league %c to %c\n",
+                    strcmp(e->confed, "UEFA") ? e->confed : "", win_str(nation_at(rows[i].nation) + NATION_NAME),
+                    'A' + rows[i].league, 'A' + next[i]);
     }
     /* A nation of the real leagues that did not play the edition before (a nation new in the data). */
     Entrant real[NL_MAX_NATIONS];
@@ -589,10 +610,13 @@ static void prepare_draw(uint32_t self, const SeasonNlEdition *e)
             if (draw_team[g][i]) draw_team[g][k++] = draw_team[g][i];
         draw_size[g] = k;
     }
+    for (int g = 0; g < draw_groups_n; g++)
+        if (draw_size[g] < 2)
+            fprintf(stderr, "recomp: season nl: %s group %d holds %d nations\n", label(e), g + 1, draw_size[g]);
     if (logging())
         for (int g = 0; g < draw_groups_n; g++) {
             int l = group_league(e, g);
-            fprintf(stderr, "recomp: season nl: %s draw league %c group %d:", e->edition, 'A' + l,
+            fprintf(stderr, "recomp: season nl: %s draw league %c group %d:", label(e), 'A' + l,
                     g - first_group(e, l) + 1);
             for (int i = 0; i < draw_size[g]; i++)
                 fprintf(stderr, " %s;", win_str(nation_at(season_nl_nation_of_club(draw_team[g][i])) + NATION_NAME));
@@ -700,7 +724,7 @@ static void next_edition(uint32_t self)
     set_draw_day(self, e);
     if (logging())
         fprintf(stderr, "recomp: season nl: the %s %d edition ends; the next is %s (%d), draw day %d of %d\n",
-                c->confed, year, e->edition, next, (int16_t)rd16(g_mem, self + F_DRAW_DAY), next + (int16_t)rd16(g_mem, self + F_DRAW_YEAR));
+                c->confed, year, label(e), next, (int16_t)rd16(g_mem, self + F_DRAW_DAY), next + (int16_t)rd16(g_mem, self + F_DRAW_YEAR));
 }
 
 /* vtable +0x8, thiscall (): the season pass calls it on the update day of entry 1 (15 August) for a complete
@@ -763,7 +787,7 @@ static void update_for_date(void)
                 wr16(g_mem, self + F_DRAW_DAY, (uint32_t)day);
                 wr16(g_mem, self + F_DRAW_YEAR, (uint32_t)(ty - year));
                 if (logging())
-                    fprintf(stderr, "recomp: season nl: draw of %s %s (%d groups)\n", cur.confed, cur.edition, draw_groups_n);
+                    fprintf(stderr, "recomp: season nl: draw of %s (%d groups)\n", label(&cur), draw_groups_n);
             }
         }
     }
@@ -777,19 +801,18 @@ static void update_for_date(void)
         (vcall(self, 0xcu, 0, NULL) & 0xffu))
         next_edition(self);
     if (rt_unwinding) return;
-    if (is_nl(self) && logging() && readable(today)) {
+    if (conf && logging() && readable(today)) {
         /* Test log: the state of the edition when it changes (stage, +0xdd of 0x689c06, the finals' complete
          * byte +0xb1 that Cup::check_complete 0x521e00 tests). */
-        static uint32_t last = 0xffffffffu;
         int groups = held_groups(self);
         uint32_t cup = groups >= 2 ? stage_at(self, groups - 1) : 0;
         uint32_t state = (rd32(g_mem, self + F_STAGE) & 0xff) | (rd32(g_mem, self + F_FINISHED) ? 0x100u : 0) |
                          (readable(cup) && rd8(g_mem, cup + 0xb1u) ? 0x200u : 0) | (readable(cup) ? 0x400u : 0);
-        if (state != last)
-            fprintf(stderr, "recomp: season nl: day %d of %d: stage %d, finished %d, finals %s%s\n",
+        if (state != conf->log_state)
+            fprintf(stderr, "recomp: season nl: %s day %d of %d: stage %d, finished %d, finals %s%s\n", conf->confed,
                     (int16_t)rd16(g_mem, today), (int16_t)rd16(g_mem, today + 2u), (int)(state & 0xff),
                     !!(state & 0x100), readable(cup) ? "made" : "none", (state & 0x200) ? " and finished" : "");
-        last = state;
+        conf->log_state = state;
     }
     rt_ret_stdcall(r, 2);
 }
@@ -860,7 +883,7 @@ static void advance_stage(void)
                     (int16_t)rd16(g_mem, cup + 0x40u), rd8(g_mem, cup + 0xb1u));
         }
         if (logging()) {
-            fprintf(stderr, "recomp: season nl: %s finals:", e->edition);
+            fprintf(stderr, "recomp: season nl: %s finals:", label(e));
             for (int k = 0; k < 4; k++)
                 fprintf(stderr, " %s;", bracket[k] ? win_str(nation_at(season_nl_nation_of_club(bracket[k])) + NATION_NAME) : "none");
             fputc('\n', stderr);
@@ -931,7 +954,7 @@ static uint32_t nl_make(const SeasonCompDef *d, uint32_t rec, int year, int load
     set_up(obj, e);
     if (rt_unwinding) return 0;
     if (logging())
-        fprintf(stderr, "recomp: season nl: %s %s (%d groups), draw day %d of %d\n", e->confed, e->edition, group_count(e),
+        fprintf(stderr, "recomp: season nl: %s (%d groups), draw day %d of %d\n", label(e), group_count(e),
                 (int16_t)rd16(g_mem, obj + F_DRAW_DAY), e->year + (int16_t)rd16(g_mem, obj + F_DRAW_YEAR));
     return obj;
 }

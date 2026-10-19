@@ -316,16 +316,20 @@ static uint32_t gold_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
     making_rec = 0;
     if (rt_unwinding || !readable(obj)) return 0;
     wr32(g_mem, obj, v);
-    if (logging())
-        fprintf(stderr, "recomp: season gold cup: %d (%d teams)%s\n", year_of(obj), season_gold_cup_teams(obj),
+    if (logging()) {
+        const SeasonNlGoldCup *g = gold_edition(year_of(obj));
+        fprintf(stderr, "recomp: season gold cup: %d (%d teams)%s\n", year_of(obj), g ? g->teams : 0,
                 loading ? " from the save" : "");
+    }
     return obj;
 }
 
 /* Part b (Q368): the CONCACAF Gold Cup on a new record with the continent, nation and colour ids of the CONCACAF
- * World Cup qualifying record. Level 17 (inference: below the Euro and the World Cup, 20). */
+ * World Cup qualifying record. Level 17 (inference: below the Euro and the World Cup, 20). `early`: the table
+ * gives the Gold Cups of July (2005, 2009, 2013, 2015, 2017, 2021) to the season that starts that summer, after
+ * their first match; so the object is made a season before. */
 const SeasonCompDef season_gold_cup_comp = {"CONCACAF Gold Cup", "new_gold_cup", "CONCACAF Gold Cup", ENTRY, gold_make,
-                                            "World Cup CONCACAF Qualifying Section", "Gold Cup", 17};
+                                            "World Cup CONCACAF Qualifying Section", "Gold Cup", 17, 1};
 
 void o_0076d940(void);
 
