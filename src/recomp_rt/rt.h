@@ -340,6 +340,17 @@ void rt_intl_cup_stages(uint32_t self);
 uint32_t rt_intl_copa_ko(uint32_t self, uint32_t original);
 uint32_t rt_intl_copa_groups(uint32_t self, uint32_t original);
 void rt_intl_copa_stages(uint32_t self);
+/* Euro qualifying places (win/season_intl_euroq.c): the places and stage indices of the format of the Euro year
+ * (Euro 2016: 9 groups, top two, best third, play-off of 8 thirds; Euro 2020 on: 10 groups, top two). Each
+ * gives the original's value in the base game and for a Euro of 16 teams. */
+void rt_euroq_rules(uint32_t self);
+uint32_t rt_euroq_hosts(uint32_t self, uint32_t original);
+uint32_t rt_euroq_ranked_place(uint32_t self, uint32_t original);
+uint32_t rt_euroq_direct(uint32_t self, uint32_t original);
+uint32_t rt_euroq_no_ranking(uint32_t self);
+uint32_t rt_euroq_group_size(uint32_t self, uint32_t group, uint32_t original);
+uint32_t rt_euroq_ten_groups(uint32_t self);
+void rt_euroq_log(uint32_t euro, uint32_t club, uint32_t stage, uint32_t playoff);
 /* World Cup qualifying 2006 to 2022 (win/season_intl_qual.c): the places of each section and the
  * inter-confederation play-offs. Each gives the original's value outside a season game and the cycles 2006 to
  * 2022. */

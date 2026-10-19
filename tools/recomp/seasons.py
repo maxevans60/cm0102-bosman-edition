@@ -192,6 +192,16 @@ PATCHES = {
     0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
     0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
     0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
+
+    # Euro qualifying places (0.6.0 slice 27, win/season_intl_euroq.c). euro_champ_qual: in a season game the
+    # places follow the Euro year (campaign +0x40 + 2). Each site gives the original's value in the base game and
+    # for a Euro of 16 teams. 0x57f9e8 (in 0x57f920) puts back the direct places of a group after the ranking
+    # stage: 2 for a Euro of 24 (this in esi). 0x57fb4f (in 0x57fa10) is the place that the ranking takes from
+    # each group: the third for Euro 2016 (this in ebp). 0x57d70e (vtable +0x48 0x57d700) is the last group id
+    # of the result news: 0x3e9 + the last group stage +0xff (7 in the original, 8 with 10 groups; this in edi).
+    0x57F9E8: (0x1, "rt_euroq_direct(esi, 1u)"),
+    0x57FB4F: (0x1, "rt_euroq_ranked_place(ebp, 1u)"),
+    0x57D70E: (0x3F0, "(0x3e9u + (uint32_t)(int32_t)(int8_t)R8(edi + 0xffu))"),
 }
 
 # address: (the instruction in the original, C code)
@@ -323,4 +333,36 @@ INSNS = {
     # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
     # edition (the original skips it when +0x40 is the game year).
     0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
+    # Euro qualifying places (0.6.0 slice 27, win/season_intl_euroq.c). The places and stage indices of the
+    # format: after set_up_rules sets +0xbf (0x57e963) and at the ctor epilogue (0x57d03b, also after a load: the
+    # bytes +0xff..+0x101 are not saved). The play-off size by the host count +0xf6: 0x57f014 (best places),
+    # 0x57f115 (play-off teams), both in 0x57ef50, and 0x57d4f3 (play-off template, in 0x57d190): Euro 2016 takes
+    # the two-host shape (1 best third, 8 in the play-off). The group sizes of 0x57d9d0 (0x57da6e, 0x57da8e,
+    # 0x57da9b; ecx this, the group at [esp + 0x204]): with 24 teams the pool count over the groups, so the
+    # places sum to the pool. The draw 0x57dab0 sets the order and counts of 9 groups: 0x57db30 sets entry 9 of
+    # the order ([esp + 0x21]) and its count ([esp + 0x2d]) for 10 groups (this in esi). With 10 groups there
+    # is no ranking stage: 0x57ff50 and 0x57ff9c (in update_for_date 0x57fd60, this in esi) skip 0x57f920 and
+    # 0x57fa10. The log of each qualifier before the add (0x57d605 group or best place, 0x57d69c play-off; the
+    # Euro is [0xadadfc][key 0x9cf7a4], the stage at [esp + 0x10]). The flags of the replaced instructions are not
+    # read before another instruction sets them.
+    0x57E963: ("mov byte ptr [esi + 0xbf], 1", "W8(esi + 0xbfu, 1u); rt_euroq_rules(esi);"),
+    0x57D03B: ("mov ecx, dword ptr [esp + 0x214]", "rt_euroq_rules(esi); ecx = R32(esp + 0x214u);"),
+    0x57F014: ("mov al, byte ptr [esi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_euroq_hosts(esi, R8(esi + 0xf6u)) & 0xffu);"),
+    0x57F115: ("mov al, byte ptr [esi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_euroq_hosts(esi, R8(esi + 0xf6u)) & 0xffu);"),
+    0x57D4F3: ("mov al, byte ptr [edi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_euroq_hosts(edi, R8(edi + 0xf6u)) & 0xffu);"),
+    0x57DA6E: ("mov ax, 5", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 5u) & 0xffffu);"),
+    0x57DA8E: ("mov ax, 5", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 5u) & 0xffffu);"),
+    0x57DA9B: ("mov ax, 6", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 6u) & 0xffffu);"),
+    0x57DB30: ("mov byte ptr [esp + 0x14], 0", "W8(esp + 0x14u, 0u); if (rt_euroq_ten_groups(esi)) { W8(esp + 0x21u, 9u); W8(esp + 0x2du, 0u); }"),
+    0x57FF50: ("call 0x57f920", "if (!rt_euroq_no_ranking(esi)) { esp -= 4; W32(esp, 0x57ff55u); SYNC(); f_0057f920(); LOAD(); RT_AFTER_CALL(); }"),
+    0x57FF9C: ("call 0x57fa10", "if (!rt_euroq_no_ranking(esi)) { esp -= 4; W32(esp, 0x57ffa1u); SYNC(); f_0057fa10(); LOAD(); RT_AFTER_CALL(); }"),
+    0x57D605: ("push esi", "rt_euroq_log(R32(eax + edx * 4u), esi, R32(esp + 0x10u), 0u); esp -= 4; W32(esp, esi);"),
+    0x57D69C: ("push esi", "rt_euroq_log(R32(ecx + eax * 4u), esi, R32(esp + 0x10u), 1u); esp -= 4; W32(esp, esi);"),
+    # EuroChampQual ctor 0x57ce10 (0.6.0 slice 27): when the game year is past the campaign year (0x57d01a) it
+    # loads the real groups, fixtures and results of the 2002 campaign (load_2002_campaign 0x580bd0, at 0x57d025:
+    # its fixed list of 49 nations and the results of 2002 and 2003). That is right only for the 2002 campaign
+    # (a 2002/03 or 2003/04 start). A later start (2019: campaign 2018 of 10 groups) loaded the 2002 data into
+    # its own campaign and stopped at the box "euro_champ_qual.cpp 2358" (0x58325b). The base game never loads
+    # (game year 2001, campaign 2002), so its path is the original's.
+    0x57D021: ("jle 0x57d02a", "if (cc_le(F) || R16(esi + 0x40u) != 0x7d2u) goto L_57d02a;"),
 }

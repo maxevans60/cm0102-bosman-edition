@@ -11,6 +11,8 @@ test log RECOMP_SEASON_INTL_LOG=1. The runs:
     2003    October 2003, 2003/04 to 2004/05, changing rules on (Euro 2004, no golden goal from 2004/05)
     2005    September 2005, 2005/06 to 2006/07, changing rules on (World Cup 2006, Australia to Asia)
     2008    September 2008, 2008/09 to 2009/10, changing rules on (the 2010 inter-confederation play-offs)
+    2014    October 2014, 2014/15 to 2015/16, changing rules on (Euro 2016 qualifying in full: a draw of 24
+            with no fill)
     2015    October 2015, 2015/16 to 2016/17, changing rules on (Euro 2016 with 24 teams)
     2017    October 2017, 2017/18 to 2018/19, changing rules on (the last Confederations Cup lies before)
     2018    October 2018, 2018/19 to 2019/20, changing rules on (Asian Cup and Africa Cup of Nations of 24 teams)
@@ -27,6 +29,7 @@ The checks (each run):
       the table from the start season (or the waiting year 2200 when the table has none)
     - on: when the year of a class changes between two reports, the new year is the next edition of the
       table (tools/seasons/make_intl.py); off: the old year plus the original's step
+    - no draw after a full qualifying is short (log "no fill"), and the draws of NO_FILL take no team from the fill
     - no inter-confederation play-off is built without a team (log "wc play-off ... v none")
     - the nation renames of RENAMES and the date moves of MOVES are in the log
     - on: each host row that the runtime writes names the first two hosts of the table (log "host")
@@ -52,6 +55,7 @@ RUNS = {
     "2003": (2003, "October 2003", "on"),
     "2005": (2005, "September 2005", "on"),
     "2008": (2008, "September 2008", "on"),
+    "2014": (2014, "October 2014", "on"),
     "2015": (2015, "October 2015", "on"),
     "2017": (2017, "October 2017", "on"),
     "2018": (2018, "October 2018", "on"),
@@ -76,7 +80,10 @@ MOVES = {"2021": [("world_cup", 2022, 161)]}
 LINES = {"2015": ["euro_champ 2016 draw of 24 teams in 6 groups", "euro_champ 2016 round of 16"],
          "2018": ["asia_nations 2019 round of 16", "african_nations 2019 round of 16"],
          "2023": ["goldcup 2024: 16 teams", "goldcup 2024 quarter-finals of 16 teams"],
-         "2008": ["wc play-off 2010:"]}
+         "2008": ["wc play-off 2010:"],
+         "2014": ["euro_champ 2016 draw of 24 teams in 6 groups"]}
+# Finals whose draw must take no team from the fill: the qualifying ran in full in the game.
+NO_FILL = {"2008": ["world_cup 2010"], "2014": ["euro_champ 2016"]}
 STEPS = {"world_cup": 4, "euro_champ": 4, "fifa_confed": 2, "olympics": 4, "goldcup": 2, "african_nations": 2,
          "asia_nations": 4, "oceania_nations": 2}
 IDLE = 2200
@@ -148,6 +155,12 @@ def check(name, start, rules, work):
     for x in log:
         if "season intl: wc play-off" in x and (" v none" in x or x.rstrip().endswith("none v")):
             fails.append(f"{name}: a play-off without a team: {x.strip()}")
+    for x in log:
+        if "no fill (full qualifying)" in x:
+            fails.append(f"{name}: a short list after a full qualifying: {x.strip()}")
+    for comp in NO_FILL.get(name, []):
+        if any(f"season intl: {comp}:" in x and " filled" in x and not x.rstrip().endswith(" 0 filled") for x in log):
+            fails.append(f"{name}: the {comp} draw took teams from the fill")
     for f, y, days in MOVES.get(name, []):
         if not any(f"season intl: {f} {y} moves by {days} days" in x for x in log):
             fails.append(f"{name}: {f} {y} does not move by {days} days")

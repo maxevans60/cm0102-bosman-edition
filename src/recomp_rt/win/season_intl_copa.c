@@ -411,12 +411,17 @@ void o_0040f590(void);
 /* vtable +0x30 of the Copa America and the Asian Cup (0x96b430, 0x967644): a jump to vtable +0x30 of stage[2]
  * (0x40f590..0x40f598). The Asian Cup's stage index is a site of season_intl_cups.c (0x40f593). For a Copa
  * America of 16 the jump goes to stage[3]. */
-int season_club_world_history_thunk(void);      /* slice 26, season_kind_club_world.c */
+/* One wrap of 0x40f590 serves every slice. Another slice that needs this function (slice 26: the Club World
+ * Championship's history thunk of slot 12) defines season_club_world_history_thunk(): it runs first and gives 1
+ * when it handled the call. The weak definition here gives 0, so this file links alone (clang and gcc keep the
+ * other file's strong definition). */
+__attribute__((weak)) int season_club_world_history_thunk(void) { return 0; }
 
 RT_WRAP(0040f590, copa_asian_final_stage)
 {
-    if (season_club_world_history_thunk() || rt_unwinding) return;
     uint32_t self = cpu.ecx;
+    if (season_club_world_history_thunk() || rt_unwinding) return;
+    cpu.ecx = self;
     if (copa16(self) < 0) {
         o_0040f590();
         return;
@@ -447,7 +452,12 @@ static void knockout16(int e, uint32_t self)
     g[0] = self;
     for (int i = 1; i < GROUPS; i++) g[i] = rd32(g_mem, stages + 4u * (uint32_t)(i - 1));
     uint32_t teams = game_malloc(8u * 4u), out = game_malloc(8);
-    if (rt_unwinding || !teams || !out) return;
+    if (rt_unwinding) return;
+    if (!teams || !out) {                               /* no leak when only one block came */
+        if (teams) game_free(teams);
+        if (out) game_free(out);
+        return;
+    }
     for (int k = 0; k < 8; k++) {
         const char *b = editions[e].bracket[k];
         wr32(g_mem, teams + 4u * (uint32_t)k, table_club(g[b[1] - 'A'], b[0] - '1'));
