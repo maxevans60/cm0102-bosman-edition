@@ -923,10 +923,19 @@ static int in_round(uint32_t cup, const Layout *L, int r, int slot)
 }
 
 /* The loser of tie t of Europa League round r, or 0 while the tie goes on: the side whose entry byte +5 is -1
- * (0x51b5cd) and that is in no tie of round r + 1 (a winner of round r that lost later is in one). */
+ * (0x51b5cd) and that is in no tie of round r + 1 (a winner of round r that lost later is in one). In the last
+ * round the winner gets +5 = 1 (0x51af97, as cl_losers reads it), so the loser is the other side. */
 static uint32_t el_loser(uint32_t el, const Layout *E, int r, int t)
 {
     uint32_t e = rd32(g_mem, el + 0xa7), tie = tie_at(el, r, t);
+    if (r == E->rounds - 1 && readable(e)) {
+        int16_t home = (int16_t)rd16(g_mem, tie), away = (int16_t)rd16(g_mem, tie + 2);
+        if (home < 0 || away < 0) return 0;
+        int8_t h5 = (int8_t)g_mem[e + ENTRY * (uint32_t)home + 5], a5 = (int8_t)g_mem[e + ENTRY * (uint32_t)away + 5];
+        if (h5 == 1 && a5 != 1) return rd32(g_mem, e + ENTRY * (uint32_t)away);
+        if (a5 == 1 && h5 != 1) return rd32(g_mem, e + ENTRY * (uint32_t)home);
+        return 0;
+    }
     for (int h = 0; h < 2 && readable(e); h++) {
         int16_t side = (int16_t)rd16(g_mem, tie + (h ? 0 : 2));
         if (side < 0 || (int8_t)g_mem[e + ENTRY * (uint32_t)side + 5] != -1) continue;

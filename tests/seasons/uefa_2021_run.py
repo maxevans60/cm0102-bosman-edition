@@ -99,8 +99,10 @@ def season_checks(name, log, report, season):
     at = log.find(f"access list {key}:")
     if at >= 0 and "decided on away goals" in log[at:]:
         fails.append(f"{name}: a UEFA tie decided on away goals in {key}")
-    for bad in ("not even", "gives no layout", "not 32", "no Champions League third", "runners-up\n",
-                "clubs, not 32", "no format for"):
+    # "UEFA Cup groups: n clubs, not 32" is a day that the group draw waits for its clubs (slice 23 on main): the
+    # drawn lines above show that it came.
+    for bad in ("not even", "gives no layout", "winners, not 32", "no Champions League third", "runners-up\n",
+                "no Europa League third", "no format for", "the Europa League has no 8 groups"):
         if bad in log:
             fails.append(f"{name}: log line with {bad!r}")
     if os.path.exists(report):
