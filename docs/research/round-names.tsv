@@ -20,3 +20,11 @@ uefa_cup	240	2018	long,plural	Preliminary Round	https://kassiesa.net/uefa/files/
 uefa_cup	240	2018	abbreviated	Prelim. Rnd	the long name in the original's short words; source of the name as the row above
 uefa_cup	30	2021	long,plural	Knockout Round Play-offs	https://kassiesa.net/uefa/files/2021-22-uefa-el-rules.pdf ("knockout round play-offs", Article 17); https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_League_knockout_phase (section "Knockout round play-offs"); slice 24, rules table row uefa-165
 uefa_cup	30	2021	abbreviated	KO Play-offs	the long name in the original's short words; source of the name as the row above
+world_cup	20	2001	long,plural	Round of 16	https://en.wikipedia.org/wiki/2002_FIFA_World_Cup_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-world-2
+world_cup	20	2001	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+euro_champ	20	2015	long,plural	Round of 16	https://en.wikipedia.org/wiki/UEFA_Euro_2016_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-continental-155
+euro_champ	20	2015	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+african_nations	20	2018	long,plural	Round of 16	https://en.wikipedia.org/wiki/2019_Africa_Cup_of_Nations_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-continental-194
+african_nations	20	2018	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+asia_nations	20	2018	long,plural	Round of 16	https://en.wikipedia.org/wiki/2019_AFC_Asian_Cup_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-continental-196
+asia_nations	20	2018	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
