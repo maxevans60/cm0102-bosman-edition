@@ -9,7 +9,9 @@ Usage:
 Each run is a season jump of tests/seasons/rules_report_check.py. The rules report holds a "uefa" line for the
 Champions League and the UEFA Cup at the start and end of each season (src/recomp_rt/win/season_uefa.c): the
 stage count, the current stage, the clubs of the group stages in stages 0 to 7 and after them, and the clubs and
-rounds of the knockout stage, and the winner of its history row of the season. The runs:
+rounds of the knockout stage, and the winner of its history row of the season; a "schedule" line gives the
+dates that the Schedule tab lists (Comp::build_match_date_list 0x48d500): none may have a year outside the
+season, and the Champions League with a round of 16 lists no group match day after its group stage. The runs:
     2007    November 2007, changing rules off, the season 2007/08: Champions League with one group stage and a
             round of 16 (9 stages, 32 clubs in groups, 16 in the knockout), UEFA Cup with 40 clubs in groups and
             a knockout of 32 (9 stages), Intertoto Cup of 3 rounds (the log line of season_uefa_cup.c)
@@ -98,6 +100,32 @@ def expect_label(labels, season, file, code, want, label, absent=False, style=1)
     return []
 
 
+def schedules(report):
+    """{(season, file): (entries, bad years, league entries of stages 8 on)} of the schedule lines: the list of
+    the Schedule tab (Comp::build_match_date_list 0x48d500) at the end of each season."""
+    out = {}
+    with open(report, encoding="latin-1") as f:
+        for line in f:
+            c = line.rstrip("\n").split("\t")
+            if c[0] == "schedule" and len(c) >= 7:
+                out[(int(c[1]), c[3])] = (int(c[4]), int(c[5]), int(c[6]))
+    return out
+
+
+def expect_schedule(sched, season, file, label, phase2=False):
+    got = sched.get((season, file))
+    if got is None:
+        return [f"{label}: no schedule line of {file} in {season}"]
+    n, bad, late_league = got
+    fails = []
+    if n <= 0 or bad:
+        fails.append(f"{label}: {file} {season} schedule: {n} dates, {bad} with a year outside the season")
+    if (late_league > 0) != phase2:
+        fails.append(f"{label}: {file} {season} schedule: {late_league} league dates in stage 8 or later, want "
+                     f"{'some (phase 2)' if phase2 else 'none'}")
+    return fails
+
+
 def expect(lines, season, file, want, label):
     u = lines.get((season, "end", file))
     if not u:
@@ -124,6 +152,10 @@ def run_2007(program, game, work):
         lines = uefa_lines(report)
         fails += expect(lines, 2007, "european_cup", CL_R16, "2007")
         fails += expect(lines, 2007, "uefa_cup", UC_GROUPS, "2007")
+    if os.path.exists(report):                  # the Schedule tab lists the dates of this format
+        sched = schedules(report)
+        fails += expect_schedule(sched, 2007, "european_cup", "2007")
+        fails += expect_schedule(sched, 2007, "uefa_cup", "2007")
     if "Intertoto Cup 2007 with 3 rounds" not in log:
         fails.append("2007: the Intertoto Cup did not play 3 rounds")
     return fails
@@ -143,6 +175,10 @@ def run_change(program, game, work):
         fails += expect(lines, 2003, "uefa_cup", UC_ORIGINAL, "change")
         fails += expect(lines, 2004, "european_cup", CL_R16, "change")
         fails += expect(lines, 2004, "uefa_cup", UC_GROUPS, "change")
+        sched = schedules(report)
+        fails += expect_schedule(sched, 2002, "european_cup", "change", phase2=True)
+        fails += expect_schedule(sched, 2004, "european_cup", "change")
+        fails += expect_schedule(sched, 2004, "uefa_cup", "change")
     if os.path.exists(report):                  # Q370: the real round names from their season
         labels = round_labels(report)
         fails += expect_label(labels, 2002, "european_cup", 20, "Round of 16", "change", absent=True)
