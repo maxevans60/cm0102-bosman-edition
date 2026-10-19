@@ -954,6 +954,94 @@ RT_WRAP(004c0f00, con_champ_rounds)
             count);
 }
 
+/* ---- Step A1: the AFC places of Japan, South Korea and Australia (part 26c) ----
+ *
+ * The Asian Club Championship's picker `select_qualified_clubs` 0x40b950 (thiscall, returns 1 at 0x40bea7) fills
+ * 32 entrants at +0xb2 (West 0 to 15, East 16 to 31) with one club a nation: the holder (slot 0 or 16), the
+ * champions of Japan (record [0x9cf65c]) and South Korea ([0x9cfa00]) when selected, then one club of each Asian
+ * nation (0x40bc08..0x40be90). The table gives Japan, South Korea and, from 2006/07 (slice 27 moves Australia to
+ * the AFC), Australia more places ("places: JPN 4, KOR 4, AUS 2"; the "+ 1 play-off" places are not counted).
+ * After the original, the next clubs of these nations by league order (division level +0x69 of club +0x5b, high
+ * first, then the league position club +0x5f, as the CONMEBOL seeding reads them, 0x4c63a9..0x4c63bd) take the
+ * East places of other nations, from the last East place back. Slots 0 and 16 (the holder) stay. The format of the
+ * competition stays the original's (Form A, the groups first, is not built: club-cups doc). */
+
+#define AFC_ENTRANTS 0xb2u              /* Club *[32] */
+#define NATIONS_TABLE 0xae23a8u         /* nation records of 0x122 bytes, by id (0x40bc46..0x40bc54) */
+#define NATION_SIZE 0x122u
+#define KEY_JAPAN 0x9cf36cu
+#define KEY_KOREA 0x9cf484u
+#define KEY_AUSTRALIA 0x9cf224u
+
+static uint32_t nation_of_key(uint32_t key)
+{
+    int32_t id = (int32_t)rd32(g_mem, key);
+    uint32_t base = rd32(g_mem, NATIONS_TABLE);
+    return id >= 0 && base ? base + (uint32_t)id * NATION_SIZE : 0;
+}
+
+/* The club of nation that is not in skip[0..n) and comes first in the league order, or 0. */
+static uint32_t next_league_club(uint32_t nation, const uint32_t *skip, int n)
+{
+    uint32_t clubs = rd32(g_mem, CLUBS), best = 0;
+    int32_t count = (int32_t)rd32(g_mem, CLUB_TABLE_COUNT) - 2 * (int32_t)rd32(g_mem, 0xae2350u);
+    int best_level = -100000, best_pos = 1000;
+    for (int32_t i = 0; clubs && nation && i < count; i++) {
+        uint32_t c = clubs + (uint32_t)i * CLUB_ROW, div = rd32(g_mem, c + 0x5b);
+        if (rd32(g_mem, c + 0x53) != nation || !div) continue;
+        int level = (int16_t)rd16(g_mem, div + 0x69), pos = g_mem[c + 0x5f] ? g_mem[c + 0x5f] : 999;
+        if (level < best_level || (level == best_level && pos >= best_pos)) continue;
+        if (listed(skip, n, c)) continue;
+        best = c, best_level = level, best_pos = pos;
+    }
+    return best;
+}
+
+void o_0040b950(void);
+
+RT_WRAP(0040b950, asia_club_champ_entrants)
+{
+    uint32_t obj = cpu.ecx;
+    o_0040b950();
+    if (rt_unwinding || !season_comps_on()) return;
+    uint32_t list = rd32(g_mem, obj + AFC_ENTRANTS);
+    int year = (int16_t)rd16(g_mem, obj + YEAR_AT);
+    const SeasonRule *r = row_of("asian_champions", season_changing_rules() ? year : season_start_year());
+    if (!list || !r || !r->format_text) return;
+    static const struct { const char *code; uint32_t key; } nat[3] = {
+        {"JPN", KEY_JAPAN}, {"KOR", KEY_KOREA}, {"AUS", KEY_AUSTRALIA}};
+    uint32_t picked[32];
+    for (int i = 0; i < 32; i++) picked[i] = rd32(g_mem, list + 4u * (uint32_t)i);
+    int added[3] = {0, 0, 0}, slot = 31;
+    for (int k = 0; k < 3; k++) {
+        int want = row_places(r->format_text, nat[k].code);
+        uint32_t nation = nation_of_key(nat[k].key);
+        if (want <= 0 || !nation) continue;
+        int have = 0;
+        for (int i = 0; i < 32; i++)
+            if (picked[i] && rd32(g_mem, picked[i] + 0x53) == nation) have++;
+        while (have < want) {
+            /* the last East place of a club of another nation (not the holder slot 16) */
+            while (slot > 16) {
+                uint32_t c = picked[slot], cn = c ? rd32(g_mem, c + 0x53) : 0;
+                int ours = 0;
+                for (int j = 0; j < 3; j++) ours |= cn && cn == nation_of_key(nat[j].key);
+                if (!ours) break;
+                slot--;
+            }
+            if (slot <= 16) break;
+            uint32_t c = next_league_club(nation, picked, 32);
+            if (!c) break;
+            picked[slot--] = c;
+            have++;
+            added[k]++;
+        }
+    }
+    for (int i = 16; i < 32; i++) wr32(g_mem, list + 4u * (uint32_t)i, picked[i]);
+    fprintf(stderr, "recomp: asian champions %d: places added JPN %d, KOR %d, AUS %d\n", year, added[0], added[1],
+            added[2]);
+}
+
 /* ---- Years with no edition (the shared rule of season_comps.h) ---- */
 
 static void cups_before(const SeasonChange *c)

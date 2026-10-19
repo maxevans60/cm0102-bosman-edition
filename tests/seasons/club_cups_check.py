@@ -24,6 +24,7 @@ RECOMP_SEASON_CHANGE_LOG=1. The runs and the editions each must show:
 
 The checks (each run): the jump ends with code 0; each listed edition logs its club list with the table's club
 count ("club cup <file> <year>: <n> clubs, <r> rounds"), and its winner ("winner") when the run passes its final;
+each draw of the Asian Club Championship adds Japanese places (step A1, the table's "places: JPN n");
 each CONMEBOL seeding logs 32 Libertadores places (step L1: the places by nation of the table's row, the
 nations short of clubs filled from the others); the base run logs no "club cup", no "new competition new_" and no
 "libertadores places" line. A run takes about 6 to 15 minutes.
@@ -102,6 +103,13 @@ def check(name, log):
     print(f"  {'ok  ' if ok else 'FAIL'}  {name}: Libertadores places at each seeding: {places}")
     if not ok:
         failed.append(f"{name}: Libertadores places {places}, want 32 at each seeding")
+    # Step A1: the AFC places of Japan (selected in these runs) from the table: more than the original's one club.
+    afc = [(int(y), int(j)) for y, j in re.findall(r"asian champions (\d+): places added JPN (\d+)", text)]
+    if "Japan" in RUN_NATIONS.get(name, NATIONS) and name != "2001":
+        ok = bool(afc) and all(j >= 1 for _, j in afc)
+        print(f"  {'ok  ' if ok else 'FAIL'}  {name}: AFC places added for Japan (year, clubs): {afc}")
+        if not ok:
+            failed.append(f"{name}: AFC places for Japan {afc}, want at least one added at each draw")
     boxes = re.findall(r"recomp: message box.*", text)
     if boxes:
         failed.append(f"{name}: message boxes: {boxes[:2]}")
