@@ -39,8 +39,14 @@
  *      the rounds below in its path (the group stage first from the Champions Path: the access lists give the
  *      free place to the best-ranked champion). The lowest round gives up its extra clubs, and fills a gap with
  *      the first club with no place of the best-ranked nations (as the UEFA Cup's fillers of 0x902cb0).
- * Each club gets +0x1db and the entry code of season_uefa.h (SEASON_UEFA_CL_*, SEASON_UEFA_EL_*), and its
- * nation entry +0x11 one more. Entry +0xc and +0xd get the nation's league places of the list (the table
+ *   Slice 24, part b (2021/22 on): after step 4 the Conference League places of each nation ("k" rows): the
+ *      first the cup winner when the nation has no Europa League place, the last the league cup winner for the
+ *      nations of the "M" rows, the others the first club with no place. The Conference League title holder
+ *      gets a Europa League group place ("Y" rows, 2022/23 on) or a Conference League place ("K" rows) when it
+ *      has no place yet. Step 6 runs for the Conference League too, on one path. These places come only when the
+ *      game has the Conference League record (season_uefa_ecl_id), and its id is the club's +0x1db.
+ * Each club gets +0x1db and the entry code of season_uefa.h (SEASON_UEFA_CL_*, SEASON_UEFA_EL_*,
+ * SEASON_UEFA_ECL_*), and its nation entry +0x11 one more. Entry +0xc and +0xd get the nation's league places of the list (the table
  * marks), +0xe 0. */
 #include "win.h"
 #include "season.h"
@@ -94,7 +100,7 @@ static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 
 typedef struct {
     uint32_t club;
-    char comp;          /* 'c' or 'e' */
+    char comp;          /* 'c', 'e' or 'k' (slice 24: the Conference League) */
     int code;
     int rank;           /* 1 is the top association */
     int champion;       /* a Champions League club that is its nation's champion (the Champions Path) */
@@ -106,10 +112,14 @@ static int n_placed;
 
 static int has_place(uint32_t club) { return readable(club) && (int32_t)rd32(g_mem, club + 0x1db) != -1; }
 
+static int32_t ecl_id = -1;             /* slice 24: the Conference League record id of assign_all, -1 for none */
+
 static void add(uint32_t club, char comp, int code, int rank, int champion)
 {
     if (!readable(club) || has_place(club) || !readable(rd32(g_mem, club + 0x53)) || n_placed >= MAX_PLACED) return;
-    wr32(g_mem, club + 0x1db, rd32(g_mem, comp == 'c' ? KEY_CL : KEY_UC));     /* the mark of a place, as 0x90430e */
+    if (comp == 'k' && ecl_id < 0) return;
+    /* The mark of a place, as 0x90430e. */
+    wr32(g_mem, club + 0x1db, comp == 'k' ? (uint32_t)ecl_id : rd32(g_mem, comp == 'c' ? KEY_CL : KEY_UC));
     placed[n_placed] = (Placed){club, comp, code, rank, champion, n_placed};
     n_placed++;
 }
@@ -121,15 +131,16 @@ static uint32_t pick(uint32_t self, uint32_t records, int count, uint32_t nation
     return rt_unwinding ? 0 : c;
 }
 
-static uint32_t history_club(uint32_t key, int k)
+static uint32_t history_club_of(int32_t id, int k)
 {
-    int32_t id = (int32_t)rd32(g_mem, key);
     uint32_t recs = rd32(g_mem, COMP_RECORDS);
     if (id < 0 || !readable(recs)) return 0;
     uint32_t a[2] = {recs + 0x6bu * (uint32_t)id, (uint32_t)k};
     uint32_t c = call_cdecl(F_HISTORY_CLUB, 2, a);
     return rt_unwinding || !readable(c) ? 0 : c;
 }
+
+static uint32_t history_club(uint32_t key, int k) { return history_club_of((int32_t)rd32(g_mem, key), k); }
 
 /* The winner (k 0) or runner-up (k 1) of the cup at offset off (0x1e cup, 0x22 league cup) of the nation's
  * league table entry, or 0. */
@@ -205,6 +216,8 @@ static const int CL_CHAMPIONS[] = {SEASON_UEFA_CL_G, SEASON_UEFA_CL_PO_CP, SEASO
 static const int CL_LEAGUE[] = {SEASON_UEFA_CL_G, SEASON_UEFA_CL_PO_LP, SEASON_UEFA_CL_Q3_LP, SEASON_UEFA_CL_Q2_LP};
 static const int EL_MAIN[] = {SEASON_UEFA_EL_G, SEASON_UEFA_EL_PO, SEASON_UEFA_EL_Q3, SEASON_UEFA_EL_Q2,
                               SEASON_UEFA_EL_Q1, SEASON_UEFA_EL_PR};
+static const int ECL_MAIN[] = {SEASON_UEFA_ECL_G, SEASON_UEFA_ECL_PO, SEASON_UEFA_ECL_Q3, SEASON_UEFA_ECL_Q2,
+                               SEASON_UEFA_ECL_Q1};
 
 static int count_code(char comp, int code)
 {
@@ -230,6 +243,7 @@ static int path_index(const int *p, int n, int code)
 static void path_of(const Placed *c, const int **p, int *n)
 {
     if (c->comp == 'e') *p = EL_MAIN, *n = 6;
+    else if (c->comp == 'k') *p = ECL_MAIN, *n = 5;
     else if (path_index(CL_LEAGUE, 4, c->code) > 0 || (c->code == SEASON_UEFA_CL_G && !c->champion))
         *p = CL_LEAGUE, *n = 4;
     else *p = CL_CHAMPIONS, *n = 6;
@@ -411,6 +425,34 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
         }
     }
     if (rt_unwinding) return;
+    /* Slice 24, part b: the Conference League places and its title holder. */
+    ecl_id = r->ecl_round_count > 0 ? season_uefa_ecl_id() : -1;
+    for (int e = 0; ecl_id >= 0 && e < entries && !rt_unwinding; e++) {
+        uint32_t ent = self + 0x12u * (uint32_t)e, nation = rd32(g_mem, ent + 4);
+        const char *pl = season_uefa_access_places(s, 'k', e + 1);
+        if (nation_suspended(r, nation)) continue;
+        int n = count_tokens(pl), el = count_tokens(season_uefa_access_places(s, 'e', e + 1));
+        int league_cup = nation == rd32(g_mem, LEAGUE_ENGLAND) && season_uefa_access_ecl_league_cup(s, "England");
+        for (int k = 0; k < n && !rt_unwinding; k++) {
+            uint32_t club = 0;
+            if (k == 0 && el == 0) {
+                club = cup_club(nation, 0x1e, 0);
+                if (has_place(club)) club = cup_club(nation, 0x1e, 1);
+            } else if (k == n - 1 && league_cup) {
+                club = cup_club(nation, 0x22, 0);
+            }
+            if (!club || has_place(club)) club = pick(self, records, count, rd32(g_mem, ent), 1, 1);
+            add(club, 'k', token_code('k', pl, k), e + 1, 0);
+        }
+    }
+    uint32_t ecl_holder = ecl_id >= 0 && !rt_unwinding ? history_club_of(ecl_id, 0) : 0;
+    const char *y = season_uefa_access_rule(s, 'Y'), *kk = season_uefa_access_rule(s, 'K');
+    if (ecl_holder && !rt_unwinding && !club_suspended(r, ecl_holder)) {
+        int rank = rank_of_nation(self, entries, rd32(g_mem, ecl_holder + 0x53));
+        if (y) add(ecl_holder, 'e', token_code('e', y, 0), rank, 0);
+        else if (kk) add(ecl_holder, 'k', token_code('k', kk, 0), rank, 0);
+    }
+    if (rt_unwinding) return;
     /* 6. The cascade to the round sizes of the row. */
     int target[SEASON_UEFA_CODE_SLOTS];
     season_uefa_new_clubs(r, 'c', target);
@@ -418,8 +460,12 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     cascade('c', CL_LEAGUE, 4, target, self, records, count, entries);
     season_uefa_new_clubs(r, 'e', target);
     cascade('e', EL_MAIN, 6, target, self, records, count, entries);
+    if (ecl_id >= 0 && !rt_unwinding) {
+        season_uefa_new_clubs(r, 'k', target);
+        cascade('k', ECL_MAIN, 5, target, self, records, count, entries);
+    }
     if (rt_unwinding) return;
-    int n_cl = 0, n_el = 0;
+    int n_cl = 0, n_el = 0, n_ecl = 0;
     for (int i = 0; i < n_placed; i++) {
         uint32_t c = placed[i].club;
         if (!c) continue;
@@ -427,6 +473,7 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
         int rank = rank_of_nation(self, entries, rd32(g_mem, c + 0x53));
         if (rank <= entries) g_mem[self + 0x12u * (uint32_t)(rank - 1) + 0x11]++;
         if (placed[i].comp == 'c') n_cl++;
+        else if (placed[i].comp == 'k') n_ecl++;
         else n_el++;
     }
     /* Slice 24: the clubs of the club table with a UEFA place from a suspended nation (0 when the rule holds). */
@@ -435,10 +482,14 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     int n_clubs = (int32_t)rd32(g_mem, CLUB_COUNT);
     for (int i = 0; r->suspended && *r->suspended && readable(clubs) && i < n_clubs; i++) {
         uint32_t c = clubs + CLUB_SIZE * (uint32_t)i, id = rd32(g_mem, c + 0x1db);
-        if ((id == rd32(g_mem, KEY_CL) || id == rd32(g_mem, KEY_UC)) && club_suspended(r, c)) n_susp++;
+        if ((id == rd32(g_mem, KEY_CL) || id == rd32(g_mem, KEY_UC) || (ecl_id >= 0 && id == (uint32_t)ecl_id)) &&
+            club_suspended(r, c))
+            n_susp++;
     }
     fprintf(stderr, "recomp: uefa: access list %d/%02d: %d Champions League and %d Europa League places\n", s,
             (s + 1) % 100, n_cl, n_el);
+    if (ecl_id >= 0)
+        fprintf(stderr, "recomp: uefa: access list %d/%02d: %d Conference League places\n", s, (s + 1) % 100, n_ecl);
     if (r->suspended && *r->suspended)
         fprintf(stderr, "recomp: uefa: suspended %s: %d clubs with a place\n", r->suspended, n_susp);
     /* For the tests: England's places (the England entry's nation, LEAGUE_ENGLAND). */
@@ -446,7 +497,7 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
     for (int i = 0; i < n_placed; i++)
         if (placed[i].club && rd32(g_mem, placed[i].club + 0x53) == rd32(g_mem, LEAGUE_ENGLAND)) {
             if (placed[i].comp == 'c') en_cl++, en_g += placed[i].code == SEASON_UEFA_CL_G;
-            else en_el++;
+            else if (placed[i].comp == 'e') en_el++;
         }
     fprintf(stderr, "recomp: uefa: England %d/%02d: %d Champions League places, %d in the group stage, %d Europa "
             "League places\n", s, (s + 1) % 100, en_cl, en_g, en_el);

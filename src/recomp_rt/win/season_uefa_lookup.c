@@ -124,15 +124,19 @@ const char *season_uefa_access_rule(int season, char comp)
     return NULL;
 }
 
-int season_uefa_access_league_cup(int season, const char *name)
+static int league_cup_row(int season, char comp, const char *name)
 {
     int s = access_season(season);
     for (int i = 0; s >= 0 && i < season_uefa_access_count; i++)
-        if (season_uefa_access[i].season == s && season_uefa_access[i].comp == 'L' &&
+        if (season_uefa_access[i].season == s && season_uefa_access[i].comp == comp &&
             !strcmp(season_uefa_access[i].places, name))
             return 1;
     return 0;
 }
+
+int season_uefa_access_league_cup(int season, const char *name) { return league_cup_row(season, 'L', name); }
+
+int season_uefa_access_ecl_league_cup(int season, const char *name) { return league_cup_row(season, 'M', name); }
 
 /* ---- Entry codes and round sizes (slice 23) ---- */
 
@@ -140,16 +144,23 @@ int season_uefa_access_league_cup(int season, const char *name)
  * only, so they are the Champions Path. A plain PO or Q3 too. */
 int season_uefa_code(char comp, const char *tok, int n)
 {
-    static const struct { const char *t; int cl, el; } map[] = {
-        {"G", SEASON_UEFA_CL_G, SEASON_UEFA_EL_G},       {"PO-LP", SEASON_UEFA_CL_PO_LP, SEASON_UEFA_EL_PO},
-        {"PO-CP", SEASON_UEFA_CL_PO_CP, SEASON_UEFA_EL_PO}, {"PO", SEASON_UEFA_CL_PO_CP, SEASON_UEFA_EL_PO},
-        {"Q3-LP", SEASON_UEFA_CL_Q3_LP, SEASON_UEFA_EL_Q3}, {"Q3-CP", SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_EL_Q3},
-        {"Q3", SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_EL_Q3},  {"Q2-LP", SEASON_UEFA_CL_Q2_LP, SEASON_UEFA_EL_Q2},
-        {"Q2-CP", SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_EL_Q2}, {"Q2", SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_EL_Q2},
-        {"Q1", SEASON_UEFA_CL_Q1, SEASON_UEFA_EL_Q1},     {"PR", SEASON_UEFA_CL_PR, SEASON_UEFA_EL_PR},
+    static const struct { const char *t; int cl, el, ecl; } map[] = {
+        {"G", SEASON_UEFA_CL_G, SEASON_UEFA_EL_G, SEASON_UEFA_ECL_G},
+        {"PO-LP", SEASON_UEFA_CL_PO_LP, SEASON_UEFA_EL_PO, SEASON_UEFA_ECL_PO},
+        {"PO-CP", SEASON_UEFA_CL_PO_CP, SEASON_UEFA_EL_PO, SEASON_UEFA_ECL_PO},
+        {"PO", SEASON_UEFA_CL_PO_CP, SEASON_UEFA_EL_PO, SEASON_UEFA_ECL_PO},
+        {"Q3-LP", SEASON_UEFA_CL_Q3_LP, SEASON_UEFA_EL_Q3, SEASON_UEFA_ECL_Q3},
+        {"Q3-CP", SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_EL_Q3, SEASON_UEFA_ECL_Q3},
+        {"Q3", SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_EL_Q3, SEASON_UEFA_ECL_Q3},
+        {"Q2-LP", SEASON_UEFA_CL_Q2_LP, SEASON_UEFA_EL_Q2, SEASON_UEFA_ECL_Q2},
+        {"Q2-CP", SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_EL_Q2, SEASON_UEFA_ECL_Q2},
+        {"Q2", SEASON_UEFA_CL_Q2_CP, SEASON_UEFA_EL_Q2, SEASON_UEFA_ECL_Q2},
+        {"Q1", SEASON_UEFA_CL_Q1, SEASON_UEFA_EL_Q1, SEASON_UEFA_ECL_Q1},
+        {"PR", SEASON_UEFA_CL_PR, SEASON_UEFA_EL_PR, 0},
     };
     for (unsigned i = 0; i < sizeof map / sizeof map[0]; i++)
-        if ((int)strlen(map[i].t) == n && !strncmp(map[i].t, tok, (size_t)n)) return comp == 'c' ? map[i].cl : map[i].el;
+        if ((int)strlen(map[i].t) == n && !strncmp(map[i].t, tok, (size_t)n))
+            return comp == 'c' ? map[i].cl : comp == 'k' ? map[i].ecl : map[i].el;
     return 0;
 }
 
@@ -167,6 +178,10 @@ int season_uefa_code_clubs(const SeasonUefa *r, char comp, int code)
         if (code < 1 || code >= SEASON_UEFA_CL_CODES) return 0;
         int n = season_uefa_cl_round(r, CL_ROUND[code][0]);
         return n || !CL_ROUND[code][1] ? n : season_uefa_cl_round(r, CL_ROUND[code][1]);
+    }
+    if (comp == 'k') {
+        if (code < SEASON_UEFA_ECL_G || code >= SEASON_UEFA_ECL_CODES) return 0;
+        return season_uefa_ecl_level(r, EL_LEVEL[code - SEASON_UEFA_ECL_G]);
     }
     if (code < SEASON_UEFA_EL_G || code >= SEASON_UEFA_EL_CODES) return 0;
     return season_uefa_uc_level(r, EL_LEVEL[code - SEASON_UEFA_EL_G]);
@@ -194,8 +209,35 @@ static int cl_losers(const SeasonUefa *r, const char *tok, int n)
     return season_uefa_cl_level(r, name) / 2;
 }
 
+/* Slice 24: the losers of the row's Champions League ("c:") and Europa League ("e:") rounds that enter Conference
+ * League round ecl_code (ecl_drops). A Europa League round of all paths gives half its clubs. */
+static int ecl_dropped(const SeasonUefa *r, int ecl_code)
+{
+    int sum = 0;
+    for (const char *p = r->ecl_drops ? r->ecl_drops : ""; *p;) {
+        while (*p == ' ') p++;
+        const char *gt = strchr(p, '>');
+        if (!gt || gt - p < 3 || p[1] != ':') break;
+        const char *e = gt + 1;
+        while (*e && *e != ' ') e++;
+        if (season_uefa_code('k', gt + 1, (int)(e - gt - 1)) == ecl_code) {
+            if (p[0] == 'c') {
+                sum += cl_losers(r, p + 2, (int)(gt - p - 2));
+            } else if (p[0] == 'e' && gt - p - 2 < 8) {
+                char name[8];
+                memcpy(name, p + 2, (size_t)(gt - p - 2));
+                name[gt - p - 2] = 0;
+                sum += season_uefa_uc_level(r, name) / 2;
+            }
+        }
+        p = e;
+    }
+    return sum;
+}
+
 int season_uefa_dropped(const SeasonUefa *r, int el_code)
 {
+    if (r && el_code >= SEASON_UEFA_ECL_G && el_code < SEASON_UEFA_ECL_CODES) return ecl_dropped(r, el_code);
     if (!r || !r->drops || el_code < SEASON_UEFA_EL_G || el_code >= SEASON_UEFA_EL_CODES) return 0;
     int sum = 0;
     for (const char *p = r->drops; *p;) {
@@ -234,9 +276,10 @@ void season_uefa_new_clubs(const SeasonUefa *r, char comp, int *out)
             }
         return;
     }
-    for (int code = SEASON_UEFA_EL_G; code < SEASON_UEFA_EL_CODES; code++) {
-        int size = season_uefa_code_clubs(r, 'e', code), below = 0;
-        for (int j = code + 1; j < SEASON_UEFA_EL_CODES && !below; j++) below = season_uefa_code_clubs(r, 'e', j);
+    int lo = comp == 'k' ? SEASON_UEFA_ECL_G : SEASON_UEFA_EL_G, hi = comp == 'k' ? SEASON_UEFA_ECL_CODES : SEASON_UEFA_EL_CODES;
+    for (int code = lo; code < hi; code++) {
+        int size = season_uefa_code_clubs(r, comp, code), below = 0;
+        for (int j = code + 1; j < hi && !below; j++) below = season_uefa_code_clubs(r, comp, j);
         out[code] = size ? size - below / 2 - season_uefa_dropped(r, code) : 0;
     }
 }

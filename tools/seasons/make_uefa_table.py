@@ -44,6 +44,14 @@ PLACE_TOKENS = {"G", "PO", "PO-CP", "PO-LP", "Q3", "Q3-CP", "Q3-LP", "Q2", "Q2-C
 # the preliminary round and Q1 losers go to the Conference League.
 DROPS = {2009: "Q3>PO PO>G", 2018: "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G",
          2021: "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G"}
+# Slice 24, part b: where the losers of the Champions League ("c:") and the Europa League ("e:") enter the
+# Conference League, from the club counts of its rows ("136 entered + 45 from the Champions League and Europa
+# League" in 2021/22: the 3 preliminary round and 16 first qualifying round losers of the Champions League, the 8
+# third qualifying round and 10 play-off losers of the Europa League, and the 8 Europa League group thirds in the
+# knockout round play-offs). The rounds of the Conference League have one path in the game, as the Europa
+# League's: all Champions League losers of the first qualifying round go to its second qualifying round (the real
+# draw gives one of them a place in the third).
+ECL_DROPS = {2021: "c:PR>Q2 c:Q1>Q2 e:Q3>PO e:PO>G"}
 LEAGUE_CUP = {"England", "France"}  # the nations whose league cup winner can take a Europa League place
 # Slice 24: ecl the Conference League (k), ecl-holder its title holder (K; "G (EL)" a Europa League place, Y).
 ACCESS_COMPS = {"cl": "c", "el": "e", "cl-holder": "h", "el-holder": "H", "el-fairplay": "f", "ecl": "k",
@@ -336,7 +344,12 @@ def text():
         lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}, {c_text(drops)},")
         eg = r["ecl_groups"]
         lines.append(f"     {r['uc_ko_po']}, {r['away_goals']}, {c_text(r['suspended'])},")
-        lines.append(f"     {c_rounds(r['ecl_rounds'])}, {eg[0]}, {eg[1]}, {r['ecl_ko_po']}, {sc[4]}}},")
+        ecl_drops = ""
+        for first in sorted(ECL_DROPS):
+            if r["season"] >= first and r["ecl_rounds"]:
+                ecl_drops = ECL_DROPS[first]
+        lines.append(f"     {c_rounds(r['ecl_rounds'])}, {eg[0]}, {eg[1]}, {r['ecl_ko_po']}, {sc[4]},")
+        lines.append(f"     {eg[2]}, {eg[3]}, {c_text(ecl_drops)}}},")
     lines += ["};", "const int season_uefa_row_count = (int)(sizeof season_uefa_rows / sizeof season_uefa_rows[0]);",
               "", f"/* The access list by association rank from {ACCESS_FIRST}/{(ACCESS_FIRST + 1) % 100:02d} "
               "(docs/research/rules-0.6.0/uefa-access.tsv). */",

@@ -157,6 +157,27 @@ int main(void)
     CHECK(!strcmp(r2021->sc_city, "Belfast") && !strcmp(r2023->sc_city, "Piraeus") && r2023->sc_day == 16);
     CHECK(r2022->sc_extra_time == 1 && r2023->sc_extra_time == 0 && r2008->sc_extra_time == 1);
 
+    /* Part 24b, the Conference League of 2021/22 with one path a round: Q1 66 new; Q2 108 = 33 Q1 winners, the 3
+     * preliminary round and 16 first qualifying round losers of the Champions League, 56 new; Q3 64 = 54 winners
+     * and 10 new; PO 44 = 32 winners, the 8 third qualifying round losers of the Europa League and 4 new; groups 32
+     * = 22 winners and the 10 Europa League play-off losers. 136 entered, as the row says. */
+    CHECK(season_uefa_code('k', "Q2", 2) == SEASON_UEFA_ECL_Q2 && season_uefa_code('k', "PO", 2) == SEASON_UEFA_ECL_PO);
+    CHECK(season_uefa_code_clubs(r2021, 'k', SEASON_UEFA_ECL_Q2) == 108 && season_uefa_code_clubs(r2020, 'k', SEASON_UEFA_ECL_Q1) == 0);
+    CHECK(season_uefa_dropped(r2021, SEASON_UEFA_ECL_Q2) == 19 && season_uefa_dropped(r2021, SEASON_UEFA_ECL_PO) == 8);
+    CHECK(season_uefa_dropped(r2021, SEASON_UEFA_ECL_G) == 10 && season_uefa_dropped(r2021, SEASON_UEFA_ECL_Q1) == 0);
+    CHECK(season_uefa_dropped(r2020, SEASON_UEFA_ECL_Q2) == 0);
+    season_uefa_new_clubs(r2021, 'k', t);
+    CHECK(t[SEASON_UEFA_ECL_Q1] == 66 && t[SEASON_UEFA_ECL_Q2] == 56 && t[SEASON_UEFA_ECL_Q3] == 10);
+    CHECK(t[SEASON_UEFA_ECL_PO] == 4 && t[SEASON_UEFA_ECL_G] == 0 && t[SEASON_UEFA_EL_Q3] == 0);
+    int ecl_sum = 0;
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) ecl_sum += t[i];
+    CHECK(ecl_sum == 136);
+    CHECK(r2021->ecl_meetings == 2 && r2021->ecl_through == 2 && !strcmp(r2020->ecl_drops, ""));
+    /* The league cup winner's Conference League place (rows M), the Conference League holder in the Europa
+     * League groups from 2022/23 (Y). */
+    CHECK(season_uefa_access_ecl_league_cup(2021, "England") && !season_uefa_access_ecl_league_cup(2021, "France"));
+    CHECK(season_uefa_access_rule(2021, 'Y') == NULL && !strcmp(season_uefa_access_rule(2023, 'Y'), "G"));
+
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);
     CHECK(season_uefa_table_row(2099) == &season_uefa_rows[season_uefa_row_count - 1]);

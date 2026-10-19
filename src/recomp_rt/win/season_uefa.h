@@ -55,6 +55,10 @@ typedef struct {
     int ecl_groups, ecl_group_clubs, ecl_ko_po;
     int sc_extra_time;              /* 1: a level Super Cup has extra time, then penalties; 0: penalties after 90
                                      * minutes (2023 on) */
+    /* Slice 24, part b: the Conference League groups (meetings, places through a group) and where the losers of
+     * the other two cups enter it: "c:PR>Q2 c:Q1>Q2 e:Q3>PO e:PO>G" (c: Champions League, e: Europa League). */
+    int ecl_meetings, ecl_through;
+    const char *ecl_drops;
 } SeasonUefa;
 
 /* The entry codes of the access list (club +0x1df) in a season with an access list (season_uefa_seeding.c).
@@ -75,19 +79,27 @@ enum {
     SEASON_UEFA_EL_G = 11, SEASON_UEFA_EL_PO, SEASON_UEFA_EL_Q3, SEASON_UEFA_EL_Q2, SEASON_UEFA_EL_Q1, SEASON_UEFA_EL_PR,
     SEASON_UEFA_EL_CODES                                        /* 17: codes 11 to 16 */
 };
-#define SEASON_UEFA_CODE_SLOTS 20                               /* arrays indexed by an entry code */
+/* Slice 24, part b: the Conference League codes are 21 to 25, apart from the other two cups' for the same reason. A
+ * round has one path in the game, as the Europa League's: "Q2 CP" and "Q2 MP" are one round. */
+enum {
+    SEASON_UEFA_ECL_G = 21, SEASON_UEFA_ECL_PO, SEASON_UEFA_ECL_Q3, SEASON_UEFA_ECL_Q2, SEASON_UEFA_ECL_Q1,
+    SEASON_UEFA_ECL_CODES                                       /* 26: codes 21 to 25 */
+};
+#define SEASON_UEFA_CODE_SLOTS 30                               /* arrays indexed by an entry code */
 
-/* The code of an access list token of n characters ("Q3-CP") for comp 'c' or 'e', 0 when unknown. */
+/* The code of an access list token of n characters ("Q3-CP") for comp 'c', 'e' or 'k', 0 when unknown. */
 int season_uefa_code(char comp, const char *tok, int n);
 
 /* The clubs of a round of the row by code: the Champions League round of a code ("Q3 CP", or "Q3" when it has
  * no paths), the Europa League round of all paths ("Q2 CP" + "Q2 MP"). 0 when the row has no such round. */
 int season_uefa_code_clubs(const SeasonUefa *r, char comp, int code);
 
-/* The Champions League losers of the row that enter Europa League round code (the drops of the row). */
+/* The Champions League losers of the row that enter Europa League round code (the drops of the row), or (slice
+ * 24, a code of 21 to 25) the Champions League and Europa League losers that enter that Conference League round
+ * (ecl_drops). */
 int season_uefa_dropped(const SeasonUefa *r, int el_code);
 
-/* The new clubs of each entry code of comp ('c' or 'e') that the round sizes of row r give: the clubs of the
+/* The new clubs of each entry code of comp ('c', 'e' or 'k') that the round sizes of row r give: the clubs of the
  * round, less the winners of the round below in its path, less (Europa League) the Champions League losers that
  * enter it. out has SEASON_UEFA_CODE_SLOTS entries. Out[code], 0 for codes the row does not play. */
 void season_uefa_new_clubs(const SeasonUefa *r, char comp, int *out);
@@ -120,6 +132,9 @@ const char *season_uefa_access_rule(int season, char comp);
 
 /* 1 when the last Europa League place of the nation named name ("England") goes to its league cup winner in S. */
 int season_uefa_access_league_cup(int season, const char *name);
+
+/* Slice 24: 1 when the last Conference League place of that nation goes to its league cup winner in S (rows M). */
+int season_uefa_access_ecl_league_cup(int season, const char *name);
 
 extern const SeasonUefa season_uefa_rows[];
 extern const int season_uefa_row_count;
@@ -158,6 +173,24 @@ uint32_t season_uefa_uc_qual_table(uint32_t uc, uint32_t rec, int *rounds);
 int season_uefa_uc_direct_first(uint32_t uc);
 void season_uefa_uc_fill_drops(uint32_t uc);
 int season_uefa_report_clubs(uint32_t obj);
+
+/* Slice 24, part b: the kind of a Uefa_Cup object (vtable 0x970790): 'e' the Europa League (its record id is
+ * the key id [0x9cf6f0]), 'k' the Conference League (the record of the def new_conference_league of
+ * season_comps.c), 0 for any other object. The record pointer +4 is set at 0x90231d, before the first call of
+ * the constructor, so the kind holds inside it too. season_uefa_ecl_id gives the record id of the Conference
+ * League, -1 when the game has none. */
+#define SEASON_UEFA_ECL_RECORD "UEFA Europa Conference League"     /* its record's long name in the data */
+#define SEASON_UEFA_ECL_FILE "new_conference_league"
+int season_uefa_cup_kind(uint32_t obj);
+int32_t season_uefa_ecl_id(void);
+uint32_t season_uefa_ecl_object(void);
+
+/* Slice 24, part b, season_uefa_qual.c: the Conference League's entry table and list, its round table of stage
+ * -1, the first slot after its rounds and the losers of the other two cups into its slots. */
+int season_uefa_ecl_entrants(uint32_t ecl);
+uint32_t season_uefa_ecl_qual_table(uint32_t ecl, uint32_t rec, int *rounds);
+int season_uefa_ecl_direct_first(uint32_t ecl);
+void season_uefa_ecl_fill_drops(uint32_t ecl);
 
 /* Slice 24, season_uefa.c: flag 0x4 (no away goals rule) in +0x0f of each two-legged round of a round table of
  * a season whose row has no away goals rule. The game only. */

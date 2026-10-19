@@ -29,6 +29,7 @@
 #include "season_rules.h"
 #include "season_uefa.h"
 #include "season_round_names.h"
+#include "season_comps.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -588,6 +589,35 @@ static void uefa_before(const SeasonChange *c)
 
 const SeasonRuleKind season_kind_uefa = {"uefa", NULL, NULL, uefa_season, NULL, uefa_before, NULL};
 
+/* ---- Slice 24, part b: the Europa League and the Conference League, two objects of one class ---- */
+
+#define UC_VTABLE 0x00970790u
+#define COMP_RECORDS 0xae23d0u
+
+int season_uefa_cup_kind(uint32_t obj)
+{
+    if (!readable(obj) || rd32(g_mem, obj) != UC_VTABLE) return 0;
+    uint32_t rec = rd32(g_mem, obj + 4);
+    if (!readable(rec)) return 0;
+    if ((int32_t)rd32(g_mem, rec) == (int32_t)rd32(g_mem, KEY_UC)) return 'e';
+    const char *n = season_change_data_name(rec);
+    return n && !strcmp(n, SEASON_UEFA_ECL_RECORD) ? 'k' : 0;
+}
+
+int32_t season_uefa_ecl_id(void)
+{
+    uint32_t rec = season_comps_record(SEASON_UEFA_ECL_RECORD);
+    return rec ? (int32_t)rd32(g_mem, rec) : -1;
+}
+
+uint32_t season_uefa_ecl_object(void)
+{
+    for (int i = 0; i < season_comp_def_count; i++)
+        if (season_comp_defs[i] && !strcmp(season_comp_defs[i]->file, SEASON_UEFA_ECL_FILE))
+            return season_comps_object(season_comp_defs[i]);
+    return 0;
+}
+
 /* ---- The rules report ---- */
 
 /* One line for a competition object: its stage count, its current stage, the clubs of the group stages in
@@ -639,16 +669,22 @@ void season_uefa_report(void *file, int season, const char *phase)
     uint32_t table = rd32(g_mem, COMP_TABLE);
     uint32_t uc = key >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)key) : 0;
     if (readable(uc) && rd32(g_mem, uc) == 0x00970790u) report_comp(f, season, phase, "uefa_cup", uc, 13);
+    uint32_t ecl = season_uefa_ecl_object();                           /* slice 24 */
+    if (season_uefa_cup_kind(ecl) == 'k') report_comp(f, season, phase, SEASON_UEFA_ECL_FILE, ecl, 13);
     /* The labels of the rounds that have a real name in the round names table (Q370), at the end of a season. */
     if (strcmp(phase, "end")) return;
     static const struct { const char *file; int code; } labels[] = {
         {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250},
         /* slice 23: the qualifying rounds of 2009/10 on */
         {"european_cup", 220}, {"european_cup", 230}, {"european_cup", 240}, {"uefa_cup", 220}, {"uefa_cup", 240},
-        {"uefa_cup", 270}};
+        {"uefa_cup", 270},
+        /* slice 24: the Conference League */
+        {SEASON_UEFA_ECL_FILE, 250}, {SEASON_UEFA_ECL_FILE, 260}, {SEASON_UEFA_ECL_FILE, 270}, {SEASON_UEFA_ECL_FILE, 220},
+        {SEASON_UEFA_ECL_FILE, 30}, {SEASON_UEFA_ECL_FILE, 40}};
     for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++)
         for (int style = 1; style <= 3 && !rt_unwinding; style += 2) {      /* 1 long names, 3 abbreviated */
-            uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : uc;
+            uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : !strcmp(labels[i].file, "uefa_cup") ? uc : ecl;
+            if (obj == ecl && !readable(obj)) continue;
             char text[128];
             season_round_name_label(obj, labels[i].code, style, text, sizeof text);
             for (char *p = text; *p; p++)

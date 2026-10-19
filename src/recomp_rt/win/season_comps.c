@@ -4,6 +4,7 @@
 #include "season_change.h"
 #include "season_comps.h"
 #include "season_rules.h"
+#include "season_uefa.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,8 +32,18 @@ static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
 static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup", "Test New Cup", 2, test_make,
                                            "UEFA Cup", "Test Cup", 10};
 
+/* Slice 24, part b (U8, Q364): the Conference League from 2021/22, a new record with a second object of the
+ * Uefa_Cup class in the Europe entry 3 (docs/research/2026-10-18-conference-league-object.md). Its record copies
+ * the UEFA Cup's continent, nation and colours, and its level (+0x69) is the UEFA Cup's 18 (0x79d447; the
+ * meaning of the level is an inference of the module). season_uefa_cup_kind tells it from the Europa League by
+ * its record, so the wraps of season_uefa_cup.c and season_uefa_qual.c give it its own rules. */
+static uint32_t ecl_make(const SeasonCompDef *d, uint32_t rec, int year, int loading);
+static const SeasonCompDef conference_league = {"Conference League", SEASON_UEFA_ECL_FILE, SEASON_UEFA_ECL_RECORD, 3,
+                                                ecl_make, "UEFA Cup", "Conference League", 18};
+
 const SeasonCompDef *const season_comp_defs[] = {
     &test_new_cup,                      /* test only, see above */
+    &conference_league,                 /* slice 24 */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 
@@ -47,6 +58,25 @@ static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
     uint32_t args[2] = {(uint32_t)year, rec};
     cpu.ecx = obj;
     rt_callback(0x632080u, 2, args);
+    if (rt_unwinding) return 0;
+    cpu = saved;
+    return obj;
+}
+
+/* operator new 0x944cf1 with the class size 0xb3 (as 0x8314bf), then Uefa_Cup::Uefa_Cup 0x9022e0, thiscall
+ * (year, record) ret 8. It writes the vtable 0x970790 (0x90232d), runs the seeding of the year (0x902377) and
+ * takes its entrants (0x90237e); at a load it reads its state from its saved file (0x90235f). */
+static uint32_t ecl_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
+{
+    (void)d;
+    (void)loading;
+    Cpu saved = cpu;
+    uint32_t size[1] = {0xb3};
+    uint32_t obj = rt_callback(0x944cf1u, 1, size);
+    if (rt_unwinding || !obj) return 0;
+    uint32_t args[2] = {(uint32_t)year, rec};
+    cpu.ecx = obj;
+    rt_callback(0x9022e0u, 2, args);
     if (rt_unwinding) return 0;
     cpu = saved;
     return obj;
@@ -143,6 +173,19 @@ uint32_t season_comps_record(const char *name)
         if (n && !strcmp(n, name)) return rec;
     }
     return 0;
+}
+
+const char *season_comps_file(uint32_t obj)
+{
+    if (obj < 0x10000u || obj >= 0xfff00000u) return NULL;
+    uint32_t rec = rd32(g_mem, obj + 4);
+    if (rec < 0x10000u || rec >= 0xfff00000u) return NULL;
+    const char *n = season_change_data_name(rec);
+    for (int i = 0; n && i < season_comp_def_count; i++) {
+        const SeasonCompDef *d = def_at(i);
+        if (d && d->record && !strcmp(d->record, n)) return d->file;
+    }
+    return NULL;
 }
 
 /* One copy per def for the whole run (runtime memory from win_static_alloc, never freed): a later call for the

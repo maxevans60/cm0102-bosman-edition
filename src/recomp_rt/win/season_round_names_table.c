@@ -32,5 +32,14 @@ const SeasonRoundName season_round_name_rows[] = {
     {"african_nations", 20, 2018, 4, "Rnd of 16"},
     {"asia_nations", 20, 2018, 3, "Round of 16"},
     {"asia_nations", 20, 2018, 4, "Rnd of 16"},
+    {"new_conference_league", 250, 2021, 3, "First Qualifying Round"},
+    {"new_conference_league", 260, 2021, 3, "Second Qualifying Round"},
+    {"new_conference_league", 270, 2021, 3, "Third Qualifying Round"},
+    {"new_conference_league", 220, 2021, 3, "Play-off Round"},
+    {"new_conference_league", 220, 2021, 4, "Play-off Rnd"},
+    {"new_conference_league", 30, 2021, 3, "Knockout Round Play-offs"},
+    {"new_conference_league", 30, 2021, 4, "KO Play-offs"},
+    {"new_conference_league", 40, 2021, 3, "Round of 16"},
+    {"new_conference_league", 40, 2021, 4, "Rnd of 16"},
 };
 const int season_round_name_count = (int)(sizeof season_round_name_rows / sizeof season_round_name_rows[0]);

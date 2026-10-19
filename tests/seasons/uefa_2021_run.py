@@ -22,7 +22,16 @@ in 5 rounds, each with a winner; the label of round code 30 of the Europa League
 2022 and 2023: the log line of the seeding counts 0 clubs of Russia with a UEFA place. No Champions League or
 Europa League tie of a season from 2021/22 is decided on away goals (the log line of the wrap of 0x51f2f0), and
 in the change run at least one of 2020/21 is.
-The Conference League is not in this check (not in the game yet: docs/research/2026-10-18-uefa-2021-2023.md).
+Part 24b, the Conference League (a new competition record and a second object of the Uefa_Cup class): the object
+is made for the first season of the rules, it has entrants and qualifying rounds, takes the losers of the
+Champions League and the Europa League, draws 8 groups of 4 with 32 clubs and its knockout round play-offs with the
+8 Europa League thirds, and its uefa line at the end of each season is as the Europa League's (9 stages, 32 in
+groups, 24 in the knockout, 5 rounds, a winner). Its round code 30 has the label of the Europa League's. No
+Conference League tie of the season is decided on away goals either. The change run gives the news sentence of
+its first season.
+    load    October 2021: the game saves 30 days after the start (inside the qualifying rounds) and 120 days after
+            the start (in the group stage); a new program loads each save and plays to the end of the season;
+            the three cups play to a winner
 A run takes about 10 to 40 minutes on a loaded machine. --jobs (default 1).
 """
 import concurrent.futures
@@ -40,10 +49,31 @@ DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
 CL = {"stages": 9, "groups": 32, "groups2": 0, "ko_clubs": 16, "ko_rounds": 4}
 EL = {"stages": 9, "groups": 32, "groups2": 0, "ko_clubs": 24, "ko_rounds": 5}
 EL_2020 = {"stages": 13, "groups": 48, "groups2": 0, "ko_clubs": 32, "ko_rounds": 5}
+ECL = {"stages": 9, "groups": 32, "groups2": 0, "ko_clubs": 24, "ko_rounds": 5}
+ECL_FILE = "new_conference_league"
 KO_PO_NAME = "Knockout Round Play-offs"
 NEWS = ["The Europa League group winners now go to the round of 16, and the runners-up meet the Champions League "
         "group thirds in knockout round play-offs.",
-        "Away goals no longer decide UEFA ties: a tie level on aggregate goes to extra time and penalties."]
+        "Away goals no longer decide UEFA ties: a tie level on aggregate goes to extra time and penalties.",
+        "The UEFA Europa Conference League is played for the first time."]
+
+
+def ecl_checks(name, log, lines, season):
+    """Part 24b: the Conference League of the season in the log and in the uefa lines of the report."""
+    key = f"{season}/{(season + 1) % 100:02d}"
+    fails = []
+    for pattern in (r"new competition new_conference_league made for \d+",
+                    rf"Conference League {key}: \d+ entrants, 0 direct, \d+ qualifying rounds",
+                    rf"Conference League {key}: \d+ qualifying rounds, 8 groups of 4",
+                    rf"Conference League {key}: 8 groups of 4 drawn",
+                    r"Conference League knockout round play-offs drawn",
+                    r"losers of Champions League round \d+ \(path \d\) into Conference League slots",
+                    r"losers of Europa League round \d+ into Conference League slots"):
+        if not re.search(pattern, log):
+            fails.append(f"{name}: no log line {pattern!r}")
+    if lines is not None:
+        fails += ufr.expect(lines, season, ECL_FILE, ECL, name)
+    return fails
 
 
 def season_checks(name, log, report, season):
@@ -78,6 +108,7 @@ def season_checks(name, log, report, season):
         fails += ufr.expect(lines, season, "european_cup", CL, name)
         fails += ufr.expect(lines, season, "uefa_cup", EL, name)
         fails += ufr.expect_label(ufr.round_labels(report), season, "uefa_cup", 30, KO_PO_NAME, name)
+        fails += ufr.expect_label(ufr.round_labels(report), season, ECL_FILE, 30, KO_PO_NAME, name)
     else:
         fails.append(f"{name}: no report")
     return fails
@@ -90,6 +121,7 @@ def run_season(name, season, database, suspended_check, super_cup_penalties=Fals
         found, log = ufr.boxes(work)
         fails += [f"{name}: message box {b}" for b in found]
         fails += season_checks(name, log, report, season)
+        fails += ecl_checks(name, log, ufr.uefa_lines(report) if os.path.exists(report) else None, season)
         m = re.search(r"suspended Russia: (\d+) clubs with a place", log)
         if suspended_check and (not m or m.group(1) != "0"):
             fails.append(f"{name}: Russia: {m.group(0) if m else 'no log line of the suspension'}")
@@ -118,9 +150,60 @@ def run_change(program, game, work):
     if "decided on away goals" not in before:
         fails.append("change: no UEFA tie of 2020/21 decided on away goals (the rule still holds in 2020/21)")
     fails += season_checks("change", log, report, 2021)
+    fails += ecl_checks("change", log, ufr.uefa_lines(report) if os.path.exists(report) else None, 2021)
+    if re.search(r"new competition new_conference_league made for 2020", log):
+        fails.append("change: the Conference League made for 2020/21")
     for sentence in NEWS:
         if sentence not in log:
             fails.append(f"change: no news sentence {sentence!r}")
+    return fails
+
+
+def run_load(program, game, work):
+    """Saves inside the qualifying rounds and in the group stage, each loaded by a new program that plays to the
+    end of the season (tests/seasons/uefa_access_run.py run_load)."""
+    import shutil
+    import fixtures
+    import smoke_run
+    db = os.path.join(DB, "October 2021")
+    fails = []
+    for days in (30, 120):
+        w = os.path.join(work, f"d{days}")
+        code, _ = rrc.run(program, game, 2021, 2021, db, ["England"], [], w, 7200, None,
+                          {"RECOMP_SAVE_AFTER_DAYS": str(days)})
+        first = os.path.join(w, "user", smoke_run.SAVE_NAME)
+        if code != 0 or not os.path.exists(first):
+            fails.append(f"load {days}: the first run made no save (code {code}, {w})")
+            continue
+        if not re.search(r"new competition new_conference_league made for 2021", ufr.boxes(w)[1]):
+            fails.append(f"load {days}: no Conference League in the first run")
+        again = os.path.join(w, "again")
+        user = os.path.join(again, "user")
+        os.makedirs(user, exist_ok=True)
+        shutil.copyfile(first, os.path.join(user, "uefa.sav"))
+        shutil.copytree(os.path.join(w, "user", "Databases"), os.path.join(user, "Databases"))
+        fixtures.write_settings(user, "classic", [])
+        with open(os.path.join(user, "settings.txt"), "a") as f:
+            f.write(f"database = folder:{os.path.basename(db)}\nfaster_days = on\n")
+        report = os.path.join(again, "report.tsv")
+        steps = fixtures.LOAD_STEPS + ["3600000 quit"]
+        r, _ = fixtures.run(program, game, "classic", user, smoke_run.scaled_steps("classic", again, steps),
+                            {"RECOMP_SEASON_JUMP": "2021", "RECOMP_RULES_REPORT": report}, 7200)
+        with open(os.path.join(again, "stderr.txt"), "w") as f:
+            f.write(r.stderr)
+        if r.returncode != 0:
+            fails.append(f"load {days}: the loaded game ended with code {r.returncode} ({again})")
+        fails += [f"load {days}: message box {b}" for b in ufr.BOX.findall(r.stderr)]
+        if "new competition new_conference_league made for 2021 (entry 3, record" not in r.stderr or \
+                "from the save" not in r.stderr:
+            fails.append(f"load {days}: the Conference League was not made again from the save")
+        if os.path.exists(report):
+            lines = ufr.uefa_lines(report)
+            fails += ufr.expect(lines, 2021, "european_cup", CL, f"load {days}")
+            fails += ufr.expect(lines, 2021, "uefa_cup", EL, f"load {days}")
+            fails += ufr.expect(lines, 2021, ECL_FILE, ECL, f"load {days}")
+        else:
+            fails.append(f"load {days}: no report ({again})")
     return fails
 
 
@@ -129,6 +212,7 @@ RUNS = {
     "2022": run_season("2022", 2022, "October 2022", True),
     "2023": run_season("2023", 2023, "October 2023", True, True),
     "change": run_change,
+    "load": run_load,
 }
 
 
