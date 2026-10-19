@@ -22,7 +22,8 @@
  * Euro 2020 and later (24 teams): 10 groups (+0xff 8, stage[8] built by the wrap of 0x57ed10), the top two
  * direct (+0xbe 2, +0xbf 0), no ranking stage (+0x100 -1: 0x57ff50 and 0x57ff9c skip 0x57f920 and 0x57fa10).
  * The stage step still calls 0x57ef50 at stage 9 (+0x101), which takes its no-ranking path (0x57ef71: news for
- * the teams that are out) and makes no stage. 20 places. Slice 28 adds the Nations League paths there.
+ * the teams that are out) and makes no stage, so the qualifying then ends (the wrap of 0x57ec60 below). 20
+ * places. Slice 28 adds the Nations League paths there.
  * Inference: Euro 2028 takes the 2020 shape (the brief names 2020 and 2024).
  *
  * The bytes +0xff..+0x101 are not in the save (the extra save 0x580130..0x5806cc writes +0xf6 and others, not
@@ -187,4 +188,32 @@ RT_WRAP(0057ed10, euroq_group_stage)
     call_this(GROUP_STAGE, self, 3, a);
     if (rt_unwinding) return;
     cpu = after;
+}
+
+/* ---- The step after the ten groups ---- */
+
+void o_0057ec60(void);
+
+/* advance_stage 0x57ec60 (vtable 0x96a0d4 +0x28): +0x30 + 1, then create_playoff_stage 0x57ef50 when the new
+ * index is +0x100 or +0x101 (0x57ecdb..0x57ecf5). The League update calls it when every stage 0 to +0x30 is
+ * complete and +0x30 is below the stage count +0x2c minus 1 (0x6849aa..0x6849e0), else it ends the competition
+ * (0x6849e8). It also calls each stage 0 to +0x30 every day (0x6848ee..0x684901). With 10 groups +0x30 is 8 after
+ * the groups, the step makes it 9, and 0x57ef50 takes its no-ranking path (the news for the teams that are out)
+ * and makes no stage[9], so the next update called an empty stage at 0x6848f8 ("call to 0" on 4 October 2019 in
+ * a 2018 start). When stage[9] is still empty after the step, +0x30 goes back to 8 and +0x2c to 9: the next
+ * update ends the qualifying. A stage that slice 28 builds there keeps the original's step. */
+RT_WRAP(0057ec60, euroq_advance)
+{
+    uint32_t self = cpu.ecx;
+    int ten = format_of(self) == TEN_GROUPS;
+    int last = (int32_t)rd32(g_mem, self + 0x30u) == (int8_t)rd8(g_mem, self + 0xffu);
+    o_0057ec60();
+    if (rt_unwinding || !ten || !last) return;
+    uint32_t stages = rd32(g_mem, self + 0xcu), next = rd32(g_mem, self + 0x30u);
+    if (!readable(stages) || next != 9u || rd32(g_mem, stages + 4u * next)) return;
+    wr32(g_mem, self + 0x30u, next - 1u);
+    wr32(g_mem, self + 0x2cu, next);
+    if (logging())
+        fprintf(stderr, "recomp: season intl: euro qualifying %d: no stage after the groups, the qualifying ends\n",
+                (int16_t)rd16(g_mem, self + 0x40u) + 2);
 }
