@@ -32,7 +32,7 @@ The checks (each run):
     - no draw after a full qualifying is short (log "no fill"), and the draws of NO_FILL take no team from the fill
     - no inter-confederation play-off is built without a team (log "wc play-off ... v none")
     - the nation renames of RENAMES and the date moves of MOVES are in the log
-    - on: each host row that the runtime writes names the first two hosts of the table (log "host")
+    - on: each host row that the runtime writes names the hosts of the table, up to six (log "host")
 A run takes about 6 to 8 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the
 reports already in the --keep folder again without a new run.
 """
@@ -170,9 +170,9 @@ def check(name, start, rules, work):
             fails.append(f"{name}: no host row in the log")
         for f, y, names in hosts:
             e = next((e for e in eds.get(f, []) if e["year"] == int(y)), None)
-            # A host row holds two hosts (HostCountry pair 1): the first two of the table.
+            # A host row holds up to six hosts (HostCountry pairs 1 to 3; slice 29): the first six of the table.
             # A name of the table may have another spelling in a database ("China PR/China").
-            want = [h.split("/") for h in e["hosts"][:2]] if e else None
+            want = [h.split("/") for h in e["hosts"][:6]] if e else None
             got = names.split(";") if names != "-" else []
             if want is not None and (len(got) != len(want) or any(g not in w for g, w in zip(got, want))):
                 fails.append(f"{name}: host row {f} {y}: {names}, the table gives {want}")

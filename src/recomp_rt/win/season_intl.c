@@ -21,6 +21,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_intl.h"
+#include "season_wc48.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -448,6 +449,9 @@ static int nation_in(const uint32_t *teams, int n, uint32_t nation)
 static int fill_allowed(const char *name, int year)
 {
     if (season_start_year() >= year - 1) return 1;
+    /* Slice 29 (Q563): after the table the 2026 shape of qualifying stays, and the hosts of 2030 do not change
+     * its places, so a World Cup from 2030 may be short. */
+    if (!strcmp(name, "world_cup") && year >= 2030) return 1;
     return !strcmp(name, "euro_champ") && (year == 2020 || year == 2024);
 }
 
@@ -526,6 +530,14 @@ RT_WRAP(0092f230, wc_seed_teams)
     if (season_intl_on() && (int16_t)rd16(g_mem, self + 0x40u) != 2002) fill_slots(self, 0, "world_cup");
     if (rt_unwinding) return;
     cpu.ecx = self;
+    /* 48 teams (slice 29, season_wc48.c): no pots here. The pot array +0xee holds 32 entries of 5 bytes and
+     * ends at +0x18e, the seeding day, in an object of 0x192 bytes (0x8307b5), so 48 would run past it. The
+     * draw wrap sorts the teams itself; the 32 pots that the save writes (0x92f150) are cleared. */
+    if (season_wc48(self)) {
+        memset(g_mem + self + 0xeeu, 0, 32u * 5u);
+        rt_ret_stdcall(cpu.eax, 0);
+        return;
+    }
     o_0092f230();
 }
 
@@ -567,6 +579,20 @@ RT_WRAP(0092e740, wc_add_qualified)
         if (logging()) fprintf(stderr, "recomp: season intl: world_cup is full, a qualifier stays out\n");
         rt_ret_stdcall(0, 1);
         return;
+    }
+    /* Test log of slice 29 (tests/seasons/season_wc48_run.py counts the qualifiers of each confederation): the
+     * team and the continent id of its nation (+0x71, sweep section 8). */
+    if (logging() && season_intl_on()) {
+        static const struct { uint32_t key; const char *name; } conf[] = {
+            {0x9cfa10u, "UEFA"}, {0x9cfa1cu, "CONMEBOL"}, {0x9cfa14u, "CONCACAF"}, {0x9cfa08u, "CAF"},
+            {0x9cfa0cu, "AFC"}, {0x9cfa18u, "OFC"},
+        };
+        uint32_t nation = team_nation(rt_arg(0)), c = nation ? rd32(g_mem, nation + NATION_CONTINENT) : 0;
+        const char *name = "?";
+        for (size_t k = 0; readable(c) && k < sizeof conf / sizeof conf[0]; k++)
+            if (rd32(g_mem, c) == rd32(g_mem, conf[k].key)) name = conf[k].name;
+        fprintf(stderr, "recomp: season intl: world_cup %d qualifier %s (%s)\n", (int16_t)rd16(g_mem, cpu.ecx + 0x40u),
+                nation ? win_str(nation + NATION_NAME) : "none", name);
     }
     o_0092e740();
 }
@@ -669,7 +695,12 @@ void o_00401ab0(void);
 void o_0040f4c0(void);
 void o_00799690(void);
 void o_007a0230(void);
-RT_WRAP(0092d200, wc_stages) { stage_builder(INTL_WORLD_CUP, o_0092d200, 1); }
+RT_WRAP(0092d200, wc_stages)
+{
+    uint32_t self = cpu.ecx;
+    stage_builder(INTL_WORLD_CUP, o_0092d200, 1);
+    if (!rt_unwinding) season_wc48_after_stages(self);     /* slice 29: the seeding and draw of 48 teams */
+}
 RT_WRAP(0057b630, euro_stages) { stage_builder(INTL_EURO, o_0057b630, 1); }
 RT_WRAP(0058bdb0, confed_stages) { stage_builder(INTL_CONFED, o_0058bdb0, 1); }
 RT_WRAP(005e12d0, copa_stages) { stage_builder(INTL_COPA, o_005e12d0, 1); }
@@ -689,7 +720,9 @@ void o_004012e0(void);
 void o_0040eb00(void);
 void o_00798b60(void);
 void o_0079f7d0(void);
-RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, o_0092c290, 0); }
+/* The World Cup of 48 teams makes its groups I to L and its knockout of 32 in season_wc48.c (slice 29). */
+static void wc_template_body(void) { season_wc48_template(o_0092c290); }
+RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, wc_template_body, 0); }
 /* The Euro of 24 teams makes its groups E and F and its knockout of 16 in season_intl_euro.c. */
 static void euro_template_body(void) { season_intl_euro_template(o_0057ab90); }
 RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, euro_template_body, 0); }
