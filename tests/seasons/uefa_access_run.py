@@ -69,9 +69,10 @@ def run_season(name, season, database, cl_clubs, labels_want, england_groups=Non
             fails.append(f"{name}: Champions League round codes {m.group(1) if m else None!r}, not {codes!r}")
         if re.search(r"Intertoto Cup \d+ with \d rounds", log):
             fails.append(f"{name}: the Intertoto Cup played rounds")
-        for bad in ("not even", "gives no layout", "not 32", "no Champions League third", "clubs, not 48"):
+        for bad in ("not even", "gives no layout", "not 32", "no Champions League third"):
             if bad in log:
                 fails.append(f"{name}: log line with {bad!r}")
+        fails += group_draw_fails(name, log)
         if os.path.exists(report):
             lines = ufr.uefa_lines(report)
             fails += ufr.expect(lines, season, "european_cup", CL, name)
@@ -109,8 +110,7 @@ def run_load(program, game, work):
         f.write(r.stderr)
     fails = [] if r.returncode == 0 else [f"load: the loaded game ended with code {r.returncode} ({again})"]
     fails += [f"load: message box {b}" for b in ufr.BOX.findall(r.stderr)]
-    if "clubs, not 48" in r.stderr:
-        fails.append("load: the Europa League group draw did not get 48 clubs")
+    fails += group_draw_fails("load", r.stderr)
     if os.path.exists(report):
         lines = ufr.uefa_lines(report)
         fails += ufr.expect(lines, 2010, "european_cup", CL, "load")
@@ -146,6 +146,17 @@ def run_repeat(program, game, work):
             return [f"repeat: run {k} made no save ({w})"]
         saves.append(open(path, "rb").read())
     return [] if saves[0] == saves[1] else ["repeat: the two 2009/10 saves differ"]
+
+
+def group_draw_fails(name, log):
+    """The Europa League group draw waits, a day at a time, while a qualifying round still plays ("42 clubs, not
+    48"). It must end with the draw of 12 groups, and its waiting is told."""
+    waits = log.count("clubs, not 48")
+    if waits and not re.search(r"clubs, not 48.*\n(?:.*\n)*?.*UEFA Cup \d+/\d+: 12 groups of 4 drawn", log):
+        return [f"{name}: the Europa League group draw did not get 48 clubs"]
+    if waits:
+        print(f"{name}: the Europa League group draw waited {waits} times for the last qualifying round")
+    return []
 
 
 LABELS_2009 = [("european_cup", 220, "Play-off Round"), ("uefa_cup", 220, "Play-off Round"),

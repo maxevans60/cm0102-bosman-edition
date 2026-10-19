@@ -62,10 +62,20 @@ static int find_stadium(const char *name, size_t n)
     return -1;
 }
 
-/* Fallback when the database lacks the venue by every name. The row's city is a record of the city table (file
- * layout of city.dat: name at +4, the nation id as a dword at +0x1f). The national stadium of that nation is the
- * dword at +0x80 of its nation record (the file layout, confirmed with the Czech Republic and Estonia). Returns the
- * stadium record index or -1; *nation_name gets the nation's name for the log. */
+/* A link of a record to another table: after the game's load it is a pointer to the record (the city's nation
+ * at +0x1f and the nation's stadium at +0x80 hold one in a running game; the files hold the index). Returns the
+ * record index or -1. */
+static int32_t record_index(uint32_t v, uint32_t table, uint32_t size, int32_t count)
+{
+    if (readable(table) && v >= table && v < table + size * (uint32_t)count && (v - table) % size == 0)
+        return (int32_t)((v - table) / size);
+    return v < (uint32_t)count ? (int32_t)v : -1;
+}
+
+/* Fallback when the database lacks the venue by every name. The row's city is a record of the city table (name
+ * at +4, the nation at +0x1f). The national stadium of that nation is the link at +0x80 of its nation record
+ * (read from a running game, as the Czech Republic and Estonia show). Returns the stadium record index or -1;
+ * *nation_name gets the nation's name for the log. */
 static int national_stadium_of_city(const char *city, char *nation_name, size_t n)
 {
     uint32_t ct = rd32(g_mem, CITIES), nt = rd32(g_mem, NATIONS);
@@ -76,10 +86,11 @@ static int national_stadium_of_city(const char *city, char *nation_name, size_t 
         char rec[32];
         snprintf(rec, sizeof rec, "%.27s", win_str(ct + CITY_SIZE * (uint32_t)i + 4));
         if (strlen(rec) != strlen(city) || !same_name(city, rec, strlen(city))) continue;
-        int32_t nation = (int32_t)rd32(g_mem, ct + CITY_SIZE * (uint32_t)i + 0x1f);
-        if (nation < 0 || nation >= nations) continue;
-        int32_t id = (int32_t)rd32(g_mem, nt + NATION_SIZE * (uint32_t)nation + 0x80);
-        if (id < 0 || id >= stadiums) continue;
+        int32_t nation = record_index(rd32(g_mem, ct + CITY_SIZE * (uint32_t)i + 0x1f), nt, NATION_SIZE, nations);
+        if (nation < 0) continue;
+        int32_t id = record_index(rd32(g_mem, nt + NATION_SIZE * (uint32_t)nation + 0x80), rd32(g_mem, STADIUMS),
+                                  STADIUM_SIZE, stadiums);
+        if (id < 0) continue;
         snprintf(nation_name, n, "%.51s", win_str(nt + NATION_SIZE * (uint32_t)nation + 4));
         return id;
     }
