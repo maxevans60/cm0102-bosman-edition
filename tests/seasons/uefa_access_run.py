@@ -121,10 +121,13 @@ def run_load(program, game, work):
 
 
 def run_2013(program, game, work):
-    """The Super Cup venue of 2013 (Prague). The line comes when the game is made."""
+    """The Super Cup venue of 2013 (Prague): the row's stadium, else the national stadium of the Czech Republic.
+    The line comes when the game is made."""
     rrc.run(program, game, 2013, 2013, os.path.join(DB, "Autumn 2013"), ["England"], [], work, 600)
     _, log = ufr.boxes(work)
-    if re.search(r"Super Cup 2013 at .*Prague", log):
+    m = re.search(r"Super Cup 2013 at .*Prague.*", log)
+    if m:
+        print("2013 venue:", m.group(0))     # names the stadium used, also when it is the fallback
         return []
     m = re.search(r"Super Cup 2013: .*", log)
     return [f"2013: no Super Cup at the 2013 stadium ({m.group(0) if m else 'no Super Cup line'})"]
