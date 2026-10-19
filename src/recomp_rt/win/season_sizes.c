@@ -27,6 +27,10 @@
 #define UP_PLAYOFF 0xbfu            /* s8: promotion play-off places (inference, rules report doc) */
 #define DOWN_PLAYOFF 0xc0u          /* s8: relegation play-off places (inference) */
 #define DOWN 0xc1u                  /* s8: relegation places (League::has_relegation 0x6847b0) */
+#define ABOVE 0x1cu                 /* s32: record id of the division above, -1 for none */
+#define BELOW 0x20u                 /* s32: record id of the division below */
+#define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table: the object of each competition record */
+#define COMP_SLOTS 0xadadf8u        /* its slot count, one per club competition record (0x8386f0) */
 #define STATUS_DOWN 3               /* league_promote_and_relegate 0x689c80: moves down a row of 3 (0x689d26) */
 #define MIN_CLUBS 2
 #define MAX_CLUBS 60
@@ -66,11 +70,14 @@ static int cap_of(const char *file)
     return i >= 0 ? season_size_caps[i] : 0;
 }
 
-/* The smallest count of a file's class (0: any count from MIN_CLUBS). */
+/* The smallest count of a file's class (0: any count from MIN_CLUBS). Q282 (the lead, 2026-10-18): a 2019/20
+ * start plays League One with 23 clubs (Bury removed), so its floor is 23 in that season. */
 static int floor_of(const char *file)
 {
     int i = size_index(file);
-    return i >= 0 ? season_size_floors[i] : 0;
+    if (i < 0) return 0;
+    if (!strcmp(file, "eng_second") && season_start_year() == 2019) return 23;
+    return season_size_floors[i];
 }
 
 /* A count within the class's floor and cap. */
@@ -147,11 +154,14 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     int cap = cap_of(file), n = cap > 0 && have > cap ? cap : have;     /* fewer than the floor: the clubs it has */
     const SeasonRule *r = row_now(obj, file);
     int want = r && r->clubs >= MIN_CLUBS && r->clubs <= MAX_CLUBS ? r->clubs : (int)original;
-    if (logging() || n != want)
+    if (logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: %d clubs in the division, %d in the table%s, class %u "
                         "(holds %d)\n", file, record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), have, want,
                 r ? "" : " (no row)", original, cap);
-    wr16(g_mem, obj + COMP_MATCHES, 0xffffu);       /* check_complete counts the matches of the new count */
+    /* Matches per club go back to -1 only for a new count, so check_complete counts them again. A class that sets
+     * its own value keeps it: ScoPrm::set_up_rules writes 38 (33 and the split) at 0x7f29d5 before create_table
+     * runs (0x7f2b68, then 0x7f2ba6), and with -1 check_complete would count (12 - 1) x 3 = 33. */
+    if ((uint32_t)n != original) wr16(g_mem, obj + COMP_MATCHES, 0xffffu);
     return (uint32_t)n;
 }
 
@@ -229,6 +239,30 @@ static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want,
                 playoff);
 }
 
+/* The object of the division above or below (league +0x1c, +0x20: the record ids, -1 for none, EngFirst::
+ * set_up_rules stores them at 0x572dea and 0x572df6), or 0. The object of a record is g_comp_object_table
+ * [0xadadfc] at the record id, below its slot count [0xadadf8] (League::process_promotion_relegation_chain
+ * 0x689c42). open_neighbour: 1 when that division is a league of the size table with no floor. */
+static uint32_t neighbour(uint32_t obj, uint32_t at)
+{
+    int32_t id = (int32_t)rd32(g_mem, obj + at), slots = (int32_t)rd32(g_mem, COMP_SLOTS);
+    uint32_t table = rd32(g_mem, COMP_OBJECTS);
+    if (id < 0 || id >= slots || !readable(table)) return 0;
+    uint32_t other = rd32(g_mem, table + 4u * (uint32_t)id);
+    return readable(other) ? other : 0;
+}
+
+/* A class that counts the clubs of its data (IreFirst, IrePrm, PolFirst: cap 0) counts too: its moves stay in
+ * pairs whenever the places of two divisions differ (the pair wrap below), so its places can change and its count
+ * does not. */
+static int open_neighbour(uint32_t obj, uint32_t at)
+{
+    uint32_t other = neighbour(obj, at);
+    if (!other) return 0;
+    const char *f = season_change_file(other);
+    return size_file(f) && floor_of(f) == 0;
+}
+
 static void sizes_rules(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return;
@@ -238,8 +272,12 @@ static void sizes_rules(uint32_t obj)
     if (!size_file(file) || floor_of(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
-    set_places(obj, UP, UP_PLAYOFF, r->up, "promotion");
-    set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+    /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
+     * with fixed counts (the German Regionalliga split needs exactly 36 clubs, cmp bl, 0x24 at 0x5dbc3b, box
+     * ger_first.cpp 1049 at 0x5dbcd9: the 2. Bundesliga with 2 relegation places against the Regionalliga's 4
+     * promotions left it short in June 2017). */
+    if (open_neighbour(obj, ABOVE)) set_places(obj, UP, UP_PLAYOFF, r->up, "promotion");
+    if (open_neighbour(obj, BELOW)) set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
 }
 
 void season_sizes_rules(uint32_t obj)
@@ -280,48 +318,108 @@ RT_WRAP(00689c80, promote_relegate)
     uint32_t upper = rt_arg(0), lower = rt_arg(1), pairwise = rt_arg(3);
     int down = rows_with(upper, STATUS_DOWN, STATUS_DOWN), up = rows_with(lower, 0, 5);
     int exp_up = (int8_t)(rt_arg(4) & 0xff), exp_down = (int8_t)(rt_arg(5) & 0xff);
-    int change = down >= 0 && up >= 0 && down != up;
-    /* Only between two classes of the size table, and only to counts that both hold. */
-    if (change) {
-        int cu = cap_of(season_change_file(upper)), cl = cap_of(season_change_file(lower));
-        int nu = (int16_t)rd16(g_mem, upper + COMP_CLUBS) - down + up, nl = (int16_t)rd16(g_mem, lower + COMP_CLUBS) + down - up;
-        int fu = floor_of(season_change_file(upper)), fl = floor_of(season_change_file(lower));
-        if (cu <= 0 || cl <= 0 || nu > cu || nl > cl || nu < MIN_CLUBS * 4 || nl < MIN_CLUBS * 4 || nu < fu || nl < fl) {
-            fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the moves do not fit (hold %d "
-                            "and %d): the call stays as it is\n", season_change_file(upper), nu,
-                    season_change_file(lower), nl, cu, cl);
-            change = 0;
-        }
+    /* Only a pair of two size-table classes: only there can the places of this slice differ. Any other pair keeps
+     * the original's call. */
+    int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower));
+    int change = ours && down >= 0 && up >= 0 && down != up, single = 0;
+    /* When the places of the two divisions differ, the clubs move on their own only with changing rules on, between
+     * two classes of the size table, and when both divisions hold counts within their floor and cap after the moves:
+     * the upper the clubs it holds now less down and plus up, the lower the clubs it holds now plus down and less up
+     * (before its own exchange with the division below, the next call of the chain). Else the clubs move in pairs,
+     * so no size changes (with changing rules off the start season's sizes stay, Q232). So a change that needs a
+     * division above its cap for a moment stays in pairs: Ligue 1 from 20 to 18 in 2023/24 would put 22 in Ligue 2
+     * until its exchange with the National, which holds 20. The
+     * French chain passes no pairs (FraFirst::start_new_season pushes 0 at 0x5bc4f1, League::process_promotion_
+     * relegation_chain passes it at 0x689c59), so pairs are set here. */
+    if (change && season_changing_rules()) {
+        const char *fu_name = season_change_file(upper), *fl_name = season_change_file(lower);
+        int cu = cap_of(fu_name), cl = cap_of(fl_name);
+        int lu = floor_of(fu_name) > MIN_CLUBS * 4 ? floor_of(fu_name) : MIN_CLUBS * 4;
+        int ll = floor_of(fl_name) > MIN_CLUBS * 4 ? floor_of(fl_name) : MIN_CLUBS * 4;
+        int nu = clubs_in_division(upper) - down + up, nl = clubs_in_division(lower) + down - up;
+        single = cu > 0 && cl > 0 && nu >= lu && nu <= cu && nl >= ll && nl <= cl;
+        if (logging() && !single)
+            fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "
+                            "(%d to %d and %d to %d): the clubs move in pairs\n", fu_name, nu, fl_name, nl, lu, cu, ll, cl);
     }
-    if (logging() || change)
+    if (logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s) down %d, %s (%.50s) up %d, pairs %u, expected %d up %d down%s\n",
                 season_change_file(upper), record_name(upper), down, season_change_file(lower), record_name(lower), up,
-                pairwise, exp_up, exp_down, change ? ": each club moves on its own" : "");
-    if (change) {
-        wr32(g_mem, cpu.esp + 4 + 4 * 3, 0);           /* pairwise off */
-        if (exp_up != -1 && exp_up != up) wr32(g_mem, cpu.esp + 4 + 4 * 4, 0xffu);
-        if (exp_down != -1 && exp_down != down) wr32(g_mem, cpu.esp + 4 + 4 * 5, 0xffu);
+                pairwise, exp_up, exp_down, !change ? "" : single ? ": each club moves on its own" : ": in pairs");
+    if (change) wr32(g_mem, cpu.esp + 4 + 4 * 3, single ? 0u : 1u);
+    /* The moves that the call makes: each row on its own, or pairs. An expected count that differs from them is
+     * dropped (Serie A and B pass 4 and 4 at 0x642476, the 2016/17 places are 3 and 3: league.cpp 5596). */
+    int pairs = rd32(g_mem, cpu.esp + 4 + 4 * 3) != 0, n = down < up ? down : up;
+    int moved_up = pairs ? n : up, moved_down = pairs ? n : down;
+    if (down >= 0 && up >= 0) {
+        if (exp_up != -1 && exp_up != moved_up) wr32(g_mem, cpu.esp + 4 + 4 * 4, 0xffu);
+        if (exp_down != -1 && exp_down != moved_down) wr32(g_mem, cpu.esp + 4 + 4 * 5, 0xffu);
     }
     o_00689c80();
 }
 
 /* ---- News (rule kind "sizes") ---- */
 
-static void sizes_after(const SeasonChange *c)
+/* The count and places that each league held last season, so the news names only what the game applies. A loaded
+ * game starts with none, so its first season change gives no sizes news (inference: acceptable, the news is a
+ * note). */
+#define MAX_SEEN 512
+static struct { uint32_t obj; int clubs, up, down; } seen[MAX_SEEN];
+static int nseen;
+
+static int seen_at(uint32_t obj, int add)
 {
-    if (!sizes_on() || !c->started || c->start || !size_file(c->file)) return;
-    const SeasonRule *now = row_of_season(c->file, c->season), *before = row_of_season(c->file, c->season - 1);
-    if (!now || !before || now == before) return;
-    const char *name = record_name(c->comp);
-    int n1 = within(c->file, now->clubs), n0 = within(c->file, before->clubs);
-    if (now->clubs >= MIN_CLUBS && before->clubs >= MIN_CLUBS && n1 != n0)     /* the counts that the class holds */
-        season_change_news("The %.50s now has %d clubs (%d last season).", name, n1, n0);
-    if (now->up >= 0 && before->up >= 0 && now->up != before->up)
-        season_change_news("%d club%s now go%s up from the %.50s (%d last season).", now->up, now->up == 1 ? "" : "s",
-                           now->up == 1 ? "es" : "", name, before->up);
-    if (now->down >= 0 && before->down >= 0 && now->down != before->down)
-        season_change_news("%d club%s now go%s down from the %.50s (%d last season).", now->down,
-                           now->down == 1 ? "" : "s", now->down == 1 ? "es" : "", name, before->down);
+    for (int i = 0; i < nseen; i++)
+        if (seen[i].obj == obj) return i;
+    if (!add || nseen >= MAX_SEEN) return -1;
+    seen[nseen].obj = obj;
+    seen[nseen].clubs = -1;
+    return nseen++;
 }
 
-const SeasonRuleKind season_kind_sizes = {"sizes", NULL, NULL, NULL, NULL, NULL, sizes_after};
+static void note(uint32_t obj)
+{
+    int i = seen_at(obj, 1);
+    if (i < 0) return;
+    seen[i].clubs = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    seen[i].up = (int8_t)g_mem[obj + UP];
+    seen[i].down = (int8_t)g_mem[obj + DOWN];
+}
+
+static void sizes_after(const SeasonChange *c)
+{
+    if (!sizes_on() || !c->started || !size_file(c->file) || !readable(c->comp)) return;
+    int i = seen_at(c->comp, 0);
+    if (i >= 0 && seen[i].clubs >= 0 && !c->start) {
+        const char *name = record_name(c->comp);
+        int clubs = (int16_t)rd16(g_mem, c->comp + COMP_CLUBS), up = (int8_t)g_mem[c->comp + UP],
+            down = (int8_t)g_mem[c->comp + DOWN];
+        if (clubs != seen[i].clubs)
+            season_change_news("The %.50s now has %d clubs (%d last season).", name, clubs, seen[i].clubs);
+        if (up != seen[i].up)
+            season_change_news("%d club%s now go%s up from the %.50s (%d last season).", up, up == 1 ? "" : "s",
+                               up == 1 ? "es" : "", name, seen[i].up);
+        if (down != seen[i].down)
+            season_change_news("%d club%s now go%s down from the %.50s (%d last season).", down, down == 1 ? "" : "s",
+                               down == 1 ? "es" : "", name, seen[i].down);
+    }
+    note(c->comp);
+}
+
+/* At a new game the constructors' set_up_rules run before g_comp_object_table is filled (build_comp_object_table
+ * 0x8386f0, called at 0x829640 in create_game), so no neighbour is known there: the places of the start season
+ * are set again once the game is made. */
+static void sizes_new_game(int start_year)
+{
+    (void)start_year;
+    if (!sizes_on()) return;
+    uint32_t comps[512];
+    int n = season_change_comps(comps, 512);
+    nseen = 0;
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        season_sizes_rules(comps[i]);
+        if (size_file(season_change_file(comps[i]))) note(comps[i]);
+    }
+}
+
+const SeasonRuleKind season_kind_sizes = {"sizes", sizes_new_game, NULL, NULL, NULL, NULL, sizes_after};

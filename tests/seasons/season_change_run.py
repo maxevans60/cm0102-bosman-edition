@@ -244,7 +244,10 @@ def check_run(name, program, game, keep, reuse=False):
             fails.append(f"{name}: {c['file']} ends {year + 1} as {n['name']!r}, expected {want!r}")
         if changes:
             expected.append(f"{c['name']} is now called {after[:50]}.")
-    got = [t for s, t in news if s == year + 1]
+    # The names kind gives "<old> is now called <new>." Other kinds (slices 17, 21a, 22) add their own sentences
+    # to the same item; this check reads the names only.
+    others = [t for s, t in news if s == year + 1 and " is now called " not in t]
+    got = [t for s, t in news if s == year + 1 and " is now called " in t]
     if collections.Counter(got) != collections.Counter(expected):
         for t in sorted(set(expected) - set(got)):
             fails.append(f"{name}: the news lacks: {t}")
@@ -252,7 +255,7 @@ def check_run(name, program, game, keep, reuse=False):
             fails.append(f"{name}: the news has an extra line: {t}")
     if [s for s, _ in news if s != year + 1]:
         fails.append(f"{name}: news for another season: {[s for s, _ in news if s != year + 1]}")
-    want_sent = [year + 1] if expected else []
+    want_sent = [year + 1] if expected or others else []
     if sent != want_sent:
         fails.append(f"{name}: news items sent {sent}, expected {want_sent}")
     if rules == "off" and any("season change" in x and "(start season)" not in x for x in log):

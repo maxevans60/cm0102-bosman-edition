@@ -67,6 +67,8 @@ The differences, by kind:
                                 are not all in it, or that holds other clubs too: the division keeps the count of
                                 its class (slice 18 brings the real count), or the list lacks clubs of the
                                 database. The line names each club, so another fill is a new difference
+    division_clubs              (slice 18) a league of the size table whose division holds another number of clubs
+                                at a season start than its table has rows
     format                      the stages of the Champions League at the end of a season (the uefa line of the
                                 report, slice 22): the second group stage and the first knockout round differ
                                 from the "Rounds (clubs):" list of the row ("Groups 2 16, KO 8" or "KO 16")
@@ -114,7 +116,7 @@ UEFA_LINES = []          # the uefa lines of the last report that read_report re
 
 
 def read_report(path, clubs=None):
-    """(season lines, comp lines); club lines go into clubs when a list is given."""
+    """(season lines, comp lines); club lines go into clubs when a list is given (slice 15)."""
     seasons, comps = [], []
     UEFA_LINES.clear()
     with open(path, encoding="latin-1") as f:
@@ -363,6 +365,25 @@ def club_differences(seasons, comps, clubs, data_dir):
     return out
 
 
+def division_differences(comps, clubs):
+    """Slice 18: at each season start, a league of the size table (tools/recomp/league_sizes.py) holds as many clubs
+    in its division (the club lines, club +0x57) as its table has rows (+0x3e). More clubs than rows play no match;
+    fewer leave the table short."""
+    sys.path.insert(0, os.path.join(ROOT, "tools", "recomp"))
+    import league_sizes
+    files = {f for _c, f, _r, stores in league_sizes.CLASSES if stores}
+    held = collections.Counter((c["season"], c["division"]) for c in clubs if c["phase"] == "start")
+    out = set()
+    for c in comps:
+        if c["phase"] != "start" or c["kind"] != "league" or c["file"] not in files or c["clubs"] <= 0:
+            continue
+        n = held.get((c["season"], c["record"]), 0)
+        if n != c["clubs"]:
+            out.add((c["season"], "division_clubs", f"{c['file']} ({c['name']}): {n} clubs in the division, "
+                                                    f"{c['clubs']} in its table"))
+    return out
+
+
 def uefa_format_differences(rows):
     """Slice 22: the stages that the Champions League and the UEFA Cup played in a season (their end lines)
     against the "Rounds (clubs):" list of the row. Champions League: the clubs of a second group stage and of the
@@ -473,6 +494,8 @@ def check(report, game=None, last=None, expected=None, update=False, data_dir=No
     diffs = differences(seasons, comps, rows)
     if data_dir and clubs:
         diffs = sorted(set(diffs) | club_differences(seasons, comps, clubs, data_dir))
+    if clubs:
+        diffs = sorted(set(diffs) | division_differences(comps, clubs))
     kinds = collections.Counter(k for _, k, _ in diffs)
     print(f"differences with the rules table: {len(diffs)} ({', '.join(f'{k} {n}' for k, n in sorted(kinds.items()))})")
     if expected:

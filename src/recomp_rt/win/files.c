@@ -309,35 +309,10 @@ static const char *drive_root(char drive, char *buf, size_t room)
     return NULL;
 }
 
-/* 1 when s is valid UTF-8. */
-static int utf8_ok(const char *s)
-{
-    for (const unsigned char *p = (const unsigned char *)s; *p;) {
-        int n = *p < 0x80 ? 0 : (*p & 0xe0) == 0xc0 ? 1 : (*p & 0xf0) == 0xe0 ? 2 : (*p & 0xf8) == 0xf0 ? 3 : -1;
-        if (n < 0) return 0;
-        p++;
-        for (; n > 0; n--, p++)
-            if ((*p & 0xc0) != 0x80) return 0;
-    }
-    return 1;
-}
-
 /* The game's names are in code page 1252 ("Copa Am\xe9rica"). A host file name is UTF-8, and macOS refuses a
  * name that is not (0.6.0: a league writes "<long name>_<id>.tmp", League::save_to_temp_file 0x6891c0 at
- * 0x689234, and stops at league.cpp 5095 when the open fails). So a part that is not UTF-8 becomes UTF-8. */
-static void cp1252_to_utf8(const char *in, char *out, size_t room)
-{
-    size_t n = 0;
-    for (const unsigned char *p = (const unsigned char *)in; *p && n + 4 < room; p++) {
-        unsigned cp = *p >= 0x80 && *p < 0xa0 ? cp1252_high[*p - 0x80] : *p;
-        if (!cp) cp = '_';
-        if (cp < 0x80) out[n++] = (char)cp;
-        else if (cp < 0x800) out[n++] = (char)(0xc0 | cp >> 6), out[n++] = (char)(0x80 | (cp & 0x3f));
-        else out[n++] = (char)(0xe0 | cp >> 12), out[n++] = (char)(0x80 | ((cp >> 6) & 0x3f)),
-             out[n++] = (char)(0x80 | (cp & 0x3f));
-    }
-    out[n] = 0;
-}
+ * 0x689234, and stops at league.cpp 5095 when the open fails). So win_host_path gives a part that is not
+ * UTF-8 to cp1252_to_utf8 (cp1252.h). */
 
 int win_host_path(const char *winpath, char *out, size_t room)
 {
@@ -353,7 +328,9 @@ int win_host_path(const char *winpath, char *out, size_t room)
         while (pl > 1 && (part[pl - 1] == '.' || part[pl - 1] == ' ')) part[--pl] = 0;
         char found[256], utf8[1024];
         ci_lookup(len ? out : "", part, found, sizeof found);
-        if (!found[0] && !utf8_ok(part)) {     /* a file of that name in the old byte form keeps it */
+        /* On Linux a file can have a name that is not UTF-8 (written by an older version); the lookup above
+         * finds it first. macOS has no such files. */
+        if (!found[0] && !utf8_ok(part)) {
             cp1252_to_utf8(part, utf8, sizeof utf8);
             part = utf8;
             ci_lookup(len ? out : "", part, found, sizeof found);
