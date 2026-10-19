@@ -55,6 +55,11 @@ typedef struct {
     int ecl_groups, ecl_group_clubs, ecl_ko_po;
     int sc_extra_time;              /* 1: a level Super Cup has extra time, then penalties; 0: penalties after 90
                                      * minutes (2023 on) */
+    /* Slice 25 (2024/25 on): the matches of a club in the league phase of the Champions League, the Europa League
+     * and the Conference League (8, 8 and 6), 0 for a group stage. A league phase is the "Groups" round of 36
+     * (uc_groups 1, uc_group_clubs 36, uc_through 24): places 1 to 8 go to the round of 16 and 9 to 24 to the
+     * knockout phase play-offs ("KO PO" 16, then "KO" 16). */
+    int cl_league, uc_league, ecl_league;
 } SeasonUefa;
 
 /* The entry codes of the access list (club +0x1df) in a season with an access list (season_uefa_seeding.c).
