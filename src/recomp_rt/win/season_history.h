@@ -14,7 +14,14 @@
  *
  * It runs from season_dates.c, right after the shift, and it is undone with the shift when the shift is made
  * again for another year. It does nothing in the base game (start 2001), for a start year that is not the
- * season of the database, for a Custom database, and with RECOMP_SEASON_CODE=off. */
+ * season of the database, for a Custom database, and with RECOMP_SEASON_CODE=off.
+ *
+ * Duplicate rows. Many season databases hold the same history row twice: the same competition, label year and
+ * four places (September 2010 ODB: 175 rows, among them the English Premier Division 2001 Chelsea / Manchester
+ * United, which the shift of slice 11b makes 2010; tests/seasons/history_duplicates_check.py lists every
+ * database). The winners tab 0x4991f0 then shows the year twice. Before the fill, every season database load
+ * with a shift (season_dates.c) clears the second and later copy of each such row in the same way, and the undo
+ * gives them back. The base game and its 3.9.68 data (2 such rows) are not touched. */
 #ifndef RECOMP_SEASON_HISTORY_H
 #define RECOMP_SEASON_HISTORY_H
 
@@ -45,7 +52,8 @@ extern const SeasonHistDb season_history_dbs[];          /* season_history_table
 extern const int season_history_dbs_count;
 
 /* After the shift of a database load or a new shift (season_dates.c): the rows of database `name` for start
- * year N. Nothing when the table has no entry for that database and year. */
+ * year N: first the duplicate rows go (above), then the researched rows. Nothing more when the table has no
+ * entry for that database and year. */
 void season_history_fill(const char *name, int N);
 
 /* Before a new shift (season_dates.c): gives back the rows and the row count of the last fill. */
