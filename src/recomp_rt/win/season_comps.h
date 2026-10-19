@@ -116,6 +116,10 @@ uint32_t season_comps_object(const SeasonCompDef *d);
  * shows an error box when all are picked (0x92b0fd). */
 uint32_t season_comps_top_club(uint32_t continent_key, const uint32_t *skip, int n);
 
+/* 1 when rec (a record address) is the record of a def of this game: a slice's constructor wrap then leaves the
+ * object's year alone (season_kind_club_world.c, the new cups on the World_Club_Cup class). */
+int season_comps_is_def_record(uint32_t rec);
+
 /* The address of a competition record by its long name in the data (the name before any season_change_rename),
  * or 0. */
 uint32_t season_comps_record(const char *name);

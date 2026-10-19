@@ -695,11 +695,15 @@ void o_004c6430(void);
  * of the seeding lives (it is freed at 0x4c6267), the Sudamericana places: the first clubs of each nation that hold
  * no place (pick_club_by_position 0x4c6730 (list, count, nation id, 1, 1, 0), ret 0x18, as 0x4c66cc..0x4c66d7). The
  * seeding rows: 10 bytes at the object, +0 the nation id, count +0x6e (0x4c6154). */
-/* The places of a nation in a row's text ("ARG 6+1": 6), or -1. */
+/* The places of a nation in the "places:" list of a row's text ("places: ARG 6+1, BRA 7+1": 6), or -1. The code
+ * may stand earlier in the text with another meaning ("all but ARG and BRA"). */
 static int row_places(const char *t, const char *code)
 {
-    const char *p = t ? strstr(t, code) : NULL;
-    return p ? atoi(p + strlen(code) + 1) : -1;
+    const char *list = t ? strstr(t, "places:") : NULL;
+    const char *p = list ? strstr(list, code) : NULL;
+    size_t n = strlen(code);
+    if (!p || p[n] != ' ' || p[n + 1] < '0' || p[n + 1] > '9') return -1;
+    return atoi(p + n + 1);
 }
 
 /* ---- Step L1: the Libertadores places by nation (docs/research/2026-10-19-club-cups.md section 6) ---- */

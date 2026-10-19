@@ -153,7 +153,8 @@ static int step_of(const char *file)
  * so the wraps act only while a new game is made. */
 static void ctor(const char *file, void (*original)(void))
 {
-    if (season_game() && season_change_is_creating()) {
+    /* A new competition of the module on an original class (season_club_cups.c) takes its own year. */
+    if (season_game() && season_change_is_creating() && !season_comps_is_def_record(rd32(g_mem, cpu.esp + 8))) {
         int start = season_start_year();
         int year = start_edition(file, start);
         uint32_t slot = cpu.esp + 4;                        /* thiscall (year, record), ret 8 */

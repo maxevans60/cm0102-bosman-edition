@@ -76,7 +76,11 @@ def check_load(program, game, work):
     os.makedirs(again, exist_ok=True)
     shutil.copyfile(first, os.path.join(again, "comps.sav"))
     os.environ.update(TEST)                                  # fixtures.run takes the environment of this process
-    r, saved = cwc.load_and_play(program, game, os.path.join(again, "comps.sav"), again, 10)
+    try:
+        r, saved = cwc.load_and_play(program, game, os.path.join(again, "comps.sav"), again, 10)
+    finally:
+        for k in TEST:                                       # the off run after this one must not have it
+            os.environ.pop(k, None)
     fails = []
     made = re.findall(r"new competition test_new_cup made for (\d+) \(entry 2, record (\d+)\) from the save", r.stderr)
     print(f"  load: made again {made}")

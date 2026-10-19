@@ -54,6 +54,8 @@ Form K rounds: the first round on the first day, each later round 3 days after t
 
 Picks: the original's 12 and 20 more from `pick_entrant` 0x92ae60, which gives the winner and the runner-up of a continent's record and then clubs of the top reputations (formats doc 5.2). The draw: pot 1 four UEFA and four CONMEBOL clubs, pot 2 eight UEFA clubs, pot 3 four AFC and four CONCACAF clubs, pot 4 four CAF, two CONMEBOL, the OFC club and the host. Each pot is shuffled with the game's random function 0x90cfc0, then the two CONMEBOL clubs of pot 4 move to groups whose pot 1 club is from UEFA.
 
+Tests (`tests/seasons/club_world_check.py`, 2026-10-19): `2007-load` (a save after the quarter-finals on 11 December 2007 loads and ends with places 1 to 3 on 16 December), `2007` (rules off: the editions of 2007 and 2008 both on 7 to 16 December), `2020-on` (4 to 11 February 2021, 3 to 12 February 2022), `2004-on` (11 to 18 December 2005) and `2024-on` (Form G: 32 clubs, 14 June to 13 July 2025, places 1 and 2 on 15 July, when the parent completes) pass. The December editions end with their places while the clubs play league matches in December, so the fixture clash code (Q-26c-6) does not stop them.
+
 **Decisions taken (new small decisions, recommended answers, for Max to confirm):**
 
 - Q-26c-1. The fifth place match stays out. It needs new code in the Cup process path (formats doc 3.4: the Cup routes only the semi-final losers), and the history records places 1 to 3 only.
@@ -61,9 +63,9 @@ Picks: the original's 12 and 20 more from `pick_entrant` 0x92ae60, which gives t
 - Q-26c-3. Form G knockout: a random draw of the round of 16 (0x4c3d10 draws with `draw_round`), not the real fixed bracket (group A winner v group B runner-up).
 - Q-26c-4. Form G pays no group prize money (the original's 0x92a140 pays 2,500,000 to each club out in the groups; the Libertadores builders pay none).
 - Q-26c-5. No set_predicted_positions for Form G (it reads 12 entrants and shuffles the list, 0x92ad36).
-- Q-26c-6. A fixture clash of a December edition with a league match: not handled by new code. `FIXTURE_MANAGER::find_fixture_clashes` 0x5ad780 treats this competition by its key id (0x5ad92e). The tests show what happens (see Tests).
+- Q-26c-6. A fixture clash of a December edition with a league match: no new code. `FIXTURE_MANAGER::find_fixture_clashes` 0x5ad780 skips one test for this competition's key id (0x5ad92e). The December and February editions of the tests end normally.
 
-### 26c: new competitions
+### 26c: new competitions (built 2026-10-19, see `2026-10-19-club-cups.md`)
 
 Copa Sudamericana (2002/03 on), Recopa Sudamericana (2003/04 on, with gaps), FIFA Intercontinental Cup (2024/25 on), AFC Champions League Two (2024/25 on), Suruga Bank Championship (2008/09 to 2019/20, Q334). The build brief gives them to the shared new competitions module (`season_comps.c`); no branch holds it on 2026-10-18.
 

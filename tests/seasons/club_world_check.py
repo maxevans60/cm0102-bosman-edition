@@ -47,7 +47,8 @@ The checks (each run):
       count of the start season
     - part 26c: a season with 32 clubs in the table plays the groups of Form G (log line "club world groups")
     - part 26c (Q401): the knockout's first match and final are on the days of the table's format text (December,
-      or February for 2020/21 to 2022/23), and when the run reaches the final, places 1 to 3 are written that day
+      or February for 2020/21 to 2022/23), and when the run reaches the final, places 1 to 3 (Form G: 1 and 2) are
+      written on the final's day or at most 7 days later
     - each class whose continent has a selected nation is in the report (NEEDS)
 The other runs: 2019-on (October 2019, Oceania into its gap of 2020/21 in the game), 2020-on (November 2020, Oceania
 waits from the new game and comes back in 2021/22), 2022-on (October 2022, the Asian Club Championship waits from the
@@ -59,6 +60,7 @@ A run takes about 6 to 12 minutes (2001-all longer). --jobs (default 2) runs tha
 already in the --keep folder again without a new run.
 """
 import concurrent.futures
+import datetime
 import os
 import re
 import sys
@@ -230,7 +232,11 @@ def check_dates(name, s, row, text, last):
     if final and (final[2], final[1]) <= (last + 1, 6):
         days = sorted({(int(d), int(m), int(y)) for _, d, m, y in places})
         want_places = ["1", "2"] if row["clubs"] == 32 else ["1", "2", "3"]      # Form G: no third place match
-        ok = sorted({p for p, *_ in places}) == want_places and days == [final]
+        # The history is written when the parent completes: on the day of the final (Form K) or a few days later
+        # (Form G, 15 July 2025 after the final of 13 July).
+        end = datetime.date(final[2], final[1], final[0])
+        ok = sorted({p for p, *_ in places}) == want_places and len(days) == 1 and \
+            0 <= (datetime.date(days[0][2], days[0][1], days[0][0]) - end).days <= 7
         print(f"  {'ok  ' if ok else 'FAIL'}  {name}: Club World Championship {s}: places {sorted(places)}")
         if not ok:
             fails.append(f"{name}: Club World Championship {s}: places {sorted(places)}, want {want_places} on {final}")

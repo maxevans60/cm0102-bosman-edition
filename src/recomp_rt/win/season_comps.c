@@ -152,6 +152,15 @@ uint32_t season_comps_record(const char *name)
     return 0;
 }
 
+int season_comps_is_def_record(uint32_t rec)
+{
+    for (int i = 0; rec && i < season_comp_def_count && i < MAX_DEFS; i++) {
+        const SeasonCompDef *d = def_at(i);
+        if (d && d->record && season_comps_record(d->record) == rec) return 1;
+    }
+    return 0;
+}
+
 uint32_t season_comps_top_club(uint32_t continent_key, const uint32_t *skip, int n)
 {
     uint32_t clubs = rd32(g_mem, 0xae23b4u), want = rd32(g_mem, continent_key), best = 0;
