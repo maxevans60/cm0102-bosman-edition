@@ -1,136 +1,69 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
-2002	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-13: game 5, table 50 (50)
-2002	clubs	european_cup (European Champions Cup), row uefa-10: game 55, table 72 (72 (32 in the group stage))
-2002	clubs	fifa_confed (Confederations Cup), row int-world-22: game 0/4, table 8 (8)
-2002	clubs	oceania_nations (Oceania Nations Cup), row int-continental-21: game 3, table 8 (8)
-2002	down	eng_third (English Third Division), row eng-41: game 1 (+0 play-off places), table 2 (2)
-2002	name	eng_auto_cup (English Vans Trophy), row eng-306: game 'English Vans Trophy', table 'Football League Trophy'
-2002	name	eng_cc_cup (English League Cup), row eng-305: game 'English League Cup', table 'Football League Cup'
-2002	name	eng_charity (English Charity Shield), row eng-308: game 'English Charity Shield', table 'FA Community Shield'
-2002	name	eng_fa_cup (English FA Cup), row eng-304: game 'English FA Cup', table 'FA Cup'
-2002	name	eng_first (English First Division), row eng-39: game 'English First Division', table 'Football League First Division'
-2002	name	eng_prm (English Premier Division), row eng-38: game 'English Premier Division', table 'FA Premier League'
-2002	name	eng_second (English Second Division), row eng-40: game 'English Second Division', table 'Football League Second Division'
-2002	name	eng_third (English Third Division), row eng-41: game 'English Third Division', table 'Football League Third Division'
-2002	name	eur_super_cup (European Super Cup), row uefa-16: game 'European Super Cup', table 'UEFA Super Cup'
-2002	name	euro_champ_qual (European Championship Qualifying), row int-continental-13: game 'European Championship Qualifying', table 'UEFA Euro 2004 qualifying'
-2002	name	european_cup (European Champions Cup), row uefa-10: game 'European Champions Cup', table 'UEFA Champions League'
-2002	name	fifa_confed (Confederations Cup), row int-world-22: game 'Confederations Cup', table '2003 FIFA Confederations Cup'
-2002	name	goldcup (Copa America), row int-continental-22: game 'Copa America', table 'Copa América'
-2002	name	inter_amer_cup (Inter-American Cup), row club-world-31: game 'Inter-American Cup', table 'Copa Interamericana'
-2002	name	intertoto_cup (Inter-Toto Cup), row uefa-15: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
-2002	name	oceania_nations (Oceania Nations Cup), row int-continental-21: game 'Oceania Nations Cup', table '2002 OFC Nations Cup'
-2002	name	world_club_cup (Intercontinental Cup), row club-world-20: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
+2002	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-13: game 5, table 50 (50)
+2002	clubs	european_cup (UEFA Champions League), row uefa-10: game 55, table 72 (72 (32 in the group stage))
+2002	clubs	fifa_confed (FIFA Confederations Cup), row int-world-22: game 0/4, table 8 (8)
+2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 3, table 8 (8)
+2002	down	eng_third (Football League Third Division), row eng-41: game 1 (+0 play-off places), table 2 (2)
 2002	no_row	friendly (Friendly): no table row
 2002	no_row	record_utils ('B' International): no table row
 2002	no_row	record_utils (Reserve): no table row
 2002	no_row	record_utils (Under 21 International): no table row
-2002	not_held	goldcup (Copa America), row int-continental-22: the game holds 2003, the table says not held
-2002	not_held	inter_amer_cup (Inter-American Cup), row club-world-31: the game holds 2002, the table says not held
+2002	not_held	goldcup (Copa América), row int-continental-22: the game holds 2003, the table says not held
+2002	not_held	inter_amer_cup (Copa Interamericana), row club-world-31: the game holds 2002, the table says not held
 2002	not_held	world_club_champ (FIFA Club World Championship), row club-world-21: the game holds 2003, the table says not held
 2002	not_in_game	eng-307 eng_fa_trophy 'FA Trophy' (England)
 2002	not_in_game	eng-42 eng_conf 'Football Conference' (England)
 2002	not_in_game	uefa-9 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2003	clubs	african_nations (African Cup of Nations), row int-continental-29: game 0/4, table 16 (16)
-2003	clubs	euro_champ (European Football Championship), row int-continental-23: game 0/4, table 16 (16)
-2003	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-24: game 5, table 50 (50)
-2003	clubs	european_cup (European Champions Cup), row uefa-18: game 55, table 72 (72 (32 in the group stage))
-2003	clubs	intertoto_cup (Inter-Toto Cup), row uefa-23: game 60, table 61 (61)
-2003	clubs	oceania_nations (Oceania Nations Cup), row int-continental-32: game 3, table 6 (6)
-2003	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-30: game 50, table 51 (51 entrants)
-2003	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-31: game 0, table 39 (39 entrants)
-2003	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-29: game 24, table 34 (34 entrants)
-2003	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-32: game 5, table 12 (12 entrants)
-2003	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-28: game 9, table 10 (10)
-2003	down	eng_third (English Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
-2003	name	african_nations (African Cup of Nations), row int-continental-29: game 'African Cup of Nations', table '2004 African Cup of Nations'
-2003	name	asia_nations (Asian Cup), row int-continental-31: game 'Asian Cup', table 'AFC Asian Cup'
-2003	name	eng_auto_cup (English Vans Trophy), row eng-312: game 'English Vans Trophy', table 'Football League Trophy'
-2003	name	eng_cc_cup (English League Cup), row eng-311: game 'English League Cup', table 'Football League Cup'
-2003	name	eng_charity (English Charity Shield), row eng-314: game 'English Charity Shield', table 'FA Community Shield'
-2003	name	eng_fa_cup (English FA Cup), row eng-310: game 'English FA Cup', table 'FA Cup'
-2003	name	eng_first (English First Division), row eng-49: game 'English First Division', table 'Football League First Division'
-2003	name	eng_prm (English Premier Division), row eng-48: game 'English Premier Division', table 'FA Premier League'
-2003	name	eng_second (English Second Division), row eng-50: game 'English Second Division', table 'Football League Second Division'
-2003	name	eng_third (English Third Division), row eng-51: game 'English Third Division', table 'Football League Third Division'
-2003	name	eur_super_cup (European Super Cup), row uefa-24: game 'European Super Cup', table 'UEFA Super Cup'
-2003	name	euro_champ (European Football Championship), row int-continental-23: game 'European Football Championship', table 'UEFA Euro 2004'
-2003	name	euro_champ_qual (European Championship Qualifying), row int-continental-24: game 'European Championship Qualifying', table 'UEFA Euro 2004 qualifying'
-2003	name	european_cup (European Champions Cup), row uefa-18: game 'European Champions Cup', table 'UEFA Champions League'
-2003	name	fifa_confed (Confederations Cup), row int-world-34: game 'Confederations Cup', table 'FIFA Confederations Cup'
-2003	name	goldcup (Copa America), row int-continental-33: game 'Copa America', table 'Copa América'
-2003	name	inter_amer_cup (Inter-American Cup), row club-world-50: game 'Inter-American Cup', table 'Copa Interamericana'
-2003	name	intertoto_cup (Inter-Toto Cup), row uefa-23: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
-2003	name	oceania_nations (Oceania Nations Cup), row int-continental-32: game 'Oceania Nations Cup', table '2004 OFC Nations Cup'
-2003	name	olympics (Olympic Games), row int-world-35: game 'Olympic Games', table 'Football at the Summer Olympics (men)'
-2003	name	wc_african_cup (World Cup African Qualifying Section), row int-world-30: game 'World Cup African Qualifying Section', table '2006 FIFA World Cup qualification (CAF)'
-2003	name	wc_asia_league (World Cup Asian Qualifying Section), row int-world-31: game 'World Cup Asian Qualifying Section', table '2006 FIFA World Cup qualification (AFC)'
-2003	name	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-29: game 'World Cup CONCACAF Qualifying Section', table '2006 FIFA World Cup qualification (CONCACAF)'
-2003	name	wc_europe_league (World Cup European Qualifying Section), row int-world-27: game 'World Cup European Qualifying Section', table 'FIFA World Cup qualification (UEFA)'
-2003	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-32: game 'World Cup Oceania Qualifying Section', table '2006 FIFA World Cup qualification (OFC)'
-2003	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-28: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
-2003	name	world_club_cup (Intercontinental Cup), row club-world-39: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
+2003	clubs	african_nations (Africa Cup of Nations), row int-continental-29: game 0/4, table 16 (16)
+2003	clubs	euro_champ (UEFA European Championship), row int-continental-23: game 0/4, table 16 (16)
+2003	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-24: game 5, table 50 (50)
+2003	clubs	european_cup (UEFA Champions League), row uefa-18: game 55, table 72 (72 (32 in the group stage))
+2003	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-23: game 60, table 61 (61)
+2003	clubs	oceania_nations (OFC Nations Cup), row int-continental-32: game 3, table 6 (6)
+2003	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-30: game 50, table 51 (51 entrants)
+2003	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-31: game 0, table 39 (39 entrants)
+2003	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-29: game 24, table 34 (34 entrants)
+2003	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-32: game 5, table 12 (12 entrants)
+2003	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-28: game 9, table 10 (10)
+2003	down	eng_third (Football League Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
+2003	name	african_nations (Africa Cup of Nations), row int-continental-29: game 'Africa Cup of Nations', table '2004 African Cup of Nations'
 2003	no_row	friendly (Friendly): no table row
 2003	no_row	record_utils ('B' International): no table row
 2003	no_row	record_utils (Reserve): no table row
 2003	no_row	record_utils (Under 21 International): no table row
-2003	not_held	asia_nations (Asian Cup), row int-continental-31: the game holds 2004, the table says not held
-2003	not_held	fifa_confed (Confederations Cup), row int-world-34: the game holds 2003, the table says not held
-2003	not_held	goldcup (Copa America), row int-continental-33: the game holds 2003, the table says not held
-2003	not_held	inter_amer_cup (Inter-American Cup), row club-world-50: the game holds 2003, the table says not held
-2003	not_held	olympics (Olympic Games), row int-world-35: the game holds 2004, the table says not held
-2003	not_held	wc_europe_league (World Cup European Qualifying Section), row int-world-27: the game holds 2004, the table says not held
+2003	not_held	asia_nations (AFC Asian Cup), row int-continental-31: the game holds 2004, the table says not held
+2003	not_held	fifa_confed (FIFA Confederations Cup), row int-world-34: the game holds 2003, the table says not held
+2003	not_held	goldcup (Copa América), row int-continental-33: the game holds 2003, the table says not held
+2003	not_held	inter_amer_cup (Copa Interamericana), row club-world-50: the game holds 2003, the table says not held
+2003	not_held	olympics (Football at the Summer Olympics), row int-world-35: the game holds 2004, the table says not held
+2003	not_held	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-27: the game holds 2004, the table says not held
 2003	not_held	world_club_champ (FIFA Club World Championship), row club-world-40: the game holds 2003, the table says not held
 2003	not_in_game	eng-313 eng_fa_trophy 'FA Trophy' (England)
 2003	not_in_game	eng-52 eng_conf 'Football Conference' (England)
 2003	not_in_game	uefa-17 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2004	clubs	asia_nations (Asian Cup), row int-continental-42: game 4, table 16 (16)
-2004	clubs	european_cup (European Champions Cup), row uefa-26: game 55, table 72 (72 (32 in the group stage))
-2004	clubs	fifa_confed (Confederations Cup), row int-world-46: game 0/4, table 8 (8)
-2004	clubs	goldcup (Copa America), row int-continental-44: game 0/4, table 12 (12)
-2004	clubs	intertoto_cup (Inter-Toto Cup), row uefa-31: game 60, table 61 (61)
-2004	clubs	oceania_nations (Oceania Nations Cup), row int-continental-43: game 0/3, table 2 (2)
-2004	clubs	olympics (Olympic Games), row int-world-47: game 4, table 16 (16)
-2004	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-42: game 50, table 30 (30)
-2004	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-43: game 0/4, table 32 (32, then 8)
-2004	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-41: game 24, table 12 (12, then 6)
-2004	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-39: game 5, table 51 (51 entrants)
-2004	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-40: game 9, table 10 (10)
-2004	down	eng_third (English Third Division), row eng-61: game 1 (+0 play-off places), table 2 (2)
+2004	clubs	asia_nations (AFC Asian Cup), row int-continental-42: game 4, table 16 (16)
+2004	clubs	european_cup (UEFA Champions League), row uefa-26: game 55, table 72 (72 (32 in the group stage))
+2004	clubs	fifa_confed (FIFA Confederations Cup), row int-world-46: game 0/4, table 8 (8)
+2004	clubs	goldcup (Copa América), row int-continental-44: game 0/4, table 12 (12)
+2004	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-31: game 60, table 61 (61)
+2004	clubs	oceania_nations (OFC Nations Cup), row int-continental-43: game 0/3, table 2 (2)
+2004	clubs	olympics (Football at the Summer Olympics), row int-world-47: game 4, table 16 (16)
+2004	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-42: game 50, table 30 (30)
+2004	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-43: game 0/4, table 32 (32, then 8)
+2004	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-41: game 24, table 12 (12, then 6)
+2004	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-39: game 5, table 51 (51 entrants)
+2004	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-40: game 9, table 10 (10)
+2004	down	eng_third (Football League Two), row eng-61: game 1 (+0 play-off places), table 2 (2)
 2004	name	african_nations (African Cup of Nations), row int-continental-40: game 'African Cup of Nations', table 'Africa Cup of Nations'
-2004	name	asia_nations (Asian Cup), row int-continental-42: game 'Asian Cup', table '2004 AFC Asian Cup'
-2004	name	eng_auto_cup (English Vans Trophy), row eng-318: game 'English Vans Trophy', table 'Football League Trophy'
-2004	name	eng_cc_cup (English League Cup), row eng-317: game 'English League Cup', table 'Football League Cup'
-2004	name	eng_charity (English Charity Shield), row eng-320: game 'English Charity Shield', table 'FA Community Shield'
-2004	name	eng_fa_cup (English FA Cup), row eng-316: game 'English FA Cup', table 'FA Cup'
-2004	name	eng_first (English First Division), row eng-59: game 'English First Division', table 'Football League Championship'
-2004	name	eng_prm (English Premier Division), row eng-58: game 'English Premier Division', table 'FA Premier League'
-2004	name	eng_second (English Second Division), row eng-60: game 'English Second Division', table 'Football League One'
-2004	name	eng_third (English Third Division), row eng-61: game 'English Third Division', table 'Football League Two'
-2004	name	eur_super_cup (European Super Cup), row uefa-32: game 'European Super Cup', table 'UEFA Super Cup'
-2004	name	euro_champ (European Football Championship), row int-continental-34: game 'European Football Championship', table 'UEFA European Championship'
-2004	name	european_cup (European Champions Cup), row uefa-26: game 'European Champions Cup', table 'UEFA Champions League'
-2004	name	fifa_confed (Confederations Cup), row int-world-46: game 'Confederations Cup', table '2005 FIFA Confederations Cup'
-2004	name	goldcup (Copa America), row int-continental-44: game 'Copa America', table '2004 Copa América'
-2004	name	inter_amer_cup (Inter-American Cup), row club-world-69: game 'Inter-American Cup', table 'Copa Interamericana'
-2004	name	intertoto_cup (Inter-Toto Cup), row uefa-31: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
-2004	name	oceania_nations (Oceania Nations Cup), row int-continental-43: game 'Oceania Nations Cup', table '2004 OFC Nations Cup final'
-2004	name	olympics (Olympic Games), row int-world-47: game 'Olympic Games', table 'Football at the 2004 Summer Olympics (men)'
-2004	name	wc_african_cup (World Cup African Qualifying Section), row int-world-42: game 'World Cup African Qualifying Section', table '2006 FIFA World Cup qualification (CAF)'
-2004	name	wc_asia_league (World Cup Asian Qualifying Section), row int-world-43: game 'World Cup Asian Qualifying Section', table '2006 FIFA World Cup qualification (AFC)'
-2004	name	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-41: game 'World Cup CONCACAF Qualifying Section', table '2006 FIFA World Cup qualification (CONCACAF)'
-2004	name	wc_europe_league (World Cup European Qualifying Section), row int-world-39: game 'World Cup European Qualifying Section', table '2006 FIFA World Cup qualification (UEFA)'
-2004	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-44: game 'World Cup Oceania Qualifying Section', table '2006 FIFA World Cup qualification (OFC)'
-2004	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-40: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
-2004	name	world_club_cup (Intercontinental Cup), row club-world-58: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
+2004	name	oceania_nations (OFC Nations Cup), row int-continental-43: game 'OFC Nations Cup', table '2004 OFC Nations Cup final'
 2004	no_row	friendly (Friendly): no table row
 2004	no_row	record_utils ('B' International): no table row
 2004	no_row	record_utils (Reserve): no table row
 2004	no_row	record_utils (Under 21 International): no table row
 2004	not_held	african_nations (African Cup of Nations), row int-continental-40: the game holds 2004, the table says not held
-2004	not_held	euro_champ (European Football Championship), row int-continental-34: the game holds 2004, the table says not held
-2004	not_held	inter_amer_cup (Inter-American Cup), row club-world-69: the game holds 2004, the table says not held
+2004	not_held	euro_champ (UEFA European Championship), row int-continental-34: the game holds 2004, the table says not held
+2004	not_held	inter_amer_cup (Copa Interamericana), row club-world-69: the game holds 2004, the table says not held
 2004	not_held	world_club_champ (FIFA Club World Championship), row club-world-59: the game holds 2005, the table says not held
 2004	not_in_game	eng-319 eng_fa_trophy 'FA Trophy' (England)
 2004	not_in_game	eng-321 new 'Conference Cup' (England)

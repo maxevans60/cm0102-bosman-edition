@@ -128,6 +128,17 @@ int season_sizes_clubs(const char *file, int season)
     return within(file, r->clubs);
 }
 
+/* A division that a cup takes whole after a capped number of lower clubs keeps the clubs that the database gives
+ * it, up to its class count, when its row has fewer (season_sizes.h). DenCup::collect_entrants 0x551240 wants 92
+ * clubs (0x5c at 0x551254): lower clubs of [0x9cf764] up to the room of rt_cup_room (0x55131c), then every club of
+ * [0x9cf5b4], [0x9cf5b0] and [0x9cf5ac]. A club that the club moves cut from the First Division goes to no
+ * division, so the cup is short by that many and the constructor stops at den_cup.cpp 75 (push 0x4b at
+ * 0x550a62). A 2020/21 start (November 2020 database: First Division 16, row 12) stopped there. */
+int season_sizes_keeps_database(const char *file)
+{
+    return sizes_on() && file && !strcmp(file, "den_first");
+}
+
 /* The clubs whose division is the record of the object. */
 static int clubs_in_division(uint32_t obj)
 {

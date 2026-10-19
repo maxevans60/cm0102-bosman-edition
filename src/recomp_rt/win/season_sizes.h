@@ -45,6 +45,10 @@ void season_sizes_rules(uint32_t obj);
  * when the class is not in the size table or the row holds no usable count. */
 int season_sizes_clubs(const char *file, int season);
 
+/* 1 when the club moves leave a division of this file the clubs of the database, up to the class count, where its
+ * row has fewer (a cup takes the division whole). */
+int season_sizes_keeps_database(const char *file);
+
 /* The source files of the league classes of tools/recomp/league_sizes.py (season_size_wraps.c). */
 extern const char *const season_size_files[];
 extern const int season_size_file_count;

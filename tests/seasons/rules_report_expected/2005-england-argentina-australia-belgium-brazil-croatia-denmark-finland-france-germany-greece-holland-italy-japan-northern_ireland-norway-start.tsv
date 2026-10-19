@@ -75,7 +75,9 @@
 2005	down	cro_a2a (Druga HNL North), row gre-pol-cro-356: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
 2005	down	cro_a2b (Druga HNL South), row gre-pol-cro-383: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
 2005	down	eng_third (Football League Two), row eng-71: game 1 (+0 play-off places), table 2 (2)
+2005	down	gre_prm (Alpha Ethniki), row gre-pol-cro-32: game 2 (+0 play-off places), table 3 (3 (14th-16th))
 2005	down	gre_second (Beta Ethniki), row gre-pol-cro-59: game 2 (+0 play-off places), table 3 (3 (14th-16th))
+2005	down	ita_ser_b (Serie B), row ita-71: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2005	down	ita_ser_c1a (Serie C1 girone A), row ita-72: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2005	down	ita_ser_c1b (Serie C1 girone B), row ita-73: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2005	down	nir_first (Irish First Division), row wal-nir-irl-111: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
@@ -127,22 +129,21 @@
 2005	not_in_game	ita-85 new 'Supercoppa di Lega di Seconda Divisione (Serie C2 to 2008)' (Italy)
 2005	not_in_game	nor-fin-50 new 'Liigacup' (Finland)
 2005	not_in_game	uefa-33 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2005	playoffs	arg_prm (Primera División), row arg-usa-5: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
-2005	playoffs	arg_second (Primera B Nacional), row arg-usa-32: game 0 up and 0 down play-off places, table 4 and 0 ('As 2003/04; Torneo Reducido of 3rd to 6th')
-2005	playoffs	bel_first (Belgian First Division), row hol-bel-60: game 0 up and 0 down play-off places, table 0 and 1 ('17th plays the second division final round for one top-flight place')
-2005	playoffs	bel_second (Belgian Second Division), row hol-bel-61: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
-2005	playoffs	bel_third (Belgian Third Division), row hol-bel-62: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
-2005	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-329: game 0 up and 0 down play-off places, table 0 and 1 ('11th: relegation play-off')
-2005	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-356: game 0 up and 0 down play-off places, table 1 and 0 ('1st of play-off group: promotion play-off')
-2005	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-383: game 0 up and 0 down play-off places, table 1 and 0 ('1st of play-off group: promotion play-off')
-2005	playoffs	den_second (Danish 2nd Divisions), row den-swe-28: game 0 up and 0 down play-off places, table 1 and 0 ('The best eligible runner-up of each group (Thisted FC, Holbæk B&IF) play two leg')
-2005	playoffs	fin_first (Ykkönen), row nor-fin-48: game 0 up and 1 down play-off places, table 0 and 0 ('none')
-2005	playoffs	fin_prm (Veikkausliiga), row nor-fin-47: game 0 up and 1 down play-off places, table 0 and 0 ('none')
-2005	playoffs	ita_ser_b (Serie B), row ita-71: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo')
-2005	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-72: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
-2005	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-73: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
-2005	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-194: game 0 up and 0 down play-off places, table 0 and 1 ('16th v J2 3rd in a two-legged promotion/relegation series')
-2005	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-221: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v J1 16th in a two-legged promotion/relegation series')
+2005	playoffs	arg_prm (Primera División), row arg-usa-5: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
+2005	playoffs	arg_second (Primera B Nacional), row arg-usa-32: game 0 up and 0 down play-off places, table 'As 2003/04; Torneo Reducido of 3rd to 6th'
+2005	playoffs	aus_nsl (A-League), row aus-jap-kor-28: game 0 up and 0 down play-off places, table 'top four, page play-off system, grand final'
+2005	playoffs	bel_first (Belgian First Division), row hol-bel-60: game 0 up and 0 down play-off places, table '17th plays the second division final round for one top-flight place'
+2005	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-86: game 0 up and 0 down play-off places, table 'see format'
+2005	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-329: game 0 up and 0 down play-off places, table '11th: relegation play-off'
+2005	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-356: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off'
+2005	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-383: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off'
+2005	playoffs	den_second (Danish 2nd Divisions), row den-swe-28: game 0 up and 0 down play-off places, table 'The best eligible runner-up of each group (Thisted FC, Holbæk B&IF) play two leg'
+2005	playoffs	fin_first (Ykkönen), row nor-fin-48: game 0 up and 1 down play-off places, table 'none'
+2005	playoffs	fin_prm (Veikkausliiga), row nor-fin-47: game 0 up and 1 down play-off places, table 'none'
+2005	playoffs	hol_first (Eerste Divisie), row hol-bel-55: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
+2005	playoffs	ita_ser_b (Serie B), row ita-71: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
+2005	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-194: game 0 up and 0 down play-off places, table '16th v J2 3rd in a two-legged promotion/relegation series'
+2005	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-221: game 0 up and 0 down play-off places, table '3rd v J1 16th in a two-legged promotion/relegation series'
 2005	up	arg_second (Primera B Nacional), row arg-usa-32: game 1 (+0 play-off places), table 2 (2 (as 2002/03))
 2005	up	aus_nsl (A-League), row aus-jap-kor-28: game 6 (+0 play-off places), table na (n/a)
 2005	up	bel_third (Belgian Third Division), row hol-bel-62: game 1 (+0 play-off places), table 2 (2 (group champions))

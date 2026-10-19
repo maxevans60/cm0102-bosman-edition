@@ -1,40 +1,28 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2018	bench	asia_club_champ (AFC Champions League), row club-world-336: game 5, table 7 (7)
-2018	bench	aus_nsl (A-League), row aus-jap-kor-41: game 4, table 5 (5 (inference for the years between 2013/14 and 2025/26))
-2018	bench	bra_cup (Copa do Brasil), row bra-153: game 7, table 12 (12)
-2018	bench	bra_nat_first (Campeonato Brasileiro Série A), row bra-45: game 7, table 12 (12)
-2018	bench	bra_nat_second (Campeonato Brasileiro Série B), row bra-72: game 7, table 12 (12)
-2018	bench	bra_nat_third (Campeonato Brasileiro Série C), row bra-99: game 7, table 12 (12)
-2018	bench	conmebol_liber (Copa Libertadores), row club-world-327: game 7, table 12 (12)
+2018	bench	bra_cup (Copa do Brasil), row bra-153: game 9, table 12 (12)
+2018	bench	bra_nat_first (Campeonato Brasileiro Série A), row bra-45: game 9, table 12 (12)
+2018	bench	bra_nat_second (Campeonato Brasileiro Série B), row bra-72: game 9, table 12 (12)
+2018	bench	bra_nat_third (Campeonato Brasileiro Série C), row bra-99: game 9, table 12 (12)
+2018	bench	conmebol_liber (Copa Libertadores), row club-world-327: game 9, table 12 (12)
 2018	bench	eng_cc_cup (EFL Cup), row eng-401: game 5, table 7 (7)
 2018	bench	eng_fa_cup (FA Cup), row eng-400: game 5, table 7 (7)
-2018	bench	eng_first (EFL Championship), row eng-199: game 5, table 7 (7)
-2018	bench	eng_prm (Premier League), row eng-198: game 5, table 7 (7)
-2018	bench	eng_second (EFL League One), row eng-200: game 5, table 7 (7)
-2018	bench	eng_third (EFL League Two), row eng-201: game 5, table 7 (7)
-2018	bench	eur_super_cup (UEFA Super Cup), row uefa-144: game 7, table 12 (12)
+2018	bench	eur_super_cup (UEFA Super Cup), row uefa-144: game 9, table 12 (12)
 2018	bench	fra_cup (Coupe de France), row fra-160: game 3, table 7 (7)
-2018	bench	fra_first (Ligue 1), row fra-155: game 5, table 7 (7)
 2018	bench	fra_lge_cup (Coupe de la Ligue), row fra-161: game 3, table 7 (7)
-2018	bench	ger_cup (DFB-Pokal), row ger-231: game 6, table 7 (7)
-2018	bench	ger_first (Bundesliga), row ger-222: game 6, table 7 (7)
-2018	bench	ger_second (2. Bundesliga), row ger-223: game 6, table 7 (7)
-2018	bench	hol_cup (KNVB Cup), row hol-bel-226: game 7, table 12 (12 (inference: 12 in 2017 and in 2019/20))
-2018	bench	hol_first (Eerste Divisie), row hol-bel-224: game 7, table 12 (12 (inference: 12 in 2017 and in 2019/20))
-2018	bench	hol_prm (Eredivisie), row hol-bel-223: game 7, table 12 (12 (inference: 12 in 2017 and in 2019/20))
-2018	bench	ita_c_cup (Coppa Italia Serie C), row ita-303: game 7, table 12 (12 (inference: already 12 in Lega Pro by July 2017))
-2018	bench	ita_cup (Coppa Italia), row ita-302: game 7, table 12 (12)
-2018	bench	ita_ser_a (Serie A), row ita-291: game 7, table 12 (12)
-2018	bench	ita_ser_b (Serie B), row ita-292: game 7, table 12 (12 (inference: Lega B assembly asked for 12 "from next season" in July 2017))
-2018	bench	ita_super (Supercoppa Italiana), row ita-304: game 7, table 12 (12)
+2018	bench	hol_cup (KNVB Cup), row hol-bel-226: game 9, table 12 (12 (inference: 12 in 2017 and in 2019/20))
+2018	bench	hol_first (Eerste Divisie), row hol-bel-224: game 9, table 12 (12 (inference: 12 in 2017 and in 2019/20))
+2018	bench	hol_prm (Eredivisie), row hol-bel-223: game 9, table 12 (12 (inference: 12 in 2017 and in 2019/20))
+2018	bench	ita_c_cup (Coppa Italia Serie C), row ita-303: game 9, table 12 (12 (inference: already 12 in Lega Pro by July 2017))
+2018	bench	ita_cup (Coppa Italia), row ita-302: game 9, table 12 (12)
+2018	bench	ita_ser_a (Serie A), row ita-291: game 9, table 12 (12)
+2018	bench	ita_ser_b (Serie B), row ita-292: game 9, table 12 (12 (inference: Lega B assembly asked for 12 "from next season" in July 2017))
+2018	bench	ita_super (Supercoppa Italiana), row ita-304: game 9, table 12 (12)
 2018	bench	world_club_champ (FIFA Club World Cup), row club-world-325: game 7, table 12 (12)
 2018	club_list	Argentine Premier Division: 20 of 26 listed clubs that the database holds (26 listed), 0 other clubs, 20 in all; not in it: Aldosivi, Gimnasia y Esgrima de La Plata, Lanús, Newell's Old Boys, San Martín de Tucumán, Tigre; others: -
-2018	club_list	Australian National Soccer League: 10 of 10 listed clubs that the database holds (10 listed), 3 other clubs, 13 in all; not in it: -; others: Campbelltown City, Heidelberg United, Sydney Olympic
 2018	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: RSC Templeuvois, RUS Genly-Quévy 89
 2018	club_list	Belgian Second Division: 8 of 8 listed clubs that the database holds (8 listed), 10 other clubs, 18 in all; not in it: -; others: AS Verbroedering Geel, FC Knokke, FC Rupel Boom, FCV Dender EH, KFC Dessel Sport, KMSK Deinze, KSK Heist, KSK Lierse Kempenzonen, RSC Chatelet-Farciennes, Royal Excelsior Virton
-2018	club_list	Brazilian National First Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: América Futebol Clube (RN), Campeonato Brasileiro Reserva, Elosport Capão Bonito, Flamengo (PE), Maguari, Sendas Pão de Açúcar Futebol Clube, Sport Club Barueri, Tupi
-2018	club_list	Brazilian National Second Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: Agremiação Sportiva Arapiraquense, Icasa Futebol Clube, Joinville EC (SC), Macaé Esporte Futebol Clube, Madureira Esporte Clube, SER Caxias do Sul, Taguatinga, Águia de Marabá Futebol Clube
 2018	club_list	Brazilian National Third Division: 19 of 19 listed clubs that the database holds (20 listed), 37 other clubs, 56 in all; not in it: -; others: AER Auritânia Foz do Iguaçu, Associação Atlética Aparecidense, Associação Atlética Caldense, Associação Atlética Coruripe, Bangu Atlético Clube, Campinense Clube, Central Sport Club, Clube Atlético Linense, Clube Atlético Metropolitano (SC), Clube Recreativo e Atlético Catalano, Colo-Colo de Futebol e Regatas, Duque de Caxias Futebol Clube, EC Internacional, Esporte Clube Comercial, Esporte Clube Cruzeiro, Esporte Clube Novo Hamburgo (RS), Esporte Clube XV de Novembro, Estanciano Esporte Clube, Fluminense de Feira Futebol Clube, Goianésia Esporte Clube, Grêmio Osasco Audax, Guarani de Juazeiro, Ituano Futebol Clube, Mirassol Futebol Clube, Moto Club de São Luís, Nacional Futebol Clube (AM), Náutico Futebol Clube, Operário Futebol Club Ltda., Palmas Futebol e Regatas, Paulista Futebol Clube, Serrano Sport Club, Sociedade Desportiva Juazeirense, Sociedade Esportiva do Gama, União Recreativa dos Trabalhadores, Veranópolis Esporte Clube Recreativo e Cultural, Vilhena Esporte Clube, Villa Nova Atlético Clube (MG)
 2018	club_list	Croatian First Division: 10 of 10 listed clubs that the database holds (10 listed), 6 other clubs, 16 in all; not in it: -; others: HNK Cibalia Vinkovci, NK Jedinstvo Omladinac, NK NASK Nasice, NK Polet Sveti Martin na Muri, NK Zelina, NK Zrinski Tordinci
 2018	club_list	Croatian Second Division North: 14 of 14 listed clubs that the database holds (14 listed), 2 other clubs, 16 in all; not in it: -; others: BSK Zmaj Blato, NK Maksimir
@@ -42,12 +30,10 @@
 2018	club_list	Danish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: Esbjerg fB, Vendsyssel FF; others: -
 2018	club_list	Danish Second Division: 16 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 16 in all; not in it: Aarhus Fremad, Brabrand IF, Odder IGF, Skive IK, Slagelse B&I, Tarup-Paarup IF, Vanlöse IF, Vejgaard B; others: -
 2018	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: AZ Alkmaar U21, FC Utrecht U21; others: -
-2018	club_list	French Lower Division: 0 of 102 listed clubs that the database holds (168 listed), 0 other clubs, 0 in all; not in it: AGL Fougères, AJ Auxerre II, AS Beauvais-Oise, AS Cannes, AS Cherbourg Football, AS Fabrègues, AS Nancy-Lorraine II, ASC Biesheim, ASPTT Caen, Amicale Sportive Muretaine, Angers SCO II, Angoulême Charente, Athletic Club Ajaccio II, Athletic Club Amiens, Aubagne, Aviron Bayonnais, Avoine Olympique Chinon Cinais, Balma Sporting Club, Blagnac, Bourges 18, Bourges 18, Bourgoin-Jallieu, Bressuire, CS Louhans-Cuiseaux 71, CSO Amneville, Chauray, Clermont Foot Auvergne 63 II, Dinan-Léhon, EA Guingamp II, ES Thaon, ES Troyes AC II, ES du Cannet Rocheville, ESM Gonfreville, Epernay Champagne, FC Challans, FC Dieppe, FC Mulhouse, FC Saint-Louis Neuweg, FC Sochaux-Montbéliard II, FC Stade Rennes B, FCA Aurillac, FCM Aubervilliers, FCO Dijon B, Fontenay Foot Vendée, Football Club Montceau Bourgogne, Garde Saint-Ivy Pontivy, Grande-Synthe, Gueugnon, HSC Montpellier II, Istres Ouest Provence, LB Châteauroux II, La Roche-sur-Yon Vendée, Les Genêts d'Anglet, Limoges, Morteau-Montlebon, Olympique Alès en Cévennes, Olympique Noisy-le-Sec Banlieue 93, Olympique Saint-Quentinois, Olympique Saumur, Pacy Vallée d'Eure, Paris FC II, RC Strasbourg Alsace II, RCO Agathois, Racing Besançon, Racing Besançon, Racing Club Fléchois, Racing Club de France Colombes 92, Rodéo Toulouse, Rouen 1899, SA Thiernois, SC Amiens II, SC Bastia, SC Selongey, SM Caen II, Sablé-sur-Sarthe, Saint-Colomban Locminé, Saint-Lô Manche, Sarreguemines, Stade Brest 29 II, Stade Lannionnais, Stade Lavallois II, Stade Plabennécois Football, Stade Poitevin, TA Rennes, Tarbes Pyrénées Football, Toulouse FC II, Tourcoing US, Tours Football Club II, US Boulogne II, US La Montagnarde, US Le Pontet, US Lège-Cap-Ferret, US Raon-l'Étape, US Sarre-Union, USSA Vertou, Union Sportive Municipale Senlisienne, Union Sportive d'Ivry, Union Sportive de Chantilly, Vaulx-en-Velin, Vierzon Foot 18, Voltigeurs de Châteaubriant, Évreux AC; others: -
 2018	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: AC Arles-Avignon, Union Sportive Albigeoise
 2018	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Apollon Smyrnis, PAS Lamia 1964; others: -
 2018	club_list	Greek National B Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: AE Sparti, PASA Irodotos; others: -
 2018	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Frosinone Calcio, Parma Calcio 1913; others: -
-2018	club_list	Italian Serie B: 19 of 19 listed clubs that the database holds (19 listed), 1 other clubs, 20 in all; not in it: -; others: Frosinone Calcio
 2018	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Matsumoto Yamaga FC, Nagoya Grampus; others: -
 2018	club_list	Japanese J-League 2: 12 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 12 in all; not in it: Ehime FC, FC Gifu, FC Machida Zelvia, FC Ryukyu, Fagiano Okayama, Kagoshima United FC, Kyoto Sanga FC, Renofa Yamaguchi FC, Tochigi SC, Zweigen Kanazawa; others: -
 2018	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Knockbreda FC, Limavady United; others: -
@@ -55,13 +41,10 @@
 2018	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Lilleström SK, Mjøndalen IF; others: -
 2018	clubs	arg_prm (Superliga Argentina), row arg-usa-18: game 20, table 26 (26)
 2018	clubs	asia_club_champ (AFC Champions League), row club-world-336: game 16, table 32 (32)
-2018	clubs	aus_nsl (A-League), row aus-jap-kor-41: game 13, table 10 (10)
 2018	clubs	bel_first (Belgian First Division A), row hol-bel-229: game 18, table 16 (16)
 2018	clubs	bel_second (Belgian First Division B), row hol-bel-230: game 18, table 8 (8)
 2018	clubs	bra_champ_cup (Copa dos Campeões), row bra-207: game 3, table 0 (0)
 2018	clubs	bra_cup (Copa do Brasil), row bra-153: game 71, table 91 (91)
-2018	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-45: game 28, table 20 (20)
-2018	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-72: game 28, table 20 (20)
 2018	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-99: game 7, table 20 (20)
 2018	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-531: game 15, table 10 (10)
 2018	clubs	bra_reg_gaucho (Campeonato Gaúcho), row bra-558: game 17, table 12 (12)
@@ -86,7 +69,6 @@
 2018	clubs	ita_c_cup (Coppa Italia Serie C), row ita-303: game 5, table 59 (59)
 2018	clubs	ita_cup (Coppa Italia), row ita-302: game 4, table 78 (78)
 2018	clubs	ita_ser_a (Serie A), row ita-291: game 18, table 20 (20)
-2018	clubs	ita_ser_b (Serie B), row ita-292: game 20, table 19 (19)
 2018	clubs	jap_j1 (J1 League), row aus-jap-kor-207: game 16, table 18 (18)
 2018	clubs	jap_j2 (J2 League), row aus-jap-kor-234: game 12, table 22 (22)
 2018	clubs	nir_cup (Irish Cup), row wal-nir-irl-438: game 32, table 126 (126)
@@ -95,7 +77,7 @@
 2018	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-435: game 10, table 12 (12)
 2018	clubs	nor_prm (Eliteserien), row nor-fin-172: game 14, table 16 (16)
 2018	clubs	oceania_club_champ (OFC Champions League), row club-world-341: game 0, table 16 (16)
-2018	clubs	uefa_cup (UEFA Europa League), row uefa-141: game 145, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
+2018	clubs	uefa_cup (UEFA Europa League), row uefa-141: game 153, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
 2018	clubs	world_club_champ (FIFA Club World Cup), row club-world-325: game 0, table 7 (7)
 2018	down	arg_prm (Superliga Argentina), row arg-usa-18: game 0 (+0 play-off places), table 4 (4 (worst average over three seasons))
 2018	down	arg_second (Primera B Nacional), row arg-usa-45: game 0 (+0 play-off places), table 2 (2 (bottom club of each affiliation table))
@@ -106,16 +88,12 @@
 2018	down	cro_a2a (Druga HNL), row gre-pol-cro-369: game 2 (+0 play-off places), table 1 (1 (14th))
 2018	down	cro_a2b (Druga HNL South), row gre-pol-cro-396: game 2 (+0 play-off places), table na (n/a)
 2018	down	den_first (Danish 1st Division), row den-swe-105: game 3 (+0 play-off places), table 2 (2)
-2018	down	den_prm (Danish Superliga), row den-swe-104: game 2 (+0 play-off places), table 1 (1)
 2018	down	eng_third (EFL League Two), row eng-201: game 1 (+0 play-off places), table 2 (2)
 2018	down	fin_first (Ykkönen), row nor-fin-178: game 2 (+1 play-off places), table 1 (10th (1))
-2018	down	fra_first (Ligue 1), row fra-155: game 3 (+0 play-off places), table 2 (2)
 2018	down	fra_second (Ligue 2), row fra-156: game 3 (+0 play-off places), table 2 (2)
-2018	down	ger_first (Bundesliga), row ger-222: game 3 (+0 play-off places), table 2 (2)
 2018	down	ger_second (2. Bundesliga), row ger-223: game 4 (+0 play-off places), table 2 (2)
 2018	down	gre_prm (Super League Greece), row gre-pol-cro-45: game 2 (+0 play-off places), table 3 (3 (14th-16th))
 2018	down	gre_second (Football League), row gre-pol-cro-72: game 2 (+0 play-off places), table 6 (6 (11th-16th: 11th-12th to the new third level, 13th-16th to the fourth level))
-2018	down	ita_ser_a (Serie A), row ita-291: game 4 (+0 play-off places), table 3 (3)
 2018	down	ita_ser_b (Serie B), row ita-292: game 4 (+0 play-off places), table 3 (3 direct + play-out 15th v 16th)
 2018	down	ita_ser_c1a (Italian Serie C1/A), row ita-293: game 1 (+4 play-off places), table na (n/a)
 2018	down	ita_ser_c1b (Italian Serie C1/B), row ita-294: game 1 (+4 play-off places), table na (n/a)
@@ -204,8 +182,6 @@
 2018	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-294: game 4 up and 4 down play-off places, table 'n/a'
 2018	playoffs	jap_j1 (J1 League), row aus-jap-kor-207: game 0 up and 0 down play-off places, table '16th v the J2 play-off winner, one match (J1 entry play-off)'
 2018	playoffs	jap_j2 (J2 League), row aus-jap-kor-234: game 0 up and 0 down play-off places, table '3rd to 6th play-off; winner plays J1 16th in one match (J1 entry play-off)'
-2018	subs_used	bel_super (Belgian Super Cup), row hol-bel-234: game 7, table 3 (3)
-2018	subs_used	eng_charity (FA Community Shield), row eng-404: game 5, table 6 (6)
 2018	subs_used	ita_c1_super (Supercoppa Serie C), row ita-305: game 3, table 5 (5)
 2018	up	arg_second (Primera B Nacional), row arg-usa-45: game 1 (+0 play-off places), table 2 (2 (champion; Torneo Reducido winner))
 2018	up	aus_nsl (A-League), row aus-jap-kor-41: game 6 (+0 play-off places), table na (n/a)
@@ -214,15 +190,11 @@
 2018	up	conmebol_liber (Copa Libertadores), row club-world-327: game 2 (+0 play-off places), table na (n/a)
 2018	up	conmebol_merc (Copa Mercosur), row club-world-328: game 1 (+0 play-off places), table na (n/a)
 2018	up	cro_a2a (Druga HNL), row gre-pol-cro-369: game 0 (+0 play-off places), table 1 (1 (1st))
-2018	up	den_first (Danish 1st Division), row den-swe-105: game 2 (+0 play-off places), table 1 (1)
 2018	up	den_second (Danish 2nd Divisions), row den-swe-106: game 3 (+0 play-off places), table 2 (2)
 2018	up	fin_first (Ykkönen), row nor-fin-178: game 2 (+0 play-off places), table 1 (1st (1))
-2018	up	fra_second (Ligue 2), row fra-156: game 3 (+0 play-off places), table 2 (2)
 2018	up	fra_third (Championnat National), row fra-157: game 3 (+0 play-off places), table 2 (2)
-2018	up	ger_second (2. Bundesliga), row ger-223: game 3 (+0 play-off places), table 2 (2)
 2018	up	gre_cup (Greek Football Cup), row gre-pol-cro-18: game 2 (+0 play-off places), table na (n/a)
 2018	up	gre_second (Football League), row gre-pol-cro-72: game 2 (+0 play-off places), table 1 (1 (1st))
-2018	up	ita_ser_b (Serie B), row ita-292: game 4 (+0 play-off places), table 3 (2 direct + 1 via play-offs)
 2018	up	ita_ser_c1a (Italian Serie C1/A), row ita-293: game 1 (+4 play-off places), table na (n/a)
 2018	up	ita_ser_c1b (Italian Serie C1/B), row ita-294: game 1 (+4 play-off places), table na (n/a)
 2018	up	oceania_club_champ (OFC Champions League), row club-world-341: game 2 (+0 play-off places), table na (n/a)

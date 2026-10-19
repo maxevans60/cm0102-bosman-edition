@@ -1,10 +1,9 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2007	bench	ire_chal_cup (FAI Cup), row wal-nir-irl-169: game 5, table 7 (7)
-2007	bench	world_club_champ (FIFA Club World Cup), row club-world-116: game 7, table 12 (12)
+2007	bench	world_club_champ (FIFA Club World Cup), row club-world-116: game 9, table 12 (12)
+2007	club_list	American Major League: 10 of 10 listed clubs that the database holds (14 listed), 2 other clubs, 12 in all; not in it: -; others: Miami Fusion FC, Tampa Bay Mutiny
 2007	club_list	Korean League: 10 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Daegu FC, Gwangju Sangmu Bulsajo, Incheon United, Jeju United; others: -
-2007	club_list	Portuguese Premier League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Associação Recreativa Aguinense, Clube Desportivo Águias
-2007	club_list	Portuguese Second League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Grupo Desportivo de Chaves, Real Sport Club Massamá
 2007	club_list	Russian First Division: 18 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 18 in all; not in it: Dinamo Barnaul, Mashuk-KMV Pyatigorsk, Sportakademclub Moscow, Volga Uljanovsk; others: -
 2007	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: GIF Sundsvall, IFK Norrköping; others: -
 2007	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Akçaabat Sebatspor, Dardanelspor A.S.
@@ -21,13 +20,11 @@
 2007	clubs	pol_first (I liga), row gre-pol-cro-196: game 8, table 16 (16)
 2007	clubs	pol_lge_cup (Puchar Ekstraklasy), row gre-pol-cro-223: game 34, table 16 (16)
 2007	clubs	por_cup (Taça de Portugal), row por-60: game 164, table 202 (202)
-2007	clubs	por_prm (Primeira Liga), row por-55: game 18, table 16 (16)
-2007	clubs	por_second (Liga de Honra), row por-56: game 18, table 16 (16)
 2007	clubs	rus_first (Russian First Division), row rus-tur-34: game 18, table 22 (22)
 2007	clubs	swe_prm (Allsvenskan), row den-swe-200: game 14, table 16 (16)
 2007	clubs	tur_second (TFF 1. Lig), row rus-tur-196: game 20, table 18 (18)
 2007	clubs	tur_second_b (TFF 2. Lig), row rus-tur-223: game 10, table 50 (50)
-2007	clubs	uefa_cup (UEFA Cup), row uefa-53: game 145, table 80 (80 in the first round; total not stated on the page)
+2007	clubs	uefa_cup (UEFA Cup), row uefa-53: game 153, table 80 (80 in the first round; total not stated on the page)
 2007	clubs	usa_mls (Major League Soccer), row arg-usa-223: game 4, table 14 (14)
 2007	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-277: game 32, table 40 (40)
 2007	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-78: game 50, table 53 (53 entrants)
@@ -40,7 +37,6 @@
 2007	clubs	world_club_champ (FIFA Club World Cup), row club-world-116: game 4, table 7 (7)
 2007	down	eng_third (Football League Two), row eng-91: game 1 (+0 play-off places), table 2 (2)
 2007	down	pol_first (I liga), row gre-pol-cro-196: game 0 (+0 play-off places), table 2 (2 (15th-16th))
-2007	down	por_prm (Primeira Liga), row por-55: game 3 (+0 play-off places), table 2 (2)
 2007	down	por_second (Liga de Honra), row por-56: game 3 (+0 play-off places), table 2 (2)
 2007	down	rus_first (Russian First Division), row rus-tur-34: game 3 (+0 play-off places), table 7 (7)
 2007	down	sco_first (Scottish First Division), row sco-51: game 2 (+0 play-off places), table 1 (1)
@@ -89,10 +85,8 @@
 2007	playoffs	sco_third (Scottish Third Division), row sco-53: game 0 up and 0 down play-off places, table '2nd to 4th play off with Second Division 9th for a Second Division place (two-le'
 2007	playoffs	tur_second (TFF 1. Lig), row rus-tur-196: game 0 up and 0 down play-off places, table '3rd v 6th and 4th v 5th, winners meet for the third place'
 2007	playoffs	usa_mls (Major League Soccer), row arg-usa-223: game 0 up and 0 down play-off places, table '8 (as 2007)'
-2007	subs_used	eng_charity (FA Community Shield), row eng-338: game 5, table 6 (6)
 2007	up	con_merc_cup (Copa Merconorte), row club-world-120: game 1 (+0 play-off places), table na (n/a)
 2007	up	pol_first (I liga), row gre-pol-cro-196: game 4 (+0 play-off places), table na (n/a)
-2007	up	por_second (Liga de Honra), row por-56: game 3 (+0 play-off places), table 2 (2)
 2007	up	sco_second (Scottish Second Division), row sco-52: game 2 (+0 play-off places), table 1 (1)
 2007	up	sco_third (Scottish Third Division), row sco-53: game 2 (+0 play-off places), table 1 (1)
 2007	up	tur_second_b (TFF 2. Lig), row rus-tur-223: game 0 (+2 play-off places), table 3 (3)

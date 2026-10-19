@@ -45,6 +45,7 @@
 2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 3, table 8 (8)
 2002	down	arg_prm (Primera División), row arg-usa-2: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2002	down	arg_second (Primera B Nacional), row arg-usa-29: game 0 (+0 play-off places), table 2 (2 (by affiliation relegation tables; infobox))
+2002	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 4 (+0 play-off places), table 2 (2)
 2002	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-83: game 2 (+0 play-off places), table na (n/a)
 2002	down	cro_a1 (Prva HNL), row gre-pol-cro-326: game 2 (+0 play-off places), table 1 (1 (12th))
 2002	down	cro_a2a (Druga HNL North), row gre-pol-cro-353: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
@@ -99,19 +100,19 @@
 2002	not_in_game	ita-24 ita_ser_c2b 'Serie C2 girone B' (Italy)
 2002	not_in_game	ita-25 ita_ser_c2c 'Serie C2 girone C' (Italy)
 2002	not_in_game	uefa-9 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2002	playoffs	arg_prm (Primera División), row arg-usa-2: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
-2002	playoffs	bel_second (Belgian Second Division), row hol-bel-22: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
-2002	playoffs	bel_third (Belgian Third Division), row hol-bel-23: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
-2002	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 0 up and 0 down play-off places, table 8 and 0 ('top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac')
-2002	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-326: game 0 up and 0 down play-off places, table 0 and 1 ('11th: relegation play-off')
-2002	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-353: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
-2002	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-380: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
-2002	playoffs	fin_first (Ykkönen), row nor-fin-18: game 0 up and 1 down play-off places, table 1 and 2 ('2nd v Veikkausliiga 13th, two legs; 11th-12th v Kakkonen clubs')
-2002	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-29: game 0 up and 0 down play-off places, table 0 and 1 ('14th: relegation play-off v Beta Ethniki 3rd')
-2002	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-56: game 0 up and 0 down play-off places, table 1 and 1 ('3rd: promotion play-off; 14th: relegation play-off')
-2002	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-21: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
-2002	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-22: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
-2002	playoffs	nir_first (Irish League First Division), row wal-nir-irl-36: game 1 up and 0 down play-off places, table 0 and 1 ('pos 5: promotion/relegation play-off')
+2002	playoffs	arg_prm (Primera División), row arg-usa-2: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
+2002	playoffs	arg_second (Primera B Nacional), row arg-usa-29: game 0 up and 0 down play-off places, table 'Final between Apertura and Clausura winners (winner up); loser v best overall cl'
+2002	playoffs	aus_nsl (National Soccer League), row aus-jap-kor-106: game 0 up and 0 down play-off places, table 'top six play a home-and-away championship series; top two meet in the grand fina'
+2002	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 0 up and 0 down play-off places, table 'top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac'
+2002	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-83: game 0 up and 0 down play-off places, table 'see format'
+2002	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-326: game 0 up and 0 down play-off places, table '11th: relegation play-off'
+2002	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-353: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
+2002	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-380: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
+2002	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-29: game 0 up and 0 down play-off places, table '14th: relegation play-off v Beta Ethniki 3rd'
+2002	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-56: game 0 up and 0 down play-off places, table '3rd: promotion play-off; 14th: relegation play-off'
+2002	playoffs	hol_first (Eerste Divisie), row hol-bel-16: game 0 up and 0 down play-off places, table 'six clubs (period winners) join the Eredivisie 16th and 17th in two groups of fo'
+2002	playoffs	ita_ser_a (Serie A), row ita-19: game 0 up and 0 down play-off places, table 'tie-break play-off match if clubs finish level on points for the title, a Europe'
+2002	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-191: game 0 up and 0 down play-off places, table 'stage winners meet in a two-legged championship (not held when one club wins bot'
 2002	up	arg_second (Primera B Nacional), row arg-usa-29: game 1 (+0 play-off places), table 2 (2 (final of Apertura and Clausura winners; second promotion play-off))
 2002	up	aus_nsl (National Soccer League), row aus-jap-kor-106: game 6 (+0 play-off places), table na (n/a)
 2002	up	bel_third (Belgian Third Division), row hol-bel-23: game 1 (+0 play-off places), table 2 (2 (group champions))

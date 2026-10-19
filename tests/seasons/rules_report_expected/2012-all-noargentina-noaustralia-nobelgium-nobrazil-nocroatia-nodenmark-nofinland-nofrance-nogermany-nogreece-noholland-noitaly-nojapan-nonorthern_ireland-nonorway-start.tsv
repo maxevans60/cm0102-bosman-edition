@@ -2,17 +2,12 @@
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2012	bench	eng_cc_cup (Football League Cup), row eng-365: game 5, table 7 (7)
 2012	bench	eng_fa_cup (FA Cup), row eng-364: game 5, table 7 (7)
-2012	bench	eng_first (Football League Championship), row eng-139: game 5, table 7 (7)
-2012	bench	eng_prm (Premier League), row eng-138: game 5, table 7 (7)
-2012	bench	eng_second (Football League One), row eng-140: game 5, table 7 (7)
-2012	bench	eng_third (Football League Two), row eng-141: game 5, table 7 (7)
 2012	bench	fifa_confed (FIFA Confederations Cup), row int-world-142: game 7, table 12 (12)
 2012	bench	ire_chal_cup (FAI Cup), row wal-nir-irl-294: game 5, table 7 (7 (inference from final line-ups))
-2012	bench	sco_prm (Scottish Premier League), row sco-90: game 5, table 7 (7)
 2012	bench	world_club_champ (FIFA Club World Cup), row club-world-211: game 7, table 12 (12)
+2012	club_list	American Major League: 12 of 17 listed clubs that the database holds (19 listed), 0 other clubs, 12 in all; not in it: Philadelphia Union, Portland Timbers, Seattle Sounders, Toronto FC, Vancouver Whitecaps; others: -
 2012	club_list	Irish First Division: 8 of 8 listed clubs that the database holds (8 listed), 2 other clubs, 10 in all; not in it: -; others: FC Carlow, Tralee Dynamos
 2012	club_list	Korean League: 10 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Daegu FC, Daejeon Citizen, Gangwon Football Club, Incheon United; others: -
-2012	club_list	Portuguese Premier League: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Associação Naval 1º de Maio, Clube Desportivo Feirense
 2012	club_list	Portuguese Second League: 18 of 21 listed clubs that the database holds (22 listed), 0 other clubs, 18 in all; not in it: Associação Desportiva Oliveirense, Associação Naval 1º de Maio, Clube Desportivo Feirense; others: -
 2012	club_list	Russian First Division: 17 of 17 listed clubs that the database holds (17 listed), 1 other clubs, 18 in all; not in it: -; others: Torpedo Vladimir
 2012	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Halmstad BK, Östers IF; others: -
@@ -29,14 +24,13 @@
 2012	clubs	olympics (Football at the Summer Olympics), row int-world-143: game 4, table 16 (16)
 2012	clubs	pol_first (Ekstraklasa), row gre-pol-cro-201: game 8, table 16 (16)
 2012	clubs	por_cup (Taça de Portugal), row por-105: game 164, table 162 (162)
-2012	clubs	por_prm (Primeira Liga), row por-100: game 18, table 16 (16)
 2012	clubs	por_second (Segunda Liga), row por-101: game 18, table 22 (22)
 2012	clubs	rus_first (Football National League), row rus-tur-39: game 18, table 17 (17)
 2012	clubs	sco_chal_cup (Scottish Challenge Cup), row sco-96: game 30, table 32 (32)
 2012	clubs	swe_prm (Allsvenskan), row den-swe-230: game 14, table 16 (16)
 2012	clubs	tur_second (TFF 1. Lig), row rus-tur-201: game 20, table 18 (18)
 2012	clubs	tur_second_b (TFF 2. Lig), row rus-tur-228: game 10, table 34 (34)
-2012	clubs	uefa_cup (UEFA Europa League), row uefa-93: game 145, table 193 (193 (161 entered + 32 from the Champions League); 48 in the group stage (+8 Cham)
+2012	clubs	uefa_cup (UEFA Europa League), row uefa-93: game 153, table 193 (193 (161 entered + 32 from the Champions League); 48 in the group stage (+8 Cham)
 2012	clubs	usa_mls (Major League Soccer), row arg-usa-228: game 4, table 19 (19)
 2012	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-282: game 32, table 68 (68)
 2012	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-138: game 50, table 40 (40)
@@ -50,10 +44,8 @@
 2012	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-283: game 3, table 20 (20)
 2012	clubs	world_club_champ (FIFA Club World Cup), row club-world-211: game 0, table 7 (7)
 2012	down	eng_third (Football League Two), row eng-141: game 1 (+0 play-off places), table 2 (2)
-2012	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-291: game 3 (+1 play-off places), table 1 (1 (pos 12))
 2012	down	kor_league (K League Classic), row aus-jap-kor-336: game 0 (+0 play-off places), table 2 (2 (13th, 14th))
 2012	down	pol_first (Ekstraklasa), row gre-pol-cro-201: game 0 (+0 play-off places), table 2 (2 (15th-16th))
-2012	down	por_prm (Primeira Liga), row por-100: game 3 (+0 play-off places), table 2 (2)
 2012	down	rus_first (Football National League), row rus-tur-39: game 3 (+0 play-off places), table 2 (2)
 2012	down	sco_first (Scottish First Division), row sco-91: game 2 (+0 play-off places), table 1 (1)
 2012	down	sco_second (Scottish Second Division), row sco-92: game 2 (+0 play-off places), table 1 (1)
@@ -108,11 +100,8 @@
 2012	playoffs	tur_second (TFF 1. Lig), row rus-tur-201: game 0 up and 0 down play-off places, table '3rd to 6th: two-legged semi-finals, final for the third place'
 2012	playoffs	usa_mls (Major League Soccer), row arg-usa-228: game 0 up and 0 down play-off places, table '10 (as 2012)'
 2012	playoffs	wel_first (Welsh Premier League), row wal-nir-irl-279: game 0 up and 0 down play-off places, table 'pos 3,4,6,7,8: European play-off'
-2012	subs_used	eng_charity (FA Community Shield), row eng-368: game 5, table 6 (6)
-2012	subs_used	rus_first (Football National League), row rus-tur-39: game 3, table 4 (4)
 2012	up	con_merc_cup (Copa Merconorte), row club-world-215: game 1 (+0 play-off places), table na (n/a)
 2012	up	pol_first (Ekstraklasa), row gre-pol-cro-201: game 4 (+0 play-off places), table na (n/a)
-2012	up	por_second (Segunda Liga), row por-101: game 3 (+0 play-off places), table 2 (2)
 2012	up	sco_second (Scottish Second Division), row sco-92: game 2 (+0 play-off places), table 1 (1)
 2012	up	sco_third (Scottish Third Division), row sco-93: game 2 (+0 play-off places), table 1 (1)
 2012	up	tur_second_b (TFF 2. Lig), row rus-tur-228: game 0 (+2 play-off places), table 3 (3)
