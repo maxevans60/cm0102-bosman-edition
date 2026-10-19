@@ -23,6 +23,11 @@ box that shows (RECOMP_SCREEN_LOG), and any box fails the run:
     load-italian         start.sav (3.9.68) in Italian, to the first news screen
     new-italian-3965     a new game on 3.9.65 in Italian, to the first news screen, then Save Game "Ita65"
     load-italian-3965    then a load of Ita65 in Italian, to the first news screen
+    new-italian-season   a new game on the season database April 2022 (no .lng files of its own, other
+                         counts) in Italian, to the Select Leagues screen: the names stay English, and
+                         the runtime skips the box (lng_count_box in waits.c)
+Since the .lng files of 3.9.65 are in its data set (make_clean_files.py), the 3.9.65 runs show no box
+at all. The season run needs the skip. It copies <fixtures folder>/databases/April 2022 to Databases.
 The 3.9.65 runs use a game folder of links to the given one, with Data-3.9.65 (--data-3965, by default
 /Users/max/Projects/cm0102/data-3965). Their game.cfg comes from a first start in English.
 """
@@ -40,6 +45,8 @@ import smoke_run  # noqa: E402
 
 SKIPPED = "recomp: skipped the box CD Not Required"
 SHOWN = "recomp: message box from"
+SKIPPED_LNG = "recomp: skipped the box Database..cpp 7784"
+SEASON_DB = "April 2022"
 DATA_3965 = "/Users/max/Projects/cm0102/data-3965"
 ITALIAN = 4                 # the language Italian: database_language_file_exists 0x535930 gives it ita.lng
 SETTINGS = ["8200 click 522 272", "8500 click 662 524"]  # the settings screen of a first start (no game.cfg)
@@ -49,13 +56,14 @@ NEW_GAME = smoke_run.STEPS[:smoke_run.STEPS.index("wait typing") + 1]
 NEW_GAME = [s for s in NEW_GAME if "dump" not in s and "box" not in s and "399 330" not in s] + ["2000 quit"]
 
 
-# Save Game after the first news screen (tests/smoke/save_folder_run.py): Backspace deletes the suggested
-# name of 18 characters.
-SAVE_AS = (["2500 click 45 342", "4500 click 140 334"] + [f"{5000 + 50 * i} key 8" for i in range(18)] +
-           ["6500 type Ita65", "8500 click 705 572", "15500 quit"])
+# Save Game after the first news screen (tests/smoke/save_folder_run.py). The suggested name is the club
+# and the date, longer than "Arsenal 2001-07-14" with the clubs of 3.9.65 in Italian: 40 Backspaces.
+SAVE_AS = (["2500 click 45 342", "4500 click 140 334"] + [f"{5000 + 50 * i} key 8" for i in range(40)] +
+           ["7500 type Ita65", "9500 click 705 572", "16500 quit"])
 NEW_ITALIAN = [s for s in smoke_run.STEPS if " dump " not in s and s not in SETTINGS]
 NEW_ITALIAN = NEW_ITALIAN[:NEW_ITALIAN.index("wait first-news") + 1] + SAVE_AS
 LOAD_ITALIAN = [s for s in LOAD if s not in SETTINGS]
+LEAGUES_ITALIAN = ["1000 click 400 300", "wait setup", "2500 click 277 177", "wait leagues", "2000 quit"]
 
 
 def italian_cfg(program, game, user):
@@ -84,12 +92,16 @@ def play_italian(program, game, folder, data_3965):
         os.symlink(data_3965, os.path.join(game65, "Data-3.9.65"))
         runs = [("load-italian", game, [], LOAD_ITALIAN, "start.sav"),
                 ("new-italian-3965", game65, [("database", "3.9.65")], NEW_ITALIAN, None),
-                ("load-italian-3965", game65, [("database", "3.9.65")], LOAD_ITALIAN, "Ita65.sav")]
+                ("load-italian-3965", game65, [("database", "3.9.65")], LOAD_ITALIAN, "Ita65.sav"),
+                ("new-italian-season", game, [("database", "folder:" + SEASON_DB)], LEAGUES_ITALIAN, None)]
         user65 = os.path.join(work, "user65")
         for name, g, options, steps, save in runs:
             user = user65 if g is game65 else os.path.join(work, name)
             if not os.path.exists(os.path.join(user, "game.cfg")):
                 os.makedirs(user, exist_ok=True)
+                if name == "new-italian-season":
+                    shutil.copytree(os.path.join(folder, "databases", SEASON_DB),
+                                    os.path.join(user, "Databases", SEASON_DB))
                 fixtures.write_settings(user, "classic", options)
                 if not italian_cfg(program, g, user):
                     out.append((name, 0, ["no game.cfg from the first start"]))
@@ -110,6 +122,8 @@ def play_italian(program, game, folder, data_3965):
                 problems.append(f"code {r.returncode}")
             if save and SKIPPED not in r.stderr:
                 problems.append("the log does not name the skipped box")
+            if name == "new-italian-season" and SKIPPED_LNG not in r.stderr:
+                problems.append("the log does not name the skipped box Database..cpp 7784")
             out.append((name, took, problems))
     return out
 

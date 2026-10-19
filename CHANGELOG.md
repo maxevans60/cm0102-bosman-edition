@@ -6,6 +6,8 @@ CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes 
 
 - HD mode is gone. On a Mac screen it showed bars around the picture and small text, while widescreen fills a large screen with sharp, bigger pixels. A `display = hd` line in `settings.txt` now gives widescreen.
 - The Linux download is now `CM0102-Bosman-Edition-<version>-x86_64.AppImage`, and it has the icon file that AppImage tools look for.
+- In a language other than English, a load and a new game no longer show the box "CD Not Required" in that language, for example "CD Non Richiesto".
+- In a language other than English, the box "Database..cpp 7784" no longer shows with the 3.9.60 and 3.9.65 data sets or with a season database. New games on 3.9.60 and 3.9.65 now show club, nation, city, competition and stadium names in your language, from the language files of those versions. Season databases and older saves on 3.9.60 or 3.9.65 keep the English names.
 
 ## 0.5.0 (pre-release)
 
