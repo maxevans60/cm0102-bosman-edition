@@ -92,6 +92,116 @@ PATCHES = {
     0x6696E6: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
     0x669869: (10, "rt_season_text_mod(10u)"),              # key_nation_format_comp_season 0x6697c0
     0x669876: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
+
+    # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). The golden goal is bit
+    # 0x80 of the rule flags of a knockout round (sweep-international section 7). The round template function
+    # of each class holds the competition in edi (set at 0x92c299, 0x57ab99, 0x58b56f) and the round records in
+    # esi. rt_intl_round_flags (win/season_intl_rules.c) clears the bit for an edition without golden goal; the
+    # base game keeps the flags. The first argument is the class (season_intl.h): 0 World Cup, 1 European
+    # Championship, 2 Confederations Cup.
+    0x92C96B: (0x383, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x383u)"),    # World Cup last 16
+    0x92CA46: (0x383, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x383u)"),    # quarter-final
+    0x92CB15: (0x383, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x383u)"),    # semi-final
+    0x92CBB9: (0x83, "rt_intl_round_flags(0u, R16(edi + 0x40u), 0x83u)"),      # third place
+    0x57B002: (0x383, "rt_intl_round_flags(1u, R16(edi + 0x40u), 0x383u)"),    # Euro quarter-final
+    0x57B0B2: (0x383, "rt_intl_round_flags(1u, R16(edi + 0x40u), 0x383u)"),    # semi-final
+    0x57B150: (0x283, "rt_intl_round_flags(1u, R16(edi + 0x40u), 0x283u)"),    # final
+    0x58B892: (0x383, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x383u)"),    # Confederations Cup semi-final
+    0x58B90B: (0x83, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x83u)"),      # third place
+    0x58B9A5: (0x83, "rt_intl_round_flags(2u, R16(edi + 0x40u), 0x83u)"),      # final
+
+    # Euro of 24 teams (0.6.0 slice 27, win/season_intl_euro.c). From Euro 2016 the finals have 6 groups of 4
+    # and a round of 16. euro_champ (ctor 0x57a890) is the League of group A, stage[0..2] are groups B to D and
+    # stage[3] the knockout of 8. With 24 teams stage[0..4] are groups B to F and stage[5] the knockout of 16.
+    # rt_intl_euro_teams gives the team count (16 in the original), rt_intl_euro_ko the knockout stage index (3).
+    # Both give the original's value in the base game and for an edition of 16 teams. this is in esi or ecx.
+    0x57A949: (0x10, "(4u * (rt_intl_euro_ko(esi, 3u) + 1u))"),     # ctor: malloc of the stage array
+    0x57A951: (0x4, "(rt_intl_euro_ko(esi, 3u) + 1u)"),             # ctor: stage count +0x2c
+    0x57AA72: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # ctor: edition in the game year, +0x36
+    0x57BD8B: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # build_team_slots 0x57bd80: calloc of slots
+    0x57BD93: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # build_team_slots: slot room +0x38
+    0x57B60B: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # group A from the draw array (0x57b530)
+    0x57B9CB: (0x10, "rt_intl_euro_teams(esi, 0x10u)"),            # groups B.. from the draw array (0x57b910)
+    0x57C2E5: (0x3, "rt_intl_euro_ko(esi, 3u)"),                   # run_group_draw 0x57c1d0: League_Stage groups
+    0x57B8FC: (0x3, "rt_intl_euro_ko(ecx, 3u)"),                   # stage step 0x57b880: knockout made at ko
+    0x57B1D5: (0x3, "rt_intl_euro_ko(ecx, 3u)"),                   # stage news (vtable +0x44): group or knockout
+    0x57B334: (0x3, "rt_intl_euro_ko(ecx, 3u)"),                   # result news (vtable +0x48)
+    0x57B736: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # vtable +0x30: the knockout stage[ko]
+    0x57B255: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # stage news: round record of stage[ko]
+
+    # ACN and Asian Cup of 24 teams (0.6.0 slice 27, win/season_intl_cups.c). From 2019 both finals have 6 groups
+    # of 4 and a round of 16. african_nations (ctor 0x401000) is the League of group A, stage[0..2] groups B to D,
+    # stage[3] the knockout of 8. asia_nations (ctor 0x40e860): group A, stage[0..1] groups B and C, stage[2] the
+    # knockout of 8. With 24 teams stage[0..4] are groups B to F and stage[5] the knockout of 16 in both.
+    # rt_intl_cup_teams gives the team count, rt_intl_cup_groups the group count of the draw (also the size of a
+    # pot), rt_intl_cup_ko the knockout stage index. Each gives the original's value in the base game, for an
+    # edition of 16 or 12 teams and for another class (0x79fea6 is shared with the Olympics). this in esi or ecx.
+    0x4010AC: (0x10, "(4u * (rt_intl_cup_ko(esi, 3u) + 1u))"),      # ACN ctor: malloc of the stage array
+    0x4010C5: (0x4, "(rt_intl_cup_ko(esi, 3u) + 1u)"),              # ACN ctor: stage count +0x2c
+    0x401B93: (0xC, "(4u * rt_intl_cup_ko(ecx, 3u))"),              # ACN vtable +0x30: stage[ko]
+    0x401BA5: (0x3, "rt_intl_cup_ko(ecx, 3u)"),                     # ACN stage news (vtable +0x44)
+    0x401C27: (0xC, "(4u * rt_intl_cup_ko(esi, 3u))"),              # ACN stage news: round record of stage[ko]
+    0x79FEA6: (0x3, "rt_intl_cup_ko(ecx, 3u)"),                     # ACN and Olympics result news (vtable +0x48)
+    0x401E8C: (0x3, "rt_intl_cup_ko(ecx, 3u)"),                     # ACN stage step 0x401e10: knockout at ko
+    0x4022D3: (0x10, "rt_intl_cup_teams(esi, 0x10u)"),              # ACN entrants 0x4022c0: team count +0xf2
+    0x40241D: (0x10, "rt_intl_cup_teams(esi, 0x10u)"),              # ACN entrants: enough nations found
+    0x40244B: (0x40, "(4u * rt_intl_cup_teams(esi, 0x10u))"),       # ACN draw: malloc of the groups
+    0x4024CA: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: groups
+    0x4024DE: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: random place in a pot
+    0x4024FD: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: random place in a pot, again
+    0x402531: (0x4, "rt_intl_cup_groups(esi, 4u)"),                 # ACN draw: next pot
+    0x402772: (0x3, "rt_intl_cup_ko(esi, 3u)"),                     # ACN update_for_date 0x4025a0: group stages
+    0x40E90A: (0xC, "(4u * (rt_intl_cup_ko(esi, 2u) + 1u))"),       # Asian Cup ctor: malloc of the stage array
+    0x40E923: (0x3, "(rt_intl_cup_ko(esi, 2u) + 1u)"),              # Asian Cup ctor: stage count +0x2c
+    0x40F593: (0x8, "(4u * rt_intl_cup_ko(ecx, 2u))"),              # Asian Cup vtable +0x30: stage[ko]
+    0x40F5A5: (0x2, "rt_intl_cup_ko(ecx, 2u)"),                     # Asian Cup stage news (vtable +0x44)
+    0x40F627: (0x8, "(4u * rt_intl_cup_ko(esi, 2u))"),              # Asian Cup stage news: round record of stage[ko]
+    0x40F136: (0x2, "rt_intl_cup_ko(ecx, 2u)"),                     # Asian Cup result news (vtable +0x48)
+    0x40F88F: (0x2, "rt_intl_cup_ko(ecx, 2u)"),                     # Asian Cup stage step 0x40f810: knockout at ko
+    0x40FDFE: (0x30, "(4u * rt_intl_cup_teams(esi, 0xcu))"),        # Asian Cup entrants 0x40fdf0: malloc of teams
+    0x40FE02: (0xC, "rt_intl_cup_teams(esi, 0xcu)"),                # Asian Cup entrants: team count +0xf2
+    0x41001C: (0x30, "(4u * rt_intl_cup_teams(esi, 0xcu))"),        # Asian Cup draw: malloc of the groups
+    0x41009B: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: groups
+    0x4100AF: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: random place in a pot
+    0x4100CE: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: random place in a pot, again
+    0x410102: (0x3, "rt_intl_cup_groups(esi, 3u)"),                 # Asian Cup draw: next pot
+
+    # Copa America of 16 teams (0.6.0 slice 27, win/season_intl_copa.c). The Copa America Centenario of 2016 and
+    # the 2024 Copa America have 4 groups of 4 and quarter-finals. copa_america (ctor 0x5e0660) is the League of
+    # group A, stage[0..1] groups B and C, stage[2] the knockout. With 16 teams stage[0..2] are groups B to D and
+    # stage[3] the knockout. Group g takes the teams g, g + groups, ... of +0xee. rt_intl_copa_ko gives the
+    # knockout stage index (2), rt_intl_copa_groups the group count (3). Both give the original's value in the
+    # base game and for an edition of 12 teams. this in esi or ecx.
+    0x5E0710: (0xC, "(4u * (rt_intl_copa_ko(esi, 2u) + 1u))"),     # ctor: malloc of the stage array
+    0x5E0729: (0x3, "(rt_intl_copa_ko(esi, 2u) + 1u)"),             # ctor: stage count +0x2c
+    0x5E0F56: (0x2, "rt_intl_copa_ko(ecx, 2u)"),                    # result news (vtable +0x48)
+    0x5E13B5: (0x2, "rt_intl_copa_ko(ecx, 2u)"),                    # stage news (vtable +0x44)
+    0x5E1437: (0x8, "(4u * rt_intl_copa_ko(esi, 2u))"),             # stage news: round record of stage[ko]
+    0x5E169F: (0x2, "rt_intl_copa_ko(ecx, 2u)"),                    # stage step 0x5e1620: knockout at ko
+    0x5E22EB: (0x2, "rt_intl_copa_ko(esi, 2u)"),                    # update_for_date 0x5e2120: group stages
+    0x5E172E: (0xC, "(4u * rt_intl_copa_groups(esi, 3u))"),         # group builder 0x5e16b0: step in +0xee
+    0x5E1735: (-0xC, "(0u - 4u * rt_intl_copa_groups(esi, 3u))"),   # group builder: the same step back
+
+    # World Cup qualifying 2006 to 2022 (0.6.0 slice 27, win/season_intl_qual.c). C1: the CONCACAF final group
+    # (0x917830, this in esi from 0x91784e) gives its 4th the play-off place: the second byte of its rules
+    # array (0x917878, 0 in the original; inference: the count of play-off places) becomes 1 in a season game.
+    0x917878: (0x0, "rt_wcq_concacaf_playoff(esi)"),
+
+    # Euro qualifying places (0.6.0 slice 27, win/season_intl_euroq.c). euro_champ_qual: in a season game the
+    # places follow the Euro year (campaign +0x40 + 2). Each site gives the original's value in the base game and
+    # for a Euro of 16 teams. 0x57f9e8 (in 0x57f920) puts back the direct places of a group after the ranking
+    # stage: 2 for a Euro of 24 (this in esi). 0x57fb4f (in 0x57fa10) is the place that the ranking takes from
+    # each group: the third for Euro 2016 (this in ebp). 0x57d70e (vtable +0x48 0x57d700) is the last group id
+    # of the result news: 0x3e9 + the last group stage +0xff (7 in the original, 8 with 10 groups; this in edi).
+    0x57F9E8: (0x1, "rt_euroq_direct(esi, 1u)"),
+    0x57FB4F: (0x1, "rt_euroq_ranked_place(ebp, 1u)"),
+    0x57D70E: (0x3F0, "(0x3e9u + (uint32_t)(int32_t)(int8_t)R8(edi + 0xffu))"),
+    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
+    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
+    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
+    0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
+    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
+    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
 }
 
 # address: (the instruction in the original, C code)
@@ -102,4 +212,153 @@ INSNS = {
     # data would go into a later campaign, and its asserts (0x91dbc4, 0x9223ab) want dates in 2000 and 2001.
     0x918473: ("jl 0x91847c", "if (cc_l(F) || rt_season_year != 2001u) goto L_91847c;"),
     0x9204B8: ("jl 0x9204c1", "if (cc_l(F) || rt_season_year != 2001u) goto L_9204c1;"),
+
+    # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). Each class keeps its
+    # edition year in the word +0x40 of the object (this in esi). The constructor rounds the game year up to the
+    # class's cycle; the first instruction after that loop also gets the year of rt_intl_first_year (the first
+    # edition of the table from the start season, win/season_intl_rules.c). start_new_season adds the step;
+    # rt_intl_next_year gives the next edition of the table. The base game keeps the original's values. The
+    # first argument is the class (season_intl.h): 0 World Cup, 1 European Championship, 2 Confederations Cup,
+    # 3 Copa America, 4 African Cup of Nations, 5 Asian Cup, 6 Oceania Nations Cup, 7 Olympics. No instruction
+    # after a step reads its flags before another instruction sets them.
+    0x92BFEE: ("push 6", "W16(esi + 0x40u, rt_intl_first_year(0u, R16(esi + 0x40u))); esp -= 4; W32(esp, 6u);"),  # world_cup ctor 0x92bf50
+    0x57A92B: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(1u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # euro_champ ctor 0x57a890
+    0x58B392: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(2u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # fifa_confed ctor 0x58b310
+    0x5E06FB: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(3u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # copa_america ctor 0x5e0660
+    0x401097: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(4u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # african_nations ctor 0x401000
+    0x40E8F5: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(5u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # asia_nations ctor 0x40e860
+    0x798952: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(6u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # oceania_nations ctor 0x7988b0
+    0x79F5C5: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(7u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # olympics ctor 0x79f530
+    0x92D409: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(0u, R16(esi + 0x40u), 4u));"),  # world_cup::start_new_season 0x92d330
+    0x57B7CA: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(1u, R16(esi + 0x40u), 4u));"),  # euro_champ 0x57b750
+    0x58C050: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(2u, R16(esi + 0x40u), 2u));"),  # fifa_confed 0x58bff0
+    0x5E1590: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(3u, R16(esi + 0x40u), 2u));"),  # copa_america 0x5e1530
+    0x401D80: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(4u, R16(esi + 0x40u), 2u));"),  # african_nations 0x401d20
+    0x40F780: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(5u, R16(esi + 0x40u), 4u));"),  # asia_nations 0x40f720
+    0x799940: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(6u, R16(esi + 0x40u), 2u));"),  # oceania_nations 0x7998e0
+    0x7A04B0: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(7u, R16(esi + 0x40u), 4u));"),  # olympics 0x7a0450
+
+    # The World Cup holder (0.6.0 slice 27): from the 2006 World Cup the holder qualifies like the others
+    # (int-world). Each qualifying section asks for the holder (comp_util_get_latest_placed_club 0x4afd80, place
+    # 0 of the World Cup history) and leaves it out of its pool; rt_intl_wc_holder gives no holder in a season
+    # game, at the instruction after each call. The sections of a 2001 game play the 2004 campaign (Europe,
+    # South America, Asia) or the 2000 campaign, whose holder France is in none of their pools.
+    0x919F47: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_europe_league
+    0x920E38: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_south_american_league
+    0x920F18: ("mov dword ptr [esp + 0x20], eax", "eax = rt_intl_wc_holder(eax); W32(esp + 0x20u, eax);"),  # wc_south_american_league, its pool
+    0x9107A6: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_african_cup
+    0x914077: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_asia_league
+    0x916394: ("mov edx, eax", "eax = rt_intl_wc_holder(eax); edx = eax;"),  # wc_concacaf_cup
+    0x91FB98: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_oceania_league
+    # world_cup build_team_slots 0x92da40 puts the holder in slot 0 (0x92da86) and counts it (0x92da89). From
+    # 2006 the slot is not counted, so the first host takes slot 0; slots 1 and 2 are cleared, because the
+    # checks at 0x92db02 and 0x92db57 compare slot 0 with them.
+    0x92DA89: ("inc word ptr [esi + 0x36]", "if (rt_intl_wc_holder_slot(R16(esi + 0x40u))) W16(esi + 0x36u, R16(esi + 0x36u) + 1u); else { W32(R32(esi + 0x14u) + 6u, 0u); W32(R32(esi + 0x14u) + 0xcu, 0u); }"),
+    # The World Cup Oceania section (wc_oceania_league, pool at 0x91fc66..0x91fcde) takes exactly 10 entrants
+    # (0x91fbda) and leaves out New Caledonia (key nation 0x9cf530) and Papua New Guinea (0x9cf41c). With
+    # Australia in Asia (win/season_intl.c) New Caledonia comes in, so the count of 10 stays.
+    0x91FC89: ("mov ecx, dword ptr [0x9cf530]", "ecx = rt_intl_oceania_left_out(R32(0x9cf530u));"),
+    # EuroChamp build_team_slots 0x57bd80: no host from find_hosts (0x57be34) leads to the box "euro_champ.cpp
+    # 837" (0x57becc..0x57bf22). Euro 2020 and 2028 have no host place in the table, so in a season game the
+    # builder goes on to the default nations (0x57bf2f) with no host (win/season_intl.c).
+    0x57BE3D: ("jle 0x57becc", "if (cc_le(F)) { if (rt_intl_euro_no_host()) goto L_57bf2f; goto L_57becc; }"),
+    # EuroChampQual::get_group_team_count 0x57d9d0 gives the size of each qualifying group by the hosts that the
+    # pool leaves out (+0xf6): 1 (0x57d9de) or 2 (0x57d9e5), else the box "euro_champ_qual.cpp 581" (0x57da3d).
+    # A Euro without a host place (2020, 2028) has 0: in a season game it takes the sizes of 1 host (groups 0,
+    # 2, 5 and 7 of six, the others of five: room for 54, the pool holds at most 51, 0x57f76f).
+    0x57D9DE: ("je 0x57da7b", "if (cc_e(F) || (rt_intl_euro_no_host() && R8(ecx + 0xf6u) == 0u)) goto L_57da7b;"),
+
+    # Euro of 24 teams (0.6.0 slice 27, win/season_intl_euro.c). start_new_season 0x57b750 keeps the stage array
+    # of the ctor (+0xc, count +0x2c). After the step (0x57b7ca) an edition of another size gets a new array.
+    # The flags of "or eax, -1" are not read: the next instructions only move, and add esp at 0x57b7e1 sets them.
+    0x57B7CF: ("or eax, 0xffffffff", "SYNC(); rt_intl_euro_stages(esi); eax = 0xffffffffu; SETF(K_RES | SZ4, 0, 0, eax, 0);"),
+
+    # ACN and Asian Cup of 24 teams (0.6.0 slice 27, win/season_intl_cups.c). start_new_season (ACN 0x401d20,
+    # Asian Cup 0x40f720) keeps the stage array of the ctor. After the step (0x401d80, 0x40f780) an edition of
+    # another size gets a new array. The instruction after the step only moves this to ecx.
+    0x401D85: ("mov ecx, esi", "SYNC(); rt_intl_cup_stages(esi); ecx = esi;"),
+    0x40F785: ("mov ecx, esi", "SYNC(); rt_intl_cup_stages(esi); ecx = esi;"),
+
+    # Copa America of 16 teams (0.6.0 slice 27, win/season_intl_copa.c). Group A (0x5e11e0) takes the teams
+    # 3 * k of +0xee: 4 * k with 16 teams. start_new_season 0x5e1530 keeps the stage array of the ctor: after
+    # the step (0x5e1590) an edition of another size gets a new array. The instruction only moves this to ecx.
+    0x5E128E: ("lea ecx, [eax + eax*2]", "ecx = eax * rt_intl_copa_groups(esi, 3u);"),
+    0x5E1595: ("mov ecx, esi", "SYNC(); rt_intl_copa_stages(esi); ecx = esi;"),
+    # EuroChampQual (0.6.0 slice 27): the hosts that the qualifying pool leaves out (+0xf6) are counted at
+    # 0x57f6b7..0x57f6e4 and must be 0 to 2 (box "euro_champ_qual.cpp 1245" at 0x57f6fa); the group sizes
+    # (0x57d9d0) and the play-off round (0x57d4f3: 6 teams for 1, 8 for 2, else the box "euro_champ_qual.cpp
+    # 283" at 0x57d597) take only 1 or 2. A Euro without a host place (2020, 2028) has 0: in a season game the
+    # count becomes 1 here, before the pool size 0x33 - count (0x57f76f), so the qualifying takes the shape of
+    # one host (a pool of 50).
+    0x57F768: ("movsx eax, byte ptr [esi + 0xf6]", "if (rt_intl_euro_no_host() && R8(esi + 0xf6u) == 0u) W8(esi + 0xf6u, 1u); eax = (uint32_t)(int32_t)(int8_t)R8(esi + 0xf6u);"),
+
+    # World Cup qualifying 2006 to 2022 (0.6.0 slice 27, win/season_intl_qual.c). Gate: a season game and the
+    # World Cup year (campaign +0x40 + 2) in 2006 to 2022; outside it each site gives the original's value.
+    # E1: the European play-off (template 0x918920 and builder 0x919910, this in edi) is sized by the exempt
+    # count +0xf6: 0 or 1 give 8 teams, else 6. With no European host it becomes 6 (3 places, 10 + 3 = 13).
+    0x918923: ("mov al, byte ptr [edi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_wcq_europe_playoff(edi, R8(edi + 0xf6u)) & 0xffu);"),
+    0x919A7E: ("mov al, byte ptr [edi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_wcq_europe_playoff(edi, R8(edi + 0xf6u)) & 0xffu);"),
+    # E2, E3: the play-off takes N of the N + 1 best runners-up (ebx = N + 1, pushed at 0x919b4e); the one at the
+    # random index (0x90cfc0, cdecl) goes to the Asian tie (0x919c10). In a season game the index is the last
+    # (the weakest is out) and no runner-up is kept for Asia ([esp + 0x28] 0, so 0x919bec never matches and the
+    # team gets the news of 0x919c45). The add esp, 4 at 0x919b58 sets the flags.
+    0x919B4F: ("call 0x90cfc0", "if (rt_wcq_europe_no_asia(edi)) eax = ebx - 1u; else { esp -= 4; W32(esp, 0x919b54u); SYNC(); f_0090cfc0(); LOAD(); RT_AFTER_CALL(); }"),
+    0x919B5E: ("mov dword ptr [esp + 0x28], ecx", "W32(esp + 0x28u, rt_wcq_europe_no_asia(edi) ? 0u : ecx);"),
+    # A1: the Asian pool builder 0x913f60 stores its kept count; after it the exempt count +0xee becomes 0, so
+    # the final groups (0x913740), the play-off (0x913bc1) and the statuses (0x912642) take the format of no
+    # host. The flags are not read before pop and ret.
+    0x9141EA: ("mov dword ptr [esi + 0xf3], ecx", "W32(esi + 0xf3u, ecx); rt_wcq_asia_format(esi);"),
+    # A2: Asia stage 12 (0x913d50, this in esi, the two teams at [ebp]) takes its partner from the European
+    # section (0x91def0, ecx the Europe object). The partner of the cycle replaces it; the European runner-up
+    # stays the fallback.
+    0x913E42: ("call 0x91def0", "esp -= 4; W32(esp, 0x913e47u); SYNC(); f_0091def0(); LOAD(); RT_AFTER_CALL(); eax = rt_wcq_asia_partner(esi, R32(ebp), eax);"),
+    # O1: Oceania stage 2 (0x91f800, this in esi) found ebp teams in the array ebx: the OFC winner and the
+    # South American play-off team. The pair of the cycle replaces them, then the compare with 2.
+    0x91F8E9: ("cmp ebp, 2", "ebp = rt_wcq_oceania_pair(esi, ebx, ebp); t0 = ebp; t1 = 0x2u; t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    # S1: the South American direct places +0xbe = 4 - ef - ee (0x921098..0x9210ad, this in esi). A host
+    # (Brazil 2014) does not take a direct place in a season game: 4 direct places with a pool of 9.
+    0x9210A2: ("sub cl, dl", "t0 = (ecx & 0xffu); t1 = rt_wcq_south_america_hosts(esi, edx & 0xffu) & 0xffu; t2 = ((t0 - t1) & 0xffu); SETF(K_SUB | SZ1, t0, t1, t2, 0); ecx = (ecx & 0xffffff00u) | t2;"),
+    # F1: the African pool builder 0x9106a0 (this in esi) compares its count ebx with the pool size +0xb6. Before
+    # the compare a pool of 50 or more takes the format of no host (South Africa 2010 stays out of the pool by
+    # the compare at 0x9108aa).
+    0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+
+    # Euro qualifying places (0.6.0 slice 27, win/season_intl_euroq.c). The places and stage indices of the
+    # format: after set_up_rules sets +0xbf (0x57e963) and at the ctor epilogue (0x57d03b, also after a load: the
+    # bytes +0xff..+0x101 are not saved). The play-off size by the host count +0xf6: 0x57f014 (best places),
+    # 0x57f115 (play-off teams), both in 0x57ef50, and 0x57d4f3 (play-off template, in 0x57d190): Euro 2016 takes
+    # the two-host shape (1 best third, 8 in the play-off). The group sizes of 0x57d9d0 (0x57da6e, 0x57da8e,
+    # 0x57da9b; ecx this, the group at [esp + 0x204]): with 24 teams the pool count over the groups, so the
+    # places sum to the pool. The draw 0x57dab0 sets the order and counts of 9 groups: 0x57db30 sets entry 9 of
+    # the order ([esp + 0x21]) and its count ([esp + 0x2d]) for 10 groups (this in esi). With 10 groups there
+    # is no ranking stage: 0x57ff50 and 0x57ff9c (in update_for_date 0x57fd60, this in esi) skip 0x57f920 and
+    # 0x57fa10. The log of each qualifier before the add (0x57d605 group or best place, 0x57d69c play-off; the
+    # Euro is [0xadadfc][key 0x9cf7a4], the stage at [esp + 0x10]). The flags of the replaced instructions are not
+    # read before another instruction sets them.
+    0x57E963: ("mov byte ptr [esi + 0xbf], 1", "W8(esi + 0xbfu, 1u); rt_euroq_rules(esi);"),
+    0x57D03B: ("mov ecx, dword ptr [esp + 0x214]", "rt_euroq_rules(esi); ecx = R32(esp + 0x214u);"),
+    0x57F014: ("mov al, byte ptr [esi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_euroq_hosts(esi, R8(esi + 0xf6u)) & 0xffu);"),
+    0x57F115: ("mov al, byte ptr [esi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_euroq_hosts(esi, R8(esi + 0xf6u)) & 0xffu);"),
+    0x57D4F3: ("mov al, byte ptr [edi + 0xf6]", "eax = (eax & 0xffffff00u) | (rt_euroq_hosts(edi, R8(edi + 0xf6u)) & 0xffu);"),
+    0x57DA6E: ("mov ax, 5", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 5u) & 0xffffu);"),
+    0x57DA8E: ("mov ax, 5", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 5u) & 0xffffu);"),
+    0x57DA9B: ("mov ax, 6", "eax = (eax & 0xffff0000u) | (rt_euroq_group_size(ecx, R8(esp + 0x204u), 6u) & 0xffffu);"),
+    0x57DB30: ("mov byte ptr [esp + 0x14], 0", "W8(esp + 0x14u, 0u); if (rt_euroq_ten_groups(esi)) { W8(esp + 0x21u, 9u); W8(esp + 0x2du, 0u); }"),
+    0x57FF50: ("call 0x57f920", "if (!rt_euroq_no_ranking(esi)) { esp -= 4; W32(esp, 0x57ff55u); SYNC(); f_0057f920(); LOAD(); RT_AFTER_CALL(); }"),
+    0x57FF9C: ("call 0x57fa10", "if (!rt_euroq_no_ranking(esi)) { esp -= 4; W32(esp, 0x57ffa1u); SYNC(); f_0057fa10(); LOAD(); RT_AFTER_CALL(); }"),
+    0x57D605: ("push esi", "rt_euroq_log(R32(eax + edx * 4u), esi, R32(esp + 0x10u), 0u); esp -= 4; W32(esp, esi);"),
+    0x57D69C: ("push esi", "rt_euroq_log(R32(ecx + eax * 4u), esi, R32(esp + 0x10u), 1u); esp -= 4; W32(esp, esi);"),
+    # EuroChampQual ctor 0x57ce10 (0.6.0 slice 27): when the game year is past the campaign year (0x57d01a) it
+    # loads the real groups, fixtures and results of the 2002 campaign (load_2002_campaign 0x580bd0, at 0x57d025:
+    # its fixed list of 49 nations and the results of 2002 and 2003). That is right only for the 2002 campaign
+    # (a 2002/03 or 2003/04 start). A later start (2019: campaign 2018 of 10 groups) loaded the 2002 data into
+    # its own campaign and stopped at the box "euro_champ_qual.cpp 2358" (0x58325b). The base game never loads
+    # (game year 2001, campaign 2002), so its path is the original's.
+    0x57D021: ("jle 0x57d02a", "if (cc_le(F) || R16(esi + 0x40u) != 0x7d2u) goto L_57d02a;"),
+    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
+    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
+    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
+    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
+    # edition (the original skips it when +0x40 is the game year).
+    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
 }

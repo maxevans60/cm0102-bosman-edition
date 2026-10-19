@@ -166,6 +166,41 @@ a { color: inherit; }
 .foot ul a { text-decoration: none; }
 .foot ul a:hover { text-decoration: underline; }
 
+/* 0.6.0 preview: the era colours of the Choose Season tiles */
+.preview { display: grid; gap: 32px; }
+.preview .release { align-items: start; }
+.preview .mock { margin: 0; max-width: 960px; width: 100%; justify-self: center; }
+.preview .mock img { width: 100%; height: auto; border: 2px solid #2433b8; }
+.preview .mock figcaption { text-align: center; font-size: var(--step-small); color: var(--muted); margin-top: 10px; }
+.preview .release > .panel { align-self: stretch; }
+.preview ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.preview .adds li { padding-left: 1.4em; position: relative; font-size: 1.125rem; line-height: 1.45; }
+.preview .adds li::before { content: ""; position: absolute; left: 0; top: .45em; width: .55em; height: .55em; background: var(--accent); }
+.preview .dates li { padding-left: 0; }
+.preview .dates li::before { content: none; }
+.dates li { display: grid; grid-template-columns: 5.2em 1fr; gap: 14px; font-size: 1.125rem; line-height: 1.45; }
+.dates b { font-family: "Orbitron", sans-serif; font-weight: 900; color: var(--accent); font-size: .9375rem; letter-spacing: .02em; padding-top: .15em; }
+.eras { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.era { background: rgba(120,120,128,.22); border: 2px solid #2433b8; border-top: 0; }
+.era h4 { margin: 0; padding: 12px 14px; color: #fff; font-family: "Orbitron", sans-serif; font-weight: 900; text-transform: uppercase; letter-spacing: .03em; font-size: 1rem; line-height: 1.2; }
+.era h4 span { display: block; font-family: "TikTok Sans", sans-serif; font-weight: 600; text-transform: none; letter-spacing: 0; font-size: .9375rem; margin-top: 4px; }
+.era p { margin: 0; padding: 14px; font-size: 1rem; line-height: 1.45; }
+.era.e1 h4 { background: #b3121a; }
+.era.e2 h4 { background: #9a5a00; }
+.era.e3 h4 { background: #1d7a35; }
+.era.e4 h4 { background: #1f4fb8; }
+.era.e5 h4 { background: #6a2bb0; }
+.eras-note { margin: 0 0 18px; color: var(--muted); font-size: 1.0625rem; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0 0 24px; }
+.stats div { border-left: 4px solid var(--accent); padding: 4px 0 4px 16px; }
+.stats b { display: block; font-family: "Orbitron", sans-serif; font-weight: 900; color: #fff; font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem); line-height: 1.05; }
+.stats span { color: var(--muted); font-size: 1rem; }
+.more { gap: 12px; }
+.more details ul.dates, .more details ul.adds { padding: 0 24px 22px; display: grid; gap: 12px; max-width: none; }
+.more .dates li { grid-template-columns: 6.4em 1fr; }
+.how p { margin: 0 0 12px; font-size: 1.125rem; line-height: 1.5; max-width: 72ch; }
+.how p:last-child { margin-bottom: 0; }
+
 /* Entrances (only with script, so content never stays hidden) */
 .js [data-in] { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); }
 .js [data-in].in { opacity: 1; transform: none; }
@@ -201,6 +236,12 @@ a { color: inherit; }
   .shot { aspect-ratio: auto; }
   .shot img { position: static; height: auto; }
   .panel { padding: 20px; }
+  .preview { gap: 20px; }
+  .eras { grid-template-columns: 1fr; gap: 10px; }
+  .stats { grid-template-columns: 1fr; gap: 14px; }
+  .more details ul.dates, .more details ul.adds { padding: 0 18px 18px; }
+  .more .dates li { grid-template-columns: 1fr; gap: 2px; }
+  .preview .adds li, .dates li, .how p { font-size: 1.0625rem; }
   .faq summary { padding: 16px 18px; font-size: 1.125rem; }
   .faq details p { padding: 0 18px 18px; font-size: 1.0625rem; }
   .foot .inner { grid-template-columns: 1fr; gap: 24px; }
@@ -221,6 +262,7 @@ a { color: inherit; }
     <ul>
       <li><a href="#release">Release</a></li>
       <li><a href="#new">New</a></li>
+      <li><a href="#seasons">0.6.0</a></li>
       <li><a href="#next">Coming next</a></li>
       <li><a href="#install">Install</a></li>
       <li><a href="#questions">Questions</a></li>
@@ -293,6 +335,156 @@ a { color: inherit; }
       <figure class="shot wide" data-in style="margin:0">
         <img src="assets/s3@2x.png" width="1600" height="1000" alt="The Arsenal squad screen after Pick best team: Seaman in goal, Cole, Keown, Campbell and Luzhny in defence, Vieira and Parlour in midfield, Bergkamp and Henry up front." loading="lazy">
       </figure>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="seasons" aria-labelledby="seasons-title">
+  <div class="inner">
+    <h2 class="bar" id="seasons-title">Coming in <em>0.6.0</em></h2>
+    <p class="lead" data-in>Start a game in any season from 2001/02 to 2025/26, with that season's squads and rules. Version 0.6.0 is not out yet, and it has no release date.</p>
+    <div class="preview">
+      <figure class="mock" data-in>
+        <img src="assets/choose-season-2025-mockup.png" width="1280" height="800" alt="The Choose Season screen. Season tiles sit in three rows for the 2000s, 2010s and 2020s, from 2001/02 to 2025/26. 2001/02 and 2002/03 are marked Official and the others Included, and a Custom database tile ends the last row. 2025/26 is picked: December 2025, a database by the CM 01/02 Update Team. Europe: Champions League, Europa League, Conference League, each with a 36-club league phase. Starts July 2025." loading="lazy">
+        <figcaption>A mockup of the 0.6.0 Choose Season screen, with 2025/26 picked. The screen may change before the release.</figcaption>
+      </figure>
+      <div class="release">
+        <div class="panel" data-in>
+          <h3 class="sub">What it adds</h3>
+          <ul class="adds">
+            <li>A Choose Season screen with a tile for each season. The tile picks the database, so you never install one by hand.</li>
+            <li>A database for every season comes in the download: the CM 01/02 Update Team's databases, and our own for 2004/05 and 2006/07. Each one unpacks the first time you pick its season.</li>
+            <li>The game starts in July of the season you pick. Every player has the right age for that July, and the competition history lists the real winners up to that season.</li>
+            <li>Each league has that season's number of clubs, promotion and relegation places, play-offs and splits. Domestic cups have that season's format.</li>
+            <li>The number of substitutes, foreign player rules, work permits and transfer windows follow the season. The bench holds at most nine players.</li>
+            <li>Competitions and their rounds carry the names they had that season, such as the Championship or the Europa League.</li>
+            <li>In a long game, each rule changes in the July it changed in real life, and a news item lists the changes. You can switch this off for a new game.</li>
+            <li>The Nations League, the 48-team World Cup and other international competitions come in from the year they started.</li>
+            <li>A Custom database tile for a database folder of your own. You tell it which season the data is from.</li>
+            <li>The base game stays: 2001/02 with the 3.9.68 data and the rule changes off. Saves from earlier versions load and play as before.</li>
+          </ul>
+        </div>
+        <div class="panel" data-in>
+          <h3 class="sub">Season by season</h3>
+          <ul class="dates">
+            <li><b>2002/03</b><span>Division 1 in France becomes Ligue 1, with 20 clubs instead of 18.</span></li>
+            <li><b>2002/03</b><span>England gets its first summer and January transfer windows.</span></li>
+            <li><b>2004/05</b><span>The First Division becomes the Championship, and the Second Division becomes League One.</span></li>
+            <li><b>2004/05</b><span>Serie A goes up to 20 clubs.</span></li>
+            <li><b>2008/09</b><span>The 3. Liga starts in Germany.</span></li>
+            <li><b>2009/10</b><span>Belgium cuts its top flight to 16 clubs and adds play-offs, with the points of the top six halved.</span></li>
+            <li><b>2015/16</b><span>Euro 2016 in France has 24 nations.</span></li>
+            <li><b>2018/19</b><span>The UEFA Nations League starts.</span></li>
+            <li><b>2020/21</b><span>From 1 January 2021, players from the EU need a work permit in England.</span></li>
+            <li><b>2022/23</b><span>Premier League clubs can make five substitutions.</span></li>
+            <li><b>2023/24</b><span>Ligue 1 goes back to 18 clubs.</span></li>
+            <li><b>2025/26</b><span>The World Cup in Canada, Mexico and the United States has 48 nations.</span></li>
+            <li><b>2026/27</b><span>The Championship play-offs take six clubs, from 3rd to 8th. It is already announced, so a long game gets it.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel" data-in>
+        <h3 class="sub">Europe by era</h3>
+        <p class="eras-note">The Choose Season screen names the European format of the season you pick.</p>
+        <div class="eras">
+          <div class="era e1"><h4>Early 2000s<span>2001/02 to 2002/03</span></h4><p>The Champions League has two group stages, the UEFA Cup has knockout rounds only, and the Intertoto Cup is played in summer.</p></div>
+          <div class="era e2"><h4>Mid 2000s<span>2003/04 to 2008/09</span></h4><p>One Champions League group stage, then a round of 16. From 2004/05, the UEFA Cup has eight groups of five. The last Intertoto Cup is in 2008.</p></div>
+          <div class="era e3"><h4>2010s<span>2009/10 to 2019/20</span></h4><p>The Europa League takes the place of the UEFA Cup and the Intertoto Cup. From 2015/16, the Europa League winner gets a Champions League place.</p></div>
+          <div class="era e4"><h4>Early 2020s<span>2020/21 to 2023/24</span></h4><p>The Conference League starts in 2021/22. From 2022/23, its winner gets a place in the Europa League groups.</p></div>
+          <div class="era e5"><h4>Mid 2020s<span>2024/25 on</span></h4><p>The Champions League, the Europa League and the Conference League each start with a league phase of 36 clubs.</p></div>
+        </div>
+      </div>
+      <figure class="mock" data-in>
+        <img src="assets/new-rules-news-mockup.png" width="1280" height="800" alt="A news item headed New rules for the 2020/21 season. It says that from 1 January 2021 players from the EU need a work permit to sign for a club in England, that the FA Cup has no replays this season, and that the League Cup semi-finals are single matches." loading="lazy">
+        <figcaption>The news item a long game shows in July 2020, from a test build. It may change before the release.</figcaption>
+      </figure>
+      <div class="faq more" data-in>
+        <details><summary>The European cups, year by year</summary>
+          <ul class="dates">
+            <li><b>2001/02</b><span>Champions League: three qualifying rounds, a first group stage of 32 clubs, a second group stage of 16, then the quarter-finals. The eight group thirds go into the UEFA Cup.</span></li>
+            <li><b>2001/02</b><span>Intertoto Cup: five rounds over the summer, all two legs. Its three winners enter the UEFA Cup first round.</span></li>
+            <li><b>2003/04</b><span>Champions League: the second group stage goes. The group winners and runners-up play a round of 16.</span></li>
+            <li><b>2004/05</b><span>UEFA Cup: after the first round, 40 clubs play in eight groups of five, two matches at home and two away. The top three of each group and the eight Champions League group thirds play a round of 32.</span></li>
+            <li><b>2009/10</b><span>Europa League: 48 clubs in 12 groups of four. The Intertoto Cup ends. Champions League qualifying splits into a Champions Path for league champions and a League Path for the other clubs.</span></li>
+            <li><b>2009/10</b><span>The Champions League holder gets a group place even when its league finish is not good enough. The Europa League holder gets a Europa League group place.</span></li>
+            <li><b>2015/16</b><span>The Europa League winner goes into the Champions League, at least into its play-off round. From 2018/19 it goes straight into the groups.</span></li>
+            <li><b>2021/22</b><span>Europa League: 32 clubs in eight groups. The runners-up play the Champions League group thirds in a knockout play-off. The group thirds go down to the new Conference League.</span></li>
+            <li><b>2024/25</b><span>League phase: each cup has one table of 36 clubs. The top eight go to the round of 16, 9th to 24th play a knockout play-off, and 25th to 36th go out.</span></li>
+            <li><b>2009/10 on</b><span>The places for each nation come from that season's UEFA access list.</span></li>
+          </ul>
+        </details>
+        <details><summary>Leagues by nation</summary>
+          <ul class="adds">
+            <li>In England the Premier League drops "FA" from its name in 2007/08. A game that starts in 2019/20 plays League One with 23 clubs, as Bury was expelled.</li>
+            <li>The Scottish top flight splits into a top six and a bottom six after 33 matches. From 2013/14 it is the Premiership, and its 11th plays the Championship play-off winner for a place. From 2014/15 the League Two 10th plays the winner of the pyramid play-off.</li>
+            <li>Belgium goes from 18 clubs to 16 with play-offs in 2009/10, back to 18 with a top four in 2020/21, and to 16 with a top six in 2023/24. The format announced for 2026/27 has 18 clubs and no play-offs.</li>
+            <li>Until the 3. Liga starts with 20 clubs in 2008/09, the Regionalliga Nord and Süd are Germany's third tier. From then on the Bundesliga 16th plays the 2. Bundesliga 3rd, and the 2. Bundesliga 16th plays the 3. Liga 3rd.</li>
+            <li>In 2003/04 the Serie A 15th plays the Serie B 6th for a place. Serie B has play-offs for 3rd to 6th from 2004/05, later for 3rd to 8th. From 2022/23 a play-off settles a tie on points for the Serie A title or 17th place.</li>
+            <li>Ligue 2 takes its name with Ligue 1 in 2002/03 and drops to 18 clubs in 2024/25. The National becomes Ligue 3 in 2026/27.</li>
+            <li>The Segunda División has play-offs for 3rd to 6th from 2010/11. Reserve teams cannot go up, so the next club takes their place.</li>
+            <li>The Eredivisie keeps 18 clubs. Its 16th and 17th go into the play-offs with Eerste Divisie clubs, and from 2019/20 only the 16th.</li>
+            <li>Portugal's Primeira Liga has 16 clubs from 2006/07 and 18 again from 2014/15.</li>
+            <li>The Danish Superliga has 14 clubs and a championship round of six from 2016/17, then 12 clubs again from 2020/21.</li>
+            <li>The Turkish 1. Lig becomes the Süper Lig in 2002/03. It has 21 clubs in 2020/21 and 18 by 2025/26.</li>
+            <li>The Alpha Ethniki becomes the Super League Greece in 2006/07 and Super League 1, with 14 clubs, in 2019/20.</li>
+            <li>The Polish league is called the Ekstraklasa from 2008/09 and has 18 clubs from 2021/22.</li>
+            <li>The League of Wales becomes the Welsh Premier League in 2002/03, has 12 clubs from 2010/11 and becomes the Cymru Premier in 2019/20.</li>
+            <li>In Australia the National Soccer League ends after 2003/04, and the A-League starts with eight clubs in 2005/06.</li>
+            <li>The Allsvenskan in Sweden goes from 14 to 16 clubs in 2008.</li>
+            <li>Norway's top flight goes from 14 to 16 clubs in 2009 and is called Eliteserien from 2017.</li>
+            <li>Finland's Veikkausliiga has 12 clubs in 2002, 14 in 2003, 13 in 2006, 14 in 2007 and 12 from 2011. From 2019 it splits after 22 matches.</li>
+            <li>Russia moves from a calendar-year season to an autumn-to-spring season through one long 2011/12 season, which splits after 30 rounds into a top eight and a bottom eight.</li>
+            <li>Croatia's Prva HNL has 16 clubs in 2001/02, 12 with a championship group from 2002/03, 16 from 2009/10, 12 from 2012/13 and 10 from 2013/14.</li>
+            <li>The Irish League Premier Division has 10 clubs in 2001/02, 12 in 2002/03 and 16 as the Irish Premier League from 2003/04. It becomes the IFA Premiership with 12 clubs and a split after 33 matches in 2008/09, and the NIFL Premiership in 2013/14.</li>
+            <li>The League of Ireland moves to a calendar-year season in 2003. Its Premier Division goes between 10 and 12 clubs, with 10 from 2018.</li>
+            <li>Argentina plays an Apertura and a Clausura each season until 2011/12. In 2015 the Primera División has 30 clubs. As the Superliga it has 28, 26 and then 24 clubs from 2017/18 to 2019/20, and it is back to 30 clubs, in two zones, in 2025.</li>
+            <li>Brazil's Série A has 26 clubs in 2002, 24 in 2003, 22 in 2005 and 20 from 2006.</li>
+            <li>J1 in Japan has two stages until 2004 and 18 clubs in one table from 2005. It goes back to two stages in 2015 and 2016, and has 20 clubs in 2021 and from 2024. A season in two regions of 10 in 2026 comes before J1 moves to an August-to-May season in 2026/27.</li>
+            <li>The K League in South Korea grows from 10 clubs in 2002 to 16 in 2011 and splits into a top and a bottom half from 2012. It is called K League Classic with 14 clubs in 2013, has 12 clubs from 2014 and is called K League 1 from 2018.</li>
+            <li>If a season's database lacks a real club of a top or second tier, the game adds it.</li>
+          </ul>
+        </details>
+        <details><summary>Substitutes, bench, work permits and windows</summary>
+          <ul class="adds">
+            <li>Every league allows three substitutions in 2001/02. Germany, Italy and Spain allow five from 2020/21.</li>
+            <li>The Premier League bench has five players in 2001/02, seven from 2008/09 and nine from 2021/22. The game's bench holds nine at most, so Spain's bench of twelve plays as nine.</li>
+            <li>England has no quota on nationality. With changing rules on, the original's limit of three non-EU players in an English match squad goes.</li>
+            <li>In 2001/02 a player from outside the EU needs a work permit to play in England. From 1 January 2021 the points system covers EU players too, in England, Scotland, Wales and Northern Ireland.</li>
+            <li>In 2001/02 England has a transfer deadline in spring and no windows. The windows from 2002/03 have each season's real dates, so the Premier League window shuts in early August in 2018/19 and 2019/20.</li>
+          </ul>
+        </details>
+        <details><summary>International football</summary>
+          <ul class="dates">
+            <li><b>2002</b><span>The World Cup in South Korea and Japan, with 32 nations. The Confederations Cup plays in France in 2003.</span></li>
+            <li><b>2016</b><span>The Euro grows from 16 to 24 nations. The Copa América Centenario plays in the United States.</span></li>
+            <li><b>2018/19</b><span>55 nations play the first UEFA Nations League, in leagues A to D, with finals. Euro 2020 gives four places through Nations League play-offs, and Euro 2024 gives three.</span></li>
+            <li><b>2019</b><span>The Africa Cup of Nations and the Asian Cup grow to 24 nations. The 2019 Africa Cup plays in June and July.</span></li>
+            <li><b>2022</b><span>The World Cup in Qatar plays in November and December, and the leagues do not stop for it. The Finalissima plays at Wembley.</span></li>
+            <li><b>2026</b><span>48 nations play in 12 groups of four. The top two and the eight best thirds go to a round of 32.</span></li>
+            <li><b>2028</b><span>Euro 2028 in England, the Republic of Ireland, Scotland and Wales. The Africa Cup of Nations plays every four years from 2028.</span></li>
+          </ul>
+        </details>
+        <details><summary>How a long game moves</summary>
+          <ul class="adds">
+            <li>Changing rules is a switch in Setup Game for each new game, and it is on by default. The save keeps it.</li>
+            <li>With it on, each rule changes in the July it changed in real life, also in a game that starts in 2001/02.</li>
+            <li>At the start of a season with new rules, a news item lists them, as in the picture above.</li>
+            <li>Your results decide which clubs go up and down. The number of places is the real one for that season.</li>
+            <li>After 2025/26, the changes already announced with a date come in, such as the Championship play-offs from 3rd to 8th. Then the rules stay as they are.</li>
+            <li>With changing rules off, the rules of your start season stay for the whole game. A game that starts in 2010/11 keeps a Euro of 16 nations.</li>
+          </ul>
+        </details>
+      </div>
+      <div class="panel how" data-in>
+        <h3 class="sub">How it knows</h3>
+        <div class="stats">
+          <div><b>7,000+</b><span>rule rows, one per competition and season</span></div>
+          <div><b>5,900+</b><span>links to the pages they came from</span></div>
+          <div><b>39,000+</b><span>facts checked against a second source</span></div>
+        </div>
+        <p>Each row holds a league's or a cup's rules for one season: the number of clubs, the places up and down, play-offs, the cup format, substitutes, foreign players, transfer windows and the name. The rows cover 27 nations, the European and other continental club cups, and international football. Each fact links to the page it came from, on more than 300 websites.</p>
+        <p>Every fact was then checked against a second source. Where a fact had only one, another pass looked for a second publisher. Where two sources disagreed, a third pass compared them and settled more than 1,000 rows. We decided the rest by hand.</p>
+      </div>
     </div>
   </div>
 </section>

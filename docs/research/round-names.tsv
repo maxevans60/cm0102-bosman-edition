@@ -7,13 +7,12 @@ uefa_cup	40	2004	long,plural	Round of 16	https://en.wikipedia.org/wiki/2004%E2%8
 uefa_cup	40	2004	abbreviated	Rnd of 16	the long name in the original's short words ("4th Rnd"); source of the name as the row above
 uefa_cup	250	2004	long,plural	First Qualifying Round	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup (section "First qualifying round"); rules table row uefa-29 (Q1); the original's short "Qual.1" stays
 uefa_cup	260	2004	long,plural	Second Qualifying Round	https://en.wikipedia.org/wiki/2004%E2%80%9305_UEFA_Cup (section "Second qualifying round"); rules table row uefa-29 (Q2); the original's short "Qual.2" stays
-european_cup	250	2003	long,plural	First Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("first qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23); the original's short "Qual.1" stays
-european_cup	260	2003	long,plural	Second Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("second qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23); the original's short "Qual.2" stays
-european_cup	270	2003	long,plural	Third Qualifying Round	https://kassiesa.net/uefa/files/2003-uefa-cl-rules.pdf ("third qualifying round"); docs/research/2026-10-18-uefa-access-and-round-names.md (slice 23); the original's short "Qual.3" stays
 european_cup	220	2009	long,plural	Play-off Round	https://kassiesa.net/uefa/files/2009-10-uefa-cl-rules.pdf ("play-offs"); https://en.wikipedia.org/wiki/2009%E2%80%9310_UEFA_Champions_League ("Play-off round"); slice 23
 european_cup	220	2009	abbreviated	Play-off Rnd	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
 european_cup	240	2018	long,plural	Preliminary Round	https://kassiesa.net/uefa/files/2018-19-uefa-cl-rules.pdf ("preliminary round"); slice 23
 european_cup	240	2018	abbreviated	Prelim. Rnd	the long name in the original's short words; source of the name as the row above
+european_cup	230	2018	long,plural	Preliminary Round Final	https://kassiesa.net/uefa/files/2018-19-uefa-cl-rules.pdf (the preliminary round: semi-finals and a final); slice 23
+european_cup	230	2018	abbreviated	Prelim. Final	the long name in the original's short words; source of the name as the row above
 uefa_cup	270	2009	long,plural	Third Qualifying Round	https://kassiesa.net/uefa/files/2009-10-uefa-el-rules.pdf ("third qualifying round"); slice 23; the original's short "Qual.3" stays
 uefa_cup	220	2009	long,plural	Play-off Round	https://kassiesa.net/uefa/files/2009-10-uefa-el-rules.pdf ("play-offs"); https://en.wikipedia.org/wiki/2009%E2%80%9310_UEFA_Europa_League ("Play-off round"); slice 23
 uefa_cup	220	2009	abbreviated	Play-off Rnd	the long name in the original's short words; source of the name as the row above
@@ -21,3 +20,20 @@ uefa_cup	240	2018	long,plural	Preliminary Round	https://kassiesa.net/uefa/files/
 uefa_cup	240	2018	abbreviated	Prelim. Rnd	the long name in the original's short words; source of the name as the row above
 uefa_cup	30	2021	long,plural	Knockout Round Play-offs	https://kassiesa.net/uefa/files/2021-22-uefa-el-rules.pdf ("knockout round play-offs", Article 17); https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_League_knockout_phase (section "Knockout round play-offs"); slice 24, rules table row uefa-165
 uefa_cup	30	2021	abbreviated	KO Play-offs	the long name in the original's short words; source of the name as the row above
+world_cup	20	2001	long,plural	Round of 16	https://en.wikipedia.org/wiki/2002_FIFA_World_Cup_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-world-2
+world_cup	20	2001	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+euro_champ	20	2015	long,plural	Round of 16	https://en.wikipedia.org/wiki/UEFA_Euro_2016_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-continental-155
+euro_champ	20	2015	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+african_nations	20	2018	long,plural	Round of 16	https://en.wikipedia.org/wiki/2019_Africa_Cup_of_Nations_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-continental-194
+african_nations	20	2018	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+asia_nations	20	2018	long,plural	Round of 16	https://en.wikipedia.org/wiki/2019_AFC_Asian_Cup_knockout_stage (section "Round of 16", read 2026-10-18); rules table row int-continental-196
+asia_nations	20	2018	abbreviated	Rnd of 16	the long name in the original's short words ("2nd Rnd", 0x4b7a84 on); source of the name as the row above
+new_conference_league	250	2021	long,plural	First Qualifying Round	https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_Conference_League (section "Qualifying phase and play-off round"); rules table row uefa-166 (Q1); slice 24; the original's short "Qual.1" stays
+new_conference_league	260	2021	long,plural	Second Qualifying Round	https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_Conference_League (section "Qualifying phase and play-off round"); rules table row uefa-166 (Q2); slice 24; the original's short "Qual.2" stays
+new_conference_league	270	2021	long,plural	Third Qualifying Round	https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_Conference_League (section "Qualifying phase and play-off round"); rules table row uefa-166 (Q3); slice 24; the original's short "Qual.3" stays
+new_conference_league	220	2021	long,plural	Play-off Round	https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_Conference_League (section "Qualifying phase and play-off round"); rules table row uefa-166 (PO); slice 24
+new_conference_league	220	2021	abbreviated	Play-off Rnd	the long name in the original's short words; source of the name as the row above
+new_conference_league	30	2021	long,plural	Knockout Round Play-offs	https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_Conference_League (section "Knockout phase"); rules table row uefa-166 (KO play-offs); slice 24
+new_conference_league	30	2021	abbreviated	KO Play-offs	the long name in the original's short words; source of the name as the row above
+new_conference_league	40	2021	long,plural	Round of 16	https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Europa_Conference_League (section "Knockout phase"); rules table row uefa-166 (KO 16); slice 24
+new_conference_league	40	2021	abbreviated	Rnd of 16	the long name in the original's short words ("4th Rnd"); source of the name as the row above

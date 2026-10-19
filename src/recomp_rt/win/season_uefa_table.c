@@ -11,6 +11,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 24, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2002/03: rows uefa-10 uefa-13 uefa-15 uefa-16 */
     {2002, 72, 6, {{"Q1", 20}, {"Q2", 28}, {"Q3", 32}, {"Groups", 32}, {"Groups 2", 16}, {"KO", 8}},
@@ -19,6 +20,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 30, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2003/04: rows uefa-18 uefa-21 uefa-23 uefa-24 */
     {2003, 72, 5, {{"Q1", 20}, {"Q2", 28}, {"Q3", 32}, {"Groups", 32}, {"KO", 16}},
@@ -27,6 +29,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 29, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2004/05: rows uefa-26 uefa-29 uefa-31 uefa-32 */
     {2004, 72, 5, {{"Q1", 20}, {"Q2", 28}, {"Q3", 32}, {"Groups", 32}, {"KO", 16}},
@@ -35,6 +38,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 27, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2005/06: rows uefa-34 uefa-37 uefa-39 uefa-40 */
     {2005, 74, 5, {{"Q1", 24}, {"Q2", 28}, {"Q3", 32}, {"Groups", 32}, {"KO", 16}},
@@ -43,6 +47,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 26, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2006/07: rows uefa-42 uefa-45 uefa-47 uefa-48 */
     {2006, 73, 5, {{"Q1", 22}, {"Q2", 28}, {"Q3", 32}, {"Groups", 32}, {"KO", 16}},
@@ -51,6 +56,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 25, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2007/08: rows uefa-50 uefa-53 uefa-55 uefa-56 */
     {2007, 76, 5, {{"Q1", 28}, {"Q2", 28}, {"Q3", 32}, {"Groups", 32}, {"KO", 16}},
@@ -59,6 +65,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 31, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2008/09: rows uefa-58 uefa-61 uefa-63 uefa-64 */
     {2008, 76, 5, {{"Q1", 28}, {"Q2", 28}, {"Q3", 32}, {"Groups", 32}, {"KO", 16}},
@@ -67,6 +74,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 29, 7, "",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2009/10: rows uefa-66 uefa-69 uefa-71 uefa-72 */
     {2009, 76, 8, {{"Q1", 4}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -75,6 +83,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 28, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2010/11: rows uefa-74 uefa-77 uefa-79 uefa-80 */
     {2010, 76, 8, {{"Q1", 4}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -83,6 +92,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 27, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2011/12: rows uefa-82 uefa-85 uefa-87 uefa-88 */
     {2011, 76, 8, {{"Q1", 4}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -91,6 +101,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 26, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2012/13: rows uefa-90 uefa-93 uefa-95 uefa-96 */
     {2012, 76, 8, {{"Q1", 6}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 8}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -99,6 +110,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stade Louis II", "Monaco", 31, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2013/14: rows uefa-98 uefa-101 uefa-103 uefa-104 */
     {2013, 76, 8, {{"Q1", 4}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -107,6 +119,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Fortuna Arena (Eden Arena)", "Prague", 30, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2014/15: rows uefa-106 uefa-109 uefa-111 uefa-112 */
     {2014, 77, 8, {{"Q1", 6}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -115,6 +128,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Cardiff City Stadium", "Cardiff", 12, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2015/16: rows uefa-114 uefa-117 uefa-119 uefa-120 */
     {2015, 78, 8, {{"Q1", 8}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -123,6 +137,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Boris Paichadze Dinamo Arena", "Tbilisi", 11, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2016/17: rows uefa-122 uefa-125 uefa-127 uefa-128 */
     {2016, 78, 8, {{"Q1", 8}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -131,6 +146,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Lerkendal Stadion", "Trondheim", 9, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2017/18: rows uefa-130 uefa-133 uefa-135 uefa-136 */
     {2017, 79, 8, {{"Q1", 10}, {"Q2", 34}, {"Q3 CP", 20}, {"Q3 LP", 10}, {"PO CP", 10}, {"PO LP", 10}, {"Groups", 32}, {"KO", 16}},
@@ -139,6 +155,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Philip II Arena", "Skopje", 8, 7, "Q3>PO PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2018/19: rows uefa-138 uefa-141 uefa-143 uefa-144 */
     {2018, 79, 10, {{"PR", 4}, {"Q1", 32}, {"Q2 CP", 20}, {"Q2 LP", 4}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 8}, {"PO LP", 4}, {"Groups", 32}, {"KO", 16}},
@@ -147,6 +164,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Lillek\374la Stadium", "Tallinn", 15, 7, "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2019/20: rows uefa-146 uefa-149 uefa-151 uefa-152 */
     {2019, 79, 10, {{"PR", 4}, {"Q1", 32}, {"Q2 CP", 20}, {"Q2 LP", 4}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 8}, {"PO LP", 4}, {"Groups", 32}, {"KO", 16}},
@@ -155,6 +173,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Vodafone Park", "Istanbul", 14, 7, "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2020/21: rows uefa-154 uefa-157 uefa-159 uefa-160 */
     {2020, 79, 10, {{"PR", 4}, {"Q1", 34}, {"Q2 CP", 20}, {"Q2 LP", 6}, {"Q3 CP", 10}, {"Q3 LP", 6}, {"PO CP", 8}, {"PO LP", 4}, {"Groups", 32}, {"KO", 16}},
@@ -163,6 +182,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Pusk\341s Ar\351na", "Budapest", 24, 8, "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G",
      0, 1, "",
      0, {}, 0, 0, 0, 1,
+     0, 0, "",
      0, 0, 0},
     /* 2021/22: rows uefa-162 uefa-165 uefa-167 uefa-168 */
     {2021, 80, 10, {{"PR", 4}, {"Q1", 32}, {"Q2 CP", 20}, {"Q2 LP", 6}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 8}, {"PO LP", 4}, {"Groups", 32}, {"KO", 16}},
@@ -171,6 +191,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Windsor Park", "Belfast", 11, 7, "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G",
      16, 0, "",
      10, {{"Q1", 66}, {"Q2 CP", 18}, {"Q2 MP", 90}, {"Q3 CP", 10}, {"Q3 MP", 54}, {"PO CP", 10}, {"PO MP", 34}, {"Groups", 32}, {"KO PO", 16}, {"KO", 16}}, 8, 4, 16, 1,
+     2, 2, "c:PR>Q2 c:Q1>Q2 e:Q3>PO e:PO>G",
      0, 0, 0},
     /* 2022/23: rows uefa-170 uefa-173 uefa-175 uefa-176 */
     {2022, 78, 10, {{"PR", 4}, {"Q1", 30}, {"Q2 CP", 20}, {"Q2 LP", 4}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 8}, {"PO LP", 4}, {"Groups", 32}, {"KO", 16}},
@@ -179,6 +200,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Helsinki Olympic Stadium", "Helsinki", 10, 7, "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G",
      16, 0, "Russia",
      10, {{"Q1", 60}, {"Q2 CP", 16}, {"Q2 MP", 90}, {"Q3 CP", 10}, {"Q3 MP", 54}, {"PO CP", 10}, {"PO MP", 34}, {"Groups", 32}, {"KO PO", 16}, {"KO", 16}}, 8, 4, 16, 1,
+     2, 2, "c:PR>Q2 c:Q1>Q2 e:Q3>PO e:PO>G",
      0, 0, 0},
     /* 2023/24: rows uefa-178 uefa-181 uefa-183 uefa-184 */
     {2023, 78, 10, {{"PR", 4}, {"Q1", 30}, {"Q2 CP", 20}, {"Q2 LP", 4}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 8}, {"PO LP", 4}, {"Groups", 32}, {"KO", 16}},
@@ -187,6 +209,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Karaiskakis Stadium", "Piraeus", 16, 7, "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G",
      16, 0, "Russia",
      10, {{"Q1", 62}, {"Q2 CP", 16}, {"Q2 MP", 90}, {"Q3 CP", 10}, {"Q3 MP", 54}, {"PO CP", 10}, {"PO MP", 34}, {"Groups", 32}, {"KO PO", 16}, {"KO", 16}}, 8, 4, 16, 0,
+     2, 2, "c:PR>Q2 c:Q1>Q2 e:Q3>PO e:PO>G",
      0, 0, 0},
     /* 2024/25: rows uefa-186 uefa-189 uefa-191 uefa-192 */
     {2024, 81, 10, {{"Q1", 28}, {"Q2 CP", 24}, {"Q2 LP", 4}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 10}, {"PO LP", 4}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}},
@@ -195,6 +218,7 @@ const SeasonUefa season_uefa_rows[] = {
      "National Stadium", "Warsaw", 14, 7, "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G",
      16, 0, "Russia",
      10, {{"Q1", 50}, {"Q2 CP", 12}, {"Q2 MP", 86}, {"Q3 CP", 8}, {"Q3 MP", 52}, {"PO CP", 10}, {"PO MP", 38}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}}, 1, 36, 16, 0,
+     1, 24, "c:Q1>Q2 e:Q1>Q2 e:Q2>Q3 e:Q3>PO e:PO>G",
      8, 8, 6},
     /* 2025/26: rows uefa-194 uefa-197 uefa-199 uefa-200 */
     {2025, 82, 10, {{"Q1", 28}, {"Q2 CP", 24}, {"Q2 LP", 6}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 10}, {"PO LP", 4}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}},
@@ -203,6 +227,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Stadio Friuli", "Udine", 13, 7, "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G",
      16, 0, "Russia",
      10, {{"Q1", 48}, {"Q2 CP", 12}, {"Q2 MP", 88}, {"Q3 CP", 8}, {"Q3 MP", 52}, {"PO CP", 10}, {"PO MP", 38}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}}, 1, 36, 16, 0,
+     1, 24, "c:Q1>Q2 e:Q1>Q2 e:Q2>Q3 e:Q3>PO e:PO>G",
      8, 8, 6},
     /* 2026/27: rows uefa-202 uefa-205 uefa-207 uefa-208 */
     {2026, 81, 10, {{"Q1", 28}, {"Q2 CP", 24}, {"Q2 LP", 4}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 10}, {"PO LP", 4}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}},
@@ -211,6 +236,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Red Bull Arena", "Salzburg", 12, 7, "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G",
      16, 0, "Russia",
      10, {{"Q1", 52}, {"Q2 CP", 12}, {"Q2 MP", 86}, {"Q3 CP", 8}, {"Q3 MP", 52}, {"PO CP", 10}, {"PO MP", 38}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}}, 1, 36, 16, 0,
+     1, 24, "c:Q1>Q2 e:Q1>Q2 e:Q2>Q3 e:Q3>PO e:PO>G",
      8, 8, 6},
     /* 2027/28: rows uefa-210 uefa-213 uefa-215 uefa-216 (formats of 2026) */
     {2027, 83, 10, {{"Q1", 30}, {"Q2 CP", 24}, {"Q2 LP", 6}, {"Q3 CP", 12}, {"Q3 LP", 8}, {"PO CP", 10}, {"PO LP", 4}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}},
@@ -219,6 +245,7 @@ const SeasonUefa season_uefa_rows[] = {
      "Johan Cruyff Arena", "Amsterdam", 12, 7, "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G",
      16, 0, "Russia",
      10, {{"Q1", 52}, {"Q2 CP", 12}, {"Q2 MP", 86}, {"Q3 CP", 8}, {"Q3 MP", 52}, {"PO CP", 10}, {"PO MP", 38}, {"Groups", 36}, {"KO PO", 16}, {"KO", 16}}, 1, 36, 16, 0,
+     1, 24, "c:Q1>Q2 e:Q1>Q2 e:Q2>Q3 e:Q3>PO e:PO>G",
      8, 8, 6},
 };
 const int season_uefa_row_count = (int)(sizeof season_uefa_rows / sizeof season_uefa_rows[0]);

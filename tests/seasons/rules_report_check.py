@@ -154,16 +154,23 @@ def division_counts(game):
 
 def pick_row(found, file, k):
     """The row of the k-th object of a file in a season (module docstring)."""
-    alone = [r for r in found if r["comp_file"] == file] or found
+    alone = [r for r in found if file in row_files(r)] or found
     main = [r for r in alone if "qualifying" not in r["comp"].lower()] or alone
     return main[min(k, len(main) - 1)]
+
+
+def row_files(r):
+    """The files of a row. A row of a new competition (comp_file "new") has the file of its def in
+    src/recomp_rt/win/season_comps.c: "new_" and its comp in lower case with "_" for spaces ("Conference League"
+    gives new_conference_league)."""
+    return ["new_" + r["comp"].lower().replace(" ", "_") if f == "new" else f for f in r["comp_file"].split(";")]
 
 
 def differences(seasons, comps, rows):
     """A sorted list of (season, kind, text)."""
     by_season_file = collections.defaultdict(list)
     for r in rows:
-        for f in r["comp_file"].split(";"):
+        for f in row_files(r):
             by_season_file[(r["season"], f)].append(r)
     # One entry per object and season: the start and end lines together.
     objects = collections.OrderedDict()
@@ -226,7 +233,7 @@ def differences(seasons, comps, rows):
         for r in rows:
             if r["season"] != s or r["comp_file"] == "na" or "not_held" in (r["clubs"], r["format"]):
                 continue
-            files = r["comp_file"].split(";")
+            files = row_files(r)
             if any(f in held[s] for f in files):
                 continue
             if r["nation"] in nations or any(f in files_in_report for f in files):

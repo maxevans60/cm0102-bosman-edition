@@ -26,6 +26,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_comps.h"
 #include "season_rules.h"
 
 #include <stdarg.h>
@@ -39,13 +40,20 @@ extern const SeasonRuleKind season_kind_subs;
 extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
 extern const SeasonRuleKind season_kind_uefa;          /* slice 22: season_uefa.c */
+extern const SeasonRuleKind season_kind_intl;
+extern const SeasonRuleKind season_kind_club_world;
+extern const SeasonRuleKind season_kind_comps;         /* slice 26: season_comps.h */
+void season_comps_reset(void);                         /* slice 26: season_comps.h */
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
+    &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
     &season_kind_names,                 /* slice 16: competition names (slice 15's names table) */
     &season_kind_subs,                  /* slice 17: substitutes used and the bench */
     &season_kind_nation,                /* slice 17: transfer windows, foreign player limits, work permits */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
+    &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
+    &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))
@@ -143,6 +151,8 @@ static const SeasonCompClass *class_of(uint32_t vtable)
 
 const char *season_change_file(uint32_t obj)
 {
+    const char *f = season_comps_file(obj);            /* slice 24: a new competition of an original class */
+    if (f) return f;
     const SeasonCompClass *c = readable(obj) ? class_of(rd32(g_mem, obj)) : NULL;
     return c ? c->file : "?";
 }
@@ -340,6 +350,15 @@ void season_change_rename(uint32_t rec, const char *name)
     memcpy(g_mem + rec + NAME_AT, now, strlen(now));
 }
 
+/* Slice 26: see season_change.h. */
+const char *season_change_data_name(uint32_t rec)
+{
+    uint32_t index;
+    if (!record_index(rec, &index)) return NULL;
+    const SeasonRename *r = rename_of(index);
+    return r ? r->original : win_str(rec + NAME_AT);
+}
+
 void o_0060efd0(void);
 
 /* match_club_comp_key_id, cdecl (name, index): a renamed record is matched by its name in the data. The two
@@ -369,6 +388,7 @@ void season_change_reset(void)
     for (int i = 0; i < news_count; i++) free(news[i].text);
     news_count = 0;
     rename_count = 0;
+    season_comps_reset();               /* slice 26 */
     season_point = 0;
     creating = 0;                               /* also when a longjmp left create_game */
 }

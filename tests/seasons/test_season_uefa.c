@@ -100,14 +100,19 @@ int main(void)
     CHECK(season_uefa_dropped(r2009, SEASON_UEFA_EL_PO) == 15 && season_uefa_dropped(r2009, SEASON_UEFA_EL_G) == 10);
     CHECK(t[SEASON_UEFA_EL_Q1] == 46 && t[SEASON_UEFA_EL_Q2] == 57 && t[SEASON_UEFA_EL_Q3] == 30);
     CHECK(t[SEASON_UEFA_EL_PO] == 26 && t[SEASON_UEFA_EL_G] == 0 && t[SEASON_UEFA_EL_PR] == 0);
-    /* 2018/19: the preliminary round is not played (its clubs enter Q1): CL Q1 32 new, groups 26 new; EL Q2
-     * takes the Q1 losers. */
+    /* 2018/19: the preliminary round of 4 (semi-finals and a final, one winner): CL Q1 31 new, groups 26 new;
+     * EL Q2 takes the 3 preliminary round losers and the 16 Q1 losers; EL PR 14 (7 winners), Q1 87 new. */
     season_uefa_new_clubs(r2018, 'c', t);
-    CHECK(t[SEASON_UEFA_CL_PR] == 0 && t[SEASON_UEFA_CL_Q1] == 32 && t[SEASON_UEFA_CL_G] == 26);
+    CHECK(t[SEASON_UEFA_CL_PR] == 4 && t[SEASON_UEFA_CL_Q1] == 31 && t[SEASON_UEFA_CL_G] == 26);
     CHECK(t[SEASON_UEFA_CL_Q2_LP] == 4 && t[SEASON_UEFA_CL_Q3_LP] == 6 && t[SEASON_UEFA_CL_Q3_CP] == 2);
-    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q2) == 16 && season_uefa_dropped(r2018, SEASON_UEFA_EL_G) == 10);
+    int cl_sum = 0, el_sum = 0;
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) cl_sum += t[i];
+    CHECK(cl_sum == 79);                                                /* the row's 79 clubs */
+    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q2) == 19 && season_uefa_dropped(r2018, SEASON_UEFA_EL_G) == 10);
     season_uefa_new_clubs(r2018, 'e', t);
-    CHECK(t[SEASON_UEFA_EL_PR] == 0 && t[SEASON_UEFA_EL_Q1] == 94);
+    CHECK(t[SEASON_UEFA_EL_PR] == 14 && t[SEASON_UEFA_EL_Q1] == 87);
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) el_sum += t[i];
+    CHECK(el_sum + 19 + 12 + 6 + 10 + 8 == 213);                         /* 158 entered and 55 from the CL */
     CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q3) == 12 && season_uefa_dropped(r2018, SEASON_UEFA_EL_PO) == 6);
     CHECK(season_uefa_code('c', "Q3-CP", 5) == SEASON_UEFA_CL_Q3_CP && season_uefa_code('e', "Q3-CP", 5) == SEASON_UEFA_EL_Q3);
     CHECK(season_uefa_dropped(r2008, SEASON_UEFA_EL_G) == 0);
@@ -151,6 +156,27 @@ int main(void)
     /* The Super Cup of 2023 at Piraeus, penalties after 90 minutes (no extra time from 2023). */
     CHECK(!strcmp(r2021->sc_city, "Belfast") && !strcmp(r2023->sc_city, "Piraeus") && r2023->sc_day == 16);
     CHECK(r2022->sc_extra_time == 1 && r2023->sc_extra_time == 0 && r2008->sc_extra_time == 1);
+
+    /* Part 24b, the Conference League of 2021/22 with one path a round: Q1 66 new; Q2 108 = 33 Q1 winners, the 3
+     * preliminary round and 16 first qualifying round losers of the Champions League, 56 new; Q3 64 = 54 winners
+     * and 10 new; PO 44 = 32 winners, the 8 third qualifying round losers of the Europa League and 4 new; groups 32
+     * = 22 winners and the 10 Europa League play-off losers. 136 entered, as the row says. */
+    CHECK(season_uefa_code('k', "Q2", 2) == SEASON_UEFA_ECL_Q2 && season_uefa_code('k', "PO", 2) == SEASON_UEFA_ECL_PO);
+    CHECK(season_uefa_code_clubs(r2021, 'k', SEASON_UEFA_ECL_Q2) == 108 && season_uefa_code_clubs(r2020, 'k', SEASON_UEFA_ECL_Q1) == 0);
+    CHECK(season_uefa_dropped(r2021, SEASON_UEFA_ECL_Q2) == 19 && season_uefa_dropped(r2021, SEASON_UEFA_ECL_PO) == 8);
+    CHECK(season_uefa_dropped(r2021, SEASON_UEFA_ECL_G) == 10 && season_uefa_dropped(r2021, SEASON_UEFA_ECL_Q1) == 0);
+    CHECK(season_uefa_dropped(r2020, SEASON_UEFA_ECL_Q2) == 0);
+    season_uefa_new_clubs(r2021, 'k', t);
+    CHECK(t[SEASON_UEFA_ECL_Q1] == 66 && t[SEASON_UEFA_ECL_Q2] == 56 && t[SEASON_UEFA_ECL_Q3] == 10);
+    CHECK(t[SEASON_UEFA_ECL_PO] == 4 && t[SEASON_UEFA_ECL_G] == 0 && t[SEASON_UEFA_EL_Q3] == 0);
+    int ecl_sum = 0;
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) ecl_sum += t[i];
+    CHECK(ecl_sum == 136);
+    CHECK(r2021->ecl_meetings == 2 && r2021->ecl_through == 2 && !strcmp(r2020->ecl_drops, ""));
+    /* The league cup winner's Conference League place (rows M), the Conference League holder in the Europa
+     * League groups from 2022/23 (Y). */
+    CHECK(season_uefa_access_ecl_league_cup(2021, "England") && !season_uefa_access_ecl_league_cup(2021, "France"));
+    CHECK(season_uefa_access_rule(2021, 'Y') == NULL && !strcmp(season_uefa_access_rule(2023, 'Y'), "G"));
 
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);

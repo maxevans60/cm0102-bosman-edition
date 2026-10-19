@@ -49,6 +49,16 @@ PLACE_TOKENS = {"G", "PO", "PO-CP", "PO-LP", "Q3", "Q3-CP", "Q3-LP", "Q2", "Q2-C
 # the preliminary round and Q1 losers go to the Conference League.
 DROPS = {2009: "Q3>PO PO>G", 2018: "PR>Q2 Q1>Q2 Q2>Q3 Q3-CP>PO Q3-LP>G PO>G",
          2021: "Q2-CP>Q3 Q2-LP>Q3 Q3-CP>PO Q3-LP>G PO>G"}
+# Slice 24, part b: where the losers of the Champions League ("c:") and the Europa League ("e:") enter the
+# Conference League, from the club counts of its rows ("136 entered + 45 from the Champions League and Europa
+# League" in 2021/22: the 3 preliminary round and 16 first qualifying round losers of the Champions League, the 8
+# third qualifying round and 10 play-off losers of the Europa League, and the 8 Europa League group thirds in the
+# knockout round play-offs). The rounds of the Conference League have one path in the game, as the Europa
+# League's: all Champions League losers of the first qualifying round go to its second qualifying round (the real
+# draw gives one of them a place in the third).
+# Slice 25 (2024/25 on, "110 entered + 54 from the Champions League and Europa League"): no preliminary round;
+# the Champions League Q1 losers (14) and the Europa League Q1 (6), Q2 (8), Q3 (6 + 7) and play-off (12) losers.
+ECL_DROPS = {2021: "c:PR>Q2 c:Q1>Q2 e:Q3>PO e:PO>G", 2024: "c:Q1>Q2 e:Q1>Q2 e:Q2>Q3 e:Q3>PO e:PO>G"}
 LEAGUE_CUP = {"England", "France"}  # the nations whose league cup winner can take a Europa League place
 # Slice 24: ecl the Conference League (k), ecl-holder its title holder (K; "G (EL)" a Europa League place, Y).
 ACCESS_COMPS = {"cl": "c", "el": "e", "cl-holder": "h", "el-holder": "H", "el-fairplay": "f", "ecl": "k",
@@ -279,11 +289,17 @@ def read_access():
     with open(ACCESS, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f, delimiter="\t"))
     out = []
+    brackets = {}                       # (season, comp): [(from, to, row)] of every rank row, "-" rows too
     for r in rows:
         season = int(r["season"][:4])
         if season < ACCESS_FIRST or season > LAST:
             continue
         r = dict(r, id=f"access {r['season']} {r['comp']} {r['rank_from']}")
+        if r["comp"] in ("cl", "el", "ecl"):
+            try:
+                brackets.setdefault((season, r["comp"]), []).append((int(r["rank_from"]), int(r["rank_to"]), r))
+            except ValueError:
+                fail(r, "a rank bracket that is not two numbers")
         comp = ACCESS_COMPS.get(r["comp"])
         if not comp:
             fail(r, f"comp {r['comp']!r} is not one of {sorted(ACCESS_COMPS)}")
@@ -309,10 +325,27 @@ def read_access():
         # The Europa League place of a league cup winner (the notes of the bracket: "England: last place to the
         # league cup winner"): a row L with the nation's name. The game knows England and France (LEAGUE_CUP).
         if comp in "ek":
-            for nation in re.findall(r"([A-Z][a-z]+)(?: \(rank \d+\))?: last place to the league cup", r["notes"]):
+            found = re.findall(r"([A-Z][a-z]+)(?: \(rank \d+\))?: last place to the league cup", r["notes"])
+            mentions = len(re.findall(r"(?<!no )league cup", r["notes"], re.I))   # "no league cup place": none
+            if mentions != len(found):
+                fail(r, f"the notes name {mentions} league cup places, {len(found)} as '<Nation>: last place to the "
+                        "league cup'")
+            for nation in found:
                 if nation not in LEAGUE_CUP:
                     fail(r, f"league cup place of {nation}, not one of {sorted(LEAGUE_CUP)}")
                 out.append((season, "L" if comp == "e" else "M", 0, 0, nation))   # M: the Conference League's
+    # The brackets of a season and cup follow each other from rank 1: no overlap, no repeat, no gap.
+    for (season, comp), bs in sorted(brackets.items()):
+        bs.sort(key=lambda b: (b[0], b[1]))
+        expect = 1
+        for lo, hi, r in bs:
+            if lo > hi:
+                fail(r, f"rank bracket {lo} to {hi} runs backwards")
+            if lo < expect:
+                fail(r, f"rank bracket {lo} to {hi} overlaps the bracket before it (ranks to {expect - 1})")
+            if lo > expect:
+                fail(r, f"no bracket for ranks {expect} to {lo - 1}")
+            expect = hi + 1
     for season in range(ACCESS_FIRST, LAST + 1):
         for comp in "ceh":
             if not any(a[0] == season and a[1] == comp for a in out):
@@ -358,8 +391,13 @@ def text():
         lines.append(f"     {c_text(sc[0])}, {c_text(sc[1])}, {sc[2]}, {sc[3]}, {c_text(drops)},")
         eg = r["ecl_groups"]
         lines.append(f"     {r['uc_ko_po']}, {r['away_goals']}, {c_text(r['suspended'])},")
+        ecl_drops = ""
+        for first in sorted(ECL_DROPS):
+            if r["season"] >= first and r["ecl_rounds"]:
+                ecl_drops = ECL_DROPS[first]
         lg = r["league"]
         lines.append(f"     {c_rounds(r['ecl_rounds'])}, {eg[0]}, {eg[1]}, {r['ecl_ko_po']}, {sc[4]},")
+        lines.append(f"     {eg[2]}, {eg[3]}, {c_text(ecl_drops)},")
         lines.append(f"     {lg[0]}, {lg[1]}, {lg[2]}}},")
     lines += ["};", "const int season_uefa_row_count = (int)(sizeof season_uefa_rows / sizeof season_uefa_rows[0]);",
               "", f"/* The access list by association rank from {ACCESS_FIRST}/{(ACCESS_FIRST + 1) % 100:02d} "

@@ -20,7 +20,13 @@
  * and the 8 Champions League group thirds. The Cup base plays the stages: Cup::update_for_date 0x51f890 calls
  * slot 10 when the rounds of the Cup end and when a stage ends while +0x30 < +0x2c - 1. Slot 10 of the UEFA
  * Cup is the empty function 0x5a8f60 (a "ret" that many vtables share), so its wrap acts only for a UEFA Cup
- * object with 9 stages. The save keeps +0x2c, +0x30 and the stages (see the wrap of Cup::load_from_disk). */
+ * object with 9 stages. The save keeps +0x2c, +0x30 and the stages (see the wrap of Cup::load_from_disk).
+ *
+ * Slice 24, part b: the Conference League is a second object of this class (season_comps.c). Each wrap acts on
+ * both by their kind (season_uefa_cup_kind, by record): the Conference League takes the ecl_* fields of the row,
+ * its own entrants and qualifying rounds (season_uefa_qual.c), and for its knockout round play-offs the 8 thirds
+ * of the Europa League groups. The format of 2004/05 to 2008/09 and the Intertoto hand-over are the Europa
+ * League's only. */
 #include "win.h"
 #include "season.h"
 #include "season_uefa.h"
@@ -71,13 +77,19 @@ typedef struct {
     int ko_po;                          /* slice 24 (2021/22 on): 16, the clubs of the knockout round play-offs */
 } UcGroups;
 
-static int uc_format(const SeasonUefa *r, UcGroups *f)
+/* The group stage of the cup of kind ('e' the Europa League, 'k' the Conference League) in row r. */
+static int uc_format(int kind, const SeasonUefa *r, UcGroups *f)
 {
-    if (!r || r->uc_groups < 2 || r->uc_groups > MAX_GROUPS || r->uc_group_clubs < 3 ||
-        r->uc_group_clubs > MAX_GROUP_CLUBS || r->uc_meetings < 1 || r->uc_meetings > 2)
+    if (!r) return 0;
+    if (kind == 'k')
+        f->groups = r->ecl_groups, f->clubs = r->ecl_group_clubs, f->meetings = r->ecl_meetings,
+        f->through = r->ecl_through, f->ko_po = r->ecl_ko_po;
+    else
+        f->groups = r->uc_groups, f->clubs = r->uc_group_clubs, f->meetings = r->uc_meetings,
+        f->through = r->uc_through, f->ko_po = r->uc_ko_po;
+    if (f->groups < 2 || f->groups > MAX_GROUPS || f->clubs < 3 || f->clubs > MAX_GROUP_CLUBS || f->meetings < 1 ||
+        f->meetings > 2)
         return 0;
-    f->groups = r->uc_groups, f->clubs = r->uc_group_clubs, f->meetings = r->uc_meetings, f->through = r->uc_through;
-    f->ko_po = r->uc_ko_po;
     /* An odd count rests one club on each match day (League::create_fixtures 0x6835c0 adds the resting place,
      * 0x683c1b): 5 clubs meet once on 5 days, 4 clubs twice on 6 days. */
     f->days = (f->clubs % 2 ? f->clubs : f->clubs - 1) * f->meetings;
@@ -110,7 +122,9 @@ static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
     return r;
 }
 
-static int is_uc(uint32_t obj) { return readable(obj) && rd32(g_mem, obj) == UC_VTABLE; }
+/* The Europa League or (slice 24) the Conference League: the kind 'e' or 'k', 0 for any other object. */
+static int is_uc(uint32_t obj) { return season_uefa_cup_kind(obj); }
+static const char *uc_name(uint32_t uc) { return is_uc(uc) == 'k' ? "Conference League" : "Europa League"; }
 /* A UEFA Cup with a group stage holds 3 to 13 stages (the original's has none, +0x2c = 0 at 0x902344). */
 static int groups_layout(uint32_t uc)
 {
@@ -225,15 +239,67 @@ static uint32_t original_table(uint32_t uc, int *rounds)
 
 void o_009025c0(void);
 
-/* The sizes of Q1, Q2 and R1 of row r for a UEFA Cup with 8 groups of 5 and count slots (2004/05 to 2008/09),
- * or 0. */
+/* Slice 23: the round table of stage -1 for the access list (season_uefa_qual.c), made from the original's
+ * qualifying round record (code 0xdc). It changes nothing in the object. Returns the table or 0. */
+static uint32_t uc_access_table(uint32_t uc, int *n)
+{
+    int rounds = 0;
+    uint32_t orig = original_table(uc, &rounds);
+    uint32_t qr = orig ? record_of(orig, rounds, 0xdc) : 0;
+    uint32_t t = !qr ? 0 : is_uc(uc) == 'k' ? season_uefa_ecl_qual_table(uc, qr, n) : season_uefa_uc_qual_table(uc, qr, n);
+    game_free(orig);
+    return rt_unwinding ? 0 : t;
+}
+
+/* A copy of the round table that the set-up made (+0xa3, +0x3c rounds), for a reader of stage -1 at any date: the
+ * clubs' entry codes change in the season, so the layout is not made again. */
+static uint32_t uc_saved_table(uint32_t uc, int *n)
+{
+    uint32_t src = rd32(g_mem, uc + 0xa3);
+    int rounds = (int16_t)rd16(g_mem, uc + 0x3c);
+    if (!readable(src) || rounds < 1 || rounds > 16) return 0;
+    uint32_t t = game_malloc(ROUND_SIZE * (uint32_t)rounds);
+    if (rt_unwinding || !t) return 0;
+    memcpy(g_mem + t, g_mem + src, ROUND_SIZE * (uint32_t)rounds);
+    *n = rounds;
+    return t;
+}
+
+/* The access list at the set-up of a season: the qualifying rounds and a group stage of f. Returns 1 when it
+ * returned the table to the caller. */
+static int uc_access_round_table(uint32_t uc, const UcGroups *f, uint32_t out_rounds)
+{
+    int n = 0;
+    uint32_t t = uc_access_table(uc, &n);
+    if (rt_unwinding || !t) return 0;
+    wr32(g_mem, uc + 0x2c, (uint32_t)(f->groups + 1));
+    wr32(g_mem, uc + 0x30, 0xffffffffu);
+    if (!ensure_stage_array(uc)) {
+        wr32(g_mem, uc + 0x2c, 0);
+        game_free(t);
+        return 0;
+    }
+    /* As the original writes them (0x9025e7, 0x902601): the rounds and a name of 0 as words, the fourth a dword 0. */
+    uint32_t out_name = rt_arg(2), out_fourth = rt_arg(3);
+    if (readable(out_rounds)) wr16(g_mem, out_rounds, (uint16_t)n);
+    if (readable(out_name)) wr16(g_mem, out_name, 0);
+    if (readable(out_fourth)) wr32(g_mem, out_fourth, 0);
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
+    fprintf(stderr, "recomp: uefa: %s %u/%02u: %d qualifying rounds, %d groups of %d\n", uc_name(uc), year,
+            (year + 1) % 100, n, f->groups, f->clubs);
+    rt_ret_stdcall(t, 4);
+    return 1;
+}
+
+/* The sizes of Q1, Q2 and R1 of row r for a UEFA Cup with count slots (see the head of the file), or 0. The
+ * original's format of 2004/05 to 2008/09: 8 groups of 5. */
 static int qual_sizes(uint32_t uc, const SeasonUefa *r, int *q1, int *q2, int *r1)
 {
     int count = (int16_t)rd16(g_mem, uc + 0x3e), b2 = (int8_t)g_mem[uc + 0xb2];
     UcGroups f;
     *r1 = r ? season_uefa_uc_round(r, "R1") : 0, *q2 = r ? season_uefa_uc_round(r, "Q2") : 0;
     *q1 = 2 * (count - 8 - *r1) - *q2;
-    return uc_format(r, &f) && f.groups == 8 && f.clubs == 5 && f.meetings == 1 &&
+    return uc_format('e', r, &f) && f.groups == 8 && f.clubs == 5 && f.meetings == 1 &&
            season_uefa_uc_round(r, "KO") == KO_CLUBS && season_uefa_cl_round_of_16(r) && b2 == 0 && *r1 == 80 &&
            *q2 > 0 && *q2 % 2 == 0 && *q1 >= 2 && *q1 % 2 == 0 && count > 100;
 }
@@ -263,29 +329,9 @@ static uint32_t qual_table(uint32_t uc, int q1, int q2, int r1)
     return rt_unwinding ? 0 : t;
 }
 
-/* Slice 23: the qualifying rounds of the access list (season_uefa_qual.c), from the original's qualifying round
- * record (code 0xdc), or 0. It changes nothing else. */
-static uint32_t access_table(uint32_t uc, int *n)
-{
-    int rounds = 0;
-    uint32_t orig = original_table(uc, &rounds);
-    uint32_t qr = orig ? record_of(orig, rounds, 0xdc) : 0;
-    uint32_t t = qr ? season_uefa_uc_qual_table(uc, qr, n) : 0;
-    game_free(orig);
-    return rt_unwinding ? 0 : t;
-}
-
-/* 1 when row r of a UEFA Cup with groups uses the access list (2009/10 on; the groups of 2004/05 to 2008/09
- * have none). */
-static int access_season(uint32_t uc, const SeasonUefa *r)
-{
-    UcGroups f;
-    return uc_format(r, &f) && season_uefa_access_places(r->season, 'c', 1) && (int8_t)g_mem[uc + 0xb2] == 0;
-}
-
-static uint32_t uc_group_name(int g);
-static uint32_t group_table(uint32_t year, int days);
 static uint32_t ko_table(uint32_t uc, int ko_po);
+static uint32_t group_table(uint32_t year, int days);
+static uint32_t uc_group_name(int g);
 
 /* The return addresses of the two calls that set up a season's rounds: the constructor (call at 0x9023cd) and
  * set_up_rules 0x9030b0 (call at 0x9030ca). Any other caller, such as Comp::build_match_date_list 0x48d500 (the
@@ -296,8 +342,8 @@ static uint32_t ko_table(uint32_t uc, int ko_po);
 /* Uefa_Cup::create_round_table, thiscall (stage, &rounds, &name, &league) ret 0x10. At the set-up of a season
  * (stage -1, after build_entrants) the format of the season is chosen here. A UEFA Cup with groups gives every
  * caller the tables of its stages: Comp::build_match_date_list 0x48d500 asks for each stage from -1 to
- * +0x2c - 1 (0x48d5b0..0x48d5cb), and the original builds only stage -1 (0x9025ca), so the other stages come
- * from here: the groups (a league table: league 1) and the knockout stage. */
+ * +0x2c - 1 (0x48d5b0..0x48d5cb), and the original builds only stage -1 (0x9025ca), so stages 0 to groups - 1
+ * come from here: the groups (a league table: league 1) and the knockout stage. */
 RT_WRAP(009025c0, uc_round_table)
 {
     uint32_t uc = cpu.ecx;
@@ -310,27 +356,28 @@ RT_WRAP(009025c0, uc_round_table)
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
     const SeasonUefa *r = season_uefa_row((int)year);
     UcGroups f;
-    int q1, q2, r1, n = 0;
+    int kind = is_uc(uc), have_f = uc_format(kind, r, &f), q1, q2, r1;
+    /* The seasons of the access list (slice 23: 2009/10 on; slice 22's groups of 2004/05 to 2008/09 have none). */
+    int access = have_f && season_uefa_access_places(r->season, 'c', 1);
     if (stage == -1 && (ret == UC_SETUP_CONSTRUCTOR || ret == UC_SETUP_RULES)) {
         if (readable(rd32(g_mem, uc + 0xc)) && (int32_t)rd32(g_mem, uc + 0x30) >= 0) free_stages(uc);
         if (rt_unwinding) return;
-        uint32_t t = 0;
-        if (access_season(uc, r)) {
-            t = access_table(uc, &n);
-        } else if (qual_sizes(uc, r, &q1, &q2, &r1)) {
-            t = qual_table(uc, q1, q2, r1), n = 3;
-        } else {
+        if (access && (int8_t)g_mem[uc + 0xb2] == 0 && uc_access_round_table(uc, &f, out_rounds)) return;
+        if (rt_unwinding) return;
+        /* Slice 24: the format of 2004/05 to 2008/09 is the Europa League's only. */
+        if (kind != 'e' || !qual_sizes(uc, r, &q1, &q2, &r1)) {
             if ((int32_t)rd32(g_mem, uc + 0x2c) != 0) wr32(g_mem, uc + 0x2c, 0);
-            if (r && r->uc_groups)
-                fprintf(stderr, "recomp: uefa: UEFA Cup %u groups not possible here (b2 %d, %d slots)\n", year,
-                        (int8_t)g_mem[uc + 0xb2], (int16_t)rd16(g_mem, uc + 0x3e));
+            if (r && (r->uc_groups || kind == 'k'))
+                fprintf(stderr, "recomp: uefa: %s %u groups not possible here (b2 %d, %d slots)\n",
+                        kind == 'k' ? "Conference League" : "UEFA Cup", year, (int8_t)g_mem[uc + 0xb2],
+                        (int16_t)rd16(g_mem, uc + 0x3e));
             o_009025c0();
             return;
         }
+        uint32_t t = qual_table(uc, q1, q2, r1);
         if (rt_unwinding) return;
-        if (!t || !uc_format(r, &f)) {
-            game_free(t);
-            if (!rt_unwinding) o_009025c0();
+        if (!t) {
+            o_009025c0();
             return;
         }
         wr32(g_mem, uc + 0x2c, (uint32_t)(f.groups + 1));
@@ -341,19 +388,15 @@ RT_WRAP(009025c0, uc_round_table)
             if (!rt_unwinding) o_009025c0();
             return;
         }
-        if (readable(out_rounds)) wr16(g_mem, out_rounds, (uint16_t)n);
+        if (readable(out_rounds)) wr16(g_mem, out_rounds, 3);
         if (readable(out_name)) wr16(g_mem, out_name, 0);       /* as the original (0x902601) */
-        if (readable(out_league)) wr32(g_mem, out_league, 0);   /* as the original (0x9025e7) */
-        if (n == 3 && !access_season(uc, r))
-            fprintf(stderr, "recomp: uefa: UEFA Cup %u/%02u with groups: Q1 %d, Q2 %d, R1 %d\n", year,
-                    (year + 1) % 100, q1, q2, r1);
-        else
-            fprintf(stderr, "recomp: uefa: Europa League %u/%02u: %d qualifying rounds, %d groups of %d\n", year,
-                    (year + 1) % 100, n, f.groups, f.clubs);
+        if (readable(out_league)) wr32(g_mem, out_league, 0);
+        fprintf(stderr, "recomp: uefa: UEFA Cup %u/%02u with groups: Q1 %d, Q2 %d, R1 %d\n", year, (year + 1) % 100,
+                q1, q2, r1);
         rt_ret_stdcall(t, 4);
         return;
     }
-    if (!groups_layout(uc) || stage < -1 || stage > ko_slot(uc) || !uc_format(r, &f) || f.groups != ko_slot(uc)) {
+    if (!groups_layout(uc) || stage < -1 || stage > ko_slot(uc) || !have_f) {
         o_009025c0();
         return;
     }
@@ -361,12 +404,12 @@ RT_WRAP(009025c0, uc_round_table)
     uint32_t t = 0;
     int rounds = 0, name = 0, league = 0;
     if (stage == -1) {
-        if (access_season(uc, r)) t = access_table(uc, &n), rounds = n;
-        else if (qual_sizes(uc, r, &q1, &q2, &r1)) t = qual_table(uc, q1, q2, r1), rounds = 3;
+        if (access) t = uc_saved_table(uc, &rounds);
+        else if (kind == 'e' && qual_sizes(uc, r, &q1, &q2, &r1)) t = qual_table(uc, q1, q2, r1), rounds = 3;
     } else if (stage < f.groups) {
         t = group_table(year, f.days), rounds = f.days, name = (int)uc_group_name(stage), league = 1;
     } else {
-        t = ko_table(uc, f.ko_po), rounds = KO_ROUNDS;
+        t = ko_table(uc, f.ko_po ? 1 : 0), rounds = KO_ROUNDS;
     }
     if (rt_unwinding) return;
     if (!t) {
@@ -389,8 +432,10 @@ static int uc_group_entrants(uint32_t uc, uint32_t *clubs, int max)
     uint32_t entries = rd32(g_mem, uc + 0xa7);
     /* Slice 23, the access list: also every club in the slots after the rounds and before the 8 slots of the
      * Champions League thirds (the group clubs, the Champions League losers for the groups). */
-    int direct = season_uefa_uc_direct_first(uc);
-    if (direct >= 0) season_uefa_uc_fill_drops(uc);
+    int ecl = is_uc(uc) == 'k';
+    int direct = ecl ? season_uefa_ecl_direct_first(uc) : season_uefa_uc_direct_first(uc);
+    if (direct >= 0 && ecl) season_uefa_ecl_fill_drops(uc);
+    else if (direct >= 0) season_uefa_uc_fill_drops(uc);
     if (rt_unwinding) return 0;
     for (int i = 0; readable(entries) && i < count; i++)
         if ((g_mem[entries + 6u * (uint32_t)i + 5] == 1 || (direct >= 0 && i >= direct && i < count - 8)) &&
@@ -476,7 +521,7 @@ static void draw_group_stage(uint32_t uc)
 {
     UcGroups f;
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
-    if (!uc_format(season_uefa_row((int)year), &f) || f.groups + 1 != (int32_t)rd32(g_mem, uc + 0x2c)) {
+    if (!uc_format(is_uc(uc), season_uefa_row((int)year), &f) || f.groups + 1 != (int32_t)rd32(g_mem, uc + 0x2c)) {
         fprintf(stderr, "recomp: uefa: UEFA Cup groups: no format for %u with %d stages\n", year,
                 (int32_t)rd32(g_mem, uc + 0x2c));
         return;
@@ -521,8 +566,8 @@ static void draw_group_stage(uint32_t uc)
     }
     if (rt_unwinding) return;
     wr32(g_mem, uc + 0x30, (uint32_t)(f.groups - 1));    /* the last group, as draw_phase2_groups leaves it (0x586182) */
-    fprintf(stderr, "recomp: uefa: UEFA Cup %u/%02u: %d groups of %d drawn\n", year, (year + 1) % 100, f.groups,
-            f.clubs);
+    fprintf(stderr, "recomp: uefa: %s %u/%02u: %d groups of %d drawn\n", is_uc(uc) == 'k' ? "Conference League" : "UEFA Cup",
+            year, (year + 1) % 100, f.groups, f.clubs);
 }
 
 /* ---- The knockout stage of 32 ---- */
@@ -609,10 +654,55 @@ static int pair_ko(const uint32_t *seed, const int *seed_group, const uint32_t *
  * winners, who enter the round of 16 (ko_table). The tier array of the stage (argument 15 of the Cup_Stage
  * constructor, entry byte +4: 0x522fa6..0x522fc6) gives the winners 2 and the others 1, so the seeded draw of
  * the round of 16 pairs each winner with a play-off winner. The thirds and fourths of the groups are out. */
+/* Slice 24: the Conference League takes the 8 Europa League group thirds (the third row of each of its 8 group
+ * tables, League::get_table_row 0x6826d0) into its last 8 slots, as the Champions League thirds go to the Europa
+ * League (0x586282): the entry, the list +0x14 and its id at +0x1db. The Europa League draws its own knockout
+ * on the same day, first (the daily update walks the competitions by record id, 0x5ce060, and the Conference
+ * League record comes last), so its tables are final. Returns the thirds put, or -1 when the Europa League has
+ * no 8 groups. */
+static int ecl_take_el_thirds(uint32_t ecl)
+{
+    uint32_t table = rd32(g_mem, COMP_TABLE);
+    int32_t key = (int32_t)rd32(g_mem, KEY_UC);
+    uint32_t el = readable(table) && key >= 0 ? rd32(g_mem, table + 4u * (uint32_t)key) : 0;
+    UcGroups fe;
+    if (is_uc(el) != 'e' || !groups_layout(el) || !uc_format('e', season_uefa_row((int16_t)rd16(g_mem, el + 0x40)), &fe) ||
+        fe.groups != 8 || ko_slot(el) != fe.groups)
+        return -1;
+    if ((int32_t)rd32(g_mem, el + 0x30) < fe.groups)
+        fprintf(stderr, "recomp: uefa: Conference League: the Europa League knockout is not drawn yet\n");
+    int count = (int16_t)rd16(g_mem, ecl + 0x3e), put = 0;
+    uint32_t e = rd32(g_mem, ecl + 0xa7), list = rd32(g_mem, ecl + 0x14);
+    for (int g = 0; g < 8 && readable(e) && !rt_unwinding; g++) {
+        uint32_t st = stage_at(el, g), at = e + 6u * (uint32_t)(count - 8 + g);
+        uint32_t club = readable(st) ? row_club(st, 2) : 0;
+        if (rt_unwinding || !readable(club) || readable(rd32(g_mem, at))) continue;
+        wr32(g_mem, at, club);
+        g_mem[at + 5] = 0;
+        int16_t m = (int16_t)rd16(g_mem, ecl + 0x36);
+        if (readable(list) && m < (int16_t)rd16(g_mem, ecl + 0x38)) {
+            wr32(g_mem, list + 6u * (uint32_t)m, club);
+            g_mem[list + 6u * (uint32_t)m + 4] = 5;
+            wr16(g_mem, ecl + 0x36, (uint16_t)(m + 1));
+        }
+        wr32(g_mem, club + 0x1db, (uint32_t)season_uefa_ecl_id());
+        put++;
+    }
+    fprintf(stderr, "recomp: uefa: Conference League: %d Europa League thirds in the slots from %d\n", put, count - 8);
+    return put;
+}
+
 static void draw_knockout_po(uint32_t uc, const UcGroups *f, uint32_t year, int groups)
 {
     uint32_t seed[8], unseed[8], winner[8];
     int seed_group[8], unseed_group[8], nw = 0, ns = 0;
+    int ecl = is_uc(uc) == 'k';
+    int32_t ecl_id = season_uefa_ecl_id();
+    if (ecl && ecl_take_el_thirds(uc) < 0) {
+        fprintf(stderr, "recomp: uefa: Conference League knockout: the Europa League has no 8 groups\n");
+        return;
+    }
+    if (rt_unwinding) return;
     for (int g = 0; g < f->groups; g++) {
         uint32_t st = stage_at(uc, g);
         if (!readable(st)) return;
@@ -620,7 +710,9 @@ static void draw_knockout_po(uint32_t uc, const UcGroups *f, uint32_t year, int 
             uint32_t club = row_club(st, p);
             if (rt_unwinding) return;
             if (p >= 2) {
-                if (readable(club)) wr32(g_mem, club + 0x1db, 0xffffffffu);
+                /* A Europa League third that the Conference League has taken keeps its id (slice 24). */
+                if (readable(club) && !(p == 2 && ecl_id >= 0 && (int32_t)rd32(g_mem, club + 0x1db) == ecl_id))
+                    wr32(g_mem, club + 0x1db, 0xffffffffu);
                 continue;
             }
             if (!readable(club)) return;
@@ -634,12 +726,13 @@ static void draw_knockout_po(uint32_t uc, const UcGroups *f, uint32_t year, int 
         unseed[k] = readable(entries) ? rd32(g_mem, entries + 6u * (uint32_t)(count - 8 + k)) : 0;
         unseed_group[k] = -1;
         if (!readable(unseed[k])) {
-            fprintf(stderr, "recomp: uefa: Europa League knockout: no Champions League third in slot %d\n", count - 8 + k);
+            fprintf(stderr, "recomp: uefa: %s knockout: no %s third in slot %d\n", uc_name(uc),
+                    ecl ? "Europa League" : "Champions League", count - 8 + k);
             return;
         }
     }
     if (nw != 8 || ns != 8) {
-        fprintf(stderr, "recomp: uefa: Europa League knockout: %d winners and %d runners-up\n", nw, ns);
+        fprintf(stderr, "recomp: uefa: %s knockout: %d winners and %d runners-up\n", uc_name(uc), nw, ns);
         return;
     }
     int pair[KO_TIES];
@@ -687,7 +780,7 @@ static void draw_knockout_po(uint32_t uc, const UcGroups *f, uint32_t year, int 
     if (!rt_unwinding) call_this(F_SET_UP_ROUND, obj, 1, r0);
     if (rt_unwinding) return;
     wr32(g_mem, uc + 0x30, (uint32_t)groups);
-    fprintf(stderr, "recomp: uefa: Europa League knockout round play-offs drawn\n");
+    fprintf(stderr, "recomp: uefa: %s knockout round play-offs drawn\n", uc_name(uc));
 }
 
 /* The draw of the round of 32. Three through a group (8 groups): the 8 winners and 8 runners-up are seeded,
@@ -700,7 +793,7 @@ static void draw_knockout(uint32_t uc)
     UcGroups f;
     int groups = ko_slot(uc);
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
-    if (!uc_format(season_uefa_row((int)year), &f) || f.groups != groups) return;
+    if (!uc_format(is_uc(uc), season_uefa_row((int)year), &f) || f.groups != groups) return;
     if (f.ko_po) {
         draw_knockout_po(uc, &f, year, groups);
         return;
@@ -805,9 +898,9 @@ RT_WRAP(005a8f60, empty_or_uc_advance)
  * it at 0x902317, before the load) or the year before (a load from January to June). */
 static int groups_near(uint32_t uc)
 {
-    int year = (int16_t)rd16(g_mem, uc + 0x40);
+    int year = (int16_t)rd16(g_mem, uc + 0x40), k = is_uc(uc) == 'k';
     const SeasonUefa *a = season_uefa_row(year), *b = season_uefa_row(year - 1);
-    return (a && a->uc_groups) || (b && b->uc_groups);
+    return (a && (k ? a->ecl_groups : a->uc_groups)) || (b && (k ? b->ecl_groups : b->uc_groups));
 }
 
 /* Cup::load_from_disk, thiscall (by_comp_id) ret 4: the stage array of a UEFA Cup before its stages load. The
@@ -926,13 +1019,22 @@ RT_WRAP(00902b90, uc_build_entrants)
 {
     uint32_t uc = cpu.ecx;
     /* Slice 23: the entrants of the access list (season_uefa_qual.c) in place of the original's. */
-    if (is_uc(uc) && season_uefa_uc_entrants(uc)) {
+    int kind = is_uc(uc);
+    if ((kind == 'e' && season_uefa_uc_entrants(uc)) || (kind == 'k' && season_uefa_ecl_entrants(uc))) {
         rt_ret_cdecl(1);
         return;
     }
     if (rt_unwinding) return;
+    /* Slice 24: the Conference League has no entrants of the original (it would take the Europa League's). */
+    if (kind == 'k') {
+        fprintf(stderr, "recomp: uefa: Conference League %d: the access list gives no layout\n",
+                (int16_t)rd16(g_mem, uc + 0x40));
+        wr16(g_mem, uc + 0x36, 0);
+        rt_ret_cdecl(1);
+        return;
+    }
     o_00902b90();
-    if (rt_unwinding || cpu.eax != 1 || !is_uc(uc)) return;
+    if (rt_unwinding || cpu.eax != 1 || is_uc(uc) != 'e') return;
     const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, uc + 0x40));
     if (!uic_to_q2(r) || g_mem[uc + 0xb2] != 0 || (int16_t)rd16(g_mem, uc + 0x3e) != UC_SLOTS_ORIGINAL) return;
     /* The sizes of uc_round_table with 153 slots: Q1 and the seeded clubs of Q2 come before the winners. */
