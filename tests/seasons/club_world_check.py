@@ -163,6 +163,10 @@ def check(name, report, log, rules_on):
     nations = RUNS[name][4]
     for f in missing:
         need = NEEDS[f]
+        # Slice 27: Australia moves to the AFC from 2006 (season_intl.c), so from a 2006 start it no longer makes
+        # the Oceania entry.
+        if f == "oceania_club_champ" and start >= 2006:
+            continue
         if need is None or need in nations:
             failed.append(f"{name}: {f} is not in the report, but a nation of its continent is selected ({need})")
     # Part b: an edition of 6 or 7 clubs in the table is a knockout (season_kind_club_world.c, Form K). The form
