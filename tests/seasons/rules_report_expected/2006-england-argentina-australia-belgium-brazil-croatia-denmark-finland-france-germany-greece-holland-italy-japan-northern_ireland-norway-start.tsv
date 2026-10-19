@@ -119,18 +119,20 @@
 2006	not_in_game	ita-93 ita_ser_c2c 'Serie C2 girone C' (Italy)
 2006	not_in_game	nor-fin-60 new 'Liigacup' (Finland)
 2006	not_in_game	uefa-41 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2006	playoffs	arg_prm (Primera División), row arg-usa-6: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
-2006	playoffs	arg_second (Primera B Nacional), row arg-usa-33: game 0 up and 0 down play-off places, table 'As 2003/04; Torneo Reducido of 4th to 7th'
-2006	playoffs	aus_nsl (A-League), row aus-jap-kor-29: game 0 up and 0 down play-off places, table 'top four, page play-off system, grand final'
-2006	playoffs	bel_first (Belgian First Division), row hol-bel-73: game 0 up and 0 down play-off places, table '17th plays the second division final round for one top-flight place'
-2006	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-87: game 0 up and 0 down play-off places, table 'see format'
-2006	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-330: game 0 up and 0 down play-off places, table '11th: relegation play-off v second tier'
-2006	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-357: game 0 up and 0 down play-off places, table '2nd: promotion play-off'
-2006	playoffs	den_second (Danish 2nd Divisions), row den-swe-34: game 0 up and 0 down play-off places, table "Promotion game between the two groups' next-best eligible clubs (table shows 3rd"
-2006	playoffs	hol_first (Eerste Divisie), row hol-bel-68: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2006	playoffs	ita_ser_b (Serie B), row ita-88: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
-2006	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-195: game 0 up and 0 down play-off places, table '16th v J2 3rd in a two-legged promotion/relegation series'
-2006	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-222: game 0 up and 0 down play-off places, table '3rd v J1 16th in a two-legged promotion/relegation series'
+2006	playoffs	arg_prm (Primera División), row arg-usa-6: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
+2006	playoffs	arg_second (Primera B Nacional), row arg-usa-33: game 0 up and 0 down play-off places, table 4 and 0 ('As 2003/04; Torneo Reducido of 4th to 7th')
+2006	playoffs	bel_first (Belgian First Division), row hol-bel-73: game 0 up and 0 down play-off places, table 0 and 1 ('17th plays the second division final round for one top-flight place')
+2006	playoffs	bel_second (Belgian Second Division), row hol-bel-74: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
+2006	playoffs	bel_third (Belgian Third Division), row hol-bel-75: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2006	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-330: game 0 up and 0 down play-off places, table 0 and 1 ('11th: relegation play-off v second tier')
+2006	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-357: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off')
+2006	playoffs	den_second (Danish 2nd Divisions), row den-swe-34: game 0 up and 0 down play-off places, table 1 and 0 ("Promotion game between the two groups' next-best eligible clubs (table shows 3rd")
+2006	playoffs	fin_first (Ykkönen), row nor-fin-58: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 13th, two legs')
+2006	playoffs	ita_ser_b (Serie B), row ita-88: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo')
+2006	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-89: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2006	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-90: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2006	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-195: game 0 up and 0 down play-off places, table 0 and 1 ('16th v J2 3rd in a two-legged promotion/relegation series')
+2006	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-222: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v J1 16th in a two-legged promotion/relegation series')
 2006	up	arg_second (Primera B Nacional), row arg-usa-33: game 1 (+0 play-off places), table 2 (2 (as 2002/03))
 2006	up	aus_nsl (A-League), row aus-jap-kor-29: game 6 (+0 play-off places), table na (n/a)
 2006	up	bel_third (Belgian Third Division), row hol-bel-75: game 1 (+0 play-off places), table 2 (2 (group champions))

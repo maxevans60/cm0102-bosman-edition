@@ -74,13 +74,14 @@
 2005	not_in_game	spa-33 spain_rules 'n/a' (Spain)
 2005	not_in_game	spa-36 spa_second_b 'Segunda División B' (Spain)
 2005	not_in_game	uefa-33 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2005	playoffs	kor_league (K League), row aus-jap-kor-329: game 0 up and 0 down play-off places, table 'championship: the two stage winners and the top two of the overall table'
-2005	playoffs	pol_first (I liga), row gre-pol-cro-194: game 0 up and 0 down play-off places, table '14th: relegation play-off'
-2005	playoffs	sco_first (Scottish First Division), row sco-35: game 0 up and 0 down play-off places, table '9th plays off with Second Division 2nd to 4th (two-legged semi-finals and final)'
-2005	playoffs	sco_second (Scottish Second Division), row sco-36: game 0 up and 0 down play-off places, table '2nd to 4th play off with First Division 9th for a First Division place; 9th play'
-2005	playoffs	sco_third (Scottish Third Division), row sco-37: game 0 up and 0 down play-off places, table '2nd to 4th play off with Second Division 9th for a Second Division place (two-le'
-2005	playoffs	tur_second (Lig A), row rus-tur-194: game 0 up and 0 down play-off places, table '3rd v 6th and 4th v 5th, winners meet for the third place'
-2005	playoffs	usa_mls (Major League Soccer), row arg-usa-221: game 0 up and 0 down play-off places, table '8 (as 2003)'
+2005	playoffs	pol_first (I liga), row gre-pol-cro-194: game 0 up and 0 down play-off places, table 0 and 1 ('14th: relegation play-off')
+2005	playoffs	pol_second (II liga), row gre-pol-cro-248: game 2 up and 0 down play-off places, table 1 and 4 ('3rd: promotion play-off; 12th-15th: relegation play-offs')
+2005	playoffs	sco_first (Scottish First Division), row sco-35: game 0 up and 0 down play-off places, table 0 and 1 ('9th plays off with Second Division 2nd to 4th (two-legged semi-finals and final)')
+2005	playoffs	sco_second (Scottish Second Division), row sco-36: game 0 up and 0 down play-off places, table 3 and 1 ('2nd to 4th play off with First Division 9th for a First Division place; 9th play')
+2005	playoffs	sco_third (Scottish Third Division), row sco-37: game 0 up and 0 down play-off places, table 3 and 0 ('2nd to 4th play off with Second Division 9th for a Second Division place (two-le')
+2005	playoffs	swe_first (Superettan), row den-swe-189: game 1 up and 0 down play-off places, table 1 and 2 ('3rd plays the Allsvenskan 12th; 13th and 14th play the Division 1 runners-up.')
+2005	playoffs	tur_second (Lig A), row rus-tur-194: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v 6th and 4th v 5th, winners meet for the third place')
+2005	playoffs	tur_second_b (Lig B), row rus-tur-221: game 2 up and 0 down play-off places, table 0 and 0 ('see format')
 2005	up	con_merc_cup (Copa Merconorte), row club-world-82: game 1 (+0 play-off places), table na (n/a)
 2005	up	pol_first (I liga), row gre-pol-cro-194: game 4 (+0 play-off places), table na (n/a)
 2005	up	sco_second (Scottish Second Division), row sco-36: game 2 (+0 play-off places), table 1 (1)

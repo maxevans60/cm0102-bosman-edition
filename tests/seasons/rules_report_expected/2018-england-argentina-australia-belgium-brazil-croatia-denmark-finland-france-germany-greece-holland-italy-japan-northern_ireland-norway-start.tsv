@@ -161,27 +161,27 @@
 2018	not_in_game	ita-299 new 'Serie C girone B' (Italy)
 2018	not_in_game	ita-300 new 'Serie C girone C' (Italy)
 2018	not_in_game	uefa-137 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2018	playoffs	arg_second (Primera B Nacional), row arg-usa-45: game 0 up and 0 down play-off places, table 'Torneo Reducido of 2nd to 9th: two-leg ties'
-2018	playoffs	aus_nsl (A-League), row aus-jap-kor-41: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2018	playoffs	bel_first (Belgian First Division A), row hol-bel-229: game 0 up and 0 down play-off places, table 'see split'
-2018	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-99: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2018	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-342: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2018	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-369: game 0 up and 0 down play-off places, table '2nd: promotion play-off'
-2018	playoffs	den_first (Danish 1st Division), row den-swe-105: game 0 up and 0 down play-off places, table '2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.'
-2018	playoffs	den_prm (Danish Superliga), row den-swe-104: game 0 up and 0 down play-off places, table 'Relegation: 3rd-placed clubs of the two qualifying groups play over two legs, lo'
-2018	playoffs	fra_first (Ligue 1), row fra-155: game 0 up and 0 down play-off places, table '18th v winner of the Ligue 2 play-off, two legs'
-2018	playoffs	fra_second (Ligue 2), row fra-156: game 0 up and 0 down play-off places, table '4th v 5th, winner v 3rd, winner v Ligue 1 18th; 18th v National 3rd'
-2018	playoffs	fra_third (Championnat National), row fra-157: game 0 up and 0 down play-off places, table '3rd v Ligue 2 18th, two legs'
-2018	playoffs	ger_first (Bundesliga), row ger-222: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2018	playoffs	ger_second (2. Bundesliga), row ger-223: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2018	playoffs	gre_prm (Super League Greece), row gre-pol-cro-45: game 0 up and 0 down play-off places, table '13th: relegation play-off v Football League runner-up'
-2018	playoffs	gre_second (Football League), row gre-pol-cro-72: game 0 up and 0 down play-off places, table '2nd: promotion play-off v Super League 13th'
-2018	playoffs	hol_first (Eerste Divisie), row hol-bel-224: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2018	playoffs	ita_ser_b (Serie B), row ita-292: game 0 up and 0 down play-off places, table '3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at'
-2018	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-293: game 4 up and 4 down play-off places, table 'n/a'
-2018	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-294: game 4 up and 4 down play-off places, table 'n/a'
-2018	playoffs	jap_j1 (J1 League), row aus-jap-kor-207: game 0 up and 0 down play-off places, table '16th v the J2 play-off winner, one match (J1 entry play-off)'
-2018	playoffs	jap_j2 (J2 League), row aus-jap-kor-234: game 0 up and 0 down play-off places, table '3rd to 6th play-off; winner plays J1 16th in one match (J1 entry play-off)'
+2018	playoffs	arg_second (Primera B Nacional), row arg-usa-45: game 0 up and 0 down play-off places, table 8 and 0 ('Torneo Reducido of 2nd to 9th: two-leg ties')
+2018	playoffs	bel_second (Belgian First Division B), row hol-bel-230: game 0 up and 1 down play-off places, table 0 and 0 ('top three of the aggregate table (not promoted) to the Europa League play-offs')
+2018	playoffs	bel_third (Belgian First Amateur Division), row hol-bel-231: game 0 up and 1 down play-off places, table 4 and 0 ('top four promotion play-offs')
+2018	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-342: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2018	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-369: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off')
+2018	playoffs	den_first (Danish 1st Division), row den-swe-105: game 0 up and 0 down play-off places, table 2 and 0 ('2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.')
+2018	playoffs	fin_first (Ykkönen), row nor-fin-178: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
+2018	playoffs	fra_first (Ligue 1), row fra-155: game 0 up and 0 down play-off places, table 0 and 1 ('18th v winner of the Ligue 2 play-off, two legs')
+2018	playoffs	fra_second (Ligue 2), row fra-156: game 0 up and 0 down play-off places, table 3 and 1 ('4th v 5th, winner v 3rd, winner v Ligue 1 18th; 18th v National 3rd')
+2018	playoffs	fra_third (Championnat National), row fra-157: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v Ligue 2 18th, two legs')
+2018	playoffs	ger_first (Bundesliga), row ger-222: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2018	playoffs	ger_second (2. Bundesliga), row ger-223: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2018	playoffs	gre_prm (Super League Greece), row gre-pol-cro-45: game 0 up and 0 down play-off places, table 0 and 1 ('13th: relegation play-off v Football League runner-up')
+2018	playoffs	gre_second (Football League), row gre-pol-cro-72: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off v Super League 13th')
+2018	playoffs	ita_ser_b (Serie B), row ita-292: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at')
+2018	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-293: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2018	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-294: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2018	playoffs	jap_j1 (J1 League), row aus-jap-kor-207: game 0 up and 0 down play-off places, table 0 and 1 ('16th v the J2 play-off winner, one match (J1 entry play-off)')
+2018	playoffs	jap_j2 (J2 League), row aus-jap-kor-234: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th play-off; winner plays J1 16th in one match (J1 entry play-off)')
+2018	playoffs	nir_first (NIFL Championship), row wal-nir-irl-436: game 1 up and 0 down play-off places, table 2 and 1 ('pos 2,3: promotion play-off; pos 11: relegation play-off')
+2018	playoffs	nor_first (OBOS-ligaen), row nor-fin-173: game 1 up and 0 down play-off places, table 4 and 1 ('3rd-6th single-leg knockout; winner v top-flight 14th, two legs. 14th v 2. divis')
 2018	subs_used	ita_c1_super (Supercoppa Serie C), row ita-305: game 3, table 5 (5)
 2018	up	arg_second (Primera B Nacional), row arg-usa-45: game 1 (+0 play-off places), table 2 (2 (champion; Torneo Reducido winner))
 2018	up	aus_nsl (A-League), row aus-jap-kor-41: game 6 (+0 play-off places), table na (n/a)

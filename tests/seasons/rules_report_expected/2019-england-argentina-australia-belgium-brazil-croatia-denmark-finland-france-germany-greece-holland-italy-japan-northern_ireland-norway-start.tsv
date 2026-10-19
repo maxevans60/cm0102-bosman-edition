@@ -163,23 +163,23 @@
 2019	not_in_game	ita-316 new 'Serie C girone B' (Italy)
 2019	not_in_game	ita-317 new 'Serie C girone C' (Italy)
 2019	not_in_game	uefa-145 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2019	playoffs	arg_second (Primera Nacional), row arg-usa-46: game 0 up and 0 down play-off places, table 'Final of the two zone winners at a neutral ground; Torneo Reducido of the final '
-2019	playoffs	aus_nsl (A-League), row aus-jap-kor-42: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2019	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-100: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2019	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-343: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2019	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-370: game 0 up and 0 down play-off places, table 'promotion play-off (first eligible non-reserve club after the champion); 14th: r'
-2019	playoffs	den_prm (Danish Superliga), row den-swe-110: game 0 up and 0 down play-off places, table 'Relegation: the two 3rd-placed clubs of the relegation round play over two legs,'
-2019	playoffs	fra_first (Ligue 1), row fra-164: game 0 up and 0 down play-off places, table '18th v winner of the Ligue 2 play-off'
-2019	playoffs	fra_second (Ligue 2), row fra-165: game 0 up and 0 down play-off places, table '3rd, 4th and 5th play off for a tie with the Ligue 1 18th; 18th v National 3rd'
-2019	playoffs	fra_third (Championnat National), row fra-166: game 0 up and 0 down play-off places, table '3rd v Ligue 2 18th'
-2019	playoffs	ger_first (Bundesliga), row ger-235: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2019	playoffs	ger_second (2. Bundesliga), row ger-236: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2019	playoffs	gre_prm (Super League 1), row gre-pol-cro-46: game 0 up and 0 down play-off places, table '13th: relegation play-off v Super League 2'
-2019	playoffs	gre_second (Super League 2), row gre-pol-cro-73: game 0 up and 0 down play-off places, table '2nd: promotion play-off'
-2019	playoffs	hol_first (Eerste Divisie), row hol-bel-237: game 0 up and 0 down play-off places, table 'Eerste Divisie clubs (period winners and best placed) with the Eredivisie 16th, '
-2019	playoffs	ita_ser_b (Serie B), row ita-309: game 0 up and 0 down play-off places, table '3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at'
-2019	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-310: game 4 up and 4 down play-off places, table 'n/a'
-2019	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-311: game 4 up and 4 down play-off places, table 'n/a'
+2019	playoffs	bel_third (Belgian First Amateur Division), row hol-bel-244: game 0 up and 1 down play-off places, table 4 and 0 ('top four promotion play-offs')
+2019	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-343: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2019	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-370: game 0 up and 0 down play-off places, table 1 and 1 ('promotion play-off (first eligible non-reserve club after the champion); 14th: r')
+2019	playoffs	fin_first (Ykkönen), row nor-fin-188: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs (no internal play-off)')
+2019	playoffs	fra_first (Ligue 1), row fra-164: game 0 up and 0 down play-off places, table 0 and 1 ('18th v winner of the Ligue 2 play-off')
+2019	playoffs	fra_second (Ligue 2), row fra-165: game 0 up and 0 down play-off places, table 3 and 1 ('3rd, 4th and 5th play off for a tie with the Ligue 1 18th; 18th v National 3rd')
+2019	playoffs	fra_third (Championnat National), row fra-166: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v Ligue 2 18th')
+2019	playoffs	ger_first (Bundesliga), row ger-235: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2019	playoffs	ger_second (2. Bundesliga), row ger-236: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2019	playoffs	gre_prm (Super League 1), row gre-pol-cro-46: game 0 up and 0 down play-off places, table 0 and 1 ('13th: relegation play-off v Super League 2')
+2019	playoffs	gre_second (Super League 2), row gre-pol-cro-73: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off')
+2019	playoffs	hol_prm (Eredivisie), row hol-bel-236: game 0 up and 2 down play-off places, table 0 and 1 ('16th to the promotion/relegation play-offs with Eerste Divisie clubs')
+2019	playoffs	ita_ser_b (Serie B), row ita-309: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at')
+2019	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-310: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2019	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-311: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2019	playoffs	nir_first (NIFL Championship), row wal-nir-irl-461: game 1 up and 0 down play-off places, table 1 and 1 ('pos 2: promotion play-off with the Premiership 11th; pos 11: relegation play-off')
+2019	playoffs	nor_first (OBOS-ligaen), row nor-fin-183: game 1 up and 0 down play-off places, table 4 and 1 ('3rd-6th single-leg knockout; winner v top-flight 14th, one match on neutral grou')
 2019	subs_used	asia_club_champ (AFC Champions League), row club-world-355: game 3, table 5 (5, a sixth in extra time)
 2019	subs_used	eng_fa_cup (FA Cup), row eng-406: game 3, table 5 (5 (+1 in extra time))
 2019	subs_used	euro_champ (UEFA European Championship), row int-continental-199: game 3, table 5 (5 (a sixth in extra time), three stoppages)
