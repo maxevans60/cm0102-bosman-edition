@@ -27,7 +27,6 @@
 2005	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-53: game 24, table 6 (6)
 2005	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-51: game 0, table 51 (51 entrants)
 2005	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-56: game 5, table 2 (2)
-2005	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-52: game 9, table 10 (10)
 2005	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-108: game 3, table 18 (18)
 2005	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-109: game 4, table 16 (16)
 2005	clubs	world_club_champ (FIFA Club World Championship), row club-world-78: game 4, table 6 (6)
@@ -51,12 +50,10 @@
 2005	not_held	asia_super_cup (Asian Super Cup), row club-world-93: the game holds 2005, the table says not held
 2005	not_held	con_merc_cup (Copa Merconorte), row club-world-82: the game holds 2005, the table says not held
 2005	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-46: the game holds 2006, the table says not held
-2005	not_held	goldcup (Copa América), row int-continental-55: the game holds 2005, the table says not held
 2005	not_held	inter_amer_cup (Copa Interamericana), row club-world-88: the game holds 2005, the table says not held
 2005	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-121: the game holds 2005, the table says not held
 2005	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-123: the game holds 2005, the table says not held
 2005	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-124: the game holds 2005, the table says not held
-2005	not_held	oceania_nations (OFC Nations Cup), row int-continental-54: the game holds 2006, the table says not held
 2005	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-221: the game holds 2005, the table says not held
 2005	not_held	pol_super (Polish Super Cup), row gre-pol-cro-275: the game holds 2005, the table says not held
 2005	not_held	world_club_cup (Intercontinental Cup), row club-world-77: the game holds 2005, the table says not held

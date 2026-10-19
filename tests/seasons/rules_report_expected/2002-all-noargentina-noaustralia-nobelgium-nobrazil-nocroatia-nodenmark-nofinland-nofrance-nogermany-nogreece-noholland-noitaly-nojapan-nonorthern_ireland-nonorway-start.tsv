@@ -13,7 +13,7 @@
 2002	clubs	ire_first (League of Ireland First Division), row wal-nir-irl-42: game 10, table 12 (12)
 2002	clubs	ire_prm (League of Ireland Premier Division), row wal-nir-irl-41: game 12, table 10 (10)
 2002	clubs	kor_league (K League), row aus-jap-kor-326: game 10, table 12 (12)
-2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 3, table 8 (8)
+2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 0, table 8 (8)
 2002	clubs	pol_first (I liga), row gre-pol-cro-191: game 8, table 16 (16)
 2002	clubs	por_cup (Taça de Portugal), row por-15: game 164, table 226 (226)
 2002	clubs	rus_first (Russian First Division), row rus-tur-29: game 18, table 22 (22)
@@ -36,7 +36,6 @@
 2002	no_row	spa_lower (Spanish Lower Division): no table row
 2002	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-35: the game holds 2002, the table says not held
 2002	not_held	con_merc_cup (Copa Merconorte), row club-world-25: the game holds 2002, the table says not held
-2002	not_held	goldcup (Copa América), row int-continental-22: the game holds 2003, the table says not held
 2002	not_held	inter_amer_cup (Copa Interamericana), row club-world-31: the game holds 2002, the table says not held
 2002	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-46: the game holds 2002, the table says not held
 2002	not_held	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-45: the game holds 2002, the table says not held

@@ -9,9 +9,9 @@
 2007	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Akçaabat Sebatspor, Dardanelspor A.S.
 2007	clubs	african_nations (Africa Cup of Nations), row int-continental-73: game 0, table 16 (16)
 2007	clubs	asia_club_champ (AFC Champions League), row club-world-127: game 16, table 29 (29)
-2007	clubs	asia_nations (AFC Asian Cup), row int-continental-75: game 0, table 16 (16)
+2007	clubs	asia_nations (AFC Asian Cup), row int-continental-75: game 4, table 16 (16)
 2007	clubs	euro_champ (UEFA European Championship), row int-continental-67: game 0, table 16 (16)
-2007	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-68: game 5, table 50 (50)
+2007	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-68: game 0, table 50 (50)
 2007	clubs	european_cup (UEFA Champions League), row uefa-50: game 55, table 76 (76 (32 in the group stage))
 2007	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-55: game 60, table 50 (50)
 2007	clubs	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-170: game 3, table 24 (24)
@@ -31,7 +31,6 @@
 2007	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-79: game 0, table 43 (43 entrants)
 2007	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-77: game 24, table 35 (35 entrants)
 2007	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-80: game 5, table 11 (11 entrants)
-2007	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-76: game 9, table 10 (10)
 2007	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-158: game 3, table 18 (18)
 2007	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-159: game 4, table 16 (16)
 2007	clubs	world_club_champ (FIFA Club World Cup), row club-world-116: game 4, table 7 (7)
@@ -52,7 +51,6 @@
 2007	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-130: the game holds 2007, the table says not held
 2007	not_held	asia_super_cup (Asian Super Cup), row club-world-131: the game holds 2007, the table says not held
 2007	not_held	con_merc_cup (Copa Merconorte), row club-world-120: the game holds 2007, the table says not held
-2007	not_held	goldcup (Copa América), row int-continental-77: the game holds 2007, the table says not held
 2007	not_held	inter_amer_cup (Copa Interamericana), row club-world-126: the game holds 2007, the table says not held
 2007	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-171: the game holds 2007, the table says not held
 2007	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-173: the game holds 2007, the table says not held

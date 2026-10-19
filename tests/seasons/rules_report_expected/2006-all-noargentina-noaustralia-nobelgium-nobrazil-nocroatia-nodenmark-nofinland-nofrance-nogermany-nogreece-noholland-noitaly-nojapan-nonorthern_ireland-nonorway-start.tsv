@@ -42,15 +42,14 @@
 2006	no_row	record_utils (Under 21 International): no table row
 2006	no_row	spa_lower (Spanish Lower Division): no table row
 2006	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-111: the game holds 2006, the table says not held
+2006	not_held	asia_nations (AFC Asian Cup), row int-continental-64: the game holds 2007, the table says not held
 2006	not_held	asia_super_cup (Asian Super Cup), row club-world-112: the game holds 2006, the table says not held
 2006	not_held	con_merc_cup (Copa Merconorte), row club-world-101: the game holds 2006, the table says not held
-2006	not_held	fifa_confed (FIFA Confederations Cup), row int-world-70: the game holds 2007, the table says not held
 2006	not_held	inter_amer_cup (Copa Interamericana), row club-world-107: the game holds 2006, the table says not held
 2006	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-146: the game holds 2006, the table says not held
 2006	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-148: the game holds 2006, the table says not held
 2006	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-149: the game holds 2006, the table says not held
 2006	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-384: the game holds 2006, the table says not held
-2006	not_held	oceania_nations (OFC Nations Cup), row int-continental-65: the game holds 2006, the table says not held
 2006	not_held	world_club_cup (Intercontinental Cup), row club-world-96: the game holds 2006, the table says not held
 2006	not_in_game	arg-usa-357 usa_rules 'United States' (United States)
 2006	not_in_game	aus-jap-kor-303 korea_rules 'n/a' (South Korea)

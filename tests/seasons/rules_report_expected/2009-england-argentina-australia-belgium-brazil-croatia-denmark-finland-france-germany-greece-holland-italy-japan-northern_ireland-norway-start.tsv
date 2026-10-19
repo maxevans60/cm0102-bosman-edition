@@ -63,14 +63,12 @@
 2009	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-214: game 5, table 26 (26)
 2009	clubs	nir_prm (IFA Premiership), row wal-nir-irl-210: game 10, table 12 (12)
 2009	clubs	nor_prm (Tippeligaen), row nor-fin-82: game 14, table 16 (16)
-2009	clubs	oceania_club_champ (OFC Champions League), row club-world-170: game 0, table 8 (8)
 2009	clubs	uefa_cup (UEFA Europa League), row uefa-69: game 153, table 192 (192 (159 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2009	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-102: game 50, table 20 (20)
 2009	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-103: game 4, table 2 (2)
 2009	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-101: game 24, table 6 (6)
 2009	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-99: game 0, table 53 (53 entrants)
 2009	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-104: game 5, table 1 (1)
-2009	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-100: game 9, table 10 (10)
 2009	clubs	world_club_champ (FIFA Club World Cup), row club-world-154: game 4, table 7 (7)
 2009	clubs	world_cup (FIFA World Cup), row int-world-98: game 0, table 32 (32)
 2009	down	arg_prm (Primera División), row arg-usa-9: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
@@ -102,12 +100,10 @@
 2009	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-387: the game holds 2009, the table says not held
 2009	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-90: the game holds 2010, the table says not held
 2009	not_held	ger_lge_cup (DFL-Ligapokal), row ger-115: the game holds 2009, the table says not held
-2009	not_held	goldcup (Copa América), row int-continental-99: the game holds 2009, the table says not held
 2009	not_held	gre_super (Greek Super Cup), row gre-pol-cro-90: the game holds 2009, the table says not held
 2009	not_held	inter_amer_cup (Copa Interamericana), row club-world-164: the game holds 2009, the table says not held
 2009	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-71: the game holds 2009, the table says not held
 2009	not_held	nir_charity (Charity Shield), row wal-nir-irl-215: the game holds 2009, the table says not held
-2009	not_held	oceania_nations (OFC Nations Cup), row int-continental-98: the game holds 2010, the table says not held
 2009	not_held	world_club_cup (Intercontinental Cup), row club-world-153: the game holds 2009, the table says not held
 2009	not_in_game	arg-usa-198 argentina_rules 'Argentina' (Argentina)
 2009	not_in_game	aus-jap-kor-117 japan_rules 'n/a' (Japan)
@@ -165,4 +161,3 @@
 2009	up	fin_first (Ykkönen), row nor-fin-88: game 2 (+0 play-off places), table 1 (1st (1))
 2009	up	gre_cup (Greek Football Cup), row gre-pol-cro-9: game 2 (+0 play-off places), table na (n/a)
 2009	up	jap_j2 (J.League Division 2), row aus-jap-kor-225: game 2 (+0 play-off places), table 3 (3)
-2009	up	oceania_club_champ (OFC Champions League), row club-world-170: game 2 (+0 play-off places), table na (n/a)

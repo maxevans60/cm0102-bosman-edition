@@ -22,6 +22,7 @@
 2020	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Büyüksehir Belediye Erzurumspor, Fatih Karagümrük
 2020	club_list	Turkish Premier Division: 18 of 21 listed clubs that the database holds (21 listed), 0 other clubs, 18 in all; not in it: Büyüksehir Belediye Erzurumspor, Fatih Karagümrük, Hatayspor; others: -
 2020	club_list	Welsh Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all; not in it: -; others: Airbus UK Broughton FC, Cambrian & Clydach, Carmarthen Town AFC, Colwyn Bay FC, Port Talbot Town, Prestatyn Town FC
+2020	clubs	african_nations (Africa Cup of Nations), row int-continental-216: game 0, table 24 (24)
 2020	clubs	asia_club_champ (AFC Champions League), row club-world-374: game 16, table 40 (40)
 2020	clubs	con_champ (CONCACAF Champions League), row club-world-370: game 8, table 16 (16)
 2020	clubs	european_cup (UEFA Champions League), row uefa-154: game 55, table 79 (79 (32 in the group stage))
@@ -60,18 +61,14 @@
 2020	down	tur_first (Süper Lig), row rus-tur-182: game 3 (+0 play-off places), table 4 (4)
 2020	down	tur_second_b (TFF 2. Lig), row rus-tur-236: game 0 (+0 play-off places), table 6 (6 (White 17th to 19th, Red 18th to 20th))
 2020	down	wel_first (Cymru Premier), row wal-nir-irl-479: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
-2020	idle	african_nations (Africa Cup of Nations), row int-continental-216: the game waits for 2022, the table holds it
 2020	no_row	friendly (Friendly): no table row
 2020	no_row	record_utils ('B' International): no table row
 2020	no_row	record_utils (Reserve): no table row
 2020	no_row	record_utils (Under 21 International): no table row
 2020	no_row	spa_lower (Spanish Lower Division): no table row
 2020	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-377: the game holds 2020, the table says not held
-2020	not_held	asia_nations (AFC Asian Cup), row int-continental-218: the game holds 2020, the table says not held
 2020	not_held	asia_super_cup (Asian Super Cup), row club-world-378: the game holds 2020, the table says not held
 2020	not_held	con_merc_cup (Copa Merconorte), row club-world-367: the game holds 2020, the table says not held
-2020	not_held	fifa_confed (FIFA Confederations Cup), row int-world-238: the game holds 2021, the table says not held
-2020	not_held	goldcup (Copa América), row int-continental-220: the game holds 2021, the table says not held
 2020	not_held	inter_amer_cup (Copa Interamericana), row club-world-373: the game holds 2020, the table says not held
 2020	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-159: the game holds 2020, the table says not held
 2020	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-496: the game holds 2020, the table says not held
@@ -80,7 +77,6 @@
 2020	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-499: the game holds 2020, the table says not held
 2020	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-452: the game holds 2020, the table says not held
 2020	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-398: the game holds 2020, the table says not held
-2020	not_held	oceania_nations (OFC Nations Cup), row int-continental-219: the game holds 2020, the table says not held
 2020	not_held	olympics (Football at the Summer Olympics), row int-world-239: the game holds 2020, the table says not held
 2020	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-236: the game holds 2020, the table says not held
 2020	not_held	sco_chal_cup (Scottish Challenge Cup), row sco-160: the game holds 2020, the table says not held

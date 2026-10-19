@@ -54,7 +54,6 @@
 2003	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-31: game 0, table 39 (39 entrants)
 2003	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-29: game 24, table 34 (34 entrants)
 2003	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-32: game 5, table 12 (12 entrants)
-2003	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-28: game 9, table 10 (10)
 2003	down	arg_prm (Primera División), row arg-usa-3: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2003	down	arg_second (Primera B Nacional), row arg-usa-30: game 0 (+0 play-off places), table 2 (2 (infobox))
 2003	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 4 (+0 play-off places), table 6 (6)
@@ -80,7 +79,7 @@
 2003	not_held	asia_super_cup (Asian Super Cup), row club-world-55: the game holds 2003, the table says not held
 2003	not_held	bra_champ_cup (Copa dos Campeões), row bra-192: the game holds 2003, the table says not held
 2003	not_held	conmebol_merc (Copa Mercosur), row club-world-43: the game holds 2003, the table says not held
-2003	not_held	goldcup (Copa América), row int-continental-33: the game holds 2003, the table says not held
+2003	not_held	goldcup (Copa América), row int-continental-33: the game holds 2004, the table says not held
 2003	not_held	gre_super (Greek Super Cup), row gre-pol-cro-84: the game holds 2003, the table says not held
 2003	not_held	inter_amer_cup (Copa Interamericana), row club-world-50: the game holds 2003, the table says not held
 2003	not_held	nir_charity (Charity Shield), row wal-nir-irl-65: the game holds 2003, the table says not held

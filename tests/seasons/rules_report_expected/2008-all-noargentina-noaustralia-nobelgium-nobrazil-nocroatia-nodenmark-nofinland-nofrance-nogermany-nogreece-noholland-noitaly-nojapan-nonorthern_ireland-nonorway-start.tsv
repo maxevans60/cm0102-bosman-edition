@@ -35,7 +35,6 @@
 2008	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-89: game 24, table 12 (12, then 6)
 2008	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-87: game 5, table 53 (53 entrants)
 2008	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-92: game 5, table 4 (4)
-2008	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-88: game 9, table 10 (10)
 2008	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-183: game 3, table 18 (18)
 2008	clubs	world_club_champ (FIFA Club World Cup), row club-world-135: game 0, table 7 (7)
 2008	down	eng_third (Football League Two), row eng-101: game 1 (+0 play-off places), table 2 (2)
@@ -53,10 +52,8 @@
 2008	no_row	record_utils (Under 21 International): no table row
 2008	no_row	spa_lower (Spanish Lower Division): no table row
 2008	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-149: the game holds 2008, the table says not held
-2008	not_held	asia_nations (AFC Asian Cup), row int-continental-86: the game holds 2008, the table says not held
 2008	not_held	asia_super_cup (Asian Super Cup), row club-world-150: the game holds 2008, the table says not held
 2008	not_held	con_merc_cup (Copa Merconorte), row club-world-139: the game holds 2008, the table says not held
-2008	not_held	goldcup (Copa América), row int-continental-88: the game holds 2009, the table says not held
 2008	not_held	inter_amer_cup (Copa Interamericana), row club-world-145: the game holds 2008, the table says not held
 2008	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-196: the game holds 2008, the table says not held
 2008	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-198: the game holds 2008, the table says not held

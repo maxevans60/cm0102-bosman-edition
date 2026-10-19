@@ -62,7 +62,6 @@
 2008	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-189: game 5, table 29 (29)
 2008	clubs	nir_prm (IFA Premiership), row wal-nir-irl-185: game 10, table 12 (12)
 2008	clubs	nor_prm (Tippeligaen), row nor-fin-72: game 14, table 16 (16)
-2008	clubs	oceania_club_champ (OFC Champions League), row club-world-151: game 0, table 6 (6)
 2008	clubs	oceania_nations (OFC Nations Cup), row int-continental-87: game 3, table 4 (4)
 2008	clubs	olympics (Football at the Summer Olympics), row int-world-95: game 4, table 16 (16)
 2008	clubs	uefa_cup (UEFA Cup), row uefa-61: game 153, table 157 (157 in all, with the 24 Champions League clubs (the page labels it qualifying; i)
@@ -71,7 +70,6 @@
 2008	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-89: game 24, table 12 (12, then 6)
 2008	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-87: game 5, table 53 (53 entrants)
 2008	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-92: game 5, table 4 (4)
-2008	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-88: game 9, table 10 (10)
 2008	clubs	world_club_champ (FIFA Club World Cup), row club-world-135: game 0, table 7 (7)
 2008	down	arg_prm (Primera División), row arg-usa-8: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2008	down	arg_second (Primera B Nacional), row arg-usa-35: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table))
@@ -96,13 +94,11 @@
 2008	no_row	record_utils (Reserve): no table row
 2008	no_row	record_utils (Under 21 International): no table row
 2008	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-149: the game holds 2008, the table says not held
-2008	not_held	asia_nations (AFC Asian Cup), row int-continental-86: the game holds 2008, the table says not held
 2008	not_held	asia_super_cup (Asian Super Cup), row club-world-150: the game holds 2008, the table says not held
 2008	not_held	bra_champ_cup (Copa dos Campeões), row bra-197: the game holds 2008, the table says not held
 2008	not_held	conmebol_merc (Copa Mercosur), row club-world-138: the game holds 2008, the table says not held
 2008	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-386: the game holds 2008, the table says not held
 2008	not_held	ger_lge_cup (DFL-Ligapokal), row ger-102: the game holds 2008, the table says not held
-2008	not_held	goldcup (Copa América), row int-continental-88: the game holds 2009, the table says not held
 2008	not_held	gre_super (Greek Super Cup), row gre-pol-cro-89: the game holds 2008, the table says not held
 2008	not_held	inter_amer_cup (Copa Interamericana), row club-world-145: the game holds 2008, the table says not held
 2008	not_held	nir_charity (Charity Shield), row wal-nir-irl-190: the game holds 2008, the table says not held
@@ -166,4 +162,3 @@
 2008	up	gre_cup (Greek Football Cup), row gre-pol-cro-8: game 2 (+0 play-off places), table na (n/a)
 2008	up	gre_second (Beta Ethniki), row gre-pol-cro-62: game 2 (+0 play-off places), table 3 (3 (1st-3rd))
 2008	up	jap_j2 (J.League Division 2), row aus-jap-kor-224: game 2 (+0 play-off places), table 3 (3)
-2008	up	oceania_club_champ (OFC Champions League), row club-world-151: game 2 (+0 play-off places), table na (n/a)

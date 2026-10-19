@@ -34,7 +34,6 @@
 2009	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-101: game 24, table 6 (6)
 2009	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-99: game 0, table 53 (53 entrants)
 2009	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-104: game 5, table 1 (1)
-2009	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-100: game 9, table 10 (10)
 2009	clubs	wel_cup (Welsh Cup), row wal-nir-irl-207: game 32, table 131 (131)
 2009	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-208: game 3, table 18 (18)
 2009	clubs	world_club_champ (FIFA Club World Cup), row club-world-154: game 4, table 7 (7)
@@ -57,13 +56,11 @@
 2009	not_held	asia_super_cup (Asian Super Cup), row club-world-169: the game holds 2009, the table says not held
 2009	not_held	con_merc_cup (Copa Merconorte), row club-world-158: the game holds 2009, the table says not held
 2009	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-90: the game holds 2010, the table says not held
-2009	not_held	goldcup (Copa América), row int-continental-99: the game holds 2009, the table says not held
 2009	not_held	inter_amer_cup (Copa Interamericana), row club-world-164: the game holds 2009, the table says not held
 2009	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-71: the game holds 2009, the table says not held
 2009	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-223: the game holds 2009, the table says not held
 2009	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-224: the game holds 2009, the table says not held
 2009	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-387: the game holds 2009, the table says not held
-2009	not_held	oceania_nations (OFC Nations Cup), row int-continental-98: the game holds 2010, the table says not held
 2009	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-225: the game holds 2009, the table says not held
 2009	not_held	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-209: the game holds 2009, the table says not held
 2009	not_held	world_club_cup (Intercontinental Cup), row club-world-153: the game holds 2009, the table says not held

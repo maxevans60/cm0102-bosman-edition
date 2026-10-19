@@ -39,8 +39,10 @@
 2018	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Knockbreda FC, Limavady United; others: -
 2018	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Institute FC, Newry City FC; others: -
 2018	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Lilleström SK, Mjøndalen IF; others: -
+2018	clubs	african_nations (Africa Cup of Nations), row int-continental-194: game 0, table 24 (24)
 2018	clubs	arg_prm (Superliga Argentina), row arg-usa-18: game 20, table 26 (26)
 2018	clubs	asia_club_champ (AFC Champions League), row club-world-336: game 16, table 32 (32)
+2018	clubs	asia_nations (AFC Asian Cup), row int-continental-196: game 0, table 24 (24)
 2018	clubs	bel_first (Belgian First Division A), row hol-bel-229: game 18, table 16 (16)
 2018	clubs	bel_second (Belgian First Division B), row hol-bel-230: game 18, table 8 (8)
 2018	clubs	bra_champ_cup (Copa dos Campeões), row bra-207: game 3, table 0 (0)
@@ -76,7 +78,6 @@
 2018	clubs	nir_lge_cup (NIFL Cup), row wal-nir-irl-439: game 5, table 36 (36)
 2018	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-435: game 10, table 12 (12)
 2018	clubs	nor_prm (Eliteserien), row nor-fin-172: game 14, table 16 (16)
-2018	clubs	oceania_club_champ (OFC Champions League), row club-world-341: game 0, table 16 (16)
 2018	clubs	uefa_cup (UEFA Europa League), row uefa-141: game 153, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
 2018	clubs	world_club_champ (FIFA Club World Cup), row club-world-325: game 0, table 7 (7)
 2018	down	arg_prm (Superliga Argentina), row arg-usa-18: game 0 (+0 play-off places), table 4 (4 (worst average over three seasons))
@@ -100,8 +101,6 @@
 2018	down	jap_j2 (J2 League), row aus-jap-kor-234: game 0 (+0 play-off places), table 2 (2)
 2018	down	nir_first (NIFL Championship), row wal-nir-irl-436: game 0 (+0 play-off places), table 1 (1 (pos 12))
 2018	down	nor_first (OBOS-ligaen), row nor-fin-173: game 4 (+0 play-off places), table 2 (15th-16th (2))
-2018	idle	african_nations (Africa Cup of Nations), row int-continental-194: the game waits for 2020, the table holds it
-2018	idle	asia_nations (AFC Asian Cup), row int-continental-196: the game waits for 2020, the table holds it
 2018	idle	fra_first (French CFA), row fra-155: the game waits for 0, the table holds it
 2018	idle	fra_first (French Lower Division), row fra-155: the game waits for 0, the table holds it
 2018	idle	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-211: the game waits for 2020, the table holds it
@@ -114,7 +113,6 @@
 2018	not_held	bra_champ_cup (Copa dos Campeões), row bra-207: the game holds 2018, the table says not held
 2018	not_held	conmebol_merc (Copa Mercosur), row club-world-328: the game holds 2018, the table says not held
 2018	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-396: the game holds 2018, the table says not held
-2018	not_held	fifa_confed (FIFA Confederations Cup), row int-world-214: the game holds 2019, the table says not held
 2018	not_held	ger_lge_cup (DFL-Ligapokal), row ger-232: the game holds 2018, the table says not held
 2018	not_held	gre_super (Greek Super Cup), row gre-pol-cro-99: the game holds 2018, the table says not held
 2018	not_held	inter_amer_cup (Copa Interamericana), row club-world-335: the game holds 2018, the table says not held
@@ -122,7 +120,6 @@
 2018	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-293: the game holds 2018, the table says not held
 2018	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-294: the game holds 2018, the table says not held
 2018	not_held	nir_charity (Charity Shield), row wal-nir-irl-440: the game holds 2018, the table says not held
-2018	not_held	oceania_nations (OFC Nations Cup), row int-continental-197: the game holds 2018, the table says not held
 2018	not_held	world_club_cup (Intercontinental Cup), row club-world-324: the game holds 2018, the table says not held
 2018	not_in_game	arg-usa-126 new 'Trofeo de Campeones de la Superliga' (Argentina)
 2018	not_in_game	arg-usa-153 new 'Copa de la Superliga 2019' (Argentina)
@@ -197,4 +194,3 @@
 2018	up	gre_second (Football League), row gre-pol-cro-72: game 2 (+0 play-off places), table 1 (1 (1st))
 2018	up	ita_ser_c1a (Italian Serie C1/A), row ita-293: game 1 (+4 play-off places), table na (n/a)
 2018	up	ita_ser_c1b (Italian Serie C1/B), row ita-294: game 1 (+4 play-off places), table na (n/a)
-2018	up	oceania_club_champ (OFC Champions League), row club-world-341: game 2 (+0 play-off places), table na (n/a)

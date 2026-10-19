@@ -52,10 +52,10 @@
 2015	clubs	den_first (Danish 1st Division), row den-swe-87: game 16, table 12 (12)
 2015	clubs	den_second (Danish 2nd Divisions), row den-swe-88: game 16, table 24 (24)
 2015	clubs	euro_champ (UEFA European Championship), row int-continental-155: game 0, table 24 (24)
-2015	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-156: game 5, table 53 (53)
+2015	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-156: game 0, table 53 (53)
 2015	clubs	european_cup (UEFA Champions League), row uefa-114: game 55, table 78 (78 (32 in the group stage))
 2015	clubs	fra_third (Championnat National), row fra-130: game 20, table 18 (18)
-2015	clubs	goldcup (Copa América Centenario), row int-continental-165: game 4, table 16 (16)
+2015	clubs	goldcup (Copa América Centenario), row int-continental-165: game 0, table 16 (16)
 2015	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-15: game 4, table 34 (34)
 2015	clubs	gre_prm (Super League Greece), row gre-pol-cro-42: game 14, table 16 (16)
 2015	clubs	gre_second (Football League), row gre-pol-cro-69: game 14, table 18 (18)
@@ -72,7 +72,6 @@
 2015	clubs	nir_lge_cup (NIFL Cup), row wal-nir-irl-364: game 5, table 40 (40)
 2015	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-360: game 10, table 12 (12)
 2015	clubs	nor_prm (Tippeligaen), row nor-fin-142: game 14, table 16 (16)
-2015	clubs	oceania_club_champ (OFC Champions League), row club-world-284: game 0, table 12 (12)
 2015	clubs	oceania_nations (OFC Nations Cup), row int-continental-164: game 0, table 8 (8)
 2015	clubs	uefa_cup (UEFA Europa League), row uefa-117: game 153, table 191 (191 (158 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2015	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-174: game 50, table 54 (54 entrants)
@@ -105,9 +104,7 @@
 2015	no_row	record_utils ('B' International): no table row
 2015	no_row	record_utils (Reserve): no table row
 2015	no_row	record_utils (Under 21 International): no table row
-2015	not_held	african_nations (Africa Cup of Nations), row int-continental-161: the game holds 2016, the table says not held
 2015	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-282: the game holds 2015, the table says not held
-2015	not_held	asia_nations (AFC Asian Cup), row int-continental-163: the game holds 2016, the table says not held
 2015	not_held	asia_super_cup (Asian Super Cup), row club-world-283: the game holds 2015, the table says not held
 2015	not_held	bra_champ_cup (Copa dos Campeões), row bra-204: the game holds 2015, the table says not held
 2015	not_held	conmebol_merc (Copa Mercosur), row club-world-271: the game holds 2015, the table says not held
@@ -183,4 +180,3 @@
 2015	up	gre_cup (Greek Football Cup), row gre-pol-cro-15: game 2 (+0 play-off places), table na (n/a)
 2015	up	ita_ser_c1a (Italian Serie C1/A), row ita-242: game 1 (+4 play-off places), table na (n/a)
 2015	up	ita_ser_c1b (Italian Serie C1/B), row ita-243: game 1 (+4 play-off places), table na (n/a)
-2015	up	oceania_club_champ (OFC Champions League), row club-world-284: game 2 (+0 play-off places), table na (n/a)

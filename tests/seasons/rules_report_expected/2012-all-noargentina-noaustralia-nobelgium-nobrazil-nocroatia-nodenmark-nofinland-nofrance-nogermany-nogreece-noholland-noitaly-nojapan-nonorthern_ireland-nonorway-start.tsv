@@ -13,6 +13,7 @@
 2012	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Halmstad BK, Östers IF; others: -
 2012	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Giresunspor, Sakaryaspor A.S.
 2012	club_list	Welsh Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all; not in it: -; others: CPD Porthmadog, Caersws, Cambrian & Clydach, Haverfordwest County, Rhyl, Technogroup Welshpool
+2012	clubs	african_nations (Africa Cup of Nations), row int-continental-128: game 0, table 16 (16)
 2012	clubs	asia_club_champ (AFC Champions League), row club-world-222: game 16, table 32 (32)
 2012	clubs	con_champ (CONCACAF Champions League), row club-world-218: game 8, table 24 (24)
 2012	clubs	european_cup (UEFA Champions League), row uefa-90: game 55, table 76 (76 (32 in the group stage))
@@ -36,9 +37,8 @@
 2012	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-138: game 50, table 40 (40)
 2012	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-139: game 0, table 10 (10)
 2012	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-137: game 24, table 12 (12, then 6)
-2012	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-135: game 6, table 53 (53 entrants)
+2012	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-135: game 5, table 53 (53 entrants)
 2012	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-140: game 5, table 4 (4)
-2012	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-136: game 10, table 9 (9)
 2012	clubs	wel_cup (Welsh Cup), row wal-nir-irl-282: game 32, table 182 (182)
 2012	clubs	wel_first (Welsh Premier League), row wal-nir-irl-279: game 18, table 12 (12)
 2012	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-283: game 3, table 20 (20)
@@ -52,24 +52,20 @@
 2012	down	swe_first (Superettan), row den-swe-231: game 3 (+0 play-off places), table 2 (2)
 2012	down	tur_second_b (TFF 2. Lig), row rus-tur-228: game 0 (+0 play-off places), table 4 (4)
 2012	down	wel_first (Welsh Premier League), row wal-nir-irl-279: game 0 (+0 play-off places), table 1 (1 (pos 12))
-2012	idle	african_nations (Africa Cup of Nations), row int-continental-128: the game waits for 2014, the table holds it
 2012	no_row	friendly (Friendly): no table row
 2012	no_row	record_utils ('B' International): no table row
 2012	no_row	record_utils (Reserve): no table row
 2012	no_row	record_utils (Under 21 International): no table row
 2012	no_row	spa_lower (Spanish Lower Division): no table row
 2012	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-225: the game holds 2012, the table says not held
-2012	not_held	asia_nations (AFC Asian Cup), row int-continental-130: the game holds 2012, the table says not held
 2012	not_held	asia_super_cup (Asian Super Cup), row club-world-226: the game holds 2012, the table says not held
 2012	not_held	con_merc_cup (Copa Merconorte), row club-world-215: the game holds 2012, the table says not held
-2012	not_held	goldcup (Copa América), row int-continental-132: the game holds 2013, the table says not held
 2012	not_held	inter_amer_cup (Copa Interamericana), row club-world-221: the game holds 2012, the table says not held
 2012	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-95: the game holds 2012, the table says not held
 2012	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-298: the game holds 2012, the table says not held
 2012	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-299: the game holds 2012, the table says not held
 2012	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-444: the game holds 2012, the table says not held
 2012	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-390: the game holds 2012, the table says not held
-2012	not_held	oceania_nations (OFC Nations Cup), row int-continental-131: the game holds 2012, the table says not held
 2012	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-228: the game holds 2012, the table says not held
 2012	not_held	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-284: the game holds 2012, the table says not held
 2012	not_held	world_club_cup (Intercontinental Cup), row club-world-210: the game holds 2012, the table says not held
