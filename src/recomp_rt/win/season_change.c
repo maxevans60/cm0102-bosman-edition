@@ -42,6 +42,7 @@ extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
 extern const SeasonRuleKind season_kind_uefa;          /* slice 22: season_uefa.c */
 extern const SeasonRuleKind season_kind_playoffs;      /* slice 19: season_playoffs.c */
+extern const SeasonRuleKind season_kind_intl;
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_names,                 /* slice 16: competition names (slice 15's names table) */
@@ -51,6 +52,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_sizes,                 /* slice 18: news of league sizes and places (season_sizes.c) */
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
     &season_kind_playoffs,              /* slice 19: promotion play-offs of leagues with none (after sizes) */
+    &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))

@@ -21,7 +21,7 @@
 2007	clubs	african_nations (Africa Cup of Nations), row int-continental-73: game 0, table 16 (16)
 2007	clubs	arg_second (Primera B Nacional), row arg-usa-34: game 25, table 20 (20)
 2007	clubs	asia_club_champ (AFC Champions League), row club-world-127: game 16, table 29 (29)
-2007	clubs	asia_nations (AFC Asian Cup), row int-continental-75: game 0, table 16 (16)
+2007	clubs	asia_nations (AFC Asian Cup), row int-continental-75: game 4, table 16 (16)
 2007	clubs	bel_second (Belgian Second Division), row hol-bel-87: game 18, table 19 (19)
 2007	clubs	bel_third (Belgian Third Division), row hol-bel-88: game 16, table 31 (31 (A 16, B 15))
 2007	clubs	bra_champ_cup (Copa dos Campeões), row bra-196: game 3, table 0 (0)
@@ -42,7 +42,7 @@
 2007	clubs	cro_a1 (Prva HNL), row gre-pol-cro-331: game 16, table 12 (12)
 2007	clubs	den_second (Danish 2nd Divisions), row den-swe-40: game 16, table 32 (32)
 2007	clubs	euro_champ (UEFA European Championship), row int-continental-67: game 0, table 16 (16)
-2007	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-68: game 5, table 50 (50)
+2007	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-68: game 0, table 50 (50)
 2007	clubs	european_cup (UEFA Champions League), row uefa-50: game 55, table 76 (76 (32 in the group stage))
 2007	clubs	fin_first (Ykkönen), row nor-fin-68: game 10, table 14 (14)
 2007	clubs	fin_prm (Veikkausliiga), row nor-fin-67: game 12, table 14 (14)
@@ -61,14 +61,12 @@
 2007	clubs	nir_first (Irish First Division), row wal-nir-irl-161: game 10, table 12 (12)
 2007	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-164: game 5, table 16 (16)
 2007	clubs	nir_prm (Irish Premier League), row wal-nir-irl-160: game 10, table 16 (16)
-2007	clubs	oceania_club_champ (OFC Champions League), row club-world-132: game 0, table 9 (9)
 2007	clubs	oceania_nations (OFC Nations Cup), row int-continental-76: game 0, table 4 (4)
 2007	clubs	uefa_cup (UEFA Cup), row uefa-53: game 153, table 80 (80 in the first round; total not stated on the page)
 2007	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-78: game 50, table 53 (53 entrants)
 2007	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-79: game 0, table 43 (43 entrants)
 2007	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-77: game 24, table 35 (35 entrants)
 2007	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-80: game 5, table 11 (11 entrants)
-2007	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-76: game 9, table 10 (10)
 2007	clubs	world_club_champ (FIFA Club World Cup), row club-world-116: game 4, table 7 (7)
 2007	down	arg_prm (Primera División), row arg-usa-7: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2007	down	arg_second (Primera B Nacional), row arg-usa-34: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table))
@@ -95,7 +93,6 @@
 2007	not_held	bra_champ_cup (Copa dos Campeões), row bra-196: the game holds 2007, the table says not held
 2007	not_held	conmebol_merc (Copa Mercosur), row club-world-119: the game holds 2007, the table says not held
 2007	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-385: the game holds 2007, the table says not held
-2007	not_held	goldcup (Copa América), row int-continental-77: the game holds 2007, the table says not held
 2007	not_held	inter_amer_cup (Copa Interamericana), row club-world-126: the game holds 2007, the table says not held
 2007	not_held	nir_charity (Charity Shield), row wal-nir-irl-165: the game holds 2007, the table says not held
 2007	not_held	olympics (Football at the Summer Olympics), row int-world-83: the game holds 2008, the table says not held
@@ -159,4 +156,3 @@
 2007	up	fin_first (Ykkönen), row nor-fin-68: game 2 (+0 play-off places), table 1 (1st (1))
 2007	up	gre_cup (Greek Football Cup), row gre-pol-cro-7: game 2 (+0 play-off places), table na (n/a)
 2007	up	gre_second (Beta Ethniki), row gre-pol-cro-61: game 2 (+0 play-off places), table 3 (3 (1st-3rd))
-2007	up	oceania_club_champ (OFC Champions League), row club-world-132: game 2 (+0 play-off places), table na (n/a)

@@ -37,7 +37,6 @@
 2013	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-149: game 24, table 6 (6)
 2013	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-147: game 0, table 53 (53 entrants)
 2013	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-152: game 5, table 1 (1)
-2013	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-148: game 10, table 9 (9)
 2013	clubs	wel_cup (Welsh Cup), row wal-nir-irl-307: game 32, table 191 (191)
 2013	clubs	wel_first (Welsh Premier League), row wal-nir-irl-304: game 18, table 12 (12)
 2013	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-308: game 3, table 20 (20)
@@ -60,18 +59,15 @@
 2013	no_row	record_utils (Reserve): no table row
 2013	no_row	record_utils (Under 21 International): no table row
 2013	no_row	spa_lower (Spanish Lower Division): no table row
-2013	not_held	african_nations (Africa Cup of Nations), row int-continental-139: the game holds 2014, the table says not held
 2013	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-244: the game holds 2013, the table says not held
 2013	not_held	asia_super_cup (Asian Super Cup), row club-world-245: the game holds 2013, the table says not held
 2013	not_held	con_merc_cup (Copa Merconorte), row club-world-234: the game holds 2013, the table says not held
 2013	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-134: the game holds 2014, the table says not held
-2013	not_held	goldcup (Copa América), row int-continental-143: the game holds 2013, the table says not held
 2013	not_held	inter_amer_cup (Copa Interamericana), row club-world-240: the game holds 2013, the table says not held
 2013	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-103: the game holds 2013, the table says not held
 2013	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-324: the game holds 2013, the table says not held
 2013	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-445: the game holds 2013, the table says not held
 2013	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-391: the game holds 2013, the table says not held
-2013	not_held	oceania_nations (OFC Nations Cup), row int-continental-142: the game holds 2014, the table says not held
 2013	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-229: the game holds 2013, the table says not held
 2013	not_held	pol_super (Polish Super Cup), row gre-pol-cro-283: the game holds 2013, the table says not held
 2013	not_held	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-309: the game holds 2013, the table says not held

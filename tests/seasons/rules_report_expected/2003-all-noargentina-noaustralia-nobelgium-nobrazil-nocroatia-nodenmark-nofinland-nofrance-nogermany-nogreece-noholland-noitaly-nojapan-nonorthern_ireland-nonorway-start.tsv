@@ -30,7 +30,6 @@
 2003	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-31: game 0, table 39 (39 entrants)
 2003	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-29: game 24, table 34 (34 entrants)
 2003	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-32: game 5, table 12 (12 entrants)
-2003	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-28: game 9, table 10 (10)
 2003	clubs	wel_first (Welsh Premier League), row wal-nir-irl-54: game 18, table 17 (17)
 2003	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-59: game 4, table 12 (12)
 2003	down	eng_third (Football League Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
@@ -47,7 +46,7 @@
 2003	not_held	asia_nations (AFC Asian Cup), row int-continental-31: the game holds 2004, the table says not held
 2003	not_held	asia_super_cup (Asian Super Cup), row club-world-55: the game holds 2003, the table says not held
 2003	not_held	con_merc_cup (Copa Merconorte), row club-world-44: the game holds 2003, the table says not held
-2003	not_held	goldcup (Copa América), row int-continental-33: the game holds 2003, the table says not held
+2003	not_held	goldcup (Copa América), row int-continental-33: the game holds 2004, the table says not held
 2003	not_held	inter_amer_cup (Copa Interamericana), row club-world-50: the game holds 2003, the table says not held
 2003	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-71: the game holds 2003, the table says not held
 2003	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-73: the game holds 2003, the table says not held

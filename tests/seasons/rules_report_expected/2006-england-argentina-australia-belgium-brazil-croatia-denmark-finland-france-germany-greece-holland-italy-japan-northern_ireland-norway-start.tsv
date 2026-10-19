@@ -53,7 +53,6 @@
 2006	clubs	nir_first (Irish First Division), row wal-nir-irl-136: game 10, table 12 (12)
 2006	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-139: game 5, table 16 (16)
 2006	clubs	nir_prm (Irish Premier League), row wal-nir-irl-135: game 10, table 16 (16)
-2006	clubs	oceania_club_champ (OFC Champions League), row club-world-113: game 0, table 6 (6)
 2006	clubs	uefa_cup (UEFA Cup), row uefa-45: game 153, table 155 (155 in all: 131 direct entrants (Q1 70, Q2 29 with 11 Intertoto winners, R1 32 w)
 2006	clubs	world_club_champ (FIFA Club World Cup), row club-world-97: game 0, table 6 (6)
 2006	down	arg_prm (Primera División), row arg-usa-6: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
@@ -71,22 +70,21 @@
 2006	down	ita_ser_c1a (Serie C1 girone A), row ita-89: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2006	down	ita_ser_c1b (Serie C1 girone B), row ita-90: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2006	down	nir_first (Irish First Division), row wal-nir-irl-136: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
-2006	idle	fra_first (French CFA), row fra-47: the game waits for -29349, the table holds it
-2006	idle	fra_first (French Lower Division), row fra-47: the game waits for -1, the table holds it
+2006	idle	fra_first (French CFA), row fra-47: the game waits for 1035, the table holds it
+2006	idle	fra_first (French Lower Division), row fra-47: the game waits for 776, the table holds it
 2006	no_row	friendly (Friendly): no table row
 2006	no_row	record_utils ('B' International): no table row
 2006	no_row	record_utils (Reserve): no table row
 2006	no_row	record_utils (Under 21 International): no table row
 2006	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-111: the game holds 2006, the table says not held
+2006	not_held	asia_nations (AFC Asian Cup), row int-continental-64: the game holds 2007, the table says not held
 2006	not_held	asia_super_cup (Asian Super Cup), row club-world-112: the game holds 2006, the table says not held
 2006	not_held	bra_champ_cup (Copa dos Campeões), row bra-195: the game holds 2006, the table says not held
 2006	not_held	conmebol_merc (Copa Mercosur), row club-world-100: the game holds 2006, the table says not held
 2006	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-384: the game holds 2006, the table says not held
-2006	not_held	fifa_confed (FIFA Confederations Cup), row int-world-70: the game holds 2007, the table says not held
 2006	not_held	gre_super (Greek Super Cup), row gre-pol-cro-87: the game holds 2006, the table says not held
 2006	not_held	inter_amer_cup (Copa Interamericana), row club-world-107: the game holds 2006, the table says not held
 2006	not_held	nir_charity (Charity Shield), row wal-nir-irl-140: the game holds 2006, the table says not held
-2006	not_held	oceania_nations (OFC Nations Cup), row int-continental-65: the game holds 2006, the table says not held
 2006	not_held	world_club_cup (Intercontinental Cup), row club-world-96: the game holds 2006, the table says not held
 2006	not_in_game	arg-usa-195 argentina_rules 'Argentina' (Argentina)
 2006	not_in_game	aus-jap-kor-114 japan_rules 'n/a' (Japan)
@@ -145,4 +143,3 @@
 2006	up	fin_first (Ykkönen), row nor-fin-58: game 2 (+0 play-off places), table 1 (1st (1))
 2006	up	gre_cup (Greek Football Cup), row gre-pol-cro-6: game 2 (+0 play-off places), table na (n/a)
 2006	up	gre_second (Beta Ethniki), row gre-pol-cro-60: game 2 (+0 play-off places), table 3 (3 (1st-3rd))
-2006	up	oceania_club_champ (OFC Champions League), row club-world-113: game 2 (+0 play-off places), table na (n/a)

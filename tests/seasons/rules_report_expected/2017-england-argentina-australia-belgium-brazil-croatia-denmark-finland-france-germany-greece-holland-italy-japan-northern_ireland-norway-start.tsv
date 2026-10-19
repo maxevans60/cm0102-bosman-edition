@@ -78,7 +78,6 @@
 2017	clubs	nir_lge_cup (NIFL Cup), row wal-nir-irl-414: game 5, table 36 (36)
 2017	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-410: game 10, table 12 (12)
 2017	clubs	nor_prm (Eliteserien), row nor-fin-162: game 14, table 16 (16)
-2017	clubs	oceania_club_champ (OFC Champions League), row club-world-322: game 0, table 16 (16)
 2017	clubs	uefa_cup (UEFA Europa League), row uefa-133: game 153, table 190 (190 (157 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2017	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-198: game 50, table 20 (20)
 2017	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-199: game 4, table 12 (12)
@@ -113,7 +112,6 @@
 2017	no_row	record_utils ('B' International): no table row
 2017	no_row	record_utils (Reserve): no table row
 2017	no_row	record_utils (Under 21 International): no table row
-2017	not_held	african_nations (Africa Cup of Nations), row int-continental-183: the game holds 2018, the table says not held
 2017	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-320: the game holds 2017, the table says not held
 2017	not_held	asia_super_cup (Asian Super Cup), row club-world-321: the game holds 2017, the table says not held
 2017	not_held	bra_champ_cup (Copa dos Campeões), row bra-206: the game holds 2017, the table says not held
@@ -121,13 +119,11 @@
 2017	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-395: the game holds 2017, the table says not held
 2017	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-178: the game holds 2018, the table says not held
 2017	not_held	ger_lge_cup (DFL-Ligapokal), row ger-219: the game holds 2017, the table says not held
-2017	not_held	goldcup (Copa América), row int-continental-187: the game holds 2017, the table says not held
 2017	not_held	gre_super (Greek Super Cup), row gre-pol-cro-98: the game holds 2017, the table says not held
 2017	not_held	inter_amer_cup (Copa Interamericana), row club-world-316: the game holds 2017, the table says not held
 2017	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-135: the game holds 2017, the table says not held
 2017	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-276: the game holds 2017, the table says not held
 2017	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-277: the game holds 2017, the table says not held
-2017	not_held	oceania_nations (OFC Nations Cup), row int-continental-186: the game holds 2018, the table says not held
 2017	not_held	world_club_cup (Intercontinental Cup), row club-world-305: the game holds 2017, the table says not held
 2017	not_in_game	arg-usa-206 argentina_rules 'Argentina' (Argentina)
 2017	not_in_game	arg-usa-71 new 'Copa Argentina' (Argentina)
@@ -197,4 +193,3 @@
 2017	up	gre_cup (Greek Football Cup), row gre-pol-cro-17: game 2 (+0 play-off places), table na (n/a)
 2017	up	ita_ser_c1a (Italian Serie C1/A), row ita-276: game 1 (+4 play-off places), table na (n/a)
 2017	up	ita_ser_c1b (Italian Serie C1/B), row ita-277: game 1 (+4 play-off places), table na (n/a)
-2017	up	oceania_club_champ (OFC Champions League), row club-world-322: game 2 (+0 play-off places), table na (n/a)

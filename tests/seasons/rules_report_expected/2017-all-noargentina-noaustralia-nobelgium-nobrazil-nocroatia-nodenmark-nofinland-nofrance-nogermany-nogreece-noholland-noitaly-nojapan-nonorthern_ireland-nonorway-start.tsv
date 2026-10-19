@@ -61,18 +61,15 @@
 2017	no_row	record_utils (Reserve): no table row
 2017	no_row	record_utils (Under 21 International): no table row
 2017	no_row	spa_lower (Spanish Lower Division): no table row
-2017	not_held	african_nations (Africa Cup of Nations), row int-continental-183: the game holds 2018, the table says not held
 2017	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-320: the game holds 2017, the table says not held
 2017	not_held	asia_super_cup (Asian Super Cup), row club-world-321: the game holds 2017, the table says not held
 2017	not_held	con_merc_cup (Copa Merconorte), row club-world-310: the game holds 2017, the table says not held
 2017	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-178: the game holds 2018, the table says not held
-2017	not_held	goldcup (Copa América), row int-continental-187: the game holds 2017, the table says not held
 2017	not_held	inter_amer_cup (Copa Interamericana), row club-world-316: the game holds 2017, the table says not held
 2017	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-135: the game holds 2017, the table says not held
 2017	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-424: the game holds 2017, the table says not held
 2017	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-449: the game holds 2017, the table says not held
 2017	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-395: the game holds 2017, the table says not held
-2017	not_held	oceania_nations (OFC Nations Cup), row int-continental-186: the game holds 2018, the table says not held
 2017	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-233: the game holds 2017, the table says not held
 2017	not_held	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-409: the game holds 2017, the table says not held
 2017	not_held	world_club_cup (Intercontinental Cup), row club-world-305: the game holds 2017, the table says not held

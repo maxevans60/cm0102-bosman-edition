@@ -38,6 +38,7 @@
 2020	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Knockbreda FC, Queen's University; others: -
 2020	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Portadown FC, Warrenpoint Town FC; others: -
 2020	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Sandefjord Fotball, Tromsø IL; others: -
+2020	clubs	african_nations (Africa Cup of Nations), row int-continental-216: game 0, table 24 (24)
 2020	clubs	arg_prm (Liga Profesional de Fútbol), row arg-usa-20: game 20, table 26 (26)
 2020	clubs	arg_second (Primera Nacional), row arg-usa-47: game 25, table 35 (35)
 2020	clubs	asia_club_champ (AFC Champions League), row club-world-374: game 16, table 40 (40)
@@ -96,7 +97,6 @@
 2020	down	jap_j2 (J2 League), row aus-jap-kor-236: game 0 (+0 play-off places), table 4 (4)
 2020	down	nir_first (NIFL Championship), row wal-nir-irl-486: game 0 (+0 play-off places), table 1 (1 (pos 12; inference from the rules of 2019/20 and 2021/22))
 2020	down	nor_first (OBOS-ligaen), row nor-fin-193: game 4 (+0 play-off places), table 2 (15th-16th (2))
-2020	idle	african_nations (Africa Cup of Nations), row int-continental-216: the game waits for 2022, the table holds it
 2020	idle	fra_first (French CFA), row fra-173: the game waits for 0, the table holds it
 2020	idle	fra_first (French Lower Division), row fra-173: the game waits for 0, the table holds it
 2020	no_row	friendly (Friendly): no table row
@@ -104,16 +104,13 @@
 2020	no_row	record_utils (Reserve): no table row
 2020	no_row	record_utils (Under 21 International): no table row
 2020	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-377: the game holds 2020, the table says not held
-2020	not_held	asia_nations (AFC Asian Cup), row int-continental-218: the game holds 2020, the table says not held
 2020	not_held	asia_super_cup (Asian Super Cup), row club-world-378: the game holds 2020, the table says not held
 2020	not_held	bel_super (Belgian Super Cup), row hol-bel-260: the game holds 2020, the table says not held
 2020	not_held	bra_champ_cup (Copa dos Campeões), row bra-209: the game holds 2020, the table says not held
 2020	not_held	conmebol_merc (Copa Mercosur), row club-world-366: the game holds 2020, the table says not held
 2020	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-398: the game holds 2020, the table says not held
-2020	not_held	fifa_confed (FIFA Confederations Cup), row int-world-238: the game holds 2021, the table says not held
 2020	not_held	fra_lge_cup (Coupe de la Ligue), row fra-179: the game holds 2020, the table says not held
 2020	not_held	ger_lge_cup (DFL-Ligapokal), row ger-258: the game holds 2020, the table says not held
-2020	not_held	goldcup (Copa América), row int-continental-220: the game holds 2021, the table says not held
 2020	not_held	gre_super (Greek Super Cup), row gre-pol-cro-101: the game holds 2020, the table says not held
 2020	not_held	hol_super (Johan Cruyff Shield), row hol-bel-253: the game holds 2020, the table says not held
 2020	not_held	inter_amer_cup (Copa Interamericana), row club-world-373: the game holds 2020, the table says not held
@@ -123,8 +120,6 @@
 2020	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-328: the game holds 2020, the table says not held
 2020	not_held	nir_charity (Charity Shield), row wal-nir-irl-490: the game holds 2020, the table says not held
 2020	not_held	nir_lge_cup (NIFL Cup), row wal-nir-irl-489: the game holds 2020, the table says not held
-2020	not_held	oceania_club_champ (OFC Champions League), row club-world-379: the game holds 2020, the table says not held
-2020	not_held	oceania_nations (OFC Nations Cup), row int-continental-219: the game holds 2020, the table says not held
 2020	not_held	olympics (Football at the Summer Olympics), row int-world-239: the game holds 2020, the table says not held
 2020	not_held	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-236: the game holds 2020, the table says not held
 2020	not_held	world_club_cup (Intercontinental Cup), row club-world-362: the game holds 2020, the table says not held
@@ -204,4 +199,3 @@
 2020	up	hol_first (Eerste Divisie), row hol-bel-250: game 1 (+0 play-off places), table 2 (2 (champion and runner-up; Jong teams cannot be promoted))
 2020	up	ita_ser_c1a (Italian Serie C1/A), row ita-327: game 1 (+4 play-off places), table na (n/a)
 2020	up	ita_ser_c1b (Italian Serie C1/B), row ita-328: game 1 (+4 play-off places), table na (n/a)
-2020	up	oceania_club_champ (OFC Champions League), row club-world-379: game 2 (+0 play-off places), table na (n/a)

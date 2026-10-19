@@ -12,6 +12,7 @@
 2010	club_list	Turkish 2. Division Category A: 17 of 17 listed clubs that the database holds (17 listed), 3 other clubs, 20 in all; not in it: -; others: Gençlerbirligi Hacettepespor, Istanbulspor A.S., Malatyaspor
 2010	club_list	Welsh Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all; not in it: -; others: CPD Porthmadog, Caersws, Elements Cefn Druids, GAP Connah's Quay, Rhyl, Technogroup Welshpool
 2010	clubs	asia_club_champ (AFC Champions League), row club-world-184: game 16, table 32 (32)
+2010	clubs	asia_nations (AFC Asian Cup), row int-continental-108: game 0, table 16 (16)
 2010	clubs	con_champ (CONCACAF Champions League), row club-world-180: game 8, table 24 (24)
 2010	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-101: game 5, table 51 (51)
 2010	clubs	european_cup (UEFA Champions League), row uefa-74: game 55, table 76 (76 (32 in the group stage))
@@ -44,7 +45,6 @@
 2010	down	tur_second (TFF 1. Lig), row rus-tur-199: game 3 (+0 play-off places), table 2 (2 (16th and 17th))
 2010	down	tur_second_b (TFF 2. Lig), row rus-tur-226: game 0 (+0 play-off places), table 6 (6)
 2010	down	wel_first (Welsh Premier League), row wal-nir-irl-229: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
-2010	idle	asia_nations (AFC Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
 2010	idle	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-115: the game waits for 2012, the table holds it
 2010	idle	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-113: the game waits for 2012, the table holds it
 2010	no_row	friendly (Friendly): no table row
@@ -55,14 +55,12 @@
 2010	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-187: the game holds 2010, the table says not held
 2010	not_held	asia_super_cup (Asian Super Cup), row club-world-188: the game holds 2010, the table says not held
 2010	not_held	con_merc_cup (Copa Merconorte), row club-world-177: the game holds 2010, the table says not held
-2010	not_held	fifa_confed (FIFA Confederations Cup), row int-world-118: the game holds 2011, the table says not held
 2010	not_held	goldcup (Copa América), row int-continental-110: the game holds 2011, the table says not held
 2010	not_held	inter_amer_cup (Copa Interamericana), row club-world-183: the game holds 2010, the table says not held
 2010	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-79: the game holds 2010, the table says not held
 2010	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-248: the game holds 2010, the table says not held
 2010	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-249: the game holds 2010, the table says not held
 2010	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-388: the game holds 2010, the table says not held
-2010	not_held	oceania_nations (OFC Nations Cup), row int-continental-109: the game holds 2010, the table says not held
 2010	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-226: the game holds 2010, the table says not held
 2010	not_held	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-234: the game holds 2010, the table says not held
 2010	not_held	world_club_cup (Intercontinental Cup), row club-world-172: the game holds 2010, the table says not held

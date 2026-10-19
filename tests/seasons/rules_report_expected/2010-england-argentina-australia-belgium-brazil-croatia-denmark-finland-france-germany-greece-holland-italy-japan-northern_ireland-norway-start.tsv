@@ -23,6 +23,7 @@
 2010	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: IK Start, Sparta Sarpsborg; others: -
 2010	clubs	arg_second (Primera B Nacional), row arg-usa-37: game 25, table 20 (20)
 2010	clubs	asia_club_champ (AFC Champions League), row club-world-184: game 16, table 32 (32)
+2010	clubs	asia_nations (AFC Asian Cup), row int-continental-108: game 0, table 16 (16)
 2010	clubs	bel_first (Belgian Pro League), row hol-bel-125: game 18, table 16 (16)
 2010	clubs	bel_third (Belgian Third Division), row hol-bel-127: game 16, table 36 (36 (A 18, B 18))
 2010	clubs	bra_champ_cup (Copa dos Campeões), row bra-199: game 3, table 0 (0)
@@ -56,7 +57,6 @@
 2010	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-239: game 5, table 42 (42)
 2010	clubs	nir_prm (IFA Premiership), row wal-nir-irl-235: game 10, table 12 (12)
 2010	clubs	nor_prm (Tippeligaen), row nor-fin-92: game 14, table 16 (16)
-2010	clubs	oceania_club_champ (OFC Champions League), row club-world-189: game 0, table 8 (8)
 2010	clubs	uefa_cup (UEFA Europa League), row uefa-77: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2010	clubs	world_club_champ (FIFA Club World Cup), row club-world-173: game 0, table 7 (7)
 2010	down	arg_prm (Primera División), row arg-usa-10: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
@@ -79,7 +79,6 @@
 2010	down	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-158: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2010	down	jap_j1 (J.League Division 1), row aus-jap-kor-199: game 2 (+0 play-off places), table 3 (3)
 2010	down	nir_first (IFA Championship 1), row wal-nir-irl-236: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
-2010	idle	asia_nations (AFC Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
 2010	idle	fra_first (French CFA), row fra-83: the game waits for 0, the table holds it
 2010	idle	fra_first (French Lower Division), row fra-83: the game waits for 0, the table holds it
 2010	idle	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-115: the game waits for 2012, the table holds it
@@ -93,14 +92,12 @@
 2010	not_held	bra_champ_cup (Copa dos Campeões), row bra-199: the game holds 2010, the table says not held
 2010	not_held	conmebol_merc (Copa Mercosur), row club-world-176: the game holds 2010, the table says not held
 2010	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-388: the game holds 2010, the table says not held
-2010	not_held	fifa_confed (FIFA Confederations Cup), row int-world-118: the game holds 2011, the table says not held
 2010	not_held	ger_lge_cup (DFL-Ligapokal), row ger-128: the game holds 2010, the table says not held
 2010	not_held	goldcup (Copa América), row int-continental-110: the game holds 2011, the table says not held
 2010	not_held	gre_super (Greek Super Cup), row gre-pol-cro-91: the game holds 2010, the table says not held
 2010	not_held	inter_amer_cup (Copa Interamericana), row club-world-183: the game holds 2010, the table says not held
 2010	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-79: the game holds 2010, the table says not held
 2010	not_held	nir_charity (Charity Shield), row wal-nir-irl-240: the game holds 2010, the table says not held
-2010	not_held	oceania_nations (OFC Nations Cup), row int-continental-109: the game holds 2010, the table says not held
 2010	not_held	world_club_cup (Intercontinental Cup), row club-world-172: the game holds 2010, the table says not held
 2010	not_in_game	arg-usa-199 argentina_rules 'Argentina' (Argentina)
 2010	not_in_game	aus-jap-kor-10 australia_rules 'n/a' (Australia)
@@ -160,4 +157,3 @@
 2010	up	fin_first (Ykkönen), row nor-fin-98: game 2 (+0 play-off places), table 1 (1st (1))
 2010	up	gre_cup (Greek Football Cup), row gre-pol-cro-10: game 2 (+0 play-off places), table na (n/a)
 2010	up	jap_j2 (J.League Division 2), row aus-jap-kor-226: game 2 (+0 play-off places), table 3 (3)
-2010	up	oceania_club_champ (OFC Champions League), row club-world-189: game 2 (+0 play-off places), table na (n/a)

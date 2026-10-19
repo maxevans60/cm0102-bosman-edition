@@ -21,9 +21,9 @@
 2019	clubs	asia_club_champ (AFC Champions League), row club-world-355: game 16, table 29 (29)
 2019	clubs	con_champ (CONCACAF Champions League), row club-world-351: game 8, table 16 (16)
 2019	clubs	euro_champ (UEFA European Championship), row int-continental-199: game 0, table 24 (24)
-2019	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-200: game 5, table 55 (55)
+2019	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-200: game 0, table 55 (55)
 2019	clubs	european_cup (UEFA Champions League), row uefa-146: game 55, table 79 (79 (32 in the group stage))
-2019	clubs	goldcup (Copa América), row int-continental-209: game 4, table 12 (12)
+2019	clubs	goldcup (Copa América), row int-continental-209: game 0, table 12 (12)
 2019	clubs	ire_chal_cup (FAI Cup), row wal-nir-irl-469: game 42, table 19 (19)
 2019	clubs	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-470: game 3, table 22 (22)
 2019	clubs	ire_prm (League of Ireland Premier Division), row wal-nir-irl-466: game 12, table 10 (10)
@@ -58,14 +58,13 @@
 2019	down	tur_second (TFF 1. Lig), row rus-tur-208: game 3 (+0 play-off places), table 0 (0 (no relegation after the COVID-19 stop))
 2019	down	tur_second_b (TFF 2. Lig), row rus-tur-235: game 0 (+0 play-off places), table 6 (6 (16th to 18th of each group))
 2019	down	wel_first (Cymru Premier), row wal-nir-irl-454: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
+2019	idle	oceania_nations (OFC Nations Cup), row int-continental-208: the game waits for 2024, the table holds it
 2019	no_row	friendly (Friendly): no table row
 2019	no_row	record_utils ('B' International): no table row
 2019	no_row	record_utils (Reserve): no table row
 2019	no_row	record_utils (Under 21 International): no table row
 2019	no_row	spa_lower (Spanish Lower Division): no table row
-2019	not_held	african_nations (Africa Cup of Nations), row int-continental-205: the game holds 2020, the table says not held
 2019	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-358: the game holds 2019, the table says not held
-2019	not_held	asia_nations (AFC Asian Cup), row int-continental-207: the game holds 2020, the table says not held
 2019	not_held	asia_super_cup (Asian Super Cup), row club-world-359: the game holds 2019, the table says not held
 2019	not_held	con_merc_cup (Copa Merconorte), row club-world-348: the game holds 2019, the table says not held
 2019	not_held	inter_amer_cup (Copa Interamericana), row club-world-354: the game holds 2019, the table says not held

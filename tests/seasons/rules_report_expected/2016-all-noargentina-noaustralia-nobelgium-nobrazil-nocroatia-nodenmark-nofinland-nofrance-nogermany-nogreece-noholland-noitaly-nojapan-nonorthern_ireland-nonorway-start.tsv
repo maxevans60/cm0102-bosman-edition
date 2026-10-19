@@ -12,6 +12,7 @@
 2016	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: AFC United, Halmstads BK; others: -
 2016	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: 1461 Trabzon, Kayseri Erciyesspor
 2016	club_list	Welsh Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all; not in it: -; others: Barry Town, Caernarfon Town, Cardiff Met, Denbigh Town, Haverfordwest County, Port Talbot Town
+2016	clubs	african_nations (Africa Cup of Nations), row int-continental-172: game 0, table 16 (16)
 2016	clubs	asia_club_champ (AFC Champions League), row club-world-298: game 16, table 32 (32)
 2016	clubs	con_champ (CONCACAF Champions League), row club-world-294: game 8, table 24 (24)
 2016	clubs	european_cup (UEFA Champions League), row uefa-122: game 55, table 78 (78 (32 in the group stage))
@@ -53,23 +54,19 @@
 2016	down	swe_first (Superettan), row den-swe-255: game 3 (+0 play-off places), table 2 (2)
 2016	down	tur_second_b (TFF 2. Lig), row rus-tur-232: game 0 (+0 play-off places), table 6 (6)
 2016	down	wel_first (Welsh Premier League), row wal-nir-irl-379: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
-2016	idle	african_nations (Africa Cup of Nations), row int-continental-172: the game waits for 2018, the table holds it
 2016	no_row	friendly (Friendly): no table row
 2016	no_row	record_utils ('B' International): no table row
 2016	no_row	record_utils (Reserve): no table row
 2016	no_row	record_utils (Under 21 International): no table row
 2016	no_row	spa_lower (Spanish Lower Division): no table row
 2016	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-301: the game holds 2016, the table says not held
-2016	not_held	asia_nations (AFC Asian Cup), row int-continental-174: the game holds 2016, the table says not held
 2016	not_held	asia_super_cup (Asian Super Cup), row club-world-302: the game holds 2016, the table says not held
 2016	not_held	con_merc_cup (Copa Merconorte), row club-world-291: the game holds 2016, the table says not held
-2016	not_held	goldcup (Copa América), row int-continental-176: the game holds 2017, the table says not held
 2016	not_held	inter_amer_cup (Copa Interamericana), row club-world-297: the game holds 2016, the table says not held
 2016	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-127: the game holds 2016, the table says not held
 2016	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-399: the game holds 2016, the table says not held
 2016	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-448: the game holds 2016, the table says not held
 2016	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-394: the game holds 2016, the table says not held
-2016	not_held	oceania_nations (OFC Nations Cup), row int-continental-175: the game holds 2016, the table says not held
 2016	not_held	pol_lge_cup (Polish League Cup), row gre-pol-cro-232: the game holds 2016, the table says not held
 2016	not_held	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-384: the game holds 2016, the table says not held
 2016	not_held	world_club_cup (Intercontinental Cup), row club-world-286: the game holds 2016, the table says not held
