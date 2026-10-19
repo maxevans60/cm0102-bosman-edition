@@ -25,8 +25,20 @@ PLAYOFF_WINNERS = {
 
 # Clubs whose FM2007 and template names do not match (FM long name -> template long name). FM2007 also has an
 # older "Erciyesspor" with no players; the 2006/07 Süper Lig club is Kayseri Erciyesspor.
-CLUB_FIX = {"Borussia Mönchengladbach": "Borussia M'gladbach", "Kayseri Erciyesspor": "Erciyesspor"}
+CLUB_FIX = {"Borussia Mönchengladbach": "Borussia M'gladbach", "Kayseri Erciyesspor": "Erciyesspor",
+            "Gençlerbirligi OFTASSpor": "Darica Gençlerbirligi"}
 SUCCESSORS = {}
+# Real clubs whose template record has another name (real name -> template long name). Record ids are the same in
+# the Update Team databases, so a later database names the record: 2938 is "Gençlerbirligi OFTASSpor" in February
+# 2008, 2512 "Sibir Novosibirsk" in December 2008 (Chkalovets-1936 until 2006); 8758 "Spartak-MGK" plays at CSK
+# Ryazan, the stadium of Spartak-MZhK Ryazan, in November 2007. Wexford Youths (founded 2007) has no template
+# record and FM2007 lacks it: a filler takes its slot.
+ALIAS = {"Gençlerbirliği OFTAŞ": "Darica Gençlerbirligi", "Sibir Novosibirsk": "Sibyr",
+         "Spartak-MZhK Ryazan": "Spartak-MGK"}
+# Template club records that lack a nation or stadium for the start season: C.F. Ciudad de Murcia moved to Granada in
+# 2007, so November 2007 keeps it with no nation and no stadium. September 2005 has nation Spain and stadium 4495
+# (Sánchez Cánovas, the same id in November 2007).
+CLUB_REPAIR = {"C.F. Ciudad de Murcia": {"nation": "Spain", "stadium": 4495}}
 
 # The real 2006/07 divisions of the playable nations (and the top divisions of Austria and Switzerland), keyed by the
 # template's division name, each nation top down. Calendar-year leagues: the 2007 season (the project's club tables
@@ -42,8 +54,8 @@ REAL = {
     'Italian Serie C1/A': ['Grosseto', 'Sassuolo', 'Pisa', 'Venezia', 'Monza', 'Cittadella', 'Padova', 'Lucchese', 'Pistoiese', 'Novara', 'Massese', 'Pro Patria', 'Cremonese', 'Pro Sesto', 'Sangiovannese', 'Pizzighettone', 'Ivrea', 'Pavia'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Serie_C1
     'Italian Serie C1/B': ['Ravenna', 'Avellino', 'Cavese', 'Foggia', 'Taranto', 'Perugia', 'Juve Stabia', 'Sambenedettese', 'Manfredonia', 'Salernitana', 'Gallipoli', 'Lanciano', 'Ternana', 'Martina', 'Teramo', 'Ancona', 'San Marino', 'Giulianova'],   # 18 clubs, https://en.wikipedia.org/wiki/2006–07_Serie_C1
     'Spanish First Division': ['Athletic Bilbao', 'Atlético Madrid', 'Barcelona', 'Real Betis', 'Celta de Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Gimnàstic', 'Levante', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Recreativo', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_La_Liga
-    # Ciudad de Murcia is in the template with no nation, so it cannot be placed. A filler takes its slot.
-    'Spanish Second Division': ['Alavés', 'Albacete', 'Almería', 'Cádiz', 'Castellón', 'Elche', 'Hércules', 'Las Palmas', 'Lorca Deportiva', 'Málaga', 'Numancia', 'Polideportivo Ejido', 'Ponferradina', 'Real Madrid C.F. B', 'Real Murcia C.F.', 'Salamanca', 'Sporting de Gijón', 'Tenerife', 'Real Valladolid', 'Vecindario', 'Xerez'],   # 22 clubs, https://en.wikipedia.org/wiki/2006–07_Segunda_División
+    # Ciudad de Murcia: the template record gets its nation and stadium (CLUB_REPAIR).
+    'Spanish Second Division': ['Alavés', 'Albacete', 'Almería', 'Cádiz', 'Ciudad de Murcia', 'Castellón', 'Elche', 'Hércules', 'Las Palmas', 'Lorca Deportiva', 'Málaga', 'Numancia', 'Polideportivo Ejido', 'Ponferradina', 'Real Madrid C.F. B', 'Real Murcia C.F.', 'Salamanca', 'Sporting de Gijón', 'Tenerife', 'Real Valladolid', 'Vecindario', 'Xerez'],   # 22 clubs, https://en.wikipedia.org/wiki/2006–07_Segunda_División
     'French First Division': ['Auxerre', 'Bordeaux', 'Le Mans', 'Lens', 'Lille', 'Lorient', 'Lyon', 'Marseille', 'Monaco', 'Nancy', 'Nantes', 'Nice', 'Paris Saint-Germain', 'Rennes', 'Saint-Étienne', 'Sedan', 'Sochaux', 'Toulouse', 'Troyes', 'Valenciennes'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Ligue_1
     'French Second Division': ['Metz', 'Caen', 'Strasbourg', 'Amiens', 'Grenoble', 'Le Havre', 'Châteauroux', 'Dijon', 'Bastia', 'Gueugnon', 'Reims', 'Ajaccio', 'Guingamp', 'Brest', 'Montpellier', 'Niort', 'Libourne-Saint-Seurin', 'Créteil', 'Istres', 'Tours'],   # 20 clubs, https://en.wikipedia.org/wiki/2006–07_Ligue_2
     'French National': ['Clermont Foot', 'US Boulogne', 'Angers SCO', 'Stade lavallois', 'Nîmes Olympique', 'Paris FC', 'FC Sète', 'CS Louhans-Cuiseaux', 'AS Beauvais', 'SO Romorantin', 'Entente Sannois-Saint-Gratien', 'AS Cherbourg', 'AS Cannes', 'FC Martigues', 'Vannes OC', 'Pau FC', 'Sporting Toulon Var', "US Raon L'Etape", 'SO Châtellerault', 'AS Yzeure'],   # 20 clubs, https://fr.wikipedia.org/wiki/Championnat_de_France_de_football_National_2006-2007
@@ -100,8 +112,17 @@ PROMOTED = {
 }
 
 # The part file and label of the rules club tables for each real list (club_rows.py): the labels that make_clubs.py
-# TARGETS maps to the database division. Spain, Germany, Austria, Switzerland and Scotland have no target yet.
+# TARGETS maps to the database division. make_clubs.py is on the slice 15 branch: the TARGETS lines for the labels of
+# Spain, Germany, Scotland, Austria and Switzerland are in tools/seasons/own_db/README.md.
 PARTS = {
+    'Spanish First Division': ('spa', 'La Liga'), 'Spanish Second Division': ('spa', 'Segunda División'),
+    'German First Division': ('ger', 'Bundesliga'), 'German Second Division': ('ger', '2. Bundesliga'),
+    'Scottish Premier Division': ('sco', 'Scottish Premier League'),
+    'Scottish First Division': ('sco', 'Scottish First Division'),
+    'Scottish Second Division': ('sco', 'Scottish Second Division'),
+    'Scottish Third Division': ('sco', 'Scottish Third Division'),
+    'Austrian Premier Division': ('aut-sui', 'Austrian Bundesliga'),
+    'Swiss National Division A': ('aut-sui', 'Swiss Super League'),
     'Italian Serie A': ('ita', 'Serie A'), 'Italian Serie B': ('ita', 'Serie B'),
     'Italian Serie C1/A': ('ita', 'Serie C1 girone A'), 'Italian Serie C1/B': ('ita', 'Serie C1 girone B'),
     'French First Division': ('fra', 'Ligue 1'), 'French Second Division': ('fra', 'Ligue 2'),
