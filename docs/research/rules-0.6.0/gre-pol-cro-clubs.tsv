@@ -1429,7 +1429,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2002/03	cro_a2a	Koprivnica	6111	NK Koprivnica	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Omladinac Novo Selo Rok	8279	NK Omladinac	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Sloga Nova Gradiška	10676	NK Sloga	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
-2002/03	cro_a2a	Valpovka				https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
+2002/03	cro_a2a	Valpovka	12238	NK Valpovska Satnica	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Metalac Osijek	7289	NK Metalac (S)	Croatian Third Division Central	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Vukovar '91	12620	HNK Vukovar '91	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2a	Podravac	8865	NK Podravac	Croatian Second Division North	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
@@ -1447,7 +1447,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2002/03	cro_a2b	Istra Pula	5463	NK Istra	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2b	Orijent	8334	NK Orijent	Croatian Second Division South	https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
 2002/03	cro_a2b	TŠK Topolovac				https://en.wikipedia.org/wiki/2002–03_Croatian_Second_Football_League
-2003/04	cro_a2a	Međimurje				https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
+2003/04	cro_a2a	Međimurje	2128	NK Cakovec	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Belišće	1466	NK Belisce	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Vukovar '91	12620	HNK Vukovar '91	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Grafičar Vodovod	4532	NK Graficar Vodovod	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
@@ -1457,7 +1457,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2003/04	cro_a2a	Čakovec	2128	NK Cakovec	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Koprivnica	6111	NK Koprivnica	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Dilj	3094	NK Dilj	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
-2003/04	cro_a2a	Valpovka				https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
+2003/04	cro_a2a	Valpovka	12238	NK Valpovska Satnica	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2a	Sloga Nova Gradiška	10676	NK Sloga	Croatian Second Division North	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2b	Pula 1856	12006	NK Uljanik	Croatian First Division	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
 2003/04	cro_a2b	Solin Građa	10745	NK Solin Gradja	Croatian Second Division South	https://en.wikipedia.org/wiki/2003–04_Croatian_Second_Football_League
