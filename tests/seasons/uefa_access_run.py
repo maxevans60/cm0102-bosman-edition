@@ -69,9 +69,10 @@ def run_season(name, season, database, cl_clubs, labels_want, england_groups=Non
             fails.append(f"{name}: Champions League round codes {m.group(1) if m else None!r}, not {codes!r}")
         if re.search(r"Intertoto Cup \d+ with \d rounds", log):
             fails.append(f"{name}: the Intertoto Cup played rounds")
-        for bad in ("not even", "gives no layout", "not 32", "no Champions League third", "clubs, not 48"):
+        for bad in ("not even", "gives no layout", "not 32", "no Champions League third"):
             if bad in log:
                 fails.append(f"{name}: log line with {bad!r}")
+        fails += group_draw_fails(name, log)
         if os.path.exists(report):
             lines = ufr.uefa_lines(report)
             fails += ufr.expect(lines, season, "european_cup", CL, name)
@@ -102,15 +103,16 @@ def run_load(program, game, work):
     with open(os.path.join(user, "settings.txt"), "a") as f:
         f.write(f"database = folder:{os.path.basename(db)}\nfaster_days = on\n")
     report = os.path.join(again, "report.tsv")
-    steps = fixtures.LOAD_STEPS + ["3600000 quit"]       # the loaded game goes on with its holiday
+    # The loaded game goes on with its holiday at once and ends when the season jump ends: no wait for the first
+    # news (its 120 s limit is shorter than the jump on a loaded machine).
+    steps = fixtures.LOAD_STEPS[:-1] + ["3600000 quit"]
     r, _ = fixtures.run(program, game, "classic", user, smoke_run.scaled_steps("classic", again, steps),
                         {"RECOMP_SEASON_JUMP": "2010", "RECOMP_RULES_REPORT": report}, 7200)
     with open(os.path.join(again, "stderr.txt"), "w") as f:
         f.write(r.stderr)
     fails = [] if r.returncode == 0 else [f"load: the loaded game ended with code {r.returncode} ({again})"]
     fails += [f"load: message box {b}" for b in ufr.BOX.findall(r.stderr)]
-    if "clubs, not 48" in r.stderr:
-        fails.append("load: the Europa League group draw did not get 48 clubs")
+    fails += group_draw_fails("load", r.stderr)
     if os.path.exists(report):
         lines = ufr.uefa_lines(report)
         fails += ufr.expect(lines, 2010, "european_cup", CL, "load")
@@ -121,10 +123,13 @@ def run_load(program, game, work):
 
 
 def run_2013(program, game, work):
-    """The Super Cup venue of 2013 (Prague). The line comes when the game is made."""
+    """The Super Cup venue of 2013 (Prague): the row's stadium, else the national stadium of the Czech Republic.
+    The line comes when the game is made."""
     rrc.run(program, game, 2013, 2013, os.path.join(DB, "Autumn 2013"), ["England"], [], work, 600)
     _, log = ufr.boxes(work)
-    if re.search(r"Super Cup 2013 at .*Prague", log):
+    m = re.search(r"Super Cup 2013 at .*Prague.*", log)
+    if m:
+        print("2013 venue:", m.group(0))     # names the stadium used, also when it is the fallback
         return []
     m = re.search(r"Super Cup 2013: .*", log)
     return [f"2013: no Super Cup at the 2013 stadium ({m.group(0) if m else 'no Super Cup line'})"]
@@ -143,6 +148,17 @@ def run_repeat(program, game, work):
             return [f"repeat: run {k} made no save ({w})"]
         saves.append(open(path, "rb").read())
     return [] if saves[0] == saves[1] else ["repeat: the two 2009/10 saves differ"]
+
+
+def group_draw_fails(name, log):
+    """The Europa League group draw waits, a day at a time, while a qualifying round still plays ("42 clubs, not
+    48"). It must end with the draw of 12 groups, and its waiting is told."""
+    waits = log.count("clubs, not 48")
+    if waits and not re.search(r"clubs, not 48.*\n(?:.*\n)*?.*UEFA Cup \d+/\d+: 12 groups of 4 drawn", log):
+        return [f"{name}: the Europa League group draw did not get 48 clubs"]
+    if waits:
+        print(f"{name}: the Europa League group draw waited {waits} times for the last qualifying round")
+    return []
 
 
 LABELS_2009 = [("european_cup", 220, "Play-off Round"), ("uefa_cup", 220, "Play-off Round"),

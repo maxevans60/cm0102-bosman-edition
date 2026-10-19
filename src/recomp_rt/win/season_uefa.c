@@ -371,14 +371,20 @@ void o_00584ae0(void);
 
 void o_00583c50(void);
 
+/* The return addresses of the two calls that set up a season's rounds: the constructor (call at 0x5838d4) and
+ * set_up_rules 0x858e70 (call at 0x858e83, from start_new_season 0x584ed7). Other callers only read the tables. */
+#define CL_SETUP_CONSTRUCTOR 0x005838d7u
+#define CL_SETUP_RULES 0x00858e86u
+
 /* EuropeanCup::create_round_table, thiscall (stage, &rounds, &name, &league) ret 0x10. Stage -1 (the qualifying
  * rounds) is asked for by the constructor (0x5838d4) and at each new season (start_new_season 0x584d60 through
  * set_up_rules 0x858e70), after the season year is set: the format of the season is chosen there. A loaded
  * game takes +0x2c from its save and does not come here. */
 RT_WRAP(00583c50, cl_round_table)
 {
-    if ((int8_t)rt_arg(0) == -1) {
-        uint32_t cl = cpu.ecx;
+    uint32_t cl = cpu.ecx, ret = rd32(g_mem, cpu.esp);
+    int stage = (int8_t)rt_arg(0);
+    if (stage == -1 && (ret == CL_SETUP_CONSTRUCTOR || ret == CL_SETUP_RULES)) {
         const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, cl + 0x40));
         if (r || stage_count(cl) != STAGES_ORIGINAL) cl_set_format(cl, r);
         /* Slice 23: the qualifying rounds of the access list (season_uefa_qual.c), or 0 for the original's. */
@@ -393,6 +399,21 @@ RT_WRAP(00583c50, cl_round_table)
             if (out_rounds >= 0x10000u) wr16(g_mem, out_rounds, (uint16_t)rounds);
             if (out_name >= 0x10000u) wr16(g_mem, out_name, (uint16_t)name);
             if (out_league >= 0x10000u) wr32(g_mem, out_league, league);
+            rt_ret_stdcall(t, 4);
+            return;
+        }
+    }
+    /* Stage 8 of the format with a round of 16 is its knockout stage. Comp::build_match_date_list 0x48d500 (the
+     * Schedule tab) asks for each stage up to +0x2c - 1 (0x48d5b0..0x48d5cb); the original's stage 8 is the
+     * first group of phase 2 (0x58406b). */
+    if (stage == KO_SLOT_ROUND_OF_16 && round_of_16_layout(cl)) {
+        uint32_t out_rounds = rt_arg(1), out_name = rt_arg(2), out_league = rt_arg(3), name_id = 0;
+        uint32_t t = ko_table(cl, &name_id);
+        if (rt_unwinding) return;
+        if (t) {
+            if (readable(out_rounds)) wr16(g_mem, out_rounds, 4);
+            if (readable(out_name)) wr16(g_mem, out_name, (uint16_t)name_id);
+            if (readable(out_league)) wr32(g_mem, out_league, 0);
             rt_ret_stdcall(t, 4);
             return;
         }
@@ -659,6 +680,38 @@ static void report_comp(FILE *f, int season, const char *phase, const char *file
             ko_clubs, ko_rounds, winner);
 }
 
+/* The list that the Schedule tab shows: Comp::build_match_date_list 0x48d500, thiscall (&count), a game block of
+ * 20-byte entries (+0 stage, +0xc day of the year, +0xe year, +0x12 round code, 0 for a league match day:
+ * 0x48d6c2), freed with 0x9452ca as its callers do. One line: the entries, the entries with a year outside
+ * the season and the year after it, the league entries of stages 8 and later, and the first and last date. */
+static void report_schedule(FILE *f, int season, const char *file, uint32_t obj)
+{
+    uint32_t saved_esp = cpu.esp;
+    cpu.esp -= 0x20;
+    uint32_t count_at = cpu.esp + 0x10;
+    wr32(g_mem, count_at, 0);
+    uint32_t a[1] = {count_at};
+    uint32_t list = call_this(0x0048d500u, obj, 1, a);
+    if (rt_unwinding) return;
+    int n = (int32_t)rd32(g_mem, count_at), bad = 0, late_league = 0, first = 9999999, last = 0;
+    cpu.esp = saved_esp;
+    for (int i = 0; readable(list) && i < n && i < 5000; i++) {
+        uint32_t e = list + 20u * (uint32_t)i;
+        int stage = (int32_t)rd32(g_mem, e), day = (int16_t)rd16(g_mem, e + 0xc), year = (int16_t)rd16(g_mem, e + 0xe);
+        if (year < season || year > season + 1) bad++;
+        if (stage >= 8 && rd16(g_mem, e + 0x12) == 0) late_league++;
+        int key = year * 1000 + day;
+        if (key < first) first = key;
+        if (key > last) last = key;
+    }
+    if (readable(list)) {
+        uint32_t fr[1] = {list};
+        call_cdecl(F_FREE, 1, fr);
+        if (rt_unwinding) return;
+    }
+    fprintf(f, "schedule\t%d\tend\t%s\t%d\t%d\t%d\t%d\t%d\n", season, file, n, bad, late_league, first, last);
+}
+
 void season_uefa_report(void *file, int season, const char *phase)
 {
     FILE *f = (FILE *)file;
@@ -673,6 +726,8 @@ void season_uefa_report(void *file, int season, const char *phase)
     if (season_uefa_cup_kind(ecl) == 'k') report_comp(f, season, phase, SEASON_UEFA_ECL_FILE, ecl, 13);
     /* The labels of the rounds that have a real name in the round names table (Q370), at the end of a season. */
     if (strcmp(phase, "end")) return;
+    if (cl) report_schedule(f, season, "european_cup", cl);
+    if (readable(uc) && rd32(g_mem, uc) == 0x00970790u) report_schedule(f, season, "uefa_cup", uc);
     static const struct { const char *file; int code; } labels[] = {
         {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250},
         /* slice 23: the qualifying rounds of 2009/10 on */

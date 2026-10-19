@@ -587,7 +587,42 @@ uint32_t rt_intl_euro_no_host(void)
  * (season_intl_date_shift). The original's weekday flag (the fourth argument) stays. */
 static int date_shift;
 
-static void stage_builder(uint32_t cls, void (*original)(void))
+/* The event dates that a builder keeps as a day word and a year offset from +0x40 (Date +0 is the day of the
+ * year, +2 the year: the World Cup's update_for_date 0x92f1a0 seeds when today's day word equals +0x18e
+ * (0x92f1b4) and today's year equals +0x40 plus the s16 at +0x190 (0x92f1b9..0x92f1ce)). Each builder writes
+ * both words: the draw day +0xb6 and its offset +0xb8 in all eight (World Cup 0x92d2c9, 0x92d2e2; Euro
+ * 0x57b6f0, 0x57b709; Confederations Cup 0x58be51, 0x58be4a; Copa America 0x5e1364, 0x5e137f; African Cup of
+ * Nations 0x401b3e, 0x401b59; Asian Cup 0x40f54c, 0x40f567; Oceania Nations Cup 0x79971e, 0x799739; Olympics
+ * 0x7a02be, 0x7a02d9), the Euro's seeding day +0x13e and offset +0x140 (0x57b6ca, 0x57b6dd) and the World
+ * Cup's +0x18e and +0x190 (0x92d2a1, 0x92d2b4). A shift that moves such a date into another year must move
+ * the offset too: the 2022 World Cup's seeding of 15 December 2021 (Date at 0x92d290 with year +0x40 and
+ * offset -1) moves by 161 days to 25 May, and with the offset left at -1 the game seeded on 25 May 2021,
+ * before its qualifying had played, and stopped at "world_cup.cpp 1438" (0x92f24c). */
+static const struct { uint32_t cls, day, offset; } offset_pairs[] = {
+    {INTL_CLASSES, 0xb6, 0xb8}, {INTL_EURO, 0x13e, 0x140}, {INTL_WORLD_CUP, 0x18e, 0x190},
+};
+static struct { uint16_t day; int delta; } moved[16];
+static int n_moved, depth, in_builder;
+
+static void fix_offsets(uint32_t cls, uint32_t self)
+{
+    for (size_t i = 0; i < sizeof offset_pairs / sizeof offset_pairs[0]; i++) {
+        if (offset_pairs[i].cls != INTL_CLASSES && offset_pairs[i].cls != cls) continue;
+        uint16_t day = rd16(g_mem, self + offset_pairs[i].day);
+        for (int k = 0; k < n_moved; k++) {
+            if (moved[k].day != day || !moved[k].delta) continue;
+            int16_t off = (int16_t)rd16(g_mem, self + offset_pairs[i].offset);
+            wr16(g_mem, self + offset_pairs[i].offset, (uint16_t)(off + moved[k].delta));
+            if (logging())
+                fprintf(stderr, "recomp: season intl: %s %d: the date at +0x%x moves %+d year\n",
+                        season_intl_class_file(cls), (int16_t)rd16(g_mem, self + 0x40u), offset_pairs[i].day,
+                        moved[k].delta);
+            break;
+        }
+    }
+}
+
+static void stage_builder(uint32_t cls, void (*original)(void), int builder)
 {
     uint32_t self = cpu.ecx;
     int saved = date_shift;
@@ -595,7 +630,15 @@ static void stage_builder(uint32_t cls, void (*original)(void))
     if (date_shift && !saved && logging())
         fprintf(stderr, "recomp: season intl: %s %d moves by %d days\n", season_intl_class_file(cls),
                 (int16_t)rd16(g_mem, self + 0x40u), date_shift);
+    if (!depth++) {                     /* a template inside a builder keeps the builder's record */
+        in_builder = builder;
+        n_moved = 0;
+    }
     original();
+    if (!--depth) {
+        if (in_builder && date_shift) fix_offsets(cls, self);
+        in_builder = 0;
+    }
     date_shift = saved;
 }
 
@@ -607,14 +650,14 @@ void o_00401ab0(void);
 void o_0040f4c0(void);
 void o_00799690(void);
 void o_007a0230(void);
-RT_WRAP(0092d200, wc_stages) { stage_builder(INTL_WORLD_CUP, o_0092d200); }
-RT_WRAP(0057b630, euro_stages) { stage_builder(INTL_EURO, o_0057b630); }
-RT_WRAP(0058bdb0, confed_stages) { stage_builder(INTL_CONFED, o_0058bdb0); }
-RT_WRAP(005e12d0, copa_stages) { stage_builder(INTL_COPA, o_005e12d0); }
-RT_WRAP(00401ab0, acn_stages) { stage_builder(INTL_ACN, o_00401ab0); }
-RT_WRAP(0040f4c0, asian_stages) { stage_builder(INTL_ASIAN, o_0040f4c0); }
-RT_WRAP(00799690, ofc_stages) { stage_builder(INTL_OFC, o_00799690); }
-RT_WRAP(007a0230, olympics_stages) { stage_builder(INTL_OLYMPICS, o_007a0230); }
+RT_WRAP(0092d200, wc_stages) { stage_builder(INTL_WORLD_CUP, o_0092d200, 1); }
+RT_WRAP(0057b630, euro_stages) { stage_builder(INTL_EURO, o_0057b630, 1); }
+RT_WRAP(0058bdb0, confed_stages) { stage_builder(INTL_CONFED, o_0058bdb0, 1); }
+RT_WRAP(005e12d0, copa_stages) { stage_builder(INTL_COPA, o_005e12d0, 1); }
+RT_WRAP(00401ab0, acn_stages) { stage_builder(INTL_ACN, o_00401ab0, 1); }
+RT_WRAP(0040f4c0, asian_stages) { stage_builder(INTL_ASIAN, o_0040f4c0, 1); }
+RT_WRAP(00799690, ofc_stages) { stage_builder(INTL_OFC, o_00799690, 1); }
+RT_WRAP(007a0230, olympics_stages) { stage_builder(INTL_OLYMPICS, o_007a0230, 1); }
 
 /* The template functions (vtable +0x3c: 0x92c290, 0x57ab90, 0x58b560, 0x5e0900, 0x4012e0, 0x40eb00, 0x798b60,
  * 0x79f7d0) also run outside the stage builder: a knockout stage is made when the groups end (for example the
@@ -627,35 +670,45 @@ void o_004012e0(void);
 void o_0040eb00(void);
 void o_00798b60(void);
 void o_0079f7d0(void);
-RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, o_0092c290); }
+RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, o_0092c290, 0); }
 /* The Euro of 24 teams makes its groups E and F and its knockout of 16 in season_intl_euro.c. */
 static void euro_template_body(void) { season_intl_euro_template(o_0057ab90); }
-RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, euro_template_body); }
-RT_WRAP(0058b560, confed_template) { stage_builder(INTL_CONFED, o_0058b560); }
+RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, euro_template_body, 0); }
+RT_WRAP(0058b560, confed_template) { stage_builder(INTL_CONFED, o_0058b560, 0); }
 static void copa_template_body(void) { season_intl_copa_template(o_005e0900); }
-RT_WRAP(005e0900, copa_template) { stage_builder(INTL_COPA, copa_template_body); }
+RT_WRAP(005e0900, copa_template) { stage_builder(INTL_COPA, copa_template_body, 0); }
 static void acn_template_body(void) { season_intl_cup_template(INTL_ACN, o_004012e0); }
-RT_WRAP(004012e0, acn_template) { stage_builder(INTL_ACN, acn_template_body); }
+RT_WRAP(004012e0, acn_template) { stage_builder(INTL_ACN, acn_template_body, 0); }
 static void asian_template_body(void) { season_intl_cup_template(INTL_ASIAN, o_0040eb00); }
-RT_WRAP(0040eb00, asian_template) { stage_builder(INTL_ASIAN, asian_template_body); }
-RT_WRAP(00798b60, ofc_template) { stage_builder(INTL_OFC, o_00798b60); }
-RT_WRAP(0079f7d0, olympics_template) { stage_builder(INTL_OLYMPICS, o_0079f7d0); }
+RT_WRAP(0040eb00, asian_template) { stage_builder(INTL_ASIAN, asian_template_body, 0); }
+RT_WRAP(00798b60, ofc_template) { stage_builder(INTL_OFC, o_00798b60, 0); }
+RT_WRAP(0079f7d0, olympics_template) { stage_builder(INTL_OLYMPICS, o_0079f7d0, 0); }
 
 void o_00549f70(void);
 
 RT_WRAP(00549f70, date_make)
 {
+    uint32_t date = cpu.ecx;
+    int delta = 0;
     if (date_shift) {
         int day = (int16_t)rd16(g_mem, cpu.esp + 4u), month0 = (int16_t)rd16(g_mem, cpu.esp + 8u);
         int year = (int16_t)rd16(g_mem, cpu.esp + 12u);
         if (day >= 1 && day <= 31 && month0 >= 0 && month0 <= 11 && year > 1900) {
+            int was = year;
             season_intl_shift_date(date_shift, &day, &month0, &year);
+            delta = year - was;
             wr32(g_mem, cpu.esp + 4u, (uint32_t)day);
             wr32(g_mem, cpu.esp + 8u, (uint32_t)month0);
             wr32(g_mem, cpu.esp + 12u, (uint32_t)year);
         }
     }
     o_00549f70();
+    /* A date of the builder's own (not of a nested template) that moved into another year: its day word for
+     * fix_offsets. */
+    if (delta && depth == 1 && in_builder && n_moved < (int)(sizeof moved / sizeof moved[0])) {
+        moved[n_moved].day = rd16(g_mem, date);
+        moved[n_moved++].delta = delta;
+    }
 }
 
 /* ---- Nation names ---- */

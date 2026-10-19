@@ -14,7 +14,8 @@
  * stadium of the row by name in the stadium table ([0xae23b0], count [0xae2358], name at +4, 51 bytes): the
  * whole name, then the name before a bracket, then the name in the bracket ("Fortuna Arena (Eden Arena)"). When it
  * finds it, the round gets the flags 0x10 and the cup +0x24 its record index. The match date is the row's in
- * every season game. A stadium that the database does not hold keeps the original's venue, and the log says so.
+ * every season game. A stadium that the database does not hold by any name gets the national stadium of the nation of the row's
+ * city (a fallback, the log names the stadium and the nation). Only when that fails does the original's venue stay.
  * The base game and RECOMP_SEASON_CODE=off get the original's round (season_uefa_row gives NULL). */
 #include "win.h"
 #include "season.h"
@@ -27,6 +28,12 @@
 #define STADIUMS 0xae23b0u
 #define STADIUM_COUNT 0xae2358u
 #define STADIUM_SIZE 78u
+#define CITIES 0xae23acu
+#define CITY_COUNT 0xae2354u
+#define CITY_SIZE 56u
+#define NATIONS 0xae23a8u
+#define NATION_COUNT 0xae2350u
+#define NATION_SIZE 290u
 #define F_MATCH_DATE 0x00521eb0u        /* cdecl (table, round, day, month, year+, weekday, time, year, venue) */
 #define VENUE_STADIUM 0x10u             /* the stadium record of the cup's +0x24 (0x85c5a7) */
 #define VENUE_MONACO 0x8000u            /* 0x57a48d */
@@ -51,6 +58,41 @@ static int find_stadium(const char *name, size_t n)
         char rec[52];
         snprintf(rec, sizeof rec, "%.51s", win_str(table + STADIUM_SIZE * (uint32_t)i + 4));
         if (strlen(rec) == n && same_name(name, rec, n)) return i;
+    }
+    return -1;
+}
+
+/* A link of a record to another table: after the game's load it is a pointer to the record (the city's nation
+ * at +0x1f and the nation's stadium at +0x80 hold one in a running game; the files hold the index). Returns the
+ * record index or -1. */
+static int32_t record_index(uint32_t v, uint32_t table, uint32_t size, int32_t count)
+{
+    if (readable(table) && v >= table && v < table + size * (uint32_t)count && (v - table) % size == 0)
+        return (int32_t)((v - table) / size);
+    return v < (uint32_t)count ? (int32_t)v : -1;
+}
+
+/* Fallback when the database lacks the venue by every name. The row's city is a record of the city table (name
+ * at +4, the nation at +0x1f). The national stadium of that nation is the link at +0x80 of its nation record
+ * (read from a running game, as the Czech Republic and Estonia show). Returns the stadium record index or -1;
+ * *nation_name gets the nation's name for the log. */
+static int national_stadium_of_city(const char *city, char *nation_name, size_t n)
+{
+    uint32_t ct = rd32(g_mem, CITIES), nt = rd32(g_mem, NATIONS);
+    int32_t cities = (int32_t)rd32(g_mem, CITY_COUNT), nations = (int32_t)rd32(g_mem, NATION_COUNT);
+    int32_t stadiums = (int32_t)rd32(g_mem, STADIUM_COUNT);
+    if (!readable(ct) || !readable(nt)) return -1;
+    for (int32_t i = 0; i < cities && i < 100000; i++) {
+        char rec[32];
+        snprintf(rec, sizeof rec, "%.27s", win_str(ct + CITY_SIZE * (uint32_t)i + 4));
+        if (strlen(rec) != strlen(city) || !same_name(city, rec, strlen(city))) continue;
+        int32_t nation = record_index(rd32(g_mem, ct + CITY_SIZE * (uint32_t)i + 0x1f), nt, NATION_SIZE, nations);
+        if (nation < 0) continue;
+        int32_t id = record_index(rd32(g_mem, nt + NATION_SIZE * (uint32_t)nation + 0x80), rd32(g_mem, STADIUMS),
+                                  STADIUM_SIZE, stadiums);
+        if (id < 0) continue;
+        snprintf(nation_name, n, "%.51s", win_str(nt + NATION_SIZE * (uint32_t)nation + 4));
+        return id;
     }
     return -1;
 }
@@ -88,21 +130,25 @@ RT_WRAP(0057a3c0, super_cup_round_table)
     uint32_t venue = VENUE_MONACO;
     if (strcmp(r->sc_city, "Monaco")) {
         int id = stadium_of_row(r->sc_stadium);
+        char nation[52] = "";
+        int fallback = 0;
+        if (id < 0) {
+            id = national_stadium_of_city(r->sc_city, nation, sizeof nation);
+            fallback = id >= 0;
+        }
         if (id >= 0) {
+            uint32_t table = rd32(g_mem, STADIUMS);
             venue = VENUE_STADIUM;
             wr32(g_mem, cup + 0x24, (uint32_t)id);
-            fprintf(stderr, "recomp: uefa: Super Cup %u at %s, %s (stadium %d)\n", year, r->sc_stadium, r->sc_city, id);
+            fprintf(stderr, "recomp: uefa: Super Cup %u at %s, %s (stadium %d)\n", year,
+                    fallback ? win_str(table + STADIUM_SIZE * (uint32_t)id + 4) : r->sc_stadium, r->sc_city, id);
+            if (fallback)
+                fprintf(stderr, "recomp: uefa: Super Cup %u: no stadium %s in the database; the national stadium of %s\n",
+                        year, r->sc_stadium, nation);
         } else {
             fprintf(stderr, "recomp: uefa: Super Cup %u: no stadium %s in the database; the original's venue\n", year,
                     r->sc_stadium);
         }
-    }
-    /* Slice 24: no extra time from 2023 (the row's "penalties after 90 minutes"). The original writes the round
-     * flags 0x83 at 0x57a4be: 0x2 extra time, 0x80 golden goal, 0x1 penalties (2026-10-17-cup-round-record.md,
-     * section 2). With no extra time only 0x1 stays. */
-    if (!r->sc_extra_time) {
-        wr16(g_mem, t + 0xd, (uint16_t)((rd16(g_mem, t + 0xd) & ~0x83u) | 0x1u));
-        fprintf(stderr, "recomp: uefa: Super Cup %u: penalties after 90 minutes\n", year);
     }
     /* The weekday of the real date, so the date function (0x549f70 from 0x521ed3), which moves a match to the
      * nearest day of the round's weekday, keeps the real day (the original passes 4, a Friday, at 0x57a48d). */

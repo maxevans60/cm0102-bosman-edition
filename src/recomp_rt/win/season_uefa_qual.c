@@ -1120,6 +1120,14 @@ RT_WRAP(006336c0, uic_build_entrants)
         return;
     }
     wr16(g_mem, uic + 0x36, 0);
+    /* An empty entry table of its slots: Cup::save_cup_to_disk 0x5210f0 shows the box "Cup.cpp 5246" for a cup with
+     * no entry table (+0xa7, 0x5211a2), and the game's save writes every cup. */
+    if (!readable(rd32(g_mem, uic + 0xa7))) {
+        int slots = (int16_t)rd16(g_mem, uic + 0x3e);
+        uint32_t e = game_malloc(ENTRY * (uint32_t)(slots > 0 && slots < 4096 ? slots : 1));
+        if (rt_unwinding) return;
+        wr32(g_mem, uic + 0xa7, e);
+    }
     /* The year of its last edition, so the object reads as an old, finished edition (the rules report: not
      * held when the year is not the season, one before or one after). */
     wr16(g_mem, uic + 0x40, (uint16_t)uic_last_year((int16_t)rd16(g_mem, GAME_YEAR)));
