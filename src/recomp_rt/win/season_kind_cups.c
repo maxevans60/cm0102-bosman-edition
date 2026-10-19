@@ -189,15 +189,18 @@ RT_WRAP(0078f2e0, cups_nor_cup)
     if (!rt_unwinding) table_made(self, stage, count);
 }
 
-/* Slice 21b: the Spanish, Turkish and Russian cups (create_round_table, slot +0x3c, stage 0xff from set_up_rounds:
- * SpaCup 0x84d220 in vtable 0x96f9c8, TurCup 0x8fc670 in 0x97048c, RusCup 0x7e9530 in 0x96f124), and the
- * knockout stage of the Coppa Italia and the KNVB Cup. ItaCup and HolCup are League classes with a group stage.
- * Their create_schedule (vtable +0x3c: ItaCup 0x63ec50 in vtable 0x96c318, HolCup 0x5f36e0 in vtable 0x96b7b8; thiscall: stage, short *round_count,
- * short *first_id, int *out; ret 0x10) makes the round table of the knockout stage for stage 7 (ItaCup, 5
- * rounds at 0x63ed91; called at 0x63f9c0 by create_knockout_stage 0x63f870) and stage 0x13 (HolCup, 6 rounds at
- * 0x5f381d; called at 0x5f4708 by create_knockout_stage 0x5f4480). The table goes to a Cup_Stage object
- * (constructor 0x522e00 at 0x63fa10 and 0x5f4755), which plays it with the Cup code of the other classes, so the
- * same five fields hold the format. */
+/* Slice 21b: the Spanish, Turkish and Russian cups (create_round_table, slot +0x3c, stage 0xff from
+ * set_up_rounds: SpaCup 0x84d220 in vtable 0x96f9c8, TurCup 0x8fc670 in 0x97048c, RusCup 0x7e9530 in 0x96f124),
+ * and the knockout stage of the Coppa Italia and the KNVB Cup. ItaCup and HolCup are League classes with a group
+ * stage. Their create_schedule (vtable +0x3c: ItaCup 0x63ec50 in vtable 0x96c318, HolCup 0x5f36e0 in vtable
+ * 0x96b7b8; thiscall: stage, short *round_count, short *first_id, int *out; ret 0x10) makes the round table of
+ * the knockout stage for stage 7 (ItaCup, 5 rounds at 0x63ed91; called at 0x63f9c0 by create_knockout_stage
+ * 0x63f870) and stage 0x13 (HolCup, 6 rounds at 0x5f381d; called at 0x5f4708 by create_knockout_stage
+ * 0x5f4480). The table goes to a Cup_Stage object (constructor 0x522e00 at 0x63fa10 and 0x5f4755), which plays
+ * it with the Cup code of the other classes, so the same five fields hold the format. The same stages are also
+ * asked for by set_predicted_positions (ItaCup 0x640210 at 0x640332, HolCup 0x5f5120 at 0x5f5242), which sorts
+ * the clubs by the table that the call returns: the wrap changes that table too (only the five format fields,
+ * not the round count or the dates). */
 void o_0084d220(void);
 RT_WRAP(0084d220, cups_spa_cup)
 {

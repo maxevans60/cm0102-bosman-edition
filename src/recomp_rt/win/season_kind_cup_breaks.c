@@ -22,11 +22,20 @@
  *
  * At a new game of a season game (start year not 2001; a 2001 game keeps the original's 2001/02): the
  * constructor builds the first edition from its year argument (thiscall: year, record; ret 8, every constructor
- * below). When the table does not hold that edition, the wrap gives the constructor the year of the next edition
- * that it holds, so the cup waits (its dates lie in the future; the club world doc, section 1). A cup that the
- * table never holds again gets SEASON_CUPS_NEVER, and the League::create_fixtures call of its constructor makes
- * no fixtures, so no fixture of the year 2999 reaches a club's list. Such a cup never completes, so the pass never
- * starts it again.
+ * below). When the table does not hold that edition:
+ *   - with changing rules on, the wrap gives the constructor the year of the next edition that the table holds, so
+ *     the cup waits (its dates lie in the future; the club world doc, section 1);
+ *   - with changing rules off, the cup stays off for the whole game (Q232: the rules of the start season stay), as
+ *     a cup that the table never holds again: both get SEASON_CUPS_NEVER (2999).
+ * For such an object the League::create_fixtures call of its constructor makes no fixtures (wrap below), so no
+ * fixture of the year 2999 reaches a club's list, and a League class gets +0x45 (drawn) 0 after its constructor:
+ * League::check_complete 0x689ad0 then returns false at 0x689af6 and League::update_for_date 0x6847c0 does nothing
+ * at 0x684811 (IreSuperCup::update_for_date 0x63b300 draws only when +0x40 is the year at [0xde1f58]+0x439,
+ * 0x63b324..0x63b331). Without that, a League with no fixtures could count as complete: the played counts of its
+ * table rows (+0x11) are compared with the matches per club +0xa7 (0x689b47..0x689b58), and a table with no rows
+ * passes. A Cup class never draws (its draw dates lie in 2999, Cup::update_for_date 0x51fa45..0x51fa6d), so
+ * Cup::check_complete 0x521e00 never sees +0xb1 set. So the pass never calls start_new_season for the object
+ * (all_stages_complete 0x48ce10 is false), and it cannot make the edition of 3000 with fixtures.
  *
  * The base game (2001/02, changing rules off) and RECOMP_SEASON_CODE=off get none of it (Q152, Q342): no hook
  * runs there, and the wraps test season_game(). RECOMP_CUPS=off turns this kind off too (a test switch of
@@ -42,6 +51,8 @@
 
 #define YEAR_AT 0x40u                   /* s16 season year of a competition object */
 #define NAME_AT 4u                      /* the long name of the competition record (object +4) */
+#define DRAWN_AT 0x45u                  /* u32 1 when a League has drawn its fixtures (Comp::Comp 0x48c5bb sets 1) */
+#define LEAGUE_CHECK_COMPLETE 0x689ad0u /* vtable +0x10 of every League class here */
 
 /* The classes with a season that the table does not hold (rules table rows with not_held, comp_file of the
  * original, tier cup or super cup) and their constructors. The note says the base class and whether the
@@ -123,6 +134,7 @@ static void ctor(const char *file, void (*original)(void))
         uint32_t arg = rd32(g_mem, slot);
         int year = (int16_t)(arg & 0xffffu);
         int next = season_cups_next(file, year);
+        if (next && next != year && !season_changing_rules()) next = SEASON_CUPS_NEVER;     /* Q232 */
         if (next && next != year) {
             wr32(g_mem, slot, (arg & 0xffff0000u) | ((uint32_t)next & 0xffffu));
             if (next == SEASON_CUPS_NEVER) never_obj = self;
@@ -131,6 +143,8 @@ static void ctor(const char *file, void (*original)(void))
         }
     }
     original();
+    if (never_obj && !rt_unwinding && rd32(g_mem, rd32(g_mem, self) + 0x10) == LEAGUE_CHECK_COMPLETE)
+        wr32(g_mem, self + DRAWN_AT, 0);                    /* never complete: see the module comment */
     never_obj = 0;
 }
 
@@ -196,18 +210,46 @@ RT_WRAP(00925e90, wel_lge_cup_ctor) { ctor("wel_lge_cup", o_00925e90); }
 RT_WRAP(009277f0, wel_prm_cup_ctor) { ctor("wel_prm_cup", o_009277f0); }
 
 /* League::create_fixtures 0x6835c0 (thiscall, no arguments, ret at 0x683edf; returns non-zero on success, which
- * the callers test, for example 0x927975). For the object of a constructor that runs with SEASON_CUPS_NEVER it
- * makes no fixture and returns 1. Every other call runs the original. */
+ * the callers test, for example 0x927975). While a constructor runs with SEASON_CUPS_NEVER it makes no fixture and
+ * returns 1: for the object itself and for the stage objects that the constructor makes (BraChampCup 0x4259a0
+ * makes its group stages in the constructor, and a run of a 2008 game with Brazil showed a fixture block of 2999
+ * until this covered them). Every other call runs the original. */
 void o_006835c0(void);
 RT_WRAP(006835c0, cup_breaks_create_fixtures)
 {
-    if (never_obj && cpu.ecx == never_obj) {
+    if (never_obj) {
         if (logging()) fprintf(stderr, "recomp: cup_breaks: no fixtures for the cup that waits for ever (0x%x)\n",
                                cpu.ecx);
         rt_ret_stdcall(1, 0);
         return;
     }
     o_006835c0();
+}
+
+/* BraChampCup::start_preliminary_stage 0x427320 (thiscall, no arguments, ret at 0x42741d): it makes the fixtures
+ * of the Copa dos Campeoes (League::create_fixtures at 0x42736b). The Brazilian league starts it from outside the
+ * season pass: bra_nat_first_fill_champions_cup_entrants 0x42bba0 fills the entrants and calls it at 0x42be2a
+ * on the object of [0xadadfc][[0x9cf9b8]], whatever the cup's year. So a cup that waits for ever (a 2008 game:
+ * six fixtures of 2999, run n2008 of tests/seasons/cup_breaks_run.py) or that skips its seasons (it would make
+ * fixtures of its old year, which the fixture manager moves to new dates, FIXTURE_MANAGER::add_fixture 0x5aa709..
+ * 0x5aa729) would play again. The wrap does not run it while the table holds neither the edition of the game
+ * year nor the next one (the cup is a calendar-year cup), or the cup waits for ever. */
+void o_00427320(void);
+RT_WRAP(00427320, cup_breaks_bra_champ_start)
+{
+    int year = (int16_t)rd16(g_mem, cpu.ecx + YEAR_AT);
+    int now = (int16_t)rd16(g_mem, 0xae2c92u);              /* the game year */
+    if (season_game() && (year >= SEASON_CUPS_NEVER || (season_cups_held("bra_champ_cup", now) == 0 &&
+                                                         season_cups_held("bra_champ_cup", now + 1) == 0))) {
+        static int logged_year;                             /* the caller runs each day: one line a year */
+        if (logged_year != now) {
+            logged_year = now;
+            fprintf(stderr, "recomp: cup_breaks: bra_champ_cup does not start (year %d, game year %d)\n", year, now);
+        }
+        rt_ret_stdcall(cpu.eax, 0);
+        return;
+    }
+    o_00427320();
 }
 
 /* ---- The season change ---- */
@@ -268,4 +310,55 @@ static void breaks_after(const SeasonChange *c)
         season_change_news("The %s is not played %s.", name, when);
 }
 
-const SeasonRuleKind season_kind_cup_breaks = {"cup_breaks", NULL, NULL, NULL, NULL, breaks_before, breaks_after};
+/* Test log (RECOMP_SEASON_CHANGE_LOG): the year of each block of the fixture store [0xae2a58] (+0x1130 s16 year,
+ * +0x112c the next block, a ring; holiday_next.c reads them the same way). A query for a date makes the block of
+ * its year too (fix_man_comp_has_fixture_on_date 0x5ae6d0 calls 0x5abf10 at 0x5ae799), so a block of 2999 can
+ * exist with no fixture in it; the wrap of add_fixture below logs each fixture itself. It only reads memory. */
+static void log_fixture_years(const char *when)
+{
+    /* Also with RECOMP_CUPS=off, so a run can tell the fixtures of other kinds from those of this one. */
+    if (!logging() || !season_code_on()) return;
+    char buf[512];
+    int n = snprintf(buf, sizeof buf, "recomp: cup_breaks: fixture years %s:", when);
+    uint32_t first = rd32(g_mem, 0xae2a58u), b = first;
+    for (int i = 0; b >= 0x10000u && b < 0xfff00000u && i < 40 && n < (int)sizeof buf - 16; i++) {
+        n += snprintf(buf + n, sizeof buf - (size_t)n, " %d", (int16_t)rd16(g_mem, b + 0x1130));
+        b = rd32(g_mem, b + 0x112c);
+        if (b == first) break;
+    }
+    fprintf(stderr, "%s\n", buf);
+}
+
+/* FIXTURE_MANAGER::add_fixture 0x5aa680 (thiscall: the fixture, then a flag; the fixture's year at +0x28 and day
+ * at +0x2a, as insert_fixture 0x5ab259 and 0x5ab2f0 read them). Test log only: a fixture of the year 2999 or later,
+ * or any fixture while a constructor runs with SEASON_CUPS_NEVER, gives a line "fixture added", which
+ * tests/seasons/cup_breaks_run.py does not allow. The call always runs the original. */
+void o_005aa680(void);
+RT_WRAP(005aa680, cup_breaks_add_fixture)
+{
+    if (logging() && season_code_on()) {
+        uint32_t f = rt_arg(0);
+        int year = f >= 0x10000u && f < 0xfff00000u ? (int16_t)rd16(g_mem, f + 0x28) : 0;
+        if (year >= SEASON_CUPS_NEVER || never_obj)
+            fprintf(stderr, "recomp: cup_breaks: fixture added for %d (call from 0x%x)%s\n", year,
+                    rd32(g_mem, cpu.esp),
+                    never_obj ? " in a constructor that waits for ever" : "");
+    }
+    o_005aa680();
+}
+
+static void breaks_new_game(int start_year)
+{
+    (void)start_year;
+    log_fixture_years("new game");
+}
+
+static void breaks_season(int season)
+{
+    char when[32];
+    snprintf(when, sizeof when, "season %d", season);
+    log_fixture_years(when);
+}
+
+const SeasonRuleKind season_kind_cup_breaks = {"cup_breaks", breaks_new_game, NULL, breaks_season, NULL,
+                                               breaks_before, breaks_after};

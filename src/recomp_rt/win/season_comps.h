@@ -13,11 +13,14 @@
  *     game give the constructor that year. Its dates then lie in that year, it is not complete, the pass does not
  *     start it again (0x5d5ccb), and it draws on its start date. Example: season_kind_club_world.c.
  *   - Only a competition that never comes back uses season_change_skip() in a before hook.
- *   - Third case (slice 21b, lead 2026-10-18): a cup with a gap in the middle of a game that makes all its
- *     fixtures again at each season start may skip its seasons with season_change_skip() and, at its return,
- *     get its +0x40 year set back to S - 1 in the before hook of season S: its start_new_season adds 1 (for
- *     example FraLgeCup::start_new_season 0x5bd420, inc word [esi+0x40] at 0x5bd4be) and builds the new dates
- *     from that year, so no date of the skipped seasons stays.
+ *   - Third case (slice 21b, accepted by the lead): a competition with a gap in the middle of a game whose
+ *     start_new_season adds 1 to +0x40 and then builds the dates, the entrants and (for some League classes) the
+ *     fixtures of the new edition may call season_change_skip() in each season of the gap and, in the before
+ *     hook of the season S of its return, set +0x40 to S - 1, so start_new_season builds edition S with new
+ *     dates. Evidence: FraLgeCup::start_new_season 0x5bd4be (+0x40 + 1) before set_up_rounds (vtable +0x8c at
+ *     0x5bd50d) and the entrant pick 0x5bd4d0; WelPrmCup::start_new_season 0x928261, then League::create_fixtures
+ *     at 0x9282f8. A wait would make those fixtures and entrants a season or more early. Example and the list of
+ *     classes: season_kind_cup_breaks.c, docs/research/2026-10-18-cup-breaks.md, section 1.
  *   - With changing rules off, the rules of the start season stay (Q232): a competition that the start season
  *     does not hold never comes, one that it holds plays on.
  * Why: a skipped competition keeps the start date of its old year. A League class draws only when today equals
