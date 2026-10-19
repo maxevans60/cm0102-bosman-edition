@@ -241,12 +241,29 @@ static int nation_by_name(const char *names)
 
 /* ---- Editions ---- */
 
-static SeasonNlEdition repeat;          /* an edition after the table, or with changing rules off */
+/* One object per confederation: the UEFA Nations League and the CONCACAF Nations League (part b). Each holds its
+ * own edition after the table (`repeat`). */
+typedef struct {
+    const char *confed;
+    const SeasonCompDef *def;
+    SeasonNlEdition repeat;     /* an edition after the table, or with changing rules off */
+} NlConf;
 
-static const SeasonNlEdition *table_edition(int year)
+extern const SeasonCompDef season_nl_comp, season_nl_concacaf_comp;
+static NlConf confs[] = {{"UEFA", &season_nl_comp, {0}}, {"CONCACAF", &season_nl_concacaf_comp, {0}}};
+#define CONFS ((int)(sizeof confs / sizeof confs[0]))
+
+static NlConf *conf_of_def(const SeasonCompDef *d)
+{
+    for (int i = 0; i < CONFS; i++)
+        if (confs[i].def == d) return &confs[i];
+    return NULL;
+}
+
+static const SeasonNlEdition *table_edition(const NlConf *c, int year)
 {
     for (int i = 0; i < season_nl_edition_count; i++)
-        if (!strcmp(season_nl_editions[i].confed, "UEFA") && season_nl_editions[i].year == year)
+        if (!strcmp(season_nl_editions[i].confed, c->confed) && season_nl_editions[i].year == year)
             return &season_nl_editions[i];
     return NULL;
 }
@@ -254,32 +271,32 @@ static const SeasonNlEdition *table_edition(int year)
 /* The edition of a year in this game. With changing rules on, the table's edition; after the table's last
  * edition the last one again every two years (Q248: the rules stay). With changing rules off, the edition of
  * the start season, again every two years (Q232). NULL for a year with no edition. */
-static const SeasonNlEdition *edition(int year)
+static const SeasonNlEdition *edition(NlConf *c, int year)
 {
     const SeasonNlEdition *base = NULL;
     if (season_changing_rules()) {
-        const SeasonNlEdition *e = table_edition(year);
+        const SeasonNlEdition *e = table_edition(c, year);
         if (e) return e;
         for (int i = 0; i < season_nl_edition_count; i++)
-            if (!strcmp(season_nl_editions[i].confed, "UEFA") && season_nl_editions[i].year < year)
+            if (!strcmp(season_nl_editions[i].confed, c->confed) && season_nl_editions[i].year < year)
                 base = &season_nl_editions[i];
     } else {
-        base = season_nl_first("UEFA", season_start_year());
+        base = season_nl_first(c->confed, season_start_year());
         if (base && base->year == year) return base;
         if (base && base->year > year) base = NULL;
     }
     if (!base || (year - base->year) % 2) return NULL;
-    repeat = *base;
-    repeat.season = base->season + (year - base->year);
-    repeat.year = year;
-    return &repeat;
+    c->repeat = *base;
+    c->repeat.season = base->season + (year - base->year);
+    c->repeat.year = year;
+    return &c->repeat;
 }
 
-static int next_year(int year)
+static int next_year(const NlConf *c, int year)
 {
     if (season_changing_rules())
         for (int i = 0; i < season_nl_edition_count; i++)
-            if (!strcmp(season_nl_editions[i].confed, "UEFA") && season_nl_editions[i].year > year)
+            if (!strcmp(season_nl_editions[i].confed, c->confed) && season_nl_editions[i].year > year)
                 return season_nl_editions[i].year;
     return year + 2;
 }
@@ -310,16 +327,16 @@ static int first_group(const SeasonNlEdition *e, int league)
 
 /* ---- The object ---- */
 
-static uint32_t vtable_copy;
-extern const SeasonCompDef season_nl_comp;
-
-static uint32_t nl_object(void) { return season_comps_object(&season_nl_comp); }
-
-static int is_nl(uint32_t self)
+/* The confederation of a Nations League object in a season game, else NULL. */
+static NlConf *conf_of(uint32_t self)
 {
-    uint32_t o = nl_object();
-    return o && self == o && season_comps_on();
+    if (!self || !season_comps_on()) return NULL;
+    for (int i = 0; i < CONFS; i++)
+        if (season_comps_object(confs[i].def) == self) return &confs[i];
+    return NULL;
 }
+
+static int is_nl(uint32_t self) { return conf_of(self) != NULL; }
 
 static uint32_t stage_at(uint32_t self, int i)
 {
@@ -512,9 +529,10 @@ static int read_results(uint32_t self, const SeasonNlEdition *old, SeasonNlRow *
 
 int season_nl_held_results(int year, SeasonNlRow *rows)
 {
-    uint32_t self = nl_object(), st0 = self ? stage_at(self, 0) : 0;
+    NlConf *c = &confs[0];
+    uint32_t self = season_comps_object(c->def), st0 = self ? stage_at(self, 0) : 0;
     if (!self || !readable(st0) || !rd32(g_mem, self + F_DRAWN) || year_of(st0) != year) return 0;
-    const SeasonNlEdition *e = edition(year);
+    const SeasonNlEdition *e = edition(c, year);
     if (!e) return 0;
     SeasonNlEdition old = *e;
     int n = read_results(self, &old, rows);
@@ -528,7 +546,8 @@ int season_nl_held_results(int year, SeasonNlRow *rows)
 static int entrants(uint32_t self, const SeasonNlEdition *e, Entrant *out)
 {
     uint32_t st0 = stage_at(self, 0);
-    const SeasonNlEdition *old = readable(st0) && rd32(g_mem, self + F_DRAWN) ? edition(year_of(st0)) : NULL;
+    NlConf *c = conf_of(self);
+    const SeasonNlEdition *old = c && readable(st0) && rd32(g_mem, self + F_DRAWN) ? edition(c, year_of(st0)) : NULL;
     SeasonNlEdition from;
     if (old) from = *old;                               /* edition() may give the static `repeat` */
     SeasonNlRow rows[NL_MAX_NATIONS];
@@ -638,7 +657,8 @@ static void round_template(void)
     uint32_t self = cpu.ecx, sp = cpu.esp;
     int stage = (int8_t)rd8(g_mem, sp + 4u);
     uint32_t out_rounds = rd32(g_mem, sp + 8u), out_code = rd32(g_mem, sp + 0xcu), out_league = rd32(g_mem, sp + 0x10u);
-    const SeasonNlEdition *e = edition(year_of(self));
+    NlConf *c = conf_of(self);
+    const SeasonNlEdition *e = c ? edition(c, year_of(self)) : NULL;
     uint32_t rec = 0;
     int year = year_of(self);
     if (e && stage <= (int8_t)rd8(g_mem, self + F_LAST_GROUP)) {
@@ -671,15 +691,16 @@ static void next_edition(uint32_t self)
 {
     uint32_t st0 = stage_at(self, 0);
     int year = year_of(self);
-    if (!rd32(g_mem, self + F_DRAWN) || !readable(st0) || year_of(st0) != year) return;
-    int next = next_year(year);
-    const SeasonNlEdition *e = edition(next);
+    NlConf *c = conf_of(self);
+    if (!c || !rd32(g_mem, self + F_DRAWN) || !readable(st0) || year_of(st0) != year) return;
+    int next = next_year(c, year);
+    const SeasonNlEdition *e = edition(c, next);
     if (!e) return;
     wr16(g_mem, self + F_YEAR, (uint32_t)next);
     set_draw_day(self, e);
     if (logging())
-        fprintf(stderr, "recomp: season nl: the %d edition ends; the next is %s (%d), draw day %d of %d\n", year,
-                e->edition, next, (int16_t)rd16(g_mem, self + F_DRAW_DAY), next + (int16_t)rd16(g_mem, self + F_DRAW_YEAR));
+        fprintf(stderr, "recomp: season nl: the %s %d edition ends; the next is %s (%d), draw day %d of %d\n",
+                c->confed, year, e->edition, next, (int16_t)rd16(g_mem, self + F_DRAW_DAY), next + (int16_t)rd16(g_mem, self + F_DRAW_YEAR));
 }
 
 /* vtable +0x8, thiscall (): the season pass calls it on the update day of entry 1 (15 August) for a complete
@@ -707,9 +728,10 @@ static void start_new_season(void)
 static void update_for_date(void)
 {
     uint32_t self = cpu.ecx, sp = cpu.esp, today = rd32(g_mem, sp + 4u), full = rd32(g_mem, sp + 8u);
-    if (is_nl(self) && readable(today)) {
+    NlConf *conf = conf_of(self);
+    if (conf && readable(today)) {
         int year = year_of(self);
-        const SeasonNlEdition *e = edition(year);
+        const SeasonNlEdition *e = edition(conf, year);
         int day = (int16_t)rd16(g_mem, today), ty = (int16_t)rd16(g_mem, today + 2u);
         int dday = (int16_t)rd16(g_mem, self + F_DRAW_DAY), dy = year + (int16_t)rd16(g_mem, self + F_DRAW_YEAR);
         if (e && full && day == dday && ty == dy) {
@@ -740,7 +762,8 @@ static void update_for_date(void)
                 if (rt_unwinding) return;
                 wr16(g_mem, self + F_DRAW_DAY, (uint32_t)day);
                 wr16(g_mem, self + F_DRAW_YEAR, (uint32_t)(ty - year));
-                if (logging()) fprintf(stderr, "recomp: season nl: draw of %s (%d groups)\n", cur.edition, draw_groups_n);
+                if (logging())
+                    fprintf(stderr, "recomp: season nl: draw of %s %s (%d groups)\n", cur.confed, cur.edition, draw_groups_n);
             }
         }
     }
@@ -778,8 +801,9 @@ static void advance_stage(void)
 {
     uint32_t self = cpu.ecx;
     int groups = held_groups(self), cur = (int32_t)rd32(g_mem, self + F_STAGE);
-    const SeasonNlEdition *e = edition(year_of(self));
-    if (is_nl(self) && e && cur < groups - 1 && groups >= 2 && e->groups[0] >= 2) {
+    NlConf *c = conf_of(self);
+    const SeasonNlEdition *e = c ? edition(c, year_of(self)) : NULL;
+    if (e && cur < groups - 1 && groups >= 2 && e->groups[0] >= 2) {
         uint32_t w[4] = {0};
         int a_groups = e->groups[0] < 4 ? e->groups[0] : 4;
         for (int g = 0; g < a_groups; g++) {
@@ -863,10 +887,9 @@ static void history(void)
     rt_ret_stdcall(0, 0);
 }
 
-static uint32_t build_vtable(void)
+static uint32_t build_vtable(const SeasonCompDef *d)
 {
-    if (vtable_copy) return vtable_copy;
-    uint32_t v = season_comps_vtable(&season_nl_comp, QUAL_VTABLE, VTABLE_SLOTS);
+    uint32_t v = season_comps_vtable(d, QUAL_VTABLE, VTABLE_SLOTS);
     if (!v) return 0;
     /* The League base functions where the class feeds the European Championship (class doc 10), and slot 11
      * (0x48ce70 returns 0, so the season pass may start the object; the class's 0x57eb10 returns 1). */
@@ -878,7 +901,6 @@ static uint32_t build_vtable(void)
     season_comps_set_slot(v, 10, "nl_advance_stage", advance_stage);
     season_comps_set_slot(v, 12, "nl_history", history);
     season_comps_set_slot(v, 15, "nl_round_template", round_template);
-    vtable_copy = v;
     return v;
 }
 
@@ -888,10 +910,10 @@ static uint32_t build_vtable(void)
  * the constructor reads the object from its file (0x57cf21); the stage bytes follow the saved stage count. */
 static uint32_t nl_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
 {
-    (void)d;
-    const SeasonNlEdition *e = loading ? NULL : season_nl_first("UEFA", year);
-    if (!loading && !e) return 0;
-    uint32_t v = build_vtable();
+    NlConf *c = conf_of_def(d);
+    const SeasonNlEdition *e = loading || !c ? NULL : season_nl_first(c->confed, year);
+    if (!c || (!loading && !e)) return 0;
+    uint32_t v = build_vtable(d);
     uint32_t na[1] = {QUAL_SIZE};
     uint32_t obj = v ? call_cdecl(GAME_NEW, 1, na) : 0;
     if (rt_unwinding || !readable(obj)) return 0;
@@ -909,12 +931,19 @@ static uint32_t nl_make(const SeasonCompDef *d, uint32_t rec, int year, int load
     set_up(obj, e);
     if (rt_unwinding) return 0;
     if (logging())
-        fprintf(stderr, "recomp: season nl: %s (%d groups), draw day %d of %d\n", e->edition, group_count(e),
+        fprintf(stderr, "recomp: season nl: %s %s (%d groups), draw day %d of %d\n", e->confed, e->edition, group_count(e),
                 (int16_t)rd16(g_mem, obj + F_DRAW_DAY), e->year + (int16_t)rd16(g_mem, obj + F_DRAW_YEAR));
     return obj;
 }
 
 const SeasonCompDef season_nl_comp = {"UEFA Nations League", "new_nations_league", RECORD_NAME, ENTRY, nl_make};
+
+/* Part b (Q368): the CONCACAF Nations League on a new record (season_comps.h, `like`): the continent, nation and
+ * colour ids of the CONCACAF World Cup qualifying record. Level 14 (inference: below the qualifying of a finals,
+ * which the officials code compares at 0x79d447; the World Cup has 20). */
+const SeasonCompDef season_nl_concacaf_comp = {"CONCACAF Nations League", "new_concacaf_nations_league",
+                                               "CONCACAF Nations League", ENTRY, nl_make,
+                                               "World Cup CONCACAF Qualifying Section", "CONCACAF Nations League", 14};
 
 /* ---- Wraps of the class's direct calls (class doc 2) ---- */
 
@@ -993,13 +1022,22 @@ uint32_t rt_nl_group_stages(uint32_t self, uint32_t original)
     return is_nl(self) ? (uint32_t)(held_groups(self) - 1) : original;
 }
 
+int season_nl_international(uint32_t rec)
+{
+    for (int i = 0; i < CONFS; i++) {
+        uint32_t o = season_comps_object(confs[i].def);
+        if (o && rec == rd32(g_mem, o + F_RECORD)) return 1;
+    }
+    return season_gold_cup_record(rec);
+}
+
 /* 0x669ae0, cdecl (record), returns 1 for the records of the list of international competitions (nations doc
  * 2.1): their fixtures are of type 1, so the squads are called up, the players are released, the friendlies
  * keep off them and the FIFA ranking counts them as the Euro qualifiers do (nations doc 1, point 4). */
 RT_WRAP(00669ae0, nl_international)
 {
-    uint32_t o = nl_object(), rec = rd32(g_mem, cpu.esp + 4u);
-    if (o && season_comps_on() && rec && rec == rd32(g_mem, o + F_RECORD)) {
+    uint32_t rec = rd32(g_mem, cpu.esp + 4u);
+    if (season_comps_on() && rec && season_nl_international(rec)) {
         rt_ret_cdecl(1);
         return;
     }

@@ -14,12 +14,19 @@ import re
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
-                  "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c")
+                  "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
+                  "season_gold_cup.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
     # Slice 28 (season_nl.c): the UEFA Nations League, an object of the class euro_champ_qual.
+    # Slice 28 part b (season_gold_cup.c): the Gold Cup (copa_america) and the Finalissima (Eur_Super_Cup).
+    0x5E0660: ("6aff6829a8950064", "copa_america::copa_america (this, year, record)"),
+    0x57A100: ("6aff683987950064", "Eur_Super_Cup::Eur_Super_Cup (this, year, record)"),
+    0x4AFD80: ("81ec1c020000a17c", "comp_util_get_latest_placed_club (record, place)"),
+    0x945333: ("558bec81ecf80000", "qsort (base, count, size, compare)"),
+    0x4B07D0: ("8b4424048b542408", "compare of club pointers (a, b)"),
     0x57CE10: ("6aff686788950064", "EuroChampQual::EuroChampQual (this, year, record)"),
     0x57E8F0: ("6aff68a888950064", "EuroChampQual::set_up_rules (this)"),
     0x57EB20: ("81ec000200005356", "EuroChampQual::start_new_season (this)"),

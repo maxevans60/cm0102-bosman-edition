@@ -27,6 +27,7 @@
  * 0x10 at 0x5e16d0), and a knockout from the top four of two groups. So it keeps the shape of 12. */
 #include "win.h"
 #include "season_intl.h"
+#include "season_nl.h"                     /* slice 28: the Gold Cup */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -132,6 +133,9 @@ static int year_of(uint32_t self) { return (int16_t)rd16(g_mem, self + 0x40u); }
 /* The index into editions[] when the object is a Copa America of 16 teams in a season game, else -1. */
 static int copa16(uint32_t self)
 {
+    /* Slice 28 part b: the CONCACAF Gold Cup object (season_gold_cup.c, by its record) of 16 teams takes the
+     * shape and the bracket of the 2024 edition (decision). */
+    if (season_gold_cup_of(self)) return season_gold_cup_teams(self) == TEAMS ? EDITIONS - 1 : -1;
     if (!season_intl_on() || !readable(self) || rd32(g_mem, self) != COPA_VTABLE) return -1;
     const SeasonIntlEdition *e = season_intl_edition("goldcup", year_of(self));
     if (!e || e->teams != TEAMS) return -1;
@@ -161,7 +165,7 @@ uint32_t rt_intl_copa_groups(uint32_t self, uint32_t original)
  * from it (0x688e11, 0x688e53). */
 void rt_intl_copa_stages(uint32_t self)
 {
-    if (!season_intl_on() || !readable(self) || rd32(g_mem, self) != COPA_VTABLE) return;
+    if (!season_intl_on() || !readable(self) || (rd32(g_mem, self) != COPA_VTABLE && !season_gold_cup_of(self))) return;
     uint32_t want = rt_intl_copa_ko(self, 2u) + 1u, have = rd32(g_mem, self + 0x2cu);
     if (have == want) return;
     uint32_t stages = game_malloc(4u * want);
@@ -340,6 +344,12 @@ void o_005e1cd0(void);
 RT_WRAP(005e1cd0, copa_entrants)
 {
     uint32_t self = cpu.ecx;
+    if (season_gold_cup_of(self)) {             /* slice 28 part b: the Gold Cup's own entrants */
+        uint32_t r = season_gold_cup_entrants(self);
+        if (rt_unwinding) return;
+        rt_ret_stdcall(r, 0);
+        return;
+    }
     int e = copa16(self);
     if (e < 0) {
         o_005e1cd0();

@@ -64,6 +64,18 @@ typedef struct {
 extern const SeasonNlQualifying season_nl_qualifying[];
 extern const int season_nl_qualifying_count;
 
+/* A CONCACAF Gold Cup that the class copa_america plays (season_gold_cup.c): 12 or 16 teams and the first day of
+ * the edition (year offset 0). From int-continental.tsv and the dates file. */
+typedef struct {
+    int year;
+    int teams;
+    SeasonNlDate start;
+    const char *row;
+} SeasonNlGoldCup;
+
+extern const SeasonNlGoldCup season_nl_gold_cups[];
+extern const int season_nl_gold_cup_count;
+
 extern const SeasonNlEdition season_nl_editions[];
 extern const int season_nl_edition_count;
 extern const SeasonNlTier season_nl_tiers[];
@@ -136,5 +148,14 @@ int season_nl_held_results(int year, SeasonNlRow *rows);
  * 0x68, one match with extra time and penalties on day d (year offset from the campaign year), the final with
  * bit 0x200 for the fixed links. */
 void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams);
+
+/* Part b (season_gold_cup.c): the CONCACAF Gold Cup and the Finalissima. */
+int season_gold_cup_of(uint32_t self);           /* 1 for the Gold Cup object (by its record) in a season game */
+int season_gold_cup_teams(uint32_t self);        /* its teams in the edition it holds (12 or 16), else 0 */
+int season_gold_cup_date_shift(uint32_t self, int *shift);   /* 1 for the Gold Cup: *shift in days */
+uint32_t season_gold_cup_entrants(uint32_t self);            /* the entrants into +0xee; 1, or 0 */
+int season_gold_cup_record(uint32_t rec);        /* 1 for the record of the Gold Cup or the Finalissima */
+/* 1 for the record of an object of slice 28 (season_nl.c): its fixtures are international (0x669ae0). */
+int season_nl_international(uint32_t rec);
 
 #endif

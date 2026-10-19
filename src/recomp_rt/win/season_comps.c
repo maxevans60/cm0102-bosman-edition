@@ -23,8 +23,9 @@
 
 /* ---- The competitions: each slice adds its lines here, in its own block ---- */
 
-/* Slice 28 (season_nl.c): the UEFA Nations League. */
-extern const SeasonCompDef season_nl_comp;
+/* Slice 28 (season_nl.c, season_gold_cup.c): the UEFA and CONCACAF Nations Leagues, the CONCACAF Gold Cup and the
+ * Finalissima. */
+extern const SeasonCompDef season_nl_comp, season_nl_concacaf_comp, season_gold_cup_comp, season_finalissima_comp;
 
 /* Test only (RECOMP_SEASON_COMPS_TEST=1, tests/seasons/season_comps_check.py): a new record "Test New Cup" with an
  * object of the Inter-American Cup class (Inter_Amer_Cup 0x632080, thiscall (year, record), ret 8, new 0xb2,
@@ -37,6 +38,9 @@ static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup
 const SeasonCompDef *const season_comp_defs[] = {
     &test_new_cup,                      /* test only, see above */
     &season_nl_comp,                    /* slice 28 */
+    &season_nl_concacaf_comp,           /* slice 28 part b */
+    &season_gold_cup_comp,              /* slice 28 part b */
+    &season_finalissima_comp,           /* slice 28 part b */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 

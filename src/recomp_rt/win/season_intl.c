@@ -21,6 +21,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_intl.h"
+#include "season_nl.h"                     /* slice 28: the Gold Cup */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -627,6 +628,8 @@ static void stage_builder(uint32_t cls, void (*original)(void), int builder)
     uint32_t self = cpu.ecx;
     int saved = date_shift;
     date_shift = season_intl_date_shift(cls, (int16_t)rd16(g_mem, self + 0x40u));
+    /* Slice 28 part b: the CONCACAF Gold Cup object of the class copa_america has its own dates. */
+    if (cls == INTL_COPA) season_gold_cup_date_shift(self, &date_shift);
     if (date_shift && !saved && logging())
         fprintf(stderr, "recomp: season intl: %s %d moves by %d days\n", season_intl_class_file(cls),
                 (int16_t)rd16(g_mem, self + 0x40u), date_shift);
