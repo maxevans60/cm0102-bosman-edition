@@ -211,6 +211,10 @@ def differences(seasons, comps, rows):
         nations |= {x["nation"] for x in found if isinstance(x["tier"], int)}
         label = f"{c['file']} ({c['name']}), row {r['id']}"
         table_held = "not_held" not in (r["clubs"], r["format"])
+        # Some objects of a record hold no year at +0x40 (French CFA and French Lower Division of fra_first): the
+        # value is whatever the memory holds and changes from build to build, so such an object gives no line.
+        if not any(1900 <= x["year"] <= 2200 for x in both):
+            continue
         # The year of an object is the season (club competitions), the year of the final (the World Cup holds
         # 2002 in 2001/02) or the first year of a qualifying campaign (2000 for the 2002 World Cup). An object
         # with a later year waits for a later edition (the World Cup holds 2006 in 2002/03).

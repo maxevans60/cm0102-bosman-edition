@@ -364,9 +364,9 @@ RT_WRAP(00689c80, promote_relegate)
 
 /* ---- News (rule kind "sizes") ---- */
 
-/* The count and places that each league held last season, so the news names only what the game applies. A loaded
- * game starts with none, so its first season change gives no sizes news (inference: acceptable, the news is a
- * note). */
+/* The count and places that each league held last season, so the news names only what the game applies. A new
+ * game and a loaded game note the counts of their own objects (sizes_new_game, sizes_loaded), so a game loaded
+ * after another game never compares with the objects of the other game. */
 #define MAX_SEEN 512
 static struct { uint32_t obj; int clubs, up, down; } seen[MAX_SEEN];
 static int nseen;
@@ -426,4 +426,16 @@ static void sizes_new_game(int start_year)
     }
 }
 
-const SeasonRuleKind season_kind_sizes = {"sizes", sizes_new_game, NULL, NULL, NULL, NULL, sizes_after};
+/* After a load: the counts of the loaded game. It only reads the objects. */
+static void sizes_loaded(int start_year)
+{
+    (void)start_year;
+    nseen = 0;
+    if (!sizes_on()) return;
+    uint32_t comps[512];
+    int n = season_change_comps(comps, 512);
+    for (int i = 0; i < n && !rt_unwinding; i++)
+        if (size_file(season_change_file(comps[i]))) note(comps[i]);
+}
+
+const SeasonRuleKind season_kind_sizes = {"sizes", sizes_new_game, sizes_loaded, NULL, NULL, NULL, sizes_after};
