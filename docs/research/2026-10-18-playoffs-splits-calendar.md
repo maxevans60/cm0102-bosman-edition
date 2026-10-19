@@ -94,8 +94,15 @@ New game code: the rule kind `playoffs` (`src/recomp_rt/win/season_playoffs.c`).
 
 ### Known limits
 
-- Spain's promotion code 0x850970 rewrites the statuses of SpaSecond rows with the division (club +0x57) and group (club +0x60) of each club (0x850a3a, 0x850b11, 0x850cb9, 0x850b30..0x850b6b). Whether it moves a B team's place to the next club is unknown. The play-off takes the 4 rows as they are.
+- Spain, B teams. Spain's code 0x850970 (`SpaFirst::resolve_b_team_clashes`) reads the linked club of each row of the table (`club_get_linked_b_team` 0x540a50, call at 0x850a09; it returns the paired senior or B club and says which in its second argument), looks at the division (club +0x57) and group (club +0x60) of that club (0x850a3a, 0x850b11, 0x850cb9, 0x850b30..0x850b6b), and for a clash sets the status of a row to 0xfb at 0x850ab6 and moves the club (0x48ece0, count in [esp+0x16]). So the original does take a B team out of a promotion place that it cannot have. Whether a B team in the four play-off places (rows 3 to 6) gives its place to the 7th is not read to the end, and the kind does not build it: it takes the 4 rows as they are, so a B team that wins the play-off is moved by 0x850970 after the play-off and the 7th club does not take its place. Not fixed in the review round (slice 19 review, should-fix 3): a wrong direction of the test would change who goes up in Spain, and no test run shows a B team in the play-off places. Next step: read 0x850970 from 0x850a1b to 0x850c3d for the meaning of the flag at [esp+0x28] and of the two status tests (3 and 0xfb), then skip a row of a B team in `build_stage`.
 - A stage object that a class does not free at start_new_season stays in the heap (one small object per season). A free could free it twice, so the kind does not free it.
+
+### Review round notes (slice 19 review, notes 4 to 9)
+
+- `balanced()` (note 4) reads the division above from its last set_up_rules. The order in which `start_new_season` runs the divisions of a chain was not read: 0x48ce10 starts the top division, and whether its start_new_season calls the lower divisions after its own set_up_rules is unknown. If the lower one runs first, a season in which the division above changes its relegation count plays one season with the decision of the season before. The new game pass of `season_sizes.c` runs `season_playoffs_rules` again, so a new game is right.
+- After WAIT_DAYS (note 5) the change comes without the stage being complete, and the chain of 0x48ce10 stays one season behind while a lower division is not complete (the test above). The comment in the code says so now. The cap is not reached by a 12-day play-off.
+- The news (note 8) compares only the shape of the season before, not `balanced`. A league whose play-off starts because the division above changed its relegation count gets no news. Not built: the kind has no memory of the decision of the season before.
+- Fixed in the code: the buffers of competitions of an entry hold 256 (the cap of `season_change_entry_comps`), not 64 (note 7); the table and the list are freed when the stage object cannot be made (note 6); the header names the callers of advance_stage (note 9).
 
 ## Design: a split on another class
 

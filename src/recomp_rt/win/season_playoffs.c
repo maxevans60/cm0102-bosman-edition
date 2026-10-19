@@ -15,7 +15,7 @@
  * places above the play-off, the play-off places +0xbf 4, and the stage count +0x2c 1 with no stage yet (+0x30
  * -1). The row is that of the start season at a new game and with changing rules off (Q232), else that of the
  * league's edition, as slice 18 reads it. League::update_for_date 0x6847c0 then calls advance_stage on the day
- * the table is complete (0x6849d1..0x6849e3), and the wrap of 0x5a8f60 (season_uefa_cup.c calls
+ * the table is complete (0x6849d1..0x6849e3: check_complete(0, 0) first), and the wrap of 0x5a8f60 (season_uefa_cup.c calls
  * season_playoffs_advance) builds the stage as EngFirst::create_playoff_stage 0x573080 does: the round table of
  * EngFirst's +0x3c 0x571980 (stage 0: two-leg semi-finals and a one-match final, codes 0x82 and 0x96; it reads
  * only the year +0x40), new dates from the day after the table is complete, the clubs 6th v 3rd and 5th v 4th
@@ -86,6 +86,7 @@
 #define DOWN_PLAYOFF 0xc0u
 #define DOWN 0xc1u
 
+#define COMPS_MAX 256                   /* the most competitions of an entry that season_change.c reads (its own cap) */
 #define PLAYOFF_CLUBS 4
 #define ROUND_SIZE 0x68u
 #define PLAYOFF_DAYS 12                 /* the last match on day 11 after the table is complete */
@@ -219,9 +220,9 @@ static void date_plus(int n, int *doy, int *year)
 /* The days from today to the update day of the league's table entry (0 to 365), or -1 when not found. */
 static int days_to_change(uint32_t obj)
 {
-    uint32_t buf[64];
+    uint32_t buf[COMPS_MAX];
     for (int e = 0; e < ENTRY_COUNT; e++) {
-        int n = season_change_entry_comps(e, buf, 64);
+        int n = season_change_entry_comps(e, buf, COMPS_MAX);
         for (int i = 0; i < n; i++) {
             if (buf[i] != obj) continue;
             int upd = (int16_t)rd16(g_mem, ENTRIES + (uint32_t)e * ENTRY_SIZE + ENTRY_UPDATE_DAY);
@@ -316,7 +317,11 @@ static void build_stage(uint32_t obj)
     for (int i = 0; i < PLAYOFF_CLUBS; i++) wr32(g_mem, list + 4u * (uint32_t)i, clubs[i]);
     uint32_t sz[1] = {0xb2};
     uint32_t stage = call_cdecl(F_NEW, 1, sz);
-    if (rt_unwinding || !readable(stage)) return;
+    if (rt_unwinding || !readable(stage)) {
+        game_free(list);
+        game_free(table);
+        return;
+    }
     uint32_t args[15] = {obj, PLAYOFF_CLUBS, list, 2, rd32(g_mem, obj + COMP_RECORD), table, year, 0, 1, 0xa0, 0x14,
                          0, 0, 0, 0};                /* as 0x573180..0x573189 */
     call_this(F_CUP_STAGE, stage, 15, args);
@@ -452,7 +457,9 @@ void season_playoffs_rules(uint32_t obj)
  * marked league whose year +0x40 is before the game year (start_new_season moves it). +0x40 is in the save. A first
  * form read the entry's season year +0x35 instead, and a game loaded in the wait never changed its season
  * (inference: a load sets +0x35 from the game year, as create_spanish_comps does at 0x83761b). At most WAIT_DAYS:
- * then the change comes as the original's would (the league stays). */
+ * then the pass sees today whether the stage is complete or not. The original's chain test (0x48ce10) is still false
+ * while a lower division is not complete, so the chain stays one season behind (the doc's test). A play-off of 12
+ * days cannot normally take 60 days. */
 
 static int16_t held_day[ENTRY_COUNT];
 static int held[ENTRY_COUNT];
@@ -462,8 +469,8 @@ static int logged[ENTRY_COUNT];         /* the day of the last log line of an en
  * stages are complete; 2: one is not (*file gets its file). */
 static int entry_playoffs(int e, int year, const char **file)
 {
-    uint32_t buf[64];
-    int n = season_change_entry_comps(e, buf, 64), seen = 0;
+    uint32_t buf[COMPS_MAX];
+    int n = season_change_entry_comps(e, buf, COMPS_MAX), seen = 0;
     for (int i = 0; i < n && !rt_unwinding; i++) {
         if (!marked(buf[i]) || (int32_t)rd32(g_mem, buf[i] + COMP_STAGE_NOW) < 0 ||
             (int16_t)rd16(g_mem, buf[i] + COMP_YEAR) >= year)

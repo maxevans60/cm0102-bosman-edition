@@ -91,6 +91,9 @@ BY_HAND = {
     "promotion play-offs": ("-", "-", "-", "partial: the play-off places are not given"),
     "promotion rounds to the First Amateur Division": ("-", "-", "-", "partial: the play-off places are not given"),
     "top four promotion play-offs": ("1-4", "-", "-", "ok"),
+    # Turkey 2005/06 to 2008/09: two ties between places of the one division, the winners play one match for one
+    # place (a play-off of 4, as the kind builds it). The tool read only "3rd".
+    "3rd v 6th and 4th v 5th, winners meet for the third place": ("3-6", "-", "-", "ok"),
     # Croatia: places of the play-off and play-out groups of a split season.
     "1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)":
         ("1", "12", "-", "partial: places of the split groups (1st of 6, 5th of the play-out group of 6)"),
