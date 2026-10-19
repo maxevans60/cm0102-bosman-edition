@@ -1,0 +1,332 @@
+/* World Cup qualifying 2006 to 2022 (0.6.0 slice 27): the places of each confederation and the
+ * inter-confederation play-offs of the cycles 2006, 2010, 2014, 2018 and 2022.
+ *
+ * Gate: season_intl_on() and the World Cup year y of the campaign, y = campaign +0x40 + 2, in 2006 to 2022.
+ * The sections use the same year for their hosts (for example 0x910736, 0x920dae, 0x914003). Outside the gate
+ * every function here gives the original's value, so the base game does not change.
+ *
+ * Places in the original (read in 3.9.68). The exempt count of a section is its hosts of year y plus the holder
+ * (the holder is off in a season game, rt_intl_wc_holder).
+ * - Europe (wc_europe_league 0x918200): exempt count +0xf6 (0x919e4b..0x919f7c). With 0 exempt there are 10
+ *   groups (+0xff = 8 at 0x91a0c2), with 1 or 2 there are 9. The group winners qualify (status 7, 0x9189e1).
+ *   The play-off (0x919910) takes the N + 1 best runners-up of stage +0x100: N = 8 for 0 or 1 exempt, else 6
+ *   (0x919a7e..0x919a94; template 0x918923). One of them, drawn at random (0x90cfc0 at 0x919b4f), plays the
+ *   Asian section (news at 0x919c10; getter 0x91def0). The play-off winners qualify (status 1, 0x918a84).
+ * - South America (0x9202b0): direct places +0xbe = 4 - SA hosts (+0xee) - Oceania hosts (+0xef)
+ *   (0x921098..0x9210ad), one play-off place (+0xbf = 1).
+ * - CONCACAF (0x9149f0): final group (stage 6, 0x917830): direct places 3 - exempt (+0xba, 0x91788a), play-off
+ *   places 0 (0x917878). Inference: the second byte of that rules array is the count of play-off places (as in
+ *   the Asian final groups, 0x913761, where the play-off place is status 1).
+ * - Africa (0x90f210): exempt count +0xba (0x9106ae..0x9107db). 0 exempt: first round of all 50 (0x910133,
+ *   0x9101d5), then 5 groups of 5 (0x9109e0), 5 winners. 1 exempt: 4 groups, 4 winners. Total 5 with hosts.
+ * - Asia (0x911bf0): exempt count +0xee (0x913f7b..0x9140ac). Final groups (0x913740): 2 direct places with 0
+ *   exempt, else 1, and 1 play-off place. Stage 11 (0x913bc1) is the play-off, stage 12 (0x913d50) the tie
+ *   with the European runner-up. Total 4.5 with hosts.
+ * - Oceania (0x91df90): the winner of the final (0x91f640) plays the South American play-off team in stage 2
+ *   (0x91f800). The section adds the winner of stage 2 (0x91e937), of either nation.
+ *
+ * Real places (int-world.tsv rows 29 to 249): UEFA 13 (plus host Germany 2006, Russia 2018), CONMEBOL 4.5
+ * (plus host Brazil 2014), CONCACAF 3.5, CAF 5 (plus host South Africa 2010), AFC 4.5 (plus host Qatar 2022),
+ * OFC 0.5. The changes here:
+ * - E1: Europe with no host plays a play-off of 6 (3 places): 10 + 3 = 13 (2010, 2014, 2022). With one host
+ *   it keeps 9 groups and a play-off of 8: 9 + 4 = 13 plus the host (2006, 2018). The group shapes of 2006,
+ *   2010 and 2014 stay those of the original (the count is right, the format is not).
+ * - E2, E3: no European runner-up goes to an Asian tie: the N best runners-up play the play-off, the next is out.
+ * - A1: Asia keeps the format of no host (4 direct places, 3rd places to the play-off) after its pool leaves
+ *   out the host (Qatar 2022).
+ * - A2, O1: the ties. Asia stage 12 holds the AFC tie, Oceania stage 2 the other tie.
+ * - C1: the 4th of the CONCACAF final group gets the play-off place.
+ * - S1: South America keeps 4 direct places with a host (Brazil 2014, a pool of 9).
+ * - F1: Africa keeps the format of no host (5 places) after its pool leaves out the host (South Africa 2010),
+ *   when the pool holds at least 50 nations.
+ *
+ * Ties (int-world.tsv and the Wikipedia pages of the inter-confederation play-offs, read 2026-10-18):
+ * - 2006: CONCACAF 4th v AFC, CONMEBOL 5th v OFC (int-world-57).
+ * - 2010: AFC v OFC, CONCACAF 4th v CONMEBOL 5th (int-world-105).
+ * - 2014: AFC v CONMEBOL (Jordan v Uruguay), CONCACAF v OFC (Mexico v New Zealand). The tsv (int-world-153)
+ *   says only "drawn". Source:
+ *   https://en.wikipedia.org/wiki/2014_FIFA_World_Cup_qualification_(inter-confederation_play-offs)
+ * - 2018: CONCACAF v AFC (Honduras v Australia), OFC v CONMEBOL (New Zealand v Peru). The tsv (int-world-201)
+ *   says only "drawn". Source:
+ *   https://en.wikipedia.org/wiki/2018_FIFA_World_Cup_qualification_(inter-confederation_play-offs)
+ * - 2022: AFC v CONMEBOL, CONCACAF v OFC (int-world-249). The real ties were single matches in Qatar in June
+ *   2022. Here they keep two legs on the dates of the original's templates (inference: a tie after the World
+ *   Cup draw would leave its slot to the draw fill of world_cup seed_teams 0x92f230).
+ *
+ * A partner that is not known when a tie is built (its section has not decided it) falls back to the
+ * original's partner, so the tie always has two teams. Inference, not traced: whether the status bytes that the
+ * partner scans read are final when the builders run (Asia stage 12 when stage 11 ends, 0x91351c; Oceania stage
+ * 2 when its final ends, 0x91f17b). RECOMP_SEASON_INTL_LOG=1 logs each pairing.
+ *
+ * Sites in tools/recomp/seasons.py ("World Cup qualifying 2006 to 2022 (0.6.0 slice 27)"). */
+#include "win.h"
+#include "season_intl.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define COMPS 0xadadfcu                 /* competition objects by key id ([0xadadfc][key], 0x90fc89) */
+#define KEY_OCEANIA 0x9cf76cu           /* key ids (sweep-international section 2) */
+#define KEY_CONCACAF 0x9cf770u
+#define KEY_SOUTH_AMERICA 0x9cf778u
+#define STAGES 0xcu                     /* stage array of a competition, count at +0x2c */
+#define STAGE_COUNT 0x2cu
+#define TEAM_COUNT 0x3eu                /* word: teams of a League table or a Cup round */
+#define CUP_ROWS 0xa7u                  /* Cup: rows of 6 bytes, +0 the team, +5 the status (0x91f888) */
+#define CUP_ROW 6u
+#define TABLE 0xb1u                     /* League: rows of 0x3b bytes, +0 the team, +0x37 the status (0x91f8bb) */
+#define TABLE_ROW 0x3bu
+#define TABLE_STATUS 0x37u
+#define STATUS_PLAYOFF 1u               /* status 1: the play-off place or the winner of a tie */
+#define CLUB_NATION 0x53u               /* the nation record of a national team (0x9107b1) */
+#define NATION_NAME 0x4u
+
+#define FIRST_YEAR 2006
+#define LAST_YEAR 2022
+
+enum { AFC, CONCACAF, CONMEBOL, OFC };
+
+/* The ties of each cycle: the partner of the AFC tie (Asia stage 12) and the two teams of the other tie
+ * (Oceania stage 2). The original puts the OFC winner in place 0 and the South American team in place 1
+ * (0x91f8ab, 0x91f8e5); each place here falls back to the original's team of that place. The sources are in the
+ * head comment. */
+static const struct { int year; int afc_partner; int other[2]; } ties[] = {
+    {2006, CONCACAF, {OFC, CONMEBOL}},
+    {2010, OFC, {CONCACAF, CONMEBOL}},
+    {2014, CONMEBOL, {OFC, CONCACAF}},
+    {2018, CONCACAF, {OFC, CONMEBOL}},
+    {2022, CONMEBOL, {OFC, CONCACAF}},
+};
+#define TIES ((int)(sizeof ties / sizeof ties[0]))
+
+static const char *const conf_name[] = {"AFC", "CONCACAF", "CONMEBOL", "OFC"};
+
+static int logging(void)
+{
+    static int on = -1;
+    if (on < 0) {
+        const char *v = getenv("RECOMP_SEASON_INTL_LOG");
+        on = v && *v == '1';
+    }
+    return on;
+}
+
+static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
+
+/* The World Cup year of a section's campaign, or 0 outside the gate. */
+static int wc_year(uint32_t self)
+{
+    if (!season_intl_on() || !readable(self)) return 0;
+    int y = (int16_t)rd16(g_mem, self + 0x40u) + 2;
+    return y >= FIRST_YEAR && y <= LAST_YEAR ? y : 0;
+}
+
+static int tie_index(int y)
+{
+    for (int i = 0; i < TIES; i++)
+        if (ties[i].year == y) return i;
+    return -1;
+}
+
+static const char *team_name(uint32_t club)
+{
+    if (!readable(club)) return "none";
+    uint32_t nation = rd32(g_mem, club + CLUB_NATION);
+    return readable(nation) ? win_str(nation + NATION_NAME) : "?";
+}
+
+/* The competition object of a key global, or 0. */
+static uint32_t comp_of(uint32_t key)
+{
+    uint32_t table = rd32(g_mem, COMPS);
+    if (!readable(table)) return 0;
+    uint32_t c = rd32(g_mem, table + rd32(g_mem, key) * 4u);
+    return readable(c) ? c : 0;
+}
+
+/* Stage i of a competition, or 0 when it does not exist yet. */
+static uint32_t stage_of(uint32_t comp, uint32_t i)
+{
+    if (!comp || rd32(g_mem, comp + STAGE_COUNT) <= i) return 0;
+    uint32_t stages = rd32(g_mem, comp + STAGES);
+    if (!readable(stages)) return 0;
+    uint32_t s = rd32(g_mem, stages + i * 4u);
+    return readable(s) ? s : 0;
+}
+
+/* The team with status 1 in a League table (rows at +0xb1), or 0. */
+static uint32_t table_playoff(uint32_t league)
+{
+    if (!league) return 0;
+    int n = (int16_t)rd16(g_mem, league + TEAM_COUNT);
+    uint32_t rows = rd32(g_mem, league + TABLE);
+    if (!readable(rows)) return 0;
+    for (int i = 0; i < n; i++)
+        if (rd8(g_mem, rows + (uint32_t)i * TABLE_ROW + TABLE_STATUS) == STATUS_PLAYOFF)
+            return rd32(g_mem, rows + (uint32_t)i * TABLE_ROW);
+    return 0;
+}
+
+/* The team with status 1 in a Cup round (rows at +0xa7), or 0. */
+static uint32_t cup_winner(uint32_t cup)
+{
+    if (!cup) return 0;
+    int n = (int16_t)rd16(g_mem, cup + TEAM_COUNT);
+    uint32_t rows = rd32(g_mem, cup + CUP_ROWS);
+    if (!readable(rows)) return 0;
+    for (int i = 0; i < n; i++)
+        if (rd8(g_mem, rows + (uint32_t)i * CUP_ROW + 5u) == STATUS_PLAYOFF)
+            return rd32(g_mem, rows + (uint32_t)i * CUP_ROW);
+    return 0;
+}
+
+/* The play-off team of a confederation (not AFC), or 0 when it is not known.
+ * - OFC: the winner of the Oceania final, stage[1] (as 0x91f878..0x91f8ab).
+ * - CONMEBOL: the South American League row with status 1 (as 0x91f8ad..0x91f8e5).
+ * - CONCACAF: the final group, stage[6] (0x9170e7, stored at 0x9179e2 with the stage index of +0x30), row with
+ *   status 1 (C1). The rows of a League_Stage are read as the Europe section reads its groups (0x919a06). */
+static uint32_t playoff_team(int conf)
+{
+    switch (conf) {
+    case OFC: return cup_winner(stage_of(comp_of(KEY_OCEANIA), 1u));
+    case CONMEBOL: return table_playoff(comp_of(KEY_SOUTH_AMERICA));
+    case CONCACAF: return table_playoff(stage_of(comp_of(KEY_CONCACAF), 6u));
+    }
+    return 0;
+}
+
+/* The strongest nation of a confederation that is not in the World Cup slots yet: the partner of a tie when
+ * neither the team of the cycle nor the original's partner is known (a 2005 start built the Asian tie of 2006
+ * before the CONCACAF final group ended, and E3 leaves no European runner-up). The continent of a nation is
+ * its pointer at +0x71, its id at +0 of that record, compared with the key continents (sweep section 8). The
+ * reputation is the s16 at +0x8e (3.9.68 nation.dat: 9500 for Brazil). The team is national_team 0x53b3d0,
+ * taken only when its own nation field names the nation (season_intl.c, team_nation). */
+static uint32_t strongest_free(int conf)
+{
+    static const uint32_t continent_key[] = {0x9cfa0cu, 0x9cfa14u, 0x9cfa1cu, 0x9cfa18u};   /* AFC .. OFC */
+    uint32_t nations = rd32(g_mem, 0xae23a8u), wc = comp_of(0x9cf79cu);
+    int count = (int)rd32(g_mem, 0xae2350u);
+    if (!readable(nations) || count <= 0 || count > 1000) return 0;
+    uint32_t slots = wc ? rd32(g_mem, wc + 0x14u) : 0;
+    int filled = wc ? (int16_t)rd16(g_mem, wc + 0x36u) : 0;
+    uint32_t want = rd32(g_mem, continent_key[conf]), best = 0;
+    int best_rep = -1;
+    for (int id = 0; id < count; id++) {
+        uint32_t nation = nations + (uint32_t)id * 0x122u, c = rd32(g_mem, nation + 0x71u);
+        int rep = (int16_t)rd16(g_mem, nation + 0x8eu);
+        if (!readable(c) || rd32(g_mem, c) != want || rep <= best_rep) continue;
+        Cpu saved = cpu;
+        uint32_t args[1] = {nation};
+        uint32_t team = rt_callback(0x0053b3d0u, 1, args);
+        if (rt_unwinding) return 0;
+        cpu = saved;
+        if (!readable(team) || rd32(g_mem, team + CLUB_NATION) != nation) continue;
+        int in = 0;
+        for (int k = 0; readable(slots) && k < filled && k < 64 && !in; k++)
+            in = rd32(g_mem, slots + 6u * (uint32_t)k) == team;
+        if (in) continue;
+        best = team;
+        best_rep = rep;
+    }
+    return best;
+}
+
+/* ---- Sites ---- */
+
+/* E1 (0x918923, 0x919a7e): the exempt count that sizes the European play-off. 2 gives a play-off of 6. */
+uint32_t rt_wcq_europe_playoff(uint32_t self, uint32_t exempt)
+{
+    return wc_year(self) && exempt == 0u ? 2u : exempt;
+}
+
+/* E2, E3 (0x919b4f, 0x919b5e): 1 when no European runner-up goes to an Asian tie. */
+uint32_t rt_wcq_europe_no_asia(uint32_t self)
+{
+    return wc_year(self) ? 1u : 0u;
+}
+
+/* A1 (0x9141ea): after the Asian pool leaves out the hosts, the format of no host. */
+void rt_wcq_asia_format(uint32_t self)
+{
+    if (!wc_year(self) || rd8(g_mem, self + 0xeeu) == 0u) return;
+    if (logging())
+        fprintf(stderr, "recomp: season intl: wc qualifying %d: Asia plays the format of no host (%u left out)\n",
+                wc_year(self), rd8(g_mem, self + 0xeeu));
+    wr8(g_mem, self + 0xeeu, 0);
+}
+
+/* A2 (0x913e42): the partner of the Asian team in stage 12. original is the European runner-up of 0x91def0. */
+uint32_t rt_wcq_asia_partner(uint32_t self, uint32_t asian, uint32_t original)
+{
+    int y = wc_year(self), t = tie_index(y);
+    if (t < 0) return original;
+    uint32_t p = playoff_team(ties[t].afc_partner);
+    if (!p) {
+        if (logging())
+            fprintf(stderr, "recomp: season intl: wc play-off %d: %s team not known, the original partner or the strongest free nation plays\n",
+                    y, conf_name[ties[t].afc_partner]);
+        p = original ? original : strongest_free(ties[t].afc_partner);
+    }
+    if (logging())
+        fprintf(stderr, "recomp: season intl: wc play-off %d: %s v %s\n", y, team_name(asian), team_name(p));
+    return p;
+}
+
+/* O1 (0x91f8e9): the two teams of Oceania stage 2. teams is the array of 0x91f800 (ebx), found the count of
+ * the original's picks (ebp). Gives the count of teams in the array. */
+uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found)
+{
+    static const int original[2] = {OFC, CONMEBOL};
+    int y = wc_year(self), t = tie_index(y);
+    if (t < 0 || !readable(teams)) return found;
+    uint32_t pick[2];
+    for (int i = 0; i < 2; i++) {
+        int conf = ties[t].other[i];
+        pick[i] = playoff_team(conf);
+        if (!pick[i] && conf != original[i]) {
+            pick[i] = playoff_team(original[i]);
+            if (logging())
+                fprintf(stderr, "recomp: season intl: wc play-off %d: %s team not known, the %s team plays\n", y,
+                        conf_name[conf], conf_name[original[i]]);
+        }
+    }
+    for (int i = 0; i < 2; i++)
+        if (!pick[i]) pick[i] = strongest_free(ties[t].other[i]);
+    if (!pick[0] || !pick[1]) return found;     /* as the original: its box at 0x91f917 */
+    wr32(g_mem, teams, pick[0]);
+    wr32(g_mem, teams + 4u, pick[1]);
+    if (logging())
+        fprintf(stderr, "recomp: season intl: wc play-off %d: %s v %s\n", y, team_name(pick[0]), team_name(pick[1]));
+    return 2u;
+}
+
+/* C1 (0x917878): the play-off places of the CONCACAF final group (0 in the original). */
+uint32_t rt_wcq_concacaf_playoff(uint32_t self)
+{
+    return wc_year(self) ? 1u : 0u;
+}
+
+/* S1 (0x9210a2): the South American hosts that the direct places lose (+0xee in dl). */
+uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts)
+{
+    return wc_year(self) ? 0u : hosts;
+}
+
+/* F1 (0x9108d8): after the African pool (count in ebx, sorted later at 0x9108fc) leaves out the hosts, the
+ * format of no host when the pool holds at least 50 nations: exempt +0xba 0, pool size +0xb6 50. The first round
+ * then takes the 50 of the pool (0x9101d9). */
+void rt_wcq_africa_format(uint32_t self, uint32_t pool)
+{
+    if (!wc_year(self) || rd8(g_mem, self + 0xbau) == 0u) return;
+    if (pool < 50u) {
+        if (logging())
+            fprintf(stderr, "recomp: season intl: wc qualifying %d: Africa pool of %u, the host format stays\n",
+                    wc_year(self), pool);
+        return;
+    }
+    if (logging())
+        fprintf(stderr, "recomp: season intl: wc qualifying %d: Africa plays the format of no host (%u left out)\n",
+                wc_year(self), rd8(g_mem, self + 0xbau));
+    wr8(g_mem, self + 0xbau, 0);
+    wr32(g_mem, self + 0xb6u, 50u);
+}

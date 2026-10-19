@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/seasons/season_history_run.py <cm0102_recomp> <game folder> <folder of databases>
-        [--only <season or database>,...] [--jobs n] [--extras] [--no-extra-runs]
+        [--only <season or database>,...] [--jobs n] [--extras] [--no-extra-runs] [--duplicates]
 
 For each season database before 2010/11 (and the 3.9.68 data on the 2002/03 tile) a new game starts in its
 season and plays to the first news screen. The test log RECOMP_HISTORY_LOG (season_history.c) gives, at the
@@ -14,6 +14,11 @@ first turn the game holds only the rows of the selected nations (England in thes
                second clubs, and no other row.
     england    the English Premier Division holds the real champion of every season from 2001/02 to the season
                before the start (an independent list, as in season_dates_run.py).
+    duplicates no competition holds the same row (label year, first and second club) twice, at the load and at the
+               first turn. Many season databases hold such rows (tests/seasons/history_duplicates_check.py lists
+               them; September 2010 ODB holds the English Premier Division 2001 Chelsea / Manchester United twice,
+               2010 after the shift). --duplicates adds a run for each season database from 2010/11 on, with this
+               check alone (the plan covers only the databases before 2010/11)
 Also:
     off        September 2005 in 2005/06 with RECOMP_SEASON_CODE=off: no row is written (the 2002 to 2004 labels
                of the English Premier Division stay empty).
@@ -120,6 +125,17 @@ def check(label, start, got, want, turn=False):
     return n, bad
 
 
+def duplicates(got):
+    """The rows that a competition of the log holds more than once: [(competition, label, first, second)]."""
+    out = []
+    for comp, rows in got.items():
+        for y, pairs in rows.items():
+            for pair in sorted(set(pairs)):
+                if pairs.count(pair) > 1:
+                    out.append((comp, y) + pair)
+    return out
+
+
 def run_one(program, game, work, label, year, folder, env=None):
     env = dict(env or {}, RECOMP_HISTORY_LOG=";".join(COMPS))
     save, log, secs = sdr.play(program, game, work, label, year, folder, env)
@@ -177,6 +193,16 @@ def main(argv):
             print(f"skip  {r['database']}: not in {dbs_dir}")
             continue
         runs.append((r["database"], year, r["database"], None))
+    dup_only = set()
+    if "--duplicates" in argv:                     # every season database from 2010/11 on: the duplicates alone
+        for r in sdr.season_rows():
+            if r["role"] != "season database" or r["database"] in starts or r["database"] not in dbs:
+                continue
+            year = int(r["data_season"][:4])
+            if only and str(year) not in only and r["database"] not in only:
+                continue
+            runs.append((r["database"], year, r["database"], None))
+            dup_only.add(r["database"])
     if not only or "2002" in only or "3.9.68" in only:
         runs.append(("3.9.68", 2002, None, None))
     if "--no-extra-runs" not in argv:
@@ -213,6 +239,17 @@ def main(argv):
                       f" ({secs:.0f} s)")
                 failed += not ok
                 continue
+            dups = duplicates(got) + duplicates(turn)
+            if label in dup_only:
+                ok = bool(turn) and not dups          # no load log: these databases have no fill
+                print(f"{'ok  ' if ok else 'FAIL'}  {label} ({year}/{(year + 1) % 100:02d}): "
+                      f"{'no duplicate rows' if turn else 'no history log'}; "
+                      f"{re.search(r'recomp: season history: .*duplicate.*', log).group(0)[24:] if 'duplicate rows' in log else 'no duplicates cleared'}"
+                      f" ({secs:.0f} s)")
+                for d in sorted(set(dups)):
+                    print(f"      duplicate: {d}")
+                failed += not ok
+                continue
             db = "September 2009" if label == "again" else (name or "3.9.68")
             if not got or not turn:
                 print(f"FAIL  {label}: no history log ({secs:.0f} s)\n{log[-1500:]}")
@@ -221,6 +258,7 @@ def main(argv):
             n, bad = check(label, year, got, want[db])
             n2, bad2 = check(label, year, turn, want[db], turn=True)
             bad += ["at the first turn: " + b for b in bad2]
+            bad += [f"duplicate row: {d}" for d in sorted(set(dups))]
             line = re.search(r"recomp: season history: .*", log)
             print(f"{'ok  ' if not bad else 'FAIL'}  {label} ({year}/{(year + 1) % 100:02d}): {n} label years "
                   f"checked at the load, {n2} at the first turn; {line.group(0)[24:] if line else 'no fill line'} ({secs:.0f} s)")

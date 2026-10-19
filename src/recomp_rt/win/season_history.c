@@ -38,7 +38,7 @@ static Saved *saved;
 static size_t saved_n, saved_cap;
 static int filled;                  /* 1 while a fill is in memory */
 static uint32_t old_count;          /* the row count before the fill */
-static uint32_t n_added, n_cleared, n_unmatched;
+static uint32_t n_added, n_cleared, n_unmatched, n_duplicates;
 
 static void save_row(uint32_t index)
 {
@@ -188,11 +188,60 @@ static const SeasonHistDb *entry_for(const char *name, int N)
     return NULL;
 }
 
+/* A history row as a sort key: competition, label year, the four places, then its index. */
+typedef struct { uint32_t comp, label, place[4], index; } RowKey;
+
+static int by_key(const void *a, const void *b)
+{
+    const RowKey *x = a, *y = b;
+    if (x->comp != y->comp) return x->comp < y->comp ? -1 : 1;
+    if (x->label != y->label) return x->label < y->label ? -1 : 1;
+    for (int f = 0; f < 4; f++)
+        if (x->place[f] != y->place[f]) return x->place[f] < y->place[f] ? -1 : 1;
+    return x->index < y->index ? -1 : x->index > y->index;
+}
+
+/* Clears the second and later copy of each row that the table holds twice (the head of season_history.h): its
+ * competition becomes 0, the free row of the original (0x4afce0), and the undo record keeps the old bytes. */
+static void drop_duplicates(void)
+{
+    uint32_t hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
+    if (!hist || !count) return;
+    RowKey *keys = malloc((size_t)count * sizeof *keys);
+    if (!keys) rt_fatal("season history: no memory");
+    uint32_t n = 0;
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t r = hist + i * HISTORY_SIZE;
+        RowKey *k = &keys[n];
+        k->comp = rd32(g_mem, r + 4);
+        if (!k->comp) continue;
+        k->label = rd16(g_mem, r + 8);
+        for (int f = 0; f < 4; f++) k->place[f] = rd32(g_mem, r + 0xa + 4 * (uint32_t)f);
+        k->index = i;
+        n++;
+    }
+    qsort(keys, n, sizeof *keys, by_key);
+    for (uint32_t i = 1; i < n; i++) {
+        const RowKey *a = &keys[i - 1], *b = &keys[i];
+        if (a->comp != b->comp || a->label != b->label || memcmp(a->place, b->place, sizeof a->place)) continue;
+        save_row(b->index);
+        wr32(g_mem, hist + b->index * HISTORY_SIZE + 4, 0);
+        n_duplicates++;
+    }
+    free(keys);
+    if (n_duplicates) {
+        filled = 1;
+        old_count = count;
+        fprintf(stderr, "recomp: season history: %u duplicate rows cleared\n", n_duplicates);
+    }
+}
+
 void season_history_fill(const char *name, int N)
 {
     season_history_undo();
     saved_n = 0;
-    n_added = n_cleared = n_unmatched = 0;
+    n_added = n_cleared = n_unmatched = n_duplicates = 0;
+    drop_duplicates();
     const SeasonHistDb *e = entry_for(name, N);
     if (!e) return;
     uint32_t hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
