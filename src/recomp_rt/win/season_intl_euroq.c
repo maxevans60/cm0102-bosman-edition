@@ -167,7 +167,9 @@ void o_0057ed10(void);
 /* The group stages are built at 0x57ff2e for index 0 to 7 (the loop at 0x57ff34 belongs to slice 28). With 10
  * groups the call for 7 also builds stage[8] (group J, its teams at +0xf7 from the draw 0x57dab0, which takes
  * +0xff + 2 groups). A call for 8 when stage[8] is there already does nothing, so a later loop to 8 builds it
- * once. */
+ * once. The stage array (+0xc, 10 entries) is not cleared before the draw: in a 2018 start stage[8] held a
+ * stale pointer, so group J was not built, +0x30 stayed 7 and the step to 8 called that pointer (0x6848f8). So
+ * the call for 0 clears stage[8] and stage[9] (stage[9] for the step after the groups, 0x57ec60 below). */
 RT_WRAP(0057ed10, euroq_group_stage)
 {
     uint32_t self = cpu.ecx, index = rd32(g_mem, cpu.esp + 4u);
@@ -176,6 +178,10 @@ RT_WRAP(0057ed10, euroq_group_stage)
         return;
     }
     uint32_t stages = rd32(g_mem, self + 0xcu);
+    if (index == 0u && readable(stages)) {      /* the array is not cleared: stage[8] held a stale pointer */
+        wr32(g_mem, stages + 32u, 0);
+        wr32(g_mem, stages + 36u, 0);
+    }
     if (index == 8u && readable(stages) && rd32(g_mem, stages + 32u)) {
         rt_ret_stdcall(1, 3);
         return;
@@ -199,9 +205,9 @@ void o_0057ec60(void);
  * complete and +0x30 is below the stage count +0x2c minus 1 (0x6849aa..0x6849e0), else it ends the competition
  * (0x6849e8). It also calls each stage 0 to +0x30 every day (0x6848ee..0x684901). With 10 groups +0x30 is 8 after
  * the groups, the step makes it 9, and 0x57ef50 takes its no-ranking path (the news for the teams that are out)
- * and makes no stage[9], so the next update called an empty stage at 0x6848f8 ("call to 0" on 4 October 2019 in
- * a 2018 start). When stage[9] is still empty after the step, +0x30 goes back to 8 and +0x2c to 9: the next
- * update ends the qualifying. A stage that slice 28 builds there keeps the original's step. */
+ * and makes no stage[9], so the next update would call an empty stage at 0x6848f8. When stage[9] is still empty
+ * after the step (the group builder above clears it), +0x30 goes back to 8 and +0x2c to 9: the next update ends
+ * the qualifying. A stage that slice 28 builds there keeps the original's step. */
 RT_WRAP(0057ec60, euroq_advance)
 {
     uint32_t self = cpu.ecx;
