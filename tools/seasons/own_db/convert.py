@@ -58,6 +58,22 @@ DAT_FILES = ["city.dat", "club.dat", "club_comp.dat", "club_comp_history.dat", "
              "nation_comp_history.dat", "officials.dat", "second_names.dat", "stadium.dat", "staff.dat",
              "staff_comp.dat", "staff_comp_history.dat", "staff_history.dat"]
 JOBS = {16: 5, 20: 6, 2: 8, 34: 8, 48: 8, 14: 9, 12: 10}     # FM job -> 3.9.68 job (FM2005 and FM use the same codes)
+# The club slots of each 3.9.68 job (staff +0x3d), as database_add_staff_to_club 0x53bd10 fills them (jump table at
+# 0x53c14c): 5 manager (+0xcf), 6 and 7 assistant (+0xd3), 8 coaches, 9 scouts, 10 physios, 11 squad. A player-manager
+# (12, at 0x53c043), player-assistant (13, 0x53c078) and player-coach (15, 0x53c0c5) take the staff slot and a squad
+# slot (lea [esi+0xd7] at 0x53c059, 0x53c08e, 0x53c0f8). The templates list them the same way. A person in the squad
+# list whom the load does not link to the club (a player-coach with no coach slot) is added to the list a second time
+# when the game moves him between the club and its linked B side (CONTRACT_MANAGER::toggle_squad_placement 0x4cbd20
+# calls 0x53bd10 at 0x4cc091), and the team pick then stops at match_man..cpp 1225.
+JOB_LISTS = {5: "m", 6: "a", 7: "a", 8: "c", 9: "s", 10: "ph", 11: "", 12: "m", 13: "a", 15: "c"}
+PLAYER_JOBS = (11, 12, 13, 15)
+
+
+def in_squad(r):
+    """A staff row with player data (kind 2 or 3) whose job takes a squad slot."""
+    return r[0x5f] == 2 or (r[0x5f] == 3 and r[0x3d] in PLAYER_JOBS)
+
+
 CUM = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
 EMPTY = (31, 1900)
 
@@ -94,10 +110,12 @@ def set_count(buf, table, count):
 
 
 def check_squad_lists(clubs, staff):
-    """The squad lists (club +0xd7, 50 ids) must agree with the staff rows: every entry names a player whose staff club
-    (+0x39) is that club, no player comes twice in one list, and every player (kind 2 or 3) at a club is in its list.
-    The computer's team pick 0x6dbc50 joins a club's list with the list of its linked B team (0x540a50) and stops
-    with "match_man..cpp 1225" (check at 0x6dd3a4) when one player comes twice."""
+    """The club lists must agree with the staff rows. Squad list (club +0xd7, 50 ids): every entry names a player
+    whose staff club (+0x39) is that club and whose job takes a squad slot (in_squad), no player comes twice, and
+    every such player at a club is in its list. Staff slots: every person at a club is in the slot of his job
+    (JOB_LISTS). The computer's team pick 0x6dbc50 takes its candidates from the squad list (side +0x27, which
+    init_match sets to club +0xd7 at 0x6b8850) and stops with "match_man..cpp 1225" (check at 0x6dd3a4) when one
+    player comes twice."""
     i32 = lambda r, o: struct.unpack_from("<i", r, o)[0]  # noqa: E731
     lists = {}
     bad, twice = [], []
@@ -110,11 +128,23 @@ def check_squad_lists(clubs, staff):
         lists[c] = set(ids)
         bad += [(c, t) for t in ids if t >= len(staff) or i32(staff[t], 0x39) != c]
     missing = [(i32(r, 0x39), i32(r, 0)) for r in staff
-               if r[0x5f] in (2, 3) and i32(r, 0x39) in lists and i32(r, 0) not in lists[i32(r, 0x39)]]
+               if in_squad(r) and i32(r, 0x39) in lists and i32(r, 0) not in lists[i32(r, 0x39)]]
+    # Every person with a club is in the club slot of his job (JOB_LISTS), so that the load links him to the club.
+    slots = {}
+    for r in clubs:
+        for key, off, n in (("m", 0xcf, 1), ("a", 0xd3, 1), ("c", 0x19f, 5), ("s", 0x1b3, 7), ("ph", 0x1cf, 3)):
+            slots[(i32(r, 0), key)] = {i32(r, off + 4 * k) for k in range(n)}
+    no_slot = [(i32(r, 0x39), i32(r, 0), r[0x3d]) for r in staff
+               if r[0x5f] in (1, 3) and i32(r, 0x39) in lists and JOB_LISTS.get(r[0x3d])
+               and i32(r, 0) not in slots[(i32(r, 0x39), JOB_LISTS[r[0x3d]])]]
+    extra = [(c, t) for c, ids in lists.items() for t in ids if t < len(staff) and not in_squad(staff[t])]
     check(not bad, f"{len(bad)} squad list entries name a player of another club or none, for example {bad[:5]}")
     check(not twice, f"{len(twice)} squad lists name one player twice, for example clubs {twice[:5]}")
     check(not missing, f"{len(missing)} players are not in the squad list of their club, for example "
                        f"(club, staff) {missing[:5]}")
+    check(not no_slot, f"{len(no_slot)} staff are not in the club slot of their job, for example (club, staff, job) "
+                       f"{no_slot[:5]}")
+    check(not extra, f"{len(extra)} squad list entries name staff whose job takes no squad slot, for example {extra[:5]}")
 
 
 # League cups that take last season's top clubs by last division (+0x5b) and place (+0x5f). The other league cups of
@@ -353,10 +383,11 @@ def main(argv):
     lists, mgr, ass, cut = {}, {}, {}, 0
     for c, ts in by_club.items():
         fm_first = lambda t: (t not in by_t, t)  # noqa: E731
-        players = sorted((t for t in ts if staff[t][0x5f] in (2, 3)), key=lambda t: (t not in by_t, born(t)))
+        players = sorted((t for t in ts if in_squad(staff[t])), key=lambda t: (t not in by_t, born(t)))
         out = {}
-        for key, job, size in (("p", None, 50), ("c", 8, 5), ("s", 9, 7), ("ph", 10, 3), ("m", 5, 1), ("a", 6, 1)):
-            group = players if job is None else sorted((t for t in ts if staff[t][0x5f] in (1, 3) and staff[t][0x3d] == job), key=fm_first)
+        for key, size in (("p", 50), ("c", 5), ("s", 7), ("ph", 3), ("m", 1), ("a", 1)):
+            group = players if key == "p" else sorted((t for t in ts if staff[t][0x5f] in (1, 3) and
+                                                       JOB_LISTS.get(staff[t][0x3d]) == key), key=fm_first)
             for t in group[size:]:
                 unemploy(t)
                 cut += 1
