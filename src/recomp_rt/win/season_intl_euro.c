@@ -20,7 +20,6 @@
  * (https://www.uefa.com/MultimediaFiles/Download/Regulations/uefaorg/Regulations/02/09/60/38/2096038_DOWNLOAD.pdf)
  * were not read: second source needed. */
 #include "win.h"
-#include "euro_finals.h"
 #include "season_intl.h"
 #include "euro_finals.h"
 

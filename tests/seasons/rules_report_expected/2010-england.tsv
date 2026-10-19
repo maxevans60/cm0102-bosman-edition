@@ -23,7 +23,6 @@
 2010	name	inter_amer_cup (Inter-American Cup), row club-world-183: game 'Inter-American Cup', table 'Copa Interamericana'
 2010	name	uefa_cup (UEFA Cup), row uefa-77: game 'UEFA Cup', table 'UEFA Europa League'
 2010	name	world_club_champ (FIFA Club World Championship), row club-world-173: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2010	name	world_club_cup (Intercontinental Cup), row club-world-172: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2010	no_row	friendly (Friendly): no table row
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
@@ -75,7 +74,6 @@
 2011	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-128: game 'World Cup Oceania Qualifying Section', table '2014 FIFA World Cup qualification (OFC)'
 2011	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-124: game 'World Cup South American Qualifying Section', table '2014 FIFA World Cup qualification (CONMEBOL)'
 2011	name	world_club_champ (FIFA Club World Championship), row club-world-192: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2011	name	world_club_cup (Intercontinental Cup), row club-world-191: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2011	no_row	friendly (Friendly): no table row
 2011	no_row	record_utils ('B' International): no table row
 2011	no_row	record_utils (Reserve): no table row
@@ -84,7 +82,6 @@
 2011	not_held	inter_amer_cup (Inter-American Cup), row club-world-202: the game holds 2011, the table says not held
 2011	not_held	olympics (Olympic Games), row int-world-131: the game holds 2012, the table says not held
 2011	not_held	wc_europe_league (World Cup European Qualifying Section), row int-world-123: the game holds 2012, the table says not held
-2011	not_held	world_club_cup (Intercontinental Cup), row club-world-191: the game holds 2011, the table says not held
 2011	not_in_game	eng-132 eng_conf 'Conference Premier' (England)
 2011	not_in_game	eng-361 eng_fa_trophy 'FA Trophy' (England)
 2011	not_in_game	uefa-81 uefa_seeding 'UEFA access list and seeding' (UEFA)

@@ -196,6 +196,12 @@ PATCHES = {
     0x57F9E8: (0x1, "rt_euroq_direct(esi, 1u)"),
     0x57FB4F: (0x1, "rt_euroq_ranked_place(ebp, 1u)"),
     0x57D70E: (0x3F0, "(0x3e9u + (uint32_t)(int32_t)(int8_t)R8(edi + 0xffu))"),
+    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
+    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
+    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
+    0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
+    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
+    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
 }
 
 # address: (the instruction in the original, C code)
@@ -349,4 +355,10 @@ INSNS = {
     # its own campaign and stopped at the box "euro_champ_qual.cpp 2358" (0x58325b). The base game never loads
     # (game year 2001, campaign 2002), so its path is the original's.
     0x57D021: ("jle 0x57d02a", "if (cc_le(F) || R16(esi + 0x40u) != 0x7d2u) goto L_57d02a;"),
+    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
+    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
+    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
+    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
+    # edition (the original skips it when +0x40 is the game year).
+    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
 }
