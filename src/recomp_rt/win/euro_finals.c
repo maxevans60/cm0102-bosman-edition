@@ -90,10 +90,5 @@ void euro_finals_fill_short_list(uint32_t ec)
     }
 }
 
-void o_0057c710(void);
-
-RT_WRAP(0057c710, euro_seed_teams)
-{
-    euro_finals_fill_short_list(cpu.ecx);
-    o_0057c710();
-}
+/* EuroChamp::seed_teams 0x57c710 is wrapped in season_intl_euro.c (0.6.0 slice 27, euro_seeding), which calls
+ * euro_finals_fill_short_list on the 16-team path before the original. */

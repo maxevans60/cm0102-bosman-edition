@@ -43,6 +43,7 @@ extern const SeasonRuleKind season_kind_club_world;
 extern const SeasonRuleKind season_kind_club_cups;
 extern const SeasonRuleKind season_kind_comps;         /* slice 26: season_comps.h */
 void season_comps_reset(void);                         /* slice 26: season_comps.h */
+extern const SeasonRuleKind season_kind_intl;
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
@@ -53,6 +54,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_club_cups,             /* slice 26c: years of the new club cups (season_club_cups.c) */
+    &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))

@@ -902,11 +902,9 @@ RT_WRAP(0092a6b0, world_club_champ_update)
     o_0092a6b0();
 }
 
-void o_0040f590(void);
-
 /* The history thunk of slot 12 (vtable +0x30), shared by 4 vtables: it forwards to stage slot 2 (0x40f593). A
  * Club World Championship of Form K holds its knockout in slot 0. Called first by the one wrap of 0x40f590
- * (season_change.h). Returns 1 when it handled the call. The target, Cup::record_season_honours 0x519a90 of the
+ * (season_intl_copa.c, season_change.h). Returns 1 when it handled the call. The target, Cup::record_season_honours 0x519a90 of the
  * Cup_Stage (vtable 0x969468 +0x30), is thiscall with no argument (ret 0 at 0x519c89). With slot 0 empty it
  * returns as that function does and writes no history: after a load the stage array has the saved +0x2c slots
  * (League::load 0x688e3a), so the original thunk would read slot 2 of a 1-slot array. */
@@ -940,14 +938,6 @@ int season_club_world_history_thunk(void)
     cpu.ecx = stage;
     rt_jump(rd32(g_mem, rd32(g_mem, stage) + 0x30));
     return 1;
-}
-
-/* Until slice 27 is on main: its wrap of 0x40f590 (season_intl_copa.c) calls the function above first. At the
- * merge this wrap goes, and so does slice 27's weak default of the function. */
-RT_WRAP(0040f590, comp_history_thunk)
-{
-    if (season_club_world_history_thunk() || rt_unwinding) return;
-    o_0040f590();
 }
 
 /* Form K: 1 for a Club World Championship whose knockout is its only stage. */

@@ -319,6 +319,58 @@ uint32_t rt_club_world_step(uint32_t original);
 uint32_t rt_club_world_month(uint32_t original);
 uint32_t rt_club_world_day(uint32_t original);
 uint32_t rt_club_world_waits(uint32_t obj);
+/* International competitions (0.6.0 slice 27, win/season_intl.h): the edition year of a finals class at its
+ * constructor and its start_new_season, the golden goal bit of a knockout round, and the World Cup holder of the
+ * qualifying sections and of slot 0. The sites of tools/recomp/seasons.py call them. Each gives the original's
+ * value in the base game. */
+uint32_t rt_intl_first_year(uint32_t cls, uint32_t year);
+uint32_t rt_intl_next_year(uint32_t cls, uint32_t year, uint32_t step);
+uint32_t rt_intl_round_flags(uint32_t cls, uint32_t year, uint32_t flags);
+uint32_t rt_intl_wc_holder(uint32_t holder);
+uint32_t rt_intl_wc_holder_slot(uint32_t year);
+uint32_t rt_intl_oceania_left_out(uint32_t id);
+uint32_t rt_intl_euro_no_host(void);
+/* The European Championship of 24 teams (win/season_intl_euro.c): the team count (16), the knockout stage index
+ * (3) and a new stage array after the step of start_new_season. Each gives the original's value for an edition
+ * of 16 teams and in the base game. */
+uint32_t rt_intl_euro_teams(uint32_t self, uint32_t original);
+uint32_t rt_intl_euro_ko(uint32_t self, uint32_t original);
+void rt_intl_euro_stages(uint32_t self);
+/* The African Cup of Nations and the Asian Cup of 24 teams (win/season_intl_cups.c): the team count (16, 12),
+ * the group count of the draw (4, 3), the knockout stage index (3, 2) and a new stage array after the step of
+ * start_new_season. Each gives the original's value for another edition, another class and the base game. */
+uint32_t rt_intl_cup_teams(uint32_t self, uint32_t original);
+uint32_t rt_intl_cup_groups(uint32_t self, uint32_t original);
+uint32_t rt_intl_cup_ko(uint32_t self, uint32_t original);
+void rt_intl_cup_stages(uint32_t self);
+/* The Copa America of 16 teams (win/season_intl_copa.c): the knockout stage index (2), the group count (3) and a
+ * new stage array after the step of start_new_season. Each gives the original's value for an edition of 12
+ * teams and in the base game. */
+uint32_t rt_intl_copa_ko(uint32_t self, uint32_t original);
+uint32_t rt_intl_copa_groups(uint32_t self, uint32_t original);
+void rt_intl_copa_stages(uint32_t self);
+/* Euro qualifying places (win/season_intl_euroq.c): the places and stage indices of the format of the Euro year
+ * (Euro 2016: 9 groups, top two, best third, play-off of 8 thirds; Euro 2020 on: 10 groups, top two). Each
+ * gives the original's value in the base game and for a Euro of 16 teams. */
+void rt_euroq_rules(uint32_t self);
+uint32_t rt_euroq_hosts(uint32_t self, uint32_t original);
+uint32_t rt_euroq_ranked_place(uint32_t self, uint32_t original);
+uint32_t rt_euroq_direct(uint32_t self, uint32_t original);
+uint32_t rt_euroq_no_ranking(uint32_t self);
+uint32_t rt_euroq_group_size(uint32_t self, uint32_t group, uint32_t original);
+uint32_t rt_euroq_ten_groups(uint32_t self);
+void rt_euroq_log(uint32_t euro, uint32_t club, uint32_t stage, uint32_t playoff);
+/* World Cup qualifying 2006 to 2022 (win/season_intl_qual.c): the places of each section and the
+ * inter-confederation play-offs. Each gives the original's value outside a season game and the cycles 2006 to
+ * 2022. */
+uint32_t rt_wcq_europe_playoff(uint32_t self, uint32_t exempt);
+uint32_t rt_wcq_europe_no_asia(uint32_t self);
+void rt_wcq_asia_format(uint32_t self);
+uint32_t rt_wcq_asia_partner(uint32_t self, uint32_t asian, uint32_t original);
+uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
+uint32_t rt_wcq_concacaf_playoff(uint32_t self);
+uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
+void rt_wcq_africa_format(uint32_t self, uint32_t pool);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets
