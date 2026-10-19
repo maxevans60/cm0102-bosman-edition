@@ -5,7 +5,7 @@ src/recomp_rt/win/season_kind_club_world.c).
 
 Usage:
     python3 tests/seasons/club_world_check.py <cm0102_recomp> <game folder> [--only <name>,...] [--jobs n]
-        [--keep <folder>] [--reuse] [--own-dbs <folder>]
+        [--keep <folder>] [--reuse] [--own-dbs <folder>] [--timeout <seconds>]
 
 Each run is a season jump of tests/seasons/rules_report_check.py with England, Argentina, Australia, Brazil and Japan
 selected (a creator makes its objects only when a nation of its continent is selected, 0x6699d0). The runs:
@@ -291,6 +291,9 @@ def knockout_load(program, game, keep):
     return fails
 
 
+TIMEOUT = 7200                          # seconds a run may take (--timeout: 2001-all with Select All under load)
+
+
 def one(program, game, name, keep, reuse, own):
     if name == "2007-load":
         return knockout_load(program, game, keep)
@@ -299,7 +302,7 @@ def one(program, game, name, keep, reuse, own):
     report = os.path.join(work, "report.tsv")
     log = os.path.join(work, "stderr.txt")
     if not reuse:
-        code, report = rrc.run(program, game, last, year, folder(db, own), nations, [], work, 7200,
+        code, report = rrc.run(program, game, last, year, folder(db, own), nations, [], work, TIMEOUT,
                                options_more={"changing_rules": rules}, env_more={"RECOMP_SEASON_CHANGE_LOG": "1"})
         if code != 0:
             return [f"{name}: the run ended with code {code} ({log})"]
@@ -319,6 +322,8 @@ def main(argv):
     keep = os.path.abspath(rrc.arg(argv, "--keep")) if "--keep" in argv else None
     reuse = "--reuse" in argv
     own = os.path.abspath(rrc.arg(argv, "--own-dbs")) if "--own-dbs" in argv else None
+    global TIMEOUT
+    TIMEOUT = int(rrc.arg(argv, "--timeout", TIMEOUT))
     failed = []
     with concurrent.futures.ThreadPoolExecutor(jobs) as pool:
         for f in [pool.submit(one, program, game, n, keep, reuse, own) for n in names]:
