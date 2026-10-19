@@ -145,8 +145,19 @@ def edition(r):
             "row": row}
 
 
+# Editions after the last season of the table whose host and dates were announced with a date (Q248; slice 29,
+# decision Q560): the 2030 World Cup, 8 June to 21 July 2030 (int-world-302), all six hosts qualified
+# (int-world-314: Morocco, Portugal, Spain, and Argentina, Paraguay and Uruguay of the centenary matches). Its
+# team count is not settled (int-world-314): the current size, 48, stays (Q248: after the table the rules stay).
+ANNOUNCED = [
+    {"file": "world_cup", "season": 2029, "year": 2030, "teams": 48, "golden": 0, "start_year": 2030,
+     "month": 6, "day": 8, "hosts": ["Morocco", "Portugal", "Spain", "Argentina", "Paraguay", "Uruguay"],
+     "row": "int-world-314"},
+]
+
+
 def editions():
-    out = []
+    out = [dict(e) for e in ANNOUNCED]
     for part in ("int-world.tsv", "int-continental.tsv"):
         for r in read(part):
             if r["comp_file"] not in FILES or r["format"].startswith("not held") or r["id"] in SKIP:

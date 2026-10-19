@@ -167,13 +167,16 @@ static int day_of(int month, int day)
 }
 
 /* Writes the hosts of an edition into a row: pair 1 the first two hosts that the data holds, the other pairs
- * none, the choice fixed and no move. */
+ * none, the choice fixed and no move. More hosts (three for the 2026 World Cup, six for 2030; slice 29) go into
+ * the fields of pairs 2 and 3 (+0xe to +0x1a) in order: find_hosts 0x5fa730 reads pair 1 only for a fixed row,
+ * so the original's code never sees them; season_intl_host_ids reads all six. The save keeps every row
+ * (0x5fb3ce), so a load keeps them. */
 static void row_write(uint32_t row, uint32_t key, const SeasonIntlEdition *e)
 {
-    int ids[2] = {-1, -1}, n = 0;
+    int ids[6] = {-1, -1, -1, -1, -1, -1}, n = 0;
     char host[128];
     const char *p = e->hosts;
-    while (*p && n < 2) {
+    while (*p && n < 6) {
         size_t len = strcspn(p, ";");
         snprintf(host, sizeof host, "%.*s", (int)len, p);
         int id = nation_by_names(host);
@@ -186,8 +189,7 @@ static void row_write(uint32_t row, uint32_t key, const SeasonIntlEdition *e)
     wr32(g_mem, row + ROW_COMP, key);
     wr16(g_mem, row + ROW_YEAR, (uint16_t)e->year);
     for (int k = 0; k < 6; k++) wr32(g_mem, row + ROW_PAIRS + 4u * (uint32_t)k, 0xffffffffu);
-    wr32(g_mem, row + ROW_PAIRS, (uint32_t)ids[0]);
-    wr32(g_mem, row + ROW_PAIRS + 4u, (uint32_t)ids[1]);
+    for (int k = 0; k < 6; k++) wr32(g_mem, row + ROW_PAIRS + 4u * (uint32_t)k, (uint32_t)ids[k]);
     wr8(g_mem, row + ROW_CHOICE, CHOICE_FIXED);
     wr8(g_mem, row + ROW_CYCLE, 0);
     if (logging()) {
@@ -204,6 +206,23 @@ static uint32_t row_find(uint32_t rows, int count, uint32_t key, int year)
         if (rd32(g_mem, row + ROW_COMP) == key && (int16_t)rd16(g_mem, row + ROW_YEAR) == year) return row;
     }
     return 0;
+}
+
+/* The hosts of a fixed row of the table (slice 29): up to six nation ids in the order of the table (row_write).
+ * Gives the count; 0 for no fixed row of that competition and year. */
+int season_intl_host_ids(uint32_t key, int year, int ids[6])
+{
+    uint32_t obj = rd32(g_mem, HOSTS), rows = readable(obj) ? rd32(g_mem, obj) : 0;
+    int count = readable(obj) ? (int16_t)rd16(g_mem, obj + 4) : 0, n = 0;
+    for (int k = 0; k < 6; k++) ids[k] = -1;
+    if (!readable(rows) || count <= 0 || count > 1000) return 0;
+    uint32_t row = row_find(rows, count, key, year);
+    if (!row || rd8(g_mem, row + ROW_CHOICE) != CHOICE_FIXED) return 0;
+    for (int k = 0; k < 6; k++) {
+        int id = (int)rd32(g_mem, row + ROW_PAIRS + 4u * (uint32_t)k);
+        if (nation_valid(id)) ids[n++] = id;
+    }
+    return n;
 }
 
 /* The rows of the editions from the start year. The table grows by the editions that have no row. */
@@ -829,11 +848,32 @@ void season_intl_at_create(void)
     nations_rename(season_start_year(), 0);
 }
 
+/* The host news of a World Cup with more than two hosts (slice 29: 2026 and 2030), in the season of its table
+ * row: a fixed host row gets no news of daily_update 0x5fa850 (post_host_news 0x5faec0 posts only for rows
+ * that it opens or decides). The names are those of the data (season_intl_host_ids). */
+static void host_news(int season)
+{
+    for (int i = 0; i < season_intl_edition_count; i++) {
+        const SeasonIntlEdition *e = &season_intl_editions[i];
+        int ids[6], n;
+        if (e->season != season || strcmp(e->file, "world_cup")) continue;
+        n = season_intl_host_ids(rd32(g_mem, host_comps[0].key), e->year, ids);
+        if (n < 3) continue;
+        char text[400];
+        size_t len = 0;
+        for (int k = 0; k < n && len < sizeof text; k++)
+            len += (size_t)snprintf(text + len, sizeof text - len, "%s%s", k == 0 ? "" : k == n - 1 ? " and " : ", ",
+                                    win_str(nation_at(ids[k]) + NATION_NAME));
+        season_change_news("The %d World Cup plays in %s, its %d host nations.", e->year, text, n);
+    }
+}
+
 /* The season point of a later season, with changing rules on: the renames of that season, with news. */
 static void intl_season(int season)
 {
     if (season_change_is_start()) return;
     nations_rename(season, 1);
+    host_news(season);
     /* The host rows of the table in a game that started in 2001/02: at its first season change, for the
      * editions from 2002/03 (host_init). The table is sorted as the constructor sorts it. */
     if (season_start_year() == SEASON_FIRST_YEAR && season == SEASON_FIRST_YEAR + 1) {

@@ -65,5 +65,6 @@ const SeasonIntlEdition season_intl_editions[] = {
     {"world_cup", 2017, 2018, 32, 0, 2018, 6, 14, "Russia", "int-world-194"},
     {"world_cup", 2022, 2022, 32, 0, 2022, 11, 20, "Qatar", "int-world-254"},
     {"world_cup", 2025, 2026, 48, 0, 2026, 6, 11, "Canada;Mexico;United States", "int-world-290"},
+    {"world_cup", 2029, 2030, 48, 0, 2030, 6, 8, "Morocco;Portugal;Spain;Argentina;Paraguay;Uruguay", "int-world-314"},
 };
 const int season_intl_edition_count = (int)(sizeof season_intl_editions / sizeof season_intl_editions[0]);
