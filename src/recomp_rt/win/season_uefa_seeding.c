@@ -1,0 +1,430 @@
+/* The UEFA places of each club from the access list by association rank (0.6.0 slice 23, Q369: from 2009/10;
+ * season_uefa.h). Evidence: docs/research/2026-10-18-uefa-2009-2020.md.
+ *
+ * The original. Uefa_Seeding::update_season 0x9035a0 (thiscall, this at [0xde1f58]) runs once a year, at the
+ * first of the three UEFA cups that makes or starts its season (their constructors 0x583881, 0x63304d,
+ * 0x902377 and start_new_season 0x584e56, 0x6339df, 0x902fac; this+0x439 holds the year). It sorts the nations
+ * by coefficient (roll_coefficients 0x903b50: the 0x12-byte entries at this+0, count this+0x438, entry index =
+ * rank, 0 the top), makes a 12-byte record of each European club (collect_european_clubs 0x904040, club +0x1db
+ * set to -1, sorted by nation, division and league position, 0x905ce0), then gives the places with three
+ * functions, each thiscall (records, short count) ret 8 with one caller: assign_champions_league_places
+ * 0x904210 (0x90375d), assign_uefa_cup_places 0x904580 (0x90376a) and assign_intertoto_places 0x904e30
+ * (0x903777). They write club +0x1db (the record id of the cup: [0x9cf6e8], [0x9cf6f0], [0x9cf6f8]) and +0x1df
+ * (the entry code) and count each club in entry +0x11 (the coefficient divisor, 0x903c00). Their places come
+ * from rank brackets in the code, not from entry +0xc and +0xd. Those two are read only by get_nation_places
+ * 0x905c60 (the league table marks 0x6853f5, the Serie A play-offs 0x641af7, the board 0x6a3a32).
+ *
+ * This file. In a season of the access list (season_uefa_access_places gives places for the row of the season),
+ * the wrap of 0x904210 gives every Champions League and Europa League place, and the wraps of 0x904580 and
+ * 0x904e30 give none (the Intertoto Cup is not held: no club gets its id, and the English volunteer list at
+ * this+0x43b is freed as 0x904fc0..0x904fe1 does). Other seasons, the base game and RECOMP_SEASON_CODE=off call
+ * the original's functions.
+ *
+ * The places, in this order:
+ *   1. the Champions League places of each nation by league position (the p-th club of its records,
+ *      0x9050d0 with skip placed 0, as 0x904465), with the entry round of the access list.
+ *   2. the Champions League title holder (the history winner of the cup, 0x4afd80 as 0x9042e3) in the group
+ *      stage, when it has no place yet. Else its place is free (the cascade of step 6 fills it).
+ *   3. the Europa League title holder: from 2015/16 a Champions League place ("X" rows), before a Europa League
+ *      group place ("H" rows), when it has no place yet.
+ *   4. the Europa League places of each nation: the first the domestic cup winner (the cup of the league
+ *      table entry, 0xb63d7e, as 0x9047e2: the winner, else the runner-up), the last the league cup winner for the
+ *      nations of the "L" rows (0xb63d82, as 0x904ad8), the others the first club with no place (0x9050d0 with
+ *      skip placed 1).
+ *   5. the fair play places (to 2015/16): three nations at random (0x90cfc0, as 0x904670) get one Europa League
+ *      place more.
+ *   6. the cascade: the number of new clubs of each entry round must be the number the round sizes of the row
+ *      give (season_uefa_new_clubs). From the group stage down, a round with too many clubs moves its
+ *      lowest-ranked club down one round of its path, and a round with too few takes the best-ranked club of
+ *      the rounds below in its path (the group stage first from the Champions Path: the access lists give the
+ *      free place to the best-ranked champion). The lowest round gives up its extra clubs, and fills a gap with
+ *      the first club with no place of the best-ranked nations (as the UEFA Cup's fillers of 0x902cb0).
+ * Each club gets +0x1db and the entry code of season_uefa.h (SEASON_UEFA_CL_*, SEASON_UEFA_EL_*), and its
+ * nation entry +0x11 one more. Entry +0xc and +0xd get the nation's league places of the list (the table
+ * marks), +0xe 0. */
+#include "win.h"
+#include "season.h"
+#include "season_uefa.h"
+
+#include <stdio.h>
+#include <string.h>
+
+#define KEY_CL 0x9cf6e8u
+#define KEY_UC 0x9cf6f0u
+#define COMP_RECORDS 0xae23d0u          /* comp records, 0x6b bytes each */
+#define LEAGUE_TABLE 0xb63d60u          /* league table entries, 0x48 bytes: +0 nation, +0x1e cup, +0x22 league cup */
+#define LEAGUE_ENGLAND 0xb64150u        /* the England entry's nation (key_nation_build_table 0x667150) */
+#define LEAGUE_FRANCE 0xb641e0u
+
+#define F_PICK 0x009050d0u              /* thiscall (records, short count, nation id, char n, skip placed, skip human) */
+#define F_HISTORY_CLUB 0x004afd80u      /* cdecl (comp record, k): k 0 the last winner, 1 the runner-up */
+#define F_NATION_INDEX 0x00669340u      /* key_nation_index_of_nation, cdecl (nation): the league table index */
+#define F_RANDOM 0x0090cfc0u            /* utils_random, cdecl (range) */
+#define F_FREE 0x009452cau
+
+#define MAX_PLACED 400
+#define MAX_NATIONS 60                  /* the entries at this+0 (0x438 / 0x12) */
+
+static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
+
+static uint32_t call_this(uint32_t fn, uint32_t self, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+/* ---- The placed clubs ---- */
+
+typedef struct {
+    uint32_t club;
+    char comp;          /* 'c' or 'e' */
+    int code;
+    int rank;           /* 1 is the top association */
+    int champion;       /* a Champions League club that is its nation's champion (the Champions Path) */
+    int order;          /* the order of the places, for ties of rank */
+} Placed;
+
+static Placed placed[MAX_PLACED];
+static int n_placed;
+
+static int has_place(uint32_t club) { return readable(club) && (int32_t)rd32(g_mem, club + 0x1db) != -1; }
+
+static void add(uint32_t club, char comp, int code, int rank, int champion)
+{
+    if (!readable(club) || has_place(club) || !readable(rd32(g_mem, club + 0x53)) || n_placed >= MAX_PLACED) return;
+    wr32(g_mem, club + 0x1db, rd32(g_mem, comp == 'c' ? KEY_CL : KEY_UC));     /* the mark of a place, as 0x90430e */
+    placed[n_placed] = (Placed){club, comp, code, rank, champion, n_placed};
+    n_placed++;
+}
+
+static uint32_t pick(uint32_t self, uint32_t records, int count, uint32_t nation_id, int n, int skip_placed)
+{
+    uint32_t a[6] = {records, (uint32_t)count, nation_id, (uint32_t)n, (uint32_t)skip_placed, 0};
+    uint32_t c = call_this(F_PICK, self, 6, a);
+    return rt_unwinding ? 0 : c;
+}
+
+static uint32_t history_club(uint32_t key, int k)
+{
+    int32_t id = (int32_t)rd32(g_mem, key);
+    uint32_t recs = rd32(g_mem, COMP_RECORDS);
+    if (id < 0 || !readable(recs)) return 0;
+    uint32_t a[2] = {recs + 0x6bu * (uint32_t)id, (uint32_t)k};
+    uint32_t c = call_cdecl(F_HISTORY_CLUB, 2, a);
+    return rt_unwinding || !readable(c) ? 0 : c;
+}
+
+/* The winner (k 0) or runner-up (k 1) of the cup at offset off (0x1e cup, 0x22 league cup) of the nation's
+ * league table entry, or 0. */
+static uint32_t cup_club(uint32_t nation, uint32_t off, int k)
+{
+    uint32_t a[1] = {nation};
+    int idx = (int8_t)call_cdecl(F_NATION_INDEX, 1, a);
+    if (rt_unwinding || idx < 0 || idx >= 35) return 0;
+    uint32_t entry = LEAGUE_TABLE + 0x48u * (uint32_t)idx;
+    uint32_t rec = rd32(g_mem, entry + off);
+    if (rd32(g_mem, entry) != nation || !readable(rec)) return 0;
+    uint32_t b[2] = {rec, (uint32_t)k};
+    uint32_t c = call_cdecl(F_HISTORY_CLUB, 2, b);
+    return rt_unwinding || !readable(c) ? 0 : c;
+}
+
+static int rank_of_nation(uint32_t self, int entries, uint32_t nation)
+{
+    for (int i = 0; i < entries; i++)
+        if (rd32(g_mem, self + 0x12u * (uint32_t)i + 4) == nation) return i + 1;
+    return 99;
+}
+
+static int count_tokens(const char *s)
+{
+    int n = 0;
+    for (const char *p = s; p && *p;) {
+        while (*p == ' ') p++;
+        if (!*p) break;
+        n++;
+        while (*p && *p != ' ') p++;
+    }
+    return n;
+}
+
+/* The k-th token of s as a code, 0 when s has fewer. */
+static int token_code(char comp, const char *s, int k)
+{
+    for (const char *p = s; p && *p;) {
+        while (*p == ' ') p++;
+        const char *e = p;
+        while (*e && *e != ' ') e++;
+        if (e == p) break;
+        if (k-- == 0) return season_uefa_code(comp, p, (int)(e - p));
+        p = e;
+    }
+    return 0;
+}
+
+/* ---- The cascade ---- */
+
+/* The paths of the entry codes, from the group stage down. The Champions League's group stage is in both. */
+static const int CL_CHAMPIONS[] = {SEASON_UEFA_CL_G, SEASON_UEFA_CL_PO_CP, SEASON_UEFA_CL_Q3_CP, SEASON_UEFA_CL_Q2_CP,
+                                   SEASON_UEFA_CL_Q1, SEASON_UEFA_CL_PR};
+static const int CL_LEAGUE[] = {SEASON_UEFA_CL_G, SEASON_UEFA_CL_PO_LP, SEASON_UEFA_CL_Q3_LP, SEASON_UEFA_CL_Q2_LP};
+static const int EL_MAIN[] = {SEASON_UEFA_EL_G, SEASON_UEFA_EL_PO, SEASON_UEFA_EL_Q3, SEASON_UEFA_EL_Q2,
+                              SEASON_UEFA_EL_Q1, SEASON_UEFA_EL_PR};
+
+static int count_code(char comp, int code)
+{
+    int n = 0;
+    for (int i = 0; i < n_placed; i++) n += placed[i].comp == comp && placed[i].code == code && placed[i].club;
+    return n;
+}
+
+static int better(const Placed *a, const Placed *b)
+{
+    return a->rank != b->rank ? a->rank < b->rank : a->order < b->order;
+}
+
+/* The index of path p (of n codes) that holds code, or -1. */
+static int path_index(const int *p, int n, int code)
+{
+    for (int i = 0; i < n; i++)
+        if (p[i] == code) return i;
+    return -1;
+}
+
+/* The path of a placed club. */
+static void path_of(const Placed *c, const int **p, int *n)
+{
+    if (c->comp == 'e') *p = EL_MAIN, *n = 6;
+    else if (path_index(CL_LEAGUE, 4, c->code) > 0 || (c->code == SEASON_UEFA_CL_G && !c->champion))
+        *p = CL_LEAGUE, *n = 4;
+    else *p = CL_CHAMPIONS, *n = 6;
+}
+
+/* The lowest round of a path that the row plays (a target of new clubs above 0, or a round with clubs). */
+static int lowest(char comp, const int *p, int n, const int *target)
+{
+    int low = 0;
+    for (int i = 0; i < n; i++)
+        if (target[p[i]] > 0 || count_code(comp, p[i])) low = i;
+    return low;
+}
+
+/* Moves the club i one round down its path. At the lowest round of the path it loses its place. */
+static void move_down(int i, const int *target)
+{
+    const int *p;
+    int n;
+    path_of(&placed[i], &p, &n);
+    int at = path_index(p, n, placed[i].code), low = lowest(placed[i].comp, p, n, target);
+    if (at >= 0 && at < low) {
+        placed[i].code = p[at + 1];
+        return;
+    }
+    wr32(g_mem, placed[i].club + 0x1db, 0xffffffffu);
+    placed[i].club = 0;
+}
+
+static void cascade(char comp, const int *p, int n, const int *target, uint32_t self, uint32_t records, int count,
+                    int entries)
+{
+    for (int at = 0; at < n && !rt_unwinding; at++) {
+        int code = p[at];
+        for (int guard = 0; guard < MAX_PLACED && count_code(comp, code) > target[code]; guard++) {
+            int worst = -1;
+            for (int i = 0; i < n_placed; i++)
+                if (placed[i].club && placed[i].comp == comp && placed[i].code == code &&
+                    (worst < 0 || better(&placed[worst], &placed[i])))
+                    worst = i;
+            if (worst < 0) break;
+            move_down(worst, target);
+        }
+        for (int guard = 0; guard < MAX_PLACED && count_code(comp, code) < target[code]; guard++) {
+            /* The best-ranked club of the rounds below: of the Champions Path first for the group stage. */
+            int best = -1;
+            for (int pass = 0; pass < 2 && best < 0; pass++) {
+                const int *q = p;
+                int m = n;
+                if (comp == 'c' && code == SEASON_UEFA_CL_G) q = pass ? CL_LEAGUE : CL_CHAMPIONS, m = pass ? 4 : 6;
+                else if (pass) break;
+                for (int i = 0; i < n_placed; i++) {
+                    if (!placed[i].club || placed[i].comp != comp) continue;
+                    int k = path_index(q, m, placed[i].code);
+                    if (k > path_index(q, m, code) && (best < 0 || better(&placed[i], &placed[best]))) best = i;
+                }
+            }
+            if (best >= 0) {
+                placed[best].code = code;
+                continue;
+            }
+            /* No club below: the first club with no place of the best-ranked nations. */
+            uint32_t club = 0;
+            int rank = 0;
+            for (int e = 0; e < entries && !club && !rt_unwinding; e++) {
+                club = pick(self, records, count, rd32(g_mem, self + 0x12u * (uint32_t)e), 1, 1);
+                rank = e + 1;
+            }
+            if (!club) break;
+            int before = n_placed;
+            add(club, comp, code, rank, 0);
+            if (n_placed == before) break;
+        }
+    }
+}
+
+/* ---- The wraps ---- */
+
+void o_00904210(void);
+void o_00904580(void);
+void o_00904e30(void);
+
+/* The row of the seeding year, when it has an access list. */
+static const SeasonUefa *access_row(uint32_t self)
+{
+    const SeasonUefa *r = season_uefa_row((int16_t)rd16(g_mem, self + 0x439));
+    return r && season_uefa_access_places(r->season, 'c', 1) ? r : NULL;
+}
+
+static void assign_all(uint32_t self, uint32_t records, int count, const SeasonUefa *r)
+{
+    int s = r->season, entries = (int8_t)g_mem[self + 0x438];
+    if (entries > MAX_NATIONS) entries = MAX_NATIONS;
+    n_placed = 0;
+    /* 1. Champions League places by league position. */
+    for (int e = 0; e < entries && !rt_unwinding; e++) {
+        uint32_t ent = self + 0x12u * (uint32_t)e;
+        const char *pl = season_uefa_access_places(s, 'c', e + 1);
+        int n = count_tokens(pl);
+        g_mem[ent + 0xc] = (uint8_t)n;
+        g_mem[ent + 0xe] = 0;
+        for (int k = 0; k < n && !rt_unwinding; k++)
+            add(pick(self, records, count, rd32(g_mem, ent), k + 1, 0), 'c', token_code('c', pl, k), e + 1, k == 0);
+    }
+    /* 2. The Champions League title holder. */
+    uint32_t holder = rt_unwinding ? 0 : history_club(KEY_CL, 0);
+    const char *h = season_uefa_access_rule(s, 'h');
+    if (holder && h && !rt_unwinding)
+        add(holder, 'c', token_code('c', h, 0), rank_of_nation(self, entries, rd32(g_mem, holder + 0x53)), 1);
+    /* 3. The Europa League title holder. */
+    uint32_t el_holder = rt_unwinding ? 0 : history_club(KEY_UC, 0);
+    const char *x = season_uefa_access_rule(s, 'X'), *hh = season_uefa_access_rule(s, 'H');
+    if (el_holder && !rt_unwinding) {
+        int rank = rank_of_nation(self, entries, rd32(g_mem, el_holder + 0x53));
+        if (x) add(el_holder, 'c', token_code('c', x, 0), rank, 0);
+        else if (hh) add(el_holder, 'e', token_code('e', hh, 0), rank, 0);
+    }
+    /* 4. Europa League places: the cup winner, the league places, the league cup winner. 5. Fair play. */
+    int fair[3] = {-1, -1, -1};
+    if (season_uefa_access_rule(s, 'f') && entries > 3)
+        for (int k = 0; k < 3 && !rt_unwinding; k++) {
+            uint32_t a[1] = {(uint32_t)entries};
+            int v = (int)call_cdecl(F_RANDOM, 1, a);
+            if (v < 0 || v >= entries || v == fair[0] || v == fair[1]) k--;
+            else fair[k] = v;
+        }
+    for (int e = 0; e < entries && !rt_unwinding; e++) {
+        uint32_t ent = self + 0x12u * (uint32_t)e, nation = rd32(g_mem, ent + 4);
+        const char *pl = season_uefa_access_places(s, 'e', e + 1);
+        int n = count_tokens(pl), extra = e == fair[0] || e == fair[1] || e == fair[2];
+        g_mem[ent + 0xd] = (uint8_t)n;
+        int league_cup = (nation == rd32(g_mem, LEAGUE_ENGLAND) && season_uefa_access_league_cup(s, "England")) ||
+                         (nation == rd32(g_mem, LEAGUE_FRANCE) && season_uefa_access_league_cup(s, "France"));
+        for (int k = 0; k < n + extra && !rt_unwinding; k++) {
+            int code = k < n ? token_code('e', pl, k) : SEASON_UEFA_EL_Q1;
+            uint32_t club = 0;
+            if (k == 0) {
+                club = cup_club(nation, 0x1e, 0);
+                if (has_place(club)) club = cup_club(nation, 0x1e, 1);
+            } else if (k == n - 1 && league_cup) {
+                club = cup_club(nation, 0x22, 0);
+            }
+            if (!club || has_place(club)) club = pick(self, records, count, rd32(g_mem, ent), 1, 1);
+            add(club, 'e', code, e + 1, 0);
+        }
+    }
+    if (rt_unwinding) return;
+    /* 6. The cascade to the round sizes of the row. */
+    int target[SEASON_UEFA_CODE_SLOTS];
+    season_uefa_new_clubs(r, 'c', target);
+    cascade('c', CL_CHAMPIONS, 6, target, self, records, count, entries);
+    cascade('c', CL_LEAGUE, 4, target, self, records, count, entries);
+    season_uefa_new_clubs(r, 'e', target);
+    cascade('e', EL_MAIN, 6, target, self, records, count, entries);
+    if (rt_unwinding) return;
+    int n_cl = 0, n_el = 0;
+    for (int i = 0; i < n_placed; i++) {
+        uint32_t c = placed[i].club;
+        if (!c) continue;
+        g_mem[c + 0x1df] = (uint8_t)placed[i].code;
+        int rank = rank_of_nation(self, entries, rd32(g_mem, c + 0x53));
+        if (rank <= entries) g_mem[self + 0x12u * (uint32_t)(rank - 1) + 0x11]++;
+        if (placed[i].comp == 'c') n_cl++;
+        else n_el++;
+    }
+    fprintf(stderr, "recomp: uefa: access list %d/%02d: %d Champions League and %d Europa League places\n", s,
+            (s + 1) % 100, n_cl, n_el);
+    /* For the tests: England's places (the England entry's nation, LEAGUE_ENGLAND). */
+    int en_cl = 0, en_g = 0, en_el = 0;
+    for (int i = 0; i < n_placed; i++)
+        if (placed[i].club && rd32(g_mem, placed[i].club + 0x53) == rd32(g_mem, LEAGUE_ENGLAND)) {
+            if (placed[i].comp == 'c') en_cl++, en_g += placed[i].code == SEASON_UEFA_CL_G;
+            else en_el++;
+        }
+    fprintf(stderr, "recomp: uefa: England %d/%02d: %d Champions League places, %d in the group stage, %d Europa "
+            "League places\n", s, (s + 1) % 100, en_cl, en_g, en_el);
+}
+
+/* Uefa_Seeding::assign_champions_league_places, thiscall (records, short count) ret 8. */
+RT_WRAP(00904210, uefa_assign_cl)
+{
+    uint32_t self = cpu.ecx;
+    const SeasonUefa *r = access_row(self);
+    if (!r) {
+        o_00904210();
+        return;
+    }
+    uint32_t records = rt_arg(0);
+    int count = (int16_t)rt_arg(1);
+    assign_all(self, records, count, r);
+    if (!rt_unwinding) rt_ret_stdcall(0, 2);
+}
+
+/* Uefa_Seeding::assign_uefa_cup_places, thiscall (records, short count) ret 8: given by the wrap above. */
+RT_WRAP(00904580, uefa_assign_uc)
+{
+    if (!access_row(cpu.ecx)) {
+        o_00904580();
+        return;
+    }
+    rt_ret_stdcall(0, 2);
+}
+
+/* Uefa_Seeding::assign_intertoto_places, thiscall (records, short count) ret 8: none. The volunteer list goes
+ * as 0x904fc0..0x904fe1 frees it. */
+RT_WRAP(00904e30, uefa_assign_uic)
+{
+    uint32_t self = cpu.ecx;
+    if (!access_row(self)) {
+        o_00904e30();
+        return;
+    }
+    uint32_t list = rd32(g_mem, self + 0x43b);
+    if (readable(list)) {
+        uint32_t a[1] = {list};
+        call_cdecl(F_FREE, 1, a);
+        if (rt_unwinding) return;
+    }
+    wr32(g_mem, self + 0x43b, 0);
+    g_mem[self + 0x43f] = 0;
+    rt_ret_stdcall(0, 2);
+}

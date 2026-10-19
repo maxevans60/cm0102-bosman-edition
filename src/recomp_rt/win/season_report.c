@@ -114,10 +114,13 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
                  (int8_t)g_mem[obj + 0xbe], (int8_t)g_mem[obj + 0xbf], (int8_t)g_mem[obj + 0xc0],
                  (int8_t)g_mem[obj + 0xc1], rd16(g_mem, obj + 0xd9), (int32_t)rd32(g_mem, obj + 0x1c),
                  (int32_t)rd32(g_mem, obj + 0x20));
+    /* Slice 23: a UEFA cup of the access list counts its clubs, not its entry slots (season_uefa_qual.c). */
+    int clubs = season_uefa_report_clubs(obj);
+    if (clubs < 0) clubs = (int16_t)rd16(g_mem, obj + 0x3e);
     fprintf(f, "comp\t%d\t%s\t%s\t%d\t%s\t%s\t%s\t0x%x\t%d\t%d\t%d\t%d\t%d\t%s\t%s\n", season, phase, slot, id,
             c ? c->file : "?", c ? c->cls : "?",
             c ? (league ? "league" : c->kind == SEASON_KIND_CUP ? "cup" : "comp") : "?", vt,
-            (int16_t)rd16(g_mem, obj + 0x40), (int16_t)rd16(g_mem, obj + 0x3e), (int16_t)rd16(g_mem, obj + 0x3c),
+            (int16_t)rd16(g_mem, obj + 0x40), clubs, (int16_t)rd16(g_mem, obj + 0x3c),
             g_mem[obj + 0x4a], g_mem[obj + 0x49], rules, name);
     if (c && c->kind == SEASON_KIND_CUP) write_cup_rounds(f, season, phase, slot, c->file, obj);
 }
