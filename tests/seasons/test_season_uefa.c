@@ -49,6 +49,74 @@ int main(void)
     CHECK(season_uefa_table_row(2006)->uic_rounds == 3 && season_uefa_table_row(2006)->uic_winners == 11);
     CHECK(!strcmp(season_uefa_table_row(2006)->uic_entry, "Q2"));
 
+    /* Slice 23. The Europa League from 2009/10 (U4): 12 groups of 4, double round robin, top two and the 8
+     * Champions League thirds to a round of 32. The UEFA Cup groups of 2004/05 to 2008/09 send three. */
+    const SeasonUefa *r2009 = season_uefa_table_row(2009), *r2018 = season_uefa_table_row(2018);
+    CHECK(r2008->uc_groups == 8 && r2008->uc_through == 3);
+    CHECK(r2009 && r2009->season == 2009 && r2009->uc_groups == 12 && r2009->uc_group_clubs == 4);
+    CHECK(r2009->uc_meetings == 2 && r2009->uc_through == 2 && season_uefa_uc_round(r2009, "KO") == 32);
+    CHECK(season_uefa_uc_round(r2009, "PO") == 76 && season_uefa_uc_round(r2009, "Groups") == 48);
+    /* The Intertoto Cup is not held from 2009 (U3). */
+    CHECK(r2008->uic_clubs == 50 && r2009->uic_clubs == -1 && r2009->uic_rounds == 0);
+    /* The Champions League paths from 2009/10 (U5, Q296): Q3 and PO of two paths. */
+    CHECK(season_uefa_cl_round(r2009, "Q3 CP") == 20 && season_uefa_cl_round(r2009, "Q3 LP") == 10);
+    CHECK(season_uefa_cl_level(r2009, "Q3") == 30 && season_uefa_cl_level(r2009, "PO") == 20);
+    CHECK(season_uefa_cl_level(r2009, "Q2") == 34 && season_uefa_cl_round_of_16(r2009));
+    CHECK(season_uefa_cl_level(r2008, "Q3") == 32);
+    /* 2018/19: a preliminary round, paths from Q2; Europa League paths CP and MP. */
+    CHECK(season_uefa_cl_round(r2018, "PR") == 4 && season_uefa_cl_level(r2018, "Q2") == 24);
+    CHECK(season_uefa_uc_level(r2018, "Q2") == 92 && season_uefa_uc_round(r2018, "Q2 MP") == 74);
+    /* The Super Cup: Monaco to 2012, then a venue each year (U6). */
+    CHECK(!strcmp(r2008->sc_city, "Monaco") && r2008->sc_day == 29 && r2008->sc_month == 7);
+    const SeasonUefa *r2013 = season_uefa_table_row(2013);
+    CHECK(!strcmp(r2013->sc_city, "Prague") && r2013->sc_day == 30 && r2013->sc_month == 7);
+    CHECK(!strcmp(season_uefa_table_row(2020)->sc_city, "Budapest") && season_uefa_table_row(2020)->sc_month == 8);
+
+    /* The access list by rank (Q369): none to 2008/09, the real list from 2009/10. */
+    CHECK(season_uefa_access_places(2008, 'c', 1) == NULL);
+    CHECK(!strcmp(season_uefa_access_places(2009, 'c', 1), "G G G PO-LP"));
+    CHECK(!strcmp(season_uefa_access_places(2009, 'c', 39), "Q2"));       /* Liechtenstein's rank: the next bracket */
+    CHECK(!strcmp(season_uefa_access_places(2009, 'c', 70), "Q1"));       /* after the last bracket: the last */
+    CHECK(!strcmp(season_uefa_access_places(2009, 'e', 1), "PO PO Q3"));
+    CHECK(!strcmp(season_uefa_access_places(2018, 'c', 4), "G G G G"));  /* four places for the top four (U7) */
+    CHECK(!strcmp(season_uefa_access_places(2017, 'c', 4), "G G PO-LP"));
+    CHECK(!strcmp(season_uefa_access_places(2030, 'c', 4), "G G G G"));  /* after the table: the last season */
+    CHECK(!strcmp(season_uefa_access_rule(2009, 'h'), "G"));
+    CHECK(!strcmp(season_uefa_access_rule(2015, 'X'), "PO-LP") && !strcmp(season_uefa_access_rule(2018, 'X'), "G"));
+    CHECK(season_uefa_access_league_cup(2009, "France") && season_uefa_access_league_cup(2015, "England"));
+    CHECK(!season_uefa_access_league_cup(2009, "Spain") && !season_uefa_access_league_cup(2008, "England"));
+    CHECK(season_uefa_access_rule(2015, 'f') && season_uefa_access_rule(2016, 'f') == NULL);
+
+    /* The new clubs of each entry code. 2009/10 Champions League: Q1 4, Q2 34 (2 Q1 winners and 32 new),
+     * Q3 CP 20 (17 and 3), Q3 LP 10, PO CP 10 (10 winners), PO LP 10 (5 and 5), groups 32 (10 and 22). */
+    int t[SEASON_UEFA_CODE_SLOTS];
+    season_uefa_new_clubs(r2009, 'c', t);
+    CHECK(t[SEASON_UEFA_CL_Q1] == 4 && t[SEASON_UEFA_CL_Q2_CP] == 32 && t[SEASON_UEFA_CL_Q3_CP] == 3);
+    CHECK(t[SEASON_UEFA_CL_Q3_LP] == 10 && t[SEASON_UEFA_CL_PO_CP] == 0 && t[SEASON_UEFA_CL_PO_LP] == 5);
+    CHECK(t[SEASON_UEFA_CL_G] == 22 && t[SEASON_UEFA_CL_Q2_LP] == 0 && t[SEASON_UEFA_CL_PR] == 0);
+    /* Europa League 2009/10: Q1 46, Q2 80 (23 and 57), Q3 70 (40 and 30), PO 76 (35 winners, 15 Champions
+     * League Q3 losers, 26 new), groups 48 (38 winners, 10 Champions League PO losers). */
+    season_uefa_new_clubs(r2009, 'e', t);
+    CHECK(season_uefa_dropped(r2009, SEASON_UEFA_EL_PO) == 15 && season_uefa_dropped(r2009, SEASON_UEFA_EL_G) == 10);
+    CHECK(t[SEASON_UEFA_EL_Q1] == 46 && t[SEASON_UEFA_EL_Q2] == 57 && t[SEASON_UEFA_EL_Q3] == 30);
+    CHECK(t[SEASON_UEFA_EL_PO] == 26 && t[SEASON_UEFA_EL_G] == 0 && t[SEASON_UEFA_EL_PR] == 0);
+    /* 2018/19: the preliminary round of 4 (semi-finals and a final, one winner): CL Q1 31 new, groups 26 new;
+     * EL Q2 takes the 3 preliminary round losers and the 16 Q1 losers; EL PR 14 (7 winners), Q1 87 new. */
+    season_uefa_new_clubs(r2018, 'c', t);
+    CHECK(t[SEASON_UEFA_CL_PR] == 4 && t[SEASON_UEFA_CL_Q1] == 31 && t[SEASON_UEFA_CL_G] == 26);
+    CHECK(t[SEASON_UEFA_CL_Q2_LP] == 4 && t[SEASON_UEFA_CL_Q3_LP] == 6 && t[SEASON_UEFA_CL_Q3_CP] == 2);
+    int cl_sum = 0, el_sum = 0;
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) cl_sum += t[i];
+    CHECK(cl_sum == 79);                                                /* the row's 79 clubs */
+    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q2) == 19 && season_uefa_dropped(r2018, SEASON_UEFA_EL_G) == 10);
+    season_uefa_new_clubs(r2018, 'e', t);
+    CHECK(t[SEASON_UEFA_EL_PR] == 14 && t[SEASON_UEFA_EL_Q1] == 87);
+    for (int i = 0; i < SEASON_UEFA_CODE_SLOTS; i++) el_sum += t[i];
+    CHECK(el_sum + 19 + 12 + 6 + 10 + 8 == 213);                         /* 158 entered and 55 from the CL */
+    CHECK(season_uefa_dropped(r2018, SEASON_UEFA_EL_Q3) == 12 && season_uefa_dropped(r2018, SEASON_UEFA_EL_PO) == 6);
+    CHECK(season_uefa_code('c', "Q3-CP", 5) == SEASON_UEFA_CL_Q3_CP && season_uefa_code('e', "Q3-CP", 5) == SEASON_UEFA_EL_Q3);
+    CHECK(season_uefa_dropped(r2008, SEASON_UEFA_EL_G) == 0);
+
     /* Outside the table: the first row before it, the last row after it (Q248). */
     CHECK(season_uefa_table_row(1999) == &season_uefa_rows[0]);
     CHECK(season_uefa_table_row(2099) == &season_uefa_rows[season_uefa_row_count - 1]);
@@ -67,7 +135,7 @@ int main(void)
     changing = 1;
     CHECK(season_uefa_row(2007) == season_uefa_table_row(2007));
     start_year = 2010, changing = 0;
-    CHECK(season_uefa_row(2010) == &season_uefa_rows[season_uefa_row_count - 1]);
+    CHECK(season_uefa_row(2010) == season_uefa_table_row(2010) && season_uefa_row(2012) == season_uefa_table_row(2010));
     code_on = 0;
     CHECK(season_uefa_row(2010) == NULL);
 
