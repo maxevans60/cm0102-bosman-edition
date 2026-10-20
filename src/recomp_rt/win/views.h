@@ -42,6 +42,9 @@ void compare_first_two(uint32_t club, uint32_t *a, uint32_t *b);
 void compare_clear(void);
 /* After the game draws a widget: the polygon and the frames of the comparison built last. */
 void compare_widget_drawn(uint32_t widget);
+/* A widget of a Best XI card whose stars the runtime draws after it: halves 0 to 10 (Q420). */
+void views_stars(int widget, int halves);
+
 /* The position text of a slot's mask: GK, SW, then D, DM, M, AM or F with L, C or R. */
 void views_position_text(uint16_t mask, char *out, size_t size);
 

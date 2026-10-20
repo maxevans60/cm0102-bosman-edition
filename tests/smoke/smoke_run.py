@@ -5,7 +5,7 @@ Usage:
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> <reference folder> [--mode classic|widescreen]
         [--database 3.9.60|3.9.65|3.9.68] [--record] [--tolerance n]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --same-save [--mode classic|widescreen] [--days n] [--ref-build <program>]
-        [--ref-050 <0.5.0 program>] [--jobs n] [--runs a,b] [--custom-db <folder>]
+        [--ref-050 <0.5.0 program>] [--ref-setup <name>] [--jobs n] [--runs a,b] [--custom-db <folder>]
         [--save start.sav|prematch.sav]
     python3 tests/smoke/smoke_run.py <cm0102_recomp> <game folder> --match [--days n] [--speed very-fast|fastest] [--ref-build <program>] [--sleep-danger]
 
@@ -236,6 +236,9 @@ SAME_SAVE_RUNS = [
 # save must equal the save of ref-0.5.0, so the new Setup Game text is the only thing that moves memory.
 # ref-0.5.0 itself is not compared with normal. --ref-build stays free for the main build.
 REF_050 = None
+# --ref-setup <name> (with --ref-build): the run setup-<name> plays this build with RECOMP_SETUP_TEXT=<name>, the
+# Setup Game of the reference build (for example 0.6.0-preview, database.c), and is compared with ref-build.
+REF_SETUP = None
 TEXT_050_RUN = ("text-0.5.0", {"faster_days": "off", "_against": "ref-0.5.0",
                                "_env": {"RECOMP_SETUP_TEXT": "0.5.0", "RECOMP_SEASON_CODE": "off"}})
 
@@ -372,6 +375,11 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
             raise SystemExit("--runs: fewer than two runs are left, so nothing is compared")
     if REF_BUILD:
         runs = list(runs) + [("ref-build", dict(runs[0][1], _program=REF_BUILD))]
+        if REF_SETUP:
+            # This build with the Setup Game of the reference build (test variable RECOMP_SETUP_TEXT): its save
+            # must equal the save of ref-build, so Setup Game is the only thing that moves memory.
+            env = dict(runs[0][1].get("_env", {}), RECOMP_SETUP_TEXT=REF_SETUP)
+            runs = list(runs) + [("setup-" + REF_SETUP, dict(runs[0][1], _env=env, _against="ref-build"))]
     if REF_050 and text_050:
         runs = list(runs) + [("ref-0.5.0", dict(runs[0][1], _program=REF_050, _against="")),
                              (TEXT_050_RUN[0], dict(runs[0][1], **TEXT_050_RUN[1]))]
@@ -585,7 +593,7 @@ def main(argv):
     if len(argv) < 4:
         print(__doc__)
         return 2
-    global REF_BUILD, REF_050, JOBS, ONLY_RUNS, CUSTOM_DB
+    global REF_BUILD, REF_050, REF_SETUP, JOBS, ONLY_RUNS, CUSTOM_DB
     if "--custom-db" in argv[3:]:
         CUSTOM_DB = os.path.abspath(argv[argv.index("--custom-db") + 1])
     if "--jobs" in argv[3:]:
@@ -599,6 +607,8 @@ def main(argv):
         REF_BUILD = os.path.abspath(argv[argv.index("--ref-build") + 1])
     if "--ref-050" in argv[3:]:
         REF_050 = os.path.abspath(argv[argv.index("--ref-050") + 1])
+    if "--ref-setup" in argv[3:]:
+        REF_SETUP = argv[argv.index("--ref-setup") + 1]
     mode = "classic"
     if "--mode" in argv[3:]:
         mode = argv[argv.index("--mode") + 1]

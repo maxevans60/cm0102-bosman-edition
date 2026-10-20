@@ -18,9 +18,9 @@ a line for the Formation list: recomp: best xi tactics <n> current <i>,
 and for each draw, in 800x600 numbers, a pitch line and a line for each of the 11 cards:
     recomp: best xi pitch <x1> <y1> <x2> <y2> columns <n> most <n> card <w> x <h>
     recomp: best xi card pos <position> rect <x1> <y1> <x2> <y2> staff <1 to 3 staff> score <picker values>
-        stars <1 to 5, 0 for no score> out <1 for a player who cannot play the next match>
+        halves <half stars 1 to 10, 0 for no score> out <0, or 1 injured, 2 international, 3 another reason>
 A picker value is the score times 1200 (picker.c value()); the score is rounded, 1 to 20 (Q156), and shows
-as one to five stars: (score + 2) // 4, at least 1, and 0 for no score.
+as half stars: (score + 1) // 2, 0 for no score (Q420).
 
 Checks:
     - the first draw is on the current tactic (tactic 0) and has 11 players, each fit 1 to 20
@@ -30,9 +30,9 @@ Checks:
     - the other club's draw has 11 players of another club
     - no draw holds a player twice
     - each draw has 11 cards, each inside the pitch, no two overlapping; the first player of each card is a
-      player of the eleven, each eleven player is first on one card, the 2nd and 3rd are not in the eleven
-      and a card holds no player twice
-    - each card's stars are the picker's score rounded (Q156), as one to five stars
+      player of the eleven, each eleven player is first on one card, and a card holds no player twice (its
+      2nd and 3rd are the next for that slot and may play elsewhere in the eleven, Q420)
+    - each card's stars are the picker's score rounded (Q156), as half stars
     - no hidden attribute of another club's player feeds a score (hidden_check.py)
     - a Formation list that does not fit is paged: with RECOMP_VIEWS_FORMATION_PAGE=5 (a classic run), "More
       formations" opens page 2 and its first item draws the sixth tactic
@@ -137,7 +137,7 @@ def draws(log):
 
 PITCH = re.compile(r"recomp: best xi pitch (-?\d+) (-?\d+) (-?\d+) (-?\d+) columns")
 CARD = re.compile(r"recomp: best xi card pos (\S+) rect (-?\d+) (-?\d+) (-?\d+) (-?\d+) staff ([-0-9 ]*) "
-                  r"score ([-0-9 ]*) stars ([-0-9 ]*) out ([-0-9 ]*)")
+                  r"score ([-0-9 ]*) halves ([-0-9 ]*) out ([-0-9 ]*)")
 
 
 def shown_score(value):
@@ -148,9 +148,9 @@ def shown_score(value):
     return max(1, min(20, (value + 600) // 1200))
 
 
-def stars(value):
+def halves(value):
     shown = shown_score(value)
-    return max(1, (shown + 2) // 4) if shown else 0
+    return (shown + 1) // 2 if shown else 0
 
 
 def score_problems(name, values, numbers):
@@ -194,12 +194,10 @@ def check_layout(name, log):
                 problems.append(f"{name}: the card {pos} is empty")
                 continue
             firsts.append(staff[0])
-            if eleven is None or set(staff[1:]) & set(eleven):
-                problems.append(f"{name}: the card {pos} lists a player of the eleven after the first: {staff}")
             if len(staff) != len(set(staff)):
                 problems.append(f"{name}: the card {pos} holds a player twice: {staff}")
-            if hv != [stars(v) for v in values]:
-                problems.append(f"{name}: the card {pos} shows {hv} stars for the scores {values}")
+            if hv != [halves(v) for v in values]:
+                problems.append(f"{name}: the card {pos} shows {hv} half stars for the scores {values}")
         if eleven is not None and sorted(firsts) != sorted(s for s in eleven if s >= 0):
             problems.append(f"{name}: the first players {sorted(firsts)} are not the eleven {sorted(eleven)}")
     return problems

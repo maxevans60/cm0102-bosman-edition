@@ -76,7 +76,7 @@
 #define BACKDROP 0x0000u            /* the middle panel's fill: black, as the dark panels of the original's table */
 #define BACKDROP_ALPHA 176
 
-#define FONT 2                      /* the original's table font (0x879a4f) */
+#define FONT (getenv("RECOMP_TMP_CFONT") ? 1 : 2)   /* TEMP experiment; the original's table font (0x879a4f) */
 #define ROW_PX 19                   /* a row of a list, screen pixels: font 2 is 18 pixels high */
 #define GAP_PX 8
 #define MARKS 64

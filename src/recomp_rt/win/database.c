@@ -65,6 +65,11 @@ extern const uint32_t rt_site_setup_menu, rt_site_setup_subheading;
 #define SUB_HEADING 0x803f80u    /* thiscall on S (text, unused) */
 #define SIDE_BAR 0x75db00u       /* cdecl (mode, arg) */
 #define MENU 0x5ed300u           /* cdecl, 11 args: the menu builder */
+#define TEXT_WIDTH 0x5e5ad0u     /* cdecl (font, text): the width in screen pixels */
+#define WIDGET_CREATE 0x55f990u  /* thiscall on a Display, 18 args */
+#define DISPLAYS 0xb74c4cu       /* the Display of a player slot, 0x300 bytes apart */
+#define PLAYER_SLOT 0xb77c7au    /* s16: the player slot that has the turn */
+#define TEXT_YELLOW 0xaebdecu
 #define BACK_BAR 0x5edcc0u       /* cdecl (back, next) */
 #define CANNOT_GO_BACK 0x7fec60u /* thiscall on S (any): 0 when there is a screen to go back to */
 #define SIDE_BAR_INPUT 0x7615d0u /* cdecl (widget): 0 when it does not handle the click */
@@ -78,7 +83,7 @@ extern const uint32_t rt_site_setup_menu, rt_site_setup_subheading;
 #define STRIP_Y2 137
 
 /* Runtime memory for the strip text and the Extras items (made at the first Setup Game build). */
-static uint32_t strip_item, extras_items;
+static uint32_t strip_item, extras_items, measure;
 #define EXTRAS_TEXT 0x100u      /* the text buffer of the Extras build */
 
 static uint32_t call(uint32_t fn, int n, const uint32_t *args)
@@ -96,6 +101,11 @@ static uint32_t call_this(uint32_t fn, uint32_t self, int n, const uint32_t *arg
     uint32_t r = rt_callback(fn, n, args);
     cpu = saved;
     return r;
+}
+
+static uint32_t display(void)
+{
+    return rd32(g_mem, DISPLAYS + (uint32_t)(int32_t)(int16_t)rd16(g_mem, PLAYER_SLOT) * 0x300u);
 }
 
 static void fill_item(uint32_t item, const char *text, uint32_t id)
@@ -117,7 +127,7 @@ RT_WRAP(00803f30, heading)
 {
     static uint32_t title;
     uint32_t at = rt_arg(2);
-    if (at && !strcmp(win_str(at), TITLE_ORIGINAL)) {
+    if (at && !strcmp(win_str(at), TITLE_ORIGINAL) && !getenv("RECOMP_SETUP_TEXT")) {
         if (!title) {
             title = win_static_alloc(sizeof TITLE_BOSMAN);
             win_put_str(title, TITLE_BOSMAN, sizeof TITLE_BOSMAN);
@@ -140,22 +150,14 @@ RT_WRAP(00803f80, sub_heading)
     o_00803f80();
 }
 
-/* The text of the strip: the season, the database and the changing rules state, then a hint. */
-static void strip_line(char *text, size_t room)
+/* The text of the strip up to the rules values: the season, the database (and the Custom note), then
+ * "Changing rules:". */
+static void strip_prefix(char *text, size_t room)
 {
     int year = season_start_year();
     char db[DBFOLDER_NAME];
     season_screen_database_text(db, dbfolders_label_room(rt_screen_w));
-    int rules = season_code_on() && season_screen_rules_on();
-    /* Same game (Q152), from a trace of the game's heap with changing rules on and off:
-     * - the game copies the text into a block of its heap for a moment (sizes in steps of 16 bytes), so "on"
-     *   gets a space and the text has the same length in both states;
-     * - the original's text engine makes the work memory of a glyph the first time a font draws it (T2K,
-     *   docs/research/2026-10-16-hd-text.md), so "from" draws the "f" of "off" first in both states, as
-     *   "Hall Of Fame" did before the "Changing rules" item of slice 13.
-     * Then the same-save runs rules-off and off equal normal. */
-    snprintf(text, room, "Season %d/%02d from July %d \xb7 %s \xb7 Changing rules %s", year, (year + 1) % 100, year,
-             db, rules ? "on " : "off");
+    snprintf(text, room, "Season %d/%02d \xb7 %s", year, (year + 1) % 100, db);
     /* Slice 11b: a Custom database in another season whose dates could not be checked keeps its dates. */
     const char *opt = options_string(OPT_DATABASE);
     char path[1100];
@@ -164,17 +166,53 @@ static void strip_line(char *text, size_t room)
                     dbfolders_path(win_databases_root(), opt + 7, path, sizeof path) && !seasons_db_identify(path) &&
                     !season_dates_custom_check(path, &shift);
     if (unchecked) snprintf(text + strlen(text), room - strlen(text), " \xb7 Ages not checked");
+    snprintf(text + strlen(text), room - strlen(text), " \xb7 Changing rules:   ");
+}
+
+static uint32_t text_width(uint32_t at, const char *s)
+{
+    win_put_str(at, s, ITEM_TEXT_SIZE);
+    return call(TEXT_WIDTH, 2, (uint32_t[2]){3, at});
 }
 
 /* The strip: a menu of one item, made by the original's menu builder in the highlight style (bit 0 of the
- * highlight bits: style 0x822, yellow text, 0x5ed300). */
+ * highlight bits: style 0x822, yellow text, 0x5ed300), with the text "... Changing rules:  On   Off", and a
+ * yellow frame with no text round the value of the next new game, as the original's Game Settings box frames
+ * the current value (style 0x221, 0x82477b).
+ *
+ * Same game (Q152): the text is the same with changing rules on and off. A text that changed with the state
+ * moved the game's memory blocks (traces of the game's heap: the original's text engine keeps work memory for
+ * each glyph and text it draws, docs/research/2026-10-16-hd-text.md), and the same-save runs rules-off and off
+ * then differed from normal. The frame draws no text and has the same size in both states, and the widths
+ * below are measured the same way in both. */
 static void make_strip(void)
 {
     if (!strip_item) strip_item = win_static_alloc(ITEM_SIZE);
-    char text[ITEM_TEXT_SIZE];
-    strip_line(text, sizeof text);
+    if (!measure) measure = win_static_alloc(ITEM_TEXT_SIZE);
+    char prefix[ITEM_TEXT_SIZE], text[ITEM_TEXT_SIZE], before_off[ITEM_TEXT_SIZE];
+    strip_prefix(prefix, sizeof prefix);
+    snprintf(text, sizeof text, "%sOn   Off", prefix);
+    snprintf(before_off, sizeof before_off, "%sOn   ", prefix);
     fill_item(strip_item, text, SEASON_ID);
     call(MENU, 11, (uint32_t[11]){110, STRIP_Y1, 780, STRIP_Y2, 1, 1, 3, 1, strip_item, 1, 0});
+
+    int full = (int)text_width(measure, text), on_x = (int)text_width(measure, prefix);
+    int off_x = (int)text_width(measure, before_off), on_w = (int)text_width(measure, "On");
+    int off_w = (int)text_width(measure, "Off");
+    int rules = season_code_on() && season_screen_rules_on();
+    int sw = (int)rt_screen_w, sh = (int)rt_screen_h;
+    int bx1 = 110 * sw / 800, bx2 = 781 * sw / 800 - 1, start = bx1 + (bx2 - bx1 + 1 - full) / 2;
+    /* One frame size for both values: a frame takes a block of the game's heap by its size. */
+    int w = on_w > off_w ? on_w : off_w, x = start + (rules ? on_x + on_w / 2 : off_x + off_w / 2) - w / 2;
+    int cy = (STRIP_Y1 + STRIP_Y2) / 2, half = 12 * 600 / sh;
+    win_put_str(measure, "", ITEM_TEXT_SIZE);
+    uint32_t yellow = rd16(g_mem, TEXT_YELLOW);
+    /* In classic numbers, both edges on a multiple of 5: the widget create scales 5 to 8 pixels in widescreen
+     * exactly, so the frame has one size at every place. */
+    int fw = ((w + 10) * 800 / sw + 4) / 5 * 5, fx = ((x + w / 2) * 800 / sw - fw / 2) / 5 * 5;
+    uint32_t f[18] = {1, (uint32_t)fx, (uint32_t)(cy - half), (uint32_t)(fx + fw), (uint32_t)(cy + half), 0, 0, 0x221,
+                      yellow, yellow, 0xc, 3, yellow, measure, 0, 0, 0, 0xffffffffu};
+    call_this(WIDGET_CREATE, display(), 18, f);
 }
 
 /* The menu builder, cdecl (x1, y1, x2, y2, columns, rows, font, count, items, highlight bits, sort). */
@@ -196,6 +234,22 @@ RT_WRAP(005ed300, menu_build)
             fill_item(item + 9 * ITEM_SIZE, text, SEASON_ID);
             fill_item(item + 10 * ITEM_SIZE, "Bosman Edition Options", OPTIONS_ID);
             wr32(g_mem, cpu.esp + 4 + 4 * 7, 11);
+            o_005ed300();
+            return;
+        }
+        if (old && !strcmp(old, "0.6.0-preview")) {
+            /* Test only: the Setup Game of 0.6.0 slice 13 (the 0.6.0 preview, c3cb6ab): the Choose Season item,
+             * the options item and the Changing rules item in a grid of 2 x 6, with the original's title and
+             * sub-heading. A run with it shows that only Setup Game moves memory against the preview build. */
+            int year = season_start_year();
+            char db[DBFOLDER_NAME], text[ITEM_TEXT_SIZE];
+            season_screen_database_text(db, dbfolders_label_room(rt_screen_w));
+            snprintf(text, sizeof text, "Choose Season: %d/%02d\n%s", year, (year + 1) % 100, db);
+            fill_item(item + 9 * ITEM_SIZE, text, SEASON_ID);
+            fill_item(item + 10 * ITEM_SIZE, "Bosman Edition Options", OPTIONS_ID);
+            fill_item(item + 11 * ITEM_SIZE,
+                      season_code_on() && season_screen_rules_on() ? "Changing rules: On" : "Changing rules: Off", 0);
+            wr32(g_mem, cpu.esp + 4 + 4 * 7, 12);
             o_005ed300();
             return;
         }

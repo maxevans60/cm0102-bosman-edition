@@ -19,6 +19,7 @@
  *
  * The screen only reads the game. It never changes the team or any other data. */
 #include "win.h"
+#include "draw.h"
 #include "views.h"
 #include "options.h"
 #include "season_screen.h"
@@ -50,6 +51,9 @@
 #define WIDGETS 0xba95eu            /* Display + this: widget 0; 0x18c bytes each */
 #define WIDGET_SIZE 0x18cu
 
+#define NO_DRAW 0xaebe0cu           /* not 0: the draw functions of the original draw nothing */
+#define DRAW_SURFACE 0xaebde4u      /* the surface that the draw functions of the original draw on */
+
 #define TAB_ID 0x61u                /* the tabs; data 1 and 2. No shared input code uses 0x61. */
 #define TAB_ENTRY 0xd4u
 #define TABS 2
@@ -58,6 +62,18 @@
 static uint32_t scratch;            /* a block of the game's heap for the calls that write through pointers */
 #define TEXT_AT (TABS * TAB_ENTRY + 0x200u)   /* the text buffer of the Best XI tab */
 #define SCRATCH_SIZE (TEXT_AT + VIEWS_TEXT_SIZE)
+
+/* The stars of the Best XI cards (Q420): each a widget with no text; the runtime draws its stars after it. */
+#define STAR_WIDGETS 40
+static struct { int widget, halves; } stars[STAR_WIDGETS];
+static int star_count;
+
+void views_stars(int widget, int halves)
+{
+    if (widget < 0 || star_count >= STAR_WIDGETS) return;
+    stars[star_count].widget = widget;
+    stars[star_count++].halves = halves;
+}
 
 #define COMPARE_SLOT 8               /* node slots 8 and 9: the players of the Compare tab, 10 and 11 their pages */
 
@@ -163,6 +179,7 @@ static void views_build(void)
     int top = tab_bar(tab), bottom = 545;
 
     compare_clear();                /* the Compare tab builds its own again below */
+    star_count = 0;
     if (tab == 1) {
         /* Best XI: the pitch over the whole box, goal on the left, the cards over it. */
         best_xi_build(club, team, scratch + TEXT_AT, 100, top + 4, 790, bottom, node_slot(6));
@@ -223,12 +240,43 @@ static void views_input(void)
 
 static uint32_t build_fn(void) { return rt_host_fn("views_build", views_build); }
 
+static int on_top(void)
+{
+    uint32_t node = rd32(g_mem, TOP_NODE);
+    return node && rd32(g_mem, node) == build_fn();
+}
+
 /* The widget draw wrap (names.c) calls this after the game draws widget w (an address): the drawings of the
- * Compare tab and of the Choose Season screen. */
+ * Compare tab, of the Choose Season screen and the stars of Best XI, on the game's draw surface, so the screen
+ * dumps hold them too. */
 void views_widget_drawn(uint32_t w)
 {
     compare_widget_drawn(w);
     season_screen_widget_drawn(w);      /* the Choose Season screen (0.6.0 slice 13) */
+    if (!star_count || !on_top() || rd32(g_mem, NO_DRAW)) return;
+    uint32_t first = display() + WIDGETS;
+    if (w < first || (w - first) % WIDGET_SIZE) return;
+    int index = (int)((w - first) / WIDGET_SIZE), star = -1;
+    for (int i = 0; i < star_count; i++)
+        if (stars[i].widget == index) star = i;
+    uint32_t surface = rd32(g_mem, DRAW_SURFACE);
+    if (star < 0 || !surface) return;
+    DrawTarget t = {g_mem + rd32(g_mem, surface + 0x14), rd32(g_mem, surface + 0x10),
+                    (int)rd32(g_mem, surface + 8), (int)rd32(g_mem, surface + 0xc)};
+    int x1 = (int32_t)rd32(g_mem, w + 0x10), y1 = (int32_t)rd32(g_mem, w + 0x14);
+    int x2 = (int32_t)rd32(g_mem, w + 0x18), y2 = (int32_t)rd32(g_mem, w + 0x1c);
+    /* Five stars, right-aligned in the widget: the yellow of the original's texts [0xaebdec] on the dark blue
+     * of an empty star. */
+    int h = y2 - y1 + 1, size = h - 2, gap = 1;
+    if (5 * size + 4 * gap > x2 - x1 + 1) size = (x2 - x1 + 1 - 4 * gap) / 5;
+    if (size < 4) return;
+    uint16_t on = rd16(g_mem, 0xaebdecu), off = 0x0010u;     /* (0, 0, 128) */
+    int r = size / 2, cy = y1 + h / 2;
+    for (int i = 0; i < 5; i++) {
+        int cx = x2 - (4 - i) * (size + gap) - r;
+        int fill = stars[star].halves >= 2 * (i + 1) ? 2 : stars[star].halves == 2 * i + 1 ? 1 : 0;
+        draw_star(&t, cx, cy, r, fill, on, off);
+    }
 }
 
 void views_open(uint32_t club, uint32_t team)

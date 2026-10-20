@@ -16,11 +16,13 @@
  * line from the goalkeeper to the forwards, and in a column the left side at the top. A card is the dark
  * panel of the tactics list (area flags 2, 0x89c819) with the position in a dark blue box as the shirt
  * numbers of the award page list (style 0x30, [0xaebe04], font 1, pale grey, 0x4164c7), then three rows in
- * font 2 as the names of that list: the slot's player of the eleven in yellow, then the two best players for
- * the position who are not in the eleven (picker_depth, the rows of Squad depth of 0.4.0: slots with the
- * same position text share a row, Q161) in pale grey, and in grey a player who cannot play the next match.
- * Each player's score for the slot (1 to 20, Q156) shows as one to five stars, "*" in font 2 as the position
- * grid of the original's comparison screen 0x876520 shows them (Max asked for stars, 2026-10-20).
+ * font 2 as the names of that list: the slot's player of the eleven in yellow, then the next two players for
+ * that slot in pale grey (picker_depth with a row for each slot; a player of the eleven at another slot can
+ * be one of them, Q420). A player who cannot play the next match keeps his colour and gets a tag in the
+ * original's orange [0xaebdd4] after his name: Inj (injured), Int (away with a national team) or Out (the
+ * squad screen's test 0x45cbe0: a ban, a loan or the competition's rules). Each player's score for the slot
+ * (1 to 20, Q156) shows as 0.5 to 5 stars in half stars, which the runtime draws after the stars' widget
+ * (views_stars, Q420).
  *
  * The Formation drop-down in the heading lists the tactics of the game's own Tactics drop-down (tactics.c).
  * Item 0 is the player's current tactic, where the tab opens. A choice sets node slot 2 and builds the
@@ -49,6 +51,8 @@
 #define LIST_TEXT 0xaebde8u         /* the text colour of the squad list's cells (0x45c781) */
 #define GREY 0xae317eu              /* the grey of the game's texts (columns.c) */
 #define PALE 0xae3184u              /* pale grey: the list's names and the shirt numbers (0x4164c7) */
+#define ORANGE 0xaebdd4u            /* the original's orange (the comparison screen's masked values) */
+#define TEXT_WIDTH 0x5e5ad0u        /* cdecl (font, text): the width in screen pixels */
 #define DARK_BLUE 0xaebe04u         /* (0, 0, 128): the shirt number boxes of the eleven (0x4164c7) */
 #define DRAW_PITCH 0x8ac600u        /* cdecl, 11 args: the original's pitch (see above) */
 #define PITCH_SCALE 0x40800000u     /* 4.0f pixels per yard, as both callers of 0x8ac600 pass */
@@ -257,18 +261,24 @@ static int by_position(const void *a, const void *b)
     return x - y;
 }
 
-/* Stars for a score 1 to 20: one star for each 4, rounded (1 to 5), 0 for a player with no score (every key
- * attribute hidden). */
-static int star_count(int shown) { return shown ? (shown + 2) / 4 < 1 ? 1 : (shown + 2) / 4 : 0; }
+/* Half stars for a score 1 to 20: 1 to 10, 0 for a player with no score (every key attribute hidden). */
+static int halves(int shown) { return shown ? (shown + 1) / 2 : 0; }
 
 /* A widget of the original at its own rectangle (classic numbers), with no owner area. */
-static void item(uint32_t buf, uint32_t flags, int x1, int y1, int x2, int y2, uint32_t style, uint32_t colour,
-                 uint32_t text_flags, uint32_t font, uint32_t text_colour, const char *text)
+static int item(uint32_t buf, uint32_t flags, int x1, int y1, int x2, int y2, uint32_t style, uint32_t colour,
+                uint32_t text_flags, uint32_t font, uint32_t text_colour, const char *text)
 {
     win_put_str(buf, text, VIEWS_TEXT_SIZE);
     uint32_t w[18] = {flags, (uint32_t)x1, (uint32_t)y1, (uint32_t)x2, (uint32_t)y2, 0, 0, style, colour, colour,
                       text_flags, font, text_colour, buf, 0, 0, 0, 0xffffffffu};
-    call_this(WIDGET_CREATE, display(), 18, w);
+    return (int16_t)call_this(WIDGET_CREATE, display(), 18, w);
+}
+
+/* The width of a text in font 2, in classic numbers. */
+static int width2(uint32_t buf, const char *text)
+{
+    win_put_str(buf, text, VIEWS_TEXT_SIZE);
+    return across_px((int32_t)call(TEXT_WIDTH, 2, (uint32_t[2]){2, buf}));
 }
 
 /* One card: the dark panel, the position box, then up to three rows of a name and its stars. Classic numbers. */
@@ -279,26 +289,39 @@ static void card(uint32_t buf, int x1, int y1, int x2, int head, int row, const 
     uint32_t a[11] = {(uint32_t)x1, (uint32_t)y1, (uint32_t)x2, (uint32_t)y2, 1, 0, 1, 0, 2, 0, 0xffffffffu};
     call_this(AREA_CREATE, display(), 11, a);
     item(buf, 1, x1 + 2, y1 + 2, x2 - 2, y1 + 2 + head, 0x30, rd16(g_mem, DARK_BLUE), 0xc, 1, rd16(g_mem, PALE), pos);
-    int star_w = across_px(44);
+    int star_w = across_px(5 * 12 + 4 + 6);
+    static const char *const tags[4] = {"", "Inj", "Int", "Out"};
     for (int r = 0; r < n && r < 3; r++) {
-        int ry = y1 + 3 + head + r * row;
-        char name[64], stars[8] = "-";
+        int ry = y1 + 3 + head + r * row, nx = x1 + across_px(5), nx2 = x2 - star_w;
+        char name[64];
         short_name(staff[r], name, sizeof name);
-        int k = star_count(shown_score(score[r]));
-        for (int i = 0; i < k; i++) stars[i] = '*';
-        if (k) stars[k] = 0;
-        uint32_t colour = out[r] ? rd16(g_mem, GREY) : r == 0 ? rd16(g_mem, ITEM_HIGHLIGHT) : rd16(g_mem, PALE);
-        item(buf, 1, x1 + across_px(5), ry, x2 - star_w, ry + row - 1, 1, 0, 1, 2, colour, name);
-        item(buf, 1, x2 - star_w, ry, x2 - across_px(5), ry + row - 1, 1, 0, 0x40, 2,
-             out[r] ? rd16(g_mem, GREY) : rd16(g_mem, ITEM_HIGHLIGHT), stars);
+        uint32_t colour = r == 0 ? rd16(g_mem, ITEM_HIGHLIGHT) : rd16(g_mem, PALE);
+        if (out[r] > 0 && out[r] < 4) {
+            /* The tag after the name, the name cut to the room that is left. */
+            int tw = width2(buf, tags[out[r]]) + across_px(4), room = nx2 - nx - tw;
+            int w = width2(buf, name);
+            /* A name wider than the room loses letters at its end and gets a full stop. */
+            for (size_t len = strlen(name); w > room && len > 3; len--) {
+                name[len - 1] = '.';
+                name[len] = 0;
+                if (len > 1 && name[len - 2] == ' ') continue;
+                w = width2(buf, name);
+            }
+            item(buf, 1, nx, ry, nx + w + across_px(2), ry + row - 1, 1, 0, 1, 2, colour, name);
+            item(buf, 1, nx + w + across_px(4), ry, nx2, ry + row - 1, 1, 0, 1, 2, rd16(g_mem, ORANGE), tags[out[r]]);
+        } else {
+            item(buf, 1, nx, ry, nx2, ry + row - 1, 1, 0, 1, 2, colour, name);
+        }
+        int st = item(buf, 1, x2 - star_w, ry + 2, x2 - across_px(5), ry + row - 3, 0, 0, 0xc, 1, 0, "");
+        views_stars(st, halves(shown_score(score[r])));
     }
     if (log_on()) {
         fprintf(stderr, "recomp: best xi card pos %s rect %d %d %d %d staff", pos, x1, y1, x2, y2);
         for (int r = 0; r < n; r++) fprintf(stderr, " %d", (int32_t)rd32(g_mem, staff[r]));
         fprintf(stderr, " score");
         for (int r = 0; r < n; r++) fprintf(stderr, " %d", score[r]);
-        fprintf(stderr, " stars");
-        for (int r = 0; r < n; r++) fprintf(stderr, " %d", star_count(shown_score(score[r])));
+        fprintf(stderr, " halves");
+        for (int r = 0; r < n; r++) fprintf(stderr, " %d", halves(shown_score(score[r])));
         fprintf(stderr, " out");
         for (int r = 0; r < n; r++) fprintf(stderr, " %d", out[r]);
         fprintf(stderr, "\n");
@@ -333,8 +356,11 @@ static void cards(uint32_t buf, uint32_t club, uint32_t team, const Tactic *t, c
         row_of[s] = r;
         nth[s] = size[r]++;
     }
+    /* The next players of each slot: a Depth row for each slot (Q420). */
+    int own_row[SLOTS];
+    for (int s = 0; s < SLOTS; s++) own_row[s] = s;
     static Depth d;
-    picker_depth(club, team, t->masks, human_manager(), p, row_of, rows, &d);
+    picker_depth(club, team, t->masks, human_manager(), p, own_row, SLOTS, &d);
 
     /* The columns: one per line of the formation, the goalkeeper on the left. */
     Spot spots[SLOTS];
@@ -375,7 +401,7 @@ static void cards(uint32_t buf, uint32_t club, uint32_t team, const Tactic *t, c
             else if (size[r] == 2) snprintf(label, sizeof label, "%s%s", pos[r], nth[s] ? "R" : "L");
             else if (size[r] == 3) snprintf(label, sizeof label, "%s%s", pos[r], nth[s] == 0 ? "L" : nth[s] == 2 ? "R" : "");
             else snprintf(label, sizeof label, "%s %d", pos[r], nth[s] + 1);
-            /* The slot's player, then the first two of the row who are not in the eleven. */
+            /* The slot's player, then the next two of the slot's own row (Q420). */
             uint32_t staff[3];
             int score[3], out[3], n = 0;
             if (p->staff[s]) {
@@ -383,13 +409,11 @@ static void cards(uint32_t buf, uint32_t club, uint32_t team, const Tactic *t, c
                 score[n] = p->score[s];
                 out[n++] = 0;
             }
-            for (int q = 0; q < d.n[r] && n < 3; q++) {
-                int in_xi = 0;
-                for (int x = 0; x < SLOTS; x++) in_xi |= p->staff[x] == d.staff[r][q];
-                if (in_xi) continue;
-                staff[n] = d.staff[r][q];
-                score[n] = d.score[r][q];
-                out[n++] = d.out[r][q];
+            for (int q = 0; q < d.n[s] && n < 3; q++) {
+                if (d.staff[s][q] == p->staff[s]) continue;
+                staff[n] = d.staff[s][q];
+                score[n] = d.score[s][q];
+                out[n++] = d.out[s][q];
             }
             int top = cy - card_h / 2;
             if (top < y1 + 2) top = y1 + 2;
