@@ -94,6 +94,7 @@ python3 -I "$REPO/tools/seasons/make_rules.py" --out "$STAGE/Seasons/rules.tsv"
 # (src/recomp_rt/win/season_names.c, season_clubs.c).
 python3 -I "$REPO/tools/seasons/make_names.py" --out "$STAGE/Seasons/names.tsv"
 python3 -I "$REPO/tools/seasons/make_clubs.py" --out "$STAGE/Seasons/clubs.tsv"
+python3 -I "$REPO/tools/seasons/make_club_records.py" --out "$STAGE/Seasons/club_records.tsv"
 GAME="$STAGE"
 MANIFEST="$OUT/manifest-download.tsv"
 {
@@ -105,7 +106,7 @@ MANIFEST="$OUT/manifest-download.tsv"
     for z in "$STAGE"/Seasons/*.zip; do
         printf '%s\t%s\tSeasons/%s\n' "$(shasum -a 256 "$z" | cut -d ' ' -f 1)" "$(wc -c < "$z" | tr -d ' ')" "$(basename "$z")"
     done
-    for t in rules names clubs; do
+    for t in rules names clubs club_records; do
         printf '%s\t%s\tSeasons/%s.tsv\n' "$(shasum -a 256 "$STAGE/Seasons/$t.tsv" | cut -d ' ' -f 1)" \
             "$(wc -c < "$STAGE/Seasons/$t.tsv" | tr -d ' ')" "$t"
     done
