@@ -93,6 +93,18 @@ PATCHES = {
     0x669869: (10, "rt_season_text_mod(10u)"),              # key_nation_format_comp_season 0x6697c0
     0x669876: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
 
+    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
+    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
+    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
+    0x797DBE: (2, "rt_oceania_step(2u)"),       # OceaniaClubChamp::start_new_season: one edition a year
+    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
+    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
+    # Slice 26c (season_club_cups.c): the club count of the CONCACAF Champions Cup (Con_Champ) by season, 8 in
+    # the original: the constructor's club list (calloc count 0x4c0cc2, +0x3e at 0x4c0cc4) and the picker's +0x3e
+    # (0x4c11af). esi is the object; +0x40 is its year (set at 0x4c0c8d).
+    0x4C0CC2: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
+    0x4C0CC4: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
+    0x4C11AF: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
     # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). The golden goal is bit
     # 0x80 of the rule flags of a knockout round (sweep-international section 7). The round template function
     # of each class holds the competition in edi (set at 0x92c299, 0x57ab99, 0x58b56f) and the round records in
@@ -186,12 +198,6 @@ PATCHES = {
     # (0x917830, this in esi from 0x91784e) gives its 4th the play-off place: the second byte of its rules
     # array (0x917878, 0 in the original; inference: the count of play-off places) becomes 1 in a season game.
     0x917878: (0x0, "rt_wcq_concacaf_playoff(esi)"),
-    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
-    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
-    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
-    0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
-    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
-    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
 
     # Euro qualifying places (0.6.0 slice 27, win/season_intl_euroq.c). euro_champ_qual: in a season game the
     # places follow the Euro year (campaign +0x40 + 2). Each site gives the original's value in the base game and
@@ -212,6 +218,12 @@ INSNS = {
     # data would go into a later campaign, and its asserts (0x91dbc4, 0x9223ab) want dates in 2000 and 2001.
     0x918473: ("jl 0x91847c", "if (cc_l(F) || rt_season_year != 2001u) goto L_91847c;"),
     0x9204B8: ("jl 0x9204c1", "if (cc_l(F) || rt_season_year != 2001u) goto L_9204c1;"),
+    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
+    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
+    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
+    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
+    # edition (the original skips it when +0x40 is the game year).
+    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
 
     # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). Each class keeps its
     # edition year in the word +0x40 of the object (this in esi). The constructor rounds the game year up to the
@@ -327,12 +339,6 @@ INSNS = {
     # stages 0 to 7 on its draw day (create_group_stage 0x57ed10 at 0x57ff2e, `cmp edi, 8`, this in esi). The
     # Nations League object makes one stage for each group after group one: G - 1. Other objects: 8.
     0x57FF34: ("cmp edi, 8", "t0 = edi; t1 = rt_nl_group_stages(esi, 8u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
-    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
-    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
-    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
-    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
-    # edition (the original skips it when +0x40 is the game year).
-    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
     # Euro qualifying places (0.6.0 slice 27, win/season_intl_euroq.c). The places and stage indices of the
     # format: after set_up_rules sets +0xbf (0x57e963) and at the ctor epilogue (0x57d03b, also after a load: the
     # bytes +0xff..+0x101 are not saved). The play-off size by the host count +0xf6: 0x57f014 (best places),

@@ -294,6 +294,17 @@ extern uint32_t rt_screen_w, rt_screen_h;
  * sites of tools/recomp/seasons.py read it in place of the constants 2001, 2002 and 2003. */
 extern uint32_t rt_season_year;
 
+/* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
+ * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
+uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
+/* The date count of a French league's template for the clubs that its division holds (slice 18). */
+uint32_t rt_league_dates(uint32_t obj, uint32_t original);
+/* The room for lower clubs of a cup with a fixed entrant count (6 bytes a place): the entrants less the clubs
+ * of the top divisions of keys a, b and c (key ids, 0 for none). The original in the base game (slice 18).
+ * rt_cup_add: the value to add to base so that the sum is that count (FraCup). */
+uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint32_t key_b, uint32_t key_c);
+uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
+uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
 /* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
  * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group
  * stage. The sites of tools/recomp/uefa.py read it. */
@@ -310,6 +321,19 @@ uint32_t rt_uefa_uic_winners(uint32_t uc, uint32_t uic);
 uint32_t rt_season_text_mod(uint32_t original);
 uint32_t rt_season_text_format(uint32_t original);
 
+/* The club competitions outside UEFA (0.6.0 slice 26, src/recomp_rt/win/season_kind_club_world.c): in a season
+ * game the Club World Championship plays every year and draws on 1 July, the Oceania Champions Cup plays every
+ * year, and the Copa Mercosur does not start itself while it waits. The sites of tools/recomp/seasons.py read
+ * these. In the base game each gives the original's value. */
+uint32_t rt_club_world_annual(void);
+uint32_t rt_club_world_step(uint32_t original);
+uint32_t rt_oceania_step(uint32_t original);
+uint32_t rt_club_world_month(uint32_t original);
+uint32_t rt_club_world_day(uint32_t original);
+uint32_t rt_club_world_waits(uint32_t obj);
+/* The CONCACAF Champions Cup's club count of the edition of `year` (slice 26c, win/season_club_cups.c): 8 in the
+ * base game and with no row. */
+uint32_t rt_concacaf_clubs(uint32_t year, uint32_t original);
 /* International competitions (0.6.0 slice 27, win/season_intl.h): the edition year of a finals class at its
  * constructor and its start_new_season, the golden goal bit of a knockout round, and the World Cup holder of the
  * qualifying sections and of slot 0. The sites of tools/recomp/seasons.py call them. Each gives the original's
@@ -369,15 +393,6 @@ uint32_t rt_nl_group_stages(uint32_t self, uint32_t original);
  * Cup (win/season_gold_cup.c). */
 uint32_t rt_copa_first_year(uint32_t self, uint32_t year);
 uint32_t rt_copa_next_year(uint32_t self, uint32_t year, uint32_t step);
-/* The club competitions outside UEFA (0.6.0 slice 26, src/recomp_rt/win/season_kind_club_world.c): in a season
- * game the Club World Championship plays every year and draws on 1 July, the Oceania Champions Cup plays every
- * year, and the Copa Mercosur does not start itself while it waits. The sites of tools/recomp/seasons.py read
- * these. In the base game each gives the original's value. */
-uint32_t rt_club_world_annual(void);
-uint32_t rt_club_world_step(uint32_t original);
-uint32_t rt_club_world_month(uint32_t original);
-uint32_t rt_club_world_day(uint32_t original);
-uint32_t rt_club_world_waits(uint32_t obj);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets

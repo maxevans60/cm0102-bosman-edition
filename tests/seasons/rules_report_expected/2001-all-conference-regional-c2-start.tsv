@@ -1,0 +1,288 @@
+# Differences between the rules report and the rules table that the check accepts. Made by
+# tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2001	bench	fra_cup (French Cup), row fra-7: game 3, table 5 (5)
+2001	bench	fra_lge_cup (French League Cup), row fra-8: game 3, table 5 (5)
+2001	bench	ger_cup (German Cup), row ger-10: game 6, table 7 (7)
+2001	bench	ger_first (German First Division), row ger-1: game 6, table 7 (7)
+2001	bench	ger_second (German Second Division), row ger-2: game 6, table 7 (7)
+2001	bench	world_cup (FIFA World Cup), row int-world-2: game 7, table 12 (12)
+2001	clubs	african_nations (African Cup of Nations), row int-continental-7: game 0, table 16 (16)
+2001	clubs	asia_club_champ (Asian Club Championship), row club-world-13: game 16, table 28 (28)
+2001	clubs	asia_cup_winner (Asian Cup Winners' Cup), row club-world-16: game 16, table 26 (26)
+2001	clubs	bel_third (Belgian Third Division), row hol-bel-10: game 16, table 32 (32 (A 16, B 16))
+2001	clubs	bra_champ_cup (Brazilian Champions Cup), row bra-190: game 3, table 16 (16)
+2001	clubs	bra_cup (Brazilian Cup), row bra-136: game 71, table 64 (64)
+2001	clubs	bra_nat_first (Brazilian National First Division), row bra-28: game 28, table 26 (26)
+2001	clubs	bra_nat_second (Brazilian National Second Division), row bra-55: game 28, table 26 (26)
+2001	clubs	bra_nat_third (Brazilian National Third Division), row bra-82: game 7, table 61 (61)
+2001	clubs	bra_reg_bahia (Brazilian Bahia State Championship), row bra-433: game 10, table 9 (9)
+2001	clubs	bra_reg_central (Brazilian Central State Championship), row bra-514: game 15, table 12 (12)
+2001	clubs	bra_reg_goias (Brazilian Goiás State Championship), row bra-568: game 14, table 12 (12)
+2001	clubs	bra_reg_minas_gerais (Brazilian Minas Gerais State Championship), row bra-595: game 12, table 8 (8)
+2001	clubs	bra_reg_north (Brazilian North State Championship), row bra-622: game 10, table 14 (14)
+2001	clubs	bra_reg_northeast (Brazilian Northeast State Championship), row bra-649: game 16, table 10 (10)
+2001	clubs	bra_reg_santa (Brazilian Santa Catarina State Championship), row bra-487: game 10, table 11 (11)
+2001	clubs	bra_reg_sp (Brazilian São Paulo State Championship), row bra-703: game 16, table 12 (12)
+2001	clubs	con_champ (CONCACAF Champions Cup), row club-world-9: game 8, table 16 (16)
+2001	clubs	con_merc_cup (Merconorte Cup), row club-world-6: game 0, table 16 (16)
+2001	clubs	conmebol_liber (South American Copa Libertadores), row club-world-4: game 4, table 32 (32)
+2001	clubs	conmebol_merc (South American Copa Mercosur), row club-world-5: game 4, table 20 (20)
+2001	clubs	european_cup (European Champions Cup), row uefa-2: game 55, table 72 (72 (32 in the group stage))
+2001	clubs	fin_first (Finnish First Division), row nor-fin-8: game 10, table 18 (18 (South 9, North 9))
+2001	clubs	goldcup (Copa America), row int-continental-11: game 4, table 12 (12)
+2001	clubs	gre_cup (Greek Cup), row gre-pol-cro-1: game 4, table 44 (44)
+2001	clubs	ire_first (Irish First Division), row wal-nir-irl-17: game 10, table 9 (9)
+2001	clubs	ita_cup (Italian Cup), row ita-13: game 4, table 48 (48)
+2001	clubs	nir_cup (Northern Irish Cup), row wal-nir-irl-13: game 32, table 85 (85)
+2001	clubs	nir_lge_cup (Northern Irish League Cup), row wal-nir-irl-14: game 5, table 20 (20)
+2001	clubs	pol_first (Polish First Division), row gre-pol-cro-190: game 8, table 16 (16)
+2001	clubs	por_cup (Portuguese Cup), row por-6: game 164, table 230 (230)
+2001	clubs	spa_cup (Spanish Cup), row spa-7: game 83, table 80 (80)
+2001	clubs	tur_second_b (Turkish 2. Division Category B), row rus-tur-217: game 10, table 50 (50)
+2001	clubs	usa_mls (American Major League), row arg-usa-217: game 4, table 10 (10)
+2001	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-6: game 50, table 25 (25 in the second round)
+2001	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-5: game 24, table 6 (6 in the final round)
+2001	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-8: game 5, table 1 (1 (Australia))
+2001	clubs	wel_prm_cup (Welsh Premier Cup), row wal-nir-irl-9: game 4, table 12 (12)
+2001	clubs	world_cup (FIFA World Cup), row int-world-2: game 0, table 32 (32)
+2001	down	arg_prm (Argentine Premier Division), row arg-usa-1: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
+2001	down	arg_second (Argentine Second Division), row arg-usa-28: game 0 (+0 play-off places), table 7 (7 (worst coefficients: 2 per affiliation zone, 3 more regardless of affiliation))
+2001	down	bra_nat_second (Brazilian National Second Division), row bra-55: game 4 (+0 play-off places), table 6 (6)
+2001	down	bra_nat_third (Brazilian National Third Division), row bra-82: game 2 (+0 play-off places), table na (n/a)
+2001	down	cro_a1 (Croatian First Division), row gre-pol-cro-325: game 2 (+0 play-off places), table 4 (4 (13th-16th))
+2001	down	cro_a2a (Croatian Second Division North), row gre-pol-cro-352: game 2 (+0 play-off places), table 6 (6 (11th-16th))
+2001	down	cro_a2b (Croatian Second Division South), row gre-pol-cro-379: game 2 (+0 play-off places), table 6 (6 (11th-16th))
+2001	down	den_first (Danish First Division), row den-swe-3: game 3 (+0 play-off places), table 2 (2)
+2001	down	den_second (Danish Second Division), row den-swe-4: game 4 (+0 play-off places), table 2 (2 (15th and 16th))
+2001	down	fin_first (Finnish First Division), row nor-fin-8: game 2 (+1 play-off places), table text (zone relegation groups; 5th-6th play-offs, 7th down in each)
+2001	down	ger_regional (German Regional), row ger-4: game 4 (+0 play-off places), table 3 (3)
+2001	down	gre_prm (Greek National A Division), row gre-pol-cro-28: game 2 (+0 play-off places), table 1 (1 (14th))
+2001	down	gre_second (Greek National B Division), row gre-pol-cro-55: game 2 (+0 play-off places), table 1 (1 (14th))
+2001	down	ita_ser_c1a (Italian Serie C1/A), row ita-4: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2001	down	ita_ser_c1b (Italian Serie C1/B), row ita-5: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2001	down	ita_ser_c2a (Italian Serie C2/A), row ita-6: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2001	down	ita_ser_c2b (Italian Serie C2/B), row ita-7: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2001	down	ita_ser_c2c (Italian Serie C2/C), row ita-8: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
+2001	down	nir_prm (Northern Irish League Premier Division), row wal-nir-irl-10: game 1 (+1 play-off places), table 0 (0)
+2001	down	pol_first (Polish First Division), row gre-pol-cro-190: game 0 (+0 play-off places), table 2 (2 (7th-8th of relegation group))
+2001	down	por_second (Portuguese Second League), row por-2: game 3 (+0 play-off places), table 2 (2 (Campomaiorense also left professional football))
+2001	down	rus_first (Russian First Division), row rus-tur-28: game 3 (+0 play-off places), table 2 (2)
+2001	down	tur_second (Turkish 2. Division Category A), row rus-tur-190: game 3 (+0 play-off places), table 5 (5)
+2001	down	tur_second_b (Turkish 2. Division Category B), row rus-tur-217: game 0 (+0 play-off places), table 10 (10 (bottom two of each of five classification groups))
+2001	down	wel_first (Welsh Premier Division), row wal-nir-irl-4: game 0 (+0 play-off places), table 2 (2 (pos 17,18))
+2001	idle	wc_asia_league (World Cup Asian Qualifying Section), row int-world-7: the game waits for 2004, the table holds it
+2001	idle	wc_europe_league (World Cup European Qualifying Section), row int-world-3: the game waits for 2004, the table holds it
+2001	idle	wc_south_american_league (World Cup South American Qualifying Section), row int-world-4: the game waits for 2004, the table holds it
+2001	name	arg_prm (Argentine Premier Division), row arg-usa-1: game 'Argentine Premier Division', table 'Primera División (Apertura 2001, Clausura 2002)'
+2001	name	arg_second (Argentine Second Division), row arg-usa-28: game 'Argentine Second Division', table 'Primera B Nacional'
+2001	name	aus_nsl (Australian National Soccer League), row aus-jap-kor-105: game 'Australian National Soccer League', table 'National Soccer League'
+2001	name	bra_champ_cup (Brazilian Champions Cup), row bra-190: game 'Brazilian Champions Cup', table 'Copa dos Campeões'
+2001	name	bra_cup (Brazilian Cup), row bra-136: game 'Brazilian Cup', table 'Copa do Brasil'
+2001	name	bra_nat_first (Brazilian National First Division), row bra-28: game 'Brazilian National First Division', table 'Campeonato Brasileiro Série A'
+2001	name	bra_nat_second (Brazilian National Second Division), row bra-55: game 'Brazilian National Second Division', table 'Campeonato Brasileiro Série B'
+2001	name	bra_nat_third (Brazilian National Third Division), row bra-82: game 'Brazilian National Third Division', table 'Campeonato Brasileiro Série C'
+2001	name	bra_reg_bahia (Brazilian Bahia State Championship), row bra-433: game 'Brazilian Bahia State Championship', table 'Campeonato Baiano'
+2001	name	bra_reg_central (Brazilian Central State Championship), row bra-514: game 'Brazilian Central State Championship', table 'Campeonato Mato-Grossense'
+2001	name	bra_reg_gaucho (Brazilian Gaúcho State Championship), row bra-541: game 'Brazilian Gaúcho State Championship', table 'Campeonato Gaúcho'
+2001	name	bra_reg_goias (Brazilian Goiás State Championship), row bra-568: game 'Brazilian Goiás State Championship', table 'Campeonato Goiano'
+2001	name	bra_reg_minas_gerais (Brazilian Minas Gerais State Championship), row bra-595: game 'Brazilian Minas Gerais State Championship', table 'Campeonato Mineiro Módulo I'
+2001	name	bra_reg_north (Brazilian North State Championship), row bra-622: game 'Brazilian North State Championship', table 'Campeonato Paraense'
+2001	name	bra_reg_northeast (Brazilian Northeast State Championship), row bra-649: game 'Brazilian Northeast State Championship', table 'Campeonato Cearense'
+2001	name	bra_reg_parana (Brazilian Paraná State Championship), row bra-676: game 'Brazilian Paraná State Championship', table 'Campeonato Paranaense'
+2001	name	bra_reg_pern (Brazilian Pernambuco State Championship), row bra-730: game 'Brazilian Pernambuco State Championship', table 'Campeonato Pernambucano'
+2001	name	bra_reg_rio (Brazilian Rio de Janeiro State Championship), row bra-460: game 'Brazilian Rio de Janeiro State Championship', table 'Campeonato Carioca'
+2001	name	bra_reg_santa (Brazilian Santa Catarina State Championship), row bra-487: game 'Brazilian Santa Catarina State Championship', table 'Campeonato Catarinense'
+2001	name	bra_reg_sp (Brazilian São Paulo State Championship), row bra-703: game 'Brazilian São Paulo State Championship', table 'Campeonato Paulista Série A1'
+2001	name	con_champ (CONCACAF Champions Cup), row club-world-9: game 'CONCACAF Champions Cup', table "CONCACAF Champions' Cup"
+2001	name	con_merc_cup (Merconorte Cup), row club-world-6: game 'Merconorte Cup', table 'Copa Merconorte'
+2001	name	conmebol_liber (South American Copa Libertadores), row club-world-4: game 'South American Copa Libertadores', table 'Copa Libertadores'
+2001	name	conmebol_merc (South American Copa Mercosur), row club-world-5: game 'South American Copa Mercosur', table 'Copa Mercosur'
+2001	name	cro_a1 (Croatian First Division), row gre-pol-cro-325: game 'Croatian First Division', table 'Prva HNL'
+2001	name	cro_a2a (Croatian Second Division North), row gre-pol-cro-352: game 'Croatian Second Division North', table 'Druga HNL North'
+2001	name	cro_a2b (Croatian Second Division South), row gre-pol-cro-379: game 'Croatian Second Division South', table 'Druga HNL South'
+2001	name	cro_cup (Croatian Cup), row gre-pol-cro-406: game 'Croatian Cup', table 'Croatian Football Cup'
+2001	name	den_first (Danish First Division), row den-swe-3: game 'Danish First Division', table 'Danish 1st Division'
+2001	name	den_prm (Danish Premier Division), row den-swe-2: game 'Danish Premier Division', table 'Danish Superliga'
+2001	name	den_second (Danish Second Division), row den-swe-4: game 'Danish Second Division', table 'Danish 2nd Division'
+2001	name	eng_auto_cup (English Vans Trophy), row eng-300: game 'English Vans Trophy', table 'Football League Trophy'
+2001	name	eng_cc_cup (English League Cup), row eng-299: game 'English League Cup', table 'Football League Cup'
+2001	name	eng_charity (English Charity Shield), row eng-302: game 'English Charity Shield', table 'FA Charity Shield'
+2001	name	eng_conf (English Conference), row eng-32: game 'English Conference', table 'Football Conference'
+2001	name	eng_fa_cup (English FA Cup), row eng-298: game 'English FA Cup', table 'FA Cup'
+2001	name	eng_fa_trophy (English FA Trophy), row eng-301: game 'English FA Trophy', table 'FA Trophy'
+2001	name	eng_first (English First Division), row eng-29: game 'English First Division', table 'Football League First Division'
+2001	name	eng_prm (English Premier Division), row eng-28: game 'English Premier Division', table 'FA Premier League'
+2001	name	eng_second (English Second Division), row eng-30: game 'English Second Division', table 'Football League Second Division'
+2001	name	eng_third (English Third Division), row eng-31: game 'English Third Division', table 'Football League Third Division'
+2001	name	eur_super_cup (European Super Cup), row uefa-8: game 'European Super Cup', table 'UEFA Super Cup'
+2001	name	euro_champ_qual (European Championship Qualifying), row int-continental-2: game 'European Championship Qualifying', table 'UEFA European Championship qualifying'
+2001	name	european_cup (European Champions Cup), row uefa-2: game 'European Champions Cup', table 'UEFA Champions League'
+2001	name	fin_cup (Finnish Cup), row nor-fin-9: game 'Finnish Cup', table 'Suomen Cup'
+2001	name	fin_first (Finnish First Division), row nor-fin-8: game 'Finnish First Division', table 'Ykkönen'
+2001	name	fin_prm (Finnish Premier Division), row nor-fin-7: game 'Finnish Premier Division', table 'Veikkausliiga'
+2001	name	fra_cup (French Cup), row fra-7: game 'French Cup', table 'Coupe de France'
+2001	name	fra_first (French First Division), row fra-2: game 'French First Division', table 'Division 1'
+2001	name	fra_lge_cup (French League Cup), row fra-8: game 'French League Cup', table 'Coupe de la Ligue'
+2001	name	fra_second (French Second Division), row fra-3: game 'French Second Division', table 'Division 2'
+2001	name	fra_super (French Champions Trophy), row fra-9: game 'French Champions Trophy', table 'Trophée des Champions'
+2001	name	fra_third (French National), row fra-4: game 'French National', table 'Championnat National'
+2001	name	ger_cup (German Cup), row ger-10: game 'German Cup', table 'DFB-Pokal'
+2001	name	ger_first (German First Division), row ger-1: game 'German First Division', table 'Bundesliga'
+2001	name	ger_lge_cup (German League Cup), row ger-11: game 'German League Cup', table 'DFB-Ligapokal'
+2001	name	ger_regional (German Regional), row ger-4: game 'German Regional', table 'Regionalliga Nord'
+2001	name	ger_second (German Second Division), row ger-2: game 'German Second Division', table '2. Bundesliga'
+2001	name	goldcup (Copa America), row int-continental-11: game 'Copa America', table '2001 Copa América'
+2001	name	gre_cup (Greek Cup), row gre-pol-cro-1: game 'Greek Cup', table 'Greek Football Cup'
+2001	name	gre_prm (Greek National A Division), row gre-pol-cro-28: game 'Greek National A Division', table 'Alpha Ethniki'
+2001	name	gre_second (Greek National B Division), row gre-pol-cro-55: game 'Greek National B Division', table 'Beta Ethniki'
+2001	name	hol_cup (Dutch Cup), row hol-bel-5: game 'Dutch Cup', table 'KNVB Cup'
+2001	name	hol_first (Dutch First Division), row hol-bel-3: game 'Dutch First Division', table 'Eerste Divisie'
+2001	name	hol_prm (Dutch Premier Division), row hol-bel-2: game 'Dutch Premier Division', table 'Eredivisie'
+2001	name	hol_super (Dutch Super Cup), row hol-bel-6: game 'Dutch Super Cup', table 'Johan Cruyff Shield'
+2001	name	inter_amer_cup (Inter-American Cup), row club-world-12: game 'Inter-American Cup', table 'Copa Interamericana'
+2001	name	intertoto_cup (Inter-Toto Cup), row uefa-7: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
+2001	name	ire_chal_cup (Irish Senior Challenge Cup), row wal-nir-irl-19: game 'Irish Senior Challenge Cup', table 'FAI Cup'
+2001	name	ire_first (Irish First Division), row wal-nir-irl-17: game 'Irish First Division', table 'League of Ireland First Division'
+2001	name	ire_leinster_cup (Irish Leinster Senior Cup), row wal-nir-irl-21: game 'Irish Leinster Senior Cup', table 'Leinster Senior Cup'
+2001	name	ire_lge_cup (Irish League Cup), row wal-nir-irl-20: game 'Irish League Cup', table 'League of Ireland Cup'
+2001	name	ire_munster_cup (Irish Munster Senior Cup), row wal-nir-irl-22: game 'Irish Munster Senior Cup', table 'Munster Senior Cup'
+2001	name	ire_pres_cup (Irish Presidents Cup), row wal-nir-irl-23: game 'Irish Presidents Cup', table "LFA President's Cup"
+2001	name	ire_prm (Irish Premier Division), row wal-nir-irl-16: game 'Irish Premier Division', table 'League of Ireland Premier Division'
+2001	name	ire_super_cup (Irish Super Cup), row wal-nir-irl-24: game 'Irish Super Cup', table 'FAI Super Cup'
+2001	name	ita_c1_super (Italian C1 Super Cup), row ita-16: game 'Italian C1 Super Cup', table 'Supercoppa di Lega di Serie C'
+2001	name	ita_c_cup (Italian Serie C Cup), row ita-14: game 'Italian Serie C Cup', table 'Coppa Italia Serie C'
+2001	name	ita_cup (Italian Cup), row ita-13: game 'Italian Cup', table 'Coppa Italia'
+2001	name	ita_ser_a (Italian Serie A), row ita-2: game 'Italian Serie A', table 'Serie A'
+2001	name	ita_ser_b (Italian Serie B), row ita-3: game 'Italian Serie B', table 'Serie B'
+2001	name	ita_ser_c1a (Italian Serie C1/A), row ita-4: game 'Italian Serie C1/A', table 'Serie C1 girone A'
+2001	name	ita_ser_c1b (Italian Serie C1/B), row ita-5: game 'Italian Serie C1/B', table 'Serie C1 girone B'
+2001	name	ita_ser_c2a (Italian Serie C2/A), row ita-6: game 'Italian Serie C2/A', table 'Serie C2 girone A'
+2001	name	ita_ser_c2b (Italian Serie C2/B), row ita-7: game 'Italian Serie C2/B', table 'Serie C2 girone B'
+2001	name	ita_ser_c2c (Italian Serie C2/C), row ita-8: game 'Italian Serie C2/C', table 'Serie C2 girone C'
+2001	name	ita_super (Italian Super Cup), row ita-15: game 'Italian Super Cup', table 'Supercoppa Italiana'
+2001	name	jap_emp_cup (Japanese Emperor's Cup), row aus-jap-kor-136: game "Japanese Emperor's Cup", table "Emperor's Cup"
+2001	name	jap_j1 (Japanese J-League 1), row aus-jap-kor-190: game 'Japanese J-League 1', table 'J.League Division 1'
+2001	name	jap_j2 (Japanese J-League 2), row aus-jap-kor-217: game 'Japanese J-League 2', table 'J.League Division 2'
+2001	name	jap_j_cup (Japanese Cup), row aus-jap-kor-163: game 'Japanese Cup', table 'J.League Yamazaki Nabisco Cup'
+2001	name	kor_league (Korean League), row aus-jap-kor-325: game 'Korean League', table 'K League'
+2001	name	kor_league_cup (Korean League Cup), row aus-jap-kor-433: game 'Korean League Cup', table 'Adidas Cup'
+2001	name	kor_super_cup (Korean Super Cup), row aus-jap-kor-379: game 'Korean Super Cup', table 'K League Super Cup'
+2001	name	nir_charity (Northern Irish Charity Shield), row wal-nir-irl-15: game 'Northern Irish Charity Shield', table 'Charity Shield'
+2001	name	nir_cup (Northern Irish Cup), row wal-nir-irl-13: game 'Northern Irish Cup', table 'Irish Cup'
+2001	name	nir_first (Northern Irish League First Division), row wal-nir-irl-11: game 'Northern Irish League First Division', table 'Irish League First Division'
+2001	name	nir_lge_cup (Northern Irish League Cup), row wal-nir-irl-14: game 'Northern Irish League Cup', table 'Irish League Cup'
+2001	name	nir_prm (Northern Irish League Premier Division), row wal-nir-irl-10: game 'Northern Irish League Premier Division', table 'Irish League Premier Division'
+2001	name	nor_cup (Norwegian Cup), row nor-fin-4: game 'Norwegian Cup', table 'Norgesmesterskapet (Norwegian Football Cup)'
+2001	name	nor_first (Norwegian First Division), row nor-fin-3: game 'Norwegian First Division', table '1. divisjon'
+2001	name	nor_prm (Norwegian Premier Division), row nor-fin-2: game 'Norwegian Premier Division', table 'Tippeligaen'
+2001	name	oceania_club_champ (Oceania Champions Cup), row club-world-18: game 'Oceania Champions Cup', table 'Oceania Club Championship'
+2001	name	oceania_nations (Oceania Nations Cup), row int-continental-10: game 'Oceania Nations Cup', table 'OFC Nations Cup'
+2001	name	pol_cup (Polish FA Cup), row gre-pol-cro-163: game 'Polish FA Cup', table 'Polish Cup'
+2001	name	pol_first (Polish First Division), row gre-pol-cro-190: game 'Polish First Division', table 'I liga (Ekstraklasa)'
+2001	name	pol_lge_cup (Polish League Cup), row gre-pol-cro-217: game 'Polish League Cup', table 'Puchar Ligi Polskiej (Polish League Cup)'
+2001	name	pol_second (Polish Second Division), row gre-pol-cro-244: game 'Polish Second Division', table 'II liga'
+2001	name	por_cup (Portuguese Cup), row por-6: game 'Portuguese Cup', table 'Taça de Portugal'
+2001	name	por_prm (Portuguese Premier League), row por-1: game 'Portuguese Premier League', table 'Primeira Liga'
+2001	name	por_second (Portuguese Second League), row por-2: game 'Portuguese Second League', table 'Segunda Liga (Liga de Honra)'
+2001	name	por_super (Portuguese Super Cup), row por-7: game 'Portuguese Super Cup', table 'Supertaça Cândido de Oliveira'
+2001	name	rus_prm (Russian Premier Division), row rus-tur-1: game 'Russian Premier Division', table 'Russian Football Premier League'
+2001	name	sco_chal_cup (Scottish League Challenge Cup), row sco-8: game 'Scottish League Challenge Cup', table 'Scottish Challenge Cup'
+2001	name	sco_prm (Scottish Premier Division), row sco-2: game 'Scottish Premier Division', table 'Scottish Premier League'
+2001	name	spa_cup (Spanish Cup), row spa-7: game 'Spanish Cup', table 'Copa del Rey'
+2001	name	spa_first (Spanish First Division), row spa-2: game 'Spanish First Division', table 'Primera División'
+2001	name	spa_second (Spanish Second Division), row spa-3: game 'Spanish Second Division', table 'Segunda División'
+2001	name	spa_super (Spanish Super Cup), row spa-8: game 'Spanish Super Cup', table 'Supercopa de España'
+2001	name	swe_cup (Swedish Cup), row den-swe-167: game 'Swedish Cup', table 'Svenska Cupen'
+2001	name	swe_first (Swedish First Division), row den-swe-165: game 'Swedish First Division', table 'Superettan'
+2001	name	swe_prm (Swedish Premier Division), row den-swe-164: game 'Swedish Premier Division', table 'Allsvenskan'
+2001	name	tur_cup (Turkish FA Cup), row rus-tur-244: game 'Turkish FA Cup', table 'Turkish Cup'
+2001	name	tur_first (Turkish Premier Division), row rus-tur-163: game 'Turkish Premier Division', table '1. Lig'
+2001	name	tur_second (Turkish 2. Division Category A), row rus-tur-190: game 'Turkish 2. Division Category A', table 'Second League Category A (2. Lig A Kategorisi)'
+2001	name	tur_second_b (Turkish 2. Division Category B), row rus-tur-217: game 'Turkish 2. Division Category B', table 'Second League Category B (2. Lig B Kategorisi)'
+2001	name	usa_mls (American Major League), row arg-usa-217: game 'American Major League', table 'Major League Soccer'
+2001	name	usa_mls_all_stars (American MLS All-Stars), row arg-usa-244: game 'American MLS All-Stars', table 'MLS All-Star Game'
+2001	name	usa_open_cup (US Open Cup), row arg-usa-271: game 'US Open Cup', table 'Lamar Hunt U.S. Open Cup'
+2001	name	wc_african_cup (World Cup African Qualifying Section), row int-world-6: game 'World Cup African Qualifying Section', table '2002 FIFA World Cup qualification (CAF)'
+2001	name	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-5: game 'World Cup CONCACAF Qualifying Section', table '2002 FIFA World Cup qualification (CONCACAF)'
+2001	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-8: game 'World Cup Oceania Qualifying Section', table '2002 FIFA World Cup qualification (OFC)'
+2001	name	wel_first (Welsh Premier Division), row wal-nir-irl-4: game 'Welsh Premier Division', table 'League of Wales'
+2001	name	wel_prm_cup (Welsh Premier Cup), row wal-nir-irl-9: game 'Welsh Premier Cup', table 'FAW Premier Cup'
+2001	no_row	friendly (Friendly): no table row
+2001	no_row	record_utils ('B' International): no table row
+2001	no_row	record_utils (Reserve): no table row
+2001	no_row	record_utils (Under 21 International): no table row
+2001	no_row	spa_lower (Spanish Lower Division): no table row
+2001	not_held	euro_champ_qual (European Championship Qualifying), row int-continental-2: the game holds 2002, the table says not held
+2001	not_held	gre_super (Greek Super Cup), row gre-pol-cro-82: the game holds 2001, the table says not held
+2001	not_held	inter_amer_cup (Inter-American Cup), row club-world-12: the game holds 2001, the table says not held
+2001	not_held	ire_leinster_cup (Irish Leinster Senior Cup), row wal-nir-irl-21: the game holds 2001, the table says not held
+2001	not_held	nir_charity (Northern Irish Charity Shield), row wal-nir-irl-15: the game holds 2001, the table says not held
+2001	not_held	oceania_club_champ (Oceania Champions Cup), row club-world-18: the game holds 2001, the table says not held
+2001	not_held	oceania_nations (Oceania Nations Cup), row int-continental-10: the game holds 2002, the table says not held
+2001	not_in_game	arg-usa-190 argentina_rules 'Argentina' (Argentina)
+2001	not_in_game	arg-usa-352 usa_rules 'United States' (United States)
+2001	not_in_game	aus-jap-kor-1 australia_rules 'n/a' (Australia)
+2001	not_in_game	aus-jap-kor-109 japan_rules 'n/a' (Japan)
+2001	not_in_game	aus-jap-kor-298 korea_rules 'n/a' (South Korea)
+2001	not_in_game	bra-1 brazil_rules 'Brazil' (Brazil)
+2001	not_in_game	bra-1000 new 'Campeonato Capixaba' (Brazil)
+2001	not_in_game	bra-1027 new 'Campeonato Sul-Mato-Grossense' (Brazil)
+2001	not_in_game	bra-1054 new 'Campeonato Tocantinense' (Brazil)
+2001	not_in_game	bra-217 new 'Copa do Nordeste' (Brazil)
+2001	not_in_game	bra-271 new 'Copa Norte' (Brazil)
+2001	not_in_game	bra-298 new 'Copa Centro-Oeste' (Brazil)
+2001	not_in_game	bra-352 new 'Torneio Rio-São Paulo' (Brazil)
+2001	not_in_game	bra-379 new 'Copa Sul-Minas' (Brazil)
+2001	not_in_game	bra-757 new 'Campeonato Potiguar' (Brazil)
+2001	not_in_game	bra-784 new 'Campeonato Paraibano' (Brazil)
+2001	not_in_game	bra-811 new 'Campeonato Alagoano' (Brazil)
+2001	not_in_game	bra-838 new 'Campeonato Sergipano' (Brazil)
+2001	not_in_game	bra-865 new 'Campeonato Maranhense' (Brazil)
+2001	not_in_game	bra-892 new 'Campeonato Amazonense' (Brazil)
+2001	not_in_game	bra-919 new 'Campeonato Piauiense' (Brazil)
+2001	not_in_game	bra-946 new 'Campeonato Acriano' (Brazil)
+2001	not_in_game	bra-973 new 'Campeonato Brasiliense' (Brazil)
+2001	not_in_game	den-swe-166 swe_second 'Division 2' (Sweden)
+2001	not_in_game	den-swe-6 new 'Danish Super Cup' (Denmark)
+2001	not_in_game	fra-5 fra_cfa 'CFA' (France)
+2001	not_in_game	fra-6 fra_lower 'CFA 2' (France)
+2001	not_in_game	gre-pol-cro-433 new 'Croatian Football Super Cup' (Croatia)
+2001	not_in_game	int-continental-5 new '2002 CONCACAF Gold Cup' (CONCACAF)
+2001	not_in_game	por-3 por_second_b 'Segunda Divisão B' (Portugal)
+2001	not_in_game	spa-1 spain_rules 'n/a' (Spain)
+2001	not_in_game	spa-4 spa_second_b 'Segunda División B' (Spain)
+2001	not_in_game	uefa-1 uefa_seeding 'UEFA access list and seeding' (UEFA)
+2001	playoffs	arg_prm (Argentine Premier Division), row arg-usa-1: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
+2001	playoffs	arg_second (Argentine Second Division), row arg-usa-28: game 0 up and 0 down play-off places, table 'Torneo Reducido for the 2nd promotion (Clausura zone winners and next best overa'
+2001	playoffs	aus_nsl (Australian National Soccer League), row aus-jap-kor-105: game 0 up and 0 down play-off places, table 'top six to a finals series (elimination finals, semi-finals, preliminary final, '
+2001	playoffs	bra_nat_first (Brazilian National First Division), row bra-28: game 0 up and 0 down play-off places, table 'top 8 of the single round robin to two-legged quarter-finals, semi-finals and fi'
+2001	playoffs	bra_nat_second (Brazilian National Second Division), row bra-55: game 0 up and 0 down play-off places, table 'top 8 of the single round robin to two-legged quarter-finals, semi-finals and fi'
+2001	playoffs	bra_nat_third (Brazilian National Third Division), row bra-82: game 0 up and 0 down play-off places, table 'see format'
+2001	playoffs	cro_a1 (Croatian First Division), row gre-pol-cro-325: game 0 up and 0 down play-off places, table '11th-12th: relegation play-offs'
+2001	playoffs	cro_a2a (Croatian Second Division North), row gre-pol-cro-352: game 0 up and 0 down play-off places, table '1st: promotion play-off; 10th: relegation play-off'
+2001	playoffs	cro_a2b (Croatian Second Division South), row gre-pol-cro-379: game 0 up and 0 down play-off places, table '1st: promotion play-off; 10th: relegation play-off'
+2001	playoffs	fin_prm (Finnish Premier Division), row nor-fin-7: game 0 up and 1 down play-off places, table 'none: promotion/relegation group decides places'
+2001	playoffs	hol_first (Dutch First Division), row hol-bel-3: game 0 up and 0 down play-off places, table 'six clubs (period winners) join the Eredivisie 16th and 17th in two groups of fo'
+2001	playoffs	ita_ser_a (Italian Serie A), row ita-2: game 0 up and 0 down play-off places, table 'tie-break play-off match if clubs finish level on points for the title, a Europe'
+2001	playoffs	jap_j1 (Japanese J-League 1), row aus-jap-kor-190: game 0 up and 0 down play-off places, table 'stage winners meet in a two-legged championship (not held when one club wins bot'
+2001	playoffs	nir_first (Northern Irish League First Division), row wal-nir-irl-11: game 1 up and 0 down play-off places, table 'none'
+2001	playoffs	nir_prm (Northern Irish League Premier Division), row wal-nir-irl-10: game 0 up and 1 down play-off places, table 'none'
+2001	playoffs	pol_first (Polish First Division), row gre-pol-cro-190: game 0 up and 0 down play-off places, table '5th-6th of relegation group: relegation play-offs'
+2001	playoffs	rus_prm (Russian Premier Division), row rus-tur-1: game 0 up and 0 down play-off places, table 'a play-off match for the title if the top two are level on points (2002: Lokomot'
+2001	playoffs	usa_mls (American Major League), row arg-usa-217: game 0 up and 0 down play-off places, table '8 (top 8 by points regardless of conference); first round: first-to-5-points ser'
+2001	up	arg_second (Argentine Second Division), row arg-usa-28: game 1 (+0 play-off places), table 2 (2 (Apertura/Clausura champion; Torneo Reducido winner))
+2001	up	aus_nsl (Australian National Soccer League), row aus-jap-kor-105: game 6 (+0 play-off places), table na (n/a)
+2001	up	bel_third (Belgian Third Division), row hol-bel-10: game 1 (+0 play-off places), table 2 (2 (group champions))
+2001	up	bra_nat_first (Brazilian National First Division), row bra-28: game 4 (+0 play-off places), table na (n/a)
+2001	up	bra_nat_second (Brazilian National Second Division), row bra-55: game 4 (+0 play-off places), table 2 (2)
+2001	up	con_merc_cup (Merconorte Cup), row club-world-6: game 1 (+0 play-off places), table na (n/a)
+2001	up	conmebol_liber (South American Copa Libertadores), row club-world-4: game 2 (+0 play-off places), table na (n/a)
+2001	up	conmebol_merc (South American Copa Mercosur), row club-world-5: game 1 (+0 play-off places), table na (n/a)
+2001	up	den_second (Danish Second Division), row den-swe-4: game 3 (+0 play-off places), table 2 (2)
+2001	up	fin_first (Finnish First Division), row nor-fin-8: game 2 (+0 play-off places), table text (top 2 of each zone to the promotion/relegation group with Veikkausliiga 9th-12th)
+2001	up	gre_cup (Greek Cup), row gre-pol-cro-1: game 2 (+0 play-off places), table na (n/a)
+2001	up	gre_second (Greek National B Division), row gre-pol-cro-55: game 2 (+0 play-off places), table 3 (3 (1st-3rd))
+2001	up	oceania_club_champ (Oceania Champions Cup), row club-world-18: game 2 (+0 play-off places), table na (n/a)
+2001	up	pol_first (Polish First Division), row gre-pol-cro-190: game 4 (+0 play-off places), table na (n/a)
+2001	up	tur_second_b (Turkish 2. Division Category B), row rus-tur-217: game 0 (+2 play-off places), table 3 (3)
+2001	up	usa_mls (American Major League), row arg-usa-217: game 1 (+0 play-off places), table na (n/a (closed league))

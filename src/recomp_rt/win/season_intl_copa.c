@@ -26,6 +26,7 @@
  * 0x3b bytes, 0xec at 0x5e11e0..0x5e11ee) and group builders of 6 (they copy exactly 4 teams: 0x5e171c, malloc
  * 0x10 at 0x5e16d0), and a knockout from the top four of two groups. So it keeps the shape of 12. */
 #include "win.h"
+#include "season_change.h"
 #include "season_intl.h"
 #include "season_nl.h"                     /* slice 28: the Gold Cup */
 
@@ -421,9 +422,9 @@ void o_0040f590(void);
 /* vtable +0x30 of the Copa America and the Asian Cup (0x96b430, 0x967644): a jump to vtable +0x30 of stage[2]
  * (0x40f590..0x40f598). The Asian Cup's stage index is a site of season_intl_cups.c (0x40f593). For a Copa
  * America of 16 the jump goes to stage[3]. */
-/* One wrap of 0x40f590 serves every slice. Slice 26's Club World Championship (its history thunk of slot 12,
- * season_kind_club_world.c) runs first and gives 1 when it handled the call. */
-int season_club_world_history_thunk(void);
+/* One wrap of 0x40f590 serves every slice. Slice 26's season_club_world_history_thunk() (season_change.h,
+ * season_kind_club_world.c: the Club World Championship's knockout of Form K and Form G) runs first and gives 1
+ * when it handled the call. */
 
 RT_WRAP(0040f590, copa_asian_final_stage)
 {

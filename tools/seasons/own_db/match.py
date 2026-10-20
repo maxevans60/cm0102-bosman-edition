@@ -5,9 +5,10 @@ from the date shift research (season settings name the template)."""
 import os,sys,struct,pickle,unicodedata,collections,re
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from cmdb import *
-from seasons import settings,template_shifts
+from seasons import repair_clubs,settings,template_shifts
 S_=settings(int(sys.argv[1]))
 T=Folder(sys.argv[2]); X=os.path.join(sys.argv[3],''); W=sys.argv[4]
+repair_clubs(T,S_)
 SHIFT=template_shifts(S_.TEMPLATE)['birth']
 STOP={'fc','f c','cf','c f','sc','ac','afc','cd','sd','ud','cfr','fk','sk','if','bk','sv','vfb','vfl','tsv','club','de','the','s a d','sad','calcio','football','futebol','clube'}
 def ckey(s):

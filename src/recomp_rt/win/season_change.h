@@ -141,6 +141,9 @@ int season_club_world_history_thunk(void);
  * an address that is not a record. */
 const char *season_change_data_name(uint32_t rec);
 
+/* The number of records with a changed name in this game (slice 15): at a load, the names of the season part. */
+int season_change_renames(void);
+
 /* The competition objects that the game holds: the table g_comp_object_table [0xadadfc] and the
  * competition arrays of the 35 league table entries (as the rules report reads them, season_report.c).
  * Fills out with at most max distinct objects and returns their count. It only reads memory. */

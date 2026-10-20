@@ -959,7 +959,7 @@ static uint32_t nl_make(const SeasonCompDef *d, uint32_t rec, int year, int load
     return obj;
 }
 
-const SeasonCompDef season_nl_comp = {"UEFA Nations League", "new_nations_league", RECORD_NAME, ENTRY, nl_make};
+const SeasonCompDef season_nl_comp = {"UEFA Nations League", "new_uefa_nations_league", RECORD_NAME, ENTRY, nl_make};
 
 /* Part b (Q368): the CONCACAF Nations League on a new record (season_comps.h, `like`): the continent, nation and
  * colour ids of the CONCACAF World Cup qualifying record. Level 14 (inference: below the qualifying of a finals,

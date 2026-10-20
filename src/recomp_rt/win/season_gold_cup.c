@@ -328,7 +328,7 @@ static uint32_t gold_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
  * World Cup qualifying record. Level 17 (inference: below the Euro and the World Cup, 20). `early`: the table
  * gives the Gold Cups of July (2005, 2009, 2013, 2015, 2017, 2021) to the season that starts that summer, after
  * their first match; so the object is made a season before. */
-const SeasonCompDef season_gold_cup_comp = {"CONCACAF Gold Cup", "new_gold_cup", "CONCACAF Gold Cup", ENTRY, gold_make,
+const SeasonCompDef season_gold_cup_comp = {"CONCACAF Gold Cup", "new_concacaf_gold_cup", "CONCACAF Gold Cup", ENTRY, gold_make,
                                             "World Cup CONCACAF Qualifying Section", "Gold Cup", 17, 1};
 
 void o_0076d940(void);
