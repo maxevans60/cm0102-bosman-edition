@@ -29,9 +29,14 @@ int season_ita_division_size(const char *name, int season);
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);   /* push 0x426 of create_table */
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);     /* ItaSerC2a::create_table count store */
 uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original);  /* C2/B and C2/C create_table count stores */
-uint32_t rt_ita_tier_c2(uint32_t c2a);
-uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b);       /* ItaCup: group C counts as C1 */
-uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position);  /* ItaCup: an end to its loop */                          /* 0x6418d5: the C2a object of the tier block */
+uint32_t rt_ita_tier_c2(uint32_t c2a);                          /* 0x6418d5: the C2a object of the tier block */
+uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b);             /* ItaCup: group C counts as C1 */
+uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position);  /* ItaCup: an end to its loop */
 uint32_t rt_ita_start_c2(uint32_t c2a);                         /* 0x641986: the C2a object of the start block */
+
+/* 1 when League::create_fixtures 0x6835c0 makes no fixtures for league: the group C object that slice 26's module
+ * makes in a season change pass into the era gets its table and fixtures after the regroup (season_uefa_league.c
+ * holds the one wrap of 0x6835c0). */
+int season_ita_no_fixtures(uint32_t league);
 
 #endif
