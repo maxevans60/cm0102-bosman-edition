@@ -90,6 +90,10 @@ void season_intl_euro_fill(uint32_t self);
  * year: up to six nation ids in the order of the table. Gives the count (slice 29: three hosts in 2026). */
 int season_intl_host_ids(uint32_t key, int year, int ids[6]);
 
+/* The inter-confederation ties of the World Cup of a year that this run built (season_intl_qual.c): up to max
+ * pairs into teams (two teams each). Gives the pair count. */
+int season_intl_wc_ties(int year, uint32_t *teams, int max);
+
 /* The classes of the code sites (cls of the calls above). */
 enum {
     INTL_WORLD_CUP, INTL_EURO, INTL_CONFED, INTL_COPA, INTL_ACN, INTL_ASIAN, INTL_OFC, INTL_OLYMPICS,

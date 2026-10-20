@@ -450,7 +450,9 @@ static int nation_in(const uint32_t *teams, int n, uint32_t nation)
  *   4 places stayed empty, and the squad pick of the finals stopped on an empty team (NationalTeams::select_squad
  *   0x76c120 passes the team's nation to national_team 0x53b3d0 at 0x76c266, which boxes "Database.cpp 13126"
  *   for none: 0x53b3da).
- * Else a full qualifying gives every team, and a short list is logged, not filled. */
+ * Else a full qualifying gives every team. A tie that ends after the World Cup draw gives its slot to its team
+ * with the higher reputation, and any other gap is logged as a fault and filled (fill_slots), so the draw never
+ * stops at its box. */
 static int fill_allowed(const char *name, int year)
 {
     if (season_start_year() >= year - 1) return 1;
@@ -462,16 +464,7 @@ static int fill_allowed(const char *name, int year)
 
 static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
 {
-    int year = (int16_t)rd16(g_mem, comp + 0x40u);
-    if (!fill_allowed(name, year)) {
-        if (logging()) {
-            int count = (int16_t)rd16(g_mem, comp + SLOT_COUNT), room = (int16_t)rd16(g_mem, comp + SLOT_ROOM);
-            if (count < room)
-                fprintf(stderr, "recomp: season intl: %s %d: %d qualified teams of %d, no fill (full qualifying)\n",
-                        name, year, count, room);
-        }
-        return;
-    }
+    int year = (int16_t)rd16(g_mem, comp + 0x40u), allowed = fill_allowed(name, year);
     uint32_t slots = rd32(g_mem, comp + SLOTS);
     int count = (int16_t)rd16(g_mem, comp + SLOT_COUNT), room = (int16_t)rd16(g_mem, comp + SLOT_ROOM);
     if (!readable(slots) || count < 0 || room <= 0 || room > 64) return;
@@ -490,8 +483,42 @@ static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
         }
     }
     if (!n_open) return;
-    int filled = 0, s = 0;
-    for (int k = 0; k < n_open; k++) {
+    int filled = 0, s = 0, k = 0;
+    if (!allowed) {
+        /* A full qualifying whose inter-confederation tie ends after the draw (season_intl_qual.c, note_tie):
+         * the slot of the tie goes to the tie's team with the higher reputation, the nearest form (Q247). The
+         * tie's winner then stays out (wc_add_qualified). */
+        uint32_t ties[16];
+        int n_ties = !strcmp(name, "world_cup") ? season_intl_wc_ties(year, ties, 8) : 0;
+        for (int i = 0; i < n_ties && k < n_open; i++) {
+            uint32_t a = ties[2 * i], b = ties[2 * i + 1], na = team_nation(a), nb = team_nation(b);
+            if (!na || !nb || nation_in(teams, room, na) || nation_in(teams, room, nb)) continue;
+            uint32_t t = (int16_t)rd16(g_mem, nb + NATION_REPUTATION) > (int16_t)rd16(g_mem, na + NATION_REPUTATION)
+                             ? b : a;
+            teams[open[k]] = t;
+            wr32(g_mem, slots + (uint32_t)open[k] * SLOT_SIZE, t);
+            wr8(g_mem, slots + (uint32_t)open[k] * SLOT_SIZE + 4u, 0);
+            if (logging())
+                fprintf(stderr, "recomp: season intl: %s %d slot %d: %s (the tie %s v %s ends after the draw)\n",
+                        name, year, open[k], win_str(team_nation(t) + NATION_NAME), win_str(na + NATION_NAME),
+                        win_str(nb + NATION_NAME));
+            k++;
+            filled++;
+        }
+        /* Any other gap after a full qualifying is a fault to find (season_intl_run.py checks this line). The
+         * original stops at its box (0x92f24c, 0x92f2ac) and then takes clubs at 0x92f2b1; the fill below gives
+         * the slot as for a moved start (Q388), so a player meets no box. */
+        if (k < n_open && logging()) {
+            fprintf(stderr, "recomp: season intl: %s %d: %d qualified teams of %d, short after a full qualifying\n",
+                    name, year, count, room);
+            for (int i = 0; i < count && i < 64; i++) {
+                uint32_t nation = team_nation(rd32(g_mem, slots + (uint32_t)i * SLOT_SIZE));
+                fprintf(stderr, "recomp: season intl: %s %d team %d: %s\n", name, year, i,
+                        nation ? win_str(nation + NATION_NAME) : "(none)");
+            }
+        }
+    }
+    for (; k < n_open; k++) {
         uint32_t t = 0;
         while (s < n_spare && !t) {
             uint32_t c = spare[s++];

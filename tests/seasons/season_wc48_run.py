@@ -22,7 +22,7 @@ The checks (each run):
     - QUALIFIERS: the qualifiers that reach add_qualified_team for the 2026 World Cup, by confederation (the three
       hosts come from the host row): UEFA 16, CONMEBOL 6, CONCACAF 3, CAF 9, AFC 8, OFC 1 at least, 2 more from
       the play-off tournament, 45 in all
-    - no draw after a full qualifying is short (log "no fill"), no play-off without a team
+    - no draw after a full qualifying is short (log "short after a full qualifying"), no play-off without a team
     - on: the host news of the 2026 World Cup names three hosts
 A run takes about 25 to 35 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the
 logs already in the --keep folder again without a new run.
@@ -73,7 +73,7 @@ def check(name, start, last, rules, work):
         if not any(text in x for x in log):
             fails.append(f"{name}: no log line {text!r}")
     for x in log:
-        if "no fill (full qualifying)" in x and "world_cup" in x:
+        if "short after a full qualifying" in x and "world_cup" in x:
             fails.append(f"{name}: a short list after a full qualifying: {x.strip()}")
         if "season intl: wc play-off" in x and " none" in x:
             fails.append(f"{name}: a play-off without a team: {x.strip()}")

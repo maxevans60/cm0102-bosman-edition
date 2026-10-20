@@ -256,6 +256,40 @@ void rt_wcq_asia_format(uint32_t self)
     wr8(g_mem, self + 0xeeu, 0);
 }
 
+/* The ties built in this run, for the draw of the finals (season_intl.c, fill_slots): a tie can end after the
+ * World Cup draw. In a 2001 game that jumps to 2010 the Oceania final ended so late that the CONCACAF v CONMEBOL
+ * tie (Oceania stage 2) was built after mid November 2009 and played after the draw of December 2009, which then
+ * held 31 teams and stopped at "world_cup.cpp 1438" (0x92f24c, 0x92f2ac). Not in the save: after a load the
+ * draw fill gives the slot by the general rule. */
+static struct { int year; uint32_t team[2]; } built[8];
+static int n_built;
+
+static void note_tie(int y, uint32_t a, uint32_t b)
+{
+    for (int i = 0; i < n_built; i++)
+        if (built[i].year == y && built[i].team[0] == a && built[i].team[1] == b) return;
+    if (n_built == (int)(sizeof built / sizeof built[0])) {           /* the oldest goes */
+        for (int i = 1; i < n_built; i++) built[i - 1] = built[i];
+        n_built--;
+    }
+    built[n_built].year = y;
+    built[n_built].team[0] = a;
+    built[n_built].team[1] = b;
+    n_built++;
+}
+
+int season_intl_wc_ties(int year, uint32_t *teams, int max)
+{
+    int n = 0;
+    for (int i = 0; i < n_built && n < max; i++)
+        if (built[i].year == year) {
+            teams[2 * n] = built[i].team[0];
+            teams[2 * n + 1] = built[i].team[1];
+            n++;
+        }
+    return n;
+}
+
 /* A2 (0x913e42): the partner of the Asian team in stage 12. original is the European runner-up of 0x91def0. */
 uint32_t rt_wcq_asia_partner(uint32_t self, uint32_t asian, uint32_t original)
 {
@@ -268,6 +302,7 @@ uint32_t rt_wcq_asia_partner(uint32_t self, uint32_t asian, uint32_t original)
                     y, conf_name[ties[t].afc_partner]);
         p = original ? original : strongest_free(ties[t].afc_partner);
     }
+    note_tie(y, asian, p);
     if (logging())
         fprintf(stderr, "recomp: season intl: wc play-off %d: %s v %s\n", y, team_name(asian), team_name(p));
     return p;
@@ -296,6 +331,7 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found)
     if (!pick[0] || !pick[1]) return found;     /* as the original: its box at 0x91f917 */
     wr32(g_mem, teams, pick[0]);
     wr32(g_mem, teams + 4u, pick[1]);
+    note_tie(y, pick[0], pick[1]);
     if (logging())
         fprintf(stderr, "recomp: season intl: wc play-off %d: %s v %s\n", y, team_name(pick[0]), team_name(pick[1]));
     return 2u;
