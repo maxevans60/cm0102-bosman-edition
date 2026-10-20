@@ -915,25 +915,31 @@ static void debug_table(const char *what, uint32_t st)
  * three hosts out (+0xbc 3, all of them in region 7) its two groups of two (0x916d5b, 0x916e86) and the round
  * 0x917110 leave two seeds for three groups, and a 2023 start with changing rules off put Costa Rica into two
  * groups. In the gate the empty seed slots take the strongest nations of North America (continent 0x9cfa14) that
- * are not in play: not in the pool slots, the early round tables, the World Cup slots. */
+ * are out of the early rounds (concacaf_in_play). */
+/* The status of a team in a Cup's rows (+0xa7, 6 bytes: +0 the team, +5 the status), or -1 when not in them. */
+static int cup_status(uint32_t cup, uint32_t team)
+{
+    uint32_t rows = readable(cup) ? rd32(g_mem, cup + F_CUP_ROWS) : 0;
+    int n = readable(cup) ? (int16_t)rd16(g_mem, cup + F_TEAMS) : 0;
+    for (int i = 0; readable(rows) && i < n && i < 64; i++)
+        if (rd32(g_mem, rows + (uint32_t)i * 6u) == team) return rd8(g_mem, rows + (uint32_t)i * 6u + 5u);
+    return -1;
+}
+
+/* 1 when a team still plays in the section or is in the World Cup: a pool slot that has not played (not in the
+ * first round's rows, or a first round winner), the leader of a central group of stage 0 or 1, a winner of the
+ * round of stage 2, a World Cup slot. The losers of the early rounds are free. */
 static int concacaf_in_play(uint32_t self, uint32_t team)
 {
     uint32_t list = rd32(g_mem, self + 0xb2u), wc = comp_of(KEY_WORLD_CUP);
     for (int i = 0; readable(list) && i < 35; i++)
-        if (rd32(g_mem, list + 4u * (uint32_t)i) == team) return 1;
-    uint32_t rows = rd32(g_mem, self + F_CUP_ROWS);
-    for (int i = 0; readable(rows) && i < (int16_t)rd16(g_mem, self + F_TEAMS) && i < 64; i++)
-        if (rd32(g_mem, rows + (uint32_t)i * 6u) == team) return 1;
-    for (int s = 0; s < 3; s++) {
-        uint32_t st = stage_of(self, s);
-        if (!st) continue;
-        uint32_t t = rd32(g_mem, st + F_TABLE), c = rd32(g_mem, st + F_CUP_ROWS);
-        int n = (int16_t)rd16(g_mem, st + F_TEAMS);
-        for (int i = 0; s < 2 && readable(t) && i < n && i < 64; i++)
-            if (rd32(g_mem, t + (uint32_t)i * ROW_SIZE) == team) return 1;
-        for (int i = 0; s == 2 && readable(c) && i < n && i < 64; i++)
-            if (rd32(g_mem, c + (uint32_t)i * 6u) == team) return 1;
-    }
+        if (rd32(g_mem, list + 4u * (uint32_t)i) == team) {
+            int st = cup_status(self, team);
+            if (st < 0 || st == 1) return 1;
+        }
+    if (cup_status(self, team) == 1 || cup_status(stage_of(self, 2), team) == 1) return 1;
+    for (int s = 0; s < 2; s++)
+        if (table_club(stage_of(self, s), 0) == team) return 1;
     uint32_t slots = wc ? rd32(g_mem, wc + 0x14u) : 0;
     for (int k = 0; readable(slots) && k < (int16_t)rd16(g_mem, wc + 0x36u) && k < 64; k++)
         if (rd32(g_mem, slots + 6u * (uint32_t)k) == team) return 1;
