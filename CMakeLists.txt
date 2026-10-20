@@ -164,6 +164,9 @@ if(NOT WIN32)
     target_include_directories(season_cups_more_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cups_more COMMAND season_cups_more_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_cups_more PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The new competitions module (slice 21c review): the defs that may need a new record fit MAX_NEW.
+    add_test(NAME season_comps_new_records COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/comps_new_records_check.py"
+        "${CMAKE_SOURCE_DIR}/src/recomp_rt/win")
     # The names table and the club moves table (0.6.0 slice 15): the tools read every part and stop on a bad row.
     add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
     add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)

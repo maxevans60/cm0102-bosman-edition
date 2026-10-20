@@ -504,7 +504,10 @@ void season_comps_before_comp_table(void)
 #define NATION_COUNT 0xae2380u          /* s32: N */
 #define NATION_RECORDS 0xae23d8u        /* the first nation comp */
 #define FRIENDLY_RECORDS 0x7f
-#define MAX_NEW 16
+/* The most new records of one game. 13 defs have `like` on main at slice 21c's merge (2026-10-20, with slices 24, 26c
+ * and 28); the ctest season_comps_new_records (tests/seasons/comps_new_records_check.py) fails when the defs with
+ * `like` outgrow it, and a game logs every def that finds no room (wanted). */
+#define MAX_NEW 32
 
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 {
@@ -524,7 +527,7 @@ static int wanted(const char (*have)[52], int have_count, char (*names)[52])
 {
     int start = season_start_year(), rules = season_next_rules(), n = 0;
     if (!season_code_on() || (start == SEASON_FIRST_YEAR && !rules)) return 0;   /* the base game, Q152 */
-    for (int i = 0; i < season_comp_def_count && n < MAX_NEW; i++) {
+    for (int i = 0; i < season_comp_def_count; i++) {
         const SeasonCompDef *d = def_at(i);
         if (!d || !d->like || !d->record) continue;
         int h = season_comps_def_held(d, start);
@@ -534,6 +537,11 @@ static int wanted(const char (*have)[52], int have_count, char (*names)[52])
         for (int j = 0; j < have_count; j++)
             if (!strcmp(have[j], d->record)) known = 1;
         if (known) continue;
+        if (n >= MAX_NEW) {                 /* never silent: its competition would never come */
+            fprintf(stderr, "recomp: new competitions: no room for the record of %s (more than %d new records)\n",
+                    d->file, MAX_NEW);
+            continue;
+        }
         snprintf(names[n++], 52, "%.50s", d->record);
     }
     return n;
