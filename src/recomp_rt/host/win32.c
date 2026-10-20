@@ -11,6 +11,7 @@
 #include <shlobj.h>
 
 #include <errno.h>
+#include <stdarg.h>
 #include <fcntl.h>
 #include <io.h>
 #include <stdio.h>
@@ -289,4 +290,108 @@ uint64_t host_unix_time_us(void)
     GetSystemTimeAsFileTime(&ft);
     uint64_t t = (uint64_t)ft.dwHighDateTime << 32 | ft.dwLowDateTime;
     return t / 10u - 11644473600000000ull;
+}
+
+/* The display report (host.h). The newer Windows calls come from the system DLLs by name, so the game
+ * still starts on a Windows that lacks them. */
+typedef LONG (WINAPI *RtlGetVersionFn)(OSVERSIONINFOW *);
+typedef const char *(CDECL *WineVersionFn)(void);
+
+void host_system_name(char *out, size_t room)
+{
+    OSVERSIONINFOW v;
+    memset(&v, 0, sizeof v);
+    v.dwOSVersionInfoSize = sizeof v;
+    HMODULE ntdll = GetModuleHandleW(L"ntdll.dll");
+    RtlGetVersionFn get = ntdll ? (RtlGetVersionFn)(void *)GetProcAddress(ntdll, "RtlGetVersion") : NULL;
+    if (get) get(&v);
+    WineVersionFn wine = ntdll ? (WineVersionFn)(void *)GetProcAddress(ntdll, "wine_get_version") : NULL;
+    SYSTEM_INFO si;
+    GetNativeSystemInfo(&si);
+    const char *cpu = si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 ? "x86_64"
+                    : si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64 ? "arm64" : "other";
+    /* Windows 11 still says 10.0; its builds start at 22000. */
+    const char *name = v.dwMajorVersion == 10 && v.dwBuildNumber >= 22000 ? "Windows 11" : "Windows";
+    snprintf(out, room, "%s %lu.%lu build %lu, %s%s%s\n", name, (unsigned long)v.dwMajorVersion,
+             (unsigned long)v.dwMinorVersion, (unsigned long)v.dwBuildNumber, cpu,
+             wine ? ", Wine " : "", wine ? wine() : "");
+}
+
+typedef HANDLE (WINAPI *GetContextFn)(void);
+typedef HANDLE (WINAPI *SetContextFn)(HANDLE);
+typedef int (WINAPI *AwarenessFn)(HANDLE);
+typedef HRESULT (WINAPI *MonitorDpiFn)(HMONITOR, int, UINT *, UINT *);
+#define PER_MONITOR_AWARE_V2 ((HANDLE)(intptr_t)-4)
+
+typedef struct { char *out; size_t room, len; int n, unaware; MonitorDpiFn dpi; SetContextFn set; } Notes;
+
+static void notes_add(Notes *s, const char *fmt, ...)
+{
+    if (s->len >= s->room) return;
+    va_list ap;
+    va_start(ap, fmt);
+    int k = vsnprintf(s->out + s->len, s->room - s->len, fmt, ap);
+    va_end(ap);
+    if (k > 0) s->len += (size_t)k;
+}
+
+static BOOL CALLBACK note_monitor(HMONITOR m, HDC dc, LPRECT r, LPARAM p)
+{
+    (void)dc; (void)r;
+    Notes *s = (Notes *)p;
+    MONITORINFOEXW mi;
+    memset(&mi, 0, sizeof mi);
+    mi.cbSize = sizeof mi;
+    if (!GetMonitorInfoW(m, (MONITORINFO *)&mi)) return TRUE;
+    s->n++;
+    DEVMODEW dm;
+    memset(&dm, 0, sizeof dm);
+    dm.dmSize = sizeof dm;
+    int real = EnumDisplaySettingsW(mi.szDevice, ENUM_CURRENT_SETTINGS, &dm);
+    /* The scale of the screen as Windows sets it, read as a program that handles the scale itself. */
+    UINT dx = 0, dy = 0;
+    HANDLE old = s->set ? s->set(PER_MONITOR_AWARE_V2) : NULL;
+    if (!s->dpi || s->dpi(m, 0 /* MDT_EFFECTIVE_DPI */, &dx, &dy) != S_OK) dx = 0;
+    if (old) s->set(old);
+    notes_add(s, "Windows screen %d%s: %ld x %ld as the game sees it", s->n,
+              (mi.dwFlags & MONITORINFOF_PRIMARY) ? " (main)" : "",
+              (long)(mi.rcMonitor.right - mi.rcMonitor.left), (long)(mi.rcMonitor.bottom - mi.rcMonitor.top));
+    if (real) notes_add(s, ", %lu x %lu real pixels at %lu Hz", (unsigned long)dm.dmPelsWidth,
+                        (unsigned long)dm.dmPelsHeight, (unsigned long)dm.dmDisplayFrequency);
+    if (dx) notes_add(s, ", scale %u%%", dx * 100u / 96u);
+    else notes_add(s, ", scale unknown");
+    notes_add(s, "\n");
+    if (dx > 96 && s->unaware) notes_add(s, "  Windows stretches the game window on this screen.\n");
+    return TRUE;
+}
+
+void host_display_notes(char *out, size_t room)
+{
+    Notes s;
+    memset(&s, 0, sizeof s);
+    s.out = out;
+    s.room = room;
+    out[0] = 0;
+    HMODULE user32 = GetModuleHandleW(L"user32.dll");
+    GetContextFn get = user32 ? (GetContextFn)(void *)GetProcAddress(user32, "GetThreadDpiAwarenessContext") : NULL;
+    AwarenessFn awareness = user32 ? (AwarenessFn)(void *)GetProcAddress(user32, "GetAwarenessFromDpiAwarenessContext") : NULL;
+    s.set = user32 ? (SetContextFn)(void *)GetProcAddress(user32, "SetThreadDpiAwarenessContext") : NULL;
+    HMODULE shcore = LoadLibraryW(L"shcore.dll");
+    s.dpi = shcore ? (MonitorDpiFn)(void *)GetProcAddress(shcore, "GetDpiForMonitor") : NULL;
+    int level = get && awareness ? awareness(get()) : (IsProcessDPIAware() ? 1 : 0);
+    static const char *const level_name[] = {"no (Windows scales the window)", "system", "per screen"};
+    s.unaware = level == 0;
+    notes_add(&s, "Game handles the Windows scale: %s\n", level >= 0 && level <= 2 ? level_name[level] : "unknown");
+    EnumDisplayMonitors(NULL, NULL, note_monitor, (LPARAM)&s);
+    DISPLAY_DEVICEW dd;
+    for (DWORD i = 0; ; i++) {
+        memset(&dd, 0, sizeof dd);
+        dd.cb = sizeof dd;
+        if (!EnumDisplayDevicesW(NULL, i, &dd, 0)) break;
+        if (!(dd.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP)) continue;
+        char name[256];
+        if (!from_wide(dd.DeviceString, name, sizeof name)) continue;
+        notes_add(&s, "Graphics: %s\n", name);
+    }
+    if (shcore) FreeLibrary(shcore);
 }

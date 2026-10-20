@@ -70,6 +70,13 @@ char host_cd_drive(void);
 /* 1 when the host has this drive (Windows only; macOS has none). */
 int host_has_drive(char letter);
 
+/* The display report (display_report.c). host_system_name writes one line: the system, its version and the
+ * processor. host_display_notes writes lines of facts that SDL does not give: on Windows the screen scale and
+ * whether Windows stretches the window of the game, on Linux the desktop session and its scale settings. Each
+ * line ends with a newline. Both write an empty text when they have nothing. */
+void host_system_name(char *out, size_t room);
+void host_display_notes(char *out, size_t room);
+
 /* Time. */
 void host_gmtime(time_t t, struct tm *out);
 void host_localtime(time_t t, struct tm *out);

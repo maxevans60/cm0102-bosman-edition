@@ -158,3 +158,60 @@ __attribute__((constructor)) static void raise_stack(void)
     execve("/proc/self/exe", args, environ);
 }
 #endif
+
+/* The display report (host.h). */
+#include <sys/utsname.h>
+#ifdef __APPLE__
+#include <sys/sysctl.h>
+static void sysctl_text(const char *name, char *out, size_t room)
+{
+    size_t n = room;
+    if (sysctlbyname(name, out, &n, NULL, 0) || !n) snprintf(out, room, "?");
+}
+#endif
+
+void host_system_name(char *out, size_t room)
+{
+    struct utsname u;
+    if (uname(&u)) memset(&u, 0, sizeof u);
+#ifdef __APPLE__
+    char version[64], model[64];
+    sysctl_text("kern.osproductversion", version, sizeof version);
+    sysctl_text("hw.model", model, sizeof model);
+    int translated = 0;
+    size_t n = sizeof translated;
+    if (sysctlbyname("sysctl.proc_translated", &translated, &n, NULL, 0)) translated = 0;
+    snprintf(out, room, "macOS %s, %s, %s%s\n", version, model, u.machine,
+             translated ? " (the game runs under Rosetta)" : "");
+#else
+    char name[200] = "";
+    FILE *f = fopen("/etc/os-release", "r");
+    char line[256];
+    while (f && fgets(line, sizeof line, f)) {
+        if (strncmp(line, "PRETTY_NAME=", 12)) continue;
+        char *v = line + 12;
+        if (*v == '"') v++;
+        v[strcspn(v, "\"\n")] = 0;
+        snprintf(name, sizeof name, "%s", v);
+    }
+    if (f) fclose(f);
+    snprintf(out, room, "%s, %s %s, %s\n", name[0] ? name : "Linux", u.sysname, u.release, u.machine);
+#endif
+}
+
+void host_display_notes(char *out, size_t room)
+{
+    out[0] = 0;
+#ifndef __APPLE__
+    static const char *const names[] = {"XDG_SESSION_TYPE", "XDG_CURRENT_DESKTOP", "WAYLAND_DISPLAY", "DISPLAY",
+                                        "GDK_SCALE", "GDK_DPI_SCALE", "QT_SCALE_FACTOR", "SDL_VIDEODRIVER",
+                                        "SteamDeck"};
+    size_t len = 0;
+    for (size_t i = 0; i < sizeof names / sizeof *names && len < room; i++) {
+        const char *v = getenv(names[i]);
+        len += (size_t)snprintf(out + len, room - len, "%s: %s\n", names[i], v && *v ? v : "(not set)");
+    }
+    if (len < room)
+        snprintf(out + len, room - len, "AppImage: %s\n", getenv("APPIMAGE") ? "yes" : "no");
+#endif
+}

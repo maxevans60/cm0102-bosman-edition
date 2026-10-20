@@ -43,6 +43,9 @@ uint32_t win_hwnd = 0x00010010u;
 static SDL_Window *window;
 static SDL_Renderer *renderer;
 static SDL_Texture *texture;
+SDL_Window *win_sdl_window(void) { return window; }
+SDL_Renderer *win_sdl_renderer(void) { return renderer; }
+SDL_Texture *win_sdl_texture(void) { return texture; }
 static uint64_t opened_at, last_present, last_poll;
 extern int win_screen_dirty;
 uint32_t win_primary_pixels(void);
@@ -128,6 +131,7 @@ static void toggle_full_screen(void)
         fprintf(stderr, "recomp: full screen: %s\n", SDL_GetError());
     update_scaling();
     win_screen_dirty = 1;
+    display_report_event(full ? "full screen off" : "full screen on");
 }
 
 /* Remember the window (option remember_window): window.txt in the user folder, beside settings.txt,
@@ -151,6 +155,8 @@ static void window_file(char *path, size_t n)
 
 void win_save_window(void)
 {
+    char report[1100];
+    if (window) display_report_write("at quit", report, sizeof report, NULL);
     if (!window || !options_bool(OPT_REMEMBER_WINDOW)) return;
     int full = (SDL_GetWindowFlags(window) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP)) != 0;
     note_windowed();
@@ -238,6 +244,9 @@ void win_video_init(void)
     update_scaling();
     SDL_StartTextInput();
     opened_at = SDL_GetTicks64();
+    display_report_event("window opened");
+    char report[1100];
+    display_report_write("at start", report, sizeof report, NULL);
 }
 
 static void present_now(void)
@@ -350,6 +359,12 @@ static int shortcut_key(SDL_Keycode k, Uint16 mod)
         full = k == SDLK_f && (mod & KMOD_GUI);
     }
     int plain = !(mod & (KMOD_CTRL | KMOD_ALT | KMOD_GUI | KMOD_SHIFT));
+    /* The display report key works with the option shortcuts off too: a player with a broken picture needs it. */
+    if (k == SDLK_d && (mod & KMOD_SHIFT) && (mod & (windows ? KMOD_CTRL : KMOD_GUI)) && !(mod & KMOD_ALT)) {
+        fprintf(stderr, "recomp: key display report\n");
+        display_report_key();
+        return 1;
+    }
     if (k == SDLK_SPACE && plain && options_bool(OPT_SPACE_TO_CONTINUE))
         return keys_continue_game(&x, &y) && click_for_key(x, y);
     if (!options_bool(OPT_SHORTCUTS)) return 0;
@@ -593,7 +608,14 @@ static void handle_event(SDL_Event *e)
     }
     case SDL_WINDOWEVENT:
         if (e->window.event == SDL_WINDOWEVENT_EXPOSED) win_screen_dirty = 1;
-        if (e->window.event == SDL_WINDOWEVENT_SIZE_CHANGED) { update_scaling(); note_windowed(); }
+        if (e->window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+            update_scaling();
+            note_windowed();
+            display_report_event("size changed");
+        }
+        if (e->window.event == SDL_WINDOWEVENT_MAXIMIZED) display_report_event("maximised");
+        if (e->window.event == SDL_WINDOWEVENT_RESTORED) display_report_event("restored");
+        if (e->window.event == SDL_WINDOWEVENT_DISPLAY_CHANGED) display_report_event("moved to another screen");
         if (e->window.event == SDL_WINDOWEVENT_MOVED) note_windowed();
         if (e->window.event == SDL_WINDOWEVENT_FOCUS_LOST) win_sound_focus(0);
         if (e->window.event == SDL_WINDOWEVENT_FOCUS_GAINED) win_sound_focus(1);
@@ -689,6 +711,7 @@ static void run_script(void)
             present_now();
         } else if (!strcmp(s->action, "dump")) { present_now(); win_dump_screen(s->text); }
         else if (!strcmp(s->action, "shot")) { present_now(); shot_window(s->text); }
+        else if (!strcmp(s->action, "report")) display_report_key();
         else if (!strcmp(s->action, "quit")) {
             win_save_window();
             script_exit(0);

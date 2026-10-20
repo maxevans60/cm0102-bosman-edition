@@ -193,5 +193,17 @@ int win_cursor_shape(uint32_t handle);          /* an SDL_SystemCursor for a cur
 void names_after_poll(void);                    /* after each input poll: the name under the mouse */
 void names_draw(struct SDL_Renderer *renderer); /* the line under it, on the shown frame */
 void names_draw_surface(struct SDL_Surface *s); /* the same line on a screen dump */
+/* The SDL window, renderer and picture texture of user32.c, NULL before the window opens. */
+struct SDL_Window;
+struct SDL_Texture;
+struct SDL_Window *win_sdl_window(void);
+struct SDL_Renderer *win_sdl_renderer(void);
+struct SDL_Texture *win_sdl_texture(void);
+/* The display report (display_report.c). display_report_event notes a change of the window. display_report_write
+ * writes display-report.txt in the user folder, puts its path in path and, when text is not NULL, the report in
+ * *text; 0 when the file cannot be written. display_report_key is the work of the report key. */
+void display_report_event(const char *what);
+int display_report_write(const char *when, char *path, size_t room, char **text);
+void display_report_key(void);
 
 #endif
