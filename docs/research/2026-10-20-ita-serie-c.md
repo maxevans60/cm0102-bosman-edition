@@ -2,9 +2,11 @@
 
 Date 2026-10-20. Original: `clean-3968/cm0102.exe` 3.9.68, virtual addresses, read in the recompiled C of `build/recomp/gen` (each instruction of the original is a comment there). Research: `slice-20-research-ita.md` in the shared notes folder of the 0.6.0 lead (the class table, the chain, the regroups, the cups). Spec: slice 20, Q290, Q363. Rows: `rules-0.6.0/ita.tsv` ("new" rows "Serie C group A..C" from 2014/15; C1 and C2 not held from 2014/15). Lists: `rules-0.6.0/ita-clubs.tsv` (36 lists, 2014/15 to 2025/26).
 
-Code: `src/recomp_rt/win/season_ita_serie_c.c` and `.h`, `tools/recomp/ita_serie_c.py`, small hooks in `season_sizes.c` (cap), `season_clubs.c` (division sizes), `season_report.c` (file names), `season_comps.c` (one def), `season_change.c` (one kind), `tools/seasons/make_clubs.py` (targets). Test: `tests/seasons/ita_serie_c_run.py`.
+Code: `src/recomp_rt/win/season_divisions_ita.c` and `.h` (the Italian part of slice 20's new divisions module), an Italy block in `tools/recomp/new_divisions.py`, one dispatch line in `season_divisions_class_size`, small hooks in `season_sizes.c` (cap), `season_comps.c` (one def), `season_change.c` (one kind), `tools/seasons/make_clubs.py` (targets). Test: `tests/seasons/ita_serie_c_run.py`.
 
 ## The era
+
+Rows (Q520, as slice 20): from 2014/15 the rows "Serie C group A", "B" and "C" take the comp_file of the object they play in (`ita_ser_c1a`, `ita_ser_c1b`, `ita_ser_c2a`), and the C1 and C2 rows of those seasons are `n/a` with a note. So slice 18's sizes and places, slice 15's names table (the groups are named "Lega Pro girone A" to 2016/17 and "Serie C girone A" from 2017/18) and the rules report read them as the rows of these objects, with no mapping in code.
 
 A season S is in the era when its rules season has the three rows "Serie C group A", "B" and "C" (held, 2 to 20 clubs). The rules season is S with changing rules on and the start year with changing rules off (Q232). The base game and `RECOMP_SEASON_CODE=off` have no rules season (`season_game_changes`), so they never enter the era (Q152, Q342).
 
@@ -15,7 +17,7 @@ Groups A, B and C are the objects of Serie C1/A (ItaSerC1a, key id [0x9cf578]), 
 - `create_italian_comps` 0x835320 always makes C1/A and C1/B, and C2/A, C2/B and C2/C only with the extra division flag (bit 4 of nation +0x11c, 0x835407). Q363: the single Serie C follows C1, so it always exists.
 - Without the flag, slice 26's module makes the C2/A object (def `season_ita_group_c`, entry 21, record "Italian Serie C2/A", operator new 0xee and constructor 0x652e90 thiscall (year, record), as 0x835696..0x8356ce). Entry 21 is Italy's: `key_nation_build_table` 0x667150 stores the Italian nation at 0xb64348 = 0xb63d60 + 21 x 0x48. With the flag the original's object exists, so the make function returns 0 (at a new game and at a load). The def's file is the class's own file (`ita_ser_c2a`), so `season_change_file` and the rule kinds still read it as C2/A.
 - C2/B and C2/C (with the flag) end in the era: no clubs (+0x3e 0) and year 2999, the shared rule for a competition that never returns (Q395). At a new game their `create_table` (0x657f50, 0x65c0e0) would find no club and return 0 (as C1/A at 0x64b755..0x64b763), so in the era a wrap gives them an empty table and ends them. At the change into the era the chain ends them. They are never started again (below), make no fixtures, and the rules report shows no edition of them (an object whose year is outside the season gives no line).
-- Names: a rule kind renames the three records to the names of the season's rows ("Lega Pro girone A" to 2016/17, "Serie C girone A" from 2017/18) with `season_change_rename`, at a new game of the era and at each season of the era with changing rules on. A renamed record keeps its data name for `set_key_ids` 0x601a40.
+- Names: from the names table (Q520). A small rule kind writes the news of the change into the era.
 
 ## Sizes: groups of 20 with 38 match days
 
@@ -47,14 +49,14 @@ A new count sets the matches of a club (+0xa7) back to -1, so `League::check_com
    - too many: the lowest reputations go to the Serie D;
    - sorted by latitude (`database_compare_clubs_by_latitude` 0x53fd40 with the game's qsort, as 0x642826..0x642833); the first go to group C, then B, then A (C2/C was the first of 0x64284a, the southern group);
    - a human manager whose club changes group gets the news of `regroup_serie_c1_clubs` (0x6426e5..0x642745: 0x7875e0, 0x77bbe0 (0x13, 0), 0x785790 twice, 0x7861e0).
-4. Two patched loads of the C2/A object in 0x641700 (`ita_serie_c.py`):
+4. Two patched loads of the C2/A object in 0x641700 (`new_divisions.py`):
    - 0x6418d5, the tier block (`League::limit_club_division_tier` 0x68a980 with (1, 3, -3, 1) on C2/A, C2/B, C2/C, else on C1/A, C1/B): in the era `rt_ita_tier_c2` calls it on C2/A and gives 0, so the block does C1/A and C1/B (0x641915). All three groups get it.
    - 0x641986, the start block (vtable +8 of C2/A, C2/B, C2/C, 0x64198d..0x6419b7): in the era `rt_ita_start_c2` starts C2/A and gives 0, so C2/B and C2/C are never started (0x6419ba).
    Outside the era both give the object, so the original runs.
 
 ## A new game of the era
 
-- Slice 15's club moves: the lists "Lega Pro girone A..C" and "Serie C girone A..C" go to the database divisions Italian Serie C1/A, C1/B and C2/A (`make_clubs.py` `TARGETS`; before, `SKIP_NEW`). The counts of these divisions are the group rows; C2/B and C2/C get 0, and the club moves now read 0 as "the division ends" (its clubs go to no division, Q290). The season databases of 2014/15 on still hold the original's five groups of 18 and a Serie D of 177 to 204 clubs (October 2014, October 2016, December 2025, read from `club.dat`).
+- Slice 15's club moves: the lists "Lega Pro girone A..C" and "Serie C girone A..C" go to the database divisions Italian Serie C1/A, C1/B and C2/A (`make_clubs.py` `TARGETS`; before, `SKIP_NEW`). The counts of these divisions are the group rows (`season_divisions_class_size`, which slice 20 calls in the club moves); C2/B and C2/C get 0, and the club moves read 0 as "the division ends" (its clubs go to no division, Q290). The season databases of 2014/15 on still hold the original's five groups of 18 and a Serie D of 177 to 204 clubs (October 2014, October 2016, December 2025, read from `club.dat`).
 - Two clubs of the lists are not in their databases (one in 2020/21 group C, one in 2025/26 group B): slice 15 fills their places by its rules.
 
 ## Out of this part

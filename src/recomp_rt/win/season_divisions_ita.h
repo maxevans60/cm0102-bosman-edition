@@ -2,11 +2,11 @@
  * slice 20 and Q363; research docs/research/2026-10-20-ita-serie-c.md).
  *
  * The groups A, B and C live in the objects of Serie C1/A (ItaSerC1a), C1/B (ItaSerC1b) and C2/A (ItaSerC2a). The
- * rows of a season are the "new" rows "Serie C group A..C" of the rules table (ita.tsv). Only a season game whose
+ * rows of a season are the rows "Serie C group A..C" of the rules table (ita.tsv, comp_file of the object, Q520). Only a season game whose
  * rules season has these rows gets any of it (the "Serie C era"); the base game, RECOMP_SEASON_CODE=off and the
  * seasons before 2014/15 keep the original's code. */
-#ifndef RECOMP_SEASON_ITA_SERIE_C_H
-#define RECOMP_SEASON_ITA_SERIE_C_H
+#ifndef RECOMP_SEASON_DIVISIONS_ITA_H
+#define RECOMP_SEASON_DIVISIONS_ITA_H
 
 #include <stdint.h>
 
@@ -24,11 +24,7 @@ int season_ita_cap(uint32_t obj, int cap);
  * its group for C1/A, C1/B and C2/A, 0 for C2/B and C2/C (the division ends, Q290) in the Serie C era; -1 else. */
 int season_ita_division_size(const char *name, int season);
 
-/* The rules report (season_report.c): "new_serie_c_group_a..c" for a group object in the Serie C era (the files
- * that rules_report_check.py gives the rows of comp_file new), else NULL. */
-const char *season_ita_report_file(uint32_t obj);
-
-/* The patched instructions (tools/recomp/ita_serie_c.py; rt.h declares them for the translated code). */
+/* The patched instructions (tools/recomp/new_divisions.py; rt.h declares them for the translated code). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);   /* push 0x426 of create_table */
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);     /* ItaSerC2a::create_table count store */
 uint32_t rt_ita_tier_c2(uint32_t c2a);                          /* 0x6418d5: the C2a object of the tier block */

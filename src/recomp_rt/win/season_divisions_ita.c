@@ -1,4 +1,4 @@
-/* Italy's single Serie C of three groups, 2014/15 on (season_ita_serie_c.h, 0.6.0 slice 20b). Evidence:
+/* Italy's single Serie C of three groups, 2014/15 on (season_divisions_ita.h, 0.6.0 slice 20b). Evidence:
  * docs/research/2026-10-20-ita-serie-c.md.
  *
  * The objects. create_italian_comps 0x835320 always makes Serie C1/A (ItaSerC1a, key id [0x9cf578]) and C1/B
@@ -18,7 +18,7 @@
 #include "season_comps.h"
 #include "season_rules.h"
 #include "season_names.h"
-#include "season_ita_serie_c.h"
+#include "season_divisions_ita.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -105,13 +105,16 @@ static const uint32_t GROUP_KEY[GROUPS] = {KEY_C1A, KEY_C1B, KEY_C2A};
 
 /* ---- The rows ---- */
 
-/* The row of group g ("Serie C group A..C", comp_file new) in season s, or NULL when not held. */
+/* The row of group g in season s, or NULL when not held. Q520: from 2014/15 the rows "Serie C group A..C" take the
+ * comp_file of the object they play in (ita_ser_c1a, ita_ser_c1b, ita_ser_c2a), and the C1 and C2 rows of those
+ * seasons are n/a; so sizes, names and the rules report read them as the rows of these objects. */
 static const SeasonRule *group_row(int s, int g)
 {
     static const char *const comp[GROUPS] = {"Serie C group A", "Serie C group B", "Serie C group C"};
+    static const char *const file[GROUPS] = {"ita_ser_c1a", "ita_ser_c1b", "ita_ser_c2a"};
     for (int i = 0, n = season_rules_count(); i < n; i++) {
         const SeasonRule *r = season_rules_row(i);
-        if (r->season != s || strcmp(r->comp_file, "new") || strcmp(r->comp, comp[g])) continue;
+        if (r->season != s || strcmp(r->comp_file, file[g]) || strcmp(r->comp, comp[g])) continue;
         return r->clubs >= 2 && r->clubs <= MAX_CLUBS ? r : NULL;
     }
     return NULL;
@@ -164,13 +167,6 @@ int season_ita_division_size(const char *name, int season)
             return r ? r->clubs : 0;
         }
     return -1;
-}
-
-const char *season_ita_report_file(uint32_t obj)
-{
-    static const char *const file[GROUPS] = {"new_serie_c_group_a", "new_serie_c_group_b", "new_serie_c_group_c"};
-    int g = season_ita_group(obj);
-    return g >= 0 && season_ita_serie_c(obj) ? file[g] : NULL;
 }
 
 /* ---- Sizes ---- */
@@ -601,42 +597,19 @@ static uint32_t group_c_make(const SeasonCompDef *d, uint32_t rec, int year, int
 const SeasonCompDef season_ita_group_c = {"Serie C group C", "ita_ser_c2a", "Italian Serie C2/A", 21, group_c_make,
                                           NULL, NULL, 0};
 
-/* ---- Names and news ----
+/* ---- News ----
  *
- * The three group records take the names of the season's rows ("Lega Pro girone A" to 2016/17, then "Serie C
- * girone A", Q370, Q360) through season_change_rename (a renamed record keeps its data name for set_key_ids
- * 0x601a40). At a new game in the era and at each season of the era with changing rules on. */
-static void rename_groups(int s)
-{
-    for (int g = 0; g < GROUPS; g++) {
-        const SeasonRule *r = group_row(s, g);
-        uint32_t rec = record_of(GROUP_KEY[g]);
-        if (!r || !rec || !r->name || !strcmp(r->name, "n/a")) continue;
-        char name[64];
-        snprintf(name, sizeof name, "%s", r->name);
-        season_change_latin1(name);
-        name[50] = 0;
-        season_change_rename(rec, name);
-    }
-}
-
-static void kind_new_game(int y)
-{
-    if (era_of_year(y)) rename_groups(rules_season(y));
-}
-
+ * The names of the groups ("Lega Pro girone A" to 2016/17, "Serie C girone A" from 2017/18) come from the names table
+ * (slice 15): Q520 gives their rows the files of the three objects. This kind says the change of the format. */
 static void kind_season(int s)
 {
-    if (!era_of_year(s)) return;
-    rename_groups(s);
-    if (!era_of_year(s - 1)) {
-        const SeasonRule *a = group_row(s, 0), *b = group_row(s, 1), *c = group_row(s, 2);
-        season_change_news("Serie C1 and Serie C2 end: the Serie C is now one division of three groups of %d, %d and "
-                           "%d clubs.", a->clubs, b->clubs, c->clubs);
-    }
+    if (!era_of_year(s) || era_of_year(s - 1)) return;
+    const SeasonRule *a = group_row(s, 0), *b = group_row(s, 1), *c = group_row(s, 2);
+    season_change_news("Serie C1 and Serie C2 end: the Serie C is now one division of three groups of %d, %d and %d "
+                       "clubs.", a->clubs, b->clubs, c->clubs);
 }
 
-const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", kind_new_game, NULL, kind_season, NULL, NULL, NULL};
+const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", NULL, NULL, kind_season, NULL, NULL, NULL};
 
 /* ---- C2/B and C2/C at a new game of the era ----
  *

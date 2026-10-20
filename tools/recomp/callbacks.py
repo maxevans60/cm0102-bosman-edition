@@ -15,7 +15,7 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
                   "season_change.c", "season_kind_club_world.c", "season_comps.c",
-                  "season_club_cups.c", "season_playoffs.c")
+                  "season_club_cups.c", "season_playoffs.c", "season_divisions.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -118,6 +118,16 @@ CALLBACKS = {
     0x9452CA: ("558bec51568b7508", "free, cdecl"),
     0x5A8F60: ("c390909090909090", "the empty function (compared with vtable +0x28, wrapped in season_uefa_cup.c)"),
     0x686940: ("8a4424083c057519", "League +0x44, base (compared with vtable +0x44, wrapped in season_playoffs.c)"),
+    # season_divisions.c (slice 20): the 3. Liga in the German Regional object
+    0x689C80: ("81ec100200008b84", "league_promote_and_relegate, stdcall (upper, lower, expire, pairwise, up, down)"),
+    0x6830B0: ("8b0df07edd005556", "League::move_club_to_division, thiscall (club, record, 1), ret 0xc"),
+    0x6831A0: ("568b742408578b7c", "League::relegate_club_to_division, thiscall (club, record, 1), ret 0xc"),
+    0x4AFBD0: ("81ec000200005356", "sort a club list for the new clubs of a tier, cdecl (list, count, need)"),
+    0x540A50: ("8b4c240481ec0002", "the senior side of a club, cdecl (club, &flag, 1)"),
+    0x945333: ("558bec81ecf80000", "qsort, cdecl (base, count, width, compare)"),
+    0x4B07D0: ("8b4424048b542408", "the compare of GerRegional's predicted positions (passed to qsort)"),
+    0x4A2540: ("81ec000200005657", "set a predicted position, thiscall (club, position), ret 8"),
+    0x53FD40: ("81ec080200008b84", "the compare of the Spanish and Portuguese group deals (passed to qsort)"),
 }
 
 

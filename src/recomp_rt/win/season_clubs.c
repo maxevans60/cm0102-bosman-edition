@@ -6,7 +6,7 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_sizes.h"
-#include "season_ita_serie_c.h"
+#include "season_divisions.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -254,8 +254,8 @@ static const ClassSize CLASS_SIZE[] = {
  * season_sizes_clubs: create_table then takes the clubs that the division holds), else the count of the class. */
 static int class_size(const char *name, int season)
 {
-    int ita = season_ita_division_size(name, season);       /* slice 20b: the Serie C groups (0 empties) */
-    if (ita >= 0) return ita;
+    int new_division = season_divisions_class_size(name, season);   /* slice 20 */
+    if (new_division >= 0) return new_division;
     for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
         if (!strncmp(name, CLASS_SIZE[k].name, 52)) {
             int table = season_sizes_clubs(CLASS_SIZE[k].file, season);
@@ -422,7 +422,7 @@ static void move_clubs(int season)
             int most = class_size_of(file);
             size = div[i].n0 < most ? div[i].n0 : most;
         }
-        div[i].want = size > 0 ? size : size == 0 ? 0 : div[i].n0;    /* 0: the division ends (slice 20b) */
+        div[i].want = size >= 0 ? size : div[i].n0;     /* 0: a division that ends (slice 20, Q290) */
         if (div[i].want != div[i].n0) {
             div[i].sized = 1;
             resized++;
@@ -444,6 +444,7 @@ static void move_clubs(int season)
         by_list[r - first] = -1;
         to_div[r - first] = -1;
         if (rows[r].season != season) continue;
+        if (!season_divisions_list_on(rows[r].division, season)) continue;     /* slice 20 */
         int t = find_division(div, ncomps, rows[r].division);
         if (t < 0) {
             unknown_division++;
