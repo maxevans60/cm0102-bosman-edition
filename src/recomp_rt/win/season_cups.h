@@ -136,6 +136,7 @@ int season_new_cup_round_code(int rounds, int r);
  * table in cpu.eax) of a new cup. */
 const char *season_new_cups_making(void);
 int season_new_cups_teams(uint32_t cup, const char *file);
+int season_new_cups_clubs_ready(const char *file, int edition);
 int season_new_cups_rounds(uint32_t cup, const char *file, uint32_t count_ptr);
 
 /* The game part of the group stages (season_cup_groups.c): after the class's create_round_table (stage, count_ptr as

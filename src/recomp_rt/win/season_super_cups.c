@@ -140,14 +140,7 @@ static void teams_made(uint32_t cup)
     const SuperCup *k = cup_of(file);
     int season = cup_season(cup);
     const SeasonSuperFour *four = k ? season_super_four(file, season) : NULL;
-    if (!four) {
-        if (!strncmp(file, "new_", 4)) {                /* a new cup of slice 21c: the clubs of its nation */
-            Cpu saved = cpu;
-            season_new_cups_teams(cup, file);
-            if (!rt_unwinding) cpu = saved;
-        }
-        return;
-    }
+    if (!four) return;
     Cpu saved = cpu;
     uint32_t in[5] = {placed(k->league, 0), placed(k->league, 1), placed(k->cup, 0), placed(k->cup, 1),
                       placed(k->league, 2)};
@@ -237,6 +230,20 @@ void o_00858960(void);
 RT_WRAP(0065fa60, super_ita_teams)
 {
     uint32_t self = cpu.ecx;
+    const char *file = season_game() && readable(self) ? file_of(self) : NULL;
+    if (file && !strncmp(file, "new_", 4)) {
+        /* A new cup of slice 21c (an ItaSuper object): the clubs of its nation in place of the class's picker,
+         * which reads Italy's key ids (0x9cf570 at 0x65faee) and stops the game when Italy is not loaded. */
+        Cpu saved = cpu;
+        season_new_cups_teams(self, file);
+        if (rt_unwinding) return;
+        cpu = saved;
+        cpu.eax = 1;
+        teams_made(self);                               /* four clubs where the row gives them */
+        if (rt_unwinding) return;
+        rt_ret_stdcall(1, 0);
+        return;
+    }
     o_0065fa60();
     if (!rt_unwinding) teams_made(self);
 }

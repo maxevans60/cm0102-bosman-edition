@@ -161,6 +161,12 @@ static uint32_t new_make(const SeasonCompDef *d, uint32_t rec, int year, int loa
         fprintf(stderr, "recomp: new cups: %s %d not made, its first match is past\n", d->file, year);
         return 0;
     }
+    /* A cup whose clubs the game does not hold (a nation or division not loaded) is not made: its picker has no
+     * fall-back (the class's own picker reads Italy's key ids and stops the game at ita_super.cpp 203). */
+    if (!loading && !season_new_cups_clubs_ready(d->file, year)) {
+        fprintf(stderr, "recomp: new cups: %s %d not made, its clubs are not in the game\n", d->file, year);
+        return 0;
+    }
     Cpu saved = cpu;
     uint32_t size[1] = {ITA_SUPER_SIZE};
     uint32_t obj = rt_callback(F_NEW, 1, size);
@@ -221,23 +227,23 @@ static int division_clubs(uint32_t key_global, uint32_t *out, int max)
     return n;
 }
 
+/* A new team list, as the class's picker makes one (ItaSuper::init_team_list 0x65fa60 mallocs it at 0x65fa72 and
+ * stores it at 0x65fa7e without freeing the old one). */
 static void put_list(uint32_t cup, const uint32_t *clubs, int n)
 {
-    uint32_t list = game_malloc(6u * (uint32_t)(n > 0 ? n : 1));
-    if (!list) return;
+    uint32_t list = game_malloc(6u * (uint32_t)n);
+    if (!list || rt_unwinding) return;
     for (int i = 0; i < n; i++) wr32(g_mem, list + 6u * (uint32_t)i, clubs[i]);
-    game_free(rd32(g_mem, cup + CUP_TEAM_LIST));
-    if (rt_unwinding) return;
     wr32(g_mem, cup + CUP_TEAM_LIST, list);
     wr16(g_mem, cup + CUP_TEAMS, (uint16_t)n);
 }
 
-int season_new_cups_teams(uint32_t cup, const char *file)
+/* The clubs of edition `edition` of a new cup in clubs[] (32 at most), the clubs of the first round first. Returns
+ * their count; fewer than 2: the cup cannot play (its nation's clubs are not in the game). */
+static int pick_clubs(const char *file, int edition, uint32_t *clubs)
 {
-    int edition = (int16_t)rd16(g_mem, cup + CUP_YEAR);
     const SeasonNewCup *f = season_new_cup(file, edition);
     if (!f) return 0;
-    uint32_t clubs[32];
     int n = 0;
     if (f->clubs == 2) {
         const NewSuper *k = NULL;
@@ -247,7 +253,7 @@ int season_new_cups_teams(uint32_t cup, const char *file)
         clubs[0] = placed(k->league, 0);
         clubs[1] = placed(k->cup, 0);
         if (clubs[1] == clubs[0]) clubs[1] = k->double_cup_runner_up ? placed(k->cup, 1) : placed(k->league, 1);
-        if (rt_unwinding) return 1;
+        if (rt_unwinding) return 0;
         n = clubs[0] && clubs[1] && clubs[0] != clubs[1] ? 2 : 0;
     } else {
         const NewCupClubs *k = NULL;
@@ -271,11 +277,31 @@ int season_new_cups_teams(uint32_t cup, const char *file)
             clubs[i] = clubs[n - 1 - i], clubs[n - 1 - i] = t;
         }
     }
+    return n;
+}
+
+int season_new_cups_clubs_ready(const char *file, int edition)
+{
+    uint32_t clubs[32];
+    Cpu saved = cpu;
+    int n = pick_clubs(file, edition, clubs);
+    if (!rt_unwinding) cpu = saved;
+    return n >= 2;
+}
+
+int season_new_cups_teams(uint32_t cup, const char *file)
+{
+    int edition = (int16_t)rd16(g_mem, cup + CUP_YEAR);
+    uint32_t clubs[32];
+    int n = pick_clubs(file, edition, clubs);
+    if (rt_unwinding) return 0;
     if (n < 2) {
-        fprintf(stderr, "recomp: new cups: %s %d: %d clubs found, the class's clubs stay\n", file, edition, n);
-        return 1;
+        /* The list of the last edition stays (the module makes no cup without its clubs, new_make). */
+        fprintf(stderr, "recomp: new cups: %s %d: %d clubs found, the last list stays\n", file, edition, n);
+        return 0;
     }
     put_list(cup, clubs, n);
+    if (rt_unwinding) return 0;
     fprintf(stderr, "recomp: new cups: %s %d with %d clubs\n", file, edition, n);
     return 1;
 }
