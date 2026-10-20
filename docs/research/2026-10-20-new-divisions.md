@@ -102,4 +102,21 @@ Spain 2020/21 (5 groups split into 10 subgroups, 102 clubs) keeps the database's
 
 ## Tests
 
-To come with the first build of each part.
+Runs of 2026-10-20 (`G=/Users/max/Projects/cm0102/clean-3968`, `D=/Users/max/Projects/cm0102/test-fixtures/databases`; each is `python3 tests/seasons/rules_report_check.py --run build/cm0102_recomp $G` with the arguments listed). Each passes against its expected file; the lines of the new divisions that stay are Q521 (direct places in place of play-offs), Q526 (the Greek group at 14) and the group classes' table count (one group in the report's `clubs`).
+
+| Arguments | Result |
+|---|---|
+| `--year 2008 --database "$D/September 2008" --nations germany --extra regional --start-only` | 3. Liga, 20 clubs, 38 dates; club list check passes |
+| `--year 2008 --last 2009 ...` (the same, two seasons) | 3 down, 3 new from the pool, 20 clubs each season |
+| `--year 2008 --last 2009 --database "$D/September 2008" --nations germany` | no flag: Regionalliga pool of 36, no box (ger_first.cpp 1049 gone) |
+| `--year 2007 --last 2008 --database "$D/November 2007" --nations germany --extra regional --changing-rules on` | Regionalliga 2007/08, then the 3. Liga of 20 (8 down, 8 cut); before the stage fix: league.cpp 3214 on 27 July 2007, also on main |
+| `--year 2013 --last 2014 --database "$D/Autumn 2013" --nations greece` | the second group (14) plays both seasons |
+| `--year 2014 --last 2016 --database "$D/October 2014" --nations greece --changing-rules on` | the group ends in 2015 (13 to the Lower Division) and waits for 2020 |
+| `--year 2021 --last 2022 --database "$D/October 2021" --nations greece` | the group (Super League 2 South) plays 2021/22 and 2022/23 |
+| `--year 2021 --database "$D/October 2021" --nations all,-<the 15 rows but Greece> --extra spain,portugal --start-only` | Primera División RFEF 2 x 20, Liga 3 2 x 12; club lists pass (one Portuguese stand-in) |
+| the same with `--last 2022` | Spain 10 down and 10 new (40), Portugal 4 and 4 (24) |
+| `--year 2020 --last 2021 --database "$D/November 2020" --nations all,-<the 16 rows> --extra spain,portugal --changing-rules on` | July 2021: Portugal 60 to 24 (12 down, 24 cut), Spain 80 to 40 (17 down, 23 cut) |
+
+Same-save (Q342), `python3 tests/smoke/smoke_run.py build/cm0102_recomp $G --same-save --runs normal,again,new-divisions-off,season-code-off --jobs 2` with `--save start.sav`, `--save prematch.sav`, a new game and `--save yeovil.sav --days 7`: PASS (each run equal to normal). Repeatability: `python3 tests/seasons/season_core_run.py build/cm0102_recomp $G --year 2008 --database "$D/September 2008" --only season` and the same for 2021 (October 2021): PASS (season-again equal to season). `ctest`: 34 of 34.
+
+Not slice 20's, found here: a 2020 start with Greece and changing rules on (November 2020) stops at the June 2021 change with "free of 0x705a85c0, which is not a heap block (from 0x945330)", also with `RECOMP_NEW_DIVISIONS=off`.
