@@ -305,6 +305,7 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint32_t key_b, uint32_t key_c);
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
 uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
+uint32_t rt_ita_cup_first_position(uint32_t original);   /* ItaCup second loop start (0x63fb16) */
 /* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
  * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group
  * stage. The sites of tools/recomp/uefa.py read it. */
@@ -386,6 +387,13 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
 uint32_t rt_wcq_concacaf_playoff(uint32_t self);
 uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
 void rt_wcq_africa_format(uint32_t self, uint32_t pool);
+/* The UEFA Nations League (0.6.0 slice 28, win/season_nl.c): the group stages that the draw of
+ * EuroChampQual::update_for_date makes (8 at 0x57ff34). The original's value for every other object. */
+uint32_t rt_nl_group_stages(uint32_t self, uint32_t original);
+/* 0.6.0 slice 28 part b: the year sites of copa_america (0x5e06fb, 0x5e1590) for the Copa America and the Gold
+ * Cup (win/season_gold_cup.c). */
+uint32_t rt_copa_first_year(uint32_t self, uint32_t year);
+uint32_t rt_copa_next_year(uint32_t self, uint32_t year, uint32_t step);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets

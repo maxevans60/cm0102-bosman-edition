@@ -1,0 +1,513 @@
+edition	confed	league	group	nation	source1	source2	note
+2018-19	UEFA	A	1	Netherlands	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	1	France	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	1	Germany	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	2	Switzerland	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	2	Belgium	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	2	Iceland	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	3	Portugal	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	3	Italy	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	3	Poland	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	4	England	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	4	Spain	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	A	4	Croatia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_A	
+2018-19	UEFA	B	1	Ukraine	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	1	Czech Republic	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	1	Slovakia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	2	Sweden	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	2	Russia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	2	Turkey	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	3	Bosnia and Herzegovina	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	3	Austria	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	3	Northern Ireland	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	4	Denmark	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	4	Wales	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	B	4	Republic of Ireland	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_B	
+2018-19	UEFA	C	1	Scotland	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	1	Israel	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	1	Albania	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	2	Finland	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	2	Hungary	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	2	Greece	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	2	Estonia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	3	Norway	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	3	Bulgaria	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	3	Cyprus	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	3	Slovenia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	4	Serbia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	4	Romania	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	4	Montenegro	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	C	4	Lithuania	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_C	
+2018-19	UEFA	D	1	Georgia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	1	Kazakhstan	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	1	Latvia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	1	Andorra	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	2	Belarus	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	2	Luxembourg	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	2	Moldova	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	2	San Marino	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	3	Kosovo	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	3	Azerbaijan	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	3	Faroe Islands	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	3	Malta	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	4	Macedonia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	4	Armenia	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	4	Gibraltar	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2018-19	UEFA	D	4	Liechtenstein	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League	https://en.wikipedia.org/wiki/2018%E2%80%9319_UEFA_Nations_League_D	
+2020-21	UEFA	A	1	Italy	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	1	Netherlands	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	1	Poland	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	1	Bosnia and Herzegovina	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	2	Belgium	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	2	Denmark	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	2	England	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	2	Iceland	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	3	France	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	3	Portugal	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	3	Croatia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	3	Sweden	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	4	Spain	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	4	Germany	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	4	Switzerland	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	A	4	Ukraine	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_A	
+2020-21	UEFA	B	1	Austria	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	1	Norway	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	1	Romania	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	1	Northern Ireland	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	2	Czech Republic	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	2	Scotland	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	2	Israel	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	2	Slovakia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	3	Hungary	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	3	Russia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	3	Serbia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	3	Turkey	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	4	Wales	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	4	Finland	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	4	Republic of Ireland	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	B	4	Bulgaria	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_B	
+2020-21	UEFA	C	1	Montenegro	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	1	Luxembourg	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	1	Azerbaijan	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	1	Cyprus	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	2	Armenia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	2	North Macedonia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	2	Georgia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	2	Estonia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	3	Slovenia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	3	Greece	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	3	Kosovo	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	3	Moldova	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	4	Albania	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	4	Belarus	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	4	Lithuania	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	C	4	Kazakhstan	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_C	
+2020-21	UEFA	D	1	Faroe Islands	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_D	
+2020-21	UEFA	D	1	Malta	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_D	
+2020-21	UEFA	D	1	Latvia	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_D	
+2020-21	UEFA	D	1	Andorra	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_D	
+2020-21	UEFA	D	2	Gibraltar	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_D	
+2020-21	UEFA	D	2	Liechtenstein	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_D	
+2020-21	UEFA	D	2	San Marino	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League	https://en.wikipedia.org/wiki/2020%E2%80%9321_UEFA_Nations_League_D	
+2022-23	UEFA	A	1	Croatia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	1	Denmark	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	1	France	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	1	Austria	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	2	Spain	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	2	Portugal	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	2	Switzerland	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	2	Czech Republic	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	3	Italy	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	3	Hungary	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	3	Germany	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	3	England	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	4	Netherlands	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	4	Belgium	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	4	Poland	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	A	4	Wales	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_A	
+2022-23	UEFA	B	1	Scotland	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	1	Ukraine	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	1	Republic of Ireland	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	1	Armenia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	2	Israel	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	2	Iceland	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	2	Albania	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	2	Russia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	disqualified; in the draw list (drawn into group B2); removed before its first match
+2022-23	UEFA	B	3	Bosnia and Herzegovina	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	3	Finland	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	3	Montenegro	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	3	Romania	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	4	Serbia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	4	Norway	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	4	Slovenia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	B	4	Sweden	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_B	
+2022-23	UEFA	C	1	Turkey	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	1	Luxembourg	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	1	Faroe Islands	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	1	Lithuania	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	2	Greece	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	2	Kosovo	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	2	Northern Ireland	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	2	Cyprus	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	3	Kazakhstan	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	3	Azerbaijan	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	3	Slovakia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	3	Belarus	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	4	Georgia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	4	Bulgaria	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	4	North Macedonia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	C	4	Gibraltar	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_C	
+2022-23	UEFA	D	1	Latvia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_D	
+2022-23	UEFA	D	1	Moldova	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_D	
+2022-23	UEFA	D	1	Andorra	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_D	
+2022-23	UEFA	D	1	Liechtenstein	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_D	
+2022-23	UEFA	D	2	Estonia	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_D	
+2022-23	UEFA	D	2	Malta	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_D	
+2022-23	UEFA	D	2	San Marino	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Nations_League_D	
+2024-25	UEFA	A	1	Portugal	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	1	Croatia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	1	Scotland	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	1	Poland	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	2	France	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	2	Italy	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	2	Belgium	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	2	Israel	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	3	Germany	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	3	Netherlands	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	3	Hungary	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	3	Bosnia and Herzegovina	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	4	Spain	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	4	Denmark	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	4	Serbia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	A	4	Switzerland	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_A	
+2024-25	UEFA	B	1	Czech Republic	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	1	Ukraine	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	1	Georgia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	1	Albania	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	2	England	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	2	Greece	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	2	Republic of Ireland	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	2	Finland	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	3	Norway	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	3	Austria	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	3	Slovenia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	3	Kazakhstan	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	4	Wales	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	4	Turkey	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	4	Iceland	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	B	4	Montenegro	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_B	
+2024-25	UEFA	C	1	Sweden	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	1	Slovakia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	1	Estonia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	1	Azerbaijan	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	2	Romania	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	2	Kosovo	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	2	Cyprus	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	2	Lithuania	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	3	Northern Ireland	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	3	Bulgaria	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	3	Belarus	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	3	Luxembourg	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	4	North Macedonia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	4	Armenia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	4	Faroe Islands	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	C	4	Latvia	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_C	
+2024-25	UEFA	D	1	San Marino	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_D	
+2024-25	UEFA	D	1	Gibraltar	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_D	
+2024-25	UEFA	D	1	Liechtenstein	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_D	
+2024-25	UEFA	D	2	Moldova	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_D	
+2024-25	UEFA	D	2	Malta	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_D	
+2024-25	UEFA	D	2	Andorra	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Nations_League_D	
+2026-27	UEFA	A	1	France	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	1	Italy	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	1	Belgium	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	1	Turkey	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	2	Netherlands	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	2	Greece	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	2	Germany	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	2	Serbia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	3	Spain	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	3	England	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	3	Croatia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	3	Czech Republic	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	4	Portugal	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	4	Denmark	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	4	Wales	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	A	4	Norway	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_A	
+2026-27	UEFA	B	1	Switzerland	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	1	Slovenia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	1	Scotland	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	1	North Macedonia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	2	Northern Ireland	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	2	Hungary	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	2	Ukraine	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	2	Georgia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	3	Austria	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	3	Kosovo	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	3	Republic of Ireland	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	3	Israel	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	4	Sweden	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	4	Bosnia and Herzegovina	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	4	Poland	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	B	4	Romania	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_B	
+2026-27	UEFA	C	1	Albania	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	1	Belarus	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	1	Finland	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	1	San Marino	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	2	Montenegro	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	2	Cyprus	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	2	Armenia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	2	Latvia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	3	Slovakia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	3	Faroe Islands	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	3	Moldova	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	3	Kazakhstan	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	4	Iceland	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	4	Estonia	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	4	Bulgaria	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	C	4	Luxembourg	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_C	
+2026-27	UEFA	D	1	Malta	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_D	
+2026-27	UEFA	D	1	Gibraltar	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_D	
+2026-27	UEFA	D	1	Andorra	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_D	
+2026-27	UEFA	D	2	Azerbaijan	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_D	
+2026-27	UEFA	D	2	Lithuania	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_D	
+2026-27	UEFA	D	2	Liechtenstein	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_UEFA_Nations_League_D	
+2019-20	CONCACAF	A	1	United States	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	1	Canada	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	1	Cuba	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	2	Mexico	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	2	Panama	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	2	Bermuda	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	3	Honduras	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	3	Martinique	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	3	Trinidad and Tobago	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	4	Costa Rica	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	4	Curaçao	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	A	4	Haiti	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_A	
+2019-20	CONCACAF	B	1	Grenada	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	1	French Guiana	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	1	Belize	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	1	Saint Kitts and Nevis	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	2	El Salvador	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	2	Montserrat	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	2	Dominican Republic	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	2	Saint Lucia	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	3	Jamaica	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	3	Guyana	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	3	Antigua and Barbuda	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	3	Aruba	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	4	Suriname	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	4	Saint Vincent and the Grenadines	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	4	Nicaragua	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	B	4	Dominica	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_B	
+2019-20	CONCACAF	C	1	Barbados	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	1	Cayman Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	1	Saint Martin	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	1	U.S. Virgin Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	2	Bahamas	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	2	Bonaire	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	2	British Virgin Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	3	Guatemala	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	3	Puerto Rico	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	3	Anguilla	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	4	Guadeloupe	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	4	Turks and Caicos Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20	CONCACAF	C	4	Sint Maarten	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_C	
+2019-20q	CONCACAF	Q		Haiti	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Canada	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Martinique	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Curaçao	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Bermuda	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Cuba	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Guyana	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Jamaica	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Nicaragua	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		El Salvador	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Montserrat	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Suriname	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Saint Lucia	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Dominica	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Saint Kitts and Nevis	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Dominican Republic	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Belize	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Antigua and Barbuda	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		French Guiana	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Saint Vincent and the Grenadines	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Grenada	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Aruba	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Guadeloupe	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Turks and Caicos Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Barbados	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Bonaire	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		U.S. Virgin Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Sint Maarten	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Cayman Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		British Virgin Islands	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Anguilla	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Bahamas	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Puerto Rico	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2019-20q	CONCACAF	Q		Saint Martin	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League_qualifying	https://en.wikipedia.org/wiki/2019%E2%80%9320_CONCACAF_Nations_League	qualifying round of 2018-19, one table, no groups
+2022-23	CONCACAF	A	1	Mexico	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	1	Jamaica	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	1	Suriname	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	2	Panama	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	2	Costa Rica	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	2	Martinique	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	3	Canada	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	3	Honduras	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	3	Curaçao	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	4	United States	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	4	El Salvador	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	A	4	Grenada	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_A	
+2022-23	CONCACAF	B	1	Cuba	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	1	Guadeloupe	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	1	Antigua and Barbuda	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	1	Barbados	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	2	Haiti	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	2	Guyana	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	2	Bermuda	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	2	Montserrat	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	3	Nicaragua	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	3	Trinidad and Tobago	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	3	Bahamas	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	3	Saint Vincent and the Grenadines	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	4	Guatemala	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	4	French Guiana	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	4	Dominican Republic	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	B	4	Belize	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_B	
+2022-23	CONCACAF	C	1	Sint Maarten	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	1	Bonaire	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	1	Turks and Caicos Islands	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	1	U.S. Virgin Islands	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	2	Saint Kitts and Nevis	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	2	Aruba	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	2	Saint Martin	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	3	Saint Lucia	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	3	Anguilla	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	3	Dominica	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	4	Puerto Rico	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	4	Cayman Islands	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2022-23	CONCACAF	C	4	British Virgin Islands	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2022%E2%80%9323_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	A	1	Panama	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	1	Trinidad and Tobago	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	1	Martinique	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	1	Guatemala	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	1	Curaçao	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	1	El Salvador	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	2	Jamaica	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	2	Honduras	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	2	Suriname	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	2	Cuba	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	2	Haiti	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	A	2	Grenada	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	
+2023-24	CONCACAF	B	1	Guadeloupe	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	1	Saint Lucia	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	1	Sint Maarten	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	1	Saint Kitts and Nevis	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	2	Nicaragua	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	2	Dominican Republic	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	2	Montserrat	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	2	Barbados	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	3	French Guiana	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	3	Saint Vincent and the Grenadines	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	3	Bermuda	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	3	Belize	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	4	Guyana	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	4	Puerto Rico	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	4	Antigua and Barbuda	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	B	4	Bahamas	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_B	
+2023-24	CONCACAF	C	1	Saint Martin	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	1	Bonaire	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	1	Anguilla	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	2	Aruba	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	2	Cayman Islands	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	2	U.S. Virgin Islands	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	3	Dominica	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	3	British Virgin Islands	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	C	3	Turks and Caicos Islands	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_C	
+2023-24	CONCACAF	A		Mexico	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2023-24	CONCACAF	A		United States	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2023-24	CONCACAF	A		Canada	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2023-24	CONCACAF	A		Costa Rica	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2023%E2%80%9324_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2024-25	CONCACAF	A	1	Costa Rica	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	1	Suriname	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	1	Guatemala	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	1	Martinique	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	1	Guadeloupe	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	1	Guyana	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	2	Jamaica	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	2	Honduras	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	2	Nicaragua	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	2	Trinidad and Tobago	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	2	Cuba	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	A	2	French Guiana	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	
+2024-25	CONCACAF	B	1	El Salvador	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	1	Saint Vincent and the Grenadines	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	1	Bonaire	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	1	Montserrat	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	2	Curaçao	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	2	Saint Lucia	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	2	Grenada	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	2	Saint Martin	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	3	Haiti	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	3	Puerto Rico	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	3	Sint Maarten	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	3	Aruba	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	4	Dominican Republic	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	4	Bermuda	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	4	Dominica	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	B	4	Antigua and Barbuda	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_B	
+2024-25	CONCACAF	C	1	Barbados	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	1	Bahamas	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	1	U.S. Virgin Islands	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	2	Belize	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	2	Anguilla	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	2	Turks and Caicos Islands	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	3	Saint Kitts and Nevis	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	3	Cayman Islands	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	C	3	British Virgin Islands	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_C	
+2024-25	CONCACAF	A		Mexico	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2024-25	CONCACAF	A		Canada	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2024-25	CONCACAF	A		United States	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2024-25	CONCACAF	A		Panama	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2024%E2%80%9325_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2026-27	CONCACAF	A	1	Curaçao	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	1	Haiti	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	1	Dominican Republic	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	1	Costa Rica	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	1	Trinidad and Tobago	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	1	Nicaragua	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	2	Guatemala	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	2	Jamaica	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	2	Suriname	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	2	Honduras	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	2	Martinique	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	A	2	El Salvador	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	
+2026-27	CONCACAF	B	1	Guyana	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	1	Puerto Rico	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	1	Cayman Islands	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	1	Dominica	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	2	Barbados	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	2	Saint Lucia	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	2	Guadeloupe	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	2	Bermuda	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	3	Cuba	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	3	Saint Kitts and Nevis	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	3	Bonaire	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	3	Grenada	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	4	Saint Vincent and the Grenadines	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	4	French Guiana	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	4	Belize	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	B	4	Sint Maarten	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_B	
+2026-27	CONCACAF	C	1	Montserrat	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	1	Turks and Caicos Islands	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	1	British Virgin Islands	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	2	Antigua and Barbuda	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	2	Aruba	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	2	Anguilla	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	3	Saint Martin	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	3	U.S. Virgin Islands	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	C	3	Bahamas	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_C	
+2026-27	CONCACAF	A		Mexico	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2026-27	CONCACAF	A		United States	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2026-27	CONCACAF	A		Canada	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)
+2026-27	CONCACAF	A		Panama	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League	https://en.wikipedia.org/wiki/2026%E2%80%9327_CONCACAF_Nations_League_A	bye to the quarter-finals (no group)

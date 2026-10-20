@@ -21,6 +21,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_intl.h"
+#include "season_nl.h"                     /* slice 28: the Gold Cup */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -550,12 +551,16 @@ void o_0057c1d0(void);
  * game stopped on 30 May 2020 in NationalTeams::select_squad 0x76c120 (box "Database.cpp 13126"). */
 void season_intl_euro_fill(uint32_t self)
 {
+    if (season_intl_on()) season_euro_slots_after_load(self);    /* slice 28: no slot array after a load */
+    if (rt_unwinding) return;
     if (season_intl_on()) fill_slots(self, CONTINENT_EUROPE, "euro_champ");
 }
 
 RT_WRAP(0057c1d0, euro_group_draw)
 {
     uint32_t self = cpu.ecx;
+    if (season_intl_on()) season_euro_slots_after_load(self);    /* slice 28 */
+    if (rt_unwinding) return;
     if (season_intl_on()) fill_slots(self, CONTINENT_EUROPE, "euro_champ");
     if (rt_unwinding) return;
     cpu.ecx = self;
@@ -585,6 +590,10 @@ RT_WRAP(0092e740, wc_add_qualified)
 
 RT_WRAP(0057c120, euro_add_qualified)
 {
+    uint32_t self = cpu.ecx;
+    if (season_intl_on()) season_euro_slots_after_load(self);    /* slice 28: no slot array after a load */
+    if (rt_unwinding) return;
+    cpu.ecx = self;
     if (season_intl_on() && !team_nation(rt_arg(0))) {
         if (logging()) fprintf(stderr, "recomp: season intl: euro_champ: a qualifier with no nation stays out\n");
         rt_ret_stdcall(0, 1);
@@ -658,6 +667,8 @@ static void stage_builder(uint32_t cls, void (*original)(void), int builder)
     uint32_t self = cpu.ecx;
     int saved = date_shift;
     date_shift = season_intl_date_shift(cls, (int16_t)rd16(g_mem, self + 0x40u));
+    /* Slice 28 part b: the CONCACAF Gold Cup object of the class copa_america has its own dates. */
+    if (cls == INTL_COPA) season_gold_cup_date_shift(self, &date_shift);
     if (date_shift && !saved && logging())
         fprintf(stderr, "recomp: season intl: %s %d moves by %d days\n", season_intl_class_file(cls),
                 (int16_t)rd16(g_mem, self + 0x40u), date_shift);
