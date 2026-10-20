@@ -254,6 +254,20 @@ uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx)
     return (uint32_t)(limit - (int)edx);
 }
 
+/* ItaCup::select_entrants 0x63faf0 fills a list of 32 Italian clubs (0x20 at 0x63fc21). Its first loop takes the
+ * Serie A clubs, the clubs relegated from Serie A, and the clubs whose last division (+0x5b) is a Serie C1 group
+ * ([0x9cf578], [0x9cf57c]) with last position (+0x5f) 3, 4 or 5 (0x63fc69..0x63fc9b). While the list is short, its
+ * second loop takes C1 clubs (not in Serie A) whose last position is p, for p = 5, 6, ... (0x63fb16, 0x63fcf9..
+ * 0x63fd30). A C1 club of last position 5 is then taken twice. The cup draws it twice, plays a tie with the other
+ * club, and stops at Cup.cpp 1187 (Cup::process_fixture 0x51a150: Cup::find_tie 0x519c90 returns -1 at 0x51a336,
+ * box at 0x51a396). The base game never showed it (inference: its data fills the list in the first loop). In a
+ * season game the club moves change the Italian divisions (a 2010/11 start with the September 2010 database took
+ * Foggia twice and stopped on day 330), so there the second loop starts at 6. */
+uint32_t rt_ita_cup_first_position(uint32_t original)
+{
+    return season_game_changes() ? 6u : original;
+}
+
 /* Sets a count of places so that the row's count is the direct places, or the direct places and the winners
  * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). */
 static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)
@@ -451,8 +465,15 @@ static void sizes_new_game(int start_year)
     int n = season_change_comps(comps, 512);
     nseen = 0;
     for (int i = 0; i < n && !rt_unwinding; i++) {
+        /* Only the classes whose set_up_rules season_size_wraps.c wraps: those are the leagues that these rules
+         * meet in every later season. Another class keeps its own stages: GerRegional's constructor sets the
+         * stage count +0x2c to 1 (0x5dcc3d) for its South group, and the play-off rules dropped that stage
+         * (+0x30 -1) while its fixtures stayed, so a German start with the regional divisions stopped at
+         * league.cpp 3214 (League::add_result 0x685d30, stage test 0x685ddb..0x685de7) on its first match day
+         * (slice 20, found in 2007 and 2008 starts). */
+        if (!size_file(season_change_file(comps[i]))) continue;
         season_sizes_rules(comps[i]);
-        if (size_file(season_change_file(comps[i]))) note(comps[i]);
+        note(comps[i]);
     }
 }
 

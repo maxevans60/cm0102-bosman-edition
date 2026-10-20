@@ -59,6 +59,11 @@ typedef struct {
      * the other two cups enter it: "c:PR>Q2 c:Q1>Q2 e:Q3>PO e:PO>G" (c: Champions League, e: Europa League). */
     int ecl_meetings, ecl_through;
     const char *ecl_drops;
+    /* Slice 25 (2024/25 on): the matches of a club in the league phase of the Champions League, the Europa League
+     * and the Conference League (8, 8 and 6), 0 for a group stage. A league phase is the "Groups" round of 36
+     * (uc_groups 1, uc_group_clubs 36, uc_through 24): places 1 to 8 go to the round of 16 and 9 to 24 to the
+     * knockout phase play-offs ("KO PO" 16, then "KO" 16). */
+    int cl_league, uc_league, ecl_league;
 } SeasonUefa;
 
 /* The entry codes of the access list (club +0x1df) in a season with an access list (season_uefa_seeding.c).
@@ -191,6 +196,10 @@ int season_uefa_ecl_entrants(uint32_t ecl);
 uint32_t season_uefa_ecl_qual_table(uint32_t ecl, uint32_t rec, int *rounds);
 int season_uefa_ecl_direct_first(uint32_t ecl);
 void season_uefa_ecl_fill_drops(uint32_t ecl);
+
+/* Slice 25, season_uefa.c: "League Phase" for the stage name id 0x41f of competition object obj when row
+ * season gives it a league phase (regulations 2024/25, Art. 13.02: "league phase"), else NULL. */
+const char *season_uefa_stage_name(uint32_t obj, int season, int id);
 
 /* Slice 24, season_uefa.c: flag 0x4 (no away goals rule) in +0x0f of each two-legged round of a round table of
  * a season whose row has no away goals rule. The game only. */
