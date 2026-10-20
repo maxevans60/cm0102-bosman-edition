@@ -275,15 +275,15 @@ The colour of an attribute number by its value on the 1 to 20 scale, as in moder
 _Avoid_: attribute highlighting, heatmap
 
 **Team views screen**:
-The screen with the Best XI, Squad depth and Compare players tabs, opened from the Assistant drop-down on any club's squad screen (0.4.0, #22). It only shows players and never changes the team.
+The screen with the Best XI and Compare players tabs (Squad depth was a third tab until 0.6.0), opened from the Assistant drop-down on any club's squad screen (0.4.0, #22). It only shows players and never changes the team.
 _Avoid_: team screen, squad analysis
 
 **Best XI**:
-The eleven that the assistant selection would pick for a formation, drawn on a pitch.
+The eleven that the assistant selection would pick for a formation, drawn on a pitch with a card for each slot. Each card also shows the next two players for that position, and stars show each player's score.
 _Avoid_: best eleven, ideal team, first XI
 
 **Squad depth**:
-The table of the top three players for each position of a formation.
+The top three players for each position of a formation. Since 0.6.0 the Best XI cards show it, and the separate tab is gone.
 _Avoid_: depth chart, cover
 
 **Polygon analyser**:

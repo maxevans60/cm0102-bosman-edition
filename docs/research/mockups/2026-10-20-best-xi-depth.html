@@ -47,8 +47,7 @@ p { margin: 0 0 10px; color: var(--muted); max-width: 80ch; }
 /* a position card */
 .card { position: absolute; background: var(--panel); border: 1px solid var(--navy-edge); box-shadow: 0 2px 0 rgba(0,0,0,.5); }
 .card .pos { background: var(--navy); color: var(--yellow); font: bold 11px Tahoma; padding: 2px 6px; display: flex; justify-content: space-between; }
-.card .pos span:last-child { color: var(--muted); font-weight: normal; }
-.row { display: grid; grid-template-columns: 1fr 26px; align-items: center; padding: 0 4px 0 6px; height: 21px; font: 12px Tahoma; color: var(--light); }
+.row { display: grid; grid-template-columns: 1fr 74px; align-items: center; padding: 0 4px 0 6px; height: 21px; font: 12px Tahoma; color: var(--light); }
 .row.first { height: 24px; font: bold 13px Tahoma; color: #fff; }
 .row + .row { border-top: 1px solid rgba(255,255,255,.07); }
 .row .n { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
@@ -60,6 +59,27 @@ p { margin: 0 0 10px; color: var(--muted); max-width: 80ch; }
 .row.out .n { color: var(--unavail); }
 .legend { position: absolute; font: 11px Tahoma; color: var(--light); display: flex; gap: 14px; align-items: center; }
 .legend b { font-weight: bold; }
+.st { display: inline-flex; gap: 1px; justify-content: flex-end; }
+.st i { position: relative; width: 13px; height: 13px; display: inline-block; }
+.st i::before, .st i::after { content: ""; position: absolute; inset: 0;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+.st i::before { background: #2c3170; }
+.st i.f::after { background: var(--yellow); }
+.st i.h::after { background: linear-gradient(90deg, var(--yellow) 50%, transparent 50%); }
+.row.first .st i { width: 14px; height: 14px; }
+.row.out .st i.f::after, .row.out .st i.h::after { background: var(--unavail); }
+.row.out .st i.h::after { background: linear-gradient(90deg, var(--unavail) 50%, transparent 50%); }
+.shirt .st i { width: 11px; height: 11px; }
+.slot { position: absolute; width: 236px; background: var(--panel); border: 1px solid var(--navy-edge); box-shadow: 0 2px 0 rgba(0,0,0,.5); }
+.slot .pos { background: var(--navy); color: var(--yellow); font: bold 12px Tahoma; padding: 3px 8px; }
+.slot .ln3 { display: grid; grid-template-columns: 30px 78px 1fr; align-items: center; height: 22px; padding: 0 6px; font: 12px Tahoma; color: var(--light); }
+.slot .ln3 + .ln3 { border-top: 1px solid rgba(255,255,255,.07); }
+.slot .ln3 .k { color: var(--muted); font-size: 11px; }
+.slot .ln3.one { font-weight: bold; color: #fff; }
+.slot .ln3 .nm { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.slot .ln3 .nm i { font-style: normal; color: var(--muted); font-size: 10px; margin-left: 4px; }
+.slot .ln3.out .nm { color: var(--unavail); }
+.slot .ln3.out .st i.f::after { background: var(--unavail); }
 /* variant C: shirt markers */
 .shirt { position: absolute; width: 150px; text-align: center; }
 .shirt .tee { width: 30px; height: 26px; margin: 0 auto 2px; background: #e00000; border: 2px solid #fff;
@@ -76,10 +96,14 @@ p { margin: 0 0 10px; color: var(--muted); max-width: 80ch; }
 <body>
 <main>
 <h1>Best XI: one screen with the best three at each position</h1>
-<p>Three ways to show Best XI and Squad depth together, in widescreen (1280 x 800). The data is an example: Arsenal in July 2001, 4-4-2. Each card holds the player that Best XI picks first, then the next two for that position. The number is the score for the position, 1 to 20, in the attribute colours. Players who cannot play the next match show in grey with the reason. The two DC slots, and the two FC slots, share one card, as in Squad depth today. The tabs become Best XI and Compare players.</p>
+<p>Three ways to show Best XI and Squad depth together, in widescreen (1280 x 800). The data is an example: Arsenal in July 2001, 4-4-2. Each card holds the player that Best XI picks first, then the next two for that position. The stars show the score for the position (1 to 20) as half stars, 0.5 to 5, as Max asked on 2026-10-20. Players who cannot play the next match show in grey with the reason. The two DC slots, and the two FC slots, share one card, as in Squad depth today. The tabs become Best XI and Compare players.</p>
 
-<h2>A. Side-on pitch, cards in lines</h2>
-<p>The pitch lies across the screen, goal on the left. Each line of the formation is a column of cards. It uses the most width, so names never cut.</p>
+<h2>D. Side-on pitch, one card per slot (as Max's squad planner picture)</h2>
+<p>Max's picture of 2026-10-20: a card for each slot of the formation with 1st, 2nd and 3rd, the stars before the name. The two DC slots get a card each: the first name is the Best XI player of that slot, then the two best players for the position who are not in the eleven, so both DC cards show the same 2nd and 3rd.</p>
+<div class="frame"><div class="screen" id="d"></div></div>
+
+<h2>A. Side-on pitch, one card per slot (Max's pick)</h2>
+<p>The pitch lies across the screen, goal on the left. Each line of the formation is a column of cards, one card for each of the 11 slots, from left side at the top to right side at the bottom. Each card shows the Best XI player of the slot, then the two best players for the position who are not in the eleven.</p>
 <div class="frame"><div class="screen" id="a"></div></div>
 
 <h2>B. Upright pitch, as the tactics screen</h2>
@@ -102,21 +126,49 @@ const POS = {
   ML: {k: 1, p: [["Pires, R", 17], ["Van Bronckhorst, G", 13], ["Cole, A", 9]]},
   FC: {k: 2, p: [["Henry, T", 19], ["Bergkamp, D", 17], ["Kanu, N", 15], ["Wiltord, S", 15, "Sus"]]},
 };
+// The score 1 to 20 as 0.5 to 5 stars in half stars.
+const stars = s => { const h = Math.max(1, Math.round(s / 2)); let o = ""; for (let i = 1; i <= 5; i++) o += `<i class="${2 * i <= h ? "f" : 2 * i - 1 === h ? "h" : ""}"></i>`; return `<span class="st">${o}</span>`; };
 const band = s => s >= 16 ? "top" : s >= 11 ? "good" : s >= 6 ? "mid" : "low";
-const row = (pl, first) => `<div class="row${first ? " first" : ""}${pl[2] ? " out" : ""}"><span class="n">${pl[0]}${pl[2] ? `<i>${pl[2]}</i>` : ""}</span><span class="r ${band(pl[1])}">${pl[1]}</span></div>`;
+const row = (pl, first) => `<div class="row${first ? " first" : ""}${pl[2] ? " out" : ""}"><span class="n">${pl[0]}${pl[2] ? `<i>${pl[2]}</i>` : ""}</span>${stars(pl[1])}</div>`;
 function card(code, x, y, w) {
   const d = POS[code];
   const label = d.k > 1 ? `${code} x${d.k}` : code;
   const rows = d.p.map((pl, i) => row(pl, i < d.k)).join("");
-  return `<div class="card" style="left:${x}px;top:${y}px;width:${w}px"><div class="pos"><span>${label}</span><span>${d.k > 1 ? "first two, then next" : "first, then next"}</span></div>${rows}</div>`;
+  return `<div class="card" style="left:${x}px;top:${y}px;width:${w}px"><div class="pos"><span>${label}</span></div>${rows}</div>`;
 }
 const frame = `
 <div class="side"><div class="date">Saturday<br>14.7.01 AM</div><div>&larr; &nbsp; &rarr;</div><div>Continue<br>Game</div><div>Competitions</div><div>Nations<br>&amp; Clubs</div><div>Find</div><div class="opt">Game<br>Options</div></div>
 <div class="heading">Arsenal<div class="formation">Formation: 4-4-2 &#9662;</div></div>
 <div class="tabs"><div class="on">Best XI</div><div>Compare players</div></div>
 <div class="bottom"><div>Back</div><div>Next</div></div>`;
-const legend = `<span><b class="top">16-20</b></span><span><b class="good">11-15</b></span><span><b class="mid">6-10</b></span><span><b class="low">1-5</b></span><span style="color:var(--unavail)">Grey: cannot play the next match</span>`;
+const legend = `<span>${stars(20)} best fit for the place</span><span>${stars(10)} half as good</span><span style="color:var(--unavail)">Grey: cannot play the next match</span>`;
 
+// D: one card per slot, 1st 2nd 3rd, stars before the name.
+const slot = (label, code, i, x, y) => {
+  const d = POS[code], list = [d.p[i], ...d.p.slice(d.k, d.k + 2)];
+  const rows = list.map((pl, r) => `<div class="ln3${r === 0 ? " one" : ""}${pl[2] ? " out" : ""}"><span class="k">${["1st", "2nd", "3rd"][r]}</span>${stars(pl[1])}<span class="nm">&nbsp;${pl[0]}${pl[2] ? `<i>${pl[2]}</i>` : ""}</span></div>`).join("");
+  return `<div class="slot" style="left:${x}px;top:${y}px"><div class="pos">${label}</div>${rows}</div>`;
+};
+document.getElementById("d").innerHTML = frame + `<div class="content">
+  <div class="pitch" style="--dir:90deg;left:0;top:0;width:1104px;height:540px">
+    <div class="ln" style="left:551px;top:-2px;width:0;height:540px;border-width:0 0 0 2px"></div>
+    <div class="ln" style="left:487px;top:203px;width:130px;height:130px;border-radius:50%"></div>
+    <div class="ln" style="left:-2px;top:120px;width:150px;height:300px;border-left:0"></div>
+    <div class="ln" style="left:954px;top:120px;width:150px;height:300px;border-right:0"></div>
+  </div>
+  ${slot("GK", "GK", 0, 14, 222)}
+  ${slot("DL", "DL", 0, 270, 12)}${slot("DCL", "DC", 0, 270, 150)}${slot("DCR", "DC", 1, 270, 296)}${slot("DR", "DR", 0, 270, 434)}
+  ${slot("ML", "ML", 0, 560, 12)}${slot("MCL", "MC", 0, 560, 150)}${slot("MCR", "MC", 1, 560, 296)}${slot("MR", "MR", 0, 560, 434)}
+  ${slot("FCL", "FC", 0, 852, 150)}${slot("FCR", "FC", 1, 852, 296)}
+  <div class="legend" style="left:4px;top:546px">${legend}</div>
+</div>`;
+
+// A (Max's pick, 2026-10-20): one card for each of the 11 slots: the slot's Best XI player, then the two best
+// players for the position who are not in the eleven.
+const one = (label, code, i, x, y) => {
+  const d = POS[code], list = [d.p[i], ...d.p.slice(d.k, d.k + 2)];
+  return `<div class="card" style="left:${x}px;top:${y}px;width:220px"><div class="pos"><span>${label}</span></div>${list.map((pl, r) => row(pl, r === 0)).join("")}</div>`;
+};
 // A: side-on pitch, goal left.
 document.getElementById("a").innerHTML = frame + `<div class="content">
   <div class="pitch" style="--dir:90deg;left:0;top:0;width:1104px;height:540px">
@@ -125,11 +177,10 @@ document.getElementById("a").innerHTML = frame + `<div class="content">
     <div class="ln" style="left:-2px;top:120px;width:150px;height:300px;border-left:0"></div>
     <div class="ln" style="left:954px;top:120px;width:150px;height:300px;border-right:0"></div>
   </div>
-  ${card("GK", 12, 220, 190)}
-  ${card("DL", 236, 22, 210)}${card("DC", 236, 170, 210)}${card("DR", 236, 388, 210)}
-  ${card("ML", 500, 22, 210)}${card("MC", 500, 170, 210)}${card("MR", 500, 388, 210)}
-  ${card("FC", 800, 170, 220)}
-  <div class="legend" style="left:4px;top:546px">${legend}</div>
+  ${one("GK", "GK", 0, 14, 222)}
+  ${one("DL", "DL", 0, 250, 14)}${one("DCL", "DC", 0, 250, 150)}${one("DCR", "DC", 1, 250, 296)}${one("DR", "DR", 0, 250, 432)}
+  ${one("ML", "ML", 0, 560, 14)}${one("MCL", "MC", 0, 560, 150)}${one("MCR", "MC", 1, 560, 296)}${one("MR", "MR", 0, 560, 432)}
+  ${one("FCL", "FC", 0, 860, 150)}${one("FCR", "FC", 1, 860, 296)}
 </div>`;
 
 // B: upright pitch, goalkeeper at the bottom.
@@ -144,14 +195,13 @@ document.getElementById("b").innerHTML = frame + `<div class="content">
   ${card("ML", 182, 158, 180)}${card("MC", 382, 158, 340)}${card("MR", 742, 158, 180)}
   ${card("DL", 182, 316, 180)}${card("DC", 382, 316, 340)}${card("DR", 742, 316, 180)}
   ${card("GK", 462, 462, 180)}
-  <div class="legend" style="left:950px;top:20px;flex-direction:column;align-items:flex-start;gap:6px">${legend}</div>
 </div>`.replace(/left:(182|382|462|742)px/g, (m, v) => `left:${+v - 0}px`);
 
 // C: shirts.
 const shirt = (code, i, x, y) => {
   const d = POS[code], first = d.p[i], rest = d.p.slice(d.k).slice(0, 2);
-  const next = i === 0 ? rest.map(pl => `<span style="color:${pl[2] ? "var(--unavail)" : "inherit"}">${pl[0].split(",")[0]} <b class="${band(pl[1])}">${pl[1]}</b></span>`).join("") : "";
-  return `<div class="shirt" style="left:${x}px;top:${y}px"><div class="tee${code === "GK" ? " gk" : ""}"></div><div class="name">${first[0].split(",")[0]} <span class="r ${band(first[1])}">${first[1]}</span></div><div class="next">${next}</div></div>`;
+  const next = i === 0 ? rest.map(pl => `<span style="color:${pl[2] ? "var(--unavail)" : "inherit"}">${pl[0].split(",")[0]} ${stars(pl[1])}</span>`).join("") : "";
+  return `<div class="shirt" style="left:${x}px;top:${y}px"><div class="tee${code === "GK" ? " gk" : ""}"></div><div class="name">${first[0].split(",")[0]} ${stars(first[1])}</div><div class="next">${next}</div></div>`;
 };
 document.getElementById("c").innerHTML = frame + `<div class="content">
   <div class="pitch" style="--dir:0deg;left:170px;top:0;width:764px;height:566px">

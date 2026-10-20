@@ -156,6 +156,9 @@ static void strip_line(char *text, size_t room)
     int year = season_start_year();
     char db[DBFOLDER_NAME];
     season_screen_database_text(db, dbfolders_label_room(rt_screen_w));
+    /* Same game (Q152): the first draw of a character in a font moves the game's memory blocks. Setup Game
+     * drew "Hall Of Fame" before Extras, so the hint holds an "f" too: "off" then adds no new character, and
+     * the same-save runs rules-off and off equal normal. The hint shows with the season code off too. */
     int rules = season_code_on() && season_screen_rules_on();
     snprintf(text, room, "Season %d/%02d \xb7 %s \xb7 Changing rules %s", year, (year + 1) % 100, db,
              rules ? "on" : "off");
@@ -166,9 +169,8 @@ static void strip_line(char *text, size_t room)
     int unchecked = season_code_on() && year != SEASON_FIRST_YEAR && !strncmp(opt, "folder:", 7) &&
                     dbfolders_path(win_databases_root(), opt + 7, path, sizeof path) && !seasons_db_identify(path) &&
                     !season_dates_custom_check(path, &shift);
-    if (season_code_on())
-        snprintf(text + strlen(text), room - strlen(text), unchecked ? "\nAges could not be checked. Click to change"
-                                                                    : "\nClick to change");
+    snprintf(text + strlen(text), room - strlen(text), unchecked ? "\nAges could not be checked. Click for season, database and rules"
+                                                                : "\nClick for season, database and rules");
 }
 
 /* The strip: a button of the menu's look in the highlight style (0x822, yellow text, 0x5ed300). */

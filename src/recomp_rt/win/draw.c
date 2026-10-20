@@ -133,3 +133,52 @@ void draw_pitch(const DrawTarget *t, int x1, int y1, int x2, int y2)
     draw_pixel(t, cx, y1 + spot, DRAW_PITCH_LINE, 256);
     draw_pixel(t, cx, y2 - spot, DRAW_PITCH_LINE, 256);
 }
+
+/* The pitch on its side (Best XI since Max's play test of 0.6.0): the goals at the left and the right,
+ * stripes from top to bottom. */
+void draw_pitch_across(const DrawTarget *t, int x1, int y1, int x2, int y2)
+{
+    int w = x2 - x1, h = y2 - y1;
+    if (w < 8 || h < 8) return;
+    double mx = w / PITCH_L, my = h / PITCH_W;
+    int cx = x1 + w / 2, cy = y1 + h / 2;
+    for (int s = 0; s < 12; s++) {
+        int left = x1 + w * s / 12, right = x1 + w * (s + 1) / 12;
+        int corners[] = {left, y1, right, y1, right, y2 + 1, left, y2 + 1};
+        draw_polygon(t, corners, 4, s & 1 ? DRAW_PITCH_STRIPE : DRAW_PITCH_GRASS, 256);
+    }
+    int last[] = {x2, y1, x2 + 1, y1, x2 + 1, y2 + 1, x2, y2 + 1};
+    draw_polygon(t, last, 4, DRAW_PITCH_STRIPE, 256);
+
+    box(t, x1, y1, x2, y2, DRAW_PITCH_LINE);
+    draw_line(t, cx, y1, cx, y2, DRAW_PITCH_LINE);
+    draw_circle(t, cx, cy, (int)lround(9.15 * (mx < my ? mx : my)), DRAW_PITCH_LINE);
+    draw_pixel(t, cx, cy, DRAW_PITCH_LINE, 256);
+
+    int area_h = (int)lround(40.3 / 2 * my), area_d = (int)lround(16.5 * mx);
+    int goal_h = (int)lround(18.3 / 2 * my), goal_d = (int)lround(5.5 * mx);
+    int spot = (int)lround(11.0 * mx);
+    box(t, x1, cy - area_h, x1 + area_d, cy + area_h, DRAW_PITCH_LINE);
+    box(t, x2 - area_d, cy - area_h, x2, cy + area_h, DRAW_PITCH_LINE);
+    box(t, x1, cy - goal_h, x1 + goal_d, cy + goal_h, DRAW_PITCH_LINE);
+    box(t, x2 - goal_d, cy - goal_h, x2, cy + goal_h, DRAW_PITCH_LINE);
+    draw_pixel(t, x1 + spot, cy, DRAW_PITCH_LINE, 256);
+    draw_pixel(t, x2 - spot, cy, DRAW_PITCH_LINE, 256);
+}
+
+/* A five-pointed star of radius r around (cx, cy). fill: 0 empty, 1 the left half, 2 full. */
+void draw_star(const DrawTarget *t, int cx, int cy, int r, int fill, uint16_t colour, uint16_t empty)
+{
+    static const int unit[20] = {0, -100, 22, -31, 95, -31, 36, 12, 59, 81, 0, 38, -59, 81, -36, 12, -95, -31, -22, -31};
+    int xy[20];
+    for (int i = 0; i < 20; i += 2) {
+        xy[i] = cx + unit[i] * r / 100;
+        xy[i + 1] = cy + 1 + unit[i + 1] * r / 100;    /* the points reach 0.81 r down: one pixel lower */
+    }
+    draw_polygon(t, xy, 10, fill == 2 ? colour : empty, 256);
+    if (fill == 1 && cx > 0) {
+        DrawTarget left = *t;                      /* the left half: a target that ends at the middle */
+        if (left.w > cx) left.w = cx;
+        draw_polygon(&left, xy, 10, colour, 256);
+    }
+}

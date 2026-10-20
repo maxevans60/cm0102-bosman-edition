@@ -8,14 +8,15 @@
  *
  * The frame copies the club screen 0x454900 (docs/research/2026-10-15-team-views-frame-inventory.md):
  * the club's background picture, the heading with the club's name in its colours, the side bar, a tab
- * bar with Best XI, Squad depth and Compare players, and the Back/Next bar. The tabs hold empty panels
- * in this slice; slices 4 to 6 fill them. The Best XI tab draws a pitch (draw.c) over a panel widget,
- * after the game draws that widget (views_widget_drawn, from the widget draw wrap in names.c), and the
- * eleven over it (best_xi.c). The Squad depth tab is in squad_depth.c.
+ * bar with Best XI and Compare players, and the Back/Next bar. The Best XI tab draws a pitch on its side
+ * (draw.c) over a panel widget, after the game draws that widget (views_widget_drawn, from the widget draw
+ * wrap in names.c), and a card for each slot over it (best_xi.c), whose stars the runtime draws after their
+ * widgets. Best XI holds the Squad depth tab of 0.4.0 since Max's play test of 0.6.0: each card shows the
+ * best three players of its slot (mockup docs/research/mockups/2026-10-20-best-xi-depth.html, option A).
  *
- * Node slots of the screen: 0 club, 1 team (0 = first team), 2 the chosen tactic of Best XI and Squad
- * depth, 4 tab (1 to 3), 5 and 6 the heading colours. Only numbers, so the screen needs no leave function
- * (inventory section 5).
+ * Node slots of the screen: 0 club, 1 team (0 = first team), 2 the chosen tactic of Best XI, 4 tab (1 Best
+ * XI, 2 Compare players; 3 was Compare players until the Squad depth tab went), 5 and 6 the heading
+ * colours. Only numbers, so the screen needs no leave function (inventory section 5).
  *
  * The screen only reads the game. It never changes the team or any other data. */
 #include "win.h"
@@ -53,9 +54,9 @@
 #define NO_DRAW 0xaebe0cu           /* not 0: the draw functions of the original draw nothing */
 #define DRAW_SURFACE 0xaebde4u      /* the surface that the draw functions of the original draw on */
 
-#define TAB_ID 0x61u                /* the tabs; data 1 to 3. No shared input code uses 0x61. */
+#define TAB_ID 0x61u                /* the tabs; data 1 and 2. No shared input code uses 0x61. */
 #define TAB_ENTRY 0xd4u
-#define TABS 3
+#define TABS 2
 #define REBUILD 0xfffffff5u         /* -0xb */
 
 static uint32_t scratch;            /* a block of the game's heap for the calls that write through pointers */
@@ -65,6 +66,19 @@ static uint32_t scratch;            /* a block of the game's heap for the calls 
 #define COMPARE_SLOT 8               /* node slots 8 and 9: the players of the Compare tab, 10 and 11 their pages */
 
 static int pitch_widget = -1;       /* the panel that the pitch covers, on the screen built last */
+
+/* The stars of the Best XI cards: each a widget with no text, the runtime draws its stars after it. */
+#define STAR_WIDGETS 40
+static struct { int widget, halves, out; } stars[STAR_WIDGETS];
+static int star_count;
+
+void views_stars(int widget, int halves, int out)
+{
+    if (widget < 0 || star_count >= STAR_WIDGETS) return;
+    stars[star_count].widget = widget;
+    stars[star_count].halves = halves;
+    stars[star_count++].out = out;
+}
 
 static uint32_t call_this(uint32_t fn, uint32_t self, int n, const uint32_t *args)
 {
@@ -141,7 +155,7 @@ static void heading(uint32_t club, uint32_t team)
 /* Returns the y below the tab row. */
 static int tab_bar(int selected)
 {
-    static const char *const names[TABS] = {"Best XI", "Squad depth", "Compare players"};
+    static const char *const names[TABS] = {"Best XI", "Compare players"};
     uint32_t e = scratch, y = scratch + TABS * TAB_ENTRY;
     for (uint32_t i = 0; i < TABS; i++) {
         uint32_t at = e + i * TAB_ENTRY;
@@ -176,18 +190,16 @@ static void views_build(void)
     int top = tab_bar(tab), bottom = 545;
 
     pitch_widget = -1;
+    star_count = 0;
     compare_clear();                /* the Compare tab builds its own again below */
     if (tab == 1) {
-        /* Best XI: the pitch on the left, the table on the right. The players' widgets come after the
-         * pitch widget, so the game draws them over the pitch. */
-        panel(100, top, 440, bottom);
-        int x1 = 104, y1 = top + 8, x2 = 436, y2 = bottom - 8;
+        /* Best XI: the pitch over the whole panel, goal on the left. The cards' widgets come after the pitch
+         * widget, so the game draws them over the pitch. */
+        panel(100, top, 790, bottom);
+        int x1 = 104, y1 = top + 6, x2 = 786, y2 = bottom - 6;
         pitch_widget = plain_widget(x1, y1, x2, y2);
-        views_pitch_rect(&x1, &y1, &x2, &y2);
-        panel(450, top, 790, bottom);
-        best_xi_build(club, team, scratch + TEXT_AT, x1, y1, x2, y2, 460, top + 6, 780, bottom - 6, node_slot(6),
-                      node_slot(5));
-    } else if (tab == 3) {
+        best_xi_build(club, team, scratch + TEXT_AT, x1, y1, x2, y2, node_slot(6));
+    } else if (tab == 2) {
         uint32_t a = node_slot(COMPARE_SLOT), b = node_slot(COMPARE_SLOT + 1);
         if (!a || !b) {
             compare_first_two(club, &a, &b);
@@ -196,9 +208,6 @@ static void views_build(void)
         }
         compare_build(scratch + TEXT_AT, a, b, 100, top, 790, bottom, club, (int)node_slot(COMPARE_SLOT + 2),
                       (int)node_slot(COMPARE_SLOT + 3));
-    } else if (tab == 2) {
-        panel(100, top, 790, bottom);
-        squad_depth_build(club, team, scratch + TEXT_AT, 110, top + 6, 780, bottom - 6, node_slot(6));
     } else {
         panel(100, top, 790, bottom);
     }
@@ -253,37 +262,6 @@ static int on_top(void)
     return node && rd32(g_mem, node) == build_fn();
 }
 
-/* The largest pitch of 68 by 105 that fits the box (screen pixels), in its middle, but at least as wide as
- * five name boxes and their gaps (Q154) when the box allows: then the pitch is wider than 68 by 105. */
-#define MIN_PITCH_W (5 * (VIEWS_BOX_PX + 4) + 4)
-static void fit_pitch(int *x1, int *y1, int *x2, int *y2)
-{
-    int bw = *x2 - *x1, bh = *y2 - *y1;
-    if (bw * 105 > bh * 68) {
-        int pw = bh * 68 / 105;
-        if (pw < MIN_PITCH_W) pw = MIN_PITCH_W < bw ? MIN_PITCH_W : bw;
-        *x1 += (bw - pw) / 2;
-        *x2 = *x1 + pw;
-    } else {
-        int ph = bw * 105 / 68;
-        *y1 += (bh - ph) / 2;
-        *y2 = *y1 + ph;
-    }
-}
-
-/* The pitch of a box in classic numbers, back in classic numbers: the box scales to the screen as the
- * widget create does (display.c), the pitch fits it there, and its edges scale back. */
-void views_pitch_rect(int *x1, int *y1, int *x2, int *y2)
-{
-    int w = (int)rt_screen_w, h = (int)rt_screen_h;
-    int sx1 = *x1 * w / 800, sy1 = *y1 * h / 600, sx2 = (*x2 + 1) * w / 800 - 1, sy2 = (*y2 + 1) * h / 600 - 1;
-    fit_pitch(&sx1, &sy1, &sx2, &sy2);
-    *x1 = sx1 * 800 / w;
-    *y1 = sy1 * 600 / h;
-    *x2 = sx2 * 800 / w;
-    *y2 = sy2 * 600 / h;
-}
-
 /* The widget draw wrap (names.c) calls this after the game draws widget w (an address). The pitch goes
  * on the game's draw surface inside the panel's box, so the screen dumps hold it too. */
 void views_widget_drawn(uint32_t w)
@@ -291,15 +269,34 @@ void views_widget_drawn(uint32_t w)
     compare_widget_drawn(w);
     season_screen_widget_drawn(w);      /* the Choose Season screen (0.6.0 slice 13) */
     if (pitch_widget < 0 || !on_top() || rd32(g_mem, NO_DRAW)) return;
-    if (w != display() + WIDGETS + (uint32_t)pitch_widget * WIDGET_SIZE) return;
+    uint32_t first = display() + WIDGETS;
+    if (w < first || (w - first) % WIDGET_SIZE) return;
+    int index = (int)((w - first) / WIDGET_SIZE), star = -1;
+    for (int i = 0; i < star_count; i++)
+        if (stars[i].widget == index) star = i;
+    if (index != pitch_widget && star < 0) return;
     uint32_t surface = rd32(g_mem, DRAW_SURFACE);
     if (!surface) return;
     DrawTarget t = {g_mem + rd32(g_mem, surface + 0x14), rd32(g_mem, surface + 0x10),
                     (int)rd32(g_mem, surface + 8), (int)rd32(g_mem, surface + 0xc)};
     int x1 = (int32_t)rd32(g_mem, w + 0x10), y1 = (int32_t)rd32(g_mem, w + 0x14);
     int x2 = (int32_t)rd32(g_mem, w + 0x18), y2 = (int32_t)rd32(g_mem, w + 0x1c);
-    fit_pitch(&x1, &y1, &x2, &y2);
-    draw_pitch(&t, x1, y1, x2, y2);
+    if (index == pitch_widget) {
+        draw_pitch_across(&t, x1, y1, x2, y2);
+        return;
+    }
+    /* Five stars, right-aligned in the widget, each as high as the widget allows: yellow, or grey for a
+     * player who cannot play the next match, on the dark blue of an empty star. */
+    int h = y2 - y1 + 1, size = h - 2, gap = 1;
+    if (5 * size + 4 * gap > x2 - x1 + 1) size = (x2 - x1 + 1 - 4 * gap) / 5;
+    if (size < 4) return;
+    uint16_t on = stars[star].out ? 0x8c53u : 0xf700u, off = 0x298eu;   /* (138, 138, 156), (245, 224, 0), (44, 49, 112) */
+    int r = size / 2, cy = y1 + h / 2;
+    for (int i = 0; i < 5; i++) {
+        int cx = x2 - (4 - i) * (size + gap) - r;
+        int fill = stars[star].halves >= 2 * (i + 1) ? 2 : stars[star].halves == 2 * i + 1 ? 1 : 0;
+        draw_star(&t, cx, cy, r, fill, on, off);
+    }
 }
 
 void views_open(uint32_t club, uint32_t team)
