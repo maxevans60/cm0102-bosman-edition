@@ -345,6 +345,28 @@ static void change_into_era(uint32_t serie_a)
     }
 }
 
+/* The last season of each group club: its division (+0x5b) and final place (+0x5f, row i is place i + 1), from the
+ * group's table while it still holds that season (its first row has played: a table of a new season has 0, row
+ * +0x11, as check_complete 0x689b51 reads it). ItaCup::select_entrants
+ * 0x63faf0 takes its lower clubs by them (0x63fc69..0x63fc93, 0x63fce6..0x63fd08) and its sort 0x640590 reads the
+ * season of that division: in a 2014 game with the extra division no group club had them (the cup's loop never
+ * ended, then comp_stats.CPP 1664). The cup can start before or after Serie A in the pass, so both mark them. */
+static void mark_last_season(void)
+{
+    for (int i = 0; i < GROUPS; i++) {
+        uint32_t obj = object_of(GROUP_KEY[i]), rec = record_of(GROUP_KEY[i]);
+        uint32_t rows = obj ? rd32(g_mem, obj + 0xb1) : 0;
+        if (!obj || !readable(rows) || !g_mem[rows + 0x11]) continue;
+        int n = (int16_t)rd16(g_mem, obj + 0x3e);
+        for (int k = 0; k < n && n <= 60 && !rt_unwinding; k++) {
+            uint32_t club = row_club(obj, k, NULL);
+            if (!readable(club)) continue;
+            wr32(g_mem, club + 0x5b, rec);
+            g_mem[club + 0x5f] = (uint8_t)(k + 1);
+        }
+    }
+}
+
 /* The chain of the Serie C era, in place of ItaSerA::process_promotion_relegation_chain 0x642410. */
 static void chain(uint32_t serie_a)
 {
@@ -356,21 +378,7 @@ static void chain(uint32_t serie_a)
         if (list[i]) call_this(rd32(g_mem, rd32(g_mem, list[i]) + 0xa4), list[i], 0, NULL);
     if (g[2] && !rt_unwinding) call_this(rd32(g_mem, rd32(g_mem, g[2]) + 0xa4), g[2], 0, NULL);
     if (rt_unwinding || !a || !b) return;
-    /* The last season of each group club: its division (+0x5b) and final place (+0x5f, row i is place i + 1), before any
-     * club moves. ItaCup::select_entrants 0x63faf0 takes its lower clubs by them (0x63fc69..0x63fc93, 0x63fce6..
-     * 0x63fd08) and its sort 0x640590 reads the season of that division (a 2014 game with the extra division had no
-     * group club with them: the cup's loop never ended, then comp_stats.CPP 1664). */
-    for (int i = 0; i < GROUPS; i++) {
-        if (!g[i]) continue;
-        uint32_t rec = record_of(GROUP_KEY[i]);
-        int n = (int16_t)rd16(g_mem, g[i] + 0x3e);
-        for (int k = 0; k < n && n <= 60 && !rt_unwinding; k++) {
-            uint32_t club = row_club(g[i], k, NULL);
-            if (!readable(club)) continue;
-            wr32(g_mem, club + 0x5b, rec);
-            g_mem[club + 0x5f] = (uint8_t)(k + 1);
-        }
-    }
+    mark_last_season();
     if (rt_unwinding) return;
     /* Serie A and B, 4 and 4 in pairs (0x64248e); B and each group in pairs (as 0x6424b6, 0x6424de). */
     uint32_t ab[6] = {a, b, 1, 1, 4, 4};
@@ -760,4 +768,21 @@ uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position)
     }
     fprintf(stderr, "recomp: serie c: Coppa Italia: the lower places filled to %u from the groups\n", count);
     return count;
+}
+
+void o_0063faf0(void);
+
+/* ItaCup::select_entrants, thiscall (): in the Serie C era the groups that still hold last season mark their clubs
+ * first (mark_last_season), as the chain does when Serie A starts first. */
+RT_WRAP(0063faf0, ita_cup_entrants)
+{
+    uint32_t cup = cpu.ecx;
+    int y = (int16_t)rd16(g_mem, cup + 0x40);
+    if (era_of_year(y) || era_of_year(y + 1)) {
+        uint32_t saved = cpu.ecx;
+        mark_last_season();
+        if (rt_unwinding) return;
+        cpu.ecx = saved;
+    }
+    o_0063faf0();
 }
