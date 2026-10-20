@@ -210,8 +210,10 @@ def run_load(program, game, work):
         if r.returncode != 0:
             fails.append(f"load {days}: the loaded game ended with code {r.returncode} ({again})")
         fails += [f"load {days}: message box {b}" for b in ufr.BOX.findall(r.stderr)]
-        if "new competition new_conference_league made for 2021 (entry 3, record" not in r.stderr or \
-                "from the save" not in r.stderr:
+        # The module logs the game year of the load (2022 for a save of February 2022); the object reads its own
+        # year from its saved file.
+        if not re.search(r"new competition new_conference_league made for 20(21|22) \(entry 3, record \d+\) from the save",
+                         r.stderr):
             fails.append(f"load {days}: the Conference League was not made again from the save")
         if os.path.exists(report):
             lines = ufr.uefa_lines(report)
