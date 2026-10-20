@@ -327,6 +327,7 @@ uint32_t rt_season_text_format(uint32_t original);
  * these. In the base game each gives the original's value. */
 uint32_t rt_club_world_annual(void);
 uint32_t rt_club_world_step(uint32_t original);
+uint32_t rt_oceania_step(uint32_t original);
 uint32_t rt_club_world_month(uint32_t original);
 uint32_t rt_club_world_day(uint32_t original);
 uint32_t rt_club_world_waits(uint32_t obj);

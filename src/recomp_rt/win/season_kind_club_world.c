@@ -131,16 +131,23 @@ static int start_edition(const char *file, int start)
 
 /* ---- The year steps of tools/recomp/seasons.py (rt.h) ---- */
 
-uint32_t rt_club_world_annual(void) { return (uint32_t)season_game(); }
-uint32_t rt_club_world_step(uint32_t original) { return season_game() ? 1u : original; }
-uint32_t rt_club_world_month(uint32_t original) { return season_game() ? 6u : original; }   /* 0-based: July */
-uint32_t rt_club_world_day(uint32_t original) { return season_game() ? 1u : original; }
+/* Each site changes only when the table has rows of the class: with no table (or no row) the kind changes
+ * nothing (Q248), so these give the original's value too. Else a season game with no table got the 1 July date
+ * with the original's year (same-save run rules-on, 2026-10-20). */
+static int cwc_rows(void) { return season_game() && last_row_season("world_club_champ") > 0; }
+static int oceania_rows(void) { return season_game() && last_row_season("oceania_club_champ") > 0; }
+
+uint32_t rt_club_world_annual(void) { return (uint32_t)cwc_rows(); }
+uint32_t rt_club_world_step(uint32_t original) { return cwc_rows() ? 1u : original; }
+uint32_t rt_club_world_month(uint32_t original) { return cwc_rows() ? 6u : original; }   /* 0-based: July */
+uint32_t rt_club_world_day(uint32_t original) { return cwc_rows() ? 1u : original; }
+uint32_t rt_oceania_step(uint32_t original) { return oceania_rows() ? 1u : original; }
 
 /* The class's step after the patches above. */
 static int step_of(const char *file)
 {
-    if (!strcmp(file, "world_club_champ") || !strcmp(file, "oceania_club_champ"))
-        return (int)rt_club_world_step(2u);
+    if (!strcmp(file, "world_club_champ")) return (int)rt_club_world_step(2u);
+    if (!strcmp(file, "oceania_club_champ")) return (int)rt_oceania_step(2u);
     return 1;
 }
 

@@ -96,7 +96,7 @@ PATCHES = {
     # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
     # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
     0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
-    0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
+    0x797DBE: (2, "rt_oceania_step(2u)"),       # OceaniaClubChamp::start_new_season: one edition a year
     0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
     0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
     # Slice 26c (season_club_cups.c): the club count of the CONCACAF Champions Cup (Con_Champ) by season, 8 in
