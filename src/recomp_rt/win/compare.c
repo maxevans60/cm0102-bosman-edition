@@ -6,11 +6,17 @@
  * Compare players tab of the Team views screen (views.c), where the name box of each side is a drop-down
  * with the squad.
  *
+ * - The look is the original comparison screen's (0x876520, Max 2026-10-20: "make it seem identical font
+ *   etc"; docs/research/2026-10-20-best-xi-original-look.md section 3): the names of the attributes in pale
+ *   grey [0xae3184] and the numbers in font 2, rows of the height of font 2, player 1 in the original's P1
+ *   colour (green [0xae31aa]) and player 2 in its P2 colour (red [0xae31a8]). The higher number of a pair
+ *   shows in its player's colour, an equal pair in yellow [0xaebdec] and the lower number in pale grey, as
+ *   the original colours its one number. A hidden value is "-" in the original's orange [0xaebdd4].
  * - Each side lists the profile's attribute groups (compare_layout.c, as the profile with
- *   attribute_groups on), the numbers in the attribute colours. A white frame marks the higher number of
- *   each pair. When the rows do not fit in one column (classic mode), the groups go in two columns.
+ *   attribute_groups on). When the rows do not fit in one column (classic mode), the groups go in two
+ *   columns.
  * - The polygon has eight axes, each the average of its shown attributes; two goalkeepers get the
- *   goalkeeper axes. Player 1 is blue, player 2 orange; the shapes overlap with alpha. Under the polygon a
+ *   goalkeeper axes. Player 1 is green, player 2 red; the shapes overlap with alpha. Under the polygon a
  *   table gives the value of each axis and is the legend.
  * - Only shown values: the profile's attribute getters (1 to 20). An attribute that the game masks for the
  *   viewer shows "-" and does not count (Q111).
@@ -57,8 +63,12 @@
 #define CHOOSE2_ID 0x64u
 #define PROFILE_ID 0x7d7u           /* a link to a staff profile, data the staff record (0x764b2a) */
 
-#define BLUE 0x4cdfu                /* player 1: (74, 155, 255) */
-#define ORANGE 0xfcc5u              /* player 2: (255, 154, 46) */
+#define P1_COLOUR 0xae31aau         /* u16: green, the original's colour of player 1 (0x876520) */
+#define P2_COLOUR 0xae31a8u         /* u16: red, its colour of player 2 */
+#define PALE 0xae3184u              /* u16: pale grey, the attribute names of the original's table */
+#define MASKED 0xaebdd4u            /* u16: orange, the original's " -" of a hidden value */
+#define BLUE rd16(g_mem, P1_COLOUR)  /* player 1 */
+#define ORANGE rd16(g_mem, P2_COLOUR) /* player 2 */
 #define GRID 0x2951u                /* the rings and spokes: (42, 42, 138) */
 #define WHITE 0xffffu
 #define DARK 0x0841u                /* the text in the name boxes */
@@ -66,8 +76,8 @@
 #define BACKDROP 0x0867u            /* the middle panel's fill: (10, 15, 60), the screen colour of the prototype */
 #define BACKDROP_ALPHA 224
 
-#define FONT 1
-#define ROW_PX VIEWS_ROW_PX         /* a row of a list, screen pixels */
+#define FONT 2                      /* the original's table font (0x879a4f) */
+#define ROW_PX 19                   /* a row of a list, screen pixels: font 2 is 18 pixels high */
 #define GAP_PX 8
 #define MARKS 64
 #define SMALL_PX 80                /* a smaller polygon radius gets the short axis names */
@@ -252,7 +262,7 @@ static int page_size(int bottom)
 static void item(uint32_t popup, const char *text, uint32_t id, uint32_t data)
 {
     win_put_str(buf, text, VIEWS_TEXT_SIZE);
-    uint32_t w[18] = {2, 0, 0, 0, 0, 0, 0, 0x10, rd16(g_mem, POPUP_COLOUR), rd16(g_mem, ITEM_HIGHLIGHT), 1, FONT,
+    uint32_t w[18] = {2, 0, 0, 0, 0, 0, 0, 0x10, rd16(g_mem, POPUP_COLOUR), rd16(g_mem, ITEM_HIGHLIGHT), 1, 1,
                       rd16(g_mem, ITEM_TEXT), buf, 0, id, data, popup};
     call_this(WIDGET_CREATE, display(), 18, w);
 }
@@ -262,7 +272,7 @@ static void chooser(int x1, int y1, int x2, int y2, uint32_t colour, const char 
 {
     win_put_str(buf, name, VIEWS_TEXT_SIZE);
     uint32_t b[12] = {(uint32_t)cx_(x1), (uint32_t)cy_(y1), (uint32_t)cx_(x2), (uint32_t)cy_(y2), 0x30, colour, 0xc,
-                      FONT, DARK, buf, 0, 0};
+                      FONT, rd16(g_mem, PALE), buf, 0, 0};
     uint32_t button = (uint32_t)(int32_t)(int16_t)call_this(BUTTON, SCREENS, 12, b);
     uint32_t a[11] = {0, 0, 0, 0, 0, 0, 0, 0, 0x130, rd16(g_mem, POPUP_COLOUR), button};
     uint32_t popup = (uint32_t)(int32_t)(int16_t)call_this(AREA_CREATE, display(), 11, a);
@@ -349,8 +359,10 @@ static void side(const Sides *s, const Player *me, const Player *other, int i, i
     const Layout *l = &s->l[i], *across = &s->l[!i];
     panel_at(x1, y1, x2, y2);
     uint32_t colour = i == 0 ? BLUE : ORANGE;
+    (void)across;
     if (club) chooser(x1 + 4, y1 + 4, x2 - 4, y1 + 4 + ROW_PX, colour, me->name, club, id, page);
-    else text_at(x1 + 4, y1 + 4, x2 - 4, y1 + 4 + ROW_PX, 0x30, colour, DARK, 0xc, me->name, PROFILE_ID, me->staff);
+    else text_at(x1 + 4, y1 + 4, x2 - 4, y1 + 4 + ROW_PX, 0x30, colour, rd16(g_mem, PALE), 0xc, me->name, PROFILE_ID,
+                 me->staff);
     text_at(x1 + 4, y1 + 6 + ROW_PX, x2 - 4, y1 + 6 + 2 * ROW_PX, 0, 0, rd16(g_mem, LIST_TEXT), 0xc, me->line, 0, 0);
     int top = y1 + 10 + 2 * ROW_PX, col_w = l->name_w + s->value_w;
     for (int c = 0; c < l->columns; c++) {
@@ -363,14 +375,17 @@ static void side(const Sides *s, const Player *me, const Player *other, int i, i
                     text_at(x, y, x + col_w, y + ROW_PX - 1, 0, 0, rd16(g_mem, ITEM_HIGHLIGHT), 1, l->names[r], 0, 0);
                     continue;
                 }
-                text_at(x, y, x + l->name_w - 1, y + ROW_PX - 1, 0, 0, rd16(g_mem, LIST_TEXT), 1, l->names[r], 0, 0);
+                text_at(x, y, x + l->name_w - 1, y + ROW_PX - 1, 0, 0, rd16(g_mem, PALE), 1, l->names[r], 0, 0);
                 char v[8];
                 int mine = me->attr[k], theirs = other->attr[k];
                 snprintf(v, sizeof v, mine ? "%d" : "-", mine);
-                int w = text_at(x + l->name_w, y, x + col_w - 1, y + ROW_PX - 2, 0, 0,
-                                mine ? columns_attribute_colour(mine) : rd16(g_mem, LIST_TEXT), 0xc, v, 0, 0);
-                if (mine && theirs && mine > theirs && has_row(across, k) && shown.marks < MARKS)
-                    shown.mark[shown.marks++] = w;
+                /* The original's colours of a pair: the higher in the player's colour, equal in yellow. */
+                uint32_t c = !mine                                         ? rd16(g_mem, MASKED)
+                             : !theirs || !has_row(across, k)              ? rd16(g_mem, PALE)
+                             : mine > theirs                               ? colour
+                             : mine == theirs                              ? rd16(g_mem, ITEM_HIGHLIGHT)
+                                                                           : rd16(g_mem, PALE);
+                text_at(x + l->name_w, y, x + col_w - 1, y + ROW_PX - 2, 0, 0, c, 0xc, v, 0, 0);
             }
         }
     }
@@ -417,8 +432,11 @@ static void middle(const Sides *s, const Player *p, int x1, int y1, int x2, int 
             char v[16];
             compare_value_text(shown.value[c][i], v, sizeof v);
             int vx = tx + label_w + c * value_w + ROW_PX / 2, mine = shown.value[c][i], theirs = shown.value[!c][i];
-            int w = text_at(vx, y, vx + 40, y + ROW_PX - 2, 0, 0, c ? ORANGE : BLUE, 0xc, v, 0, 0);
-            if (mine >= 0 && theirs >= 0 && mine > theirs && shown.marks < MARKS) shown.mark[shown.marks++] = w;
+            uint32_t vc = mine < 0 || theirs < 0 ? rd16(g_mem, PALE)
+                          : mine > theirs        ? (c ? ORANGE : BLUE)
+                          : mine == theirs       ? rd16(g_mem, ITEM_HIGHLIGHT)
+                                                 : rd16(g_mem, PALE);
+            text_at(vx, y, vx + 48, y + ROW_PX - 2, 0, 0, vc, 0xc, v, 0, 0);
         }
     }
 

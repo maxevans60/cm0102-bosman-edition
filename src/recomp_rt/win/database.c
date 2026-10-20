@@ -69,12 +69,7 @@ extern const uint32_t rt_site_setup_menu, rt_site_setup_subheading;
 #define CANNOT_GO_BACK 0x7fec60u /* thiscall on S (any): 0 when there is a screen to go back to */
 #define SIDE_BAR_INPUT 0x7615d0u /* cdecl (widget): 0 when it does not handle the click */
 #define GAME_INPUT 0x7643d0u     /* cdecl (widget): the game's own actions, Back among them */
-#define WIDGET_CREATE 0x55f990u  /* thiscall on a Display, 18 args */
-#define DISPLAYS 0xb74c4cu       /* the Display of a player slot, 0x300 bytes apart */
-#define PLAYER_SLOT 0xb77c7au    /* s16: the player slot that has the turn */
-#define NAVY 0xaebe04u           /* u16 colours of the original (include/gui_utils.h) */
-#define TEXT_YELLOW 0xaebdecu
-#define TEXT_LIGHT 0xae3184u
+#define TEXT_LIGHT 0xae3184u   /* u16 colours of the original (include/gui_utils.h) */
 #define HEADING_RED 0xae31a8u
 
 #define MENU_Y 145               /* the grid: the original's top, rows of ROW_H pixels (classic numbers) */
@@ -83,8 +78,8 @@ extern const uint32_t rt_site_setup_menu, rt_site_setup_subheading;
 #define STRIP_Y2 137
 
 /* Runtime memory for the strip text and the Extras items (made at the first Setup Game build). */
-static uint32_t strip_text, extras_items;
-#define STRIP_ROOM 0x100u
+static uint32_t strip_item, extras_items;
+#define EXTRAS_TEXT 0x100u      /* the text buffer of the Extras build */
 
 static uint32_t call(uint32_t fn, int n, const uint32_t *args)
 {
@@ -101,11 +96,6 @@ static uint32_t call_this(uint32_t fn, uint32_t self, int n, const uint32_t *arg
     uint32_t r = rt_callback(fn, n, args);
     cpu = saved;
     return r;
-}
-
-static uint32_t display(void)
-{
-    return rd32(g_mem, DISPLAYS + (uint32_t)(int32_t)(int16_t)rd16(g_mem, PLAYER_SLOT) * 0x300u);
 }
 
 static void fill_item(uint32_t item, const char *text, uint32_t id)
@@ -156,12 +146,16 @@ static void strip_line(char *text, size_t room)
     int year = season_start_year();
     char db[DBFOLDER_NAME];
     season_screen_database_text(db, dbfolders_label_room(rt_screen_w));
-    /* Same game (Q152): the first draw of a character in a font moves the game's memory blocks. Setup Game
-     * drew "Hall Of Fame" before Extras, so the hint holds an "f" too: "off" then adds no new character, and
-     * the same-save runs rules-off and off equal normal. The hint shows with the season code off too. */
     int rules = season_code_on() && season_screen_rules_on();
-    snprintf(text, room, "Season %d/%02d \xb7 %s \xb7 Changing rules %s", year, (year + 1) % 100, db,
-             rules ? "on" : "off");
+    /* Same game (Q152), from a trace of the game's heap with changing rules on and off:
+     * - the game copies the text into a block of its heap for a moment (sizes in steps of 16 bytes), so "on"
+     *   gets a space and the text has the same length in both states;
+     * - the original's text engine makes the work memory of a glyph the first time a font draws it (T2K,
+     *   docs/research/2026-10-16-hd-text.md), so "from" draws the "f" of "off" first in both states, as
+     *   "Hall Of Fame" did before the "Changing rules" item of slice 13.
+     * Then the same-save runs rules-off and off equal normal. */
+    snprintf(text, room, "Season %d/%02d from July %d \xb7 %s \xb7 Changing rules %s", year, (year + 1) % 100, year,
+             db, rules ? "on " : "off");
     /* Slice 11b: a Custom database in another season whose dates could not be checked keeps its dates. */
     const char *opt = options_string(OPT_DATABASE);
     char path[1100];
@@ -169,21 +163,18 @@ static void strip_line(char *text, size_t room)
     int unchecked = season_code_on() && year != SEASON_FIRST_YEAR && !strncmp(opt, "folder:", 7) &&
                     dbfolders_path(win_databases_root(), opt + 7, path, sizeof path) && !seasons_db_identify(path) &&
                     !season_dates_custom_check(path, &shift);
-    snprintf(text + strlen(text), room - strlen(text), unchecked ? "\nAges could not be checked. Click for season, database and rules"
-                                                                : "\nClick for season, database and rules");
+    if (unchecked) snprintf(text + strlen(text), room - strlen(text), " \xb7 Ages not checked");
 }
 
-/* The strip: a button of the menu's look in the highlight style (0x822, yellow text, 0x5ed300). */
+/* The strip: a menu of one item, made by the original's menu builder in the highlight style (bit 0 of the
+ * highlight bits: style 0x822, yellow text, 0x5ed300). */
 static void make_strip(void)
 {
-    if (!strip_text) strip_text = win_static_alloc(STRIP_ROOM);
-    char text[STRIP_ROOM];
+    if (!strip_item) strip_item = win_static_alloc(ITEM_SIZE);
+    char text[ITEM_TEXT_SIZE];
     strip_line(text, sizeof text);
-    win_put_str(strip_text, text, STRIP_ROOM);
-    uint32_t navy = rd16(g_mem, NAVY);
-    uint32_t w[18] = {2, 110, STRIP_Y1, 780, STRIP_Y2, 0, 0, 0x822, navy, navy, 0xc, 3, rd16(g_mem, TEXT_YELLOW),
-                      strip_text, 0, SEASON_ID, 0, 0xffffffffu};
-    call_this(WIDGET_CREATE, display(), 18, w);
+    fill_item(strip_item, text, SEASON_ID);
+    call(MENU, 11, (uint32_t[11]){110, STRIP_Y1, 780, STRIP_Y2, 1, 1, 3, 1, strip_item, 1, 0});
 }
 
 /* The menu builder, cdecl (x1, y1, x2, y2, columns, rows, font, count, items, highlight bits, sort). */
@@ -227,8 +218,8 @@ RT_WRAP(005ed300, menu_build)
 static uint32_t extras_text(const char *s)
 {
     static uint32_t at;
-    if (!at) at = win_static_alloc(STRIP_ROOM);
-    win_put_str(at, s, STRIP_ROOM);
+    if (!at) at = win_static_alloc(EXTRAS_TEXT);
+    win_put_str(at, s, EXTRAS_TEXT);
     return at;
 }
 

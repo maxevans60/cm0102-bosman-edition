@@ -25,8 +25,6 @@ int tactics_list(uint32_t manager, Tactic *out, int max);
  * numbers, the pitch on its side). Returns the number of tactics in the list, 0 when there is none. */
 int best_xi_build(uint32_t club, uint32_t team, uint32_t buf, int x1, int y1, int x2, int y2, uint32_t bar);
 
-/* A widget of a card whose stars the runtime draws after it: halves 0 to 10 (half stars), out 1 in grey. */
-void views_stars(int widget, int halves, int out);
 /* A click on a widget of id and data: 1 when it was a Formation item (rebuild the screen). */
 int best_xi_input(uint32_t id, uint32_t data);
 
