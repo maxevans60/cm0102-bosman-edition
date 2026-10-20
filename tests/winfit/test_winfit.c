@@ -25,6 +25,12 @@ int main(void)
     /* No usable size known: the size does not change. */
     winfit_size(1920, 1080, 0, 0, &w, &h);
     CHECK(w == 1920 && h == 1080);
+    /* Windows display scaling: the picture's size in real pixels, as points. */
+    CHECK(winfit_points(1280, 1600, 1280) == 1024 && winfit_points(800, 1000, 800) == 640);   /* 125 % */
+    CHECK(winfit_points(1280, 1920, 1280) == 854 && winfit_points(800, 1200, 800) == 534);    /* 150 %: rounded up */
+    CHECK(winfit_points(800, 1750, 1000) == 458);                                              /* 175 % */
+    CHECK(winfit_points(1280, 1280, 1280) == 1280);                                            /* 100 % */
+    CHECK(winfit_points(1280, 0, 0) == 1280);                                                  /* unknown */
     puts(failed ? "FAIL" : "PASS");
     return failed;
 }
