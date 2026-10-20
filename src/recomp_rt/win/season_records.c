@@ -1175,7 +1175,7 @@ void o_0090dae0(void);
  * 15 filled slots of +0xd7 (0x90d2f0, the count loop of 0x32 slots). The wrap names such a club. It only reads. */
 RT_WRAP(0090dae0, virtual_staff_top_up)
 {
-    uint32_t club = rt_arg(0);
+    uint32_t club = rt_arg(0), fixture = rt_arg(3);
     o_0090dae0();
     if (rt_unwinding || !getenv("RECOMP_CLUB_LOG") || !club) return;
     int n = 0;
@@ -1186,5 +1186,20 @@ RT_WRAP(0090dae0, virtual_staff_top_up)
         name[51] = 0;
         fprintf(stderr, "recomp: club records: %s (club %d, nation %08x, division %08x) has %d squad slots after the "
                         "virtual players\n", name, (int)rd32(g_mem, club), rd32(g_mem, club + 0x53), rd32(g_mem, club + 0x57), n);
+        /* The fixture (arg 3: its record +0x14) and, for a national team, the nation's squad record of
+         * NationalTeams [0xb74318] (+4 + nation id * 0x6e; the senior slot +0x32..+0x45, end date +0x3a, picked
+         * +0x43: select_squads_for_fixture 0x76bab0 at 0x76bb65..0x76bc23). */
+        uint32_t fx = fixture, rec = fx ? rd32(g_mem, fx + 0x14) : 0, nat = rd32(g_mem, club + 0x53);
+        char rn[52] = "";
+        if (rec) { memcpy(rn, g_mem + rec + 4, 51); rn[51] = 0; }
+        fprintf(stderr, "recomp: club records:   fixture %08x of %s, its bytes +0x40 %02x +0x43 %02x +0x4d %04x\n", fx, rn,
+                fx ? g_mem[fx + 0x40] : 0, fx ? g_mem[fx + 0x43] : 0, fx ? rd16(g_mem, fx + 0x4d) : 0);
+        uint32_t nt = rd32(g_mem, 0xb74318u);
+        if (nt && nat) {
+            uint32_t sq = rd32(g_mem, nt + 4) + rd32(g_mem, nat) * 0x6eu;
+            fprintf(stderr, "recomp: club records:   squad record of nation %u:", rd32(g_mem, nat));
+            for (uint32_t k = 0x32; k < 0x46; k++) fprintf(stderr, " %02x", g_mem[sq + k]);
+            fputc('\n', stderr);
+        }
     }
 }
