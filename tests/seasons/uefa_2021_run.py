@@ -11,7 +11,9 @@ Each run is a season jump of tests/seasons/rules_report_check.py with England. T
     2022    October 2022, changing rules off, the season 2022/23: Russia is suspended
     2023    October 2023, the season 2023/24: Russia is suspended, the Super Cup goes to penalties after 90
             minutes
-    change  November 2020, changing rules on, 2020/21 to the end of 2021/22: the news sentences of the change
+    change  November 2020, changing rules on, 2020/21 to the end of 2022/23: the news sentences of the change; the
+            2021/22 Conference League winner gets its Europa League group place in 2022/23 (rule Y), or the log
+            says it has a place already
 The checks of each run: the jump ends with code 0 and shows no message box of the game; the log of
 src/recomp_rt/win/season_uefa*.c shows the access list places, 8 Europa League groups of 4 drawn, the knockout
 round play-offs drawn, and the no away goals rule in the two-legged rounds of the Champions League and the
@@ -29,8 +31,9 @@ Champions League and the Europa League, draws 8 groups of 4 with 32 clubs and it
 groups, 24 in the knockout, 5 rounds, a winner). Its round code 30 has the label of the Europa League's. No
 Conference League tie of the season is decided on away goals either. The change run gives the news sentence of
 its first season.
-    load    October 2021: the game saves 30 days after the start (inside the qualifying rounds) and 120 days after
-            the start (in the group stage); a new program loads each save and plays to the end of the season;
+    load    October 2021: the game saves 30 days after the start (inside the qualifying rounds), 120 days after
+            the start (in the group stage) and 225 days after it (late February, between the legs of the knockout
+            round play-offs); a new program loads each save and plays to the end of the season;
             the three cups play to a winner
     repeat  October 2021, twice: the saves 120 days after the start (in the group stages, with the Conference League)
             are equal (a moved season repeats)
@@ -139,7 +142,7 @@ def run_season(name, season, database, suspended_check, super_cup_penalties=Fals
 
 
 def run_change(program, game, work):
-    code, report = rrc.run(program, game, 2021, 2020, os.path.join(DB, "November 2020"), ["England"], [], work, 10800,
+    code, report = rrc.run(program, game, 2022, 2020, os.path.join(DB, "November 2020"), ["England"], [], work, 14400,
                            {"changing_rules": "on"}, {"RECOMP_SEASON_CHANGE_LOG": "1"})
     fails = [] if code == 0 else [f"change: the jump ended with code {code}"]
     found, log = ufr.boxes(work)
@@ -157,6 +160,15 @@ def run_change(program, game, work):
     fails += ecl_checks("change", log, ufr.uefa_lines(report) if os.path.exists(report) else None, 2021)
     if re.search(r"new competition new_conference_league made for 2020", log):
         fails.append("change: the Conference League made for 2020/21")
+    # Rule Y: the 2021/22 winner (the uefa line of the report) is the holder that the 2022/23 seeding places.
+    lines = ufr.uefa_lines(report) if os.path.exists(report) else {}
+    winner = (lines.get((2021, "end", ECL_FILE)) or {}).get("winner", "-")
+    m = re.search(r"Conference League holder (.+): (a Europa League place|has a place already)", log)
+    if winner in ("", "-") or not m or m.group(1) != winner[:50]:
+        fails.append(f"change: the 2022/23 seeding does not place the 2021/22 Conference League winner {winner!r} "
+                     f"({m.group(0) if m else 'no holder line'})")
+    else:
+        print(f"change: Conference League holder {winner}: {m.group(2)}")
     for sentence in NEWS:
         if sentence not in log:
             fails.append(f"change: no news sentence {sentence!r}")
@@ -171,7 +183,7 @@ def run_load(program, game, work):
     import smoke_run
     db = os.path.join(DB, "October 2021")
     fails = []
-    for days in (30, 120):
+    for days in (30, 120, 225):               # qualifying rounds, groups, between the knockout play-off legs
         w = os.path.join(work, f"d{days}")
         code, _ = rrc.run(program, game, 2021, 2021, db, ["England"], [], w, 7200, None,
                           {"RECOMP_SAVE_AFTER_DAYS": str(days)})
