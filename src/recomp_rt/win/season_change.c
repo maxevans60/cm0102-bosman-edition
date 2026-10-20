@@ -24,6 +24,7 @@
  * meets it. The news screen build calls only write_text, get_action_button and NewsItem::get_date 0x789280
  * with an item. */
 #include "win.h"
+#include "season_comps.h"
 #include "season.h"
 #include "season_change.h"
 #include "season_comps.h"
@@ -153,7 +154,7 @@ static const SeasonCompClass *class_of(uint32_t vtable)
         if (season_comp_classes[mid].vtable < vtable) lo = mid + 1;
         else hi = mid - 1;
     }
-    return NULL;
+    return season_comps_class(vtable);     /* slice 28: a vtable copy of a new competition (season_comps.h) */
 }
 
 const char *season_change_file(uint32_t obj)
