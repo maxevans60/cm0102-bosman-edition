@@ -111,6 +111,8 @@ def check_off(program, game, work):
         fails.append(f"off: the test object without the test variable ({work}/stderr.txt)")
     if "jump" in COUNTS and off != COUNTS["jump"] - 1:
         fails.append(f"off: {off} new records, the jump {COUNTS['jump']}: the test record without its variable")
+    if "new competition new_conference_league made" in log:          # slice 24: played from 2021/22
+        fails.append(f"off: the Conference League made before 2021/22 ({work}/stderr.txt)")
     print(f"  off: {off} new records (the real defs), jump {COUNTS.get('jump')}")
     return fails
 

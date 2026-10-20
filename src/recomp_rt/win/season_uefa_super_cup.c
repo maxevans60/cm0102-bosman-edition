@@ -62,14 +62,14 @@ static int find_stadium(const char *name, size_t n)
     return -1;
 }
 
-/* A link of a record to another table: after the game's load it is a pointer to the record (the city's nation
- * at +0x1f and the nation's stadium at +0x80 hold one in a running game; the files hold the index). Returns the
- * record index or -1. */
+/* A link of a record to another table. The wrap runs only in a running game, where the link is a pointer to the
+ * record (the city's nation at +0x1f, the nation's stadium at +0x80). Returns the record index, or -1 for no link
+ * (0 or 0xffffffff, so a null link is never record 0) and for a value outside the table. */
 static int32_t record_index(uint32_t v, uint32_t table, uint32_t size, int32_t count)
 {
-    if (readable(table) && v >= table && v < table + size * (uint32_t)count && (v - table) % size == 0)
-        return (int32_t)((v - table) / size);
-    return v < (uint32_t)count ? (int32_t)v : -1;
+    if (v == 0 || v == 0xffffffffu || !readable(table)) return -1;
+    if (v >= table && v < table + size * (uint32_t)count && (v - table) % size == 0) return (int32_t)((v - table) / size);
+    return -1;
 }
 
 /* Fallback when the database lacks the venue by every name. The row's city is a record of the city table (name
@@ -149,6 +149,13 @@ RT_WRAP(0057a3c0, super_cup_round_table)
             fprintf(stderr, "recomp: uefa: Super Cup %u: no stadium %s in the database; the original's venue\n", year,
                     r->sc_stadium);
         }
+    }
+    /* Slice 24: no extra time from 2023 (the row's "penalties after 90 minutes"). The original writes the round
+     * flags 0x83 at 0x57a4be: 0x2 extra time, 0x80 golden goal, 0x1 penalties (2026-10-17-cup-round-record.md,
+     * section 2). With no extra time only 0x1 stays. */
+    if (!r->sc_extra_time) {
+        wr16(g_mem, t + 0xd, (uint16_t)((rd16(g_mem, t + 0xd) & ~0x83u) | 0x1u));
+        fprintf(stderr, "recomp: uefa: Super Cup %u: penalties after 90 minutes\n", year);
     }
     /* The weekday of the real date, so the date function (0x549f70 from 0x521ed3), which moves a match to the
      * nearest day of the round's weekday, keeps the real day (the original passes 4, a Friday, at 0x57a48d). */

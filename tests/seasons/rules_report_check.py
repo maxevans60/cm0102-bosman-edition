@@ -174,16 +174,23 @@ def division_counts(game):
 
 def pick_row(found, file, k):
     """The row of the k-th object of a file in a season (module docstring)."""
-    alone = [r for r in found if r["comp_file"] == file] or found
+    alone = [r for r in found if file in row_files(r)] or found
     main = [r for r in alone if "qualifying" not in r["comp"].lower()] or alone
     return main[min(k, len(main) - 1)]
+
+
+def row_files(r):
+    """The files of a row. A row of a new competition (comp_file "new") has the file of its def in
+    src/recomp_rt/win/season_comps.c: "new_" and its comp in lower case with "_" for spaces ("Conference League"
+    gives new_conference_league)."""
+    return ["new_" + r["comp"].lower().replace(" ", "_") if f == "new" else f for f in r["comp_file"].split(";")]
 
 
 def differences(seasons, comps, rows):
     """A sorted list of (season, kind, text)."""
     by_season_file = collections.defaultdict(list)
     for r in rows:
-        for f in r["comp_file"].split(";"):
+        for f in row_files(r):
             by_season_file[(r["season"], f)].append(r)
     # One entry per object and season: the start and end lines together.
     objects = collections.OrderedDict()
@@ -251,7 +258,7 @@ def differences(seasons, comps, rows):
         for r in rows:
             if r["season"] != s or r["comp_file"] == "na" or "not_held" in (r["clubs"], r["format"]):
                 continue
-            files = r["comp_file"].split(";")
+            files = row_files(r)
             if any(f in held[s] for f in files):
                 continue
             if r["nation"] in nations or any(f in files_in_report for f in files):
@@ -392,6 +399,11 @@ def uefa_format_differences(rows):
             words = ("in a second group stage", "in the first knockout round")
         else:
             want = (int(groups.group(1)), int(ko.group(1)) if ko else 0) if groups else (0, 0)
+            # Slice 24: knockout round play-offs (2021/22 on) are one knockout stage with the round of 16: its
+            # 16 clubs and the 8 group winners who enter the round of 16.
+            ko_po = re.search(r"\bKO play-offs (\d+)", text)
+            if groups and ko and ko_po:
+                want = (want[0], int(ko_po.group(1)) + int(ko.group(1)) - int(ko_po.group(1)) // 2)
             game = (u["groups"], u["ko_clubs"])
             words = ("in the group stage", "in the knockout round after it")
         if game != want:

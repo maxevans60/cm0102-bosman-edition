@@ -29,6 +29,7 @@
 #include "season_rules.h"
 #include "season_uefa.h"
 #include "season_round_names.h"
+#include "season_comps.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -118,6 +119,52 @@ static void cl_set_format(uint32_t cl, const SeasonUefa *r)
             ((int16_t)rd16(g_mem, cl + 0x40) + 1) % 100, want);
 }
 
+/* ---- No away goals rule (slice 24, U9: 2021/22 on) ----
+ *
+ * A two-legged tie that is level on aggregate goes to the away goals rule in the Cup's tie result code
+ * (0x51f74c..0x51f79e: with flag 0x4 of the flags argument clear, the side with more away goals wins, winner
+ * code 6 at +0x3d or +0x3e), and the match engine 0x6bd930 tests the same flag before it compares the away goals
+ * (0x6bdab9, 0x6bdbc1), so it plays no extra time when they decide. Flag 0x4 skips both
+ * (docs/research/2026-10-17-cup-round-record.md, section 2). The second leg takes its flags from the round's
+ * +0x0f (OR'd in after the first leg). So in a season whose row has no away goals rule, each two-legged round
+ * (+0x21 = 2) of the three cups gets 0x4 in +0x0f: level on aggregate means extra time, then penalties (the
+ * 3 = extra time and penalties that the original's records hold). */
+void season_uefa_no_away_goals(uint32_t table, int rounds, int season)
+{
+    const SeasonUefa *r = season_uefa_row(season);
+    if (!r || r->away_goals || !readable(table)) return;
+    int n = 0;
+    for (int i = 0; i < rounds; i++) {
+        uint32_t rec = table + ROUND_SIZE * (uint32_t)i;
+        if (g_mem[rec + 0x21] != 2) continue;
+        wr16(g_mem, rec + 0xf, (uint16_t)(rd16(g_mem, rec + 0xf) | 0x4));
+        n++;
+    }
+    fprintf(stderr, "recomp: uefa: no away goals rule in %d of %d rounds, first code %d (%d/%02d)\n", n, rounds,
+            (int16_t)rd16(g_mem, table + 7), season, (season + 1) % 100);
+}
+
+void o_0051f2f0(void);
+
+/* The tie result code 0x51f2f0 (stdcall (result, fixture) ret 8; the flags word fixture +0x38 at 0x51f30f, the
+ * winner codes at fixture +0x3d and +0x3e, 6 for away goals at 0x51f6d0, 0x51f6e8, 0x51f76c and 0x51f784). It
+ * only watches: a tie of the Champions League or the Europa League that away goals decide writes a log line
+ * for the test (tests/seasons/uefa_2021_run.py). The fixture's competition is the record at +0x14, whose first
+ * dword is its id (as the eligibility test 0x55d29f..0x55d2a1 reads it). */
+RT_WRAP(0051f2f0, cup_tie_result)
+{
+    uint32_t fixture = rt_arg(1);
+    o_0051f2f0();
+    if (rt_unwinding || !readable(fixture) || (g_mem[fixture + 0x3d] != 6 && g_mem[fixture + 0x3e] != 6)) return;
+    uint32_t rec = rd32(g_mem, fixture + 0x14);
+    int32_t id = readable(rec) ? (int32_t)rd32(g_mem, rec) : -1;
+    if (id < 0 || (id != (int32_t)rd32(g_mem, KEY_CL) && id != (int32_t)rd32(g_mem, KEY_UC))) return;
+    int year = (int16_t)rd16(g_mem, 0xae2c92u), day = (int16_t)rd16(g_mem, 0xae2c90u);
+    fprintf(stderr, "recomp: uefa: a %s tie decided on away goals on day %d of %d (flags %04x)\n",
+            id == (int32_t)rd32(g_mem, KEY_CL) ? "Champions League" : "Europa League", day, year,
+            rd16(g_mem, fixture + 0x38));
+}
+
 /* ---- The knockout round table of 4 rounds ---- */
 
 /* The original's table of the quarter-finals, semi-finals and final (create_round_table, stage 12: 3 rounds,
@@ -170,6 +217,7 @@ static uint32_t ko_table(uint32_t cl, uint32_t *name_id)
     call_cdecl(F_DRAW_DATE, 7, d);
     uint32_t m[9] = {t, 0, 20, 1, 1, 2, 2, year, 0};
     if (!rt_unwinding) call_cdecl(F_MATCH_DATE, 9, m);
+    if (!rt_unwinding) season_uefa_no_away_goals(t, 4, (int)year);
     return rt_unwinding ? 0 : t;
 }
 
@@ -519,6 +567,26 @@ static void uefa_season(int season)
         season_change_news("The Champions League qualifying rounds now have a Champions Path for league champions "
                            "and a League Path for the other clubs.");
     if (now->uic_clubs < 0 && before->uic_clubs >= 0) season_change_news("The Intertoto Cup is no longer held.");
+    /* Slice 24. */
+    if (now->uc_ko_po && !before->uc_ko_po)
+        season_change_news("The %s group winners now go to the round of 16, and the runners-up meet the Champions "
+                           "League group thirds in knockout round play-offs.", uc_name(season));
+    if (!now->away_goals && before->away_goals)
+        season_change_news("Away goals no longer decide UEFA ties: a tie level on aggregate goes to extra time and "
+                           "penalties.");
+    for (const char *p = now->suspended ? now->suspended : ""; *p;) {
+        const char *e = strchr(p, ',');
+        int n = e ? (int)(e - p) : (int)strlen(p);
+        char name[40];
+        if (n > 0 && n < (int)sizeof name) {
+            memcpy(name, p, (size_t)n);
+            name[n] = 0;
+            if (!season_uefa_suspended(before, name))
+                season_change_news("Clubs from %s have no places in the UEFA competitions while the suspension lasts.",
+                                   name);
+        }
+        p += n + (e ? 1 : 0);
+    }
     /* The access list (slice 23): the group places of the association ranked 4. */
     const char *g_now = season_uefa_access_places(now->season, 'c', 4), *g_before = season_uefa_access_places(before->season, 'c', 4);
     if (g_now && g_before && group_places(g_now) == 4 && group_places(g_before) < 4)
@@ -541,6 +609,35 @@ static void uefa_before(const SeasonChange *c)
 }
 
 const SeasonRuleKind season_kind_uefa = {"uefa", NULL, NULL, uefa_season, NULL, uefa_before, NULL};
+
+/* ---- Slice 24, part b: the Europa League and the Conference League, two objects of one class ---- */
+
+#define UC_VTABLE 0x00970790u
+#define COMP_RECORDS 0xae23d0u
+
+int season_uefa_cup_kind(uint32_t obj)
+{
+    if (!readable(obj) || rd32(g_mem, obj) != UC_VTABLE) return 0;
+    uint32_t rec = rd32(g_mem, obj + 4);
+    if (!readable(rec)) return 0;
+    if ((int32_t)rd32(g_mem, rec) == (int32_t)rd32(g_mem, KEY_UC)) return 'e';
+    const char *n = season_change_data_name(rec);
+    return n && !strcmp(n, SEASON_UEFA_ECL_RECORD) ? 'k' : 0;
+}
+
+int32_t season_uefa_ecl_id(void)
+{
+    uint32_t rec = season_comps_record(SEASON_UEFA_ECL_RECORD);
+    return rec ? (int32_t)rd32(g_mem, rec) : -1;
+}
+
+uint32_t season_uefa_ecl_object(void)
+{
+    for (int i = 0; i < season_comp_def_count; i++)
+        if (season_comp_defs[i] && !strcmp(season_comp_defs[i]->file, SEASON_UEFA_ECL_FILE))
+            return season_comps_object(season_comp_defs[i]);
+    return 0;
+}
 
 /* ---- The rules report ---- */
 
@@ -625,6 +722,8 @@ void season_uefa_report(void *file, int season, const char *phase)
     uint32_t table = rd32(g_mem, COMP_TABLE);
     uint32_t uc = key >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)key) : 0;
     if (readable(uc) && rd32(g_mem, uc) == 0x00970790u) report_comp(f, season, phase, "uefa_cup", uc, 13);
+    uint32_t ecl = season_uefa_ecl_object();                           /* slice 24 */
+    if (season_uefa_cup_kind(ecl) == 'k') report_comp(f, season, phase, SEASON_UEFA_ECL_FILE, ecl, 13);
     /* The labels of the rounds that have a real name in the round names table (Q370), at the end of a season. */
     if (strcmp(phase, "end")) return;
     if (cl) report_schedule(f, season, "european_cup", cl);
@@ -633,10 +732,14 @@ void season_uefa_report(void *file, int season, const char *phase)
         {"european_cup", 20}, {"uefa_cup", 30}, {"uefa_cup", 40}, {"uefa_cup", 250},
         /* slice 23: the qualifying rounds of 2009/10 on */
         {"european_cup", 220}, {"european_cup", 230}, {"european_cup", 240}, {"uefa_cup", 220}, {"uefa_cup", 240},
-        {"uefa_cup", 270}};
+        {"uefa_cup", 270},
+        /* slice 24: the Conference League */
+        {SEASON_UEFA_ECL_FILE, 250}, {SEASON_UEFA_ECL_FILE, 260}, {SEASON_UEFA_ECL_FILE, 270}, {SEASON_UEFA_ECL_FILE, 220},
+        {SEASON_UEFA_ECL_FILE, 30}, {SEASON_UEFA_ECL_FILE, 40}};
     for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++)
         for (int style = 1; style <= 3 && !rt_unwinding; style += 2) {      /* 1 long names, 3 abbreviated */
-            uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : uc;
+            uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : !strcmp(labels[i].file, "uefa_cup") ? uc : ecl;
+            if (obj == ecl && !readable(obj)) continue;
             char text[128];
             season_round_name_label(obj, labels[i].code, style, text, sizeof text);
             for (char *p = text; *p; p++)

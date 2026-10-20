@@ -26,6 +26,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_comps.h"
 #include "season_rules.h"
 
 #include <stdarg.h>
@@ -154,6 +155,8 @@ static const SeasonCompClass *class_of(uint32_t vtable)
 
 const char *season_change_file(uint32_t obj)
 {
+    const char *f = season_comps_file(obj);            /* slice 24: a new competition of an original class */
+    if (f) return f;
     const SeasonCompClass *c = readable(obj) ? class_of(rd32(g_mem, obj)) : NULL;
     return c ? c->file : "?";
 }
