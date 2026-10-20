@@ -360,6 +360,27 @@ uint32_t rt_intl_euro_no_host(void);
 uint32_t rt_intl_euro_teams(uint32_t self, uint32_t original);
 uint32_t rt_intl_euro_ko(uint32_t self, uint32_t original);
 void rt_intl_euro_stages(uint32_t self);
+/* The World Cup of 48 teams (win/season_wc48.c, 0.6.0 slice 29): the team count (32), the knockout stage index
+ * (7) and new stage and slot arrays after the step of start_new_season. Each gives the original's value for an
+ * edition of 32 teams and in the base game. */
+uint32_t rt_intl_wc_teams(uint32_t self, uint32_t original);
+uint32_t rt_intl_wc_ko(uint32_t self, uint32_t original);
+void rt_intl_wc_stages(uint32_t self);
+/* World Cup qualifying from the 2026 cycle (win/season_wcq26.c, 0.6.0 slice 29). Each gives the original's
+ * value outside its gate (a section of a campaign for a World Cup of 48 teams in a season game). */
+uint32_t rt_wcq26_south_america_direct(uint32_t self, uint32_t original);
+uint32_t rt_wcq26_concacaf_exempt(uint32_t self, uint32_t holder);
+uint32_t rt_wcq26_concacaf_hosts(uint32_t self, uint32_t exempt);
+uint32_t rt_wcq26_africa_first(uint32_t self, uint32_t original);
+uint32_t rt_wcq26_africa_groups(uint32_t self, uint32_t original);
+void rt_wcq26_africa_format(uint32_t self);
+uint32_t rt_wcq26_asia_direct(uint32_t self, uint32_t original);
+uint32_t rt_wcq26_asia_playoff_row(uint32_t self, uint32_t original);
+uint32_t rt_wcq26_asia_stages(uint32_t self, uint32_t original);
+void rt_wcq26_asia_format(uint32_t self);
+uint32_t rt_wcq26_oceania_stages(uint32_t self, uint32_t original);
+void rt_wcq26_europe_format(uint32_t self);
+uint32_t rt_wcq26_europe_index(uint32_t self, uint32_t original);
 /* The African Cup of Nations and the Asian Cup of 24 teams (win/season_intl_cups.c): the team count (16, 12),
  * the group count of the draw (4, 3), the knockout stage index (3, 2) and a new stage array after the step of
  * start_new_season. Each gives the original's value for another edition, another class and the base game. */

@@ -93,7 +93,9 @@ int main(void)
     game(1, 2018, 1);
     CHECK(rt_intl_first_year(INTL_CONFED, 2019) == 2200, "2018: no Confederations Cup");
     game(1, 2026, 1);
-    CHECK(rt_intl_first_year(INTL_WORLD_CUP, 2026) == 2200, "2026: no World Cup in the table after 2026");
+    CHECK(rt_intl_first_year(INTL_WORLD_CUP, 2026) == 2030, "2026: the 2030 World Cup (slice 29, Q560)");
+    game(1, 2030, 1);
+    CHECK(rt_intl_first_year(INTL_WORLD_CUP, 2030) == 2200, "2030: no World Cup in the table after 2030");
 
     /* Finals dates. */
     game(1, 2001, 0);

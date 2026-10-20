@@ -141,6 +141,54 @@ PATCHES = {
     0x57B736: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # vtable +0x30: the knockout stage[ko]
     0x57B255: (0xC, "(4u * rt_intl_euro_ko(esi, 3u))"),            # stage news: round record of stage[ko]
 
+    # World Cup qualifying from the 2026 cycle (0.6.0 slice 29, win/season_wcq26.c; evidence in
+    # docs/research/2026-10-19-world-cup-48.md, "Qualifying"). Each gives the original's value outside the gate (a
+    # section whose campaign +0x40 + 2 is a World Cup of 48 teams, in a season game). this in the register named.
+    0x921098: (0x4, "rt_wcq26_south_america_direct(esi, 4u)"),     # set_up_rules 0x921040: direct places, 6
+    0x91377F: (0x2, "rt_wcq26_asia_direct(esi, 2u)"),               # final groups 0x913740: direct places, 4
+    0x913BCE: (0x2, "rt_wcq26_asia_playoff_row(esi, 2u)"),          # play-off 0x913b60: the fifths of stage 9
+    0x913BDA: (0x2, "rt_wcq26_asia_playoff_row(esi, 2u)"),          # and of stage 10
+    0x911CF6: (0xD, "rt_wcq26_asia_stages(esi, 0xdu)"),             # ctor: no stage 12 (tie with Europe)
+    0x910133: (0x32, "rt_wcq26_africa_first(esi, 0x32u)"),          # first round 0x910120: 2 x (pool - 45)
+    0x90F6F0: (0x32, "rt_wcq26_africa_first(edi, 0x32u)"),          # template 0x90f600: first round teams
+    0x90F6F5: (0x19, "(rt_wcq26_africa_first(edi, 0x32u) / 2u)"),   # and ties
+    0x90F357: (0x5, "rt_wcq26_africa_groups(esi, 5u)"),             # ctor: stage count (9 groups)
+    0x91058A: (0x5, "rt_wcq26_africa_groups(esi, 5u)"),             # start_new_season: stage count
+    0x90F768: (0x5, "rt_wcq26_africa_groups(edi, 5u)"),             # template: group stages below 9
+    0x90FC24: (0x5, "rt_wcq26_africa_groups(ecx, 5u)"),             # slot 17 0x90fbf0: winners of stages below 9
+    0x91E076: (0x3, "rt_wcq26_oceania_stages(esi, 3u)"),            # ctor: stage count 4 (the tournament)
+    0x91F002: (0xC, "(4u * rt_wcq26_oceania_stages(esi, 3u))"),     # start_new_season: malloc of the stage array
+    0x91F004: (0x3, "rt_wcq26_oceania_stages(esi, 3u)"),            # start_new_season: stage count
+    0x91A0C2: (0x8, "rt_wcq26_europe_index(esi, 8u)"),              # pool 0x919e30: last group stage +0xff
+    0x91A0C9: (0x9, "rt_wcq26_europe_index(esi, 9u)"),              # runners-up stage +0x100
+    0x91A0D0: (0xA, "rt_wcq26_europe_index(esi, 0xau)"),            # play-off stage +0x101
+    0x91AA96: (0x8, "rt_wcq26_europe_index(edi, 8u)"),              # load 0x91a9f0: the same three
+    0x91AA9D: (0x9, "rt_wcq26_europe_index(edi, 9u)"),
+    0x91AAA4: (0xA, "rt_wcq26_europe_index(edi, 0xau)"),
+    0x918348: (0xB, "rt_wcq26_europe_index(esi, 0xbu)"),            # ctor: stage count 13
+    0x91950C: (0xB, "rt_wcq26_europe_index(esi, 0xbu)"),            # start_new_season: stage count 13
+    0x91A6CF: (0xA, "rt_wcq26_europe_index(esi, 0xau)"),            # group stages after the draw: 12 groups
+
+    # World Cup of 48 teams (0.6.0 slice 29, win/season_wc48.c). From 2026 the finals have 12 groups of 4 and a
+    # round of 32. world_cup (ctor 0x92bf50) is the League of group A, stage[0..6] are groups B to H and stage[7]
+    # the knockout of 16. With 48 teams stage[0..10] are groups B to L and stage[11] the knockout of 32.
+    # rt_intl_wc_teams gives the team count (32 in the original), rt_intl_wc_ko the knockout stage index (7).
+    # Both give the original's value in the base game and for an edition of 32 teams. this is in esi or ecx.
+    # Evidence: docs/research/2026-10-19-world-cup-48.md. The flags of the compares are read by the jumps after
+    # them only (0x92ccf5 and 0x92cea5 by two jumps, both on the same compare).
+    0x92BFF0: (0x20, "rt_intl_wc_teams(esi, 0x20u)"),              # ctor: calloc count of the slot array
+    0x92BFFA: (0x20, "rt_intl_wc_teams(esi, 0x20u)"),              # ctor: slot room +0x38
+    0x92C04D: (0x20, "(4u * (rt_intl_wc_ko(esi, 7u) + 1u))"),      # ctor: malloc of the stage array
+    0x92C063: (0x8, "(rt_intl_wc_ko(esi, 7u) + 1u)"),              # ctor: stage count +0x2c
+    0x92D52C: (0x7, "rt_intl_wc_ko(ecx, 7u)"),                     # stage step 0x92d4b0: knockout made at ko
+    0x92D316: (0x1C, "(4u * rt_intl_wc_ko(esi, 7u))"),             # vtable +0x30 0x92d310: stage[ko]
+    0x92CCF5: (0x7, "rt_intl_wc_ko(ecx, 7u)"),                     # stage news (vtable +0x44): group or knockout
+    0x92CD86: (0x1C, "(4u * rt_intl_wc_ko(esi, 7u))"),             # stage news: round record of stage[ko]
+    0x92CEA5: (0x7, "rt_intl_wc_ko(ecx, 7u)"),                     # result news (vtable +0x48)
+    0x92D1D7: (0x20, "rt_intl_wc_teams(esi, 0x20u)"),              # group A from the draw array (0x92d0f0)
+    0x92D5FB: (0x20, "rt_intl_wc_teams(esi, 0x20u)"),              # groups B.. from the draw array (0x92d540)
+    0x92E907: (0x7, "rt_intl_wc_ko(esi, 7u)"),                     # run_group_draw 0x92e7f0: League_Stage groups
+
     # ACN and Asian Cup of 24 teams (0.6.0 slice 27, win/season_intl_cups.c). From 2019 both finals have 6 groups
     # of 4 and a round of 16. african_nations (ctor 0x401000) is the League of group A, stage[0..2] groups B to D,
     # stage[3] the knockout of 8. asia_nations (ctor 0x40e860): group A, stage[0..1] groups B and C, stage[2] the
@@ -260,7 +308,7 @@ INSNS = {
     0x920F18: ("mov dword ptr [esp + 0x20], eax", "eax = rt_intl_wc_holder(eax); W32(esp + 0x20u, eax);"),  # wc_south_american_league, its pool
     0x9107A6: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_african_cup
     0x914077: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_asia_league
-    0x916394: ("mov edx, eax", "eax = rt_intl_wc_holder(eax); edx = eax;"),  # wc_concacaf_cup
+    0x916394: ("mov edx, eax", "eax = rt_wcq26_concacaf_exempt(esi, rt_intl_wc_holder(eax)); edx = eax;"),  # slice 29: the third host  # wc_concacaf_cup
     0x91FB98: ("add esp, 8", "eax = rt_intl_wc_holder(eax); esp += 8u;"),  # wc_oceania_league
     # world_cup build_team_slots 0x92da40 puts the holder in slot 0 (0x92da86) and counts it (0x92da89). From
     # 2006 the slot is not counted, so the first host takes slot 0; slots 1 and 2 are cleared, because the
@@ -284,6 +332,20 @@ INSNS = {
     # of the ctor (+0xc, count +0x2c). After the step (0x57b7ca) an edition of another size gets a new array.
     # The flags of "or eax, -1" are not read: the next instructions only move, and add esp at 0x57b7e1 sets them.
     0x57B7CF: ("or eax, 0xffffffff", "SYNC(); rt_intl_euro_stages(esi); eax = 0xffffffffu; SETF(K_RES | SZ4, 0, 0, eax, 0);"),
+
+    # World Cup qualifying from the 2026 cycle (0.6.0 slice 29, win/season_wcq26.c). 0x919f90 (pool 0x919e30,
+    # this in esi): after the pool size, the shape of no exempt nation (+0xf6 0). 0x91785c (final group 0x917830,
+    # esi): the direct places are 3 less the hosts; in the gate the hosts are not taken off. The flags of that
+    # sub are not read: 0x91785e..0x917882 only move, `sub bl, 3` at 0x917887 sets them.
+    0x919F90: ("mov dword ptr [esi + 0xf2], eax", "W32(esi + 0xf2u, eax); rt_wcq26_europe_format(esi);"),
+    0x91785C: ("sub al, cl", "t0 = (eax & 0xffu); t1 = rt_wcq26_concacaf_hosts(esi, ecx & 0xffu) & 0xffu; t2 = ((t0 - t1) & 0xffu); SETF(K_SUB | SZ1, t0, t1, t2, 0); eax = (eax & 0xffffff00u) | t2;"),
+    0x910A4A: ("mov byte ptr [esp + 0x13], al", "W8(esp + 0x13u, rt_wcq26_africa_groups(esi, eax & 0xffu));"),
+
+    # World Cup of 48 teams (0.6.0 slice 29, win/season_wc48.c). start_new_season 0x92d330 keeps the stage array
+    # and the slot array of the ctor (+0xc, count +0x2c; +0x14, room +0x38). After the step (0x92d409) an edition
+    # of another size gets new arrays. The flags of "or eax, -1" are not read: 0x92d411..0x92d419 only move, then
+    # the call of build_team_slots 0x92da40.
+    0x92D40E: ("or eax, 0xffffffff", "SYNC(); rt_intl_wc_stages(esi); eax = 0xffffffffu; SETF(K_RES | SZ4, 0, 0, eax, 0);"),
 
     # ACN and Asian Cup of 24 teams (0.6.0 slice 27, win/season_intl_cups.c). start_new_season (ACN 0x401d20,
     # Asian Cup 0x40f720) keeps the stage array of the ctor. After the step (0x401d80, 0x40f780) an edition of
@@ -319,7 +381,7 @@ INSNS = {
     # A1: the Asian pool builder 0x913f60 stores its kept count; after it the exempt count +0xee becomes 0, so
     # the final groups (0x913740), the play-off (0x913bc1) and the statuses (0x912642) take the format of no
     # host. The flags are not read before pop and ret.
-    0x9141EA: ("mov dword ptr [esi + 0xf3], ecx", "W32(esi + 0xf3u, ecx); rt_wcq_asia_format(esi);"),
+    0x9141EA: ("mov dword ptr [esi + 0xf3], ecx", "W32(esi + 0xf3u, ecx); rt_wcq_asia_format(esi); rt_wcq26_asia_format(esi);"),
     # A2: Asia stage 12 (0x913d50, this in esi, the two teams at [ebp]) takes its partner from the European
     # section (0x91def0, ecx the Europe object). The partner of the cycle replaces it; the European runner-up
     # stays the fallback.
@@ -333,7 +395,7 @@ INSNS = {
     # F1: the African pool builder 0x9106a0 (this in esi) compares its count ebx with the pool size +0xb6. Before
     # the compare a pool of 50 or more takes the format of no host (South Africa 2010 stays out of the pool by
     # the compare at 0x9108aa).
-    0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); rt_wcq26_africa_format(esi); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
 
     # UEFA Nations League (0.6.0 slice 28, season_nl.c). EuroChampQual::update_for_date 0x57fd60 makes the group
     # stages 0 to 7 on its draw day (create_group_stage 0x57ed10 at 0x57ff2e, `cmp edi, 8`, this in esi). The

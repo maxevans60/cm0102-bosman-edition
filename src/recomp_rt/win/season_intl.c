@@ -21,6 +21,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_intl.h"
+#include "season_wc48.h"
 #include "season_nl.h"                     /* slice 28: the Gold Cup */
 
 #include <stdio.h>
@@ -168,13 +169,16 @@ static int day_of(int month, int day)
 }
 
 /* Writes the hosts of an edition into a row: pair 1 the first two hosts that the data holds, the other pairs
- * none, the choice fixed and no move. */
+ * none, the choice fixed and no move. More hosts (three for the 2026 World Cup, six for 2030; slice 29) go into
+ * the fields of pairs 2 and 3 (+0xe to +0x1a) in order: find_hosts 0x5fa730 reads pair 1 only for a fixed row,
+ * so the original's code never sees them; season_intl_host_ids reads all six. The save keeps every row
+ * (0x5fb3ce), so a load keeps them. */
 static void row_write(uint32_t row, uint32_t key, const SeasonIntlEdition *e)
 {
-    int ids[2] = {-1, -1}, n = 0;
+    int ids[6] = {-1, -1, -1, -1, -1, -1}, n = 0;
     char host[128];
     const char *p = e->hosts;
-    while (*p && n < 2) {
+    while (*p && n < 6) {
         size_t len = strcspn(p, ";");
         snprintf(host, sizeof host, "%.*s", (int)len, p);
         int id = nation_by_names(host);
@@ -187,8 +191,7 @@ static void row_write(uint32_t row, uint32_t key, const SeasonIntlEdition *e)
     wr32(g_mem, row + ROW_COMP, key);
     wr16(g_mem, row + ROW_YEAR, (uint16_t)e->year);
     for (int k = 0; k < 6; k++) wr32(g_mem, row + ROW_PAIRS + 4u * (uint32_t)k, 0xffffffffu);
-    wr32(g_mem, row + ROW_PAIRS, (uint32_t)ids[0]);
-    wr32(g_mem, row + ROW_PAIRS + 4u, (uint32_t)ids[1]);
+    for (int k = 0; k < 6; k++) wr32(g_mem, row + ROW_PAIRS + 4u * (uint32_t)k, (uint32_t)ids[k]);
     wr8(g_mem, row + ROW_CHOICE, CHOICE_FIXED);
     wr8(g_mem, row + ROW_CYCLE, 0);
     if (logging()) {
@@ -205,6 +208,23 @@ static uint32_t row_find(uint32_t rows, int count, uint32_t key, int year)
         if (rd32(g_mem, row + ROW_COMP) == key && (int16_t)rd16(g_mem, row + ROW_YEAR) == year) return row;
     }
     return 0;
+}
+
+/* The hosts of a fixed row of the table (slice 29): up to six nation ids in the order of the table (row_write).
+ * Gives the count; 0 for no fixed row of that competition and year. */
+int season_intl_host_ids(uint32_t key, int year, int ids[6])
+{
+    uint32_t obj = rd32(g_mem, HOSTS), rows = readable(obj) ? rd32(g_mem, obj) : 0;
+    int count = readable(obj) ? (int16_t)rd16(g_mem, obj + 4) : 0, n = 0;
+    for (int k = 0; k < 6; k++) ids[k] = -1;
+    if (!readable(rows) || count <= 0 || count > 1000) return 0;
+    uint32_t row = row_find(rows, count, key, year);
+    if (!row || rd8(g_mem, row + ROW_CHOICE) != CHOICE_FIXED) return 0;
+    for (int k = 0; k < 6; k++) {
+        int id = (int)rd32(g_mem, row + ROW_PAIRS + 4u * (uint32_t)k);
+        if (nation_valid(id)) ids[n++] = id;
+    }
+    return n;
 }
 
 /* The rows of the editions from the start year. The table grows by the editions that have no row. */
@@ -436,6 +456,9 @@ static int nation_in(const uint32_t *teams, int n, uint32_t nation)
 static int fill_allowed(const char *name, int year)
 {
     if (season_start_year() >= year - 1) return 1;
+    /* Slice 29 (Q563): after the table the 2026 shape of qualifying stays, and the hosts of 2030 do not change
+     * its places, so a World Cup from 2030 may be short. */
+    if (!strcmp(name, "world_cup") && year >= 2030) return 1;
     return !strcmp(name, "euro_champ") && year >= 2020;
 }
 
@@ -539,6 +562,14 @@ RT_WRAP(0092f230, wc_seed_teams)
     if (season_intl_on() && (int16_t)rd16(g_mem, self + 0x40u) != 2002) fill_slots(self, 0, "world_cup");
     if (rt_unwinding) return;
     cpu.ecx = self;
+    /* 48 teams (slice 29, season_wc48.c): no pots here. The pot array +0xee holds 32 entries of 5 bytes and
+     * ends at +0x18e, the seeding day, in an object of 0x192 bytes (0x8307b5), so 48 would run past it. The
+     * draw wrap sorts the teams itself; the 32 pots that the save writes (0x92f150) are cleared. */
+    if (season_wc48(self)) {
+        memset(g_mem + self + 0xeeu, 0, 32u * 5u);
+        rt_ret_stdcall(cpu.eax, 0);
+        return;
+    }
     o_0092f230();
 }
 
@@ -580,10 +611,39 @@ static int slots_full(uint32_t comp)
 
 RT_WRAP(0092e740, wc_add_qualified)
 {
+    /* Slice 29: a section can give a nation that is in already as a host, because find_hosts gives a section two
+     * hosts (Spain and the three South American hosts of 2030 play their qualifying). Such a qualifier stays out
+     * and its place goes to the fill (Q563). */
+    if (season_intl_on() && team_nation(rt_arg(0))) {
+        uint32_t slots = rd32(g_mem, cpu.ecx + SLOTS), nation = team_nation(rt_arg(0));
+        int count = (int16_t)rd16(g_mem, cpu.ecx + SLOT_COUNT), in = 0;
+        for (int k = 0; readable(slots) && k < count && k < 64 && !in; k++)
+            in = team_nation(rd32(g_mem, slots + (uint32_t)k * SLOT_SIZE)) == nation;
+        if (in) {
+            if (logging()) fprintf(stderr, "recomp: season intl: world_cup: %s is in already, a qualifier stays out\n",
+                                   win_str(nation + NATION_NAME));
+            rt_ret_stdcall(0, 1);
+            return;
+        }
+    }
     if (slots_full(cpu.ecx)) {
         if (logging()) fprintf(stderr, "recomp: season intl: world_cup is full, a qualifier stays out\n");
         rt_ret_stdcall(0, 1);
         return;
+    }
+    /* Test log of slice 29 (tests/seasons/season_wc48_run.py counts the qualifiers of each confederation): the
+     * team and the continent id of its nation (+0x71, sweep section 8). */
+    if (logging() && season_intl_on()) {
+        static const struct { uint32_t key; const char *name; } conf[] = {
+            {0x9cfa10u, "UEFA"}, {0x9cfa1cu, "CONMEBOL"}, {0x9cfa14u, "CONCACAF"}, {0x9cfa08u, "CAF"},
+            {0x9cfa0cu, "AFC"}, {0x9cfa18u, "OFC"},
+        };
+        uint32_t nation = team_nation(rt_arg(0)), c = nation ? rd32(g_mem, nation + NATION_CONTINENT) : 0;
+        const char *name = "?";
+        for (size_t k = 0; readable(c) && k < sizeof conf / sizeof conf[0]; k++)
+            if (rd32(g_mem, c) == rd32(g_mem, conf[k].key)) name = conf[k].name;
+        fprintf(stderr, "recomp: season intl: world_cup %d qualifier %s (%s)\n", (int16_t)rd16(g_mem, cpu.ecx + 0x40u),
+                nation ? win_str(nation + NATION_NAME) : "none", name);
     }
     o_0092e740();
 }
@@ -692,7 +752,12 @@ void o_00401ab0(void);
 void o_0040f4c0(void);
 void o_00799690(void);
 void o_007a0230(void);
-RT_WRAP(0092d200, wc_stages) { stage_builder(INTL_WORLD_CUP, o_0092d200, 1); }
+RT_WRAP(0092d200, wc_stages)
+{
+    uint32_t self = cpu.ecx;
+    stage_builder(INTL_WORLD_CUP, o_0092d200, 1);
+    if (!rt_unwinding) season_wc48_after_stages(self);     /* slice 29: the seeding and draw of 48 teams */
+}
 RT_WRAP(0057b630, euro_stages) { stage_builder(INTL_EURO, o_0057b630, 1); }
 RT_WRAP(0058bdb0, confed_stages) { stage_builder(INTL_CONFED, o_0058bdb0, 1); }
 RT_WRAP(005e12d0, copa_stages) { stage_builder(INTL_COPA, o_005e12d0, 1); }
@@ -712,7 +777,9 @@ void o_004012e0(void);
 void o_0040eb00(void);
 void o_00798b60(void);
 void o_0079f7d0(void);
-RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, o_0092c290, 0); }
+/* The World Cup of 48 teams makes its groups I to L and its knockout of 32 in season_wc48.c (slice 29). */
+static void wc_template_body(void) { season_wc48_template(o_0092c290); }
+RT_WRAP(0092c290, wc_template) { stage_builder(INTL_WORLD_CUP, wc_template_body, 0); }
 /* The Euro of 24 teams makes its groups E and F and its knockout of 16 in season_intl_euro.c. */
 static void euro_template_body(void) { season_intl_euro_template(o_0057ab90); }
 RT_WRAP(0057ab90, euro_template) { stage_builder(INTL_EURO, euro_template_body, 0); }
@@ -871,11 +938,32 @@ void season_intl_at_create(void)
     nations_rename(season_start_year(), 0);
 }
 
+/* The host news of a World Cup with more than two hosts (slice 29: 2026 and 2030), in the season of its table
+ * row: a fixed host row gets no news of daily_update 0x5fa850 (post_host_news 0x5faec0 posts only for rows
+ * that it opens or decides). The names are those of the data (season_intl_host_ids). */
+static void host_news(int season)
+{
+    for (int i = 0; i < season_intl_edition_count; i++) {
+        const SeasonIntlEdition *e = &season_intl_editions[i];
+        int ids[6], n;
+        if (e->season != season || strcmp(e->file, "world_cup")) continue;
+        n = season_intl_host_ids(rd32(g_mem, host_comps[0].key), e->year, ids);
+        if (n < 3) continue;
+        char text[400];
+        size_t len = 0;
+        for (int k = 0; k < n && len < sizeof text; k++)
+            len += (size_t)snprintf(text + len, sizeof text - len, "%s%s", k == 0 ? "" : k == n - 1 ? " and " : ", ",
+                                    win_str(nation_at(ids[k]) + NATION_NAME));
+        season_change_news("The %d World Cup plays in %s, its %d host nations.", e->year, text, n);
+    }
+}
+
 /* The season point of a later season, with changing rules on: the renames of that season, with news. */
 static void intl_season(int season)
 {
     if (season_change_is_start()) return;
     nations_rename(season, 1);
+    host_news(season);
     /* The host rows of the table in a game that started in 2001/02: at its first season change, for the
      * editions from 2002/03 (host_init). The table is sorted as the constructor sorts it. */
     if (season_start_year() == SEASON_FIRST_YEAR && season == SEASON_FIRST_YEAR + 1) {
