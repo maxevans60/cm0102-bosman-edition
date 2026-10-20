@@ -8,7 +8,9 @@ Usage:
 
 Input: docs/research/round-names.tsv, one row per name, exactly these columns:
     comp_file       the source file of the original's class (european_cup): a file of the function map
-                    (docs/research/function-map/<file>.cpp.md), so a competition the game has
+                    (docs/research/function-map/<file>.cpp.md), so a competition the game has; or the file of a
+                    new competition ("new_conference_league", a string of src/recomp_rt/win/season_comps.c or
+                    a header there)
     round_code      the code of the round record (+7): a multiple of 10 from 10 to 990 (the code + 1 to + 5 names
                     the replays, legs and decider)
     first_season    the start year of the first season with the name: the season of the real rename
@@ -23,6 +25,7 @@ column stops it with exit code 1 and names the line.
 import csv
 import glob
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -40,6 +43,10 @@ def fail(n, text):
 
 def rows():
     files = {os.path.basename(p)[:-len(".cpp.md")].lower() for p in glob.glob(os.path.join(FUNCTION_MAP, "*.cpp.md"))}
+    win = os.path.join(ROOT, "src", "recomp_rt", "win")
+    for p in [os.path.join(win, "season_comps.c")] + glob.glob(os.path.join(win, "*.h")):
+        with open(p, encoding="utf-8") as f:
+            files |= set(re.findall(r'"(new_[a-z_]+)"', f.read()))
     out, seen = [], set()
     with open(TSV, newline="", encoding="utf-8") as f:
         lines = list(csv.reader(f, delimiter="\t"))

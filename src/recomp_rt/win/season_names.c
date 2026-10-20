@@ -5,6 +5,7 @@
 #include "season_names.h"
 #include "season_change.h"
 #include "season_rules.h"
+#include "season_comps.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -347,6 +348,9 @@ void o_008386f0(void);
 RT_WRAP(008386f0, build_comp_table)
 {
     int load = rd32(g_mem, cpu.esp) == 0x82c5fbu;
+    /* Slice 26 first: at a load it makes each new record's object again before the original fills [0xadadfc]. */
+    season_comps_before_comp_table();
+    if (rt_unwinding) return;
     o_008386f0();
     if (rt_unwinding) return;
     if (!season_game_changes()) return;

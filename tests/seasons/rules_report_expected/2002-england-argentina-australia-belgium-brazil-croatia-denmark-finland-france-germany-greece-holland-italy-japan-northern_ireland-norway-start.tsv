@@ -2,25 +2,18 @@
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2002	bench	fra_lge_cup (Coupe de la Ligue), row fra-17: game 3, table 5 (5)
 2002	bench	ger_cup (DFB-Pokal), row ger-23: game 6, table 7 (7)
-2002	bench	ger_first (Bundesliga), row ger-14: game 6, table 7 (7)
-2002	bench	ger_second (2. Bundesliga), row ger-15: game 6, table 7 (7)
 2002	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all; not in it: -; others: Atlético Tucumán, Central Córdoba de Rosario, Independiente Rivadavia de Mendoza, Platense, Racing de Córdoba
-2002	club_list	Brazilian National First Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all; not in it: -; others: 4 de Julho Esporte Clube, Associação Garanhuense de Atletismo, Botafogo Futebol Clube (SP), Clube 15 de Novembro
-2002	club_list	Brazilian National Second Division: 24 of 24 listed clubs that the database holds (24 listed), 4 other clubs, 28 in all; not in it: -; others: Americano Futebol Clube (RJ), Clube Atlético Bragantino, Clube Malutrom, Desportiva Capixaba
 2002	club_list	Brazilian National Third Division: 56 of 79 listed clubs that the database holds (93 listed), 0 other clubs, 56 in all; not in it: Americano Futebol Clube (RJ), Associação Atlética Francana, Associação Atlética Portuguesa (RJ), Associação Desportiva Cabofriense, Botafogo Futebol Clube (SP), Caxias Futebol Clube, Clube Atlético Bragantino, Comercial Esporte Clube, Desportiva Capixaba, Esporte Clube São José, Esporte Clube XV de Novembro, Estrela do Norte Futebol Clube, Goytacaz Futebol Clube, Grêmio Esportivo Brasil, Grêmio de Esportes Maringá, Iraty Sport Club, Ituiutaba Esporte Clube, Macaé Sports, Rio Branco Atlético Clube, Serra Futebol Clube, Tuna Luso Brasileira, Tupi Football Club, Uberaba Sport Club; others: -
 2002	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Bojovnik 7, NK Amater, NK Borac, NK TSK
 2002	club_list	Croatian Second Division North: 11 of 11 listed clubs that the database holds (12 listed), 5 other clubs, 16 in all; not in it: -; others: Ivancica, NK Bedem, NK Bjelovar, NK Metalac, NK Mladost Molve
 2002	club_list	Croatian Second Division South: 11 of 11 listed clubs that the database holds (12 listed), 5 other clubs, 16 in all; not in it: -; others: HNK Segesta, NK GOSK, NK Imotska Krajina, NK Mosor, NK Samobor
 2002	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: FC Jokerit, FC KooTeePee; others: -
-2002	club_list	French Lower Division: 0 of 87 listed clubs that the database holds (128 listed), 0 other clubs, 0 in all; not in it: AC Cambrai, AS Frontignan, AS Moulinoise, AS Porto-Vecchio, AS Salbris, Andrézieux, Arin Luzien, Athletic Club Arles, Aubervilliers FC, Avranches, Balma SC, Bayeux, Bayonne, Blagnac, Bois-Guillaume, Borgo FC, CO Châlons-en-Champagne, CS Mars Bischheim, CSO 19 Amnéville-les-Thermes, Calais Racing UFC, Calvi, Cercle Omnisports Saint-Dizier, Chantilly, Chartres, Chaumont FC, Colmar, Dole-Tavaux RC 1991, Douai SC, ES La Rochelle, Echirolles, Etoile Filante Bastiaise, FA Carcassonne-Villalbe, FC Chalonnais, FC Ecommoy, FC Marmande 47, FC Saint-Lô Manche, FC Vaulx-en-Velin, Flers FC, Gallia CO Bihorel, Gap, JA Armentières, Jura Sud Football, La Vitréenne, Langon-Castets FC, Le Puy, Les Herbiers, Levallois, Lunel, Lyon-Duchère, Marly USM, Montauban FC, Montceau, Montluçon, Muret, Olympique Saint-Quentinois, Péronne, Red Star 93, Rodez Aveyron Football, SC Abbeville, SC Draguignan, SR Creutzwald, SR Haguenau, SS L'Hôpital, Saint-Colomban Locminé, Saint-Médard, Schiltigheim, Sporting Club Toulon 83, Stade Bordelais UC, Stade Béthunois, Stade Lamballais, Stade Montois, Stade Plabennécois, Stade Poitevin, Toulouse Fontaines, US Changéenne, US Concarneau, US Ivry, US Jeanne-d'Arc Carquefou, US Joué-lès-Tours, US Littoral Dunkerque, US Orléans, US Royenne, US Saint-Malo, US Saintes Football, Vauban Strasbourg, Vergèze, Vitrolles; others: -
 2002	club_list	Northern Irish League First Division: 8 of 8 listed clubs that the database holds (8 listed), 2 other clubs, 10 in all; not in it: -; others: Ards, Institute
 2002	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Ards, Institute; others: -
 2002	clubs	arg_second (Primera B Nacional), row arg-usa-29: game 25, table 20 (20)
 2002	clubs	bel_third (Belgian Third Division), row hol-bel-23: game 16, table 32 (32 (A 16, B 16))
 2002	clubs	bra_champ_cup (Copa dos Campeões), row bra-191: game 3, table 0 (0)
 2002	clubs	bra_cup (Copa do Brasil), row bra-137: game 71, table 64 (64 (65 with a preliminary match on the English page))
-2002	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-29: game 28, table 24 (24)
-2002	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 28, table 24 (24)
 2002	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-83: game 7, table 93 (93)
 2002	clubs	bra_reg_bahia (Campeonato Baiano), row bra-434: game 10, table 13 (13)
 2002	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-515: game 15, table 12 (12)
@@ -49,10 +42,9 @@
 2002	clubs	nir_first (Irish League First Division), row wal-nir-irl-36: game 10, table 8 (8)
 2002	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-39: game 5, table 20 (20)
 2002	clubs	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 10, table 12 (12)
-2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 3, table 8 (8)
+2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 0, table 8 (8)
 2002	down	arg_prm (Primera División), row arg-usa-2: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2002	down	arg_second (Primera B Nacional), row arg-usa-29: game 0 (+0 play-off places), table 2 (2 (by affiliation relegation tables; infobox))
-2002	down	bra_nat_first (Campeonato Brasileiro Série A), row bra-29: game 4 (+0 play-off places), table 2 (2)
 2002	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 4 (+0 play-off places), table 2 (2)
 2002	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-83: game 2 (+0 play-off places), table na (n/a)
 2002	down	cro_a1 (Prva HNL), row gre-pol-cro-326: game 2 (+0 play-off places), table 1 (1 (12th))
@@ -63,8 +55,6 @@
 2002	down	ita_ser_c1a (Serie C1 girone A), row ita-21: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	ita_ser_c1b (Serie C1 girone B), row ita-22: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 1 (+1 play-off places), table 0 (0)
-2002	idle	fra_first (French CFA), row fra-11: the game waits for 0, the table holds it
-2002	idle	fra_first (French Lower Division), row fra-11: the game waits for 0, the table holds it
 2002	no_row	friendly (Friendly): no table row
 2002	no_row	record_utils ('B' International): no table row
 2002	no_row	record_utils (Reserve): no table row
@@ -72,7 +62,6 @@
 2002	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-35: the game holds 2002, the table says not held
 2002	not_held	bra_champ_cup (Copa dos Campeões), row bra-191: the game holds 2002, the table says not held
 2002	not_held	conmebol_merc (Copa Mercosur), row club-world-24: the game holds 2002, the table says not held
-2002	not_held	goldcup (Copa América), row int-continental-22: the game holds 2003, the table says not held
 2002	not_held	gre_super (Greek Super Cup), row gre-pol-cro-83: the game holds 2002, the table says not held
 2002	not_held	inter_amer_cup (Copa Interamericana), row club-world-31: the game holds 2002, the table says not held
 2002	not_held	nir_charity (Charity Shield), row wal-nir-irl-40: the game holds 2002, the table says not held
@@ -108,25 +97,23 @@
 2002	not_in_game	ita-24 ita_ser_c2b 'Serie C2 girone B' (Italy)
 2002	not_in_game	ita-25 ita_ser_c2c 'Serie C2 girone C' (Italy)
 2002	not_in_game	uefa-9 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2002	playoffs	arg_prm (Primera División), row arg-usa-2: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
-2002	playoffs	arg_second (Primera B Nacional), row arg-usa-29: game 0 up and 0 down play-off places, table 'Final between Apertura and Clausura winners (winner up); loser v best overall cl'
-2002	playoffs	aus_nsl (National Soccer League), row aus-jap-kor-106: game 0 up and 0 down play-off places, table 'top six play a home-and-away championship series; top two meet in the grand fina'
-2002	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 0 up and 0 down play-off places, table 'top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac'
-2002	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-83: game 0 up and 0 down play-off places, table 'see format'
-2002	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-326: game 0 up and 0 down play-off places, table '11th: relegation play-off'
-2002	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-353: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
-2002	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-380: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
-2002	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-29: game 0 up and 0 down play-off places, table '14th: relegation play-off v Beta Ethniki 3rd'
-2002	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-56: game 0 up and 0 down play-off places, table '3rd: promotion play-off; 14th: relegation play-off'
-2002	playoffs	hol_first (Eerste Divisie), row hol-bel-16: game 0 up and 0 down play-off places, table 'six clubs (period winners) join the Eredivisie 16th and 17th in two groups of fo'
-2002	playoffs	ita_ser_a (Serie A), row ita-19: game 0 up and 0 down play-off places, table 'tie-break play-off match if clubs finish level on points for the title, a Europe'
-2002	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-191: game 0 up and 0 down play-off places, table 'stage winners meet in a two-legged championship (not held when one club wins bot'
-2002	subs_used	eng_charity (FA Community Shield), row eng-308: game 5, table 6 (6)
+2002	playoffs	arg_prm (Primera División), row arg-usa-2: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
+2002	playoffs	bel_second (Belgian Second Division), row hol-bel-22: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
+2002	playoffs	bel_third (Belgian Third Division), row hol-bel-23: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2002	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 0 up and 0 down play-off places, table 8 and 0 ('top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac')
+2002	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-326: game 0 up and 0 down play-off places, table 0 and 1 ('11th: relegation play-off')
+2002	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-353: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
+2002	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-380: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
+2002	playoffs	fin_first (Ykkönen), row nor-fin-18: game 0 up and 1 down play-off places, table 1 and 2 ('2nd v Veikkausliiga 13th, two legs; 11th-12th v Kakkonen clubs')
+2002	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-29: game 0 up and 0 down play-off places, table 0 and 1 ('14th: relegation play-off v Beta Ethniki 3rd')
+2002	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-56: game 0 up and 0 down play-off places, table 1 and 1 ('3rd: promotion play-off; 14th: relegation play-off')
+2002	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-21: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2002	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-22: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2002	playoffs	nir_first (Irish League First Division), row wal-nir-irl-36: game 1 up and 0 down play-off places, table 0 and 1 ('pos 5: promotion/relegation play-off')
 2002	up	arg_second (Primera B Nacional), row arg-usa-29: game 1 (+0 play-off places), table 2 (2 (final of Apertura and Clausura winners; second promotion play-off))
 2002	up	aus_nsl (National Soccer League), row aus-jap-kor-106: game 6 (+0 play-off places), table na (n/a)
 2002	up	bel_third (Belgian Third Division), row hol-bel-23: game 1 (+0 play-off places), table 2 (2 (group champions))
 2002	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-29: game 4 (+0 play-off places), table na (n/a)
-2002	up	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 4 (+0 play-off places), table 2 (2)
 2002	up	conmebol_liber (Copa Libertadores), row club-world-23: game 2 (+0 play-off places), table na (n/a)
 2002	up	conmebol_merc (Copa Mercosur), row club-world-24: game 1 (+0 play-off places), table na (n/a)
 2002	up	fin_first (Ykkönen), row nor-fin-18: game 2 (+0 play-off places), table 1 (1st (1))

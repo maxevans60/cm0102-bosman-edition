@@ -11,7 +11,6 @@
 2001	idle	wc_asia_league (World Cup Asian Qualifying Section), row int-world-7: the game waits for 2004, the table holds it
 2001	idle	wc_europe_league (World Cup European Qualifying Section), row int-world-3: the game waits for 2004, the table holds it
 2001	idle	wc_south_american_league (World Cup South American Qualifying Section), row int-world-4: the game waits for 2004, the table holds it
-2001	name	african_nations (African Cup of Nations), row int-continental-7: game 'African Cup of Nations', table '2002 African Cup of Nations'
 2001	name	eng_auto_cup (English Vans Trophy), row eng-300: game 'English Vans Trophy', table 'Football League Trophy'
 2001	name	eng_cc_cup (English League Cup), row eng-299: game 'English League Cup', table 'Football League Cup'
 2001	name	eng_charity (English Charity Shield), row eng-302: game 'English Charity Shield', table 'FA Charity Shield'
@@ -30,8 +29,6 @@
 2001	name	wc_african_cup (World Cup African Qualifying Section), row int-world-6: game 'World Cup African Qualifying Section', table '2002 FIFA World Cup qualification (CAF)'
 2001	name	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-5: game 'World Cup CONCACAF Qualifying Section', table '2002 FIFA World Cup qualification (CONCACAF)'
 2001	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-8: game 'World Cup Oceania Qualifying Section', table '2002 FIFA World Cup qualification (OFC)'
-2001	name	world_club_cup (Intercontinental Cup), row club-world-1: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
-2001	name	world_cup (FIFA World Cup), row int-world-2: game 'FIFA World Cup', table '2002 FIFA World Cup'
 2001	no_row	friendly (Friendly): no table row
 2001	no_row	record_utils ('B' International): no table row
 2001	no_row	record_utils (Reserve): no table row
@@ -64,7 +61,6 @@
 2002	name	inter_amer_cup (Inter-American Cup), row club-world-31: game 'Inter-American Cup', table 'Copa Interamericana'
 2002	name	intertoto_cup (Inter-Toto Cup), row uefa-15: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
 2002	name	oceania_nations (Oceania Nations Cup), row int-continental-21: game 'Oceania Nations Cup', table '2002 OFC Nations Cup'
-2002	name	world_club_cup (Intercontinental Cup), row club-world-20: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2002	no_row	friendly (Friendly): no table row
 2002	no_row	record_utils ('B' International): no table row
 2002	no_row	record_utils (Reserve): no table row
@@ -83,14 +79,13 @@
 2003	clubs	european_cup (European Champions Cup), row uefa-18: game 55, table 72 (72 (32 in the group stage))
 2003	clubs	intertoto_cup (Inter-Toto Cup), row uefa-23: game 60, table 61 (61)
 2003	clubs	oceania_nations (Oceania Nations Cup), row int-continental-32: game 3, table 6 (6)
+2003	clubs	uefa_cup (UEFA Cup), row uefa-21: game 146, table 145 (145)
 2003	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-30: game 50, table 51 (51 entrants)
 2003	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-31: game 0, table 39 (39 entrants)
 2003	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-29: game 24, table 34 (34 entrants)
 2003	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-32: game 5, table 12 (12 entrants)
-2003	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-28: game 9, table 10 (10)
 2003	down	eng_third (English Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
 2003	format	european_cup, row uefa-18: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
-2003	name	african_nations (African Cup of Nations), row int-continental-29: game 'African Cup of Nations', table '2004 African Cup of Nations'
 2003	name	asia_nations (Asian Cup), row int-continental-31: game 'Asian Cup', table 'AFC Asian Cup'
 2003	name	eng_auto_cup (English Vans Trophy), row eng-312: game 'English Vans Trophy', table 'Football League Trophy'
 2003	name	eng_cc_cup (English League Cup), row eng-311: game 'English League Cup', table 'Football League Cup'
@@ -116,7 +111,6 @@
 2003	name	wc_europe_league (World Cup European Qualifying Section), row int-world-27: game 'World Cup European Qualifying Section', table 'FIFA World Cup qualification (UEFA)'
 2003	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-32: game 'World Cup Oceania Qualifying Section', table '2006 FIFA World Cup qualification (OFC)'
 2003	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-28: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
-2003	name	world_club_cup (Intercontinental Cup), row club-world-39: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2003	no_row	friendly (Friendly): no table row
 2003	no_row	record_utils ('B' International): no table row
 2003	no_row	record_utils (Reserve): no table row
@@ -143,7 +137,6 @@
 2004	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-43: game 0/4, table 32 (32, then 8)
 2004	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-41: game 24, table 12 (12, then 6)
 2004	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-39: game 5, table 51 (51 entrants)
-2004	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-40: game 9, table 10 (10)
 2004	down	eng_third (English Third Division), row eng-61: game 1 (+0 play-off places), table 2 (2)
 2004	format	european_cup, row uefa-26: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
 2004	format	uefa_cup, row uefa-29: game 0 clubs in the group stage and 0 in the knockout round after it, table 40 and 32
@@ -172,7 +165,6 @@
 2004	name	wc_europe_league (World Cup European Qualifying Section), row int-world-39: game 'World Cup European Qualifying Section', table '2006 FIFA World Cup qualification (UEFA)'
 2004	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-44: game 'World Cup Oceania Qualifying Section', table '2006 FIFA World Cup qualification (OFC)'
 2004	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-40: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
-2004	name	world_club_cup (Intercontinental Cup), row club-world-58: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2004	no_row	friendly (Friendly): no table row
 2004	no_row	record_utils ('B' International): no table row
 2004	no_row	record_utils (Reserve): no table row
@@ -198,7 +190,6 @@
 2005	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-53: game 24, table 6 (6)
 2005	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-51: game 5, table 51 (51 entrants)
 2005	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-56: game 5, table 2 (2)
-2005	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-52: game 9, table 10 (10)
 2005	clubs	world_club_champ (FIFA Club World Championship), row club-world-78: game 4, table 6 (6)
 2005	clubs	world_cup (FIFA World Cup), row int-world-50: game 0/4, table 32 (32)
 2005	down	eng_third (English Third Division), row eng-71: game 1 (+0 play-off places), table 2 (2)
@@ -229,8 +220,6 @@
 2005	name	wc_europe_league (World Cup European Qualifying Section), row int-world-51: game 'World Cup European Qualifying Section', table '2006 FIFA World Cup qualification (UEFA)'
 2005	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-56: game 'World Cup Oceania Qualifying Section', table '2006 FIFA World Cup qualification (OFC)'
 2005	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-52: game 'World Cup South American Qualifying Section', table '2006 FIFA World Cup qualification (CONMEBOL)'
-2005	name	world_club_cup (Intercontinental Cup), row club-world-77: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
-2005	name	world_cup (FIFA World Cup), row int-world-50: game 'FIFA World Cup', table '2006 FIFA World Cup'
 2005	no_row	friendly (Friendly): no table row
 2005	no_row	record_utils ('B' International): no table row
 2005	no_row	record_utils (Reserve): no table row
@@ -275,7 +264,6 @@
 2006	name	intertoto_cup (Inter-Toto Cup), row uefa-47: game 'Inter-Toto Cup', table 'UEFA Intertoto Cup'
 2006	name	oceania_nations (Oceania Nations Cup), row int-continental-65: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2006	name	world_club_champ (FIFA Club World Championship), row club-world-97: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2006	name	world_club_cup (Intercontinental Cup), row club-world-96: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2006	no_row	friendly (Friendly): no table row
 2006	no_row	record_utils ('B' International): no table row
 2006	no_row	record_utils (Reserve): no table row
@@ -334,7 +322,6 @@
 2007	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-80: game 'World Cup Oceania Qualifying Section', table '2010 FIFA World Cup qualification (OFC)'
 2007	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-76: game 'World Cup South American Qualifying Section', table '2010 FIFA World Cup qualification (CONMEBOL)'
 2007	name	world_club_champ (FIFA Club World Championship), row club-world-116: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2007	name	world_club_cup (Intercontinental Cup), row club-world-115: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2007	no_row	friendly (Friendly): no table row
 2007	no_row	record_utils ('B' International): no table row
 2007	no_row	record_utils (Reserve): no table row
@@ -396,7 +383,6 @@
 2008	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-92: game 'World Cup Oceania Qualifying Section', table '2010 FIFA World Cup qualification (OFC)'
 2008	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-88: game 'World Cup South American Qualifying Section', table '2010 FIFA World Cup qualification (CONMEBOL)'
 2008	name	world_club_champ (FIFA Club World Championship), row club-world-135: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2008	name	world_club_cup (Intercontinental Cup), row club-world-134: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2008	no_row	friendly (Friendly): no table row
 2008	no_row	record_utils ('B' International): no table row
 2008	no_row	record_utils (Reserve): no table row
@@ -461,8 +447,6 @@
 2009	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-104: game 'World Cup Oceania Qualifying Section', table '2010 FIFA World Cup qualification (OFC)'
 2009	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-100: game 'World Cup South American Qualifying Section', table '2010 FIFA World Cup qualification (CONMEBOL)'
 2009	name	world_club_champ (FIFA Club World Championship), row club-world-154: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2009	name	world_club_cup (Intercontinental Cup), row club-world-153: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
-2009	name	world_cup (FIFA World Cup), row int-world-98: game 'FIFA World Cup', table '2010 FIFA World Cup'
 2009	no_row	friendly (Friendly): no table row
 2009	no_row	record_utils ('B' International): no table row
 2009	no_row	record_utils (Reserve): no table row
@@ -516,7 +500,6 @@
 2010	name	oceania_nations (Oceania Nations Cup), row int-continental-109: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2010	name	uefa_cup (UEFA Cup), row uefa-77: game 'UEFA Cup', table 'UEFA Europa League'
 2010	name	world_club_champ (FIFA Club World Championship), row club-world-173: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2010	name	world_club_cup (Intercontinental Cup), row club-world-172: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2010	no_row	friendly (Friendly): no table row
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
@@ -547,7 +530,6 @@
 2011	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-127: game 0, table 20 (20, then 10)
 2011	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-125: game 24, table 30 (30, then 12)
 2011	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-128: game 5, table 11 (11 entrants)
-2011	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-124: game 10, table 9 (9 (Brazil qualified as host))
 2011	clubs	world_club_champ (FIFA Club World Championship), row club-world-192: game 4, table 7 (7)
 2011	down	eng_third (English Third Division), row eng-131: game 1 (+0 play-off places), table 2 (2)
 2011	format	european_cup, row uefa-82: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -579,7 +561,6 @@
 2011	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-128: game 'World Cup Oceania Qualifying Section', table '2014 FIFA World Cup qualification (OFC)'
 2011	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-124: game 'World Cup South American Qualifying Section', table '2014 FIFA World Cup qualification (CONMEBOL)'
 2011	name	world_club_champ (FIFA Club World Championship), row club-world-192: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2011	name	world_club_cup (Intercontinental Cup), row club-world-191: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2011	no_row	friendly (Friendly): no table row
 2011	no_row	record_utils ('B' International): no table row
 2011	no_row	record_utils (Reserve): no table row
@@ -610,7 +591,6 @@
 2012	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-137: game 24, table 12 (12, then 6)
 2012	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-135: game 5, table 53 (53 entrants)
 2012	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-140: game 5, table 4 (4)
-2012	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-136: game 10, table 9 (9)
 2012	clubs	world_club_champ (FIFA Club World Championship), row club-world-211: game 0/4, table 7 (7)
 2012	down	eng_third (English Third Division), row eng-141: game 1 (+0 play-off places), table 2 (2)
 2012	format	european_cup, row uefa-90: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -642,7 +622,6 @@
 2012	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-140: game 'World Cup Oceania Qualifying Section', table '2014 FIFA World Cup qualification (OFC)'
 2012	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-136: game 'World Cup South American Qualifying Section', table '2014 FIFA World Cup qualification (CONMEBOL)'
 2012	name	world_club_champ (FIFA Club World Championship), row club-world-211: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2012	name	world_club_cup (Intercontinental Cup), row club-world-210: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2012	no_row	friendly (Friendly): no table row
 2012	no_row	record_utils ('B' International): no table row
 2012	no_row	record_utils (Reserve): no table row
@@ -672,7 +651,6 @@
 2013	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-149: game 24, table 6 (6)
 2013	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-147: game 5, table 53 (53 entrants)
 2013	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-152: game 5, table 1 (1)
-2013	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-148: game 10, table 9 (9)
 2013	clubs	world_club_champ (FIFA Club World Championship), row club-world-230: game 4, table 7 (7)
 2013	clubs	world_cup (FIFA World Cup), row int-world-146: game 0/4, table 32 (32)
 2013	down	eng_third (English Third Division), row eng-151: game 1 (+0 play-off places), table 2 (2)
@@ -704,8 +682,6 @@
 2013	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-152: game 'World Cup Oceania Qualifying Section', table '2014 FIFA World Cup qualification (OFC)'
 2013	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-148: game 'World Cup South American Qualifying Section', table '2014 FIFA World Cup qualification (CONMEBOL)'
 2013	name	world_club_champ (FIFA Club World Championship), row club-world-230: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2013	name	world_club_cup (Intercontinental Cup), row club-world-229: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
-2013	name	world_cup (FIFA World Cup), row int-world-146: game 'FIFA World Cup', table '2014 FIFA World Cup'
 2013	no_row	friendly (Friendly): no table row
 2013	no_row	record_utils ('B' International): no table row
 2013	no_row	record_utils (Reserve): no table row
@@ -760,7 +736,6 @@
 2014	name	oceania_nations (Oceania Nations Cup), row int-continental-153: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2014	name	uefa_cup (UEFA Cup), row uefa-109: game 'UEFA Cup', table 'UEFA Europa League'
 2014	name	world_club_champ (FIFA Club World Championship), row club-world-249: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2014	name	world_club_cup (Intercontinental Cup), row club-world-248: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2014	no_row	friendly (Friendly): no table row
 2014	no_row	record_utils ('B' International): no table row
 2014	no_row	record_utils (Reserve): no table row
@@ -820,7 +795,6 @@
 2015	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-176: game 'World Cup Oceania Qualifying Section', table '2018 FIFA World Cup qualification (OFC)'
 2015	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-172: game 'World Cup South American Qualifying Section', table '2018 FIFA World Cup qualification (CONMEBOL)'
 2015	name	world_club_champ (FIFA Club World Championship), row club-world-268: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2015	name	world_club_cup (Intercontinental Cup), row club-world-267: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2015	no_row	friendly (Friendly): no table row
 2015	no_row	record_utils ('B' International): no table row
 2015	no_row	record_utils (Reserve): no table row
@@ -884,7 +858,6 @@
 2016	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-188: game 'World Cup Oceania Qualifying Section', table '2018 FIFA World Cup qualification (OFC)'
 2016	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-184: game 'World Cup South American Qualifying Section', table '2018 FIFA World Cup qualification (CONMEBOL)'
 2016	name	world_club_champ (FIFA Club World Championship), row club-world-287: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2016	name	world_club_cup (Intercontinental Cup), row club-world-286: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2016	no_row	friendly (Friendly): no table row
 2016	no_row	record_utils ('B' International): no table row
 2016	no_row	record_utils (Reserve): no table row
@@ -947,8 +920,6 @@
 2017	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-200: game 'World Cup Oceania Qualifying Section', table '2018 FIFA World Cup qualification (OFC)'
 2017	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-196: game 'World Cup South American Qualifying Section', table '2018 FIFA World Cup qualification (CONMEBOL)'
 2017	name	world_club_champ (FIFA Club World Championship), row club-world-306: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2017	name	world_club_cup (Intercontinental Cup), row club-world-305: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
-2017	name	world_cup (FIFA World Cup), row int-world-194: game 'FIFA World Cup', table '2018 FIFA World Cup'
 2017	no_row	friendly (Friendly): no table row
 2017	no_row	record_utils ('B' International): no table row
 2017	no_row	record_utils (Reserve): no table row
@@ -1003,7 +974,6 @@
 2018	name	oceania_nations (Oceania Nations Cup), row int-continental-197: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2018	name	uefa_cup (UEFA Cup), row uefa-141: game 'UEFA Cup', table 'UEFA Europa League'
 2018	name	world_club_champ (FIFA Club World Championship), row club-world-325: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2018	name	world_club_cup (Intercontinental Cup), row club-world-324: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2018	no_row	friendly (Friendly): no table row
 2018	no_row	record_utils ('B' International): no table row
 2018	no_row	record_utils (Reserve): no table row
@@ -1064,7 +1034,6 @@
 2019	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-224: game 'World Cup Oceania Qualifying Section', table 'FIFA World Cup qualification (OFC)'
 2019	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-220: game 'World Cup South American Qualifying Section', table 'FIFA World Cup qualification (CONMEBOL)'
 2019	name	world_club_champ (FIFA Club World Championship), row club-world-344: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2019	name	world_club_cup (Intercontinental Cup), row club-world-343: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2019	no_row	friendly (Friendly): no table row
 2019	no_row	record_utils ('B' International): no table row
 2019	no_row	record_utils (Reserve): no table row
@@ -1101,6 +1070,7 @@
 2020	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-235: game 0/4, table 40 (40)
 2020	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-233: game 24, table 30 (30, then 6)
 2020	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-231: game 5, table 55 (55 entrants)
+2020	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-232: game 9, table 10 (10)
 2020	clubs	world_club_champ (FIFA Club World Championship), row club-world-363: game 0/4, table 6 (6)
 2020	down	eng_third (English Third Division), row eng-221: game 1 (+0 play-off places), table 2 (2)
 2020	format	european_cup, row uefa-154: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -1131,7 +1101,6 @@
 2020	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-236: game 'World Cup Oceania Qualifying Section', table 'FIFA World Cup qualification (OFC)'
 2020	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-232: game 'World Cup South American Qualifying Section', table '2022 FIFA World Cup qualification (CONMEBOL)'
 2020	name	world_club_champ (FIFA Club World Championship), row club-world-363: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2020	name	world_club_cup (Intercontinental Cup), row club-world-362: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2020	no_row	friendly (Friendly): no table row
 2020	no_row	record_utils ('B' International): no table row
 2020	no_row	record_utils (Reserve): no table row
@@ -1172,6 +1141,7 @@
 2021	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-245: game 24, table 8 (8)
 2021	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-243: game 5, table 55 (55 entrants)
 2021	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-248: game 5, table 8 (8 in groups (Tonga withdrew); Cook Islands and Vanuatu withdrew because of COVID)
+2021	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-244: game 9, table 10 (10)
 2021	clubs	world_club_champ (FIFA Club World Championship), row club-world-382: game 4, table 7 (7)
 2021	down	eng_third (English Third Division), row eng-231: game 1 (+0 play-off places), table 2 (2)
 2021	format	european_cup, row uefa-162: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -1202,7 +1172,6 @@
 2021	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-248: game 'World Cup Oceania Qualifying Section', table '2022 FIFA World Cup qualification (OFC)'
 2021	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-244: game 'World Cup South American Qualifying Section', table '2022 FIFA World Cup qualification (CONMEBOL)'
 2021	name	world_club_champ (FIFA Club World Championship), row club-world-382: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2021	name	world_club_cup (Intercontinental Cup), row club-world-381: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2021	no_row	friendly (Friendly): no table row
 2021	no_row	record_utils ('B' International): no table row
 2021	no_row	record_utils (Reserve): no table row
@@ -1242,7 +1211,7 @@
 2022	clubs	african_nations (African Cup of Nations), row int-continental-238: game 0/4, table 24 (24)
 2022	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-233: game 5, table 53 (53)
 2022	clubs	european_cup (European Champions Cup), row uefa-170: game 55, table 78 (78 (32 in the group stage))
-2022	clubs	uefa_cup (UEFA Cup), row uefa-173: game 145, table 57 (57 (21 entered + 36 from the Champions League); 32 in the group stage (+8 Champi)
+2022	clubs	uefa_cup (UEFA Cup), row uefa-173: game 146, table 57 (57 (21 entered + 36 from the Champions League); 32 in the group stage (+8 Champi)
 2022	clubs	world_club_champ (FIFA Club World Championship), row club-world-401: game 0/4, table 7 (7)
 2022	down	eng_third (English Third Division), row eng-241: game 1 (+0 play-off places), table 2 (2)
 2022	format	european_cup, row uefa-170: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -1267,7 +1236,6 @@
 2022	name	oceania_nations (Oceania Nations Cup), row int-continental-241: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2022	name	uefa_cup (UEFA Cup), row uefa-173: game 'UEFA Cup', table 'UEFA Europa League'
 2022	name	world_club_champ (FIFA Club World Championship), row club-world-401: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2022	name	world_club_cup (Intercontinental Cup), row club-world-400: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2022	no_row	friendly (Friendly): no table row
 2022	no_row	record_utils ('B' International): no table row
 2022	no_row	record_utils (Reserve): no table row
@@ -1313,7 +1281,6 @@
 2023	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-270: game 50, table 53 (53 entrants)
 2023	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-271: game 0, table 46 (46 entrants)
 2023	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-269: game 24, table 32 (32 entrants (hosts exempt))
-2023	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-268: game 9, table 10 (10)
 2023	clubs	world_club_champ (FIFA Club World Championship), row club-world-420: game 4, table 7 (7)
 2023	down	eng_third (English Third Division), row eng-251: game 1 (+0 play-off places), table 2 (2)
 2023	format	european_cup, row uefa-178: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -1345,7 +1312,6 @@
 2023	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-272: game 'World Cup Oceania Qualifying Section', table 'FIFA World Cup qualification (OFC)'
 2023	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-268: game 'World Cup South American Qualifying Section', table '2026 FIFA World Cup qualification (CONMEBOL)'
 2023	name	world_club_champ (FIFA Club World Championship), row club-world-420: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2023	name	world_club_cup (Intercontinental Cup), row club-world-419: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2023	no_row	friendly (Friendly): no table row
 2023	no_row	record_utils ('B' International): no table row
 2023	no_row	record_utils (Reserve): no table row
@@ -1392,7 +1358,6 @@
 2024	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-281: game 24, table 30 (30)
 2024	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-279: game 5, table 54 (54 entrants)
 2024	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-284: game 5, table 11 (11 entrants)
-2024	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-280: game 9, table 10 (10)
 2024	clubs	world_club_champ (FIFA Club World Championship), row club-world-439: game 0/4, table 32 (32)
 2024	down	eng_third (English Third Division), row eng-261: game 1 (+0 play-off places), table 2 (2)
 2024	name	african_nations (African Cup of Nations), row int-continental-260: game 'African Cup of Nations', table 'Africa Cup of Nations'
@@ -1421,7 +1386,6 @@
 2024	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-284: game 'World Cup Oceania Qualifying Section', table '2026 FIFA World Cup qualification (OFC)'
 2024	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-280: game 'World Cup South American Qualifying Section', table '2026 FIFA World Cup qualification (CONMEBOL)'
 2024	name	world_club_champ (FIFA Club World Championship), row club-world-439: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2024	name	world_club_cup (Intercontinental Cup), row club-world-438: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2024	no_row	friendly (Friendly): no table row
 2024	no_row	record_utils ('B' International): no table row
 2024	no_row	record_utils (Reserve): no table row
@@ -1461,13 +1425,12 @@
 2025	bench	uefa_cup (UEFA Cup), row uefa-197: game 7, table 12 (12)
 2025	clubs	african_nations (African Cup of Nations), row int-continental-271: game 0/4, table 24 (24)
 2025	clubs	european_cup (European Champions Cup), row uefa-194: game 55, table 82 (82 (36 in the league phase))
-2025	clubs	uefa_cup (UEFA Cup), row uefa-197: game 146, table 77 (77 (45 entered + 32 from the Champions League); 36 in the league phase)
+2025	clubs	uefa_cup (UEFA Cup), row uefa-197: game 145, table 77 (77 (45 entered + 32 from the Champions League); 36 in the league phase)
 2025	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-294: game 50, table 53 (53 in groups (Eritrea withdrew; group E has 5 teams))
 2025	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-295: game 4, table 6 (6, then 2)
 2025	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-293: game 24, table 12 (12)
 2025	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-291: game 5, table 54 (54 entrants)
 2025	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-296: game 5, table 1 (1)
-2025	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-292: game 9, table 10 (10)
 2025	clubs	world_cup (FIFA World Cup), row int-world-290: game 0/4, table 48 (48)
 2025	down	eng_third (English Third Division), row eng-271: game 1 (+0 play-off places), table 2 (2)
 2025	name	african_nations (African Cup of Nations), row int-continental-271: game 'African Cup of Nations', table '2025 Africa Cup of Nations'
@@ -1496,8 +1459,6 @@
 2025	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-296: game 'World Cup Oceania Qualifying Section', table '2026 FIFA World Cup qualification (OFC)'
 2025	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-292: game 'World Cup South American Qualifying Section', table '2026 FIFA World Cup qualification (CONMEBOL)'
 2025	name	world_club_champ (FIFA Club World Championship), row club-world-458: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2025	name	world_club_cup (Intercontinental Cup), row club-world-457: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
-2025	name	world_cup (FIFA World Cup), row int-world-290: game 'FIFA World Cup', table '2026 FIFA World Cup'
 2025	no_row	friendly (Friendly): no table row
 2025	no_row	record_utils ('B' International): no table row
 2025	no_row	record_utils (Reserve): no table row
@@ -1564,7 +1525,6 @@
 2026	name	oceania_nations (Oceania Nations Cup), row int-continental-285: game 'Oceania Nations Cup', table 'OFC Nations Cup'
 2026	name	uefa_cup (UEFA Cup), row uefa-205: game 'UEFA Cup', table 'UEFA Europa League'
 2026	name	world_club_champ (FIFA Club World Championship), row club-world-477: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2026	name	world_club_cup (Intercontinental Cup), row club-world-476: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2026	no_row	friendly (Friendly): no table row
 2026	no_row	record_utils ('B' International): no table row
 2026	no_row	record_utils (Reserve): no table row
@@ -1581,6 +1541,7 @@
 2026	not_in_game	int-continental-278 new '2026-27 UEFA Nations League' (UEFA)
 2026	not_in_game	uefa-201 uefa_seeding 'UEFA access list and seeding' (UEFA)
 2026	not_in_game	uefa-206 new 'UEFA Conference League' (UEFA)
+2026	playoffs	eng_first (English First Division), row eng-279: game 4 up and 0 down play-off places, table 6 and 0 ('3rd-8th: 5v8 and 6v7 single-leg eliminators (higher club at home), then semi-fin')
 2026	subs_used	eng_charity (English Charity Shield), row eng-452: game 5, table 6 (6)
 2026	subs_used	eng_fa_cup (English FA Cup), row eng-448: game 3, table 5 (5)
 2026	subs_used	eng_first (English First Division), row eng-279: game 3, table 5 (5)
@@ -1630,7 +1591,6 @@
 2027	name	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-320: game 'World Cup Oceania Qualifying Section', table '2030 FIFA World Cup qualification (OFC)'
 2027	name	wc_south_american_league (World Cup South American Qualifying Section), row int-world-316: game 'World Cup South American Qualifying Section', table '2030 FIFA World Cup qualification (CONMEBOL)'
 2027	name	world_club_champ (FIFA Club World Championship), row club-world-496: game 'FIFA Club World Championship', table 'FIFA Club World Cup'
-2027	name	world_club_cup (Intercontinental Cup), row club-world-495: game 'Intercontinental Cup', table 'Intercontinental Cup (Toyota Cup)'
 2027	no_row	friendly (Friendly): no table row
 2027	no_row	record_utils ('B' International): no table row
 2027	no_row	record_utils (Reserve): no table row
@@ -1647,6 +1607,7 @@
 2027	not_in_game	eng-459 new 'National League Cup' (England)
 2027	not_in_game	uefa-209 uefa_seeding 'UEFA access list and seeding' (UEFA)
 2027	not_in_game	uefa-214 new 'UEFA Conference League' (UEFA)
+2027	playoffs	eng_first (English First Division), row eng-289: game 4 up and 0 down play-off places, table 6 and 0 ('3rd-8th: 5v8 and 6v7 single-leg eliminators (higher club at home), then semi-fin')
 2027	subs_used	eng_charity (English Charity Shield), row eng-458: game 5, table 6 (6)
 2027	subs_used	eng_fa_cup (English FA Cup), row eng-454: game 3, table 5 (5)
 2027	subs_used	eng_first (English First Division), row eng-289: game 3, table 5 (5)

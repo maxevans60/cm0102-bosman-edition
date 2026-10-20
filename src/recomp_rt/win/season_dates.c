@@ -31,6 +31,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_dates.h"
+#include "season_comps.h"
 #include "season_history.h"
 #include "season_records.h"
 #include "seasons_db.h"
@@ -601,7 +602,8 @@ void o_0081ce00(void);
 RT_WRAP(0081ce00, start_new_game)
 {
     if (loaded && !season_game_on() && season_code_on() && rd32(g_mem, 0xae23a8u) &&
-        (loaded_year != season_start_year() || strcmp(loaded_dir, win_data_set_dir()))) {
+        (loaded_year != season_start_year() || strcmp(loaded_dir, win_data_set_dir()) ||
+         season_comps_records_stale())) {                  /* slice 26: the records of new competitions */
         fprintf(stderr, "recomp: season dates: the data of %d (%s) is freed for a start in %d with %s\n", loaded_year,
                 loaded_dir[0] ? "a database folder" : "the game's Data", season_start_year(),
                 win_data_set_dir()[0] ? "a database folder" : "the game's Data");

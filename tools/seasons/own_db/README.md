@@ -1,8 +1,10 @@
 # Own season databases
 
 These tools build the 2004/05 and 2006/07 season databases (Q351). The facts come from Football Manager 2005 and
-2007: names, dates of birth, nations, clubs, jobs, contracts, final tables and competition winners. The ratings
-and positions come from the Update Team databases. No Football Manager rating goes into a database.
+2007: names, dates of birth, nations, clubs, jobs, contracts, loans (2004/05), careers, final tables and
+competition winners. The ratings and positions come from the Update Team databases. Key players with no Update
+Team record (Q383) are the one exception: FM's rating of each is the reference for his ratings (Max, 2026-10-17),
+through a mapping that `keyplayers.py` derives from the matched players and prints at each run.
 
 The Football Manager discs are untrusted data. Mount an image read-only. Read it only with `python3 -I`. Run
 nothing from it. Keep the disc files, the facts and the work folders outside the repo. Commit no Football Manager
@@ -18,6 +20,7 @@ data and nothing made from it.
 | `<db700>` | a new folder for the FM2007 database files |
 | `<facts>` | a new folder for the facts pickles |
 | `<work>` | a new folder for the match and league pickles |
+| `<conv>` | the converter's output folder (it must not exist) |
 | `<out>` | the new database folder (it must not exist) |
 
 Run each command from `tools/seasons/own_db`.
@@ -28,7 +31,8 @@ Run each command from `tools/seasons/own_db`.
 python3 -I fm2005/read_fm2005.py "<FM2005 db>" "<facts>"
 python3 -I match.py 2004 "<DB>/September 2005" "<facts>" "<work>"
 python3 -I leagues.py 2004 "<DB>/September 2005" "<facts>" "<work>"
-python3 -I convert.py 2004 "<DB>/September 2005" "<facts>" "<work>" "<DB>/September 2010 ODB" "<out>" "<DB>/October 2003"
+python3 -I convert.py 2004 "<DB>/September 2005" "<facts>" "<work>" "<DB>/September 2010 ODB" "<conv>" "<DB>/October 2003"
+python3 -I keyplayers.py 2004 "<conv>" "<facts>" "<work>" "<DB>" "<out>" [<overrides.tsv>]
 ```
 
 ## 2006/07 (Summer 2006)
@@ -40,12 +44,26 @@ python3 -I fm2007/unpack_setup_jar.py "<setup.jar>" "<db700>"
 python3 -I fm2007/read_fm2007.py "<db700>" "<facts>"
 python3 -I match.py 2006 "<DB>/November 2007" "<facts>" "<work>"
 python3 -I leagues.py 2006 "<DB>/November 2007" "<facts>" "<work>"
-python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/September 2010 ODB" "<out>" "<DB>/September 2005"
+python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/September 2010 ODB" "<conv>" "<DB>/September 2005"
+python3 -I keyplayers.py 2006 "<conv>" "<facts>" "<work>" "<DB>" "<out>" [<overrides.tsv>]
 ```
+
+`<conv>` is a new folder for the converter's output. The overrides file (identity decisions per key player, see
+`keyplayers.py`) names FM rows, so it stays in the work folder with the FM data. Two builds with different
+`PYTHONHASHSEED` values (run with `python3 -P -s`, because `-I` ignores the seed) give the same files.
+
+## Mapping of FM ratings (key players only)
+
+`keyplayers.py` maps each FM value to the median Update Team value of the matched players with the same FM value
+(`value_map`), made non-decreasing. Above and below the values that at least 100 matched players have, the map goes
+on with slope 1 from the last such value. Potential ability and each attribute have their own map in the same
+way. FM's position ratings go across as they are. Attributes map byte by byte: `CM_ATTRS` in `keyplayers.py`
+gives the FM attribute of each CM 01/02 attribute byte. The tool prints the maps to its log; keep the log with the
+FM data, outside the repo.
 
 ## After a rebuild
 
-1. Print the club table rows with `python3 -I club_rows.py <year> "<template>" "<work>"`. Add `--write` only for a season that has no rows in the part files yet.
+1. Print the club table rows with `python3 -I club_rows.py <year> "<template>" "<work>"`. `--write` puts them into the part files and replaces the rows of that season with the same labels.
 2. Put the new sizes and SHA-256 of `index.dat`, `club.dat` and `staff.dat` in `docs/research/rules-0.6.0/databases-signatures.tsv`.
 3. Measure the date shifts with `python3 -I ../measure_date_shifts.py <3.9.68 Data> <folder with the new database> --only "Summer 2006"`, or "Summer 2004". Copy the printed row into `databases-date-shifts.tsv`. Set careers_kept and last_rows to 0.
 4. Make the C tables with `python3 -I ../make_db_table.py` and `python3 -I ../make_dates_table.py`.
@@ -54,3 +72,21 @@ python3 -I convert.py 2006 "<DB>/November 2007" "<facts>" "<work>" "<DB>/Septemb
 
 The settings of each season are in `season_2004.py` and `season_2006.py`. Each file gives the template, the real
 lists with one source each, the play-off winners and the part file of each list.
+
+## Club tables of Spain, Germany, Scotland, Austria and Switzerland
+
+`club_rows.py` writes these lists with the labels below. `make_clubs.py` (slice 15 branch) maps a label to a
+database division only through its TARGETS list, so slice 15 adds these lines to TARGETS:
+
+```python
+    ("aut-sui", r"Austrian Bundesliga", "Austrian Premier Division"),
+    ("aut-sui", r"Swiss Super League", "Swiss National Division A"),
+    ("ger", r"Bundesliga", "German First Division"),
+    ("ger", r"2\. Bundesliga", "German Second Division"),
+    ("sco", r"Scottish Premier League", "Scottish Premier Division"),
+    ("sco", r"Scottish (First|Second|Third) Division", "="),
+    ("spa", r"La Liga", "Spanish First Division"),
+    ("spa", r"Segunda División", "Spanish Second Division"),
+```
+
+Switzerland has 12 places in the game and 10 real clubs in 2004/05 and 2006/07.

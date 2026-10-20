@@ -26,6 +26,7 @@
 #include "season_names.h"
 #include "season_change.h"
 #include "season_dates.h"
+#include "season_intl.h"
 #include "options.h"
 #include "../host.h"
 
@@ -109,6 +110,11 @@ uint32_t rt_season_text_format(uint32_t original)
 int season_start_year(void) { return (int)rt_season_year; }
 int season_game_on(void) { return game_on; }
 int season_changing_rules(void) { return rules_now; }
+/* Slice 26: the changing rules of the next new game, as create_game sets them (below). */
+int season_next_rules(void)
+{
+    return !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
+}
 
 int season_set_new_game(int start_year, int changing_rules)
 {
@@ -403,6 +409,7 @@ RT_WRAP(00828110, create_game)
     rules_now = !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
     season_change_reset();
     season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
+    season_intl_at_create();                    /* slice 27: Australia in Asia from 2006/07 */
     season_change_creating(1);
     o_00828110();
     season_change_creating(0);

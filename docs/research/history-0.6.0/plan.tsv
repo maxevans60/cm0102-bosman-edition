@@ -2771,9 +2771,9 @@ add	Summer 2004	2004	Croatian Third Division South	2002		differ	NK Mosor	Croatia
 add	Summer 2004	2004	Croatian Third Division South	2003		differ	NK Mosor	Croatia	NK Jadran Luka Ploce	Croatia				
 add	Summer 2004	2004	Czech First Division	2002		agree	FC Slovan Liberec	Czech Republic	AC Sparta Prague	Czech Republic				
 add	Summer 2004	2004	Czech First Division	2003		agree	AC Sparta Prague	Czech Republic	SK Slavia Prague	Czech Republic				
-add	Summer 2004	2004	Czech Second Division	2002		add	SK Ceske Budejovice	Czech Republic	FK Zlin	Czech Republic				
-add	Summer 2004	2004	Czech Second Division	2003		add	FC Viktoria Plzen	Czech Republic	Slezsky FC Opava	Czech Republic				
-add	Summer 2004	2004	Czech Second Division	2004		add	FK Mlada Boleslav	Czech Republic	FK Drnovice	Czech Republic				
+add	Summer 2004	2004	Czech Second Division	2002		agree	SK Ceske Budejovice	Czech Republic	FK Zlin	Czech Republic				
+add	Summer 2004	2004	Czech Second Division	2003		agree	FC Viktoria Plzen	Czech Republic	Slezsky FC Opava	Czech Republic				
+add	Summer 2004	2004	Czech Second Division	2004		agree	FK Mlada Boleslav	Czech Republic	FK Drnovice	Czech Republic				
 add	Summer 2004	2004	Greek Cup	2002		differ	PAOK Salonika	Greece	Aris Salonika	Greece				
 add	Summer 2004	2004	Greek Cup	2003		differ	Panathinaikos	Greece	Olympiakos Piraeus	Greece				
 add	Summer 2004	2004	Greek National A Division	2002		differ	Olympiakos Piraeus	Greece	Panathinaikos	Greece				
@@ -3329,7 +3329,7 @@ add	Summer 2004	2004	Croatian First Division	2001		differ	NK Zagreb	Croatia	HNK 
 add	Summer 2004	2004	Croatian Second Division North	2001		agree	HNK Vukovar '91	Croatia	NK Belisce	Croatia				
 add	Summer 2004	2004	Croatian Second Division South	2001		differ	NK Istra	Croatia	NK Pula 1856	Croatia				
 add	Summer 2004	2004	Czech First Division	2001		agree	AC Sparta Prague	Czech Republic	SK Slavia Prague	Czech Republic				
-add	Summer 2004	2004	Czech Second Division	2001		add	SK Hradec Kralove	Czech Republic	Slezsky FC Opava	Czech Republic				
+add	Summer 2004	2004	Czech Second Division	2001		agree	SK Hradec Kralove	Czech Republic	Slezsky FC Opava	Czech Republic				
 add	Summer 2004	2004	Danish Cup	2001		agree	Silkeborg Idræts Forening	Denmark	Akademisk Boldklub	Denmark				
 add	Summer 2004	2004	Danish First Division	2001		agree	Esbjerg Forenede Boldklubber	Denmark	Vejle Boldklub	Denmark				
 add	Summer 2004	2004	Danish Premier Division	2001		agree	Football Club København	Denmark	Brøndbyernes Idræts Forening	Denmark				
@@ -7615,6 +7615,8 @@ add	Summer 2006	2006	German League Cup	2002		agree	Hertha BSC Berlin	Germany	FC 
 add	Summer 2006	2006	German League Cup	2003		differ	Hamburger SV	Germany	Borussia Dortmund	Germany				
 add	Summer 2006	2006	German League Cup	2004		agree	FC Bayern München	Germany	SV Werder Bremen	Germany				
 add	Summer 2006	2006	German League Cup	2005		agree	FC Schalke 04	Germany	VfB Stuttgart	Germany				
+add	Summer 2006	2006	German Regional Division North	2002		add	VfB Lübeck	Germany	TSV Eintracht Braunschweig	Germany				
+add	Summer 2006	2006	German Regional Division North	2003		agree	FC Erzgebirge Aue	Germany	VfL Osnabrück	Germany				
 add	Summer 2006	2006	German Regional Division South	2002		add	SV Wacker Burghausen	Germany	SV Eintracht Trier 05	Germany				
 add	Summer 2006	2006	German Regional Division South	2003		agree	SpVgg Unterhaching	Germany	SSV 2000 Jahn Regensburg	Germany				
 add	Summer 2006	2006	German Regional Division South	2004		differ	FC Bayern München Amateure	Germany	FC Rot-Weiss Erfurt	Germany				
@@ -7910,8 +7912,8 @@ add	Summer 2006	2006	Danish Cup	2005		add	Brøndbyernes Idrætsforening	Denmark	
 add	Summer 2006	2006	Danish Cup	2006		agree	Randers FC	Denmark	Esbjerg Forenede Boldklubber	Denmark				
 add	Summer 2006	2006	Danish Second Division	2002		add	Boldklubben Skjold	Denmark	Ølstykke Fodbold Club	Denmark				
 add	Summer 2006	2006	Danish Second Division	2003		add	FC Nordjylland	Denmark	Lolland-Falster Alliancen	Denmark				
-add	Summer 2006	2006	Danish Second Division	2004		agree	Hellerup Idræts Klub	Denmark	Dalum Idrætsforening	Denmark				
-add	Summer 2006	2006	Danish Second Division	2005		agree	Kolding Idrætsforening FC	Denmark	Brabrand IF	Denmark				
+add	Summer 2006	2006	Danish Second Division	2004		differ	Hellerup Idræts Klub	Denmark	Dalum Idrætsforening	Denmark				
+add	Summer 2006	2006	Danish Second Division	2005		differ	Kolding Idrætsforening FC	Denmark	Brabrand IF	Denmark				
 add	Summer 2006	2006	Danish Second Division	2006	East	differ	Næstved Boldklub	Denmark	Holbæk Bold- og Idrætsforening	Denmark				
 add	Summer 2006	2006	Finnish Premier Division	2002		differ	HJK Helsinki	Finland	MyPa Anjalankoski	Finland				
 add	Summer 2006	2006	Finnish Premier Division	2003		differ	HJK Helsinki	Finland	FC Haka	Finland				
@@ -8087,6 +8089,7 @@ add	Summer 2006	2006	French Second Division	2001		differ	FC Sochaux-Montbéliard
 add	Summer 2006	2006	German Cup	2001		agree	FC Schalke 04	Germany	1.FC Union Berlin	Germany				
 add	Summer 2006	2006	German First Division	2001		agree	FC Bayern München	Germany	FC Schalke 04	Germany				
 add	Summer 2006	2006	German League Cup	2001		agree	Hertha BSC Berlin	Germany	FC Schalke 04	Germany				
+add	Summer 2006	2006	German Regional Division North	2001		add	1.FC Union Berlin	Germany	SV Babelsberg 03	Germany				
 add	Summer 2006	2006	German Regional Division South	2001		add	Karlsruher SC	Germany	VfB Stuttgart Amateure	Germany				
 add	Summer 2006	2006	German Second Division	2001		agree	1.FC Nürnberg	Germany	Borussia M'gladbach	Germany				
 add	Summer 2006	2006	Greek Cup	2001		agree	AEK Athens	Greece	Olympiakos Piraeus	Greece				
@@ -8760,6 +8763,9 @@ clear	Summer 2006	2006	German League Cup	2003
 clear	Summer 2006	2006	German League Cup	2004										
 clear	Summer 2006	2006	German League Cup	2005										
 clear	Summer 2006	2006	German League Cup	2006										
+clear	Summer 2006	2006	German Regional Division North	2001										
+clear	Summer 2006	2006	German Regional Division North	2002										
+clear	Summer 2006	2006	German Regional Division North	2003										
 clear	Summer 2006	2006	German Regional Division South	2001										
 clear	Summer 2006	2006	German Regional Division South	2002										
 clear	Summer 2006	2006	German Regional Division South	2003										

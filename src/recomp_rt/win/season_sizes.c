@@ -5,6 +5,7 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_sizes.h"
+#include "season_playoffs.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -127,6 +128,17 @@ int season_sizes_clubs(const char *file, int season)
     return within(file, r->clubs);
 }
 
+/* A division that a cup takes whole after a capped number of lower clubs keeps the clubs that the database gives
+ * it, up to its class count, when its row has fewer (season_sizes.h). DenCup::collect_entrants 0x551240 wants 92
+ * clubs (0x5c at 0x551254): lower clubs of [0x9cf764] up to the room of rt_cup_room (0x55131c), then every club of
+ * [0x9cf5b4], [0x9cf5b0] and [0x9cf5ac]. A club that the club moves cut from the First Division goes to no
+ * division, so the cup is short by that many and the constructor stops at den_cup.cpp 75 (push 0x4b at
+ * 0x550a62). A 2020/21 start (November 2020 database: First Division 16, row 12) stopped there. */
+int season_sizes_keeps_database(const char *file)
+{
+    return sizes_on() && file && !strcmp(file, "den_first");
+}
+
 /* The clubs whose division is the record of the object. */
 static int clubs_in_division(uint32_t obj)
 {
@@ -219,6 +231,29 @@ uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint3
     return (uint32_t)room * 6u;
 }
 
+/* FraLgeCup::collect_entrants 0x5bd160: the first loop takes National clubs ([0x9cf5d4]) whose last division (+0x5b)
+ * is set and is not the CFA ([0x9cf5d8]) up to 16 - 2 after 2001 (edx is 0 or -2 before `add edx, 0x10` at
+ * 0x5bd244), the second loop National clubs from the CFA up to the room (0x5bd2ac). When the National holds fewer
+ * clubs from the CFA than the room leaves them, the first loop takes those places too, so the cup gets its 54
+ * (a 2025/26 start with the December 2025 database stopped at fra_lge_cup.cpp 73, 0x5bcb21). With enough clubs
+ * from the CFA the limit is the original's. Returns the value to add to edx. */
+uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx)
+{
+    if (!sizes_on()) return original;
+    int base = (int)edx + (int)original;
+    int32_t national = (int32_t)rd32(g_mem, 0x9cf5d4u), cfa = (int32_t)rd32(g_mem, 0x9cf5d8u);
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), from_cfa = 0;
+    if (!readable(table)) return original;
+    for (int i = 0; i < count; i++) {
+        uint32_t at = table + (uint32_t)i * CLUB_SIZE, div = rd32(g_mem, at + CLUB_DIVISION), last = rd32(g_mem, at + 0x5bu);
+        from_cfa += readable(div) && (int32_t)rd32(g_mem, div) == national && readable(last) && (int32_t)rd32(g_mem, last) == cfa;
+    }
+    int room = (int)(rt_cup_room(0x60u, 54u, 0x9cf5d0u, 0x9cf5ccu, 0u) / 6u), limit = room - from_cfa;
+    if (limit < base) limit = base;
+    return (uint32_t)(limit - (int)edx);
+}
+
 /* Sets a count of places so that the row's count is the direct places, or the direct places and the winners
  * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). */
 static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)
@@ -262,7 +297,7 @@ static int open_neighbour(uint32_t obj, uint32_t at)
     return size_file(f) && floor_of(f) == 0;
 }
 
-void season_sizes_rules(uint32_t obj)
+static void sizes_rules(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return;
     const char *file = season_change_file(obj);
@@ -277,6 +312,12 @@ void season_sizes_rules(uint32_t obj)
      * promotions left it short in June 2017). */
     if (open_neighbour(obj, ABOVE)) set_places(obj, UP, UP_PLAYOFF, r->up, "promotion");
     if (open_neighbour(obj, BELOW)) set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+}
+
+void season_sizes_rules(uint32_t obj)
+{
+    sizes_rules(obj);
+    if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
 }
 
 /* ---- Promotion and relegation of a size change ---- */
@@ -353,9 +394,9 @@ RT_WRAP(00689c80, promote_relegate)
 
 /* ---- News (rule kind "sizes") ---- */
 
-/* The count and places that each league held last season, so the news names only what the game applies. A loaded
- * game starts with none, so its first season change gives no sizes news (inference: acceptable, the news is a
- * note). */
+/* The count and places that each league held last season, so the news names only what the game applies. A new
+ * game and a loaded game note the counts of their own objects (sizes_new_game, sizes_loaded), so a game loaded
+ * after another game never compares with the objects of the other game. */
 #define MAX_SEEN 512
 static struct { uint32_t obj; int clubs, up, down; } seen[MAX_SEEN];
 static int nseen;
@@ -415,4 +456,16 @@ static void sizes_new_game(int start_year)
     }
 }
 
-const SeasonRuleKind season_kind_sizes = {"sizes", sizes_new_game, NULL, NULL, NULL, NULL, sizes_after};
+/* After a load: the counts of the loaded game. It only reads the objects. */
+static void sizes_loaded(int start_year)
+{
+    (void)start_year;
+    nseen = 0;
+    if (!sizes_on()) return;
+    uint32_t comps[512];
+    int n = season_change_comps(comps, 512);
+    for (int i = 0; i < n && !rt_unwinding; i++)
+        if (size_file(season_change_file(comps[i]))) note(comps[i]);
+}
+
+const SeasonRuleKind season_kind_sizes = {"sizes", sizes_new_game, sizes_loaded, NULL, NULL, NULL, sizes_after};

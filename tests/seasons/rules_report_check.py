@@ -49,7 +49,12 @@ The differences, by kind:
     up, down                    a division's promotion places (+0xbe) or relegation places (+0xc1) differ from
                                 the row (a row with a numbered tier); the row's count can also hold the
                                 play-off winner (+0xbf) or the play-out losers (+0xc0)
-    playoffs                    a division has play-off places and the row has none, or the other way round
+    playoffs                    a division's promotion play-off places (+0xbf) or relegation play-off places
+                                (+0xc0) differ from the places of the row's play-off text, as
+                                tools/seasons/encode_leagues.py reads it (slice 19). A play-off that moves no
+                                club between tiers (a finals series, a European play-off, a tie-break) has no
+                                places. For a text that the tool reads only in part, only whether the division
+                                has play-off places at all is compared
     name                        the game's name differs from the table's name of that season and from its shown
                                 form (tools/seasons/make_names.py shown_name)
     no_row                      the game holds a competition whose file has no row in that season
@@ -94,6 +99,7 @@ sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
 import make_rules  # noqa: E402
 import make_names  # noqa: E402
 import make_clubs  # noqa: E402
+import encode_leagues  # noqa: E402   slice 19: the play-off places of each league row
 
 COLS = ["season", "phase", "slot", "record", "file", "class", "kind", "vtable", "year", "clubs", "rounds",
         "subs_used", "bench", "matches", "up", "playoff_up", "playoff_down", "down", "flags", "above", "below",
@@ -174,16 +180,36 @@ def division_counts(game):
 
 def pick_row(found, file, k):
     """The row of the k-th object of a file in a season (module docstring)."""
-    alone = [r for r in found if r["comp_file"] == file] or found
+    alone = [r for r in found if file in row_files(r)] or found
     main = [r for r in alone if "qualifying" not in r["comp"].lower()] or alone
     return main[min(k, len(main) - 1)]
+
+
+def row_files(r):
+    """The files of a row. A row of a new competition (comp_file "new") has the file of its def in
+    src/recomp_rt/win/season_comps.c: "new_" and its comp in lower case with "_" for spaces ("Conference League"
+    gives new_conference_league)."""
+    return ["new_" + r["comp"].lower().replace(" ", "_") if f == "new" else f for f in r["comp_file"].split(";")]
+
+
+_LEAGUE_PLAYOFFS = {}
+
+
+def league_playoffs():
+    """{row id: encoded league row} of tools/seasons/encode_leagues.py (slice 19)."""
+    if not _LEAGUE_PLAYOFFS:
+        rows, _, problems = encode_leagues.encode()
+        if problems:
+            raise SystemExit("encode_leagues.py: " + problems[0])
+        _LEAGUE_PLAYOFFS.update((e["id"], e) for e in rows)
+    return _LEAGUE_PLAYOFFS
 
 
 def differences(seasons, comps, rows):
     """A sorted list of (season, kind, text)."""
     by_season_file = collections.defaultdict(list)
     for r in rows:
-        for f in r["comp_file"].split(";"):
+        for f in row_files(r):
             by_season_file[(r["season"], f)].append(r)
     # One entry per object and season: the start and end lines together.
     objects = collections.OrderedDict()
@@ -211,6 +237,10 @@ def differences(seasons, comps, rows):
         nations |= {x["nation"] for x in found if isinstance(x["tier"], int)}
         label = f"{c['file']} ({c['name']}), row {r['id']}"
         table_held = "not_held" not in (r["clubs"], r["format"])
+        # Some objects of a record hold no year at +0x40 (French CFA and French Lower Division of fra_first): the
+        # value is whatever the memory holds and changes from build to build, so such an object gives no line.
+        if not any(1900 <= x["year"] <= 2200 for x in both):
+            continue
         # The year of an object is the season (club competitions), the year of the final (the World Cup holds
         # 2002 in 2001/02) or the first year of a qualifying campaign (2000 for the 2002 World Cup). An object
         # with a later year waits for a later edition (the World Cup holds 2006 in 2002/03).
@@ -234,11 +264,15 @@ def differences(seasons, comps, rows):
                 if not isinstance(want, int) or want not in accept:
                     out.add((season, key, f"{label}: game {c[key]} (+{c[extra]} play-off places), "
                                           f"table {want} ({r[key + '_text'][:80]})"))
-            table_po = r["playoffs"] not in ("na", "none", "unknown")
-            game_po = bool(c["playoff_up"] or c["playoff_down"])
-            if r["playoffs"] != "unknown" and table_po != game_po:
-                out.add((season, "playoffs", f"{label}: game {c['playoff_up']} up and {c['playoff_down']} down "
-                                             f"play-off places, table {r['playoffs_text'][:80]!r}"))
+            # Slice 19: the places of the encoded play-off text.
+            e = league_playoffs().get(r["id"])
+            if e is not None and r["playoffs"] != "unknown":
+                want = (encode_leagues.count(e["po_up"]), encode_leagues.count(e["po_down"]))
+                game = (c["playoff_up"], c["playoff_down"])
+                same = game == want if e["po_status"] == "ok" else bool(sum(game)) == bool(sum(want))
+                if not same:
+                    out.add((season, "playoffs", f"{label}: game {game[0]} up and {game[1]} down play-off places, "
+                                                 f"table {want[0]} and {want[1]} ({r['playoffs_text'][:80]!r})"))
         shown = make_names.shown_name(r["name"])
         if shown and c["name"] not in (r["name"], shown):
             out.add((season, "name", f"{label}: game {c['name']!r}, table {r['name']!r}"))
@@ -247,7 +281,7 @@ def differences(seasons, comps, rows):
         for r in rows:
             if r["season"] != s or r["comp_file"] == "na" or "not_held" in (r["clubs"], r["format"]):
                 continue
-            files = r["comp_file"].split(";")
+            files = row_files(r)
             if any(f in held[s] for f in files):
                 continue
             if r["nation"] in nations or any(f in files_in_report for f in files):
@@ -401,6 +435,11 @@ def uefa_format_differences(rows):
             words = ("in a second group stage", "in the first knockout round")
         else:
             want = (int(groups.group(1)), int(ko.group(1)) if ko else 0) if groups else (0, 0)
+            # Slice 24: knockout round play-offs (2021/22 on) are one knockout stage with the round of 16: its
+            # 16 clubs and the 8 group winners who enter the round of 16.
+            ko_po = re.search(r"\bKO play-offs (\d+)", text)
+            if groups and ko and ko_po:
+                want = (want[0], int(ko_po.group(1)) + int(ko.group(1)) - int(ko_po.group(1)) // 2)
             game = (u["groups"], u["ko_clubs"])
             words = ("in the group stage", "in the knockout round after it")
         if game != want:
