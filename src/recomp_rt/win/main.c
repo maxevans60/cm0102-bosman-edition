@@ -14,6 +14,8 @@
 #include "host.h"
 #include "season.h"
 #include "season_rules.h"
+#include "season_names.h"
+#include "season_clubs.h"
 
 #include <SDL.h>
 #include <stdlib.h>
@@ -117,6 +119,8 @@ int main(int argc, char **argv)
     win_read_settings();
     season_init();                       /* RECOMP_START_SEASON (season.c) */
     season_rules_init(win_game_dir);     /* Seasons/rules.tsv (season_rules.c) */
+    season_names_init(win_game_dir);     /* Seasons/names.tsv (season_names.c) */
+    season_clubs_init(win_game_dir);     /* Seasons/clubs.tsv (season_clubs.c) */
     season_report_init();                /* RECOMP_SEASON_JUMP, RECOMP_RULES_REPORT (season_report.c) */
 
     /* The command line as Windows gives it: the quoted program path, then the options. */

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Nations League check (0.6.0 slice 28): the UEFA Nations League in a season jump.
+"""Nations League check (0.6.0 slice 28): the UEFA and CONCACAF Nations Leagues, the CONCACAF Gold Cup and the
+Finalissima in a season jump.
 
 Usage:
     python3 tests/seasons/season_nl_run.py <cm0102_recomp> <game folder> [--only <name>,...] [--jobs n]
@@ -14,6 +15,10 @@ test log RECOMP_SEASON_NL_LOG=1. The runs:
     2022    October 2022, 2022/23 to 2023/24, changing rules on: the 2024-25 edition (draw February 2024)
     2024    October 2024, 2024/25, changing rules on: the 2024-25 edition and its finals
     off     October 2018, 2018/19 to 2019/20, changing rules off: the 2018-19 shape again for 2020
+    2010    September 2010, 2010/11, changing rules on: the 2011 Gold Cup of 12 teams (no Nations League)
+Part b in the runs: the CONCACAF Nations League 2019-20 (run 2018: real leagues, finals in June 2020), 2022-23
+(run 2020), 2023-24 and 2024-25 (run 2022), 2024-25 and its finals (run 2024); the Gold Cups of 16 of 2019, 2021,
+2023 and 2025; the Finalissima of 1 June 2022 (run 2020).
     save    October 2018, changing rules on: the jump saves after 430 days (September 2019, after the 2018-19
             finals and before the 2020-21 draw) and stops; a second game loads that save in a new user folder and
             jumps to the end of 2019/20. The leagues of its 2020-21 draw must be those of run 2018 (the same
@@ -60,15 +65,26 @@ RUNS = {
     "2024": (2024, "October 2024", "on", 2024, "2024-25", ["2024-25"]),
     "off": (2018, "October 2018", "off", 2019, "2018-19", ["2018-19", "2018-19"]),
     "save": (2018, "October 2018", "on", 2019, "2018-19", ["2018-19", "2020-21"]),
+    "2010": (2010, "September 2010", "on", 2010, None, []),
 }
+# The CONCACAF Nations League editions drawn in each run (part b), in the log's names.
+CONCACAF = {"2018": ["CONCACAF-2019-20"], "2020": ["CONCACAF-2022-23"],
+            "2022": ["CONCACAF-2023-24", "CONCACAF-2024-25"], "2024": ["CONCACAF-2024-25"],
+            "off": ["CONCACAF-2019-20"], "2010": []}
 SAVE_AFTER = 430
 # Log lines each run must hold: the play-off paths (season_nl_euro.c, season_nl_wc.c).
 LINES = {"2018": ["euro 2020 qualifying groups from 21 March 2019", "euro 2020 path A (", "euro 2020 path D (",
-                  "euro 2020 seeding on day"],
+                  "euro 2020 seeding on day", "season nl: CONCACAF-2019-20 finals:", "season gold cup 2019: 16 teams:",
+                  "season gold cup 2019 hosts: United States (stadium"],
          "2020": ["world cup 2022 qualifying groups from 24 March 2021", "world cup 2022 path A:",
-                  "world cup 2022 path C:"],
-         "2022": ["euro 2024 qualifying groups from 23 March 2023", "euro 2024 path C ("]}
-NO_LINES = ["no path play-off", ": no paths ("]
+                  "world cup 2022 path C:", "season gold cup 2021: 16 teams:", "season finalissima 2022: ",
+                  "season gold cup 2021 hosts: United States (stadium"],
+         "2022": ["euro 2024 qualifying groups from 23 March 2023", "euro 2024 path C (",
+                  "season gold cup 2023: 16 teams:"],
+         "2024": ["season nl: CONCACAF-2024-25 finals:", "season gold cup 2025: 16 teams:"],
+         "off": ["season gold cup 2019: 16 teams:"],
+         "2010": ["season gold cup 2011: 12 teams:", "season gold cup 2011 hosts: United States (stadium"]}
+NO_LINES = ["no path play-off", ": no paths (", "teams of 12", "teams of 16", "no winner in the history", " holds 0 nations", " holds 1 nations"]
 BASE_ENV = {"RECOMP_STAFF_RESERVE": "23000", "RECOMP_SEASON_NL_LOG": "1"}
 DRAW = re.compile(r"recomp: season nl: (\S+) draw league ([A-D]) group (\d+):(.*)$")
 FINALS = re.compile(r"recomp: season nl: (\S+) finals:(.*)$")
@@ -83,21 +99,22 @@ def database_folder(name):
     return os.path.join(DB, hits[0])
 
 
-def real_leagues(edition):
+def real_leagues(edition, confed="UEFA"):
     """nation name (each "/" name of the table) -> (league, group) of the real draw."""
     out = {}
-    for t in make_nl.tiers({("UEFA", edition)}):
+    for t in make_nl.tiers({(confed, edition)}):
         for name in t["nation"].split("/"):
             out[name.encode("latin-1", "replace").decode("latin-1")] = ("ABCD"[t["league"]], t["group"])
     return out
 
 
-def draws(log):
-    """The draws in log order: [(edition, {league: [[nations of group 1], ...]})]."""
+def draws(log, confed="UEFA"):
+    """The draws of a confederation in log order: [(edition, {league: [[nations of group 1], ...]})]. The log
+    names a CONCACAF edition "CONCACAF-2019-20"."""
     out = []
     for line in log:
         m = DRAW.search(line)
-        if not m:
+        if not m or m.group(1).startswith("CONCACAF-") != (confed == "CONCACAF"):
             continue
         ed, league, group, names = m.group(1), m.group(2), int(m.group(3)), m.group(4)
         nations = [n.strip() for n in names.split(";") if n.strip()]
@@ -121,8 +138,8 @@ def check(name, work):
     if not os.path.exists(path):
         return fails + [f"{name}: no log"]
     log = open(path, encoding="latin-1").read().split("\n")
-    made = [m.groups() for m in (MADE.search(x) for x in log) if m]
-    if not made or made[0][0] != first:
+    made = [m.groups() for m in (MADE.search(x) for x in log) if m and not m.group(1).startswith("CONCACAF-")]
+    if first and (not made or made[0][0] != first):
         fails.append(f"{name}: the object is not made for {first} ({made[:1]})")
     eds = {(e["confed"], e["edition"]): e for e in make_nl.editions()}
     seen = draws(log)
@@ -148,6 +165,7 @@ def check(name, work):
                         elif want and want[1] and want[1] != gi + 1:
                             fails.append(f"{name}: {ed}: {nation} in group {league}{gi + 1}, the real group is "
                                          f"{want[0]}{want[1]}")
+    fails += [f"{name}: {x.strip()}" for x in log if "recomp: message box from" in x]
     for text in LINES.get(name, []):
         if not any(text in x for x in log):
             fails.append(f"{name}: no log line {text!r}")
@@ -158,7 +176,27 @@ def check(name, work):
     for x in log:
         if "path" in x and "season nl:" in x and " none;" in x:
             fails.append(f"{name}: a path with a missing nation: {x.strip()}")
-    league_a = {ed: {n for g in leagues.get("A", []) for n in g} for ed, leagues in seen}
+    seen_c = draws(log, "CONCACAF")
+    if [d[0] for d in seen_c] != CONCACAF.get(name, []):
+        fails.append(f"{name}: the CONCACAF draws are {[d[0] for d in seen_c]}, expected {CONCACAF.get(name, [])}")
+    for k, (ed, leagues) in enumerate(seen_c):
+        e = eds.get(("CONCACAF", ed[len("CONCACAF-"):]))
+        for li, league in enumerate("ABC"):
+            groups = leagues.get(league, [])
+            count = sum(len(g) for g in groups)
+            if e and count > e["sizes"][li] + 1:
+                fails.append(f"{name}: {ed} league {league} holds {count}, the edition {e['sizes'][li]}")
+            if e and len(groups) != e["groups"][li]:
+                fails.append(f"{name}: {ed} league {league} has {len(groups)} groups, the edition {e['groups'][li]}")
+        if k == 0:
+            real = real_leagues(ed[len("CONCACAF-"):], "CONCACAF")
+            for league, groups in leagues.items():
+                for gi, g in enumerate(groups):
+                    for nation in g:
+                        want = real.get(nation)
+                        if want and want[0] != league:
+                            fails.append(f"{name}: {ed}: {nation} in league {league}, the real league is {want[0]}")
+    league_a = {ed: {n for g in leagues.get("A", []) for n in g} for ed, leagues in seen + seen_c}
     finals = [m.groups() for m in (FINALS.search(x) for x in log) if m]
     for ed, names in finals:
         nations = [n.strip() for n in names.split(";") if n.strip()]
@@ -238,6 +276,9 @@ def save_run(program, game, keep, reuse):
             return [f"save: the loaded game ended with code {code} ({second})"]
     fails = []
     log_b = open(os.path.join(second, "stderr.txt"), encoding="latin-1").read().split("\n")
+    fails += [f"save: the loaded game: {x.strip()}" for x in log_b if "recomp: message box from" in x]
+    if not any("season jump: done" in x for x in log_b):
+        fails.append(f"save: the loaded game did not reach the end of {last}/{(last + 1) % 100:02d}")
     ref = os.path.join(base, "2018", "stderr.txt")
     if not os.path.exists(ref):
         return [f"save: no log of run 2018 in {base} to compare with"]

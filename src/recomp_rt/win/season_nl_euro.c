@@ -364,3 +364,59 @@ RT_WRAP(0057ef50, nl_euro_paths)
     if (rt_unwinding) return;
     rt_ret_stdcall(0, 0);
 }
+
+/* Test log (RECOMP_SEASON_NL_LOG): the Euro's team slots (+0x14, 6 bytes a slot: team +0, flag +4; count +0x36,
+ * room +0x38, season_intl.c) on the two days before its seeding day (+0x13e and the year offset +0x140,
+ * class doc 12.2) and on that day, from the Nations League object's daily update (season_nl.c). Each team with
+ * its record name and its nation (club +0x53). */
+void season_nl_euro_log_slots(int day, int year)
+{
+    if (!logging()) return;
+    uint32_t euro = euro_object();
+    if (!readable(euro)) return;
+    int seed = (int16_t)rd16(g_mem, euro + EURO_SEED_DAY);
+    int seed_year = (int16_t)rd16(g_mem, euro + 0x40u) + (int16_t)rd16(g_mem, euro + EURO_SEED_DAY + 2u);
+    if (year != seed_year || day < seed - 2 || day > seed) return;
+    uint32_t slots = rd32(g_mem, euro + EURO_SLOTS);
+    int n = (int16_t)rd16(g_mem, euro + EURO_SLOT_COUNT), room = (int16_t)rd16(g_mem, euro + 0x38u);
+    fprintf(stderr, "recomp: season nl: euro slots on day %d of %d (seeding day %d): %d of %d at 0x%x (object 0x%x)\n",
+            day, year, seed, n, room, slots, euro);
+    for (int k = 0; readable(slots) && k < n && k < 32; k++) {
+        uint32_t club = rd32(g_mem, slots + 6u * (uint32_t)k);
+        uint32_t nation = readable(club) ? rd32(g_mem, club + 0x53u) : 0;
+        fprintf(stderr, "recomp: season nl:   slot %d: club 0x%x %.30s, nation 0x%x %.30s, flag %d\n", k, club,
+                readable(club) ? win_str(club + 4u) : "-", nation, readable(nation) ? win_str(nation + 4u) : "-",
+                (int8_t)rd8(g_mem, slots + 6u * (uint32_t)k + 4u));
+    }
+}
+
+/* The Euro's team slots after a load. The constructor of EuroChamp builds the slots (malloc 0x57a958,
+ * build_team_slots 0x57bd80) only for a new edition: after a load it jumps past them (`jne 0x57aa87` at 0x57a943),
+ * and load_extra_data 0x57c480 reads only the pots (+0xee) and the seeding day (+0x13e, +0x140). So in a loaded game
+ * +0x14 is 0 while the count +0x36 and the room +0x38 come from the file, and add_qualified_team 0x57c120 writes
+ * the qualifiers at address 0 with no test (0x57c1aa..0x57c1bc), where other writes can overwrite them before the
+ * seeding reads them (box "Database..cpp 13126" at the Euro 2020 seeding in a loaded game). The World Cup builds
+ * its slots before its load (0x92bffa..0x92c00a, load at 0x92c040), so it keeps them. In a season game slice 27's
+ * Euro slot code (season_intl.c: add_qualified_team 0x57c120, the fill at the seeding 0x57c710 and at the draw
+ * 0x57c1d0) calls this first: a Euro with no slot array gets one of its room, with the entries already written at
+ * address 0 that hold a national team. The base game keeps the original's (Q152). */
+void season_euro_slots_after_load(uint32_t euro)
+{
+    if (!readable(euro) || rd32(g_mem, euro + EURO_SLOTS)) return;
+    int n = (int16_t)rd16(g_mem, euro + EURO_SLOT_COUNT), room = (int16_t)rd16(g_mem, euro + 0x38u);
+    if (room <= 0 || room > 64) return;
+    uint32_t slots = game_malloc((uint32_t)room * 6u);
+    if (rt_unwinding || !slots) return;
+    int kept = 0;
+    for (int k = 0; k < n && k < room; k++) {
+        uint32_t club = rd32(g_mem, 6u * (uint32_t)k);
+        if (season_nl_nation_of_club(club) < 0) continue;
+        wr32(g_mem, slots + 6u * (uint32_t)kept, club);
+        wr8(g_mem, slots + 6u * (uint32_t)kept + 4u, rd8(g_mem, 6u * (uint32_t)k + 4u));
+        kept++;
+    }
+    wr32(g_mem, euro + EURO_SLOTS, slots);
+    wr16(g_mem, euro + EURO_SLOT_COUNT, (uint32_t)kept);
+    fprintf(stderr, "recomp: season nl: the Euro %d gets its team slots again after a load (%d of %d kept, room %d)\n",
+            (int16_t)rd16(g_mem, euro + 0x40u), kept, n, room);
+}

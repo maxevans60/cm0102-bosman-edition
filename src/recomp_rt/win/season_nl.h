@@ -35,6 +35,8 @@ typedef struct {
     int up_winners;             /* 1: the group winners of each league below A go up one league */
     int down_last[NL_MAX_LEAGUES];   /* 1: the last of each group of the league goes down one league */
     int down_lowest[NL_MAX_LEAGUES]; /* more nations of the league that go down: the lowest of the ranking */
+    int up_second[NL_MAX_LEAGUES];   /* the best runners-up of the league by the ranking that go up too (the best
+                                        League C runner-up of CONCACAF from 2023-24) */
     SeasonNlDate draw;          /* the draw of the league phase */
     SeasonNlDate md[6];         /* the first day of each of the six matchdays of the league phase */
     SeasonNlDate sf, final;     /* the semi-finals and the final of the finals of four */
@@ -63,6 +65,19 @@ typedef struct {
 
 extern const SeasonNlQualifying season_nl_qualifying[];
 extern const int season_nl_qualifying_count;
+
+/* A CONCACAF Gold Cup that the class copa_america plays (season_gold_cup.c): 12 or 16 teams and the first day of
+ * the edition (year offset 0). From int-continental.tsv and the dates file. */
+typedef struct {
+    int year;
+    int teams;
+    SeasonNlDate start;
+    const char *row;
+    const char *hosts;          /* the host nations, names of the game's nation.dat, ";" between them */
+} SeasonNlGoldCup;
+
+extern const SeasonNlGoldCup season_nl_gold_cups[];
+extern const int season_nl_gold_cup_count;
 
 extern const SeasonNlEdition season_nl_editions[];
 extern const int season_nl_edition_count;
@@ -135,6 +150,23 @@ int season_nl_held_results(int year, SeasonNlRow *rows);
 /* One round of a path play-off template (season_nl_euro.c): a cup round record of 0x68 bytes at rec + round *
  * 0x68, one match with extra time and penalties on day d (year offset from the campaign year), the final with
  * bit 0x200 for the fixed links. */
+/* Test log: the Euro's team slots around its seeding (season_nl_euro.c). */
+void season_nl_euro_log_slots(int day, int year);
+/* A Euro with no slot array after a load gets one (season_nl_euro.c), called by slice 27's Euro slot code in a
+ * season game. */
+void season_euro_slots_after_load(uint32_t euro);
+
 void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams);
+
+/* Part b (season_gold_cup.c): the CONCACAF Gold Cup and the Finalissima. */
+int season_gold_cup_of(uint32_t self);           /* 1 for the Gold Cup object (by its record) in a season game */
+int season_gold_cup_teams(uint32_t self);        /* its teams in the edition it holds (12 or 16), else 0 */
+int season_gold_cup_date_shift(uint32_t self, int *shift);   /* 1 for the Gold Cup: *shift in days */
+uint32_t season_gold_cup_entrants(uint32_t self);            /* the entrants into +0xee; 1, or 0 */
+int season_gold_cup_record(uint32_t rec);
+/* The Finalissima's round table in the wrap of 0x57a3c0 (season_uefa_super_cup.c): 1 when handled. */
+int season_finalissima_round_table(void (*original)(void));        /* 1 for the record of the Gold Cup or the Finalissima */
+/* 1 for the record of an object of slice 28 (season_nl.c): its fixtures are international (0x669ae0). */
+int season_nl_international(uint32_t rec);
 
 #endif

@@ -220,9 +220,24 @@ static int has_file(const char *list, const char *file)
     return 0;
 }
 
+/* Slice 24: a row of a new competition (comp_file "new") has the file of its def in season_comps.c: "new_" and its
+ * comp in lower case with "_" for a space ("Conference League" gives new_conference_league), as
+ * tests/seasons/rules_report_check.py reads it. */
+static int new_file(const SeasonRule *r, const char *file)
+{
+    if (strcmp(r->comp_file, "new") || strncmp(file, "new_", 4) || !r->comp) return 0;
+    const char *p = r->comp, *f = file + 4;
+    for (; *p && *f; p++, f++) {
+        char c = *p == ' ' ? '_' : (*p >= 'A' && *p <= 'Z') ? (char)(*p - 'A' + 'a') : *p;
+        if (c != *f) return 0;
+    }
+    return !*p && !*f;
+}
+
 const SeasonRule *season_rules_find(int season, const char *file, int n)
 {
     for (int i = 0; i < nrows; i++)
-        if (rows[i].season == season && has_file(rows[i].comp_file, file) && n-- == 0) return &rows[i];
+        if (rows[i].season == season && (has_file(rows[i].comp_file, file) || new_file(&rows[i], file)) && n-- == 0)
+            return &rows[i];
     return NULL;
 }

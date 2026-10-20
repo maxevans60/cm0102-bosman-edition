@@ -66,11 +66,15 @@ EDITIONS = {
     # "League A 16: 12 in two groups of 6 (4 matches each), top 4 plus 4 top-ranked teams to quarter-finals;
     # League B 16 (4 groups of 4); League C 9 (3 groups of 3)"; up "group winners of B and C, best League C
     # runner-up"; down "5th and 6th of A groups, 4th of B groups".
-    "int-continental-248": ("CONCACAF", "2023-24", 2023, (16, 16, 9), (2, 4, 3), 1, (0, 1, 0), (4, 0, 0)),
+    # Decision (slice 28 part b, recommended answer): League A of 16 plays 4 groups of 4, home and away, like the
+    # UEFA leagues, and its group winners play the finals of four. The class holds no Swiss system, no groups of
+    # 6 with 4 matches each and no byes or quarter-finals. The last of each A group goes down (4, as the real
+    # 5th and 6th of the two groups of 6).
+    "int-continental-248": ("CONCACAF", "2023-24", 2023, (16, 16, 9), (4, 4, 3), 1, (1, 1, 0), (0, 0, 0)),
     # As 2023-24 (League A 16 with 4 byes, B 16, C 9 from the moves); up "group winners of B; group winners of
     # C and the best C runner-up"; down "5th and 6th of A groups ...; 4th of B groups".
-    "int-continental-259": ("CONCACAF", "2024-25", 2024, (16, 16, 9), (2, 4, 3), 1, (0, 1, 0), (4, 0, 0)),
-    "int-continental-281": ("CONCACAF", "2026-27", 2026, (16, 16, 9), (2, 4, 3), 1, (0, 1, 0), (4, 0, 0)),
+    "int-continental-259": ("CONCACAF", "2024-25", 2024, (16, 16, 9), (4, 4, 3), 1, (1, 1, 0), (0, 0, 0)),
+    "int-continental-281": ("CONCACAF", "2026-27", 2026, (16, 16, 9), (4, 4, 3), 1, (1, 1, 0), (0, 0, 0)),
 }
 
 # Names of the tiers file -> names of the game's nation.dat (3.9.68 and the Update Team databases), with the
@@ -95,6 +99,14 @@ NAMES = {
     "U.S. Virgin Islands": "US Virgin Islands",
 }
 LEAGUES = "ABCD"
+
+# The best runners-up of a league that go up too, by league (the up column of the row: "best League C
+# runner-up" of CONCACAF 2023-24 and 2024-25; 2026-27 as 2024-25).
+UP_SECOND = {
+    "int-continental-248": (0, 0, 1),
+    "int-continental-259": (0, 0, 1),
+    "int-continental-281": (0, 0, 1),
+}
 
 # Rows whose format does not give every size: the sizes are checked against the row named here. 2022-23:
 # "structure unchanged from 2019-20: inference" (row 237). 2024-25 and 2026-27: League C 9 from the moves of
@@ -134,13 +146,13 @@ def editions():
                 fail(f"{row}: the size {n} is not in the format")
         year = int(ed[:4])
         when = {}
-        if confed == "UEFA":
-            ds = dates()
-            for ev in ("draw", "md1", "md2", "md3", "md4", "md5", "md6", "sf1", "final"):
-                if (ed, ev) not in ds:
-                    fail(f"{row}: no date {ev} of {ed} in nations-league-dates.tsv")
-                y, mo, d = ds[(ed, ev)]
-                when[ev] = (d, mo, y - year)
+        ds = dates()
+        key = ed if confed == "UEFA" else "concacaf-" + ed     # the CONCACAF rows: "concacaf-2019-20"
+        for ev in ("draw", "md1", "md2", "md3", "md4", "md5", "md6", "sf1", "final"):
+            if (key, ev) not in ds:
+                fail(f"{row}: no date {ev} of {key} in nations-league-dates.tsv")
+            y, mo, d = ds[(key, ev)]
+            when[ev] = (d, mo, y - year)
         out.append({"confed": confed, "edition": ed, "season": season, "year": year, "sizes": sizes,
                     "groups": groups, "up": up, "down": down, "lowest": lowest, "when": when, "row": row})
     out.sort(key=lambda e: (e["confed"] != "UEFA", e["confed"], e["season"]))
@@ -161,7 +173,21 @@ QUALIFYING = {"euro2020": (2020, 4, 0), "euro2024": (2024, 3, 0), "wc2022": (202
 MOVED_DATES = {
     ("2020-21", "sf1"): "2021-06-02",
     ("2020-21", "final"): "2021-06-06",
+    # The 2019-20 CONCACAF finals were planned for 4 to 7 June 2020 (row int-continental-204) and played in June
+    # 2021 (Q277: the planned time).
+    ("concacaf-2019-20", "sf1"): "2020-06-04",
+    ("concacaf-2019-20", "final"): "2020-06-07",
+    # The 2026-27 CONCACAF finals: only the window 25 to 28 March 2027 is known (dates file). Decision: the
+    # semi-finals on its first day and the final on its last.
+    ("concacaf-2026-27", "sf1"): "2027-03-25",
+    ("concacaf-2026-27", "final"): "2027-03-28",
 }
+
+# The CONCACAF Gold Cups that the class copa_america can play (docs/research/2026-10-18-gold-cup-class.md): the
+# rows of int-continental.tsv with comp "CONCACAF Gold Cup" and 12 or 16 teams. 2002 and 2003 (4 groups of 3)
+# cannot be played. The first day of each edition: event "start" of "goldcup-<year>" in the dates file.
+GOLD_COMP = "CONCACAF Gold Cup"
+GOLD_FIRST = 2005
 
 
 def dates():
@@ -174,6 +200,41 @@ def dates():
             m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", d)
             if m:
                 out[(r["edition"], r["event"])] = tuple(int(x) for x in m.groups())
+    return out
+
+
+def gold_hosts(r):
+    """The hosts of a Gold Cup row: the format text starts "host United States and Canada;" (or "host A, B and
+    C;"). The names of the game's nation.dat, ";" between hosts. An unknown host (2027: "host unknown (TBA)")
+    gives the United States, the host of 13 of the 14 editions from 2005 (decision)."""
+    m = re.match(r"^host (.*?);", r["format"])
+    text = m.group(1) if m else ""
+    if not text or "unknown" in text:
+        return "United States"
+    names = [n.strip() for n in re.split(r",| and ", text) if n.strip()]
+    return ";".join(NAMES.get(n, n) for n in names)
+
+
+def gold_cups():
+    ds = dates()
+    out = []
+    for r in read("int-continental.tsv"):
+        if r["comp"] != GOLD_COMP or not r["real_season"][:4].isdigit():
+            continue
+        year = int(r["real_season"][:4])
+        if year < GOLD_FIRST:
+            continue
+        teams = int(r["clubs"]) if r["clubs"].isdigit() else 0
+        if teams not in (12, 16):
+            fail(f'{r["id"]}: {teams} teams, the class plays 12 or 16')
+        key = (f"goldcup-{year}", "start")
+        if key not in ds:
+            fail(f"no date start of goldcup-{year} in nations-league-dates.tsv")
+        y, mo, d = ds[key]
+        if y != year:
+            fail(f"goldcup-{year} starts in {y}")
+        out.append({"year": year, "teams": teams, "day": d, "month": mo, "row": r["id"], "hosts": gold_hosts(r)})
+    out.sort(key=lambda g: g["year"])
     return out
 
 
@@ -221,7 +282,7 @@ def text():
         mds = "{" + ", ".join(day(f"md{k}") for k in range(1, 7)) + "}"
         lines.append(f'    {{{c_str(e["confed"])}, {c_str(e["edition"])}, {e["season"]}, {e["year"]}, '
                      f'{len(e["sizes"])}, {arr(e["sizes"])}, {arr(e["groups"])}, {e["up"]}, {arr(e["down"])}, '
-                     f'{arr(e["lowest"])},')
+                     f'{arr(e["lowest"])}, {arr(UP_SECOND.get(e["row"], ()))},')
         lines.append(f'     {day("draw")}, {mds}, {day("sf1")}, {day("final")}, {c_str(e["row"])}}},')
     lines += [
         "};",
@@ -249,6 +310,15 @@ def text():
     lines += [
         "};",
         "const int season_nl_qualifying_count = (int)(sizeof season_nl_qualifying / sizeof season_nl_qualifying[0]);",
+        "",
+        "const SeasonNlGoldCup season_nl_gold_cups[] = {",
+    ]
+    for g in gold_cups():
+        lines.append(f'    {{{g["year"]}, {g["teams"]}, {{{g["day"]}, {g["month"]}, 0}}, {c_str(g["row"])}, '
+                     f'{c_str(g["hosts"])}}},')
+    lines += [
+        "};",
+        "const int season_nl_gold_cup_count = (int)(sizeof season_nl_gold_cups / sizeof season_nl_gold_cups[0]);",
         "",
         "const SeasonNlTier season_nl_tiers[] = {",
     ]

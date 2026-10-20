@@ -32,11 +32,12 @@ CLUB_FIX = {"Borussia Mönchengladbach": "Borussia M'gladbach", "Randers Footbal
 # Wimbledon moved and became Milton Keynes Dons in June 2004 (https://en.wikipedia.org/wiki/Milton_Keynes_Dons_F.C.);
 # Telford United folded and AFC Telford United was formed (https://en.wikipedia.org/wiki/AFC_Telford_United).
 SUCCESSORS = {"Wimbledon": "Milton Keynes Dons", "Telford United": "AFC Telford United"}
+# Real clubs whose template record has another name (real name -> template long name).
+ALIAS = {"Kerkyra": "Kerkira"}
 
 # The real 2004/05 divisions of other nations, keyed by the template's division name (calendar-year leagues: the
 # 2005 season: the project's club tables put calendar year X+1 in game season X/X+1), and the clubs promoted into each, in the order of their finish below. English Wikipedia, one URL
 # per list. Club counts are the rows of each page's table. Names follow the template's spelling where it differs.
-# Kerkyra (Greece) is not in the template.
 REAL = {
     'Italian Serie A': ['Juventus', 'Milan', 'Internazionale', 'Udinese', 'Sampdoria', 'Palermo', 'Messina', 'Roma', 'Livorno', 'Reggina', 'Lecce', 'Cagliari', 'Lazio', 'Siena', 'Chievo', 'Fiorentina', 'Parma', 'Bologna', 'Brescia', 'Atalanta'],   # 20 clubs, https://en.wikipedia.org/wiki/2004–05_Serie_A
     'Italian Serie B': ['Empoli', 'Torino', 'Perugia', 'Treviso', 'Ascoli', 'Hellas Verona', 'Modena', 'Ternana', 'Piacenza', 'Bari', 'AlbinoLeffe', 'Catania', 'Salernitana', 'Arezzo', 'Cesena', 'Crotone', 'Vicenza', 'Triestina', 'Pescara', 'Venezia', 'Catanzaro', 'Genoa'],   # 22 clubs, https://en.wikipedia.org/wiki/2004–05_Serie_B
@@ -101,9 +102,18 @@ PROMOTED = {
 }
 
 # Part file and label of each real list in docs/research/rules-0.6.0/<part>-clubs.tsv (club_rows.py), with the
-# labels that make_clubs.py TARGETS maps to the database division. Lists with no target there are left out
-# (Spain and Germany above their group tiers, Scotland, Austria, Switzerland, Czech Republic, Serbia and Montenegro).
+# labels that make_clubs.py TARGETS maps to the database division (the lines for Spain, Germany, Scotland,
+# Austria and Switzerland are written for slice 15: tools/seasons/own_db/README.md). Lists with no part are left out
+# (Czech Republic, Serbia and Montenegro).
 PARTS = {
+    'Spanish First Division': ('spa', 'La Liga'), 'Spanish Second Division': ('spa', 'Segunda División'),
+    'German First Division': ('ger', 'Bundesliga'), 'German Second Division': ('ger', '2. Bundesliga'),
+    'Scottish Premier Division': ('sco', 'Scottish Premier League'),
+    'Scottish First Division': ('sco', 'Scottish First Division'),
+    'Scottish Second Division': ('sco', 'Scottish Second Division'),
+    'Scottish Third Division': ('sco', 'Scottish Third Division'),
+    'Austrian Premier Division': ('aut-sui', 'Austrian Bundesliga'),
+    'Swiss National Division A': ('aut-sui', 'Swiss Super League'),
     'Italian Serie A': ('ita', 'Serie A'), 'Italian Serie B': ('ita', 'Serie B'),
     'French First Division': ('fra', 'Ligue 1'), 'French Second Division': ('fra', 'Ligue 2'),
     'Dutch Premier Division': ('hol-bel', 'Eredivisie'), 'Dutch First Division': ('hol-bel', 'Eerste Divisie'),

@@ -80,6 +80,14 @@ int season_nl_next_leagues(const SeasonNlEdition *from, const SeasonNlEdition *t
         }
     }
 
+    /* The best runners-up that go up too (rows are ranked, so the first found are the best). */
+    for (int l = 1; l < from->leagues && l < NL_MAX_LEAGUES; l++)
+        for (int i = 0, left = from->up_second[l]; i < n && left > 0; i++)
+            if (rows[i].league == l && rows[i].pos == 2 && moved[i] == l) {
+                moved[i] = l - 1;
+                left--;
+            }
+
     /* 2. Fill the leagues of `to` in order: the nations of each moved league, in the ranking (rows are ranked
      * by their old league, so a nation that came down from above comes first, then those that stay, then those
      * that came up). A league with room takes the best of the next moved league. A full league passes the

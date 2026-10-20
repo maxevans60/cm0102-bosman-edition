@@ -234,6 +234,51 @@ static void check_paths(void)
           "too few nations: -1");
 }
 
+/* Part b: the CONCACAF moves with test places (nation ids 100 on, group places in order). 2022-23 to 2023-24:
+ * no one goes down, the B and C winners go up, so the leagues grow to 16, 16 and 9. 2023-24 to 2024-25 (League A
+ * of 4 groups of 4, decision 11): the last of each A and B group go down, the B and C winners and the best C
+ * runner-up go up. */
+static int concacaf_rows(const SeasonNlEdition *e, SeasonNlRow *rows)
+{
+    int n = 0, nation = 100;
+    for (int l = 0; l < e->leagues; l++)
+        for (int k = 0; k < e->size[l]; k++) {
+            int g = k % e->groups[l], pos = k / e->groups[l];
+            rows[n++] = (SeasonNlRow){nation++, l, g + 1, pos + 1, 4, 12 - 3 * pos - g % 2, 0, 0, 0};
+        }
+    return n;
+}
+
+static void check_concacaf(void)
+{
+    const char *pairs[][2] = {{"2022-23", "2023-24"}, {"2023-24", "2024-25"}};
+    for (int p = 0; p < 2; p++) {
+        const SeasonNlEdition *from = edition("CONCACAF", pairs[p][0]), *to = edition("CONCACAF", pairs[p][1]);
+        if (!from || !to) { CHECK(0, "no CONCACAF %s or %s", pairs[p][0], pairs[p][1]); continue; }
+        SeasonNlRow rows[NL_MAX_NATIONS];
+        int next[NL_MAX_NATIONS], size[NL_MAX_LEAGUES] = {0}, up = 0, down = 0;
+        int n = concacaf_rows(from, rows);
+        CHECK(season_nl_next_leagues(from, to, rows, n, next) == n, "CONCACAF %s: the leagues are made", pairs[p][1]);
+        for (int i = 0; i < n; i++) {
+            size[next[i]]++;
+            up += next[i] < rows[i].league;
+            down += next[i] > rows[i].league;
+            CHECK(next[i] >= rows[i].league - 1 && next[i] <= rows[i].league + 1, "CONCACAF %s: a move of one league",
+                  pairs[p][1]);
+        }
+        CHECK(size[0] == 16 && size[1] == 16 && size[2] == 9, "CONCACAF %s sizes %d %d %d", pairs[p][1], size[0],
+              size[1], size[2]);
+        CHECK(p == 0 ? up == 8 && down == 0 : up == 8 && down == 8, "CONCACAF %s: %d up, %d down", pairs[p][1], up, down);
+    }
+    CHECK(season_nl_gold_cup_count == 12 && season_nl_gold_cups[0].year == 2005 && season_nl_gold_cups[0].teams == 12,
+          "the Gold Cups from 2005 (12 teams)");
+    for (int i = 0; i < season_nl_gold_cup_count; i++)
+        CHECK(season_nl_gold_cups[i].teams == (season_nl_gold_cups[i].year >= 2019 ? 16 : 12) &&
+              season_nl_gold_cups[i].start.month >= 6 && season_nl_gold_cups[i].start.month <= 7,
+              "Gold Cup %d: %d teams from %d.%d", season_nl_gold_cups[i].year, season_nl_gold_cups[i].teams,
+              season_nl_gold_cups[i].start.day, season_nl_gold_cups[i].start.month);
+}
+
 int main(void)
 {
     CHECK(season_nl_weekday(6, 9, 2018) == 3, "6 September 2018 is a Thursday");
@@ -248,6 +293,7 @@ int main(void)
     check_table();
     check_promotion();
     check_paths();
+    check_concacaf();
     if (failures) fprintf(stderr, "season_nl_test: %d failures\n", failures);
     else printf("season_nl_test: all checks pass\n");
     return failures != 0;

@@ -26,7 +26,9 @@
  * 0x3b bytes, 0xec at 0x5e11e0..0x5e11ee) and group builders of 6 (they copy exactly 4 teams: 0x5e171c, malloc
  * 0x10 at 0x5e16d0), and a knockout from the top four of two groups. So it keeps the shape of 12. */
 #include "win.h"
+#include "season_change.h"
 #include "season_intl.h"
+#include "season_nl.h"                     /* slice 28: the Gold Cup */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -132,6 +134,9 @@ static int year_of(uint32_t self) { return (int16_t)rd16(g_mem, self + 0x40u); }
 /* The index into editions[] when the object is a Copa America of 16 teams in a season game, else -1. */
 static int copa16(uint32_t self)
 {
+    /* Slice 28 part b: the CONCACAF Gold Cup object (season_gold_cup.c, by its record) of 16 teams takes the
+     * shape and the bracket of the 2024 edition (decision). */
+    if (season_gold_cup_of(self)) return season_gold_cup_teams(self) == TEAMS ? EDITIONS - 1 : -1;
     if (!season_intl_on() || !readable(self) || rd32(g_mem, self) != COPA_VTABLE) return -1;
     const SeasonIntlEdition *e = season_intl_edition("goldcup", year_of(self));
     if (!e || e->teams != TEAMS) return -1;
@@ -161,7 +166,7 @@ uint32_t rt_intl_copa_groups(uint32_t self, uint32_t original)
  * from it (0x688e11, 0x688e53). */
 void rt_intl_copa_stages(uint32_t self)
 {
-    if (!season_intl_on() || !readable(self) || rd32(g_mem, self) != COPA_VTABLE) return;
+    if (!season_intl_on() || !readable(self) || (rd32(g_mem, self) != COPA_VTABLE && !season_gold_cup_of(self))) return;
     uint32_t want = rt_intl_copa_ko(self, 2u) + 1u, have = rd32(g_mem, self + 0x2cu);
     if (have == want) return;
     uint32_t stages = game_malloc(4u * want);
@@ -340,6 +345,12 @@ void o_005e1cd0(void);
 RT_WRAP(005e1cd0, copa_entrants)
 {
     uint32_t self = cpu.ecx;
+    if (season_gold_cup_of(self)) {             /* slice 28 part b: the Gold Cup's own entrants */
+        uint32_t r = season_gold_cup_entrants(self);
+        if (rt_unwinding) return;
+        rt_ret_stdcall(r, 0);
+        return;
+    }
     int e = copa16(self);
     if (e < 0) {
         o_005e1cd0();
@@ -411,11 +422,9 @@ void o_0040f590(void);
 /* vtable +0x30 of the Copa America and the Asian Cup (0x96b430, 0x967644): a jump to vtable +0x30 of stage[2]
  * (0x40f590..0x40f598). The Asian Cup's stage index is a site of season_intl_cups.c (0x40f593). For a Copa
  * America of 16 the jump goes to stage[3]. */
-/* One wrap of 0x40f590 serves every slice. Another slice that needs this function (slice 26: the Club World
- * Championship's history thunk of slot 12) defines season_club_world_history_thunk(): it runs first and gives 1
- * when it handled the call. The weak definition here gives 0, so this file links alone (clang and gcc keep the
- * other file's strong definition). */
-__attribute__((weak)) int season_club_world_history_thunk(void) { return 0; }
+/* One wrap of 0x40f590 serves every slice. Slice 26's season_club_world_history_thunk() (season_change.h,
+ * season_kind_club_world.c: the Club World Championship's knockout of Form K and Form G) runs first and gives 1
+ * when it handled the call. */
 
 RT_WRAP(0040f590, copa_asian_final_stage)
 {

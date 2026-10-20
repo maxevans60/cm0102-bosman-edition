@@ -13,8 +13,8 @@ Checks:
   5. The file name of the setup program holds the version.
   6. The setup program exists and is not empty.
   7. With --manifest (0.6.0 slice 12): the game folder that makensis packed (--game-dir) holds exactly the
-     files of the manifest, each with its size and SHA-256 (Seasons/rules.tsv and the season zips among
-     them), and the makensis log (-V4, --nsis-log) adds exactly those files under game, each with its size.
+     files of the manifest, each with its size and SHA-256 (Seasons/rules.tsv, names.tsv and clubs.tsv
+     and the season zips among them), and the makensis log (-V4, --nsis-log) adds exactly those files under game, each with its size.
      The installer packs the folder with File /r (packaging/windows/installer.nsi).
 
 Exit code 0 when all checks pass, else 1."""
@@ -237,10 +237,11 @@ def main():
 
     if args.manifest:
         want = parse_manifest(args.manifest)
-        check(bool(want) and "Seasons/rules.tsv" in want and any(k.startswith("Seasons/") and k.endswith(".zip")
-                                                              for k in want),
-              "manifest has %d files, Seasons/rules.tsv and the season zips among them" % len(want),
-              "manifest %s lacks files, Seasons/rules.tsv or the season zips" % args.manifest)
+        tables = ("Seasons/rules.tsv", "Seasons/names.tsv", "Seasons/clubs.tsv")
+        check(bool(want) and all(t in want for t in tables) and any(k.startswith("Seasons/") and k.endswith(".zip")
+                                                                    for k in want),
+              "manifest has %d files, the season tables and the season zips among them" % len(want),
+              "manifest %s lacks files, a season table (rules, names, clubs) or the season zips" % args.manifest)
         have = folder_files(args.game_dir) if args.game_dir else {}
         bad = sorted(k for k in set(want) | set(have) if want.get(k) != have.get(k))
         check(bool(args.game_dir) and not bad, "the packed game folder matches the manifest",

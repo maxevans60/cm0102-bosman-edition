@@ -22,6 +22,7 @@
 #include "season_change.h"
 #include "season_intl.h"
 #include "season_wc48.h"
+#include "season_nl.h"                     /* slice 28: the Gold Cup */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -443,8 +444,12 @@ static int nation_in(const uint32_t *teams, int n, uint32_t nation)
  * qualifying cannot fill:
  * - a game that starts in the season of the finals or the one before: the qualifying began before the game
  *   (the 2006 World Cup draw of a 2005 start, Euro 2004 of a 2003 start);
- * - the Nations League path places of Euro 2020 and 2024 (4 and 3), until slice 28 plays the paths: Euro
- *   qualifying gives only the 20 group places there (season_intl_euroq.c).
+ * - the Nations League path places of every Euro from 2020 (4 in 2020 and 2028, 3 in 2024 with its host), until
+ *   slice 28 plays the paths: the qualifying of 10 groups gives only the 20 group places (season_intl_euroq.c,
+ *   which keeps that format after 2024). Euro 2028 has no host places (table row int-continental-287), so its
+ *   4 places stayed empty, and the squad pick of the finals stopped on an empty team (NationalTeams::select_squad
+ *   0x76c120 passes the team's nation to national_team 0x53b3d0 at 0x76c266, which boxes "Database.cpp 13126"
+ *   for none: 0x53b3da).
  * Else a full qualifying gives every team, and a short list is logged, not filled. */
 static int fill_allowed(const char *name, int year)
 {
@@ -452,7 +457,7 @@ static int fill_allowed(const char *name, int year)
     /* Slice 29 (Q563): after the table the 2026 shape of qualifying stays, and the hosts of 2030 do not change
      * its places, so a World Cup from 2030 may be short. */
     if (!strcmp(name, "world_cup") && year >= 2030) return 1;
-    return !strcmp(name, "euro_champ") && (year == 2020 || year == 2024);
+    return !strcmp(name, "euro_champ") && year >= 2020;
 }
 
 static void fill_slots(uint32_t comp, uint32_t continent, const char *name)
@@ -550,12 +555,16 @@ void o_0057c1d0(void);
  * game stopped on 30 May 2020 in NationalTeams::select_squad 0x76c120 (box "Database.cpp 13126"). */
 void season_intl_euro_fill(uint32_t self)
 {
+    if (season_intl_on()) season_euro_slots_after_load(self);    /* slice 28: no slot array after a load */
+    if (rt_unwinding) return;
     if (season_intl_on()) fill_slots(self, CONTINENT_EUROPE, "euro_champ");
 }
 
 RT_WRAP(0057c1d0, euro_group_draw)
 {
     uint32_t self = cpu.ecx;
+    if (season_intl_on()) season_euro_slots_after_load(self);    /* slice 28 */
+    if (rt_unwinding) return;
     if (season_intl_on()) fill_slots(self, CONTINENT_EUROPE, "euro_champ");
     if (rt_unwinding) return;
     cpu.ecx = self;
@@ -599,6 +608,10 @@ RT_WRAP(0092e740, wc_add_qualified)
 
 RT_WRAP(0057c120, euro_add_qualified)
 {
+    uint32_t self = cpu.ecx;
+    if (season_intl_on()) season_euro_slots_after_load(self);    /* slice 28: no slot array after a load */
+    if (rt_unwinding) return;
+    cpu.ecx = self;
     if (season_intl_on() && !team_nation(rt_arg(0))) {
         if (logging()) fprintf(stderr, "recomp: season intl: euro_champ: a qualifier with no nation stays out\n");
         rt_ret_stdcall(0, 1);
@@ -672,6 +685,8 @@ static void stage_builder(uint32_t cls, void (*original)(void), int builder)
     uint32_t self = cpu.ecx;
     int saved = date_shift;
     date_shift = season_intl_date_shift(cls, (int16_t)rd16(g_mem, self + 0x40u));
+    /* Slice 28 part b: the CONCACAF Gold Cup object of the class copa_america has its own dates. */
+    if (cls == INTL_COPA) season_gold_cup_date_shift(self, &date_shift);
     if (date_shift && !saved && logging())
         fprintf(stderr, "recomp: season intl: %s %d moves by %d days\n", season_intl_class_file(cls),
                 (int16_t)rd16(g_mem, self + 0x40u), date_shift);

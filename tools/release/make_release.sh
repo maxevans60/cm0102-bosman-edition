@@ -90,6 +90,10 @@ python3 -I "$REPO/tools/release/make_season_zips.py" --season-dbs "$SEASON_DBS" 
 # The rules table of the game (0.6.0 slice 12): one file from the parts of docs/research/rules-0.6.0. The game
 # reads Seasons/rules.tsv at the start (src/recomp_rt/win/season_rules.c). The tool stops on a row it cannot read.
 python3 -I "$REPO/tools/seasons/make_rules.py" --out "$STAGE/Seasons/rules.tsv"
+# The names table and the club moves table (0.6.0 slice 15): the game reads them at the start
+# (src/recomp_rt/win/season_names.c, season_clubs.c).
+python3 -I "$REPO/tools/seasons/make_names.py" --out "$STAGE/Seasons/names.tsv"
+python3 -I "$REPO/tools/seasons/make_clubs.py" --out "$STAGE/Seasons/clubs.tsv"
 GAME="$STAGE"
 MANIFEST="$OUT/manifest-download.tsv"
 {
@@ -101,8 +105,10 @@ MANIFEST="$OUT/manifest-download.tsv"
     for z in "$STAGE"/Seasons/*.zip; do
         printf '%s\t%s\tSeasons/%s\n' "$(shasum -a 256 "$z" | cut -d ' ' -f 1)" "$(wc -c < "$z" | tr -d ' ')" "$(basename "$z")"
     done
-    printf '%s\t%s\tSeasons/rules.tsv\n' "$(shasum -a 256 "$STAGE/Seasons/rules.tsv" | cut -d ' ' -f 1)" \
-        "$(wc -c < "$STAGE/Seasons/rules.tsv" | tr -d ' ')"
+    for t in rules names clubs; do
+        printf '%s\t%s\tSeasons/%s.tsv\n' "$(shasum -a 256 "$STAGE/Seasons/$t.tsv" | cut -d ' ' -f 1)" \
+            "$(wc -c < "$STAGE/Seasons/$t.tsv" | tr -d ' ')" "$t"
+    done
 } > "$MANIFEST"
 CHECK_ARGS=(--manifest "$MANIFEST")
 if [ "$STAGE_ONLY" = 1 ]; then
