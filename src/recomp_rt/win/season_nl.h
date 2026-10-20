@@ -149,6 +149,9 @@ int season_nl_held_results(int year, SeasonNlRow *rows);
 /* One round of a path play-off template (season_nl_euro.c): a cup round record of 0x68 bytes at rec + round *
  * 0x68, one match with extra time and penalties on day d (year offset from the campaign year), the final with
  * bit 0x200 for the fixed links. */
+/* Test log: the Euro's team slots around its seeding (season_nl_euro.c). */
+void season_nl_euro_log_slots(int day, int year);
+
 void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams);
 
 /* Part b (season_gold_cup.c): the CONCACAF Gold Cup and the Finalissima. */

@@ -364,3 +364,28 @@ RT_WRAP(0057ef50, nl_euro_paths)
     if (rt_unwinding) return;
     rt_ret_stdcall(0, 0);
 }
+
+/* Test log (RECOMP_SEASON_NL_LOG): the Euro's team slots (+0x14, 6 bytes a slot: team +0, flag +4; count +0x36,
+ * room +0x38, season_intl.c) on the two days before its seeding day (+0x13e and the year offset +0x140,
+ * class doc 12.2) and on that day, from the Nations League object's daily update (season_nl.c). Each team with
+ * its record name and its nation (club +0x53). */
+void season_nl_euro_log_slots(int day, int year)
+{
+    if (!logging()) return;
+    uint32_t euro = euro_object();
+    if (!readable(euro)) return;
+    int seed = (int16_t)rd16(g_mem, euro + EURO_SEED_DAY);
+    int seed_year = (int16_t)rd16(g_mem, euro + 0x40u) + (int16_t)rd16(g_mem, euro + EURO_SEED_DAY + 2u);
+    if (year != seed_year || day < seed - 2 || day > seed) return;
+    uint32_t slots = rd32(g_mem, euro + EURO_SLOTS);
+    int n = (int16_t)rd16(g_mem, euro + EURO_SLOT_COUNT), room = (int16_t)rd16(g_mem, euro + 0x38u);
+    fprintf(stderr, "recomp: season nl: euro slots on day %d of %d (seeding day %d): %d of %d\n", day, year, seed, n,
+            room);
+    for (int k = 0; readable(slots) && k < n && k < 32; k++) {
+        uint32_t club = rd32(g_mem, slots + 6u * (uint32_t)k);
+        uint32_t nation = readable(club) ? rd32(g_mem, club + 0x53u) : 0;
+        fprintf(stderr, "recomp: season nl:   slot %d: club 0x%x %.30s, nation 0x%x %.30s, flag %d\n", k, club,
+                readable(club) ? win_str(club + 4u) : "-", nation, readable(nation) ? win_str(nation + 4u) : "-",
+                (int8_t)rd8(g_mem, slots + 6u * (uint32_t)k + 4u));
+    }
+}
