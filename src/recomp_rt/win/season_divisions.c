@@ -37,7 +37,9 @@
 #define OBJ_RECORD 4u
 #define OBJ_OWNER 8u                /* the object that takes the predicted positions (0x5de25f) */
 #define OBJ_STAGES 0xcu
+#define OBJ_STAGE_COUNT 0x2cu       /* s32: the stages of the league */
 #define OBJ_STAGE_NOW 0x30u         /* s32, -1 with no stage */
+#define OBJ_COMPLETE 0x4cu          /* 1 when the season is complete (League::update_for_date 0x684a9e) */
 #define OBJ_CLUBS 0x3eu
 #define OBJ_YEAR 0x40u
 #define OBJ_MATCHES 0xa7u
@@ -290,7 +292,8 @@ RT_WRAP(005dd9f0, ger_regional_rules)
 
 
 /* GerRegional's South group (create_south_stage 0x5ddc50, thiscall (slot), ret 4): no group in the 3. Liga. The
- * stage slot is cleared and +0x30 stays -1, so the save, the load and the destructor (0x5dce80) see no stage. */
+ * stage slot is cleared, +0x30 stays -1 and +0x2c is 0, so the save, the load and the destructor (0x5dce80) see no
+ * stage and the season ends as a league's with no stages. */
 void o_005ddc50(void);
 RT_WRAP(005ddc50, ger_regional_south)
 {
@@ -302,6 +305,11 @@ RT_WRAP(005ddc50, ger_regional_south)
     uint32_t stages = rd32(g_mem, self + OBJ_STAGES);
     if (readable(stages)) wr32(g_mem, stages, 0);
     wr32(g_mem, self + OBJ_STAGE_NOW, 0xffffffffu);
+    /* No stage at all: the stage count +0x2c (1 from the constructor, 0x5dcc3d) goes to 0. With 1,
+     * League::update_for_date 0x6847c0 took -1 < 0 as a stage to come (0x6849d1..0x6849da), called the empty
+     * advance_stage and skipped the season's end: the history (Club_History::record_comp_season 0x442e80 at
+     * 0x6849fa), the honours (vtable +0x30 at 0x684a8f) and the complete flag +0x4c (0x684a9e). */
+    wr32(g_mem, self + OBJ_STAGE_COUNT, 0);
     rt_ret_stdcall(0, 1);
 }
 
@@ -498,8 +506,13 @@ RT_WRAP(005db980, ger_exchange)
         }
     }
     game_free(pool);
-    fprintf(stderr, "recomp: new divisions: 3. Liga %d: %d relegated, %d cut, %d new clubs from %d, %d clubs\n",
-            next_season_of(self), out, cut, in, npool, clubs_in(reg_rec));
+    /* The season that ends (+0x4c set by League::update_for_date at 0x684a9e when it ended with its history),
+     * for tests/seasons/new_divisions_check.py; -1 for the change from two groups (the Regionalliga's season). */
+    int complete = liga3_row((int16_t)rd16(g_mem, reg + OBJ_YEAR)) ? g_mem[reg + OBJ_COMPLETE] : -1;
+    fprintf(stderr, "recomp: new divisions: 3. Liga %d: %d relegated, %d cut, %d new clubs from %d, %d clubs; season "
+                    "%d complete %d, stages %d and %d\n", next_season_of(self), out, cut, in, npool, clubs_in(reg_rec),
+            (int16_t)rd16(g_mem, reg + OBJ_YEAR), complete, (int32_t)rd32(g_mem, reg + OBJ_STAGE_COUNT),
+            (int32_t)rd32(g_mem, reg + OBJ_STAGE_NOW));
     rt_ret_cdecl(0);
 }
 
@@ -673,6 +686,11 @@ uint32_t rt_por_cup_none(uint32_t club)
         int day = (int16_t)rd16(g_mem, 0x00ae2c90u), year = (int16_t)rd16(g_mem, 0x00ae2c92u);
         season = day < 181 ? year - 1 : year;
     }
+    /* Clubs only: the last 2 x nations rows of the club table are national teams (0x53b900; the German Cup stops
+     * there too, 0x5d9569..0x5d957c), and the original's null-division jump kept them out. */
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT) - 2 * (int)rd32(g_mem, NATION_COUNT);
+    if (club < table || (club - table) / CLUB_SIZE >= (uint32_t)(count > 0 ? count : 0)) return 0;
     uint32_t nation = rd32(g_mem, club + CLUB_NATION);
     return group_row(&PORTUGAL, season) && readable(nation) &&
            (int32_t)rd32(g_mem, nation) == (int32_t)rd32(g_mem, PORTUGAL.nation_key);
@@ -1054,53 +1072,63 @@ static void gre_rules(uint32_t obj)
 }
 
 /* gre_prm_swap_second_and_third_division_clubs 0x5eb120 (thiscall, ret), after the chain of GrePrm 0x689c20 with
- * the National B Division (0x5eaf62, 0x5eaf6a): first the group's exchange with the National A Division (as the
- * chain does at 0x689c60), its relegated rows to the Lower Division (as 0x5eb25d..0x5eb28a), its clubs for the
- * next season (from the Lower Division up to the next row's count, or all to the Lower Division when the next
- * season has no group, Q522) and its season start. Then the original for the National B Division. */
+ * the National B Division (0x5eaf62, 0x5eaf6a): the group's exchange with the National A Division (as the chain does
+ * at 0x689c60), its new clubs from the Lower Division up to the next row's count, the original for the National B
+ * Division, then the group's relegated rows to the Lower Division (as 0x5eb25d..0x5eb28a; all its clubs when the next
+ * season has no group, Q522) and its season start. */
 void o_005eb120(void);
 RT_WRAP(005eb120, gre_swap)
 {
     uint32_t self = cpu.ecx, group = divisions_on() ? gre_group() : 0;
-    if (group && !rt_unwinding) {
-        int now = (int16_t)rd16(g_mem, self + OBJ_YEAR), next = next_season_of(self);
-        uint32_t rec = rd32(g_mem, group + OBJ_RECORD), lower = record_of(KEY_GRE_LOWER);
-        int played = gre_held(season_changing_rules() ? now : season_start_year()), out = 0;
-        if (played && lower) {
-            uint32_t a[6] = {self, group, 1, 1, 0xffffffffu, 0xffffffffu};
-            call_this(F_PROMOTE, self, 6, a);
-            int n = (int16_t)rd16(g_mem, group + OBJ_CLUBS);
-            for (int i = 0; i < n && !rt_unwinding; i++) {
-                uint32_t row = rd32(g_mem, group + OBJ_TABLE) + (uint32_t)i * ROW_SIZE, club = rd32(g_mem, row);
-                if (g_mem[row + ROW_STATUS] != 3 || rd32(g_mem, club + CLUB_DIVISION) != rec) continue;
-                uint32_t m[3] = {club, lower, 1};
-                call_this(F_RELEGATE, self, 3, m);
-                out++;
-            }
-        }
-        int in = 0;
-        if (gre_held(next)) in = gre_fill(rec, gre_count(next));
-        else if (lower) {
-            uint32_t table = rd32(g_mem, CLUBS);
-            int count = (int)rd32(g_mem, CLUB_COUNT);
-            for (int i = 0; readable(table) && i < count && !rt_unwinding; i++) {
-                uint32_t club = table + (uint32_t)i * CLUB_SIZE;
-                if (rd32(g_mem, club + CLUB_DIVISION) != rec) continue;
-                uint32_t m[3] = {club, lower, 1};
-                call_this(F_RELEGATE, self, 3, m);
-                out++;
-            }
-        }
-        fprintf(stderr, "recomp: new divisions: Greek second group %d: %d out, %d in, %d clubs\n", next, out, in,
-                clubs_in(rec));
-        /* A league with a division above is started by its top league, not by the pass (0x48ce10,
-         * season_change.h): GrePrm::start_new_season 0x5eaf50 starts the National B Division at its end
-         * (0x5eb0ec..0x5eb0f7, vtable +8) and does not know the group. So the group starts here, with its clubs in
-         * place; with changing rules on, the before hook of the rule kind below keeps it idle in a season with no
-         * group. */
-        if (!rt_unwinding) vcall(group, 0x8);
+    if (!group || rt_unwinding) {
+        o_005eb120();
+        return;
     }
+    int now = (int16_t)rd16(g_mem, self + OBJ_YEAR), next = next_season_of(self), held = gre_held(next);
+    uint32_t rec = rd32(g_mem, group + OBJ_RECORD), lower = record_of(KEY_GRE_LOWER);
+    int played = gre_held(season_changing_rules() ? now : season_start_year()), out = 0, leaving = 0, in = 0;
+    if (played && lower) {
+        uint32_t a[6] = {self, group, 1, 1, 0xffffffffu, 0xffffffffu};
+        call_this(F_PROMOTE, self, 6, a);
+    }
+    /* The group's relegated rows (status 3 of its table, still in its record). */
+    int n = played ? (int16_t)rd16(g_mem, group + OBJ_CLUBS) : 0;
+    for (int i = 0; i < n; i++) {
+        uint32_t row = rd32(g_mem, group + OBJ_TABLE) + (uint32_t)i * ROW_SIZE;
+        leaving += g_mem[row + ROW_STATUS] == 3 && rd32(g_mem, rd32(g_mem, row) + CLUB_DIVISION) == rec;
+    }
+    /* The new clubs first, while the leavers are still in the group, so neither the group's pool nor the original's
+     * pool for the National B Division (0x5eb1d7..0x5eb20f) can take a club that has just gone down (as the German
+     * and Iberian exchanges build their pools before any club leaves). */
+    if (held && !rt_unwinding) in = gre_fill(rec, gre_count(next) + leaving);
     o_005eb120();
+    if (rt_unwinding) return;
+    if (lower && held) {
+        for (int i = 0; i < n && !rt_unwinding; i++) {
+            uint32_t row = rd32(g_mem, group + OBJ_TABLE) + (uint32_t)i * ROW_SIZE, club = rd32(g_mem, row);
+            if (g_mem[row + ROW_STATUS] != 3 || rd32(g_mem, club + CLUB_DIVISION) != rec) continue;
+            uint32_t m[3] = {club, lower, 1};
+            call_this(F_RELEGATE, self, 3, m);
+            out++;
+        }
+    } else if (lower) {                     /* no group next season: every club to the Lower Division (Q522) */
+        uint32_t table = rd32(g_mem, CLUBS);
+        int count = (int)rd32(g_mem, CLUB_COUNT);
+        for (int i = 0; readable(table) && i < count && !rt_unwinding; i++) {
+            uint32_t club = table + (uint32_t)i * CLUB_SIZE;
+            if (rd32(g_mem, club + CLUB_DIVISION) != rec) continue;
+            uint32_t m[3] = {club, lower, 1};
+            call_this(F_RELEGATE, self, 3, m);
+            out++;
+        }
+    }
+    fprintf(stderr, "recomp: new divisions: Greek second group %d: %d out, %d in, %d clubs\n", next, out, in,
+            clubs_in(rec));
+    /* A league with a division above is started by its top league, not by the pass (0x48ce10, season_change.h):
+     * GrePrm::start_new_season 0x5eaf50 starts the National B Division at its end (0x5eb0ec..0x5eb0f7, vtable +8)
+     * and does not know the group. So the group starts here, with its clubs in place; with changing rules on, the
+     * before hook of the rule kind below keeps it idle in a season with no group. */
+    if (!rt_unwinding) vcall(group, 0x8);
 }
 
 /* Rule kind "divisions": the group plays only in the seasons of the table. In a season with no group it is idle
@@ -1172,12 +1200,12 @@ int season_divisions_class_size(const char *division, int season)
 int season_divisions_list_on(const char *division, int season)
 {
     if (!division) return 1;
-    if (!strcmp(division, "German Regional Division North") && liga3_row(season)) return ger_flag();
+    if (!strcmp(division, "German Regional Division North") && liga3_row(season)) return divisions_on() && ger_flag();
     const GroupTier *tiers[2] = {&SPAIN, &PORTUGAL};
     for (int t = 0; t < 2; t++)
         for (int k = 0; k < 2; k++)
             if (!strcmp(division, tiers[t]->group_names[k]) && group_row(tiers[t], season))
-                return nation_flag(tiers[t]->nation_key);
+                return divisions_on() && nation_flag(tiers[t]->nation_key);
     return 1;
 }
 
