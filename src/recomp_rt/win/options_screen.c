@@ -1,8 +1,9 @@
 /* The Bosman Edition Options box (spec 2026-10-16-features-0.5.0, slice 6; #56).
  *
  * A box the size of the original's Game Settings box (build 0x823950), with every option of the settings
- * file (options.h) on two tabs, Screen and Game, nine rows each. Labels and notes come from the mockup
- * docs/research/mockups/2026-10-16-options-screen.html, variant B.
+ * file (options.h) on two tabs, Graphics and Game, nine rows each (Graphics was Screen until 0.6.0, Max's play
+ * test). Labels and notes come from the mockup docs/research/mockups/2026-10-16-options-screen.html, variant B.
+ * The version line shows the project version (CMakeLists.txt, CM0102_VERSION).
  *
  * The box is a screen of the runtime on the game's own screen stack, as Team views (views.c). The push of
  * the original 0x7fe600 gets flag 1, as Game Settings does (0x8238bb): the game draws it as a box over the
@@ -41,7 +42,7 @@
  * it. A switch in the box does not change the game: smoke_run.py --same-save --options compares two
  * switches with two tab clicks.
  *
- * Node slots: 0 the tab (1 Screen, 2 Game), 1 the place that opened the box (1 start screen, 2 game). Only
+ * Node slots: 0 the tab (1 Graphics, 2 Game), 1 the place that opened the box (1 start screen, 2 game). Only
  * numbers, so the box needs no leave function. */
 #include "win.h"
 #include "options.h"
@@ -97,7 +98,7 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_PATH } RowKind;
 
 typedef struct {
-    int tab;                        /* 1 Screen, 2 Game */
+    int tab;                        /* 1 Graphics, 2 Game */
     OptionId id;
     RowKind kind;
     const char *label;
@@ -347,7 +348,7 @@ static void options_build(void)
 
     /* The tabs: the open tab as a framed label, the other as a button. */
     int t = area(165, 142, 724, 168, 2, NULL, 1, 0);
-    static const char *const tab_names[2] = {"Screen", "Game"};
+    static const char *const tab_names[2] = {"Graphics", "Game"};
     for (int i = 1; i <= 2; i++) {
         if (i == tab) current(t, i - 1, tab_names[i - 1]);
         else choice(t, i - 1, tab_names[i - 1], TAB_ID, (uint32_t)i, green);

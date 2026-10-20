@@ -153,8 +153,16 @@ A game whose start season is not 2001/02, or whose changing rules are on. Only a
 _Avoid_: modern game, new-season game
 
 **Choose Season screen**:
-The screen from the start screen with one tile per season under era headings. The player picks the season, and so its database, there.
+The screen from the start screen with one tile per season under era headings. The player picks the season, and so its database, there, and sets changing rules for the new game. Each season has one database (Q417).
 _Avoid_: season picker, year select
+
+**Season strip**:
+The wide button at the top of Setup Game that shows the season, the database and the changing rules state of the next new game. A click opens the Choose Season screen.
+_Avoid_: season bar, season button, Choose Season item
+
+**Extras screen**:
+The screen from the Extras button of Setup Game with the original's Hall Of Fame, Game Credits and Web Sites.
+_Avoid_: more, other options
 
 **Season database**:
 The Update Team database that a season uses, the earliest of that season unless players report it as faulty.
@@ -165,7 +173,7 @@ The folder `Seasons` in the game folder of a download. It holds one zip for each
 _Avoid_: season pack, database zips
 
 **Extra database**:
-An Update Team database that is not a season database, such as an April or SIM version.
+An Update Team database that is not a season database, such as an April or SIM version. The Choose Season screen does not offer them (Q417).
 _Avoid_: more versions, alternative database
 
 **Custom database**:

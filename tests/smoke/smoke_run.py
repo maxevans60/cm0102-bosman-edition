@@ -42,7 +42,7 @@ the save of search-off.
 
 Options box check (--same-save --save <name> --options): the runs open the Bosman Edition Options box from the
 side bar before the holiday (0.5.0 slice 6). options and options-again switch Faster holidays off and on and
-close the box. options-tabs clicks the tabs Game, Screen and Game, options-rules switches the default of
+close the box. options-tabs clicks the tabs Game, Graphics and Game, options-rules switches the default of
 Changing rules off and on (0.6.0 slice 13: the open game keeps its own value), and options-backups switches
 Save backups off and on, so the box is built as often. Each save
 must be the same as the save of options. The runs give the box the same save folder path end
