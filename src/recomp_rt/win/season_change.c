@@ -28,6 +28,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_comps.h"
+#include "season_cups.h"
 #include "season_playoffs.h"
 #include "season_rules.h"
 
@@ -407,6 +408,7 @@ void season_change_reset(void)
     news_count = 0;
     rename_count = 0;
     season_comps_reset();               /* slice 26 */
+    season_cup_groups_reset();          /* slice 21c: the big stage arrays of the cups with groups */
     season_point = 0;
     creating = 0;                               /* also when a longjmp left create_game */
 }

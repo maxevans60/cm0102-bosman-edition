@@ -155,6 +155,9 @@ int season_cup_groups_advance(uint32_t cup);
 uint32_t season_cup_groups_ko(uint32_t cup);
 void season_cup_groups_load(uint32_t cup);
 
+/* Forgets the big stage arrays of this game (season_change_reset: a new game, a load, the end of a game). */
+void season_cup_groups_reset(void);
+
 /* ---- Group stages (slice 21c, season_cups_more.c; the game part is season_cup_groups.c) ----
  *
  * A cup whose season has a group stage: the class's first base_rounds rounds (0: none), then groups of the clubs

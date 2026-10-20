@@ -182,13 +182,20 @@ static void free_stages(uint32_t cup)
     if (!rt_unwinding) wr32(g_mem, cup + CUP_STAGE_NOW, 0xffffffffu);
 }
 
+/* The big stage arrays made in this game: the cup and its array. A pair counts only while the cup still holds that
+ * array; the list is cleared at each new game, load and end of a game (season_cup_groups_reset from
+ * season_change_reset), because the classes' destructors free the arrays and malloc gives the addresses again. */
+#define MAX_MADE 64
+static struct { uint32_t cup, arr; } made[MAX_MADE];
+
+void season_cup_groups_reset(void) { memset(made, 0, sizeof made); }
+
 /* A stage array of MAX_GROUPS + 1 slots (the class's array, two slots in EngAutoCup, goes). */
 static int big_stage_array(uint32_t cup)
 {
-    static uint32_t made[64];
     uint32_t arr = rd32(g_mem, cup + CUP_STAGES);
-    for (int i = 0; i < 64; i++)
-        if (made[i] == arr && arr) return 1;
+    for (int i = 0; i < MAX_MADE; i++)
+        if (arr && made[i].cup == cup && made[i].arr == arr) return 1;
     uint32_t big = game_malloc(4u * (MAX_GROUPS + 1));
     if (!big) return 0;
     if (readable(arr)) {
@@ -196,11 +203,13 @@ static int big_stage_array(uint32_t cup)
         game_free(arr);
     }
     wr32(g_mem, cup + CUP_STAGES, big);
-    for (int i = 0; i < 64; i++)
-        if (!made[i] || i == 63) {
-            made[i] = big;
+    int slot = MAX_MADE - 1;
+    for (int i = 0; i < MAX_MADE; i++)
+        if (made[i].cup == cup || !made[i].cup) {
+            slot = i;
             break;
         }
+    made[slot].cup = cup, made[slot].arr = big;
     return 1;
 }
 
@@ -329,6 +338,21 @@ static uint32_t group_table(const SeasonCupGroups *g, int days, uint32_t year)
     return rt_unwinding ? 0 : t;
 }
 
+/* A group draw that cannot finish (more than 10 match days, or no memory): the groups made so far go and the
+ * class's rounds play, as when the clubs do not fit the groups. Without this +0x30 stays -1 and
+ * Cup::update_for_date calls slot 10 every day (0x51f8da..0x51f8f5), so the cup never ends. */
+static void groups_failed(uint32_t cup, const SeasonCupGroups *g, int group, int days)
+{
+    fprintf(stderr, "recomp: cup groups: %s: the draw of group %d failed (%d match days), the class's rounds play\n",
+            format_file(cup), group, days);
+    (void)g;
+    wr32(g_mem, cup + CUP_STAGE_NOW, (uint32_t)(group - 1));     /* free_stages deletes the groups 0 to group - 1 */
+    free_stages(cup);
+    if (rt_unwinding) return;
+    wr32(g_mem, cup + CUP_STAGE_COUNT, 0);
+    g_mem[cup + CUP_BASE_DONE] = 0;
+}
+
 static void draw_groups(uint32_t cup, const SeasonCupGroups *g)
 {
     uint32_t list = rd32(g_mem, cup + CUP_TEAM_LIST);
@@ -374,7 +398,13 @@ static void draw_groups(uint32_t cup, const SeasonCupGroups *g)
         uint32_t table = days <= 10 ? group_table(g, days, year) : 0;
         uint32_t sz[1] = {0xee};                                      /* as 0x5860b3 */
         uint32_t obj = mem && table ? call_cdecl(F_NEW, 1, sz) : 0;
-        if (rt_unwinding || !readable(obj)) return;
+        if (rt_unwinding) return;
+        if (!readable(obj)) {
+            game_free(mem);
+            if (!rt_unwinding) game_free(table);
+            if (!rt_unwinding) groups_failed(cup, g, x, days);
+            return;
+        }
         for (int k = 0; k < filled[x]; k++) wr32(g_mem, mem + 4u * (uint32_t)k, members[x][k]);
         uint32_t saved_esp = cpu.esp;
         cpu.esp -= 16;
@@ -422,9 +452,9 @@ static double row_score(uint32_t stage, uint32_t row, int clubs, int meetings)
     return (games > 0 ? 1000.0 * points / games : 0) + (gf - ga) + gf / 1000.0;
 }
 
-static void build_ko_table(uint32_t t, const SeasonCupGroups *g, int rounds, uint32_t year)
+static void build_ko_table(uint32_t t, const SeasonCupGroups *g, int ko_clubs, int rounds, uint32_t year)
 {
-    int teams = g->ko_clubs;
+    int teams = ko_clubs;
     for (int r = 0; r < rounds && !rt_unwinding; r++, teams /= 2) {
         const SeasonNewRound *spec = &g->ko[rounds - 1 - r];
         uint32_t rec = t + (uint32_t)r * ROUND_SIZE;
@@ -464,10 +494,34 @@ static void build_ko_table(uint32_t t, const SeasonCupGroups *g, int rounds, uin
     }
 }
 
+/* 1 when a club is in one of the group stages of the cup. */
+static int in_groups(uint32_t cup, const SeasonCupGroups *g, uint32_t club)
+{
+    for (int x = 0; x < g->groups; x++) {
+        uint32_t st = stage_at(cup, x);
+        int clubs = readable(st) ? (int16_t)rd16(g_mem, st + 0x3e) : 0;
+        for (int pos = 0; pos < clubs && pos < 10; pos++) {
+            uint32_t row = row_at(st, pos);
+            if (rt_unwinding) return 0;
+            if (row && rd32(g_mem, row) == club) return 1;
+        }
+    }
+    return 0;
+}
+
+/* A knockout that cannot be drawn: the cup ends after its groups (+0x2c = groups, so Cup::update_for_date records
+ * the season once every group is complete, 0x51f8da..0x51f8f5), with a log line. Without this +0x30 stays at the
+ * last group and the update calls slot 10 every day, so the cup never ends or starts a new season (0x5d5ccb). */
+static void ko_failed(uint32_t cup, const SeasonCupGroups *g, const char *why)
+{
+    fprintf(stderr, "recomp: cup groups: %s: the knockout draw failed (%s), the cup ends after its groups\n",
+            format_file(cup), why);
+    wr32(g_mem, cup + CUP_STAGE_COUNT, (uint32_t)g->groups);
+}
+
 static void draw_knockout(uint32_t cup, const SeasonCupGroups *g)
 {
-    int ties0 = 0, rounds = 0;
-    if (!season_new_cup_layout(g->ko_clubs, &ties0, &rounds) || rounds > 5 || 2 * ties0 != g->ko_clubs) return;
+    int ties0 = 0, rounds = 0, ko = g->ko_clubs;
     /* The clubs in order: the group winners, the byes, the other places that go through, the best of the next place
      * by score, then the rest by place and score. */
     uint32_t order[MAX_CLUBS];
@@ -476,14 +530,21 @@ static void draw_knockout(uint32_t cup, const SeasonCupGroups *g)
     int nn = 0;
     for (int x = 0; x < g->groups; x++) {
         uint32_t st = stage_at(cup, x), row = readable(st) ? row_at(st, 0) : 0;
-        if (rt_unwinding || !row) return;
+        if (rt_unwinding) return;
+        if (!row) {
+            ko_failed(cup, g, "no group table");
+            return;
+        }
         order[n] = rd32(g_mem, row), group_of[n++] = x;
     }
+    /* The byes: the clubs of the team list that the group draw left out (it read their European mark, is_bye, on
+     * its day; the mark is not read again here, so a club is never both in a group and a bye). */
     uint32_t list = rd32(g_mem, cup + CUP_TEAM_LIST);
     int count = (int16_t)rd16(g_mem, cup + CUP_TEAMS);
     for (int i = 0; g->byes && readable(list) && i < count && i < 512 && n < MAX_CLUBS; i++) {
         uint32_t club = rd32(g_mem, list + 6u * (uint32_t)i);
-        if (readable(club) && is_bye(club)) order[n] = club, group_of[n++] = -1;
+        if (readable(club) && !in_groups(cup, g, club)) order[n] = club, group_of[n++] = -1;
+        if (rt_unwinding) return;
     }
     for (int place = 1; place < 10; place++)
         for (int x = 0; x < g->groups; x++) {
@@ -491,7 +552,11 @@ static void draw_knockout(uint32_t cup, const SeasonCupGroups *g)
             int clubs = (int16_t)rd16(g_mem, st + 0x3e);
             if (place >= clubs) continue;
             uint32_t row = row_at(st, place);
-            if (rt_unwinding || !row) return;
+            if (rt_unwinding) return;
+            if (!row) {
+                ko_failed(cup, g, "no group table");
+                return;
+            }
             if (place < g->per_group) order[n] = rd32(g_mem, row), group_of[n++] = x;
             else if (nn < MAX_CLUBS)
                 next[nn].club = rd32(g_mem, row), next[nn].group = x, next[nn].place = place,
@@ -504,12 +569,17 @@ static void draw_knockout(uint32_t cup, const SeasonCupGroups *g)
             next[k] = next[k - 1], next[k - 1] = t;
         }
     for (int i = 0; i < nn && n < MAX_CLUBS; i++) order[n] = next[i].club, group_of[n++] = next[i].group;
-    if (n < g->ko_clubs) {
-        fprintf(stderr, "recomp: cup groups: %s: %d clubs for a knockout of %d\n", format_file(cup), n, g->ko_clubs);
+    if (n < ko) {
+        while (ko > n) ko /= 2;
+        fprintf(stderr, "recomp: cup groups: %s: %d clubs for a knockout of %d, a knockout of %d plays\n",
+                format_file(cup), n, g->ko_clubs, ko);
+    }
+    if (ko < 2 || !season_new_cup_layout(ko, &ties0, &rounds) || rounds > 5 || 2 * ties0 != ko) {
+        ko_failed(cup, g, "no knockout size");
         return;
     }
     /* Seeded clubs (the first half) against the others, not of the same group when a draw is found. */
-    int half = g->ko_clubs / 2, pair[64];
+    int half = ko / 2, pair[64];
     for (int relax = 0; relax < 2; relax++) {
         int ok = 1, used[64] = {0};
         for (int i = 0; i < half && ok; i++) {
@@ -525,25 +595,43 @@ static void draw_knockout(uint32_t cup, const SeasonCupGroups *g)
             used[pair[i]] = 1;
         }
         if (ok) break;
-        if (relax) return;
+        if (relax) {
+            ko_failed(cup, g, "no pairing");
+            return;
+        }
     }
-    uint32_t ca[2] = {(uint32_t)g->ko_clubs, 4};
+    uint32_t ca[2] = {(uint32_t)ko, 4};
     uint32_t clubs = call_cdecl(F_CALLOC, 2, ca);
-    if (rt_unwinding || !readable(clubs)) return;
+    if (rt_unwinding) return;
+    if (!readable(clubs)) {
+        ko_failed(cup, g, "no memory");
+        return;
+    }
     for (int i = 0; i < half; i++) {
         wr32(g_mem, clubs + 8u * (uint32_t)i, order[i]);
         wr32(g_mem, clubs + 8u * (uint32_t)i + 4, order[half + pair[i]]);
     }
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, cup + CUP_YEAR);
     uint32_t table = game_malloc((uint32_t)rounds * ROUND_SIZE);
-    if (!table) return;
-    build_ko_table(table, g, rounds, year);
+    if (rt_unwinding) return;
+    if (!table) {
+        game_free(clubs);
+        if (!rt_unwinding) ko_failed(cup, g, "no memory");
+        return;
+    }
+    build_ko_table(table, g, ko, rounds, year);
     uint32_t sz[1] = {0xb2};
     uint32_t obj = rt_unwinding ? 0 : call_cdecl(F_NEW, 1, sz);
-    if (rt_unwinding || !readable(obj)) return;
+    if (rt_unwinding) return;
+    if (!readable(obj)) {
+        game_free(clubs);
+        if (!rt_unwinding) game_free(table);
+        if (!rt_unwinding) ko_failed(cup, g, "no memory");
+        return;
+    }
     /* The arguments of season_uefa_cup.c (as EngAutoCup::create_final_stage 0x56bce0): parent, clubs, list, rounds,
      * record, round table, year, stage, 2, 0, 0x14, 1, 0, 0, 0. */
-    uint32_t args[15] = {cup, (uint32_t)g->ko_clubs, clubs, (uint32_t)rounds, rd32(g_mem, cup + 4), table, year,
+    uint32_t args[15] = {cup, (uint32_t)ko, clubs, (uint32_t)rounds, rd32(g_mem, cup + 4), table, year,
                          (uint32_t)g->groups, 2, 0, 0x14, 1, 0, 0, 0};
     call_this(F_CUP_STAGE, obj, 15, args);
     if (rt_unwinding) return;
@@ -555,7 +643,7 @@ static void draw_knockout(uint32_t cup, const SeasonCupGroups *g)
     if (rt_unwinding) return;
     wr32(g_mem, cup + CUP_STAGE_NOW, (uint32_t)g->groups);
     fprintf(stderr, "recomp: cup groups: %s %u/%02u: knockout of %d clubs drawn\n", format_file(cup), year,
-            (year + 1) % 100, g->ko_clubs);
+            (year + 1) % 100, ko);
 }
 
 int season_cup_groups_advance(uint32_t cup)

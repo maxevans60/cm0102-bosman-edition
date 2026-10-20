@@ -165,7 +165,11 @@ static int game_day(void) { return (int16_t)rd16(g_mem, GAME_DATE + 2) * 400 + (
  * 2003 in the row of 2002/03). */
 static int hook_edition(const SeasonCompDef *d, int season)
 {
-    return season_changing_rules() ? season : season_new_cup_row_edition(d->file, season);
+    /* The module's record step at database_load 0x528540 of a new game runs before create_game 0x828110 sets the
+     * game's flag (season_changing_rules is 0 until then): it takes the flag of the next new game, as `wanted` in
+     * season_comps.c does. */
+    int rules = season_game_on() ? season_changing_rules() : season_next_rules();
+    return rules ? season : season_new_cup_row_edition(d->file, season);
 }
 
 static int new_held(const SeasonCompDef *d, int season)
