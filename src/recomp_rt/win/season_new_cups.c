@@ -79,7 +79,7 @@ static void game_free(uint32_t p)
 /* ---- The defs (listed in season_comp_defs of season_comps.c) ---- */
 
 static uint32_t new_make(const SeasonCompDef *d, uint32_t rec, int year, int loading);
-static int new_held(const SeasonCompDef *d, int season) { return season_new_cup_held(d->file, season); }
+static int new_held(const SeasonCompDef *d, int season);
 
 /* Entries: 14 England, 20 Ireland, 24 Norway, 27 Russia, 32 Turkey (key_nation_create_all_comps 0x669180 calls the
  * creators in that order: create_english_comps 0x833750 is the 15th, create_turkish_comps 0x837d70 the 33rd). The
@@ -158,8 +158,24 @@ static int first_match(const SeasonNewCup *f, int edition, int clubs)
 
 static int game_day(void) { return (int16_t)rd16(g_mem, GAME_DATE + 2) * 400 + (int16_t)rd16(g_mem, GAME_DATE); }
 
+/* The edition that the entry hook of season S makes. With changing rules on: edition S (the hook of every season
+ * runs, and a calendar-year cup's edition S lies in the entry's season S). With changing rules off only the start
+ * season's hook runs (season_change.c, the pass of 0x5d5ae0), so it makes the edition that the start season's row
+ * holds (Q232): for a cup in the row of the season before, edition S + 1 (the Russian Premier League Cup of March
+ * 2003 in the row of 2002/03). */
+static int hook_edition(const SeasonCompDef *d, int season)
+{
+    return season_changing_rules() ? season : season_new_cup_row_edition(d->file, season);
+}
+
+static int new_held(const SeasonCompDef *d, int season)
+{
+    return season_new_cup_held(d->file, hook_edition(d, season));
+}
+
 static uint32_t new_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
 {
+    if (!loading) year = hook_edition(d, year);
     const SeasonNewCup *f = season_new_cup(d->file, year);
     if (!loading && (!f || first_match(f, year, 32) <= game_day())) {
         fprintf(stderr, "recomp: new cups: %s %d not made, its first match is past\n", d->file, year);

@@ -120,6 +120,10 @@ const SeasonNewCup *season_new_cup(const char *file, int edition);
  * After the last row of the table the rule stays (Q248). */
 int season_new_cup_held(const char *file, int edition);
 
+/* The edition that the row of season s holds: s, or s + 1 for a calendar-year cup in the row of the season before
+ * (row_shift 1). */
+int season_new_cup_row_edition(const char *file, int season);
+
 /* The first edition from `edition` on that the game plays, SEASON_CUPS_NEVER when none, 0 with no row. */
 int season_new_cup_next(const char *file, int edition);
 

@@ -25,12 +25,11 @@ The runs:
             has a winner
     t2010   start run, September 2010 ODB, changing rules off, Select All without France (Turkey, Russia and the
             Republic of Ireland are not in the 16 rows that the steps click): the Turkish Cup has 4 groups after 3
-            rounds, the Turkish Super Cup is made with two clubs (the Russian one of March 2010 is past), the
-            All-Ireland cup with 12 clubs
-    r2002   start run, 2002/03 (the original data), changing rules off, Select All without France, to January 2003
-            (time limit 3000 s): Russia's 2003 season starts in late December 2002, and its entry hook makes the
-            Russian Premier League Cup of 2003 (first round in March 2003, the row of 2002/03) with 16 clubs and the
-            Russian Super Cup of March 2003 with two clubs (log lines)
+            rounds, the Turkish Super Cup is made with two clubs, the Russian one of March 2011 (the edition of
+            the row of 2010/11) with two clubs, the All-Ireland cup with 12 clubs
+    r2002   start run, 2002/03 (the original data), changing rules off, Select All without France: the start hook
+            makes the editions that the row of 2002/03 holds, the Russian Premier League Cup of 2003 (first round in
+            March 2003) with 16 clubs and the Russian Super Cup of March 2003 with two clubs (log lines)
 
 A run starts a game only when fewer than 15 games run on this Mac and the load of the last minute is below 24 (Max's
 limit), and its game stops when the script stops (SIGTERM, SIGINT, SIGHUP). Run at most three of these scripts at
@@ -155,8 +154,8 @@ def check_c2007(lines, log, fails, name):
 def check_t2010(lines, log, fails, name):
     need_log(log, "cup groups: tur_cup 2010 with 4 groups after 3 rounds", fails, name)
     need_made(lines, "new_tur_super", fails, name, 2)
-    # The Russian Super Cup of 2010 was played in March 2010, before the new game: it is made in 2011.
-    need_log(log, "new cups: new_rus_super 2010 not made, its first match is past", fails, name)
+    # Changing rules off: the edition that the row of 2010/11 holds, the Russian Super Cup of March 2011.
+    need_log(log, "new cups: new_rus_super 2011 with 2 clubs", fails, name)
     need_made(lines, "new_all_ireland", fails, name, 12)
 
 
@@ -177,7 +176,7 @@ RUNS = {
               {"extra": ["conference"]}),
     "t2010": (2010, os.path.join(DB, "September 2010 ODB"), "off", 2010, ALL_BUT_FRANCE, True, 1800, check_t2010,
               {}),
-    "r2002": (2002, None, "off", 2002, ALL_BUT_FRANCE, True, 3000, check_r2002, {}),
+    "r2002": (2002, None, "off", 2002, ALL_BUT_FRANCE, True, 1800, check_r2002, {}),
 }
 
 

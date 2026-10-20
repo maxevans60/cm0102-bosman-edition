@@ -152,6 +152,13 @@ static int shift_of(const char *file, int edition)
     return 0;
 }
 
+int season_new_cup_row_edition(const char *file, int season)
+{
+    for (int e = season; e <= season + 1; e++)
+        if (e - shift_of(file, e) == season) return e;
+    return season;
+}
+
 int season_new_cup_held(const char *file, int edition)
 {
     const SeasonRule *r = file ? row_of(file, edition - shift_of(file, edition)) : NULL;

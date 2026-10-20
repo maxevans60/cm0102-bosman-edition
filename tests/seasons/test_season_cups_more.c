@@ -93,6 +93,12 @@ static void new_cups(void)
     CHECK(season_new_cup_held("new_nor_super", 2018) == 1, "Norwegian Super Cup 2018");
     CHECK(season_new_cup_held("new_nor_super", 2019) == 0, "Norwegian Super Cup 2019");
     CHECK(season_new_cup_next("new_nor_super", 2011) == 2017, "Norwegian Super Cup next from 2011");
+    /* The edition that a season's row holds (a start with changing rules off makes that edition). */
+    CHECK(season_new_cup_row_edition("new_rus_lge_cup", 2002) == 2003, "Russian Premier League Cup in row 2002/03");
+    CHECK(season_new_cup_row_edition("new_rus_super", 2010) == 2011, "Russian Super Cup of March 2011 in row 2010/11");
+    CHECK(season_new_cup_row_edition("new_rus_super", 2012) == 2012, "Russian Super Cup of July 2012 in row 2012/13");
+    CHECK(season_new_cup_row_edition("new_nor_super", 2008) == 2009, "Norwegian Super Cup of 2009 in row 2008/09");
+    CHECK(season_new_cup_row_edition("new_conf_cup", 2007) == 2007, "Conference League Cup in row 2007/08");
     CHECK(season_new_cup_next("new_nor_super", 2019) == SEASON_CUPS_NEVER, "Norwegian Super Cup after 2018");
     /* The Russian Premier League Cup: one edition, 2003 (row 2002/03). */
     CHECK(season_new_cup_held("new_rus_lge_cup", 2003) == 1, "Russian Premier League Cup 2003");
