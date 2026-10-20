@@ -35,6 +35,14 @@ INSNS = {
     0x657F62: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2_end_clubs(edi, 0x12u));"),
     0x65C0F2: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2_end_clubs(edi, 0x12u));"),
     0x6418D5: ("mov ecx, dword ptr [eax + edx*4]", "ecx = rt_ita_tier_c2(R32(eax + edx * 4u));"),
+    # ItaCup::select_entrants 0x63faf0 takes the lower places from the clubs whose last division was C1/A or C1/B
+    # (0x63fc6f..0x63fc7f by positions 3 to 5; 0x63fcef..0x63fcff from position 5 up, with no end, 0x63fd22..0x63fd30).
+    # In the Serie C era group C (C2/A) counts too, so the 32 places fill and the second loop ends: the compare with
+    # the C1/B id gives "equal" for the C2/A id (rt_ita_cup_c1b).
+    0x63FC79: ("cmp ecx, dword ptr [0x9cf57c]",
+               "t0 = ecx; t1 = rt_ita_cup_c1b(ecx, R32(0x9cf57cu)); t2 = t0 - t1 - 0; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    0x63FCF9: ("cmp ecx, dword ptr [0x9cf57c]",
+               "t0 = ecx; t1 = rt_ita_cup_c1b(ecx, R32(0x9cf57cu)); t2 = t0 - t1 - 0; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
     0x641986: ("mov ecx, dword ptr [ecx + edx*4]", "ecx = rt_ita_start_c2(R32(ecx + edx * 4u));"),
     0x7D2412: ("mov word ptr [edi + 0x3e], 0x14", "W16(edi + 0x3eu, rt_por_group_clubs(edi, 0x14u));"),
     0x5DD801: ("mov word ptr [edi + 0x3e], 0x13", "W16(edi + 0x3eu, rt_ger_regional_clubs(edi, 0x13u));"),

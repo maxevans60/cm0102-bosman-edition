@@ -692,3 +692,15 @@ RT_WRAP(0063dfe0, ita_ccup_entrants)
     cpu.eax = eax;
     fprintf(stderr, "recomp: serie c: Coppa Italia Serie C takes %d clubs of the Serie D\n", m);
 }
+
+/* ItaCup::select_entrants 0x63faf0, the two compares with the C1/B id (0x63fc79, 0x63fcf9): in the Serie C era the id
+ * of C2/A (group C) gives the C1/B id, so the compare is "equal" and group C's clubs take the cup's lower places as the
+ * clubs of groups A and B do. Its second loop goes up through the last positions until it has 32 clubs and has no end
+ * (0x63fd22..0x63fd30): with group C left out, a 2014 game with the extra division looped there for ever. */
+uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b)
+{
+    uint32_t serie_a = object_of(KEY_A);
+    int y = serie_a ? (int16_t)rd16(g_mem, serie_a + 0x40) : 0;      /* the cup can start before Serie A: y + 1 */
+    if (id == rd32(g_mem, KEY_C2A) && serie_a && (era_of_year(y) || era_of_year(y + 1))) return id;
+    return c1b;
+}
