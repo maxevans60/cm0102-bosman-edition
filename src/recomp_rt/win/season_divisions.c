@@ -1049,24 +1049,36 @@ RT_WRAP(005ebcb0, gre_second_table)
  * National A Division above while the group plays: its relegation places are the promotions of both groups, so
  * the pairs of 0x689c80 stay even (0x689df4 and 0x689dff mark a moved pair, so the second call moves the rest). The
  * joint play-offs of 2013/14, 2014/15 and 2021/22 have no code: the group winner goes up (Q521). */
+/* A group's promotions in a season with two groups: its own row's up, at least 1 (the joint play-offs of 2013/14,
+ * 2014/15 and 2021/22 have no code: the group winner goes up, Q521). Row 0 of gre_second is the National B Division,
+ * row 1 the group (Q520). */
+static int gre_up(int season, int row)
+{
+    const SeasonRule *r = season_rules_find(season, "gre_second", row);
+    return r && r->up >= 1 ? r->up : 1;
+}
+
 static void gre_rules(uint32_t obj)
 {
     uint32_t group = gre_group();
     if (!group) return;
+    int s = season_of(obj);
     if (obj == group) {
-        int s = season_of(obj);
         const SeasonRule *r = season_rules_find(s, "gre_second", 1);
         if (!r) return;
-        g_mem[obj + UP] = (uint8_t)(r->up >= 1 ? r->up : 1);
+        g_mem[obj + UP] = (uint8_t)gre_up(s, 1);
         g_mem[obj + UP_PLAYOFF] = 0;
         g_mem[obj + DOWN_PLAYOFF] = 0;
         if (r->down >= 0) g_mem[obj + DOWN] = (uint8_t)r->down;
-    } else if (!strcmp(season_change_file(obj), "gre_prm") && gre_held(season_of(obj))) {
-        /* The group's promotions from its row (at a new game GrePrm's rules run before the group's own). */
-        uint32_t first = object_of(KEY_GRE_SECOND);
-        const SeasonRule *r = season_rules_find(season_of(obj), "gre_second", 1);
-        int up1 = first ? (int8_t)g_mem[first + UP] : 2, up2 = r && r->up >= 1 ? r->up : 1;
-        if (up1 >= 0) g_mem[obj + DOWN] = (uint8_t)(up1 + up2);
+    } else if (!strcmp(season_change_file(obj), "gre_second") && gre_held(s)) {
+        /* The National B Division in a season with the group: the two groups of one tier promote by one rule
+         * (review 2). It is a floor division of slice 18 (its class keeps 2 up and 2 down), and its relegations stay
+         * 2: the original's exchange 0x5eb120 brings 2 clubs back from the Lower Division (0x5eb219). */
+        g_mem[obj + UP] = (uint8_t)gre_up(s, 0);
+        g_mem[obj + UP_PLAYOFF] = 0;
+    } else if (!strcmp(season_change_file(obj), "gre_prm") && gre_held(s)) {
+        /* Both groups' promotions, from their rows (at a new game GrePrm's rules run before the groups' own). */
+        g_mem[obj + DOWN] = (uint8_t)(gre_up(s, 0) + gre_up(s, 1));
         g_mem[obj + DOWN_PLAYOFF] = 0;
     }
 }
@@ -1128,7 +1140,15 @@ RT_WRAP(005eb120, gre_swap)
      * GrePrm::start_new_season 0x5eaf50 starts the National B Division at its end (0x5eb0ec..0x5eb0f7, vtable +8)
      * and does not know the group. So the group starts here, with its clubs in place; with changing rules on, the
      * before hook of the rule kind below keeps it idle in a season with no group. */
-    if (!rt_unwinding) vcall(group, 0x8);
+    if (rt_unwinding) return;
+    if (held) vcall(group, 0x8);
+    else {
+        /* No group next season: it stays idle with its finished season and waits with the year before its next
+         * edition (2998 when none comes), as the rule kind's before hook does (review 2: its start_new_season would
+         * make a table with no club). */
+        int edition = season_comps_next_edition(GRE_GROUP_COMP, next);
+        wr16(g_mem, group + OBJ_YEAR, (uint16_t)((edition > next ? edition : 2999) - 1));
+    }
 }
 
 /* Rule kind "divisions": the group plays only in the seasons of the table. In a season with no group it is idle

@@ -3,7 +3,8 @@
 2021	bench	asia_club_champ (AFC Champions League), row club-world-393: game 5/9, table 10 (10)
 2021	bench	eur_super_cup (UEFA Super Cup), row uefa-168: game 9, table 12 (12)
 2021	bench	european_cup (UEFA Champions League), row uefa-162: game 9, table 12 (12)
-2021	bench	new_conference_league (UEFA Europa League), row uefa-166: game 9, table 12 (12)
+2021	bench	new_conference_league (UEFA Europa Conference League), row uefa-166: game 9, table 12 (12)
+2021	bench	new_finalissima (2022 Finalissima), row int-continental-224: game 9, table 12 (12)
 2021	bench	rus_first (Football National League), row rus-tur-48: game 9, table 12 (12)
 2021	bench	rus_prm (Russian Premier League), row rus-tur-21: game 9, table 12 (12)
 2021	bench	spa_first (Primera División), row spa-162: game 9, table 12 (12)
@@ -14,18 +15,6 @@
 2021	bench	tur_second_b (TFF 2. Lig), row rus-tur-237: game 9, table 10 (10)
 2021	bench	uefa_cup (UEFA Europa League), row uefa-165: game 7/9, table 12 (12)
 2021	bench	world_club_champ (FIFA Club World Cup), row club-world-382: game 7/9, table 12 (12)
-2021	club_list	American Major League: 12 of 26 listed clubs that the database holds (28 listed), 0 other clubs, 12 in all; not in it: Charlotte FC, Club de Foot Montréal, FC Cincinnati, Houston Dynamo FC, Los Angeles FC, Minnesota United FC, Nashville SC, New York City FC, Orlando City SC, Philadelphia Union, Portland Timbers, Real Salt Lake City, Toronto FC, Vancouver Whitecaps FC; others: -
-2021	club_list	Greek National B Division: 14 of 17 listed clubs that the database holds (17 listed), 0 other clubs, 14 in all; not in it: AO Kavala, Olympiakos Volou, Pierikos Katerini; others: -
-2021	club_list	Irish First Division: 9 of 9 listed clubs that the database holds (9 listed), 1 other clubs, 10 in all; not in it: -; others: Cabinteely FC
-2021	club_list	Irish Premier Division: 10 of 10 listed clubs that the database holds (10 listed), 2 other clubs, 12 in all; not in it: -; others: Saint Joseph's Boys, Willow Park FC
-2021	club_list	Korean League: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Gimcheon Sangmu, Suwon FC; others: -
-2021	club_list	Polish First Division: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Bruk-Bet Termalica Nieciecza, Gornik Leczna; others: -
-2021	club_list	Portuguese Second Division B: 23 of 23 listed clubs that the database holds (24 listed), 1 other clubs, 24 in all; not in it: -; others: SB Castelo Branco
-2021	club_list	Russian First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: FK Krasnodar 2, Spartak 2 Moscow; others: -
-2021	club_list	Swedish Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: GIF Sundsvall, Helsingborgs IF; others: -
-2021	club_list	Turkish 2. Division Category A: 19 of 19 listed clubs that the database holds (19 listed), 1 other clubs, 20 in all; not in it: -; others: Altay SK
-2021	club_list	Turkish Premier Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Altay SK, Giresunspor; others: -
-2021	club_list	Welsh Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all; not in it: -; others: Airbus UK Broughton FC, Cambrian & Clydach, Carmarthen Town AFC, Colwyn Bay FC, Port Talbot Town, Prestatyn Town FC
 2021	clubs	asia_club_champ (AFC Champions League), row club-world-393: game 16, table 39 (39)
 2021	clubs	con_champ (CONCACAF Champions League), row club-world-389: game 16, table 15 (15)
 2021	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-21: game 4, table 128 (128)
@@ -35,6 +24,7 @@
 2021	clubs	ire_first (League of Ireland First Division), row wal-nir-irl-517: game 10, table 9 (9)
 2021	clubs	ire_prm (League of Ireland Premier Division), row wal-nir-irl-516: game 12, table 10 (10)
 2021	clubs	kor_league (K League 1), row aus-jap-kor-345: game 10, table 12 (12)
+2021	clubs	new_concacaf_nations_league (2022-23 CONCACAF Nations League), row int-continental-226: game 2, table 41 (41)
 2021	clubs	pol_first (Ekstraklasa), row gre-pol-cro-210: game 8, table 18 (18)
 2021	clubs	por_cup (Taça de Portugal), row por-186: game 164, table 154 (154)
 2021	clubs	por_second_b (Liga 3), row por-184: game 12, table 24 (24 (2 series of 12))
@@ -60,7 +50,7 @@
 2021	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-508: game 3, table 46 (46)
 2021	clubs	world_club_champ (FIFA Club World Cup), row club-world-382: game 0, table 7 (7)
 2021	down	eng_third (EFL League Two), row eng-231: game 1 (+0 play-off places), table 2 (2)
-2021	down	gre_prm (Super League 1), row gre-pol-cro-48: game 3 (+0 play-off places), table 1 (1 (14th))
+2021	down	gre_prm (Super League 1), row gre-pol-cro-48: game 2 (+0 play-off places), table 1 (1 (14th))
 2021	down	gre_second (Super League 2 North), row gre-pol-cro-75: game 2 (+0 play-off places), table 4 (4 (14th-17th))
 2021	down	kor_league (K League 1), row aus-jap-kor-345: game 0 (+0 play-off places), table 1 (1 (12th))
 2021	down	pol_first (Ekstraklasa), row gre-pol-cro-210: game 0 (+0 play-off places), table 3 (3 (16th-18th))
@@ -74,8 +64,9 @@
 2021	down	tur_second (TFF 1. Lig), row rus-tur-210: game 3 (+0 play-off places), table 4 (4)
 2021	down	tur_second_b (TFF 2. Lig), row rus-tur-237: game 0 (+0 play-off places), table 7 (7 (White 16th to 18th, Red 17th to 20th))
 2021	down	wel_first (Cymru Premier), row wal-nir-irl-504: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
+2021	idle	new_concacaf_gold_cup (2021 CONCACAF Gold Cup), row int-continental-225: the game waits for 2023, the table holds it
 2021	idle	olympics (Football at the Summer Olympics), row int-world-251: the game waits for 2024, the table holds it
-2021	name	new_conference_league (UEFA Europa League), row uefa-166: game 'UEFA Europa League', table 'UEFA Europa Conference League'
+2021	name	new_uefa_nations_league (2020-21 Finals; 2022-23 UEFA Nations League (start), row int-continental-223: game '2020-21 Finals; 2022-23 UEFA Nations League (start', table '2020-21 Finals; 2022-23 UEFA Nations League (start)'
 2021	no_row	friendly (Friendly): no table row
 2021	no_row	record_utils ('B' International): no table row
 2021	no_row	record_utils (Reserve): no table row
@@ -98,9 +89,6 @@
 2021	not_in_game	den-swe-286 swe_second 'Ettan' (Sweden)
 2021	not_in_game	eng-232 eng_conf 'National League' (England)
 2021	not_in_game	eng-421 eng_fa_trophy 'FA Trophy' (England)
-2021	not_in_game	int-continental-223 new '2020-21 Finals; 2022-23 UEFA Nations League (start)' (UEFA)
-2021	not_in_game	int-continental-225 new '2021 CONCACAF Gold Cup' (CONCACAF)
-2021	not_in_game	int-continental-226 new '2022-23 CONCACAF Nations League' (CONCACAF)
 2021	not_in_game	por-188 new 'Taça da Liga (Allianz Cup)' (Portugal)
 2021	not_in_game	rus-tur-102 new 'Russian Super Cup' (Russia)
 2021	not_in_game	rus-tur-291 new 'Turkish Super Cup' (Turkey)
@@ -125,7 +113,6 @@
 2021	playoffs	tur_second_b (TFF 2. Lig), row rus-tur-237: game 2 up and 0 down play-off places, table 0 and 0 ('see format')
 2021	subs_used	gre_cup (Greek Football Cup), row gre-pol-cro-21: game 3, table 5 (5)
 2021	up	gre_cup (Greek Football Cup), row gre-pol-cro-21: game 2 (+0 play-off places), table na (n/a)
-2021	up	gre_second (Super League 2 North), row gre-pol-cro-75: game 2 (+0 play-off places), table 1 (1 (play-off winner))
 2021	up	gre_second (Super League 2 South), row gre-pol-cro-129: game 1 (+0 play-off places), table 0 (0 (group winner to joint title and promotion play-off, see group 1 row))
 2021	up	pol_first (Ekstraklasa), row gre-pol-cro-210: game 4 (+0 play-off places), table na (n/a)
 2021	up	por_second_b (Liga 3), row por-184: game 1 (+0 play-off places), table 2 (2 (winners of the two promotion series))
