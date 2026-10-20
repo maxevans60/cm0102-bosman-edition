@@ -1104,3 +1104,24 @@ RT_WRAP(005267c0, trim_club_table)
     }
     fprintf(stderr, "recomp: club records: %d language name rows set after the club trim\n", fixed);
 }
+
+void o_0090dae0(void);
+
+/* Test log (RECOMP_CLUB_LOG=1): VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0 tops up both clubs of a fixture with
+ * virtual players through 0x90dae0 (club, ...) and stops at virtual_staff.cpp 195 when a squad still has fewer than
+ * 15 filled slots of +0xd7 (0x90d2f0, the count loop of 0x32 slots). The wrap names such a club. It only reads. */
+RT_WRAP(0090dae0, virtual_staff_top_up)
+{
+    uint32_t club = rt_arg(0);
+    o_0090dae0();
+    if (rt_unwinding || !getenv("RECOMP_CLUB_LOG") || !club) return;
+    int n = 0;
+    for (uint32_t j = 0; j < SQUAD; j++) n += rd32(g_mem, club + 0xd7 + 4 * j) != 0;
+    if (n < 15) {
+        char name[52];
+        memcpy(name, g_mem + club + 4, 51);
+        name[51] = 0;
+        fprintf(stderr, "recomp: club records: %s (club %d, nation %08x, division %08x) has %d squad slots after the "
+                        "virtual players\n", name, (int)rd32(g_mem, club), rd32(g_mem, club + 0x53), rd32(g_mem, club + 0x57), n);
+    }
+}

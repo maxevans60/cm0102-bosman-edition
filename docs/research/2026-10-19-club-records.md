@@ -99,4 +99,25 @@ Clubs below 16 after the fill: none in the runs of this slice (see Tests).
 
 ## Tests
 
-See the brief's test seam: the rules report with `--start-only` for every season with a record and both nation groups of slice 15, `--year X --last X+1` for one season per nation, a check of each new club's squad, the same-save set with `RECOMP_SEASON_CODE=off` and `RECOMP_CLUB_RECORDS=off`, repeatability, and a save that loads and plays 3 days.
+Check: `tests/seasons/club_records_run.py <build> <game> --year Y --database <folder> --nations all[,-<row>] [--last Y+1]`. It starts a new game with `RECOMP_RECORDS_SOURCES` (the unpacked databases of `test-fixtures/databases`, known by content) and `RECOMP_RECORDS_DUMP` (the merged files), and checks the log, the merged club.dat (names, ids, the national team ids moved, the squads), and the club lines of the rules report. A record that the class count of its division leaves out (the class takes fewer clubs than the real list; slice 15 keeps the clubs that the database has there first) is printed as "not kept (the class count, slice 18)".
+
+Runs of 2026-10-20 (Select All, start only):
+
+| Season | Database | New clubs | Result |
+|---|---|---|---|
+| 2002/03 | 3.9.68 (format 1 staff) | Daegu FC, TŠK Topolovac | PASS (before the fill) |
+| 2005/06 | September 2005 | 9 | PASS, every squad 22 |
+| 2007/08 | November 2007 | 1 | PASS |
+| 2008/09 | September 2008 | 7 | PASS |
+| 2009/10, 2011/12, 2013/14, 2014/15, 2016/17, 2023/24 | the season databases | 1 to 5 | PASS |
+| 2010/11 | September 2010 ODB | 5 | PASS |
+| 2020/21, 2022/23 | November 2020, October 2022 | Treaty United, Kerry | PASS without Denmark |
+| 2025/26 | December 2025 | Iwaki FC | PASS without Denmark and France |
+
+No club ended below 16 players. Clubs that their class count leaves out until slice 18: the Korean League (10), Greek National A and B (14), Northern Irish First Division (10), Russian First Division 2005/06 (18), J-League 2 (12).
+
+Full seasons (`--last Y+1`): 2008/09 reaches the 2009/10 start, and FK Krasnodar and FK Nizhny Novgorod hold a division there (the end-of-season step runs only for a league whose matches are all played). 2013/14 and 2005/06 stop at world_cup.cpp 1438 (slice 27 fixes it).
+
+Stops that are not this slice (the same with `RECOMP_CLUB_RECORDS=off`): Select All 2020/21 and 2022/23 at den_cup.cpp 75; Select All 2025/26 at fra_lge_cup.cpp 73; a 2013/14 season with Argentina at virtual_staff.cpp 195 (Huracán de Tres Arroyos, no nation and no players in the Autumn 2013 database, becomes a 26th club of the Argentine Second Division after the moves); 2005/06 with the 3.9.68 data (not a game configuration) at Database.cpp 13471.
+
+`tests/seasons/season_core_run.py` (its 2010/11 game holds the 5 new clubs): PASS, the save is the same twice and loads and plays on. Same-save set: see the slice report.

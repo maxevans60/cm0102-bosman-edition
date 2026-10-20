@@ -3,14 +3,15 @@
 
 Usage:
     python3 tests/seasons/club_records_run.py <cm0102_recomp> <game folder> --year <Y> --database <folder>
-        --nations <a,b,...> [--sources <folder>] [--keep <work folder>] [--timeout <s>]
+        --nations <a,b,...> [--last <Y+1>] [--sources <folder>] [--keep <work folder>] [--timeout <s>]
 
 It starts a new game in season Y with the season database and the nations given (England is always selected),
 up to the first start report (rules_report_check.py --start-only), with RECOMP_RECORDS_DUMP so the game writes the
 merged files of its load. --sources is the folder of the unpacked Update Team databases that the squads come from
 (default: /Users/max/Projects/cm0102/test-fixtures/databases); the game knows each by its content.
 
-Checks:
+--last Y+1 plays the season through to the start of the next one (no match engine) and checks that each new club
+of a league is in a division at that start. Checks:
 - the log names the records of the season, and every row of Seasons/club_records.tsv of Y is a new club;
 - in the merged club.dat each new club has its name, short name, nation, stadium and the squad of sources.tsv
   less the people that the start database holds; every national team id moved by the number of new clubs;
@@ -109,8 +110,9 @@ def main(argv):
     year = int(arg(argv, "--year"))
     database = os.path.abspath(arg(argv, "--database")) if "--database" in argv else None
     words = [x.strip() for x in arg(argv, "--nations", "England").split(",")]
-    if words[0].lower() == "all":                   # Select All (every league; Korea and Russia are rows 17 on)
-        nations = ["all"]
+    if words[0].lower() == "all":                   # Select All (every league; Korea and Russia are rows 17 on),
+        nations = ["all"] + [n for n in rrc.NATION_ROWS  # less the rows named with a minus ("all,-denmark")
+                             if "-" + n.lower() in {w.lower() for w in words}]
     else:
         nations = ["England"] + [n for n in rrc.NATION_ROWS if n.lower() in {w.lower() for w in words} and n != "England"]
     work = os.path.abspath(arg(argv, "--keep")) if "--keep" in argv else tempfile.mkdtemp(prefix="cm0102-records-")
@@ -118,8 +120,10 @@ def main(argv):
     os.makedirs(dump, exist_ok=True)
     env = {"RECOMP_RECORDS_SOURCES": arg(argv, "--sources", SOURCES), "RECOMP_RECORDS_DUMP": dump,
            "RECOMP_CLUB_LOG": "1"}
-    code, report = rrc.run(program, game, year, year, database, nations, [], os.path.join(work, "run"),
-                           int(arg(argv, "--timeout", 1800)), env_more=env, start_only=True)
+    last = int(arg(argv, "--last", year))
+    code, report = rrc.run(program, game, last, year, database, nations, [], os.path.join(work, "run"),
+                           int(arg(argv, "--timeout", 1800 if last == year else 10800)), env_more=env,
+                           start_only=last == year)
     failed = [] if code == 0 else [f"the run ended with code {code}"]
     records = [r for r in make_club_records.build()[0] if r[0] == year]
     log = open(os.path.join(work, "run", "stderr.txt"), encoding="latin-1").read()
@@ -153,9 +157,29 @@ def main(argv):
                 failed.append(f"{rec[3]} is not in {rec[1]} at the start")
             elif div in leagues:
                 print(f"  {rec[3]} plays in {rec[1]}")
+            elif rec[1] in short:
+                print(f"  {rec[3]}: not kept, {rec[1]} takes {short[rec[1]][1]} of {short[rec[1]][0]} real clubs "
+                      f"(the class count, slice 18)")
+            else:
+                print(f"  {rec[3]}: the report holds no league of {rec[1]} (record {div})")
         for d in rrc.club_differences(seasons, comps, clubs, data):
             if d[2].split(":")[0] not in short and any(rec[3] in d[2] or rec[2] in d[2] for rec in records):
                 failed.append(f"club_list names a new club: {d[2][:300]}")
+        # A full season (--last Y+1): the end-of-season step runs only for a league whose matches are all played
+        # (rules report doc), so a new club that the next start holds in a division of its nation played its season.
+        if last > year:
+            for rec in records:
+                start = [c for c in clubs if c["season"] == year + 1 and c["phase"] == "start" and c["name"] == rec[3]]
+                was = {c["division"] for c in clubs if c["season"] == year and c["phase"] == "start" and c["name"] == rec[3]}
+                if not was:
+                    continue
+                if not start:
+                    failed.append(f"{rec[3]}: in no division at the start of {year + 1}")
+                else:
+                    names = {v: k for k, v in divisions.items()}
+                    print(f"  {rec[3]}: {year + 1} start in {names.get(start[0]['division'], start[0]['division'])}")
+            if not any(s["season"] == year + 1 for s in seasons):
+                failed.append(f"the report has no start of {year + 1}")
     else:
         failed.append("the run wrote no report")
     for f in failed:
