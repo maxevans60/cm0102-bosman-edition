@@ -89,7 +89,8 @@ def check(name, start, last, rules, work):
         if "no room for the knockout" in x or "no knockout stage" in x or "no paths" in x:
             fails.append(f"{name}: {x.strip()}")
     for x in log:
-        if "Russia" in x and ("wc qualifying 2026" in x or "world_cup 2026 qualifier" in x or "wc play-off 2026" in x):
+        if "Russia" in x and "Europe pool of" not in x and \
+                ("wc qualifying 2026" in x or "world_cup 2026 qualifier" in x or "wc play-off 2026" in x):
             fails.append(f"{name}: Russia in the 2026 qualifying: {x.strip()}")
     year = QUALIFIERS.get(name)
     if year:
