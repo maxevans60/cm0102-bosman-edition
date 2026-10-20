@@ -129,6 +129,13 @@ if(NOT WIN32)
         src/recomp_rt/win/season_intl_table.c)
     target_include_directories(season_intl_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_intl COMMAND season_intl_test)
+    # Nations Leagues (0.6.0 slice 28): the C table of the editions and leagues matches the tables, and the
+    # ranking, promotion and relegation and play-off path rules.
+    add_test(NAME season_nl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_nl.py" --check)
+    add_executable(season_nl_test tests/seasons/test_season_nl.c src/recomp_rt/win/season_nl_rules.c
+        src/recomp_rt/win/season_nl_table.c)
+    target_include_directories(season_nl_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_nl COMMAND season_nl_test)
     # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
     add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
         src/recomp_rt/win/season_cups_table.c)
@@ -160,6 +167,7 @@ if(NOT WIN32)
     # The names table and the club moves table (0.6.0 slice 15): the tools read every part and stop on a bad row.
     add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
     add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)
+    add_test(NAME season_club_records_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_club_records.py" --check)
     # The UEFA formats by season (0.6.0 slice 22): the committed table matches uefa.tsv, and its lookups.
     add_test(NAME season_uefa_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_uefa_table.py" --check)
     add_executable(season_uefa_test tests/seasons/test_season_uefa.c src/recomp_rt/win/season_uefa_table.c
@@ -340,8 +348,19 @@ if(EXISTS "${CM0102_EXE}")
             ${RULES_PARTS} ${CLUBS_PARTS}
         COMMENT "Making the club moves table"
         VERBATIM)
+    # 0.6.0 slice 15b: the club records table (Seasons/club_records.tsv).
+    file(GLOB CLUB_RECORDS_PARTS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/docs/research/club-records-0.6.0/*.tsv")
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/club_records.tsv"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_club_records.py"
+            --out "${CMAKE_BINARY_DIR}/seasons/club_records.tsv"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_club_records.py" "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py"
+            ${RULES_PARTS} ${CLUBS_PARTS} ${CLUB_RECORDS_PARTS}
+        COMMENT "Making the club records table"
+        VERBATIM)
     add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv"
-        "${CMAKE_BINARY_DIR}/seasons/names.tsv" "${CMAKE_BINARY_DIR}/seasons/clubs.tsv")
+        "${CMAKE_BINARY_DIR}/seasons/names.tsv" "${CMAKE_BINARY_DIR}/seasons/clubs.tsv"
+        "${CMAKE_BINARY_DIR}/seasons/club_records.tsv")
     target_sources(cm0102_recomp PRIVATE "${CMAKE_BINARY_DIR}/seasons/comp_classes.c")
     add_dependencies(cm0102_recomp seasons_rules)
     # The season change (0.6.0 slice 16): the committed wraps of start_new_season match the class table.

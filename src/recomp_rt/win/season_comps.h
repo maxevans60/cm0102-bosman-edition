@@ -93,6 +93,11 @@ struct SeasonCompDef {
     const char *like;
     const char *short_name;
     int level;
+    /* Slice 28: 1 when an edition starts before the update day of its entry in the season that the table gives
+     * it (the Gold Cup of July 2021 in 2021/22, entry 1 on 15 August): the object is also made in the season
+     * before a season that holds the competition. Only with changing rules on: with them off a competition that
+     * the start season does not hold stays off (Q398). */
+    int early;
     /* Slice 21c: the rule of season S of the entry hook, 1 held, 0 not held, -1 no row; NULL: the table by `comp`
      * (season_comps_held). A cup whose editions do not map one to one to the rows (a calendar-year cup in the row
      * before, or one that the game cannot play in some seasons) gives its own. */
@@ -155,6 +160,11 @@ uint32_t season_comps_base_vtable(uint32_t vtable);
 
 /* 1 when the def holds its competition in season s (its `held`, else the table by comp), 0 not, -1 no row. */
 int season_comps_def_held(const SeasonCompDef *d, int s);
+
+/* Slice 28: the class of a vtable copy (the original class and kind, the def's file), or NULL for another
+ * vtable. The rules report and season_change_file use it, so a new competition shows its def's file. */
+#include "season_rules.h"
+const SeasonCompClass *season_comps_class(uint32_t vtable);
 
 /* Points slot `slot` of a vtable copy at a runtime function (rt_host_fn gives it a game address). */
 void season_comps_set_slot(uint32_t vtable, int slot, const char *name, void (*fn)(void));

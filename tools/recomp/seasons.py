@@ -236,7 +236,7 @@ INSNS = {
     0x92BFEE: ("push 6", "W16(esi + 0x40u, rt_intl_first_year(0u, R16(esi + 0x40u))); esp -= 4; W32(esp, 6u);"),  # world_cup ctor 0x92bf50
     0x57A92B: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(1u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # euro_champ ctor 0x57a890
     0x58B392: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(2u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # fifa_confed ctor 0x58b310
-    0x5E06FB: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(3u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # copa_america ctor 0x5e0660
+    0x5E06FB: ("push 1", "W16(esi + 0x40u, rt_copa_first_year(esi, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # copa_america ctor 0x5e0660
     0x401097: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(4u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # african_nations ctor 0x401000
     0x40E8F5: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(5u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # asia_nations ctor 0x40e860
     0x798952: ("push 1", "W16(esi + 0x40u, rt_intl_first_year(6u, R16(esi + 0x40u))); esp -= 4; W32(esp, 1u);"),  # oceania_nations ctor 0x7988b0
@@ -244,7 +244,7 @@ INSNS = {
     0x92D409: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(0u, R16(esi + 0x40u), 4u));"),  # world_cup::start_new_season 0x92d330
     0x57B7CA: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(1u, R16(esi + 0x40u), 4u));"),  # euro_champ 0x57b750
     0x58C050: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(2u, R16(esi + 0x40u), 2u));"),  # fifa_confed 0x58bff0
-    0x5E1590: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(3u, R16(esi + 0x40u), 2u));"),  # copa_america 0x5e1530
+    0x5E1590: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_copa_next_year(esi, R16(esi + 0x40u), 2u));"),  # copa_america 0x5e1530
     0x401D80: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(4u, R16(esi + 0x40u), 2u));"),  # african_nations 0x401d20
     0x40F780: ("add word ptr [esi + 0x40], 4", "W16(esi + 0x40u, rt_intl_next_year(5u, R16(esi + 0x40u), 4u));"),  # asia_nations 0x40f720
     0x799940: ("add word ptr [esi + 0x40], 2", "W16(esi + 0x40u, rt_intl_next_year(6u, R16(esi + 0x40u), 2u));"),  # oceania_nations 0x7998e0
@@ -335,6 +335,10 @@ INSNS = {
     # the compare at 0x9108aa).
     0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
 
+    # UEFA Nations League (0.6.0 slice 28, season_nl.c). EuroChampQual::update_for_date 0x57fd60 makes the group
+    # stages 0 to 7 on its draw day (create_group_stage 0x57ed10 at 0x57ff2e, `cmp edi, 8`, this in esi). The
+    # Nations League object makes one stage for each group after group one: G - 1. Other objects: 8.
+    0x57FF34: ("cmp edi, 8", "t0 = edi; t1 = rt_nl_group_stages(esi, 8u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
     # Euro qualifying places (0.6.0 slice 27, win/season_intl_euroq.c). The places and stage indices of the
     # format: after set_up_rules sets +0xbf (0x57e963) and at the ctor epilogue (0x57d03b, also after a load: the
     # bytes +0xff..+0x101 are not saved). The play-off size by the host count +0xf6: 0x57f014 (best places),

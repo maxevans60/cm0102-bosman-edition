@@ -193,6 +193,13 @@ NEW_FILES = {("Turkey", "super cup"): "new_tur_super", ("Russia", "super cup"): 
              ("Northern Ireland and Republic of Ireland", "All-Ireland cup"): "new_all_ireland"}
 
 
+def new_matches(name, row):
+    """A new competition of the shared module (season_comps.h, slice 28) and a row of comp_file "new": the module
+    gives the object the name of each season's row, and keeps the name of the season before until its next
+    change ("2018-19 UEFA Nations League" in 2019/20 holds the comp "UEFA Nations League")."""
+    return name in (row["name"], row["comp"]) or (row["comp"] and row["comp"] in name)
+
+
 def row_files(r):
     """The files of a row. A row of a new competition (comp_file "new") has the file of its def in
     src/recomp_rt/win/season_comps.c: "new_" and its comp in lower case with "_" for spaces ("Conference League"
@@ -229,12 +236,19 @@ def differences(seasons, comps, rows):
     files_in_report = {c["file"] for c in comps}
     nations = set()
     held = collections.defaultdict(set)
+    held_new = collections.defaultdict(set)         # the names of the new competitions of each season (slice 28)
     nth = collections.Counter()
     for (season, _), phases in objects.items():
         c = phases.get("start") or phases["end"]
         both = [x for x in (phases.get("start"), phases.get("end")) if x]
         held[season].add(c["file"])
+        if c["file"].startswith("new_"):
+            held_new[season].add(c["name"])
         found = by_season_file.get((season, c["file"]), [])
+        if not found and c["file"].startswith("new_"):
+            # A new competition of the shared module (season_comps.h, slice 28): the rows of comp_file "new"
+            # with the object's name (the module gives it the name of each season's row).
+            found = [r for r in by_season_file.get((season, "new"), []) if new_matches(c["name"], r)]
         k = nth[(season, c["file"])]
         nth[(season, c["file"])] += 1
         if not found:
@@ -294,6 +308,8 @@ def differences(seasons, comps, rows):
             files = row_files(r)
             if any(f in held[s] for f in files):
                 continue
+            if r["comp_file"] == "new" and any(new_matches(n, r) for n in held_new[s]):
+                continue
             if r["nation"] in nations or any(f in files_in_report for f in files):
                 out.add((s, "not_in_game", f"{r['id']} {r['comp_file']} {r['name']!r} ({r['nation']})"))
     return sorted(out)
@@ -324,6 +340,16 @@ def division_records(folder):
 
 
 DATA_COUNTING = {"IrePrm", "IreFirst", "PolFirst", "NorFirst"}     # the classes that count the clubs of the data
+
+
+def record_names(season):
+    """Slice 15b: {(division, real name of the club moves table): the name of the new club record} of a season
+    (tools/seasons/make_club_records.py). RECOMP_CLUB_RECORDS=off: none."""
+    if os.environ.get("RECOMP_CLUB_RECORDS") == "off":
+        return {}
+    import make_club_records
+    out, _errors = make_club_records.build()
+    return {(r[1], r[2]): r[3] for r in out if r[0] == season}
 
 
 def club_differences(seasons, comps, clubs, data_dir):
@@ -358,11 +384,14 @@ def club_differences(seasons, comps, clubs, data_dir):
     for n in held:
         plain_to[make_clubs.plain_name(n)].add(n)
     lists = collections.OrderedDict()
+    records = record_names(season)                  # slice 15b: the new club records of the start season
     for s, division, club_id, club, _ in make_clubs.build()[0]:
         if s != season:
             continue
         if names.get(club_id) == club or club in held:
             name = club
+        elif club_id == -1 and (division, club) in records:
+            name = records[(division, club)]
         else:                               # the plain form, when one club of the database has it (season_clubs.c)
             name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
         lists.setdefault(division, []).append(name)

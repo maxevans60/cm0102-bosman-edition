@@ -33,6 +33,7 @@
 #include "season_dates.h"
 #include "season_comps.h"
 #include "season_history.h"
+#include "season_records.h"
 #include "seasons_db.h"
 #include "../host.h"
 
@@ -225,6 +226,8 @@ static int career_kept(const SeasonDateShifts *s, uint32_t i)
     int byte = hexval(p[0]) << 4 | hexval(p[1]);
     return byte >> (i & 7) & 1;
 }
+
+int season_dates_career_kept(const SeasonDateShifts *s, uint32_t i) { return career_kept(s, i); }
 
 static int last_row_comp(const SeasonDateShifts *s, uint32_t id)
 {
@@ -442,12 +445,12 @@ int season_dates_custom_check(const char *folder, int *shift)
 }
 
 /* The plan for the loaded data in start year N. 0 when nothing moves. */
-static int plan_for(int N, Plan *p)
+static int plan_for_folder(const char *dir, int N, Plan *p)
 {
     memset(p, 0, sizeof *p);
     p->N = N;
     char folder[1100];
-    if (loaded_dir[0]) snprintf(folder, sizeof folder, "%s", loaded_dir);
+    if (dir[0]) snprintf(folder, sizeof folder, "%s", dir);
     else snprintf(folder, sizeof folder, "%s/Data", win_game_dir);
     const SeasonKnownDb *k = seasons_db_identify(folder);
     if (k && (k->role == SEASONS_ROLE_OFFICIAL_BASE || k->role == SEASONS_ROLE_OFFICIAL_VERSION)) {
@@ -488,6 +491,29 @@ static int plan_for(int N, Plan *p)
     p->history = (D >= 2010 ? d : 0) + e;
     p->contract_old = d + e;
     p->contract_real = e;
+    return 1;
+}
+
+static int plan_for(int N, Plan *p) { return plan_for_folder(loaded_dir, N, p); }
+
+int season_dates_plan(const char *folder, int N, SeasonShiftPlan *out)
+{
+    Plan p;
+    memset(out, 0, sizeof *out);
+    if (N == SEASON_FIRST_YEAR || !plan_for_folder(folder, N, &p)) {
+        out->D = SEASON_FIRST_YEAR;
+        out->N = N;
+        return 0;
+    }
+    out->D = p.D;
+    out->N = p.N;
+    out->birth = p.birth;
+    out->joined = p.joined;
+    out->careers = p.careers;
+    out->kept = p.kept;
+    out->contract_old = p.contract_old;
+    out->contract_real = p.contract_real;
+    out->row = p.row;
     return 1;
 }
 
@@ -534,7 +560,9 @@ void o_00524d50(void);
  * loads through 0x524d10 (the stream source) and is not touched. Nonzero when the data is loaded. */
 RT_WRAP(00524d50, database_load_files)
 {
+    season_records_before_load(win_data_set_dir(), season_start_year());   /* slice 15b: the merged files */
     o_00524d50();
+    season_records_after_load();
     if (rt_unwinding) return;
     season_dates_forget();
     if (!cpu.eax) return;

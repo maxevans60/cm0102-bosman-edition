@@ -86,18 +86,18 @@ static int new_held(const SeasonCompDef *d, int season);
  * records: the Conference League Cup takes "English Conference Cup" of the data (record 95 in 3.9.68: key id
  * 0x9cf6a4, matched by set_key_ids 0x601a40, no object); the others get a new record like the cup of their nation. */
 const SeasonCompDef season_def_tur_super = {"Turkey:super cup", "new_tur_super", "Turkish Super Cup", 32, new_make,
-                                            "Turkish FA Cup", "Super Cup", 10, new_held};
+                                            "Turkish FA Cup", "Super Cup", 10, 0, new_held};
 const SeasonCompDef season_def_rus_super = {"Russia:super cup", "new_rus_super", "Russian Super Cup", 27, new_make,
-                                            "Russian Cup", "Super Cup", 10, new_held};
+                                            "Russian Cup", "Super Cup", 10, 0, new_held};
 const SeasonCompDef season_def_nor_super = {"Norway:Norwegian Super Cup", "new_nor_super", "Norwegian Super Cup", 24,
-                                            new_make, "Norwegian Cup", "Super Cup", 7, new_held};
+                                            new_make, "Norwegian Cup", "Super Cup", 7, 0, new_held};
 const SeasonCompDef season_def_rus_lge_cup = {"Russia:league cup", "new_rus_lge_cup", "Russian Premier League Cup", 27,
-                                              new_make, "Russian Cup", "Premier League Cup", 8, new_held};
+                                              new_make, "Russian Cup", "Premier League Cup", 8, 0, new_held};
 const SeasonCompDef season_def_conf_cup = {"England:Conference League Cup", "new_conf_cup", "English Conference Cup",
-                                           14, new_make, NULL, NULL, 0, new_held};
+                                           14, new_make, NULL, NULL, 0, 0, new_held};
 const SeasonCompDef season_def_all_ireland = {"Northern Ireland and Republic of Ireland:All-Ireland cup",
                                               "new_all_ireland", "Setanta Sports Cup", 20, new_make,
-                                              "Irish League Cup", "Setanta Cup", 5, new_held};
+                                              "Irish League Cup", "Setanta Cup", 5, 0, new_held};
 
 /* The clubs of a knockout cup: up to `count` clubs of a division (key id global), by their place in it in the last
  * season (clubs new to it after them). */

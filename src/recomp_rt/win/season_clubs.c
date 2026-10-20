@@ -4,6 +4,7 @@
 #include "season.h"
 #include "season_clubs.h"
 #include "season_names.h"
+#include "season_records.h"
 #include "season_rules.h"
 #include "season_sizes.h"
 #include "../host.h"
@@ -450,6 +451,10 @@ static void move_clubs(int season)
         div[t].target = 1;
         div[t].listed++;
         int k = -1;
+        /* Slice 15b: a club that the database lacks can be a new club record of this load (season_records.c). */
+        int record = rows[r].club_id < 0 ? season_records_club(season, rows[r].real) : -1;
+        for (int i = 0; i < count && k < 0 && record >= 0; i++)
+            if (club[i].id == record && !club[i].national) k = i;
         for (int i = 0; i < count && k < 0 && rows[r].club_id >= 0; i++)
             if (club[i].id == rows[r].club_id && !club[i].national && club[i].nation == div[t].nation &&
                 same_name(club[i].at + CLUB_NAME, rows[r].club))
@@ -650,5 +655,6 @@ RT_WRAP(00524d70, trim_staff_tables)
 {
     const char *off = getenv("RECOMP_CLUB_MOVES");     /* test switch: off moves no club */
     if (season_game_changes() && nrows && !(off && !strcmp(off, "off"))) move_clubs(season_start_year());
+    if (season_game_changes()) season_records_fill(season_start_year());     /* slice 15b: after the moves */
     o_00524d70();
 }
