@@ -54,6 +54,10 @@ extern char win_cwd[1024];             /* current folder, as a Windows path */
 /* Handles of files (files.c). */
 int win_is_file_handle(uint32_t h);
 int win_close_file(uint32_t h);
+/* Memory files (season_records.c, 0.6.0 slice 15b): a read-only open of the host path gives these bytes in place
+ * of the file on disk. The caller keeps the buffer until win_memory_files_clear. */
+void win_memory_file(const char *host_path, const uint8_t *data, size_t size);
+void win_memory_files_clear(void);
 
 /* Memory that the runtime owns and never frees, zeroed (kernel32.c). */
 uint32_t win_static_alloc(uint32_t size);
@@ -84,6 +88,10 @@ void win_save_window(void);
 void win_present(void);                /* show the primary surface */
 void win_poll_events(void);            /* SDL events to the message queue */
 void win_game_work(void);              /* user32.c: game work ran in this pass, no idle sleep (#58) */
+/* user32.c: a hook on the game's random function 0x90cfc0 (cdecl (range)): called after each call with the esp of
+ * the call (the return address is at [esp]), the caller's edi and the result, returns the result to use. NULL
+ * when no code asks for it (season_uefa_qual.c, the Champions League group draw). */
+extern uint32_t (*win_random_hook)(uint32_t esp, uint32_t edi, uint32_t result);
 uint32_t win_back_buffer(void);        /* flat address of the RGB565 back buffer, or 0 */
 void win_dump_screen(const char *path);
 extern uint32_t win_wndproc;

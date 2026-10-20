@@ -404,6 +404,42 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
         fprintf(stderr, "recomp: uefa: Conference League holder %.50s: %s\n", win_str(ecl_holder + 4),
                 had ? "has a place already" : y ? "a Europa League place" : "a Conference League place");
     }
+    /* Slice 25 (Q540, 2024/25 on): the European Performance Spots. The two nations with the best season
+     * coefficient of the season before (nation record +0x108, a double: roll_coefficients 0x903b50 writes the
+     * points of that season divided by the clubs entered there, before these places) each get one more league
+     * phase place, for their best-placed club with no place yet. At a new game in a moved season the shift runs
+     * too (0x903b6f tests the year 2001) with no clubs entered, so +0x108 is 0 for every nation (0x903c2a) and
+     * the season before is the database's last value, now at +0x100 (0x903be8..0x903bee). It
+     * comes after the title holders and before the Europa League places, so the clubs below move down one place
+     * (CL regulations 2024/25, Art. 3.07 and 3.08). */
+    if (r->cl_league && !rt_unwinding) {
+        int best[2] = {-1, -1};
+        double val[2] = {0, 0};
+        uint32_t field = 0x100;
+        for (int e = 0; e < entries; e++) {
+            uint32_t rec = rd32(g_mem, self + 0x12u * (uint32_t)e + 4);
+            double v = 0;
+            if (readable(rec)) memcpy(&v, g_mem + rec + 0x108, sizeof v);
+            if (v > 0) field = 0x108;
+        }
+        for (int e = 0; e < entries; e++) {
+            uint32_t ent = self + 0x12u * (uint32_t)e, rec = rd32(g_mem, ent + 4);
+            if (!readable(rec) || nation_suspended(r, rd32(g_mem, ent + 4))) continue;
+            double v;
+            memcpy(&v, g_mem + rec + field, sizeof v);
+            if (best[0] < 0 || v > val[0]) best[1] = best[0], val[1] = val[0], best[0] = e, val[0] = v;
+            else if (best[1] < 0 || v > val[1]) best[1] = e, val[1] = v;
+        }
+        for (int k = 0; k < 2 && best[k] >= 0 && !rt_unwinding; k++) {
+            uint32_t ent = self + 0x12u * (uint32_t)best[k];
+            uint32_t club = pick(self, records, count, rd32(g_mem, ent), 1, 1);
+            if (rt_unwinding || !readable(club)) continue;
+            add(club, 'c', SEASON_UEFA_CL_G, best[k] + 1, 0);
+            g_mem[ent + 0xc]++;
+            fprintf(stderr, "recomp: uefa: European Performance Spot %d/%02d: rank %d (%.3f at +0x%x), %.40s\n", s,
+                    (s + 1) % 100, best[k] + 1, val[k], field, win_str(club + 4));
+        }
+    }
     /* 4. Europa League places: the cup winner, the league places, the league cup winner. 5. Fair play. */
     int fair[3] = {-1, -1, -1};
     if (season_uefa_access_rule(s, 'f') && entries > 3)
