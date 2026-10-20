@@ -132,6 +132,13 @@ int main(int argc, char **argv)
     for (int i = first; i < argc && len < sizeof win_command_line; i++)
         len += (size_t)snprintf(win_command_line + len, sizeof win_command_line - len, " %s", argv[i]);
 
+#ifdef _WIN32
+    /* Windows display scaling (125 %, 150 %): the game draws in real pixels, so that Windows does not
+     * stretch the window and blur the text. Window sizes and places stay in scaled points, as on a Mac,
+     * so that window.txt, the first window size and the mouse keep their units. It must come before
+     * SDL_Init. */
+    SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1");
+#endif
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
         fprintf(stderr, "cm0102_recomp: SDL_Init: %s\n", SDL_GetError());
         return 1;

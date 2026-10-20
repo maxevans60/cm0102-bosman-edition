@@ -20,6 +20,7 @@
 #include "host.h"
 #include "options.h"
 #include "winfit.h"
+#include "winscale.h"
 
 #include <SDL.h>
 #include <stdlib.h>
@@ -85,23 +86,28 @@ static void post_mouse(uint32_t msg, int x, int y)
 }
 
 /* The scaling of the picture to the window. SDL_RenderSetLogicalSize keeps its shape, with bars at
- * the sides or at the top and bottom. With the option sharp_picture, each pixel of the game is drawn
- * as a block of whole pixels (SDL_RenderSetIntegerScale) when that loses at most a fifth of the size
- * that fits the window, for example 2 times in a window that allows 2.4 times. Otherwise the picture
- * fills the window and each pixel takes the nearest whole pixels. Without the option, the scaling
- * stays as in 0.1.0 (SDL's default filter). */
-#define WHOLE_PIXEL_SHARE 0.8
+ * the sides or at the top and bottom. With the option sharp_picture, winscale_pick (winscale.h) picks
+ * whole pixels, the nearest pixels or, on Windows between 1.2 and 2 times, smooth scaling. Without the
+ * option, the scaling stays as in 0.1.0 (SDL's default filter). */
+#ifdef _WIN32
+#define SMOOTH_BAND 1
+#else
+#define SMOOTH_BAND 0
+#endif
 static void update_scaling(void)
 {
-    if (!renderer || !options_bool(OPT_SHARP_PICTURE)) return;
+    if (!renderer || !texture || !options_bool(OPT_SHARP_PICTURE)) return;
     int ow = 0, oh = 0;
     if (SDL_GetRendererOutputSize(renderer, &ow, &oh) || ow <= 0 || oh <= 0) return;
-    double fit = (double)ow / rt_screen_w;
-    if ((double)oh / rt_screen_h < fit) fit = (double)oh / rt_screen_h;
-    int whole = (int)fit;
-    SDL_bool on = whole >= 1 && whole >= fit * WHOLE_PIXEL_SHARE ? SDL_TRUE : SDL_FALSE;
+    WinScale ws = winscale_pick(ow, oh, (int)rt_screen_w, (int)rt_screen_h, SMOOTH_BAND);
+    SDL_bool on = ws.whole ? SDL_TRUE : SDL_FALSE;
     if (SDL_RenderGetIntegerScale(renderer) != on) {
         SDL_RenderSetIntegerScale(renderer, on);
+        win_screen_dirty = 1;
+    }
+    SDL_ScaleMode want = ws.smooth ? SDL_ScaleModeLinear : SDL_ScaleModeNearest, now;
+    if (SDL_GetTextureScaleMode(texture, &now) || now != want) {
+        SDL_SetTextureScaleMode(texture, want);
         win_screen_dirty = 1;
     }
 }
@@ -113,7 +119,6 @@ void win_sharp_picture_changed(void)
 {
     if (!renderer || !texture) return;
     if (options_bool(OPT_SHARP_PICTURE)) {
-        SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
         update_scaling();
     } else {
         SDL_SetTextureScaleMode(texture, default_scale_mode);
@@ -240,7 +245,6 @@ void win_video_init(void)
                                 (int)rt_screen_w, (int)rt_screen_h);
     if (!texture) rt_fatal("SDL_CreateTexture: %s", SDL_GetError());
     SDL_GetTextureScaleMode(texture, &default_scale_mode);
-    if (options_bool(OPT_SHARP_PICTURE)) SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
     update_scaling();
     SDL_StartTextInput();
     opened_at = SDL_GetTicks64();
