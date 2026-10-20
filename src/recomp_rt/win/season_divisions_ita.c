@@ -369,12 +369,34 @@ static void unlink_ended(void)
 }
 
 /* C2/B or C2/C ends: the year 2999, so it makes no fixtures and the chain never starts it again (0x641986). Its
- * table keeps its last season (the rules report shows that edition with year 2999). It leaves the links. */
+ * table keeps its last season (the rules report shows that edition with year 2999). It leaves the links.
+ *
+ * A table of one club (a new game of the era with the flag) holds no result blocks. Each row's block at +9 holds
+ * +0xa7 bytes, the matches of a club, which is 0 with one club. League::save_to_temp_file writes the blocks when
+ * row 0 has one (0x689762..0x6897e3), and League::load_from_temp_file reads each with fread of +0xa7 bytes and wants
+ * a count of 1 (0x688c59..0x688c98): fread of 0 bytes gives 0, so the load of a 2014 game with the extra division
+ * stopped at its box (line 0x12e4, 0x688cea). With no block in row 0 the save writes 0 and the load gives each row
+ * none (0x688d1f..0x688d3d), a state that the load itself makes. */
+static void drop_results(uint32_t obj)
+{
+    uint32_t rows = rd32(g_mem, obj + 0xb1);
+    int n = (int16_t)rd16(g_mem, obj + 0x3e);
+    if (!readable(rows) || n > 1) return;
+    for (int k = 0; k < n && !rt_unwinding; k++) {
+        uint32_t at = rows + ROW_SIZE * (uint32_t)k + 9u, block = rd32(g_mem, at);
+        if (!block) continue;
+        uint32_t f[1] = {block};
+        call_cdecl(F_FREE, 1, f);
+        wr32(g_mem, at, 0);
+    }
+}
+
 static void idle(uint32_t obj)
 {
     if (!obj) return;
     wr16(g_mem, obj + 0x40, IDLE_YEAR);
     unlink(obj);
+    drop_results(obj);
     fprintf(stderr, "recomp: serie c: %.50s ends (year %d)\n", win_str(rd32(g_mem, obj + 4) + 4), IDLE_YEAR);
 }
 
