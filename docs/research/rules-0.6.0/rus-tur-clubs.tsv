@@ -99,6 +99,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2006/07	Turkish Premier Division (real: Süper Lig)	Antalyaspor	757	Antalyaspor A.S.	Turkish Premier Division	https://en.wikipedia.org/wiki/2006–07_Süper_Lig
 2006/07	Turkish Premier Division (real: Süper Lig)	Rizespor	2034	Çaykur Rizespor	Turkish Premier Division	https://en.wikipedia.org/wiki/2006–07_Süper_Lig
 2006/07	Turkish Premier Division (real: Süper Lig)	Manisaspor	7048	Vestel Manisaspor	Turkish Premier Division	https://en.wikipedia.org/wiki/2006–07_Süper_Lig
+2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Gençlerbirliği OFTAŞ	2938	Darica Gençlerbirligi	Turkish 2. Division Category A	https://en.wikipedia.org/wiki/2006–07_TFF_First_League
 2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Istanbul Büyüksehir Belediye Spor	2023	Istanbul Büyüksehir Belediye Spor	Turkish 2. Division Category A	https://en.wikipedia.org/wiki/2006–07_TFF_First_League
 2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Malatyaspor	6992	Malatyaspor	Turkish 2. Division Category A	https://en.wikipedia.org/wiki/2006–07_TFF_First_League
 2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Diyarbakırspor	2865	Diyarbakirspor	Turkish 2. Division Category A	https://en.wikipedia.org/wiki/2006–07_TFF_First_League
@@ -116,7 +117,6 @@ season	division	club	db_club_id	db_club	db_division	source
 2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Türk Telekomspor	11435	Türk Telekomspor	Turkish 2. Division Category A	https://en.wikipedia.org/wiki/2006–07_TFF_First_League
 2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Akçaabat Sebatspor	41	Akçaabat Sebatspor	Turkish 2. Division Category A	https://en.wikipedia.org/wiki/2006–07_TFF_First_League
 2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Uşakspor	12130	UMPAS Usakspor A.S.	Turkish 2. Division Category A	https://en.wikipedia.org/wiki/2006–07_TFF_First_League
-2006/07	Turkish 2. Division Category A (real: TFF 1. Lig)	Gençlerbirliği OFTAŞ				https://en.wikipedia.org/wiki/2006–07_TFF_First_League
 2006/07	Russian Premier Division (real: Premier League)	Zenith St. Petersburg	713	Zenith St. Petersburg	Russian Premier Division	https://en.wikipedia.org/wiki/2007_Russian_Premier_League
 2006/07	Russian Premier Division (real: Premier League)	Spartak Moscow	10862	Spartak Moscow	Russian Premier Division	https://en.wikipedia.org/wiki/2007_Russian_Premier_League
 2006/07	Russian Premier Division (real: Premier League)	CSKA Moscow	2090	CSKA Moscow	Russian Premier Division	https://en.wikipedia.org/wiki/2007_Russian_Premier_League
@@ -135,6 +135,7 @@ season	division	club	db_club_id	db_club	db_division	source
 2006/07	Russian Premier Division (real: Premier League)	Rostov	9688	Rostov	Russian Premier Division	https://en.wikipedia.org/wiki/2007_Russian_Premier_League
 2006/07	Russian First Division (real: First Division)	Shinnik Yaroslavl	10464	Shinnik Yaroslavl	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2006/07	Russian First Division (real: First Division)	Terek Grozny	11467	Terek Grozny	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
+2006/07	Russian First Division (real: First Division)	Sibir Novosibirsk	2512	Sibyr	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2006/07	Russian First Division (real: First Division)	KAMAZ	5796	KAMAZ Naberezhnye Chelny	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2006/07	Russian First Division (real: First Division)	Ural Yekaterinburg	12117	Ural Yekaterinburg	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2006/07	Russian First Division (real: First Division)	Torpedo Moscow	11692	Torpedo Moscow	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
@@ -150,11 +151,10 @@ season	division	club	db_club_id	db_club	db_division	source
 2006/07	Russian First Division (real: First Division)	Metallurg-Kuzbass	7304	Metallurg-Kuzbass Novokuznetsk	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2006/07	Russian First Division (real: First Division)	SKA Rostov-on-Don	9886	SKA Rostov-na-Donu	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2006/07	Russian First Division (real: First Division)	Avangard Kursk	1080	Avangard Kursk	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
-2006/07	Russian First Division (real: First Division)	Mordovia Saransk	1601	Mordovia Saransk	Russian First Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
+2006/07	Russian First Division (real: First Division)	Mordovia Saransk	1601	Mordovia Saransk	Russian Second Division - Volga	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2006/07	Russian First Division (real: First Division)	Textilschik-Telecom Ivanovo	11505	Textilschik-Telecom Ivanovo	Russian Second Division - Central	https://en.wikipedia.org/wiki/2007_Russian_First_Division
-2006/07	Russian First Division (real: First Division)	Sodovik Sterlitamak	10720	Sodovik Sterlitamak	Russian Second Division - Volga	https://en.wikipedia.org/wiki/2007_Russian_First_Division
-2006/07	Russian First Division (real: First Division)	Sibir Novosibirsk				https://en.wikipedia.org/wiki/2007_Russian_First_Division
-2006/07	Russian First Division (real: First Division)	Spartak-MZhK Ryazan				https://en.wikipedia.org/wiki/2007_Russian_First_Division
+2006/07	Russian First Division (real: First Division)	Sodovik Sterlitamak	10720	Sodovik Sterlitamak	Russian Second Division - Central	https://en.wikipedia.org/wiki/2007_Russian_First_Division
+2006/07	Russian First Division (real: First Division)	Spartak-MZhK Ryazan	8758	Spartak-MGK	Russian Lower Division	https://en.wikipedia.org/wiki/2007_Russian_First_Division
 2007/08	Russian Premier Division (real: Premier League)	Rubin Kazan	9735	Rubin Kazan	Russian Premier Division	https://en.wikipedia.org/wiki/2008_Russian_Premier_League
 2007/08	Russian Premier Division (real: Premier League)	CSKA Moscow	2090	CSKA Moscow	Russian Premier Division	https://en.wikipedia.org/wiki/2008_Russian_Premier_League
 2007/08	Russian Premier Division (real: Premier League)	Dynamo Moscow	3127	Dinamo Moscow	Russian Premier Division	https://en.wikipedia.org/wiki/2008_Russian_Premier_League

@@ -32,10 +32,15 @@ static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
 static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup", "Test New Cup", 2, test_make,
                                            "UEFA Cup", "Test Cup", 10};
 
+/* Slice 26c: the new club cups (season_club_cups.c). */
+extern const SeasonCompDef season_cup_sudamericana, season_cup_recopa, season_cup_suruga_bank,
+    season_cup_intercontinental, season_cup_acl_two;
+
 /* Slice 24, part b (U8, Q364): the Conference League from 2021/22, a new record with a second object of the
  * Uefa_Cup class in the Europe entry 3 (docs/research/2026-10-18-conference-league-object.md). Its record copies
- * the UEFA Cup's continent, nation and colours, and its level (+0x69) is the UEFA Cup's 18 (0x79d447; the
- * meaning of the level is an inference of the module). season_uefa_cup_kind tells it from the Europa League by
+ * the UEFA Cup's continent, nation and colours, and its level (+0x69) is the UEFA Cup's 18: the fixture order
+ * (0x48da90), the team pick (MATCH_MAN::pick_team 0x6dc154) and the referee order (0x79d410) read it, so the
+ * cup counts as much as the Europa League (doc, decision 5). season_uefa_cup_kind tells it from the Europa League by
  * its record, so the wraps of season_uefa_cup.c and season_uefa_qual.c give it its own rules. */
 static uint32_t ecl_make(const SeasonCompDef *d, uint32_t rec, int year, int loading);
 static const SeasonCompDef conference_league = {"Conference League", SEASON_UEFA_ECL_FILE, SEASON_UEFA_ECL_RECORD, 3,
@@ -43,6 +48,9 @@ static const SeasonCompDef conference_league = {"Conference League", SEASON_UEFA
 
 const SeasonCompDef *const season_comp_defs[] = {
     &test_new_cup,                      /* test only, see above */
+    /* slice 26c */
+    &season_cup_sudamericana, &season_cup_recopa, &season_cup_suruga_bank, &season_cup_intercontinental,
+    &season_cup_acl_two,
     &conference_league,                 /* slice 24 */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
@@ -188,6 +196,33 @@ const char *season_comps_file(uint32_t obj)
     return NULL;
 }
 
+int season_comps_is_def_record(uint32_t rec)
+{
+    for (int i = 0; rec && i < season_comp_def_count && i < MAX_DEFS; i++) {
+        const SeasonCompDef *d = def_at(i);
+        if (d && d->record && season_comps_record(d->record) == rec) return 1;
+    }
+    return 0;
+}
+
+uint32_t season_comps_top_club(uint32_t continent_key, const uint32_t *skip, int n)
+{
+    uint32_t clubs = rd32(g_mem, 0xae23b4u), want = rd32(g_mem, continent_key), best = 0;
+    int32_t count = (int32_t)rd32(g_mem, 0xae235cu) - 2 * (int32_t)rd32(g_mem, 0xae2350u);
+    int best_rep = -100000;
+    for (int32_t i = 0; clubs && i < count; i++) {
+        uint32_t c = clubs + (uint32_t)i * 0x245u, nation = rd32(g_mem, c + 0x53);
+        uint32_t cont = nation ? rd32(g_mem, nation + 0x71) : 0;
+        if (!cont || rd32(g_mem, cont) != want) continue;
+        int rep = (int16_t)rd16(g_mem, c + 0x80);
+        if (rep <= best_rep) continue;
+        int taken = 0;
+        for (int j = 0; j < n && !taken; j++) taken = skip[j] == c;
+        if (!taken) best = c, best_rep = rep;
+    }
+    return best;
+}
+
 /* One copy per def for the whole run (runtime memory from win_static_alloc, never freed): a later call for the
  * same def gives the same copy, made again from the class's vtable. */
 uint32_t season_comps_vtable(const SeasonCompDef *d, uint32_t vtable, int slots)
@@ -312,14 +347,13 @@ static void save_file(uint32_t rec, char *out, size_t room)
     snprintf(out, room, "%s_%d.tmp", name, (int)rd32(g_mem, rec));
 }
 
-void o_008386f0(void);
-
-/* build_comp_object_table, cdecl, called by create_game (0x829640) and the load (0x82c5f6). At a load the
+/* build_comp_object_table, cdecl, called by create_game (0x829640) and the load (0x82c5f6). Its one wrap is in
+ * season_names.c (slices 15 and 26 both need it); it calls this before the original. At a load the
  * creators made only the original's objects (key_nation_create_all_comps 0x669180 at 0x82c5aa), so each def
  * whose object's file came out of the save is made again here, before the original fills [0xadadfc] from the
  * entry arrays. The constructor reads its state from that file. Inference: the temp files are in the user
  * folder, as the game's own *.tmp files of a run are. */
-RT_WRAP(008386f0, build_comp_object_table)
+void season_comps_before_comp_table(void)
 {
     if (season_comps_on() && !season_change_is_creating()) {
         reset();
@@ -338,7 +372,6 @@ RT_WRAP(008386f0, build_comp_object_table)
             if (rt_unwinding) return;
         }
     }
-    o_008386f0();
 }
 
 /* ---- New records (docs/research/2026-10-18-new-comp-records.md) ----

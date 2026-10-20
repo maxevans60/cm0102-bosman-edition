@@ -1,5 +1,5 @@
 ### Slice 30a, release test (Opus), after the last merge and before slice 30
-Waits for: every 0.6.0 slice on main (spec "Blocked by: all except 30"). Runs on the final main build only. Max's decision of 2026-10-19 (O12): after this slice, 0.6.0 goes out first as a public beta (a GitHub pre-release and a forum post, about a week), then as the full release. Max approves both publishes himself.
+Waits for: every 0.6.0 slice on main (spec "Blocked by: all except 30"). Runs on the final main build only. Max's decision of 2026-10-19 (O12): after this slice, 0.6.0 goes out first as a public beta (a GitHub pre-release and a forum post, about a week), then as the 0.6.0 release. Max approves both publishes himself.
 
 Rule: any error box of the game is a fail. Keep every log and run folder in `/Users/max/Projects/cm0102/run-logs/release-test-0.6.0/`, one folder per check, and list each result in `docs/research/<date>-release-test-0.6.0.md`.
 

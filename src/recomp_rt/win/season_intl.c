@@ -423,13 +423,17 @@ static int nation_in(const uint32_t *teams, int n, uint32_t nation)
  * qualifying cannot fill:
  * - a game that starts in the season of the finals or the one before: the qualifying began before the game
  *   (the 2006 World Cup draw of a 2005 start, Euro 2004 of a 2003 start);
- * - the Nations League path places of Euro 2020 and 2024 (4 and 3), until slice 28 plays the paths: Euro
- *   qualifying gives only the 20 group places there (season_intl_euroq.c).
+ * - the Nations League path places of every Euro from 2020 (4 in 2020 and 2028, 3 in 2024 with its host), until
+ *   slice 28 plays the paths: the qualifying of 10 groups gives only the 20 group places (season_intl_euroq.c,
+ *   which keeps that format after 2024). Euro 2028 has no host places (table row int-continental-287), so its
+ *   4 places stayed empty, and the squad pick of the finals stopped on an empty team (NationalTeams::select_squad
+ *   0x76c120 passes the team's nation to national_team 0x53b3d0 at 0x76c266, which boxes "Database.cpp 13126"
+ *   for none: 0x53b3da).
  * Else a full qualifying gives every team, and a short list is logged, not filled. */
 static int fill_allowed(const char *name, int year)
 {
     if (season_start_year() >= year - 1) return 1;
-    return !strcmp(name, "euro_champ") && (year == 2020 || year == 2024);
+    return !strcmp(name, "euro_champ") && year >= 2020;
 }
 
 static void fill_slots(uint32_t comp, uint32_t continent, const char *name)

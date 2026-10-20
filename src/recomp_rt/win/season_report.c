@@ -7,6 +7,8 @@
  *          table entries, mostly 20 or 21 June: 2026-10-16-sweep-season-end.md, section 2.1). A national team
  *          tournament makes its team list after the start (the World Cup holds 0 clubs on 14 July 2001).
  * It only reads the game's memory.
+ * At each start it also writes the clubs of each division (club lines, slice 15). RECOMP_RULES_REPORT_STOP=start
+ * ends the program with code 0 after the first start report (the club moves and names of a start season).
  * RECOMP_SEASON_JUMP=<year>: the game plays on with no match engine, and the program ends with code 0 after
  * the end report of the season that starts in that year. The test steps put the manager on holiday
  * (tests/seasons/rules_report_check.py), so the days pass with no input. A value that is not a year from 2001
@@ -74,6 +76,7 @@ static int started;                 /* the first human turn has run */
 static FILE *report;
 static int last_start = -1;         /* the last season with a start report */
 static int last_end = -1;           /* the last season with an end report */
+static int stop_at_start;           /* RECOMP_RULES_REPORT_STOP=start: end after the first start report */
 
 static const SeasonCompClass *class_of(uint32_t vtable)
 {
@@ -144,6 +147,25 @@ static void write_cup_rounds(FILE *f, int season, const char *phase, const char 
     fprintf(f, "\t0x%x\n", obj);                  /* the object, for a test that follows one cup */
 }
 
+/* The clubs of each division at a season start (0.6.0 slice 15): one line per club whose division pointer
+ * (club +0x57, resolve_database_indexes 0x5315a0 at 0x531625) is set: the record id of the division, the club
+ * id (+0) and its long name (+4). The club table is [0xae23b4] with [0xae235c] clubs of 0x245 bytes. */
+static void write_clubs(int season, const char *phase)
+{
+    uint32_t table = rd32(g_mem, 0xae23b4u);
+    int32_t count = (int32_t)rd32(g_mem, 0xae235cu);
+    for (int32_t i = 0; readable(table) && i < count && i < 1000000; i++) {
+        uint32_t club = table + (uint32_t)i * 0x245u, div = rd32(g_mem, club + 0x57);
+        if (!readable(div)) continue;
+        char name[64];
+        snprintf(name, sizeof name, "%.51s", win_str(club + 4));
+        for (char *p = name; *p; p++)
+            if (*p == '\t' || *p == '\n' || *p == '\r') *p = ' ';
+        fprintf(report, "club\t%d\t%s\t%d\t%d\t%s\n", season, phase, (int)rd32(g_mem, div), (int)rd32(g_mem, club),
+                name);
+    }
+}
+
 static void write_season(int season, const char *phase)
 {
     int y = 0, m = 0, d = 0;
@@ -178,6 +200,7 @@ static void write_season(int season, const char *phase)
         }
     }
     season_uefa_report(report, season, phase);      /* slice 22: the stages of the Champions League */
+    if (*phase == 's') write_clubs(season, phase);
     fflush(report);
     fprintf(stderr, "recomp: rules report: season %d/%02d %s on %02d.%02d.%04d\n", season, (season + 1) % 100, phase,
             d, m, y);
@@ -195,6 +218,8 @@ void season_report_init(void)
         }
         jump_to = (int)y;
     }
+    const char *stop = getenv("RECOMP_RULES_REPORT_STOP");
+    stop_at_start = stop && !strcmp(stop, "start");
     const char *path = getenv("RECOMP_RULES_REPORT");
     if (path && *path) {
         report = host_fopen(path, "w");
@@ -233,6 +258,7 @@ void season_report_turn(void)
         if (*phase == 's') last_start = season;
         else last_end = season;
     }
+    if (stop_at_start && last_start >= 0) last_end = jump_to = last_start;   /* RECOMP_RULES_REPORT_STOP=start */
     if (jump_to >= 0 && last_end >= jump_to) {
         if (report) fclose(report);
         report = NULL;

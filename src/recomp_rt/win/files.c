@@ -25,6 +25,7 @@
 #include "host.h"
 #include "options.h"
 #include "dbfolders.h"
+#include "cp1252.h"
 
 #include <ctype.h>
 #include <errno.h>
@@ -308,6 +309,11 @@ static const char *drive_root(char drive, char *buf, size_t room)
     return NULL;
 }
 
+/* The game's names are in code page 1252 ("Copa Am\xe9rica"). A host file name is UTF-8, and macOS refuses a
+ * name that is not (0.6.0: a league writes "<long name>_<id>.tmp", League::save_to_temp_file 0x6891c0 at
+ * 0x689234, and stops at league.cpp 5095 when the open fails). So win_host_path gives a part that is not
+ * UTF-8 to cp1252_to_utf8 (cp1252.h). */
+
 int win_host_path(const char *winpath, char *out, size_t room)
 {
     char full[2048], rootbuf[1024];
@@ -320,8 +326,15 @@ int win_host_path(const char *winpath, char *out, size_t room)
         /* Windows drops trailing dots and spaces of a name. */
         size_t pl = strlen(part);
         while (pl > 1 && (part[pl - 1] == '.' || part[pl - 1] == ' ')) part[--pl] = 0;
-        char found[256];
+        char found[256], utf8[1024];
         ci_lookup(len ? out : "", part, found, sizeof found);
+        /* On Linux a file can have a name that is not UTF-8 (written by an older version); the lookup above
+         * finds it first. macOS has no such files. */
+        if (!found[0] && !utf8_ok(part)) {
+            cp1252_to_utf8(part, utf8, sizeof utf8);
+            part = utf8;
+            ci_lookup(len ? out : "", part, found, sizeof found);
+        }
         len += (size_t)snprintf(out + len, room - len, "/%s", found[0] ? found : part);
         if (len >= room) return 0;
     }

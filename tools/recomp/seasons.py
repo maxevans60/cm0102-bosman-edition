@@ -93,6 +93,18 @@ PATCHES = {
     0x669869: (10, "rt_season_text_mod(10u)"),              # key_nation_format_comp_season 0x6697c0
     0x669876: (0x9EB024, "rt_season_text_format(0x9eb024u)"),
 
+    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
+    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
+    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
+    0x797DBE: (2, "rt_oceania_step(2u)"),       # OceaniaClubChamp::start_new_season: one edition a year
+    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
+    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
+    # Slice 26c (season_club_cups.c): the club count of the CONCACAF Champions Cup (Con_Champ) by season, 8 in
+    # the original: the constructor's club list (calloc count 0x4c0cc2, +0x3e at 0x4c0cc4) and the picker's +0x3e
+    # (0x4c11af). esi is the object; +0x40 is its year (set at 0x4c0c8d).
+    0x4C0CC2: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
+    0x4C0CC4: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
+    0x4C11AF: (8, "rt_concacaf_clubs(R16(esi + 0x40u), 8u)"),
     # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). The golden goal is bit
     # 0x80 of the rule flags of a knockout round (sweep-international section 7). The round template function
     # of each class holds the competition in edi (set at 0x92c299, 0x57ab99, 0x58b56f) and the round records in
@@ -196,12 +208,6 @@ PATCHES = {
     0x57F9E8: (0x1, "rt_euroq_direct(esi, 1u)"),
     0x57FB4F: (0x1, "rt_euroq_ranked_place(ebp, 1u)"),
     0x57D70E: (0x3F0, "(0x3e9u + (uint32_t)(int32_t)(int8_t)R8(edi + 0xffu))"),
-    # Slice 26: the club competitions outside UEFA (src/recomp_rt/win/season_kind_club_world.c, evidence in
-    # docs/research/2026-10-18-club-world-idle.md, section 5). In a season game:
-    0x929D9E: (2, "rt_club_world_step(2u)"),    # WorldClubChamp::start_new_season: one edition a year
-    0x797DBE: (2, "rt_club_world_step(2u)"),    # OceaniaClubChamp::start_new_season: one edition a year
-    0x929C39: (1, "rt_club_world_month(1u)"),   # WorldClubChamp::set_up_rules: start date Date(5, 1, year)
-    0x929C3B: (5, "rt_club_world_day(5u)"),     # becomes Date(1, 6, year): 1 July, after the update day
 }
 
 # address: (the instruction in the original, C code)
@@ -212,6 +218,12 @@ INSNS = {
     # data would go into a later campaign, and its asserts (0x91dbc4, 0x9223ab) want dates in 2000 and 2001.
     0x918473: ("jl 0x91847c", "if (cc_l(F) || rt_season_year != 2001u) goto L_91847c;"),
     0x9204B8: ("jl 0x9204c1", "if (cc_l(F) || rt_season_year != 2001u) goto L_9204c1;"),
+    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
+    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
+    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
+    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
+    # edition (the original skips it when +0x40 is the game year).
+    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
 
     # International finals (0.6.0 slice 27, docs/research/2026-10-18-international.md). Each class keeps its
     # edition year in the word +0x40 of the object (this in esi). The constructor rounds the game year up to the
@@ -355,10 +367,4 @@ INSNS = {
     # its own campaign and stopped at the box "euro_champ_qual.cpp 2358" (0x58325b). The base game never loads
     # (game year 2001, campaign 2002), so its path is the original's.
     0x57D021: ("jle 0x57d02a", "if (cc_le(F) || R16(esi + 0x40u) != 0x7d2u) goto L_57d02a;"),
-    # Slice 26 (season_kind_club_world.c). WorldClubChamp::WorldClubChamp 0x929140: the first edition loop adds 1
-    # to an even year (0x9291b0); in a season game it keeps the year that the runtime gives the constructor.
-    0x9291B0: ("je 0x9291b8", "if (cc_e(F) && !rt_club_world_annual()) goto L_9291b8;"),
-    # ConmebolMerc::update_for_date 0x4c5c90: no start_new_season on 1 June while the cup waits for a later
-    # edition (the original skips it when +0x40 is the game year).
-    0x4C5CDE: ("je 0x4c5ce7", "if (cc_e(F) || rt_club_world_waits(esi)) goto L_4c5ce7;"),
 }

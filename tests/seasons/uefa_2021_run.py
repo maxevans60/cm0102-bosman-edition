@@ -11,7 +11,9 @@ Each run is a season jump of tests/seasons/rules_report_check.py with England. T
     2022    October 2022, changing rules off, the season 2022/23: Russia is suspended
     2023    October 2023, the season 2023/24: Russia is suspended, the Super Cup goes to penalties after 90
             minutes
-    change  November 2020, changing rules on, 2020/21 to the end of 2021/22: the news sentences of the change
+    change  November 2020, changing rules on, 2020/21 to the end of 2022/23: the news sentences of the change; the
+            2021/22 Conference League winner gets its Europa League group place in 2022/23 (rule Y), or the log
+            says it has a place already
 The checks of each run: the jump ends with code 0 and shows no message box of the game; the log of
 src/recomp_rt/win/season_uefa*.c shows the access list places, 8 Europa League groups of 4 drawn, the knockout
 round play-offs drawn, and the no away goals rule in the two-legged rounds of the Champions League and the
@@ -29,9 +31,12 @@ Champions League and the Europa League, draws 8 groups of 4 with 32 clubs and it
 groups, 24 in the knockout, 5 rounds, a winner). Its round code 30 has the label of the Europa League's. No
 Conference League tie of the season is decided on away goals either. The change run gives the news sentence of
 its first season.
-    load    October 2021: the game saves 30 days after the start (inside the qualifying rounds) and 120 days after
-            the start (in the group stage); a new program loads each save and plays to the end of the season;
+    load    October 2021: the game saves 30 days after the start (inside the qualifying rounds), 120 days after
+            the start (in the group stage) and 225 days after it (late February, between the legs of the knockout
+            round play-offs); a new program loads each save and plays to the end of the season;
             the three cups play to a winner
+    repeat  October 2021, twice: the saves 120 days after the start (in the group stages, with the Conference League)
+            are equal (a moved season repeats)
 A run takes about 10 to 40 minutes on a loaded machine. --jobs (default 1).
 """
 import concurrent.futures
@@ -137,7 +142,7 @@ def run_season(name, season, database, suspended_check, super_cup_penalties=Fals
 
 
 def run_change(program, game, work):
-    code, report = rrc.run(program, game, 2021, 2020, os.path.join(DB, "November 2020"), ["England"], [], work, 10800,
+    code, report = rrc.run(program, game, 2022, 2020, os.path.join(DB, "November 2020"), ["England"], [], work, 14400,
                            {"changing_rules": "on"}, {"RECOMP_SEASON_CHANGE_LOG": "1"})
     fails = [] if code == 0 else [f"change: the jump ended with code {code}"]
     found, log = ufr.boxes(work)
@@ -155,6 +160,15 @@ def run_change(program, game, work):
     fails += ecl_checks("change", log, ufr.uefa_lines(report) if os.path.exists(report) else None, 2021)
     if re.search(r"new competition new_conference_league made for 2020", log):
         fails.append("change: the Conference League made for 2020/21")
+    # Rule Y: the 2021/22 winner (the uefa line of the report) is the holder that the 2022/23 seeding places.
+    lines = ufr.uefa_lines(report) if os.path.exists(report) else {}
+    winner = (lines.get((2021, "end", ECL_FILE)) or {}).get("winner", "-")
+    m = re.search(r"Conference League holder (.+): (a Europa League place|has a place already)", log)
+    if winner in ("", "-") or not m or m.group(1) != winner[:50]:
+        fails.append(f"change: the 2022/23 seeding does not place the 2021/22 Conference League winner {winner!r} "
+                     f"({m.group(0) if m else 'no holder line'})")
+    else:
+        print(f"change: Conference League holder {winner}: {m.group(2)}")
     for sentence in NEWS:
         if sentence not in log:
             fails.append(f"change: no news sentence {sentence!r}")
@@ -169,7 +183,7 @@ def run_load(program, game, work):
     import smoke_run
     db = os.path.join(DB, "October 2021")
     fails = []
-    for days in (30, 120):
+    for days in (30, 120, 225):               # qualifying rounds, groups, between the knockout play-off legs
         w = os.path.join(work, f"d{days}")
         code, _ = rrc.run(program, game, 2021, 2021, db, ["England"], [], w, 7200, None,
                           {"RECOMP_SAVE_AFTER_DAYS": str(days)})
@@ -188,7 +202,7 @@ def run_load(program, game, work):
         with open(os.path.join(user, "settings.txt"), "a") as f:
             f.write(f"database = folder:{os.path.basename(db)}\nfaster_days = on\n")
         report = os.path.join(again, "report.tsv")
-        steps = fixtures.LOAD_STEPS + ["3600000 quit"]
+        steps = fixtures.LOAD_STEPS[:-1] + ["3600000 quit"]    # no first-news wait, as uefa_access_run.py
         r, _ = fixtures.run(program, game, "classic", user, smoke_run.scaled_steps("classic", again, steps),
                             {"RECOMP_SEASON_JUMP": "2021", "RECOMP_RULES_REPORT": report}, 7200)
         with open(os.path.join(again, "stderr.txt"), "w") as f:
@@ -196,8 +210,10 @@ def run_load(program, game, work):
         if r.returncode != 0:
             fails.append(f"load {days}: the loaded game ended with code {r.returncode} ({again})")
         fails += [f"load {days}: message box {b}" for b in ufr.BOX.findall(r.stderr)]
-        if "new competition new_conference_league made for 2021 (entry 3, record" not in r.stderr or \
-                "from the save" not in r.stderr:
+        # The module logs the game year of the load (2022 for a save of February 2022); the object reads its own
+        # year from its saved file.
+        if not re.search(r"new competition new_conference_league made for 20(21|22) \(entry 3, record \d+\) from the save",
+                         r.stderr):
             fails.append(f"load {days}: the Conference League was not made again from the save")
         if os.path.exists(report):
             lines = ufr.uefa_lines(report)
@@ -209,12 +225,29 @@ def run_load(program, game, work):
     return fails
 
 
+def run_repeat(program, game, work):
+    """Two 2021/22 games with the same steps give equal saves 120 days after the start
+    (tests/seasons/uefa_access_run.py run_repeat)."""
+    import smoke_run
+    saves = []
+    for k in ("a", "b"):
+        w = os.path.join(work, k)
+        rrc.run(program, game, 2021, 2021, os.path.join(DB, "October 2021"), ["England"], [], w, 1800, None,
+                {"RECOMP_SAVE_AFTER_DAYS": "120"})
+        path = os.path.join(w, "user", smoke_run.SAVE_NAME)
+        if not os.path.exists(path):
+            return [f"repeat: run {k} made no save ({w})"]
+        saves.append(open(path, "rb").read())
+    return [] if saves[0] == saves[1] else ["repeat: the two 2021/22 saves differ"]
+
+
 RUNS = {
     "2021": run_season("2021", 2021, "October 2021", False),
     "2022": run_season("2022", 2022, "October 2022", True),
     "2023": run_season("2023", 2023, "October 2023", True, True),
     "change": run_change,
     "load": run_load,
+    "repeat": run_repeat,
 }
 
 

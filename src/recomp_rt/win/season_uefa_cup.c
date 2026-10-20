@@ -31,6 +31,7 @@
 #include "season.h"
 #include "season_uefa.h"
 #include "season_uefa_league.h"
+#include "season_playoffs.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -742,10 +743,10 @@ static int pair_ko(const uint32_t *seed, const int *seed_group, const uint32_t *
  * the round of 16 pairs each winner with a play-off winner. The thirds and fourths of the groups are out. */
 /* Slice 24: the Conference League takes the 8 Europa League group thirds (the third row of each of its 8 group
  * tables, League::get_table_row 0x6826d0) into its last 8 slots, as the Champions League thirds go to the Europa
- * League (0x586282): the entry, the list +0x14 and its id at +0x1db. The Europa League draws its own knockout
- * on the same day, first (the daily update walks the competitions by record id, 0x5ce060, and the Conference
- * League record comes last), so its tables are final. Returns the thirds put, or -1 when the Europa League has
- * no 8 groups. */
+ * League (0x586282): the entry, the list +0x14 and its id at +0x1db. Both group stages end on the same match
+ * day, so the tables are final whichever cup draws first (a 2021/22 game drew the Conference League groups
+ * before the Europa League's); the Europa League's own draw keeps the id of a third taken here. Returns the
+ * thirds put, or -1 when the Europa League has no 8 groups. */
 static int ecl_take_el_thirds(uint32_t ecl)
 {
     uint32_t table = rd32(g_mem, COMP_TABLE);
@@ -973,6 +974,10 @@ void o_009030e0(void);
 RT_WRAP(005a8f60, empty_or_uc_advance)
 {
     uint32_t uc = cpu.ecx;
+    if (season_playoffs_advance(uc)) {               /* slice 19: a league's play-off (season_playoffs.c) */
+        if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
+        return;
+    }
     if (!groups_layout(uc)) {
         o_005a8f60();
         return;

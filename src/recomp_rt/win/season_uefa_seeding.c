@@ -391,6 +391,19 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
         if (x) add(el_holder, 'c', token_code('c', x, 0), rank, 0);
         else if (hh) add(el_holder, 'e', token_code('e', hh, 0), rank, 0);
     }
+    /* Slice 24: the Conference League title holder (the history winner of its record), before the league places
+     * as the other holders: a Europa League group place from 2022/23 ("Y" rows) or a Conference League place
+     * ("K"). With a place already (a Champions League place) it keeps that one. */
+    ecl_id = r->ecl_round_count > 0 ? season_uefa_ecl_id() : -1;
+    uint32_t ecl_holder = ecl_id >= 0 && !rt_unwinding ? history_club_of(ecl_id, 0) : 0;
+    const char *y = season_uefa_access_rule(s, 'Y'), *kk = season_uefa_access_rule(s, 'K');
+    if (ecl_holder && (y || kk) && !rt_unwinding && !club_suspended(r, ecl_holder)) {
+        int rank = rank_of_nation(self, entries, rd32(g_mem, ecl_holder + 0x53)), had = has_place(ecl_holder);
+        if (y) add(ecl_holder, 'e', token_code('e', y, 0), rank, 0);
+        else add(ecl_holder, 'k', token_code('k', kk, 0), rank, 0);
+        fprintf(stderr, "recomp: uefa: Conference League holder %.50s: %s\n", win_str(ecl_holder + 4),
+                had ? "has a place already" : y ? "a Europa League place" : "a Conference League place");
+    }
     /* Slice 25 (Q540, 2024/25 on): the European Performance Spots. The two nations with the best season
      * coefficient of the season before (nation record +0x108, a double: roll_coefficients 0x903b50 writes the
      * points of that season divided by the clubs entered there, before these places) each get one more league
@@ -461,8 +474,7 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
         }
     }
     if (rt_unwinding) return;
-    /* Slice 24, part b: the Conference League places and its title holder. */
-    ecl_id = r->ecl_round_count > 0 ? season_uefa_ecl_id() : -1;
+    /* Slice 24, part b: the Conference League places (its title holder is placed with the other holders). */
     for (int e = 0; ecl_id >= 0 && e < entries && !rt_unwinding; e++) {
         uint32_t ent = self + 0x12u * (uint32_t)e, nation = rd32(g_mem, ent + 4);
         const char *pl = season_uefa_access_places(s, 'k', e + 1);
@@ -480,13 +492,6 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
             if (!club || has_place(club)) club = pick(self, records, count, rd32(g_mem, ent), 1, 1);
             add(club, 'k', token_code('k', pl, k), e + 1, 0);
         }
-    }
-    uint32_t ecl_holder = ecl_id >= 0 && !rt_unwinding ? history_club_of(ecl_id, 0) : 0;
-    const char *y = season_uefa_access_rule(s, 'Y'), *kk = season_uefa_access_rule(s, 'K');
-    if (ecl_holder && !rt_unwinding && !club_suspended(r, ecl_holder)) {
-        int rank = rank_of_nation(self, entries, rd32(g_mem, ecl_holder + 0x53));
-        if (y) add(ecl_holder, 'e', token_code('e', y, 0), rank, 0);
-        else if (kk) add(ecl_holder, 'k', token_code('k', kk, 0), rank, 0);
     }
     if (rt_unwinding) return;
     /* 6. The cascade to the round sizes of the row. */

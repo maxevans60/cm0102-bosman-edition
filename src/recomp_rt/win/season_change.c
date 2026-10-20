@@ -27,6 +27,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_comps.h"
+#include "season_playoffs.h"
 #include "season_rules.h"
 
 #include <stdarg.h>
@@ -36,14 +37,17 @@
 
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
+extern const SeasonRuleKind season_kind_sizes;
 extern const SeasonRuleKind season_kind_subs;
 extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
 extern const SeasonRuleKind season_kind_uefa;          /* slice 22: season_uefa.c */
-extern const SeasonRuleKind season_kind_intl;
 extern const SeasonRuleKind season_kind_club_world;
+extern const SeasonRuleKind season_kind_club_cups;
 extern const SeasonRuleKind season_kind_comps;         /* slice 26: season_comps.h */
 void season_comps_reset(void);                         /* slice 26: season_comps.h */
+extern const SeasonRuleKind season_kind_playoffs;      /* slice 19: season_playoffs.c */
+extern const SeasonRuleKind season_kind_intl;
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
@@ -51,9 +55,12 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_subs,                  /* slice 17: substitutes used and the bench */
     &season_kind_nation,                /* slice 17: transfer windows, foreign player limits, work permits */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
+    &season_kind_sizes,                 /* slice 18: news of league sizes and places (season_sizes.c) */
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
-    &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
+    &season_kind_club_cups,             /* slice 26c: years of the new club cups (season_club_cups.c) */
+    &season_kind_playoffs,              /* slice 19: promotion play-offs of leagues with none (after sizes) */
+    &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))
@@ -318,6 +325,8 @@ static int record_index(uint32_t rec, uint32_t *index)
     *index = (rec - base) / RECORD_SIZE;
     return *index < (uint32_t)count && *index < 100000u;
 }
+
+int season_change_renames(void) { return rename_count; }
 
 static const SeasonRename *rename_of(uint32_t index)
 {
@@ -702,8 +711,18 @@ void season_change_loaded(void)
 
 void o_005d5ae0(void);
 
-/* game_season_update_pass, cdecl (): at the end of every day. */
+static void update_pass(void);
+
+/* game_season_update_pass, cdecl (): at the end of every day. Slice 19: an entry's change waits for its play-off
+ * (season_playoffs.c). */
 RT_WRAP(005d5ae0, season_update_pass)
+{
+    int held = season_playoffs_hold();
+    update_pass();
+    season_playoffs_release(held);
+}
+
+static void update_pass(void)
 {
     if (!kinds_on()) {
         o_005d5ae0();
