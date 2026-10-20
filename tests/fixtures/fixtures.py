@@ -62,8 +62,9 @@ def run(program, game, mode, user, steps, env_extra, timeout):
     env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SCRIPT="; ".join(steps), **env_extra)
     start = time.time()
+    # errors="replace": the game writes Latin-1 names (for example a club name with 0xf3) into its log.
     r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, capture_output=True, text=True,
-                       timeout=timeout)
+                       errors="replace", timeout=timeout)
     return r, time.time() - start
 
 

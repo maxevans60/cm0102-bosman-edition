@@ -1,16 +1,13 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
-2004	club_list	Russian Premier Division: 13 of 13 listed clubs that the database holds (16 listed), 3 other clubs, 16 in all; not in it: -; others: Anzhi Makhachkala, Rostselmash Rostov-na-Donu, SC Rotor Volgograd
-2004	club_list	Welsh Premier Division: 17 of 17 listed clubs that the database holds (18 listed), 1 other clubs, 18 in all; not in it: -; others: Barry Town
 2004	clubs	asia_club_champ (AFC Champions League), row club-world-70: game 16, table 29 (29)
 2004	clubs	asia_nations (AFC Asian Cup), row int-continental-42: game 4, table 16 (16)
 2004	clubs	european_cup (UEFA Champions League), row uefa-26: game 55, table 72 (72 (32 in the group stage))
 2004	clubs	fifa_confed (FIFA Confederations Cup), row int-world-46: game 0, table 8 (8)
-2004	clubs	goldcup (Copa América), row int-continental-44: game 0, table 12 (12)
+2004	clubs	goldcup (Copa América), row int-continental-44: game 4, table 12 (12)
 2004	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-31: game 60, table 61 (61)
 2004	clubs	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-95: game 3, table 23 (23 (inference from RSSSF round list))
 2004	clubs	kor_league (K League), row aus-jap-kor-328: game 10, table 13 (13)
-2004	clubs	oceania_nations (OFC Nations Cup final), row int-continental-43: game 3, table 2 (2)
 2004	clubs	olympics (Football at the Summer Olympics), row int-world-47: game 4, table 16 (16)
 2004	clubs	pol_first (I liga), row gre-pol-cro-193: game 8, table 14 (14)
 2004	clubs	por_cup (Taça de Portugal), row por-33: game 164, table 229 (229)
@@ -27,12 +24,13 @@
 2004	clubs	wel_lge_cup (Welsh League Cup), row wal-nir-irl-83: game 3, table 20 (20)
 2004	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-84: game 4, table 16 (16)
 2004	down	eng_third (Football League Two), row eng-61: game 1 (+0 play-off places), table 2 (2)
-2004	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-91: game 3 (+1 play-off places), table 1 (1 (pos 12))
 2004	down	pol_first (I liga), row gre-pol-cro-193: game 0 (+0 play-off places), table 1 (1 (14th))
 2004	down	pol_second (II liga), row gre-pol-cro-247: game 4 (+0 play-off places), table 2 (2 (17th-18th))
+2004	down	por_second (Segunda Liga), row por-29: game 3 (+0 play-off places), table 2 (2 (Felgueiras for finances, with 18th; Alverca left professional football))
 2004	down	rus_first (Russian First Division), row rus-tur-31: game 3 (+0 play-off places), table 5 (5)
 2004	down	tur_second_b (Second League Category B), row rus-tur-220: game 0 (+0 play-off places), table unknown (unknown)
 2004	down	wel_first (Welsh Premier League), row wal-nir-irl-79: game 0 (+0 play-off places), table 2 (2 (pos 17,18))
+2004	idle	oceania_nations (OFC Nations Cup final), row int-continental-43: the game waits for 2008, the table holds it
 2004	no_row	friendly (Friendly): no table row
 2004	no_row	record_utils ('B' International): no table row
 2004	no_row	record_utils (Reserve): no table row

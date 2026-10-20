@@ -3,19 +3,11 @@
 2006	bench	ire_chal_cup (FAI Cup), row wal-nir-irl-144: game 5, table 7 (7)
 2006	bench	world_club_champ (FIFA Club World Cup), row club-world-97: game 7, table 12 (12)
 2006	club_list	Irish First Division: 9 of 9 listed clubs that the database holds (10 listed), 1 other clubs, 10 in all; not in it: -; others: Dublin City F.C.
-2006	club_list	Korean League: 4 of 4 listed clubs that the database holds (14 listed), 6 other clubs, 10 in all; not in it: -; others: Anyang LG Cheetahs, Bucheon SK, Chonbuk Hyundai Motors, Pusan I.cons, Songnam Ilhwa Chunma, Taejon Citizen
-2006	club_list	Polish First Division: 11 of 11 listed clubs that the database holds (16 listed), 5 other clubs, 16 in all; not in it: -; others: Amica Wronki, GKS Katowice, Groclin Grodzisk, Odra Wodzislaw, Orlen Plock
-2006	club_list	Polish Second Division: 15 of 16 listed clubs that the database holds (18 listed), 3 other clubs, 18 in all; not in it: Zawisza Bydgoszcz; others: Ceramika Opoczno, GKS Belchatow, Hetman Zamosc
-2006	club_list	Portuguese Second League: 15 of 15 listed clubs that the database holds (16 listed), 1 other clubs, 16 in all; not in it: -; others: Futebol Clube de Alverca
-2006	club_list	Russian First Division: 15 of 15 listed clubs that the database holds (22 listed), 3 other clubs, 18 in all; not in it: -; others: Chernomorets Novorossiysk, Dinamo St. Petersburg, Fakel Voronezh
-2006	club_list	Russian Premier Division: 13 of 13 listed clubs that the database holds (16 listed), 3 other clubs, 16 in all; not in it: -; others: Rostselmash Rostov-na-Donu, SC Rotor Volgograd, Sokol Saratov
-2006	club_list	Swedish First Division: 15 of 15 listed clubs that the database holds (16 listed), 1 other clubs, 16 in all; not in it: -; others: Ängelholms FF
-2006	club_list	Swedish Premier Division: 13 of 13 listed clubs that the database holds (14 listed), 1 other clubs, 14 in all; not in it: -; others: AIK
-2006	club_list	Turkish 2. Division Category A: 17 of 17 listed clubs that the database holds (18 listed), 3 other clubs, 20 in all; not in it: -; others: Adanaspor A.S., Aydinspor, Batman Petrolspor
-2006	club_list	Turkish Premier Division: 17 of 17 listed clubs that the database holds (18 listed), 1 other clubs, 18 in all; not in it: -; others: MKE Ankaragücü
-2006	club_list	Welsh Premier Division: 14 of 14 listed clubs that the database holds (17 listed), 4 other clubs, 18 in all; not in it: -; others: Afan Lido, Barry Town, Flexsys Cefn Druids, Oswestry Town FC
+2006	club_list	Korean League: 10 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Busan l'Park, Daegu FC, Gwangju Sangmu Bulsajo, Jeju United; others: -
+2006	club_list	Russian First Division: 18 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 18 in all; not in it: Mordovia Saransk, Sodovik Sterlitamak, Spartak-MGK, Textilschik-Telecom Ivanovo; others: -
+2006	club_list	Turkish 2. Division Category A: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Dardanelspor A.S., Kartalspor
+2006	club_list	Welsh Premier Division: 17 of 17 listed clubs that the database holds (17 listed), 1 other clubs, 18 in all; not in it: -; others: Llangefni Town
 2006	clubs	asia_club_champ (AFC Champions League), row club-world-108: game 16, table 27 (27)
-2006	clubs	eng_third (Football League Two), row eng-81: game 21, table 24 (24)
 2006	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-57: game 5, table 50 (50)
 2006	clubs	european_cup (UEFA Champions League), row uefa-42: game 55, table 73 (73 (32 in the group stage))
 2006	clubs	goldcup (Copa América), row int-continental-66: game 0, table 12 (12)
@@ -36,11 +28,12 @@
 2006	clubs	wel_prm_cup (FAW Premier Cup), row wal-nir-irl-134: game 4, table 16 (16)
 2006	clubs	world_club_champ (FIFA Club World Cup), row club-world-97: game 0, table 6 (6)
 2006	down	eng_third (Football League Two), row eng-81: game 1 (+0 play-off places), table 2 (2)
-2006	down	ire_prm (League of Ireland Premier Division), row wal-nir-irl-141: game 3 (+1 play-off places), table 1 (1 (pos 12))
 2006	down	pol_first (I liga), row gre-pol-cro-195: game 0 (+0 play-off places), table 2 (2 (15th-16th))
+2006	down	por_second (Liga de Honra), row por-47: game 3 (+0 play-off places), table 2 (2)
 2006	down	rus_first (Russian First Division), row rus-tur-33: game 3 (+0 play-off places), table 5 (5)
 2006	down	sco_first (Scottish First Division), row sco-43: game 2 (+0 play-off places), table 1 (1)
 2006	down	sco_second (Scottish Second Division), row sco-44: game 2 (+0 play-off places), table 1 (1)
+2006	down	swe_first (Superettan), row den-swe-195: game 3 (+0 play-off places), table 2 (2)
 2006	down	tur_second_b (Lig B), row rus-tur-222: game 0 (+0 play-off places), table 10 (10 (7th and 8th of each of five second-stage groups))
 2006	down	wel_first (Welsh Premier League), row wal-nir-irl-129: game 0 (+0 play-off places), table 1 (1 (pos 17))
 2006	no_row	friendly (Friendly): no table row
@@ -49,15 +42,14 @@
 2006	no_row	record_utils (Under 21 International): no table row
 2006	no_row	spa_lower (Spanish Lower Division): no table row
 2006	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-111: the game holds 2006, the table says not held
+2006	not_held	asia_nations (AFC Asian Cup), row int-continental-64: the game holds 2007, the table says not held
 2006	not_held	asia_super_cup (Asian Super Cup), row club-world-112: the game holds 2006, the table says not held
 2006	not_held	con_merc_cup (Copa Merconorte), row club-world-101: the game holds 2006, the table says not held
-2006	not_held	fifa_confed (FIFA Confederations Cup), row int-world-70: the game holds 2007, the table says not held
 2006	not_held	inter_amer_cup (Copa Interamericana), row club-world-107: the game holds 2006, the table says not held
 2006	not_held	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-146: the game holds 2006, the table says not held
 2006	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-148: the game holds 2006, the table says not held
 2006	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-149: the game holds 2006, the table says not held
 2006	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-384: the game holds 2006, the table says not held
-2006	not_held	oceania_nations (OFC Nations Cup), row int-continental-65: the game holds 2006, the table says not held
 2006	not_held	world_club_cup (Intercontinental Cup), row club-world-96: the game holds 2006, the table says not held
 2006	not_in_game	arg-usa-357 usa_rules 'United States' (United States)
 2006	not_in_game	aus-jap-kor-303 korea_rules 'n/a' (South Korea)
@@ -83,7 +75,6 @@
 2006	playoffs	sco_third (Scottish Third Division), row sco-45: game 0 up and 0 down play-off places, table 3 and 0 ('2nd to 4th play off with Second Division 9th for a Second Division place (two-le')
 2006	playoffs	swe_first (Superettan), row den-swe-195: game 1 up and 0 down play-off places, table 0 and 0 ('none')
 2006	playoffs	swe_prm (Allsvenskan), row den-swe-194: game 0 up and 1 down play-off places, table 0 and 0 ('none')
-2006	playoffs	tur_second (Lig A), row rus-tur-195: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v 6th and 4th v 5th, winners meet for the third place')
 2006	playoffs	tur_second_b (Lig B), row rus-tur-222: game 2 up and 0 down play-off places, table 0 and 0 ('see format')
 2006	up	con_merc_cup (Copa Merconorte), row club-world-101: game 1 (+0 play-off places), table na (n/a)
 2006	up	pol_first (I liga), row gre-pol-cro-195: game 4 (+0 play-off places), table na (n/a)

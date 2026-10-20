@@ -1,45 +1,32 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
-2016	bench	aus_nsl (A-League), row aus-jap-kor-39: game 4, table 5 (5 (inference for the years between 2013/14 and 2025/26))
-2016	bench	bra_cup (Copa do Brasil), row bra-151: game 7, table 12 (12)
-2016	bench	bra_nat_first (Campeonato Brasileiro Série A), row bra-43: game 7, table 12 (12)
-2016	bench	bra_nat_second (Campeonato Brasileiro Série B), row bra-70: game 7, table 12 (12)
-2016	bench	bra_nat_third (Campeonato Brasileiro Série C), row bra-97: game 7, table 12 (12)
+2016	bench	bra_cup (Copa do Brasil), row bra-151: game 9, table 12 (12)
+2016	bench	bra_nat_first (Campeonato Brasileiro Série A), row bra-43: game 9, table 12 (12)
+2016	bench	bra_nat_second (Campeonato Brasileiro Série B), row bra-70: game 9, table 12 (12)
+2016	bench	bra_nat_third (Campeonato Brasileiro Série C), row bra-97: game 9, table 12 (12)
 2016	bench	eng_cc_cup (EFL Cup), row eng-389: game 5, table 7 (7)
 2016	bench	eng_fa_cup (FA Cup), row eng-388: game 5, table 7 (7)
-2016	bench	eng_first (EFL Championship), row eng-179: game 5, table 7 (7)
-2016	bench	eng_prm (Premier League), row eng-178: game 5, table 7 (7)
-2016	bench	eng_second (EFL League One), row eng-180: game 5, table 7 (7)
-2016	bench	eng_third (EFL League Two), row eng-181: game 5, table 7 (7)
 2016	bench	fifa_confed (FIFA Confederations Cup), row int-world-190: game 7, table 12 (12)
 2016	bench	fra_cup (Coupe de France), row fra-142: game 3, table 7 (7)
-2016	bench	fra_first (Ligue 1), row fra-137: game 5, table 7 (7)
 2016	bench	fra_lge_cup (Coupe de la Ligue), row fra-143: game 3, table 7 (7)
-2016	bench	ger_cup (DFB-Pokal), row ger-205: game 6, table 7 (7)
-2016	bench	ger_first (Bundesliga), row ger-196: game 6, table 7 (7)
-2016	bench	ger_second (2. Bundesliga), row ger-197: game 6, table 7 (7)
-2016	bench	hol_cup (KNVB Cup), row hol-bel-200: game 7, table 12 (12 (same limit in the Johan Cruyff Shield rules of that summer))
-2016	bench	hol_first (Eerste Divisie), row hol-bel-198: game 7, table 12 (12 (same limit in the Johan Cruyff Shield rules of that summer))
-2016	bench	hol_prm (Eredivisie), row hol-bel-197: game 7, table 12 (12 (same limit in the Johan Cruyff Shield rules of that summer))
-2016	bench	hol_super (Johan Cruyff Shield), row hol-bel-201: game 5, table 12 (12)
-2016	bench	ita_c_cup (Coppa Italia Lega Pro), row ita-269: game 7, table 12 (12 (inference: already 12 in Lega Pro by July 2017))
-2016	bench	ita_ser_a (Serie A), row ita-257: game 7, table 12 (12)
+2016	bench	hol_cup (KNVB Cup), row hol-bel-200: game 9, table 12 (12 (same limit in the Johan Cruyff Shield rules of that summer))
+2016	bench	hol_first (Eerste Divisie), row hol-bel-198: game 9, table 12 (12 (same limit in the Johan Cruyff Shield rules of that summer))
+2016	bench	hol_prm (Eredivisie), row hol-bel-197: game 9, table 12 (12 (same limit in the Johan Cruyff Shield rules of that summer))
+2016	bench	hol_super (Johan Cruyff Shield), row hol-bel-201: game 9, table 12 (12)
+2016	bench	ita_c_cup (Coppa Italia Lega Pro), row ita-269: game 9, table 12 (12 (inference: already 12 in Lega Pro by July 2017))
+2016	bench	ita_ser_a (Serie A), row ita-257: game 9, table 12 (12)
 2016	bench	world_club_champ (FIFA Club World Cup), row club-world-287: game 7, table 12 (12)
 2016	club_list	Argentine Premier Division: 20 of 30 listed clubs that the database holds (30 listed), 0 other clubs, 20 in all; not in it: Aldosivi, Atlético Rafaela, Banfield, Belgrano de Córdoba, Colón de Santa Fé, Newell's Old Boys, Olimpo de Bahía Blanca, Quilmes, Talleres de Córdoba, Temperley; others: -
 2016	club_list	Argentine Second Division: 23 of 23 listed clubs that the database holds (23 listed), 2 other clubs, 25 in all; not in it: -; others: Aldosivi, Banfield
-2016	club_list	Australian National Soccer League: 10 of 10 listed clubs that the database holds (10 listed), 3 other clubs, 13 in all; not in it: -; others: Marconi Stallions, Sutherland Sharks, Sydney Olympic
 2016	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Football Club Herstal, RUS Genly-Quévy 89
 2016	club_list	Belgian Second Division: 8 of 8 listed clubs that the database holds (8 listed), 10 other clubs, 18 in all; not in it: -; others: Allemaal Samen Verbroedering Geel, FCV Dender EH, KFC Dessel Sport, KFC Oosterzonen Oosterwijk, KFC VW Hamme, KMSK Deinze, KSK Hasselt, Royal Excelsior Virton, Royal White Star Bruxelles, Seraing United
-2016	club_list	Brazilian National First Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: Centro Sportivo Paraibano, Elosport Capão Bonito, Esporte Clube Água Santa, Esporte Clube Águia Negra, Maguari, Sendas Pão de Açúcar Futebol Clube, Sport Club Barueri, Taguatinga
-2016	club_list	Brazilian National Second Division: 20 of 20 listed clubs that the database holds (20 listed), 8 other clubs, 28 in all; not in it: -; others: América Futebol Clube (RN), Associação Portuguesa de Desportos, Atlético Monte Azul, Guaratinguetá Futebol Ltda, Icasa Futebol Clube, Madureira Esporte Clube, Osasco Futebol Clube, Águia de Marabá Futebol Clube
 2016	club_list	Brazilian National Third Division: 20 of 20 listed clubs that the database holds (20 listed), 36 other clubs, 56 in all; not in it: -; others: AER Auritânia Foz do Iguaçu, Associação Atlética Anapolina, Associação Atlética Aparecidense, Associação Atlética Caldense, Associação Atlética Coruripe, Bangu Atlético Clube, Campinense Clube, Central Sport Club, Clube Atlético Metropolitano, Clube Recreativo e Atlético Catalano, Colo-Colo de Futebol e Regatas, Duque de Caxias Futebol Clube, EC Internacional, Esporte Clube Comercial, Esporte Clube Cruzeiro, Esporte Clube Novo Hamburgo, Esporte Clube XV de Novembro, Estanciano Esporte Clube, Goianésia Esporte Clube, Grêmio Osasco Audax, Guarani de Juazeiro, Ituano Futebol Clube, Mirassol Futebol Clube, Nacional Futebol Clube (AM), Náutico Futebol Clube, Operário Futebol Club Ltda., Paulista Futebol Clube, SER Caxias do Sul, Serrano Sport Club, Sociedade Esportiva do Gama, Sociedade Imperatriz de Desportos, Treze Futebol Clube, União Recreativa dos Trabalhadores, Veranópolis Esporte Clube Recreativo e Cultural, Vilhena Esporte Clube, Villa Nova Atlético Clube
 2016	club_list	Croatian First Division: 10 of 10 listed clubs that the database holds (10 listed), 6 other clubs, 16 in all; not in it: -; others: BSK Zmaj Blato, HNK Hajduk Split u19, NK Jedinstvo Omladinac, NK Polet Sveti Martin na Muri, NK Stupnik, NK Zrinski Tordinci
 2016	club_list	Croatian Second Division North: 11 of 11 listed clubs that the database holds (12 listed), 5 other clubs, 16 in all; not in it: -; others: NK Grobnican Cavle, NK Junak Sinj, NK Val Kastel Stari, NK Zadar, NK Zelina
-2016	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: AC Horsens, BK Søllerød-Vedbæk, Brabrand IF, Silkeborg IF
+2016	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 3 other clubs, 15 in all; not in it: -; others: AC Horsens, Brabrand IF, Silkeborg IF
 2016	club_list	Danish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: AC Horsens, Silkeborg IF; others: -
 2016	club_list	Danish Second Division: 16 of 23 listed clubs that the database holds (24 listed), 0 other clubs, 16 in all; not in it: Brabrand IF, Dalum IF, FC Sydvest 05, Fredensborg BI, Greve Fodbold, Kjellerup IF, Vejgaard Boldspilklub; others: -
 2016	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong FC Utrecht, Jong PSV; others: -
-2016	club_list	French Lower Division: 0 of 94 listed clubs that the database holds (113 listed), 0 other clubs, 0 in all; not in it: AGL Fougères, AS Beauvais-Oise, AS Fabrègues, AS Furiani Agliani, AS Illzach-Modenheim, AS Marck, AS Nancy-Lorraine II, AS Pagny-sur-Moselle, AS Saint-Etienne Loire II, AS Saint-Ouen-l'Aumône, AS Saint-Priest, ASC Biesheim, ASPTT Besançon, Ailly-sur-Somme Samara, Amiens Sporting Club II, Angers SCO II, Angoulême Charente, Athletic Club Ajaccio II, Aubagne, Aurillac Foot Cantal Auvergne, Aviron Bayonnais, Avoine Olympique Chinon Cinais, Balma Sporting Club, Borgo, Bourges 18, Bourgoin-Jallieu, Bressuire, CS Louhans-Cuiseaux 71, Clermont Foot Auvergne 63 II, Club Athlétique de Pontarlier, Club Municipal Sportif d'Oissel, Cournon d'Auvergne, Dinan-Léhon, ES Troyes AC II, ES du Cannet Rocheville, En Avant Guingamp II, FA Ile-Rousse Monticello, FC Metz II, FC Sochaux-Montbéliard II, FCO Dijon II, FCSR Haguenau, Girondins de Bordeaux II, Gueugnon, La Roche-sur-Yon Vendée, Le Mans, Les Genêts d'Anglet, Limoges, Marmande 47, Municipal d'Aubervilliers, Nîmes Olympique II, Olympique Alès en Cévennes, Olympique Grande-Synthe, Olympique Noisy-le-Sec Banlieue 93, Olympique Saint-Quentinois, Paris Football Club 2000 II, RCO Agathois, Racing Besançon, Racing Club Fléchois, Racing Club de Grasse, Racing Club de Strasbourg II, Rodéo Toulouse, SC Bastia II, SC Selongey, SM Caen II, Sablé-sur-Sarthe, Saint-Pryvé Saint-Hilaire, Sainte-Geneviève-des-Bois Sports, Sarreguemines, Sporting Club Schiltigheim, Sporting Club de Feignies, Stade Bordelais, Stade Brest 29 II, Stade Briochin, Stade Lannionnais, Stade Lavallois II, TA Rennes, Toulouse FC II, Tourcoing US, Tours Football Club II, UJA Maccabi Paris Métropole, US Boulogne Côte d'Opale II, US Castanéenne, US Créteil-Lusitanos II, US Lège-Cap-Ferret, US Roye-Noyon Couer de Picardie, US Sarre-Union, USSA Vertou, Union Sportive Changéenne, Union Sportive Sénart-Moissy, Union Sportive d'Ivry, Union Sportive de Forbach, Vannes Olympique Club, Évian Thonon Gaillard II, Évreux AC; others: -
 2016	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: AS Chêtaigneraie Vendée Football, Orvault Sport Football
 2016	club_list	Greek National A Division: 14 of 15 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: APO Levadiakos; others: -
 2016	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AO Acharnaikos, GAS Eginiakos, GS Panegialios, Panelefsiniakos; others: -
@@ -50,16 +37,14 @@
 2016	club_list	Northern Irish League First Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Annagh United, Loughgall; others: -
 2016	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Ards, Ballinamallard United; others: -
 2016	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Sandefjord Fotball, Sogndal IL; others: -
+2016	clubs	african_nations (Africa Cup of Nations), row int-continental-172: game 0, table 16 (16)
 2016	clubs	arg_prm (Primera División), row arg-usa-16: game 20, table 30 (30)
 2016	clubs	arg_second (Primera B Nacional), row arg-usa-43: game 25, table 23 (23)
 2016	clubs	asia_club_champ (AFC Champions League), row club-world-298: game 16, table 32 (32)
-2016	clubs	aus_nsl (A-League), row aus-jap-kor-39: game 13, table 10 (10)
 2016	clubs	bel_first (Belgian First Division A), row hol-bel-203: game 18, table 16 (16)
 2016	clubs	bel_second (Belgian First Division B), row hol-bel-204: game 18, table 8 (8)
 2016	clubs	bra_champ_cup (Copa dos Campeões), row bra-205: game 3, table 0 (0)
 2016	clubs	bra_cup (Copa do Brasil), row bra-151: game 71, table 91 (91)
-2016	clubs	bra_nat_first (Campeonato Brasileiro Série A), row bra-43: game 28, table 20 (20)
-2016	clubs	bra_nat_second (Campeonato Brasileiro Série B), row bra-70: game 28, table 20 (20)
 2016	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-97: game 7, table 20 (20)
 2016	clubs	bra_reg_bahia (Campeonato Baiano), row bra-448: game 10, table 11 (11)
 2016	clubs	bra_reg_central (Campeonato Mato-Grossense), row bra-529: game 15, table 10 (10)
@@ -71,10 +56,9 @@
 2016	clubs	conmebol_liber (Copa Libertadores), row club-world-289: game 4, table 47 (47)
 2016	clubs	cro_a1 (Prva HNL), row gre-pol-cro-340: game 16, table 10 (10)
 2016	clubs	cro_a2a (Druga HNL), row gre-pol-cro-367: game 16, table 12 (12)
-2016	clubs	den_first (Danish 1st Division), row den-swe-93: game 16, table 12 (12)
+2016	clubs	den_first (Danish 1st Division), row den-swe-93: game 15, table 12 (12)
 2016	clubs	den_prm (Danish Superliga), row den-swe-92: game 12, table 14 (14)
 2016	clubs	den_second (Danish 2nd Divisions), row den-swe-94: game 16, table 24 (24)
-2016	clubs	european_cup (UEFA Champions League), row uefa-122: game 55, table 78 (78 (32 in the group stage))
 2016	clubs	fifa_confed (FIFA Confederations Cup), row int-world-190: game 0, table 8 (8)
 2016	clubs	fra_third (Championnat National), row fra-139: game 20, table 18 (18)
 2016	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-16: game 4, table 34 (34)
@@ -93,9 +77,8 @@
 2016	clubs	nir_lge_cup (NIFL Cup), row wal-nir-irl-389: game 5, table 36 (36)
 2016	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-385: game 10, table 12 (12)
 2016	clubs	nor_prm (Eliteserien), row nor-fin-152: game 14, table 16 (16)
-2016	clubs	oceania_club_champ (OFC Champions League), row club-world-303: game 0, table 16 (16)
 2016	clubs	olympics (Football at the Summer Olympics), row int-world-191: game 4, table 16 (16)
-2016	clubs	uefa_cup (UEFA Europa League), row uefa-125: game 145, table 188 (188 (155 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2016	clubs	uefa_cup (UEFA Europa League), row uefa-125: game 155, table 188 (188 (155 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2016	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-186: game 50, table 20 (20)
 2016	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-187: game 0, table 12 (12)
 2016	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-185: game 24, table 6 (6)
@@ -110,15 +93,11 @@
 2016	down	cro_a1 (Prva HNL), row gre-pol-cro-340: game 2 (+0 play-off places), table 1 (1 (10th))
 2016	down	cro_a2b (Druga HNL South), row gre-pol-cro-394: game 2 (+0 play-off places), table na (n/a)
 2016	down	den_first (Danish 1st Division), row den-swe-93: game 3 (+0 play-off places), table 2 (2)
-2016	down	den_prm (Danish Superliga), row den-swe-92: game 2 (+0 play-off places), table 1 (1)
 2016	down	eng_third (EFL League Two), row eng-181: game 1 (+0 play-off places), table 2 (2)
-2016	down	fra_first (Ligue 1), row fra-137: game 3 (+0 play-off places), table 2 (2)
 2016	down	fra_second (Ligue 2), row fra-138: game 3 (+0 play-off places), table 2 (2)
-2016	down	ger_first (Bundesliga), row ger-196: game 3 (+0 play-off places), table 2 (2)
 2016	down	ger_second (2. Bundesliga), row ger-197: game 4 (+0 play-off places), table 2 (2)
 2016	down	gre_second (Football League), row gre-pol-cro-70: game 2 (+0 play-off places), table 4 (4 (bottom four))
 2016	down	hol_first (Eerste Divisie), row hol-bel-198: game 0 (+0 play-off places), table 1 (1 (20th) only if the Tweede Divisie champion is eligible and applies)
-2016	down	ita_ser_a (Serie A), row ita-257: game 4 (+0 play-off places), table 3 (3)
 2016	down	ita_ser_b (Serie B), row ita-258: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2016	down	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 1 (+4 play-off places), table na (n/a)
 2016	down	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 1 (+4 play-off places), table na (n/a)
@@ -126,27 +105,20 @@
 2016	down	jap_j2 (J2 League), row aus-jap-kor-232: game 0 (+0 play-off places), table 2 (2)
 2016	down	nir_first (NIFL Championship), row wal-nir-irl-386: game 0 (+0 play-off places), table 1 (1 (pos 12))
 2016	down	nor_first (OBOS-ligaen), row nor-fin-153: game 4 (+0 play-off places), table 2 (15th-16th (2))
-2016	idle	african_nations (Africa Cup of Nations), row int-continental-172: the game waits for 2018, the table holds it
-2016	idle	fra_first (French CFA), row fra-137: the game waits for 0, the table holds it
-2016	idle	fra_first (French Lower Division), row fra-137: the game waits for 0, the table holds it
 2016	no_row	friendly (Friendly): no table row
 2016	no_row	record_utils ('B' International): no table row
 2016	no_row	record_utils (Reserve): no table row
 2016	no_row	record_utils (Under 21 International): no table row
 2016	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-301: the game holds 2016, the table says not held
-2016	not_held	asia_nations (AFC Asian Cup), row int-continental-174: the game holds 2016, the table says not held
 2016	not_held	asia_super_cup (Asian Super Cup), row club-world-302: the game holds 2016, the table says not held
 2016	not_held	bra_champ_cup (Copa dos Campeões), row bra-205: the game holds 2016, the table says not held
 2016	not_held	conmebol_merc (Copa Mercosur), row club-world-290: the game holds 2016, the table says not held
 2016	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-394: the game holds 2016, the table says not held
 2016	not_held	ger_lge_cup (DFL-Ligapokal), row ger-206: the game holds 2016, the table says not held
-2016	not_held	goldcup (Copa América), row int-continental-176: the game holds 2017, the table says not held
 2016	not_held	gre_super (Greek Super Cup), row gre-pol-cro-97: the game holds 2016, the table says not held
 2016	not_held	inter_amer_cup (Copa Interamericana), row club-world-297: the game holds 2016, the table says not held
-2016	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-127: the game holds 2016, the table says not held
 2016	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-259: the game holds 2016, the table says not held
 2016	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-260: the game holds 2016, the table says not held
-2016	not_held	oceania_nations (OFC Nations Cup), row int-continental-175: the game holds 2016, the table says not held
 2016	not_held	world_club_cup (Intercontinental Cup), row club-world-286: the game holds 2016, the table says not held
 2016	not_in_game	arg-usa-205 argentina_rules 'Argentina' (Argentina)
 2016	not_in_game	arg-usa-70 new 'Copa Argentina' (Argentina)
@@ -184,26 +156,23 @@
 2016	not_in_game	ita-266 new 'Lega Pro girone C' (Italy)
 2016	not_in_game	nor-fin-155 new 'Mesterfinalen' (Norway)
 2016	not_in_game	uefa-121 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2016	playoffs	aus_nsl (A-League), row aus-jap-kor-39: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2016	playoffs	bel_first (Belgian First Division A), row hol-bel-203: game 0 up and 0 down play-off places, table 'see split'
-2016	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-97: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2016	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-340: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2016	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-367: game 0 up and 0 down play-off places, table '2nd: promotion play-off v HNL 9th'
-2016	playoffs	den_first (Danish 1st Division), row den-swe-93: game 0 up and 0 down play-off places, table '2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.'
-2016	playoffs	den_prm (Danish Superliga), row den-swe-92: game 0 up and 0 down play-off places, table 'Relegation: first a two-legged cross round, the 3rd of each qualifying group v t'
-2016	playoffs	fra_first (Ligue 1), row fra-137: game 0 up and 0 down play-off places, table '18th v Ligue 2 3rd, two legs'
-2016	playoffs	fra_second (Ligue 2), row fra-138: game 0 up and 0 down play-off places, table '3rd v Ligue 1 18th; 18th v National 3rd, two legs'
-2016	playoffs	fra_third (Championnat National), row fra-139: game 0 up and 0 down play-off places, table '3rd v Ligue 2 18th, two legs'
-2016	playoffs	ger_first (Bundesliga), row ger-196: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2016	playoffs	ger_second (2. Bundesliga), row ger-197: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2016	playoffs	gre_prm (Super League Greece), row gre-pol-cro-43: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league'
-2016	playoffs	hol_first (Eerste Divisie), row hol-bel-198: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2016	playoffs	ita_ser_b (Serie B), row ita-258: game 0 up and 0 down play-off places, table '3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);'
-2016	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 4 up and 4 down play-off places, table 'n/a'
-2016	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 4 up and 4 down play-off places, table 'n/a'
-2016	playoffs	jap_j2 (J2 League), row aus-jap-kor-232: game 0 up and 0 down play-off places, table '3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw'
-2016	subs_used	bel_super (Belgian Super Cup), row hol-bel-208: game 7, table 3 (3)
-2016	subs_used	eng_charity (FA Community Shield), row eng-392: game 5, table 6 (6)
+2016	playoffs	bel_second (Belgian First Division B), row hol-bel-204: game 0 up and 1 down play-off places, table 0 and 0 ('top three of the aggregate table (not promoted) to the Europa League play-offs')
+2016	playoffs	bel_third (Belgian First Amateur Division), row hol-bel-205: game 0 up and 1 down play-off places, table 4 and 0 ('top four promotion play-offs')
+2016	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-340: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2016	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-367: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off v HNL 9th')
+2016	playoffs	den_first (Danish 1st Division), row den-swe-93: game 0 up and 0 down play-off places, table 2 and 0 ('2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.')
+2016	playoffs	fin_first (Ykkönen), row nor-fin-158: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
+2016	playoffs	fra_first (Ligue 1), row fra-137: game 0 up and 0 down play-off places, table 0 and 1 ('18th v Ligue 2 3rd, two legs')
+2016	playoffs	fra_second (Ligue 2), row fra-138: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Ligue 1 18th; 18th v National 3rd, two legs')
+2016	playoffs	fra_third (Championnat National), row fra-139: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v Ligue 2 18th, two legs')
+2016	playoffs	ger_first (Bundesliga), row ger-196: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2016	playoffs	ger_second (2. Bundesliga), row ger-197: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2016	playoffs	ita_ser_b (Serie B), row ita-258: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
+2016	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2016	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2016	playoffs	jap_j2 (J2 League), row aus-jap-kor-232: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
+2016	playoffs	nir_first (NIFL Championship), row wal-nir-irl-386: game 1 up and 0 down play-off places, table 2 and 1 ('pos 2,3: promotion play-off; pos 11: relegation play-off')
+2016	playoffs	nor_first (OBOS-ligaen), row nor-fin-153: game 1 up and 0 down play-off places, table 4 and 1 ('3rd-6th single-leg knockout; winner v top-flight 14th, two legs. 14th v 2. divis')
 2016	up	arg_second (Primera B Nacional), row arg-usa-43: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2016	up	aus_nsl (A-League), row aus-jap-kor-39: game 6 (+0 play-off places), table na (n/a)
 2016	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-43: game 4 (+0 play-off places), table na (n/a)
@@ -211,14 +180,9 @@
 2016	up	conmebol_liber (Copa Libertadores), row club-world-289: game 2 (+0 play-off places), table na (n/a)
 2016	up	conmebol_merc (Copa Mercosur), row club-world-290: game 1 (+0 play-off places), table na (n/a)
 2016	up	cro_a2a (Druga HNL), row gre-pol-cro-367: game 0 (+0 play-off places), table 1 (1 (1st))
-2016	up	den_first (Danish 1st Division), row den-swe-93: game 2 (+0 play-off places), table 1 (1)
 2016	up	den_second (Danish 2nd Divisions), row den-swe-94: game 3 (+0 play-off places), table 2 (2)
 2016	up	fin_first (Ykkönen), row nor-fin-158: game 2 (+0 play-off places), table 1 (1st (1))
-2016	up	fra_second (Ligue 2), row fra-138: game 3 (+0 play-off places), table 2 (2)
 2016	up	fra_third (Championnat National), row fra-139: game 3 (+0 play-off places), table 2 (2)
-2016	up	ger_second (2. Bundesliga), row ger-197: game 3 (+0 play-off places), table 2 (2)
 2016	up	gre_cup (Greek Football Cup), row gre-pol-cro-16: game 2 (+0 play-off places), table na (n/a)
-2016	up	ita_ser_b (Serie B), row ita-258: game 4 (+0 play-off places), table 3 (2 direct + 1 via play-offs)
 2016	up	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 1 (+4 play-off places), table na (n/a)
 2016	up	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 1 (+4 play-off places), table na (n/a)
-2016	up	oceania_club_champ (OFC Champions League), row club-world-303: game 2 (+0 play-off places), table na (n/a)

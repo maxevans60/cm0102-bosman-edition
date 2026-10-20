@@ -4,16 +4,18 @@
  * Which leagues. A league row of the rules table whose play-off text gives four places in a row just below the
  * direct places ("3rd to 6th", tools/seasons/encode_leagues.py, season_league_table.c), of a League class with
  * no play-off code of its own: advance_stage (vtable +0x28) is the empty function 0x5a8f60 and the result
- * handler (+0x44) is the base League one 0x686940. Examples: the Conference from 2002/03, the Segunda from
- * 2010/11, the Turkish second tier from 2010/11, J2 from 2011. A class with its own builder (England, Serie B,
- * Norway, Ireland and the others of the doc) keeps the original's play-off.
+ * handler (+0x44) is the base League one 0x686940. Examples: the Segunda from 2010/11, the Turkish second tier
+ * from 2010/11, each only when the division above relegates the direct places and one more (see balanced).
+ * So not the Conference (League Two relegates 1) and not the Greek second tier (GrePrm relegates 2). J2 and the
+ * Argentine second tier have no set_up_rules wrap of slice 18, so they get no play-off. A class with its own
+ * builder (England, Serie B, Norway, Ireland and the others of the doc) keeps the original's play-off.
  *
  * How. After each set_up_rules of such a league (vtable +0x8c: the constructor and start_new_season call it;
  * season_sizes_rules of slice 18 calls season_playoffs_rules at its end), the direct places +0xbe become the
  * places above the play-off, the play-off places +0xbf 4, and the stage count +0x2c 1 with no stage yet (+0x30
  * -1). The row is that of the start season at a new game and with changing rules off (Q232), else that of the
  * league's edition, as slice 18 reads it. League::update_for_date 0x6847c0 then calls advance_stage on the day
- * the table is complete (0x6849d1..0x6849e3), and the wrap of 0x5a8f60 (season_uefa_cup.c calls
+ * the table is complete (0x6849d1..0x6849e3: check_complete(0, 0) first), and the wrap of 0x5a8f60 (season_uefa_cup.c calls
  * season_playoffs_advance) builds the stage as EngFirst::create_playoff_stage 0x573080 does: the round table of
  * EngFirst's +0x3c 0x571980 (stage 0: two-leg semi-finals and a one-match final, codes 0x82 and 0x96; it reads
  * only the year +0x40), new dates from the day after the table is complete, the clubs 6th v 3rd and 5th v 4th
@@ -67,6 +69,8 @@
 #define ENTRY_SIZE 0x48u
 #define ENTRY_COUNT 35
 #define ENTRY_UPDATE_DAY 0x15u          /* s16 day of the year of the season change (compared at 0x5d5bc8) */
+#define LATE_DAY 273                    /* 1 October: an update day from here is a calendar-year change */
+#define WAIT_DAYS 60                    /* the longest wait of a season change for a play-off */
 
 #define COMP_RECORD 4u
 #define COMP_STAGES 0xcu                /* the stage array */
@@ -82,6 +86,7 @@
 #define DOWN_PLAYOFF 0xc0u
 #define DOWN 0xc1u
 
+#define COMPS_MAX 256                   /* the most competitions of an entry that season_change.c reads (its own cap) */
 #define PLAYOFF_CLUBS 4
 #define ROUND_SIZE 0x68u
 #define PLAYOFF_DAYS 12                 /* the last match on day 11 after the table is complete */
@@ -215,9 +220,9 @@ static void date_plus(int n, int *doy, int *year)
 /* The days from today to the update day of the league's table entry (0 to 365), or -1 when not found. */
 static int days_to_change(uint32_t obj)
 {
-    uint32_t buf[64];
+    uint32_t buf[COMPS_MAX];
     for (int e = 0; e < ENTRY_COUNT; e++) {
-        int n = season_change_entry_comps(e, buf, 64);
+        int n = season_change_entry_comps(e, buf, COMPS_MAX);
         for (int i = 0; i < n; i++) {
             if (buf[i] != obj) continue;
             int upd = (int16_t)rd16(g_mem, ENTRIES + (uint32_t)e * ENTRY_SIZE + ENTRY_UPDATE_DAY);
@@ -312,7 +317,11 @@ static void build_stage(uint32_t obj)
     for (int i = 0; i < PLAYOFF_CLUBS; i++) wr32(g_mem, list + 4u * (uint32_t)i, clubs[i]);
     uint32_t sz[1] = {0xb2};
     uint32_t stage = call_cdecl(F_NEW, 1, sz);
-    if (rt_unwinding || !readable(stage)) return;
+    if (rt_unwinding || !readable(stage)) {
+        game_free(list);
+        game_free(table);
+        return;
+    }
     uint32_t args[15] = {obj, PLAYOFF_CLUBS, list, 2, rd32(g_mem, obj + COMP_RECORD), table, year, 0, 1, 0xa0, 0x14,
                          0, 0, 0, 0};                /* as 0x573180..0x573189 */
     call_this(F_CUP_STAGE, stage, 15, args);
@@ -330,10 +339,6 @@ static void build_stage(uint32_t obj)
 
 int season_playoffs_advance(uint32_t obj)
 {
-    if (plain_league(obj) && (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1)
-        fprintf(stderr, "recomp: playoffs: advance %s: stages %d, now %d, places %d+%d\n", season_change_file(obj),
-                (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT), (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW),
-                (int8_t)g_mem[obj + UP], (int8_t)g_mem[obj + UP_PLAYOFF]);
     if (!marked(obj) || (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) != -1) return 0;
     if (!readable(rd32(g_mem, obj + COMP_STAGES))) return 0;
     build_stage(obj);
@@ -346,6 +351,9 @@ void o_00686940(void);
 RT_WRAP(00686940, playoff_result)
 {
     if (marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
+        if (getenv("RECOMP_PLAYOFF_LOG"))
+            fprintf(stderr, "recomp: playoffs: %s: result club %x code %d stage %d\n", season_change_file(cpu.ecx),
+                    rd32(g_mem, cpu.esp + 4), (int8_t)g_mem[cpu.esp + 8], (int8_t)g_mem[cpu.esp + 0xc]);
         rt_jump(F_ENG_RESULT);
         return;
     }
@@ -383,17 +391,37 @@ static void drop_stage(uint32_t obj)
     wr32(g_mem, obj + COMP_STAGE_NOW, 0xffffffffu);
 }
 
+/* The object of the division above (league +0x1c, the record id, -1 for none; EngFirst::set_up_rules stores it at
+ * 0x572dea), or 0. The object of a record is g_comp_object_table [0xadadfc] at the record id, below its slot
+ * count [0xadadf8] (League::process_promotion_relegation_chain 0x689c42), as season_sizes.c reads it. */
+static uint32_t league_above(uint32_t obj)
+{
+    int32_t id = (int32_t)rd32(g_mem, obj + 0x1cu), slots = (int32_t)rd32(g_mem, 0x00adadf8u);
+    uint32_t table = rd32(g_mem, 0x00adadfcu);
+    if (id < 0 || id >= slots || !readable(table)) return 0;
+    uint32_t other = rd32(g_mem, table + 4u * (uint32_t)id);
+    return readable(other) ? other : 0;
+}
+
+/* 1 when the division above relegates the direct places and the play-off winner (+0xc1 = direct + 1). With
+ * fewer, the winner stays down. Observed in a first build: the Conference 2002/03 (League Two keeps 1 down, its
+ * floor in slice 18) and the Greek second tier 2010/11 (GrePrm 2 down; the play-off was played, 3 clubs had
+ * status 0 and the 2 direct clubs went up). Inference: the chain 0x689c80 moves as many clubs up as come down. Then the
+ * league keeps its class's places and has no play-off (the nearest form, Q247). The places of the division above
+ * are those of its last set_up_rules: at a new game the constructors run before g_comp_object_table is filled,
+ * so no division is found there, and the new_game pass of season_sizes.c (sizes_new_game) runs this again. */
+static int balanced(uint32_t obj, int direct)
+{
+    uint32_t above = league_above(obj);
+    return above && (int8_t)g_mem[above + DOWN] == direct + 1;
+}
+
 void season_playoffs_rules(uint32_t obj)
 {
-    if (getenv("RECOMP_PLAYOFF_LOG") && readable(obj)) {
-        uint32_t vt = rd32(g_mem, obj);
-        fprintf(stderr, "recomp: playoffs: rules %s on %d plain %d vt %x +28 %x +44 %x\n", season_change_file(obj),
-                playoffs_on(), plain_league(obj), vt, rd32(g_mem, vt + 0x28), rd32(g_mem, vt + 0x44));
-    }
     if (!playoffs_on() || !plain_league(obj)) return;
     const char *file = season_change_file(obj);
     int direct = 0, season = season_now(obj, file);
-    int want = season_playoffs_shape(file, season, &direct);
+    int want = season_playoffs_shape(file, season, &direct) && balanced(obj, direct);
     int have = (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1;
     if (!want) {
         if (have) {                                  /* the play-off ends: no stage count, no stage */
@@ -411,9 +439,93 @@ void season_playoffs_rules(uint32_t obj)
     wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
     g_mem[obj + UP] = (uint8_t)direct;
     g_mem[obj + UP_PLAYOFF] = PLAYOFF_CLUBS;
-    if (1)
-        fprintf(stderr, "recomp: playoffs: %s %d: places %d to %d\n", file, season, direct + 1,
-                direct + PLAYOFF_CLUBS);
+    fprintf(stderr, "recomp: playoffs: %s %d: places %d to %d\n", file, season, direct + 1, direct + PLAYOFF_CLUBS);
+}
+
+/* ---- The season change waits for the play-off ---- */
+
+/* game_season_update_pass 0x5d5ae0 calls start_new_season only on an entry's update day (+0x15 against the day of
+ * the year at 0x5d5bc8) and only for a competition whose vtable +0xc is true (0x5d5ccb). For a league that is
+ * 0x48ce10: false when it has a division above (+0x1c >= 0, 0x48ce13), else its own check_complete(1, 1) (vtable
+ * +0x10) and that of each division below along +0x20 (0x48ce30..0x48ce48). So the pass starts only the top
+ * division, and a lower division that is not complete holds the whole chain. The game can move a play-off match: in
+ * a test run the Segunda's final of 2011/12, due on 13 June 2012, was played after the update day of 20 June, and
+ * all Spanish leagues stayed in their old season (year +0x40 2011 in 2012/13). So an entry with a marked league
+ * that is not complete (check_complete(1, 1): the table and every stage, 0x689bbc..0x689be8) waits: on its update
+ * day the pass sees no update day for it, and on the first later day that the league is complete the pass sees
+ * today. The original then does the change as on its own day. A waiting entry is one past its update day with a
+ * marked league whose year +0x40 is before the game year (start_new_season moves it). +0x40 is in the save. A first
+ * form read the entry's season year +0x35 instead, and a game loaded in the wait never changed its season
+ * (inference: a load sets +0x35 from the game year, as create_spanish_comps does at 0x83761b). At most WAIT_DAYS:
+ * then the pass sees today whether the stage is complete or not. The original's chain test (0x48ce10) is still false
+ * while a lower division is not complete, so the chain stays one season behind (the doc's test). A play-off of 12
+ * days cannot normally take 60 days. */
+
+static int16_t held_day[ENTRY_COUNT];
+static int held[ENTRY_COUNT];
+static int logged[ENTRY_COUNT];         /* the day of the last log line of an entry, +1 */
+
+/* The marked leagues of an entry with a built stage and a year before the game year. 0: none; 1: all their
+ * stages are complete; 2: one is not (*file gets its file). */
+static int entry_playoffs(int e, int year, const char **file)
+{
+    uint32_t buf[COMPS_MAX];
+    int n = season_change_entry_comps(e, buf, COMPS_MAX), seen = 0;
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        if (!marked(buf[i]) || (int32_t)rd32(g_mem, buf[i] + COMP_STAGE_NOW) < 0 ||
+            (int16_t)rd16(g_mem, buf[i] + COMP_YEAR) >= year)
+            continue;
+        seen = 1;
+        uint32_t vt = rd32(g_mem, buf[i]), args[2] = {1, 1};
+        if (!(call_this(rd32(g_mem, vt + 0x10), buf[i], 2, args) & 0xff)) {   /* check_complete(1, 1) */
+            *file = season_change_file(buf[i]);
+            return 2;
+        }
+    }
+    return seen;
+}
+
+int season_playoffs_hold(void)
+{
+    if (!playoffs_on()) return 0;
+    int today = (int16_t)rd16(g_mem, GAME_DATE), year = (int16_t)rd16(g_mem, GAME_DATE + 2), any = 0;
+    for (int e = 0; e < ENTRY_COUNT && !rt_unwinding; e++) {
+        uint32_t at = ENTRIES + (uint32_t)e * ENTRY_SIZE;
+        int upd = (int16_t)rd16(g_mem, at + ENTRY_UPDATE_DAY);
+        held[e] = 0;
+        if (upd < 0 || upd >= LATE_DAY || today < upd || today - upd > WAIT_DAYS) continue;
+        const char *file = "";
+        int state = entry_playoffs(e, year, &file);
+        if (!state) continue;
+        if (today == upd && state == 2) {
+            held_day[e] = (int16_t)upd;
+            held[e] = 1;
+            wr16(g_mem, at + ENTRY_UPDATE_DAY, 0xffffu);
+            if (logged[e] != today + 1)
+                fprintf(stderr, "recomp: playoffs: entry %d waits for the play-off of %s (update day %d of %d)\n", e,
+                        file, upd, year);
+        } else if (today > upd && (state == 1 || today - upd == WAIT_DAYS)) {
+            held_day[e] = (int16_t)upd;
+            held[e] = 1;
+            wr16(g_mem, at + ENTRY_UPDATE_DAY, (uint16_t)today);
+            if (logged[e] != today + 1)
+                fprintf(stderr, "recomp: playoffs: entry %d changes its season on day %d of %d, %d days late%s\n", e,
+                        today, year, today - upd, state == 2 ? " (the play-off is not complete)" : "");
+        }
+        if (held[e]) logged[e] = today + 1;
+        any |= held[e];
+    }
+    return any;
+}
+
+void season_playoffs_release(int any)
+{
+    if (!any) return;
+    for (int e = 0; e < ENTRY_COUNT; e++)
+        if (held[e]) {
+            wr16(g_mem, ENTRIES + (uint32_t)e * ENTRY_SIZE + ENTRY_UPDATE_DAY, (uint16_t)held_day[e]);
+            held[e] = 0;
+        }
 }
 
 /* ---- Rule kind "playoffs": the news ---- */
@@ -422,7 +534,8 @@ static void playoffs_after(const SeasonChange *c)
 {
     if (!playoffs_on() || !c->started || c->start || !plain_league(c->comp)) return;
     int direct = 0;
-    if (season_playoffs_shape(c->file, c->season, &direct) && !season_playoffs_shape(c->file, c->season - 1, NULL))
+    if (marked(c->comp) && season_playoffs_shape(c->file, c->season, &direct) &&
+        !season_playoffs_shape(c->file, c->season - 1, NULL))
         season_change_news("The %.50s now has promotion play-offs: places %d to %d play for one place.",
                            (const char *)g_mem + rd32(g_mem, c->comp + COMP_RECORD) + 4, direct + 1,
                            direct + PLAYOFF_CLUBS);

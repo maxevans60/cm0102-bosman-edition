@@ -5,6 +5,7 @@
 #include "season_names.h"
 #include "season_change.h"
 #include "season_rules.h"
+#include "season_comps.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -339,13 +340,25 @@ static int season_of_date(void)
 void o_008386f0(void);
 
 /* build_comp_object_table 0x8386f0, cdecl, no arguments: one slot per club competition record (count
- * 0xae2378). A new game calls it at 0x829640, a load at 0x82c5f6. A load gets back the names of its save: the
- * renames are in the season part (season_change_rename), so a name that is there already changes nothing. */
+ * 0xae2378). A new game calls it at 0x829640, a load at 0x82c5f6 (return addresses 0x829645 and 0x82c5fb).
+ * A load reads the season part before the original's load runs (load_game 0x82a9c0 in season.c), so here the
+ * renames of the part are known. A save whose part holds names has them in its data already, so a load
+ * changes no name; a part with no names (version 1, or a save made before the names went into the part)
+ * takes the names of the season of the game date. */
 RT_WRAP(008386f0, build_comp_table)
 {
+    int load = rd32(g_mem, cpu.esp) == 0x82c5fbu;
+    /* Slice 26 first: at a load it makes each new record's object again before the original fills [0xadadfc]. */
+    season_comps_before_comp_table();
+    if (rt_unwinding) return;
     o_008386f0();
     if (rt_unwinding) return;
     if (!season_game_changes()) return;
+    if (load && season_change_renames()) {
+        fprintf(stderr, "recomp: names of the save: %d competition records keep the names of the season part\n",
+                season_change_renames());
+        return;
+    }
     /* A new game: the date is 1 January of the start year here, so this gives the start season. */
     season_names_apply(season_changing_rules() ? season_of_date() : season_start_year());
 }

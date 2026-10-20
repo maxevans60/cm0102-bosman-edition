@@ -55,6 +55,7 @@
 #include "season.h"
 #include "season_rules.h"
 #include "season_uefa.h"
+#include "season_comps.h"
 #include "../host.h"
 
 #include <SDL.h>
@@ -114,12 +115,18 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
                  (int8_t)g_mem[obj + 0xbe], (int8_t)g_mem[obj + 0xbf], (int8_t)g_mem[obj + 0xc0],
                  (int8_t)g_mem[obj + 0xc1], rd16(g_mem, obj + 0xd9), (int32_t)rd32(g_mem, obj + 0x1c),
                  (int32_t)rd32(g_mem, obj + 0x20));
+    /* Slice 23: a UEFA cup of the access list counts its clubs, not its entry slots (season_uefa_qual.c). */
+    int clubs = season_uefa_report_clubs(obj);
+    if (clubs < 0) clubs = (int16_t)rd16(g_mem, obj + 0x3e);
+    /* Slice 24: a new competition of an original class has the file of its def (season_comps.h). */
+    const char *file = season_comps_file(obj);
+    if (!file) file = c ? c->file : "?";
     fprintf(f, "comp\t%d\t%s\t%s\t%d\t%s\t%s\t%s\t0x%x\t%d\t%d\t%d\t%d\t%d\t%s\t%s\n", season, phase, slot, id,
-            c ? c->file : "?", c ? c->cls : "?",
+            file, c ? c->cls : "?",
             c ? (league ? "league" : c->kind == SEASON_KIND_CUP ? "cup" : "comp") : "?", vt,
-            (int16_t)rd16(g_mem, obj + 0x40), (int16_t)rd16(g_mem, obj + 0x3e), (int16_t)rd16(g_mem, obj + 0x3c),
+            (int16_t)rd16(g_mem, obj + 0x40), clubs, (int16_t)rd16(g_mem, obj + 0x3c),
             g_mem[obj + 0x4a], g_mem[obj + 0x49], rules, name);
-    if (c && c->kind == SEASON_KIND_CUP) write_cup_rounds(f, season, phase, slot, c->file, obj);
+    if (c && c->kind == SEASON_KIND_CUP) write_cup_rounds(f, season, phase, slot, file, obj);
 }
 
 /* A cup line (slice 21): the rounds of a cup as the original's round table holds them (cup+0x3c rounds, table at
@@ -192,8 +199,8 @@ static void write_season(int season, const char *phase)
             write_comp(report, season, phase, slot, obj);
         }
     }
-    if (*phase == 's') write_clubs(season, phase);
     season_uefa_report(report, season, phase);      /* slice 22: the stages of the Champions League */
+    if (*phase == 's') write_clubs(season, phase);
     fflush(report);
     fprintf(stderr, "recomp: rules report: season %d/%02d %s on %02d.%02d.%04d\n", season, (season + 1) % 100, phase,
             d, m, y);

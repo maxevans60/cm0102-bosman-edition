@@ -54,21 +54,20 @@
 2003	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-31: game 0, table 39 (39 entrants)
 2003	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-29: game 24, table 34 (34 entrants)
 2003	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-32: game 5, table 12 (12 entrants)
-2003	clubs	wc_south_american_league (FIFA World Cup qualification (CONMEBOL)), row int-world-28: game 9, table 10 (10)
 2003	down	arg_prm (Primera División), row arg-usa-3: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2003	down	arg_second (Primera B Nacional), row arg-usa-30: game 0 (+0 play-off places), table 2 (2 (infobox))
+2003	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 4 (+0 play-off places), table 6 (6)
 2003	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-84: game 2 (+0 play-off places), table na (n/a)
 2003	down	cro_a1 (Prva HNL), row gre-pol-cro-327: game 2 (+0 play-off places), table 1 (1 (12th))
 2003	down	cro_a2a (Druga HNL North), row gre-pol-cro-354: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
 2003	down	cro_a2b (Druga HNL South), row gre-pol-cro-381: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
 2003	down	den_second (Danish 2nd Division), row den-swe-16: game 4 (+0 play-off places), table 3 (3 (14th to 16th))
 2003	down	eng_third (Football League Third Division), row eng-51: game 1 (+0 play-off places), table 2 (2)
+2003	down	ita_ser_b (Serie B), row ita-37: game 4 (+0 play-off places), table 3 (3 direct (22nd-24th) + relegation play-out 20th v 21st)
 2003	down	ita_ser_c1a (Serie C1 girone A), row ita-38: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2003	down	ita_ser_c1b (Serie C1 girone B), row ita-39: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2003	down	jap_j1 (J.League Division 1), row aus-jap-kor-192: game 2 (+0 play-off places), table 0 (0)
 2003	down	nir_first (Irish First Division), row wal-nir-irl-61: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
-2003	idle	fra_first (French CFA), row fra-20: the game waits for 0, the table holds it
-2003	idle	fra_first (French Lower Division), row fra-20: the game waits for 0, the table holds it
 2003	no_row	friendly (Friendly): no table row
 2003	no_row	record_utils ('B' International): no table row
 2003	no_row	record_utils (Reserve): no table row
@@ -78,7 +77,7 @@
 2003	not_held	asia_super_cup (Asian Super Cup), row club-world-55: the game holds 2003, the table says not held
 2003	not_held	bra_champ_cup (Copa dos Campeões), row bra-192: the game holds 2003, the table says not held
 2003	not_held	conmebol_merc (Copa Mercosur), row club-world-43: the game holds 2003, the table says not held
-2003	not_held	goldcup (Copa América), row int-continental-33: the game holds 2003, the table says not held
+2003	not_held	goldcup (Copa América), row int-continental-33: the game holds 2004, the table says not held
 2003	not_held	gre_super (Greek Super Cup), row gre-pol-cro-84: the game holds 2003, the table says not held
 2003	not_held	inter_amer_cup (Copa Interamericana), row club-world-50: the game holds 2003, the table says not held
 2003	not_held	nir_charity (Charity Shield), row wal-nir-irl-65: the game holds 2003, the table says not held

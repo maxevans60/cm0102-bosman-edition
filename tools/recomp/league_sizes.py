@@ -117,8 +117,9 @@ DATES = {
 #   at 0x5bd2ac), then Ligue 2 [0x9cf5d0] (0x5bd33d) and Ligue 1 [0x9cf5cc].
 # - FraCup::collect_entrants 0x5baa50: 222 (0xde at 0x5baa64); National and lower clubs up to a count of
 #   ebx + 0xb8 (0x5bab90, 0x5bac3c) or eax + 0xb8 (0x5bacf0), the register -2 after 2001 (184 or 182), then
-#   Ligue 2 [0x9cf5d0] (0x5bad74) and Ligue 1 [0x9cf5cc] (0x5baddd). rt_cup_add gives the add so that the count is
-#   222 less both divisions.
+#   Ligue 2 [0x9cf5d0] (0x5bad74) and Ligue 1 [0x9cf5cc] (0x5baddd). These three are whole instructions (CUP_INSNS):
+#   the register plus rt_cup_add(0xb8, register, ...) is 222 less both divisions (the original's sum in the base
+#   game). The compare after each add sets the flags again (0x5bab96, 0x5bac42, 0x5bacf5).
 # Evidence and the other cups: docs/research/2026-10-18-league-sizes.md, "Cups".
 PATCHES = {
     0x7CE2F8: (0x300, "rt_cup_room(0x300u, 164u, 0x9cf610u, 0x9cf60cu, 0u)"),
@@ -126,9 +127,6 @@ PATCHES = {
     0x924B81: (0x54, "rt_cup_room(0x54u, 32u, 0x9cf94cu, 0u, 0u)"),
     0x55131C: (0x120, "rt_cup_room(0x120u, 92u, 0x9cf5b4u, 0x9cf5b0u, 0x9cf5acu)"),
     0x5BD2AC: (0x60, "rt_cup_room(0x60u, 54u, 0x9cf5d0u, 0x9cf5ccu, 0u)"),
-    0x5BAB90: (0xB8, "rt_cup_add(0xb8u, t0, 222u, 0x9cf5d0u, 0x9cf5ccu)"),
-    0x5BAC3C: (0xB8, "rt_cup_add(0xb8u, t0, 222u, 0x9cf5d0u, 0x9cf5ccu)"),
-    0x5BACF0: (0xB8, "rt_cup_add(0xb8u, t0, 222u, 0x9cf5d0u, 0x9cf5ccu)"),
 }
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
@@ -150,6 +148,18 @@ FLOORS = {"eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_fi
 # after 2001, 0x7cad4f), else its largest count.
 FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
 
+CUP_INSNS = {
+    0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    0x5BAC3C: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    0x5BACF0: ("add eax, 0xb8", "eax = eax + rt_cup_add(0xb8u, eax, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    # FraLgeCup::collect_entrants: the limit of its first National loop (16 - 2 after 2001), raised by the
+    # places that National clubs from the CFA cannot fill; `cmp edi, edx` at 0x5bd247 sets the flags again.
+    0x5BD244: ("add edx, 0x10", "edx = edx + rt_fra_lge_first(0x10u, edx);"),
+    # ItaCup::select_entrants 0x63faf0: the first position of its second loop (C1 clubs by last position). The
+    # first loop already takes C1 clubs of last position 3 to 5, so a season game starts the second loop at 6.
+    0x63FB16: ("mov byte ptr [esp + 0x13], 5", "W8(esp + 0x13u, rt_ita_cup_first_position(5u));"),
+}
+
 # address: (the instruction in the original, C code). The store keeps its width (W16) and its object register.
 INSNS = {}
 for _cls, _file, _rules, _stores in CLASSES:
@@ -157,3 +167,4 @@ for _cls, _file, _rules, _stores in CLASSES:
         INSNS[_at] = (f"mov word ptr [{_reg} + 0x3e], {_imm(_n)}",
                       f"W16({_reg} + 0x3eu, rt_league_clubs({_reg}, {_n:#x}u));")
 INSNS.update(DATES)
+INSNS.update(CUP_INSNS)

@@ -31,6 +31,8 @@
 #define COMP_NATION 0x5du           /* nation pointer */
 #define COMP_RANK 0x69u             /* s16: a higher division has a higher value (English Premier 18, Third 4) */
 #define KEY_LOWER 0x9cf764u         /* "A Lower Division" (0x60efd0 at 0x610141) */
+#define NATIONS 0xae23a8u           /* the nation table, 0x122 bytes a nation */
+#define DEN_NATION 0x9cf2c0u        /* index of Denmark (DenCup::collect_entrants 0x551240 at 0x5512ee) */
 #define KEY_PREMIER 0x9cf6b8u       /* "A Premier Division" (0x60efd0 at 0x60fb7f) */
 
 typedef struct {
@@ -260,6 +262,22 @@ static int class_size(const char *name, int season)
     return -1;
 }
 
+/* The file of a division's class, or NULL. */
+static const char *class_file(const char *name)
+{
+    for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
+        if (!strncmp(name, CLASS_SIZE[k].name, 52)) return CLASS_SIZE[k].file;
+    return NULL;
+}
+
+/* The count of a class after 2001. */
+static int class_size_of(const char *file)
+{
+    for (size_t k = 0; file && k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
+        if (!strcmp(file, CLASS_SIZE[k].file)) return CLASS_SIZE[k].size;
+    return 0;
+}
+
 /* A club name in a plain form, to find a club whose name in the research differs a little from the database
  * ("Operário Futebol Clube Ltda" and "Operário Futebol Clube"): the letters of Windows-1252 without accents,
  * lower case, words of letters and digits, and (when drop is set) the words that only say "club" (fc, futebol,
@@ -354,6 +372,12 @@ static void move_clubs(int season)
     uint32_t spare1 = key_lower >= 0 ? comps + (uint32_t)key_lower * COMP_SIZE : 0;
     uint32_t spare2 = key_premier >= 0 ? comps + (uint32_t)key_premier * COMP_SIZE : 0;
 
+    /* DenCup::collect_entrants 0x551240 takes its lower clubs from A Lower Division (record [0x9cf764], 0x5512fa)
+     * when their nation is Denmark (0x551302..0x55131a: the nation table [0xae23a8], 0x122 bytes a nation, at the
+     * index [0x9cf2c0]), up to 48, then three whole divisions, and stops at den_cup.cpp 75 (0x550a62) without 92. A
+     * Danish club taken from that division leaves the cup short, so the moves take none (a 2021/22 start with the
+     * October 2021 database stopped there; main did not). */
+    uint32_t nations = rd32(g_mem, NATIONS), cup_pool_nation = nations ? nations + rd32(g_mem, DEN_NATION) * 0x122u : 0;
     Club *club = calloc((size_t)count, sizeof *club);
     Division *div = calloc((size_t)ncomps, sizeof *div);
     int *by_list = calloc((size_t)(last - first + 2), sizeof *by_list);
@@ -390,6 +414,11 @@ static void move_clubs(int season)
     int resized = 0;
     for (int i = 0; i < ncomps; i++) {
         int size = div[i].n0 > 0 && !div[i].spare ? class_size(div[i].name, season) : -1;
+        const char *file = class_file(div[i].name);
+        if (size > 0 && div[i].n0 > size && season_sizes_keeps_database(file)) {     /* a cup takes it whole */
+            int most = class_size_of(file);
+            size = div[i].n0 < most ? div[i].n0 : most;
+        }
         div[i].want = size > 0 ? size : div[i].n0;
         if (div[i].want != div[i].n0) {
             div[i].sized = 1;
@@ -519,7 +548,8 @@ static void move_clubs(int season)
          *   class counts the clubs of the data. A class with a fixed count stops at its assert with an open
          *   place, so there it takes a club with no division too, and the log calls it a stand-in;
          * - any other place (a club that moved up, or a class that takes more clubs than the real division has,
-         *   slice 18): first a club that left a division of the same or a higher rank (step "Leave"), so the
+         *   slice 18): first a club that left a division of a higher rank (step "Leave"; no reserve or B side,
+         *   and no move between two divisions of one rank such as German Regional North and South), so the
          *   clubs of the nation stay in its divisions (SweCup::build_club_pool 0x88da20 needs 244 Swedish clubs in
          *   them and loops for ever with fewer). Then the nation's clubs with no division, then the clubs of the
          *   spare divisions, then the clubs of
@@ -542,13 +572,14 @@ static void move_clubs(int season)
                     Club *c = &club[i];
                     if (c->kept || c->national || c->nation != d->nation || c->div == d->at) continue;
                     int take = 0;
-                    if (group == 0) {           /* a club that left a division of the same or a higher rank */
+                    if (group == 0) {           /* a club that left a division of a higher rank */
                         int t = c->db_div >= comps ? (int)((c->db_div - comps) / COMP_SIZE) : -1;
-                        take = !c->div && t >= 0 && t < ncomps && div[t].rank >= d->rank;
+                        take = !c->div && t >= 0 && t < ncomps && div[t].rank > d->rank &&
+                               (!reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve);
                     } else if (group == 1)
                         take = !c->div && !c->db_div && (!reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve);
                     else if (group == 2)
-                        take = c->div && (c->div == spare1 || c->div == spare2);
+                        take = c->div && (c->div == spare1 || c->div == spare2) && c->nation != cup_pool_nation;
                     else if (c->div >= comps && c->div < comps + (uint32_t)ncomps * COMP_SIZE) {
                         Division *from = &div[(c->div - comps) / COMP_SIZE];
                         take = !from->spare && !from->target && from->rank < d->rank;

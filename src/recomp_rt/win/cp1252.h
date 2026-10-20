@@ -70,4 +70,61 @@ static inline void cp1252_from_utf8(char *out, size_t room, const char *in)
     out[n] = 0;
 }
 
+/* The length of the valid UTF-8 sequence at p (2 to 4 bytes), or 0 when p does not start one: a stray or
+ * missing continuation byte, an overlong form (c0 aa), a surrogate or a code point over U+10FFFF. */
+static inline int utf8_sequence(const unsigned char *p)
+{
+    unsigned c = p[0], cp, min;
+    int len = c >= 0xc2 && c <= 0xdf ? 2 : c >= 0xe0 && c <= 0xef ? 3 : c >= 0xf0 && c <= 0xf4 ? 4 : 0;
+    if (!len) return 0;
+    cp = c & (len == 2 ? 0x1f : len == 3 ? 0x0f : 0x07);
+    for (int i = 1; i < len; i++) {
+        if ((p[i] & 0xc0) != 0x80) return 0;
+        cp = cp << 6 | (p[i] & 0x3f);
+    }
+    min = len == 2 ? 0x80 : len == 3 ? 0x800 : 0x10000;
+    if (cp < min || cp > 0x10ffff || (cp >= 0xd800 && cp <= 0xdfff)) return 0;
+    return len;
+}
+
+/* 1 when s is valid UTF-8 (utf8_sequence for every byte of 0x80 or more). */
+static inline int utf8_ok(const char *s)
+{
+    for (const unsigned char *p = (const unsigned char *)s; *p;) {
+        if (*p < 0x80) { p++; continue; }
+        int len = utf8_sequence(p);
+        if (!len) return 0;
+        p += len;
+    }
+    return 1;
+}
+
+/* A file name part as UTF-8, byte by byte: a valid UTF-8 sequence stays as it is, and every other byte of
+ * 0x80 or more is a code page 1252 character. The five bytes that 1252 does not define (0x81, 0x8d, 0x8f,
+ * 0x90, 0x9d) take their Latin-1 code points. At most room - 1 bytes; a character that does not fit ends it. */
+static inline void cp1252_to_utf8(const char *in, char *out, size_t room)
+{
+    size_t n = 0;
+    if (!room) return;
+    for (const unsigned char *p = (const unsigned char *)in; *p;) {
+        int len = *p < 0x80 ? 1 : utf8_sequence(p);
+        if (len) {
+            if (n + (size_t)len >= room) break;
+            memcpy(out + n, p, (size_t)len);
+            n += (size_t)len;
+            p += len;
+            continue;
+        }
+        unsigned cp = *p < 0xa0 && cp1252_high[*p - 0x80] ? cp1252_high[*p - 0x80] : *p;
+        size_t w = cp < 0x800 ? 2 : 3;
+        if (n + w >= room) break;
+        if (w == 2) out[n] = (char)(0xc0 | cp >> 6), out[n + 1] = (char)(0x80 | (cp & 0x3f));
+        else out[n] = (char)(0xe0 | cp >> 12), out[n + 1] = (char)(0x80 | ((cp >> 6) & 0x3f)),
+             out[n + 2] = (char)(0x80 | (cp & 0x3f));
+        n += w;
+        p++;
+    }
+    out[n] = 0;
+}
+
 #endif

@@ -1,7 +1,7 @@
 /* The MLS with clubs that the original does not know (0.6.0 slice 18).
  *
  * The UsaMls class plays three groups of 4 clubs (UsaMls::create_table 0x908560 sets 4 at 0x908572 and takes the
- * clubs of group 0x413; UsaMls::create_second_division_stage 0x908fc0 takes 0x47b; 0x9091e0 takes 0x414). The
+ * clubs of group 0x413, UsaMls::create_second_division_stage 0x908fc0 takes 0x47b, 0x9091e0 takes 0x414). The
  * group of a club comes from usa_mls_get_club_division 0x909ec0, which knows the 12 MLS clubs of the original by
  * their key ids (0x9d037c..0x9d03a8, compares at 0x909ee5..0x909f6b) and stops at usa_mls.cpp 1819 (push 0x71b
  * at 0x909f96, box 0x5e8290 at 0x909fbe) for any other club whose division is the American Major League (key id
@@ -24,7 +24,7 @@
 #define CLUBS 0xae23b4u             /* the club table (0x245 bytes a club) */
 #define CLUB_COUNT 0xae235cu
 #define CLUB_SIZE 0x245u
-#define CLUB_DIVISION 0x57u         /* club_comp pointer; its +0 is the record id */
+#define CLUB_DIVISION 0x57u         /* club_comp pointer, its +0 is the record id */
 #define KEY_MLS 0x9cf590u           /* key id of the American Major League (0x909ed7) */
 
 #define GROUP_A 0x413u

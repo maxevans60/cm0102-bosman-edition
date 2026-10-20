@@ -14,11 +14,34 @@ import re
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
-                  "season_change.c", "season_playoffs.c")
+                  "season_change.c", "season_kind_club_world.c", "season_comps.c",
+                  "season_club_cups.c", "season_playoffs.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
+    # Slice 26 (season_kind_club_world.c): the knockout of the FIFA Club World Championship.
+    0x92A8B0: ("81ec08020000568b", "WorldClubChamp::pick_entrants (this): the 12 entrants into +0xee"),
+    0x92AE60: ("b844210000e8a6a7", "WorldClubChamp::pick_entrant (this, continent, nation, picked, count, record)"),
+    0x929390: ("81ec000200005356", "WorldClubChamp::create_schedule (this, stage, &rounds, &code, &is_league)"),
+    0x522E00: ("6aff683b78950064", "Cup_Stage::Cup_Stage (this, parent, clubs, club array, rounds, record, ...)"),
+    # Slice 26c: the 32-club Club World Cup (Form G) with the Libertadores builders.
+    0x4C37A0: ("81ec04020000568b", "Conmebol_Liber group A: the parent's group from entrants 0 to 3 (this)"),
+    0x4C3B10: ("64a1000000006aff", "Conmebol_Liber group i + 1 at stage slot i (this, i), ret 4"),
+    0x4C3A80: ("8b512c8b413081ec", "Conmebol_Liber::advance_stage (this): at 7 the knockout 0x4c3d10"),
+    0x6835C0: ("6aff6881c9950064", "League::create_fixtures (this)"),
+    0x6827D0: ("83ec4c535556578b", "League table sort (this, 0)"),
+    0x90CFC0: ("51568b74240c85f6", "random (n), cdecl"),
+    # Slice 26c (season_club_cups.c): the new club cups on the World_Club_Cup class.
+    0x92B4B0: ("6aff68395f960064", "World_Club_Cup::World_Club_Cup (this, year, record), ret 8"),
+    0x92B770: ("8a44240481ec0002", "World_Club_Cup::create_schedule (this, stage, &rounds, &code, &is_league), ret 0x10"),
+    0x51F890: ("6aff689877950064", "Cup::update_for_date (this, today, arg2), ret 8: the jump of the cups' vtable copy"),
+    0x4C6730: ("83ec0c0fbf442414", "Conmebol_Seeding::pick_club_by_position (this, list, count, nation, n, skip, filter), ret 0x18"),
+    0x51C800: ("6aff68d976950064", "Cup::set_up_round (this, round)"),
+    0x9452CA: ("558bec51568b7508", "free (block)"),
+    0x632080: ("6aff6819b2950064", "Inter_Amer_Cup::Inter_Amer_Cup (this, year, record), ret 8: the test def of season_comps.c"),
+    0x9022E0: ("6aff68d951960064", "Uefa_Cup::Uefa_Cup (this, year, record), ret 8: the Conference League of season_comps.c (slice 24)"),
+    0x944E46: ("ff350830de00ff74", "operator new of the stage arrays (size), cdecl (0x9291e9)"),
     0x45CBE0: ("5355568b74241085", "can the player play the fixture (squad screen test)"),
     0x5431E0: ("8b44240481ec0002", "shown attribute of a player (staff, index 1 to 31)"),
     0x543280: ("8b4424045685c00f", "is an attribute shown to a manager (manager, staff, index)"),

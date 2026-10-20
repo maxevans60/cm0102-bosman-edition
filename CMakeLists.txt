@@ -122,6 +122,13 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # International competitions (0.6.0 slice 27): the C table of the editions matches the rules table, and
+    # the editions and the rules of the code sites.
+    add_test(NAME season_intl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_intl.py" --check)
+    add_executable(season_intl_test tests/seasons/test_season_intl.c src/recomp_rt/win/season_intl_rules.c
+        src/recomp_rt/win/season_intl_table.c)
+    target_include_directories(season_intl_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_intl COMMAND season_intl_test)
     # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
     add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
         src/recomp_rt/win/season_cups_table.c)
@@ -174,6 +181,10 @@ if(NOT WIN32)
     add_executable(savename_test tests/savename/test_cp1252.c)
     target_include_directories(savename_test PRIVATE src/recomp_rt/win)
     add_test(NAME savename COMMAND savename_test)
+    # File name parts that are not UTF-8 (0.6.0 slice 15): win_host_path turns them into UTF-8.
+    add_executable(path_utf8_test tests/pathutf8/test_path_utf8.c)
+    target_include_directories(path_utf8_test PRIVATE src/recomp_rt/win)
+    add_test(NAME path_utf8 COMMAND path_utf8_test)
     add_executable(draw_test tests/draw/test_draw.c src/recomp_rt/win/draw.c)
     target_include_directories(draw_test PRIVATE src/recomp_rt/win)
     add_test(NAME draw COMMAND draw_test)

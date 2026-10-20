@@ -42,9 +42,10 @@
 2002	clubs	nir_first (Irish League First Division), row wal-nir-irl-36: game 10, table 8 (8)
 2002	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-39: game 5, table 20 (20)
 2002	clubs	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 10, table 12 (12)
-2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 3, table 8 (8)
+2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 0, table 8 (8)
 2002	down	arg_prm (Primera División), row arg-usa-2: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2002	down	arg_second (Primera B Nacional), row arg-usa-29: game 0 (+0 play-off places), table 2 (2 (by affiliation relegation tables; infobox))
+2002	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 4 (+0 play-off places), table 2 (2)
 2002	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-83: game 2 (+0 play-off places), table na (n/a)
 2002	down	cro_a1 (Prva HNL), row gre-pol-cro-326: game 2 (+0 play-off places), table 1 (1 (12th))
 2002	down	cro_a2a (Druga HNL North), row gre-pol-cro-353: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
@@ -54,8 +55,6 @@
 2002	down	ita_ser_c1a (Serie C1 girone A), row ita-21: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	ita_ser_c1b (Serie C1 girone B), row ita-22: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 1 (+1 play-off places), table 0 (0)
-2002	idle	fra_first (French CFA), row fra-11: the game waits for 0, the table holds it
-2002	idle	fra_first (French Lower Division), row fra-11: the game waits for 0, the table holds it
 2002	no_row	friendly (Friendly): no table row
 2002	no_row	record_utils ('B' International): no table row
 2002	no_row	record_utils (Reserve): no table row
@@ -63,7 +62,6 @@
 2002	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-35: the game holds 2002, the table says not held
 2002	not_held	bra_champ_cup (Copa dos Campeões), row bra-191: the game holds 2002, the table says not held
 2002	not_held	conmebol_merc (Copa Mercosur), row club-world-24: the game holds 2002, the table says not held
-2002	not_held	goldcup (Copa América), row int-continental-22: the game holds 2003, the table says not held
 2002	not_held	gre_super (Greek Super Cup), row gre-pol-cro-83: the game holds 2002, the table says not held
 2002	not_held	inter_amer_cup (Copa Interamericana), row club-world-31: the game holds 2002, the table says not held
 2002	not_held	nir_charity (Charity Shield), row wal-nir-irl-40: the game holds 2002, the table says not held

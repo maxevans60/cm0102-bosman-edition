@@ -23,6 +23,7 @@
 2010	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: IK Start, Sparta Sarpsborg; others: -
 2010	clubs	arg_second (Primera B Nacional), row arg-usa-37: game 25, table 20 (20)
 2010	clubs	asia_club_champ (AFC Champions League), row club-world-184: game 16, table 32 (32)
+2010	clubs	asia_nations (AFC Asian Cup), row int-continental-108: game 0, table 16 (16)
 2010	clubs	bel_first (Belgian Pro League), row hol-bel-125: game 18, table 16 (16)
 2010	clubs	bel_third (Belgian Third Division), row hol-bel-127: game 16, table 36 (36 (A 18, B 18))
 2010	clubs	bra_champ_cup (Copa dos Campeões), row bra-199: game 3, table 0 (0)
@@ -39,7 +40,6 @@
 2010	clubs	conmebol_liber (Copa Libertadores), row club-world-175: game 4, table 38 (38)
 2010	clubs	den_second (Danish 2nd Divisions), row den-swe-58: game 16, table 32 (32)
 2010	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-101: game 5, table 51 (51)
-2010	clubs	european_cup (UEFA Champions League), row uefa-74: game 55, table 76 (76 (32 in the group stage))
 2010	clubs	fin_first (Ykkönen), row nor-fin-98: game 10, table 13 (13)
 2010	clubs	fra_third (Championnat National), row fra-85: game 20, table 21 (21)
 2010	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-10: game 4, table 67 (67)
@@ -56,8 +56,7 @@
 2010	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-239: game 5, table 42 (42)
 2010	clubs	nir_prm (IFA Premiership), row wal-nir-irl-235: game 10, table 12 (12)
 2010	clubs	nor_prm (Tippeligaen), row nor-fin-92: game 14, table 16 (16)
-2010	clubs	oceania_club_champ (OFC Champions League), row club-world-189: game 0, table 8 (8)
-2010	clubs	uefa_cup (UEFA Europa League), row uefa-77: game 145, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2010	clubs	uefa_cup (UEFA Europa League), row uefa-77: game 161, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2010	clubs	world_club_champ (FIFA Club World Cup), row club-world-173: game 0, table 7 (7)
 2010	down	arg_prm (Primera División), row arg-usa-10: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2010	down	arg_second (Primera B Nacional), row arg-usa-37: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table); 3 relegated in total (infobox))
@@ -71,14 +70,14 @@
 2010	down	eng_third (Football League Two), row eng-121: game 1 (+0 play-off places), table 2 (2)
 2010	down	fin_first (Ykkönen), row nor-fin-98: game 2 (+1 play-off places), table 4 (10th-13th (4))
 2010	down	fra_third (Championnat National), row fra-85: game 4 (+0 play-off places), table 5 (5)
+2010	down	ger_second (2. Bundesliga), row ger-119: game 4 (+0 play-off places), table 2 (2)
+2010	down	gre_prm (Super League Greece), row gre-pol-cro-37: game 2 (+0 play-off places), table 3 (3 (14th-16th))
 2010	down	gre_second (Football League), row gre-pol-cro-64: game 2 (+0 play-off places), table unknown (unknown)
+2010	down	ita_ser_b (Serie B), row ita-156: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2010	down	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-157: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2010	down	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-158: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2010	down	jap_j1 (J.League Division 1), row aus-jap-kor-199: game 2 (+0 play-off places), table 3 (3)
 2010	down	nir_first (IFA Championship 1), row wal-nir-irl-236: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
-2010	idle	asia_nations (AFC Asian Cup), row int-continental-108: the game waits for 2012, the table holds it
-2010	idle	fra_first (French CFA), row fra-83: the game waits for 0, the table holds it
-2010	idle	fra_first (French Lower Division), row fra-83: the game waits for 0, the table holds it
 2010	idle	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-115: the game waits for 2012, the table holds it
 2010	idle	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-113: the game waits for 2012, the table holds it
 2010	no_row	friendly (Friendly): no table row
@@ -90,14 +89,11 @@
 2010	not_held	bra_champ_cup (Copa dos Campeões), row bra-199: the game holds 2010, the table says not held
 2010	not_held	conmebol_merc (Copa Mercosur), row club-world-176: the game holds 2010, the table says not held
 2010	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-388: the game holds 2010, the table says not held
-2010	not_held	fifa_confed (FIFA Confederations Cup), row int-world-118: the game holds 2011, the table says not held
 2010	not_held	ger_lge_cup (DFL-Ligapokal), row ger-128: the game holds 2010, the table says not held
 2010	not_held	goldcup (Copa América), row int-continental-110: the game holds 2011, the table says not held
 2010	not_held	gre_super (Greek Super Cup), row gre-pol-cro-91: the game holds 2010, the table says not held
 2010	not_held	inter_amer_cup (Copa Interamericana), row club-world-183: the game holds 2010, the table says not held
-2010	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-79: the game holds 2010, the table says not held
 2010	not_held	nir_charity (Charity Shield), row wal-nir-irl-240: the game holds 2010, the table says not held
-2010	not_held	oceania_nations (OFC Nations Cup), row int-continental-109: the game holds 2010, the table says not held
 2010	not_held	world_club_cup (Intercontinental Cup), row club-world-172: the game holds 2010, the table says not held
 2010	not_in_game	arg-usa-199 argentina_rules 'Argentina' (Argentina)
 2010	not_in_game	aus-jap-kor-10 australia_rules 'n/a' (Australia)
@@ -130,22 +126,21 @@
 2010	not_in_game	ita-170 new 'Supercoppa di Lega di Seconda Divisione (Serie C2 to 2008)' (Italy)
 2010	not_in_game	nor-fin-100 new 'Liigacup' (Finland)
 2010	not_in_game	uefa-73 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2010	playoffs	arg_prm (Primera División), row arg-usa-10: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
-2010	playoffs	arg_second (Primera B Nacional), row arg-usa-37: game 0 up and 0 down play-off places, table '3rd and 4th play two-leg promoción v Primera 17th and 18th of the average table;'
-2010	playoffs	aus_nsl (A-League), row aus-jap-kor-33: game 0 up and 0 down play-off places, table 'top six, four weeks, double chance, grand final'
-2010	playoffs	bel_first (Belgian Pro League), row hol-bel-125: game 0 up and 0 down play-off places, table 'see split'
-2010	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-91: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2010	playoffs	den_second (Danish 2nd Divisions), row den-swe-58: game 0 up and 0 down play-off places, table 'The two group winners play a two-legged promotion play-off for one place.'
-2010	playoffs	fin_first (Ykkönen), row nor-fin-98: game 0 up and 1 down play-off places, table 'none'
-2010	playoffs	fin_prm (Veikkausliiga), row nor-fin-97: game 0 up and 1 down play-off places, table 'none'
-2010	playoffs	ger_first (Bundesliga), row ger-118: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2010	playoffs	ger_second (2. Bundesliga), row ger-119: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2010	playoffs	gre_prm (Super League Greece), row gre-pol-cro-37: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league (home and away)'
-2010	playoffs	gre_second (Football League), row gre-pol-cro-64: game 0 up and 0 down play-off places, table '3rd-6th: promotion play-off group'
-2010	playoffs	hol_first (Eerste Divisie), row hol-bel-120: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2010	playoffs	ita_ser_b (Serie B), row ita-156: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
-2010	playoffs	nor_first (Adeccoligaen), row nor-fin-93: game 1 up and 0 down play-off places, table 'none'
-2010	playoffs	nor_prm (Tippeligaen), row nor-fin-92: game 0 up and 1 down play-off places, table 'none'
+2010	playoffs	arg_prm (Primera División), row arg-usa-10: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
+2010	playoffs	arg_second (Primera B Nacional), row arg-usa-37: game 0 up and 0 down play-off places, table 2 and 0 ('3rd and 4th play two-leg promoción v Primera 17th and 18th of the average table;')
+2010	playoffs	bel_second (Belgian Second Division), row hol-bel-126: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
+2010	playoffs	bel_third (Belgian Third Division), row hol-bel-127: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2010	playoffs	den_second (Danish 2nd Divisions), row den-swe-58: game 0 up and 0 down play-off places, table 1 and 0 ('The two group winners play a two-legged promotion play-off for one place.')
+2010	playoffs	fin_first (Ykkönen), row nor-fin-98: game 0 up and 1 down play-off places, table 0 and 0 ('none')
+2010	playoffs	fin_prm (Veikkausliiga), row nor-fin-97: game 0 up and 1 down play-off places, table 0 and 0 ('none')
+2010	playoffs	ger_first (Bundesliga), row ger-118: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2010	playoffs	ger_second (2. Bundesliga), row ger-119: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2010	playoffs	gre_second (Football League), row gre-pol-cro-64: game 0 up and 0 down play-off places, table 4 and 0 ('3rd-6th: promotion play-off group')
+2010	playoffs	ita_ser_b (Serie B), row ita-156: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo')
+2010	playoffs	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-157: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2010	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-158: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2010	playoffs	nor_first (Adeccoligaen), row nor-fin-93: game 1 up and 0 down play-off places, table 0 and 0 ('none')
+2010	playoffs	nor_prm (Tippeligaen), row nor-fin-92: game 0 up and 1 down play-off places, table 0 and 0 ('none')
 2010	up	arg_second (Primera B Nacional), row arg-usa-37: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2010	up	aus_nsl (A-League), row aus-jap-kor-33: game 6 (+0 play-off places), table na (n/a)
 2010	up	bel_third (Belgian Third Division), row hol-bel-127: game 1 (+0 play-off places), table 2 (2 (group champions))
@@ -158,4 +153,3 @@
 2010	up	fin_first (Ykkönen), row nor-fin-98: game 2 (+0 play-off places), table 1 (1st (1))
 2010	up	gre_cup (Greek Football Cup), row gre-pol-cro-10: game 2 (+0 play-off places), table na (n/a)
 2010	up	jap_j2 (J.League Division 2), row aus-jap-kor-226: game 2 (+0 play-off places), table 3 (3)
-2010	up	oceania_club_champ (OFC Champions League), row club-world-189: game 2 (+0 play-off places), table na (n/a)

@@ -58,6 +58,8 @@ check(po("sco_prm", 2013) == ("-", "11", "-"), "Premiership 11th from 2013/14")
 check(po("sco_prm", 2012) == ("-", "-", "-"), "no Premiership play-off in 2012/13")
 check(po("ire_first", 2009) == ("2-3", "12", "-"), "Irish pos 2,3,12: two up, one down")
 check(po("nor_prm", 2001) == ("-", "12", "-"), "Tippeligaen 12th")
+for y in range(2005, 2009):
+    check(po("tur_second", y) == ("3-6", "-", "-"), "Turkish second tier %d: 3rd v 6th and 4th v 5th, a play-off of 4" % y)
 check(po("usa_mls", 2001)[2] == "title" and po("usa_mls", 2001)[:2] == ("-", "-"), "MLS play-offs move no club")
 check(po("ita_ser_a", 2001) == ("-", "-", "tiebreak"), "Serie A tie-break")
 check(po("aus_nsl", 2005) == ("-", "-", "title"), "A-League finals series")

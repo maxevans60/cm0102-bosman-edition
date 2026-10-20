@@ -56,6 +56,12 @@ int main(int argc, char **argv)
     r = season_rules_find(2027, "eng_prm", 0);
     CHECK(r && r->season == 2027, "a row of 2027/28");
 
+    /* Slice 24: a row of a new competition (comp_file "new") is found by the file of its def. */
+    r = season_rules_find(2021, "new_conference_league", 0);
+    CHECK(r && !strcmp(r->comp_file, "new") && !strcmp(r->comp, "Conference League") && r->subs_used == 5,
+          "2021 new_conference_league is %s", r ? r->id : "none");
+    CHECK(!season_rules_find(2021, "new_conference", 0), "no part match");
+
     /* A row with two files is found by each of them. */
     int both = 0;
     for (int k = 0; (r = season_rules_find(2001, "wc_oceania_league", k)); k++)
