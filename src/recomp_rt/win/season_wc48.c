@@ -213,14 +213,18 @@ static void round_fields(uint32_t rec, int round, int value, int teams, int firs
     wr32(g_mem, r + 0x64u, 0);
 }
 
-/* The knockout of 48 teams: 6 rounds (month from 0, 5 = June, 6 = July). The class's dates move by the date
- * shift of the caller (the class's first group day 12 June to the table's 11 June 2026: -1 day), so each date
- * here is the real one plus a day: round of 32 28 June to 3 July 2026, round of 16 4 to 7 July, quarter-finals
- * 9 to 11 July, semi-finals 14 and 15 July, third place 18 July, final 19 July (int-world-290 and the knockout
- * page). The round of 32 has 16 matches and a round holds 8 kick-off slots (0x521f10 takes index 0 to 7,
- * 0x521f28): it gets none, as the original's third place and final rounds (inference: the matches then fall
- * between the first and the last date). The later rounds keep the original's slots and fields (0x92c8a1..
- * 0x92cc63). The value +7 of the round of 32 is that of the round of 16 (0x14; meaning unknown). */
+/* The knockout of 48 teams: 6 rounds (month from 0, 5 = June, 6 = July). The original's round of 16 to final
+ * (0x92c8a1..0x92cc63) keep their dates, weekday codes, x and y arguments, slots, values and flags, 8 days later:
+ * round of 16 26 June to 30 June becomes 4 to 8 July, quarter-finals 9 to 12 July, semi-finals 13 to 16 July,
+ * third place 17 to 20 July and final 17 to 19 July. The first date of a round must come before its last: a first
+ * form with both on the match day for the third place and the final never played them, so the cup never ended
+ * and the World Cup and its sections never moved on (a 2025 start: four teams with status 0 on 21 July 2026).
+ * The round of 32 (16 matches) plays from the original's first round of 16 day, 26 June, to 3 July, with no
+ * kick-off slots: a round holds 8 (0x521f10 takes index 0 to 7, 0x521f28), and the matches then fall between
+ * the two dates (inference). The real 2026 dates: round of 32 28 June to 3 July, round of 16 4 to 7 July,
+ * quarter-finals 9 to 11 July, semi-finals 14 and 15 July, third place 18 July, final 19 July. The table's first
+ * day moves all dates (the date shift of the caller). The value +7 of the round of 32 is that of the round of 16
+ * (0x14; meaning unknown). */
 static uint32_t knockout_template(uint32_t self, uint32_t out_rounds, uint32_t out_id, uint32_t out_flag)
 {
     if (readable(out_flag)) wr32(g_mem, out_flag, 0);
@@ -229,13 +233,13 @@ static uint32_t knockout_template(uint32_t self, uint32_t out_rounds, uint32_t o
     uint32_t rec = game_malloc(ROUNDS * ROUND_SIZE);
     if (rt_unwinding || !rec) return 0;
     int y = year_of(self);
-    /* Round of 32 */
-    first_date(rec, 0, 29, 5, 0, y);
-    last_date(rec, 0, 4, 6, 5, 1, y, 1);
+    /* Round of 32: first (26 June, weekday 4) as the original's round of 16 (0x92c8a1), last 3 July */
+    first_date(rec, 0, 26, 5, 4, y);
+    last_date(rec, 0, 3, 6, 5, 1, y, 1);
     round_fields(rec, 0, 0x14, 32, 1, y, 0x383);
-    /* Round of 16 (the original's slots, 0x92c8cb..0x92c958) */
-    first_date(rec, 1, 5, 6, 6, y);
-    last_date(rec, 1, 8, 6, 2, 1, y, 1);
+    /* Round of 16 (0x92c8a1, 0x92c8b8: 26 to 30 June) */
+    first_date(rec, 1, 4, 6, 4, y);
+    last_date(rec, 1, 8, 6, 1, 1, y, 1);
     slot(rec, 1, 0, 5, 1, 3, 0x40);
     slot(rec, 1, 1, 5, 2, 3, 0x80);
     slot(rec, 1, 2, 6, 2, 3, 0x200);
@@ -245,29 +249,29 @@ static uint32_t knockout_template(uint32_t self, uint32_t out_rounds, uint32_t o
     slot(rec, 1, 6, 1, 2, 3, 0x1000);
     slot(rec, 1, 7, 1, 1, 3, 0x2000);
     round_fields(rec, 1, 0x14, 16, 0, y, 0x383);
-    /* Quarter-finals (0x92c9b2..0x92ca46) */
-    first_date(rec, 2, 10, 6, 4, y);
-    last_date(rec, 2, 12, 6, 6, 1, y, 1);
+    /* Quarter-finals (0x92c9b2, 0x92c9cd: 1 to 4 July) */
+    first_date(rec, 2, 9, 6, 2, y);
+    last_date(rec, 2, 12, 6, 5, 1, y, 1);
     slot(rec, 2, 0, 4, 2, 3, 4);
     slot(rec, 2, 1, 4, 1, 3, 0x400);
     slot(rec, 2, 2, 5, 2, 3, 0x40);
     slot(rec, 2, 3, 5, 1, 3, 0x100);
     slot(rec, 2, 4, -1, -1, -1, 0);
     round_fields(rec, 2, 0x78, 8, 0, y, 0x383);
-    /* Semi-finals (0x92caa8..0x92cb15) */
-    first_date(rec, 3, 15, 6, 2, y);
-    last_date(rec, 3, 16, 6, 3, 2, y, 1);
+    /* Semi-finals (0x92caa8, 0x92cac0: 5 to 8 July, x 2) */
+    first_date(rec, 3, 13, 6, 6, y);
+    last_date(rec, 3, 16, 6, 2, 2, y, 1);
     slot(rec, 3, 0, 1, 2, 3, 0x40);
     slot(rec, 3, 1, 2, 2, 3, 4);
     slot(rec, 3, 2, -1, -1, -1, 0);
     round_fields(rec, 3, 0x82, 4, 0, y, 0x383);
-    /* Third place (0x92cb83..0x92cbb9) */
-    first_date(rec, 4, 19, 6, 6, y);
-    last_date(rec, 4, 19, 6, 6, 1, y, 4);
+    /* Third place (0x92cb83, 0x92cb9b: 9 to 12 July, y 4) */
+    first_date(rec, 4, 17, 6, 3, y);
+    last_date(rec, 4, 20, 6, 6, 1, y, 4);
     round_fields(rec, 4, 0x96, 2, 0, y, 0x83);
-    /* Final (0x92cc27..0x92cc63) */
-    first_date(rec, 5, 20, 6, 0, y);
-    last_date(rec, 5, 20, 6, 0, 1, y, 0x80);
+    /* Final (0x92cc27, 0x92cc42: 9 to 11 July, y 0x80) */
+    first_date(rec, 5, 17, 6, 3, y);
+    last_date(rec, 5, 19, 6, 5, 1, y, 0x80);
     round_fields(rec, 5, 0x8c, 2, 0, y, 0x3);
     return rt_unwinding ? 0 : rec;
 }
@@ -731,4 +735,60 @@ RT_WRAP(0092d770, wc_knockout)
     knockout48(self);
     if (rt_unwinding) return;
     rt_ret_stdcall(cpu.eax, 0);
+}
+
+/* ---- TEMPORARY test log (remove before review): the stages of an edition of 48 after the final ---- */
+
+void o_0092f1a0(void);
+
+RT_WRAP(0092f1a0, wc48_debug_update)
+{
+    uint32_t self = cpu.ecx;
+    static int done_year;
+    if (logging() && season_wc48(self) && done_year != year_of(self)) {
+        int day = (int16_t)rd16(g_mem, 0xae2c90u), yr = (int16_t)rd16(g_mem, 0xae2c92u);
+        if (yr == year_of(self) && day >= 202) {
+            done_year = year_of(self);
+            uint32_t stages = rd32(g_mem, self + 0xcu);
+            fprintf(stderr, "recomp: season intl: DEBUG world_cup %d day %d: +0x30 %d +0x2c %d +0xdd %u +0xb5 %u\n", yr, day,
+                    (int)rd32(g_mem, self + 0x30u), (int)rd32(g_mem, self + 0x2cu), rd32(g_mem, self + 0xddu),
+                    rd8(g_mem, self + 0xb5u));
+            for (int i = -1; i < 12; i++) {
+                uint32_t st = i < 0 ? self : (readable(stages) ? rd32(g_mem, stages + 4u * (uint32_t)i) : 0);
+                if (!readable(st)) {
+                    fprintf(stderr, "recomp: season intl: DEBUG   stage %d: none\n", i);
+                    continue;
+                }
+                if (i == KO) {
+                    fprintf(stderr, "recomp: season intl: DEBUG   stage %d cup: vt %08x +0xb1 %u +0x30 %d +0x3c %d +0x3e %d\n",
+                            i, rd32(g_mem, st), rd8(g_mem, st + 0xb1u), (int)rd32(g_mem, st + 0x30u),
+                            (int16_t)rd16(g_mem, st + 0x3cu), (int16_t)rd16(g_mem, st + 0x3eu));
+                    uint32_t rows = rd32(g_mem, st + 0xa7u);
+                    int count[256] = {0};
+                    for (int r = 0; readable(rows) && r < 32; r++) count[rd8(g_mem, rows + (uint32_t)r * 6u + 5u)]++;
+                    fprintf(stderr, "recomp: season intl: DEBUG     statuses:");
+                    for (int v = 0; v < 256; v++) if (count[v]) fprintf(stderr, " %d x%d;", v, count[v]);
+                    fputc('\n', stderr);
+                    uint32_t rec = rd32(g_mem, st + 0xa3u);
+                    for (int r = 0; readable(rec) && r < 6; r++) {
+                        fprintf(stderr, "recomp: season intl: DEBUG     round %d:", r);
+                        for (uint32_t k = 0; k < 0x24u; k += 2) fprintf(stderr, " %04x", rd16(g_mem, rec + (uint32_t)r * 0x68u + k));
+                        fputc('\n', stderr);
+                    }
+                    continue;
+                }
+                uint32_t table = rd32(g_mem, st + TABLE);
+                int n = (int16_t)rd16(g_mem, st + 0x3eu), mn = 99;
+                for (int r = 0; readable(table) && r < n; r++) {
+                    int pl = (int8_t)rd8(g_mem, table + (uint32_t)r * ROW_SIZE + 0x11u);
+                    if (pl < mn) mn = pl;
+                }
+                fprintf(stderr, "recomp: season intl: DEBUG   stage %d: vt %08x teams %d min played %d +0xa7 %d +0xdd %u +0xb5 %u +0x45 %08x\n",
+                        i, rd32(g_mem, st), n, mn, (int16_t)rd16(g_mem, st + 0xa7u), rd32(g_mem, st + 0xddu),
+                        rd8(g_mem, st + 0xb5u), rd32(g_mem, st + 0x45u));
+            }
+        }
+    }
+    cpu.ecx = self;
+    o_0092f1a0();
 }
