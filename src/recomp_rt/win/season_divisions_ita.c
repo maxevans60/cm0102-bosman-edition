@@ -356,6 +356,22 @@ static void chain(uint32_t serie_a)
         if (list[i]) call_this(rd32(g_mem, rd32(g_mem, list[i]) + 0xa4), list[i], 0, NULL);
     if (g[2] && !rt_unwinding) call_this(rd32(g_mem, rd32(g_mem, g[2]) + 0xa4), g[2], 0, NULL);
     if (rt_unwinding || !a || !b) return;
+    /* The last season of each group club: its division (+0x5b) and final place (+0x5f, row i is place i + 1), before any
+     * club moves. ItaCup::select_entrants 0x63faf0 takes its lower clubs by them (0x63fc69..0x63fc93, 0x63fce6..
+     * 0x63fd08) and its sort 0x640590 reads the season of that division (a 2014 game with the extra division had no
+     * group club with them: the cup's loop never ended, then comp_stats.CPP 1664). */
+    for (int i = 0; i < GROUPS; i++) {
+        if (!g[i]) continue;
+        uint32_t rec = record_of(GROUP_KEY[i]);
+        int n = (int16_t)rd16(g_mem, g[i] + 0x3e);
+        for (int k = 0; k < n && n <= 60 && !rt_unwinding; k++) {
+            uint32_t club = row_club(g[i], k, NULL);
+            if (!readable(club)) continue;
+            wr32(g_mem, club + 0x5b, rec);
+            g_mem[club + 0x5f] = (uint8_t)(k + 1);
+        }
+    }
+    if (rt_unwinding) return;
     /* Serie A and B, 4 and 4 in pairs (0x64248e); B and each group in pairs (as 0x6424b6, 0x6424de). */
     uint32_t ab[6] = {a, b, 1, 1, 4, 4};
     call_this(F_PROMOTE_RELEGATE, serie_a, 6, ab);
@@ -719,7 +735,8 @@ uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b)
 /* ItaCup::select_entrants 0x63fd28 (cmp si, 0x20 after the next position, 0x63fd22..0x63fd30): the list of lower clubs
  * is on the stack at esp + 0x1c (4 bytes a club, 0x63fd12), count clubs so far. In the Serie C era, when the position
  * passes 40 with fewer than 32 clubs, the clubs of the three groups that are not in the list yet join it by reputation
- * (then the Serie D's), so the loop ends with 32. Else the count is as it is. Q626. */
+ * (only clubs of the groups: the cup's sort 0x640590 reads the season of a club's last division), so the loop ends
+ * with 32. Else the count is as it is. Q626. */
 uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position)
 {
     uint32_t serie_a = object_of(KEY_A);
@@ -731,8 +748,8 @@ uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position)
     fprintf(stderr, "recomp: serie c: Coppa Italia: %u lower clubs at position %u (%d empty)\n", count, position, nulls);
     static uint32_t cand[4096];
     int n = 0;
-    const uint32_t keys[4] = {KEY_C1A, KEY_C1B, KEY_C2A, KEY_SERIE_D};
-    for (int k = 0; k < 4 && count < 0x20; k++) {
+    const uint32_t keys[3] = {KEY_C1A, KEY_C1B, KEY_C2A};
+    for (int k = 0; k < 3 && count < 0x20; k++) {
         n = pool(record_of(keys[k]), cand, 4096);
         qsort(cand, (size_t)n, sizeof *cand, by_reputation);
         for (int i = 0; i < n && count < 0x20; i++) {
