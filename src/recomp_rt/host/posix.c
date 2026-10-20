@@ -184,7 +184,7 @@ void host_system_name(char *out, size_t room)
     snprintf(out, room, "macOS %s, %s, %s%s\n", version, model, u.machine,
              translated ? " (the game runs under Rosetta)" : "");
 #else
-    char name[200] = "";
+    char name[256] = "";
     FILE *f = fopen("/etc/os-release", "r");
     char line[256];
     while (f && fgets(line, sizeof line, f)) {
@@ -195,7 +195,7 @@ void host_system_name(char *out, size_t room)
         snprintf(name, sizeof name, "%s", v);
     }
     if (f) fclose(f);
-    snprintf(out, room, "%s, %s %s, %s\n", name[0] ? name : "Linux", u.sysname, u.release, u.machine);
+    snprintf(out, room, "%.200s, %s %s, %s\n", name[0] ? name : "Linux", u.sysname, u.release, u.machine);
 #endif
 }
 

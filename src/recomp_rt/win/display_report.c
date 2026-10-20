@@ -31,7 +31,7 @@
 
 typedef struct {
     uint64_t ms;                        /* since SDL_Init */
-    char line[200];
+    char line[260];
 } Event;
 static Event events[REPORT_EVENTS];
 static int event_count;                 /* every event so far; the last REPORT_EVENTS are kept */
