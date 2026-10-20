@@ -35,18 +35,18 @@ const SeasonNlQualifying season_nl_qualifying[] = {
 const int season_nl_qualifying_count = (int)(sizeof season_nl_qualifying / sizeof season_nl_qualifying[0]);
 
 const SeasonNlGoldCup season_nl_gold_cups[] = {
-    {2005, 12, {6, 7, 0}, "int-continental-49"},
-    {2007, 12, {6, 6, 0}, "int-continental-60"},
-    {2009, 12, {3, 7, 0}, "int-continental-93"},
-    {2011, 12, {5, 6, 0}, "int-continental-104"},
-    {2013, 12, {7, 7, 0}, "int-continental-137"},
-    {2015, 12, {7, 7, 0}, "int-continental-159"},
-    {2017, 12, {7, 7, 0}, "int-continental-181"},
-    {2019, 16, {15, 6, 0}, "int-continental-192"},
-    {2021, 16, {10, 7, 0}, "int-continental-225"},
-    {2023, 16, {24, 6, 0}, "int-continental-236"},
-    {2025, 16, {14, 6, 0}, "int-continental-258"},
-    {2027, 16, {19, 6, 0}, "int-continental-280"},
+    {2005, 12, {6, 7, 0}, "int-continental-49", "United States"},
+    {2007, 12, {6, 6, 0}, "int-continental-60", "United States"},
+    {2009, 12, {3, 7, 0}, "int-continental-93", "United States"},
+    {2011, 12, {5, 6, 0}, "int-continental-104", "United States"},
+    {2013, 12, {7, 7, 0}, "int-continental-137", "United States"},
+    {2015, 12, {7, 7, 0}, "int-continental-159", "United States;Canada"},
+    {2017, 12, {7, 7, 0}, "int-continental-181", "United States"},
+    {2019, 16, {15, 6, 0}, "int-continental-192", "United States;Costa Rica;Jamaica"},
+    {2021, 16, {10, 7, 0}, "int-continental-225", "United States"},
+    {2023, 16, {24, 6, 0}, "int-continental-236", "United States;Canada"},
+    {2025, 16, {14, 6, 0}, "int-continental-258", "United States;Canada"},
+    {2027, 16, {19, 6, 0}, "int-continental-280", "United States"},
 };
 const int season_nl_gold_cup_count = (int)(sizeof season_nl_gold_cups / sizeof season_nl_gold_cups[0]);
 

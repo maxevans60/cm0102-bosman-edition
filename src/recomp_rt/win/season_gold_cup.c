@@ -57,6 +57,22 @@
 
 #define GAME_NEW 0x00944cf1u            /* operator new, cdecl (size) */
 #define GAME_MALLOC 0x00944e46u         /* malloc, cdecl (size) */
+#define GAME_FREE 0x009452cau           /* free, cdecl (block) */
+#define FIND_HOSTS 0x005fa730u          /* HostCountry::find_hosts, thiscall (key, year, &host1, &host2, 1) */
+
+/* The host table (season_intl.c): HostCountry at [0xb5e134], +0 the rows of 0x22 bytes, +4 the count (word). A
+ * row: +0 the key id (here the record id), +4 the year (word), +6 three host pairs (nation ids, -1 none), +0x1e
+ * the choice (0xfd fixed), +0x1f the decision day, +0x21 the move cycle. */
+#define HOSTS 0xb5e134u
+#define ROW_SIZE 0x22u
+#define ROW_YEAR 0x4u
+#define ROW_PAIRS 0x6u
+#define ROW_CHOICE 0x1eu
+#define ROW_DAY 0x1fu
+#define ROW_CYCLE 0x21u
+#define CHOICE_FIXED 0xfdu
+#define NATION_NAME 0x4u
+#define NATION_STADIUM 0x80u            /* the national stadium (0x85c730) */
 #define GAME_QSORT 0x00945333u          /* qsort, cdecl (base, count, size, compare) */
 #define CLUB_COMPARE 0x004b07d0u        /* compare of club pointers (0x5e20f5) */
 #define NATIONAL_TEAM 0x0053b3d0u       /* cdecl (nation record) */
@@ -270,6 +286,8 @@ int season_gold_cup_date_shift(uint32_t self, int *shift)
  * highest reputation, sorted by strength as the original (qsort 0x4b07d0 at 0x5e20fe); group g then takes the
  * teams g, g + G, ... (class doc 4). Decision: no host places (the class's hosts come from the Copa America's
  * key at 0x5e1f55) and no qualifying through the Nations League. Returns 1, or 0 when too few nations. */
+static void gold_log_hosts(uint32_t self);
+
 uint32_t season_gold_cup_entrants(uint32_t self)
 {
     int want = season_gold_cup_teams(self);
@@ -295,11 +313,99 @@ uint32_t season_gold_cup_entrants(uint32_t self)
         for (int k = 0; k < n; k++) fprintf(stderr, " %.50s;", win_str(rd32(g_mem, list + 4u * (uint32_t)k) + 4u));
         fputc('\n', stderr);
     }
+    gold_log_hosts(self);
+    if (rt_unwinding) return 0;
     if (n != want) {
         fprintf(stderr, "recomp: season gold cup %d: only %d teams of %d\n", year_of(self), n, want);
         return 0;
     }
     return 1;
+}
+
+static int nation_by_name(const char *name)
+{
+    for (int id = 0; id < nation_count(); id++)
+        if (!strcmp(win_str(nation_at(id) + NATION_NAME), name)) return id;
+    return -1;
+}
+
+/* Where the Gold Cup's matches are played. The class's rounds take venue flags 1, 4 and 0x80 (0x5e0c7d, 0x5e0d50,
+ * 0x5e0e11, 0x5e0eb5); the venue code asks HostCountry::find_hosts 0x5fa730 with the fixture's record id and year
+ * (0x85c5ff..0x85c61c) and plays at the host's stadium (nation +0x80, 0x85c730), else it takes the record's nation
+ * (+0x5d, 0x85c709). The Gold Cup record has no host row, so it gets one per edition from its first edition: the
+ * first two hosts of the table (the United States in every edition; Canada, Costa Rica as the second), choice
+ * fixed, no move, as slice 27 writes the rows of the Copa America (season_intl.c row_write). The rows are in the
+ * save with the rest of the host table. */
+static void gold_host_rows(uint32_t rec, int from)
+{
+    uint32_t hc = rd32(g_mem, HOSTS), key = rd32(g_mem, rec);
+    if (!readable(hc)) return;
+    uint32_t rows = rd32(g_mem, hc);
+    int count = (int16_t)rd16(g_mem, hc + 4u);
+    if (!readable(rows) || count <= 0 || count > 1000) return;
+    int years[40], n = 0;
+    for (int y = from; y <= 2031 && n < 40; y++) {
+        if (!gold_edition(y)) continue;
+        int have = 0;
+        for (int i = 0; i < count; i++)
+            have |= rd32(g_mem, rows + (uint32_t)i * ROW_SIZE) == key &&
+                    (int16_t)rd16(g_mem, rows + (uint32_t)i * ROW_SIZE + ROW_YEAR) == y;
+        if (!have) years[n++] = y;
+    }
+    if (!n) return;
+    uint32_t now = game_malloc((uint32_t)(count + n) * ROW_SIZE);
+    if (rt_unwinding || !now) return;
+    memcpy(g_mem + now, g_mem + rows, (size_t)count * ROW_SIZE);
+    uint32_t fa[1] = {rows};
+    call_cdecl(GAME_FREE, 1, fa);
+    if (rt_unwinding) return;
+    for (int k = 0; k < n; k++) {
+        const SeasonNlGoldCup *g = gold_edition(years[k]);
+        uint32_t row = now + (uint32_t)(count + k) * ROW_SIZE;
+        int ids[2] = {-1, -1}, m = 0;
+        char host[64];
+        for (const char *p = g ? g->hosts : ""; *p && m < 2;) {
+            size_t len = strcspn(p, ";");
+            snprintf(host, sizeof host, "%.*s", (int)len, p);
+            int id = nation_by_name(host);
+            if (id >= 0) ids[m++] = id;
+            p += len;
+            if (*p == ';') p++;
+        }
+        wr32(g_mem, row, key);
+        wr16(g_mem, row + ROW_YEAR, (uint32_t)years[k]);
+        for (int j = 0; j < 6; j++) wr32(g_mem, row + ROW_PAIRS + 4u * (uint32_t)j, 0xffffffffu);
+        wr32(g_mem, row + ROW_PAIRS, (uint32_t)ids[0]);
+        wr32(g_mem, row + ROW_PAIRS + 4u, (uint32_t)ids[1]);
+        wr8(g_mem, row + ROW_CHOICE, CHOICE_FIXED);
+        wr16(g_mem, row + ROW_DAY, (uint32_t)day_of_year(g ? g->start.day : 1, g ? g->start.month : 7, years[k]));
+        wr8(g_mem, row + ROW_CYCLE, 0);
+    }
+    wr32(g_mem, hc, now);
+    wr16(g_mem, hc + 4u, (uint32_t)(count + n));
+}
+
+/* Test log: the hosts that find_hosts gives the Gold Cup of the object's year, and their stadiums. */
+static void gold_log_hosts(uint32_t self)
+{
+    if (!logging()) return;
+    uint32_t hc = rd32(g_mem, HOSTS), out = game_malloc(8);
+    if (rt_unwinding || !out || !readable(hc)) return;
+    wr32(g_mem, out, 0xffffffffu);
+    wr32(g_mem, out + 4u, 0xffffffffu);
+    uint32_t fa[5] = {rd32(g_mem, rd32(g_mem, self + F_RECORD)), (uint32_t)year_of(self), out, out + 4u, 1};
+    int count = (int8_t)call_this(FIND_HOSTS, hc, 5, fa);
+    if (rt_unwinding) return;
+    fprintf(stderr, "recomp: season gold cup %d hosts:", year_of(self));
+    for (int h = 0; h < count && h < 2; h++) {
+        int id = (int32_t)rd32(g_mem, out + 4u * (uint32_t)h);
+        if (id < 0 || id >= nation_count()) continue;
+        uint32_t st = rd32(g_mem, nation_at(id) + NATION_STADIUM);
+        fprintf(stderr, " %.30s (stadium %.40s);", win_str(nation_at(id) + NATION_NAME), readable(st) ? win_str(st + 4u) : "none");
+    }
+    fputc('\n', stderr);
+    uint32_t fr[1] = {out};
+    call_cdecl(GAME_FREE, 1, fr);
 }
 
 static uint32_t gold_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
@@ -316,6 +422,8 @@ static uint32_t gold_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
     making_rec = 0;
     if (rt_unwinding || !readable(obj)) return 0;
     wr32(g_mem, obj, v);
+    if (!loading) gold_host_rows(rec, y);
+    if (rt_unwinding) return 0;
     if (logging()) {
         const SeasonNlGoldCup *g = gold_edition(year_of(obj));
         fprintf(stderr, "recomp: season gold cup: %d (%d teams)%s\n", year_of(obj), g ? g->teams : 0,

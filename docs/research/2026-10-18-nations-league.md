@@ -108,15 +108,36 @@ An object of the class `Eur_Super_Cup` (ctor 0x57a100) on its own record, made i
 
 11. **CONCACAF League A from 2023-24** plays 4 groups of 4, home and away, like the UEFA leagues; its group winners play the finals of four. The class holds no groups of 6 with 4 matches each, no byes and no quarter-finals. The last of each A group goes down (4, as the real 5th and 6th of two groups of 6). Its matchdays 5 and 6 are those of League B.
 12. **The 2019-20 CONCACAF finals** play on the planned days, 4 and 7 June 2020 (Q277). **The 2026-27 finals**: only the window 25 to 28 March 2027 is known, so the semi-finals play on 25 March and the final on 28 March.
-13. **Gold Cup entrants** are the 12 or 16 CONCACAF national teams with the highest reputation. No host places, no qualifying through the Nations League, no guests.
+13. **Gold Cup entrants** are the 12 or 16 CONCACAF national teams with the highest reputation. No host places (the hosts play their matches at home, decision 19), no qualifying through the Nations League, no guests.
 14. **The Gold Cup of 16** (2019 on) takes the bracket of the 2024 Copa America (A1-B2, B1-A2, C1-D2, D1-C2). The Gold Cup keeps the class's third place match (only 2015 had one).
 15. **The Gold Cups of 2002 and 2003** (4 groups of 3) are not played: the first Gold Cup of a game is 2005 or later.
 16. **The Finalissima** plays only in 2022, with changing rules on or off (2026 was cancelled). It plays at the first team's ground (the Euro winner), not at Wembley: the class has no neutral ground by record. A winner missing from the history (a season database) is replaced by the strongest nation of its continent.
 17. **The Confederations Cup** keeps its CONCACAF place (the original's random pick, 0x58cd7c), not the Gold Cup winner.
+18. **Euro 2028** takes slice 27's fill for the places that its groups do not fill, not Nations League paths (section "Euro 2028 qualifying").
+19. **The Gold Cup's hosts**: the first two hosts of each edition from the table; the unknown 2027 host is the United States.
+20. **Gold Cup with changing rules off** follows Q398: only when the start season holds a Gold Cup.
 
 ### The Euro's team slots after a load
 
-The EuroChamp constructor builds the team slots (+0x14, 6 bytes a slot; malloc 0x57a958, build_team_slots 0x57bd80) only for a new edition: after a load it jumps past them (`jne 0x57aa87` at 0x57a943). `load_extra_data` 0x57c480 reads only the pots (+0xee) and the seeding day (+0x13e, +0x140). So in a loaded game +0x14 is 0 while the count +0x36 and the room +0x38 come from the file, and `add_qualified_team` 0x57c120 writes each qualifier at address 0. In the 2018 save run other writes overwrote them before the Euro 2020 seeding: box "Database..cpp 13126" (national_team 0x53b3d0 with a null nation, from 0x53b4ac) on 1 April 2020 in the loaded game only (test log: slots "at 0x0"). The Nations League's daily update (`season_nl_euro_slots_after_load`) gives such a Euro a slot array of its room and keeps the entries at address 0 that hold a national team. It runs only in a season game with the UEFA Nations League object (from 2018/19). Inference, not tested: a Euro of an earlier season, or the World Cup's slots (+0x14 too, room 32 at 0x92bffa), have the same fault after a load.
+The EuroChamp constructor builds the team slots (+0x14, 6 bytes a slot; malloc 0x57a958, build_team_slots 0x57bd80) only for a new edition: after a load (`League::load` 0x687b10 gives non-zero) it jumps past them (`jne 0x57aa87` at 0x57a943). `load_extra_data` 0x57c480 reads only the pots (+0xee) and the seeding day (+0x13e, +0x140). So after a load +0x14 is 0 while the count +0x36 and the room +0x38 come from the file, and `add_qualified_team` 0x57c120 writes each qualifier at address 0 with no test (0x57c1aa..0x57c1bc). In the 2018 save run (Euro 2020, measured with the test log: slots "at 0x0") other writes overwrote them before the seeding: box "Database..cpp 13126" (national_team 0x53b3d0 with a null nation, from 0x53b4ac) on 1 April 2020, in the loaded game only.
+
+A review game (2003 start, saved in September 2003 during the Euro 2004 qualifying, loaded) seeded Euro 2004 with no box: the fill of slice 27 found its slots. So that Euro had a slot array after the load. Why it had one is not known (inference: its constructor did not load its file and built a new edition). The fault does not need the Nations League: any Euro whose file loads has no slot array.
+
+The World Cup builds its slots before its load (+0x38 = 32 at 0x92bffa, +0x14 at 0x92c00a, load at 0x92c040), so it keeps them.
+
+The repair (`season_euro_slots_after_load`, season_nl_euro.c) runs in every season game from slice 27's Euro slot code (season_intl.c): before `add_qualified_team` 0x57c120 and before the fill at the seeding 0x57c710 and at the draw 0x57c1d0. A Euro with no slot array gets one of its room, with the entries already written at address 0 that hold a national team. The base game keeps the original's code (Q152).
+
+### Euro 2028 qualifying
+
+`season_nl_qualifying` holds Euro 2020, Euro 2024 and the 2022 World Cup. Euro 2028 qualifying plays the class's own calendar (from September of the campaign year, template 0x57d190), and its places that the groups do not fill come from slice 27's fill (`claude/fix-euro-2028`, every Euro from 2020): the strongest European nations not yet in, by reputation. Decision (for Max): Euro 2028 takes the fill, not Nations League paths. Why: the real Euro 2028 qualifying (groups from March 2027, play-offs in March 2028 from the 2026-27 Nations League) is announced only in outline, its matchdays are not in the table, and its five hosts (the four UK nations and Ireland) take places that the format of the table (no host places, row int-continental-287) does not give. A row with the real matchdays and paths can be added to `nations-league-dates.tsv` and `make_nl.py` QUALIFYING when the dates are known.
+
+### The Gold Cup's venue
+
+The class's rounds take venue flags 1 (quarter-finals and semi-finals, 0x5e0c7d, 0x5e0d50), 4 (third place, 0x5e0e11) and 0x80 (final, 0x5e0eb5). The venue code asks `HostCountry::find_hosts` 0x5fa730 with the fixture's record id and year (0x85c5ff..0x85c61c) and plays at the host's stadium (nation +0x80, 0x85c730); with no host it takes the record's nation (+0x5d, 0x85c709). The new record has no host row, so `make` writes one per edition (season_gold_cup.c `gold_host_rows`): the first two hosts of the table's format text (the United States in every edition; Canada in 2015, 2023 and 2025, Costa Rica in 2019; the 2027 host is unknown, so the United States, decision). The test log names the hosts that find_hosts gives and their stadiums ("season gold cup 2019 hosts: ..."); `season_nl_run.py` checks it in runs 2018, 2020 and 2010.
+
+### The Gold Cup with changing rules off (Q398)
+
+With changing rules off a cup that the start season does not hold stays off (Q398). The module's `early` (make an object a season before a held season) therefore acts only with changing rules on. So a 2004/05 start with changing rules off has no Gold Cup (2004/05 holds none), and a 2006/07 start plays the 2007 edition, then every two years.
 
 ### Open item
 

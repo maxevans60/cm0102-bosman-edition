@@ -394,13 +394,14 @@ void season_nl_euro_log_slots(int day, int year)
  * build_team_slots 0x57bd80) only for a new edition: after a load it jumps past them (`jne 0x57aa87` at 0x57a943),
  * and load_extra_data 0x57c480 reads only the pots (+0xee) and the seeding day (+0x13e, +0x140). So in a loaded game
  * +0x14 is 0 while the count +0x36 and the room +0x38 come from the file, and add_qualified_team 0x57c120 writes
- * the qualifiers at address 0, where other writes can overwrite them before the seeding reads them (box
- * "Database..cpp 13126" at the Euro 2020 seeding in a loaded game). In a season game the Nations League's daily
- * update calls this: when the Euro object has no slot array, it gets one of its room, with the entries already
- * written at address 0 that hold a national team. */
-void season_nl_euro_slots_after_load(void)
+ * the qualifiers at address 0 with no test (0x57c1aa..0x57c1bc), where other writes can overwrite them before the
+ * seeding reads them (box "Database..cpp 13126" at the Euro 2020 seeding in a loaded game). The World Cup builds
+ * its slots before its load (0x92bffa..0x92c00a, load at 0x92c040), so it keeps them. In a season game slice 27's
+ * Euro slot code (season_intl.c: add_qualified_team 0x57c120, the fill at the seeding 0x57c710 and at the draw
+ * 0x57c1d0) calls this first: a Euro with no slot array gets one of its room, with the entries already written at
+ * address 0 that hold a national team. The base game keeps the original's (Q152). */
+void season_euro_slots_after_load(uint32_t euro)
 {
-    uint32_t euro = euro_object();
     if (!readable(euro) || rd32(g_mem, euro + EURO_SLOTS)) return;
     int n = (int16_t)rd16(g_mem, euro + EURO_SLOT_COUNT), room = (int16_t)rd16(g_mem, euro + 0x38u);
     if (room <= 0 || room > 64) return;
@@ -416,6 +417,6 @@ void season_nl_euro_slots_after_load(void)
     }
     wr32(g_mem, euro + EURO_SLOTS, slots);
     wr16(g_mem, euro + EURO_SLOT_COUNT, (uint32_t)kept);
-    fprintf(stderr, "recomp: season nl: the Euro gets its team slots again after a load (%d of %d kept, room %d)\n", kept,
-            n, room);
+    fprintf(stderr, "recomp: season nl: the Euro %d gets its team slots again after a load (%d of %d kept, room %d)\n",
+            (int16_t)rd16(g_mem, euro + 0x40u), kept, n, room);
 }

@@ -344,7 +344,9 @@ static void comps_entry(const SeasonChange *c)
         const SeasonCompDef *d = def_at(i);
         if (!d || d->entry != c->entry || objects[i]) continue;
         if (season_comps_held(d->comp, c->season) != 1 &&
-            !(d->early && season_comps_held(d->comp, c->season + 1) == 1)) continue;   /* slice 28: `early` */
+            !(d->early && season_changing_rules() && season_comps_held(d->comp, c->season + 1) == 1))
+            continue;   /* slice 28: `early`, only with changing rules on (Q398: with them off a cup that the start
+                         * season does not hold stays off) */
         uint32_t obj = make(d, i, c->season, 0);
         if (!obj) continue;
         char name[64];
@@ -455,7 +457,7 @@ static int wanted(const char (*have)[52], int have_count, char (*names)[52])
         const SeasonCompDef *d = def_at(i);
         if (!d || !d->like || !d->record) continue;
         int h = season_comps_held(d->comp, start);
-        if (h == 0 && d->early && season_comps_held(d->comp, start + 1) == 1) h = 1;        /* slice 28: `early` */
+        if (h == 0 && d->early && rules && season_comps_held(d->comp, start + 1) == 1) h = 1;   /* slice 28 (Q398) */
         if (h < 0 || (!h && (!rules || season_comps_next_edition(d->comp, start) == NEVER))) continue;  /* Q232 */
         int known = 0;
         for (int j = 0; j < have_count; j++)

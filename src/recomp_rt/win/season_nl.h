@@ -73,6 +73,7 @@ typedef struct {
     int teams;
     SeasonNlDate start;
     const char *row;
+    const char *hosts;          /* the host nations, names of the game's nation.dat, ";" between them */
 } SeasonNlGoldCup;
 
 extern const SeasonNlGoldCup season_nl_gold_cups[];
@@ -151,8 +152,9 @@ int season_nl_held_results(int year, SeasonNlRow *rows);
  * bit 0x200 for the fixed links. */
 /* Test log: the Euro's team slots around its seeding (season_nl_euro.c). */
 void season_nl_euro_log_slots(int day, int year);
-/* A Euro with no slot array after a load gets one (season_nl_euro.c). */
-void season_nl_euro_slots_after_load(void);
+/* A Euro with no slot array after a load gets one (season_nl_euro.c), called by slice 27's Euro slot code in a
+ * season game. */
+void season_euro_slots_after_load(uint32_t euro);
 
 void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams);
 

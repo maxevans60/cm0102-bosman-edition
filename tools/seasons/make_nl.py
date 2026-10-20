@@ -203,6 +203,18 @@ def dates():
     return out
 
 
+def gold_hosts(r):
+    """The hosts of a Gold Cup row: the format text starts "host United States and Canada;" (or "host A, B and
+    C;"). The names of the game's nation.dat, ";" between hosts. An unknown host (2027: "host unknown (TBA)")
+    gives the United States, the host of 13 of the 14 editions from 2005 (decision)."""
+    m = re.match(r"^host (.*?);", r["format"])
+    text = m.group(1) if m else ""
+    if not text or "unknown" in text:
+        return "United States"
+    names = [n.strip() for n in re.split(r",| and ", text) if n.strip()]
+    return ";".join(NAMES.get(n, n) for n in names)
+
+
 def gold_cups():
     ds = dates()
     out = []
@@ -221,7 +233,7 @@ def gold_cups():
         y, mo, d = ds[key]
         if y != year:
             fail(f"goldcup-{year} starts in {y}")
-        out.append({"year": year, "teams": teams, "day": d, "month": mo, "row": r["id"]})
+        out.append({"year": year, "teams": teams, "day": d, "month": mo, "row": r["id"], "hosts": gold_hosts(r)})
     out.sort(key=lambda g: g["year"])
     return out
 
@@ -302,7 +314,8 @@ def text():
         "const SeasonNlGoldCup season_nl_gold_cups[] = {",
     ]
     for g in gold_cups():
-        lines.append(f'    {{{g["year"]}, {g["teams"]}, {{{g["day"]}, {g["month"]}, 0}}, {c_str(g["row"])}}},')
+        lines.append(f'    {{{g["year"]}, {g["teams"]}, {{{g["day"]}, {g["month"]}, 0}}, {c_str(g["row"])}, '
+                     f'{c_str(g["hosts"])}}},')
     lines += [
         "};",
         "const int season_nl_gold_cup_count = (int)(sizeof season_nl_gold_cups / sizeof season_nl_gold_cups[0]);",

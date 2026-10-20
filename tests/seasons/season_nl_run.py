@@ -74,14 +74,16 @@ CONCACAF = {"2018": ["CONCACAF-2019-20"], "2020": ["CONCACAF-2022-23"],
 SAVE_AFTER = 430
 # Log lines each run must hold: the play-off paths (season_nl_euro.c, season_nl_wc.c).
 LINES = {"2018": ["euro 2020 qualifying groups from 21 March 2019", "euro 2020 path A (", "euro 2020 path D (",
-                  "euro 2020 seeding on day", "season nl: CONCACAF-2019-20 finals:", "season gold cup 2019: 16 teams:"],
+                  "euro 2020 seeding on day", "season nl: CONCACAF-2019-20 finals:", "season gold cup 2019: 16 teams:",
+                  "season gold cup 2019 hosts: United States (stadium"],
          "2020": ["world cup 2022 qualifying groups from 24 March 2021", "world cup 2022 path A:",
-                  "world cup 2022 path C:", "season gold cup 2021: 16 teams:", "season finalissima 2022: "],
+                  "world cup 2022 path C:", "season gold cup 2021: 16 teams:", "season finalissima 2022: ",
+                  "season gold cup 2021 hosts: United States (stadium"],
          "2022": ["euro 2024 qualifying groups from 23 March 2023", "euro 2024 path C (",
                   "season gold cup 2023: 16 teams:"],
          "2024": ["season nl: CONCACAF-2024-25 finals:", "season gold cup 2025: 16 teams:"],
          "off": ["season gold cup 2019: 16 teams:"],
-         "2010": ["season gold cup 2011: 12 teams:"]}
+         "2010": ["season gold cup 2011: 12 teams:", "season gold cup 2011 hosts: United States (stadium"]}
 NO_LINES = ["no path play-off", ": no paths (", "teams of 12", "teams of 16", "no winner in the history", " holds 0 nations", " holds 1 nations"]
 BASE_ENV = {"RECOMP_STAFF_RESERVE": "23000", "RECOMP_SEASON_NL_LOG": "1"}
 DRAW = re.compile(r"recomp: season nl: (\S+) draw league ([A-D]) group (\d+):(.*)$")

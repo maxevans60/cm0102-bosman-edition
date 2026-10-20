@@ -92,7 +92,8 @@ struct SeasonCompDef {
     int level;
     /* Slice 28: 1 when an edition starts before the update day of its entry in the season that the table gives
      * it (the Gold Cup of July 2021 in 2021/22, entry 1 on 15 August): the object is also made in the season
-     * before a season that holds the competition. */
+     * before a season that holds the competition. Only with changing rules on: with them off a competition that
+     * the start season does not hold stays off (Q398). */
     int early;
 };
 

@@ -23,6 +23,7 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
 CALLBACKS = {
     # Slice 28 (season_nl.c): the UEFA Nations League, an object of the class euro_champ_qual.
     # Slice 28 part b (season_gold_cup.c): the Gold Cup (copa_america) and the Finalissima (Eur_Super_Cup).
+    0x5FA730: ("8b01535556668b71", "HostCountry::find_hosts (this, key, year, &host1, &host2, 1)"),
     0x5E0660: ("6aff6829a8950064", "copa_america::copa_america (this, year, record)"),
     0x57A100: ("6aff683987950064", "Eur_Super_Cup::Eur_Super_Cup (this, year, record)"),
     0x4AFD80: ("81ec1c020000a17c", "comp_util_get_latest_placed_club (record, place)"),
