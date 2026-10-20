@@ -46,6 +46,10 @@ typedef struct {
  * letter is not a type. */
 int season_cups_apply(char type, SeasonCupRound *round);
 
+/* Slice 21b (season_kind_cup_breaks.c): 1 while a constructor runs with SEASON_CUPS_NEVER, so League::create_fixtures
+ * 0x6835c0 makes no fixture and returns 1 (its one wrap is in season_uefa_league.c). */
+int season_cup_breaks_no_fixtures(void);
+
 /* ---- Cups that the rules table does not hold in some seasons (slice 21b, season_cup_breaks.c) ----
  *
  * An edition of a cup is its season year (cup+0x40). The rules table puts the edition of a split-season cup

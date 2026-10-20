@@ -213,17 +213,13 @@ RT_WRAP(009277f0, wel_prm_cup_ctor) { ctor("wel_prm_cup", o_009277f0); }
  * the callers test, for example 0x927975). While a constructor runs with SEASON_CUPS_NEVER it makes no fixture and
  * returns 1: for the object itself and for the stage objects that the constructor makes (BraChampCup 0x4259a0
  * makes its group stages in the constructor, and a run of a 2008 game with Brazil showed a fixture block of 2999
- * until this covered them). Every other call runs the original. */
-void o_006835c0(void);
-RT_WRAP(006835c0, cup_breaks_create_fixtures)
+ * until this covered them). Every other call runs the original. The one wrap of 0x6835c0 is in
+ * season_uefa_league.c (slices 21b and 25): it calls this first, and returns 1 at once when this returns 1. */
+int season_cup_breaks_no_fixtures(void)
 {
-    if (never_obj) {
-        if (logging()) fprintf(stderr, "recomp: cup_breaks: no fixtures for the cup that waits for ever (0x%x)\n",
-                               cpu.ecx);
-        rt_ret_stdcall(1, 0);
-        return;
-    }
-    o_006835c0();
+    if (!never_obj) return 0;
+    if (logging()) fprintf(stderr, "recomp: cup_breaks: no fixtures for the cup that waits for ever (0x%x)\n", cpu.ecx);
+    return 1;
 }
 
 /* BraChampCup::start_preliminary_stage 0x427320 (thiscall, no arguments, ret at 0x42741d): it makes the fixtures
