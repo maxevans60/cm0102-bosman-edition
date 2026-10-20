@@ -86,6 +86,10 @@ void season_intl_shift_date(int shift, int *day, int *month0, int *year);
 /* Fills the empty Euro team slots in a season game (season_intl.c): at the seeding and at the draw. */
 void season_intl_euro_fill(uint32_t self);
 
+/* The inter-confederation ties of the World Cup of a year that this run built (season_intl_qual.c): up to max
+ * pairs into teams (two teams each). Gives the pair count. */
+int season_intl_wc_ties(int year, uint32_t *teams, int max);
+
 /* The classes of the code sites (cls of the calls above). */
 enum {
     INTL_WORLD_CUP, INTL_EURO, INTL_CONFED, INTL_COPA, INTL_ACN, INTL_ASIAN, INTL_OFC, INTL_OLYMPICS,
