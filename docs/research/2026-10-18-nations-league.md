@@ -139,6 +139,10 @@ The class's rounds take venue flags 1 (quarter-finals and semi-finals, 0x5e0c7d,
 
 With changing rules off a cup that the start season does not hold stays off (Q398). The module's `early` (make an object a season before a held season) therefore acts only with changing rules on. So a 2004/05 start with changing rules off has no Gold Cup (2004/05 holds none), and a 2006/07 start plays the 2007 edition, then every two years.
 
+### National team stats in the club records
+
+`Club_Records::update_records_for_match` 0x444930 asks each player of a national team for his national team stats record (`PlayerStats::get_category_record` 0x7c3920, category 5 when `database_is_national_team` gives 1, 0x445f7b..0x445f96) and stops at the box "club_records.cpp 794" (0x44602d, text "No player stats for %s playing in %s" at 0x98b6ec) when he has none. A player has that record only when his national team called him up. A 2021 start with Greece (October 2021) stopped there with "No player stats for Argentina playing in 2022 Finalissima": Argentina had no other match in that window, so no squad was called up. Making the Finalissima a finals competition (0x76d940) does not call a squad up: tested, the same box. The record is only read after the call (`player_stats_get_record_value` 0x7c2150 at 0x44653f, 0x446690 and 0x4467f7), so in a season game that one call (return address 0x445f9b) gets an empty record of its own in place of 0 (`season_nl_stats.c`): the player counts with no matches and the default rating. Every other call and the base game keep the original's answer (Q152).
+
 ### Open item
 
 The Copa America of 12 teams of slice 27 takes Mexico and Canada as guests in every year (0x5e2009, 0x5e1ffe). In 2019 and 2021 its dates meet those of the Gold Cup, so two finals can hold one nation at once. Slice 27 owns the Copa America's guests.
