@@ -73,8 +73,8 @@
 #define WHITE 0xffffu
 #define DARK 0x0841u                /* the text in the name boxes */
 #define FILL_ALPHA 77               /* 0.3 of 256 */
-#define BACKDROP 0x0867u            /* the middle panel's fill: (10, 15, 60), the screen colour of the prototype */
-#define BACKDROP_ALPHA 224
+#define BACKDROP 0x0000u            /* the middle panel's fill: black, as the dark panels of the original's table */
+#define BACKDROP_ALPHA 176
 
 #define FONT 2                      /* the original's table font (0x879a4f) */
 #define ROW_PX 19                   /* a row of a list, screen pixels: font 2 is 18 pixels high */
@@ -418,30 +418,45 @@ static void middle(const Sides *s, const Player *p, int x1, int y1, int x2, int 
     if (w2 > value_w) value_w = w2;
     value_w += ROW_PX + 10;
     if (value_w < 60) value_w = 60;
-    int table_w = label_w + 2 * value_w, tx = (x1 + x2 - table_w) / 2;
+    /* Classic mode: when the table does not fit the middle panel, it takes the short axis names and the
+     * value columns share the room that is left. */
+    int table_abbr = 0, tl = label_w;
+    if (tl + 2 * value_w > x2 - x1 - 8) {
+        table_abbr = 1;
+        tl = 0;
+        for (int i = 0; i < COMPARE_AXES; i++) {
+            int w = width_of(axes[i].abbr);
+            if (w > tl) tl = w;
+        }
+        tl += 6;
+        value_w = (x2 - x1 - 8 - tl) / 2;
+    }
+    int table_w = tl + 2 * value_w, tx = (x1 + x2 - table_w) / 2;
     if (tx < x1 + 4) tx = x1 + 4;
     for (int c = 0; c < 2; c++) {
-        int vx = tx + label_w + c * value_w;
+        int vx = tx + tl + c * value_w;
         text_at(vx + 4, ty + 3, vx + ROW_PX - 4, ty + ROW_PX - 4, 0x30, c ? ORANGE : BLUE, 0, 0xc, "", 0, 0);
         text_at(vx + ROW_PX, ty, vx + value_w - 1, ty + ROW_PX - 1, 0, 0, c ? ORANGE : BLUE, 1, c ? n2 : n1, 0, 0);
     }
     for (int i = 0; i < COMPARE_AXES; i++) {
         int y = ty + (i + 1) * ROW_PX;
-        text_at(tx, y, tx + label_w - 1, y + ROW_PX - 1, 0, 0, rd16(g_mem, ITEM_HIGHLIGHT), 1, axes[i].name, 0, 0);
+        text_at(tx, y, tx + tl - 1, y + ROW_PX - 1, 0, 0, rd16(g_mem, ITEM_HIGHLIGHT), 1,
+                table_abbr ? axes[i].abbr : axes[i].name, 0, 0);
         for (int c = 0; c < 2; c++) {
             char v[16];
             compare_value_text(shown.value[c][i], v, sizeof v);
-            int vx = tx + label_w + c * value_w + ROW_PX / 2, mine = shown.value[c][i], theirs = shown.value[!c][i];
+            int vx = tx + tl + c * value_w + ROW_PX / 2, mine = shown.value[c][i], theirs = shown.value[!c][i];
             uint32_t vc = mine < 0 || theirs < 0 ? rd16(g_mem, PALE)
                           : mine > theirs        ? (c ? ORANGE : BLUE)
                           : mine == theirs       ? rd16(g_mem, ITEM_HIGHLIGHT)
                                                  : rd16(g_mem, PALE);
-            text_at(vx, y, vx + 48, y + ROW_PX - 2, 0, 0, vc, 0xc, v, 0, 0);
+            text_at(vx, y, vx + (value_w - ROW_PX / 2 < 48 ? value_w - ROW_PX / 2 : 48), y + ROW_PX - 2, 0, 0, vc, 0xc,
+                    v, 0, 0);
         }
     }
 
     /* The polygon: the largest that leaves room for the axis names round it. When the names leave a
-     * radius under SMALL_PX (classic mode), the polygon gets the short names; the table keeps the names. */
+     * radius under SMALL_PX (classic mode), the polygon gets the short names. */
     int short_w = 0;
     for (int i = 0; i < COMPARE_AXES; i++) {
         int w = width_of(axes[i].abbr);
