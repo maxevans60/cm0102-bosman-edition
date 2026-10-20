@@ -36,6 +36,9 @@ static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup
 extern const SeasonCompDef season_cup_sudamericana, season_cup_recopa, season_cup_suruga_bank,
     season_cup_intercontinental, season_cup_acl_two;
 
+/* Slice 20d (season_divisions.c): the second group of the Greek second tier, a GreSecond object. */
+extern const SeasonCompDef season_div_gre_group;
+
 /* Slice 24, part b (U8, Q364): the Conference League from 2021/22, a new record with a second object of the
  * Uefa_Cup class in the Europe entry 3 (docs/research/2026-10-18-conference-league-object.md). Its record copies
  * the UEFA Cup's continent, nation and colours, and its level (+0x69) is the UEFA Cup's 18: the fixture order
@@ -52,6 +55,7 @@ const SeasonCompDef *const season_comp_defs[] = {
     &season_cup_sudamericana, &season_cup_recopa, &season_cup_suruga_bank, &season_cup_intercontinental,
     &season_cup_acl_two,
     &conference_league,                 /* slice 24 */
+    &season_div_gre_group,              /* slice 20d: the second group of the Greek second tier */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 
@@ -469,7 +473,10 @@ static void grow(void)
         wr32(g_mem, r, (uint32_t)(cn + j));                             /* id = index (doc 1.5) */
         put_name(r + NAME_AT, names[j], 0x34);
         put_name(r + 0x38, d && d->short_name ? d->short_name : names[j], 0x1b);
-        wr16(g_mem, r + 0x69, (uint32_t)(d && d->level ? d->level : 1));
+        /* Slice 20: level -1 copies the level of `like` (a division of the nation takes the rank of the division
+         * it sits beside: the club moves count the tier by it, season_clubs.c). */
+        if (d && d->level < 0 && like) wr16(g_mem, r + 0x69, rd16(g_mem, like + 0x69));
+        else wr16(g_mem, r + 0x69, (uint32_t)(d && d->level > 0 ? d->level : 1));
     }
     /* The friendly records again, blank, as the loader writes them (0x52a060..0x52a1ab). */
     for (int i = 0; i < FRIENDLY_RECORDS; i++) {

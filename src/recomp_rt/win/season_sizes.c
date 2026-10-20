@@ -467,8 +467,15 @@ static void sizes_new_game(int start_year)
     int n = season_change_comps(comps, 512);
     nseen = 0;
     for (int i = 0; i < n && !rt_unwinding; i++) {
+        /* Only the classes whose set_up_rules season_size_wraps.c wraps: those are the leagues that these rules
+         * meet in every later season. Another class keeps its own stages: GerRegional's constructor sets the
+         * stage count +0x2c to 1 (0x5dcc3d) for its South group, and the play-off rules dropped that stage
+         * (+0x30 -1) while its fixtures stayed, so a German start with the regional divisions stopped at
+         * league.cpp 3214 (League::add_result 0x685d30, stage test 0x685ddb..0x685de7) on its first match day
+         * (slice 20, found in 2007 and 2008 starts). */
+        if (!size_file(season_change_file(comps[i]))) continue;
         season_sizes_rules(comps[i]);
-        if (size_file(season_change_file(comps[i]))) note(comps[i]);
+        note(comps[i]);
     }
 }
 

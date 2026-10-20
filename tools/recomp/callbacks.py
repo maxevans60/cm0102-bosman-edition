@@ -127,6 +127,7 @@ CALLBACKS = {
     0x945333: ("558bec81ecf80000", "qsort, cdecl (base, count, width, compare)"),
     0x4B07D0: ("8b4424048b542408", "the compare of GerRegional's predicted positions (passed to qsort)"),
     0x4A2540: ("81ec000200005657", "set a predicted position, thiscall (club, position), ret 8"),
+    0x5EB2B0: ("6aff6829aa950064", "GreSecond::GreSecond, thiscall (year, record), ret 8 (the second Greek group)"),
     0x53FD40: ("81ec080200008b84", "the compare of the Spanish and Portuguese group deals (passed to qsort)"),
 }
 

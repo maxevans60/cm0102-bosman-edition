@@ -9,10 +9,10 @@ The research of 2026-10-19 and 2026-10-20 read the code of each part (one resear
 | Part | Design | Size |
 |---|---|---|
 | 20a Germany | the GerRegional object holds the 3. Liga from 2008/09 | medium to large: 8 wraps and 2 sites |
-| 20b Italy | groups A, B, C in the C1a, C1b and C2a objects; a new start and chain code for Serie A | large |
+| 20b Italy | groups A, B, C in the C1a, C1b and C2a objects; a new start and chain code for Serie A | large: built in a session of its own (branch claude/slice-20b) |
 | 20c Spain, Portugal | Primera Federación and Liga 3 in the Segunda B objects, fewer groups | medium to large |
 | 20d Greece | a second GreSecond object with a new record (slice 26's module), a cup wrap | medium to large |
-| 20e Brazil | 15 state championships with a picker by state, 12 new records | large, a session of its own (reported to the lead) |
+| 20e Brazil | 15 state championships with a picker by state, 12 new records | large: built in a session of its own (branch claude/slice-20e) |
 
 Only a season game (`season_game_changes`) gets any of it. The base game and `RECOMP_SEASON_CODE=off` keep the original (Q152, Q342). `RECOMP_NEW_DIVISIONS=off` is the test switch in a season game, `RECOMP_DIVISION_LOG=1` prints a line for each count and date template.
 
@@ -47,10 +47,55 @@ With changing rules off the start season stays (Q232): a 2008 start plays the 3.
 
 The research of 2026-10-19 found that with the flag off 0x5db7b0 moves a fixed 4 clubs up (0x5db8d8, 0x5db8e8), so a 2. Bundesliga with 2 relegation places would leave the pool at 34 and stop the split. Slice 18 already keeps the 2. Bundesliga's places when its lower division is not a size-table division (`open_neighbour`, commit 6587a7c), so it keeps 4 down. The flag-off test run below checks it.
 
+
+## 20c Spain and Portugal: Primera Federación and Liga 3
+
+### The original
+
+- `create_spanish_comps` 0x837560 makes one `SpaSecondB` object (constructor 0x855f40, record [0x9cf7b8] "Spanish Second Division B") only with the extra division flag (`test byte [edx+0x11c], 4` at 0x837647). Its own table is group 1 (B1 [0x9cf62c], picked by club +0x60, `load_group_clubs` 0x856cd0, 20 at 0x856ce2). Groups 2 to 4 are League_Stage objects built by 0x857210 for slots 0, 1, 2 (constructor 0x85614c, `start_new_season` 0x85712a), 20 clubs each. `SpaSecondB::advance_stage` 0x857150 builds the promotion play-off when +0x30 reaches 3 (0x8571d0).
+- `SpaFirst::start_new_season` 0x84feb0: the chain 0x850700 (Segunda with group 1 and stage slots 0, 1, 2 at 0x8507eb, 0x850818, 0x850846, 0x850874, read with no test), new clubs 0x850300 (pool: Spanish clubs of A Lower Division, 0x850325..0x85036f; relegated rows to A Lower Division at 0x8503e4; a reserve side whose senior side is in Segunda B is passed over, 0x8504c9..0x8504ec) and the group deal 0x850530 (needs exactly 80 clubs, 0x8505da; sorts by 0x53fd40, push at 0x85067f), all before +0x40 + 1 (0x84ff3a).
+- `create_portuguese_comps` 0x8366e0 makes `PorSecondB` (constructor 0x7d1920, record [0x9cf7c0]) only with the flag (0x83694f). Its own table is the North zone (`create_table` 0x7d2400, 20 at 0x7d2412), the Central and South zones are stages built by 0x7d2870 for slots 0 and 1 (exactly 20: 0x7d2965, 0x7d29ff; League_Stage of 20 at 0x7d2ab2). `PorPrm::start_new_season` 0x7cf9e0 runs the chain 0x7cfbf0 (stage slots read at 0x7cfcdd, 0x7cfd0a), new clubs 0x7cff70 (pool: Portuguese clubs of the Third Division [0x9cf620] or A Lower Division, 0x7d0031..0x7d005b; relegated rows to the Third Division at 0x7d010f) and the zone deal 0x7d0210 (sort 0x53fd40 pushed at 0x7d02c5).
+- `League::update_for_date` 0x6847c0 calls `advance_stage` (vtable +0x28) while +0x30 is below +0x2c - 1 (0x6849d1..0x6849e3).
+
+### What the game does
+
+In a season whose row has the new form (spa_second_b 40 clubs from 2021/22, por_second_b 24 or 20 from 2021/22), with the flag (Q363; no flag, no object, as in the original):
+
+1. **Two groups.** The wraps of the group builders 0x857210 and 0x7d2870 build slot 0 only, clear the other slots (`start_new_season` deletes the stages and keeps the pointers, 0x856fd6, 0x7d26f6) and set the stage count +0x2c to 1, so no advance_stage runs: no play-off stage (Spain's 0x857570 reads four groups).
+2. **Sizes.** Spain keeps 20 a group. Portugal takes the row's half (12, then 10) at 0x7d2412, 0x7d2965, 0x7d29ff and 0x7d2ab2 (`rt_por_group_clubs`, `rt_por_stage_clubs`); the class never resets +0xa7, so a new count resets it.
+3. **Places** (wraps of `set_up_rules` 0x856ef0, 0x7d2610, and the stage after it is built). Spain: the group winner and the play-off place (Q521) up, 2 a group, 5 down a group. Portugal: the winners of the promotion series (Q521), 1 a series, the row's down shared. The division above (Segunda, Liga Portugal 2) relegates as many as the tier sends up (`season_divisions_rules`).
+4. **Season change.** Wraps of the chains (the calls less the cleared slots), the new clubs (the shared exchange of 20a: relegated rows to the original's division, at the change from more groups the clubs below the row's count leave by table position, then the pool fills to the row's count) and the deals (sort by 0x53fd40; the first half, the southern clubs, to the second group, the rest to the first: Spain B2 and B1, Portugal Central and North).
+5. **Club moves at a new game.** Primera Federación Group 1 and 2 go to B1 and B2, Liga 3 Série A and B to North and Central (`make_clubs.py`). The groups that end (B3, B4, South) keep their database clubs, unplayed (Q527): wraps of the first-season merges (0x856cd0 at 0x856d0e..0x856d3a, 0x7d2400 at 0x7d243e..0x7d2462) leave them out of the tier. The cups need them: `PorCup::collect_entrants` 0x7ce220 counts the three zones (0x7ce2d6..0x7ce2f0), and a 2021/22 start whose South zone had no clubs stopped at por_cup.cpp 74 (box at 0x7cdb19). Without the flag the lists do not apply.
+
+Spain 2020/21 (5 groups split into 10 subgroups, 102 clubs) keeps the database's 4 groups of 20 (Q524). The rules report keeps a `clubs` line for these group classes (the object's table holds one group).
+
+## 20d Greece: the second group of the second tier
+
+### The original
+
+- `create_greek_comps` 0x8347c0 makes GrePrm, GreSecond, GreCup and GreSuper with no extra division flag (0x834965..0x834b02). Greece is entry 18 of the league table (the function is stored at 0xb64278).
+- `GreSecond::create_table` 0x5ebcb0 takes the clubs of the key id [0x9cf870] (0x5ebd54..0x5ebd64), 14 (0x5ebcc2, table of 14 rows at 0x5ebcbb). The constructor 0x5eb2b0 calls it directly (0x5eb35e).
+- `GrePrm::start_new_season` 0x5eaf50: the chain 0x689c20 (GrePrm with [0x9cf870] at 0x689c60), then 0x5eb120 (2 clubs of the Lower Division [0x9cf874] up by 0x4afbd0 and 0x6830b0, the relegated rows down by 0x6831a0).
+- `GreCup::collect_entrants` 0x5e9a80 needs 44: 16 Lower Division clubs, the National B and the National A Division. The group keeps its own record, so the cup stays as it is.
+- 0x689c80 marks both rows of a moved pair with 0xff (0x689df4, 0x689dff), so a second call against a second lower division moves no club twice.
+
+### What the game does
+
+1. **Object.** A def of slice 26's module (`season_div_gre_group`): comp "league group 2", entry 18, a new record "Greek Second Division Group 2" like the National B Division (its level too: a def level of -1 copies it, a small block in `season_comps.c`), and a GreSecond object (0xee bytes, constructor 0x5eb2b0). Its rows take comp_file gre_second (Q520), so it is the second gre_second object of the report and the names table; the group names are "Football League North/South" and "Super League 2 North/South" (Q525).
+2. **Clubs.** A wrap of 0x5ebcb0 gives the key [0x9cf870] the group's record id while the original runs for the group's object. The class holds 14, so the group holds at most 14 (17 in 2021/22 and 15 in 2022/23 are capped, Q526). The club moves fill the new record from the lists (`season_clubs.c` takes a record with no database club when the module adds it). A group that starts later in a game takes its clubs from the Lower Division (the original's pool) before its constructor runs.
+3. **Places.** The group winner goes up (the joint play-offs have no code, Q521); the row's down. The National A Division relegates the promotions of both groups.
+4. **Season change.** A wrap of 0x5eb120: the group's exchange with GrePrm (a second 0x689c80 call), its relegated rows to the Lower Division, then its clubs for the next season from the Lower Division, or all to the Lower Division when the next season has no group. Then the original for the National B Division.
+5. **Gaps.** The rule kind "divisions" keeps the group idle (`season_change_skip`) in the seasons with no group, and at its return sets +0x40 to the year before, so `start_new_season` makes the new dates (the third case of `season_comps.h`).
+
 ## Decisions
 
 - **Q520:** a new division that lives in the object of an old one takes that object's comp_file in the rules table from its first season; the old division's rows of those seasons become `n/a` with a note. Done for the 3. Liga (as Q291 does for Spain and Portugal).
 - **Q521:** a play-off against the division above, which slice 19's code cannot play, becomes a direct place up and down (slice 19's nearest form). 3. Liga: 3 up, 2. Bundesliga 3 down.
+- **Q523:** the pool of new clubs of a new tier 3 takes the nation's clubs with no division too (Q331: promoted clubs come from that pool), besides the original's pool divisions.
+- **Q524:** Spain 2020/21 keeps the database's 4 groups of 20; the code holds no 10 subgroups.
+- **Q525:** the two Greek groups are called North and South in their names ("Super League 2 North"), so the two divisions do not show the same name.
+- **Q526:** the second Greek group holds at most 14 clubs (the GreSecond table); the real 17 and 15 stay `clubs` lines of the report.
+- **Q527:** at a new game the Spanish and Portuguese groups that end keep their database clubs, unplayed, as the original keeps the tier 3 divisions of a nation without the flag; the cups take their entrants from them (a deviation from Q290, which would leave the Portuguese Cup short).
 - **Q522:** clubs relegated from the 3. Liga go to A Lower Division, as the original's Regionalliga does, so the German Cup still takes them. The clubs of the ended South group at a new game go to no division (Q290).
 
 ## Tests
