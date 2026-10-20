@@ -56,7 +56,7 @@ LINES = {
     "2023": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32",
              "world_cup 2026 seeds on 1 April", "wc play-off 2026: seeds", "wc play-off 2026: finals",
              "wc qualifying 2026: path A", "wc qualifying 2026: Europe draws", "world_cup 2026 host",
-             "wc qualifying 2026: Europe pool of"],
+             "wc qualifying 2026: Europe pool of 54 nations (Russia out"],
     "2025": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32",
              "world_cup 2030 has 12 stages and 48 slots", "world_cup 2030 host Uruguay",
              "wc qualifying 2030: Europe draws"],
