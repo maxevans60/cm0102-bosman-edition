@@ -303,14 +303,13 @@ static void save_file(uint32_t rec, char *out, size_t room)
     snprintf(out, room, "%s_%d.tmp", name, (int)rd32(g_mem, rec));
 }
 
-void o_008386f0(void);
-
-/* build_comp_object_table, cdecl, called by create_game (0x829640) and the load (0x82c5f6). At a load the
+/* build_comp_object_table, cdecl, called by create_game (0x829640) and the load (0x82c5f6). Its one wrap is in
+ * season_names.c (slices 15 and 26 both need it); it calls this before the original. At a load the
  * creators made only the original's objects (key_nation_create_all_comps 0x669180 at 0x82c5aa), so each def
  * whose object's file came out of the save is made again here, before the original fills [0xadadfc] from the
  * entry arrays. The constructor reads its state from that file. Inference: the temp files are in the user
  * folder, as the game's own *.tmp files of a run are. */
-RT_WRAP(008386f0, build_comp_object_table)
+void season_comps_before_comp_table(void)
 {
     if (season_comps_on() && !season_change_is_creating()) {
         reset();
@@ -329,7 +328,6 @@ RT_WRAP(008386f0, build_comp_object_table)
             if (rt_unwinding) return;
         }
     }
-    o_008386f0();
 }
 
 /* ---- New records (docs/research/2026-10-18-new-comp-records.md) ----

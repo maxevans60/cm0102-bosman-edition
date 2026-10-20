@@ -144,4 +144,8 @@ int season_comps_records_stale(void);
 /* season_change_reset calls it: before a new game, a load and the end of a game. */
 void season_comps_reset(void);
 
+/* The load step of build_comp_object_table 0x8386f0 (each def's object made again from its save file). The one wrap
+ * of 0x8386f0 is in season_names.c and calls this before the original. */
+void season_comps_before_comp_table(void);
+
 #endif
