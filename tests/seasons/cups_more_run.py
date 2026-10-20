@@ -27,8 +27,10 @@ The runs:
             Republic of Ireland are not in the 16 rows that the steps click): the Turkish Cup has 4 groups after 3
             rounds, the Turkish Super Cup is made with two clubs (the Russian one of March 2010 is past), the
             All-Ireland cup with 12 clubs
-    r2003   start run, the October 2003 database, changing rules off, Select All without France: the Russian Premier
-            League Cup is made with 16 clubs
+    r2002   start run, 2002/03 (the original data), changing rules off, Select All without France, to January 2003
+            (time limit 3000 s): Russia's 2003 season starts in late December 2002, and its entry hook makes the
+            Russian Premier League Cup of 2003 (first round in March 2003, the row of 2002/03) with 16 clubs and the
+            Russian Super Cup of March 2003 with two clubs (log lines)
 
 A run starts a game only when fewer than 15 games run on this Mac and the load of the last minute is below 24 (Max's
 limit), and its game stops when the script stops (SIGTERM, SIGINT, SIGHUP). Run at most three of these scripts at
@@ -158,14 +160,9 @@ def check_t2010(lines, log, fails, name):
     need_made(lines, "new_all_ireland", fails, name, 12)
 
 
-def check_r2003(lines, log, fails, name):
-    need_made(lines, "new_rus_lge_cup", fails, name, 16)
-
-
-def database(prefix):
-    """The database folder whose name starts with prefix (some folder names hold more words)."""
-    names = sorted(n for n in os.listdir(DB) if n == prefix or n.startswith(prefix + " ")) if os.path.isdir(DB) else []
-    return os.path.join(DB, names[0] if names else prefix)
+def check_r2002(lines, log, fails, name):
+    need_log(log, "new cups: new_rus_lge_cup 2003 with 16 clubs", fails, name)
+    need_log(log, "new cups: new_rus_super 2003 with 2 clubs", fails, name)
 
 
 # name: (start year, database folder, changing rules, last season, nations, start run, time limit in seconds, check,
@@ -180,7 +177,7 @@ RUNS = {
               {"extra": ["conference"]}),
     "t2010": (2010, os.path.join(DB, "September 2010 ODB"), "off", 2010, ALL_BUT_FRANCE, True, 1800, check_t2010,
               {}),
-    "r2003": (2003, database("October 2003"), "off", 2003, ALL_BUT_FRANCE, True, 1800, check_r2003, {}),
+    "r2002": (2002, None, "off", 2002, ALL_BUT_FRANCE, True, 3000, check_r2002, {}),
 }
 
 
