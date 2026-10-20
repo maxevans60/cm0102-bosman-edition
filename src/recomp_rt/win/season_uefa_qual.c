@@ -293,8 +293,11 @@ static int make_layout(const SeasonUefa *r, char comp, Layout *L, uint32_t cl)
     L->direct_first = slot;
     int direct = L->count[group_code(comp)];
     if (comp == 'c') {
-        if (direct < DIRECT_IN_LIST || direct + cp_win + lp_win != 32) {
-            fprintf(stderr, "recomp: uefa: CL groups: %d direct and %d winners, not 32\n", direct, cp_win + lp_win);
+        /* Slice 25: the league phase has 36 clubs (2024/25 on), the group stage 32. */
+        int group = season_uefa_cl_round(r, "Groups");
+        if (direct < DIRECT_IN_LIST || direct + cp_win + lp_win != group) {
+            fprintf(stderr, "recomp: uefa: CL groups: %d direct and %d winners, not %d\n", direct, cp_win + lp_win,
+                    group);
             return 0;
         }
         L->slots = slot + direct - DIRECT_IN_LIST;
@@ -1181,4 +1184,134 @@ int season_uefa_report_clubs(uint32_t obj)
     int n = 0, slots = (int16_t)rd16(g_mem, obj + 0x3e);
     for (int i = 0; readable(e) && i < slots; i++) n += readable(rd32(g_mem, e + ENTRY * (uint32_t)i));
     return n;
+}
+
+/* ---- The Champions League group draw never leaves a group row empty (0.6.0, box Database 13126) ----
+ *
+ * The original. EuropeanCup::draw_phase1_groups 0x585290 takes the 32 group clubs (list slots 0 to 15, 0x58535a..
+ * 0x585375, and the entries with +5 = 1, 0x585383..0x5853b8), sorts them by entry code up and reputation down
+ * (qsort 0x945333 with 0x586f60, 0x585435..0x58543f; pots of 8 by position), and pairs each club with the next
+ * club of the same nation that has no partner (0x58544c..0x585496). Then for each pot (0x585528..0x5856c3) it
+ * takes the clubs of the pot in random order (0x90cfc0 at 0x585564), gives a club with no half (+8 = 0) the half 2
+ * or 1 by the places that are left in each half of this pot (c2 at [esp+0x12], c1 at [esp+0x13], 4 each at the
+ * start less the clubs that already have a half: 0x585528..0x585550; the random number below c2 + c1 at 0x5855b7,
+ * below c2 is half 2, 0x5855bf..0x5855d1), gives the partner the other half (0x5855e1..0x585656), and puts the club
+ * in the first free slot of its pot in the four groups of its half (0x58565a..0x585699). A pot has 4 slots in
+ * each half. A club whose half is full is not put anywhere, and its group row stays empty (the pointer of the
+ * entry is zeroed only when a club is put, 0x585693). The group draw news then reads the nation of that club
+ * (0x5857f4, 0x9058b0, Database.cpp 13126 at 0x53b407): the box. The halves of the partners of an earlier pot
+ * come before the pot is drawn: when 5 clubs of a pot have a partner in an earlier pot, and that partner has the
+ * same half for all 5, the pot has 5 clubs for the 4 slots of a half.
+ *
+ * This file. For a Champions League of the access list, before the draw: the same sort (the game's qsort) and
+ * pairs, and when a pot has 5 or more clubs with a partner in an earlier pot, a choice of the half of each club
+ * (the partners in opposite halves, 4 of each half in every pot), found by search. The hook on the random function
+ * (win.h) then returns the number that gives that half at the call at 0x5855b7 (return address 0x5855bc). The
+ * clubs, the other random numbers and the count of calls stay the original's. A draw that cannot fail runs as the
+ * original's. */
+#define DG_RET_HALF 0x005855bcu          /* after the call of 0x90cfc0 at 0x5855b7 */
+#define F_GAME_QSORT 0x00945333u         /* cdecl (base, count, size, compare) */
+#define F_SEED_COMPARE 0x00586f60u
+#define DG_N 32
+
+static int dg_on, dg_count;
+static uint32_t dg_club[DG_N];
+static int8_t dg_half[DG_N];
+
+static uint32_t dg_hook(uint32_t esp, uint32_t edi, uint32_t result)
+{
+    if (!dg_on || rd32(g_mem, esp) != DG_RET_HALF) return result;
+    /* The locals of the draw as the instructions at 0x5855aa..0x5855b6 read them: esp + 8 is their esp. */
+    int c2 = (int8_t)g_mem[esp + 8 + 0x12], c1 = (int8_t)g_mem[esp + 8 + 0x13];
+    uint32_t club = readable(edi) ? rd32(g_mem, edi) : 0;
+    int want = 0;
+    for (int i = 0; i < dg_count; i++)
+        if (dg_club[i] == club) want = dg_half[i];
+    if (want == 2 && c2 > 0) return 0;
+    if (want == 1 && c1 > 0) return c2 > 0 ? (uint32_t)c2 : 0;
+    return result;
+}
+
+/* The search for halves: partners opposite, at most 4 of each half in a pot. */
+static int dg_search(const int *partner, int8_t *half, int *used, int i, long *steps)
+{
+    if (i == DG_N) return 1;
+    if (++*steps > 2000000L) return 0;
+    int pot = i / 8;
+    for (int h = 1; h <= 2; h++) {
+        if (partner[i] >= 0 && partner[i] < i && half[partner[i]] == h) continue;
+        if (used[pot * 3 + h] >= 4) continue;
+        half[i] = (int8_t)h;
+        used[pot * 3 + h]++;
+        if (dg_search(partner, half, used, i + 1, steps)) return 1;
+        used[pot * 3 + h]--;
+        half[i] = 0;
+    }
+    return 0;
+}
+
+void o_00585290(void);
+
+RT_WRAP(00585290, cl_group_draw_guard)
+{
+    uint32_t cl = cpu.ecx;
+    dg_on = 0;
+    dg_count = 0;
+    if (readable(cl) && rd32(g_mem, cl) == CL_VTABLE && access_row_of(cl)) {
+        uint32_t list = rd32(g_mem, cl + 0x14), e = rd32(g_mem, cl + 0xa7);
+        int slots = (int16_t)rd16(g_mem, cl + 0x3e), n = 0;
+        uint32_t club[DG_N];
+        for (int i = 0; i < 16 && readable(list) && n < DG_N; i++) club[n++] = rd32(g_mem, list + ENTRY * (uint32_t)i);
+        for (int i = 0; readable(e) && i < slots && n < DG_N; i++)
+            if (g_mem[e + ENTRY * (uint32_t)i + 5] == 1) club[n++] = rd32(g_mem, e + ENTRY * (uint32_t)i);
+        int ok = n == DG_N;
+        for (int i = 0; ok && i < n; i++) ok = readable(club[i]) && readable(rd32(g_mem, club[i] + 0x53));
+        /* The 9-byte entries of the draw (club, partner, half) go on the game's stack, below the call: no
+         * allocation, so the heap of the game keeps its layout (Q152). */
+        uint32_t saved_esp = cpu.esp, buf = 0;
+        if (ok) {
+            cpu.esp = (cpu.esp - 9u * DG_N - 16u) & ~15u;
+            buf = cpu.esp;
+            for (int i = 0; i < 9 * DG_N; i++) g_mem[buf + (uint32_t)i] = 0;
+        }
+        if (buf) {
+            for (int i = 0; i < DG_N; i++) wr32(g_mem, buf + 9u * (uint32_t)i, club[i]);
+            uint32_t q[4] = {buf, DG_N, 9, F_SEED_COMPARE};
+            call_cdecl(F_GAME_QSORT, 4, q);
+            if (rt_unwinding) return;
+            int partner[DG_N], risky = 0, from_earlier[4] = {0, 0, 0, 0};
+            uint32_t nat[DG_N];
+            for (int i = 0; i < DG_N; i++) {
+                club[i] = rd32(g_mem, buf + 9u * (uint32_t)i);
+                nat[i] = rd32(g_mem, club[i] + 0x53);
+                partner[i] = -1;
+            }
+            for (int i = 0; i < DG_N; i++)                  /* 0x58544c..0x585496 */
+                for (int j = i + 1; partner[i] < 0 && j < DG_N; j++)
+                    if (partner[j] < 0 && nat[j] == nat[i]) partner[i] = j, partner[j] = i;
+            for (int i = 0; i < DG_N; i++)
+                if (partner[i] >= 0 && partner[i] / 8 < i / 8 && ++from_earlier[i / 8] >= 5) risky = 1;
+            cpu.esp = saved_esp;
+            if (getenv("RECOMP_DRAW_GUARD") && !strcmp(getenv("RECOMP_DRAW_GUARD"), "force")) risky = 1;   /* a test run */
+            if (risky) {
+                int8_t half[DG_N] = {0};
+                int used[12] = {0};
+                long steps = 0;
+                if (dg_search(partner, half, used, 0, &steps)) {
+                    memcpy(dg_club, club, sizeof club);
+                    memcpy(dg_half, half, sizeof half);
+                    dg_count = DG_N;
+                    dg_on = 1;
+                    win_random_hook = dg_hook;
+                    fprintf(stderr, "recomp: uefa: Champions League group draw: 5 or more clubs of a pot have a partner "
+                            "in an earlier pot, the halves of the 32 clubs are set\n");
+                } else {
+                    fprintf(stderr, "recomp: uefa: Champions League group draw: no balanced halves for the 32 clubs\n");
+                }
+            }
+        }
+    }
+    o_00585290();
+    dg_on = 0;
+    win_random_hook = NULL;
 }

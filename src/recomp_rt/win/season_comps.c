@@ -24,6 +24,10 @@
 
 /* ---- The competitions: each slice adds its lines here, in its own block ---- */
 
+/* Slice 28 (season_nl.c, season_gold_cup.c): the UEFA and CONCACAF Nations Leagues, the CONCACAF Gold Cup and the
+ * Finalissima. */
+extern const SeasonCompDef season_nl_comp, season_nl_concacaf_comp, season_gold_cup_comp, season_finalissima_comp;
+
 /* Test only (RECOMP_SEASON_COMPS_TEST=1, tests/seasons/season_comps_check.py): a new record "Test New Cup" with an
  * object of the Inter-American Cup class (Inter_Amer_Cup 0x632080, thiscall (year, record), ret 8, new 0xb2,
  * sweep-europe 2.1) in entry 2. It takes the rows of the Intercontinental Cup, so it is made in 2001/02 to
@@ -55,13 +59,16 @@ const SeasonCompDef *const season_comp_defs[] = {
     &season_cup_sudamericana, &season_cup_recopa, &season_cup_suruga_bank, &season_cup_intercontinental,
     &season_cup_acl_two,
     &conference_league,                 /* slice 24 */
+    &season_nl_comp,                    /* slice 28 */
+    &season_nl_concacaf_comp,           /* slice 28 part b */
+    &season_gold_cup_comp,              /* slice 28 part b */
+    &season_finalissima_comp,           /* slice 28 part b */
     &season_div_gre_group,              /* slice 20d: the second group of the Greek second tier */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 
 static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
 {
-    (void)d;
     (void)loading;
     Cpu saved = cpu;
     uint32_t size[1] = {0xb2};
@@ -72,6 +79,11 @@ static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
     rt_callback(0x632080u, 2, args);
     if (rt_unwinding) return 0;
     cpu = saved;
+    /* A vtable copy, as each real def's object has one (season_club_cups.c): with the original's vtable the names
+     * kind of slice 15 sees a second Inter-American Cup (class_of in season_names.c) and gives the record that
+     * class's name ("Copa Interamericana"), not the name of the def's rows. */
+    uint32_t vt = season_comps_vtable(d, rd32(g_mem, obj), 40);
+    if (vt) wr32(g_mem, obj, vt);
     return obj;
 }
 
@@ -228,19 +240,51 @@ uint32_t season_comps_top_club(uint32_t continent_key, const uint32_t *skip, int
 }
 
 /* One copy per def for the whole run (runtime memory from win_static_alloc, never freed): a later call for the
- * same def gives the same copy, made again from the class's vtable. */
+ * same def gives the same copy, made again from the class's vtable. Slice 28: each copy and the class of its
+ * original are kept for the rules report (season_comps_class). */
+#define MAX_COPIES MAX_DEFS
+static struct { uint32_t copy, original; } copies[MAX_COPIES];
+static int copy_count;
+
 uint32_t season_comps_vtable(const SeasonCompDef *d, uint32_t vtable, int slots)
 {
-    static uint32_t copies[MAX_DEFS], sizes[MAX_DEFS];
+    static uint32_t made[MAX_DEFS], sizes[MAX_DEFS];
     int i = def_index(d);
     if (i < 0 || i >= MAX_DEFS || slots <= 0 || slots > 128) return 0;
-    if (!copies[i] || sizes[i] < (uint32_t)slots) {
-        copies[i] = win_static_alloc(4u * (uint32_t)slots);
-        sizes[i] = copies[i] ? (uint32_t)slots : 0;
+    if (!made[i] || sizes[i] < (uint32_t)slots) {
+        made[i] = win_static_alloc(4u * (uint32_t)slots);
+        sizes[i] = made[i] ? (uint32_t)slots : 0;
     }
-    if (!copies[i]) return 0;
-    memcpy(g_mem + copies[i], g_mem + vtable, 4u * (size_t)slots);
-    return copies[i];
+    if (!made[i]) return 0;
+    memcpy(g_mem + made[i], g_mem + vtable, 4u * (size_t)slots);
+    int k = 0;
+    while (k < copy_count && copies[k].copy != made[i]) k++;
+    if (k < MAX_COPIES) {
+        copies[k].copy = made[i];
+        copies[k].original = vtable;
+        if (k == copy_count) copy_count++;
+    }
+    return made[i];
+}
+
+/* Slice 28: the class of a vtable copy for the rules report and the season change: the original's class and
+ * kind, with the file of the def whose object holds the copy (season_comps.h, "Rules for the slices"). */
+const SeasonCompClass *season_comps_class(uint32_t vtable)
+{
+    static SeasonCompClass out;
+    for (int i = 0; i < copy_count; i++) {
+        if (copies[i].copy != vtable) continue;
+        const SeasonCompClass *c = NULL;
+        for (int k = 0; k < season_comp_class_count; k++)
+            if (season_comp_classes[k].vtable == copies[i].original) c = &season_comp_classes[k];
+        if (!c) return NULL;
+        out = *c;
+        out.vtable = vtable;
+        for (int d = 0; d < season_comp_def_count && d < MAX_DEFS; d++)
+            if (season_comp_defs[d] && objects[d] && rd32(g_mem, objects[d]) == vtable) out.file = season_comp_defs[d]->file;
+        return &out;
+    }
+    return NULL;
 }
 
 void season_comps_set_slot(uint32_t vtable, int slot, const char *name, void (*fn)(void))
@@ -306,7 +350,11 @@ static void comps_entry(const SeasonChange *c)
     if (!season_comps_on() || !entry_in_game(c->entry)) return;
     for (int i = 0; i < season_comp_def_count && i < MAX_DEFS; i++) {
         const SeasonCompDef *d = def_at(i);
-        if (!d || d->entry != c->entry || objects[i] || season_comps_held(d->comp, c->season) != 1) continue;
+        if (!d || d->entry != c->entry || objects[i]) continue;
+        if (season_comps_held(d->comp, c->season) != 1 &&
+            !(d->early && season_changing_rules() && season_comps_held(d->comp, c->season + 1) == 1))
+            continue;   /* slice 28: `early`, only with changing rules on (Q398: with them off a cup that the start
+                         * season does not hold stays off) */
         uint32_t obj = make(d, i, c->season, 0);
         if (!obj) continue;
         char name[64];
@@ -417,6 +465,7 @@ static int wanted(const char (*have)[52], int have_count, char (*names)[52])
         const SeasonCompDef *d = def_at(i);
         if (!d || !d->like || !d->record) continue;
         int h = season_comps_held(d->comp, start);
+        if (h == 0 && d->early && rules && season_comps_held(d->comp, start + 1) == 1) h = 1;   /* slice 28 (Q398) */
         if (h < 0 || (!h && (!rules || season_comps_next_edition(d->comp, start) == NEVER))) continue;  /* Q232 */
         int known = 0;
         for (int j = 0; j < have_count; j++)

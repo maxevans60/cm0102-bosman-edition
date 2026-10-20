@@ -804,11 +804,16 @@ void win_game_work(void) { work_count++; }
 
 void o_0090cfc0(void);
 
-/* The game's random function random(n), 0x90cfc0: noted as game work for idle_rest only. */
+uint32_t (*win_random_hook)(uint32_t esp, uint32_t edi, uint32_t result);
+
+/* The game's random function random(n), 0x90cfc0: noted as game work for idle_rest only. The hook (win.h) can
+ * replace the result of a call from one place of the game's code; it is NULL in the base game. */
 RT_WRAP(0090cfc0, game_random)
 {
     win_game_work();
+    uint32_t esp = cpu.esp, edi = cpu.edi;
     o_0090cfc0();
+    if (win_random_hook && !rt_unwinding) cpu.eax = win_random_hook(esp, edi, cpu.eax);
 }
 
 static void print_sleep_count(void) { fprintf(stderr, "recomp: idle sleeps %llu\n", (unsigned long long)sleep_count); }

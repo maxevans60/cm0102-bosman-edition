@@ -41,5 +41,11 @@ const SeasonRoundName season_round_name_rows[] = {
     {"new_conference_league", 30, 2021, 4, "KO Play-offs"},
     {"new_conference_league", 40, 2021, 3, "Round of 16"},
     {"new_conference_league", 40, 2021, 4, "Rnd of 16"},
+    {"european_cup", 10, 2024, 3, "Knockout Phase Play-offs"},
+    {"european_cup", 10, 2024, 4, "KO Play-offs"},
+    {"uefa_cup", 30, 2024, 3, "Knockout Phase Play-offs"},
+    {"uefa_cup", 30, 2024, 4, "KO Play-offs"},
+    {"new_conference_league", 30, 2024, 3, "Knockout Phase Play-offs"},
+    {"new_conference_league", 30, 2024, 4, "KO Play-offs"},
 };
 const int season_round_name_count = (int)(sizeof season_round_name_rows / sizeof season_round_name_rows[0]);

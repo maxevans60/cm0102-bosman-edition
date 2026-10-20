@@ -477,10 +477,55 @@ static int fd_of(uint32_t h)
     return fd_used[i] ? fds[i] : -1;
 }
 
-int win_is_file_handle(uint32_t h) { return fd_of(h) >= 0; }
+/* Memory files (0.6.0 slice 15b): a handle whose fds entry is MEM_FD reads mem_file[mem_of[i]] at mem_pos[i]. */
+#define MEM_FD (-2)
+#define MAX_MEM_FILES 32
+typedef struct { char path[1100]; const uint8_t *data; size_t size; } MemFile;
+static MemFile mem_file[MAX_MEM_FILES];
+static int mem_files;
+static int mem_of[MAX_FILES];
+static size_t mem_pos[MAX_FILES];
+
+void win_memory_file(const char *host_path, const uint8_t *data, size_t size)
+{
+    if (mem_files == MAX_MEM_FILES || strlen(host_path) >= sizeof mem_file[0].path) rt_fatal("too many memory files");
+    snprintf(mem_file[mem_files].path, sizeof mem_file[0].path, "%s", host_path);
+    mem_file[mem_files].data = data;
+    mem_file[mem_files].size = size;
+    mem_files++;
+}
+
+void win_memory_files_clear(void)
+{
+    for (uint32_t i = 0; i < MAX_FILES; i++)
+        if (fd_used[i] && fds[i] == MEM_FD) fd_used[i] = 0;
+    mem_files = 0;
+}
+
+static int mem_find(const char *host)
+{
+    for (int m = 0; m < mem_files; m++)
+        if (!strcasecmp(mem_file[m].path, host)) return m;
+    return -1;
+}
+
+/* The slot of a memory file handle, or -1. */
+static int mem_slot(uint32_t h)
+{
+    if (h < FILE_BASE || h >= FILE_BASE + 4 * MAX_FILES || (h & 3)) return -1;
+    uint32_t i = (h - FILE_BASE) / 4;
+    return fd_used[i] && fds[i] == MEM_FD ? (int)i : -1;
+}
+
+int win_is_file_handle(uint32_t h) { return fd_of(h) >= 0 || mem_slot(h) >= 0; }
 
 int win_close_file(uint32_t h)
 {
+    int m = mem_slot(h);
+    if (m >= 0) {
+        fd_used[m] = 0;
+        return 1;
+    }
     int fd = fd_of(h);
     if (fd < 0) return 0;
     host_close(fd);
@@ -543,6 +588,21 @@ RT_IMPORT(CreateFileA)
         if (disposition == 5 && !in_u) flags |= O_CREAT;
         if (in_u && (disposition == 2 || disposition == 5)) save_backup(h, u, 1);
     }
+    int mem = write_intent ? -1 : mem_find(target);
+    if (mem >= 0) {
+        for (uint32_t i = 0; i < MAX_FILES; i++) {
+            if (!fd_used[i]) {
+                fd_used[i] = 1;
+                fds[i] = MEM_FD;
+                mem_of[i] = mem;
+                mem_pos[i] = 0;
+                win_last_error = 0;
+                rt_ret_stdcall(FILE_BASE + 4 * i, 7);
+                return;
+            }
+        }
+        rt_fatal("too many open files");
+    }
     int fd = host_open(target, flags, 0644);
     WIN_TRACE("CreateFileA(%s -> %s, %#x, %u) = %d\n", name, target, access, disposition, fd);
     if (fd < 0) {
@@ -566,9 +626,15 @@ RT_IMPORT(CreateFileA)
 RT_IMPORT(ReadFile)
 {
     uint32_t h = rt_arg(0), buf = rt_arg(1), count = rt_arg(2), done = rt_arg(3);
-    int fd = fd_of(h);
+    int fd = fd_of(h), m = mem_slot(h);
     uint32_t got = 0;
-    if (fd >= 0) {
+    if (m >= 0) {
+        const MemFile *f = &mem_file[mem_of[m]];
+        size_t left = mem_pos[m] < f->size ? f->size - mem_pos[m] : 0;
+        got = count < left ? count : (uint32_t)left;
+        memcpy(g_mem + buf, f->data + mem_pos[m], got);
+        mem_pos[m] += got;
+    } else if (fd >= 0) {
         while (got < count) {
             long r = host_read(fd, g_mem + buf + got, count - got);
             if (r <= 0) break;
@@ -613,7 +679,21 @@ RT_IMPORT(WriteFile)
 RT_IMPORT(SetFilePointer)
 {
     uint32_t h = rt_arg(0), low = rt_arg(1), high_at = rt_arg(2), method = rt_arg(3);
-    int fd = fd_of(h);
+    int fd = fd_of(h), m = mem_slot(h);
+    if (m >= 0) {
+        int64_t off = high_at ? (int64_t)((uint64_t)rd32(g_mem, high_at) << 32 | low) : (int64_t)(int32_t)low;
+        int64_t base = method == 0 ? 0 : method == 1 ? (int64_t)mem_pos[m] : (int64_t)mem_file[mem_of[m]].size;
+        if (base + off < 0) {
+            win_last_error = 131;                   /* ERROR_NEGATIVE_SEEK */
+            rt_ret_stdcall(0xffffffffu, 4);
+            return;
+        }
+        mem_pos[m] = (size_t)(base + off);
+        if (high_at) wr32(g_mem, high_at, (uint32_t)((uint64_t)mem_pos[m] >> 32));
+        win_last_error = 0;
+        rt_ret_stdcall((uint32_t)mem_pos[m], 4);
+        return;
+    }
     if (fd < 0) {
         win_last_error = ERROR_INVALID_HANDLE;
         rt_ret_stdcall(0xffffffffu, 4);
@@ -644,7 +724,7 @@ RT_IMPORT(GetFileType)
 {
     uint32_t h = rt_arg(0);
     if (is_std(h)) { rt_ret_stdcall(2, 1); return; }      /* FILE_TYPE_CHAR */
-    if (fd_of(h) >= 0) { rt_ret_stdcall(1, 1); return; }  /* FILE_TYPE_DISK */
+    if (win_is_file_handle(h)) { rt_ret_stdcall(1, 1); return; }  /* FILE_TYPE_DISK */
     win_last_error = ERROR_INVALID_HANDLE;
     rt_ret_stdcall(0, 1);
 }
