@@ -9,7 +9,7 @@ Usage:
         database of the run)
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
-        [--extra conference,regional,c2]
+        [--extra conference,regional,c2,spain,portugal]
         [--keep <folder>] [--timeout s] [--start-only] [--update-expected] [--changing-rules on|off]
         plays the season jump, then compares its report
 
@@ -110,6 +110,7 @@ RECORD = 0x6b
 NATION_ROWS = ["Argentina", "Australia", "Belgium", "Brazil", "Croatia", "Denmark", "England", "Finland", "France",
                "Germany", "Greece", "Holland", "Italy", "Japan", "Northern Ireland", "Norway"]
 EXTRA = {"conference": 320, "regional": 385, "c2": 451}     # y of the row; the extra division is at x 675
+ENV_EXTRA = {"spain", "portugal"}                           # slice 20: set by RECOMP_TEST_EXTRA, not by a click
 
 
 UEFA_LINES = []          # the uefa lines of the last report that read_report read (slice 22)
@@ -571,7 +572,7 @@ def league_steps(nations, extra):
     """The new game steps of tests/smoke/smoke_run.py with other leagues selected."""
     import smoke_run
     steps = smoke_run.without_intro_click([s for s in smoke_run.STEPS if "dump" not in s and "quit" not in s])
-    if nations == ["England"] and not extra:
+    if nations == ["England"] and not [e for e in extra if e in EXTRA]:
         return steps
     points = []                                                     # a step's time counts from the last wait
     if nations[0] == "all":
@@ -583,7 +584,8 @@ def league_steps(nations, extra):
             if n != "England":
                 points.append(f"390 {188 + 22 * NATION_ROWS.index(n)}")
     for e in extra:
-        points.append(f"675 {EXTRA[e]}")
+        if e in EXTRA:
+            points.append(f"675 {EXTRA[e]}")
     picks = [f"{2000 + 1500 * i} click {p}" for i, p in enumerate(points)]
     many = nations != ["England"]
     out = []
@@ -616,6 +618,11 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, opti
     options = {"display": "classic", "changing_rules": "off", "faster_days": "on"}
     options.update(options_more or {})
     env_extra = dict(env_more or {})
+    # Slice 20: Spain and Portugal sit below the 16 rows of the Select League(s) screen, so their extra division
+    # comes from the test switch RECOMP_TEST_EXTRA (season_divisions.h).
+    test_extra = [e for e in extra if e in ENV_EXTRA]
+    if test_extra:
+        env_extra["RECOMP_TEST_EXTRA"] = ",".join(test_extra)
     if year:
         env_extra["RECOMP_START_SEASON"] = str(year)
     if database:
