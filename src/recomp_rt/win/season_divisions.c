@@ -658,6 +658,26 @@ RT_WRAP(00857210, spa_group_build) { group_build(o_00857210); }
 void o_007d2870(void);
 RT_WRAP(007d2870, por_group_build) { group_build(o_007d2870); }
 
+/* The Portuguese Cup's lower clubs (PorCup::collect_entrants 0x7ce220, second pass 0x7ce378..0x7ce3ed): the Third
+ * Division and Portuguese clubs of A Lower Division. With Liga 3 the club moves leave the clubs that the real Liga 3
+ * and the lower series hold with no division, so the cup also takes Portuguese clubs with no division (Q528). Only
+ * in a game whose Liga 3 object plays the new form; else the original's jump. */
+uint32_t rt_por_cup_none(uint32_t club)
+{
+    if (!divisions_on() || !nation_flag(PORTUGAL.nation_key)) return 0;
+    /* The season of the cup's draw: the start season with changing rules off (Q232) or at a new game (the cup is
+     * made before [0xadadfc] is filled, so the Liga 3 object is not found there); else the game date's season
+     * (s16 day of the year and year at 0xae2c90: January to June belong to the season before). */
+    int season = season_start_year();
+    if (season_changing_rules() && !season_change_is_creating()) {
+        int day = (int16_t)rd16(g_mem, 0x00ae2c90u), year = (int16_t)rd16(g_mem, 0x00ae2c92u);
+        season = day < 181 ? year - 1 : year;
+    }
+    uint32_t nation = rd32(g_mem, club + CLUB_NATION);
+    return group_row(&PORTUGAL, season) && readable(nation) &&
+           (int32_t)rd32(g_mem, nation) == (int32_t)rd32(g_mem, PORTUGAL.nation_key);
+}
+
 /* The set_up_rules of the two classes (SpaSecondB 0x856ef0: +0xbe 0, +0xbf 4, +0xc0 1, +0xc1 4 at
  * 0x856f2d..0x856f40; PorSecondB 0x7d2610: +0xbe 1, +0xc1 4 at 0x7d264e..0x7d2660): the places of a group. */
 static void group_rules(void (*original)(void))
@@ -1035,9 +1055,9 @@ static void gre_rules(uint32_t obj)
 
 /* gre_prm_swap_second_and_third_division_clubs 0x5eb120 (thiscall, ret), after the chain of GrePrm 0x689c20 with
  * the National B Division (0x5eaf62, 0x5eaf6a): first the group's exchange with the National A Division (as the
- * chain does at 0x689c60), its relegated rows to the Lower Division (as 0x5eb25d..0x5eb28a), and its clubs for
- * the next season: from the Lower Division up to the next row's count, or all to the Lower Division when the next
- * season has no group (Q522). Then the original for the National B Division. */
+ * chain does at 0x689c60), its relegated rows to the Lower Division (as 0x5eb25d..0x5eb28a), its clubs for the
+ * next season (from the Lower Division up to the next row's count, or all to the Lower Division when the next
+ * season has no group, Q522) and its season start. Then the original for the National B Division. */
 void o_005eb120(void);
 RT_WRAP(005eb120, gre_swap)
 {
@@ -1073,6 +1093,12 @@ RT_WRAP(005eb120, gre_swap)
         }
         fprintf(stderr, "recomp: new divisions: Greek second group %d: %d out, %d in, %d clubs\n", next, out, in,
                 clubs_in(rec));
+        /* A league with a division above is started by its top league, not by the pass (0x48ce10,
+         * season_change.h): GrePrm::start_new_season 0x5eaf50 starts the National B Division at its end
+         * (0x5eb0ec..0x5eb0f7, vtable +8) and does not know the group. So the group starts here, with its clubs in
+         * place; with changing rules on, the before hook of the rule kind below keeps it idle in a season with no
+         * group. */
+        if (!rt_unwinding) vcall(group, 0x8);
     }
     o_005eb120();
 }
@@ -1171,3 +1197,4 @@ void season_divisions_test_extra(void)
         fprintf(stderr, "recomp: new divisions: test: extra division of %s on\n", nations[i].name);
     }
 }
+

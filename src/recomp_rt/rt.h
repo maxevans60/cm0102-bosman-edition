@@ -303,6 +303,8 @@ uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);
 /* Liga 3 (slice 20): the series size of the Portuguese Segunda B object, 0x7d2412, 0x7d2965, 0x7d29ff, 0x7d2ab2. */
 uint32_t rt_por_group_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_por_stage_clubs(uint32_t obj, uint32_t original);
+/* 1 when the Portuguese Cup takes a club with no division (0x7ce37d): a Portuguese club in a game with Liga 3. */
+uint32_t rt_por_cup_none(uint32_t club);
 /* The date count of a French league's template for the clubs that its division holds (slice 18). */
 uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* The room for lower clubs of a cup with a fixed entrant count (6 bytes a place): the entrants less the clubs
