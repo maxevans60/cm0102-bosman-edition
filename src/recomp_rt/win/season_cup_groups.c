@@ -594,7 +594,6 @@ void season_cup_groups_load(uint32_t cup)
 
 void o_007efcb0(void);
 void o_0056ade0(void);
-void o_00518790(void);
 void o_00519890(void);
 void o_0056bab0(void);
 void o_0056bc50(void);
@@ -618,16 +617,14 @@ RT_WRAP(0056ade0, groups_eng_auto_cup)
     if (!rt_unwinding) season_cup_groups_table(self, stage, count);
 }
 
-/* Cup::map_fixture_tree, thiscall () ret 0 (vtable +0x94). */
-RT_WRAP(00518790, groups_map_fixture_tree)
+/* After Cup::map_fixture_tree 0x518790 (thiscall () ret 0, vtable +0x94) of self: one wrap for slices 21c and 23,
+ * in season_uefa_qual.c, calls this. */
+void season_cup_groups_mapped(uint32_t self)
 {
-    uint32_t self = cpu.ecx;
-    o_00518790();
-    if (!rt_unwinding && readable(self)) {
-        uint32_t eax = cpu.eax;
-        mark_later_slots(self);
-        cpu.eax = eax;
-    }
+    if (rt_unwinding || !readable(self)) return;
+    uint32_t eax = cpu.eax;
+    mark_later_slots(self);
+    cpu.eax = eax;
 }
 
 /* Cup::update_staff_records_for_status, slot 17 (thiscall, 6 arguments, ret 0x18): as for a cup with no stages. */

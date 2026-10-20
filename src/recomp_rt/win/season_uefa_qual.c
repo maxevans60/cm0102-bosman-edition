@@ -48,6 +48,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_uefa.h"
+#include "season_cups.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -555,11 +556,13 @@ static void cl_paths(uint32_t cl, const Layout *L)
 
 void o_00518790(void);
 
-/* Cup::map_fixture_tree, thiscall () (vtable +0x94; 0x5838df, 0x584f14). */
+/* Cup::map_fixture_tree, thiscall () (vtable +0x94; 0x5838df, 0x584f14). The one wrap of 0x518790: slice 21c's
+ * domestic cups with groups mark their later slots first (season_cup_groups_mapped, season_cups.h). */
 RT_WRAP(00518790, cup_map_fixture_tree)
 {
     uint32_t cup = cpu.ecx;
     o_00518790();
+    season_cup_groups_mapped(cup);
     if (rt_unwinding || !readable(cup) || rd32(g_mem, cup) != CL_VTABLE) return;
     const SeasonUefa *r = access_row_of(cup);
     Layout L;

@@ -176,4 +176,8 @@ int season_cup_group_sizes(int clubs, int groups, int *sizes);
  * when n is odd (League::create_fixtures 0x6835c0 adds a resting place, 0x683c1b). */
 int season_cup_group_days(int clubs, int meetings);
 
+/* After Cup::map_fixture_tree 0x518790 of a cup (season_cup_groups.c): a cup with base rounds and groups marks its
+ * later slots. The wrap is in season_uefa_qual.c (one wrap for slices 21c and 23). */
+void season_cup_groups_mapped(uint32_t self);
+
 #endif

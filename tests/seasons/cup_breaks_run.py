@@ -178,12 +178,16 @@ def first_edition(table, file, edition, rules):
     return n
 
 
+# The lead's hold file: while it exists no test game starts (docs/HANDOVER.md, Rules).
+HOLD = "/Users/max/Projects/cm0102/run-logs/HOLD"
+
+
 def wait_for_room():
-    """Starts a game only when fewer than 16 games run on this Mac and the load of the last minute is below 24
+    """Starts a game only when fewer than 15 games run on this Mac and the load of the last minute is below 24
     (Max's limit for the 0.6.0 build sessions)."""
     while True:
         games = subprocess.run(["pgrep", "-x", "cm0102_recomp"], capture_output=True, text=True).stdout.split()
-        if len(games) < 16 and os.getloadavg()[0] < 24:
+        if len(games) < 15 and os.getloadavg()[0] < 24 and not os.path.exists(HOLD):
             return
         time.sleep(20)
 
