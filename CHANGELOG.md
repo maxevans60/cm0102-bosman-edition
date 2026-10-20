@@ -6,7 +6,7 @@ CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes 
 
 - HD mode is gone. On a Mac screen it showed bars around the picture and small text, while widescreen fills a large screen with sharp, bigger pixels. A `display = hd` line in `settings.txt` now gives widescreen.
 - Display report: if the picture looks wrong, press Ctrl+Shift+D (Cmd+Shift+D on a Mac). The game saves `display-report.txt` in the save folder, puts the same text on the clipboard and shows where the file is. The report lists your system, your screens and their scale, the window size and how the game scales its picture, and the last 10 changes of the window. The game also writes the file at each start and quit. Paths in it show `<user>` in place of your account name.
-- Windows: text stays sharp with display scaling at 125 % or 150 %. Before, Windows stretched the whole window and blurred it. The window opens at the same size as before. With `sharp_picture` on, a window that holds the picture between 1.2 and 2 times now fills with smooth scaling, so the picture does not get smaller.
+- Windows: text stays sharp with display scaling at 125 % or 150 %. Before, Windows stretched the whole window and blurred it. A new window opens at the size of the picture, as at 100 %. With `sharp_picture` on, a larger window keeps the picture at its own size, with bars round it, until the window holds it 2 times.
 - The Linux download is now `CM0102-Bosman-Edition-<version>-x86_64.AppImage`, and it has the icon file that AppImage tools look for.
 
 ## 0.5.0 (pre-release)

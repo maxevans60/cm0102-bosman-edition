@@ -1,4 +1,4 @@
-/* How the picture is scaled to the window with sharp_picture (winscale.h, 0.6.0 Windows scaling). */
+/* Whole pixels or not with sharp_picture (winscale.h, 0.6.0 Windows display scaling). */
 #include "winscale.h"
 
 #include <stdio.h>
@@ -8,42 +8,27 @@ static int failed;
 
 int main(void)
 {
-    WinScale s;
-    /* The old rule, without the smooth band (Mac, Linux). */
-    s = winscale_pick(1280, 800, 1280, 800, 0);                     /* 1 time: whole pixels */
-    CHECK(s.whole && !s.smooth);
-    s = winscale_pick(1600, 1000, 1280, 800, 0);                    /* 1.25 times: scale 1 with bars */
-    CHECK(s.whole && !s.smooth);
-    s = winscale_pick(1920, 1200, 1280, 800, 0);                    /* 1.5 times: nearest pixels fill */
-    CHECK(!s.whole && !s.smooth);
-    s = winscale_pick(2560, 1600, 1280, 800, 0);                    /* 2 times: whole pixels */
-    CHECK(s.whole && !s.smooth);
-    s = winscale_pick(3072, 1920, 1280, 800, 0);                    /* 2.4 times: 2 is at least 4/5 */
-    CHECK(s.whole && !s.smooth);
-    s = winscale_pick(3712, 2320, 1280, 800, 0);                    /* 2.9 times: nearest pixels fill */
-    CHECK(!s.whole && !s.smooth);
-    s = winscale_pick(1000, 625, 1280, 800, 0);                     /* smaller than the picture */
-    CHECK(!s.whole && !s.smooth);
+    /* The old rule (Mac, Linux). */
+    CHECK(winscale_whole(1280, 800, 1280, 800, 0));                 /* 1 time */
+    CHECK(winscale_whole(1600, 1000, 1280, 800, 0));                /* 1.25 times: 1 is 4/5 */
+    CHECK(!winscale_whole(1920, 1200, 1280, 800, 0));               /* 1.5 times: nearest pixels fill */
+    CHECK(winscale_whole(2560, 1600, 1280, 800, 0));                /* 2 times */
+    CHECK(winscale_whole(3072, 1920, 1280, 800, 0));                /* 2.4 times: 2 is at least 4/5 */
+    CHECK(!winscale_whole(3712, 2320, 1280, 800, 0));               /* 2.9 times */
+    CHECK(!winscale_whole(1000, 625, 1280, 800, 0));                /* smaller than the picture */
 
-    /* Windows: the smooth band between 1.2 and 2 times. */
-    s = winscale_pick(1280, 800, 1280, 800, 1);
-    CHECK(s.whole && !s.smooth);
-    s = winscale_pick(1500, 940, 1280, 800, 1);                     /* 1.17 times: still whole pixels */
-    CHECK(s.whole && !s.smooth);
-    s = winscale_pick(1600, 1000, 1280, 800, 1);                    /* 125 %: smooth fill */
-    CHECK(!s.whole && s.smooth);
-    s = winscale_pick(1920, 1009, 1280, 800, 1);                    /* 1080p at 125 %, maximised: 1.26 */
-    CHECK(!s.whole && s.smooth);
-    s = winscale_pick(1920, 1200, 1280, 800, 1);                    /* 150 % */
-    CHECK(!s.whole && s.smooth);
-    s = winscale_pick(1200, 900, 800, 600, 1);                      /* classic at 150 % */
-    CHECK(!s.whole && s.smooth);
-    s = winscale_pick(2560, 1600, 1280, 800, 1);                    /* 200 %: whole pixels */
-    CHECK(s.whole && !s.smooth);
-    s = winscale_pick(1000, 625, 1280, 800, 1);                     /* smaller than the picture: as before */
-    CHECK(!s.whole && !s.smooth);
-    s = winscale_pick(0, 0, 1280, 800, 1);                          /* no output size */
-    CHECK(!s.whole && !s.smooth);
+    /* Windows: scale 1 from 1 up to 2 times. */
+    CHECK(winscale_whole(1280, 800, 1280, 800, 1));
+    CHECK(winscale_whole(1281, 801, 1280, 800, 1));                 /* a 1-pixel round-up at 150 % */
+    CHECK(winscale_whole(1600, 1000, 1280, 800, 1));                /* 125 % */
+    CHECK(winscale_whole(1920, 1009, 1280, 800, 1));                /* 1080p at 125 %, maximised */
+    CHECK(winscale_whole(1920, 1200, 1280, 800, 1));                /* 150 % */
+    CHECK(winscale_whole(1599, 1199, 800, 600, 1));                 /* classic, just under 2 times */
+    CHECK(winscale_whole(1600, 1200, 800, 600, 1));                 /* classic, 2 times */
+    CHECK(winscale_whole(3072, 1920, 1280, 800, 1));                /* 2.4 times: the old rule */
+    CHECK(!winscale_whole(3712, 2320, 1280, 800, 1));               /* 2.9 times: the old rule */
+    CHECK(!winscale_whole(1279, 800, 1280, 800, 1));                /* smaller: as before */
+    CHECK(!winscale_whole(0, 0, 1280, 800, 1));                     /* no output size */
     puts(failed ? "FAIL" : "PASS");
     return failed;
 }

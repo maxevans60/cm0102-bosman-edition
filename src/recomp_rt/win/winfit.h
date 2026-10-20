@@ -21,4 +21,13 @@ static inline void winfit_size(int w, int h, int max_w, int max_h, int *out_w, i
     }
 }
 
+/* Windows display scaling (0.6.0): the window size in scaled points that holds at least px real
+ * pixels, when the window has pixels x points. 1280 pixels at 125 % (1600 x 1280) give 1024 points;
+ * at 150 % 854 points give 1281 pixels, as 853 would give 1279, less than the picture. */
+static inline int winfit_points(int px, int pixels, int points)
+{
+    if (pixels <= 0 || points <= 0) return px;
+    return (int)(((long long)px * points + pixels - 1) / pixels);
+}
+
 #endif
