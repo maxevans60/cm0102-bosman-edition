@@ -199,6 +199,8 @@ uint32_t rt_wcq26_concacaf_exempt(uint32_t self, uint32_t holder)
     uint32_t a[1] = {nation};
     uint32_t team = call_cdecl(NATIONAL_TEAM, 1, a);
     if (rt_unwinding || !readable(team) || rd32(g_mem, team + 0x53u) != nation) return holder;
+    uint32_t c = rd32(g_mem, nation + 0x71u);                   /* a host of North America only (not 2030's) */
+    if (!readable(c) || rd32(g_mem, c) != rd32(g_mem, 0x9cfa14u)) return holder;
     if (logging()) fprintf(stderr, "recomp: season intl: wc qualifying %d: CONCACAF leaves out host %s\n",
                            year_of(self) + 2, team_name(team));
     return team;

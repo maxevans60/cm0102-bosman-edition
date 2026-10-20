@@ -11,7 +11,7 @@ test logs RECOMP_SEASON_INTL_LOG=1 and RECOMP_SEASON_CHANGE_LOG=1. The runs:
     2023    October 2023, 2023/24 to 2026/27, changing rules on: the full 2026 qualifying, the play-off
             tournament, the finals of 48, the host news, then the 2030 cycle
     2025    December 2025, 2025/26 to 2027/28, changing rules on: the finals of 48 from a start after the
-            qualifying began (the draw fill, Q388)
+            qualifying began (the draw fill, Q388), then the 2030 cycle (the six hosts, the sections of 2028)
     off     October 2023, 2023/24 to 2026/27, changing rules off: the rule edition of the start season is the
             2026 World Cup, so the finals have 48 teams too
 
@@ -48,7 +48,9 @@ LINES = {
     "2023": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32",
              "world_cup 2026 seeds on 1 April", "wc play-off 2026: seeds", "wc play-off 2026: finals",
              "wc qualifying 2026: path A", "wc qualifying 2026: Europe draws", "world_cup 2026 host"],
-    "2025": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32"],
+    "2025": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32",
+             "world_cup 2030 has 12 stages and 48 slots", "world_cup 2030 host Uruguay",
+             "wc qualifying 2030: Europe draws"],
     "off": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32"],
 }
 QUALIFIERS = {"2023": 2026, "off": 2026}

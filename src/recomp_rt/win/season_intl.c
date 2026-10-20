@@ -584,6 +584,21 @@ static int slots_full(uint32_t comp)
 
 RT_WRAP(0092e740, wc_add_qualified)
 {
+    /* Slice 29: a section can give a nation that is in already as a host, because find_hosts gives a section two
+     * hosts (Spain and the three South American hosts of 2030 play their qualifying). Such a qualifier stays out
+     * and its place goes to the fill (Q563). */
+    if (season_intl_on() && team_nation(rt_arg(0))) {
+        uint32_t slots = rd32(g_mem, cpu.ecx + SLOTS), nation = team_nation(rt_arg(0));
+        int count = (int16_t)rd16(g_mem, cpu.ecx + SLOT_COUNT), in = 0;
+        for (int k = 0; readable(slots) && k < count && k < 64 && !in; k++)
+            in = team_nation(rd32(g_mem, slots + (uint32_t)k * SLOT_SIZE)) == nation;
+        if (in) {
+            if (logging()) fprintf(stderr, "recomp: season intl: world_cup: %s is in already, a qualifier stays out\n",
+                                   win_str(nation + NATION_NAME));
+            rt_ret_stdcall(0, 1);
+            return;
+        }
+    }
     if (slots_full(cpu.ecx)) {
         if (logging()) fprintf(stderr, "recomp: season intl: world_cup is full, a qualifier stays out\n");
         rt_ret_stdcall(0, 1);
