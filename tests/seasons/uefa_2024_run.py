@@ -10,8 +10,8 @@ Each run is a season jump of tests/seasons/rules_report_check.py with England. T
     2024    October 2024, changing rules off, the season 2024/25
     2025    December 2025, changing rules off, the season 2025/26
     change  October 2023, changing rules on, 2023/24 to the end of 2024/25: the news sentences of the change
-    load    October 2024: a save in the league phase (120 days) and one in the knockout phase (200 days), each
-            loaded by a new program that plays to the end of the season
+    load    October 2024: a save in the league phase (120 days) and one in the knockout phase (215 days: 13 February,
+            after the play-off draw of 31 January), each loaded by a new program that plays to the final
     repeat  two October 2024 games with the same steps give equal saves 130 days after the start (in the league
             phase)
 The checks of a season: the jump ends with code 0 and shows no message box of the game; the log of
@@ -78,6 +78,9 @@ def season_checks(name, log, report, season, ecl):
         if not ties_ok(ties):
             fails.append(f"{name}: play-off ties {ties!r} are not the pairs of places 9 to 24 of the bracket")
     # "league phase: n clubs, not 36" is a day that the draw waits for its clubs: the drawn lines above show it came.
+    for m in re.finditer(r"league phase order: (\d+) level pairs, (\d+) not by goal difference", log):
+        if m.group(2) != "0":
+            fails.append(f"{name}: a league phase table with {m.group(2)} level pairs out of the order of Art. 18")
     for bad in ("no draw found", "no format for", "not even", "gives no layout"):
         if bad in log:
             fails.append(f"{name}: log line with {bad!r}")
@@ -141,7 +144,7 @@ def run_load(program, game, work):
     import smoke_run
     db = os.path.join(DB, "October 2024")
     fails = []
-    for days in (120, 200):
+    for days in (120, 215):
         w = os.path.join(work, f"d{days}")
         code, _ = rrc.run(program, game, 2024, 2024, db, ["England"], [], w, 7200, None,
                           {"RECOMP_SAVE_AFTER_DAYS": str(days)})
@@ -149,6 +152,11 @@ def run_load(program, game, work):
         if code != 0 or not os.path.exists(first):
             fails.append(f"load {days}: the first run made no save (code {code}, {w})")
             continue
+        # The save of 215 days is inside the knockout phase: the first run drew both knockouts before it saved,
+        # and the save of 120 days is inside the league phase: no knockout yet.
+        drawn = "Champions League knockout phase play-offs drawn" in ufr.boxes(w)[1]
+        if drawn != (days > 200):
+            fails.append(f"load {days}: the save is not in the {'knockout' if days > 200 else 'league'} phase")
         again = os.path.join(w, "again")
         user = os.path.join(again, "user")
         os.makedirs(user, exist_ok=True)

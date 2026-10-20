@@ -485,15 +485,16 @@ static void draw_league(uint32_t cl)
         fprintf(stderr, "recomp: uefa: Champions League league phase: %d clubs, not 36\n", n);
         return;
     }
-    reset_bookings(cl, clubs, n);
-    pay_clubs(cl, clubs, n, GROUP_PRIZE, 0x449);
-    if (rt_unwinding) return;
     int weekday = 0;
     const SeasonLeagueDay *days = season_uefa_league_days('c', &weekday);
     uint32_t st = season_uefa_league_make(cl, clubs, r->cl_league, 0, LEAGUE_NAME, days, weekday);
     if (rt_unwinding || !st) return;
     wr32(g_mem, rd32(g_mem, cl + 0xc), st);
     wr32(g_mem, cl + 0x30, 0);
+    /* The bookings and money only once the stage is in its slot: a draw that fails comes again on a later day. */
+    reset_bookings(cl, clubs, n);
+    pay_clubs(cl, clubs, n, GROUP_PRIZE, 0x449);
+    if (rt_unwinding) return;
     season_uefa_league_news(st);
     if (rt_unwinding) return;
     /* The play-off losers to the Europa League. */
@@ -532,11 +533,9 @@ static void draw_league_ko(uint32_t cl)
     uint32_t tiers = rt_unwinding || !readable(list) ? 0 : call_cdecl(F_MALLOC, 1, sz);
     if (rt_unwinding) return;
     uint32_t name_id = 0, table = 0, obj = 0;
+    uint32_t clubs[LEAGUE_KO_CLUBS];
     if (readable(tiers) && season_uefa_league_knockout_list(league, list, tiers)) {
-        uint32_t clubs[LEAGUE_KO_CLUBS];
         for (int i = 0; i < LEAGUE_KO_CLUBS; i++) clubs[i] = rd32(g_mem, list + 4u * (uint32_t)i);
-        reset_bookings(cl, clubs, LEAGUE_KO_CLUBS);
-        pay_clubs(cl, clubs, LEAGUE_KO_CLUBS, PHASE2_PRIZE, ROUND_CODE_KO_PO);
         table = rt_unwinding ? 0 : league_ko_table(cl, &name_id);
         uint32_t ns[1] = {0xb2};
         obj = table && !rt_unwinding ? call_cdecl(F_NEW, 1, ns) : 0;
@@ -556,6 +555,9 @@ static void draw_league_ko(uint32_t cl)
     uint32_t fb[1] = {table};
     if (!rt_unwinding && readable(table)) call_cdecl(F_FREE, 1, fb);
     if (rt_unwinding || !readable(obj)) return;
+    reset_bookings(cl, clubs, LEAGUE_KO_CLUBS);         /* once the stage is in its slot, as draw_league */
+    pay_clubs(cl, clubs, LEAGUE_KO_CLUBS, PHASE2_PRIZE, ROUND_CODE_KO_PO);
+    if (rt_unwinding) return;
     uint32_t r0[1] = {0};
     call_this(F_SET_UP_ROUND, obj, 1, r0);
     if (rt_unwinding) return;

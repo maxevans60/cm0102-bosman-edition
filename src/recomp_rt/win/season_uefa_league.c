@@ -205,11 +205,15 @@ uint32_t season_uefa_league_make(uint32_t parent, uint32_t *clubs, int days, int
     }
     for (int i = 0; i < SEASON_LEAGUE_CLUBS; i++) wr32(g_mem, members + 4u * (uint32_t)i, clubs[i]);
     /* Two small byte tables on the game stack, as the group draws give them (0x5852b9..0x5852dc): the order of
-     * the table (4, 1, 2, 0) and the places that go on (+0xbe: the first 8, who go to the round of 16). */
+     * the table and the places that go on (+0xbe: the first 8, who go to the round of 16). The groups pass 4, 1,
+     * 2, 0: code 4 starts a head-to-head pass before the sort (0x682850..0x682877), code 1 is goal difference
+     * (row +0x15 - +0x17) and 2 goals scored (+0x15) for clubs level on points (0x68a535..0x68a556). The league
+     * phase ranks level clubs by goal difference, then goals scored, with no head-to-head (regulations
+     * 2024/25, Art. 18), so it passes 1, 2, 0, 0. The later criteria (away goals, wins) are not in the game. */
     uint32_t saved_esp = cpu.esp;
     cpu.esp -= 16;
     uint32_t order = cpu.esp, places = cpu.esp + 8;
-    g_mem[order] = 4, g_mem[order + 1] = 1, g_mem[order + 2] = 2, g_mem[order + 3] = 0;
+    g_mem[order] = 1, g_mem[order + 1] = 2, g_mem[order + 2] = 0, g_mem[order + 3] = 0;
     g_mem[places] = 8, g_mem[places + 1] = 0, g_mem[places + 2] = 0, g_mem[places + 3] = 0;
     /* The arguments of the group draws (0x58587f..0x5858b6): parent, clubs, list, meetings, record, round table,
      * match days, 3, 1, 8, order, places, year, stage, name, 0xf, 2, 0, 8; then +0xa7 the matches of a club
@@ -247,9 +251,21 @@ uint32_t season_uefa_league_club_at(uint32_t stage, int place)
 int season_uefa_league_knockout_list(uint32_t stage, uint32_t list, uint32_t tiers)
 {
     uint32_t by_place[SEASON_LEAGUE_CLUBS + 1];
+    int level = 0, wrong = 0, pts0 = 0, gd0 = 0, gf0 = 0;
     for (int p = 1; p <= SEASON_LEAGUE_CLUBS; p++) {
-        by_place[p] = season_uefa_league_club_at(stage, p);
-        if (rt_unwinding || !readable(by_place[p])) return 0;
+        uint32_t a[1] = {(uint32_t)(p - 1)};
+        uint32_t row = call_this(F_LEAGUE_ROW, stage, 1, a);
+        if (rt_unwinding || !readable(row)) return 0;
+        by_place[p] = rd32(g_mem, row);
+        if (!readable(by_place[p])) return 0;
+        /* The test seam of the order: clubs level on points (+0x19) with the goal difference and goals of the
+         * row (+0x15 scored, +0x17 conceded, as 0x68a53f..0x68a55a read them). */
+        int pts = (int16_t)rd16(g_mem, row + 0x19), gf = (int8_t)g_mem[row + 0x15], gd = gf - (int8_t)g_mem[row + 0x17];
+        if (p > 1 && pts == pts0) {
+            level++;
+            wrong += gd > gd0 || (gd == gd0 && gf > gf0);
+        }
+        pts0 = pts, gd0 = gd, gf0 = gf;
     }
     /* The test seam: the matches each table row has played (row +0x11, the count check_complete reads at
      * 0x689b51; rows at +0xb1, 0x3b bytes each), and the places of the knockout clubs. */
@@ -266,6 +282,8 @@ int season_uefa_league_knockout_list(uint32_t stage, uint32_t list, uint32_t tie
         snprintf(ties + strlen(ties), sizeof ties - strlen(ties), "%s%d-%d", k ? " " : "", po[2 * k], po[2 * k + 1]);
     fprintf(stderr, "recomp: uefa: league phase table: %d clubs, played %d to %d; play-off ties %s\n", clubs, lo, hi,
             ties);
+    fprintf(stderr, "recomp: uefa: league phase order: %d level pairs, %d not by goal difference and goals\n", level,
+            wrong);
     /* Slots 0 to 15: the 8 play-off ties, the unseeded club first (it plays the first leg at home), tier 1.
      * Slots 16 to 23: places 1 to 8, tier 2 (the seeded draw of the round of 16 pairs them with the winners). */
     for (int k = 0; k < 16; k++) {
