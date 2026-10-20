@@ -318,6 +318,7 @@ uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_tier_c2(uint32_t c2a);
 uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b);
+uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position);
 uint32_t rt_ita_start_c2(uint32_t c2a);
 /* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
  * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group

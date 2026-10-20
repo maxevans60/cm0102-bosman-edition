@@ -41,6 +41,12 @@ INSNS = {
     # the C1/B id gives "equal" for the C2/A id (rt_ita_cup_c1b).
     0x63FC79: ("cmp ecx, dword ptr [0x9cf57c]",
                "t0 = ecx; t1 = rt_ita_cup_c1b(ecx, R32(0x9cf57cu)); t2 = t0 - t1 - 0; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    # Its second loop then goes on to the next position (inc cl at 0x63fd26) while it has fewer than 32 (cmp si,
+    # 0x20 at 0x63fd28): in the era, from position 40 on the runtime fills the list (on the stack at esp + 0x1c, 4
+    # bytes a club) to 32 and the loop ends (rt_ita_cup_fill), so it cannot run for ever.
+    0x63FD28: ("cmp si, 0x20",
+               "esi = (esi & 0xffff0000u) | (rt_ita_cup_fill(esp, esi & 0xffffu, ecx & 0xffu) & 0xffffu); "
+               "t0 = (esi & 0xffffu); t1 = 0x20u; t2 = ((t0 - t1 - 0) & 0xffffu); SETF(K_SUB | SZ2, t0, t1, t2, 0);"),
     0x63FCF9: ("cmp ecx, dword ptr [0x9cf57c]",
                "t0 = ecx; t1 = rt_ita_cup_c1b(ecx, R32(0x9cf57cu)); t2 = t0 - t1 - 0; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
     0x641986: ("mov ecx, dword ptr [ecx + edx*4]", "ecx = rt_ita_start_c2(R32(ecx + edx * 4u));"),

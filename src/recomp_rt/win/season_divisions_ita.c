@@ -704,3 +704,29 @@ uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b)
     if (id == rd32(g_mem, KEY_C2A) && serie_a && (era_of_year(y) || era_of_year(y + 1))) return id;
     return c1b;
 }
+
+/* ItaCup::select_entrants 0x63fd28 (cmp si, 0x20 after the next position, 0x63fd22..0x63fd30): the list of lower clubs
+ * is on the stack at esp + 0x1c (4 bytes a club, 0x63fd12), count clubs so far. In the Serie C era, when the position
+ * passes 40 with fewer than 32 clubs, the clubs of the three groups that are not in the list yet join it by reputation
+ * (then the Serie D's), so the loop ends with 32. Else the count is as it is. Q626. */
+uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position)
+{
+    uint32_t serie_a = object_of(KEY_A);
+    int y = serie_a ? (int16_t)rd16(g_mem, serie_a + 0x40) : 0;
+    if (count >= 0x20 || position <= 40 || !serie_a || !(era_of_year(y) || era_of_year(y + 1))) return count;
+    uint32_t list = esp + 0x1c;
+    static uint32_t cand[4096];
+    int n = 0;
+    const uint32_t keys[4] = {KEY_C1A, KEY_C1B, KEY_C2A, KEY_SERIE_D};
+    for (int k = 0; k < 4 && count < 0x20; k++) {
+        n = pool(record_of(keys[k]), cand, 4096);
+        qsort(cand, (size_t)n, sizeof *cand, by_reputation);
+        for (int i = 0; i < n && count < 0x20; i++) {
+            int have = 0;
+            for (uint32_t j = 0; j < count && !have; j++) have = rd32(g_mem, list + 4u * j) == cand[i];
+            if (!have) wr32(g_mem, list + 4u * count++, cand[i]);
+        }
+    }
+    fprintf(stderr, "recomp: serie c: Coppa Italia: the lower places filled to %u from the groups\n", count);
+    return count;
+}
