@@ -197,6 +197,10 @@ uint32_t season_uefa_ecl_qual_table(uint32_t ecl, uint32_t rec, int *rounds);
 int season_uefa_ecl_direct_first(uint32_t ecl);
 void season_uefa_ecl_fill_drops(uint32_t ecl);
 
+/* Slice 25, season_uefa.c: "League Phase" for the stage name id 0x41f of competition object obj when row
+ * season gives it a league phase (regulations 2024/25, Art. 13.02: "league phase"), else NULL. */
+const char *season_uefa_stage_name(uint32_t obj, int season, int id);
+
 /* Slice 24, season_uefa.c: flag 0x4 (no away goals rule) in +0x0f of each two-legged round of a round table of
  * a season whose row has no away goals rule. The game only. */
 void season_uefa_no_away_goals(uint32_t table, int rounds, int season);

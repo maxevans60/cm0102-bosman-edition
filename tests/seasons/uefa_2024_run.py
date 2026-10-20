@@ -86,6 +86,8 @@ def season_checks(name, log, report, season, ecl):
         labels = ufr.round_labels(report)
         fails += ufr.expect_label(labels, season, "european_cup", 10, KO_PO_NAME, name)
         fails += ufr.expect_label(labels, season, "uefa_cup", 30, KO_PO_NAME, name)
+        for file in ("european_cup", "uefa_cup"):
+            fails += ufr.expect_label(labels, season, file, 0x41f, "League Phase", name)
         if ecl:
             fails += ufr.expect(lines, season, ECL_FILE, LEAGUE, name)
     else:

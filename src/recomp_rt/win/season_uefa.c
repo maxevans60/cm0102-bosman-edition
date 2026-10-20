@@ -563,6 +563,15 @@ static void draw_league_ko(uint32_t cl)
     fprintf(stderr, "recomp: uefa: Champions League knockout phase play-offs drawn\n");
 }
 
+const char *season_uefa_stage_name(uint32_t obj, int season, int id)
+{
+    const SeasonUefa *r = season_uefa_row(season);
+    if (id != (int)LEAGUE_NAME || !r || !readable(obj)) return NULL;
+    int league = obj == cl_object() ? r->cl_league : season_uefa_cup_kind(obj) == 'e' ? r->uc_league
+                 : season_uefa_cup_kind(obj) == 'k' ? r->ecl_league : 0;
+    return league ? "League Phase" : NULL;
+}
+
 /* ---- Wraps of the Champions League class ---- */
 
 void o_005851d0(void);
@@ -984,8 +993,8 @@ void season_uefa_report(void *file, int season, const char *phase)
         /* slice 24: the Conference League */
         {SEASON_UEFA_ECL_FILE, 250}, {SEASON_UEFA_ECL_FILE, 260}, {SEASON_UEFA_ECL_FILE, 270}, {SEASON_UEFA_ECL_FILE, 220},
         {SEASON_UEFA_ECL_FILE, 30}, {SEASON_UEFA_ECL_FILE, 40},
-        /* slice 25: the Champions League knockout phase play-offs */
-        {"european_cup", 10}};
+        /* slice 25: the Champions League knockout phase play-offs, the stage name of the league phase */
+        {"european_cup", 10}, {"european_cup", (int)LEAGUE_NAME}, {"uefa_cup", (int)LEAGUE_NAME}};
     for (unsigned i = 0; i < sizeof labels / sizeof labels[0] && !rt_unwinding; i++)
         for (int style = 1; style <= 3 && !rt_unwinding; style += 2) {      /* 1 long names, 3 abbreviated */
             uint32_t obj = !strcmp(labels[i].file, "european_cup") ? cl : !strcmp(labels[i].file, "uefa_cup") ? uc : ecl;

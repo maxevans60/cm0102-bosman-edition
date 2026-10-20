@@ -15,6 +15,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_round_names.h"
+#include "season_uefa.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -70,6 +71,12 @@ RT_WRAP(004b4850, round_name)
     int named_part = part == 0 || part == 3 || part == 4 || ((part == 1 || part == 2 || part == 5) && code < 160);
     if (season && named_part && code > 0 && code < 1000 && readable(buf) && size >= 2 && size <= 0x1000)
         name = season_round_name(season_change_file(context), code - part, season, set);
+    /* Slice 25 (Q370): the stage name id of the league phase (0x41f, "Group A" in the original's table) reads
+     * "League Phase" in a season with a league phase (season_uefa.c). */
+    if (!name && season && readable(buf) && size >= 2 && size <= 0x1000) {
+        name = season_uefa_stage_name(context, season, code);
+        if (name) part = 0;
+    }
     if (!name) {
         o_004b4850();
         return;
