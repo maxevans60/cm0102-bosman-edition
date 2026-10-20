@@ -305,12 +305,28 @@ static int by_reputation(const void *a, const void *b)
 
 #define IDLE_YEAR 2999                  /* Q395: a competition that never returns waits for year 2999 with no fixtures */
 
-/* C2/B or C2/C ends: no clubs (+0x3e 0) and the year 2999, so it makes no fixtures, the pass and the chain never
- * start it again (0x641986) and the rules report shows no edition of it. */
+/* C2/B or C2/C ends: the year 2999, so it makes no fixtures and the chain never starts it again (0x641986). Its
+ * table keeps its last season (the rules report shows that edition with year 2999).
+ *
+ * It also leaves the links of the leagues: +0x1c the record of the league above, +0x20 the one below (-1 for
+ * none). The season change pass starts a nation's leagues only through its top league (vtable +0xc,
+ * 0x48ce10: false while +0x1c is not -1), and only when its table and each league below it by +0x20 is complete
+ * (vtable +0x10, check_complete 0x689ad0; 0x48ce30..0x48ce54). An ended league is never complete again: with the
+ * extra division the Serie A of a 2014 game never started 2015/16. So the league above takes its link below,
+ * and its own +0x1c stays, so that the pass never takes it for a top league. */
 static void idle(uint32_t obj)
 {
     if (!obj) return;
     wr16(g_mem, obj + 0x40, IDLE_YEAR);
+    uint32_t table = rd32(g_mem, COMP_OBJECTS), slots = rd32(g_mem, 0xadadf8u);
+    int32_t id = (int32_t)rd32(g_mem, rd32(g_mem, obj + 4)), below = (int32_t)rd32(g_mem, obj + 0x20);
+    for (uint32_t i = 0; readable(table) && i < slots && i < 4096; i++) {
+        uint32_t o = rd32(g_mem, table + 4u * i);
+        if (readable(o) && o != obj && (int32_t)rd32(g_mem, o + 0x20) == id) wr32(g_mem, o + 0x20, (uint32_t)below);
+        if (readable(o) && o != obj && below >= 0 && i == (uint32_t)below)
+            wr32(g_mem, o + 0x1c, rd32(g_mem, obj + 0x1c));
+    }
+    wr32(g_mem, obj + 0x20, 0xffffffffu);
     fprintf(stderr, "recomp: serie c: %.50s ends (year %d)\n", win_str(rd32(g_mem, obj + 4) + 4), IDLE_YEAR);
 }
 

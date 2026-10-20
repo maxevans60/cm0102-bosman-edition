@@ -13,8 +13,8 @@ Each run is a season jump of tests/seasons/rules_report_check.py with Italy. The
     change-c2 the same with the extra division
 The checks: the jump ends with code 0 and shows no message box of the game; the report has the groups (files
 ita_ser_c1a, ita_ser_c1b and ita_ser_c2a, Q520) at the end of each season of the era, each with the clubs of its row (20 in 2014/15;
-with changing rules off every later season keeps the start season's counts, Q232), and C2/B and C2/C with no
-clubs at the end of a season of the era; the log has the 38 match days of each group of 20, the regroup line of each
+with changing rules off every later season keeps the start season's counts, Q232), and C2/B and C2/C with
+year 2999 at the end of a season of the era (Q623); the log has the 38 match days of each group of 20, the regroup line of each
 season change into the era, and the news sentence of the change in the change runs.
 """
 import concurrent.futures
@@ -34,13 +34,13 @@ NEWS = "Serie C1 and Serie C2 end: the Serie C is now one division of three grou
 
 
 def comps(report):
-    """{(season, phase): {file: clubs}} of the comp lines of a report."""
+    """{(season, phase): {file: (clubs, year)}} of the comp lines of a report."""
     out = {}
     with open(report, encoding="latin-1") as f:
         for line in f:
             c = line.rstrip("\n").split("\t")
             if c[0] == "comp" and len(c) > 10:
-                out.setdefault((int(c[1]), c[2]), {})[c[5]] = int(c[10])
+                out.setdefault((int(c[1]), c[2]), {})[c[5]] = (int(c[10]), int(c[9]))
     return out
 
 
@@ -52,11 +52,12 @@ def check_report(name, report, seasons, want):
     for s in seasons:
         end = got.get((s, "end"), {})
         for g, file in enumerate(GROUPS):
-            if end.get(file) != want[s][g]:
-                fails.append(f"{name}: {file} at the end of {s} holds {end.get(file)} clubs, want {want[s][g]}")
+            got_clubs = end.get(file, (None, None))[0]
+            if got_clubs != want[s][g]:
+                fails.append(f"{name}: {file} at the end of {s} holds {got_clubs} clubs, want {want[s][g]}")
         for old in ("ita_ser_c2b", "ita_ser_c2c"):
-            if end.get(old, 0) > 1:                 # with the extra division each keeps one club (Q623)
-                fails.append(f"{name}: {old} holds {end[old]} clubs at the end of {s} (it ends in the era)")
+            if old in end and end[old][1] != 2999:  # Q623: an ended league waits for year 2999
+                fails.append(f"{name}: {old} has year {end[old][1]} at the end of {s} (it ends in the era)")
     return fails
 
 
