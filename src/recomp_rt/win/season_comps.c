@@ -390,7 +390,8 @@ static void comps_after(const SeasonChange *c)
 
 const SeasonRuleKind season_kind_comps = {"comps", NULL, NULL, NULL, comps_entry, NULL, comps_after};
 
-void season_comps_reset(void) { reset(); }
+void season_bra_states_reset(void);    /* slice 20e: season_bra_states.h */
+void season_comps_reset(void) { reset(); season_bra_states_reset(); }
 
 /* ---- The load: build_comp_object_table 0x8386f0 ---- */
 

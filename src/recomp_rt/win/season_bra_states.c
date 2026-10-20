@@ -103,6 +103,7 @@ typedef struct {
 } StateClass;
 
 static const StateClass NORTH = {10, 4}, NORTHEAST = {16, 4}, CENTRAL = {15, 8};
+static const StateClass *const REGION_CLASS[3] = {&NORTH, &NORTHEAST, &CENTRAL};
 
 typedef struct {
     const char *record;         /* the region's championship record, its long name in the data */
@@ -175,14 +176,19 @@ static int in_other_table(uint32_t club, uint32_t self)
     return 0;
 }
 
-/* 1 for a state record of another region or state ("Brazilian ... State Championship" or "... Lower Division"):
- * its club plays in that state's own championship, which the original picks by club +0x60. */
-static int other_state_record(uint32_t rec, uint32_t region, uint32_t lower)
+/* 1 for the record of one of the original's nine single-state championships or its lower division ("Brazilian ...
+ * State Championship" or "... Lower Division", not a region's): the original's own classes pick those clubs by club
+ * +0x60. A region's records do not count: a database can file a club of a state under another region (October 2021
+ * files the Maranhão clubs under the Northeast). */
+static int single_state_record(uint32_t rec)
 {
-    const char *n = readable(rec) && rec != region && rec != lower ? season_change_data_name(rec) : NULL;
+    const char *n = readable(rec) ? season_change_data_name(rec) : NULL;
     size_t k = n ? strlen(n) : 0;
+    for (int i = 0; n && i < 3; i++)
+        if (!strcmp(n, REGIONS[i].record) || !strcmp(n, REGIONS[i].lower)) return 0;
     return n && !strncmp(n, "Brazilian ", 10) &&
-           ((k > 19 && !strcmp(n + k - 19, " State Championship")) || (k > 15 && !strcmp(n + k - 15, " Lower Division")));
+           ((k > 19 && !strcmp(n + k - 19, " State Championship")) ||
+            (k > 15 && !strcmp(n + k - 15, " Lower Division")));
 }
 
 /* ---- The state of a club ---- */
@@ -204,6 +210,39 @@ static int club_state(uint32_t club, char out[3])
     return season_bra_state_from(name, city, out);
 }
 
+/* Brazil's nation: that of a club of a region record, or 0. */
+static uint32_t brazil_nation(void)
+{
+    uint32_t base = rd32(g_mem, CLUBS);
+    int32_t count = (int32_t)rd32(g_mem, CLUB_COUNT) - 2 * (int32_t)rd32(g_mem, NATIONAL_TEAMS);
+    for (int r = 0; r < 3; r++) {
+        uint32_t region = season_comps_record(REGIONS[r].record);
+        for (int32_t i = 0; readable(base) && region && i < count; i++) {
+            uint32_t c = base + (uint32_t)i * CLUB_SIZE;
+            if (rd32(g_mem, c + CLUB_STATE_RECORD) == region) return rd32(g_mem, c + CLUB_NATION);
+        }
+    }
+    return 0;
+}
+
+/* 1 when region object i (0 to 2) keeps the original's region (Q603): its state has fewer clubs than its class needs.
+ * Counted on the data only (no table of another object), so the answer is the same whenever it is asked: the region
+ * object, the module's make of the region's new objects and every picker agree. */
+static int keeps_region(int i)
+{
+    uint32_t base = rd32(g_mem, CLUBS), brazil = brazil_nation();
+    int32_t count = (int32_t)rd32(g_mem, CLUB_COUNT) - 2 * (int32_t)rd32(g_mem, NATIONAL_TEAMS);
+    int n = 0;
+    for (int32_t k = 0; readable(base) && brazil && k < count; k++) {
+        uint32_t c = base + (uint32_t)k * CLUB_SIZE;
+        char code[3];
+        if (rd32(g_mem, c + CLUB_NATION) == brazil && club_state(c, code) && !strcmp(code, STATES[i].code) &&
+            !single_state_record(rd32(g_mem, c + CLUB_STATE_RECORD)))
+            n++;
+    }
+    return n < REGION_CLASS[i]->min;
+}
+
 /* ---- The clubs of a state (Q602) ---- */
 
 typedef struct {
@@ -220,9 +259,9 @@ static int by_rank(const void *a, const void *b)
     return x->index - y->index;
 }
 
-/* The clubs of state st in pick order, at most max, for the object self (0: none yet). The nation is Brazil's: that of
- * a club of the region record. A club with the state record of another state, or in the table of another of the 15
- * state objects, is left out. */
+/* The clubs of state st in pick order, at most max, for the object self (0: none yet). Left out (Q611): a club with the
+ * record of a single-state championship, a club with the record of a region object that keeps its region (its
+ * original picker takes it), and a club in the table of another of the 15 state objects. */
 static int state_clubs(const State *st, uint32_t self, uint32_t *out, int max)
 {
     uint32_t base = rd32(g_mem, CLUBS), region = season_comps_record(REGIONS[st->region].record),
@@ -233,6 +272,12 @@ static int state_clubs(const State *st, uint32_t self, uint32_t *out, int max)
         if (rd32(g_mem, c + CLUB_STATE_RECORD) == region) brazil = rd32(g_mem, c + CLUB_NATION);
     }
     if (!brazil) return 0;
+    int kept[3];
+    uint32_t kept_record[3];
+    for (int r = 0; r < 3; r++) {
+        kept[r] = keeps_region(r);
+        kept_record[r] = season_comps_record(REGIONS[r].record);
+    }
     static StatePick picks[4096];
     int n = 0;
     for (int32_t i = 0; i < count && n < 4096; i++) {
@@ -240,7 +285,10 @@ static int state_clubs(const State *st, uint32_t self, uint32_t *out, int max)
         char code[3];
         if (rd32(g_mem, c + CLUB_NATION) != brazil || !club_state(c, code) || strcmp(code, st->code)) continue;
         uint32_t rec = rd32(g_mem, c + CLUB_STATE_RECORD);
-        if (other_state_record(rec, region, lower) || in_other_table(c, self)) continue;
+        if (single_state_record(rec) || in_other_table(c, self)) continue;
+        int taken = 0;
+        for (int r = 0; r < 3; r++) taken |= kept[r] && rec == kept_record[r] && rec;
+        if (taken) continue;
         picks[n].club = c;
         picks[n].rank = rec == region ? 0 : rec == lower && lower ? 1 : 2;
         picks[n].reputation = (int16_t)rd16(g_mem, c + CLUB_REPUTATION);
@@ -278,9 +326,14 @@ static int plan(uint32_t obj, const StateClass *k, uint32_t *clubs, int *have, i
 {
     const State *st = state_of(obj);
     if (!st) return 0;
+    if (st - STATES < 3 && keeps_region((int)(st - STATES))) {
+        *have = *want = 0;
+        return 0;
+    }
     *have = state_clubs(st, obj, clubs, MAX_PICK);
     *want = row_count(obj);
-    if (*have < k->min) return st - STATES < 3 || *have < 2 ? 0 : *have;   /* a region object keeps its region */
+    if (*have < k->min) return *have;   /* a new object never takes the region's clubs: it plays with what its state
+                                         * has (make: 4 or more) */
     int n = *want > 0 ? *want : DEFAULT_COUNT;
     if (n > *have) n = *have;
     return n < k->min ? k->min : n;      /* the fallback hangs on the clubs of the data, not on the season's count */
@@ -289,27 +342,33 @@ static int plan(uint32_t obj, const StateClass *k, uint32_t *clubs, int *have, i
 /* The constructor asks for the round table (stage -1) before it calls create_table (in a test run: "schedule ...
  * picked 0"), and start_new_season may step the year between the two. So the count that the round table was made
  * for is kept for the object, and create_table takes it. */
-static struct { uint32_t obj, rec; int n; } planned[16];
+#define PLANS 15                    /* one a state object */
+static struct { uint32_t obj, rec; int n; } planned[PLANS];
 
-/* An entry is found by object and record, so an entry of an earlier game (another object at that address) is not
- * taken; with no free slot the oldest one goes (review of 2026-10-20). */
+/* Cleared at a new game and a load (season_bra_states_reset). An entry is found by object and record, so an entry
+ * of another object at a reused address is not taken (reviews of 2026-10-20). */
+void season_bra_states_reset(void) { memset(planned, 0, sizeof planned); }
+
 static void keep_plan(uint32_t obj, int n)
 {
-    static int next;
     uint32_t rec = rd32(g_mem, obj + COMP_RECORD);
     int slot = -1;
-    for (int i = 0; i < 16 && slot < 0; i++)
+    for (int i = 0; i < PLANS && slot < 0; i++)
         if (planned[i].obj == obj) slot = i;
-    for (int i = 0; i < 16 && slot < 0; i++)
+    for (int i = 0; i < PLANS && slot < 0; i++)
         if (!planned[i].obj) slot = i;
-    if (slot < 0) slot = next++ % 16;
+    if (slot < 0) {                                     /* not possible with 15 objects: say so, keep the first */
+        fprintf(stderr, "recomp: brazil states: no room for the plan of %.50s\n",
+                (const char *)g_mem + rec + NAME_AT);
+        return;
+    }
     planned[slot].obj = obj, planned[slot].rec = rec, planned[slot].n = n;
 }
 
 static int kept_plan(uint32_t obj)
 {
     uint32_t rec = obj ? rd32(g_mem, obj + COMP_RECORD) : 0;
-    for (int i = 0; obj && i < 16; i++)
+    for (int i = 0; obj && i < PLANS; i++)
         if (planned[i].obj == obj && planned[i].rec == rec) return planned[i].n;
     return -1;
 }
@@ -323,14 +382,18 @@ static int pick(uint32_t obj, const StateClass *k)
     int have = 0, want = 0, n = plan(obj, k, clubs, &have, &want), kept = kept_plan(obj);
     if (rt_unwinding) return 1;
     if (kept >= 0 && kept <= have) n = kept;
-    if (!n) {
-        fprintf(stderr, "recomp: brazil states: %s %d: %d clubs of %s, fewer than %d: the original's region\n",
-                st->record, (int16_t)rd16(g_mem, obj + COMP_YEAR), have, st->code, k->min);
+    if (!n && st - STATES < 3) {
+        fprintf(stderr, "recomp: brazil states: %s %d: too few clubs of %s for its format: the original's region\n",
+                st->record, (int16_t)rd16(g_mem, obj + COMP_YEAR), st->code);
         return 0;
     }
-    uint32_t a[1] = {(uint32_t)n * ROW_SIZE};
+    uint32_t a[1] = {(uint32_t)(n ? n : 1) * ROW_SIZE};
     uint32_t table = call_cdecl(F_MALLOC, 1, a);
-    if (rt_unwinding || !readable(table)) return 1;
+    if (rt_unwinding) return 1;
+    if (!readable(table)) {                 /* as the original's failed malloc (0x435daa..0x435e13): false */
+        rt_ret_cdecl(0);
+        return 1;
+    }
     wr16(g_mem, obj + COMP_CLUBS, (uint16_t)n);
     wr32(g_mem, obj + COMP_TABLE, table);
     for (int i = 0; i < n && !rt_unwinding; i++) {
@@ -482,10 +545,7 @@ static uint32_t state_make(const SeasonCompDef *d, uint32_t rec, int year, int l
         uint32_t clubs[MAX_PICK];
         /* A region object that keeps its region (its state has fewer clubs than its class needs) holds the clubs of
          * the region's other states: their new objects are not made in this game (review of 2026-10-20). */
-        static const StateClass *const region_class[3] = {&NORTH, &NORTHEAST, &CENTRAL};
-        int region_have = state_clubs(&STATES[st->region], object_of_state(st->region), clubs, MAX_PICK);
-        if (rt_unwinding) return 0;
-        if (region_have < region_class[st->region]->min) {
+        if (keeps_region(st->region)) {
             fprintf(stderr, "recomp: brazil states: %s: %s keeps its region, no championship of %s\n", d->record,
                     STATES[st->region].record, st->code);
             return 0;
@@ -511,7 +571,7 @@ static uint32_t state_make(const SeasonCompDef *d, uint32_t rec, int year, int l
 
 #define STATE_DEF(name, comp, file, record, region, short_name)                                                   \
     const SeasonCompDef name = {comp, file, record, BRAZIL_ENTRY, state_make, REGIONS_LIKE_##region, short_name,  \
-                                REGIONS_LEVEL_##region}
+                                REGIONS_LEVEL_##region, 0}
 #define REGIONS_LIKE_0 "Brazilian North State Championship"
 #define REGIONS_LIKE_1 "Brazilian Northeast State Championship"
 #define REGIONS_LIKE_2 "Brazilian Central State Championship"

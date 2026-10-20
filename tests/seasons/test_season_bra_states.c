@@ -27,6 +27,9 @@ int main(void)
     expect("Any Club", "Fortaleza (XX)", NULL);                  /* not a state code: no state */
     expect("Any Club", "Nowhere", NULL);
     expect("", "", NULL);
+    expect("Sociedade Esportiva do Gama (DF)", "Nowhere", "DF");   /* the club's suffix (databases from 2020) */
+    expect("Some Club (XX)", "Nowhere", NULL);                     /* not a state code */
+    expect("Some Club (DF)", "Fortaleza (CE)", "CE");             /* the city's code first */
     /* A club of the table with a city that the table lacks: the first club row of the table. */
     for (int i = 0; i < season_bra_name_count; i++)
         if (season_bra_names[i].club) {

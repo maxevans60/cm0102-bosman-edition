@@ -41,8 +41,15 @@ int season_bra_state_from(const char *club, const char *city, char out[3])
         out[0] = city[n - 3], out[1] = city[n - 2], out[2] = 0;
         return 1;
     }
+    /* From November 2020 the databases write the code at the end of the club's name: "Sociedade Esportiva do Gama
+     * (DF)" (review of 2026-10-20). */
+    size_t m = club ? trimmed(club) : 0;
+    if (m >= 4 && club[m - 1] == ')' && club[m - 4] == '(' && is_state(club + m - 3)) {
+        out[0] = club[m - 3], out[1] = club[m - 2], out[2] = 0;
+        return 1;
+    }
     if (city) state = in_table(0, city, n);
-    if (!state && club) state = in_table(1, club, trimmed(club));
+    if (!state && club) state = in_table(1, club, m);
     if (!state) return 0;
     out[0] = state[0], out[1] = state[1], out[2] = 0;
     return 1;
