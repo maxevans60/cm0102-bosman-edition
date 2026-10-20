@@ -37,7 +37,8 @@
 #define ITA_SUPER_SIZE 0xb2u
 #define CLUBS 0xae23b4u                 /* the club records, 0x245 bytes each */
 #define CLUB_SIZE 0x245u
-#define CLUB_COUNT 0xae235cu            /* s32; the clubs are [0xae235c] - 2 * [0xae2350] (ItaCup::select_entrants 0x63fb2a) */
+/* s32; the clubs are [0xae235c] - 2 * [0xae2350] (ItaCup::select_entrants 0x63fb2a) */
+#define CLUB_COUNT 0xae235cu
 #define CLUB_COUNT_LESS 0xae2350u
 #define CLUB_DIVISION 0x57u             /* the comp record of the club's division (record +0 its id) */
 #define CLUB_LAST_DIVISION 0x5bu        /* the division of the last season */

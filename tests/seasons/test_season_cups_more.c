@@ -14,7 +14,15 @@
 
 static int failures;
 
-#define CHECK(cond, ...) do { if (!(cond)) { failures++; printf("FAIL line %d: ", __LINE__); printf(__VA_ARGS__); printf("\n"); } } while (0)
+#define CHECK(cond, ...) \
+    do { \
+        if (!(cond)) { \
+            failures++; \
+            printf("FAIL line %d: ", __LINE__); \
+            printf(__VA_ARGS__); \
+            printf("\n"); \
+        } \
+    } while (0)
 
 static void four_clubs(void)
 {
@@ -122,7 +130,8 @@ static void groups(void)
     const SeasonCupGroups *g = season_cup_groups("sco_lge_cup", 2015);
     CHECK(!g, "Scottish League Cup 2015/16 has no groups");
     g = season_cup_groups("sco_lge_cup", 2016);
-    CHECK(g && g->groups == 8 && g->ko_clubs == 16 && g->byes == 1 && g->base_rounds == 0, "Scottish League Cup 2016/17");
+    CHECK(g && g->groups == 8 && g->ko_clubs == 16 && g->byes == 1 && g->base_rounds == 0,
+          "Scottish League Cup 2016/17");
     CHECK(season_cup_groups("sco_lge_cup", 2030) == g, "Scottish League Cup after the table");
     g = season_cup_groups("tur_cup", 2005);
     CHECK(g && g->base_rounds == 3 && g->groups == 4 && g->ko_clubs == 8, "Turkish Cup 2005/06");

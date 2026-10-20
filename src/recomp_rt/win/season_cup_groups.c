@@ -25,11 +25,11 @@
  * stages (it does nothing with +0x2c > 0, 0x5198a3), as slice 22 does for the UEFA Cup. A save keeps +0x2c, +0x30 and
  * the stages (Cup::save_cup_to_disk 0x5210f0); the stage array is made before a load (season_cup_groups_load).
  *
- * The EFL Trophy (EngAutoCup) is a Cup with two stages of its own: its regional half in a Cup_Stage (create_section_stage
- * 0x56bab0, from the clubs at +0xb2) and the final (advance_stage 0x56bc50, create_final_stage 0x56bce0). In a group
- * season the team list takes the clubs of both halves, the section stage is not made, slot 10 is the group draw, its
- * rank_teams 0x56c010 (it reads the team list of stage 0 at 0x56c06b) does not run, and its slot 12 0x595160 (the
- * honours of stage 1) takes the knockout stage.
+ * The EFL Trophy (EngAutoCup) is a Cup with two stages of its own: its regional half in a Cup_Stage
+ * (create_section_stage 0x56bab0, from the clubs at +0xb2) and the final (advance_stage 0x56bc50,
+ * create_final_stage 0x56bce0). In a group season the team list takes the clubs of both halves, the section stage
+ * is not made, slot 10 is the group draw, its rank_teams 0x56c010 (it reads the team list of stage 0 at 0x56c06b)
+ * does not run, and its slot 12 0x595160 (the honours of stage 1) takes the knockout stage.
  *
  * The base game (2001/02, changing rules off) and RECOMP_SEASON_CODE=off get none of it (Q152, Q342). */
 #include "win.h"
@@ -76,8 +76,8 @@
 #define F_MATCH_DATE 0x00521eb0u
 #define F_GROUP_DATE 0x0068a160u        /* league_round_set_date, cdecl (table, round, day, month, year+, weekday, time,
                                          * year, 0) */
-#define F_GROUP_SLOT 0x0068a1c0u        /* league_round_set_match_slot, cdecl (table, round, slot, weekday, kind, option,
-                                         * value) */
+#define F_GROUP_SLOT 0x0068a1c0u        /* league_round_set_match_slot, cdecl (table, round, slot, weekday, kind,
+                                         * option, value) */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -265,7 +265,7 @@ void season_cup_groups_table(uint32_t cup, uint32_t stage, uint32_t count_ptr)
     if (is_auto_cup(cup)) merge_auto_halves(cup);
     if (rt_unwinding) return;
     int clubs = club_count(cup);
-    if (clubs < 2 * g->groups) return;                  /* the class has not picked its clubs yet (ScoLgeCup 0x7f0230) */
+    if (clubs < 2 * g->groups) return;  /* the class has not picked its clubs yet (ScoLgeCup 0x7f0230) */
     if ((int32_t)rd32(g_mem, cup + CUP_STAGE_NOW) >= 0 && readable(rd32(g_mem, cup + CUP_STAGES))) free_stages(cup);
     if (rt_unwinding || !big_stage_array(cup)) return;
     wr32(g_mem, cup + CUP_STAGE_COUNT, (uint32_t)(g->groups + 1));
@@ -284,7 +284,8 @@ static void mark_later_slots(uint32_t cup)
     const SeasonCupGroups *g = layout(cup);
     if (!g || g->base_rounds <= 0) return;
     uint32_t list = rd32(g_mem, cup + CUP_TEAM_LIST);
-    int count = (int16_t)rd16(g_mem, cup + CUP_TEAMS), from = base_slots(cup, (int16_t)rd16(g_mem, cup + CUP_ROUND_COUNT));
+    int count = (int16_t)rd16(g_mem, cup + CUP_TEAMS);
+    int from = base_slots(cup, (int16_t)rd16(g_mem, cup + CUP_ROUND_COUNT));
     for (int i = from; readable(list) && i < count && i < 512; i++) g_mem[list + 6u * (uint32_t)i + 5] = 0xff;
 }
 
@@ -343,8 +344,8 @@ static void draw_groups(uint32_t cup, const SeasonCupGroups *g)
     }
     int sizes[MAX_GROUPS];
     if (!season_cup_group_sizes(n, g->groups, sizes)) {
-        fprintf(stderr, "recomp: cup groups: %s: %d clubs for %d groups, the class's rounds play\n", format_file(cup), n,
-                g->groups);
+        fprintf(stderr, "recomp: cup groups: %s: %d clubs for %d groups, the class's rounds play\n",
+                format_file(cup), n, g->groups);
         wr32(g_mem, cup + CUP_STAGE_COUNT, 0);
         g_mem[cup + CUP_BASE_DONE] = 0;
         return;
@@ -385,8 +386,8 @@ static void draw_groups(uint32_t cup, const SeasonCupGroups *g)
          * name (0x43d + stage, Group A to Group H, sweep-europe 0x583eda; groups after the eighth repeat the names),
          * 0xf, 2, 0, 8, -1, 0, 2. */
         uint32_t a[22] = {cup, (uint32_t)filled[x], mem, (uint32_t)g->meetings, rd32(g_mem, cup + 4), table,
-                          (uint32_t)days, 3, 1, 8, order, places, year, (uint32_t)x, 0x43du + (uint32_t)(x % 8), 0xf, 2, 0,
-                          8, 0xffffffffu, 0, 2};
+                          (uint32_t)days, 3, 1, 8, order, places, year, (uint32_t)x, 0x43du + (uint32_t)(x % 8),
+                          0xf, 2, 0, 8, 0xffffffffu, 0, 2};
         call_this(F_LEAGUE_STAGE, obj, 22, a);
         if (rt_unwinding) return;
         cpu.esp = saved_esp;
@@ -415,7 +416,8 @@ static uint32_t row_at(uint32_t stage, int pos)
 static double row_score(uint32_t stage, uint32_t row, int clubs, int meetings)
 {
     uint32_t at = row + 0xeu * (uint32_t)(int32_t)rd32(g_mem, stage + 0xad);
-    int points = (int16_t)rd16(g_mem, at + 0x19), gf = (int16_t)rd16(g_mem, at + 0x15), ga = (int16_t)rd16(g_mem, at + 0x17);
+    int points = (int16_t)rd16(g_mem, at + 0x19);
+    int gf = (int16_t)rd16(g_mem, at + 0x15), ga = (int16_t)rd16(g_mem, at + 0x17);
     int games = (clubs - 1) * meetings;
     return (games > 0 ? 1000.0 * points / games : 0) + (gf - ga) + gf / 1000.0;
 }
@@ -430,7 +432,8 @@ static void build_ko_table(uint32_t t, const SeasonCupGroups *g, int rounds, uin
         wr16(g_mem, rec + 7, (uint16_t)code);
         wr16(g_mem, rec + 9, (uint16_t)r);
         wr16(g_mem, rec + 0xb, 0);
-        uint16_t pairs = r == 0 ? 0x200u : 0;           /* the first round: the list's pairs (map_fixture_tree 0x519279) */
+        /* The first round: the list's pairs (map_fixture_tree 0x519279). */
+        uint16_t pairs = r == 0 ? 0x200u : 0;
         if (spec->legs == 2) {
             wr16(g_mem, rec + 0xd, pairs);
             wr16(g_mem, rec + 0xf, spec->flags);

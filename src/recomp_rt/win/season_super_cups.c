@@ -35,7 +35,8 @@
 #define F_PLACED 0x004afd80u            /* comp_util_get_latest_placed_club, cdecl (record, place 0 to 2) */
 #define F_MALLOC 0x00944e46u            /* malloc, cdecl (size) */
 #define F_FREE 0x009452cau              /* free, cdecl (block) */
-#define F_DRAW_DATE 0x00521e60u         /* cup_set_round_draw_date, cdecl (table, round, day, month, year+, weekday, year) */
+/* cup_set_round_draw_date, cdecl (table, round, day, month, year+, weekday, year) */
+#define F_DRAW_DATE 0x00521e60u
 #define F_MATCH_DATE 0x00521eb0u        /* cup_set_round_match_date, cdecl (table, round, day, month, year+, weekday,
                                          * kick-off slot, year, venue) */
 
