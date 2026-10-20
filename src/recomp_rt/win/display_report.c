@@ -31,7 +31,7 @@
 
 typedef struct {
     uint64_t ms;                        /* since SDL_Init */
-    char line[260];
+    char line[320];
 } Event;
 static Event events[REPORT_EVENTS];
 static int event_count;                 /* every event so far; the last REPORT_EVENTS are kept */
@@ -53,9 +53,15 @@ static void add(Text *t, const char *fmt, ...)
 static void hide_user(const char *path, char *out, size_t room)
 {
     char home[1024];
-    size_t n;
-    if (!host_home_dir(home, sizeof home) || !(n = strlen(home)) || strncmp(path, home, n)
-        || (path[n] && path[n] != '/')) {
+    size_t n = 0;
+    if (host_home_dir(home, sizeof home)) n = strlen(home);
+    while (n > 1 && home[n - 1] == '/') home[--n] = 0;     /* a home folder with a slash at the end */
+#ifdef _WIN32
+    int differs = n && _strnicmp(path, home, n);           /* Windows keeps the case the player typed */
+#else
+    int differs = n && strncmp(path, home, n);
+#endif
+    if (!n || differs || (path[n] && path[n] != '/')) {
         snprintf(out, room, "%s", path);
         return;
     }
@@ -94,7 +100,7 @@ static void window_line(Text *t)
 void display_report_event(const char *what)
 {
     if (!win_sdl_window()) return;
-    char line[200];
+    char line[260];
     Text t = {line, sizeof line, 0};
     window_line(&t);
     Event *e = &events[event_count % REPORT_EVENTS];
@@ -194,7 +200,7 @@ void display_report_key(void)
     int copied = text && !SDL_SetClipboardText(text);
     hide_user(path, shown, sizeof shown);
     if (ok)
-        snprintf(msg, sizeof msg, "The display report is saved to:\n%s\n\n%s", path,
+        snprintf(msg, sizeof msg, "The display report is saved to:\n%s\n\n%s", shown,
                  copied ? "It is also on the clipboard. Paste it into your forum post or GitHub issue."
                         : "Attach this file to your forum post or GitHub issue.");
     else

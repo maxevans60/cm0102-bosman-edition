@@ -341,7 +341,8 @@ static void end_click_for_key(void)
     post_mouse(WM_MOUSEMOVE, key_click.real_x, key_click.real_y);
 }
 
-/* The keys of the options. Returns 1 when the key did its work; the game then does not get it. */
+/* The keys of the options. Returns 1 when the key did its work; the game then does not get it, nor its repeats
+ * and release. Returns 2 for the display report key: the game does not get the press, and nothing is swallowed. */
 static int shortcut_key(SDL_Keycode k, Uint16 mod)
 {
     int x, y;
@@ -363,7 +364,7 @@ static int shortcut_key(SDL_Keycode k, Uint16 mod)
     if (k == SDLK_d && (mod & KMOD_SHIFT) && (mod & (windows ? KMOD_CTRL : KMOD_GUI)) && !(mod & KMOD_ALT)) {
         fprintf(stderr, "recomp: key display report\n");
         display_report_key();
-        return 1;
+        return 2;    /* not swallowed: the release of D may go to the message box, and a kept swallow would lose the next D */
     }
     if (k == SDLK_SPACE && plain && options_bool(OPT_SPACE_TO_CONTINUE))
         return keys_continue_game(&x, &y) && click_for_key(x, y);
@@ -579,7 +580,9 @@ static void handle_event(SDL_Event *e)
     case SDL_KEYDOWN:
     case SDL_KEYUP: {
         int down = e->type == SDL_KEYDOWN;
-        if (down && !e->key.repeat && shortcut_key(e->key.keysym.sym, e->key.keysym.mod)) {
+        int done = down && !e->key.repeat ? shortcut_key(e->key.keysym.sym, e->key.keysym.mod) : 0;
+        if (done == 2) break;
+        if (done) {
             swallow_key = e->key.keysym.sym;
             break;
         }

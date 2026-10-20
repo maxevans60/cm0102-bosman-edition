@@ -322,6 +322,7 @@ typedef HANDLE (WINAPI *SetContextFn)(HANDLE);
 typedef int (WINAPI *AwarenessFn)(HANDLE);
 typedef HRESULT (WINAPI *MonitorDpiFn)(HMONITOR, int, UINT *, UINT *);
 #define PER_MONITOR_AWARE_V2 ((HANDLE)(intptr_t)-4)
+#define PER_MONITOR_AWARE ((HANDLE)(intptr_t)-3)
 
 typedef struct { char *out; size_t room, len; int n, unaware; MonitorDpiFn dpi; SetContextFn set; } Notes;
 
@@ -350,15 +351,24 @@ static BOOL CALLBACK note_monitor(HMONITOR m, HDC dc, LPRECT r, LPARAM p)
     int real = EnumDisplaySettingsW(mi.szDevice, ENUM_CURRENT_SETTINGS, &dm);
     /* The scale of the screen as Windows sets it, read as a program that handles the scale itself. */
     UINT dx = 0, dy = 0;
+    /* Windows 10 1703 and later have V2, 1607 has only the first per-screen context. Without either the call
+     * gives 96 for an unaware game, so the scale then comes from the real pixels against the size the game sees. */
     HANDLE old = s->set ? s->set(PER_MONITOR_AWARE_V2) : NULL;
-    if (!s->dpi || s->dpi(m, 0 /* MDT_EFFECTIVE_DPI */, &dx, &dy) != S_OK) dx = 0;
+    if (!old && s->set) old = s->set(PER_MONITOR_AWARE);
+    if (!old || !s->dpi || s->dpi(m, 0 /* MDT_EFFECTIVE_DPI */, &dx, &dy) != S_OK) dx = 0;
     if (old) s->set(old);
+    long seen_w = (long)(mi.rcMonitor.right - mi.rcMonitor.left);
+    int from_pixels = 0;
+    if (!dx && real && s->unaware && seen_w > 0) {
+        dx = (UINT)((long)dm.dmPelsWidth * 96 / seen_w);
+        from_pixels = 1;
+    }
     notes_add(s, "Windows screen %d%s: %ld x %ld as the game sees it", s->n,
               (mi.dwFlags & MONITORINFOF_PRIMARY) ? " (main)" : "",
               (long)(mi.rcMonitor.right - mi.rcMonitor.left), (long)(mi.rcMonitor.bottom - mi.rcMonitor.top));
     if (real) notes_add(s, ", %lu x %lu real pixels at %lu Hz", (unsigned long)dm.dmPelsWidth,
                         (unsigned long)dm.dmPelsHeight, (unsigned long)dm.dmDisplayFrequency);
-    if (dx) notes_add(s, ", scale %u%%", dx * 100u / 96u);
+    if (dx) notes_add(s, ", scale %u%%%s", dx * 100u / 96u, from_pixels ? " (from the pixels)" : "");
     else notes_add(s, ", scale unknown");
     notes_add(s, "\n");
     if (dx > 96 && s->unaware) notes_add(s, "  Windows stretches the game window on this screen.\n");
