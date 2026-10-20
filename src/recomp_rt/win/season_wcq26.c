@@ -219,7 +219,19 @@ uint32_t rt_wcq26_concacaf_hosts(uint32_t self, uint32_t exempt)
  * pool below 47 keeps the original's shape (no first round would remain). */
 static int africa_on(uint32_t self)
 {
-    return season_wcq26(self) && (int)rd32(g_mem, self + 0xb6u) >= 47 && (int)rd32(g_mem, self + 0xb6u) <= 52;
+    if (!season_wcq26(self)) return 0;
+    int pool = (int)rd32(g_mem, self + 0xb6u);
+    if (pool >= 47 && pool <= 52) return 1;
+    /* The pool builder takes at most 52 (0x910896; every season database from October 2021 holds 54 African
+     * nations, so the pool is 52), and below 47 no first round is left: the original's shape and its 5 places
+     * stay, and the fill gives the World Cup's open places (Q388). Logged once a campaign (review 2). */
+    static int logged;
+    if (logging() && logged != year_of(self)) {
+        logged = year_of(self);
+        fprintf(stderr, "recomp: season intl: wc qualifying %d: Africa pool of %d, the original's shape stays\n",
+                year_of(self) + 2, pool);
+    }
+    return 0;
 }
 
 /* 0x910133 (this in esi), 0x90f6f0 (template, this in edi): the first-round team count, 50 in the original. */
@@ -760,6 +772,16 @@ static void build_round(uint32_t self, int st, const uint32_t *teams)
     call_this(CUP_START, cup, 1, z);
 }
 
+/* The status of a team in a Cup's rows (+0xa7, 6 bytes: +0 the team, +5 the status), or -1 when not in them. */
+static int cup_status(uint32_t cup, uint32_t team)
+{
+    uint32_t rows = readable(cup) ? rd32(g_mem, cup + F_CUP_ROWS) : 0;
+    int n = readable(cup) ? (int16_t)rd16(g_mem, cup + F_TEAMS) : 0;
+    for (int i = 0; readable(rows) && i < n && i < 64; i++)
+        if (rd32(g_mem, rows + (uint32_t)i * 6u) == team) return rd8(g_mem, rows + (uint32_t)i * 6u + 5u);
+    return -1;
+}
+
 /* The six of the tournament, best first by nation reputation (the real seeding used the FIFA ranking of
  * November 2025: decision Q565): the first two are the seeds. The sections keep their tables until their
  * start_new_season of 25 July, so the finals take the same six again (no state of this file goes into a save). */
@@ -827,12 +849,25 @@ static uint32_t tie_winner(uint32_t cup, int k)
     return 0;
 }
 
-/* The finals: seed 1 v the winner of semi-final 1, seed 2 v the winner of semi-final 2, the seed at home. */
+/* The finals: seed 1 v the winner of semi-final 1, seed 2 v the winner of semi-final 2, the seed at home. The
+ * seeds are the two of the six that did not play the semi-finals (the rows of stage 2), so a reputation that
+ * changes between 26 and 31 March does not take a semi-finalist into the seeds (review 2). The two seeds keep
+ * the order of the day's sort (the pairing of a seed with a semi-final was a draw in 2026). */
 static void build_finals(uint32_t self)
 {
-    uint32_t six[6], semis = stage_of(self, 2);
+    uint32_t six[6], semis = stage_of(self, 2), seeds[2] = {0, 0};
     if (!tournament_six(self, six)) return;
-    uint32_t finals[4] = {six[0], tie_winner(semis, 0), six[1], tie_winner(semis, 1)};
+    int n = 0;
+    for (int k = 0; k < 6 && n < 2; k++)
+        if (cup_status(semis, six[k]) < 0) seeds[n++] = six[k];
+    if (n < 2) {                                         /* not found: the sort of today, logged */
+        seeds[0] = six[0];
+        seeds[1] = six[1];
+        if (logging())
+            fprintf(stderr, "recomp: season intl: wc play-off %d: the seeds are not the two out of the semi-finals\n",
+                    year_of(self) + 2);
+    }
+    uint32_t finals[4] = {seeds[0], tie_winner(semis, 0), seeds[1], tie_winner(semis, 1)};
     if (logging())
         fprintf(stderr, "recomp: season intl: wc play-off %d: finals %s v %s, %s v %s\n", year_of(self) + 2,
                 team_name(finals[0]), team_name(finals[1]), team_name(finals[2]), team_name(finals[3]));
@@ -925,16 +960,6 @@ RT_WRAP(0091e840, wcq26_oceania_status)
  * 0x917110 leave two seeds for three groups, and a 2023 start with changing rules off put Costa Rica into two
  * groups. In the gate the empty seed slots take the strongest nations of North America (continent 0x9cfa14) that
  * are out of the early rounds (concacaf_in_play). */
-/* The status of a team in a Cup's rows (+0xa7, 6 bytes: +0 the team, +5 the status), or -1 when not in them. */
-static int cup_status(uint32_t cup, uint32_t team)
-{
-    uint32_t rows = readable(cup) ? rd32(g_mem, cup + F_CUP_ROWS) : 0;
-    int n = readable(cup) ? (int16_t)rd16(g_mem, cup + F_TEAMS) : 0;
-    for (int i = 0; readable(rows) && i < n && i < 64; i++)
-        if (rd32(g_mem, rows + (uint32_t)i * 6u) == team) return rd8(g_mem, rows + (uint32_t)i * 6u + 5u);
-    return -1;
-}
-
 /* 1 when a team still plays in the section or is in the World Cup: a pool slot that has not played (not in the
  * first round's rows, or a first round winner), the leader of a central group of stage 0 or 1, a winner of the
  * round of stage 2, a World Cup slot. The losers of the early rounds are free. */

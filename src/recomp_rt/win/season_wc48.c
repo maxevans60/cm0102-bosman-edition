@@ -216,10 +216,11 @@ static void round_fields(uint32_t rec, int round, int value, int teams, int firs
 /* The knockout of 48 teams: 6 rounds (month from 0, 5 = June, 6 = July). The original's round of 16 to final
  * (0x92c8a1..0x92cc63) keep their dates, weekday codes, x and y arguments, slots, values and flags, 8 days later:
  * round of 16 26 June to 30 June becomes 4 to 8 July, quarter-finals 9 to 12 July, semi-finals 13 to 16 July,
- * third place 17 to 20 July and final 17 to 19 July. The first date of a round must come before its last: a first
+ * third place 17 to 18 July and final 18 to 19 July (the third place first, review 2). The first date of a round must come before its last: a first
  * form with both on the match day for the third place and the final never played them, so the cup never ended
  * and the World Cup and its sections never moved on (a 2025 start: four teams with status 0 on 21 July 2026).
- * The round of 32 (16 matches) plays from the original's first round of 16 day, 26 June, to 3 July, with no
+ * The round of 32 (16 matches) plays from 27 June (the groups end on 26 June, groups I to L two days after A to D)
+ * to 3 July, with no
  * kick-off slots: a round holds 8 (0x521f10 takes index 0 to 7, 0x521f28), and the matches then fall between
  * the two dates (inference). The real 2026 dates: round of 32 28 June to 3 July, round of 16 4 to 7 July,
  * quarter-finals 9 to 11 July, semi-finals 14 and 15 July, third place 18 July, final 19 July. The table's first
@@ -233,8 +234,8 @@ static uint32_t knockout_template(uint32_t self, uint32_t out_rounds, uint32_t o
     uint32_t rec = game_malloc(ROUNDS * ROUND_SIZE);
     if (rt_unwinding || !rec) return 0;
     int y = year_of(self);
-    /* Round of 32: first (26 June, weekday 4) as the original's round of 16 (0x92c8a1), last 3 July */
-    first_date(rec, 0, 26, 5, 4, y);
+    /* Round of 32: first 27 June (the day after the last group day of I to L), last 3 July */
+    first_date(rec, 0, 27, 5, 5, y);
     last_date(rec, 0, 3, 6, 5, 1, y, 1);
     round_fields(rec, 0, 0x14, 32, 1, y, 0x383);
     /* Round of 16 (0x92c8a1, 0x92c8b8: 26 to 30 June) */
@@ -265,12 +266,12 @@ static uint32_t knockout_template(uint32_t self, uint32_t out_rounds, uint32_t o
     slot(rec, 3, 1, 2, 2, 3, 4);
     slot(rec, 3, 2, -1, -1, -1, 0);
     round_fields(rec, 3, 0x82, 4, 0, y, 0x383);
-    /* Third place (0x92cb83, 0x92cb9b: 9 to 12 July, y 4) */
+    /* Third place (0x92cb83, 0x92cb9b: 9 to 12 July, y 4): 17 to 18 July, before the final (review 2) */
     first_date(rec, 4, 17, 6, 3, y);
-    last_date(rec, 4, 20, 6, 6, 1, y, 4);
+    last_date(rec, 4, 18, 6, 4, 1, y, 4);
     round_fields(rec, 4, 0x96, 2, 0, y, 0x83);
-    /* Final (0x92cc27, 0x92cc42: 9 to 11 July, y 0x80) */
-    first_date(rec, 5, 17, 6, 3, y);
+    /* Final (0x92cc27, 0x92cc42: 9 to 11 July, y 0x80): 18 to 19 July */
+    first_date(rec, 5, 18, 6, 4, y);
     last_date(rec, 5, 19, 6, 5, 1, y, 0x80);
     round_fields(rec, 5, 0x8c, 2, 0, y, 0x3);
     return rt_unwinding ? 0 : rec;
@@ -292,11 +293,23 @@ uint32_t season_wc48_template(void (*original)(void))
     }
     if (idx < KO) {
         int mapped = idx < 7 ? idx : idx - 8;
-        uint32_t out_id = rd32(g_mem, sp + 0xcu);
+        uint32_t out_id = rd32(g_mem, sp + 0xcu), out_rounds = rd32(g_mem, sp + 8u);
         wr8(g_mem, sp + 4u, (uint32_t)mapped);
         original();
         if (rt_unwinding) return cpu.eax;
         if (mapped != idx && readable(out_id)) wr16(g_mem, out_id, (uint32_t)(idx + 0x420));
+        /* Groups E to H play a day after A to D, groups I to L two days after: 8 World Cup matches a day at
+         * most (the original's 8 groups play 16 on each of its three days; the real 2026 groups played from 11
+         * to 27 June). A league round record is 0x41 bytes: +0 the day of the year, +2 the year offset, +4 the
+         * weekday code (league_round_set_date 0x68a160: 0x68a1a5..0x68a1b4). The days stay in June. */
+        int later = idx >= 7 ? 2 : idx >= 3 ? 1 : 0, rounds = readable(out_rounds) ? (int16_t)rd16(g_mem, out_rounds) : 0;
+        uint32_t rec = cpu.eax;
+        for (int i = 0; later && readable(rec) && i < rounds && i < 8; i++) {
+            uint32_t r = rec + (uint32_t)i * 0x41u;
+            wr16(g_mem, r, rd16(g_mem, r) + (uint32_t)later);
+            int wd = rd8(g_mem, r + 4u);
+            if (wd <= 6) wr8(g_mem, r + 4u, (uint32_t)((wd + later) % 7));
+        }
         return cpu.eax;
     }
     uint32_t rec = knockout_template(self, rd32(g_mem, sp + 8u), rd32(g_mem, sp + 0xcu), rd32(g_mem, sp + 0x10u));
@@ -396,10 +409,14 @@ static int random_below(int n)
     return r < 0 || r >= n ? 0 : r;
 }
 
-/* The groups of the hosts in table order (decision Q562): A, B and D for the three of 2026 (the real draw put
- * Mexico in A, Canada in B and the United States in D; the table lists Canada, Mexico, United States), then C,
- * E and F for 2030. */
-static const int host_group[6] = {1, 2, 4, 3, 5, 6};
+/* The group of each host by its place in the table (decision Q562). 2026 (Canada, Mexico, United States): the
+ * real draw put Canada in B, Mexico in A and the United States in D. Other editions (2030): A, B, D, C, E, F.
+ * A host that is missing from the slots does not move the others (review 2). */
+static int host_group_of(int year, int place)
+{
+    static const int y2026[3] = {2, 1, 4}, other[6] = {1, 2, 4, 3, 5, 6};
+    return year == 2026 && place < 3 ? y2026[place] : other[place < 6 ? place : 5];
+}
 
 /* The draw of 48 teams in 4 pots of 12. The original's seeding 0x92f230 sorts the slots with 0x4b07b0
  * (0x92f34a), puts the hosts (0x92f370) and the holder (0x92f3f0) first and makes pot 1 of 8; its draw 0x92e940
@@ -425,7 +442,7 @@ static uint32_t draw48(uint32_t self)
     game_free(buf);
 
     uint32_t front[7] = {0};
-    int ids[6], hosts = season_intl_host_ids(rd32(g_mem, WC_KEY), year_of(self), ids);
+    int ids[6], hosts = season_intl_host_ids(rd32(g_mem, WC_KEY), year_of(self), ids), seeded_host[6];
     for (int k = 0; k < hosts; k++) {
         front[k] = host_team(ids[k]);
         if (rt_unwinding) return 0;
@@ -440,7 +457,7 @@ static uint32_t draw48(uint32_t self)
                 uint32_t t = order[k];
                 memmove(order + seeded + 1, order + seeded, (size_t)(k - seeded) * sizeof order[0]);
                 order[seeded++] = t;
-                if (f < hosts) host_seeded++;
+                if (f < hosts) seeded_host[host_seeded++] = f;      /* the host's place in the table */
                 break;
             }
 
@@ -449,7 +466,7 @@ static uint32_t draw48(uint32_t self)
     if (rt_unwinding || !readable(res)) return 0;
     for (int pot = 0; pot * GROUPS < n; pot++) {
         int fixed = pot == 0 ? host_seeded : 0, taken[GROUPS + 1] = {0}, groups[GROUPS], m = 0;
-        for (int h = 0; h < fixed; h++) taken[host_group[h]] = 1;
+        for (int h = 0; h < fixed; h++) taken[host_group_of(year_of(self), seeded_host[h])] = 1;
         for (int g = 1; g <= GROUPS; g++)
             if (!taken[g]) groups[m++] = g;
         for (int i = m - 1; i > 0; i--) {
@@ -460,7 +477,7 @@ static uint32_t draw48(uint32_t self)
             groups[j] = t;
         }
         for (int i = 0, used = 0; i < GROUPS && pot * GROUPS + i < n; i++) {
-            int k = pot * GROUPS + i, g = i < fixed ? host_group[i] : groups[used++];
+            int k = pot * GROUPS + i, g = i < fixed ? host_group_of(year_of(self), seeded_host[i]) : groups[used++];
             if (!readable(order[k])) continue;
             wr32(g_mem, res + (uint32_t)k * 5u, rd32(g_mem, order[k]));
             wr8(g_mem, res + (uint32_t)k * 5u + 4u, (uint32_t)g);
