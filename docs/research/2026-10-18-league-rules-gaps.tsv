@@ -98,6 +98,12 @@ gre-pol-cro-75	2021	gre_second	playoffs	partial: the winner of each group	group 
 gre-pol-cro-77	2023	gre_second	playoffs	partial: split rounds (needs the split kind)	top 5 of each group: play-off round; 6th-11th: play-out round
 gre-pol-cro-78	2024	gre_second	playoffs	partial: split rounds (needs the split kind)	top 5 of each group: play-off round; 6th-10th: play-out round
 gre-pol-cro-79	2025	gre_second	playoffs	partial: split rounds (needs the split kind)	top 4 of each group: play-off round; 5th-10th: play-out round
+gre-pol-cro-121	2013	gre_second	playoffs	partial: the places of each group	top 4 of each group: promotion play-off round of 8 for 3 places (2 direct, 3rd via a play-off match)
+gre-pol-cro-122	2014	gre_second	playoffs	partial: the places of each group	top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: relegation play-off groups
+gre-pol-cro-129	2021	gre_second	playoffs	partial: the winner of each group	group winners: title and promotion play-off
+gre-pol-cro-131	2023	gre_second	playoffs	partial: split rounds (needs the split kind)	top 5 of each group: play-off round; 6th-11th: play-out round
+gre-pol-cro-132	2024	gre_second	playoffs	partial: split rounds (needs the split kind)	top 5 of each group: play-off round; 6th-10th: play-out round
+gre-pol-cro-133	2025	gre_second	playoffs	partial: split rounds (needs the split kind)	top 4 of each group: play-off round; 5th-10th: play-out round
 gre-pol-cro-190	2001	pol_first	playoffs	partial: the 5th and 6th of the relegation group of 8	5th-6th of relegation group: relegation play-offs
 gre-pol-cro-353	2002	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
 gre-pol-cro-354	2003	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off

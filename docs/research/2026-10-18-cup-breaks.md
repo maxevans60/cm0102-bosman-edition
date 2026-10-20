@@ -1,0 +1,81 @@
+# Domestic cups, part 21b (0.6.0)
+
+Date 2026-10-18. Original: `clean-3968/cm0102.exe` 3.9.68, virtual addresses. Part 21a is in `2026-10-17-cup-round-record.md`; its list "Formats the code cannot hold" is the scope of this part. Code: `src/recomp_rt/win/season_kind_cup_breaks.c` (kind `cup_breaks`), `season_cup_breaks.c` (the part that reads only the rules table), more classes in `season_kind_cups.c`, rows in `tools/seasons/cup_formats.tsv`. Tests: ctest `season_cup_breaks` (`tests/seasons/test_season_cup_breaks.c`), `tests/seasons/cup_breaks_run.py`, `tests/seasons/season_cups_run.py`.
+
+## 1. Cups that end or pause
+
+### The classes
+
+29 classes of the original have a cup or super cup row with `not_held` in the rules table: `bel_super`, `bra_champ_cup`, `fra_lge_cup`, `ger_lge_cup`, `gre_super`, `hol_super`, `ire_leinster_cup`, `ire_lge_cup`, `ire_munster_cup`, `ire_pres_cup`, `ire_super_cup`, `ita_c1_super`, `ita_c_cup`, `jap_emp_cup`, `jap_j_cup`, `jap_super`, `kor_league_cup`, `kor_super_cup`, `nir_charity`, `nir_lge_cup`, `nor_cup`, `pol_lge_cup`, `pol_super`, `sco_chal_cup`, `swe_cup`, `usa_open_cup`, `wel_cup`, `wel_lge_cup`, `wel_prm_cup`. The club competitions outside UEFA are slice 26's (`season_kind_club_world.c`), the Intertoto Cup and the international competitions are other slices'.
+
+What the code of these classes does (read for each class):
+
+- Every `start_new_season` adds 1 to +0x40 before it calls `set_up_rules` or `set_up_rounds` (vtable +0x8c): FraLgeCup 0x5bd4be, KorLeagueCup 0x66c971, KorSuperCup 0x66df2e, WelPrmCup 0x928261, IreSuperCup 0x63b5b0, IreLgeCup 0x6377d1, IrePresCup 0x6398be, IreLeinsterCup 0x636cbe, IreMunsterCup 0x63916e, BraChampCup 0x426320, JapEmpCup 0x6629ee, JapJCup 0x665c5e, JapSuper 0x66657e, NorCup 0x78fc2e, ItaC1Super 0x63cb3e, ItaCCup 0x63d7f1, NirCharity 0x78a4ae, NirLgeCup 0x78d1d1, ScoChalCup 0x7ed1ce, WelCup 0x924cee, WelLgeCup 0x926911.
+- No function of these files calls vtable +0x8 (`start_new_season`), nor do `cup.cpp`, `league.cpp` or `comp.cpp`. So, unlike the Copa Mercosur and the Asian Super Cup (club world doc, section 3.3), no class starts itself outside the season pass.
+- Every constructor is thiscall (year, record) with `ret 8` and calls `Cup::Cup` 0x518640 or `League::League` 0x682200 first.
+- Six League-based classes make the fixtures of an edition at once: their constructor and their `start_new_season` call `League::create_fixtures` 0x6835c0 (WelPrmCup at 0x927970 and 0x9282f8; KorLeagueCup, IreLgeCup, ItaCCup, NirLgeCup, WelLgeCup the same). Cup classes make the fixtures of a round only on its draw and match dates.
+- Every Cup class picks its entrants in `start_new_season` (FraLgeCup 0x5bd4d0).
+
+### Edition and row
+
+The edition of a cup is its year +0x40. A split-season cup plays edition Y in season Y/Y+1, row Y. A calendar-year cup plays edition Y in the calendar year Y (NorCup draws its first round on 7 April of +0x40, `create_round_table` 0x78f3cb; JapJCup, KorSuperCup, UsaOpenCup the same), and the rules table puts that edition in row Y - 1 (`rules-0.6.0/club-world.md`, "How editions map to game seasons"; for example `nor_cup` row 2019/20 holds the real 2020 cup). `season_cups_calendar` reads this from the table: a file whose first row (2001/02) holds the real season "2002" alone is a calendar-year cup. The Irish classes play from August to May in the original (IrePresCup draws in June, plays in August, 0x6395f4, 0x639612), so they are split-season cups; their rows from 2003/04 hold the real calendar years 2004 on, which the game plays from August 2003 to May 2004.
+
+The season S of the hook (slice 16) is the edition that `start_new_season` makes: a log of the jump from 2019 (`RECOMP_SEASON_CHANGE_LOG=1`, lines `cup_breaks: <file> season S, year Y`) shows Y + 1 = S for every cup that did not skip a season, the Norwegian Cup too (its change on 27 November 2019 is season 2020).
+
+### Method
+
+- **In a game** (changing rules on, or the hooks of the start season): in the before hook of season S, a cup whose edition S the table does not hold calls `season_change_skip()`. The cup keeps its finished edition and its year, makes no fixtures and plays no matches (club world doc, section 3.2). The pass asks again each season. When the table holds the cup again, the before hook finds the year of the last edition (lower than S - 1) and sets +0x40 to S - 1, so `start_new_season` builds edition S with fresh entrants and dates in the future.
+- **At a new game** of a season game (start year not 2001): the constructor builds the first edition from its year argument. When the table does not hold that edition, the wrap gives the constructor, with changing rules on, the year of the next edition that the table holds, and the cup waits (club world doc, section 1). With changing rules off the cup stays off for the whole game (lead's decision on Q232, 2026-10-18: the rules of the start season stay), so it gets the year 2999, as a cup that the table never holds again. For an object with 2999:
+  - the wrap of `League::create_fixtures` 0x6835c0 makes no fixture and returns 1 (the callers test the result, 0x927975) while its constructor runs, also for the stage objects that the constructor makes;
+  - a League class gets +0x45 (drawn) 0 after the constructor. `League::check_complete` 0x689ad0 then returns false at 0x689af6, so `all_stages_complete` 0x48ce10 is false and the pass never calls `start_new_season` (which would make the edition of 3000 with fixtures). Without it a League with no fixtures could count as complete: the played counts of the table rows (+0x11) are compared with the matches per club +0xa7 (0x689b47..0x689b58), and a table with no rows passes. `League::update_for_date` 0x6847c0 does nothing while +0x45 is 0 (0x684811); `IreSuperCup::update_for_date` 0x63b300 draws only when +0x40 is the year at [0xde1f58]+0x439 (0x63b324..0x63b331). All eight League classes here have `League::check_complete` at vtable +0x10;
+  - a Cup class never draws, because its draw dates lie in 2999 (`Cup::update_for_date` 0x51fa45..0x51fa6d), so `Cup::check_complete` 0x521e00 never sees +0xb1 set.
+- **The Copa dos Campeoes has an outside start.** `bra_nat_first_fill_champions_cup_entrants` 0x42bba0 (Brazilian league) fills its entrants and calls `BraChampCup::start_preliminary_stage` 0x427320 at 0x42be2a, which makes its fixtures (`League::create_fixtures` at 0x42736b), whatever the cup's year. The check found six fixtures of 2999 in a 2008 game with Brazil (run `n2008`, caller 0x427370). The kind wraps 0x427320: it does not run while the table holds neither the edition of the game year nor the next one, or the cup waits for ever. No other class of the list has such a start in its own file (section "The classes"); the add_fixture log of the check would show one for a cup that waits for ever.
+- A 2001 start keeps the original's 2001/02 (the Leinster Cup and the Northern Irish Charity Shield, not held in 2001/02, play in a 2001 game with changing rules on, and stop in 2002/03).
+- News (Q258): one sentence in the season in which the table stops or starts holding the cup ("The X is not played in the 2020/21 season.", "The X is no longer played.", "The X is played again in the 2021/22 season."; calendar-year cups say "in 2020").
+
+### Decision for Max: a skip, not a wait, for a gap in a game
+
+The lead's rule for a cup that comes back was the wait of slice 26 (+0x40 at the next edition before `start_new_season`). For these classes that would make the next edition at once: the six League-based classes would put its fixtures into the clubs' fixture lists a season or more early (`League::create_fixtures` inside `start_new_season`, for example 0x9282f8), and every class would pick its entrants a season early (0x5bd4d0). The skip with a year fix at the return has neither problem, and it is the same state for a cup that never returns. At a new game the wait is the only way (no `start_new_season` runs for a new object); a League-based cup with a one-season gap at the start (Korean League Cup 2003, Irish League Cup 2002/03, Coppa Italia Serie C, Northern Irish and Welsh League Cups 2020/21) then holds the fixtures of its next edition from the start of the game. Recommended answer: keep the skip in a game and the wait at a new game.
+
+### Review round (2026-10-18)
+
+- **Slice 26's constructor wrap has the same fault** as this kind had: `season_kind_club_world.c` (`ctor`) gives the constructor the next edition with no test of `season_changing_rules()`, so in a game with changing rules off a competition that the start season does not hold comes back in a later season. Slice 26's review fixes (commit "Slice 26: review fixes") add the test: its `start_edition` gives the start season's rule with changing rules off.
+- **Screens of a cup that waits for ever: not known.** The comp season formatter `key_nation_format_comp_season` 0x6697c0 takes its year from its caller or from the game date and the entry's update day (0x66982e..0x669850), not from the object, so whether a screen writes "2999/00" needs a look at the screen. Not checked.
+- **The French league cup's UEFA Cup place.** `assign_uefa_cup_places` 0x904580 gives a nation's second place to its league cup winner: the record id at league table entry +0x1e (0x90480a), then the club in place 0 of the latest history row (`comp_util_get_latest_placed_club` 0x4afd80, call at 0x904890), the runner-up or a league club (0x9050d0) when that club already has a place. It reads no object. So with the Coupe de la Ligue idle from 2020/21 the place does not break, but it goes each season to the last winner in the history (2019/20), or to its runner-up. In real life the place moved to the league. Decision for Max: recommended answer, a later UEFA slice gives the place to the next league club when the league cup is not held (a wrap of 0x904580 or a site at 0x904890).
+
+### Not checked in a game run
+
+The runs `r2019`, `s2020`, `r2001` and `s2008` of `cup_breaks_run.py` check Belgium, Holland, Italy, Northern Ireland, Norway and Greece, and the new game with Select All in 2008. The Irish, Welsh, Korean, Scottish, Polish, Swedish, Brazilian and American cups need Select All in the test steps (their nations are not in the 16 rows that the steps click); their classes follow the same code (section "The classes").
+
+## 2. Round counts that differ from the class
+
+A row of `cup_formats.tsv` gives the rounds counted from the final, as many as the class makes. The real early rounds that the class does not have are for clubs that the game does not hold (the Highland and Lowland League clubs in Scotland, the fifth tier in Spain), so the class keeps its round count and its entrants.
+
+- **Scottish Cup from 2007:** part 21a already has the rows (replays to the quarter-finals, then on the day).
+- **Spanish Cup** (SpaCup `create_round_table` 0x84d220, vtable 0x96f9c8 +0x3c, 7 rounds): the round of 32 to the semi-finals over two legs from 2006/07; single matches to the quarter-finals and two-leg semi-finals from 2019/20; no away goals in the semi-finals from 2021/22.
+- **Turkish Cup** (TurCup 0x8fc670, vtable 0x97048c, 7 single rounds with golden goal): two-leg quarter-finals and semi-finals 2005/06 to 2010/11 and 2014/15 to 2016/17, from the fifth round 2017/18 to 2019/20, two-leg semi-finals 2012/13, 2013/14, 2021/22 to 2023/24 and 2026/27, single matches in the other seasons. The rounds of a group stage are single matches here (section 4). The research gives no away goals rule for the Turkish Cup, so the two-leg rounds keep away goals (type L).
+- **Russian Cup** (RusCup 0x7e9530, vtable 0x96f124, 6 rounds): the round of 32 to the semi-finals over two legs 2003/04 to 2006/07, two-leg quarter-finals and semi-finals in 2018/19, single matches in the other seasons. From 2020/21 (groups, then two paths) the rounds stay single matches (section 4).
+- **A round that becomes two legs can end after the next draw date** (SpaCup plays round 2 in early January and draws round 3 on 5 January; TurCup plays the quarter-final on 31 January and draws the semi-final on 6 February; RusCup plays round 1 on 12 October and draws round 2 on 13 October). The original handles it: `Cup::draw_round` 0x51c410 finds a tie with no winner (0x51c47c..0x51c495), moves the draw date one day on (0x51c4e9..0x51c549) and keeps the later rounds after it (0x51c54d..0x51c596). Part 21a's Belgian row of 2002 (two-leg quarter-finals, played on 24 January with the semi-final draw on 25 January, BelFaCup 0x41d310) already plays this way in its check `c2001`.
+- Golden goal (bit 0x80) stays in the classes that have it (TurCup, HolCup): the types keep that bit, and the rules table names no season for its end.
+
+## 3. Coppa Italia and KNVB Cup
+
+`ItaCup` and `HolCup` are League classes with a group stage. The knockout stage is a `Cup_Stage` object (constructor 0x522e00), made by `create_knockout_stage` (ItaCup 0x63f870, call at 0x63fa10; HolCup 0x5f4480, call at 0x5f4755) when the group stage ends. Its round table comes from the class's `create_schedule` (vtable +0x3c: ItaCup 0x63ec50 in vtable 0x96c318, HolCup 0x5f36e0 in vtable 0x96b7b8) with stage 7 (ItaCup, call at 0x63f9c0, 5 rounds written at 0x63ed91) or stage 0x13 (HolCup, call at 0x5f4708, 6 rounds at 0x5f381d), in the same 0x68-byte rounds as the Cup classes, with the same arguments (stage, short *round count, short *first id, int *out; `ret 0x10`). `Cup_Stage` plays them with the Cup code, so the five format fields hold the format. Both functions are wrapped for those stages, and the rows apply as for a Cup class:
+
+- `ita_cup` 2005: the first knockout round single, the rest two legs; 2007: the final a single match; 2008: single matches to the quarter-finals, semi-finals two legs; 2024: penalties after 90 minutes before the semi-finals.
+- `hol_cup` 2009: the final over two legs (one season); 2010: a single final again.
+- **Not held:** the group stages themselves (the Coppa Italia has none from 2005/06, the KNVB Cup none from 2003/04): see section 4.
+
+## 4. Group stages and four-club super cups
+
+Part 21c builds them: `docs/research/2026-10-18-cups-more.md`, sections 1 and 2. The Coppa Italia and KNVB Cup keep their group stages in every season (section 4 of that doc).
+
+## 5. New cups (slice 26's module)
+
+Part 21c builds the six new cups on new competition records of slice 26's module: `docs/research/2026-10-18-cups-more.md`, section 3. Q336 (EFL Trophy academy sides, National League Cup from 2024/25) stays out.
+
+## 6. Round names (Q370)
+
+The shared table of slice 22 (`docs/research/round-names.tsv`, `season_round_names.c`) gives a round its real name from the season in which the real competition renamed it, and the original's names stay until then (Q370). The original names the rounds of a domestic cup by number and stage: "First Round" to "Eighth Round", "Preliminary Round", "Quarter Final", "Semi Final", "Final" (strings of the long set, name function 0x4b4850), and "1st Rnd" and so on in the abbreviated set. The cup rows of the rules table describe the structure of each season (rounds, legs, entrants) and record no rename of a round, and the formats of this part keep every round code (+0x07) as the class makes it. So part 21b adds no row: no domestic cup round of the classes here has a rename with a source.
+
+Decision for Max: names such as "Round of 32" for the Copa del Rey or "Round of 16" for the Coppa Italia were the real names before 2001 too, so Q370 keeps the original's "Third Round" and "Fourth Round" for them. Recommended answer: keep it so; if Max wants the real names of every season (not only renames), a research pass with a source per name adds rows to `round-names.tsv` for the cups of section 2 and 3.

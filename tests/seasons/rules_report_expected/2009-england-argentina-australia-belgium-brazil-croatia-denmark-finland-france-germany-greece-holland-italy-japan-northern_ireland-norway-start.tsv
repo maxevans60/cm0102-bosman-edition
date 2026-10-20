@@ -11,17 +11,14 @@
 2009	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: AFC Tubize, RUS Andenne-Seilles
 2009	club_list	Belgian Second Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all; not in it: AFC Tubize; others: -
 2009	club_list	Brazilian National Third Division: 20 of 20 listed clubs that the database holds (20 listed), 36 other clubs, 56 in all; not in it: -; others: Alagoinhas Atlético Clube, Americano FC (RJ), Associação Atlética Anapolina, Associação Cultural e Desportiva Potiguar, Brasília Futebol Clube, Brusque Futebol Clube, Central Sport Club, Centro Sportivo Alagoano, Clube Náutico Marcílio Dias, Clube Recreativo e Atlético Catalano, Clube Rio Branco, Clube do Remo, Cristal Atlético Clube, ECPP Vitória da Conquista, Esporte Clube Flamengo, Esporte Clube Pelotas, Ferroviário Atlético Clube, Fluminense de Feira Futebol Clube, Friburguense Atlético Clube, Iraty Sport Club, Ituano Futebol Clube, Joinville Esporte Clube, Londrina Esporte Clube, Madureira Esporte Clube, Mesquita Futebol Clube, Mirassol Futebol Clube, Mogi Mirim Esporte Clube, Moto Clube de São Luís, Nacional Atlético Clube, Nacional Futebol Clube (AM), Oeste Futebol Clube, Paulista Futebol Clube, Rio Branco Atlético Clube, Sport Club Corinthians Paranaense, Vilhena Esporte Clube, Ypiranga Futebol Clube
-2009	club_list	Croatian Second Division North: 13 of 13 listed clubs that the database holds (14 listed), 3 other clubs, 16 in all; not in it: -; others: NK Belisce, NK Graficar Vodovod, NK Ðakovo
 2009	club_list	Danish Second Division: 16 of 22 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Boldklubben af 1908, Greve Idrætsforening, Hobro IK, Otterup Boldklub, Stenløse Boldklub, Tjørring Idrætsforening; others: -
 2009	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: FC Eindhoven, FC Omniworld; others: -
 2009	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: AC Oulu, Jyväskylän Jalkapalloklubi; others: -
 2009	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: A.O Kavalas, Panipeirotikos Athlitikos Syllogos Giannina; others: -
-2009	club_list	Greek National B Division: 14 of 17 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: Doxa Dramas, GS Ilioupolis, Rodos A.S; others: -
 2009	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Bologna F.C. 1909, Chievo Verona; others: -
 2009	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Ancona, Padova; others: -
 2009	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Kyoto Sanga FC, Shonan Bellmare; others: -
 2009	club_list	Japanese J-League 2: 12 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 12 in all; not in it: Ehime F.C., FC Gifu, Fagiano Okayama F.C., Kataller Toyama, New Wave Kitakyushu, Oita Trinita, Thespa Kusatsu; others: -
-2009	club_list	Northern Irish League First Division: 10 of 13 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Ballyclare Comrades, Banbridge Town, Coagh United; others: -
 2009	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Glenavon, Institute; others: -
 2009	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Kongsvinger IL, Sandefjord Fotball; others: -
 2009	clubs	african_nations (Africa Cup of Nations), row int-continental-95: game 0, table 16 (16 (15 played))
@@ -124,7 +121,7 @@
 2009	not_in_game	eng-349 eng_fa_trophy 'FA Trophy' (England)
 2009	not_in_game	fra-77 fra_cfa 'CFA' (France)
 2009	not_in_game	fra-78 fra_lower 'CFA 2' (France)
-2009	not_in_game	ger-107 new '3. Liga' (Germany)
+2009	not_in_game	ger-107 ger_regional '3. Liga' (Germany)
 2009	not_in_game	ger-116 new 'Supercup (unofficial)' (Germany)
 2009	not_in_game	gre-pol-cro-441 new 'Croatian Football Super Cup' (Croatia)
 2009	not_in_game	ita-142 ita_ser_c2a 'Lega Pro Seconda Divisione girone A' (Italy)

@@ -9,7 +9,7 @@ Usage:
         database of the run)
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
-        [--extra conference,regional,c2]
+        [--extra conference,regional,c2,spain,portugal]
         [--keep <folder>] [--timeout s] [--start-only] [--update-expected] [--changing-rules on|off]
         plays the season jump, then compares its report
 
@@ -110,6 +110,7 @@ RECORD = 0x6b
 NATION_ROWS = ["Argentina", "Australia", "Belgium", "Brazil", "Croatia", "Denmark", "England", "Finland", "France",
                "Germany", "Greece", "Holland", "Italy", "Japan", "Northern Ireland", "Norway"]
 EXTRA = {"conference": 320, "regional": 385, "c2": 451}     # y of the row; the extra division is at x 675
+ENV_EXTRA = {"spain", "portugal"}                           # slice 20: set by RECOMP_TEST_EXTRA, not by a click
 
 
 UEFA_LINES = []          # the uefa lines of the last report that read_report read (slice 22)
@@ -185,10 +186,27 @@ def pick_row(found, file, k):
     return main[min(k, len(main) - 1)]
 
 
+# Slice 21c: the new cups of season_new_cups.c report the file of their def; their rows have comp_file "new" and are
+# found by nation and comp (the same pairs as new_keys in src/recomp_rt/win/season_cups_more.c).
+NEW_FILES = {("Turkey", "super cup"): "new_tur_super", ("Russia", "super cup"): "new_rus_super",
+             ("Norway", "Norwegian Super Cup"): "new_nor_super", ("Russia", "league cup"): "new_rus_lge_cup",
+             ("England", "Conference League Cup"): "new_conf_cup",
+             ("Northern Ireland and Republic of Ireland", "All-Ireland cup"): "new_all_ireland"}
+
+
+def new_matches(name, row):
+    """A new competition of the shared module (season_comps.h, slice 28) and a row of comp_file "new": the module
+    gives the object the name of each season's row, and keeps the name of the season before until its next
+    change ("2018-19 UEFA Nations League" in 2019/20 holds the comp "UEFA Nations League")."""
+    return name in (row["name"], row["comp"]) or (row["comp"] and row["comp"] in name)
+
+
 def row_files(r):
     """The files of a row. A row of a new competition (comp_file "new") has the file of its def in
     src/recomp_rt/win/season_comps.c: "new_" and its comp in lower case with "_" for spaces ("Conference League"
-    gives new_conference_league)."""
+    gives new_conference_league). The new cups of slice 21c have files of their own (NEW_FILES)."""
+    if r["comp_file"] == "new" and (r["nation"], r["comp"]) in NEW_FILES:
+        return [NEW_FILES[(r["nation"], r["comp"])]]
     return ["new_" + r["comp"].lower().replace(" ", "_") if f == "new" else f for f in r["comp_file"].split(";")]
 
 
@@ -219,12 +237,19 @@ def differences(seasons, comps, rows):
     files_in_report = {c["file"] for c in comps}
     nations = set()
     held = collections.defaultdict(set)
+    held_new = collections.defaultdict(set)         # the names of the new competitions of each season (slice 28)
     nth = collections.Counter()
     for (season, _), phases in objects.items():
         c = phases.get("start") or phases["end"]
         both = [x for x in (phases.get("start"), phases.get("end")) if x]
         held[season].add(c["file"])
+        if c["file"].startswith("new_"):
+            held_new[season].add(c["name"])
         found = by_season_file.get((season, c["file"]), [])
+        if not found and c["file"].startswith("new_"):
+            # A new competition of the shared module (season_comps.h, slice 28): the rows of comp_file "new"
+            # with the object's name (the module gives it the name of each season's row).
+            found = [r for r in by_season_file.get((season, "new"), []) if new_matches(c["name"], r)]
         k = nth[(season, c["file"])]
         nth[(season, c["file"])] += 1
         if not found:
@@ -232,6 +257,11 @@ def differences(seasons, comps, rows):
             # and the rules table has no rows for them. So they give no line.
             if c["file"] not in FRIENDLY_FILES:
                 out.add((season, "no_row", f"{c['file']} ({c['name']}): no table row"))
+            continue
+        # Slice 20: a second object of a file that waits for a later season (the second Greek group between its
+        # editions) and has no row of its own this season gives no line.
+        own = [x for x in found if c["file"] in row_files(x)]
+        if k >= len(own) and own and not any(season - 1 <= x["year"] <= season + 1 for x in both):
             continue
         r = pick_row(found, c["file"], k)
         nations |= {x["nation"] for x in found if isinstance(x["tier"], int)}
@@ -283,6 +313,8 @@ def differences(seasons, comps, rows):
                 continue
             files = row_files(r)
             if any(f in held[s] for f in files):
+                continue
+            if r["comp_file"] == "new" and any(new_matches(n, r) for n in held_new[s]):
                 continue
             if r["nation"] in nations or any(f in files_in_report for f in files):
                 out.add((s, "not_in_game", f"{r['id']} {r['comp_file']} {r['name']!r} ({r['nation']})"))
@@ -339,6 +371,16 @@ def new_division_alias(division, season, rows):
     return division
 
 
+def club_record_names(season):
+    """Slice 15b: {(division, real name of the club moves table): the name of the new club record} of a season
+    (tools/seasons/make_club_records.py). RECOMP_CLUB_RECORDS=off: none."""
+    if os.environ.get("RECOMP_CLUB_RECORDS") == "off":
+        return {}
+    import make_club_records
+    out, _errors = make_club_records.build()
+    return {(r[1], r[2]): r[3] for r in out if r[0] == season}
+
+
 def club_differences(seasons, comps, clubs, data_dir, rows=()):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
@@ -371,11 +413,14 @@ def club_differences(seasons, comps, clubs, data_dir, rows=()):
     for n in held:
         plain_to[make_clubs.plain_name(n)].add(n)
     lists = collections.OrderedDict()
+    records = club_record_names(season)             # slice 15b: the new club records of the start season
     for s, division, club_id, club, _ in make_clubs.build()[0]:
         if s != season:
             continue
         if names.get(club_id) == club or club in held:
             name = club
+        elif club_id == -1 and (division, club) in records:
+            name = records[(division, club)]
         else:                               # the plain form, when one club of the database has it (season_clubs.c)
             name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
         lists.setdefault(new_division_alias(division, season, rows), []).append(name)
@@ -411,6 +456,8 @@ def division_differences(comps, clubs):
     for c in comps:
         if c["phase"] != "start" or c["kind"] != "league" or c["file"] not in files or c["clubs"] <= 0:
             continue
+        if c["year"] > c["season"] + 1:                 # slice 20: a league that waits for a later season
+            continue
         n = held.get((c["season"], c["record"]), 0)
         if n != c["clubs"]:
             out.add((c["season"], "division_clubs", f"{c['file']} ({c['name']}): {n} clubs in the division, "
@@ -437,6 +484,20 @@ def uefa_format_differences(rows):
         groups = re.search(r"Groups (\d+)", text)
         groups2 = re.search(r"Groups 2 (\d+)", text)
         ko = re.search(r"\b(?:KO|R3) (\d+)\.", text) or re.search(r"\bKO (\d+)", text)
+        # Slice 25 (2024/25 on): the league phase of 36 is the group stage, and its knockout stage is the
+        # play-offs and the round of 16 ("League phase 36, KO play-offs 16, R16 16"): 16 + 16 - 8 = 24 clubs.
+        league = re.search(r"League phase (\d+)", text)
+        r16 = re.search(r"\bR16 (\d+)", text)
+        league_po = re.search(r"\bKO play-offs (\d+)", text)
+        if league and r16 and league_po:
+            want = (0 if u["file"] == "european_cup" else int(league.group(1)),
+                    int(league_po.group(1)) + int(r16.group(1)) - int(league_po.group(1)) // 2)
+            game = (u["groups2"] if u["file"] == "european_cup" else u["groups"], u["ko_clubs"])
+            if game != want:
+                out.add((u["season"], "format", f"{u['file']}, row {r['id']}: game {game[0]} and {game[1]} clubs "
+                                                f"in the league phase and its knockout stage, table {want[0]} and "
+                                                f"{want[1]}"))
+            continue
         if u["file"] == "european_cup":
             if not ko:
                 continue
@@ -564,7 +625,7 @@ def league_steps(nations, extra):
     """The new game steps of tests/smoke/smoke_run.py with other leagues selected."""
     import smoke_run
     steps = smoke_run.without_intro_click([s for s in smoke_run.STEPS if "dump" not in s and "quit" not in s])
-    if nations == ["England"] and not extra:
+    if nations == ["England"] and not [e for e in extra if e in EXTRA]:
         return steps
     points = []                                                     # a step's time counts from the last wait
     if nations[0] == "all":
@@ -576,7 +637,8 @@ def league_steps(nations, extra):
             if n != "England":
                 points.append(f"390 {188 + 22 * NATION_ROWS.index(n)}")
     for e in extra:
-        points.append(f"675 {EXTRA[e]}")
+        if e in EXTRA:
+            points.append(f"675 {EXTRA[e]}")
     picks = [f"{2000 + 1500 * i} click {p}" for i, p in enumerate(points)]
     many = nations != ["England"]
     out = []
@@ -609,6 +671,11 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, opti
     options = {"display": "classic", "changing_rules": "off", "faster_days": "on"}
     options.update(options_more or {})
     env_extra = dict(env_more or {})
+    # Slice 20: Spain and Portugal sit below the 16 rows of the Select League(s) screen, so their extra division
+    # comes from the test switch RECOMP_TEST_EXTRA (season_divisions.h).
+    test_extra = [e for e in extra if e in ENV_EXTRA]
+    if test_extra:
+        env_extra["RECOMP_TEST_EXTRA"] = ",".join(test_extra)
     if year:
         env_extra["RECOMP_START_SEASON"] = str(year)
     if database:

@@ -160,6 +160,13 @@ def run_change(program, game, work):
     fails += ecl_checks("change", log, ufr.uefa_lines(report) if os.path.exists(report) else None, 2021)
     if re.search(r"new competition new_conference_league made for 2020", log):
         fails.append("change: the Conference League made for 2020/21")
+    # The Conference League record keeps its own name at each season change (the names table of slice 15 counts
+    # it as its own file, not as a second uefa_cup object).
+    if os.path.exists(report):
+        _, comps = rrc.read_report(report)
+        names = sorted({(c["season"], c["name"]) for c in comps if c["file"] == ECL_FILE})
+        if not names or any(n != "UEFA Europa Conference League" for _, n in names):
+            fails.append(f"change: the Conference League record's names {names}")
     # Rule Y: the 2021/22 winner (the uefa line of the report) is the holder that the 2022/23 seeding places.
     lines = ufr.uefa_lines(report) if os.path.exists(report) else {}
     winner = (lines.get((2021, "end", ECL_FILE)) or {}).get("winner", "-")

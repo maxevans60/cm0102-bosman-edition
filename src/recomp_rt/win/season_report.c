@@ -9,6 +9,21 @@
  * It only reads the game's memory.
  * At each start it also writes the clubs of each division (club lines, slice 15). RECOMP_RULES_REPORT_STOP=start
  * ends the program with code 0 after the first start report (the club moves and names of a start season).
+ * RECOMP_DATA_SWEEP=1 (0.6.0 slice 30a, check 4 in data form; with RECOMP_RULES_REPORT): at each start and end
+ * report the runtime also checks every competition object and each stage of it (stage array +0xc, +0x2c slots) and
+ * writes a "sweep" line for each fault, and one "sweepok" line a report with what it read:
+ *   - date: a round whose year is outside the edition (the year +0x40 of the object that holds the round table,
+ *     less one to plus two), or whose day is not a day of the year. Cup rounds: table +0xa3, +0x3c rounds of 0x68
+ *     bytes, the draw day word +0 and its year offset byte +2 (cup_set_round_draw_date 0x521e60 at 0x521ea6,
+ *     0x521ea9), the match day word +3 and its year offset byte +5 (cup_set_round_match_date 0x521eb0). League
+ *     rounds: table +0xba, +0xa9 rounds (word, 0x68b158) of 0x41 bytes, the day word +0 and the year offset word
+ *     +2 (league_round_set_date 0x68a160 at 0x68a1a5, 0x68a1ac). These are the dates that the Schedule and
+ *     Fixtures tabs of the competition screen show. An object waiting for an edition in 2999 or later (slices 21b,
+ *     26) is left out;
+ *   - empty: a league (kind league) that has drawn its fixtures (+0x45 1, Comp::Comp 0x48c5bb) while the rules
+ *     table gives its season clubs, with no club in its table (+0x3e 0) or an empty row (table +0xb1, rows of
+ *     0x3b bytes, the club at +0, 0x6826d0).
+ * It only reads memory.
  * RECOMP_SEASON_JUMP=<year>: the game plays on with no match engine, and the program ends with code 0 after
  * the end report of the season that starts in that year. The test steps put the manager on holiday
  * (tests/seasons/rules_report_check.py), so the days pass with no input. A value that is not a year from 2001
@@ -52,8 +67,11 @@
  * - +0x1c and +0x20 (s32) the record ids of the divisions above and below: EngFirst 0x572dea and 0x572df6
  *   store the key ids [0x9cf5bc] (English Premier Division) and [0x9cf5c4]; EngPrm 0x574bd0 stores -1. */
 #include "win.h"
+#include "season_comps.h"
 #include "season.h"
 #include "season_rules.h"
+#include "season_cups.h"
+#include "season_comps.h"
 #include "season_uefa.h"
 #include "season_comps.h"
 #include "../host.h"
@@ -87,7 +105,7 @@ static const SeasonCompClass *class_of(uint32_t vtable)
         if (season_comp_classes[mid].vtable < vtable) lo = mid + 1;
         else hi = mid - 1;
     }
-    return NULL;
+    return season_comps_class(vtable);     /* slice 28: a vtable copy of a new competition (season_comps.h) */
 }
 
 /* A pointer of the game that can be read: inside the 32-bit space and not near 0. */
@@ -96,10 +114,93 @@ static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 static void write_cup_rounds(FILE *f, int season, const char *phase, const char *slot, const char *file,
                              uint32_t obj);
 
+/* ---- RECOMP_DATA_SWEEP (slice 30a) ---- */
+
+static int sweep_on;
+static int sweep_objects, sweep_tables, sweep_rounds, sweep_faults;
+
+static void sweep_fault(FILE *f, int season, const char *phase, const char *file, uint32_t obj, const char *what)
+{
+    uint32_t rec = rd32(g_mem, obj + 4);
+    char name[64] = "?";
+    if (readable(rec)) {
+        snprintf(name, sizeof name, "%.51s", win_str(rec + 4));
+        for (char *p = name; *p; p++)
+            if (*p == '\t' || *p == '\n' || *p == '\r') *p = ' ';
+    }
+    fprintf(f, "sweep\t%d\t%s\t%s\t%s\t%s\n", season, phase, file, name, what);
+    sweep_faults++;
+}
+
+/* The rounds of one round table: cup (0x68 bytes, two dates) or league (0x41 bytes, one date). */
+static void sweep_rounds_of(FILE *f, int season, const char *phase, const char *file, uint32_t owner, uint32_t holder,
+                            int cup)
+{
+    int base = (int16_t)rd16(g_mem, holder + 0x40);
+    int n = cup ? (int16_t)rd16(g_mem, holder + 0x3c) : (int16_t)rd16(g_mem, holder + 0xa9);
+    uint32_t table = rd32(g_mem, holder + (cup ? 0xa3u : 0xbau)), size = cup ? 0x68u : 0x41u;
+    if (base < 1990 || base >= 2999 || n < 1 || n > 128 || !readable(table) || !readable(table + size * (uint32_t)n))
+        return;
+    sweep_tables++;
+    for (int i = 0; i < n; i++) {
+        uint32_t r = table + size * (uint32_t)i;
+        int day[2] = {(int16_t)rd16(g_mem, r), cup ? (int16_t)rd16(g_mem, r + 3) : 0};
+        int off[2] = {cup ? (int8_t)g_mem[r + 2] : (int16_t)rd16(g_mem, r + 2), cup ? (int8_t)g_mem[r + 5] : 0};
+        for (int k = 0; k < (cup ? 2 : 1); k++) {
+            int year = base + off[k];
+            sweep_rounds++;
+            if (day[k] < 0 || day[k] > 365 || year < base - 1 || year > base + 2) {
+                char what[160];
+                snprintf(what, sizeof what, "date: %s round %d of %d, %s day %d of %d (edition %d)",
+                         holder == owner ? "own" : "stage", i, n, k ? "match" : (cup ? "draw" : "match"), day[k],
+                         year, base);
+                sweep_fault(f, season, phase, file, owner, what);
+            }
+        }
+    }
+}
+
+static void sweep_comp(FILE *f, int season, const char *phase, const char *file, const SeasonCompClass *c,
+                       uint32_t obj)
+{
+    sweep_objects++;
+    if (c && (c->kind == SEASON_KIND_CUP || c->kind == SEASON_KIND_LEAGUE))
+        sweep_rounds_of(f, season, phase, file, obj, obj, c->kind == SEASON_KIND_CUP);
+    uint32_t stages = rd32(g_mem, obj + 0xc);
+    int32_t slots = (int32_t)rd32(g_mem, obj + 0x2c);
+    for (int32_t i = 0; readable(stages) && i < slots && i < 64; i++) {
+        uint32_t st = rd32(g_mem, stages + 4u * (uint32_t)i);
+        if (!readable(st) || st == obj) continue;
+        if (g_mem[st + 0x43] == 1) sweep_rounds_of(f, season, phase, file, obj, st, 1);       /* a Cup_Stage */
+        else if (g_mem[st + 0x43] == 2) sweep_rounds_of(f, season, phase, file, obj, st, 0);  /* a League_Stage */
+    }
+    if (!c || c->kind != SEASON_KIND_LEAGUE || rd32(g_mem, obj + 0x45) != 1) return;
+    const SeasonRule *r = season_rules_find(season, file, 0);
+    if (!r || r->clubs <= 0) return;
+    int n = (int16_t)rd16(g_mem, obj + 0x3e);
+    uint32_t table = rd32(g_mem, obj + 0xb1);
+    int empty = n <= 0 || !readable(table) ? -1 : 0;
+    for (int i = 0; !empty && i < n && i < 128; i++)
+        if (!readable(rd32(g_mem, table + 0x3bu * (uint32_t)i))) empty = i + 1;
+    if (empty) {
+        char what[160];
+        if (empty < 0) snprintf(what, sizeof what, "empty: no club in the table, the rules give %d", r->clubs);
+        else snprintf(what, sizeof what, "empty: row %d of %d has no club, the rules give %d", empty, n, r->clubs);
+        sweep_fault(f, season, phase, file, obj, what);
+    }
+}
+
 static void write_comp(FILE *f, int season, const char *phase, const char *slot, uint32_t obj)
 {
     uint32_t vt = rd32(g_mem, obj), rec = rd32(g_mem, obj + 4);
     const SeasonCompClass *c = class_of(vt);
+    /* Slice 21c: a new competition with its def's vtable copy reports the class of the copy and the def's file. */
+    SeasonCompClass copy;
+    if (!c && season_comps_base_vtable(vt) && class_of(season_comps_base_vtable(vt))) {
+        copy = *class_of(season_comps_base_vtable(vt));
+        copy.file = season_comps_file_of(obj);
+        c = &copy;
+    }
     char name[64] = "?";
     int id = -1;
     if (readable(rec)) {
@@ -127,6 +228,7 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
             (int16_t)rd16(g_mem, obj + 0x40), clubs, (int16_t)rd16(g_mem, obj + 0x3c),
             g_mem[obj + 0x4a], g_mem[obj + 0x49], rules, name);
     if (c && c->kind == SEASON_KIND_CUP) write_cup_rounds(f, season, phase, slot, file, obj);
+    if (sweep_on) sweep_comp(f, season, phase, file, c, obj);
 }
 
 /* A cup line (slice 21): the rounds of a cup as the original's round table holds them (cup+0x3c rounds, table at
@@ -200,7 +302,13 @@ static void write_season(int season, const char *phase)
         }
     }
     season_uefa_report(report, season, phase);      /* slice 22: the stages of the Champions League */
+    season_cups_more_report(report, season, phase); /* slice 21c: super cups, group stages, new cups */
     if (*phase == 's') write_clubs(season, phase);
+    if (sweep_on) {
+        fprintf(report, "sweepok\t%d\t%s\t%d objects\t%d round tables\t%d dates\t%d faults\n", season, phase,
+                sweep_objects, sweep_tables, sweep_rounds, sweep_faults);
+        sweep_objects = sweep_tables = sweep_rounds = sweep_faults = 0;
+    }
     fflush(report);
     fprintf(stderr, "recomp: rules report: season %d/%02d %s on %02d.%02d.%04d\n", season, (season + 1) % 100, phase,
             d, m, y);
@@ -218,6 +326,8 @@ void season_report_init(void)
         }
         jump_to = (int)y;
     }
+    const char *sweep = getenv("RECOMP_DATA_SWEEP");
+    sweep_on = sweep && *sweep == '1';
     const char *stop = getenv("RECOMP_RULES_REPORT_STOP");
     stop_at_start = stop && !strcmp(stop, "start");
     const char *path = getenv("RECOMP_RULES_REPORT");

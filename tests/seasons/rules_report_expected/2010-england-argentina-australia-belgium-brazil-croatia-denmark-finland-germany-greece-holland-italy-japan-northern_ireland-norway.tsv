@@ -48,7 +48,7 @@
 2010	clubs	nir_lge_cup (Irish League Cup), row wal-nir-irl-239: game 5, table 42 (42)
 2010	clubs	nir_prm (IFA Premiership), row wal-nir-irl-235: game 10, table 12 (12)
 2010	clubs	nor_prm (Tippeligaen), row nor-fin-92: game 14, table 16 (16)
-2010	clubs	world_club_champ (FIFA Club World Cup), row club-world-173: game 0/4, table 7 (7)
+2010	clubs	world_club_champ (FIFA Club World Cup), row club-world-173: game 0, table 7 (7)
 2010	down	arg_prm (Primera División), row arg-usa-10: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2010	down	arg_second (Primera B Nacional), row arg-usa-37: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table); 3 relegated in total (infobox))
 2010	down	bel_first (Belgian Pro League), row hol-bel-125: game 2 (+0 play-off places), table text (15th v 16th relegation play-off (five matches, 15th starts with 3 points): loser)
@@ -74,17 +74,8 @@
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
 2010	no_row	record_utils (Under 21 International): no table row
-2010	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-187: the game holds 2010, the table says not held
-2010	not_held	asia_super_cup (Asian Super Cup), row club-world-188: the game holds 2010, the table says not held
-2010	not_held	bra_champ_cup (Copa dos Campeões), row bra-199: the game holds 2010, the table says not held
-2010	not_held	conmebol_merc (Copa Mercosur), row club-world-176: the game holds 2010, the table says not held
 2010	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-388: the game holds 2010, the table says not held
-2010	not_held	ger_lge_cup (DFL-Ligapokal), row ger-128: the game holds 2010, the table says not held
 2010	not_held	goldcup (Copa América), row int-continental-110: the game holds 2011, the table says not held
-2010	not_held	gre_super (Greek Super Cup), row gre-pol-cro-91: the game holds 2010, the table says not held
-2010	not_held	inter_amer_cup (Copa Interamericana), row club-world-183: the game holds 2010, the table says not held
-2010	not_held	nir_charity (Charity Shield), row wal-nir-irl-240: the game holds 2010, the table says not held
-2010	not_held	world_club_cup (Intercontinental Cup), row club-world-172: the game holds 2010, the table says not held
 2010	not_in_game	arg-usa-199 argentina_rules 'Argentina' (Argentina)
 2010	not_in_game	aus-jap-kor-10 australia_rules 'n/a' (Australia)
 2010	not_in_game	aus-jap-kor-118 japan_rules 'n/a' (Japan)
@@ -101,11 +92,9 @@
 2010	not_in_game	bra-928 new 'Campeonato Piauiense' (Brazil)
 2010	not_in_game	bra-955 new 'Campeonato Acriano' (Brazil)
 2010	not_in_game	bra-982 new 'Campeonato Brasiliense' (Brazil)
-2010	not_in_game	club-world-178 new 'Copa Sudamericana' (CONMEBOL)
-2010	not_in_game	club-world-179 new 'Recopa Sudamericana' (CONMEBOL)
 2010	not_in_game	eng-122 eng_conf 'Conference Premier' (England)
 2010	not_in_game	eng-355 eng_fa_trophy 'FA Trophy' (England)
-2010	not_in_game	ger-120 new '3. Liga' (Germany)
+2010	not_in_game	ger-120 ger_regional '3. Liga' (Germany)
 2010	not_in_game	ger-129 new 'DFL-Supercup' (Germany)
 2010	not_in_game	gre-pol-cro-442 new 'Croatian Football Super Cup' (Croatia)
 2010	not_in_game	ita-159 ita_ser_c2a 'Lega Pro Seconda Divisione girone A' (Italy)
@@ -135,7 +124,6 @@
 2010	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-37: game 4 (+0 play-off places), table na (n/a)
 2010	up	bra_nat_third (Campeonato Brasileiro Série C), row bra-91: game 2 (+0 play-off places), table 4 (4)
 2010	up	conmebol_liber (Copa Libertadores), row club-world-175: game 2 (+0 play-off places), table na (n/a)
-2010	up	conmebol_merc (Copa Mercosur), row club-world-176: game 1 (+0 play-off places), table na (n/a)
 2010	up	cro_a2a (Druga HNL), row gre-pol-cro-361: game 0 (+0 play-off places), table 1 (1)
 2010	up	den_second (Danish 2nd Divisions), row den-swe-58: game 3 (+0 play-off places), table 0 (0)
 2010	up	fin_first (Ykkönen), row nor-fin-98: game 2 (+0 play-off places), table 1 (1st (1))

@@ -2,6 +2,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_comps.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
 #include "season_names.h"
@@ -37,7 +38,9 @@
 #define OBJ_RECORD 4u
 #define OBJ_OWNER 8u                /* the object that takes the predicted positions (0x5de25f) */
 #define OBJ_STAGES 0xcu
+#define OBJ_STAGE_COUNT 0x2cu       /* s32: the stages of the league */
 #define OBJ_STAGE_NOW 0x30u         /* s32, -1 with no stage */
+#define OBJ_COMPLETE 0x4cu          /* 1 when the season is complete (League::update_for_date 0x684a9e) */
 #define OBJ_CLUBS 0x3eu
 #define OBJ_YEAR 0x40u
 #define OBJ_MATCHES 0xa7u
@@ -290,7 +293,8 @@ RT_WRAP(005dd9f0, ger_regional_rules)
 
 
 /* GerRegional's South group (create_south_stage 0x5ddc50, thiscall (slot), ret 4): no group in the 3. Liga. The
- * stage slot is cleared and +0x30 stays -1, so the save, the load and the destructor (0x5dce80) see no stage. */
+ * stage slot is cleared, +0x30 stays -1 and +0x2c is 0, so the save, the load and the destructor (0x5dce80) see no
+ * stage and the season ends as a league's with no stages. */
 void o_005ddc50(void);
 RT_WRAP(005ddc50, ger_regional_south)
 {
@@ -302,6 +306,11 @@ RT_WRAP(005ddc50, ger_regional_south)
     uint32_t stages = rd32(g_mem, self + OBJ_STAGES);
     if (readable(stages)) wr32(g_mem, stages, 0);
     wr32(g_mem, self + OBJ_STAGE_NOW, 0xffffffffu);
+    /* No stage at all: the stage count +0x2c (1 from the constructor, 0x5dcc3d) goes to 0. With 1,
+     * League::update_for_date 0x6847c0 took -1 < 0 as a stage to come (0x6849d1..0x6849da), called the empty
+     * advance_stage and skipped the season's end: the history (Club_History::record_comp_season 0x442e80 at
+     * 0x6849fa), the honours (vtable +0x30 at 0x684a8f) and the complete flag +0x4c (0x684a9e). */
+    wr32(g_mem, self + OBJ_STAGE_COUNT, 0);
     rt_ret_stdcall(0, 1);
 }
 
@@ -498,8 +507,13 @@ RT_WRAP(005db980, ger_exchange)
         }
     }
     game_free(pool);
-    fprintf(stderr, "recomp: new divisions: 3. Liga %d: %d relegated, %d cut, %d new clubs from %d, %d clubs\n",
-            next_season_of(self), out, cut, in, npool, clubs_in(reg_rec));
+    /* The season that ends (+0x4c set by League::update_for_date at 0x684a9e when it ended with its history),
+     * for tests/seasons/new_divisions_check.py; -1 for the change from two groups (the Regionalliga's season). */
+    int complete = liga3_row((int16_t)rd16(g_mem, reg + OBJ_YEAR)) ? g_mem[reg + OBJ_COMPLETE] : -1;
+    fprintf(stderr, "recomp: new divisions: 3. Liga %d: %d relegated, %d cut, %d new clubs from %d, %d clubs; season "
+                    "%d complete %d, stages %d and %d\n", next_season_of(self), out, cut, in, npool, clubs_in(reg_rec),
+            (int16_t)rd16(g_mem, reg + OBJ_YEAR), complete, (int32_t)rd32(g_mem, reg + OBJ_STAGE_COUNT),
+            (int32_t)rd32(g_mem, reg + OBJ_STAGE_NOW));
     rt_ret_cdecl(0);
 }
 
@@ -657,6 +671,31 @@ void o_00857210(void);
 RT_WRAP(00857210, spa_group_build) { group_build(o_00857210); }
 void o_007d2870(void);
 RT_WRAP(007d2870, por_group_build) { group_build(o_007d2870); }
+
+/* The Portuguese Cup's lower clubs (PorCup::collect_entrants 0x7ce220, second pass 0x7ce378..0x7ce3ed): the Third
+ * Division and Portuguese clubs of A Lower Division. With Liga 3 the club moves leave the clubs that the real Liga 3
+ * and the lower series hold with no division, so the cup also takes Portuguese clubs with no division (Q528). Only
+ * in a game whose Liga 3 object plays the new form; else the original's jump. */
+uint32_t rt_por_cup_none(uint32_t club)
+{
+    if (!divisions_on() || !nation_flag(PORTUGAL.nation_key)) return 0;
+    /* The season of the cup's draw: the start season with changing rules off (Q232) or at a new game (the cup is
+     * made before [0xadadfc] is filled, so the Liga 3 object is not found there); else the game date's season
+     * (s16 day of the year and year at 0xae2c90: January to June belong to the season before). */
+    int season = season_start_year();
+    if (season_changing_rules() && !season_change_is_creating()) {
+        int day = (int16_t)rd16(g_mem, 0x00ae2c90u), year = (int16_t)rd16(g_mem, 0x00ae2c92u);
+        season = day < 181 ? year - 1 : year;
+    }
+    /* Clubs only: the last 2 x nations rows of the club table are national teams (0x53b900; the German Cup stops
+     * there too, 0x5d9569..0x5d957c), and the original's null-division jump kept them out. */
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT) - 2 * (int)rd32(g_mem, NATION_COUNT);
+    if (club < table || (club - table) / CLUB_SIZE >= (uint32_t)(count > 0 ? count : 0)) return 0;
+    uint32_t nation = rd32(g_mem, club + CLUB_NATION);
+    return group_row(&PORTUGAL, season) && readable(nation) &&
+           (int32_t)rd32(g_mem, nation) == (int32_t)rd32(g_mem, PORTUGAL.nation_key);
+}
 
 /* The set_up_rules of the two classes (SpaSecondB 0x856ef0: +0xbe 0, +0xbf 4, +0xc0 1, +0xc1 4 at
  * 0x856f2d..0x856f40; PorSecondB 0x7d2610: +0xbe 1, +0xc1 4 at 0x7d264e..0x7d2660): the places of a group. */
@@ -828,6 +867,29 @@ static void group_refill(const GroupTier *g, void (*original)(void))
     rt_ret_cdecl(0);
 }
 
+/* The first-season merge of the group divisions into the tier (SpaSecondB::load_group_clubs 0x856cd0 at
+ * 0x856d0e..0x856d3a for B1 to B4; PorSecondB::create_table 0x7d2400 at 0x7d243e..0x7d2462 for the three zones):
+ * in the new form the groups that end are left out, so their clubs stay in their database division, unplayed, as
+ * without the flag (Q527). Their keys hold an id that no record has while the original runs. */
+static void group_merge(const GroupTier *g, void (*original)(void))
+{
+    uint32_t self = cpu.ecx, saved[2] = {0, 0};
+    int on = group_new_form(self);
+    for (int k = 0; on && k < 2; k++)
+        if (g->ended[k]) {
+            saved[k] = rd32(g_mem, g->ended[k]);
+            wr32(g_mem, g->ended[k], 0x7fffffffu);
+        }
+    original();
+    for (int k = 0; on && k < 2; k++)
+        if (g->ended[k]) wr32(g_mem, g->ended[k], saved[k]);
+}
+
+void o_00856cd0(void);
+RT_WRAP(00856cd0, spa_group_merge) { group_merge(&SPAIN, o_00856cd0); }
+void o_007d2400(void);
+RT_WRAP(007d2400, por_group_merge) { group_merge(&PORTUGAL, o_007d2400); }
+
 void o_00850300(void);
 RT_WRAP(00850300, spa_refill) { group_refill(&SPAIN, o_00850300); }
 void o_007cff70(void);
@@ -885,6 +947,231 @@ static void group_above_rules(uint32_t obj, const GroupTier *g)
     g_mem[obj + DOWN_PLAYOFF] = 0;
 }
 
+/* ---- Greece: the second group of the second tier (20d) ---- */
+
+/* The second group of the Greek second tier (2013/14, 2014/15, 2021/22 to 2025/26) is a second GreSecond object
+ * (constructor 0x5eb2b0, 0xee bytes, ruling body 0x20 at 0x5eb301) with a new record, made by slice 26's module
+ * in the Greek entry 18 (create_greek_comps 0x8347c0 is stored at 0xb64278: entry 18 of 0xb63d60, 0x48 bytes an
+ * entry). create_greek_comps has no extra division flag (0x834965..0x834b02), so the group is made whenever the
+ * table holds it (Q363). Its rows take comp_file gre_second (Q520), so it is the second gre_second object of the
+ * rules report and the names table. */
+#define KEY_GRE_FIRST 0x009cf86cu
+#define KEY_GRE_SECOND 0x009cf870u
+#define KEY_GRE_LOWER 0x009cf874u       /* Greek Lower Division: the pool of 0x5eb120 */
+#define GRE_GROUP_COMP "league group 2"
+#define GRE_GROUP_MAX 14                /* GreSecond's table: malloc(0x33a) at 0x5ebcbb, 14 rows */
+#define F_NEW 0x00944cf1u               /* operator new, cdecl (size) */
+#define F_GRE_SECOND 0x005eb2b0u        /* GreSecond::GreSecond, thiscall (year, record), ret 8 */
+
+static uint32_t gre_make(const SeasonCompDef *d, uint32_t rec, int year, int loading);
+const SeasonCompDef season_div_gre_group = {GRE_GROUP_COMP, "gre_second", SEASON_DIV_GRE_RECORD, 18, gre_make,
+                                            "Greek National B Division", "Second Division Group 2", -1};
+
+/* The group's object, or 0: the gre_second object whose record is not the National B record. */
+static uint32_t gre_group(void)
+{
+    uint32_t o = season_comps_object(&season_div_gre_group);
+    return readable(o) ? o : 0;
+}
+
+static int gre_held(int season) { return season_comps_held(GRE_GROUP_COMP, season) == 1; }
+
+/* The group's club count in a season: its row (the second gre_second row of the season), at most 14. */
+static int gre_count(int season)
+{
+    const SeasonRule *r = season_rules_find(season, "gre_second", 1);
+    int n = r && r->clubs >= MIN_CLUBS ? r->clubs : 0;
+    return n > GRE_GROUP_MAX ? GRE_GROUP_MAX : n;
+}
+
+/* Fills a record from the Greek Lower Division up to n clubs, as 0x5eb120 takes its new clubs: the clubs of the
+ * Lower Division sorted by 0x4afbd0 (0x5eb1d7..0x5eb20f), the first ones moved (0x6830b0 at 0x5eb23e). */
+static int gre_fill(uint32_t rec, int n)
+{
+    uint32_t lower = record_of(KEY_GRE_LOWER), table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), need = n - clubs_in(rec), npool = 0, in = 0;
+    if (need <= 0 || !lower || !readable(table)) return 0;
+    uint32_t pool = game_malloc(4u * POOL_MAX);
+    for (int i = 0; pool && i < count && npool < POOL_MAX; i++) {
+        uint32_t club = table + (uint32_t)i * CLUB_SIZE;
+        if (rd32(g_mem, club + CLUB_DIVISION) == lower) wr32(g_mem, pool + 4u * (uint32_t)npool++, club);
+    }
+    if (need > npool) need = npool;
+    if (need > 0 && !rt_unwinding) {
+        uint32_t a[3] = {pool, (uint32_t)npool, (uint32_t)need};
+        call_cdecl(F_PICK, 3, a);
+        for (int i = 0; i < need && !rt_unwinding; i++) {
+            uint32_t m[3] = {rd32(g_mem, pool + 4u * (uint32_t)i), rec, 1};
+            call_this(F_MOVE, 0, 3, m);         /* 0x6830b0 reads no this (0x6830b0: mov ecx, [0xdd7ef0]) */
+            in++;
+        }
+    }
+    game_free(pool);
+    return in;
+}
+
+/* The module's make: a GreSecond object with the group's record. A new object (not a load) needs its clubs in
+ * the record first, because the constructor calls create_table at once (0x5eb35e) and fails with fewer than its
+ * count: the club moves of a new game put the list there, and a group that starts later in a game takes clubs
+ * from the Lower Division. */
+static uint32_t gre_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
+{
+    (void)d;
+    if (!loading) {
+        int n = gre_count(year), got = gre_fill(rec, n);
+        fprintf(stderr, "recomp: new divisions: Greek second group %d: %d clubs (%d from the Lower Division)\n", year,
+                clubs_in(rec), got);
+        if (clubs_in(rec) < MIN_CLUBS) return 0;
+    }
+    uint32_t size[1] = {0xee};
+    uint32_t obj = call_cdecl(F_NEW, 1, size);
+    if (rt_unwinding || !readable(obj)) return 0;
+    uint32_t args[2] = {(uint32_t)year, rec};
+    call_this(F_GRE_SECOND, obj, 2, args);
+    return rt_unwinding ? 0 : obj;
+}
+
+/* GreSecond::create_table 0x5ebcb0 (thiscall, ret) takes the clubs of the key id [0x9cf870] (0x5ebd54..0x5ebd64),
+ * not of its own record. For the group's object the key holds the group's record id while the original runs. */
+void o_005ebcb0(void);
+RT_WRAP(005ebcb0, gre_second_table)
+{
+    uint32_t self = cpu.ecx, rec = rd32(g_mem, self + OBJ_RECORD), key = rd32(g_mem, KEY_GRE_SECOND);
+    if (!divisions_on() || !readable(rec) || rec == record_of(KEY_GRE_SECOND)) {
+        o_005ebcb0();
+        return;
+    }
+    wr32(g_mem, KEY_GRE_SECOND, rd32(g_mem, rec));
+    o_005ebcb0();
+    wr32(g_mem, KEY_GRE_SECOND, key);
+}
+
+/* The places of the group (after GreSecond::set_up_rules 0x5ebde0, through season_sizes_rules), and of the
+ * National A Division above while the group plays: its relegation places are the promotions of both groups, so
+ * the pairs of 0x689c80 stay even (0x689df4 and 0x689dff mark a moved pair, so the second call moves the rest). The
+ * joint play-offs of 2013/14, 2014/15 and 2021/22 have no code: the group winner goes up (Q521). */
+/* A group's promotions in a season with two groups: its own row's up, at least 1 (the joint play-offs of 2013/14,
+ * 2014/15 and 2021/22 have no code: the group winner goes up, Q521). Row 0 of gre_second is the National B Division,
+ * row 1 the group (Q520). */
+static int gre_up(int season, int row)
+{
+    const SeasonRule *r = season_rules_find(season, "gre_second", row);
+    return r && r->up >= 1 ? r->up : 1;
+}
+
+static void gre_rules(uint32_t obj)
+{
+    uint32_t group = gre_group();
+    if (!group) return;
+    int s = season_of(obj);
+    if (obj == group) {
+        const SeasonRule *r = season_rules_find(s, "gre_second", 1);
+        if (!r) return;
+        g_mem[obj + UP] = (uint8_t)gre_up(s, 1);
+        g_mem[obj + UP_PLAYOFF] = 0;
+        g_mem[obj + DOWN_PLAYOFF] = 0;
+        if (r->down >= 0) g_mem[obj + DOWN] = (uint8_t)r->down;
+    } else if (!strcmp(season_change_file(obj), "gre_second") && gre_held(s)) {
+        /* The National B Division in a season with the group: the two groups of one tier promote by one rule
+         * (review 2). It is a floor division of slice 18 (its class keeps 2 up and 2 down), and its relegations stay
+         * 2: the original's exchange 0x5eb120 brings 2 clubs back from the Lower Division (0x5eb219). */
+        g_mem[obj + UP] = (uint8_t)gre_up(s, 0);
+        g_mem[obj + UP_PLAYOFF] = 0;
+    } else if (!strcmp(season_change_file(obj), "gre_prm") && gre_held(s)) {
+        /* Both groups' promotions, from their rows (at a new game GrePrm's rules run before the groups' own). */
+        g_mem[obj + DOWN] = (uint8_t)(gre_up(s, 0) + gre_up(s, 1));
+        g_mem[obj + DOWN_PLAYOFF] = 0;
+    }
+}
+
+/* gre_prm_swap_second_and_third_division_clubs 0x5eb120 (thiscall, ret), after the chain of GrePrm 0x689c20 with
+ * the National B Division (0x5eaf62, 0x5eaf6a): the group's exchange with the National A Division (as the chain does
+ * at 0x689c60), its new clubs from the Lower Division up to the next row's count, the original for the National B
+ * Division, then the group's relegated rows to the Lower Division (as 0x5eb25d..0x5eb28a; all its clubs when the next
+ * season has no group, Q522) and its season start. */
+void o_005eb120(void);
+RT_WRAP(005eb120, gre_swap)
+{
+    uint32_t self = cpu.ecx, group = divisions_on() ? gre_group() : 0;
+    if (!group || rt_unwinding) {
+        o_005eb120();
+        return;
+    }
+    int now = (int16_t)rd16(g_mem, self + OBJ_YEAR), next = next_season_of(self), held = gre_held(next);
+    uint32_t rec = rd32(g_mem, group + OBJ_RECORD), lower = record_of(KEY_GRE_LOWER);
+    int played = gre_held(season_changing_rules() ? now : season_start_year()), out = 0, leaving = 0, in = 0;
+    if (played && lower) {
+        uint32_t a[6] = {self, group, 1, 1, 0xffffffffu, 0xffffffffu};
+        call_this(F_PROMOTE, self, 6, a);
+    }
+    /* The group's relegated rows (status 3 of its table, still in its record). */
+    int n = played ? (int16_t)rd16(g_mem, group + OBJ_CLUBS) : 0;
+    for (int i = 0; i < n; i++) {
+        uint32_t row = rd32(g_mem, group + OBJ_TABLE) + (uint32_t)i * ROW_SIZE;
+        leaving += g_mem[row + ROW_STATUS] == 3 && rd32(g_mem, rd32(g_mem, row) + CLUB_DIVISION) == rec;
+    }
+    /* The new clubs first, while the leavers are still in the group, so neither the group's pool nor the original's
+     * pool for the National B Division (0x5eb1d7..0x5eb20f) can take a club that has just gone down (as the German
+     * and Iberian exchanges build their pools before any club leaves). */
+    if (held && !rt_unwinding) in = gre_fill(rec, gre_count(next) + leaving);
+    o_005eb120();
+    if (rt_unwinding) return;
+    if (lower && held) {
+        for (int i = 0; i < n && !rt_unwinding; i++) {
+            uint32_t row = rd32(g_mem, group + OBJ_TABLE) + (uint32_t)i * ROW_SIZE, club = rd32(g_mem, row);
+            if (g_mem[row + ROW_STATUS] != 3 || rd32(g_mem, club + CLUB_DIVISION) != rec) continue;
+            uint32_t m[3] = {club, lower, 1};
+            call_this(F_RELEGATE, self, 3, m);
+            out++;
+        }
+    } else if (lower) {                     /* no group next season: every club to the Lower Division (Q522) */
+        uint32_t table = rd32(g_mem, CLUBS);
+        int count = (int)rd32(g_mem, CLUB_COUNT);
+        for (int i = 0; readable(table) && i < count && !rt_unwinding; i++) {
+            uint32_t club = table + (uint32_t)i * CLUB_SIZE;
+            if (rd32(g_mem, club + CLUB_DIVISION) != rec) continue;
+            uint32_t m[3] = {club, lower, 1};
+            call_this(F_RELEGATE, self, 3, m);
+            out++;
+        }
+    }
+    fprintf(stderr, "recomp: new divisions: Greek second group %d: %d out, %d in, %d clubs\n", next, out, in,
+            clubs_in(rec));
+    /* A league with a division above is started by its top league, not by the pass (0x48ce10, season_change.h):
+     * GrePrm::start_new_season 0x5eaf50 starts the National B Division at its end (0x5eb0ec..0x5eb0f7, vtable +8)
+     * and does not know the group. So the group starts here, with its clubs in place; with changing rules on, the
+     * before hook of the rule kind below keeps it idle in a season with no group. */
+    if (rt_unwinding) return;
+    if (held) vcall(group, 0x8);
+    else {
+        /* No group next season: it stays idle with its finished season and waits with the year before its next
+         * edition (2998 when none comes), as the rule kind's before hook does (review 2: its start_new_season would
+         * make a table with no club). */
+        int edition = season_comps_next_edition(GRE_GROUP_COMP, next);
+        wr16(g_mem, group + OBJ_YEAR, (uint16_t)((edition > next ? edition : 2999) - 1));
+    }
+}
+
+/* Rule kind "divisions": the group plays only in the seasons of the table. In a season with no group it is idle
+ * (season_change_skip) with the year before its next edition; when it comes back, +0x40 is the year before, so its
+ * start_new_season (0x5ebe90 adds 1) makes the new season's dates (the third case of season_comps.h). */
+static void divisions_before(const SeasonChange *c)
+{
+    uint32_t group = gre_group();
+    if (!group || c->comp != group) return;
+    if (!gre_held(c->season)) {
+        /* Idle: its year goes to the year before its next edition (2998 when none comes), as an object that
+         * waits (season_comps.h), so the rules report and the screens do not take it for this season's group. */
+        int next = season_comps_next_edition(GRE_GROUP_COMP, c->season);
+        wr16(g_mem, group + OBJ_YEAR, (uint16_t)((next > c->season ? next : 2999) - 1));
+        season_change_skip();
+        return;
+    }
+    if ((int16_t)rd16(g_mem, group + OBJ_YEAR) < c->season - 1) wr16(g_mem, group + OBJ_YEAR, (uint16_t)(c->season - 1));
+}
+
+const SeasonRuleKind season_kind_divisions = {"divisions", NULL, NULL, NULL, NULL, divisions_before, NULL};
+
 void season_divisions_rules(uint32_t obj)
 {
     if (!divisions_on() || !readable(obj)) return;
@@ -898,6 +1185,7 @@ void season_divisions_rules(uint32_t obj)
             g_mem[obj + DOWN_PLAYOFF] = 0;
         }
     }
+    gre_rules(obj);
     if (!strcmp(season_change_file(obj), "spa_second")) group_above_rules(obj, &SPAIN);
     if (!strcmp(season_change_file(obj), "por_second")) group_above_rules(obj, &PORTUGAL);
 }
@@ -916,16 +1204,18 @@ int season_divisions_class_size(const char *division, int season)
         if (!ger_flag()) return 18;
         return north ? liga3_row(season)->clubs : 0;
     }
+    /* Greece: the second group takes its row's count, at most 14 (its table). */
+    if (!strcmp(division, SEASON_DIV_GRE_RECORD)) return gre_held(season) ? gre_count(season) : -1;
     /* Spain and Portugal in the new form, with the flag: the two groups take half of the row each and the
      * other group divisions none. Without the flag the tier has no object and the database stays. */
     const GroupTier *tiers[2] = {&SPAIN, &PORTUGAL};
     for (int t = 0; t < 2; t++) {
         const GroupTier *g = tiers[t];
         if (!group_row(g, season) || !nation_flag(g->nation_key)) continue;
-        for (int k = 0; k < 2; k++) {
+        for (int k = 0; k < 2; k++)
             if (!strcmp(division, g->group_names[k])) return group_size(g, season);
-            if (g->ended_names[k] && !strcmp(division, g->ended_names[k])) return 0;
-        }
+        /* The groups that end keep their database clubs (-1), unplayed (Q527): the cups take them (PorCup
+         * 0x7ce2d6..0x7ce2f0 counts the three zones; a 2021/22 start stopped at por_cup.cpp 74 when they had none). */
     }
     return -1;
 }
@@ -933,11 +1223,33 @@ int season_divisions_class_size(const char *division, int season)
 int season_divisions_list_on(const char *division, int season)
 {
     if (!division) return 1;
-    if (!strcmp(division, "German Regional Division North") && liga3_row(season)) return ger_flag();
+    if (!strcmp(division, "German Regional Division North") && liga3_row(season)) return divisions_on() && ger_flag();
     const GroupTier *tiers[2] = {&SPAIN, &PORTUGAL};
     for (int t = 0; t < 2; t++)
         for (int k = 0; k < 2; k++)
             if (!strcmp(division, tiers[t]->group_names[k]) && group_row(tiers[t], season))
-                return nation_flag(tiers[t]->nation_key);
+                return divisions_on() && nation_flag(tiers[t]->nation_key);
     return 1;
 }
+
+int season_divisions_new_record(const char *division)
+{
+    return division && !strcmp(division, SEASON_DIV_GRE_RECORD);
+}
+
+void season_divisions_test_extra(void)
+{
+    const char *want = getenv("RECOMP_TEST_EXTRA");
+    static const struct { const char *name; uint32_t key; } nations[] = {
+        {"germany", KEY_GERMANY}, {"italy", 0x009cf360u}, {"spain", 0x009cf488u}, {"portugal", 0x009cf434u},
+    };
+    uint32_t table = rd32(g_mem, NATIONS);
+    if (!want || !*want || !readable(table)) return;
+    for (size_t i = 0; i < sizeof nations / sizeof nations[0]; i++) {
+        int32_t id = (int32_t)rd32(g_mem, nations[i].key);
+        if (!strstr(want, nations[i].name) || id < 0) continue;
+        g_mem[table + (uint32_t)id * NATION_SIZE + NATION_SELECTED] |= EXTRA_DIVISION;
+        fprintf(stderr, "recomp: new divisions: test: extra division of %s on\n", nations[i].name);
+    }
+}
+

@@ -50,6 +50,10 @@ INSNS = {
     0x63FCF9: ("cmp ecx, dword ptr [0x9cf57c]",
                "t0 = ecx; t1 = rt_ita_cup_c1b(ecx, R32(0x9cf57cu)); t2 = t0 - t1 - 0; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
     0x641986: ("mov ecx, dword ptr [ecx + edx*4]", "ecx = rt_ita_start_c2(R32(ecx + edx * 4u));"),
+    # PorCup::collect_entrants 0x7ce220, second pass: a club with no division is passed over (je 0x7ce3ed at
+    # 0x7ce37d). With Liga 3 the club moves leave more Portuguese clubs with no division, and the cup (164 entrants,
+    # 0x7ce234) stopped at por_cup.cpp 74 in a 2021/22 start; rt_por_cup_none takes them then (Q528).
+    0x7CE37D: ("je 0x7ce3ed", "if (cc_e(F)) { if (rt_por_cup_none(ebx)) goto L_7ce3a6; goto L_7ce3ed; }"),
     0x7D2412: ("mov word ptr [edi + 0x3e], 0x14", "W16(edi + 0x3eu, rt_por_group_clubs(edi, 0x14u));"),
     0x5DD801: ("mov word ptr [edi + 0x3e], 0x13", "W16(edi + 0x3eu, rt_ger_regional_clubs(edi, 0x13u));"),
     0x5DD809: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ger_regional_clubs(edi, 0x12u));"),

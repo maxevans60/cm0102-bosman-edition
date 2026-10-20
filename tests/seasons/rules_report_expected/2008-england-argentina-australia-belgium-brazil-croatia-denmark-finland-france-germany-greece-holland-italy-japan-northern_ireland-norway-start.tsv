@@ -14,12 +14,10 @@
 2008	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: FC Eindhoven, HFC Haarlem; others: -
 2008	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: Jyväskylän Jalkapalloklubi, Rovaniemen Palloseura; others: -
 2008	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Panthrakikos, Thrasivoulos; others: -
-2008	club_list	Greek National B Division: 14 of 17 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AO Kalamata, Anagenisi Karditsas, Diagoras Rodou; others: -
 2008	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Calcio Catania, Reggina; others: -
 2008	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Ancona, Cittadella; others: -
 2008	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Kyoto Sanga FC, Montedio Yamagata; others: -
 2008	club_list	Japanese J-League 2: 12 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 12 in all; not in it: Ehime F.C., FC Gifu, Fagiano Okayama F.C., Kataller Toyama, Roasso Kumamoto, Tochigi S.C.; others: -
-2008	club_list	Northern Irish League First Division: 10 of 14 listed clubs that the database holds (17 listed), 0 other clubs, 10 in all; not in it: Ballyclare Comrades, Ballymoney United, Carrick Rangers, Limavady United; others: -
 2008	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Bangor, Glenavon; others: -
 2008	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: IK Start, Sandefjord Fotball; others: -
 2008	clubs	arg_second (Primera B Nacional), row arg-usa-35: game 25, table 20 (20)
@@ -91,16 +89,11 @@
 2008	no_row	record_utils ('B' International): no table row
 2008	no_row	record_utils (Reserve): no table row
 2008	no_row	record_utils (Under 21 International): no table row
-2008	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-149: the game holds 2008, the table says not held
-2008	not_held	asia_super_cup (Asian Super Cup), row club-world-150: the game holds 2008, the table says not held
 2008	not_held	bra_champ_cup (Copa dos Campeões), row bra-197: the game holds 2008, the table says not held
-2008	not_held	conmebol_merc (Copa Mercosur), row club-world-138: the game holds 2008, the table says not held
 2008	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-386: the game holds 2008, the table says not held
 2008	not_held	ger_lge_cup (DFL-Ligapokal), row ger-102: the game holds 2008, the table says not held
 2008	not_held	gre_super (Greek Super Cup), row gre-pol-cro-89: the game holds 2008, the table says not held
-2008	not_held	inter_amer_cup (Copa Interamericana), row club-world-145: the game holds 2008, the table says not held
 2008	not_held	nir_charity (Charity Shield), row wal-nir-irl-190: the game holds 2008, the table says not held
-2008	not_held	world_club_cup (Intercontinental Cup), row club-world-134: the game holds 2008, the table says not held
 2008	not_in_game	arg-usa-197 argentina_rules 'Argentina' (Argentina)
 2008	not_in_game	aus-jap-kor-116 japan_rules 'n/a' (Japan)
 2008	not_in_game	aus-jap-kor-8 australia_rules 'n/a' (Australia)
@@ -117,15 +110,13 @@
 2008	not_in_game	bra-926 new 'Campeonato Piauiense' (Brazil)
 2008	not_in_game	bra-953 new 'Campeonato Acriano' (Brazil)
 2008	not_in_game	bra-980 new 'Campeonato Brasiliense' (Brazil)
-2008	not_in_game	club-world-140 new 'Copa Sudamericana' (CONMEBOL)
-2008	not_in_game	club-world-141 new 'Recopa Sudamericana' (CONMEBOL)
 2008	not_in_game	eng-102 eng_conf 'Conference Premier' (England)
 2008	not_in_game	eng-343 eng_fa_trophy 'FA Trophy' (England)
 2008	not_in_game	eng-345 new 'Conference League Cup (Setanta Shield)' (England)
 2008	not_in_game	fra-68 fra_cfa 'CFA' (France)
 2008	not_in_game	fra-69 fra_lower 'CFA 2' (France)
 2008	not_in_game	ger-103 new 'T-Home Supercup' (Germany)
-2008	not_in_game	ger-94 new '3. Liga' (Germany)
+2008	not_in_game	ger-94 ger_regional '3. Liga' (Germany)
 2008	not_in_game	gre-pol-cro-440 new 'Croatian Football Super Cup' (Croatia)
 2008	not_in_game	ita-125 ita_ser_c2a 'Lega Pro Seconda Divisione girone A' (Italy)
 2008	not_in_game	ita-126 ita_ser_c2b 'Lega Pro Seconda Divisione girone B' (Italy)
@@ -155,7 +146,6 @@
 2008	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-35: game 4 (+0 play-off places), table na (n/a)
 2008	up	bra_nat_third (Campeonato Brasileiro Série C), row bra-89: game 2 (+0 play-off places), table 4 (4)
 2008	up	conmebol_liber (Copa Libertadores), row club-world-137: game 2 (+0 play-off places), table na (n/a)
-2008	up	conmebol_merc (Copa Mercosur), row club-world-138: game 1 (+0 play-off places), table na (n/a)
 2008	up	cro_a2a (Druga HNL), row gre-pol-cro-359: game 0 (+0 play-off places), table unknown (unknown)
 2008	up	den_second (Danish 2nd Divisions), row den-swe-46: game 3 (+0 play-off places), table 2 (2)
 2008	up	fin_first (Ykkönen), row nor-fin-78: game 2 (+0 play-off places), table 1 (1st (1))

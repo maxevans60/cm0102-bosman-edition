@@ -16,6 +16,7 @@
 #include "season_rules.h"
 #include "season_names.h"
 #include "season_clubs.h"
+#include "season_records.h"
 
 #include <SDL.h>
 #include <stdlib.h>
@@ -121,6 +122,7 @@ int main(int argc, char **argv)
     season_rules_init(win_game_dir);     /* Seasons/rules.tsv (season_rules.c) */
     season_names_init(win_game_dir);     /* Seasons/names.tsv (season_names.c) */
     season_clubs_init(win_game_dir);     /* Seasons/clubs.tsv (season_clubs.c) */
+    season_records_init(win_game_dir);   /* Seasons/club_records.tsv (season_records.c) */
     season_report_init();                /* RECOMP_SEASON_JUMP, RECOMP_RULES_REPORT (season_report.c) */
 
     /* The command line as Windows gives it: the quoted program path, then the options. */
@@ -130,6 +132,13 @@ int main(int argc, char **argv)
     for (int i = first; i < argc && len < sizeof win_command_line; i++)
         len += (size_t)snprintf(win_command_line + len, sizeof win_command_line - len, " %s", argv[i]);
 
+#ifdef _WIN32
+    /* Windows display scaling (125 %, 150 %): the game draws in real pixels, so that Windows does not
+     * stretch the window and blur the text. Window sizes and places stay in scaled points, as on a Mac,
+     * so that window.txt, the first window size and the mouse keep their units. It must come before
+     * SDL_Init. */
+    SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1");
+#endif
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
         fprintf(stderr, "cm0102_recomp: SDL_Init: %s\n", SDL_GetError());
         return 1;

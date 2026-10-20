@@ -1199,6 +1199,13 @@ const SeasonLeagueRule season_league_rules[] = {
     {"gre_super", 2025, 0, 0, 0, 1, 0, 0, 0, 0},
     {"gre_super", 2026, 0, 0, 0, 1, 0, 0, 0, 0},
     {"gre_super", 2027, 0, 0, 0, 1, 0, 0, 0, 0},
+    {"gre_second", 2013, 4, 1, 0, 0, 0, 0, 0, 0},
+    {"gre_second", 2014, 3, 1, 6, 0, 0, 0, 0, 0},
+    {"gre_second", 2021, 1, 1, 0, 0, 0, 0, 0, 0},
+    {"gre_second", 2022, 0, 0, 0, 1, 0, 0, 0, 0},
+    {"gre_second", 2023, 0, 0, 0, 0, 0, 0, 0, 0},
+    {"gre_second", 2024, 0, 0, 0, 0, 0, 0, 0, 0},
+    {"gre_second", 2025, 0, 0, 0, 0, 0, 0, 0, 0},
     {"pol_cup", 2001, 0, 0, 0, 1, 0, 0, 0, 0},
     {"pol_cup", 2002, 0, 0, 0, 1, 0, 0, 0, 0},
     {"pol_cup", 2003, 0, 0, 0, 1, 0, 0, 0, 0},
@@ -2495,4 +2502,4 @@ const SeasonLeagueRule season_league_rules[] = {
     {"ire_prm", 2027, 0, 0, 0, 1, 0, 0, 1, 0},
     {"ire_first", 2027, 0, 0, 0, 1, 0, 0, 1, 0},
 };
-const int season_league_rule_count = 2490;
+const int season_league_rule_count = 2497;

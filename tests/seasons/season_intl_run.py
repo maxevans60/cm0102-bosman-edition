@@ -29,7 +29,8 @@ The checks (each run):
       the table from the start season (or the waiting year 2200 when the table has none)
     - on: when the year of a class changes between two reports, the new year is the next edition of the
       table (tools/seasons/make_intl.py); off: the old year plus the original's step
-    - no draw after a full qualifying is short (log "no fill"), and the draws of NO_FILL take no team from the fill
+    - no draw after a full qualifying is short (log "short after a full qualifying"; a tie that ends after the
+      World Cup draw is not a fault), and the draws of NO_FILL take no team from the fill
     - no inter-confederation play-off is built without a team (log "wc play-off ... v none")
     - the nation renames of RENAMES and the date moves of MOVES are in the log
     - on: each host row that the runtime writes names the first two hosts of the table (log "host")
@@ -156,7 +157,7 @@ def check(name, start, rules, work):
         if "season intl: wc play-off" in x and (" v none" in x or x.rstrip().endswith("none v")):
             fails.append(f"{name}: a play-off without a team: {x.strip()}")
     for x in log:
-        if "no fill (full qualifying)" in x:
+        if "short after a full qualifying" in x:
             fails.append(f"{name}: a short list after a full qualifying: {x.strip()}")
     for comp in NO_FILL.get(name, []):
         if any(f"season intl: {comp}:" in x and " filled" in x and not x.rstrip().endswith(" 0 filled") for x in log):

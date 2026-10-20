@@ -1194,6 +1194,13 @@ gre-pol-cro-105	2024	gre_super	0	-1	-	-	-	ok	-	split
 gre-pol-cro-106	2025	gre_super	0	2	-	-	-	ok	-	split
 gre-pol-cro-107	2026	gre_super	0	2	-	-	-	ok	-	split
 gre-pol-cro-108	2027	gre_super	0	2	-	-	-	ok	-	split
+gre-pol-cro-121	2013	gre_second	2	14	1-4	-	-	partial: the places of each group	-	split
+gre-pol-cro-122	2014	gre_second	2	13	1-3	5-10	-	partial: the places of each group	-	split
+gre-pol-cro-129	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split
+gre-pol-cro-130	2022	gre_second	2	15	-	-	-	ok	-	split
+gre-pol-cro-131	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	groups	split
+gre-pol-cro-132	2024	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split
+gre-pol-cro-133	2025	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split
 gre-pol-cro-163	2001	pol_cup	0	-1	-	-	-	ok	-	split
 gre-pol-cro-164	2002	pol_cup	0	-1	-	-	-	ok	-	split
 gre-pol-cro-165	2003	pol_cup	0	-1	-	-	-	ok	-	split

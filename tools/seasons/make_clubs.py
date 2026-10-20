@@ -101,6 +101,7 @@ TARGETS = [
     ("gre-pol-cro", r"gre_second", "Greek National B Division"),
     ("gre-pol-cro", r"pol_first", "Polish First Division"),
     ("gre-pol-cro", r"pol_second", "Polish Second Division"),
+    ("gre-pol-cro", r"new \(gre second, group 2\)", "Greek Second Division Group 2"),   # slice 20d: a new record
     ("gre-pol-cro", r"new .*", None, SKIP_NEW),
     ("hol-bel", r"Eredivisie", "Dutch Premier Division"),
     ("hol-bel", r"Eerste Divisie", "Dutch First Division"),

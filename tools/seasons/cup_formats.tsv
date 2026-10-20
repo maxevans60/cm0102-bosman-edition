@@ -20,3 +20,25 @@ bel_fa_cup	2021	8	. . . . . E L E	The Belgian Cup semi-finals are over two legs 
 fra_lge_cup	2016	7	P P P P P P E	Coupe de la Ligue ties are now settled by penalties after 90 minutes. Only the final has extra time.
 fra_cup	2020	9	P P P P P P P P E	Coupe de France ties are now settled by penalties after 90 minutes. Only the final has extra time.
 nor_cup	2002	7	E E E E E E E	Norwegian Cup ties are now settled on the day. Level ties go to extra time and penalties.
+spa_cup	2019	7	E E E E E L E	Copa del Rey ties are now single matches up to the quarter-finals. Only the semi-finals have two legs.
+spa_cup	2021	7	E E E E E LN E	The Copa del Rey semi-finals no longer use the away goals rule.
+ita_cup	2005	5	E L L L L	The Coppa Italia third round is now a single match. The later rounds keep two legs.
+ita_cup	2007	5	E L L L E	The Coppa Italia final is now a single match.
+ita_cup	2008	5	E E E L E	Coppa Italia ties are now single matches up to the quarter-finals. Only the semi-finals have two legs.
+ita_cup	2024	5	P P P L E	Coppa Italia ties before the semi-finals now go straight to penalties after 90 minutes.
+hol_cup	2009	6	. . . . . L	The KNVB Cup final is played over two legs this season.
+hol_cup	2010	6	. . . . . E	The KNVB Cup final is a single match again.
+spa_cup	2006	7	E E L L L L E	Copa del Rey ties from the round of 32 to the semi-finals are now over two legs.
+tur_cup	2005	7	E E E E L L E	The Turkish Cup quarter-finals and semi-finals are now over two legs.
+tur_cup	2011	7	E E E E E E E	Turkish Cup ties are all single matches again.
+tur_cup	2012	7	E E E E E L E	The Turkish Cup semi-finals are now over two legs.
+tur_cup	2014	7	E E E E L L E	The Turkish Cup quarter-finals are over two legs again.
+tur_cup	2017	7	E E L L L L E	Turkish Cup ties from the fifth round to the semi-finals are now over two legs.
+tur_cup	2020	7	E E E E E E E	Turkish Cup ties are all single matches this season.
+tur_cup	2021	7	E E E E E L E	The Turkish Cup semi-finals are over two legs again.
+tur_cup	2024	7	E E E E E E E	Turkish Cup ties are all single matches again.
+tur_cup	2026	7	E E E E E L E	The Turkish Cup semi-finals are over two legs again.
+rus_cup	2003	6	E L L L L E	Russian Cup ties from the round of 32 to the semi-finals are now over two legs.
+rus_cup	2007	6	E E E E E E	Russian Cup ties are all single matches again.
+rus_cup	2018	6	E E E L L E	The Russian Cup quarter-finals and semi-finals are now over two legs.
+rus_cup	2019	6	E E E E E E	Russian Cup ties are all single matches again.

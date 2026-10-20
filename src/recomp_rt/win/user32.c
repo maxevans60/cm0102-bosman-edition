@@ -20,6 +20,7 @@
 #include "host.h"
 #include "options.h"
 #include "winfit.h"
+#include "winscale.h"
 
 #include <SDL.h>
 #include <stdlib.h>
@@ -43,6 +44,9 @@ uint32_t win_hwnd = 0x00010010u;
 static SDL_Window *window;
 static SDL_Renderer *renderer;
 static SDL_Texture *texture;
+SDL_Window *win_sdl_window(void) { return window; }
+SDL_Renderer *win_sdl_renderer(void) { return renderer; }
+SDL_Texture *win_sdl_texture(void) { return texture; }
 static uint64_t opened_at, last_present, last_poll;
 extern int win_screen_dirty;
 uint32_t win_primary_pixels(void);
@@ -83,20 +87,20 @@ static void post_mouse(uint32_t msg, int x, int y)
 
 /* The scaling of the picture to the window. SDL_RenderSetLogicalSize keeps its shape, with bars at
  * the sides or at the top and bottom. With the option sharp_picture, each pixel of the game is drawn
- * as a block of whole pixels (SDL_RenderSetIntegerScale) when that loses at most a fifth of the size
- * that fits the window, for example 2 times in a window that allows 2.4 times. Otherwise the picture
- * fills the window and each pixel takes the nearest whole pixels. Without the option, the scaling
- * stays as in 0.1.0 (SDL's default filter). */
-#define WHOLE_PIXEL_SHARE 0.8
+ * as a block of whole pixels (SDL_RenderSetIntegerScale) when winscale_whole (winscale.h) says so.
+ * Otherwise the picture fills the window and each pixel takes the nearest whole pixels. Without the
+ * option, the scaling stays as in 0.1.0 (SDL's default filter). */
+#ifdef _WIN32
+#define WINDOWS_SCALE 1
+#else
+#define WINDOWS_SCALE 0
+#endif
 static void update_scaling(void)
 {
     if (!renderer || !options_bool(OPT_SHARP_PICTURE)) return;
     int ow = 0, oh = 0;
     if (SDL_GetRendererOutputSize(renderer, &ow, &oh) || ow <= 0 || oh <= 0) return;
-    double fit = (double)ow / rt_screen_w;
-    if ((double)oh / rt_screen_h < fit) fit = (double)oh / rt_screen_h;
-    int whole = (int)fit;
-    SDL_bool on = whole >= 1 && whole >= fit * WHOLE_PIXEL_SHARE ? SDL_TRUE : SDL_FALSE;
+    SDL_bool on = winscale_whole(ow, oh, (int)rt_screen_w, (int)rt_screen_h, WINDOWS_SCALE) ? SDL_TRUE : SDL_FALSE;
     if (SDL_RenderGetIntegerScale(renderer) != on) {
         SDL_RenderSetIntegerScale(renderer, on);
         win_screen_dirty = 1;
@@ -128,6 +132,7 @@ static void toggle_full_screen(void)
         fprintf(stderr, "recomp: full screen: %s\n", SDL_GetError());
     update_scaling();
     win_screen_dirty = 1;
+    display_report_event(full ? "full screen off" : "full screen on");
 }
 
 /* Remember the window (option remember_window): window.txt in the user folder, beside settings.txt,
@@ -151,6 +156,8 @@ static void window_file(char *path, size_t n)
 
 void win_save_window(void)
 {
+    char report[1100];
+    if (window) display_report_write("at quit", report, sizeof report, NULL);
     if (!window || !options_bool(OPT_REMEMBER_WINDOW)) return;
     int full = (SDL_GetWindowFlags(window) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP)) != 0;
     note_windowed();
@@ -179,17 +186,32 @@ static int window_on_screen(int x, int y, int w, int h)
 /* A new window (not a remembered one) that does not fit in the usable part of its screen, for example
  * a 1280x800 window on a small laptop screen, gets smaller with the same shape and goes to the middle (winfit.h). The
  * window opens hidden and shows after this. When the title bar size is unknown (SDL gives it on Windows
- * and Linux), 32 rows are kept for it. */
+ * and Linux), 32 rows are kept for it. On Windows with display scaling (125 %, 150 %), the window first
+ * gets the picture's size in real pixels, so that the picture shows at scale 1 with no bars, as at 100 %. */
 static void fit_new_window(int w, int h)
 {
+    int made_w = w, made_h = h;
+#ifdef _WIN32
+    int pw = 0, ph = 0, lw = 0, lh = 0;
+    SDL_GetWindowSizeInPixels(window, &pw, &ph);
+    SDL_GetWindowSize(window, &lw, &lh);
+    if (pw > lw && lw > 0 && lh > 0) {
+        w = winfit_points(w, pw, lw);
+        h = winfit_points(h, ph, lh);
+    }
+#endif
     SDL_Rect r;
     int d = SDL_GetWindowDisplayIndex(window);
-    if (d < 0 || SDL_GetDisplayUsableBounds(d, &r)) { SDL_ShowWindow(window); return; }
+    if (d < 0 || SDL_GetDisplayUsableBounds(d, &r)) {
+        if (w != made_w || h != made_h) SDL_SetWindowSize(window, w, h);
+        SDL_ShowWindow(window);
+        return;
+    }
     int top = 0, left = 0, bottom = 0, right = 0;
     if (SDL_GetWindowBordersSize(window, &top, &left, &bottom, &right) || top + bottom == 0) top = 32;
     int fw, fh;
     winfit_size(w, h, r.w - left - right, r.h - top - bottom, &fw, &fh);
-    if (fw != w || fh != h) {
+    if (fw != made_w || fh != made_h) {
         SDL_SetWindowSize(window, fw, fh);
         SDL_SetWindowPosition(window, r.x + left + (r.w - left - right - fw) / 2, r.y + top + (r.h - top - bottom - fh) / 2);
         fprintf(stderr, "recomp: window fitted to %dx%d in %dx%d\n", fw, fh, r.w, r.h);
@@ -238,6 +260,9 @@ void win_video_init(void)
     update_scaling();
     SDL_StartTextInput();
     opened_at = SDL_GetTicks64();
+    display_report_event("window opened");
+    char report[1100];
+    display_report_write("at start", report, sizeof report, NULL);
 }
 
 static void present_now(void)
@@ -332,7 +357,8 @@ static void end_click_for_key(void)
     post_mouse(WM_MOUSEMOVE, key_click.real_x, key_click.real_y);
 }
 
-/* The keys of the options. Returns 1 when the key did its work; the game then does not get it. */
+/* The keys of the options. Returns 1 when the key did its work; the game then does not get it, nor its repeats
+ * and release. Returns 2 for the display report key: the game does not get the press, and nothing is swallowed. */
 static int shortcut_key(SDL_Keycode k, Uint16 mod)
 {
     int x, y;
@@ -350,6 +376,12 @@ static int shortcut_key(SDL_Keycode k, Uint16 mod)
         full = k == SDLK_f && (mod & KMOD_GUI);
     }
     int plain = !(mod & (KMOD_CTRL | KMOD_ALT | KMOD_GUI | KMOD_SHIFT));
+    /* The display report key works with the option shortcuts off too: a player with a broken picture needs it. */
+    if (k == SDLK_d && (mod & KMOD_SHIFT) && (mod & (windows ? KMOD_CTRL : KMOD_GUI)) && !(mod & KMOD_ALT)) {
+        fprintf(stderr, "recomp: key display report\n");
+        display_report_key();
+        return 2;    /* not swallowed: the release of D may go to the message box, and a kept swallow would lose the next D */
+    }
     if (k == SDLK_SPACE && plain && options_bool(OPT_SPACE_TO_CONTINUE))
         return keys_continue_game(&x, &y) && click_for_key(x, y);
     if (!options_bool(OPT_SHORTCUTS)) return 0;
@@ -564,7 +596,9 @@ static void handle_event(SDL_Event *e)
     case SDL_KEYDOWN:
     case SDL_KEYUP: {
         int down = e->type == SDL_KEYDOWN;
-        if (down && !e->key.repeat && shortcut_key(e->key.keysym.sym, e->key.keysym.mod)) {
+        int done = down && !e->key.repeat ? shortcut_key(e->key.keysym.sym, e->key.keysym.mod) : 0;
+        if (done == 2) break;
+        if (done) {
             swallow_key = e->key.keysym.sym;
             break;
         }
@@ -593,7 +627,14 @@ static void handle_event(SDL_Event *e)
     }
     case SDL_WINDOWEVENT:
         if (e->window.event == SDL_WINDOWEVENT_EXPOSED) win_screen_dirty = 1;
-        if (e->window.event == SDL_WINDOWEVENT_SIZE_CHANGED) { update_scaling(); note_windowed(); }
+        if (e->window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+            update_scaling();
+            note_windowed();
+            display_report_event("size changed");
+        }
+        if (e->window.event == SDL_WINDOWEVENT_MAXIMIZED) display_report_event("maximised");
+        if (e->window.event == SDL_WINDOWEVENT_RESTORED) display_report_event("restored");
+        if (e->window.event == SDL_WINDOWEVENT_DISPLAY_CHANGED) display_report_event("moved to another screen");
         if (e->window.event == SDL_WINDOWEVENT_MOVED) note_windowed();
         if (e->window.event == SDL_WINDOWEVENT_FOCUS_LOST) win_sound_focus(0);
         if (e->window.event == SDL_WINDOWEVENT_FOCUS_GAINED) win_sound_focus(1);
@@ -689,6 +730,7 @@ static void run_script(void)
             present_now();
         } else if (!strcmp(s->action, "dump")) { present_now(); win_dump_screen(s->text); }
         else if (!strcmp(s->action, "shot")) { present_now(); shot_window(s->text); }
+        else if (!strcmp(s->action, "report")) display_report_key();
         else if (!strcmp(s->action, "quit")) {
             win_save_window();
             script_exit(0);
@@ -804,11 +846,16 @@ void win_game_work(void) { work_count++; }
 
 void o_0090cfc0(void);
 
-/* The game's random function random(n), 0x90cfc0: noted as game work for idle_rest only. */
+uint32_t (*win_random_hook)(uint32_t esp, uint32_t edi, uint32_t result);
+
+/* The game's random function random(n), 0x90cfc0: noted as game work for idle_rest only. The hook (win.h) can
+ * replace the result of a call from one place of the game's code; it is NULL in the base game. */
 RT_WRAP(0090cfc0, game_random)
 {
     win_game_work();
+    uint32_t esp = cpu.esp, edi = cpu.edi;
     o_0090cfc0();
+    if (win_random_hook && !rt_unwinding) cpu.eax = win_random_hook(esp, edi, cpu.eax);
 }
 
 static void print_sleep_count(void) { fprintf(stderr, "recomp: idle sleeps %llu\n", (unsigned long long)sleep_count); }

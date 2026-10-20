@@ -54,6 +54,10 @@ extern char win_cwd[1024];             /* current folder, as a Windows path */
 /* Handles of files (files.c). */
 int win_is_file_handle(uint32_t h);
 int win_close_file(uint32_t h);
+/* Memory files (season_records.c, 0.6.0 slice 15b): a read-only open of the host path gives these bytes in place
+ * of the file on disk. The caller keeps the buffer until win_memory_files_clear. */
+void win_memory_file(const char *host_path, const uint8_t *data, size_t size);
+void win_memory_files_clear(void);
 
 /* Memory that the runtime owns and never frees, zeroed (kernel32.c). */
 uint32_t win_static_alloc(uint32_t size);
@@ -84,6 +88,10 @@ void win_save_window(void);
 void win_present(void);                /* show the primary surface */
 void win_poll_events(void);            /* SDL events to the message queue */
 void win_game_work(void);              /* user32.c: game work ran in this pass, no idle sleep (#58) */
+/* user32.c: a hook on the game's random function 0x90cfc0 (cdecl (range)): called after each call with the esp of
+ * the call (the return address is at [esp]), the caller's edi and the result, returns the result to use. NULL
+ * when no code asks for it (season_uefa_qual.c, the Champions League group draw). */
+extern uint32_t (*win_random_hook)(uint32_t esp, uint32_t edi, uint32_t result);
 uint32_t win_back_buffer(void);        /* flat address of the RGB565 back buffer, or 0 */
 void win_dump_screen(const char *path);
 extern uint32_t win_wndproc;
@@ -185,5 +193,17 @@ int win_cursor_shape(uint32_t handle);          /* an SDL_SystemCursor for a cur
 void names_after_poll(void);                    /* after each input poll: the name under the mouse */
 void names_draw(struct SDL_Renderer *renderer); /* the line under it, on the shown frame */
 void names_draw_surface(struct SDL_Surface *s); /* the same line on a screen dump */
+/* The SDL window, renderer and picture texture of user32.c, NULL before the window opens. */
+struct SDL_Window;
+struct SDL_Texture;
+struct SDL_Window *win_sdl_window(void);
+struct SDL_Renderer *win_sdl_renderer(void);
+struct SDL_Texture *win_sdl_texture(void);
+/* The display report (display_report.c). display_report_event notes a change of the window. display_report_write
+ * writes display-report.txt in the user folder, puts its path in path and, when text is not NULL, the report in
+ * *text; 0 when the file cannot be written. display_report_key is the work of the report key. */
+void display_report_event(const char *what);
+int display_report_write(const char *when, char *path, size_t room, char **text);
+void display_report_key(void);
 
 #endif

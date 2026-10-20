@@ -21,7 +21,7 @@
 2016	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-185: game 24, table 6 (6)
 2016	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-183: game 5, table 54 (54 entrants)
 2016	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-188: game 5, table 6 (6)
-2016	clubs	world_club_champ (FIFA Club World Cup), row club-world-287: game 0/4, table 7 (7)
+2016	clubs	world_club_champ (FIFA Club World Cup), row club-world-287: game 0, table 7 (7)
 2016	down	eng_third (EFL League Two), row eng-181: game 1 (+0 play-off places), table 2 (2)
 2016	down	fra_second (Ligue 2), row fra-138: game 3 (+0 play-off places), table 2 (2)
 2016	down	ger_second (2. Bundesliga), row ger-197: game 4 (+0 play-off places), table 2 (2)
@@ -32,29 +32,26 @@
 2016	no_row	record_utils ('B' International): no table row
 2016	no_row	record_utils (Reserve): no table row
 2016	no_row	record_utils (Under 21 International): no table row
-2016	not_held	ger_lge_cup (DFL-Ligapokal), row ger-206: the game holds 2016, the table says not held
-2016	not_held	inter_amer_cup (Copa Interamericana), row club-world-297: the game holds 2016, the table says not held
 2016	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-259: the game holds 2016, the table says not held
 2016	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-260: the game holds 2016, the table says not held
-2016	not_held	world_club_cup (Intercontinental Cup), row club-world-286: the game holds 2016, the table says not held
 2016	not_in_game	eng-182 eng_conf 'National League' (England)
 2016	not_in_game	eng-391 eng_fa_trophy 'FA Trophy' (England)
 2016	not_in_game	fra-140 fra_cfa 'CFA' (France)
 2016	not_in_game	fra-141 fra_lower 'CFA 2' (France)
-2016	not_in_game	ger-198 new '3. Liga' (Germany)
+2016	not_in_game	ger-198 ger_regional '3. Liga' (Germany)
 2016	not_in_game	ger-207 new 'DFL-Supercup' (Germany)
 2016	not_in_game	ita-264 new 'Lega Pro girone A' (Italy)
 2016	not_in_game	ita-265 new 'Lega Pro girone B' (Italy)
 2016	not_in_game	ita-266 new 'Lega Pro girone C' (Italy)
 2016	not_in_game	uefa-121 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2016	playoffs	fra_first (Ligue 1), row fra-137: game 0 up and 0 down play-off places, table '18th v Ligue 2 3rd, two legs'
-2016	playoffs	fra_second (Ligue 2), row fra-138: game 0 up and 0 down play-off places, table '3rd v Ligue 1 18th; 18th v National 3rd, two legs'
-2016	playoffs	fra_third (Championnat National), row fra-139: game 0 up and 0 down play-off places, table '3rd v Ligue 2 18th, two legs'
-2016	playoffs	ger_first (Bundesliga), row ger-196: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2016	playoffs	ger_second (2. Bundesliga), row ger-197: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2016	playoffs	ita_ser_b (Serie B), row ita-258: game 0 up and 0 down play-off places, table '3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);'
-2016	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 4 up and 4 down play-off places, table 'n/a'
-2016	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 4 up and 4 down play-off places, table 'n/a'
+2016	playoffs	fra_first (Ligue 1), row fra-137: game 0 up and 0 down play-off places, table 0 and 1 ('18th v Ligue 2 3rd, two legs')
+2016	playoffs	fra_second (Ligue 2), row fra-138: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Ligue 1 18th; 18th v National 3rd, two legs')
+2016	playoffs	fra_third (Championnat National), row fra-139: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v Ligue 2 18th, two legs')
+2016	playoffs	ger_first (Bundesliga), row ger-196: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2016	playoffs	ger_second (2. Bundesliga), row ger-197: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2016	playoffs	ita_ser_b (Serie B), row ita-258: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
+2016	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2016	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
 2016	up	fra_third (Championnat National), row fra-139: game 3 (+0 play-off places), table 2 (2)
 2016	up	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 1 (+4 play-off places), table na (n/a)
 2016	up	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 1 (+4 play-off places), table na (n/a)
@@ -107,7 +104,7 @@
 2017	not_in_game	eng-397 eng_fa_trophy 'FA Trophy' (England)
 2017	not_in_game	fra-149 fra_cfa 'National 2' (France)
 2017	not_in_game	fra-150 fra_lower 'National 3' (France)
-2017	not_in_game	ger-211 new '3. Liga' (Germany)
+2017	not_in_game	ger-211 ger_regional '3. Liga' (Germany)
 2017	not_in_game	ger-220 new 'DFL-Supercup' (Germany)
 2017	not_in_game	ita-281 new 'Serie C girone A' (Italy)
 2017	not_in_game	ita-282 new 'Serie C girone B' (Italy)

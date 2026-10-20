@@ -303,6 +303,8 @@ uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);
 /* Liga 3 (slice 20): the series size of the Portuguese Segunda B object, 0x7d2412, 0x7d2965, 0x7d29ff, 0x7d2ab2. */
 uint32_t rt_por_group_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_por_stage_clubs(uint32_t obj, uint32_t original);
+/* 1 when the Portuguese Cup takes a club with no division (0x7ce37d): a Portuguese club in a game with Liga 3. */
+uint32_t rt_por_cup_none(uint32_t club);
 /* The date count of a French league's template for the clubs that its division holds (slice 18). */
 uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* The room for lower clubs of a cup with a fixed entrant count (6 bytes a place): the entrants less the clubs
@@ -401,6 +403,13 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
 uint32_t rt_wcq_concacaf_playoff(uint32_t self);
 uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
 void rt_wcq_africa_format(uint32_t self, uint32_t pool);
+/* The UEFA Nations League (0.6.0 slice 28, win/season_nl.c): the group stages that the draw of
+ * EuroChampQual::update_for_date makes (8 at 0x57ff34). The original's value for every other object. */
+uint32_t rt_nl_group_stages(uint32_t self, uint32_t original);
+/* 0.6.0 slice 28 part b: the year sites of copa_america (0x5e06fb, 0x5e1590) for the Copa America and the Gold
+ * Cup (win/season_gold_cup.c). */
+uint32_t rt_copa_first_year(uint32_t self, uint32_t year);
+uint32_t rt_copa_next_year(uint32_t self, uint32_t year, uint32_t step);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets
