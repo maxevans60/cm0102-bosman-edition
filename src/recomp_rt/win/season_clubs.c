@@ -6,6 +6,7 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_sizes.h"
+#include "season_ita_serie_c.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -253,6 +254,8 @@ static const ClassSize CLASS_SIZE[] = {
  * season_sizes_clubs: create_table then takes the clubs that the division holds), else the count of the class. */
 static int class_size(const char *name, int season)
 {
+    int ita = season_ita_division_size(name, season);       /* slice 20b: the Serie C groups (0 empties) */
+    if (ita >= 0) return ita;
     for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
         if (!strncmp(name, CLASS_SIZE[k].name, 52)) {
             int table = season_sizes_clubs(CLASS_SIZE[k].file, season);
@@ -419,7 +422,7 @@ static void move_clubs(int season)
             int most = class_size_of(file);
             size = div[i].n0 < most ? div[i].n0 : most;
         }
-        div[i].want = size > 0 ? size : div[i].n0;
+        div[i].want = size > 0 ? size : size == 0 ? 0 : div[i].n0;    /* 0: the division ends (slice 20b) */
         if (div[i].want != div[i].n0) {
             div[i].sized = 1;
             resized++;

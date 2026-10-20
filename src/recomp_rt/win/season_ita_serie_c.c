@@ -1,0 +1,665 @@
+/* Italy's single Serie C of three groups, 2014/15 on (season_ita_serie_c.h, 0.6.0 slice 20b). Evidence:
+ * docs/research/2026-10-20-ita-serie-c.md.
+ *
+ * The objects. create_italian_comps 0x835320 always makes Serie C1/A (ItaSerC1a, key id [0x9cf578]) and C1/B
+ * ([0x9cf57c]), and C2/A, C2/B and C2/C ([0x9cf580], [0x9cf584], [0x9cf588]) only with the extra division flag
+ * (bit 4 of nation +0x11c, 0x835407). In the Serie C era the groups A, B and C are C1/A, C1/B and C2/A (Q620).
+ * Each class picks its clubs by the key id of its own record (C1a 0x64b71d, C1b 0x64f8cd, C2a 0x653b3d).
+ *
+ * The start. ItaSerA::start_new_season 0x641700 runs the chain (vtable +0xb0 = 0x642410, at 0x641713), then with
+ * a C2/A object exchange_serie_d_clubs 0x6421c0 and regroup_serie_c2_clubs 0x642790, else
+ * exchange_serie_c2_clubs_unplayed 0x641fc0, then regroup_serie_c1_clubs 0x642630 (0x641725..0x641743). It reads
+ * C2/B and C2/C whenever C2/A exists (the chain 0x64250f, 0x642527; 0x6421e8..0x6421f5; the tier calls
+ * 0x6418e0..0x641939; the starts 0x64198d..0x6419b7). In the Serie C era the wraps below play the season of the
+ * three groups, and the two patched loads of the C2/A object (0x6418d5, 0x641986) keep C2/B and C2/C out. */
+#include "win.h"
+#include "season.h"
+#include "season_change.h"
+#include "season_comps.h"
+#include "season_rules.h"
+#include "season_names.h"
+#include "season_ita_serie_c.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define COMP_OBJECTS 0xadadfcu          /* g_comp_object_table */
+#define COMP_RECORDS 0xae23d0u          /* club_comp records, 0x6b bytes each (as 0x6422ed..0x642306) */
+#define COMP_RECORD_SIZE 0x6bu
+#define CLUBS 0xae23b4u
+#define CLUB_COUNT 0xae235cu
+#define CLUB_SIZE 0x245u
+#define KEY_A 0x9cf570u
+#define KEY_B 0x9cf574u
+#define KEY_C1A 0x9cf578u
+#define KEY_C1B 0x9cf57cu
+#define KEY_C2A 0x9cf580u
+#define KEY_C2B 0x9cf584u
+#define KEY_C2C 0x9cf588u
+#define KEY_SERIE_D 0x9cf58cu
+#define KEY_ITALY 0x9cf360u             /* the nation record of Italy (0x6422af) */
+#define HUMANS 0xb7431cu                /* the manager list: 0x7875e0 (club) tells a human manager (0x6426ec) */
+
+#define F_RELEGATE_TO 0x006831a0u       /* thiscall (club, record, 1) ret 0xc: the club's division becomes record */
+#define F_PROMOTE_TO 0x006830b0u        /* thiscall (club, record, 1): as 0x64230c */
+#define F_PROMOTE_RELEGATE 0x00689c80u  /* league_promote_and_relegate, thiscall (upper, lower, 1, pairwise, up, down) */
+#define F_TIER_LIMIT 0x0068a980u        /* League::limit_club_division_tier, thiscall (1, 3, -3, 1) (0x6418e0) */
+#define F_SHUFFLE 0x004afbd0u           /* cdecl (array, count, k), as 0x6422de */
+#define F_QSORT 0x00945333u
+#define F_LATITUDE 0x0053fd40u          /* database_compare_clubs_by_latitude (qsort of club pointers, 0x642826) */
+#define F_LEAGUE_ROW 0x006826d0u        /* League::get_table_row, thiscall (index) */
+#define F_MALLOC 0x00944e46u
+#define F_FREE 0x009452cau
+#define F_IS_HUMAN 0x007875e0u          /* thiscall on [HUMANS] (club), 0x6426ec */
+#define F_NEWS_NEW 0x0077bbe0u          /* news item constructor, thiscall (0x13, 0), 0x642700 */
+#define F_NEWS_ARG 0x00785790u          /* thiscall (index, id), 0x64271e and 0x64272f */
+#define F_NEWS_SEND 0x007861e0u         /* thiscall on [HUMANS] (news, club), 0x642745 */
+#define F_GROUP_DATE 0x0068a160u        /* league_round_set_date, cdecl (table, round, day, month, year+, weekday, time, year, 0) */
+#define F_GROUP_SLOT 0x0068a1c0u        /* league_round_set_match_slot, cdecl (table, round, slot, -1, -1, -1, 0) */
+
+#define ROW_SIZE 0x3bu
+#define ROW_STATUS 0x37u
+#define STATUS_DOWN 3
+#define GROUP_ROUND_SIZE 0x41u
+#define ORIGINAL_CLUBS 18
+#define MAX_CLUBS 20
+#define GROUPS 3
+
+static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
+
+static uint32_t call_this(uint32_t fn, uint32_t self, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t object_of(uint32_t key)
+{
+    int32_t id = (int32_t)rd32(g_mem, key);
+    uint32_t table = rd32(g_mem, COMP_OBJECTS);
+    if (id < 0 || !readable(table)) return 0;
+    uint32_t obj = rd32(g_mem, table + 4u * (uint32_t)id);
+    return readable(obj) ? obj : 0;
+}
+
+static uint32_t record_of(uint32_t key)
+{
+    int32_t id = (int32_t)rd32(g_mem, key);
+    uint32_t recs = rd32(g_mem, COMP_RECORDS);
+    return id >= 0 && readable(recs) ? recs + COMP_RECORD_SIZE * (uint32_t)id : 0;
+}
+
+static const uint32_t GROUP_KEY[GROUPS] = {KEY_C1A, KEY_C1B, KEY_C2A};
+
+/* ---- The rows ---- */
+
+/* The row of group g ("Serie C group A..C", comp_file new) in season s, or NULL when not held. */
+static const SeasonRule *group_row(int s, int g)
+{
+    static const char *const comp[GROUPS] = {"Serie C group A", "Serie C group B", "Serie C group C"};
+    for (int i = 0, n = season_rules_count(); i < n; i++) {
+        const SeasonRule *r = season_rules_row(i);
+        if (r->season != s || strcmp(r->comp_file, "new") || strcmp(r->comp, comp[g])) continue;
+        return r->clubs >= 2 && r->clubs <= MAX_CLUBS ? r : NULL;
+    }
+    return NULL;
+}
+
+/* The rules season of a season year: the year itself with changing rules on, the start year with them off (Q232);
+ * 0 in the base game and with the season code off. */
+static int rules_season(int year)
+{
+    if (!season_game_changes()) return 0;
+    return season_changing_rules() ? year : season_start_year();
+}
+
+static int era_of_year(int year)
+{
+    int s = rules_season(year);
+    return s && group_row(s, 0) && group_row(s, 1) && group_row(s, 2);
+}
+
+int season_ita_group(uint32_t obj)
+{
+    if (!readable(obj)) return -1;
+    for (int g = 0; g < GROUPS; g++)
+        if (obj == object_of(GROUP_KEY[g])) return g;
+    return -1;
+}
+
+int season_ita_serie_c(uint32_t obj)
+{
+    return season_ita_group(obj) >= 0 && era_of_year((int16_t)rd16(g_mem, obj + 0x40));
+}
+
+/* The clubs whose division is the record of a key id. */
+static int clubs_of(uint32_t key)
+{
+    uint32_t rec = record_of(key), table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), n = 0;
+    for (int i = 0; rec && readable(table) && i < count; i++) n += rd32(g_mem, table + CLUB_SIZE * (uint32_t)i + 0x57) == rec;
+    return n;
+}
+
+int season_ita_division_size(const char *name, int season)
+{
+    static const char *const div[5] = {"Italian Serie C1/A", "Italian Serie C1/B", "Italian Serie C2/A",
+                                       "Italian Serie C2/B", "Italian Serie C2/C"};
+    if (!name || !era_of_year(season)) return -1;
+    for (int k = 0; k < 5; k++)
+        if (!strcmp(name, div[k])) {
+            const SeasonRule *r = k < GROUPS ? group_row(rules_season(season), k) : NULL;
+            return r ? r->clubs : 0;
+        }
+    return -1;
+}
+
+const char *season_ita_report_file(uint32_t obj)
+{
+    static const char *const file[GROUPS] = {"new_serie_c_group_a", "new_serie_c_group_b", "new_serie_c_group_c"};
+    int g = season_ita_group(obj);
+    return g >= 0 && season_ita_serie_c(obj) ? file[g] : NULL;
+}
+
+/* ---- Sizes ---- */
+
+int season_ita_cap(uint32_t obj, int cap)
+{
+    int g = season_ita_group(obj);
+    return g >= 0 && g < 2 && season_ita_serie_c(obj) && cap < MAX_CLUBS ? MAX_CLUBS : cap;
+}
+
+uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original)
+{
+    return season_ita_serie_c(obj) && original < MAX_CLUBS * ROW_SIZE ? MAX_CLUBS * ROW_SIZE : original;
+}
+
+uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original)
+{
+    if (!season_ita_serie_c(obj)) return original;
+    int have = clubs_of(KEY_C2A), n = have > MAX_CLUBS ? MAX_CLUBS : have;
+    if (n < 2) return original;
+    if ((uint32_t)n != original) wr16(g_mem, obj + 0xa7, 0xffffu);     /* check_complete counts the matches again */
+    return (uint32_t)n;
+}
+
+/* The match days of a group of 20 (38): the original's 34 of C1/A (create_schedule 0x64ad80, 0x64ae06..0x64b3a0:
+ * Sundays from 5 September to 7 May, Wednesday 6 January and Tuesday 5 April), and 22 and 29 August and the
+ * Wednesdays 27 October and 9 March (Q621). Month 0 to 11; year 1 the second calendar year. */
+typedef struct { int8_t day, month, year, weekday, time; } Day;
+static const Day DAYS_38[38] = {
+    {22, 7, 0, 6, 1}, {29, 7, 0, 6, 1}, {5, 8, 0, 6, 1}, {12, 8, 0, 6, 1}, {19, 8, 0, 6, 1}, {26, 8, 0, 6, 1},
+    {3, 9, 0, 6, 1}, {10, 9, 0, 6, 1}, {17, 9, 0, 6, 1}, {24, 9, 0, 6, 1}, {27, 9, 0, 2, 2}, {31, 9, 0, 6, 1},
+    {7, 10, 0, 6, 1}, {14, 10, 0, 6, 1}, {21, 10, 0, 6, 1}, {28, 10, 0, 6, 1}, {5, 11, 0, 6, 1}, {12, 11, 0, 6, 1},
+    {19, 11, 0, 6, 1}, {6, 0, 1, 3, 2}, {16, 0, 1, 6, 1}, {23, 0, 1, 6, 1}, {30, 0, 1, 6, 1}, {13, 1, 1, 6, 1},
+    {20, 1, 1, 6, 1}, {27, 1, 1, 6, 1}, {5, 2, 1, 6, 1}, {9, 2, 1, 2, 2}, {12, 2, 1, 6, 1}, {19, 2, 1, 6, 1},
+    {26, 2, 1, 6, 1}, {2, 3, 1, 6, 1}, {5, 3, 1, 2, 2}, {9, 3, 1, 6, 1}, {16, 3, 1, 6, 1}, {23, 3, 1, 6, 1},
+    {30, 3, 1, 6, 1}, {7, 4, 1, 6, 1}};
+
+/* create_schedule of C1/A, C1/B and C2/A, thiscall (stage, &rounds, &name, &flag) ret 0x10. Stage -1 is the league
+ * (0x64ad91); the original makes 34 match days (D 0x22 at 0x64adbd, block 0x8a2 at 0x64adb8). A group of more than
+ * 18 clubs in the Serie C era gets 38. */
+static int schedule(uint32_t key)
+{
+    uint32_t obj = cpu.ecx;
+    if ((int8_t)rt_arg(0) != -1 || !season_ita_serie_c(obj)) return 0;
+    int n = clubs_of(key);
+    if (n > MAX_CLUBS) n = MAX_CLUBS;
+    if (n <= ORIGINAL_CLUBS) return 0;
+    int rounds = 2 * (n + (n & 1) - 1);
+    if (rounds > 38) rounds = 38;
+    uint32_t sz[1] = {(uint32_t)rounds * GROUP_ROUND_SIZE};
+    uint32_t t = call_cdecl(F_MALLOC, 1, sz);
+    if (rt_unwinding) return 1;
+    if (!readable(t)) return 0;
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, obj + 0x40);
+    for (int r = 0; r < rounds && !rt_unwinding; r++) {
+        const Day *d = &DAYS_38[r + 38 - rounds];
+        uint32_t a[9] = {t, (uint32_t)r, (uint32_t)d->day, (uint32_t)d->month, (uint32_t)d->year, (uint32_t)d->weekday,
+                         (uint32_t)d->time, year, 0};
+        call_cdecl(F_GROUP_DATE, 9, a);
+        uint32_t s[7] = {t, (uint32_t)r, 0, 0xffffffffu, 0xffffffffu, 0xffffffffu, 0};
+        if (!rt_unwinding) call_cdecl(F_GROUP_SLOT, 7, s);
+    }
+    if (rt_unwinding) return 1;
+    uint32_t out_rounds = rt_arg(1), out_name = rt_arg(2), out_flag = rt_arg(3);
+    if (readable(out_flag)) wr32(g_mem, out_flag, 1);      /* as 0x64ada4 */
+    if (readable(out_rounds)) wr16(g_mem, out_rounds, (uint16_t)rounds);
+    if (readable(out_name)) wr16(g_mem, out_name, 0);
+    fprintf(stderr, "recomp: serie c: %.50s %u: %d clubs, %d match days\n", win_str(rd32(g_mem, obj + 4) + 4), year, n,
+            rounds);
+    rt_ret_stdcall(t, 4);
+    return 1;
+}
+
+void o_0064ad80(void);
+void o_0064ef30(void);
+void o_006531a0(void);
+RT_WRAP(0064ad80, c1a_schedule) { if (!schedule(KEY_C1A)) o_0064ad80(); }
+RT_WRAP(0064ef30, c1b_schedule) { if (!schedule(KEY_C1B)) o_0064ef30(); }
+RT_WRAP(006531a0, c2a_schedule) { if (!schedule(KEY_C2A)) o_006531a0(); }
+
+/* ---- The season change ---- */
+
+/* The era of the season that ItaSerA starts: its year + 1 (start_new_season adds 1 at 0x641789, after the chain). */
+static int next_era(uint32_t serie_a) { return era_of_year((int16_t)rd16(g_mem, serie_a + 0x40) + 1); }
+static int next_season(uint32_t serie_a) { return rules_season((int16_t)rd16(g_mem, serie_a + 0x40) + 1); }
+
+static uint32_t row_club(uint32_t league, int i, int *status)
+{
+    uint32_t a[1] = {(uint32_t)i};
+    uint32_t row = call_this(F_LEAGUE_ROW, league, 1, a);
+    if (rt_unwinding || !readable(row)) return 0;
+    if (status) *status = g_mem[row + ROW_STATUS];
+    return rd32(g_mem, row);
+}
+
+/* The Italian clubs whose division is record (0 for none: no division) and that are in no group of the season. */
+static int pool(uint32_t record, uint32_t *out, int max)
+{
+    uint32_t table = rd32(g_mem, CLUBS), italy = rd32(g_mem, KEY_ITALY);
+    int count = (int)rd32(g_mem, CLUB_COUNT), n = 0;
+    for (int i = 0; readable(table) && i < count && n < max; i++) {
+        uint32_t c = table + CLUB_SIZE * (uint32_t)i, nat = rd32(g_mem, c + 0x53);
+        if (rd32(g_mem, c + 0x57) != record || !readable(nat) || rd32(g_mem, nat) != italy) continue;
+        if (record == 0 && (int16_t)rd16(g_mem, c + 0x80) <= 1) continue;       /* no extinct or empty club */
+        out[n++] = c;
+    }
+    return n;
+}
+
+static void shuffle(uint32_t *clubs, int n, int k)
+{
+    if (n <= 1) return;
+    uint32_t sz[1] = {4u * (uint32_t)n};
+    uint32_t a = call_cdecl(F_MALLOC, 1, sz);
+    if (rt_unwinding || !readable(a)) return;
+    for (int i = 0; i < n; i++) wr32(g_mem, a + 4u * (uint32_t)i, clubs[i]);
+    uint32_t s[3] = {a, (uint32_t)n, (uint32_t)k};
+    call_cdecl(F_SHUFFLE, 3, s);
+    if (rt_unwinding) return;
+    for (int i = 0; i < n; i++) clubs[i] = rd32(g_mem, a + 4u * (uint32_t)i);
+    uint32_t f[1] = {a};
+    call_cdecl(F_FREE, 1, f);
+}
+
+static int by_reputation(const void *a, const void *b)
+{
+    int x = (int16_t)rd16(g_mem, *(const uint32_t *)a + 0x80), y = (int16_t)rd16(g_mem, *(const uint32_t *)b + 0x80);
+    return (y > x) - (y < x);
+}
+
+#define IDLE_YEAR 2999                  /* Q395: a competition that never returns waits for year 2999 with no fixtures */
+
+/* C2/B or C2/C ends: no clubs (+0x3e 0) and the year 2999, so it makes no fixtures, the pass and the chain never
+ * start it again (0x641986) and the rules report shows no edition of it. */
+static void idle(uint32_t obj)
+{
+    if (!obj) return;
+    wr16(g_mem, obj + 0x3e, 0);
+    wr16(g_mem, obj + 0x40, IDLE_YEAR);
+    fprintf(stderr, "recomp: serie c: %.50s ends (no clubs, year %d)\n", win_str(rd32(g_mem, obj + 4) + 4), IDLE_YEAR);
+}
+
+/* The change into the era (the season before has C1 and C2, changing rules on): the clubs of C2/B and C2/C (with the
+ * extra division flag) that their table does not relegate (status 3, the 9 of each group in 2013/14, ita-210, ita-211)
+ * join group C's record for the regroup; the relegated go to the Serie D. Then both objects end. */
+static void change_into_era(uint32_t serie_a)
+{
+    uint32_t serie_d = record_of(KEY_SERIE_D), group_c = record_of(KEY_C2A);
+    const uint32_t keys[2] = {KEY_C2B, KEY_C2C};
+    for (int k = 0; k < 2 && !rt_unwinding; k++) {
+        uint32_t obj = object_of(keys[k]);
+        if (!obj) continue;
+        int n = (int16_t)rd16(g_mem, obj + 0x3e), joined = 0, down = 0;
+        for (int i = 0; i < n && n <= 60 && !rt_unwinding; i++) {
+            int st = 0;
+            uint32_t club = row_club(obj, i, &st);
+            if (!readable(club)) continue;
+            if (st == STATUS_DOWN) {
+                uint32_t r[3] = {club, serie_d, 1};
+                call_this(F_RELEGATE_TO, serie_a, 3, r);
+                down++;
+            } else {
+                wr32(g_mem, club + 0x57, group_c);              /* a move within the tier, as the regroup 0x642852 */
+                joined++;
+            }
+        }
+        if (rt_unwinding) return;
+        fprintf(stderr, "recomp: serie c: %.50s: %d clubs to the Serie C, %d to the Serie D\n",
+                win_str(rd32(g_mem, obj + 4) + 4), joined, down);
+        idle(obj);
+    }
+}
+
+/* The chain of the Serie C era, in place of ItaSerA::process_promotion_relegation_chain 0x642410. */
+static void chain(uint32_t serie_a)
+{
+    uint32_t a = object_of(KEY_A), b = object_of(KEY_B), g[GROUPS];
+    for (int i = 0; i < GROUPS; i++) g[i] = object_of(GROUP_KEY[i]);
+    uint32_t list[4] = {a, b, g[0], g[1]};
+    /* The statuses of each table first (vtable +0xa4, as 0x642423..0x642465). */
+    for (int i = 0; i < 4 && !rt_unwinding; i++)
+        if (list[i]) call_this(rd32(g_mem, rd32(g_mem, list[i]) + 0xa4), list[i], 0, NULL);
+    if (g[2] && !rt_unwinding) call_this(rd32(g_mem, rd32(g_mem, g[2]) + 0xa4), g[2], 0, NULL);
+    if (rt_unwinding || !a || !b) return;
+    /* Serie A and B, 4 and 4 in pairs (0x64248e); B and each group in pairs (as 0x6424b6, 0x6424de). */
+    uint32_t ab[6] = {a, b, 1, 1, 4, 4};
+    call_this(F_PROMOTE_RELEGATE, serie_a, 6, ab);
+    for (int i = 0; i < GROUPS && !rt_unwinding; i++) {
+        if (!g[i]) continue;
+        uint32_t bg[6] = {b, g[i], 1, 1, 0xffffffffu, 0xffffffffu};
+        call_this(F_PROMOTE_RELEGATE, serie_a, 6, bg);
+    }
+    if (rt_unwinding) return;
+    /* The relegated rows of each group (status 3) go to the Serie D data division, as exchange_serie_d_clubs does
+     * for C2 (0x642317..0x6423e6), and as many clubs of the Serie D come up (0x6422a3..0x64230c), into group C
+     * (the regroup then puts each club in its group). Q620, Q622. */
+    uint32_t serie_d = record_of(KEY_SERIE_D), group_c = record_of(KEY_C2A);
+    int down = 0;
+    for (int i = 0; i < GROUPS && !rt_unwinding; i++) {
+        if (!g[i]) continue;
+        int n = (int16_t)rd16(g_mem, g[i] + 0x3e);
+        for (int k = 0; k < n && n <= 60 && !rt_unwinding; k++) {
+            int st = 0;
+            uint32_t club = row_club(g[i], k, &st);
+            if (!readable(club) || st != STATUS_DOWN) continue;
+            uint32_t r[3] = {club, serie_d, 1};
+            call_this(F_RELEGATE_TO, serie_a, 3, r);
+            down++;
+        }
+    }
+    if (rt_unwinding) return;
+    fprintf(stderr, "recomp: serie c: %d clubs to the Serie D\n", down);
+    (void)group_c;
+    if (!era_of_year((int16_t)rd16(g_mem, serie_a + 0x40))) change_into_era(serie_a);
+    /* The clubs that come up are taken in the regroup: it fills each group to its count. */
+}
+
+/* The regroup of the Serie C era, in place of regroup_serie_c2_clubs 0x642790 (and regroup_serie_c1_clubs 0x642630,
+ * which does nothing then): the clubs of the three groups, filled from the Serie D data division (shuffled, as
+ * 0x6422de), then from the Italian clubs with no division by reputation (Q622), or cut by reputation to the Serie D,
+ * to the counts of the season's rows, sorted by latitude (0x53fd40) and split into C (the first), B and A. A human
+ * manager whose club changes group gets the news of 0x6426e5..0x642745. */
+static void regroup(uint32_t serie_a)
+{
+    int s = next_season(serie_a), want[GROUPS], total = 0;
+    for (int g = 0; g < GROUPS; g++) {
+        const SeasonRule *r = group_row(s, g);
+        want[g] = r ? r->clubs : 0;
+        total += want[g];
+    }
+    uint32_t rec[GROUPS];
+    for (int g = 0; g < GROUPS; g++) rec[g] = record_of(GROUP_KEY[g]);
+    uint32_t serie_d = record_of(KEY_SERIE_D);
+    if (!rec[0] || !rec[1] || !rec[2] || total < 2 * GROUPS) return;
+    static uint32_t clubs[4096], extra[4096];
+    uint32_t was[4096];
+    int n = 0;
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT);
+    for (int i = 0; readable(table) && i < count && n < 4096; i++) {
+        uint32_t c = table + CLUB_SIZE * (uint32_t)i, d = rd32(g_mem, c + 0x57);
+        if (d == rec[0] || d == rec[1] || d == rec[2]) was[n] = d, clubs[n++] = c;
+    }
+    int from_d = 0, from_none = 0, cut = 0;
+    if (n < total) {
+        int m = pool(serie_d, extra, 4096);
+        shuffle(extra, m, m);
+        if (rt_unwinding) return;
+        for (int i = 0; i < m && n < total; i++) was[n] = serie_d, clubs[n++] = extra[i], from_d++;
+    }
+    if (n < total) {
+        int m = pool(0, extra, 4096);
+        qsort(extra, (size_t)m, sizeof *extra, by_reputation);
+        for (int i = 0; i < m && n < total; i++) was[n] = 0, clubs[n++] = extra[i], from_none++;
+    }
+    if (n > total) {
+        /* Too many clubs: the lowest reputations go to the Serie D. */
+        uint32_t idx[4096];
+        for (int i = 0; i < n; i++) idx[i] = clubs[i];
+        qsort(idx, (size_t)n, sizeof *idx, by_reputation);
+        for (int i = total; i < n && !rt_unwinding; i++) {
+            uint32_t r[3] = {idx[i], serie_d, 1};
+            call_this(F_RELEGATE_TO, serie_a, 3, r);
+            cut++;
+        }
+        n = 0;
+        for (int i = 0; i < total; i++) was[n] = rd32(g_mem, idx[i] + 0x57), clubs[n++] = idx[i];
+    }
+    if (rt_unwinding) return;
+    /* Sort by latitude with the game's qsort on a game array. */
+    uint32_t sz[1] = {4u * (uint32_t)n};
+    uint32_t arr = call_cdecl(F_MALLOC, 1, sz);
+    if (rt_unwinding || !readable(arr)) return;
+    for (int i = 0; i < n; i++) wr32(g_mem, arr + 4u * (uint32_t)i, clubs[i]);
+    uint32_t q[4] = {arr, (uint32_t)n, 4, F_LATITUDE};
+    call_cdecl(F_QSORT, 4, q);
+    if (rt_unwinding) return;
+    int news = 0;
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        uint32_t club = rd32(g_mem, arr + 4u * (uint32_t)i);
+        int g = i < want[2] ? 2 : i < want[2] + want[1] ? 1 : 0;
+        uint32_t old = rd32(g_mem, club + 0x57);
+        if (old != rec[g] && (old == rec[0] || old == rec[1] || old == rec[2])) {
+            uint32_t h[1] = {club};
+            uint32_t human = call_this(F_IS_HUMAN, rd32(g_mem, HUMANS), 1, h);
+            if (rt_unwinding) return;
+            if (human) {
+                uint32_t saved_esp = cpu.esp;
+                cpu.esp -= 0x200;
+                uint32_t item = cpu.esp + 0x10;
+                uint32_t c[2] = {0x13, 0};
+                call_this(F_NEWS_NEW, item, 2, c);
+                uint32_t a0[2] = {0, rd32(g_mem, club)}, a1[2] = {1, rd32(g_mem, rec[g])};
+                if (!rt_unwinding) call_this(F_NEWS_ARG, item, 2, a0);
+                if (!rt_unwinding) call_this(F_NEWS_ARG, item, 2, a1);
+                uint32_t sn[2] = {item, club};
+                if (!rt_unwinding) call_this(F_NEWS_SEND, rd32(g_mem, HUMANS), 2, sn);
+                if (rt_unwinding) return;
+                cpu.esp = saved_esp;
+                news++;
+            }
+        }
+        if (old != rec[g]) {
+            if (old == rec[0] || old == rec[1] || old == rec[2]) wr32(g_mem, club + 0x57, rec[g]);   /* as 0x642852 */
+            else {
+                uint32_t p[3] = {club, rec[g], 1};
+                call_this(F_PROMOTE_TO, serie_a, 3, p);
+            }
+        }
+    }
+    uint32_t f[1] = {arr};
+    if (!rt_unwinding) call_cdecl(F_FREE, 1, f);
+    (void)was;
+    fprintf(stderr, "recomp: serie c %d/%02d: %d clubs in groups of %d, %d and %d (%d from the Serie D, %d with no "
+                    "division, %d to the Serie D, %d news)\n", s, (s + 1) % 100, n, want[0], want[1], want[2], from_d,
+            from_none, cut, news);
+}
+
+void o_00642410(void);
+void o_006421c0(void);
+void o_00642790(void);
+void o_00641fc0(void);
+void o_00642630(void);
+
+/* ItaSerA::process_promotion_relegation_chain, thiscall (1) ret 4. */
+RT_WRAP(00642410, ita_chain)
+{
+    uint32_t serie_a = cpu.ecx;
+    if (!next_era(serie_a)) {
+        o_00642410();
+        return;
+    }
+    chain(serie_a);
+    if (!rt_unwinding) rt_ret_stdcall(cpu.eax, 1);
+}
+
+/* exchange_serie_d_clubs, exchange_serie_c2_clubs_unplayed and regroup_serie_c1_clubs, thiscall () ret: in the Serie
+ * C era the chain and the regroup do their work. */
+RT_WRAP(006421c0, ita_exchange_d)
+{
+    if (!next_era(cpu.ecx)) o_006421c0();
+    else rt_ret_cdecl(cpu.eax);
+}
+RT_WRAP(00641fc0, ita_exchange_c2)
+{
+    if (!next_era(cpu.ecx)) {
+        o_00641fc0();
+        return;
+    }
+    regroup(cpu.ecx);           /* no C2/A object: the regroup still makes the three groups it can */
+    if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
+}
+RT_WRAP(00642630, ita_regroup_c1)
+{
+    if (!next_era(cpu.ecx)) o_00642630();
+    else rt_ret_cdecl(cpu.eax);
+}
+RT_WRAP(00642790, ita_regroup_c2)
+{
+    if (!next_era(cpu.ecx)) {
+        o_00642790();
+        return;
+    }
+    regroup(cpu.ecx);
+    if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
+}
+
+/* 0x6418d5, the load of the C2/A object that picks the tier block (C2/A, B, C or C1/A, B, 0x6418dc): in the Serie
+ * C era the tier call goes to C2/A here, and 0 sends the block to C1/A and C1/B (0x641915). The four arguments are
+ * pushed around this load (0x6418d1..0x6418dc). */
+uint32_t rt_ita_tier_c2(uint32_t c2a)
+{
+    uint32_t serie_a = object_of(KEY_A);
+    if (!c2a || !serie_a || !era_of_year((int16_t)rd16(g_mem, serie_a + 0x40))) return c2a;
+    uint32_t a[4] = {1, 3, 0xfffffffdu, 1};
+    call_this(F_TIER_LIMIT, c2a, 4, a);
+    return 0;
+}
+
+/* 0x641986, the load of the C2/A object that starts the C2 groups (0x64198b): in the Serie C era C2/A starts here
+ * (its vtable +8, as 0x64198f) and 0 skips C2/B and C2/C. ItaSerA's year is already the new season (0x641789). */
+uint32_t rt_ita_start_c2(uint32_t c2a)
+{
+    uint32_t serie_a = object_of(KEY_A);
+    if (!c2a || !serie_a || !era_of_year((int16_t)rd16(g_mem, serie_a + 0x40))) return c2a;
+    call_this(rd32(g_mem, rd32(g_mem, c2a) + 8), c2a, 0, NULL);
+    return 0;
+}
+
+/* ---- Group C without the extra division flag ----
+ *
+ * create_italian_comps 0x835320 makes C2/A (constructor 0x652e90, thiscall (year, record) ret 8, operator new 0xee
+ * as 0x835696..0x8356ce) only with bit 4 of nation +0x11c (0x835407). The module of slice 26 (season_comps.h) makes
+ * it in the Italian entry 21 (the nation of entry 21 is Italy: key_nation_build_table 0x667150 stores [0x9cf360]'s
+ * nation at 0xb64348 = 0xb63d60 + 21 x 0x48) in the first season of the table's group C, and again at a load from
+ * its saved file. With the flag the original's object exists, so make returns 0 (no second object, also at a load:
+ * the creators make the original's object then). The def's file is the class's own file, so the report and the
+ * rule kinds read it as the C2/A object it is. */
+#define F_NEW 0x00944cf1u
+#define F_C2A_NEW 0x00652e90u
+#define NATIONS 0xae23a8u
+#define NATION_SIZE 0x122u
+#define NATION_FLAGS 0x11cu
+#define FLAG_EXTRA 4
+
+static int extra_division_flag(void)
+{
+    int32_t italy = (int32_t)rd32(g_mem, KEY_ITALY);
+    uint32_t table = rd32(g_mem, NATIONS);
+    return italy >= 0 && readable(table) && (g_mem[table + NATION_SIZE * (uint32_t)italy + NATION_FLAGS] & FLAG_EXTRA);
+}
+
+static uint32_t group_c_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
+{
+    (void)d;
+    if (extra_division_flag() || object_of(KEY_C2A)) return 0;
+    uint32_t sz[1] = {0xee};
+    uint32_t obj = call_cdecl(F_NEW, 1, sz);
+    if (rt_unwinding || !readable(obj)) return 0;
+    uint32_t a[2] = {(uint32_t)year, rec};
+    call_this(F_C2A_NEW, obj, 2, a);
+    if (rt_unwinding) return 0;
+    fprintf(stderr, "recomp: serie c: group C object made on the C2/A record for %d%s\n", year,
+            loading ? " (load)" : "");
+    return obj;
+}
+
+const SeasonCompDef season_ita_group_c = {"Serie C group C", "ita_ser_c2a", "Italian Serie C2/A", 21, group_c_make,
+                                          NULL, NULL, 0};
+
+/* ---- Names and news ----
+ *
+ * The three group records take the names of the season's rows ("Lega Pro girone A" to 2016/17, then "Serie C
+ * girone A", Q370, Q360) through season_change_rename (a renamed record keeps its data name for set_key_ids
+ * 0x601a40). At a new game in the era and at each season of the era with changing rules on. */
+static void rename_groups(int s)
+{
+    for (int g = 0; g < GROUPS; g++) {
+        const SeasonRule *r = group_row(s, g);
+        uint32_t rec = record_of(GROUP_KEY[g]);
+        if (!r || !rec || !r->name || !strcmp(r->name, "n/a")) continue;
+        char name[64];
+        snprintf(name, sizeof name, "%s", r->name);
+        season_change_latin1(name);
+        name[50] = 0;
+        season_change_rename(rec, name);
+    }
+}
+
+static void kind_new_game(int y)
+{
+    if (era_of_year(y)) rename_groups(rules_season(y));
+}
+
+static void kind_season(int s)
+{
+    if (!era_of_year(s)) return;
+    rename_groups(s);
+    if (!era_of_year(s - 1)) {
+        const SeasonRule *a = group_row(s, 0), *b = group_row(s, 1), *c = group_row(s, 2);
+        season_change_news("Serie C1 and Serie C2 end: the Serie C is now one division of three groups of %d, %d and "
+                           "%d clubs.", a->clubs, b->clubs, c->clubs);
+    }
+}
+
+const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", kind_new_game, NULL, kind_season, NULL, NULL, NULL};
+
+/* ---- C2/B and C2/C at a new game of the era ----
+ *
+ * With the extra division flag the original makes C2/B and C2/C (0x8356ce, 0x835721). In the era their divisions
+ * end (season_ita_division_size gives 0), and create_table would find no club and return 0 (0x64b755..0x64b763 in
+ * C1/A; the same in C2/B 0x657f50 and C2/C 0x65c0e0). So in the era it makes an empty table and the object ends. */
+void o_00657f50(void);
+void o_0065c0e0(void);
+
+static int empty_table(void)
+{
+    uint32_t obj = cpu.ecx;
+    if (!era_of_year((int16_t)rd16(g_mem, obj + 0x40))) return 0;
+    uint32_t sz[1] = {ROW_SIZE};
+    uint32_t t = call_cdecl(F_MALLOC, 1, sz);
+    if (rt_unwinding) return 1;
+    if (!readable(t)) return 0;
+    memset(g_mem + t, 0, ROW_SIZE);
+    wr32(g_mem, obj + 0xb1, t);                         /* the table, as 0x64b694 */
+    idle(obj);
+    rt_ret_cdecl(1);
+    return 1;
+}
+
+RT_WRAP(00657f50, c2b_table) { if (!empty_table()) o_00657f50(); }
+RT_WRAP(0065c0e0, c2c_table) { if (!empty_table()) o_0065c0e0(); }

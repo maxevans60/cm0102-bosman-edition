@@ -56,6 +56,7 @@
 #include "season_rules.h"
 #include "season_uefa.h"
 #include "season_comps.h"
+#include "season_ita_serie_c.h"
 #include "../host.h"
 
 #include <SDL.h>
@@ -120,6 +121,7 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
     if (clubs < 0) clubs = (int16_t)rd16(g_mem, obj + 0x3e);
     /* Slice 24: a new competition of an original class has the file of its def (season_comps.h). */
     const char *file = season_comps_file(obj);
+    if (season_ita_report_file(obj)) file = season_ita_report_file(obj);    /* slice 20b: a Serie C group */
     if (!file) file = c ? c->file : "?";
     fprintf(f, "comp\t%d\t%s\t%s\t%d\t%s\t%s\t%s\t0x%x\t%d\t%d\t%d\t%d\t%d\t%s\t%s\n", season, phase, slot, id,
             file, c ? c->cls : "?",

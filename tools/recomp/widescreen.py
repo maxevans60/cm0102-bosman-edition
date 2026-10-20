@@ -149,3 +149,11 @@ from league_sizes import INSNS as SIZE_INSNS, PATCHES as SIZE_PATCHES  # noqa: E
 assert not set(SIZE_INSNS) & (set(INSNS) | set(PATCHES)) and not set(SIZE_PATCHES) & (set(PATCHES) | set(SIZE_INSNS))
 INSNS.update(SIZE_INSNS)
 PATCHES.update(SIZE_PATCHES)
+
+# Italy's Serie C of three groups (0.6.0 slice 20b): table sizes, the C2/A count and the C2/A loads of
+# ItaSerA::start_new_season (ita_serie_c.py).
+from ita_serie_c import INSNS as ITA_INSNS, PATCHES as ITA_PATCHES  # noqa: E402
+
+assert not set(ITA_INSNS) & (set(INSNS) | set(PATCHES)) and not set(ITA_PATCHES) & (set(PATCHES) | set(ITA_INSNS))
+INSNS.update(ITA_INSNS)
+PATCHES.update(ITA_PATCHES)

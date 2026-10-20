@@ -6,6 +6,7 @@
 #include "season_rules.h"
 #include "season_sizes.h"
 #include "season_playoffs.h"
+#include "season_ita_serie_c.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -162,7 +163,7 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     const char *file = season_change_file(obj);
     int have = clubs_in_division(obj);
     if (have < MIN_CLUBS || have > MAX_CLUBS) return original;
-    int cap = cap_of(file), n = cap > 0 && have > cap ? cap : have;     /* fewer than the floor: the clubs it has */
+    int cap = season_ita_cap(obj, cap_of(file)), n = cap > 0 && have > cap ? cap : have;   /* slice 20b: Serie C */
     const SeasonRule *r = row_now(obj, file);
     int want = r && r->clubs >= MIN_CLUBS && r->clubs <= MAX_CLUBS ? r->clubs : (int)original;
     if (logging())

@@ -46,12 +46,17 @@ static uint32_t ecl_make(const SeasonCompDef *d, uint32_t rec, int year, int loa
 static const SeasonCompDef conference_league = {"Conference League", SEASON_UEFA_ECL_FILE, SEASON_UEFA_ECL_RECORD, 3,
                                                 ecl_make, "UEFA Cup", "Conference League", 18};
 
+/* Slice 20b: group C of the single Serie C (2014/15 on) on the C2/A object (season_ita_serie_c.c). The original
+ * makes C2/A only with the extra division flag; without it the module makes the object. */
+extern const SeasonCompDef season_ita_group_c;
+
 const SeasonCompDef *const season_comp_defs[] = {
     &test_new_cup,                      /* test only, see above */
     /* slice 26c */
     &season_cup_sudamericana, &season_cup_recopa, &season_cup_suruga_bank, &season_cup_intercontinental,
     &season_cup_acl_two,
     &conference_league,                 /* slice 24 */
+    &season_ita_group_c,                /* slice 20b */
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 
