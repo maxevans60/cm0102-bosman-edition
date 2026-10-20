@@ -6,10 +6,9 @@ Usage:
         [--keep <folder>]
 
 Each run is a season jump of tests/seasons/rules_report_check.py over one season change (start in X, last
-season X+1), with changing_rules on, the test log RECOMP_SEASON_CHANGE_LOG=1 and RECOMP_SEASON_NAMES=table.
-The second variable makes the stand-in of slice 15's names table give the rules table name of a season when it
-differs from the name of the season before (src/recomp_rt/win/season_names_stub.c), so the run has real
-changes of name before slice 15 is on main. The runs (the era boundaries of the build brief):
+season X+1), with changing_rules on and the test log RECOMP_SEASON_CHANGE_LOG=1. The names are those of the
+names table of slice 15 (Seasons/names.tsv, tools/seasons/make_names.py). The runs (the era boundaries of the
+build brief):
     2002    3.9.68 data from 2002/03, across 2002/03 to 2003/04
     2008    September 2008, across 2008/09 to 2009/10 (the UEFA Cup becomes the Europa League)
     2020    November 2020, across 2020/21 to 2021/22
@@ -31,8 +30,8 @@ changes of name before slice 15 is on main. The runs (the era boundaries of the 
 
 The checks (each run):
     - the jump ends with code 0 and the report holds the end of X and of X+1 (a stopped run fails)
-    - on: the competitions whose rules table name changes from X to X+1 (first row of the file) have the new
-      name at the end of X+1 in the rules report (1 June: the international entries change as late as 15 and
+    - on: the competitions whose names table name of X+1 (the row of the object's number) differs from their
+      name at the end of X have the new name at the end of X+1 in the rules report (1 June: the international entries change as late as 15 and
       28 August, after the start report of 1 August), and every other competition keeps its name
     - on: the news log lists exactly one sentence "<old name> is now called <new name>." for each of them,
       for season X+1, and the news item of X+1 is sent once (no news item when no name changes)
@@ -121,7 +120,7 @@ def check_load(program, game, keep):
     work = os.path.join(keep, "load") if keep else tempfile.mkdtemp(prefix="cm0102-season-change-load-")
     year, database, _ = RUNS["load"]
     code, _ = rrc.run(program, game, year + 2, year, database, ["England"], [], work, 7200, {"changing_rules": "on"},
-                      dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1", RECOMP_SEASON_NAMES="table", RECOMP_SAVE_AFTER_DAYS="352"))
+                      dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1", RECOMP_SAVE_AFTER_DAYS="352"))
     first = os.path.join(work, "user", "samesave.sav")
     if code != 0 or not os.path.exists(first):
         return [f"load: the first run made no save (code {code}, {work})"]
@@ -186,27 +185,21 @@ POINT = re.compile(r"recomp: season change: season point of (\d{4})/\d\d on day 
 HOOK = re.compile(r"recomp: season change: test: season hook (\d{4}) on day (\d+) of (\d+)$")
 
 
-def table_names(table_path):
-    """{(season, file): name} of the first row of each file in each season (as the stand-in reads it)."""
-    out = {}
-    with open(table_path, encoding="utf-8") as f:
-        lines = f.read().split("\n")
-    cols = None
-    for line in lines:
-        if not line or line.startswith("#"):
-            continue
-        cells = line.split("\t")
-        if cols is None:
-            cols = cells
-            continue
-        r = dict(zip(cols, cells))
-        try:
-            season = int(r["season"])
-        except (KeyError, ValueError):
-            continue
-        for f in r.get("comp_file", "").split(";"):
-            out.setdefault((season, f), r.get("name", ""))
-    return out
+def season_names():
+    """{(season, file): {n: long name}} of the names table of slice 15 (tools/seasons/make_names.py)."""
+    sys.path.insert(0, os.path.join(HERE, "..", "..", "tools", "seasons"))
+    import make_names
+    import make_rules
+    return make_names.names_by_key(make_rules.read_rows())
+
+
+def name_of(names, season, file, n):
+    """The name that the game gives the n-th object of a file (season_names.c season_names_get_nth): the row n,
+    no name for a gap, the last row for an object after it."""
+    rows = names.get((season, file), {})
+    if n in rows:
+        return rows[n]
+    return rows[max(rows)] if rows and n > max(rows) else None
 
 
 def check_run(name, program, game, keep, reuse=False):
@@ -218,7 +211,7 @@ def check_run(name, program, game, keep, reuse=False):
     else:
         code, report = rrc.run(program, game, year + 1, year, database, ["England"], [], work, 7200,
                                {"changing_rules": rules},
-                               dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1", RECOMP_SEASON_NAMES="table"))
+                               dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1"))
     fails = []
     if code != 0:
         return [f"{name}: the run ended with code {code} ({work})"]
@@ -233,22 +226,28 @@ def check_run(name, program, game, keep, reuse=False):
     for season, day, y in sent_at:
         if y != season or not 151 <= day <= 273:
             fails.append(f"{name}: the item of {season} was sent on day {day} of {y}, not at its season point")
-    end = {c["slot"]: c for c in comps if c["season"] == year and c["phase"] == "end"}
+    end = [c for c in comps if c["season"] == year and c["phase"] == "end"]
     start = {c["slot"]: c for c in comps if c["season"] == year + 1 and c["phase"] == "end"}
-    table = table_names(os.path.join(os.path.dirname(program), "seasons", "rules.tsv"))
+    names = season_names()
     expected = []
-    for slot, c in sorted(end.items()):
-        n = start.get(slot)
+    count = collections.Counter()
+    for c in end:                       # the report order is that of season_comp_objects (season_names.c)
+        k = count[c["file"]]
+        count[c["file"]] += 1
+        n = start.get(c["slot"])
         if not n:
             continue
-        before, after = table.get((year, c["file"])), table.get((year + 1, c["file"]))
-        changes = rules == "on" and before and after and before != after and c["name"] != after[:50]
+        after = name_of(names, year + 1, c["file"], k)
+        changes = rules == "on" and after and c["name"] != after[:50]
         want = after[:50] if changes else c["name"]
         if n["name"] != want:
             fails.append(f"{name}: {c['file']} ends {year + 1} as {n['name']!r}, expected {want!r}")
         if changes:
             expected.append(f"{c['name']} is now called {after[:50]}.")
-    got = [t for s, t in news if s == year + 1]
+    # The names kind gives "<old> is now called <new>." Other kinds (slices 17, 21a, 22) add their own sentences
+    # to the same item; this check reads the names only.
+    others = [t for s, t in news if s == year + 1 and " is now called " not in t]
+    got = [t for s, t in news if s == year + 1 and " is now called " in t]
     if collections.Counter(got) != collections.Counter(expected):
         for t in sorted(set(expected) - set(got)):
             fails.append(f"{name}: the news lacks: {t}")
@@ -256,7 +255,7 @@ def check_run(name, program, game, keep, reuse=False):
             fails.append(f"{name}: the news has an extra line: {t}")
     if [s for s, _ in news if s != year + 1]:
         fails.append(f"{name}: news for another season: {[s for s, _ in news if s != year + 1]}")
-    want_sent = [year + 1] if expected else []
+    want_sent = [year + 1] if expected or others else []
     if sent != want_sent:
         fails.append(f"{name}: news items sent {sent}, expected {want_sent}")
     if rules == "off" and any("season change" in x and "(start season)" not in x for x in log):

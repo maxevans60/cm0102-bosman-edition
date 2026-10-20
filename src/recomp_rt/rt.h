@@ -294,6 +294,17 @@ extern uint32_t rt_screen_w, rt_screen_h;
  * sites of tools/recomp/seasons.py read it in place of the constants 2001, 2002 and 2003. */
 extern uint32_t rt_season_year;
 
+/* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
+ * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
+uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
+/* The date count of a French league's template for the clubs that its division holds (slice 18). */
+uint32_t rt_league_dates(uint32_t obj, uint32_t original);
+/* The room for lower clubs of a cup with a fixed entrant count (6 bytes a place): the entrants less the clubs
+ * of the top divisions of keys a, b and c (key ids, 0 for none). The original in the base game (slice 18).
+ * rt_cup_add: the value to add to base so that the sum is that count (FraCup). */
+uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint32_t key_b, uint32_t key_c);
+uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
+uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
 /* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
  * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group
  * stage. The sites of tools/recomp/uefa.py read it. */

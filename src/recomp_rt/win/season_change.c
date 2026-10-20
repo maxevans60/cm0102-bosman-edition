@@ -35,6 +35,7 @@
 
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
+extern const SeasonRuleKind season_kind_sizes;
 extern const SeasonRuleKind season_kind_subs;
 extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
@@ -51,6 +52,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_subs,                  /* slice 17: substitutes used and the bench */
     &season_kind_nation,                /* slice 17: transfer windows, foreign player limits, work permits */
     &season_kind_cups,                  /* slice 21: the round formats of the domestic cups */
+    &season_kind_sizes,                 /* slice 18: news of league sizes and places (season_sizes.c) */
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_club_cups,             /* slice 26c: years of the new club cups (season_club_cups.c) */
@@ -317,6 +319,8 @@ static int record_index(uint32_t rec, uint32_t *index)
     *index = (rec - base) / RECORD_SIZE;
     return *index < (uint32_t)count && *index < 100000u;
 }
+
+int season_change_renames(void) { return rename_count; }
 
 static const SeasonRename *rename_of(uint32_t index)
 {
