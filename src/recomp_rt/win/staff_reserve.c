@@ -11,6 +11,7 @@
  * than 23,000: then it gets RESERVE_CUSTOM rows. The test switch RECOMP_STAFF_RESERVE=<rows> sets any
  * size from 23,000 up. RECOMP_SCREEN_LOG=1 prints how many rows a new game used. */
 #include "options.h"
+#include "season_records.h"
 #include "win.h"
 #include "../host.h"
 #include "../rt.h"
@@ -144,6 +145,8 @@ uint32_t rt_staff_reserve_size(void)
         if (getenv("RECOMP_SCREEN_LOG"))
             fprintf(stderr, "recomp: staff reserve estimate %ld for Select All, reserve %u\n", need, r);
     }
+    /* Slice 15b: 0x527240 makes up to 16 non-playing staff for each new club record of this load. */
+    r += season_records_reserve_extra();
     const char *v = getenv("RECOMP_STAFF_RESERVE");
     if (v && *v) {
         long n = strtol(v, NULL, 10);

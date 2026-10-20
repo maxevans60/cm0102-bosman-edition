@@ -65,7 +65,6 @@ const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_
 
 static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
 {
-    (void)d;
     (void)loading;
     Cpu saved = cpu;
     uint32_t size[1] = {0xb2};
@@ -76,6 +75,11 @@ static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
     rt_callback(0x632080u, 2, args);
     if (rt_unwinding) return 0;
     cpu = saved;
+    /* A vtable copy, as each real def's object has one (season_club_cups.c): with the original's vtable the names
+     * kind of slice 15 sees a second Inter-American Cup (class_of in season_names.c) and gives the record that
+     * class's name ("Copa Interamericana"), not the name of the def's rows. */
+    uint32_t vt = season_comps_vtable(d, rd32(g_mem, obj), 40);
+    if (vt) wr32(g_mem, obj, vt);
     return obj;
 }
 

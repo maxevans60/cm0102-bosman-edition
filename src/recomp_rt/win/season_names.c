@@ -234,6 +234,8 @@ static const SeasonCompClass *class_of(uint32_t vtable)
 
 /* The long name that the n-th competition object of a file has now (n from 0, counted as in
  * season_names_apply). NULL when the game has no such object. */
+static const char *names_file(uint32_t obj);
+
 static const char *current_name_of(const char *comp_file, int n)
 {
     static uint32_t objs[MAX_OBJECTS];
@@ -241,8 +243,8 @@ static const char *current_name_of(const char *comp_file, int n)
     int count = season_comp_objects(objs, MAX_OBJECTS), k = 0;
     for (int i = 0; i < count; i++) {
         uint32_t rec = rd32(g_mem, objs[i] + 4);
-        const SeasonCompClass *c = class_of(rd32(g_mem, objs[i]));
-        if (!c || !readable(rec) || strcmp(c->file, comp_file)) continue;
+        const char *file = names_file(objs[i]);
+        if (!file || !readable(rec) || strcmp(file, comp_file)) continue;
         if (k++ != n) continue;
         memcpy(name, g_mem + rec + LONG_AT, LONG_SIZE);
         name[LONG_SIZE] = 0;
@@ -272,17 +274,27 @@ static int rename_record(uint32_t rec, const char *long_name, const char *short_
 
 /* The file of an object's class and its number among the objects of that file (from 0), as
  * season_names_apply counts. 0 when the object is not one of the game's competition objects. */
+/* The file of an object for the names table: a new competition that takes a class of the original has the file
+ * of its def (season_comps_file: the Conference League is a Uefa_Cup object, not the second "uefa_cup"), else the
+ * file of its class. NULL for an object of no known class. */
+static const char *names_file(uint32_t obj)
+{
+    const char *f = season_comps_file(obj);
+    const SeasonCompClass *c = f ? NULL : class_of(rd32(g_mem, obj));
+    return f ? f : c ? c->file : NULL;
+}
+
 static int object_place(uint32_t obj, const char **file, int *n)
 {
     static uint32_t objs[MAX_OBJECTS];
-    const SeasonCompClass *c = class_of(rd32(g_mem, obj));
-    if (!c) return 0;
+    const char *f = names_file(obj);
+    if (!f) return 0;
     int count = season_comp_objects(objs, MAX_OBJECTS), k = 0;
     for (int i = 0; i < count; i++) {
-        const SeasonCompClass *ci = class_of(rd32(g_mem, objs[i]));
-        if (!ci || strcmp(ci->file, c->file)) continue;
+        const char *fi = names_file(objs[i]);
+        if (!fi || strcmp(fi, f)) continue;
         if (objs[i] == obj) {
-            *file = c->file;
+            *file = f;
             *n = k;
             return 1;
         }
@@ -313,14 +325,14 @@ int season_names_apply(int season)
     int nseen = 0;
     for (int i = 0; i < n; i++) {
         uint32_t obj = objs[i], rec = rd32(g_mem, obj + 4);
-        const SeasonCompClass *c = class_of(rd32(g_mem, obj));
-        if (!c || !readable(rec)) continue;
+        const char *file = names_file(obj);
+        if (!file || !readable(rec)) continue;
         int k = 0, s;
-        for (s = 0; s < nseen && strcmp(seen[s].file, c->file); s++) {}
+        for (s = 0; s < nseen && strcmp(seen[s].file, file); s++) {}
         if (s < nseen) k = seen[s].count++;
-        else if (nseen < 512) seen[nseen].file = c->file, seen[nseen++].count = 1;
+        else if (nseen < 512) seen[nseen].file = file, seen[nseen++].count = 1;
         const char *short_name = NULL;
-        const char *long_name = season_names_get_nth(c->file, season, k, &short_name);
+        const char *long_name = season_names_get_nth(file, season, k, &short_name);
         if (long_name) changed += rename_record(rec, long_name, short_name);
     }
     fprintf(stderr, "recomp: names of %d/%02d: %d competition records renamed\n", season, (season + 1) % 100,

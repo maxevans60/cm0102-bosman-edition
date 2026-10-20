@@ -23,7 +23,7 @@
 2020	not_in_game	uefa-153 uefa_seeding 'UEFA access list and seeding' (UEFA)
 2021	bench	eur_super_cup (UEFA Super Cup), row uefa-168: game 9, table 12 (12)
 2021	bench	european_cup (UEFA Champions League), row uefa-162: game 9, table 12 (12)
-2021	bench	new_conference_league (UEFA Europa League), row uefa-166: game 9, table 12 (12)
+2021	bench	new_conference_league (UEFA Europa Conference League), row uefa-166: game 9, table 12 (12)
 2021	bench	new_finalissima (2022 Finalissima), row int-continental-224: game 7, table 12 (12)
 2021	bench	uefa_cup (UEFA Europa League), row uefa-165: game 7/9, table 12 (12)
 2021	bench	world_club_champ (FIFA Club World Cup), row club-world-382: game 7/9, table 12 (12)
@@ -37,7 +37,6 @@
 2021	clubs	world_club_champ (FIFA Club World Cup), row club-world-382: game 0, table 7 (7)
 2021	down	eng_third (EFL League Two), row eng-231: game 1 (+0 play-off places), table 2 (2)
 2021	idle	olympics (Football at the Summer Olympics), row int-world-251: the game waits for 2024, the table holds it
-2021	name	new_conference_league (UEFA Europa League), row uefa-166: game 'UEFA Europa League', table 'UEFA Europa Conference League'
 2021	name	new_uefa_nations_league (2020-21 UEFA Nations League), row int-continental-223: game '2020-21 UEFA Nations League', table '2020-21 Finals; 2022-23 UEFA Nations League (start)'
 2021	no_row	friendly (Friendly): no table row
 2021	no_row	record_utils ('B' International): no table row

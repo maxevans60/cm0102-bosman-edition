@@ -332,6 +332,16 @@ def division_records(folder):
 DATA_COUNTING = {"IrePrm", "IreFirst", "PolFirst", "NorFirst"}     # the classes that count the clubs of the data
 
 
+def record_names(season):
+    """Slice 15b: {(division, real name of the club moves table): the name of the new club record} of a season
+    (tools/seasons/make_club_records.py). RECOMP_CLUB_RECORDS=off: none."""
+    if os.environ.get("RECOMP_CLUB_RECORDS") == "off":
+        return {}
+    import make_club_records
+    out, _errors = make_club_records.build()
+    return {(r[1], r[2]): r[3] for r in out if r[0] == season}
+
+
 def club_differences(seasons, comps, clubs, data_dir):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
@@ -364,11 +374,14 @@ def club_differences(seasons, comps, clubs, data_dir):
     for n in held:
         plain_to[make_clubs.plain_name(n)].add(n)
     lists = collections.OrderedDict()
+    records = record_names(season)                  # slice 15b: the new club records of the start season
     for s, division, club_id, club, _ in make_clubs.build()[0]:
         if s != season:
             continue
         if names.get(club_id) == club or club in held:
             name = club
+        elif club_id == -1 and (division, club) in records:
+            name = records[(division, club)]
         else:                               # the plain form, when one club of the database has it (season_clubs.c)
             name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
         lists.setdefault(division, []).append(name)
@@ -430,6 +443,20 @@ def uefa_format_differences(rows):
         groups = re.search(r"Groups (\d+)", text)
         groups2 = re.search(r"Groups 2 (\d+)", text)
         ko = re.search(r"\b(?:KO|R3) (\d+)\.", text) or re.search(r"\bKO (\d+)", text)
+        # Slice 25 (2024/25 on): the league phase of 36 is the group stage, and its knockout stage is the
+        # play-offs and the round of 16 ("League phase 36, KO play-offs 16, R16 16"): 16 + 16 - 8 = 24 clubs.
+        league = re.search(r"League phase (\d+)", text)
+        r16 = re.search(r"\bR16 (\d+)", text)
+        league_po = re.search(r"\bKO play-offs (\d+)", text)
+        if league and r16 and league_po:
+            want = (0 if u["file"] == "european_cup" else int(league.group(1)),
+                    int(league_po.group(1)) + int(r16.group(1)) - int(league_po.group(1)) // 2)
+            game = (u["groups2"] if u["file"] == "european_cup" else u["groups"], u["ko_clubs"])
+            if game != want:
+                out.add((u["season"], "format", f"{u['file']}, row {r['id']}: game {game[0]} and {game[1]} clubs "
+                                                f"in the league phase and its knockout stage, table {want[0]} and "
+                                                f"{want[1]}"))
+            continue
         if u["file"] == "european_cup":
             if not ko:
                 continue
