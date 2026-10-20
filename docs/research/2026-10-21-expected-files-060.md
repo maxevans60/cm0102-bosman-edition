@@ -1,6 +1,6 @@
 # Expected files of the rules report on main (batch F)
 
-Date 2026-10-21. All 66 files of `tests/seasons/rules_report_expected/` were run again with `--update-expected` on the build of origin/main 8d5466e (`ref-builds/main-batchF-dir`, batch G only changes the club_records.cpp 794 box path and adds the display report). 54 files changed (504 lines added, 1,407 removed), 12 did not change.
+Date 2026-10-21. All 66 files of `tests/seasons/rules_report_expected/` were run again with `--update-expected` on the build of origin/main 8d5466e (`ref-builds/main-batchF-dir`, batch G only changes the club_records.cpp 794 box path and adds the display report). 55 files changed (510 lines added, 1444 removed), 11 did not change.
 
 ## How
 
