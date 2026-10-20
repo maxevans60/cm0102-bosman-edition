@@ -42,6 +42,17 @@ typedef struct {
 extern const SeasonDateShifts season_date_shifts[];     /* season_dates_table.c */
 extern const int season_date_shifts_count;
 
+/* The shifts that a load of the database folder (host path, "" for the game's own Data) gets in start year N, in
+ * years: a date of the files plus the shift is the real date (slice 15b writes its new rows by them). A contract end
+ * y gets contract_real when y >= D and y >= 2009, else contract_old. The career of staff row i keeps its years
+ * (shift kept) when bit i of row->kept_hex is set. 0 when nothing moves (all shifts 0). */
+typedef struct {
+    int D, N, birth, joined, careers, kept, contract_old, contract_real;
+    const SeasonDateShifts *row;
+} SeasonShiftPlan;
+int season_dates_plan(const char *folder, int N, SeasonShiftPlan *out);
+int season_dates_career_kept(const SeasonDateShifts *s, uint32_t row);
+
 /* The row of a known database by its neutral name, or NULL. */
 const SeasonDateShifts *season_dates_for(const char *name);
 
