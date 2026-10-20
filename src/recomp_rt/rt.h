@@ -310,6 +310,18 @@ uint32_t rt_uefa_uic_winners(uint32_t uc, uint32_t uic);
 uint32_t rt_season_text_mod(uint32_t original);
 uint32_t rt_season_text_format(uint32_t original);
 
+/* The club competitions outside UEFA (0.6.0 slice 26, src/recomp_rt/win/season_kind_club_world.c): in a season
+ * game the Club World Championship plays every year and draws on 1 July, the Oceania Champions Cup plays every
+ * year, and the Copa Mercosur does not start itself while it waits. The sites of tools/recomp/seasons.py read
+ * these. In the base game each gives the original's value. */
+uint32_t rt_club_world_annual(void);
+uint32_t rt_club_world_step(uint32_t original);
+uint32_t rt_club_world_month(uint32_t original);
+uint32_t rt_club_world_day(uint32_t original);
+uint32_t rt_club_world_waits(uint32_t obj);
+/* The CONCACAF Champions Cup's club count of the edition of `year` (slice 26c, win/season_club_cups.c): 8 in the
+ * base game and with no row. */
+uint32_t rt_concacaf_clubs(uint32_t year, uint32_t original);
 /* International competitions (0.6.0 slice 27, win/season_intl.h): the edition year of a finals class at its
  * constructor and its start_new_season, the golden goal bit of a knockout round, and the World Cup holder of the
  * qualifying sections and of slot 0. The sites of tools/recomp/seasons.py call them. Each gives the original's
@@ -362,15 +374,6 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found);
 uint32_t rt_wcq_concacaf_playoff(uint32_t self);
 uint32_t rt_wcq_south_america_hosts(uint32_t self, uint32_t hosts);
 void rt_wcq_africa_format(uint32_t self, uint32_t pool);
-/* The club competitions outside UEFA (0.6.0 slice 26, src/recomp_rt/win/season_kind_club_world.c): in a season
- * game the Club World Championship plays every year and draws on 1 July, the Oceania Champions Cup plays every
- * year, and the Copa Mercosur does not start itself while it waits. The sites of tools/recomp/seasons.py read
- * these. In the base game each gives the original's value. */
-uint32_t rt_club_world_annual(void);
-uint32_t rt_club_world_step(uint32_t original);
-uint32_t rt_club_world_month(uint32_t original);
-uint32_t rt_club_world_day(uint32_t original);
-uint32_t rt_club_world_waits(uint32_t obj);
 
 /* The reserve of blank staff rows that a database load makes (0.6.0, src/recomp_rt/win/staff_reserve.c):
  * 23,000 in the original. The sites of tools/recomp/staff_reserve.py read it. rt_staff_reserve_size() sets

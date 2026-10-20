@@ -5,8 +5,10 @@ Usage: python3 -I read_fm2007.py <FM2007 db700 folder> <facts folder>
 
 The db700 folder holds client_db.dat, server_db.dat and people_db.dat, unpacked from setup.jar as data with
 unpack_setup_jar.py. Nothing from the disc runs. The files are untrusted input: every read is bounds-checked, and a
-file that does not have the expected shape stops the script. Facts only: names, dates of birth, nations, clubs,
-jobs, contracts, final tables and competition winners. No rating, attribute, ability or position is read.
+file that does not have the expected shape stops the script. Facts: names, dates of birth, nations, clubs,
+jobs, contracts, final tables, competition winners and careers (fm_careers.py). ratings.pkl holds FM2007's ratings
+(extra_fm2007.py): keyplayers.py uses them only as the reference for key players with no Update Team record (Q383,
+Max 2026-10-17). No other step reads them.
 
 Output (the facts folder): nations, clubs, people_all, teammap, clubhist and comphist .pkl.
 
@@ -141,11 +143,12 @@ def people(p, F, S, C):
         x["role"] = "player" if p[x["off"] - 6:x["off"]] == PLAYER else "staff"
         q = x["q"]
         end = min(P[i + 1]["off"] if i + 1 < len(P) else q + 400, q + 400, L)
-        x["job"] = x["joined"] = x["club"] = x["wage"] = x["cend"] = x["pid"] = None
-        m = re.search(rb"(?s)\x6c\x07....(.)(....)\x00", p[q + 9:q + 80])
+        x["job"] = x["joined"] = x["club"] = x["wage"] = x["cend"] = x["pid"] = x["team"] = None
+        m = re.search(rb"(?s)\x6c\x07(....)(.)(....)\x00", p[q + 9:q + 80])
         if m:
-            x["job"] = m.group(1)[0]
-            x["joined"] = date(p, q + 9 + m.start(2))
+            x["team"] = struct.unpack_from("<I", m.group(1))[0]     # the team id of the join block (as FM2005)
+            x["job"] = m.group(2)[0]
+            x["joined"] = date(p, q + 9 + m.start(3))
         for k in range(q + 9, end - 20):
             if p[k] == 0x64 and p[k + 5] == 0:
                 club, wage, day, yr = struct.unpack_from("<IIHH", p, k + 6)
@@ -284,8 +287,15 @@ def main(argv):
     P = people(p, F, S, C)
     teams = teams_of(s, clubs)
     hist, comphist = club_history(s), comp_history(s)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    import extra_fm2007
+    import fm_careers
+    rates = extra_fm2007.common_ratings(src, P)
+    careers = fm_careers.careers(src, P, clubs)
+    print(f"ratings: {len(rates)}, careers: {len(careers)}")
     for n, v in (("nations", nations), ("clubs", clubs), ("people_all", P), ("teammap", teams),
-                 ("clubhist", hist), ("comphist", comphist)):
+                 ("clubhist", hist), ("comphist", comphist), ("ratings", rates), ("careers", careers)):
         with open(os.path.join(out, n + ".pkl"), "wb") as f:
             pickle.dump(v, f)
     print(f"names {len(F)}/{len(S)}/{len(C)}, nations {len(nations)}, clubs {len(clubs)}, people {len(P)} "

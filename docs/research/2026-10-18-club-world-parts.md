@@ -34,7 +34,7 @@ The rules report reads the parent's club count +0x3e, which is 0 for Form K, so 
 
 **Known leak:** the zeroed parent row (0x3b bytes) of each Form K edition is not freed: the League reset frees the table only with a club count of 1 or more (0x687996). About 1.5 KB over 25 seasons.
 
-**Not built yet (lead, 2026-10-18: all go to part 26c):** the 32-club form of 2024/25, the December dates (Q293), the fifth place match, the club counts of the confederations' competitions (below), and the new competitions (Copa Sudamericana, FIFA Intercontinental Cup, Recopa, Suruga Bank Championship, ACL Two).
+**Not built yet in part b (lead, 2026-10-18: all go to part 26c; the December dates and the 32-club form are now built, see 26c below):** the 32-club form of 2024/25, the December dates (Q293), the fifth place match, the club counts of the confederations' competitions (below), and the new competitions (Copa Sudamericana, FIFA Intercontinental Cup, Recopa, Suruga Bank Championship, ACL Two).
 
 - Form G, the 32-club edition of 2024/25 (8 groups of 4 and a knockout from the round of 16, with the Libertadores builders, doc section 4). That season plays the original's 12-club form.
 
@@ -44,7 +44,28 @@ The rules report reads the parent's club count +0x3e, which is 0 for Form K, so 
 - Asian Club Championship to AFC Champions League from 2002/03 (entrants 0x40b950), autumn to spring from 2023/24, ACL Elite from 2024/25. Australian clubs: Oceania to 2005, the ACL from 2007. Australia's confederation is slice 27's.
 - Oceania: 8 clubs (0x798220). The table has more clubs from 2005.
 
-### 26c: new competitions
+### 26c: December dates and the 32-club form (built 2026-10-19)
+
+**Real dates (Q401, Q293).** `edition_dates` in `season_kind_club_world.c` reads the days of each edition from the `format` text of its row in `club-world.tsv` ("7–16 December 2007", "4–11 February 2021", "14 June – 13 July 2025"). The year of the text minus the row's season is the year offset: 0 for December, 1 for February and for June 2025. With changing rules off the row of the start season stays (Q232), so its days and offset move with the edition's year. The start date fields +0xb6 (day of the year) and +0xb8 (year offset), which the original's start branch tests (0x92a73d..0x92a765), get the day one week before the first match (formats doc 5.4), so the picks read the latest continental winners. The day of the year counts from 0 with the month starts of Date.cpp (0x9b8448, 0x9b8460) and its leap test.
+
+Form K rounds: the first round on the first day, each later round 3 days after the one before, the final and the third place match on the last day. Each draw is 2 days before the first round, else the day after the round before (as the original's final, 0x92975f). The cup round fields are those of the formats doc 3.1 (+0x00 draw day, +0x02 year offset, +0x03 match day, +0x05 year offset).
+
+**Form G, the 32-club Club World Cup of 2024/25.** As the formats doc section 4 recommends: the parent is group A, seven `League_Stage` groups at stage slots 0 to 6 and the knockout at slot 7, built with the Libertadores builders 0x4c37a0, 0x4c3b10 and its advance 0x4c3a80 (knockout 0x4c3d10, 16 clubs) in the order of the Libertadores update 0x4c447d..0x4c45e7. Wraps: `create_schedule` 0x929390 (groups: 3 rounds on the first day and 4 and 9 days later; knockout: round of 16 on day 14, quarter-finals 20, semi-finals 24, the final on the last day, one match each with extra time and penalties, no third place), `advance_stage` 0x929dd0 (to 0x4c3a80), the history thunk (slot 7), and the stage index map of 0x929c70, 0x9298a0, 0x92ad50 (groups 2 to 6 become 1, the knockout 7 becomes 2). +0xbe = 2 and a stage array of 8 slots from the game's operator new.
+
+Picks: the original's 12 and 20 more from `pick_entrant` 0x92ae60, which gives the winner and the runner-up of a continent's record and then clubs of the top reputations (formats doc 5.2). The draw: pot 1 four UEFA and four CONMEBOL clubs, pot 2 eight UEFA clubs, pot 3 four AFC and four CONCACAF clubs, pot 4 four CAF, two CONMEBOL, the OFC club and the host. Each pot is shuffled with the game's random function 0x90cfc0, then the two CONMEBOL clubs of pot 4 move to groups whose pot 1 club is from UEFA.
+
+Tests (`tests/seasons/club_world_check.py`, 2026-10-19): `2007-load` (a save after the quarter-finals on 11 December 2007 loads and ends with places 1 to 3 on 16 December), `2007` (rules off: the editions of 2007 and 2008 both on 7 to 16 December), `2020-on` (4 to 11 February 2021, 3 to 12 February 2022), `2004-on` (11 to 18 December 2005) and `2024-on` (Form G: 32 clubs, 14 June to 13 July 2025, places 1 and 2 on 15 July, when the parent completes) pass. The December editions end with their places while the clubs play league matches in December, so the fixture clash code (Q-26c-6) does not stop them.
+
+**Decisions taken (new small decisions, recommended answers, for Max to confirm):**
+
+- Q-26c-1. The fifth place match stays out. It needs new code in the Cup process path (formats doc 3.4: the Cup routes only the semi-final losers), and the history records places 1 to 3 only.
+- Q-26c-2. Form G picks: the real slots (Champions League winners 2021 to 2024, then the ranking, at most two clubs per nation) need older history rows. The game takes each continent's winner, runner-up and then the clubs of the top reputations.
+- Q-26c-3. Form G knockout: a random draw of the round of 16 (0x4c3d10 draws with `draw_round`), not the real fixed bracket (group A winner v group B runner-up).
+- Q-26c-4. Form G pays no group prize money (the original's 0x92a140 pays 2,500,000 to each club out in the groups; the Libertadores builders pay none).
+- Q-26c-5. No set_predicted_positions for Form G (it reads 12 entrants and shuffles the list, 0x92ad36).
+- Q-26c-6. A fixture clash of a December edition with a league match: no new code. `FIXTURE_MANAGER::find_fixture_clashes` 0x5ad780 skips one test for this competition's key id (0x5ad92e). The December and February editions of the tests end normally.
+
+### 26c: new competitions (built 2026-10-19, see `2026-10-19-club-cups.md`)
 
 Copa Sudamericana (2002/03 on), Recopa Sudamericana (2003/04 on, with gaps), FIFA Intercontinental Cup (2024/25 on), AFC Champions League Two (2024/25 on), Suruga Bank Championship (2008/09 to 2019/20, Q334). The build brief gives them to the shared new competitions module (`season_comps.c`); no branch holds it on 2026-10-18.
 

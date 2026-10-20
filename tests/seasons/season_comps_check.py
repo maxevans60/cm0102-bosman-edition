@@ -7,16 +7,14 @@ Usage:
     python3 tests/seasons/season_comps_check.py <cm0102_recomp> <game folder> [--only <name>,...] [--keep <folder>]
 
 The runs (the 3.9.68 data from 2001/02, England, changing_rules on):
-    jump   to 2002/03. The data load of the new game adds one record after the 19 nation comps (index 452 in the
-           3.9.68 data), the season change of 2002 makes the object, and the rules report of 2002 holds it with that
+    jump   to 2002/03. The data load of the new game adds the test record first after the 19 nation comps (index
+           452 in the 3.9.68 data; the records of the real defs follow), the season change of 2002 makes the object, and the rules report of 2002 holds it with that
            record and the table's name of the season (the module renames it, season_comps.h)
     load   the game saves 400 days after the start (August 2002, after the object is made); a new program loads that
            save and plays 10 days: the module makes the object again from its saved file, and the record is in the
            loaded data, so no new record is added at the load
-    off    the jump to 2002/03 without the test variable: no test record and no object
-Slice 24: with changing rules on from 2001/02 the game also gets the Conference League record (def
-new_conference_league, played from 2021/22) at the data load, after the test record. So the load adds 2 records
-with the test variable, 1 without; the Conference League object is not made before 2021/22.
+    off    the jump to 2002/03 without the test variable: no test object, and one record less than the jump (the
+           records of the real defs that a later season holds stay)
 A run takes about 5 to 8 minutes.
 """
 import os
@@ -32,6 +30,7 @@ import rules_report_check as rrc  # noqa: E402
 import club_world_check as cwc  # noqa: E402
 
 TEST = {"RECOMP_SEASON_COMPS_TEST": "1"}
+COUNTS = {}                             # new records of each run, for the off run's compare
 NAME = "Test New Cup"
 COMP = "intercontinental_cup"
 
@@ -46,9 +45,14 @@ def jump(program, game, work, env):
 def check_jump(program, game, work):
     code, report, log = jump(program, game, work, TEST)
     fails = [] if code == 0 else [f"jump: code {code} ({work})"]
+    # The test record comes first (the test def is first in season_comp_defs). A 2001 game with changing rules on
+    # also adds the records of the real defs that a later season holds (slice 26c: Suruga Bank, FIFA
+    # Intercontinental Cup, ACL Two), so the count is checked against the off run.
     m = re.search(r"new competitions: (\d+) new records from index (\d+)", log)
-    if not m or m.group(1) != "2":                          # the test record, then the Conference League's
+    if not m:
         fails.append(f"jump: no new record at the data load ({work}/stderr.txt)")
+    else:
+        COUNTS["jump"] = int(m.group(1))
     index = int(m.group(2)) if m else -1
     if "new competition test_new_cup made for 2002" not in log:
         fails.append("jump: the object was not made in the season change of 2002")
@@ -82,7 +86,7 @@ def check_load(program, game, work):
     try:
         r, saved = cwc.load_and_play(program, game, os.path.join(again, "comps.sav"), again, 10)
     finally:
-        for k in TEST:                                       # slice 24: the off run after this one has no test def
+        for k in TEST:                                       # the off run after this one must not have it
             os.environ.pop(k, None)
     fails = []
     made = re.findall(r"new competition test_new_cup made for (\d+) \(entry 2, record (\d+)\) from the save", r.stderr)
@@ -101,11 +105,15 @@ def check_load(program, game, work):
 def check_off(program, game, work):
     code, report, log = jump(program, game, work, {})
     fails = [] if code == 0 else [f"off: code {code} ({work})"]
-    m = re.search(r"new competitions: (\d+) new records from index", log)
-    if (m and m.group(1) != "1") or "new competition test_new_cup" in log:
-        fails.append(f"off: a test record or object without the test variable ({work}/stderr.txt)")
-    if "new competition new_conference_league made" in log:
+    m = re.search(r"new competitions: (\d+) new records from index (\d+)", log)
+    off = int(m.group(1)) if m else 0
+    if "new competition test_new_cup" in log:
+        fails.append(f"off: the test object without the test variable ({work}/stderr.txt)")
+    if "jump" in COUNTS and off != COUNTS["jump"] - 1:
+        fails.append(f"off: {off} new records, the jump {COUNTS['jump']}: the test record without its variable")
+    if "new competition new_conference_league made" in log:          # slice 24: played from 2021/22
         fails.append(f"off: the Conference League made before 2021/22 ({work}/stderr.txt)")
+    print(f"  off: {off} new records (the real defs), jump {COUNTS.get('jump')}")
     return fails
 
 

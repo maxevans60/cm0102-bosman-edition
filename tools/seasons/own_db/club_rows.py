@@ -6,8 +6,8 @@ Usage: python3 -I club_rows.py <season start year> <template folder> <work folde
 
 The work folder holds leagues.pkl (leagues.py: realrows, the real name and record id of each listed club, and cur,
 the club's division in the new database). Without --write the tool prints the rows. With --write it puts them
-into the part files, after the rows of the seasons before. It stops when a part file already has rows of the
-season. A list goes to a part file only when the season settings' PARTS name its part and label (the labels
+into the part files, after the rows of the seasons before. Rows of the season with a label that the run writes
+are replaced (a rebuild), other rows stay; a part file that does not exist is made. A list goes to a part file only when the season settings' PARTS name its part and label (the labels
 that make_clubs.py TARGETS maps to a database division); the rest are printed as left out.
 """
 import collections
@@ -21,7 +21,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from cmdb import Folder, cstr  # noqa: E402
-from seasons import RULES, settings  # noqa: E402
+from seasons import RULES, repair_clubs, settings  # noqa: E402
 
 COLUMNS = ["season", "division", "club", "db_club_id", "db_club", "db_division", "source"]
 
@@ -45,6 +45,7 @@ def main(argv):
     year = int(argv[0])
     S = settings(year)
     T = Folder(argv[1])
+    repair_clubs(T, S)
     L = pickle.load(open(os.path.join(argv[2], "leagues.pkl"), "rb"))
     write = "--write" in argv
     comps = {struct.unpack_from("<i", r, 0)[0]: cstr(r, 4, 51) for r in T.rows(12)}
@@ -70,12 +71,18 @@ def main(argv):
         return
     for p, rows in sorted(by_part.items()):
         path = os.path.join(RULES, f"{p}-clubs.tsv")
-        with open(path, newline="", encoding="utf-8") as f:
-            lines = list(csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE))
+        if os.path.exists(path):
+            with open(path, newline="", encoding="utf-8") as f:
+                lines = list(csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE))
+        else:
+            lines = [COLUMNS]
         if lines[0] != COLUMNS:
             sys.exit(f"club_rows: {path}: not a clubs file")
-        if any(r and r[0] == season for r in lines[1:]):
-            sys.exit(f"club_rows: {path} already has rows of {season}")
+        labels = {r[1] for r in rows}
+        old = [r for r in lines[1:] if r and r[0] == season and r[1] in labels]
+        lines = [lines[0]] + [r for r in lines[1:] if not (r and r[0] == season and r[1] in labels)]
+        if old:
+            print(f"{path}: {len(old)} rows of {season} replaced")
         at = next((i for i, r in enumerate(lines[1:], 1) if r and r[0] > season), len(lines))
         lines[at:at] = rows
         text = "".join("\t".join(r) + "\n" for r in lines)   # as read: plain tabs, no quoting
