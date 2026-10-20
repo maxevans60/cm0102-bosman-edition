@@ -155,6 +155,9 @@ CUP_INSNS = {
     # FraLgeCup::collect_entrants: the limit of its first National loop (16 - 2 after 2001), raised by the
     # places that National clubs from the CFA cannot fill; `cmp edi, edx` at 0x5bd247 sets the flags again.
     0x5BD244: ("add edx, 0x10", "edx = edx + rt_fra_lge_first(0x10u, edx);"),
+    # ItaCup::select_entrants 0x63faf0: the first position of its second loop (C1 clubs by last position). The
+    # first loop already takes C1 clubs of last position 3 to 5, so a season game starts the second loop at 6.
+    0x63FB16: ("mov byte ptr [esp + 0x13], 5", "W8(esp + 0x13u, rt_ita_cup_first_position(5u));"),
 }
 
 # address: (the instruction in the original, C code). The store keeps its width (W16) and its object register.
