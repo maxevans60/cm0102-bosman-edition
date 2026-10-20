@@ -12,8 +12,9 @@ Runs (Brazil selected, RECOMP_BRA_STATES_LOG=1):
     load      October 2014, a save in March 2015 inside the state season, loaded and played on 60 days
 
 A run passes when it ends with no error box, each of the 15 state objects that is made picks only clubs of its
-state with no club in two state championships of one year, the three region objects take their state, and the
-championships of the next calendar year pick again (the season changed).
+state, no club is in two of the 15 state championships of one year (a region object that keeps its region logs its
+clubs with the state "RG"), the three region objects take their state, and the championships of the next calendar
+year pick again (the season changed).
 """
 import collections
 import concurrent.futures
@@ -58,7 +59,7 @@ def check_log(name, text, base):
     by_year = collections.defaultdict(dict)
     for record, year, n, state, clubs in picks:
         by_year[year][record] = (state, clubs)
-        if record in REGIONS and REGIONS[record] != state:
+        if record in REGIONS and REGIONS[record] != state and state != "RG":   # RG: the region object kept its region
             fails.append(f"{name}: {record} {year} takes {state}")
         if len(clubs) != n or len(set(clubs)) != n:
             fails.append(f"{name}: {record} {year}: {n} clubs, the list holds {len(clubs)} ({len(set(clubs))} distinct)")

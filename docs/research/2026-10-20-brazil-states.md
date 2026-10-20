@@ -70,9 +70,15 @@ never from November 2020 (2 to 3 percent). Measured on the test databases, 2026-
 - **Q602 Which clubs.** The clubs of the state with the region's championship record (club +0x60) first, then those
   with the region's lower division record, then those with no state record; within each, the highest reputation
   first.
-- **Q603 Too few clubs.** A format needs 4 clubs (semi-finals) or 8 (the Central class's knockout of 8). A new object
-  is not made when its state has fewer than 4 clubs in the database. A composite object whose state has fewer than its
-  minimum keeps the original's region and count.
+- **Q603 Too few clubs.** A format needs 4 clubs (semi-finals) or 8 (the Central class's knockout of 8), counted on
+  the clubs of the state in the database, not on the season's count (a count below the minimum is raised to it). A
+  region object whose state has fewer keeps the original's region, and the new objects of that region's other states
+  are not made in that game: their clubs play in the region championship, as in the original (review of
+  2026-10-20: in the 3.9.68 data Mato Grosso has 5 clubs, so the clubs of DF, ES, MS and TO stay in the Central
+  championship). A new object is not made when its state has fewer than 4 clubs.
+- **Q611 One championship a club.** A club plays in at most one of the 15: the picker leaves out a club in the table
+  of another of them, or with the state record of another state ("Brazilian ... State Championship" or
+  "... Lower Division"), which the original's own classes pick by club +0x60.
 - **Q604 Format.** Each state plays its class's format with the count: the league stage of its class's meetings
   (double round robin for the North class, single for Northeast and Central, as the original), then the class's
   semi-finals and final (Central: its knockout of 8). The league match days spread evenly between the template's first
@@ -95,13 +101,14 @@ never from November 2020 (2 to 3 percent). Measured on the test databases, 2026-
 
 - ctest `season_bra_states` (the state of a city code, a city of the table, a club of the table, no state) and
   `season_bra_states_table` (the C table matches the tsv): pass; ctest 36 of 36.
-- `tests/seasons/bra_states_run.py <program> <game> --only 2001-on,2014-on,2021-on,2001,load`: all pass.
-  - 2001-on (3.9.68 data): the Paraense 12 clubs (row 14, 12 in the data), the Cearense 10, the Central object
-    keeps its region (5 clubs of Mato Grosso, fewer than 8), the 12 new championships 5 to 10 clubs; 14 pick in
-    2001 and again in 2002 (each edition ended, so the season changed).
-  - 2014-on (October 2014): 15 championships (the Mato-Grossense too), 147 clubs.
-  - 2021-on (October 2021, no city codes: the tables): 10 championships, 73 clubs; Piauí, Acre, Sergipe and
-    Tocantins have 2 or 3 clubs and no championship (Q603).
+- `tests/seasons/bra_states_run.py <program> <game> --only 2001-on,2014-on,2021-on,2001,load --jobs 3`: all pass,
+  with no club in two of the 15 championships of one year (after the review fix of 2026-10-20, Q603, Q611).
+  - 2001-on (3.9.68 data): the Paraense 12 clubs, the Cearense 10; the Central object keeps its region (5 clubs of
+    Mato Grosso, fewer than 8) with its 15 clubs, so the Brasiliense, Capixaba, Sul-Mato-Grossense and Tocantinense
+    are not made; 11 championships in 2001 and again in 2002.
+  - 2014-on (October 2014): 15 championships, 144 clubs.
+  - 2021-on (October 2021, no city codes: the tables): 7 championships; the Central object keeps its region (7 clubs
+    of Mato Grosso); Piauí, Acre and Sergipe have 2 or 3 clubs and no championship.
   - 2001 (changing rules off): no line of this slice.
   - load: a save on day 75 of 2015 (16 March, inside the state season), loaded, 60 more days, saved: no box.
 - The day fixtures screen gave one area of 31 rows a page in the 2001-on run (now 30, scrolls).
