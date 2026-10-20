@@ -114,6 +114,10 @@ An object of the class `Eur_Super_Cup` (ctor 0x57a100) on its own record, made i
 16. **The Finalissima** plays only in 2022, with changing rules on or off (2026 was cancelled). It plays at the first team's ground (the Euro winner), not at Wembley: the class has no neutral ground by record. A winner missing from the history (a season database) is replaced by the strongest nation of its continent.
 17. **The Confederations Cup** keeps its CONCACAF place (the original's random pick, 0x58cd7c), not the Gold Cup winner.
 
+### The Euro's team slots after a load
+
+The EuroChamp constructor builds the team slots (+0x14, 6 bytes a slot; malloc 0x57a958, build_team_slots 0x57bd80) only for a new edition: after a load it jumps past them (`jne 0x57aa87` at 0x57a943). `load_extra_data` 0x57c480 reads only the pots (+0xee) and the seeding day (+0x13e, +0x140). So in a loaded game +0x14 is 0 while the count +0x36 and the room +0x38 come from the file, and `add_qualified_team` 0x57c120 writes each qualifier at address 0. In the 2018 save run other writes overwrote them before the Euro 2020 seeding: box "Database..cpp 13126" (national_team 0x53b3d0 with a null nation, from 0x53b4ac) on 1 April 2020 in the loaded game only (test log: slots "at 0x0"). The Nations League's daily update (`season_nl_euro_slots_after_load`) gives such a Euro a slot array of its room and keeps the entries at address 0 that hold a national team. It runs only in a season game with the UEFA Nations League object (from 2018/19). Inference, not tested: a Euro of an earlier season, or the World Cup's slots (+0x14 too, room 32 at 0x92bffa), have the same fault after a load.
+
 ### Open item
 
 The Copa America of 12 teams of slice 27 takes Mexico and Canada as guests in every year (0x5e2009, 0x5e1ffe). In 2019 and 2021 its dates meet those of the Gold Cup, so two finals can hold one nation at once. Slice 27 owns the Copa America's guests.
