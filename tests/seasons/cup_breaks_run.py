@@ -178,7 +178,7 @@ def first_edition(table, file, edition, rules):
     return n
 
 
-# The lead's hold file: while it exists no test game starts (docs/HANDOVER.md, Rules).
+# The lead's hold file: while it exists a test game starts only below 8 games and load 16 (the lead's note in it).
 HOLD = "/Users/max/Projects/cm0102/run-logs/HOLD"
 
 
@@ -189,7 +189,11 @@ def wait_for_room():
         games = subprocess.run(["pgrep", "-x", "cm0102_recomp"], capture_output=True, text=True).stdout.split()
         builds = subprocess.run(["pgrep", "-f", "cmake --build"], capture_output=True, text=True).stdout.split()
         busy = len(builds) >= 2 and len(games) >= 10                # the lead's rule of 2026-10-20 11:35
-        if len(games) < 15 and os.getloadavg()[0] < 24 and not os.path.exists(HOLD) and not busy:
+        load = os.getloadavg()[0]
+        if os.path.exists(HOLD):                                    # the lead's note: below 8 games and load 16
+            if len(games) < 7 and load < 16:
+                return
+        elif len(games) < 15 and load < 24 and not busy:
             return
         time.sleep(20)
 
