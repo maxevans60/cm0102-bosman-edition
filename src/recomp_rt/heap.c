@@ -9,6 +9,7 @@
 #include "rt.h"
 #include "rt_host.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -156,6 +157,15 @@ static uint32_t list_alloc(uint32_t size)
 static void list_free(uint32_t a)
 {
     if (a < RT_HEAP_BASE + HDR || a >= heap_top || h_state(a) != MAGIC_USED) {
+        /* The CRT free 0x9452ca keeps its frame in ebp: its caller is at [ebp + 4]. The words of the stack that
+         * look like return addresses of the game's code follow, for the search of the caller's callers. */
+        fprintf(stderr, "recomp: free of %#x (block state %#x): caller %#x, stack:", a,
+                a >= RT_HEAP_BASE + HDR && a < heap_top ? h_state(a) : 0, rd32(g_mem, cpu.ebp + 4));
+        for (uint32_t k = 0, n = 0; k < 256 && n < 16; k++) {
+            uint32_t v = rd32(g_mem, cpu.esp + 4 * k);
+            if (v >= 0x401000u && v < 0x960000u) fprintf(stderr, " %#x", v), n++;
+        }
+        fprintf(stderr, "\n");
         rt_fatal("free of %#x, which is not a heap block (from %#x)", a, rd32(g_mem, cpu.esp));
     }
     uint32_t room = h_room(a);

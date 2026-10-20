@@ -1110,11 +1110,22 @@ RT_WRAP(00633300, uic_round_table)
 }
 
 /* Uefa_Cup::build_entrants, thiscall () returning 1: the gap of the Intertoto winners in the Q2 slots. */
+#define UC_ENTRANTS_CONSTRUCTOR 0x00902383u     /* the return address of the call at 0x90237e in 0x9022e0 */
+
 RT_WRAP(00902b90, uc_build_entrants)
 {
     uint32_t uc = cpu.ecx;
     /* Slice 23: the entrants of the access list (season_uefa_qual.c) in place of the original's. */
     int kind = is_uc(uc);
+    /* They free the cup's old entry table +0xa7 first. The constructor 0x9022e0 calls here (return 0x902383)
+     * before anything sets +0xa7: Comp::Comp 0x48c580 sets the list +0x14 to 0 (0x48c5d1), but neither it nor
+     * Cup::Cup 0x518640 sets +0xa7, so it holds what operator new left. A Conference League made at a season
+     * change takes a used heap block, and its stale +0xa7 was freed again ("free of ... not a heap block", a
+     * 2020 start with Greece and changing rules on). Only for a cup of the access list: the base game's UEFA
+     * Cup takes the original's build_entrants, which writes +0xa7 itself. */
+    const SeasonUefa *row = season_uefa_row((int16_t)rd16(g_mem, uc + 0x40));
+    if (kind && rd32(g_mem, cpu.esp) == UC_ENTRANTS_CONSTRUCTOR && row && season_uefa_access_places(row->season, 'c', 1))
+        wr32(g_mem, uc + 0xa7, 0);
     if ((kind == 'e' && season_uefa_uc_entrants(uc)) || (kind == 'k' && season_uefa_ecl_entrants(uc))) {
         rt_ret_cdecl(1);
         return;
