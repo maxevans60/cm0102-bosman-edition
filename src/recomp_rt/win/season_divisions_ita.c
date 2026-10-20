@@ -373,7 +373,8 @@ static void chain(uint32_t serie_a)
     uint32_t a = object_of(KEY_A), b = object_of(KEY_B), g[GROUPS];
     for (int i = 0; i < GROUPS; i++) g[i] = object_of(GROUP_KEY[i]);
     uint32_t list[4] = {a, b, g[0], g[1]};
-    /* The statuses of each table first (vtable +0xa4, as 0x642423..0x642465). */
+    /* The final places of each table first (vtable +0xa4, League::record_final_positions 0x68aa30, as
+     * 0x642423..0x642465). */
     for (int i = 0; i < 4 && !rt_unwinding; i++)
         if (list[i]) call_this(rd32(g_mem, rd32(g_mem, list[i]) + 0xa4), list[i], 0, NULL);
     if (g[2] && !rt_unwinding) call_this(rd32(g_mem, rd32(g_mem, g[2]) + 0xa4), g[2], 0, NULL);
@@ -772,15 +773,26 @@ uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position)
 
 void o_0063faf0(void);
 
-/* ItaCup::select_entrants, thiscall (): in the Serie C era the groups that still hold last season mark their clubs
- * first (mark_last_season), as the chain does when Serie A starts first. */
+/* ItaCup::select_entrants, thiscall (): it takes its places by each club's last division and final place
+ * (0x63fbd5..0x63fef0), and only the chain of ItaSerA records them (vtable +0xa4, League::record_final_positions
+ * 0x68aa30, at 0x642423..0x642465). The cup can start before Serie A in the season change pass: in a 2014 game
+ * with the extra division the Serie A and B clubs had no last division at the 2015 pick, 12 of the 16 upper places
+ * stayed empty and the cup's first round stopped at "comp_stats..CPP 1664" (0x4a2553, from 0x640389). So in the
+ * Serie C era, when Serie A has not started the cup's season yet, Serie A and B record their final places first
+ * (the chain records the same places again), and the groups mark their clubs (mark_last_season). */
 RT_WRAP(0063faf0, ita_cup_entrants)
 {
     uint32_t cup = cpu.ecx;
     int y = (int16_t)rd16(g_mem, cup + 0x40);
     if (era_of_year(y) || era_of_year(y + 1)) {
         uint32_t saved = cpu.ecx;
-        mark_last_season();
+        const uint32_t keys[2] = {KEY_A, KEY_B};
+        for (int i = 0; i < 2 && !rt_unwinding; i++) {
+            uint32_t obj = object_of(keys[i]);
+            int oy = obj ? (int16_t)rd16(g_mem, obj + 0x40) : 0;
+            if (obj && oy > 0 && oy < y) call_this(rd32(g_mem, rd32(g_mem, obj) + 0xa4), obj, 0, NULL);
+        }
+        if (!rt_unwinding) mark_last_season();
         if (rt_unwinding) return;
         cpu.ecx = saved;
     }
