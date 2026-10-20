@@ -9,7 +9,7 @@ Usage:
 Each run is a season jump of tests/seasons/rules_report_check.py with Italy. The runs:
     2014      October 2014, changing rules off, 2014/15 and 2015/16 (the Serie C start code runs at the change)
     2014-c2   the same with the extra division (Serie C2 selected: the original makes C2/A, C2/B and C2/C)
-    change    October 2013, changing rules on, 2013/14 to the end of 2014/15 (C1 and C2 end)
+    change    Autumn 2013, changing rules on, 2013/14 to the end of 2014/15 (C1 and C2 end)
     change-c2 the same with the extra division
 The checks: the jump ends with code 0 and shows no message box of the game; the report has the groups (files
 ita_ser_c1a, ita_ser_c1b and ita_ser_c2a, Q520) at the end of each season of the era, each with the clubs of its row (20 in 2014/15;
@@ -63,7 +63,7 @@ def check_report(name, report, seasons, want):
 def run_season(name, extra):
     def run(program, game, work):
         code, report = rrc.run(program, game, 2015, 2014, os.path.join(DB, "October 2014"), ["Italy"], extra, work,
-                               7200)
+                               7200, None, {"RECOMP_SEASON_CHANGE_LOG": "1"})
         fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
         found, log = ufr.boxes(work)
         fails += [f"{name}: message box {b}" for b in found]
@@ -78,7 +78,7 @@ def run_season(name, extra):
 
 def run_change(name, extra):
     def run(program, game, work):
-        code, report = rrc.run(program, game, 2014, 2013, os.path.join(DB, "October 2013"), ["Italy"], extra, work,
+        code, report = rrc.run(program, game, 2014, 2013, os.path.join(DB, "Autumn 2013"), ["Italy"], extra, work,
                                10800, {"changing_rules": "on"}, {"RECOMP_SEASON_CHANGE_LOG": "1"})
         fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
         found, log = ufr.boxes(work)
