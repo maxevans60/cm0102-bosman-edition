@@ -427,6 +427,20 @@ def uefa_format_differences(rows):
         groups = re.search(r"Groups (\d+)", text)
         groups2 = re.search(r"Groups 2 (\d+)", text)
         ko = re.search(r"\b(?:KO|R3) (\d+)\.", text) or re.search(r"\bKO (\d+)", text)
+        # Slice 25 (2024/25 on): the league phase of 36 is the group stage, and its knockout stage is the
+        # play-offs and the round of 16 ("League phase 36, KO play-offs 16, R16 16"): 16 + 16 - 8 = 24 clubs.
+        league = re.search(r"League phase (\d+)", text)
+        r16 = re.search(r"\bR16 (\d+)", text)
+        league_po = re.search(r"\bKO play-offs (\d+)", text)
+        if league and r16 and league_po:
+            want = (0 if u["file"] == "european_cup" else int(league.group(1)),
+                    int(league_po.group(1)) + int(r16.group(1)) - int(league_po.group(1)) // 2)
+            game = (u["groups2"] if u["file"] == "european_cup" else u["groups"], u["ko_clubs"])
+            if game != want:
+                out.add((u["season"], "format", f"{u['file']}, row {r['id']}: game {game[0]} and {game[1]} clubs "
+                                                f"in the league phase and its knockout stage, table {want[0]} and "
+                                                f"{want[1]}"))
+            continue
         if u["file"] == "european_cup":
             if not ko:
                 continue

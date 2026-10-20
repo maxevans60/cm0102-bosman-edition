@@ -155,6 +155,11 @@ if(NOT WIN32)
         src/recomp_rt/win/season_uefa_lookup.c)
     target_include_directories(season_uefa_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_uefa COMMAND season_uefa_test)
+    # The UEFA league phase draw (0.6.0 slice 25): pots, opponents, nation rules and match days.
+    add_executable(season_uefa_league_test tests/seasons/test_season_uefa_league.c
+        src/recomp_rt/win/season_uefa_league_draw.c)
+    target_include_directories(season_uefa_league_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_uefa_league COMMAND season_uefa_league_test)
     # The real round names (Q370): the committed table matches round-names.tsv, and its lookup.
     add_test(NAME season_round_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_round_names.py" --check)
     add_executable(season_round_names_test tests/seasons/test_season_round_names.c
