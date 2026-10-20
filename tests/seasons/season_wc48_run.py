@@ -14,6 +14,9 @@ test logs RECOMP_SEASON_INTL_LOG=1 and RECOMP_SEASON_CHANGE_LOG=1. The runs:
             qualifying began (the draw fill, Q388), then the 2030 cycle (the six hosts, the sections of 2028)
     off     October 2023, 2023/24 to 2026/27, changing rules off: the rule edition of the start season is the
             2026 World Cup, so the finals have 48 teams too
+    save    December 2025, changing rules on: the jump saves after SAVE_AFTER days (about 22 June 2026, in the
+            group stage of the finals) and stops; a second game loads that save in a new user folder and plays to
+            the end of 2027/28: no message box, the round of 32 and the 2030 cycle in the loaded game's log
 
 The checks (each run):
     - the jump ends with code 0 and the report holds the end of the last season
@@ -24,6 +27,7 @@ The checks (each run):
       the play-off tournament, 45 in all
     - no draw after a full qualifying is short (log "short after a full qualifying"), no play-off without a team
     - on: the host news of the 2026 World Cup names three hosts
+    - no 2026 qualifying line names Russia (Q288, Q365), and the European pool of 2026 is logged
 A run takes about 25 to 35 minutes. --jobs (default 2) runs that many at the same time. --reuse checks the
 logs already in the --keep folder again without a new run.
 """
@@ -38,16 +42,21 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "smoke"))
 import rules_report_check as rrc  # noqa: E402
 import season_intl_run as sir  # noqa: E402
+import season_nl_run as snr  # noqa: E402
+import smoke_run  # noqa: E402
 
 RUNS = {
     "2023": (2023, 2026, "October 2023", "on"),
     "2025": (2025, 2027, "December 2025", "on"),
     "off": (2023, 2026, "October 2023", "off"),
+    "save": (2025, 2027, "December 2025", "on"),
 }
+SAVE_AFTER = 345
 LINES = {
     "2023": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32",
              "world_cup 2026 seeds on 1 April", "wc play-off 2026: seeds", "wc play-off 2026: finals",
-             "wc qualifying 2026: path A", "wc qualifying 2026: Europe draws", "world_cup 2026 host"],
+             "wc qualifying 2026: path A", "wc qualifying 2026: Europe draws", "world_cup 2026 host",
+             "wc qualifying 2026: Europe pool of"],
     "2025": ["world_cup 2026 draw of 48 teams in 12 groups", "world_cup 2026 round of 32",
              "world_cup 2030 has 12 stages and 48 slots", "world_cup 2030 host Uruguay",
              "wc qualifying 2030: Europe draws"],
@@ -79,6 +88,9 @@ def check(name, start, last, rules, work):
             fails.append(f"{name}: a play-off without a team: {x.strip()}")
         if "no room for the knockout" in x or "no knockout stage" in x or "no paths" in x:
             fails.append(f"{name}: {x.strip()}")
+    for x in log:
+        if "Russia" in x and ("wc qualifying 2026" in x or "world_cup 2026 qualifier" in x or "wc play-off 2026" in x):
+            fails.append(f"{name}: Russia in the 2026 qualifying: {x.strip()}")
     year = QUALIFIERS.get(name)
     if year:
         count = {}
@@ -109,7 +121,42 @@ def check(name, start, last, rules, work):
     return fails
 
 
+def save_run(program, game, keep, reuse):
+    """A save inside the finals of 48 and a load (slice 28's load_and_jump, season_nl_run.py)."""
+    start, last, database, _ = RUNS["save"]
+    base = os.path.join(keep, "save") if keep else tempfile.mkdtemp(prefix="cm0102-season-wc48-save-")
+    first, second = os.path.join(base, "save-a"), os.path.join(base, "save-b")
+    db = sir.database_folder(database)
+    if not reuse:
+        os.makedirs(base, exist_ok=True)
+        save = os.path.join(first, "user", smoke_run.SAVE_NAME)
+        if not os.path.exists(save):
+            code, _ = rrc.run(program, game, last, start, db, ["England"], [], first, 7200, {"changing_rules": "on"},
+                              dict(BASE_ENV, RECOMP_SAVE_AFTER_DAYS=str(SAVE_AFTER)))
+            if code != 0 or not os.path.exists(save):
+                return [f"save: the first game did not save (code {code}, {first})"]
+        snr.BASE_ENV = BASE_ENV                          # the intl test log in the loaded game
+        code = snr.load_and_jump(program, game, db, save, second, last, 7200)
+        if code != 0:
+            return [f"save: the loaded game ended with code {code} ({second})"]
+    log_a = open(os.path.join(first, "stderr.txt"), encoding="latin-1").read().split("\n")
+    log_b = open(os.path.join(second, "stderr.txt"), encoding="latin-1").read().split("\n")
+    fails = [f"save: the loaded game: {x.strip()}" for x in log_b if "recomp: message box from" in x]
+    if not any("world_cup 2026 draw of 48 teams in 12 groups" in x for x in log_a):
+        fails.append("save: the first game made no draw of 48 before the save")
+    if any("world_cup 2026 round of 32" in x for x in log_a):
+        fails.append("save: the first game reached the round of 32 before the save (save earlier)")
+    if not any("season jump: done" in x for x in log_b):
+        fails.append(f"save: the loaded game did not reach the end of {last}/{(last + 1) % 100:02d}")
+    for text in ("world_cup 2026 round of 32", "world_cup 2030 has 12 stages and 48 slots"):
+        if not any(text in x for x in log_b):
+            fails.append(f"save: no log line {text!r} in the loaded game")
+    return fails
+
+
 def one(program, game, name, keep, reuse):
+    if name == "save":
+        return save_run(program, game, keep, reuse)
     start, last, database, rules = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-season-wc48-{name}-")
     if not reuse:

@@ -293,6 +293,67 @@ void rt_wcq26_europe_format(uint32_t self)
     if (europe_on(self) && rd8(g_mem, self + EU_EXEMPT)) wr8(g_mem, self + EU_EXEMPT, 0);
 }
 
+/* The European pool. build_entry_pool 0x919e30 (from the ctor 0x918339 and start_new_season 0x9194cf; it
+ * returns 1, or 0 when it finds fewer nations than its size, 0x91a08c) leaves out the European hosts that
+ * find_hosts gives (two at most, 0x919ee3) and takes European nations in nation order until 50 (pool size 0x32
+ * less the exempt at 0x919e41, `cmp ebx, 0x32` at 0x91a04a; an array of 50 at 0x919fa9), then sorts them by
+ * reputation (0x4b07d0, 0x91a0b0). The pool is not in the save: the ctor builds it at a load too. In the gate
+ * this wrap makes the pool again after the original: every European nation whose national team names it, less
+ * Russia (suspended, Q288 and Q365: the 2026 qualifying had 54 entrants, int-world-279, and after the table the
+ * rule stays, Q248) and less every host of the World Cup of the table (season_intl_host_ids: the three of 2026
+ * are not European; Spain and Portugal of 2030), sorted by the original's compare. 54 nations give 6 groups of 4
+ * and 6 of 5 (europe_group_size), as the real 2026 draw. The fields that the original sets after its sort get
+ * the gate's values: +0xf6 0, +0xff 10, +0x100 11, +0x101 12. */
+#define POOL_MAX 60                     /* 12 groups of 5 (europe_group_size) */
+#define CLUB_COMPARE 0x004b07d0u        /* compare_clubs_by_reputation_desc_nulls_last (0x91a0b0) */
+#define GAME_QSORT 0x00945333u
+
+void o_00919e30(void);
+
+RT_WRAP(00919e30, wcq26_europe_pool)
+{
+    uint32_t self = cpu.ecx;
+    o_00919e30();
+    if (rt_unwinding || !europe_on(self)) return;
+    uint32_t nations = rd32(g_mem, NATIONS);
+    int count = (int)rd32(g_mem, NATION_COUNT), hosts[6], n_hosts, n = 0, russia = 0;
+    if (!readable(nations) || count <= 0 || count > 1000) return;
+    n_hosts = season_intl_host_ids(rd32(g_mem, KEY_WORLD_CUP), year_of(self) + 2, hosts);
+    uint32_t pool = game_malloc(4u * POOL_MAX);
+    if (rt_unwinding || !pool) return;
+    for (int id = 0; id < count && n < POOL_MAX; id++) {
+        uint32_t nation = nations + (uint32_t)id * NATION_SIZE, c = rd32(g_mem, nation + 0x71u);
+        if (!readable(c) || rd32(g_mem, c) != rd32(g_mem, 0x9cfa10u)) continue;
+        if (!strcmp(win_str(nation + 4u), "Russia")) {
+            russia = 1;
+            continue;
+        }
+        int host = 0;
+        for (int k = 0; k < n_hosts; k++) host |= hosts[k] == id;
+        if (host) continue;
+        uint32_t args[1] = {nation};
+        uint32_t team = call_cdecl(NATIONAL_TEAM, 1, args);
+        if (rt_unwinding) return;
+        if (!readable(team) || rd32(g_mem, team + 0x53u) != nation) continue;
+        wr32(g_mem, pool + 4u * (uint32_t)n++, team);
+    }
+    uint32_t qa[4] = {pool, (uint32_t)n, 4, CLUB_COMPARE};
+    call_cdecl(GAME_QSORT, 4, qa);
+    if (rt_unwinding) return;
+    game_free(rd32(g_mem, self + EU_POOL));
+    if (rt_unwinding) return;
+    wr32(g_mem, self + EU_POOL, pool);
+    wr32(g_mem, self + EU_POOL_SIZE, (uint32_t)n);
+    wr8(g_mem, self + EU_EXEMPT, 0);
+    wr8(g_mem, self + EU_LAST_GROUP, EU_GROUPS - 2);
+    wr8(g_mem, self + EU_RUNNERS_UP, EU_GROUPS - 1);
+    wr8(g_mem, self + EU_PLAYOFF, EU_GROUPS);
+    cpu.eax = 1;
+    if (logging())
+        fprintf(stderr, "recomp: season intl: wc qualifying %d: Europe pool of %d nations (%s, %d hosts out)\n",
+                year_of(self) + 2, n, russia ? "Russia out" : "no Russia in the data", n_hosts);
+}
+
 /* 0x91a0c2, 0x91a0c9, 0x91a0d0 (pool, esi) and 0x91aa96, 0x91aa9d, 0x91aaa4 (load 0x91a9f0, edi): the last group
  * stage +0xff, the runners-up stage +0x100 and the play-off stage +0x101 (8, 9, 10: ten groups). +2 in the gate:
  * twelve groups. 0x918348, 0x91950c: the stage count (0xb), 0x91a6cf: the group count of the draw (0xa). */
