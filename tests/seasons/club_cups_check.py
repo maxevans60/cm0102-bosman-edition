@@ -84,9 +84,9 @@ LOAD_RUNS = {
     # places 1 and 2 of the knockout (final 13 July).
     "2024-load-cwc": (2024, "October 2024", ["England", "Argentina", "Australia", "Japan"], 342, 40, None,
                       [r"club world knockout 2024: place 1 ", r"club world knockout 2024: place 2 "]),
-    # Select All but France. Start 12.07.2008; saved 02.10.2008 inside the CONCACAF Champions Cup of 24 clubs (28
+    # Select All but France and Brazil (the save fault above). Start 12.07.2008; saved 02.10.2008 inside the CONCACAF Champions Cup of 24 clubs (28
     # September to 10 October); played to 01.03.2009, after its season start of 21 February 2009.
-    "2008-load-all": (2008, "September 2008", ["all", "France"], 82, 150, None,
+    "2008-load-all": (2008, "September 2008", ["all", "France", "Brazil"], 82, 150, None,
                       [r"concacaf champions 2008: winner "]),
 }
 
