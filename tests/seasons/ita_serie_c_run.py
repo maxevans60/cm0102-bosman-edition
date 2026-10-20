@@ -62,7 +62,7 @@ def check_report(name, report, seasons, want):
 
 def run_season(name, extra):
     def run(program, game, work):
-        code, report = rrc.run(program, game, 2015, 2014, os.path.join(DB, "October 2014"), ["italy"], extra, work,
+        code, report = rrc.run(program, game, 2015, 2014, os.path.join(DB, "October 2014"), ["Italy"], extra, work,
                                7200)
         fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
         found, log = ufr.boxes(work)
@@ -78,7 +78,7 @@ def run_season(name, extra):
 
 def run_change(name, extra):
     def run(program, game, work):
-        code, report = rrc.run(program, game, 2014, 2013, os.path.join(DB, "October 2013"), ["italy"], extra, work,
+        code, report = rrc.run(program, game, 2014, 2013, os.path.join(DB, "October 2013"), ["Italy"], extra, work,
                                10800, {"changing_rules": "on"}, {"RECOMP_SEASON_CHANGE_LOG": "1"})
         fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
         found, log = ufr.boxes(work)
