@@ -854,60 +854,6 @@ RT_WRAP(0091e840, wcq26_oceania_status)
     o_0091e840();
 }
 
-/* ---- TEMPORARY test log (remove before review): a League with an empty stage up to +0x30 ---- */
-
-void o_006847c0(void);
-
-RT_WRAP(006847c0, wcq26_debug_league_update)
-{
-    uint32_t self = cpu.ecx;
-    if (logging() && readable(self) && (int8_t)rd8(g_mem, self + 0x44u) == -1) {
-        int cur = (int)rd32(g_mem, self + F_STAGE), count = (int)rd32(g_mem, self + F_STAGE_COUNT);
-        uint32_t stages = rd32(g_mem, self + F_STAGES);
-        for (int i = 0; i <= cur && i < 64; i++) {
-            uint32_t st = readable(stages) ? rd32(g_mem, stages + 4u * (uint32_t)i) : 0;
-            if (!readable(st) || !readable(rd32(g_mem, st)) || !rd32(g_mem, rd32(g_mem, st) + 0x14u)) {
-                uint32_t rec = rd32(g_mem, self + F_RECORD);
-                fprintf(stderr, "recomp: season intl: DEBUG empty stage %d of %d (count %d) in %s, vtable %08x, year %d\n",
-                        i, cur, count, readable(rec) ? win_str(rec + 4u) : "?", rd32(g_mem, self), year_of(self));
-                break;
-            }
-        }
-    }
-    cpu.ecx = self;
-    o_006847c0();
-}
-
-void o_00916250(void);
-
-/* TEMPORARY test log (remove before review): the CONCACAF pool +0xb2 (+0xb6 entries) after its builder. */
-RT_WRAP(00916250, wcq26_debug_concacaf_pool)
-{
-    uint32_t self = cpu.ecx;
-    o_00916250();
-    if (rt_unwinding || !logging() || !season_wcq26(self)) return;
-    uint32_t list = rd32(g_mem, self + 0xb2u);
-    int n = (int)rd32(g_mem, self + 0xb6u);
-    fprintf(stderr, "recomp: season intl: DEBUG CONCACAF pool (ok %u, exempt %u, bb %u, bc %u) of %d:", cpu.eax & 0xffu,
-            rd8(g_mem, self + 0xbau), rd8(g_mem, self + 0xbbu), rd8(g_mem, self + 0xbcu), n);
-    for (int i = 0; readable(list) && i < n && i < 40; i++) {
-        uint32_t t = rd32(g_mem, list + 4u * (uint32_t)i), nat = readable(t) ? rd32(g_mem, t + 0x53u) : 0;
-        fprintf(stderr, " %s/%u;", team_name(t), readable(nat) ? rd8(g_mem, nat + 0x75u) : 0);
-    }
-    fputc('\n', stderr);
-}
-
-static void debug_table(const char *what, uint32_t st)
-{
-    uint32_t rows = readable(st) ? rd32(g_mem, st + F_TABLE) : 0;
-    int n = readable(st) ? (int16_t)rd16(g_mem, st + F_TEAMS) : 0;
-    fprintf(stderr, "recomp: season intl: DEBUG %s (%d):", what, n);
-    for (int i = 0; readable(rows) && i < n && i < 8; i++)
-        fprintf(stderr, " %s %u;", team_name(rd32(g_mem, rows + (uint32_t)i * ROW_SIZE)),
-                rd8(g_mem, rows + (uint32_t)i * ROW_SIZE + ROW_STATUS));
-    fputc('\n', stderr);
-}
-
 /* The semi-final groups 0x917320 (from advance 0x9170f8, this in esi) make three groups of four. Each takes as
  * its first team the first central seed of the pool slots 25 to 34 (0x917425..0x91744e; it clears the slot), into
  * a block of 16 bytes from malloc (0x917382) that it does not clear: with no seed left it keeps what the block
@@ -983,40 +929,6 @@ RT_WRAP(00917320, wcq26_concacaf_semis)
     uint32_t self = cpu.ecx;
     if (season_wcq26(self)) concacaf_fill_seeds(self);
     if (rt_unwinding) return;
-    int on = logging() && season_wcq26(self);
-    if (on) {
-        uint32_t list = rd32(g_mem, self + 0xb2u);
-        fprintf(stderr, "recomp: season intl: DEBUG CONCACAF semis, +0x30 %d, central slots:", (int)rd32(g_mem, self + F_STAGE));
-        for (int i = 25; readable(list) && i < 35; i++) fprintf(stderr, " %s;", team_name(rd32(g_mem, list + 4u * (uint32_t)i)));
-        fputc('\n', stderr);
-        uint32_t rows = rd32(g_mem, self + F_CUP_ROWS);
-        int n = (int16_t)rd16(g_mem, self + F_TEAMS);
-        fprintf(stderr, "recomp: season intl: DEBUG CONCACAF cup rows (%d):", n);
-        for (int i = 0; readable(rows) && i < n && i < 40; i++)
-            fprintf(stderr, " %s %u;", team_name(rd32(g_mem, rows + (uint32_t)i * 6u)), rd8(g_mem, rows + (uint32_t)i * 6u + 5u));
-        fputc('\n', stderr);
-        for (int s = 0; s < 3; s++) {
-            char what[32];
-            snprintf(what, sizeof what, "CONCACAF stage %d", s);
-            uint32_t st = stage_of(self, s);
-            if (s == 2) {                                   /* a Cup round */
-                uint32_t r2 = readable(st) ? rd32(g_mem, st + F_CUP_ROWS) : 0;
-                int n2 = readable(st) ? (int16_t)rd16(g_mem, st + F_TEAMS) : 0;
-                fprintf(stderr, "recomp: season intl: DEBUG %s cup (%d):", what, n2);
-                for (int i = 0; readable(r2) && i < n2 && i < 40; i++)
-                    fprintf(stderr, " %s %u;", team_name(rd32(g_mem, r2 + (uint32_t)i * 6u)), rd8(g_mem, r2 + (uint32_t)i * 6u + 5u));
-                fputc('\n', stderr);
-            } else {
-                debug_table(what, st);
-            }
-        }
-    }
     cpu.ecx = self;
     o_00917320();
-    if (rt_unwinding || !on) return;
-    for (int s = 3; s < 6; s++) {
-        char what[32];
-        snprintf(what, sizeof what, "CONCACAF semi stage %d", s);
-        debug_table(what, stage_of(self, s));
-    }
 }
