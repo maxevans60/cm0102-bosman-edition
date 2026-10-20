@@ -160,6 +160,13 @@ if(NOT WIN32)
         src/recomp_rt/win/season_round_names.c src/recomp_rt/win/season_round_names_table.c)
     target_include_directories(season_round_names_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_round_names COMMAND season_round_names_test)
+    # The state of a Brazilian club (0.6.0 slice 20e, Q600): the committed table matches bra-city-states.tsv, and its
+    # lookup.
+    add_test(NAME season_bra_states_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_bra_states.py" --check)
+    add_executable(season_bra_states_test tests/seasons/test_season_bra_states.c
+        src/recomp_rt/win/season_bra_names.c src/recomp_rt/win/season_bra_states_table.c)
+    target_include_directories(season_bra_states_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_bra_states COMMAND season_bra_states_test)
     # The substitute rule lookup (0.6.0 slice 17).
     add_executable(season_subs_test tests/seasons/test_season_subs.c src/recomp_rt/win/season_subs_rule.c
         src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)

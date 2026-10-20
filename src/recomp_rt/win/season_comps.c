@@ -46,12 +46,22 @@ static uint32_t ecl_make(const SeasonCompDef *d, uint32_t rec, int year, int loa
 static const SeasonCompDef conference_league = {"Conference League", SEASON_UEFA_ECL_FILE, SEASON_UEFA_ECL_RECORD, 3,
                                                 ecl_make, "UEFA Cup", "Conference League", 18};
 
+/* Slice 20e: the state championships of 12 states of the North, Northeast and Central regions of Brazil, objects
+ * of the North class (season_bra_states.c, Q332). */
+extern const SeasonCompDef season_bra_state_ma, season_bra_state_am, season_bra_state_pi, season_bra_state_ac,
+    season_bra_state_rn, season_bra_state_pb, season_bra_state_al, season_bra_state_se, season_bra_state_df,
+    season_bra_state_es, season_bra_state_ms, season_bra_state_to;
+
 const SeasonCompDef *const season_comp_defs[] = {
     &test_new_cup,                      /* test only, see above */
     /* slice 26c */
     &season_cup_sudamericana, &season_cup_recopa, &season_cup_suruga_bank, &season_cup_intercontinental,
     &season_cup_acl_two,
     &conference_league,                 /* slice 24 */
+    /* slice 20e */
+    &season_bra_state_ma, &season_bra_state_am, &season_bra_state_pi, &season_bra_state_ac, &season_bra_state_rn,
+    &season_bra_state_pb, &season_bra_state_al, &season_bra_state_se, &season_bra_state_df, &season_bra_state_es,
+    &season_bra_state_ms, &season_bra_state_to,
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 
@@ -389,7 +399,7 @@ void season_comps_before_comp_table(void)
 #define NATION_COUNT 0xae2380u          /* s32: N */
 #define NATION_RECORDS 0xae23d8u        /* the first nation comp */
 #define FRIENDLY_RECORDS 0x7f
-#define MAX_NEW 16
+#define MAX_NEW 32                      /* slice 20e: 12 more (24, 26c and 28 hold about 8) */
 
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 {
