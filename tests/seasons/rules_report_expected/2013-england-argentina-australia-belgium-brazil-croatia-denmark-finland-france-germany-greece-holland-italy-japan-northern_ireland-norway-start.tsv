@@ -10,27 +10,8 @@
 2013	bench	fra_lge_cup (Coupe de la Ligue), row fra-116: game 3, table 7 (7)
 2013	bench	ger_cup (DFB-Pokal), row ger-166: game 6, table 7 (7)
 2013	bench	ita_ser_a (Serie A), row ita-206: game 9, table 12 (12)
-2013	bench	world_club_champ (FIFA Club World Cup), row club-world-230: game 9, table 12 (12)
+2013	bench	world_club_champ (FIFA Club World Cup), row club-world-230: game 7, table 12 (12)
 2013	bench	world_cup (FIFA World Cup), row int-world-146: game 7, table 12 (12 (all squad members not in the starting team))
-2013	club_list	Argentine Second Division: 22 of 22 listed clubs that the database holds (22 listed), 4 other clubs, 26 in all; not in it: -; others: Chacarita Juniors, Deportivo Santamarina, Huracán, Huracán de Tres Arroyos
-2013	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: KSV Sottegem, RUS Andenne-Seilles
-2013	club_list	Brazilian National Third Division: 20 of 20 listed clubs that the database holds (20 listed), 36 other clubs, 56 in all; not in it: -; others: Alecrim Futebol Clube, América Football Club (RJ), América Futebol Clube (AM), Araguaína Futebol e Regatas, Associação Botafogo Futebol Clube, Associação Desportiva Confiança, Betim EC, Botafogo Futebol Clube (SP), Brasília Futebol Clube, Brusque Futebol Clube, Camaçari Futebol Clube, Cametá Sport Club, Ceilândia Esporte Clube, Central Sport Club, Centro Esportivo Nova Esperança, Centro Sportivo Alagoano, Clube Atlético Metropolitano, Clube Náutico Marcílio Dias, Esporte Clube Flamengo, Esporte Clube Gênus Rondoniense, Esporte Clube Ypiranga (BA), Ferroviário Atlético Clube, Fluminense de Feira Futebol Clube, Grêmio Esportivo Brasil, Guarany Sporting Clube, Iraty Sport Club, J.Malucelli Futebol S/A, JV Lideral Futebol Clube, Londrina Esporte Clube, Mixto Esporte Clube, Náuas Esporte Clube, Paulista Futebol Clube, Sociedade Esportiva River Plate, Sociedade Esportiva Vila Aurora, Sociedade Esportiva do Gama, Vilhena Esporte Clube
-2013	club_list	Croatian First Division: 10 of 10 listed clubs that the database holds (10 listed), 6 other clubs, 16 in all; not in it: -; others: HNK DOSK Drnis, HNK Hajduk Split u19, NK Amater Slavonski Brod, NK Borac (H), NK Zminj, NK Zrinski Ozalj
-2013	club_list	Croatian Second Division North: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK Grobnican Cavle, NK Imotski, NK Junak Sinj, NK Mladost Zdralovi
-2013	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Aarhus Fremad, FC Fyn, FC Helsingør, Skive Idrætsklub
-2013	club_list	Danish Second Division: 16 of 31 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Aarhus Fremad, BK Søllerød-Vedbæk, Boldklubben Avarta, Boldklubben Fremad Amager, Boldklubben af 1893, FC Djursland, FC Helsingør, Fodbold Club Sydvest 05, Idrætsforeningen Skjold Birkerød, Odder IGF, Ringkøbing IF, SC Egedal, Skive Idrætsklub, Svebølle B&I, Vanløse Idræts Forening; others: -
-2013	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong FC Twente, Jong PSV; others: -
-2013	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: FU Narbonne, Vierzon Foot 18
-2013	club_list	Greek National A Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AEL Kalloni, Apollon Smirnis, Diethnis Enosis Ergotelis, Panetolikos; others: -
-2013	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Hellas Verona, Livorno; others: -
-2013	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Carpi, Trapani; others: -
-2013	club_list	Italian Serie C1/A: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Carpi, Trapani
-2013	club_list	Italian Serie C1/B: 17 of 17 listed clubs that the database holds (17 listed), 1 other clubs, 18 in all; not in it: -; others: Livorno
-2013	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Tokushima Vortis, Vissel Kobe; others: -
-2013	club_list	Japanese J-League 2: 12 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 12 in all; not in it: Avispa Fukuoka, Ehime FC, FC Gifu, Giravanz Kitakyushu, Kamatamare Sanuki, Kataller Toyama, Mito HollyHock, Roasso Kumamoto, ThespaKusatsu Gunma, Yokohama FC; others: -
-2013	club_list	Northern Irish League First Division: 10 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 10 in all; not in it: Ballyclare Comrades, Coagh United, Limavady United, Loughgall; others: -
-2013	club_list	Northern Irish League Premier Division: 10 of 12 listed clubs that the database holds (12 listed), 0 other clubs, 10 in all; not in it: Ards, Warrenpoint Town FC; others: -
-2013	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: FK Bodø/Glimt, IK Start; others: -
 2013	clubs	arg_second (Primera B Nacional), row arg-usa-40: game 25, table 22 (22)
 2013	clubs	asia_club_champ (AFC Champions League), row club-world-241: game 16, table 32 (32)
 2013	clubs	bel_first (Belgian Pro League), row hol-bel-164: game 18, table 16 (16)
@@ -75,7 +56,7 @@
 2013	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-149: game 24, table 6 (6)
 2013	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-147: game 0, table 53 (53 entrants)
 2013	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-152: game 5, table 1 (1)
-2013	clubs	world_club_champ (FIFA Club World Cup), row club-world-230: game 4, table 7 (7)
+2013	clubs	world_club_champ (FIFA Club World Cup), row club-world-230: game 0, table 7 (7)
 2013	clubs	world_cup (FIFA World Cup), row int-world-146: game 0, table 32 (32)
 2013	down	arg_prm (Primera División), row arg-usa-13: game 0 (+0 play-off places), table 3 (3 (bottom three of the average table))
 2013	down	arg_second (Primera B Nacional), row arg-usa-40: game 0 (+0 play-off places), table 4 (4 (infobox; bottom two of the table faced relegation by affiliation))
@@ -88,7 +69,7 @@
 2013	down	den_second (Danish 2nd Divisions), row den-swe-76: game 4 (+0 play-off places), table 6 (6)
 2013	down	eng_third (Football League Two), row eng-151: game 1 (+0 play-off places), table 2 (2)
 2013	down	ger_second (2. Bundesliga), row ger-158: game 4 (+0 play-off places), table 2 (2)
-2013	down	gre_second (Football League), row gre-pol-cro-67: game 2 (+0 play-off places), table 3 (3 per group (bottom three))
+2013	down	gre_second (Football League North), row gre-pol-cro-67: game 2 (+0 play-off places), table 3 (3 per group (bottom three))
 2013	down	ita_ser_b (Serie B), row ita-207: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2013	down	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-208: game 1 (+4 play-off places), table 0 (0 (all non-promoted clubs join the single Lega Pro in 2014/15))
 2013	down	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-209: game 1 (+4 play-off places), table 0 (0 (all non-promoted clubs join the single Lega Pro in 2014/15))
@@ -99,17 +80,12 @@
 2013	no_row	record_utils ('B' International): no table row
 2013	no_row	record_utils (Reserve): no table row
 2013	no_row	record_utils (Under 21 International): no table row
-2013	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-244: the game holds 2013, the table says not held
-2013	not_held	asia_super_cup (Asian Super Cup), row club-world-245: the game holds 2013, the table says not held
 2013	not_held	bra_champ_cup (Copa dos Campeões), row bra-202: the game holds 2013, the table says not held
-2013	not_held	conmebol_merc (Copa Mercosur), row club-world-233: the game holds 2013, the table says not held
 2013	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-391: the game holds 2013, the table says not held
 2013	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-134: the game holds 2014, the table says not held
 2013	not_held	ger_lge_cup (DFL-Ligapokal), row ger-167: the game holds 2013, the table says not held
 2013	not_held	gre_super (Greek Super Cup), row gre-pol-cro-94: the game holds 2013, the table says not held
-2013	not_held	inter_amer_cup (Copa Interamericana), row club-world-240: the game holds 2013, the table says not held
 2013	not_held	nir_charity (Charity Shield), row wal-nir-irl-315: the game holds 2013, the table says not held
-2013	not_held	world_club_cup (Intercontinental Cup), row club-world-229: the game holds 2013, the table says not held
 2013	not_in_game	arg-usa-202 argentina_rules 'Argentina' (Argentina)
 2013	not_in_game	arg-usa-67 new 'Copa Argentina' (Argentina)
 2013	not_in_game	arg-usa-94 new 'Supercopa Argentina' (Argentina)
@@ -130,15 +106,12 @@
 2013	not_in_game	bra-931 new 'Campeonato Piauiense' (Brazil)
 2013	not_in_game	bra-958 new 'Campeonato Acriano' (Brazil)
 2013	not_in_game	bra-985 new 'Campeonato Brasiliense' (Brazil)
-2013	not_in_game	club-world-235 new 'Copa Sudamericana' (CONMEBOL)
-2013	not_in_game	club-world-236 new 'Recopa Sudamericana' (CONMEBOL)
 2013	not_in_game	eng-152 eng_conf 'Conference Premier' (England)
 2013	not_in_game	eng-373 eng_fa_trophy 'FA Trophy' (England)
 2013	not_in_game	fra-113 fra_cfa 'CFA' (France)
 2013	not_in_game	fra-114 fra_lower 'CFA 2' (France)
-2013	not_in_game	ger-159 new '3. Liga' (Germany)
+2013	not_in_game	ger-159 ger_regional '3. Liga' (Germany)
 2013	not_in_game	ger-168 new 'DFL-Supercup' (Germany)
-2013	not_in_game	gre-pol-cro-121 new 'Football League (South group)' (Greece)
 2013	not_in_game	gre-pol-cro-445 new 'Croatian Football Super Cup' (Croatia)
 2013	not_in_game	ita-210 ita_ser_c2a 'Lega Pro Seconda Divisione girone A' (Italy)
 2013	not_in_game	ita-211 ita_ser_c2b 'Lega Pro Seconda Divisione girone B' (Italy)
@@ -154,21 +127,23 @@
 2013	playoffs	ger_first (Bundesliga), row ger-157: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
 2013	playoffs	ger_second (2. Bundesliga), row ger-158: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
 2013	playoffs	gre_prm (Super League Greece), row gre-pol-cro-40: game 0 up and 0 down play-off places, table 0 and 1 ('2nd-5th: European play-off mini-league; 16th: relegation play-off')
-2013	playoffs	gre_second (Football League), row gre-pol-cro-67: game 0 up and 0 down play-off places, table 4 and 0 ('top 4 of each group: promotion play-off round of 8 for 3 places (2 direct, 3rd v')
+2013	playoffs	gre_second (Football League North), row gre-pol-cro-67: game 0 up and 0 down play-off places, table 4 and 0 ('top 4 of each group: promotion play-off round of 8 for 3 places (2 direct, 3rd v')
+2013	playoffs	gre_second (Football League South), row gre-pol-cro-121: game 0 up and 0 down play-off places, table 4 and 0 ('top 4 of each group: promotion play-off round of 8 for 3 places (2 direct, 3rd v')
 2013	playoffs	ita_ser_b (Serie B), row ita-207: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
 2013	playoffs	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-208: game 4 up and 4 down play-off places, table 8 and 0 ('2nd to 9th: quarter-finals one leg (2v9, 3v8, 4v7, 5v6) with extra time and pena')
 2013	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-209: game 4 up and 4 down play-off places, table 8 and 0 ('2nd to 9th: quarter-finals one leg (2v9, 3v8, 4v7, 5v6) with extra time and pena')
 2013	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-229: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
 2013	playoffs	nor_first (1. divisjon), row nor-fin-123: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
+2013	subs_used	new_suruga_bank (Suruga Bank Championship), row club-world-525: game 3, table 7 (7)
 2013	up	arg_second (Primera B Nacional), row arg-usa-40: game 1 (+0 play-off places), table 3 (3 (champion, runner-up, winner of a tie-breaker for 3rd))
 2013	up	aus_nsl (A-League), row aus-jap-kor-36: game 6 (+0 play-off places), table na (n/a)
 2013	up	bel_third (Belgian Third Division), row hol-bel-166: game 1 (+0 play-off places), table 2 (2 (group champions))
 2013	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-40: game 4 (+0 play-off places), table na (n/a)
 2013	up	bra_nat_third (Campeonato Brasileiro Série C), row bra-94: game 2 (+0 play-off places), table 4 (4)
 2013	up	conmebol_liber (Copa Libertadores), row club-world-232: game 2 (+0 play-off places), table na (n/a)
-2013	up	conmebol_merc (Copa Mercosur), row club-world-233: game 1 (+0 play-off places), table na (n/a)
 2013	up	cro_a2a (Druga HNL), row gre-pol-cro-364: game 0 (+0 play-off places), table 1 (1 (1st))
 2013	up	den_second (Danish 2nd Divisions), row den-swe-76: game 3 (+0 play-off places), table 2 (2)
 2013	up	fin_first (Ykkönen), row nor-fin-128: game 2 (+0 play-off places), table 1 (1st (1))
 2013	up	gre_cup (Greek Football Cup), row gre-pol-cro-13: game 2 (+0 play-off places), table na (n/a)
-2013	up	gre_second (Football League), row gre-pol-cro-67: game 2 (+0 play-off places), table 0 (0)
+2013	up	gre_second (Football League North), row gre-pol-cro-67: game 1 (+0 play-off places), table 0 (0)
+2013	up	gre_second (Football League South), row gre-pol-cro-121: game 1 (+0 play-off places), table 0 (0 (promotion via joint play-off round, see group 1 row))
