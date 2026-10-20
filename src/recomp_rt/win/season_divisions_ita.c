@@ -560,8 +560,16 @@ uint32_t rt_ita_start_c2(uint32_t c2a)
     if (!c2a || !serie_a || !era_of_year((int16_t)rd16(g_mem, serie_a + 0x40))) return c2a;
     /* A C2/A that slice 26's module made in this pass already holds the new season (its constructor took it): a
      * start would move it a year on. */
-    if ((int16_t)rd16(g_mem, c2a + 0x40) < (int16_t)rd16(g_mem, serie_a + 0x40))
-        call_this(rd32(g_mem, rd32(g_mem, c2a) + 8), c2a, 0, NULL);
+    int y = (int16_t)rd16(g_mem, serie_a + 0x40), cy = (int16_t)rd16(g_mem, c2a + 0x40);
+    /* Made in this pass with the clubs of its division before the regroup (the module's entry hook runs before
+     * ItaSerA's start): when the regroup changed its count, it starts again from the season before, so its table
+     * and fixtures take the clubs of the group (start_new_season adds 1, as 0x641789). */
+    if (cy == y && (int16_t)rd16(g_mem, c2a + 0x3e) != clubs_of(KEY_C2A)) {
+        wr16(g_mem, c2a + 0x40, (uint16_t)(y - 1));
+        cy = y - 1;
+        fprintf(stderr, "recomp: serie c: group C starts again with %d clubs\n", clubs_of(KEY_C2A));
+    }
+    if (cy < y) call_this(rd32(g_mem, rd32(g_mem, c2a) + 8), c2a, 0, NULL);
     return 0;
 }
 
@@ -718,6 +726,9 @@ uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position)
     int y = serie_a ? (int16_t)rd16(g_mem, serie_a + 0x40) : 0;
     if (count >= 0x20 || position <= 40 || !serie_a || !(era_of_year(y) || era_of_year(y + 1))) return count;
     uint32_t list = esp + 0x1c;
+    int nulls = 0;
+    for (uint32_t j = 0; j < count; j++) nulls += !readable(rd32(g_mem, list + 4u * j));
+    fprintf(stderr, "recomp: serie c: Coppa Italia: %u lower clubs at position %u (%d empty)\n", count, position, nulls);
     static uint32_t cand[4096];
     int n = 0;
     const uint32_t keys[4] = {KEY_C1A, KEY_C1B, KEY_C2A, KEY_SERIE_D};

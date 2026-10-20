@@ -55,7 +55,7 @@ def check_report(name, report, seasons, want):
             if end.get(file) != want[s][g]:
                 fails.append(f"{name}: {file} at the end of {s} holds {end.get(file)} clubs, want {want[s][g]}")
         for old in ("ita_ser_c2b", "ita_ser_c2c"):
-            if end.get(old, 0):
+            if end.get(old, 0) > 1:                 # with the extra division each keeps one club (Q623)
                 fails.append(f"{name}: {old} holds {end[old]} clubs at the end of {s} (it ends in the era)")
     return fails
 
