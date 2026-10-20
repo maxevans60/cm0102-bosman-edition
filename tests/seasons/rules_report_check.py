@@ -233,6 +233,11 @@ def differences(seasons, comps, rows):
             if c["file"] not in FRIENDLY_FILES:
                 out.add((season, "no_row", f"{c['file']} ({c['name']}): no table row"))
             continue
+        # Slice 20: a second object of a file that waits for a later season (the second Greek group between its
+        # editions) and has no row of its own this season gives no line.
+        own = [x for x in found if c["file"] in row_files(x)]
+        if k >= len(own) and own and not any(season - 1 <= x["year"] <= season + 1 for x in both):
+            continue
         r = pick_row(found, c["file"], k)
         nations |= {x["nation"] for x in found if isinstance(x["tier"], int)}
         label = f"{c['file']} ({c['name']}), row {r['id']}"
@@ -410,6 +415,8 @@ def division_differences(comps, clubs):
     out = set()
     for c in comps:
         if c["phase"] != "start" or c["kind"] != "league" or c["file"] not in files or c["clubs"] <= 0:
+            continue
+        if c["year"] > c["season"] + 1:                 # slice 20: a league that waits for a later season
             continue
         n = held.get((c["season"], c["record"]), 0)
         if n != c["clubs"]:

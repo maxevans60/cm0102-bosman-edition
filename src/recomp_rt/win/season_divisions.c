@@ -1104,13 +1104,17 @@ RT_WRAP(005eb120, gre_swap)
 }
 
 /* Rule kind "divisions": the group plays only in the seasons of the table. In a season with no group it is idle
- * (season_change_skip); when it comes back, +0x40 goes to the year before, so its start_new_season (0x5ebe90 adds
- * 1) makes the new season's dates (the third case of season_comps.h). */
+ * (season_change_skip) with the year before its next edition; when it comes back, +0x40 is the year before, so its
+ * start_new_season (0x5ebe90 adds 1) makes the new season's dates (the third case of season_comps.h). */
 static void divisions_before(const SeasonChange *c)
 {
     uint32_t group = gre_group();
     if (!group || c->comp != group) return;
     if (!gre_held(c->season)) {
+        /* Idle: its year goes to the year before its next edition (2998 when none comes), as an object that
+         * waits (season_comps.h), so the rules report and the screens do not take it for this season's group. */
+        int next = season_comps_next_edition(GRE_GROUP_COMP, c->season);
+        wr16(g_mem, group + OBJ_YEAR, (uint16_t)((next > c->season ? next : 2999) - 1));
         season_change_skip();
         return;
     }
