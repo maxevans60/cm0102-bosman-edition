@@ -135,7 +135,7 @@ def run_load(name, extra):
             fails.append(f"{name}: the save did not load and play on (code {r.returncode}, {again})")
         if "message box" in out:
             fails.append(f"{name}: a message box after the load ({again}/stderr.txt)")
-        made = "new competition ita_ser_c2a made for 2014 (entry 21" in out and "from the save" in out
+        made = re.search(r"new competition ita_ser_c2a made for \d+ \(entry 21, record \d+\) from the save", out)
         if not extra and not made:
             fails.append(f"{name}: the module did not make group C again from the save")
         if extra and "group C object made" in out:
