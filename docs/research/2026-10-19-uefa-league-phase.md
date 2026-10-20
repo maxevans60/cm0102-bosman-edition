@@ -118,7 +118,19 @@ With changing rules on, the kind `uefa` writes for 2024/25: "The Champions Leagu
 - Q546: the places byte of the league phase table is 8 (places 1 to 8 marked as through).
 - Q547: the match days and knockout dates of 2024/25 serve every season from 2024/25.
 
+## The stage name
+
+The stage name id of the league phase is 0x41f, "Group A" in the original's name table (0x4b9a44). The round name function 0x4b4850 names stage ids too, and the screen wraps of `season_round_names_game.c` set its competition. The round names table takes round codes up to 990 only, so the wrap asks `season_uefa_stage_name`: id 0x41f of a competition whose row has a league phase reads "League Phase" (regulations 2024/25, Art. 13.02, Q370). The rules report shows it ("European Champions Cup League Phase").
+
+## Tests and results (2026-10-20)
+
+- ctest `season_uefa`, `season_uefa_table`, `season_uefa_league`, `season_round_names`, `season_round_names_table`: pass.
+- `tests/seasons/uefa_2024_run.py` with `build/cm0102_recomp`: `2024`, `2025`, `change`, `load`, `repeat` pass. Each league phase table has 36 clubs with 8 (Champions League, Europa League) or 6 (Conference League) matches played by every club, the play-off ties are the pairs of the bracket, and each cup has a winner. The draws kept both nation rules in every run.
+- Rules reports: `--year 2024 --database "October 2024" --last 2025` gives `rules_report_expected/2024-england.tsv`, `--year 2025 --database "December 2025" --last 2026` gives `2025-england.tsv`. The league phase format lines are gone (the check reads "League phase 36, KO play-offs 16, R16 16"). Left: the bench and substitutes counts and the competition names of the original, which other slices own.
+- `--year 2025 --last 2027` stops at the box "Database..cpp 13126" on day 147 of 2028 in `NationalTeams::select_squad` (call 0x76c266, Euro 2028 finals), outside this slice. The full jump from 2001 to 2027 with changing rules on stops at the same box on day 247 of 2015 in the original's Champions League group draw (prize news, stack 0x48e413, 0x58582f). Neither runs code of this slice. Both are reported to the lead.
+- Same-save (Q342) with start.sav, prematch.sav, a new game and yeovil.sav (7 days): every run equal to normal, `season-code-off` too, except `rules-on`, whose save also differs in `FIFA Club World Championship_104.tmp` (slice 26's competition; this slice changes nothing in a 2001/02 game).
+
 ## Open points
 
-- The stage name of the league phase: name id 0x41f reads "Group A" in the original's name table (0x4b9a44). The round names table takes round codes up to 990 only, so the name "League Phase" needs a new kind of row. Not done.
-- The Conference League object comes from slice 24 part b. Its league phase uses this code through the kind 'k'; it is tested when part b is in.
+- The Euro 2028 and 2015 boxes above (other slices).
+- The `rules-on` difference in `FIFA Club World Championship_104.tmp` (slice 26).

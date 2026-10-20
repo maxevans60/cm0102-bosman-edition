@@ -12,6 +12,8 @@ Each run is a season jump of tests/seasons/rules_report_check.py with England. T
     change  October 2023, changing rules on, 2023/24 to the end of 2024/25: the news sentences of the change
     load    October 2024: a save in the league phase (120 days) and one in the knockout phase (200 days), each
             loaded by a new program that plays to the end of the season
+    repeat  two October 2024 games with the same steps give equal saves 130 days after the start (in the league
+            phase)
 The checks of a season: the jump ends with code 0 and shows no message box of the game; the log of
 src/recomp_rt/win/season_uefa*.c shows the access list places, two European Performance Spots, a league phase
 of 36 clubs with 8 matches each for the Champions League and the Europa League (6 for the Conference League
@@ -173,11 +175,30 @@ def run_load(program, game, work):
     return fails
 
 
+def run_repeat(program, game, work):
+    """Two 2024/25 games with the same steps give equal saves 130 days after the start (as
+    tests/seasons/uefa_access_run.py run_repeat), both at the same time."""
+    import smoke_run
+    db = os.path.join(DB, "October 2024")
+
+    def one(k):
+        w = os.path.join(work, k)
+        rrc.run(program, game, 2024, 2024, db, ["England"], [], w, 3600, None, {"RECOMP_SAVE_AFTER_DAYS": "130"})
+        path = os.path.join(w, "user", smoke_run.SAVE_NAME)
+        return open(path, "rb").read() if os.path.exists(path) else None
+    with concurrent.futures.ThreadPoolExecutor(2) as ex:
+        saves = list(ex.map(one, ("a", "b")))
+    if None in saves:
+        return [f"repeat: a run made no save ({work})"]
+    return [] if saves[0] == saves[1] else ["repeat: the two 2024/25 saves differ"]
+
+
 RUNS = {
     "2024": run_season("2024", 2024, "October 2024"),
     "2025": run_season("2025", 2025, "December 2025"),
     "change": run_change,
     "load": run_load,
+    "repeat": run_repeat,
 }
 
 
