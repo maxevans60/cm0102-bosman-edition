@@ -1194,6 +1194,17 @@ RT_WRAP(0090dae0, virtual_staff_top_up)
         if (rec) { memcpy(rn, g_mem + rec + 4, 51); rn[51] = 0; }
         fprintf(stderr, "recomp: club records:   fixture %08x of %s, its bytes +0x40 %02x +0x43 %02x +0x4d %04x\n", fx, rn,
                 fx ? g_mem[fx + 0x40] : 0, fx ? g_mem[fx + 0x43] : 0, fx ? rd16(g_mem, fx + 0x4d) : 0);
+        fprintf(stderr, "recomp: club records:   club pointer %08x, fixture bytes:", club);
+        for (uint32_t k = 0; fx && k < 0x50; k++) fprintf(stderr, "%s%02x", k % 16 ? " " : " |", g_mem[fx + k]);
+        fputc('\n', stderr);
+        /* The competition objects of g_comp_object_table [0xadadfc] (by record id) whose record is the fixture's. */
+        uint32_t objs = rd32(g_mem, 0xadadfcu);
+        for (uint32_t id = 0; objs && rec && id < 1024; id++) {
+            uint32_t o = rd32(g_mem, objs + 4 * id);
+            if (o >= 0x10000u && o < 0xfff00000u && rd32(g_mem, o + 4) == rec)
+                fprintf(stderr, "recomp: club records:   object %08x of record %u, vtable %08x, clubs %d\n", o, id,
+                        rd32(g_mem, o), (int16_t)rd16(g_mem, o + 0x3e));
+        }
         uint32_t nt = rd32(g_mem, 0xb74318u);
         if (nt && nat) {
             uint32_t sq = rd32(g_mem, nt + 4) + rd32(g_mem, nat) * 0x6eu;
