@@ -7,6 +7,7 @@
 #include "season_records.h"
 #include "season_rules.h"
 #include "season_sizes.h"
+#include "season_divisions.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -164,6 +165,7 @@ typedef struct {
 typedef struct {
     uint32_t at, nation;
     int rank, n0, want, tier, target, spare, sized;
+    int fresh;          /* slice 20: a record that the module adds, with no club in the database */
     int listed, found, kept, missing, missing_reserve, filled_own, filled_left, filled_pool, filled_spare, filled_lower;
     int open, stand_in;
     const char *name;
@@ -254,6 +256,8 @@ static const ClassSize CLASS_SIZE[] = {
  * season_sizes_clubs: create_table then takes the clubs that the division holds), else the count of the class. */
 static int class_size(const char *name, int season)
 {
+    int new_division = season_divisions_class_size(name, season);   /* slice 20 */
+    if (new_division >= 0) return new_division;
     for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
         if (!strncmp(name, CLASS_SIZE[k].name, 52)) {
             int table = season_sizes_clubs(CLASS_SIZE[k].file, season);
@@ -350,7 +354,7 @@ static int reserve_name(const char *name)
 static int find_division(const Division *div, int ncomps, const char *name)
 {
     for (int t = 0; t < ncomps; t++)
-        if (div[t].n0 > 0 && !div[t].spare && same_name(div[t].at + COMP_NAME, name)) return t;
+        if ((div[t].n0 > 0 || div[t].fresh) && !div[t].spare && same_name(div[t].at + COMP_NAME, name)) return t;
     return -1;
 }
 
@@ -408,19 +412,20 @@ static void move_clubs(int season)
         d->rank = (int16_t)rd16(g_mem, d->at + COMP_RANK);
         d->spare = d->at == spare1 || d->at == spare2;
         d->name = win_str(d->at + COMP_NAME);
+        d->fresh = season_divisions_new_record(d->name);
     }
     for (int i = 0; i < count; i++)
         if (club[i].db_div >= comps && club[i].db_div < comps + (uint32_t)ncomps * COMP_SIZE)
             div[(club[i].db_div - comps) / COMP_SIZE].n0++;
     int resized = 0;
     for (int i = 0; i < ncomps; i++) {
-        int size = div[i].n0 > 0 && !div[i].spare ? class_size(div[i].name, season) : -1;
+        int size = (div[i].n0 > 0 || div[i].fresh) && !div[i].spare ? class_size(div[i].name, season) : -1;
         const char *file = class_file(div[i].name);
         if (size > 0 && div[i].n0 > size && season_sizes_keeps_database(file)) {     /* a cup takes it whole */
             int most = class_size_of(file);
             size = div[i].n0 < most ? div[i].n0 : most;
         }
-        div[i].want = size > 0 ? size : div[i].n0;
+        div[i].want = size >= 0 ? size : div[i].n0;     /* 0: a division that ends (slice 20, Q290) */
         if (div[i].want != div[i].n0) {
             div[i].sized = 1;
             resized++;
@@ -429,7 +434,7 @@ static void move_clubs(int season)
         }
     }
     for (int i = 0; i < ncomps; i++) {             /* tier: 1 + the divisions of the nation with a higher rank */
-        if (div[i].n0 <= 0 || div[i].spare) continue;
+        if ((div[i].n0 <= 0 && !div[i].fresh) || div[i].spare) continue;
         div[i].tier = 1;
         for (int j = 0; j < ncomps; j++)
             if (j != i && div[j].n0 > 0 && !div[j].spare && div[j].nation == div[i].nation && div[j].rank > div[i].rank)
@@ -442,6 +447,7 @@ static void move_clubs(int season)
         by_list[r - first] = -1;
         to_div[r - first] = -1;
         if (rows[r].season != season) continue;
+        if (!season_divisions_list_on(rows[r].division, season)) continue;     /* slice 20 */
         int t = find_division(div, ncomps, rows[r].division);
         if (t < 0) {
             unknown_division++;
@@ -519,7 +525,7 @@ static void move_clubs(int season)
      * the highest rank down. */
     int norder = 0;
     for (int i = 0; i < ncomps; i++) {
-        if (div[i].n0 <= 0 || div[i].spare) continue;
+        if ((div[i].n0 <= 0 && !div[i].fresh) || div[i].spare) continue;
         int nation_listed = 0;
         for (int j = 0; j < ncomps && !nation_listed; j++)
             nation_listed = (div[j].target || div[j].sized) && div[j].nation == div[i].nation;
@@ -654,6 +660,7 @@ void o_00524d70(void);
 RT_WRAP(00524d70, trim_staff_tables)
 {
     const char *off = getenv("RECOMP_CLUB_MOVES");     /* test switch: off moves no club */
+    season_divisions_test_extra();                     /* slice 20: test switch RECOMP_TEST_EXTRA */
     if (season_game_changes() && nrows && !(off && !strcmp(off, "off"))) move_clubs(season_start_year());
     if (season_game_changes()) season_records_fill(season_start_year());     /* slice 15b: after the moves */
     o_00524d70();

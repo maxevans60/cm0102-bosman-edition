@@ -83,7 +83,9 @@ The first command checks each file against [`tools/clean_files/manifest.tsv`](to
 
 ## Report a problem or ask for a feature
 
-Open an [issue](https://github.com/maxevans60/cm0102-bosman-edition/issues/new/choose). For a problem, say which computer you use, which version of the game, and what you clicked before it happened. Many features came from players on Reddit, and the release notes credit each one.
+Open an [issue](https://github.com/maxevans60/cm0102-bosman-edition/issues/new/choose). For a problem, say which computer you use, which version of the game, and what you clicked before it happened.
+
+For a problem with the picture or the window, such as blurred text or a picture that stays small, add the display report (0.6.0 and later). Press Ctrl+Shift+D in the game (Cmd+Shift+D on a Mac). The game copies the report to the clipboard, so you can paste it into the issue or a forum post. It also saves it as `display-report.txt` in the save folder. The report lists your system, your screens and their scale, and how the game scales its picture. It does not include your account name. Many features came from players on Reddit, and the release notes credit each one.
 
 ## Credits
 

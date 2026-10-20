@@ -226,6 +226,9 @@ SAME_SAVE_RUNS = [
     # The play-off kind (0.6.0 slice 19) runs only in a season game: with its test switch off the base game save
     # is that of normal.
     ("playoffs-off", {"faster_days": "off", "_env": {"RECOMP_PLAYOFFS": "off"}}),
+    # The new divisions (0.6.0 slice 20) act only in a season game: with their test switch off the base game save
+    # is that of normal.
+    ("new-divisions-off", {"faster_days": "off", "_env": {"RECOMP_NEW_DIVISIONS": "off"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this

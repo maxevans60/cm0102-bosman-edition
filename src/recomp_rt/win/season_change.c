@@ -27,6 +27,7 @@
 #include "season_comps.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_divisions.h"
 #include "season_comps.h"
 #include "season_playoffs.h"
 #include "season_rules.h"
@@ -62,6 +63,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_club_cups,             /* slice 26c: years of the new club cups (season_club_cups.c) */
     &season_kind_playoffs,              /* slice 19: promotion play-offs of leagues with none (after sizes) */
     &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
+    &season_kind_divisions,             /* slice 20: new divisions (season_divisions.c) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))

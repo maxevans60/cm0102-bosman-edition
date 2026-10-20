@@ -23,7 +23,13 @@ body:
     id: display
     attributes:
       label: Display setting
-      options: [widescreen (default), classic, hd (0.4.0 and later), not sure]
+      options: [widescreen (default), classic, hd (0.4.0 to 0.5.x), not sure]
+  - type: textarea
+    id: display_report
+    attributes:
+      label: Display report
+      description: "For a problem with the picture or the window (blurred text, a small picture, a wrong size), and in 0.6.0 and later: press Ctrl+Shift+D in the game (Cmd+Shift+D on a Mac) and paste the text here. The game copies it to the clipboard and also saves it as display-report.txt in the save folder."
+      render: text
   - type: textarea
     id: steps
     attributes:

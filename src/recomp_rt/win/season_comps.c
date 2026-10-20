@@ -40,6 +40,9 @@ static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup
 extern const SeasonCompDef season_cup_sudamericana, season_cup_recopa, season_cup_suruga_bank,
     season_cup_intercontinental, season_cup_acl_two;
 
+/* Slice 20d (season_divisions.c): the second group of the Greek second tier, a GreSecond object. */
+extern const SeasonCompDef season_div_gre_group;
+
 /* Slice 24, part b (U8, Q364): the Conference League from 2021/22, a new record with a second object of the
  * Uefa_Cup class in the Europe entry 3 (docs/research/2026-10-18-conference-league-object.md). Its record copies
  * the UEFA Cup's continent, nation and colours, and its level (+0x69) is the UEFA Cup's 18: the fixture order
@@ -49,6 +52,12 @@ extern const SeasonCompDef season_cup_sudamericana, season_cup_recopa, season_cu
 static uint32_t ecl_make(const SeasonCompDef *d, uint32_t rec, int year, int loading);
 static const SeasonCompDef conference_league = {"Conference League", SEASON_UEFA_ECL_FILE, SEASON_UEFA_ECL_RECORD, 3,
                                                 ecl_make, "UEFA Cup", "Conference League", 18};
+
+/* Slice 20e: the state championships of 12 states of the North, Northeast and Central regions of Brazil, objects
+ * of the North class (season_bra_states.c, Q332). */
+extern const SeasonCompDef season_bra_state_ma, season_bra_state_am, season_bra_state_pi, season_bra_state_ac,
+    season_bra_state_rn, season_bra_state_pb, season_bra_state_al, season_bra_state_se, season_bra_state_df,
+    season_bra_state_es, season_bra_state_ms, season_bra_state_to;
 
 const SeasonCompDef *const season_comp_defs[] = {
     &test_new_cup,                      /* test only, see above */
@@ -60,6 +69,11 @@ const SeasonCompDef *const season_comp_defs[] = {
     &season_nl_concacaf_comp,           /* slice 28 part b */
     &season_gold_cup_comp,              /* slice 28 part b */
     &season_finalissima_comp,           /* slice 28 part b */
+    &season_div_gre_group,              /* slice 20d: the second group of the Greek second tier */
+    /* slice 20e */
+    &season_bra_state_ma, &season_bra_state_am, &season_bra_state_pi, &season_bra_state_ac, &season_bra_state_rn,
+    &season_bra_state_pb, &season_bra_state_al, &season_bra_state_se, &season_bra_state_df, &season_bra_state_es,
+    &season_bra_state_ms, &season_bra_state_to,
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 
@@ -380,7 +394,8 @@ static void comps_after(const SeasonChange *c)
 
 const SeasonRuleKind season_kind_comps = {"comps", NULL, NULL, NULL, comps_entry, NULL, comps_after};
 
-void season_comps_reset(void) { reset(); }
+void season_bra_states_reset(void);    /* slice 20e: season_bra_states.h */
+void season_comps_reset(void) { reset(); season_bra_states_reset(); }
 
 /* ---- The load: build_comp_object_table 0x8386f0 ---- */
 
@@ -437,7 +452,7 @@ void season_comps_before_comp_table(void)
 #define NATION_COUNT 0xae2380u          /* s32: N */
 #define NATION_RECORDS 0xae23d8u        /* the first nation comp */
 #define FRIENDLY_RECORDS 0x7f
-#define MAX_NEW 16
+#define MAX_NEW 32                      /* slice 20e: 12 more (24, 26c and 28 hold about 8) */
 
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 {
@@ -518,7 +533,10 @@ static void grow(void)
         wr32(g_mem, r, (uint32_t)(cn + j));                             /* id = index (doc 1.5) */
         put_name(r + NAME_AT, names[j], 0x34);
         put_name(r + 0x38, d && d->short_name ? d->short_name : names[j], 0x1b);
-        wr16(g_mem, r + 0x69, (uint32_t)(d && d->level ? d->level : 1));
+        /* Slice 20: level -1 copies the level of `like` (a division of the nation takes the rank of the division
+         * it sits beside: the club moves count the tier by it, season_clubs.c). */
+        if (d && d->level < 0 && like) wr16(g_mem, r + 0x69, rd16(g_mem, like + 0x69));
+        else wr16(g_mem, r + 0x69, (uint32_t)(d && d->level > 0 ? d->level : 1));
     }
     /* The friendly records again, blank, as the loader writes them (0x52a060..0x52a1ab). */
     for (int i = 0; i < FRIENDLY_RECORDS; i++) {

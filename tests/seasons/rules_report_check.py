@@ -9,7 +9,7 @@ Usage:
         database of the run)
     python3 tests/seasons/rules_report_check.py --run <cm0102_recomp> <game folder> [--year y] [--last y]
         [--database <folder>] [--nations england|all|all,-<name>,...|<name,name,...>]
-        [--extra conference,regional,c2]
+        [--extra conference,regional,c2,spain,portugal]
         [--keep <folder>] [--timeout s] [--start-only] [--update-expected] [--changing-rules on|off]
         plays the season jump, then compares its report
 
@@ -110,6 +110,7 @@ RECORD = 0x6b
 NATION_ROWS = ["Argentina", "Australia", "Belgium", "Brazil", "Croatia", "Denmark", "England", "Finland", "France",
                "Germany", "Greece", "Holland", "Italy", "Japan", "Northern Ireland", "Norway"]
 EXTRA = {"conference": 320, "regional": 385, "c2": 451}     # y of the row; the extra division is at x 675
+ENV_EXTRA = {"spain", "portugal"}                           # slice 20: set by RECOMP_TEST_EXTRA, not by a click
 
 
 UEFA_LINES = []          # the uefa lines of the last report that read_report read (slice 22)
@@ -247,6 +248,11 @@ def differences(seasons, comps, rows):
             if c["file"] not in FRIENDLY_FILES:
                 out.add((season, "no_row", f"{c['file']} ({c['name']}): no table row"))
             continue
+        # Slice 20: a second object of a file that waits for a later season (the second Greek group between its
+        # editions) and has no row of its own this season gives no line.
+        own = [x for x in found if c["file"] in row_files(x)]
+        if k >= len(own) and own and not any(season - 1 <= x["year"] <= season + 1 for x in both):
+            continue
         r = pick_row(found, c["file"], k)
         nations |= {x["nation"] for x in found if isinstance(x["tier"], int)}
         label = f"{c['file']} ({c['name']}), row {r['id']}"
@@ -332,7 +338,30 @@ def division_records(folder):
 DATA_COUNTING = {"IrePrm", "IreFirst", "PolFirst", "NorFirst"}     # the classes that count the clubs of the data
 
 
-def record_names(season):
+def new_division_alias(division, season, rows):
+    """Slice 20: the record whose clubs a list names. A new division that lives in the object of a group division
+    holds its clubs in the object's record: the club moves put them in a group, the first-season merge of the class
+    makes the parent record their division and the group their tag (GerFirst::create_table 0x5db23e,
+    SpaSecondB::load_group_clubs 0x856cdc, PorSecondB::create_table 0x7d240c). So the lists of the groups of one
+    season are one list of the parent: the 3. Liga (one ger_regional row), Primera Federación (spa_second_b of 40)
+    and Liga 3 (por_second_b of 24 or fewer)."""
+    def row(file):
+        found = [r for r in rows if r["season"] == season and r["comp_file"] == file]
+        return found
+    if division == "German Regional Division North" and len(row("ger_regional")) == 1:
+        return "German Regional"
+    if division in ("Spanish Second Division B1", "Spanish Second Division B2"):
+        r = row("spa_second_b")
+        if r and isinstance(r[0]["clubs"], int) and r[0]["clubs"] <= 48:
+            return "Spanish Second Division B"
+    if division in ("Portuguese Second Division B North", "Portuguese Second Division B Central"):
+        r = row("por_second_b")
+        if r and isinstance(r[0]["clubs"], int) and r[0]["clubs"] <= 30:
+            return "Portuguese Second Division B"
+    return division
+
+
+def club_record_names(season):
     """Slice 15b: {(division, real name of the club moves table): the name of the new club record} of a season
     (tools/seasons/make_club_records.py). RECOMP_CLUB_RECORDS=off: none."""
     if os.environ.get("RECOMP_CLUB_RECORDS") == "off":
@@ -342,7 +371,7 @@ def record_names(season):
     return {(r[1], r[2]): r[3] for r in out if r[0] == season}
 
 
-def club_differences(seasons, comps, clubs, data_dir):
+def club_differences(seasons, comps, clubs, data_dir, rows=()):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
     must be the clubs of that division at the start. One difference line per division that differs."""
@@ -374,7 +403,7 @@ def club_differences(seasons, comps, clubs, data_dir):
     for n in held:
         plain_to[make_clubs.plain_name(n)].add(n)
     lists = collections.OrderedDict()
-    records = record_names(season)                  # slice 15b: the new club records of the start season
+    records = club_record_names(season)             # slice 15b: the new club records of the start season
     for s, division, club_id, club, _ in make_clubs.build()[0]:
         if s != season:
             continue
@@ -384,7 +413,7 @@ def club_differences(seasons, comps, clubs, data_dir):
             name = records[(division, club)]
         else:                               # the plain form, when one club of the database has it (season_clubs.c)
             name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
-        lists.setdefault(division, []).append(name)
+        lists.setdefault(new_division_alias(division, season, rows), []).append(name)
     out = set()
     for division, listed in lists.items():
         rec = records.get(division)
@@ -416,6 +445,8 @@ def division_differences(comps, clubs):
     out = set()
     for c in comps:
         if c["phase"] != "start" or c["kind"] != "league" or c["file"] not in files or c["clubs"] <= 0:
+            continue
+        if c["year"] > c["season"] + 1:                 # slice 20: a league that waits for a later season
             continue
         n = held.get((c["season"], c["record"]), 0)
         if n != c["clubs"]:
@@ -552,7 +583,7 @@ def check(report, game=None, last=None, expected=None, update=False, data_dir=No
               f"{per[(s['season'], s['phase'])]} competitions")
     diffs = differences(seasons, comps, rows)
     if data_dir and clubs:
-        diffs = sorted(set(diffs) | club_differences(seasons, comps, clubs, data_dir))
+        diffs = sorted(set(diffs) | club_differences(seasons, comps, clubs, data_dir, rows))
     if clubs:
         diffs = sorted(set(diffs) | division_differences(comps, clubs))
     kinds = collections.Counter(k for _, k, _ in diffs)
@@ -584,7 +615,7 @@ def league_steps(nations, extra):
     """The new game steps of tests/smoke/smoke_run.py with other leagues selected."""
     import smoke_run
     steps = smoke_run.without_intro_click([s for s in smoke_run.STEPS if "dump" not in s and "quit" not in s])
-    if nations == ["England"] and not extra:
+    if nations == ["England"] and not [e for e in extra if e in EXTRA]:
         return steps
     points = []                                                     # a step's time counts from the last wait
     if nations[0] == "all":
@@ -596,7 +627,8 @@ def league_steps(nations, extra):
             if n != "England":
                 points.append(f"390 {188 + 22 * NATION_ROWS.index(n)}")
     for e in extra:
-        points.append(f"675 {EXTRA[e]}")
+        if e in EXTRA:
+            points.append(f"675 {EXTRA[e]}")
     picks = [f"{2000 + 1500 * i} click {p}" for i, p in enumerate(points)]
     many = nations != ["England"]
     out = []
@@ -629,6 +661,11 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, opti
     options = {"display": "classic", "changing_rules": "off", "faster_days": "on"}
     options.update(options_more or {})
     env_extra = dict(env_more or {})
+    # Slice 20: Spain and Portugal sit below the 16 rows of the Select League(s) screen, so their extra division
+    # comes from the test switch RECOMP_TEST_EXTRA (season_divisions.h).
+    test_extra = [e for e in extra if e in ENV_EXTRA]
+    if test_extra:
+        env_extra["RECOMP_TEST_EXTRA"] = ",".join(test_extra)
     if year:
         env_extra["RECOMP_START_SEASON"] = str(year)
     if database:

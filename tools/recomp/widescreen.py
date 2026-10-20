@@ -149,3 +149,10 @@ from league_sizes import INSNS as SIZE_INSNS, PATCHES as SIZE_PATCHES  # noqa: E
 assert not set(SIZE_INSNS) & (set(INSNS) | set(PATCHES)) and not set(SIZE_PATCHES) & (set(PATCHES) | set(SIZE_INSNS))
 INSNS.update(SIZE_INSNS)
 PATCHES.update(SIZE_PATCHES)
+
+# New divisions (0.6.0 slice 20): the club count of the 3. Liga in the German Regional object (new_divisions.py).
+from new_divisions import INSNS as DIVISION_INSNS, PATCHES as DIVISION_PATCHES  # noqa: E402
+
+assert not set(DIVISION_INSNS) & (set(INSNS) | set(PATCHES)) and not set(DIVISION_PATCHES) & (set(PATCHES) | set(INSNS))
+INSNS.update(DIVISION_INSNS)
+PATCHES.update(DIVISION_PATCHES)

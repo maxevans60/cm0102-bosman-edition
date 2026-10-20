@@ -14,9 +14,9 @@ import re
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
-                  "season_change.c", "season_kind_club_world.c", "season_comps.c",
+                  "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_bra_states.c",
                   "season_club_cups.c", "season_playoffs.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
-                  "season_gold_cup.c")
+                  "season_gold_cup.c", "season_divisions.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -136,6 +136,20 @@ CALLBACKS = {
     0x9452CA: ("558bec51568b7508", "free, cdecl"),
     0x5A8F60: ("c390909090909090", "the empty function (compared with vtable +0x28, wrapped in season_uefa_cup.c)"),
     0x686940: ("8a4424083c057519", "League +0x44, base (compared with vtable +0x44, wrapped in season_playoffs.c)"),
+    # season_divisions.c (slice 20): the 3. Liga in the German Regional object
+    0x689C80: ("81ec100200008b84", "league_promote_and_relegate, stdcall (upper, lower, expire, pairwise, up, down)"),
+    0x6830B0: ("8b0df07edd005556", "League::move_club_to_division, thiscall (club, record, 1), ret 0xc"),
+    0x6831A0: ("568b742408578b7c", "League::relegate_club_to_division, thiscall (club, record, 1), ret 0xc"),
+    0x4AFBD0: ("81ec000200005356", "sort a club list for the new clubs of a tier, cdecl (list, count, need)"),
+    0x540A50: ("8b4c240481ec0002", "the senior side of a club, cdecl (club, &flag, 1)"),
+    0x945333: ("558bec81ecf80000", "qsort, cdecl (base, count, width, compare)"),
+    0x4B07D0: ("8b4424048b542408", "the compare of GerRegional's predicted positions (passed to qsort)"),
+    0x4A2540: ("81ec000200005657", "set a predicted position, thiscall (club, position), ret 8"),
+    0x5EB2B0: ("6aff6829aa950064", "GreSecond::GreSecond, thiscall (year, record), ret 8 (the second Greek group)"),
+    0x53FD40: ("81ec080200008b84", "the compare of the Spanish and Portuguese group deals (passed to qsort)"),
+    # season_bra_states.c (slice 20e): the state championships of Brazil
+    0x687430: ("81ec080200005355", "League: add a club to the table row (row, club, 0, 0), thiscall"),
+    0x435340: ("6aff683948950064", "BraRegNorth::BraRegNorth, thiscall (year, record), ret 8"),
 }
 
 
