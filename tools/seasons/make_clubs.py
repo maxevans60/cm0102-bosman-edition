@@ -93,7 +93,7 @@ TARGETS = [
     ("fra", r"CFA 2|National 3", "French Lower Division"),
     ("ger", r"Regionalliga Nord", "German Regional Division North"),
     ("ger", r"Regionalliga Süd", "German Regional Division South"),
-    ("ger", r"3\. Liga", None, SKIP_NEW),
+    ("ger", r"3\. Liga", "German Regional Division North"),   # slice 20: the 3. Liga in the GerRegional object
     ("gre-pol-cro", r"cro_a1", "Croatian First Division"),
     ("gre-pol-cro", r"cro_a2a", "Croatian Second Division North"),
     ("gre-pol-cro", r"cro_a2b", "Croatian Second Division South"),
@@ -131,7 +131,8 @@ TARGETS = [
     ("por", r"Segunda Divisão( B)? Zona Centro", "Portuguese Second Division B Central"),
     ("por", r"Segunda Divisão( B)? Zona Sul", "Portuguese Second Division B South"),
     ("por", r"Segunda Divisão Série [A-D]|Campeonato .* Série [A-H]", None, SKIP_GROUPS),
-    ("por", r"Liga 3 Série [AB]", None, SKIP_NEW),
+    ("por", r"Liga 3 Série A", "Portuguese Second Division B North"),     # slice 20: Liga 3 in PorSecondB (Q291)
+    ("por", r"Liga 3 Série B", "Portuguese Second Division B Central"),
     ("rus-tur", r"Russian Premier Division \(real: .*\)", "Russian Premier Division"),
     ("rus-tur", r"Russian First Division \(real: .*\)", "Russian First Division"),
     ("rus-tur", r"Turkish Premier Division \(real: .*\)", "Turkish Premier Division"),
@@ -142,7 +143,8 @@ TARGETS = [
     ("spa", r"Segunda División B Group III", "Spanish Second Division B3"),
     ("spa", r"Segunda División B Group IV", "Spanish Second Division B4"),
     ("spa", r"Segunda División B Subgroup .*", None, SKIP_GROUPS),
-    ("spa", r"Primera (División RFEF|Federación) .*", None, SKIP_NEW),
+    ("spa", r"Primera (División RFEF|Federación) Group 1.*", "Spanish Second Division B1"),   # slice 20 (Q291)
+    ("spa", r"Primera (División RFEF|Federación) Group 2.*", "Spanish Second Division B2"),
     ("wal-nir-irl", r"Irish Premier Division|Irish First Division|Northern Irish League Premier Division|"
                     r"Northern Irish League First Division|Welsh Premier Division", "="),
 ]

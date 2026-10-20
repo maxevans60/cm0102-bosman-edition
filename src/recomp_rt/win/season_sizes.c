@@ -6,6 +6,7 @@
 #include "season_rules.h"
 #include "season_sizes.h"
 #include "season_playoffs.h"
+#include "season_divisions.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -332,6 +333,7 @@ void season_sizes_rules(uint32_t obj)
 {
     sizes_rules(obj);
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
+    if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
 }
 
 /* ---- Promotion and relegation of a size change ---- */

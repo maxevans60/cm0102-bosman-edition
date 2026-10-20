@@ -297,6 +297,12 @@ extern uint32_t rt_season_year;
 /* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
  * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
+/* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
+ * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
+uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);
+/* Liga 3 (slice 20): the series size of the Portuguese Segunda B object, 0x7d2412, 0x7d2965, 0x7d29ff, 0x7d2ab2. */
+uint32_t rt_por_group_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_por_stage_clubs(uint32_t obj, uint32_t original);
 /* The date count of a French league's template for the clubs that its division holds (slice 18). */
 uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* The room for lower clubs of a cup with a fixed entrant count (6 bytes a place): the entrants less the clubs

@@ -316,7 +316,30 @@ def division_records(folder):
 DATA_COUNTING = {"IrePrm", "IreFirst", "PolFirst", "NorFirst"}     # the classes that count the clubs of the data
 
 
-def club_differences(seasons, comps, clubs, data_dir):
+def new_division_alias(division, season, rows):
+    """Slice 20: the record whose clubs a list names. A new division that lives in the object of a group division
+    holds its clubs in the object's record: the club moves put them in a group, the first-season merge of the class
+    makes the parent record their division and the group their tag (GerFirst::create_table 0x5db23e,
+    SpaSecondB::load_group_clubs 0x856cdc, PorSecondB::create_table 0x7d240c). So the lists of the groups of one
+    season are one list of the parent: the 3. Liga (one ger_regional row), Primera Federación (spa_second_b of 40)
+    and Liga 3 (por_second_b of 24 or fewer)."""
+    def row(file):
+        found = [r for r in rows if r["season"] == season and r["comp_file"] == file]
+        return found
+    if division == "German Regional Division North" and len(row("ger_regional")) == 1:
+        return "German Regional"
+    if division in ("Spanish Second Division B1", "Spanish Second Division B2"):
+        r = row("spa_second_b")
+        if r and isinstance(r[0]["clubs"], int) and r[0]["clubs"] <= 48:
+            return "Spanish Second Division B"
+    if division in ("Portuguese Second Division B North", "Portuguese Second Division B Central"):
+        r = row("por_second_b")
+        if r and isinstance(r[0]["clubs"], int) and r[0]["clubs"] <= 30:
+            return "Portuguese Second Division B"
+    return division
+
+
+def club_differences(seasons, comps, clubs, data_dir, rows=()):
     """The club moves of the start season (slice 15): for each division with a club list of the table
     (tools/seasons/make_clubs.py) whose league is in the report, the listed clubs that the database holds
     must be the clubs of that division at the start. One difference line per division that differs."""
@@ -355,7 +378,7 @@ def club_differences(seasons, comps, clubs, data_dir):
             name = club
         else:                               # the plain form, when one club of the database has it (season_clubs.c)
             name = make_clubs.plain_match(club, plain_to.get(make_clubs.plain_name(club), set()))
-        lists.setdefault(division, []).append(name)
+        lists.setdefault(new_division_alias(division, season, rows), []).append(name)
     out = set()
     for division, listed in lists.items():
         rec = records.get(division)
@@ -509,7 +532,7 @@ def check(report, game=None, last=None, expected=None, update=False, data_dir=No
               f"{per[(s['season'], s['phase'])]} competitions")
     diffs = differences(seasons, comps, rows)
     if data_dir and clubs:
-        diffs = sorted(set(diffs) | club_differences(seasons, comps, clubs, data_dir))
+        diffs = sorted(set(diffs) | club_differences(seasons, comps, clubs, data_dir, rows))
     if clubs:
         diffs = sorted(set(diffs) | division_differences(comps, clubs))
     kinds = collections.Counter(k for _, k, _ in diffs)
