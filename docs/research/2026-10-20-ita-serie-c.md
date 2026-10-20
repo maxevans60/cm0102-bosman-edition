@@ -16,7 +16,7 @@ Groups A, B and C are the objects of Serie C1/A (ItaSerC1a, key id [0x9cf578]), 
 
 - `create_italian_comps` 0x835320 always makes C1/A and C1/B, and C2/A, C2/B and C2/C only with the extra division flag (bit 4 of nation +0x11c, 0x835407). Q363: the single Serie C follows C1, so it always exists.
 - Without the flag, slice 26's module makes the C2/A object (def `season_ita_group_c`, entry 21, record "Italian Serie C2/A", operator new 0xee and constructor 0x652e90 thiscall (year, record), as 0x835696..0x8356ce). Entry 21 is Italy's: `key_nation_build_table` 0x667150 stores the Italian nation at 0xb64348 = 0xb63d60 + 21 x 0x48. With the flag the original's object exists, so the make function returns 0 (at a new game and at a load). The def's file is the class's own file (`ita_ser_c2a`), so `season_change_file` and the rule kinds still read it as C2/A.
-- C2/B and C2/C (with the flag) end in the era: no clubs (+0x3e 0) and year 2999, the shared rule for a competition that never returns (Q395). At a new game their `create_table` (0x657f50, 0x65c0e0) would find no club and return 0 (as C1/A at 0x64b755..0x64b763), so in the era a wrap gives them an empty table and ends them. At the change into the era the chain ends them. They are never started again (below), make no fixtures, and the rules report shows no edition of them (an object whose year is outside the season gives no line).
+- C2/B and C2/C (with the flag) end in the era with year 2999, the shared rule for a competition that never returns (Q395). Their constructors stop with "league..cpp 1020" when a table has no club, so the club moves give each one club (C2/B and C2/C count 1 in `season_ita_division_size` with the flag), and `create_table` (0x657f50, 0x65c0e0) takes it (`rt_ita_c2_end_clubs` at 0x657f62 and 0x65c0f2). The new game hook of the rule kind then sets year 2999. Their fixed fixture lists of 2001 (0x658750, 0x65c8e0) write 306 entries into a block for one club, so in the era the builders make no list (+0xea 0); `create_fixtures` reads the list only when its year is the league's (0x68382e..0x68383d). At the change into the era the chain ends them. They are never started again (below), and the rules report shows no edition of them (an object whose year is outside the season gives no line).
 - Names: from the names table (Q520). A small rule kind writes the news of the change into the era.
 
 ## Sizes: groups of 20 with 38 match days
@@ -51,7 +51,7 @@ A new count sets the matches of a club (+0xa7) back to -1, so `League::check_com
    - a human manager whose club changes group gets the news of `regroup_serie_c1_clubs` (0x6426e5..0x642745: 0x7875e0, 0x77bbe0 (0x13, 0), 0x785790 twice, 0x7861e0).
 4. Two patched loads of the C2/A object in 0x641700 (`new_divisions.py`):
    - 0x6418d5, the tier block (`League::limit_club_division_tier` 0x68a980 with (1, 3, -3, 1) on C2/A, C2/B, C2/C, else on C1/A, C1/B): in the era `rt_ita_tier_c2` calls it on C2/A and gives 0, so the block does C1/A and C1/B (0x641915). All three groups get it.
-   - 0x641986, the start block (vtable +8 of C2/A, C2/B, C2/C, 0x64198d..0x6419b7): in the era `rt_ita_start_c2` starts C2/A and gives 0, so C2/B and C2/C are never started (0x6419ba).
+   - 0x641986, the start block (vtable +8 of C2/A, C2/B, C2/C, 0x64198d..0x6419b7): in the era `rt_ita_start_c2` starts C2/A and gives 0, so C2/B and C2/C are never started (0x6419ba). A C2/A that slice 26's module made in this pass already holds the new season, so it is started only when its year is older. When the regroup changed its count after the module made it, its year goes back one and it starts again, so its table takes the clubs of the group.
    Outside the era both give the object, so the original runs.
 
 ## A new game of the era
@@ -59,10 +59,16 @@ A new count sets the matches of a club (+0xa7) back to -1, so `League::check_com
 - Slice 15's club moves: the lists "Lega Pro girone A..C" and "Serie C girone A..C" go to the database divisions Italian Serie C1/A, C1/B and C2/A (`make_clubs.py` `TARGETS`; before, `SKIP_NEW`). The counts of these divisions are the group rows (`season_divisions_class_size`, which slice 20 calls in the club moves); C2/B and C2/C get 0, and the club moves read 0 as "the division ends" (its clubs go to no division, Q290). The season databases of 2014/15 on still hold the original's five groups of 18 and a Serie D of 177 to 204 clubs (October 2014, October 2016, December 2025, read from `club.dat`).
 - Two clubs of the lists are not in their databases (one in 2020/21 group C, one in 2025/26 group B): slice 15 fills their places by its rules.
 
+## The cups in the era
+
+- `ItaCCup::select_entrants` 0x63dfe0 (Coppa Italia Serie C) sets 90 entrants (0x63dff4) and reads all 90 slots (0x63e109..). It takes the Italian clubs of C1/A to C2/C (0x63e094..0x63e107). The era's groups hold 60, and the constructor stopped at "Database..cpp 16398" (0x63ccce). Q625: a wrap makes the clubs that are short Serie D clubs by reputation, which count as C2/B for the call and go back to the Serie D after it.
+- `ItaCup::select_entrants` 0x63faf0 (Coppa Italia) compares a club's last division with the C1/B id (0x63fc79, 0x63fcf9). In the era `rt_ita_cup_c1b` makes the C2/A id count as C1/B, so group C clubs take the lower places. Its second loop goes up through the last positions until it has 32 clubs and has no end (0x63fd22..0x63fd30). Q626: at 0x63fd28, from position 40 with fewer than 32 clubs, `rt_ita_cup_fill` fills the list from the group clubs by reputation.
+- The cup reads each club's last division (+0x5b) and final place (+0x5f), and its sort 0x640590 reads the stats of that division (a club with no stats there stopped at "comp_stats.CPP 1664"). The cup can start before or after Serie A in the season change pass. So the chain and a wrap of 0x63faf0 both mark the clubs of each group whose table still holds the last season (its first row has played, row +0x11, as 0x689b51 reads it).
+
 ## Out of this part
 
 - Promotion play-offs and play-outs of the groups (slice 19). Places come from slice 18's `set_up_rules` wrap with the rows.
-- `ItaCCup` 0x63dfe0 (Coppa Italia Serie C: 90 entrants of C1 and C2) and `ItaC1Super` (two C1 winners; from 2014/15 a triangular): slice 21. `ItalyAwards` 0x660ec0 gives division awards to C2 only with the flag (0x660f5b): without the flag group C gets none.
+- The real format of `ItaCCup` 0x63dfe0 (60 entrants of the groups, ita-235) and `ItaC1Super` (two C1 winners; from 2014/15 a triangular): slice 21. `ItalyAwards` 0x660ec0 gives division awards to C2 only with the flag (0x660f5b): without the flag group C gets none.
 - The two-group C2 seasons 2011/12 to 2013/14 with the flag (C2/C not held): `regroup_serie_c2_clubs` still reads 54 clubs; not changed here.
 
 ## Decisions (recommended answers taken; for Max to confirm)
@@ -72,3 +78,5 @@ A new count sets the matches of a club (+0xa7) back to -1, so `League::check_com
 - Q622: when the Serie D cannot fill the groups, Italian clubs with no division by reputation fill them; with too many clubs the lowest reputations go to the Serie D.
 - Q623: C2/B and C2/C end in the era with year 2999 and no clubs (Q395), with or without the flag; they stay in the menus as empty leagues.
 - Q624: the groups are split by latitude, the south first (group C), as the original's regroups do. The real groups are drawn by the league each summer.
+- Q625: until slice 21, the Coppa Italia Serie C takes the clubs it is short of 90 from the Serie D by reputation.
+- Q626: when the Coppa Italia finds fewer than 32 lower clubs by position 40, the group clubs fill its list by reputation.
