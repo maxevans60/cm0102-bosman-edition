@@ -30,6 +30,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_uefa.h"
+#include "season_cups.h"
 #include "season_uefa_league.h"
 #include "season_playoffs.h"
 
@@ -979,6 +980,10 @@ RT_WRAP(005a8f60, empty_or_uc_advance)
         return;
     }
     if (!groups_layout(uc)) {
+        if (season_cup_groups_advance(uc)) {            /* slice 21c: a domestic cup with groups */
+            if (!rt_unwinding) rt_ret_cdecl(0);
+            return;
+        }
         o_005a8f60();
         return;
     }
@@ -1010,6 +1015,12 @@ RT_WRAP(0051fc00, cup_load)
         if (rt_unwinding) return;
         cpu.ecx = saved_ecx;
     }
+    if (!is_uc(obj)) {                                  /* slice 21c: a domestic cup with groups */
+        uint32_t saved_ecx = cpu.ecx;
+        season_cup_groups_load(obj);
+        if (rt_unwinding) return;
+        cpu.ecx = saved_ecx;
+    }
     o_0051fc00();
 }
 
@@ -1019,6 +1030,7 @@ RT_WRAP(00519a90, cup_honours)
 {
     uint32_t uc = cpu.ecx;
     uint32_t ko = groups_layout(uc) && (int32_t)rd32(g_mem, uc + 0x30) == ko_slot(uc) ? stage_at(uc, ko_slot(uc)) : 0;
+    if (!readable(ko)) ko = season_cup_groups_ko(uc);  /* slice 21c: a domestic cup with groups */
     if (!readable(ko)) {
         o_00519a90();
         return;

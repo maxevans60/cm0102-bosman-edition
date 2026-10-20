@@ -186,6 +186,14 @@ def pick_row(found, file, k):
     return main[min(k, len(main) - 1)]
 
 
+# Slice 21c: the new cups of season_new_cups.c report the file of their def; their rows have comp_file "new" and are
+# found by nation and comp (the same pairs as new_keys in src/recomp_rt/win/season_cups_more.c).
+NEW_FILES = {("Turkey", "super cup"): "new_tur_super", ("Russia", "super cup"): "new_rus_super",
+             ("Norway", "Norwegian Super Cup"): "new_nor_super", ("Russia", "league cup"): "new_rus_lge_cup",
+             ("England", "Conference League Cup"): "new_conf_cup",
+             ("Northern Ireland and Republic of Ireland", "All-Ireland cup"): "new_all_ireland"}
+
+
 def new_matches(name, row):
     """A new competition of the shared module (season_comps.h, slice 28) and a row of comp_file "new": the module
     gives the object the name of each season's row, and keeps the name of the season before until its next
@@ -196,7 +204,9 @@ def new_matches(name, row):
 def row_files(r):
     """The files of a row. A row of a new competition (comp_file "new") has the file of its def in
     src/recomp_rt/win/season_comps.c: "new_" and its comp in lower case with "_" for spaces ("Conference League"
-    gives new_conference_league)."""
+    gives new_conference_league). The new cups of slice 21c have files of their own (NEW_FILES)."""
+    if r["comp_file"] == "new" and (r["nation"], r["comp"]) in NEW_FILES:
+        return [NEW_FILES[(r["nation"], r["comp"])]]
     return ["new_" + r["comp"].lower().replace(" ", "_") if f == "new" else f for f in r["comp_file"].split(";")]
 
 

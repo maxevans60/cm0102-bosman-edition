@@ -52,7 +52,10 @@ static int cups_off(void)
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
 /* Writes the format of the row to a table of n rounds. Returns the number of rounds that changed, or -1 when
- * the table has another round count than the row (nothing is written). */
+ * the table has another round count than the row (nothing is written). A round that becomes two legs can end
+ * after the draw date of the next round: Cup::draw_round 0x51c410 then finds a tie with no winner (0x51c47c..
+ * 0x51c495), moves the draw date one day on (0x51c4e9..0x51c549) and keeps the later rounds after it
+ * (0x51c54d..0x51c596), so the draw waits for the tie (slice 21b). */
 static int apply_row(uint32_t table, int n, const SeasonCupRow *row)
 {
     if (n != row->rounds || !readable(table) || !readable(table + (uint32_t)n * ROUND_SIZE)) return -1;
@@ -81,10 +84,11 @@ static int cup_season(uint32_t cup)
 }
 
 /* After create_round_table of a cup: self is the cup, stage and count_ptr are its first two arguments, the table
- * is the result (cpu.eax). */
-static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
+ * is the result (cpu.eax). want: the stage of the knockout table (0xff from set_up_rounds 0x4c15f0 for a Cup
+ * class; 7 and 0x13 for the knockout stage of ItaCup and HolCup, slice 21b). */
+static void table_made_stage(uint32_t self, uint32_t stage, uint32_t count_ptr, uint32_t want)
 {
-    if (stage != 0xffu || !season_code_on() || cups_off() || !readable(count_ptr)) return;
+    if (stage != want || !season_code_on() || cups_off() || !readable(count_ptr)) return;
     const char *file = season_change_file(self);
     int season = cup_season(self);
     const SeasonCupRow *row = season_cups_row(file, season);
@@ -95,6 +99,11 @@ static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
                 changed < 0 ? "not applied, another round count, rounds" : "rounds changed", changed < 0 ? 0 : changed);
 }
 
+static void table_made(uint32_t self, uint32_t stage, uint32_t count_ptr)
+{
+    table_made_stage(self, stage, count_ptr, 0xffu);
+}
+
 /* The news of a row: with changing rules on, the cup that starts the season of a row says so. A row is a change by
  * design (the table holds only seasons in which a format changes), so the sentence does not check the rounds. */
 static void cups_after(const SeasonChange *c)
@@ -102,7 +111,9 @@ static void cups_after(const SeasonChange *c)
     if (!c->started || cups_off()) return;
     const SeasonCupRow *row = season_cups_row(c->file, c->season);
     if (!row || row->season != c->season) return;
-    if ((int16_t)rd16(g_mem, c->comp + CUP_ROUND_COUNT) != row->rounds) return;
+    /* ItaCup and HolCup are League classes: their knockout stage is made later in the season (slice 21b). */
+    int league_cup = !strcmp(c->file, "ita_cup") || !strcmp(c->file, "hol_cup");
+    if (!league_cup && (int16_t)rd16(g_mem, c->comp + CUP_ROUND_COUNT) != row->rounds) return;
     season_change_news("%s", row->sentence);
 }
 
@@ -127,6 +138,7 @@ RT_WRAP(0056c570, cups_eng_cc_cup)
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_0056c570();
     if (!rt_unwinding) table_made(self, stage, count);
+    if (!rt_unwinding) season_cup_groups_table(self, stage, count);     /* slice 21c: a group stage */
 }
 
 void o_00570ec0(void);
@@ -175,4 +187,58 @@ RT_WRAP(0078f2e0, cups_nor_cup)
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_0078f2e0();
     if (!rt_unwinding) table_made(self, stage, count);
+}
+
+/* Slice 21b: the Spanish, Turkish and Russian cups (create_round_table, slot +0x3c, stage 0xff from
+ * set_up_rounds: SpaCup 0x84d220 in vtable 0x96f9c8, TurCup 0x8fc670 in 0x97048c, RusCup 0x7e9530 in 0x96f124),
+ * and the knockout stage of the Coppa Italia and the KNVB Cup. ItaCup and HolCup are League classes with a group
+ * stage. Their create_schedule (vtable +0x3c: ItaCup 0x63ec50 in vtable 0x96c318, HolCup 0x5f36e0 in vtable
+ * 0x96b7b8; thiscall: stage, short *round_count, short *first_id, int *out; ret 0x10) makes the round table of
+ * the knockout stage for stage 7 (ItaCup, 5 rounds at 0x63ed91; called at 0x63f9c0 by create_knockout_stage
+ * 0x63f870) and stage 0x13 (HolCup, 6 rounds at 0x5f381d; called at 0x5f4708 by create_knockout_stage
+ * 0x5f4480). The table goes to a Cup_Stage object (constructor 0x522e00 at 0x63fa10 and 0x5f4755), which plays
+ * it with the Cup code of the other classes, so the same five fields hold the format. The same stages are also
+ * asked for by set_predicted_positions (ItaCup 0x640210 at 0x640332, HolCup 0x5f5120 at 0x5f5242), which sorts
+ * the clubs by the table that the call returns: the wrap changes that table too (only the five format fields,
+ * not the round count or the dates). */
+void o_0084d220(void);
+RT_WRAP(0084d220, cups_spa_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_0084d220();
+    if (!rt_unwinding) table_made(self, stage, count);
+}
+
+void o_008fc670(void);
+RT_WRAP(008fc670, cups_tur_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_008fc670();
+    if (!rt_unwinding) table_made(self, stage, count);
+    if (!rt_unwinding) season_cup_groups_table(self, stage, count);     /* slice 21c: a group stage */
+}
+
+void o_007e9530(void);
+RT_WRAP(007e9530, cups_rus_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_007e9530();
+    if (!rt_unwinding) table_made(self, stage, count);
+    if (!rt_unwinding) season_cup_groups_table(self, stage, count);     /* slice 21c: a group stage */
+}
+
+void o_0063ec50(void);
+RT_WRAP(0063ec50, cups_ita_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_0063ec50();
+    if (!rt_unwinding) table_made_stage(self, stage, count, 7u);
+}
+
+void o_005f36e0(void);
+RT_WRAP(005f36e0, cups_hol_cup)
+{
+    uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
+    o_005f36e0();
+    if (!rt_unwinding) table_made_stage(self, stage, count, 0x13u);
 }

@@ -23,6 +23,7 @@
 #include "season.h"
 #include "season_uefa.h"
 #include "season_uefa_league.h"
+#include "season_cups.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -125,9 +126,14 @@ static uint32_t pending_stage, pending_list;
 void o_006835c0(void);
 
 /* League::create_fixtures, thiscall () returning 1 or 0. Only the league phase stage that is being made gets the
- * list; every other league runs as it is. */
+ * list; every other league runs as it is. The one wrap of 0x6835c0: slice 21b's cup that waits for ever makes no
+ * fixture (season_cup_breaks_no_fixtures, season_cups.h). */
 RT_WRAP(006835c0, league_create_fixtures)
 {
+    if (season_cup_breaks_no_fixtures()) {
+        rt_ret_stdcall(1, 0);
+        return;
+    }
     uint32_t league = cpu.ecx;
     if (pending_stage && league == pending_stage && pending_list) {
         wr32(g_mem, league + 0xea, pending_list);

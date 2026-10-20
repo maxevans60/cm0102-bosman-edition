@@ -15,12 +15,23 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
                   "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_bra_states.c",
+                  "season_super_cups.c", "season_new_cups.c", "season_cup_groups.c",
                   "season_club_cups.c", "season_playoffs.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
                   "season_gold_cup.c", "season_divisions.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
+    # Slice 21c (season_super_cups.c): the clubs and rounds of the super cups.
+    0x521E60: ("8b4c24148b442418", "cup_set_round_draw_date (table, round, day, month, year+, weekday, year), cdecl"),
+    0x521EB0: ("8b4c24148b442418", "cup_set_round_match_date (table, round, day, month, year+, weekday, slot, year, venue)"),
+    0x65F670: ("6aff68b9bd950064", "ItaSuper::ItaSuper (this, year, record), ret 8: the new cups of season_new_cups.c"),
+    # Slice 21c (season_cup_groups.c): the group stages of the domestic cups.
+    0x6826D0: ("8b4424048d14c500", "League::get_table_row (this, index)"),
+    0x90CFC0: ("51568b74240c85f6", "utils_random (range), cdecl"),
+    0x945501: ("558bec568b75080f", "calloc (count, size), cdecl"),
+    0x68B100: ("6aff68ebca950064", "League_Stage::League_Stage (this, 22 arguments)"),
+    0x684230: ("64a1000000006aff", "League::send_group_draw_news (this)"),
     # Slice 28 (season_nl.c): the UEFA Nations League, an object of the class euro_champ_qual.
     # Slice 28 part b (season_gold_cup.c): the Gold Cup (copa_america) and the Finalissima (Eur_Super_Cup).
     0x5FA730: ("8b01535556668b71", "HostCountry::find_hosts (this, key, year, &host1, &host2, 1)"),

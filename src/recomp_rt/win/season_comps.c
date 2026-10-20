@@ -36,6 +36,10 @@ static uint32_t test_make(const SeasonCompDef *d, uint32_t rec, int year, int lo
 static const SeasonCompDef test_new_cup = {"intercontinental_cup", "test_new_cup", "Test New Cup", 2, test_make,
                                            "UEFA Cup", "Test Cup", 10};
 
+/* Slice 21c: the new domestic cups (season_new_cups.c). */
+extern const SeasonCompDef season_def_tur_super, season_def_rus_super, season_def_nor_super, season_def_rus_lge_cup,
+    season_def_conf_cup, season_def_all_ireland;
+
 /* Slice 26c: the new club cups (season_club_cups.c). */
 extern const SeasonCompDef season_cup_sudamericana, season_cup_recopa, season_cup_suruga_bank,
     season_cup_intercontinental, season_cup_acl_two;
@@ -74,6 +78,12 @@ const SeasonCompDef *const season_comp_defs[] = {
     &season_bra_state_ma, &season_bra_state_am, &season_bra_state_pi, &season_bra_state_ac, &season_bra_state_rn,
     &season_bra_state_pb, &season_bra_state_al, &season_bra_state_se, &season_bra_state_df, &season_bra_state_es,
     &season_bra_state_ms, &season_bra_state_to,
+    &season_def_tur_super,              /* slice 21c */
+    &season_def_rus_super,
+    &season_def_nor_super,
+    &season_def_rus_lge_cup,
+    &season_def_conf_cup,
+    &season_def_all_ireland,
 };
 const int season_comp_def_count = (int)(sizeof season_comp_defs / sizeof season_comp_defs[0]);
 
@@ -144,12 +154,21 @@ int season_comps_on(void)
 
 /* ---- The rules table ---- */
 
+/* Slice 21c: a comp "Nation:comp" names the rows of that nation only (several nations have a comp "super cup"). */
+static int comp_is(const SeasonRule *r, const char *comp)
+{
+    const char *colon = strchr(comp, ':');
+    if (!colon) return !strcmp(r->comp, comp);
+    size_t n = (size_t)(colon - comp);
+    return strlen(r->nation) == n && !strncmp(r->nation, comp, n) && !strcmp(r->comp, colon + 1);
+}
+
 static const SeasonRule *row_of(const char *comp, int s)
 {
     const SeasonRule *best = NULL;
     for (int i = 0; i < season_rules_count(); i++) {
         const SeasonRule *r = season_rules_row(i);
-        if (strcmp(r->comp, comp) || r->season > s) continue;
+        if (!comp_is(r, comp) || r->season > s) continue;
         if (!best || r->season > best->season) best = r;
     }
     return best;
@@ -174,10 +193,28 @@ int season_comps_next_edition(const char *comp, int s)
     int last = 0;
     for (int i = 0; i < season_rules_count(); i++) {
         const SeasonRule *r = season_rules_row(i);
-        if (!strcmp(r->comp, comp) && r->season > last) last = r->season;
+        if (comp_is(r, comp) && r->season > last) last = r->season;
     }
     for (int y = s + 1; y <= last; y++)
         if (season_comps_held(comp, y) == 1) return y;
+    return NEVER;
+}
+
+/* Slice 21c: a def with its own rule (its `held`). */
+int season_comps_def_held(const SeasonCompDef *d, int s)
+{
+    if (!d) return -1;
+    return d->held ? d->held(d, s) : season_comps_held(d->comp, s);
+}
+
+static int def_next_edition(const SeasonCompDef *d, int s)
+{
+    if (!d->held) return season_comps_next_edition(d->comp, s);
+    int h = d->held(d, s);
+    if (h < 0) return 0;
+    if (h) return s;
+    for (int y = s + 1; y <= SEASON_LAST_YEAR; y++)
+        if (d->held(d, y) == 1) return y;
     return NEVER;
 }
 
@@ -297,6 +334,36 @@ const SeasonCompClass *season_comps_class(uint32_t vtable)
     return NULL;
 }
 
+/* Slice 21c: one vtable copy per def, kept for the run (static memory). */
+static uint32_t def_vtables[MAX_DEFS], def_bases[MAX_DEFS];
+
+uint32_t season_comps_def_vtable(const SeasonCompDef *d, uint32_t vtable, int slots)
+{
+    int i = def_index(d);
+    if (i < 0) return 0;
+    if (!def_vtables[i]) {
+        def_vtables[i] = season_comps_vtable(d, vtable, slots);
+        def_bases[i] = def_vtables[i] ? vtable : 0;
+    }
+    return def_vtables[i];
+}
+
+const char *season_comps_file_of(uint32_t obj)
+{
+    if (obj < 0x10000u || obj >= 0xfff00000u) return NULL;
+    uint32_t vt = rd32(g_mem, obj);
+    for (int i = 0; vt && i < season_comp_def_count && i < MAX_DEFS; i++)
+        if (def_vtables[i] == vt) return season_comp_defs[i]->file;
+    return NULL;
+}
+
+uint32_t season_comps_base_vtable(uint32_t vtable)
+{
+    for (int i = 0; vtable && i < season_comp_def_count && i < MAX_DEFS; i++)
+        if (def_vtables[i] == vtable) return def_bases[i];
+    return 0;
+}
+
 void season_comps_set_slot(uint32_t vtable, int slot, const char *name, void (*fn)(void))
 {
     if (vtable && slot >= 0) wr32(g_mem, vtable + 4u * (uint32_t)slot, rt_host_fn(name, fn));
@@ -361,10 +428,10 @@ static void comps_entry(const SeasonChange *c)
     for (int i = 0; i < season_comp_def_count && i < MAX_DEFS; i++) {
         const SeasonCompDef *d = def_at(i);
         if (!d || d->entry != c->entry || objects[i]) continue;
-        if (season_comps_held(d->comp, c->season) != 1 &&
-            !(d->early && season_changing_rules() && season_comps_held(d->comp, c->season + 1) == 1))
+        if (season_comps_def_held(d, c->season) != 1 &&
+            !(d->early && season_changing_rules() && season_comps_def_held(d, c->season + 1) == 1))
             continue;   /* slice 28: `early`, only with changing rules on (Q398: with them off a cup that the start
-                         * season does not hold stays off) */
+                         * season does not hold stays off); slice 21c: the def's own `held` */
         uint32_t obj = make(d, i, c->season, 0);
         if (!obj) continue;
         char name[64];
@@ -452,7 +519,10 @@ void season_comps_before_comp_table(void)
 #define NATION_COUNT 0xae2380u          /* s32: N */
 #define NATION_RECORDS 0xae23d8u        /* the first nation comp */
 #define FRIENDLY_RECORDS 0x7f
-#define MAX_NEW 32                      /* slice 20e: 12 more (24, 26c and 28 hold about 8) */
+/* The most new records of one game. 13 defs have `like` on main at slice 21c's merge (2026-10-20, with slices 24, 26c
+ * and 28); the ctest season_comps_new_records (tests/seasons/comps_new_records_check.py) fails when the defs with
+ * `like` outgrow it, and a game logs every def that finds no room (wanted). */
+#define MAX_NEW 32
 
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 {
@@ -472,16 +542,21 @@ static int wanted(const char (*have)[52], int have_count, char (*names)[52])
 {
     int start = season_start_year(), rules = season_next_rules(), n = 0;
     if (!season_code_on() || (start == SEASON_FIRST_YEAR && !rules)) return 0;   /* the base game, Q152 */
-    for (int i = 0; i < season_comp_def_count && n < MAX_NEW; i++) {
+    for (int i = 0; i < season_comp_def_count; i++) {
         const SeasonCompDef *d = def_at(i);
         if (!d || !d->like || !d->record) continue;
-        int h = season_comps_held(d->comp, start);
-        if (h == 0 && d->early && rules && season_comps_held(d->comp, start + 1) == 1) h = 1;   /* slice 28 (Q398) */
-        if (h < 0 || (!h && (!rules || season_comps_next_edition(d->comp, start) == NEVER))) continue;  /* Q232 */
+        int h = season_comps_def_held(d, start);
+        if (h == 0 && d->early && rules && season_comps_def_held(d, start + 1) == 1) h = 1;   /* slice 28 (Q398) */
+        if (h < 0 || (!h && (!rules || def_next_edition(d, start) == NEVER))) continue;  /* Q232 */
         int known = 0;
         for (int j = 0; j < have_count; j++)
             if (!strcmp(have[j], d->record)) known = 1;
         if (known) continue;
+        if (n >= MAX_NEW) {                 /* never silent: its competition would never come */
+            fprintf(stderr, "recomp: new competitions: no room for the record of %s (more than %d new records)\n",
+                    d->file, MAX_NEW);
+            continue;
+        }
         snprintf(names[n++], 52, "%.50s", d->record);
     }
     return n;
