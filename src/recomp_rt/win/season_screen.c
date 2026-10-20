@@ -6,9 +6,9 @@
  * top edge, a status tag on each tile and a star on each season that has a saved game. A Custom database
  * tile follows the seasons (Q254). Below the tiles the strip shows the chosen season, its database, its
  * credit and the start date. Each season has one database, the one of its tile (Q417, Max's play test of the
- * 0.6.0 preview): the version choice of Q252 and Q257 and the line to the Update Team's forum are gone. Under
- * the strip, the changing rules switch of the next new game (Q232, Q259; on Setup Game until Max's play
- * test).
+ * 0.6.0 preview): the version choice of Q252 and Q257 is gone. A line still links to the Update Team's
+ * Databases forum at champman0102.co.uk (Q418). At the foot of the strip, the changing rules switch of the
+ * next new game (Q232, Q259; on Setup Game until Max's play test).
  *
  * The screen is a screen of the runtime on the game's own screen stack, as Team views (views.c): the
  * Choose Season item of Setup Game (database.c) pushes it with the push of the original 0x7fe600, flag 0,
@@ -41,6 +41,7 @@
 #include "season_screen.h"
 #include "../host.h"
 
+#include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,6 +82,7 @@
 #define CHOOSE_ID 0x7d42u
 #define FOLDER_ID 0x7d43u           /* the next Custom folder */
 #define CUSTOM_YEAR_ID 0x7d44u      /* data: 0 an earlier season, 1 a later one */
+#define LINK_ID 0x7d45u
 #define BACK_ID 0x7d47u             /* Back: the screen goes back to Setup Game */
 #define REBUILD 0xfffffff5u         /* -0xb */
 #define GO_BACK 0xfffffffeu         /* -2: the result of Back (0x762c97) */
@@ -89,6 +91,8 @@
 #define TILES (SEASONS_COUNT + 1)
 #define TEXT_ROOM 0x200u
 #define TEXTS 8                     /* text buffers in a row: a create copies its text, but a few are kept */
+
+#define LINK_URL "https://champman0102.co.uk/viewforum.php?f=73"
 
 /* The credit of each database (Q147, Q269, Q340): the official data sets credit Sports Interactive, and every
  * Update Team database, October 2003 and September 2005 included, credits the Update Team. Our own season
@@ -134,7 +138,7 @@ typedef struct {
     int det_x1, det_y1, det_x2, det_y2, pad;   /* the details: the strip (classic) or the panel (widescreen) */
     int left_w;                         /* classic: the column of the year in the strip */
     int button_h;                       /* the season buttons of the details */
-    int link_y, link_h;                 /* the changing rules row (the forum line until Q417) */
+    int link_y, link_h;                 /* the forum line; its height is the height of the changing rules row */
     int bottom_y, bottom_h, start_w;    /* Back and Start */
 } Layout;
 
@@ -773,9 +777,9 @@ int season_screen_rules_choice(void) { return rules_choice; }
 int season_screen_rules_on(void) { return rules_choice < 0 ? options_bool(OPT_CHANGING_RULES) : rules_choice; }
 
 /* "Changing rules", On and Off (the chosen one a yellow framed label, as the options box), and what it does. */
-static void rules_row(const Layout *L)
+static void rules_row(const Layout *L, int x, int y)
 {
-    int y = L->link_y, h = L->link_h, x = L->left + 4;
+    int h = L->link_h;
     uint32_t f = L->text_fonts[0];
     int on = season_screen_rules_on();
     const char *name = "Changing rules", *note = on ? "The rules change each July, as they did in real life."
@@ -864,7 +868,15 @@ static void season_build(void)
                   "Click a season to see its database.", 2);
     }
 
-    rules_row(L);
+    /* The changing rules switch at the foot of the strip, under the database column. */
+    if (sel >= 0) rules_row(L, L->det_x1 + L->pad + 4 + L->left_w + 20, L->det_y2 - L->pad - L->link_h);
+
+    const char *more = "More versions of each season are on the Update Team's forum.", *open = "Open champman0102.co.uk";
+    uint32_t lf = L->text_fonts[0];
+    int link_w = text_w(lf, open) + 24;
+    plabel(L->left + 4, L->link_y, L->right - link_w - 8, L->link_y + L->link_h, 1,
+           fit_font(L->text_fonts, 2, more, L->right - link_w - 12 - L->left), pale_rgb, more);
+    pbutton(L->right - link_w, L->link_y, L->right, L->link_y + L->link_h, lf, open, LINK_ID, 0, 1);
 
     /* Back, and the yellow Start button of the chosen season. */
     int by = L->bottom_y, bh = L->bottom_h, sx = L->right - L->start_w;
@@ -1000,6 +1012,12 @@ static void season_input(void)
             int year = (int)node_slot(3) + (data ? 1 : -1);
             if (year >= SEASONS_FIRST && year < SEASONS_FIRST + SEASONS_COUNT) set_slot(3, (uint32_t)year);
             r = REBUILD;
+        } else if (id == LINK_ID) {
+            fprintf(stderr, "recomp: choose season: open %s\n", LINK_URL);
+            handled_press = win_press_count();  /* one press opens one page: a held button repeats */
+            if (!getenv("RECOMP_SCRIPT") && SDL_OpenURL(LINK_URL))
+                fprintf(stderr, "cm0102_recomp: the page %s could not be opened: %s\n", LINK_URL, SDL_GetError());
+            r = 0;
         } else if (id == BACK_ID) {
             r = GO_BACK;
         } else if (id == CHOOSE_ID) {
