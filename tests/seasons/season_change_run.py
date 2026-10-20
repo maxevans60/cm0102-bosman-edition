@@ -18,7 +18,7 @@ build brief):
             then a new program loads that save, returns from holiday, goes through the unread items of the
             Competitions filter with Next Unread (the runtime logs the text that the season item's write_text
             gives the screen, and the item's date), plays on with Space (each news item, then Continue Game)
-            and saves again 10 days after the load (RECOMP_SAVE_AFTER_DAYS). The save of a game with a
+            and saves again 8 days after the load (RECOMP_SAVE_AFTER_DAYS). The save of a game with a
             changed name must load: the game finds its key competitions by name (0x60efd0), and without the names in the
             data the load stops at the box "index.cpp 5809". Both saves must hold the news text and the
             changed name in their season part (bosman_season.dat, version 2)
@@ -87,8 +87,15 @@ LOAD_PLAY = [                               # the time of a step counts from the
     "2000 click 531 97",                    # the Competitions filter
 ] + [f"{3000 + 800 * k} click 717 230" for k in range(60)] + [   # Next Unread, item by item: the runtime logs
     "52000 dump {d}/item.bmp",                                    # the text of the season item when it shows
-] + [f"{54000 + 400 * k} press space" for k in range(400)]   # Space: the next news item, then Continue
-#                     Game (space_to_continue); the save comes 10 days after the load, before the friendly of 14 July
+] + [f"{54000 + 400 * k} press space" for k in range(400)] + [   # Space: the next news item, then Continue
+#                     Game (space_to_continue); the save comes 8 days after the load (check_load)
+    # The original's news item "<player> seeks assurances" (a player of the save, on 29 June or 6 July 2009 as the
+    # holiday runs) wants a reply and greys out Continue Game: Respond, "a backup for the first team", Set, then
+    # Space again. Where no reply is due, the clicks hit an empty part, the item text and Next of the news screen.
+    "216000 click 172 230",                 # Respond
+    "219000 click 360 343",                 # This player is a backup for the first team
+    "221000 click 705 572",                 # Set
+] + [f"{224000 + 400 * k} press space" for k in range(200)]
 
 
 def load_and_save(program, game, save, out, days, env):
@@ -102,8 +109,9 @@ def load_and_save(program, game, save, out, days, env):
     os.replace(save, os.path.join(user, os.path.basename(save)))
     fixtures.write_settings(user, "classic", [])
     steps = fixtures.LOAD_STEPS[:-1] + LOAD_PLAY + ["900000 quit"]
+    table = os.path.join(os.path.dirname(os.path.abspath(program)), "seasons", "rules.tsv")   # as rules_report_check
     r, _ = fixtures.run(program, game, "classic", user, smoke_run.scaled_steps("classic", out, steps),
-                        dict(env, RECOMP_SAVE_AFTER_DAYS=str(days)), 1200)
+                        dict(env, RECOMP_SAVE_AFTER_DAYS=str(days), RECOMP_RULES_TABLE=table), 1200)
     with open(os.path.join(out, "stderr.txt"), "w") as f:
         f.write(r.stderr)
     for f in sorted(os.listdir(out)):
@@ -131,15 +139,18 @@ def check_load(program, game, keep):
     again = os.path.join(work, "again")
     os.makedirs(again, exist_ok=True)
     shutil.copyfile(first, os.path.join(again, "change.sav"))
-    r, saved = load_and_save(program, game, os.path.join(again, "change.sav"), again, 10,
+    # 8 days: the load is on day 179 of 2009, the item is read on day 186, and on the evening of day 187 the
+    # original's own news item "seeks assurances" (a player of the save) wants a reply and greys out Continue Game,
+    # so the Space steps cannot go past it. The save comes at the first human turn of day 187.
+    r, saved = load_and_save(program, game, os.path.join(again, "change.sav"), again, 8,
                              dict(BASE_ENV, RECOMP_SEASON_CHANGE_LOG="1"))
     if r.returncode != 0 or not saved:
         fails.append(f"load: the save did not load and play on (code {r.returncode}, {again})")
-    shown = [m.groups() for m in (SHOWN.search(x) for x in r.stderr.split("\n")) if m]
+    shown = shown_items(r.stderr)
     if not shown:
         fails.append(f"load: the news item was not shown ({again}/item.png)")
     for season, day, y, text in shown:
-        if (season, y) != ("2009", "2009") or not 151 <= int(day) <= 273 or text != LOAD_NEWS.decode():
+        if (season, y) != ("2009", "2009") or not 151 <= int(day) <= 273 or LOAD_NEWS.decode() not in text:
             fails.append(f"load: the item shows {season}, day {day} of {y}: {text!r}")
     if saved:
         part = season_part(saved)
@@ -183,6 +194,24 @@ SENT = re.compile(r"recomp: season change: news item for (\d{4})/\d\d sent on da
 SHOWN = re.compile(r"recomp: season change: news shown for (\d{4})/\d\d, dated day (\d+) of (\d+): (.*)$")
 POINT = re.compile(r"recomp: season change: season point of (\d{4})/\d\d on day (\d+) of (\d+)(?: \(start season\))?$")
 HOOK = re.compile(r"recomp: season change: test: season hook (\d{4}) on day (\d+) of (\d+)$")
+
+
+def shown_items(log):
+    """[(season, day, year, [sentences])] of the season items that the log shows. The runtime logs the first
+    sentence on the line of SHOWN and each further sentence on a line of its own (the UEFA slices put their
+    sentences before the names, so "UEFA Cup is now called ..." is the last of four in 2009/10)."""
+    out, lines = [], log.split("\n")
+    for i, x in enumerate(lines):
+        m = SHOWN.search(x)
+        if not m:
+            continue
+        text = [m.group(4)]
+        for y in lines[i + 1:]:
+            if not y or y.startswith("recomp:"):
+                break
+            text.append(y)
+        out.append((m.group(1), m.group(2), m.group(3), text))
+    return out
 
 
 def season_names():
