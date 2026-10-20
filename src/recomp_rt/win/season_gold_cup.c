@@ -415,35 +415,32 @@ RT_WRAP(0057a500, finalissima_teams)
     rt_ret_stdcall(list && euro && copa ? 0u : 0xffffffffu, 0);
 }
 
-void o_0057a3c0(void);
-
 /* Eur_Super_Cup round table (vtable +0x3c), thiscall (stage as a byte, short *rounds, short *code, int
- * *is_league), ret 0x10. The original makes one round of 0x68 bytes: draw 4 July (0x57a484), match 24 August
- * with venue flags 0x8000 (0x57a4a2), rule flags 0x83 (0x57a4be). The Finalissima: draw 1 May, match 1 June of
- * +0x40, rule flags 0x1 (penalties after 90 minutes: bit 0x2 is extra time, bit 0x80 the golden goal;
- * sweep-international section 7), venue flags 0. */
-RT_WRAP(0057a3c0, finalissima_round)
+ * *is_league), ret 0x10. Called first by the wrap of 0x57a3c0 in season_uefa_super_cup.c (slice 23), with the
+ * original. The original makes one round of 0x68 bytes: draw 4 July (0x57a484), match 24 August with venue
+ * flags 0x8000 (0x57a4a2), rule flags 0x83 (0x57a4be). The Finalissima: draw 1 May, match 1 June of +0x40, rule
+ * flags 0x1 (penalties after 90 minutes: bit 0x2 is extra time, bit 0x80 the golden goal; sweep-international
+ * section 7), venue flags 0. Returns 1 when it handled the call (the Finalissima), else 0 with nothing done. */
+int season_finalissima_round_table(void (*original)(void))
 {
     uint32_t self = cpu.ecx;
-    if (!is_finalissima(self)) {
-        o_0057a3c0();
-        return;
-    }
-    o_0057a3c0();
-    if (rt_unwinding) return;
+    if (!is_finalissima(self)) return 0;
+    original();
+    if (rt_unwinding) return 1;
     uint32_t rec = cpu.eax;
-    if (!readable(rec)) return;
+    if (!readable(rec)) return 1;
     Cpu after = cpu;
     int year = year_of(self);
     uint32_t f[7] = {rec, 0, 1, 4, 0, 0xffffffffu, (uint32_t)year};
     call_cdecl(CUP_FIRST_DATE, 7, f);
-    if (rt_unwinding) return;
+    if (rt_unwinding) return 1;
     /* 1 June 2022 is a Wednesday: flag 2 as the original's midweek round (0x57a492). */
     uint32_t l[9] = {rec, 0, 1, 5, 0, 0xffffffffu, 2, (uint32_t)year, 0};
     call_cdecl(CUP_LAST_DATE, 9, l);
-    if (rt_unwinding) return;
+    if (rt_unwinding) return 1;
     wr16(g_mem, rec + 0xdu, 0x1);
     cpu = after;
+    return 1;
 }
 
 /* vtable +0x8 of the copy: the hooks of the season change and no new edition (the class's start_new_season

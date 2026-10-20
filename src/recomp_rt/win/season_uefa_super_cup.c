@@ -18,6 +18,7 @@
  * city (a fallback, the log names the stadium and the nation). Only when that fails does the original's venue stay.
  * The base game and RECOMP_SEASON_CODE=off get the original's round (season_uefa_row gives NULL). */
 #include "win.h"
+#include "season_nl.h"                     /* slice 28: the Finalissima */
 #include "season.h"
 #include "season_uefa.h"
 
@@ -121,6 +122,8 @@ void o_0057a3c0(void);
 RT_WRAP(0057a3c0, super_cup_round_table)
 {
     uint32_t cup = cpu.ecx;
+    /* Slice 28 part b: the Finalissima object of this class has its own round (season_gold_cup.c). */
+    if (season_finalissima_round_table(o_0057a3c0)) return;
     o_0057a3c0();
     if (rt_unwinding || !readable(cup)) return;
     uint32_t t = cpu.eax;
