@@ -3,8 +3,10 @@
 Usage: python3 -I read_fm2005.py <FM2005 db folder> <facts folder>
 
 The db folder holds client_db.dat, server_db.dat and people_db.dat, copied from the disc as data. Nothing from the
-disc runs. Facts only: names, dates of birth, nations, clubs, jobs, contracts, final tables and competition
-winners. No rating, attribute, ability or position is read.
+disc runs. Facts: names, dates of birth, nations, clubs, jobs, contracts, loans, final tables and competition
+winners (pickles nations, clubs, people_all, teammap, clubhist, comphist, loans, careers). ratings.pkl holds FM2005's
+ratings (extra_fm2005.py): keyplayers.py uses them only as the reference for key players with no Update Team
+record (Q383, Max 2026-10-17). No other step reads them.
 
 Format (file version 0xf0; plain binary, little-endian, text UTF-16LE with a u32 length; a date is a u16 day of
 the year from 0 and a u16 year, 1900 for no date). Found in the files with known people and clubs:
@@ -239,8 +241,17 @@ def main(argv):
     for o in run_of(s, s.find(struct.pack("<IHIII", 7, 2004, 516, 544, 593)) - 1, 39, 31):
         comp, yr = struct.unpack_from("<IH", s, o + 1)
         comphist.append((comp, yr, struct.unpack_from("<6I", s, o + 7)))
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import extra_fm2005
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    import fm_careers
+    careers = fm_careers.careers(src, P, clubs)
+    loans = extra_fm2005.loans(src, P, clubs, teams)
+    rates = extra_fm2005.ratings(src, P)
+    print(f"loans on 1.7.2004: {len(loans)}, ratings: {len(rates)}, careers: {len(careers)}")
     for n, v in (("nations", nations), ("clubs", clubs), ("people_all", P), ("teammap", teams),
-                 ("clubhist", hist), ("comphist", comphist)):
+                 ("clubhist", hist), ("comphist", comphist), ("loans", loans), ("ratings", rates),
+                 ("careers", careers)):
         with open(os.path.join(out, n + ".pkl"), "wb") as f:
             pickle.dump(v, f)
     print(f"names {len(F)}/{len(S)}/{len(C)}, nations {len(nations)}, clubs {len(clubs)}, people {len(P)} "
