@@ -152,6 +152,9 @@ CUP_INSNS = {
     0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
     0x5BAC3C: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
     0x5BACF0: ("add eax, 0xb8", "eax = eax + rt_cup_add(0xb8u, eax, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    # FraLgeCup::collect_entrants: the limit of its first National loop (16 - 2 after 2001), raised by the
+    # places that National clubs from the CFA cannot fill; `cmp edi, edx` at 0x5bd247 sets the flags again.
+    0x5BD244: ("add edx, 0x10", "edx = edx + rt_fra_lge_first(0x10u, edx);"),
 }
 
 # address: (the instruction in the original, C code). The store keeps its width (W16) and its object register.

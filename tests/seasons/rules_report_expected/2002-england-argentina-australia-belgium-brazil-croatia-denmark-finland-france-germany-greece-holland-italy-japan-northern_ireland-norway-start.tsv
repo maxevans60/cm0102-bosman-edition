@@ -55,8 +55,6 @@
 2002	down	ita_ser_c1a (Serie C1 girone A), row ita-21: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	ita_ser_c1b (Serie C1 girone B), row ita-22: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 1 (+1 play-off places), table 0 (0)
-2002	idle	fra_first (French CFA), row fra-11: the game waits for 0, the table holds it
-2002	idle	fra_first (French Lower Division), row fra-11: the game waits for 0, the table holds it
 2002	no_row	friendly (Friendly): no table row
 2002	no_row	record_utils ('B' International): no table row
 2002	no_row	record_utils (Reserve): no table row

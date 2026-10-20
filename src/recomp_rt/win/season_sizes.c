@@ -230,6 +230,29 @@ uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint3
     return (uint32_t)room * 6u;
 }
 
+/* FraLgeCup::collect_entrants 0x5bd160: the first loop takes National clubs ([0x9cf5d4]) whose last division (+0x5b)
+ * is set and is not the CFA ([0x9cf5d8]) up to 16 - 2 after 2001 (edx is 0 or -2 before `add edx, 0x10` at
+ * 0x5bd244), the second loop National clubs from the CFA up to the room (0x5bd2ac). When the National holds fewer
+ * clubs from the CFA than the room leaves them, the first loop takes those places too, so the cup gets its 54
+ * (a 2025/26 start with the December 2025 database stopped at fra_lge_cup.cpp 73, 0x5bcb21). With enough clubs
+ * from the CFA the limit is the original's. Returns the value to add to edx. */
+uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx)
+{
+    if (!sizes_on()) return original;
+    int base = (int)edx + (int)original;
+    int32_t national = (int32_t)rd32(g_mem, 0x9cf5d4u), cfa = (int32_t)rd32(g_mem, 0x9cf5d8u);
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), from_cfa = 0;
+    if (!readable(table)) return original;
+    for (int i = 0; i < count; i++) {
+        uint32_t at = table + (uint32_t)i * CLUB_SIZE, div = rd32(g_mem, at + CLUB_DIVISION), last = rd32(g_mem, at + 0x5bu);
+        from_cfa += readable(div) && (int32_t)rd32(g_mem, div) == national && readable(last) && (int32_t)rd32(g_mem, last) == cfa;
+    }
+    int room = (int)(rt_cup_room(0x60u, 54u, 0x9cf5d0u, 0x9cf5ccu, 0u) / 6u), limit = room - from_cfa;
+    if (limit < base) limit = base;
+    return (uint32_t)(limit - (int)edx);
+}
+
 /* Sets a count of places so that the row's count is the direct places, or the direct places and the winners
  * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). */
 static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)

@@ -58,7 +58,6 @@
 2020	clubs	cro_a2a (Druga HNL), row gre-pol-cro-371: game 16, table 18 (18)
 2020	clubs	den_first (Danish 1st Division), row den-swe-117: game 16, table 12 (12)
 2020	clubs	den_second (Danish 2nd Divisions), row den-swe-118: game 16, table 28 (28)
-2020	clubs	european_cup (UEFA Champions League), row uefa-154: game 55, table 79 (79 (32 in the group stage))
 2020	clubs	fin_first (Ykkönen), row nor-fin-198: game 10, table 12 (12)
 2020	clubs	fra_third (Championnat National), row fra-175: game 20, table 18 (18)
 2020	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-20: game 4, table 14 (14)
@@ -72,7 +71,7 @@
 2020	clubs	nir_first (NIFL Championship), row wal-nir-irl-486: game 10, table 12 (12)
 2020	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-485: game 10, table 12 (12)
 2020	clubs	nor_prm (Eliteserien), row nor-fin-192: game 14, table 16 (16)
-2020	clubs	uefa_cup (UEFA Europa League), row uefa-157: game 153, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
+2020	clubs	uefa_cup (UEFA Europa League), row uefa-157: game 158, table 213 (213 (158 entered + 55 from the Champions League); 48 in the group stage (+8 Cham)
 2020	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-234: game 50, table 40 (40)
 2020	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-235: game 0, table 40 (40)
 2020	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-233: game 24, table 30 (30, then 6)
@@ -97,8 +96,6 @@
 2020	down	jap_j2 (J2 League), row aus-jap-kor-236: game 0 (+0 play-off places), table 4 (4)
 2020	down	nir_first (NIFL Championship), row wal-nir-irl-486: game 0 (+0 play-off places), table 1 (1 (pos 12; inference from the rules of 2019/20 and 2021/22))
 2020	down	nor_first (OBOS-ligaen), row nor-fin-193: game 4 (+0 play-off places), table 2 (15th-16th (2))
-2020	idle	fra_first (French CFA), row fra-173: the game waits for 0, the table holds it
-2020	idle	fra_first (French Lower Division), row fra-173: the game waits for 0, the table holds it
 2020	no_row	friendly (Friendly): no table row
 2020	no_row	record_utils ('B' International): no table row
 2020	no_row	record_utils (Reserve): no table row
@@ -114,7 +111,6 @@
 2020	not_held	gre_super (Greek Super Cup), row gre-pol-cro-101: the game holds 2020, the table says not held
 2020	not_held	hol_super (Johan Cruyff Shield), row hol-bel-253: the game holds 2020, the table says not held
 2020	not_held	inter_amer_cup (Copa Interamericana), row club-world-373: the game holds 2020, the table says not held
-2020	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-159: the game holds 2020, the table says not held
 2020	not_held	ita_c_cup (Coppa Italia Serie C), row ita-337: the game holds 2020, the table says not held
 2020	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-327: the game holds 2020, the table says not held
 2020	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-328: the game holds 2020, the table says not held

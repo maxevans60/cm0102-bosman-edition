@@ -14,7 +14,6 @@
 2015	clubs	con_champ (CONCACAF Champions League), row club-world-275: game 8, table 24 (24)
 2015	clubs	euro_champ (UEFA European Championship), row int-continental-155: game 0, table 24 (24)
 2015	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-156: game 0, table 53 (53)
-2015	clubs	european_cup (UEFA Champions League), row uefa-114: game 55, table 78 (78 (32 in the group stage))
 2015	clubs	goldcup (Copa América Centenario), row int-continental-165: game 0, table 16 (16)
 2015	clubs	ire_chal_cup (FAI Cup), row wal-nir-irl-369: game 42, table 40 (40)
 2015	clubs	ire_first (League of Ireland First Division), row wal-nir-irl-367: game 10, table 8 (8)
@@ -30,7 +29,7 @@
 2015	clubs	swe_prm (Allsvenskan), row den-swe-248: game 14, table 16 (16)
 2015	clubs	tur_second (TFF 1. Lig), row rus-tur-204: game 20, table 18 (18)
 2015	clubs	tur_second_b (TFF 2. Lig), row rus-tur-231: game 10, table 36 (36)
-2015	clubs	uefa_cup (UEFA Europa League), row uefa-117: game 153, table 191 (191 (158 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2015	clubs	uefa_cup (UEFA Europa League), row uefa-117: game 158, table 191 (191 (158 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2015	clubs	usa_mls (Major League Soccer), row arg-usa-231: game 4, table 20 (20)
 2015	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-285: game 32, table 80 (80 or more)
 2015	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-174: game 50, table 54 (54 entrants)
@@ -60,7 +59,6 @@
 2015	not_held	asia_super_cup (Asian Super Cup), row club-world-283: the game holds 2015, the table says not held
 2015	not_held	con_merc_cup (Copa Merconorte), row club-world-272: the game holds 2015, the table says not held
 2015	not_held	inter_amer_cup (Copa Interamericana), row club-world-278: the game holds 2015, the table says not held
-2015	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-119: the game holds 2015, the table says not held
 2015	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-374: the game holds 2015, the table says not held
 2015	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-447: the game holds 2015, the table says not held
 2015	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-393: the game holds 2015, the table says not held

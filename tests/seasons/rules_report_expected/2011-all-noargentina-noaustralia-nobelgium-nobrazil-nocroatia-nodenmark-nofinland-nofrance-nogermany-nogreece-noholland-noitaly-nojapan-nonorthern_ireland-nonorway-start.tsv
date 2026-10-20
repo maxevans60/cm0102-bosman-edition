@@ -17,7 +17,6 @@
 2011	clubs	con_champ (CONCACAF Champions League), row club-world-199: game 8, table 24 (24)
 2011	clubs	euro_champ (UEFA European Championship), row int-continental-111: game 0, table 16 (16)
 2011	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-112: game 0, table 51 (51)
-2011	clubs	european_cup (UEFA Champions League), row uefa-82: game 55, table 76 (76 (32 in the group stage))
 2011	clubs	goldcup (Copa América), row int-continental-121: game 4, table 12 (12)
 2011	clubs	ire_chal_cup (FAI Cup), row wal-nir-irl-269: game 42, table 40 (40)
 2011	clubs	ire_first (League of Ireland First Division), row wal-nir-irl-267: game 10, table 8 (8)
@@ -32,7 +31,7 @@
 2011	clubs	swe_prm (Allsvenskan), row den-swe-224: game 14, table 16 (16)
 2011	clubs	tur_second (TFF 1. Lig), row rus-tur-200: game 20, table 18 (18)
 2011	clubs	tur_second_b (TFF 2. Lig), row rus-tur-227: game 10, table 34 (34)
-2011	clubs	uefa_cup (UEFA Europa League), row uefa-85: game 153, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2011	clubs	uefa_cup (UEFA Europa League), row uefa-85: game 161, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2011	clubs	usa_mls (Major League Soccer), row arg-usa-227: game 4, table 19 (19)
 2011	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-281: game 32, table 64 (64)
 2011	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-126: game 50, table 52 (52 entrants)
@@ -62,7 +61,6 @@
 2011	not_held	asia_super_cup (Asian Super Cup), row club-world-207: the game holds 2011, the table says not held
 2011	not_held	con_merc_cup (Copa Merconorte), row club-world-196: the game holds 2011, the table says not held
 2011	not_held	inter_amer_cup (Copa Interamericana), row club-world-202: the game holds 2011, the table says not held
-2011	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-87: the game holds 2011, the table says not held
 2011	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-273: the game holds 2011, the table says not held
 2011	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-274: the game holds 2011, the table says not held
 2011	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-443: the game holds 2011, the table says not held

@@ -87,8 +87,6 @@
 2008	down	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-124: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2008	down	jap_j1 (J.League Division 1), row aus-jap-kor-197: game 2 (+0 play-off places), table 3 (3)
 2008	down	nir_first (IFA Championship), row wal-nir-irl-186: game 0 (+0 play-off places), table 3 (3 (pos 15,16,17))
-2008	idle	fra_first (French CFA), row fra-65: the game waits for 0, the table holds it
-2008	idle	fra_first (French Lower Division), row fra-65: the game waits for 0, the table holds it
 2008	no_row	friendly (Friendly): no table row
 2008	no_row	record_utils ('B' International): no table row
 2008	no_row	record_utils (Reserve): no table row

@@ -79,8 +79,6 @@
 2005	down	ita_ser_c1a (Serie C1 girone A), row ita-72: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2005	down	ita_ser_c1b (Serie C1 girone B), row ita-73: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2005	down	nir_first (Irish First Division), row wal-nir-irl-111: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
-2005	idle	fra_first (French CFA), row fra-38: the game waits for 0, the table holds it
-2005	idle	fra_first (French Lower Division), row fra-38: the game waits for 0, the table holds it
 2005	no_row	friendly (Friendly): no table row
 2005	no_row	record_utils ('B' International): no table row
 2005	no_row	record_utils (Reserve): no table row

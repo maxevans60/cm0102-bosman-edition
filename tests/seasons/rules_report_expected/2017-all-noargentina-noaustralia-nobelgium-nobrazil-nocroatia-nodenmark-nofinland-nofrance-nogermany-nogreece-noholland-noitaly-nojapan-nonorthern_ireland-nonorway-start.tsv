@@ -19,7 +19,6 @@
 2017	club_list	Welsh Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 6 other clubs, 18 in all; not in it: -; others: Airbus UK Broughton, Caernarfon Town, Cardiff Met, Denbigh Town, Haverfordwest County, Port Talbot Town
 2017	clubs	asia_club_champ (AFC Champions League), row club-world-317: game 16, table 32 (32)
 2017	clubs	con_champ (CONCACAF Champions League), row club-world-313: game 8, table 16 (16)
-2017	clubs	european_cup (UEFA Champions League), row uefa-130: game 55, table 79 (79 (32 in the group stage))
 2017	clubs	ire_chal_cup (FAI Cup), row wal-nir-irl-419: game 42, table 40 (40 (inference from RSSSF round list))
 2017	clubs	ire_lge_cup (League of Ireland Cup), row wal-nir-irl-420: game 3, table 24 (24)
 2017	clubs	ire_prm (League of Ireland Premier Division), row wal-nir-irl-416: game 12, table 10 (10)
@@ -33,7 +32,7 @@
 2017	clubs	swe_prm (Allsvenskan), row den-swe-260: game 14, table 16 (16)
 2017	clubs	tur_second (TFF 1. Lig), row rus-tur-206: game 20, table 18 (18)
 2017	clubs	tur_second_b (TFF 2. Lig), row rus-tur-233: game 10, table 36 (36)
-2017	clubs	uefa_cup (UEFA Europa League), row uefa-133: game 153, table 190 (190 (157 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2017	clubs	uefa_cup (UEFA Europa League), row uefa-133: game 157, table 190 (190 (157 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2017	clubs	usa_mls (Major League Soccer), row arg-usa-233: game 4, table 23 (23)
 2017	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-287: game 32, table 80 (80 or more)
 2017	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-198: game 50, table 20 (20)
@@ -66,7 +65,6 @@
 2017	not_held	con_merc_cup (Copa Merconorte), row club-world-310: the game holds 2017, the table says not held
 2017	not_held	euro_champ_qual (UEFA European Championship qualifying), row int-continental-178: the game holds 2018, the table says not held
 2017	not_held	inter_amer_cup (Copa Interamericana), row club-world-316: the game holds 2017, the table says not held
-2017	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-135: the game holds 2017, the table says not held
 2017	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-424: the game holds 2017, the table says not held
 2017	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-449: the game holds 2017, the table says not held
 2017	not_held	kor_super_cup (Korean Super Cup), row aus-jap-kor-395: the game holds 2017, the table says not held

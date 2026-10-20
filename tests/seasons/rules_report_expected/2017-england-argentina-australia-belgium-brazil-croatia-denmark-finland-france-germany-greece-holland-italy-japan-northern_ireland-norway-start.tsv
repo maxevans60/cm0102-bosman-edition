@@ -27,7 +27,7 @@
 2017	club_list	Brazilian National Third Division: 19 of 19 listed clubs that the database holds (20 listed), 37 other clubs, 56 in all; not in it: -; others: AER Auritânia Foz do Iguaçu, Associação Atlética Aparecidense, Associação Atlética Caldense, Associação Atlética Coruripe, Bangu Atlético Clube, Campinense Clube, Central Sport Club, Clube Atlético Metropolitano, Clube Recreativo e Atlético Catalano, Colo-Colo de Futebol e Regatas, Duque de Caxias Futebol Clube, EC Internacional, Esporte Clube Comercial, Esporte Clube Cruzeiro, Esporte Clube Novo Hamburgo, Esporte Clube XV de Novembro, Estanciano Esporte Clube, Goianésia Esporte Clube, Grêmio Osasco Audax, Guarani de Juazeiro, Ituano Futebol Clube, Mirassol Futebol Clube, Moto Club de São Luís, Nacional Futebol Clube (AM), Náutico Futebol Clube, Operário Futebol Club Ltda., Palmas Futebol e Regatas, Paulista Futebol Clube, SER Caxias do Sul, Serrano Sport Club, Sociedade Esportiva do Gama, Sociedade Imperatriz de Desportos, Treze Futebol Clube, União Recreativa dos Trabalhadores, Veranópolis Esporte Clube Recreativo e Cultural, Vilhena Esporte Clube, Villa Nova Atlético Clube
 2017	club_list	Croatian First Division: 10 of 10 listed clubs that the database holds (10 listed), 6 other clubs, 16 in all; not in it: -; others: HNK Hajduk Split u19, NK Jedinstvo Omladinac, NK NASK Nasice, NK Zelina, NK Zrinski Tordinci, RNK Split
 2017	club_list	Croatian Second Division North: 10 of 10 listed clubs that the database holds (12 listed), 6 other clubs, 16 in all; not in it: -; others: NK Grobnican Cavle, NK Imotski, NK Junak Sinj, NK Mladost Zdralovi, NK Val Kastel Stari, NK Zadar
-2017	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: AB Gladsaxe, BK Søllerød-Vedbæk, FC Helsingør, Hobro IK
+2017	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 3 other clubs, 15 in all; not in it: -; others: AB Gladsaxe, FC Helsingør, Hobro IK
 2017	club_list	Danish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: FC Helsingør, Hobro IK; others: -
 2017	club_list	Danish Second Division: 16 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 16 in all; not in it: AB Gladsaxe, Hellerup IK, Hillerød Fodbold, IF Lyseng, Jammerbugt FC, Middelfart G&BK, Ringkøbing IF, Skovshoved IF; others: -
 2017	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong AZ Alkmaar, Jong FC Utrecht; others: -
@@ -57,10 +57,9 @@
 2017	clubs	conmebol_liber (Copa Libertadores), row club-world-308: game 4, table 47 (47)
 2017	clubs	cro_a1 (Prva HNL), row gre-pol-cro-341: game 16, table 10 (10)
 2017	clubs	cro_a2a (Druga HNL), row gre-pol-cro-368: game 16, table 12 (12)
-2017	clubs	den_first (Danish 1st Division), row den-swe-99: game 16, table 12 (12)
+2017	clubs	den_first (Danish 1st Division), row den-swe-99: game 15, table 12 (12)
 2017	clubs	den_prm (Danish Superliga), row den-swe-98: game 12, table 14 (14)
 2017	clubs	den_second (Danish 2nd Divisions), row den-swe-100: game 16, table 24 (24)
-2017	clubs	european_cup (UEFA Champions League), row uefa-130: game 55, table 79 (79 (32 in the group stage))
 2017	clubs	fra_third (Championnat National), row fra-148: game 20, table 17 (17)
 2017	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-17: game 4, table 33 (33)
 2017	clubs	gre_prm (Super League Greece), row gre-pol-cro-44: game 14, table 16 (16)
@@ -78,7 +77,7 @@
 2017	clubs	nir_lge_cup (NIFL Cup), row wal-nir-irl-414: game 5, table 36 (36)
 2017	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-410: game 10, table 12 (12)
 2017	clubs	nor_prm (Eliteserien), row nor-fin-162: game 14, table 16 (16)
-2017	clubs	uefa_cup (UEFA Europa League), row uefa-133: game 153, table 190 (190 (157 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2017	clubs	uefa_cup (UEFA Europa League), row uefa-133: game 157, table 190 (190 (157 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2017	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-198: game 50, table 20 (20)
 2017	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-199: game 4, table 12 (12)
 2017	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-197: game 24, table 6 (6)
@@ -106,8 +105,6 @@
 2017	down	jap_j2 (J2 League), row aus-jap-kor-233: game 0 (+0 play-off places), table 2 (2)
 2017	down	nir_first (NIFL Championship), row wal-nir-irl-411: game 0 (+0 play-off places), table 1 (1 (pos 12))
 2017	down	nor_first (OBOS-ligaen), row nor-fin-163: game 4 (+0 play-off places), table 2 (15th-16th (2))
-2017	idle	fra_first (French CFA), row fra-146: the game waits for 0, the table holds it
-2017	idle	fra_first (French Lower Division), row fra-146: the game waits for 0, the table holds it
 2017	no_row	friendly (Friendly): no table row
 2017	no_row	record_utils ('B' International): no table row
 2017	no_row	record_utils (Reserve): no table row
@@ -121,7 +118,6 @@
 2017	not_held	ger_lge_cup (DFL-Ligapokal), row ger-219: the game holds 2017, the table says not held
 2017	not_held	gre_super (Greek Super Cup), row gre-pol-cro-98: the game holds 2017, the table says not held
 2017	not_held	inter_amer_cup (Copa Interamericana), row club-world-316: the game holds 2017, the table says not held
-2017	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-135: the game holds 2017, the table says not held
 2017	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-276: the game holds 2017, the table says not held
 2017	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-277: the game holds 2017, the table says not held
 2017	not_held	world_club_cup (Intercontinental Cup), row club-world-305: the game holds 2017, the table says not held

@@ -304,6 +304,7 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
  * rt_cup_add: the value to add to base so that the sum is that count (FraCup). */
 uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint32_t key_b, uint32_t key_c);
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
+uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
 /* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
  * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group
  * stage. The sites of tools/recomp/uefa.py read it. */

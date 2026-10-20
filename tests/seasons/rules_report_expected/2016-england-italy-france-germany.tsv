@@ -8,7 +8,6 @@
 2016	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Crotone, Delfino Pescara; others: -
 2016	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Cittadella, Pisa; others: -
 2016	clubs	african_nations (Africa Cup of Nations), row int-continental-172: game 0/4, table 16 (16)
-2016	clubs	european_cup (UEFA Champions League), row uefa-122: game 55, table 78 (78 (32 in the group stage))
 2016	clubs	fifa_confed (FIFA Confederations Cup), row int-world-190: game 0/4, table 8 (8)
 2016	clubs	fra_third (Championnat National), row fra-139: game 20, table 18 (18)
 2016	clubs	ita_c1_super (Supercoppa di Lega Pro), row ita-271: game 2, table 3 (3)
@@ -17,7 +16,6 @@
 2016	clubs	ita_ser_a (Serie A), row ita-257: game 18, table 20 (20)
 2016	clubs	ita_ser_b (Serie B), row ita-258: game 20, table 22 (22)
 2016	clubs	olympics (Football at the Summer Olympics), row int-world-191: game 4, table 16 (16)
-2016	clubs	uefa_cup (UEFA Europa League), row uefa-125: game 153, table 188 (188 (155 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2016	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-186: game 50, table 20 (20)
 2016	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-187: game 0/4, table 12 (12)
 2016	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-185: game 24, table 6 (6)
@@ -30,16 +28,12 @@
 2016	down	ita_ser_b (Serie B), row ita-258: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2016	down	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 1 (+4 play-off places), table na (n/a)
 2016	down	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 1 (+4 play-off places), table na (n/a)
-2016	format	uefa_cup, row uefa-125: game 40 clubs in the group stage and 32 in the knockout round after it, table 48 and 32
-2016	idle	fra_first (French CFA), row fra-137: the game waits for 0, the table holds it
-2016	idle	fra_first (French Lower Division), row fra-137: the game waits for 0, the table holds it
 2016	no_row	friendly (Friendly): no table row
 2016	no_row	record_utils ('B' International): no table row
 2016	no_row	record_utils (Reserve): no table row
 2016	no_row	record_utils (Under 21 International): no table row
 2016	not_held	ger_lge_cup (DFL-Ligapokal), row ger-206: the game holds 2016, the table says not held
 2016	not_held	inter_amer_cup (Copa Interamericana), row club-world-297: the game holds 2016, the table says not held
-2016	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-127: the game holds 2016, the table says not held
 2016	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-259: the game holds 2016, the table says not held
 2016	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-260: the game holds 2016, the table says not held
 2016	not_held	world_club_cup (Intercontinental Cup), row club-world-286: the game holds 2016, the table says not held
@@ -72,14 +66,14 @@
 2017	bench	ita_super (Supercoppa Italiana), row ita-287: game 7, table 12 (12)
 2017	bench	world_club_champ (FIFA Club World Cup), row club-world-306: game 9, table 12 (12)
 2017	bench	world_cup (FIFA World Cup), row int-world-194: game 7, table 12 (12)
-2017	clubs	european_cup (UEFA Champions League), row uefa-130: game 55, table 79 (79 (32 in the group stage))
+2017	clubs	european_cup (UEFA Champions League), row uefa-130: game 78, table 79 (79 (32 in the group stage))
 2017	clubs	fra_third (Championnat National), row fra-148: game 20, table 17 (17)
 2017	clubs	ita_c1_super (Supercoppa di Lega Pro), row ita-288: game 2, table 3 (3)
 2017	clubs	ita_c_cup (Coppa Italia Lega Pro), row ita-286: game 5, table 57 (57)
 2017	clubs	ita_cup (Coppa Italia), row ita-285: game 4, table 78 (78)
 2017	clubs	ita_ser_a (Serie A), row ita-274: game 18, table 20 (20)
 2017	clubs	ita_ser_b (Serie B), row ita-275: game 20, table 22 (22)
-2017	clubs	uefa_cup (UEFA Europa League), row uefa-133: game 146, table 190 (190 (157 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
+2017	clubs	uefa_cup (UEFA Europa League), row uefa-133: game 155/188, table 190 (190 (157 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
 2017	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-198: game 50, table 20 (20)
 2017	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-199: game 4, table 12 (12)
 2017	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-197: game 24, table 6 (6)
@@ -94,9 +88,6 @@
 2017	down	ita_ser_b (Serie B), row ita-275: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2017	down	ita_ser_c1a (Italian Serie C1/A), row ita-276: game 1 (+4 play-off places), table na (n/a)
 2017	down	ita_ser_c1b (Italian Serie C1/B), row ita-277: game 1 (+4 play-off places), table na (n/a)
-2017	format	uefa_cup, row uefa-133: game 0 clubs in the group stage and 0 in the knockout round after it, table 48 and 32
-2017	idle	fra_first (French CFA), row fra-146: the game waits for 0, the table holds it
-2017	idle	fra_first (French Lower Division), row fra-146: the game waits for 0, the table holds it
 2017	name	ita_c1_super (Supercoppa di Lega Pro), row ita-288: game 'Supercoppa di Lega Pro', table 'Supercoppa Serie C'
 2017	name	ita_c_cup (Coppa Italia Lega Pro), row ita-286: game 'Coppa Italia Lega Pro', table 'Coppa Italia Serie C'
 2017	no_row	friendly (Friendly): no table row
@@ -108,7 +99,6 @@
 2017	not_held	fifa_confed (FIFA Confederations Cup), row int-world-202: the game holds 2017, the table says not held
 2017	not_held	ger_lge_cup (DFL-Ligapokal), row ger-219: the game holds 2017, the table says not held
 2017	not_held	inter_amer_cup (Copa Interamericana), row club-world-316: the game holds 2017, the table says not held
-2017	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-135: the game holds 2017, the table says not held
 2017	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-276: the game holds 2017, the table says not held
 2017	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-277: the game holds 2017, the table says not held
 2017	not_held	olympics (Football at the Summer Olympics), row int-world-203: the game holds 2016, the table says not held

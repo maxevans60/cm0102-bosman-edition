@@ -31,6 +31,8 @@
 #define COMP_NATION 0x5du           /* nation pointer */
 #define COMP_RANK 0x69u             /* s16: a higher division has a higher value (English Premier 18, Third 4) */
 #define KEY_LOWER 0x9cf764u         /* "A Lower Division" (0x60efd0 at 0x610141) */
+#define NATIONS 0xae23a8u           /* the nation table, 0x122 bytes a nation */
+#define DEN_NATION 0x9cf2c0u        /* index of Denmark (DenCup::collect_entrants 0x551240 at 0x5512ee) */
 #define KEY_PREMIER 0x9cf6b8u       /* "A Premier Division" (0x60efd0 at 0x60fb7f) */
 
 typedef struct {
@@ -370,6 +372,12 @@ static void move_clubs(int season)
     uint32_t spare1 = key_lower >= 0 ? comps + (uint32_t)key_lower * COMP_SIZE : 0;
     uint32_t spare2 = key_premier >= 0 ? comps + (uint32_t)key_premier * COMP_SIZE : 0;
 
+    /* DenCup::collect_entrants 0x551240 takes its lower clubs from A Lower Division (record [0x9cf764], 0x5512fa)
+     * when their nation is Denmark (0x551302..0x55131a: the nation table [0xae23a8], 0x122 bytes a nation, at the
+     * index [0x9cf2c0]), up to 48, then three whole divisions, and stops at den_cup.cpp 75 (0x550a62) without 92. A
+     * Danish club taken from that division leaves the cup short, so the moves take none (a 2021/22 start with the
+     * October 2021 database stopped there; main did not). */
+    uint32_t nations = rd32(g_mem, NATIONS), cup_pool_nation = nations ? nations + rd32(g_mem, DEN_NATION) * 0x122u : 0;
     Club *club = calloc((size_t)count, sizeof *club);
     Division *div = calloc((size_t)ncomps, sizeof *div);
     int *by_list = calloc((size_t)(last - first + 2), sizeof *by_list);
@@ -571,7 +579,7 @@ static void move_clubs(int season)
                     } else if (group == 1)
                         take = !c->div && !c->db_div && (!reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve);
                     else if (group == 2)
-                        take = c->div && (c->div == spare1 || c->div == spare2);
+                        take = c->div && (c->div == spare1 || c->div == spare2) && c->nation != cup_pool_nation;
                     else if (c->div >= comps && c->div < comps + (uint32_t)ncomps * COMP_SIZE) {
                         Division *from = &div[(c->div - comps) / COMP_SIZE];
                         take = !from->spare && !from->target && from->rank < d->rank;

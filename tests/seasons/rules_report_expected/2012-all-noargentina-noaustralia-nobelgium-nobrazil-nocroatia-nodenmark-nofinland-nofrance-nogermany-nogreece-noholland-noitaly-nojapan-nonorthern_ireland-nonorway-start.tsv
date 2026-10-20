@@ -16,7 +16,6 @@
 2012	clubs	african_nations (Africa Cup of Nations), row int-continental-128: game 0, table 16 (16)
 2012	clubs	asia_club_champ (AFC Champions League), row club-world-222: game 16, table 32 (32)
 2012	clubs	con_champ (CONCACAF Champions League), row club-world-218: game 8, table 24 (24)
-2012	clubs	european_cup (UEFA Champions League), row uefa-90: game 55, table 76 (76 (32 in the group stage))
 2012	clubs	fifa_confed (FIFA Confederations Cup), row int-world-142: game 0, table 8 (8)
 2012	clubs	ire_chal_cup (FAI Cup), row wal-nir-irl-294: game 42, table 40 (40)
 2012	clubs	ire_first (League of Ireland First Division), row wal-nir-irl-292: game 10, table 8 (8)
@@ -31,7 +30,7 @@
 2012	clubs	swe_prm (Allsvenskan), row den-swe-230: game 14, table 16 (16)
 2012	clubs	tur_second (TFF 1. Lig), row rus-tur-201: game 20, table 18 (18)
 2012	clubs	tur_second_b (TFF 2. Lig), row rus-tur-228: game 10, table 34 (34)
-2012	clubs	uefa_cup (UEFA Europa League), row uefa-93: game 153, table 193 (193 (161 entered + 32 from the Champions League); 48 in the group stage (+8 Cham)
+2012	clubs	uefa_cup (UEFA Europa League), row uefa-93: game 161, table 193 (193 (161 entered + 32 from the Champions League); 48 in the group stage (+8 Cham)
 2012	clubs	usa_mls (Major League Soccer), row arg-usa-228: game 4, table 19 (19)
 2012	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-282: game 32, table 68 (68)
 2012	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-138: game 50, table 40 (40)
@@ -61,7 +60,6 @@
 2012	not_held	asia_super_cup (Asian Super Cup), row club-world-226: the game holds 2012, the table says not held
 2012	not_held	con_merc_cup (Copa Merconorte), row club-world-215: the game holds 2012, the table says not held
 2012	not_held	inter_amer_cup (Copa Interamericana), row club-world-221: the game holds 2012, the table says not held
-2012	not_held	intertoto_cup (UEFA Intertoto Cup), row uefa-95: the game holds 2012, the table says not held
 2012	not_held	ire_pres_cup (President's Cup), row wal-nir-irl-298: the game holds 2012, the table says not held
 2012	not_held	ire_super_cup (FAI Super Cup), row wal-nir-irl-299: the game holds 2012, the table says not held
 2012	not_held	kor_league_cup (Korean League Cup), row aus-jap-kor-444: the game holds 2012, the table says not held

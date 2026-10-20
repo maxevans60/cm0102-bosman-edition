@@ -70,8 +70,6 @@
 2006	down	ita_ser_c1a (Serie C1 girone A), row ita-89: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2006	down	ita_ser_c1b (Serie C1 girone B), row ita-90: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2006	down	nir_first (Irish First Division), row wal-nir-irl-136: game 0 (+0 play-off places), table 2 (2 (pos 11,12))
-2006	idle	fra_first (French CFA), row fra-47: the game waits for 1035, the table holds it
-2006	idle	fra_first (French Lower Division), row fra-47: the game waits for 776, the table holds it
 2006	no_row	friendly (Friendly): no table row
 2006	no_row	record_utils ('B' International): no table row
 2006	no_row	record_utils (Reserve): no table row
