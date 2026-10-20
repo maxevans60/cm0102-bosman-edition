@@ -716,6 +716,7 @@ uint32_t rt_ita_tier_c2(uint32_t c2a)
 #define F_C2A_TABLE 0x00653a90u         /* ItaSerC2a::create_table, thiscall () */
 #define F_CREATE_FIXTURES 0x006835c0u   /* League::create_fixtures, thiscall () */
 #define F_SORT_TABLE 0x006827d0u        /* League::sort_table, thiscall (0) ret 4 */
+#define F_EXPECTATIONS 0x0068aa80u      /* League::set_club_season_expectations, thiscall () */
 
 /* The group C object that the module makes in a season change pass, which waits for its fixtures (below). */
 static uint32_t c2a_pending, c2a_making;
@@ -729,15 +730,28 @@ uint32_t rt_ita_start_c2(uint32_t c2a)
     int y = (int16_t)rd16(g_mem, serie_a + 0x40), cy = (int16_t)rd16(g_mem, c2a + 0x40);
     if (c2a == c2a_pending) {
         /* Made by the module in this pass (it holds the new season) with no fixtures: now, after the regroup, the
-         * table and the fixtures take the clubs of the group once, as the constructor does (0x652f4c..0x652fc9),
-         * after League::free_table 0x687970 of the constructor's table. A start (0x653c40) would archive a season
-         * that was never played (0x653c77) and make the fixtures again. */
+         * group gets its rules, match days, table and fixtures once, in the order of ItaSerC2a::start_new_season
+         * 0x653c40 less its archive and its year step: +0x4c 0 (0x653c4d), League::free_table 0x687970 (0x653c50),
+         * free of the match days at +0xba (0x653c55..0x653c68), set_up_rules (vtable +0x8c, 0x653cad: the match
+         * days of the group's count, create_schedule at 0x653c27), create_table (0x653cec), create_fixtures
+         * (0x653d27), sort_table (0x653d63), vtable +0x5c (0x653dd5) and 0x68aa80 (0x653dda). A start would
+         * archive a season that was never played (0x653c77) and make the fixtures again. */
         c2a_pending = 0;
         uint32_t zero[1] = {0};
+        wr32(g_mem, c2a + 0x4c, 0);
         call_this(F_FREE_TABLE, c2a, 1, zero);
+        uint32_t days = rd32(g_mem, c2a + 0xba);
+        if (!rt_unwinding && days) {
+            uint32_t f[1] = {days};
+            call_cdecl(F_FREE, 1, f);
+            wr32(g_mem, c2a + 0xba, 0);
+        }
+        if (!rt_unwinding) call_this(rd32(g_mem, rd32(g_mem, c2a) + 0x8c), c2a, 0, NULL);
         if (!rt_unwinding) call_this(F_C2A_TABLE, c2a, 0, NULL);
         if (!rt_unwinding) call_this(F_CREATE_FIXTURES, c2a, 0, NULL);
         if (!rt_unwinding) call_this(F_SORT_TABLE, c2a, 1, zero);
+        if (!rt_unwinding) call_this(rd32(g_mem, rd32(g_mem, c2a) + 0x5c), c2a, 0, NULL);
+        if (!rt_unwinding) call_this(F_EXPECTATIONS, c2a, 0, NULL);
         if (rt_unwinding) return 0;
         fprintf(stderr, "recomp: serie c: group C %d: table and fixtures of %d clubs\n", y,
                 (int16_t)rd16(g_mem, c2a + 0x3e));
