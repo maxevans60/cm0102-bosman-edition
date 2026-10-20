@@ -10,7 +10,7 @@ Date 2026-10-19. Original: `clean-3968/cm0102.exe` 3.9.68, virtual addresses. Sp
 - the B teams (Shamrock Rovers B and II, Vitória de Guimarães B, Dinamo Zagreb II, Hajduk Split II, Asteras Tripolis B): slice 15 fills their places (Q359);
 - the rows of "new (gre second, group 2)": no class holds that division (slice 20).
 
-Three of the 52 rows name clubs that the season's own database holds under another name (Q505): Valpovka in 2002/03 and 2003/04 (NK Valpovska Satnica, record 12238, in Croatian Second Division North in both databases) and Međimurje in 2003/04 (NK Cakovec, record 2128 of the October 2003 database, the record that later databases call NK Medjimurje Cakovec). Their rows in `rules-0.6.0/gre-pol-cro-clubs.tsv` now name these records, so slice 15 finds them. The other 49 rows (37 clubs) become new records.
+Three of the 52 rows name clubs that the season's own database holds under another name (Q505): Valpovka in 2002/03 and 2003/04 (NK Valpovska Satnica, record 12238, in Croatian Second Division North in both databases) and Međimurje in 2003/04 (NK Cakovec, record 2128 of the October 2003 database, the record that later databases call NK Medjimurje Cakovec). Their rows in `rules-0.6.0/gre-pol-cro-clubs.tsv` now name these records, so slice 15 finds them. The rebuilt Summer 2006 database (Q351, merged 2026-10-20) holds three more: Gençlerbirliği OFTAŞ (record 2938), Sibir Novosibirsk (2512) and Spartak-MZhK Ryazan (8758); `make_club_records.py` leaves out a row whose club the season's database holds. The other 46 rows (34 clubs) become new records (`Seasons/club_records.tsv`).
 
 The facts of each club are in `club-records-0.6.0/clubs.tsv`, with a source and a second source per row, and `clubs.check.md` says which facts the second source confirms. Q504: a fact with one source stays and its `notes` say so (Glebe Rangers and Warrenpoint Town have no second source that could be read on the day).
 
@@ -120,4 +120,8 @@ Full seasons (`--last Y+1`): 2008/09 reaches the 2009/10 start, and FK Krasnodar
 
 Stops that are not this slice (the same with `RECOMP_CLUB_RECORDS=off`): Select All 2020/21 and 2022/23 at den_cup.cpp 75; Select All 2025/26 at fra_lge_cup.cpp 73; a 2013/14 season with Argentina at virtual_staff.cpp 195 (Huracán de Tres Arroyos, no nation and no players in the Autumn 2013 database, becomes a 26th club of the Argentine Second Division after the moves); 2005/06 with the 3.9.68 data (not a game configuration) at Database.cpp 13471.
 
+After the merge of main (slice 18 and the own databases, 2026-10-20): 2002/03 (3.9.68 data, format 1 staff; TŠK Topolovac 22 players from the fill) and 2006/07 (Summer 2006; Wexford Youths in the Irish First Division) PASS.
+
 `tests/seasons/season_core_run.py` (its 2010/11 game holds the 5 new clubs): PASS, the save is the same twice and loads and plays on. Same-save set: see the slice report.
+
+Expected files: the slice 15 start runs of both nation groups (`rules_report_check.py --run ... --start-only --update-expected`, with `RECOMP_RECORDS_SOURCES`) for the 13 seasons with a record and an expected file (2002 to 2020) all PASS. Of each update only the `club_list` lines of the divisions that hold a record of that season are kept (31 lines go); the other lines differ through slices merged since the files were made, and the lead regenerates the full set on main.
