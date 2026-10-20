@@ -122,6 +122,13 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # International competitions (0.6.0 slice 27): the C table of the editions matches the rules table, and
+    # the editions and the rules of the code sites.
+    add_test(NAME season_intl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_intl.py" --check)
+    add_executable(season_intl_test tests/seasons/test_season_intl.c src/recomp_rt/win/season_intl_rules.c
+        src/recomp_rt/win/season_intl_table.c)
+    target_include_directories(season_intl_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_intl COMMAND season_intl_test)
     # Domestic cups (0.6.0 slice 21): the round types, the cup table, and the C table matches cup_formats.tsv.
     add_executable(season_cups_test tests/seasons/test_season_cups.c src/recomp_rt/win/season_cups.c
         src/recomp_rt/win/season_cups_table.c)
@@ -150,6 +157,9 @@ if(NOT WIN32)
     target_include_directories(season_cups_more_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cups_more COMMAND season_cups_more_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_cups_more PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The names table and the club moves table (0.6.0 slice 15): the tools read every part and stop on a bad row.
+    add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
+    add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)
     # The UEFA formats by season (0.6.0 slice 22): the committed table matches uefa.tsv, and its lookups.
     add_test(NAME season_uefa_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_uefa_table.py" --check)
     add_executable(season_uefa_test tests/seasons/test_season_uefa.c src/recomp_rt/win/season_uefa_table.c
@@ -175,12 +185,18 @@ if(NOT WIN32)
     target_include_directories(season_nation_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_nation COMMAND season_nation_test)
     add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
+    # The league rules (0.6.0 slice 19): play-off places, splits and calendars. The outputs are committed.
+    add_test(NAME season_encode_leagues COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_leagues.py")
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
     add_executable(savename_test tests/savename/test_cp1252.c)
     target_include_directories(savename_test PRIVATE src/recomp_rt/win)
     add_test(NAME savename COMMAND savename_test)
+    # File name parts that are not UTF-8 (0.6.0 slice 15): win_host_path turns them into UTF-8.
+    add_executable(path_utf8_test tests/pathutf8/test_path_utf8.c)
+    target_include_directories(path_utf8_test PRIVATE src/recomp_rt/win)
+    add_test(NAME path_utf8 COMMAND path_utf8_test)
     add_executable(draw_test tests/draw/test_draw.c src/recomp_rt/win/draw.c)
     target_include_directories(draw_test PRIVATE src/recomp_rt/win)
     add_test(NAME draw COMMAND draw_test)
@@ -301,12 +317,33 @@ if(EXISTS "${CM0102_EXE}")
         DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py" ${RULES_PARTS}
         COMMENT "Making the rules table"
         VERBATIM)
-    add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv")
+    # 0.6.0 slice 15: the names table (Seasons/names.tsv) and the club moves table (Seasons/clubs.tsv).
+    file(GLOB CLUBS_PARTS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/*-clubs.tsv")
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/names.tsv"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py"
+            --out "${CMAKE_BINARY_DIR}/seasons/names.tsv"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py"
+            ${RULES_PARTS}
+        COMMENT "Making the names table"
+        VERBATIM)
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/seasons/clubs.tsv"
+        COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py"
+            --out "${CMAKE_BINARY_DIR}/seasons/clubs.tsv"
+        DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" "${CMAKE_SOURCE_DIR}/tools/seasons/make_rules.py"
+            ${RULES_PARTS} ${CLUBS_PARTS}
+        COMMENT "Making the club moves table"
+        VERBATIM)
+    add_custom_target(seasons_rules ALL DEPENDS "${CMAKE_BINARY_DIR}/seasons/rules.tsv"
+        "${CMAKE_BINARY_DIR}/seasons/names.tsv" "${CMAKE_BINARY_DIR}/seasons/clubs.tsv")
     target_sources(cm0102_recomp PRIVATE "${CMAKE_BINARY_DIR}/seasons/comp_classes.c")
     add_dependencies(cm0102_recomp seasons_rules)
     # The season change (0.6.0 slice 16): the committed wraps of start_new_season match the class table.
     add_test(NAME season_starts COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_start_wraps.py"
         --exe "${CM0102_EXE}" --classes "${CMAKE_BINARY_DIR}/seasons/comp_classes.c" --check)
+    # League sizes (0.6.0 slice 18): the committed wraps of set_up_rules match tools/recomp/league_sizes.py.
+    add_test(NAME season_size_wraps COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_size_wraps.py" --check)
     target_include_directories(cm0102_recomp PRIVATE src/recomp_rt src/recomp_rt/win "${RECOMP_OUT}/gen"
         ${SDL2_INCLUDE_DIRS})
     target_compile_definitions(cm0102_recomp PRIVATE CM0102_DEFAULT_EXE="${CM0102_EXE}"

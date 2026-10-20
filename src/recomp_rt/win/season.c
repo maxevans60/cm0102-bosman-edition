@@ -23,8 +23,10 @@
  * proof: docs/research/2026-10-17-season-save-part.md. */
 #include "win.h"
 #include "season.h"
+#include "season_names.h"
 #include "season_change.h"
 #include "season_dates.h"
+#include "season_intl.h"
 #include "options.h"
 #include "../host.h"
 
@@ -337,7 +339,8 @@ RT_WRAP(0082e430, save_game)
     char path[1024];
     snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
     o_0082e430();
-    if (rt_unwinding || cpu.eax != 1 || !part_needed()) return;
+    if (rt_unwinding) return;
+    if (cpu.eax != 1 || !part_needed()) return;
     char host[2048];
     if (win_existing_file(path, host, sizeof host) && !add_part(host)) return;
     /* The file stays a whole save without the part, which would load as a 2001/02 game: the save fails. */
@@ -406,6 +409,7 @@ RT_WRAP(00828110, create_game)
     rules_now = !season_code_on() ? 0 : new_rules < 0 ? options_bool(OPT_CHANGING_RULES) : new_rules;
     season_change_reset();
     season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
+    season_intl_at_create();                    /* slice 27: Australia in Asia from 2006/07 */
     season_change_creating(1);
     o_00828110();
     season_change_creating(0);

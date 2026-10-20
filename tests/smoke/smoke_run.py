@@ -223,6 +223,9 @@ SAME_SAVE_RUNS = [
     # The fixes of two error boxes of the original (call_up_news.c, euro_finals.c) act only where the original
     # stops at the box. A test-only variable turns them off: the save must equal normal.
     ("box-fixes-off", {"faster_days": "off", "_env": {"RECOMP_BOX_FIXES": "off"}}),
+    # The play-off kind (0.6.0 slice 19) runs only in a season game: with its test switch off the base game save
+    # is that of normal.
+    ("playoffs-off", {"faster_days": "off", "_env": {"RECOMP_PLAYOFFS": "off"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this

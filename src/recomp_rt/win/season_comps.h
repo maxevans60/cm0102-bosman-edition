@@ -116,6 +116,22 @@ int season_comps_next_edition(const char *comp, int s);
 /* The object of a def in the game that runs, or 0 (not made, or the game has none). */
 uint32_t season_comps_object(const SeasonCompDef *d);
 
+/* Slice 24: the file of the def whose record the object has (its long name in the data), or NULL. A new
+ * competition can take a class of the original, so season_change_file asks here first: the class would give
+ * the file of the original's competition and its rules (the names kind would rename its record). */
+const char *season_comps_file(uint32_t obj);
+
+/* The club of the highest reputation (club +0x80) of a continent (key id global, for example 0x9cfa0c for Asia)
+ * that is not in skip[0..n), or 0. The walk of WorldClubChamp::pick_entrant 0x92afbd..0x92aff4: [0xae235c] -
+ * 2 x [0xae2350] clubs of the club table [0xae23b4] (so no national team), club +0x53 the nation, nation +0x71 the
+ * continent, continent +0 its id. No random number: the original's pick takes a short list of about 6 clubs and
+ * shows an error box when all are picked (0x92b0fd). */
+uint32_t season_comps_top_club(uint32_t continent_key, const uint32_t *skip, int n);
+
+/* 1 when rec (a record address) is the record of a def of this game: a slice's constructor wrap then leaves the
+ * object's year alone (season_kind_club_world.c, the new cups on the World_Club_Cup class). */
+int season_comps_is_def_record(uint32_t rec);
+
 /* The address of a competition record by its long name in the data (the name before any season_change_rename),
  * or 0. */
 uint32_t season_comps_record(const char *name);
@@ -153,5 +169,9 @@ int season_comps_records_stale(void);
 
 /* season_change_reset calls it: before a new game, a load and the end of a game. */
 void season_comps_reset(void);
+
+/* The load step of build_comp_object_table 0x8386f0 (each def's object made again from its save file). The one wrap
+ * of 0x8386f0 is in season_names.c and calls this before the original. */
+void season_comps_before_comp_table(void);
 
 #endif
