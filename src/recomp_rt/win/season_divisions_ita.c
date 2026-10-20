@@ -609,7 +609,16 @@ static void kind_season(int s)
                        "clubs.", a->clubs, b->clubs, c->clubs);
 }
 
-const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", NULL, NULL, kind_season, NULL, NULL, NULL};
+/* A new game of the era: C2/B and C2/C (made with the extra division flag, emptied by empty_table) end now. */
+static void kind_new_game(int y)
+{
+    if (!era_of_year(y)) return;
+    uint32_t b = object_of(KEY_C2B), c = object_of(KEY_C2C);
+    if (b && !(int16_t)rd16(g_mem, b + 0x3e)) idle(b);
+    if (c && !(int16_t)rd16(g_mem, c + 0x3e)) idle(c);
+}
+
+const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", kind_new_game, NULL, kind_season, NULL, NULL, NULL};
 
 /* ---- C2/B and C2/C at a new game of the era ----
  *
@@ -629,10 +638,43 @@ static int empty_table(void)
     if (!readable(t)) return 0;
     memset(g_mem + t, 0, ROW_SIZE);
     wr32(g_mem, obj + 0xb1, t);                         /* the table, as 0x64b694 */
-    idle(obj);
+    /* No clubs now; the year 2999 only after the constructor (the new game hook): its calendar and fixtures are made
+     * with the start year (league.cpp 1020 with 2999 while it is made). */
+    wr16(g_mem, obj + 0x3e, 0);
     rt_ret_cdecl(1);
     return 1;
 }
 
 RT_WRAP(00657f50, c2b_table) { if (!empty_table()) o_00657f50(); }
 RT_WRAP(0065c0e0, c2c_table) { if (!empty_table()) o_0065c0e0(); }
+
+/* ---- The Coppa Italia Serie C in the era (Q625) ----
+ *
+ * ItaCCup::select_entrants 0x63dfe0 sets 90 entrants (+0xf2 0x5a at 0x63dff4, a block of 0x168 bytes at +0xee) and
+ * takes the Italian clubs whose division is C1/A, C1/B, C2/A, C2/B or C2/C (0x63e094..0x63e107) up to 90; the code
+ * after it reads all 90 slots (0x63e109..). The original's C1 and C2 hold 90; the era's three groups hold 60 or fewer,
+ * and the constructor (0x63ccce) stopped at "Database..cpp 16398". Until slice 21 gives the cup its real 60 entrants
+ * (ita-235), the clubs that are short come from the Serie D by reputation: for the call they count as C2/B clubs,
+ * after it their division is the Serie D again. */
+void o_0063dfe0(void);
+
+RT_WRAP(0063dfe0, ita_ccup_entrants)
+{
+    uint32_t cup = cpu.ecx;
+    int need = 90 - clubs_of(KEY_C1A) - clubs_of(KEY_C1B) - clubs_of(KEY_C2A) - clubs_of(KEY_C2B) - clubs_of(KEY_C2C);
+    uint32_t serie_d = record_of(KEY_SERIE_D), c2b = record_of(KEY_C2B);
+    if (need <= 0 || !era_of_year((int16_t)rd16(g_mem, cup + 0x40)) || !serie_d || !c2b) {
+        o_0063dfe0();
+        return;
+    }
+    static uint32_t extra[4096];
+    int m = pool(serie_d, extra, 4096);
+    qsort(extra, (size_t)m, sizeof *extra, by_reputation);
+    if (m > need) m = need;
+    for (int i = 0; i < m; i++) wr32(g_mem, extra[i] + 0x57, c2b);
+    o_0063dfe0();
+    uint32_t eax = cpu.eax;
+    for (int i = 0; i < m; i++) wr32(g_mem, extra[i] + 0x57, serie_d);
+    cpu.eax = eax;
+    fprintf(stderr, "recomp: serie c: Coppa Italia Serie C takes %d clubs of the Serie D\n", m);
+}
