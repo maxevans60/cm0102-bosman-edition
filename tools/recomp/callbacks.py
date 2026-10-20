@@ -14,7 +14,7 @@ import re
 CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "views.c", "print_pdf.c", "best_xi.c",
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
-                  "season_change.c", "season_kind_club_world.c", "season_comps.c",
+                  "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_bra_states.c",
                   "season_club_cups.c", "season_playoffs.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
                   "season_gold_cup.c", "season_divisions.c")
                                 # in src/recomp_rt/win
@@ -147,6 +147,9 @@ CALLBACKS = {
     0x4A2540: ("81ec000200005657", "set a predicted position, thiscall (club, position), ret 8"),
     0x5EB2B0: ("6aff6829aa950064", "GreSecond::GreSecond, thiscall (year, record), ret 8 (the second Greek group)"),
     0x53FD40: ("81ec080200008b84", "the compare of the Spanish and Portuguese group deals (passed to qsort)"),
+    # season_bra_states.c (slice 20e): the state championships of Brazil
+    0x687430: ("81ec080200005355", "League: add a club to the table row (row, club, 0, 0), thiscall"),
+    0x435340: ("6aff683948950064", "BraRegNorth::BraRegNorth, thiscall (year, record), ret 8"),
 }
 
 
