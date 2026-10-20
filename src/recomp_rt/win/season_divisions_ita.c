@@ -558,7 +558,10 @@ uint32_t rt_ita_start_c2(uint32_t c2a)
 {
     uint32_t serie_a = object_of(KEY_A);
     if (!c2a || !serie_a || !era_of_year((int16_t)rd16(g_mem, serie_a + 0x40))) return c2a;
-    call_this(rd32(g_mem, rd32(g_mem, c2a) + 8), c2a, 0, NULL);
+    /* A C2/A that slice 26's module made in this pass already holds the new season (its constructor took it): a
+     * start would move it a year on. */
+    if ((int16_t)rd16(g_mem, c2a + 0x40) < (int16_t)rd16(g_mem, serie_a + 0x40))
+        call_this(rd32(g_mem, rd32(g_mem, c2a) + 8), c2a, 0, NULL);
     return 0;
 }
 
