@@ -11,10 +11,10 @@ Each run is a season jump of tests/seasons/rules_report_check.py with Italy. The
     2014-c2   the same with the extra division (Serie C2 selected: the original makes C2/A, C2/B and C2/C)
     change    October 2013, changing rules on, 2013/14 to the end of 2014/15 (C1 and C2 end)
     change-c2 the same with the extra division
-The checks: the jump ends with code 0 and shows no message box of the game; the report has the files
-new_serie_c_group_a to c at the end of each season of the era, each with the clubs of its row (20 in 2014/15;
-with changing rules off every later season keeps the start season's counts, Q232), and no league of C2/B or C2/C
-at the end of a season of the era; the log has the 38 match days of each group of 20, the regroup line of each
+The checks: the jump ends with code 0 and shows no message box of the game; the report has the groups (files
+ita_ser_c1a, ita_ser_c1b and ita_ser_c2a, Q520) at the end of each season of the era, each with the clubs of its row (20 in 2014/15;
+with changing rules off every later season keeps the start season's counts, Q232), and C2/B and C2/C with no
+clubs at the end of a season of the era; the log has the 38 match days of each group of 20, the regroup line of each
 season change into the era, and the news sentence of the change in the change runs.
 """
 import concurrent.futures
@@ -29,7 +29,7 @@ import rules_report_check as rrc  # noqa: E402
 import uefa_formats_run as ufr  # noqa: E402
 
 DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
-GROUPS = ["new_serie_c_group_a", "new_serie_c_group_b", "new_serie_c_group_c"]
+GROUPS = ["ita_ser_c1a", "ita_ser_c1b", "ita_ser_c2a"]      # Q520: the rows take the files of their objects
 NEWS = "Serie C1 and Serie C2 end: the Serie C is now one division of three groups of 20, 20 and 20 clubs."
 
 
@@ -55,8 +55,8 @@ def check_report(name, report, seasons, want):
             if end.get(file) != want[s][g]:
                 fails.append(f"{name}: {file} at the end of {s} holds {end.get(file)} clubs, want {want[s][g]}")
         for old in ("ita_ser_c2b", "ita_ser_c2c"):
-            if old in end:
-                fails.append(f"{name}: {old} is a league at the end of {s}")
+            if end.get(old, 0):
+                fails.append(f"{name}: {old} holds {end[old]} clubs at the end of {s} (it ends in the era)")
     return fails
 
 
