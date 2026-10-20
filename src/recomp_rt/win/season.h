@@ -37,6 +37,9 @@ int season_start_year(void);
 /* 1 when the season rules of the game that runs change each July (option changing_rules of that game). */
 int season_changing_rules(void);
 
+/* The changing rules that the next new game gets (slice 26: the records of new competitions at the data load). */
+int season_next_rules(void);
+
 /* Sets the season of the next new game. Call it before Start New Game (the Choose Season screen, slice 13).
  * start_year: SEASON_FIRST_YEAR to SEASON_LAST_YEAR, else the call does nothing and returns 0.
  * changing_rules: 1 or 0, or -1 for the option changing_rules at the moment the game is made.
