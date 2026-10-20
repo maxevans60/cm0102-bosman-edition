@@ -156,24 +156,23 @@
 2016	not_in_game	ita-266 new 'Lega Pro girone C' (Italy)
 2016	not_in_game	nor-fin-155 new 'Mesterfinalen' (Norway)
 2016	not_in_game	uefa-121 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2016	playoffs	aus_nsl (A-League), row aus-jap-kor-39: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2016	playoffs	bel_first (Belgian First Division A), row hol-bel-203: game 0 up and 0 down play-off places, table 'see split'
-2016	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-97: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2016	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-340: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2016	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-367: game 0 up and 0 down play-off places, table '2nd: promotion play-off v HNL 9th'
-2016	playoffs	den_first (Danish 1st Division), row den-swe-93: game 0 up and 0 down play-off places, table '2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.'
-2016	playoffs	den_prm (Danish Superliga), row den-swe-92: game 0 up and 0 down play-off places, table 'Relegation: first a two-legged cross round, the 3rd of each qualifying group v t'
-2016	playoffs	fra_first (Ligue 1), row fra-137: game 0 up and 0 down play-off places, table '18th v Ligue 2 3rd, two legs'
-2016	playoffs	fra_second (Ligue 2), row fra-138: game 0 up and 0 down play-off places, table '3rd v Ligue 1 18th; 18th v National 3rd, two legs'
-2016	playoffs	fra_third (Championnat National), row fra-139: game 0 up and 0 down play-off places, table '3rd v Ligue 2 18th, two legs'
-2016	playoffs	ger_first (Bundesliga), row ger-196: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2016	playoffs	ger_second (2. Bundesliga), row ger-197: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2016	playoffs	gre_prm (Super League Greece), row gre-pol-cro-43: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league'
-2016	playoffs	hol_first (Eerste Divisie), row hol-bel-198: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2016	playoffs	ita_ser_b (Serie B), row ita-258: game 0 up and 0 down play-off places, table '3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);'
-2016	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 4 up and 4 down play-off places, table 'n/a'
-2016	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 4 up and 4 down play-off places, table 'n/a'
-2016	playoffs	jap_j2 (J2 League), row aus-jap-kor-232: game 0 up and 0 down play-off places, table '3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw'
+2016	playoffs	bel_second (Belgian First Division B), row hol-bel-204: game 0 up and 1 down play-off places, table 0 and 0 ('top three of the aggregate table (not promoted) to the Europa League play-offs')
+2016	playoffs	bel_third (Belgian First Amateur Division), row hol-bel-205: game 0 up and 1 down play-off places, table 4 and 0 ('top four promotion play-offs')
+2016	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-340: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2016	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-367: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off v HNL 9th')
+2016	playoffs	den_first (Danish 1st Division), row den-swe-93: game 0 up and 0 down play-off places, table 2 and 0 ('2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.')
+2016	playoffs	fin_first (Ykkönen), row nor-fin-158: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
+2016	playoffs	fra_first (Ligue 1), row fra-137: game 0 up and 0 down play-off places, table 0 and 1 ('18th v Ligue 2 3rd, two legs')
+2016	playoffs	fra_second (Ligue 2), row fra-138: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Ligue 1 18th; 18th v National 3rd, two legs')
+2016	playoffs	fra_third (Championnat National), row fra-139: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v Ligue 2 18th, two legs')
+2016	playoffs	ger_first (Bundesliga), row ger-196: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2016	playoffs	ger_second (2. Bundesliga), row ger-197: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2016	playoffs	ita_ser_b (Serie B), row ita-258: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
+2016	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-259: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2016	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-260: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2016	playoffs	jap_j2 (J2 League), row aus-jap-kor-232: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
+2016	playoffs	nir_first (NIFL Championship), row wal-nir-irl-386: game 1 up and 0 down play-off places, table 2 and 1 ('pos 2,3: promotion play-off; pos 11: relegation play-off')
+2016	playoffs	nor_first (OBOS-ligaen), row nor-fin-153: game 1 up and 0 down play-off places, table 4 and 1 ('3rd-6th single-leg knockout; winner v top-flight 14th, two legs. 14th v 2. divis')
 2016	up	arg_second (Primera B Nacional), row arg-usa-43: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2016	up	aus_nsl (A-League), row aus-jap-kor-39: game 6 (+0 play-off places), table na (n/a)
 2016	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-43: game 4 (+0 play-off places), table na (n/a)

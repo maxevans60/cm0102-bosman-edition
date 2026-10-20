@@ -154,23 +154,23 @@
 2020	not_in_game	ita-333 new 'Serie C girone B' (Italy)
 2020	not_in_game	ita-334 new 'Serie C girone C' (Italy)
 2020	not_in_game	uefa-153 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2020	playoffs	arg_second (Primera Nacional), row arg-usa-47: game 0 up and 0 down play-off places, table 'Final of the two zone winners at a neutral ground; Torneo Reducido of 2nd to 4th'
-2020	playoffs	aus_nsl (A-League), row aus-jap-kor-43: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2020	playoffs	bel_first (Belgian First Division A), row hol-bel-255: game 0 up and 0 down play-off places, table 'see split'
-2020	playoffs	bel_third (Belgian National Division 1), row hol-bel-257: game 0 up and 1 down play-off places, table 'n/a'
-2020	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-101: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2020	playoffs	den_prm (Danish Superliga), row den-swe-116: game 0 up and 0 down play-off places, table 'European play-off: relegation-round winner (7th) plays the lowest championship-r'
-2020	playoffs	fra_first (Ligue 1), row fra-173: game 0 up and 0 down play-off places, table '18th v winner of the Ligue 2 play-off, two legs'
-2020	playoffs	fra_second (Ligue 2), row fra-174: game 0 up and 0 down play-off places, table '4th v 5th, winner v 3rd, winner v Ligue 1 18th; 18th v National 3rd'
-2020	playoffs	fra_third (Championnat National), row fra-175: game 0 up and 0 down play-off places, table '3rd v Ligue 2 18th, two legs'
-2020	playoffs	ger_first (Bundesliga), row ger-248: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2020	playoffs	ger_second (2. Bundesliga), row ger-249: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2020	playoffs	gre_prm (Super League 1), row gre-pol-cro-47: game 0 up and 0 down play-off places, table '13th: relegation play-off'
-2020	playoffs	gre_second (Super League 2), row gre-pol-cro-74: game 0 up and 0 down play-off places, table '2nd of play-off round: promotion play-off'
-2020	playoffs	hol_first (Eerste Divisie), row hol-bel-250: game 0 up and 0 down play-off places, table 'six clubs (3rd to 8th or period winners) with the Eredivisie 16th; knockout for '
-2020	playoffs	ita_ser_b (Serie B), row ita-326: game 0 up and 0 down play-off places, table '3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at'
-2020	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-327: game 4 up and 4 down play-off places, table 'n/a'
-2020	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-328: game 4 up and 4 down play-off places, table 'n/a'
+2020	playoffs	bel_second (Belgian First Division B), row hol-bel-256: game 0 up and 1 down play-off places, table 1 and 0 ('runner-up v top-flight 17th')
+2020	playoffs	bel_third (Belgian National Division 1), row hol-bel-257: game 0 up and 1 down play-off places, table 0 and 0 ('n/a')
+2020	playoffs	fin_first (Ykkönen), row nor-fin-198: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
+2020	playoffs	fra_first (Ligue 1), row fra-173: game 0 up and 0 down play-off places, table 0 and 1 ('18th v winner of the Ligue 2 play-off, two legs')
+2020	playoffs	fra_second (Ligue 2), row fra-174: game 0 up and 0 down play-off places, table 3 and 1 ('4th v 5th, winner v 3rd, winner v Ligue 1 18th; 18th v National 3rd')
+2020	playoffs	fra_third (Championnat National), row fra-175: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v Ligue 2 18th, two legs')
+2020	playoffs	ger_first (Bundesliga), row ger-248: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2020	playoffs	ger_second (2. Bundesliga), row ger-249: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2020	playoffs	gre_prm (Super League 1), row gre-pol-cro-47: game 0 up and 0 down play-off places, table 0 and 1 ('13th: relegation play-off')
+2020	playoffs	gre_second (Super League 2), row gre-pol-cro-74: game 0 up and 0 down play-off places, table 1 and 0 ('2nd of play-off round: promotion play-off')
+2020	playoffs	hol_first (Eerste Divisie), row hol-bel-250: game 0 up and 0 down play-off places, table 6 and 0 ('six clubs (3rd to 8th or period winners) with the Eredivisie 16th; knockout for ')
+2020	playoffs	hol_prm (Eredivisie), row hol-bel-249: game 0 up and 2 down play-off places, table 0 and 1 ('16th to the promotion/relegation play-offs with six Eerste Divisie clubs; places')
+2020	playoffs	ita_ser_b (Serie B), row ita-326: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at')
+2020	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-327: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2020	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-328: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2020	playoffs	nir_first (NIFL Championship), row wal-nir-irl-486: game 1 up and 0 down play-off places, table 1 and 1 ('pos 2: promotion play-off with the Premiership 11th; pos 11: relegation play-off')
+2020	playoffs	nor_first (OBOS-ligaen), row nor-fin-193: game 1 up and 0 down play-off places, table 4 and 1 ('3rd-6th single-leg knockout; winner v top-flight 14th, one match on neutral grou')
 2020	subs_used	asia_club_champ (AFC Champions League), row club-world-374: game 3, table 5 (5, a sixth in extra time)
 2020	subs_used	cro_cup (Croatian Football Cup), row gre-pol-cro-425: game 3, table 5 (5)
 2020	subs_used	den_cup (Danish Cup), row den-swe-119: game 3, table 5 (5)

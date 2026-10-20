@@ -149,22 +149,18 @@
 2015	not_in_game	ita-249 new 'Lega Pro girone C' (Italy)
 2015	not_in_game	nor-fin-150 new 'Liigacup' (Finland)
 2015	not_in_game	uefa-113 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2015	playoffs	arg_prm (Primera División), row arg-usa-15: game 0 up and 0 down play-off places, table 'Final at a neutral ground between the two zone winners; play-off of the two zone'
-2015	playoffs	aus_nsl (A-League), row aus-jap-kor-38: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2015	playoffs	bel_first (Belgian Pro League), row hol-bel-190: game 0 up and 0 down play-off places, table 'see split'
-2015	playoffs	bel_second (Belgian Second Division), row hol-bel-191: game 0 up and 1 down play-off places, table 'none'
-2015	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-96: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2015	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-339: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2015	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-366: game 0 up and 0 down play-off places, table '2nd: promotion play-off v HNL 9th'
-2015	playoffs	ger_first (Bundesliga), row ger-183: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2015	playoffs	ger_second (2. Bundesliga), row ger-184: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2015	playoffs	gre_prm (Super League Greece), row gre-pol-cro-42: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league with weighted starting points'
-2015	playoffs	hol_first (Eerste Divisie), row hol-bel-185: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2015	playoffs	ita_ser_b (Serie B), row ita-241: game 0 up and 0 down play-off places, table '3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);'
-2015	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-242: game 4 up and 4 down play-off places, table 'n/a'
-2015	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-243: game 4 up and 4 down play-off places, table 'n/a'
-2015	playoffs	jap_j1 (J1 League), row aus-jap-kor-204: game 0 up and 0 down play-off places, table 'championship stage of 3 to 5 clubs (stage winners and top three overall)'
-2015	playoffs	jap_j2 (J2 League), row aus-jap-kor-231: game 0 up and 0 down play-off places, table '3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw'
+2015	playoffs	bel_second (Belgian Second Division), row hol-bel-191: game 0 up and 1 down play-off places, table 0 and 0 ('none')
+2015	playoffs	bel_third (Belgian Third Division), row hol-bel-192: game 0 up and 1 down play-off places, table 0 and 0 ('promotion rounds to the First Amateur Division')
+2015	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-339: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2015	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-366: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off v HNL 9th')
+2015	playoffs	fin_first (Ykkönen), row nor-fin-148: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
+2015	playoffs	ger_first (Bundesliga), row ger-183: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2015	playoffs	ger_second (2. Bundesliga), row ger-184: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2015	playoffs	ita_ser_b (Serie B), row ita-241: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
+2015	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-242: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2015	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-243: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2015	playoffs	jap_j2 (J2 League), row aus-jap-kor-231: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
+2015	playoffs	nor_first (OBOS-ligaen), row nor-fin-143: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
 2015	up	aus_nsl (A-League), row aus-jap-kor-38: game 6 (+0 play-off places), table na (n/a)
 2015	up	bel_third (Belgian Third Division), row hol-bel-192: game 1 (+0 play-off places), table 2 (2 per group (top two) plus play-off winners (reform))
 2015	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-42: game 4 (+0 play-off places), table na (n/a)

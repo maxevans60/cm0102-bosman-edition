@@ -27,6 +27,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_comps.h"
+#include "season_playoffs.h"
 #include "season_rules.h"
 
 #include <stdarg.h>
@@ -45,6 +46,7 @@ extern const SeasonRuleKind season_kind_club_world;
 extern const SeasonRuleKind season_kind_club_cups;
 extern const SeasonRuleKind season_kind_comps;         /* slice 26: season_comps.h */
 void season_comps_reset(void);                         /* slice 26: season_comps.h */
+extern const SeasonRuleKind season_kind_playoffs;      /* slice 19: season_playoffs.c */
 extern const SeasonRuleKind season_kind_intl;
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
@@ -57,6 +59,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_club_cups,             /* slice 26c: years of the new club cups (season_club_cups.c) */
+    &season_kind_playoffs,              /* slice 19: promotion play-offs of leagues with none (after sizes) */
     &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
@@ -708,8 +711,18 @@ void season_change_loaded(void)
 
 void o_005d5ae0(void);
 
-/* game_season_update_pass, cdecl (): at the end of every day. */
+static void update_pass(void);
+
+/* game_season_update_pass, cdecl (): at the end of every day. Slice 19: an entry's change waits for its play-off
+ * (season_playoffs.c). */
 RT_WRAP(005d5ae0, season_update_pass)
+{
+    int held = season_playoffs_hold();
+    update_pass();
+    season_playoffs_release(held);
+}
+
+static void update_pass(void)
 {
     if (!kinds_on()) {
         o_005d5ae0();

@@ -147,24 +147,21 @@
 2014	not_in_game	ita-232 new 'Lega Pro girone C' (Italy)
 2014	not_in_game	nor-fin-140 new 'Liigacup' (Finland)
 2014	not_in_game	uefa-105 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2014	playoffs	arg_prm (Primera División), row arg-usa-14: game 0 up and 0 down play-off places, table 'Liguilla Pre-Libertadores (3rd to 6th) and Liguilla Pre-Sudamericana for contine'
-2014	playoffs	arg_second (Primera B Nacional), row arg-usa-41: game 0 up and 0 down play-off places, table 'Torneo Reducido of 2nd to 5th, two-leg ties'
-2014	playoffs	aus_nsl (A-League), row aus-jap-kor-37: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2014	playoffs	bel_first (Belgian Pro League), row hol-bel-177: game 0 up and 0 down play-off places, table 'see split'
-2014	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2014	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-338: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2014	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-365: game 0 up and 0 down play-off places, table '2nd: promotion play-off v HNL 9th'
-2014	playoffs	den_second (Danish 2nd Divisions), row den-swe-82: game 0 up and 0 down play-off places, table '11th of each group in play-offs.'
-2014	playoffs	ger_first (Bundesliga), row ger-170: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2014	playoffs	ger_second (2. Bundesliga), row ger-171: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2014	playoffs	gre_prm (Super League Greece), row gre-pol-cro-41: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league, teams start with weighted points (5th st'
-2014	playoffs	gre_second (Football League), row gre-pol-cro-68: game 0 up and 0 down play-off places, table 'top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: releg'
-2014	playoffs	hol_first (Eerste Divisie), row hol-bel-172: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2014	playoffs	ita_ser_b (Serie B), row ita-224: game 0 up and 0 down play-off places, table '3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);'
-2014	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 4 up and 4 down play-off places, table 'n/a'
-2014	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 4 up and 4 down play-off places, table 'n/a'
-2014	playoffs	jap_j1 (J1 League), row aus-jap-kor-203: game 0 up and 0 down play-off places, table 'championship stage of 3 to 5 clubs (stage winners and top three overall)'
-2014	playoffs	jap_j2 (J2 League), row aus-jap-kor-230: game 0 up and 0 down play-off places, table '3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw'
+2014	playoffs	arg_second (Primera B Nacional), row arg-usa-41: game 0 up and 0 down play-off places, table 4 and 0 ('Torneo Reducido of 2nd to 5th, two-leg ties')
+2014	playoffs	bel_second (Belgian Second Division), row hol-bel-178: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
+2014	playoffs	bel_third (Belgian Third Division), row hol-bel-179: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2014	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-338: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2014	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-365: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off v HNL 9th')
+2014	playoffs	den_second (Danish 2nd Divisions), row den-swe-82: game 0 up and 0 down play-off places, table 0 and 1 ('11th of each group in play-offs.')
+2014	playoffs	fin_first (Ykkönen), row nor-fin-138: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
+2014	playoffs	ger_first (Bundesliga), row ger-170: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2014	playoffs	ger_second (2. Bundesliga), row ger-171: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2014	playoffs	gre_second (Football League), row gre-pol-cro-68: game 0 up and 0 down play-off places, table 3 and 6 ('top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: releg')
+2014	playoffs	ita_ser_b (Serie B), row ita-224: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
+2014	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2014	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2014	playoffs	jap_j2 (J2 League), row aus-jap-kor-230: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
+2014	playoffs	nor_first (OBOS-ligaen), row nor-fin-133: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
 2014	up	arg_second (Primera B Nacional), row arg-usa-41: game 1 (+0 play-off places), table 2 (2 (champion; Torneo Reducido winner))
 2014	up	aus_nsl (A-League), row aus-jap-kor-37: game 6 (+0 play-off places), table na (n/a)
 2014	up	bel_third (Belgian Third Division), row hol-bel-179: game 1 (+0 play-off places), table 2 (2 (group champions))

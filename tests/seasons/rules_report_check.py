@@ -49,7 +49,12 @@ The differences, by kind:
     up, down                    a division's promotion places (+0xbe) or relegation places (+0xc1) differ from
                                 the row (a row with a numbered tier); the row's count can also hold the
                                 play-off winner (+0xbf) or the play-out losers (+0xc0)
-    playoffs                    a division has play-off places and the row has none, or the other way round
+    playoffs                    a division's promotion play-off places (+0xbf) or relegation play-off places
+                                (+0xc0) differ from the places of the row's play-off text, as
+                                tools/seasons/encode_leagues.py reads it (slice 19). A play-off that moves no
+                                club between tiers (a finals series, a European play-off, a tie-break) has no
+                                places. For a text that the tool reads only in part, only whether the division
+                                has play-off places at all is compared
     name                        the game's name differs from the table's name of that season and from its shown
                                 form (tools/seasons/make_names.py shown_name)
     no_row                      the game holds a competition whose file has no row in that season
@@ -94,6 +99,7 @@ sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
 import make_rules  # noqa: E402
 import make_names  # noqa: E402
 import make_clubs  # noqa: E402
+import encode_leagues  # noqa: E402   slice 19: the play-off places of each league row
 
 COLS = ["season", "phase", "slot", "record", "file", "class", "kind", "vtable", "year", "clubs", "rounds",
         "subs_used", "bench", "matches", "up", "playoff_up", "playoff_down", "down", "flags", "above", "below",
@@ -186,6 +192,19 @@ def row_files(r):
     return ["new_" + r["comp"].lower().replace(" ", "_") if f == "new" else f for f in r["comp_file"].split(";")]
 
 
+_LEAGUE_PLAYOFFS = {}
+
+
+def league_playoffs():
+    """{row id: encoded league row} of tools/seasons/encode_leagues.py (slice 19)."""
+    if not _LEAGUE_PLAYOFFS:
+        rows, _, problems = encode_leagues.encode()
+        if problems:
+            raise SystemExit("encode_leagues.py: " + problems[0])
+        _LEAGUE_PLAYOFFS.update((e["id"], e) for e in rows)
+    return _LEAGUE_PLAYOFFS
+
+
 def differences(seasons, comps, rows):
     """A sorted list of (season, kind, text)."""
     by_season_file = collections.defaultdict(list)
@@ -245,11 +264,15 @@ def differences(seasons, comps, rows):
                 if not isinstance(want, int) or want not in accept:
                     out.add((season, key, f"{label}: game {c[key]} (+{c[extra]} play-off places), "
                                           f"table {want} ({r[key + '_text'][:80]})"))
-            table_po = r["playoffs"] not in ("na", "none", "unknown")
-            game_po = bool(c["playoff_up"] or c["playoff_down"])
-            if r["playoffs"] != "unknown" and table_po != game_po:
-                out.add((season, "playoffs", f"{label}: game {c['playoff_up']} up and {c['playoff_down']} down "
-                                             f"play-off places, table {r['playoffs_text'][:80]!r}"))
+            # Slice 19: the places of the encoded play-off text.
+            e = league_playoffs().get(r["id"])
+            if e is not None and r["playoffs"] != "unknown":
+                want = (encode_leagues.count(e["po_up"]), encode_leagues.count(e["po_down"]))
+                game = (c["playoff_up"], c["playoff_down"])
+                same = game == want if e["po_status"] == "ok" else bool(sum(game)) == bool(sum(want))
+                if not same:
+                    out.add((season, "playoffs", f"{label}: game {game[0]} up and {game[1]} down play-off places, "
+                                                 f"table {want[0]} and {want[1]} ({r['playoffs_text'][:80]!r})"))
         shown = make_names.shown_name(r["name"])
         if shown and c["name"] not in (r["name"], shown):
             out.add((season, "name", f"{label}: game {c['name']!r}, table {r['name']!r}"))

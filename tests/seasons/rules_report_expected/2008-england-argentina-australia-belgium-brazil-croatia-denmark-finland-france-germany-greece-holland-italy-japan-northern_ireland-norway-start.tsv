@@ -134,19 +134,21 @@
 2008	not_in_game	nor-fin-75 new 'Superfinalen' (Norway)
 2008	not_in_game	nor-fin-80 new 'Liigacup' (Finland)
 2008	not_in_game	uefa-57 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2008	playoffs	arg_prm (Primera División), row arg-usa-8: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
-2008	playoffs	arg_second (Primera B Nacional), row arg-usa-35: game 0 up and 0 down play-off places, table '3rd and 4th play two-leg promoción v Primera 17th and 18th of the average table;'
-2008	playoffs	aus_nsl (A-League), row aus-jap-kor-31: game 0 up and 0 down play-off places, table 'top four, page play-off system, grand final'
-2008	playoffs	bel_first (Belgian First Division), row hol-bel-99: game 0 up and 0 down play-off places, table '15th and 16th to relegation play-offs (league cut to 16 for 2009/10)'
-2008	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-89: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2008	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-332: game 0 up and 0 down play-off places, table '12th: relegation play-off'
-2008	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-359: game 0 up and 0 down play-off places, table '6th: promotion play-off'
-2008	playoffs	den_second (Danish 2nd Divisions), row den-swe-46: game 0 up and 0 down play-off places, table 'Promotion game between the group runners-up. Relegation game between the 15th-pl'
-2008	playoffs	ger_first (Bundesliga), row ger-92: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2008	playoffs	ger_second (2. Bundesliga), row ger-93: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2008	playoffs	gre_prm (Super League Greece), row gre-pol-cro-35: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league (home and away)'
-2008	playoffs	hol_first (Eerste Divisie), row hol-bel-94: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2008	playoffs	ita_ser_b (Serie B), row ita-122: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
+2008	playoffs	arg_prm (Primera División), row arg-usa-8: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
+2008	playoffs	arg_second (Primera B Nacional), row arg-usa-35: game 0 up and 0 down play-off places, table 2 and 0 ('3rd and 4th play two-leg promoción v Primera 17th and 18th of the average table;')
+2008	playoffs	bel_first (Belgian First Division), row hol-bel-99: game 0 up and 0 down play-off places, table 0 and 2 ('15th and 16th to relegation play-offs (league cut to 16 for 2009/10)')
+2008	playoffs	bel_second (Belgian Second Division), row hol-bel-100: game 0 up and 1 down play-off places, table 0 and 0 ('runner-up and three period winners play two-legged qualifying ties; the two winn')
+2008	playoffs	bel_third (Belgian Third Division), row hol-bel-101: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2008	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-332: game 0 up and 0 down play-off places, table 0 and 1 ('12th: relegation play-off')
+2008	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-359: game 0 up and 0 down play-off places, table 1 and 0 ('6th: promotion play-off')
+2008	playoffs	den_second (Danish 2nd Divisions), row den-swe-46: game 0 up and 0 down play-off places, table 1 and 1 ('Promotion game between the group runners-up. Relegation game between the 15th-pl')
+2008	playoffs	fin_first (Ykkönen), row nor-fin-78: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 13th, two legs')
+2008	playoffs	ger_first (Bundesliga), row ger-92: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2008	playoffs	ger_second (2. Bundesliga), row ger-93: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2008	playoffs	ita_ser_b (Serie B), row ita-122: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo')
+2008	playoffs	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-123: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2008	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-124: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2008	playoffs	nor_first (Adeccoligaen), row nor-fin-73: game 1 up and 0 down play-off places, table 3 and 0 ('3rd, 4th, 5th play off with Tippeligaen 14th for one place')
 2008	up	arg_second (Primera B Nacional), row arg-usa-35: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2008	up	aus_nsl (A-League), row aus-jap-kor-31: game 6 (+0 play-off places), table na (n/a)
 2008	up	bel_third (Belgian Third Division), row hol-bel-101: game 1 (+0 play-off places), table 2 (2 (group champions))

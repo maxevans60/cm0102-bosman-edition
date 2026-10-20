@@ -156,25 +156,25 @@
 2017	not_in_game	ita-283 new 'Serie C girone C' (Italy)
 2017	not_in_game	nor-fin-165 new 'Mesterfinalen' (Norway)
 2017	not_in_game	uefa-129 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2017	playoffs	arg_second (Primera B Nacional), row arg-usa-44: game 0 up and 0 down play-off places, table 'Torneo Reducido of 2nd to 9th: one-leg quarter-finals, two-leg semi-finals and f'
-2017	playoffs	aus_nsl (A-League), row aus-jap-kor-40: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2017	playoffs	bel_first (Belgian First Division A), row hol-bel-216: game 0 up and 0 down play-off places, table 'see split'
-2017	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-98: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2017	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-341: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2017	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-368: game 0 up and 0 down play-off places, table '2nd (next club if a B team is 1st or 2nd): promotion play-off v HNL 9th; 11th: r'
-2017	playoffs	den_first (Danish 1st Division), row den-swe-99: game 0 up and 0 down play-off places, table '2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.'
-2017	playoffs	den_prm (Danish Superliga), row den-swe-98: game 0 up and 0 down play-off places, table 'Relegation: first a two-legged cross round, the 3rd of each qualifying group v t'
-2017	playoffs	fra_first (Ligue 1), row fra-146: game 0 up and 0 down play-off places, table '18th v winner of the Ligue 2 play-off, two legs'
-2017	playoffs	fra_second (Ligue 2), row fra-147: game 0 up and 0 down play-off places, table '4th v 5th, winner v 3rd, winner v Ligue 1 18th; 18th v National 3rd'
-2017	playoffs	fra_third (Championnat National), row fra-148: game 0 up and 0 down play-off places, table '3rd v Ligue 2 18th, two legs'
-2017	playoffs	ger_first (Bundesliga), row ger-209: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2017	playoffs	ger_second (2. Bundesliga), row ger-210: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2017	playoffs	hol_first (Eerste Divisie), row hol-bel-211: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2017	playoffs	ita_ser_b (Serie B), row ita-275: game 0 up and 0 down play-off places, table '3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at'
-2017	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-276: game 4 up and 4 down play-off places, table 'n/a'
-2017	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-277: game 4 up and 4 down play-off places, table 'n/a'
-2017	playoffs	jap_j1 (J1 League), row aus-jap-kor-206: game 0 up and 0 down play-off places, table '16th v the J2 play-off winner, one match (J1 entry play-off)'
-2017	playoffs	jap_j2 (J2 League), row aus-jap-kor-233: game 0 up and 0 down play-off places, table '3rd to 6th play-off; winner plays J1 16th in one match (J1 entry play-off)'
+2017	playoffs	arg_second (Primera B Nacional), row arg-usa-44: game 0 up and 0 down play-off places, table 8 and 0 ('Torneo Reducido of 2nd to 9th: one-leg quarter-finals, two-leg semi-finals and f')
+2017	playoffs	bel_second (Belgian First Division B), row hol-bel-217: game 0 up and 1 down play-off places, table 0 and 0 ('top three of the aggregate table (not promoted) to the Europa League play-offs')
+2017	playoffs	bel_third (Belgian First Amateur Division), row hol-bel-218: game 0 up and 1 down play-off places, table 4 and 0 ('top four promotion play-offs')
+2017	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-341: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2017	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-368: game 0 up and 0 down play-off places, table 1 and 1 ('2nd (next club if a B team is 1st or 2nd): promotion play-off v HNL 9th; 11th: r')
+2017	playoffs	den_first (Danish 1st Division), row den-swe-99: game 0 up and 0 down play-off places, table 2 and 0 ('2nd and 3rd play two-legged finals against Superliga relegation play-off clubs.')
+2017	playoffs	fin_first (Ykkönen), row nor-fin-168: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
+2017	playoffs	fra_first (Ligue 1), row fra-146: game 0 up and 0 down play-off places, table 0 and 1 ('18th v winner of the Ligue 2 play-off, two legs')
+2017	playoffs	fra_second (Ligue 2), row fra-147: game 0 up and 0 down play-off places, table 3 and 1 ('4th v 5th, winner v 3rd, winner v Ligue 1 18th; 18th v National 3rd')
+2017	playoffs	fra_third (Championnat National), row fra-148: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v Ligue 2 18th, two legs')
+2017	playoffs	ger_first (Bundesliga), row ger-209: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2017	playoffs	ger_second (2. Bundesliga), row ger-210: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2017	playoffs	ita_ser_b (Serie B), row ita-275: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th regardless of the points gap: one-leg preliminary round (5v8, 6v7) at')
+2017	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-276: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2017	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-277: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
+2017	playoffs	jap_j1 (J1 League), row aus-jap-kor-206: game 0 up and 0 down play-off places, table 0 and 1 ('16th v the J2 play-off winner, one match (J1 entry play-off)')
+2017	playoffs	jap_j2 (J2 League), row aus-jap-kor-233: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th play-off; winner plays J1 16th in one match (J1 entry play-off)')
+2017	playoffs	nir_first (NIFL Championship), row wal-nir-irl-411: game 1 up and 0 down play-off places, table 2 and 1 ('pos 2,3: promotion play-off; pos 11: relegation play-off')
+2017	playoffs	nor_first (OBOS-ligaen), row nor-fin-163: game 1 up and 0 down play-off places, table 4 and 1 ('3rd-6th single-leg knockout; winner v top-flight 14th, two legs. 14th v 2. divis')
 2017	subs_used	ita_c1_super (Supercoppa Serie C), row ita-288: game 3, table 5 (5)
 2017	up	arg_second (Primera B Nacional), row arg-usa-44: game 1 (+0 play-off places), table 2 (2 (champion; Torneo Reducido winner))
 2017	up	aus_nsl (A-League), row aus-jap-kor-40: game 6 (+0 play-off places), table na (n/a)

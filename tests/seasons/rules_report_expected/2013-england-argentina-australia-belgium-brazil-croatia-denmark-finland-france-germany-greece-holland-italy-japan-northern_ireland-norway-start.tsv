@@ -146,21 +146,21 @@
 2013	not_in_game	ita-221 new 'Supercoppa di Lega di Seconda Divisione (Serie C2 to 2008)' (Italy)
 2013	not_in_game	nor-fin-130 new 'Liigacup' (Finland)
 2013	not_in_game	uefa-97 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2013	playoffs	arg_second (Primera B Nacional), row arg-usa-40: game 0 up and 0 down play-off places, table 'one-match tie-breaker for 3rd place'
-2013	playoffs	aus_nsl (A-League), row aus-jap-kor-36: game 0 up and 0 down play-off places, table 'top six, three weeks, no double chance, grand final'
-2013	playoffs	bel_first (Belgian Pro League), row hol-bel-164: game 0 up and 0 down play-off places, table 'see split'
-2013	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-94: game 0 up and 0 down play-off places, table 'promotion by play-off stage, see format'
-2013	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-337: game 0 up and 0 down play-off places, table '9th: relegation play-off v second tier runner-up'
-2013	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-364: game 0 up and 0 down play-off places, table '2nd: promotion play-off v HNL 9th'
-2013	playoffs	fin_first (Ykkönen), row nor-fin-128: game 0 up and 1 down play-off places, table 'none'
-2013	playoffs	fin_prm (Veikkausliiga), row nor-fin-127: game 0 up and 1 down play-off places, table 'none'
-2013	playoffs	ger_first (Bundesliga), row ger-157: game 0 up and 0 down play-off places, table '16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties'
-2013	playoffs	ger_second (2. Bundesliga), row ger-158: game 0 up and 0 down play-off places, table '3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule'
-2013	playoffs	gre_prm (Super League Greece), row gre-pol-cro-40: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league; 16th: relegation play-off'
-2013	playoffs	gre_second (Football League), row gre-pol-cro-67: game 0 up and 0 down play-off places, table 'top 4 of each group: promotion play-off round of 8 for 3 places (2 direct, 3rd v'
-2013	playoffs	hol_first (Eerste Divisie), row hol-bel-159: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2013	playoffs	ita_ser_b (Serie B), row ita-207: game 0 up and 0 down play-off places, table '3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);'
-2013	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-229: game 0 up and 0 down play-off places, table '3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw'
+2013	playoffs	bel_second (Belgian Second Division), row hol-bel-165: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
+2013	playoffs	bel_third (Belgian Third Division), row hol-bel-166: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2013	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-337: game 0 up and 0 down play-off places, table 0 and 1 ('9th: relegation play-off v second tier runner-up')
+2013	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-364: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off v HNL 9th')
+2013	playoffs	fin_first (Ykkönen), row nor-fin-128: game 0 up and 1 down play-off places, table 0 and 0 ('none')
+2013	playoffs	fin_prm (Veikkausliiga), row nor-fin-127: game 0 up and 1 down play-off places, table 0 and 0 ('none')
+2013	playoffs	ger_first (Bundesliga), row ger-157: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
+2013	playoffs	ger_second (2. Bundesliga), row ger-158: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
+2013	playoffs	gre_prm (Super League Greece), row gre-pol-cro-40: game 0 up and 0 down play-off places, table 0 and 1 ('2nd-5th: European play-off mini-league; 16th: relegation play-off')
+2013	playoffs	gre_second (Football League), row gre-pol-cro-67: game 0 up and 0 down play-off places, table 4 and 0 ('top 4 of each group: promotion play-off round of 8 for 3 places (2 direct, 3rd v')
+2013	playoffs	ita_ser_b (Serie B), row ita-207: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
+2013	playoffs	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-208: game 4 up and 4 down play-off places, table 8 and 0 ('2nd to 9th: quarter-finals one leg (2v9, 3v8, 4v7, 5v6) with extra time and pena')
+2013	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-209: game 4 up and 4 down play-off places, table 8 and 0 ('2nd to 9th: quarter-finals one leg (2v9, 3v8, 4v7, 5v6) with extra time and pena')
+2013	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-229: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
+2013	playoffs	nor_first (1. divisjon), row nor-fin-123: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
 2013	up	arg_second (Primera B Nacional), row arg-usa-40: game 1 (+0 play-off places), table 3 (3 (champion, runner-up, winner of a tie-breaker for 3rd))
 2013	up	aus_nsl (A-League), row aus-jap-kor-36: game 6 (+0 play-off places), table na (n/a)
 2013	up	bel_third (Belgian Third Division), row hol-bel-166: game 1 (+0 play-off places), table 2 (2 (group champions))

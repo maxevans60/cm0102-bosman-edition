@@ -15,7 +15,7 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
                   "tactics.c", "groups.c", "compare.c", "compare_screen.c", "squad_depth.c", "names.c", "pdf.c", "dbfolders.c",
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
                   "season_change.c", "season_kind_club_world.c", "season_comps.c",
-                  "season_club_cups.c")
+                  "season_club_cups.c", "season_playoffs.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -107,6 +107,17 @@ CALLBACKS = {
     0x4AE770: ("81ec000200005355", "text: append a string (text), thiscall"),
     0x944CF1: ("6a01ff742408e85c", "operator new (size), cdecl: an entry's competition array (season_change.c)"),
     0x944C94: ("ff742404e82d0600", "operator delete (block), cdecl"),
+    # season_playoffs.c (slice 19): the play-off stage of a league with none
+    0x522E00: ("6aff683b78950064", "Cup_Stage::Cup_Stage, thiscall, 15 arguments"),
+    0x51C800: ("6aff68d976950064", "Cup::set_up_round, thiscall (round)"),
+    0x521E60: ("8b4c24148b442418", "cup_set_round_draw_date, cdecl"),
+    0x521EB0: ("8b4c24148b442418", "cup_set_round_match_date, cdecl"),
+    0x571980: ("8a44240481ec0802", "EngFirst +0x3c: the round table of a stage, thiscall (stage, &rounds, &name, flag)"),
+    0x576C50: ("8a44240c5355563c", "EngFirst +0x44: a stage result (jumped to from the wrap of 0x686940)"),
+    0x944E46: ("ff350830de00ff74", "malloc, cdecl"),
+    0x9452CA: ("558bec51568b7508", "free, cdecl"),
+    0x5A8F60: ("c390909090909090", "the empty function (compared with vtable +0x28, wrapped in season_uefa_cup.c)"),
+    0x686940: ("8a4424083c057519", "League +0x44, base (compared with vtable +0x44, wrapped in season_playoffs.c)"),
 }
 
 

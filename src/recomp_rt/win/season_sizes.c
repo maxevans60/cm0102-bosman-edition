@@ -5,6 +5,7 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_sizes.h"
+#include "season_playoffs.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -296,7 +297,7 @@ static int open_neighbour(uint32_t obj, uint32_t at)
     return size_file(f) && floor_of(f) == 0;
 }
 
-void season_sizes_rules(uint32_t obj)
+static void sizes_rules(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return;
     const char *file = season_change_file(obj);
@@ -311,6 +312,12 @@ void season_sizes_rules(uint32_t obj)
      * promotions left it short in June 2017). */
     if (open_neighbour(obj, ABOVE)) set_places(obj, UP, UP_PLAYOFF, r->up, "promotion");
     if (open_neighbour(obj, BELOW)) set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+}
+
+void season_sizes_rules(uint32_t obj)
+{
+    sizes_rules(obj);
+    if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
 }
 
 /* ---- Promotion and relegation of a size change ---- */

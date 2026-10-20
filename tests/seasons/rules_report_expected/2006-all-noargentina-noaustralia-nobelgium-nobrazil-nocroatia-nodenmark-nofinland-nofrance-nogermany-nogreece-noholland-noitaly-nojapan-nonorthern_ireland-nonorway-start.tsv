@@ -67,15 +67,15 @@
 2006	not_in_game	spa-41 spain_rules 'n/a' (Spain)
 2006	not_in_game	spa-44 spa_second_b 'Segunda División B' (Spain)
 2006	not_in_game	uefa-41 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2006	playoffs	kor_league (K League), row aus-jap-kor-330: game 0 up and 0 down play-off places, table 'championship play-off of the top six'
-2006	playoffs	pol_first (I liga), row gre-pol-cro-195: game 0 up and 0 down play-off places, table '14th: promotion/relegation play-off v II liga 3rd'
-2006	playoffs	sco_first (Scottish First Division), row sco-43: game 0 up and 0 down play-off places, table '9th plays off with Second Division 2nd to 4th (two-legged semi-finals and final)'
-2006	playoffs	sco_second (Scottish Second Division), row sco-44: game 0 up and 0 down play-off places, table '2nd to 4th play off with First Division 9th for a First Division place; 9th play'
-2006	playoffs	sco_third (Scottish Third Division), row sco-45: game 0 up and 0 down play-off places, table '2nd to 4th play off with Second Division 9th for a Second Division place (two-le'
-2006	playoffs	swe_first (Superettan), row den-swe-195: game 1 up and 0 down play-off places, table 'none'
-2006	playoffs	swe_prm (Allsvenskan), row den-swe-194: game 0 up and 1 down play-off places, table 'none'
-2006	playoffs	tur_second (Lig A), row rus-tur-195: game 0 up and 0 down play-off places, table '3rd v 6th and 4th v 5th, winners meet for the third place'
-2006	playoffs	usa_mls (Major League Soccer), row arg-usa-222: game 0 up and 0 down play-off places, table '8 (top 3 of each conference plus the 2 next best); two-leg first round, one-matc'
+2006	playoffs	ire_first (League of Ireland First Division), row wal-nir-irl-142: game 1 up and 0 down play-off places, table 2 and 0 ('pos 2,3: promotion/relegation play-off')
+2006	playoffs	pol_first (I liga), row gre-pol-cro-195: game 0 up and 0 down play-off places, table 0 and 1 ('14th: promotion/relegation play-off v II liga 3rd')
+2006	playoffs	pol_second (II liga), row gre-pol-cro-249: game 2 up and 0 down play-off places, table 1 and 4 ('3rd: promotion/relegation play-off v I liga 14th; 11th-14th: relegation play-off')
+2006	playoffs	sco_first (Scottish First Division), row sco-43: game 0 up and 0 down play-off places, table 0 and 1 ('9th plays off with Second Division 2nd to 4th (two-legged semi-finals and final)')
+2006	playoffs	sco_second (Scottish Second Division), row sco-44: game 0 up and 0 down play-off places, table 3 and 1 ('2nd to 4th play off with First Division 9th for a First Division place; 9th play')
+2006	playoffs	sco_third (Scottish Third Division), row sco-45: game 0 up and 0 down play-off places, table 3 and 0 ('2nd to 4th play off with Second Division 9th for a Second Division place (two-le')
+2006	playoffs	swe_first (Superettan), row den-swe-195: game 1 up and 0 down play-off places, table 0 and 0 ('none')
+2006	playoffs	swe_prm (Allsvenskan), row den-swe-194: game 0 up and 1 down play-off places, table 0 and 0 ('none')
+2006	playoffs	tur_second_b (Lig B), row rus-tur-222: game 2 up and 0 down play-off places, table 0 and 0 ('see format')
 2006	up	con_merc_cup (Copa Merconorte), row club-world-101: game 1 (+0 play-off places), table na (n/a)
 2006	up	pol_first (I liga), row gre-pol-cro-195: game 4 (+0 play-off places), table na (n/a)
 2006	up	sco_second (Scottish Second Division), row sco-44: game 2 (+0 play-off places), table 1 (1)

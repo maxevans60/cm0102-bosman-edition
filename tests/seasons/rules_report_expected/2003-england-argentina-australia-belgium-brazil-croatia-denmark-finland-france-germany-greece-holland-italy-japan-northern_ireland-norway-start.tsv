@@ -115,21 +115,22 @@
 2003	not_in_game	ita-42 ita_ser_c2c 'Serie C2 girone C' (Italy)
 2003	not_in_game	nor-fin-30 new 'Liigacup' (Finland)
 2003	not_in_game	uefa-17 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2003	playoffs	arg_prm (Primera División), row arg-usa-3: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
-2003	playoffs	arg_second (Primera B Nacional), row arg-usa-30: game 0 up and 0 down play-off places, table 'As 2002/03, plus a Torneo Reducido for a promoción place'
-2003	playoffs	aus_nsl (National Soccer League), row aus-jap-kor-107: game 0 up and 0 down play-off places, table 'top six to a finals series (major and minor semi-finals, two legs, grand final)'
-2003	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 0 up and 0 down play-off places, table 'top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac'
-2003	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-84: game 0 up and 0 down play-off places, table 'see format'
-2003	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-327: game 0 up and 0 down play-off places, table '11th: relegation play-off'
-2003	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-354: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
-2003	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-381: game 0 up and 0 down play-off places, table '1st of play-off group: promotion play-off; 5th of play-out group: relegation pla'
-2003	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-30: game 0 up and 0 down play-off places, table '14th: relegation play-off v Beta Ethniki 3rd at a neutral venue'
-2003	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-57: game 0 up and 0 down play-off places, table '3rd: promotion play-off v Alpha Ethniki 14th; 14th: relegation play-off'
-2003	playoffs	hol_first (Eerste Divisie), row hol-bel-29: game 0 up and 0 down play-off places, table 'six clubs (period winners) join the Eredivisie 16th and 17th in two groups of fo'
-2003	playoffs	ita_ser_a (Serie A), row ita-36: game 0 up and 0 down play-off places, table '15th v Serie B 6th, two legs, for one Serie A place; tie-break play-off match if'
-2003	playoffs	ita_ser_b (Serie B), row ita-37: game 0 up and 0 down play-off places, table '6th v Serie A 15th, two legs, for one Serie A place'
-2003	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-192: game 0 up and 0 down play-off places, table 'stage winners meet in a two-legged championship; 16th v J2 3rd in a two-legged p'
-2003	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-219: game 0 up and 0 down play-off places, table '3rd v J1 16th in a two-legged promotion/relegation series'
+2003	playoffs	arg_prm (Primera División), row arg-usa-3: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
+2003	playoffs	bel_second (Belgian Second Division), row hol-bel-35: game 0 up and 1 down play-off places, table 0 and 0 ('final round: three period winners (four clubs before 2005/06) and, from 2005/06,')
+2003	playoffs	bel_third (Belgian Third Division), row hol-bel-36: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2003	playoffs	bra_nat_second (Campeonato Brasileiro Série B), row bra-57: game 0 up and 0 down play-off places, table 8 and 0 ('top 8 of the single round robin to two groups of 4 (home and away), top 2 of eac')
+2003	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-327: game 0 up and 0 down play-off places, table 0 and 1 ('11th: relegation play-off')
+2003	playoffs	cro_a2a (Druga HNL North), row gre-pol-cro-354: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
+2003	playoffs	cro_a2b (Druga HNL South), row gre-pol-cro-381: game 0 up and 0 down play-off places, table 1 and 1 ('1st of play-off group: promotion play-off; 5th of play-out group: relegation pla')
+2003	playoffs	fin_first (Ykkönen), row nor-fin-28: game 0 up and 1 down play-off places, table 1 and 2 ('2nd v Veikkausliiga 13th, two legs; 11th-12th v Kakkonen clubs')
+2003	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-30: game 0 up and 0 down play-off places, table 0 and 1 ('14th: relegation play-off v Beta Ethniki 3rd at a neutral venue')
+2003	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-57: game 0 up and 0 down play-off places, table 1 and 1 ('3rd: promotion play-off v Alpha Ethniki 14th; 14th: relegation play-off')
+2003	playoffs	ita_ser_a (Serie A), row ita-36: game 0 up and 0 down play-off places, table 0 and 1 ('15th v Serie B 6th, two legs, for one Serie A place; tie-break play-off match if')
+2003	playoffs	ita_ser_b (Serie B), row ita-37: game 0 up and 0 down play-off places, table 1 and 0 ('6th v Serie A 15th, two legs, for one Serie A place')
+2003	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-38: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2003	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-39: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2003	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-192: game 0 up and 0 down play-off places, table 0 and 1 ('stage winners meet in a two-legged championship; 16th v J2 3rd in a two-legged p')
+2003	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-219: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v J1 16th in a two-legged promotion/relegation series')
 2003	up	arg_second (Primera B Nacional), row arg-usa-30: game 1 (+0 play-off places), table 2 (2 (as 2002/03))
 2003	up	aus_nsl (National Soccer League), row aus-jap-kor-107: game 6 (+0 play-off places), table na (n/a)
 2003	up	bel_third (Belgian Third Division), row hol-bel-36: game 1 (+0 play-off places), table 2 (2 (group champions))

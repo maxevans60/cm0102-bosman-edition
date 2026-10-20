@@ -127,20 +127,21 @@
 2007	not_in_game	ita-119 new 'Supercoppa di Lega di Seconda Divisione (Serie C2 to 2008)' (Italy)
 2007	not_in_game	nor-fin-70 new 'Liigacup' (Finland)
 2007	not_in_game	uefa-49 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2007	playoffs	arg_prm (Primera División), row arg-usa-7: game 0 up and 0 down play-off places, table '17th and 18th of the average table play two-leg promotion/relegation ties (promo'
-2007	playoffs	arg_second (Primera B Nacional), row arg-usa-34: game 0 up and 0 down play-off places, table '3rd and 4th play two-leg promoción v Primera 17th and 18th of the average table;'
-2007	playoffs	aus_nsl (A-League), row aus-jap-kor-30: game 0 up and 0 down play-off places, table 'top four, page play-off system, grand final'
-2007	playoffs	bra_nat_third (Campeonato Brasileiro Série C), row bra-88: game 0 up and 0 down play-off places, table 'see format'
-2007	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-331: game 0 up and 0 down play-off places, table '11th: relegation play-off v second tier runner-up'
-2007	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-358: game 0 up and 0 down play-off places, table '2nd: promotion play-off v HNL 11th'
-2007	playoffs	den_second (Danish 2nd Divisions), row den-swe-40: game 0 up and 0 down play-off places, table 'Promotion game between the group runners-up.'
-2007	playoffs	gre_prm (Super League Greece), row gre-pol-cro-34: game 0 up and 0 down play-off places, table '2nd-5th: European play-off mini-league (home and away) for European places'
-2007	playoffs	hol_first (Eerste Divisie), row hol-bel-81: game 0 up and 0 down play-off places, table 'eight clubs (period winners and best placed) with the Eredivisie 16th and 17th i'
-2007	playoffs	ita_ser_b (Serie B), row ita-105: game 0 up and 0 down play-off places, table '3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo'
-2007	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-196: game 0 up and 0 down play-off places, table '16th v J2 3rd in a two-legged promotion/relegation series'
-2007	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-223: game 0 up and 0 down play-off places, table '3rd v J1 16th in a two-legged promotion/relegation series'
-2007	playoffs	nir_first (Irish First Division), row wal-nir-irl-161: game 1 up and 0 down play-off places, table 'none'
-2007	playoffs	nir_prm (Irish Premier League), row wal-nir-irl-160: game 0 up and 1 down play-off places, table 'none'
+2007	playoffs	arg_prm (Primera División), row arg-usa-7: game 0 up and 0 down play-off places, table 0 and 2 ('17th and 18th of the average table play two-leg promotion/relegation ties (promo')
+2007	playoffs	arg_second (Primera B Nacional), row arg-usa-34: game 0 up and 0 down play-off places, table 2 and 0 ('3rd and 4th play two-leg promoción v Primera 17th and 18th of the average table;')
+2007	playoffs	bel_second (Belgian Second Division), row hol-bel-87: game 0 up and 1 down play-off places, table 0 and 0 ('final round: runner-up and three period winners (four clubs), double round robin')
+2007	playoffs	bel_third (Belgian Third Division), row hol-bel-88: game 0 up and 1 down play-off places, table 0 and 0 ('third division play-off: three period winners per group plus the second division')
+2007	playoffs	cro_a1 (Prva HNL), row gre-pol-cro-331: game 0 up and 0 down play-off places, table 0 and 1 ('11th: relegation play-off v second tier runner-up')
+2007	playoffs	cro_a2a (Druga HNL), row gre-pol-cro-358: game 0 up and 0 down play-off places, table 1 and 0 ('2nd: promotion play-off v HNL 11th')
+2007	playoffs	den_second (Danish 2nd Divisions), row den-swe-40: game 0 up and 0 down play-off places, table 1 and 0 ('Promotion game between the group runners-up.')
+2007	playoffs	fin_first (Ykkönen), row nor-fin-68: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 13th, two legs')
+2007	playoffs	ita_ser_b (Serie B), row ita-105: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th, semi-finals and final over two legs; not held if 3rd leads 4th by mo')
+2007	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-106: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2007	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-107: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
+2007	playoffs	jap_j1 (J.League Division 1), row aus-jap-kor-196: game 0 up and 0 down play-off places, table 0 and 1 ('16th v J2 3rd in a two-legged promotion/relegation series')
+2007	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-223: game 0 up and 0 down play-off places, table 1 and 0 ('3rd v J1 16th in a two-legged promotion/relegation series')
+2007	playoffs	nir_first (Irish First Division), row wal-nir-irl-161: game 1 up and 0 down play-off places, table 0 and 0 ('none')
+2007	playoffs	nir_prm (Irish Premier League), row wal-nir-irl-160: game 0 up and 1 down play-off places, table 0 and 0 ('none')
 2007	up	arg_second (Primera B Nacional), row arg-usa-34: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2007	up	aus_nsl (A-League), row aus-jap-kor-30: game 6 (+0 play-off places), table na (n/a)
 2007	up	bel_third (Belgian Third Division), row hol-bel-88: game 1 (+0 play-off places), table 2 (2 (group champions))
