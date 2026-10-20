@@ -16,11 +16,16 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
                   "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_bra_states.c",
                   "season_club_cups.c", "season_playoffs.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
-                  "season_gold_cup.c", "season_divisions.c")
+                  "season_gold_cup.c", "season_divisions.c", "screen_sweep.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
+    # Slice 30a (screen_sweep.c, RECOMP_SCREEN_SWEEP): the competition and history screens of every competition.
+    0x48F4A0: ("81ecf0000000558b", "comp_screens_open_comp_screen (record, int, int, keep)"),
+    0x498780: ("81ecf0000000558b", "comp_screens_open_history_screen (record, keep)"),
+    0x55F7C0: ("81ec000200005355", "the reset of a screen manager before a build (thiscall, 1)"),
+    0x55F300: ("51558be957b95044", "the screen draw of a screen manager (thiscall, -1, -1, -1, -1)"),
     # Slice 28 (season_nl.c): the UEFA Nations League, an object of the class euro_champ_qual.
     # Slice 28 part b (season_gold_cup.c): the Gold Cup (copa_america) and the Finalissima (Eur_Super_Cup).
     0x5FA730: ("8b01535556668b71", "HostCountry::find_hosts (this, key, year, &host1, &host2, 1)"),
