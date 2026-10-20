@@ -137,8 +137,11 @@ static int era_of_year(int year)
 int season_ita_group(uint32_t obj)
 {
     if (!readable(obj)) return -1;
+    /* By the object's record (+4): while the constructor runs, the object is not yet in [0xadadfc] (the module and
+     * build_comp_object_table 0x8386f0 fill it later). */
+    uint32_t rec = rd32(g_mem, obj + 4);
     for (int g = 0; g < GROUPS; g++)
-        if (obj == object_of(GROUP_KEY[g])) return g;
+        if (rec && rec == record_of(GROUP_KEY[g])) return g;
     return -1;
 }
 
@@ -156,6 +159,8 @@ static int clubs_of(uint32_t key)
     return n;
 }
 
+static int extra_division_flag(void);
+
 int season_ita_division_size(const char *name, int season)
 {
     static const char *const div[5] = {"Italian Serie C1/A", "Italian Serie C1/B", "Italian Serie C2/A",
@@ -164,6 +169,7 @@ int season_ita_division_size(const char *name, int season)
     for (int k = 0; k < 5; k++)
         if (!strcmp(name, div[k])) {
             const SeasonRule *r = k < GROUPS ? group_row(rules_season(season), k) : NULL;
+            if (k >= GROUPS) return extra_division_flag() ? 1 : 0;     /* one club with the flag (see below) */
             return r ? r->clubs : 0;
         }
     return -1;
@@ -304,9 +310,8 @@ static int by_reputation(const void *a, const void *b)
 static void idle(uint32_t obj)
 {
     if (!obj) return;
-    wr16(g_mem, obj + 0x3e, 0);
     wr16(g_mem, obj + 0x40, IDLE_YEAR);
-    fprintf(stderr, "recomp: serie c: %.50s ends (no clubs, year %d)\n", win_str(rd32(g_mem, obj + 4) + 4), IDLE_YEAR);
+    fprintf(stderr, "recomp: serie c: %.50s ends (year %d)\n", win_str(rd32(g_mem, obj + 4) + 4), IDLE_YEAR);
 }
 
 /* The change into the era (the season before has C1 and C2, changing rules on): the clubs of C2/B and C2/C (with the
@@ -480,8 +485,9 @@ static void regroup(uint32_t serie_a)
     uint32_t f[1] = {arr};
     if (!rt_unwinding) call_cdecl(F_FREE, 1, f);
     (void)was;
+    int y = (int16_t)rd16(g_mem, serie_a + 0x40) + 1;      /* the season that starts (the rules of s) */
     fprintf(stderr, "recomp: serie c %d/%02d: %d clubs in groups of %d, %d and %d (%d from the Serie D, %d with no "
-                    "division, %d to the Serie D, %d news)\n", s, (s + 1) % 100, n, want[0], want[1], want[2], from_d,
+                    "division, %d to the Serie D, %d news)\n", y, (y + 1) % 100, n, want[0], want[1], want[2], from_d,
             from_none, cut, news);
 }
 
@@ -609,44 +615,32 @@ static void kind_season(int s)
                        "clubs.", a->clubs, b->clubs, c->clubs);
 }
 
-/* A new game of the era: C2/B and C2/C (made with the extra division flag, emptied by empty_table) end now. */
+/* A new game of the era: C2/B and C2/C (made with the extra division flag, one club each) end now. */
 static void kind_new_game(int y)
 {
     if (!era_of_year(y)) return;
     uint32_t b = object_of(KEY_C2B), c = object_of(KEY_C2C);
-    if (b && !(int16_t)rd16(g_mem, b + 0x3e)) idle(b);
-    if (c && !(int16_t)rd16(g_mem, c + 0x3e)) idle(c);
+    if (b && (int16_t)rd16(g_mem, b + 0x3e) <= 1) idle(b);
+    if (c && (int16_t)rd16(g_mem, c + 0x3e) <= 1) idle(c);
 }
 
 const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", kind_new_game, NULL, kind_season, NULL, NULL, NULL};
 
 /* ---- C2/B and C2/C at a new game of the era ----
  *
- * With the extra division flag the original makes C2/B and C2/C (0x8356ce, 0x835721). In the era their divisions
- * end (season_ita_division_size gives 0), and create_table would find no club and return 0 (0x64b755..0x64b763 in
- * C1/A; the same in C2/B 0x657f50 and C2/C 0x65c0e0). So in the era it makes an empty table and the object ends. */
-void o_00657f50(void);
-void o_0065c0e0(void);
-
-static int empty_table(void)
+ * With the extra division flag the original makes C2/B and C2/C (0x8356ce, 0x835721). League::create_fixtures
+ * 0x6835c0 cannot make a league of 0 clubs (its first block, n + n mod 2 pointers, at 0x683615..0x683638: box
+ * league.cpp 1020 in a 2014 game), and create_table wants its whole count (0x64b755..0x64b763 in C1/A). So in the
+ * era each keeps one club (season_ita_division_size gives 1 with the flag): its count store (0x657f62, 0x65c0f2)
+ * gives 1, the round robin of one club and a rest place has no match (0x683ac9 on), check_complete counts 0
+ * matches ((1 - 1) x 2, 0x689b1d..0x689b36), and the new game hook ends the object (year 2999). */
+uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original)
 {
-    uint32_t obj = cpu.ecx;
-    if (!era_of_year((int16_t)rd16(g_mem, obj + 0x40))) return 0;
-    uint32_t sz[1] = {ROW_SIZE};
-    uint32_t t = call_cdecl(F_MALLOC, 1, sz);
-    if (rt_unwinding) return 1;
-    if (!readable(t)) return 0;
-    memset(g_mem + t, 0, ROW_SIZE);
-    wr32(g_mem, obj + 0xb1, t);                         /* the table, as 0x64b694 */
-    /* No clubs now; the year 2999 only after the constructor (the new game hook): its calendar and fixtures are made
-     * with the start year (league.cpp 1020 with 2999 while it is made). */
-    wr16(g_mem, obj + 0x3e, 0);
-    rt_ret_cdecl(1);
-    return 1;
+    if (!era_of_year((int16_t)rd16(g_mem, obj + 0x40))) return original;
+    int32_t id = (int32_t)rd32(g_mem, rd32(g_mem, obj + 4));
+    uint32_t key = id == (int32_t)rd32(g_mem, KEY_C2B) ? KEY_C2B : id == (int32_t)rd32(g_mem, KEY_C2C) ? KEY_C2C : 0;
+    return key && clubs_of(key) == 1 ? 1u : original;
 }
-
-RT_WRAP(00657f50, c2b_table) { if (!empty_table()) o_00657f50(); }
-RT_WRAP(0065c0e0, c2c_table) { if (!empty_table()) o_0065c0e0(); }
 
 /* ---- The Coppa Italia Serie C in the era (Q625) ----
  *

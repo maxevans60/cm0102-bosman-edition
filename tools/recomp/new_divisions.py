@@ -31,6 +31,9 @@ PATCHES.update({
 
 INSNS = {
     0x653AA2: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2a_clubs(edi, 0x12u));"),
+    # C2/B and C2/C end in the era; with the flag their objects exist and keep one club (create_fixtures needs one).
+    0x657F62: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2_end_clubs(edi, 0x12u));"),
+    0x65C0F2: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2_end_clubs(edi, 0x12u));"),
     0x6418D5: ("mov ecx, dword ptr [eax + edx*4]", "ecx = rt_ita_tier_c2(R32(eax + edx * 4u));"),
     0x641986: ("mov ecx, dword ptr [ecx + edx*4]", "ecx = rt_ita_start_c2(R32(ecx + edx * 4u));"),
     0x7D2412: ("mov word ptr [edi + 0x3e], 0x14", "W16(edi + 0x3eu, rt_por_group_clubs(edi, 0x14u));"),

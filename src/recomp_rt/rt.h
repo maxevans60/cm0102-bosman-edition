@@ -315,6 +315,7 @@ uint32_t rt_ita_cup_first_position(uint32_t original);   /* ItaCup second loop s
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_tier_c2(uint32_t c2a);
 uint32_t rt_ita_start_c2(uint32_t c2a);
 /* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
