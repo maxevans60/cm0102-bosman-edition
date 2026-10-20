@@ -61,6 +61,7 @@
  * Sites in tools/recomp/seasons.py ("World Cup qualifying 2006 to 2022 (0.6.0 slice 27)"). */
 #include "win.h"
 #include "season_intl.h"
+#include "season_wcq26.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -303,6 +304,7 @@ uint32_t rt_wcq_oceania_pair(uint32_t self, uint32_t teams, uint32_t found)
 /* C1 (0x917878): the play-off places of the CONCACAF final group (0 in the original). */
 uint32_t rt_wcq_concacaf_playoff(uint32_t self)
 {
+    if (season_wcq26(self)) return 2u;          /* slice 29: the 4th and 5th go to the 2026 play-off tournament */
     return wc_year(self) ? 1u : 0u;
 }
 

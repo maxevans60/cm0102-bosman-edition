@@ -607,20 +607,26 @@ static uint32_t africa_runner_up(void)
     return best;
 }
 
-/* The strongest nation of a continent (key continent global) that is not in the World Cup slots and not in
- * taken[]: the place of a team that a section has not given (as slice 27's strongest_free). */
-static uint32_t strongest_free(uint32_t continent_key, const uint32_t *taken, int n_taken)
+/* The place of a team that a section has not given (a game that starts after the qualifying began, Q388): the
+ * strongest nation of the continent (key continent global) that is not in the World Cup slots and not in
+ * taken[], after the nations that the confederation's direct places would take. direct counts the hosts and
+ * qualifiers of the continent already in the slots, so the first (direct - in slots) free nations by
+ * reputation are passed over: a December 2025 start put Brazil, which the draw fill takes into the finals,
+ * into the tournament before this. */
+static uint32_t strongest_free(uint32_t continent_key, int direct, const uint32_t *taken, int n_taken)
 {
-    uint32_t nations = rd32(g_mem, NATIONS), wc = comp_of(KEY_WORLD_CUP), best = 0;
-    int count = (int)rd32(g_mem, NATION_COUNT), best_rep = -1;
+    uint32_t nations = rd32(g_mem, NATIONS), wc = comp_of(KEY_WORLD_CUP);
+    int count = (int)rd32(g_mem, NATION_COUNT);
     if (!readable(nations) || count <= 0 || count > 1000) return 0;
     uint32_t slots = wc ? rd32(g_mem, wc + 0x14u) : 0;
     int filled = wc ? (int16_t)rd16(g_mem, wc + 0x36u) : 0;
     uint32_t want = rd32(g_mem, continent_key);
+    enum { MAX = 64 };
+    uint32_t free_team[MAX];
+    int free_rep[MAX], n_free = 0, in_slots = 0;
     for (int id = 0; id < count; id++) {
         uint32_t nation = nations + (uint32_t)id * NATION_SIZE, c = rd32(g_mem, nation + 0x71u);
-        int rep = (int16_t)rd16(g_mem, nation + 0x8eu);
-        if (!readable(c) || rd32(g_mem, c) != want || rep <= best_rep) continue;
+        if (!readable(c) || rd32(g_mem, c) != want) continue;
         uint32_t args[1] = {nation};
         uint32_t team = call_cdecl(NATIONAL_TEAM, 1, args);
         if (rt_unwinding) return 0;
@@ -628,12 +634,26 @@ static uint32_t strongest_free(uint32_t continent_key, const uint32_t *taken, in
         int in = 0;
         for (int k = 0; readable(slots) && k < filled && k < 64 && !in; k++)
             in = rd32(g_mem, slots + 6u * (uint32_t)k) == team;
+        if (in) {
+            in_slots++;
+            continue;
+        }
         for (int k = 0; k < n_taken && !in; k++) in = taken[k] == team;
         if (in) continue;
-        best = team;
-        best_rep = rep;
+        if (n_free >= MAX) continue;
+        int rep = (int16_t)rd16(g_mem, nation + 0x8eu), at = n_free++;
+        while (at > 0 && free_rep[at - 1] < rep) {      /* sorted, best first */
+            free_team[at] = free_team[at - 1];
+            free_rep[at] = free_rep[at - 1];
+            at--;
+        }
+        free_team[at] = team;
+        free_rep[at] = rep;
     }
-    return best;
+    int skip = direct - in_slots;
+    if (skip < 0) skip = 0;
+    if (skip >= n_free) skip = n_free - 1;
+    return n_free > 0 ? free_team[skip] : 0;
 }
 
 static int reputation(uint32_t team)
@@ -683,6 +703,7 @@ static void build_round(uint32_t self, int st, const uint32_t *teams)
 static int tournament_six(uint32_t self, uint32_t six[6])
 {
     static const uint32_t continent[6] = {0x9cfa18u, 0x9cfa1cu, 0x9cfa14u, 0x9cfa14u, 0x9cfa08u, 0x9cfa0cu};
+    static const int direct[6] = {1, 6, 6, 6, 9, 8};    /* CONCACAF: 3 places and the 3 hosts */
     static const char *const conf[6] = {"OFC", "CONMEBOL", "CONCACAF", "CONCACAF", "CAF", "AFC"};
     uint32_t t[6];
     t[0] = cup_row(stage_of(self, 1), 0);                                    /* the OFC final's loser */
@@ -692,9 +713,18 @@ static int tournament_six(uint32_t self, uint32_t six[6])
     t[4] = africa_runner_up();
     if (rt_unwinding) return 0;
     t[5] = cup_row(stage_of(comp_of(KEY_ASIA), 11), 1);                      /* the AFC play-off winner */
+    if (logging()) {                                    /* test log: the CONCACAF final group and its statuses */
+        uint32_t fg = stage_of(comp_of(KEY_CONCACAF), 6), rows = readable(fg) ? rd32(g_mem, fg + F_TABLE) : 0;
+        int n = readable(fg) ? (int16_t)rd16(g_mem, fg + F_TEAMS) : 0;
+        fprintf(stderr, "recomp: season intl: wc play-off %d: CONCACAF final group of %d:", year_of(self) + 2, n);
+        for (int i = 0; readable(rows) && i < n && i < 8; i++)
+            fprintf(stderr, " %s %u;", team_name(rd32(g_mem, rows + (uint32_t)i * ROW_SIZE)),
+                    rd8(g_mem, rows + (uint32_t)i * ROW_SIZE + ROW_STATUS));
+        fputc('\n', stderr);
+    }
     for (int k = 0; k < 6; k++)
         if (!t[k]) {
-            t[k] = strongest_free(continent[k], t, 6);
+            t[k] = strongest_free(continent[k], direct[k], t, 6);
             if (rt_unwinding) return 0;
             if (logging())
                 fprintf(stderr, "recomp: season intl: wc play-off %d: %s team not known, %s plays\n", year_of(self) + 2,
@@ -822,4 +852,28 @@ RT_WRAP(0091e840, wcq26_oceania_status)
                     year_of(cpu.ecx) + 2, team_name(rd32(g_mem, cpu.esp + 4u)), st);
     }
     o_0091e840();
+}
+
+/* ---- TEMPORARY test log (remove before review): a League with an empty stage up to +0x30 ---- */
+
+void o_006847c0(void);
+
+RT_WRAP(006847c0, wcq26_debug_league_update)
+{
+    uint32_t self = cpu.ecx;
+    if (logging() && readable(self) && (int8_t)rd8(g_mem, self + 0x44u) == -1) {
+        int cur = (int)rd32(g_mem, self + F_STAGE), count = (int)rd32(g_mem, self + F_STAGE_COUNT);
+        uint32_t stages = rd32(g_mem, self + F_STAGES);
+        for (int i = 0; i <= cur && i < 64; i++) {
+            uint32_t st = readable(stages) ? rd32(g_mem, stages + 4u * (uint32_t)i) : 0;
+            if (!readable(st) || !readable(rd32(g_mem, st)) || !rd32(g_mem, rd32(g_mem, st) + 0x14u)) {
+                uint32_t rec = rd32(g_mem, self + F_RECORD);
+                fprintf(stderr, "recomp: season intl: DEBUG empty stage %d of %d (count %d) in %s, vtable %08x, year %d\n",
+                        i, cur, count, readable(rec) ? win_str(rec + 4u) : "?", rd32(g_mem, self), year_of(self));
+                break;
+            }
+        }
+    }
+    cpu.ecx = self;
+    o_006847c0();
 }
