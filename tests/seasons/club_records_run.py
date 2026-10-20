@@ -89,16 +89,17 @@ def check_dump(dump, data, season, records):
         if cid != c + k or text(r, 4) != rec[3] or text(r, 0x38, 26) != rec[4]:
             out.append(f"new club {k}: id {cid}, name {text(r, 4)!r}, short {text(r, 0x38, 26)!r}; want {rec[3]!r}")
             continue
+        last_div = struct.unpack_from("<i", r, 0x5b)[0]
+        in_div = sum(1 for o in clubs[:c] if struct.unpack_from("<i", o, 0x57)[0] == last_div)
+        if r[0x5f] <= in_div:
+            out.append(f"{rec[3]}: last place +0x5f is {r[0x5f]}, inside the {in_div} clubs of its last division "
+                       f"(review 2: the UEFA seeding and the cups read it)")
         squad = [s for s in struct.unpack_from("<50i", r, 0xd7) if s != -1]
         for s in squad:
             if not 0 <= s < len(staff) or struct.unpack_from("<i", staff[s], 0x39)[0] != cid:
                 out.append(f"{rec[3]}: squad member {s} does not name the club")
                 break
-        new = sum(1 for s in squad if s >= n_staff_data)
-        print(f"  {rec[3]}: {len(squad)} players, {new} from {rec[10] or 'no source'}, {len(squad) - new} with no "
-              f"club in the start database")
-        if len(squad) < MIN_SQUAD:
-            out.append(f"{rec[3]}: {len(squad)} players, fewer than {MIN_SQUAD}")
+        print(f"  {rec[3]}: {len(squad)} players from {rec[10] or 'no source'} (the fill follows in the game)")
     return out
 
 
@@ -129,6 +130,12 @@ def main(argv):
     log = open(os.path.join(work, "run", "stderr.txt"), encoding="latin-1").read()
     if records and f"recomp: club records of {year}: {len(records)} clubs" not in log:
         failed.append(f"the log names no {len(records)} club records of {year}")
+    # The squad fill (Q509) runs in the game after the moves: the log names each club under 16 players.
+    for line in log.split("\n"):
+        if line.startswith("recomp: club records: ") and f"fewer than {MIN_SQUAD}" in line:
+            failed.append(line[len("recomp: club records: "):])
+        if line.startswith("recomp: club records: squad fill of"):
+            print("  " + line[len("recomp: club records: "):])
     data = database or os.path.join(game, "Data")
     if records and os.path.exists(os.path.join(dump, "club.dat")):
         failed += check_dump(dump, data, year, records)

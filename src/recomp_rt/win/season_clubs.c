@@ -655,5 +655,6 @@ RT_WRAP(00524d70, trim_staff_tables)
 {
     const char *off = getenv("RECOMP_CLUB_MOVES");     /* test switch: off moves no club */
     if (season_game_changes() && nrows && !(off && !strcmp(off, "off"))) move_clubs(season_start_year());
+    if (season_game_changes()) season_records_fill(season_start_year());     /* slice 15b: after the moves */
     o_00524d70();
 }

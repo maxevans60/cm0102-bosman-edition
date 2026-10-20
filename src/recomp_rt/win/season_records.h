@@ -24,6 +24,9 @@ void season_records_after_load(void);
  * `real` (the real column of Seasons/clubs.tsv), or -1. */
 int season_records_club(int season, const char *real);
 
+/* The squad fill (Q509) at the start of 0x524d70, after slice 15's club moves (season_clubs.c). */
+void season_records_fill(int season);
+
 /* The staff reserve rows that the new clubs of this load need (staff_reserve.c): 16 for each new club, for the
  * coaches, scouts, physios and manager that 0x527240 makes. */
 uint32_t season_records_reserve_extra(void);

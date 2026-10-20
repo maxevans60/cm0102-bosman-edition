@@ -5,6 +5,8 @@ a season database lacks, which the game adds as new club records at a new game i
 Usage:
     python3 -I tools/seasons/make_club_records.py --out <club_records.tsv>   write the table for the game
     python3 -I tools/seasons/make_club_records.py --check                    read the files, write nothing
+        [--databases <folder>]...  also check that no club of the record's nation in the season database (an unpacked
+                                 folder of <folder>, known by the SHA-256 of its club.dat) has the record's short name
 
 Input (docs/research/club-records-0.6.0/): clubs.tsv (the facts, one row per club and season), sources.tsv (the
 squad source of each row, tools/seasons/find_club_sources.py). The database division of a row is the one that the
@@ -67,14 +69,55 @@ def build():
     return out, errors
 
 
+def short_name_clashes(out, databases):
+    """Records whose short name a club of the same nation in the season database has (review 1: two "Krasnodar" in
+    one table). The season database of a row is the one of databases-signatures.tsv for its season."""
+    import find_club_sources as fcs
+    import hashlib
+    import struct
+    sigs = {r["club_sha256"]: r for r in csv.DictReader(open(fcs.SIGNATURES), delimiter="\t")
+            if r["role"] in ("season database", "official base")}
+    by_season = {}
+    for path in sorted(os.path.join(d, f) for d in databases for f in os.listdir(d)):
+        try:
+            club = open(os.path.join(path, fcs.find(path, "club.dat")), "rb").read()
+        except (SystemExit, NotADirectoryError, FileNotFoundError):
+            continue
+        s = sigs.get(hashlib.sha256(club).hexdigest())
+        if s:
+            season = int(s["data_season"][:4])
+            by_season.setdefault(season, path)
+            if s["role"] == "official base":
+                by_season.setdefault(season + 1, path)          # 3.9.68 is the data of 2001/02 and 2002/03
+    errors, seen = [], set()
+    for r in out:
+        path = by_season.get(r[0])
+        if not path:
+            if r[0] not in seen:
+                print(f"make_club_records.py: no season database of {r[0]} in {', '.join(databases)}: its short names "
+                      f"are not checked")
+                seen.add(r[0])
+            continue
+        comps = {struct.unpack_from("<i", c, 0)[0]: c for c in fcs.table(path, 12, 0x6b)}
+        nation = next((struct.unpack_from("<i", c, 0x5d)[0] for c in comps.values() if fcs.text(c, 4) == r[1]), None)
+        for c in fcs.table(path, 0, 0x245):
+            if struct.unpack_from("<i", c, 0x53)[0] == nation and fcs.text(c, 0x38, 26) == r[4]:
+                errors.append(f"{r[0]} {r[3]}: the short name {r[4]!r} is that of record {struct.unpack_from('<i', c, 0)[0]} "
+                              f"({fcs.text(c, 4)})")
+    return errors
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--out")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--databases", action="append")
     a = ap.parse_args(argv)
     if not (a.out or a.check):
         ap.error("give --out or --check")
     out, errors = build()
+    if a.databases:
+        errors += short_name_clashes(out, a.databases)
     for e in errors:
         print("make_club_records.py:", e)
     if errors:
