@@ -642,6 +642,26 @@ uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original)
     return key && clubs_of(key) == 1 ? 1u : original;
 }
 
+/* The fixed fixture lists of C2/B and C2/C (0x658750, 0x65c8e0, called by the constructors before create_fixtures,
+ * for example 0x65b5d6): each allocates (clubs / 2) x match days entries of 16 bytes (0x65c900..0x65c91e) into +0xea
+ * and writes 306 of the 2001 season. With one club the block holds none, so the writes run past it (a later block of
+ * create_fixtures then failed: league.cpp 1020). create_fixtures uses the list only when its year is the league's
+ * (0x68382e..0x68383d), never in the era; so in the era the builders make no list. */
+void o_00658750(void);
+void o_0065c8e0(void);
+
+static int no_fixed_list(void)
+{
+    uint32_t obj = cpu.ecx;
+    if (!era_of_year((int16_t)rd16(g_mem, obj + 0x40))) return 0;
+    wr32(g_mem, obj + 0xea, 0);
+    rt_ret_cdecl(cpu.eax);
+    return 1;
+}
+
+RT_WRAP(00658750, c2b_fixed_list) { if (!no_fixed_list()) o_00658750(); }
+RT_WRAP(0065c8e0, c2c_fixed_list) { if (!no_fixed_list()) o_0065c8e0(); }
+
 /* ---- The Coppa Italia Serie C in the era (Q625) ----
  *
  * ItaCCup::select_entrants 0x63dfe0 sets 90 entrants (+0xf2 0x5a at 0x63dff4, a block of 0x168 bytes at +0xee) and
