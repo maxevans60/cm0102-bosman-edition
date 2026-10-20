@@ -1028,84 +1028,64 @@ ger-82	2007	ger_regional	3	19	-	-	-	ok	-	split
 ger-83	2007	ger_regional	3	18	-	-	-	ok	-	split
 ger-92	2008	ger_first	1	18	-	16	-	ok	-	split
 ger-93	2008	ger_second	2	18	3	16	-	ok	-	split
-ger-352	2008	ger_regional	3	-1	-	-	-	ok	-	split
-ger-353	2008	ger_regional	3	-1	-	-	-	ok	-	split
+ger-94	2008	ger_regional	3	20	3	-	-	ok	-	split
 ger-105	2009	ger_first	1	18	-	16	-	ok	-	split
 ger-106	2009	ger_second	2	18	3	16	-	ok	-	split
-ger-354	2009	ger_regional	3	-1	-	-	-	ok	-	split
-ger-355	2009	ger_regional	3	-1	-	-	-	ok	-	split
+ger-107	2009	ger_regional	3	20	3	-	-	ok	-	split
 ger-118	2010	ger_first	1	18	-	16	-	ok	-	split
 ger-119	2010	ger_second	2	18	3	16	-	ok	-	split
-ger-356	2010	ger_regional	3	-1	-	-	-	ok	-	split
-ger-357	2010	ger_regional	3	-1	-	-	-	ok	-	split
+ger-120	2010	ger_regional	3	20	3	-	-	ok	-	split
 ger-131	2011	ger_first	1	18	-	16	-	ok	-	split
 ger-132	2011	ger_second	2	18	3	16	-	ok	-	split
-ger-358	2011	ger_regional	3	-1	-	-	-	ok	-	split
-ger-359	2011	ger_regional	3	-1	-	-	-	ok	-	split
+ger-133	2011	ger_regional	3	20	3	-	-	ok	-	split
 ger-144	2012	ger_first	1	18	-	16	-	ok	-	split
 ger-145	2012	ger_second	2	18	3	16	-	ok	-	split
-ger-360	2012	ger_regional	3	-1	-	-	-	ok	-	split
-ger-361	2012	ger_regional	3	-1	-	-	-	ok	-	split
+ger-146	2012	ger_regional	3	20	3	-	-	ok	-	split
 ger-157	2013	ger_first	1	18	-	16	-	ok	-	split
 ger-158	2013	ger_second	2	18	3	16	-	ok	-	split
-ger-362	2013	ger_regional	3	-1	-	-	-	ok	-	split
-ger-363	2013	ger_regional	3	-1	-	-	-	ok	-	split
+ger-159	2013	ger_regional	3	20	3	-	-	ok	-	split
 ger-170	2014	ger_first	1	18	-	16	-	ok	-	split
 ger-171	2014	ger_second	2	18	3	16	-	ok	-	split
-ger-364	2014	ger_regional	3	-1	-	-	-	ok	-	split
-ger-365	2014	ger_regional	3	-1	-	-	-	ok	-	split
+ger-172	2014	ger_regional	3	20	3	-	-	ok	-	split
 ger-183	2015	ger_first	1	18	-	16	-	ok	-	split
 ger-184	2015	ger_second	2	18	3	16	-	ok	-	split
-ger-366	2015	ger_regional	3	-1	-	-	-	ok	-	split
-ger-367	2015	ger_regional	3	-1	-	-	-	ok	-	split
+ger-185	2015	ger_regional	3	20	3	-	-	ok	-	split
 ger-196	2016	ger_first	1	18	-	16	-	ok	-	split
 ger-197	2016	ger_second	2	18	3	16	-	ok	-	split
-ger-368	2016	ger_regional	3	-1	-	-	-	ok	-	split
-ger-369	2016	ger_regional	3	-1	-	-	-	ok	-	split
+ger-198	2016	ger_regional	3	20	3	-	-	ok	-	split
 ger-209	2017	ger_first	1	18	-	16	-	ok	-	split
 ger-210	2017	ger_second	2	18	3	16	-	ok	-	split
-ger-370	2017	ger_regional	3	-1	-	-	-	ok	-	split
-ger-371	2017	ger_regional	3	-1	-	-	-	ok	-	split
+ger-211	2017	ger_regional	3	20	3	-	-	ok	-	split
 ger-222	2018	ger_first	1	18	-	16	-	ok	-	split
 ger-223	2018	ger_second	2	18	3	16	-	ok	-	split
-ger-372	2018	ger_regional	3	-1	-	-	-	ok	-	split
-ger-373	2018	ger_regional	3	-1	-	-	-	ok	-	split
+ger-224	2018	ger_regional	3	20	3	-	-	ok	-	split
 ger-235	2019	ger_first	1	18	-	16	-	ok	-	split
 ger-236	2019	ger_second	2	18	3	16	-	ok	-	split
-ger-374	2019	ger_regional	3	-1	-	-	-	ok	-	split
-ger-375	2019	ger_regional	3	-1	-	-	-	ok	-	split
+ger-237	2019	ger_regional	3	20	3	-	-	ok	-	split
 ger-248	2020	ger_first	1	18	-	16	-	ok	-	split
 ger-249	2020	ger_second	2	18	3	16	-	ok	-	split
-ger-376	2020	ger_regional	3	-1	-	-	-	ok	-	split
-ger-377	2020	ger_regional	3	-1	-	-	-	ok	-	split
+ger-250	2020	ger_regional	3	20	3	-	-	ok	-	split
 ger-261	2021	ger_first	1	18	-	16	-	ok	-	split
 ger-262	2021	ger_second	2	18	3	16	-	ok	-	split
-ger-378	2021	ger_regional	3	-1	-	-	-	ok	-	split
-ger-379	2021	ger_regional	3	-1	-	-	-	ok	-	split
+ger-263	2021	ger_regional	3	20	3	-	-	ok	-	split
 ger-274	2022	ger_first	1	18	-	16	-	ok	-	split
 ger-275	2022	ger_second	2	18	3	16	-	ok	-	split
-ger-380	2022	ger_regional	3	-1	-	-	-	ok	-	split
-ger-381	2022	ger_regional	3	-1	-	-	-	ok	-	split
+ger-276	2022	ger_regional	3	20	3	-	-	ok	-	split
 ger-287	2023	ger_first	1	18	-	16	-	ok	-	split
 ger-288	2023	ger_second	2	18	3	16	-	ok	-	split
-ger-382	2023	ger_regional	3	-1	-	-	-	ok	-	split
-ger-383	2023	ger_regional	3	-1	-	-	-	ok	-	split
+ger-289	2023	ger_regional	3	20	3	-	-	ok	-	split
 ger-300	2024	ger_first	1	18	-	16	-	ok	-	split
 ger-301	2024	ger_second	2	18	3	16	-	ok	-	split
-ger-384	2024	ger_regional	3	-1	-	-	-	ok	-	split
-ger-385	2024	ger_regional	3	-1	-	-	-	ok	-	split
+ger-302	2024	ger_regional	3	20	3	-	-	ok	-	split
 ger-313	2025	ger_first	1	18	-	16	-	ok	-	split
 ger-314	2025	ger_second	2	18	3	16	-	ok	-	split
-ger-386	2025	ger_regional	3	-1	-	-	-	ok	-	split
-ger-387	2025	ger_regional	3	-1	-	-	-	ok	-	split
+ger-315	2025	ger_regional	3	20	3	-	-	ok	-	split
 ger-326	2026	ger_first	1	18	-	16	-	ok	-	split
 ger-327	2026	ger_second	2	18	3	16	-	ok	-	split
-ger-388	2026	ger_regional	3	-1	-	-	-	ok	-	split
-ger-389	2026	ger_regional	3	-1	-	-	-	ok	-	split
+ger-328	2026	ger_regional	3	20	3	-	-	ok	-	split
 ger-339	2027	ger_first	1	18	-	16	-	ok	-	split
 ger-340	2027	ger_second	2	18	3	16	-	ok	-	split
-ger-390	2027	ger_regional	3	-1	-	-	-	ok	-	split
-ger-391	2027	ger_regional	3	-1	-	-	-	ok	-	split
+ger-341	2027	ger_regional	3	20	3	-	-	ok	-	split
 gre-pol-cro-1	2001	gre_cup	0	44	-	-	-	ok	-	split
 gre-pol-cro-2	2002	gre_cup	0	52	-	-	-	ok	-	split
 gre-pol-cro-3	2003	gre_cup	0	52	-	-	-	ok	-	split
@@ -1685,102 +1665,74 @@ ita-211	2013	ita_ser_c2b	4	18	-	-	-	partial: the play-out places are not given	-
 ita-212	2013	ita_ser_c2c	4	-1	-	-	-	ok	-	split
 ita-223	2014	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-224	2014	ita_ser_b	2	22	3-8	-	-	ok	-	split
-ita-225	2014	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-226	2014	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-227	2014	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-228	2014	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-229	2014	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-230	2014	ita_ser_c1a	3	20	2-4	-	-	partial: the places of each group or zone	-	split
+ita-231	2014	ita_ser_c1b	3	20	2-4	-	-	partial: the places of each group or zone	-	split
+ita-232	2014	ita_ser_c2a	3	20	2-4	-	-	partial: the places of each group or zone	-	split
 ita-240	2015	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-241	2015	ita_ser_b	2	22	3-8	-	-	ok	-	split
-ita-242	2015	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-243	2015	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-244	2015	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-245	2015	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-246	2015	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-247	2015	ita_ser_c1a	3	18	2-4	-	-	partial: the places of each group or zone	-	split
+ita-248	2015	ita_ser_c1b	3	18	2-4	-	-	partial: the places of each group or zone	-	split
+ita-249	2015	ita_ser_c2a	3	18	2-4	-	-	partial: the places of each group or zone	-	split
 ita-257	2016	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-258	2016	ita_ser_b	2	22	3-8	-	-	ok	-	split
-ita-259	2016	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-260	2016	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-261	2016	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-262	2016	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-263	2016	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-264	2016	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-265	2016	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-266	2016	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-274	2017	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-275	2017	ita_ser_b	2	22	3-8	-	-	ok	-	split
-ita-276	2017	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-277	2017	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-278	2017	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-279	2017	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-280	2017	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-281	2017	ita_ser_c1a	3	19	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-282	2017	ita_ser_c1b	3	19	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-283	2017	ita_ser_c2a	3	19	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-291	2018	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-292	2018	ita_ser_b	2	19	3-8	-	-	ok	-	split
-ita-293	2018	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-294	2018	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-295	2018	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-296	2018	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-297	2018	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-298	2018	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-299	2018	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-300	2018	ita_ser_c2a	3	19	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-308	2019	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-309	2019	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-310	2019	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-311	2019	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-312	2019	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-313	2019	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-314	2019	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-315	2019	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-316	2019	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-317	2019	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-325	2020	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-326	2020	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-327	2020	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-328	2020	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-329	2020	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-330	2020	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-331	2020	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-332	2020	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-333	2020	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-334	2020	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-342	2021	ita_ser_a	1	20	-	-	-	ok	-	split
 ita-343	2021	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-344	2021	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-345	2021	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-346	2021	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-347	2021	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-348	2021	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-349	2021	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-350	2021	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-351	2021	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-359	2022	ita_ser_a	1	20	-	-	tiebreak	ok	-	split
 ita-360	2022	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-361	2022	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-362	2022	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-363	2022	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-364	2022	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-365	2022	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-366	2022	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-367	2022	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-368	2022	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-376	2023	ita_ser_a	1	20	-	-	tiebreak	ok	-	split
 ita-377	2023	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-378	2023	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-379	2023	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-380	2023	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-381	2023	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-382	2023	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-383	2023	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-384	2023	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-385	2023	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-393	2024	ita_ser_a	1	20	-	-	tiebreak	ok	-	split
 ita-394	2024	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-395	2024	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-396	2024	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-397	2024	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-398	2024	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-399	2024	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-400	2024	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-401	2024	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-402	2024	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-410	2025	ita_ser_a	1	20	-	-	tiebreak	ok	-	split
 ita-411	2025	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-412	2025	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-413	2025	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-414	2025	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-415	2025	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-416	2025	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-417	2025	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-418	2025	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-419	2025	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-427	2026	ita_ser_a	1	20	-	-	tiebreak	ok	-	split
 ita-428	2026	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-429	2026	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-430	2026	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-431	2026	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-432	2026	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-433	2026	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-434	2026	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-435	2026	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-436	2026	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 ita-444	2027	ita_ser_a	1	20	-	-	tiebreak	ok	-	split
 ita-445	2027	ita_ser_b	2	20	3-8	-	-	ok	-	split
-ita-446	2027	ita_ser_c1a	3	-1	-	-	-	ok	-	split
-ita-447	2027	ita_ser_c1b	3	-1	-	-	-	ok	-	split
-ita-448	2027	ita_ser_c2a	4	-1	-	-	-	ok	-	split
-ita-449	2027	ita_ser_c2b	4	-1	-	-	-	ok	-	split
-ita-450	2027	ita_ser_c2c	4	-1	-	-	-	ok	-	split
+ita-451	2027	ita_ser_c1a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-452	2027	ita_ser_c1b	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
+ita-453	2027	ita_ser_c2a	3	20	-	-	-	gap: a national phase of the clubs of the three Serie C groups: not a play-off of one league	-	split
 nor-fin-2	2001	nor_prm	1	14	-	12	-	ok	-	calendar
 nor-fin-3	2001	nor_first	2	16	3	-	-	ok	-	calendar
 nor-fin-7	2001	fin_prm	1	12	-	-	-	ok	groups	calendar
