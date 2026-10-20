@@ -147,8 +147,11 @@ static int day_of_year(int day, int month)
 static int first_match(const SeasonNewCup *f, int edition, int clubs)
 {
     int ties0 = 1, rounds = 1;
+    if (f->clubs > 2) clubs = f->clubs;             /* a row with a club count: its own rounds (12 clubs: 4) */
     if (f->clubs != 2 && !season_new_cup_layout(clubs, &ties0, &rounds)) rounds = 1;
-    const SeasonNewRound *r = &f->round[rounds - 1 < 5 ? rounds - 1 : 4];
+    int i = rounds - 1 < 5 ? rounds - 1 : 4;
+    while (i > 0 && f->round[i].day == 0) i--;      /* the first round that the row gives */
+    const SeasonNewRound *r = &f->round[i];
     return (edition + r->year) * 400 + day_of_year(r->day, r->month);
 }
 

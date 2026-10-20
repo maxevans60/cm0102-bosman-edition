@@ -17,15 +17,16 @@ The runs:
             clubs and two rounds at the new game
     g2001   the test seam RECOMP_CUP_GROUPS_TEST=1, 2001/02, changing rules on, England: the League Cup plays 16
             groups and a knockout of 32 clubs in 5 rounds (17 stages) and has a winner
-    e2016   October 2016, changing rules off, England: the EFL Trophy plays 16 groups of 3 (48 clubs) and a knockout
+    e2016   October 2016, changing rules off, England: the EFL Trophy plays 16 groups (56 clubs) and a knockout
             of 32 clubs in 5 rounds, and has a winner
     n2008   September 2008, changing rules on, 2008 to 2010, Norway: the Norwegian Super Cup is made, plays its
-            editions of March 2009 and March 2010 with two clubs, and is not held after them
+            editions of March 2009 and March 2010 with two clubs, and the row of 2010/11 holds no edition of March 2011
     c2007   November 2007, changing rules off, England with the Conference: the Conference League Cup is made and
             has a winner
     t2010   start run, September 2010 ODB, changing rules off, Select All without France (Turkey, Russia and the
             Republic of Ireland are not in the 16 rows that the steps click): the Turkish Cup has 4 groups after 3
-            rounds, the Turkish and Russian Super Cups are made with two clubs, the All-Ireland cup with 12 clubs
+            rounds, the Turkish Super Cup is made with two clubs (the Russian one of March 2010 is past), the
+            All-Ireland cup with 12 clubs
     r2003   start run, the October 2003 database, changing rules off, Select All without France: the Russian Premier
             League Cup is made with 16 clubs
 
@@ -131,7 +132,7 @@ def check_g2001(lines, log, fails, name):
 
 
 def check_e2016(lines, log, fails, name):
-    need_groups(lines, "eng_auto_cup", 2016, (17, 16, 48, 32, 5), fails, name)
+    need_groups(lines, "eng_auto_cup", 2016, (17, 16, 56, 32, 5), fails, name)
     need_winner(lines, "eng_auto_cup", 2016, fails, name)
 
 
@@ -141,7 +142,7 @@ def check_n2008(lines, log, fails, name):
         if not any(x["file"] == "new_nor_super" and (x["winner"] != "-" or x["winner_next"] != "-") and
                    y in (x["season"], x["season"] + 1) for x in lines):
             fails.append(f"{name}: new_nor_super has no winner of {y} in the history")
-    need_log(log, "new cups: new_nor_super is not held in 2010", fails, name)
+    need_log(log, "new cups: new_nor_super is not held in 2011", fails, name)
 
 
 def check_c2007(lines, log, fails, name):
@@ -152,7 +153,8 @@ def check_c2007(lines, log, fails, name):
 def check_t2010(lines, log, fails, name):
     need_log(log, "cup groups: tur_cup 2010 with 4 groups after 3 rounds", fails, name)
     need_made(lines, "new_tur_super", fails, name, 2)
-    need_made(lines, "new_rus_super", fails, name, 2)
+    # The Russian Super Cup of 2010 was played in March 2010, before the new game: it is made in 2011.
+    need_log(log, "new cups: new_rus_super 2010 not made, its first match is past", fails, name)
     need_made(lines, "new_all_ireland", fails, name, 12)
 
 

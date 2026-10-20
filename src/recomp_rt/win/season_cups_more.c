@@ -98,7 +98,8 @@ int season_super_four_pick(const uint32_t in[5], uint32_t out[4])
 /* ---- New cups ----
  * The formats (rules table rows, columns format and notes; dates marked "inference" are not in the row):
  * - Turkish Super Cup (rus-tur.tsv): one match at a neutral venue from 2006/07, cancelled in 2011/12; the game plays it
- *   in early August (inference: the real dates are late July to mid August). Four clubs from 2025/26 (season_super_four).
+ *   in early August (inference: the real dates are late July to mid August). Four clubs from 2025/26
+ *   (season_super_four).
  * - Russian Super Cup (rus-tur.tsv): one match, the league champions v the cup winners. Editions 2003 to 2011 in March
  *   before the season (the row of the season before), from 2012 in July (its own row); days 8 March and 14 July are an
  *   inference.
@@ -204,11 +205,13 @@ int season_new_cup_round_code(int rounds, int r)
  *   final in late November (the final of 2016/17 was on 27 November). The row's bonus point for a penalty win after a
  *   draw needs a match engine change: a draw stays a draw (docs/research/2026-10-18-cups-more.md, section 4).
  * - EFL Trophy (eng.tsv) from 2016/17: 16 groups of 4 with the academy sides; the game holds no academy sides (Q336),
- *   so the 48 League One and League Two clubs play 16 groups of 3 (August to November), the top 2 of each to a last
- *   32; ties settled by penalties after 90 minutes, the final with extra time and penalties in April at Wembley.
+ *   so the class's own clubs (56 in a game of the October 2016 database) play 16 groups of 4 and 3 (August to
+ *   November), the top 2 of each to a last 32; ties settled by penalties after 90 minutes, the final with extra
+ *   time and penalties in April at Wembley.
  * - Turkish Cup (rus-tur.tsv): 2005/06 to 2010/11 groups of 5 after 2 rounds and 2014/15 to 2016/17 8 groups of 4
  *   after 3 rounds; the class (TurCup 0x8fc670) holds 64 clubs in 7 rounds (36, 28, 32 and 16 clubs; round 3 on 13
- *   December, round 4 on 17 January), so the groups come after its rounds 1 and 2 (32 clubs: 8 groups of 4, top 2 to a last 16) for 2014/15 to 2016/17, and after its
+ *   December, round 4 on 17 January), so the groups come after its rounds 1 and 2 (32 clubs: 8 groups of 4, top 2
+ *   to a last 16) for 2014/15 to 2016/17, and after its
  *   rounds 1 to 3 (16 clubs: 4 groups of 4, top 2 to the quarter-finals) for 2005/06 to 2010/11 and 2024/25 to
  *   2025/26 (the real groups of 5, 6 or 8 clubs need more clubs than the class holds at that point); 2012/13 and
  *   2013/14 2 groups of 4 after its rounds 1 to 4, top 2 to the semi-finals. Quarter-finals and semi-finals over two
