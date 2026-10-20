@@ -27,6 +27,10 @@
 #define STAFF_SIZE 0x6e
 #define STAFF_FILE_SIZE 0x9d
 #define SQUAD 50
+#define FILL_TO 22                  /* the squad that the fill makes (Q509) */
+#define MIN_SQUAD 16                /* the least squad that the fill must reach (Q509): 11 and 5 substitutes */
+#define FILL_KEEPERS 2
+#define KEEPER_FROM 15              /* goalkeeper rating (player row +0x0f, 1 to 20) of a goalkeeper */
 #define RESERVE_PER_CLUB 16u        /* 0x527240: up to 5 coaches, 7 scouts, 3 physios and a manager */
 #define EMPTY_YEAR 1900
 #define REAL_CONTRACT_FROM 2009
@@ -428,7 +432,7 @@ static int contract_file_year(int Y, const SeasonShiftPlan *p)
 
 typedef struct {
     int added;                      /* new clubs */
-    int players, skipped, names, cities, careers;
+    int players, skipped, names, cities, careers, filled, short_squads;
     int club_id[MAX_ROWS];          /* the club id of row i of the season, -1 when none */
     int row_of[MAX_ROWS];           /* index into rows[] */
     int n;
@@ -642,6 +646,116 @@ static int median(int *v, int n)
     return v[(n - 1) / 2];
 }
 
+/* The squad fill (Q509, the lead's answer of 2026-10-20): the original has no squad fill at a new game (table users
+ * doc, section 8), so a new club with fewer than FILL_TO players takes players whom the start database has at no
+ * club (+0x39 -1), aged 17 to 34 at the start: first FILL_KEEPERS goalkeepers when the squad has fewer, then the
+ * good ones (current ability, player row +0x05, at or above the median of the players of the club's division)
+ * youngest first, then the others by current ability. Players of the club's nation first; when they run out,
+ * players of the other nations of its continent (nation +0x71). No person is made up. Their joined date becomes
+ * 1 July of the start year and their contract ends on 30 June of the year after. */
+static int player_row_of(Db *t, const uint8_t *s)
+{
+    int p = t->staff_size == STAFF_FILE_SIZE ? gets32(s + 0x91) : gets32(s + 0x61);
+    return p >= 0 && p < count(t, T_PLAYER) ? p : -1;
+}
+
+static int continent_of(Db *t, int nation_id)
+{
+    for (int i = 0; i < count(t, T_NATION); i++)
+        if (gets32(row(t, T_NATION, i)) == nation_id) return gets32(row(t, T_NATION, i) + 0x71);
+    return -1;
+}
+
+static void fill_squad(Db *t, uint8_t *club, int club_id, int nation_id, int division_id, int season,
+                       const SeasonShiftPlan *pt, uint8_t *taken, MergeResult *res, const char *name)
+{
+    int slots = 0, keepers = 0, players = 0;
+    for (int j = 0; j < SQUAD; j++) {
+        int sid = gets32(club + 0xd7 + 4 * j);
+        if (sid < 0) continue;
+        slots = j + 1;
+        players++;
+        const uint8_t *s = sid < count(t, T_STAFF) ? row(t, T_STAFF, sid)
+                                                    : t->add[T_STAFF] + (size_t)(sid - count(t, T_STAFF)) * (size_t)t->staff_size;
+        int p = t->staff_size == STAFF_FILE_SIZE ? gets32(s + 0x91) : gets32(s + 0x61);
+        const uint8_t *pr = p >= 0 && p < count(t, T_PLAYER) ? row(t, T_PLAYER, p)
+                          : p >= count(t, T_PLAYER) ? t->add[T_PLAYER] + (size_t)(p - count(t, T_PLAYER)) * 0x46 : NULL;
+        if (pr && pr[0x0f] >= KEEPER_FROM) keepers++;
+    }
+    if (players >= FILL_TO) return;
+    /* The median current ability of the players of the division's clubs. */
+    int c = count(t, T_CLUB), *cas = NULL, ncas = 0;
+    uint8_t *in_div = calloc((size_t)c + 1, 1);
+    cas = malloc(((size_t)count(t, T_STAFF) + 1) * sizeof *cas);
+    if (!in_div || !cas) rt_fatal("club records: no memory");
+    for (int i = 0; i < c; i++) in_div[i] = gets32(row(t, T_CLUB, i) + 0x57) == division_id;
+    for (int i = 0; i < count(t, T_STAFF); i++) {
+        const uint8_t *s = row(t, T_STAFF, i);
+        int cl = gets32(s + 0x39), p = player_row_of(t, s);
+        if (cl >= 0 && cl < c && in_div[cl] && p >= 0) cas[ncas++] = get16(row(t, T_PLAYER, p) + 5);
+    }
+    int good = median(cas, ncas);
+    free(cas);
+    free(in_div);
+    int continent = continent_of(t, nation_id), from_nation = 0, from_continent = 0;
+    int ncont = count(t, T_NATION), *cont = malloc(((size_t)ncont + 1) * sizeof *cont);
+    if (!cont) rt_fatal("club records: no memory");
+    for (int i = 0; i < ncont; i++) cont[i] = continent_of(t, i);
+    for (int wide = 0; wide < 2 && players < FILL_TO; wide++)
+        while (players < FILL_TO && slots < SQUAD) {
+            int want_keeper = keepers < FILL_KEEPERS, best = -1, best_key = 0;
+            for (int i = 0; i < count(t, T_STAFF); i++) {
+                if (taken[i]) continue;
+                const uint8_t *s = row(t, T_STAFF, i);
+                if (gets32(s + 0x39) != -1 || s[0x5f] != 2) continue;
+                int nat = gets32(s + 0x1a);
+                if (wide ? nat == nation_id || continent < 0 || nat < 0 || nat >= ncont || cont[nat] != continent
+                         : nat != nation_id)
+                    continue;
+                int p = player_row_of(t, s);
+                if (p < 0) continue;
+                int by = get16(s + 0x12);
+                int age = by > EMPTY_YEAR ? season - (by + pt->birth) : 0;
+                if (age < 17 || age > 34) continue;
+                const uint8_t *pr = row(t, T_PLAYER, p);
+                if (want_keeper && pr[0x0f] < KEEPER_FROM) continue;
+                int ca = get16(pr + 5);
+                /* The good ones youngest first (key above 100000), then the others by current ability. */
+                int key = ca >= good ? 100000 + (60 - age) * 1000 + ca : ca;
+                if (best < 0 || key > best_key) best_key = key, best = i;
+            }
+            if (best < 0) {
+                if (want_keeper) { keepers = FILL_KEEPERS; continue; }   /* no goalkeeper left: any player */
+                break;
+            }
+            taken[best] = 1;
+            uint8_t *s = row(t, T_STAFF, best);
+            if (row(t, T_PLAYER, player_row_of(t, s))[0x0f] >= KEEPER_FROM) keepers++;
+            put32(s + 0x39, (uint32_t)club_id);
+            s[0x3d] = 11;
+            put16(s + 0x3e, 181);
+            put16(s + 0x40, season - pt->joined);
+            put32(s + 0x42, 0);
+            put16(s + 0x46, 180);
+            put16(s + 0x48, contract_file_year(season + 1, pt));
+            put32(s + 0x4a, 0);
+            touch(t, T_STAFF);
+            put32(club + 0xd7 + 4 * slots++, (uint32_t)gets32(s));
+            players++;
+            res->filled++;
+            if (wide) from_continent++;
+            else from_nation++;
+        }
+    free(cont);
+    if (from_continent)
+        fprintf(stderr, "recomp: club records: %s: %d players of its nation and %d of its continent with no club\n",
+                name, from_nation, from_continent);
+    if (players < MIN_SQUAD) {
+        res->short_squads++;
+        fprintf(stderr, "recomp: club records: %s has %d players, fewer than %d\n", name, players, MIN_SQUAD);
+    }
+}
+
 /* Writes each changed file again: its tables in the order of their offsets, each with its added rows, then any
  * bytes that followed the last table. */
 static int rebuild(Db *db, char *log, size_t room)
@@ -716,6 +830,12 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
     SeasonShiftPlan pt;
     season_dates_plan(dir, season, &pt);
     int c = count(t, T_CLUB), nat = count(t, T_NAT_CLUB);
+    /* The national teams follow the new clubs: their ids and every reference to them in the rows of the files move
+     * by the number of new clubs, before any row names a new club (whose ids c .. c + n - 1 were national team ids).
+     * A row whose division this database lacks makes no club, so n counts the rows whose division it holds. */
+    int will = 0;
+    for (int r = 0; r < n; r++) will += find_by_name(t, T_CLUB_COMP, 4, 51, rows[result.row_of[r]].division) >= 0;
+    if (will) shift_national(t, c, nat, will);
     NameHash names[3];
     for (int k = 0; k < 3; k++) hash_names(t, T_FIRST + k, &names[k]);
     /* The people of the start database, by names and real date of birth. */
@@ -747,10 +867,7 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
         if (template < 0)
             for (int i = 0; i < c && template < 0; i++)
                 if (gets32(row(t, T_CLUB, i) + 0x53) == nation_id) template = i;
-        if (template < 0) {
-            fprintf(stderr, "recomp: club records: %s: no club of its nation to copy\n", rr->name);
-            continue;
-        }
+        if (template < 0) template = 0;     /* never for a known database: a division with no club of its nation */
         for (int i = 0; i < c && nc < 1024; i++) {
             const uint8_t *cl = row(t, T_CLUB, i);
             int sid = gets32(cl + 0x69);
@@ -834,17 +951,24 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
     }
     for (int i = 0; i < nsrc; i++) db_free(&src[i].db);
     free(src);
+    /* The fill, after every squad of the season is in, so no player of a source squad is taken twice. */
+    uint8_t *taken = calloc((size_t)count(t, T_STAFF) + 1, 1);
+    if (!taken) rt_fatal("club records: no memory");
+    for (int j = 0; j < k; j++) {
+        uint8_t *cl = t->add[T_CLUB] + (size_t)j * CLUB_SIZE;
+        fill_squad(t, cl, gets32(cl), gets32(cl + 0x53), gets32(cl + 0x5b), season, &pt, taken, &result, (const char *)cl + 4);
+    }
+    free(taken);
     free(people);
     for (int j = 0; j < 3; j++) free(names[j].slot);
     result.added = k;
+    if (k != will) rt_fatal("club records: %d clubs made, %d planned", k, will);
     if (!k) { db_free(t); return 0; }
-    /* The national teams follow the new clubs: their ids and every reference to them move by k. The new rows'
-     * own career rows name only clubs below c. */
-    shift_national(t, c, nat, k);
     if (!rebuild(t, log, room)) { season_records_free(); return -1; }
     merged_ok = 1;
-    snprintf(log, room, "%d clubs, %d players (%d held by this database already), %d new names, %d new cities, "
-                        "%d career rows", k, result.players, result.skipped, result.names, result.cities,
+    snprintf(log, room, "%d clubs, %d players (%d held by this database already), %d players with no club of the "
+                        "database in the squads, %d squads under %d, %d new names, %d new cities, %d career rows", k,
+             result.players, result.skipped, result.filled, result.short_squads, MIN_SQUAD, result.names, result.cities,
              result.careers);
     return k;
 }

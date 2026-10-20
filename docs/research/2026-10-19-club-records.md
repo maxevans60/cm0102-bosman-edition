@@ -72,7 +72,9 @@ Each player of the source club (staff +0x39 = the club, a player row at +0x61) i
 
 The staff reserve (`staff_reserve.c`) is sized at the load. The new players are file rows, but 0x527240 makes up to 16 non-playing staff for each new club, so the reserve grows by 16 x K when records are added.
 
-**Squad fill (open, question to the lead).** The original has no squad fill at a new game (table users 8). Many source squads are thin (the Northern Irish clubs 0 to 1 player) and three clubs are in no season database (TŠK Topolovac, Spartak-MZhK Ryazan, Nizhny Novgorod of 2008).
+**Squad fill (Q509, the lead's answer of 2026-10-20).** The original has no squad fill at a new game (table users 8): no code adds players to a club with too few, and its youth generation `PLAYER_REGEN::regenerate_as_youth_player` 0x7abac0 runs only after the competitions exist, reuses a retired staff row and chooses the club itself (`player_regen_sign_for_club` 0x7a6f10). Many source squads are thin (the Northern Irish clubs 0 to 1 player) and three clubs are in no season database (TŠK Topolovac, Spartak-MZhK Ryazan, Nizhny Novgorod of 2008). So, after the squads of the season are in, a new club with fewer than 22 players takes players whom the start database has at no club (+0x39 -1), aged 17 to 34 at the start: first two goalkeepers when the squad has fewer (goalkeeper rating, player row +0x0f, 15 or more), then the good ones youngest first, then the others by current ability (player row +0x05; data: Messi 195, Rooney 176). A good one has a current ability at or above the median of the players of the clubs of the club's division in the start database. Players of the club's nation come first; when they run out, players of the other nations of its continent (nation +0x71). These are people of the database: no person is made up. Their joined date becomes 1 July of the start year and their contract ends on 30 June of the year after. A club that still has fewer than 16 players is named in the log ("has N players, fewer than 16") and in the list below. The fill runs only where the records run: a season game (Q152).
+
+Clubs below 16 after the fill: none in the runs of this slice (see Tests).
 
 ## Slice 15's club moves
 
@@ -92,6 +94,8 @@ The staff reserve (`staff_reserve.c`) is sized at the load. The new players are 
 - Q505: Valpovka (2002/03, 2003/04) and Međimurje (2003/04) are in their season databases; slice 15's clubs file names those records.
 - Q506: a record's template is the median-reputation club of its division; unknown bytes keep the template's values.
 - Q507: a person whom the start database holds stays where it has him, also when it has him with no club.
+- Q508: not used (an earlier fill rule, replaced by Q509).
+- Q509: the squad fill above (22 players; two goalkeepers; good unattached players of the nation youngest first, then the others; then the nation's continent; at least 16).
 
 ## Tests
 

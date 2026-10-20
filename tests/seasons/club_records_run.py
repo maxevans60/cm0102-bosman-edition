@@ -33,6 +33,7 @@ import make_club_records  # noqa: E402
 import rules_report_check as rrc  # noqa: E402
 
 SOURCES = "/Users/max/Projects/cm0102/test-fixtures/databases"
+MIN_SQUAD = 16          # 11 and 5 substitutes: the squad that a match needs (inference; the fill aims at 20)
 
 
 def arg(argv, name, default=None):
@@ -89,10 +90,14 @@ def check_dump(dump, data, season, records):
             continue
         squad = [s for s in struct.unpack_from("<50i", r, 0xd7) if s != -1]
         for s in squad:
-            if not n_staff_data <= s < len(staff) or struct.unpack_from("<i", staff[s], 0x39)[0] != cid:
-                out.append(f"{rec[3]}: squad member {s} is not a new staff row of the club")
+            if not 0 <= s < len(staff) or struct.unpack_from("<i", staff[s], 0x39)[0] != cid:
+                out.append(f"{rec[3]}: squad member {s} does not name the club")
                 break
-        print(f"  {rec[3]}: {len(squad)} players from {rec[10] or 'no source'}")
+        new = sum(1 for s in squad if s >= n_staff_data)
+        print(f"  {rec[3]}: {len(squad)} players, {new} from {rec[10] or 'no source'}, {len(squad) - new} with no "
+              f"club in the start database")
+        if len(squad) < MIN_SQUAD:
+            out.append(f"{rec[3]}: {len(squad)} players, fewer than {MIN_SQUAD}")
     return out
 
 
@@ -104,7 +109,10 @@ def main(argv):
     year = int(arg(argv, "--year"))
     database = os.path.abspath(arg(argv, "--database")) if "--database" in argv else None
     words = [x.strip() for x in arg(argv, "--nations", "England").split(",")]
-    nations = ["England"] + [n for n in rrc.NATION_ROWS if n.lower() in {w.lower() for w in words} and n != "England"]
+    if words[0].lower() == "all":                   # Select All (every league; Korea and Russia are rows 17 on)
+        nations = ["all"]
+    else:
+        nations = ["England"] + [n for n in rrc.NATION_ROWS if n.lower() in {w.lower() for w in words} and n != "England"]
     work = os.path.abspath(arg(argv, "--keep")) if "--keep" in argv else tempfile.mkdtemp(prefix="cm0102-records-")
     dump = os.path.join(work, "merged")
     os.makedirs(dump, exist_ok=True)
