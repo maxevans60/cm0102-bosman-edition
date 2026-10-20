@@ -30,6 +30,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_uefa.h"
+#include "season_uefa_league.h"
 #include "season_playoffs.h"
 
 #include <stdio.h>
@@ -76,6 +77,7 @@
 typedef struct {
     int groups, clubs, meetings, through, days;
     int ko_po;                          /* slice 24 (2021/22 on): 16, the clubs of the knockout round play-offs */
+    int league;                         /* slice 25 (2024/25 on): the matches of a club in the league phase, else 0 */
 } UcGroups;
 
 /* The group stage of the cup of kind ('e' the Europa League, 'k' the Conference League) in row r. */
@@ -88,6 +90,14 @@ static int uc_format(int kind, const SeasonUefa *r, UcGroups *f)
     else
         f->groups = r->uc_groups, f->clubs = r->uc_group_clubs, f->meetings = r->uc_meetings,
         f->through = r->uc_through, f->ko_po = r->uc_ko_po;
+    /* Slice 25: the league phase, one table of 36 (1 group, 24 through) with 8 or 6 match days, then the
+     * knockout phase play-offs of places 9 to 24 and a round of 16 with places 1 to 8. */
+    f->league = kind == 'k' ? r->ecl_league : r->uc_league;
+    if (f->league) {
+        f->days = f->league;
+        return f->groups == 1 && f->clubs == SEASON_LEAGUE_CLUBS && f->through == 24 && f->ko_po == KO_PO_CLUBS &&
+               f->days <= SEASON_LEAGUE_MAX_DAYS;
+    }
     if (f->groups < 2 || f->groups > MAX_GROUPS || f->clubs < 3 || f->clubs > MAX_GROUP_CLUBS || f->meetings < 1 ||
         f->meetings > 2)
         return 0;
@@ -126,11 +136,12 @@ static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 /* The Europa League or (slice 24) the Conference League: the kind 'e' or 'k', 0 for any other object. */
 static int is_uc(uint32_t obj) { return season_uefa_cup_kind(obj); }
 static const char *uc_name(uint32_t uc) { return is_uc(uc) == 'k' ? "Conference League" : "Europa League"; }
-/* A UEFA Cup with a group stage holds 3 to 13 stages (the original's has none, +0x2c = 0 at 0x902344). */
+/* A UEFA Cup with a group stage holds 3 to 13 stages (the original's has none, +0x2c = 0 at 0x902344); with a
+ * league phase (slice 25) 2: the league phase and the knockout stage. */
 static int groups_layout(uint32_t uc)
 {
     int32_t n = is_uc(uc) ? (int32_t)rd32(g_mem, uc + 0x2c) : 0;
-    return n >= 3 && n <= MAX_STAGES;
+    return n >= 2 && n <= MAX_STAGES;
 }
 static int ko_slot(uint32_t uc) { return (int32_t)rd32(g_mem, uc + 0x2c) - 1; }
 static uint32_t stage_at(uint32_t uc, int i) { return rd32(g_mem, rd32(g_mem, uc + 0xc) + 4u * (uint32_t)i); }
@@ -407,6 +418,10 @@ RT_WRAP(009025c0, uc_round_table)
     if (stage == -1) {
         if (access) t = uc_saved_table(uc, &rounds);
         else if (kind == 'e' && qual_sizes(uc, r, &q1, &q2, &r1)) t = qual_table(uc, q1, q2, r1), rounds = 3;
+    } else if (stage < f.groups && f.league) {
+        int weekday = 0;
+        const SeasonLeagueDay *days = season_uefa_league_days((char)kind, &weekday);
+        t = season_uefa_league_table(year, f.days, days, weekday), rounds = f.days, name = (int)uc_group_name(0), league = 1;
     } else if (stage < f.groups) {
         t = group_table(year, f.days), rounds = f.days, name = (int)uc_group_name(stage), league = 1;
     } else {
@@ -518,6 +533,73 @@ static int sort_by_seed(uint32_t *clubs, int n)
     return !rt_unwinding;
 }
 
+/* ---- The league phase (slice 25, 2024/25 on) ----
+ *
+ * The object holds 2 stages: the league phase of 36 clubs in stage 0 (season_uefa_league.c) and the knockout
+ * stage in stage 1: the knockout phase play-offs of places 9 to 24 in the ties of the bracket (round 0 of
+ * ko_table with ko_po, code 30), then the round of 16 with places 1 to 8 (a seeded draw), as slice 24's
+ * knockout round play-offs. No group thirds go to the Conference League. */
+
+static void draw_league_stage(uint32_t uc, const UcGroups *f)
+{
+    uint32_t clubs[SEASON_LEAGUE_CLUBS + 8];
+    int n = uc_group_entrants(uc, clubs, SEASON_LEAGUE_CLUBS + 8);
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
+    if (rt_unwinding) return;
+    if (n != SEASON_LEAGUE_CLUBS) {
+        fprintf(stderr, "recomp: uefa: %s league phase: %d clubs, not 36\n", uc_name(uc), n);
+        return;
+    }
+    int weekday = 0;
+    const SeasonLeagueDay *days = season_uefa_league_days((char)is_uc(uc), &weekday);
+    uint32_t st = season_uefa_league_make(uc, clubs, f->league, 0, uc_group_name(0), days, weekday);
+    if (rt_unwinding || !st) return;
+    wr32(g_mem, rd32(g_mem, uc + 0xc), st);
+    wr32(g_mem, uc + 0x30, 0);
+    season_uefa_league_news(st);
+    if (!rt_unwinding)
+        fprintf(stderr, "recomp: uefa: %s %u/%02u: league phase drawn\n", uc_name(uc), year, (year + 1) % 100);
+}
+
+static void draw_league_knockout(uint32_t uc, uint32_t year)
+{
+    uint32_t league = stage_at(uc, 0);
+    if (!readable(league)) return;
+    uint32_t ca[2] = {KO_PO_ALL, 4};
+    uint32_t list = call_cdecl(F_CALLOC, 2, ca);
+    uint32_t tiers = rt_unwinding || !readable(list) ? 0 : game_malloc(KO_PO_ALL);
+    if (rt_unwinding) return;
+    uint32_t table = 0, obj = 0;
+    if (tiers && season_uefa_league_knockout_list(league, list, tiers)) {
+        uint32_t bodies = rd32(g_mem, RULING_BODIES);
+        uint32_t body = readable(bodies) ? rd32(g_mem, rd32(g_mem, bodies) + 4u * (uint32_t)(int8_t)g_mem[uc + 0x50]) : 0;
+        for (int i = 0; i < KO_PO_ALL && readable(body) && !rt_unwinding; i++) {
+            uint32_t a[1] = {rd32(g_mem, list + 4u * (uint32_t)i)};
+            call_this(F_BOOKINGS, body, 1, a);
+        }
+        table = rt_unwinding ? 0 : ko_table(uc, 1);
+        uint32_t sz[1] = {0xb2};
+        obj = table && !rt_unwinding ? call_cdecl(F_NEW, 1, sz) : 0;
+    }
+    if (rt_unwinding) return;
+    if (readable(obj)) {
+        uint32_t args[15] = {uc, KO_PO_ALL, list, KO_ROUNDS, rd32(g_mem, uc + 4), table, year, 1, 2, 0, 0x14, 1, 0, 0,
+                             tiers};
+        call_this(F_CUP_STAGE, obj, 15, args);
+        if (rt_unwinding) return;
+        wr32(g_mem, rd32(g_mem, uc + 0xc) + 4u, obj);
+    }
+    game_free(list);
+    game_free(tiers);
+    game_free(table);
+    if (rt_unwinding || !readable(obj)) return;
+    uint32_t r0[1] = {0};
+    call_this(F_SET_UP_ROUND, obj, 1, r0);
+    if (rt_unwinding) return;
+    wr32(g_mem, uc + 0x30, 1);
+    fprintf(stderr, "recomp: uefa: %s knockout phase play-offs drawn\n", uc_name(uc));
+}
+
 static void draw_group_stage(uint32_t uc)
 {
     UcGroups f;
@@ -525,6 +607,10 @@ static void draw_group_stage(uint32_t uc)
     if (!uc_format(is_uc(uc), season_uefa_row((int)year), &f) || f.groups + 1 != (int32_t)rd32(g_mem, uc + 0x2c)) {
         fprintf(stderr, "recomp: uefa: UEFA Cup groups: no format for %u with %d stages\n", year,
                 (int32_t)rd32(g_mem, uc + 0x2c));
+        return;
+    }
+    if (f.league) {
+        draw_league_stage(uc, &f);
         return;
     }
     int want = f.groups * f.clubs;
@@ -795,6 +881,10 @@ static void draw_knockout(uint32_t uc)
     int groups = ko_slot(uc);
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
     if (!uc_format(is_uc(uc), season_uefa_row((int)year), &f) || f.groups != groups) return;
+    if (f.league) {
+        draw_league_knockout(uc, year);
+        return;
+    }
     if (f.ko_po) {
         draw_knockout_po(uc, &f, year, groups);
         return;
