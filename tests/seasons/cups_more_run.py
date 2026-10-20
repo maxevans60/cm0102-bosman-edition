@@ -31,6 +31,20 @@ The runs:
             makes the editions that the row of 2002/03 holds, the Russian Premier League Cup of 2003 (first round in
             March 2003) with 16 clubs and the Russian Super Cup of March 2003 with two clubs (log lines)
 
+Save and load runs (review 1 of 2026-10-20): the first program plays the season jump and saves the game
+RECOMP_SAVE_AFTER_DAYS game days after the start, inside a competition of this part; a second program loads that save
+(tests/fixtures/fixtures.py LOAD_STEPS) and plays on with the season jump and the rules report to the end report of
+the season. The check reads the loaded program's report and log.
+    e2016-load  October 2016, England, changing rules on: saved after 100 days (late October 2016, between the
+                second and the third group match day of the EFL Trophy); after the load the knockout of 32 clubs is
+                drawn and the Trophy has a winner
+    i2023-load  October 2023, Italy, changing rules on: saved after 189 days (20 January 2024, between the
+                semi-finals of 18 January and the final of 22 January of the four-club Supercoppa); after the load
+                the final is played and the cup has a winner
+    n2008-load  September 2008, Norway, changing rules on: saved after 150 days (December 2008, after the module
+                made the Norwegian Super Cup of March 2009 on its vtable copy); after the load the cup is played
+                and has a winner
+
 A run starts a game only when fewer than 15 games run on this Mac and the load of the last minute is below 24 (Max's
 limit), and its game stops when the script stops (SIGTERM, SIGINT, SIGHUP). Run at most three of these scripts at
 a time (--only).
@@ -188,7 +202,9 @@ def wait_for_room():
     """Starts a game only when fewer than 15 games run on this Mac and the load of the last minute is below 24."""
     while True:
         games = subprocess.run(["pgrep", "-x", "cm0102_recomp"], capture_output=True, text=True).stdout.split()
-        if len(games) < 15 and os.getloadavg()[0] < 24 and not os.path.exists(HOLD):
+        builds = subprocess.run(["pgrep", "-f", "cmake --build"], capture_output=True, text=True).stdout.split()
+        busy = len(builds) >= 2 and len(games) >= 10                # the lead's rule of 2026-10-20 11:35
+        if len(games) < 15 and os.getloadavg()[0] < 24 and not os.path.exists(HOLD) and not busy:
             return
         time.sleep(20)
 
@@ -223,6 +239,94 @@ def check_run(name, program, game, keep, reuse):
     return fails
 
 
+def check_e2016_load(lines, log, fails, name):
+    need_log(log, "cup groups: eng_auto_cup 2016/17: knockout of 32 clubs drawn", fails, name)
+    need_groups(lines, "eng_auto_cup", 2016, (17, 16, 56, 32, 5), fails, name)
+    need_winner(lines, "eng_auto_cup", 2016, fails, name)
+
+
+def check_i2023_load(lines, log, fails, name):
+    need_winner(lines, "ita_super", 2023, fails, name)
+    for x in lines_of(lines, "ita_super", 2023, "end"):
+        if x["clubs"] != 4 or x["rounds"] != 2:
+            fails.append(f"{name}: ita_super after the load: {x['clubs']} clubs, {x['rounds']} rounds")
+
+
+def check_n2008_load(lines, log, fails, name):
+    need_made(lines, "new_nor_super", fails, name, 2)
+    if not any(x["file"] == "new_nor_super" and x["phase"] == "end" and x["season"] == 2008 and
+               x["winner_next"] != "-" for x in lines):
+        fails.append(f"{name}: new_nor_super has no winner of 2009 at the end of 2008/09 after the load")
+
+
+# name: (start year, database folder, nations, days to the save, season of the end report, a log line of the first
+# program that shows the save is inside the competition, check of the loaded program)
+LOAD_RUNS = {
+    "e2016-load": (2016, os.path.join(DB, "October 2016"), ["England"], 100, 2016,
+                   "cup groups: eng_auto_cup 2016/17: 56 clubs drawn in 16 groups", check_e2016_load),
+    "i2023-load": (2023, os.path.join(DB, "October 2023"), ["Italy"], 189, 2023,
+                   "super cups: ita_super 2023 with four clubs", check_i2023_load),
+    "n2008-load": (2008, os.path.join(DB, "September 2008"), ["Norway"], 150, 2008,
+                   "new cups: new_nor_super 2009 with 2 clubs", check_n2008_load),
+}
+
+
+def load_run(name, program, game, keep):
+    """The first program saves inside the competition, the second loads the save and plays to the end report."""
+    import shutil
+    sys.path.insert(0, os.path.join(HERE, "..", "fixtures"))
+    import fixtures
+    import smoke_run
+    year, database, nations, days, last, before, check = LOAD_RUNS[name]
+    work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-cups-more-{name}-")
+    if os.path.exists(work) and keep:
+        return [f"{name}: the folder {work} exists; use another --keep folder"]
+    wait_for_room()
+    code, _ = rrc.run(program, game, last, year, database, nations, [], work, 3600, {"changing_rules": "on"},
+                      {"RECOMP_SEASON_CHANGE_LOG": "1", "RECOMP_SAVE_AFTER_DAYS": str(days)})
+    first = os.path.join(work, "user", smoke_run.SAVE_NAME)
+    log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
+    if code != 0 or not os.path.exists(first):
+        return [f"{name}: the first program made no save (code {code}, {work})"]
+    if before not in log:
+        return [f"{name}: the save is not inside the competition: no line \"{before}\" before it ({work})"]
+    again = os.path.join(work, "again")
+    user = os.path.join(again, "user")
+    os.makedirs(user)
+    shutil.copyfile(first, os.path.join(user, "inside.sav"))
+    # The settings of the first program (the database folder too): the load needs the same data.
+    shutil.copyfile(os.path.join(work, "user", "settings.txt"), os.path.join(user, "settings.txt"))
+    if os.path.isdir(os.path.join(work, "user", "Databases")):
+        shutil.copytree(os.path.join(work, "user", "Databases"), os.path.join(user, "Databases"))
+    report = os.path.join(again, "report.tsv")
+    table = os.path.join(os.path.dirname(os.path.abspath(program)), "seasons", "rules.tsv")
+    wait_for_room()
+    # A loaded game keeps its holiday, so the last step (wait first-news) is left out, as in club_world_check.py.
+    steps = smoke_run.scaled_steps("classic", again, fixtures.LOAD_STEPS[:-1] + ["3300000 quit"])
+    try:
+        env = {"RECOMP_SEASON_JUMP": str(last), "RECOMP_RULES_REPORT": report, "RECOMP_RULES_TABLE": table,
+               "RECOMP_SEASON_CHANGE_LOG": "1", "RECOMP_SCREEN_LOG": "1"}
+        r, _ = fixtures.run(program, game, "classic", user, steps, env, 3600)
+    except subprocess.TimeoutExpired:
+        return [f"{name}: the loaded program did not end in time ({again})"]
+    with open(os.path.join(again, "stderr.txt"), "w") as f:
+        f.write(r.stderr)
+    fails = []
+    if r.returncode != 0:
+        fails.append(f"{name}: the loaded program ended with code {r.returncode} ({again})")
+    if "recomp: message box" in r.stderr:
+        fails.append(f"{name}: an error box after the load ({again}/stderr.txt)")
+    if not os.path.exists(report):
+        return fails + [f"{name}: the loaded program wrote no report ({again})"]
+    seasons, _ = rrc.read_report(report)
+    if not any(x["season"] == last and x["phase"] == "end" for x in seasons):
+        fails.append(f"{name}: the loaded program's report has no end of {last}/{(last + 1) % 100:02d}")
+    lines = cupmore(report)
+    check(lines, r.stderr, fails, name)
+    print(f"{name}: {len(lines)} cupmore lines after the load, {len(fails)} problems ({work})")
+    return fails
+
+
 def main(argv):
     if len(argv) < 3:
         print(__doc__)
@@ -233,11 +337,13 @@ def main(argv):
         raise KeyboardInterrupt()
     for sig in (signal.SIGTERM, signal.SIGHUP, signal.SIGINT):
         signal.signal(sig, stop)
-    only = rrc.arg(argv, "--only", ",".join(RUNS)).split(",")
+    only = rrc.arg(argv, "--only", ",".join(list(RUNS) + list(LOAD_RUNS))).split(",")
     keep = os.path.abspath(rrc.arg(argv, "--keep")) if "--keep" in argv else None
     fails = []
     for name in [n for n in RUNS if n in only]:
         fails += check_run(name, program, game, keep, "--reuse" in argv)
+    for name in [n for n in LOAD_RUNS if n in only]:
+        fails += load_run(name, program, game, keep)
     for t in fails:
         print("FAIL  " + t)
     print("PASS" if not fails else f"FAILED: {len(fails)}")

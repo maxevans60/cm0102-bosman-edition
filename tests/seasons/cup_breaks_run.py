@@ -187,7 +187,9 @@ def wait_for_room():
     (Max's limit for the 0.6.0 build sessions)."""
     while True:
         games = subprocess.run(["pgrep", "-x", "cm0102_recomp"], capture_output=True, text=True).stdout.split()
-        if len(games) < 15 and os.getloadavg()[0] < 24 and not os.path.exists(HOLD):
+        builds = subprocess.run(["pgrep", "-f", "cmake --build"], capture_output=True, text=True).stdout.split()
+        busy = len(builds) >= 2 and len(games) >= 10                # the lead's rule of 2026-10-20 11:35
+        if len(games) < 15 and os.getloadavg()[0] < 24 and not os.path.exists(HOLD) and not busy:
             return
         time.sleep(20)
 
