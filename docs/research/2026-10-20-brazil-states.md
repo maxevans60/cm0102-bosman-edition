@@ -91,10 +91,19 @@ never from November 2020 (2 to 3 percent). Measured on the test databases, 2026-
 - Changing rules off: the start season's counts for the whole game (Q232). The base game and
   `RECOMP_SEASON_CODE=off`: nothing changes (Q152).
 
-## Tests (planned)
+## Tests (2026-10-20)
 
-- ctest `season_bra_states`: the state of a city name, a suffix, a club name.
-- `tests/seasons/bra_states_run.py`: starts 2001 (rules on), 2014 (October 2014), 2021 (October 2021) with Brazil:
-  every one of the 15 objects that is made holds only clubs of its state and its count, plays to a champion, and
-  the season changes; a load inside the state season; the base 2001 game logs nothing of this slice.
-- Same-save set (Q342).
+- ctest `season_bra_states` (the state of a city code, a city of the table, a club of the table, no state) and
+  `season_bra_states_table` (the C table matches the tsv): pass; ctest 36 of 36.
+- `tests/seasons/bra_states_run.py <program> <game> --only 2001-on,2014-on,2021-on,2001,load`: all pass.
+  - 2001-on (3.9.68 data): the Paraense 12 clubs (row 14, 12 in the data), the Cearense 10, the Central object
+    keeps its region (5 clubs of Mato Grosso, fewer than 8), the 12 new championships 5 to 10 clubs; 14 pick in
+    2001 and again in 2002 (each edition ended, so the season changed).
+  - 2014-on (October 2014): 15 championships (the Mato-Grossense too), 147 clubs.
+  - 2021-on (October 2021, no city codes: the tables): 10 championships, 73 clubs; Piauí, Acre, Sergipe and
+    Tocantins have 2 or 3 clubs and no championship (Q603).
+  - 2001 (changing rules off): no line of this slice.
+  - load: a save on day 75 of 2015 (16 March, inside the state season), loaded, 60 more days, saved: no box.
+- The day fixtures screen gave one area of 31 rows a page in the 2001-on run (now 30, scrolls).
+- Same-save (Q342): `smoke_run.py <program> <game> --same-save` with `--save start.sav`, `--save prematch.sav` and a new game,
+  runs again, season-code-off, kinds-base (and rules-off for the new game): every run equal to normal.
