@@ -59,7 +59,7 @@
 2014	clubs	goldcup (Copa América), row int-continental-154: game 0, table 12 (12)
 2014	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-14: game 4, table 46 (46)
 2014	clubs	gre_prm (Super League Greece), row gre-pol-cro-41: game 14, table 18 (18)
-2014	clubs	gre_second (Football League), row gre-pol-cro-68: game 14, table 13 (13)
+2014	clubs	gre_second (Football League North), row gre-pol-cro-68: game 14, table 13 (13)
 2014	clubs	hol_first (Eerste Divisie), row hol-bel-172: game 18, table 20 (20)
 2014	clubs	ita_c1_super (Supercoppa di Lega Pro), row ita-237: game 2, table 3 (3)
 2014	clubs	ita_c_cup (Coppa Italia Lega Pro), row ita-235: game 5, table 59 (59)
@@ -86,8 +86,8 @@
 2014	down	den_second (Danish 2nd Divisions), row den-swe-82: game 4 (+0 play-off places), table 10 (10)
 2014	down	eng_third (Football League Two), row eng-161: game 1 (+0 play-off places), table 2 (2)
 2014	down	ger_second (2. Bundesliga), row ger-171: game 4 (+0 play-off places), table 2 (2)
-2014	down	gre_prm (Super League Greece), row gre-pol-cro-41: game 2 (+0 play-off places), table 4 (4 (15th-18th))
-2014	down	gre_second (Football League), row gre-pol-cro-68: game 2 (+0 play-off places), table 3 (3 per group (bottom three))
+2014	down	gre_prm (Super League Greece), row gre-pol-cro-41: game 3 (+0 play-off places), table 4 (4 (15th-18th))
+2014	down	gre_second (Football League North), row gre-pol-cro-68: game 2 (+0 play-off places), table 3 (3 per group (bottom three))
 2014	down	ita_ser_b (Serie B), row ita-224: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
 2014	down	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 1 (+4 play-off places), table na (n/a)
 2014	down	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 1 (+4 play-off places), table na (n/a)
@@ -100,17 +100,12 @@
 2014	no_row	record_utils ('B' International): no table row
 2014	no_row	record_utils (Reserve): no table row
 2014	no_row	record_utils (Under 21 International): no table row
-2014	not_held	asia_cup_winner (Asian Cup Winners' Cup), row club-world-263: the game holds 2014, the table says not held
-2014	not_held	asia_super_cup (Asian Super Cup), row club-world-264: the game holds 2014, the table says not held
 2014	not_held	bra_champ_cup (Copa dos Campeões), row bra-203: the game holds 2014, the table says not held
-2014	not_held	conmebol_merc (Copa Mercosur), row club-world-252: the game holds 2014, the table says not held
 2014	not_held	cro_a2b (Druga HNL South), row gre-pol-cro-392: the game holds 2014, the table says not held
 2014	not_held	ger_lge_cup (DFL-Ligapokal), row ger-180: the game holds 2014, the table says not held
 2014	not_held	gre_super (Greek Super Cup), row gre-pol-cro-95: the game holds 2014, the table says not held
-2014	not_held	inter_amer_cup (Copa Interamericana), row club-world-259: the game holds 2014, the table says not held
 2014	not_held	ita_ser_c1a (Italian Serie C1/A), row ita-225: the game holds 2014, the table says not held
 2014	not_held	ita_ser_c1b (Italian Serie C1/B), row ita-226: the game holds 2014, the table says not held
-2014	not_held	world_club_cup (Intercontinental Cup), row club-world-248: the game holds 2014, the table says not held
 2014	not_in_game	arg-usa-203 argentina_rules 'Argentina' (Argentina)
 2014	not_in_game	arg-usa-68 new 'Copa Argentina' (Argentina)
 2014	not_in_game	arg-usa-95 new 'Supercopa Argentina' (Argentina)
@@ -132,15 +127,12 @@
 2014	not_in_game	bra-932 new 'Campeonato Piauiense' (Brazil)
 2014	not_in_game	bra-959 new 'Campeonato Acriano' (Brazil)
 2014	not_in_game	bra-986 new 'Campeonato Brasiliense' (Brazil)
-2014	not_in_game	club-world-254 new 'Copa Sudamericana' (CONMEBOL)
-2014	not_in_game	club-world-255 new 'Recopa Sudamericana' (CONMEBOL)
 2014	not_in_game	eng-162 eng_conf 'Conference Premier' (England)
 2014	not_in_game	eng-379 eng_fa_trophy 'FA Trophy' (England)
 2014	not_in_game	fra-122 fra_cfa 'CFA' (France)
 2014	not_in_game	fra-123 fra_lower 'CFA 2' (France)
-2014	not_in_game	ger-172 new '3. Liga' (Germany)
+2014	not_in_game	ger-172 ger_regional '3. Liga' (Germany)
 2014	not_in_game	ger-181 new 'DFL-Supercup' (Germany)
-2014	not_in_game	gre-pol-cro-122 new 'Football League (South group)' (Greece)
 2014	not_in_game	gre-pol-cro-446 new 'Croatian Football Super Cup' (Croatia)
 2014	not_in_game	ita-230 new 'Lega Pro girone A' (Italy)
 2014	not_in_game	ita-231 new 'Lega Pro girone B' (Italy)
@@ -156,23 +148,25 @@
 2014	playoffs	fin_first (Ykkönen), row nor-fin-138: game 0 up and 1 down play-off places, table 1 and 0 ('2nd v Veikkausliiga 11th, two legs')
 2014	playoffs	ger_first (Bundesliga), row ger-170: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, away goals rule, extra time and penalties')
 2014	playoffs	ger_second (2. Bundesliga), row ger-171: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, away goals rule')
-2014	playoffs	gre_second (Football League), row gre-pol-cro-68: game 0 up and 0 down play-off places, table 3 and 6 ('top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: releg')
+2014	playoffs	gre_second (Football League North), row gre-pol-cro-68: game 0 up and 0 down play-off places, table 3 and 6 ('top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: releg')
+2014	playoffs	gre_second (Football League South), row gre-pol-cro-122: game 0 up and 0 down play-off places, table 3 and 6 ('top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: releg')
 2014	playoffs	ita_ser_b (Serie B), row ita-224: game 0 up and 0 down play-off places, table 6 and 0 ('3rd to 8th, but only clubs within 14 points of the 3rd take part (2 to 6 clubs);')
 2014	playoffs	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
 2014	playoffs	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 4 up and 4 down play-off places, table 0 and 0 ('n/a')
 2014	playoffs	jap_j2 (J2 League), row aus-jap-kor-230: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
 2014	playoffs	nor_first (OBOS-ligaen), row nor-fin-133: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
+2014	subs_used	new_suruga_bank (Suruga Bank Championship), row club-world-526: game 3, table 7 (7)
 2014	up	arg_second (Primera B Nacional), row arg-usa-41: game 1 (+0 play-off places), table 2 (2 (champion; Torneo Reducido winner))
 2014	up	aus_nsl (A-League), row aus-jap-kor-37: game 6 (+0 play-off places), table na (n/a)
 2014	up	bel_third (Belgian Third Division), row hol-bel-179: game 1 (+0 play-off places), table 2 (2 (group champions))
 2014	up	bra_nat_first (Campeonato Brasileiro Série A), row bra-41: game 4 (+0 play-off places), table na (n/a)
 2014	up	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 2 (+0 play-off places), table 4 (4)
 2014	up	conmebol_liber (Copa Libertadores), row club-world-251: game 2 (+0 play-off places), table na (n/a)
-2014	up	conmebol_merc (Copa Mercosur), row club-world-252: game 1 (+0 play-off places), table na (n/a)
 2014	up	cro_a2a (Druga HNL), row gre-pol-cro-365: game 0 (+0 play-off places), table 1 (1 (1st))
 2014	up	den_second (Danish 2nd Divisions), row den-swe-82: game 3 (+0 play-off places), table 2 (2)
 2014	up	fin_first (Ykkönen), row nor-fin-138: game 2 (+0 play-off places), table 1 (1st (1))
 2014	up	gre_cup (Greek Football Cup), row gre-pol-cro-14: game 2 (+0 play-off places), table na (n/a)
-2014	up	gre_second (Football League), row gre-pol-cro-68: game 2 (+0 play-off places), table 0 (0)
+2014	up	gre_second (Football League North), row gre-pol-cro-68: game 2 (+0 play-off places), table 0 (0)
+2014	up	gre_second (Football League South), row gre-pol-cro-122: game 1 (+0 play-off places), table 0 (0 (promotion via joint play-off round, see group 1 row))
 2014	up	ita_ser_c1a (Italian Serie C1/A), row ita-225: game 1 (+4 play-off places), table na (n/a)
 2014	up	ita_ser_c1b (Italian Serie C1/B), row ita-226: game 1 (+4 play-off places), table na (n/a)
