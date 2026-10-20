@@ -314,6 +314,14 @@ uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint3
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
 uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
 uint32_t rt_ita_cup_first_position(uint32_t original);   /* ItaCup second loop start (0x63fb16) */
+/* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
+uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
+uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_ita_tier_c2(uint32_t c2a);
+uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b);
+uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position);
+uint32_t rt_ita_start_c2(uint32_t c2a);
 /* The offset of the knockout stage in the stage array of a Champions League object (0.6.0 slice 22,
  * win/season_uefa.c): 0x30 (stage 12) in the original's format, 0x20 (stage 8) in the format with one group
  * stage. The sites of tools/recomp/uefa.py read it. */
