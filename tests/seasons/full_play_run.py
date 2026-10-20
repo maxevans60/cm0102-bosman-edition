@@ -15,7 +15,8 @@ ends the program (src/recomp_rt/win/testrun.c). The rules report (RECOMP_RULES_R
 The checks:
     - no message box of the game in its log (RECOMP_SCREEN_LOG prints "recomp: message box from", waits.c): the
       script stops the game by its PID at the first one, so a box does not wait for the timeout
-    - no stall: the game date (the "date d/y" of the screen log) moves at least once in --stall-minutes
+    - no stall: once the game is made, the game date (the "date d/y" of the screen log) moves at least once in
+      --stall-minutes
     - the program ends with code 0 and leaves samesave.sav in its user folder
 The script prints the wall time at each 1 July that the game reaches (the time per season) and waits before the
 start while /Users/max/Projects/cm0102/run-logs/HOLD exists, while 15 or more games run on this Mac, or while the load
@@ -118,7 +119,9 @@ def main(argv):
                     if y not in reached and (year > y or (year == y and day >= 182)):
                         reached.add(y)
                         print(f"1 July {y}: {(time.time() - t0) / 60:.0f} min", flush=True)
-            if time.time() - moved > stall:
+            # The making of a new game (date day 0) is not a stall: with Select All on a loaded Mac it takes about
+            # 30 minutes. The stall clock runs from the first date past day 0.
+            if last_date and last_date[0] > 0 and time.time() - moved > stall:
                 fails.append(f"stall: the date stays at {last_date} for {stall // 60} minutes")
                 p.terminate()
                 break
