@@ -40,6 +40,7 @@ def build():
                for r in csv.DictReader(open(os.path.join(RECORDS, "sources.tsv"), encoding="utf-8"), delimiter="\t")}
     moves, _report, _missing = make_clubs.build()
     division = {(r[0], r[4]): r[1] for r in moves if r[2] == -1}
+    held = {(r[0], r[4]) for r in moves if r[2] != -1}     # the season's database holds the club (its record id)
     out, errors = [], []
     for c in clubs:
         season, key = int(c["season"]), make_clubs.plain(c["club"])
@@ -50,6 +51,8 @@ def build():
         if s["source"] == "=":                  # the season's own database holds it (Q505)
             continue
         d = division.get((season, key))
+        if not d and (season, key) in held:     # the database of the season holds it now (the own databases of Q351)
+            continue
         if not d:
             errors.append(f"{season} {c['club']}: the club moves table has no missing club of that name")
             continue
