@@ -151,6 +151,8 @@ int season_nl_held_results(int year, SeasonNlRow *rows);
  * bit 0x200 for the fixed links. */
 /* Test log: the Euro's team slots around its seeding (season_nl_euro.c). */
 void season_nl_euro_log_slots(int day, int year);
+/* A Euro with no slot array after a load gets one (season_nl_euro.c). */
+void season_nl_euro_slots_after_load(void);
 
 void season_nl_path_round(uint32_t rec, int round, SeasonNlDate d, int campaign, int teams);
 

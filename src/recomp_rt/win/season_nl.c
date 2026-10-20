@@ -801,6 +801,10 @@ static void update_for_date(void)
         (vcall(self, 0xcu, 0, NULL) & 0xffu))
         next_edition(self);
     if (rt_unwinding) return;
+    if (conf == &confs[0]) {
+        season_nl_euro_slots_after_load();
+        if (rt_unwinding) return;
+    }
     if (conf == &confs[0] && logging() && readable(today)) {
         season_nl_euro_log_slots((int16_t)rd16(g_mem, today), (int16_t)rd16(g_mem, today + 2u));
         if (rt_unwinding) return;
