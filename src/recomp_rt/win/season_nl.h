@@ -143,6 +143,9 @@ int season_nl_nation_of_club(uint32_t club);
  * nation), or 0. */
 uint32_t season_nl_nation_team(int id);
 
+/* 1 when the national team of the nation id can take a squad (a squad size in NationalTeams, 0x775520). */
+int season_nl_nation_can_play(int id);
+
 /* The ranked results of the UEFA edition of year `year` (2018 for 2018-19) while the Nations League object
  * holds its tables (from its draw to the draw of the next edition), else 0. */
 int season_nl_held_results(int year, SeasonNlRow *rows);

@@ -1328,3 +1328,30 @@ RT_WRAP(00585290, cl_group_draw_guard)
     dg_on = 0;
     win_random_hook = NULL;
 }
+
+/* EUROPE_RULES::get_ineligibility_code 0x5832e0, thiscall (player, fixture), ret 8. On its first deadline (4 August,
+ * uefa_check_registration_deadlines 0x9058e0, call at 0x9059c5) process_euro_registration 0x85a9b0 sets the
+ * registration year, clears every player's mark +0x6d (0x85a9e3..0x85a9fa) and registers the clubs that each
+ * European competition lists then. From then on a player of the year's Champions League or Europa League with no
+ * mark 2 gets code 8 (0x5833e1..0x5833ed) in every round but the original's qualifying rounds 160 and 230
+ * (0x5833bb..0x5833df). The access list's qualifying rounds (codes 220 to 270 above, as 0x4b0870 rounds them) are
+ * not in that test, so a club still in them after 4 August, or handed over to the Europa or Conference League,
+ * fielded only its registered players: FC Midtjylland had 6 of 50 in its Champions League third qualifying round
+ * on 14 August 2020 (2020/21 start, November 2020 database), and the match stopped at match_eng.cpp 652 (init_match
+ * 0x6b7f20 counts fewer than 11 at 0x6b89be). With the access list these rounds take the original's base rule
+ * (TRANSFER_RULES::get_ineligibility_code 0x8e8a60, as 0x5833ac does), as its own qualifying rounds do. */
+void o_005832e0(void);
+
+RT_WRAP(005832e0, uefa_qual_registration)
+{
+    uint32_t self = cpu.ecx, player = rt_arg(0), fixture = rt_arg(1);
+    o_005832e0();
+    if (rt_unwinding || (cpu.eax & 0xff) != 8 || !readable(fixture)) return;
+    int code = (int16_t)rd16(g_mem, fixture + 0x30), base = code < 1000 ? code - code % 10 : code;
+    if (base != 220 && (base < 240 || base > 270)) return;
+    uint32_t rec = rd32(g_mem, fixture + 0x14);
+    if (!readable(rec) || !season_uefa_row((int16_t)rd16(g_mem, GAME_YEAR))) return;
+    uint32_t a[2] = {player, fixture};
+    uint32_t r = call_this(0x8e8a60u, self, 2, a);
+    if (!rt_unwinding) cpu.eax = (cpu.eax & 0xffffff00u) | (r & 0xff);
+}
