@@ -204,8 +204,11 @@ static int cd_box(void)
  * in its header with the database (0x533e6a..0x533ec5). The .lng files of the game are those of 3.9.68,
  * so every other database, and a save that holds 3.9.68 .lng copies, gave the box at each new game and
  * load. On a difference the function closes the file, shows the box, sets 0xb67a34 to 0 and returns
- * with no names loaded, so the names stay English. The skip keeps all of that except the box. */
-static int lng_count_box(void) { return rd32(g_mem, cpu.esp) == rt_site_lng_count_box; }
+ * with no names loaded, so the names stay English. The skip keeps all of that except the box. The same
+ * call also shows "Database..cpp 7752" when the .lng file does not open (0x533c74, jump 0x533caa to
+ * 0x535897). That box still shows: the skip tests the line number, the last argument of 0x90d130 (0x1e68
+ * pushed at 0x535890, 0x1e48 at 0x533ca4), which is still on the stack at the call (argument 8). */
+static int lng_count_box(void) { return rd32(g_mem, cpu.esp) == rt_site_lng_count_box && rt_arg(8) == 0x1e68; }
 
 /* The message box of the game: its own loop draws it and waits for Ok. */
 RT_WRAP(005e8290, message_box)
