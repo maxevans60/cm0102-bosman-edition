@@ -237,7 +237,8 @@ SAME_SAVE_RUNS = [
 # ref-0.5.0 itself is not compared with normal. --ref-build stays free for the main build.
 REF_050 = None
 # --ref-setup <name> (with --ref-build): the run setup-<name> plays this build with RECOMP_SETUP_TEXT=<name>, the
-# Setup Game of the reference build (for example 0.6.0-preview, database.c), and is compared with ref-build.
+# Setup Game of the reference build (0.6.0-preview, or menu-b for the strip of batch S; database.c), and is compared
+# with ref-build.
 REF_SETUP = None
 TEXT_050_RUN = ("text-0.5.0", {"faster_days": "off", "_against": "ref-0.5.0",
                                "_env": {"RECOMP_SETUP_TEXT": "0.5.0", "RECOMP_SEASON_CODE": "off"}})

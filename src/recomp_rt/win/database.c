@@ -32,6 +32,7 @@
  * play test of 0.6.0). The title is a text, not a picture. The widget keeps its text in the widget record
  * (+0x80), so the longer text takes no game memory. */
 #include "win.h"
+#include "draw.h"
 #include "options.h"
 
 #include "dbfolders.h"
@@ -115,6 +116,16 @@ static uint32_t call_this(uint32_t fn, uint32_t self, int n, const uint32_t *arg
     return r;
 }
 
+/* Test only: RECOMP_SETUP_TEXT names an older Setup Game. "0.5.0" and "0.6.0-preview" have the original's title
+ * and sub-heading; "menu-b" is the season strip of batch S (a96c282), with this build's title. */
+static const char *setup_text(void) { const char *v = getenv("RECOMP_SETUP_TEXT"); return v && *v ? v : NULL; }
+static int setup_legacy(void)
+{
+    const char *v = setup_text();
+    return v && (!strcmp(v, "0.5.0") || !strcmp(v, "0.6.0-preview"));
+}
+static int setup_menu_b(void) { return setup_text() && !strcmp(setup_text(), "menu-b"); }
+
 static uint32_t display(void)
 {
     return rd32(g_mem, DISPLAYS + (uint32_t)(int32_t)(int16_t)rd16(g_mem, PLAYER_SLOT) * 0x300u);
@@ -139,7 +150,7 @@ RT_WRAP(00803f30, heading)
 {
     static uint32_t title;
     uint32_t at = rt_arg(2);
-    if (at && !strcmp(win_str(at), TITLE_ORIGINAL) && !getenv("RECOMP_SETUP_TEXT")) {
+    if (at && !strcmp(win_str(at), TITLE_ORIGINAL) && !setup_legacy()) {
         if (!title) {
             title = win_static_alloc(sizeof TITLE_BOSMAN);
             win_put_str(title, TITLE_BOSMAN, sizeof TITLE_BOSMAN);
@@ -155,11 +166,82 @@ void o_005ed300(void);
 void o_00803f80(void);
 RT_WRAP(00803f80, sub_heading)
 {
-    if (rd32(g_mem, cpu.esp) == rt_site_setup_subheading && !getenv("RECOMP_SETUP_TEXT")) {
+    if (rd32(g_mem, cpu.esp) == rt_site_setup_subheading && !setup_legacy()) {
         rt_ret_stdcall(0xffffffffu, 2);
         return;
     }
     o_00803f80();
+}
+
+/* ---- Test only (RECOMP_SETUP_TEXT=menu-b): the season strip of batch S, a96c282, as it was ---- */
+#define STRIP_Y1 78
+#define STRIP_Y2 137
+#define TEXT_WIDTH 0x5e5ad0u     /* cdecl (font, text): the width in screen pixels */
+static uint32_t strip_item, measure;
+static struct { int set, full, x[2], w[2]; } strip_frame;
+
+static void strip_prefix(char *text, size_t room)
+{
+    int year = season_start_year();
+    char db[DBFOLDER_NAME];
+    season_screen_database_text(db, dbfolders_label_room(rt_screen_w));
+    snprintf(text, room, "Season %d/%02d \xb7 %s", year, (year + 1) % 100, db);
+    const char *opt = options_string(OPT_DATABASE);
+    char path[1100];
+    int shift;
+    int unchecked = season_code_on() && year != SEASON_FIRST_YEAR && !strncmp(opt, "folder:", 7) &&
+                    dbfolders_path(win_databases_root(), opt + 7, path, sizeof path) && !seasons_db_identify(path) &&
+                    !season_dates_custom_check(path, &shift);
+    if (unchecked) snprintf(text + strlen(text), room - strlen(text), " \xb7 Ages not checked");
+}
+
+#define RULES_TEXT "Changing rules:   "
+
+static uint32_t text_width(uint32_t at, const char *s)
+{
+    win_put_str(at, s, ITEM_TEXT_SIZE);
+    return call(TEXT_WIDTH, 2, (uint32_t[2]){3, at});
+}
+
+static void make_strip(void)
+{
+    if (!strip_item) strip_item = win_static_alloc(ITEM_SIZE);
+    if (!measure) measure = win_static_alloc(ITEM_TEXT_SIZE);
+    char first[ITEM_TEXT_SIZE], text[ITEM_TEXT_SIZE];
+    strip_prefix(first, sizeof first);
+    snprintf(text, sizeof text, "%s\n" RULES_TEXT "On   Off", first);
+    fill_item(strip_item, text, SEASON_ID);
+    call(MENU, 11, (uint32_t[11]){110, STRIP_Y1, 780, STRIP_Y2, 1, 1, 3, 1, strip_item, 1, 0});
+    const char *prefix = RULES_TEXT, *before_off = RULES_TEXT "On   ";
+    int full = (int)text_width(measure, RULES_TEXT "On   Off"), on_x = (int)text_width(measure, prefix);
+    int off_x = (int)text_width(measure, before_off), on_w = (int)text_width(measure, "On");
+    int off_w = (int)text_width(measure, "Off");
+    strip_frame.full = full;
+    strip_frame.x[1] = on_x;
+    strip_frame.w[1] = on_w;
+    strip_frame.x[0] = off_x;
+    strip_frame.w[0] = off_w;
+    strip_frame.set = 1;
+}
+
+static void strip_widget_drawn(uint32_t w)
+{
+    if (!strip_frame.set || (int16_t)rd16(g_mem, w + 8) != SEASON_ID || rd32(g_mem, NO_DRAW)) return;
+    uint32_t surface = rd32(g_mem, DRAW_SURFACE);
+    if (!surface) return;
+    DrawTarget t = {g_mem + rd32(g_mem, surface + 0x14), rd32(g_mem, surface + 0x10),
+                    (int)rd32(g_mem, surface + 8), (int)rd32(g_mem, surface + 0xc)};
+    int x1 = (int32_t)rd32(g_mem, w + 0x10), y1 = (int32_t)rd32(g_mem, w + 0x14);
+    int x2 = (int32_t)rd32(g_mem, w + 0x18), y2 = (int32_t)rd32(g_mem, w + 0x1c);
+    int v = season_code_on() && season_screen_rules_on();
+    int start = x1 + (x2 - x1 + 1 - strip_frame.full) / 2, cy = (y1 + y2) / 2 + 10;
+    int fx1 = start + strip_frame.x[v] - 5, fx2 = start + strip_frame.x[v] + strip_frame.w[v] + 4;
+    int fy1 = cy - 11, fy2 = cy + 10;
+    uint16_t c = rd16(g_mem, TEXT_YELLOW);
+    draw_line(&t, fx1, fy1, fx2, fy1, c);
+    draw_line(&t, fx2, fy1, fx2, fy2, c);
+    draw_line(&t, fx2, fy2, fx1, fy2, c);
+    draw_line(&t, fx1, fy2, fx1, fy1, c);
 }
 
 /* A text over the top row, a widget of its own rect (classic numbers), centred: 0x803fd0 as the season
@@ -231,6 +313,10 @@ static void make_top_row(void)
  * same in both states, and the box and the one yellow give the same set of colours in both. */
 void setup_widget_drawn(uint32_t w)
 {
+    if (setup_menu_b()) {
+        strip_widget_drawn(w);
+        return;
+    }
     uint32_t node = rd32(g_mem, TOP_NODE);
     if (rd32(g_mem, NO_DRAW) || !node || rd32(g_mem, node) != SETUP_BUILD) return;   /* Setup Game on top only */
     uint32_t surface = rd32(g_mem, DRAW_SURFACE), first = display() + WIDGETS_OF_DISPLAY;
@@ -318,7 +404,8 @@ RT_WRAP(005ed300, menu_build)
             g_mem[extras_items + i] = g_mem[item + FIRST_EXTRA * ITEM_SIZE + i];
         fill_item(item + 6 * ITEM_SIZE, "Bosman Edition Options", OPTIONS_ID);
         fill_item(item + 7 * ITEM_SIZE, "Extras", EXTRAS_ID);
-        make_top_row();
+        if (setup_menu_b()) make_strip();
+        else make_top_row();
         wr32(g_mem, cpu.esp + 4 + 4 * 3, MENU_Y + 4 * ROW_H);   /* y2 */
         wr32(g_mem, cpu.esp + 4 + 4 * 5, 4);                     /* rows */
         wr32(g_mem, cpu.esp + 4 + 4 * 7, 8);                     /* count */
