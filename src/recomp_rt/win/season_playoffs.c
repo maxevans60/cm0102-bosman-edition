@@ -92,7 +92,7 @@
 #define PLAYOFF_CLUBS 4
 #define ROUND_SIZE 0x68u
 #define PLAYOFF_DAYS 12                 /* the last match on day 11 after the table is complete */
-#define FINAL_LEG_DAYS 4                /* a two-leg final: the second leg 4 days after the first */
+#define FINAL_LEG_DAYS 3                /* a two-leg final: the second leg 3 days after the first (0x425f99) */
 #define NO_WEEKDAY 0xffffffffu          /* Date::Date 0x549f70 keeps the date for weekday -1 (src/si/date.c) */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
@@ -364,10 +364,10 @@ static void build_stage(uint32_t obj)
     if (!rt_unwinding) set_dates(table, 1, 8, 11, 2, two ? 0 : 4, year);   /* the final on day 11 (venue 4 as 0x572b5b) */
     if (two) {
         /* A two-leg final at the clubs' grounds, as the semi-finals of this table (+0x21 2 legs and +0x22 4 days
-         * between them, 0x572b1c, 0x572b20) and as the two-leg final of BraChampCup::create_schedule 0x425c10
-         * (+0x89 2 at 0x425f92, venue 0 at 0x425f38). The final's tie rule (+0xd) is that of the semi-finals
-         * without their fixed pairs flag 0x200 (0x572af3). Inference: +0x21 is the count of legs and +0x22 the
-         * days between them. */
+         * between them, 0x572b1c, 0x572b20) and the two-leg final of BraChampCup::create_schedule 0x425c10 (+0x89 2
+         * at 0x425f92, +0x8a 3 days at 0x425f99, venue 0 at 0x425f38). 3 days here, so that the play-off ends 15
+         * days after the table. The final's tie rule (+0xd) is that of the semi-finals without their fixed pairs
+         * flag 0x200 (0x572af3). Inference: +0x21 is the count of legs and +0x22 the days between them. */
         uint32_t f = table + ROUND_SIZE;
         g_mem[f + 0x21] = 2;
         g_mem[f + 0x22] = FINAL_LEG_DAYS;
@@ -397,8 +397,9 @@ static void build_stage(uint32_t obj)
     if (!rt_unwinding) call_this(F_SET_UP_ROUND, stage, 1, r0);
     if (rt_unwinding) return;
     wr32(g_mem, obj + COMP_STAGE_NOW, 0);            /* only now: the save reads stages[0..+0x30] (0x689918) */
-    fprintf(stderr, "recomp: playoffs: %s %u: play-off of places %d, %d, %d and %d drawn, %s final\n", file, year,
-            rows[0] + 1, rows[1] + 1, rows[2] + 1, rows[3] + 1, two ? "a two-leg" : "a one-match");
+    fprintf(stderr, "recomp: playoffs: %s %u: play-off of places %d, %d, %d and %d drawn on day %d, %s final\n", file,
+            year, rows[0] + 1, rows[1] + 1, rows[2] + 1, rows[3] + 1, (int16_t)rd16(g_mem, GAME_DATE),
+            two ? "a two-leg" : "a one-match");
 }
 
 int season_playoffs_advance(uint32_t obj)
@@ -416,8 +417,9 @@ RT_WRAP(00686940, playoff_result)
 {
     if (marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
         if (getenv("RECOMP_PLAYOFF_LOG"))
-            fprintf(stderr, "recomp: playoffs: %s: result club %x code %d stage %d\n", season_change_file(cpu.ecx),
-                    rd32(g_mem, cpu.esp + 4), (int8_t)g_mem[cpu.esp + 8], (int8_t)g_mem[cpu.esp + 0xc]);
+            fprintf(stderr, "recomp: playoffs: %s: result club %x code %d stage %d, day %d of %d\n",
+                    season_change_file(cpu.ecx), rd32(g_mem, cpu.esp + 4), (int8_t)g_mem[cpu.esp + 8],
+                    (int8_t)g_mem[cpu.esp + 0xc], (int16_t)rd16(g_mem, GAME_DATE), (int16_t)rd16(g_mem, GAME_DATE + 2));
         rt_jump(F_ENG_RESULT);
         return;
     }
@@ -504,6 +506,11 @@ void season_playoffs_rules(uint32_t obj)
     g_mem[obj + UP] = (uint8_t)direct;
     g_mem[obj + UP_PLAYOFF] = PLAYOFF_CLUBS;
     fprintf(stderr, "recomp: playoffs: %s %d: places %d to %d\n", file, season, direct + 1, direct + PLAYOFF_CLUBS);
+    if (getenv("RECOMP_PLAYOFF_LOG"))                /* the reserve sides that the play-off would skip */
+        for (int i = 0; i < (int16_t)rd16(g_mem, obj + COMP_CLUBS) && i < 64 && !rt_unwinding; i++)
+            if (barred(obj, row_club(obj, i)))
+                fprintf(stderr, "recomp: playoffs: %s %d: %.51s is a reserve side of a club above\n", file, season,
+                        win_str(row_club(obj, i) + 4));
 }
 
 /* ---- The season change waits for the play-off ---- */
