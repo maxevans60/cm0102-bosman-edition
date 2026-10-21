@@ -20,6 +20,7 @@
  * there means (clubs - 1) * meetings (0x689b1d..0x689b36), 35 for 36 clubs. The league phase passes its match
  * count, 8 or 6. */
 #include "win.h"
+#include "season_records.h"
 #include "season.h"
 #include "season_uefa.h"
 #include "season_uefa_league.h"
@@ -137,6 +138,7 @@ RT_WRAP(006835c0, league_create_fixtures)
         return;
     }
     uint32_t league = cpu.ecx;
+    season_records_league_log(league, rd32(g_mem, cpu.esp));      /* test log of slice 15b's fix */
     if (pending_stage && league == pending_stage && pending_list) {
         wr32(g_mem, league + 0xea, pending_list);
         pending_stage = pending_list = 0;

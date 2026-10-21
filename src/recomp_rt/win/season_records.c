@@ -1238,6 +1238,34 @@ void season_records_fixture_log(uint32_t fx, uint32_t ret)
                 rd32(g_mem, fx + 0x1c), rd32(g_mem, fx + 0x20), bad ? " (not a club)" : "");
 }
 
+/* Test log (RECOMP_CLUB_LOG=2): League::create_fixtures 0x6835c0 (its wrap in season_uefa_league.c calls this):
+ * a league whose table (+0xb1, rows of 0x3b, count +0x3e) holds a row that is not a club of the club table. It
+ * names the object, its vtable, record and count, the caller and the bad rows. It only reads. */
+void season_records_league_log(uint32_t league, uint32_t ret)
+{
+    const char *v = getenv("RECOMP_CLUB_LOG");
+    if (!v || strcmp(v, "2") || league < 0x10000u) return;
+    uint32_t table = rd32(g_mem, league + 0xb1), rec = rd32(g_mem, league + 4);
+    int n = (int16_t)rd16(g_mem, league + 0x3e);
+    uint32_t base = rd32(g_mem, 0xae23b4u), end = base + rd32(g_mem, 0xae235cu) * 0x245u;
+    if (table < 0x10000u || n <= 0 || n > 64) return;
+    int bad = 0;
+    for (int i = 0; i < n; i++) {
+        uint32_t c = rd32(g_mem, table + (uint32_t)i * 0x3bu);
+        bad += c < base || c >= end || (c - base) % 0x245u;
+    }
+    if (!bad) return;
+    char rn[52] = "";
+    if (rec >= 0x10000u && rec < 0xfff00000u) { memcpy(rn, g_mem + rec + 4, 51); rn[51] = 0; }
+    fprintf(stderr, "recomp: club records: create_fixtures from %08x: league %08x vtable %08x %s, %d rows, %d not "
+                    "clubs:", ret, league, rd32(g_mem, league), rn, n, bad);
+    for (int i = 0; i < n; i++) {
+        uint32_t c = rd32(g_mem, table + (uint32_t)i * 0x3bu);
+        if (c < base || c >= end || (c - base) % 0x245u) fprintf(stderr, " row %d %08x;", i, c);
+    }
+    fputc('\n', stderr);
+}
+
 void o_0090d2f0(void);
 
 /* VIRTUAL_STAFF::fill_fixture_squads, thiscall (Fixture *fixture, short slot, char no_check), ret 0xc. It tops up
