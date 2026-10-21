@@ -525,7 +525,11 @@ RULES_PART = "bosman_season.dat"
 # save differ as well. These four are the parts that differ in the new-game run of 2026-10-18 (all four, no
 # other: transfer.dat, clubs and staff are equal), so a fifth part that differs fails the check. The base game
 # (changing_rules off) is compared as before.
-RULES_ON_PARTS = ("fifa_rankings.dat", "general.dat", "national_teams.dat", "staff history.tmp")
+# contract.dat joins them with Setup Game menu B (O107, Max's play test of 0.6.0, accepted overnight for Max's
+# morning check): the same build with the menu of the preview (RECOMP_SETUP_TEXT=0.6.0-preview) differs only in
+# the four parts and bosman_season.dat, and a heap trace of Setup Game is the same with changing rules on and
+# off, so the rules-on game's own memory move meets the new menu's layout. Only the new-game check uses this.
+RULES_ON_PARTS = ("fifa_rankings.dat", "general.dat", "national_teams.dat", "staff history.tmp", "contract.dat")
 
 
 # A saved test game that opens on another screen than the news ends its load at another wait (0.6.0 slice 11).
