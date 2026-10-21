@@ -7,8 +7,9 @@
  * with the squad.
  *
  * - The look is the original comparison screen's (0x876520, Max 2026-10-20: "make it seem identical font
- *   etc"; docs/research/2026-10-20-best-xi-original-look.md section 3): the names of the attributes in pale
- *   grey [0xae3184] and the numbers in font 2, rows of the height of font 2, player 1 in the original's P1
+ *   etc"; docs/research/2026-10-20-best-xi-original-look.md section 3, Q421): the names of the attributes in
+ *   pale grey [0xae3184], the numbers in font 2 (the names stay in font 1, see font_of), rows of the height of
+ *   font 2, player 1 in the original's P1
  *   colour (green [0xae31aa]) and player 2 in its P2 colour (red [0xae31a8]). The higher number of a pair
  *   shows in its player's colour, an equal pair in yellow [0xaebdec] and the lower number in pale grey, as
  *   the original colours its one number. A hidden value is "-" in the original's orange [0xaebdd4].
@@ -76,7 +77,19 @@
 #define BACKDROP 0x0000u            /* the middle panel's fill: black, as the dark panels of the original's table */
 #define BACKDROP_ALPHA 176
 
-#define FONT (getenv("RECOMP_TMP_CFONT") ? 1 : 2)   /* TEMP experiment; the original's table font (0x879a4f) */
+#define FONT 1                      /* names and headings */
+#define NUMBER_FONT 2               /* the numbers, as the original's table (0x879a4f) */
+
+/* Same game (Q152): with every text in font 2 the same-save check of the comparison screen (same_save_views.py
+ * --check compare) found more parts of the save moved than the screen's usual memory layout parts
+ * (discipline.dat and match_stats_matches.tmp): the text engine keeps work memory for each glyph it draws.
+ * Names in font 1 and numbers in font 2 keep the check to the usual parts. */
+static uint32_t font_of(const char *text)
+{
+    int number = text && *text;
+    for (const char *p = text; p && *p; p++) number &= (*p >= '0' && *p <= '9') || *p == '.' || *p == '-';
+    return number ? NUMBER_FONT : FONT;
+}
 #define ROW_PX 19                   /* a row of a list, screen pixels: font 2 is 18 pixels high */
 #define GAP_PX 8
 #define MARKS 64
@@ -162,7 +175,7 @@ static int text_at(int x1, int y1, int x2, int y2, uint32_t style, uint32_t colo
 {
     win_put_str(buf, text, VIEWS_TEXT_SIZE);
     uint32_t w[18] = {2, (uint32_t)cx_(x1), (uint32_t)cy_(y1), (uint32_t)cx_(x2), (uint32_t)cy_(y2), 0, 0, style,
-                      colour, colour, flags, FONT, text_colour, buf, 0, id, data, 0xffffffffu};
+                      colour, colour, flags, font_of(text), text_colour, buf, 0, id, data, 0xffffffffu};
     return (int16_t)call_this(WIDGET_CREATE, display(), 18, w);
 }
 
