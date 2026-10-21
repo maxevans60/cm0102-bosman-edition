@@ -84,7 +84,8 @@ def main(argv):
         print(f"data_sweep_run.py: {work} exists; give a new --keep folder")
         return 2
     code, _ = rrc.run(program, game, last, year if year != 2001 else None, database, nations, [], work,
-                      int(arg(argv, "--timeout", 7200)), {"changing_rules": rules}, {"RECOMP_DATA_SWEEP": "1"})
+                      int(arg(argv, "--timeout", 7200)), {"changing_rules": rules}, {"RECOMP_DATA_SWEEP": "1"},
+                      stop_on_box=True)
     fails = [] if code == 0 else [f"the run ended with code {code} ({work})"]
     fails += check(work, last)
     for f in fails:

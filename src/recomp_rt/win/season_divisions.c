@@ -4,6 +4,7 @@
 #include "season_change.h"
 #include "season_comps.h"
 #include "season_divisions.h"
+#include "season_divisions_ita.h"
 #include "season_names.h"
 #include "season_rules.h"
 
@@ -1194,6 +1195,8 @@ void season_divisions_rules(uint32_t obj)
 int season_divisions_class_size(const char *division, int season)
 {
     if (!divisions_on() || !division) return -1;
+    int ita = season_ita_division_size(division, season);     /* slice 20b: Italy (season_divisions_ita.c) */
+    if (ita >= 0) return ita;
     /* Germany: in a season of the 3. Liga the North division takes the 3. Liga with the flag, and keeps the
      * Regionalliga pool of 18 and 18 without it (the unplayed exchange 0x5db7b0 and the split need 36). */
     int north = !strcmp(division, "German Regional Division North"), south = !strcmp(division, "German Regional Division South");

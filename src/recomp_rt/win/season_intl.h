@@ -86,6 +86,10 @@ void season_intl_shift_date(int shift, int *day, int *month0, int *year);
 /* Fills the empty Euro team slots in a season game (season_intl.c): at the seeding and at the draw. */
 void season_intl_euro_fill(uint32_t self);
 
+/* The hosts of the fixed host row of a competition (its key id, the value of its key global) and an edition
+ * year: up to six nation ids in the order of the table. Gives the count (slice 29: three hosts in 2026). */
+int season_intl_host_ids(uint32_t key, int year, int ids[6]);
+
 /* The inter-confederation ties of the World Cup of a year that this run built (season_intl_qual.c): up to max
  * pairs into teams (two teams each). Gives the pair count. */
 int season_intl_wc_ties(int year, uint32_t *teams, int max);

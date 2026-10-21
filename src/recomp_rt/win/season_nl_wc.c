@@ -20,6 +20,7 @@
 #include "season_comps.h"
 #include "season_intl.h"
 #include "season_nl.h"
+#include "season_wcq26.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -130,6 +131,7 @@ void o_009185c0(void);
  * Other campaigns and objects: the original (with slice 27's E1 site inside it). */
 RT_WRAP(009185c0, nl_wc_template)
 {
+    if (season_wcq26_europe_template()) return; /* slice 29: the 2026 cycle (season_wcq26.c) */
     uint32_t self = cpu.ecx, sp = cpu.esp;
     const SeasonNlQualifying *q = moved(self);
     int st = (int8_t)rd8(g_mem, sp + 4u);
@@ -272,6 +274,7 @@ void o_00919910(void);
 /* create_play_off_stage, thiscall (), from advance_stage 0x9196b5 when the groups end (wc doc 4). */
 RT_WRAP(00919910, nl_wc_paths)
 {
+    if (season_wcq26_europe_paths()) return; /* slice 29: the 2026 cycle (season_wcq26.c) */
     uint32_t self = cpu.ecx;
     const SeasonNlQualifying *q = moved(self);
     if (!q) {
@@ -290,6 +293,7 @@ void o_0091def0(void);
  * takes the CONMEBOL team or its fallback). */
 RT_WRAP(0091def0, nl_wc_asia_partner)
 {
+    if (season_wcq26_europe_no_asia()) return; /* slice 29: the 2026 cycle (season_wcq26.c) */
     if (!moved(cpu.ecx)) {
         o_0091def0();
         return;

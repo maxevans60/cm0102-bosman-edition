@@ -657,7 +657,7 @@ def league_steps(nations, extra):
 
 
 def run(program, game, last, year, database, nations, extra, keep, timeout, options_more=None, env_more=None,
-        start_only=False):
+        start_only=False, stop_on_box=False):
     """Plays the season jump. options_more: lines of settings.txt over the defaults (for example
     changing_rules = on, tests/seasons/season_change_run.py); env_more: more environment variables; start_only:
     the run ends after the first start report (slice 15)."""
@@ -693,13 +693,28 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, opti
                **({"RECOMP_RULES_REPORT_STOP": "start"} if start_only else {}),
                RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps("classic", shots, steps)), **env_extra)
     start = time.time()
-    with open(os.path.join(work, "stderr.txt"), "w") as log:
-        try:
-            r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, stdout=subprocess.DEVNULL,
-                               stderr=log, timeout=timeout)
-            code = r.returncode
-        except subprocess.TimeoutExpired:
-            code = "timeout"
+    log_path = os.path.join(work, "stderr.txt")
+    with open(log_path, "w") as log:
+        if stop_on_box:                         # slice 30a: a box makes the game wait; stop it by its PID at once
+            p = subprocess.Popen([program, "--game", game, "-seed", "1"], env=env, stdout=subprocess.DEVNULL,
+                                 stderr=log)
+            code = None
+            while code is None:
+                time.sleep(5)
+                code = p.poll()
+                with open(log_path, encoding="latin-1") as f:
+                    boxed = "recomp: message box from" in f.read()
+                if code is None and (boxed or time.time() - start > timeout):
+                    p.kill()
+                    p.wait()
+                    code = "box" if boxed else "timeout"
+        else:
+            try:
+                r = subprocess.run([program, "--game", game, "-seed", "1"], env=env, stdout=subprocess.DEVNULL,
+                                   stderr=log, timeout=timeout)
+                code = r.returncode
+            except subprocess.TimeoutExpired:
+                code = "timeout"
     print(f"run: code {code} after {time.time() - start:.0f} s, log {os.path.join(work, 'stderr.txt')}")
     return code, report
 
