@@ -232,10 +232,27 @@ static int name_matches(const char *names, const char *data)
     return 0;
 }
 
+/* The nation of a table name "Old/New": the latest name first. A database can hold the old record and a record
+ * with the new name (December 2025: nation 66 "FYR of Macedonia", with no clubs and no players, and nation 229
+ * "North Macedonia"), and a first match by id took the old record: its national team had no squad, and the first
+ * 2026-27 match stopped at virtual_staff.cpp 195 (VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0, box at 0x90d4c1:
+ * fewer than 15 filled squad slots of +0xd7 after the virtual players). A database with the old name only (and
+ * slice 27's rename, season_intl.c) still finds it by the earlier name. */
 static int nation_by_name(const char *names)
 {
-    for (int id = 0; id < nation_count(); id++)
-        if (name_matches(names, win_str(nation_at(id) + NATION_NAME))) return id;
+    char buf[128], *alt[8];
+    int n = 0;
+    snprintf(buf, sizeof buf, "%s", names);
+    season_change_latin1(buf);
+    for (char *p = buf; p && *p && n < 8;) {
+        char *slash = strchr(p, '/');
+        if (slash) *slash = 0;
+        alt[n++] = p;
+        p = slash ? slash + 1 : NULL;
+    }
+    for (int k = n - 1; k >= 0; k--)
+        for (int id = 0; id < nation_count(); id++)
+            if (!strcmp(alt[k], win_str(nation_at(id) + NATION_NAME))) return id;
     return -1;
 }
 
