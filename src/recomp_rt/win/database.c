@@ -30,6 +30,7 @@
  * play test of 0.6.0). The title is a text, not a picture. The widget keeps its text in the widget record
  * (+0x80), so the longer text takes no game memory. */
 #include "win.h"
+#include "draw.h"
 #include "options.h"
 
 #include "dbfolders.h"
@@ -66,10 +67,9 @@ extern const uint32_t rt_site_setup_menu, rt_site_setup_subheading;
 #define SIDE_BAR 0x75db00u       /* cdecl (mode, arg) */
 #define MENU 0x5ed300u           /* cdecl, 11 args: the menu builder */
 #define TEXT_WIDTH 0x5e5ad0u     /* cdecl (font, text): the width in screen pixels */
-#define WIDGET_CREATE 0x55f990u  /* thiscall on a Display, 18 args */
-#define DISPLAYS 0xb74c4cu       /* the Display of a player slot, 0x300 bytes apart */
-#define PLAYER_SLOT 0xb77c7au    /* s16: the player slot that has the turn */
 #define TEXT_YELLOW 0xaebdecu
+#define NO_DRAW 0xaebe0cu        /* not 0: the draw functions of the original draw nothing */
+#define DRAW_SURFACE 0xaebde4u   /* the surface that the draw functions of the original draw on */
 #define BACK_BAR 0x5edcc0u       /* cdecl (back, next) */
 #define CANNOT_GO_BACK 0x7fec60u /* thiscall on S (any): 0 when there is a screen to go back to */
 #define SIDE_BAR_INPUT 0x7615d0u /* cdecl (widget): 0 when it does not handle the click */
@@ -84,6 +84,8 @@ extern const uint32_t rt_site_setup_menu, rt_site_setup_subheading;
 
 /* Runtime memory for the strip text and the Extras items (made at the first Setup Game build). */
 static uint32_t strip_item, extras_items, measure;
+/* The places of "On" and "Off" in the strip's second line, screen pixels from its start ([1] On, [0] Off). */
+static struct { int set, full, x[2], w[2]; } strip_frame;
 #define EXTRAS_TEXT 0x100u      /* the text buffer of the Extras build */
 
 static uint32_t call(uint32_t fn, int n, const uint32_t *args)
@@ -101,11 +103,6 @@ static uint32_t call_this(uint32_t fn, uint32_t self, int n, const uint32_t *arg
     uint32_t r = rt_callback(fn, n, args);
     cpu = saved;
     return r;
-}
-
-static uint32_t display(void)
-{
-    return rd32(g_mem, DISPLAYS + (uint32_t)(int32_t)(int16_t)rd16(g_mem, PLAYER_SLOT) * 0x300u);
 }
 
 static void fill_item(uint32_t item, const char *text, uint32_t id)
@@ -150,8 +147,7 @@ RT_WRAP(00803f80, sub_heading)
     o_00803f80();
 }
 
-/* The text of the strip up to the rules values: the season, the database (and the Custom note), then
- * "Changing rules:". */
+/* The first line of the strip: the season and the database (and the Custom note). */
 static void strip_prefix(char *text, size_t room)
 {
     int year = season_start_year();
@@ -166,8 +162,9 @@ static void strip_prefix(char *text, size_t room)
                     dbfolders_path(win_databases_root(), opt + 7, path, sizeof path) && !seasons_db_identify(path) &&
                     !season_dates_custom_check(path, &shift);
     if (unchecked) snprintf(text + strlen(text), room - strlen(text), " \xb7 Ages not checked");
-    snprintf(text + strlen(text), room - strlen(text), " \xb7 Changing rules:   ");
 }
+
+#define RULES_TEXT "Changing rules:   "
 
 static uint32_t text_width(uint32_t at, const char *s)
 {
@@ -176,43 +173,58 @@ static uint32_t text_width(uint32_t at, const char *s)
 }
 
 /* The strip: a menu of one item, made by the original's menu builder in the highlight style (bit 0 of the
- * highlight bits: style 0x822, yellow text, 0x5ed300), with the text "... Changing rules:  On   Off", and a
- * yellow frame with no text round the value of the next new game, as the original's Game Settings box frames
- * the current value (style 0x221, 0x82477b).
+ * highlight bits: style 0x822, yellow text, 0x5ed300), with two lines: the season and its database, then
+ * "Changing rules:   On   Off". The runtime draws a yellow frame round the value of the next new game
+ * (setup_widget_drawn), as the original's Game Settings box frames the current value (0x82477b).
  *
- * Same game (Q152): the text is the same with changing rules on and off. A text that changed with the state
- * moved the game's memory blocks (traces of the game's heap: the original's text engine keeps work memory for
- * each glyph and text it draws, docs/research/2026-10-16-hd-text.md), and the same-save runs rules-off and off
- * then differed from normal. The frame draws no text and has the same size in both states, and the widths
- * below are measured the same way in both. */
+ * Same game (Q152): the game's widgets and texts are the same with changing rules on and off, so the
+ * same-save runs rules-off and off equal normal. Heap traces showed why: a text that changed with the state
+ * moved the original's text engine's work memory (docs/research/2026-10-16-hd-text.md), and a frame widget
+ * of the game that changed with the state swapped two blocks. The widths below are measured the same way in
+ * both states. */
 static void make_strip(void)
 {
     if (!strip_item) strip_item = win_static_alloc(ITEM_SIZE);
     if (!measure) measure = win_static_alloc(ITEM_TEXT_SIZE);
-    char prefix[ITEM_TEXT_SIZE], text[ITEM_TEXT_SIZE], before_off[ITEM_TEXT_SIZE];
-    strip_prefix(prefix, sizeof prefix);
-    snprintf(text, sizeof text, "%sOn   Off", prefix);
-    snprintf(before_off, sizeof before_off, "%sOn   ", prefix);
+    char first[ITEM_TEXT_SIZE], text[ITEM_TEXT_SIZE];
+    strip_prefix(first, sizeof first);
+    snprintf(text, sizeof text, "%s\n" RULES_TEXT "On   Off", first);
     fill_item(strip_item, text, SEASON_ID);
     call(MENU, 11, (uint32_t[11]){110, STRIP_Y1, 780, STRIP_Y2, 1, 1, 3, 1, strip_item, 1, 0});
 
-    int full = (int)text_width(measure, text), on_x = (int)text_width(measure, prefix);
+    const char *prefix = RULES_TEXT, *before_off = RULES_TEXT "On   ";
+    int full = (int)text_width(measure, RULES_TEXT "On   Off"), on_x = (int)text_width(measure, prefix);
     int off_x = (int)text_width(measure, before_off), on_w = (int)text_width(measure, "On");
     int off_w = (int)text_width(measure, "Off");
-    int rules = season_code_on() && season_screen_rules_on();
-    int sw = (int)rt_screen_w, sh = (int)rt_screen_h;
-    int bx1 = 110 * sw / 800, bx2 = 781 * sw / 800 - 1, start = bx1 + (bx2 - bx1 + 1 - full) / 2;
-    /* One frame size for both values: a frame takes a block of the game's heap by its size. */
-    int w = on_w > off_w ? on_w : off_w, x = start + (rules ? on_x + on_w / 2 : off_x + off_w / 2) - w / 2;
-    int cy = (STRIP_Y1 + STRIP_Y2) / 2, half = 12 * 600 / sh;
-    win_put_str(measure, "", ITEM_TEXT_SIZE);
-    uint32_t yellow = rd16(g_mem, TEXT_YELLOW);
-    /* In classic numbers, both edges on a multiple of 5: the widget create scales 5 to 8 pixels in widescreen
-     * exactly, so the frame has one size at every place. */
-    int fw = ((w + 10) * 800 / sw + 4) / 5 * 5, fx = ((x + w / 2) * 800 / sw - fw / 2) / 5 * 5;
-    uint32_t f[18] = {1, (uint32_t)fx, (uint32_t)(cy - half), (uint32_t)(fx + fw), (uint32_t)(cy + half), 0, 0, 0x221,
-                      yellow, yellow, 0xc, 3, yellow, measure, 0, 0, 0, 0xffffffffu};
-    call_this(WIDGET_CREATE, display(), 18, f);
+    strip_frame.full = full;
+    strip_frame.x[1] = on_x;
+    strip_frame.w[1] = on_w;
+    strip_frame.x[0] = off_x;
+    strip_frame.w[0] = off_w;
+    strip_frame.set = 1;
+}
+
+/* After the game draws a widget (names.c, through views_widget_drawn): on the strip, the yellow frame round
+ * the value of the next new game, drawn by the runtime on the game's draw surface (draw.c), so the screen
+ * dumps hold it too. */
+void setup_widget_drawn(uint32_t w)
+{
+    if (!strip_frame.set || (int16_t)rd16(g_mem, w + 8) != SEASON_ID || rd32(g_mem, NO_DRAW)) return;
+    uint32_t surface = rd32(g_mem, DRAW_SURFACE);
+    if (!surface) return;
+    DrawTarget t = {g_mem + rd32(g_mem, surface + 0x14), rd32(g_mem, surface + 0x10),
+                    (int)rd32(g_mem, surface + 8), (int)rd32(g_mem, surface + 0xc)};
+    int x1 = (int32_t)rd32(g_mem, w + 0x10), y1 = (int32_t)rd32(g_mem, w + 0x14);
+    int x2 = (int32_t)rd32(g_mem, w + 0x18), y2 = (int32_t)rd32(g_mem, w + 0x1c);
+    int v = season_code_on() && season_screen_rules_on();
+    int start = x1 + (x2 - x1 + 1 - strip_frame.full) / 2, cy = (y1 + y2) / 2 + 10;   /* the second line */
+    int fx1 = start + strip_frame.x[v] - 5, fx2 = start + strip_frame.x[v] + strip_frame.w[v] + 4;
+    int fy1 = cy - 11, fy2 = cy + 10;
+    uint16_t c = rd16(g_mem, TEXT_YELLOW);
+    draw_line(&t, fx1, fy1, fx2, fy1, c);
+    draw_line(&t, fx2, fy1, fx2, fy2, c);
+    draw_line(&t, fx2, fy2, fx1, fy2, c);
+    draw_line(&t, fx1, fy2, fx1, fy1, c);
 }
 
 /* The menu builder, cdecl (x1, y1, x2, y2, columns, rows, font, count, items, highlight bits, sort). */

@@ -33,6 +33,10 @@ const char *season_screen_credit(const char *name);
 int season_screen_rules_choice(void);
 int season_screen_rules_on(void);
 
+/* The widget draw wrap (names.c, through views_widget_drawn) calls this after the game draws widget w: the
+ * frame of the season strip of Setup Game (database.c). */
+void setup_widget_drawn(uint32_t w);
+
 /* The build function of the Extras screen of Setup Game (database.c), for the wait state "extras". */
 uint32_t setup_extras_build_fn(void);
 
