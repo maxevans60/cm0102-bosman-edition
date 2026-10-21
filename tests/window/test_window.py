@@ -7,6 +7,7 @@ Each run uses a new temporary save folder. The runs do not go to full screen: th
 the screen of the person at the computer."""
 import os
 import re
+import struct
 import subprocess
 import sys
 import tempfile
@@ -48,6 +49,30 @@ def fills(sizes):
     return one_way and dw <= ow + 1 and dh <= oh + 1 and abs(dw * ph - dh * pw) <= max(pw, ph)
 
 
+def bmp(path):
+    """A 24-bit BMP of the script step shot: width, height and a pixel reader (x, y from the top)."""
+    data = open(path, "rb").read()
+    start, = struct.unpack_from("<I", data, 10)
+    w, h = struct.unpack_from("<ii", data, 18)
+    row = (w * 3 + 3) & ~3
+
+    def px(x, y):
+        o = start + (h - 1 - y) * row + x * 3 if h > 0 else start + y * row + x * 3
+        return data[o:o + 3]
+    return w, abs(h), px
+
+
+def picture_in_bars(path, sizes):
+    """The bars at the sides are black and the picture between them is drawn (not black)."""
+    w, h, px = bmp(path)
+    bar = (sizes[2] - sizes[6]) // 2
+    black = b"\0\0\0"
+    bars_black = all(px(x, y) == black for x in (0, max(0, bar - 2), w - 1) for y in range(0, h, 37))
+    inside = [px(x, y) for x in range(bar + 2, w - bar - 2, 23) for y in range(0, h, 23)]
+    drawn = sum(1 for p in inside if p != black) > len(inside) // 2
+    return bar > 2 and bars_black and drawn
+
+
 def main(argv):
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
     failures = []
@@ -60,7 +85,8 @@ def main(argv):
     # remember_window, in classic mode: its smallest window, 800x600, is below the sizes used here.
     with tempfile.TemporaryDirectory() as user:
         classic(user)
-        err = run(program, game, user, ["3000 resize 1000 700", "4000 quit"])
+        shot = os.path.join(user, "shot.bmp")
+        err = run(program, game, user, ["1000 click 400 300", "2000 resize 1000 700", "12000 shot " + shot, "12500 quit"])
         check("classic: the smallest window is 800x600", smallest(err) == (800, 600))
         saved = open(os.path.join(user, "window.txt")).read().split()
         check("quit stores the resized size", saved[2:4] == ["1000", "700"])
@@ -68,6 +94,8 @@ def main(argv):
         check("classic 1000x700: the picture fills the window, with bars at the sides only",
               sizes is not None and fills(sizes) and abs(sizes[7] - sizes[3]) <= 1)
         check("classic 1000x700: sharp bilinear above a fit of 1", way.startswith("sharp: "))
+        check("classic 1000x700: the window shows the picture between black bars", sizes is not None
+              and os.path.exists(shot) and picture_in_bars(shot, sizes))
         o = opened(run(program, game, user, ["3000 quit"]))
         check("next start opens at the stored size", o is not None and o[2:4] == (1000, 700))
 

@@ -92,7 +92,7 @@ static void post_mouse(uint32_t msg, int x, int y)
  * pixels at a whole number of times its size (work_k), and the work texture goes to the window with
  * linear filtering. Otherwise the picture goes to the window with linear filtering. */
 static SDL_Texture *work;
-static int work_k = 1;
+static int work_k = 1, work_failed_k;             /* work_failed_k: a size that SDL could not make */
 
 static void update_scaling(void)
 {
@@ -106,13 +106,17 @@ static void update_scaling(void)
     if (k != work_k || (k > 1 && !work)) {
         if (work) SDL_DestroyTexture(work);
         work = NULL;
-        if (k > 1) {
+        if (k > 1 && k != work_failed_k) {
             work = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET,
                                      (int)rt_screen_w * k, (int)rt_screen_h * k);
-            if (!work) fprintf(stderr, "recomp: work texture %dx: %s\n", k, SDL_GetError());
+            if (!work) {
+                fprintf(stderr, "recomp: work texture %dx: %s\n", k, SDL_GetError());
+                work_failed_k = k;
+            }
             else SDL_SetTextureScaleMode(work, SDL_ScaleModeLinear);
         }
         work_k = work ? k : 1;
+        if (k == 1) work_failed_k = 0;
         win_screen_dirty = 1;
     }
     SDL_SetTextureScaleMode(texture, work ? SDL_ScaleModeNearest : SDL_ScaleModeLinear);
@@ -294,6 +298,8 @@ static void fit_new_window(int made_w, int made_h)
 int win_short_screen(void)
 {
     const char *test = getenv("RECOMP_TEST_SCREEN_H");
+    const char *driver = SDL_GetCurrentVideoDriver();
+    if (!test && driver && !strcmp(driver, "dummy")) return 0;   /* the test runs: no screen, no hint */
     int h = test ? atoi(test) : 0;
     SDL_DisplayMode m;
     int d = window ? SDL_GetWindowDisplayIndex(window) : -1;
@@ -387,6 +393,7 @@ static int draw_frame(void)
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, work, NULL, NULL);
     } else {
+        if (work) SDL_SetTextureScaleMode(texture, SDL_ScaleModeLinear);   /* the target failed: no uneven letters */
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, NULL, NULL);
         names_draw(renderer);
@@ -690,6 +697,22 @@ static SDL_Keycode swallow_key = SDLK_UNKNOWN;    /* a key that did the work of 
 static void handle_event(SDL_Event *e)
 {
     switch (e->type) {
+    case SDL_RENDER_TARGETS_RESET:            /* Direct3D after a lost device, for example Alt+Tab from the 800x600 mode */
+        win_screen_dirty = 1;
+        break;
+    case SDL_RENDER_DEVICE_RESET:             /* every texture is gone: make them again */
+        fprintf(stderr, "recomp: render device reset\n");
+        if (work) SDL_DestroyTexture(work);
+        work = NULL;
+        work_k = 1;
+        work_failed_k = 0;
+        SDL_DestroyTexture(texture);
+        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING,
+                                    (int)rt_screen_w, (int)rt_screen_h);
+        if (!texture) rt_fatal("SDL_CreateTexture: %s", SDL_GetError());
+        update_scaling();
+        win_screen_dirty = 1;
+        break;
     case SDL_QUIT:
         win_save_window();
         if (rt_on_fatal) rt_on_fatal();

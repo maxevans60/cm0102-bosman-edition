@@ -31,7 +31,7 @@ def main(argv):
                      "Settings: display = widescreen", "Game folder: "):
             check("report has " + part, part in text)
         check("the change log has the resize", "size changed: window 1300x820" in text)
-        check("the report says how the picture is scaled", "sharp: " in text or ", linear)" in text)
+        check("1300x820 is above a fit of 1: the report says sharp bilinear", "sharp: " in text)
         check("the change log has the report key", "report key: window 1300x820" in text)
         home = os.path.expanduser("~")
         name = os.path.basename(home)

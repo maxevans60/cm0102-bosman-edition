@@ -35,11 +35,11 @@ Max, 2026-10-21. Decisions 1 to 4 came with the task, Q5 to Q12 from the grillin
 7. The smallest window is the size of a new window: the picture's size, in real pixels on Windows (the size that the DPI fix gives a new window) and in points on a Mac and on Linux. It is never larger than the usable part of the screen, with the same shape. Widescreen on a 1366x768 screen gets about 1110x694. The game sets it again when the window moves to another screen.
 8. Full screen (F11 on Windows and Linux, Cmd+F on a Mac) in classic changes the screen to 800x600 when the screen lists that mode. Otherwise it uses the desktop size with the picture filled. Windows and Linux PCs normally list 800x600. The Mac of the project lists no 800x600 mode (its smallest is 1024x640), so a Mac uses the desktop size. A remembered full screen at start follows the same rule.
 9. Widescreen full screen uses the desktop size with the picture filled. A 16:9 screen shows narrow bars at the sides, because the picture is 16:10.
-10. When the player switches away from the 800x600 full screen (Alt+Tab), the game minimises and the desktop goes back to its own size. This is SDL's default.
+10. When the player switches away from the 800x600 full screen (Alt+Tab), the game minimises and the desktop goes back to its own size. This is SDL's default. After a lost Direct3D device the game draws its picture again, and after a device reset it makes its textures again.
 11. The widescreen hint. On a screen less than 800 real pixels high, in widescreen, the game shows a message box once, at the first start on such a screen: "Your screen is less than 800 pixels high. Classic mode fits it better. Choose it in Game Options, Display mode, then start the game again." The file `hints.txt` in the user folder, beside `window.txt`, keeps the line `short_screen_hint = shown`. It is not in `settings.txt`, because it is not an option. The Display mode row of Bosman Edition Options says "Next start. Classic suits this screen" on such a screen, every time. The height is that of the desktop mode of the window's screen: real pixels on Windows, points on a Mac.
 12. A remembered window smaller than the smallest size grows to it at start. SDL does this when the game sets the smallest size.
 
-The display report shows the way the picture is scaled ("sharp: 2 times with nearest pixels, then linear" or "linear"), full screen "in an 800x600 mode" when the mode changed, and a line when the screen is less than 800 pixels high.
+The display report shows the way the picture is scaled ("sharp: 2 times with nearest pixels, then linear" or "linear"), full screen "in an 800x600 mode" when the mode changed, and, in widescreen, a line when the screen is less than 800 pixels high. Under SDL's dummy video driver (the smoke runs) there is no screen, so there is no hint.
 
 The drawing does not touch the game's memory, so the game's decisions stay the same (Q152).
 
@@ -50,7 +50,8 @@ The drawing does not touch the game's memory, so the game's decisions stay the s
 - `tests/window/test_display_report.py`: the report at start, on the key and at quit, with the way of scaling.
 - The smoke runs in classic and widescreen.
 - The script step `shot` now reads the window before the present, because the back buffer was empty after it on a Mac (Metal).
-- Nobody can run Windows on the project's Mac. The cross-build must have no warnings. The 800x600 full screen on Windows and the forum player's laptop are manual checks for the 0.6.0 beta.
+- `test_window.py` also reads a shot of classic at 1000x700: black bars at the sides and a drawn picture between them.
+- Nobody can run Windows on the project's Mac. The cross-build must have no warnings. Manual checks for the 0.6.0 beta on Windows: the 800x600 full screen, Alt+Tab from it and back, the forum player's laptop, and whether SDL 2.32 with `SDL_WINDOWS_DPI_SCALING=1` gives the desktop mode in real pixels at 125 % (the "desktop mode" of the display report shows it). The hint and the 800x600 check depend on that answer.
 
 ## Out of scope
 
@@ -70,6 +71,6 @@ Delivers: every decision above.
 Merge danger: two-way door. Blast radius: the picture of every player on every system. A wrong filter or size shows a soft, small or black picture, and a wrong mode change can leave a Windows screen at 800x600 until the game quits. The game's decisions do not change. Anything a player sees triggers the review rule: one Opus review.
 - [x] `winscale` passes.
 - [x] `test_window.py` and `test_display_report.py` pass on the Mac.
-- [ ] The Mac and Windows builds have no warnings.
-- [ ] ctest and the Mac smoke runs pass.
-- [ ] One Opus review is clean.
+- [x] The Mac build has no warnings. The Windows cross-build of the changed files has no warnings. The full `.exe` does not link on main at 79fec25 because of a fault outside this change (`season_divisions_ita.c:349` defines `unlink`, which MinGW's `stdio.h` declares).
+- [x] ctest passes (44 of 44). The Mac smoke runs match main: 1, 3, 4 and 5 pass, and 2-setup differs from `smoke-ref` by 2.6 % (classic) and 2.0 % (widescreen) on main too, because the reference is older than the Setup Game strip.
+- [x] One Opus review: no must-fix. Its four should-fix items and four nits are fixed or moved to the manual checks above.

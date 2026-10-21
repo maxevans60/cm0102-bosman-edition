@@ -33,9 +33,9 @@
  *   below the box is built again when the box closes.
  * - full_player_search: on the next game day (the search keeps its list for the day, 0x7af160).
  * - sharp_picture: at once (win_sharp_picture_changed).
+ * - the other switches: at the next key, draw or save.
  * The Display mode row says "Next start. Classic suits this screen" in widescreen on a screen less than 800
  * pixels high (win_short_screen, the widescreen hint).
- * - the other switches: at the next key, draw or save.
  * save_folder: the Change button of its row opens the computer's own folder picker (host_pick_folder, Q419)
  * and writes the choice to settings.txt; the row then shows the new folder, and the game uses it at the next
  * start. The test variable RECOMP_PICK_FOLDER gives the answer of the picker without a window. When
