@@ -4,7 +4,7 @@ CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes 
 
 ## Next release
 
-- Setup Game: a strip at the top shows the season, its database and whether the rules change. Click it to open Choose Season. Hall Of Fame, Game Credits and Web Sites are on a new Extras screen.
+- Setup Game: two new buttons sit at the top. The left one shows the season and its database, and a click opens Choose Season. The right one shows whether the rules change, and a click switches it. Hall Of Fame, Game Credits and Web Sites are on a new Extras screen.
 - Choose Season: each season has one database, so the version choice is gone. The changing rules switch is on this screen now, under the season details.
 - The start screens have the title "Championship Manager: Bosman Edition".
 - Bosman Edition Options: the Screen tab is now called Graphics.
