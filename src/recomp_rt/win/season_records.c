@@ -1214,3 +1214,26 @@ RT_WRAP(0090dae0, virtual_staff_top_up)
         }
     }
 }
+
+
+/* Test log (RECOMP_CLUB_LOG=2): FIXTURE_MANAGER::add_fixture 0x5aa680 (its wrap in season_kind_cup_breaks.c calls
+ * this), for a fixture whose record (+0x14) has the long name of RECOMP_FIXTURE_RECORD: the caller (return
+ * address) and the fixture's clubs (+0x1c, +0x20). It only reads. */
+void season_records_fixture_log(uint32_t fx, uint32_t ret)
+{
+    const char *want = getenv("RECOMP_FIXTURE_RECORD"), *v = getenv("RECOMP_CLUB_LOG");
+    if (!v || strcmp(v, "2") || fx < 0x10000u) return;
+    uint32_t rec = rd32(g_mem, fx + 0x14);
+    char rn[52] = "";
+    if (rec >= 0x10000u && rec < 0xfff00000u) { memcpy(rn, g_mem + rec + 4, 51); rn[51] = 0; }
+    /* A club pointer outside the club table: the fixture names no club. */
+    uint32_t base = rd32(g_mem, 0xae23b4u), end = base + rd32(g_mem, 0xae235cu) * 0x245u;
+    int bad = 0;
+    for (int k = 0; k < 2; k++) {
+        uint32_t c = rd32(g_mem, fx + 0x1c + 4u * (uint32_t)k);
+        bad |= c < base || c >= end || (c - base) % 0x245u;
+    }
+    if ((want && *want && !strcmp(rn, want)) || bad)
+        fprintf(stderr, "recomp: club records: add_fixture from %08x: %s, clubs %08x %08x%s\n", ret, rn,
+                rd32(g_mem, fx + 0x1c), rd32(g_mem, fx + 0x20), bad ? " (not a club)" : "");
+}
