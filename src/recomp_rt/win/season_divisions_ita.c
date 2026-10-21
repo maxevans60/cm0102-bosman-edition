@@ -346,7 +346,7 @@ static int by_reputation(const void *a, const void *b)
  * +0x1c stays, so that the pass never takes it for a top league. ItaSerC2a::set_up_rules writes C2/A's links again
  * each season and at a load (+0x1c [0x9cf57c], +0x20 [0x9cf584], 0x653bf5..0x653c0c), so unlink_ended runs after
  * each start of C2/A, at a new game and after a load. */
-static void unlink(uint32_t obj)
+static void ita_unlink(uint32_t obj)
 {
     uint32_t table = rd32(g_mem, COMP_OBJECTS), slots = rd32(g_mem, 0xadadf8u);
     int32_t id = (int32_t)rd32(g_mem, rd32(g_mem, obj + 4)), below = (int32_t)rd32(g_mem, obj + 0x20);
@@ -364,7 +364,7 @@ static void unlink_ended(void)
     const uint32_t keys[2] = {KEY_C2B, KEY_C2C};
     for (int k = 0; k < 2; k++) {
         uint32_t obj = object_of(keys[k]);
-        if (obj && (int16_t)rd16(g_mem, obj + 0x40) == IDLE_YEAR) unlink(obj);
+        if (obj && (int16_t)rd16(g_mem, obj + 0x40) == IDLE_YEAR) ita_unlink(obj);
     }
 }
 
@@ -395,7 +395,7 @@ static void idle(uint32_t obj)
 {
     if (!obj) return;
     wr16(g_mem, obj + 0x40, IDLE_YEAR);
-    unlink(obj);
+    ita_unlink(obj);
     drop_results(obj);
     fprintf(stderr, "recomp: serie c: %.50s ends (year %d)\n", win_str(rd32(g_mem, obj + 4) + 4), IDLE_YEAR);
 }
