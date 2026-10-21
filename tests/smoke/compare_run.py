@@ -132,7 +132,7 @@ HIDDEN_CLASSIC = [
     "12000 click 160 137",                  # the first name box
     "13500 click 160 538",                  # More players (font 2 name boxes since 0.6.0: one row fewer)
     "15000 click 160 137",                  # the first name box again
-    "16500 click 160 244",                  # John Welsh
+    "16500 click 160 265",                  # John Welsh (one row lower since the page holds one name less)
     "18000 dump {d}/9-hidden-attributes.bmp",
 ]
 
