@@ -294,6 +294,9 @@ extern uint32_t rt_screen_w, rt_screen_h;
  * sites of tools/recomp/seasons.py read it in place of the constants 2001, 2002 and 2003. */
 extern uint32_t rt_season_year;
 
+/* The league load's row arrays (win/league_load.c, tools/recomp/league_load.py at 0x68c898): 0 when the read
+ * of a row's result array failed only because the array has 0 bytes (a league of one club), else 1. */
+uint32_t rt_league_row_read_failed(uint32_t league);
 /* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
  * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
