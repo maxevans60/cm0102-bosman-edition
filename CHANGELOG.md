@@ -14,6 +14,8 @@ CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes 
 - Display report: if the picture looks wrong, press Ctrl+Shift+D (Cmd+Shift+D on a Mac). The game saves `display-report.txt` in the save folder, puts the same text on the clipboard and shows where the file is. The report lists your system, your screens and their scale, the window size and how the game scales its picture, and the last 10 changes of the window. The game also writes the file at each start and quit. Paths in it show `<user>` in place of your account name.
 - Windows: text stays sharp with display scaling at 125 % or 150 %. Before, Windows stretched the whole window and blurred it. A new window opens at the size of the picture, as at 100 %. With `sharp_picture` on, a larger window or full screen keeps the picture at its own size, with bars round it, until it holds the picture 2 times. This also applies at 100 %.
 - The Linux download is now `CM0102-Bosman-Edition-<version>-x86_64.AppImage`, and it has the icon file that AppImage tools look for.
+- In a language other than English, a load and a new game no longer show the box "CD Not Required" in that language, for example "CD Non Richiesto".
+- In a language other than English, the box "Database..cpp 7784" no longer shows with the 3.9.60 and 3.9.65 data sets or with a season database. New games on 3.9.60 and 3.9.65 now show club, nation, city, competition and stadium names in your language, from the language files of those versions. Season databases and older saves on 3.9.60 or 3.9.65 keep the English names.
 
 ## 0.5.0 (pre-release)
 
