@@ -1206,3 +1206,32 @@ RT_WRAP(0090d2f0, virtual_staff_fill_check)
         g_mem[cpu.esp + 0xc] = 1;   /* no_check; the wrap of 0x90dae0 above names a short club (RECOMP_CLUB_LOG) */
     o_0090d2f0();
 }
+
+void o_006db500(void);
+
+/* Test log (RECOMP_CLUB_LOG=1): the team pick 0x6db500, thiscall, called by CM3_MATCH_ENGINE::init_match 0x6b7f20
+ * once per side (0x6b89b9 for the away side, args: engine, [club+0xcf], club+0xd7, ..., club, opponent, fixture).
+ * init_match shows match_eng.cpp 612 (home) or 652 (away) when it returns fewer than 11 (0x6b89be). The line names
+ * the side, its squad slots, the national squad size of NationalTeams (0x775520) and the fixture's competition
+ * (record +0x14). It only reads. */
+RT_WRAP(006db500, team_pick_log)
+{
+    uint32_t club = rt_arg(2) - 0xd7, fixture = rt_arg(7);
+    o_006db500();
+    if (rt_unwinding || (int8_t)cpu.eax >= 11 || !getenv("RECOMP_CLUB_LOG")) return;
+    int n = 0;
+    for (uint32_t j = 0; j < SQUAD; j++) n += rd32(g_mem, club + 0xd7 + 4 * j) != 0;
+    char name[52] = "", cname[52] = "", hname[52] = "";
+    uint32_t rec = rd32(g_mem, fixture + 0x14), home = rd32(g_mem, fixture + 0x1c);
+    if (club >= 0x10000u) memcpy(name, g_mem + club + 4, 51);
+    if (rec >= 0x10000u) memcpy(cname, g_mem + rec + 4, 51);
+    if (home >= 0x10000u) memcpy(hname, g_mem + home + 4, 51);
+    fprintf(stderr, "recomp: club records: team pick of %s (club %08x) gives %d players from %d squad slots", name, club,
+            (int8_t)cpu.eax, n);
+    uint32_t nt = rd32(g_mem, 0xb74318u), sizes = nt >= 0x10000u ? rd32(g_mem, nt + 4) : 0;
+    uint32_t nat = club >= 0x10000u ? rd32(g_mem, club + 0x53) : 0;
+    if (sizes >= 0x10000u && nat >= 0x10000u && rd32(g_mem, nat) < 0x10000u)
+        fprintf(stderr, ", national squad size %d", g_mem[sizes + 110u * rd32(g_mem, nat) + 0x43]);
+    fprintf(stderr, ", record %d %s, home %s, round %d\n", rec >= 0x10000u ? (int)rd32(g_mem, rec) : -1, cname, hname,
+            (int16_t)rd16(g_mem, fixture + 0x30));
+}

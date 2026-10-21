@@ -77,6 +77,8 @@
 #define CLUB_SIZE 0x245u
 #define CLUB_NATION 0x53u
 #define GAME_YEAR 0xae2c92u
+#define NATIONAL_TEAMS 0xb74318u        /* NationalTeams: +4 squad sizes, 110 bytes a nation (0x775520) */
+#define SENIOR_SIZE 0x43u
 
 /* Object fields (class doc 2 and 3). */
 #define F_RECORD 0x4u
@@ -194,6 +196,25 @@ int season_nl_nation_of_club(uint32_t club)
     if (!readable(n) || n < base || (n - base) % NATION_SIZE) return -1;
     int id = (int)((n - base) / NATION_SIZE);
     return id < nation_count() ? id : -1;
+}
+
+/* 1 when the national team of the nation can take a squad. Before a match fill_fixture_squads 0x90d2f0 tops up a
+ * national team (0x90dae0) to the squad sizes of NationalTeams (0x775520: the byte at [[0xb74318] + 4] + 110 x the
+ * nation id + 0x43 for a senior side, 0x775555..0x775576). A nation with size 0 there gets no players and no virtual
+ * players (0x90dd3e..0x90dd45): Martinique (reputation 0 in the October 2022 database) had 0 squad slots in its
+ * first CONCACAF Nations League match of 2023/24 in a 2022 start, and init_match 0x6b7f20 stopped at
+ * match_eng.cpp 652 (fewer than 11 at 0x6b89be). Before the table holds any size (the draw at game creation), a
+ * nation with reputation 0 is left out instead. */
+int season_nl_nation_can_play(int id)
+{
+    if (id < 0 || id >= nation_count()) return 0;
+    uint32_t nt = rd32(g_mem, NATIONAL_TEAMS), table = readable(nt) ? rd32(g_mem, nt + 4) : 0;
+    int ready = 0;
+    if (readable(table))
+        for (int k = 0; k < nation_count() && !ready; k++) ready = g_mem[table + 110u * (uint32_t)k + SENIOR_SIZE] != 0;
+    if (!ready) return (int16_t)rd16(g_mem, nation_at(id) + NATION_REPUTATION) > 0;
+    uint32_t nid = rd32(g_mem, nation_at(id));
+    return nid < 0x10000u && g_mem[table + 110u * nid + SENIOR_SIZE] != 0;
 }
 
 /* The national team of a nation: national_team 0x53b3d0 gives the club of the nation's row, which in some
@@ -500,6 +521,11 @@ static int real_entrants(const SeasonNlEdition *e, Entrant *out)
                                    e->edition, t->nation);
             continue;
         }
+        if (!season_nl_nation_can_play(id)) {
+            if (logging()) fprintf(stderr, "recomp: season nl: %s %s: %s has no national squad size\n", e->confed,
+                                   e->edition, t->nation);
+            continue;
+        }
         out[n++] = (Entrant){id, t->league, t->group, 0};
     }
     return n;
@@ -576,7 +602,7 @@ static int entrants(uint32_t self, const SeasonNlEdition *e, Entrant *out)
     int next[NL_MAX_NATIONS], k = 0;
     if (!season_nl_next_leagues(&from, e, rows, n, next)) return real_entrants(e, out);
     for (int i = 0; i < n; i++) {
-        if (left_out(e, rows[i].nation)) continue;
+        if (left_out(e, rows[i].nation) || !season_nl_nation_can_play(rows[i].nation)) continue;
         out[k++] = (Entrant){rows[i].nation, next[i], 0, 0};
         if (logging() && next[i] != rows[i].league)
             fprintf(stderr, strcmp(e->confed, "UEFA") ? "recomp: season nl: %s: %s moves from league %c to %c\n"
