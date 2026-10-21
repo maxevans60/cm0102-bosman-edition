@@ -156,9 +156,9 @@ _Avoid_: modern game, new-season game
 The screen from the start screen with one tile per season under era headings. The player picks the season, and so its database, there, and sets changing rules for the new game. Each season has one database (Q417).
 _Avoid_: season picker, year select
 
-**Season strip**:
-The wide button at the top of Setup Game that shows the season, the database and the changing rules state of the next new game. A click opens the Choose Season screen.
-_Avoid_: season bar, season button, Choose Season item
+**Season button**:
+The left button of the top row of Setup Game: the season of the next new game and its database. A click opens the Choose Season screen. The right button of the row shows changing rules On or Off, and a click switches it (Q422).
+_Avoid_: season strip, season bar, Choose Season item
 
 **Extras screen**:
 The screen from the Extras button of Setup Game with the original's Hall Of Fame, Game Credits and Web Sites.

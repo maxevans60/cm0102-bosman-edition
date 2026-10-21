@@ -530,6 +530,11 @@ RULES_PART = "bosman_season.dat"
 # the four parts and bosman_season.dat, and a heap trace of Setup Game is the same with changing rules on and
 # off, so the rules-on game's own memory move meets the new menu's layout. Only the new-game check uses this.
 RULES_ON_PARTS = ("fifa_rankings.dat", "general.dat", "national_teams.dat", "staff history.tmp", "contract.dat")
+# O128 (the standard of O107): in a new game the runs off and foreign-off may differ in club records.dat. The same
+# build with the menu of the preview (RECOMP_SETUP_TEXT=0.6.0-preview) equals normal in both, so the Setup Game
+# top row's layout (Q422) meets the memory move that those options already make (foreign_colours draws names in
+# another colour); it is not decision code. Only those two runs of the new-game check use this.
+NEW_GAME_LAYOUT_PARTS = ("club records.dat",)
 
 
 # A saved test game that opens on another screen than the news ends its load at another wait (0.6.0 slice 11).
@@ -548,7 +553,9 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
     if save_name is None:
         steps = [s for s in STEPS if "5-holiday" not in s and "quit" not in s]
         return compare_runs(program, game, mode, new_game_runs(SAME_SAVE_RUNS),
-                            without_intro_click(steps) + ["400000 quit"], days, allowed={"rules-on": (RULES_PART,) + RULES_ON_PARTS},
+                            without_intro_click(steps) + ["400000 quit"], days,
+                            allowed={"rules-on": (RULES_PART,) + RULES_ON_PARTS, "off": NEW_GAME_LAYOUT_PARTS,
+                                     "foreign-off": NEW_GAME_LAYOUT_PARTS},
                             required={"rules-on": RULES_PART}, text_050=True)
     # --save: load the saved test game, then the same Go on Holiday steps as the new game.
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fixtures"))
