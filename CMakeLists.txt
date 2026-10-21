@@ -118,6 +118,10 @@ if(NOT WIN32)
     target_compile_definitions(seasons_db_test PRIVATE
         SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv")
     add_test(NAME seasons_db COMMAND seasons_db_test)
+    # The heap of the recompiled game: the join of the free blocks at the end of the arena (decision O121).
+    add_executable(heap_test tests/recomp/test_heap.c src/recomp_rt/heap.c)
+    target_include_directories(heap_test PRIVATE src/recomp_rt)
+    add_test(NAME heap COMMAND heap_test)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
