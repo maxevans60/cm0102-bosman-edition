@@ -1142,8 +1142,13 @@ RT_WRAP(005eb120, gre_swap)
      * and does not know the group. So the group starts here, with its clubs in place; with changing rules on, the
      * before hook of the rule kind below keeps it idle in a season with no group. */
     if (rt_unwinding) return;
-    if (held) vcall(group, 0x8);
-    else {
+    /* A group that the module makes at this change (gre_make, before GrePrm's start) is already in the next season:
+     * the constructor sets its year and makes its table (0x5eb35e). A second start put it one year ahead (seed 3 of
+     * the 0.6.0 long games, made in 2013): it then took its class's places (2 up) where GrePrm relegated 1 to
+     * it, and at the 2015 end the Greek Cup had fewer than its 44 clubs (gre_cup.cpp 802, 0x5e9c24). */
+    if (held) {
+        if ((int16_t)rd16(g_mem, group + OBJ_YEAR) < next) vcall(group, 0x8);
+    } else {
         /* No group next season: it stays idle with its finished season and waits with the year before its next
          * edition (2998 when none comes), as the rule kind's before hook does (review 2: its start_new_season would
          * make a table with no club). */
