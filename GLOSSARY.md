@@ -62,6 +62,10 @@ _Avoid_: larger text, 4K mode
 The game drawn at 800x600, as the original draws it.
 _Avoid_: 4:3 mode, original mode
 
+**Sharp bilinear**:
+The scaling of `sharp_picture = on` from 0.6.0. The game draws its picture with nearest pixels at a whole number of times its size, then scales that to the window with linear filtering. Letters keep an even shape at every window size.
+_Avoid_: whole pixels, integer scaling
+
 **Display report**:
 The file display-report.txt in the save folder, from 0.6.0. It lists the system, the screens and their scale, the window and how the game scales its picture, and the last 10 window changes. The game writes it at start and at quit. Ctrl+Shift+D (Cmd+Shift+D on a Mac) writes it again and copies it to the clipboard. Players add it to reports of picture and window problems.
 _Avoid_: diagnostics, debug log, system info
