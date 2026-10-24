@@ -36,6 +36,12 @@ INSNS = {
     0x653AA2: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2a_clubs(edi, 0x12u));"),
     # C2/B and C2/C end in the era; with the flag their objects exist and keep one club (create_fixtures needs one).
     # In the two-group Serie C2 (2011/12 to 2013/14, Q529) C2/B takes the clubs of its division and C2/C ends.
+    # create_italian_comps 0x835320 with the flag: no league for an ended C2/B or C2/C division (no clubs, O259 A23):
+    # its operator new gives 0, so the slot is 0 (0x8356d5, 0x835728) and the wrap of 0x835320 drops it.
+    0x835696: ("call 0x944cf1", "if (rt_ita_c2_none(1u)) eax = 0; else { esp -= 4; W32(esp, 0x83569bu); SYNC(); "
+               "f_00944cf1(); LOAD(); RT_AFTER_CALL(); }"),
+    0x8356E9: ("call 0x944cf1", "if (rt_ita_c2_none(2u)) eax = 0; else { esp -= 4; W32(esp, 0x8356eeu); SYNC(); "
+               "f_00944cf1(); LOAD(); RT_AFTER_CALL(); }"),
     0x657F62: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2_end_clubs(edi, 0x12u));"),
     0x65C0F2: ("mov word ptr [edi + 0x3e], 0x12", "W16(edi + 0x3eu, rt_ita_c2_end_clubs(edi, 0x12u));"),
     0x6418D5: ("mov ecx, dword ptr [eax + edx*4]", "ecx = rt_ita_tier_c2(R32(eax + edx * 4u));"),
@@ -57,6 +63,14 @@ INSNS = {
     0x63FCF9: ("cmp ecx, dword ptr [0x9cf57c]",
                "t0 = ecx; t1 = rt_ita_cup_c1b(ecx, R32(0x9cf57cu)); t2 = t0 - t1 - 0; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
     0x641986: ("mov ecx, dword ptr [ecx + edx*4]", "ecx = rt_ita_start_c2(R32(ecx + edx * 4u));"),
+    # The Coppa Italia Serie C of the Serie C era and the two-group C2 seasons (O259 A21, Q628): smaller groups and
+    # their match days, and the knockout's runners-up and seeds for the clubs of the Serie C divisions (rt_ita_ccup_*, season_divisions_ita.c).
+    0x63D5EE: ("mov word ptr [esi + 0x3e], 5", "W16(esi + 0x3eu, rt_ita_ccup_group(esi, 5u));"),
+    0x63CFD8: ("mov word ptr [ecx], 5", "W16(ecx, rt_ita_ccup_days(edi, 5u));"),
+    0x63DE55: ("cmp edx, 0x162",
+               "t0 = edx; t1 = rt_ita_ccup_seconds(ebp, 0x162u); t2 = t0 - t1 - 0; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    0x63DE7B: ("mov esi, 0x16", "esi = rt_ita_ccup_first_seed(ebp, 0x16u);"),
+    0x63DE86: ("lea edx, [ecx + 0x58]", "edx = rt_ita_ccup_seed_slot(ebp, ecx, esi);"),
     # PorCup::collect_entrants 0x7ce220, second pass: a club with no division is passed over (je 0x7ce3ed at
     # 0x7ce37d). With Liga 3 the club moves leave more Portuguese clubs with no division, and the cup (164 entrants,
     # 0x7ce234) stopped at por_cup.cpp 74 in a 2021/22 start; rt_por_cup_none takes them then (Q528).

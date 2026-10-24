@@ -229,14 +229,14 @@ int season_ita_division_size(const char *name, int season)
                                        "Italian Serie C2/B", "Italian Serie C2/C"};
     if (name && two_c2_of_year(season)) {
         for (int k = 0; k < GROUPS; k++)
-            if (!strcmp(name, div[GROUPS - 1 + k])) return k < 2 ? c2_clubs(rules_season(season), k) : 1;
+            if (!strcmp(name, div[GROUPS - 1 + k])) return k < 2 ? c2_clubs(rules_season(season), k) : 0;
         return -1;
     }
     if (!name || !era_of_year(season)) return -1;
     for (int k = 0; k < 5; k++)
         if (!strcmp(name, div[k])) {
             const SeasonRule *r = k < GROUPS ? group_row(rules_season(season), k) : NULL;
-            if (k >= GROUPS) return extra_division_flag() ? 1 : 0;     /* one club with the flag (see below) */
+            if (k >= GROUPS) return 0;          /* the division ends (Q290): no league is built for it (below) */
             return r ? r->clubs : 0;
         }
     return -1;
@@ -437,35 +437,14 @@ static void unlink_ended(void)
     }
 }
 
-/* C2/B or C2/C ends: the year 2999, so it makes no fixtures and the chain never starts it again (0x641986). Its
- * table keeps its last season (the rules report shows that edition with year 2999). It leaves the links.
- *
- * A table of one club (a new game of the era with the flag) holds no result blocks. Each row's block at +9 holds
- * +0xa7 bytes, the matches of a club, which is 0 with one club. League::save_to_temp_file writes the blocks when
- * row 0 has one (0x689762..0x6897e3), and League::load_from_temp_file reads each with fread of +0xa7 bytes and wants
- * a count of 1 (0x688c59..0x688c98): fread of 0 bytes gives 0, so the load of a 2014 game with the extra division
- * stopped at its box (line 0x12e4, 0x688cea). With no block in row 0 the save writes 0 and the load gives each row
- * none (0x688d1f..0x688d3d), a state that the load itself makes. */
-static void drop_results(uint32_t obj)
-{
-    uint32_t rows = rd32(g_mem, obj + 0xb1);
-    int n = (int16_t)rd16(g_mem, obj + 0x3e);
-    if (!readable(rows) || n > 1) return;
-    for (int k = 0; k < n && !rt_unwinding; k++) {
-        uint32_t at = rows + ROW_SIZE * (uint32_t)k + 9u, block = rd32(g_mem, at);
-        if (!block) continue;
-        uint32_t f[1] = {block};
-        call_cdecl(F_FREE, 1, f);
-        wr32(g_mem, at, 0);
-    }
-}
-
+/* C2/B or C2/C ends while the game runs: the year 2999, so it makes no fixtures and the chain never starts it again
+ * (0x641986). Its table keeps its last season (the rules report shows that edition with year 2999). It leaves the
+ * links. At the next load no league is made for it (rt_ita_c2_none). */
 static void idle(uint32_t obj)
 {
     if (!obj) return;
     wr16(g_mem, obj + 0x40, IDLE_YEAR);
     ita_unlink(obj);
-    drop_results(obj);
     fprintf(stderr, "recomp: serie c: %.50s ends (year %d)\n", win_str(rd32(g_mem, obj + 4) + 4), IDLE_YEAR);
 }
 
@@ -804,7 +783,10 @@ static void regroup(uint32_t serie_a)
 static int c2c_ended(void)
 {
     uint32_t c = object_of(KEY_C2C);
-    return c && (int16_t)rd16(g_mem, c + 0x40) == IDLE_YEAR;
+    if (c) return (int16_t)rd16(g_mem, c + 0x40) == IDLE_YEAR;
+    /* A23: no league is made for an ended C2/C, so a game that starts in a two-group season has C2/A and C2/B and no
+     * C2/C object (the original's chain would call through it: 0x64252d). */
+    return object_of(KEY_C2A) && object_of(KEY_C2B);
 }
 
 /* The season that ItaSerA starts is a two-group season, or C2/C has ended. */
@@ -1004,8 +986,8 @@ uint32_t rt_ita_tier_c2(uint32_t c2a)
 uint32_t rt_ita_tier_last(uint32_t obj)
 {
     uint32_t serie_a = object_of(KEY_A), c2b = object_of(KEY_C2B);
-    if (!serie_a || !c2b || c2_group(obj) != 2 || !two_c2_of_year((int16_t)rd16(g_mem, serie_a + 0x40))) return obj;
-    return c2b;
+    if (!serie_a || !c2b || !two_c2_of_year((int16_t)rd16(g_mem, serie_a + 0x40))) return obj;
+    return obj && c2_group(obj) != 2 ? obj : c2b;          /* no C2/C object after a load of such a season */
 }
 
 #define F_FREE_TABLE 0x00687970u        /* League::free_table, thiscall (0: its own table) ret 4 */
@@ -1134,38 +1116,6 @@ static void kind_season(int s)
                        "clubs.", a->clubs, b->clubs, c->clubs);
 }
 
-/* An ended league of one club at a new game: it ends, and its club (the one its constructor needs) goes to the
- * Serie D, so it is in the pool that fills the groups (else it kept a division with no league for the whole game:
- * review of Q529). The table keeps the row. */
-static void end_new(uint32_t obj)
-{
-    if (!obj || (int16_t)rd16(g_mem, obj + 0x3e) > 1) return;
-    idle(obj);
-    uint32_t rec = rd32(g_mem, obj + 4), serie_d = record_of(KEY_SERIE_D), serie_a = object_of(KEY_A);
-    uint32_t table = rd32(g_mem, CLUBS);
-    int count = (int)rd32(g_mem, CLUB_COUNT);
-    for (int i = 0; rec && serie_d && serie_a && readable(table) && i < count && !rt_unwinding; i++) {
-        uint32_t club = table + CLUB_SIZE * (uint32_t)i;
-        if (rd32(g_mem, club + 0x57) != rec) continue;
-        uint32_t r[3] = {club, serie_d, 1};
-        call_this(F_RELEGATE_TO, serie_a, 3, r);
-        fprintf(stderr, "recomp: serie c: %.50s: its club goes to the Serie D\n", win_str(rec + 4));
-    }
-}
-
-/* A new game of the era: C2/B and C2/C (made with the extra division flag, one club each) end now; in a two-group
- * C2 season C2/C (Q529). */
-static void kind_new_game(int y)
-{
-    if (two_c2_of_year(y)) {
-        end_new(object_of(KEY_C2C));
-        return;
-    }
-    if (!era_of_year(y)) return;
-    end_new(object_of(KEY_C2B));
-    end_new(object_of(KEY_C2C));
-}
-
 /* A load: the constructors and set_up_rules give C2/A, C2/B and C2/C their links again (0x653bf5..0x653c0c). */
 static void kind_loaded(int y)
 {
@@ -1173,26 +1123,78 @@ static void kind_loaded(int y)
     unlink_ended();
 }
 
-const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", kind_new_game, kind_loaded, kind_season, NULL, NULL,
-                                                NULL};
+const SeasonRuleKind season_kind_ita_serie_c = {"ita_serie_c", NULL, kind_loaded, kind_season, NULL, NULL, NULL};
 
-/* ---- C2/B and C2/C at a new game of the era ----
+/* ---- No league for an ended C2 division (O259, row A23) ----
  *
- * With the extra division flag the original makes C2/B and C2/C (0x8356ce, 0x835721). League::create_fixtures
- * 0x6835c0 cannot make a league of 0 clubs (its first block, n + n mod 2 pointers, at 0x683615..0x683638: box
- * league.cpp 1020 in a 2014 game), and create_table wants its whole count (0x64b755..0x64b763 in C1/A). So in the
- * era each keeps one club (season_ita_division_size gives 1 with the flag): its count store (0x657f62, 0x65c0f2)
- * gives 1, the round robin of one club and a rest place has no match (0x683ac9 on), check_complete counts 0
- * matches ((1 - 1) x 2, 0x689b1d..0x689b36), and the new game hook ends the object (year 2999). */
+ * With the extra division flag create_italian_comps 0x835320 makes C2/A, C2/B and C2/C (operator new 0x944cf1 at
+ * 0x835640, 0x835696, 0x8356e9; constructors 0x652e90, 0x657350, 0x65b4e0 at 0x835678, 0x8356ce, 0x835721; entry
+ * slots 4 to 6, 0x835693..0x835736), at a new game and at each load. A C2 division that has ended holds no clubs:
+ * at a new game the club moves give it none (season_ita_division_size, Q290), after the change into the era or into
+ * two C2 groups the chain and the regroup move its clubs out. A league of 0 clubs cannot be made:
+ * League::create_fixtures 0x6835c0 stops at league.cpp 1020 (its first block, n + n mod 2 pointers, 0x683615..
+ * 0x683638), and create_table wants its whole count (0x64b755..0x64b763 in C1/A). So in a season game the operator
+ * new of C2/B and C2/C gives 0 when the division has no clubs (rt_ita_c2_none, tools/recomp/new_divisions.py): the
+ * original then stores 0 in the slot (0x8356d5, 0x835728), and the wrap below takes the empty slots out of the
+ * entry's array. The base game always has clubs there. A C2 league that ends while the game runs keeps its object
+ * until the next load, as a competition that never returns (year 2999, Q395, idle). */
+uint32_t rt_ita_c2_none(uint32_t group)
+{
+    uint32_t key = group == 1 ? KEY_C2B : group == 2 ? KEY_C2C : 0;
+    int none = key && season_game_changes() && clubs_of(key) == 0;
+    if (none) fprintf(stderr, "recomp: serie c: no league for %.50s (its division has no clubs)\n",
+                      win_str(record_of(key) + 4));
+    return (uint32_t)none;
+}
+
+/* create_italian_comps, cdecl (entry) ret: the entry's competitions +0x10 (count +0xc, 0xb with the flag at
+ * 0x835410) lose the empty slots that rt_ita_c2_none left; the cups after them (0x835739 on) move up. */
+void o_00835320(void);
+
+RT_WRAP(00835320, ita_create_comps)
+{
+    uint32_t entry = rt_arg(0);
+    o_00835320();
+    if (rt_unwinding || !readable(entry)) return;
+    uint32_t eax = cpu.eax, arr = rd32(g_mem, entry + 0x10);
+    int n = (int32_t)rd32(g_mem, entry + 0xc), k = 0;
+    for (int i = 0; readable(arr) && i < n && i < 64; i++) {
+        uint32_t obj = rd32(g_mem, arr + 4u * (uint32_t)i);
+        if (obj) wr32(g_mem, arr + 4u * (uint32_t)k++, obj);
+    }
+    if (readable(arr) && k < n) {
+        for (int i = k; i < n; i++) wr32(g_mem, arr + 4u * (uint32_t)i, 0);
+        wr32(g_mem, entry + 0xc, (uint32_t)k);
+    }
+    cpu.eax = eax;
+}
+
+/* The links below of the C2 groups: set_up_rules writes +0x20 = [0x9cf584] in C2/A (0x653bf5..0x653c0c) and the next
+ * group's id in C2/B, at every start and at a load. The season change pass follows +0x20 from the top league and
+ * reads the object of each id (0x48ce37..0x48ce46), so a link to a division with no clubs (no league, or one that has
+ * ended) ends the chain there (-1). At a new game the object table is not filled yet, so the test is the clubs. */
+static void c2_link(uint32_t obj)
+{
+    int32_t below = (int32_t)rd32(g_mem, obj + 0x20);
+    for (int k = 1; k < GROUPS && !rt_unwinding; k++)
+        if (below >= 0 && below == (int32_t)rd32(g_mem, C2_KEY[k]) && season_game_changes() && clubs_of(C2_KEY[k]) == 0)
+            wr32(g_mem, obj + 0x20, 0xffffffffu);
+}
+
+void o_00653b90(void);
+void o_00658050(void);
+void o_0065c1e0(void);
+
+RT_WRAP(00653b90, c2a_set_up_rules) { uint32_t o = cpu.ecx; o_00653b90(); if (!rt_unwinding) { uint32_t a = cpu.eax; c2_link(o); cpu.eax = a; } }
+RT_WRAP(00658050, c2b_set_up_rules) { uint32_t o = cpu.ecx; o_00658050(); if (!rt_unwinding) { uint32_t a = cpu.eax; c2_link(o); cpu.eax = a; } }
+RT_WRAP(0065c1e0, c2c_set_up_rules) { uint32_t o = cpu.ecx; o_0065c1e0(); if (!rt_unwinding) { uint32_t a = cpu.eax; c2_link(o); cpu.eax = a; } }
+
+/* The count store of C2/B's create_table (0x657f62) in a two-group C2 season: the clubs of its division (C2/C's store
+ * 0x65c0f2 keeps the original's: C2/C is not made in those seasons). */
 uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original)
 {
     if (c2_group(obj) == 1 && two_c2(obj)) return own_clubs(obj, KEY_C2B, original);
-    if (c2_group(obj) == 2 && two_c2_of_year((int16_t)rd16(g_mem, obj + 0x40)))
-        return clubs_of(KEY_C2C) == 1 ? 1u : original;
-    if (!era_of_year((int16_t)rd16(g_mem, obj + 0x40))) return original;
-    int32_t id = (int32_t)rd32(g_mem, rd32(g_mem, obj + 4));
-    uint32_t key = id == (int32_t)rd32(g_mem, KEY_C2B) ? KEY_C2B : id == (int32_t)rd32(g_mem, KEY_C2C) ? KEY_C2C : 0;
-    return key && clubs_of(key) == 1 ? 1u : original;
+    return original;
 }
 
 /* The fixed fixture lists of C2/B and C2/C (0x658750, 0x65c8e0, called by the constructors before create_fixtures,
@@ -1216,37 +1218,177 @@ static int no_fixed_list(void)
 RT_WRAP(00658750, c2b_fixed_list) { if (!no_fixed_list()) o_00658750(); }
 RT_WRAP(0065c8e0, c2c_fixed_list) { if (!no_fixed_list()) o_0065c8e0(); }
 
-/* ---- The Coppa Italia Serie C in the era (Q625) ----
+/* ---- The Coppa Italia Serie C in the era (O259, row A21; Q628) ----
  *
- * ItaCCup::select_entrants 0x63dfe0 sets 90 entrants (+0xf2 0x5a at 0x63dff4, a block of 0x168 bytes at +0xee) and
- * takes the Italian clubs whose division is C1/A, C1/B, C2/A, C2/B or C2/C (0x63e094..0x63e107) up to 90; the code
- * after it reads all 90 slots (0x63e109..). The original's C1 and C2 hold 90; the era's three groups hold 60 or fewer,
- * and the constructor (0x63ccce) stopped at "Database..cpp 16398". Until slice 21 gives the cup its real 60 entrants
- * (ita-235), the clubs that are short come from the Serie D by reputation: for the call they count as C2/B clubs,
- * after it their division is the Serie D again. The two C2 groups of 2011/12 to 2013/14 hold 36 to 40 clubs, so the
- * C1 and C2 clubs are 72 to 76 then, and the same fill makes 90 (Q529). */
+ * The original's cup is made for 90 clubs, the clubs of C1 and C2 (ItaCCup::select_entrants 0x63dfe0: +0xf2 0x5a at
+ * 0x63dff4, a block of 0x168 bytes at +0xee, the clubs of C1/A to C2/C at 0x63e094..0x63e107). Its shape:
+ * - 16 groups of 5: the cup object is group 1 (init_first_group 0x63d5e0, +0x3e 5 at 0x63d5ee) and each step makes
+ *   the next group of +0x3e clubs from the list (create_group_stage 0x63d9e0, 0x63da9a..0x63dace) until +0x30 is
+ *   15 (advance_stage 0x63d950, 0x63d9cc); the group match days are 5 (create_schedule 0x63cf90, 0x63cfd8);
+ * - a knockout of 32 in stage slot 15 (create_knockout_stage 0x63dc10): the 16 group winners (0x63dd91..0x63ddb7),
+ *   the 6 best runners-up by a table of the 16 second rows (0x63dca4..0x63dd3e, 0x63ddc6..0x63de5f: 0x162 = 6 rows)
+ *   and from place 22 (0x63de7b) the 10 seeds, the clubs that select_entrants moved to the end of the list: the
+ *   clubs relegated from Serie B and places 3 to 5 of C1 (0x63e109..0x63e199).
+ * The Serie C era has three groups of 54 to 60 clubs, and a two-group C2 season (Q529) C1 and two C2 groups of 72 to
+ * 76, so the 90 slots stopped the constructor at "Database..cpp 16398" (0x63ccce). Real cups of these seasons
+ * (ita-184 to ita-252) play three-club groups, then knockout rounds. So in these seasons the cup takes the clubs of
+ * the Serie C divisions (N) and keeps the original's shape with smaller groups: 16 groups of g clubs, g the size with
+ * 16 x g <= N <= 16 x g + 16 (3 for 54 to 60, 4 for 72 to 76), and the other N - 16 x g clubs go straight into the
+ * knockout with the 16 winners and the 16 - (N - 16 x g) best runners-up. A group plays g match days for an odd g
+ * (a club rests each day), g - 1 for an even g. The stage numbers stay the original's (slot 15 and stage index 15
+ * are the knockout in 0x63cf9a, 0x63d4c4, 0x63d770, 0x63e275). The base game keeps the original's cup. */
+#define CCUP_GROUPS 16
+#define CCUP_KO 32
+#define F_SHUFFLE_LIST 0x004afb40u      /* comp_util_shuffle_pointer_array, cdecl (list, count), as 0x63e1ae */
+#define F_LONGITUDE 0x0053fe50u         /* database_compare_clubs_by_longitude, as 0x63e1b9 */
+
+static const uint32_t CCUP_KEY[4] = {KEY_C1A, KEY_C1B, KEY_C2A, KEY_C2B};
+
+/* The divisions that play (the cup's clubs): the three groups in the era, C1 and the two C2 groups in a two-group
+ * season; 0 for the original's cup. Not every C1 and C2 division: in a game without the flag the C2 divisions keep
+ * clubs that no league plays (the original's cup takes them, 0x63e094..0x63e107), so a change into the era gave 96. */
+static int ccup_divisions(uint32_t cup)
+{
+    if (!readable(cup)) return 0;
+    int y = (int16_t)rd16(g_mem, cup + 0x40);
+    return era_of_year(y) ? 3 : two_c2_of_year(y) ? 4 : 0;
+}
+
+/* The clubs of the cup (N), or 0 (the original's cup). */
+static int ccup_clubs(uint32_t cup)
+{
+    int d = ccup_divisions(cup), n = 0;
+    for (int k = 0; k < d; k++) n += clubs_of(CCUP_KEY[k]);
+    return n >= CCUP_GROUPS * 3 && n <= CCUP_GROUPS * 6 ? n : 0;      /* groups of 3 to 5 */
+}
+
+/* The group size g of N clubs: 16 x g <= N <= 16 x g + 16. */
+static int ccup_group(int n) { return (n - 1) / CCUP_GROUPS; }
+
+/* The seed order: the clubs relegated from Serie B, then the best last places, then reputation. */
+static uint32_t seed_b;
+static int by_seed(const void *a, const void *b)
+{
+    uint32_t x = *(const uint32_t *)a, y = *(const uint32_t *)b;
+    uint32_t lx = rd32(g_mem, x + 0x5b), ly = rd32(g_mem, y + 0x5b);
+    int kx = lx && lx == seed_b ? 0 : lx ? g_mem[x + 0x5f] : 99, ky = ly && ly == seed_b ? 0 : ly ? g_mem[y + 0x5f] : 99;
+    if (kx != ky) return kx - ky;
+    return by_reputation(a, b);
+}
+
 void o_0063dfe0(void);
 
+/* select_entrants, thiscall () returning 1 (0x63e25d). In those seasons the list (+0xee, +0xf2 N) is the 16 x g
+ * group clubs, shuffled (0x4afb40), ordered by longitude (0x53fe50) and shuffled in blocks of 2 x g (the original's
+ * 80 in blocks of 10, 0x63e1a5..0x63e255), so each group is regional, then the seeds. */
 RT_WRAP(0063dfe0, ita_ccup_entrants)
 {
     uint32_t cup = cpu.ecx;
-    int need = 90 - clubs_of(KEY_C1A) - clubs_of(KEY_C1B) - clubs_of(KEY_C2A) - clubs_of(KEY_C2B) - clubs_of(KEY_C2C);
-    uint32_t serie_d = record_of(KEY_SERIE_D), c2b = record_of(KEY_C2B);
-    int y = (int16_t)rd16(g_mem, cup + 0x40);
-    if (need <= 0 || !(era_of_year(y) || two_c2_of_year(y)) || !serie_d || !c2b) {
+    int n = ccup_clubs(cup);
+    if (!n) {
         o_0063dfe0();
         return;
     }
-    static uint32_t extra[4096];
-    int m = pool(serie_d, extra, 4096);
-    qsort(extra, (size_t)m, sizeof *extra, by_reputation);
-    if (m > need) m = need;
-    for (int i = 0; i < m; i++) wr32(g_mem, extra[i] + 0x57, c2b);
-    o_0063dfe0();
-    uint32_t eax = cpu.eax;
-    for (int i = 0; i < m; i++) wr32(g_mem, extra[i] + 0x57, serie_d);
-    cpu.eax = eax;
-    fprintf(stderr, "recomp: serie c: Coppa Italia Serie C takes %d clubs of the Serie D\n", m);
+    static uint32_t clubs[96];
+    uint32_t rec[4];
+    int d = ccup_divisions(cup);
+    for (int k = 0; k < 4; k++) rec[k] = k < d ? record_of(CCUP_KEY[k]) : 0;
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), m = 0;
+    for (int i = 0; readable(table) && i < count && m < n; i++) {
+        uint32_t c = table + CLUB_SIZE * (uint32_t)i, dv = rd32(g_mem, c + 0x57);
+        for (int k = 0; k < 4 && dv; k++)
+            if (dv == rec[k]) {
+                clubs[m++] = c;
+                break;
+            }
+    }
+    seed_b = record_of(KEY_B);
+    qsort(clubs, (size_t)m, sizeof *clubs, by_seed);
+    int g = ccup_group(m), seeds = m - CCUP_GROUPS * g, grouped = m - seeds;
+    uint32_t sz[1] = {4u * (uint32_t)m};
+    uint32_t list = call_cdecl(F_MALLOC, 1, sz);
+    if (rt_unwinding || !readable(list)) return;
+    for (int i = 0; i < grouped; i++) wr32(g_mem, list + 4u * (uint32_t)i, clubs[seeds + i]);
+    for (int i = 0; i < seeds; i++) wr32(g_mem, list + 4u * (uint32_t)(grouped + i), clubs[i]);
+    wr32(g_mem, cup + 0xee, list);
+    wr32(g_mem, cup + 0xf2, (uint32_t)m);
+    uint32_t a[2] = {list, (uint32_t)grouped};
+    call_cdecl(F_SHUFFLE_LIST, 2, a);
+    uint32_t q[4] = {list, (uint32_t)grouped, 4, F_LONGITUDE};
+    if (!rt_unwinding) call_cdecl(F_QSORT, 4, q);
+    for (int i = 0; i < grouped && !rt_unwinding; i += 2 * g) {
+        uint32_t b[2] = {list + 4u * (uint32_t)i, 2u * (uint32_t)g};
+        call_cdecl(F_SHUFFLE_LIST, 2, b);
+    }
+    if (rt_unwinding) return;
+    fprintf(stderr, "recomp: serie c: Coppa Italia Serie C %d: %d clubs, %d groups of %d and %d seeds in the "
+                    "knockout of %d\n", (int16_t)rd16(g_mem, cup + 0x40), m, CCUP_GROUPS, g, seeds, CCUP_KO);
+    rt_ret_cdecl(1);
+}
+
+/* The group size (init_first_group 0x63d5ee, read by create_group_stage at 0x63dac5). The cup object is group 1 and
+ * lives on from edition to edition, so it keeps the matches per club (+0xa7) that check_complete 0x689ad0 made for
+ * its last group: (5 - 1) x 1 = 4 in the original, where every group has 5 clubs. Groups 2 to 16 are new objects
+ * (0x68b100 at 0x63db49) with -1. When g changes (5 to 4 in 2011/12, 4 to 3 in 2014/15, changing rules on), group 1
+ * kept the old value, was never complete, the knockout was never made (advance_stage 0x63d950) and the cup stayed at
+ * that edition. So the store gives -1 when the value is not the one of g clubs, and check_complete counts again (as
+ * own_clubs does for C2/A). */
+uint32_t rt_ita_ccup_group(uint32_t cup, uint32_t original)
+{
+    int n = ccup_clubs(cup);
+    if (!n) return original;
+    int g = ccup_group(n), m = (int16_t)rd16(g_mem, cup + 0xa7), meet = (int)g_mem[cup + 0x3c];
+    if (m != -1 && m != (g - 1) * meet) {
+        wr16(g_mem, cup + 0xa7, 0xffffu);
+        fprintf(stderr, "recomp: serie c: Coppa Italia Serie C %d: group 1 counts its matches again (%d of the last "
+                        "edition, groups of %d now)\n", (int16_t)rd16(g_mem, cup + 0x40), m, g);
+    }
+    return (uint32_t)g;
+}
+
+/* The match days of a group (create_schedule 0x63cfd8): the first of the original's five dates. */
+uint32_t rt_ita_ccup_days(uint32_t cup, uint32_t original)
+{
+    int n = ccup_clubs(cup), g = n ? ccup_group(n) : 0;
+    return n ? (uint32_t)(g & 1 ? g : g - 1) : original;
+}
+
+/* The knockout (create_knockout_stage 0x63dc10): the bytes of the runners-up rows it takes (0x63de55, 0x162 = 6 rows
+ * of 0x3b) and the first place of the seeds (0x63de7b, 0x16 = 16 + 6): 16 - S runners-up and the place 32 - S, for
+ * S = N - 16 x g seeds. */
+uint32_t rt_ita_ccup_seconds(uint32_t cup, uint32_t original)
+{
+    int n = ccup_clubs(cup);
+    return n ? (uint32_t)(CCUP_GROUPS - (n - CCUP_GROUPS * ccup_group(n))) * ROW_SIZE : original;
+}
+
+uint32_t rt_ita_ccup_first_seed(uint32_t cup, uint32_t original)
+{
+    int n = ccup_clubs(cup);
+    if (!n) return original;
+    uint32_t list = rd32(g_mem, cup + 0xee), stages = rd32(g_mem, cup + 0xc);
+    int left = 0, sizes = (int16_t)rd16(g_mem, cup + 0x3e);
+    for (int i = 0; readable(list) && i < (int)rd32(g_mem, cup + 0xf2); i++) left += rd32(g_mem, list + 4u * (uint32_t)i) != 0;
+    for (int i = 0; readable(stages) && i < CCUP_GROUPS - 1; i++) {
+        uint32_t st = rd32(g_mem, stages + 4u * (uint32_t)i);
+        sizes += readable(st) ? (int16_t)rd16(g_mem, st + 0x3e) : 0;
+    }
+    fprintf(stderr, "recomp: serie c: Coppa Italia Serie C knockout: %d clubs in the groups, %d seeds left, %d best "
+                    "runners-up\n", sizes, left, CCUP_GROUPS - (n - CCUP_GROUPS * ccup_group(n)));
+    return (uint32_t)(CCUP_KO - (n - CCUP_GROUPS * ccup_group(n)));
+}
+
+/* The slot the seed loop writes first (0x63de86, lea edx, [ecx + 0x58]). The original fixes the slot at place 22 and
+ * counts places in esi from 0x63de7b, so with the first place 32 - S moved the S seeds went to places 22 to 21 + S:
+ * places 32 - S to 21 stayed empty and the last 22 - (32 - S) seeds were written past the list of 32 (0x80 bytes,
+ * 0x63dd43). For 12 seeds that was places 20 and 21 empty and two writes past the end. The slot now follows the first
+ * place: list + 4 x esi, which is list + 0x58 in the original's cup. */
+uint32_t rt_ita_ccup_seed_slot(uint32_t cup, uint32_t list, uint32_t first)
+{
+    if (!ccup_clubs(cup)) return list + 0x58u;
+    fprintf(stderr, "recomp: serie c: Coppa Italia Serie C knockout: seeds from place %u of %d\n", first, CCUP_KO);
+    return list + 4u * first;
 }
 
 /* ItaCup::select_entrants 0x63faf0, the two compares with the C1/B id (0x63fc79, 0x63fcf9): in the Serie C era the id
@@ -1262,10 +1404,16 @@ uint32_t rt_ita_cup_c1b(uint32_t id, uint32_t c1b)
 }
 
 /* ItaCup::select_entrants 0x63fd28 (cmp si, 0x20 after the next position, 0x63fd22..0x63fd30): the list of lower clubs
- * is on the stack at esp + 0x1c (4 bytes a club, 0x63fd12), count clubs so far. In the Serie C era, when the position
- * passes 40 with fewer than 32 clubs, the Italian clubs whose last division (+0x5b) is a group and that are not in
- * the list yet join it by reputation, so the loop ends with 32. Else the count is as it is. Q626. Only the last
- * division counts: the cup's sort 0x640590 reads the stats of that division (a club with none stopped at
+ * is on the stack at esp + 0x1c (4 bytes a club, 0x63fd12), count clubs so far. A net (O259, row A22), never the
+ * cause fix. The first loop (0x63fbbc..0x63fcad) takes Serie B's clubs (0x63fc0f), the clubs that Serie B relegated
+ * (last division Serie B, place 3, 4 or above 16: 0x63fc39..0x63fc61) and places 3 to 5 of each group (0x63fc6f..
+ * 0x63fc93; group C through rt_ita_cup_c1b): 20 + 4 + 9 = 33 or more, so the endless second loop (0x63fd22) never
+ * runs while each group club has its last division and place. The causes of the loop that a 2014 game met are fixed
+ * where they start: group C did not count (rt_ita_cup_c1b) and the clubs had no last season when the cup picks
+ * before Serie A (mark_last_season, record_final_positions in the wrap of 0x63faf0). If a club still lacks them, the
+ * net takes, when the position passes 40 with fewer than 32 clubs, the Italian clubs whose last division (+0x5b) is a
+ * group by reputation, so the loop ends with 32, and logs it (ita_serie_c_run.py fails on that line). Q626. Only the
+ * last division counts: the cup's sort 0x640590 reads the stats of that division (a club with none stopped at
  * comp_stats.CPP 1664), and the upper places take clubs whose last division is Serie A or B (0x63fdc0..0x63fef0), so
  * no club comes twice. */
 uint32_t rt_ita_cup_fill(uint32_t esp, uint32_t count, uint32_t position)
@@ -1334,11 +1482,20 @@ RT_WRAP(0063faf0, ita_cup_entrants)
  * award of a league with the year of an ended group is not given. */
 void o_00768940(void);
 
+/* An ended C2 group: its object waits for year 2999, or it has none (no league for an ended division, A23): the
+ * award functions read the object of the id (0x768944..0x768950: no object gives a box at 0x76895a;
+ * 0x768cfd..0x768d05 with no test; 0x7698f0 below). */
+static int ended_c2(int32_t id, uint32_t obj)
+{
+    if (readable(obj)) return c2_group(obj) >= 1 && (int16_t)rd16(g_mem, obj + 0x40) == IDLE_YEAR;
+    return id >= 0 && (id == (int32_t)rd32(g_mem, KEY_C2B) || id == (int32_t)rd32(g_mem, KEY_C2C));
+}
+
 RT_WRAP(00768940, ita_manager_award)
 {
     int32_t id = (int32_t)rt_arg(2);
     uint32_t table = rd32(g_mem, COMP_OBJECTS), obj = id >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)id) : 0;
-    if (readable(obj) && c2_group(obj) >= 1 && (int16_t)rd16(g_mem, obj + 0x40) == IDLE_YEAR) {
+    if (ended_c2(id, obj)) {
         rt_ret_stdcall(cpu.eax, 3);
         return;
     }
@@ -1355,9 +1512,25 @@ RT_WRAP(00768cf0, ita_player_award)
 {
     int32_t id = (int32_t)rt_arg(0);
     uint32_t table = rd32(g_mem, COMP_OBJECTS), obj = id >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)id) : 0;
-    if (readable(obj) && c2_group(obj) >= 1 && (int16_t)rd16(g_mem, obj + 0x40) == IDLE_YEAR) {
+    if (ended_c2(id, obj)) {
         rt_ret_stdcall(cpu.eax, 10);
         return;
     }
     o_00768cf0();
+}
+
+/* The team of the season of a division (NationAwards::award_team_of_season 0x7698f0, thiscall (comp id, award) ret 8;
+ * C2/B and C2/C at 0x6612f4, 0x66130c with the flag) stops at nation_awards.cpp 1624 when the id has no object
+ * (0x76990f, box at 0x769acc): no award for an ended C2 group either. */
+void o_007698f0(void);
+
+RT_WRAP(007698f0, ita_team_award)
+{
+    int32_t id = (int32_t)rt_arg(0);
+    uint32_t table = rd32(g_mem, COMP_OBJECTS), obj = id >= 0 && readable(table) ? rd32(g_mem, table + 4u * (uint32_t)id) : 0;
+    if (ended_c2(id, obj)) {
+        rt_ret_stdcall(cpu.eax, 2);
+        return;
+    }
+    o_007698f0();
 }
