@@ -74,6 +74,26 @@ static void top_up(uint32_t cup, uint32_t key, int from, int to, int places, int
                 (int16_t)rd16(g_mem, cup + 0x40), empty, places, filled, pool);
 }
 
+/* The new list of IreLeinsterCup::select_clubs (0x60 bytes, 0x636a98), IreMunsterCup::collect_entrants (0x78,
+ * 0x638e4b) and PolCup::collect_entrants (0x138, 0x7c856f), at its store to +0xa7 (0x636aa2, 0x638e55, 0x7c8579).
+ * The allocator 0x944e46 does not clear the block, and each class writes only the places it finds clubs for:
+ * Leinster places 4 to 15 for the Premier and First Division clubs in its seven towns (0x636b9a), Munster places
+ * 16 to 19 for the four clubs it finds by name (0x639038), the Polish top places for the clubs of the top division
+ * (0x7c885b). Each start_new_season makes a new list, and the block is often the freed list of the last edition,
+ * so a place the class did not write still held last edition's club. top_up took such a place as full: in a 2008
+ * game (September 2008 database, gate (a) pre-run on 53fba30a) the 2009/10 Leinster Cup had place 15 empty and
+ * top_up gave it Arklow Town; in 2010/11 the four senior league clubs drawn into places 0 to 3 held Arklow Town
+ * again, place 15 still held it from the old block, so Arklow Town came in twice, a tie of round 2 lost its club
+ * and Cup::process_fixture 0x51a150 stopped at Cup.cpp 1187 (find_tie 0x519c90 found no tie, 0x51a336). In a
+ * season game the list now starts cleared. The base game writes every place, so it keeps the original's block
+ * (Q152). */
+uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes)
+{
+    if (season_game_changes() && readable(list) && readable(list + bytes - 1u))
+        for (uint32_t i = 0; i < bytes; i++) g_mem[list + i] = 0;
+    return list;
+}
+
 void o_00636a80(void);
 void o_00638e30(void);
 
