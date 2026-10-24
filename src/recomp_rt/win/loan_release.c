@@ -8,18 +8,21 @@
  * from +0x19f, 0x83ec1f..0x83ec64) into [esp+0xe4]. For a staff slot of the club it takes the first of them who is
  * a coach or a player/coach (+0x3d 6 or 13, 0x83edac); when his rating for the slot (0x69d1b0, 0x83ee23) is below the
  * slot's need and he has no contract offer from the club (find_contract_offer 0x4cc9e0, 0x83ee4b), it releases him:
- * MANAGER_MANAGER::remove_staff_from_club 0x690890 (staff, club) at 0x83ee72. Nothing there looks at his loan
+ * MANAGER_MANAGER::remove_staff_from_club 0x690890 (staff, club) at 0x83ee72. The other staff jobs take the same
+ * steps with their own release call: +0x3d 7 or 14 at 0x83ef82, 8 or 15 at 0x83f092, then 0x83f19b and 0x83f2b1.
+ * Nothing there looks at his loan
  * contract: for a staff on loan at the club, remove_staff_from_club removes his main contract, the one with his
  * parent club (0x4d0b50, called at 0x69089e), and the loan contract stays. On the loan's last day
  * CONTRACT_MANAGER::daily_update 0x4c7ac0 calls end_loan 0x4d07e0 (0x4c8114), which needs the main contract
  * (0x4d0857..0x4d088b) and shows the box at 0x4d08e3. Seen in soak-2021 leg 1 (Select All, 2021): Brown de Adrogue
  * released Alfredo Grelak, a player/coach on loan from Platense to day 262 of 2022, so his Platense contract went
- * and the loan stayed.
+ * and the loan stayed. A second case, soak-tip leg 0 (main 144ed82c, a new 2021 game): Francisco Beltrao released
+ * Juliano Cesar de Moraes Tobias, on loan from Joinville to day 123 of 2022, at 0x83f092.
  *
- * The fix, in a season game (season_game_changes, Q152): the release at 0x83ee72 of a staff who has a loan contract
- * does not happen; he keeps his contract and his loan, and a club can release him after the loan ends. The slot
- * fields that the original clears before the call (0x83ee62, 0x83ee68) stay cleared. The base game keeps the
- * original's call. Test switch RECOMP_TEST_LOAN_RELEASE=original: a season game takes the original's call too,
+ * The fix, in a season game (season_game_changes, Q152): at the five calls, the release of a staff who has a loan
+ * contract does not happen; he keeps his contract and his loan, and a club can release him after the loan ends. The
+ * slot fields that the original clears before each call (as 0x83ee62, 0x83ee68) stay cleared. The base game keeps
+ * the original's calls. Test switch RECOMP_TEST_LOAN_RELEASE=original: a season game takes the original's calls too,
  * so that the net below acts.
  *
  * The net (all games; the test switch RECOMP_BOX_FIXES=off turns it off): end_loan of a staff with no main contract
@@ -36,7 +39,9 @@
 #define STAFF_ROWS 0xae2d0cu            /* 79-byte rows: +0 main contract, +4 loan contract */
 #define MANAGER_MANAGER 0xb67a44u       /* ecx of remove_staff_from_club (0x83ee6c) */
 #define CLUB_OF 0x39u
-#define RELEASE_IN_ASSESS 0x0083ee77u   /* the return address of the call at 0x83ee72 */
+/* The return addresses of the five release calls of assess_club_squad (0x83ee72, 0x83ef82, 0x83f092, 0x83f19b,
+ * 0x83f2b1). */
+static const uint32_t release_in_assess[] = {0x0083ee77u, 0x0083ef87u, 0x0083f097u, 0x0083f1a0u, 0x0083f2b6u};
 #define REMOVE_STAFF 0x00690890u
 #define REMOVE_LOAN 0x004d0bd0u
 
@@ -69,11 +74,18 @@ static int test_original(void)
     return v;
 }
 
+static int from_assess(uint32_t ret)
+{
+    for (unsigned k = 0; k < sizeof release_in_assess / sizeof *release_in_assess; k++)
+        if (ret == release_in_assess[k]) return 1;
+    return 0;
+}
+
 /* remove_staff_from_club 0x690890, thiscall (staff, club) ret 8. */
 RT_WRAP(00690890, remove_staff_from_club)
 {
     uint32_t staff = rt_arg(0), club = rt_arg(1);
-    if (rd32(g_mem, cpu.esp) == RELEASE_IN_ASSESS && staff && season_game_changes() && !test_original() &&
+    if (from_assess(rd32(g_mem, cpu.esp)) && staff && season_game_changes() && !test_original() &&
         contract_index(staff, 1) >= 0) {
         if (getenv("RECOMP_SCREEN_LOG")) {
             char name[120];
