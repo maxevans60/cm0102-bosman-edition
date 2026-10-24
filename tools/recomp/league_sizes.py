@@ -166,6 +166,13 @@ CUP_INSNS = {
     # EngFaCup::collect_entrants 0x56fab0: the National League places that its clubs cannot fill go to the clubs
     # below it, and no copy takes more than its stack array holds (O294, season_sizes.c rt_fa_cup_takes).
     0x56FFE4: ("movsx di, byte ptr [esp + 0x1b]", "edi = (edi & 0xffff0000u) | (rt_fa_cup_takes(esp) & 0xffffu);"),
+    # The list stores of IreLeinsterCup::select_clubs 0x636a80, IreMunsterCup::collect_entrants 0x638e30 and
+    # PolCup::collect_entrants 0x7c8550: the new list (0x944e46) is not cleared, so a place that the class does not
+    # write keeps stale bytes. In a season game the list starts cleared, so the cup places fill sees each empty
+    # place (season_cup_places.c rt_cup_places_list).
+    0x636AA2: ("mov dword ptr [esi + 0xa7], eax", "W32(esi + 0xa7u, rt_cup_places_list(eax, 0x60u));"),
+    0x638E55: ("mov dword ptr [ebp + 0xa7], eax", "W32(ebp + 0xa7u, rt_cup_places_list(eax, 0x78u));"),
+    0x7C8579: ("mov dword ptr [esi + 0xa7], eax", "W32(esi + 0xa7u, rt_cup_places_list(eax, 0x138u));"),
 }
 
 # address: (the instruction in the original, C code). The store keeps its width (W16) and its object register.
