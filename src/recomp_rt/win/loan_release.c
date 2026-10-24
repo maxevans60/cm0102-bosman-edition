@@ -1,22 +1,22 @@
-/* A club releases a staff member who is away on loan (O358, box contract_manager..cpp 5941).
+/* A club releases a staff member who has a loan contract (O358, box contract_manager..cpp 5941).
  *
  * Each staff has a row of 79 bytes at [0xae2d0c] + id * 79: +0 the index of his main contract, +4 the index of his
  * loan contract, -1 for none. A contract is 80 bytes in the table at [CONTRACT_MANAGER] ([0xae1050]): +0x4 the club,
  * +0x2d and +0x2f the end day and year, +0x35 the type.
  *
- * The cause. Shortlist_Manager::assess_club_squad 0x83cb40 lists the club's staff who are away on loan: a loan
- * contract (get_loan_contract 0x4cf6d0, 0x83d41b) and staff +0x39 not the club (0x83d424), into [esp+0xe4]
- * (0x83d432). For a staff slot of the club it takes the first of them who is a coach or a player/coach (+0x3d 6 or
- * 13, 0x83edac); when his rating for the slot (0x69d1b0, 0x83ee23) is below the slot's need and he has no contract
- * offer from the club (find_contract_offer 0x4cc9e0, 0x83ee4b), it releases him: MANAGER_MANAGER::
- * remove_staff_from_club 0x690890 (staff, club) at 0x83ee72. That function removes his main contract (0x4d0b50,
- * called at 0x69089e) and clears his club slot only when +0x39 is the club (0x6908ac), so the loan contract stays.
- * On the loan's last day CONTRACT_MANAGER::daily_update 0x4c7ac0 calls end_loan 0x4d07e0 (0x4c8114), which needs the
- * main contract (0x4d0857..0x4d088b) and shows the box at 0x4d08e3. Seen in soak-2021 leg 1 (Select All, 2021):
- * Platense released the player/coach Alfredo Grelak, on loan at Brown de Adrogue to day 262 of 2022.
+ * The cause. Shortlist_Manager::assess_club_squad 0x83cb40 lists the club's staff slots (club +0xd3, then the slots
+ * from +0x19f, 0x83ec1f..0x83ec64) into [esp+0xe4]. For a staff slot of the club it takes the first of them who is
+ * a coach or a player/coach (+0x3d 6 or 13, 0x83edac); when his rating for the slot (0x69d1b0, 0x83ee23) is below the
+ * slot's need and he has no contract offer from the club (find_contract_offer 0x4cc9e0, 0x83ee4b), it releases him:
+ * MANAGER_MANAGER::remove_staff_from_club 0x690890 (staff, club) at 0x83ee72. Nothing there looks at his loan
+ * contract: remove_staff_from_club removes his main contract (0x4d0b50, called at 0x69089e) and his club slot, and
+ * the loan contract stays. On the loan's last day CONTRACT_MANAGER::daily_update 0x4c7ac0 calls end_loan 0x4d07e0
+ * (0x4c8114), which needs the main contract (0x4d0857..0x4d088b) and shows the box at 0x4d08e3. Seen in soak-2021
+ * leg 1 (Select All, 2021): Platense released its player/coach Alfredo Grelak, whose loan to Brown de Adrogue
+ * (to day 262 of 2022) was agreed; at the release his staff +0x39 was still Platense, at the loan's end Brown.
  *
- * The fix, in a season game (season_game_changes, Q152): the release at 0x83ee72 of a staff who is away on loan does
- * not happen; he stays under contract until his loan ends, and the club's daily assessment can release him then.
+ * The fix, in a season game (season_game_changes, Q152): the release at 0x83ee72 of a staff who has a loan contract
+ * does not happen; he keeps his contract until his loan ends, and the club's daily assessment can release him then.
  * The slot fields that the original clears before the call (0x83ee62, 0x83ee68) stay cleared. The base game keeps
  * the original's call. Test switch RECOMP_TEST_LOAN_RELEASE=original: a season game takes the original's call too,
  * so that the net below acts.
@@ -73,11 +73,11 @@ RT_WRAP(00690890, remove_staff_from_club)
 {
     uint32_t staff = rt_arg(0), club = rt_arg(1);
     if (rd32(g_mem, cpu.esp) == RELEASE_IN_ASSESS && staff && season_game_changes() && !test_original() &&
-        contract_index(staff, 1) >= 0 && rd32(g_mem, staff + CLUB_OF) != club) {
+        contract_index(staff, 1) >= 0) {
         if (getenv("RECOMP_SCREEN_LOG")) {
             char name[120];
-            fprintf(stderr, "recomp: loans: %s stays at %s while on loan at %s: the release waits for the loan's end\n",
-                    name_of(staff, name, sizeof name), club_name(club), club_name(rd32(g_mem, staff + CLUB_OF)));
+            fprintf(stderr, "recomp: loans: %s keeps his contract at %s: he has a loan, the release waits for its end\n",
+                    name_of(staff, name, sizeof name), club_name(club));
         }
         rt_ret_stdcall(0, 2);
         return;
