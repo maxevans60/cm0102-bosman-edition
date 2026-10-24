@@ -854,7 +854,7 @@ static int cl_table_layout(uint32_t cl, Layout *L)
 {
     memset(L, 0, sizeof *L);
     uint32_t t = rd32(g_mem, cl + 0xa3), e = rd32(g_mem, cl + 0xa7);
-    int rounds = (int16_t)rd16(g_mem, cl + 0x3c), slot = 0, k = 0;
+    int rounds = (int16_t)rd16(g_mem, cl + 0x3c), slot = 0, k = 0, lp_win = 0;
     if (!readable(t) || !readable(e) || rounds < 1 || rounds > MAX_ROUNDS) return 0;
     for (int i = 0; i < rounds; i++) {
         uint32_t rec = t + ROUND_SIZE * (uint32_t)i;
@@ -869,6 +869,10 @@ static int cl_table_layout(uint32_t cl, Layout *L)
         }
         L->level[i] = k, L->first[i] = slot, L->fresh[i] = fresh, L->cp_fresh[i] = fresh - lp, L->lp_fresh[i] = lp;
         L->clubs_in[i] = (int16_t)rd16(g_mem, rec + 0x18);
+        /* The paths as make_layout has them: the League Path winners stay in their path (issue #68). */
+        if (!lp && path_draw_off()) lp_win = 0;
+        L->two[i] = lp + lp_win > 0;
+        lp_win = L->two[i] ? (lp + lp_win) / 2 : 0;
         slot += fresh;
         k++;
     }
