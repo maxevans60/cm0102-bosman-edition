@@ -675,9 +675,9 @@ RT_WRAP(0051d9f0, cup_nation_draw)
         call_this(F_NATION_DRAW, cup, 1, a);
     }
     nation_draw_inner = 0;
-    if (rt_unwinding) return;
-    wr32(g_mem, arr, base);
+    wr32(g_mem, arr, base);                     /* also on an unwind: the saved tie array and count of the round */
     wr16(g_mem, rec + 0x1a, (uint16_t)ties);
+    if (rt_unwinding) return;
     for (int t = 0; t < ties; t++) {
         uint32_t tie = base + TIE_SIZE * (uint32_t)t;
         for (int h = 1; h >= 0; h--) {
