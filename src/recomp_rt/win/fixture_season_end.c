@@ -19,9 +19,11 @@
  * run 7; Denmark alone has too few call-ups to show it).
  *
  * So in a season game, only for the call of 0x5abbd2: when the new date of 0x5ab510 is on or after the competition's
- * next update day, the match goes to the last free day before that update day (no clash at all in
- * find_fixture_clashes 0x5ad780, with the slice of get_time_slice 0x5af2f0, as 0x5ab510 and add_fixture test a day),
- * and after the old date and today. When there is no free day and the old date is after today, the match keeps its
+ * next update day, the match goes to the last free day before that update day, after the old date and not before
+ * today + 2 (0x5ab929..0x5ab935). A day is free by 0x5ab510's own test (0x5ab9b6..0x5ab9f2): with the slice of
+ * get_time_slice 0x5af2f0, find_fixture_clashes 0x5ad780 gives no clash, or the severity 1, or a severity below the
+ * match's priority (+0x3a). An international window of the club fails it (severity 0x15, 0x776fc0). When the update
+ * day is in the next year, the search goes on into the rest of the old date's year. When there is no free day and the old date is after today, the match keeps its
  * old date and slice: the leg check record that 0x5ab510 added (list 0xae2a48, round variants 3 and 4) is removed,
  * add_fixture inserts it without its clash moves (flag 0 with the try count 0xae2a40 at 10, as add_fixture does
  * after its tenth try), and no "fixture moved" news is queued. The club plays without its called-up players, as a
@@ -112,6 +114,8 @@ static int update_day(uint32_t rec)
 
 static int before(int y1, int d1, int y2, int d2) { return y1 < y2 || (y1 == y2 && d1 < d2); }
 
+static int days_in(int y) { return (y % 4 == 0 && y % 100 != 0) || y % 400 == 0 ? 366 : 365; }
+
 /* 1 when day d of year y is free for the fixture: it gets that date and the slice of get_time_slice, and
  * find_fixture_clashes finds no clash. The work space (a Date and the severity) lies below the guest stack. */
 static int free_day(uint32_t manager, uint32_t fix, int y, int d)
@@ -136,7 +140,8 @@ static int free_day(uint32_t manager, uint32_t fix, int y, int d)
         a[1] = sev;
         a[2] = 0;
         uint32_t list = call_this(FIND_CLASHES, manager, 3, a);
-        ok = !list && !rd32(g_mem, sev);
+        int severity = (int32_t)rd32(g_mem, sev);
+        ok = (!list && !severity) || severity == 1 || (int8_t)g_mem[fix + FIX_PRIORITY] > severity;
         if (list && !rt_unwinding) {
             call_this(LIST_FREE, list, 0, a);
             a[0] = list;
@@ -175,13 +180,16 @@ RT_WRAP(005ab510, fixture_new_date)
     if (before(new_year, new_day, last_year, last)) return;
     int today_year = (int16_t)rd16(g_mem, TODAY + 2u), today = (int16_t)rd16(g_mem, TODAY);
     const char *name = win_str(rec + 4);
-    /* The last free day before the update day, after the old date and after today, in the update day's year. */
-    for (int d = last - 1; d >= 0; d--) {
-        if (!before(year, day, last_year, d) || !before(today_year, today, last_year, d)) break;
-        if (free_day(manager, fix, last_year, d)) {
+    /* The last free day before the update day, after the old date and not before today + 2 (0x5ab92d). */
+    int min_year = today_year, min_day = today + 2;
+    if (min_day >= days_in(min_year)) min_day -= days_in(min_year), min_year++;
+    for (int y = last_year, d = last - 1;; d--) {
+        if (d < 0) y--, d = days_in(y) - 1;
+        if (!before(year, day, y, d) || before(y, d, min_year, min_day)) break;
+        if (free_day(manager, fix, y, d)) {
             fprintf(stderr, "recomp: fixtures: a match of %.40s moves from day %d of %d to day %d of %d, before its "
                             "season change on day %d (the call-up move gave day %d of %d)\n",
-                    name, day, year, d, last_year, last, new_day, new_year);
+                    name, day, year, d, y, last, new_day, new_year);
             return;
         }
         if (rt_unwinding) return;
