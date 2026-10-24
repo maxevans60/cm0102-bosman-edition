@@ -26,7 +26,11 @@
  * add_fixture inserts it without its clash moves (flag 0 with the try count 0xae2a40 at 10, as add_fixture does
  * after its tenth try), and no "fixture moved" news is queued. The club plays without its called-up players, as a
  * league plays at the end of its season. When the old date is today or past, the new date of 0x5ab510 stays.
- * The other 11 calls of 0x5ab510, the base game and RECOMP_SEASON_CODE=off keep the original (Q152). */
+ * The other 11 calls of 0x5ab510, the base game and RECOMP_SEASON_CODE=off keep the original (Q152).
+ *
+ * Test switch RECOMP_TEST_FIXTURE_HOLD (season games only): "log" prints each call-up move; "1" also takes the new
+ * date of each call-up move later in the same year as the update day, so that the free day search and the kept date
+ * act on every such move (forced case of the retest). */
 #include "win.h"
 #include "../rt.h"
 #include "../rt_host.h"
@@ -35,6 +39,8 @@
 #include "fixture_season_end.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define ENTRIES 0x00b63d60u     /* league table entries, 0x48 bytes each (0x5d5bc8) */
 #define ENTRY_SIZE 0x48u
@@ -63,6 +69,17 @@
 #define LIST_REMOVE_NODE 0x0068d280u    /* LLIST::remove_node (node), ret 4 */
 
 static uint32_t kept;           /* the fixture that keeps its date, between 0x5abbd2 and 0x5abbeb */
+
+/* RECOMP_TEST_FIXTURE_HOLD: 0 off, 1 "log", 2 "1" (forced). */
+static int test_mode(void)
+{
+    static int mode = -1;
+    if (mode < 0) {
+        const char *v = getenv("RECOMP_TEST_FIXTURE_HOLD");
+        mode = !v ? 0 : !strcmp(v, "log") ? 1 : !strcmp(v, "1") ? 2 : 0;
+    }
+    return mode;
+}
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -147,9 +164,13 @@ RT_WRAP(005ab510, fixture_new_date)
     if (rt_unwinding) return;
     uint32_t rec = rd32(g_mem, fix + FIX_COMP);
     int last = update_day(rec);
+    int new_year = (int16_t)rd16(g_mem, fix + FIX_YEAR), new_day = (int16_t)rd16(g_mem, fix + FIX_DAY);
+    if (test_mode())
+        fprintf(stderr, "recomp: fixtures: test: a call-up move of %.40s from day %d of %d to day %d of %d (update "
+                        "day %d)\n", win_str(rec + 4), day, year, new_day, new_year, last);
+    if (test_mode() == 2 && new_year == year && new_day > day) last = new_day;
     if (last < 0) return;
     int last_year = day < last ? year : year + 1;
-    int new_year = (int16_t)rd16(g_mem, fix + FIX_YEAR), new_day = (int16_t)rd16(g_mem, fix + FIX_DAY);
     uint8_t new_slice = g_mem[fix + FIX_SLICE];
     if (before(new_year, new_day, last_year, last)) return;
     int today_year = (int16_t)rd16(g_mem, TODAY + 2u), today = (int16_t)rd16(g_mem, TODAY);
