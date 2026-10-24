@@ -9,21 +9,22 @@
  * a coach or a player/coach (+0x3d 6 or 13, 0x83edac); when his rating for the slot (0x69d1b0, 0x83ee23) is below the
  * slot's need and he has no contract offer from the club (find_contract_offer 0x4cc9e0, 0x83ee4b), it releases him:
  * MANAGER_MANAGER::remove_staff_from_club 0x690890 (staff, club) at 0x83ee72. Nothing there looks at his loan
- * contract: remove_staff_from_club removes his main contract (0x4d0b50, called at 0x69089e) and his club slot, and
- * the loan contract stays. On the loan's last day CONTRACT_MANAGER::daily_update 0x4c7ac0 calls end_loan 0x4d07e0
- * (0x4c8114), which needs the main contract (0x4d0857..0x4d088b) and shows the box at 0x4d08e3. Seen in soak-2021
- * leg 1 (Select All, 2021): Platense released its player/coach Alfredo Grelak, whose loan to Brown de Adrogue
- * (to day 262 of 2022) was agreed; at the release his staff +0x39 was still Platense, at the loan's end Brown.
+ * contract: for a staff on loan at the club, remove_staff_from_club removes his main contract, the one with his
+ * parent club (0x4d0b50, called at 0x69089e), and the loan contract stays. On the loan's last day
+ * CONTRACT_MANAGER::daily_update 0x4c7ac0 calls end_loan 0x4d07e0 (0x4c8114), which needs the main contract
+ * (0x4d0857..0x4d088b) and shows the box at 0x4d08e3. Seen in soak-2021 leg 1 (Select All, 2021): Brown de Adrogue
+ * released Alfredo Grelak, a player/coach on loan from Platense to day 262 of 2022, so his Platense contract went
+ * and the loan stayed.
  *
  * The fix, in a season game (season_game_changes, Q152): the release at 0x83ee72 of a staff who has a loan contract
- * does not happen; he keeps his contract until his loan ends, and the club's daily assessment can release him then.
- * The slot fields that the original clears before the call (0x83ee62, 0x83ee68) stay cleared. The base game keeps
- * the original's call. Test switch RECOMP_TEST_LOAN_RELEASE=original: a season game takes the original's call too,
+ * does not happen; he keeps his contract and his loan, and a club can release him after the loan ends. The slot
+ * fields that the original clears before the call (0x83ee62, 0x83ee68) stay cleared. The base game keeps the
+ * original's call. Test switch RECOMP_TEST_LOAN_RELEASE=original: a season game takes the original's call too,
  * so that the net below acts.
  *
  * The net (all games; the test switch RECOMP_BOX_FIXES=off turns it off): end_loan of a staff with no main contract
- * ends the loan as a release would have: remove_staff_from_club (staff, loan club) takes him out of the loan club
- * (+0x39 to 0), then CONTRACT_MANAGER::remove_loan_contract 0x4d0bd0 frees the loan contract. Logged. */
+ * does not call the original: remove_staff_from_club (staff, loan club) takes him off the loan club's staff slots,
+ * then CONTRACT_MANAGER::remove_loan_contract 0x4d0bd0 frees the loan contract. Logged. */
 #include "win.h"
 #include "season_names.h"
 
@@ -76,7 +77,7 @@ RT_WRAP(00690890, remove_staff_from_club)
         contract_index(staff, 1) >= 0) {
         if (getenv("RECOMP_SCREEN_LOG")) {
             char name[120];
-            fprintf(stderr, "recomp: loans: %s keeps his contract at %s: he has a loan, the release waits for its end\n",
+            fprintf(stderr, "recomp: loans: %s has a loan contract, so %s does not release him before the loan ends\n",
                     name_of(staff, name, sizeof name), club_name(club));
         }
         rt_ret_stdcall(0, 2);
@@ -96,7 +97,7 @@ RT_WRAP(004d07e0, end_loan)
         return;
     }
     char name[120];
-    fprintf(stderr, "recomp: loans: net: %s has no main contract at the end of his loan at %s: he leaves the club\n",
+    fprintf(stderr, "recomp: loans: net: %s has no main contract at the end of his loan at %s: the loan is freed\n",
             name_of(staff, name, sizeof name), club_name(loan_club));
     Cpu saved = cpu;
     uint32_t a[2] = {staff, loan_club};
