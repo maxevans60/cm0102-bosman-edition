@@ -87,6 +87,53 @@ def check_moves(name, log):
             fails.append(f"{name}: {up} clubs up to Serie B and {down} down (want 4 and 4)")
     if "group C starts again" in log:
         fails.append(f"{name}: group C started twice in one season change")
+    # O259, row A22: the Coppa Italia's lower places fill from its own loop (Serie B, its relegated clubs and places 3
+    # to 5 of the groups make 33 or more); the fill of rt_ita_cup_fill is a net that must never run.
+    if "Coppa Italia: the lower places filled" in log or "lower clubs at position" in log:
+        fails.append(f"{name}: the Coppa Italia net filled its lower places (a club lacks its last division)")
+    # O259 row A21 (Q628): the Coppa Italia Serie C takes no Serie D club.
+    if "Coppa Italia Serie C takes" in log:
+        fails.append(f"{name}: the Coppa Italia Serie C took Serie D clubs")
+    return fails
+
+
+def check_ccup(name, log):
+    """O259 row A21 (Q628): in the era the Coppa Italia Serie C takes the clubs of the three groups: 16 groups of 3
+    and the rest seeded into the knockout of 32."""
+    if not re.search(r"Coppa Italia Serie C \d+: (4[89]|5\d|6[0-4]) clubs, 16 groups of 3 and \d+ seeds", log):
+        return [f"{name}: no Coppa Italia Serie C of the groups' clubs"]
+    return check_knockout(name, log)
+
+
+def check_knockout(name, log):
+    """O259 row A21: the knockout of 32 fills all its places itself (0x63de86 writes the seeds from the first seed
+    place): no knockout without the seed line, and slice 21's cup-entrants net finds no empty place after it."""
+    fails, lines = [], log.splitlines()
+    for i, line in enumerate(lines):
+        if "Coppa Italia Serie C knockout:" in line and "runners-up" in line:
+            if i + 1 >= len(lines) or "seeds from place" not in lines[i + 1]:
+                fails.append(f"{name}: a Coppa Italia Serie C knockout with no seed line")
+            elif i + 2 < len(lines) and re.search(r"cup entrants: cup_stage .* places empty", lines[i + 2]):
+                fails.append(f"{name}: the Coppa Italia Serie C knockout left places empty: {lines[i + 2]}")
+    return fails
+
+
+def check_editions(name, report, log):
+    """O259 row A21: the Coppa Italia Serie C plays each edition to its knockout and starts the next one. Group 1 (the
+    cup object) kept the matches per club of the last edition's group size, so with changing rules on a cup of
+    smaller groups was never complete: no knockout, and the cup stayed at that edition."""
+    fails = []
+    got = comps(report) if os.path.exists(report) else {}
+    seasons = sorted({s for s, phase in got if phase == "start"})
+    for s in seasons:
+        year = got[(s, "start")].get("ita_c_cup", (None, s))[1]
+        if year not in (s, 2999):
+            fails.append(f"{name}: ita_c_cup has edition {year} at the start of {s}")
+    blocks = re.split(r"(?=recomp: serie c: Coppa Italia Serie C \d+: \d+ clubs)", log)[1:]
+    for block in blocks:
+        year = int(re.match(r"recomp: serie c: Coppa Italia Serie C (\d+)", block).group(1))
+        if seasons and year <= seasons[-1] and "seeds from place" not in block:
+            fails.append(f"{name}: the Coppa Italia Serie C {year} made no knockout")
     return fails
 
 
@@ -104,8 +151,23 @@ def run_season(name, extra):
             fails.append(f"{name}: no regroup into 2015/16")
         if not re.search(r"serie c: \d+ up to Serie B", log):
             fails.append(f"{name}: no line of the clubs that go up to Serie B")
+        fails += check_no_league(name, log, extra)
+        fails += check_ccup(name, log) + check_editions(name, report, log)
         return fails + check_moves(name, log)
     return run
+
+
+def check_no_league(name, log, extra):
+    """O259 row A23: a new game of the era with the extra division makes no league for C2/B and C2/C (their
+    divisions hold no clubs), so no league of one club ends at the start."""
+    fails = []
+    if extra:
+        for div in ("Italian Serie C2/B", "Italian Serie C2/C"):
+            if f"no league for {div}" not in log:
+                fails.append(f"{name}: a league was made for {div}, which has no clubs")
+    if re.search(r"serie c: Italian Serie C2/[BC] ends \(year 2999\)", log):
+        fails.append(f"{name}: a C2 league made at the start ended at once")
+    return fails
 
 
 def run_change(name, extra):
@@ -122,12 +184,13 @@ def run_change(name, extra):
             fails.append(f"{name}: no news sentence of the change")
         if not extra and not re.search(r"serie c: group C 2014: table and fixtures of 20 clubs", log):
             fails.append(f"{name}: group C made in the change did not get its table and fixtures once")
-        # Q529: a 2013/14 start with the flag is a two-group C2 season, so C2/C ends at the new game; its one club
-        # goes to the Serie D, and at the change into the era the ended C2/C holds no club.
-        if extra and not re.search(r"serie c: [^\n]*(girone C|C2/C): its club goes to the Serie D", log):
-            fails.append(f"{name}: the one club of the ended C2/C did not go to the Serie D at the new game")
-        if extra and not re.search(r"serie c: [^\n]*(girone C|C2/C) \(ended\): 0 clubs to the Serie C", log):
+        # Q529, A23: a 2013/14 start with the flag is a two-group C2 season, so C2/C has ended at the new game; no
+        # league is made for it (it has no clubs), so no club of it goes to the Serie D and none joins the Serie C.
+        if extra and not re.search(r"serie c: no league for [^\n]*C2/C \(its division has no clubs\)", log):
+            fails.append(f"{name}: a league was made for the ended C2/C at the new game")
+        if extra and re.search(r"serie c: [^\n]*(girone C|C2/C) \(ended\): [1-9]\d* clubs to the Serie C", log):
             fails.append(f"{name}: the ended C2/C held clubs at the change into the era")
+        fails += check_ccup(name, log) + check_editions(name, report, log)
         return fails + check_moves(name, log)
     return run
 
@@ -159,6 +222,9 @@ def run_load(name, extra):
             fails.append(f"{name}: no regroup into 2015/16 after the load")
         if len(re.findall(r"serie c: .* 2015: 20 clubs, 38 match days", out)) < 3:
             fails.append(f"{name}: fewer than 3 groups of 20 with 38 match days after the load")
+        if extra:
+            fails += [f"{name} (load): " + f.split(": ", 1)[1] for f in check_no_league(name, out, extra)]
+        fails += check_ccup(name, out)
         return fails + check_moves(name, out)
     return run
 
@@ -230,6 +296,9 @@ def run_two(name, year, last, database, rules, want):
         found, log = ufr.boxes(work)
         fails += [f"{name}: message box {b}" for b in found]
         fails += check_two(name, report, log, want)
+        if not re.search(r"Coppa Italia Serie C \d+: 7[2-6] clubs, 16 groups of 4 and \d+ seeds", log):
+            fails.append(f"{name}: no Coppa Italia Serie C of two C2 groups (groups of 4)")
+        fails += check_knockout(name, log) + check_editions(name, report, log)
         first = min(want)
         if want[first][0] == 20 and len(re.findall(rf"serie c: .* {first}: 20 clubs, 38 match days", log)) < 2:
             fails.append(f"{name}: fewer than 2 C2 groups of 20 with 38 match days in {first}")
