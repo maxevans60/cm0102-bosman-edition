@@ -21,12 +21,13 @@
  *   A host that crashes or drops sends no 0x04: the joiner learns of it only at its next click (0x569456).
  *
  * What this file adds:
- * - The host's save at its quit. Every way out of a game passes free_game_data 0x82ff40 (the wrap in season.c
- *   calls net_session_game_ends first): Exit Game (0x762c42 calls game_fatal_cleanup 0x5cc7d0, which calls
- *   0x82ff40 at 0x5cc7d4), a new or loaded game, and a new network game (0x8389d2). 0x82ff40 ends the network
- *   session first (0x82ff46), so the save comes before. The save is the Auto Save's: save_game_data 0x82e430 with
- *   the flags 0x16 and the path that _makepath gives at 0x7617c9 (the save folder of the game options
- *   [0xae3138] + 0xf, the game's file name + 0x113, ".sav").
+ * - The host's save at its Exit Game. Yes on "Exit the network game ?" calls game_fatal_cleanup 0x5cc7d0 at
+ *   0x762c42, which calls free_game_data 0x82ff40 at 0x5cc7d4 (the wrap in season.c calls net_session_game_ends
+ *   first). 0x82ff40 ends the network session first (0x82ff46), so the save comes before. Only that chain saves:
+ *   0x5cc7d0 is also the original's fatal error path, with about 450 callers (match engine, day update, the save
+ *   parts), where the game is not whole. The save is the Auto Save's: save_game_data 0x82e430 with the flags 0x16
+ *   and the path of _makepath 0x945b13 at 0x7617c9 (no drive, the save folder of the game options [0xae3138] + 0xf,
+ *   the game's file name + 0x113, ".sav").
  * - A window close or the script's quit on a host waits for the poll of the screen loop (0x7fcc14 in
  *   ScreenManager::monitor 0x7fc7e0), saves there, then ends the program (net_session_defer_quit).
  * - The joiner's box. After the client loop ends because the host left (net_core.c, nc_host_left), the game's
@@ -48,6 +49,9 @@
 #define GAME_OPTIONS 0xae3138u      /* +0xf the save folder, +0x113 the game's file name (0x7617ab..0x7617bb) */
 #define SAVE_GAME 0x0082e430u       /* cdecl (path, flags) */
 #define SAVE_FLAGS 0x16u            /* the Auto Save's (0x7617d5) */
+#define MAKEPATH 0x00945b13u        /* cdecl (out, drive, folder, name, extension), as at 0x7617c9 */
+#define EXIT_FREE_RET 0x005cc7d9u   /* free_game_data's return address in game_fatal_cleanup (call at 0x5cc7d4) */
+#define EXIT_CLEANUP_RET 0x00762c47u  /* game_fatal_cleanup's return address at Exit Game (call at 0x762c42) */
 #define MESSAGE_BOX 0x005e8290u     /* cdecl (title, text, 0) */
 
 static int turns;                   /* human turns of the game that runs: it has started */
@@ -59,14 +63,22 @@ int net_session_hosting(void)
     return rd32(g_mem, NETWORK_HOST) == 1 && rd32(g_mem, NETWORK_SESSION) != 0;
 }
 
-/* The path of the Auto Save, else NULL when the game options are not there. */
-static const char *save_path(char *out, size_t room)
+/* The path of the Auto Save in game memory, made by the game's own _makepath as at 0x7617c9, else 0 when the game
+ * options are not there. A game that was never saved has no file name yet: it takes "Network Game". */
+static uint32_t save_path(void)
 {
+    static uint32_t out, fallback;
     uint32_t options = rd32(g_mem, GAME_OPTIONS);
-    if (!options) return NULL;
-    const char *folder = (const char *)g_mem + options + 0xf, *name = (const char *)g_mem + options + 0x113;
-    /* A game that was never saved has no file name yet: it takes the name of the network game. */
-    snprintf(out, room, "%s%s.sav", folder, *name ? name : "Network Game");
+    if (!options) return 0;
+    if (!out) {
+        out = win_static_alloc(0x200);
+        fallback = win_static_alloc(16);
+        snprintf((char *)g_mem + fallback, 16, "Network Game");
+    }
+    uint32_t name = options + 0x113;
+    uint32_t args[5] = {out, 0, options + 0xf, g_mem[name] ? name : fallback, rt_alloc_str(".sav")};
+    rt_callback(MAKEPATH, 5, args);
+    g_mem[out + 0x1ff] = 0;
     return out;
 }
 
@@ -74,17 +86,19 @@ static int must_save(void) { return net_session_hosting() && turns > 0 && season
 
 static void save_now(void)
 {
-    char path[600];
-    if (!save_path(path, sizeof path)) return;
-    fprintf(stderr, "recomp: net: the host quits: saving %s\n", path);
-    uint32_t args[2] = {rt_alloc_str(path), SAVE_FLAGS};
+    uint32_t path = save_path();
+    if (!path) return;
+    fprintf(stderr, "recomp: net: the host quits: saving %s\n", (const char *)g_mem + path);
+    uint32_t args[2] = {path, SAVE_FLAGS};
     uint32_t r = rt_callback(SAVE_GAME, 2, args);
     fprintf(stderr, "recomp: net: the host's save ended (result %u)\n", r);
 }
 
-void net_session_game_ends(void)
+void net_session_game_ends(uint32_t esp)
 {
-    int save = must_save();
+    /* At the entry of 0x82ff40: [esp] its return address, [esp + 4] its argument, then the esi and edi that
+     * 0x5cc7d0 pushed (0x5cc7d0..0x5cc7d1), then the return address of 0x5cc7d0. */
+    int save = must_save() && rd32(g_mem, esp) == EXIT_FREE_RET && rd32(g_mem, esp + 16) == EXIT_CLEANUP_RET;
     turns = 0;
     if (save) save_now();
 }

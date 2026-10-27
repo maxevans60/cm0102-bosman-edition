@@ -293,7 +293,8 @@ def main(argv):
             away1 = h.find("lobby: away 1 ")
             check(away1 >= 0 and "lobby: away 0" in h[away1:], "3 on the host, join1's club is on holiday after the "
                   "drop and back in play after join2's password (host log)")
-            saves = glob.glob(os.path.join(work, "host", "**", "*.sav"), recursive=True)
+            # The game's save folder is the game folder (options + 0xf), which the runtime moves to the user folder.
+            saves = glob.glob(os.path.join(work, "host", "Network Game.sav"))
             check("the host's save ended" in h and bool(saves), f"4 the host saved at its quit: {saves}")
             j2 = text(os.path.join(shots, "join2-stderr.txt"))
             at = j2.find("net box: Network Game: The host left the game.")

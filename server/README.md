@@ -85,7 +85,7 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 | `season` | integer | Start year of the season, 1900 to 2200 |
 | `day` | string | The game date, `YYYY-MM-DD` |
 | `humanClubs` | string array | At most 16 club names, each 1 to 40 characters. Word filter. |
-| `awayClubs` | string array | Optional, empty by default. The clubs of `humanClubs` whose human manager is Away: the connection dropped and the club is on holiday. The same rules as `humanClubs`. |
+| `awayClubs` | string array | Optional, empty by default. The clubs whose human manager is Away: the connection dropped and the club is on holiday. The same rules as `humanClubs`. |
 | `freeSeats` | integer | 0 to 16 |
 | `managersOnline` | integer | 0 to 16 |
 | `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash (20,000 rounds), in memory. |

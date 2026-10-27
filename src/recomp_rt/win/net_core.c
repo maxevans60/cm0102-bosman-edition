@@ -741,7 +741,7 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
     if (r < 0 && k->blocking && hn_error() == HN_WOULDBLOCK && !k->dead && hn_wait(k->s, 1, NC_CONNECT_MS) > 0)
         r = hn_recv(k->s, buf, n);
     int broke = r == 0 || (r < 0 && (hn_error() != HN_WOULDBLOCK || k->dead));
-    if (broke && to_host(k) && frame_between(&k->fi) && n) {
+    if (broke && to_host(k) && frame_between(&k->fi) && n && !k->fi.op_packets[4] && !k->exit_seen) {
         /* The host quit with no quit packet: it crashed, or its line dropped. The joiner's loop 0x7fdc00 would
          * see it only at its next click, through "Unable to send data" (0x569456). It gets the host's own quit
          * packet in place of the close, and ends as at a quit (0x7fdeba). */

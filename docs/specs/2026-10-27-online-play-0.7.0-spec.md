@@ -179,6 +179,8 @@ Merge danger: two-way door. Blast radius: a human manager can lose their club in
 - [ ] A host quit saves and sends every human manager to the start screen.
 - [ ] Kick removes a human manager, and their club goes on holiday.
 
+As built (2026-10-27, branch `claude/online-s6-dropin-95a988`, on slice 4b with `online-0.7.0` merged): the merge danger stays a two-way door. Rejoin needed no new code: the original opens Manager Status for a joiner while a manager is on holiday, and a click on that manager opens its password box (research note, section 13). Files: `src/recomp_rt/win/net_session.c` (new: the host's save, the deferred quit, the joiner's box and the way back to the start screen, the Kick test switch), `net_core.c` and `net_core.h` (keepalive timers, the quit packet for a broken host connection, the joiner's own Exit Game, `nc_kick`, `nc_peer_list`), `net_lobby.c`, `lobby.c`, `lobby.h`, `lobby_rows.c` (Away in the entry and the row), `user32.c` (window close and the screen loop poll), `season.c` and `testrun.c` (one call each), `win.h`, `host_net.h`, `host/net_posix.c`, `host/net_win32.c` (`hn_set_keepalive`), `server/src/validate.ts` and `server/README.md` (`awayClubs`), `tests/net/test_net_core.c`, `tests/net/test_lobby.c`, `server/test/lobby.test.ts` and `tests/smoke/dropin_run.py` (new). Open: the host control of Kick and the text that a kicked joiner sees (Max's choice), and whether the host's save may overwrite the game's file after the host said No to "Save Game Before Exit".
+
 ### 7. Clear errors, connection test, ping
 Blocked by: 6
 Delivers: each failure shows a reason and a next step. Network Play has a connection test. The game list and the game show each human manager's ping.
