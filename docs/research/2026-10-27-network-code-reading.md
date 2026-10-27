@@ -384,3 +384,51 @@ Do not touch:
 6. Single-player paths. A network session object exists only after the network screens make one (0x81f1cc, 0x81f8f7). The same-save sets prove this.
 
 Points for later slices that the original does not have: a version check, Kick, a ping, a host save on quit, and a reason for each failure. "The network game could not be created" and "could not be joined" (0x838a05, 0x838a3c) carry no reason.
+
+## 10. A game list longer than 9 games
+
+Added 2026-10-27 for Max's question: can the game list scroll past 9 games?
+
+### Where the cap lives
+
+The list lives inside the `Network` object. The allocation is 0xc3e54 bytes (0x7ff563). It holds two arrays of 10 slots of 50 bytes:
+
+- Game names at +0xc3a6c.
+- Address texts at +0xc3c60. This array ends exactly at the end of the object (0xc3c60 + 500 = 0xc3e54).
+
+The count is at +0xc3a6a. The cap is `cmp ax, 9` at 0x77b0eb.
+
+Every reader and writer:
+
+| Function | Sites |
+|---|---|
+| `Network::Network` 0x77a7d0 | count reset 0x77a809 |
+| `Network::~Network` 0x77a890 | host name in the BYE, 0x77a901 |
+| `Network::host_or_join_game` 0x77a9f0 | host name and game name 0x77aa58, 0x77aa6d, 0x77aab4. Join look-up 0x77ab24, 0x77ab40, 0x77ab73, 0x77ab84. |
+| `Network::receive_packet` 0x77af20 | ACK out 0x77b02b, 0x77b04b. Add 0x77b0e7..0x77b166. Sort 0x77b1ce..0x77b317, which reaches the address array through the name pointer with the fixed distance 500 (0x77b1ea, 0x77b1f0, 0x77b1f6, 0x77b29d, 0x77b2b2, 0x77b2d5). BYE removal 0x77b373..0x77b45a, with the same kind of fixed offsets at 0x77b3cc, 0x77b3f5 and 0x77b402. |
+| `setup_build_select_network_game_screen` 0x81f8d0 | count reset 0x81f913. Copies 500 bytes (0x7d dwords) of names to the global 0xdd6cd0 (0x81faf2..0x81fb06), then makes one button per name from 0xdd6cd0 (0x81fb1a). |
+| `setup_handle_select_network_game_input` 0x81fbd0 | count reset 0x81fc30, 0x81fde9. Count compare 0x81fc63. |
+
+A click on a game copies the clicked button's own text (Display +0xba9de, 0x81fd14..0x81fd5e). It does not read the array.
+
+### How the screen draws the list
+
+The list is one area of 1 column and 6 rows per page (0x81fa9f..0x81fad4, flags 1). Each game is a button in its own row (0x81fb1e..0x81fb4b). Empty rows up to 6 get blank text (0x81fb5c..0x81fb8b). `Area::layout` 0x403350 adds a scrollbar when the rows used pass the rows per page (0x4034b3..0x4034c7). So the original list already scrolls for games 7 to 9. An area takes up to 1,200 widgets (`Area::add_widget` 0x403200, 0x40321b). No screen change is needed for 50 rows.
+
+### The smallest change for about 50 games
+
+It is all constant patches in the recompiler, in the same form as `tools/recomp/staff_reserve.py`. No `RT_REPLACE` is needed.
+
+1. Grow the allocation at 0x7ff563 by 4,000 bytes (50 slots x 2 arrays x 50 bytes, less the 1,000 bytes there now).
+2. Leave the names at +0xc3a6c, now 50 slots. Move the address array to +0xc4430, the new end of the names.
+3. Change the address base at the 9 sites that use +0xc3c60, and at 0x77b1ea and 0x77b3cc. Change the fixed distance 500 at the 6 sort sites and the 2 BYE sites to 2,500.
+4. Change the cap at 0x77b0eb from 9 to 50.
+5. Point the screen copy (0x81fae7, 0x81fb02, 0x81fb1a) at a new 2,500-byte runtime buffer, and copy 625 dwords in place of 0x7d at 0x81fafc. The global 0xdd6cd0 cannot grow, because the game name text at 0xdd70a8 and the Join field at 0xdd70dc lie 984 bytes after it.
+
+That is about 25 constant sites in 5 functions. The packets, the host logic and the join logic do not change. The host keeps its own name in slot 0 of the same arrays, so the host side moves with the patch.
+
+Same-save risk: none that I found. The `Network` object exists only after a network screen makes it (0x81f1cc, 0x81f8f7). `ScreenManager::monitor` calls `receive_packet` only when the session pointer is set (0x7fc909, 0x7fcad3). The two screen functions are network screens. The four same-save sets would confirm this.
+
+### Opinion
+
+Medium. Each site is easy, but the sort and BYE code use derived offsets, so one missed site corrupts the list or the host name. Patching the array part needs a test that fills the list with 50 ACKs, sends some BYEs and joins the last entry. The risk to the host and join logic is low if every site is covered. The join uses the address text of the clicked name, so a wrong address offset joins the wrong host. A cheaper option keeps the cap at 9. In that case the runtime answers each REQ with the 9 games that best fit (for example, open seats first), and the rest wait for Refresh.
