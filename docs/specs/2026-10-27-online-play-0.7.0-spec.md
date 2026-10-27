@@ -144,9 +144,17 @@ Merge danger: two-way door. Blast radius: joiners' clicks in network games. Sing
 
 As built (2026-10-27, branch `claude/online-s2-click-fix`): the merge danger stays a two-way door. Files: `src/recomp_rt/win/user32.c` (the rule in the input poll wrapper, only at the poll 0x7fdf17 of the client loop), `src/recomp_rt/win/net_core.c` and `net_core.h` (`nc_resets_in`, the count of host screens read), `tests/smoke/network_run.py`. In a press, the client loop gets a widget once, and a second widget only while no new host screen came (a press that ends a text entry gives the field, then the button). Mac and wine runs pass with 1 and 3 joiners. Not run: a click through the relay (slice 5). Research note, section 11.
 
+### 4a. A game list of 50 games
+Blocked by: 2
+Delivers: the game list holds up to 50 games with the original's scrollbar (Q31, Q33). Constant patches in the recompiler (`tools/recomp/game_list.py`) and a runtime buffer for the screen's copy of the names. No game function is replaced.
+Merge danger: two-way door. Blast radius: the game list and join in network games.
+- [ ] Game list run passes: 50 ACKs fill the list, 5 BYEs remove games, and a join of the last row reaches its host (`tests/smoke/game_list_run.py`, under wine with `game_list_wine.sh`).
+- [ ] Two-game run passes.
+- [ ] ctest and the same-save sets pass.
+
 ### 4. Online games in the game list
 Blocked by: 2b, 3
-Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online, up to 50 games with the scrollbar (Q33), and one row for each host. Also the Online play option, the version check, the game password and the "full today" message.
+Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online, and one row for each host. Also the Online play option, the version check, the game password and the "full today" message.
 Merge danger: two-way door. Players see it, so the Opus review rule applies.
 - [ ] Two-game run passes against the local server.
 - [ ] With Online play off, the game makes no lobby request.

@@ -433,6 +433,15 @@ Same-save risk: none that I found. The `Network` object exists only after a netw
 
 Medium. Each site is easy, but the sort and BYE code use derived offsets, so one missed site corrupts the list or the host name. Patching the array part needs a test that fills the list with 50 ACKs, sends some BYEs and joins the last entry. The risk to the host and join logic is low if every site is covered. The join uses the address text of the clicked name, so a wrong address offset joins the wrong host. A cheaper option keeps the cap at 9. In that case the runtime answers each REQ with the 9 games that best fit (for example, open seats first), and the rest wait for Refresh.
 
+### As built in slice 4a (2026-10-27)
+
+Every site of the table above was read again at its address and holds the constant named there. A scan of the whole code for the offsets +0xc3a60..+0xc3e60 and for 0xdd6cd0..0xdd70a8 found no other use of the list. The hits outside 0x77a7d0..0x77b5a0 and 0x81f8d0..0x81fe10 are bytes of other instructions, such as jump offsets. The derived offsets are +0xc3c92 (0x77b1ea, the address slot 1), +0xc3c2e (0x77b3cc, the address slot k - 1), -0x226 (0x77b1f6, 0x77b29d, 0x77b2d5: the distance 500 and one slot) and -0x1c2 (0x77b3f5: the distance 500 less one slot). The allocation instruction is `push 0xc3e54` at 0x7ff562. The global 0xdd6cd0 is 500 bytes: the next global starts at 0xdd6ec4.
+
+Two points that the plan above missed:
+
+1. The original has 10 slots for a cap of 9, so one slot is spare. A BYE from an address that is not in the list adds a row (0x77b448..0x77b457), and that row is the spare slot. With 50 slots and a cap of 50, that row would be past the arrays, and the sort would write past the end of the object. So `tools/recomp/game_list.py` gives each array 51 slots: the names at +0xc3a6c, the addresses at +0xc4462, the object 0xc4e58 bytes (4,100 more), the distance 2,550. The screen copies 638 dwords (2,552 bytes) to a runtime buffer of that size (`rt_game_list_names`, `src/recomp_rt/win/game_list.c`). A second BYE from an unknown address still writes past the end, as in the original.
+2. A game in the list is the sender address of its ACK (0x77b10d), and a second ACK from the same address is dropped (0x77b145..0x77b1b1). So a test with 50 games needs 50 sender addresses. `tests/smoke/game_list_run.py` gives a fake host 50 addresses in a Linux network namespace and runs the joiner under wine (`game_list_wine.sh`). With the original's 9 games, the run fails.
+
 ## 11. Slice 2 results: real sockets (2026-10-27)
 
 Slice 2 built items 1 to 11 and 13 of section 9 in the runtime: `src/recomp_rt/win/net.c` (the 18 calls and `RT_REPLACE` of 0x8aee20), `src/recomp_rt/win/net_core.c` (handles, queues, counts) and `src/recomp_rt/host/net_posix.c` and `net_win32.c`. Item 12 stays as Max decided (Q32): two games on one Mac meet through the Mac's LAN address, and the loopback test 0x8af290 runs unchanged. `tools/recomp/widescreen.py` no longer patches 0x8aeed3..0x8aef00, because those instructions are inside the replaced 0x8aee20.
