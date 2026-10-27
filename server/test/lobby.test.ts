@@ -1,9 +1,9 @@
-import { abortAllDurableObjects } from "cloudflare:test";
+import { abortAllDurableObjects, evictDurableObject } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { call, freshIp, gameBody, json, register, setLobbyClock, withLobby } from "./helpers";
+import { call, freshIp, gameBody, json, lobbyStub, register, setLobbyClock, withLobby, resetObjects } from "./helpers";
 
 beforeEach(async () => {
-  await abortAllDurableObjects();
+  await resetObjects();
 });
 afterEach(async () => {
   await abortAllDurableObjects();
@@ -345,5 +345,124 @@ describe("join step", () => {
     const res = await call(`/v1/games/ABCDEFGH/join`, { method: "POST", ip: freshIp(), body: { version: "0.7.0", name: "Ann" } });
     expect(res.status).toBe(404);
     expect((await json(res)).error).toBe("unknown_game");
+  });
+});
+
+describe("eviction: the runtime removes an idle lobby from memory", () => {
+  const heartbeat = (code: string, token: string, ip: string) =>
+    call(`/v1/games/${code}/heartbeat`, { method: "POST", token, ip, body: { day: "2001-09-01" } });
+
+  it("keeps every open game, its host token and its password", async () => {
+    const g = await register({ password: "pw" });
+    await evictDurableObject(lobbyStub());
+    expect((await heartbeat(g.code, g.hostToken, g.ip)).status).toBe(200);
+    expect((await json(await call("/v1/games"))).games.map((x: any) => x.code)).toContain(g.code);
+    const join = (password: string) =>
+      call(`/v1/games/${g.code}/join`, { method: "POST", ip: freshIp(), body: { version: "0.7.0", name: "Ann", password } });
+    expect((await join("nope")).status).toBe(403);
+    expect((await join("pw")).status).toBe(200);
+  });
+
+  it("keeps the one open copy of a save", async () => {
+    const g = await register();
+    await evictDurableObject(lobbyStub());
+    const again = await register({ gameId: g.body.gameId });
+    expect(again.res.status).toBe(409);
+    expect(again.data.code).toBe(g.code);
+  });
+
+  it("keeps heartbeat updates that are 60 seconds old", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const g = await register();
+    await setLobbyClock(t0 + 60_000);
+    expect((await heartbeat(g.code, g.hostToken, g.ip)).status).toBe(200);
+    await evictDurableObject(lobbyStub());
+    expect((await json(await call(`/v1/games/${g.code}`))).game.day).toBe("2001-09-01");
+  });
+
+  it("writes a heartbeat at most once a minute, also when a field changed", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const g = await register();
+    const stored = () => withLobby(async (_i, state) => (await state.storage.get<any>(`g:${g.code}`)) as any);
+    await setLobbyClock(t0 + 30_000);
+    await heartbeat(g.code, g.hostToken, g.ip);
+    expect((await stored()).lastSeen).toBe(t0);
+    expect((await stored()).info.day).toBe("2001-08-11");
+    await setLobbyClock(t0 + 60_000);
+    await heartbeat(g.code, g.hostToken, g.ip);
+    expect((await stored()).lastSeen).toBe(t0 + 60_000);
+    expect((await stored()).info.day).toBe("2001-09-01");
+  });
+
+  it("after an eviction, takes the latest time a game can have been seen", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const g = await register();
+    await setLobbyClock(t0 + 30_000);
+    await heartbeat(g.code, g.hostToken, g.ip); // not written: the stored time is t0
+    await evictDurableObject(lobbyStub()); // the load runs at t0 + 30 s
+    await setLobbyClock(t0 + 119_000);
+    expect((await json(await call("/v1/games"))).games.map((x: any) => x.code)).toContain(g.code);
+    await setLobbyClock(t0 + 120_000);
+    expect((await json(await call("/v1/games"))).games.map((x: any) => x.code)).not.toContain(g.code);
+  });
+
+  it("deletes more than 128 expired games in groups", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    for (let i = 0; i < 130; i++) await register();
+    const sizes: number[] = [];
+    await withLobby((_inst, state) => {
+      const del = state.storage.delete.bind(state.storage);
+      (state.storage as any).delete = (k: string | string[]) => {
+        sizes.push(Array.isArray(k) ? k.length : 1);
+        return del(k as any);
+      };
+    });
+    await setLobbyClock(t0 + 90_000);
+    await call("/v1/games");
+    expect(Math.max(...sizes)).toBeLessThanOrEqual(128);
+    expect((await withLobby(async (_i, state) => (await state.storage.list({ prefix: "g:" })).size))).toBe(0);
+  }, 30_000);
+
+  it("still drops a game with no heartbeat for 90 seconds", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const g = await register();
+    await evictDurableObject(lobbyStub());
+    await setLobbyClock(t0 + 89_000);
+    expect((await json(await call("/v1/games"))).games.map((x: any) => x.code)).toContain(g.code);
+    await setLobbyClock(t0 + 90_000);
+    expect((await json(await call("/v1/games"))).games.map((x: any) => x.code)).not.toContain(g.code);
+    expect((await withLobby(async (_i, state) => [...(await state.storage.list()).keys()]))).toEqual([]);
+  });
+
+  it("learns each host's address again from its next heartbeat, for the limit of 2", async () => {
+    const ip = freshIp();
+    const a = await register({}, ip);
+    const b = await register({}, ip);
+    await evictDurableObject(lobbyStub());
+    expect(await withLobby((inst) => inst.addressCount())).toBe(0);
+    await heartbeat(a.code, a.hostToken, ip);
+    await heartbeat(b.code, b.hostToken, ip);
+    const third = await register({}, ip);
+    expect(third.res.status).toBe(429);
+    expect(third.data.error).toBe("too_many_games");
+  });
+
+  it("stores no internet address and no address hash", async () => {
+    const ip = "192.0.2.123";
+    const g = await register({ password: "pw" }, ip);
+    await heartbeat(g.code, g.hostToken, ip);
+    const keys = await withLobby((inst) => inst.addressKeys());
+    expect(keys.length).toBe(1);
+    const stored = await withLobby(async (_i, state) => JSON.stringify([...(await state.storage.list()).entries()]));
+    expect(stored).toContain(g.code);
+    expect(stored).not.toContain(ip);
+    expect(stored).not.toContain("192.0.2");
+    for (const k of keys) expect(stored).not.toContain(k);
+    expect(stored).not.toContain('"pw"');
   });
 });
