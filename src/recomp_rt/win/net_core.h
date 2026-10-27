@@ -64,6 +64,11 @@ typedef struct {
     long (*extra)(uint8_t *buf, uint32_t room, uint32_t *addr, uint16_t *port);  /* one to add, or -1 */
     int (*connect)(uint32_t addr, uint16_t port);  /* before a connect: -1 refuses it (the hook sets the error) */
     void (*tick)(void);                            /* at each call of the game */
+    /* 0.7.0 slice 5, the relay (relay.h). route: before a connect that the connect hook let through. 1: *s is a
+     * connected socket that takes the place of the system's connect, 0: connect as usual, -1: refused (the hook
+     * sets the error). incoming: a new connection for the game's listen socket, or HN_INVALID. */
+    int (*route)(uint32_t addr, uint16_t port, intptr_t *s);
+    intptr_t (*incoming)(uint32_t *addr, uint16_t *port);
 } NcHooks;
 void nc_set_hooks(const NcHooks *h);
 

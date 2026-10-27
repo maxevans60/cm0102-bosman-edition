@@ -52,6 +52,19 @@ lobbies in this script stand in for the failures. The host has RECOMP_LOBBY_URL 
            and joins as above. The fake lobby must see no connection.
     join4  Online play on, a fake lobby that answers full_today: the list shows the "full today" row, and Join on
            it gives the box that says so.
+--relay (0.7.0 slice 5) runs the host and n joiners (--joiners) through the relay of the lobby (the local copy, or
+--lobby-url for the deployed server). Each joiner sees only lobby rows (RECOMP_TEST_NO_LAN_ROWS), clicks the
+host's row and joins through the relay; the game sees an ordinary socket. Checks 1 to 6 hold as on the LAN (the
+joiner's connection is to the row's 0.66 address, and the host's connections are from 0.66.255.<channel>), with
+checks 7 and 10 and:
+   11  each joiner joined through the relay and the host held one relay connection; the relay lines of the
+       host's log give the frames that it sent (batches of about 50 ms)
+
+--remote n (with --relay and --lobby-url) runs the host only and waits --remote-wait seconds (default 1800) at
+its Enter Name for n joiners on other computers, for example the GitHub machines of
+.github/workflows/online-join.yml (tests/smoke/relay_join_remote.py). The checks are 1, 4 (the host's side, n
+connections), 7, 10 and 11 (the host's side). The host's dumps stay in --shots, for relay_join_remote.py
+--compare with the joiners' dumps.
 Lobby checks, besides checks 1 to 6 for join1 and join3:
     7  the lobby lists the game with the name, the version, the database, a season, a day, the managers online
        and no password, while the host plays
@@ -83,10 +96,11 @@ START = [
     "1000 click 277 346",                   # Network Play
 ]
 NAME_BUILD = "0x820f50"                     # Enter Name of a new human manager (setup_add_human_manager)
-def host_steps(joiners):
+def host_steps(joiners, later=None):
     # The joiners play after the host's dump; they start 4 s apart and each plays about 40 s. The host's own
-    # manager types the same names after they quit.
-    later = 60000 + 8000 * (joiners - 1)
+    # manager types the same names after they quit. --remote: the host waits the given time for joiners on
+    # other computers.
+    later = later or 60000 + 8000 * (joiners - 1)
     return START + [
         "3500 click 277 177",               # Start Network Game
         "6500 type Bosman",                 # Enter Network Game Name
@@ -313,12 +327,13 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = os.path.abspath(args[0]), os.path.abspath(args[1])
-    address, shots, joiners, slow, lobby, lobby_url = lan_address(), None, 1, 1.0, False, None
+    address, shots, joiners, slow, lobby, lobby_url, relay = lan_address(), None, 1, 1.0, False, None, False
+    remote, remote_wait = 0, 1800
     rest = args[2:]
     while rest:
         k = rest.pop(0)
-        if k == "--lobby":
-            lobby = True
+        if k in ("--lobby", "--relay"):
+            lobby, relay = True, relay or k == "--relay"
             continue
         if not rest:
             print(__doc__)
@@ -334,6 +349,10 @@ def main(argv):
             joiners = max(1, min(3, int(v)))
         elif k == "--lobby-url":
             lobby, lobby_url = True, v
+        elif k == "--remote":
+            remote = max(1, min(15, int(v)))
+        elif k == "--remote-wait":
+            remote_wait = int(v)
         else:
             print(__doc__)
             return 2
@@ -356,6 +375,17 @@ def main(argv):
             lobby_url = f"http://127.0.0.1:{port}"
         quiet, full = FakeLobby(False), FakeLobby(True)
         other = "0.0.1"
+    if remote and not (relay and lobby_url):
+        print("--remote needs --relay and --lobby-url")
+        return 2
+    if remote:
+        specs, host_env = [], {"RECOMP_LOBBY_URL": lobby_url}
+    elif relay:
+        specs = [(f"join{n}", joiner_steps(address, n, by_row=True),
+                  {"RECOMP_LOBBY_URL": lobby_url, "RECOMP_TEST_NO_LAN_ROWS": "1"}, True, True)
+                 for n in range(1, joiners + 1)]
+        host_env = {"RECOMP_LOBBY_URL": lobby_url}
+    elif lobby:
         specs = [("join1", joiner_steps(address, 1, by_row=True), {"RECOMP_LOBBY_URL": lobby_url}, True, True),
                  ("join2", refused_steps(2), {"RECOMP_LOBBY_URL": lobby_url, "RECOMP_TEST_NO_LAN_ROWS": "1",
                                               "RECOMP_TEST_VERSION": other}, True, False),
@@ -376,7 +406,8 @@ def main(argv):
         stop = threading.Event()
         if lobby:
             threading.Thread(target=keep_awake, args=(lobby_url, stop), daemon=True).start()
-        host, host_err = start(program, game, work, "host", host_steps(len(specs)), shots, slow, host_env)
+        steps = host_steps(remote, remote_wait * 1000) if remote else host_steps(len(specs))
+        host, host_err = start(program, game, work, "host", steps, shots, slow, host_env)
         ready = wait_for(os.path.join(shots, "host-stderr.txt"), f"screen {NAME_BUILD}", host, 240 * slow)
         check(ready, "the host reaches its Enter Name screen with the network game made")
         procs = []
@@ -401,8 +432,10 @@ def main(argv):
                     p.wait(timeout=180 * slow)
                 except subprocess.TimeoutExpired:
                     pass
+            if remote and ready:
+                print(f"the host waits {remote_wait} s for {remote} joiners on other computers")
             try:
-                host.wait(timeout=240 * slow)
+                host.wait(timeout=240 * slow + (remote_wait if remote else 0))
             except subprocess.TimeoutExpired:
                 pass
             after = lobby_games(lobby_url) if lobby else None
@@ -432,16 +465,32 @@ def main(argv):
                     check(False, f"{name}'s {what}: dump missing")
 
         host_log = connections(os.path.join(shots, "host-net.log"))
-        joined = [f for f in host_log.values() if f["peer"].split(":")[0] == address and not f["peer"].endswith(":6667")]
-        check(len(joined) == len(names) and all(f["packets_in"] and f["packets_out"] for f in joined),
-              f"host log: {len(joined)} joiner connections with packets both ways, {len(names)} expected")
+        # A joiner's connection on the host: from its LAN address, or from 0.66.255.<channel> through the relay.
+        joiner_peer = (lambda p: p.startswith("0.66.255.")) if relay else (
+            lambda p: p.split(":")[0] == address and not p.endswith(":6667"))
+        joined = [f for f in host_log.values() if joiner_peer(f["peer"])]
+        want = remote or len(names)
+        check(len(joined) == want and all(f["packets_in"] and f["packets_out"] for f in joined),
+              f"host log: {len(joined)} joiner connections with packets both ways, {want} expected")
         for name in names:
             log = connections(os.path.join(shots, f"{name}-net.log"))
-            c = log.get(f"{address}:6667")
-            check(bool(c and c["packets_in"] and c["packets_out"]), f"{name} log: the connection to {address}:6667")
-            clicks = click_packets(os.path.join(shots, f"{name}-net.log"), f"{address}:6667")
+            # Through the relay, the joiner's connection is to the lobby row's address (0.66.x.y, lobby_rows.h).
+            peer = next((p for p in log if p.startswith("0.66.") and p.endswith(":6667")), "0.66.?") if relay \
+                else f"{address}:6667"
+            c = log.get(peer)
+            check(bool(c and c["packets_in"] and c["packets_out"]), f"{name} log: the connection to {peer}")
+            clicks = click_packets(os.path.join(shots, f"{name}-net.log"), peer)
             check(clicks == JOINER_CLIENT_CLICKS, f"{name} sent {clicks} click packets, {JOINER_CLIENT_CLICKS} expected")
 
+        if relay:
+            herr = open(dump("host-stderr.txt"), errors="replace").read()
+            check(herr.count("recomp: relay: the host is connected as") == 1,
+                  "11 the host held one relay connection")
+            for name in names:
+                err = open(dump(f"{name}-stderr.txt"), errors="replace").read()
+                check("through the relay" in err and "recomp: relay: joined" in err, f"11 {name} joined through the relay")
+            for line in re.findall(r"recomp: relay: channel \d+ .*", herr):
+                print("     " + line)
         if lobby:
             g = listed[0] if listed else {}
             check(len(listed) == 1 and g.get("version") == project_version() and g.get("database") == "3.9.68" and
@@ -449,6 +498,7 @@ def main(argv):
                   g.get("managersOnline", 0) >= 1 and g.get("password") is False and 0 <= g.get("freeSeats", -1) <= 15
                   and g.get("hostName", "").startswith("PC-"),
                   f"7 the lobby lists the host's game: {json.dumps(g)}")
+        if lobby and not relay:
             rows1 = list_rows(dump("join1-stderr.txt"))
             check(len([r for r in rows1 if r.startswith("Bosman")]) == 1 and "Bosman" in rows1,
                   f"8 join1's list has the host once, as its LAN row: {rows1}")
@@ -467,6 +517,7 @@ def main(argv):
                   "join box: Online games are full today" in err4, f"9 join4 sees the full row and its box: {rows4}")
             check(quiet.count == 0, f"9 with Online play off, join3 made {quiet.count} lobby connections")
             check(full.count >= 1, f"join4's lobby got {full.count} requests")
+        if lobby:
             check(after is not None and not [x for x in after if x.get("name") == "Bosman"],
                   "10 the lobby lists no game after the host quit")
 

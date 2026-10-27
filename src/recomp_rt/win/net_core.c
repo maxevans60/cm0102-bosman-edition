@@ -36,7 +36,11 @@
  * blocking socket and waits for (connect_to_host 0x8ae640, connect at 0x8ae74e). The host's side runs inside
  * accept: TcpIp::accept_connection 0x8ae840 polls accept on each listen socket while a player slot is free
  * (0x77af5a). A new connection waits in a list until its block is read, and accept says "would block" until
- * then. So the game sees only joiners that passed, as if the others never came. */
+ * then. So the game sees only joiners that passed, as if the others never came.
+ *
+ * The relay (0.7.0 slice 5, relay.h). A joiner's connect to a lobby row gets a socket from the route hook in
+ * place of the system's connect, and a host's listen socket gets the relay's human managers from the incoming
+ * hook. Both are ordinary TCP sockets on 127.0.0.1, so everything above runs on them as it is. */
 #include "net_core.h"
 #include "../host_net.h"
 
@@ -494,6 +498,16 @@ static void serve_listeners(void)
             pending[i].listen = socks[k].handle, pending[i].s = c, pending[i].addr = a, pending[i].port = p;
             pending[i].since = hn_ms(), pending[i].len = 0, pending[i].ready = is_loopback(a);
         }
+        /* A human manager through the relay (relay.h): its join block comes through the relay like any bytes. */
+        for (int i = 0; hooks && hooks->incoming && i < PENDING; i++) {
+            if (pending[i].listen) continue;
+            uint32_t a;
+            uint16_t p;
+            hn_sock c = hooks->incoming(&a, &p);
+            if (c == HN_INVALID) break;
+            pending[i].listen = socks[k].handle, pending[i].s = c, pending[i].addr = a, pending[i].port = p;
+            pending[i].since = hn_ms(), pending[i].len = 0, pending[i].ready = 0;
+        }
     }
     for (int i = 0; i < PENDING; i++)
         if (pending[i].listen && !pending[i].ready && check_pending(i) > 0) pending[i].ready = 1;
@@ -648,7 +662,13 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     refused = NC_REFUSED_NONE;
     refused_version[0] = 0;
     if (hooks && hooks->connect && hooks->connect(addr, port) < 0) return -1;
-    if (hn_connect(k->s, addr, port, connect_ms) < 0) return fail_host();
+    hn_sock routed = HN_INVALID;
+    int how = hooks && hooks->route ? hooks->route(addr, port, &routed) : 0;
+    if (how < 0) return -1;
+    if (how > 0) {                 /* the relay's socket takes the place of the game's (relay.h) */
+        hn_close(k->s);
+        k->s = routed;
+    } else if (hn_connect(k->s, addr, port, connect_ms) < 0) return fail_host();
     if (identity && !is_loopback(addr) && hello(k) < 0) {
         /* The game keeps its handle and closes it after the failed join: give it a fresh socket. */
         hn_close(k->s);

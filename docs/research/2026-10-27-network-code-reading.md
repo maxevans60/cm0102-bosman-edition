@@ -592,3 +592,24 @@ Finding for the server (slice 3). The local Workers runtime drops a Durable Obje
 - Joining a lobby game through the relay (slice 5): today a click on a lobby row gives a box that says so.
 - The game id of a restored save (the one-copy rule, Q23): today each hosting has a new id.
 - The lobby address of the release: empty until Max deploys the server. Tests set `RECOMP_LOBBY_URL`.
+
+## 13. Slice 5: joins through the relay (2026-10-27)
+
+Slice 5 adds the relay under the game's own network code. No function of the original changes, and no packet layout changes. Files: `src/recomp_rt/win/relay.c` (the host's relay connection and each human manager's), `websocket.c` (a WebSocket client, RFC 6455), `secure.c` (the secure connection: TLS with mbedTLS 3.6), `tls_config.h` (the mbedTLS settings), hooks in `net_core.c` and `net_lobby.c`, `https://` in `lobby_http.c`, and `hn_pair`, `hn_trust_roots` and `hn_verify_server` in `host/net_posix.c` and `net_win32.c`.
+
+### The game sees an ordinary socket
+
+Each connection through the relay is a pair of TCP sockets on 127.0.0.1 (`hn_pair`). The game holds one end. A thread of the runtime passes the bytes of the other end to the relay and back. So everything that the runtime does on a LAN socket also runs on it: the 4-byte length framing of `Network::send_packet` 0x77ac30, the whole-send queue, the packet counts by opcode (the opcode 0 count of slice 2b, `nc_resets_in`), the join check `BOSMAN HELLO`, and the traffic log.
+
+- A joiner's connect (`connect_to_host` 0x8ae640, connect at 0x8ae74e) to a lobby row (0.66.0.0/16) asks the lobby for a ticket (`POST /v1/games/<code>/join`), opens `wss://<lobby>/v1/games/<code>/relay?role=manager&ticket=<ticket>`, and gives the game's socket handle the pair's end in place of the system's connect. Then the join check runs through the relay as on a LAN.
+- A host that is open in the lobby holds one relay connection (`role=host`, with the host token). For each `{"t":"open","ch":n}` the runtime makes a pair and gives one end to the game's listen socket as a new connection from 0.66.255.n. The join check runs on it before the game's accept (`TcpIp::accept_connection` 0x8ae840) sees it, as in section 12. When the game closes the socket, the relay gets `{"t":"kick","ch":n}`. When the relay closes the channel, the game's socket ends.
+
+### Batches
+
+The host's bytes on a channel wait at most 50 ms and then go in one binary frame (the channel byte and the batch). All channels that have bytes go at the same moment. A joiner's bytes wait at most 10 ms. A link sends a frame only when it has bytes, and `ping` after 30 s with none, so an idle relay can hibernate (server/README.md, "Free plan"). The host never uses channel 255 (all human managers): a human manager that connects while a frame to all is on its way would get bytes before its join check.
+
+### The secure connection
+
+mbedTLS 3.6.7, the LTS branch, Apache-2.0, built from its release by CMake (FetchContent, SHA-256 checked). Why: it builds with plain CMake on Mac (both architectures), mingw and Linux, needs no system library, links statically, and its licence fits the GPL-3.0 of the repo. TLS 1.2 only: mbedTLS 3.6 does TLS 1.3 through its PSA layer, whose key store is shared by all threads and needs `MBEDTLS_THREADING_C`, and the lobby thread and the relay threads make connections at the same time. Cloudflare serves TLS 1.2.
+
+The server's certificate is checked against the system's root certificates and the host name. macOS: `/etc/ssl/cert.pem`. Linux: the first of the usual bundle files (Debian, Ubuntu, the Steam Deck, Fedora, openSUSE). Windows: the ROOT store, and for a chain that it does not trust, the system's own check (`CertGetCertificateChain` and the SSL policy), because Windows fills its ROOT store on demand.

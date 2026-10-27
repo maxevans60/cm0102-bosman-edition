@@ -39,9 +39,9 @@
 /* The game sorts its list by a plain byte compare of the names (0x77b1fc..0x77b222): the leading space puts
  * this row first. */
 #define LR_FULL_TEXT " Online games are full today, try again later"
-/* The most rows that the game takes: the cap at 0x77b0eb. Slice 4a raises it to 50 in tools/recomp; this
- * constant must follow it at the merge. */
-#define LR_CAP 9
+/* The most rows that the game takes: the cap at 0x77b0eb, which slice 4a raises from 9 to 50
+ * (tools/recomp/game_list.py, SLOTS - 1). */
+#define LR_CAP 50
 
 /* 1 when the datagram has the tag ("CM3 LIST SERVER REQ", "...ACK", "...BYE"). */
 int lr_is(const uint8_t *p, long n, const char *tag);

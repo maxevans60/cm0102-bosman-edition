@@ -5,6 +5,22 @@ set(CMAKE_C_STANDARD 11)
 
 find_package(SDL2 REQUIRED)
 
+# The secure connection of online play (0.7.0 slice 5, src/recomp_rt/win/secure.c): mbedTLS 3.6, the LTS branch
+# (Apache-2.0), built from its release with the settings of src/recomp_rt/win/tls_config.h. For a build with
+# no download, unpack the release and pass -DFETCHCONTENT_SOURCE_DIR_MBEDTLS=<its folder>.
+include(FetchContent)
+set(ENABLE_PROGRAMS OFF CACHE BOOL "Build the Mbed TLS programs" FORCE)
+set(ENABLE_TESTING OFF CACHE BOOL "Build the Mbed TLS tests" FORCE)
+set(MBEDTLS_FATAL_WARNINGS OFF CACHE BOOL "Mbed TLS warnings stop the build" FORCE)
+set(USE_SHARED_MBEDTLS_LIBRARY OFF CACHE BOOL "Build a shared Mbed TLS" FORCE)
+set(MBEDTLS_USER_CONFIG_FILE "${CMAKE_SOURCE_DIR}/src/recomp_rt/win/tls_config.h" CACHE FILEPATH
+    "Mbed TLS settings of Bosman Edition" FORCE)
+FetchContent_Declare(mbedtls
+    URL https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.7/mbedtls-3.6.7.tar.bz2
+    URL_HASH SHA256=a7e8bcbec0e6f761b4af24f25677626b35f762f68eef79c08677a363212d11f6
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+FetchContent_MakeAvailable(mbedtls)
+
 add_executable(cm0102
     src/main.c
     src/demo.c
@@ -130,10 +146,20 @@ if(NOT WIN32)
     # Online games in the game list (0.7.0 slice 4): lobby HTTP rules, JSON, game list rows, join check.
     find_package(Threads REQUIRED)
     add_executable(lobby_test tests/net/test_lobby.c src/recomp_rt/win/lobby_http.c src/recomp_rt/win/lobby.c
-        src/recomp_rt/win/lobby_rows.c src/recomp_rt/win/net_core.c src/recomp_rt/host/net_posix.c)
+        src/recomp_rt/win/lobby_rows.c src/recomp_rt/win/net_core.c src/recomp_rt/win/secure.c
+        src/recomp_rt/host/net_posix.c)
     target_include_directories(lobby_test PRIVATE src/recomp_rt src/recomp_rt/win)
-    target_link_libraries(lobby_test PRIVATE Threads::Threads)
+    target_link_libraries(lobby_test PRIVATE Threads::Threads mbedtls)
     add_test(NAME lobby COMMAND lobby_test)
+    # Joins through the relay (0.7.0 slice 5): WebSocket frames, the socket pair, a fake relay with a host and a
+    # human manager over the game's sockets, and the secure connection against a local TLS server.
+    add_executable(relay_test tests/net/test_relay.c src/recomp_rt/win/relay.c src/recomp_rt/win/websocket.c
+        src/recomp_rt/win/secure.c src/recomp_rt/win/lobby_http.c src/recomp_rt/win/net_core.c
+        src/recomp_rt/host/net_posix.c)
+    target_include_directories(relay_test PRIVATE src/recomp_rt src/recomp_rt/win)
+    target_link_libraries(relay_test PRIVATE Threads::Threads mbedtls)
+    add_test(NAME relay COMMAND relay_test)
+    add_test(NAME relay_tls COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/net/tls_check.py" $<TARGET_FILE:relay_test>)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
@@ -431,6 +457,8 @@ if(EXISTS "${CM0102_EXE}")
         find_package(Threads REQUIRED)
         target_link_libraries(cm0102_recomp PRIVATE ${SDL2_LIBRARIES} m Threads::Threads)
     endif()
+    # The secure connection of online play (src/recomp_rt/win/secure.c).
+    target_link_libraries(cm0102_recomp PRIVATE mbedtls)
 else()
     message(STATUS "cm0102_recomp: ${CM0102_EXE} not found, so the recompiled game is not built")
 endif()

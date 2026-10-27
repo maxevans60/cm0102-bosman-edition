@@ -111,9 +111,11 @@ static void test_http(uint16_t port)
     t0 = hn_ms();
     CHECK(lobby_http(closed, "GET", "/v1/games", NULL, NULL, 3000, a) == LH_UNAVAILABLE && hn_ms() - t0 < 1000,
           "a refused connection: unavailable at once");
+    /* https goes over the secure connection (slice 5, tests/net/tls_check.py): a name that does not resolve is
+     * unavailable. */
     CHECK(lobby_http("https://example.invalid", "GET", "/", NULL, NULL, 3000, a) == LH_UNAVAILABLE &&
-          !lobby_http_usable("https://example.invalid") && !lobby_http_usable("") && lobby_http_usable(base),
-          "https waits for slice 5");
+          lobby_http_usable("https://example.invalid") && !lobby_http_usable("ftp://x") && !lobby_http_usable("") &&
+          lobby_http_usable(base), "https is usable; a name that does not resolve is unavailable");
     free(a);
 }
 

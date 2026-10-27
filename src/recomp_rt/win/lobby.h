@@ -42,6 +42,10 @@ void lobby_host_set(const LobbyGame *g, const char *password);
 /* The game ended: close its entry. */
 void lobby_host_close(void);
 LobbyHostState lobby_host_state(char *code_out);    /* code_out: 9 bytes or NULL */
+/* The code and the host token of an open entry, for the host's relay connection (relay.h). 1 when open. */
+int lobby_host_relay(char code[9], char token[96]);
+/* The lobby address that lobby_set_address set. */
+const char *lobby_address(void);
 
 /* List. lobby_list_fetch asks for the list. lobby_list_take gives the rows of the last answer once: the count,
  * or -1 while no new answer waits. *result is an LhResult (lobby_http.h). */
