@@ -464,7 +464,46 @@ On this Mac each script click stayed down for many host screens. The joiner sent
 
 On the original's WinSock, the length bytes went out at once and the body waited for the peer's delayed acknowledgement (up to 200 ms on Windows), so the next screen came after a normal click had ended. With real sockets on a LAN, and with the runtime's whole-packet sends and `TCP_NODELAY`, the next screen comes within milliseconds. A player's normal click then acts on two or more screens: Next on Enter Name can also click Next on Select Nationality.
 
-This is the original's input code, not the network layer, so slice 2 leaves it. It must be fixed before 0.7.0 ships, and it needs a decision on where. One option: the runtime reports the left button as up to `poll_input` in the client loop after the poll that sent a click, until the real button comes up. The two-game run clicks only where the next screen has no button, so its checks do not depend on it.
+This is the original's input code, not the network layer, so slice 2 left it.
+
+### The fix: each press acts on one host screen (slice 2b, Q34, 2026-10-27)
+
+How the game learns the button state. The window procedure sets the level flag 0xb67a34 at WM_LBUTTONDOWN (0x68d9bc) and clears it at WM_LBUTTONUP (0x68da03) (docs/research/2026-10-13-input-inventory.md). `poll_input` 0x55f620 first takes the one-shot results (hotkey, 0xb67a0c, 0xb67a1c), then calls the hit test of the Display's mode (0x560490 for mode 0, at 0x55f704). While 0xb67a34 is set, the hit test gives the widget under the pointer in every poll. The runtime already wraps 0x55f620 (`input_poll` in `src/recomp_rt/win/user32.c`) to pace held buttons in single-player screens. It numbers each press (`press_count`, one for each WM_LBUTTONDOWN that it posts).
+
+The rule, in that wrapper. The wrapper notes the press, the widget and the count of host screens read so far each time a held poll gives a widget, at any call site. When the poll returns to 0x7fdf1c (the call at 0x7fdf17 in `run_network_client` 0x7fdc00) in a press that already gave a widget, it gives -1 in two cases:
+
+- the widget is the same one, or
+- a new host screen came since, that is a packet with opcode 0 (`Display::process_command_packet` 0x564080, case 0 at 0x564131 calls `Display::reset` 0x55f7c0). `net_core.c` counts these packets as the game reads them (`nc_resets_in`).
+
+On -1 the client loop stores -1 as its last widget (0x7fe1e8) and sends nothing, as for a pointer over no widget. The next press gives its widget at once and goes to the host as before (0x7fe1df). The press of the join click gave Next on the game list before the client loop ran, and Enter Name came since, so that press no longer reaches the host's Enter Name.
+
+Two details came from a log of each poll (2026-10-27) and from the two review agents:
+
+- A press that ends a text entry gives the field in one poll and the widget under the pointer in the next poll of the same press, both at 0x7fdf17 (field 0xb, then Next 0x15 on Enter Name). The original sends both, because they differ (0x7fdf2c). A first version of the rule gave -1 for every later poll of a press and so lost Next. The test caught it (3 click packets, Enter Name stayed).
+- The host sent 5 bytes within 2 ms of each click, before the next poll of the same press. A rule that counted every byte from the host also lost Next. Only opcode 0 counts.
+
+What stays as before: every other caller of 0x55f620 (single-player screens and the joining game's own screens before the client loop), the held-button pacing, the scrollbar test 0x561f10, and the wheel and key clicks that hold 0xb67a34 for a count of passes (0xb67a3c, not "held" in the wrapper). A joiner cannot hold a +/- button to repeat it on a host screen. The original could not either, because the client loop sends a widget only when it differs from the last one (0x7fdf2c). A hotkey while the left button is down gives -1 in the client loop. That is a small case.
+
+Test: `tests/smoke/network_run.py`. The joiner types its names, types one more letter in First Name, and clicks Next while that entry is open. The run checks:
+
+- the joiner's first screen equals the host's Enter Name (no "Names Are Blank"),
+- after Next the joiner's screen equals the host's own Select Nationality (not Select Team),
+- each joiner sends exactly 4 click packets (First Name, Second Name, and First Name and Next from the last press).
+
+On the slice 2 build it fails: the first screen was "Names Are Blank", Next led to Select Team, and the joiner sent 174 click packets. With the fix:
+
+| Run | Result |
+|---|---|
+| Mac, host and 1 joiner | PASS, 4 click packets |
+| Mac, host and 3 joiners | PASS, 4 click packets for each joiner |
+| Windows build under wine, host and 1 joiner | PASS, 4 click packets |
+| Windows build under wine, host and 3 joiners | PASS, 4 click packets for each joiner |
+
+Under wine the repeat did not show before the fix either (section above), so the wine runs check that the fix does no harm there. The Mac runs prove the fix.
+
+Not tested: a click through the relay (slice 5). The rule counts host screens as the game reads them in `nc_recv`, so the relay path must deliver the host's packets through `nc_recv` with the same framing. An opcode 0 that the host sends unasked, between the two polls of a press that ends a text entry, loses that press. The player then clicks again.
+
+The same-save sets (start.sav, prematch.sav, a new game, yeovil.sav with `--days 7`, each against the slice 2 build as ref-build) pass: every run of each set is ok, and ref-build equals normal in all four.
 
 ### Traffic
 
@@ -479,7 +518,7 @@ The wine runs have no repeated clicks, so their figures are the real cost of a s
 
 By opcode, for one connection: each screen is opcodes 0 (reset, about 40 bytes), 1 (widgets, about 500 bytes), 2 (about 160 bytes) and 3 (draw, 5 bytes), so about 700 bytes and 4 packets for Enter Name or Manager Status. One or two opcode 9 packets (play a sound, 5 bytes). Each click is opcode 6, 62 to 69 bytes with its length.
 
-The Mac runs show the cost of the repeated clicks: about 70 KB and 430 packets from the host to each joiner in 15 s (for example 4,854, 55,600, 15,557 and 565 bytes for opcodes 0 to 3, 113 times each), answering 113 click packets.
+Before the fix, the Mac runs showed the cost of the repeated clicks: about 70 KB and 430 packets from the host to each joiner in 15 s (for example 4,854, 55,600, 15,557 and 565 bytes for opcodes 0 to 3, 113 times each), answering 113 click packets.
 
 What the figures say:
 

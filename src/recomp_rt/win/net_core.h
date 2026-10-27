@@ -50,6 +50,10 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port);
 long nc_send(uint32_t h, const void *buf, uint32_t n);
 long nc_recv(uint32_t h, void *buf, uint32_t n);
 long nc_sendto(uint32_t h, const void *buf, uint32_t n, uint32_t addr, uint16_t port);
+/* The packets with opcode 0 that the game read from all TCP connections so far. Each host screen starts with
+ * one: Display::process_command_packet 0x564080, case 0 at 0x564131, calls Display::reset 0x55f7c0. The click
+ * rule of the input poll (user32.c) reads it. */
+uint64_t nc_resets_in(void);
 long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *port);
 
 /* The adapter table of 0x8aee20: at most max addresses and their subnet broadcasts. The count. */

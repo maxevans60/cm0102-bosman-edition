@@ -460,6 +460,8 @@ long nc_send(uint32_t h, const void *buf, uint32_t n)
     return (long)n;
 }
 
+static uint64_t resets_in;   /* opcode 0 packets that the game read from all TCP connections (nc_resets_in) */
+
 long nc_recv(uint32_t h, void *buf, uint32_t n)
 {
     Sock *k = find(h);
@@ -473,9 +475,13 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
     if (r < 0 && k->dead && hn_error() == HN_WOULDBLOCK) return fail(k->dead);
     if (r < 0) return fail_host();
     k->n.bytes_in += (uint64_t)r;
+    uint64_t resets = k->fi.op_packets[0];
     k->n.packets_in += frame_feed(&k->fi, buf, (uint32_t)r);
+    resets_in += k->fi.op_packets[0] - resets;
     return r;
 }
+
+uint64_t nc_resets_in(void) { return resets_in; }
 
 long nc_sendto(uint32_t h, const void *buf, uint32_t n, uint32_t addr, uint16_t port)
 {

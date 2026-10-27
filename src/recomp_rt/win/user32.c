@@ -21,6 +21,7 @@
 #include "options.h"
 #include "winfit.h"
 #include "winscale.h"
+#include "net_core.h"
 
 #include <SDL.h>
 #include <stdlib.h>
@@ -975,6 +976,30 @@ RT_IMPORT(GetMessageA)
  * (a click that ends a text entry and then hits the button under the pointer), go through at once. */
 #define REPEAT_DELAY 400u
 #define REPEAT_INTERVAL 100u
+
+/* A joining game in a network game (0.7.0, #45, Q34, research note 2026-10-27-network-code-reading.md,
+ * section 11). Its client loop run_network_client 0x7fdc00 calls the poll at 0x7fdf17 (return address 0x7fdf1c)
+ * and sends the widget to the host as a click (opcode 6, Display::send_widget_click 0x568560, call at 0x7fe1df)
+ * when it differs from the last one (0x7fdf2c). Each new screen from the host clears the Display, so while the
+ * button stays down the same press went to every screen that arrived: on a LAN a normal click acted on two or
+ * more host screens, and the press of the join click (the game list's Next, before the loop runs) reached the
+ * host's Enter Name as Next ("Names Are Blank"). The original's WinSock hid this behind the peer's delayed
+ * acknowledgement (up to 200 ms), so its next screen came after a normal click had ended.
+ *
+ * So the poll at 0x7fdf17 gives -1 (nothing) for a held press that already gave a widget, unless the widget is
+ * another one and no new host screen came since: no packet with opcode 0, which resets the Display
+ * (Display::process_command_packet 0x564080, case 0 at 0x564131 calls Display::reset 0x55f7c0, counted by
+ * nc_resets_in). Other packets do not count: the host sent 5 bytes within 2 ms of each click (logged
+ * 2026-10-27), before the next poll of the same press. The loop then clears its last widget at 0x7fe1e8, as
+ * for a pointer over no widget, and the next press clicks as before. A widget from a poll outside the client
+ * loop counts too: the join click. The exception keeps a click that ends a text entry: the hit test 0x560490
+ * gives the field in one poll and the widget under the pointer in the next poll of the same press (logged
+ * 2026-10-27: field 0xb, then Next 0x15 on Enter Name), both on the same host screen, and the loop sends both.
+ * Only the poll at 0x7fdf17 changes. A screen loop of the joining game and every single-player poll are as
+ * before. */
+#define CLIENT_LOOP_POLL 0x7fdf1cu
+static uint32_t click_press, click_widget;  /* the press that last gave a widget, and that widget */
+static uint64_t click_resets;               /* nc_resets_in at that poll */
 static uint32_t last_press, last_widget = 0xffffu, last_top;
 static uint64_t next_repeat_at;
 
@@ -1069,6 +1094,11 @@ RT_WRAP(0055f620, input_poll)
     int held = (buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu);
     idle_rest(widget);
     if (widget == 0xffffu || !held) return;
+    /* The client loop of a joining game sends each press to one host screen only. */
+    uint64_t resets = nc_resets_in();
+    if (poll_ret == CLIENT_LOOP_POLL && press_count == click_press &&
+        (widget == click_widget || resets != click_resets)) { cpu.eax |= 0xffffu; return; }
+    click_press = press_count, click_widget = widget, click_resets = resets;
     uint32_t top = rd32(g_mem, 0xb74450u + 0x7d4u + 0x0eu);   /* the screen node on top (waits.c) */
     if (press_count != last_press || widget != last_widget) {
         last_press = press_count;
