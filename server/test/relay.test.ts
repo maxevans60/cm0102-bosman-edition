@@ -1,4 +1,4 @@
-import { abortAllDurableObjects, runDurableObjectAlarm, runInDurableObject } from "cloudflare:test";
+import { abortAllDurableObjects, evictDurableObject, runDurableObjectAlarm, runInDurableObject } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Relay } from "../src/relay";
 import {
@@ -12,11 +12,10 @@ import {
   setLobbyClock,
   withLobby,
   json,
-  Socket,
-} from "./helpers";
+  Socket, resetObjects } from "./helpers";
 
 beforeEach(async () => {
-  await abortAllDurableObjects();
+  await resetObjects();
 });
 afterEach(async () => {
   await abortAllDurableObjects();
@@ -248,6 +247,36 @@ describe("relay", () => {
     await withLobby((inst) => inst.forgetAll());
     expect(await runDurableObjectAlarm(relayStub(code))).toBe(true);
     expect(await relayKeys(code)).toContain("key");
+  });
+
+  it("keeps working after an eviction: frames, a new manager, a used ticket, kick and host quit", async () => {
+    const { code, hostToken, host } = await gameWithHost();
+    const a = await addManager(code, host);
+    const used = await joinTicket(code);
+    const b = await managerSocket(code, used);
+    expect((await host.nextJson()).ch).toBe(1);
+    await evictDurableObject(relayStub(code));
+
+    a.socket.send([1, 2]);
+    expect(await host.nextBytes()).toEqual([0, 1, 2]);
+    host.send([255, 9]);
+    expect(await a.socket.nextBytes()).toEqual([9]);
+    expect(await b.nextBytes()).toEqual([9]);
+
+    expect((await openRelay(code, `role=manager&ticket=${encodeURIComponent(used)}`)).res.status).toBe(401);
+    const c = await addManager(code, host);
+    expect(c.ch).toBe(2);
+    expect((await openRelay(code, "role=host&token=wrong")).res.status).toBe(401);
+
+    await evictDurableObject(relayStub(code));
+    host.send(JSON.stringify({ t: "kick", ch: 1 }));
+    expect(await b.waitClosed()).toEqual({ code: 4003, reason: "kicked" });
+    expect(await host.nextJson()).toEqual({ t: "close", ch: 1 });
+
+    await evictDurableObject(relayStub(code));
+    host.ws.close(1000, "quit");
+    expect(await a.socket.waitClosed()).toEqual({ code: 4000, reason: "host_left" });
+    expect(hostToken).toBeTruthy();
   });
 
   it("stores no game data: only the relay key and connection markers", async () => {

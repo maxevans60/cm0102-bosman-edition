@@ -1,10 +1,10 @@
 import { abortAllDurableObjects } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import worker from "../src/index";
-import { BASE, call, freshIp, gameBody, register } from "./helpers";
+import { BASE, call, freshIp, gameBody, register, resetObjects } from "./helpers";
 
 beforeEach(async () => {
-  await abortAllDurableObjects();
+  await resetObjects();
 });
 afterEach(async () => {
   await abortAllDurableObjects();

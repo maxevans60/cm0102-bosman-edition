@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import { exports } from "cloudflare:workers";
-import { env, runInDurableObject } from "cloudflare:test";
+import { abortAllDurableObjects, env, runInDurableObject } from "cloudflare:test";
 import type { Lobby } from "../src/lobby";
 
 export const BASE = "https://lobby.test";
@@ -59,7 +59,7 @@ export async function register(over: Record<string, unknown> = {}, ip = freshIp(
   return { res, data, body, ip, code: data.code as string, hostToken: data.hostToken as string };
 }
 
-function lobbyStub() {
+export function lobbyStub() {
   return env.LOBBY.get(env.LOBBY.idFromName("lobby"));
 }
 
@@ -142,7 +142,10 @@ export async function openRelay(code: string, query: string): Promise<{ res: Res
   const res = await exports.default.fetch(`${BASE}/v1/games/${code}/relay?${query}`, {
     headers: { Upgrade: "websocket" },
   });
-  return { res, socket: res.webSocket ? new Socket(res.webSocket) : null };
+  if (res.webSocket) return { res, socket: new Socket(res.webSocket) };
+  // Read a refusal's body at once, so the request ends. A test may read it again.
+  const body = await res.text();
+  return { res: new Response(body, { status: res.status, headers: res.headers }), socket: null };
 }
 
 export async function hostSocket(code: string, hostToken: string): Promise<Socket> {
@@ -166,4 +169,11 @@ export async function managerSocket(code: string, ticket: string): Promise<Socke
   const { res, socket } = await openRelay(code, `role=manager&ticket=${encodeURIComponent(ticket)}`);
   expect(res.status).toBe(101);
   return socket!;
+}
+
+/** Starts each test with fresh objects and an empty lobby. Stored games outlive an abort. */
+export async function resetObjects(): Promise<void> {
+  await abortAllDurableObjects();
+  await withLobby((inst) => inst.forgetAll());
+  await abortAllDurableObjects();
 }

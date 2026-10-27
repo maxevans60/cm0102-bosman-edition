@@ -91,7 +91,9 @@ async function route(request: Request, env: Env): Promise<Response> {
   switch (parts[3]) {
     case "heartbeat":
       if (method !== "POST") return fail("method_not_allowed");
-      return toResponse(await lobby(env).heartbeat(code, bearer(request), parseHeartbeat(await readBody(request, false))));
+      return toResponse(
+        await lobby(env).heartbeat(code, bearer(request), parseHeartbeat(await readBody(request, false)), address(request)),
+      );
     case "join":
       if (method !== "POST") return fail("method_not_allowed");
       return toResponse(await lobby(env).join(code, parseJoin(await readBody(request, true)), address(request)));

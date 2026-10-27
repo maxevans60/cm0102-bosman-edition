@@ -2,14 +2,14 @@ import { abortAllDurableObjects, runInDurableObject } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Relay } from "../src/relay";
 import wranglerConfig from "../wrangler.jsonc?raw";
-import { call, hostSocket, joinTicket, json, managerSocket, register, relayStub, setLobbyClock, withLobby } from "./helpers";
+import { call, hostSocket, joinTicket, json, managerSocket, register, relayStub, setLobbyClock, withLobby, resetObjects } from "./helpers";
 
 const HOST_IP = "203.0.113.77";
 const JOIN_IP = "2001:db8::4242";
 
 const logged: string[] = [];
 beforeEach(async () => {
-  await abortAllDurableObjects();
+  await resetObjects();
   logged.length = 0;
   for (const level of ["log", "info", "warn", "error", "debug", "trace"] as const) {
     vi.spyOn(console, level).mockImplementation((...args: unknown[]) => {
@@ -44,8 +44,9 @@ describe("internet addresses", () => {
     await register({}, HOST_IP);
     answers.push(JSON.stringify((await register({}, HOST_IP)).data));
 
-    const lobbyStored = await withLobby(async (_inst, state) => [...(await state.storage.list()).entries()]);
-    expect(lobbyStored).toEqual([]);
+    const lobbyStored = JSON.stringify(await withLobby(async (_inst, state) => [...(await state.storage.list()).entries()]));
+    expect(lobbyStored).toContain(g.code);
+    for (const k of await withLobby((inst) => inst.addressKeys())) expect(lobbyStored).not.toContain(k);
     const relayStored = await runInDurableObject(relayStub(g.code), async (_inst: Relay, state) => [
       ...(await state.storage.list()).entries(),
     ]);
@@ -55,6 +56,7 @@ describe("internet addresses", () => {
       for (const line of logged) expect(line).not.toContain(ip);
       for (const a of answers) expect(a).not.toContain(ip);
       expect(JSON.stringify(relayStored)).not.toContain(ip);
+      expect(lobbyStored).not.toContain(ip);
       expect(lobbyMemory).not.toContain(ip);
     }
   });
