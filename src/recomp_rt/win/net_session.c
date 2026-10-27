@@ -34,10 +34,14 @@
  *   message box 0x5e8290 says so. The original's network error box is the same box (0x56946b). Then Network Play
  *   goes back to the start screen.
  * - Kick (Q39): the list of the human managers online and the Kick of one player slot, for the Network tab of the
- *   Options box (options_screen.c). */
+ *   Options box (options_screen.c).
+ * - Clear errors (0.7.0 slice 7): the joiner's box names why the session ended. The host's KICK control packet
+ *   (net_core.c) gives "kicked", a connection that broke with no quit packet gives "the connection was lost", and
+ *   the host's quit packet gives "the host left" (net_errors.c). */
 #include "win.h"
 #include "net_core.h"
 #include "season.h"
+#include "net_errors.h"
 #include "../host_net.h"
 
 #include <stdio.h>
@@ -138,10 +142,10 @@ static void box(const char *title, const char *text)
     static uint32_t title_at, text_at;
     if (!title_at) {
         title_at = win_static_alloc(64);
-        text_at = win_static_alloc(200);
+        text_at = win_static_alloc(400);
     }
     snprintf((char *)g_mem + title_at, 64, "%s", title);
-    snprintf((char *)g_mem + text_at, 200, "%s", text);
+    snprintf((char *)g_mem + text_at, 400, "%s", text);
     fprintf(stderr, "recomp: net box: %s: %s\n", title, text);
     uint32_t args[3] = {title_at, text_at, 0};
     rt_callback(MESSAGE_BOX, 3, args);
@@ -160,7 +164,10 @@ RT_WRAP(007fdc00, run_network_client)
     if (rt_unwinding || !nc_host_left()) return;
     nc_host_left_clear();
     uint32_t eax = cpu.eax;
-    box("Network Game", "The host left the game.");
+    char text[400];
+    net_error_text(text, sizeof text, nc_kicked() ? NE_KICKED : nc_host_broke() ? NE_CONNECTION_LOST : NE_HOST_LEFT,
+                   NULL, NULL, 0);
+    box("Network Game", text);
     cpu.eax = eax;
     back_to_start = 1;
 }
@@ -229,13 +236,27 @@ int net_session_managers(NetManager *out, int max)
 /* The socket of a player slot: the index at +0x4b8 + 2 * slot of the Network object (s16, -1 with none; release_
  * slot_socket 0x77ac00 at 0x77ac13), then the handle at that index of the connection table at +0 of the object
  * (TcpIp::send_to_connection 0x8ae8d0 at 0x8ae8d1..0x8ae8f6), 16 entries (0x77a7eb). */
-int net_session_kick(int slot)
+static uint32_t slot_socket(int slot)
 {
     uint32_t net = rd32(g_mem, NETWORK_SESSION);
-    if (!net_session_hosting() || slot < 1 || slot > 16) return -1;
+    if (!net_session_hosting() || slot < 1 || slot > 16) return NC_INVALID;
     int index = (int16_t)rd16(g_mem, net + 0x4b8u + (uint32_t)slot * 2u);
     uint32_t table = rd32(g_mem, net);
-    if (index < 0 || index >= 16 || !table) return -1;
+    if (index < 0 || index >= 16 || !table) return NC_INVALID;
+    return rd32(g_mem, table + (uint32_t)index * 4u);
+}
+
+int net_session_kick(int slot)
+{
+    uint32_t h = slot_socket(slot);
+    if (h == NC_INVALID) return -1;
     fprintf(stderr, "recomp: net: Kick of player slot %d\n", slot);
-    return nc_kick(rd32(g_mem, table + (uint32_t)index * 4u));
+    return nc_kick(h);
+}
+
+/* 0.7.0 slice 7: the ping of a player slot's connection (net_core.c control packets), -1 when none is known. */
+int net_session_ping(int slot)
+{
+    uint32_t h = slot_socket(slot);
+    return h == NC_INVALID ? -1 : nc_ping_ms(h);
 }

@@ -36,7 +36,14 @@
  * blocking socket and waits for (connect_to_host 0x8ae640, connect at 0x8ae74e). The host's side runs inside
  * accept: TcpIp::accept_connection 0x8ae840 polls accept on each listen socket while a player slot is free
  * (0x77af5a). A new connection waits in a list until its block is read, and accept says "would block" until
- * then. So the game sees only joiners that passed, as if the others never came. */
+ * then. So the game sees only joiners that passed, as if the others never came.
+ *
+ * Control packets (0.7.0 slice 7, net_core.h). On a connection that passed the join check, both runtimes may put
+ * a packet of their own between two packets of the game: the 4-byte length, the opcode NC_CONTROL_OP, which the
+ * game never sends (Display::process_command_packet 0x564080 switches on 0..26 through the table at 0x567a1c), and
+ * a line "BOSMAN PING <n>", "BOSMAN PONG <n>" or "BOSMAN KICK". A send puts one only where the game's own stream is
+ * between two packets, and nc_recv takes each one out where the game's reads are between two packets, before
+ * the game reads the next length byte. So the game never sees them, and they pass the relay as any bytes. */
 #include "net_core.h"
 #include "../host_net.h"
 
@@ -69,6 +76,12 @@ typedef struct {
     int quit_at;                   /* a joiner's connection that broke: 1 + the bytes of the quit packet given */
     int exit_seen;                 /* the host screen now shown holds the confirm of the joiner's own Exit Game */
     char tail[32];                 /* the last bytes from the host, for a text cut between two reads */
+    int control;                   /* the connection passed the join check: control packets go both ways */
+    uint32_t ping_seq;             /* host: the number of the last PING, and when it went (0: its PONG came) */
+    uint64_t ping_sent, ping_at;   /* ping_at: when the next PING goes */
+    int ping[NC_PING_KEEP], ping_n;/* host: the last round trips in ms */
+    uint8_t wait[NC_CONTROL_MAX + 4];  /* a control packet that waits for the game's packet to end */
+    int wait_len;
     hn_sock s;
     hn_sock out;                   /* UDP: the send socket, else HN_INVALID */
     uint32_t net, mask;            /* UDP: the adapter's subnet, for the shared socket's datagrams */
@@ -90,6 +103,9 @@ static int log_ready;
 
 static int connect_ms = NC_CONNECT_MS;
 static int host_left;               /* nc_host_left */
+static int host_broke, kicked;      /* nc_host_broke, nc_kicked (0.7.0 slice 7) */
+static int connect_error, bind_error;   /* nc_connect_error, nc_bind_error */
+static int ping_every = NC_PING_MS;
 
 static const NcHooks *hooks;
 static int in_tick;
@@ -259,6 +275,7 @@ static int flush(Sock *k)
 /* Every call moves the queues on, but a send leaves the bytes that it holds back for its own packet. */
 static void serve_listeners(void);
 static void close_pending(uint32_t h);
+static void control_tick(void);
 
 static void flush_all(const Sock *except)
 {
@@ -266,6 +283,7 @@ static void flush_all(const Sock *except)
         if (socks[i].handle && &socks[i] != except && socks[i].qlen) flush(&socks[i]);
     log_tick();
     serve_listeners();
+    control_tick();
     if (hooks && hooks->tick && !in_tick) {
         in_tick = 1;
         hooks->tick();
@@ -306,6 +324,124 @@ static int enqueue(Sock *k, const uint8_t *p, uint32_t n)
     k->qlen += n;
     return 0;
 }
+
+/* ---- control packets (0.7.0 slice 7, see the head of this file) ---- */
+
+#define CONTROL_TAG "BOSMAN "
+
+/* Builds a control packet with the line text: its length, or 0 when the text is too long. */
+static int control_packet(uint8_t *out, const char *text)
+{
+    size_t n = strlen(text) + 1 + strlen(CONTROL_TAG);
+    if (n > NC_CONTROL_MAX) return 0;
+    out[0] = (uint8_t)n, out[1] = out[2] = out[3] = 0;
+    out[4] = NC_CONTROL_OP;
+    memcpy(out + 5, CONTROL_TAG, strlen(CONTROL_TAG));
+    memcpy(out + 5 + strlen(CONTROL_TAG), text, strlen(text));
+    return (int)n + 4;
+}
+
+/* Sends a control packet now when the game's stream is between two packets, else after the game's packet. A packet
+ * that already waits gives way to the newer one. */
+static void send_control(Sock *k, const char *text)
+{
+    if (!k->control || k->dead || k->kicked) return;
+    k->wait_len = control_packet(k->wait, text);
+    if (k->wait_len && frame_between(&k->fo)) {
+        if (enqueue(k, k->wait, (uint32_t)k->wait_len) == 0) flush(k);
+        k->wait_len = 0;
+    }
+}
+
+/* A control packet that waited for the end of the game's packet. */
+static void send_waiting(Sock *k)
+{
+    if (!k->wait_len || !frame_between(&k->fo) || k->dead) return;
+    if (enqueue(k, k->wait, (uint32_t)k->wait_len) == 0) flush(k);
+    k->wait_len = 0;
+}
+
+static void control_arrived(Sock *k, const char *line)
+{
+    unsigned n;
+    if (sscanf(line, "PING %u", &n) == 1) {
+        char pong[24];
+        snprintf(pong, sizeof pong, "PONG %u", n);
+        send_control(k, pong);
+    } else if (sscanf(line, "PONG %u", &n) == 1) {
+        if (!k->ping_sent || n != k->ping_seq) return;
+        int ms = (int)(hn_ms() - k->ping_sent);
+        memmove(k->ping + 1, k->ping, sizeof k->ping - sizeof k->ping[0]);
+        k->ping[0] = ms;
+        if (k->ping_n < NC_PING_KEEP) k->ping_n++;
+        k->ping_sent = 0;
+    } else if (!strcmp(line, "KICK")) {
+        kicked = 1;
+        fprintf(stderr, "recomp: net: the host kicked this computer\n");
+    }
+}
+
+/* Takes the control packets out of the stream where the game's reads are between two packets. 0: the next bytes
+ * are the game's (or none came yet, or the connection ended: the caller's read sees it), 1: wait, part of a
+ * packet came. */
+static int take_control(Sock *k)
+{
+    for (;;) {
+        uint8_t p[NC_CONTROL_MAX + 4];
+        long got = hn_peek(k->s, p, sizeof p);
+        if (got <= 0) return 0;
+        size_t tag = strlen(CONTROL_TAG);
+        if (got >= 5 && p[4] != NC_CONTROL_OP) return 0;
+        long seen = got < 5 + (long)tag ? got - 5 : (long)tag;
+        if (seen > 0 && memcmp(p + 5, CONTROL_TAG, (size_t)seen)) return 0;
+        if (got < 5 + (long)tag) return 1;
+        uint32_t len = (uint32_t)p[0] | (uint32_t)p[1] << 8 | (uint32_t)p[2] << 16 | (uint32_t)p[3] << 24;
+        if (len < 1 + tag || len > NC_CONTROL_MAX) return 0;
+        if (got < (long)len + 4) return 1;
+        if (hn_recv(k->s, p, len + 4) != (long)len + 4) return 0;
+        char line[NC_CONTROL_MAX];
+        snprintf(line, sizeof line, "%.*s", (int)(len - 1 - tag), (const char *)p + 5 + tag);
+        control_arrived(k, line);
+    }
+}
+
+/* At every call of the game: the host's PING to each joiner every NC_PING_MS, and the packets that waited. */
+static void control_tick(void)
+{
+    uint64_t now = hn_ms();
+    for (int i = 0; i < MAX_SOCKS; i++) {
+        Sock *k = &socks[i];
+        if (!k->handle || !k->control || !k->connected || k->dead || k->kicked) continue;
+        send_waiting(k);
+        if (!k->accepted || now < k->ping_at) continue;
+        if (k->ping_sent && now - k->ping_sent < NC_PING_LOST_MS) continue;     /* its PONG is still on the way */
+        char ping[24];
+        snprintf(ping, sizeof ping, "PING %u", ++k->ping_seq);
+        send_control(k, ping);
+        k->ping_sent = now;
+        k->ping_at = now + (uint64_t)ping_every;
+    }
+}
+
+int nc_ping_ms(uint32_t h)
+{
+    Sock *k = find(h);
+    if (!k || !k->control || !k->ping_n) return -1;
+    int best = k->ping[0];
+    for (int i = 1; i < k->ping_n; i++)
+        if (k->ping[i] < best) best = k->ping[i];
+    /* A PONG that is late by more than two rounds counts as it is now: the line may have stopped. */
+    if (k->ping_sent && hn_ms() - k->ping_sent > 2u * (uint64_t)ping_every && (int)(hn_ms() - k->ping_sent) > best)
+        best = (int)(hn_ms() - k->ping_sent);
+    return best;
+}
+
+void nc_set_ping_every(int ms) { ping_every = ms; }
+int nc_kicked(void) { return kicked; }
+int nc_host_broke(void) { return host_broke; }
+int nc_connect_error(void) { return connect_error; }
+int nc_bind_error(void) { return bind_error; }
+void nc_bind_error_clear(void) { bind_error = 0; }
 
 /* ---- calls ---- */
 
@@ -428,7 +564,11 @@ int nc_bind(uint32_t h, uint32_t addr, uint16_t port)
     Sock *k = find(h);
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
-    if (k->stream) return hn_bind(k->s, addr, port) < 0 ? fail_host() : 0;
+    if (k->stream) {
+        if (hn_bind(k->s, addr, port) == 0) return 0;
+        bind_error = hn_error();       /* the reason of "could not be created" (0.7.0 slice 7) */
+        return fail_host();
+    }
     /* UDP: see the head of this file. */
     if (k->out != HN_INVALID) return fail(HN_INVAL);
     hn_set_flag(k->s, HN_REUSEADDR, 1);
@@ -483,6 +623,7 @@ static struct {
     uint16_t port;
     uint64_t since;
     int len, ready;                /* ready: it passed, and waits for the game's accept */
+    int hello;                     /* it passed with a join block: control packets work (0.7.0 slice 7) */
     char buf[256];
 } pending[PENDING];
 
@@ -505,6 +646,7 @@ static void serve_listeners(void)
             if (c == HN_INVALID) break;
             pending[i].listen = socks[k].handle, pending[i].s = c, pending[i].addr = a, pending[i].port = p;
             pending[i].since = hn_ms(), pending[i].len = 0, pending[i].ready = is_loopback(a);
+            pending[i].hello = 0;
         }
     }
     for (int i = 0; i < PENDING; i++)
@@ -583,6 +725,7 @@ static int check_pending(int i)
             break;
         }
         send_line(pending[i].s, "BOSMAN OK\n");
+        pending[i].hello = 1;
         return 1;
     }
     hn_close(pending[i].s);
@@ -598,10 +741,11 @@ uint32_t nc_accept(uint32_t h, uint32_t *addr, uint16_t *port)
     uint32_t a = 0;
     uint16_t p = 0;
     hn_sock s = HN_INVALID;
+    int hello = 0;
     if (identity) {                /* flush_all above served the join blocks: take one that passed */
         for (int i = 0; s == HN_INVALID && i < PENDING; i++)
             if (pending[i].listen == h && pending[i].ready) {
-                s = pending[i].s, a = pending[i].addr, p = pending[i].port;
+                s = pending[i].s, a = pending[i].addr, p = pending[i].port, hello = pending[i].hello;
                 pending[i].listen = 0;
             }
         if (s == HN_INVALID) return fail(HN_WOULDBLOCK), NC_INVALID;
@@ -618,6 +762,7 @@ uint32_t nc_accept(uint32_t h, uint32_t *addr, uint16_t *port)
      * non-blocking (0x8ae48d), and it never sets the accepted one (0x8ae840). */
     c->blocking = k->blocking;
     c->accepted = 1;
+    c->control = hello;
     connected(c, a, p);
     if (addr) *addr = a;
     if (port) *port = p;
@@ -659,15 +804,19 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     if (!k->stream) return fail(10045);                          /* WSAEOPNOTSUPP: the game never does */
     refused = NC_REFUSED_NONE;
     refused_version[0] = 0;
-    host_left = 0;
+    host_left = host_broke = kicked = connect_error = 0;
     if (hooks && hooks->connect && hooks->connect(addr, port) < 0) return -1;
-    if (hn_connect(k->s, addr, port, connect_ms) < 0) return fail_host();
+    if (hn_connect(k->s, addr, port, connect_ms) < 0) {
+        connect_error = hn_error();    /* the reason of "could not be joined" (0.7.0 slice 7) */
+        return fail_host();
+    }
     if (identity && !is_loopback(addr) && hello(k) < 0) {
         /* The game keeps its handle and closes it after the failed join: give it a fresh socket. */
         hn_close(k->s);
         k->s = hn_socket(1);
         return fail(10061);                                       /* WSAECONNREFUSED */
     }
+    k->control = identity && !is_loopback(addr);
     connected(k, addr, port);
     return 0;
 }
@@ -686,6 +835,7 @@ long nc_send(uint32_t h, const void *buf, uint32_t n)
     k->n.packets_out += frame_feed(&k->fo, buf, n);
     /* Hold the length bytes until the body follows. */
     if (frame_between(&k->fo) && flush(k) < 0) return fail(k->dead);
+    send_waiting(k);
     k->n.queued = k->qlen - k->qoff;
     return (long)n;
 }
@@ -738,6 +888,14 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
         return (long)take;
     }
     if (k->quit_at) return fail(k->dead ? k->dead : HN_CONNRESET);
+    /* The runtime's own packets come out before the game reads the next length byte (0.7.0 slice 7). */
+    if (k->control && n && frame_between(&k->fi)) {
+        uint64_t until = hn_ms() + NC_CONNECT_MS;
+        while (take_control(k)) {
+            if (!k->blocking || hn_ms() >= until) return fail(HN_WOULDBLOCK);
+            hn_wait(k->s, 1, 50);
+        }
+    }
     /* Bytes that arrived before a send broke the connection still count, for example the host's quit
      * packet 0x04 (0x7fc738). */
     long r = hn_recv(k->s, buf, n);
@@ -751,6 +909,7 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
         if (!k->dead) k->dead = r == 0 ? HN_CONNRESET : hn_error();
         fprintf(stderr, "recomp: net: the connection to the host broke (%d): the joiner gets the quit packet\n", k->dead);
         host_left = 1;
+        host_broke = 1;
         k->quit_at = 1;
         return nc_recv(h, buf, n);
     }
@@ -795,6 +954,16 @@ int nc_kick(uint32_t h)
     char ip[24];
     ip_text(ip, sizeof ip, k->peer);
     fprintf(stderr, "recomp: net: the host kicks the human manager at %s:%u\n", ip, k->peer_port);
+    /* The joiner's runtime learns why its connection ends (0.7.0 slice 7): a KICK control packet, sent before the
+     * close when the game's stream is between two packets. */
+    if (k->control && !k->dead && frame_between(&k->fo)) {
+        uint8_t p[NC_CONTROL_MAX + 4];
+        int len = control_packet(p, "KICK");
+        if (len && enqueue(k, p, (uint32_t)len) == 0) {
+            uint64_t until = hn_ms() + NC_CLOSE_MS;
+            while (k->qlen && !k->dead && flush(k) == 0 && k->qlen && hn_ms() < until) hn_wait(k->s, 0, 50);
+        }
+    }
     if (log_file) log_line(k, "close", &k->n);
     /* The game's next recv or send on this handle fails, and Network::receive_packet 0x77af20 frees the slot and
      * calls the disconnect callback (0x77b4e9..0x77b508): the original's leave path puts the club on holiday. */

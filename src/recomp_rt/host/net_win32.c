@@ -170,6 +170,12 @@ long hn_sendto(hn_sock s, const void *buf, size_t n, uint32_t addr, uint16_t por
     return k == SOCKET_ERROR ? fail_wsa() : k;
 }
 
+long hn_peek(hn_sock s, void *buf, size_t n)
+{
+    int k = recv((SOCKET)s, (char *)buf, (int)n, MSG_PEEK);
+    return k == SOCKET_ERROR ? fail_wsa() : k;
+}
+
 long hn_recvfrom(hn_sock s, void *buf, size_t n, uint32_t *addr, uint16_t *port)
 {
     struct sockaddr_in a;

@@ -19,7 +19,7 @@ game saves at its screen loop (net_session.c), and join2 sees "The host left the
 
 --kick (in place of the rejoin): join1 clicks Finish, the game starts, and the host opens the Network tab of the
 Options box. It clicks Kick for join1, then No (join1 stays), then Kick and Yes: join1's club goes on holiday and
-join1 sees "The host left the game".
+join1 sees "The host kicked you from the network game" (0.7.0 slice 7). The Network tab shows join1's ping.
 --leave (in place of the rejoin): join1 clicks Exit Game and Yes. The host sends it the quit packet (result -12,
 0x7fcd79), its club goes on holiday, and join1 shows no "The host left the game".
 
@@ -30,7 +30,8 @@ Checks:
     3 the host's log shows join1's club on holiday after the drop and back in play after join2's password
     4 the host saved at its quit: the log line and a save file in the host's save folder
     5 join2 shows "The host left the game" and then the start screen (0x81bab0)
-    6 kick: No keeps join1, Yes kicks it (host log), and join1's game shows "The host left the game"
+    6 kick: No keeps join1, Yes kicks it (host log), join1's game shows "The host kicked you", and the Network
+      tab showed join1's ping
     7 leave: join1 shows no "The host left the game"
 """
 import glob
@@ -61,7 +62,8 @@ PASSWORD = [
 ]
 
 
-KICK_ROW = "click 688 286"          # the Kick button of the first human manager on the Network tab
+KICK_ROW = "click 688 321"          # the Kick button of the first human manager on the Network tab (0.7.0 slice 7:
+                                    # below the Connection test row)
 NETWORK_TAB = "click 680 155"
 KICK_STEPS = [                      # the host, in the game: Kick with No, then with Yes (Q39)
     "1000 click 45 344",            # Game Options
@@ -314,7 +316,10 @@ def main(argv):
             j1 = text(os.path.join(shots, "join1-stderr.txt"))
             no_at, yes_at = h.find(": no\n", h.find("options box: Kick")), h.find("the host kicks the human manager")
             check(0 <= no_at < yes_at and ": yes" in h, "6 Kick: No keeps join1, then Yes kicks it (host log)")
-            check("net box: Network Game: The host left the game." in j1, "6 join1 shows the box after the kick")
+            check("net box: Network Game: The host kicked you from the network game" in j1,
+                  "6 join1 shows the kicked box after the kick")
+            pings = [l.split(" ping ")[1] for l in h.splitlines() if "options box: " in l and " ping " in l]
+            check(any(p.endswith(" ms") for p in pings), f"6 the Network tab shows join1's ping: {pings[:3]}")
         else:
             check(away_after_rejoin == [], f"2 no club is Away after the rejoin: {away_after_rejoin}")
             away1 = h.find("lobby: away 1 ")

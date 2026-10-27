@@ -14,6 +14,7 @@ export class FieldError extends Error {
 const LATIN1_TEXT = /^[\x20-\x7e\xa0-\xff]+$/;
 
 export const MAX_MANAGERS = 16;
+export const MAX_PING_MS = 9999;
 
 export interface PublicInfo {
   name: string;
@@ -27,6 +28,8 @@ export interface PublicInfo {
   awayClubs: string[];
   freeSeats: number;
   managersOnline: number;
+  /** The highest ping of the host's human managers in ms, 0 when none is known (0.7.0 slice 7). */
+  pingMs: number;
 }
 
 export interface RegisterInput extends PublicInfo {
@@ -36,7 +39,7 @@ export interface RegisterInput extends PublicInfo {
   hostToken: string | null;
 }
 
-export type HeartbeatInput = Partial<Pick<PublicInfo, "season" | "day" | "humanClubs" | "awayClubs" | "freeSeats" | "managersOnline">>;
+export type HeartbeatInput = Partial<Pick<PublicInfo, "season" | "day" | "humanClubs" | "awayClubs" | "freeSeats" | "managersOnline" | "pingMs">>;
 
 export interface JoinInput {
   version: string;
@@ -126,6 +129,7 @@ export function parseRegister(body: unknown): RegisterInput {
     awayClubs: o.awayClubs === undefined ? [] : clubs(o, "awayClubs"),
     freeSeats: int(o, "freeSeats", 0, MAX_MANAGERS),
     managersOnline: int(o, "managersOnline", 0, MAX_MANAGERS),
+    pingMs: o.pingMs === undefined ? 0 : int(o, "pingMs", 0, MAX_PING_MS),
     password: password(o),
     code: optional(o, "code", () => {
       if (typeof o.code !== "string" || !CODE_RE.test(o.code)) throw new FieldError("code");
@@ -148,6 +152,7 @@ export function parseHeartbeat(body: unknown): HeartbeatInput {
   if (o.awayClubs !== undefined) out.awayClubs = clubs(o, "awayClubs");
   if (o.freeSeats !== undefined) out.freeSeats = int(o, "freeSeats", 0, MAX_MANAGERS);
   if (o.managersOnline !== undefined) out.managersOnline = int(o, "managersOnline", 0, MAX_MANAGERS);
+  if (o.pingMs !== undefined) out.pingMs = int(o, "pingMs", 0, MAX_PING_MS);
   return out;
 }
 

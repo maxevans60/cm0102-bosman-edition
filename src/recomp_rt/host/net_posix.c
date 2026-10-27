@@ -235,6 +235,12 @@ long hn_recv(hn_sock s, void *buf, size_t n)
     return k < 0 ? fail_errno() : (long)k;
 }
 
+long hn_peek(hn_sock s, void *buf, size_t n)
+{
+    ssize_t k = recv((int)s, buf, n, MSG_PEEK);
+    return k < 0 ? fail_errno() : (long)k;
+}
+
 long hn_sendto(hn_sock s, const void *buf, size_t n, uint32_t addr, uint16_t port)
 {
     struct sockaddr_in a = sin_of(addr, port);

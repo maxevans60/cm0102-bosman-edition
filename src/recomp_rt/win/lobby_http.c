@@ -156,10 +156,15 @@ LhResult lobby_http(const char *base, const char *method, const char *path, cons
 
     static char request[REQUEST_MAX];
     size_t body = json ? strlen(json) : 0;
+    int upgrade = !strcmp(method, "UPGRADE");
+    if (upgrade) method = "GET";
     int n = snprintf(request, sizeof request,
                      "%s %s HTTP/1.1\r\nHost: %s:%u\r\nUser-Agent: Bosman-Edition\r\nAccept: application/json\r\n"
-                     "Connection: close\r\n",
-                     method, path, host, port);
+                     "%s\r\n",
+                     method, path, host, port,
+                     upgrade ? "Connection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\n"
+                               "Sec-WebSocket-Key: Qm9zbWFuIEVkaXRpb24hIQ=="
+                             : "Connection: close");
     if (token) n += snprintf(request + n, sizeof request - (size_t)n, "Authorization: Bearer %s\r\n", token);
     if (json || strcmp(method, "GET"))
         n += snprintf(request + n, sizeof request - (size_t)n,

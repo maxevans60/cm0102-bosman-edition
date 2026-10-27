@@ -87,6 +87,8 @@ void win_data_set_changed(void);
 const char *win_data_set_dir(void);     /* the host folder of the data set, "" for the game's own Data */
 const char *win_databases_root(void);   /* the folder that holds Databases: the save folder */
 void net_lobby_install(void);           /* net_lobby.c: online games in the game list, at the first WSAStartup */
+const char *net_lobby_host_line(char *out, unsigned room);   /* this host's place in the lobby, or NULL (slice 7) */
+void net_lobby_test_start(void);        /* the connection test on this game's lobby address (net_test.c) */
 /* net_session.c (0.7.0 slice 6): drop in, drop out and host quit. */
 void net_session_turn(void);            /* at each human turn */
 void net_session_game_ends(uint32_t esp); /* at free_game_data 0x82ff40, before it: the host's save */
@@ -94,6 +96,7 @@ int net_session_hosting(void);          /* 1 while this game hosts a network gam
 typedef struct { int slot; char name[64]; char club[48]; } NetManager;   /* name and club empty while being made */
 int net_session_managers(NetManager *out, int max);   /* the human managers online on this host: the count */
 int net_session_kick(int slot);         /* closes the connection of a player slot: 0 on success */
+int net_session_ping(int slot);         /* the ping of a player slot in ms, -1 when none is known (slice 7) */
 int net_session_defer_quit(void);       /* a window close or the script's quit: 1 when the host saves first */
 int net_session_screen_idle(void);      /* at the screen loop's poll: 1 when the host saved and now quits */
 int net_session_quit_overdue(void);     /* 1 when a deferred quit waited too long for the screen loop */

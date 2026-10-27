@@ -19,7 +19,8 @@
  * the system.
  * A lobby game is the same as a LAN game when its hostName is lr_host_key of the ACK's computer name and the
  * names match. Lobby rows go to the game LOBBY_WAIT_MS after the request at the earliest, so that the LAN
- * answers come first. When the lobby answers "full today", one row says so. */
+ * answers come first. When the lobby answers "full today", one row says so. When it gives no answer, one row says
+ * that (0.7.0 slice 7). */
 #ifndef LOBBY_ROWS_H
 #define LOBBY_ROWS_H
 
@@ -33,12 +34,14 @@
 #define LR_HOST_AT 19
 #define LR_NET 0x00420000u           /* 0.66.0.0, host order */
 #define LR_FULL_ROW 0x0042ffffu      /* 0.66.255.255: the "full today" row */
+#define LR_DOWN_ROW 0x0042fffeu      /* 0.66.255.254: the "lobby does not answer" row (0.7.0 slice 7) */
 #define LR_HOLD_MS 300
 #define LR_LOBBY_WAIT_MS 400
 
 /* The game sorts its list by a plain byte compare of the names (0x77b1fc..0x77b222): the leading space puts
  * this row first. */
 #define LR_FULL_TEXT " Online games are full today, try again later"
+#define LR_DOWN_TEXT " Online games: the lobby does not answer"
 /* The most rows that the game takes: the cap at 0x77b0eb, which tools/recomp/game_list.py raises from 9 to 50
  * (slice 4a). This constant must follow it. */
 #define LR_CAP 50
@@ -59,7 +62,7 @@ long lr_extra(uint8_t *buf, uint32_t room, uint32_t *addr);
 /* The lobby's answer for the last request: rows and an LhResult. */
 void lr_lobby(const LobbyRow *rows, int n, int result);
 /* The lobby row of a joiner's connect to addr (network order): the row, or NULL when addr is not a lobby row.
- * *full is 1 for the "full today" row. */
+ * *full is 1 for the "full today" row and 2 for the "lobby does not answer" row. */
 const LobbyRow *lr_row_of(uint32_t addr, int *full);
 
 /* Tests: the adapters (network order) and the default route; else the system's own. */

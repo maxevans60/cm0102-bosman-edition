@@ -89,22 +89,25 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 | `awayClubs` | string array | Optional, empty by default. The clubs whose human manager is Away: the connection dropped and the club is on holiday. The same rules as `humanClubs`. |
 | `freeSeats` | integer | 0 to 16 |
 | `managersOnline` | integer | 0 to 16 |
+| `pingMs` | integer | Optional, 0 by default. The highest ping of the host's human managers in ms, 0 to 9999, 0 when none is known (slice 7). The game list row shows it. |
 | `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash (20,000 rounds) in its storage. |
 
 ### Endpoints
 
 `GET /v1/health` gives `{"ok": true, "api": 1}`. It does not use a Durable Object, so the connection test (slice 7) can call it often.
 
+The connection test (slice 7, `src/recomp_rt/win/net_test.c`) calls `GET /v1/health`, then `GET /v1/games`, then a WebSocket request for `/v1/games/22222222/relay?role=manager&ticket=connection-test`. No game has that code, so the relay answers `unknown_game` (404) and stores nothing. If the answer is `upgrade_required`, something on the way took the `Upgrade` header off, and the relay cannot work on that network. Each test costs 3 Worker requests and 2 Durable Object requests.
+
 `POST /v1/games` registers a game. The body holds every game field. The answer is 201 with `{"code", "hostToken", "heartbeatSeconds": 30, "expireSeconds": 90}`.
 - `code` is 8 characters from `23456789ABCDEFGHJKMNPQRSTUVWXYZ`. The game list and the invite link use it.
 - Keep `hostToken` secret. Heartbeat, close and the host relay connection need it.
 - To register the same game again (see the heartbeat), add `code` and `hostToken` to the body. The answer is 200 with the same code and token.
 
-`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `awayClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. This also happens if the lobby loses its storage. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
+`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `awayClubs`, `freeSeats`, `managersOnline` and `pingMs`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. This also happens if the lobby loses its storage. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
 
 `DELETE /v1/games/<code>`, with the header `Authorization: Bearer <hostToken>`, closes the game and its relay. The host sends it when it quits.
 
-`GET /v1/games` gives `{"games": [...], "heartbeatSeconds": 30}`. Each game is `{"code", "name", "hostName", "version", "database", "season", "day", "humanClubs", "awayClubs", "freeSeats", "managersOnline", "password": true|false}`. The list holds at most 200 games, with the most managers online first.
+`GET /v1/games` gives `{"games": [...], "heartbeatSeconds": 30}`. Each game is `{"code", "name", "hostName", "version", "database", "season", "day", "humanClubs", "awayClubs", "freeSeats", "managersOnline", "pingMs", "password": true|false}`. The list holds at most 200 games, with the most managers online first.
 
 `GET /v1/games/<code>` gives `{"game": {...}}` for one game, in the same form. The invite link page uses it.
 

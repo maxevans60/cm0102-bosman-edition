@@ -35,6 +35,7 @@ describe("register", () => {
       awayClubs: [],
       freeSeats: 14,
       managersOnline: 2,
+      pingMs: 0,
       password: true,
     });
     expect(JSON.stringify(data)).not.toContain("secret");
@@ -69,6 +70,7 @@ describe("register", () => {
     ["freeSeats", -1],
     ["freeSeats", 17],
     ["managersOnline", 1.5],
+    ["pingMs", 10000],
     ["password", "x".repeat(65)],
   ])("rejects a bad %s", async (field, value) => {
     const res = await call("/v1/games", { method: "POST", body: gameBody({ [field]: value }), ip: freshIp() });
@@ -152,6 +154,18 @@ describe("heartbeat and expiry", () => {
     expect(game).toMatchObject({ awayClubs: ["Scunthorpe United"], managersOnline: 1 });
     const bad = await call(`/v1/games/${code}/heartbeat`, { method: "POST", token: hostToken, body: { awayClubs: "Arsenal" } });
     expect(bad.status).toBe(400);
+  });
+
+  it("lists the ping of a heartbeat, 0 by default, and refuses one out of range", async () => {
+    const { code, hostToken } = await register();
+    expect((await json(await call(`/v1/games/${code}`))).game.pingMs).toBe(0);
+    const res = await call(`/v1/games/${code}/heartbeat`, { method: "POST", token: hostToken, body: { pingMs: 120 } });
+    expect(res.status).toBe(200);
+    expect((await json(await call(`/v1/games/${code}`))).game.pingMs).toBe(120);
+    for (const v of [-1, 10000, 1.5, "80"]) {
+      const bad = await call(`/v1/games/${code}/heartbeat`, { method: "POST", token: hostToken, body: { pingMs: v } });
+      expect(bad.status).toBe(400);
+    }
   });
 
   it("accepts a heartbeat with no body", async () => {
