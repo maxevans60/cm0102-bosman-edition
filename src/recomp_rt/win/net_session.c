@@ -68,16 +68,18 @@ int net_session_hosting(void)
  * options are not there. A game that was never saved has no file name yet: it takes "Network Game". */
 static uint32_t save_path(void)
 {
-    static uint32_t out, fallback;
+    static uint32_t out, fallback, extension;
     uint32_t options = rd32(g_mem, GAME_OPTIONS);
     if (!options) return 0;
     if (!out) {
         out = win_static_alloc(0x200);
         fallback = win_static_alloc(16);
+        extension = win_static_alloc(8);
         snprintf((char *)g_mem + fallback, 16, "Network Game");
+        snprintf((char *)g_mem + extension, 8, ".sav");
     }
     uint32_t name = options + 0x113;
-    uint32_t args[5] = {out, 0, options + 0xf, g_mem[name] ? name : fallback, rt_alloc_str(".sav")};
+    uint32_t args[5] = {out, 0, options + 0xf, g_mem[name] ? name : fallback, extension};
     rt_callback(MAKEPATH, 5, args);
     g_mem[out + 0x1ff] = 0;
     return out;
@@ -155,8 +157,8 @@ void o_007fdc00(void);
 RT_WRAP(007fdc00, run_network_client)
 {
     nc_host_left_clear();
-    net_password_joined();
     o_007fdc00();
+    net_password_reset();          /* the join passed: the hello carried the password, and the next host gets none */
     if (rt_unwinding || !nc_host_left()) return;
     nc_host_left_clear();
     uint32_t eax = cpu.eax;
@@ -198,29 +200,38 @@ RT_WRAP(0081ef70, network_play_input)
 int net_session_managers(NetManager *out, int max)
 {
     static uint32_t buf;
-    if (!buf) buf = win_static_alloc(200);
     int n = 0;
     if (!net_session_hosting()) return 0;
+    if (!buf) buf = win_static_alloc(200);
     for (uint32_t ch = 0; ch < 16; ch++) {
         int count = (int16_t)rd16(g_mem, CHANNEL_COUNTS + ch * 2);
         for (int rec = 0; rec < count && rec < 16 && n < max; rec++) {
             uint32_t r = CHANNEL_RECORDS + ch * 0x300u + (uint32_t)rec * 0x30u;
             int slot = (int16_t)rd16(g_mem, r);
             if (slot <= 0 || slot > 16) continue;
-            int seen = 0;
-            for (int i = 0; i < n; i++) seen |= out[i].slot == slot;
-            if (seen) continue;
-            NetManager *m = &out[n++];
-            memset(m, 0, sizeof *m);
-            m->slot = slot;
+            /* One row for each player slot, that is each joining computer: Kick closes its connection, so every
+             * manager of that computer leaves. A computer with two managers has a record for each (the second
+             * through add_manager_record 0x7ff8f0, called at 0x8233dc): the row names both. */
+            NetManager *m = NULL;
+            for (int i = 0; i < n; i++)
+                if (out[i].slot == slot) m = &out[i];
+            if (!m) {
+                m = &out[n++];
+                memset(m, 0, sizeof *m);
+                m->slot = slot;
+            }
             uint32_t staff = rd32(g_mem, r + 2);
             if (!staff || g_mem[staff + STAFF_STATE] != 1) continue;   /* being made: no name or club yet */
             g_mem[buf] = 0;
             uint32_t args[4] = {staff, buf, 200, 1};
             rt_callback(STAFF_NAME, 4, args);
-            snprintf(m->name, sizeof m->name, "%s", (const char *)g_mem + buf);
+            size_t at = strlen(m->name);
+            snprintf(m->name + at, sizeof m->name - at, "%s%s", at ? " and " : "", (const char *)g_mem + buf);
             uint32_t club = rd32(g_mem, staff + STAFF_CLUB);
-            if (club) snprintf(m->club, sizeof m->club, "%s", (const char *)g_mem + club + CLUB_SHORT);
+            at = strlen(m->club);
+            if (club) snprintf(m->club + at, sizeof m->club - at, "%s%s", at ? ", " : "",
+                               (const char *)g_mem + club + CLUB_SHORT);
+            m->managers++;
         }
     }
     return n;

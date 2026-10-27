@@ -285,6 +285,7 @@ RT_WRAP(00591840, confirm_push)
         char host_version[32];
         int why = nc_refusal(host_version, sizeof host_version);
         nc_refusal_clear();
+        if (why != NC_REFUSED_PASSWORD) net_password_reset();
         if (!reason[0] && why == NC_REFUSED_VERSION) {
             char t[400];
             snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman "

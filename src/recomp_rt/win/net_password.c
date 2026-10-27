@@ -40,6 +40,7 @@
 #define BUTTON_TEXT 0xae3184u
 #define COMMAND 0xdd6bdeu           /* s16: the command that an input takes when no widget is clicked */
 #define NEXT_ID 0xfffdu             /* Next (-3) of the game list */
+#define JOIN_NAME 0xdd70dcu         /* the Join field's text (0x81fda3) */
 
 #define FIELD_ID 0x7d62u            /* ids that the original does not use */
 #define CANCEL_ID 0x7d63u
@@ -137,6 +138,7 @@ static void password_input(void)
         uint32_t id = (uint16_t)rd32(g_mem, display() + WIDGETS + 8 + (uint32_t)w * WIDGET_SIZE);
         if (id == CANCEL_ID) {
             fprintf(stderr, "recomp: password box: Cancel\n");
+            retry = 0;
             nc_set_join_password("");
             typed = 0;
             r = CLOSE;
@@ -154,7 +156,12 @@ static void password_input(void)
 }
 
 int net_password_typed(void) { return typed; }
-void net_password_joined(void) { typed = 0; }
+/* After a join that passed, or a refusal for another reason: the next host must not get this password. */
+void net_password_reset(void)
+{
+    typed = 0;
+    nc_set_join_password("");
+}
 
 int net_password_ask(int was_wrong)
 {
@@ -180,13 +187,17 @@ RT_WRAP(0081fbd0, select_network_game_input)
         o_0081fbd0();
         return;
     }
-    retry = 0;
+    /* The input can return -11 before it reads the command word while the list's count changes (0x81fc58..
+     * 0x81fc7a), so the retry stays until the join's connect, or until the Join field is empty (0x81fdb2). */
     command_before = rd16(g_mem, COMMAND);
     command_set = 1;
     wr16(g_mem, COMMAND, NEXT_ID);
-    fprintf(stderr, "recomp: password box: the join runs again\n");
     o_0081fbd0();
-    net_password_connecting();     /* when the join stopped before its connect (an empty Join field) */
+    if (command_set) {             /* no connect in this call */
+        command_set = 0;
+        wr16(g_mem, COMMAND, command_before);
+        if (!g_mem[JOIN_NAME]) retry = 0;
+    }
 }
 
 /* The join's connect (net_lobby.c, before_connect): the joiner's whole session runs inside the input call, so the
@@ -195,5 +206,7 @@ void net_password_connecting(void)
 {
     if (!command_set) return;
     command_set = 0;
+    retry = 0;
     wr16(g_mem, COMMAND, command_before);
+    fprintf(stderr, "recomp: password box: the join runs again\n");
 }
