@@ -727,7 +727,9 @@ long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *po
     long r = -1;
     uint32_t from = 0, a = 0;
     uint16_t p = 0;
+    int dropped = 0;
     for (int tries = 0; r < 0 && tries < 64; tries++) {
+        dropped = 0;               /* 1 only when the last try read a datagram that the hook dropped */
         r = k->out != HN_INVALID ? hn_recvfrom(k->out, buf, n, &a, &p) : -1;
         /* The shared socket: drop the datagrams from other adapters' subnets (see the head of this file). */
         for (int i = 0; r < 0 && i < 64; i++) {
@@ -738,8 +740,10 @@ long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *po
         }
         if (r < 0) break;
         /* The game list (lobby_rows.c) may drop a datagram: then read the next one. */
-        if (hooks && hooks->arrived && !hooks->arrived(buf, r, a)) r = -1;
+        dropped = hooks && hooks->arrived && !hooks->arrived(buf, r, a);
+        if (dropped) r = -1;
     }
+    if (r < 0 && dropped) nc_set_error(HN_WOULDBLOCK);    /* 64 dropped datagrams: the next call reads on */
     if (r < 0 && hooks && hooks->extra) {
         r = hooks->extra(buf, n, &a, &p);
         if (r >= 0) {
@@ -748,9 +752,9 @@ long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *po
             k->n.packets_in++;
             return r;
         }
-        return fail_host();        /* the error of the last real read: would block, or a real error */
+        return dropped ? -1 : fail_host();   /* the last real read's error: would block, or a real one */
     }
-    if (r < 0) return fail_host();
+    if (r < 0) return dropped ? -1 : fail_host();
     if (addr) *addr = a;
     if (port) *port = p;
     k->n.bytes_in += (uint64_t)r, k->n.packets_in++;

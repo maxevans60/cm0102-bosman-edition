@@ -218,11 +218,11 @@ static void test_rows(void)
     CHECK(drain(names, addrs, 16) == 1 && !strcmp(names[0], "Second") && addrs[0] == ip(10, 211, 55, 9),
           "after the hold");
 
-    /* Two hosts on one subnet with the same computer name and game name stay two rows. */
+    /* A host with Wi-Fi and Ethernet in one subnet answers twice: one row. */
     lr_request();
     ack(d, "MacBook-Pro", "Bosman");
-    CHECK(lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 20)) == 1 && lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 21)) == 1,
-          "two hosts on one subnet");
+    CHECK(lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 20)) == 1 && lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 21)) == 0,
+          "two adapters of a host in one subnet");
 
     /* The cap of the game (0x77b0eb): a row past it is not counted, and its BYE does not reach the game. */
     lr_request();
@@ -302,7 +302,8 @@ static void test_rows(void)
 
 /* ---- the join check ---- */
 
-static pid_t host(uint16_t port, const char *version, const char *password)
+/* A host. With accept_ms > 0 its game calls no accept for that long, only other calls (a full game). */
+static pid_t host_late(uint16_t port, const char *version, const char *password, int accept_ms)
 {
     pid_t pid = fork();
     if (pid) return pid;
@@ -314,8 +315,13 @@ static pid_t host(uint16_t port, const char *version, const char *password)
     uint32_t me;
     if (hn_route_address(&me) < 0) _exit(3);
     if (nc_bind(l, me, port) < 0 || nc_listen(l, 16) < 0) _exit(4);
-    uint64_t until = hn_ms() + 6000;
+    uint64_t until = hn_ms() + 6000, start = hn_ms();
     while (hn_ms() < until) {
+        if (hn_ms() - start < (uint64_t)accept_ms) {
+            nc_nonblocking(l, 1);                       /* any call of the game: the runtime answers the joiner */
+            hn_sleep(5);
+            continue;
+        }
         uint32_t a = nc_accept(l, NULL, NULL);
         if (a != NC_INVALID) {
             nc_send(a, "\4\0\0\0game", 8);            /* the game's first bytes follow the OK */
@@ -325,6 +331,29 @@ static pid_t host(uint16_t port, const char *version, const char *password)
         hn_sleep(5);
     }
     _exit(1);
+}
+
+static pid_t host(uint16_t port, const char *version, const char *password)
+{
+    return host_late(port, version, password, 0);
+}
+
+/* A host that takes the connection and never answers, as the original's own WinSock code does. */
+static pid_t silent_host(uint16_t port)
+{
+    uint32_t me;
+    hn_route_address(&me);
+    pid_t pid = fork();
+    if (pid) return pid;
+    int l = socket(AF_INET, SOCK_STREAM, 0), one = 1;
+    setsockopt(l, SOL_SOCKET, SO_REUSEADDR, &one, sizeof one);
+    struct sockaddr_in a = {0};
+    a.sin_family = AF_INET, a.sin_port = htons(port), a.sin_addr.s_addr = me;
+    if (bind(l, (struct sockaddr *)&a, sizeof a) || listen(l, 4)) _exit(2);
+    int c = accept(l, NULL, NULL);
+    sleep(NC_HELLO_WAIT_MS / 1000 + 2);
+    close(c);
+    _exit(0);
 }
 
 static int join(uint16_t port, const char *version, const char *password, char *got, int room)
@@ -374,6 +403,23 @@ static void test_join(uint16_t port)
     h = host(port, "0.7.0", "secret");
     hn_sleep(200);
     CHECK(join(port, "0.7.0", "secret", got, sizeof got) == 0, "the right password: joined");
+    waitpid(h, &status, 0);
+
+    /* The host's game calls no accept for 2 s: the joiner gets its answer at once, the game its bytes later. */
+    h = host_late(port, "0.7.0", "", 2000);
+    hn_sleep(200);
+    uint64_t t0 = hn_ms();
+    CHECK(join(port, "0.7.0", "", got, sizeof got) == 0 && hn_ms() - t0 < 1500,
+          "the answer comes while the host's game does not accept (%llu ms)", (unsigned long long)(hn_ms() - t0));
+    waitpid(h, &status, 0);
+
+    /* No answer: refused with its own reason within NC_HELLO_WAIT_MS. */
+    h = silent_host(port);
+    hn_sleep(200);
+    t0 = hn_ms();
+    CHECK(join(port, "0.7.0", "", got, sizeof got) < 0 && nc_refusal(NULL, 0) == NC_REFUSED_NO_ANSWER &&
+          hn_ms() - t0 < NC_HELLO_WAIT_MS + 1000, "no answer: refused as no answer");
+    kill(h, SIGKILL);
     waitpid(h, &status, 0);
 }
 

@@ -112,8 +112,8 @@ FIRST_ROW = "click 445 257"                 # the first row of the game list are
 
 
 def joiner_steps(address, n, by_row=False):
-    if by_row:   # the row's click copies its name into the Join field (0x81fd08..0x81fd63)
-        join = [f"3500 {FIRST_ROW}", "6000 click 705 572", "7500 click 705 572"]
+    if by_row:   # the row's click copies its name into the Join field (0x81fd08..0x81fd63) and ends the entry
+        join = [f"3500 {FIRST_ROW}", "7500 click 705 572"]
     else:
         join = [f"3500 type {address}", "6000 click 705 572", "7500 click 705 572"]
     return START + [
@@ -153,7 +153,6 @@ def refused_steps(n):
         "wait screen:0x81f8d0",
         "3000 dump {d}/join%d-0-list.bmp" % n,
         f"3500 {FIRST_ROW}",
-        "6000 click 705 572",
         "7500 click 705 572",
         "11000 dump {d}/join%d-1-box.bmp" % n,
         "12000 quit",
@@ -211,6 +210,14 @@ def start_lobby(port):
         time.sleep(1)
     os.killpg(p.pid, 9)
     return None
+
+
+def keep_awake(url, stop):
+    """The local Workers runtime drops a Durable Object after about 10 s with no request, and the lobby keeps its
+    games in memory only (server/README.md), so a heartbeat every 30 s finds its game gone. A list request every
+    3 s keeps the local lobby awake, as other players' requests keep the real one."""
+    while not stop.wait(3):
+        lobby_games(url)
 
 
 def lobby_games(url):
@@ -366,6 +373,9 @@ def main(argv):
         shots = shots or work
         os.makedirs(shots, exist_ok=True)
         print(f"host address {address}" + (f", lobby {lobby_url}" if lobby else ""))
+        stop = threading.Event()
+        if lobby:
+            threading.Thread(target=keep_awake, args=(lobby_url, stop), daemon=True).start()
         host, host_err = start(program, game, work, "host", host_steps(len(specs)), shots, slow, host_env)
         ready = wait_for(os.path.join(shots, "host-stderr.txt"), f"screen {NAME_BUILD}", host, 240 * slow)
         check(ready, "the host reaches its Enter Name screen with the network game made")
@@ -402,6 +412,7 @@ def main(argv):
                     p.kill()
                     p.wait()
                 err.close()
+            stop.set()
             if lobby_proc:
                 os.killpg(lobby_proc.pid, 9)
 
@@ -443,15 +454,16 @@ def main(argv):
                   f"8 join1's list has the host once, as its LAN row: {rows1}")
             rows2 = list_rows(dump("join2-stderr.txt"))
             season = g.get("season", 0)
-            check(len(rows2) == 1 and rows2[0].startswith("Bosman  %d/%02d " % (season, (season + 1) % 100)) and
-                  rows2[0].endswith(" online"), f"8 join2's list has the lobby row with its details: {rows2}")
+            # A failed join sends a new REQ (0x81fddc), so the list fills again after the box.
+            check(rows2 and len(set(rows2)) == 1 and rows2[0].startswith("Bosman  %d/%02d " % (season, (season + 1) % 100))
+                  and rows2[0].endswith(" online"), f"8 join2's list has the lobby row with its details: {rows2}")
             err2 = open(dump("join2-stderr.txt"), errors="replace").read()
             # "join box:" comes from the wrap of confirm_push 0x591840, as the box gets the text.
             check(f"join box: This network game runs Bosman Edition {project_version()}, and you have {other}" in err2,
                   "9 join2's box names the host's version")
             rows4 = list_rows(dump("join4-stderr.txt"))
             err4 = open(dump("join4-stderr.txt"), errors="replace").read()
-            check(rows4 == [" Online games are full today, try again later"] and
+            check(rows4 and set(rows4) == {" Online games are full today, try again later"} and
                   "join box: Online games are full today" in err4, f"9 join4 sees the full row and its box: {rows4}")
             check(quiet.count == 0, f"9 with Online play off, join3 made {quiet.count} lobby connections")
             check(full.count >= 1, f"join4's lobby got {full.count} requests")

@@ -76,7 +76,7 @@ void nc_set_hooks(const NcHooks *h);
 #define NC_HELLO_MS 5000
 /* What a joiner waits for the answer. The host answers at each network call of its game; a game that works
  * out a day makes none for a few seconds. The original's connect waited with no limit. */
-#define NC_HELLO_WAIT_MS 15000
+#define NC_HELLO_WAIT_MS 8000
 void nc_set_identity(const char *version, const char *host_password, const char *join_password);
 enum { NC_REFUSED_NONE, NC_REFUSED_VERSION, NC_REFUSED_PASSWORD, NC_REFUSED_NOT_BOSMAN, NC_REFUSED_NO_ANSWER };
 /* Why the last connect was refused, and the host's version for NC_REFUSED_VERSION. */

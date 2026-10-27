@@ -135,14 +135,14 @@ static int shown(void)
     return n;
 }
 
-/* The LAN row of this game from addr: the same address, or another adapter of the same host, whose subnet
- * differs. Two hosts on one subnet with the same computer name and game name stay two rows. */
-static Game *find_lan(const char *host, const char *name, uint32_t addr, int r)
+/* The LAN row of this game. A host with two adapters, also two in one subnet (Wi-Fi and Ethernet), answers
+ * from each, so the computer name and the game name alone name the row. Two computers with the same name that
+ * host games with the same name on one LAN show as one row: a rare case, and the cost of the common one. */
+static Game *find_lan(const char *host, const char *name)
 {
     for (int i = 0; i < games_n; i++) {
         Game *g = &games[i];
-        if (!g->lobby && !strcmp(g->key_host, host) && !strcmp(g->key_name, name) && (g->addr == addr || g->rank != r))
-            return g;
+        if (!g->lobby && !strcmp(g->key_host, host) && !strcmp(g->key_name, name)) return g;
     }
     return NULL;
 }
@@ -189,7 +189,7 @@ int lr_arrived(const uint8_t *p, long n, uint32_t addr)
         char host[12], name[LOBBY_TEXT];
         key_of_ack(p, host, name);
         int r = rank(addr);
-        Game *g = find_lan(host, name, addr, r);
+        Game *g = find_lan(host, name);
         if (g) {
             if (g->delivered) return g->addr == addr;    /* the game drops a second ACK of an address itself */
             if (g->over) return 0;

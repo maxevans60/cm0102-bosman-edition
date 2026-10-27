@@ -277,7 +277,8 @@ RT_WRAP(00591840, confirm_push)
         else if (!reason[0] && why == NC_REFUSED_NOT_BOSMAN)
             refuse("The host does not run this version of Bosman Edition, so you cannot join its game.");
         else if (!reason[0] && why == NC_REFUSED_NO_ANSWER)
-            refuse("The host did not answer in time. Check that the host still runs the game, then try again.");
+            refuse("The host did not answer. It may be busy, or it may run another version of the game. Try again "
+                   "in a moment.");
         if (reason[0]) {
             static uint32_t at;
             if (!at) at = win_static_alloc(sizeof reason);
