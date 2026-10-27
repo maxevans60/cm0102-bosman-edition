@@ -103,14 +103,19 @@ describe("the invite link page", () => {
 
   it("logs nothing and keeps no address of a visitor (Q26)", async () => {
     const g = await register({}, HOST_IP);
+    const storedRows = () =>
+      withLobby(async (_inst, state) => JSON.stringify([...(await state.storage.list()).entries()]));
+    // The lobby stores each game (it survives an eviction), so the check is that a visit adds nothing.
+    const before = await storedRows();
     const answers: string[] = [];
     for (const path of [`/join/${g.code}`, "/join/ABCDEFGH", "/join/x"]) answers.push((await page(path)).html);
     const memory = await withLobby((inst) => inst.debugDump());
-    const stored = await withLobby(async (_inst, state) => [...(await state.storage.list()).entries()]);
+    const after = await storedRows();
     expect(logged).toEqual([]);
-    expect(stored).toEqual([]);
+    expect(after).toBe(before);
     for (const ip of [HOST_IP, VISITOR_IP]) {
       expect(memory).not.toContain(ip);
+      expect(after).not.toContain(ip);
       for (const a of answers) expect(a).not.toContain(ip);
     }
   });
