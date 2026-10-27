@@ -39,14 +39,37 @@ Checks:
 
 --joiners n (default 1, at most 3) starts n joiners at once, for the traffic of n + 1 human managers. The run
 prints each game's traffic log. With --shots the dumps and logs stay in that folder.
+
+--lobby (0.7.0 slice 4) runs the lobby with the host and four joiners. The lobby is a local copy of the server
+(server/, `npx wrangler dev`, so server/node_modules must exist: `cd server && npm ci`), or --lobby-url. Two fake
+lobbies in this script stand in for the failures. The host has RECOMP_LOBBY_URL set and Online play on.
+    join1  Online play on: the game list shows the host once (one row for each host, not one for each adapter,
+           and not again as a lobby row). It clicks that row and joins through the LAN, as above.
+    join2  Online play on, lobby rows only (RECOMP_TEST_NO_LAN_ROWS), another version (RECOMP_TEST_VERSION): the
+           list shows the host's lobby row with the season, the day and the managers online. Join gives the box
+           with the host's version.
+    join3  Online play off, lobby address of a fake lobby that counts connections: it types the host's address
+           and joins as above. The fake lobby must see no connection.
+    join4  Online play on, a fake lobby that answers full_today: the list shows the "full today" row, and Join on
+           it gives the box that says so.
+Lobby checks, besides checks 1 to 6 for join1 and join3:
+    7  the lobby lists the game with the name, the version, the database, a season, a day, the managers online
+       and no password, while the host plays
+    8  join1's list has one row for the host's game; join2's list has its lobby row with the details
+    9  join2 and join4 see the reason of the refused join; join3's lobby saw no connection
+   10  the lobby lists no game after the host quit
 """
+import json
 import os
+import re
 import shutil
 import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import time
+import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import smoke_run  # noqa: E402
@@ -85,14 +108,19 @@ def host_steps(joiners):
     ]
 
 
-def joiner_steps(address, n):
+FIRST_ROW = "click 445 257"                 # the first row of the game list area (190, 234)-(700, 510), 6 rows (0x81fad4)
+
+
+def joiner_steps(address, n, by_row=False):
+    if by_row:   # the row's click copies its name into the Join field (0x81fd08..0x81fd63)
+        join = [f"3500 {FIRST_ROW}", "6000 click 705 572", "7500 click 705 572"]
+    else:
+        join = [f"3500 type {address}", "6000 click 705 572", "7500 click 705 572"]
     return START + [
         "3500 click 612 243",               # Join Network Game
         "wait screen:0x81f8d0",             # the game list; the Join field takes the keys
         "3000 dump {d}/join%d-0-list.bmp" % n,
-        f"3500 type {address}",
-        "6000 click 705 572",               # Next (ends the text entry)
-        "7500 click 705 572",               # Next: connect, then run_network_client 0x7fdc00
+    ] + join + [                            # Next ends the text entry, then Next connects and runs 0x7fdc00
         # The press of that click is still down when the client loop polls the host's Enter Name. The runtime
         # keeps it from the host (user32.c, the poll at 0x7fdf17), so the host gives no "Names Are Blank".
         "11000 dump {d}/join%d-1-name.bmp" % n,
@@ -118,6 +146,87 @@ def joiner_steps(address, n):
 JOINER_CLIENT_CLICKS = 4
 
 
+def refused_steps(n):
+    """A joiner whose join is refused: the list, its first row, Next, the box."""
+    return START + [
+        "3500 click 612 243",
+        "wait screen:0x81f8d0",
+        "3000 dump {d}/join%d-0-list.bmp" % n,
+        f"3500 {FIRST_ROW}",
+        "6000 click 705 572",
+        "7500 click 705 572",
+        "11000 dump {d}/join%d-1-box.bmp" % n,
+        "12000 quit",
+    ]
+
+
+def project_version():
+    text = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "CMakeLists.txt")).read()
+    return re.search(r"project\([^)]*VERSION ([0-9.]+)", text).group(1)
+
+
+class FakeLobby:
+    """A lobby on 127.0.0.1 that counts connections, and answers each request with full_today when full is set."""
+
+    def __init__(self, full):
+        self.full, self.count = full, 0
+        self.sock = socket.socket()
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.bind(("127.0.0.1", 0))
+        self.sock.listen(8)
+        self.url = "http://127.0.0.1:%d" % self.sock.getsockname()[1]
+        threading.Thread(target=self.serve, daemon=True).start()
+
+    def serve(self):
+        body = b'{"error":"full_today","message":"Online games are full today","retryAfterSeconds":3600}'
+        while True:
+            try:
+                c, _ = self.sock.accept()
+            except OSError:
+                return
+            self.count += 1
+            c.settimeout(2)
+            try:
+                c.recv(4096)
+                if self.full:
+                    c.sendall(b"HTTP/1.1 503 Service Unavailable\r\nX-Bosman-Api: 1\r\nContent-Type: application/json"
+                              b"\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % len(body) + body)
+            except OSError:
+                pass
+            c.close()
+
+
+def start_lobby(port):
+    """npx wrangler dev of server/ on 127.0.0.1:port. The process, or None when it does not answer."""
+    server = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "server")
+    log = open(os.path.join(tempfile.gettempdir(), f"cm0102-lobby-{port}.log"), "w")
+    p = subprocess.Popen(["npx", "wrangler", "dev", "--port", str(port), "--ip", "127.0.0.1"], cwd=server,
+                         stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+    for _ in range(90):
+        try:
+            if json.load(urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/health", timeout=2)).get("ok"):
+                return p
+        except OSError:
+            pass
+        time.sleep(1)
+    os.killpg(p.pid, 9)
+    return None
+
+
+def lobby_games(url):
+    try:
+        return json.load(urllib.request.urlopen(url + "/v1/games", timeout=5))["games"]
+    except (OSError, ValueError, KeyError):
+        return None
+
+
+def list_rows(stderr_path):
+    """The rows that the runtime gave the game list, from a game's stderr."""
+    if not os.path.exists(stderr_path):
+        return []
+    return re.findall(r'recomp: lobby: list row "([^"]*)" from', open(stderr_path, errors="replace").read())
+
+
 def lan_address():
     """The address of the default route (no packet is sent)."""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -128,11 +237,13 @@ def lan_address():
         s.close()
 
 
-def start(program, game, work, name, steps, shots, slow=1):
+def start(program, game, work, name, steps, shots, slow=1, env_extra=None, online=True):
     user = os.path.join(work, name)
     os.makedirs(user)
     with open(os.path.join(user, "settings.txt"), "w") as f:
         f.write("display = classic\n")
+        if not online:
+            f.write("online_play = off\n")
     steps = smoke_run.scaled_steps("classic", shots, steps)
     if slow != 1:   # --slow: every step time and wait limit (120 s by default) times this factor
         steps = [f"{s} {int(120000 * slow)}" if s.startswith("wait") else
@@ -140,6 +251,8 @@ def start(program, game, work, name, steps, shots, slow=1):
     env = dict(os.environ, HOME=user, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                RECOMP_USER_DIR=user, RECOMP_SCREEN_LOG="1",
                RECOMP_NET_LOG=os.path.join(shots, f"{name}-net.log"), RECOMP_SCRIPT="; ".join(steps))
+    env.pop("RECOMP_LOBBY_URL", None)
+    env.update(env_extra or {})
     err = open(os.path.join(shots, f"{name}-stderr.txt"), "w", errors="replace")
     return subprocess.Popen([program, "--game", game], env=env, stdout=subprocess.DEVNULL, stderr=err), err
 
@@ -193,14 +306,17 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = os.path.abspath(args[0]), os.path.abspath(args[1])
-    address, shots, joiners, slow = lan_address(), None, 1, 1.0
+    address, shots, joiners, slow, lobby, lobby_url = lan_address(), None, 1, 1.0, False, None
     rest = args[2:]
-    if len(rest) % 2:
-        print(__doc__)
-        return 2
     while rest:
-        k, v = rest[0], rest[1]
-        rest = rest[2:]
+        k = rest.pop(0)
+        if k == "--lobby":
+            lobby = True
+            continue
+        if not rest:
+            print(__doc__)
+            return 2
+        v = rest.pop(0)
         if k == "--address":
             address = v
         elif k == "--shots":
@@ -209,6 +325,8 @@ def main(argv):
             slow = float(v)
         elif k == "--joiners":
             joiners = max(1, min(3, int(v)))
+        elif k == "--lobby-url":
+            lobby, lobby_url = True, v
         else:
             print(__doc__)
             return 2
@@ -219,23 +337,56 @@ def main(argv):
         if not ok:
             failed.append(text)
 
+    # The joiners: (name, steps, environment, online play, plays the whole join).
+    lobby_proc, quiet, full = None, None, None
+    if lobby:
+        if not lobby_url:
+            port = 8790 + os.getpid() % 100
+            lobby_proc = start_lobby(port)
+            if not lobby_proc:
+                print("FAIL the local lobby (npx wrangler dev in server/) does not answer")
+                return 1
+            lobby_url = f"http://127.0.0.1:{port}"
+        quiet, full = FakeLobby(False), FakeLobby(True)
+        other = "0.0.1"
+        specs = [("join1", joiner_steps(address, 1, by_row=True), {"RECOMP_LOBBY_URL": lobby_url}, True, True),
+                 ("join2", refused_steps(2), {"RECOMP_LOBBY_URL": lobby_url, "RECOMP_TEST_NO_LAN_ROWS": "1",
+                                              "RECOMP_TEST_VERSION": other}, True, False),
+                 ("join3", joiner_steps(address, 3), {"RECOMP_LOBBY_URL": quiet.url}, False, True),
+                 ("join4", refused_steps(4), {"RECOMP_LOBBY_URL": full.url, "RECOMP_TEST_NO_LAN_ROWS": "1"},
+                  True, False)]
+        host_env = {"RECOMP_LOBBY_URL": lobby_url}
+    else:
+        specs = [(f"join{n}", joiner_steps(address, n), {}, True, True) for n in range(1, joiners + 1)]
+        host_env = {}
+    players = [x for x in specs if x[4]]
+    listed = []
+
     with tempfile.TemporaryDirectory(prefix="cm0102-network-") as work:
         shots = shots or work
         os.makedirs(shots, exist_ok=True)
-        print(f"host address {address}")
-        host, host_err = start(program, game, work, "host", host_steps(joiners), shots, slow)
+        print(f"host address {address}" + (f", lobby {lobby_url}" if lobby else ""))
+        host, host_err = start(program, game, work, "host", host_steps(len(specs)), shots, slow, host_env)
         ready = wait_for(os.path.join(shots, "host-stderr.txt"), f"screen {NAME_BUILD}", host, 240 * slow)
         check(ready, "the host reaches its Enter Name screen with the network game made")
         procs = []
         try:
+            if ready and lobby:
+                for _ in range(20):          # the host registers once the data is loaded
+                    games = lobby_games(lobby_url) or []
+                    listed = [g for g in games if g.get("name") == "Bosman"]
+                    if listed:
+                        break
+                    time.sleep(0.5)
             if ready:
-                for n in range(1, joiners + 1):
+                for n, (name, steps, env, online, _) in enumerate(specs):
                     # The original's loopback test 0x8af290 binds 127.0.0.1:6667 for a moment in each game. Two
                     # games on one computer that run it at the same time collide, and one turns network play off.
-                    if n > 1:
+                    if n:
                         time.sleep(4 * slow)
-                    procs.append(start(program, game, work, f"join{n}", joiner_steps(address, n), shots, slow))
-            for p, _ in procs:
+                    p, err = start(program, game, work, name, steps, shots, slow, env, online)
+                    procs.append((name, p, err))
+            for _, p, _ in procs:
                 try:
                     p.wait(timeout=180 * slow)
                 except subprocess.TimeoutExpired:
@@ -244,38 +395,69 @@ def main(argv):
                 host.wait(timeout=240 * slow)
             except subprocess.TimeoutExpired:
                 pass
+            after = lobby_games(lobby_url) if lobby else None
         finally:
-            for p, err in procs + [(host, host_err)]:
+            for _, p, err in procs + [("host", host, host_err)]:
                 if p.poll() is None:
                     p.kill()
                     p.wait()
                 err.close()
+            if lobby_proc:
+                os.killpg(lobby_proc.pid, 9)
 
         check(host.returncode == 0, f"host ended with code {host.returncode}")
-        for n, (p, _) in enumerate(procs, 1):
-            check(p.returncode == 0, f"joiner {n} ended with code {p.returncode}")
-        dump = lambda name: os.path.join(shots, name)
-        for n in range(1, len(procs) + 1):
-            for host_shot, join_shot, what in (("host-1-name.bmp", f"join{n}-1-name.bmp", "Enter Name"),
-                                                ("host-2-typed.bmp", f"join{n}-2-typed.bmp", "Enter Name with the typed names"),
-                                                ("host-3-nation.bmp", f"join{n}-3-nation.bmp", "Select Nationality after Next")):
+        for name, p, _ in procs:
+            check(p.returncode == 0, f"{name} ended with code {p.returncode}")
+        dump = lambda f: os.path.join(shots, f)
+        names = [x[0] for x in players]
+        for name in names:
+            for host_shot, join_shot, what in (("host-1-name.bmp", f"{name}-1-name.bmp", "Enter Name"),
+                                                ("host-2-typed.bmp", f"{name}-2-typed.bmp", "Enter Name with the typed names"),
+                                                ("host-3-nation.bmp", f"{name}-3-nation.bmp", "Select Nationality after Next")):
                 if os.path.exists(dump(host_shot)) and os.path.exists(dump(join_shot)):
                     share = smoke_run.differing_share(dump(host_shot), dump(join_shot))
-                    check(share <= 0.01, f"joiner {n}'s {what} equals the host's: {share:.2%} of pixels differ")
+                    check(share <= 0.01, f"{name}'s {what} equals the host's: {share:.2%} of pixels differ")
                 else:
-                    check(False, f"joiner {n}'s {what}: dump missing")
+                    check(False, f"{name}'s {what}: dump missing")
 
         host_log = connections(os.path.join(shots, "host-net.log"))
         joined = [f for f in host_log.values() if f["peer"].split(":")[0] == address and not f["peer"].endswith(":6667")]
-        check(len(joined) == len(procs) and all(f["packets_in"] and f["packets_out"] for f in joined),
-              f"host log: {len(joined)} joiner connections with packets both ways")
-        for n in range(1, len(procs) + 1):
-            log = connections(os.path.join(shots, f"join{n}-net.log"))
+        check(len(joined) == len(names) and all(f["packets_in"] and f["packets_out"] for f in joined),
+              f"host log: {len(joined)} joiner connections with packets both ways, {len(names)} expected")
+        for name in names:
+            log = connections(os.path.join(shots, f"{name}-net.log"))
             c = log.get(f"{address}:6667")
-            check(bool(c and c["packets_in"] and c["packets_out"]), f"joiner {n} log: the connection to {address}:6667")
-            clicks = click_packets(os.path.join(shots, f"join{n}-net.log"), f"{address}:6667")
-            check(clicks == JOINER_CLIENT_CLICKS, f"joiner {n} sent {clicks} click packets, {JOINER_CLIENT_CLICKS} expected")
-        for name in ["host"] + [f"join{n}" for n in range(1, len(procs) + 1)]:
+            check(bool(c and c["packets_in"] and c["packets_out"]), f"{name} log: the connection to {address}:6667")
+            clicks = click_packets(os.path.join(shots, f"{name}-net.log"), f"{address}:6667")
+            check(clicks == JOINER_CLIENT_CLICKS, f"{name} sent {clicks} click packets, {JOINER_CLIENT_CLICKS} expected")
+
+        if lobby:
+            g = listed[0] if listed else {}
+            check(len(listed) == 1 and g.get("version") == project_version() and g.get("database") == "3.9.68" and
+                  isinstance(g.get("season"), int) and re.match(r"\d{4}-\d\d-\d\d$", g.get("day", "")) and
+                  g.get("managersOnline", 0) >= 1 and g.get("password") is False and 0 <= g.get("freeSeats", -1) <= 15
+                  and g.get("hostName", "").startswith("PC-"),
+                  f"7 the lobby lists the host's game: {json.dumps(g)}")
+            rows1 = list_rows(dump("join1-stderr.txt"))
+            check(len([r for r in rows1 if r.startswith("Bosman")]) == 1 and "Bosman" in rows1,
+                  f"8 join1's list has the host once, as its LAN row: {rows1}")
+            rows2 = list_rows(dump("join2-stderr.txt"))
+            season = g.get("season", 0)
+            check(len(rows2) == 1 and rows2[0].startswith("Bosman  %d/%02d " % (season, (season + 1) % 100)) and
+                  rows2[0].endswith(" online"), f"8 join2's list has the lobby row with its details: {rows2}")
+            err2 = open(dump("join2-stderr.txt"), errors="replace").read()
+            check(f"join refused: This network game runs Bosman Edition {project_version()}, and you have {other}" in err2,
+                  "9 join2 sees the host's version in the refused join")
+            rows4 = list_rows(dump("join4-stderr.txt"))
+            err4 = open(dump("join4-stderr.txt"), errors="replace").read()
+            check(rows4 == ["Online games are full today, try again later"] and
+                  "join refused: Online games are full today" in err4, f"9 join4 sees the full row and its box: {rows4}")
+            check(quiet.count == 0, f"9 with Online play off, join3 made {quiet.count} lobby connections")
+            check(full.count >= 1, f"join4's lobby got {full.count} requests")
+            check(after is not None and not [x for x in after if x.get("name") == "Bosman"],
+                  "10 the lobby lists no game after the host quit")
+
+        for name in ["host"] + [x[0] for x in specs]:
             path = os.path.join(shots, f"{name}-net.log")
             if os.path.exists(path):
                 print(f"--- {name} traffic")

@@ -56,6 +56,31 @@ long nc_sendto(uint32_t h, const void *buf, uint32_t n, uint32_t addr, uint16_t 
 uint64_t nc_resets_in(void);
 long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *port);
 
+/* The runtime's lobby and game list (net_lobby.c) under the game's UDP reads and its connects (0.7.0 slice 4).
+ * Each hook may be NULL. Without hooks every call behaves as above. */
+typedef struct {
+    void (*sent)(const uint8_t *p, uint32_t n, uint32_t addr, uint16_t port);   /* a datagram the game sent */
+    int (*arrived)(const uint8_t *p, long n, uint32_t addr);   /* a datagram the game reads: 0 drops it */
+    long (*extra)(uint8_t *buf, uint32_t room, uint32_t *addr, uint16_t *port);  /* one to add, or -1 */
+    int (*connect)(uint32_t addr, uint16_t port);  /* before a connect: -1 refuses it (the hook sets the error) */
+    void (*tick)(void);                            /* at each call of the game */
+} NcHooks;
+void nc_set_hooks(const NcHooks *h);
+
+/* The join check (0.7.0 slice 4). When an identity is set, a joiner's connect to an address that is not
+ * 127.x sends one line block before the game sees the connection:
+ *     "BOSMAN HELLO 1\nversion=<v>\npassword=<p>\n\n"
+ * and the host's accept answers "BOSMAN OK\n", "BOSMAN VERSION <host version>\n" or "BOSMAN PASSWORD\n"
+ * before it gives the game the connection. The game's own bytes come only after "OK". The loopback test
+ * 0x8af290 connects to 127.0.0.1 and gets no check. A host waits NC_HELLO_MS for the block, then closes. */
+#define NC_HELLO_MS 5000
+void nc_set_identity(const char *version, const char *host_password, const char *join_password);
+enum { NC_REFUSED_NONE, NC_REFUSED_VERSION, NC_REFUSED_PASSWORD, NC_REFUSED_NOT_BOSMAN };
+/* Why the last connect was refused, and the host's version for NC_REFUSED_VERSION. */
+int nc_refusal(char *host_version, unsigned room);
+/* The connections that this host accepted and that are open (the human managers who joined). */
+int nc_peers(void);
+
 /* The adapter table of 0x8aee20: at most max addresses and their subnet broadcasts. The count. */
 int nc_adapters(uint32_t *addr, uint32_t *broadcast, int max);
 

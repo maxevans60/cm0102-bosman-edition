@@ -7,8 +7,11 @@
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <netdb.h>
 #include <netinet/tcp.h>
+#include <pthread.h>
 #include <poll.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -21,7 +24,7 @@
 #define SEND_FLAGS 0
 #endif
 
-static int last_error;
+static _Thread_local int last_error;
 
 static int fail(int code)
 {
@@ -267,4 +270,64 @@ int hn_adapters(uint32_t *addr, uint32_t *mask, int max)
     }
     freeifaddrs(list);
     return n;
+}
+
+static void *thread_main(void *p)
+{
+    void **a = p;
+    void (*fn)(void *) = (void (*)(void *))a[0];
+    void *arg = a[1];
+    free(a);
+    fn(arg);
+    return NULL;
+}
+
+int hn_thread(void (*fn)(void *), void *arg)
+{
+    void **a = malloc(2 * sizeof *a);
+    pthread_t t;
+    if (!a) return fail(10055);
+    a[0] = (void *)fn, a[1] = arg;
+    if (pthread_create(&t, NULL, thread_main, a)) {
+        free(a);
+        return fail(10055);
+    }
+    pthread_detach(t);
+    return 0;
+}
+
+static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+void hn_lock(void) { pthread_mutex_lock(&lock); }
+void hn_unlock(void) { pthread_mutex_unlock(&lock); }
+
+void hn_sleep(int ms)
+{
+    struct timespec t = {ms / 1000, (long)(ms % 1000) * 1000000L};
+    while (nanosleep(&t, &t) < 0 && errno == EINTR) {}
+}
+
+int hn_resolve(const char *name, uint32_t *addr)
+{
+    struct addrinfo hints, *res = NULL;
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    if (getaddrinfo(name, NULL, &hints, &res) || !res) return fail(11001);    /* WSAHOST_NOT_FOUND */
+    *addr = ((struct sockaddr_in *)res->ai_addr)->sin_addr.s_addr;
+    freeaddrinfo(res);
+    return 0;
+}
+
+int hn_route_address(uint32_t *addr)
+{
+    int fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (fd < 0) return fail_errno();
+    struct sockaddr_in to = sin_of(htonl(0xc0000201u), 9), me;     /* 192.0.2.1, a documentation address */
+    socklen_t len = sizeof me;
+    int r = connect(fd, (struct sockaddr *)&to, sizeof to) < 0 || getsockname(fd, (struct sockaddr *)&me, &len) < 0;
+    int e = errno;
+    close(fd);
+    if (r) return fail(wsa_of(e));
+    *addr = me.sin_addr.s_addr;
+    return *addr ? 0 : fail(HN_NETDOWN);
 }

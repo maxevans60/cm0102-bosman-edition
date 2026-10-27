@@ -58,4 +58,16 @@ int hn_hostname(char *out, size_t room);
  * max. The count. */
 int hn_adapters(uint32_t *addr, uint32_t *mask, int max);
 
+/* For the lobby client (0.7.0 slice 4, win/lobby.c), which makes its HTTP calls on its own thread so that
+ * the game never waits on the network. hn_error keeps one code for each thread. */
+int hn_thread(void (*fn)(void *), void *arg);         /* starts a detached thread; 0 when it runs */
+void hn_lock(void);                                   /* one lock for the lobby client's shared state */
+void hn_unlock(void);
+void hn_sleep(int ms);
+/* The IPv4 address of a host name or a dotted address, in network order. A DNS look-up can wait: call it on
+ * the lobby thread only. 0 on success. */
+int hn_resolve(const char *name, uint32_t *addr);
+/* The address of this computer that the default route uses. No packet is sent. 0 on success. */
+int hn_route_address(uint32_t *addr);
+
 #endif
