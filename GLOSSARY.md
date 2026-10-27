@@ -344,6 +344,14 @@ _Avoid_: persistent league, server game
 The state of a human manager who left a network game. Their club is on holiday as in the original. They can take it back with their manager password.
 _Avoid_: offline, AFK, dropped
 
+**Game password**:
+The optional password of a network game. The host sets it on the Network tab of the Bosman Edition Options box, and a human manager types it in the password box to join. It is not the manager password, which protects one club.
+_Avoid_: server password, join code
+
+**Kick**:
+The host removes a human manager from a network game, from the list on the Network tab. Their club goes on holiday, as when they leave.
+_Avoid_: ban, boot, remove (for this action)
+
 **Online play**:
 The option that lets the game list show online games and lets a host put its game in the lobby. It is on by default. When it is off, the game shows LAN games only.
 _Avoid_: internet mode, online mode
