@@ -49,7 +49,8 @@ void lobby_list_fetch(void);
 int lobby_list_take(LobbyRow *rows, int max, int *result);
 
 /* One game, for an invite link (slice 8). lobby_game_fetch asks for the game with this code. lobby_game_take gives
- * the answer once: 1 with the row and *result (an LhResult; unknown_game is LH_API_ERROR), or 0 while none waits. */
+ * the answer once: 1 with the row and *result (an LhResult; unknown_game is LH_API_ERROR), or 0 while none waits. A
+ * new fetch drops the answer of an older one. */
 void lobby_game_fetch(const char *code);
 int lobby_game_take(LobbyRow *row, int *result);
 

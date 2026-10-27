@@ -14,7 +14,7 @@
 
 void net_lobby_install(void);       /* net_lobby.c: sets the lobby address */
 
-static volatile int looking;        /* a lookup waits for its answer */
+static int looking;                 /* a lookup waits for its answer */
 static LobbyRow last;
 static int have_last;
 
@@ -55,7 +55,7 @@ void invite_open(const char *text)
         fprintf(stderr, "recomp: invite: %s: the game has no lobby address\n", code);
         return;
     }
-    fprintf(stderr, "recomp: invite: looking up %s\n", code);
+    fprintf(stderr, "recomp: invite: the game asks the lobby for %s\n", code);
     lobby_game_fetch(code);
     looking = 1;
 }
@@ -68,8 +68,8 @@ void invite_poll(void)
     if (!lobby_game_take(&row, &result)) return;
     looking = 0;
     if (result != LH_OK) {
-        fprintf(stderr, "recomp: invite: the lobby has no open game for this link (%s)\n",
-                result == LH_API_ERROR ? "not open" : result == LH_FULL_TODAY ? "full today" : "unavailable");
+        fprintf(stderr, "recomp: invite: %s\n", result == LH_API_ERROR ? "the lobby has no open game with this code" :
+                result == LH_FULL_TODAY ? "online games are full today" : "the game cannot reach the lobby");
         return;
     }
     fprintf(stderr, "recomp: invite: %s is \"%s\", hosted by %s, version %s%s\n", row.code, row.g.name,

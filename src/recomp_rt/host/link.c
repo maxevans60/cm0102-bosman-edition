@@ -1,6 +1,6 @@
 /* host_link_handler (host.h): the cm0102:// link of invite links (0.7.0 slice 8, #45).
  *
- * The handler is a door on the player's computer, so it stays small: one key or one file, for the current
+ * The handler lets a web page start this program, so it stays small: one key or one file, for the current
  * user, with no administrator rights. The game writes it at each start while Online play is on, so that it
  * follows the program when the player moves it or installs a new version, and removes it when Online play is
  * off. Where each one is and how a player removes it: the spec's slice 8, "As built"
@@ -189,7 +189,7 @@ int host_link_handler(int on)
         fprintf(stderr, "recomp: link: cm0102:// links open this AppImage (%s)\n", file);
         return 1;
     }
-    if (!have[0]) return 0;
+    if (strcmp(want, have)) return 0;           /* none, or another AppImage's: leave it */
     if (remove(file)) {
         fprintf(stderr, "recomp: link: cannot remove %s\n", file);
         return -1;

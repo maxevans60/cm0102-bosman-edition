@@ -71,7 +71,7 @@ async function route(request: Request, env: Env): Promise<Response> {
       } catch (e) {
         return err(isLimitError(e) ? "full_today" : "unavailable");
       }
-    });
+    }, () => secondsToMidnightUtc());
     return method === "HEAD" ? new Response(null, { status: res.status, headers: res.headers }) : res;
   }
   if (parts[0] !== "v1") return fail("not_found");

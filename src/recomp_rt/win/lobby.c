@@ -34,7 +34,7 @@ static struct {
     char code[9], token[96];
     int want_list, list_ready, list_result, list_n;
     LobbyRow list[LOBBY_ROWS];
-    char want_game[9];
+    char want_game[9], game_code[9];     /* game_code: the last code asked for; an older answer is dropped */
     int game_ready, game_result;
     LobbyRow game_row;
 } sh;
@@ -478,8 +478,10 @@ static void lobby_thread(void *unused)
             if (r == LH_OK && (!lobby_parse_game(answer.body, &row) || strcmp(row.code, want_game))) r = LH_UNAVAILABLE;
             say("game", r);
             hn_lock();
-            sh.game_row = row;
-            sh.game_result = r, sh.game_ready = 1;
+            if (!sh.want_game[0] && !strcmp(sh.game_code, want_game)) {
+                sh.game_row = row;
+                sh.game_result = r, sh.game_ready = 1;
+            }
             hn_unlock();
         }
         hn_sleep(TICK_MS);
@@ -555,6 +557,7 @@ void lobby_game_fetch(const char *code)
     if (!lobby_usable()) return;
     hn_lock();
     snprintf(sh.want_game, sizeof sh.want_game, "%s", code);
+    memcpy(sh.game_code, sh.want_game, sizeof sh.game_code);
     sh.game_ready = 0;
     start_thread();
     hn_unlock();

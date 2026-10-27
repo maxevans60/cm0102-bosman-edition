@@ -1,6 +1,7 @@
 import { abortAllDurableObjects } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { DOWNLOAD_URL, escapeHtml, joinCode } from "../src/join";
+import { DOWNLOAD_URL, escapeHtml, joinCode, joinPage } from "../src/join";
+import { err } from "../src/http";
 import { call, register, withLobby } from "./helpers";
 
 const HOST_IP = "203.0.113.91";
@@ -122,6 +123,17 @@ describe("join page helpers", () => {
     expect(joinCode("ABCDEFGHJ")).toBeNull();
     expect(joinCode("ABCDEFG1")).toBeNull(); // 1 is not in the alphabet
     expect(joinCode(undefined)).toBeNull();
+  });
+
+  it("gives a page with Retry-After when the free plan is used up", async () => {
+    const full = await joinPage("ABCDEFGH", async () => err("full_today"), () => 3600);
+    expect(full.status).toBe(503);
+    expect(full.headers.get("Retry-After")).toBe("3600");
+    expect(await full.text()).toContain("Online games are full today, try again later");
+    const down = await joinPage("ABCDEFGH", async () => err("unavailable"), () => 3600);
+    expect(down.status).toBe(503);
+    expect(down.headers.get("Retry-After")).toBeNull();
+    expect(await down.text()).toContain("Online games are not available now");
   });
 
   it("escapes the five HTML characters", () => {

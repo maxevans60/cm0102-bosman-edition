@@ -121,7 +121,11 @@ ${DOWNLOAD}
 }
 
 /** The page for GET /join/<code>. get asks the lobby for one game. */
-export async function joinPage(part: string | undefined, get: (code: string) => Promise<Result>): Promise<Response> {
+export async function joinPage(
+  part: string | undefined,
+  get: (code: string) => Promise<Result>,
+  midnight: () => number,         /* seconds until 00:00 UTC, for Retry-After */
+): Promise<Response> {
   const code = joinCode(part);
   if (code === null) return new Response(closedPage("This game is not open"), { status: 404, headers: HEADERS });
   const r = await get(code);
@@ -129,7 +133,9 @@ export async function joinPage(part: string | undefined, get: (code: string) => 
   if (r.error === "unknown_game") {
     return new Response(closedPage("This game is not open"), { status: 404, headers: HEADERS });
   }
-  const text = r.error === "full_today" ? "Online games are full today, try again later" :
-    "Online games are not available now, try again later";
-  return new Response(closedPage(text), { status: 503, headers: HEADERS });
+  if (r.error === "full_today") {
+    const headers = { ...HEADERS, "Retry-After": String(midnight()) };
+    return new Response(closedPage("Online games are full today, try again later"), { status: 503, headers });
+  }
+  return new Response(closedPage("Online games are not available now, try again later"), { status: 503, headers: HEADERS });
 }

@@ -1,5 +1,5 @@
 /* The cm0102:// link handler (0.7.0 slice 8, src/recomp_rt/host/link.c). ctest runs it on macOS (no handler)
- * and Linux (the desktop file of an AppImage). tests/net/link_wine.sh runs the Windows build under wine, where it
+ * and Linux (the desktop file of an AppImage). tests/net/link_container.sh runs the Windows build under wine, where it
  * writes and removes the registry key of the current user. */
 #include "host.h"
 
@@ -101,6 +101,9 @@ static void test_link(void)
     read_file(file, text, sizeof text);
     CHECK(strstr(text, "Exec=\"/opt/new.AppImage\" %u\n") != NULL, "the Exec line follows the AppImage");
 
+    setenv("APPIMAGE", "/opt/other.AppImage", 1);
+    CHECK(host_link_handler(0) == 0 && access(file, F_OK) == 0, "off in another AppImage: the file stays");
+    setenv("APPIMAGE", "/opt/new.AppImage", 1);
     CHECK(host_link_handler(0) == 0, "off: removed");
     CHECK(access(file, F_OK) != 0, "off: no file");
     CHECK(host_link_handler(0) == 0, "off again");

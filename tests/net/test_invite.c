@@ -131,6 +131,19 @@ static void test_lookup(uint16_t port)
     poll_for(1500);
     CHECK(invite_last() == g && !strcmp(g->code, "K7M2Q9RT"), "an answer for another code is not joined");
 
+    /* A second link before the first answer: only the second link's answer comes. */
+    lobby_game_fetch("K7M2Q9RT");
+    lobby_game_fetch("ABCDEFGH");
+    int answers = 0, last_result = -1;
+    for (int t = 0; t < 1500; t += 10) {
+        LobbyRow r;
+        int res;
+        if (lobby_game_take(&r, &res)) answers++, last_result = res;
+        usleep(10000);
+    }
+    CHECK(answers == 1 && last_result == LH_API_ERROR, "an older answer is dropped: %d answers, result %d", answers,
+          last_result);
+
     online_play = 0;
     address[0] = 0;                                        /* any request would fail the next check */
     invite_open("cm0102://join/K7M2Q9RT");
