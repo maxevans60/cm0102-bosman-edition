@@ -36,7 +36,7 @@ describe("no path crashes the game side", () => {
     ["POST", "/v1/games/ABCDEFGH/heartbeat"],
     ["DELETE", "/v1/games/ABCDEFGH"],
     ["GET", "/v1/games/ABCDEFGH/relay"],
-    ["GET", "/join/ABCDEFGH"],
+    ["POST", "/join/ABCDEFGH"], // GET gives the invite link page (join.test.ts)
   ])("%s %s answers JSON", async (method, path) => {
     const res = await call(path, { method, ip: freshIp() });
     expect(res.status).toBeGreaterThanOrEqual(400);

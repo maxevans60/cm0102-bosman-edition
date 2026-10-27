@@ -1,6 +1,7 @@
 // Bosman Edition lobby and relay (0.7.0, #45, slice 3). The API contract is in README.md.
 // This Worker logs nothing, so no log line can hold an internet address (Q26).
-import { fail, json, toResponse } from "./http";
+import { err, fail, json, toResponse } from "./http";
+import { joinPage } from "./join";
 import { CODE_RE, FieldError, parseHeartbeat, parseJoin, parseRegister } from "./validate";
 
 export { Lobby } from "./lobby";
@@ -61,10 +62,19 @@ async function route(request: Request, env: Env): Promise<Response> {
   const parts = url.pathname.split("/").filter((p) => p !== "");
   const method = request.method;
 
-  if (parts[0] !== "v1") {
-    // "/join/<code>" is kept for the invite link page of slice 8.
-    return fail("not_found");
+  if (parts[0] === "join" && parts.length <= 2) {
+    // The invite link page (slice 8). A lobby failure gives a page too, never JSON.
+    if (method !== "GET" && method !== "HEAD") return fail("method_not_allowed");
+    const res = await joinPage(parts[1], async (code) => {
+      try {
+        return await lobby(env).get(code);
+      } catch (e) {
+        return err(isLimitError(e) ? "full_today" : "unavailable");
+      }
+    }, () => secondsToMidnightUtc());
+    return method === "HEAD" ? new Response(null, { status: res.status, headers: res.headers }) : res;
   }
+  if (parts[0] !== "v1") return fail("not_found");
   if (parts.length === 2 && parts[1] === "health") {
     return method === "GET" ? json({ ok: true, api: 1 }) : fail("method_not_allowed");
   }

@@ -6,6 +6,7 @@ The lobby keeps the list of open online games. The relay passes traffic between 
 - `src/lobby.ts`: the `Lobby` Durable Object. One object holds every open game. The games are in its storage, so they survive when Cloudflare evicts an idle object.
 - `src/relay.ts`: the `Relay` Durable Object. There is one object for each game, named by the game code. It uses the WebSocket Hibernation API.
 - `src/filter.ts`: the word filter for player names and game names.
+- `src/join.ts`: the invite link page (slice 8).
 - `test/`: tests that run in the local Workers runtime (workerd), with no Cloudflare account.
 
 ## Run the tests
@@ -60,7 +61,7 @@ For slices 4 and 5, this means: send a batch only when there is data, and send n
 
 ## API contract (version 1)
 
-The game uses this contract in slices 4, 5 and 8. The base is the deploy address, for example `https://bosman-online.<account>.workers.dev`.
+The game uses this contract in slices 4, 5 and 8. The invite link page at the end of this section is for people, not for the game. The base is the deploy address, for example `https://bosman-online.<account>.workers.dev`.
 
 ### Rules for the game side
 
@@ -172,9 +173,17 @@ Close codes:
 
 When the host connection closes, the relay closes every human manager with 4000. A host can connect again with the same token while the game is open.
 
-### Reserved for the invite link (slice 8)
+### Invite link page (slice 8)
 
-`GET /join/<code>` is kept for the invite link page. Today it answers `not_found`. Slice 8 builds the page from `GET /v1/games/<code>`. The site states the privacy rule in one line: the lobby keeps internet addresses in memory only while the game is open, and writes them to no log.
+`GET /join/<code>` (and `HEAD`) gives an HTML page for a person, not JSON. The game never calls it. A host posts the address, for example `https://<address>/join/K7M2Q9RT`, and a friend opens it in a browser. The code is read in any case.
+
+- An open game: the page shows its name, host, season, game date, database, human clubs, managers online, places left and version. It has an "Open in Bosman Edition" button for `cm0102://join/<code>`, the game code to find the game by hand, a line for a game with a password, and a download link to the latest GitHub release. Status 200.
+- A game that is not open, or a code that is not valid: "This game is not open", with the download link. Status 404.
+- A lobby failure: the "full today" or "not available" text as a page. Status 503.
+
+The page has no script, no cookie, no picture and no outside file. Its headers forbid all of them (`Content-Security-Policy: default-src 'none'`), send no referrer and allow no cache. It reads the game with the lobby's `get`, so it keeps no record of the visitor. Its last line states the privacy rule (Q26): the lobby keeps internet addresses in memory only while a game is open, and writes them to no log. `src/join.ts` builds it, and `test/join.test.ts` tests it.
+
+Each page view is one Worker request and one Durable Object request. A chat program that shows a preview of the link (Discord, for example) also loads the page once.
 
 ## Privacy
 

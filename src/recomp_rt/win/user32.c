@@ -22,6 +22,7 @@
 #include "winfit.h"
 #include "winscale.h"
 #include "net_core.h"
+#include "invite.h"
 
 #include <SDL.h>
 #include <stdlib.h>
@@ -727,6 +728,10 @@ static void handle_event(SDL_Event *e)
         update_scaling();
         win_screen_dirty = 1;
         break;
+    case SDL_DROPFILE:                         /* macOS gives a cm0102:// link this way (invite.h) */
+        if (e->drop.file && !strncasecmp(e->drop.file, "cm0102:", 7)) invite_open(e->drop.file);
+        SDL_free(e->drop.file);
+        break;
     case SDL_QUIT:
         win_save_window();
         if (rt_on_fatal) rt_on_fatal();
@@ -921,6 +926,7 @@ void win_poll_events(void)
     SDL_Event e;
     while (SDL_PollEvent(&e))
         handle_event(&e);
+    invite_poll();
     if (window) run_script();
 }
 

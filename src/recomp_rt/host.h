@@ -82,6 +82,15 @@ void host_display_notes(char *out, size_t room);
  * (Linux without zenity or kdialog). It blocks until the player answers. */
 int host_pick_folder(const char *title, char *out, size_t room);
 
+/* The cm0102:// link handler (0.7.0 slice 8, host/link.c): the computer starts this program with a link
+ * cm0102://join/<code> from an invite link page. on 1 writes it for this program, for the current user only,
+ * and writes nothing when it is there already. on 0 removes it when it starts this program (on Linux: this AppImage). Windows: the key
+ * HKEY_CURRENT_USER\Software\Classes\cm0102. Linux, only in an AppImage: the file
+ * cm0102-bosman-edition.desktop in ~/.local/share/applications. macOS: nothing, because the app's Info.plist
+ * names the link and the system reads it. 1 when the handler is this program's now, 0 when there is none, -1
+ * on a failure (with a message on stderr). */
+int host_link_handler(int on);
+
 /* Time. */
 void host_gmtime(time_t t, struct tm *out);
 void host_localtime(time_t t, struct tm *out);

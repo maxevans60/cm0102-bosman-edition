@@ -48,6 +48,12 @@ LobbyHostState lobby_host_state(char *code_out);    /* code_out: 9 bytes or NULL
 void lobby_list_fetch(void);
 int lobby_list_take(LobbyRow *rows, int max, int *result);
 
+/* One game, for an invite link (slice 8). lobby_game_fetch asks for the game with this code. lobby_game_take gives
+ * the answer once: 1 with the row and *result (an LhResult; unknown_game is LH_API_ERROR), or 0 while none waits. A
+ * new fetch drops the answer of an older one. */
+void lobby_game_fetch(const char *code);
+int lobby_game_take(LobbyRow *row, int *result);
+
 /* At quit: waits at most ms for a close that is not sent yet. */
 void lobby_finish(int ms);
 
@@ -57,6 +63,7 @@ void lobby_clean(char *out, unsigned room, const char *in);
 
 /* Tests: the JSON of the list answer as rows, and a game as the JSON of a registration. */
 int lobby_parse_games(const char *json, LobbyRow *rows, int max);
+int lobby_parse_game(const char *json, LobbyRow *row);     /* the answer of GET /v1/games/<code>: 1 when valid */
 int lobby_game_json(char *out, unsigned room, const LobbyGame *g, const char *password, const char *code,
                     const char *token);
 
