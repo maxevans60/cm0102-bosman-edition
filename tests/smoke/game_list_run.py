@@ -22,9 +22,9 @@ area's scrollbar (Area::layout 0x403350). Each click on the scrollbar's down arr
 
 Checks:
     1 the joiner ends with code 0
-    2 with 50 games, the list moves on each of the first 44 clicks of the down arrow, and not on the 45th:
-      the list has 50 rows
-    3 after the 5 BYEs (45 games), the list moves on each of the first 39 clicks, and not on the 40th
+    2 with 50 games, the list moves on click 44 of the down arrow and not on click 45: the list has 50 rows
+    3 after the 5 BYEs (45 games), the list moves on click 39 and not on click 40, and on the last page the
+      row above Game 50 is no longer Game 49 (a BYE) while the last row stays Game 50
     4 the joiner picks the last row (Game 50) and clicks Next: the fake host gets the TCP connection on
       10.50.0.150, the address of Game 50
 """
@@ -44,7 +44,7 @@ import smoke_run  # noqa: E402
 GAMES = 50
 NET = "10.50.0."
 JOINER = NET + "1"
-FAKE_FIRST = 101                     # Game NN comes from 10.50.0.(100 + NN)
+FAKE_FIRST = 100                     # Game NN comes from 10.50.0.(FAKE_FIRST + NN)
 GONE = (7, 13, 22, 38, 49)           # the games that send a BYE
 PORT = 6667
 TAG_ACK, TAG_BYE, TAG_REQ = b"CM3 LIST SERVER ACK", b"CM3 LIST SERVER BYE", b"CM3 LIST SERVER REQ"
@@ -52,6 +52,7 @@ TAG_ACK, TAG_BYE, TAG_REQ = b"CM3 LIST SERVER ACK", b"CM3 LIST SERVER BYE", b"CM
 # The game list (setup_build_select_network_game_screen 0x81f8d0): the list area is x 190..700, y 234..510,
 # 6 rows a page (0x81fa9f..0x81fad4). The box of the rows, without the scrollbar, for the dump compares.
 LIST_BOX = (192, 236, 660, 508)
+ROW_5, ROW_6 = (192, 422, 660, 460), (192, 468, 660, 506)    # the fifth and sixth rows of a page
 DOWN_ARROW = (690, 500)              # the scrollbar's down arrow
 LAST_ROW = (420, 485)                # the sixth row of the page
 NEXT = (705, 572)
@@ -65,17 +66,16 @@ def packet(tag, host, name):
     return tag + pad(host) + pad(name)
 
 
-def fake_host(out):
-    """Runs in the namespace "fake" until the joiner connects, or 15 minutes."""
+def fake_host(out, slow):
+    """Runs in the namespace "fake" until the run ends it, or after 15 minutes times slow."""
     order = list(range(1, GAMES + 1))
     random.Random(10).shuffle(order)   # Game 50 comes 46th: the original's 9 lack it
     socks = {}
     for n in order:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.bind((NET + str(100 + n), 0))
+        s.bind((NET + str(FAKE_FIRST + n), 0))
         socks[n] = s
     listen = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    listen.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     listen.bind(("", PORT))
     tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcp.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -86,7 +86,7 @@ def fake_host(out):
     joiner = None
     byes_sent = False
     held = []
-    end = time.time() + 900
+    end = time.time() + 900 * slow
     while time.time() < end:
         r, _, _ = select.select([listen, tcp], [], [], 0.5)
         if listen in r:
@@ -144,7 +144,7 @@ def joiner_steps():
     after = GAMES - len(GONE) - 6
     return network_run.START + relative([
         "3500 click 612 243",               # Join Network Game
-        f"wait screen:0x81f8d0",            # the game list
+        "wait screen:0x81f8d0",            # the game list
         "6000 dump {d}/list-0.bmp",         # all ACKs are in: the list's first page
         *scroll(before + 1, before - 1, before + 1, "list-a"),
         f"{STEP} click {LAST_ROW[0]} {LAST_ROW[1]}",   # the last row: Game 50 into the Join field
@@ -171,7 +171,7 @@ def setup_namespace():
     ip("addr", "add", JOINER + "/24", "broadcast", NET + "255", "dev", "veth-join")
     ip("link", "set", "veth-join", "up")
     for n in range(1, GAMES + 1):
-        ip("netns", "exec", "fake", "ip", "addr", "add", f"{NET}{100 + n}/24", "broadcast", NET + "255",
+        ip("netns", "exec", "fake", "ip", "addr", "add", f"{NET}{FAKE_FIRST + n}/24", "broadcast", NET + "255",
            "dev", "veth-fake")
     ip("netns", "exec", "fake", "ip", "link", "set", "veth-fake", "up")
     ip("netns", "exec", "fake", "ip", "link", "set", "lo", "up")
@@ -188,7 +188,7 @@ def moved(shots, name, n):
 def main(argv):
     args = argv[1:]
     if args[:1] == ["--fake-host"]:
-        fake_host(args[1])
+        fake_host(args[1], float(args[2]))
         return 0
     if len(args) < 2:
         print(__doc__)
@@ -212,9 +212,12 @@ def main(argv):
     with tempfile.TemporaryDirectory(prefix="cm0102-gamelist-") as work:
         shots = shots or work
         os.makedirs(shots, exist_ok=True)
+        for f in os.listdir(shots):     # files of an earlier run would pass a check or start the BYEs
+            if f.endswith((".bmp", ".png", ".txt", ".log")):
+                os.remove(os.path.join(shots, f))
         setup_namespace()
         fake = subprocess.Popen(["ip", "netns", "exec", "fake", sys.executable, "-I", os.path.abspath(__file__),
-                                 "--fake-host", shots])
+                                 "--fake-host", shots, str(slow)])
         time.sleep(1)
         join, err = network_run.start(program, game, work, "join", joiner_steps(), shots, slow)
         try:
@@ -232,9 +235,16 @@ def main(argv):
             last, end = moved(shots, name, n), moved(shots, name, n + 1)
             check(last is True and end is False,
                   f"{games} games: the list moves on click {n} ({last}) and not on click {n + 1} ({end})")
+        a, b = os.path.join(shots, f"list-a-{before}.bmp"), os.path.join(shots, f"list-b-{after}.bmp")
+        if os.path.exists(a) and os.path.exists(b):
+            five, six = smoke_run.differing_share(a, b, ROW_5), smoke_run.differing_share(a, b, ROW_6)
+            check(five > 0 and six == 0, f"the last page after the BYEs: row 5 changes ({five:.1%}), row 6 stays "
+                  f"Game {GAMES} ({six:.1%})")
+        else:
+            check(False, "the last pages before and after the BYEs: dump missing")
         path = os.path.join(shots, "fake-connect.txt")
         got = open(path).read().strip() if os.path.exists(path) else None
-        want = NET + str(100 + GAMES)
+        want = NET + str(FAKE_FIRST + GAMES)
         check(got == want, f"the join of the last row reaches {want} (Game {GAMES}): {got}")
         for f in ("fake-host.log", "join-net.log"):
             p = os.path.join(shots, f)
