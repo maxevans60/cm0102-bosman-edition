@@ -30,7 +30,13 @@
  * adapter would add a row for each copy after the first (0x77b448).
  *
  * Traffic. Each TCP connection counts bytes, sends and packets in both directions. A packet is a
- * 4-byte length and its body (0x77ac30, 0x77b45e). */
+ * 4-byte length and its body (0x77ac30, 0x77b45e).
+ *
+ * Join check (0.7.0 slice 4, net_core.h). The joiner's side runs inside connect, which the game calls on a
+ * blocking socket and waits for (connect_to_host 0x8ae640, connect at 0x8ae74e). The host's side runs inside
+ * accept: TcpIp::accept_connection 0x8ae840 polls accept on each listen socket while a player slot is free
+ * (0x77af5a). A new connection waits in a list until its block is read, and accept says "would block" until
+ * then. So the game sees only joiners that passed, as if the others never came. */
 #include "net_core.h"
 #include "../host_net.h"
 
@@ -57,6 +63,8 @@ typedef struct {
     int connected;
     int dead;                      /* a WinSock code once the connection broke in a background send */
     int broadcast;                 /* SO_BROADCAST, for the UDP send socket */
+    int accepted;                  /* a joiner's connection on this host */
+    int listening;
     hn_sock s;
     hn_sock out;                   /* UDP: the send socket, else HN_INVALID */
     uint32_t net, mask;            /* UDP: the adapter's subnet, for the shared socket's datagrams */
@@ -77,6 +85,30 @@ static uint64_t last_log;
 static int log_ready;
 
 static int connect_ms = NC_CONNECT_MS;
+
+static const NcHooks *hooks;
+static int in_tick;
+void nc_set_hooks(const NcHooks *h) { hooks = h; }
+
+/* The join check: this game's version and passwords, and the reason of the last refused connect. */
+static char my_version[32], host_password[72], join_password[72], refused_version[32];
+static int identity, refused;
+
+void nc_set_identity(const char *version, const char *host_pw, const char *join_pw)
+{
+    snprintf(my_version, sizeof my_version, "%s", version ? version : "");
+    snprintf(host_password, sizeof host_password, "%s", host_pw ? host_pw : "");
+    snprintf(join_password, sizeof join_password, "%s", join_pw ? join_pw : "");
+    identity = version != NULL;
+}
+
+void nc_refusal_clear(void) { refused = NC_REFUSED_NONE; }
+
+int nc_refusal(char *host_version, unsigned room)
+{
+    if (host_version && room) snprintf(host_version, room, "%s", refused_version);
+    return refused;
+}
 
 int nc_error(void) { return error_code; }
 void nc_set_connect_ms(int ms) { connect_ms = ms; }
@@ -217,11 +249,28 @@ static int flush(Sock *k)
 }
 
 /* Every call moves the queues on, but a send leaves the bytes that it holds back for its own packet. */
+static void serve_listeners(void);
+static void close_pending(uint32_t h);
+
 static void flush_all(const Sock *except)
 {
     for (int i = 0; i < MAX_SOCKS; i++)
         if (socks[i].handle && &socks[i] != except && socks[i].qlen) flush(&socks[i]);
     log_tick();
+    serve_listeners();
+    if (hooks && hooks->tick && !in_tick) {
+        in_tick = 1;
+        hooks->tick();
+        in_tick = 0;
+    }
+}
+
+int nc_peers(void)
+{
+    int n = 0;
+    for (int i = 0; i < MAX_SOCKS; i++)
+        if (socks[i].handle && socks[i].accepted && socks[i].connected && !socks[i].dead) n++;
+    return n;
 }
 
 static int enqueue(Sock *k, const uint8_t *p, uint32_t n)
@@ -307,6 +356,7 @@ int nc_close(uint32_t h)
     while (k->qlen && !k->dead && flush(k) == 0 && k->qlen && hn_ms() < until)
         hn_wait(k->s, 0, 50);
     if (log_file && k->connected) log_line(k, "close", &k->n);
+    if (k->listening) close_pending(h);
     hn_close(k->s);
     if (k->out != HN_INVALID) hn_close(k->out);
     free(k->q);
@@ -396,7 +446,9 @@ int nc_listen(uint32_t h, int backlog)
     Sock *k = find(h);
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
-    return hn_listen(k->s, backlog) < 0 ? fail_host() : 0;
+    if (hn_listen(k->s, backlog) < 0) return fail_host();
+    k->listening = 1;
+    return 0;
 }
 
 static void connected(Sock *k, uint32_t addr, uint16_t port)
@@ -408,6 +460,124 @@ static void connected(Sock *k, uint32_t addr, uint16_t port)
     if (log_file) log_line(k, "open", &k->n);
 }
 
+static int is_loopback(uint32_t a) { return ((const uint8_t *)&a)[0] == 127; }
+
+/* Connections that wait for their join block (see the head of this file). */
+#define PENDING 16
+static struct {
+    uint32_t listen;               /* the game's listen handle, 0: free */
+    hn_sock s;
+    uint32_t addr;
+    uint16_t port;
+    uint64_t since;
+    int len, ready;                /* ready: it passed, and waits for the game's accept */
+    char buf[256];
+} pending[PENDING];
+
+static int check_pending(int i);
+
+/* Takes each new connection of the game's listen sockets and reads the join blocks, at every call of the game,
+ * so a joiner gets its answer while the host's game does not accept (a full game, or a game between two polls
+ * of 0x77af5a). A connection from 127.x passes with no block. */
+static void serve_listeners(void)
+{
+    for (int k = 0; identity && k < MAX_SOCKS; k++) {
+        if (!socks[k].handle || !socks[k].listening) continue;
+        for (;;) {
+            int i = 0;
+            while (i < PENDING && pending[i].listen) i++;
+            if (i == PENDING) break;
+            uint32_t a;
+            uint16_t p;
+            hn_sock c = hn_accept(socks[k].s, &a, &p);
+            if (c == HN_INVALID) break;
+            pending[i].listen = socks[k].handle, pending[i].s = c, pending[i].addr = a, pending[i].port = p;
+            pending[i].since = hn_ms(), pending[i].len = 0, pending[i].ready = is_loopback(a);
+        }
+    }
+    for (int i = 0; i < PENDING; i++)
+        if (pending[i].listen && !pending[i].ready && check_pending(i) > 0) pending[i].ready = 1;
+}
+
+/* The game closed a listen socket: its waiting connections go too. */
+static void close_pending(uint32_t h)
+{
+    for (int i = 0; i < PENDING; i++)
+        if (pending[i].listen == h) {
+            hn_close(pending[i].s);
+            pending[i].listen = 0;
+        }
+}
+
+static void send_line(hn_sock s, const char *line)
+{
+    size_t n = strlen(line);
+    uint64_t until = hn_ms() + 500;
+    while (n) {
+        long r = hn_send(s, line, n);
+        if (r > 0) {
+            line += r, n -= (size_t)r;
+            continue;
+        }
+        if ((r < 0 && hn_error() != HN_WOULDBLOCK) || hn_ms() >= until || hn_wait(s, 0, 50) < 0) return;
+    }
+}
+
+/* The value of "key=" in a join block, cut to room - 1 bytes. */
+static void block_value(const char *b, const char *key, char *out, size_t room)
+{
+    out[0] = 0;
+    size_t k = strlen(key);
+    for (const char *line = b; *line; line += strcspn(line, "\n") + (line[strcspn(line, "\n")] ? 1 : 0))
+        if (!strncmp(line, key, k) && line[k] == '=') {
+            size_t n = strcspn(line + k + 1, "\n");
+            if (n >= room) n = room - 1;
+            memcpy(out, line + k + 1, n);
+            out[n] = 0;
+            return;
+        }
+}
+
+/* Reads the block of pending connection i. 1: it passed (the connection goes to the game), 0: not yet,
+ * -1: it failed and is closed. */
+static int check_pending(int i)
+{
+    for (;;) {
+        if (pending[i].len >= (int)sizeof pending[i].buf - 1) break;
+        long r = hn_recv(pending[i].s, pending[i].buf + pending[i].len, 1);
+        if (r < 0 && hn_error() == HN_WOULDBLOCK) {
+            if (hn_ms() - pending[i].since < NC_HELLO_MS) return 0;
+            break;
+        }
+        if (r <= 0) break;
+        pending[i].buf[++pending[i].len] = 0;
+        if (pending[i].len < 2 || memcmp(pending[i].buf + pending[i].len - 2, "\n\n", 2)) continue;
+        char version[32], password[72];
+        block_value(pending[i].buf, "version", version, sizeof version);
+        block_value(pending[i].buf, "password", password, sizeof password);
+        char line[64];
+        const char *why = NULL;
+        if (strncmp(pending[i].buf, "BOSMAN HELLO 1\n", 15)) why = "not a join block";
+        else if (strcmp(version, my_version)) {
+            snprintf(line, sizeof line, "BOSMAN VERSION %s\n", my_version);
+            why = "another version";
+        } else if (host_password[0] && strcmp(password, host_password)) {
+            snprintf(line, sizeof line, "BOSMAN PASSWORD\n");
+            why = "a wrong password";
+        }
+        if (why) {
+            if (strcmp(why, "not a join block")) send_line(pending[i].s, line);
+            fprintf(stderr, "recomp: net: a joiner was refused: %s (version %s)\n", why, version);
+            break;
+        }
+        send_line(pending[i].s, "BOSMAN OK\n");
+        return 1;
+    }
+    hn_close(pending[i].s);
+    pending[i].listen = 0;
+    return -1;
+}
+
 uint32_t nc_accept(uint32_t h, uint32_t *addr, uint16_t *port)
 {
     Sock *k = find(h);
@@ -415,8 +585,18 @@ uint32_t nc_accept(uint32_t h, uint32_t *addr, uint16_t *port)
     if (!k) return fail(HN_NOTSOCK), NC_INVALID;
     uint32_t a = 0;
     uint16_t p = 0;
-    hn_sock s = hn_accept(k->s, &a, &p);
-    if (s == HN_INVALID) return fail_host(), NC_INVALID;
+    hn_sock s = HN_INVALID;
+    if (identity) {                /* flush_all above served the join blocks: take one that passed */
+        for (int i = 0; s == HN_INVALID && i < PENDING; i++)
+            if (pending[i].listen == h && pending[i].ready) {
+                s = pending[i].s, a = pending[i].addr, p = pending[i].port;
+                pending[i].listen = 0;
+            }
+        if (s == HN_INVALID) return fail(HN_WOULDBLOCK), NC_INVALID;
+    } else {
+        s = hn_accept(k->s, &a, &p);
+        if (s == HN_INVALID) return fail_host(), NC_INVALID;
+    }
     Sock *c = new_sock(s, 1);
     if (!c) {
         hn_close(s);
@@ -425,10 +605,38 @@ uint32_t nc_accept(uint32_t h, uint32_t *addr, uint16_t *port)
     /* Windows gives an accepted socket the mode of the listen socket. The game's listen sockets are
      * non-blocking (0x8ae48d), and it never sets the accepted one (0x8ae840). */
     c->blocking = k->blocking;
+    c->accepted = 1;
     connected(c, a, p);
     if (addr) *addr = a;
     if (port) *port = p;
     return c->handle;
+}
+
+/* The joiner's side of the join check on a connected socket. 0 when the host said OK. */
+static int hello(Sock *k)
+{
+    char block[160], line[64];
+    snprintf(block, sizeof block, "BOSMAN HELLO 1\nversion=%s\npassword=%s\n\n", my_version, join_password);
+    send_line(k->s, block);
+    uint64_t until = hn_ms() + NC_HELLO_WAIT_MS;
+    int n = 0;
+    while (n < (int)sizeof line - 1) {
+        long r = hn_recv(k->s, line + n, 1);                      /* one byte at a time: the game's bytes follow */
+        if (r == 1) {
+            if (line[n++] == '\n') break;
+            continue;
+        }
+        if (r == 0 || hn_error() != HN_WOULDBLOCK || hn_ms() >= until || hn_wait(k->s, 1, 50) < 0) break;
+    }
+    line[n] = 0;
+    if (!strcmp(line, "BOSMAN OK\n")) return 0;
+    if (!strncmp(line, "BOSMAN VERSION ", 15)) {
+        refused = NC_REFUSED_VERSION;
+        snprintf(refused_version, sizeof refused_version, "%.*s", (int)strcspn(line + 15, "\n"), line + 15);
+    } else if (!strcmp(line, "BOSMAN PASSWORD\n")) refused = NC_REFUSED_PASSWORD;
+    else refused = n ? NC_REFUSED_NOT_BOSMAN : NC_REFUSED_NO_ANSWER;
+    fprintf(stderr, "recomp: net: the host refused the join: %s\n", n ? line : "no answer\n");
+    return -1;
 }
 
 int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
@@ -437,7 +645,16 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
     if (!k->stream) return fail(10045);                          /* WSAEOPNOTSUPP: the game never does */
+    refused = NC_REFUSED_NONE;
+    refused_version[0] = 0;
+    if (hooks && hooks->connect && hooks->connect(addr, port) < 0) return -1;
     if (hn_connect(k->s, addr, port, connect_ms) < 0) return fail_host();
+    if (identity && !is_loopback(addr) && hello(k) < 0) {
+        /* The game keeps its handle and closes it after the failed join: give it a fresh socket. */
+        hn_close(k->s);
+        k->s = hn_socket(1);
+        return fail(10061);                                       /* WSAECONNREFUSED */
+    }
     connected(k, addr, port);
     return 0;
 }
@@ -492,6 +709,7 @@ long nc_sendto(uint32_t h, const void *buf, uint32_t n, uint32_t addr, uint16_t 
     long r = hn_sendto(k->out != HN_INVALID ? k->out : k->s, buf, n, addr, port);
     if (r < 0) return fail_host();
     k->n.sends++, k->n.bytes_out += (uint64_t)r, k->n.packets_out++;
+    if (hooks && hooks->sent) hooks->sent(buf, n, addr, port);
     return r;
 }
 
@@ -507,16 +725,38 @@ long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *po
         return r;
     }
     long r = -1;
-    uint32_t from = 0;
-    if (k->out != HN_INVALID) r = hn_recvfrom(k->out, buf, n, addr, port);
-    /* The shared socket: drop the datagrams from other adapters' subnets (see the head of this file). */
-    for (int i = 0; r < 0 && i < 64; i++) {
-        r = hn_recvfrom(k->s, buf, n, &from, port);
-        if (r >= 0 && k->mask && (from & k->mask) != k->net) r = -1;
-        else if (r < 0) break;
-        else if (addr) *addr = from;
+    uint32_t from = 0, a = 0;
+    uint16_t p = 0;
+    int dropped = 0;
+    for (int tries = 0; r < 0 && tries < 64; tries++) {
+        dropped = 0;               /* 1 only when the last try read a datagram that the hook dropped */
+        r = k->out != HN_INVALID ? hn_recvfrom(k->out, buf, n, &a, &p) : -1;
+        /* The shared socket: drop the datagrams from other adapters' subnets (see the head of this file). */
+        for (int i = 0; r < 0 && i < 64; i++) {
+            r = hn_recvfrom(k->s, buf, n, &from, &p);
+            if (r >= 0 && k->mask && (from & k->mask) != k->net) r = -1;
+            else if (r < 0) break;
+            else a = from;
+        }
+        if (r < 0) break;
+        /* The game list (lobby_rows.c) may drop a datagram: then read the next one. */
+        dropped = hooks && hooks->arrived && !hooks->arrived(buf, r, a);
+        if (dropped) r = -1;
     }
-    if (r < 0) return fail_host();
+    if (r < 0 && dropped) nc_set_error(HN_WOULDBLOCK);    /* 64 dropped datagrams: the next call reads on */
+    if (r < 0 && hooks && hooks->extra) {
+        r = hooks->extra(buf, n, &a, &p);
+        if (r >= 0) {
+            if (addr) *addr = a;
+            if (port) *port = p;
+            k->n.packets_in++;
+            return r;
+        }
+        return dropped ? -1 : fail_host();   /* the last real read's error: would block, or a real one */
+    }
+    if (r < 0) return dropped ? -1 : fail_host();
+    if (addr) *addr = a;
+    if (port) *port = p;
     k->n.bytes_in += (uint64_t)r, k->n.packets_in++;
     return r;
 }

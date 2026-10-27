@@ -547,3 +547,48 @@ The Windows build (mingw-w64, linked with ws2_32 and iphlpapi) passes the two-ga
 ### Same-save sets
 
 With networking compiled in, the four same-save sets pass against `ref-builds/main-batchAX`: start.sav, prematch.sav, a new game and yeovil.sav with `--days 7`, each with every option run and ref-build equal to normal. The sets ran on the build before the review fixes, which changed only `net_core.c`, `net_win32.c`, `net.c` comments and the tests. start.sav passed again on the final build. ctest passes 50 of 50 on the Mac, with the new `net_core` test, and `net_core` passes on Linux in the container.
+
+## 12. Slice 4: online games in the game list (2026-10-27)
+
+Slice 4 adds the lobby under the game's own network code. No function of the original changes, and no packet layout changes. Files: `src/recomp_rt/win/net_lobby.c` (the glue), `lobby.c` (the lobby client and its thread), `lobby_http.c` (the one HTTP interface, where slice 5 adds the secure connection), `lobby_rows.c` (the rows of the game list), hooks and the join check in `net_core.c`, and threads in `host/net_posix.c` and `net_win32.c`.
+
+### Where the runtime learns that a game hosts
+
+From the datagrams that the game sends (section 2): the first `CM3 LIST SERVER ACK` (the start-up broadcast of `host_or_join_game` 0x77a9f0 at 0x77aa7c..0x77aafd, or a reply of `receive_packet` 0x77af20 at 0x77aff2..0x77b088) makes the game a host, with the computer name of bytes 19..68 and the game name of bytes 69..118. `CM3 LIST SERVER BYE` (`Network::~Network` 0x77a890, host flag only) closes the entry. A quit with no BYE closes it at exit.
+
+### Where the runtime reads the season, the day and the clubs
+
+All reads run in the hook of a network call of the game, on the game's own thread, at most once a second.
+
+| Field | Where | Evidence |
+|---|---|---|
+| The data is loaded | `[0xadadfc]` and `[0xae23bc]` are set | `setup_create_or_join_network_game` 0x8388e0 tests `[0xadadfc]` at 0x8389c7 before `free_game_data`. A new network game is made at Select League(s) before its data loads, so the host registers only after. |
+| Day | game date 0xae2c90: s16 day of the year, s16 year | `savename.c` (`win_game_date`), `picker.c` |
+| Season | the year of the date from July, else the year before | rule of this slice |
+| Human clubs | the last 16 rows of the staff table `[0xae23bc]`, 0x6e bytes a row, count `[0xae2364]`; a row is in use when byte +0x5f is not 0 | `HUMAN_MANAGER::clear_invalid_watched_fixtures` 0x5fe8d0 at 0x5fe8e3..0x5fe903; `setup_assign_restored_network_managers` 0x8387e0 at 0x8387f0..0x83880f |
+| Club name | club at staff +0x39, short name at club +0x38, long name at club +4 | side bar 0x76300e and 0x763017; `savename.c` |
+| Managers online | 1 + the open connections that the host accepted | `nc_peers` |
+| Free seats | 16 less the larger of the rows in use and the managers online | the original's 16 slots (+0x4ba, section 1) |
+
+### The game list
+
+The rows come in the 119-byte ACK layout through the game's own `recvfrom` (0x8aedcd). One row for each host: a game is named by its computer name and game name. The first ACK from the subnet of the default route goes to the game at once; an ACK from another subnet waits 300 ms for a better one; later ACKs of the same game from another address are dropped. A BYE from an address with no row is dropped, so the original's extra row for such a BYE (0x77b448) no longer shows. On this Mac the host's three ACKs (192.168.68.106 and the two Parallels adapters) now give one row.
+
+A lobby game that is not on the LAN is an ACK from an address in 0.66.0.0/16, which no host can have. Its text is the name with the season, the day and the managers online, for example `Sunday League  2003/04 14 Oct  3 online, password`, within the 49 bytes of the name slot. The join compares the Join text with the list names and uses that row's address (0x77ab2a..0x77ab88), and the runtime's connect sees the 0.66 address. Lobby rows go to the game 400 ms after the request at the earliest, so the LAN answers come first. The runtime counts the rows that the game holds and gives none past the game's cap of 9 (0x77b0eb), so a BYE never reaches a row that the game dropped. A host with two adapters in one subnet (Wi-Fi and Ethernet) also gives one row. So two computers with the same name that host games with the same name on one LAN show as one row: a rare case. Two lobby rows whose cut names give the same text get a number, because the join takes the first row with the Join text. The "full today" row starts with a space: the list sort is a plain byte compare (0x77b1fc..0x77b222), so it shows first. A LAN ACK that comes after a lobby row of the same game replaces it: a BYE from the 0.66 address, then the ACK. The lobby's hostName is `PC-` and a hash of the computer name, so the lobby shows no computer name and a joiner can match the two rows.
+
+### The join check
+
+The original has no version check (section 3). A joiner's connect to any address that is not 127.x sends `BOSMAN HELLO 1`, its version and a password. The host's runtime takes each new connection of the game's listen sockets and answers at every network call of the game, also while the game accepts no one (a full game, or between two polls of 0x77af5a): OK, the host's version, or a wrong password. A host that gives no answer, for example the original game on Windows, gets its own reason. The game's accept gets only connections that passed. The joiner waits at most 8 s, because a host that works out a day makes no network call for a few seconds; the original's connect waited with no limit. The game's bytes follow only after OK. A refused join shows the original's "Unable To Join" box (`confirm_push` 0x591840, called at 0x838a67 with the text formatted at 0x838a46) with the reason in place of "could not be joined". The loopback test 0x8af290 connects to 127.0.0.1 and gets no check.
+
+### Test results (2026-10-27)
+
+`tests/smoke/network_run.py --lobby` against the local server (`npx wrangler dev`): PASS. The lobby listed the game with name, version, database 3.9.68, season 2001, day 2001-07-14, 1 manager online, 15 free seats and no password, and listed nothing after the host quit. join1 (Online play on) saw one row for the host, clicked it and played Enter Name and Select Nationality as the host's own (0.00 % of pixels differ, 4 click packets). join2 (lobby rows only, version 0.0.1) saw `Bosman  2001/02 14 Jul  1 online` and the box "This network game runs Bosman Edition 0.5.0, and you have 0.0.1. Install Bosman Edition 0.5.0 to join it." join3 (Online play off) joined through the LAN, and its lobby saw no connection. join4 (a lobby that answers full_today) saw the "full today" row and its box. The plain two-game run passes as before.
+
+Finding for the server (slice 3). The local Workers runtime drops a Durable Object after about 10 s with no request. The lobby keeps its games in memory only, so in the first run the host's heartbeat after 30 s got `unknown_game`. The game registered again with its code and token, as the contract says, and the game came back. Between the two, a joiner's list was empty. The test now asks for the list every 3 s. I don't know how long Cloudflare keeps an idle lobby object in memory: with one game and a heartbeat every 30 s the list may empty in the same way. The server could keep its games in Durable Object storage, or set an alarm. That is a slice 3 decision.
+
+### Not built in slice 4
+
+- The screens for the game password: they need Max's choice. The join check already carries the password, and the lobby keeps its flag.
+- Joining a lobby game through the relay (slice 5): today a click on a lobby row gives a box that says so.
+- The game id of a restored save (the one-copy rule, Q23): today each hosting has a new id.
+- The lobby address of the release: empty until Max deploys the server. Tests set `RECOMP_LOBBY_URL`.

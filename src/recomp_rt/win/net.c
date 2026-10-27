@@ -41,6 +41,7 @@ static void put_addr(uint32_t p, uint32_t len_p, uint32_t addr, uint16_t port)
 RT_IMPORT(WSOCK32_ord115)                                                         /* WSAStartup */
 {
     uint32_t data = rt_arg(1);
+    net_lobby_install();
     if (nc_start() < 0) rt_ret_stdcall(HN_SYSNOTREADY, 2);
     else {
         /* WSADATA: wVersion, wHighVersion, then text the game does not read. The game keeps 398 bytes for

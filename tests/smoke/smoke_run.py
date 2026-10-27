@@ -204,7 +204,7 @@ SAME_SAVE_RUNS = [
              "clickable_names": "off", "attribute_colours": "off", "faster_days": "off",
              "match_columns": "off", "condition_colours": "off", "save_backups": "off", "remember_window": "off",
              "squad_views": "off", "attribute_groups": "off", "foreign_colours": "off",
-             "full_player_search": "off", "changing_rules": "off"}),
+             "full_player_search": "off", "changing_rules": "off", "online_play": "off"}),
     ("foreign-on", {"faster_days": "off", "foreign_colours": "on"}),
     ("foreign-off", {"faster_days": "off", "foreign_colours": "off"}),
     ("search-on", {"faster_days": "off", "full_player_search": "on"}),
@@ -213,6 +213,9 @@ SAME_SAVE_RUNS = [
     # and must equal the game with it off in every other part (RULES_PART). A loaded old save has it off.
     ("rules-on", {"faster_days": "off", "changing_rules": "on"}),
     ("rules-off", {"faster_days": "off", "changing_rules": "off"}),
+    # Online play (0.7.0 slice 4): acts only in network games, so a single-player game must not change.
+    ("online-on", {"faster_days": "off", "online_play": "on"}),
+    ("online-off", {"faster_days": "off", "online_play": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
     # Q342: the season code off (slice 11 year sites, the season part, the Choose Season code) gives the save of
@@ -304,6 +307,8 @@ MATCH_RUNS = [
     ("search-off", {"full_player_search": "off"}),
     ("rules-on", {"changing_rules": "on"}),
     ("rules-off", {"changing_rules": "off"}),
+    ("online-on", {"online_play": "on"}),
+    ("online-off", {"online_play": "off"}),
     ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
     ("season-code-off", {"_env": {"RECOMP_SEASON_CODE": "off"}}),
     ("box-fixes-off", {"_env": {"RECOMP_BOX_FIXES": "off"}}),

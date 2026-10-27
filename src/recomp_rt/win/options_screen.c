@@ -1,8 +1,9 @@
 /* The Bosman Edition Options box (spec 2026-10-16-features-0.5.0, slice 6; #56).
  *
  * A box the size of the original's Game Settings box (build 0x823950), with every option of the settings
- * file (options.h) on two tabs, Graphics and Game, nine rows each (Graphics was Screen until 0.6.0, Max's play
- * test). Labels and notes come from the mockup docs/research/mockups/2026-10-16-options-screen.html, variant B.
+ * file (options.h) on three tabs, Graphics and Game with nine rows each (Graphics was Screen until 0.6.0, Max's
+ * play test), and Network (0.7.0 slice 4: Online play). The tab buttons share their row 2:2:1, so Graphics and
+ * Game keep their places of the two-tab box. Labels and notes come from the mockup docs/research/mockups/2026-10-16-options-screen.html, variant B.
  * The version line shows the project version (CMakeLists.txt, CM0102_VERSION).
  *
  * The box is a screen of the runtime on the game's own screen stack, as Team views (views.c). The push of
@@ -46,7 +47,7 @@
  * it. A switch in the box does not change the game: smoke_run.py --same-save --options compares two
  * switches with two tab clicks.
  *
- * Node slots: 0 the tab (1 Graphics, 2 Game), 1 the place that opened the box (1 start screen, 2 game). Only
+ * Node slots: 0 the tab (1 Graphics, 2 Game, 3 Network), 1 the place that opened the box (1 start screen, 2 game). Only
  * numbers, so the box needs no leave function. */
 #include "win.h"
 #include "options.h"
@@ -91,7 +92,8 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 #define BUTTON_TEXT 0xae3184u
 
 #define VALUE_ID 0x7d3au            /* data: row index * 16 + value index. Ids that the original does not use. */
-#define TAB_ID 0x7d3bu              /* data: the tab, 1 or 2 */
+#define TAB_ID 0x7d3bu              /* data: the tab, 1 to TABS */
+#define TABS 3
 #define CLOSE_ID 0x7d3cu
 #define ITEM_ID 0x4b8u              /* the side bar item; the side bar input 0x7615d0 uses no such id */
 #define REBUILD 0xfffffff5u         /* -0xb: build the box again */
@@ -103,7 +105,7 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_PATH } RowKind;
 
 typedef struct {
-    int tab;                        /* 1 Graphics, 2 Game */
+    int tab;                        /* 1 Graphics, 2 Game, 3 Network */
     OptionId id;
     RowKind kind;
     const char *label;
@@ -129,6 +131,7 @@ static const Row rows[] = {
     {2, OPT_SAVE_BACKUPS, ROW_SWITCH, "Save backups", ""},
     {2, OPT_CHANGING_RULES, ROW_SWITCH, "Changing rules", "Default for a new game\nSetup Game sets each game"},
     {2, OPT_SAVE_FOLDER, ROW_PATH, "Save folder", "Applies at the next start\nOld saves do not move"},
+    {3, OPT_ONLINE_PLAY, ROW_SWITCH, "Online play", "Off: LAN games only"},
 };
 #define ROW_COUNT ((int)(sizeof rows / sizeof rows[0]))
 
@@ -339,7 +342,7 @@ static void options_build(void)
 {
     if (!scratch) scratch = rt_alloc_zero(TEXT_SIZE + 16);
     int tab = (int)node_slot(0);
-    if (tab != 1 && tab != 2) {
+    if (tab < 1 || tab > TABS) {
         tab = 1;
         set_slot(0, 1);
     }
@@ -357,9 +360,10 @@ static void options_build(void)
     box_text(490, 115, 724, 135, 1, 0, 1, 1, light, "Changes save at once to settings.txt");
 
     /* The tabs: the open tab as a framed label, the other as a button. */
-    int t = area(165, 142, 724, 168, 2, NULL, 1, 0);
-    static const char *const tab_names[2] = {"Graphics", "Game"};
-    for (int i = 1; i <= 2; i++) {
+    static const uint8_t weights_tabs[TABS] = {2, 2, 1};
+    int t = area(165, 142, 724, 168, TABS, weights_tabs, 1, 0);
+    static const char *const tab_names[TABS] = {"Graphics", "Game", "Network"};
+    for (int i = 1; i <= TABS; i++) {
         if (i == tab) current(t, i - 1, tab_names[i - 1]);
         else choice(t, i - 1, tab_names[i - 1], TAB_ID, (uint32_t)i, green);
     }
@@ -451,7 +455,7 @@ static void options_input(void)
         uint32_t id = (uint16_t)rd32(g_mem, at), data = rd32(g_mem, at + 0x40);
         if (id == CLOSE_ID) {
             r = CLOSE;
-        } else if (id == TAB_ID && (data == 1 || data == 2)) {
+        } else if (id == TAB_ID && data >= 1 && data <= TABS) {
             set_slot(0, data);
             r = REBUILD;
         } else if (id == VALUE_ID && data / 16 < (uint32_t)ROW_COUNT) {

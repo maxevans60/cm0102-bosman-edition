@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int last_error;
+static _Thread_local int last_error;
 
 static int fail(int code)
 {
@@ -218,4 +218,61 @@ int hn_adapters(uint32_t *addr, uint32_t *mask, int max)
         }
     free(list);
     return n;
+}
+
+typedef struct { void (*fn)(void *); void *arg; } ThreadStart;
+
+static DWORD WINAPI thread_main(LPVOID p)
+{
+    ThreadStart t = *(ThreadStart *)p;
+    free(p);
+    t.fn(t.arg);
+    return 0;
+}
+
+int hn_thread(void (*fn)(void *), void *arg)
+{
+    ThreadStart *t = malloc(sizeof *t);
+    if (!t) return fail(WSAENOBUFS);
+    t->fn = fn, t->arg = arg;
+    HANDLE h = CreateThread(NULL, 0, thread_main, t, 0, NULL);
+    if (!h) {
+        free(t);
+        return fail(WSAENOBUFS);
+    }
+    CloseHandle(h);
+    return 0;
+}
+
+static SRWLOCK lock = SRWLOCK_INIT;
+void hn_lock(void) { AcquireSRWLockExclusive(&lock); }
+void hn_unlock(void) { ReleaseSRWLockExclusive(&lock); }
+void hn_sleep(int ms) { Sleep((DWORD)ms); }
+
+int hn_resolve(const char *name, uint32_t *addr)
+{
+    struct addrinfo hints, *res = NULL;
+    if (hn_start() < 0) return -1;
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    if (getaddrinfo(name, NULL, &hints, &res) || !res) return fail(WSAHOST_NOT_FOUND);
+    *addr = ((struct sockaddr_in *)res->ai_addr)->sin_addr.s_addr;
+    freeaddrinfo(res);
+    return 0;
+}
+
+int hn_route_address(uint32_t *addr)
+{
+    if (hn_start() < 0) return -1;
+    SOCKET s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (s == INVALID_SOCKET) return fail_wsa();
+    struct sockaddr_in to = sin_of(htonl(0xc0000201u), 9), me;     /* 192.0.2.1, a documentation address */
+    int len = sizeof me;
+    int r = connect(s, (struct sockaddr *)&to, sizeof to) || getsockname(s, (struct sockaddr *)&me, &len);
+    int e = WSAGetLastError();
+    closesocket(s);
+    if (r) return fail(e);
+    *addr = me.sin_addr.s_addr;
+    return *addr ? 0 : fail(HN_NETDOWN);
 }
