@@ -371,12 +371,61 @@ describe("eviction: the runtime removes an idle lobby from memory", () => {
     expect(again.data.code).toBe(g.code);
   });
 
-  it("keeps heartbeat updates", async () => {
+  it("keeps heartbeat updates that are 60 seconds old", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
     const g = await register();
+    await setLobbyClock(t0 + 60_000);
     expect((await heartbeat(g.code, g.hostToken, g.ip)).status).toBe(200);
     await evictDurableObject(lobbyStub());
     expect((await json(await call(`/v1/games/${g.code}`))).game.day).toBe("2001-09-01");
   });
+
+  it("writes a heartbeat at most once a minute, also when a field changed", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const g = await register();
+    const stored = () => withLobby(async (_i, state) => (await state.storage.get<any>(`g:${g.code}`)) as any);
+    await setLobbyClock(t0 + 30_000);
+    await heartbeat(g.code, g.hostToken, g.ip);
+    expect((await stored()).lastSeen).toBe(t0);
+    expect((await stored()).info.day).toBe("2001-08-11");
+    await setLobbyClock(t0 + 60_000);
+    await heartbeat(g.code, g.hostToken, g.ip);
+    expect((await stored()).lastSeen).toBe(t0 + 60_000);
+    expect((await stored()).info.day).toBe("2001-09-01");
+  });
+
+  it("after an eviction, takes the latest time a game can have been seen", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const g = await register();
+    await setLobbyClock(t0 + 30_000);
+    await heartbeat(g.code, g.hostToken, g.ip); // not written: the stored time is t0
+    await evictDurableObject(lobbyStub()); // the load runs at t0 + 30 s
+    await setLobbyClock(t0 + 119_000);
+    expect((await json(await call("/v1/games"))).games.map((x: any) => x.code)).toContain(g.code);
+    await setLobbyClock(t0 + 120_000);
+    expect((await json(await call("/v1/games"))).games.map((x: any) => x.code)).not.toContain(g.code);
+  });
+
+  it("deletes more than 128 expired games in groups", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    for (let i = 0; i < 130; i++) await register();
+    const sizes: number[] = [];
+    await withLobby((_inst, state) => {
+      const del = state.storage.delete.bind(state.storage);
+      (state.storage as any).delete = (k: string | string[]) => {
+        sizes.push(Array.isArray(k) ? k.length : 1);
+        return del(k as any);
+      };
+    });
+    await setLobbyClock(t0 + 90_000);
+    await call("/v1/games");
+    expect(Math.max(...sizes)).toBeLessThanOrEqual(128);
+    expect((await withLobby(async (_i, state) => (await state.storage.list({ prefix: "g:" })).size))).toBe(0);
+  }, 30_000);
 
   it("still drops a game with no heartbeat for 90 seconds", async () => {
     const t0 = 1_800_000_000_000;

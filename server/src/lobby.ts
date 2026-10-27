@@ -19,7 +19,10 @@ export const MAX_OPEN_GAMES = 300;
 export const MAX_FAILED_PER_ADDRESS = 5;
 export const MAX_FAILED_PER_GAME = 30;
 const FAILED_PASSWORD_WINDOW_MS = 60_000;
-/** A heartbeat with no changed field stores its time only when the stored time is this old. */
+/**
+ * A heartbeat writes the game only when the stored copy is this old, also when a field changed.
+ * This keeps each game at about 1,440 written rows a day (100,000 a day are free).
+ */
 export const STORE_SEEN_EVERY_MS = 60_000;
 
 interface Failures {
@@ -72,9 +75,21 @@ function hex(b: Uint8Array): string {
   return [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
+/** Cloudflare deletes at most 128 keys in one call. */
+const MAX_DELETE_KEYS = 128;
+
+/** The clock. Tests set it with setClock; it outlives an eviction, as the real clock does. */
+let clock: () => number = () => Date.now();
+
 export class Lobby extends DurableObject<Env> {
-  /** The clock. Tests replace it. */
-  now: () => number = () => Date.now();
+  now(): number {
+    return clock();
+  }
+
+  /** Test hook: a fixed time in ms, or null for the real clock. */
+  setClock(ms: number | null) {
+    clock = ms === null ? () => Date.now() : () => ms;
+  }
 
   private games = new Map<string, Game>();
   private byGameId = new Map<string, string>();
@@ -87,11 +102,11 @@ export class Lobby extends DurableObject<Env> {
 
   /** Reads the stored games after a start or an eviction. */
   private async load() {
-    const realNow = Date.now();
+    const now = this.now();
     for (const s of (await this.ctx.storage.list<StoredGame>({ prefix: PREFIX })).values()) {
       // The stored time can be up to STORE_SEEN_EVERY_MS behind the last heartbeat. Take the
       // latest time it can be, so that a live game does not expire early.
-      const lastSeen = Math.max(s.lastSeen, Math.min(s.lastSeen + STORE_SEEN_EVERY_MS, realNow));
+      const lastSeen = Math.max(s.lastSeen, Math.min(s.lastSeen + STORE_SEEN_EVERY_MS, now));
       const g: Game = { ...s, lastSeen, storedSeen: s.lastSeen, addressKey: null, failed: { since: 0, count: 0 }, failedBy: new Map() };
       this.games.set(g.code, g);
       this.byGameId.set(g.gameId, g.code);
@@ -164,7 +179,8 @@ export class Lobby extends DurableObject<Env> {
       this.games.delete(g.code);
       if (this.byGameId.get(g.gameId) === g.code) this.byGameId.delete(g.gameId);
     }
-    if (expired.length > 0) await this.ctx.storage.delete(expired.map((g) => PREFIX + g.code));
+    const keys = expired.map((g) => PREFIX + g.code);
+    for (let i = 0; i < keys.length; i += MAX_DELETE_KEYS) await this.ctx.storage.delete(keys.slice(i, i + MAX_DELETE_KEYS));
     await Promise.all(expired.map((g) => this.teardown(g.code)));
   }
 
@@ -235,7 +251,12 @@ export class Lobby extends DurableObject<Env> {
         failed: { since: 0, count: 0 },
         failedBy: new Map(),
       };
-      await this.add(g);
+      try {
+        await this.add(g);
+      } catch (e) {
+        await this.teardown(code);
+        throw e;
+      }
       return this.registered(g, token, 201);
     }
     return err("unavailable");
@@ -285,12 +306,9 @@ export class Lobby extends DurableObject<Env> {
     const addressKey = await this.addressKey(address);
     if (this.games.get(code) !== g) return err("unknown_game"); // closed or expired meanwhile
     g.addressKey = addressKey;
-    const changed = Object.entries(input).some(
-      ([k, v]) => JSON.stringify(v) !== JSON.stringify(g.info[k as keyof PublicInfo]),
-    );
     Object.assign(g.info, input);
     g.lastSeen = this.now();
-    if (changed || g.lastSeen - g.storedSeen >= STORE_SEEN_EVERY_MS) await this.store(g);
+    if (g.lastSeen - g.storedSeen >= STORE_SEEN_EVERY_MS) await this.store(g);
     return { ok: true, body: { ok: true } };
   }
 

@@ -50,7 +50,7 @@ Figures checked on 2026-10-27 on developers.cloudflare.com (Workers limits and D
 What one game uses:
 
 - An open game sends a heartbeat every 30 s. That is 2,880 Worker requests and 2,880 Durable Object requests a day. About 30 games can stay open all day, with room for game list requests.
-- The lobby writes 1 row when a game registers, closes or expires. A heartbeat writes 1 row when a listed field changes, and otherwise at most once a minute. That is about 1,440 rows a day for each game. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
+- The lobby writes 1 row when a game registers, closes or expires. A heartbeat writes 1 row at most once a minute, also when a listed field changes. That is about 1,440 rows a day for each game, so the 100,000 free rows cover about 69 games open all day. The Worker request limit stops at about 30 games first. After an eviction, the list can show fields up to 60 s old until the next heartbeat. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
 - A relay is awake while frames flow. One awake relay uses 450 GB-s an hour, so the free plan gives about 28 relay hours a day in total.
 - A host that sends a batch every 50 ms sends 20 messages a second, which bills as 1 request a second, or 3,600 an hour. Each human manager adds to this.
 

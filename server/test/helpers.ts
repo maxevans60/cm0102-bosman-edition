@@ -65,9 +65,7 @@ export function lobbyStub() {
 
 /** Sets the lobby's clock. Pass null to go back to the real clock. */
 export async function setLobbyClock(ms: number | null): Promise<void> {
-  await runInDurableObject(lobbyStub(), (inst: Lobby) => {
-    inst.now = ms === null ? () => Date.now() : () => ms;
-  });
+  await runInDurableObject(lobbyStub(), (inst: Lobby) => inst.setClock(ms));
 }
 
 export async function withLobby<R>(fn: (inst: Lobby, state: DurableObjectState) => R | Promise<R>): Promise<R> {
@@ -174,6 +172,7 @@ export async function managerSocket(code: string, ticket: string): Promise<Socke
 /** Starts each test with fresh objects and an empty lobby. Stored games outlive an abort. */
 export async function resetObjects(): Promise<void> {
   await abortAllDurableObjects();
+  await setLobbyClock(null);
   await withLobby((inst) => inst.forgetAll());
   await abortAllDurableObjects();
 }
