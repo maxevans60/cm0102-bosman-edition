@@ -54,6 +54,9 @@ Rules from the interview:
 - Small additions that need a message or field: the game password, Kick, the error messages, the connection test and the ping.
 - All games are public in the list. A host can set an optional password (Q10).
 - Up to 16 human managers in a game, the original's limit (Q4).
+- The game list holds up to 50 games with the original's scrollbar. The recompiler raises the original's limit of 9 (research note, section 10). A test fills the list with 50 games (Q31, Q33).
+- On a fast connection, the runtime reports the mouse button as up to a joiner's game after it sends a click, until the real button comes up. The game's input code does not change (Q34).
+- Tests on one Mac join the host through the Mac's LAN address. The loopback test 0x8af290 stays as it is (Q32).
 - Mac, Windows and Linux players play in one game (Q5).
 - A player on a different version cannot join. The message names the host's version (Q6).
 - When the host quits or drops, the host's game saves at once, and each human manager sees "The host left the game" and goes back to the start screen (Q7).
@@ -132,9 +135,16 @@ Merge danger: two-way door, but public, so the Opus review rule applies. Blast r
 - [ ] No log line or stored record holds an internet address.
 - [ ] Max approves the deploy.
 
+### 2b. One click acts on one screen
+Blocked by: 2
+Delivers: a joiner's click acts on one host screen only, on a fast LAN and through the relay (Q34, research note section 11).
+Merge danger: two-way door. Blast radius: joiners' clicks in network games. Single-player input does not change.
+- [ ] The two-game run clicks Next on Enter Name and lands on the next screen only.
+- [ ] Same-save sets pass.
+
 ### 4. Online games in the game list
-Blocked by: 2, 3
-Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online. Also the Online play option, the version check, the game password and the "full today" message.
+Blocked by: 2b, 3
+Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online, up to 50 games with the scrollbar (Q33), and one row for each host. Also the Online play option, the version check, the game password and the "full today" message.
 Merge danger: two-way door. Players see it, so the Opus review rule applies.
 - [ ] Two-game run passes against the local server.
 - [ ] With Online play off, the game makes no lobby request.
