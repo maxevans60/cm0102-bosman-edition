@@ -17,8 +17,9 @@ The host makes the network game "Bosman" and its own manager with Arsenal, and w
 Then the host clicks Finish, the game starts, and the host quits (the script's quit, as a window close). The host's
 game saves at its screen loop (net_session.c), and join2 sees "The host left the game" and goes back.
 
---kick (in place of the rejoin): the host kicks join1 (RECOMP_TEST_KICK) once it is on Manager Status, and its
-club goes on holiday.
+--kick (in place of the rejoin): join1 clicks Finish, the game starts, and the host opens the Network tab of the
+Options box. It clicks Kick for join1, then No (join1 stays), then Kick and Yes: join1's club goes on holiday and
+join1 sees "The host left the game".
 --leave (in place of the rejoin): join1 clicks Exit Game and Yes. The host sends it the quit packet (result -12,
 0x7fcd79), its club goes on holiday, and join1 shows no "The host left the game".
 
@@ -29,7 +30,7 @@ Checks:
     3 the host's log shows join1's club on holiday after the drop and back in play after join2's password
     4 the host saved at its quit: the log line and a save file in the host's save folder
     5 join2 shows "The host left the game" and then the start screen (0x81bab0)
-    6 kick: the host's log names the kick, and join1's game shows "The host left the game"
+    6 kick: No keeps join1, Yes kicks it (host log), and join1's game shows "The host left the game"
     7 leave: join1 shows no "The host left the game"
 """
 import glob
@@ -60,7 +61,28 @@ PASSWORD = [
 ]
 
 
-def host_steps(finish_ms, finish=True):
+KICK_ROW = "click 688 286"          # the Kick button of the first human manager on the Network tab
+NETWORK_TAB = "click 680 155"
+KICK_STEPS = [                      # the host, in the game: Kick with No, then with Yes (Q39)
+    "1000 click 45 344",            # Game Options
+    "wait popup",
+    "1000 click 175 417",           # Bosman Edition Options
+    "wait options",
+    f"1500 {NETWORK_TAB}",
+    "3500 dump {d}/host-4-network.bmp",
+    f"4000 {KICK_ROW}",
+    "6500 dump {d}/host-5-confirm.bmp",
+    "7000 click 300 572",           # No
+    "9500 dump {d}/host-6-no.bmp",
+    f"10000 {KICK_ROW}",
+    "12500 click 705 572",          # Yes
+    "15500 dump {d}/host-7-yes.bmp",
+    "16000 click 444 524",          # Close
+    "18000 quit",
+]
+
+
+def host_steps(finish_ms, finish=True, kick=False):
     return nr.START + [
         "3500 click 277 177",               # Start Network Game
         "6500 type Bosman",
@@ -86,8 +108,9 @@ def host_steps(finish_ms, finish=True):
         f"{finish_ms + 500} click 705 572",  # Manager Status: Finish
         "wait first-news",
         "3000 dump {d}/host-3-news.bmp",
+    ] + (KICK_STEPS if kick else [
         "8000 quit",                        # as a window close: the save waits for the screen loop
-    ]
+    ])
 
 
 def join_steps(n, address, rejoin=False, quit_ms=None, leave=False):
@@ -116,7 +139,10 @@ def join_steps(n, address, rejoin=False, quit_ms=None, leave=False):
             f"{t + 18000} click 705 572",   # Please Confirm: Yes
             f"{t + 22000} dump {{d}}/join{n}-6-status.bmp",
         ]
-        if leave:   # the joiner's own Exit Game: the host sends the quit packet (0x7fcd79), not a host quit
+        if quit_ms:  # --kick: Finish, then wait for the kick
+            steps += [f"{t + 23000} click 705 572", f"{quit_ms - 1000} dump {{d}}/join{n}-7-kicked.bmp",
+                      f"{quit_ms} quit"]
+        elif leave:   # the joiner's own Exit Game: the host sends the quit packet (0x7fcd79), not a host quit
             steps += [
                 f"{t + 23000} click 45 210",    # Exit Game
                 f"{t + 27000} dump {{d}}/join{n}-7-exit.bmp",
@@ -125,7 +151,7 @@ def join_steps(n, address, rejoin=False, quit_ms=None, leave=False):
                 f"{t + 34000} quit",
             ]
         else:
-            steps += [f"{quit_ms or t + 24000} quit"]   # the drop
+            steps += [f"{t + 24000} quit"]   # the drop
     else:
         steps += [
             f"{t} dump {{d}}/join{n}-1-status.bmp",
@@ -217,7 +243,7 @@ def main(argv):
             return 1
         lobby_url = f"http://127.0.0.1:{port}"
     env = {"RECOMP_LOBBY_URL": lobby_url}
-    finish_ms = 200000 if not (kick or leave) else 150000   # step times; start() scales them
+    finish_ms = 200000 if not leave else 150000   # step times; start() scales them
     procs = []
     away_after_drop, away_after_rejoin = None, None
     with tempfile.TemporaryDirectory(prefix="cm0102-dropin-") as work:
@@ -225,8 +251,8 @@ def main(argv):
         os.makedirs(shots, exist_ok=True)
         stop = threading.Event()
         threading.Thread(target=nr.keep_awake, args=(lobby_url, stop), daemon=True).start()
-        host_env = dict(env, RECOMP_TEST_KICK=str(int(80 * slow))) if kick else env
-        host, host_err = start(program, game, work, "host", host_steps(finish_ms, not (kick or leave)), shots, slow,
+        host_env = env
+        host, host_err = start(program, game, work, "host", host_steps(finish_ms, not leave, kick), shots, slow,
                                 host_env)
         host_log = os.path.join(shots, "host-stderr.txt")
         try:
@@ -234,11 +260,11 @@ def main(argv):
             check(ready, "the host reaches Manager Status with its own manager")
             if ready:
                 # join1 joins and makes its manager. Without --kick it quits at the end of its steps.
-                quit_ms = 120000 if kick else None
+                quit_ms = 330000 if kick else None
                 p1, e1 = start(program, game, work, "join1", join_steps(1, address, quit_ms=quit_ms, leave=leave), shots, slow,
                                   env)
                 procs.append(("join1", p1, e1))
-                p1.wait(timeout=240 * slow)
+                p1.wait(timeout=(600 if kick else 240) * slow)
                 for _ in range(int(60 * slow)):    # the heartbeat comes every 30 s
                     away_after_drop = lobby_away(lobby_url)
                     if away_after_drop:
@@ -286,7 +312,8 @@ def main(argv):
             check("The host left the game" not in j1, "7 join1 left by its own Exit Game and shows no host-left box")
         elif kick:
             j1 = text(os.path.join(shots, "join1-stderr.txt"))
-            check("the host kicks the human manager" in h, "6 the host's log names the kick")
+            no_at, yes_at = h.find(": no\n", h.find("options box: Kick")), h.find("the host kicks the human manager")
+            check(0 <= no_at < yes_at and ": yes" in h, "6 Kick: No keeps join1, then Yes kicks it (host log)")
             check("net box: Network Game: The host left the game." in j1, "6 join1 shows the box after the kick")
         else:
             check(away_after_rejoin == [], f"2 no club is Away after the rejoin: {away_after_rejoin}")

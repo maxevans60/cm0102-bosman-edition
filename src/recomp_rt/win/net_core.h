@@ -78,6 +78,9 @@ void nc_set_hooks(const NcHooks *h);
  * out a day makes none for a few seconds. The original's connect waited with no limit. */
 #define NC_HELLO_WAIT_MS 8000
 void nc_set_identity(const char *version, const char *host_password, const char *join_password);
+/* 0.7.0 slice 6: the passwords alone, from the Network tab (host) and the password box (joiner). */
+void nc_set_host_password(const char *pw);
+void nc_set_join_password(const char *pw);
 enum { NC_REFUSED_NONE, NC_REFUSED_VERSION, NC_REFUSED_PASSWORD, NC_REFUSED_NOT_BOSMAN, NC_REFUSED_NO_ANSWER };
 /* Why the last connect was refused, and the host's version for NC_REFUSED_VERSION. */
 int nc_refusal(char *host_version, unsigned room);

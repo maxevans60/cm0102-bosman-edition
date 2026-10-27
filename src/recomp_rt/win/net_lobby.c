@@ -202,6 +202,7 @@ static int before_connect(uint32_t addr, uint16_t port)
 {
     (void)port;
     reason[0] = 0;
+    net_password_connecting();
     int full;
     const LobbyRow *r = lr_row_of(addr, &full);
     char t[400];
@@ -223,7 +224,6 @@ static int before_connect(uint32_t addr, uint16_t port)
 
 static void tick(void)
 {
-    net_session_tick();
     uint64_t now = hn_ms();
     if (now - last_look < 1000) return;
     last_look = now;
@@ -241,7 +241,7 @@ static void tick(void)
             shown_away = g.away_n;
             fprintf(stderr, "recomp: lobby: away %d%s%s\n", g.away_n, g.away_n ? " " : "", g.away_n ? g.away[0] : "");
         }
-        if (g.name[0]) lobby_host_set(&g, "");
+        if (g.name[0]) lobby_host_set(&g, options_string(OPT_GAME_PASSWORD));
     } else if (hosting && !options_bool(OPT_ONLINE_PLAY)) {
         lobby_host_close();                              /* Online play went off: the entry closes */
     }
@@ -272,7 +272,7 @@ void net_lobby_install(void)
     const char *url = getenv("RECOMP_LOBBY_URL");
     lobby_set_address(url ? url : LOBBY_ADDRESS);
     nc_set_hooks(&hooks);
-    nc_set_identity(version(), "", "");
+    nc_set_identity(version(), options_string(OPT_GAME_PASSWORD), "");
     atexit(at_quit);
 }
 
@@ -290,7 +290,15 @@ RT_WRAP(00591840, confirm_push)
             snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman "
                      "Edition %s to join it.", host_version, version(), host_version);
             refuse(t);
-        } else if (!reason[0] && why == NC_REFUSED_PASSWORD) refuse("The password of this network game is wrong.");
+        } else if (!reason[0] && why == NC_REFUSED_PASSWORD) {
+            /* 0.7.0 slice 6 (Q38): the joiner's password box in place of the box (net_password.c). The caller does
+             * not read the result (0x838a6c..0x838a6f). */
+            if (net_password_ask(net_password_typed())) {
+                rt_ret_cdecl(0);
+                return;
+            }
+            refuse("The password of this network game is wrong.");
+        }
         else if (!reason[0] && why == NC_REFUSED_NOT_BOSMAN)
             refuse("The host does not run this version of Bosman Edition, so you cannot join its game.");
         else if (!reason[0] && why == NC_REFUSED_NO_ANSWER)

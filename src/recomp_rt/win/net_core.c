@@ -107,6 +107,9 @@ void nc_set_identity(const char *version, const char *host_pw, const char *join_
     identity = version != NULL;
 }
 
+void nc_set_host_password(const char *pw) { snprintf(host_password, sizeof host_password, "%s", pw ? pw : ""); }
+void nc_set_join_password(const char *pw) { snprintf(join_password, sizeof join_password, "%s", pw ? pw : ""); }
+
 void nc_refusal_clear(void) { refused = NC_REFUSED_NONE; }
 
 int nc_refusal(char *host_version, unsigned room)

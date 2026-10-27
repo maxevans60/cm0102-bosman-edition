@@ -33,7 +33,8 @@
  * - The joiner's box. After the client loop ends because the host left (net_core.c, nc_host_left), the game's
  *   message box 0x5e8290 says so. The original's network error box is the same box (0x56946b). Then Network Play
  *   goes back to the start screen.
- * - The test switch of Kick (RECOMP_TEST_KICK=<s>): s seconds after the first joiner, the host kicks it. */
+ * - Kick (Q39): the list of the human managers online and the Kick of one player slot, for the Network tab of the
+ *   Options box (options_screen.c). */
 #include "win.h"
 #include "net_core.h"
 #include "season.h"
@@ -154,6 +155,7 @@ void o_007fdc00(void);
 RT_WRAP(007fdc00, run_network_client)
 {
     nc_host_left_clear();
+    net_password_joined();
     o_007fdc00();
     if (rt_unwinding || !nc_host_left()) return;
     nc_host_left_clear();
@@ -180,20 +182,60 @@ RT_WRAP(0081ef70, network_play_input)
     o_0081ef70();
 }
 
-/* At each network call of the game (net_lobby.c, tick). */
-void net_session_tick(void)
+/* The human managers online, for the Kick list of the Network tab (Q39). The screen manager keeps up to 16
+ * channels, 0x300 bytes apart, with the count of their records at 0xb77c5a + 2 * channel. A record is 0x30 bytes
+ * from 0xb74c24 + 0x300 * channel: +0 the player slot (s16; 0 is this computer), +2 the manager's staff row or 0
+ * while the manager is being made (scrman_add_player_record 0x7ff630 at 0x7ff6d8..0x7ff6f2). The name is the one
+ * of Manager Status (database_format_staff_name 0x53dba0, called at 0x820210 with 200 and style 1), the club the
+ * staff row's club at +0x39 with its short name at +0x38 (net_lobby.c). */
+#define CHANNEL_RECORDS 0xb74c24u
+#define CHANNEL_COUNTS 0xb77c5au
+#define STAFF_NAME 0x0053dba0u
+#define STAFF_STATE 0x5fu
+#define STAFF_CLUB 0x39u
+#define CLUB_SHORT 0x38u
+
+int net_session_managers(NetManager *out, int max)
 {
-    static int kick_s = -2;
-    static uint64_t first_seen;
-    if (kick_s == -2) {
-        const char *v = getenv("RECOMP_TEST_KICK");
-        kick_s = v && *v ? atoi(v) : -1;
+    static uint32_t buf;
+    if (!buf) buf = win_static_alloc(200);
+    int n = 0;
+    if (!net_session_hosting()) return 0;
+    for (uint32_t ch = 0; ch < 16; ch++) {
+        int count = (int16_t)rd16(g_mem, CHANNEL_COUNTS + ch * 2);
+        for (int rec = 0; rec < count && rec < 16 && n < max; rec++) {
+            uint32_t r = CHANNEL_RECORDS + ch * 0x300u + (uint32_t)rec * 0x30u;
+            int slot = (int16_t)rd16(g_mem, r);
+            if (slot <= 0 || slot > 16) continue;
+            int seen = 0;
+            for (int i = 0; i < n; i++) seen |= out[i].slot == slot;
+            if (seen) continue;
+            NetManager *m = &out[n++];
+            memset(m, 0, sizeof *m);
+            m->slot = slot;
+            uint32_t staff = rd32(g_mem, r + 2);
+            if (!staff || g_mem[staff + STAFF_STATE] != 1) continue;   /* being made: no name or club yet */
+            g_mem[buf] = 0;
+            uint32_t args[4] = {staff, buf, 200, 1};
+            rt_callback(STAFF_NAME, 4, args);
+            snprintf(m->name, sizeof m->name, "%s", (const char *)g_mem + buf);
+            uint32_t club = rd32(g_mem, staff + STAFF_CLUB);
+            if (club) snprintf(m->club, sizeof m->club, "%s", (const char *)g_mem + club + CLUB_SHORT);
+        }
     }
-    if (kick_s < 0) return;
-    uint32_t handle;
-    if (nc_peer_list(&handle, NULL, NULL, 1) < 1) return;
-    if (!first_seen) first_seen = hn_ms();
-    if (hn_ms() - first_seen < (uint64_t)kick_s * 1000u) return;
-    nc_kick(handle);
-    kick_s = -1;
+    return n;
+}
+
+/* The socket of a player slot: the index at +0x4b8 + 2 * slot of the Network object (s16, -1 with none; release_
+ * slot_socket 0x77ac00 at 0x77ac13), then the handle at that index of the connection table at +0 of the object
+ * (TcpIp::send_to_connection 0x8ae8d0 at 0x8ae8d1..0x8ae8f6), 16 entries (0x77a7eb). */
+int net_session_kick(int slot)
+{
+    uint32_t net = rd32(g_mem, NETWORK_SESSION);
+    if (!net_session_hosting() || slot < 1 || slot > 16) return -1;
+    int index = (int16_t)rd16(g_mem, net + 0x4b8u + (uint32_t)slot * 2u);
+    uint32_t table = rd32(g_mem, net);
+    if (index < 0 || index >= 16 || !table) return -1;
+    fprintf(stderr, "recomp: net: Kick of player slot %d\n", slot);
+    return nc_kick(rd32(g_mem, table + (uint32_t)index * 4u));
 }
