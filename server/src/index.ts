@@ -26,6 +26,10 @@ async function readBody(request: Request, required: boolean): Promise<unknown> {
   }
 }
 
+function address(request: Request): string {
+  return request.headers.get("CF-Connecting-IP") ?? "unknown";
+}
+
 function bearer(request: Request): string | null {
   const h = request.headers.get("Authorization");
   return h !== null && h.startsWith("Bearer ") ? h.slice(7) : null;
@@ -40,11 +44,12 @@ export function secondsToMidnightUtc(now = Date.now()): number {
 
 /**
  * True for a Durable Object error that comes from a used-up free plan limit.
- * Cloudflare does not document the exact text, so this matches the words it uses in its limit errors.
+ * Cloudflare does not document the exact text, so this matches the words it uses in its limit
+ * errors. CPU and memory errors ("exceeded CPU time", "exceeded memory") do not match.
  */
-function isLimitError(e: unknown): boolean {
+export function isLimitError(e: unknown): boolean {
   const msg = e instanceof Error ? e.message : String(e);
-  return /exceed|daily limit|free tier|quota/i.test(msg);
+  return /daily limit|daily request limit|free tier|quota|exceeded (the )?allowed|exceeded its daily/i.test(msg);
 }
 
 function lobby(env: Env) {
@@ -69,8 +74,7 @@ async function route(request: Request, env: Env): Promise<Response> {
     if (method === "GET") return toResponse(await lobby(env).list());
     if (method === "POST") {
       const input = parseRegister(await readBody(request, true));
-      const address = request.headers.get("CF-Connecting-IP") ?? "unknown";
-      return toResponse(await lobby(env).register(input, address));
+      return toResponse(await lobby(env).register(input, address(request)));
     }
     return fail("method_not_allowed");
   }
@@ -90,7 +94,7 @@ async function route(request: Request, env: Env): Promise<Response> {
       return toResponse(await lobby(env).heartbeat(code, bearer(request), parseHeartbeat(await readBody(request, false))));
     case "join":
       if (method !== "POST") return fail("method_not_allowed");
-      return toResponse(await lobby(env).join(code, parseJoin(await readBody(request, true))));
+      return toResponse(await lobby(env).join(code, parseJoin(await readBody(request, true)), address(request)));
     case "relay": {
       if (method !== "GET") return fail("method_not_allowed");
       if (request.headers.get("Upgrade")?.toLowerCase() !== "websocket") return fail("upgrade_required");

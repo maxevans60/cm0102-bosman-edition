@@ -17,6 +17,7 @@ export type ErrorCode =
   | "relay_full"
   | "host_not_connected"
   | "upgrade_required"
+  | "lobby_full"
   | "full_today"
   | "unavailable";
 
@@ -37,6 +38,7 @@ const MESSAGES: Record<ErrorCode, string> = {
   relay_full: "The game has 16 human managers",
   host_not_connected: "The host is not connected",
   upgrade_required: "This address needs a WebSocket connection",
+  lobby_full: "The online game list is full, try again later",
   full_today: "Online games are full today, try again later",
   unavailable: "Online games are not available now, try again later",
 };
@@ -57,6 +59,7 @@ const STATUS: Record<ErrorCode, number> = {
   relay_full: 409,
   host_not_connected: 409,
   upgrade_required: 426,
+  lobby_full: 503,
   full_today: 503,
   unavailable: 503,
 };

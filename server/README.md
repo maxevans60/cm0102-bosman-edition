@@ -54,6 +54,8 @@ What one game uses:
 - A relay is awake while frames flow. One awake relay uses 450 GB-s an hour, so the free plan gives about 28 relay hours a day in total.
 - A host that sends a batch every 50 ms sends 20 messages a second, which bills as 1 request a second, or 3,600 an hour. Each human manager adds to this.
 
+A stranger can use up the daily Worker requests with a simple flood, because the free plan has no request filter before the Worker. Online play then stops until 00:00 UTC, and LAN play still works. A Workers rate limit for each address is a possible later step.
+
 For slices 4 and 5, this means: send a batch only when there is data, and send nothing while the game waits. An idle relay hibernates after about 10 s and then costs no run time. Measure the real traffic in slice 2 and check these figures again.
 
 ## API contract (version 1)
@@ -79,13 +81,13 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 | `name` | string | 1 to 40 characters. Word filter. |
 | `hostName` | string | 1 to 40 characters. Word filter. |
 | `version` | string | 1 to 24 of `0-9 A-Z a-z . + -`, for example `0.7.0` |
-| `database` | string | 1 to 40 characters |
+| `database` | string | 1 to 40 characters. Word filter. |
 | `season` | integer | Start year of the season, 1900 to 2200 |
 | `day` | string | The game date, `YYYY-MM-DD` |
-| `humanClubs` | string array | At most 16 club names, each 1 to 40 characters |
+| `humanClubs` | string array | At most 16 club names, each 1 to 40 characters. Word filter. |
 | `freeSeats` | integer | 0 to 16 |
 | `managersOnline` | integer | 0 to 16 |
-| `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash, in memory. |
+| `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash (20,000 rounds), in memory. |
 
 ### Endpoints
 
@@ -96,7 +98,7 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 - Keep `hostToken` secret. Heartbeat, close and the host relay connection need it.
 - To register the same game again (see the heartbeat), add `code` and `hostToken` to the body. The answer is 200 with the same code and token.
 
-`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. The lobby keeps games in memory only, so this also happens after a lobby restart or a deploy.
+`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. The lobby keeps games in memory only, so this also happens after a lobby restart or a deploy. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
 
 `DELETE /v1/games/<code>`, with the header `Authorization: Bearer <hostToken>`, closes the game and its relay. The host sends it when it quits.
 
@@ -105,12 +107,14 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 `GET /v1/games/<code>` gives `{"game": {...}}` for one game, in the same form. The invite link page uses it.
 
 `POST /v1/games/<code>/join` with `{"version", "name", "password"?}` checks a human manager before the relay. The checks are, in order:
-1. The game is open.
-2. The name passes the word filter.
+1. The fields are valid and the name passes the word filter.
+2. The game is open.
 3. The version is the host's version.
 4. The password is correct.
 
-The answer is `{"ticket", "expireSeconds": 60}`. A ticket works once, within 60 s, for this game only. After 5 wrong passwords in a minute, the game answers `too_many_attempts` for the rest of that minute.
+The answer is `{"ticket", "expireSeconds": 60}`. A ticket works once, within 60 s, for this game only.
+
+Wrong passwords are limited for each game, in each minute: 5 from one internet address, and 30 from all addresses together. Over a limit, the answer is `too_many_attempts` for the rest of that minute.
 
 ### Error codes
 
@@ -120,20 +124,21 @@ The answer is `{"ticket", "expireSeconds": 60}`. A ticket works once, within 60 
 | `name_not_allowed` | 400 | The word filter refused a name | `field` |
 | `unknown_game` | 404 | The game is not open | |
 | `not_host` | 401 | The host token is missing or wrong | |
-| `too_many_games` | 429 | This internet address already has 2 open games | |
+| `too_many_games` | 429 | This internet address already has 2 open games. An IPv6 address counts by its first 64 bits. | |
 | `game_already_open` | 409 | A game from the same save is open | `code` of the open game, so the second host can join it |
 | `version_mismatch` | 409 | Join: the versions differ | `hostVersion` |
 | `wrong_password` | 403 | Join: the password is missing or wrong | |
-| `too_many_attempts` | 429 | Join: 5 wrong passwords in a minute | |
+| `too_many_attempts` | 429 | Join: too many wrong passwords in this minute | |
 | `bad_ticket` | 401 | Relay: the ticket is wrong, used or expired | |
 | `relay_full` | 409 | Relay: 16 human managers are connected | |
 | `host_not_connected` | 409 | Relay: the host is not connected | |
 | `upgrade_required` | 426 | Relay: the request is not a WebSocket request | |
 | `not_found`, `method_not_allowed` | 404, 405 | Unknown path or method | |
+| `lobby_full` | 503 | 300 games are open | |
 | `full_today` | 503 | A free plan limit is used up | `retryAfterSeconds` (to 00:00 UTC), also in the `Retry-After` header |
 | `unavailable` | 503 | Any other server failure | |
 
-Cloudflare does not document the error text of a used-up Durable Object limit. The Worker gives `full_today` for an error that contains "exceed", "daily limit", "free tier" or "quota", and `unavailable` for other errors. Check this against a real limit error once, after the deploy.
+Cloudflare does not document the error text of a used-up Durable Object limit. The Worker gives `full_today` for an error that contains "daily limit", "free tier", "quota", "exceeded allowed" or "exceeded its daily", and `unavailable` for other errors. CPU and memory errors give `unavailable`. Check this against a real limit error once, after the deploy.
 
 ### Relay
 
@@ -174,6 +179,6 @@ When the host connection closes, the relay closes every human manager with 4000.
 ## Privacy
 
 - The Worker writes no log lines.
-- The lobby keeps a salted SHA-256 hash of each host's internet address, in memory only, to count open games for each address. The salt is random and is never stored. The hash goes when the game closes or expires.
-- The lobby stores nothing in Durable Object storage. The relay stores its key, the id of the host connection and used ticket ids. It never receives the internet address, because the Worker passes it only the `Upgrade` header and the query.
+- The lobby keeps a salted SHA-256 hash of each host's internet address (the first 64 bits for IPv6), in memory only, to count open games for each address. It also keeps one for each address that sent a wrong password, for one minute. The salt is random and is never stored. The hash goes when the game closes or expires.
+- The lobby stores nothing in Durable Object storage. The relay stores the game code, its key, the id of the host connection and used ticket ids. Once an hour, a relay with no host connection asks the lobby if the game is open. If it is not, the relay deletes all of this. It never receives the internet address, because the Worker passes it only the `Upgrade` header and the query.
 - The tests check log lines, answers, lobby memory and both storages for the test addresses.

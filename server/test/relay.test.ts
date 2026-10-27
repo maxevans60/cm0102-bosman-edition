@@ -1,4 +1,4 @@
-import { abortAllDurableObjects, runInDurableObject } from "cloudflare:test";
+import { abortAllDurableObjects, runDurableObjectAlarm, runInDurableObject } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Relay } from "../src/relay";
 import {
@@ -10,6 +10,7 @@ import {
   register,
   relayStub,
   setLobbyClock,
+  withLobby,
   json,
   Socket,
 } from "./helpers";
@@ -20,6 +21,10 @@ beforeEach(async () => {
 afterEach(async () => {
   await abortAllDurableObjects();
 });
+
+async function relayKeys(code: string): Promise<string[]> {
+  return runInDurableObject(relayStub(code), async (_inst: Relay, state) => [...(await state.storage.list()).keys()]);
+}
 
 async function gameWithHost() {
   const g = await register();
@@ -101,6 +106,20 @@ describe("relay", () => {
     expect(await a.socket.waitClosed()).toEqual({ code: 4003, reason: "kicked" });
   });
 
+  it("keeps a kicked manager's channel until the host hears that it closed", async () => {
+    const { code, host } = await gameWithHost();
+    await addManager(code, host);
+    const used = await runInDurableObject(relayStub(code), (inst: Relay, state) => {
+      for (const ws of state.getWebSockets("m0")) ws.close(4003, "kicked");
+      // The close event has not run yet, so the host does not know. Channel 0 must stay in use.
+      return (inst as unknown as { usedChannels(): number[] }).usedChannels();
+    });
+    expect(used).toEqual([0]);
+    expect(await host.nextJson()).toEqual({ t: "close", ch: 0 });
+    const b = await addManager(code, host);
+    expect(b.ch).toBe(0);
+  });
+
   it("ignores a bad control message from the host", async () => {
     const { code, host } = await gameWithHost();
     const a = await addManager(code, host);
@@ -180,6 +199,7 @@ describe("relay", () => {
     const { code, hostToken, host } = await gameWithHost();
     const a = await addManager(code, host);
     const host2 = await hostSocket(code, hostToken);
+    expect(await host2.nextJson()).toEqual({ t: "open", ch: a.ch });
     expect(await host.waitClosed()).toEqual({ code: 4001, reason: "replaced" });
     await a.socket.expectSilence();
     expect(a.socket.closed).toBeNull();
@@ -214,6 +234,22 @@ describe("relay", () => {
     expect((await host.waitClosed()).code).toBe(4004);
   });
 
+  it("forgets a relay that the lobby no longer lists, at its hourly check", async () => {
+    const g = await register();
+    expect(await runDurableObjectAlarm(relayStub(g.code))).toBe(true);
+    expect(await relayKeys(g.code)).toContain("key");
+    await withLobby((inst) => inst.forgetAll());
+    expect(await runDurableObjectAlarm(relayStub(g.code))).toBe(true);
+    expect(await relayKeys(g.code)).toEqual([]);
+  });
+
+  it("keeps a relay with a connected host at its hourly check, even when the lobby forgot it", async () => {
+    const { code } = await gameWithHost();
+    await withLobby((inst) => inst.forgetAll());
+    expect(await runDurableObjectAlarm(relayStub(code))).toBe(true);
+    expect(await relayKeys(code)).toContain("key");
+  });
+
   it("stores no game data: only the relay key and connection markers", async () => {
     const { code, host } = await gameWithHost();
     const a = await addManager(code, host);
@@ -225,7 +261,7 @@ describe("relay", () => {
       ...(await state.storage.list()).entries(),
     ]);
     const keys = entries.map(([k]) => k);
-    for (const k of keys) expect(k).toMatch(/^(key|hostConn|n:.+)$/);
+    for (const k of keys) expect(k).toMatch(/^(code|key|hostConn|n:.+)$/);
     expect(JSON.stringify(entries)).not.toContain("GAME");
   });
 });

@@ -57,6 +57,7 @@ function text(o: Record<string, unknown>, field: string, max: number): string {
   return t;
 }
 
+/** Text that other players see: the word filter applies. */
 function playerName(o: Record<string, unknown>, field: string): string {
   const t = text(o, field, 40);
   if (!nameAllowed(t)) throw new FieldError(field, "name_not_allowed");
@@ -90,6 +91,9 @@ function clubs(o: Record<string, unknown>): string[] {
     } catch {
       throw new FieldError("humanClubs");
     }
+  }).map((club) => {
+    if (!nameAllowed(club)) throw new FieldError("humanClubs", "name_not_allowed");
+    return club;
   });
 }
 
@@ -113,7 +117,7 @@ export function parseRegister(body: unknown): RegisterInput {
     name: playerName(o, "name"),
     hostName: playerName(o, "hostName"),
     version: version(o),
-    database: text(o, "database", 40),
+    database: playerName(o, "database"),
     season: int(o, "season", 1900, 2200),
     day: day(o),
     humanClubs: clubs(o),

@@ -8,8 +8,9 @@
 // Manager socket: binary frame = payload only. The relay adds the channel byte for the host.
 // Both:           the text frame "ping" gets "pong" without waking the object.
 //
-// Stored: the game's relay key, the id of the current host connection, and used ticket ids.
-// No game data and no internet address.
+// Stored: the game code, the relay key, the id of the current host connection and used ticket ids.
+// No game data and no internet address. An hourly alarm removes them when the lobby no longer
+// lists the game and no host is connected, so a relay that the lobby forgot does not stay for good.
 import { DurableObject } from "cloudflare:workers";
 import { b64url, fromB64url, hmac, randomBytes, sameBytes } from "./crypto";
 import { fail } from "./http";
@@ -23,6 +24,8 @@ export const CLOSE_HOST_LEFT = 4000;
 export const CLOSE_REPLACED = 4001;
 export const CLOSE_KICKED = 4003;
 export const CLOSE_GAME_CLOSED = 4004;
+
+export const CHECK_EVERY_MS = 60 * 60 * 1000;
 
 type Attachment = { r: "h"; id: string } | { r: "m"; ch: number };
 
@@ -58,10 +61,11 @@ export class Relay extends DurableObject<Env> {
   // Calls from the lobby.
 
   /** Makes the relay key and returns the host token, or null when this code already has a relay. */
-  async setup(): Promise<string | null> {
+  async setup(code: string): Promise<string | null> {
     if ((await this.getKey()) !== null) return null;
     const key = randomBytes(32);
-    await this.ctx.storage.put("key", key);
+    await this.ctx.storage.put({ key, code });
+    await this.ctx.storage.setAlarm(this.now() + CHECK_EVERY_MS);
     this.key = key;
     return Relay.hostToken(key);
   }
@@ -89,9 +93,25 @@ export class Relay extends DurableObject<Env> {
   async teardown(): Promise<void> {
     for (const ws of this.ctx.getWebSockets("m")) safeClose(ws, CLOSE_HOST_LEFT, "host_left");
     for (const ws of this.ctx.getWebSockets("h")) safeClose(ws, CLOSE_GAME_CLOSED, "game_closed");
+    await this.ctx.storage.deleteAlarm();
     await this.ctx.storage.deleteAll();
     this.key = null;
     this.hostConn = null;
+  }
+
+  /** Every hour: forget the relay if no host is connected and the lobby does not list the game. */
+  async alarm(): Promise<void> {
+    const code = await this.ctx.storage.get<string>("code");
+    let keep = (await this.currentHost()) !== null;
+    if (!keep && code !== undefined) {
+      try {
+        keep = await this.env.LOBBY.get(this.env.LOBBY.idFromName("lobby")).isOpen(code);
+      } catch {
+        keep = true; // the lobby is not available; ask again next hour
+      }
+    }
+    if (keep) await this.ctx.storage.setAlarm(this.now() + CHECK_EVERY_MS);
+    else await this.teardown();
   }
 
   // Connections.
@@ -108,6 +128,14 @@ export class Relay extends DurableObject<Env> {
 
   private openManagers(): WebSocket[] {
     return this.ctx.getWebSockets("m").filter((ws) => ws.readyState === WebSocket.OPEN);
+  }
+
+  /** Channels in use. A closing socket keeps its channel until its close event tells the host. */
+  private usedChannels(): number[] {
+    return this.ctx
+      .getWebSockets("m")
+      .filter((ws) => ws.readyState !== WebSocket.CLOSED)
+      .map((ws) => (ws.deserializeAttachment() as Attachment & { r: "m" }).ch);
   }
 
   private async checkTicket(ticket: string, key: Uint8Array): Promise<string | null> {
@@ -140,6 +168,10 @@ export class Relay extends DurableObject<Env> {
       const pair = new WebSocketPair();
       this.ctx.acceptWebSocket(pair[1], ["h"]);
       pair[1].serializeAttachment({ r: "h", id } satisfies Attachment);
+      // A new host connection learns the managers that are still connected.
+      for (const ws of this.openManagers()) {
+        pair[1].send(JSON.stringify({ t: "open", ch: (ws.deserializeAttachment() as Attachment & { r: "m" }).ch }));
+      }
       return new Response(null, { status: 101, webSocket: pair[0] });
     }
 
@@ -148,7 +180,7 @@ export class Relay extends DurableObject<Env> {
       if (nonce === null) return fail("bad_ticket");
       const host = await this.currentHost();
       if (host === null) return fail("host_not_connected");
-      const used = new Set(this.openManagers().map((ws) => (ws.deserializeAttachment() as Attachment & { r: "m" }).ch));
+      const used = new Set(this.usedChannels());
       let ch = 0;
       while (used.has(ch)) ch++;
       if (ch >= MAX_MANAGERS) return fail("relay_full");

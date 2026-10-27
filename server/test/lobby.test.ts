@@ -82,6 +82,15 @@ describe("register", () => {
 });
 
 describe("word filter", () => {
+  it.each([
+    ["database", "Shit Database"],
+    ["humanClubs", ["Arsenal", "Wanker Wanderers"]],
+  ])("rejects a rude %s, because the list shows it", async (field, value) => {
+    const res = await call("/v1/games", { method: "POST", body: gameBody({ [field]: value }), ip: freshIp() });
+    expect(res.status).toBe(400);
+    expect(await json(res)).toMatchObject({ error: "name_not_allowed", field });
+  });
+
   it.each(["name", "hostName"])("rejects a rude %s", async (field) => {
     const res = await call("/v1/games", { method: "POST", body: gameBody({ [field]: "F.U.C.K league" }), ip: freshIp() });
     expect(res.status).toBe(400);
@@ -145,6 +154,20 @@ describe("heartbeat and expiry", () => {
     expect((await json(res)).error).toBe("unknown_game");
   });
 
+  it("after expiry, a restore answers not_host and a new registration works", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const first = await register();
+    await setLobbyClock(t0 + 91_000);
+    expect((await call(`/v1/games/${first.code}/heartbeat`, { method: "POST", token: first.hostToken })).status).toBe(404);
+    const restore = await register({ gameId: first.body.gameId, code: first.code, hostToken: first.hostToken }, first.ip);
+    expect(restore.res.status).toBe(401);
+    expect(restore.data.error).toBe("not_host");
+    const fresh = await register({ gameId: first.body.gameId }, first.ip);
+    expect(fresh.res.status).toBe(201);
+    expect(fresh.code).not.toBe(first.code);
+  });
+
   it("refuses a heartbeat and a close without the host token", async () => {
     const { code } = await register();
     for (const token of [undefined, "wrong"]) {
@@ -188,6 +211,22 @@ describe("at most 2 open games for each internet address", () => {
     await call(`/v1/games/${a.code}`, { method: "DELETE", token: a.hostToken });
     expect((await register({}, ip)).res.status).toBe(201);
   });
+
+  it("counts IPv6 addresses by their /64 prefix", async () => {
+    expect((await register({}, "2001:db8:1:2::1")).res.status).toBe(201);
+    expect((await register({}, "2001:db8:1:2:aaaa:bbbb:cccc:dddd")).res.status).toBe(201);
+    const third = await register({}, "2001:0db8:0001:0002:ffff::9");
+    expect(third.res.status).toBe(429);
+    expect(third.data.error).toBe("too_many_games");
+    expect((await register({}, "2001:db8:1:3::1")).res.status).toBe(201);
+  });
+
+  it("refuses new games when 300 are open", async () => {
+    for (let i = 0; i < 300; i++) expect((await register()).res.status).toBe(201);
+    const over = await register();
+    expect(over.res.status).toBe(503);
+    expect(over.data.error).toBe("lobby_full");
+  }, 30_000);
 
   it("frees the address when a game expires", async () => {
     const t0 = 1_800_000_000_000;
@@ -269,18 +308,37 @@ describe("join step", () => {
     expect(dump).not.toContain("plain-text-check");
   });
 
-  it("slows down password guessing", async () => {
+  const tryJoin = (code: string, ip: string, password: string) =>
+    call(`/v1/games/${code}/join`, { method: "POST", ip, body: { version: "0.7.0", name: "Ann", password } });
+
+  it("slows down password guessing from one address, and lets others join", async () => {
     const { code } = await register({ password: "right" });
-    let last: Response | null = null;
-    for (let i = 0; i < 6; i++) {
-      last = await call(`/v1/games/${code}/join`, {
-        method: "POST",
-        ip: freshIp(),
-        body: { version: "0.7.0", name: "Ann", password: `guess${i}` },
-      });
-    }
-    expect(last!.status).toBe(429);
-    expect((await json(last!)).error).toBe("too_many_attempts");
+    const guesser = freshIp();
+    for (let i = 0; i < 5; i++) expect((await tryJoin(code, guesser, `guess${i}`)).status).toBe(403);
+    const sixth = await tryJoin(code, guesser, "guess5");
+    expect(sixth.status).toBe(429);
+    expect((await json(sixth)).error).toBe("too_many_attempts");
+    expect((await tryJoin(code, guesser, "right")).status).toBe(429);
+    expect((await tryJoin(code, freshIp(), "right")).status).toBe(200);
+  });
+
+  // workerd may run these one after another. The lobby counts each guess before its hash anyway.
+  it("counts guesses sent at the same time", async () => {
+    const { code } = await register({ password: "right" });
+    const guesser = freshIp();
+    const results = await Promise.all([...Array(10).keys()].map((i) => tryJoin(code, guesser, `g${i}`)));
+    expect(results.filter((r) => r.status === 403).length).toBe(5);
+    expect(results.filter((r) => r.status === 429).length).toBe(5);
+  });
+
+  it("limits guesses from all addresses together to 30 a minute", async () => {
+    const t0 = 1_800_000_000_000;
+    await setLobbyClock(t0);
+    const { code } = await register({ password: "right" });
+    for (let i = 0; i < 30; i++) expect((await tryJoin(code, freshIp(), `g${i}`)).status).toBe(403);
+    expect((await tryJoin(code, freshIp(), "right")).status).toBe(429);
+    await setLobbyClock(t0 + 60_000);
+    expect((await tryJoin(code, freshIp(), "right")).status).toBe(200);
   });
 
   it("answers unknown_game for a game that is not open", async () => {

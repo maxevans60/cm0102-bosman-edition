@@ -138,6 +138,14 @@ describe("free plan: full today", () => {
     expect((await expectGameSafe(res)).error).toBe("full_today");
   });
 
+  it.each(["Worker exceeded CPU time limit.", "Durable Object exceeded its memory limit and was reset."])(
+    "answers unavailable for '%s'",
+    async (msg) => {
+      const res = await worker.fetch(new Request(`${BASE}/v1/games`), brokenEnv(msg));
+      expect((await expectGameSafe(res)).error).toBe("unavailable");
+    },
+  );
+
   it("answers unavailable for any other server failure, with no detail", async () => {
     const res = await worker.fetch(new Request(`${BASE}/v1/games`), brokenEnv("internal error 203.0.113.9"));
     expect(res.status).toBe(503);

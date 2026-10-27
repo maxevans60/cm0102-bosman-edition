@@ -19,6 +19,10 @@ describe("word filter", () => {
     "Spicy Wings",
     "Fukuoka",
     "Pakistan XI",
+    "Kike Garcia",
+    "Twatt",
+    "Fuks",
+    "Scunthorpe Utd",
   ])("allows %s", (name) => {
     expect(nameAllowed(name)).toBe(true);
   });
@@ -37,6 +41,12 @@ describe("word filter", () => {
     "wanker",
     "Hitler Youth",
     "n1gger",
+    "f*ck",
+    "c*nt",
+    "sh*t FC",
+    "cuntface",
+    "shitbag",
+    "phuck",
   ])("rejects %s", (name) => {
     expect(nameAllowed(name)).toBe(false);
   });

@@ -45,7 +45,8 @@ export function sameBytes(a: Uint8Array, b: Uint8Array): boolean {
   return crypto.subtle.timingSafeEqual(a, b);
 }
 
-const PBKDF2_ITERATIONS = 100_000; // the most that Workers allow
+// Hashes live in memory only, so a moderate count keeps the lobby quick under many joins.
+const PBKDF2_ITERATIONS = 20_000;
 
 export async function hashPassword(password: string, salt: Uint8Array): Promise<Uint8Array> {
   const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
