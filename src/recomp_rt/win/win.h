@@ -87,6 +87,15 @@ void win_data_set_changed(void);
 const char *win_data_set_dir(void);     /* the host folder of the data set, "" for the game's own Data */
 const char *win_databases_root(void);   /* the folder that holds Databases: the save folder */
 void net_lobby_install(void);           /* net_lobby.c: online games in the game list, at the first WSAStartup */
+/* net_session.c (0.7.0 slice 6): drop in, drop out and host quit. */
+void net_session_turn(void);            /* at each human turn */
+void net_session_game_ends(void);       /* at free_game_data 0x82ff40, before it: the host's save */
+void net_session_tick(void);            /* at each network call of the game */
+int net_session_hosting(void);          /* 1 while this game hosts a network game */
+int net_session_defer_quit(void);       /* a window close or the script's quit: 1 when the host saves first */
+int net_session_screen_idle(void);      /* at the screen loop's poll: 1 when the host saved and now quits */
+int net_session_quit_overdue(void);     /* 1 when a deferred quit waited too long for the screen loop */
+void win_quit_now(void);                /* user32.c: saves the window place and ends the program with code 0 */
 
 /* Sound (dsound.c): 0 mutes every sound while the window lacks focus, 1 makes them heard again. */
 void win_sound_focus(int focused);

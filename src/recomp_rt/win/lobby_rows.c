@@ -224,18 +224,24 @@ int lr_arrived(const uint8_t *p, long n, uint32_t addr)
 static const char *const months[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-/* The text of a lobby row: the name, then the season, the day and the managers online, in 49 bytes. A number
- * from 2 goes at the end of a row whose text another row has. */
+/* The text of a lobby row: the name, then the season, the day, the managers online and Away, in 49 bytes. A number
+ * from 2 goes at the end of a row whose text another row has. When the name would keep fewer than 8 characters,
+ * the day goes. */
 static void row_text(char *out, const LobbyGame *g, int number)
 {
-    char more[64];
+    char more[80];
     int y = 0, m = 0, d = 0;
     sscanf(g->day, "%d-%d-%d", &y, &m, &d);
-    int n = snprintf(more, sizeof more, "  %d/%02d", g->season, (g->season + 1) % 100);
-    if (m >= 1 && m <= 12 && d >= 1) n += snprintf(more + n, sizeof more - (size_t)n, " %d %s", d, months[m - 1]);
-    n += snprintf(more + n, sizeof more - (size_t)n, "  %d online", g->managers_online);
-    if (g->password) n += snprintf(more + n, sizeof more - (size_t)n, ", password");
-    if (number > 1) snprintf(more + n, sizeof more - (size_t)n, " (%d)", number);
+    for (int with_day = 1; with_day >= 0; with_day--) {
+        int n = snprintf(more, sizeof more, "  %d/%02d", g->season, (g->season + 1) % 100);
+        if (with_day && m >= 1 && m <= 12 && d >= 1)
+            n += snprintf(more + n, sizeof more - (size_t)n, " %d %s", d, months[m - 1]);
+        n += snprintf(more + n, sizeof more - (size_t)n, "  %d online", g->managers_online);
+        if (g->away_n) n += snprintf(more + n, sizeof more - (size_t)n, ", %d away", g->away_n);
+        if (g->password) n += snprintf(more + n, sizeof more - (size_t)n, ", password");
+        if (number > 1) snprintf(more + n, sizeof more - (size_t)n, " (%d)", number);
+        if (49 - (int)strlen(more) >= 8) break;
+    }
     int room = 49 - (int)strlen(more);
     snprintf(out, 50, "%.*s%s", room > 8 ? room : 8, g->name, more);
 }

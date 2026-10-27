@@ -132,23 +132,26 @@ static void test_json(void)
     snprintf(g.clubs[0], LOBBY_TEXT, "M\xe1laga");
     snprintf(g.clubs[1], LOBBY_TEXT, "Arsenal");
     g.free_seats = 14, g.managers_online = 2;
+    g.away_n = 1;
+    snprintf(g.away[0], LOBBY_TEXT, "Arsenal");
     char json[4096];
     CHECK(lobby_game_json(json, sizeof json, &g, "pw", NULL, NULL) > 0 &&
           strstr(json, "\"name\":\"K\\u00f6ln \\\"League\\\"\"") && strstr(json, "\"password\":\"pw\"") &&
           strstr(json, "\"humanClubs\":[\"M\\u00e1laga\",\"Arsenal\"]") && strstr(json, "\"season\":2002") &&
-          !strstr(json, "hostToken"), "registration JSON: %s", json);
+          strstr(json, "\"awayClubs\":[\"Arsenal\"]") && !strstr(json, "hostToken"), "registration JSON: %s", json);
 
     /* The list answer, with UTF-8 text as the lobby sends it. */
     const char *list = "{\"games\":[{\"code\":\"FP26DG7H\",\"name\":\"K\xc3\xb6ln\",\"hostName\":\"PC-0000abcd\","
                        "\"version\":\"0.7.0\",\"database\":\"3.9.68\",\"season\":2002,\"day\":\"2002-08-14\","
-                       "\"humanClubs\":[\"Arsenal\",\"Lyon\"],\"freeSeats\":14,\"managersOnline\":2,"
+                       "\"humanClubs\":[\"Arsenal\",\"Lyon\"],\"awayClubs\":[\"Lyon\"],\"freeSeats\":14,\"managersOnline\":2,"
                        "\"password\":true,\"extra\":{\"a\":[1,2]}},{\"code\":\"B\",\"name\":\"xĀ\"}],"
                        "\"heartbeatSeconds\":30}";
     LobbyRow rows[4];
     int n = lobby_parse_games(list, rows, 4);
     CHECK(n == 2 && !strcmp(rows[0].code, "FP26DG7H") && !strcmp(rows[0].g.name, "K\xf6ln") &&
           rows[0].g.season == 2002 && rows[0].g.managers_online == 2 && rows[0].g.password &&
-          rows[0].g.clubs_n == 2 && !strcmp(rows[0].g.clubs[1], "Lyon") && !strcmp(rows[1].g.name, "x?"),
+          rows[0].g.clubs_n == 2 && !strcmp(rows[0].g.clubs[1], "Lyon") &&
+          rows[0].g.away_n == 1 && !strcmp(rows[0].g.away[0], "Lyon") && !strcmp(rows[1].g.name, "x?"),
           "list parse: n=%d name=%s", n, n > 0 ? rows[0].g.name : "");
     CHECK(lobby_parse_games("{\"games\":[{\"code\":", rows, 4) < 0, "a cut answer is refused");
     static char deep[40000];
@@ -257,12 +260,13 @@ static void test_rows(void)
     snprintf(rows[1].g.version, 25, "0.7.1");
     snprintf(rows[1].g.day, 11, "2003-10-14");
     rows[1].g.season = 2003, rows[1].g.managers_online = 3, rows[1].g.password = 1;
+    rows[1].g.away_n = 1;                                            /* slice 6: one human manager is Away */
     lr_lobby(rows, 2, LH_OK);
     CHECK(drain(names, addrs, 16) == 0, "the lobby rows wait for the LAN answers");
     hn_sleep(LR_LOBBY_WAIT_MS);
     int n = drain(names, addrs, 16);
-    CHECK(n == 1 && strstr(names[0], "2003/04 14 Oct  3 online, password") && strlen(names[0]) <= 49 &&
-          !strncmp(names[0], "Sunday League", 13), "one lobby row: %d %s", n, n ? names[0] : "");
+    CHECK(n == 1 && strstr(names[0], "  2003/04  3 online, 1 away, password") && strlen(names[0]) <= 49 &&
+          !strncmp(names[0], "Sunday Leagu", 12), "one lobby row: %d %s", n, n ? names[0] : "");
     int full;
     const LobbyRow *r = n ? lr_row_of(addrs[0], &full) : NULL;
     CHECK(r && !full && !strcmp(r->g.version, "0.7.1") && ((const uint8_t *)&addrs[0])[0] == 0,

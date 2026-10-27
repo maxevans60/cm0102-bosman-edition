@@ -65,6 +65,10 @@ typedef struct {
     int broadcast;                 /* SO_BROADCAST, for the UDP send socket */
     int accepted;                  /* a joiner's connection on this host */
     int listening;
+    int kicked;                    /* the host removed this human manager (nc_kick): the socket is closed */
+    int quit_at;                   /* a joiner's connection that broke: 1 + the bytes of the quit packet given */
+    int exit_seen;                 /* the host screen now shown holds the confirm of the joiner's own Exit Game */
+    char tail[32];                 /* the last bytes from the host, for a text cut between two reads */
     hn_sock s;
     hn_sock out;                   /* UDP: the send socket, else HN_INVALID */
     uint32_t net, mask;            /* UDP: the adapter's subnet, for the shared socket's datagrams */
@@ -85,6 +89,7 @@ static uint64_t last_log;
 static int log_ready;
 
 static int connect_ms = NC_CONNECT_MS;
+static int host_left;               /* nc_host_left */
 
 static const NcHooks *hooks;
 static int in_tick;
@@ -357,7 +362,7 @@ int nc_close(uint32_t h)
         hn_wait(k->s, 0, 50);
     if (log_file && k->connected) log_line(k, "close", &k->n);
     if (k->listening) close_pending(h);
-    hn_close(k->s);
+    if (k->s != HN_INVALID) hn_close(k->s);
     if (k->out != HN_INVALID) hn_close(k->out);
     free(k->q);
     memset(k, 0, sizeof *k);
@@ -378,6 +383,7 @@ int nc_readable(uint32_t h, uint32_t *n)
     Sock *k = find(h);
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
+    if (k->kicked) return fail(HN_CONNRESET);
     return hn_readable_bytes(k->s, n) < 0 ? fail_host() : 0;
 }
 
@@ -457,6 +463,9 @@ static void connected(Sock *k, uint32_t addr, uint16_t port)
     k->peer = addr, k->peer_port = port;
     k->opened = hn_ms();
     hn_set_flag(k->s, HN_NODELAY, 1);
+    /* The game sets SO_KEEPALIVE (0x8ae50c, 0x8ae79e), whose system timers find a dead peer after about two
+     * hours. These find it in under a minute (0.7.0 slice 6). */
+    hn_set_keepalive(k->s, NC_KEEP_IDLE_S, NC_KEEP_INTERVAL_S, NC_KEEP_COUNT);
     if (log_file) log_line(k, "open", &k->n);
 }
 
@@ -647,6 +656,7 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     if (!k->stream) return fail(10045);                          /* WSAEOPNOTSUPP: the game never does */
     refused = NC_REFUSED_NONE;
     refused_version[0] = 0;
+    host_left = 0;
     if (hooks && hooks->connect && hooks->connect(addr, port) < 0) return -1;
     if (hn_connect(k->s, addr, port, connect_ms) < 0) return fail_host();
     if (identity && !is_loopback(addr) && hello(k) < 0) {
@@ -679,23 +689,118 @@ long nc_send(uint32_t h, const void *buf, uint32_t n)
 
 static uint64_t resets_in;   /* opcode 0 packets that the game read from all TCP connections (nc_resets_in) */
 
+/* A joiner's connection to its host, not the loopback test's. */
+static int to_host(const Sock *k) { return k->stream && k->connected && !k->accepted && !is_loopback(k->peer); }
+
+/* The text of the confirm of Exit Game in a network game (0xa5a820, pushed at 0x764392 for player 0..15 when the
+ * player is not 0, research note 2026-10-14-start-screen-helpers.md section 8). The host sends it in the screen
+ * of the joiner's own Exit Game. */
+static const char exit_text[] = "Exit the network game";
+
+static void watch_exit(Sock *k, const uint8_t *p, uint32_t n)
+{
+    size_t keep = sizeof exit_text - 2, have = strlen(k->tail);
+    char b[sizeof k->tail + 4096];
+    while (n) {
+        uint32_t take = n < 4096 ? n : 4096;
+        memcpy(b, k->tail, have);
+        memcpy(b + have, p, take);
+        size_t len = have + take;
+        for (size_t i = 0; i + sizeof exit_text - 1 <= len; i++)
+            if (!memcmp(b + i, exit_text, sizeof exit_text - 1)) k->exit_seen = 1;
+        have = len < keep ? len : keep;
+        memcpy(k->tail, b + len - have, have);
+        k->tail[have] = 0;
+        for (size_t i = 0; i < have; i++)
+            if (!k->tail[i]) k->tail[i] = 1;    /* a zero byte in the data must not end the kept text */
+        p += take, n -= take;
+    }
+}
+
+/* The quit packet 0x04 of disconnect_network 0x7fc690 (0x7fc738..0x7fc766), with its length. */
+static const uint8_t quit_packet[5] = {1, 0, 0, 0, 4};
+
 long nc_recv(uint32_t h, void *buf, uint32_t n)
 {
     Sock *k = find(h);
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
+    if (k->kicked) return fail(HN_CONNRESET);
+    if (k->quit_at >= 1 && k->quit_at <= (int)sizeof quit_packet) {
+        uint32_t take = (uint32_t)sizeof quit_packet - (uint32_t)(k->quit_at - 1);
+        if (take > n) take = n;
+        memcpy(buf, quit_packet + k->quit_at - 1, take);
+        k->quit_at += (int)take;
+        frame_feed(&k->fi, buf, take);
+        return (long)take;
+    }
+    if (k->quit_at) return fail(k->dead ? k->dead : HN_CONNRESET);
     /* Bytes that arrived before a send broke the connection still count, for example the host's quit
      * packet 0x04 (0x7fc738). */
     long r = hn_recv(k->s, buf, n);
     if (r < 0 && k->blocking && hn_error() == HN_WOULDBLOCK && !k->dead && hn_wait(k->s, 1, NC_CONNECT_MS) > 0)
         r = hn_recv(k->s, buf, n);
+    int broke = r == 0 || (r < 0 && (hn_error() != HN_WOULDBLOCK || k->dead));
+    if (broke && to_host(k) && frame_between(&k->fi) && n) {
+        /* The host quit with no quit packet: it crashed, or its line dropped. The joiner's loop 0x7fdc00 would
+         * see it only at its next click, through "Unable to send data" (0x569456). It gets the host's own quit
+         * packet in place of the close, and ends as at a quit (0x7fdeba). */
+        if (!k->dead) k->dead = r == 0 ? HN_CONNRESET : hn_error();
+        fprintf(stderr, "recomp: net: the connection to the host broke (%d): the joiner gets the quit packet\n", k->dead);
+        host_left = 1;
+        k->quit_at = 1;
+        return nc_recv(h, buf, n);
+    }
     if (r < 0 && k->dead && hn_error() == HN_WOULDBLOCK) return fail(k->dead);
     if (r < 0) return fail_host();
     k->n.bytes_in += (uint64_t)r;
-    uint64_t resets = k->fi.op_packets[0];
+    uint64_t resets = k->fi.op_packets[0], quits = k->fi.op_packets[4];
     k->n.packets_in += frame_feed(&k->fi, buf, (uint32_t)r);
     resets_in += k->fi.op_packets[0] - resets;
+    if (to_host(k)) {
+        if (k->fi.op_packets[0] != resets) k->exit_seen = 0, k->tail[0] = 0;   /* a new host screen */
+        watch_exit(k, buf, (uint32_t)r);
+        /* A quit packet ends the joiner's loop. The host sends it at its own quit (0x7fc738), and also when the
+         * joiner says Yes to its own Exit Game: the menu bar input 0x7615d0 returns -12 for a remote channel
+         * (0x762af8..0x762b04), and the screen loop sends 0x04 to that joiner (0x7fcd79..0x7fce2e). */
+        if (k->fi.op_packets[4] != quits) host_left = !k->exit_seen;
+    }
     return r;
+}
+
+int nc_host_left(void) { return host_left; }
+void nc_host_left_clear(void) { host_left = 0; }
+
+int nc_peer_list(uint32_t *handle, uint32_t *addr, uint16_t *port, int max)
+{
+    int n = 0;
+    for (int i = 0; i < MAX_SOCKS && n < max; i++) {
+        const Sock *k = &socks[i];
+        if (!k->handle || !k->accepted || !k->connected || k->dead || k->kicked) continue;
+        if (handle) handle[n] = k->handle;
+        if (addr) addr[n] = k->peer;
+        if (port) port[n] = k->peer_port;
+        n++;
+    }
+    return n;
+}
+
+int nc_kick(uint32_t h)
+{
+    Sock *k = find(h);
+    if (!k || !k->accepted || !k->connected || k->kicked) return -1;
+    char ip[24];
+    ip_text(ip, sizeof ip, k->peer);
+    fprintf(stderr, "recomp: net: the host kicks the human manager at %s:%u\n", ip, k->peer_port);
+    if (log_file) log_line(k, "close", &k->n);
+    /* The game's next recv or send on this handle fails, and Network::receive_packet 0x77af20 frees the slot and
+     * calls the disconnect callback (0x77b4e9..0x77b508): the original's leave path puts the club on holiday. */
+    hn_close(k->s);
+    k->s = HN_INVALID;
+    k->kicked = 1;
+    k->dead = HN_CONNRESET;
+    k->qlen = k->qoff = 0;
+    return 0;
 }
 
 uint64_t nc_resets_in(void) { return resets_in; }

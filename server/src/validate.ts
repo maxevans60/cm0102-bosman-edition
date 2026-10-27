@@ -23,6 +23,8 @@ export interface PublicInfo {
   season: number;
   day: string;
   humanClubs: string[];
+  /** The clubs of humanClubs whose human manager is Away: their connection dropped, and the club is on holiday. */
+  awayClubs: string[];
   freeSeats: number;
   managersOnline: number;
 }
@@ -34,7 +36,7 @@ export interface RegisterInput extends PublicInfo {
   hostToken: string | null;
 }
 
-export type HeartbeatInput = Partial<Pick<PublicInfo, "season" | "day" | "humanClubs" | "freeSeats" | "managersOnline">>;
+export type HeartbeatInput = Partial<Pick<PublicInfo, "season" | "day" | "humanClubs" | "awayClubs" | "freeSeats" | "managersOnline">>;
 
 export interface JoinInput {
   version: string;
@@ -82,17 +84,17 @@ function day(o: Record<string, unknown>): string {
   return v;
 }
 
-function clubs(o: Record<string, unknown>): string[] {
-  const v = o.humanClubs;
-  if (!Array.isArray(v) || v.length > MAX_MANAGERS) throw new FieldError("humanClubs");
+function clubs(o: Record<string, unknown>, field: "humanClubs" | "awayClubs" = "humanClubs"): string[] {
+  const v = o[field];
+  if (!Array.isArray(v) || v.length > MAX_MANAGERS) throw new FieldError(field);
   return v.map((_, i) => {
     try {
       return text(v as unknown as Record<string, unknown>, String(i), 40);
     } catch {
-      throw new FieldError("humanClubs");
+      throw new FieldError(field);
     }
   }).map((club) => {
-    if (!nameAllowed(club)) throw new FieldError("humanClubs", "name_not_allowed");
+    if (!nameAllowed(club)) throw new FieldError(field, "name_not_allowed");
     return club;
   });
 }
@@ -121,6 +123,7 @@ export function parseRegister(body: unknown): RegisterInput {
     season: int(o, "season", 1900, 2200),
     day: day(o),
     humanClubs: clubs(o),
+    awayClubs: o.awayClubs === undefined ? [] : clubs(o, "awayClubs"),
     freeSeats: int(o, "freeSeats", 0, MAX_MANAGERS),
     managersOnline: int(o, "managersOnline", 0, MAX_MANAGERS),
     password: password(o),
@@ -142,6 +145,7 @@ export function parseHeartbeat(body: unknown): HeartbeatInput {
   if (o.season !== undefined) out.season = int(o, "season", 1900, 2200);
   if (o.day !== undefined) out.day = day(o);
   if (o.humanClubs !== undefined) out.humanClubs = clubs(o);
+  if (o.awayClubs !== undefined) out.awayClubs = clubs(o, "awayClubs");
   if (o.freeSeats !== undefined) out.freeSeats = int(o, "freeSeats", 0, MAX_MANAGERS);
   if (o.managersOnline !== undefined) out.managersOnline = int(o, "managersOnline", 0, MAX_MANAGERS);
   return out;

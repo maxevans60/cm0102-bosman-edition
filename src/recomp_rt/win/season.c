@@ -441,6 +441,7 @@ void o_0082ff40(void);
  * year (0x8304ec). The values go back to those of a new game first, so that date is the new game's. */
 RT_WRAP(0082ff40, free_game)
 {
+    net_session_game_ends();                    /* 0.7.0 slice 6: the host's save, while the game is whole */
     game_on = 0;
     season_dates_forget();
     rt_season_year = (uint32_t)new_year;

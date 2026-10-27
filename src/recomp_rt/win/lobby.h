@@ -20,6 +20,8 @@ typedef struct {
     char day[11];                  /* YYYY-MM-DD */
     char clubs[LOBBY_CLUBS][LOBBY_TEXT];
     int clubs_n, free_seats, managers_online;
+    char away[LOBBY_CLUBS][LOBBY_TEXT];   /* the clubs whose human manager is Away (on holiday after a drop) */
+    int away_n;
     int password;                  /* in the list: the game has a password */
 } LobbyGame;
 

@@ -32,6 +32,7 @@ describe("register", () => {
       season: 2001,
       day: "2001-08-11",
       humanClubs: ["Arsenal", "Scunthorpe United"],
+      awayClubs: [],
       freeSeats: 14,
       managersOnline: 2,
       password: true,
@@ -136,6 +137,21 @@ describe("heartbeat and expiry", () => {
     }
     const game = (await json(await call(`/v1/games/${code}`))).game;
     expect(game).toMatchObject({ day: "2001-08-18", managersOnline: 3, freeSeats: 13, humanClubs: ["Arsenal"] });
+  });
+
+  it("lists the Away clubs of a heartbeat, and none by default", async () => {
+    const { code, hostToken } = await register();
+    expect((await json(await call(`/v1/games/${code}`))).game.awayClubs).toEqual([]);
+    const res = await call(`/v1/games/${code}/heartbeat`, {
+      method: "POST",
+      token: hostToken,
+      body: { humanClubs: ["Arsenal", "Scunthorpe United"], awayClubs: ["Scunthorpe United"], managersOnline: 1 },
+    });
+    expect(res.status).toBe(200);
+    const game = (await json(await call(`/v1/games/${code}`))).game;
+    expect(game).toMatchObject({ awayClubs: ["Scunthorpe United"], managersOnline: 1 });
+    const bad = await call(`/v1/games/${code}/heartbeat`, { method: "POST", token: hostToken, body: { awayClubs: "Arsenal" } });
+    expect(bad.status).toBe(400);
   });
 
   it("accepts a heartbeat with no body", async () => {

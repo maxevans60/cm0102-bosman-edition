@@ -85,6 +85,7 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 | `season` | integer | Start year of the season, 1900 to 2200 |
 | `day` | string | The game date, `YYYY-MM-DD` |
 | `humanClubs` | string array | At most 16 club names, each 1 to 40 characters. Word filter. |
+| `awayClubs` | string array | Optional, empty by default. The clubs of `humanClubs` whose human manager is Away: the connection dropped and the club is on holiday. The same rules as `humanClubs`. |
 | `freeSeats` | integer | 0 to 16 |
 | `managersOnline` | integer | 0 to 16 |
 | `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash (20,000 rounds), in memory. |
@@ -98,11 +99,11 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 - Keep `hostToken` secret. Heartbeat, close and the host relay connection need it.
 - To register the same game again (see the heartbeat), add `code` and `hostToken` to the body. The answer is 200 with the same code and token.
 
-`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. The lobby keeps games in memory only, so this also happens after a lobby restart or a deploy. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
+`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `awayClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. The lobby keeps games in memory only, so this also happens after a lobby restart or a deploy. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
 
 `DELETE /v1/games/<code>`, with the header `Authorization: Bearer <hostToken>`, closes the game and its relay. The host sends it when it quits.
 
-`GET /v1/games` gives `{"games": [...], "heartbeatSeconds": 30}`. Each game is `{"code", "name", "hostName", "version", "database", "season", "day", "humanClubs", "freeSeats", "managersOnline", "password": true|false}`. The list holds at most 200 games, with the most managers online first.
+`GET /v1/games` gives `{"games": [...], "heartbeatSeconds": 30}`. Each game is `{"code", "name", "hostName", "version", "database", "season", "day", "humanClubs", "awayClubs", "freeSeats", "managersOnline", "password": true|false}`. The list holds at most 200 games, with the most managers online first.
 
 `GET /v1/games/<code>` gives `{"game": {...}}` for one game, in the same form. The invite link page uses it.
 

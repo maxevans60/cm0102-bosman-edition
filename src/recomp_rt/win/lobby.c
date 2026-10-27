@@ -102,6 +102,12 @@ static void put_state(Out *o, const LobbyGame *g)
         put_str(o, g->clubs[i]);
     }
     put(o, "%s", "]");
+    put(o, "%s", ",\"awayClubs\":[");
+    for (int i = 0; i < g->away_n; i++) {
+        if (i) put(o, "%s", ",");
+        put_str(o, g->away[i]);
+    }
+    put(o, "%s", "]");
     put_int(o, "freeSeats", g->free_seats);
     put_int(o, "managersOnline", g->managers_online);
 }
@@ -279,7 +285,10 @@ static int game_key(J *j, const char *k, void *ctx)
         g->password = !strncmp(j->p, "true", 4);
         return skip(j);
     }
-    if (!strcmp(k, "humanClubs")) {
+    if (!strcmp(k, "humanClubs") || !strcmp(k, "awayClubs")) {
+        int away = k[0] == 'a';
+        char (*list)[LOBBY_TEXT] = away ? g->away : g->clubs;
+        int *count = away ? &g->away_n : &g->clubs_n;
         ws(j);
         if (*j->p != '[') return skip(j);
         j->p++;
@@ -287,7 +296,7 @@ static int game_key(J *j, const char *k, void *ctx)
         while (*j->p && *j->p != ']') {
             char club[LOBBY_TEXT];
             if (!read_str(j, club, sizeof club)) return 0;
-            if (g->clubs_n < LOBBY_CLUBS) memcpy(g->clubs[g->clubs_n++], club, sizeof club);
+            if (*count < LOBBY_CLUBS) memcpy(list[(*count)++], club, sizeof club);
             ws(j);
             if (*j->p == ',') j->p++, ws(j);
         }
