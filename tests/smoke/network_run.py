@@ -74,6 +74,13 @@ import urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import smoke_run  # noqa: E402
 
+# Cloudflare answers the deployed server's requests with "error code: 1010" (403) when they carry Python's own
+# User-Agent "Python-urllib/3.x" (checked 2026-10-27); the game's "Bosman-Edition" passes. Every urlopen of the
+# scripts that import this module sends this one.
+_opener = urllib.request.build_opener()
+_opener.addheaders = [("User-Agent", "Bosman-Edition-tests")]
+urllib.request.install_opener(_opener)
+
 START = [
     smoke_run.INTRO_CLICK,
     smoke_run.SETTINGS_WAIT,

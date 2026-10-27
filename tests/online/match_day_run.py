@@ -12,8 +12,10 @@ a network game and takes its manager back. One joiner joins (through the LAN add
 relay), clicks Add Manager, makes a manager with the second club of Select Team and clicks Finish; then the host
 clicks Finish and takes Holiday until next match, so that the assistant answers the Henry bid that blocks
 Continue Game, and the host is back for the friendly. Then for --minutes both
-games repeat three inputs every 6 s: Space (Continue Game), a click at (45, 120) (Continue Game, and on the match
-screen Kick Off, Re-start and Continue Game) and a click at (705, 573) (Yes of "Proceed to the match?"). Each game
+games repeat their inputs: Space (Continue Game), a click at (45, 120) (Continue Game, and on the match screen
+Kick Off, Re-start and Continue Game) and a click at (705, 573) (Yes of "Proceed to the match?"), every 6 s. The
+joiner also clicks Yes, then answers a bid for its players (Respond at 172, 230, Reject at 502, 573, then the Yes),
+every 10 s. Each game
 dumps its screen once a minute.
 
 The traffic logs (RECOMP_NET_LOG) give the bytes and packets of each 10 s. The run prints:
@@ -45,13 +47,24 @@ PERIOD = 6000
 BATCHES_IN_10S = 200                     # one batch each 50 ms at most
 
 
-def loop_steps(t0, minutes, who):
-    steps = []
-    for i in range(int(minutes * 60000 // PERIOD)):
-        t = t0 + i * PERIOD
-        steps += [f"{t} press space", f"{t + 2000} click 45 120", f"{t + 4000} click 705 573"]
+# The joiner's club gets bids for its players, which block its Continue Game, and the host then shows "Waiting
+# For Players" (run matchday3, 2026-10-27). The joiner answers each as smoke_run.MATCH_STEPS answers the Henry
+# bid: Respond on the news item, Reject, Yes. (502, 573) is also No on "Proceed to the match?", so each round
+# clicks Yes (705, 573) before Respond and Reject (run matchday4: No first kept the joiner from its own friendly,
+# and the host waited on Latest Scores). The host is on holiday to its match, so its assistant answers its bids.
+BID = ["click 172 230", "click 502 573"]          # Respond, Reject (Back on most other screens)
+
+
+def loop_steps(t0, minutes, who, bids=False):
+    steps, period = [], PERIOD + (4000 if bids else 0)
+    for i in range(int(minutes * 60000 // period)):
+        t = t0 + i * period
+        steps += [f"{t} press space", f"{t + 1500} click 45 120"]
+        if bids:
+            steps += [f"{t + 3000} click 705 573", f"{t + 5000} {BID[0]}", f"{t + 7000} {BID[1]}"]
+        steps += [f"{t + period - 2000} click 705 573"]
         if i % 10 == 0:
-            steps.append(f"{t + 5000} dump {{d}}/{who}-loop-{i // 10:03d}.bmp")
+            steps.append(f"{t + period - 1000} dump {{d}}/{who}-loop-{i // 10:03d}.bmp")
     return steps + [f"{t0 + int(minutes * 60000) + 3000} quit"]
 
 
@@ -142,7 +155,7 @@ def main(argv):
             # host's Finish at 90 s; then the loop.
             steps = snr.join_new(o, 1, 1, 60000 - 30000, 10 ** 9, add=True)
             steps = [s for s in steps if not s.endswith(" quit") and "-4-game" not in s]
-            steps += loop_steps(finish + 30000, minutes, "join1")
+            steps += loop_steps(finish + 30000, minutes, "join1", bids=True)
             jp, jerr = snr.start(o, keep, "join1", steps, shots, env, {"display": "classic"})
         for p in (jp, hp):
             if p:
