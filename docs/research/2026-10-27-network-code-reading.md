@@ -1,6 +1,6 @@
 # Research: the original's network code (0.7.0 slice 1, #45)
 
-Status: written 2026-10-27 for slice 1 of `docs/specs/2026-10-27-online-play-0.7.0-spec.md`. No game code changes. No build ran, because the 0.6.0 gates hold this Mac.
+Status: written 2026-10-27 for slice 1 of `docs/specs/2026-10-27-online-play-0.7.0-spec.md`. No game code changes. No build ran, because the 0.6.0 gates hold this Mac. Section 10 holds the results of slice 2 (real sockets).
 
 Method: I disassembled the original 3.9.68 (`clean-3968/cm0102.exe`) with capstone and pefile, and resolved each import thunk to its IAT entry. Ghidra stayed closed for the gates. Every address below is one I read. Function map names are given as hints only. Where a name in this note differs from the function map, this note wins.
 
@@ -432,3 +432,70 @@ Same-save risk: none that I found. The `Network` object exists only after a netw
 ### Opinion
 
 Medium. Each site is easy, but the sort and BYE code use derived offsets, so one missed site corrupts the list or the host name. Patching the array part needs a test that fills the list with 50 ACKs, sends some BYEs and joins the last entry. The risk to the host and join logic is low if every site is covered. The join uses the address text of the clicked name, so a wrong address offset joins the wrong host. A cheaper option keeps the cap at 9. In that case the runtime answers each REQ with the 9 games that best fit (for example, open seats first), and the rest wait for Refresh.
+
+## 11. Slice 2 results: real sockets (2026-10-27)
+
+Slice 2 built items 1 to 11 and 13 of section 9 in the runtime: `src/recomp_rt/win/net.c` (the 18 calls and `RT_REPLACE` of 0x8aee20), `src/recomp_rt/win/net_core.c` (handles, queues, counts) and `src/recomp_rt/host/net_posix.c` and `net_win32.c`. Item 12 stays as Max decided (Q32): two games on one Mac meet through the Mac's LAN address, and the loopback test 0x8af290 runs unchanged. `tools/recomp/widescreen.py` no longer patches 0x8aeed3..0x8aef00, because those instructions are inside the replaced 0x8aee20.
+
+### What the tests showed
+
+1. UDP on macOS (item 11), tested with a small C program before the build: a socket bound to the adapter address gets no subnet broadcast. Two sockets bound to `*:6667` with `SO_REUSEPORT` both get a broadcast, but a datagram sent to one address and port goes to the socket that bound first. So on one Mac the host's ACK reply (0x8aed5a) would go to the host itself. The runtime therefore gives each UDP socket of the game two host sockets: a shared one on `*:6667` that takes broadcasts, and one on the adapter address with a system port that sends. The reply goes back to that port. Each shared socket gets every broadcast, but the game has one UDP socket for each adapter (0x8aea80). So a shared socket keeps only datagrams from its adapter's subnet, as a socket bound to the adapter address does on Windows. Without that, the host answered one REQ once for each adapter, and a joiner that got one BYE for each adapter added a stale row for each copy after the first (0x77b448). The unit test `net_core` checks the reply path, the broadcast to two games and the subnet filter on macOS, and on Linux in an ubuntu 22.04 container.
+2. The game list on this Mac shows the host's game three times, once for each adapter whose ACK arrives (192.168.68.106 and the two Parallels adapters 10.211.55.2 and 10.37.129.2). The rows have the same name, and the list sorts by name (0x77b1d2), so the first row can be an adapter that another computer cannot reach. The original does the same on a host with several adapters. Slice 4 can drop adapters that are not on the joiner's LAN.
+3. Manager Status shows "Server IP Address" with all four addresses of this Mac (0x77a980 through the new 0x8aee20), the Tailscale address 100.110.189.44 included.
+4. A wrong address no longer freezes the game: connect gives up after 4 s (item 8, unit test with 192.0.2.1).
+5. Two games that start network play at the same moment on one computer collide in the loopback test: both bind 127.0.0.1:6667 for a moment, and one turns network play off (it showed screen 0x591b70). The two-game run starts its joiners 4 s apart. This cannot happen between two computers.
+
+### Two-game run
+
+`tests/smoke/network_run.py` starts a host and joiners with timed clicks. Each joiner types the host's LAN address in the Join field, clicks Next, and checks the host's screens against the host's own. `tests/smoke/network_wine.sh` runs the same with the Windows build under wine 6.0.3 in an ubuntu 22.04 linux/amd64 container, where the games meet on the container's address. Results, 2026-10-27:
+
+| Run | Result |
+|---|---|
+| Mac, host and 1 joiner | PASS: the joiner's Enter Name, and its Enter Name after its typed names went to the host and back, equal the host's own (0.00 % of pixels differ) |
+| Mac, host and 3 joiners (4 human managers) | PASS, the same for each joiner |
+| Windows build under wine, host and 1 joiner | PASS, the same |
+| Windows build under wine, host and 3 joiners | PASS, the same for each joiner |
+
+### Finding: one click acts on several host screens
+
+The opcode of a joiner's click packet is 6 (`Display::send_widget_click` 0x568560 writes it at 0x5685e4). In the client loop `run_network_client` 0x7fdc00, `Display::poll_input` 0x55f620 (called at 0x7fdf17) reports the widget under the mouse while the button is down. The loop sends a click when that widget differs from the last one it saw (0x7fdf2c), and a poll with no widget clears the last one (0x7fe1e8). Each new screen from the host clears the Display, so while the button stays down, every new screen gets the click again.
+
+On this Mac each script click stayed down for many host screens. The joiner sent 113 click packets for 6 script clicks, and the host sent a full screen for each one. The click on Next to join also reached the host's Enter Name as Next, and the host answered "Names Are Blank". Under wine, where each new screen comes after the click has ended, the joiner sent 3 click packets in the whole run, and the join gave no "Names Are Blank".
+
+On the original's WinSock, the length bytes went out at once and the body waited for the peer's delayed acknowledgement (up to 200 ms on Windows), so the next screen came after a normal click had ended. With real sockets on a LAN, and with the runtime's whole-packet sends and `TCP_NODELAY`, the next screen comes within milliseconds. A player's normal click then acts on two or more screens: Next on Enter Name can also click Next on Select Nationality.
+
+This is the original's input code, not the network layer, so slice 2 leaves it. It must be fixed before 0.7.0 ships, and it needs a decision on where. One option: the runtime reports the left button as up to `poll_input` in the client loop after the poll that sent a click, until the real button comes up. The two-game run clicks only where the next screen has no button, so its checks do not depend on it.
+
+### Traffic
+
+The runtime counts bytes, send calls and packets (4-byte length and body) for each TCP connection, and packets and bytes for each opcode. `RECOMP_NET_LOG=<file>` writes a line when a connection opens, every 10 s while it moves bytes, and at its close with the counts by opcode.
+
+The wine runs have no repeated clicks, so their figures are the real cost of a setup screen. Each run: the join, about 60 s on the setup screens with a few clicks, then the joiner quits.
+
+| Human managers | Each connection, host to joiner | Each connection, joiner to host | Host total out |
+|---|---|---|---|
+| 2 (host and 1 joiner) | 2,102 bytes, 14 packets, 70 send calls | 256 bytes, 4 packets | 2.1 KB in 69 s |
+| 4 (host and 3 joiners) | 2,098 to 2,340 bytes, 13 to 17 packets | 195 bytes, 3 packets | 6.5 KB in 62 s |
+
+By opcode, for one connection: each screen is opcodes 0 (reset, about 40 bytes), 1 (widgets, about 500 bytes), 2 (about 160 bytes) and 3 (draw, 5 bytes), so about 700 bytes and 4 packets for Enter Name or Manager Status. One or two opcode 9 packets (play a sound, 5 bytes). Each click is opcode 6, 62 to 69 bytes with its length.
+
+The Mac runs show the cost of the repeated clicks: about 70 KB and 430 packets from the host to each joiner in 15 s (for example 4,854, 55,600, 15,557 and 565 bytes for opcodes 0 to 3, 113 times each), answering 113 click packets.
+
+What the figures say:
+
+- A setup screen costs about 700 bytes, far below the estimate of section 8 (5 to 50 KB). Screens with long lists (player search, squads) are not measured yet and will be larger.
+- The host sends a screen only when a human manager clicks. A still screen costs nothing: the wine runs had 10 s periods with no bytes. The 30 s keepalive of section 3 adds one small packet.
+- Each joiner's connection carries its own screens, so the host's traffic grows with the number of joiners and with their clicks.
+- Each packet is 5 send calls of the game (section 3). The runtime holds the 4 length bytes and sends each packet in one system send.
+
+Not measured: a match with commentary and the days of a running game, because the runs stop at the setup screens. Slice 4 or 9 should add a run that plays a match day with two human managers, after the click fix.
+
+For the relay (slice 5): with batches of 50 ms, a click and its screen are one or two batches each way. The free-plan count then depends on the number of clicks in an evening, not on its length.
+
+### Windows
+
+The Windows build (mingw-w64, linked with ws2_32 and iphlpapi) passes the two-game run under wine with 1 and 3 joiners (table above). Under wine the game list showed one row, for the container's one adapter. The test on the Windows 11 virtual machine waits for the 0.6.0 gates (Q30).
+
+### Same-save sets
+
+With networking compiled in, the four same-save sets pass against `ref-builds/main-batchAX`: start.sav, prematch.sav, a new game and yeovil.sav with `--days 7`, each with every option run and ref-build equal to normal. The sets ran on the build before the review fixes, which changed only `net_core.c`, `net_win32.c`, `net.c` comments and the tests. start.sav passed again on the final build. ctest passes 50 of 50 on the Mac, with the new `net_core` test, and `net_core` passes on Linux in the container.
