@@ -1,0 +1,17 @@
+{
+  // Bosman Edition lobby and relay (0.7.0, slice 3). Max deploys: see README.md.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bosman-online",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-20",
+  // Privacy (Q26): no Workers Logs, so no stored request record holds an internet address.
+  "observability": { "enabled": false },
+  "durable_objects": {
+    "bindings": [
+      { "name": "LOBBY", "class_name": "Lobby" },
+      { "name": "RELAY", "class_name": "Relay" }
+    ]
+  },
+  // The free plan allows only SQLite-backed Durable Objects.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Lobby", "Relay"] }]
+}
