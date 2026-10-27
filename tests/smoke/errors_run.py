@@ -218,8 +218,8 @@ def main(argv):
                 t = run("lobby-down", by_row("lobby-down"), {"RECOMP_LOBBY_URL": closed_port(),
                                                              "RECOMP_TEST_NO_LAN_ROWS": "1"})
                 rows = nr.list_rows(os.path.join(shots, "lobby-down-stderr.txt"))
-                check(" Online games: the lobby does not answer" in rows, f"lobby-down: the list row: {rows}")
-                check(box_has(t, "join", "The lobby, which lists the online games, does not answer."),
+                check(" The lobby does not answer, try again later" in rows, f"lobby-down: the list row: {rows}")
+                check(box_has(t, "join", "The lobby, which lists the games online, does not answer."),
                       "lobby-down: Join gives the reason")
             if want("full-today"):
                 full = nr.FakeLobby(True)
@@ -229,7 +229,7 @@ def main(argv):
                       "full-today: the box")
             if want("game-gone"):
                 t = run("game-gone", typed("game-gone", "0.66.1.2"))
-                check(box_has(t, "join", "This online game is no longer in the list."), "game-gone: the box")
+                check(box_has(t, "join", "This network game is no longer in the list."), "game-gone: the box")
             if want("host-refused"):
                 t = run("host-refused", typed("host-refused", address))
                 check(box_has(t, "join", "No network game runs at this address now."), "host-refused: the box")
@@ -251,7 +251,7 @@ def main(argv):
                         s.close()
                 try:
                     t = run("create-port", host_to_leagues("create-port", [
-                        "8000 dump {d}/create-port-1-box.bmp", "9000 quit"]))
+                        "60000 dump {d}/create-port-1-box.bmp", "61000 quit"]))
                 finally:
                     for s in held:
                         s.close()

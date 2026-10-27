@@ -82,6 +82,8 @@ typedef struct {
     int ping[NC_PING_KEEP], ping_n;/* host: the last round trips in ms */
     uint8_t wait[NC_CONTROL_MAX + 4];  /* a control packet that waits for the game's packet to end */
     int wait_len;
+    int wait_ping;                 /* the waiting packet is a PING: its time starts when it goes */
+    uint64_t part_since;           /* when part of a control packet came and the rest did not yet, 0: none */
     hn_sock s;
     hn_sock out;                   /* UDP: the send socket, else HN_INVALID */
     uint32_t net, mask;            /* UDP: the adapter's subnet, for the shared socket's datagrams */
@@ -126,7 +128,7 @@ void nc_set_identity(const char *version, const char *host_pw, const char *join_
 void nc_set_host_password(const char *pw) { snprintf(host_password, sizeof host_password, "%s", pw ? pw : ""); }
 void nc_set_join_password(const char *pw) { snprintf(join_password, sizeof join_password, "%s", pw ? pw : ""); }
 
-void nc_refusal_clear(void) { refused = NC_REFUSED_NONE; }
+void nc_refusal_clear(void) { refused = NC_REFUSED_NONE, connect_error = 0; }
 
 int nc_refusal(char *host_version, unsigned room)
 {
@@ -341,16 +343,16 @@ static int control_packet(uint8_t *out, const char *text)
     return (int)n + 4;
 }
 
+static void send_waiting(Sock *k);
+
 /* Sends a control packet now when the game's stream is between two packets, else after the game's packet. A packet
  * that already waits gives way to the newer one. */
 static void send_control(Sock *k, const char *text)
 {
     if (!k->control || k->dead || k->kicked) return;
     k->wait_len = control_packet(k->wait, text);
-    if (k->wait_len && frame_between(&k->fo)) {
-        if (enqueue(k, k->wait, (uint32_t)k->wait_len) == 0) flush(k);
-        k->wait_len = 0;
-    }
+    k->wait_ping = !strncmp(text, "PING", 4);
+    send_waiting(k);
 }
 
 /* A control packet that waited for the end of the game's packet. */
@@ -358,7 +360,8 @@ static void send_waiting(Sock *k)
 {
     if (!k->wait_len || !frame_between(&k->fo) || k->dead) return;
     if (enqueue(k, k->wait, (uint32_t)k->wait_len) == 0) flush(k);
-    k->wait_len = 0;
+    if (k->wait_ping) k->ping_sent = hn_ms();
+    k->wait_len = k->wait_ping = 0;
 }
 
 static void control_arrived(Sock *k, const char *line)
@@ -381,17 +384,44 @@ static void control_arrived(Sock *k, const char *line)
     }
 }
 
+static int take_one(Sock *k);
+
 /* Takes the control packets out of the stream where the game's reads are between two packets. 0: the next bytes
  * are the game's (or none came yet, or the connection ended: the caller's read sees it), 1: wait, part of a
- * packet came. */
+ * packet came. A part whose rest does not come within NC_CONNECT_MS is dropped: the peer stopped in the middle of
+ * it, and the caller's read then sees the end of the connection. */
 static int take_control(Sock *k)
 {
     for (;;) {
+        int part = take_one(k);
+        if (part < 0) continue;
+        if (!part) {
+            k->part_since = 0;
+            return 0;
+        }
+        if (!k->part_since) k->part_since = hn_ms();
+        if (hn_ms() - k->part_since < NC_CONNECT_MS) return 1;
+        k->part_since = 0;
+        if (part == 2) return 0;       /* fewer than 5 bytes: they may be the game's, so the game reads them */
+        uint8_t drop[NC_CONTROL_MAX + 4];
+        long got = hn_recv(k->s, drop, sizeof drop);
+        fprintf(stderr, "recomp: net: part of a control packet (%ld bytes) with no rest: dropped\n", got);
+        k->part_since = 0;
+        return 0;
+    }
+}
+
+/* One step of take_control: -1 a control packet was taken, 0 the game's bytes or none, 1 part of one came, 2 fewer
+ * than 5 bytes came, which may start either. */
+static int take_one(Sock *k)
+{
+    {
         uint8_t p[NC_CONTROL_MAX + 4];
         long got = hn_peek(k->s, p, sizeof p);
         if (got <= 0) return 0;
+        if (got < 5) return 2;
         size_t tag = strlen(CONTROL_TAG);
-        if (got >= 5 && p[4] != NC_CONTROL_OP) return 0;
+        if (p[4] != NC_CONTROL_OP) return 0;
         long seen = got < 5 + (long)tag ? got - 5 : (long)tag;
         if (seen > 0 && memcmp(p + 5, CONTROL_TAG, (size_t)seen)) return 0;
         if (got < 5 + (long)tag) return 1;
@@ -402,6 +432,7 @@ static int take_control(Sock *k)
         char line[NC_CONTROL_MAX];
         snprintf(line, sizeof line, "%.*s", (int)(len - 1 - tag), (const char *)p + 5 + tag);
         control_arrived(k, line);
+        return -1;
     }
 }
 
@@ -417,8 +448,8 @@ static void control_tick(void)
         if (k->ping_sent && now - k->ping_sent < NC_PING_LOST_MS) continue;     /* its PONG is still on the way */
         char ping[24];
         snprintf(ping, sizeof ping, "PING %u", ++k->ping_seq);
+        k->ping_sent = now;            /* send_waiting sets the time again when the PING goes */
         send_control(k, ping);
-        k->ping_sent = now;
         k->ping_at = now + (uint64_t)ping_every;
     }
 }
@@ -426,7 +457,10 @@ static void control_tick(void)
 int nc_ping_ms(uint32_t h)
 {
     Sock *k = find(h);
-    if (!k || !k->control || !k->ping_n) return -1;
+    if (!k || !k->control) return -1;
+    /* A PONG that came while the game made no call (a day's work) is read now, so the wait does not count. */
+    if (!k->dead && !k->kicked && frame_between(&k->fi)) take_control(k);
+    if (!k->ping_n) return -1;
     int best = k->ping[0];
     for (int i = 1; i < k->ping_n; i++)
         if (k->ping[i] < best) best = k->ping[i];
@@ -893,7 +927,7 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
         uint64_t until = hn_ms() + NC_CONNECT_MS;
         while (take_control(k)) {
             if (!k->blocking || hn_ms() >= until) return fail(HN_WOULDBLOCK);
-            hn_wait(k->s, 1, 50);
+            hn_sleep(5);             /* hn_wait returns at once while part of a packet waits */
         }
     }
     /* Bytes that arrived before a send broke the connection still count, for example the host's quit
@@ -962,6 +996,17 @@ int nc_kick(uint32_t h)
         if (len && enqueue(k, p, (uint32_t)len) == 0) {
             uint64_t until = hn_ms() + NC_CLOSE_MS;
             while (k->qlen && !k->dead && flush(k) == 0 && k->qlen && hn_ms() < until) hn_wait(k->s, 0, 50);
+        }
+        /* A close with unread bytes from the joiner sends a reset, and the joiner's system may then drop the KICK
+         * before its game reads it. So: end the send side, and read until the joiner closes, for a short time. */
+        if (!k->qlen && hn_shutdown_send(k->s) == 0) {
+            uint8_t sink[512];
+            uint64_t until = hn_ms() + 2 * NC_CLOSE_MS;
+            while (hn_ms() < until) {
+                long r = hn_recv(k->s, sink, sizeof sink);
+                if (r == 0 || (r < 0 && hn_error() != HN_WOULDBLOCK)) break;
+                if (r < 0) hn_wait(k->s, 1, 50);
+            }
         }
     }
     if (log_file) log_line(k, "close", &k->n);

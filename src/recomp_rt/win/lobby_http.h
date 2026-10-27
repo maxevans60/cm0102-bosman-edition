@@ -34,7 +34,8 @@ typedef struct {
 /* One call. base is the lobby address, for example "http://127.0.0.1:8787". method is GET, POST or DELETE,
  * or UPGRADE: a GET with the headers of a WebSocket request, which the connection test sends to the relay and
  * which gets no upgrade (0.7.0 slice 7, net_test.c). path starts with "/". token, when not NULL, goes in "Authorization: Bearer". json, when not NULL, is the
- * body. Waits at most timeout_ms in all. Blocks: call it on the lobby thread only. */
+ * body. Waits at most timeout_ms in all. Blocks: call it on a thread of its own (the lobby's, or the connection
+ * test's), never on the game's. */
 LhResult lobby_http(const char *base, const char *method, const char *path, const char *token, const char *json,
                     int timeout_ms, LhAnswer *a);
 

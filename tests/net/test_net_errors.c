@@ -129,6 +129,60 @@ static void test_control(void)
     nc_set_identity(NULL, NULL, NULL);
 }
 
+/* A host that passes the join check, sends part of a control packet and closes: it stopped in the middle. */
+static pid_t broken_host(uint32_t me, uint16_t port)
+{
+    int l = socket(AF_INET, SOCK_STREAM, 0), one = 1;
+    setsockopt(l, SOL_SOCKET, SO_REUSEADDR, &one, sizeof one);
+    struct sockaddr_in a = {0};
+    a.sin_family = AF_INET, a.sin_port = htons(port), a.sin_addr.s_addr = me;
+    if (bind(l, (struct sockaddr *)&a, sizeof a) || listen(l, 4)) return -1;
+    pid_t pid = fork();
+    if (pid) {
+        close(l);
+        return pid;
+    }
+    int c = accept(l, NULL, NULL);
+    char block[256];
+    int n = 0;
+    while (n < (int)sizeof block - 1 && recv(c, block + n, 1, 0) == 1)
+        if (++n >= 2 && block[n - 1] == '\n' && block[n - 2] == '\n') break;
+    static const char part[] = "BOSMAN OK\n\x10\0\0\0\xbe" "BOSM";
+    send(c, part, sizeof part - 1, 0);
+    usleep(300000);
+    close(c);
+    _exit(0);
+}
+
+static void test_broken_control(void)
+{
+    uint32_t me;
+    if (hn_route_address(&me) < 0) return;
+    uint16_t port = (uint16_t)(26000 + getpid() % 2000 * 2);
+    pid_t h = broken_host(me, port);
+    CHECK(h > 0, "broken host");
+    hn_sleep(100);
+    nc_set_identity("7.7.7", "", "");
+    uint32_t c = nc_socket(2, 1);
+    CHECK(nc_connect(c, me, port) == 0, "connect to the broken host: %d", nc_error());
+    nc_nonblocking(c, 1);
+    uint8_t q[5];
+    uint64_t t0 = hn_ms();
+    int n = 0;
+    while (n < 5 && hn_ms() - t0 < 15000) {
+        long r = nc_recv(c, q + n, 1);
+        if (r == 1) n++;
+        else if (r < 0 && nc_error() == HN_WOULDBLOCK) hn_sleep(5);
+        else break;
+    }
+    CHECK(n == 5 && q[4] == 4 && nc_host_broke() && !nc_kicked() && hn_ms() - t0 < NC_CONNECT_MS + 3000,
+          "a host that stops in the middle of a control packet: the part is dropped, and the game gets the quit "
+          "packet after about NC_CONNECT_MS (%d bytes, %llu ms)", n, (unsigned long long)(hn_ms() - t0));
+    nc_close(c);
+    waitpid(h, NULL, 0);
+    nc_set_identity(NULL, NULL, NULL);
+}
+
 /* ---- connect and bind errors ---- */
 
 static void test_connect_errors(void)
@@ -185,6 +239,11 @@ static void test_texts(void)
     CHECK(strstr(t, "runs Bosman Edition 0.7.1, and you have 0.7.0"), "the version text names both: %s", t);
     net_error_text(t, sizeof t, NE_CREATE_OTHER, "0.7.0", "", 10013);
     CHECK(strstr(t, "10013"), "the other create text names the code: %s", t);
+    net_error_text(t, sizeof t, NE_CREATE_OTHER, "0.7.0", "", 0);
+    CHECK(!strstr(t, "error"), "with no code, no error number: %s", t);
+    /* net_errors.c copies the values of LobbyHostState. */
+    CHECK(LOBBY_NONE == 0 && LOBBY_REGISTERING == 1 && LOBBY_OPEN == 2 && LOBBY_REFUSED == 3 && LOBBY_FULL_TODAY == 4 &&
+          LOBBY_UNAVAILABLE == 5 && LOBBY_CLOSED == 6, "LobbyHostState has the values that net_host_text reads");
     net_error_text(t, sizeof t, NE_FULL_TODAY, "", "", 0);
     CHECK(!strncmp(t, "Online games are full today, try again later", 44), "the spec's full today text (Q12): %s", t);
     net_error_text(t, sizeof t, NE_HOST_LEFT, "", "", 0);
@@ -379,6 +438,7 @@ int main(void)
     test_connect_errors();
     test_connection_test();
     test_control();
+    test_broken_control();
     printf("%s\n", failures ? "net_errors: FAILED" : "net_errors: ok");
     return failures != 0;
 }

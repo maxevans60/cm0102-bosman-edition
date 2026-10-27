@@ -14,7 +14,7 @@ void net_error_text(char *out, size_t room, NetError e, const char *version, con
     if (!host_version) host_version = "";
     switch (e) {
     case NE_LOBBY_DOWN:
-        snprintf(out, room, "The lobby, which lists the online games, does not answer. Check your internet connection, "
+        snprintf(out, room, "The lobby, which lists the games online, does not answer. Check your internet connection, "
                  "or try again later. " ON_YOUR_NETWORK);
         break;
     case NE_FULL_TODAY:
@@ -22,14 +22,14 @@ void net_error_text(char *out, size_t room, NetError e, const char *version, con
                  ON_YOUR_NETWORK);
         break;
     case NE_RELAY_DOWN:
-        snprintf(out, room, "The relay, which carries online games, does not answer. Check your internet connection, "
+        snprintf(out, room, "The relay, which carries the games online, does not answer. Check your internet connection, "
                  "or try again later. " ON_YOUR_NETWORK);
         break;
     case NE_GAME_GONE:
-        snprintf(out, room, "This online game is no longer in the list. Click Refresh and try again.");
+        snprintf(out, room, "This network game is no longer in the list. Click Refresh and try again.");
         break;
     case NE_HOST_AWAY:
-        snprintf(out, room, "The host of this online game is not connected. Try again in a moment.");
+        snprintf(out, room, "The host of this network game is not connected. Try again in a moment.");
         break;
     case NE_HOST_REFUSED:
         snprintf(out, room, "No network game runs at this address now. Click Refresh, or ask the host to start the "
@@ -37,7 +37,7 @@ void net_error_text(char *out, size_t room, NetError e, const char *version, con
         break;
     case NE_CONNECT_TIMEOUT:
         snprintf(out, room, "The host did not answer. Check the address. If it is correct, the host's firewall may "
-                 "block Bosman Edition: ask the host to allow it.");
+                 "block Bosman Edition. Ask the host to allow it.");
         break;
     case NE_HOST_UNREACHABLE:
         snprintf(out, room, "This computer cannot reach the host. Check the address and your network connection.");
@@ -90,8 +90,12 @@ void net_error_text(char *out, size_t room, NetError e, const char *version, con
                  "second copy of the game. Close it and try again.");
         break;
     case NE_CREATE_OTHER:
-        snprintf(out, room, "The network game could not start on this computer (error %d). Check your network "
-                 "connection, and check that your firewall allows Bosman Edition.", code);
+        if (code)
+            snprintf(out, room, "The network game could not start on this computer (error %d). Check your network "
+                     "connection, and check that your firewall allows Bosman Edition.", code);
+        else
+            snprintf(out, room, "The network game could not start on this computer. Check your network connection, "
+                     "and check that your firewall allows Bosman Edition.");
         break;
     default:
         out[0] = 0;
@@ -117,23 +121,24 @@ void net_test_text(char *out, size_t room, NetTest t, int ms)
     if (!room) return;
     switch (t) {
     case NT_RUNNING: snprintf(out, room, "Testing the lobby and the relay ..."); break;
-    case NT_OFF: snprintf(out, room, "Online play is off. Turn it on to use online games."); break;
+    case NT_OFF: snprintf(out, room, "Online play is off. Turn it on to join and host games online."); break;
     case NT_NO_ADDRESS: snprintf(out, room, "This copy of the game has no lobby address. Online games cannot work."); break;
     case NT_WORKS: snprintf(out, room, "Online play works. The lobby answered in %d ms.", ms); break;
     case NT_LOBBY_DOWN:
-        snprintf(out, room, "The lobby does not answer. Check your internet connection. LAN games still work.");
+        snprintf(out, room, "The lobby does not answer. Check your internet connection. " ON_YOUR_NETWORK);
         break;
     case NT_LOBBY_LIST_DOWN:
-        snprintf(out, room, "The lobby answers, but its game list does not. Try again later. LAN games still work.");
+        snprintf(out, room, "The lobby answers, but its list of games does not. Try again later. " ON_YOUR_NETWORK);
         break;
     case NT_FULL_TODAY:
-        snprintf(out, room, "Online games are full today. They open again at 00:00 UTC. LAN games still work.");
+        snprintf(out, room, "Online games are full today. They open again at 00:00 UTC. " ON_YOUR_NETWORK);
         break;
     case NT_RELAY_DOWN:
-        snprintf(out, room, "The lobby works, but the relay does not answer. Try again later. LAN games still work.");
+        snprintf(out, room, "The lobby works, but the relay does not answer. Try again later. " ON_YOUR_NETWORK);
         break;
     case NT_RELAY_BLOCKED:
-        snprintf(out, room, "A firewall or proxy on your network blocks the relay. Online joins cannot work here.");
+        snprintf(out, room, "A firewall or proxy on your network blocks the relay, so you cannot join games online "
+                 "here. " ON_YOUR_NETWORK);
         break;
     default: out[0] = 0;
     }
@@ -147,8 +152,8 @@ const char *net_host_text(char *out, size_t room, int state, const char *code, c
     if (!room) return NULL;
     if (!refusal) refusal = "";
     switch (state) {
-    case HS_REGISTERING: snprintf(out, room, "Your game goes into the online list ..."); break;
-    case HS_OPEN: snprintf(out, room, "Your game is in the online list. Game code %s", code ? code : ""); break;
+    case HS_REGISTERING: snprintf(out, room, "Your game goes into the lobby ..."); break;
+    case HS_OPEN: snprintf(out, room, "Your game is in the lobby. Game code %s", code ? code : ""); break;
     case HS_FULL_TODAY: snprintf(out, room, "Your game is on the LAN only: online games are full today."); break;
     case HS_UNAVAILABLE: snprintf(out, room, "Your game is on the LAN only: the lobby does not answer."); break;
     case HS_REFUSED:
@@ -159,7 +164,7 @@ const char *net_host_text(char *out, size_t room, int state, const char *code, c
         else if (!strcmp(refusal, "game_already_open"))
             snprintf(out, room, "Your game is on the LAN only: this game is already open online.");
         else if (!strcmp(refusal, "lobby_full"))
-            snprintf(out, room, "Your game is on the LAN only: the online list is full. Try again later.");
+            snprintf(out, room, "Your game is on the LAN only: the lobby is full. Try again later.");
         else snprintf(out, room, "Your game is on the LAN only: the lobby refused it (%s).", refusal);
         break;
     default: return NULL;

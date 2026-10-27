@@ -48,7 +48,8 @@
  * "<name>" could not be created." with the title "Unable To Create" (the text 0xa8238c, formatted at 0x838a0f, to
  * confirm_push at 0x838a67) when Network::host_or_join_game 0x77a9f0 gives 0 for a host (0x8389be..0x8389c5): no
  * listen socket opened (TcpIp::open_listen_sockets 0x8ae370 binds each adapter to port 6667 at 0x8ae5bd). The wrap
- * gives that box the reason too: the bind's error (nc_bind_error), or no adapter at all. For a join, the reason is
+ * gives that box the reason too: the bind's error (nc_bind_error), or no adapter at all. The wrap acts only on the
+ * call at 0x838a67 (its return address): the folder box at 0x590060 also says "could not be created". For a join, the reason is
  * the lobby row (full today, the lobby does not answer, another version), the join check's answer (nc_refusal), or
  * the connect's own error (nc_connect_error: a refused connection, no answer within NC_CONNECT_MS, no route).
  *
@@ -85,6 +86,8 @@
 #define HM_HOLIDAY 0x9a01u          /* the dword that 0x5fd2d2 reads */
 #define JOIN_TEXT "could not be joined"
 #define CREATE_TEXT "could not be created"
+#define SETUP_BOX_RET 0x00838a6cu   /* the return address of confirm_push at 0x838a67: the network game's box only.
+                                     * The folder box at 0x590060 has the same title and "could not be created". */
 #define LIST_CACHE_MS 5000
 #define PORT 6667
 
@@ -308,8 +311,9 @@ void o_00591840(void);
 RT_WRAP(00591840, confirm_push)
 {
     uint32_t text = rt_arg(2);
-    int create = text && strstr((const char *)g_mem + text, CREATE_TEXT);
-    int join = text && strstr((const char *)g_mem + text, JOIN_TEXT);
+    int ours = text && rd32(g_mem, cpu.esp) == SETUP_BOX_RET;
+    int create = ours && strstr((const char *)g_mem + text, CREATE_TEXT);
+    int join = ours && strstr((const char *)g_mem + text, JOIN_TEXT);
     if (create) {
         uint32_t ad[8], bc[8];
         int bind = nc_bind_error();

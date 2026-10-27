@@ -235,6 +235,8 @@ long hn_recv(hn_sock s, void *buf, size_t n)
     return k < 0 ? fail_errno() : (long)k;
 }
 
+int hn_shutdown_send(hn_sock s) { return shutdown((int)s, SHUT_WR) < 0 ? fail_errno() : 0; }
+
 long hn_peek(hn_sock s, void *buf, size_t n)
 {
     ssize_t k = recv((int)s, buf, n, MSG_PEEK);

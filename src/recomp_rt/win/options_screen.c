@@ -380,7 +380,7 @@ static void build_row(const Row *r, int index, int y1, int y2, uint32_t green, u
 /* A small text in two lines at most, split at the space nearest the middle when it is longer than one line. */
 static void two_lines(int x1, int y1, int x2, int y2, const char *s, uint32_t colour)
 {
-    size_t n = strlen(s), per_line = (size_t)(x2 - x1) * 800u / rt_screen_w / 6u;
+    size_t n = strlen(s), per_line = (size_t)(x2 - x1) * rt_screen_w / 800u / 6u;
     if (n <= per_line) {
         box_text(x1, y1, x2, y2, 1, 0, 1, 1, colour, s);
         return;

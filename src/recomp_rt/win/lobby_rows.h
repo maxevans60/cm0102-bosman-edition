@@ -41,7 +41,7 @@
 /* The game sorts its list by a plain byte compare of the names (0x77b1fc..0x77b222): the leading space puts
  * this row first. */
 #define LR_FULL_TEXT " Online games are full today, try again later"
-#define LR_DOWN_TEXT " Online games: the lobby does not answer"
+#define LR_DOWN_TEXT " The lobby does not answer, try again later"
 /* The most rows that the game takes: the cap at 0x77b0eb, which tools/recomp/game_list.py raises from 9 to 50
  * (slice 4a). This constant must follow it. */
 #define LR_CAP 50
