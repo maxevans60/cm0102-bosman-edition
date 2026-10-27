@@ -144,9 +144,19 @@ Merge danger: two-way door. Blast radius: joiners' clicks in network games. Sing
 
 As built (2026-10-27, branch `claude/online-s2-click-fix`): the merge danger stays a two-way door. Files: `src/recomp_rt/win/user32.c` (the rule in the input poll wrapper, only at the poll 0x7fdf17 of the client loop), `src/recomp_rt/win/net_core.c` and `net_core.h` (`nc_resets_in`, the count of host screens read), `tests/smoke/network_run.py`. In a press, the client loop gets a widget once, and a second widget only while no new host screen came (a press that ends a text entry gives the field, then the button). Mac and wine runs pass with 1 and 3 joiners. Not run: a click through the relay (slice 5). Research note, section 11.
 
+### 4a. A game list of 50 games
+Blocked by: 2
+Delivers: the game list holds up to 50 games with the original's scrollbar (Q31, Q33). Constant patches in the recompiler (`tools/recomp/game_list.py`) and a runtime buffer for the screen's copy of the names. No game function is replaced.
+Merge danger: two-way door. Blast radius: the game list and join in network games.
+- [x] Game list run passes: 50 ACKs fill the list, 5 BYEs remove games, and a join of the last row reaches its host (`tests/smoke/game_list_run.py`, under wine with `game_list_wine.sh`).
+- [x] Two-game run passes.
+- [x] ctest and the same-save sets pass.
+
+As built (2026-10-27, branch `claude/online-s4a-list50-211ec8`): the merge danger stays a two-way door. Files: `tools/recomp/game_list.py` (24 constant sites), `tools/recomp/widescreen.py` (the import), `src/recomp_rt/win/game_list.c` and `src/recomp_rt/rt.h` (the buffer of the names), `tests/smoke/game_list_run.py` and `game_list_wine.sh`. Each array has 51 slots, 50 games and the original's spare slot (research note, section 10). The game list run fails on the slice 2b build (9 games) and passes on this one. The two-game run, ctest (50 tests) and the four same-save sets pass, with the slice 2b build as `ref-build`. In the match set, `condition-on` and `condition-off` differed once under load and were equal in a run of the two alone. For a merge with slice 4b: the patches act only while 0x77a890, 0x77a9f0, 0x77af20 and 0x81f8d0 stay translated. If slice 4b replaces one of them with `RT_REPLACE`, the build stops with "no translated instruction" at those sites (the build runs `recomp.py --all`), and the replacement must use the new layout.
+
 ### 4. Online games in the game list
 Blocked by: 2b, 3
-Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online, up to 50 games with the scrollbar (Q33), and one row for each host. Also the Online play option, the version check, the game password and the "full today" message.
+Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online, and one row for each host. Also the Online play option, the version check, the game password and the "full today" message.
 Merge danger: two-way door. Players see it, so the Opus review rule applies.
 - [x] Two-game run passes against the local server.
 - [x] With Online play off, the game makes no lobby request.

@@ -113,6 +113,12 @@ from uefa import PATCHES as UEFA_PATCHES  # noqa: E402
 assert not set(UEFA_PATCHES) & set(PATCHES)
 PATCHES.update(UEFA_PATCHES)
 
+# The game list of 50 games (0.7.0 slice 4a) in the same way.
+from game_list import PATCHES as GAME_LIST_PATCHES  # noqa: E402
+
+assert not set(GAME_LIST_PATCHES) & set(PATCHES)
+PATCHES.update(GAME_LIST_PATCHES)
+
 # Not a screen size: a fix for an endless loop (0.4.0 slice 12, custom data sets). euro.cfg is read by 0x9059e0
 # (docs/research/2026-10-16-update-team-databases.md). When a line of it is not a "*" header (after a header
 # that names an unknown nation, or a file that does not match the database), the original tests the same line
