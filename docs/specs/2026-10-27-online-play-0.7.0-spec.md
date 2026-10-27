@@ -216,7 +216,7 @@ Open points:
 - On Windows and Linux a click while the game runs starts a second copy of the game. On macOS the running game gets the link.
 - Needs a real Windows machine: a click in Edge and Chrome (their "open this app" question), the key with a real install under Program Files, and the uninstaller's removal, also when a standard user types another account's administrator password (the key of the player then stays).
 - Online play is on by default, so each Windows and Linux (AppImage) player gets the handler at the first start, also a player who never plays online.
-- Not tested: the link through `main.c` and `user32.c` in a real game start. The C tests call `invite_open` directly.
+- A real game start on this Mac with `cm0102://join/<code>/` in small letters as its argument found its game in the local lobby (`main.c` path). Not run in a real game: the drop event path of `user32.c` (the small SDL app above covers SDL's part).
 
 ### 9. Full online test
 Blocked by: 6, 7, 8
