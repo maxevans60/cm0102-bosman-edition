@@ -24,9 +24,9 @@ gcc -std=c11 -D_DEFAULT_SOURCE -D_GNU_SOURCE -I$S -o $W/link_pass_test $T/test_l
 log "linux link_pass_test: $($W/link_pass_test | tail -1)"
 # Two processes: one listens, a second gives it a link (Q41).
 mkdir -p /tmp/u1; $W/link_pass_test serve /tmp/u1 > /tmp/serve.txt & SERVE=$!; sleep 1
-$W/link_pass_test pass /tmp/u1 cm0102://join/K7M2Q9RT; PASSED=$?; wait $SERVE
+PASSED=0; $W/link_pass_test pass /tmp/u1 cm0102://join/K7M2Q9RT || PASSED=$?; wait $SERVE || true
 log "linux two processes: pass exit $PASSED, the first process: $(tr '\n' ' ' < /tmp/serve.txt)"
-$W/link_pass_test pass /tmp/u1 cm0102://join/K7M2Q9RT; log "linux with no first process: pass exit $? (1: the link stays)"
+ALONE=0; $W/link_pass_test pass /tmp/u1 cm0102://join/K7M2Q9RT || ALONE=$?; log "linux with no first process: pass exit $ALONE (1: the link stays)"
 
 # 2. A fake AppImage that writes its arguments, then the handler, then a click on the link.
 export HOME=/tmp/home XDG_DATA_HOME=/tmp/home/.local/share; mkdir -p $HOME
@@ -54,8 +54,8 @@ wine64 $W/link_test.exe --write >/dev/null 2>&1
 x86_64-w64-mingw32-gcc -std=c11 -Wall -I$S -o $W/link_pass_test.exe $T/test_link_pass.c $S/host/link_pass.c
 log "wine link_pass_test: $(wine64 $W/link_pass_test.exe 2>/dev/null | tr -d '\r' | tail -1)"
 wine64 $W/link_pass_test.exe serve C:/u1 > /tmp/wserve.txt 2>/dev/null & WSERVE=$!; sleep 3
-wine64 $W/link_pass_test.exe pass C:/u1 cm0102://join/K7M2Q9RT 2>/dev/null; WPASSED=$?; wait $WSERVE
+WPASSED=0; wine64 $W/link_pass_test.exe pass C:/u1 cm0102://join/K7M2Q9RT 2>/dev/null || WPASSED=$?; wait $WSERVE || true
 log "wine two processes: pass exit $WPASSED, the first process: $(tr -d '\r' < /tmp/wserve.txt | tr '\n' ' ')"
-wine64 $W/link_pass_test.exe pass C:/u1 cm0102://join/K7M2Q9RT 2>/dev/null; log "wine with no first process: pass exit $? (1: the link stays)"
+WALONE=0; wine64 $W/link_pass_test.exe pass C:/u1 cm0102://join/K7M2Q9RT 2>/dev/null || WALONE=$?; log "wine with no first process: pass exit $WALONE (1: the link stays)"
 log "wine reg query after a write:"
 wine64 reg query 'HKCU\Software\Classes\cm0102' /s 2>/dev/null | tr -d '\r' | tee -a /out/link-container.txt
