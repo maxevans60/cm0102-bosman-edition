@@ -75,6 +75,7 @@ static void check_defaults(void)
     CHECK(options_bool(OPT_FOREIGN_COLOURS) == 1);
     CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
     CHECK(options_bool(OPT_CHANGING_RULES) == 1);
+    CHECK(options_bool(OPT_ONLINE_PLAY) == 1);
     CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
     CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.68"));
     CHECK(options_enum(OPT_SEASON) == 0 && !strcmp(options_string(OPT_SEASON), "2001/02"));
@@ -105,6 +106,8 @@ int main(void)
     CHECK(strstr(get(), "full_player_search = on makes the player search list every player") != NULL);
     CHECK(strstr(get(), "\nchanging_rules = on\n") != NULL);
     CHECK(strstr(get(), "changing_rules = on lets the rules of each league and cup change each July") != NULL);
+    CHECK(strstr(get(), "\nonline_play = on\n") != NULL);
+    CHECK(strstr(get(), "online_play = on shows online games in the game list") != NULL);
     CHECK(strstr(get(), "\nseason = 2001/02\n") != NULL);
     CHECK(strstr(get(), "season = the season of a new game, 2001/02 to 2025/26.") != NULL);
     static char first[16384];
@@ -180,6 +183,11 @@ int main(void)
     put("full_player_search = maybe\n");
     options_load(path);
     CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
+
+    /* 5b2. online_play (0.7.0 slice 4): on by default, off when the file says so. */
+    put("online_play = off\n");
+    options_load(path);
+    CHECK(options_bool(OPT_ONLINE_PLAY) == 0);
 
     /* 5c. changing_rules (0.6.0 slice 11): on by default, off when the file says so. A bad word keeps on. */
     put("changing_rules = off\n");

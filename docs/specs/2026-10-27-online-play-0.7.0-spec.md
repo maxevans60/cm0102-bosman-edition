@@ -158,9 +158,11 @@ As built (2026-10-27, branch `claude/online-s4a-list50-211ec8`): the merge dange
 Blocked by: 2b, 3
 Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online, and one row for each host. Also the Online play option, the version check, the game password and the "full today" message.
 Merge danger: two-way door. Players see it, so the Opus review rule applies.
-- [ ] Two-game run passes against the local server.
-- [ ] With Online play off, the game makes no lobby request.
-- [ ] Same-save sets pass.
+- [x] Two-game run passes against the local server.
+- [x] With Online play off, the game makes no lobby request.
+- [x] Same-save sets pass.
+
+As built (2026-10-27, branch `claude/online-s4b-lobby-ea2663`, less the 50-game list of slice 4a): the merge danger stays a two-way door. Files: `src/recomp_rt/win/net_lobby.c` (new), `lobby.c`, `lobby_http.c`, `lobby_rows.c` and their headers (new), `net_core.c` and `net_core.h` (hooks, join check, `nc_peers`), `net.c`, `win.h`, `options.c`, `options.h`, `options_screen.c` (a third tab, Network), `host/net_posix.c`, `host/net_win32.c`, `host_net.h` (thread, lock, name look-up, route address), `CMakeLists.txt` (Threads, the `lobby` test), `tests/net/test_lobby.c`, `tests/options/test_options.c`, `tests/smoke/network_run.py` (`--lobby`), `tests/smoke/smoke_run.py` (online-on, online-off). Merge with slice 4a: `LR_CAP` in `lobby_rows.h` must become 50 when its cap of 0x77b0eb does; a conflict is likely only in `CMakeLists.txt` and `smoke_run.py`. Tests: ctest 51 of 51; the two-game run with `--lobby` and with 3 joiners; the four same-save sets (start.sav, prematch.sav, a new game, yeovil.sav with `--days 7`, against `ref-builds/main-batchAX`, with online-on and online-off) and the options box set pass. The sets ran before the second review round, which changed only network code; start.sav and the options set passed again on the final build. Research note, section 12. Open: the screens of the game password (Max's choice), the lobby address of the release, the game id of a restored save, and the lobby's memory (section 12, finding for the server).
 
 ### 5. Join through the relay
 Blocked by: 4

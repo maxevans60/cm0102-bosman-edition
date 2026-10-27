@@ -86,6 +86,7 @@ void win_read_settings(void);
 void win_data_set_changed(void);
 const char *win_data_set_dir(void);     /* the host folder of the data set, "" for the game's own Data */
 const char *win_databases_root(void);   /* the folder that holds Databases: the save folder */
+void net_lobby_install(void);           /* net_lobby.c: online games in the game list, at the first WSAStartup */
 
 /* Sound (dsound.c): 0 mutes every sound while the window lacks focus, 1 makes them heard again. */
 void win_sound_focus(int focused);
