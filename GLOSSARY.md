@@ -336,6 +336,10 @@ _Avoid_: proxy, tunnel, TURN
 A web link to one network game. It opens a page with a button that starts Bosman Edition and joins that game.
 _Avoid_: join code, deep link
 
+**Game code**:
+The 8 characters that name one online network game in the lobby, for example K7M2Q9RT. The invite link holds it, and the relay uses it.
+_Avoid_: join code, room code
+
 **Always-on game**:
 A network game that a host leaves open for a long time, so that human managers can join and leave when they want. It moves forward only when a human manager clicks Continue.
 _Avoid_: persistent league, server game

@@ -190,8 +190,31 @@ Merge danger: two-way door.
 Blocked by: 5
 Delivers: the join web page on the lobby address and the `cm0102://` link on Mac, Windows and Linux.
 Merge danger: one-way door on players' computers, because the game registers a link handler. The Opus review rule applies.
-- [ ] A click on the link joins the game on each platform.
-- [ ] The page works for a visitor who does not have the game.
+- [ ] A click on the link joins the game on each platform. Today the link reaches the game and the game finds it in the lobby on each platform. The join itself is slice 5's call `invite_join`.
+- [x] The page works for a visitor who does not have the game.
+
+As built (2026-10-27, branch `claude/online-s8-invite-7d774c`, cut from `online-0.7.0` with slice 4b merged in, because the lookup uses the lobby client of slice 4b): the merge danger stays a one-way door on players' computers. Files: `server/src/join.ts`, `server/src/index.ts` (the `/join/<code>` route), `server/test/join.test.ts`, `server/README.md`, `src/recomp_rt/win/invite.c` and `invite.h`, `src/recomp_rt/win/lobby.c` and `lobby.h` (one game by its code), `src/recomp_rt/win/main.c` and `user32.c` (the link from the command line and from a drop event), `src/recomp_rt/host/link.c` and `host.h`, `tools/mac/Info.plist.in`, `tools/mac/check_package.py`, `packaging/windows/installer.nsi`, `tests/net/test_invite.c`, `test_link.c` and `link_container.sh`, `CMakeLists.txt`.
+
+The game code is the lobby's 8-character code of slice 3. The page is `https://<lobby address>/join/<code>`. It needs no game, has no script, cookie or outside file, and logs and stores nothing (Q26).
+
+Where the link handler is, and how a player removes it:
+
+| Platform | Where | Written | Removed |
+|---|---|---|---|
+| macOS | `CFBundleURLTypes` in the app's `Info.plist`. The game writes nothing. | macOS reads it when the app is copied or first opened. macOS ignores an app in a temporary folder. | Move the app to the Bin. |
+| Windows | The key `HKEY_CURRENT_USER\Software\Classes\cm0102`: a name, `URL Protocol` and `shell\open\command` = `"<program>" "%1"`. Current user only, no administrator rights, no installer step. | At each start while Online play is on, only when the command differs (a moved or new install). | At a start with Online play off, when the key starts this program. The uninstaller removes it when it starts that copy. By hand: `reg delete HKCU\Software\Classes\cm0102 /f`. |
+| Linux | `cm0102-bosman-edition.desktop` in `~/.local/share/applications` (or `$XDG_DATA_HOME/applications`), hidden from menus, with `MimeType=x-scheme-handler/cm0102`. Only the AppImage writes it (`$APPIMAGE`), and `update-desktop-database` refreshes the folder when the system has it. | At each start while Online play is on, only when the file differs (a new AppImage path). | At a start with Online play off. By hand: delete the file, then run `update-desktop-database ~/.local/share/applications`. |
+
+A test run (`RECOMP_USER_DIR` set) writes and removes nothing.
+
+How the link reaches the game: on Windows and Linux the system starts the program with the link as its only argument. `main.c` gives it to `invite_open` and passes no argument to the game's command line. On macOS the system sends an Apple event, also to a game that runs, and SDL gives it as a drop event (`user32.c`). With Online play on, the runtime asks the lobby for the game (`GET /v1/games/<code>`) on the lobby thread, and `invite_poll` gives a game that is open to `invite_join`. That function is empty: slice 5 starts its join there. With Online play off, the game does not ask the lobby.
+
+Tests: `server/test/join.test.ts` (10 tests, 151 in the server suite); ctest `invite` (link text, the answer for one game, a lookup in a fake lobby, Online play off) and `link`; `tests/net/link_container.sh` in a linux/amd64 container: both tests built with gcc, the desktop file passes `desktop-file-validate`, `gio open` and `xdg-open` on GNOME start a fake AppImage with the link, and `link_test` built with mingw-w64 under wine writes, keeps another program's key and removes the key. On this Mac, a small SDL app with the same `Info.plist` entry got `cm0102://join/<code>` as a drop event, at its start and while it ran (the app was unregistered after the test).
+
+Open points:
+- `xdg-open` of xdg-utils 1.1.3 (Ubuntu 22.04) on a desktop that it does not know (no GNOME, no KDE) takes `cm0102:` for a file name, because its URL test allows no digits in a scheme. GNOME, KDE and `gio open` work. The page's text for a button that does nothing covers this.
+- On Windows and Linux a click while the game runs starts a second copy of the game. On macOS the running game gets the link.
+- Needs a real Windows machine: a click in Edge and Chrome (their "open this app" question), the key with a real install under Program Files, and the uninstaller's removal.
 
 ### 9. Full online test
 Blocked by: 6, 7, 8
