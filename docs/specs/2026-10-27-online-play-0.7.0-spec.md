@@ -139,8 +139,10 @@ Merge danger: two-way door, but public, so the Opus review rule applies. Blast r
 Blocked by: 2
 Delivers: a joiner's click acts on one host screen only, on a fast LAN and through the relay (Q34, research note section 11).
 Merge danger: two-way door. Blast radius: joiners' clicks in network games. Single-player input does not change.
-- [ ] The two-game run clicks Next on Enter Name and lands on the next screen only.
-- [ ] Same-save sets pass.
+- [x] The two-game run clicks Next on Enter Name and lands on the next screen only.
+- [x] Same-save sets pass.
+
+As built (2026-10-27, branch `claude/online-s2-click-fix`): the merge danger stays a two-way door. Files: `src/recomp_rt/win/user32.c` (the rule in the input poll wrapper, only at the poll 0x7fdf17 of the client loop), `src/recomp_rt/win/net_core.c` and `net_core.h` (`nc_resets_in`, the count of host screens read), `tests/smoke/network_run.py`. In a press, the client loop gets a widget once, and a second widget only while no new host screen came (a press that ends a text entry gives the field, then the button). Mac and wine runs pass with 1 and 3 joiners. Not run: a click through the relay (slice 5). Research note, section 11.
 
 ### 4. Online games in the game list
 Blocked by: 2b, 3

@@ -15,21 +15,25 @@ Each joiner: Network Play, Join Network Game, the game list (0x81f8d0), types th
 field and clicks Next. Max's decision Q32: the games meet through this computer's LAN address (--address,
 default: the address of the default route), not 127.0.0.1, because the original's loopback test 0x8af290 holds
 127.0.0.1:6667. The host opens Enter Name on the joiner's channel (setup_on_network_player_joined 0x838a80)
-and sends it. The mouse-up of the join click reaches the joiner's client loop 0x7fdc00 and goes to the host as
-a click on Next, so the host answers "Names Are Blank" and, after Ok, Manager Status. The joiner clicks Add
-Manager, gets Enter Name, and types "Join" and "Two". After the joiners quit, the host's own manager types the
-same names on its own Enter Name and clicks First Name, as the joiner did.
+and sends it. The joiner types "Join" and "Two" and clicks Next, and the host sends Select Nationality
+(setup_handle_enter_name_input 0x821520). After the joiners quit, the host's own manager types the same names on
+its own Enter Name and clicks Next, as the joiner did.
 
-A click on a host screen is not followed by a dump of the next screen: while the button is down, the client
-loop sends the click again when the host's next screen arrives (poll_input 0x55f620 at 0x7fdf17). On a fast
-connection one click then acts on two screens. See the research note, section 11.
+The click repeat (research note, section 11): while the button is down, the client loop 0x7fdc00 sends a click
+(opcode 6) for each new host screen (Display::poll_input 0x55f620 at 0x7fdf17). Without the runtime's fix, the
+press of the join click reached the host's Enter Name as Next ("Names Are Blank"), and Next on Enter Name also
+clicked Next on Select Nationality (Select Team). Checks 2, 5 and 6 catch it.
 
 Checks:
     1 each game ends with code 0
-    2 the joiner's Enter Name equals the host's own Enter Name (at most 1% of pixels differ: the text cursor)
+    2 the joiner's Enter Name equals the host's own Enter Name (at most 1% of pixels differ: the text cursor),
+      so the join gave no "Names Are Blank"
     3 the joiner's Enter Name after its typed names went to the host and back equals the host's own with the
       same names
     4 the traffic logs (RECOMP_NET_LOG) show the connection on both sides, with packets both ways
+    5 after Next on Enter Name the joiner's screen equals the host's own Select Nationality (not Select Team)
+    6 each joiner sends 4 click packets (opcode 6): no press is sent twice and none is lost, the press that
+      ends a text entry on Next included
 
 --slow k multiplies every step time and timeout by k, for the Windows build under wine in an emulated container.
 
@@ -75,7 +79,9 @@ def host_steps(joiners):
         f"{later + 3000} type Two",
         f"{later + 4500} click 560 246",    # First Name
         f"{later + 5000} dump {{d}}/host-2-typed.bmp",
-        f"{later + 6000} quit",
+        f"{later + 6000} click 705 572",    # Next: Select Nationality
+        f"{later + 9000} dump {{d}}/host-3-nation.bmp",
+        f"{later + 10000} quit",
     ]
 
 
@@ -87,24 +93,29 @@ def joiner_steps(address, n):
         f"3500 type {address}",
         "6000 click 705 572",               # Next (ends the text entry)
         "7500 click 705 572",               # Next: connect, then run_network_client 0x7fdc00
-        # The mouse-up of that click reaches the client loop, which sends it to the host as a click on Next of
-        # Enter Name (Display::poll_input 0x55f620 at 0x7fdf17). So the host answers "Names Are Blank". This is
-        # the original's input code, not the network layer.
-        "11000 dump {d}/join%d-blank.bmp" % n,
-        "11500 click 400 572",              # Ok: the host opens Manager Status on the joiner's channel
-        "13000 dump {d}/join%d-status.bmp" % n,
-        "13500 click 45 120",               # Add Manager (left bar): Enter Name
-        "16000 dump {d}/join%d-1-name.bmp" % n,
-        "16500 click 560 246",              # First Name
-        "17000 type Join",
-        "19000 click 560 310",              # Second Name
-        "20000 type Two",
+        # The press of that click is still down when the client loop polls the host's Enter Name. The runtime
+        # keeps it from the host (user32.c, the poll at 0x7fdf17), so the host gives no "Names Are Blank".
+        "11000 dump {d}/join%d-1-name.bmp" % n,
+        "11500 click 560 246",              # First Name
+        "12000 type Join",
+        "14000 click 560 310",              # Second Name
+        "15000 type Two",
         # The joiner draws its own text entry. A click sends the click packet (opcode 6, Display::send_widget_click
         # 0x568560) with the fields, and the host draws the names in the screen it sends back.
-        "21500 click 560 246",
-        "24000 dump {d}/join%d-2-typed.bmp" % n,
-        "25000 quit",
+        "16500 click 560 246",
+        "19000 dump {d}/join%d-2-typed.bmp" % n,
+        "19500 type s",                     # First Name "Joins": the entry is open with changed text
+        # Next ends the entry (the client loop's entry poll at 0x7fe05d) and the loop sends First Name, then
+        # Next in the same press (poll 0x7fdf17). One press on one screen: Select Nationality, not Select Team.
+        "20000 click 705 572",
+        "23000 dump {d}/join%d-3-nation.bmp" % n,
+        "24000 quit",
     ]
+
+
+# The joiner's click packets: First Name (sent when Second Name ends its entry), Second Name, First Name and Next
+# (both from the last press, which ends the entry of First Name on Next).
+JOINER_CLIENT_CLICKS = 4
 
 
 def lan_address():
@@ -158,6 +169,22 @@ def connections(log):
             f["bytes_in"] = int(f["in"])
             out[f["peer"]] = f
     return out
+
+
+def click_packets(log, peer):
+    """The count of click packets (opcode 6) sent on the connection to peer, from a traffic log."""
+    if not os.path.exists(log):
+        return None
+    handle, count = None, 0
+    for line in open(log):
+        p = line.split()
+        if len(p) > 3 and p[1] in ("close", "end") and f"peer={peer}" in p:
+            handle = p[3]
+    for line in open(log):
+        p = line.split()
+        if handle and p[:3] == ["net", "ops", handle] and len(p) > 3 and p[3] == "out":
+            count = sum(int(x[2:].split("/")[0]) for x in p[4:] if x.startswith("6="))
+    return count if handle else None
 
 
 def main(argv):
@@ -230,7 +257,8 @@ def main(argv):
         dump = lambda name: os.path.join(shots, name)
         for n in range(1, len(procs) + 1):
             for host_shot, join_shot, what in (("host-1-name.bmp", f"join{n}-1-name.bmp", "Enter Name"),
-                                                ("host-2-typed.bmp", f"join{n}-2-typed.bmp", "Enter Name with the typed names")):
+                                                ("host-2-typed.bmp", f"join{n}-2-typed.bmp", "Enter Name with the typed names"),
+                                                ("host-3-nation.bmp", f"join{n}-3-nation.bmp", "Select Nationality after Next")):
                 if os.path.exists(dump(host_shot)) and os.path.exists(dump(join_shot)):
                     share = smoke_run.differing_share(dump(host_shot), dump(join_shot))
                     check(share <= 0.01, f"joiner {n}'s {what} equals the host's: {share:.2%} of pixels differ")
@@ -245,6 +273,8 @@ def main(argv):
             log = connections(os.path.join(shots, f"join{n}-net.log"))
             c = log.get(f"{address}:6667")
             check(bool(c and c["packets_in"] and c["packets_out"]), f"joiner {n} log: the connection to {address}:6667")
+            clicks = click_packets(os.path.join(shots, f"join{n}-net.log"), f"{address}:6667")
+            check(clicks == JOINER_CLIENT_CLICKS, f"joiner {n} sent {clicks} click packets, {JOINER_CLIENT_CLICKS} expected")
         for name in ["host"] + [f"join{n}" for n in range(1, len(procs) + 1)]:
             path = os.path.join(shots, f"{name}-net.log")
             if os.path.exists(path):
