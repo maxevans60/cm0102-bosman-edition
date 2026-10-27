@@ -118,6 +118,14 @@ int main(int argc, char **argv)
             return 2;
         }
     }
+    /* One copy takes the invite links of this user folder (Q41): a copy that starts with a link gives it to the
+     * copy that runs and ends here, before it reads the settings or opens a window. Else this copy listens, when
+     * no other copy does (host/link_pass.c). */
+    if (first < argc && !strncasecmp(argv[first], "cm0102:", 7) && host_link_pass(win_user_dir, argv[first])) {
+        fprintf(stderr, "recomp: link: the game that runs took the link\n");
+        return 0;
+    }
+    host_link_listen(win_user_dir);
     win_trace = getenv("RECOMP_TRACE") && *getenv("RECOMP_TRACE");
     win_read_settings();
     season_init();                       /* RECOMP_START_SEASON (season.c) */
