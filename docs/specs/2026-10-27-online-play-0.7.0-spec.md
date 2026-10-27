@@ -1,0 +1,173 @@
+# Easy online play (0.7.0, #45)
+Status: Ready
+
+Interview: 2026-10-27, Q1 to Q30, all settled. Background and costs: `docs/research/2026-10-19-easy-network-play-plan.md`. Terms: the "Network play" section of `GLOSSARY.md`.
+
+## Problem
+
+A network game works today only after about ten manual steps on Windows: compatibility mode, administrator rights, a VPN program, a hand-edited address file, a network patch and a firewall question. The forum thread on network play is six years of players who are stuck at one of these steps. In Bosman Edition, network games do not work at all, because the port answers every network call with "no network". Mac and Linux players cannot play network games.
+
+## Solution
+
+A player clicks Network Play, then Join Network Game. The game list shows every open network game online and on the LAN. The player clicks one, clicks Join, picks a club and plays. There is no patch, no VPN, no router setting and no IP address. Mac, Windows and Linux players can play in one game. It costs Max nothing on the Cloudflare free plan.
+
+Only the network layer under the game changes. The original's network screens, packets and host logic run as they are. A free lobby on Cloudflare keeps the list of online games, and a relay on Cloudflare passes the traffic, so no router setting is needed.
+
+## User stories
+
+1. As a human manager, I want to see every open online game in the game list, so that I can join one with no setup.
+2. As a human manager, I want LAN games and online games in the same list, so that one screen covers both.
+3. As a host, I want my game to show in the lobby when I start a network game, so that my friends can find it.
+4. As a host, I want to set a password on my game, so that only my friends can join.
+5. As a human manager on a Mac, I want to join a game that a Windows host runs, so that the platform does not matter.
+6. As a human manager on a different Bosman Edition version, I want a message that names the host's version, so that I know what to update.
+7. As a human manager whose connection drops, I want my club to go on holiday and show Away, and I want to take it back with my manager password when I return.
+8. As a human manager, I want the game to tell me when the host quits, and I want to go back to the start screen, while the host's game saves.
+9. As a host, I want to leave an always-on game open at home, so that friends can join and leave in the evening. The game moves forward only when a human manager clicks Continue.
+10. As a human manager, I want the game list to show the season, the day and the managers online for each game, so that I can see which game is active.
+11. As a human manager, I want an invite link that I can post on Discord or the forum, so that a friend clicks it and joins.
+12. As a friend who does not have the game, I want the invite link to open a page that says what the game is and how to get it.
+13. As a human manager, I want a clear reason and a next step when something fails, in place of "The network game could not be created" or a freeze at "Contacting Server".
+14. As a human manager, I want a connection test in Network Play that says online play works or what is wrong.
+15. As a human manager, I want to see each human manager's ping, so that I can see if the network is the cause of a slow game.
+16. As a host, I want Kick, so that I can remove a human manager from a public game.
+17. As a player who does not want online games, I want to turn Online play off on the options screen, so that the game does not contact the lobby.
+18. As a player, I want LAN and VPN games to work if the online service is down or full for the day.
+19. As a player, I want the lobby to keep no record of my internet address.
+20. As a host of a restored save, I want the lobby to stop a second copy of the same game, so that the league does not split into two games.
+
+## Decisions
+
+Design:
+
+- Change only the network layer under the game. The original's network screens, packets, host logic, holiday code and manager passwords run unchanged. Single-player games do not run this code, so the same-save rule (Q152) holds.
+- Real sockets replace the "no network" answers for all 18 network calls the game imports. The game gets its own addresses directly in place of the original's address file lookup, which starts a background program that the port does not have.
+- The host's game tells the lobby about its game and sends a heartbeat. The lobby drops a game that stops its heartbeat.
+- When the game list asks for games, the network layer answers with the lobby's games as well as the LAN games.
+- When a human manager joins an online game, the network layer carries the connection through the relay over a secure web connection on port 443. The game sees an ordinary connection.
+- The game sends the host's packets to the relay in batches, to stay inside the free plan.
+
+Rules from the interview:
+
+- 0.7.0 ships real sockets, the lobby and the relay together (Q2).
+- No new screens for the lobby. The game list is the original's Select Network Game screen. There is no waiting room and no chat (Q9). The original's names Network Play and Join Network Game stay (Q27).
+- Small additions that need a message or field: the game password, Kick, the error messages, the connection test and the ping.
+- All games are public in the list. A host can set an optional password (Q10).
+- Up to 16 human managers in a game, the original's limit (Q4).
+- Mac, Windows and Linux players play in one game (Q5).
+- A player on a different version cannot join. The message names the host's version (Q6).
+- When the host quits or drops, the host's game saves at once, and each human manager sees "The host left the game" and goes back to the start screen (Q7).
+- Drop in and drop out: a human manager who leaves is Away, and their club is on holiday as in the original. They take it back with their manager password (Q15).
+- Always-on game: it moves forward only when a human manager clicks Continue, as in the original. The game list shows the season, the day and the managers online (Q16).
+- Invite link: a web link on the lobby address opens a page with an "Open in Bosman Edition" button and the game code. The game registers a `cm0102://` link on Mac, Windows and Linux. A game with a password still asks for it (Q17).
+- The lobby allows one open copy of a game. A second host sees that the game is already open and can join it (Q23).
+- Player names are free text with no account. A word filter checks player names and game names (Q13).
+- The host has Kick. The lobby allows at most 2 open games for each internet address (Q14).
+- The lobby keeps internet addresses in memory only while the game is open and writes them to no log. The site says this in one line (Q26).
+- Online play is an option on the game's options screen, on by default. When it is off, the game list shows LAN games only and the game does not contact the lobby (Q25).
+
+Server:
+
+- The lobby and relay run on Max's Cloudflare account on the free plan, on a `workers.dev` address. The code lives in the repo under `server/` (Q11).
+- When the free allowance runs out, the game list says "Online games are full today, try again later" until 00:00 UTC. LAN and VPN play still work. The game never crashes on a server failure (Q12).
+- The relay stores no game data.
+- Max deploys the server. A deploy waits for his yes.
+
+Build:
+
+- Slices build in worktrees while the 0.6.0 gates run, with `build-slot.sh` for builds. Nothing merges to main before 0.6.0 ships (Q3).
+- The build sessions may start, use and suspend the "Windows 11 (1)" Parallels virtual machine, after the 0.6.0 gates finish (Q30).
+- Never use patch code. Work from the original's own network code and the function map. Read each cited function and cite its address (repo rule).
+
+## Testing
+
+Seams:
+
+1. Two-game run. A script starts a host game and a joining game with timed clicks, joins through Network Play and compares screen dumps. It uses the same timed-click method as the smoke tests. It runs against 127.0.0.1, then a local copy of the server, then the real server.
+2. Server tests in `server/`, against a local copy of the lobby and relay.
+3. The four same-save sets, unchanged, with networking compiled in.
+
+Release tests (Q29), because Max cannot run a test evening:
+
+1. Two and four games on this Mac play through the real lobby and relay.
+2. The Windows 11 virtual machine joins a game that this Mac hosts.
+3. GitHub's Windows and Linux machines join a game that this Mac hosts over the internet, with scripted clicks.
+4. A four-player game runs through a World Cup, a Euros and every season change between them, with a drop and rejoin, a host quit and a version mismatch.
+
+The one gap: a home router with strict settings.
+
+## Out of scope
+
+Derby night, chat, the weekly challenge, the hall of fame, deadline day, Discord in any form, pass the host, spectators, direct connections without the relay, accounts, ban lists, a cloud host that runs the game.
+
+## Open decisions
+
+None.
+
+## Slices
+
+### 1. Read the original's network code
+Blocked by: none
+Delivers: a research note in `docs/research/` that cites each network function by address. It covers the packets and the list broadcast, whether the game waits on each call or polls, the address lookup and how to replace it, whether a joining human manager needs the database, the join and holiday flow, and an estimate of traffic. No game code.
+Merge danger: two-way door. Blast radius: none, nothing ships.
+- [ ] Every claim cites a function address that the author read.
+- [ ] The note lists what slice 2 must change and what it must not touch.
+
+### 2. Real sockets
+Blocked by: 1
+Delivers: LAN and VPN play on Mac, Windows and Linux. The game finds its own addresses directly. Two games on this Mac play together through 127.0.0.1, and the Windows virtual machine joins a game on this Mac. Traffic for 2 and 4 human managers is logged.
+Merge danger: two-way door. Blast radius: network games only. The same-save sets prove that single-player games do not change.
+- [ ] Two-game run passes through 127.0.0.1.
+- [ ] Same-save sets pass.
+- [ ] Traffic log for 2 and 4 human managers is in the research note.
+
+### 3. Lobby and relay server
+Blocked by: none
+Delivers: the Worker and relay in `server/` with tests: register, heartbeat, list, relay, the free-plan limits, the "full today" answer, at most 2 games for each address, one open copy of a game, the word filter and addresses in memory only. Max deploys it.
+Merge danger: two-way door, but public, so the Opus review rule applies. Blast radius: the online list is down. LAN play still works.
+- [ ] Server tests pass against the local copy.
+- [ ] No log line or stored record holds an internet address.
+- [ ] Max approves the deploy.
+
+### 4. Online games in the game list
+Blocked by: 2, 3
+Delivers: a host puts its game in the lobby. The game list shows online and LAN games with the season, the day and the managers online. Also the Online play option, the version check, the game password and the "full today" message.
+Merge danger: two-way door. Players see it, so the Opus review rule applies.
+- [ ] Two-game run passes against the local server.
+- [ ] With Online play off, the game makes no lobby request.
+- [ ] Same-save sets pass.
+
+### 5. Join through the relay
+Blocked by: 4
+Delivers: a human manager on another network joins with no router setting. Adds a library for secure web connections on three platforms.
+Merge danger: two-way door. Blast radius: online joins fail. A new library ships on three platforms.
+- [ ] Two-game run passes through the real relay.
+- [ ] A GitHub Windows machine and a GitHub Linux machine join a game on this Mac.
+
+### 6. Drop in, drop out and host quit
+Blocked by: 5
+Delivers: Away status, rejoin with the manager password, the host's save and message when it quits, and Kick.
+Merge danger: two-way door. Blast radius: a human manager can lose their club in a network game.
+- [ ] A dropped human manager rejoins the same club.
+- [ ] A host quit saves and sends every human manager to the start screen.
+- [ ] Kick removes a human manager, and their club goes on holiday.
+
+### 7. Clear errors, connection test, ping
+Blocked by: 6
+Delivers: each failure shows a reason and a next step. Network Play has a connection test. The game list and the game show each human manager's ping.
+Merge danger: two-way door.
+- [ ] Each failure in a list of forced failures (lobby down, relay down, host gone, version mismatch, wrong password, full today) shows its message.
+- [ ] The connection test reports each forced failure.
+
+### 8. Invite links
+Blocked by: 5
+Delivers: the join web page on the lobby address and the `cm0102://` link on Mac, Windows and Linux.
+Merge danger: one-way door on players' computers, because the game registers a link handler. The Opus review rule applies.
+- [ ] A click on the link joins the game on each platform.
+- [ ] The page works for a visitor who does not have the game.
+
+### 9. Full online test
+Blocked by: 6, 7, 8
+Delivers: the four release tests in Testing, with results in `docs/TESTING.md`.
+Merge danger: two-way door. Tests only.
+- [ ] All four release tests pass, and every failure is fixed and tested again.

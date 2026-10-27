@@ -306,6 +306,52 @@ _Avoid_: secret attribute, intrinsic (for the whole set)
 The text lines that the original makes from a print button, on the squad and competition screens. The PDF choice of Print To writes it to a PDF in the `Prints` folder.
 _Avoid_: report, export, screenshot
 
+### Network play
+
+**Network game**:
+A game that several human managers play together, each on their own computer. One computer hosts it, and the others join it over a LAN, a VPN or online (0.7.0, #45).
+_Avoid_: multiplayer game, online game (for the game itself), session
+
+**Host**:
+The computer that runs a network game. Only the host runs the match engine and keeps the save. The other computers show the screens that the host sends.
+_Avoid_: server (for the host's computer)
+
+**Human manager**:
+A person who takes part in a network game and controls one club.
+_Avoid_: player, client, user (inside a network game)
+
+**Game list**:
+The original's Select Network Game screen. It lists each open network game on the LAN and online, with Join.
+_Avoid_: lobby (for the screen), server list, browser
+
+**Lobby**:
+The Bosman Edition server that keeps the list of open online games. A host tells the lobby about its game, and the game list asks the lobby for it.
+_Avoid_: matchmaker, master server
+
+**Relay**:
+The Bosman Edition server that passes traffic between a host and its human managers. No router setting is needed. It keeps no game data.
+_Avoid_: proxy, tunnel, TURN
+
+**Invite link**:
+A web link to one network game. It opens a page with a button that starts Bosman Edition and joins that game.
+_Avoid_: join code, deep link
+
+**Always-on game**:
+A network game that a host leaves open for a long time, so that human managers can join and leave when they want. It moves forward only when a human manager clicks Continue.
+_Avoid_: persistent league, server game
+
+**Away**:
+The state of a human manager who left a network game. Their club is on holiday as in the original. They can take it back with their manager password.
+_Avoid_: offline, AFK, dropped
+
+**Online play**:
+The option that lets the game list show online games and lets a host put its game in the lobby. It is on by default. When it is off, the game shows LAN games only.
+_Avoid_: internet mode, online mode
+
+**Connection test**:
+A check in Network Play that the lobby and relay can be reached. It says that online play works, or it says what is wrong.
+_Avoid_: network check, diagnostics
+
 ### Research maps
 
 **Function map**:
