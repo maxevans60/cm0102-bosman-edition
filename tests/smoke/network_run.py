@@ -446,12 +446,13 @@ def main(argv):
             check(len(rows2) == 1 and rows2[0].startswith("Bosman  %d/%02d " % (season, (season + 1) % 100)) and
                   rows2[0].endswith(" online"), f"8 join2's list has the lobby row with its details: {rows2}")
             err2 = open(dump("join2-stderr.txt"), errors="replace").read()
-            check(f"join refused: This network game runs Bosman Edition {project_version()}, and you have {other}" in err2,
-                  "9 join2 sees the host's version in the refused join")
+            # "join box:" comes from the wrap of confirm_push 0x591840, as the box gets the text.
+            check(f"join box: This network game runs Bosman Edition {project_version()}, and you have {other}" in err2,
+                  "9 join2's box names the host's version")
             rows4 = list_rows(dump("join4-stderr.txt"))
             err4 = open(dump("join4-stderr.txt"), errors="replace").read()
-            check(rows4 == ["Online games are full today, try again later"] and
-                  "join refused: Online games are full today" in err4, f"9 join4 sees the full row and its box: {rows4}")
+            check(rows4 == [" Online games are full today, try again later"] and
+                  "join box: Online games are full today" in err4, f"9 join4 sees the full row and its box: {rows4}")
             check(quiet.count == 0, f"9 with Online play off, join3 made {quiet.count} lobby connections")
             check(full.count >= 1, f"join4's lobby got {full.count} requests")
             check(after is not None and not [x for x in after if x.get("name") == "Bosman"],

@@ -194,14 +194,18 @@ static int before_connect(uint32_t addr, uint16_t port)
     int full;
     const LobbyRow *r = lr_row_of(addr, &full);
     char t[400];
-    if (full) refuse(LR_FULL_TEXT ". LAN games still work.");
+    const uint8_t *b = (const uint8_t *)&addr;
+    if (full) refuse("Online games are full today, try again later. Games on your own network still work.");
     else if (r && strcmp(r->g.version, version())) {
         snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman Edition %s "
                  "to join it.", r->g.version, version(), r->g.version);
         refuse(t);
-    } else if (r) refuse("Online games are joined through the relay, which is not in this build yet. Join a LAN "
-                         "game, or type the address of the host.");
-    else return 0;
+    } else if (r || (b[0] == 0 && b[1] == 66)) {
+        /* Every address of 0.66.0.0/16 stops here, also one that a player typed (lobby_rows.h). */
+        refuse(r ? "This build cannot join online games yet. Join a game on your own network, or type the address "
+                   "of the host."
+                 : "This online game is no longer in the list. Click Refresh and try again.");
+    } else return 0;
     nc_set_error(10061);
     return -1;
 }
@@ -260,22 +264,28 @@ void o_00591840(void);
 RT_WRAP(00591840, confirm_push)
 {
     uint32_t text = rt_arg(2);
-    char host_version[32];
-    int why = nc_refusal(host_version, sizeof host_version);
-    if (!reason[0] && why == NC_REFUSED_VERSION) {
-        char t[400];
-        snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman Edition %s "
-                 "to join it.", host_version, version(), host_version);
-        refuse(t);
-    } else if (!reason[0] && why == NC_REFUSED_PASSWORD) refuse("The password of this network game is wrong.");
-    else if (!reason[0] && why == NC_REFUSED_NOT_BOSMAN)
-        refuse("The host did not answer as Bosman Edition does. It may run another version of the game.");
-    if (reason[0] && text && strstr((const char *)g_mem + text, JOIN_TEXT)) {
-        static uint32_t at;
-        if (!at) at = win_static_alloc(sizeof reason);
-        snprintf((char *)g_mem + at, sizeof reason, "%s", reason);
-        wr32(g_mem, cpu.esp + 4 + 2 * 4, at);
-        reason[0] = 0;
+    if (text && strstr((const char *)g_mem + text, JOIN_TEXT)) {
+        char host_version[32];
+        int why = nc_refusal(host_version, sizeof host_version);
+        nc_refusal_clear();
+        if (!reason[0] && why == NC_REFUSED_VERSION) {
+            char t[400];
+            snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman "
+                     "Edition %s to join it.", host_version, version(), host_version);
+            refuse(t);
+        } else if (!reason[0] && why == NC_REFUSED_PASSWORD) refuse("The password of this network game is wrong.");
+        else if (!reason[0] && why == NC_REFUSED_NOT_BOSMAN)
+            refuse("The host does not run this version of Bosman Edition, so you cannot join its game.");
+        else if (!reason[0] && why == NC_REFUSED_NO_ANSWER)
+            refuse("The host did not answer in time. Check that the host still runs the game, then try again.");
+        if (reason[0]) {
+            static uint32_t at;
+            if (!at) at = win_static_alloc(sizeof reason);
+            snprintf((char *)g_mem + at, sizeof reason, "%s", reason);
+            wr32(g_mem, cpu.esp + 4 + 2 * 4, at);
+            fprintf(stderr, "recomp: join box: %s\n", reason);
+            reason[0] = 0;
+        }
     }
     o_00591840();
 }

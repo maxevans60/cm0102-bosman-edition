@@ -137,7 +137,10 @@ static int heartbeat_json(char *out, unsigned room, const LobbyGame *g)
 
 typedef struct {
     const char *p;
+    int depth;                       /* of the containers that skip is in: an answer may nest at most JSON_DEPTH */
 } J;
+
+#define JSON_DEPTH 32
 
 static void ws(J *j)
 {
@@ -177,9 +180,13 @@ static int skip(J *j);
 
 static int skip_container(J *j, char close)
 {
+    if (++j->depth > JSON_DEPTH) return 0;
     j->p++;
     ws(j);
-    if (*j->p == close) return j->p++, 1;
+    if (*j->p == close) {
+        j->depth--;
+        return j->p++, 1;
+    }
     for (;;) {
         if (close == '}') {
             char k[2];
@@ -194,7 +201,10 @@ static int skip_container(J *j, char close)
             ws(j);
             continue;
         }
-        if (*j->p == close) return j->p++, 1;
+        if (*j->p == close) {
+            j->depth--;
+            return j->p++, 1;
+        }
         return 0;
     }
 }
@@ -317,7 +327,7 @@ static int list_key(J *j, const char *k, void *ctx)
 int lobby_parse_games(const char *json, LobbyRow *rows, int max)
 {
     List l = {rows, max, 0};
-    J j = {json};
+    J j = {json, 0};
     return object(&j, list_key, &l) ? l.n : -1;
 }
 
@@ -393,7 +403,7 @@ static void lobby_thread(void *unused)
             }
             say("register", r);
             Registered reg = {code, token, 30};
-            J j = {answer.body};
+            J j = {answer.body, 0};
             if (r == LH_OK && object(&j, register_key, &reg) && code[0] && token[0]) {
                 open = 1;
                 beat_ms = reg.beat > 0 && reg.beat <= 60 ? (unsigned)reg.beat * 1000u : 30000u;

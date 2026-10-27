@@ -27,14 +27,16 @@ static const char *answer_for(const char *path)
     if (!strncmp(path, "/ok", 3))
         return "HTTP/1.1 200 OK\r\nX-Bosman-Api: 1\r\nContent-Length: 11\r\n\r\n{\"ok\":true}";
     if (!strncmp(path, "/refused", 8))
-        return "HTTP/1.1 409 Conflict\r\nX-Bosman-Api: 1\r\nContent-Length: 49\r\n\r\n"
+        return "HTTP/1.1 409 Conflict\r\nX-Bosman-Api: 1\r\nContent-Length: 50\r\n\r\n"
                "{\"error\":\"version_mismatch\",\"hostVersion\":\"0.7.1\"}";
     if (!strncmp(path, "/full", 5))
-        return "HTTP/1.1 503 Service Unavailable\r\nX-Bosman-Api: 1\r\nContent-Length: 49\r\n\r\n"
+        return "HTTP/1.1 503 Service Unavailable\r\nX-Bosman-Api: 1\r\nContent-Length: 47\r\n\r\n"
                "{\"error\":\"full_today\",\"retryAfterSeconds\":3600}";
     if (!strncmp(path, "/cf429", 6)) return "HTTP/1.1 429 Too Many Requests\r\nContent-Length: 4\r\n\r\nbusy";
     if (!strncmp(path, "/cf1027", 7))
-        return "HTTP/1.1 500 Internal\r\nContent-Length: 26\r\n\r\nError 1027: limit exceeded";
+        return "HTTP/1.1 500 Internal\r\nContent-Length: 16\r\n\r\nerror code: 1027";
+    if (!strncmp(path, "/ray1027", 8))
+        return "HTTP/1.1 500 Internal\r\nContent-Length: 21\r\n\r\nRay ID: 8a1027f0c3e2b";
     if (!strncmp(path, "/cf500", 6)) return "HTTP/1.1 502 Bad Gateway\r\nContent-Length: 3\r\n\r\nbad";
     if (!strncmp(path, "/chunked", 8))
         return "HTTP/1.1 200 OK\r\nX-Bosman-Api: 1\r\nTransfer-Encoding: chunked\r\n\r\n5\r\n{\"a\":\r\n2\r\n1}\r\n0\r\n\r\n";
@@ -60,6 +62,11 @@ static pid_t fake_lobby(uint16_t port)
     for (;;) {
         int c = accept(l, NULL, NULL);
         if (c < 0) continue;
+        if (fork()) {              /* each connection in its own process: an answer may wait */
+            close(c);
+            while (waitpid(-1, NULL, WNOHANG) > 0) {}
+            continue;
+        }
         char req[4096];
         long n = recv(c, req, sizeof req - 1, 0);
         req[n > 0 ? n : 0] = 0;
@@ -68,11 +75,12 @@ static pid_t fake_lobby(uint16_t port)
         const char *r = answer_for(path);
         if (!r) {
             sleep(5);              /* no answer: the caller's timeout */
-            close(c);
-            continue;
+            _exit(0);
         }
         send(c, r, strlen(r), 0);
+        if (!strncmp(path, "/ok", 3)) sleep(3);   /* the answer ends at its Content-Length, not at the close */
         close(c);
+        _exit(0);
     }
 }
 
@@ -81,17 +89,21 @@ static void test_http(uint16_t port)
     char base[64];
     snprintf(base, sizeof base, "http://127.0.0.1:%u", port);
     LhAnswer *a = malloc(sizeof *a);
-    CHECK(lobby_http(base, "GET", "/ok", NULL, NULL, 3000, a) == LH_OK && a->api && a->status == 200 &&
-          !strcmp(a->body, "{\"ok\":true}"), "a lobby answer: %s", a->body);
+    uint64_t t0 = hn_ms();
+    CHECK(lobby_http(base, "GET", "/ok", NULL, NULL, 2000, a) == LH_OK && a->api && a->status == 200 &&
+          !strcmp(a->body, "{\"ok\":true}") && hn_ms() - t0 < 1500,
+          "a lobby answer, read to its Content-Length while the connection stays open: %s", a->body);
     CHECK(lobby_http(base, "POST", "/refused", "tok", "{}", 3000, a) == LH_API_ERROR &&
-          !strcmp(a->code, "version_mismatch"), "an error answer gives its code: %s", a->code);
+          !strcmp(a->code, "version_mismatch") && strstr(a->body, "\"0.7.1\"}"),
+          "an error answer gives its code: %s", a->code);
     CHECK(lobby_http(base, "GET", "/full", NULL, NULL, 3000, a) == LH_FULL_TODAY, "full_today");
     CHECK(lobby_http(base, "GET", "/cf429", NULL, NULL, 3000, a) == LH_FULL_TODAY, "429 without the header: full");
-    CHECK(lobby_http(base, "GET", "/cf1027", NULL, NULL, 3000, a) == LH_FULL_TODAY, "1027 in the body: full");
+    CHECK(lobby_http(base, "GET", "/cf1027", NULL, NULL, 3000, a) == LH_FULL_TODAY, "error 1027: full");
+    CHECK(lobby_http(base, "GET", "/ray1027", NULL, NULL, 3000, a) == LH_UNAVAILABLE, "1027 in a Ray ID: unavailable");
     CHECK(lobby_http(base, "GET", "/cf500", NULL, NULL, 3000, a) == LH_UNAVAILABLE, "another answer: unavailable");
     CHECK(lobby_http(base, "GET", "/chunked", NULL, NULL, 3000, a) == LH_OK && !strcmp(a->body, "{\"a\":1}"),
           "a chunked body: %s", a->body);
-    uint64_t t0 = hn_ms();
+    t0 = hn_ms();
     CHECK(lobby_http(base, "GET", "/silent", NULL, NULL, 800, a) == LH_UNAVAILABLE && hn_ms() - t0 < 2000,
           "no answer: unavailable within the timeout (%llu ms)", (unsigned long long)(hn_ms() - t0));
     char closed[64];
@@ -139,6 +151,10 @@ static void test_json(void)
           rows[0].g.clubs_n == 2 && !strcmp(rows[0].g.clubs[1], "Lyon") && !strcmp(rows[1].g.name, "x?"),
           "list parse: n=%d name=%s", n, n > 0 ? rows[0].g.name : "");
     CHECK(lobby_parse_games("{\"games\":[{\"code\":", rows, 4) < 0, "a cut answer is refused");
+    static char deep[40000];
+    memcpy(deep, "{\"x\":", 5);
+    memset(deep + 5, '[', 30000);
+    CHECK(lobby_parse_games(deep, rows, 4) < 0, "a deep answer is refused, not a stack overflow");
 
     char clean[LOBBY_TEXT];
     lobby_clean(clean, sizeof clean, "  a\x81" "b\tc  ");
@@ -202,6 +218,31 @@ static void test_rows(void)
     CHECK(drain(names, addrs, 16) == 1 && !strcmp(names[0], "Second") && addrs[0] == ip(10, 211, 55, 9),
           "after the hold");
 
+    /* Two hosts on one subnet with the same computer name and game name stay two rows. */
+    lr_request();
+    ack(d, "MacBook-Pro", "Bosman");
+    CHECK(lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 20)) == 1 && lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 21)) == 1,
+          "two hosts on one subnet");
+
+    /* The cap of the game (0x77b0eb): a row past it is not counted, and its BYE does not reach the game. */
+    lr_request();
+    for (int i = 0; i < LR_CAP; i++) {
+        char name[8];
+        snprintf(name, sizeof name, "G%d", i);
+        ack(d, "pc", name);
+        CHECK(lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 30 + i)) == 1, "row %d", i);
+    }
+    ack(d, "pc", "Past");
+    CHECK(lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 99)) == 0, "past the cap");
+    CHECK(lr_arrived(bye, LR_DATAGRAM, ip(192, 168, 68, 99)) == 0, "the BYE of a row past the cap");
+    LobbyRow one[1];
+    memset(one, 0, sizeof one);
+    snprintf(one[0].g.host_name, LOBBY_TEXT, "PC-99999999");
+    snprintf(one[0].g.name, LOBBY_TEXT, "Online");
+    lr_lobby(one, 1, LH_OK);
+    hn_sleep(LR_LOBBY_WAIT_MS);
+    CHECK(drain(names, addrs, 16) == 0, "no lobby row past the cap");
+
     /* Lobby rows: the LAN game is not shown twice, another game is, then the full-today row. */
     lr_request();
     ack(d, "maxs-mac.local", "Bosman");
@@ -233,13 +274,30 @@ static void test_rows(void)
     lr_lobby(rows, 1, LH_FULL_TODAY);
     hn_sleep(LR_LOBBY_WAIT_MS);
     n = drain(names, addrs, 16);
-    CHECK(n == 2 && !strncmp(names[0], "Bosman  ", 8) && !strcmp(names[1], LR_FULL_TEXT), "lobby row, full row");
-    lr_row_of(addrs[1], &full);
+    CHECK(n == 2 && !strcmp(names[0], LR_FULL_TEXT) && names[0][0] == ' ' && !strncmp(names[1], "Bosman  ", 8),
+          "full row first, then the lobby row");
+    lr_row_of(addrs[0], &full);
     CHECK(full, "the full row");
+    ack(d, "maxs-mac.local", "Bosman");
     CHECK(lr_arrived(d, LR_DATAGRAM, ip(192, 168, 68, 110)) == 0, "the LAN ACK waits for the BYE");
     n = drain(names, addrs, 16);
     CHECK(n == 2 && !strncmp(names[0], "BYE PC-", 7) && addrs[0] != ip(192, 168, 68, 110) &&
           !strcmp(names[1], "Bosman") && addrs[1] == ip(192, 168, 68, 110), "BYE of the lobby row, then the LAN row");
+
+    /* Two lobby games whose long names give the same row text get different texts. */
+    lr_request();
+    LobbyRow two[2];
+    memset(two, 0, sizeof two);
+    for (int i = 0; i < 2; i++) {
+        snprintf(two[i].g.host_name, LOBBY_TEXT, "PC-0000000%d", i);
+        snprintf(two[i].g.name, LOBBY_TEXT, "The Very Long League Name Of Season %d", i);
+        snprintf(two[i].g.day, 11, "2003-10-14");
+        two[i].g.season = 2003;
+    }
+    lr_lobby(two, 2, LH_OK);
+    hn_sleep(LR_LOBBY_WAIT_MS);
+    n = drain(names, addrs, 16);
+    CHECK(n == 2 && strcmp(names[0], names[1]) && strlen(names[1]) <= 49, "two texts: %s | %s", names[0], names[1]);
 }
 
 /* ---- the join check ---- */
@@ -290,10 +348,8 @@ static int join(uint16_t port, const char *version, const char *password, char *
 static void test_join(uint16_t port)
 {
     uint32_t me;
-    if (hn_route_address(&me) < 0) {
-        printf("skip the join check: no default route\n");
-        return;
-    }
+    CHECK(hn_route_address(&me) == 0, "the join check needs a default route");
+    if (hn_route_address(&me) < 0) return;
     char got[64], v[32];
     int status;
     pid_t h = host(port, "0.7.0", "");

@@ -14,8 +14,9 @@
  * row (the original adds a row for a BYE that matches none, 0x77b448).
  *
  * Lobby rows. Each lobby game that is not on the LAN is an ACK from an address in 0.66.0.0/16 (LR_NET), which
- * no real host has: 0.0.0.0/8 is "this network" and is never a destination. The row text is the game name with
- * the season, the day and the managers online. A connect to such an address goes to lr_row_of (net_lobby.c).
+ * no real host has (0.0.0.0/8 is "this network"). The row text is the game name with the season, the day and
+ * the managers online. A connect to any address in 0.66.0.0/16 goes to lr_row_of (net_lobby.c) and never to
+ * the system.
  * A lobby game is the same as a LAN game when its hostName is lr_host_key of the ACK's computer name and the
  * names match. Lobby rows go to the game LOBBY_WAIT_MS after the request at the earliest, so that the LAN
  * answers come first. When the lobby answers "full today", one row says so. */
@@ -35,7 +36,12 @@
 #define LR_HOLD_MS 300
 #define LR_LOBBY_WAIT_MS 400
 
-#define LR_FULL_TEXT "Online games are full today, try again later"
+/* The game sorts its list by a plain byte compare of the names (0x77b1fc..0x77b222): the leading space puts
+ * this row first. */
+#define LR_FULL_TEXT " Online games are full today, try again later"
+/* The most rows that the game takes: the cap at 0x77b0eb. Slice 4a raises it to 50 in tools/recomp; this
+ * constant must follow it at the merge. */
+#define LR_CAP 9
 
 /* 1 when the datagram has the tag ("CM3 LIST SERVER REQ", "...ACK", "...BYE"). */
 int lr_is(const uint8_t *p, long n, const char *tag);

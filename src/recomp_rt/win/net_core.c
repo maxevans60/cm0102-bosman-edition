@@ -64,6 +64,7 @@ typedef struct {
     int dead;                      /* a WinSock code once the connection broke in a background send */
     int broadcast;                 /* SO_BROADCAST, for the UDP send socket */
     int accepted;                  /* a joiner's connection on this host */
+    int listening;
     hn_sock s;
     hn_sock out;                   /* UDP: the send socket, else HN_INVALID */
     uint32_t net, mask;            /* UDP: the adapter's subnet, for the shared socket's datagrams */
@@ -100,6 +101,8 @@ void nc_set_identity(const char *version, const char *host_pw, const char *join_
     snprintf(join_password, sizeof join_password, "%s", join_pw ? join_pw : "");
     identity = version != NULL;
 }
+
+void nc_refusal_clear(void) { refused = NC_REFUSED_NONE; }
 
 int nc_refusal(char *host_version, unsigned room)
 {
@@ -246,11 +249,15 @@ static int flush(Sock *k)
 }
 
 /* Every call moves the queues on, but a send leaves the bytes that it holds back for its own packet. */
+static void serve_listeners(void);
+static void close_pending(uint32_t h);
+
 static void flush_all(const Sock *except)
 {
     for (int i = 0; i < MAX_SOCKS; i++)
         if (socks[i].handle && &socks[i] != except && socks[i].qlen) flush(&socks[i]);
     log_tick();
+    serve_listeners();
     if (hooks && hooks->tick && !in_tick) {
         in_tick = 1;
         hooks->tick();
@@ -349,6 +356,7 @@ int nc_close(uint32_t h)
     while (k->qlen && !k->dead && flush(k) == 0 && k->qlen && hn_ms() < until)
         hn_wait(k->s, 0, 50);
     if (log_file && k->connected) log_line(k, "close", &k->n);
+    if (k->listening) close_pending(h);
     hn_close(k->s);
     if (k->out != HN_INVALID) hn_close(k->out);
     free(k->q);
@@ -438,7 +446,9 @@ int nc_listen(uint32_t h, int backlog)
     Sock *k = find(h);
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
-    return hn_listen(k->s, backlog) < 0 ? fail_host() : 0;
+    if (hn_listen(k->s, backlog) < 0) return fail_host();
+    k->listening = 1;
+    return 0;
 }
 
 static void connected(Sock *k, uint32_t addr, uint16_t port)
@@ -460,9 +470,44 @@ static struct {
     uint32_t addr;
     uint16_t port;
     uint64_t since;
-    int len;
+    int len, ready;                /* ready: it passed, and waits for the game's accept */
     char buf[256];
 } pending[PENDING];
+
+static int check_pending(int i);
+
+/* Takes each new connection of the game's listen sockets and reads the join blocks, at every call of the game,
+ * so a joiner gets its answer while the host's game does not accept (a full game, or a game between two polls
+ * of 0x77af5a). A connection from 127.x passes with no block. */
+static void serve_listeners(void)
+{
+    for (int k = 0; identity && k < MAX_SOCKS; k++) {
+        if (!socks[k].handle || !socks[k].listening) continue;
+        for (;;) {
+            int i = 0;
+            while (i < PENDING && pending[i].listen) i++;
+            if (i == PENDING) break;
+            uint32_t a;
+            uint16_t p;
+            hn_sock c = hn_accept(socks[k].s, &a, &p);
+            if (c == HN_INVALID) break;
+            pending[i].listen = socks[k].handle, pending[i].s = c, pending[i].addr = a, pending[i].port = p;
+            pending[i].since = hn_ms(), pending[i].len = 0, pending[i].ready = is_loopback(a);
+        }
+    }
+    for (int i = 0; i < PENDING; i++)
+        if (pending[i].listen && !pending[i].ready && check_pending(i) > 0) pending[i].ready = 1;
+}
+
+/* The game closed a listen socket: its waiting connections go too. */
+static void close_pending(uint32_t h)
+{
+    for (int i = 0; i < PENDING; i++)
+        if (pending[i].listen == h) {
+            hn_close(pending[i].s);
+            pending[i].listen = 0;
+        }
+}
 
 static void send_line(hn_sock s, const char *line)
 {
@@ -541,28 +586,16 @@ uint32_t nc_accept(uint32_t h, uint32_t *addr, uint16_t *port)
     uint32_t a = 0;
     uint16_t p = 0;
     hn_sock s = HN_INVALID;
-    for (int i = 0; identity && s == HN_INVALID && i < PENDING; i++)
-        if (pending[i].listen == h && check_pending(i) > 0) {
-            s = pending[i].s, a = pending[i].addr, p = pending[i].port;
-            pending[i].listen = 0;
-        }
-    while (s == HN_INVALID) {
+    if (identity) {                /* flush_all above served the join blocks: take one that passed */
+        for (int i = 0; s == HN_INVALID && i < PENDING; i++)
+            if (pending[i].listen == h && pending[i].ready) {
+                s = pending[i].s, a = pending[i].addr, p = pending[i].port;
+                pending[i].listen = 0;
+            }
+        if (s == HN_INVALID) return fail(HN_WOULDBLOCK), NC_INVALID;
+    } else {
         s = hn_accept(k->s, &a, &p);
         if (s == HN_INVALID) return fail_host(), NC_INVALID;
-        if (!identity || is_loopback(a)) break;
-        int i = 0;
-        while (i < PENDING && pending[i].listen) i++;
-        if (i == PENDING) {
-            hn_close(s);
-            return fail(HN_WOULDBLOCK), NC_INVALID;
-        }
-        pending[i].listen = h, pending[i].s = s, pending[i].addr = a, pending[i].port = p;
-        pending[i].since = hn_ms(), pending[i].len = 0;
-        s = HN_INVALID;
-        if (check_pending(i) > 0) {
-            s = pending[i].s;
-            pending[i].listen = 0;
-        }
     }
     Sock *c = new_sock(s, 1);
     if (!c) {
@@ -585,7 +618,7 @@ static int hello(Sock *k)
     char block[160], line[64];
     snprintf(block, sizeof block, "BOSMAN HELLO 1\nversion=%s\npassword=%s\n\n", my_version, join_password);
     send_line(k->s, block);
-    uint64_t until = hn_ms() + (uint64_t)connect_ms;
+    uint64_t until = hn_ms() + NC_HELLO_WAIT_MS;
     int n = 0;
     while (n < (int)sizeof line - 1) {
         long r = hn_recv(k->s, line + n, 1);                      /* one byte at a time: the game's bytes follow */
@@ -600,7 +633,8 @@ static int hello(Sock *k)
     if (!strncmp(line, "BOSMAN VERSION ", 15)) {
         refused = NC_REFUSED_VERSION;
         snprintf(refused_version, sizeof refused_version, "%.*s", (int)strcspn(line + 15, "\n"), line + 15);
-    } else refused = !strcmp(line, "BOSMAN PASSWORD\n") ? NC_REFUSED_PASSWORD : NC_REFUSED_NOT_BOSMAN;
+    } else if (!strcmp(line, "BOSMAN PASSWORD\n")) refused = NC_REFUSED_PASSWORD;
+    else refused = n ? NC_REFUSED_NOT_BOSMAN : NC_REFUSED_NO_ANSWER;
     fprintf(stderr, "recomp: net: the host refused the join: %s\n", n ? line : "no answer\n");
     return -1;
 }
@@ -714,8 +748,7 @@ long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *po
             k->n.packets_in++;
             return r;
         }
-        nc_set_error(HN_WOULDBLOCK);
-        return -1;
+        return fail_host();        /* the error of the last real read: would block, or a real error */
     }
     if (r < 0) return fail_host();
     if (addr) *addr = a;

@@ -74,10 +74,14 @@ void nc_set_hooks(const NcHooks *h);
  * before it gives the game the connection. The game's own bytes come only after "OK". The loopback test
  * 0x8af290 connects to 127.0.0.1 and gets no check. A host waits NC_HELLO_MS for the block, then closes. */
 #define NC_HELLO_MS 5000
+/* What a joiner waits for the answer. The host answers at each network call of its game; a game that works
+ * out a day makes none for a few seconds. The original's connect waited with no limit. */
+#define NC_HELLO_WAIT_MS 15000
 void nc_set_identity(const char *version, const char *host_password, const char *join_password);
-enum { NC_REFUSED_NONE, NC_REFUSED_VERSION, NC_REFUSED_PASSWORD, NC_REFUSED_NOT_BOSMAN };
+enum { NC_REFUSED_NONE, NC_REFUSED_VERSION, NC_REFUSED_PASSWORD, NC_REFUSED_NOT_BOSMAN, NC_REFUSED_NO_ANSWER };
 /* Why the last connect was refused, and the host's version for NC_REFUSED_VERSION. */
 int nc_refusal(char *host_version, unsigned room);
+void nc_refusal_clear(void);
 /* The connections that this host accepted and that are open (the human managers who joined). */
 int nc_peers(void);
 

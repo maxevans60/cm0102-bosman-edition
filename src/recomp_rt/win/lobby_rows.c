@@ -16,6 +16,7 @@ typedef struct {
     int rank;                        /* LAN: how near the sender is (rank) */
     int lobby;                       /* a lobby row */
     int delivered;                   /* the game has the row */
+    int over;                        /* past the cap: never delivered */
     uint64_t seen;
     uint8_t d[LR_DATAGRAM];          /* LAN, held: the ACK */
 } Game;
@@ -29,7 +30,7 @@ static struct {
 static int q_head, q_n;
 
 static LobbyRow rows[LOBBY_ROWS];
-static int rows_n, lobby_result, lobby_waiting;
+static int rows_n, lobby_result, lobby_waiting, full_shown;
 static uint64_t asked_at;
 
 static uint32_t ad[32], mk[32], route;
@@ -125,6 +126,27 @@ static Game *find(const char *host, const char *name)
 
 static void drop(Game *g) { *g = games[--games_n]; }
 
+/* The rows that the game has now. It takes no ACK when it has LR_CAP (0x77b0eb), so a row past the cap is never
+ * delivered, and its BYE is dropped as one from an address with no row. */
+static int shown(void)
+{
+    int n = full_shown;
+    for (int i = 0; i < games_n; i++) n += games[i].delivered;
+    return n;
+}
+
+/* The LAN row of this game from addr: the same address, or another adapter of the same host, whose subnet
+ * differs. Two hosts on one subnet with the same computer name and game name stay two rows. */
+static Game *find_lan(const char *host, const char *name, uint32_t addr, int r)
+{
+    for (int i = 0; i < games_n; i++) {
+        Game *g = &games[i];
+        if (!g->lobby && !strcmp(g->key_host, host) && !strcmp(g->key_name, name) && (g->addr == addr || g->rank != r))
+            return g;
+    }
+    return NULL;
+}
+
 /* A LAN row goes to the game. A lobby row of the same game leaves first, so the ACK then waits in the queue
  * behind its BYE. 1 when the caller gives the ACK to the game now. */
 static int deliver_lan(Game *g, const uint8_t *d, uint32_t addr, int now)
@@ -140,7 +162,12 @@ static int deliver_lan(Game *g, const uint8_t *d, uint32_t addr, int now)
             break;
         }
     }
-    g->delivered = 1, g->lobby = 0, g->addr = addr;
+    g->lobby = 0, g->addr = addr;
+    if (shown() >= LR_CAP) {
+        g->over = 1;                                   /* the game would drop it: see shown */
+        return 0;
+    }
+    g->delivered = 1;
     if (!now) push(d, addr);
     return now;
 }
@@ -148,7 +175,7 @@ static int deliver_lan(Game *g, const uint8_t *d, uint32_t addr, int now)
 void lr_request(void)
 {
     games_n = q_head = q_n = 0;
-    rows_n = lobby_waiting = 0;
+    rows_n = lobby_waiting = full_shown = 0;
     asked_at = hn_ms();
     if (!fixed_adapters) {
         ad_n = hn_adapters(ad, mk, 32);
@@ -161,10 +188,11 @@ int lr_arrived(const uint8_t *p, long n, uint32_t addr)
     if (n >= LR_DATAGRAM && lr_is(p, n, "CM3 LIST SERVER ACK")) {
         char host[12], name[LOBBY_TEXT];
         key_of_ack(p, host, name);
-        Game *g = find(host, name);
         int r = rank(addr);
-        if (g && !g->lobby) {
+        Game *g = find_lan(host, name, addr, r);
+        if (g) {
             if (g->delivered) return g->addr == addr;    /* the game drops a second ACK of an address itself */
+            if (g->over) return 0;
             if (r < g->rank) {
                 g->rank = r, g->addr = addr;
                 memcpy(g->d, p, LR_DATAGRAM);
@@ -196,8 +224,9 @@ int lr_arrived(const uint8_t *p, long n, uint32_t addr)
 static const char *const months[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-/* The text of a lobby row: the name, then the season, the day and the managers online, in 49 bytes. */
-static void row_text(char *out, const LobbyGame *g)
+/* The text of a lobby row: the name, then the season, the day and the managers online, in 49 bytes. A number
+ * from 2 goes at the end of a row whose text another row has. */
+static void row_text(char *out, const LobbyGame *g, int number)
 {
     char more[64];
     int y = 0, m = 0, d = 0;
@@ -205,7 +234,8 @@ static void row_text(char *out, const LobbyGame *g)
     int n = snprintf(more, sizeof more, "  %d/%02d", g->season, (g->season + 1) % 100);
     if (m >= 1 && m <= 12 && d >= 1) n += snprintf(more + n, sizeof more - (size_t)n, " %d %s", d, months[m - 1]);
     n += snprintf(more + n, sizeof more - (size_t)n, "  %d online", g->managers_online);
-    if (g->password) snprintf(more + n, sizeof more - (size_t)n, ", password");
+    if (g->password) n += snprintf(more + n, sizeof more - (size_t)n, ", password");
+    if (number > 1) snprintf(more + n, sizeof more - (size_t)n, " (%d)", number);
     int room = 49 - (int)strlen(more);
     snprintf(out, 50, "%.*s%s", room > 8 ? room : 8, g->name, more);
 }
@@ -223,28 +253,41 @@ long lr_extra(uint8_t *buf, uint32_t room, uint32_t *addr)
     uint64_t now = hn_ms();
     for (int i = 0; i < games_n; i++) {
         Game *g = &games[i];
-        if (!g->lobby && !g->delivered && now - g->seen >= LR_HOLD_MS) deliver_lan(g, g->d, g->addr, 0);
+        if (!g->lobby && !g->delivered && !g->over && now - g->seen >= LR_HOLD_MS) deliver_lan(g, g->d, g->addr, 0);
     }
     if (lobby_waiting && now - asked_at >= LR_LOBBY_WAIT_MS) {
         lobby_waiting = 0;
         uint8_t d[LR_DATAGRAM];
+        if (lobby_result == LH_FULL_TODAY && shown() < LR_CAP) {
+            ack_of(d, "", LR_FULL_TEXT);
+            push(d, to_net(LR_FULL_ROW));
+            full_shown = 1;
+        }
+        char used[LOBBY_ROWS][50];
+        int used_n = 0;
         for (int i = 0; i < rows_n; i++) {
             char name[LOBBY_TEXT], text[50];
             lobby_clean(name, LOBBY_TEXT, rows[i].g.name);
             if (find(rows[i].g.host_name, name) || games_n == GAMES) continue;   /* on the LAN */
+            if (shown() >= LR_CAP) break;
+            /* The join takes the first row whose text equals the Join text (0x77ab2a..0x77ab88), and a long name
+             * is cut to make room for the details: a second row with the same text gets a number. */
+            row_text(text, &rows[i].g, 1);
+            for (int k = 2, again = 1; again && k < 100; k++) {
+                again = 0;
+                for (int u = 0; u < used_n; u++)
+                    if (!strcmp(used[u], text)) again = 1;
+                if (again) row_text(text, &rows[i].g, k);
+            }
+            memcpy(used[used_n++], text, sizeof text);
             Game *g = &games[games_n++];
             memset(g, 0, sizeof *g);
             snprintf(g->key_host, sizeof g->key_host, "%s", rows[i].g.host_name);
             memcpy(g->key_name, name, sizeof name);
             g->lobby = g->delivered = 1;
             g->addr = to_net(LR_NET | (uint32_t)i);
-            row_text(text, &rows[i].g);
             ack_of(d, rows[i].g.host_name, text);
             push(d, g->addr);
-        }
-        if (lobby_result == LH_FULL_TODAY) {
-            ack_of(d, "", LR_FULL_TEXT);
-            push(d, to_net(LR_FULL_ROW));
         }
     }
     if (!q_n || room < LR_DATAGRAM) return -1;

@@ -131,8 +131,9 @@ static void json_word(const char *body, const char *name, char *out, size_t room
 static LhResult kind_of(LhAnswer *a)
 {
     if (!a->api) {
-        /* Not the lobby: Cloudflare's own page. server/README.md: 429 or "1027" means full today. */
-        if (a->status == 429 || strstr(a->body, "1027")) return LH_FULL_TODAY;
+        /* Not the lobby: Cloudflare's own page. server/README.md: 429 or error 1027 means full today. */
+        if (a->status == 429 || strstr(a->body, "rror code: 1027") || strstr(a->body, "rror 1027"))
+            return LH_FULL_TODAY;
         return LH_UNAVAILABLE;
     }
     if (a->status >= 200 && a->status < 300) return LH_OK;
