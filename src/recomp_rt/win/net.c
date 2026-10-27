@@ -43,7 +43,9 @@ RT_IMPORT(WSOCK32_ord115)                                                       
     uint32_t data = rt_arg(1);
     if (nc_start() < 0) rt_ret_stdcall(HN_SYSNOTREADY, 2);
     else {
-        if (data) {                /* WSADATA: wVersion, wHighVersion, then text the game does not read */
+        /* WSADATA: wVersion, wHighVersion, then text the game does not read. The game keeps 398 bytes for
+         * it at TcpIp + 0x328, before the "Winsock started" flag at + 0x4b6, so the runtime writes 398. */
+        if (data) {
             memset(g_mem + data, 0, 398);
             wr16(g_mem, data, 0x0101);
             wr16(g_mem, data + 2, 0x0202);

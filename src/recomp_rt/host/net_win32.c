@@ -1,5 +1,6 @@
 /* Sockets of 64-bit Windows (host_net.h): WinSock 2, whose error codes are the ones the game expects.
  * The adapters come from GetAdaptersAddresses. */
+#define _WIN32_WINNT 0x0600        /* GetTickCount64 and OnLinkPrefixLength: Windows Vista and later */
 #include "../host_net.h"
 
 #include <winsock2.h>

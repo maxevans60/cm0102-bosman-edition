@@ -27,7 +27,8 @@ static uint32_t tcp(void)
 
 int main(void)
 {
-    uint16_t port = (uint16_t)(40000 + getpid() % 20000);
+    /* Below the systems' own port ranges (macOS from 49152, Linux from 32768). */
+    uint16_t port = (uint16_t)(20000 + getpid() % 10000 * 2);
     CHECK(nc_start() == 0, "start");
 
     /* Listen as open_listen_sockets 0x8ae370 does: SO_REUSEADDR, FIONBIO, bind, listen 16. */
@@ -55,7 +56,9 @@ int main(void)
 
     /* Item 5: the accepted socket reads without blocking. */
     char buf[64];
-    CHECK(nc_recv(a, buf, 1) == -1 && nc_error() == HN_WOULDBLOCK, "item 5: recv on an accepted socket is 10035");
+    uint64_t t0 = hn_ms();
+    CHECK(nc_recv(a, buf, 1) == -1 && nc_error() == HN_WOULDBLOCK && hn_ms() - t0 < 100,
+          "item 5: recv on an accepted socket is 10035 at once (%llu ms)", (unsigned long long)(hn_ms() - t0));
 
     /* Item 4: send_packet 0x77ac30 sends 4 one-byte length sends, then the body. A body larger than the system
      * takes at once still gives the whole count, with no short send. */
@@ -108,10 +111,15 @@ int main(void)
     CHECK(nc_connect(d, loopback(), (uint16_t)(port + 1)) == -1 && nc_error() != HN_WOULDBLOCK, "refused");
     nc_close(d);
     d = tcp();
-    uint64_t t0 = hn_ms();
-    int cr = nc_connect(d, htonl(0xc0000201u), 6667);   /* 192.0.2.1, TEST-NET-1 */
+    nc_set_connect_ms(300);
+    t0 = hn_ms();
+    int cr = nc_connect(d, htonl(0xc0000201u), 6667);   /* 192.0.2.1, TEST-NET-1: no host answers */
     uint64_t took = hn_ms() - t0;
-    CHECK(cr == -1 && took < NC_CONNECT_MS + 1500, "item 8: connect ends in %llu ms", (unsigned long long)took);
+    if (cr == -1 && nc_error() == HN_TIMEDOUT)
+        CHECK(took >= 250 && took < 1500, "item 8: the connect timeout ends the wait (%llu ms)", (unsigned long long)took);
+    else
+        CHECK(cr == -1, "item 8: connect to 192.0.2.1 (no route here: %d in %llu ms)", nc_error(), (unsigned long long)took);
+    nc_set_connect_ms(NC_CONNECT_MS);
     nc_close(d);
     nc_close(a);
     nc_close(l);
@@ -146,9 +154,41 @@ int main(void)
     nc_close(u1);
     nc_close(u2);
 
-    /* Item 10: the adapter table holds no loopback or 0 address, and each broadcast is in its subnet. */
+    /* Item 11: a subnet broadcast reaches both games, each on its adapter address and port (0x8aec05, 0x8aed1a). */
     uint32_t ad[20], bc[20];
     int n = nc_adapters(ad, bc, 20);
+    if (n > 0 && bc[0] != ad[0]) {
+        uint16_t up = (uint16_t)(port + 2);
+        u1 = nc_socket(2, 2), u2 = nc_socket(2, 2);
+        nc_setopt(u1, NC_SOL_SOCKET, NC_SO_BROADCAST, 1, 0), nc_setopt(u2, NC_SOL_SOCKET, NC_SO_BROADCAST, 1, 0);
+        CHECK(nc_bind(u1, ad[0], up) == 0 && nc_bind(u2, ad[0], up) == 0, "udp bind on the adapter: %d", nc_error());
+        /* A game's socket of another adapter keeps only its own subnet's datagrams, as on Windows. */
+        uint32_t u3 = NC_INVALID, ha[20], hm[20];
+        hn_adapters(ha, hm, 20);
+        for (int i = 1; i < n && u3 == NC_INVALID; i++)
+            if ((ad[i] & hm[i]) != (ad[0] & hm[i])) {
+                u3 = nc_socket(2, 2);
+                CHECK(nc_bind(u3, ad[i], up) == 0, "udp bind on adapter %d", i);
+            }
+        CHECK(nc_sendto(u2, "CM3 LIST SERVER REQ", 20, bc[0], up) == 20, "broadcast: %d", nc_error());
+        int got1 = 0, got2 = 0;
+        for (int t = 0; t < 2000 && !(got1 && got2); t++) {
+            if (nc_recvfrom(u1, buf, sizeof buf, &from, &fport) == 20) got1 = 1;
+            if (nc_recvfrom(u2, buf, sizeof buf, &from, &fport) == 20) got2 = 1;
+            usleep(1000);
+        }
+        CHECK(got1 && got2, "item 11: the broadcast reaches both sockets (%d %d)", got1, got2);
+        if (u3 != NC_INVALID) {
+            CHECK(nc_recvfrom(u3, buf, sizeof buf, &from, &fport) == -1 && nc_error() == HN_WOULDBLOCK,
+                  "item 11: another adapter's socket drops the broadcast");
+            nc_close(u3);
+        }
+        nc_close(u1);
+        nc_close(u2);
+    } else
+        printf("net_core: no adapter with a broadcast address, the broadcast check is skipped\n");
+
+    /* Item 10: the adapter table holds no loopback or 0 address, and each broadcast is in its subnet. */
     CHECK(n >= 0 && n <= 20, "adapters %d", n);
     for (int i = 0; i < n; i++) {
         CHECK(ad[i] && ad[i] != loopback(), "adapter %d", i);

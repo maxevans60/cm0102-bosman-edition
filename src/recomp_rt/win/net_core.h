@@ -26,12 +26,13 @@
 
 /* The connect timeout. The original's connect 0x8ae74e waits with no limit. */
 #define NC_CONNECT_MS 4000
-/* What a close waits to send the bytes still queued. */
-#define NC_CLOSE_MS 1000
+/* What a close waits to send the bytes still queued. The host closes up to 16 connections at its quit. */
+#define NC_CLOSE_MS 250
 /* A connection whose queue grows past this is treated as broken. */
 #define NC_QUEUE_MAX (16u << 20)
 
 int nc_error(void);
+void nc_set_connect_ms(int ms);    /* tests: the connect timeout, NC_CONNECT_MS by default */
 void nc_set_error(int code);
 
 int nc_start(void);

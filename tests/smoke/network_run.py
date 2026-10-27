@@ -18,7 +18,7 @@ default: the address of the default route), not 127.0.0.1, because the original'
 and sends it. The mouse-up of the join click reaches the joiner's client loop 0x7fdc00 and goes to the host as
 a click on Next, so the host answers "Names Are Blank" and, after Ok, Manager Status. The joiner clicks Add
 Manager, gets Enter Name, and types "Join" and "Two". After the joiners quit, the host's own manager types the
-same names on its own Enter Name.
+same names on its own Enter Name and clicks First Name, as the joiner did.
 
 A click on a host screen is not followed by a dump of the next screen: while the button is down, the client
 loop sends the click again when the host's next screen arrives (poll_input 0x55f620 at 0x7fdf17). On a fast
@@ -27,7 +27,8 @@ connection one click then acts on two screens. See the research note, section 10
 Checks:
     1 each game ends with code 0
     2 the joiner's Enter Name equals the host's own Enter Name (at most 1% of pixels differ: the text cursor)
-    3 the joiner's Enter Name with its typed names, drawn by the host, equals the host's own with the same names
+    3 the joiner's Enter Name after its typed names went to the host and back equals the host's own with the
+      same names
     4 the traffic logs (RECOMP_NET_LOG) show the connection on both sides, with packets both ways
 
 --slow k multiplies every step time and timeout by k, for the Windows build under wine in an emulated container.
@@ -55,23 +56,27 @@ START = [
     "1000 click 277 346",                   # Network Play
 ]
 NAME_BUILD = "0x820f50"                     # Enter Name of a new human manager (setup_add_human_manager)
-HOST = START + [
-    "3500 click 277 177",                   # Start Network Game
-    "6500 type Bosman",                     # Enter Network Game Name
-    "8500 click 705 572",                   # Next (ends the text entry)
-    "10000 click 705 572",                  # Next
-    "wait leagues",
-    "2000 click 705 572",                   # Select League(s): Next makes the network game and loads the data
-    f"wait screen:{NAME_BUILD}",
-    "2000 dump {d}/host-1-name.bmp",
-    # The joiners play now. The host's own manager types the same names after they quit.
-    "60000 click 560 246",                  # First Name
-    "60500 type Join",
-    "62000 click 560 310",                  # Second Name
-    "63000 type Two",
-    "65000 dump {d}/host-2-typed.bmp",
-    "66000 quit",
-]
+def host_steps(joiners):
+    # The joiners play after the host's dump; they start 4 s apart and each plays about 40 s. The host's own
+    # manager types the same names after they quit.
+    later = 60000 + 8000 * (joiners - 1)
+    return START + [
+        "3500 click 277 177",               # Start Network Game
+        "6500 type Bosman",                 # Enter Network Game Name
+        "8500 click 705 572",               # Next (ends the text entry)
+        "10000 click 705 572",              # Next
+        "wait leagues",
+        "2000 click 705 572",               # Select League(s): Next makes the network game and loads the data
+        f"wait screen:{NAME_BUILD}",
+        "2000 dump {d}/host-1-name.bmp",
+        f"{later} click 560 246",           # First Name
+        f"{later + 500} type Join",
+        f"{later + 2000} click 560 310",    # Second Name
+        f"{later + 3000} type Two",
+        f"{later + 4500} click 560 246",    # First Name
+        f"{later + 5000} dump {{d}}/host-2-typed.bmp",
+        f"{later + 6000} quit",
+    ]
 
 
 def joiner_steps(address, n):
@@ -94,8 +99,11 @@ def joiner_steps(address, n):
         "17000 type Join",
         "19000 click 560 310",              # Second Name
         "20000 type Two",
-        "22000 dump {d}/join%d-2-typed.bmp" % n,
-        "23000 quit",
+        # The joiner draws its own text entry. A click sends the click packet (opcode 6, Display::send_widget_click
+        # 0x568560) with the fields, and the host draws the names in the screen it sends back.
+        "21500 click 560 246",
+        "24000 dump {d}/join%d-2-typed.bmp" % n,
+        "25000 quit",
     ]
 
 
@@ -160,6 +168,9 @@ def main(argv):
     program, game = os.path.abspath(args[0]), os.path.abspath(args[1])
     address, shots, joiners, slow = lan_address(), None, 1, 1.0
     rest = args[2:]
+    if len(rest) % 2:
+        print(__doc__)
+        return 2
     while rest:
         k, v = rest[0], rest[1]
         rest = rest[2:]
@@ -185,30 +196,33 @@ def main(argv):
         shots = shots or work
         os.makedirs(shots, exist_ok=True)
         print(f"host address {address}")
-        host, host_err = start(program, game, work, "host", HOST, shots, slow)
+        host, host_err = start(program, game, work, "host", host_steps(joiners), shots, slow)
         ready = wait_for(os.path.join(shots, "host-stderr.txt"), f"screen {NAME_BUILD}", host, 240 * slow)
         check(ready, "the host reaches its Enter Name screen with the network game made")
         procs = []
-        if ready:
-            for n in range(1, joiners + 1):
-                # The original's loopback test 0x8af290 binds 127.0.0.1:6667 for a moment in each game. Two games
-                # on one computer that run it at the same time collide, and one turns network play off.
-                if n > 1:
-                    time.sleep(4 * slow)
-                procs.append(start(program, game, work, f"join{n}", joiner_steps(address, n), shots, slow))
-        for p, err in procs:
-            try:
-                p.wait(timeout=180 * slow)
-            except subprocess.TimeoutExpired:
-                p.kill()
-                p.wait()
-            err.close()
         try:
-            host.wait(timeout=240 * slow)
-        except subprocess.TimeoutExpired:
-            host.kill()
-            host.wait()
-        host_err.close()
+            if ready:
+                for n in range(1, joiners + 1):
+                    # The original's loopback test 0x8af290 binds 127.0.0.1:6667 for a moment in each game. Two
+                    # games on one computer that run it at the same time collide, and one turns network play off.
+                    if n > 1:
+                        time.sleep(4 * slow)
+                    procs.append(start(program, game, work, f"join{n}", joiner_steps(address, n), shots, slow))
+            for p, _ in procs:
+                try:
+                    p.wait(timeout=180 * slow)
+                except subprocess.TimeoutExpired:
+                    pass
+            try:
+                host.wait(timeout=240 * slow)
+            except subprocess.TimeoutExpired:
+                pass
+        finally:
+            for p, err in procs + [(host, host_err)]:
+                if p.poll() is None:
+                    p.kill()
+                    p.wait()
+                err.close()
 
         check(host.returncode == 0, f"host ended with code {host.returncode}")
         for n, (p, _) in enumerate(procs, 1):

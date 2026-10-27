@@ -17,13 +17,17 @@
  * the length and the body. Any call other than a send to that socket sends what is held.
  *
  * UDP. The game binds each UDP socket to an adapter address on port 6667 (0x8aec05) and broadcasts to
- * the adapter's subnet broadcast. Windows delivers a subnet broadcast to such a socket. macOS and Linux
- * do not (tested on this Mac, 2026-10-27). And when two games on one computer share port 6667, the
+ * the adapter's subnet broadcast. Windows delivers a subnet broadcast to such a socket. macOS does not
+ * (tested on this Mac, 2026-10-27), and Linux delivers a broadcast only to sockets on any address. And when two games on one computer share port 6667, the
  * system gives a datagram sent to one address and port to only one of them. So a UDP socket of the game
  * is two host sockets: one on any address, port 6667, shared (SO_REUSEADDR and SO_REUSEPORT), that takes
  * the broadcasts, and one on the adapter address with a port of the system's choice, that sends. The
  * host's ACK goes back to the sender's address and port (0x8aed5a), so it reaches the right game. The
- * same on Windows, so every system behaves alike.
+ * same on Windows, so every system behaves alike. The game opens one UDP socket for each adapter
+ * (0x8aea80), and each shared socket gets every broadcast. So a shared socket keeps only the datagrams
+ * whose sender is in its adapter's subnet, as a socket bound to the adapter address on Windows does.
+ * Else a host would answer one request once for each adapter, and a joiner that gets one BYE for each
+ * adapter would add a row for each copy after the first (0x77b448).
  *
  * Traffic. Each TCP connection counts bytes, sends and packets in both directions. A packet is a
  * 4-byte length and its body (0x77ac30, 0x77b45e). */
@@ -41,6 +45,9 @@ typedef struct {                   /* the 4-byte length framing of one direction
     int have;                      /* length bytes seen of the current packet, 0..4 */
     uint8_t len[4];
     uint32_t body;                 /* body bytes still to come */
+    uint32_t size;                 /* the body length of the current packet, until its first byte is seen */
+    uint32_t op_packets[32];       /* by the packet's first byte, the opcode of 0x564080 (0..26) */
+    uint64_t op_bytes[32];
 } Frame;
 
 typedef struct {
@@ -52,6 +59,7 @@ typedef struct {
     int broadcast;                 /* SO_BROADCAST, for the UDP send socket */
     hn_sock s;
     hn_sock out;                   /* UDP: the send socket, else HN_INVALID */
+    uint32_t net, mask;            /* UDP: the adapter's subnet, for the shared socket's datagrams */
     uint8_t *q;                    /* send queue */
     size_t qlen, qoff, qcap;
     uint32_t peer;
@@ -68,7 +76,10 @@ static FILE *log_file;
 static uint64_t last_log;
 static int log_ready;
 
+static int connect_ms = NC_CONNECT_MS;
+
 int nc_error(void) { return error_code; }
+void nc_set_connect_ms(int ms) { connect_ms = ms; }
 void nc_set_error(int code) { error_code = code; }
 
 static int fail(int code)
@@ -104,6 +115,15 @@ void nc_log_to(const char *path)
     if (log_file) last_log = hn_ms();
 }
 
+/* The packets of one direction by opcode: "op=packets/bytes" for each opcode seen. */
+static void log_ops(const Sock *k, const char *dir, const Frame *f)
+{
+    fprintf(log_file, "net ops h=%u %s", k->handle, dir);
+    for (int i = 0; i < 32; i++)
+        if (f->op_packets[i]) fprintf(log_file, " %d=%u/%llu", i, f->op_packets[i], (unsigned long long)f->op_bytes[i]);
+    fprintf(log_file, "\n");
+}
+
 static void log_line(const Sock *k, const char *what, const NcCounts *c)
 {
     char peer[20];
@@ -113,6 +133,10 @@ static void log_line(const Sock *k, const char *what, const NcCounts *c)
             (unsigned long long)((hn_ms() - k->opened) / 1000), (unsigned long long)c->bytes_out,
             (unsigned long long)c->packets_out, (unsigned long long)c->sends,
             (unsigned long long)c->bytes_in, (unsigned long long)c->packets_in);
+    if (!strcmp(what, "close") || !strcmp(what, "end")) {
+        log_ops(k, "out", &k->fo);
+        log_ops(k, "in", &k->fi);
+    }
     fflush(log_file);
 }
 
@@ -149,6 +173,10 @@ static unsigned frame_feed(Frame *f, const uint8_t *p, uint32_t n)
     unsigned done = 0;
     while (n) {
         if (f->body) {
+            if (f->size) {         /* the opcode */
+                f->op_packets[*p & 31]++, f->op_bytes[*p & 31] += f->size + 4;
+                f->size = 0;
+            }
             uint32_t take = n < f->body ? n : f->body;
             f->body -= take, p += take, n -= take;
             if (!f->body) done++;
@@ -161,6 +189,7 @@ static unsigned frame_feed(Frame *f, const uint8_t *p, uint32_t n)
                       (uint32_t)f->len[3] << 24;
             /* A length of 0 or above 50,000 is not a packet of the game (0x77ac43, 0x77acb4). */
             if (f->body > 50000u) f->body = 0;
+            f->size = f->body;
         }
     }
     return done;
@@ -355,6 +384,10 @@ int nc_bind(uint32_t h, uint32_t addr, uint16_t port)
         return fail(e);
     }
     k->out = out;
+    uint32_t ad[32], mask[32];
+    int n = hn_adapters(ad, mask, 32);
+    for (int i = 0; i < n; i++)
+        if (ad[i] == addr) k->net = addr & mask[i], k->mask = mask[i];
     return 0;
 }
 
@@ -404,7 +437,7 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
     if (!k->stream) return fail(10045);                          /* WSAEOPNOTSUPP: the game never does */
-    if (hn_connect(k->s, addr, port, NC_CONNECT_MS) < 0) return fail_host();
+    if (hn_connect(k->s, addr, port, connect_ms) < 0) return fail_host();
     connected(k, addr, port);
     return 0;
 }
@@ -432,10 +465,12 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
     Sock *k = find(h);
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
-    if (k->dead) return fail(k->dead);
+    /* Bytes that arrived before a send broke the connection still count, for example the host's quit
+     * packet 0x04 (0x7fc738). */
     long r = hn_recv(k->s, buf, n);
-    if (r < 0 && k->blocking && hn_error() == HN_WOULDBLOCK && hn_wait(k->s, 1, NC_CONNECT_MS) > 0)
+    if (r < 0 && k->blocking && hn_error() == HN_WOULDBLOCK && !k->dead && hn_wait(k->s, 1, NC_CONNECT_MS) > 0)
         r = hn_recv(k->s, buf, n);
+    if (r < 0 && k->dead && hn_error() == HN_WOULDBLOCK) return fail(k->dead);
     if (r < 0) return fail_host();
     k->n.bytes_in += (uint64_t)r;
     k->n.packets_in += frame_feed(&k->fi, buf, (uint32_t)r);
@@ -466,8 +501,15 @@ long nc_recvfrom(uint32_t h, void *buf, uint32_t n, uint32_t *addr, uint16_t *po
         return r;
     }
     long r = -1;
+    uint32_t from = 0;
     if (k->out != HN_INVALID) r = hn_recvfrom(k->out, buf, n, addr, port);
-    if (r < 0) r = hn_recvfrom(k->s, buf, n, addr, port);
+    /* The shared socket: drop the datagrams from other adapters' subnets (see the head of this file). */
+    for (int i = 0; r < 0 && i < 64; i++) {
+        r = hn_recvfrom(k->s, buf, n, &from, port);
+        if (r >= 0 && k->mask && (from & k->mask) != k->net) r = -1;
+        else if (r < 0) break;
+        else if (addr) *addr = from;
+    }
     if (r < 0) return fail_host();
     k->n.bytes_in += (uint64_t)r, k->n.packets_in++;
     return r;
