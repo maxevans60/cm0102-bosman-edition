@@ -1,7 +1,9 @@
 // The lobby: one Durable Object that keeps the list of open online games.
-// Everything lives in memory only, so no stored record holds an internet address (Q26).
-// If the object restarts, a heartbeat answers unknown_game and the host registers again
-// with its code and host token, so the game keeps its code and its relay.
+// Each game is stored, so the list survives when the runtime evicts an idle object.
+// Internet addresses are never stored (Q26). The lobby keeps a salted hash of each host's
+// address in memory only, for the limit of 2 games, and learns it again from the next
+// heartbeat after an eviction. A stored hash would not help: the salt would have to be
+// stored too, and then an IPv4 address could be found from the hash by trying them all.
 import { DurableObject } from "cloudflare:workers";
 import { hashPassword, randomBytes, randomCode, sameBytes, sha256 } from "./crypto";
 import { err, type Result } from "./http";
@@ -17,25 +19,41 @@ export const MAX_OPEN_GAMES = 300;
 export const MAX_FAILED_PER_ADDRESS = 5;
 export const MAX_FAILED_PER_GAME = 30;
 const FAILED_PASSWORD_WINDOW_MS = 60_000;
+/**
+ * A heartbeat writes the game only when the stored copy is this old, also when a field changed.
+ * This keeps each game at about 1,440 written rows a day (100,000 a day are free).
+ */
+export const STORE_SEEN_EVERY_MS = 60_000;
 
 interface Failures {
   since: number;
   count: number;
 }
 
-interface Game {
+/** The stored part of a game. It holds no internet address and no address hash. */
+interface StoredGame {
   code: string;
   gameId: string;
-  /** A salted hash of the host's internet address. The salt is random and lives in memory only. */
-  addressKey: string;
   info: PublicInfo;
   hostTokenHash: Uint8Array;
   password: { salt: Uint8Array; hash: Uint8Array } | null;
   lastSeen: number;
+}
+
+interface Game extends StoredGame {
+  /**
+   * A salted hash of the host's internet address, in memory only. The salt is random and is
+   * never stored. Null after an eviction until the host's next heartbeat.
+   */
+  addressKey: string | null;
+  /** The lastSeen value in storage. */
+  storedSeen: number;
   /** Wrong passwords in the current minute: in total, and for each salted address hash. */
   failed: Failures;
   failedBy: Map<string, Failures>;
 }
+
+const PREFIX = "g:";
 
 /**
  * The part of an internet address that names one home connection. An IPv6 home connection
@@ -57,13 +75,56 @@ function hex(b: Uint8Array): string {
   return [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
+/** Cloudflare deletes at most 128 keys in one call. */
+const MAX_DELETE_KEYS = 128;
+
+/** The clock. Tests set it with setClock; it outlives an eviction, as the real clock does. */
+let clock: () => number = () => Date.now();
+
 export class Lobby extends DurableObject<Env> {
-  /** The clock. Tests replace it. */
-  now: () => number = () => Date.now();
+  now(): number {
+    return clock();
+  }
+
+  /** Test hook: a fixed time in ms, or null for the real clock. */
+  setClock(ms: number | null) {
+    clock = ms === null ? () => Date.now() : () => ms;
+  }
 
   private games = new Map<string, Game>();
   private byGameId = new Map<string, string>();
   private readonly addressSalt = randomBytes(32);
+
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    ctx.blockConcurrencyWhile(() => this.load());
+  }
+
+  /** Reads the stored games after a start or an eviction. */
+  private async load() {
+    const now = this.now();
+    for (const s of (await this.ctx.storage.list<StoredGame>({ prefix: PREFIX })).values()) {
+      // The stored time can be up to STORE_SEEN_EVERY_MS behind the last heartbeat. Take the
+      // latest time it can be, so that a live game does not expire early.
+      const lastSeen = Math.max(s.lastSeen, Math.min(s.lastSeen + STORE_SEEN_EVERY_MS, now));
+      const g: Game = { ...s, lastSeen, storedSeen: s.lastSeen, addressKey: null, failed: { since: 0, count: 0 }, failedBy: new Map() };
+      this.games.set(g.code, g);
+      this.byGameId.set(g.gameId, g.code);
+    }
+  }
+
+  private async store(g: Game) {
+    const s: StoredGame = {
+      code: g.code,
+      gameId: g.gameId,
+      info: g.info,
+      hostTokenHash: g.hostTokenHash,
+      password: g.password,
+      lastSeen: g.lastSeen,
+    };
+    await this.ctx.storage.put(PREFIX + g.code, s);
+    g.storedSeen = g.lastSeen;
+  }
 
   private relay(code: string) {
     return this.env.RELAY.get(this.env.RELAY.idFromName(code));
@@ -83,9 +144,23 @@ export class Lobby extends DurableObject<Env> {
     return n;
   }
 
-  private remove(g: Game) {
+  /** Adds a game to memory and storage. If the write fails, the game is not added. */
+  private async add(g: Game) {
+    this.games.set(g.code, g);
+    this.byGameId.set(g.gameId, g.code);
+    try {
+      await this.store(g);
+    } catch (e) {
+      if (this.games.get(g.code) === g) this.games.delete(g.code);
+      if (this.byGameId.get(g.gameId) === g.code) this.byGameId.delete(g.gameId);
+      throw e;
+    }
+  }
+
+  private async remove(g: Game) {
     this.games.delete(g.code);
     if (this.byGameId.get(g.gameId) === g.code) this.byGameId.delete(g.gameId);
+    await this.ctx.storage.delete(PREFIX + g.code);
   }
 
   private async teardown(code: string) {
@@ -99,14 +174,14 @@ export class Lobby extends DurableObject<Env> {
   /** Drops every game with no heartbeat for EXPIRE_SECONDS, and closes its relay. */
   private async prune() {
     const limit = this.now() - EXPIRE_SECONDS * 1000;
-    const dropped: string[] = [];
-    for (const g of this.games.values()) {
-      if (g.lastSeen <= limit) {
-        this.remove(g);
-        dropped.push(g.code);
-      }
+    const expired = [...this.games.values()].filter((g) => g.lastSeen <= limit);
+    for (const g of expired) {
+      this.games.delete(g.code);
+      if (this.byGameId.get(g.gameId) === g.code) this.byGameId.delete(g.gameId);
     }
-    await Promise.all(dropped.map((c) => this.teardown(c)));
+    const keys = expired.map((g) => PREFIX + g.code);
+    for (let i = 0; i < keys.length; i += MAX_DELETE_KEYS) await this.ctx.storage.delete(keys.slice(i, i + MAX_DELETE_KEYS));
+    await Promise.all(expired.map((g) => this.teardown(g.code)));
   }
 
   private async isHost(g: Game, token: string | null): Promise<boolean> {
@@ -172,11 +247,16 @@ export class Lobby extends DurableObject<Env> {
         hostTokenHash: tokenHash,
         password,
         lastSeen: this.now(),
+        storedSeen: 0,
         failed: { since: 0, count: 0 },
         failedBy: new Map(),
       };
-      this.games.set(code, g);
-      this.byGameId.set(gameId, code);
+      try {
+        await this.add(g);
+      } catch (e) {
+        await this.teardown(code);
+        throw e;
+      }
       return this.registered(g, token, 201);
     }
     return err("unavailable");
@@ -210,21 +290,25 @@ export class Lobby extends DurableObject<Env> {
       hostTokenHash: tokenHash,
       password,
       lastSeen: this.now(),
+      storedSeen: 0,
       failed: g?.failed ?? { since: 0, count: 0 },
       failedBy: g?.failedBy ?? new Map(),
     };
-    this.games.set(code, restored);
-    this.byGameId.set(gameId, code);
+    await this.add(restored);
     return this.registered(restored, token, 200);
   }
 
-  async heartbeat(code: string, token: string | null, input: HeartbeatInput): Promise<Result> {
+  async heartbeat(code: string, token: string | null, input: HeartbeatInput, address: string): Promise<Result> {
     await this.prune();
     const g = this.games.get(code);
     if (g === undefined) return err("unknown_game");
     if (!(await this.isHost(g, token))) return err("not_host");
+    const addressKey = await this.addressKey(address);
+    if (this.games.get(code) !== g) return err("unknown_game"); // closed or expired meanwhile
+    g.addressKey = addressKey;
     Object.assign(g.info, input);
     g.lastSeen = this.now();
+    if (g.lastSeen - g.storedSeen >= STORE_SEEN_EVERY_MS) await this.store(g);
     return { ok: true, body: { ok: true } };
   }
 
@@ -233,7 +317,7 @@ export class Lobby extends DurableObject<Env> {
     const g = this.games.get(code);
     if (g === undefined) return err("unknown_game");
     if (!(await this.isHost(g, token))) return err("not_host");
-    this.remove(g);
+    await this.remove(g);
     await this.teardown(code);
     return { ok: true, body: { ok: true } };
   }
@@ -288,14 +372,19 @@ export class Lobby extends DurableObject<Env> {
 
   // Test hooks. They read memory only and return no internet address.
 
-  /** Forgets every game, as a restart does. */
-  forgetAll() {
+  /** Forgets every game in memory and in storage, as if the lobby lost its data. */
+  async forgetAll() {
     this.games.clear();
     this.byGameId.clear();
+    await this.ctx.storage.deleteAll();
+  }
+
+  addressKeys(): string[] {
+    return [...new Set([...this.games.values()].map((g) => g.addressKey).filter((k) => k !== null))];
   }
 
   addressCount(): number {
-    return new Set([...this.games.values()].map((g) => g.addressKey)).size;
+    return this.addressKeys().length;
   }
 
   debugDump(): string {

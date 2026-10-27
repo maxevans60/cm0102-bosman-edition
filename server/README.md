@@ -3,9 +3,10 @@
 The lobby keeps the list of open online games. The relay passes traffic between a host and its human managers. Both run as one Cloudflare Worker on the free plan (0.7.0, #45, slice 3 of `docs/specs/2026-10-27-online-play-0.7.0-spec.md`).
 
 - `src/index.ts`: the Worker. It reads requests, checks fields and sends each call to the lobby or a relay.
-- `src/lobby.ts`: the `Lobby` Durable Object. One object holds every open game, in memory only.
+- `src/lobby.ts`: the `Lobby` Durable Object. One object holds every open game. The games are in its storage, so they survive when Cloudflare evicts an idle object.
 - `src/relay.ts`: the `Relay` Durable Object. There is one object for each game, named by the game code. It uses the WebSocket Hibernation API.
 - `src/filter.ts`: the word filter for player names and game names.
+- `src/join.ts`: the invite link page (slice 8).
 - `test/`: tests that run in the local Workers runtime (workerd), with no Cloudflare account.
 
 ## Run the tests
@@ -50,7 +51,7 @@ Figures checked on 2026-10-27 on developers.cloudflare.com (Workers limits and D
 What one game uses:
 
 - An open game sends a heartbeat every 30 s. That is 2,880 Worker requests and 2,880 Durable Object requests a day. About 30 games can stay open all day, with room for game list requests.
-- The lobby writes nothing to storage. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
+- The lobby writes 1 row when a game registers, closes or expires. A heartbeat writes 1 row at most once a minute, also when a listed field changes. That is about 1,440 rows a day for each game, so the 100,000 free rows cover about 69 games open all day. The Worker request limit stops at about 30 games first. After an eviction, the list can show fields up to 60 s old until the next heartbeat. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
 - A relay is awake while frames flow. One awake relay uses 450 GB-s an hour, so the free plan gives about 28 relay hours a day in total.
 - A host that sends a batch every 50 ms sends 20 messages a second, which bills as 1 request a second, or 3,600 an hour. Each human manager adds to this.
 
@@ -60,7 +61,7 @@ For slices 4 and 5, this means: send a batch only when there is data, and send n
 
 ## API contract (version 1)
 
-The game uses this contract in slices 4, 5 and 8. The base is the deploy address, for example `https://bosman-online.<account>.workers.dev`.
+The game uses this contract in slices 4, 5 and 8. The invite link page at the end of this section is for people, not for the game. The base is the deploy address, for example `https://bosman-online.<account>.workers.dev`.
 
 ### Rules for the game side
 
@@ -88,7 +89,7 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 | `awayClubs` | string array | Optional, empty by default. The clubs whose human manager is Away: the connection dropped and the club is on holiday. The same rules as `humanClubs`. |
 | `freeSeats` | integer | 0 to 16 |
 | `managersOnline` | integer | 0 to 16 |
-| `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash (20,000 rounds), in memory. |
+| `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash (20,000 rounds) in its storage. |
 
 ### Endpoints
 
@@ -99,7 +100,7 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 - Keep `hostToken` secret. Heartbeat, close and the host relay connection need it.
 - To register the same game again (see the heartbeat), add `code` and `hostToken` to the body. The answer is 200 with the same code and token.
 
-`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `awayClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. The lobby keeps games in memory only, so this also happens after a lobby restart or a deploy. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
+`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `awayClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. This also happens if the lobby loses its storage. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
 
 `DELETE /v1/games/<code>`, with the header `Authorization: Bearer <hostToken>`, closes the game and its relay. The host sends it when it quits.
 
@@ -173,13 +174,21 @@ Close codes:
 
 When the host connection closes, the relay closes every human manager with 4000. A host can connect again with the same token while the game is open.
 
-### Reserved for the invite link (slice 8)
+### Invite link page (slice 8)
 
-`GET /join/<code>` is kept for the invite link page. Today it answers `not_found`. Slice 8 builds the page from `GET /v1/games/<code>`. The site states the privacy rule in one line: the lobby keeps internet addresses in memory only while the game is open, and writes them to no log.
+`GET /join/<code>` (and `HEAD`) gives an HTML page for a person, not JSON. The game never calls it. A host posts the address, for example `https://<address>/join/K7M2Q9RT`, and a friend opens it in a browser. The code is read in any case.
+
+- An open game: the page shows its name, host, season, game date, database, human clubs, managers online, places left and version. It has an "Open in Bosman Edition" button for `cm0102://join/<code>`, the game code to find the game by hand, a line for a game with a password, and a download link to the latest GitHub release. Status 200.
+- A game that is not open, or a code that is not valid: "This game is not open", with the download link. Status 404.
+- A lobby failure: the "full today" or "not available" text as a page. Status 503.
+
+The page has no script, no cookie, no picture and no outside file. Its headers forbid all of them (`Content-Security-Policy: default-src 'none'`), send no referrer and allow no cache. It reads the game with the lobby's `get`, so it keeps no record of the visitor. Its last line states the privacy rule (Q26): the lobby keeps internet addresses in memory only while a game is open, and writes them to no log. `src/join.ts` builds it, and `test/join.test.ts` tests it.
+
+Each page view is one Worker request and one Durable Object request. A chat program that shows a preview of the link (Discord, for example) also loads the page once.
 
 ## Privacy
 
 - The Worker writes no log lines.
-- The lobby keeps a salted SHA-256 hash of each host's internet address (the first 64 bits for IPv6), in memory only, to count open games for each address. It also keeps one for each address that sent a wrong password, for one minute. The salt is random and is never stored. The hash goes when the game closes or expires.
-- The lobby stores nothing in Durable Object storage. The relay stores the game code, its key, the id of the host connection and used ticket ids. Once an hour, a relay with no host connection asks the lobby if the game is open. If it is not, the relay deletes all of this. It never receives the internet address, because the Worker passes it only the `Upgrade` header and the query.
+- The lobby keeps a salted SHA-256 hash of each host's internet address (the first 64 bits for IPv6), in memory only, to count open games for each address. It also keeps one for each address that sent a wrong password, for one minute. The salt is random and is never stored. The hash goes when the game closes or expires. When Cloudflare evicts the idle lobby, the hashes go too. The lobby learns each host's hash again from its next heartbeat, so for up to 30 s after an eviction one address can register more than 2 games. A stored hash would not be safe: its salt would have to be stored too, and an IPv4 address could then be found from the hash by trying every address.
+- The lobby stores each open game: its code, the save's game id, the listed fields, a hash of the host token, the password hash and the time of the last heartbeat. It deletes the game when it closes or expires. The relay stores the game code, its key, the id of the host connection and used ticket ids. Once an hour, a relay with no host connection asks the lobby if the game is open. If it is not, the relay deletes all of this. It never receives the internet address, because the Worker passes it only the `Upgrade` header and the query.
 - The tests check log lines, answers, lobby memory and both storages for the test addresses.

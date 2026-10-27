@@ -7,7 +7,8 @@
  * - heartbeat: POST /v1/games/<code>/heartbeat every heartbeatSeconds, with the latest fields. unknown_game:
  *   register again with code and hostToken. If that gives not_host, the game expired: register as a new game.
  * - close: DELETE /v1/games/<code>.
- * List: GET /v1/games. */
+ * List: GET /v1/games.
+ * One game (the invite link, slice 8): GET /v1/games/<code>. */
 #include "lobby.h"
 #include "lobby_http.h"
 #include "../host_net.h"
@@ -33,6 +34,9 @@ static struct {
     char code[9], token[96];
     int want_list, list_ready, list_result, list_n;
     LobbyRow list[LOBBY_ROWS];
+    char want_game[9], game_code[9];     /* game_code: the last code asked for; an older answer is dropped */
+    int game_ready, game_result;
+    LobbyRow game_row;
 } sh;
 
 /* ---- text ---- */
@@ -340,6 +344,18 @@ int lobby_parse_games(const char *json, LobbyRow *rows, int max)
     return object(&j, list_key, &l) ? l.n : -1;
 }
 
+static int one_key(J *j, const char *k, void *ctx)
+{
+    return strcmp(k, "game") ? skip(j) : object(j, game_key, ctx);
+}
+
+int lobby_parse_game(const char *json, LobbyRow *row)
+{
+    J j = {json, 0};
+    memset(row, 0, sizeof *row);
+    return object(&j, one_key, row) && row->code[0] && row->g.name[0];
+}
+
 typedef struct {
     char *code, *token;
     int beat;
@@ -458,6 +474,25 @@ static void lobby_thread(void *unused)
             sh.list_n = n, sh.list_result = r, sh.list_ready = 1;
             hn_unlock();
         }
+
+        hn_lock();
+        char want_game[9];
+        memcpy(want_game, sh.want_game, sizeof want_game);
+        sh.want_game[0] = 0;
+        hn_unlock();
+        if (want_game[0]) {
+            snprintf(path, sizeof path, "/v1/games/%s", want_game);
+            LhResult r = lobby_http(base, "GET", path, NULL, NULL, LH_TIMEOUT_MS, &answer);
+            static LobbyRow row;
+            if (r == LH_OK && (!lobby_parse_game(answer.body, &row) || strcmp(row.code, want_game))) r = LH_UNAVAILABLE;
+            say("game", r);
+            hn_lock();
+            if (!sh.want_game[0] && !strcmp(sh.game_code, want_game)) {
+                sh.game_row = row;
+                sh.game_result = r, sh.game_ready = 1;
+            }
+            hn_unlock();
+        }
         hn_sleep(TICK_MS);
     }
 }
@@ -524,6 +559,31 @@ int lobby_list_take(LobbyRow *rows, int max, int *result)
     }
     hn_unlock();
     return n;
+}
+
+void lobby_game_fetch(const char *code)
+{
+    if (!lobby_usable()) return;
+    hn_lock();
+    snprintf(sh.want_game, sizeof sh.want_game, "%s", code);
+    memcpy(sh.game_code, sh.want_game, sizeof sh.game_code);
+    sh.game_ready = 0;
+    start_thread();
+    hn_unlock();
+}
+
+int lobby_game_take(LobbyRow *row, int *result)
+{
+    int got = 0;
+    hn_lock();
+    if (sh.game_ready) {
+        *row = sh.game_row;
+        *result = sh.game_result;
+        sh.game_ready = 0;
+        got = 1;
+    }
+    hn_unlock();
+    return got;
 }
 
 void lobby_finish(int ms)
