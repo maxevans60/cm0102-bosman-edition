@@ -122,6 +122,11 @@ if(NOT WIN32)
     add_executable(heap_test tests/recomp/test_heap.c src/recomp_rt/heap.c)
     target_include_directories(heap_test PRIVATE src/recomp_rt)
     add_test(NAME heap COMMAND heap_test)
+    # The game's sockets (0.7.0 slice 2): WinSock behaviour on the host's sockets over 127.0.0.1.
+    add_executable(net_core_test tests/net/test_net_core.c src/recomp_rt/win/net_core.c
+        src/recomp_rt/host/net_posix.c)
+    target_include_directories(net_core_test PRIVATE src/recomp_rt src/recomp_rt/win)
+    add_test(NAME net_core COMMAND net_core_test)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
@@ -323,9 +328,9 @@ if(EXISTS "${CM0102_EXE}")
 
     # The host functions (src/recomp_rt/host.h): Windows when cross-compiled with mingw-w64, else POSIX.
     if(WIN32)
-        set(RECOMP_HOST src/recomp_rt/host/win32.c)
+        set(RECOMP_HOST src/recomp_rt/host/win32.c src/recomp_rt/host/net_win32.c)
     else()
-        set(RECOMP_HOST src/recomp_rt/host/posix.c)
+        set(RECOMP_HOST src/recomp_rt/host/posix.c src/recomp_rt/host/net_posix.c)
     endif()
     add_executable(cm0102_recomp ${RECOMP_GEN}
         src/recomp_rt/rt.c

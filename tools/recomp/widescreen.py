@@ -29,10 +29,10 @@ PATCHES = {
     0x55F58D: (599, H1), 0x55F592: (799, W1), 0x55F5EB: (599, H1), 0x55F5F0: (799, W1),
     # Widget drag 0x561210: clamped to the screen.
     0x5612A0: (799, W1), 0x5612A8: (799, W1), 0x5612C9: (599, H1), 0x5612D1: (599, H1),
-    # Display init calls 0x5e2620(800, 600, ...): start-up, the two settings changes, the network path.
+    # Display init calls 0x5e2620(800, 600, ...): start-up and the two settings changes. The network path's
+    # calls (0x8aeed3..0x8aef00) are in the address lookup 0x8aee20, which net.c replaces (0.7.0 slice 2).
     0x5D79ED: (600, H), 0x5D79F2: (800, W),
     0x5D8645: (600, H), 0x5D864A: (800, W), 0x5D8685: (600, H), 0x5D868A: (800, W),
-    0x8AEED3: (600, H), 0x8AEED8: (800, W), 0x8AEEFB: (600, H), 0x8AEF00: (800, W),
     # Outline draw 0x5e7840: the span list starts at x 800, and the lock covers the whole screen.
     0x5E78BA: (800, W), 0x5E78E2: (800, W), 0x5E78EA: (600, H),
     # Error box 0x5e8290: centred in a screen 800 wide. Its y values follow in BOX_Y.
