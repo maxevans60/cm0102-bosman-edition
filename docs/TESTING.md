@@ -56,6 +56,25 @@ The screen sweep opens the tables, results, fixtures, schedule and history of ev
 
 The smoke test plays a fixed set of clicks through the main screens in the classic and widescreen modes. It compares each screenshot with a reference picture. The script is `tests/smoke/smoke_run.py --mode classic` or `--mode widescreen`. It runs at each merge and at each release. The pass rule is no error box and pictures that match. When a change draws something new on purpose, we look at the picture and record a new reference.
 
+## Online play
+
+Network games (0.7.0) have their own tests. The two-game run (`tests/smoke/network_run.py`) starts a host game and joining games on this Mac with timed clicks, and compares the joiners' screens with the host's. It runs at each change of the network code, also under wine with the Windows build. The server tests in `server/` run against a local copy of the lobby and relay.
+
+Before the release, four release tests run (spec Q29). Their scripts are in `tests/online/`. Each script waits for room on the machine, and for any network run of another worktree to end, because two network runs on one Mac collide on port 6667. Each one adds a line to `run-logs/s9-tests/results.tsv`.
+
+| Test | Script | Pass rule |
+|---|---|---|
+| 1. Two and four games on this Mac through the real lobby and relay | `release_mac_run.py` | Each two-game run with 1 and 3 joiners through the relay passes. Without the relay in the build the script runs the lobby and LAN runs and reports STAGE. |
+| 2. The Windows 11 virtual machine joins a game on this Mac | `vm_join_run.py` | The joiner in the virtual machine ends with code 0, its screens equal the host's and its 4 clicks reach the host, over the LAN and through the relay. It starts the virtual machine only after the 0.6.0 gates, and suspends it at the end. |
+| 3. GitHub's Windows and Linux machines join a game on this Mac | `github_join_run.py`, `remote_join.py`, `.github/workflows/online-release-join.yml` | Both joiners pass their checks and their screens equal the host's. The workflow must be on GitHub first. |
+| 4. A four-player game through a World Cup, a Euros and every season change between them | `season_net_run.py` | The host plays a network game from 2001 to 1 September 2004 with the match engine on, one season a leg. Each leg restores the last save, and three joiners take their clubs back with their passwords. Leg 0 also has a drop and rejoin and a game of another version. The last leg ends with a host quit. No box, no stall, every division moves on. |
+
+`tests/online/match_day_run.py` measures the traffic of a match day with two human managers. It passes when both games ran, the joiner made its manager and the host played a match. Its figures are in the network research note, section 16.
+
+Results:
+
+<!-- s9 results -->
+
 ## Platform checks
 
 The game ships for Mac, Windows and Linux. At each release the release script builds all three packages. The Windows build runs its smoke test under wine on the Mac. The Linux build is made and checked in a linux/amd64 container. Each platform runs the smoke test in both screen modes and a season change with a save and load.

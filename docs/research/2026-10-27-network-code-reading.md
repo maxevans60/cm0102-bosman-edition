@@ -592,3 +592,59 @@ Finding for the server (slice 3). The local Workers runtime drops a Durable Obje
 - Joining a lobby game through the relay (slice 5): today a click on a lobby row gives a box that says so.
 - The game id of a restored save (the one-copy rule, Q23): today each hosting has a new id.
 - The lobby address of the release: empty until Max deploys the server. Tests set `RECOMP_LOBBY_URL`.
+
+## 16. Slice 9: release tests, a match day and the free plan (2026-10-27)
+
+Section number 16 leaves 13 to 15 for slices 5, 6 and 7, whose notes use 13 on their branches. Renumber at the merge.
+
+### The release tests
+
+The scripts of the four release tests (spec Q29) are in `tests/online/`, with `docs/TESTING.md` ("Online play") as their summary. They reuse the timed clicks of `tests/smoke/network_run.py`. What the runs on this Mac showed about the original's screens in a network game:
+
+- Restore Network Game (0x81edd0, the button at 277, 242) asks for the game name, then shows Select File with the saves of the save folder, then Manager Status. A restored manager with no password shows "Not Playing". A click on its row gives "Resume control of Arsenal ?" (0x823420), and Yes takes it back. This matches `setup_assign_restored_network_managers` 0x8387e0 (section 7).
+- A joiner of a restored game whose other managers are Away gets Manager Status (0x838a80). A click on its old manager's row, the password and Ok take the club back: "Player Two, Barnsley, Playing" on the joiner's Manager Status.
+- A joiner of a game that runs gets Manager Status too, also when no manager is Away. Add Manager in its left bar opens Enter Name.
+- On the host's news screen the left bar first shows a countdown (5, 4, 3, 2, 1) in place of Continue Game. In one probe the first click on the manager's name then opened no menu, and a click after Escape did. The scripts click, press Escape and click again, then wait for the menu.
+- The host's Go on Holiday works as in single-player: the host is not asked "Exit the network game as you go on holiday ?" (0x7623da), which the holiday code asks only on a channel with a remote player (`[0xb74c24 + slot*0x300]`, docs/research/2026-10-15-holiday-next-match-inventory.md).
+- The type step of a test script reads one word. A game name with a space ("00 S9") becomes "00". The scripts use one-word names.
+
+A gap in release test 4. In the original a joiner who goes on holiday leaves the network game, and a joiner who stays must click Continue Game for each day. So `season_net_run.py` lets the three joiners play at the start of each leg (in July), then they drop and their clubs are Away, and the host plays the rest of the season on holiday as a network host. Every match day, tournament and season change runs in a network game with four human managers, three of them Away. No joiner is connected at the moment of a season change or a tournament match. A joiner that stays connected through a season would need a click loop such as the one of `match_day_run.py`, and a random event of its club (an offer for a player) stops that loop. Max decides whether the release test needs that (recommendation below).
+
+### Cloudflare free plan figures (checked 2026-10-27)
+
+From developers.cloudflare.com (Workers limits, Durable Objects pricing, limits and lifecycle). The pages were read through a summary tool, so each figure should be read once more on the page before a decision depends on it.
+
+| Limit | Free plan |
+|---|---|
+| Worker requests | 100,000 a day, reset at 00:00 UTC |
+| Durable Object requests | 100,000 a day. 20 incoming WebSocket messages bill as 1 request. Outgoing messages are free. A WebSocket connect is 1 request. An alarm run is 1 request. |
+| Durable Object duration | 13,000 GB-s a day. An object bills 128 MB while it is in memory and cannot hibernate, so 13,000 GB-s is about 28.9 object-hours a day for all objects together. |
+| Hibernation | An object with only hibernatable WebSockets hibernates after 10 s with no request or event and then bills no duration. An idle object is evicted after 70 to 140 s. |
+| SQLite storage | 100,000 rows written a day, 5 million rows read a day, 5 GB. A delete counts as a row written. Each `setAlarm` is 1 row written. |
+
+I don't know whether an object that serves only HTTP requests (the lobby) bills its 10 s of idle time after each request. The pricing page bills an object that is "idle in memory but unable to hibernate". The estimates below take the worst case.
+
+### What the server uses, from its code
+
+- A heartbeat every 30 s (`lobby.c`, 30 s from the lobby's answer): 2,880 Worker requests and 2,880 lobby requests a day for each open game.
+- The lobby writes a game's row at most once a minute on a heartbeat (`STORE_SEEN_EVERY_MS`, `server/src/lobby.ts` lines 26 and 311), and once at register and close: about 1,442 rows a day for an open game.
+- The relay writes its key and code at register, an alarm each hour (`CHECK_EVERY_MS`, `relay.ts` line 28: 24 rows and 24 requests a day), a row when the host connects, and a row and a delete for each join ticket. About 30 rows a day for an open game with a few joins.
+- The game list asks the lobby at most once each 5 s while it is open (`LIST_CACHE_MS`, `net_lobby.c` line 68).
+- The relay answers the runtime's "ping" without waking (`setWebSocketAutoResponse`, `relay.ts` line 44). The game's own keepalive (one packet each 30 s from each joiner, 0x7fe212, section 8) is game data, so it wakes the relay.
+
+### Estimates
+
+Always-on game (open all day, human managers only in the evening):
+
+- Worker requests: 2,880 a day. With game list requests, about 30 games can stay open all day, as the server README says.
+- Rows written: about 1,470 a day, so about 68 always-on games. The request limit comes first.
+- Lobby duration, worst case: with 3 or more open games a heartbeat comes at least each 10 s, so the lobby never goes idle: 0.125 GB x 86,400 s = 10,800 GB-s a day, 83 % of the free 13,000. That leaves about 2,200 GB-s, or 4.9 relay-hours a day for all games together. With one open game the lobby is awake about 10 s of each 30 s, about 3,600 GB-s a day.
+- Relay duration while no one plays: none, because the host's relay connection hibernates. A joiner who stays connected but idle sends its keepalive each 30 s, and each wakes the relay for at least 10 s: about 1,500 GB-s a day for each idle joiner, worst case.
+
+Evening (a host and three human managers for 4 hours): see the match day below for the traffic. The relay stays awake while frames flow at least each 10 s. If it is awake the whole evening: 4 h x 450 GB-s = 1,800 GB-s, 14 % of a day's allowance. With the lobby's worst case, the free plan carries about one such evening a day.
+
+What this means: the free plan's daily duration, not its requests, limits online play first, and the lobby's own awake time may take most of it. Recommendations for Max:
+
+1. After the deploy, read the Durable Objects duration in the Cloudflare dashboard for one day with one or two open games. That gives the real lobby figure in place of the worst case.
+2. If the lobby uses most of the duration: keep the game list in a cache, or move the lobby to a Worker that keeps the list in the Cache API, so that a heartbeat does not keep an object awake. That is a slice 3 change.
+3. A paid Workers plan has a larger duration allowance. I did not check its price or figures. Q11 says the free plan.
