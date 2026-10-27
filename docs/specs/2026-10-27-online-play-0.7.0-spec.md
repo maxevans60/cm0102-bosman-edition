@@ -66,6 +66,7 @@ Rules from the interview:
 - The lobby allows one open copy of a game. A second host sees that the game is already open and can join it (Q23).
 - Player names are free text with no account. A word filter checks player names and game names (Q13).
 - The host has Kick. The lobby allows at most 2 open games for each internet address (Q14).
+- The host sets the game password, and kicks a human manager, on the Network tab of the options box. A joiner gets a small password box when the game needs one. Kick asks "Kick <name>? Their club goes on holiday." with Yes and No. Both are in the runtime, with no change to the original's screens (Q38, Q39). Slice 6 builds both.
 - The lobby keeps internet addresses in memory only while the game is open and writes them to no log. The site says this in one line (Q26).
 - Online play is an option on the game's options screen, on by default. When it is off, the game list shows LAN games only and the game does not contact the lobby (Q25).
 
