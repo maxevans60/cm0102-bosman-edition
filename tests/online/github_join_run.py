@@ -4,7 +4,7 @@ game that this Mac hosts over the internet, with scripted clicks.
 
 Usage:
     python3 tests/online/github_join_run.py <cm0102_recomp> [--game <folder>] [--server real|<address>]
-        [--dispatch] [--ref <branch>] [--run-id <id>] [--name <game name>] [--host-wait-minutes 45]
+        [--push] [--run-id <id>] [--name <game name>] [--host-wait-minutes 45]
         [--out <folder>]
 
 The workflow is .github/workflows/online-release-join.yml, and its joiner is tests/online/remote_join.py.
@@ -15,13 +15,14 @@ The steps:
     1  Wait for room (online_common.wait_for_room). The host makes a game named "00S9-<time>" (or --name): one
        word, because the type step reads one word, and 00 makes it the first row of the joiners' list
        (remote_join.py).
-    2  --dispatch: `gh workflow run online-release-join.yml --ref <branch>` (default: this checkout's branch, so
-       that the runners build the same code) with the lobby address and the name, and the run's id from
-       `gh run list`. Without --dispatch the script prints the command, for a start by hand, and finds that run
-       in `gh run list` while the host waits. --run-id gives the run instead.
+    2  --push: push this checkout's commit to the branch online-ci-test (never main). The workflow's push
+       trigger starts it with the game name 00S9-CI and the real lobby; the run's id comes from `gh run list`.
+       (GitHub starts workflow_dispatch only for a workflow on the default branch, which the 0.6.0 work owns.)
+       Without --push the script prints the push command and finds the run in `gh run list` while the host
+       waits. Max allowed pushes of online branches (Q43).
     3  The host waits at its Enter Name for --host-wait-minutes (default 45: the build takes about 20 minutes and
        the two joiners join one at a time or together), then types its own names, as in network_run.py.
-    4  With a run id (--dispatch, or --run-id of a run started by hand): `gh run watch`, then `gh run download`
+    4  With a run id (--push, a run found while the host waits, or --run-id): `gh run watch`, then `gh run download`
        into <out>/runner/, and the joiners' dumps are compared with the host's.
 
 Checks:
@@ -48,31 +49,34 @@ import smoke_run  # noqa: E402
 
 WORKFLOW = "online-release-join.yml"
 JOINERS = ("join-Linux", "join-Windows")
+TEST_BRANCH = "online-ci-test"          # the workflow's push trigger; never main
+CI_NAME = "00S9-CI"                     # the workflow's default game name for a push run
 
 
 def gh(*args, timeout=120):
     return subprocess.run(["gh", *args], capture_output=True, text=True, timeout=timeout)
 
 
-def dispatch(url, name, wait_minutes, ref):
-    """Starts the workflow on the branch ref and returns its run id, or None."""
+def push_test_branch():
+    """Pushes this checkout's commit to the test branch, which starts the workflow with its default inputs
+    (game name CI_NAME, the real lobby). Returns the run id, or None. Never main."""
     t0 = time.time()
-    r = gh("workflow", "run", WORKFLOW, "--ref", ref, "-f", f"lobby_url={url}", "-f", f"game_name={name}",
-           "-f", f"wait_minutes={wait_minutes}")
+    r = subprocess.run(["git", "-C", oc.REPO, "push", "--force", "origin", f"HEAD:refs/heads/{TEST_BRANCH}"],
+                       capture_output=True, text=True)
     if r.returncode:
-        print(f"gh workflow run failed: {r.stderr.strip()}")
+        print(f"git push to {TEST_BRANCH} failed: {r.stderr.strip()}")
         return None
     for _ in range(30):
         time.sleep(5)
-        run = new_run(t0)
+        run = new_run(t0, "push")
         if run:
             return run
     return None
 
 
-def new_run(t0):
-    """The id of a run of the workflow that started at t0 or later, or None."""
-    r = gh("run", "list", "--workflow", WORKFLOW, "--event", "workflow_dispatch", "--limit", "5",
+def new_run(t0, event="push"):
+    """The id of a run of the workflow (started by event) that started at t0 or later, or None."""
+    r = gh("run", "list", "--workflow", WORKFLOW, "--event", event, "--limit", "5",
            "--json", "databaseId,createdAt")
     try:
         runs = json.loads(r.stdout)
@@ -90,18 +94,18 @@ def main(argv):
         print(__doc__)
         return 2
     program = os.path.abspath(args.pop(0))
-    o = {"game": oc.GAME, "server": "real", "run": None, "wait": "45", "out": None, "name": None, "ref": None}
-    do_dispatch = False
+    o = {"game": oc.GAME, "server": "real", "run": None, "wait": "45", "out": None, "name": None}
+    do_push = False
     while args:
         k = args.pop(0)
-        if k == "--dispatch":
-            do_dispatch = True
+        if k == "--push":
+            do_push = True
             continue
         if not args:
             print(__doc__)
             return 2
         key = {"--game": "game", "--server": "server", "--run-id": "run", "--host-wait-minutes": "wait",
-               "--out": "out", "--name": "name", "--ref": "ref"}.get(k)
+               "--out": "out", "--name": "name"}.get(k)
         if not key:
             print(__doc__)
             return 2
@@ -116,10 +120,7 @@ def main(argv):
     out = os.path.abspath(o["out"] or os.path.join(oc.RUN_LOGS, time.strftime("release3-%Y%m%d-%H%M")))
     os.makedirs(out, exist_ok=True)
     # One word (the type step reads one word, user32.c); 00 sorts it first in the joiners' list.
-    name = o["name"] or "00S9-" + time.strftime("%H%M%S")
-    # The runners build the branch of the workflow run: by default this checkout's branch, which must be on GitHub.
-    ref = o["ref"] or subprocess.run(["git", "-C", oc.REPO, "rev-parse", "--abbrev-ref", "HEAD"],
-                                     capture_output=True, text=True).stdout.strip()
+    name = CI_NAME if do_push else o["name"] or "00S9-" + time.strftime("%H%M%S")
     wait_ms = int(o["wait"]) * 60000
     failed = []
 
@@ -141,17 +142,17 @@ def main(argv):
                 break
             time.sleep(1)
         check(listed, f"1 the lobby lists the game {name}")
-        if listed and do_dispatch:
-            run_id = dispatch(url, name, int(o["wait"]) - 5, ref)
+        if listed and do_push:
+            run_id = push_test_branch()
             check(run_id is not None, f"the workflow run started: {run_id}")
         elif listed and not run_id:
-            print(f"start the workflow by hand within {o['wait']} minutes:\n  gh workflow run {WORKFLOW} --ref {ref} "
-                  f"-f lobby_url={url} -f game_name={name}", flush=True)
+            print(f"start the workflow within {o['wait']} minutes (the game name must be {CI_NAME}: give "
+                  f"--name {CI_NAME}):\n  git push --force origin HEAD:refs/heads/{TEST_BRANCH}", flush=True)
         t_host, end = time.time(), time.time() + wait_ms / 1000 + 300
         while host.poll() is None and time.time() < end:
             time.sleep(30)
             if listed and not run_id:       # a run started by hand while the host waits
-                run_id = new_run(t_host)
+                run_id = new_run(t_host, "push") or new_run(t_host, "workflow_dispatch")
         if host.poll() is None:
             raise subprocess.TimeoutExpired("host", wait_ms / 1000 + 300)
     except subprocess.TimeoutExpired:

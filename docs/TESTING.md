@@ -62,13 +62,13 @@ Network games (0.7.0) have their own tests. The two-game run (`tests/smoke/netwo
 
 Before the release, four release tests run (spec Q29). Their scripts are in `tests/online/`. Each script waits for room on the machine, and for any network run of another worktree to end, because two network runs on one Mac collide on port 6667. Each one adds a line to `run-logs/s9-tests/results.tsv`. While several sessions test network play, each run that hosts a network game goes through `the maintainer's notes`, which lets one host at a time use port 6667.
 
-`gh workflow run` starts a manual workflow only when the workflow file is on the default branch. So test 3 needs `.github/workflows/online-release-join.yml` on `main` first.
+Test 3 starts its workflow with a push of the branch `online-ci-test` (`github_join_run.py --push`), because GitHub starts a manual workflow only from the default branch, and `main` belongs to the 0.6.0 work.
 
 | Test | Script | Pass rule |
 |---|---|---|
 | 1. Two and four games on this Mac through the real lobby and relay | `release_mac_run.py` | Each two-game run with 1 and 3 joiners through the relay passes. Without the relay in the build the script runs the lobby and LAN runs and reports STAGE. |
 | 2. The Windows 11 virtual machine joins a game on this Mac | `vm_join_run.py` | The joiner in the virtual machine ends with code 0, its screens equal the host's and its 4 clicks reach the host, over the LAN and through the relay. It starts the virtual machine only after the 0.6.0 gates, and suspends it at the end. |
-| 3. GitHub's Windows and Linux machines join a game on this Mac | `github_join_run.py`, `remote_join.py`, `.github/workflows/online-release-join.yml` | Both joiners pass their checks and their screens equal the host's. The workflow must be on GitHub first. |
+| 3. GitHub's Windows and Linux machines join a game on this Mac | `github_join_run.py`, `remote_join.py`, `.github/workflows/online-release-join.yml` | Both joiners pass their checks and their screens equal the host's. It needs the relay (slice 5). |
 | 4. A four-player game through a World Cup, a Euros and every season change between them | `season_net_run.py` | The host plays a network game from 2001 to 1 September 2004 with the match engine on, one season a leg. Each leg restores the last save, and three joiners take their clubs back with their passwords. Leg 0 also has a drop and rejoin and a game of another version. The last leg ends with a host quit. No box, no stall, every division moves on. |
 
 `tests/online/match_day_run.py` measures the traffic of a match day with two human managers. It passes when both games ran, the joiner made its manager and the host played a match. Its figures are in the network research note, section 16.

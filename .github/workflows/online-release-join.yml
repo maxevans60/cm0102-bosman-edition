@@ -2,7 +2,7 @@
 # Linux machine and a GitHub Windows machine join a game that the Mac hosts over the internet, through the lobby
 # and the relay, with scripted clicks.
 #
-# Started by hand, or by tests/online/github_join_run.py --dispatch on the Mac. It needs two repository secrets,
+# Started by a push of the branch online-ci-test (tests/online/github_join_run.py --push on the Mac). It needs two repository secrets,
 # the download addresses of the free release CM0102.iso and of the official patch cm0102_3968.exe (README.md,
 # "Build from source"): CM0102_ISO_URL and CM0102_PATCH_URL.
 #
@@ -15,6 +15,11 @@
 name: Online release join test
 
 on:
+  # GitHub starts workflow_dispatch only for a workflow on the default branch, and the 0.6.0 work owns main. So a
+  # push of the test branch online-ci-test starts it too (Max allowed pushes of online branches, Q43). The push
+  # run takes its inputs from the env defaults below.
+  push:
+    branches: [online-ci-test]
   workflow_dispatch:
     inputs:
       lobby_url:
@@ -101,9 +106,9 @@ jobs:
       - name: Join the game on the Mac
         shell: bash
         env:
-          LOBBY_URL: ${{ inputs.lobby_url }}
-          GAME_NAME: ${{ inputs.game_name }}
-          WAIT_MINUTES: ${{ inputs.wait_minutes }}
+          LOBBY_URL: ${{ inputs.lobby_url || 'https://bosman-online.maxvert.workers.dev' }}
+          GAME_NAME: ${{ inputs.game_name || '00S9-CI' }}
+          WAIT_MINUTES: ${{ inputs.wait_minutes || '40' }}
         run: |
           exe=builds/cm0102_recomp py=python3
           if [ "$RUNNER_OS" = Windows ]; then exe=builds/cm0102_recomp.exe py=python; fi
