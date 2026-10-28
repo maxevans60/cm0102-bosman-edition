@@ -323,8 +323,8 @@ RT_WRAP(00591840, confirm_push)
         else refuse_for(NE_CREATE_OTHER, NULL, bind);
     } else if (join) {
         char host_version[32];
-        int why = nc_refusal(host_version, sizeof host_version);
-        nc_refusal_clear();
+        int why = nc_refusal(host_version, sizeof host_version), connect_error = nc_connect_error();
+        nc_refusal_clear();                              /* also the connect's error: a later box has its own */
         if (!reason[0] && why == NC_REFUSED_VERSION) refuse_for(NE_VERSION, host_version, 0);
         else if (!reason[0] && why == NC_REFUSED_PASSWORD) {
             /* 0.7.0 slice 6 (Q38): the joiner's password box in place of the box (net_password.c). The caller does
@@ -337,8 +337,8 @@ RT_WRAP(00591840, confirm_push)
         }
         else if (!reason[0] && why == NC_REFUSED_NOT_BOSMAN) refuse_for(NE_NOT_BOSMAN, NULL, 0);
         else if (!reason[0] && why == NC_REFUSED_NO_ANSWER) refuse_for(NE_NO_ANSWER, NULL, 0);
-        else if (!reason[0] && nc_connect_error())
-            refuse_for(net_error_of_connect(nc_connect_error()), NULL, nc_connect_error());
+        else if (!reason[0] && connect_error)
+            refuse_for(net_error_of_connect(connect_error), NULL, connect_error);
     }
     if ((create || join) && reason[0]) {
         static uint32_t at;

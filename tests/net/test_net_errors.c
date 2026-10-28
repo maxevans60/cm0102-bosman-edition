@@ -30,7 +30,7 @@ static int failures;
 static const uint8_t game1[] = {6, 0, 0, 0, 0, 'h', 'e', 'l', 'l', 'o'};     /* opcode 0, a host screen */
 static const uint8_t game2[] = {3, 0, 0, 0, 3, 'a', 'b'};                    /* opcode 3 */
 static const uint8_t from_joiner[] = {2, 0, 0, 0, 1, 'c'};                    /* a click */
-enum { END_QUIT, END_KICK, END_CLOSE };
+enum { END_QUIT, END_KICK, END_CLOSE, END_EXIT };
 
 /* The host: sends game1 with a PING before it, game2 one byte at a time (as Network::send_packet 0x77ac30 sends the
  * length, 0x77ad10..0x77ad46) with PINGs that must wait for the packet's end, reads the joiner's click with no
@@ -73,6 +73,8 @@ static pid_t host(uint32_t me, uint16_t port, int end)
         nc_close(a);
     } else if (end == END_KICK) {
         if (nc_kick(a) != 0) _exit(17);
+    } else if (end == END_EXIT) {
+        exit(0);                                       /* a window close: the runtime's QUIT at exit */
     } else nc_close(a);
     hn_sleep(300);
     _exit(0);
@@ -99,8 +101,8 @@ static void test_control(void)
         return;
     }
     uint16_t port = (uint16_t)(24000 + getpid() % 4000 * 2);
-    static const char *const ends[] = {"quit", "kick", "close"};
-    for (int end = END_QUIT; end <= END_CLOSE; end++) {
+    static const char *const ends[] = {"quit", "kick", "close", "exit"};
+    for (int end = END_QUIT; end <= END_EXIT; end++) {
         pid_t h = host(me, port, end);
         hn_sleep(200);
         nc_set_identity("7.7.7", "", "");
@@ -118,7 +120,8 @@ static void test_control(void)
         CHECK(n == 5 && q[0] == 1 && q[4] == 4 && nc_host_left(), "%s: the client loop gets the quit packet (%d)",
               ends[end], n);
         CHECK(nc_kicked() == (end == END_KICK), "%s: nc_kicked %d", ends[end], nc_kicked());
-        CHECK(nc_host_broke() == (end != END_QUIT), "%s: nc_host_broke %d", ends[end], nc_host_broke());
+        CHECK(nc_host_broke() == (end == END_KICK || end == END_CLOSE), "%s: nc_host_broke %d", ends[end],
+              nc_host_broke());
         int status;
         waitpid(h, &status, 0);
         CHECK(WIFEXITED(status) && WEXITSTATUS(status) == 0, "%s: the host's checks (exit %d: 14 the click had control "

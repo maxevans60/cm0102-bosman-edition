@@ -41,7 +41,7 @@
  * Control packets (0.7.0 slice 7, net_core.h). On a connection that passed the join check, both runtimes may put
  * a packet of their own between two packets of the game: the 4-byte length, the opcode NC_CONTROL_OP, which the
  * game never sends (Display::process_command_packet 0x564080 switches on 0..26 through the table at 0x567a1c), and
- * a line "BOSMAN PING <n>", "BOSMAN PONG <n>" or "BOSMAN KICK". A send puts one only where the game's own stream is
+ * a line "BOSMAN PING <n>", "BOSMAN PONG <n>", "BOSMAN KICK" or "BOSMAN QUIT" (a host that ends at a window close). A send puts one only where the game's own stream is
  * between two packets, and nc_recv takes each one out where the game's reads are between two packets, before
  * the game reads the next length byte. So the game never sees them, and they pass the relay as any bytes. */
 #include "net_core.h"
@@ -106,6 +106,7 @@ static int log_ready;
 static int connect_ms = NC_CONNECT_MS;
 static int host_left;               /* nc_host_left */
 static int host_broke, kicked;      /* nc_host_broke, nc_kicked (0.7.0 slice 7) */
+static int host_quit;               /* the host's QUIT came: it ends on purpose, with no quit packet of the game */
 static int connect_error, bind_error;   /* nc_connect_error, nc_bind_error */
 static int ping_every = NC_PING_MS;
 
@@ -378,6 +379,9 @@ static void control_arrived(Sock *k, const char *line)
         k->ping[0] = ms;
         if (k->ping_n < NC_PING_KEEP) k->ping_n++;
         k->ping_sent = 0;
+    } else if (!strcmp(line, "QUIT")) {
+        host_quit = 1;
+        fprintf(stderr, "recomp: net: the host ends its game\n");
     } else if (!strcmp(line, "KICK")) {
         kicked = 1;
         fprintf(stderr, "recomp: net: the host kicked this computer\n");
@@ -472,7 +476,21 @@ int nc_ping_ms(uint32_t h)
 
 void nc_set_ping_every(int ms) { ping_every = ms; }
 int nc_kicked(void) { return kicked; }
-int nc_host_broke(void) { return host_broke; }
+int nc_host_broke(void) { return host_broke && !host_quit; }
+
+/* At the program's end on a host: a window close or the script's quit ends the program with no quit packet of the
+ * game (net_session.c saves first). Each joiner's runtime gets QUIT, so it says "the host left" and not "the
+ * connection was lost". A crash sends nothing. */
+static void quit_notice(void)
+{
+    uint64_t until = hn_ms() + NC_CLOSE_MS;
+    for (int i = 0; i < MAX_SOCKS; i++) {
+        Sock *k = &socks[i];
+        if (!k->handle || !k->control || !k->accepted || !k->connected || k->dead || k->kicked) continue;
+        send_control(k, "QUIT");
+        while (k->qlen && !k->dead && flush(k) == 0 && k->qlen && hn_ms() < until) hn_wait(k->s, 0, 50);
+    }
+}
 int nc_connect_error(void) { return connect_error; }
 int nc_bind_error(void) { return bind_error; }
 void nc_bind_error_clear(void) { bind_error = 0; }
@@ -486,6 +504,7 @@ int nc_start(void)
         const char *path = getenv("RECOMP_NET_LOG");
         if (path && *path && !log_file) nc_log_to(path);
         atexit(log_at_exit);
+        atexit(quit_notice);
     }
     return hn_start() < 0 ? fail_host() : 0;
 }
@@ -838,7 +857,7 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     if (!k->stream) return fail(10045);                          /* WSAEOPNOTSUPP: the game never does */
     refused = NC_REFUSED_NONE;
     refused_version[0] = 0;
-    host_left = host_broke = kicked = connect_error = 0;
+    host_left = host_broke = host_quit = kicked = connect_error = 0;
     if (hooks && hooks->connect && hooks->connect(addr, port) < 0) return -1;
     if (hn_connect(k->s, addr, port, connect_ms) < 0) {
         connect_error = hn_error();    /* the reason of "could not be joined" (0.7.0 slice 7) */
