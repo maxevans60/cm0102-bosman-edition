@@ -69,7 +69,8 @@ KICK_STEPS = [                      # the host, in the game: Kick with No, then 
     "wait label:Continue",
     "1500 click 45 344",            # Game Options
     "wait popup",
-    "1000 click 175 417",           # Bosman Edition Options
+    "500 dump {d}/host-3-popup.bmp",
+    "1000 click 175 439",           # Bosman Edition Options: one row lower than in a single-player game (0x823950 above)
     "wait options",
     f"1500 {NETWORK_TAB}",
     "3500 dump {d}/host-4-network.bmp",
