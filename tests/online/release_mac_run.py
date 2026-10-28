@@ -16,7 +16,8 @@ The runs, each a tests/smoke/network_run.py run in its own folder of --out:
         relay-2   --relay --joiners 1: the host and 1 joiner, the joiner sees lobby rows only and joins through
                   the relay
         relay-4   --relay --joiners 3: the host and 3 joiners, the same
-    Without it (online-0.7.0 before slice 5), the stage that runs today:
+    Without it (online-0.7.0 before slice 5), the stage that runs today, always against the local copy, because
+    the game's lobby client of that build speaks only http:// (lobby_http.c):
         lobby     --lobby: the host is in the lobby; join1 joins through its row over the LAN; join2 (another
                   version) and join4 (full today) are refused; join3 has Online play off
         lan-4     --joiners 3: the host and 3 joiners over the LAN, no lobby
@@ -65,6 +66,11 @@ def main(argv):
     relay = oc.relay_in_build(program)
     out = out or os.path.join(oc.RUN_LOGS, time.strftime("release1-%Y%m%d-%H%M"))
     os.makedirs(out, exist_ok=True)
+    if not relay and url and url.startswith("https://"):
+        # Before slice 5 the game's lobby client speaks only http:// (lobby_http.c), so the stage of today runs
+        # against the local copy (run release1-20261028-0109: the real server never saw the host's game).
+        print(f"the build has no secure connection (slice 5): the lobby stage uses the local copy, not {url}")
+        url = None
     where = ["--lobby-url", url] if url else ["--lobby"]
     if relay:
         runs = [("relay-2", ["--relay", "--joiners", "1"] + where),

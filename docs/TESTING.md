@@ -83,6 +83,9 @@ Results:
 
 | 2026-10-28 | Match day, two human managers, LAN | online-0.7.0 8b7b21bd | Measured days 16.7.01 to 19.7.01: 72 KB a minute to the joiner, one 6.2 KB screen for each of its clicks (research note section 16). FAIL as a match day: the joiner's own friendly did not start, and the host waited on Latest Scores. Open. |
 
+| 2026-10-28 | 1, stage before slice 5 | online-0.7.0 8b7b21bd | STAGE: the lobby run (local copy) and the four-game LAN run pass. Against the real server the lobby run failed: the game's lobby client of this build speaks only `http://`, so the script now uses the local copy until the build has slice 5. |
+| 2026-10-28 | 4, short check: 2 legs of 10 days, England, LAN, local lobby | online-0.7.0 8b7b21bd | STAGE: every check passes in both legs (the new game with the drop by kill, the rejoin and the version box; then the restore, where all three joiners took their clubs back with their passwords). The quit leg waits for slice 6, the relay for slice 5. |
+
 <!-- s9 results -->
 
 ## Platform checks
