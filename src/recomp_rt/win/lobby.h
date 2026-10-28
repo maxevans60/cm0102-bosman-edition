@@ -40,7 +40,8 @@ void lobby_set_address(const char *base);
 int lobby_usable(void);
 
 /* Host. The first call registers the game. Each later call gives the fields of the next heartbeat (season,
- * day, human clubs, free seats, managers online). password is sent at the registration only. */
+ * day, human clubs, Away clubs, free seats, managers online). password goes with the registration, and again with
+ * the next heartbeat after it changed. */
 void lobby_host_set(const LobbyGame *g, const char *password);
 /* The game ended: close its entry. */
 void lobby_host_close(void);

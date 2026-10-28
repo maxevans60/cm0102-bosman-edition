@@ -39,7 +39,10 @@ export interface RegisterInput extends PublicInfo {
   hostToken: string | null;
 }
 
-export type HeartbeatInput = Partial<Pick<PublicInfo, "season" | "day" | "humanClubs" | "awayClubs" | "freeSeats" | "managersOnline" | "pingMs">>;
+export type HeartbeatInput = Partial<Pick<PublicInfo, "season" | "day" | "humanClubs" | "awayClubs" | "freeSeats" | "managersOnline" | "pingMs">> & {
+  /** A new game password, or null to remove it. Absent: no change. */
+  password?: string | null;
+};
 
 export interface JoinInput {
   version: string;
@@ -153,6 +156,7 @@ export function parseHeartbeat(body: unknown): HeartbeatInput {
   if (o.freeSeats !== undefined) out.freeSeats = int(o, "freeSeats", 0, MAX_MANAGERS);
   if (o.managersOnline !== undefined) out.managersOnline = int(o, "managersOnline", 0, MAX_MANAGERS);
   if (o.pingMs !== undefined) out.pingMs = int(o, "pingMs", 0, MAX_PING_MS);
+  if (o.password !== undefined) out.password = password(o);
   return out;
 }
 

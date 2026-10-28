@@ -230,10 +230,19 @@ int main(void)
                 else if (g < 0 && nc_error() == HN_WOULDBLOCK) usleep(1000);
                 else break;
             }
-            CHECK(have5 == 5 && !memcmp(got5, quit, 5) && nc_host_left() == (round != 2), "round %d: the joiner reads "
-                  "the quit packet (%d bytes) and nc_host_left is %d", round, have5, nc_host_left());
+            CHECK(have5 == 5 && !memcmp(got5, quit, 5) && nc_host_left() == (round != 2) && !nc_kicked(),
+                  /* No join check here, so no control packets: the KICK notice is tested in test_net_errors.c. */
+                  "round %d: the joiner reads the quit packet (%d bytes), nc_host_left %d, nc_kicked %d", round, have5,
+                  nc_host_left(), nc_kicked());
             if (round == 1) {
-                CHECK(nc_recv(kc, got5, 1) == -1 && nc_error() != HN_WOULDBLOCK, "then the joiner's recv fails");
+                long after = -1;
+                for (int t = 0; t < 2000; t++) {     /* then the close */
+                    after = nc_recv(kc, got5, 1);
+                    if (after >= 0 || nc_error() != HN_WOULDBLOCK) break;
+                    usleep(1000);
+                }
+                CHECK(after == 0 || (after == -1 && nc_error() != HN_WOULDBLOCK), "then the joiner sees the close: %ld",
+                      after);
                 CHECK(nc_recv(ka, got5, 1) == -1 && nc_error() == HN_CONNRESET, "the host's recv on a kicked handle fails");
             }
             nc_close(kc);

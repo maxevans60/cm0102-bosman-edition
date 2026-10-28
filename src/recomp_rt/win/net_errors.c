@@ -82,8 +82,8 @@ void net_error_text(char *out, size_t room, NetError e, const char *version, con
                  "then join the game again to take your club back.");
         break;
     case NE_KICKED:
-        snprintf(out, room, "The host kicked you from the network game, and your club is on holiday. Ask the host "
-                 "before you join again.");
+        snprintf(out, room, "The host removed you from the game. Your club is on holiday. Ask the host before you "
+                 "join again.");
         break;
     case NE_CREATE_PORT:
         snprintf(out, room, "Another program on this computer uses port 6667, which network games need. It may be a "

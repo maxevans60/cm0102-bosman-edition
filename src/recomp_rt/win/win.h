@@ -91,7 +91,7 @@ const char *net_lobby_host_line(char *out, unsigned room);   /* this host's plac
 void net_lobby_test_start(void);        /* the connection test on this game's lobby address (net_test.c) */
 /* net_session.c (0.7.0 slice 6): drop in, drop out and host quit. */
 void net_session_turn(void);            /* at each human turn */
-void net_session_game_ends(uint32_t esp); /* at free_game_data 0x82ff40, before it: the host's save */
+void net_session_game_ends(void);       /* at free_game_data 0x82ff40: the game ends */
 int net_session_hosting(void);          /* 1 while this game hosts a network game */
 typedef struct {                        /* one joining computer: its managers' names and clubs, empty while made */
     int slot, managers;
