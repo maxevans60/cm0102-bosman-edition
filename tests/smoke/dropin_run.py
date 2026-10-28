@@ -64,7 +64,10 @@ PASSWORD = [
 KICK_ROW = "click 688 286"          # the Kick button of the first human manager on the Network tab
 NETWORK_TAB = "click 680 155"
 KICK_STEPS = [                      # the host, in the game: Kick with No, then with Yes (Q39)
-    "1000 click 45 344",            # Game Options
+    # In a network game the left bar counts down (4 to 0) before Continue Game shows, and a click while it changes
+    # opens nothing.
+    "wait label:Continue",
+    "1500 click 45 344",            # Game Options
     "wait popup",
     "1000 click 175 417",           # Bosman Edition Options
     "wait options",

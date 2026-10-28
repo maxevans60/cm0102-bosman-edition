@@ -48,10 +48,11 @@
  * switches with two tab clicks.
  *
  * Network tab, 0.7.0 slice 6 (Q38, Q39). Below Online play:
- * - Game password: a text field that hides its text (Display::add_item 0x55f990 with type 0x18 and text flags 0x8c,
+ * - Game password: on the start screen and while this game hosts, a text field that hides its text (Display::add_item 0x55f990 with type 0x18 and text flags 0x8c,
  *   as the original's password box at 0x822f56..0x822f9f). It writes into a buffer of the runtime, as the game name
  *   field writes into 0xdd70dc (0x81f243..0x81f287). The box saves it as game_password at the next click in the box
- *   and at Close, and the join check uses it at once (nc_set_host_password).
+ *   and at Close, and the join check uses it at once (nc_set_host_password). In a single-player game the row shows a label
+ *   only: a text entry would change the game's memory layout (Q152).
  * - Human managers online, while this computer hosts a network game (net_session_managers): the name, the club and
  *   a Kick button for each. Kick opens the original's confirm box (confirm_push 0x591840 with 7 arguments, as Exit
  *   Game calls it at 0x764362..0x7643a6), "Kick <name>? Their club goes on holiday.", with No and Yes. Its input
@@ -65,6 +66,7 @@
 #include "options.h"
 #include "dbfolders.h"
 #include "net_core.h"
+#include "season.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -372,6 +374,16 @@ static void network_rows(int y, uint32_t green, uint32_t light)
     snprintf((char *)g_mem + password_field, PASSWORD_MAX + 1, "%s", options_string(OPT_GAME_PASSWORD));
     int a = area(ROW_X1, y, ROW_X2, y + 32, 4, weights_two, 1, 0);
     plain(a, 0, "Game password", 3, light);
+    if (season_game_on() && !net_session_hosting()) {
+        /* A single-player game: a label, no text field. The field's text entry changes the game's memory layout,
+         * and with it later days (Q152, smoke_run.py --same-save --options, run options-network). */
+        plain(a, 1, options_string(OPT_GAME_PASSWORD)[0] ? "******" : "None", 2, colour16(TEXT_YELLOW));
+        note("Change it on the start screen", weights_two, 4, y, y + 32, light);
+        y += 42;
+        box_text(ROW_X1, y, ROW_X2, y + 22, 1, 0, 1, 3, light, "Human managers online");
+        box_text(ROW_X1, y + 26, ROW_X2, y + 44, 1, 0, 1, 1, light, "Shown while this computer hosts a network game");
+        return;
+    }
     uint32_t w[18] = {0x18, (uint32_t)column_x(weights_two, 4, 1) + 2, (uint32_t)y + 2,
                       (uint32_t)column_x(weights_two, 4, 3) - 4, (uint32_t)y + 30, 0, 0, 0x22, colour16(FIELD_COLOUR),
                       0, 0x8c, 2, colour16(BUTTON_TEXT), password_field, PASSWORD_MAX, PASSWORD_ID, 0, 0xffffffffu};
