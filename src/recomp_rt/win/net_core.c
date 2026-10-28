@@ -90,6 +90,7 @@ static int log_ready;
 
 static int connect_ms = NC_CONNECT_MS;
 static int host_left;               /* nc_host_left */
+static int kicked_here;             /* nc_kicked */
 
 static const NcHooks *hooks;
 static int in_tick;
@@ -723,6 +724,27 @@ static void watch_exit(Sock *k, const uint8_t *p, uint32_t n)
 /* The quit packet 0x04 of disconnect_network 0x7fc690 (0x7fc738..0x7fc766), with its length. */
 static const uint8_t quit_packet[5] = {1, 0, 0, 0, 4};
 
+/* A Kick (nc_kick) sends the quit packet, then this line. The joiner's client loop ends at the quit packet
+ * (0x7fdeba) and its game reads no more bytes, so only the runtime reads the line. */
+static const char kick_line[] = "BOSMAN KICK\n";
+
+/* After a quit packet from the host: 1 when the kick line follows it. It waits at most 300 ms for the line. */
+static int read_kick_line(Sock *k)
+{
+    char got[sizeof kick_line];
+    size_t have = 0, want = sizeof kick_line - 1;
+    uint64_t until = hn_ms() + 300;
+    while (have < want) {
+        long r = hn_recv(k->s, got + have, want - have);
+        if (r > 0) {
+            have += (size_t)r;
+            continue;
+        }
+        if (r == 0 || hn_error() != HN_WOULDBLOCK || hn_ms() >= until || hn_wait(k->s, 1, 50) < 0) break;
+    }
+    return have == want && !memcmp(got, kick_line, want);
+}
+
 long nc_recv(uint32_t h, void *buf, uint32_t n)
 {
     Sock *k = find(h);
@@ -766,13 +788,17 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
         /* A quit packet ends the joiner's loop. The host sends it at its own quit (0x7fc738), and also when the
          * joiner says Yes to its own Exit Game: the menu bar input 0x7615d0 returns -12 for a remote channel
          * (0x762af8..0x762b04), and the screen loop sends 0x04 to that joiner (0x7fcd79..0x7fce2e). */
-        if (k->fi.op_packets[4] != quits) host_left = !k->exit_seen;
+        if (k->fi.op_packets[4] != quits) {
+            host_left = !k->exit_seen;
+            kicked_here = read_kick_line(k);
+        }
     }
     return r;
 }
 
 int nc_host_left(void) { return host_left; }
-void nc_host_left_clear(void) { host_left = 0; }
+int nc_kicked(void) { return kicked_here; }
+void nc_host_left_clear(void) { host_left = 0, kicked_here = 0; }
 
 int nc_peer_list(uint32_t *handle, uint32_t *addr, uint16_t *port, int max)
 {
@@ -796,6 +822,20 @@ int nc_kick(uint32_t h)
     ip_text(ip, sizeof ip, k->peer);
     fprintf(stderr, "recomp: net: the host kicks the human manager at %s:%u\n", ip, k->peer_port);
     if (log_file) log_line(k, "close", &k->n);
+    /* Between two packets of the host, the joiner gets the quit packet and the kick line, so it can say why it left.
+     * In the middle of a packet it gets only the close, and says that the host left. */
+    if (frame_between(&k->fo) && !k->dead && flush(k) == 0 && !k->qlen) {
+        uint8_t bye[sizeof quit_packet + sizeof kick_line - 1];
+        memcpy(bye, quit_packet, sizeof quit_packet);
+        memcpy(bye + sizeof quit_packet, kick_line, sizeof kick_line - 1);
+        size_t sent = 0;
+        uint64_t until = hn_ms() + NC_CLOSE_MS;
+        while (sent < sizeof bye) {
+            long w = hn_send(k->s, bye + sent, sizeof bye - sent);
+            if (w > 0) sent += (size_t)w;
+            else if ((w < 0 && hn_error() != HN_WOULDBLOCK) || hn_ms() >= until || hn_wait(k->s, 0, 50) < 0) break;
+        }
+    }
     /* The game's next recv or send on this handle fails, and Network::receive_packet 0x77af20 frees the slot and
      * calls the disconnect callback (0x77b4e9..0x77b508): the original's leave path puts the club on holiday. */
     hn_close(k->s);

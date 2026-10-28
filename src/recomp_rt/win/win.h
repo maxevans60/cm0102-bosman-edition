@@ -89,7 +89,7 @@ const char *win_databases_root(void);   /* the folder that holds Databases: the 
 void net_lobby_install(void);           /* net_lobby.c: online games in the game list, at the first WSAStartup */
 /* net_session.c (0.7.0 slice 6): drop in, drop out and host quit. */
 void net_session_turn(void);            /* at each human turn */
-void net_session_game_ends(uint32_t esp); /* at free_game_data 0x82ff40, before it: the host's save */
+void net_session_game_ends(void);       /* at free_game_data 0x82ff40: the game ends */
 int net_session_hosting(void);          /* 1 while this game hosts a network game */
 typedef struct {                        /* one joining computer: its managers' names and clubs, empty while made */
     int slot, managers;

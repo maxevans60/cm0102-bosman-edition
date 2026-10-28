@@ -223,7 +223,10 @@ export class Lobby extends DurableObject<Env> {
     const g = this.games.get(code);
     if (g === undefined) return err("unknown_game");
     if (!(await this.isHost(g, token))) return err("not_host");
-    Object.assign(g.info, input);
+    const { password: plain, ...info } = input;
+    // A changed password is hashed once, when the host sends it; the game sends it only after a change.
+    if (plain !== undefined) g.password = await this.passwordRecord(plain);
+    Object.assign(g.info, info);
     g.lastSeen = this.now();
     return { ok: true, body: { ok: true } };
   }

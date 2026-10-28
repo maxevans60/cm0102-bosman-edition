@@ -21,15 +21,13 @@
  *   A host that crashes or drops sends no 0x04: the joiner learns of it only at its next click (0x569456).
  *
  * What this file adds:
- * - The host's save at its Exit Game. Yes on "Exit the network game ?" calls game_fatal_cleanup 0x5cc7d0 at
- *   0x762c42, which calls free_game_data 0x82ff40 at 0x5cc7d4 (the wrap in season.c calls net_session_game_ends
- *   first). 0x82ff40 ends the network session first (0x82ff46), so the save comes before. Only that chain saves:
- *   0x5cc7d0 is also the original's fatal error path, with about 450 callers (match engine, day update, the save
- *   parts), where the game is not whole. The save is the Auto Save's: save_game_data 0x82e430 with the flags 0x16
- *   and the path of _makepath 0x945b13 at 0x7617c9 (no drive, the save folder of the game options [0xae3138] + 0xf,
- *   the game's file name + 0x113, ".sav").
- * - A window close or the script's quit on a host waits for the poll of the screen loop (0x7fcc14 in
- *   ScreenManager::monitor 0x7fc7e0), saves there, then ends the program (net_session_defer_quit).
+ * - The host's save when it closes the window (or the script quits), which skips the original's quit question. The
+ *   close waits for the poll of the screen loop (0x7fcc14 in ScreenManager::monitor 0x7fc7e0), saves there, then
+ *   ends the program (net_session_defer_quit). The save is the Auto Save's: save_game_data 0x82e430 with the flags
+ *   0x16 and the path of _makepath 0x945b13 at 0x7617c9 (no drive, the save folder of the game options [0xae3138] +
+ *   0xf, the game's file name + 0x113, ".sav"). Exit Game gets no save of the runtime: the original asks "Save Game
+ *   Before Exit" when the game changed since its last save (0x762b9e..0x762c3d), and its No stands (decision of
+ *   2026-10-28 for Q7).
  * - The joiner's box. After the client loop ends because the host left (net_core.c, nc_host_left), the game's
  *   message box 0x5e8290 says so. The original's network error box is the same box (0x56946b). Then Network Play
  *   goes back to the start screen.
@@ -51,8 +49,6 @@
 #define SAVE_GAME 0x0082e430u       /* cdecl (path, flags) */
 #define SAVE_FLAGS 0x16u            /* the Auto Save's (0x7617d5) */
 #define MAKEPATH 0x00945b13u        /* cdecl (out, drive, folder, name, extension), as at 0x7617c9 */
-#define EXIT_FREE_RET 0x005cc7d9u   /* free_game_data's return address in game_fatal_cleanup (call at 0x5cc7d4) */
-#define EXIT_CLEANUP_RET 0x00762c47u  /* game_fatal_cleanup's return address at Exit Game (call at 0x762c42) */
 #define MESSAGE_BOX 0x005e8290u     /* cdecl (title, text, 0) */
 
 static int turns;                   /* human turns of the game that runs: it has started */
@@ -97,14 +93,8 @@ static void save_now(void)
     fprintf(stderr, "recomp: net: the host's save ended (result %u)\n", r);
 }
 
-void net_session_game_ends(uint32_t esp)
-{
-    /* At the entry of 0x82ff40: [esp] its return address, [esp + 4] its argument, then the esi and edi that
-     * 0x5cc7d0 pushed (0x5cc7d0..0x5cc7d1), then the return address of 0x5cc7d0. */
-    int save = must_save() && rd32(g_mem, esp) == EXIT_FREE_RET && rd32(g_mem, esp + 16) == EXIT_CLEANUP_RET;
-    turns = 0;
-    if (save) save_now();
-}
+/* At free_game_data 0x82ff40 (season.c): the game ends, and the next one starts with no human turn. */
+void net_session_game_ends(void) { turns = 0; }
 
 /* A window close, or the script's quit, while this game hosts a game that has started. The program does not end
  * in the event loop: that runs inside any call of the game that pumps messages, also in the middle of a day. It
@@ -162,7 +152,7 @@ RT_WRAP(007fdc00, run_network_client)
     if (rt_unwinding || !nc_host_left()) return;
     nc_host_left_clear();
     uint32_t eax = cpu.eax;
-    box("Network Game", "The host left the game.");
+    box("Network Game", nc_kicked() ? "The host removed you from the game." : "The host left the game.");
     cpu.eax = eax;
     back_to_start = 1;
 }

@@ -154,6 +154,18 @@ describe("heartbeat and expiry", () => {
     expect(bad.status).toBe(400);
   });
 
+  it("changes the password of a game at a heartbeat", async () => {
+    const { code, hostToken } = await register();
+    const beat = (body: object) => call(`/v1/games/${code}/heartbeat`, { method: "POST", token: hostToken, body });
+    expect((await beat({ password: "Sunday 7" })).status).toBe(200);
+    expect((await json(await call(`/v1/games/${code}`))).game.password).toBe(true);
+    expect((await beat({ managersOnline: 2 })).status).toBe(200);
+    expect((await json(await call(`/v1/games/${code}`))).game.password).toBe(true);
+    expect((await beat({ password: "" })).status).toBe(200);
+    expect((await json(await call(`/v1/games/${code}`))).game.password).toBe(false);
+    expect((await beat({ password: "x".repeat(65) })).status).toBe(400);
+  });
+
   it("accepts a heartbeat with no body", async () => {
     const { code, hostToken } = await register();
     const res = await call(`/v1/games/${code}/heartbeat`, { method: "POST", token: hostToken });

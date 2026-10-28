@@ -98,6 +98,7 @@ int nc_peers(void);
  * When it broke between two packets, the game reads the quit packet 0x04 in place of the close, so the
  * client loop 0x7fdc00 ends as at a quit. A new connect clears it. */
 int nc_host_left(void);
+int nc_kicked(void);                /* with nc_host_left: the host kicked this joiner (the kick line came) */
 void nc_host_left_clear(void);
 /* The joiners' connections that this host accepted and that are open: handles, addresses, ports. The count. */
 int nc_peer_list(uint32_t *handle, uint32_t *addr, uint16_t *port, int max);
