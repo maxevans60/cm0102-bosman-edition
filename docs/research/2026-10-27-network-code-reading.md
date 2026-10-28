@@ -641,7 +641,25 @@ Always-on game (open all day, human managers only in the evening):
 - Lobby duration, worst case: with 3 or more open games a heartbeat comes at least each 10 s, so the lobby never goes idle: 0.125 GB x 86,400 s = 10,800 GB-s a day, 83 % of the free 13,000. That leaves about 2,200 GB-s, or 4.9 relay-hours a day for all games together. With one open game the lobby is awake about 10 s of each 30 s, about 3,600 GB-s a day.
 - Relay duration while no one plays: none, because the host's relay connection hibernates. A joiner who stays connected but idle sends its keepalive each 30 s, and each wakes the relay for at least 10 s: about 1,500 GB-s a day for each idle joiner, worst case.
 
-Evening (a host and three human managers for 4 hours): see the match day below for the traffic. The relay stays awake while frames flow at least each 10 s. If it is awake the whole evening: 4 h x 450 GB-s = 1,800 GB-s, 14 % of a day's allowance. With the lobby's worst case, the free plan carries about one such evening a day.
+### The match day run (2026-10-28)
+
+`tests/online/match_day_run.py` (run-logs/s9-tests/matchday5): the host restored prematch.sav (Test Smoke, Arsenal, 16.7.01) as a network game, one joiner made Player Two at Barnsley over the LAN, and both clicked through days for 26 minutes. The host took Holiday until next match, so that its assistant answered the Henry bid. The joiner clicked Continue Game, Yes and the answer to a bid (Respond, Reject, Yes) in a loop, about 6 inputs each 10 s.
+
+The days ran from 16.7.01 to 19.7.01 with both human managers. Then the joiner's own friendly, Barnsley v Walsall on 19.7.01, did not start: the joiner's Continue Game on its squad screen came back after each click, and the host waited on Latest Scores (0x71b300) for the rest of the run. So the run measured days with two human managers, and no match screen. Why the joiner's match does not start is open; it needs a probe of the screens after the joiner's Continue Game.
+
+Traffic of the joiner's connection, from the host's log (1,574 s):
+
+| | Bytes | Packets |
+|---|---|---|
+| Host to joiner | 1,932,725 (72 KB a minute) | 1,778 |
+| Joiner to host | 20,121 | 307 (all clicks, opcode 6) |
+| Busiest 10 s, host to joiner | 28,134 | 45 |
+
+By opcode, host to joiner: 309 screens (opcodes 0 to 3) of 6.2 KB each on average (opcode 1, the widgets, 5.6 KB), 163 packets of opcode 16, 300 of opcode 19, and a few of 7, 8, 9 and 17. Each click of the joiner brought one full screen. A game screen (news, squad, fixtures) is about 9 times a setup screen (section 11: 700 bytes).
+
+Relay messages for this run, from the 10 s counts: at least 693 and at most 4,755 an hour each way together, for one joiner that clicks 12 times a minute. 20 incoming messages bill as 1 request, so that is 35 to 238 requests an hour.
+
+Evening (a host and three human managers for 4 hours), from these figures: a player who clicks 6 times a minute sends 360 clicks an hour, and each gives about 3 incoming relay messages (the click, and the host's screen in 1 or 2 batches), with 120 keepalives. That is about 1,200 messages, or 60 requests, an hour for each joiner, and about 720 requests for the evening: under 1 % of the 100,000 a day. With a click each 10 s the relay stays awake the whole evening, because it hibernates only after 10 s with no message. Awake the whole evening: 4 h x 450 GB-s = 1,800 GB-s, 14 % of a day's allowance. With the lobby's worst case, the free plan carries about one such evening a day.
 
 What this means: the free plan's daily duration, not its requests, limits online play first, and the lobby's own awake time may take most of it. Recommendations for Max:
 

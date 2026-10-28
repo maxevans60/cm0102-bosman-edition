@@ -73,6 +73,14 @@ Before the release, four release tests run (spec Q29). Their scripts are in `tes
 
 Results:
 
+| Date | Test | Build | Result |
+|---|---|---|---|
+| 2026-10-27 | 4, short check: 1 leg of 3 days, England, LAN, local lobby (`--days 3 --legs 1`) | online-0.7.0 8b7b21bd | Leg 0 passed every check: four human managers with passwords, join3's drop (lobby 3 online) and rejoin with its password (4 online), the box of a game of version 0.0.1 that names the host's version, the host's holiday and its save after 3 game days. The restore leg then restored the save and Player Two took Barnsley back with the password. The quit leg waits for slice 6. |
+| 2026-10-27 | 2 | | Not run: the 0.6.0 gates run, and the virtual machine waits for them (Q30). |
+| 2026-10-27 | 3 | | Not run: the workflow is not on GitHub (a push waits for Max), and the build has no relay. |
+
+| 2026-10-28 | Match day, two human managers, LAN | online-0.7.0 8b7b21bd | Measured days 16.7.01 to 19.7.01: 72 KB a minute to the joiner, one 6.2 KB screen for each of its clicks (research note section 16). FAIL as a match day: the joiner's own friendly did not start, and the host waited on Latest Scores. Open. |
+
 <!-- s9 results -->
 
 ## Platform checks
