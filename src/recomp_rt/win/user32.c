@@ -1013,11 +1013,11 @@ RT_IMPORT(GetMessageA)
  * Through the relay (0.7.0 slice 5) the client loop polls again only after the host's answer to the click
  * (opcode 9, 5 bytes), about 130 ms later through the deployed relay (2026-10-28). A press is shorter than that,
  * so the field came and the button under the pointer never did: Next on Enter Name was lost. So when the press
- * that gave the last widget at this poll is up by its next poll, and the pointer is still where the press went
- * down, that poll runs once more with the button flag 0xb67a34 set. The rule above then applies to it as to a
- * held press: the same widget gives nothing, and a new host screen gives nothing. */
+ * that gave the last widget at this poll is up by its next poll, no new host screen came, and the pointer is
+ * still exactly where the press went down, that poll runs once more with the button flag 0xb67a34 set. The rule
+ * above then applies to it as to a held press: the same widget gives nothing. A new host screen before the poll
+ * stops the replay before the poll, because the poll acts on the screen with the flag set (lists, entries). */
 #define CLIENT_LOOP_POLL 0x7fdf1cu
-#define REPLAY_NEAR 3                       /* pixels that the pointer may move after the press */
 static uint32_t replay_press;               /* the press that the client loop's poll ran once more */
 static uint32_t click_press, click_widget;  /* the press that last gave a widget, and that widget */
 static uint64_t click_resets;               /* nc_resets_in at that poll */
@@ -1107,8 +1107,8 @@ RT_WRAP(0055f620, input_poll)
     uint32_t poll_ret = rd32(g_mem, cpu.esp), poll_display = cpu.ecx;
     waits_poll();
     int replay = poll_ret == CLIENT_LOOP_POLL && click_press == press_count && replay_press != press_count &&
-                 !(buttons & 1) && !rd32(g_mem, 0xb67a34u) && abs(mouse_x - press_x) <= REPLAY_NEAR &&
-                 abs(mouse_y - press_y) <= REPLAY_NEAR;
+                 !(buttons & 1) && !rd32(g_mem, 0xb67a34u) && mouse_x == press_x && mouse_y == press_y &&
+                 nc_resets_in() == click_resets;
     if (replay) {
         replay_press = press_count;
         wr32(g_mem, 0xb67a34u, 1);

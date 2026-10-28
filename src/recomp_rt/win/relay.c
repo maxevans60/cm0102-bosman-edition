@@ -198,6 +198,8 @@ static int send_batches(WsConn *w, Channel *ch, uint64_t *last_sent)
     for (int i = 0; i < RELAY_CHANNELS; i++) {
         Channel *c = &ch[i];
         size_t n = c->open ? c->batch.len - c->batch.off : 0;
+        /* At most one frame each RELAY_BATCH_MS for each channel, unless it ends or its batch is full. */
+        if (n && !c->ended && n < RELAY_BATCH_MAX && hn_ms() - c->last_frame < RELAY_BATCH_MS) n = 0;
         if (n) {
             frame[0] = (uint8_t)i;
             memcpy(frame + 1, c->batch.p + c->batch.off, n);
