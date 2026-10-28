@@ -50,3 +50,40 @@ RT_WRAP(007fe600, screen_push_probe)
                 (int16_t)rd16(g_mem, cpu.ecx + 0x382a), rt_arg(0), rt_arg(1), rd32(g_mem, cpu.esp));
     o_007fe600();
 }
+
+/* RECOMP_STACK_PROBE=1: the steps from the joiner's Continue Game to its match (research note section 16, second
+ * code reading). Each wrap prints its first stack argument, the result and the caller. 0x725ca0 also prints the
+ * channel of the screen manager at 0xb74450 (a guess from docs/research/2026-10-15-holiday-next-match-inventory.md)
+ * and the match day words [0xb77c84], [0xdd6be0], [0xdd6be4] that it reads. 0x4671f0 and 0x7615d0 have wraps of
+ * their own (assistant.c, holiday_next.c); the caller of 0x725ca0 shows which of them ran. */
+static int probe_on(void)
+{
+    static int on = -1;
+    if (on < 0) {
+        const char *v = getenv("RECOMP_STACK_PROBE");
+        on = v && *v == '1';
+    }
+    return on;
+}
+
+#define PROBE_CALL(addr, label, extra)                                                                     \
+    void o_##addr(void);                                                                                   \
+    RT_WRAP(addr, probe_##addr)                                                                            \
+    {                                                                                                      \
+        if (!probe_on()) {                                                                                 \
+            o_##addr();                                                                                    \
+            return;                                                                                        \
+        }                                                                                                  \
+        uint32_t a0 = rt_arg(0), caller = rd32(g_mem, cpu.esp);                                            \
+        extra;                                                                                             \
+        o_##addr();                                                                                        \
+        fprintf(stderr, "recomp: probe %s arg %d gives %d from %#x\n", label, (int)a0, (int)cpu.eax, caller); \
+    }
+
+PROBE_CALL(00727c30, "0x727c30 confirm input", (void)0)
+PROBE_CALL(00725ca0, "0x725ca0 match input",
+           fprintf(stderr, "recomp: probe 0x725ca0 channel %d b77c84 %#x dd6be0 %#x dd6be4 %#x\n",
+                   (int16_t)rd16(g_mem, 0xb74450u + 0x382a), rd32(g_mem, 0xb77c84u), rd32(g_mem, 0xdd6be0u),
+                   rd32(g_mem, 0xdd6be4u)))
+PROBE_CALL(00725f70, "0x725f70 confirm open", (void)0)
+PROBE_CALL(00788010, "0x788010", (void)0)
