@@ -305,17 +305,16 @@ export class Lobby extends DurableObject<Env> {
     if (g === undefined) return err("unknown_game");
     if (!(await this.isHost(g, token))) return err("not_host");
     const addressKey = await this.addressKey(address);
-    if (this.games.get(code) !== g) return err("unknown_game"); // closed or expired meanwhile
-    g.addressKey = addressKey;
     const { password: plain, ...info } = input;
     // A changed password is hashed once, when the host sends it; the game sends it only after a change.
-    if (plain !== undefined) {
-      g.password = await this.passwordRecord(plain);
-      g.storedSeen = 0; // store the new password at once
-    }
+    const password = plain !== undefined ? await this.passwordRecord(plain) : undefined;
+    if (this.games.get(code) !== g) return err("unknown_game"); // closed or expired meanwhile
+    g.addressKey = addressKey;
+    if (password !== undefined) g.password = password;
     Object.assign(g.info, info);
     g.lastSeen = this.now();
-    if (g.lastSeen - g.storedSeen >= STORE_SEEN_EVERY_MS) await this.store(g);
+    // A password change is stored at once, so that it survives an eviction.
+    if (password !== undefined || g.lastSeen - g.storedSeen >= STORE_SEEN_EVERY_MS) await this.store(g);
     return { ok: true, body: { ok: true } };
   }
 
