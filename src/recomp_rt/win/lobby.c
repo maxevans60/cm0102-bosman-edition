@@ -106,6 +106,12 @@ static void put_state(Out *o, const LobbyGame *g)
         put_str(o, g->clubs[i]);
     }
     put(o, "%s", "]");
+    put(o, "%s", ",\"awayClubs\":[");
+    for (int i = 0; i < g->away_n; i++) {
+        if (i) put(o, "%s", ",");
+        put_str(o, g->away[i]);
+    }
+    put(o, "%s", "]");
     put_int(o, "freeSeats", g->free_seats);
     put_int(o, "managersOnline", g->managers_online);
 }
@@ -128,11 +134,14 @@ int lobby_game_json(char *out, unsigned room, const LobbyGame *g, const char *pa
     return o.n < room ? (int)o.n : -1;
 }
 
-static int heartbeat_json(char *out, unsigned room, const LobbyGame *g)
+/* password: the new game password after a change on the Network tab (0.7.0 slice 6), "" to remove it, NULL when it
+ * did not change. */
+static int heartbeat_json(char *out, unsigned room, const LobbyGame *g, const char *password)
 {
     Out o = {out, room, 0};
     put(&o, "%s", "{\"v\":1");
     put_state(&o, g);
+    if (password) put_field(&o, "password", password);
     put(&o, "%s", "}");
     return o.n < room ? (int)o.n : -1;
 }
@@ -283,7 +292,10 @@ static int game_key(J *j, const char *k, void *ctx)
         g->password = !strncmp(j->p, "true", 4);
         return skip(j);
     }
-    if (!strcmp(k, "humanClubs")) {
+    if (!strcmp(k, "humanClubs") || !strcmp(k, "awayClubs")) {
+        int away = k[0] == 'a';
+        char (*list)[LOBBY_TEXT] = away ? g->away : g->clubs;
+        int *count = away ? &g->away_n : &g->clubs_n;
         ws(j);
         if (*j->p != '[') return skip(j);
         j->p++;
@@ -291,7 +303,7 @@ static int game_key(J *j, const char *k, void *ctx)
         while (*j->p && *j->p != ']') {
             char club[LOBBY_TEXT];
             if (!read_str(j, club, sizeof club)) return 0;
-            if (g->clubs_n < LOBBY_CLUBS) memcpy(g->clubs[g->clubs_n++], club, sizeof club);
+            if (*count < LOBBY_CLUBS) memcpy(list[(*count)++], club, sizeof club);
             ws(j);
             if (*j->p == ',') j->p++, ws(j);
         }
@@ -387,7 +399,7 @@ static void lobby_thread(void *unused)
     unsigned beat_ms = 30000;
     int open = 0;
     LobbyGame g;
-    char password[65];
+    char password[65], sent_password[65] = "";   /* the password now, and the one the lobby has */
     for (;;) {
         hn_lock();
         int want_close = sh.want_close, want_open = sh.want_open && sh.have_game, want_list = sh.want_list;
@@ -422,6 +434,7 @@ static void lobby_thread(void *unused)
             J j = {answer.body, 0};
             if (r == LH_OK && object(&j, register_key, &reg) && code[0] && token[0]) {
                 open = 1;
+                memcpy(sent_password, password, sizeof sent_password);
                 beat_ms = reg.beat > 0 && reg.beat <= 60 ? (unsigned)reg.beat * 1000u : 30000u;
                 next_beat = hn_ms() + beat_ms;
                 fprintf(stderr, "recomp: lobby: the game is open as %s\n", code);
@@ -441,9 +454,11 @@ static void lobby_thread(void *unused)
             }
         } else if (open && now >= next_beat) {
             snprintf(path, sizeof path, "/v1/games/%s/heartbeat", code);
-            LhResult r = heartbeat_json(json, sizeof json, &g) > 0 ?
+            int changed = strcmp(password, sent_password) != 0;
+            LhResult r = heartbeat_json(json, sizeof json, &g, changed ? password : NULL) > 0 ?
                 lobby_http(base, "POST", path, token, json, LH_TIMEOUT_MS, &answer) : LH_UNAVAILABLE;
             next_beat = hn_ms() + beat_ms;
+            if (r == LH_OK && changed) memcpy(sent_password, password, sizeof sent_password);
             if (r != LH_OK) say("heartbeat", r);
             if (r == LH_API_ERROR && !strcmp(answer.code, "unknown_game")) {
                 open = 0;                                /* register again at once, with code and token */
@@ -503,10 +518,9 @@ void lobby_host_set(const LobbyGame *g, const char *password)
 {
     if (!lobby_usable()) return;
     hn_lock();
-    if (!sh.have_game) {
-        sh.want_open = 1;
-        snprintf(sh.password, sizeof sh.password, "%s", password ? password : "");
-    }
+    if (!sh.have_game) sh.want_open = 1;
+    /* A later change goes to the lobby at the next heartbeat (0.7.0 slice 6). */
+    snprintf(sh.password, sizeof sh.password, "%s", password ? password : "");
     sh.have_game = 1;
     sh.game = *g;
     start_thread();

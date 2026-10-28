@@ -24,6 +24,10 @@
  *   clear_invalid_watched_fixtures 0x5fe8d0 at 0x5fe8e3..0x5fe903; setup_assign_restored_network_managers
  *   0x8387e0 reads the same rows at 0x8387f0..0x83880f). Its club is at +0x39 (the side bar 0x76300e), with
  *   the short name at club +0x38 (0x763017) and the long name at club +4 (savename.c).
+ * - Away (0.7.0 slice 6): a human manager on holiday. HUMAN_MANAGER::is_on_holiday 0x5fd210 reads the dword at
+ *   +0x9a01 of row i (0x5fd2a5..0x5fd2d2) of the rows at +0 of the object [0xb63c98], with i the staff index less
+ *   (count - 16) and rows of 0xa6ef bytes, after a check of i against the count at +4 (0x5fd2b3..0x5fd2b9). A
+ *   human manager whose connection drops goes on holiday (setup_on_network_player_left 0x838c00, net_session.c).
  * - Managers online: the host itself and each connection that it accepted and that is open (nc_peers).
  *   Free seats: 16, the original's limit, less the larger of the rows in use and the managers online.
  * - The database: the name of the data set's folder (win_data_set_dir), else 3.9.68, the game's own Data.
@@ -64,6 +68,9 @@
 #define STAFF_CLUB 0x39u
 #define CLUB_SHORT 0x38u
 #define CLUB_LONG 0x4u
+#define HUMAN_MANAGERS 0xb63c98u    /* HUMAN_MANAGER object: +0 the rows, +4 their count */
+#define HM_ROW 0xa6efu              /* HUMAN_MANAGER::is_on_holiday 0x5fd210: row = staff index - (count - 16) */
+#define HM_HOLIDAY 0x9a01u          /* the dword that 0x5fd2d2 reads */
 #define JOIN_TEXT "could not be joined"
 #define LIST_CACHE_MS 5000
 #define PORT 6667
@@ -109,6 +116,7 @@ static void snapshot(LobbyGame *g)
     g->season = m >= 7 ? y : y - 1;
     snprintf(g->day, sizeof g->day, "%04d-%02d-%02d", y, m, d);
     uint32_t table = rd32(g_mem, STAFF_TABLE), count = rd32(g_mem, STAFF_COUNT);
+    uint32_t hm = rd32(g_mem, HUMAN_MANAGERS), hm_rows = hm ? rd32(g_mem, hm) : 0, hm_n = hm ? rd32(g_mem, hm + 4) : 0;
     int used = 0;
     for (uint32_t i = 0; i < 16; i++) {
         uint32_t row = table + (count - 16 + i) * STAFF_SIZE;
@@ -119,7 +127,10 @@ static void snapshot(LobbyGame *g)
         char name[LOBBY_TEXT];
         lobby_clean(name, sizeof name, (const char *)g_mem + club + CLUB_SHORT);
         if (!name[0]) lobby_clean(name, sizeof name, (const char *)g_mem + club + CLUB_LONG);
-        if (name[0]) memcpy(g->clubs[g->clubs_n++], name, sizeof name);
+        if (!name[0]) continue;
+        memcpy(g->clubs[g->clubs_n++], name, sizeof name);
+        if (hm_rows && i < hm_n && rd32(g_mem, hm_rows + i * HM_ROW + HM_HOLIDAY))
+            memcpy(g->away[g->away_n++], name, sizeof name);
     }
     g->managers_online = 1 + nc_peers();
     if (g->managers_online > 16) g->managers_online = 16;
@@ -191,6 +202,7 @@ static int before_connect(uint32_t addr, uint16_t port)
 {
     (void)port;
     reason[0] = 0;
+    net_password_connecting();
     int full;
     const LobbyRow *r = lr_row_of(addr, &full);
     char t[400];
@@ -224,7 +236,12 @@ static void tick(void)
     if (hosting && online() && data_loaded()) {
         LobbyGame g;
         snapshot(&g);
-        if (g.name[0]) lobby_host_set(&g, "");
+        static int shown_away = -1;
+        if (g.away_n != shown_away) {                    /* slice 6: the log names each change of Away */
+            shown_away = g.away_n;
+            fprintf(stderr, "recomp: lobby: away %d%s%s\n", g.away_n, g.away_n ? " " : "", g.away_n ? g.away[0] : "");
+        }
+        if (g.name[0]) lobby_host_set(&g, options_string(OPT_GAME_PASSWORD));
     } else if (hosting && !options_bool(OPT_ONLINE_PLAY)) {
         lobby_host_close();                              /* Online play went off: the entry closes */
     }
@@ -255,7 +272,7 @@ void net_lobby_install(void)
     const char *url = getenv("RECOMP_LOBBY_URL");
     lobby_set_address(url ? url : LOBBY_ADDRESS);
     nc_set_hooks(&hooks);
-    nc_set_identity(version(), "", "");
+    nc_set_identity(version(), options_string(OPT_GAME_PASSWORD), "");
     atexit(at_quit);
 }
 
@@ -268,12 +285,21 @@ RT_WRAP(00591840, confirm_push)
         char host_version[32];
         int why = nc_refusal(host_version, sizeof host_version);
         nc_refusal_clear();
+        if (why != NC_REFUSED_PASSWORD) net_password_reset();
         if (!reason[0] && why == NC_REFUSED_VERSION) {
             char t[400];
             snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman "
                      "Edition %s to join it.", host_version, version(), host_version);
             refuse(t);
-        } else if (!reason[0] && why == NC_REFUSED_PASSWORD) refuse("The password of this network game is wrong.");
+        } else if (!reason[0] && why == NC_REFUSED_PASSWORD) {
+            /* 0.7.0 slice 6 (Q38): the joiner's password box in place of the box (net_password.c). The caller does
+             * not read the result (0x838a6c..0x838a6f). */
+            if (net_password_ask(net_password_typed())) {
+                rt_ret_cdecl(0);
+                return;
+            }
+            refuse("The password of this network game is wrong.");
+        }
         else if (!reason[0] && why == NC_REFUSED_NOT_BOSMAN)
             refuse("The host does not run this version of Bosman Edition, so you cannot join its game.");
         else if (!reason[0] && why == NC_REFUSED_NO_ANSWER)

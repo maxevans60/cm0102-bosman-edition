@@ -174,11 +174,14 @@ Merge danger: two-way door. Blast radius: online joins fail. A new library ships
 
 ### 6. Drop in, drop out and host quit
 Blocked by: 5
-Delivers: Away status, rejoin with the manager password, the host's save and message when it quits, and Kick.
+Delivers: Away status, rejoin with the manager password, the host's save and message when it quits, Kick from a list on the Network tab of the Options box (Q39), and the game password: a field on the Network tab for the host and a small password box for a joiner (Q38).
 Merge danger: two-way door. Blast radius: a human manager can lose their club in a network game.
-- [ ] A dropped human manager rejoins the same club.
-- [ ] A host quit saves and sends every human manager to the start screen.
-- [ ] Kick removes a human manager, and their club goes on holiday.
+- [x] A dropped human manager rejoins the same club.
+- [x] A host quit saves and sends every human manager to the start screen.
+- [x] Kick removes a human manager, and their club goes on holiday. No in the confirm keeps them.
+- [x] A joiner with a wrong game password gets the password box again, and joins with the right one.
+
+As built (2026-10-27, branch `claude/online-s6-dropin-95a988`, on slice 4b with `online-0.7.0` merged): the merge danger stays a two-way door. Rejoin needed no new code: the original opens Manager Status for a joiner while a manager is on holiday, and a click on that manager opens its password box (research note, section 13). Files: `src/recomp_rt/win/net_session.c` (new: the host's save, the deferred quit, the joiner's box and the way back to the start screen, the list of human managers online and Kick by player slot), `net_password.c` (new: the joiner's password box and the join again), `options_screen.c` (the Game password field and the Kick list on the Network tab), `options.h` and `options.c` (`game_password`), `net_core.c` and `net_core.h` (keepalive timers, the quit packet for a broken host connection, the joiner's own Exit Game, `nc_kick`, `nc_peer_list`), `net_lobby.c`, `lobby.c`, `lobby.h`, `lobby_rows.c` (Away in the entry and the row), `user32.c` (window close and the screen loop poll), `season.c` and `testrun.c` (one call each), `win.h`, `host_net.h`, `host/net_posix.c`, `host/net_win32.c` (`hn_set_keepalive`), `server/src/validate.ts` and `server/README.md` (`awayClubs`), `tests/net/test_net_core.c`, `tests/net/test_lobby.c`, `server/test/lobby.test.ts`, `tests/options/test_options.c`, `tests/smoke/dropin_run.py` and `tests/smoke/password_run.py` (new). Tests (2026-10-28, c5dd33b2): `tests/smoke/dropin_run.py` (drop, rejoin with the manager password, host quit with the save, the start screen), `--leave` and `--kick` (No, then Yes; the joiner's box), `tests/smoke/password_run.py`, the two-game run, ctest 51 of 51, the server tests 143 of 143, the four same-save sets against the slice 4b build and the options set with options-network pass. The options box run passed on the build before the last joiner-side fix. Decisions of 2026-10-28 (lead, for Max to confirm): a kicked joiner sees "The host removed you from the game."; Exit Game keeps the original's "Save Game Before Exit" and its No, and the runtime saves only at a window close; the lobby's password flag follows a change at the next heartbeat (the server takes `password` in the heartbeat: a deploy is needed).
 
 ### 7. Clear errors, connection test, ping
 Blocked by: 6

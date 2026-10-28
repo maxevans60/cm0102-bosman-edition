@@ -43,8 +43,9 @@ the save of search-off.
 Options box check (--same-save --save <name> --options): the runs open the Bosman Edition Options box from the
 side bar before the holiday (0.5.0 slice 6). options and options-again switch Faster holidays off and on and
 close the box. options-tabs clicks the tabs Game, Graphics and Game, options-rules switches the default of
-Changing rules off and on (0.6.0 slice 13: the open game keeps its own value), and options-backups switches
-Save backups off and on, so the box is built as often. Each save
+Changing rules off and on (0.6.0 slice 13: the open game keeps its own value), options-backups switches
+Save backups off and on, and options-network clicks the tabs Network, Game and Network (0.7.0 slice 6: the
+game password field and the list of human managers online), so the box is built as often. Each save
 must be the same as the save of options. The runs give the box the same save folder path end
 (OPTIONS_USER_SUB).
 
@@ -525,11 +526,13 @@ def options_runs(load, holiday):
         OPTIONS_CLOSE + holiday
     backups = load + OPTIONS_OPEN + ["1000 click 584 155", "2500 click 452 402", "4000 click 371 402"] + \
         OPTIONS_CLOSE + holiday
+    network = load + OPTIONS_OPEN + ["1000 click 680 155", "2500 click 584 155", "4000 click 680 155"] + \
+        OPTIONS_CLOSE + holiday
 
     def run(name, steps):
         return (name, {"faster_days": "on", "_steps": steps, "_user_sub": OPTIONS_USER_SUB})
     return ([run("options", switch), run("options-again", switch), run("options-tabs", tabs),
-             run("options-rules", rules), run("options-backups", backups)],)
+             run("options-rules", rules), run("options-backups", backups), run("options-network", network)],)
 
 
 # The season part of a save (0.6.0 slice 11, src/recomp_rt/win/season.c). A save of a new game with

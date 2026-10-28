@@ -20,6 +20,8 @@ typedef struct {
     char day[11];                  /* YYYY-MM-DD */
     char clubs[LOBBY_CLUBS][LOBBY_TEXT];
     int clubs_n, free_seats, managers_online;
+    char away[LOBBY_CLUBS][LOBBY_TEXT];   /* the clubs whose human manager is Away (on holiday after a drop) */
+    int away_n;
     int password;                  /* in the list: the game has a password */
 } LobbyGame;
 
@@ -37,7 +39,8 @@ void lobby_set_address(const char *base);
 int lobby_usable(void);
 
 /* Host. The first call registers the game. Each later call gives the fields of the next heartbeat (season,
- * day, human clubs, free seats, managers online). password is sent at the registration only. */
+ * day, human clubs, Away clubs, free seats, managers online). password goes with the registration, and again with
+ * the next heartbeat after it changed. */
 void lobby_host_set(const LobbyGame *g, const char *password);
 /* The game ended: close its entry. */
 void lobby_host_close(void);

@@ -47,6 +47,7 @@ void o_005cde40(void);
 RT_WRAP(005cde40, human_turn)
 {
     holiday_next_turn();
+    net_session_turn();
     season_log_turn();
     season_dates_log_turn();
     season_history_log_turn();

@@ -78,12 +78,33 @@ void nc_set_hooks(const NcHooks *h);
  * out a day makes none for a few seconds. The original's connect waited with no limit. */
 #define NC_HELLO_WAIT_MS 8000
 void nc_set_identity(const char *version, const char *host_password, const char *join_password);
+/* 0.7.0 slice 6: the passwords alone, from the Network tab (host) and the password box (joiner). */
+void nc_set_host_password(const char *pw);
+void nc_set_join_password(const char *pw);
 enum { NC_REFUSED_NONE, NC_REFUSED_VERSION, NC_REFUSED_PASSWORD, NC_REFUSED_NOT_BOSMAN, NC_REFUSED_NO_ANSWER };
 /* Why the last connect was refused, and the host's version for NC_REFUSED_VERSION. */
 int nc_refusal(char *host_version, unsigned room);
 void nc_refusal_clear(void);
 /* The connections that this host accepted and that are open (the human managers who joined). */
 int nc_peers(void);
+
+/* Drop in, drop out and host quit (0.7.0 slice 6). The keepalive timers of every game connection: a peer
+ * that stops answering breaks the connection in about NC_KEEP_IDLE_S + NC_KEEP_INTERVAL_S * NC_KEEP_COUNT seconds
+ * (Windows uses its own count of 10). */
+#define NC_KEEP_IDLE_S 20
+#define NC_KEEP_INTERVAL_S 5
+#define NC_KEEP_COUNT 4
+/* 1 when the joiner's connection to its host ended: the host's quit packet 0x04 came, or the connection broke.
+ * When it broke between two packets, the game reads the quit packet 0x04 in place of the close, so the
+ * client loop 0x7fdc00 ends as at a quit. A new connect clears it. */
+int nc_host_left(void);
+int nc_kicked(void);                /* with nc_host_left: the host kicked this joiner (the kick line came) */
+void nc_host_left_clear(void);
+/* The joiners' connections that this host accepted and that are open: handles, addresses, ports. The count. */
+int nc_peer_list(uint32_t *handle, uint32_t *addr, uint16_t *port, int max);
+/* The host removes a joiner: its connection closes, and the game's next call on the handle fails, so the
+ * original's leave path runs (setup_on_network_player_left 0x838c00). 0 on success. */
+int nc_kick(uint32_t handle);
 
 /* The adapter table of 0x8aee20: at most max addresses and their subnet broadcasts. The count. */
 int nc_adapters(uint32_t *addr, uint32_t *broadcast, int max);
