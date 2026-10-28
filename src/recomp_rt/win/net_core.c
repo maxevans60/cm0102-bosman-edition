@@ -836,6 +836,9 @@ int nc_kick(uint32_t h)
             else if ((w < 0 && hn_error() != HN_WOULDBLOCK) || hn_ms() >= until || hn_wait(k->s, 0, 50) < 0) break;
         }
     }
+    /* The game sets SO_LINGER {0, 0} (0x8ae4d4), so a close would send a reset, and the joiner's system would drop the
+     * kick line that its game has not read. A plain close sends the line first. */
+    hn_set_linger(k->s, 0, 0);
     /* The game's next recv or send on this handle fails, and Network::receive_packet 0x77af20 frees the slot and
      * calls the disconnect callback (0x77b4e9..0x77b508): the original's leave path puts the club on holiday. */
     hn_close(k->s);

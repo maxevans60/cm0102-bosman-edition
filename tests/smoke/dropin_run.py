@@ -308,6 +308,8 @@ def main(argv):
         for name, p, _ in procs:
             check(p.returncode == 0, f"1 {name} ended with code {p.returncode}")
         h = text(host_log)
+        if kick:   # the host quits soon after the kick, before join1 ends: its own log shows Away
+            away_after_drop = [x.split("lobby: away 1 ", 1)[1] for x in h.splitlines() if "lobby: away 1 " in x] or None
         check(bool(away_after_drop) and len(away_after_drop) == 1 and away_after_drop[0] != "Arsenal",
               f"2 the lobby lists join1's club as Away after the {'kick' if kick else 'exit' if leave else 'drop'}: "
               f"{away_after_drop}")
