@@ -28,7 +28,7 @@ struct WsConn {
     uint32_t rng;
 };
 
-/* The masks and the key only need to be hard to guess for a proxy between the game and the server. */
+/* The masks and the key only need to be hard to guess for a machine on the path between the game and the server. */
 static uint32_t next_random(uint32_t *s)
 {
     uint32_t x = *s;

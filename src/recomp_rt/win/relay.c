@@ -1,6 +1,7 @@
 /* Joins through the relay (relay.h). */
 #include "relay.h"
 #include "lobby_http.h"
+#include "lobby_rows.h"
 #include "websocket.h"
 
 #include <stdio.h>
@@ -115,7 +116,7 @@ typedef struct {
 
 /* Shared with the host thread, under hn_lock. */
 static struct {
-    int started, active, gen;
+    int started, active, gen, replaced;   /* replaced: 4001 for this code and token */
     char lobby[256], code[9], token[96];
     struct {
         hn_sock s;
@@ -147,15 +148,27 @@ static void close_all(Channel *ch)
     hn_unlock();
 }
 
-static void open_channel(Channel *ch, int n)
+/* The game ends of channel n that the game has not taken yet. Under hn_lock. */
+static void forget_incoming(int n)
+{
+    for (int i = 0; i < host.incoming_n;)
+        if (host.incoming[i].ch == n) {
+            hn_close(host.incoming[i].s);
+            memmove(host.incoming + i, host.incoming + i + 1, (size_t)(--host.incoming_n - i) * sizeof host.incoming[0]);
+        } else i++;
+}
+
+/* 0 when the game gets the new channel's connection, -1 when the channel must be kicked. */
+static int open_channel(Channel *ch, int n)
 {
     close_channel(&ch[n]);
     hn_sock game, mine;
     if (hn_pair(&game, &mine) < 0) {
         fprintf(stderr, "recomp: relay: no socket pair for channel %d\n", n);
-        return;
+        return -1;
     }
     hn_lock();
+    forget_incoming(n);
     if (host.incoming_n < RELAY_CHANNELS) {
         host.incoming[host.incoming_n].s = game, host.incoming[host.incoming_n].ch = n;
         host.incoming_n++;
@@ -164,10 +177,18 @@ static void open_channel(Channel *ch, int n)
     hn_unlock();
     if (game != HN_INVALID) {
         hn_close(game), hn_close(mine);
-        return;
+        return -1;
     }
     ch[n].open = 1, ch[n].mine = mine, ch[n].opened = hn_ms();
     fprintf(stderr, "recomp: relay: a human manager connects on channel %d\n", n);
+    return 0;
+}
+
+static int kick(WsConn *w, int n)
+{
+    char m[32];
+    snprintf(m, sizeof m, "{\"t\":\"kick\",\"ch\":%d}", n);
+    return ws_send(w, 1, m, strlen(m), SEND_MS);
 }
 
 /* Sends every channel's batch. -1 when the relay connection broke. */
@@ -186,9 +207,7 @@ static int send_batches(WsConn *w, Channel *ch, uint64_t *last_sent)
             *last_sent = hn_ms();
         }
         if (c->open && c->ended) {
-            char kick[32];
-            snprintf(kick, sizeof kick, "{\"t\":\"kick\",\"ch\":%d}", i);
-            if (ws_send(w, 1, kick, strlen(kick), SEND_MS) < 0) return -1;
+            if (kick(w, i) < 0) return -1;
             fprintf(stderr, "recomp: relay: the host closed channel %d\n", i);
             close_channel(c);
         }
@@ -202,11 +221,12 @@ static void host_thread(void *unused)
     Channel *ch = host_channels;
     WsConn *w = NULL;
     int gen = -1, backoff = RETRY_FIRST_MS;
-    uint64_t retry_at = 0, last_sent = 0;
+    int gen_seen_before = 0;       /* this code and token had a connection before: a reconnect */
+    uint64_t retry_at = 0, last_sent = 0, connected_at = 0;
     char lobby[256], code[9], token[96], url[512], query[160];
     for (;;) {
         hn_lock();
-        int active = host.active, want = host.gen;
+        int active = host.active && !host.replaced, want = host.gen;
         memcpy(lobby, host.lobby, sizeof lobby), memcpy(code, host.code, sizeof code);
         memcpy(token, host.token, sizeof token);
         hn_unlock();
@@ -223,7 +243,7 @@ static void host_thread(void *unused)
             continue;
         }
         if (!w && (want != gen || now >= retry_at)) {
-            if (want != gen) backoff = RETRY_FIRST_MS;
+            if (want != gen) backoff = RETRY_FIRST_MS, gen_seen_before = 0;
             gen = want;
             snprintf(query, sizeof query, "role=host&token=%s", token);
             int status = 0;
@@ -231,7 +251,7 @@ static void host_thread(void *unused)
             w = relay_url(url, sizeof url, lobby, code, query) ? ws_open(url, 10000, &status, body, sizeof body) : NULL;
             if (w) {
                 fprintf(stderr, "recomp: relay: the host is connected as %s\n", code);
-                backoff = RETRY_FIRST_MS, last_sent = hn_ms();
+                backoff = RETRY_FIRST_MS, last_sent = connected_at = hn_ms();
             } else {
                 char why[32];
                 lobby_json_word(body, "error", why, sizeof why);
@@ -256,15 +276,26 @@ static void host_thread(void *unused)
                 memcpy(t, m.data, n);
                 t[n] = 0;
                 int c = channel_of(t);
-                if (strstr(t, "\"open\"") && c >= 0) open_channel(ch, c);
-                else if (strstr(t, "\"close\"") && c >= 0 && ch[c].open) {
-                    fprintf(stderr, "recomp: relay: the human manager on channel %d left\n", c);
+                /* The relay names the channels still open when a host connects (relay.ts): after a reconnect
+                 * their streams broke with the old connection, so the game could not read them on. */
+                int stale = hn_ms() - connected_at < RELAY_FRESH_MS && gen_seen_before;
+                if (strstr(t, "\"open\"") && c >= 0 && (stale || open_channel(ch, c) < 0)) {
+                    fprintf(stderr, "recomp: relay: channel %d is kicked: %s\n", c, stale ? "an old stream" : "no room");
+                    if (kick(w, c) < 0) r = -1;
+                    break;
+                }
+                else if (strstr(t, "\"close\"") && c >= 0) {
+                    if (ch[c].open) fprintf(stderr, "recomp: relay: the human manager on channel %d left\n", c);
                     close_channel(&ch[c]);
+                    hn_lock();
+                    forget_incoming(c);
+                    hn_unlock();
                 }
             } else if (m.len >= 1 && m.data[0] < RELAY_CHANNELS && ch[m.data[0]].open) {
                 Channel *c = &ch[m.data[0]];
                 c->frames_in++, c->bytes_in += m.len - 1;
-                if (put(&c->to_game, m.data + 1, m.len - 1) < 0) c->ended = 1;
+                if (c->to_game.len - c->to_game.off + m.len > RELAY_QUEUE_MAX || put(&c->to_game, m.data + 1, m.len - 1) < 0)
+                    c->ended = 1;
             }
         }
         if (r < 0) {
@@ -275,9 +306,10 @@ static void host_thread(void *unused)
             fprintf(stderr, "recomp: relay: the relay closed the host's connection (%d)\n", code_now);
             if (code_now == 4001) {         /* replaced: another connection with this token took over */
                 hn_lock();
-                if (host.gen == gen) host.active = 0;
+                if (host.gen == gen) host.replaced = 1;
                 hn_unlock();
             }
+            gen_seen_before = 1;
             retry_at = hn_ms() + (uint64_t)backoff;
             continue;
         }
@@ -306,6 +338,7 @@ static void host_thread(void *unused)
             ws_close(w, 0);
             w = NULL;
             fprintf(stderr, "recomp: relay: the host's connection broke\n");
+            gen_seen_before = 1;
             retry_at = hn_ms() + (uint64_t)backoff;
         }
     }
@@ -314,11 +347,11 @@ static void host_thread(void *unused)
 void relay_host_set(const char *lobby, const char *code, const char *token)
 {
     hn_lock();
-    if (!host.active || strcmp(host.code, code) || strcmp(host.token, token) || strcmp(host.lobby, lobby)) {
+    if ((!host.active && !host.replaced) || strcmp(host.code, code) || strcmp(host.token, token) || strcmp(host.lobby, lobby)) {
         snprintf(host.lobby, sizeof host.lobby, "%s", lobby);
         snprintf(host.code, sizeof host.code, "%s", code);
         snprintf(host.token, sizeof host.token, "%s", token);
-        host.active = 1;
+        host.active = 1, host.replaced = 0;
         host.gen++;
         if (!host.started && hn_thread(host_thread, NULL) == 0) host.started = 1;
     }
@@ -329,6 +362,7 @@ void relay_host_stop(void)
 {
     hn_lock();
     if (host.active) host.active = 0, host.gen++;
+    host.replaced = 0;
     hn_unlock();
 }
 
@@ -338,7 +372,7 @@ hn_sock relay_take_joiner(uint32_t *addr, uint16_t *port)
     hn_lock();
     if (host.incoming_n) {
         s = host.incoming[0].s;
-        uint32_t a = RELAY_PEER_NET + (uint32_t)host.incoming[0].ch;
+        uint32_t a = LR_RELAY_PEERS + (uint32_t)host.incoming[0].ch;
         const uint8_t b[4] = {(uint8_t)(a >> 24), (uint8_t)(a >> 16), (uint8_t)(a >> 8), (uint8_t)a};
         memcpy(addr, b, 4);
         *port = (uint16_t)(50000 + host.incoming[0].ch);
@@ -369,7 +403,10 @@ static void joiner_thread(void *arg)
         while ((r = ws_poll(l->w, &m)) == 1)
             if (!m.text) {
                 frames_in++, bytes_in += m.len;
-                if (put(&to_game, m.data, m.len) < 0) r = -1;
+                if (to_game.len - to_game.off + m.len > RELAY_QUEUE_MAX || put(&to_game, m.data, m.len) < 0) {
+                    r = -1;
+                    break;
+                }
             }
         if (r < 0) {
             code = ws_close_code(l->w);
@@ -443,7 +480,7 @@ RelayJoin relay_join(const char *lobby, const char *code, const char *version, c
             if (host_version && room) lobby_json_word(a->body, "hostVersion", host_version, room);
         } else if (!strcmp(why, "wrong_password")) out = RJ_PASSWORD;
         else if (!strcmp(why, "too_many_attempts")) out = RJ_ATTEMPTS;
-        else if (!strcmp(why, "name_not_allowed")) out = RJ_NAME;
+        else if (!strcmp(why, "name_not_allowed") || !strcmp(why, "bad_request")) out = RJ_NAME;
     }
     if (!ticket[0]) {
         fprintf(stderr, "recomp: relay: the lobby gave no ticket for %s (%d %s)\n", code, a->status, why);

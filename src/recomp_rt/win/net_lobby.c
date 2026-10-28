@@ -206,9 +206,13 @@ static int before_connect(uint32_t addr, uint16_t port)
         snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman Edition %s "
                  "to join it.", r->g.version, version(), r->g.version);
         refuse(t);
+    } else if (r && r->g.password) {
+        /* The join carries a password, but no screen asks for one yet (slice 4 hand-over: Max's choice). */
+        refuse("This network game has a password. This version of Bosman Edition cannot ask for it yet, so join "
+               "a game with no password.");
     } else if (!r && b[0] == 0 && b[1] == 66) {
-        /* An address of 0.66.0.0/16 with no row, for example one that a player typed (lobby_rows.h). */
-        refuse("This online game is no longer in the list. Click Refresh and try again.");
+        /* An address of 0.66.0.0/16 with no row, for example one that a human manager typed (lobby_rows.h). */
+        refuse("This network game is no longer in the list. Click Refresh and try again.");
     } else return 0;                 /* a LAN address, or a lobby row: route joins it through the relay */
     nc_set_error(10061);
     return -1;
@@ -232,16 +236,17 @@ static int route(uint32_t addr, uint16_t port, intptr_t *s)
     case RJ_OK:
         *s = got;
         return 1;
-    case RJ_GONE: refuse("This online game is no longer in the list. Click Refresh and try again."); break;
+    case RJ_GONE: refuse("This network game is no longer in the list. Click Refresh and try again."); break;
     case RJ_VERSION:
         snprintf(t, sizeof t, "This network game runs Bosman Edition %s, and you have %s. Install Bosman Edition %s "
                  "to join it.", host_version, version(), host_version);
         refuse(t);
         break;
-    case RJ_PASSWORD: refuse("The password of this network game is wrong."); break;
+    case RJ_PASSWORD: refuse("The password of this network game is wrong. Ask the host for it and try again."); break;
     case RJ_ATTEMPTS: refuse("Too many wrong passwords for this network game. Wait one minute and try again."); break;
-    case RJ_FULL: refuse("This network game has 16 human managers. It cannot take more."); break;
-    case RJ_HOST_AWAY: refuse("The host of this online game is not connected. Try again in a moment."); break;
+    case RJ_FULL: refuse("This network game has 16 human managers, the most it can take. Join another game."); break;
+    case RJ_HOST_AWAY: refuse("The host of this network game is not connected. Try again in a moment."); break;
+    case RJ_NAME: refuse("The online service refused this join. Click Refresh and try again."); break;
     case RJ_FULL_TODAY:
         refuse("Online games are full today, try again later. Games on your own network still work.");
         break;

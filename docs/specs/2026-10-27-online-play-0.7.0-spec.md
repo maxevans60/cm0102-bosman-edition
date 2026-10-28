@@ -171,6 +171,8 @@ Merge danger: two-way door. Blast radius: online joins fail. A new library ships
 - [ ] Two-game run passes through the real relay.
 - [ ] A GitHub Windows machine and a GitHub Linux machine join a game on this Mac.
 
+As built so far (2026-10-28, branch `claude/online-s5-relay-16166c`, not finished): the merge danger stays a two-way door. Files: `src/recomp_rt/win/relay.c`, `websocket.c`, `secure.c`, `tls_config.h` and their headers (new), `net_core.c` and `net_core.h` (route and incoming hooks), `net_lobby.c`, `lobby.c`, `lobby_http.c` (https), `lobby_rows.h` (`LR_CAP` 50, `LR_RELAY_PEERS`), `host/net_posix.c`, `host/net_win32.c`, `host_net.h`, `CMakeLists.txt` (mbedTLS 3.6.7), `packaging/windows/windows.cmake` (crypt32), `tests/net/test_relay.c`, `tests/net/tls_check.py`, `tests/smoke/network_run.py` (`--relay`, `--remote`, `--game-name`), `tests/smoke/relay_join_remote.py`, `.github/workflows/online-join.yml`. The two-game run with `--relay` passes through the local server's relay, and ctest passes. Not run yet: the relay with 3 joiners, the real relay, the GitHub machines, the four same-save sets. Research note, section 13.
+
 ### 6. Drop in, drop out and host quit
 Blocked by: 5
 Delivers: Away status, rejoin with the manager password, the host's save and message when it quits, and Kick.

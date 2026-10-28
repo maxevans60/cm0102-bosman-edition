@@ -56,7 +56,7 @@ def main(argv):
         return 2
     if not shutil.which("openssl"):
         print("tls check: no openssl tool, skipped")
-        return 0
+        return 77                           # ctest SKIP_RETURN_CODE
     program = os.path.abspath(argv[1])
     with tempfile.TemporaryDirectory(prefix="cm0102-tls-") as d:
         make_certificates(d)
@@ -68,21 +68,24 @@ def main(argv):
         threading.Thread(target=server.serve_forever, daemon=True).start()
         failed = []
 
-        def check(name, address, ca, want):
+        def check(name, address, ca, want, why=None):
             env = dict(os.environ)
             env.pop("RECOMP_TEST_TLS_CA", None)
             if ca:
                 env["RECOMP_TEST_TLS_CA"] = os.path.join(d, "ca.pem")
             r = subprocess.run([program, "--https", address], env=env, capture_output=True, text=True, timeout=30)
-            ok = (r.returncode == 0) == want
+            # A failure must be the certificate check, not some other failure.
+            ok = (r.returncode == 0) == want and (not why or why in r.stderr)
             print(("ok   " if ok else "FAIL ") + name)
             if not ok:
                 failed.append(name)
                 print(r.stdout + r.stderr)
 
         check("1 the test root: the lobby call succeeds", f"https://localhost:{port}", True, True)
-        check("2 no test root: the server is not trusted", f"https://localhost:{port}", False, False)
-        check("3 another name: the certificate does not match", f"https://127.0.0.1:{port}", True, False)
+        check("2 no test root: the server is not trusted", f"https://localhost:{port}", False, False,
+              "certificate is not trusted")
+        check("3 another name: the certificate does not match", f"https://127.0.0.1:{port}", True, False,
+              "certificate is not trusted")
         server.shutdown()
     print("tls check: " + ("PASS" if not failed else f"FAIL ({len(failed)})"))
     return 1 if failed else 0

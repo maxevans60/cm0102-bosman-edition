@@ -60,7 +60,7 @@ checks 7 and 10 and:
    11  each joiner joined through the relay and the host held one relay connection; the relay lines of the
        host's log give the frames that it sent (batches of about 50 ms)
 
---remote n (with --relay and --lobby-url) runs the host only and waits --remote-wait seconds (default 1800) at
+--game-name <word> names the host's game (default Bosman). --remote n (with --relay and --lobby-url) runs the host only and waits --remote-wait seconds (default 1800) at
 its Enter Name for n joiners on other computers, for example the GitHub machines of
 .github/workflows/online-join.yml (tests/smoke/relay_join_remote.py). The checks are 1, 4 (the host's side, n
 connections), 7, 10 and 11 (the host's side). The host's dumps stay in --shots, for relay_join_remote.py
@@ -95,6 +95,7 @@ START = [
     "wait setup",
     "1000 click 277 346",                   # Network Play
 ]
+GAME_NAME = "Bosman"                        # --game-name: one word, for a run on the public lobby
 NAME_BUILD = "0x820f50"                     # Enter Name of a new human manager (setup_add_human_manager)
 def host_steps(joiners, later=None):
     # The joiners play after the host's dump; they start 4 s apart and each plays about 40 s. The host's own
@@ -103,7 +104,7 @@ def host_steps(joiners, later=None):
     later = later or 60000 + 8000 * (joiners - 1)
     return START + [
         "3500 click 277 177",               # Start Network Game
-        "6500 type Bosman",                 # Enter Network Game Name
+        f"6500 type {GAME_NAME}",           # Enter Network Game Name
         "8500 click 705 572",               # Next (ends the text entry)
         "10000 click 705 572",              # Next
         "wait leagues",
@@ -322,6 +323,7 @@ def click_packets(log, peer):
 
 
 def main(argv):
+    global GAME_NAME
     args = argv[1:]
     if len(args) < 2:
         print(__doc__)
@@ -353,6 +355,8 @@ def main(argv):
             remote = max(1, min(15, int(v)))
         elif k == "--remote-wait":
             remote_wait = int(v)
+        elif k == "--game-name" and re.match(r"[A-Za-z0-9]{1,20}$", v):
+            GAME_NAME = v
         else:
             print(__doc__)
             return 2
@@ -415,7 +419,7 @@ def main(argv):
             if ready and lobby:
                 for _ in range(20):          # the host registers once the data is loaded
                     games = lobby_games(lobby_url) or []
-                    listed = [g for g in games if g.get("name") == "Bosman"]
+                    listed = [g for g in games if g.get("name") == GAME_NAME]
                     if listed:
                         break
                     time.sleep(0.5)
@@ -518,7 +522,7 @@ def main(argv):
             check(quiet.count == 0, f"9 with Online play off, join3 made {quiet.count} lobby connections")
             check(full.count >= 1, f"join4's lobby got {full.count} requests")
         if lobby:
-            check(after is not None and not [x for x in after if x.get("name") == "Bosman"],
+            check(after is not None and not [x for x in after if x.get("name") == GAME_NAME],
                   "10 the lobby lists no game after the host quit")
 
         for name in ["host"] + [x[0] for x in specs]:

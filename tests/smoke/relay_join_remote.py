@@ -12,9 +12,10 @@ The host: python3 tests/smoke/network_run.py <exe> <game> --relay --lobby-url <a
 
 The joiner waits at most --wait seconds (default 1800) for the lobby to list a game with the name, then plays the
 joiner's timed clicks of network_run.py: Network Play, Join Network Game, the first row of the list (the host's
-lobby row: the joiner sees lobby rows only), Next, the names, Next. Checks:
+lobby row: the joiner sees lobby rows only), Next, the names, Next. On the public lobby another game can sort
+first, so give the host's game a name of its own (network_run.py --game-name, and --name here). Checks:
     1 the game ends with code 0
-    2 it joined through the relay
+    2 the first row of its list is the host's game, and it joined through the relay
     3 its traffic log shows the connection to the row's 0.66 address with packets both ways
     4 it sent 4 click packets (opcode 6)
     5 the three dumps exist (Enter Name, Enter Name with the names, Select Nationality)
@@ -121,6 +122,8 @@ def main(argv):
         err.close()
         check(p.returncode == 0, f"1 the game ended with code {p.returncode}")
         text = open(os.path.join(shots, f"{me}-stderr.txt"), errors="replace").read()
+        rows = network_run.list_rows(os.path.join(shots, f"{me}-stderr.txt"))
+        check(bool(rows) and rows[0].startswith(name + "  "), f"2 the first row of its list is the host's game: {rows[:3]}")
         check("through the relay" in text and "recomp: relay: joined" in text, "2 it joined through the relay")
         log_path = os.path.join(shots, f"{me}-net.log")
         log = network_run.connections(log_path)

@@ -160,6 +160,7 @@ if(NOT WIN32)
     target_link_libraries(relay_test PRIVATE Threads::Threads mbedtls)
     add_test(NAME relay COMMAND relay_test)
     add_test(NAME relay_tls COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/net/tls_check.py" $<TARGET_FILE:relay_test>)
+    set_tests_properties(relay_tls PROPERTIES SKIP_RETURN_CODE 77)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.

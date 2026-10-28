@@ -2,6 +2,7 @@
  * The adapters come from GetAdaptersAddresses. The secure connection's root certificates come from the
  * system's ROOT store (crypt32). */
 #define _WIN32_WINNT 0x0600        /* GetTickCount64 and OnLinkPrefixLength: Windows Vista and later */
+#define CERT_CHAIN_PARA_HAS_EXTRA_FIELDS    /* dwUrlRetrievalTimeout */
 #include "../host_net.h"
 
 #include <winsock2.h>
@@ -343,6 +344,7 @@ int hn_verify_server(const unsigned char *const *der, const size_t *len, int n, 
         para.RequestedUsage.dwType = USAGE_MATCH_TYPE_OR;
         para.RequestedUsage.Usage.cUsageIdentifier = 1;
         para.RequestedUsage.Usage.rgpszUsageIdentifier = usage;
+        para.dwUrlRetrievalTimeout = 5000;     /* a root that Windows fetches: the join waits at most this */
         PCCERT_CHAIN_CONTEXT chain = NULL;
         if (CertGetCertificateChain(NULL, leaf, NULL, extra, &para, 0, NULL, &chain)) {
             SSL_EXTRA_CERT_CHAIN_POLICY_PARA ssl;

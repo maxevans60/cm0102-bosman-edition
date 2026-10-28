@@ -8,7 +8,7 @@
 #    wait_minutes for the game in the lobby.
 # 2. On the Mac, start the host:
 #      python3 tests/smoke/network_run.py <cm0102_recomp> <clean files> --relay --lobby-url <address> \
-#          --remote 2 --shots <folder>
+#          --remote 2 --game-name <the game_name input> --shots <folder>
 # 3. When the run ends, download the joiners' results (gh run download) and compare their dumps with the host's:
 #      python3 tests/smoke/relay_join_remote.py --compare <host shots> <joiner shots>
 name: Online join test
@@ -20,7 +20,7 @@ on:
         description: "The lobby address, for example https://bosman-online.<account>.workers.dev"
         required: true
       game_name:
-        description: "The name of the host's game"
+        description: "The name of the host's game: one word of letters and digits, unique in the lobby"
         default: "Bosman"
       wait_minutes:
         description: "How long each joiner waits for the game in the lobby"
@@ -54,8 +54,8 @@ jobs:
         run: |
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCM0102_EXE="$RUNNER_TEMP/game/cm0102.exe" \
               -DRECOMP_PYTHON=/tmp/venv/bin/python
-          cmake --build build --target cm0102_recomp relay_test
-          ctest --test-dir build -R "relay|lobby|net_core" --output-on-failure
+          cmake --build build --target cm0102_recomp relay_test lobby_test net_core_test
+          ctest --test-dir build -R "^(relay|relay_tls|lobby|net_core)$" --output-on-failure
       - name: Build for Windows
         run: |
           curl -fsSL -o /tmp/sdl2.tar.gz \

@@ -606,7 +606,14 @@ Each connection through the relay is a pair of TCP sockets on 127.0.0.1 (`hn_pai
 
 ### Batches
 
-The host's bytes on a channel wait at most 50 ms and then go in one binary frame (the channel byte and the batch). All channels that have bytes go at the same moment. A joiner's bytes wait at most 10 ms. A link sends a frame only when it has bytes, and `ping` after 30 s with none, so an idle relay can hibernate (server/README.md, "Free plan"). The host never uses channel 255 (all human managers): a human manager that connects while a frame to all is on its way would get bytes before its join check.
+The host's bytes on a channel wait at most 50 ms and then go in one binary frame (the channel byte and the batch). All channels that have bytes go at the same moment. A joiner's bytes wait at most 10 ms. At 50 ms the two-game run failed: the host's next screen came before the second click of one press (First Name, then Next), and the click rule of slice 2b held that click back (3 click packets of 4, Select Team in place of Select Nationality). A link sends a frame only when it has bytes, and `ping` after 30 s with none, so an idle relay can hibernate (server/README.md, "Free plan"). The host never uses channel 255 (all human managers): a human manager that connects while a frame to all is on its way would get bytes before its join check.
+
+### When a connection ends
+
+- The host's relay connection breaks: every channel's socket ends, so the host's game sees each human manager leave. The runtime connects again after 2 s, then 4, 8 and up to 30 s. The relay names the human managers that are still connected when a host connects (`server/src/relay.ts`). Their streams broke with the old connection, so the host kicks a channel that the relay names within 1 s of a reconnect. A human manager who joins in that second is kicked too and can join again.
+- Close code 4001 (another connection with the same token took over): the host does not connect again until its code or token changes.
+- A channel whose game does not read 4 MiB of the relay's bytes ends, and so does a joiner's connection.
+- A joiner's game closes its socket: its relay connection closes with 1000. The relay closes a joiner (4000 the host left, 4003 a kick): its game's socket ends after the bytes that came before.
 
 ### The secure connection
 
