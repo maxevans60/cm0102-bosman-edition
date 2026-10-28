@@ -369,7 +369,9 @@ def main(argv):
                           "(vm-prepare.txt)", o["out"])
             return 1
         for via in vias:
-            results.append((via, one_join(o, via, serve_dir, url)))
+            oc.wait_for_room()
+            with oc.NetLock(f"vm_join_run.py {via}"):     # one host on port 6667 at a time (lead's net-lock.sh)
+                results.append((via, one_join(o, via, serve_dir, url)))
     finally:
         server.shutdown()
         # Suspend the virtual machine only when this run started or resumed it.

@@ -96,6 +96,36 @@ def wait_for_room(max_games=15, quiet=False):
         time.sleep(30)
 
 
+NET_LOCK_SH = "the maintainer's notes"
+
+
+class NetLock:
+    """A turn at the lead's lock (the maintainer's notes one 0.7.0 game run at a time, first come, first
+    served, at most 2 games). It starts net-lock.sh with a command that touches a file and then waits on its
+    input: the turn is ours once the file exists, and closing the input ends the command and frees the lock.
+    Use it around one short run: with NetLock("what"): ..."""
+
+    def __init__(self, what):
+        self.what = what
+
+    def __enter__(self):
+        mark = os.path.join(RUN_LOGS, f"net-lock-turn-{os.getpid()}")
+        if os.path.exists(mark):
+            os.remove(mark)
+        self.proc = subprocess.Popen([NET_LOCK_SH, "sh", "-c", f'touch "{mark}"; cat >/dev/null', self.what],
+                                     stdin=subprocess.PIPE)
+        while not os.path.exists(mark):
+            if self.proc.poll() is not None:
+                raise SystemExit("online_common: net-lock.sh ended before our turn")
+            time.sleep(5)
+        os.remove(mark)
+        return self
+
+    def __exit__(self, *exc):
+        self.proc.stdin.close()
+        self.proc.wait()
+
+
 def relay_in_build(program):
     """True when the build has slice 5's relay join (its log text "recomp: relay: joined")."""
     try:
