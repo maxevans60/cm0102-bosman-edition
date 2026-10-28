@@ -91,6 +91,14 @@ int host_pick_folder(const char *title, char *out, size_t room);
  * on a failure (with a message on stderr). */
 int host_link_handler(int on);
 
+/* One copy of the game takes the invite links of a user (0.7.0 slice 8, Q41, host/link_pass.c). host_link_pass
+ * gives the link to the copy that listens on the channel of this user folder: 1 when that copy kept it, and the
+ * caller then ends. host_link_listen makes this copy the one that listens, when no other copy does: 0 when it
+ * listens. host_link_take gives a link that arrived, once: 1 with the link in out. */
+int host_link_pass(const char *user_dir, const char *link);
+int host_link_listen(const char *user_dir);
+int host_link_take(char *out, size_t room);
+
 /* Time. */
 void host_gmtime(time_t t, struct tm *out);
 void host_localtime(time_t t, struct tm *out);

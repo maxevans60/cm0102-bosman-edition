@@ -2,7 +2,9 @@
  *
  * The invite link page of the lobby (server/src/join.ts) has a button that opens cm0102://join/<code>. The
  * computer starts the game with that link:
- * - Windows and Linux give it as an argument of the program (main.c takes it off the game's command line).
+ * - Windows and Linux give it as an argument of the program (main.c takes it off the game's command line). When
+ *   a copy of the game runs already, the new copy gives the link to it and ends (host_link_pass, Q41), and the
+ *   copy that runs gets it in its event poll (user32.c).
  * - macOS sends it as an Apple event, also to a game that runs. SDL gives it as a drop event (user32.c).
  * The runtime looks up the game code in the lobby and gives the game it found to invite_join, the join path
  * of slice 5. */
