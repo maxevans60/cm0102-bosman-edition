@@ -36,3 +36,17 @@ RT_WRAP(00803d80, screen_pop_probe)
     o_00803d80();
     fprintf(stderr, "recomp: probe 0x803d80 channel %d gives %#x\n", ch, cpu.eax);
 }
+
+void o_007fe600(void);
+
+/* RECOMP_STACK_PROBE=1: each screen push (0x7fe600, thiscall on the screen manager: build function, input
+ * function, ...) prints the channel it goes to ([this + 0x382a], 0x7fe60c), the build and input functions and the
+ * caller. The joiner's screens are pushed on its channel, so the log shows which screen a joiner's click opens. */
+RT_WRAP(007fe600, screen_push_probe)
+{
+    const char *v = getenv("RECOMP_STACK_PROBE");
+    if (v && *v == '1')
+        fprintf(stderr, "recomp: probe push channel %d build %#x input %#x from %#x\n",
+                (int16_t)rd16(g_mem, cpu.ecx + 0x382a), rt_arg(0), rt_arg(1), rd32(g_mem, cpu.esp));
+    o_007fe600();
+}
