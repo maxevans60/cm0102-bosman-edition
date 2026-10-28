@@ -12,9 +12,11 @@
  * 0.66.255.<n> (LR_RELAY_PEERS, lobby_rows.h). A channel that the relay names at once after the host connects
  * again belongs to a stream that broke with the old connection: the host kicks it. A relay connection that
  * another connection with the same token replaced (close code 4001) is not opened again for that code and
- * token. The bytes that the host's game sends on a channel wait up to RELAY_BATCH_MS and
- * then go in one binary frame, the channel byte and the batch: the free plan bills WebSocket messages
- * (server/README.md, "Free plan"). A channel sends a batch only when it has bytes, and a quiet connection
+ * token. The bytes that the host's game sends on a channel go in one binary frame, the channel byte and the
+ * batch, at most one frame each RELAY_BATCH_MS: the free plan bills WebSocket messages (server/README.md, "Free
+ * plan"). Bytes after a quiet RELAY_BATCH_MS go after RELAY_QUIET_MS, so the host's 5-byte answer to a click
+ * (opcode 9) does not wait: the joiner's client loop polls the second widget of a press only after it (two-game
+ * run through the deployed relay, 2026-10-28). Later bytes wait up to RELAY_BATCH_MS. A channel sends a batch only when it has bytes, and a quiet connection
  * sends "ping" every RELAY_PING_MS. When the host's game closes a channel's socket, the relay gets a kick for
  * it. When the relay closes a channel, the game's socket of it ends.
  *
@@ -33,6 +35,7 @@
 #include <stdint.h>
 
 #define RELAY_BATCH_MS 50
+#define RELAY_QUIET_MS 2              /* the bytes that the game writes at once still go in one frame */
 #define RELAY_JOIN_MS 10
 #define RELAY_PING_MS 30000
 #define RELAY_BATCH_MAX (256u << 10)  /* a batch this large goes at once */

@@ -111,7 +111,7 @@ typedef struct {
     int ended;                     /* the game closed its end: kick once the batch is sent */
     unsigned frames_out, frames_in;   /* for the log: the free plan bills messages */
     uint64_t bytes_out, bytes_in;
-    uint64_t opened;
+    uint64_t opened, last_frame;
 } Channel;
 
 /* Shared with the host thread, under hn_lock. */
@@ -202,7 +202,7 @@ static int send_batches(WsConn *w, Channel *ch, uint64_t *last_sent)
             frame[0] = (uint8_t)i;
             memcpy(frame + 1, c->batch.p + c->batch.off, n);
             c->batch.off = c->batch.len = 0;
-            c->frames_out++, c->bytes_out += n;
+            c->frames_out++, c->bytes_out += n, c->last_frame = hn_ms();
             if (ws_send(w, 0, frame, n + 1, SEND_MS) < 0) return -1;
             *last_sent = hn_ms();
         }
@@ -324,7 +324,8 @@ static void host_thread(void *unused)
             if (t < 0) c->ended = 1;
             if (!had && c->batch.len > c->batch.off) c->first = now;
             if (c->ended || (c->batch.len > c->batch.off &&
-                             (now - c->first >= RELAY_BATCH_MS || c->batch.len - c->batch.off >= RELAY_BATCH_MAX)))
+                             (now - c->first >= RELAY_BATCH_MS || c->batch.len - c->batch.off >= RELAY_BATCH_MAX ||
+                              (now - c->last_frame >= RELAY_BATCH_MS && now - c->first >= RELAY_QUIET_MS))))
                 due = 1;
         }
         /* One moment for all channels: a screen that the host sends to every human manager leaves together. */

@@ -331,6 +331,7 @@ static void test_relay(void)
     CHECK(n == 10 && !memcmp(buf, "BOSMAN OK\n", 10), "the join check passes through the relay (%ld)", n);
 
     /* The host sends five packets at once: one batch, one frame. The game's 4-byte lengths go through. */
+    hn_sleep(100);                 /* a quiet time after the join check's frame */
     int frames0 = host_frames;
     uint64_t t0 = hn_ms();
     for (int i = 0; i < 5; i++) {
@@ -341,7 +342,20 @@ static void test_relay(void)
     uint64_t took = hn_ms() - t0;
     CHECK(n == 520 && buf[0] == 100 && buf[4] == 0 && buf[104 + 4] == 1 && buf[416 + 4] == 4, "the packets arrive (%ld)", n);
     CHECK(host_frames - frames0 == 1, "five packets in one frame (%d)", host_frames - frames0);
-    CHECK(took >= RELAY_BATCH_MS - 5, "the batch waits about %d ms (%llu ms)", RELAY_BATCH_MS, (unsigned long long)took);
+    CHECK(took < RELAY_BATCH_MS, "after a quiet time the frame goes at once (%llu ms)", (unsigned long long)took);
+    /* The next packets within RELAY_BATCH_MS wait for it: at most one frame each RELAY_BATCH_MS. */
+    frames0 = host_frames;
+    t0 = hn_ms();
+    for (int i = 0; i < 3; i++) {
+        uint8_t pkt[4 + 10] = {10, 0, 0, 0, 9};
+        nc_send(a, pkt, sizeof pkt);
+        hn_sleep(5);
+    }
+    n = read_for(s, buf, sizeof buf, 42, 3000);
+    took = hn_ms() - t0;
+    CHECK(n == 42 && host_frames - frames0 == 1 && took >= RELAY_BATCH_MS / 2,
+          "packets soon after a frame wait for the batch (%ld bytes, %d frames, %llu ms)", n, host_frames - frames0,
+          (unsigned long long)took);
 
     /* A large screen: 70000 bytes in one frame. */
     static uint8_t big[70000];
