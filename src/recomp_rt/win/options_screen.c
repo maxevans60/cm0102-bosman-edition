@@ -418,7 +418,7 @@ static void network_rows(int y, uint32_t green, uint32_t light)
 {
     test_row(y, green, light);
     y += 35;
-    if (!password_field) password_field = rt_alloc_zero(PASSWORD_MAX + 8);
+    if (!password_field) password_field = win_static_alloc(PASSWORD_MAX + 8);   /* not the game heap (Q152) */
     snprintf((char *)g_mem + password_field, PASSWORD_MAX + 1, "%s", options_string(OPT_GAME_PASSWORD));
     int a = area(ROW_X1, y, ROW_X2, y + 32, 4, weights_two, 1, 0);
     plain(a, 0, "Game password", 3, light);
@@ -481,18 +481,22 @@ static void ask_kick(int slot)
     if (!kick_slot) return;
     static uint32_t heading, question;
     if (!heading) {
-        heading = rt_alloc_zero(32);
-        question = rt_alloc_zero(160);
+        heading = win_static_alloc(32);
+        question = win_static_alloc(160);
         win_put_str(heading, "Please Confirm", 32);
     }
     char q[160];
-    if (kick_name[0]) snprintf(q, sizeof q, "Kick %s? Their club goes on holiday.", kick_name);
-    else snprintf(q, sizeof q, "Kick this human manager?");
+    int managers = 0;
+    for (int i = 0; i < n; i++)
+        if (m[i].slot == slot) managers = m[i].managers;
+    if (managers > 1) snprintf(q, sizeof q, "Kick %s? Their clubs go on holiday.", kick_name);
+    else if (managers == 1) snprintf(q, sizeof q, "Kick %s? Their club goes on holiday.", kick_name);
+    else snprintf(q, sizeof q, "Kick this new human manager? They have no club yet.");
     win_put_str(question, q, 160);
     uint32_t one[1] = {1}, zero[1] = {0};
     uint32_t args[7] = {call(GAME_TITLE, 0, NULL), heading, question, 1, call(HEADING_COLOUR, 1, one),
                         call(HEADING_COLOUR, 1, zero), KICK_CODE};
-    call(CONFIRM_PUSH, 7, args);
+    call(CONFIRM_PUSH, 7, args);                /* its result is not a status (0x59192a..0x591938) */
     fprintf(stderr, "recomp: options box: %s\n", q);
 }
 
@@ -627,6 +631,7 @@ static void options_input(void)
     int16_t w = (int16_t)rt_arg(0);
     uint32_t r = 0;
     if (w < 0 && kick_answer()) {
+        handled_press = win_press_count();          /* a held Yes or No does not click in the box below */
         rt_ret_cdecl(REBUILD);
         return;
     }
@@ -639,10 +644,12 @@ static void options_input(void)
      * speed of the machine. So the box takes one click for each press of the mouse button. */
     if (w >= 0 && win_press_count() == handled_press) w = -1;
     if (w >= 0) {
-        handled_press = win_press_count();
         uint32_t at = display() + WIDGETS + 8 + (uint32_t)w * WIDGET_SIZE;
         uint32_t id = (uint16_t)rd32(g_mem, at), data = rd32(g_mem, at + 0x40);
-        if (id != PASSWORD_ID) save_password();
+        /* A click that ends the text entry gives the field, then the button under the pointer in the next poll of
+         * the same press (research note, section 11): the field does not take the press. */
+        if (id != PASSWORD_ID) handled_press = win_press_count();
+        save_password();
         if (id == TEST_ID) {
             test_asked = 1;
             net_lobby_test_start();

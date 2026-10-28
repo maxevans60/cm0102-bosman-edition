@@ -325,6 +325,7 @@ RT_WRAP(00591840, confirm_push)
         char host_version[32];
         int why = nc_refusal(host_version, sizeof host_version), connect_error = nc_connect_error();
         nc_refusal_clear();                              /* also the connect's error: a later box has its own */
+        if (why != NC_REFUSED_PASSWORD) net_password_reset();
         if (!reason[0] && why == NC_REFUSED_VERSION) refuse_for(NE_VERSION, host_version, 0);
         else if (!reason[0] && why == NC_REFUSED_PASSWORD) {
             /* 0.7.0 slice 6 (Q38): the joiner's password box in place of the box (net_password.c). The caller does
