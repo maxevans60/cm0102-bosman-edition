@@ -932,6 +932,11 @@ void win_poll_events(void)
     SDL_Event e;
     while (SDL_PollEvent(&e))
         handle_event(&e);
+    char link[128];
+    if (host_link_take(link, sizeof link)) {        /* a link that a second copy gave (host/link_pass.c) */
+        invite_open(link);
+        if (window) SDL_RaiseWindow(window);
+    }
     invite_poll();
     if (window) run_script();
 }
