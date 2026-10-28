@@ -66,7 +66,7 @@ KICK_ROW = "click 688 321"          # the Kick button of the first human manager
                                     # below the Connection test row)
 NETWORK_TAB = "click 680 155"
 KICK_STEPS = [                      # the host, in the game: Kick with No, then with Yes (Q39)
-    "1000 click 45 344",            # Game Options
+    "5000 click 45 344",            # Game Options, after the dump of the news (3000)
     "wait popup",
     "1000 click 175 417",           # Bosman Edition Options
     "wait options",
