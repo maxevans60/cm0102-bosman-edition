@@ -39,6 +39,9 @@ hn_sock hn_socket(int stream);                        /* stream 1: TCP, 0: UDP *
 int hn_close(hn_sock s);
 int hn_set_flag(hn_sock s, int flag, int on);         /* HN_REUSEPORT is 0 and does nothing where the host has none */
 int hn_set_linger(hn_sock s, int on, int seconds);
+/* TCP keepalive with these timers: a peer that stops answering (a crash, a pulled cable, a lost Wi-Fi) breaks the
+ * connection after about idle_s + interval_s * count seconds. 0 on success. */
+int hn_set_keepalive(hn_sock s, int idle_s, int interval_s, int count);
 int hn_bind(hn_sock s, uint32_t addr, uint16_t port);
 int hn_listen(hn_sock s, int backlog);
 hn_sock hn_accept(hn_sock s, uint32_t *addr, uint16_t *port);

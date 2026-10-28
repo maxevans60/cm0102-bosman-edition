@@ -677,6 +677,14 @@ static void load_script(void)
 }
 
 /* Ends the program at once, as the quit step does, with this exit code. */
+void win_quit_now(void)
+{
+    win_save_window();
+    if (rt_on_fatal) rt_on_fatal();
+    SDL_Quit();
+    exit(0);
+}
+
 static void script_exit(int code)
 {
     if (rt_on_fatal) rt_on_fatal();
@@ -734,10 +742,8 @@ static void handle_event(SDL_Event *e)
         SDL_free(e->drop.file);
         break;
     case SDL_QUIT:
-        win_save_window();
-        if (rt_on_fatal) rt_on_fatal();
-        SDL_Quit();
-        exit(0);
+        if (net_session_defer_quit()) break;       /* a host saves first (net_session.c) */
+        win_quit_now();
     case SDL_MOUSEMOTION:
         if (key_click.on) { key_click.real_x = e->motion.x; key_click.real_y = e->motion.y; break; }
         post_mouse(WM_MOUSEMOVE, e->motion.x, e->motion.y);
@@ -911,8 +917,7 @@ static void run_script(void)
         else if (!strcmp(s->action, "shot")) shot_window(s->text);
         else if (!strcmp(s->action, "report")) display_report_key();
         else if (!strcmp(s->action, "quit")) {
-            win_save_window();
-            script_exit(0);
+            if (!net_session_defer_quit()) win_quit_now();
         }
     }
 }
@@ -923,6 +928,7 @@ void win_poll_events(void)
     if (win_screen_dirty && now - last_present >= 16) present_now();
     if (now - last_poll < 2) return;              /* the game pumps very often; SDL needs less */
     last_poll = now;
+    if (net_session_quit_overdue()) win_quit_now();
     end_click_for_key();
     SDL_Event e;
     while (SDL_PollEvent(&e))
@@ -1019,6 +1025,9 @@ RT_IMPORT(GetMessageA)
  * stops the replay before the poll, because the poll acts on the screen with the flag set (lists, entries). */
 #define CLIENT_LOOP_POLL 0x7fdf1cu
 static uint32_t replay_press;               /* the press that the client loop's poll ran once more */
+/* The poll of the screen loop ScreenManager::monitor 0x7fc7e0 (call at 0x7fcc14): the game waits for input there,
+ * as when the original handles a click and its Auto Save. A host's quit saves there (net_session.c). */
+#define SCREEN_LOOP_POLL 0x7fcc19u
 static uint32_t click_press, click_widget;  /* the press that last gave a widget, and that widget */
 static uint64_t click_resets;               /* nc_resets_in at that poll */
 static uint32_t last_press, last_widget = 0xffffu, last_top;
@@ -1105,6 +1114,7 @@ RT_WRAP(0055f620, input_poll)
     int key_down_in = key_click.on && (int32_t)(q_head - key_click.down_at) >= 0;
     keys_display = cpu.ecx;
     uint32_t poll_ret = rd32(g_mem, cpu.esp), poll_display = cpu.ecx;
+    if (poll_ret == SCREEN_LOOP_POLL && net_session_screen_idle()) win_quit_now();
     waits_poll();
     int replay = poll_ret == CLIENT_LOOP_POLL && click_press == press_count && replay_press != press_count &&
                  !(buttons & 1) && !rd32(g_mem, 0xb67a34u) && mouse_x == press_x && mouse_y == press_y &&

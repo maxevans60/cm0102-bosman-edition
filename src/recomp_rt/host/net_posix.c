@@ -145,6 +145,25 @@ int hn_set_linger(hn_sock s, int on, int seconds)
     return setsockopt((int)s, SOL_SOCKET, SO_LINGER, &l, sizeof l) < 0 ? fail_errno() : 0;
 }
 
+int hn_set_keepalive(hn_sock s, int idle_s, int interval_s, int count)
+{
+    int on = 1;
+    if (setsockopt((int)s, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof on) < 0) return fail_errno();
+#ifdef TCP_KEEPIDLE
+    if (setsockopt((int)s, IPPROTO_TCP, TCP_KEEPIDLE, &idle_s, sizeof idle_s) < 0) return fail_errno();
+#elif defined(TCP_KEEPALIVE)
+    if (setsockopt((int)s, IPPROTO_TCP, TCP_KEEPALIVE, &idle_s, sizeof idle_s) < 0) return fail_errno();
+#endif
+#ifdef TCP_KEEPINTVL
+    if (setsockopt((int)s, IPPROTO_TCP, TCP_KEEPINTVL, &interval_s, sizeof interval_s) < 0) return fail_errno();
+#endif
+#ifdef TCP_KEEPCNT
+    if (setsockopt((int)s, IPPROTO_TCP, TCP_KEEPCNT, &count, sizeof count) < 0) return fail_errno();
+#endif
+    (void)interval_s, (void)count;
+    return 0;
+}
+
 static struct sockaddr_in sin_of(uint32_t addr, uint16_t port)
 {
     struct sockaddr_in a;

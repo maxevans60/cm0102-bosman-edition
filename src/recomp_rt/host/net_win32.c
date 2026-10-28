@@ -9,6 +9,7 @@
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 #include <wincrypt.h>
+#include <mstcpip.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -67,6 +68,19 @@ int hn_set_flag(hn_sock s, int flag, int on)
     default: return fail(HN_NOPROTOOPT);
     }
     return setsockopt((SOCKET)s, level, name, (const char *)&v, sizeof v) ? fail_wsa() : 0;
+}
+
+/* SIO_KEEPALIVE_VALS (Windows 2000 and later) sets the idle time and the interval. The count is the system's
+ * (10 on Windows Vista and later). */
+int hn_set_keepalive(hn_sock s, int idle_s, int interval_s, int count)
+{
+    struct tcp_keepalive k;
+    DWORD n = 0;
+    (void)count;
+    k.onoff = 1;
+    k.keepalivetime = (ULONG)idle_s * 1000u;
+    k.keepaliveinterval = (ULONG)interval_s * 1000u;
+    return WSAIoctl((SOCKET)s, SIO_KEEPALIVE_VALS, &k, sizeof k, NULL, 0, &n, NULL, NULL) ? fail_wsa() : 0;
 }
 
 int hn_set_linger(hn_sock s, int on, int seconds)
