@@ -78,12 +78,13 @@ static uint32_t mouse_lparam(void) { return ((uint32_t)mouse_y & 0xffff) << 16 |
 static uint32_t press_count;
 uint32_t win_press_count(void) { return press_count; }
 static uint64_t press_at;
+static int press_x, press_y;       /* where the press went down */
 
 static void post_mouse(uint32_t msg, int x, int y)
 {
     mouse_x = x;
     mouse_y = y;
-    if (msg == WM_LBUTTONDOWN) { press_count++; press_at = SDL_GetTicks64(); }
+    if (msg == WM_LBUTTONDOWN) { press_count++; press_at = SDL_GetTicks64(); press_x = x, press_y = y; }
     post(msg, (uint32_t)buttons, mouse_lparam());
 }
 
@@ -1007,8 +1008,17 @@ RT_IMPORT(GetMessageA)
  * gives the field in one poll and the widget under the pointer in the next poll of the same press (logged
  * 2026-10-27: field 0xb, then Next 0x15 on Enter Name), both on the same host screen, and the loop sends both.
  * Only the poll at 0x7fdf17 changes. A screen loop of the joining game and every single-player poll are as
- * before. */
+ * before.
+ *
+ * Through the relay (0.7.0 slice 5) the client loop polls again only after the host's answer to the click
+ * (opcode 9, 5 bytes), about 130 ms later through the deployed relay (2026-10-28). A press is shorter than that,
+ * so the field came and the button under the pointer never did: Next on Enter Name was lost. So when the press
+ * that gave the last widget at this poll is up by its next poll, and the pointer is still where the press went
+ * down, that poll runs once more with the button flag 0xb67a34 set. The rule above then applies to it as to a
+ * held press: the same widget gives nothing, and a new host screen gives nothing. */
 #define CLIENT_LOOP_POLL 0x7fdf1cu
+#define REPLAY_NEAR 3                       /* pixels that the pointer may move after the press */
+static uint32_t replay_press;               /* the press that the client loop's poll ran once more */
 static uint32_t click_press, click_widget;  /* the press that last gave a widget, and that widget */
 static uint64_t click_resets;               /* nc_resets_in at that poll */
 static uint32_t last_press, last_widget = 0xffffu, last_top;
@@ -1096,13 +1106,21 @@ RT_WRAP(0055f620, input_poll)
     keys_display = cpu.ecx;
     uint32_t poll_ret = rd32(g_mem, cpu.esp), poll_display = cpu.ecx;
     waits_poll();
+    int replay = poll_ret == CLIENT_LOOP_POLL && click_press == press_count && replay_press != press_count &&
+                 !(buttons & 1) && !rd32(g_mem, 0xb67a34u) && abs(mouse_x - press_x) <= REPLAY_NEAR &&
+                 abs(mouse_y - press_y) <= REPLAY_NEAR;
+    if (replay) {
+        replay_press = press_count;
+        wr32(g_mem, 0xb67a34u, 1);
+    }
     o_0055f620();
+    if (replay) wr32(g_mem, 0xb67a34u, 0);
     options_screen_after_poll(poll_ret, poll_display, cpu.eax & 0xffffu);   /* the options box item */
     names_after_poll();
     if (key_down_in) key_click.polls++;
     if (script_click.on && (int32_t)(q_head - script_click.down_at) >= 0) script_click.polls++;
     uint32_t widget = cpu.eax & 0xffffu;
-    int held = (buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu);
+    int held = replay || ((buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu));
     idle_rest(widget);
     if (widget == 0xffffu || !held) return;
     /* The client loop of a joining game sends each press to one host screen only. */
