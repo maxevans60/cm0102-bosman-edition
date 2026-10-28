@@ -150,9 +150,10 @@ RT_WRAP(007fdc00, run_network_client)
     o_007fdc00();
     net_password_reset();          /* the join passed: the hello carried the password, and the next host gets none */
     if (rt_unwinding || !nc_host_left()) return;
+    int kicked = nc_kicked();      /* read before the clear */
     nc_host_left_clear();
     uint32_t eax = cpu.eax;
-    box("Network Game", nc_kicked() ? "The host removed you from the game." : "The host left the game.");
+    box("Network Game", kicked ? "The host removed you from the game." : "The host left the game.");
     cpu.eax = eax;
     back_to_start = 1;
 }

@@ -742,7 +742,10 @@ static int read_kick_line(Sock *k)
         }
         if (r == 0 || hn_error() != HN_WOULDBLOCK || hn_ms() >= until || hn_wait(k->s, 1, 50) < 0) break;
     }
-    return have == want && !memcmp(got, kick_line, want);
+    int kicked = have == want && !memcmp(got, kick_line, want);
+    fprintf(stderr, "recomp: net: quit packet from the host, %s (%u bytes after it)\n", kicked ? "a kick" : "no kick line",
+            (unsigned)have);
+    return kicked;
 }
 
 long nc_recv(uint32_t h, void *buf, uint32_t n)
