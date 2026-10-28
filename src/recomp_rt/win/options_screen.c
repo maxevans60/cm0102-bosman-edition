@@ -48,6 +48,7 @@
  * switches with two tab clicks.
  *
  * Network tab, 0.7.0 slice 6 (Q38, Q39). Below Online play:
+ * - On the start screen and while this game hosts (a single-player game shows Online play only, Q152):
  * - Game password: a text field that hides its text (Display::add_item 0x55f990 with type 0x18 and text flags 0x8c,
  *   as the original's password box at 0x822f56..0x822f9f). It writes into a buffer of the runtime, as the game name
  *   field writes into 0xdd70dc (0x81f243..0x81f287). The box saves it as game_password at the next click in the box
@@ -59,7 +60,8 @@
  *   below then gets an input with no widget, and Yes kicks (net_session_kick): the original's leave path puts the
  *   club on holiday.
  *
- * Network tab, 0.7.0 slice 7. Between Online play and Game password, a Connection test row: the Test button starts
+ * Network tab, 0.7.0 slice 7. Between Online play and Game password, outside a single-player game, a Connection
+ * test row: the Test button starts
  * the connection test (net_test.c), and the row's text shows "Testing ..." and then its result. The box builds
  * again at its next input with no widget once the test ended. Before a test, the text is this host's place in the
  * lobby with its game code, or a line that says what the test does. The list of human managers online shows each
@@ -73,6 +75,7 @@
 #include "dbfolders.h"
 #include "net_core.h"
 #include "net_errors.h"
+#include "season.h"
 #include "../host.h"
 
 #include <stdio.h>
@@ -416,6 +419,11 @@ static void test_row(int y, uint32_t green, uint32_t light)
 /* The Network tab below its switch rows (see the head of this file). */
 static void network_rows(int y, uint32_t green, uint32_t light)
 {
+    /* A single-player game shows only the Online play row, as slice 4 did: the rows below changed the game's memory
+     * layout and with it later days (Q152, smoke_run.py --same-save --options, run options-network, 2026-10-28; with
+     * the field alone left out the run still failed). The Connection test row is one of them (slice 7): the start
+     * screen's box and a host's box show it. */
+    if (season_game_on() && !net_session_hosting()) return;
     test_row(y, green, light);
     y += 35;
     if (!password_field) password_field = win_static_alloc(PASSWORD_MAX + 8);   /* not the game heap (Q152) */

@@ -489,6 +489,7 @@ static void quit_notice(void)
         if (!k->handle || !k->control || !k->accepted || !k->connected || k->dead || k->kicked) continue;
         send_control(k, "QUIT");
         while (k->qlen && !k->dead && flush(k) == 0 && k->qlen && hn_ms() < until) hn_wait(k->s, 0, 50);
+        hn_set_linger(k->s, 0, 0);     /* the game's SO_LINGER {1, 0} (0x8ae4d4): the exit would reset, not close */
     }
 }
 int nc_connect_error(void) { return connect_error; }
@@ -1029,6 +1030,9 @@ int nc_kick(uint32_t h)
         }
     }
     if (log_file) log_line(k, "close", &k->n);
+    /* The game sets SO_LINGER {0, 0} (0x8ae4d4), so a close would send a reset, and the joiner's system would drop the
+     * KICK packet that its game has not read. A plain close sends it first (0.7.0 slice 6). */
+    hn_set_linger(k->s, 0, 0);
     /* The game's next recv or send on this handle fails, and Network::receive_packet 0x77af20 frees the slot and
      * calls the disconnect callback (0x77b4e9..0x77b508): the original's leave path puts the club on holiday. */
     hn_close(k->s);

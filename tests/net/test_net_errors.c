@@ -50,6 +50,7 @@ static pid_t host(uint32_t me, uint16_t port, int end)
     for (uint64_t until = hn_ms() + 8000; a == NC_INVALID && hn_ms() < until; hn_sleep(2)) a = nc_accept(l, NULL, NULL);
     if (a == NC_INVALID) _exit(11);
     nc_nonblocking(a, 1);
+    nc_setopt(a, NC_SOL_SOCKET, NC_SO_LINGER, 1, 0);   /* as the game's connections: SO_LINGER {1, 0} (0x8ae4d4) */
     if (nc_send(a, game1, sizeof game1) != (long)sizeof game1) _exit(12);
     for (unsigned i = 0; i < sizeof game2; i++) {
         if (nc_send(a, game2 + i, 1) != 1) _exit(13);

@@ -66,9 +66,13 @@ KICK_ROW = "click 688 321"          # the Kick button of the first human manager
                                     # below the Connection test row)
 NETWORK_TAB = "click 680 155"
 KICK_STEPS = [                      # the host, in the game: Kick with No, then with Yes (Q39)
-    "5000 click 45 344",            # Game Options, after the dump of the news (3000)
+    # In a network game the left bar counts down (4 to 0) before Continue Game shows, and a click while it changes
+    # opens nothing.
+    "wait label:Continue",
+    "1500 click 45 344",            # Game Options
     "wait popup",
-    "1000 click 175 417",           # Bosman Edition Options
+    "500 dump {d}/host-3-popup.bmp",
+    "1000 click 175 439",           # Bosman Edition Options: one row lower than in a single-player game (0x823950 above)
     "wait options",
     f"1500 {NETWORK_TAB}",
     "3500 dump {d}/host-4-network.bmp",
@@ -306,6 +310,8 @@ def main(argv):
         for name, p, _ in procs:
             check(p.returncode == 0, f"1 {name} ended with code {p.returncode}")
         h = text(host_log)
+        if kick:   # the host quits soon after the kick, before join1 ends: its own log shows Away
+            away_after_drop = [x.split("lobby: away 1 ", 1)[1] for x in h.splitlines() if "lobby: away 1 " in x] or None
         check(bool(away_after_drop) and len(away_after_drop) == 1 and away_after_drop[0] != "Arsenal",
               f"2 the lobby lists join1's club as Away after the {'kick' if kick else 'exit' if leave else 'drop'}: "
               f"{away_after_drop}")
