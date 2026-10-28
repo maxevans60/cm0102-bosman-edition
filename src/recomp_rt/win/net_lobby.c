@@ -35,7 +35,7 @@
  * to the host through the relay (route), and a host that is open in the lobby holds a relay connection whose
  * human managers come to its listen socket (incoming).
  *
- * The lobby address: RECOMP_LOBBY_URL, else LOBBY_ADDRESS (empty until Max deploys the server). The
+ * The lobby address: RECOMP_LOBBY_URL, else LOBBY_ADDRESS, the deployed server. The
  * option online_play (on by default) gates every lobby request at the moment of the request: with it off,
  * the game list shows LAN games only and a host stays off the lobby.
  *
@@ -59,7 +59,7 @@
 #ifndef CM0102_VERSION
 #define CM0102_VERSION "dev"
 #endif
-#define LOBBY_ADDRESS ""            /* the deployed https address: set when Max deploys the server */
+#define LOBBY_ADDRESS "https://bosman-online.maxvert.workers.dev"   /* the deployed server (server/README.md) */
 
 #define COMP_TABLE 0xadadfcu        /* g_comp_object_table */
 #define STAFF_TABLE 0xae23bcu

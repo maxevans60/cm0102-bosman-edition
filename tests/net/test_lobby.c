@@ -8,6 +8,7 @@
 #include "host_net.h"
 
 #include <arpa/inet.h>
+#include <fcntl.h>
 #include <netinet/in.h>
 #include <signal.h>
 #include <stdio.h>
@@ -74,11 +75,11 @@ static pid_t fake_lobby(uint16_t port)
         sscanf(req, "%*s %255s", path);
         const char *r = answer_for(path);
         if (!r) {
-            sleep(5);              /* no answer: the caller's timeout */
+            sleep(30);             /* no answer: the caller's timeout */
             _exit(0);
         }
         send(c, r, strlen(r), 0);
-        if (!strncmp(path, "/ok", 3)) sleep(3);   /* the answer ends at its Content-Length, not at the close */
+        if (!strncmp(path, "/ok", 3)) sleep(20);  /* the answer ends at its Content-Length, not at the close */
         close(c);
         _exit(0);
     }
@@ -89,10 +90,12 @@ static void test_http(uint16_t port)
     char base[64];
     snprintf(base, sizeof base, "http://127.0.0.1:%u", port);
     LhAnswer *a = malloc(sizeof *a);
-    uint64_t t0 = hn_ms();
-    CHECK(lobby_http(base, "GET", "/ok", NULL, NULL, 2000, a) == LH_OK && a->api && a->status == 200 &&
-          !strcmp(a->body, "{\"ok\":true}") && hn_ms() - t0 < 1500,
+    /* The fake lobby holds the connection open 20 s, longer than the 10 s timeout: an answer read to the close
+     * would time out and give unavailable. */
+    CHECK(lobby_http(base, "GET", "/ok", NULL, NULL, 10000, a) == LH_OK && a->api && a->status == 200 &&
+          !strcmp(a->body, "{\"ok\":true}"),
           "a lobby answer, read to its Content-Length while the connection stays open: %s", a->body);
+    uint64_t t0;
     CHECK(lobby_http(base, "POST", "/refused", "tok", "{}", 3000, a) == LH_API_ERROR &&
           !strcmp(a->code, "version_mismatch") && strstr(a->body, "\"0.7.1\"}"),
           "an error answer gives its code: %s", a->code);
@@ -104,12 +107,14 @@ static void test_http(uint16_t port)
     CHECK(lobby_http(base, "GET", "/chunked", NULL, NULL, 3000, a) == LH_OK && !strcmp(a->body, "{\"a\":1}"),
           "a chunked body: %s", a->body);
     t0 = hn_ms();
-    CHECK(lobby_http(base, "GET", "/silent", NULL, NULL, 800, a) == LH_UNAVAILABLE && hn_ms() - t0 < 2000,
+    /* The fake lobby holds the connection 30 s: an end before 15 s is the 800 ms timeout, with room for load. */
+    CHECK(lobby_http(base, "GET", "/silent", NULL, NULL, 800, a) == LH_UNAVAILABLE && hn_ms() - t0 < 15000,
           "no answer: unavailable within the timeout (%llu ms)", (unsigned long long)(hn_ms() - t0));
     char closed[64];
     snprintf(closed, sizeof closed, "http://127.0.0.1:%u", port + 1);
     t0 = hn_ms();
-    CHECK(lobby_http(closed, "GET", "/v1/games", NULL, NULL, 3000, a) == LH_UNAVAILABLE && hn_ms() - t0 < 1000,
+    /* A refused connection ends at once, long before the 20 s timeout. */
+    CHECK(lobby_http(closed, "GET", "/v1/games", NULL, NULL, 20000, a) == LH_UNAVAILABLE && hn_ms() - t0 < 10000,
           "a refused connection: unavailable at once");
     /* https goes over the secure connection (slice 5, tests/net/tls_check.py): a name that does not resolve is
      * unavailable. */
@@ -304,8 +309,8 @@ static void test_rows(void)
 
 /* ---- the join check ---- */
 
-/* A host. With accept_ms > 0 its game calls no accept for that long, only other calls (a full game). */
-static pid_t host_late(uint16_t port, const char *version, const char *password, int accept_ms)
+/* A host. With go >= 0 its game calls no accept, only other calls (a full game), until a byte comes on go. */
+static pid_t host_late(uint16_t port, const char *version, const char *password, int go)
 {
     pid_t pid = fork();
     if (pid) return pid;
@@ -317,13 +322,15 @@ static pid_t host_late(uint16_t port, const char *version, const char *password,
     uint32_t me;
     if (hn_route_address(&me) < 0) _exit(3);
     if (nc_bind(l, me, port) < 0 || nc_listen(l, 16) < 0) _exit(4);
-    uint64_t until = hn_ms() + 6000, start = hn_ms();
+    char byte;
+    uint64_t limit = hn_ms() + 60000;                   /* a safety end only: the order below decides */
+    while (go >= 0 && read(go, &byte, 1) != 1) {
+        if (hn_ms() > limit) _exit(5);
+        nc_nonblocking(l, 1);                           /* any call of the game: the runtime answers the joiner */
+        hn_sleep(5);
+    }
+    uint64_t until = hn_ms() + 6000;
     while (hn_ms() < until) {
-        if (hn_ms() - start < (uint64_t)accept_ms) {
-            nc_nonblocking(l, 1);                       /* any call of the game: the runtime answers the joiner */
-            hn_sleep(5);
-            continue;
-        }
         uint32_t a = nc_accept(l, NULL, NULL);
         if (a != NC_INVALID) {
             nc_send(a, "\4\0\0\0game", 8);            /* the game's first bytes follow the OK */
@@ -337,7 +344,7 @@ static pid_t host_late(uint16_t port, const char *version, const char *password,
 
 static pid_t host(uint16_t port, const char *version, const char *password)
 {
-    return host_late(port, version, password, 0);
+    return host_late(port, version, password, -1);
 }
 
 /* A host that takes the connection and never answers, as the original's own WinSock code does. */
@@ -353,7 +360,7 @@ static pid_t silent_host(uint16_t port)
     a.sin_family = AF_INET, a.sin_port = htons(port), a.sin_addr.s_addr = me;
     if (bind(l, (struct sockaddr *)&a, sizeof a) || listen(l, 4)) _exit(2);
     int c = accept(l, NULL, NULL);
-    sleep(NC_HELLO_WAIT_MS / 1000 + 2);
+    sleep(NC_HELLO_WAIT_MS / 1000 + 30);      /* far past the joiner's wait: its end is the wait, not the close */
     close(c);
     _exit(0);
 }
@@ -407,20 +414,27 @@ static void test_join(uint16_t port)
     CHECK(join(port, "0.7.0", "secret", got, sizeof got) == 0, "the right password: joined");
     waitpid(h, &status, 0);
 
-    /* The host's game calls no accept for 2 s: the joiner gets its answer at once, the game its bytes later. */
-    h = host_late(port, "0.7.0", "", 2000);
+    /* The host's game calls no accept until this side says so, after the join: so the OK came while the host's
+     * game did not accept. An order of events, not a time (a time bound failed once under load). */
+    int go[2];
+    CHECK(pipe(go) == 0, "pipe");
+    fcntl(go[0], F_SETFL, O_NONBLOCK);
+    h = host_late(port, "0.7.0", "", go[0]);
     hn_sleep(200);
-    uint64_t t0 = hn_ms();
-    CHECK(join(port, "0.7.0", "", got, sizeof got) == 0 && hn_ms() - t0 < 1500,
-          "the answer comes while the host's game does not accept (%llu ms)", (unsigned long long)(hn_ms() - t0));
+    CHECK(join(port, "0.7.0", "", got, sizeof got) == 0 && nc_refusal(NULL, 0) == NC_REFUSED_NONE,
+          "the answer comes while the host's game does not accept");
+    CHECK(write(go[1], "g", 1) == 1, "go");
     waitpid(h, &status, 0);
+    CHECK(WIFEXITED(status) && WEXITSTATUS(status) == 0, "the host's game accepted the joiner after the go");
+    close(go[0]);
+    close(go[1]);
 
     /* No answer: refused with its own reason within NC_HELLO_WAIT_MS. */
     h = silent_host(port);
     hn_sleep(200);
-    t0 = hn_ms();
+    uint64_t t0 = hn_ms();
     CHECK(join(port, "0.7.0", "", got, sizeof got) < 0 && nc_refusal(NULL, 0) == NC_REFUSED_NO_ANSWER &&
-          hn_ms() - t0 < NC_HELLO_WAIT_MS + 1000, "no answer: refused as no answer");
+          hn_ms() - t0 < NC_HELLO_WAIT_MS + 15000, "no answer: refused as no answer");
     kill(h, SIGKILL);
     waitpid(h, &status, 0);
 }

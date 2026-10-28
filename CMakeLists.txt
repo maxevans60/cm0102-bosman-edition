@@ -161,6 +161,18 @@ if(NOT WIN32)
     add_test(NAME relay COMMAND relay_test)
     add_test(NAME relay_tls COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/net/tls_check.py" $<TARGET_FILE:relay_test>)
     set_tests_properties(relay_tls PROPERTIES SKIP_RETURN_CODE 77)
+    add_executable(invite_test tests/net/test_invite.c src/recomp_rt/win/invite.c src/recomp_rt/win/lobby_http.c
+        src/recomp_rt/win/lobby.c src/recomp_rt/win/secure.c src/recomp_rt/host/net_posix.c)
+    target_include_directories(invite_test PRIVATE src/recomp_rt src/recomp_rt/win)
+    target_link_libraries(invite_test PRIVATE Threads::Threads mbedtls)
+    add_test(NAME invite COMMAND invite_test)
+    add_executable(link_test tests/net/test_link.c src/recomp_rt/host/link.c src/recomp_rt/host/posix.c)
+    target_include_directories(link_test PRIVATE src/recomp_rt)
+    add_test(NAME link COMMAND link_test)
+    add_executable(link_pass_test tests/net/test_link_pass.c src/recomp_rt/host/link_pass.c)
+    target_include_directories(link_pass_test PRIVATE src/recomp_rt)
+    target_link_libraries(link_pass_test PRIVATE Threads::Threads)
+    add_test(NAME link_pass COMMAND link_pass_test)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
@@ -370,6 +382,8 @@ if(EXISTS "${CM0102_EXE}")
         src/recomp_rt/rt.c
         src/recomp_rt/heap.c
         ${RECOMP_HOST}
+        src/recomp_rt/host/link.c
+        src/recomp_rt/host/link_pass.c
         ${RECOMP_WIN}
     )
     add_dependencies(cm0102_recomp recomp_gen)

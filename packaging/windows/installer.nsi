@@ -156,4 +156,11 @@ Section "Uninstall"
 
   ; The saves in $APPDATA\cm0102 stay. The last page says where they are.
   SetShellVarContext current
+
+  ; The cm0102:// link of invite links (0.7.0). The game writes it for the user who plays (host/link.c). Remove it
+  ; when it starts this copy of the game: a link of another copy stays.
+  ReadRegStr $0 HKCU "Software\Classes\cm0102\shell\open\command" ""
+  ${If} $0 == '"$INSTDIR\${PROGRAM}" "%1"'
+    DeleteRegKey HKCU "Software\Classes\cm0102"
+  ${EndIf}
 SectionEnd
