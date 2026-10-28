@@ -60,7 +60,9 @@ The smoke test plays a fixed set of clicks through the main screens in the class
 
 Network games (0.7.0) have their own tests. The two-game run (`tests/smoke/network_run.py`) starts a host game and joining games on this Mac with timed clicks, and compares the joiners' screens with the host's. It runs at each change of the network code, also under wine with the Windows build. The server tests in `server/` run against a local copy of the lobby and relay.
 
-Before the release, four release tests run (spec Q29). Their scripts are in `tests/online/`. Each script waits for room on the machine, and for any network run of another worktree to end, because two network runs on one Mac collide on port 6667. Each one adds a line to `run-logs/s9-tests/results.tsv`.
+Before the release, four release tests run (spec Q29). Their scripts are in `tests/online/`. Each script waits for room on the machine, and for any network run of another worktree to end, because two network runs on one Mac collide on port 6667. Each one adds a line to `run-logs/s9-tests/results.tsv`. While several sessions test network play, each run that hosts a network game goes through `the maintainer's notes`, which lets one host at a time use port 6667.
+
+`gh workflow run` starts a manual workflow only when the workflow file is on the default branch. So test 3 needs `.github/workflows/online-release-join.yml` on `main` first.
 
 | Test | Script | Pass rule |
 |---|---|---|
