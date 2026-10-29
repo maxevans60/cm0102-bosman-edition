@@ -2,7 +2,7 @@ import { expect } from "vitest";
 import { exports } from "cloudflare:workers";
 import { abortAllDurableObjects, env, runInDurableObject } from "cloudflare:test";
 import type { Lobby } from "../src/lobby";
-import { setAnswerCacheMs } from "../src/index";
+import { setAnswerCacheMs } from "../src/flood";
 
 export const BASE = "https://lobby.test";
 
