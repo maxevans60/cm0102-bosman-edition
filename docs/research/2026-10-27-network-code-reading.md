@@ -685,3 +685,85 @@ From the two-game run through the deployed server (one joiner, about 90 s): the 
 mbedTLS 3.6.7, the LTS branch, Apache-2.0, built from its release by CMake (FetchContent, SHA-256 checked). Why: it builds with plain CMake on Mac (both architectures), mingw and Linux, needs no system library, links statically, and its licence fits the GPL-3.0 of the repo. TLS 1.2 only: mbedTLS 3.6 does TLS 1.3 through its PSA layer, whose key store is shared by all threads and needs `MBEDTLS_THREADING_C`, and the lobby thread and the relay threads make connections at the same time. Cloudflare serves TLS 1.2.
 
 The server's certificate is checked against the system's root certificates and the host name. macOS: `/etc/ssl/cert.pem`. Linux: the first of the usual bundle files (Debian, Ubuntu, the Steam Deck, Fedora, openSUSE). Windows: the ROOT store, and for a chain that it does not trust, the system's own check (`CertGetCertificateChain` and the SSL policy), because Windows fills its ROOT store on demand.
+
+## 16. Slice 9: release tests, a match day and the free plan (2026-10-27)
+
+Section number 16 leaves 13 to 15 for slices 5, 6 and 7, whose notes use 13 on their branches. Renumber at the merge.
+
+### The release tests
+
+The scripts of the four release tests (spec Q29) are in `tests/online/`, with `docs/TESTING.md` ("Online play") as their summary. They reuse the timed clicks of `tests/smoke/network_run.py`. What the runs on this Mac showed about the original's screens in a network game:
+
+- Restore Network Game (0x81edd0, the button at 277, 242) asks for the game name, then shows Select File with the saves of the save folder, then Manager Status. A restored manager with no password shows "Not Playing". A click on its row gives "Resume control of Arsenal ?" (0x823420), and Yes takes it back. This matches `setup_assign_restored_network_managers` 0x8387e0 (section 7).
+- A joiner of a restored game whose other managers are Away gets Manager Status (0x838a80). A click on its old manager's row, the password and Ok take the club back: "Player Two, Barnsley, Playing" on the joiner's Manager Status.
+- A joiner of a game that runs gets Manager Status too, also when no manager is Away. Add Manager in its left bar opens Enter Name.
+- On the host's news screen the left bar first shows a countdown (5, 4, 3, 2, 1) in place of Continue Game. In one probe the first click on the manager's name then opened no menu, and a click after Escape did. The scripts click, press Escape and click again, then wait for the menu.
+- The host's Go on Holiday works as in single-player: the host is not asked "Exit the network game as you go on holiday ?" (0x7623da), which the holiday code asks only on a channel with a remote player (`[0xb74c24 + slot*0x300]`, docs/research/2026-10-15-holiday-next-match-inventory.md).
+- The type step of a test script reads one word. A game name with a space ("00 S9") becomes "00". The scripts use one-word names.
+
+A gap in release test 4. In the original a joiner who goes on holiday leaves the network game, and a joiner who stays must click Continue Game for each day. So `season_net_run.py` lets the three joiners play at the start of each leg (in July), then they drop and their clubs are Away, and the host plays the rest of the season on holiday as a network host. Every match day, tournament and season change runs in a network game with four human managers, three of them Away. No joiner is connected at the moment of a season change or a tournament match. A joiner that stays connected through a season would need a click loop such as the one of `match_day_run.py`, and a random event of its club (an offer for a player) stops that loop. Max decides whether the release test needs that (recommendation below).
+
+### Cloudflare free plan figures (checked 2026-10-27)
+
+From developers.cloudflare.com (Workers limits, Durable Objects pricing, limits and lifecycle). The pages were read through a summary tool, so each figure should be read once more on the page before a decision depends on it.
+
+| Limit | Free plan |
+|---|---|
+| Worker requests | 100,000 a day, reset at 00:00 UTC |
+| Durable Object requests | 100,000 a day. 20 incoming WebSocket messages bill as 1 request. Outgoing messages are free. A WebSocket connect is 1 request. An alarm run is 1 request. |
+| Durable Object duration | 13,000 GB-s a day. An object bills 128 MB while it is in memory and cannot hibernate, so 13,000 GB-s is about 28.9 object-hours a day for all objects together. |
+| Hibernation | An object with only hibernatable WebSockets hibernates after 10 s with no request or event and then bills no duration. An idle object is evicted after 70 to 140 s. |
+| SQLite storage | 100,000 rows written a day, 5 million rows read a day, 5 GB. A delete counts as a row written. Each `setAlarm` is 1 row written. |
+
+I don't know whether an object that serves only HTTP requests (the lobby) bills its 10 s of idle time after each request. The pricing page bills an object that is "idle in memory but unable to hibernate". The estimates below take the worst case.
+
+### What the server uses, from its code
+
+- A heartbeat every 30 s (`lobby.c`, 30 s from the lobby's answer): 2,880 Worker requests and 2,880 lobby requests a day for each open game.
+- The lobby writes a game's row at most once a minute on a heartbeat (`STORE_SEEN_EVERY_MS`, `server/src/lobby.ts` lines 26 and 311), and once at register and close: about 1,442 rows a day for an open game.
+- The relay writes its key and code at register, an alarm each hour (`CHECK_EVERY_MS`, `relay.ts` line 28: 24 rows and 24 requests a day), a row when the host connects, and a row and a delete for each join ticket. About 30 rows a day for an open game with a few joins.
+- The game list asks the lobby at most once each 5 s while it is open (`LIST_CACHE_MS`, `net_lobby.c` line 68).
+- The relay answers the runtime's "ping" without waking (`setWebSocketAutoResponse`, `relay.ts` line 44). The game's own keepalive (one packet each 30 s from each joiner, 0x7fe212, section 8) is game data, so it wakes the relay.
+
+### Estimates
+
+Always-on game (open all day, human managers only in the evening):
+
+- Worker requests: 2,880 a day. With game list requests, about 30 games can stay open all day, as the server README says.
+- Rows written: about 1,470 a day, so about 68 always-on games. The request limit comes first.
+- Lobby duration, worst case: with 3 or more open games a heartbeat comes at least each 10 s, so the lobby never goes idle: 0.125 GB x 86,400 s = 10,800 GB-s a day, 83 % of the free 13,000. That leaves about 2,200 GB-s, or 4.9 relay-hours a day for all games together. With one open game the lobby is awake about 10 s of each 30 s, about 3,600 GB-s a day.
+- Relay duration while no one plays: none, because the host's relay connection hibernates. A joiner who stays connected but idle sends its keepalive each 30 s, and each wakes the relay for at least 10 s: about 1,500 GB-s a day for each idle joiner, worst case.
+
+### The match day run (2026-10-28)
+
+`tests/online/match_day_run.py` (run-logs/s9-tests/matchday5): the host restored prematch.sav (Test Smoke, Arsenal, 16.7.01) as a network game, one joiner made Player Two at Barnsley over the LAN, and both clicked through days for 26 minutes. The host took Holiday until next match, so that its assistant answered the Henry bid. The joiner clicked Continue Game, Yes and the answer to a bid (Respond, Reject, Yes) in a loop, about 6 inputs each 10 s.
+
+The days ran from 16.7.01 to 19.7.01 with both human managers. Then the joiner's own friendly, Barnsley v Walsall on 19.7.01, did not start: the joiner's Continue Game on its squad screen came back after each click, and the host waited on Latest Scores (0x71b300) for the rest of the run. So the run measured days with two human managers, and no match screen. Why the joiner's match does not start, from a code reading (not yet proved by a run, about 70 % sure): `MATCH_DAY::play_matches` 0x6b4360 puts the squad screen on the joiner's channel (0x4542f0) and Latest Scores on the host's (0x71b1b0). The joiner's Yes on "Proceed to the match?" (button id 3, 0x727bd6) reached the host about 80 ms after each click, so the click rule of slice 2b did not drop it. Yes would call 0x718aa0, which opens the match screen and starts the match (0x6b5260) without waiting for the host. In 0x725ca0, Yes returns -0xb (rebuild) when 0x803d80 returns 0, which happens only while a screen with flag 1 and no close callback is still on the joiner's channel; so the squad screen came back. Which screen that is (the bid screens of 19.7, or a screen of the runtime) is a guess. The host's holiday is held correctly: while the match is unplayed, 0x71b3d0 resets the holiday stamp (0x71b436..0x71b444). Next step: a runtime log at 0x725ca0 of 0x803d80's result and the joiner channel's screen stack (build function, +0x10 flag, +0xc), then a test change or a runtime fix.
+
+A probe run disproved that guess (2026-10-28, run-logs/s9-tests/matchday6, `src/recomp_rt/win/net_probe.c` with `RECOMP_STACK_PROBE=1`): the stall came again on 19.7.01, with the host on Latest Scores, and 0x803d80 was never called. Its two callers are 0x725d77 and 0x72805a, so the joiner's Yes never reached that path of 0x725ca0. The joiner's clicks reach the host (103 click packets, a screen back for each), but which screen they act on is not known. The probe now also logs each screen push (0x7fe600) with its channel, build and input function; that run waits for the end of the 0.6.0 gates.
+
+A second code reading (not yet proved by a run): `MATCH_DAY::play_matches` sets the joiner's record +0xe2 to the fixture (0x6b4566), opens the squad screen on its channel (0x4542f0) and Latest Scores on the host's (0x6b4807), then runs the monitor (0x6b481a). The joiner's Continue Game (id 0x3e8) goes through 0x76234c to 0x725ca0, which opens "Proceed to the match?" (0x725f70 at 0x725f46: build 0x7260f0, input 0x727c30, flag 1, no close callback, 0x725f7c). Yes (id 3, 0x727bd6) pops it (-9, 0x727e12), and the squad screen's input then runs 0x725ca0 again, which calls 0x803d80 and 0x718aa0 to start the match. The left bar shows Continue Game as a plain label while such a confirm is on top (0x75e389..0x75e3a3), which matches the runs. So the confirm opens, and its answer never reaches 0x803d80. The host's Latest Scores holds the host's holiday while the fixture's state +0x67 is not 2 (0x71b405..0x71b444), which only the joiner's match sets; the host's holiday is not the cause. Open: whether the test's clicks miss Yes, or the runtime loses the pop's input. The probe (`net_probe.c`) now also logs 0x727c30, 0x725ca0 (with [0xb77c84], [0xdd6be0], [0xdd6be4]), 0x725f70 and 0x788010.
+
+The cause, from the probe run of 2026-10-29 (run-logs/s9-tests/matchday7/shots/host-probe.txt): the test's clicks, not the runtime. Each round, the joiner's Space reached the side bar's Continue Game as widget 5 (0x725ca0 called from 0x76238f gives -4), which pushed "Proceed to the match?" on channel 1 (build 0x7260f0, input 0x727c30, pushed from 0x725f91). The test's next click, at (45, 120) on the left bar, reached 0x727c30 as widget 129, which closes the confirm with no match (-9); 0x725ca0 then gave 0, and the squad screen came back. The Yes click came after that, on the squad screen. Widget 3 (Yes) never reached 0x727c30. `match_day_run.py` now clicks Yes right after Space. (0x788010 is called millions of times; its probe is of no use.)
+
+Correction (runs matchday9 to matchday13, 2026-10-29, with dumps of the screen that Continue Game opens): the box was not "Proceed to the match?" but "Team Selection" (same build 0x7260f0, one Ok button, widget 129 on the joiner and 131 on the host). The joiner's new manager had picked no team ("You have not selected any outfield players"), which the original refuses, as it should. With Assistant > Pick best team on the joiner's squad screen, the box said "You have only selected ten outfield players": the pick (runtime, `assistant.c`) put "Cooper, J", shown grey, into the eleven at ML (Barnsley, 16.7.01, run matchday11). With another club (row 2, Blackburn) the days ran to the host's friendly on 20.7.01, where the host's Arsenal also had only ten outfield players picked; the click loop of the test probably changed the eleven. No network fault was found. A match day measurement needs exact steps for each side (as smoke_run.MATCH_STEPS has for single-player), not a blind loop.
+
+Traffic of the joiner's connection, from the host's log (1,574 s):
+
+| | Bytes | Packets |
+|---|---|---|
+| Host to joiner | 1,932,725 (72 KB a minute) | 1,778 |
+| Joiner to host | 20,121 | 307 (all clicks, opcode 6) |
+| Busiest 10 s, host to joiner | 28,134 | 45 |
+
+By opcode, host to joiner: 309 screens (opcodes 0 to 3) of 6.2 KB each on average (opcode 1, the widgets, 5.6 KB), 163 packets of opcode 16, 300 of opcode 19, and a few of 7, 8, 9 and 17. Each click of the joiner brought one full screen. A game screen (news, squad, fixtures) is about 9 times a setup screen (section 11: 700 bytes).
+
+Relay messages for this run, from the 10 s counts: at least 693 and at most 4,755 an hour each way together, for one joiner that clicks 12 times a minute. 20 incoming messages bill as 1 request, so that is 35 to 238 requests an hour.
+
+Evening (a host and three human managers for 4 hours), from these figures: a player who clicks 6 times a minute sends 360 clicks an hour, and each gives about 3 incoming relay messages (the click, and the host's screen in 1 or 2 batches), with 120 keepalives. That is about 1,200 messages, or 60 requests, an hour for each joiner, and about 720 requests for the evening: under 1 % of the 100,000 a day. With a click each 10 s the relay stays awake the whole evening, because it hibernates only after 10 s with no message. Awake the whole evening: 4 h x 450 GB-s = 1,800 GB-s, 14 % of a day's allowance. With the lobby's worst case, the free plan carries about one such evening a day.
+
+What this means: the free plan's daily duration, not its requests, limits online play first, and the lobby's own awake time may take most of it. Recommendations for Max:
+
+1. After the deploy, read the Durable Objects duration in the Cloudflare dashboard for one day with one or two open games. That gives the real lobby figure in place of the worst case.
+2. If the lobby uses most of the duration: keep the game list in a cache, or move the lobby to a Worker that keeps the list in the Cache API, so that a heartbeat does not keep an object awake. That is a slice 3 change.
+3. A paid Workers plan has a larger duration allowance. I did not check its price or figures. Q11 says the free plan.
