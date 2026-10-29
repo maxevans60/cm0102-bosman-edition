@@ -309,6 +309,7 @@ static void test_relay(void)
 
     /* The host: a listen socket of the game, with the join check, and its relay connection. */
     nc_set_identity("1.0", "", "");
+    nc_set_ping_every(3600000);    /* after the first, no PING of slice 7 comes between the packets counted here */
     NcHooks hooks = {0};
     hooks.incoming = incoming;
     nc_set_hooks(&hooks);
@@ -331,7 +332,11 @@ static void test_relay(void)
     CHECK(n == 10 && !memcmp(buf, "BOSMAN OK\n", 10), "the join check passes through the relay (%ld)", n);
 
     /* The host sends five packets at once: one batch, one frame. The game's 4-byte lengths go through. */
-    hn_sleep(100);                 /* a quiet time after the join check's frame */
+    /* Slice 7's first PING goes at the host's next call after the accept: let it pass before the count. */
+    uint32_t avail;
+    nc_readable(a, &avail);
+    read_for(s, buf, sizeof buf, 1000, 300);
+    hn_sleep(100);                 /* a quiet time after the last frame */
     int frames0 = host_frames;
     uint64_t t0 = hn_ms();
     for (int i = 0; i < 5; i++) {

@@ -10,7 +10,6 @@
 #include <strings.h>
 
 #define REQUEST_MAX 8192
-#define REPLY_MAX (LH_BODY_MAX + 8192)
 
 /* The lobby thread and the game thread (a join through the relay, relay.c) both call lobby_http, so its buffers
  * are its own for each call. */
@@ -51,6 +50,7 @@ static int complete(const char *r, size_t got)
     for (size_t i = 0; i + 4 <= got && !end; i++)
         if (!memcmp(r + i, "\r\n\r\n", 4)) end = r + i;
     if (!end) return 0;
+    if (!strncmp(r, "HTTP/1.1 101", 12)) return 1;     /* an upgrade has no body (the connection test) */
     for (const char *p = r; p < end; p++)
         if ((p == r || p[-1] == '\n') && !strncasecmp(p, "Content-Length:", 15))
             return got - (size_t)(end + 4 - r) >= strtoul(p + 15, NULL, 10);
@@ -133,8 +133,11 @@ static LhResult kind_of(LhAnswer *a)
     return LH_API_ERROR;
 }
 
-LhResult lobby_http(const char *base, const char *method, const char *path, const char *token, const char *json,
-                    int timeout_ms, LhAnswer *a)
+#define REPLY_MAX (LH_BODY_MAX + 8192 + 1)
+
+/* lobby_http with the buffers of one call. */
+static LhResult http_call(const char *base, const char *method, const char *path, const char *token,
+                          const char *json, int timeout_ms, LhAnswer *a, char *request, char *reply)
 {
     memset(a, 0, sizeof *a);
     char host[256];
@@ -144,38 +147,36 @@ LhResult lobby_http(const char *base, const char *method, const char *path, cons
     uint64_t until = hn_ms() + (uint64_t)timeout_ms;
 
     size_t body = json ? strlen(json) : 0;
-    char *request = malloc(REQUEST_MAX), *reply = malloc(REPLY_MAX + 1);
-    if (!request || !reply) {
-        free(request), free(reply);
-        return LH_UNAVAILABLE;
-    }
+    int upgrade = !strcmp(method, "UPGRADE");
+    if (upgrade) method = "GET";
     /* The default port is not named in Host, so the address's host matches the certificate's host. */
     char port_text[8] = "";
     if (port != (tls ? 443u : 80u)) snprintf(port_text, sizeof port_text, ":%u", port);
     int n = snprintf(request, REQUEST_MAX,
                      "%s %s HTTP/1.1\r\nHost: %s%s\r\nUser-Agent: Bosman-Edition\r\nAccept: application/json\r\n"
-                     "Connection: close\r\n",
-                     method, path, host, port_text);
+                     "%s\r\n",
+                     method, path, host, port_text,
+                     upgrade ? "Connection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\n"
+                               "Sec-WebSocket-Key: Qm9zbWFuIEVkaXRpb24hIQ=="
+                             : "Connection: close");
     if (token) n += snprintf(request + n, REQUEST_MAX - (size_t)n, "Authorization: Bearer %s\r\n", token);
     if (json || strcmp(method, "GET"))
         n += snprintf(request + n, REQUEST_MAX - (size_t)n,
                       "Content-Type: application/json\r\nContent-Length: %zu\r\n", body);
     n += snprintf(request + n, REQUEST_MAX - (size_t)n, "\r\n");
-    LhResult result = LH_UNAVAILABLE;
-    SecureConn *s = NULL;
-    if (n < 0 || (size_t)n + body >= REQUEST_MAX) goto done;
+    if (n < 0 || (size_t)n + body >= REQUEST_MAX) return LH_UNAVAILABLE;
     if (body) memcpy(request + n, json, body);
 
     char why[160];
-    s = sc_open(host, port, tls, left_ms(until), why, sizeof why);
+    SecureConn *s = sc_open(host, port, tls, left_ms(until), why, sizeof why);
     if (!s) {
         fprintf(stderr, "recomp: lobby: %s: %s\n", host, why);
-        goto done;
+        return LH_UNAVAILABLE;
     }
     size_t got = 0;
     int ok = sc_send_all(s, request, (size_t)n + body, left_ms(until)) == 0;
-    while (ok && got < REPLY_MAX && !complete(reply, got)) {
-        long r = sc_recv(s, reply + got, REPLY_MAX - got);
+    while (ok && got < REPLY_MAX - 1 && !complete(reply, got)) {
+        long r = sc_recv(s, reply + got, REPLY_MAX - 1 - got);
         if (r > 0) {
             got += (size_t)r;
             continue;
@@ -183,10 +184,11 @@ LhResult lobby_http(const char *base, const char *method, const char *path, cons
         if (r == 0) break;                                   /* the lobby closed: the answer is whole */
         if (r == -2 || !left_ms(until) || sc_wait(s, 1, left_ms(until)) <= 0) ok = 0;
     }
-    if (!ok) goto done;
+    sc_close(s);
+    if (!ok) return LH_UNAVAILABLE;
     reply[got] = 0;
     char *end = strstr(reply, "\r\n\r\n");
-    if (!end || strncmp(reply, "HTTP/1.", 7)) goto done;
+    if (!end || strncmp(reply, "HTTP/1.", 7)) return LH_UNAVAILABLE;
     *end = 0;
     a->status = atoi(reply + 9);
     char v[64];
@@ -200,9 +202,19 @@ LhResult lobby_http(const char *base, const char *method, const char *path, cons
     memcpy(a->body, b, len);
     a->body[len] = 0;
     a->len = len;
-    result = kind_of(a);
-done:
-    sc_close(s);
-    free(request), free(reply);
-    return result;
+    return kind_of(a);
+}
+
+LhResult lobby_http(const char *base, const char *method, const char *path, const char *token, const char *json,
+                    int timeout_ms, LhAnswer *a)
+{
+    /* Each call has its own buffers: the lobby thread, the connection test's thread (net_test.c) and a join through
+     * the relay in the game's connect (relay.c) all call. */
+    char *request = malloc(REQUEST_MAX), *reply = malloc(REPLY_MAX);
+    LhResult r = LH_UNAVAILABLE;
+    if (request && reply) r = http_call(base, method, path, token, json, timeout_ms, a, request, reply);
+    else memset(a, 0, sizeof *a);
+    free(request);
+    free(reply);
+    return r;
 }

@@ -22,6 +22,8 @@ cp /build/cm0102_recomp "$A/usr/bin/"
 strip "$A/usr/bin/cm0102_recomp"
 ldd "$A/usr/bin/cm0102_recomp" | awk '/libSDL2/ { print $3 }' | xargs -r -I{} cp -L {} "$A/usr/lib/"
 cp -r /game/. "$A/usr/share/game/"
+mkdir -p "$A/usr/share/licences"                     # the licences of the libraries in the program (mbedTLS)
+cp /src/packaging/licences/*.txt "$A/usr/share/licences/"
 cat > "$A/AppRun" <<'RUN'
 #!/bin/sh
 HERE="$(dirname "$(readlink -f "$0")")"

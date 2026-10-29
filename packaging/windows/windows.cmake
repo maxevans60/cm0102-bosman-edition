@@ -38,6 +38,7 @@ add_custom_target(windows_installer
         "-DGAME_DIR=${CM0102_GAME_DIR}"
         "-DOUT_FILE=${CMAKE_BINARY_DIR}/${CM0102_SETUP}"
         "-DICON=${CM0102_ICO}"
+        "-DLICENCES=${CMAKE_SOURCE_DIR}/packaging/licences"
         "${CMAKE_CURRENT_LIST_DIR}/installer.nsi"
     DEPENDS cm0102_recomp "${CMAKE_CURRENT_LIST_DIR}/installer.nsi" "${CM0102_ICO}"
     COMMENT "Making ${CM0102_SETUP}"

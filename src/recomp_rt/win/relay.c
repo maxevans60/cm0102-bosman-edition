@@ -499,7 +499,7 @@ RelayJoin relay_join(const char *lobby, const char *code, const char *version, c
         lobby_json_word(a->body, "error", why, sizeof why);
         fprintf(stderr, "recomp: relay: the relay refused the join to %s (%d %s)\n", code, status, why);
         out = !strcmp(why, "relay_full") ? RJ_FULL : !strcmp(why, "host_not_connected") ? RJ_HOST_AWAY :
-              !strcmp(why, "bad_ticket") || !strcmp(why, "unknown_game") ? RJ_GONE : RJ_UNAVAILABLE;
+              !strcmp(why, "bad_ticket") || !strcmp(why, "unknown_game") ? RJ_GONE : RJ_RELAY_DOWN;
         free(a);
         return out;
     }

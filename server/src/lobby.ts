@@ -189,7 +189,8 @@ export class Lobby extends DurableObject<Env> {
   }
 
   private view(g: Game) {
-    return { code: g.code, ...g.info, password: g.password !== null };
+    // A game stored before pingMs existed has none: 0.
+    return { code: g.code, ...g.info, pingMs: g.info.pingMs ?? 0, password: g.password !== null };
   }
 
   private async passwordRecord(password: string | null) {

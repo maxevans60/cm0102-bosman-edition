@@ -60,7 +60,8 @@ typedef enum {
     RJ_HOST_AWAY,       /* the host is not connected to the relay */
     RJ_NAME,            /* the word filter refused the name, or the lobby refused a field */
     RJ_FULL_TODAY,
-    RJ_UNAVAILABLE
+    RJ_RELAY_DOWN,      /* the lobby gave a ticket, and the relay did not answer */
+    RJ_UNAVAILABLE      /* the lobby did not answer */
 } RelayJoin;
 
 /* Human manager, on the game's thread in its connect. Waits at most timeout_ms for the ticket and as long again
