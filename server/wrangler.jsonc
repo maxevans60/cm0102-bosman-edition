@@ -4,6 +4,11 @@
   "name": "bosman-online",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-20",
+  // The game's address (29 October 2026). The zone cm0102bosman.co.uk carries the free WAF rate limiting
+  // rule, which blocks a flooding address before the Worker runs. workers.dev stays on until the game
+  // builds use this address; then it goes off, so that a flood cannot go around the WAF rule.
+  "routes": [{ "pattern": "online.cm0102bosman.co.uk", "custom_domain": true }],
+  "workers_dev": true,
   // Privacy (Q26): no Workers Logs, so no stored request record holds an internet address.
   "observability": { "enabled": false },
   "durable_objects": {
