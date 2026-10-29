@@ -237,6 +237,11 @@ if(NOT WIN32)
         src/recomp_rt/win/season_nation_table.c)
     target_include_directories(season_nation_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_nation COMMAND season_nation_test)
+    # The row A18 list of the season part (0.6.1 item 4): its write keeps inside its size.
+    add_executable(season_friendly_part_test tests/seasons/test_season_friendly_part.c
+        src/recomp_rt/win/season_friendly_dates.c)
+    target_include_directories(season_friendly_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
+    add_test(NAME season_friendly_part COMMAND season_friendly_part_test)
     add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
     # The league rules (0.6.0 slice 19): play-off places, splits and calendars. The outputs are committed.
     add_test(NAME season_encode_leagues COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_leagues.py")
