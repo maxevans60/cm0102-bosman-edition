@@ -78,6 +78,7 @@ typedef struct {
     int listening;
     int kicked;                    /* the host removed this human manager (nc_kick): the socket is closed */
     int quit_at;                   /* a joiner's connection that broke: 1 + the bytes of the quit packet given */
+    int told;                      /* a recv of the game reported that the connection closed or broke */
     int exit_seen;                 /* the host screen now shown holds the confirm of the joiner's own Exit Game */
     char tail[32];                 /* the last bytes from the host, for a text cut between two reads */
     int control;                   /* the connection passed the join check: control packets go both ways */
@@ -907,6 +908,22 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     return 0;
 }
 
+/* A send into a connection whose peer is gone, before a recv of the game reported it. The original handles a close
+ * at its recv: Network::receive_packet 0x77af20 frees the slot and runs the leave path (0x77b4e9..0x77b508). A send
+ * that fails makes send_packet 0x77ac30 return 0 (0x77ad5f..0x77ad9d), and ScreenManager::send_clear_click 0x800000
+ * then shows "scrman.cpp 2480" (0x8000e2..0x80013a), which stops the host: slice 9's four-player run, 2026-10-29,
+ * where two joiners quit while the host worked out a day and then opened their news screens. WinSock takes the first
+ * send after the peer closed and fails a send after the peer's reset came back (WSAECONNRESET), so the original can
+ * show that box too when it sends two packets to a gone joiner with no recv between them. The runtime takes such a
+ * send and drops its bytes until a recv of the game has reported the close, so the leave path runs in every case;
+ * after that recv, a send fails as before. */
+static long send_to_gone(Sock *k, uint32_t n)
+{
+    if (k->told) return fail(k->dead ? k->dead : HN_CONNRESET);
+    k->n.sends++;
+    return (long)n;
+}
+
 long nc_send(uint32_t h, const void *buf, uint32_t n)
 {
     Sock *k = find(h);
@@ -914,13 +931,13 @@ long nc_send(uint32_t h, const void *buf, uint32_t n)
     if (!k) return fail(HN_NOTSOCK);
     if (!k->stream) return nc_sendto(h, buf, n, k->peer, k->peer_port);
     if (!k->connected) return fail(HN_NOTCONN);
-    if (k->dead) return fail(k->dead);
-    if (enqueue(k, buf, n) < 0) return fail(k->dead);
+    if (k->dead) return send_to_gone(k, n);
+    if (enqueue(k, buf, n) < 0) return send_to_gone(k, n);
     k->n.sends++;
     k->n.bytes_out += n;
     k->n.packets_out += frame_feed(&k->fo, buf, n);
     /* Hold the length bytes until the body follows. */
-    if (frame_between(&k->fo) && flush(k) < 0) return fail(k->dead);
+    if (frame_between(&k->fo) && flush(k) < 0) return send_to_gone(k, n);
     send_waiting(k);
     k->n.queued = k->qlen - k->qoff;
     return (long)n;
@@ -964,7 +981,7 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
     Sock *k = find(h);
     flush_all(NULL);
     if (!k) return fail(HN_NOTSOCK);
-    if (k->kicked) return fail(HN_CONNRESET);
+    if (k->kicked) return k->told = 1, fail(HN_CONNRESET);
     if (k->quit_at >= 1 && k->quit_at <= (int)sizeof quit_packet) {
         uint32_t take = (uint32_t)sizeof quit_packet - (uint32_t)(k->quit_at - 1);
         if (take > n) take = n;
@@ -973,7 +990,7 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
         frame_feed(&k->fi, buf, take);
         return (long)take;
     }
-    if (k->quit_at) return fail(k->dead ? k->dead : HN_CONNRESET);
+    if (k->quit_at) return k->told = 1, fail(k->dead ? k->dead : HN_CONNRESET);
     /* The runtime's own packets come out before the game reads the next length byte (0.7.0 slice 7). */
     if (k->control && n && frame_between(&k->fi)) {
         uint64_t until = hn_ms() + NC_CONNECT_MS;
@@ -999,8 +1016,12 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
         k->quit_at = 1;
         return nc_recv(h, buf, n);
     }
-    if (r < 0 && k->dead && hn_error() == HN_WOULDBLOCK) return fail(k->dead);
-    if (r < 0) return fail_host();
+    if (r < 0 && k->dead && hn_error() == HN_WOULDBLOCK) return k->told = 1, fail(k->dead);
+    if (r < 0) {
+        if (hn_error() != HN_WOULDBLOCK) k->told = 1;
+        return fail_host();
+    }
+    if (r == 0 && n) k->told = 1;   /* the peer closed */
     k->n.bytes_in += (uint64_t)r;
     uint64_t resets = k->fi.op_packets[0], quits = k->fi.op_packets[4];
     k->n.packets_in += frame_feed(&k->fi, buf, (uint32_t)r);
