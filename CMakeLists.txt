@@ -15,10 +15,16 @@ set(MBEDTLS_FATAL_WARNINGS OFF CACHE BOOL "Mbed TLS warnings stop the build" FOR
 set(USE_SHARED_MBEDTLS_LIBRARY OFF CACHE BOOL "Build a shared Mbed TLS" FORCE)
 set(MBEDTLS_USER_CONFIG_FILE "${CMAKE_SOURCE_DIR}/src/recomp_rt/win/tls_config.h" CACHE FILEPATH
     "Mbed TLS settings of Bosman Edition" FORCE)
+# DOWNLOAD_EXTRACT_TIMESTAMP exists from CMake 3.24; the Linux build's container (Ubuntu 22.04) has 3.22, which
+# takes the option as part of URL_HASH and stops.
+set(MBEDTLS_FETCH_EXTRA "")
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set(MBEDTLS_FETCH_EXTRA DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+endif()
 FetchContent_Declare(mbedtls
     URL https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.7/mbedtls-3.6.7.tar.bz2
     URL_HASH SHA256=a7e8bcbec0e6f761b4af24f25677626b35f762f68eef79c08677a363212d11f6
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+    ${MBEDTLS_FETCH_EXTRA})
 FetchContent_MakeAvailable(mbedtls)
 
 add_executable(cm0102
