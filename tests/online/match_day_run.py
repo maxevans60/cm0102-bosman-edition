@@ -5,7 +5,7 @@ note, section 11).
 
 Usage:
     python3 tests/online/match_day_run.py <cm0102_recomp> [<game folder>] --keep <folder> [--minutes 25]
-        [--via lan|relay] [--lobby-url <address>] [--save <prematch.sav>]
+        [--via lan|relay] [--lobby-url <address>] [--save <prematch.sav>] [--team-row 1]
 
 The host restores prematch.sav (tests/fixtures: Test Smoke at Arsenal, 16.7.01, a friendly at Basel on 20.7.01) as
 a network game and takes its manager back. One joiner joins (through the LAN address, or the relay with --via
@@ -163,7 +163,8 @@ def main(argv):
             # The joiner's steps count from its game list, about 15 s after its start: Finish 47 s after that
             # (join_new's earliest time with Add Manager), about 77 s after the host's Manager Status, before the
             # host's Finish at 90 s; then the loop.
-            steps = snr.join_new(o, 1, 1, 60000 - 30000, 10 ** 9, add=True)
+            # --team-row: the club of Select Team (1, Barnsley: its pick held an unavailable player, matchday11).
+            steps = snr.join_new(o, 1, int(arg(argv, "--team-row", 1)), 60000 - 30000, 10 ** 9, add=True)
             steps = [s for s in steps if not s.endswith(" quit") and "-4-game" not in s]
             # The joiner's new manager has no team picked, so on the day of its own friendly Continue Game showed
             # "Team Selection: You have not selected any outfield players" with Ok, and the match never started
