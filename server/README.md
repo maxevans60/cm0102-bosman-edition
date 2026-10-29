@@ -66,7 +66,7 @@ The game uses this contract in slices 4, 5 and 8. The invite link page at the en
 ### Rules for the game side
 
 - Each answer from this API is JSON with the header `X-Bosman-Api: 1`. An answer is either a success body or `{"error": "<code>", "message": "<English text>", ...}`.
-- An answer without `X-Bosman-Api: 1` does not come from this API. If its status is 429, or its body contains `1027`, show "Online games are full today, try again later". In all other cases, treat it as `unavailable`. Cloudflare does not document the status code of its 1027 page, so the game must also check the body.
+- An answer without `X-Bosman-Api: 1` does not come from this API. If its body contains `1027`, show "Online games are full today, try again later". In all other cases, treat it as `unavailable`, also a 429: Cloudflare's rate limiting rule of the server's address answers 429 to an address with more than 60 calls in 10 s. Cloudflare does not document the status code of its 1027 page, so the game must also check the body.
 - A timeout, a TLS failure or a refused connection is `unavailable`.
 - Use a 10 s timeout for each HTTP request. Read at most 64 KiB of an answer.
 - The game shows its own text for each error code. The `message` field is a fallback.

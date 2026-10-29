@@ -2,10 +2,10 @@
  * lobby_http, so the secure connection of slice 5 is added here and nowhere else.
  *
  * The rules come from the API contract in server/README.md ("Rules for the game side"): a 10 s timeout,
- * at most 64 KiB of an answer, and an answer without the header X-Bosman-Api: 1 is not from the lobby. Its
- * status 429, or "error code: 1027" in its body (Cloudflare's page for a used-up free plan; a bare "1027"
- * can be part of a Ray ID), means full today, and any
- * other such answer means unavailable. A timeout or a refused connection is unavailable too.
+ * at most 64 KiB of an answer, and an answer without the header X-Bosman-Api: 1 is not from the lobby.
+ * "error code: 1027" in its body (Cloudflare's page for a used-up free plan; a bare "1027" can be part of a
+ * Ray ID) means full today, and any other such answer means unavailable, also a 429 of Cloudflare's rate
+ * limiting rule. A timeout or a refused connection is unavailable too.
  *
  * https:// goes over the secure connection (secure.h, slice 5), http:// is plain, for the local copy of the
  * server in tests. */

@@ -76,7 +76,7 @@
 #ifndef CM0102_VERSION
 #define CM0102_VERSION "dev"
 #endif
-#define LOBBY_ADDRESS "https://bosman-online.maxvert.workers.dev"   /* the deployed server (server/README.md) */
+#define LOBBY_ADDRESS "https://online.cm0102bosman.co.uk"   /* the deployed server (server/README.md) */
 
 #define COMP_TABLE 0xadadfcu        /* g_comp_object_table */
 #define STAFF_TABLE 0xae23bcu
