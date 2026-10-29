@@ -296,6 +296,10 @@ set(RECOMP_PYTHON "${RECOMP_PYTHON_DEFAULT}" CACHE FILEPATH "A Python with capst
 # every row is valid. A Python test, so it runs on every platform.
 enable_testing()
 add_test(NAME season_history_table COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_table.py" --check)
+# The .dmg window background shows the logo art alone, with no drawn BOSMAN EDITION line under it (0.6.1
+# item 1). Needs Pillow, so a skip (77) without it.
+add_test(NAME dmg_background COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tests/mac/dmg_background_check.py")
+set_tests_properties(dmg_background PROPERTIES SKIP_RETURN_CODE 77)
 
 if(EXISTS "${CM0102_EXE}")
     set(RECOMP_SHARDS 128)
