@@ -43,6 +43,8 @@ jobs:
           gh release download "$tag" --repo "${{ github.repository }}" --pattern site-assets.zip --dir "$RUNNER_TEMP"
           mkdir -p site/assets
           unzip -o -q "$RUNNER_TEMP/site-assets.zip" -d site/assets
+          # Videos of the game (screens of the original, so not in git) are separate .mp4 files on the release.
+          gh release download "$tag" --repo "${{ github.repository }}" --pattern '*.mp4' --dir site/assets || true
           echo "ready=true" >> "$GITHUB_OUTPUT"
       - if: steps.pictures.outputs.ready == 'true'
         uses: actions/configure-pages@v5
