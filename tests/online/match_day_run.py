@@ -64,7 +64,9 @@ def loop_steps(t0, minutes, who, bids=False):
             # click at (45, 120) while it is open reaches its input 0x727c30 as widget 129, which closes it with
             # no match (-9), so the squad screen came back each round (run matchday7, 2026-10-29, probe of
             # 0x725ca0, 0x725f70 and 0x727c30). Then (45, 120) is Kick Off on the match screen.
-            steps += [f"{t} press space", f"{t + 1500} click 705 573", f"{t + 3000} click 45 120",
+            # Run matchday8: with Space first and Yes 1.5 s later the squad screen still came back, so the joiner
+            # clicks Continue Game at (45, 120) in place of Space (a guess: the key gives a second input, 129).
+            steps += [f"{t} click 45 120", f"{t + 1500} click 705 573", f"{t + 3000} click 45 120",
                       f"{t + 5000} {BID[0]}", f"{t + 7000} {BID[1]}"]
         else:
             steps += [f"{t} press space", f"{t + 1500} click 45 120"]

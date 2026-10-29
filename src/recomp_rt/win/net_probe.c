@@ -82,7 +82,6 @@ static void probe_call(void (*orig)(void), const char *label)
 void o_00727c30(void);
 void o_00725ca0(void);
 void o_00725f70(void);
-void o_00788010(void);
 
 RT_WRAP(00727c30, probe_confirm_input) { probe_call(o_00727c30, "0x727c30 confirm input"); }
 
@@ -96,5 +95,3 @@ RT_WRAP(00725ca0, probe_match_input)
 }
 
 RT_WRAP(00725f70, probe_confirm_open) { probe_call(o_00725f70, "0x725f70 confirm open"); }
-
-RT_WRAP(00788010, probe_788010) { probe_call(o_00788010, "0x788010"); }
