@@ -98,7 +98,9 @@ HOLIDAY_PRE = [
 ]
 HOLIDAY_POST = [
     "wait popup 10000",
-    "1500 click 150 427",           # Go on Holiday
+    "1000 dump {d}/host-4a-menu.bmp",
+    "1500 click 150 {holiday_y}",   # Go on Holiday
+    "3500 dump {d}/host-4b-confirm.bmp",
     "4000 click 705 572",           # Please Confirm: Yes
     "40000 dump {d}/host-4-holiday.bmp",
 ]
@@ -184,7 +186,12 @@ def host_restore():
     ]
 
 
-def host_after_status(finish_ms, holiday, quit_ms=None):
+# Go on Holiday in the manager's menu: with a club the menu starts with five club items, without one (the board
+# sacked the host's manager, as in leg 8 of run season-final, 2004) it starts at News, and the item is higher.
+HOLIDAY_Y_CLUB, HOLIDAY_Y_NO_CLUB = 427, 298
+
+
+def host_after_status(finish_ms, holiday, quit_ms=None, holiday_y=HOLIDAY_Y_CLUB):
     """From the last dump on Manager Status: Finish at finish_ms, then the holiday (or the quit of the quit leg)."""
     steps = [
         f"{finish_ms - 1000} dump {{d}}/host-2-status.bmp",
@@ -194,7 +201,8 @@ def host_after_status(finish_ms, holiday, quit_ms=None):
     ]
     if quit_ms:
         return steps + [f"{quit_ms - 1000} dump {{d}}/host-4-playing.bmp", f"{quit_ms} quit"]
-    return steps + at(holiday, HOLIDAY_PRE) + HOLIDAY_POST + ["86400000 quit"]
+    return steps + at(holiday, HOLIDAY_PRE) + [x.replace("{holiday_y}", str(holiday_y)) for x in HOLIDAY_POST] + \
+        ["86400000 quit"]
 
 
 # ---- the joiners' steps ----
@@ -314,6 +322,7 @@ def watch_lobby(o, store, stop):
             v = (g.get("season"), g.get("day"), g.get("managersOnline"), time.time())
             if not store or store[-1][:3] != v[:3]:
                 store.append(v)
+            o["clubs_seen"] = g.get("humanClubs") or []
 
 
 def play_host(o, p, err_path, days, check, leg):
@@ -373,8 +382,12 @@ def run_leg(o, leg, kind, save, days, check):
         # The host takes its manager back by 9.5 s. join1 at 15, join2 at 50, join3 at 85; Finish of the joiners at
         # 140, of the host at 160; the joiners quit at 250 (the quit leg: the host quits 120 s after its news).
         starts, finish, quit_at = [15, 50, 85], 160, 250
+    # The host's club, from the lobby's human clubs at the end of the leg before (lobby-clubs.txt): without it the
+    # host's manager has no club, and Go on Holiday sits higher in the menu.
+    clubs = text(os.path.join(o["keep"], f"leg{leg - 1:02d}", "lobby-clubs.txt")) if leg else ""
+    holiday_y = HOLIDAY_Y_NO_CLUB if clubs and "Arsenal" not in clubs.split("\t") else HOLIDAY_Y_CLUB
     host = (host_new(o) if kind == "new" else host_restore()) + host_after_status(
-        finish * 1000, 120000, quit_ms=120000 if kind == "quit" else None)
+        finish * 1000, 120000, quit_ms=120000 if kind == "quit" else None, holiday_y=holiday_y)
     # The host's steps after the wait for Manager Status count from that wait, as the orchestra below does.
     oc.wait_for_room()
     hp, herr = start(o, work, "host", host, shots, host_env, settings)
@@ -577,6 +590,8 @@ def main(argv):
             before = len(failed)
             user, last = run_leg(o, leg, "new" if leg == 0 else "restore", save, days, check)
             ok = len(failed) == before
+            with open(os.path.join(o["keep"], f"leg{leg:02d}", "lobby-clubs.txt"), "w") as f:
+                f.write("\t".join(o.get("clubs_seen", [])) + "\n")
             with open(os.path.join(o["keep"], f"leg{leg:02d}", "lobby-seasons.txt"), "w") as f:
                 f.write(" ".join(str(x) for x in (o["seasons_seen"][-1] if o["seasons_seen"] else [])) + "\n")
             with open(summary, "a") as f:
