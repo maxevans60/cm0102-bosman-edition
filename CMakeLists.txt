@@ -179,6 +179,8 @@ if(NOT WIN32)
         "${CMAKE_SOURCE_DIR}/src/recomp_rt/win")
     # The names table and the club moves table (0.6.0 slice 15): the tools read every part and stop on a bad row.
     add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
+    # 0.6.1 item 2: the abbreviation column of the names table (Select Team shows it).
+    add_test(NAME season_names_abbr COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/names_abbr_check.py")
     add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)
     # The club ids of the clubs files (O151): each row names a club record of its season's database. The check reads
     # the databases of test-fixtures and skips (code 77) where they are missing.
