@@ -231,6 +231,11 @@ if(NOT WIN32)
     target_include_directories(season_subs_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_subs COMMAND season_subs_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_subs PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The whole season part of a save (0.6.1 items 4 and 10): its write keeps inside its size.
+    add_executable(season_part_test tests/seasons/test_season_part.c
+        src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c)
+    target_include_directories(season_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
+    add_test(NAME season_part COMMAND season_part_test)
     # The nation rules (0.6.0 slice 17): windows, foreign player limits and the work permit rule. The encoder reads
     # the research parts; its outputs are committed and checked here; the lookup runs on the C table.
     add_executable(season_nation_test tests/seasons/test_season_nation.c src/recomp_rt/win/season_nation.c
