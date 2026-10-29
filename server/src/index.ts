@@ -1,11 +1,13 @@
 // Bosman Edition lobby and relay (0.7.0, #45, slice 3). The API contract is in README.md.
 // This Worker logs nothing, so no log line can hold an internet address (Q26).
 import { err, fail, json, toResponse } from "./http";
+import { cachedAnswer, refused, withinLimits } from "./flood";
 import { joinPage } from "./join";
 import { CODE_RE, FieldError, parseHeartbeat, parseJoin, parseRegister } from "./validate";
 
 export { Lobby } from "./lobby";
 export { Relay } from "./relay";
+export { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, clearAnswerCache, setAnswerCacheMs } from "./flood";
 
 const MAX_BODY_BYTES = 4096;
 
@@ -62,12 +64,15 @@ async function route(request: Request, env: Env): Promise<Response> {
   const parts = url.pathname.split("/").filter((p) => p !== "");
   const method = request.method;
 
+  // Layer 1 against floods: the limit for each address comes before any other work (flood.ts).
+  if (!(await withinLimits(request, env, parts))) return refused(parts[0] === "join");
+
   if (parts[0] === "join" && parts.length <= 2) {
     // The invite link page (slice 8). A lobby failure gives a page too, never JSON.
     if (method !== "GET" && method !== "HEAD") return fail("method_not_allowed");
     const res = await joinPage(parts[1], async (code) => {
       try {
-        return await lobby(env).get(code);
+        return await cachedAnswer(`get:${code}`, () => lobby(env).get(code));
       } catch (e) {
         return err(isLimitError(e) ? "full_today" : "unavailable");
       }
@@ -81,7 +86,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (parts[1] !== "games") return fail("not_found");
 
   if (parts.length === 2) {
-    if (method === "GET") return toResponse(await lobby(env).list());
+    if (method === "GET") return toResponse(await cachedAnswer("list", () => lobby(env).list()));
     if (method === "POST") {
       const input = parseRegister(await readBody(request, true));
       return toResponse(await lobby(env).register(input, address(request)));
@@ -93,7 +98,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (!CODE_RE.test(code) || parts.length > 4) return fail("unknown_game");
 
   if (parts.length === 3) {
-    if (method === "GET") return toResponse(await lobby(env).get(code));
+    if (method === "GET") return toResponse(await cachedAnswer(`get:${code}`, () => lobby(env).get(code)));
     if (method === "DELETE") return toResponse(await lobby(env).close(code, bearer(request)));
     return fail("method_not_allowed");
   }

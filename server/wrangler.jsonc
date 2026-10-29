@@ -12,6 +12,12 @@
       { "name": "RELAY", "class_name": "Relay" }
     ]
   },
+  // Layer 1 against call floods (src/flood.ts): calls and writes in 60 s from one address.
+  // The limits must match CALL_LIMIT and WRITE_LIMIT in src/flood.ts (a test checks it).
+  "ratelimits": [
+    { "name": "RATE_CALLS", "namespace_id": "1001", "simple": { "limit": 120, "period": 60 } },
+    { "name": "RATE_WRITES", "namespace_id": "1002", "simple": { "limit": 10, "period": 60 } }
+  ],
   // The free plan allows only SQLite-backed Durable Objects.
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Lobby", "Relay"] }]
 }
