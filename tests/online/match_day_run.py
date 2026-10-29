@@ -51,7 +51,8 @@ BATCHES_IN_10S = 200                     # one batch each 50 ms at most
 # For Players" (run matchday3, 2026-10-27). The joiner answers each as smoke_run.MATCH_STEPS answers the Henry
 # bid: Respond on the news item, Reject, Yes. (502, 573) is also No on "Proceed to the match?", so each round
 # clicks Yes (705, 573) before Respond and Reject (run matchday4: No first kept the joiner from its own friendly,
-# and the host waited on Latest Scores). The host is on holiday to its match, so its assistant answers its bids.
+# and the host waited on Latest Scores). The host is on holiday to its match, but on its match day a new bid for
+# Henry blocked it (run matchday12), so the host's loop answers bids too.
 BID = ["click 172 230", "click 502 573"]          # Respond, Reject (Back on most other screens)
 
 
@@ -146,7 +147,7 @@ def main(argv):
         "1500 click 150 447",               # Holiday until next match
         "4000 click 705 572",               # Please Confirm: Yes
         "6000 dump {d}/host-holiday.bmp",
-    ] + loop_steps(10000, minutes, "host")
+    ] + loop_steps(10000, minutes, "host", bids=True)     # back from holiday it must answer a new Henry bid
     settings = {"display": "classic", "faster_days": "on"}
     oc.wait_for_room()
     t_start = time.time()
