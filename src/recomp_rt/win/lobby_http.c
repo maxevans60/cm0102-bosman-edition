@@ -46,6 +46,7 @@ static int complete(const char *r, size_t got)
     for (size_t i = 0; i + 4 <= got && !end; i++)
         if (!memcmp(r + i, "\r\n\r\n", 4)) end = r + i;
     if (!end) return 0;
+    if (!strncmp(r, "HTTP/1.1 101", 12)) return 1;     /* an upgrade has no body (the connection test) */
     for (const char *p = r; p < end; p++)
         if ((p == r || p[-1] == '\n') && !strncasecmp(p, "Content-Length:", 15))
             return got - (size_t)(end + 4 - r) >= strtoul(p + 15, NULL, 10);
@@ -143,8 +144,11 @@ static LhResult kind_of(LhAnswer *a)
     return LH_API_ERROR;
 }
 
-LhResult lobby_http(const char *base, const char *method, const char *path, const char *token, const char *json,
-                    int timeout_ms, LhAnswer *a)
+#define REPLY_MAX (LH_BODY_MAX + 8192 + 1)
+
+/* lobby_http with the buffers of one call. */
+static LhResult http_call(const char *base, const char *method, const char *path, const char *token,
+                          const char *json, int timeout_ms, LhAnswer *a, char *request, char *reply)
 {
     memset(a, 0, sizeof *a);
     char host[256];
@@ -154,29 +158,32 @@ LhResult lobby_http(const char *base, const char *method, const char *path, cons
         return LH_UNAVAILABLE;
     uint64_t until = hn_ms() + (uint64_t)timeout_ms;
 
-    static char request[REQUEST_MAX];
     size_t body = json ? strlen(json) : 0;
-    int n = snprintf(request, sizeof request,
+    int upgrade = !strcmp(method, "UPGRADE");
+    if (upgrade) method = "GET";
+    int n = snprintf(request, REQUEST_MAX,
                      "%s %s HTTP/1.1\r\nHost: %s:%u\r\nUser-Agent: Bosman-Edition\r\nAccept: application/json\r\n"
-                     "Connection: close\r\n",
-                     method, path, host, port);
-    if (token) n += snprintf(request + n, sizeof request - (size_t)n, "Authorization: Bearer %s\r\n", token);
+                     "%s\r\n",
+                     method, path, host, port,
+                     upgrade ? "Connection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\n"
+                               "Sec-WebSocket-Key: Qm9zbWFuIEVkaXRpb24hIQ=="
+                             : "Connection: close");
+    if (token) n += snprintf(request + n, REQUEST_MAX - (size_t)n, "Authorization: Bearer %s\r\n", token);
     if (json || strcmp(method, "GET"))
-        n += snprintf(request + n, sizeof request - (size_t)n,
+        n += snprintf(request + n, REQUEST_MAX - (size_t)n,
                       "Content-Type: application/json\r\nContent-Length: %zu\r\n", body);
-    n += snprintf(request + n, sizeof request - (size_t)n, "\r\n");
-    if (n < 0 || (size_t)n + body >= sizeof request) return LH_UNAVAILABLE;
+    n += snprintf(request + n, REQUEST_MAX - (size_t)n, "\r\n");
+    if (n < 0 || (size_t)n + body >= REQUEST_MAX) return LH_UNAVAILABLE;
     if (body) memcpy(request + n, json, body);
 
     hn_sock s = hn_socket(1);
     if (s == HN_INVALID) return LH_UNAVAILABLE;
     hn_set_flag(s, HN_NODELAY, 1);
-    static char reply[LH_BODY_MAX + 8192 + 1];
     size_t got = 0;
     int ok = hn_connect(s, addr, (uint16_t)port, left_ms(until)) == 0 &&
              send_all(s, request, (size_t)n + body, until) == 0;
-    while (ok && got < sizeof reply - 1 && !complete(reply, got)) {
-        long r = hn_recv(s, reply + got, sizeof reply - 1 - got);
+    while (ok && got < REPLY_MAX - 1 && !complete(reply, got)) {
+        long r = hn_recv(s, reply + got, REPLY_MAX - 1 - got);
         if (r > 0) {
             got += (size_t)r;
             continue;
@@ -203,4 +210,17 @@ LhResult lobby_http(const char *base, const char *method, const char *path, cons
     a->body[len] = 0;
     a->len = len;
     return kind_of(a);
+}
+
+LhResult lobby_http(const char *base, const char *method, const char *path, const char *token, const char *json,
+                    int timeout_ms, LhAnswer *a)
+{
+    /* Each call has its own buffers: the lobby thread and the connection test's thread (net_test.c) both call. */
+    char *request = malloc(REQUEST_MAX), *reply = malloc(REPLY_MAX);
+    LhResult r = LH_UNAVAILABLE;
+    if (request && reply) r = http_call(base, method, path, token, json, timeout_ms, a, request, reply);
+    else memset(a, 0, sizeof *a);
+    free(request);
+    free(reply);
+    return r;
 }

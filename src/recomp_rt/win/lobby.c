@@ -32,6 +32,7 @@ static struct {
     char password[65];
     LobbyHostState state;
     char code[9], token[96];
+    char refusal[32];                    /* the error code of a refused entry */
     int want_list, list_ready, list_result, list_n;
     LobbyRow list[LOBBY_ROWS];
     char want_game[9], game_code[9];     /* game_code: the last code asked for; an older answer is dropped */
@@ -114,6 +115,7 @@ static void put_state(Out *o, const LobbyGame *g)
     put(o, "%s", "]");
     put_int(o, "freeSeats", g->free_seats);
     put_int(o, "managersOnline", g->managers_online);
+    put_int(o, "pingMs", g->ping_ms);
 }
 
 int lobby_game_json(char *out, unsigned room, const LobbyGame *g, const char *password, const char *code,
@@ -287,6 +289,7 @@ static int game_key(J *j, const char *k, void *ctx)
     if (!strcmp(k, "season")) return read_int(j, &g->season);
     if (!strcmp(k, "freeSeats")) return read_int(j, &g->free_seats);
     if (!strcmp(k, "managersOnline")) return read_int(j, &g->managers_online);
+    if (!strcmp(k, "pingMs")) return read_int(j, &g->ping_ms);
     if (!strcmp(k, "password")) {
         ws(j);
         g->password = !strncmp(j->p, "true", 4);
@@ -450,6 +453,7 @@ static void lobby_thread(void *unused)
                 hn_lock();
                 sh.want_open = 0;                        /* refused: the game stays on the LAN */
                 sh.state = LOBBY_REFUSED;
+                memcpy(sh.refusal, answer.code, sizeof sh.refusal);
                 hn_unlock();
             }
         } else if (open && now >= next_beat) {
@@ -541,6 +545,13 @@ LobbyHostState lobby_host_state(char *code_out)
     if (code_out) memcpy(code_out, sh.code, 9);
     hn_unlock();
     return s;
+}
+
+void lobby_host_refusal(char *out, unsigned room)
+{
+    hn_lock();
+    snprintf(out, room, "%s", sh.state == LOBBY_REFUSED ? sh.refusal : "");
+    hn_unlock();
 }
 
 void lobby_list_fetch(void)

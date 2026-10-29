@@ -230,12 +230,13 @@ int main(void)
                 else if (g < 0 && nc_error() == HN_WOULDBLOCK) usleep(1000);
                 else break;
             }
-            CHECK(have5 == 5 && !memcmp(got5, quit, 5) && nc_host_left() == (round != 2) && nc_kicked() == (round == 1),
+            CHECK(have5 == 5 && !memcmp(got5, quit, 5) && nc_host_left() == (round != 2) && !nc_kicked(),
+                  /* No join check here, so no control packets: the KICK notice is tested in test_net_errors.c. */
                   "round %d: the joiner reads the quit packet (%d bytes), nc_host_left %d, nc_kicked %d", round, have5,
                   nc_host_left(), nc_kicked());
             if (round == 1) {
                 long after = -1;
-                for (int t = 0; t < 2000; t++) {     /* the kick line went to the runtime; then the close */
+                for (int t = 0; t < 2000; t++) {     /* then the close */
                     after = nc_recv(kc, got5, 1);
                     if (after >= 0 || nc_error() != HN_WOULDBLOCK) break;
                     usleep(1000);

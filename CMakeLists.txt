@@ -134,6 +134,13 @@ if(NOT WIN32)
     target_include_directories(lobby_test PRIVATE src/recomp_rt src/recomp_rt/win)
     target_link_libraries(lobby_test PRIVATE Threads::Threads)
     add_test(NAME lobby COMMAND lobby_test)
+    # Clear errors, connection test and ping (0.7.0 slice 7): control packets, failure reasons, texts, the test.
+    add_executable(net_errors_test tests/net/test_net_errors.c src/recomp_rt/win/net_errors.c
+        src/recomp_rt/win/net_test.c src/recomp_rt/win/lobby_http.c src/recomp_rt/win/lobby.c
+        src/recomp_rt/win/lobby_rows.c src/recomp_rt/win/net_core.c src/recomp_rt/host/net_posix.c)
+    target_include_directories(net_errors_test PRIVATE src/recomp_rt src/recomp_rt/win)
+    target_link_libraries(net_errors_test PRIVATE Threads::Threads)
+    add_test(NAME net_errors COMMAND net_errors_test)
     add_executable(invite_test tests/net/test_invite.c src/recomp_rt/win/invite.c src/recomp_rt/win/lobby_http.c
         src/recomp_rt/win/lobby.c src/recomp_rt/host/net_posix.c)
     target_include_directories(invite_test PRIVATE src/recomp_rt src/recomp_rt/win)

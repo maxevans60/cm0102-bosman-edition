@@ -49,6 +49,11 @@ hn_sock hn_accept(hn_sock s, uint32_t *addr, uint16_t *port);
 int hn_connect(hn_sock s, uint32_t addr, uint16_t port, int timeout_ms);
 long hn_send(hn_sock s, const void *buf, size_t n);
 long hn_recv(hn_sock s, void *buf, size_t n);         /* 0 when the peer closed */
+/* As hn_recv, but the bytes stay in the socket for the next read (MSG_PEEK). 0.7.0 slice 7: net_core.c reads its
+ * own control packets with it. */
+long hn_peek(hn_sock s, void *buf, size_t n);
+/* Ends the send side: the peer reads the bytes sent so far, then the end (0.7.0 slice 7, the kick notice). */
+int hn_shutdown_send(hn_sock s);
 long hn_sendto(hn_sock s, const void *buf, size_t n, uint32_t addr, uint16_t port);
 long hn_recvfrom(hn_sock s, void *buf, size_t n, uint32_t *addr, uint16_t *port);
 /* 1 when the socket can be read (read 1) or written (read 0) within ms, 0 when not, -1 on failure. */

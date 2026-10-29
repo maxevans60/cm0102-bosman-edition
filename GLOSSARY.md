@@ -361,8 +361,12 @@ The option that lets the game list show online games and lets a host put its gam
 _Avoid_: internet mode, online mode
 
 **Connection test**:
-A check in Network Play that the lobby and relay can be reached. It says that online play works, or it says what is wrong.
+A check on the Network tab of the Bosman Edition Options box that the lobby and relay can be reached. It says that online play works, or it says what is wrong.
 _Avoid_: network check, diagnostics
+
+**Ping**:
+The time in ms for a message to go from the host to a human manager's game and back. The Network tab shows it for each human manager online, and the game list row shows the highest one of the game.
+_Avoid_: latency, lag
 
 ### Research maps
 

@@ -98,13 +98,33 @@ int nc_peers(void);
  * When it broke between two packets, the game reads the quit packet 0x04 in place of the close, so the
  * client loop 0x7fdc00 ends as at a quit. A new connect clears it. */
 int nc_host_left(void);
-int nc_kicked(void);                /* with nc_host_left: the host kicked this joiner (the kick line came) */
 void nc_host_left_clear(void);
 /* The joiners' connections that this host accepted and that are open: handles, addresses, ports. The count. */
 int nc_peer_list(uint32_t *handle, uint32_t *addr, uint16_t *port, int max);
 /* The host removes a joiner: its connection closes, and the game's next call on the handle fails, so the
  * original's leave path runs (setup_on_network_player_left 0x838c00). 0 on success. */
 int nc_kick(uint32_t handle);
+
+/* Clear errors and ping (0.7.0 slice 7). Control packets: see net_core.c. The host sends a PING to each joiner every
+ * NC_PING_MS, and the joiner's runtime answers PONG at once. A ping is the shortest of the last NC_PING_KEEP round
+ * trips, so that a host that was busy with a day does not count. */
+#define NC_CONTROL_OP 0xbe
+#define NC_CONTROL_MAX 48           /* the longest control packet body */
+#define NC_PING_MS 3000
+#define NC_PING_KEEP 4
+#define NC_PING_LOST_MS 10000       /* a PING with no PONG for this long is lost: the next one goes */
+/* The ping of a joiner's connection on this host in ms, or -1 when none is known yet. */
+int nc_ping_ms(uint32_t handle);
+void nc_set_ping_every(int ms);     /* tests: the time between two PINGs, NC_PING_MS by default */
+/* Joiner: 1 when the host's KICK came on the connection to the host. A new connect clears it. */
+int nc_kicked(void);
+/* Joiner: 1 when the connection to the host broke with no quit packet (nc_host_left is 1 too). */
+int nc_host_broke(void);
+/* The WinSock error of the last connect that failed before the join check, 0 when none. */
+int nc_connect_error(void);
+/* The WinSock error of the last TCP bind that failed (the host's listen sockets, 0x8ae5bd), 0 when none. */
+int nc_bind_error(void);
+void nc_bind_error_clear(void);
 
 /* The adapter table of 0x8aee20: at most max addresses and their subnet broadcasts. The count. */
 int nc_adapters(uint32_t *addr, uint32_t *broadcast, int max);

@@ -23,6 +23,7 @@ typedef struct {
     char away[LOBBY_CLUBS][LOBBY_TEXT];   /* the clubs whose human manager is Away (on holiday after a drop) */
     int away_n;
     int password;                  /* in the list: the game has a password */
+    int ping_ms;                   /* 0.7.0 slice 7: the highest ping of the host's human managers, 0 when none */
 } LobbyGame;
 
 typedef struct {
@@ -30,7 +31,7 @@ typedef struct {
     LobbyGame g;
 } LobbyRow;
 
-/* What the host's entry is now, for logs and tests. */
+/* What the host's entry is now, for logs, tests and the Network tab. */
 typedef enum { LOBBY_NONE, LOBBY_REGISTERING, LOBBY_OPEN, LOBBY_REFUSED, LOBBY_FULL_TODAY, LOBBY_UNAVAILABLE,
                LOBBY_CLOSED } LobbyHostState;
 
@@ -45,6 +46,8 @@ void lobby_host_set(const LobbyGame *g, const char *password);
 /* The game ended: close its entry. */
 void lobby_host_close(void);
 LobbyHostState lobby_host_state(char *code_out);    /* code_out: 9 bytes or NULL */
+/* The lobby's error code of a refused entry (LOBBY_REFUSED), for example name_not_allowed, else "". */
+void lobby_host_refusal(char *out, unsigned room);
 
 /* List. lobby_list_fetch asks for the list. lobby_list_take gives the rows of the last answer once: the count,
  * or -1 while no new answer waits. *result is an LhResult (lobby_http.h). */

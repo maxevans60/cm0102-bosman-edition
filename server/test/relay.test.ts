@@ -173,6 +173,19 @@ describe("relay", () => {
     expect(hostToken).toBeTruthy();
   });
 
+  it("answers the connection test's request for a code with no game, and stores nothing (0.7.0 slice 7)", async () => {
+    const probe = await openRelay("22222222", "role=manager&ticket=connection-test");
+    expect(probe.socket).toBeNull();
+    expect(probe.res.status).toBe(404);
+    expect(probe.res.headers.get("X-Bosman-Api")).toBe("1");
+    expect(await json(probe.res)).toMatchObject({ error: "unknown_game" });
+    expect(await relayKeys("22222222")).toEqual([]);
+    // Without the Upgrade header the Worker answers first: the test reads this as a proxy that took it off.
+    const stripped = await call("/v1/games/22222222/relay?role=manager&ticket=connection-test");
+    expect(stripped.status).toBe(426);
+    expect(await json(stripped)).toMatchObject({ error: "upgrade_required" });
+  });
+
   it("does not accept a ticket from another game", async () => {
     const one = await gameWithHost();
     const two = await gameWithHost();
