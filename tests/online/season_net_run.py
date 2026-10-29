@@ -5,7 +5,13 @@ Euros and every season change between them, with a drop and rejoin, a host quit 
 Usage:
     python3 tests/online/season_net_run.py <cm0102_recomp> [<game folder>] --keep <folder> [--start 2001]
         [--end 2004 [--end-days 62] | --seasons n | --days d --legs n] [--nations England|all]
-        [--lobby-url <address>] [--via lan|relay] [--seed 1] [--stall-minutes 20] [--timeout 86400] [--slow k]
+        [--leg-days d] [--leg n] [--lobby-url <address>] [--via lan|relay] [--seed 1] [--stall-minutes 20]
+        [--timeout 86400] [--slow k]
+
+--leg-days d cuts the same days into legs of d days (more restores and rejoins, and shorter turns at the lock).
+--leg n plays only leg n, in the --keep folder of the earlier legs, from the save of leg n-1 (n = the number of
+play legs is the quit leg). Run each leg as its own turn at lead-notes/tools/net-lock.sh, so that other runs get
+turns between them; the run's checks (6, 7 and the lobby's seasons) come with the last play leg.
 
 It is the full play of tests/seasons/full_play_run.py (gate (b) of 0.6.0: the match engine on, the managers on
 holiday, a save near each 1 July that a new program loads) with the host's game as a network game of four human
@@ -518,13 +524,25 @@ def main(argv):
     else:
         end = int(arg(argv, "--end", 2004))
         legs = [365] * (end - start_year) + [int(arg(argv, "--end-days", 62))]
+    if "--leg-days" in argv:                # shorter legs: the same days, cut into pieces of --leg-days
+        total, d = sum(legs), int(arg(argv, "--leg-days"))
+        legs = [d] * (total // d) + ([total % d] if total % d else [])
     if not legs or min(legs) <= 0:
         print("season_net_run.py: no leg to play")
         return 2
-    if os.path.exists(o["keep"]):
+    only = int(arg(argv, "--leg")) if "--leg" in argv else None
+    if only is not None and not 0 <= only <= len(legs):
+        print(f"season_net_run.py: --leg from 0 to {len(legs)} ({len(legs)} is the quit leg)")
+        return 2
+    if only:                                # a later leg goes on in the folder of the earlier ones
+        prev = os.path.join(o["keep"], f"leg{only - 1:02d}", "host", "samesave.sav")
+        if not os.path.exists(prev):
+            print(f"season_net_run.py: no save of leg {only - 1} ({prev})")
+            return 2
+    elif os.path.exists(o["keep"]):
         print(f"season_net_run.py: {o['keep']} exists; give a new --keep folder")
         return 2
-    os.makedirs(o["keep"])
+    os.makedirs(o["keep"], exist_ok=True)
     failed = []
 
     def check(ok, what):
@@ -545,15 +563,22 @@ def main(argv):
     print(f"season run: {len(legs)} legs {legs} from {start_year}, nations {o['nations']}, via {o['via']}, lobby "
           f"{o['lobby']}, slice 6 in the build: {o['host_left']}", flush=True)
     summary = os.path.join(o["keep"], "season.tsv")
-    with open(summary, "w") as f:
-        f.write("leg\tseason\tresult\tminutes\tlast date\n")
+    if not only:
+        with open(summary, "w") as f:
+            f.write("leg\tseason\tresult\tminutes\tlast date\n")
     save, last = None, None
+    if only:
+        save = os.path.join(o["keep"], f"leg{only - 1:02d}", "host", "samesave.sav")
     try:
         for leg, days in enumerate(legs):
+            if only is not None and leg != only:
+                continue
             t0 = time.time()
             before = len(failed)
             user, last = run_leg(o, leg, "new" if leg == 0 else "restore", save, days, check)
             ok = len(failed) == before
+            with open(os.path.join(o["keep"], f"leg{leg:02d}", "lobby-seasons.txt"), "w") as f:
+                f.write(" ".join(str(x) for x in (o["seasons_seen"][-1] if o["seasons_seen"] else [])) + "\n")
             with open(summary, "a") as f:
                 f.write(f"{leg}\t{start_year + leg}/{(start_year + leg + 1) % 100:02d}\t{'ok' if ok else 'FAIL'}\t"
                         f"{(time.time() - t0) / 60:.0f}\t{last}\n")
@@ -563,14 +588,30 @@ def main(argv):
                 break
             save = os.path.join(user, "samesave.sav")
         else:
-            if o["host_left"]:
-                run_leg(o, len(legs), "quit", save, 0, check)
-            else:
+            if only is not None and only < len(legs):
+                pass                            # one play leg only: the quit leg is --leg len(legs)
+            elif not o["host_left"]:
                 print("quit leg skipped: the build has no slice 6 (\"The host left the game\")", flush=True)
+            else:
+                if only == len(legs):
+                    save = os.path.join(o["keep"], f"leg{len(legs) - 1:02d}", "host", "samesave.sav")
+                run_leg(o, len(legs), "quit", save, 0, check)
     finally:
         stop.set()
         if lobby_proc:
             os.killpg(lobby_proc.pid, 9)
+    if only is not None and only < len(legs) - 1:
+        # One leg of a run in pieces: its own checks only; the run's checks come with the last play leg.
+        verdict = "FAIL" if failed else "LEG OK"
+        print(f"season run, leg {only} of {len(legs)}: {verdict}")
+        oc.put_result("release4", f"{os.path.basename(o['keep'])} leg {only}", verdict, "; ".join(failed[:2]),
+                      o["keep"])
+        return 1 if failed else 0
+    if only is not None:                        # the run's checks over the legs of the folder
+        o["seasons_seen"] = [[int(x) for x in text(os.path.join(o["keep"], f"leg{n:02d}", "lobby-seasons.txt"))
+                              .split()] for n in range(len(legs))]
+        dates = DATE.findall(text(os.path.join(o["keep"], f"leg{len(legs) - 1:02d}", "shots", "host-stderr.txt")))
+        last = (int(dates[-1][0]), int(dates[-1][1])) if dates else last
     reports = [os.path.join(o["keep"], f"leg{n:02d}", "report.tsv") for n in range(len(legs))]
     comps = [c for r in reports if os.path.exists(r) for c in rrc.read_report(r)[1]]
     stalls = rrc.league_stalls(comps)
