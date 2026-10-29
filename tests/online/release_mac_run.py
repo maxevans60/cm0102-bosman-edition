@@ -6,7 +6,7 @@ Usage:
     python3 tests/online/release_mac_run.py <cm0102_recomp> [<game folder>] [--server real|local|<address>]
         [--out <folder>]
 
---server real (the default) is https://bosman-online.maxvert.workers.dev. local starts a local copy of server/
+--server real (the default) is https://online.cm0102bosman.co.uk. local starts a local copy of server/
 (`npx wrangler dev`, as tests/smoke/network_run.py --lobby does); use it before a run against the real server.
 The game folder defaults to /Users/max/Projects/cm0102/clean-3968. --out defaults to a new folder under
 run-logs/s9-tests/.

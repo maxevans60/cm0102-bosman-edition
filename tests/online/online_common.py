@@ -22,7 +22,7 @@ import network_run as nr  # noqa: E402
 
 HOLD = "/Users/max/Projects/cm0102/run-logs/HOLD"
 RUN_LOGS = "/Users/max/Projects/cm0102/run-logs/s9-tests"
-REAL_LOBBY = "https://bosman-online.maxvert.workers.dev"
+REAL_LOBBY = "https://online.cm0102bosman.co.uk"
 GAME = "/Users/max/Projects/cm0102/clean-3968"
 NAME_DUMP = "dump {d}/host-1-name.bmp"
 

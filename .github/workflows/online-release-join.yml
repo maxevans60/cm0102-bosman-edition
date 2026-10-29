@@ -23,7 +23,7 @@ on:
   workflow_dispatch:
     inputs:
       lobby_url:
-        description: "The lobby address, for example https://bosman-online.maxvert.workers.dev"
+        description: "The lobby address, for example https://online.cm0102bosman.co.uk"
         required: true
       game_name:
         description: "The name of the host's game, one word (github_join_run.py gives 00S9-<time>)"
@@ -106,7 +106,7 @@ jobs:
       - name: Join the game on the Mac
         shell: bash
         env:
-          LOBBY_URL: ${{ inputs.lobby_url || 'https://bosman-online.maxvert.workers.dev' }}
+          LOBBY_URL: ${{ inputs.lobby_url || 'https://online.cm0102bosman.co.uk' }}
           GAME_NAME: ${{ inputs.game_name || '00S9-CI' }}
           WAIT_MINUTES: ${{ inputs.wait_minutes || '40' }}
         run: |
