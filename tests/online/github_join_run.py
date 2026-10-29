@@ -4,7 +4,8 @@ game that this Mac hosts over the internet, with scripted clicks.
 
 Usage:
     python3 tests/online/github_join_run.py <cm0102_recomp> [--game <folder>] [--server real|<address>]
-        [--push] [--run-id <id>] [--name <game name>] [--host-wait-minutes 45]
+        [--push --appimage <0.7.0 AppImage> [--win-build build-win]] [--run-id <id>] [--name <game name>]
+        [--host-wait-minutes 45]
         [--out <folder>]
 
 The workflow is .github/workflows/online-release-join.yml, and its joiner is tests/online/remote_join.py.
@@ -15,11 +16,14 @@ The steps:
     1  Wait for room (online_common.wait_for_room). The host makes a game named "00S9-<time>" (or --name): one
        word, because the type step reads one word, and 00 makes it the first row of the joiners' list
        (remote_join.py).
-    2  --push: push this checkout's commit to the branch online-ci-test (never main). The workflow's push
+    2  --push: put the packages on the draft release ci-online-test (visible only with write access): the
+       AppImage of --appimage (tools/linux/make_appimage.sh or its container step) and a zip of --win-build's
+       cm0102_recomp.exe and seasons folder with the game folder. Then push this checkout's commit to the branch online-ci-test (never main). The workflow's push
        trigger starts it with the game name 00S9-CI and the real lobby; the run's id comes from `gh run list`.
        (GitHub starts workflow_dispatch only for a workflow on the default branch, which the 0.6.0 work owns.)
        Without --push the script prints the push command and finds the run in `gh run list` while the host
-       waits. Max allowed pushes of online branches (Q43).
+       waits. Max allowed pushes of online branches (Q43). Before the push the script checks brief rule 10 (no
+       commit from before the history rewrite). After the run it deletes the draft release.
     3  The host waits at its Enter Name for --host-wait-minutes (default 45: the build takes about 20 minutes and
        the two joiners join one at a time or together), then types its own names, as in network_run.py.
     4  With a run id (--push, a run found while the host waits, or --run-id): `gh run watch`, then `gh run download`
@@ -57,9 +61,65 @@ def gh(*args, timeout=120):
     return subprocess.run(["gh", *args], capture_output=True, text=True, timeout=timeout)
 
 
+RELEASE_TAG = "ci-online-test"           # the draft release that the workflow reads; deleted after the run
+OLD_MAIN = "0e9a510c"                    # a commit of main from before the rewrite of 29 October (brief rule 10)
+
+
+def git(*args):
+    return subprocess.run(["git", "-C", oc.REPO, *args], capture_output=True, text=True)
+
+
+def push_allowed():
+    """Brief rule 10: fetch, then refuse a push of a branch that holds a commit from before the history rewrite."""
+    git("fetch", "-q", "origin")
+    if git("cat-file", "-e", OLD_MAIN).returncode == 0 and \
+            git("merge-base", "--is-ancestor", OLD_MAIN, "HEAD").returncode == 0:
+        return f"HEAD holds {OLD_MAIN}, a commit from before the rewrite"
+    if not git("merge-base", "HEAD", "origin/main").stdout.strip():
+        return "HEAD has no merge base with origin/main"
+    return None
+
+
+def make_draft(appimage, win_build, game, folder):
+    """The draft release with the two packages: the AppImage, and a zip of the Windows program, its seasons folder
+    and the game folder. A draft is visible only to people with write access. Returns None or the reason."""
+    if not os.path.exists(appimage) or not os.path.exists(os.path.join(win_build, "cm0102_recomp.exe")):
+        return f"no package: {appimage} or {win_build}/cm0102_recomp.exe"
+    win_zip = os.path.join(folder, "windows-joiner.zip")
+    linux = os.path.join(folder, "linux-joiner.AppImage")
+    if os.path.exists(win_zip):
+        os.remove(win_zip)
+    subprocess.run(["zip", "-q", "-j", win_zip, os.path.join(win_build, "cm0102_recomp.exe")], check=True)
+    subprocess.run(["zip", "-q", "-r", win_zip, "seasons"], cwd=win_build, check=True)
+    subprocess.run(["zip", "-q", "-r", win_zip, "game"], cwd=_game_link(game, folder), check=True)
+    if os.path.exists(linux):
+        os.remove(linux)
+    os.link(appimage, linux)
+    gh("release", "delete", RELEASE_TAG, "--yes")
+    r = gh("release", "create", RELEASE_TAG, "--draft", "--target", git("rev-parse", "HEAD").stdout.strip(),
+           "--title", "CI online test (draft, deleted after the run)",
+           "--notes", "Packages for .github/workflows/online-release-join.yml. Not a release.", win_zip, linux,
+           timeout=3600)
+    return None if r.returncode == 0 else f"gh release create failed: {r.stderr.strip()[:200]}"
+
+
+def _game_link(game, folder):
+    """A folder whose "game" entry is the game folder, for the zip's game/ prefix."""
+    d = os.path.join(folder, "zip-root")
+    os.makedirs(d, exist_ok=True)
+    link = os.path.join(d, "game")
+    if not os.path.islink(link):
+        os.symlink(game, link)
+    return d
+
+
 def push_test_branch():
     """Pushes this checkout's commit to the test branch, which starts the workflow with its default inputs
     (game name CI_NAME, the real lobby). Returns the run id, or None. Never main."""
+    why = push_allowed()
+    if why:
+        print(f"no push: {why}")
+        return None
     t0 = time.time()
     r = subprocess.run(["git", "-C", oc.REPO, "push", "--force", "origin", f"HEAD:refs/heads/{TEST_BRANCH}"],
                        capture_output=True, text=True)
@@ -94,7 +154,7 @@ def main(argv):
         print(__doc__)
         return 2
     program = os.path.abspath(args.pop(0))
-    o = {"game": oc.GAME, "server": "real", "run": None, "wait": "45", "out": None, "name": None}
+    o = {"game": oc.GAME, "server": "real", "run": None, "wait": "45", "out": None, "name": None, "appimage": None, "win": os.path.join(oc.REPO, "build-win")}
     do_push = False
     while args:
         k = args.pop(0)
@@ -105,7 +165,7 @@ def main(argv):
             print(__doc__)
             return 2
         key = {"--game": "game", "--server": "server", "--run-id": "run", "--host-wait-minutes": "wait",
-               "--out": "out", "--name": "name"}.get(k)
+               "--out": "out", "--name": "name", "--appimage": "appimage", "--win-build": "win"}.get(k)
         if not key:
             print(__doc__)
             return 2
@@ -129,6 +189,13 @@ def main(argv):
         if not ok:
             failed.append(text)
 
+    if do_push:
+        why = push_allowed() or make_draft(o["appimage"] or "", o["win"], o["game"], out)
+        if why:
+            check(False, f"the draft release with the packages: {why}")
+            oc.put_result("release3", "all", "FAIL", why, out)
+            return 1
+        print(f"the draft release {RELEASE_TAG} holds the packages", flush=True)
     oc.wait_for_room()
     host, err = nr.start(program, o["game"], os.path.join(out, "work"), "host", oc.host_steps(name, wait_ms), out,
                          1, {"RECOMP_LOBBY_URL": url})
@@ -190,6 +257,9 @@ def main(argv):
                     check(share <= 0.01, f"4 {j} {suffix} equals the host's: {share:.2%} of pixels differ")
                 else:
                     check(False, f"4 {j} {suffix}: dump missing")
+    if do_push:
+        r = gh("release", "delete", RELEASE_TAG, "--yes")
+        check(r.returncode == 0, f"the draft release {RELEASE_TAG} deleted")
     verdict = "FAIL" if failed else "PASS" if run_id else "WAIT"
     oc.put_result("release3", "all", verdict, "; ".join(failed[:2]) or (f"run {run_id}" if run_id else
                                                                         "host only: no workflow run"), out)
