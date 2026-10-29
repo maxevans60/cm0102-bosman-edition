@@ -52,7 +52,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 80
     steps:
+      # Only the scripts: some file names under tests/seasons are too long for a Windows checkout.
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tests/online
+            tests/smoke
       - name: Download the package from the draft release
         shell: bash
         env:
@@ -71,6 +76,8 @@ jobs:
         run: |
           cd builds
           if [ "$RUNNER_OS" = Linux ]; then
+            # The AppImage brings SDL2 but not the libraries SDL2 loads (libpulse and others), which a desktop has.
+            sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends libsdl2-2.0-0
             chmod +x linux-joiner.AppImage
             ./linux-joiner.AppImage --appimage-extract > /dev/null
           else
