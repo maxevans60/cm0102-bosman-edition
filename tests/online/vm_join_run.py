@@ -87,10 +87,11 @@ def vm_up(vm):
     state = vm_state(vm)
     if state is None:
         raise SystemExit(f"vm_join_run.py: no virtual machine named {vm}")
-    if state == "suspended":
-        prl("resume", vm)
-    elif state == "stopped":
-        prl("start", vm)
+    r = prl("resume", vm) if state == "suspended" else prl("start", vm) if state == "stopped" else None
+    if r is not None and "only in Parallels Desktop for Mac Pro" in r.stdout + r.stderr:
+        # Checked 2026-10-29: this Mac has the standard edition, which refuses resume, start and exec from prlctl.
+        raise SystemExit("vm_join_run.py: prlctl needs Parallels Desktop Pro or Business Edition for resume, "
+                         "start and exec; this Mac's edition refuses them")
     end = time.time() + 600
     while time.time() < end:
         r = prl("exec", vm, "cmd", "/c", "echo", "ready", timeout=60)
