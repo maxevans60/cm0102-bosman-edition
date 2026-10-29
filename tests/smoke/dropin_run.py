@@ -20,6 +20,10 @@ game saves at its screen loop (net_session.c), and join2 sees "The host left the
 --kick (in place of the rejoin): join1 clicks Finish, the game starts, and the host opens the Network tab of the
 Options box. It clicks Kick for join1, then No (join1 stays), then Kick and Yes: join1's club goes on holiday and
 join1 sees "The host removed you from the game" (0.7.0 slice 7). The Network tab shows join1's ping.
+--drop-at-finish (in place of the rejoin): join1 clicks Finish, the host clicks Finish, and after the first news the
+script kills join1 when the host's left bar counts down to 0, so the host works out the day with join1 gone (slice
+9's four-player run, 2026-10-29). The host must show no box of
+the game ("scrman.cpp 2480" from ScreenManager::send_clear_click 0x800000) and go on to its first news.
 --leave (in place of the rejoin): join1 clicks Exit Game and Yes. The host sends it the quit packet (result -12,
 0x7fcd79), its club goes on holiday, and join1 shows no "The host left the game".
 
@@ -33,6 +37,7 @@ Checks:
     6 kick: No keeps join1, Yes kicks it (host log), join1's game shows "The host removed you from the game", and the Network
       tab showed join1's ping
     7 leave: join1 shows no "The host left the game"
+    8 drop at Finish: the host shows no box of the game and reaches its first news
 """
 import glob
 import os
@@ -212,10 +217,13 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = os.path.abspath(args[0]), os.path.abspath(args[1])
-    shots, slow, kick, leave, lobby_url = None, 1.0, False, False, None
+    shots, slow, kick, leave, lobby_url, dayquit = None, 1.0, False, False, None, False
     rest = args[2:]
     while rest:
         k = rest.pop(0)
+        if k == "--drop-at-finish":
+            dayquit = True
+            continue
         if k in ("--kick", "--leave"):
             kick, leave = kick or k == "--kick", leave or k == "--leave"
             continue
@@ -266,17 +274,30 @@ def main(argv):
             check(ready, "the host reaches Manager Status with its own manager")
             if ready:
                 # join1 joins and makes its manager. Without --kick it quits at the end of its steps.
-                quit_ms = 330000 if kick else None
+                quit_ms = 330000 if kick or dayquit else None
                 p1, e1 = start(program, game, work, "join1", join_steps(1, address, quit_ms=quit_ms, leave=leave), shots, slow,
                                   env)
                 procs.append(("join1", p1, e1))
+                if dayquit:
+                    # join1 quits while the host works out a day of the game: the left bar counts down to 0, then the
+                    # host works out the day and opens the next screens for each channel (slice 9's run: the box came
+                    # from the news screen 0x788eb3, through the menu bar build, to send_clear_click 0x800000).
+                    end = time.time() + 900 * slow
+                    while time.time() < end and host.poll() is None:
+                        h0 = text(host_log)
+                        at = h0.find("reached first-news")
+                        if at >= 0 and "left bar (|)|0|" in h0[at:]:
+                            break
+                        time.sleep(0.05)
+                    p1.kill()
+                    print("join1 killed when the host's left bar reached 0, after the first news")
                 p1.wait(timeout=(600 if kick else 240) * slow)
                 for _ in range(int(60 * slow)):    # the heartbeat comes every 30 s
                     away_after_drop = lobby_away(lobby_url)
                     if away_after_drop:
                         break
                     time.sleep(1)
-                if not kick and not leave:
+                if not kick and not leave and not dayquit:
                     time.sleep(4 * slow)
                     p2, e2 = start(program, game, work, "join2",
                                       join_steps(2, address, rejoin=True), shots, slow,
@@ -308,14 +329,18 @@ def main(argv):
 
         check(host.returncode == 0, f"1 host ended with code {host.returncode}")
         for name, p, _ in procs:
-            check(p.returncode == 0, f"1 {name} ended with code {p.returncode}")
+            if not dayquit:
+                check(p.returncode == 0, f"1 {name} ended with code {p.returncode}")
         h = text(host_log)
-        if kick:   # the host quits soon after the kick, before join1 ends: its own log shows Away
+        if kick or dayquit:   # the host quits before the heartbeat after the drop: its own log shows Away
             away_after_drop = [x.split("lobby: away 1 ", 1)[1] for x in h.splitlines() if "lobby: away 1 " in x] or None
         check(bool(away_after_drop) and len(away_after_drop) == 1 and away_after_drop[0] != "Arsenal",
               f"2 the lobby lists join1's club as Away after the {'kick' if kick else 'exit' if leave else 'drop'}: "
               f"{away_after_drop}")
-        if leave:
+        if dayquit:
+            check("message box from" not in h, "8 the host shows no box of the game after join1's drop (scrman.cpp 2480)")
+            check(os.path.exists(os.path.join(shots, "host-3-news.bmp")), "8 the host goes on to its first news")
+        elif leave:
             j1 = text(os.path.join(shots, "join1-stderr.txt"))
             check("The host left the game" not in j1, "7 join1 left by its own Exit Game and shows no host-left box")
         elif kick:

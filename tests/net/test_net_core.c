@@ -251,6 +251,36 @@ int main(void)
         nc_close(kl);
     }
 
+    /* A joiner that quits while the host works out a day (0.7.0, slice 9's four-player run): WinSock takes the host's
+     * sends after the peer closed and reports the close at the next recv, where the original's leave path runs
+     * (Network::receive_packet 0x77af20 at 0x77b4e9..0x77b508). A send that failed instead made send_packet 0x77ac30
+     * return 0, and ScreenManager::send_clear_click 0x800000 showed "scrman.cpp 2480" (0x8000e2..0x80013a). */
+    {
+        uint16_t dp = (uint16_t)(port + 6);
+        uint32_t dl = tcp();
+        nc_setopt(dl, NC_SOL_SOCKET, NC_SO_REUSEADDR, 1, 0);
+        nc_nonblocking(dl, 1);
+        CHECK(nc_bind(dl, loopback(), dp) == 0 && nc_listen(dl, 16) == 0, "drop listen: %d", nc_error());
+        uint32_t dc = tcp(), da = NC_INVALID;
+        CHECK(nc_connect(dc, loopback(), dp) == 0, "drop connect: %d", nc_error());
+        POLL((long)(da = nc_accept(dl, NULL, NULL)) == (long)NC_INVALID ? -1 : 0, r);
+        nc_close(dc);                                   /* the joiner quits */
+        uint8_t packet[200];
+        memset(packet, 7, sizeof packet);
+        int refused = 0;
+        for (int i = 0; i < 60; i++) {                  /* the host sends on: the system sees the reset in between */
+            if (nc_send(da, packet, sizeof packet) != (long)sizeof packet) refused++;
+            usleep(5000);
+        }
+        CHECK(refused == 0, "a send after the peer closed is taken until recv reports the close (%d refused)", refused);
+        long g = nc_recv(da, buf, sizeof buf);
+        CHECK(g == 0 || (g == -1 && nc_error() != HN_WOULDBLOCK), "then recv reports the close: %ld (%d)", g,
+              nc_error());
+        CHECK(nc_send(da, packet, sizeof packet) == -1, "and after that a send fails");
+        nc_close(da);
+        nc_close(dl);
+    }
+
     /* Item 10: the adapter table holds no loopback or 0 address, and each broadcast is in its subnet. */
     CHECK(n >= 0 && n <= 20, "adapters %d", n);
     for (int i = 0; i < n; i++) {
