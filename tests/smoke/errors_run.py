@@ -6,7 +6,8 @@ Usage:
         [--lobby-url URL]
 
 It uses the timed clicks of tests/smoke/network_run.py. Each case runs one game, or a host and a joiner, one case
-after the other: two network runs on one computer collide on port 6667. The local lobby is a copy of the server
+after the other: two network runs on one computer collide on port 6667, so start it through
+/Users/max/Projects/cm0102/lead-notes/tools/net-lock.sh. The local lobby is a copy of the server
 (server/, `npx wrangler dev`), or --lobby-url. A closed port stands in for a lobby that is down.
 
 Cases (each checks the text in the game's log: "join box:" and "create box:" come from the wrap of confirm_push
@@ -132,13 +133,6 @@ def closed_port():
     return f"http://127.0.0.1:{port}"
 
 
-def other_network_runs():
-    """Network runs of other worktrees (slice 5's note): their games' paths hold "online-s"."""
-    out = subprocess.run(["ps", "-axo", "pid=,command="], capture_output=True, text=True).stdout
-    mine = os.path.abspath(__file__).split("/tests/")[0]
-    return [l for l in out.splitlines() if "cm0102_recomp" in l and "online-s" in l and mine not in l]
-
-
 def main(argv):
     args = argv[1:]
     if len(args) < 2:
@@ -197,9 +191,6 @@ def main(argv):
             return open(p, errors="replace").read() if os.path.exists(p) else ""
 
         def run(name, steps, env=None, online=True, timeout=240):
-            while other_network_runs():
-                print(f"waiting for another worktree's network run before {name}", flush=True)
-                time.sleep(20)
             p, err = nr.start(program, game, work, name, steps, shots, slow, env or {}, online)
             try:
                 p.wait(timeout=timeout * slow)
