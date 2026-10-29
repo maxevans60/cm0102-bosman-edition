@@ -66,24 +66,35 @@ static int probe_on(void)
     return on;
 }
 
-#define PROBE_CALL(addr, label, extra)                                                                     \
-    void o_##addr(void);                                                                                   \
-    RT_WRAP(addr, probe_##addr)                                                                            \
-    {                                                                                                      \
-        if (!probe_on()) {                                                                                 \
-            o_##addr();                                                                                    \
-            return;                                                                                        \
-        }                                                                                                  \
-        uint32_t a0 = rt_arg(0), caller = rd32(g_mem, cpu.esp);                                            \
-        extra;                                                                                             \
-        o_##addr();                                                                                        \
-        fprintf(stderr, "recomp: probe %s arg %d gives %d from %#x\n", label, (int)a0, (int)cpu.eax, caller); \
+/* Calls the original orig with the probe's lines around it. tools/recomp/recomp.py finds a wrap only by a line that
+ * starts with RT_WRAP(<address>, so each wrap below is written out. */
+static void probe_call(void (*orig)(void), const char *label)
+{
+    if (!probe_on()) {
+        orig();
+        return;
     }
+    uint32_t a0 = rt_arg(0), caller = rd32(g_mem, cpu.esp);
+    orig();
+    fprintf(stderr, "recomp: probe %s arg %d gives %d from %#x\n", label, (int)a0, (int)cpu.eax, caller);
+}
 
-PROBE_CALL(00727c30, "0x727c30 confirm input", (void)0)
-PROBE_CALL(00725ca0, "0x725ca0 match input",
-           fprintf(stderr, "recomp: probe 0x725ca0 channel %d b77c84 %#x dd6be0 %#x dd6be4 %#x\n",
-                   (int16_t)rd16(g_mem, 0xb74450u + 0x382a), rd32(g_mem, 0xb77c84u), rd32(g_mem, 0xdd6be0u),
-                   rd32(g_mem, 0xdd6be4u)))
-PROBE_CALL(00725f70, "0x725f70 confirm open", (void)0)
-PROBE_CALL(00788010, "0x788010", (void)0)
+void o_00727c30(void);
+void o_00725ca0(void);
+void o_00725f70(void);
+void o_00788010(void);
+
+RT_WRAP(00727c30, probe_confirm_input) { probe_call(o_00727c30, "0x727c30 confirm input"); }
+
+RT_WRAP(00725ca0, probe_match_input)
+{
+    if (probe_on())
+        fprintf(stderr, "recomp: probe 0x725ca0 channel %d b77c84 %#x dd6be0 %#x dd6be4 %#x\n",
+                (int16_t)rd16(g_mem, 0xb74450u + 0x382a), rd32(g_mem, 0xb77c84u), rd32(g_mem, 0xdd6be0u),
+                rd32(g_mem, 0xdd6be4u));
+    probe_call(o_00725ca0, "0x725ca0 match input");
+}
+
+RT_WRAP(00725f70, probe_confirm_open) { probe_call(o_00725f70, "0x725f70 confirm open"); }
+
+RT_WRAP(00788010, probe_788010) { probe_call(o_00788010, "0x788010"); }
