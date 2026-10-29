@@ -96,7 +96,7 @@ def make_draft(appimage, win_build, game, folder):
         os.remove(linux)
     os.link(appimage, linux)
     gh("release", "delete", RELEASE_TAG, "--yes")
-    r = gh("release", "create", RELEASE_TAG, "--draft", "--target", git("rev-parse", "HEAD").stdout.strip(),
+    r = gh("release", "create", RELEASE_TAG, "--draft",          # no --target: the commit is not on GitHub yet
            "--title", "CI online test (draft, deleted after the run)",
            "--notes", "Packages for .github/workflows/online-release-join.yml. Not a release.", win_zip, linux,
            timeout=3600)
