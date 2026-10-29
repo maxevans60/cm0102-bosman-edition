@@ -46,9 +46,8 @@ def port_6667_users():
 
 
 def other_network_games(rows=None):
-    """Games that this process did not start and that play a network game: a game of another 0.7.0 worktree (a
-    path with "online-s"), or any process that listens on port 6667. Slice 5's note: two network runs on one Mac
-    both listen on port 6667 of the same adapters, and the second host fails."""
+    """Processes that this process did not start and that listen on port 6667 (a network host). Slice 5's note:
+    two network runs on one Mac both listen on port 6667 of the same adapters, and the second host fails."""
     rows = rows or processes()
     parent = {pid: ppid for pid, ppid, _ in rows}
     me = os.getpid()
@@ -61,9 +60,10 @@ def other_network_games(rows=None):
                 return False
             pid = parent[pid]
         return False
+    # Since 29 October other 0.7.0 games may run beside ours (up to 14), and lead-notes/tools/net-lock.sh keeps
+    # network hosts apart; so only a listener on port 6667 counts.
     listeners = port_6667_users()
-    return [pid for pid, _, cmd in rows if not mine(pid) and (
-        pid in listeners or (cmd.split(" ", 1)[0].endswith("cm0102_recomp") and "online-s" in cmd))]
+    return [pid for pid, _, _ in rows if pid in listeners and not mine(pid)]
 
 
 def room(max_games=15):
