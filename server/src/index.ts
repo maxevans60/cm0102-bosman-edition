@@ -1,13 +1,13 @@
 // Bosman Edition lobby and relay (0.7.0, #45, slice 3). The API contract is in README.md.
 // This Worker logs nothing, so no log line can hold an internet address (Q26).
-import { err, fail, json, toResponse } from "./http";
-import { cachedAnswer, refused, withinLimits } from "./flood";
+import { err, fail, json, toResponse, type Result } from "./http";
+import { cachedAnswer, forgetAnswers, refused, withinLimits } from "./flood";
 import { joinPage } from "./join";
 import { CODE_RE, FieldError, parseHeartbeat, parseJoin, parseRegister } from "./validate";
 
 export { Lobby } from "./lobby";
 export { Relay } from "./relay";
-export { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, clearAnswerCache, setAnswerCacheMs } from "./flood";
+export { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, WRITE_LIMIT_48, clearAnswerCache, setAnswerCacheMs } from "./flood";
 
 const MAX_BODY_BYTES = 4096;
 
@@ -89,7 +89,9 @@ async function route(request: Request, env: Env): Promise<Response> {
     if (method === "GET") return toResponse(await cachedAnswer("list", () => lobby(env).list()));
     if (method === "POST") {
       const input = parseRegister(await readBody(request, true));
-      return toResponse(await lobby(env).register(input, address(request)));
+      const r = (await lobby(env).register(input, address(request))) as Result;
+      if (r.ok) forgetAnswers(typeof r.body.code === "string" ? r.body.code : null);
+      return toResponse(r);
     }
     return fail("method_not_allowed");
   }
@@ -99,16 +101,20 @@ async function route(request: Request, env: Env): Promise<Response> {
 
   if (parts.length === 3) {
     if (method === "GET") return toResponse(await cachedAnswer(`get:${code}`, () => lobby(env).get(code)));
-    if (method === "DELETE") return toResponse(await lobby(env).close(code, bearer(request)));
+    if (method === "DELETE") {
+      const r = (await lobby(env).close(code, bearer(request))) as Result;
+      if (r.ok) forgetAnswers(code);
+      return toResponse(r);
+    }
     return fail("method_not_allowed");
   }
 
   switch (parts[3]) {
     case "heartbeat":
       if (method !== "POST") return fail("method_not_allowed");
-      return toResponse(
-        await lobby(env).heartbeat(code, bearer(request), parseHeartbeat(await readBody(request, false)), address(request)),
-      );
+      const beat = (await lobby(env).heartbeat(code, bearer(request), parseHeartbeat(await readBody(request, false)), address(request))) as Result;
+      if (beat.ok) forgetAnswers(code);
+      return toResponse(beat);
     case "join":
       if (method !== "POST") return fail("method_not_allowed");
       return toResponse(await lobby(env).join(code, parseJoin(await readBody(request, true)), address(request)));

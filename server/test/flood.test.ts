@@ -1,7 +1,7 @@
 // Layer 1 against call floods: a limit for each internet address at the start of the Worker,
 // before any Durable Object call, and a short-lived copy of the list in the Worker's memory.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import worker, { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, setAnswerCacheMs } from "../src/index";
+import worker, { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, WRITE_LIMIT_48, setAnswerCacheMs } from "../src/index";
 import wranglerConfig from "../wrangler.jsonc?raw";
 import { BASE, call, freshIp, gameBody, json, register, resetObjects } from "./helpers";
 
@@ -48,6 +48,16 @@ describe("limit for each internet address (Workers Rate Limiting binding)", () =
     expect((await call("/v1/games", { ip })).status).toBe(200);
   });
 
+  it(`counts the writes of one IPv6 /48 site together: ${WRITE_LIMIT_48} a minute`, async () => {
+    const host = await register();
+    const join = (ip: string) =>
+      call(`/v1/games/${host.code}/join`, { method: "POST", ip, body: { version: "0.7.0", name: "Ann" } });
+    for (let i = 0; i < WRITE_LIMIT_48; i++) expect((await join(`2001:db8:99:${i.toString(16)}::1`)).status, `join ${i + 1}`).toBe(200);
+    await expectRefused(await join("2001:db8:99:ffff::1"));
+    expect((await call("/v1/games", { ip: "2001:db8:99:ffff::1" })).status).toBe(200);
+    expect((await join("2001:db8:9a:1::1")).status).toBe(200);
+  }, 30_000);
+
   it("refuses a relay connection too, before the relay object is asked", async () => {
     const ip = freshIp();
     for (let i = 0; i < CALL_LIMIT; i++) await call("/v1/health", { ip });
@@ -65,7 +75,7 @@ describe("limit for each internet address (Workers Rate Limiting binding)", () =
 
   it("lets a busy home through: 2 hosts and joiners behind one address, a list every 5 s from 4 games", async () => {
     // In one minute from one address: 2 registers, 8 heartbeats, 6 joins, and 4 games that each ask for the list
-    // every 5 s (the game keeps its list 5 s, LIST_CACHE_MS in net_lobby.c): 48 lists. 64 calls, 8 writes.
+    // every 5 s (the most: the game keeps its list 5 s, LIST_CACHE_MS in net_lobby.c): 48 lists. 64 calls, 8 writes.
     const ip = freshIp();
     const hosts = [];
     for (let i = 0; i < 2; i++) hosts.push(await register({}, ip));
@@ -86,6 +96,7 @@ describe("Wrangler config", () => {
     const byName = Object.fromEntries(config.ratelimits.map((r: any) => [r.name, r.simple]));
     expect(byName.RATE_CALLS).toEqual({ limit: CALL_LIMIT, period: 60 });
     expect(byName.RATE_WRITES).toEqual({ limit: WRITE_LIMIT, period: 60 });
+    expect(byName.RATE_WRITES_48).toEqual({ limit: WRITE_LIMIT_48, period: 60 });
   });
 });
 
@@ -146,6 +157,14 @@ describe("the refusal does no work", () => {
       expect(k).not.toContain("203");
     }
     expect(keys[0]).not.toBe(keys[1]);
+    const salted: string[] = [];
+    const s = refusingEnv(salted);
+    await worker.fetch(
+      new Request(`${BASE}/v1/games`, { headers: { "CF-Connecting-IP": ip } }),
+      Object.assign(s.env, { RATE_KEY_SALT: "secret" }),
+    );
+    expect(salted[0]).toMatch(/^[0-9a-f]{32}$/);
+    expect(salted[0]).not.toBe(keys[0]);
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(Date.now() + 86_400_000);
     await worker.fetch(new Request(`${BASE}/v1/games`, { headers: { "CF-Connecting-IP": ip } }), env);
@@ -187,6 +206,34 @@ describe("the Worker's copy of the list", () => {
     vi.spyOn(Date, "now").mockImplementation(() => t0 + 2_000);
     expect(await list()).toBe("GAME2");
     expect(lobbyCalls).toBe(2);
+  });
+
+  it("shows a new game at once and a closed game as gone at once, through the same Worker", async () => {
+    const ip = freshIp();
+    expect((await json(await call("/v1/games", { ip }))).games).toEqual([]);
+    const g = await register({}, ip);
+    expect((await json(await call("/v1/games", { ip }))).games.map((x: any) => x.code)).toContain(g.code);
+    expect((await call(`/v1/games/${g.code}`, { ip })).status).toBe(200);
+    await call(`/v1/games/${g.code}/heartbeat`, { method: "POST", ip, token: g.hostToken, body: { day: "2001-12-01" } });
+    expect((await json(await call(`/v1/games/${g.code}`, { ip }))).game.day).toBe("2001-12-01");
+    await call(`/v1/games/${g.code}`, { method: "DELETE", ip, token: g.hostToken });
+    expect((await call(`/v1/games/${g.code}`, { ip })).status).toBe(404);
+    expect((await call(`/join/${g.code}`, { ip })).status).toBe(404);
+    expect((await json(await call("/v1/games", { ip }))).games).toEqual([]);
+  });
+
+  it("does not keep a game-not-open answer", async () => {
+    let n = 0;
+    const env = {
+      LOBBY: {
+        idFromName: () => ({}),
+        get: () => ({
+          get: async () => (++n === 1 ? { ok: false, error: "unknown_game" } : { ok: true, body: { game: { code: "ABCDEFGH" } } }),
+        }),
+      },
+    } as unknown as Env;
+    expect((await worker.fetch(new Request(`${BASE}/v1/games/ABCDEFGH`), env)).status).toBe(404);
+    expect((await worker.fetch(new Request(`${BASE}/v1/games/ABCDEFGH`), env)).status).toBe(200);
   });
 
   it("does not keep a failed list answer", async () => {

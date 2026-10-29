@@ -16,9 +16,11 @@ import type { Result } from "./http";
 import { addressPrefix } from "./lobby";
 
 /** Calls in 60 s from one address. Must match RATE_CALLS in wrangler.jsonc. */
-export const CALL_LIMIT = 120;
+export const CALL_LIMIT = 180;
 /** Registers, joins and closes in 60 s from one address. Must match RATE_WRITES in wrangler.jsonc. */
-export const WRITE_LIMIT = 10;
+export const WRITE_LIMIT = 20;
+/** Writes in 60 s from one IPv6 /48 network. Must match RATE_WRITES_48 in wrangler.jsonc. */
+export const WRITE_LIMIT_48 = 60;
 export const REFUSED_RETRY_SECONDS = 60;
 export const ANSWER_CACHE_MS = 2_000;
 let cacheMs = ANSWER_CACHE_MS;
@@ -28,10 +30,19 @@ interface Limiter {
   limit(options: { key: string }): Promise<{ success: boolean }>;
 }
 
-export async function limiterKey(address: string, now = Date.now()): Promise<string> {
+/**
+ * The limiter's key for an address prefix: a hash with the UTC date and a salt. The salt is the
+ * secret RATE_KEY_SALT when Max sets one (wrangler secret put RATE_KEY_SALT), else a constant.
+ */
+export async function limiterKey(prefix: string, salt = "", now = Date.now()): Promise<string> {
   const day = new Date(now).toISOString().slice(0, 10);
-  const h = await sha256(`bosman-rate|${day}|${addressPrefix(address)}`);
+  const h = await sha256(`bosman-rate|${salt}|${day}|${prefix}`);
   return [...h.slice(0, 16)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** The first 48 bits of an IPv6 address (a whole site), or null for IPv4. */
+export function prefix48(address: string): string | null {
+  return address.includes(":") ? addressPrefix(address).split(":").slice(0, 3).join(":") : null;
 }
 
 /** True when the call may go on. A missing or failing limiter lets the call through. */
@@ -56,10 +67,20 @@ export function isWrite(method: string, parts: string[]): boolean {
 export async function withinLimits(request: Request, env: Env, parts: string[]): Promise<boolean> {
   const address = request.headers.get("CF-Connecting-IP");
   if (address === null) return true;
-  const limits = env as unknown as { RATE_CALLS?: Limiter; RATE_WRITES?: Limiter };
-  const key = await limiterKey(address);
+  const limits = env as unknown as {
+    RATE_CALLS?: Limiter;
+    RATE_WRITES?: Limiter;
+    RATE_WRITES_48?: Limiter;
+    RATE_KEY_SALT?: string;
+  };
+  const salt = typeof limits.RATE_KEY_SALT === "string" ? limits.RATE_KEY_SALT : "";
+  const key = await limiterKey(addressPrefix(address), salt);
   if (!(await allow(limits.RATE_CALLS, key))) return false;
-  return !isWrite(request.method, parts) || (await allow(limits.RATE_WRITES, key));
+  if (!isWrite(request.method, parts)) return true;
+  if (!(await allow(limits.RATE_WRITES, key))) return false;
+  // One IPv6 site has 65,536 /64 networks: its writes also count together.
+  const site = prefix48(address);
+  return site === null || (await allow(limits.RATE_WRITES_48, await limiterKey(`48|${site}`, salt)));
 }
 
 const REFUSED_JSON = JSON.stringify({
@@ -90,11 +111,17 @@ export async function cachedAnswer(name: string, ask: () => Promise<Result>): Pr
   const hit = answers.get(name);
   if (cacheMs > 0 && hit !== undefined && now < hit.until) return hit.result;
   const result = await ask();
-  if (result.ok || result.error === "unknown_game") {
+  if (result.ok) {
     if (answers.size >= ANSWER_CACHE_MAX) answers.clear();
     answers.set(name, { until: now + cacheMs, result });
   }
   return result;
+}
+
+/** Drops the copies that a register, heartbeat or close in this Worker makes old. */
+export function forgetAnswers(code: string | null) {
+  answers.delete("list");
+  if (code !== null) answers.delete(`get:${code}`);
 }
 
 export function clearAnswerCache() {
