@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       lobby_url:
-        description: "The lobby address, for example https://bosman-online.<account>.workers.dev"
+        description: "The lobby address, for example https://online.cm0102bosman.co.uk"
         required: true
       game_name:
         description: "The name of the host's game: one word of letters and digits, unique in the lobby"

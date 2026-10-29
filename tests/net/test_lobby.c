@@ -100,7 +100,8 @@ static void test_http(uint16_t port)
           !strcmp(a->code, "version_mismatch") && strstr(a->body, "\"0.7.1\"}"),
           "an error answer gives its code: %s", a->code);
     CHECK(lobby_http(base, "GET", "/full", NULL, NULL, 3000, a) == LH_FULL_TODAY, "full_today");
-    CHECK(lobby_http(base, "GET", "/cf429", NULL, NULL, 3000, a) == LH_FULL_TODAY, "429 without the header: full");
+    CHECK(lobby_http(base, "GET", "/cf429", NULL, NULL, 3000, a) == LH_UNAVAILABLE,
+          "429 without the header (Cloudflare's rate limit): unavailable");
     CHECK(lobby_http(base, "GET", "/cf1027", NULL, NULL, 3000, a) == LH_FULL_TODAY, "error 1027: full");
     CHECK(lobby_http(base, "GET", "/ray1027", NULL, NULL, 3000, a) == LH_UNAVAILABLE, "1027 in a Ray ID: unavailable");
     CHECK(lobby_http(base, "GET", "/cf500", NULL, NULL, 3000, a) == LH_UNAVAILABLE, "another answer: unavailable");
