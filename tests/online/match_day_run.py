@@ -68,6 +68,8 @@ def loop_steps(t0, minutes, who, bids=False):
             # clicks Continue Game at (45, 120) in place of Space (a guess: the key gives a second input, 129).
             steps += [f"{t} click 45 120", f"{t + 1500} click 705 573", f"{t + 3000} click 45 120",
                       f"{t + 5000} {BID[0]}", f"{t + 7000} {BID[1]}"]
+            if i < 40 and i % 4 == 0:      # the screen that Continue Game opens on the joiner
+                steps.append(f"{t + 1000} dump {{d}}/{who}-continue-{i:03d}.bmp")
         else:
             steps += [f"{t} press space", f"{t + 1500} click 45 120"]
         steps += [f"{t + period - 2000} click 705 573"]
@@ -163,6 +165,17 @@ def main(argv):
             # host's Finish at 90 s; then the loop.
             steps = snr.join_new(o, 1, 1, 60000 - 30000, 10 ** 9, add=True)
             steps = [s for s in steps if not s.endswith(" quit") and "-4-game" not in s]
+            # The joiner's new manager has no team picked, so on the day of its own friendly Continue Game showed
+            # "Team Selection: You have not selected any outfield players" with Ok, and the match never started
+            # (run matchday10, 2026-10-29). Its squad screen's Assistant > Pick best team picks it (best_xi_run.py).
+            steps += [
+                f"{finish + 5000} click 45 165",            # the manager's menu
+                f"{finish + 7500} click 150 156",           # the club's squad
+                f"{finish + 11000} click 592 135",          # Assistant
+                f"{finish + 13000} click 540 159",          # Pick best team
+                f"{finish + 16000} dump {{d}}/join1-picked.bmp",
+                f"{finish + 17000} click 358 573",          # Back
+            ]
             steps += loop_steps(finish + 30000, minutes, "join1", bids=True)
             jp, jerr = snr.start(o, keep, "join1", steps, shots, env, {"display": "classic"})
         for p in (jp, hp):
