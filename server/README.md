@@ -36,28 +36,64 @@ Privacy (Q26) depends on these rules:
 - Do not turn on Workers Logs, Logpush or a tail Worker. `wrangler.jsonc` sets `observability.enabled` to false, and a test checks it.
 - Do not run `wrangler tail`. It shows each request's headers, and these include the internet address.
 
-## Free plan
+## Free plan and paid plan
 
-Figures checked on 2026-10-27 on developers.cloudflare.com (Workers limits and Durable Objects pricing):
+Figures checked on 2026-10-29 on developers.cloudflare.com (Workers pricing and limits, Durable Objects pricing). The limits are for the whole Cloudflare account. Max's account also runs Elodie's two Durable Objects, which use about 900 Durable Object requests a day.
 
-| Limit | Free plan |
-|---|---|
-| Worker requests | 100,000 a day, reset at 00:00 UTC. Over the limit, Cloudflare answers with its own error page, error 1027, and the Worker does not run. |
-| Worker CPU time | 10 ms for each request |
-| Durable Object requests | 100,000 a day. 20 incoming WebSocket messages count as 1 request. |
-| Durable Object run time | 13,000 GB-s a day. An object is billed at 128 MB while it is awake. |
-| Durable Object storage | SQLite-backed objects only, 5 GB, 100,000 rows written a day |
+| Limit | Free plan | Workers Paid ($5 a month minimum) |
+|---|---|---|
+| Worker requests | 100,000 a day, reset at 00:00 UTC. Over the limit, Cloudflare answers with its own error page (error 1027) and the Worker does not run. | 10 million a month, then $0.30 a million |
+| Durable Object requests | 100,000 a day. 20 incoming WebSocket messages count as 1 request. | 1 million a month, then $0.15 a million |
+| Durable Object run time | 13,000 GB-s a day | 400,000 GB-s a month, then $12.50 a million GB-s |
+| Durable Object rows written | 100,000 a day | 50 million a month |
 
-What one game uses:
+The free plan stops at its daily limit and the game shows "full today". The paid plan has no daily limit: it charges for use above the included amounts.
 
-- An open game sends a heartbeat every 30 s. That is 2,880 Worker requests and 2,880 Durable Object requests a day. About 30 games can stay open all day, with room for game list requests.
-- The lobby writes 1 row when a game registers, closes or expires. A heartbeat writes 1 row at most once a minute, also when a listed field changes. That is about 1,440 rows a day for each game, so the 100,000 free rows cover about 69 games open all day. The Worker request limit stops at about 30 games first. After an eviction, the list can show fields up to 60 s old until the next heartbeat. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
-- A relay is awake while frames flow. One awake relay uses 450 GB-s an hour, so the free plan gives about 28 relay hours a day in total.
-- A host that sends a batch every 50 ms sends 20 messages a second, which bills as 1 request a second, or 3,600 an hour. Each human manager adds to this.
+### When the relay is billed
+
+Cloudflare bills run time while an object handles a request or a message, and while it is idle in memory but cannot hibernate. A relay that can hibernate costs nothing while it waits, even with its sockets open. The relay keeps every rule for this, and `test/sleep.test.ts` checks them:
+
+- It accepts sockets with the Hibernation API (`acceptWebSocket`), never with `accept()`.
+- It starts no timer and sends no request of its own while it passes frames.
+- The runtime answers a text `ping` with `pong` (`setWebSocketAutoResponse`). The relay's code does not run, so a ping costs no run time.
+
+The game's own PING (slice 7) goes every 30 s through the relay. It is a binary frame, so it wakes the relay for a few milliseconds.
+
+### Measured on the live server
+
+Two-game run on 2026-10-29, 14:57 to 15:00 UTC: a host and one joiner on this Mac joined through `https://bosman-online.maxvert.workers.dev` (`tests/smoke/network_run.py --relay`, slice 5 build). The figures come from Cloudflare's GraphQL analytics (`durableObjectsPeriodicGroups`, `durableObjectsInvocationsAdaptiveGroups`, `workersInvocationsAdaptive`).
+
+| Part | Calls | Billed run time | For each call |
+|---|---|---|---|
+| Relay | 22 (2 connections, 20 messages) | 0.21 s awake, 0.027 GB-s, while the sockets were open for about 150 s in total | 0.0012 GB-s |
+| Lobby | 45 requests (register, heartbeats, lists, join, close) | 0.136 GB-s | 0.003 GB-s |
+| Worker | 47 requests | no run-time charge. Workers bill requests and CPU time, not run time. | |
+
+The relay slept between messages: it was awake for 0.21 s of the 150 s.
+
+### What a game uses
+
+Assumptions: the measured cost of each call, a heartbeat every 30 s, and slice 5's estimate of 7,000 relay messages an hour for 4 human managers who click about 20 times a minute. The message rate is an estimate, not a measurement of play. Slice 9's runs through the live server can measure it: billed requests = relay messages / 20.
+
+| Game | Durable Object requests | Run time | Worker requests |
+|---|---|---|---|
+| A 4-hour evening, 4 human managers | 1,920 (relay 1,400, lobby 520) | 35 GB-s | 520 |
+| An always-on game, open all day, nobody connected | 2,900 (heartbeats and the relay's hourly check) | 9 GB-s | 2,880 |
+
+Each human manager who stays connected but does not click adds 2 messages every 30 s (PING and PONG), which is about 290 billed requests a day.
+
+### How many games each plan carries
+
+| | Free plan, each day | Workers Paid, in the $5 each month | Workers Paid, above the $5 |
+|---|---|---|---|
+| 4-hour evenings | about 50 (Durable Object requests run out first) | about 520 (about 17 a day) | about $0.0007 for each further evening |
+| Always-on games | about 34 (Durable Object and Worker requests run out together) | about 11 | about $0.01 a month for each further game |
+
+The free plan's limits are daily, and the paid plan's are monthly. So the free plan carries more each month than the $5 includes, but it stops for the rest of the day at its limit. On the paid plan, 50 evenings every day (1,500 a month) cost about $5.30 a month. Run time is far from the limit on both plans.
+
+The lobby writes about 1,440 rows a day for each open game: 1 row when a game registers, closes or expires, and at most 1 row a minute from its heartbeats. The 100,000 free rows a day cover about 69 games open all day, so the request limits come first. After an eviction, the list can show fields up to 60 s old until the next heartbeat. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
 
 A stranger can use up the daily Worker requests with a simple flood, because the free plan has no request filter before the Worker. Online play then stops until 00:00 UTC, and LAN play still works. A Workers rate limit for each address is a possible later step.
-
-For slices 4 and 5, this means: send a batch only when there is data, and send nothing while the game waits. An idle relay hibernates after about 10 s and then costs no run time. Measure the real traffic in slice 2 and check these figures again.
 
 ## API contract (version 1)
 

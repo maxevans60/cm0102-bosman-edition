@@ -34,6 +34,8 @@ export class Relay extends DurableObject<Env> {
   now: () => number = () => Date.now();
   /** Test hook: when set, the relay records the header names and values of each request. */
   seenHeaders?: string[];
+  /** Test hook: counts the messages that woke the object (a "ping" answered by the runtime does not). */
+  handled = 0;
 
   // Memory copies of stored values. They are empty again after the object wakes from hibernation.
   private key: Uint8Array | null | undefined;
@@ -196,6 +198,7 @@ export class Relay extends DurableObject<Env> {
   }
 
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer): Promise<void> {
+    this.handled++;
     const a = ws.deserializeAttachment() as Attachment;
     if (a.r === "m") {
       if (typeof message === "string") return safeClose(ws, 1003, "binary_only");
