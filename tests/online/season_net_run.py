@@ -553,7 +553,7 @@ def main(argv):
     lobby_proc, stop = None, threading.Event()
     o["lobby"] = arg(argv, "--lobby-url")
     if not o["lobby"]:
-        port = 8690 + os.getpid() % 100
+        port = oc.free_port()
         lobby_proc = nr.start_lobby(port)
         if not lobby_proc:
             print("FAIL the local lobby (npx wrangler dev in server/) does not answer")

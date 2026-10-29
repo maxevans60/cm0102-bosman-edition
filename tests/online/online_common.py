@@ -126,6 +126,15 @@ class NetLock:
         self.proc.wait()
 
 
+def free_port():
+    """A TCP port on 127.0.0.1 that is free now, for a local lobby. A port from the process id (8590 + pid % 100)
+    clashed with another session's lobby (run matchday8, 2026-10-29)."""
+    import socket
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        return sock.getsockname()[1]
+
+
 def relay_in_build(program):
     """True when the build has slice 5's relay join (its log text "recomp: relay: joined")."""
     try:
