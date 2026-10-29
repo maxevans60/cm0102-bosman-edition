@@ -406,6 +406,10 @@ static int take_control(Sock *k)
     for (;;) {
         int part = take_one(k);
         if (part < 0) continue;
+        if (part == 3) {               /* no byte waits: the game's read must not run (see take_one) */
+            k->part_since = 0;
+            return 3;
+        }
         if (!part) {
             k->part_since = 0;
             return 0;
@@ -422,13 +426,16 @@ static int take_control(Sock *k)
     }
 }
 
-/* One step of take_control: -1 a control packet was taken, 0 the game's bytes or none, 1 part of one came, 2 fewer
- * than 5 bytes came, which may start either. */
+/* One step of take_control: -1 a control packet was taken, 0 the game's bytes or a close, 1 part of one came, 2 fewer
+ * than 5 bytes came, which may start either, 3 no byte waits. With 3 the game's recv gives "would block" and does not
+ * read: a control packet that came between the look and the read would else go to the game whole, as a packet of
+ * opcode 0xbe (slice 9's quit leg, 2026-10-29: the host's game read a PONG). */
 static int take_one(Sock *k)
 {
     {
         uint8_t p[NC_CONTROL_MAX + 4];
         long got = hn_peek(k->s, p, sizeof p);
+        if (got < 0 && hn_error() == HN_WOULDBLOCK) return 3;
         if (got <= 0) return 0;
         if (got < 5) return 2;
         size_t tag = strlen(CONTROL_TAG);
