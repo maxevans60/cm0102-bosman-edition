@@ -593,6 +593,99 @@ Finding for the server (slice 3). The local Workers runtime drops a Durable Obje
 - The game id of a restored save (the one-copy rule, Q23): today each hosting has a new id.
 - The lobby address of the release: empty until Max deploys the server. Tests set `RECOMP_LOBBY_URL`.
 
+## 13. Slice 6: drop in, drop out and host quit (2026-10-27)
+
+Slice 6 adds no game function and changes no packet. Files: `src/recomp_rt/win/net_session.c` (new), additions to `net_core.c`, `net_lobby.c`, `lobby.c`, `lobby_rows.c`, `user32.c`, `season.c` and `testrun.c`, `hn_set_keepalive` in `host/net_posix.c` and `net_win32.c`, and the optional `awayClubs` field of the server.
+
+### What the original already does
+
+- Drop. Section 7 holds: a closed or broken connection reaches `setup_on_network_player_left` 0x838c00, which puts a made manager on holiday (0x838c3e..0x838c41) and frees a row that is still being made (0x838c48). Holiday is the dword at +0x9a01 of the manager's row in the object [0xb63c98], rows of 0xa6ef bytes (`HUMAN_MANAGER::is_on_holiday` 0x5fd210 at 0x5fd2a5..0x5fd2d2). `set_on_holiday` 0x5fd2f0 counts holidays at +0xc of the object (0x5fd39a..0x5fd39e).
+- Rejoin. `setup_on_network_player_joined` 0x838a80 opens Manager Status (0x81ff10) when +8 (computer controlled) or +0xc (on holiday) of 0xb63c98 is above 0 (0x838a85..0x838a95). On Manager Status, a click on a manager's row (command 0x18, `setup_handle_manager_status_input` 0x820950 at 0x820b9d) takes the manager from the row's data (0x820bc9) and opens the password box (0x822ec0, input 0x8230b0) when `get_password` 0x5fde40 gives a text (0x820bdb..0x820c01), else the resume confirm (0x823420, 0x820c36..0x820c45). So the original already offers an Away human manager's club back after the manager password. `setup_assign_restored_network_managers` 0x8387e0 does the same for a restored game: a manager with a password who is not on holiday becomes computer controlled until the owner returns (0x83888d..0x8388a5). Slice 6 adds nothing here.
+- A joiner's Exit Game on its host screen returns -12 on the host for a remote channel (0x762af8..0x762b04).
+- The host's quit packet ends the joiner's client loop (section 7), and the game list input returns -2 (0x81fe11..0x81fe31). The original shows no message.
+- The original's Exit Game asks "Save Game Before Exit" when the game changed since the last save (0x762b9e..0x762c3d), and then calls `game_fatal_cleanup` 0x5cc7d0 and `exit` (0x762c42..0x762c4d). 0x5cc7d0 calls `free_game_data` 0x82ff40 (0x5cc7d4), which ends the network session first (0x82ff46).
+
+### What the runtime adds
+
+- Dead peers. The game sets `SO_KEEPALIVE` (0x8ae50c, 0x8ae79e), whose system timers wait about two hours. Each game connection gets keepalive timers of 20 s idle and 5 s between probes, 4 probes (Windows: its own count of 10). A crashed peer or a lost line breaks the connection in about 40 s on Mac and Linux and about 70 s on Windows, and the original's leave path runs.
+- The host's save. Exit Game keeps the original's own question: it asks "Save Game Before Exit" when the game changed since its last save (0x762b9e..0x762c3d), and its No stands (decision of 2026-10-28 for Q7). The runtime saves only for a host that closes its window (or a script that quits), which skips that question. When this game hosts a network game (0xb77c80 = 1 and the session 0xb77c90 is set) that has had a human turn, it saves as the Auto Save does: `save_game_data` 0x82e430 with flags 0x16 (0x7617d5) and the path of the game's `_makepath` 0x945b13 as at 0x7617c9, the save folder [0xae3138] + 0xf and the game's file name + 0x113. A game with no file name yet gets "Network Game".
+- A window close or the script's quit on such a host does not end the program in the event loop, which runs inside any call of the game that pumps messages, also in a day's work. It waits for the poll of the screen loop (0x7fcc14 in `ScreenManager::monitor` 0x7fc7e0), where the original handles a click and its Auto Save, saves there and ends. After 20 s with no such poll it ends with no save.
+- Host left. On a joiner's connection to its host (not 127.x), a close or an error between two packets gives the game the quit packet 0x04 (length 1) in place of the close, then the error. So the client loop ends at once, as at a quit, in place of "Unable to send data" at the next click (0x569456). The host's own quit packet is seen too. After the loop, the wrap of `run_network_client` 0x7fdc00 shows the game's message box 0x5e8290, the box of the original's network errors (0x56946b), with "The host left the game."
+- Kick. `nc_kick` closes the host's side of one joiner's connection. The game's next call on that handle fails, so `receive_packet` frees the slot and the leave path puts the club on holiday. Before it closes, the host's runtime sends the control packet KICK of slice 7 (section 14), and the joiner's box says "The host removed you from the game." (decision of 2026-10-28). Slice 6 first sent the quit packet and a line after it; the merge with slice 7 kept one way only. In the middle of a host packet only the close goes, and the joiner sees that the connection was lost.
+- A joiner's own Exit Game. The host sends the quit packet for it too (result -12, 0x7fcd79..0x7fce2e). The joiner's runtime looks for the text of the confirm, "Exit the network game" (0xa5a820), in the bytes of the host screen now shown, and shows no box when it is there. A new screen (opcode 0) clears it. A close after the quit packet, or after that confirm, gives no second quit packet.
+- The Kick list (Q39). The Network tab of the Options box lists the human managers online while this game hosts. The screen manager keeps 16 channels 0x300 bytes apart, with the count of their records at 0xb77c5a + 2 * channel; a record of 0x30 bytes from 0xb74c24 + 0x300 * channel holds the player slot (s16) and the manager's staff row (`scrman_add_player_record` 0x7ff630 at 0x7ff6d8..0x7ff6f2). The name comes from `database_format_staff_name` 0x53dba0, as Manager Status calls it (0x820210). A player slot leads to its socket through the index at +0x4b8 + 2 * slot of the Network object (`release_slot_socket` 0x77ac00 at 0x77ac13) and the connection table at +0 (0x8ae8d1..0x8ae8f6). Kick opens the original's confirm box (`confirm_push` 0x591840, 7 arguments as at 0x764362..0x7643a6); its input leaves its code and the button in 0xdd6be0 and 0xdd6be4 (0x591e7d..0x591e94), and the Options box reads them at its next input with no widget.
+- The game password (Q38). The host types it in a field on the Network tab (`game_password` in settings.txt); the field hides its text with text flags 0x8c, as the original's password box (0x822f68). The join check of slice 4 carries it. When the host answers PASSWORD, the wrap of `confirm_push` opens the joiner's password box in place of "Unable To Join" (the caller does not read the result, 0x838a6c..0x838a6f). Join sets the password and closes the box; for the game list's next input with no widget, the runtime sets the command word 0xdd6bde to -3 (Next), which the input takes when no widget is clicked (0x81fd8f..0x81fd96), so the original joins again with the name in 0xdd70dc (0x81fd99..0x81fdc4). The word gets its old value back at the join's connect, because the whole session runs inside that input call.
+- The lobby's password flag follows a change on the Network tab at the next heartbeat: the heartbeat carries `password` after a change (server/README.md), and the lobby hashes it once.
+- Away in the lobby. The host's entry carries `awayClubs`, the clubs of human managers on holiday, read from the holiday dword above. The game list row adds ", 1 away". When the name would keep fewer than 8 characters, the row leaves out the day.
+
+## 14. Slice 7: clear errors, connection test and ping (2026-10-27)
+
+Slice 7 adds no game function, changes no packet of the game and changes no screen of the original. Files: `src/recomp_rt/win/net_errors.c` (every text), `net_test.c` (the connection test), additions to `net_core.c`, `net_lobby.c`, `net_session.c`, `lobby.c`, `lobby_rows.c`, `lobby_http.c`, `options_screen.c`, `hn_peek` in `host/net_posix.c` and `net_win32.c`, and the optional `pingMs` field of the server.
+
+### Where each failure reaches the player
+
+| Failure | Where the runtime sees it | Box |
+|---|---|---|
+| Hosting fails | `Network::host_or_join_game` 0x77a9f0 gives 0 for a host (0x8389be..0x8389c5) when no listen socket opened: `TcpIp::open_listen_sockets` 0x8ae370 binds each adapter to port 6667 (0x8ae5bd). The runtime keeps the bind's error. | "Unable To Create" (text 0xa8238c formatted at 0x838a0f, `confirm_push` 0x591840 at 0x838a67) |
+| A join fails | The lobby row (full today, the lobby does not answer, another version), the join check's answer (section 12), or the connect's own error: refused, no answer within 4 s (`NC_CONNECT_MS`), no route. | "Unable To Join" (text 0xa82348 formatted at 0x838a46, the same call) |
+| The session ends | The host's quit packet, a connection that broke with no quit packet, or the host's KICK (below). | The game's message box 0x5e8290 after `run_network_client` 0x7fdc00 (section 13) |
+| The lobby does not answer | The list request gives `unavailable` (lobby_http.h). | A row " Online games: the lobby does not answer" first in the list (address 0.66.255.254), whose Join gives the reason |
+| The host is not in the lobby | The lobby refused the entry, is full today or does not answer. | A line on the Network tab of the Options box |
+
+The "Contacting Server" freeze: the joiner's loop draws it while it waits for the host's answer to a click (0x7fe151..0x7fe1bb). Slices 2 and 6 removed its causes in the runtime: short sends (section 7), a connect with no limit (now 4 s), and a dead host (keepalive, section 13). A dead host now ends the loop in about 40 s with "The connection to the host was lost", and the joiner's club is Away. A host that works out a day is not a failure, and the joiner keeps waiting.
+
+### Control packets
+
+The runtime needs two facts that the game's packets do not carry: the ping, and that the host used Kick. Both runtimes put a packet of their own between two packets of the game, on a connection that passed the join check: the 4-byte length, the opcode 0xbe and the line `BOSMAN PING <n>`, `BOSMAN PONG <n>` or `BOSMAN KICK`. The game never sends opcode 0xbe: `Display::process_command_packet` 0x564080 switches on 0..26 through the table at 0x567a1c (0x564121..0x56412a). A send puts one only where the game's own stream is between two packets: `Network::send_packet` 0x77ac30 sends each length byte in its own `send` (0x77ad10..0x77ad46), so a PING may wait for the end of a packet. `nc_recv` looks at the next bytes (MSG_PEEK) where the game's reads are between two packets, takes control packets out, and gives the game only its own bytes. `receive_packet` 0x77af20 reads the length one byte at a time (0x77b4a8) and then the body (0x77b52f), so the look comes before each length. Through the relay (slice 5) the control packets are bytes like any others, so the relay needs no change.
+
+- Ping. The host sends a PING to each joiner every 3 s and the joiner's runtime answers at once. A ping is the shortest of the last 4 round trips, so a host that was busy with a day (it makes no network call for a few seconds, section 12) does not count. A PONG late by more than two rounds counts as it is. The host's lobby entry carries `pingMs`, the highest ping of its human managers in tens of ms, and the game list row adds ", 80 ms". When the name would keep fewer than 8 characters, the day goes first, then the ping.
+- Kick. `nc_kick` sends KICK before it closes, so the joiner's box says "The host kicked you" in place of "The host left the game".
+
+### The connection test
+
+The Test button on the Network tab runs three requests on a thread: `GET /v1/health` (the Worker), `GET /v1/games` (the lobby object), and a WebSocket request for the relay of the code 22222222, which no game has. The relay object answers `unknown_game` and stores nothing (server test). The Worker passes the request to the relay only when the `Upgrade` header came through, so `upgrade_required` means that a proxy or firewall took it off. The test needs no game and no change of the relay. The Network tab is the place because it holds the other online controls and is a screen of the runtime: the original's Network Play screen (0x81edd0) would need a new button, a change of an original screen.
+
+### Not built in slice 7
+
+- The relay's own failures (relay down, host not connected, too many wrong passwords, 16 human managers) have texts in `net_errors.c` (`NE_RELAY_DOWN`, `NE_HOST_AWAY`, `NE_ATTEMPTS`, `NE_GAME_FULL`, `NE_NAME`), for slice 5's join to use. Slice 5's `route` hook in `net_lobby.c` has its own texts today.
+- A ping on the joiner's side: the joiner has no list of human managers.
+
+## 15. Slice 5: joins through the relay (2026-10-27)
+
+Slice 5 adds the relay under the game's own network code. No function of the original changes, and no packet layout changes. Files: `src/recomp_rt/win/relay.c` (the host's relay connection and each human manager's), `websocket.c` (a WebSocket client, RFC 6455), `secure.c` (the secure connection: TLS with mbedTLS 3.6), `tls_config.h` (the mbedTLS settings), hooks in `net_core.c` and `net_lobby.c`, `https://` in `lobby_http.c`, and `hn_pair`, `hn_trust_roots` and `hn_verify_server` in `host/net_posix.c` and `net_win32.c`.
+
+### The game sees an ordinary socket
+
+Each connection through the relay is a pair of TCP sockets on 127.0.0.1 (`hn_pair`). The game holds one end. A thread of the runtime passes the bytes of the other end to the relay and back. So everything that the runtime does on a LAN socket also runs on it: the 4-byte length framing of `Network::send_packet` 0x77ac30, the whole-send queue, the packet counts by opcode (the opcode 0 count of slice 2b, `nc_resets_in`), the join check `BOSMAN HELLO`, and the traffic log.
+
+- A joiner's connect (`connect_to_host` 0x8ae640, connect at 0x8ae74e) to a lobby row (0.66.0.0/16) asks the lobby for a ticket (`POST /v1/games/<code>/join`), opens `wss://<lobby>/v1/games/<code>/relay?role=manager&ticket=<ticket>`, and gives the game's socket handle the pair's end in place of the system's connect. Then the join check runs through the relay as on a LAN.
+- A host that is open in the lobby holds one relay connection (`role=host`, with the host token). For each `{"t":"open","ch":n}` the runtime makes a pair and gives one end to the game's listen socket as a new connection from 0.66.255.n. The join check runs on it before the game's accept (`TcpIp::accept_connection` 0x8ae840) sees it, as in section 12. When the game closes the socket, the relay gets `{"t":"kick","ch":n}`. When the relay closes the channel, the game's socket ends.
+
+### Batches
+
+Each channel sends at most one binary frame (the channel byte and the batch) each 50 ms. Bytes after a quiet 50 ms go after 2 ms, so the host's 5-byte answer to a click (opcode 9) does not wait. Later bytes wait up to 50 ms, and all channels that have waiting bytes go at the same moment. A joiner's bytes wait at most 10 ms. At 50 ms the two-game run failed: the host's next screen came before the second click of one press (First Name, then Next), and the click rule of slice 2b held that click back (3 click packets of 4, Select Team in place of Select Nationality). A link sends a frame only when it has bytes, and `ping` after 30 s with none, so an idle relay can hibernate (server/README.md, "Free plan"). The host never uses channel 255 (all human managers): a human manager that connects while a frame to all is on its way would get bytes before its join check.
+
+### A click through the deployed relay (2026-10-28)
+
+Through the deployed server, a request that reaches a Durable Object took about 110 ms from this Mac (curl), against 10 to 20 ms for the edge alone. The joiner's client loop `run_network_client` 0x7fdc00 polls again only after the host's answer to a click (opcode 9). That answer came about 130 ms after the click, later than the script's press of 100 ms, and a person's press is about as short. So the press that ends a text entry gave the field (First Name) and never the button under the pointer (Next): 3 click packets of 4, and the joiner stayed on Enter Name. The runtime now runs the poll at 0x7fdf17 once more for such a press, with the button flag 0xb67a34 set, if the pointer is still where the press went down (`user32.c`). The click rule of slice 2b applies to that poll as to a held press: the same widget or a new host screen gives nothing. The LAN runs pass as before.
+
+### Requests of the free plan
+
+From the two-game run through the deployed server (one joiner, about 90 s): the host made 1 registration, 1 relay connection, 1 close and 2 or 3 heartbeats; the joiner made 2 list requests, 1 join and 1 relay connection. The relay carried 10 WebSocket messages (5 each way, Enter Name to Select Nationality), which bill as 0.5 request. With two joiners (2026-10-29): 9 HTTP calls and 20 relay messages, about 10 billed requests. Estimate for play: each click is about one message each way, and an idle link sends `ping` each 30 s. A game of 4 human managers at 20 clicks a minute is about 120 heartbeats and 7,000 messages an hour, so about 500 requests an hour. Slice 7's PING goes every 3 s on a LAN. Through the relay it goes every 30 s (`NC_PING_RELAY_MS`): at 3 s the PING and PONG of each joiner were 40 messages a minute, and they kept the relay awake while nobody clicked. The limit that binds first is the Durable Object run time: about 28 awake relay hours a day in total (server/README.md).
+
+### When a connection ends
+
+- The host's relay connection breaks: every channel's socket ends, so the host's game sees each human manager leave. The runtime connects again after 2 s, then 4, 8 and up to 30 s. The relay names the human managers that are still connected when a host connects (`server/src/relay.ts`). Their streams broke with the old connection, so the host kicks a channel that the relay names within 1 s of a reconnect. A human manager who joins in that second is kicked too and can join again.
+- Close code 4001 (another connection with the same token took over): the host does not connect again until its code or token changes.
+- A channel whose game does not read 4 MiB of the relay's bytes ends, and so does a joiner's connection.
+- A joiner's game closes its socket: its relay connection closes with 1000. The relay closes a joiner (4000 the host left, 4003 a kick): its game's socket ends after the bytes that came before.
+
+### The secure connection
+
+mbedTLS 3.6.7, the LTS branch, Apache-2.0, built from its release by CMake (FetchContent, SHA-256 checked). Why: it builds with plain CMake on Mac (both architectures), mingw and Linux, needs no system library, links statically, and its licence fits the GPL-3.0 of the repo. TLS 1.2 only: mbedTLS 3.6 does TLS 1.3 through its PSA layer, whose key store is shared by all threads and needs `MBEDTLS_THREADING_C`, and the lobby thread and the relay threads make connections at the same time. Cloudflare serves TLS 1.2.
+
+The server's certificate is checked against the system's root certificates and the host name. macOS: `/etc/ssl/cert.pem`. Linux: the first of the usual bundle files (Debian, Ubuntu, the Steam Deck, Fedora, openSUSE). Windows: the ROOT store, and for a chain that it does not trust, the system's own check (`CertGetCertificateChain` and the SSL policy), because Windows fills its ROOT store on demand.
+
 ## 16. Slice 9: release tests, a match day and the free plan (2026-10-27)
 
 Section number 16 leaves 13 to 15 for slices 5, 6 and 7, whose notes use 13 on their branches. Renumber at the merge.

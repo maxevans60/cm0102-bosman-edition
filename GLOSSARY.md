@@ -348,13 +348,25 @@ _Avoid_: persistent league, server game
 The state of a human manager who left a network game. Their club is on holiday as in the original. They can take it back with their manager password.
 _Avoid_: offline, AFK, dropped
 
+**Game password**:
+The optional password of a network game. The host sets it on the Network tab of the Bosman Edition Options box, and a human manager types it in the password box to join. It is not the manager password, which protects one club.
+_Avoid_: server password, join code
+
+**Kick**:
+The host removes a human manager from a network game, from the list on the Network tab. Their club goes on holiday, as when they leave.
+_Avoid_: ban, boot, remove (for this action)
+
 **Online play**:
 The option that lets the game list show online games and lets a host put its game in the lobby. It is on by default. When it is off, the game shows LAN games only.
 _Avoid_: internet mode, online mode
 
 **Connection test**:
-A check in Network Play that the lobby and relay can be reached. It says that online play works, or it says what is wrong.
+A check on the Network tab of the Bosman Edition Options box that the lobby and relay can be reached. It says that online play works, or it says what is wrong.
 _Avoid_: network check, diagnostics
+
+**Ping**:
+The time in ms for a message to go from the host to a human manager's game and back. The Network tab shows it for each human manager online, and the game list row shows the highest one of the game.
+_Avoid_: latency, lag
 
 ### Research maps
 

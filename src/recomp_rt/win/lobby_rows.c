@@ -224,18 +224,25 @@ int lr_arrived(const uint8_t *p, long n, uint32_t addr)
 static const char *const months[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-/* The text of a lobby row: the name, then the season, the day and the managers online, in 49 bytes. A number
- * from 2 goes at the end of a row whose text another row has. */
+/* The text of a lobby row: the name, then the season, the day, the managers online, the ping (0.7.0 slice 7) and
+ * Away, in 49 bytes. A number from 2 goes at the end of a row whose text another row has. When the name would keep
+ * fewer than 8 characters, the day goes, and then the ping. */
 static void row_text(char *out, const LobbyGame *g, int number)
 {
-    char more[64];
+    char more[80];
     int y = 0, m = 0, d = 0;
     sscanf(g->day, "%d-%d-%d", &y, &m, &d);
-    int n = snprintf(more, sizeof more, "  %d/%02d", g->season, (g->season + 1) % 100);
-    if (m >= 1 && m <= 12 && d >= 1) n += snprintf(more + n, sizeof more - (size_t)n, " %d %s", d, months[m - 1]);
-    n += snprintf(more + n, sizeof more - (size_t)n, "  %d online", g->managers_online);
-    if (g->password) n += snprintf(more + n, sizeof more - (size_t)n, ", password");
-    if (number > 1) snprintf(more + n, sizeof more - (size_t)n, " (%d)", number);
+    for (int cut = 0; cut < 3; cut++) {
+        int n = snprintf(more, sizeof more, "  %d/%02d", g->season, (g->season + 1) % 100);
+        if (cut == 0 && m >= 1 && m <= 12 && d >= 1)
+            n += snprintf(more + n, sizeof more - (size_t)n, " %d %s", d, months[m - 1]);
+        n += snprintf(more + n, sizeof more - (size_t)n, "  %d online", g->managers_online);
+        if (cut < 2 && g->ping_ms > 0) n += snprintf(more + n, sizeof more - (size_t)n, ", %d ms", g->ping_ms);
+        if (g->away_n) n += snprintf(more + n, sizeof more - (size_t)n, ", %d away", g->away_n);
+        if (g->password) n += snprintf(more + n, sizeof more - (size_t)n, ", password");
+        if (number > 1) snprintf(more + n, sizeof more - (size_t)n, " (%d)", number);
+        if (49 - (int)strlen(more) >= 8) break;
+    }
     int room = 49 - (int)strlen(more);
     snprintf(out, 50, "%.*s%s", room > 8 ? room : 8, g->name, more);
 }
@@ -261,6 +268,10 @@ long lr_extra(uint8_t *buf, uint32_t room, uint32_t *addr)
         if (lobby_result == LH_FULL_TODAY && shown() < LR_CAP) {
             ack_of(d, "", LR_FULL_TEXT);
             push(d, to_net(LR_FULL_ROW));
+            full_shown = 1;
+        } else if (lobby_result == LH_UNAVAILABLE && shown() < LR_CAP) {
+            ack_of(d, "", LR_DOWN_TEXT);            /* 0.7.0 slice 7: Join on it gives the reason */
+            push(d, to_net(LR_DOWN_ROW));
             full_shown = 1;
         }
         char used[LOBBY_ROWS][50];
@@ -310,8 +321,8 @@ const LobbyRow *lr_row_of(uint32_t addr, int *full)
     uint32_t h = to_host(addr);
     *full = 0;
     if ((h & 0xffff0000u) != LR_NET) return NULL;
-    if (h == LR_FULL_ROW) {
-        *full = 1;
+    if (h == LR_FULL_ROW || h == LR_DOWN_ROW) {
+        *full = h == LR_FULL_ROW ? 1 : 2;
         return NULL;
     }
     uint32_t i = h & 0xffffu;

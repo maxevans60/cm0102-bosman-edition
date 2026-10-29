@@ -189,6 +189,12 @@ int main(void)
     options_load(path);
     CHECK(options_bool(OPT_ONLINE_PLAY) == 0);
 
+    /* 5b3. game_password (0.7.0 slice 6): empty by default, the text of the file when it has one. */
+    CHECK(options_string(OPT_GAME_PASSWORD)[0] == 0);
+    put("game_password = Sunday 7\n");
+    options_load(path);
+    CHECK(!strcmp(options_string(OPT_GAME_PASSWORD), "Sunday 7"));
+
     /* 5c. changing_rules (0.6.0 slice 11): on by default, off when the file says so. A bad word keeps on. */
     put("changing_rules = off\n");
     options_load(path);

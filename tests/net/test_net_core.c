@@ -188,6 +188,69 @@ int main(void)
     } else
         printf("net_core: no adapter with a broadcast address, the broadcast check is skipped\n");
 
+    /* Slice 6: on a joiner's connection to a host that is not 127.x, the host's quit packet sets nc_host_left. A
+     * connection that breaks between packets gives the game the quit packet 0x04, then the error. Kick closes the
+     * host's side, and the game's next recv there fails, so the original's leave path runs. */
+    if (n > 0) {
+        uint16_t kp = (uint16_t)(port + 4);
+        uint32_t kl = tcp();
+        nc_setopt(kl, NC_SOL_SOCKET, NC_SO_REUSEADDR, 1, 0);
+        nc_nonblocking(kl, 1);
+        CHECK(nc_bind(kl, ad[0], kp) == 0 && nc_listen(kl, 16) == 0, "slice 6 listen: %d", nc_error());
+        static const uint8_t quit[5] = {1, 0, 0, 0, 4};
+        for (int round = 0; round < 3; round++) {
+            uint32_t kc = tcp(), ka = NC_INVALID;
+            CHECK(nc_connect(kc, ad[0], kp) == 0, "slice 6 connect: %d", nc_error());
+            nc_nonblocking(kc, 1);
+            CHECK(!nc_host_left(), "a new connect clears nc_host_left");
+            POLL((long)(ka = nc_accept(kl, NULL, NULL)) == (long)NC_INVALID ? -1 : 0, r);
+            uint32_t handles[4];
+            CHECK(ka != NC_INVALID && nc_peer_list(handles, NULL, NULL, 4) == 1 && handles[0] == ka, "peer list");
+            if (round == 2) {   /* the screen of the joiner's own Exit Game, then the quit packet: not a host quit */
+                static const char body[] = "\0xExit the network game ?";      /* opcode 0, then text */
+                uint8_t screen[4 + sizeof body];
+                screen[0] = (uint8_t)sizeof body, screen[1] = screen[2] = screen[3] = 0;
+                memcpy(screen + 4, body, sizeof body);
+                CHECK(nc_send(ka, screen, sizeof screen) == (long)sizeof screen, "the exit confirm screen");
+                uint8_t sink[64];
+                int got = 0;
+                for (int t = 0; t < 2000 && got < (int)sizeof screen; t++) {   /* length bytes, then the body */
+                    long g = nc_recv(kc, sink, got < 4 ? 1 : (uint32_t)sizeof screen - (uint32_t)got);
+                    if (g > 0) got += (int)g;
+                    else usleep(1000);
+                }
+            }
+            if (round != 1) CHECK(nc_send(ka, quit, 5) == 5, "the host's quit packet");
+            else CHECK(nc_kick(ka) == 0 && nc_peer_list(handles, NULL, NULL, 4) == 0, "kick");
+            uint8_t got5[8];
+            int have5 = 0;
+            for (int t = 0; t < 2000 && have5 < 5; t++) {   /* one byte at a time, as receive_packet 0x77b4a8 reads */
+                long g = nc_recv(kc, got5 + have5, 1);
+                if (g == 1) have5++;
+                else if (g < 0 && nc_error() == HN_WOULDBLOCK) usleep(1000);
+                else break;
+            }
+            CHECK(have5 == 5 && !memcmp(got5, quit, 5) && nc_host_left() == (round != 2) && !nc_kicked(),
+                  /* No join check here, so no control packets: the KICK notice is tested in test_net_errors.c. */
+                  "round %d: the joiner reads the quit packet (%d bytes), nc_host_left %d, nc_kicked %d", round, have5,
+                  nc_host_left(), nc_kicked());
+            if (round == 1) {
+                long after = -1;
+                for (int t = 0; t < 2000; t++) {     /* then the close */
+                    after = nc_recv(kc, got5, 1);
+                    if (after >= 0 || nc_error() != HN_WOULDBLOCK) break;
+                    usleep(1000);
+                }
+                CHECK(after == 0 || (after == -1 && nc_error() != HN_WOULDBLOCK), "then the joiner sees the close: %ld",
+                      after);
+                CHECK(nc_recv(ka, got5, 1) == -1 && nc_error() == HN_CONNRESET, "the host's recv on a kicked handle fails");
+            }
+            nc_close(kc);
+            nc_close(ka);
+        }
+        nc_close(kl);
+    }
+
     /* Item 10: the adapter table holds no loopback or 0 address, and each broadcast is in its subnet. */
     CHECK(n >= 0 && n <= 20, "adapters %d", n);
     for (int i = 0; i < n; i++) {

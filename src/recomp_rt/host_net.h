@@ -39,6 +39,9 @@ hn_sock hn_socket(int stream);                        /* stream 1: TCP, 0: UDP *
 int hn_close(hn_sock s);
 int hn_set_flag(hn_sock s, int flag, int on);         /* HN_REUSEPORT is 0 and does nothing where the host has none */
 int hn_set_linger(hn_sock s, int on, int seconds);
+/* TCP keepalive with these timers: a peer that stops answering (a crash, a pulled cable, a lost Wi-Fi) breaks the
+ * connection after about idle_s + interval_s * count seconds. 0 on success. */
+int hn_set_keepalive(hn_sock s, int idle_s, int interval_s, int count);
 int hn_bind(hn_sock s, uint32_t addr, uint16_t port);
 int hn_listen(hn_sock s, int backlog);
 hn_sock hn_accept(hn_sock s, uint32_t *addr, uint16_t *port);
@@ -46,6 +49,11 @@ hn_sock hn_accept(hn_sock s, uint32_t *addr, uint16_t *port);
 int hn_connect(hn_sock s, uint32_t addr, uint16_t port, int timeout_ms);
 long hn_send(hn_sock s, const void *buf, size_t n);
 long hn_recv(hn_sock s, void *buf, size_t n);         /* 0 when the peer closed */
+/* As hn_recv, but the bytes stay in the socket for the next read (MSG_PEEK). 0.7.0 slice 7: net_core.c reads its
+ * own control packets with it. */
+long hn_peek(hn_sock s, void *buf, size_t n);
+/* Ends the send side: the peer reads the bytes sent so far, then the end (0.7.0 slice 7, the kick notice). */
+int hn_shutdown_send(hn_sock s);
 long hn_sendto(hn_sock s, const void *buf, size_t n, uint32_t addr, uint16_t port);
 long hn_recvfrom(hn_sock s, void *buf, size_t n, uint32_t *addr, uint16_t *port);
 /* 1 when the socket can be read (read 1) or written (read 0) within ms, 0 when not, -1 on failure. */
@@ -69,5 +77,19 @@ void hn_sleep(int ms);
 int hn_resolve(const char *name, uint32_t *addr);
 /* The address of this computer that the default route uses. No packet is sent. 0 on success. */
 int hn_route_address(uint32_t *addr);
+
+/* For the relay (0.7.0 slice 5, win/relay.c). Two connected TCP sockets on 127.0.0.1, both non-blocking. The
+ * game gets one as an ordinary socket, and the relay thread passes the bytes of the other to the relay. 0 on
+ * success. */
+int hn_pair(hn_sock *a, hn_sock *b);
+
+/* The trusted root certificates of this system, for the secure connection (win/secure.c). Calls add once for
+ * each certificate (pem 0: DER bytes) or certificate bundle (pem 1: PEM text with its zero). The count of
+ * calls. macOS and Linux: the first bundle file found. Windows: the "ROOT" store. */
+int hn_trust_roots(void (*add)(void *ctx, const unsigned char *data, size_t n, int pem), void *ctx);
+/* Windows only: checks a server's certificate chain (DER, the server's own first) for host with the system's
+ * own check, which also fetches a root that the store does not hold yet. 0 when the system trusts it. -1
+ * elsewhere. */
+int hn_verify_server(const unsigned char *const *der, const size_t *len, int n, const char *host);
 
 #endif

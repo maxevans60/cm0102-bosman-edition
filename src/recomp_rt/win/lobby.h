@@ -20,7 +20,10 @@ typedef struct {
     char day[11];                  /* YYYY-MM-DD */
     char clubs[LOBBY_CLUBS][LOBBY_TEXT];
     int clubs_n, free_seats, managers_online;
+    char away[LOBBY_CLUBS][LOBBY_TEXT];   /* the clubs whose human manager is Away (on holiday after a drop) */
+    int away_n;
     int password;                  /* in the list: the game has a password */
+    int ping_ms;                   /* 0.7.0 slice 7: the highest ping of the host's human managers, 0 when none */
 } LobbyGame;
 
 typedef struct {
@@ -28,7 +31,7 @@ typedef struct {
     LobbyGame g;
 } LobbyRow;
 
-/* What the host's entry is now, for logs and tests. */
+/* What the host's entry is now, for logs, tests and the Network tab. */
 typedef enum { LOBBY_NONE, LOBBY_REGISTERING, LOBBY_OPEN, LOBBY_REFUSED, LOBBY_FULL_TODAY, LOBBY_UNAVAILABLE,
                LOBBY_CLOSED } LobbyHostState;
 
@@ -37,11 +40,18 @@ void lobby_set_address(const char *base);
 int lobby_usable(void);
 
 /* Host. The first call registers the game. Each later call gives the fields of the next heartbeat (season,
- * day, human clubs, free seats, managers online). password is sent at the registration only. */
+ * day, human clubs, Away clubs, free seats, managers online). password goes with the registration, and again with
+ * the next heartbeat after it changed. */
 void lobby_host_set(const LobbyGame *g, const char *password);
 /* The game ended: close its entry. */
 void lobby_host_close(void);
 LobbyHostState lobby_host_state(char *code_out);    /* code_out: 9 bytes or NULL */
+/* The code and the host token of an open entry, for the host's relay connection (relay.h). 1 when open. */
+int lobby_host_relay(char code[9], char token[96]);
+/* The lobby address that lobby_set_address set. */
+const char *lobby_address(void);
+/* The lobby's error code of a refused entry (LOBBY_REFUSED), for example name_not_allowed, else "". */
+void lobby_host_refusal(char *out, unsigned room);
 
 /* List. lobby_list_fetch asks for the list. lobby_list_take gives the rows of the last answer once: the count,
  * or -1 while no new answer waits. *result is an LhResult (lobby_http.h). */

@@ -36,28 +36,91 @@ Privacy (Q26) depends on these rules:
 - Do not turn on Workers Logs, Logpush or a tail Worker. `wrangler.jsonc` sets `observability.enabled` to false, and a test checks it.
 - Do not run `wrangler tail`. It shows each request's headers, and these include the internet address.
 
-## Free plan
+## Free plan and paid plan
 
-Figures checked on 2026-10-27 on developers.cloudflare.com (Workers limits and Durable Objects pricing):
+Figures checked on 2026-10-29 on developers.cloudflare.com (Workers pricing and limits, Durable Objects pricing). The limits are for the whole Cloudflare account. Max's account also runs Elodie's two Durable Objects, which use about 900 Durable Object requests a day.
 
-| Limit | Free plan |
-|---|---|
-| Worker requests | 100,000 a day, reset at 00:00 UTC. Over the limit, Cloudflare answers with its own error page, error 1027, and the Worker does not run. |
-| Worker CPU time | 10 ms for each request |
-| Durable Object requests | 100,000 a day. 20 incoming WebSocket messages count as 1 request. |
-| Durable Object run time | 13,000 GB-s a day. An object is billed at 128 MB while it is awake. |
-| Durable Object storage | SQLite-backed objects only, 5 GB, 100,000 rows written a day |
+| Limit | Free plan | Workers Paid ($5 a month minimum) |
+|---|---|---|
+| Worker requests | 100,000 a day, reset at 00:00 UTC. Over the limit, Cloudflare answers with its own error page (error 1027) and the Worker does not run. | 10 million a month, then $0.30 a million |
+| Durable Object requests | 100,000 a day. 20 incoming WebSocket messages count as 1 request. | 1 million a month, then $0.15 a million |
+| Durable Object run time | 13,000 GB-s a day | 400,000 GB-s a month, then $12.50 a million GB-s |
+| Durable Object rows written | 100,000 a day | 50 million a month |
 
-What one game uses:
+The free plan stops at its daily limit and the game shows "full today". The paid plan has no daily limit: it charges for use above the included amounts.
 
-- An open game sends a heartbeat every 30 s. That is 2,880 Worker requests and 2,880 Durable Object requests a day. About 30 games can stay open all day, with room for game list requests.
-- The lobby writes 1 row when a game registers, closes or expires. A heartbeat writes 1 row at most once a minute, also when a listed field changes. That is about 1,440 rows a day for each game, so the 100,000 free rows cover about 69 games open all day. The Worker request limit stops at about 30 games first. After an eviction, the list can show fields up to 60 s old until the next heartbeat. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
-- A relay is awake while frames flow. One awake relay uses 450 GB-s an hour, so the free plan gives about 28 relay hours a day in total.
-- A host that sends a batch every 50 ms sends 20 messages a second, which bills as 1 request a second, or 3,600 an hour. Each human manager adds to this.
+### When the relay is billed
 
-A stranger can use up the daily Worker requests with a simple flood, because the free plan has no request filter before the Worker. Online play then stops until 00:00 UTC, and LAN play still works. A Workers rate limit for each address is a possible later step.
+Cloudflare bills run time while an object handles a request or a message, and while it is idle in memory but cannot hibernate. A relay that can hibernate costs nothing while it waits, even with its sockets open. The relay keeps every rule for this, and `test/sleep.test.ts` checks them:
 
-For slices 4 and 5, this means: send a batch only when there is data, and send nothing while the game waits. An idle relay hibernates after about 10 s and then costs no run time. Measure the real traffic in slice 2 and check these figures again.
+- It accepts sockets with the Hibernation API (`acceptWebSocket`), never with `accept()`.
+- It starts no timer and sends no request of its own while it passes frames.
+- The runtime answers a text `ping` with `pong` (`setWebSocketAutoResponse`). The relay's code does not run, so a ping costs no run time.
+
+The game's own PING (slice 7) goes every 30 s through the relay. It is a binary frame, so it wakes the relay for a few milliseconds.
+
+### Measured on the live server
+
+Two-game run on 2026-10-29, 14:57 to 15:00 UTC: a host and one joiner on this Mac joined through `https://bosman-online.maxvert.workers.dev` (`tests/smoke/network_run.py --relay`, slice 5 build). The figures come from Cloudflare's GraphQL analytics (`durableObjectsPeriodicGroups`, `durableObjectsInvocationsAdaptiveGroups`, `workersInvocationsAdaptive`).
+
+| Part | Calls | Billed run time | For each call |
+|---|---|---|---|
+| Relay | 22 (2 connections, 20 messages) | 0.21 s awake, 0.027 GB-s, while the sockets were open for about 150 s in total | 0.0012 GB-s |
+| Lobby | 45 requests (register, heartbeats, lists, join, close) | 0.136 GB-s | 0.003 GB-s |
+| Worker | 47 requests | no run-time charge. Workers bill requests and CPU time, not run time. | |
+
+The relay slept between messages: it was awake for 0.21 s of the 150 s.
+
+### What a game uses
+
+Assumptions: the measured cost of each call, a heartbeat every 30 s, and slice 5's estimate of 7,000 relay messages an hour for 4 human managers who click about 20 times a minute. The message rate is an estimate, not a measurement of play. Slice 9's runs through the live server can measure it: billed requests = relay messages / 20.
+
+| Game | Durable Object requests | Run time | Worker requests |
+|---|---|---|---|
+| A 4-hour evening, 4 human managers | 1,920 (relay 1,400, lobby 520) | 35 GB-s | 520 |
+| An always-on game, open all day, nobody connected | 2,900 (heartbeats and the relay's hourly check) | 9 GB-s | 2,880 |
+
+Each human manager who stays connected but does not click adds 2 messages every 30 s (PING and PONG), which is about 290 billed requests a day.
+
+### How many games each plan carries
+
+| | Free plan, each day | Workers Paid, in the $5 each month | Workers Paid, above the $5 |
+|---|---|---|---|
+| 4-hour evenings | about 50 (Durable Object requests run out first) | about 520 (about 17 a day) | about $0.0007 for each further evening |
+| Always-on games | about 34 (Durable Object and Worker requests run out together) | about 11 | about $0.01 a month for each further game |
+
+The free plan's limits are daily, and the paid plan's are monthly. So the free plan carries more each month than the $5 includes, but it stops for the rest of the day at its limit. On the paid plan, 50 evenings every day (1,500 a month) cost about $5.30 a month. Run time is far from the limit on both plans.
+
+The lobby writes about 1,440 rows a day for each open game: 1 row when a game registers, closes or expires, and at most 1 row a minute from its heartbeats. The 100,000 free rows a day cover about 69 games open all day, so the request limits come first. After an eviction, the list can show fields up to 60 s old until the next heartbeat. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
+
+## Floods of calls
+
+The server stays on the free plan (Max, 2026-10-29). On the free plan a flood can stop online play until 00:00 UTC, but it can never cost money. LAN and VPN play still work.
+
+Layer 1 (`src/flood.ts`) has two parts.
+
+A limit for each internet address runs first in the Worker, before it reads a body or asks a Durable Object. It uses the Workers Rate Limiting binding (`ratelimits` in `wrangler.jsonc`). An IPv6 address counts by its first 64 bits, as in the lobby.
+
+| Limit | In 60 s from one address | Why this number |
+|---|---|---|
+| `RATE_CALLS`, every call | 180 | A busy home makes at most about 64: 2 hosts with 8 heartbeats, 6 joins, and 4 games that each ask for the list every 5 s (the game keeps its list 5 s). The margin is for many players behind one carrier or campus address. |
+| `RATE_WRITES`, register, join and close | 20 | These calls write storage, hash a password or make a relay. A home makes at most 2 registers (the limit of 2 games). 20 lets a group of friends at one address join in the same minute. |
+| `RATE_WRITES_48`, the same writes from one IPv6 /48 site | 60 | One site has 65,536 /64 networks, so without this limit it could make 20 writes in each of them. |
+
+A refused call gets status 503 with `{"error": "unavailable", ...}`, the header `X-Bosman-Api: 1` and `Retry-After: 60`. The game shows its existing "not available" text and tries again later. The invite link page gets a short page that says to try again in a minute. A call with no `CF-Connecting-IP` header (only a local run) is not limited. If the limiter fails, the call goes through.
+
+The Worker also keeps the list, and the answer for one game, in its memory for 2 s. Many list calls then cost one lobby call. These answers hold no internet address and no token. An error answer and a "game not open" answer are not kept. A register, heartbeat or close through the same Worker drops the copies at once. Through another Worker, the list can be up to 2 s old.
+
+What layer 1 cannot do:
+
+- A refused call still counts as a Worker request, because Cloudflare counts each call that reaches the Worker. A flood of 100,000 calls a day therefore still stops online play until 00:00 UTC, also from one address. Layer 1 saves the Durable Object requests, storage writes, run time and CPU time behind each refused call.
+- The limiter's counts are approximate and kept for each Cloudflare location. A flood from many addresses or locations gets through each address's limit.
+- The limiter never gets an internet address. Its key is a hash of the address prefix, the UTC date and a salt, so the key of one address changes each day. With the salt in the code only, someone who has a key could find an IPv4 address by trying them all. Only Cloudflare sees the keys, and it sees the addresses anyway. For a secret salt, run `npx wrangler secret put RATE_KEY_SALT` once and enter any long random text. Cloudflare keeps the counts for the limit's period only. Nothing is stored or logged by this server.
+- The refusal uses the game's "not available" text. It does not say that the cause is too many calls from the player's network.
+
+Cloudflare's documents (checked 2026-10-29) do not name a plan for the Rate Limiting binding, and a third-party report says the free plan has it at no charge. The deploy shows if the account allows it. If the binding is missing, every call goes through.
+
+A free WAF rate limiting rule would block calls before the Worker runs, so that blocked calls would not count. The free plan has 1 such rule (by IP, 10 s). Its set-up pages are for a domain on Cloudflare. They do not say if it works on a `workers.dev` address. It would need a domain.
 
 ## API contract (version 1)
 
@@ -66,7 +129,7 @@ The game uses this contract in slices 4, 5 and 8. The invite link page at the en
 ### Rules for the game side
 
 - Each answer from this API is JSON with the header `X-Bosman-Api: 1`. An answer is either a success body or `{"error": "<code>", "message": "<English text>", ...}`.
-- An answer without `X-Bosman-Api: 1` does not come from this API. If its status is 429, or its body contains `1027`, show "Online games are full today, try again later". In all other cases, treat it as `unavailable`. Cloudflare does not document the status code of its 1027 page, so the game must also check the body.
+- An answer without `X-Bosman-Api: 1` does not come from this API. If its body contains `1027`, show "Online games are full today, try again later". In all other cases, treat it as `unavailable`, also a 429: Cloudflare's rate limiting rule of the server's address answers 429 to an address with more than 60 calls in 10 s. Cloudflare does not document the status code of its 1027 page, so the game must also check the body.
 - A timeout, a TLS failure or a refused connection is `unavailable`.
 - Use a 10 s timeout for each HTTP request. Read at most 64 KiB of an answer.
 - The game shows its own text for each error code. The `message` field is a fallback.
@@ -86,24 +149,28 @@ Text fields hold printable Latin-1 only (U+0020 to U+007E and U+00A0 to U+00FF).
 | `season` | integer | Start year of the season, 1900 to 2200 |
 | `day` | string | The game date, `YYYY-MM-DD` |
 | `humanClubs` | string array | At most 16 club names, each 1 to 40 characters. Word filter. |
+| `awayClubs` | string array | Optional, empty by default. The clubs whose human manager is Away: the connection dropped and the club is on holiday. The same rules as `humanClubs`. |
 | `freeSeats` | integer | 0 to 16 |
 | `managersOnline` | integer | 0 to 16 |
+| `pingMs` | integer | Optional, 0 by default. The highest ping of the host's human managers in ms, 0 to 9999, 0 when none is known (slice 7). The game list row shows it. |
 | `password` | string | Optional, at most 64 characters. Empty means no password. The lobby keeps only a salted PBKDF2 hash (20,000 rounds) in its storage. |
 
 ### Endpoints
 
 `GET /v1/health` gives `{"ok": true, "api": 1}`. It does not use a Durable Object, so the connection test (slice 7) can call it often.
 
+The connection test (slice 7, `src/recomp_rt/win/net_test.c`) calls `GET /v1/health`, then `GET /v1/games`, then a WebSocket request for `/v1/games/22222222/relay?role=manager&ticket=connection-test`. No game has that code, so the relay answers `unknown_game` (404) and stores nothing. If the answer is `upgrade_required`, something on the way took the `Upgrade` header off, and the relay cannot work on that network. Each test costs 3 Worker requests and 2 Durable Object requests.
+
 `POST /v1/games` registers a game. The body holds every game field. The answer is 201 with `{"code", "hostToken", "heartbeatSeconds": 30, "expireSeconds": 90}`.
 - `code` is 8 characters from `23456789ABCDEFGHJKMNPQRSTUVWXYZ`. The game list and the invite link use it.
 - Keep `hostToken` secret. Heartbeat, close and the host relay connection need it.
 - To register the same game again (see the heartbeat), add `code` and `hostToken` to the body. The answer is 200 with the same code and token.
 
-`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `freeSeats` and `managersOnline`. The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. This also happens if the lobby loses its storage. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
+`POST /v1/games/<code>/heartbeat`, with the header `Authorization: Bearer <hostToken>`, keeps the game open. Send it every 30 s. The body is optional and can hold `season`, `day`, `humanClubs`, `awayClubs`, `freeSeats`, `managersOnline` and `pingMs`, and `password` after the host changed it (a new password, or an empty string to remove it; the list's `password` flag follows at once, and the change is stored at once). The answer is `{"ok": true}`. The lobby drops a game with no heartbeat for 90 s and closes its relay. If the answer is `unknown_game`, register again at once with `code` and `hostToken`. This also happens if the lobby loses its storage. If that answer is `not_host`, the game expired and its relay is closed. Then register as a new game, without `code` and `hostToken`, and connect to the new relay. The game gets a new code.
 
 `DELETE /v1/games/<code>`, with the header `Authorization: Bearer <hostToken>`, closes the game and its relay. The host sends it when it quits.
 
-`GET /v1/games` gives `{"games": [...], "heartbeatSeconds": 30}`. Each game is `{"code", "name", "hostName", "version", "database", "season", "day", "humanClubs", "freeSeats", "managersOnline", "password": true|false}`. The list holds at most 200 games, with the most managers online first.
+`GET /v1/games` gives `{"games": [...], "heartbeatSeconds": 30}`. Each game is `{"code", "name", "hostName", "version", "database", "season", "day", "humanClubs", "awayClubs", "freeSeats", "managersOnline", "pingMs", "password": true|false}`. The list holds at most 200 games, with the most managers online first.
 
 `GET /v1/games/<code>` gives `{"game": {...}}` for one game, in the same form. The invite link page uses it.
 
@@ -137,7 +204,7 @@ Wrong passwords are limited for each game, in each minute: 5 from one internet a
 | `not_found`, `method_not_allowed` | 404, 405 | Unknown path or method | |
 | `lobby_full` | 503 | 300 games are open | |
 | `full_today` | 503 | A free plan limit is used up | `retryAfterSeconds` (to 00:00 UTC), also in the `Retry-After` header |
-| `unavailable` | 503 | Any other server failure | |
+| `unavailable` | 503 | Any other server failure, or too many calls from one address (then with `Retry-After: 60`) | |
 
 Cloudflare does not document the error text of a used-up Durable Object limit. The Worker gives `full_today` for an error that contains "daily limit", "free tier", "quota", "exceeded allowed" or "exceeded its daily", and `unavailable` for other errors. CPU and memory errors give `unavailable`. Check this against a real limit error once, after the deploy.
 

@@ -189,7 +189,8 @@ export class Lobby extends DurableObject<Env> {
   }
 
   private view(g: Game) {
-    return { code: g.code, ...g.info, password: g.password !== null };
+    // A game stored before pingMs existed has none: 0.
+    return { code: g.code, ...g.info, pingMs: g.info.pingMs ?? 0, password: g.password !== null };
   }
 
   private async passwordRecord(password: string | null) {
@@ -304,11 +305,16 @@ export class Lobby extends DurableObject<Env> {
     if (g === undefined) return err("unknown_game");
     if (!(await this.isHost(g, token))) return err("not_host");
     const addressKey = await this.addressKey(address);
+    const { password: plain, ...info } = input;
+    // A changed password is hashed once, when the host sends it; the game sends it only after a change.
+    const password = plain !== undefined ? await this.passwordRecord(plain) : undefined;
     if (this.games.get(code) !== g) return err("unknown_game"); // closed or expired meanwhile
     g.addressKey = addressKey;
-    Object.assign(g.info, input);
+    if (password !== undefined) g.password = password;
+    Object.assign(g.info, info);
     g.lastSeen = this.now();
-    if (g.lastSeen - g.storedSeen >= STORE_SEEN_EVERY_MS) await this.store(g);
+    // A password change is stored at once, so that it survives an eviction.
+    if (password !== undefined || g.lastSeen - g.storedSeen >= STORE_SEEN_EVERY_MS) await this.store(g);
     return { ok: true, body: { ok: true } };
   }
 

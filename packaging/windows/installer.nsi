@@ -121,6 +121,9 @@ Section "Install"
   File "/oname=${PROGRAM}" "${EXE}"
   SetOutPath "$INSTDIR\game"
   File /r "${GAME_DIR}/*"
+  ; The licences of the libraries in the program (packaging/licences).
+  SetOutPath "$INSTDIR\licences"
+  File "${LICENCES}\mbedtls-LICENSE.txt"
   SetOutPath "$INSTDIR"
 
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -148,6 +151,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\${PROGRAM}"
   RMDir /r "$INSTDIR\game"
+  RMDir /r "$INSTDIR\licences"
   Delete "$INSTDIR\Uninstall.exe"
   RMDir "$INSTDIR"
 
