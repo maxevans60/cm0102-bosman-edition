@@ -14,8 +14,8 @@ clicks Finish and takes Holiday until next match, so that the assistant answers 
 Continue Game, and the host is back for the friendly. Then for --minutes both
 games repeat their inputs: Space (Continue Game), a click at (45, 120) (Continue Game, and on the match screen
 Kick Off, Re-start and Continue Game) and a click at (705, 573) (Yes of "Proceed to the match?"), every 6 s. The
-joiner also clicks Yes, then answers a bid for its players (Respond at 172, 230, Reject at 502, 573, then the Yes),
-every 10 s. Each game
+joiner's round (every 10 s) is Space, Yes (705, 573) at once, then (45, 120), then the answer to a bid for its
+players (Respond at 172, 230, Reject at 502, 573, then the Yes). Each game
 dumps its screen once a minute.
 
 The traffic logs (RECOMP_NET_LOG) give the bytes and packets of each 10 s. The run prints:
@@ -59,9 +59,15 @@ def loop_steps(t0, minutes, who, bids=False):
     steps, period = [], PERIOD + (4000 if bids else 0)
     for i in range(int(minutes * 60000 // period)):
         t = t0 + i * period
-        steps += [f"{t} press space", f"{t + 1500} click 45 120"]
         if bids:
-            steps += [f"{t + 3000} click 705 573", f"{t + 5000} {BID[0]}", f"{t + 7000} {BID[1]}"]
+            # Space (Continue Game) opens "Proceed to the match?" on the joiner's channel; Yes must come next. A
+            # click at (45, 120) while it is open reaches its input 0x727c30 as widget 129, which closes it with
+            # no match (-9), so the squad screen came back each round (run matchday7, 2026-10-29, probe of
+            # 0x725ca0, 0x725f70 and 0x727c30). Then (45, 120) is Kick Off on the match screen.
+            steps += [f"{t} press space", f"{t + 1500} click 705 573", f"{t + 3000} click 45 120",
+                      f"{t + 5000} {BID[0]}", f"{t + 7000} {BID[1]}"]
+        else:
+            steps += [f"{t} press space", f"{t + 1500} click 45 120"]
         steps += [f"{t + period - 2000} click 705 573"]
         if i % 10 == 0:
             steps.append(f"{t + period - 1000} dump {{d}}/{who}-loop-{i // 10:03d}.bmp")
