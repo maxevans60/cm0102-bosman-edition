@@ -7,7 +7,6 @@ import { CODE_RE, FieldError, parseHeartbeat, parseJoin, parseRegister } from ".
 
 export { Lobby } from "./lobby";
 export { Relay } from "./relay";
-export { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, WRITE_LIMIT_48, clearAnswerCache, setAnswerCacheMs } from "./flood";
 
 const MAX_BODY_BYTES = 4096;
 

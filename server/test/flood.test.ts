@@ -1,7 +1,8 @@
 // Layer 1 against call floods: a limit for each internet address at the start of the Worker,
 // before any Durable Object call, and a short-lived copy of the list in the Worker's memory.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import worker, { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, WRITE_LIMIT_48, setAnswerCacheMs } from "../src/index";
+import worker from "../src/index";
+import { ANSWER_CACHE_MS, CALL_LIMIT, WRITE_LIMIT, WRITE_LIMIT_48, setAnswerCacheMs } from "../src/flood";
 import wranglerConfig from "../wrangler.jsonc?raw";
 import { BASE, call, freshIp, gameBody, json, register, resetObjects } from "./helpers";
 
