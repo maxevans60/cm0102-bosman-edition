@@ -93,7 +93,34 @@ The free plan's limits are daily, and the paid plan's are monthly. So the free p
 
 The lobby writes about 1,440 rows a day for each open game: 1 row when a game registers, closes or expires, and at most 1 row a minute from its heartbeats. The 100,000 free rows a day cover about 69 games open all day, so the request limits come first. After an eviction, the list can show fields up to 60 s old until the next heartbeat. The relay writes 1 row when a game registers, 1 row when a host connects and 1 row for each join.
 
-A stranger can use up the daily Worker requests with a simple flood, because the free plan has no request filter before the Worker. Online play then stops until 00:00 UTC, and LAN play still works. A Workers rate limit for each address is a possible later step.
+## Floods of calls
+
+The server stays on the free plan (Max, 2026-10-29). On the free plan a flood can stop online play until 00:00 UTC, but it can never cost money. LAN and VPN play still work.
+
+Layer 1 (`src/flood.ts`) has two parts.
+
+A limit for each internet address runs first in the Worker, before it reads a body or asks a Durable Object. It uses the Workers Rate Limiting binding (`ratelimits` in `wrangler.jsonc`). An IPv6 address counts by its first 64 bits, as in the lobby.
+
+| Limit | In 60 s from one address | Why this number |
+|---|---|---|
+| `RATE_CALLS`, every call | 180 | A busy home makes at most about 64: 2 hosts with 8 heartbeats, 6 joins, and 4 games that each ask for the list every 5 s (the game keeps its list 5 s). The margin is for many players behind one carrier or campus address. |
+| `RATE_WRITES`, register, join and close | 20 | These calls write storage, hash a password or make a relay. A home makes at most 2 registers (the limit of 2 games). 20 lets a group of friends at one address join in the same minute. |
+| `RATE_WRITES_48`, the same writes from one IPv6 /48 site | 60 | One site has 65,536 /64 networks, so without this limit it could make 20 writes in each of them. |
+
+A refused call gets status 503 with `{"error": "unavailable", ...}`, the header `X-Bosman-Api: 1` and `Retry-After: 60`. The game shows its existing "not available" text and tries again later. The invite link page gets a short page that says to try again in a minute. A call with no `CF-Connecting-IP` header (only a local run) is not limited. If the limiter fails, the call goes through.
+
+The Worker also keeps the list, and the answer for one game, in its memory for 2 s. Many list calls then cost one lobby call. These answers hold no internet address and no token. An error answer and a "game not open" answer are not kept. A register, heartbeat or close through the same Worker drops the copies at once. Through another Worker, the list can be up to 2 s old.
+
+What layer 1 cannot do:
+
+- A refused call still counts as a Worker request, because Cloudflare counts each call that reaches the Worker. A flood of 100,000 calls a day therefore still stops online play until 00:00 UTC, also from one address. Layer 1 saves the Durable Object requests, storage writes, run time and CPU time behind each refused call.
+- The limiter's counts are approximate and kept for each Cloudflare location. A flood from many addresses or locations gets through each address's limit.
+- The limiter never gets an internet address. Its key is a hash of the address prefix, the UTC date and a salt, so the key of one address changes each day. With the salt in the code only, someone who has a key could find an IPv4 address by trying them all. Only Cloudflare sees the keys, and it sees the addresses anyway. For a secret salt, run `npx wrangler secret put RATE_KEY_SALT` once and enter any long random text. Cloudflare keeps the counts for the limit's period only. Nothing is stored or logged by this server.
+- The refusal uses the game's "not available" text. It does not say that the cause is too many calls from the player's network.
+
+Cloudflare's documents (checked 2026-10-29) do not name a plan for the Rate Limiting binding, and a third-party report says the free plan has it at no charge. The deploy shows if the account allows it. If the binding is missing, every call goes through.
+
+A free WAF rate limiting rule would block calls before the Worker runs, so that blocked calls would not count. The free plan has 1 such rule (by IP, 10 s). Its set-up pages are for a domain on Cloudflare. They do not say if it works on a `workers.dev` address. It would need a domain.
 
 ## API contract (version 1)
 
@@ -177,7 +204,7 @@ Wrong passwords are limited for each game, in each minute: 5 from one internet a
 | `not_found`, `method_not_allowed` | 404, 405 | Unknown path or method | |
 | `lobby_full` | 503 | 300 games are open | |
 | `full_today` | 503 | A free plan limit is used up | `retryAfterSeconds` (to 00:00 UTC), also in the `Retry-After` header |
-| `unavailable` | 503 | Any other server failure | |
+| `unavailable` | 503 | Any other server failure, or too many calls from one address (then with `Retry-After: 60`) | |
 
 Cloudflare does not document the error text of a used-up Durable Object limit. The Worker gives `full_today` for an error that contains "daily limit", "free tier", "quota", "exceeded allowed" or "exceeded its daily", and `unavailable` for other errors. CPU and memory errors give `unavailable`. Check this against a real limit error once, after the deploy.
 

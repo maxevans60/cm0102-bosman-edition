@@ -2,6 +2,7 @@ import { expect } from "vitest";
 import { exports } from "cloudflare:workers";
 import { abortAllDurableObjects, env, runInDurableObject } from "cloudflare:test";
 import type { Lobby } from "../src/lobby";
+import { setAnswerCacheMs } from "../src/index";
 
 export const BASE = "https://lobby.test";
 
@@ -171,6 +172,8 @@ export async function managerSocket(code: string, ticket: string): Promise<Socke
 
 /** Starts each test with fresh objects and an empty lobby. Stored games outlive an abort. */
 export async function resetObjects(): Promise<void> {
+  // Most tests change the lobby and read the list at once, so the Worker's 2 s copy is off (flood.test.ts turns it on).
+  setAnswerCacheMs(0);
   await abortAllDurableObjects();
   await setLobbyClock(null);
   await withLobby((inst) => inst.forgetAll());
