@@ -111,6 +111,7 @@ a { color: inherit; }
 .release li::before { content: ""; position: absolute; left: 0; top: .45em; width: .55em; height: .55em; background: var(--accent); }
 .release .later li::before { background: #7a7a86; }
 .release .later { margin-top: 28px; color: var(--muted); }
+.release.history { grid-template-columns: minmax(0, 1fr); }
 .shot { position: relative; aspect-ratio: 4 / 3; min-width: 0; width: 100%; }
 .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; border: 2px solid #2433b8; }
 .shot.wide { aspect-ratio: 1600 / 1000; align-self: start; }
@@ -265,7 +266,7 @@ a { color: inherit; }
     <ul>
       <li><a href="#release">Release</a></li>
       <li><a href="#seasons">New</a></li>
-      <li><a href="#new">0.5.0</a></li>
+      <li><a href="#history">History</a></li>
       <li><a href="#next">Roadmap</a></li>
       <li><a href="#install">Install</a></li>
       <li><a href="#questions">Questions</a></li>
@@ -466,28 +467,25 @@ a { color: inherit; }
   </div>
 </section>
 
-<section class="screen" id="new" aria-labelledby="new-title">
+<section class="screen" id="history" aria-labelledby="history-title">
   <div class="inner">
-    <h2 class="bar" id="new-title">New in <em>0.5.0</em></h2>
-    <div class="release">
-      <div class="panel" data-in>
-        <h3 class="sub">Added</h3>
-        <ul>
-          <li>Bosman Edition Options: change every option in the game, from Setup Game or from Game Options in the side bar.</li>
-          <li>Each player's position on the tactics screen, before and during a match.</li>
-          <li>Players who count against the foreign player limit of your next league or cup match show in light violet.</li>
-          <li>A full player search option that lists every player, also the ones your manager does not know.</li>
-          <li>Fixes for rare faults of the original game in news, transfers and squad updates.</li>
-          <li>The game no longer uses a full processor core while it waits for you.</li>
-          <li>The Database button lists the Update Team databases by season.</li>
-        </ul>
-        <ul class="later">
-          <li>Each option can be switched off in the options box or in settings.txt. The changelog on GitHub lists every change.</li>
-        </ul>
-      </div>
-      <figure class="shot wide" data-in style="margin:0">
-        <img src="assets/s3@2x.png" width="1600" height="1000" alt="The Arsenal squad screen after Pick best team: Seaman in goal, Cole, Keown, Campbell and Luzhny in defence, Vieira and Parlour in midfield, Bergkamp and Henry up front." loading="lazy">
-      </figure>
+    <h2 class="bar" id="history-title">All <em>releases</em></h2>
+    <div class="release history">
+    <div class="panel" data-in>
+      <ul>
+        <li><b>0.6.0</b> (29 October 2026): any season from 2001/02 to 2025/26 with its own database, leagues, cups and rules, changing rules in a long game, Best XI with squad depth, a new Setup Game.</li>
+        <li><b>0.5.1</b> (18 October 2026): a Mac fix for saving games with Brazil's state championships.</li>
+        <li><b>0.5.0</b> (16 October 2026): Bosman Edition Options to change every option from Setup Game or Game Options, each player's position on the tactics screen, foreign players who count against the limit in light violet, a full player search, the Update Team databases listed by season, fixes for rare faults of the original in news, transfers and squad updates, and low processor use while the game waits for you.</li>
+        <li><b>0.4.0</b> (16 October 2026): Team views with best XI and squad depth, player comparison with a polygon, attribute groups, print to PDF, HD layout, the Update Team's databases.</li>
+        <li><b>0.3.1</b> (15 October 2026): the Assistant picks by the key attributes of each position and finds the best eleven as a whole.</li>
+        <li><b>0.3.0</b> (15 October 2026): Linux and Steam Deck, a database choice, the Assistant menu, holiday until next match, Fastest commentary, save names, backups, colours for condition and morale.</li>
+        <li><b>0.2.0</b> (15 October 2026): sound, space bar for Continue Game, a Back key, sharp scaling, clickable names, attribute colours, faster holidays.</li>
+        <li><b>0.1.0</b> (14 October 2026): the first release, for Mac and Windows, in widescreen or classic.</li>
+      </ul>
+      <ul class="later">
+        <li>Each option can be switched off in the options box or in settings.txt. The <a href="https://github.com/maxevans60/cm0102-bosman-edition/releases">GitHub releases</a> list every change.</li>
+      </ul>
+    </div>
     </div>
   </div>
 </section>
