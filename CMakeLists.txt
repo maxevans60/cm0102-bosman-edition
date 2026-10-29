@@ -343,6 +343,12 @@ if(EXISTS "${CM0102_EXE}")
         ${RECOMP_WIN}
     )
     add_dependencies(cm0102_recomp recomp_gen)
+    # The host qsort of the player history lists (qsort6.c) sorts as the recompiled qsort 0x945333 does,
+    # rows and eax, so "Player histories" is faster and the game stays the same (rule Q152).
+    get_filename_component(CM0102_EXE_DIR "${CM0102_EXE}" DIRECTORY)
+    add_test(NAME qsort6 COMMAND cm0102_recomp --game "${CM0102_EXE_DIR}")
+    set_tests_properties(qsort6 PROPERTIES ENVIRONMENT
+        "RECOMP_QSORT_TEST=1;SDL_VIDEODRIVER=dummy;SDL_AUDIODRIVER=dummy;RECOMP_NO_BOX=1;RECOMP_USER_DIR=${CMAKE_BINARY_DIR}/qsort6-user")
     # 0.6.0 slice 11c: the build stops when the history table is not the one plan.tsv gives, or a row is not valid.
     add_custom_command(
         OUTPUT "${CMAKE_BINARY_DIR}/seasons/history.ok"
