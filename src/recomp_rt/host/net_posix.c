@@ -11,6 +11,7 @@
 #include <netinet/tcp.h>
 #include <pthread.h>
 #include <poll.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -357,4 +358,71 @@ int hn_route_address(uint32_t *addr)
     if (r) return fail(wsa_of(e));
     *addr = me.sin_addr.s_addr;
     return *addr ? 0 : fail(HN_NETDOWN);
+}
+
+int hn_pair(hn_sock *a, hn_sock *b)
+{
+    int l = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP), c = -1, s = -1;
+    struct sockaddr_in at = sin_of(htonl(INADDR_LOOPBACK), 0), mine, peer;
+    socklen_t len = sizeof at;
+    if (l < 0) return fail_errno();
+    if (bind(l, (struct sockaddr *)&at, sizeof at) < 0 || listen(l, 1) < 0 ||
+        getsockname(l, (struct sockaddr *)&at, &len) < 0)
+        goto failed;
+    c = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (c < 0 || connect(c, (struct sockaddr *)&at, sizeof at) < 0) goto failed;
+    len = sizeof peer;
+    s = accept(l, (struct sockaddr *)&peer, &len);
+    len = sizeof mine;
+    /* Only the connection of c: another program on this computer could connect first. */
+    if (s < 0 || getsockname(c, (struct sockaddr *)&mine, &len) < 0 || peer.sin_port != mine.sin_port) goto failed;
+    if (prepare(c) < 0 || prepare(s) < 0) goto failed;
+    close(l);
+    int one = 1;
+    setsockopt(c, IPPROTO_TCP, TCP_NODELAY, &one, sizeof one);
+    setsockopt(s, IPPROTO_TCP, TCP_NODELAY, &one, sizeof one);
+    *a = c, *b = s;
+    return 0;
+failed:
+    fail_errno();
+    close(l);
+    if (c >= 0) close(c);
+    if (s >= 0) close(s);
+    return -1;
+}
+
+int hn_trust_roots(void (*add)(void *ctx, const unsigned char *data, size_t n, int pem), void *ctx)
+{
+    /* macOS, then Debian, Ubuntu, Arch and the Steam Deck, Fedora, openSUSE, Alpine. */
+    static const char *const files[] = {"/etc/ssl/cert.pem", "/etc/ssl/certs/ca-certificates.crt",
+                                        "/etc/pki/tls/certs/ca-bundle.crt", "/etc/ssl/ca-bundle.pem",
+                                        "/etc/ssl/certs/ca-bundle.crt"};
+    for (size_t i = 0; i < sizeof files / sizeof files[0]; i++) {
+        FILE *f = fopen(files[i], "rb");
+        if (!f) continue;
+        size_t room = 1u << 20, n = 0;
+        unsigned char *b = malloc(room + 1);
+        size_t r;
+        while (b && (r = fread(b + n, 1, room - n, f)) > 0) {
+            n += r;
+            if (n == room) {
+                unsigned char *bigger = realloc(b, room * 2 + 1);
+                if (!bigger) break;
+                b = bigger, room *= 2;
+            }
+        }
+        fclose(f);
+        if (!b) continue;
+        b[n] = 0;
+        if (n) add(ctx, b, n + 1, 1);
+        free(b);
+        if (n) return 1;
+    }
+    return 0;
+}
+
+int hn_verify_server(const unsigned char *const *der, const size_t *len, int n, const char *host)
+{
+    (void)der, (void)len, (void)n, (void)host;
+    return -1;
 }

@@ -547,6 +547,18 @@ LobbyHostState lobby_host_state(char *code_out)
     return s;
 }
 
+int lobby_host_relay(char code[9], char token[96])
+{
+    hn_lock();
+    int open = sh.state == LOBBY_OPEN && sh.code[0] && sh.token[0];
+    memcpy(code, sh.code, 9);
+    memcpy(token, sh.token, 96);
+    hn_unlock();
+    return open;
+}
+
+const char *lobby_address(void) { return base; }
+
 void lobby_host_refusal(char *out, unsigned room)
 {
     hn_lock();

@@ -43,7 +43,11 @@
  * game never sends (Display::process_command_packet 0x564080 switches on 0..26 through the table at 0x567a1c), and
  * a line "BOSMAN PING <n>", "BOSMAN PONG <n>", "BOSMAN KICK" or "BOSMAN QUIT" (a host that ends at a window close). A send puts one only where the game's own stream is
  * between two packets, and nc_recv takes each one out where the game's reads are between two packets, before
- * the game reads the next length byte. So the game never sees them, and they pass the relay as any bytes. */
+ * the game reads the next length byte. So the game never sees them, and they pass the relay as any bytes.
+ *
+ * The relay (0.7.0 slice 5, relay.h). A joiner's connect to a lobby row gets a socket from the route hook in
+ * place of the system's connect, and a host's listen socket gets the relay's human managers from the incoming
+ * hook. Both are ordinary TCP sockets on 127.0.0.1, so everything above runs on them as it is. */
 #include "net_core.h"
 #include "../host_net.h"
 
@@ -128,6 +132,8 @@ void nc_set_identity(const char *version, const char *host_pw, const char *join_
 
 void nc_set_host_password(const char *pw) { snprintf(host_password, sizeof host_password, "%s", pw ? pw : ""); }
 void nc_set_join_password(const char *pw) { snprintf(join_password, sizeof join_password, "%s", pw ? pw : ""); }
+const char *nc_join_password(void) { return join_password; }
+void nc_set_refusal(int why) { refused = why; }
 
 void nc_refusal_clear(void) { refused = NC_REFUSED_NONE, connect_error = 0; }
 
@@ -440,6 +446,16 @@ static int take_one(Sock *k)
     }
 }
 
+/* The time between two PINGs on k. A joiner through the relay (0.66.255.<channel>, relay.h) gets one every
+ * NC_PING_RELAY_MS: each PING and PONG is a WebSocket message, and a message every few seconds keeps the relay
+ * awake, which is the free plan's tightest limit (server/README.md, research note section 15). */
+static int ping_gap(const Sock *k)
+{
+    const uint8_t *b = (const uint8_t *)&k->peer;
+    int relay = b[0] == 0 && b[1] == 66 && b[2] == 255;
+    return relay && ping_every < NC_PING_RELAY_MS ? NC_PING_RELAY_MS : ping_every;
+}
+
 /* At every call of the game: the host's PING to each joiner every NC_PING_MS, and the packets that waited. */
 static void control_tick(void)
 {
@@ -454,7 +470,7 @@ static void control_tick(void)
         snprintf(ping, sizeof ping, "PING %u", ++k->ping_seq);
         k->ping_sent = now;            /* send_waiting sets the time again when the PING goes */
         send_control(k, ping);
-        k->ping_at = now + (uint64_t)ping_every;
+        k->ping_at = now + (uint64_t)ping_gap(k);
     }
 }
 
@@ -469,7 +485,7 @@ int nc_ping_ms(uint32_t h)
     for (int i = 1; i < k->ping_n; i++)
         if (k->ping[i] < best) best = k->ping[i];
     /* A PONG that is late by more than two rounds counts as it is now: the line may have stopped. */
-    if (k->ping_sent && hn_ms() - k->ping_sent > 2u * (uint64_t)ping_every && (int)(hn_ms() - k->ping_sent) > best)
+    if (k->ping_sent && hn_ms() - k->ping_sent > 2u * (uint64_t)ping_gap(k) && (int)(hn_ms() - k->ping_sent) > best)
         best = (int)(hn_ms() - k->ping_sent);
     return best;
 }
@@ -702,6 +718,16 @@ static void serve_listeners(void)
             pending[i].since = hn_ms(), pending[i].len = 0, pending[i].ready = is_loopback(a);
             pending[i].hello = 0;
         }
+        /* A human manager through the relay (relay.h): its join block comes through the relay like any bytes. */
+        for (int i = 0; hooks && hooks->incoming && i < PENDING; i++) {
+            if (pending[i].listen) continue;
+            uint32_t a;
+            uint16_t p;
+            hn_sock c = hooks->incoming(&a, &p);
+            if (c == HN_INVALID) break;
+            pending[i].listen = socks[k].handle, pending[i].s = c, pending[i].addr = a, pending[i].port = p;
+            pending[i].since = hn_ms(), pending[i].len = 0, pending[i].ready = 0;
+        }
     }
     for (int i = 0; i < PENDING; i++)
         if (pending[i].listen && !pending[i].ready && check_pending(i) > 0) pending[i].ready = 1;
@@ -860,7 +886,13 @@ int nc_connect(uint32_t h, uint32_t addr, uint16_t port)
     refused_version[0] = 0;
     host_left = host_broke = host_quit = kicked = connect_error = 0;
     if (hooks && hooks->connect && hooks->connect(addr, port) < 0) return -1;
-    if (hn_connect(k->s, addr, port, connect_ms) < 0) {
+    hn_sock routed = HN_INVALID;
+    int how = hooks && hooks->route ? hooks->route(addr, port, &routed) : 0;
+    if (how < 0) return -1;
+    if (how > 0) {                 /* the relay's socket takes the place of the game's (relay.h) */
+        hn_close(k->s);
+        k->s = routed;
+    } else if (hn_connect(k->s, addr, port, connect_ms) < 0) {
         connect_error = hn_error();    /* the reason of "could not be joined" (0.7.0 slice 7) */
         return fail_host();
     }

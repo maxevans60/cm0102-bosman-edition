@@ -35,7 +35,11 @@
  * The game id is new for each hosting: the save has no id that the runtime knows yet (one open copy of a
  * save, Q23, is open for slice 6).
  *
- * The lobby address: RECOMP_LOBBY_URL, else LOBBY_ADDRESS (empty until Max deploys the server, slice 5). The
+ * Joins through the relay (slice 5, relay.h): a connect to a lobby row gets a ticket from the lobby and a socket
+ * to the host through the relay (route), and a host that is open in the lobby holds a relay connection whose
+ * human managers come to its listen socket (incoming).
+ *
+ * The lobby address: RECOMP_LOBBY_URL, else LOBBY_ADDRESS, the deployed server. The
  * option online_play (on by default) gates every lobby request at the moment of the request: with it off,
  * the game list shows LAN games only and a host stays off the lobby.
  *
@@ -61,6 +65,7 @@
 #include "lobby.h"
 #include "lobby_rows.h"
 #include "lobby_http.h"
+#include "relay.h"
 #include "net_errors.h"
 #include "../host_net.h"
 
@@ -71,7 +76,7 @@
 #ifndef CM0102_VERSION
 #define CM0102_VERSION "dev"
 #endif
-#define LOBBY_ADDRESS ""            /* slice 5: the deployed https address */
+#define LOBBY_ADDRESS "https://bosman-online.maxvert.workers.dev"   /* the deployed server (server/README.md) */
 
 #define COMP_TABLE 0xadadfcu        /* g_comp_object_table */
 #define STAFF_TABLE 0xae23bcu
@@ -90,6 +95,7 @@
                                      * The folder box at 0x590060 has the same title and "could not be created". */
 #define LIST_CACHE_MS 5000
 #define PORT 6667
+#define JOIN_MS 8000                /* the ticket, then the relay: each at most this */
 
 static int hosting;
 static char host_text[51], game_name[51], game_id[40];
@@ -240,17 +246,51 @@ static int before_connect(uint32_t addr, uint16_t port)
     const uint8_t *b = (const uint8_t *)&addr;
     if (full) refuse_for(full == 2 ? NE_LOBBY_DOWN : NE_FULL_TODAY, NULL, 0);
     else if (r && strcmp(r->g.version, version())) refuse_for(NE_VERSION, r->g.version, 0);
-    else if (r) {
-        /* Slice 5 joins a lobby row through the relay (its route hook takes this place). */
-        refuse("This build cannot join online games yet. Join a game on your own network, or type the address of "
-               "the host.");
-    } else if (b[0] == 0 && b[1] == 66) {
-        /* Every other address of 0.66.0.0/16 stops here, also one that a player typed (lobby_rows.h). */
+    else if (!r && b[0] == 0 && b[1] == 66) {
+        /* An address of 0.66.0.0/16 with no row, for example one that a human manager typed (lobby_rows.h). */
         refuse_for(NE_GAME_GONE, NULL, 0);
-    } else return 0;
+    } else return 0;                 /* a LAN address, or a lobby row: route joins it through the relay */
     nc_set_error(10061);
     return -1;
 }
+
+/* A connect to a lobby row goes through the relay (relay.h). */
+static int route(uint32_t addr, uint16_t port, intptr_t *s)
+{
+    (void)port;
+    int full;
+    const LobbyRow *r = lr_row_of(addr, &full);
+    if (!r || full) return 0;
+    char code[9], computer[51] = "", name[12], host_version[32], t[400];
+    memcpy(code, r->code, sizeof code);
+    hn_hostname(computer, sizeof computer);
+    lr_host_key(name, computer);
+    hn_sock got;
+    RelayJoin j = relay_join(lobby_address(), code, version(), name, nc_join_password(), JOIN_MS, &got, host_version,
+                             sizeof host_version);
+    switch (j) {
+    case RJ_OK:
+        *s = got;
+        return 1;
+    case RJ_PASSWORD:
+        /* As the host's own refusal: the wrap of confirm_push opens the joiner's password box (slice 6). */
+        nc_set_refusal(NC_REFUSED_PASSWORD);
+        break;
+    case RJ_GONE: refuse_for(NE_GAME_GONE, NULL, 0); break;
+    case RJ_VERSION: refuse_for(NE_VERSION, host_version, 0); break;
+    case RJ_ATTEMPTS: refuse_for(NE_ATTEMPTS, NULL, 0); break;
+    case RJ_FULL: refuse_for(NE_GAME_FULL, NULL, 0); break;
+    case RJ_HOST_AWAY: refuse_for(NE_HOST_AWAY, NULL, 0); break;
+    case RJ_NAME: refuse_for(NE_NAME, NULL, 0); break;
+    case RJ_FULL_TODAY: refuse_for(NE_FULL_TODAY, NULL, 0); break;
+    case RJ_RELAY_DOWN: refuse_for(NE_RELAY_DOWN, NULL, 0); break;
+    default: refuse_for(NE_LOBBY_DOWN, NULL, 0);
+    }
+    nc_set_error(10061);
+    return -1;
+}
+
+static intptr_t incoming(uint32_t *addr, uint16_t *port) { return relay_take_joiner(addr, port); }
 
 static void tick(void)
 {
@@ -275,7 +315,11 @@ static void tick(void)
     } else if (hosting && !options_bool(OPT_ONLINE_PLAY)) {
         lobby_host_close();                              /* Online play went off: the entry closes */
     }
-    char code[9];
+    /* The host's relay connection follows its lobby entry. While the entry registers again, the old one stays. */
+    char code[9], token[96];
+    if (hosting && online() && lobby_host_relay(code, token)) relay_host_set(lobby_address(), code, token);
+    else if (!hosting || !online() || lobby_host_state(NULL) == LOBBY_REFUSED || lobby_host_state(NULL) == LOBBY_CLOSED)
+        relay_host_stop();
     LobbyHostState s = lobby_host_state(code);
     if (s != shown_state) {
         shown_state = s;
@@ -290,12 +334,13 @@ static void tick(void)
 static void at_quit(void)
 {
     if (hosting) lobby_host_close();
+    relay_host_stop();
     lobby_finish(2000);
 }
 
 void net_lobby_install(void)
 {
-    static const NcHooks hooks = {sent, arrived, extra, before_connect, tick};
+    static const NcHooks hooks = {sent, arrived, extra, before_connect, tick, route, incoming};
     static int done;
     if (done) return;
     done = 1;

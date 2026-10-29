@@ -34,6 +34,7 @@
 #define LR_HOST_AT 19
 #define LR_NET 0x00420000u           /* 0.66.0.0, host order */
 #define LR_FULL_ROW 0x0042ffffu      /* 0.66.255.255: the "full today" row */
+#define LR_RELAY_PEERS 0x0042ff00u   /* 0.66.255.<channel>: a human manager through the relay, on the host (relay.h) */
 #define LR_DOWN_ROW 0x0042fffeu      /* 0.66.255.254: the "lobby does not answer" row (0.7.0 slice 7) */
 #define LR_HOLD_MS 300
 #define LR_LOBBY_WAIT_MS 400

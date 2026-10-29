@@ -169,8 +169,10 @@ As built (2026-10-27, branch `claude/online-s4b-lobby-ea2663`, less the 50-game 
 Blocked by: 4
 Delivers: a human manager on another network joins with no router setting. Adds a library for secure web connections on three platforms.
 Merge danger: two-way door. Blast radius: online joins fail. A new library ships on three platforms.
-- [ ] Two-game run passes through the real relay.
+- [x] Two-game run passes through the real relay.
 - [ ] A GitHub Windows machine and a GitHub Linux machine join a game on this Mac.
+
+As built (2026-10-29, branch `claude/online-s5-relay-16166c`): the merge danger stays a two-way door. Files: `src/recomp_rt/win/relay.c`, `websocket.c`, `secure.c`, `tls_config.h` and their headers (new), `net_core.c` and `net_core.h` (route and incoming hooks, the join password for the lobby), `net_lobby.c`, `lobby.c`, `lobby_http.c` (https), `lobby_rows.h` (`LR_RELAY_PEERS`), `user32.c` (the joiner's client loop runs its poll once more for a press that came up before the host's answer), `host/net_posix.c`, `host/net_win32.c`, `host_net.h`, `CMakeLists.txt` (mbedTLS 3.6.7), `packaging/windows/windows.cmake` (crypt32), `tests/net/test_relay.c`, `tests/net/tls_check.py`, `tests/smoke/network_run.py` (`--relay`, `--remote`, `--game-name`), `tests/smoke/relay_join_remote.py`, `.github/workflows/online-join.yml`. On the final build: the two-game run through the local relay and the LAN run, the deployed relay with 1 and 2 joiners, ctest 55 of 55 and the four same-save sets pass. Earlier builds passed the local relay with 3 joiners. Not run: 3 joiners on the final build, the GitHub machines (the workflow needs a push and two secrets). The downloads ship mbedTLS's licence (`packaging/licences`). Research note, section 15.
 
 ### 6. Drop in, drop out and host quit
 Blocked by: 5

@@ -78,4 +78,18 @@ int hn_resolve(const char *name, uint32_t *addr);
 /* The address of this computer that the default route uses. No packet is sent. 0 on success. */
 int hn_route_address(uint32_t *addr);
 
+/* For the relay (0.7.0 slice 5, win/relay.c). Two connected TCP sockets on 127.0.0.1, both non-blocking. The
+ * game gets one as an ordinary socket, and the relay thread passes the bytes of the other to the relay. 0 on
+ * success. */
+int hn_pair(hn_sock *a, hn_sock *b);
+
+/* The trusted root certificates of this system, for the secure connection (win/secure.c). Calls add once for
+ * each certificate (pem 0: DER bytes) or certificate bundle (pem 1: PEM text with its zero). The count of
+ * calls. macOS and Linux: the first bundle file found. Windows: the "ROOT" store. */
+int hn_trust_roots(void (*add)(void *ctx, const unsigned char *data, size_t n, int pem), void *ctx);
+/* Windows only: checks a server's certificate chain (DER, the server's own first) for host with the system's
+ * own check, which also fetches a root that the store does not hold yet. 0 when the system trusts it. -1
+ * elsewhere. */
+int hn_verify_server(const unsigned char *const *der, const size_t *len, int n, const char *host);
+
 #endif

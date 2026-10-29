@@ -64,6 +64,11 @@ typedef struct {
     long (*extra)(uint8_t *buf, uint32_t room, uint32_t *addr, uint16_t *port);  /* one to add, or -1 */
     int (*connect)(uint32_t addr, uint16_t port);  /* before a connect: -1 refuses it (the hook sets the error) */
     void (*tick)(void);                            /* at each call of the game */
+    /* 0.7.0 slice 5, the relay (relay.h). route: before a connect that the connect hook let through. 1: *s is a
+     * connected socket that takes the place of the system's connect, 0: connect as usual, -1: refused (the hook
+     * sets the error). incoming: a new connection for the game's listen socket, or HN_INVALID. */
+    int (*route)(uint32_t addr, uint16_t port, intptr_t *s);
+    intptr_t (*incoming)(uint32_t *addr, uint16_t *port);
 } NcHooks;
 void nc_set_hooks(const NcHooks *h);
 
@@ -81,6 +86,9 @@ void nc_set_identity(const char *version, const char *host_password, const char 
 /* 0.7.0 slice 6: the passwords alone, from the Network tab (host) and the password box (joiner). */
 void nc_set_host_password(const char *pw);
 void nc_set_join_password(const char *pw);
+/* The relay (slice 5): the join password for the lobby's join call, and a refusal that came from the lobby. */
+const char *nc_join_password(void);
+void nc_set_refusal(int why);
 enum { NC_REFUSED_NONE, NC_REFUSED_VERSION, NC_REFUSED_PASSWORD, NC_REFUSED_NOT_BOSMAN, NC_REFUSED_NO_ANSWER };
 /* Why the last connect was refused, and the host's version for NC_REFUSED_VERSION. */
 int nc_refusal(char *host_version, unsigned room);
@@ -111,6 +119,7 @@ int nc_kick(uint32_t handle);
 #define NC_CONTROL_OP 0xbe
 #define NC_CONTROL_MAX 48           /* the longest control packet body */
 #define NC_PING_MS 3000
+#define NC_PING_RELAY_MS 30000      /* through the relay (slice 5): see ping_gap in net_core.c */
 #define NC_PING_KEEP 4
 #define NC_PING_LOST_MS 10000       /* a PING with no PONG for this long is lost: the next one goes */
 /* The ping of a joiner's connection on this host in ms, or -1 when none is known yet. */

@@ -649,3 +649,39 @@ The Test button on the Network tab runs three requests on a thread: `GET /v1/hea
 
 - The relay's own failures (relay down, host not connected, too many wrong passwords, 16 human managers) have texts in `net_errors.c` (`NE_RELAY_DOWN`, `NE_HOST_AWAY`, `NE_ATTEMPTS`, `NE_GAME_FULL`, `NE_NAME`), for slice 5's join to use. Slice 5's `route` hook in `net_lobby.c` has its own texts today.
 - A ping on the joiner's side: the joiner has no list of human managers.
+
+## 15. Slice 5: joins through the relay (2026-10-27)
+
+Slice 5 adds the relay under the game's own network code. No function of the original changes, and no packet layout changes. Files: `src/recomp_rt/win/relay.c` (the host's relay connection and each human manager's), `websocket.c` (a WebSocket client, RFC 6455), `secure.c` (the secure connection: TLS with mbedTLS 3.6), `tls_config.h` (the mbedTLS settings), hooks in `net_core.c` and `net_lobby.c`, `https://` in `lobby_http.c`, and `hn_pair`, `hn_trust_roots` and `hn_verify_server` in `host/net_posix.c` and `net_win32.c`.
+
+### The game sees an ordinary socket
+
+Each connection through the relay is a pair of TCP sockets on 127.0.0.1 (`hn_pair`). The game holds one end. A thread of the runtime passes the bytes of the other end to the relay and back. So everything that the runtime does on a LAN socket also runs on it: the 4-byte length framing of `Network::send_packet` 0x77ac30, the whole-send queue, the packet counts by opcode (the opcode 0 count of slice 2b, `nc_resets_in`), the join check `BOSMAN HELLO`, and the traffic log.
+
+- A joiner's connect (`connect_to_host` 0x8ae640, connect at 0x8ae74e) to a lobby row (0.66.0.0/16) asks the lobby for a ticket (`POST /v1/games/<code>/join`), opens `wss://<lobby>/v1/games/<code>/relay?role=manager&ticket=<ticket>`, and gives the game's socket handle the pair's end in place of the system's connect. Then the join check runs through the relay as on a LAN.
+- A host that is open in the lobby holds one relay connection (`role=host`, with the host token). For each `{"t":"open","ch":n}` the runtime makes a pair and gives one end to the game's listen socket as a new connection from 0.66.255.n. The join check runs on it before the game's accept (`TcpIp::accept_connection` 0x8ae840) sees it, as in section 12. When the game closes the socket, the relay gets `{"t":"kick","ch":n}`. When the relay closes the channel, the game's socket ends.
+
+### Batches
+
+Each channel sends at most one binary frame (the channel byte and the batch) each 50 ms. Bytes after a quiet 50 ms go after 2 ms, so the host's 5-byte answer to a click (opcode 9) does not wait. Later bytes wait up to 50 ms, and all channels that have waiting bytes go at the same moment. A joiner's bytes wait at most 10 ms. At 50 ms the two-game run failed: the host's next screen came before the second click of one press (First Name, then Next), and the click rule of slice 2b held that click back (3 click packets of 4, Select Team in place of Select Nationality). A link sends a frame only when it has bytes, and `ping` after 30 s with none, so an idle relay can hibernate (server/README.md, "Free plan"). The host never uses channel 255 (all human managers): a human manager that connects while a frame to all is on its way would get bytes before its join check.
+
+### A click through the deployed relay (2026-10-28)
+
+Through the deployed server, a request that reaches a Durable Object took about 110 ms from this Mac (curl), against 10 to 20 ms for the edge alone. The joiner's client loop `run_network_client` 0x7fdc00 polls again only after the host's answer to a click (opcode 9). That answer came about 130 ms after the click, later than the script's press of 100 ms, and a person's press is about as short. So the press that ends a text entry gave the field (First Name) and never the button under the pointer (Next): 3 click packets of 4, and the joiner stayed on Enter Name. The runtime now runs the poll at 0x7fdf17 once more for such a press, with the button flag 0xb67a34 set, if the pointer is still where the press went down (`user32.c`). The click rule of slice 2b applies to that poll as to a held press: the same widget or a new host screen gives nothing. The LAN runs pass as before.
+
+### Requests of the free plan
+
+From the two-game run through the deployed server (one joiner, about 90 s): the host made 1 registration, 1 relay connection, 1 close and 2 or 3 heartbeats; the joiner made 2 list requests, 1 join and 1 relay connection. The relay carried 10 WebSocket messages (5 each way, Enter Name to Select Nationality), which bill as 0.5 request. With two joiners (2026-10-29): 9 HTTP calls and 20 relay messages, about 10 billed requests. Estimate for play: each click is about one message each way, and an idle link sends `ping` each 30 s. A game of 4 human managers at 20 clicks a minute is about 120 heartbeats and 7,000 messages an hour, so about 500 requests an hour. Slice 7's PING goes every 3 s on a LAN. Through the relay it goes every 30 s (`NC_PING_RELAY_MS`): at 3 s the PING and PONG of each joiner were 40 messages a minute, and they kept the relay awake while nobody clicked. The limit that binds first is the Durable Object run time: about 28 awake relay hours a day in total (server/README.md).
+
+### When a connection ends
+
+- The host's relay connection breaks: every channel's socket ends, so the host's game sees each human manager leave. The runtime connects again after 2 s, then 4, 8 and up to 30 s. The relay names the human managers that are still connected when a host connects (`server/src/relay.ts`). Their streams broke with the old connection, so the host kicks a channel that the relay names within 1 s of a reconnect. A human manager who joins in that second is kicked too and can join again.
+- Close code 4001 (another connection with the same token took over): the host does not connect again until its code or token changes.
+- A channel whose game does not read 4 MiB of the relay's bytes ends, and so does a joiner's connection.
+- A joiner's game closes its socket: its relay connection closes with 1000. The relay closes a joiner (4000 the host left, 4003 a kick): its game's socket ends after the bytes that came before.
+
+### The secure connection
+
+mbedTLS 3.6.7, the LTS branch, Apache-2.0, built from its release by CMake (FetchContent, SHA-256 checked). Why: it builds with plain CMake on Mac (both architectures), mingw and Linux, needs no system library, links statically, and its licence fits the GPL-3.0 of the repo. TLS 1.2 only: mbedTLS 3.6 does TLS 1.3 through its PSA layer, whose key store is shared by all threads and needs `MBEDTLS_THREADING_C`, and the lobby thread and the relay threads make connections at the same time. Cloudflare serves TLS 1.2.
+
+The server's certificate is checked against the system's root certificates and the host name. macOS: `/etc/ssl/cert.pem`. Linux: the first of the usual bundle files (Debian, Ubuntu, the Steam Deck, Fedora, openSUSE). Windows: the ROOT store, and for a chain that it does not trust, the system's own check (`CertGetCertificateChain` and the SSL policy), because Windows fills its ROOT store on demand.

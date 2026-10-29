@@ -1,11 +1,14 @@
 /* Sockets of 64-bit Windows (host_net.h): WinSock 2, whose error codes are the ones the game expects.
- * The adapters come from GetAdaptersAddresses. */
+ * The adapters come from GetAdaptersAddresses. The secure connection's root certificates come from the
+ * system's ROOT store (crypt32). */
 #define _WIN32_WINNT 0x0600        /* GetTickCount64 and OnLinkPrefixLength: Windows Vista and later */
+#define CERT_CHAIN_PARA_HAS_EXTRA_FIELDS    /* dwUrlRetrievalTimeout */
 #include "../host_net.h"
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
+#include <wincrypt.h>
 #include <mstcpip.h>
 #include <stdlib.h>
 #include <string.h>
@@ -297,4 +300,92 @@ int hn_route_address(uint32_t *addr)
     if (r) return fail(e);
     *addr = me.sin_addr.s_addr;
     return *addr ? 0 : fail(HN_NETDOWN);
+}
+
+int hn_pair(hn_sock *a, hn_sock *b)
+{
+    if (hn_start() < 0) return -1;
+    SOCKET l = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP), c = INVALID_SOCKET, s = INVALID_SOCKET;
+    struct sockaddr_in at = sin_of(htonl(INADDR_LOOPBACK), 0), mine, peer;
+    int len = sizeof at;
+    if (l == INVALID_SOCKET) return fail_wsa();
+    if (bind(l, (struct sockaddr *)&at, sizeof at) || listen(l, 1) || getsockname(l, (struct sockaddr *)&at, &len))
+        goto failed;
+    c = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (c == INVALID_SOCKET || connect(c, (struct sockaddr *)&at, sizeof at)) goto failed;
+    len = sizeof peer;
+    s = accept(l, (struct sockaddr *)&peer, &len);
+    len = sizeof mine;
+    /* Only the connection of c: another program on this computer could connect first. */
+    if (s == INVALID_SOCKET || getsockname(c, (struct sockaddr *)&mine, &len) || peer.sin_port != mine.sin_port)
+        goto failed;
+    if (make_nonblocking(c) || make_nonblocking(s)) goto failed;
+    closesocket(l);
+    SetHandleInformation((HANDLE)c, HANDLE_FLAG_INHERIT, 0);
+    SetHandleInformation((HANDLE)s, HANDLE_FLAG_INHERIT, 0);
+    BOOL one = TRUE;
+    setsockopt(c, IPPROTO_TCP, TCP_NODELAY, (const char *)&one, sizeof one);
+    setsockopt(s, IPPROTO_TCP, TCP_NODELAY, (const char *)&one, sizeof one);
+    *a = (hn_sock)c, *b = (hn_sock)s;
+    return 0;
+failed:
+    fail_wsa();
+    closesocket(l);
+    if (c != INVALID_SOCKET) closesocket(c);
+    if (s != INVALID_SOCKET) closesocket(s);
+    return -1;
+}
+
+int hn_trust_roots(void (*add)(void *ctx, const unsigned char *data, size_t n, int pem), void *ctx)
+{
+    HCERTSTORE store = CertOpenSystemStoreW(0, L"ROOT");
+    if (!store) return 0;
+    int n = 0;
+    for (PCCERT_CONTEXT c = NULL; (c = CertEnumCertificatesInStore(store, c)) != NULL; n++)
+        add(ctx, c->pbCertEncoded, c->cbCertEncoded, 0);
+    CertCloseStore(store, 0);
+    return n;
+}
+
+int hn_verify_server(const unsigned char *const *der, const size_t *len, int n, const char *host)
+{
+    if (n < 1) return -1;
+    HCERTSTORE extra = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, 0, 0, NULL);
+    if (!extra) return -1;
+    PCCERT_CONTEXT leaf = NULL;
+    for (int i = 0; i < n; i++)
+        CertAddEncodedCertificateToStore(extra, X509_ASN_ENCODING, der[i], (DWORD)len[i],
+                                         CERT_STORE_ADD_USE_EXISTING, i ? NULL : &leaf);
+    int ok = 0;
+    wchar_t name[256];
+    if (leaf && MultiByteToWideChar(CP_UTF8, 0, host, -1, name, 256) > 0) {
+        LPSTR usage[] = {(LPSTR)szOID_PKIX_KP_SERVER_AUTH};
+        CERT_CHAIN_PARA para;
+        memset(&para, 0, sizeof para);
+        para.cbSize = sizeof para;
+        para.RequestedUsage.dwType = USAGE_MATCH_TYPE_OR;
+        para.RequestedUsage.Usage.cUsageIdentifier = 1;
+        para.RequestedUsage.Usage.rgpszUsageIdentifier = usage;
+        para.dwUrlRetrievalTimeout = 5000;     /* a root that Windows fetches: the join waits at most this */
+        PCCERT_CHAIN_CONTEXT chain = NULL;
+        if (CertGetCertificateChain(NULL, leaf, NULL, extra, &para, 0, NULL, &chain)) {
+            SSL_EXTRA_CERT_CHAIN_POLICY_PARA ssl;
+            memset(&ssl, 0, sizeof ssl);
+            ssl.cbSize = sizeof ssl;
+            ssl.dwAuthType = AUTHTYPE_SERVER;
+            ssl.pwszServerName = name;
+            CERT_CHAIN_POLICY_PARA policy;
+            memset(&policy, 0, sizeof policy);
+            policy.cbSize = sizeof policy;
+            policy.pvExtraPolicyPara = &ssl;
+            CERT_CHAIN_POLICY_STATUS status;
+            memset(&status, 0, sizeof status);
+            status.cbSize = sizeof status;
+            ok = CertVerifyCertificateChainPolicy(CERT_CHAIN_POLICY_SSL, chain, &policy, &status) && !status.dwError;
+            CertFreeCertificateChain(chain);
+        }
+    }
+    if (leaf) CertFreeCertificateContext(leaf);
+    CertCloseStore(extra, 0);
+    return ok ? 0 : -1;
 }
