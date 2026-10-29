@@ -572,8 +572,9 @@ int season_intl_oceania_wait(uint32_t self)
  *   apart (0x9124b9, 0x9124e3) from 11 November (0x912492..0x9124a4).
  * The real ties (the Wikipedia pages "<year> FIFA World Cup qualification (inter-confederation play-offs)", read
  * 29 October 2026) played in November, weeks before the World Cup draw of December. So each tie takes its real
- * leg dates, drawn 7 days before its first leg and not before tomorrow. A tie built after that (the AFC tie of
- * 2010, whose first leg was on 10 October 2009, or a section that ends late) keeps the template's dates (logged).
+ * leg dates, drawn 7 days before its first leg. A tie built on or after that draw day (the AFC tie of 2010,
+ * whose first leg was on 10 October 2009, or a section that ends late) takes the earliest dates: drawn tomorrow,
+ * legs 7 and 4 days later (logged), unless the template's first leg comes earlier.
  * 2022 keeps the templates (the real ties were single matches in June 2022, after the draw of April 2022; head
  * comment). 2026 and later play the tournament of season_wcq26.c. Round record (0x68 bytes, as Cup::draw_round
  * 0x51c410 reads it): draw day of the year s16 +0 and year offset s8 +2, first leg s16 +3 and offset s8 +5, the
@@ -593,24 +594,35 @@ static void tie_dates_of(uint32_t self, uint32_t rec, int afc)
     if (k < 0 || !readable(rec) || rd8(g_mem, rec + 0x21u) != 2u) return;
     const int *t = afc ? tie_dates[k].afc : tie_dates[k].other;
     int base = (int16_t)rd16(g_mem, self + 0x40u), year = y - 1;
-    int leg1 = season_day_of_year(year, t[1], t[0]), leg2 = season_day_of_year(year, t[3], t[2]), draw = leg1 - 7;
+    int leg1 = season_day_of_year(year, t[1], t[0]), gap = season_day_of_year(year, t[3], t[2]) - leg1;
+    int draw = leg1 - 7, draw_year = year, leg_year = year;
     int today = (int16_t)rd16(g_mem, 0xae2c90u), today_year = (int16_t)rd16(g_mem, 0xae2c92u);
     const char *which = afc ? "AFC tie" : "other tie";
-    if (today_year == year && draw <= today) draw = today + 1;
-    if (today_year > year || (today_year == year && draw >= leg1)) {
+    if (today_year > year || (today_year == year && draw <= today)) {
+        /* Built on or after its real draw day: the earliest dates, the draw tomorrow and the legs 7 and 4 days
+         * later, unless the template's own first leg is earlier (World Cup chain session review, 29 October). */
+        draw = today + 1, draw_year = today_year, leg1 = today + 8, leg_year = today_year, gap = 4;
+        if (draw >= days_of_year(draw_year)) draw -= days_of_year(draw_year), draw_year++;
+        if (leg1 >= days_of_year(leg_year)) leg1 -= days_of_year(leg_year), leg_year++;
+        int tmpl_year = (int8_t)rd8(g_mem, rec + 5u) + base, tmpl_leg = (int16_t)rd16(g_mem, rec + 3u);
+        if (tmpl_year < leg_year || (tmpl_year == leg_year && tmpl_leg <= leg1)) {
+            if (logging())
+                fprintf(stderr, "recomp: season intl: wc play-off %d: the %s keeps the template's dates (built on "
+                                "day %d of %d, the template's first leg is earlier)\n", y, which, today, today_year);
+            return;
+        }
         if (logging())
-            fprintf(stderr, "recomp: season intl: wc play-off %d: the %s keeps the template's dates (built on day %d "
-                            "of %d, its real first leg on day %d)\n", y, which, today, today_year, leg1);
-        return;
+            fprintf(stderr, "recomp: season intl: wc play-off %d: the %s was built on day %d of %d, on or after its "
+                            "real draw day: the earliest dates\n", y, which, today, today_year);
     }
     wr16(g_mem, rec, (uint16_t)draw);
-    wr8(g_mem, rec + 2u, (uint8_t)(year - base));
+    wr8(g_mem, rec + 2u, (uint8_t)(draw_year - base));
     wr16(g_mem, rec + 3u, (uint16_t)leg1);
-    wr8(g_mem, rec + 5u, (uint8_t)(year - base));
-    wr8(g_mem, rec + 0x22u, (uint8_t)(leg2 - leg1));
+    wr8(g_mem, rec + 5u, (uint8_t)(leg_year - base));
+    wr8(g_mem, rec + 0x22u, (uint8_t)gap);
     if (logging())
-        fprintf(stderr, "recomp: season intl: wc play-off %d: the %s is drawn on day %d and plays on days %d and %d of "
-                        "%d\n", y, which, draw, leg1, leg2, year);
+        fprintf(stderr, "recomp: season intl: wc play-off %d: the %s is drawn on day %d of %d and plays on days %d and "
+                        "%d of %d\n", y, which, draw, draw_year, leg1, leg1 + gap, leg_year);
 }
 
 void season_intl_oceania_tie_dates(uint32_t self, int stage, uint32_t rec)
