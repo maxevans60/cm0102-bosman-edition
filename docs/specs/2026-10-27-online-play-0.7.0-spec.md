@@ -94,7 +94,7 @@ Seams:
 Release tests (Q29), because Max cannot run a test evening:
 
 1. Two and four games on this Mac play through the real lobby and relay.
-2. The Windows 11 virtual machine joins a game that this Mac hosts.
+2. Dropped (Q45): the Windows 11 virtual machine was to join a game that this Mac hosts. This Mac's Parallels Desktop edition refuses `prlctl resume`, `start` and `exec` (they need the Pro or Business Edition), so a script cannot drive the virtual machine. Test 3's GitHub Windows machine covers a real Windows machine with its own firewall, over the internet.
 3. GitHub's Windows and Linux machines join a game that this Mac hosts over the internet, with scripted clicks.
 4. A four-player game runs through a World Cup, a Euros and every season change between them, with a drop and rejoin, a host quit and a version mismatch.
 
@@ -124,7 +124,7 @@ Merge danger: two-way door. Blast radius: network games only. The same-save sets
 - [x] Two-game run passes, through this Mac's LAN address in place of 127.0.0.1 (Q32), with 1 and 3 joiners, and under wine with the Windows build (`tests/smoke/network_run.py`).
 - [x] Same-save sets pass.
 - [x] Traffic log for 2 and 4 human managers is in the research note (section 11).
-- [ ] The Windows virtual machine joins a game on this Mac: waits for the 0.6.0 gates (Q30).
+- [ ] ~~The Windows virtual machine joins a game on this Mac~~: dropped (Q45), see release test 2.
 
 As built (2026-10-27, branch `claude/online-s2-sockets-b40614`): the merge danger stays a two-way door. Files: `src/recomp_rt/win/net.c`, `net_core.c`, `src/recomp_rt/host/net_posix.c`, `net_win32.c`, `host_net.h`, `CMakeLists.txt`, `packaging/windows/windows.cmake` (links ws2_32 and iphlpapi) and `tools/recomp/widescreen.py` (four entries inside 0x8aee20 removed). A merge conflict is likely only in `CMakeLists.txt` and `widescreen.py`. Open: on a fast connection one click of a human manager acts on several host screens, because the original's client loop sends the click again for each new screen while the button is down (research note, section 11). It must be fixed before 0.7.0 ships, and where to fix it needs a decision. Also open for slice 4: the game list shows one row for each adapter of the host.
 

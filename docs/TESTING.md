@@ -67,7 +67,7 @@ Test 3 starts its workflow with a push of the branch `online-ci-test` (`github_j
 | Test | Script | Pass rule |
 |---|---|---|
 | 1. Two and four games on this Mac through the real lobby and relay | `release_mac_run.py` | Each two-game run with 1 and 3 joiners through the relay passes. Without the relay in the build the script runs the lobby and LAN runs and reports STAGE. |
-| 2. The Windows 11 virtual machine joins a game on this Mac | `vm_join_run.py` | The joiner in the virtual machine ends with code 0, its screens equal the host's and its 4 clicks reach the host, over the LAN and through the relay. It starts the virtual machine only after the 0.6.0 gates, and suspends it at the end. |
+| 2. Dropped (Q45): the Windows 11 virtual machine joins a game on this Mac | `vm_join_run.py` (kept, not run) | This Mac's Parallels Desktop edition refuses `prlctl resume`, `start` and `exec`, which need the Pro or Business Edition. Test 3's GitHub Windows machine covers a real Windows machine. |
 | 3. GitHub's Windows and Linux machines join a game on this Mac | `github_join_run.py`, `remote_join.py`, `.github/workflows/online-release-join.yml` | Both joiners pass their checks and their screens equal the host's. It needs the relay (slice 5). |
 | 4. A four-player game through a World Cup, a Euros and every season change between them | `season_net_run.py` | The host plays a network game from 2001 to 1 September 2004 with the match engine on, one season a leg. Each leg restores the last save, and three joiners take their clubs back with their passwords. Leg 0 also has a drop and rejoin and a game of another version. The last leg ends with a host quit. No box, no stall, every division moves on. |
 
@@ -78,7 +78,7 @@ Results:
 | Date | Test | Build | Result |
 |---|---|---|---|
 | 2026-10-27 | 4, short check: 1 leg of 3 days, England, LAN, local lobby (`--days 3 --legs 1`) | online-0.7.0 8b7b21bd | Leg 0 passed every check: four human managers with passwords, join3's drop (lobby 3 online) and rejoin with its password (4 online), the box of a game of version 0.0.1 that names the host's version, the host's holiday and its save after 3 game days. The restore leg then restored the save and Player Two took Barnsley back with the password. The quit leg waits for slice 6. |
-| 2026-10-27 | 2 | | Not run: the 0.6.0 gates run, and the virtual machine waits for them (Q30). |
+| 2026-10-29 | 2 | | Dropped (Q45): `prlctl resume` answered "The command is available only in Parallels Desktop for Mac Pro or Business Edition". |
 | 2026-10-27 | 3 | | Not run: the workflow is not on GitHub (a push waits for Max), and the build has no relay. |
 
 | 2026-10-28 | Match day, two human managers, LAN | online-0.7.0 8b7b21bd | Measured days 16.7.01 to 19.7.01: 72 KB a minute to the joiner, one 6.2 KB screen for each of its clicks (research note section 16). FAIL as a match day: the joiner's own friendly did not start, and the host waited on Latest Scores. Open. |
