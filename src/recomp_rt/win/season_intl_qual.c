@@ -62,6 +62,7 @@
 #include "win.h"
 #include "season_intl.h"
 #include "season_wcq26.h"
+#include "season_uefa_days.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -559,4 +560,72 @@ int season_intl_oceania_wait(uint32_t self)
         }
     }
     return 0;
+}
+
+/* The dates of the inter-confederation ties, cycles 2006 to 2018 (gate-2007 leg02 of run 8 on cf2e8fa5). The
+ * original's templates put them in the year before the World Cup (year offset 1 from +0x40):
+ * - Oceania stage 2 (0x91e2e0, vtable 0x970d78 +0x3c): drawn on 23 November (0x91e7c9..0x91e7cd, Cup round draw
+ *   date 0x521e60), two legs (+0x21 = 2) 7 days apart (+0x22 = 7) from 2 December (0x91e7d2..0x91e7e8, 0x521eb0).
+ *   In 2009 those are days 326, 335 and 342, and the World Cup draw is on day 346: a second leg moved by 4 days or
+ *   more ends after the draw, the slot net (A10) fills its place and the winner finds the finals full (A11).
+ * - Asia stage 12 (0x911f00, vtable 0x970b70 +0x3c): drawn on 27 October (0x91247e..0x91248d), two legs 4 days
+ *   apart (0x9124b9, 0x9124e3) from 11 November (0x912492..0x9124a4).
+ * The real ties (the Wikipedia pages "<year> FIFA World Cup qualification (inter-confederation play-offs)", read
+ * 29 October 2026) played in November, weeks before the World Cup draw of December. So each tie takes its real
+ * leg dates, drawn 7 days before its first leg and not before tomorrow. A tie built after that (the AFC tie of
+ * 2010, whose first leg was on 10 October 2009, or a section that ends late) keeps the template's dates (logged).
+ * 2022 keeps the templates (the real ties were single matches in June 2022, after the draw of April 2022; head
+ * comment). 2026 and later play the tournament of season_wcq26.c. Round record (0x68 bytes, as Cup::draw_round
+ * 0x51c410 reads it): draw day of the year s16 +0 and year offset s8 +2, first leg s16 +3 and offset s8 +5, the
+ * days between the legs +0x22. */
+static const struct { int year, afc[4], other[4]; } tie_dates[] = {   /* day, month of each leg, in year - 1 */
+    {2006, {12, 11, 16, 11}, {12, 11, 16, 11}},     /* Trinidad and Tobago v Bahrain; Uruguay v Australia */
+    {2010, {10, 10, 14, 11}, {14, 11, 18, 11}},     /* Bahrain v New Zealand; Costa Rica v Uruguay */
+    {2014, {13, 11, 20, 11}, {13, 11, 20, 11}},     /* Jordan v Uruguay; Mexico v New Zealand */
+    {2018, {10, 11, 15, 11}, {11, 11, 15, 11}},     /* Honduras v Australia; New Zealand v Peru */
+};
+
+static void tie_dates_of(uint32_t self, uint32_t rec, int afc)
+{
+    int y = wc_year(self), k = -1;
+    for (int i = 0; i < (int)(sizeof tie_dates / sizeof tie_dates[0]); i++)
+        if (tie_dates[i].year == y) k = i;
+    if (k < 0 || !readable(rec) || rd8(g_mem, rec + 0x21u) != 2u) return;
+    const int *t = afc ? tie_dates[k].afc : tie_dates[k].other;
+    int base = (int16_t)rd16(g_mem, self + 0x40u), year = y - 1;
+    int leg1 = season_day_of_year(year, t[1], t[0]), leg2 = season_day_of_year(year, t[3], t[2]), draw = leg1 - 7;
+    int today = (int16_t)rd16(g_mem, 0xae2c90u), today_year = (int16_t)rd16(g_mem, 0xae2c92u);
+    const char *which = afc ? "AFC tie" : "other tie";
+    if (today_year == year && draw <= today) draw = today + 1;
+    if (today_year > year || (today_year == year && draw >= leg1)) {
+        if (logging())
+            fprintf(stderr, "recomp: season intl: wc play-off %d: the %s keeps the template's dates (built on day %d "
+                            "of %d, its real first leg on day %d)\n", y, which, today, today_year, leg1);
+        return;
+    }
+    wr16(g_mem, rec, (uint16_t)draw);
+    wr8(g_mem, rec + 2u, (uint8_t)(year - base));
+    wr16(g_mem, rec + 3u, (uint16_t)leg1);
+    wr8(g_mem, rec + 5u, (uint8_t)(year - base));
+    wr8(g_mem, rec + 0x22u, (uint8_t)(leg2 - leg1));
+    if (logging())
+        fprintf(stderr, "recomp: season intl: wc play-off %d: the %s is drawn on day %d and plays on days %d and %d of "
+                        "%d\n", y, which, draw, leg1, leg2, year);
+}
+
+void season_intl_oceania_tie_dates(uint32_t self, int stage, uint32_t rec)
+{
+    if (stage == 2) tie_dates_of(self, rec, 0);
+}
+
+void o_00911f00(void);
+
+/* The Asian template (vtable +0x3c, thiscall (stage as a byte, short *, short *, int *), ret 0x10): stage 12 is
+ * the AFC tie (above). */
+RT_WRAP(00911f00, wcq_asia_template)
+{
+    uint32_t self = cpu.ecx;
+    int st = (int8_t)rd8(g_mem, cpu.esp + 4u);
+    o_00911f00();
+    if (!rt_unwinding && st == 12) tie_dates_of(self, cpu.eax, 1);
 }
