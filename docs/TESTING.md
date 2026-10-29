@@ -88,6 +88,8 @@ Results:
 
 | 2026-10-29 | 3, GitHub's Linux and Windows machines | online-0.7.0 7d60ee73 with slice 9 (05e55d19) | Both joined the Mac's game `00S9-CI` through the live lobby and relay (https://online.cm0102bosman.co.uk): each ended with code 0, joined through the relay, sent its 4 clicks, and its three screens equal the host's within 2 colour levels (the Mac's picture decode rounds otherwise; Windows and Linux are equal). The packages came from a draft release, deleted after the run; no secret. The run reported FAIL on two faults of its own checks (a tolerance of 0, and two joiners on one relay address counted once); both are fixed, and the same data passes. Run 40927613267. |
 
+| 2026-10-29 | 4, the full run: 2001 to 4 September 2004, England, 10 legs of 120 days and a quit leg | online-0.7.0 6f12558e with slice 9 | PASS. Legs 0 and 1 over the LAN with a local lobby (leg 1 on slice 6's build with the send fix, after leg 1 on the earlier build found the "scrman 2480" box), legs 2 to 10 through the relay and the live lobby. Each leg: the three joiners took their clubs back with their passwords; every division moved on; the run crossed the World Cup 2002, the Euro 2004 and the season changes of 2002, 2003 and 2004. Quit leg: the host saved at its quit, and each joiner showed "The host left the game", then the start screen. Two test faults fixed on the way: Go on Holiday sits higher in the menu of a manager with no club (the board sacked the host in 2004), and the first quit leg's host stayed on Manager Status after Finish for 10 minutes with two joiners "Waiting" (not seen again in the second try; open). |
+
 <!-- s9 results -->
 
 ## Platform checks
