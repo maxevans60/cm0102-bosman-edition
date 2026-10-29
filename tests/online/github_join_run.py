@@ -33,7 +33,7 @@ Checks:
     1 the host ends with code 0, after the lobby listed its game
     2 the host's traffic log has 2 joiner connections from the relay (0.66.255.<channel>) with packets both ways
     3 each joiner's result.txt ends with "remote join: PASS" (Linux and Windows)
-    4 each joiner's three dumps equal the host's: at most 1% of pixels differ
+    4 each joiner's three dumps equal the host's: at most 1% of pixels differ by more than 2 levels (TOLERANCE)
 Result: PASS (exit code 0) when all checks pass; FAIL (1) else; WAIT (3) when the build has no relay (slice 5) or
 no workflow run took part (the host's checks only).
 """
@@ -148,6 +148,23 @@ def new_run(t0, event="push"):
     return None
 
 
+def relay_connections(log):
+    """[(bytes out, bytes in)] of each closed or ended connection from the relay (0.66.255.x) in a traffic log."""
+    out = []
+    for line in open(log) if os.path.exists(log) else []:
+        p = line.split()
+        if len(p) > 4 and p[1] in ("close", "end") and p[4].startswith("peer=0.66.255."):
+            f = dict(x.split("=", 1) for x in p if "=" in x)
+            out.append({"bytes_out": int(f["out"]), "bytes_in": int(f["in"])})
+    return out
+
+
+# Each platform decodes the background picture with its own rounding: the Mac's and the runners' screens differ by
+# at most 2 levels in 38% of pixels (run release3-ci3), while Windows and Linux are equal. So the screens compare
+# with a tolerance of 2 levels.
+TOLERANCE = 2
+
+
 def main(argv):
     args = argv[1:]
     if not args or args[0].startswith("--"):
@@ -230,11 +247,12 @@ def main(argv):
             host.wait()
         err.close()
     check(host.returncode == 0, f"1 the host ended with code {host.returncode}")
-    hl = nr.connections(os.path.join(out, "host-net.log"))
-    joined = [c for c in hl.values() if c["peer"].startswith("0.66.255.")]
+    # Relay joiners can come from the same 0.66.255.<channel>:<port> one after the other, so count by handle
+    # (nr.connections keys by peer). Run release3-ci3: two joiners, both 0.66.255.0:50000.
+    joined = relay_connections(os.path.join(out, "host-net.log"))
     if run_id:              # without a workflow run no joiner came, and the result is WAIT
-        check(len(joined) == len(JOINERS) and all(c["packets_in"] and c["packets_out"] for c in joined),
-              f"2 host log: {len(joined)} joiner connections from the relay with packets both ways, "
+        check(len(joined) == len(JOINERS) and all(c["bytes_in"] and c["bytes_out"] for c in joined),
+              f"2 host log: {len(joined)} joiner connections from the relay with bytes both ways, "
               f"{len(JOINERS)} expected")
         try:
             gh("run", "watch", run_id, "--exit-status", timeout=7200)
@@ -253,7 +271,7 @@ def main(argv):
                 found = glob.glob(os.path.join(runner, "shots-*", f"{j}-{suffix}.bmp"))
                 a = os.path.join(out, host_shot)
                 if found and os.path.exists(a):
-                    share = smoke_run.differing_share(a, found[0])
+                    share = smoke_run.differing_share(a, found[0], tol=TOLERANCE)
                     check(share <= 0.01, f"4 {j} {suffix} equals the host's: {share:.2%} of pixels differ")
                 else:
                     check(False, f"4 {j} {suffix}: dump missing")

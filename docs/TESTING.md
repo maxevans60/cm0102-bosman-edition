@@ -62,13 +62,13 @@ Network games (0.7.0) have their own tests. The two-game run (`tests/smoke/netwo
 
 Before the release, four release tests run (spec Q29). Their scripts are in `tests/online/`. Each script waits for room on the machine, and for any network run of another worktree to end, because two network runs on one Mac collide on port 6667. Each one adds a line to `run-logs/s9-tests/results.tsv`. While several sessions test network play, each run that hosts a network game goes through `the maintainer's notes`, which lets one host at a time use port 6667.
 
-Test 3 starts its workflow with a push of the branch `online-ci-test` (`github_join_run.py --push`), because GitHub starts a manual workflow only from the default branch, and `main` belongs to the 0.6.0 work.
+Test 3 starts its workflow with a push of the branch `online-ci-test` (`github_join_run.py --push`), because GitHub starts a manual workflow only from the default branch, and `main` belongs to the 0.6.0 work. It needs no secret: the Mac puts the AppImage and a zip of the Windows program with its game folder on a draft release, which only people with write access see, and deletes it after the run.
 
 | Test | Script | Pass rule |
 |---|---|---|
 | 1. Two and four games on this Mac through the real lobby and relay | `release_mac_run.py` | Each two-game run with 1 and 3 joiners through the relay passes. Without the relay in the build the script runs the lobby and LAN runs and reports STAGE. |
 | 2. Dropped (Q45): the Windows 11 virtual machine joins a game on this Mac | `vm_join_run.py` (kept, not run) | This Mac's Parallels Desktop edition refuses `prlctl resume`, `start` and `exec`, which need the Pro or Business Edition. Test 3's GitHub Windows machine covers a real Windows machine. |
-| 3. GitHub's Windows and Linux machines join a game on this Mac | `github_join_run.py`, `remote_join.py`, `.github/workflows/online-release-join.yml` | Both joiners pass their checks and their screens equal the host's. It needs the relay (slice 5). |
+| 3. GitHub's Windows and Linux machines join a game on this Mac | `github_join_run.py --push`, `remote_join.py`, `.github/workflows/online-release-join.yml` | Both joiners pass their checks and their screens equal the host's within 2 colour levels. |
 | 4. A four-player game through a World Cup, a Euros and every season change between them | `season_net_run.py` | The host plays a network game from 2001 to 1 September 2004 with the match engine on, one season a leg. Each leg restores the last save, and three joiners take their clubs back with their passwords. Leg 0 also has a drop and rejoin and a game of another version. The last leg ends with a host quit. No box, no stall, every division moves on. |
 
 `tests/online/match_day_run.py` measures the traffic of a match day with two human managers. It passes when both games ran, the joiner made its manager and the host played a match. Its figures are in the network research note, section 16.
@@ -85,6 +85,8 @@ Results:
 
 | 2026-10-28 | 1, stage before slice 5 | online-0.7.0 8b7b21bd | STAGE: the lobby run (local copy) and the four-game LAN run pass. Against the real server the lobby run failed: the game's lobby client of this build speaks only `http://`, so the script now uses the local copy until the build has slice 5. |
 | 2026-10-28 | 4, short check: 2 legs of 10 days, England, LAN, local lobby | online-0.7.0 8b7b21bd | STAGE: every check passes in both legs (the new game with the drop by kill, the rejoin and the version box; then the restore, where all three joiners took their clubs back with their passwords). The quit leg waits for slice 6, the relay for slice 5. |
+
+| 2026-10-29 | 3, GitHub's Linux and Windows machines | online-0.7.0 7d60ee73 with slice 9 (05e55d19) | Both joined the Mac's game `00S9-CI` through the live lobby and relay (https://online.cm0102bosman.co.uk): each ended with code 0, joined through the relay, sent its 4 clicks, and its three screens equal the host's within 2 colour levels (the Mac's picture decode rounds otherwise; Windows and Linux are equal). The packages came from a draft release, deleted after the run; no secret. The run reported FAIL on two faults of its own checks (a tolerance of 0, and two joiners on one relay address counted once); both are fixed, and the same data passes. Run 40927613267. |
 
 <!-- s9 results -->
 
