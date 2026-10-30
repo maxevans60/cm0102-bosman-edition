@@ -48,14 +48,13 @@ static inline void put(const Sort *s, int32_t off, uint32_t v)
     m[0] = (uint8_t)v; m[1] = (uint8_t)(v >> 8); m[2] = (uint8_t)(v >> 16); m[3] = (uint8_t)(v >> 24);
 }
 
-/* A compare. at: the stack offset of the second argument; the first lies 4 below it, then the return
- * address, then the push of esi by 0x7c6d40. */
-static inline int compare(const Sort *s, int32_t at, uint8_t *a, uint8_t *b, uint32_t ret, uint32_t esi)
+/* A compare. The original pushes its two arguments and the return address, and 0x7c6d40 pushes esi, at the
+ * four stack words from 0x108 (the partition) or 0x12c (the short sort) below q. Each loop of compares ends
+ * with pushes to all four words before any code reads the stack (the partition 0x9453f3..0x9453ff or
+ * 0x9453f3..0x94540a, the short sort 0x9454bb..0x9454c0), so the words of the compares are left out and the
+ * stack ends the same (0.6.2 slice 14). */
+static inline int compare(uint8_t *a, uint8_t *b)
 {
-    put(s, at, addr(s, b));
-    put(s, at - 4, addr(s, a));
-    put(s, at - 8, ret);
-    put(s, at - 12, esi);
     return qsort6_history_cmp(a, b);
 }
 
@@ -93,7 +92,7 @@ static uint8_t *short_sort(const Sort *s, uint8_t *lo, uint8_t *hi, uint32_t q_e
     while (hi > lo) {
         uint8_t *max = lo, *p;
         for (p = lo + w; p <= hi; p += w)
-            if (compare(s, -0x12c, p, max, 0x9454aeu, addr(s, p)) > 0) max = p;
+            if (compare(p, max) > 0) max = p;
         put(s, -0x12c, w);
         put(s, -0x130, addr(s, hi));
         put(s, -0x134, addr(s, max));
@@ -134,16 +133,16 @@ uint8_t *qsort6(uint8_t *base, uint32_t num, uint32_t width, const qsort6_stack 
             uint8_t *up = lo, *down = hi + width;
             put(&s, -8, lo_a);
             for (;;) {
-                for (;;) {
+                for (;;) {                          /* each step writes up at q - 8: the last one stays */
                     up += width;
-                    put(&s, -8, addr(&s, up));
                     if (up > hi) break;
-                    if (compare(&s, -0x108, up, lo, 0x9453dbu, hi_a) > 0) break;
+                    if (compare(up, lo) > 0) break;
                 }
+                put(&s, -8, addr(&s, up));
                 for (;;) {
                     down -= width;
                     if (down <= lo) break;
-                    if (compare(&s, -0x108, down, lo, 0x9453edu, hi_a) < 0) break;
+                    if (compare(down, lo) < 0) break;
                 }
                 put(&s, -0x108, width);
                 put(&s, -0x10c, addr(&s, down));

@@ -65,12 +65,16 @@ enum { K_ADD = 0, K_SUB = 1, K_INC = 2, K_DEC = 3, K_RES = 4, K_RAW = 5 };
 #define SZ1 0x10u
 #define SZ2 0x20u
 #define SZ4 0x40u
+/* The flag helpers are always inlined: at -O1 the compiler kept them as calls in each file of generated code,
+ * 15 to 20 % of a game day in the profile of 30 October 2026 (0.6.2 slice 14). Inlined, the kind
+ * of flag folds to one comparison where the generated code knows it. The results are the same. */
+#define RT_FLAG_FN static inline __attribute__((always_inline))
 #define SETF(o, A, B, R, C) (F.op = (o), F.a = (A), F.b = (B), F.r = (R), F.c = (C))
 
-static inline uint32_t f_mask(uint32_t op) { return op & SZ1 ? 0xffu : op & SZ2 ? 0xffffu : 0xffffffffu; }
-static inline uint32_t f_msb(uint32_t op) { return op & SZ1 ? 0x80u : op & SZ2 ? 0x8000u : 0x80000000u; }
+RT_FLAG_FN uint32_t f_mask(uint32_t op) { return op & SZ1 ? 0xffu : op & SZ2 ? 0xffffu : 0xffffffffu; }
+RT_FLAG_FN uint32_t f_msb(uint32_t op) { return op & SZ1 ? 0x80u : op & SZ2 ? 0x8000u : 0x80000000u; }
 
-static inline uint32_t f_cf(Flags f)
+RT_FLAG_FN uint32_t f_cf(Flags f)
 {
     uint32_t m = f_mask(f.op);
     switch (f.op & 15) {
@@ -81,10 +85,10 @@ static inline uint32_t f_cf(Flags f)
     default: return f.r & 1;
     }
 }
-static inline uint32_t f_zf(Flags f) { return (f.op & 15) == K_RAW ? (f.r >> 6) & 1 : (f.r & f_mask(f.op)) == 0; }
-static inline uint32_t f_sf(Flags f) { return (f.op & 15) == K_RAW ? (f.r >> 7) & 1 : (f.r & f_msb(f.op)) != 0; }
-static inline uint32_t f_pf(Flags f) { return (f.op & 15) == K_RAW ? (f.r >> 2) & 1 : !__builtin_parity(f.r & 0xffu); }
-static inline uint32_t f_of(Flags f)
+RT_FLAG_FN uint32_t f_zf(Flags f) { return (f.op & 15) == K_RAW ? (f.r >> 6) & 1 : (f.r & f_mask(f.op)) == 0; }
+RT_FLAG_FN uint32_t f_sf(Flags f) { return (f.op & 15) == K_RAW ? (f.r >> 7) & 1 : (f.r & f_msb(f.op)) != 0; }
+RT_FLAG_FN uint32_t f_pf(Flags f) { return (f.op & 15) == K_RAW ? (f.r >> 2) & 1 : !__builtin_parity(f.r & 0xffu); }
+RT_FLAG_FN uint32_t f_of(Flags f)
 {
     uint32_t s = f_msb(f.op), m = f_mask(f.op);
     switch (f.op & 15) {
@@ -96,7 +100,7 @@ static inline uint32_t f_of(Flags f)
     default: return (f.r >> 11) & 1;
     }
 }
-static inline uint32_t f_af(Flags f)
+RT_FLAG_FN uint32_t f_af(Flags f)
 {
     switch (f.op & 15) {
     case K_ADD: case K_SUB: case K_INC: case K_DEC: return ((f.a ^ f.b ^ f.r) >> 4) & 1;
@@ -104,37 +108,37 @@ static inline uint32_t f_af(Flags f)
     default: return 0;
     }
 }
-static inline uint32_t f_flags(Flags f)
+RT_FLAG_FN uint32_t f_flags(Flags f)
 {
     return f_cf(f) | 2u | f_pf(f) << 2 | f_af(f) << 4 | f_zf(f) << 6 | f_sf(f) << 7 | f_of(f) << 11;
 }
 
 /* Conditions. The common cases fold to one comparison when the flag kind is known. */
-static inline int cc_o(Flags f) { return f_of(f); }
-static inline int cc_b(Flags f)
+RT_FLAG_FN int cc_o(Flags f) { return f_of(f); }
+RT_FLAG_FN int cc_b(Flags f)
 {
     if ((f.op & 15) == K_SUB && f.c == 0) return (f.a & f_mask(f.op)) < (f.b & f_mask(f.op));
     return f_cf(f);
 }
-static inline int cc_e(Flags f) { return f_zf(f); }
-static inline int cc_be(Flags f)
+RT_FLAG_FN int cc_e(Flags f) { return f_zf(f); }
+RT_FLAG_FN int cc_be(Flags f)
 {
     if ((f.op & 15) == K_SUB && f.c == 0) return (f.a & f_mask(f.op)) <= (f.b & f_mask(f.op));
     return f_cf(f) | f_zf(f);
 }
-static inline int cc_s(Flags f) { return f_sf(f); }
-static inline int cc_p(Flags f) { return f_pf(f); }
-static inline int32_t f_sext(Flags f, uint32_t v)
+RT_FLAG_FN int cc_s(Flags f) { return f_sf(f); }
+RT_FLAG_FN int cc_p(Flags f) { return f_pf(f); }
+RT_FLAG_FN int32_t f_sext(Flags f, uint32_t v)
 {
     return f.op & SZ1 ? (int8_t)v : f.op & SZ2 ? (int16_t)v : (int32_t)v;
 }
-static inline int cc_l(Flags f)
+RT_FLAG_FN int cc_l(Flags f)
 {
     if ((f.op & 15) == K_SUB && f.c == 0) return f_sext(f, f.a) < f_sext(f, f.b);
     if ((f.op & 15) == K_RES) return f_sf(f) != ((f.c >> 1) & 1);
     return f_sf(f) != f_of(f);
 }
-static inline int cc_le(Flags f)
+RT_FLAG_FN int cc_le(Flags f)
 {
     if ((f.op & 15) == K_SUB && f.c == 0) return f_sext(f, f.a) <= f_sext(f, f.b);
     return f_zf(f) | (f_sf(f) != f_of(f));
