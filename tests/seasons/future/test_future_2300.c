@@ -141,7 +141,7 @@ static void test_dates(void)
 /* ---- International finals (season_intl_rules.c, season_intl_table.c) ---- */
 
 /* The original's step of each class (start_new_season), and the cycle after the table (the after-table rule: its last
- * cycle; the ACN on 2 years, its normal step; the OFC Nations Cup on 4, its step before the 2020 gap). 0: ended. */
+ * cycle; the ACN on 2 years, its normal step; the OFC Nations Cup on 4 from 2028, decided). 0: ended. */
 static const struct { uint32_t cls; const char *file; int step, cycle, end; } classes[] = {
     {INTL_WORLD_CUP, "world_cup", 4, 4, 0},
     {INTL_EURO, "euro_champ", 4, 4, 0},
