@@ -238,9 +238,10 @@ SAME_SAVE_RUNS = [
     # The Turkish groups of Summer 2002 act only with that database: with their test switch off the save of the
     # 3.9.68 data is that of normal.
     ("turkish-groups-off", {"faster_days": "off", "_env": {"RECOMP_TURKISH_GROUPS": "off"}}),
-    # The fixes of faults of the original (0.6.2 slice 11, original_faults.c) act in every game, but only on a
-    # national team without a manager at a month change or later, above 2,147,483,647 or at an age above 127: with
-    # their test switch off the save is that of normal.
+    # The fixes of faults of the original (0.6.2 slice 11, original_faults.c) act in every game, but only when a
+    # small nation's national team loses or misses its manager (at the latest at the first month change in play),
+    # for money above 2,147,483,647 (the top wage from about 1.65 billion) and at an age above 127: in these runs
+    # none of that happens, so with their test switch off the save is that of normal.
     ("original-faults-keep", {"faster_days": "off", "_env": {"RECOMP_ORIGINAL_FAULTS": "keep"}}),
 ]
 

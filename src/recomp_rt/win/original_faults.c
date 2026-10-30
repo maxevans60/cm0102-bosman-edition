@@ -60,21 +60,23 @@ uint32_t rt_national_vacancy(uint32_t club, uint32_t site)
     int32_t id = (int32_t)rd32(g_mem, club), clubs = (int32_t)rd32(g_mem, CLUB_COUNT);
     int32_t nations = (int32_t)rd32(g_mem, NATION_COUNT);
     if (id < clubs - 2 * nations || id >= clubs - nations) return 0;
-    if (site)    /* site 0, the bound in add_job_vacancy, always follows one of the others */
+    if (site)    /* site 0, the bound in add_job_vacancy: no line (it mostly follows one of the others) */
         fprintf(stderr, "recomp: national manager: a vacancy for %s after %s (%d players)\n", log_name(club + 4u),
                 why[site < 5u ? site : 0u], (int32_t)rd32(g_mem, nation + 0x88u));
     return 1;
 }
 
-/* `database_get_staff_age` 0x53ab90 gives the age in ax; the original stores it as the sign extension of al. */
-uint32_t rt_staff_age_store(uint32_t eax)
+/* `database_get_staff_age` 0x53ab90 (cdecl: staff, date) gives the age in ax (0x53ac0a..0x53ac3a), and its callers keep
+ * al. Above 127 it gives 127, so no caller sees a negative age (Q27). A null staff goes to the original's assert. */
+void o_0053ab90(void);
+
+RT_WRAP(0053ab90, staff_age)
 {
-    int16_t age = (int16_t)(eax & 0xffffu);
-    if (fixes_on() && age > 127) return 127u;
-    return (uint32_t)(int32_t)(int8_t)(eax & 0xffu);
+    uint32_t staff = rt_arg(0);
+    o_0053ab90();
+    if (rt_unwinding || !fixes_on() || !staff) return;
+    if ((int16_t)(cpu.eax & 0xffffu) > 127) cpu.eax = (cpu.eax & 0xffff0000u) | 127u;
 }
-
-
 
 /* Money (Q24). `Finance::get_transfer_budget` 0x598800 works on a 64-bit budget, but cuts three values to 32 bits.
  * The first two (0x598f4f, 0x598f8b, 0x598f92) re-extend the low word with cdq: here the high word is used. */
@@ -124,6 +126,13 @@ static const uint32_t budget_wide_callers[] = {
 
 void o_00598800(void);
 
+static int money_log(void)
+{
+    static int on = -1;
+    if (on < 0) on = getenv("RECOMP_MONEY_LOG") != NULL;
+    return on;
+}
+
 RT_WRAP(00598800, get_transfer_budget)
 {
     uint32_t from = rd32(g_mem, cpu.esp), finance = cpu.ecx;
@@ -139,7 +148,7 @@ RT_WRAP(00598800, get_transfer_budget)
         else if (v < INT32_MIN) cpu.eax = 0x80000000u, cpu.edx = 0xffffffffu;
     }
     /* test switch (tests/seasons/original_faults_run.py money): the budgets of a club above 2,147,483,647 */
-    if (getenv("RECOMP_MONEY_LOG") && (int64_t)rd64(g_mem, finance) > INT32_MAX) {
+    if (money_log() && (int64_t)rd64(g_mem, finance) > INT32_MAX) {
         uint32_t club = rd32(g_mem, 0xae23b4u) + rd32(g_mem, finance + 8u) * 0x245u;
         fprintf(stderr, "recomp: money budget: %s from 0x%x: %lld, the caller sees %lld\n", log_name(club + 4u), from,
                 (long long)v, wide ? (long long)v : (long long)(int32_t)cpu.eax);
@@ -148,17 +157,23 @@ RT_WRAP(00598800, get_transfer_budget)
 
 /* The money text. A Cash holds 32 bits, and `Cash::get_display_amount` 0x43f460 starts with `fild dword [ecx]`;
  * after that the original works on 64 bits (the rounding step 0x4426e0 and the text `cash_format_money`
- * 0x441c10 take an int64). A screen that puts a 64-bit amount into a Cash registers it here; the next two reads of
- * that Cash (0x463994..0x4639e6 formats the balance twice) take the full amount while its low word is unchanged. */
+ * 0x441c10 take an int64). A screen that puts a 64-bit amount into a Cash registers it here with the number of reads
+ * of that site (one, or two for the club info balance, which formats it again when the text is long, 0x4639c8..0x4639e6,
+ * and ends at 0x4639ee). Those reads take the full amount while the Cash keeps its low word. */
 static uint32_t wide_at, wide_reads;
 static int64_t wide_amount;
 
-void rt_cash_wide(uint32_t cash, uint32_t lo, uint32_t hi)
+void rt_cash_wide(uint32_t cash, uint32_t lo, uint32_t hi, uint32_t reads)
 {
     int64_t v = (int64_t)(((uint64_t)hi << 32) | lo);
-    wide_reads = fixes_on() && v != (int64_t)(int32_t)lo ? 2u : 0u;
+    wide_reads = fixes_on() && v != (int64_t)(int32_t)lo ? reads : 0u;
     wide_at = cash;
     wide_amount = v;
+}
+
+void rt_cash_wide_end(void)
+{
+    wide_reads = 0;
 }
 
 int64_t rt_cash_amount(uint32_t cash)
@@ -166,21 +181,31 @@ int64_t rt_cash_amount(uint32_t cash)
     uint32_t lo = rd32(g_mem, cash);
     if (wide_reads && cash == wide_at && lo == (uint32_t)wide_amount) {
         wide_reads--;
-        if (getenv("RECOMP_MONEY_LOG"))     /* test switch: tests/seasons/original_faults_run.py money */
+        if (money_log())     /* test switch: tests/seasons/original_faults_run.py money */
             fprintf(stderr, "recomp: money text: %lld\n", (long long)wide_amount);
         return wide_amount;
     }
     return (int64_t)(int32_t)lo;
 }
 
-/* `Finance::get_max_wage` 0x5968d0: the wage term plus ftol(1.3 x balance) (0x5968db..0x5968ee keeps eax), in 32
- * bits at 0x597019. Here the high word of that product comes back, and the sum is clamped to the 32-bit range. */
-uint32_t rt_max_wage_sum(uint32_t term, uint32_t lo, uint32_t finance)
+/* `Finance::get_max_wage` 0x5968d0: the wage term plus ftol(1.3 x balance) (ftol at 0x5968e3, only eax kept at
+ * 0x5968ee), in 32 bits at 0x597019. 0x5968e8 hands over the high word in edx; the sum takes it when the low word is
+ * still the one of that product, and a sum above 2,147,483,647 is clamped to it. Any other sum, a debt among them,
+ * is the original's. */
+static uint32_t wage_high, wage_low, wage_set;
+
+void rt_max_wage_high(uint32_t edx, uint32_t eax)
 {
-    if (!fixes_on()) return term + lo;
-    int64_t product = (int64_t)((double)(int64_t)rd64(g_mem, finance) * rdf64(g_mem, 0x968de8u));
-    int64_t sum = (int64_t)(int32_t)term + (int64_t)(((uint64_t)product & 0xffffffff00000000u) | lo);
-    if (sum > INT32_MAX) return (uint32_t)INT32_MAX;
-    if (sum < INT32_MIN) return 0x80000000u;
-    return (uint32_t)sum;
+    wage_high = edx;
+    wage_low = eax;
+    wage_set = 1;
+}
+
+uint32_t rt_max_wage_sum(uint32_t term, uint32_t lo)
+{
+    int had = wage_set && lo == wage_low;
+    wage_set = 0;
+    if (!fixes_on() || !had) return term + lo;
+    int64_t sum = (int64_t)(int32_t)term + (int64_t)(((uint64_t)wage_high << 32) | lo);
+    return sum > INT32_MAX ? (uint32_t)INT32_MAX : term + lo;
 }

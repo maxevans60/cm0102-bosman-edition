@@ -28,11 +28,14 @@ test fixtures (tools/save/edit_money.py), loads it, opens Arsenal's Finances vie
 saves --days game days later (tests/fixtures/fixtures.py play). The runtime logs each 64-bit amount that a screen
 formats (RECOMP_MONEY_LOG: "money text") and each transfer budget of a club above 2,147,483,647 ("money budget").
 The checks, for each balance:
-    - the Finances view formats the full balance (a "money text" line with the balance)
+    - the Finances view formats the full balance and the full transfer funds ("money text" lines; the funds are at
+      least 99% of the balance)
     - Liverpool's budget is at least 99% of its balance, as below 2,147,483,647 (the fault gave a tenth: the floor
       of `get_transfer_budget` was cut to 32 bits), and its shortlist (`try_add_player_to_club_shortlist`, return
       0x84301b, 32 bits) sees that budget clamped to 2,147,483,647
-    - Liverpool builds a bid with a positive budget (`TRANSFER_OFFER::build_bid`, return 0x8e6335 or 0x8e74a7)
+    - `TRANSFER_OFFER::build_bid` asks for Liverpool's budget and gets a positive one (return 0x8e6335 or 0x8e74a7).
+      It asks only while it builds a bid. This check also passes with the fault kept (the budget is then a tenth):
+      the budget check above is the one that finds the fault
     - no message box, and the program ends with code 0
 
 age: sets the birth year of the human manager of start.sav (+0x12) to --born, loads it, goes on holiday and saves 3
@@ -153,13 +156,16 @@ def money(argv):
             f.write("\n".join(MONEY_STEPS) + "\n")
         out = os.path.join(work, "out")
         code = fixtures.play(program, game, work, "start.sav", steps, out, "classic", {}, days)
-        log = open(os.path.join(out, "stderr.txt"), encoding="latin-1").read().split("\n")
+        path = os.path.join(out, "stderr.txt")
+        log = open(path, encoding="latin-1").read().split("\n") if os.path.exists(path) else []
         if code != 0:
             fails.append(f"{balance}: the run failed (code {code})")
         fails += [f"{balance}: {x.strip()}" for x in log if "recomp: message box from" in x]
         texts = [int(x.split(": ")[-1]) for x in log if x.startswith("recomp: money text: ")]
         if balance not in texts:
             fails.append(f"{balance}: the Finances view did not format the balance (money text: {texts[:4]})")
+        if not [t for t in texts if t != balance and t > 0.99 * balance]:
+            fails.append(f"{balance}: the Finances view did not format the transfer funds in full ({texts[:4]})")
         full, seen = {}, {}
         for x in log:
             if x.startswith(BUDGET + BIDDER + " from "):
