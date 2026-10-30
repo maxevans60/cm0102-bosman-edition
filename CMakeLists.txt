@@ -188,6 +188,9 @@ if(NOT WIN32)
     add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
     # 0.6.1 item 2: the abbreviation column of the names table (Select Team shows it).
     add_test(NAME season_names_abbr COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/names_abbr_check.py")
+    # Future testing step 2: the history checker finds each planted fault of a small fixture save that it writes.
+    add_test(NAME season_future_history_check COMMAND python3 -I
+        "${CMAKE_SOURCE_DIR}/tests/seasons/future/history_check_test.py")
     add_test(NAME season_clubs_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_clubs.py" --check)
     # The club ids of the clubs files (O151): each row names a club record of its season's database. The check reads
     # the databases of test-fixtures and skips (code 77) where they are missing.
