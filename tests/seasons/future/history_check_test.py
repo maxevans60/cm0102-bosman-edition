@@ -73,7 +73,9 @@ def history():
         a, b = ((7, 9), (9, 10), (10, 7))[y % 3]
         rows.append((14, y, side(a), side(b), -1, -1))
     for y in (2020, 2024):                                            # Nations Shield: a European cup on
-        rows.append((15, y, side(1), side(2), -1, -1))                # an Asian record (rules run only)
+        rows.append((15, y, side(1), side(2), -1, -1))                # an Asian record with the short name
+    rows.append((15, 2032, side(2), side(0), -1, -1))                 # of an Asian cup
+    want.add(("confederation", "Nations Shield", 2032))               # plain run: its continent is Asia
     return rows, want
 
 
@@ -82,11 +84,14 @@ NATION_CHANGES = ("kind\tseason\tfrom\tnation\tto\tsource\n"
                   "rename\t2024\t09-01\tHatay\tHatay Republic\tdue in the start season\n"
                   "rename\t2030\t09-01\tRuritania\tNeo-Ruritania\tdue, a live record\n"
                   "rename\t2030\t09-01\tOld Genovia\tGenovia\tdue, a dead record (no continent)\n"
+                  "rename\t2030\t09-01\tOld Freedonia\tFreedonia\tdue, the side keeps the old name\n"
                   "rename\t2040\t09-01\tKurlandia\tCourland\tnot due before 1 September 2040\n"
                   "confed\t2035\t09-01\tDurania\tUEFA\tdue, still in AFC\n"
                   "confed\t2020\t02-01\tElbonia\tAFC\tdue, in AFC\n")
 NATION_FAULTS = {("nation-name", "Hatay", 2024), ("nation-name", "Ruritania", 2030),
-                 ("nation-confed", "Durania", 2035)}
+                 ("nation-confed", "Durania", 2035), ("side-name", "Old Freedonia", 2030)}
+SHORT_NAMES = {15: "Asia Shield"}                               # the short name (+0x38) of a competition
+SIDE_NAMES = {"Freedonia": "Old Freedonia"}                      # the national side's name, when not the nation's
 NATION_FAULTS_OFF = {("nation-name", "Hatay", 2024)}             # changing rules off: only to the start season
 
 
@@ -111,13 +116,15 @@ def records(changing=1):
         return bytes(r)
 
     clubs = b"".join(club(i, n, nat_) for i, (n, nat_) in enumerate(CLUBS))
-    sides = b"".join(club(side(i), n, i) for i, (n, _) in enumerate(NATIONS))
+    sides = b"".join(club(side(i), SIDE_NAMES.get(n, n), i) for i, (n, _) in enumerate(NATIONS))
     comp = {"club": bytearray(), "nation": bytearray()}
     for cid, name, c, n, part in COMPS:
         r = bytearray(0x6B)
         struct.pack_into("<i", r, 0, cid)
         r[4:4 + len(name)] = name.encode()
         struct.pack_into("<ii", r, 0x59, c, n)
+        short = SHORT_NAMES.get(cid, "").encode()
+        r[0x38:0x38 + len(short)] = short
         comp[part] += r
     rows, want = history()
     want |= NATION_FAULTS
@@ -222,19 +229,22 @@ def main():
                 "americas\tAmericas Finals\tintl_finals\tCONCACAF\t1\t2\t2041\tnone\n"
                 "world\tWorld Finals\tintl_finals\tFIFA\t1\t4\t2038\t2034\n"
                 "esc\tEuro Super Cup\tleague\tUEFA\t0\t1\t2041\tnone\n"
-                "shield\tNations Shield\tnations_league\tUEFA\t0\t4\t2028\tnone\n")
+                "shield\tNations Shield\tnations_league\tUEFA\t0\t4\t2028\tnone\n"
+                "asia_shield\tAsia Shield\tintl_qual\tAFC\t0\t4\t2028\tnone\n")
     names = os.path.join(work, "names.tsv")
     with open(names, "w", encoding="utf-8") as f:
         f.write("# a note line\npattern\tcomp\nAmericas Finals\tamericas\n(The )?World Finals\tworld\n"
-                "Euro Super Cup\tesc\nNations Shield\tshield\n")
+                "Euro Super Cup\tesc\nNations Shield\tshield\nAsia Shield\tasia_shield\n")
     known = os.path.join(work, "known.tsv")
     with open(known, "w", encoding="utf-8") as f:
         f.write("check\tcompetition\tyear\tnote\nduplicate\tEuro Finals\t*\tplanted\n")
     code, out = run([sav, "--out", work, "--label", "rules", "--rules", rules, "--names", names, "--known", known,
                      "--nations", nations])
     got = faults(work, "rules")
-    want2 = (want - {("missing", "World Finals", 2038), ("same-final", "Euro Super Cup", 2028)}) | \
-        {("comp-continent", "Nations Shield", 2040)}
+    want2 = (want - {("missing", "World Finals", 2038), ("same-final", "Euro Super Cup", 2028),
+                     ("confederation", "Nations Shield", 2032)}) | \
+        {("comp-continent", "Nations Shield", 2040), ("comp-name", "Nations Shield", 2040),
+         ("confederation", "Asia Shield", 2032)}
     if set(got) != want2:
         bad.append(f"rules run: missed {sorted(want2 - set(got))}, extra {sorted(set(got) - want2)}")
     if got.get(("duplicate", "Euro Finals", 2028)) != "known":

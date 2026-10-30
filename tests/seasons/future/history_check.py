@@ -125,7 +125,7 @@ class Game:
         for i in range(len(nat) // NATION):
             r = nat[i * NATION:(i + 1) * NATION]
             self.nations[s32(r, 0)] = (text(r, 4), self.continents.get(s32(r, 0x71), ""))
-        self.clubs, self.sides = {}, set()
+        self.clubs, self.sides, self.side_names = {}, set(), []
         for part in ("club.dat", "nat_club.dat"):
             data = sav.read(part)
             for i in range(len(data) // CLUB):
@@ -133,6 +133,7 @@ class Game:
                 self.clubs[s32(r, 0)] = (text(r, 4), s32(r, 0x53))
                 if part == "nat_club.dat":
                     self.sides.add(s32(r, 0))
+                    self.side_names.append((text(r, 4), s32(r, 0x53)))
         self.comps = {}
         for kind, part in (("club", "club_comp.dat"), ("nation", "nation_comp.dat")):
             data = sav.read(part)
@@ -140,8 +141,8 @@ class Game:
                 r = data[i * COMP:(i + 1) * COMP]
                 name = text(r, 4)
                 if name:
-                    self.comps[s32(r, 0)] = {"kind": kind, "name": name, "continent": s32(r, 0x59),
-                                             "nation": s32(r, 0x5d)}
+                    self.comps[s32(r, 0)] = {"kind": kind, "name": name, "short": text(r, 0x38, 26),
+                                             "continent": s32(r, 0x59), "nation": s32(r, 0x5d)}
         self.rows = []
         for part in ("club_comp_history.dat", "nation_comp_history.dat"):
             data = sav.read(part)
@@ -245,9 +246,14 @@ def cycle_of(years, start):
 FRIENDLY = re.compile(r"^(Friendly|Reserve|'B' International|Under 21 International)")
 
 
-def check(game, rules=None):
-    """[(check, competition, year, detail)]."""
+def check(game, rules=None, changes=()):
+    """[(check, competition, year, detail)]. changes: the rows of nations.tsv; a nation that moves to another
+    confederation after a row's year (Australia to the AFC in 2006) is not checked in that row."""
     rules = rules or Rules()
+    moved = collections.defaultdict(list)
+    for c in changes:
+        if c["kind"] == "confed":
+            moved[c["nation"]].append(c["season"])
     by = collections.defaultdict(list)
     for r in table(game):
         by[r[0]].append(r)
@@ -296,12 +302,23 @@ def check(game, rules=None):
         if rule.get("confs") and record in CONF_IDS and record not in rule["confs"]:
             faults.append(("comp-continent", name, save_year, f"the record has continent {record}, the competition "
                                                               f"is {'|'.join(sorted(rule['confs']))}"))
-        if conf:
+        checks = [(name, conf)] if conf else []
+        # the short name (+0x38, the name of the history screen) of another competition than the long name
+        # (open item 4: the UEFA Nations League record keeps the short name "Asian Cup Quals"): the rows are
+        # checked against the rule of the short name too, under that name
+        short = rules.get(comp["short"]) if comp["short"] else {}
+        if short and rule and short["key"] != rule["key"]:
+            faults.append(("comp-name", name, save_year, f"the short name {comp['short']} is the competition "
+                                                         f"{short['key']}, the name is {rule['key']}"))
+            if short.get("confs"):
+                checks.append((comp["short"], "|".join(sorted(short["confs"]))))
+        for shown, conf in checks:
             for r in game_rows:
                 for role, p in (("winner", r[4]), ("runner-up", r[5])):
-                    if p[0] and p[2] and p[2] not in conf.split("|"):
-                        faults.append(("confederation", name, r[3], f"{role} {p[0]} ({p[1]}, {p[2]}), "
-                                                                    f"the competition is {conf}"))
+                    if p[0] and p[2] and p[2] not in conf.split("|") and \
+                            not any(r[3] < y for y in moved.get(p[1], ())):
+                        faults.append(("confederation", shown, r[3], f"{role} {p[0]} ({p[1]}, {p[2]}), "
+                                                                     f"the competition is {conf}"))
         # the same two finalists more than 2 editions in a row
         finals = rule["kind"] != "league" if rule.get("kind") else (teams == "nation" or international)
         if finals:
@@ -376,7 +393,15 @@ def check_nations(game, changes):
         if c["kind"] == "rename" and c["nation"] in live:
             faults.append(("nation-name", c["nation"], c["season"],
                            f"a live record named {c['nation']} in {year}; from {c['season']} the name is {c['to']}"))
-        elif c["kind"] == "confed":
+        if c["kind"] == "rename":
+            for side, nid in game.side_names:
+                nation, conf = game.nations.get(nid, ("", ""))
+                if side == c["nation"] and conf and nation != side:
+                    faults.append(("side-name", side, c["season"], f"the national side of {nation} "
+                                                                   f"is named {side} in {year}; from {c['season']} "
+                                                                   f"the name is {c['to']}"))
+                    break
+        if c["kind"] == "confed":
             for conf in live.get(c["nation"], []):
                 if conf != c["to"]:
                     faults.append(("nation-confed", c["nation"], c["season"],
@@ -424,7 +449,7 @@ def main(argv):
         game = Game(path)
         label = opts.get("--label") if len(args) == 1 and "--label" in opts else \
             re.sub(r"[^A-Za-z0-9.-]+", "_", os.path.relpath(path, os.path.dirname(os.path.dirname(path))))
-        faults = sorted(check(game, rules) + check_nations(game, nations), key=lambda f: (f[1], f[0], f[2]))
+        faults = sorted(check(game, rules, nations) + check_nations(game, nations), key=lambda f: (f[1], f[0], f[2]))
         if "--out" in opts:
             write(game, label, opts["--out"], faults, known)
         fresh = [f for f in faults if not is_known(known, f[0], f[1], f[2])]
