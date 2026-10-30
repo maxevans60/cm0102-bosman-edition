@@ -73,9 +73,9 @@
 #define CLUB_COUNT 0xae235cu
 #define NATION_COUNT 0xae2350u
 #define CLUB_SIZE 0x245u
-#define NO_CONTINENT 0xfffffffeu
+#define NO_CONTINENT 0xfffffffeu        /* -2: no continent has it (-1 is every continent at 0x5cc060) */
 #define NATION_CONTINENT 0x71u          /* nation record: its continent record, whose +0 is the continent id */
-#define KEY_CONTINENTS 0x9cfa08u        /* the key continent ids, Africa to South America (season_intl.h) */        /* -2: no continent has it (-1 is every continent at 0x5cc060) */
+#define KEY_CONTINENTS 0x9cfa08u        /* the key continent ids, Africa to South America (season_intl.h) */
 
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }

@@ -226,9 +226,9 @@ int season_intl_date_shift(uint32_t cls, int year)
  * days. In long game seed 6 (a 2001 game, changing rules on, 0.6.0) the CAF World Cup qualifiers of 26 January 2013
  * met the African Cup of Nations of 19 January 2013. The finalists' group matches of that week moved to later days
  * (add_fixture 0x5aa680 moves a clashing fixture at 0x5aa96e and adds it again at 0x5aa978), the last group ended
- * on 5 February, the knockout rounds came a week apart, no final was set, and the class waited for it to 2022. The
- * Copa America of 2004 met CONMEBOL qualifiers on 17 and 24 July and stopped the same way. (The Asian Cup of 2019
- * met friendlies on 13 January; from 0.6.0 a January friendly row has no date, season_friendly_dates.c.)
+ * on 5 February, the knockout rounds came a week apart, and no final was set. The class still held that edition
+ * in the save of 2022 (run-logs/release-test-0.6.0/long-games/soak-seed6). The Copa America of 2004 in the same
+ * game met CONMEBOL qualifiers on 17 and 24 July (the fixtures of its save of July 2004) and stopped the same way.
  * season_friendly_dates.c keeps a qualifier off these days. */
 
 /* The step of each class's start_new_season (tools/recomp/seasons.py, the sites 0x92d409 to 0x7a04b0). */
@@ -241,9 +241,10 @@ static const int class_confs[INTL_CLASSES] = {
     1 << SEASON_CONF_AFRICA, 1 << SEASON_CONF_ASIA, 1 << SEASON_CONF_OCEANIA, 0,
 };
 
-/* The days from the first group day to the final for a team count, with a week to spare for the knockout days
- * that the game sets as the groups end: 2013 ACN of 16 teams 22 days, Copa America Centenario of 16 23, Euro 2016
- * of 24 30, 2014 World Cup of 32 31, 2026 World Cup of 48 38 (int-continental and int-world rows). */
+/* The days from the first group day to the final for a team count: the real spans (2013 ACN of 16 teams 22 days,
+ * Copa America Centenario of 16 23, Euro 2016 of 24 30, 2014 World Cup of 32 31, 2026 World Cup of 48 38;
+ * int-continental and int-world rows) and some days more. Inference: the game's own finals fit in these spans
+ * (the 2012 ACN of seed 6 played 21 January to 11 February, 21 days). */
 static int finals_span(int teams)
 {
     return teams <= 16 ? 30 : teams <= 24 ? 37 : teams <= 32 ? 38 : 45;
