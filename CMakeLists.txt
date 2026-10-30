@@ -265,6 +265,20 @@ if(NOT WIN32)
     add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
     # The league rules (0.6.0 slice 19): play-off places, splits and calendars. The outputs are committed.
     add_test(NAME season_encode_leagues COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_leagues.py")
+    # Games to 2300 (future testing, step 1): every season function that reads no game memory, from 2001 to 2300, with
+    # the days round 28 February 2100, 2200 and 2300. Known faults: tests/seasons/future/known_faults.tsv.
+    add_executable(future_2300_test tests/seasons/future/test_future_2300.c
+        src/recomp_rt/win/season_intl_rules.c src/recomp_rt/win/season_intl_table.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c
+        src/recomp_rt/win/season_uefa_table.c src/recomp_rt/win/season_uefa_lookup.c
+        src/recomp_rt/win/season_uefa_ko_lookup.c src/recomp_rt/win/season_uefa_dates_table.c
+        src/recomp_rt/win/season_uefa_days.c src/recomp_rt/win/season_fifa_days_table.c
+        src/recomp_rt/win/season_cups.c src/recomp_rt/win/season_cups_table.c src/si/date.c)
+    target_include_directories(future_2300_test PRIVATE src/recomp_rt/win include)
+    target_compile_options(future_2300_test PRIVATE -O2)    # 300 years of days: seconds, not half a minute
+    add_test(NAME future_2300 COMMAND future_2300_test "${CMAKE_SOURCE_DIR}/tests/seasons/future/known_faults.tsv")
+    # The expected rule of every competition (the input of the history checker): its columns and values.
+    add_test(NAME future_competitions COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/competitions_check.py")
     add_executable(winfit_test tests/winfit/test_winfit.c)
     target_include_directories(winfit_test PRIVATE src/recomp_rt/win)
     add_test(NAME winfit COMMAND winfit_test)
