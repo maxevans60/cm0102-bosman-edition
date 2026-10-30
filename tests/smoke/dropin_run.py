@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/smoke/dropin_run.py <cm0102_recomp> <game folder> [--shots <folder>] [--slow k] [--kick]
-        [--lobby-url URL]
+        [--lobby-url URL] [--relay]
 
 It uses the timed clicks of tests/smoke/network_run.py and a local copy of the lobby (server/, `npx wrangler dev`),
 or --lobby-url.
@@ -124,14 +124,19 @@ def host_steps(finish_ms, finish=True, kick=False):
     ])
 
 
+RELAY = False                               # --relay: the joiners join the host's lobby row through the relay
+
+
 def join_steps(n, address, rejoin=False, quit_ms=None, leave=False):
     steps = nr.START + [
         "3500 click 612 243",               # Join Network Game
         "wait screen:0x81f8d0",
+    ] + ([f"3500 {nr.FIRST_ROW}",           # the host's lobby row: its click copies the name to Join
+          "7500 click 705 572"] if RELAY else [
         f"3500 type {address}",
         "6000 click 705 572",               # Next ends the text entry
         "7500 click 705 572",               # Next connects
-    ]
+    ])
     t = 11000
     if not rejoin:
         steps += [f"{t} dump {{d}}/join{n}-1-name.bmp"]
@@ -224,6 +229,10 @@ def main(argv):
         if k == "--drop-at-finish":
             dayquit = True
             continue
+        if k == "--relay":
+            global RELAY
+            RELAY = True
+            continue
         if k in ("--kick", "--leave"):
             kick, leave = kick or k == "--kick", leave or k == "--leave"
             continue
@@ -257,6 +266,8 @@ def main(argv):
             return 1
         lobby_url = f"http://127.0.0.1:{port}"
     env = {"RECOMP_LOBBY_URL": lobby_url}
+    if RELAY:                                  # lobby rows only, as on a computer that is not on the host's LAN
+        env = dict(env, RECOMP_TEST_NO_LAN_ROWS="1")
     finish_ms = 200000 if not leave else 150000   # step times; start() scales them
     procs = []
     away_after_drop, away_after_rejoin = None, None

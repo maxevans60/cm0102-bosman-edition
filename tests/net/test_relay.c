@@ -114,6 +114,11 @@ static void control(const char *t, int ch)
 static void drop_peer(Peer *p, int code)
 {
     if (p->role == MANAGER) control("close", p->ch);
+    if (p->role == HOST) {         /* as the relay: the host left, so every human manager goes with 4000 */
+        p->role = GONE;
+        for (int i = 0; i < 8; i++)
+            if (peers[i].role == MANAGER) drop_peer(&peers[i], 4000);
+    }
     if (code) {
         uint8_t c[2] = {(uint8_t)(code >> 8), (uint8_t)code};
         server_frame(p->s, 8, c, 2);
@@ -403,7 +408,33 @@ static void test_relay(void)
     CHECK(nc_recv(a, buf, sizeof buf) == 0, "and the host's socket of it");
     nc_close(a);
 
-    relay_host_stop();
+    /* The host's last bytes before its end (net_core.c's QUIT at a window close) reach the human manager, and its
+     * socket then ends normally, not with a reset (test 4 of the spec, 2026-10-29: "the connection was lost"). */
+    hn_sleep(200);
+    CHECK(relay_join(base, "GOOD0001", "1.0", "PC-1", "", 3000, &s, v, sizeof v) == RJ_OK, "a third join");
+    raw_send(s, hello, strlen(hello));
+    a = nc_accept_for(l, 3000, &addr);
+    CHECK(a != NC_INVALID && read_for(s, buf, sizeof buf, 10, 2000) == 10, "the third join passes");
+    nc_readable(a, &avail);        /* slice 7's first PING, read off before the count */
+    read_for(s, buf, sizeof buf, 1000, 300);
+    hn_sleep(150);
+    uint8_t last[4 + 6] = {6, 0, 0, 0, 0xbe, 'Q', 'U', 'I', 'T', '\n'};
+    raw_send(s, "pong", 4);        /* bytes of the human manager's game that nobody reads before the end */
+    CHECK(nc_send(a, last, sizeof last) == (long)sizeof last, "the host sends its last bytes");
+    relay_host_finish(1000);       /* at once, as at the host's exit */
+    n = 0;
+    long r = 1;
+    until = hn_ms() + 3000;
+    while (hn_ms() < until) {
+        r = hn_recv(s, buf + n, sizeof buf - (size_t)n);
+        if (r > 0) n += r;
+        else if (r == 0 || hn_error() != HN_WOULDBLOCK) break;
+        else hn_wait(s, 1, 20);
+    }
+    CHECK(n == (long)sizeof last && !memcmp(buf, last, sizeof last), "the host's last bytes arrive (%ld)", n);
+    CHECK(r == 0, "then the socket ends normally (%ld, error %d)", r, r < 0 ? hn_error() : 0);
+    hn_close(s);
+    nc_close(a);
     nc_close(l);
     hn_sleep(100);
     fr_stop = 1;
