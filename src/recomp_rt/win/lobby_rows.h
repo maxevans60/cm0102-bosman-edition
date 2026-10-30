@@ -66,6 +66,11 @@ void lr_lobby(const LobbyRow *rows, int n, int result);
  * *full is 1 for the "full today" row and 2 for the "lobby does not answer" row. */
 const LobbyRow *lr_row_of(uint32_t addr, int *full);
 
+/* The text of the row that the game list shows now for the lobby game with this code: its lobby row, or its
+ * LAN row when the host is on this computer's LAN. 0 when the list shows no such row. For invite links
+ * (invite.c), which put this text in the Join field as a click on the row does. */
+int lr_shown_text(const char *code, char out[50]);
+
 /* Tests: the adapters (network order) and the default route; else the system's own. */
 void lr_set_adapters(const uint32_t *addr, const uint32_t *mask, int n, uint32_t route);
 
