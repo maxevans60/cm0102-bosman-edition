@@ -86,12 +86,14 @@ FINALS = {
                                        2016: ("Portugal", (2016, 7, 10)), 2020: ("Italy", (2021, 7, 11)),
                                        2024: ("Spain", (2024, 7, 14))},
 }
-FIRST_DAY = (7, 10)          # a new game's first news day is 10 July or later (tools/seasons/history_fill.py)
+# A final in July of the start year is history: the game plays no finals in the July of its start
+# (tools/seasons/history_fill.py, GAP_FINALS).
+START_END = (7, 31)
 
 
 def last_final(comp, year):
-    """(label, winner) of the last final of comp before the first day of a game that starts in year."""
-    done = [(y, w) for y, (w, d) in FINALS[comp].items() if d < (year,) + FIRST_DAY]
+    """(label, winner) of the last final of comp before a game that starts in year."""
+    done = [(y, w) for y, (w, d) in FINALS[comp].items() if d <= (year,) + START_END]
     return max(done) if done else None
 MIN_PEOPLE = 5
 

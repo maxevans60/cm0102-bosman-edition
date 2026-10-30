@@ -45,10 +45,12 @@ static size_t saved_n, saved_cap;
 static int filled;                  /* 1 while a fill is in memory */
 static uint32_t old_count;          /* the row count before the fill */
 static uint32_t n_added, n_cleared, n_unmatched, n_duplicates;
-/* The rows that the game wrote since the last load or new game (indices): rows of the same label year that it
- * writes in one year, as the three Inter-Toto Cup winners of one August, all stay. In memory only: a save of the
- * calendar year of the start between two such rows of one competition does not keep them apart. */
-static uint32_t *own;
+/* The rows that the game wrote since the last load or new game, by content (competition, label, four places):
+ * the lookup 0x4afd80 sorts the whole table (qsort 0x945333 at 0x4afd9b), so an index does not last. Rows of one
+ * label that the game writes in one year all stay. In memory only: a save of the calendar year of the start
+ * between two such rows of one competition does not keep them apart. */
+typedef struct { uint32_t comp, label, place[4]; } Own;
+static Own *own;
 static size_t own_n, own_cap;
 
 static void save_row(uint32_t index)
@@ -365,10 +367,15 @@ int season_history_after_start_on(void)
 
 static uint32_t n_after;
 
-static int is_own(uint32_t index)
+static int is_own(uint32_t r)
 {
-    for (size_t k = 0; k < own_n; k++)
-        if (own[k] == index) return 1;
+    for (size_t k = 0; k < own_n; k++) {
+        const Own *o = &own[k];
+        if (o->comp != rd32(g_mem, r + 4) || o->label != rd16(g_mem, r + 8)) continue;
+        int f = 0;
+        while (f < 4 && o->place[f] == rd32(g_mem, r + 0xa + 4 * (uint32_t)f)) f++;
+        if (f == 4) return 1;
+    }
     return 0;
 }
 
@@ -398,19 +405,29 @@ void o_004afce0(void);
 /* comp_util_add_history_record, cdecl (Comp *comp, Club *first, Club *second, Club *third, Club *host): the row of
  * an edition that the game has played. It reuses a free row at the end of the table or grows it (0x527f60), and
  * writes the competition record [comp + 4] (0x4afd51), the game year [0xae2c92] as the label (0x4afd57,
- * 0x4afd62) and the four places (0x4afd6a to 0x4afd7b). Before it: every other row of the competition with a
- * later label, and in the calendar year of the start every other row with this label, is cleared. The game
- * never writes a label after the game year, so those rows are rows of the data. */
+ * 0x4afd62) and the four places from its arguments (0x4afd6a to 0x4afd7b). Before it, the rows of the data for
+ * the same edition go: every other row of the competition with a later label (the game never writes a label after
+ * the game year), and in the calendar year of the start the row of this label, unless the data holds two or more
+ * rows of it (the Argentine and Mexican first divisions keep the two halves of a season under one label, and in
+ * the Update Team databases those halves ended before the start: Autumn 2013 holds the Inicial 2012 and the Final
+ * 2013 under 2013). */
 RT_WRAP(004afce0, comp_util_add_history_record)
 {
     uint32_t obj = rt_arg(0), hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
     uint32_t comp = obj ? rd32(g_mem, obj + 4) : 0;
     int year = (int)rd16(g_mem, GAME_YEAR), S = season_start_year(), n = 0;
     if (comp && hist && season_history_after_start_on()) {
+        int same = 0;
+        for (uint32_t i = 0; year == S && i < count; i++) {
+            uint32_t r = hist + i * HISTORY_SIZE;
+            same += rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == year && !is_own(r);
+        }
         for (uint32_t i = 0; i < count; i++) {
             uint32_t r = hist + i * HISTORY_SIZE;
             int label = (int)rd16(g_mem, r + 8);
-            if (rd32(g_mem, r + 4) != comp || label < year || (label == year && year != S) || is_own(i)) continue;
+            if (rd32(g_mem, r + 4) != comp || label < year || (label == year && (year != S || same >= 2)) ||
+                is_own(r))
+                continue;
             wr32(g_mem, r + 4, 0);
             n++;
         }
@@ -418,25 +435,17 @@ RT_WRAP(004afce0, comp_util_add_history_record)
             fprintf(stderr, "recomp: season history: %d data rows of label %d or later cleared before the game's "
                             "row\n", n, year);
     }
+    Own o = {comp, (uint32_t)year, {rt_arg(1), rt_arg(2), rt_arg(3), rt_arg(4)}};
     o_004afce0();
     if (rt_unwinding || !comp) return;
-    /* The row it wrote: the last row of the table with this competition and year (0x4afcfc..0x4afd28 takes the
-     * row after the last used row, or a grown one). */
-    hist = rd32(g_mem, HISTORY_PTR);
-    count = rd32(g_mem, HISTORY_COUNT);
-    for (uint32_t i = count; hist && i-- > 0;) {
-        uint32_t r = hist + i * HISTORY_SIZE;
-        if (rd32(g_mem, r + 4) != comp || (int)rd16(g_mem, r + 8) != year) continue;
-        if (own_n == own_cap) {
-            size_t cap = own_cap ? own_cap * 2 : 64;
-            uint32_t *m = realloc(own, cap * sizeof *m);
-            if (!m) rt_fatal("season history: no memory for the game's rows");
-            own = m;
-            own_cap = cap;
-        }
-        own[own_n++] = i;
-        break;
+    if (own_n == own_cap) {
+        size_t cap = own_cap ? own_cap * 2 : 64;
+        Own *m = realloc(own, cap * sizeof *m);
+        if (!m) rt_fatal("season history: no memory for the game's rows");
+        own = m;
+        own_cap = cap;
     }
+    own[own_n++] = o;
 }
 
 /* --- Test log: RECOMP_HISTORY_LOG=<competition>;<competition>;... At the first human turn, every row of each

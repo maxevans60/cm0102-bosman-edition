@@ -43,7 +43,7 @@ def text():
     nation = {}
     for r in read("databases-date-shifts-nation-comps.tsv"):
         cid, s = int(r["competition_id"]), int(r["shift"])
-        if not 0 <= cid < 65536 or not -30 <= s <= 60:
+        if not 0 <= cid < 32768 or not -30 <= s <= 60:          # int16_t pairs in the C table
             fail(f"{r['database']}: bad nation competition row {cid} {s}")
         nation.setdefault(r["database"], []).append((cid, s))
     lines = [
@@ -87,8 +87,8 @@ def text():
                      len(comps), f"nation_{ident}" if comps else "0"))
     names = {r[0] for r in rows}
     for name in sorted((set(last) | set(kept) | set(nation)) - names):
-        print(f"make_dates_table.py: warning: {name!r} has last rows or kept careers but no row in "
-              "databases-date-shifts.tsv: dropped", file=sys.stderr)
+        print(f"make_dates_table.py: warning: {name!r} has last rows, kept careers or nation competition shifts but "
+              "no row in databases-date-shifts.tsv: dropped", file=sys.stderr)
     with_season = {r["database"] for r in read("databases-signatures.tsv") if r["data_season"] != "none"}
     for name in sorted(with_season - names):
         print(f"make_dates_table.py: warning: {name!r} of databases-signatures.tsv has no shift row: "

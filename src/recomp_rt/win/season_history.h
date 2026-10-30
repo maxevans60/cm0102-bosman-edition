@@ -33,9 +33,10 @@
  * twice, and it reads the newest row (Con_Champ::pick_clubs 0x4c11a0 through 0x4afd80): its 2001 Charity Shield
  * is Liverpool against Arsenal, the 2002 champion. So at the creation of a new game every row with a label after
  * the start year S goes (season_history_drop_after_start, with the undo record), and when the game writes a row
- * (0x4afce0), every other row of that competition with a later label goes, and in the calendar year S every other
- * row with the same label. A row of the year S of a competition that ends before July (the English Premier
- * Division 2001 in a 2001/02 game) stays: the game writes no row of that label. */
+ * (0x4afce0), every other row of that competition with a later label goes, and in the calendar year S the row of
+ * the data with the same label (not when the data holds two or more of them: the halves of a split season). A row
+ * of the year S of a competition that ends before July (the English Premier Division 2001 in a 2001/02 game)
+ * stays: the game writes no row of that label. */
 #ifndef RECOMP_SEASON_HISTORY_H
 #define RECOMP_SEASON_HISTORY_H
 
