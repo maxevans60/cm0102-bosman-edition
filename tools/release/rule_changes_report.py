@@ -36,11 +36,15 @@ MLS_CLUBS = 12
 # ArgPrm::create_table stores 20 (0x405552): the real 30 clubs of 2015 need the mark.
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'recomp'))
 from league_sizes import CAPS, FLOOR_COUNT  # noqa: E402
-# The groups of the Serie C era (comp "Serie C group A" and "B", from 2014/15) hold up to 60 clubs (season_ita_cap and
-# group_row, src/recomp_rt/win/season_divisions_ita.c). The C1 groups before it keep their cap and floor.
+# The groups of the Serie C era (comp "Serie C group A" and "B", from 2014/15) hold up to 20 clubs with no floor
+# (season_ita_cap and group_row, src/recomp_rt/win/season_divisions_ita.c). The C1 groups before it keep their cap and
+# floor.
 OPEN_COMPS = {'Serie C group A', 'Serie C group B'}
-# A 2019/20 start plays League One with 23 clubs (Q282, floor_of in src/recomp_rt/win/season_sizes.c).
-FLOOR_SEASONS = {('eng_second', '2019/20'): 23}
+# The second Greek group (comp "league group 2") is a second gre_second object: gre_count caps it at 14 with no floor
+# (src/recomp_rt/win/season_divisions.c). Only the National B record has the floor.
+NO_FLOOR_COMPS = {('gre_second', 'league group 2')}
+# The two C2 groups of 2011/12 to 2013/14 hold at most 20 clubs each (c2_clubs, season_divisions_ita.c).
+C2_FILES, C2_SEASONS, C2_CAP = {'ita_ser_c2a', 'ita_ser_c2b'}, {'2011/12', '2012/13', '2013/14'}, 20
 
 LIMITS = """\
 ## What the game will not do
@@ -109,7 +113,7 @@ def note(field, new, nation, comp, name, comp_file='', season=''):
         m = re.match(r'\s*(\d+)', new)
         n = int(m.group(1)) if m else None
         cap = CAPS[comp_file]
-        floor = FLOOR_SEASONS.get((comp_file, season), FLOOR_COUNT.get(comp_file, 0))
+        floor = 0 if (comp_file, comp) in NO_FLOOR_COMPS else FLOOR_COUNT.get(comp_file, 0)
         if n is not None and n > cap:
             return ' The game keeps %d clubs (league sizes).' % cap
         if n is not None and n < floor:
@@ -117,6 +121,10 @@ def note(field, new, nation, comp, name, comp_file='', season=''):
         # DenCup needs the First Division's clubs: it keeps those of the database (season_sizes_keeps_database).
         if n is not None and comp_file == 'den_first' and n < cap:
             return ' The game keeps the clubs of the database, up to %d (league sizes).' % cap
+    if field == 'clubs' and comp_file in C2_FILES and season in C2_SEASONS:
+        m = re.match(r'\s*(\d+)', new)
+        if m and int(m.group(1)) > C2_CAP:
+            return ' The game keeps %d clubs (league sizes).' % C2_CAP
     return ''
 
 
