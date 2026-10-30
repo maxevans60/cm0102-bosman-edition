@@ -110,6 +110,8 @@ static int log_ready;
 
 static int connect_ms = NC_CONNECT_MS;
 static int host_left;               /* nc_host_left */
+static int hold_on;                 /* nc_hold_others: the joiners' connections other than hold_handle wait */
+static uint32_t hold_handle;
 static int host_broke, kicked;      /* nc_host_broke, nc_kicked (0.7.0 slice 7) */
 static int host_quit;               /* the host's QUIT came: it ends on purpose, with no quit packet of the game */
 static int connect_error, bind_error;   /* nc_connect_error, nc_bind_error */
@@ -943,6 +945,16 @@ long nc_send(uint32_t h, const void *buf, uint32_t n)
     k->n.sends++;
     k->n.bytes_out += n;
     k->n.packets_out += frame_feed(&k->fo, buf, n);
+    /* The packet trace (RECOMP_NET_TRACE=1, net_session.c): each click packet (opcode 6) that a joiner sends. */
+    static int trace = -1;
+    if (trace < 0) trace = getenv("RECOMP_NET_TRACE") != NULL;
+    if (trace && frame_between(&k->fo) && n > 1 && ((const uint8_t *)buf)[0] == 6 && !k->accepted) {
+        char hex[40];
+        int at = 0;
+        for (uint32_t i = 0; i < n && i < 10; i++) at += snprintf(hex + at, sizeof hex - (size_t)at, " %02x",
+                                                                   ((const uint8_t *)buf)[i]);
+        fprintf(stderr, "recomp: trace: %llu click packet sent:%s\n", (unsigned long long)hn_ms(), hex);
+    }
     /* Hold the length bytes until the body follows. */
     if (frame_between(&k->fo) && flush(k) < 0) return send_to_gone(k, n);
     send_waiting(k);
@@ -1006,6 +1018,8 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
             hn_sleep(5);             /* hn_wait returns at once while part of a packet waits */
         }
     }
+    /* The host's screen loop takes one human manager's packet at a time (nc_hold_others). */
+    if (hold_on && k->accepted && k->handle != hold_handle && frame_between(&k->fi)) return fail(HN_WOULDBLOCK);
     /* Bytes that arrived before a send broke the connection still count, for example the host's quit
      * packet 0x04 (0x7fc738). */
     long r = hn_recv(k->s, buf, n);
@@ -1042,6 +1056,12 @@ long nc_recv(uint32_t h, void *buf, uint32_t n)
         if (k->fi.op_packets[4] != quits) host_left = !k->exit_seen;
     }
     return r;
+}
+
+void nc_hold_others(uint32_t handle)
+{
+    hold_on = handle != NC_INVALID;
+    hold_handle = handle;
 }
 
 int nc_host_left(void) { return host_left; }

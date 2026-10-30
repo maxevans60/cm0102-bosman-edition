@@ -98,7 +98,11 @@ static void save_now(void)
 }
 
 /* At free_game_data 0x82ff40 (season.c): the game ends, and the next one starts with no human turn. */
-void net_session_game_ends(void) { turns = 0; }
+void net_session_game_ends(void)
+{
+    turns = 0;
+    nc_hold_others(NC_INVALID);    /* the hold of the screen loop's reads (below) ends with the game */
+}
 
 /* A window close, or the script's quit, while this game hosts a game that has started. The program does not end
  * in the event loop: that runs inside any call of the game that pumps messages, also in the middle of a day. It
@@ -261,4 +265,110 @@ int net_session_ping(int slot)
 {
     uint32_t h = slot_socket(slot);
     return h == NC_INVALID ? -1 : nc_ping_ms(h);
+}
+
+
+/* The packet trace (RECOMP_NET_TRACE=1, test runs): what the host's screen loop ScreenManager::monitor 0x7fc7e0 does
+ * with each packet of a human manager. A line at each start of the loop (with its caller), one for each packet that
+ * its read reads (Network::receive_packet, call at 0x7fcaed): the out slot, the first body bytes and, for each
+ * channel, the slot of its first record, its record count and the flags +0x16, +0x1a and +0x1e of that record, which
+ * the loop reads as "has run", "takes no input" and "done" (0x7fc889..0x7fc898, 0x7fcb48, 0x7fd25a..0x7fd27b); and
+ * one with the result of Display::process_command_packet for it (call at 0x7fcb68), the widget that the loop gives
+ * the channel's input, or -1. A joiner prints each click packet that it sends (net_core.c). */
+#define SCREENS 0xb74450u
+#define NET_BUFFER (SCREENS + 0x37feu)     /* the screen manager's network buffer, the packet body */
+#define CURRENT_CHANNEL (SCREENS + 0x382au)
+
+static int tracing(void)
+{
+    static int on = -1;
+    if (on < 0) on = getenv("RECOMP_NET_TRACE") != NULL;
+    return on;
+}
+
+static int trace_channels(char *line, size_t room, int at)
+{
+    for (uint32_t ch = 0; ch < 16 && at < (int)room; ch++) {
+        int count = (int16_t)rd16(g_mem, CHANNEL_COUNTS + ch * 2);
+        if (count <= 0) continue;
+        uint32_t r = SCREENS + 0x7d4u + ch * 0x300u;
+        at += snprintf(line + at, room - (size_t)at, " ch%u=slot%d,n%d,%u%u%u", ch, (int16_t)rd16(g_mem, r), count,
+                       rd32(g_mem, r + 0x16), rd32(g_mem, r + 0x1a), rd32(g_mem, r + 0x1e));
+    }
+    return at;
+}
+
+void o_007fc7e0(void);
+
+RT_WRAP(007fc7e0, monitor_trace)
+{
+    if (tracing()) {
+        char line[700];
+        int at = snprintf(line, sizeof line, "recomp: trace: %llu screen loop starts (from 0x%x):",
+                          (unsigned long long)hn_ms(), rd32(g_mem, cpu.esp));
+        trace_channels(line, sizeof line, at);
+        fprintf(stderr, "%s\n", line);
+    }
+    o_007fc7e0();
+}
+
+/* One human manager's packet at a time. The input of a screen first checks that the screen is not out of date: Manager
+ * Status (setup_handle_manager_status_input 0x820950) compares the human managers in use and count_idle_channels
+ * 0x7fff70 with the counts that its build saved, and returns -11 (build again) when they differ, before it looks at
+ * the widget (0x8209ee..0x820a38). A Finish changes those counts for every channel. The screen loop gives each other
+ * channel's input -1 in its passes with no packet, one channel a pass (0x7fcb8b..0x7fcc1d), and that builds its
+ * screen again. A packet of another channel in the very next pass found its screen out of date, and the original
+ * dropped its click: through the relay three joiners' Finish clicks came within 5 ms, and the host stayed on Manager
+ * Status (slice 9's quit leg, 2026-10-30, packet trace: "channel 3 gets 22", "widget 22 gives -11"). Over WinSock,
+ * packets of three sockets almost never come in the same few milliseconds. So after the screen loop's read (call at
+ * 0x7fcaed) gives a packet of one human manager, the other joiners' connections wait (nc_hold_others) until the loop
+ * has made one read with no packet for each channel and one more; the order of the packets stays the same. */
+static int hold_reads;              /* reads with no packet still to come before the other joiners' packets */
+
+void o_0077af20(void);
+
+RT_WRAP(0077af20, screen_loop_read)
+{
+    uint32_t ret = rd32(g_mem, cpu.esp), out = rt_arg(1);
+    o_0077af20();
+    if (rt_unwinding || ret != 0x7fcaf2u) return;
+    if (cpu.eax && net_session_hosting()) {
+        int channels = 0;
+        for (uint32_t ch = 0; ch < 16; ch++) channels += (int16_t)rd16(g_mem, CHANNEL_COUNTS + ch * 2) > 0;
+        hold_reads = channels + 1;
+        nc_hold_others(slot_socket((int16_t)rd16(g_mem, out)));
+    } else if (!cpu.eax && hold_reads && !--hold_reads) {
+        nc_hold_others(NC_INVALID);
+    }
+    if (!tracing() || !cpu.eax) return;
+    char line[700];
+    uint32_t body = rd32(g_mem, NET_BUFFER);
+    int at = snprintf(line, sizeof line, "recomp: trace: %llu packet of slot %d:", (unsigned long long)hn_ms(),
+                      (int16_t)rd16(g_mem, out));
+    for (int i = 0; i < 10; i++) at += snprintf(line + at, sizeof line - (size_t)at, " %02x", g_mem[body + (uint32_t)i]);
+    at += snprintf(line + at, sizeof line - (size_t)at, " |");
+    trace_channels(line, sizeof line, at);
+    fprintf(stderr, "%s\n", line);
+}
+
+void o_00564080(void);
+
+RT_WRAP(00564080, process_trace)
+{
+    uint32_t ret = rd32(g_mem, cpu.esp);
+    o_00564080();
+    if (tracing() && !rt_unwinding && ret == 0x7fcb6du)
+        fprintf(stderr, "recomp: trace: channel %d gets %d\n", (int16_t)rd16(g_mem, CURRENT_CHANNEL), (int16_t)cpu.eax);
+}
+
+void o_00820950(void);
+
+/* setup_handle_manager_status_input, cdecl (s16 widget): Finish gives -5 (0x820cf5..0x820d06). */
+RT_WRAP(00820950, status_input_trace)
+{
+    int16_t widget = (int16_t)rt_arg(0);
+    o_00820950();
+    if (tracing() && !rt_unwinding && (widget != -1 || (int32_t)cpu.eax != 0))
+        fprintf(stderr, "recomp: trace: Manager Status input of channel %d: widget %d gives %d\n",
+                (int16_t)rd16(g_mem, CURRENT_CHANNEL), widget, (int32_t)cpu.eax);
 }

@@ -6,7 +6,8 @@ Usage:
     python3 tests/smoke/finish_run.py <cm0102_recomp> <game folder> [--shots <folder>] [--slow k] [--runs n]
         [--delta ms]
 
---delta ms: join2's Finish comes this much after join1's (in step time, scaled by --slow).
+--delta ms: each joiner's Finish comes this much after the one before (in step time, scaled by --slow).
+--joiners 3: join3 joins too, 40 s after join2, with the fourth club (slice 9's quit leg has three joiners).
 
 The host makes the network game "Bosman" and its manager with Arsenal, and waits on Manager Status. join1 and join2
 join, make their managers at the second and third club of Select Team, and click Finish on Manager Status at the same
@@ -58,18 +59,22 @@ def join_steps(n, address, first, second, club_y, finish_ms):
     ]
 
 
-def one_run(program, game, shots, slow, address, delta_ms=0):
+JOINERS = (("Join", "Two", 187), ("Join", "Three", 211), ("Join", "Four", 235))
+
+
+def one_run(program, game, shots, slow, address, delta_ms=0, joiners=2):
     """1 when the host reached its first news."""
     with tempfile.TemporaryDirectory(prefix="cm0102-finish-") as work:
         os.makedirs(shots, exist_ok=True)
-        host, host_err = dr.start(program, game, work, "host", dr.host_steps(260000), shots, slow, {})
+        host, host_err = dr.start(program, game, work, "host", dr.host_steps(220000 + 40000 * joiners), shots, slow,
+                                  {})
         procs = []
         try:
             if nr.wait_for(os.path.join(shots, "host-stderr.txt"), f"screen {dr.STATUS_BUILD}", host, 300 * slow):
-                for n, (first, second, y) in enumerate((("Join", "Two", 187), ("Join", "Three", 211)), 1):
-                    if n == 2:
+                for n, (first, second, y) in enumerate(JOINERS[:joiners], 1):
+                    if n > 1:
                         time.sleep(JOIN2_AFTER_MS / 1000 * slow)
-                    finish = FINISH_MS - (JOIN2_AFTER_MS - delta_ms) * (n - 1)
+                    finish = FINISH_MS + 40000 * (joiners - 2) - (JOIN2_AFTER_MS - delta_ms) * (n - 1)
                     p, e = dr.start(program, game, work, f"join{n}",
                                     join_steps(n, address, first, second, y, finish), shots, slow, {})
                     procs.append((p, e))
@@ -96,7 +101,7 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = os.path.abspath(args[0]), os.path.abspath(args[1])
-    shots, slow, runs, delta = os.path.abspath("finish-run"), 1.0, 1, 0
+    shots, slow, runs, delta, joiners = os.path.abspath("finish-run"), 1.0, 1, 0, 2
     rest = args[2:]
     while len(rest) >= 2:
         k, v = rest.pop(0), rest.pop(0)
@@ -108,10 +113,12 @@ def main(argv):
             runs = int(v)
         elif k == "--delta":
             delta = int(v)
+        elif k == "--joiners":
+            joiners = max(2, min(3, int(v)))
     address = nr.lan_address()
     failed = 0
     for i in range(1, runs + 1):
-        ok, code = one_run(program, game, os.path.join(shots, f"run{i}"), slow, address, delta)
+        ok, code = one_run(program, game, os.path.join(shots, f"run{i}"), slow, address, delta, joiners)
         print(("ok   " if ok else "FAIL ") + f"run {i}: the host reaches its first news after both joiners' Finish "
               f"(code {code})")
         failed += not ok
