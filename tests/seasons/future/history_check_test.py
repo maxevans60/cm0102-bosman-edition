@@ -5,11 +5,13 @@ Usage:
     python3 -I tests/seasons/future/history_check_test.py
 
 The test writes a saved game of a few kilobytes into a temporary folder: the container of tools/save/savfile.py
-(compressed members) with six continents, eleven nations, their national sides, six clubs, five competitions and
-their history rows, a news list and the .tmp parts of two finals classes. The game starts in 2025 and the save
-is on day 189 of 2040. The rows hold one fault for each check of the checker, and two competitions hold none.
-The test runs the checker and compares its faults with the planted list, then runs it again with a rules file
-and a known-fault list. All data is made up, so the fixture holds no data of a database.
+(compressed members) with six continents, twelve nations, their national sides, six clubs, nine competitions and
+their history rows, a news list, the .tmp parts of finals classes, three fixtures parts, 60 players and the
+finance records. The game starts in 2025 and the save is on day 189 of 2040. The data holds one fault for each
+check of the checker, and some competitions hold none. The test runs the checker and compares its faults with the
+planted list, then runs it again with a rules file, a finals table, an access file and a known-fault list, then
+with changing rules off, then with --health. It also compares the renames of nations.tsv with the season code.
+All data is made up, so the fixture holds no data of a database.
 """
 import csv
 import os
@@ -36,7 +38,8 @@ SIDE0 = 100                                  # national side ids follow the club
 COMPS = [(0, "Aland League", 2, 0, "club"), (1, "Euro Super Cup", 2, -1, "club"),
          (10, "World Finals", -1, -1, "nation"), (11, "Euro Finals", 2, -1, "nation"),
          (12, "Asia Finals", 1, -1, "nation"), (13, "Americas Finals", 3, -1, "nation"),
-         (14, "Hatay Cup", 5, -1, "nation"), (15, "Nations Shield", 1, -1, "nation")]
+         (14, "Hatay Cup", 5, -1, "nation"), (15, "Nations Shield", 1, -1, "nation"),
+         (16, "Champions Match", 2, -1, "club")]
 
 
 def side(n):
@@ -95,6 +98,63 @@ SIDE_NAMES = {"Freedonia": "Old Freedonia"}                      # the national 
 NATION_FAULTS_OFF = {("nation-name", "Hatay", 2024)}             # changing rules off: only to the start season
 
 
+# Entrants (fixtures_<year>.tmp): (competition, home, away, day of the year).
+# World Finals 2038: 3 sides, the table has 4 and the host Carpania (not an entrant). Champions Match: the winners
+# of the Aland League and of the Euro Super Cup meet; Carpania FC won neither in 2039, Elbonia Rovers (AFC) in 2040.
+FIXTURES_2038 = [(10, side(0), side(1), 160), (10, side(4), side(0), 164), (10, side(1), side(4), 168),
+                 (10, side(0), side(1), 175)]
+FIXTURES_2039 = [(16, 0, 3, 220), (1, 0, 1, 100)]
+FIXTURES_2040 = [(16, 0, 5, 150), (16, 2, 0, 250)]        # the second match is after the save date: not checked
+ENTRANT_FAULTS = {("entrant-count", "World Finals", 2038), ("entrant-host", "World Finals", 2038),
+                  ("entrant-route", "Champions Match", 2039), ("entrant-route", "Champions Match", 2040),
+                  ("entrant-confed", "Champions Match", 2040)}
+TABLE = '{"world", 2037, 2038, 4, 0, 2038, 6, 1, "Carpania/Karpania", "row-1"},\n'
+ACCESS = "comp\tfrom\tto\tteams\troutes\tsource\nchamp\t2030\tnone\t2\twinner:aland;winner:esc\tmade up\n"
+
+
+def fixture_part(fixtures):
+    b = bytearray(struct.pack("<i", len(fixtures)))
+    for cid, home, away, day in fixtures:
+        r = bytearray(0x4F)
+        struct.pack_into("<i", r, 0, cid)
+        struct.pack_into("<ii", r, 0xC, home, away)
+        struct.pack_into("<hh", r, 0x28, 2038 + (fixtures is FIXTURES_2039) + 2 * (fixtures is FIXTURES_2040), day)
+        b += r
+    return bytes(b)
+
+
+# World health: Aland has 30 players born in 2010 (none under 23 in 2040), Borduria 30 of all ages; one Borduria
+# player has a wrong age field; Carpania FC's balance has wrapped.
+HEALTH_FAULTS = {("empty-squad", "Aland", 2040), ("overflow", "age", 2040), ("overflow", "balance", 2040)}
+
+
+def staff():
+    out = bytearray()
+    people = [(0, 2010, 30)] * 30 + [(1, 2015 + k % 10, 2040 - 2015 - k % 10 - 1) for k in range(30)]
+    people[-1] = (1, 2000, 7)                                       # the age field is 7, the birth date gives 39
+    for i, (nation, born, age) in enumerate(people):
+        r = bytearray(0x6E)
+        struct.pack_into("<i", r, 0, i)
+        struct.pack_into("<hh", r, 0x10, 300, born)                 # born on day 300: the birthday is after day 189
+        struct.pack_into("<h", r, 0x18, age)
+        struct.pack_into("<ii", r, 0x1A, nation, -1)
+        struct.pack_into("<i", r, 0x24, side(nation) if i % 2 else -1)
+        r[0x28] = 11
+        struct.pack_into("<ii", r, 0x39, -1, 0)
+        struct.pack_into("<i", r, 0x61, i)
+        out += r
+    return bytes(out)
+
+
+def finance():
+    out = bytearray()
+    for k, _ in enumerate(CLUBS):
+        r = bytearray(0x167)
+        struct.pack_into("<q", r, 0, (1 << 62) + 5 if k == 3 else 1000000 * k)
+        out += r
+    return bytes(out)
+
+
 def records(changing=1):
     def pad(b, n):
         return b + bytes(n - len(b))
@@ -147,7 +207,10 @@ def records(changing=1):
                ("news.dat", bytes(news)), ("bosman_season.dat", struct.pack("<4i", 1, 16, 2025, changing)),
                ("World Finals_10.tmp", part(2200)), ("Asia Finals_12.tmp", part(2043)),
                ("Euro Finals_11.tmp", b"\0" * 64), ("Americas Finals_13.tmp", b"\0" * 64),
-               ("Euro Super Cup_1.tmp", b"\0" * 64), ("Hatay Cup_14.tmp", part(2999))]
+               ("Euro Super Cup_1.tmp", b"\0" * 64), ("Hatay Cup_14.tmp", part(2999)),
+               ("fixtures_2038.tmp", fixture_part(FIXTURES_2038)), ("fixtures_2039.tmp", fixture_part(FIXTURES_2039)),
+               ("fixtures_2040.tmp", fixture_part(FIXTURES_2040)), ("staff.dat", staff()),
+               ("finance.dat", finance())]
     return members, want
 
 
@@ -230,21 +293,30 @@ def main():
                 "world\tWorld Finals\tintl_finals\tFIFA\t1\t4\t2038\t2034\n"
                 "esc\tEuro Super Cup\tleague\tUEFA\t0\t1\t2041\tnone\n"
                 "shield\tNations Shield\tnations_league\tUEFA\t0\t4\t2028\tnone\n"
-                "asia_shield\tAsia Shield\tintl_qual\tAFC\t0\t4\t2028\tnone\n")
+                "asia_shield\tAsia Shield\tintl_qual\tAFC\t0\t4\t2028\tnone\n"
+                "champ\tChampions Match\tsuper_cup\tUEFA\t0\t1\t2041\tnone\n"
+                "aland\tAland League\tleague\tnation\t0\t1\t2041\tnone\n")
     names = os.path.join(work, "names.tsv")
     with open(names, "w", encoding="utf-8") as f:
         f.write("# a note line\npattern\tcomp\nAmericas Finals\tamericas\n(The )?World Finals\tworld\n"
-                "Euro Super Cup\tesc\nNations Shield\tshield\nAsia Shield\tasia_shield\n")
+                "Euro Super Cup\tesc\nNations Shield\tshield\nAsia Shield\tasia_shield\n"
+                "Champions Match\tchamp\nAland League\taland\n")
     known = os.path.join(work, "known.tsv")
     with open(known, "w", encoding="utf-8") as f:
         f.write("check\tcompetition\tyear\tnote\nduplicate\tEuro Finals\t*\tplanted\n")
+    table = os.path.join(work, "table.c")
+    with open(table, "w", encoding="utf-8") as f:
+        f.write(TABLE)
+    access = os.path.join(work, "access.tsv")
+    with open(access, "w", encoding="utf-8") as f:
+        f.write(ACCESS)
     code, out = run([sav, "--out", work, "--label", "rules", "--rules", rules, "--names", names, "--known", known,
-                     "--nations", nations])
+                     "--nations", nations, "--table", table, "--access", access])
     got = faults(work, "rules")
     want2 = (want - {("missing", "World Finals", 2038), ("same-final", "Euro Super Cup", 2028),
                      ("confederation", "Nations Shield", 2032)}) | \
         {("comp-continent", "Nations Shield", 2040), ("comp-name", "Nations Shield", 2040),
-         ("confederation", "Asia Shield", 2032)}
+         ("confederation", "Asia Shield", 2032)} | ENTRANT_FAULTS
     if set(got) != want2:
         bad.append(f"rules run: missed {sorted(want2 - set(got))}, extra {sorted(set(got) - want2)}")
     if got.get(("duplicate", "Euro Finals", 2028)) != "known":
@@ -254,7 +326,8 @@ def main():
     with open(known, "a", encoding="utf-8") as f:
         for c, comp, y in sorted(want2):
             f.write(f"{c}\t{comp}\t{y}\tplanted\n")
-    code, out = run([sav, "--rules", rules, "--names", names, "--known", known, "--nations", nations])
+    code, out = run([sav, "--rules", rules, "--names", names, "--known", known, "--nations", nations,
+                     "--table", table, "--access", access])
     if code != 0:
         bad.append(f"known run: exit code {code} with only known faults\n{out}")
 
@@ -266,13 +339,37 @@ def main():
     if got != NATION_FAULTS_OFF:
         bad.append(f"changing rules off: nation faults {sorted(got)}, not {sorted(NATION_FAULTS_OFF)}")
 
+    # The entrant list: the routes in of the Champions Match of 2039.
+    with open(os.path.join(work, "rules.entrants.tsv"), encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    for want_line in ("16\tChampions Match\t2039\t2039-08-09\t2039-08-09\t0\tAland City\tAland\tUEFA\twinner aland; "
+                      "winner Aland League 2038; winner Aland League 2039",
+                      "16\tChampions Match\t2039\t2039-08-09\t2039-08-09\t3\tCarpania FC\tCarpania\tUEFA\t"
+                      "place 2 Euro Super Cup 2038; place 2 Euro Super Cup 2039",
+                      "10\tWorld Finals\t2038\t2038-06-10\t2038-06-25\t104\tElbonia\tElbonia\tAFC\tqualifier"):
+        if want_line not in lines:
+            bad.append(f"entrant list: no line {want_line!r}")
+
+    # World health: the report and its faults.
+    run([sav, "--out", work, "--label", "health", "--known", empty, "--nations", nations, "--health"])
+    got = {k for k in faults(work, "health") if k[0] in ("empty-squad", "overflow")}
+    if got != HEALTH_FAULTS:
+        bad.append(f"health run: faults {sorted(got)}, not {sorted(HEALTH_FAULTS)}")
+    with open(os.path.join(work, "health.health.tsv"), encoding="utf-8") as f:
+        report = f.read().splitlines()
+    for want_line in ("#\tplayers\t60", "#\tunder_21\t17", "#\tunder_23\t23", "#\tbalances_over_32_bits\t1",
+                      "Aland\tUEFA\t30\t0\t0\t15\t\t1", "Borduria\tUEFA\t30\t17\t23\t15\t\t1"):
+        if want_line not in report:
+            bad.append(f"health report: no line {want_line!r}")
+
     # nations.tsv holds the renames of the season code.
     bad += renames_match()
 
     for b in bad:
         print("FAIL  " + b)
-    print(f"{'ok  ' if not bad else 'FAIL'}  history checker: {len(want)} planted faults found, rules and "
-          f"known list applied (work folder {work})")
+    print(f"{'ok  ' if not bad else 'FAIL'}  history checker: {len(want)} planted history and nation faults, "
+          f"{len(ENTRANT_FAULTS)} entrant and {len(HEALTH_FAULTS)} health faults found, rules and known list applied "
+          f"(work folder {work})")
     return 1 if bad else 0
 
 
