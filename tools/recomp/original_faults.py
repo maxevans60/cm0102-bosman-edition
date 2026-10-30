@@ -46,10 +46,18 @@ trace is in docs/research/2026-10-30-money-64bit.md. Each patch gives the origin
   budget and bids.
 - The money text: `Cash::get_display_amount` 0x43f460 reads a 32-bit Cash (`fild dword`). The screens that put a
   64-bit amount into a Cash give the full amount to the runtime (rt_cash_wide, for the reads of that site), and
-  0x43f460 reads it from there: the club info balance (0x46399c, read once or twice, ended at 0x4639ee) and budget
-  (0x463b28), the budget of the player search (0x808ef3) and of the bid screen (0x8ea2c0), and the manager's money
-  spent and received on the manager stats screen (0x6b0366, 0x6b0399) and on the staff history tab (0x887fa7,
-  0x88808f).
+  0x43f460 reads it from there: the club info balance (0x46399c, read once or twice: a long text is formatted again,
+  ended at 0x4639ee), debt (0x463a14, ended at 0x463a6e) and budget (0x463b28, ended at 0x463b7a), the budget of the
+  player search (0x808ef3) and of the bid screen (0x8ea2c0: the Cash keeps the clamped budget, because the fee
+  colour reads it again at 0x8ea54c, 0x8eaf95 and 0x8eb3b0), and the manager's money spent and received on the
+  manager stats screen (0x6b0366, 0x6b0399) and on the staff history tab (0x887fa7, 0x88808f).
+- News: a news item keeps 50 32-bit slots (`NewsItem::set_slot` 0x785790 at item + 5 + 4 x slot), saved raw in
+  news.dat. Two items carry a transfer budget in slot 2: the job offer to the human (`post_job_offer_to_human_news`
+  0x6a4f80, store 0x6a5028) and the finance news (`finance_post_finance_boost_news` 0x59f300, store 0x59f36e). The
+  slot keeps the clamped budget, and a budget above 2,147,483,647 also goes into the free slots 8 (low word) and 9
+  (high word) of the item (0x6a5021, 0x59f36b). They stay 0 below it, as the item's constructor clears them
+  (0x77bc1b..0x77bc29), so news.dat is the same. The text writers (0x6a5120, 0x59f3e0) read slot 2 (0x6a51dd,
+  0x59f5ab) and show the full amount from slots 8 and 9 (0x6a533d, 0x59f5c7).
 - `Finance::get_max_wage` 0x5968d0 adds 1.3 x the balance (ftol at 0x5968e3, only eax kept at 0x5968ee) to a wage term
   in 32 bits (0x597019) and divides by 52: from a balance of about 1.65 billion the sum wraps and the club's top wage
   goes wrong. The high word of that product is kept at 0x5968e8, and a sum above 2,147,483,647 is clamped to it. This
@@ -75,9 +83,20 @@ INSNS = {
     0x46399C: ("mov dword ptr [esp + 0x18], eax",
                "W32(esp + 0x18u, eax); rt_cash_wide(esp + 0x18u, eax, R32(ebp + 4u), 2u);"),
     0x4639EE: ("mov dx, word ptr [0xadab48]", "rt_cash_wide_end(); edx = (edx & 0xffff0000u) | R16(0xadab48u);"),
-    0x463B28: ("mov dword ptr [esp + 0x18], eax", "W32(esp + 0x18u, eax); rt_cash_wide(esp + 0x18u, eax, edx, 1u);"),
+    0x463A14: ("mov dword ptr [esp + 0x18], eax",
+               "W32(esp + 0x18u, eax); { uint64_t nb_ = 0u - R64(ebp); "
+               "rt_cash_wide(esp + 0x18u, (uint32_t)nb_, (uint32_t)(nb_ >> 32), 2u); }"),
+    0x463A6E: ("lea eax, [esp + 0xac]", "rt_cash_wide_end(); eax = (uint32_t)(esp + 0xacu);"),
+    0x463B28: ("mov dword ptr [esp + 0x18], eax", "W32(esp + 0x18u, eax); rt_cash_wide(esp + 0x18u, eax, edx, 2u);"),
+    0x463B7A: ("mov dx, word ptr [0xadab48]", "rt_cash_wide_end(); edx = (edx & 0xffff0000u) | R16(0xadab48u);"),
     0x808EF3: ("mov dword ptr [esp + 0x64], eax", "W32(esp + 0x64u, eax); rt_cash_wide(esp + 0x64u, eax, edx, 1u);"),
-    0x8EA2C0: ("mov dword ptr [esp + 0x48], ebx", "W32(esp + 0x48u, ebx); rt_cash_wide(esp + 0x48u, ebx, edi, 1u);"),
+    0x8EA2C0: ("mov dword ptr [esp + 0x48], ebx", "W32(esp + 0x48u, rt_cash_wide_clamped(esp + 0x48u, ebx, edi, 1u));"),
+    0x59F36B: ("push edx", "rt_news_wide(ecx, R32(esi), edx); t0 = edx; esp -= 4; W32(esp, t0);"),
+    0x6A5021: ("push eax", "rt_news_wide(esp + 0x10u, R32(esi), eax); t0 = eax; esp -= 4; W32(esp, t0);"),
+    0x59F5AB: ("push 3", "rt_news_read(edi, eax); t0 = 0x3u; esp -= 4; W32(esp, t0);"),
+    0x59F5C7: ("mov dword ptr [esp + 0x18], ebx", "W32(esp + 0x18u, ebx); rt_cash_news(esp + 0x18u, ebx);"),
+    0x6A51DD: ("push 3", "rt_news_read(esi, eax); t0 = 0x3u; esp -= 4; W32(esp, t0);"),
+    0x6A533D: ("mov dword ptr [esp + 0x10], eax", "W32(esp + 0x10u, eax); rt_cash_news(esp + 0x10u, eax);"),
     0x6B0366: ("mov dword ptr [esp + 0x20], edi", "W32(esp + 0x20u, edi); rt_cash_wide(esp + 0x20u, edi, ecx, 1u);"),
     0x6B0399: ("mov dword ptr [esp + 0x3c], edi", "W32(esp + 0x3cu, edi); rt_cash_wide(esp + 0x3cu, edi, ecx, 1u);"),
     0x887FA7: ("mov dword ptr [esp + 0x34], eax",

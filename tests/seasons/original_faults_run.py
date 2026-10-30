@@ -6,7 +6,7 @@ Usage:
     python3 tests/seasons/original_faults_run.py managers <cm0102_recomp> <game folder> --save <in.sav> --keep <folder>
         [--days 400] [--keep-faults]
     python3 tests/seasons/original_faults_run.py money <cm0102_recomp> <game folder> --keep <folder>
-        [--balance 2500000000,5000000000,12000000000] [--days 45] [--keep-faults]
+        [--balance 2500000000,5000000000,12000000000,-2500000000] [--days 45] [--keep-faults]
     python3 tests/seasons/original_faults_run.py age <cm0102_recomp> <game folder> --keep <folder> [--born 1870]
         [--keep-faults]
 
@@ -29,7 +29,7 @@ docs/research/2026-10-30-money-64bit.md) in start.sav of the
 test fixtures (tools/save/edit_money.py), loads it, opens Arsenal's Finances view (a screen dump), goes on holiday and
 saves --days game days later (tests/fixtures/fixtures.py play). The runtime logs each 64-bit amount that a screen
 formats (RECOMP_MONEY_LOG: "money text") and each transfer budget of a club above 2,147,483,647 ("money budget").
-The checks, for each balance:
+The checks, for each balance (a negative balance is a debt: only the first check, on the amount of the debt):
     - the Finances view formats the full balance and the full transfer funds ("money text" lines; the funds are at
       least 99% of the balance)
     - Liverpool's budget is at least 99% of its balance, as below 2,147,483,647 (the fault gave a tenth: the floor
@@ -139,7 +139,7 @@ BID_A, BID_B = "0x8e6335", "0x8e74a7"   # TRANSFER_OFFER::build_bid 0x8e5d60 (ea
 def money(argv):
     program, game = os.path.abspath(argv[0]), os.path.abspath(argv[1])
     keep = os.path.abspath(soak_run.arg(argv, "--keep"))
-    balances = [int(b) for b in soak_run.arg(argv, "--balance", "2500000000,5000000000,12000000000").split(",")]
+    balances = [int(b) for b in soak_run.arg(argv, "--balance", "2500000000,5000000000,12000000000,-2500000000").split(",")]
     days = int(soak_run.arg(argv, "--days", 45))
     os.environ["RECOMP_MONEY_LOG"] = "1"
     if "--keep-faults" in argv:
@@ -169,6 +169,10 @@ def money(argv):
             fails.append(f"{balance}: the run failed (code {code})")
         fails += [f"{balance}: {x.strip()}" for x in log if "recomp: message box from" in x]
         texts = [int(x.split(": ")[-1]) for x in log if x.startswith("recomp: money text: ")]
+        if balance < 0:      # a debt: the club info tab shows the amount of the debt (0x463a0a); no budget check
+            if -balance not in texts:
+                fails.append(f"{balance}: the Finances view did not format the debt (money text: {texts[:4]})")
+            continue
         if balance not in texts:
             fails.append(f"{balance}: the Finances view did not format the balance (money text: {texts[:4]})")
         if not [t for t in texts if t != balance and t > 0.99 * balance]:

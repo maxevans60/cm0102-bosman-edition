@@ -130,6 +130,9 @@ static const uint32_t budget_wide_callers[] = {
 
 void o_00598800(void);
 
+static uint32_t news_club;    /* the club of the last budget above 2,147,483,647 that a caller got clamped */
+static int64_t news_full;
+
 static int money_log(void)
 {
     static int on = -1;
@@ -148,7 +151,11 @@ RT_WRAP(00598800, get_transfer_budget)
     for (size_t i = 0; i < sizeof budget_wide_callers / sizeof budget_wide_callers[0]; i++)
         wide |= from == budget_wide_callers[i];
     if (fixes_on() && !wide) {
-        if (v > INT32_MAX) cpu.eax = (uint32_t)INT32_MAX, cpu.edx = 0;
+        if (v > INT32_MAX) {
+            cpu.eax = (uint32_t)INT32_MAX, cpu.edx = 0;
+            news_club = rd32(g_mem, finance + 8u);    /* rt_news_wide: a news item may carry this budget */
+            news_full = v;
+        }
         else if (v < INT32_MIN) cpu.eax = 0x80000000u, cpu.edx = 0xffffffffu;
     }
     /* test switch (tests/seasons/original_faults_run.py money): the budgets of a club above 2,147,483,647 */
@@ -164,15 +171,31 @@ RT_WRAP(00598800, get_transfer_budget)
  * 0x441c10 take an int64). A screen that puts a 64-bit amount into a Cash registers it here with the number of reads
  * of that site (one, or two for the club info balance, which formats it again when the text is long, 0x4639c8..0x4639e6,
  * and ends at 0x4639ee). Those reads take the full amount while the Cash keeps its low word. */
-static uint32_t wide_at, wide_reads;
+static uint32_t wide_at, wide_reads, wide_stored;
 static int64_t wide_amount;
+
+/* The Cash at cash holds stored; its next reads give amount. */
+static void cash_wide(uint32_t cash, uint32_t stored, int64_t amount, uint32_t reads)
+{
+    wide_reads = fixes_on() && amount != (int64_t)(int32_t)stored ? reads : 0u;
+    wide_at = cash;
+    wide_stored = stored;
+    wide_amount = amount;
+}
 
 void rt_cash_wide(uint32_t cash, uint32_t lo, uint32_t hi, uint32_t reads)
 {
+    cash_wide(cash, lo, (int64_t)(((uint64_t)hi << 32) | lo), reads);
+}
+
+/* The bid screen (0x8ea2c0): the Cash keeps the budget clamped to 2,147,483,647, because the fee colour reads it
+ * again (0x8ea54c, 0x8eaf95, 0x8eb3b0); only the text read gives the full amount. Returns the value to store. */
+uint32_t rt_cash_wide_clamped(uint32_t cash, uint32_t lo, uint32_t hi, uint32_t reads)
+{
     int64_t v = (int64_t)(((uint64_t)hi << 32) | lo);
-    wide_reads = fixes_on() && v != (int64_t)(int32_t)lo ? reads : 0u;
-    wide_at = cash;
-    wide_amount = v;
+    uint32_t stored = !fixes_on() ? lo : v > INT32_MAX ? (uint32_t)INT32_MAX : v < INT32_MIN ? 0x80000000u : lo;
+    cash_wide(cash, stored, v, reads);
+    return stored;
 }
 
 void rt_cash_wide_end(void)
@@ -183,7 +206,7 @@ void rt_cash_wide_end(void)
 int64_t rt_cash_amount(uint32_t cash)
 {
     uint32_t lo = rd32(g_mem, cash);
-    if (wide_reads && cash == wide_at && lo == (uint32_t)wide_amount) {
+    if (wide_reads && cash == wide_at && lo == wide_stored) {
         wide_reads--;
         if (money_log())     /* test switch: tests/seasons/original_faults_run.py money */
             fprintf(stderr, "recomp: money text: %lld\n", (long long)wide_amount);
@@ -212,4 +235,33 @@ uint32_t rt_max_wage_sum(uint32_t term, uint32_t lo)
     if (!fixes_on() || !had) return term + lo;
     int64_t sum = (int64_t)(int32_t)term + (int64_t)(((uint64_t)wage_high << 32) | lo);
     return sum > INT32_MAX ? (uint32_t)INT32_MAX : term + lo;
+}
+
+/* News (Q46). A news item keeps 50 32-bit slots at item + 5 + 4 x slot (`NewsItem::set_slot` 0x785790), saved raw in
+ * news.dat. The job offer (0x6a5021) and the finance news (0x59f36b) put a transfer budget in slot 2, clamped to
+ * 2,147,483,647 by the wrap of 0x598800. When that budget was clamped for the same club, its full amount also goes into
+ * slots 8 (low word) and 9 (high word), which these items do not use and which the constructor clears
+ * (0x77bc1b..0x77bc29): below 2,147,483,647 the item, and so the save, is unchanged. */
+#define NEWS_SLOT(item, n) ((item) + 5u + 4u * (n))
+
+void rt_news_wide(uint32_t item, uint32_t club, uint32_t value)
+{
+    if (!fixes_on() || value != (uint32_t)INT32_MAX || club != news_club || news_full <= INT32_MAX) return;
+    wr32(g_mem, NEWS_SLOT(item, 8u), (uint32_t)news_full);
+    wr32(g_mem, NEWS_SLOT(item, 9u), (uint32_t)((uint64_t)news_full >> 32));
+}
+
+/* The text writers read slot 2 (0x6a51dd, 0x59f5ab) and later put it into a Cash (0x6a533d, 0x59f5c7). */
+static int64_t news_pending;
+
+void rt_news_read(uint32_t item, uint32_t value)
+{
+    uint64_t full = ((uint64_t)rd32(g_mem, NEWS_SLOT(item, 9u)) << 32) | rd32(g_mem, NEWS_SLOT(item, 8u));
+    news_pending = fixes_on() && value == (uint32_t)INT32_MAX && (int64_t)full > INT32_MAX ? (int64_t)full : 0;
+}
+
+void rt_cash_news(uint32_t cash, uint32_t value)
+{
+    if (news_pending && value == (uint32_t)INT32_MAX) cash_wide(cash, value, news_pending, 1u);
+    news_pending = 0;
 }

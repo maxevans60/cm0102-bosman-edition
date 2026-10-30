@@ -310,7 +310,11 @@ uint32_t rt_budget_floor_low(uint32_t r);
 uint32_t rt_budget_floor_high(uint32_t lo);
 int64_t rt_budget_floor_wide(uint32_t r);
 void rt_cash_wide(uint32_t cash, uint32_t lo, uint32_t hi, uint32_t reads); /* a 64-bit amount put into a Cash */
-void rt_cash_wide_end(void);                                 /* the club info balance is formatted (0x4639ee) */
+void rt_cash_wide_end(void);
+uint32_t rt_cash_wide_clamped(uint32_t cash, uint32_t lo, uint32_t hi, uint32_t reads); /* bid screen 0x8ea2c0 */
+void rt_news_wide(uint32_t item, uint32_t club, uint32_t value);  /* news slot 2 of a budget: slots 8 and 9 */
+void rt_news_read(uint32_t item, uint32_t value);                 /* a text writer reads slot 2 */
+void rt_cash_news(uint32_t cash, uint32_t value);                 /* ... and puts it into a Cash */                                 /* the club info balance is formatted (0x4639ee) */
 int64_t rt_cash_amount(uint32_t cash);                       /* the amount that 0x43f460 reads from a Cash */
 void rt_max_wage_high(uint32_t edx, uint32_t eax);  /* get_max_wage 0x5968e8: the product of 1.3 x the balance */
 uint32_t rt_max_wage_sum(uint32_t term, uint32_t lo); /* get_max_wage 0x597019 */

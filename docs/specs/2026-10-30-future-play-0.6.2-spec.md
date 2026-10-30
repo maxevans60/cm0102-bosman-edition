@@ -237,7 +237,7 @@ Delivers: every national team gets a new manager, money above £2.1 billion is r
 Merge danger: two-way door. The base game changes at the first month change in play (1 August in a 2001 game): about 95 national teams of the 3.9.68 data have no manager from the start and get one then (Q43). The same-save set does not reach that point, so it must PASS. A loaded save with a national team that has no manager gets one at the next month change. That is an expected change. Blast radius: national team jobs, money screens and AI transfer budgets.
 - [x] A save with a retired national manager of a small nation opens a vacancy. A save where a national team already has no manager fills it at the next month change.
 - [x] Saves edited to balances of £2.5 billion, £5 billion and £12 billion show the right balance, and the club still bids.
-- [ ] Every screen that formats money through the 32-bit Cash object is traced and fixed.
+- [x] Every screen that formats money through the 32-bit Cash object is traced and fixed.
 - [x] Same-save set PASS.
 
 ### 12. Caps in a wider field
