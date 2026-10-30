@@ -300,6 +300,20 @@ uint32_t rt_league_row_read_failed(uint32_t league);
 /* The ban release's nation index (win/discipline_ban.c, tools/recomp/discipline_ban.py at 0x556dcf): the entry
  * of the staff id under any nation, 0 for none, or 1 when the fix is off (the original's box). */
 uint32_t rt_discipline_ban_entry(uint32_t discipline, uint32_t staff);
+/* 1 when a senior national team gets a manager vacancy that the original refuses (0.6.2 slice 11, Q23; win/original_faults.c,
+ * tools/recomp/original_faults.py at 0x69bb02, 0x7ab158, 0x68fe65, 0x69d0a5, 0x69b6d8: site 0 to 4). */
+uint32_t rt_national_vacancy(uint32_t club, uint32_t site);
+/* The staff age of the day loops (0x5cca1d, 0x5cd3c4): the age from 0x53ab90 in ax, kept at 127 above 127 (Q27). */
+uint32_t rt_staff_age_store(uint32_t eax);
+/* Money above 2,147,483,647 (0.6.2 slice 11, Q24; win/original_faults.c, tools/recomp/original_faults.py). */
+uint32_t rt_budget_hi(uint32_t lo, uint32_t hi);          /* get_transfer_budget: the high word in place of cdq */
+uint32_t rt_budget_floor(uint32_t finance, uint32_t less); /* the balance less 10m or 15m (0x599135, 0x599185) */
+uint32_t rt_budget_floor_low(uint32_t r);
+uint32_t rt_budget_floor_high(uint32_t lo);
+int64_t rt_budget_floor_wide(uint32_t r);
+void rt_cash_wide(uint32_t cash, uint32_t lo, uint32_t hi); /* a 64-bit amount put into the Cash at that address */
+int64_t rt_cash_amount(uint32_t cash);                       /* the amount that 0x43f460 reads from a Cash */
+uint32_t rt_max_wage_sum(uint32_t term, uint32_t lo, uint32_t finance); /* get_max_wage 0x597019 */
 /* The rule-set load's Oceania body (win/season_intl.c, tools/recomp/discipline_ban.py at 0x55deb6): 1 when a
  * season game moved a selected Australia to Asia, so its saves hold the body. */
 uint32_t rt_discipline_oceania_body(void);

@@ -238,6 +238,10 @@ SAME_SAVE_RUNS = [
     # The Turkish groups of Summer 2002 act only with that database: with their test switch off the save of the
     # 3.9.68 data is that of normal.
     ("turkish-groups-off", {"faster_days": "off", "_env": {"RECOMP_TURKISH_GROUPS": "off"}}),
+    # The fixes of faults of the original (0.6.2 slice 11, original_faults.c) act in every game, but only on a
+    # national team without a manager at a month change or later, above 2,147,483,647 or at an age above 127: with
+    # their test switch off the save is that of normal.
+    ("original-faults-keep", {"faster_days": "off", "_env": {"RECOMP_ORIGINAL_FAULTS": "keep"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this
@@ -313,6 +317,7 @@ MATCH_RUNS = [
     ("season-code-off", {"_env": {"RECOMP_SEASON_CODE": "off"}}),
     ("box-fixes-off", {"_env": {"RECOMP_BOX_FIXES": "off"}}),
     ("host-loops-off", {"_env": {"RECOMP_QSORT": "original", "RECOMP_HOT": "original"}}),
+    ("original-faults-keep", {"_env": {"RECOMP_ORIGINAL_FAULTS": "keep"}}),
 ]
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
 # --match --sleep-danger adds this run: the idle sleep without its time rules (RECOMP_IDLE_SLEEP=force), so
