@@ -62,7 +62,7 @@ The game ships for Mac, Windows and Linux. At each release the release script bu
 
 ## Rules source checks
 
-The season rules come from a table with one row per competition and season. `tools/research/rules_lint.py` checks that every filled fact has a source. `tests/seasons/rules_report_check.py` compares the competitions that the game holds each season with that table. Both run at each change to the rules and at each release. The pass rule is no missing source and no difference.
+The season rules come from a table with one row per competition and season. `tools/research/rules_lint.py` checks that every filled fact has a source. `tests/seasons/rules_report_check.py` compares the competitions that the game holds each season with that table. `tools/release/rule_changes_report.py` writes the list of rule changes for players, and marks each real club count that the league code of the game cannot hold. `tests/seasons/rule_changes_report_check.py` tests it. All three run at each change to the rules and at each release. The pass rule is no missing source, no difference and a passing test.
 
 ## Database checks
 
