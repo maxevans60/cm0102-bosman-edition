@@ -180,14 +180,18 @@ def main():
     # fault), Americas Finals keeps its gap. Known list: the Euro Finals duplicate.
     rules = os.path.join(work, "rules.tsv")
     with open(rules, "w", encoding="utf-8") as f:
-        f.write("competition\tkind\tconfederation\tcycle\tfirst_year\tend_year\n"
-                "Americas Finals\tfinals\tCONCACAF\t2\t2015\t\n"
-                "World Finals\tfinals\tnone\t4\t1930\t2034\n"
-                "Euro Super Cup\tleague\tUEFA\t1\t1972\t\n")
+        f.write("# a note line\ncomp\tname\tkind\tconfed\thas_host\tcycle\tnext_year\tend_year\n"
+                "americas\tAmericas Finals\tintl_finals\tCONCACAF\t1\t2\t2041\tnone\n"
+                "world\tWorld Finals\tintl_finals\tFIFA\t1\t4\t2038\t2034\n"
+                "esc\tEuro Super Cup\tleague\tUEFA\t0\t1\t2041\tnone\n")
+    names = os.path.join(work, "names.tsv")
+    with open(names, "w", encoding="utf-8") as f:
+        f.write("# a note line\npattern\tcomp\nAmericas Finals\tamericas\n(The )?World Finals\tworld\n"
+                "Euro Super Cup\tesc\n")
     known = os.path.join(work, "known.tsv")
     with open(known, "w", encoding="utf-8") as f:
         f.write("check\tcompetition\tyear\tnote\nduplicate\tEuro Finals\t*\tplanted\n")
-    code, out = run([sav, "--out", work, "--label", "rules", "--rules", rules, "--known", known])
+    code, out = run([sav, "--out", work, "--label", "rules", "--rules", rules, "--names", names, "--known", known])
     got = faults(work, "rules")
     want2 = want - {("missing", "World Finals", 2038), ("same-final", "Euro Super Cup", 2028)}
     if set(got) != want2:
@@ -199,7 +203,7 @@ def main():
     with open(known, "a", encoding="utf-8") as f:
         for c, comp, y in sorted(want2):
             f.write(f"{c}\t{comp}\t{y}\tplanted\n")
-    code, out = run([sav, "--rules", rules, "--known", known])
+    code, out = run([sav, "--rules", rules, "--names", names, "--known", known])
     if code != 0:
         bad.append(f"known run: exit code {code} with only known faults\n{out}")
 

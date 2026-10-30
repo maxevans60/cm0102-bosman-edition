@@ -37,13 +37,17 @@ Checks (one row of <label>.faults.tsv each, check names in the first column):
     gap           a gap in the cycle from the start year on: two editions further apart than the cycle and one
                   year. The cycle is the rules file's, else the most common step of the last 6 editions before
                   the start year
+    (a competition whose rules cycle is 0 has ended: it gets none of the three checks below)
     missing       no edition after the last one up to the save date (the last edition + cycle + 1 < the save
                   year), for a competition with rows from the start year on or an international one; not for a
                   competition whose class waits on 2999 (ended) or whose rules end year has passed
     next-edition  the class waits for the year 2199 or 2200 (the idle year of rt_intl_next_year), or for a
                   year more than one cycle and one year after the save date
---rules: a TSV with a header and the columns competition, kind, confederation, cycle, first_year, end_year
-(session 1's file). Columns that it lacks keep the rules above. --known: a TSV with check, competition, year
+--rules (default: competitions.tsv next to this file, when it is there; lines with # are notes): per key (column comp) the columns
+kind, confed (FIFA or nation: no check, else codes joined by |), has_host (0: no host check, 1: every row from
+the start on needs one), cycle (0: the competition ended) and end_year (a year or none). --names (default
+history_names.tsv next to this file) gives the key of each competition name of a save; a name with no key keeps
+the rules above. --known: a TSV with check, competition, year
 (or *) and a note; a fault that matches is printed as "known". Exit code 1 when a fault is not known.
 """
 import collections
@@ -59,12 +63,13 @@ sys.path.insert(0, os.path.join(ROOT, "tools", "save"))
 import savfile  # noqa: E402
 
 CLUB, NATION, COMP, CONT, HIST = 0x245, 0x122, 0x6B, 0xC6, 0x1A
-CONF = {"Africa": "CAF", "Asia": "AFC", "Europe": "UEFA", "North America": "CONCACAF", "Oceania": "OFC",
-        "South America": "CONMEBOL"}
 IDLE_YEARS = (2199, 2200)
 ENDED_YEAR = 2999
 EDITION = re.compile(rb"\xff\xff\xff\xff\x07\x03..\x00{7}.\x00\x00\x00(..)", re.S)
 PART = re.compile(r"^(.*)_(\d+)\.tmp$")
+SEASON = re.compile(r"^\d{4}(-\d{2})? ")
+# continent ids of the data (Africa, Asia, Europe, North America, Oceania, South America in every database)
+CONF_IDS = ["CAF", "AFC", "UEFA", "CONCACAF", "OFC", "CONMEBOL"]
 
 
 class LazySav:
@@ -112,8 +117,8 @@ class Game:
         sav = LazySav(path)
         self.path = path
         cont = sav.read("continent.dat")
-        self.continents = {s32(cont, i * CONT): CONF.get(text(cont, i * CONT + 4, 26), text(cont, i * CONT + 4, 26))
-                           for i in range(len(cont) // CONT)}
+        self.continents = {s32(cont, i * CONT): CONF_IDS[s32(cont, i * CONT)] if 0 <= s32(cont, i * CONT) < 6
+                           else text(cont, i * CONT + 4, 26) for i in range(len(cont) // CONT)}
         nat = sav.read("nation.dat")
         self.nations = {}
         for i in range(len(nat) // NATION):
@@ -173,18 +178,36 @@ class Game:
         return (name, nname, conf)
 
 
-def read_rules(path):
-    if not path:
-        return {}
+def tsv(path):
     with open(path, newline="", encoding="utf-8") as f:
-        return {r["competition"]: r for r in csv.DictReader(f, delimiter="\t") if r.get("competition")}
+        return list(csv.DictReader((l for l in f if not l.startswith("#")), delimiter="\t"))
+
+
+class Rules:
+    """The expected rules of competitions.tsv, found by competition name through history_names.tsv."""
+
+    def __init__(self, path=None, names=None):
+        self.rows = {r["comp"]: r for r in tsv(path)} if path else {}
+        self.names = [(re.compile(r["pattern"], re.I), r["comp"]) for r in tsv(names)] if path and names else []
+
+    def get(self, name):
+        """{} or {key, kind, confs (a set, or None: any), has_host (None, 0 or 1), cycle, end}."""
+        bare = SEASON.sub("", name)
+        key = next((k for pat, k in self.names if pat.fullmatch(bare)), None)
+        r = self.rows.get(key)
+        if not r:
+            return {}
+        confed = r.get("confed", "")
+        cycle = number(r.get("cycle"))
+        return {"key": key, "kind": r.get("kind", ""), "has_host": number(r.get("has_host")),
+                "confs": set(confed.split("|")) if confed and set(confed.split("|")) <= set(CONF_IDS) else None,
+                "cycle": cycle or None, "end": number(r.get("end_year")), "ended": cycle == 0}
 
 
 def read_known(path):
     if not path or not os.path.exists(path):
         return []
-    with open(path, newline="", encoding="utf-8") as f:
-        return [r for r in csv.DictReader(f, delimiter="\t") if r.get("check") and not r["check"].startswith("#")]
+    return [r for r in tsv(path) if r.get("check")]
 
 
 def is_known(known, check, comp, year):
@@ -223,7 +246,7 @@ FRIENDLY = re.compile(r"^(Friendly|Reserve|'B' International|Under 21 Internatio
 
 def check(game, rules=None):
     """[(check, competition, year, detail)]."""
-    rules = rules or {}
+    rules = rules or Rules()
     by = collections.defaultdict(list)
     for r in table(game):
         by[r[0]].append(r)
@@ -237,7 +260,7 @@ def check(game, rules=None):
         name = comp["name"]
         if FRIENDLY.match(name):
             continue
-        rule = rules.get(name, {})
+        rule = rules.get(name)
         sides = sum(1 for a in raw[cid] if a in game.sides)
         teams = "nation" if sides * 2 > len(raw[cid]) else "club"
         international = comp["nation"] < 0
@@ -250,28 +273,26 @@ def check(game, rules=None):
                 faults.append(("duplicate", name, y, f"{n} rows: {pairs}"))
         # a missing host where the competition has hosts
         hosted = [r for r in rs if r[7][0]]
-        if len(hosted) * 2 > len(rs):
+        if rule.get("has_host") == 1 or (rule.get("has_host") is None and len(hosted) * 2 > len(rs)):
             for r in game_rows:
                 if not r[7][0]:
                     faults.append(("no-host", name, r[3], f"{r[4][0]} / {r[5][0]}, no host ({len(hosted)} of "
                                                          f"{len(rs)} rows have one)"))
         # a winner or runner-up from the wrong confederation
-        if rule.get("confederation"):
-            conf = rule["confederation"]
-        elif not international:
+        if not international:
             conf = game.nations.get(comp["nation"], ("", ""))[1]
+        elif "confs" in rule:
+            conf = "|".join(sorted(rule["confs"])) if rule["confs"] else ""
         else:
             conf = game.continents.get(comp["continent"], "")
             older = [r[4][2] for r in rs if r[3] < start and r[4][2]]
             if not conf and len(older) >= 3:
                 top, n = collections.Counter(older).most_common(1)[0]
                 conf = top if n * 5 >= len(older) * 4 else ""
-        if conf in ("none", "world", "FIFA", "-"):
-            conf = ""
         if conf:
             for r in game_rows:
                 for role, p in (("winner", r[4]), ("runner-up", r[5])):
-                    if p[0] and p[2] and p[2] != conf:
+                    if p[0] and p[2] and p[2] not in conf.split("|"):
                         faults.append(("confederation", name, r[3], f"{role} {p[0]} ({p[1]}, {p[2]}), "
                                                                     f"the competition is {conf}"))
         # the same two finalists more than 2 editions in a row
@@ -286,10 +307,12 @@ def check(game, rules=None):
                     faults.append(("same-final", name, r[3], f"{r[4][0]} and {r[5][0]} in 3 editions to {r[3]}"))
         # a gap in the cycle and editions missing up to the save date: for a competition that the game runs
         # (it has a .tmp part) and that was held near the start
-        cyc = number(rule.get("cycle")) or cycle_of(years, start)
-        end = number(rule.get("end_year"))
+        cyc = rule.get("cycle") or cycle_of(years, start)
+        end = rule.get("end")
         edition = game.editions.get(cid)
         ys = sorted(set(years))
+        if rule.get("ended"):
+            continue                                  # ended by the rules: no later edition is expected
         if cyc and ys and cid in game.parts and ys[-1] >= start - 2 * cyc:
             for a, b in zip(ys, ys[1:]):
                 if b >= start and a >= start - cyc and b - a > cyc + 1 and not (end and a >= end):
@@ -329,7 +352,7 @@ def write(game, label, out, faults, known):
 def main(argv):
     args = [a for a in argv[1:]]
     opts = {}
-    for k in ("--out", "--rules", "--known", "--label"):
+    for k in ("--out", "--rules", "--names", "--known", "--label"):
         if k in args:
             i = args.index(k)
             opts[k] = args[i + 1]
@@ -337,7 +360,9 @@ def main(argv):
     if not args:
         print(__doc__)
         return 2
-    rules = read_rules(opts.get("--rules"))
+    default = os.path.join(HERE, "competitions.tsv")
+    rules = Rules(opts.get("--rules", default if os.path.exists(default) else None),
+                  opts.get("--names", os.path.join(HERE, "history_names.tsv")))
     known = read_known(opts.get("--known", os.path.join(HERE, "history_known.tsv")))
     new = 0
     for path in args:
