@@ -77,6 +77,20 @@ const SeasonIntlEdition *season_intl_rule_edition(const char *file, int year);
  * (0 for the base game, an edition the table does not hold, or one without a date). */
 int season_intl_date_shift(uint32_t cls, int year);
 
+/* The confederations, in the order of the key continent ids 0x9cfa08 to 0x9cfa1c (set at 0x604289; sweep
+ * section 8): the id of confederation c is the dword at 0x9cfa08 + 4 * c. */
+enum {
+    SEASON_CONF_AFRICA, SEASON_CONF_ASIA, SEASON_CONF_EUROPE, SEASON_CONF_NORTH_AMERICA, SEASON_CONF_OCEANIA,
+    SEASON_CONF_SOUTH_AMERICA, SEASON_CONFS
+};
+
+/* 1 when day doy (0 is 1 January) of year y lies in the days of a final that the nations of confederation conf
+ * play in a season game: from 2 days before the first group day that the class plays (the original's day moved by
+ * season_intl_date_shift) to the end of its span for its team count. The World Cup counts for every
+ * confederation, the Copa America for CONMEBOL and its CONCACAF guests. The Confederations Cup and the Olympics
+ * (8 nations of all confederations, an under-23 side) do not count. 0 outside a season game. */
+int season_intl_finals_busy(int conf, int y, int doy);
+
 /* The source file of a class of the code sites ("?" for none). */
 const char *season_intl_class_file(uint32_t cls);
 
