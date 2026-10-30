@@ -205,6 +205,12 @@ def resolve(names, name, nation, kind):
 
 
 GAP_COMPETITIONS = ("US Open Cup",)
+# Repairs of a database of 2010/11 or later (0.6.2 slice 7, open item 20): (database, competition, label years
+# whose rows are cleared, after the year shift, researched label years that are added). September 2010 ODB holds
+# no World Cup 2010 row; its last row (1998 in the file, 2007 after the nation shift of +9) names France alone, with
+# no other place. The game does not play the 2010 World Cup in a 2010/11 start (no game row in the 2010 gate
+# saves of 0.6.0), so the researched 2010 row takes its place.
+REPAIRS = (("September 2010 ODB", "FIFA World Cup", (2007,), (2010,)),)
 
 
 def gap_databases(dbroot):
@@ -228,7 +234,7 @@ def gap_rows(name, start, folder, rows, ref, alias, plan, report):
     d = hg.Data(folder)
     held = {d.comp(cid)[1] for cid, *_ in d.history()}
     comps = {}
-    for cid in range(d.count(12)):
+    for cid in range(d.count(12) + d.count(16)):     # the club competitions, then the nation competitions
         c = d.comp(cid)
         if c:
             comps.setdefault(c[1], (cid, c[2]))
@@ -245,6 +251,22 @@ def gap_rows(name, start, folder, rows, ref, alias, plan, report):
             places = [resolve(names, r.get(f, ""), r["nation"], r["kind"]) for f in ("first", "second", "third", "host")]
             if places[0] is None or not places[0][0]:
                 continue
+            places = [v or ("", "") for v in places]
+            plan.append("\t".join(["add", name, str(start), comp, r["label"], r.get("part", ""), "add"]
+                                  + [x for v in places for x in v]))
+            added += 1
+    for db, comp, clears, adds in REPAIRS:
+        if db != name or comp not in comps:
+            continue
+        for label in clears:
+            plan.append("\t".join(["clear", name, str(start), comp, str(label)] + [""] * (len(PLAN_COLS) - 5)))
+        for r in rows:
+            if r["competition"] != comp or r["nation"] != comps[comp][1] or not r.get("label", "").isdigit() \
+                    or int(r["label"]) not in adds or r.get("held") != "yes":
+                continue
+            places = [resolve(names, r.get(f, ""), r["nation"], r["kind"]) for f in ("first", "second", "third", "host")]
+            if places[0] is None or not places[0][0]:
+                raise SystemExit(f"{name}: the repair row {comp} {r['label']} has no winner in the database")
             places = [v or ("", "") for v in places]
             plan.append("\t".join(["add", name, str(start), comp, r["label"], r.get("part", ""), "add"]
                                   + [x for v in places for x in v]))

@@ -13,6 +13,7 @@
  *             name (51 bytes), +0x53 the nation (a pointer after the id pass, 0x5315de); nation +0x04 its name.
  *   comps     +0x04 the name (51 bytes). */
 #include "win.h"
+#include "season.h"
 #include "season_history.h"
 
 #include <stdio.h>
@@ -33,6 +34,8 @@
 #define CLUB_COMP_SIZE 0x6bu
 
 #define GROW_HISTORY 0x00527f60u   /* database_grow_comp_history_table (count): blank rows at the end, 1 on success */
+#define GAME_YEAR 0xae2c92u         /* u16, the year of the game date: the label year that 0x4afce0 writes */
+#define FIX_BASE_GAME 1             /* 0.6.2 slice 7: the rows after the start also go in the base game */
 
 /* --- Undo: the rows that the fill changed, by index (the grow moves the table), and the old row count. --- */
 
@@ -42,6 +45,11 @@ static size_t saved_n, saved_cap;
 static int filled;                  /* 1 while a fill is in memory */
 static uint32_t old_count;          /* the row count before the fill */
 static uint32_t n_added, n_cleared, n_unmatched, n_duplicates;
+/* The rows that the game wrote since the last load or new game (indices): rows of the same label year that it
+ * writes in one year, as the three Inter-Toto Cup winners of one August, all stay. In memory only: a save of the
+ * calendar year of the start between two such rows of one competition does not keep them apart. */
+static uint32_t *own;
+static size_t own_n, own_cap;
 
 static void save_row(uint32_t index)
 {
@@ -78,6 +86,7 @@ void season_history_undo(void)
 
 void season_history_forget(void)
 {
+    own_n = 0;
     filled = 0;
     saved_n = 0;
 }
@@ -343,6 +352,91 @@ void season_history_fill(const char *name, int N)
     free(freed);
     free(nw);
     log_rows("load");
+}
+
+/* --- Rows after the start (0.6.2 slice 7, open items 3 and 17; the head of season_history.h). --- */
+
+int season_history_after_start_on(void)
+{
+    if (!season_code_on()) return 0;
+    if (FIX_BASE_GAME) return 1;
+    return season_start_year() != SEASON_FIRST_YEAR || season_changing_rules();
+}
+
+static uint32_t n_after;
+
+static int is_own(uint32_t index)
+{
+    for (size_t k = 0; k < own_n; k++)
+        if (own[k] == index) return 1;
+    return 0;
+}
+
+void season_history_drop_after_start(int S)
+{
+    n_after = 0;
+    if (!season_history_after_start_on()) return;
+    uint32_t hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
+    if (!hist) return;
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t r = hist + i * HISTORY_SIZE;
+        if (!rd32(g_mem, r + 4) || (int)rd16(g_mem, r + 8) <= S) continue;
+        if (!filled) {
+            filled = 1;
+            old_count = count;
+        }
+        save_row(i);
+        wr32(g_mem, r + 4, 0);
+        n_after++;
+    }
+    if (n_after)
+        fprintf(stderr, "recomp: season history: %u rows after the start season %d cleared\n", n_after, S);
+}
+
+void o_004afce0(void);
+
+/* comp_util_add_history_record, cdecl (Comp *comp, Club *first, Club *second, Club *third, Club *host): the row of
+ * an edition that the game has played. It reuses a free row at the end of the table or grows it (0x527f60), and
+ * writes the competition record [comp + 4] (0x4afd51), the game year [0xae2c92] as the label (0x4afd57,
+ * 0x4afd62) and the four places (0x4afd6a to 0x4afd7b). Before it: every other row of the competition with a
+ * later label, and in the calendar year of the start every other row with this label, is cleared. The game
+ * never writes a label after the game year, so those rows are rows of the data. */
+RT_WRAP(004afce0, comp_util_add_history_record)
+{
+    uint32_t obj = rt_arg(0), hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
+    uint32_t comp = obj ? rd32(g_mem, obj + 4) : 0;
+    int year = (int)rd16(g_mem, GAME_YEAR), S = season_start_year(), n = 0;
+    if (comp && hist && season_history_after_start_on()) {
+        for (uint32_t i = 0; i < count; i++) {
+            uint32_t r = hist + i * HISTORY_SIZE;
+            int label = (int)rd16(g_mem, r + 8);
+            if (rd32(g_mem, r + 4) != comp || label < year || (label == year && year != S) || is_own(i)) continue;
+            wr32(g_mem, r + 4, 0);
+            n++;
+        }
+        if (n && getenv("RECOMP_HISTORY_LOG"))
+            fprintf(stderr, "recomp: season history: %d data rows of label %d or later cleared before the game's "
+                            "row\n", n, year);
+    }
+    o_004afce0();
+    if (rt_unwinding || !comp) return;
+    /* The row it wrote: the last row of the table with this competition and year (0x4afcfc..0x4afd28 takes the
+     * row after the last used row, or a grown one). */
+    hist = rd32(g_mem, HISTORY_PTR);
+    count = rd32(g_mem, HISTORY_COUNT);
+    for (uint32_t i = count; hist && i-- > 0;) {
+        uint32_t r = hist + i * HISTORY_SIZE;
+        if (rd32(g_mem, r + 4) != comp || (int)rd16(g_mem, r + 8) != year) continue;
+        if (own_n == own_cap) {
+            size_t cap = own_cap ? own_cap * 2 : 64;
+            uint32_t *m = realloc(own, cap * sizeof *m);
+            if (!m) rt_fatal("season history: no memory for the game's rows");
+            own = m;
+            own_cap = cap;
+        }
+        own[own_n++] = i;
+        break;
+    }
 }
 
 /* --- Test log: RECOMP_HISTORY_LOG=<competition>;<competition>;... At the first human turn, every row of each

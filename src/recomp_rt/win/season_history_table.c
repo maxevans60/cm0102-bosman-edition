@@ -34327,6 +34327,7 @@ static const SeasonHistRow rows_16[] = {
     {"US Open Cup", 2001, {"Los Angeles Galaxy", "New England Revolution", "", ""}, {"United States", "United States", "", ""}},
 };
 static const SeasonHistClear clears_17[] = {
+    {"FIFA World Cup", 2007},
 };
 static const SeasonHistRow rows_17[] = {
     {"US Open Cup", 2002, {"Columbus Crew", "Los Angeles Galaxy", "", ""}, {"United States", "United States", "", ""}},
@@ -34339,6 +34340,7 @@ static const SeasonHistRow rows_17[] = {
     {"US Open Cup", 2009, {"Seattle Sounders", "Washington DC United", "", ""}, {"United States", "United States", "", ""}},
     {"US Open Cup", 2010, {"Seattle Sounders", "Columbus Crew", "", ""}, {"United States", "United States", "", ""}},
     {"US Open Cup", 2001, {"Los Angeles Galaxy", "New England Revolution", "", ""}, {"United States", "United States", "", ""}},
+    {"FIFA World Cup", 2010, {"Spain", "Holland", "Germany", "South Africa"}, {"", "", "", ""}},
 };
 static const SeasonHistClear clears_18[] = {
 };
@@ -34373,7 +34375,7 @@ const SeasonHistDb season_history_dbs[] = {
     {"September 2009", 2009, clears_14, 1456, rows_14, 1255},
     {"April 2011 SIM", 2010, clears_15, 0, rows_15, 10},
     {"December 2010 SIM", 2010, clears_16, 0, rows_16, 10},
-    {"September 2010 ODB", 2010, clears_17, 0, rows_17, 10},
+    {"September 2010 ODB", 2010, clears_17, 1, rows_17, 11},
     {"March 2012 SIM", 2011, clears_18, 0, rows_18, 11},
 };
 const int season_history_dbs_count = 19;
