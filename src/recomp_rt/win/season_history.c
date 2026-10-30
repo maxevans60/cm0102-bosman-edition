@@ -379,23 +379,47 @@ static int is_own(uint32_t r)
     return 0;
 }
 
-void season_history_drop_after_start(int S)
+/* The number of rows of the competition with this label. */
+static uint32_t rows_of_label(uint32_t hist, uint32_t count, uint32_t comp, int label)
+{
+    uint32_t n = 0;
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t r = hist + i * HISTORY_SIZE;
+        n += rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == label;
+    }
+    return n;
+}
+
+void season_history_drop_after_start(int S, int official)
 {
     n_after = 0;
     if (!season_history_after_start_on()) return;
     uint32_t hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
     if (!hist) return;
+    uint32_t *drop = malloc((count + 1) * sizeof *drop), n = 0;
+    if (!drop) rt_fatal("season history: no memory");
     for (uint32_t i = 0; i < count; i++) {
-        uint32_t r = hist + i * HISTORY_SIZE;
-        if (!rd32(g_mem, r + 4) || (int)rd16(g_mem, r + 8) <= S) continue;
-        if (!filled) {
-            filled = 1;
-            old_count = count;
-        }
-        save_row(i);
-        wr32(g_mem, r + 4, 0);
-        n_after++;
+        uint32_t r = hist + i * HISTORY_SIZE, comp = rd32(g_mem, r + 4);
+        int label = (int)rd16(g_mem, r + 8);
+        if (!comp || label < S) continue;
+        /* The official data labels a split season by the year where it starts (label 2001: the Apertura 2001 and
+         * the Clausura 2002, docs/research/2026-10-17-competition-history-fill.md), so its rows of the label S are
+         * the season that the game plays and labels S + 1: a competition with two or more rows of S and of S - 1. */
+        if (label == S && !(official && rows_of_label(hist, count, comp, S) >= 2 &&
+                            rows_of_label(hist, count, comp, S - 1) >= 2))
+            continue;
+        drop[n++] = i;
     }
+    if (n && !filled) {
+        filled = 1;
+        old_count = count;
+    }
+    for (uint32_t k = 0; k < n; k++) {
+        save_row(drop[k]);
+        wr32(g_mem, hist + drop[k] * HISTORY_SIZE + 4, 0);
+    }
+    n_after = n;
+    free(drop);
     if (n_after)
         fprintf(stderr, "recomp: season history: %u rows after the start season %d cleared\n", n_after, S);
 }

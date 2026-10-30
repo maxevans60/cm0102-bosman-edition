@@ -32,7 +32,8 @@
  * super cups of their start year. The game then writes the same edition again, so the history shows the year
  * twice, and it reads the newest row (Con_Champ::pick_clubs 0x4c11a0 through 0x4afd80): its 2001 Charity Shield
  * is Liverpool against Arsenal, the 2002 champion. So at the creation of a new game every row with a label after
- * the start year S goes (season_history_drop_after_start, with the undo record), and when the game writes a row
+ * the start year S goes (season_history_drop_after_start, with the undo record; in the official data also the
+ * label S of a split season, which that data labels by the year where it starts), and when the game writes a row
  * (0x4afce0), every other row of that competition with a later label goes, and in the calendar year S the row of
  * the data with the same label (not when the data holds two or more of them: the halves of a split season). A row
  * of the year S of a competition that ends before July (the English Premier Division 2001 in a 2001/02 game)
@@ -71,8 +72,9 @@ extern const int season_history_dbs_count;
  * entry for that database and year. */
 void season_history_fill(const char *name, int N);
 
-/* At the creation of a new game, after the shift and the fill: clears every row with a label after S (above). */
-void season_history_drop_after_start(int S);
+/* At the creation of a new game, after the shift and the fill: clears every row with a label after S (above), and
+ * with official (the 3.9.60, 3.9.65 or 3.9.68 data) the rows of S of a split season. */
+void season_history_drop_after_start(int S, int official);
 
 /* 1 when the rows after the start go (the head): the season code is on (and, with FIX_BASE_GAME 0, the game is
  * not the base game). */

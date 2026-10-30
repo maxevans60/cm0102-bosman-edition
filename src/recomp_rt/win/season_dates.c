@@ -552,19 +552,29 @@ void season_dates_forget(void)
     journal_n = 0;
 }
 
+/* 1 when the loaded data is an official data set (3.9.60, 3.9.65, 3.9.68). */
+static int official_data(void)
+{
+    char folder[1100];
+    if (loaded_dir[0]) snprintf(folder, sizeof folder, "%s", loaded_dir);
+    else snprintf(folder, sizeof folder, "%s/Data", win_game_dir);
+    const SeasonKnownDb *k = seasons_db_identify(folder);
+    return k && (k->role == SEASONS_ROLE_OFFICIAL_BASE || k->role == SEASONS_ROLE_OFFICIAL_VERSION);
+}
+
 void season_dates_at_create(void)
 {
     if (!loaded || rt_unwinding) return;
     int N = season_start_year();
     if (N == (applied_year ? applied_year : SEASON_FIRST_YEAR)) {
-        season_history_drop_after_start(N);    /* 0.6.2 slice 7 */
+        season_history_drop_after_start(N, official_data());    /* 0.6.2 slice 7 */
         return;
     }
     fprintf(stderr, "recomp: season dates: the game is made in %d, the data was loaded for %d: the shift is made "
                     "again\n", N, applied_year ? applied_year : SEASON_FIRST_YEAR);
     uint32_t eax = cpu.eax;
     shift_for(N);
-    season_history_drop_after_start(N);
+    season_history_drop_after_start(N, official_data());
     loaded_year = N;
     log_load();
     cpu.eax = eax;

@@ -30,7 +30,8 @@ classes after their table 2200, the ended cups 2999). An edition in progress wri
 pattern is absent; then the check reads nothing.
 
 Checks (one row of <label>.faults.tsv each, check names in the first column):
-    duplicate     a competition holds the same label year twice
+    duplicate     a competition holds the same label year twice (three times for a split season: two rows a year in
+                  most of the 10 years before the start, the Argentine and Mexican first divisions)
     no-host       a row with no host in a competition whose rows have hosts (more than half of its rows)
     confederation a winner or runner-up from another confederation, in a row from the start year on. The
                   confederation is the rules file's, else the competition's continent, else the continent of
@@ -341,9 +342,13 @@ def check(game, rules=None, changes=()):
         international = comp["nation"] < 0
         years = [r[3] for r in rs]
         game_rows = [r for r in rs if r[3] >= start]
-        # the same year twice (from the year before the start: older duplicates are rows of the database)
-        for y, n in sorted(collections.Counter(years).items()):
-            if n > 1 and y >= start - 1:
+        # the same year twice (from the year before the start: older duplicates are rows of the database); a split
+        # season (Apertura and Clausura) holds two rows a year
+        per_year = collections.Counter(years)
+        before = [per_year[y] for y in range(start - 10, start) if per_year[y]]
+        most = 2 if before and sum(1 for k in before if k == 2) * 2 > len(before) else 1
+        for y, n in sorted(per_year.items()):
+            if n > most and y >= start - 1:
                 pairs = "; ".join(f"{r[4][0]} / {r[5][0]}" for r in rs if r[3] == y)
                 faults.append(("duplicate", name, y, f"{n} rows: {pairs}"))
         # a missing host where the competition has hosts
