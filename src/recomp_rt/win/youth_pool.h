@@ -3,7 +3,7 @@
 #ifndef YOUTH_POOL_H
 #define YOUTH_POOL_H
 
-#define YOUTH_POOL_SQUAD 23        /* a nation with fewer players fills no squad; the history checker's SQUAD */
+#define YOUTH_POOL_SQUAD 23        /* a nation with fewer players fills no squad (SQUAD of the history checker) */
 #define YOUTH_POOL_OLDER_MAX 349   /* 0x15d: a nation with more players at the start always gets young new players */
 
 /* The age in whole years on the day (day of the year from 0, as the game date 0xae2c90) of a person born on

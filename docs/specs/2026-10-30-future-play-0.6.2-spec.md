@@ -285,9 +285,11 @@ Merge danger: one-way door if it changes the save format. Blast radius: every sa
 - [ ] Tier B save size stays under 4 GB to 2300 at the measured rate.
 
 ### 20. A youth pool for every nation
-Blocked by: none (the no-youth check of slice 2)
-Delivers: every nation with 23 players or more keeps players under 21 and under 23 (Q35). Open item 52. The cause, read in code: a new player (regenerate_as_youth_player 0x7abac0) takes the nation of a retired player. A nation that is not loaded and had 349 players or fewer at the start (+0x88, counted once by 0x524d70) gets new players of 23 to 27 in most cases (0x7abe87..0x7abeee). Its young players grow up and none follow. The fix, in every game: such a nation with fewer than 1 in 20 players under 21 or fewer than 1 in 10 under 23 gets the young ages of the original. A nation that will have none under 21 or under 23 within a year gets the next new player of a nation that is not short.
-Merge danger: two-way door. The base game changes from the first new player of a short nation: about 2003 in an England-only 2001 game, the first year in a 2025 start. No nation is short at the start of a 2001 game, so the same-save set must PASS. Blast radius: the age and nation of new players.
+Blocked by: none
+Delivers: every nation with 23 players or more keeps players under 21 and under 23 (Q35). Open item 52.
+- The cause, read in code: a new player (regenerate_as_youth_player 0x7abac0) takes the nation of a retired player. Some nations are not loaded and had 349 players or fewer at the start (+0x88, counted once by 0x524d70). Their new players are 23 to 27 in most cases (0x7abe87..0x7abeee). Their young players grow up and none follow.
+- The fix, in every game: a short nation gets the young ages of the original. Short means fewer than 1 in 20 players under 21, or fewer than 1 in 10 under 23. A nation that will have none under 21 or none under 23 within a year gets the next new player of a nation that is not short.
+Merge danger: two-way door. The base game changes from the first new player of a nation that is short or runs out. In an England-only 2001 game that is by July 2004 at the latest. A 2025 start has such nations in its first two years. No nation is short or runs out at the start of a 2001 game, so the same-save set must PASS. Blast radius: the age and nation of new players.
 - [ ] Unit test: the rule cases, and a 300-year model where no nation runs out.
 - [ ] The 2041 forum save played one year: the no-youth faults of main are gone.
 - [ ] Same-save set PASS against main.
