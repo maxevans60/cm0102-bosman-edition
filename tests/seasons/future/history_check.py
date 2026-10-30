@@ -83,7 +83,11 @@ save date (a confederation check for every edition):
                   Intercontinental Cup, Finalissima, FIFA Intercontinental Cup) won none of its route competitions
                   in the year of the match or the edition before, when that edition is at most one cycle and one
                   year before (checked when every route competition has history rows, for an edition after the
-                  start year: an edition of the start year may come from the data)
+                  start year: an edition of the start year may come from the data); a route competition with no
+                  row written in the game (a year after the start) in the year or one cycle before did not play
+                  (its nations are not selected), and its place goes to a drawn club, as the original draws one
+                  (WorldClubChamp::pick_entrant 0x92ae60, World_Club_Cup 0x92baa8): as many entrants as such
+                  routes may come by no route (slice 9a)
     save-part      a fixtures part whose size does not fit its count (not read)
 
 World health (--health), Tier B: <label>.health.tsv holds the save size and part count, the players, under-21 and
@@ -606,6 +610,12 @@ def entrants(game, rules, access, changes=()):
         years = {year} | ({before} if year - before <= cycle + 1 else set())
         return {w for y, w in by_key.get(key, ()) if y in years}
 
+    def played(key, year):
+        """1 when the game wrote a row of route competition key (a year after the start) at most one cycle before
+        the year: else its nations are not selected and a club comes by the original's draw (slice 9a)."""
+        cycle = number(rules.rows.get(key, {}).get("cycle")) or 1
+        return any(game.start < y <= year and year - y <= cycle for y, w in by_key.get(key, ()))
+
     save_day = datetime.date(game.date[0], 1, 1).toordinal() + game.date[1] if game.date[0] > 1900 else 0
     live = {n for n, conf in game.nations.values() if conf}
     listing, faults = [], []
@@ -631,7 +641,7 @@ def entrants(game, rules, access, changes=()):
             # teams (the play-off tournament of 2026, in the record of the OFC qualifying: 2 of CONCACAF and 1 each of
             # AFC, CAF, CONMEBOL and OFC)
             playoff = (key or "").startswith("wc_qual_")
-            foreign, dead = collections.defaultdict(list), []
+            foreign, dead, no_route = collections.defaultdict(list), [], []
             prev = [w for y, w in sorted(by_key.get(key, ())) if y < year][-1:] if key else []
             host = hosts.get((cid, year), -1)
             host_nations = [game.clubs.get(host, ("", -1))[1]] if host >= 0 else []
@@ -655,8 +665,9 @@ def entrants(game, rules, access, changes=()):
                             not any(year < m for m in moved.get(nation, ())):
                         foreign[(shown, "|".join(sorted(cs)))].append(f"{tname} ({conf})")
                 if won and done and year > game.start and not by_route and all(by_key.get(r) for r in won):
-                    faults.append(("entrant-route", name, year, f"{tname} ({nation}) won none of {', '.join(won)} in "
-                                                                f"{year} or the edition before"))
+                    no_route.append(f"{tname} ({nation}) won none of {', '.join(won)} in {year} or the edition before")
+            if len(no_route) > sum(1 for r in won if not played(r, year)):   # the places of routes that did not play
+                faults += [("entrant-route", name, year, text) for text in no_route]
             if dead:
                 faults.append(("entrant-dead", name, year, f"{len(dead)} entrants of a nation under an old name: "
                                                            f"{', '.join(dead[:6])}"))

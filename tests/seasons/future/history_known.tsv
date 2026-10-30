@@ -261,7 +261,6 @@ comp-continent	*UEFA Nations League*	*	open items 4 and 21: the Nations League r
 comp-name	*UEFA Nations League*	*	open item 4: the Nations League record keeps the short name Asian Cup Quals
 confederation	Asian Cup Quals	*	open item 4: European winners under the short name of the Nations League record
 entrant-confed	Asian Cup Quals	*	open item 4: European entrants under the short name of the Nations League record
-missing	FIFA Intercontinental Cup	*	open item 11: no edition after 2026
 gap	OFC Men's Nations Cup	2024	open items 2 and 19: editions not written
 missing	OFC Men's Nations Cup	2028	open items 2 and 19: editions not written
 same-final	CONCACAF Gold Cup	2009	real results: the same finalists count only in Tier B (spec, Decisions)
@@ -289,10 +288,8 @@ entrant-host	OFC*Nations Cup*	2016	open item 45
 entrant-host	OFC*Nations Cup*	2024	open item 45
 entrant-host	Africa*Cup of Nations	2002	open item 46: the host does not play (Mali 2002)
 entrant-host	Africa*Cup of Nations	2027	open item 46: Kenya, Tanzania and Uganda do not play in 2027
-entrant-route	Intercontinental Cup	*	open item 47: entrants that won neither the Champions League nor the Libertadores (ended 2004)
-entrant-confed	OFC Club Championship	2006	open item 48: Australian clubs in the 2006 edition, after Australia moved to the AFC
+entrant-route	Intercontinental Cup	*	open item 47: a data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7; then the original's drawn club passes (slice 9a)
 entrant-confed	CONCACAF Champions*	2020	open item 49: the Argentine club Atlanta in the CONCACAF Champions Cup
 entrant-confed	CONCACAF Champions*	2021	open item 49
 entrant-confed	CONCACAF Champions*	2022	open item 49
-entrant-route	FIFA Intercontinental Cup	*	open item 50: entrants that are not the continental champions
 entrant-dead	*CONCACAF Nations League*	*	open item 51: the dead Netherlands Antilles plays beside Curaçao
