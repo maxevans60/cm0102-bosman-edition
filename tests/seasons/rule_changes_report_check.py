@@ -5,9 +5,10 @@ sys.path.insert(0, os.path.join(here, '..', '..', 'tools', 'release'))
 import rule_changes_report as r
 
 H = 'id season real_season nation comp_file comp tier name clubs up down playoffs split format subs_used bench foreign work_permit registration windows notes sources'.split()
-def row(i, season, real, name, clubs, bench='n/a', comp='league', tier='1', nation='Testland', foreign='n/a'):
+def row(i, season, real, name, clubs, bench='n/a', comp='league', tier='1', nation='Testland', foreign='n/a',
+        comp_file='tl'):
     d = dict.fromkeys(H, 'n/a'); d.update(id=i, season=season, real_season=real, nation=nation,
-        comp_file='tl', comp=comp, tier=tier, name=name, clubs=clubs, bench=bench, foreign=foreign, sources='x')
+        comp_file=comp_file, comp=comp, tier=tier, name=name, clubs=clubs, bench=bench, foreign=foreign, sources='x')
     return d
 
 rows = [
@@ -19,13 +20,34 @@ rows = [
     row('6', '2026/27', '2027', 'Top', '10'),
     row('7', '2001/02', '2002', 'Major League Soccer', '10', nation='USA', tier='1'),
     row('8', '2002/03', '2003', 'Major League Soccer', '14', nation='USA', tier='1'),
+    # Item 38 (0.6.2): ArgPrm holds 20 clubs (create_table 0x405552), so the real 30 of 2015 needs a mark.
+    row('9', '2013/14', '2013-14', 'Primera', '20', nation='Argentina', comp_file='arg_prm'),
+    row('10', '2014/15', '2015', 'Primera', '30', nation='Argentina', comp_file='arg_prm'),
+    row('11', '2017/18', '2017-18', 'Primera', '28', nation='Argentina', comp_file='arg_prm'),
+    row('12', '2019/20', '2020', 'Primera', '18', nation='Argentina', comp_file='arg_prm'),
+    # A count under the floor that a cup of the nation needs (FLOOR_COUNT of tools/recomp/league_sizes.py).
+    row('13', '2001/02', '2002', 'Scottish Premier', '12', nation='Scotland', comp_file='sco_prm'),
+    row('14', '2002/03', '2003', 'Scottish Premier', '10', nation='Scotland', comp_file='sco_prm'),
+    # Serie C groups hold up to 60 in the Serie C era (season_ita_cap): no mark.
+    row('15', '2001/02', '2002', 'Serie C1/A', '18', nation='Italy', comp_file='ita_ser_c1a'),
+    row('16', '2002/03', '2003', 'Serie C1/A', '20', nation='Italy', comp_file='ita_ser_c1a'),
+    # The Danish First Division keeps the clubs of the database up to 16 (season_sizes_keeps_database).
+    row('17', '2010/11', '2011', 'Danish First', '16', nation='Denmark', comp_file='den_first'),
+    row('18', '2011/12', '2012', 'Danish First', '12', nation='Denmark', comp_file='den_first'),
 ]
 text = r.render(rows, '2025/26')
 assert '- 2003/04 (real 2004): clubs changes from "18" to "20".' in text, text
 assert '- 2002/03 (real 2003): bench changes from "5" to "7".' in text
 assert 'The game keeps it at 9 (Q375).' in text
 assert 'The game keeps 12 clubs (Q404).' in text
-assert text.count('clubs changes') == 2          # unknown skipped, 2026/27 cut off
+assert '- 2014/15 (real 2015): clubs changes from "20" to "30". The game keeps 20 clubs (league sizes).' in text, text
+assert 'clubs changes from "30" to "28". The game keeps 20 clubs (league sizes).' in text
+assert 'clubs changes from "28" to "18".\n' in text            # under the class count: the game plays it
+assert 'clubs changes from "12" to "10". The game keeps 12 clubs (league sizes).' in text
+assert 'clubs changes from "18" to "20".\n' in text            # Serie C group: no mark
+assert '20 clubs at most in the Argentine Primera' in text      # the limits section names the league
+assert 'clubs changes from "16" to "12". The game keeps the clubs of the database, up to 16 (league sizes).' in text
+assert text.count('clubs changes') == 8          # unknown skipped, 2026/27 cut off
 assert 'foreign players changes' not in text      # unknown and equal values are no change
 assert '—' not in text and '–' not in text
 print('ok')

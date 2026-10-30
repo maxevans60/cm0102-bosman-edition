@@ -30,15 +30,25 @@ FIELDS = [
 GAME_BENCH_LIMIT = 9
 MLS_CLUBS = 12
 
+# The club counts that the league code of the original holds (0.6.0 slice 18, docs/research/2026-10-18-league-sizes.md):
+# CAPS is the largest count of each class, FLOOR_COUNT the smallest where a cup of the nation needs the clubs. A real
+# count outside them stays a `clubs` line of the rules report (tests/seasons/rules_report_check.py). Item 38 (0.6.2):
+# the report said 30 Argentine clubs from 2015 and the game keeps 20, so a player took the 20 for a fault.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'recomp'))
+from league_sizes import CAPS, FLOOR_COUNT  # noqa: E402
+# The Serie C1 groups hold up to 60 clubs in the Serie C era (season_ita_cap, src/recomp_rt/win/season_divisions_ita.c).
+OPEN_CAPS = {'ita_ser_c1a', 'ita_ser_c1b'}
+
 LIMITS = """\
 ## What the game will not do
 
-A row of the rules files states the real rule. The game limits some of them, so the report lists the real change and marks the limit. Two limits apply in 0.6.0:
+A row of the rules files states the real rule. The game limits some of them, so the report lists the real change and marks the limit. Three limits apply:
 
 - The bench and the substitutes used stay at 9 or fewer (Q375). The match engine clamps at 9. A real rule of more than 9 shows in the report, and the game plays 9.
 - The MLS stays at 12 clubs (Q404). The group code of the original holds 12. MLS expansion clubs get no place.
+- Each league holds at most the clubs that its league code in the original holds, for example 20 clubs at most in the Argentine Primera División, 18 in Serie A and 16 in the J1 League. Some leagues also keep a smallest count, because a cup of their nation needs their clubs. A real count outside these limits shows in the report, marked "The game keeps N clubs (league sizes)". The real clubs that do not fit stay in the division below.
 
-Source: docs/specs/2026-10-16-seasons-0.6.0-spec.md.
+Sources: docs/specs/2026-10-16-seasons-0.6.0-spec.md, docs/research/2026-10-18-league-sizes.md.
 """
 
 
@@ -62,7 +72,10 @@ def load(folder):
     rows = []
     for f in main_files(folder):
         with open(f, encoding='utf-8', newline='') as fh:
-            rows.extend(csv.DictReader(fh, delimiter='\t', quoting=csv.QUOTE_NONE))
+            reader = csv.DictReader(fh, delimiter='\t', quoting=csv.QUOTE_NONE)
+            # The date tables (uefa-ko-dates.tsv, nations-league-dates.tsv, uefa-access.tsv) are not rules files.
+            if 'nation' in (reader.fieldnames or []) and 'comp_file' in reader.fieldnames:
+                rows.extend(reader)
     return rows
 
 
@@ -75,7 +88,7 @@ def tier_key(t):
     return int(t) if t.isdigit() else 99
 
 
-def note(field, new, nation, comp, name):
+def note(field, new, nation, comp, name, comp_file=''):
     """Returns a short game-limit remark for a new value, or ''."""
     if field in ('bench', 'subs_used'):
         nums = [int(x) for x in re.findall(r'\d+', new)]
@@ -85,6 +98,16 @@ def note(field, new, nation, comp, name):
         nums = [int(x) for x in re.findall(r'\d+', new)]
         if nums and max(nums) > MLS_CLUBS:
             return ' The game keeps %d clubs (Q404).' % MLS_CLUBS
+    if field == 'clubs' and comp_file in CAPS and comp_file not in OPEN_CAPS:
+        nums = [int(x) for x in re.findall(r'\d+', new)]
+        cap, floor = CAPS[comp_file], FLOOR_COUNT.get(comp_file, 0)
+        if nums and max(nums) > cap:
+            return ' The game keeps %d clubs (league sizes).' % cap
+        if nums and max(nums) < floor:
+            return ' The game keeps %d clubs (league sizes).' % floor
+        # DenCup needs the First Division's clubs: it keeps those of the database (season_sizes_keeps_database).
+        if nums and comp_file == 'den_first' and max(nums) < cap:
+            return ' The game keeps the clubs of the database, up to %d (league sizes).' % cap
     return ''
 
 
@@ -119,7 +142,7 @@ def changes(rows, last_season=None):
                 if field in last and last[field] != v:
                     real = clean(r['real_season']) if r['real_season'] not in ('', 'n/a', r['season']) else ''
                     text = '%s changes from "%s" to "%s".' % (label, last[field], v)
-                    events.append((r['season'], real, text + note(field, v, r['nation'], r['comp'], r['name'])))
+                    events.append((r['season'], real, text + note(field, v, r['nation'], r['comp'], r['name'], r['comp_file'])))
                 last[field] = v
         if events:
             title = r['name'] if r['comp'] != 'nation rules' else 'Nation rules'
