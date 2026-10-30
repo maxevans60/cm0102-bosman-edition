@@ -36,14 +36,22 @@ import network_run as nr  # noqa: E402
 import password_run as pr  # noqa: E402
 import smoke_run  # noqa: E402
 
-LIST = "wait screen:0x81f8d0"           # the game list, which the runtime opens
+LIST_SCREEN = "screen 0x81f8d0"         # the game list in the screen log, which the runtime opens
+SETTINGS_OK = 8500                      # nr.START: Ok on the settings screen, after its wait
+WALK_MS = 5000                          # the walk from the start screen to the join takes about 2 s
 
 
-def joiner_steps(n, password=False):
-    """The joiner: the start screen, then nothing until the game list; then the steps after the join."""
-    steps = nr.START[:-1] + [LIST, "3000 dump {d}/join%d-0-list.bmp" % n]
+def shifted(steps, ms):
+    return [f"{int(s.split()[0]) + ms} " + " ".join(s.split()[1:]) for s in steps]
+
+
+def joiner_steps(n, password=False, later=0):
+    """The joiner: the settings screen, then nothing while the runtime walks to the join; then the steps after it.
+    The walk can pass the start screen and the game list before a wait for them starts, so the times count from
+    the settings screen, the last screen that the script waits for."""
+    steps = nr.START[:-2]
     if password:
-        return steps + [
+        return steps + shifted([
             "9000 dump {d}/join%d-1-box.bmp" % n,
             f"9500 {pr.FIELD}",
             "10000 type secret",
@@ -51,9 +59,9 @@ def joiner_steps(n, password=False):
             f"12500 {pr.JOIN}",
             "18000 dump {d}/join%d-1-name.bmp" % n,
             "19000 quit",
-        ]
+        ], SETTINGS_OK + WALK_MS + later - 1000 - 9000)
     tail = nr.joiner_steps(None, n, by_row=True)
-    return steps + tail[tail.index("11000 dump {d}/join%d-1-name.bmp" % n):]
+    return steps + shifted(tail[tail.index("11000 dump {d}/join%d-1-name.bmp" % n):], SETTINGS_OK + WALK_MS + later - 11000)
 
 
 def lobby_code(url, name, timeout):
@@ -146,15 +154,17 @@ def run(case, program, game, lobby_url, env, shots, slow, check):
             code = "ZZZZ2222"
         if code:
             link = f"cm0102://join/{code}"
-            steps = joiner_steps(1, password=case == "password")
+            # running: the second copy starts about 2 s after the start screen and takes a few seconds itself
+            steps = joiner_steps(1, password=case == "password", later=6000 if case == "running" else 0)
             if case in ("gone", "version"):
-                steps = nr.START[:-1] + [LIST, "9000 dump {d}/join1-1-box.bmp", "10000 quit"]
+                steps = nr.START[:-2] + [f"{SETTINGS_OK + WALK_MS} dump {{d}}/join1-1-box.bmp",   # Unable To Join
+                                         f"{SETTINGS_OK + WALK_MS + 1000} quit"]
             jenv = dict(env, RECOMP_TEST_VERSION="0.0.1") if case == "version" else env
             join, e = nr.start(program, game, work, "join1", steps, shots, slow, jenv,
                                args=() if case == "running" else (link,))
             errs.append(e)
             if case == "running":
-                at_start = nr.wait_for(os.path.join(shots, "join1-stderr.txt"), "reached setup", join, 120 * slow)
+                at_start = nr.wait_for(os.path.join(shots, "join1-stderr.txt"), "screen 0x81bab0", join, 120 * slow)
                 check(at_start, "running: the joiner reaches the start screen")
                 time.sleep(2)
                 user = os.path.join(work, "join1")
@@ -188,7 +198,7 @@ def run(case, program, game, lobby_url, env, shots, slow, check):
         check(join.returncode == 0, f"{case}: the joiner ended with code {join.returncode}")
     if host:
         check(host.returncode == 0, f"{case}: the host ended with code {host.returncode}")
-    check("recomp: invite: the game opens Join Network Game" in jerr and "script reached screen:0x81f8d0" in jerr
+    check("recomp: invite: the game opens Join Network Game" in jerr and LIST_SCREEN in jerr
           and 'recomp: invite: Join "' in jerr, f"{case}: the runtime opened the game list and pressed Join")
     if case in ("link", "running"):
         check("recomp: relay: joined" in jerr, f"{case}: the joiner joined through the relay")
